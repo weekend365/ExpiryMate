@@ -1,6 +1,11 @@
-import type { Product } from "@expirymate/shared";
+import {
+  ItemStatus,
+  productCategoryLabels,
+  storageLocationLabels,
+  type Product,
+} from "@expirymate/shared";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -11,6 +16,7 @@ import {
 import { CameraView, type BarcodeScanningResult, useCameraPermissions } from "expo-camera";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "../src/components/Button";
+import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { lookupProductByBarcode } from "../src/services/api";
 import { colors, spacing } from "../src/shared/theme";
 import { useRegistrationStore } from "../src/store/registration-store";
@@ -19,6 +25,7 @@ export default function ScanScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [scannedBarcode, setScannedBarcode] = useState<string | null>(null);
   const [result, setResult] = useState<Product | null>(null);
+  const { data: inventory = [] } = useInventoryList();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
 
   const lookupMutation = useMutation({
@@ -53,6 +60,36 @@ export default function ScanScreen() {
     });
     router.replace("/register");
   };
+
+  const goBackLater = () => {
+    router.back();
+  };
+
+  const existingItems = useMemo(() => {
+    return inventory.filter((item) => {
+      if (item.status !== ItemStatus.ACTIVE) {
+        return false;
+      }
+
+      if (scannedBarcode && item.barcode === scannedBarcode) {
+        return true;
+      }
+
+      if (result?.id && item.productId === result.id) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [inventory, result?.id, scannedBarcode]);
+
+  const existingItemLabel = existingItems
+    .slice(0, 2)
+    .map(
+      (item) =>
+        `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
+    )
+    .join(" / ");
 
   if (!permission) {
     return (
@@ -105,8 +142,30 @@ export default function ScanScreen() {
         ) : result ? (
           <>
             <Text style={styles.sheetTitle}>{result.name}</Text>
-            <Text style={styles.sheetDescription}>{result.brand} · 상품 정보가 자동으로 채워져요.</Text>
-            <Button onPress={goToRegister}>등록 이어서 하기</Button>
+            <Text style={styles.sheetMeta}>
+              {result.brand} · {productCategoryLabels[result.category]}
+            </Text>
+            <Text style={styles.sheetDescription}>
+              상품 정보가 자동으로 채워져요. 유통기한과 수량만 선택하면 됩니다.
+            </Text>
+            {existingItems.length ? (
+              <View style={styles.hintCard}>
+                <Text style={styles.hintTitle}>집에 이미 {existingItems.length}개 있어요</Text>
+                <Text style={styles.hintDescription}>{existingItemLabel}</Text>
+              </View>
+            ) : null}
+            <View style={styles.actionRow}>
+              <Button onPress={goToRegister} style={styles.actionButton}>
+                이 상품 등록하기
+              </Button>
+              <Button
+                variant="secondary"
+                onPress={goBackLater}
+                style={styles.actionButton}
+              >
+                나중에 처리
+              </Button>
+            </View>
           </>
         ) : (
           <>
@@ -114,7 +173,18 @@ export default function ScanScreen() {
             <Text style={styles.sheetDescription}>
               직접 입력할까요? 바코드는 함께 저장해둘 수 있어요.
             </Text>
-            <Button onPress={goToRegister}>직접 입력할까요?</Button>
+            <View style={styles.actionRow}>
+              <Button onPress={goToRegister} style={styles.actionButton}>
+                직접 등록
+              </Button>
+              <Button
+                variant="secondary"
+                onPress={goBackLater}
+                style={styles.actionButton}
+              >
+                나중에 처리
+              </Button>
+            </View>
           </>
         )}
 
@@ -191,6 +261,34 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     color: colors.subtext,
+  },
+  sheetMeta: {
+    fontSize: 14,
+    color: colors.subtext,
+    fontWeight: "600",
+  },
+  hintCard: {
+    backgroundColor: colors.warningSoft,
+    borderRadius: 20,
+    padding: spacing.md,
+    gap: 4,
+  },
+  hintTitle: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: colors.warning,
+  },
+  hintDescription: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.text,
+  },
+  actionRow: {
+    flexDirection: "row",
+    gap: spacing.md,
+  },
+  actionButton: {
+    flex: 1,
   },
   resetText: {
     textAlign: "center",

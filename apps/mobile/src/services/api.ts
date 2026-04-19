@@ -33,17 +33,33 @@ type InventoryPayload = {
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(buildUrl(path), {
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {}),
-    },
-    ...init,
-  });
+  let response: Response;
 
-  const body = (await response.json()) as ApiEnvelope<T>;
+  try {
+    response = await fetch(buildUrl(path), {
+      headers: {
+        "Content-Type": "application/json",
+        ...(init?.headers ?? {}),
+      },
+      ...init,
+    });
+  } catch {
+    throw new Error("네트워크 연결을 확인해주세요.");
+  }
+
+  let body: ApiEnvelope<T>;
+
+  try {
+    body = (await response.json()) as ApiEnvelope<T>;
+  } catch {
+    throw new Error("서버 응답을 확인하지 못했어요.");
+  }
 
   if (!response.ok || !body.success) {
+    if (response.status >= 500) {
+      throw new Error("서버가 일시적으로 불안정해요. 잠시 후 다시 시도해주세요.");
+    }
+
     throw new Error(body.error?.message ?? "요청을 처리하지 못했어요.");
   }
 

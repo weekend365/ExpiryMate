@@ -1,5 +1,11 @@
-import type { ProductCategory } from "@expirymate/shared";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ExpirySource,
+  type ProductCategory,
+  StorageLocation,
+} from "@expirymate/shared";
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface RegistrationPrefill {
   productId?: string;
@@ -9,14 +15,48 @@ export interface RegistrationPrefill {
   category?: ProductCategory;
 }
 
-interface RegistrationState {
-  prefill: RegistrationPrefill | null;
-  setPrefill: (prefill: RegistrationPrefill | null) => void;
-  clearPrefill: () => void;
+export interface RegistrationDraft extends RegistrationPrefill {
+  quantity?: number;
+  unit?: string;
+  storageLocation?: StorageLocation;
+  expiryDate?: string;
+  expirySource?: ExpirySource;
+  notes?: string;
 }
 
-export const useRegistrationStore = create<RegistrationState>((set) => ({
-  prefill: null,
-  setPrefill: (prefill) => set({ prefill }),
-  clearPrefill: () => set({ prefill: null }),
-}));
+interface RegistrationState {
+  hasHydrated: boolean;
+  prefill: RegistrationPrefill | null;
+  draft: RegistrationDraft | null;
+  finishHydration: () => void;
+  setPrefill: (prefill: RegistrationPrefill | null) => void;
+  setDraft: (draft: RegistrationDraft | null) => void;
+  clearPrefill: () => void;
+  clearDraft: () => void;
+}
+
+export const useRegistrationStore = create<RegistrationState>()(
+  persist(
+    (set) => ({
+      hasHydrated: false,
+      prefill: null,
+      draft: null,
+      finishHydration: () => set({ hasHydrated: true }),
+      setPrefill: (prefill) => set({ prefill }),
+      setDraft: (draft) => set({ draft }),
+      clearPrefill: () => set({ prefill: null }),
+      clearDraft: () => set({ draft: null }),
+    }),
+    {
+      name: "expirymate-registration-store",
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (state) => ({
+        prefill: state.prefill,
+        draft: state.draft,
+      }),
+      onRehydrateStorage: () => (state) => {
+        state?.finishHydration();
+      },
+    },
+  ),
+);
