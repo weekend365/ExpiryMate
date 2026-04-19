@@ -1,0 +1,145 @@
+import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ExpirySource,
+  ItemStatus,
+  ProductCategory,
+  StorageLocation,
+} from "@prisma/client";
+import { addDays, ItemStatus as SharedItemStatus } from "@expirymate/shared";
+import { serializeInventoryItem } from "../../common/serializers";
+import { PrismaService } from "../../database/prisma.service";
+import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
+
+interface FindInventoryParams {
+  ownerKey: string;
+  q?: string;
+  status?: SharedItemStatus;
+  storageLocation?: StorageLocation;
+  expiringWithin?: number;
+}
+
+@Injectable()
+export class InventoryService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findAll(params: FindInventoryParams) {
+    const items = await this.prisma.inventoryItem.findMany({
+      where: {
+        ownerKey: params.ownerKey,
+        status: params.status as ItemStatus | undefined,
+        storageLocation: params.storageLocation,
+        expiryDate: params.expiringWithin
+          ? {
+              lte: addDays(new Date(), params.expiringWithin),
+            }
+          : undefined,
+        OR: params.q
+          ? [
+              {
+                displayName: {
+                  contains: params.q,
+                  mode: "insensitive",
+                },
+              },
+              {
+                brand: {
+                  contains: params.q,
+                  mode: "insensitive",
+                },
+              },
+              {
+                barcode: {
+                  contains: params.q,
+                },
+              },
+            ]
+          : undefined,
+      },
+      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+    });
+
+    return items.map(serializeInventoryItem);
+  }
+
+  async findOne(id: string) {
+    const item = await this.prisma.inventoryItem.findUnique({
+      where: { id },
+    });
+
+    if (!item) {
+      throw new NotFoundException("재고 항목을 찾을 수 없습니다.");
+    }
+
+    return serializeInventoryItem(item);
+  }
+
+  async create(dto: CreateInventoryItemDto) {
+    const ownerKey = process.env.DEFAULT_OWNER_KEY ?? "demo-user";
+
+    const item = await this.prisma.inventoryItem.create({
+      data: {
+        ownerKey,
+        productId: dto.productId,
+        barcode: dto.barcode,
+        displayName: dto.displayName,
+        brand: dto.brand,
+        category: dto.category as ProductCategory | undefined,
+        quantity: dto.quantity,
+        unit: dto.unit ?? "개",
+        storageLocation: dto.storageLocation as StorageLocation,
+        expiryDate: new Date(dto.expiryDate),
+        expirySource: dto.expirySource as ExpirySource,
+        status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
+        notes: dto.notes,
+      },
+    });
+
+    return serializeInventoryItem(item);
+  }
+
+  async update(id: string, dto: Partial<CreateInventoryItemDto>) {
+    await this.findOne(id);
+
+    const item = await this.prisma.inventoryItem.update({
+      where: { id },
+      data: {
+        productId: dto.productId,
+        barcode: dto.barcode,
+        displayName: dto.displayName,
+        brand: dto.brand,
+        category: dto.category as ProductCategory | undefined,
+        quantity: dto.quantity,
+        unit: dto.unit,
+        storageLocation: dto.storageLocation as StorageLocation | undefined,
+        expiryDate: dto.expiryDate ? new Date(dto.expiryDate) : undefined,
+        expirySource: dto.expirySource as ExpirySource | undefined,
+        status: dto.status as ItemStatus | undefined,
+        notes: dto.notes,
+      },
+    });
+
+    return serializeInventoryItem(item);
+  }
+
+  async consume(id: string) {
+    const item = await this.prisma.inventoryItem.update({
+      where: { id },
+      data: {
+        status: ItemStatus.consumed,
+      },
+    });
+
+    return serializeInventoryItem(item);
+  }
+
+  async discard(id: string) {
+    const item = await this.prisma.inventoryItem.update({
+      where: { id },
+      data: {
+        status: ItemStatus.discarded,
+      },
+    });
+
+    return serializeInventoryItem(item);
+  }
+}

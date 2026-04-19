@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StorageLocation {
+  fridge
+  freezer
+  room
+  bathroom
+  kitchen
+}
+
+enum ItemStatus {
+  active
+  consumed
+  discarded
+  expired
+}
+
+enum ExpirySource {
+  manual
+  preset
+  barcode_decoded
+  ocr_detected
+}
+
+enum ProductCategory {
+  dairy
+  egg
+  tofu
+  beverage
+  instant_food
+  personal_care
+  paper_goods
+  cleaning
+  frozen_food
+  produce
+  seasoning
+  snack
+  household
+}
+
+model Product {
+  id             String          @id @default(cuid())
+  barcode        String          @unique
+  name           String
+  brand          String
+  category       ProductCategory
+  imageUrl       String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  inventoryItems InventoryItem[]
+}
+
+model InventoryItem {
+  id              String           @id @default(cuid())
+  ownerKey        String           @default("demo-user")
+  productId       String?
+  product         Product?         @relation(fields: [productId], references: [id])
+  barcode         String?
+  displayName     String
+  brand           String?
+  category        ProductCategory?
+  quantity        Int
+  unit            String?          @default("개")
+  storageLocation StorageLocation
+  expiryDate      DateTime
+  expirySource    ExpirySource
+  status          ItemStatus       @default(active)
+  notes           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([ownerKey, status])
+  @@index([ownerKey, expiryDate])
+  @@index([barcode])
+}
+
+model NotificationPreference {
+  id                 String   @id @default(cuid())
+  ownerKey           String   @unique @default("demo-user")
+  enabled            Boolean  @default(true)
+  reminderDaysBefore Int[]    @default([1, 3, 7])
+  remindOnDayOf      Boolean  @default(true)
+  quietHoursStart    String   @default("22:00")
+  quietHoursEnd      String   @default("07:00")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ScanLog {
+  id        String   @id @default(cuid())
+  ownerKey  String   @default("demo-user")
+  barcode   String
+  matched   Boolean
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([barcode])
+  @@index([matched])
+}

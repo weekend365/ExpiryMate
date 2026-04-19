@@ -1,0 +1,27 @@
+{
+  "name": "expirymate-monorepo",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:mobile": "pnpm --filter @expirymate/mobile dev",
+    "dev:admin": "pnpm --filter @expirymate/admin dev",
+    "dev:api": "pnpm --filter @expirymate/api dev",
+    "dev": "concurrently -n shared,api,admin,mobile -c yellow,blue,green,magenta \"pnpm --filter @expirymate/shared dev\" \"pnpm --filter @expirymate/api exec nest start --watch\" \"pnpm --filter @expirymate/admin exec next dev\" \"pnpm --filter @expirymate/mobile exec expo start -c\"",
+    "lint": "eslint .",
+    "typecheck": "pnpm --filter @expirymate/shared build && pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "db:generate": "pnpm --filter @expirymate/api db:generate",
+    "db:migrate": "pnpm --filter @expirymate/api db:migrate",
+    "db:seed": "pnpm --filter @expirymate/api db:seed"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.25.1",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.0.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1",
+    "vitest": "^3.1.2"
+  }
+}

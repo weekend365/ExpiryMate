@@ -1,0 +1,14 @@
+node_modules
+.pnpm-store
+.DS_Store
+.next
+.expo
+dist
+coverage
+.turbo
+*.tsbuildinfo
+apps/api/prisma/dev.db
+apps/api/prisma/dev.db-journal
+apps/api/.env
+apps/admin/.env.local
+apps/mobile/.env
