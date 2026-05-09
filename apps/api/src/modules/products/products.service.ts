@@ -7,7 +7,6 @@ import { CreateProductDto } from "./dto/create-product.dto";
 interface FindProductsParams {
   q?: string;
   category?: ProductCategory;
-  barcode?: string;
 }
 
 @Injectable()
@@ -17,11 +16,6 @@ export class ProductsService {
   async findAll(params: FindProductsParams) {
     const products = await this.prisma.product.findMany({
       where: {
-        barcode: params.barcode
-          ? {
-              contains: params.barcode,
-            }
-          : undefined,
         category: params.category,
         OR: params.q
           ? [
@@ -35,11 +29,6 @@ export class ProductsService {
                 brand: {
                   contains: params.q,
                   mode: "insensitive",
-                },
-              },
-              {
-                barcode: {
-                  contains: params.q,
                 },
               },
             ]
@@ -65,28 +54,9 @@ export class ProductsService {
     return serializeProduct(product);
   }
 
-  async findByBarcode(barcode: string) {
-    const ownerKey = process.env.DEFAULT_OWNER_KEY ?? "demo-user";
-    const product = await this.prisma.product.findUnique({
-      where: { barcode },
-    });
-
-    await this.prisma.scanLog.create({
-      data: {
-        barcode,
-        matched: Boolean(product),
-        ownerKey,
-        note: product ? "product_lookup_match" : "product_lookup_unmatched",
-      },
-    });
-
-    return product ? serializeProduct(product) : null;
-  }
-
   async create(dto: CreateProductDto) {
     const product = await this.prisma.product.create({
       data: {
-        barcode: dto.barcode,
         name: dto.name,
         brand: dto.brand,
         category: dto.category as ProductCategory,

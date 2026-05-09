@@ -18,10 +18,6 @@ export class CreateInventoryItemDto {
   @IsString()
   productId?: string;
 
-  @IsOptional()
-  @IsString()
-  barcode?: string;
-
   @IsString()
   @MinLength(1)
   displayName!: string;

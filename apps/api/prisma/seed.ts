@@ -10,7 +10,6 @@ const addDays = (days: number) => {
 };
 
 async function main() {
-  await prisma.scanLog.deleteMany();
   await prisma.inventoryItem.deleteMany();
   await prisma.notificationPreference.deleteMany();
   await prisma.product.deleteMany();
@@ -18,70 +17,60 @@ async function main() {
   const products = await Promise.all(
     [
       {
-        barcode: "8801111111111",
         name: "서울우유 1L",
         brand: "서울우유",
         category: ProductCategory.dairy,
         imageUrl: "https://placehold.co/400x400?text=%EC%84%9C%EC%9A%B8%EC%9A%B0%EC%9C%A0",
       },
       {
-        barcode: "8802222222222",
         name: "계란 10구",
         brand: "행복란",
         category: ProductCategory.egg,
         imageUrl: "https://placehold.co/400x400?text=%EA%B3%84%EB%9E%80",
       },
       {
-        barcode: "8803333333333",
         name: "두부",
         brand: "풀무원",
         category: ProductCategory.tofu,
         imageUrl: "https://placehold.co/400x400?text=%EB%91%90%EB%B6%80",
       },
       {
-        barcode: "8804444444444",
         name: "플레인 요거트",
         brand: "매일",
         category: ProductCategory.dairy,
         imageUrl: "https://placehold.co/400x400?text=%EC%9A%94%EA%B1%B0%ED%8A%B8",
       },
       {
-        barcode: "8805555555555",
         name: "오렌지 주스",
         brand: "델몬트",
         category: ProductCategory.beverage,
         imageUrl: "https://placehold.co/400x400?text=%EC%98%A4%EB%A0%8C%EC%A7%80+%EC%A3%BC%EC%8A%A4",
       },
       {
-        barcode: "8806666666666",
         name: "컵라면",
         brand: "농심",
         category: ProductCategory.instant_food,
         imageUrl: "https://placehold.co/400x400?text=%EC%BB%B5%EB%9D%BC%EB%A9%B4",
       },
       {
-        barcode: "8807777777777",
         name: "샴푸",
         brand: "려",
         category: ProductCategory.personal_care,
         imageUrl: "https://placehold.co/400x400?text=%EC%83%B4%ED%91%B8",
       },
       {
-        barcode: "8808888888888",
         name: "휴지",
         brand: "크리넥스",
         category: ProductCategory.paper_goods,
         imageUrl: "https://placehold.co/400x400?text=%ED%9C%B4%EC%A7%80",
       },
       {
-        barcode: "8809999999999",
         name: "세제",
         brand: "피죤",
         category: ProductCategory.cleaning,
         imageUrl: "https://placehold.co/400x400?text=%EC%84%B8%EC%A0%9C",
       },
       {
-        barcode: "8801234567890",
         name: "냉동 만두",
         brand: "비비고",
         category: ProductCategory.frozen_food,
@@ -94,13 +83,13 @@ async function main() {
     ),
   );
 
-  const productByBarcode = new Map(products.map((product) => [product.barcode, product]));
+  const productByName = new Map(products.map((product) => [product.name, product]));
 
-  const requireProduct = (barcode: string) => {
-    const product = productByBarcode.get(barcode);
+  const requireProduct = (name: string) => {
+    const product = productByName.get(name);
 
     if (!product) {
-      throw new Error(`Seed product not found for barcode ${barcode}`);
+      throw new Error(`Seed product not found for name ${name}`);
     }
 
     return product;
@@ -110,8 +99,7 @@ async function main() {
     data: [
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8801111111111").id,
-        barcode: "8801111111111",
+        productId: requireProduct("서울우유 1L").id,
         displayName: "서울우유 1L",
         brand: "서울우유",
         category: ProductCategory.dairy,
@@ -125,8 +113,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8802222222222").id,
-        barcode: "8802222222222",
+        productId: requireProduct("계란 10구").id,
         displayName: "계란 10구",
         brand: "행복란",
         category: ProductCategory.egg,
@@ -140,8 +127,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8803333333333").id,
-        barcode: "8803333333333",
+        productId: requireProduct("두부").id,
         displayName: "두부",
         brand: "풀무원",
         category: ProductCategory.tofu,
@@ -155,8 +141,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8804444444444").id,
-        barcode: "8804444444444",
+        productId: requireProduct("플레인 요거트").id,
         displayName: "플레인 요거트",
         brand: "매일",
         category: ProductCategory.dairy,
@@ -170,8 +155,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8805555555555").id,
-        barcode: "8805555555555",
+        productId: requireProduct("오렌지 주스").id,
         displayName: "오렌지 주스",
         brand: "델몬트",
         category: ProductCategory.beverage,
@@ -185,8 +169,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8806666666666").id,
-        barcode: "8806666666666",
+        productId: requireProduct("컵라면").id,
         displayName: "컵라면",
         brand: "농심",
         category: ProductCategory.instant_food,
@@ -200,8 +183,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8807777777777").id,
-        barcode: "8807777777777",
+        productId: requireProduct("샴푸").id,
         displayName: "샴푸",
         brand: "려",
         category: ProductCategory.personal_care,
@@ -215,8 +197,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8801234567890").id,
-        barcode: "8801234567890",
+        productId: requireProduct("냉동 만두").id,
         displayName: "냉동 만두",
         brand: "비비고",
         category: ProductCategory.frozen_food,
@@ -230,8 +211,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8808888888888").id,
-        barcode: "8808888888888",
+        productId: requireProduct("휴지").id,
         displayName: "휴지",
         brand: "크리넥스",
         category: ProductCategory.paper_goods,
@@ -245,8 +225,7 @@ async function main() {
       },
       {
         ownerKey: "demo-user",
-        productId: requireProduct("8809999999999").id,
-        barcode: "8809999999999",
+        productId: requireProduct("세제").id,
         displayName: "세제",
         brand: "피죤",
         category: ProductCategory.cleaning,
@@ -272,28 +251,6 @@ async function main() {
     },
   });
 
-  await prisma.scanLog.createMany({
-    data: [
-      {
-        ownerKey: "demo-user",
-        barcode: "8801111111111",
-        matched: true,
-        note: "seeded_successful_lookup",
-      },
-      {
-        ownerKey: "demo-user",
-        barcode: "8800000000000",
-        matched: false,
-        note: "seeded_unknown_scan",
-      },
-      {
-        ownerKey: "demo-user",
-        barcode: "8800000000001",
-        matched: false,
-        note: "seeded_unknown_scan",
-      },
-    ],
-  });
 }
 
 main()

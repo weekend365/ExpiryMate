@@ -7,7 +7,6 @@ import type { PropsWithChildren } from "react";
 const navItems = [
   { href: "/dashboard", label: "대시보드" },
   { href: "/products", label: "상품 관리" },
-  { href: "/barcodes", label: "바코드 조회" },
   { href: "/inventory", label: "재고 조회" },
   { href: "/seed-status", label: "시드 상태" },
 ];
@@ -23,9 +22,9 @@ export function AppShell({ children }: PropsWithChildren) {
             <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
               ExpiryMate Admin
             </div>
-            <h1 className="mt-4 text-2xl font-black tracking-tight">바코드 기반 재고 운영</h1>
+            <h1 className="mt-4 text-2xl font-black tracking-tight">재료 기반 운영 관리</h1>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              상품 매핑, 재고 상태, 미매칭 바코드 로그를 한 곳에서 관리합니다.
+              기준 상품, 재고 상태, 요리 추천 준비 데이터를 한 곳에서 관리합니다.
             </p>
           </div>
 

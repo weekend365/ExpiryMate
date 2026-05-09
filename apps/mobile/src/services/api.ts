@@ -2,7 +2,6 @@ import type {
   DashboardSummary,
   InventoryItem,
   NotificationPreference,
-  Product,
 } from "@expirymate/shared";
 
 const API_BASE_URL =
@@ -18,7 +17,6 @@ interface ApiEnvelope<T> {
 
 type InventoryPayload = {
   productId?: string;
-  barcode?: string;
   displayName: string;
   brand?: string;
   category?: string;
@@ -95,9 +93,6 @@ export const discardInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}/discard`, {
     method: "POST",
   });
-
-export const lookupProductByBarcode = (barcode: string) =>
-  request<Product | null>(`/products/barcode/${barcode}`);
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

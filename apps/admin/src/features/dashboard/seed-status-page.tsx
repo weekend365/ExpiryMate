@@ -4,14 +4,13 @@ import { useQueries } from "@tanstack/react-query";
 import { PageHeader } from "../../components/page-header";
 import { MetricCard } from "../../components/metric-card";
 import { Panel } from "../../components/panel";
-import { getDashboardSummary, listInventory, listProducts, listUnknownScanLogs } from "../../lib/api";
+import { getDashboardSummary, listInventory, listProducts } from "../../lib/api";
 
 export function SeedStatusPage() {
-  const [productsQuery, inventoryQuery, logsQuery, summaryQuery] = useQueries({
+  const [productsQuery, inventoryQuery, summaryQuery] = useQueries({
     queries: [
       { queryKey: ["products", "seed-status"], queryFn: () => listProducts() },
       { queryKey: ["inventory", "seed-status"], queryFn: listInventory },
-      { queryKey: ["scan-logs", "seed-status"], queryFn: listUnknownScanLogs },
       { queryKey: ["dashboard-summary", "seed-status"], queryFn: getDashboardSummary },
     ],
   });
@@ -27,7 +26,7 @@ export function SeedStatusPage() {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="시드 상품 수" value={productsQuery.data?.length ?? 0} />
         <MetricCard label="시드 재고 수" value={inventoryQuery.data?.length ?? 0} />
-        <MetricCard label="미매칭 로그 수" value={logsQuery.data?.length ?? 0} tone="warning" />
+        <MetricCard label="보관 중" value={summaryQuery.data?.totalActiveCount ?? 0} />
         <MetricCard label="오늘 만료 수" value={summaryQuery.data?.todayExpiryCount ?? 0} tone="danger" />
       </div>
 
@@ -36,7 +35,7 @@ export function SeedStatusPage() {
           <li>상품 10개 이상</li>
           <li>재고 8개 이상</li>
           <li>오늘 만료, 3일 이내 만료, 만료 상태가 모두 섞여 있음</li>
-          <li>미매칭 바코드 로그 1건 이상</li>
+          <li>요리 추천에 활용할 냉장, 냉동, 실온 재료가 섞여 있음</li>
         </ul>
       </Panel>
     </div>

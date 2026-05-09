@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Post, Body, Query } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { ProductCategory } from "@expirymate/shared";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./dto/create-product.dto";
@@ -11,19 +11,12 @@ export class ProductsController {
   @Get()
   findAll(
     @Query("q") q?: string,
-    @Query("barcode") barcode?: string,
     @Query("category") category?: ProductCategory,
   ) {
     return this.productsService.findAll({
       q,
-      barcode,
       category,
     });
-  }
-
-  @Get("barcode/:barcode")
-  findByBarcode(@Param("barcode") barcode: string) {
-    return this.productsService.findByBarcode(barcode);
   }
 
   @Get(":id")

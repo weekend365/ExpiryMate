@@ -23,7 +23,6 @@ export const itemStatusLabels: Record<ItemStatus, string> = {
 export const expirySourceLabels: Record<ExpirySource, string> = {
   [ExpirySource.MANUAL]: "직접 입력",
   [ExpirySource.PRESET]: "빠른 선택",
-  [ExpirySource.BARCODE_DECODED]: "바코드 해석",
   [ExpirySource.OCR_DETECTED]: "OCR 인식",
 };
 

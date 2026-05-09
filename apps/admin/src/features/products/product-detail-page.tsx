@@ -39,7 +39,6 @@ export function ProductDetailPage({ productId }: { productId: string }) {
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productUpsertSchema),
     defaultValues: {
-      barcode: "",
       name: "",
       brand: "",
       category: ProductCategory.DAIRY,
@@ -50,7 +49,6 @@ export function ProductDetailPage({ productId }: { productId: string }) {
   useEffect(() => {
     if (productQuery.data) {
       form.reset({
-        barcode: productQuery.data.barcode,
         name: productQuery.data.name,
         brand: productQuery.data.brand,
         category: productQuery.data.category,
@@ -75,7 +73,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <Panel title="현재 정보" description="모바일 바코드 자동완성에 사용되는 기준 데이터입니다.">
+        <Panel title="현재 정보" description="모바일 등록과 요리 추천에 사용되는 기준 데이터입니다.">
           <div className="space-y-3 rounded-[28px] bg-[var(--surface-muted)] p-5">
             <div>
               <div className="text-sm text-[var(--muted)]">상품명</div>
@@ -91,22 +89,11 @@ export function ProductDetailPage({ productId }: { productId: string }) {
                 {productQuery.data ? productCategoryLabels[productQuery.data.category] : "-"}
               </div>
             </div>
-            <div>
-              <div className="text-sm text-[var(--muted)]">바코드</div>
-              <div className="font-mono font-semibold">{productQuery.data?.barcode}</div>
-            </div>
           </div>
         </Panel>
 
         <Panel title="상품 수정" description="운영자가 기준 상품 레코드를 정리하는 화면입니다.">
           <form className="grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-semibold">
-              바코드
-              <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
-                {...form.register("barcode")}
-              />
-            </label>
             <label className="grid gap-2 text-sm font-semibold">
               상품명
               <input

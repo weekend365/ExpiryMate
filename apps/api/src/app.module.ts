@@ -5,7 +5,6 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { DashboardModule } from "./modules/dashboard/dashboard.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
 import { ProductsModule } from "./modules/products/products.module";
-import { ScanLogsModule } from "./modules/scan-logs/scan-logs.module";
 import { SettingsModule } from "./modules/settings/settings.module";
 
 @Module({
@@ -20,7 +19,6 @@ import { SettingsModule } from "./modules/settings/settings.module";
     InventoryModule,
     DashboardModule,
     SettingsModule,
-    ScanLogsModule,
   ],
 })
 export class AppModule {}

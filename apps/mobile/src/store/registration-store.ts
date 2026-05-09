@@ -9,7 +9,6 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface RegistrationPrefill {
   productId?: string;
-  barcode?: string;
   displayName?: string;
   brand?: string;
   category?: ProductCategory;

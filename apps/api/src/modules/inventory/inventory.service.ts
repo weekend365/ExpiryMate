@@ -47,11 +47,6 @@ export class InventoryService {
                   mode: "insensitive",
                 },
               },
-              {
-                barcode: {
-                  contains: params.q,
-                },
-              },
             ]
           : undefined,
       },
@@ -80,7 +75,6 @@ export class InventoryService {
       data: {
         ownerKey,
         productId: dto.productId,
-        barcode: dto.barcode,
         displayName: dto.displayName,
         brand: dto.brand,
         category: dto.category as ProductCategory | undefined,
@@ -104,7 +98,6 @@ export class InventoryService {
       where: { id },
       data: {
         productId: dto.productId,
-        barcode: dto.barcode,
         displayName: dto.displayName,
         brand: dto.brand,
         category: dto.category as ProductCategory | undefined,

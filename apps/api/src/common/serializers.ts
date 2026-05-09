@@ -2,7 +2,6 @@ import {
   type InventoryItem as PrismaInventoryItem,
   type NotificationPreference as PrismaNotificationPreference,
   type Product as PrismaProduct,
-  type ScanLog as PrismaScanLog,
 } from "@prisma/client";
 import {
   calculateDaysLeftUntilExpiry,
@@ -12,13 +11,11 @@ import {
   type NotificationPreference,
   type Product,
   ProductCategory,
-  type ScanLog,
   StorageLocation,
 } from "@expirymate/shared";
 
 export const serializeProduct = (product: PrismaProduct): Product => ({
   id: product.id,
-  barcode: product.barcode,
   name: product.name,
   brand: product.brand,
   category: product.category as ProductCategory,
@@ -44,7 +41,6 @@ export const serializeInventoryItem = (
   id: item.id,
   productId: item.productId,
   ownerKey: item.ownerKey,
-  barcode: item.barcode,
   displayName: item.displayName,
   brand: item.brand,
   category: item.category ? (item.category as ProductCategory) : null,
@@ -70,12 +66,4 @@ export const serializeNotificationPreference = (
   quietHoursStart: preference.quietHoursStart,
   quietHoursEnd: preference.quietHoursEnd,
   updatedAt: preference.updatedAt.toISOString(),
-});
-
-export const serializeScanLog = (log: PrismaScanLog): ScanLog => ({
-  id: log.id,
-  barcode: log.barcode,
-  matched: log.matched,
-  note: log.note,
-  createdAt: log.createdAt.toISOString(),
 });

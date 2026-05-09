@@ -19,15 +19,15 @@ export default function OnboardingScreen() {
         <View style={styles.badge}>
           <Text style={styles.badgeText}>ExpiryMate</Text>
         </View>
-        <Text style={styles.title}>집에 있는 물건을 바코드로 빠르게 정리하세요</Text>
+        <Text style={styles.title}>냉장고 속 재료로 오늘 만들 요리를 찾아보세요</Text>
         <Text style={styles.description}>
-          바코드로 상품을 찾고, 유통기한은 따로 입력해서 놓치지 않게 관리해요.
+          보관 중인 재료와 유통기한을 정리하고, 남은 재료로 만들 수 있는 요리를 준비해요.
         </Text>
         <View style={styles.points}>
-          <Text style={styles.point}>빠르게 등록</Text>
+          <Text style={styles.point}>재료 빠르게 등록</Text>
           <Text style={styles.point}>유통기한 놓치지 않기</Text>
-          <Text style={styles.point}>중복 구매 줄이기</Text>
-          <Text style={styles.point}>집에 뭐 있는지 바로 확인하기</Text>
+          <Text style={styles.point}>냉장고 재료 바로 확인하기</Text>
+          <Text style={styles.point}>요리 추천 준비하기</Text>
         </View>
       </View>
       <Button onPress={handleStart}>시작하기</Button>

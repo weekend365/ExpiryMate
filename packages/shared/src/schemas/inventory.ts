@@ -10,7 +10,6 @@ export const inventoryItemSchema = z.object({
   id: z.string(),
   productId: z.string().nullable().optional(),
   ownerKey: z.string().optional(),
-  barcode: z.string().nullable().optional(),
   displayName: z.string().min(1),
   brand: z.string().nullable().optional(),
   category: z.nativeEnum(ProductCategory).nullable().optional(),
@@ -33,7 +32,6 @@ export const inventoryUpsertSchema = inventoryItemSchema.omit({
 
 export const inventoryFormSchema = z.object({
   productId: z.string().optional(),
-  barcode: z.string().min(8, "바코드를 확인해주세요").max(32).optional().or(z.literal("")),
   displayName: z.string().min(1, "상품명을 입력해주세요"),
   brand: z.string().optional(),
   category: z.nativeEnum(ProductCategory).optional(),

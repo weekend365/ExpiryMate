@@ -4,14 +4,12 @@ import type {
   NotificationPreference,
   Product,
   ProductCategory,
-  ScanLog,
 } from "@expirymate/shared";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
 type ProductPayload = {
-  barcode: string;
   name: string;
   brand: string;
   category: ProductCategory;
@@ -67,13 +65,7 @@ export const updateProduct = (id: string, payload: Partial<ProductPayload>) =>
     body: JSON.stringify(payload),
   });
 
-export const lookupProductByBarcode = (barcode: string) =>
-  request<Product | null>(`/products/barcode/${barcode}`);
-
 export const listInventory = () => request<InventoryItem[]>("/inventory");
-
-export const listUnknownScanLogs = () =>
-  request<ScanLog[]>("/scan-logs?matched=false");
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

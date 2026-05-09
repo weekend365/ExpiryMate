@@ -1,5 +1,12 @@
 import { StorageLocation, storageLocationLabels } from "@expirymate/shared";
 import { router } from "expo-router";
+import {
+  Archive,
+  CircleAlert,
+  Clock3,
+  MapPin,
+  type LucideIcon,
+} from "lucide-react-native";
 import { useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { filterInventoryItems, type InventoryViewFilter } from "../../src/features/inventory/filters";
@@ -9,10 +16,17 @@ import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { colors, spacing } from "../../src/shared/theme";
 
-const filters: Array<{ key: InventoryViewFilter; label: string }> = [
-  { key: "all", label: "전체" },
-  { key: "expiring", label: "임박" },
-  { key: "expired", label: "만료" },
+type PillTone = "default" | "warning" | "danger" | "success";
+
+const filters: Array<{
+  key: InventoryViewFilter;
+  label: string;
+  icon: LucideIcon;
+  tone?: PillTone;
+}> = [
+  { key: "all", label: "전체", icon: Archive },
+  { key: "expiring", label: "임박", icon: Clock3, tone: "warning" },
+  { key: "expired", label: "만료", icon: CircleAlert, tone: "danger" },
 ];
 
 export default function InventoryScreen() {
@@ -24,52 +38,85 @@ export default function InventoryScreen() {
     () => filterInventoryItems(data, filter, location),
     [data, filter, location],
   );
+  const filterCounts = useMemo(
+    () => ({
+      all: data.length,
+      expiring: filterInventoryItems(data, "expiring", "all").length,
+      expired: filterInventoryItems(data, "expired", "all").length,
+    }),
+    [data],
+  );
+  const locationCounts = useMemo(() => {
+    const counts = Object.fromEntries(
+      Object.values(StorageLocation).map((value) => [value, 0]),
+    ) as Record<StorageLocation, number>;
+
+    data.forEach((item) => {
+      counts[item.storageLocation] += 1;
+    });
+
+    return counts;
+  }, [data]);
 
   return (
     <Screen
-      title="재고 목록"
-      subtitle="임박 상품, 만료 상품, 저장 위치별 재고를 빠르게 확인해요."
+      title="보관함"
+      subtitle={`${filtered.length}개 상품을 유통기한이 가까운 순서로 보여드려요.`}
     >
-      <View style={styles.pillRow}>
-        {filters.map((item) => (
-          <Pill
-            key={item.key}
-            label={item.label}
-            selected={filter === item.key}
-            onPress={() => setFilter(item.key)}
-          />
-        ))}
+      <View style={styles.filterPanel}>
+        <Text style={styles.filterTitle}>상태</Text>
+        <View style={styles.pillRow}>
+          {filters.map((item) => (
+            <Pill
+              key={item.key}
+              label={item.label}
+              icon={item.icon}
+              count={filterCounts[item.key]}
+              tone={item.tone}
+              selected={filter === item.key}
+              onPress={() => setFilter(item.key)}
+            />
+          ))}
+        </View>
       </View>
 
-      <View style={styles.pillRow}>
-        <Pill
-          label="전체 위치"
-          selected={location === "all"}
-          onPress={() => setLocation("all")}
-        />
-        {Object.values(StorageLocation).map((value) => (
+      <View style={styles.filterPanel}>
+        <Text style={styles.filterTitle}>위치</Text>
+        <View style={styles.pillRow}>
           <Pill
-            key={value}
-            label={storageLocationLabels[value]}
-            selected={location === value}
-            onPress={() => setLocation(value)}
+            label="전체 위치"
+            icon={MapPin}
+            count={data.length}
+            selected={location === "all"}
+            onPress={() => setLocation("all")}
           />
-        ))}
+          {Object.values(StorageLocation).map((value) => (
+            <Pill
+              key={value}
+              label={storageLocationLabels[value]}
+              count={locationCounts[value]}
+              selected={location === value}
+              onPress={() => setLocation(value)}
+            />
+          ))}
+        </View>
       </View>
 
       {filtered.length ? (
-        filtered.map((item) => (
-          <InventoryCard
-            key={item.id}
-            item={item}
-            onPress={() =>
-              router.push({
-                pathname: "/inventory/[id]",
-                params: { id: item.id },
-              })
-            }
-          />
-        ))
+        <View style={styles.list}>
+          {filtered.map((item) => (
+            <InventoryCard
+              key={item.id}
+              item={item}
+              onPress={() =>
+                router.push({
+                  pathname: "/inventory/[id]",
+                  params: { id: item.id },
+                })
+              }
+            />
+          ))}
+        </View>
       ) : (
         <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>조건에 맞는 재고가 없어요</Text>
@@ -83,14 +130,28 @@ export default function InventoryScreen() {
 }
 
 const styles = StyleSheet.create({
+  filterPanel: {
+    gap: spacing.sm,
+  },
+  filterTitle: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: "800",
+    color: colors.subtext,
+  },
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: spacing.sm,
   },
+  list: {
+    gap: spacing.sm,
+  },
   emptyState: {
     backgroundColor: colors.surface,
-    borderRadius: 24,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.xl,
     gap: spacing.xs,
   },
@@ -101,7 +162,7 @@ const styles = StyleSheet.create({
   },
   emptyDescription: {
     fontSize: 14,
-    lineHeight: 22,
+    lineHeight: 21,
     color: colors.subtext,
   },
 });

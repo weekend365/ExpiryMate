@@ -1,10 +1,19 @@
 import {
+  calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
   getExpiryBucket,
   itemStatusLabels,
   storageLocationLabels,
   type InventoryItem,
 } from "@expirymate/shared";
+import {
+  CalendarDays,
+  ChevronRight,
+  CircleAlert,
+  Clock3,
+  MapPin,
+  ShieldCheck,
+} from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, spacing } from "../shared/theme";
 
@@ -14,30 +23,55 @@ interface InventoryCardProps {
 }
 
 const expiryLabelMap = {
-  expired: "이미 만료",
+  expired: "만료됨",
   today: "오늘 만료",
-  within_3_days: "3일 이내 만료",
-  within_7_days: "7일 이내 만료",
-  safe: "여유 있음",
+  within_3_days: "임박",
+  within_7_days: "곧 만료",
+  safe: "안전",
 };
 
 export function InventoryCard({ item, onPress }: InventoryCardProps) {
   const bucket = getExpiryBucket(item.expiryDate);
   const bucketStyle = bucketStyles[bucket];
+  const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
+  const DDayIcon = bucketStyle.icon;
+  const ddayLabel =
+    daysLeft < 0
+      ? `D+${Math.abs(daysLeft)}`
+      : daysLeft === 0
+        ? "오늘"
+        : `D-${daysLeft}`;
 
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && { opacity: 0.85 }]}
+      disabled={!onPress}
+      style={({ pressed }) => [
+        styles.card,
+        pressed && styles.cardPressed,
+      ]}
     >
-      <View style={styles.row}>
-        <View style={styles.grow}>
-          <Text style={styles.name}>{item.displayName}</Text>
-          <Text style={styles.meta}>
+      <View style={styles.content}>
+        <View style={styles.titleRow}>
+          <Text style={styles.name} numberOfLines={1}>{item.displayName}</Text>
+          {onPress ? <ChevronRight color={colors.mutedText} size={18} /> : null}
+        </View>
+        <View style={styles.metaRow}>
+          <MapPin color={colors.mutedText} size={14} strokeWidth={2.3} />
+          <Text style={styles.meta} numberOfLines={1}>
             {storageLocationLabels[item.storageLocation]} · {item.quantity}
             {item.unit ?? "개"} · {itemStatusLabels[item.status]}
           </Text>
         </View>
+        <View style={styles.dateRow}>
+          <CalendarDays color={colors.mutedText} size={14} strokeWidth={2.3} />
+          <Text style={styles.dateLabel}>
+            유통기한 {formatDateKoreanCompact(item.expiryDate)}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.badgeColumn}>
         <View
           style={[
             styles.badge,
@@ -46,60 +80,101 @@ export function InventoryCard({ item, onPress }: InventoryCardProps) {
             },
           ]}
         >
+          <DDayIcon color={bucketStyle.color} size={15} strokeWidth={2.5} />
           <Text style={[styles.badgeText, { color: bucketStyle.color }]}>
-            {expiryLabelMap[bucket]}
+            {ddayLabel}
           </Text>
         </View>
+        <Text style={[styles.bucketLabel, { color: bucketStyle.color }]}>
+          {expiryLabelMap[bucket]}
+        </Text>
       </View>
-      <Text style={styles.dateLabel}>유통기한 {formatDateKoreanCompact(item.expiryDate)}</Text>
     </Pressable>
   );
 }
 
 const bucketStyles = {
-  expired: { backgroundColor: colors.dangerSoft, color: colors.danger },
-  today: { backgroundColor: colors.dangerSoft, color: colors.danger },
-  within_3_days: { backgroundColor: colors.warningSoft, color: colors.warning },
-  within_7_days: { backgroundColor: colors.accentSoft, color: colors.accent },
-  safe: { backgroundColor: colors.primarySoft, color: colors.primary },
+  expired: { backgroundColor: colors.dangerSoft, color: colors.danger, icon: CircleAlert },
+  today: { backgroundColor: colors.dangerSoft, color: colors.danger, icon: Clock3 },
+  within_3_days: { backgroundColor: colors.warningSoft, color: colors.warning, icon: Clock3 },
+  within_7_days: { backgroundColor: colors.primarySoft, color: colors.primary, icon: CalendarDays },
+  safe: { backgroundColor: colors.successSoft, color: colors.success, icon: ShieldCheck },
 };
 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 22,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
     padding: spacing.md,
-    gap: spacing.sm,
-  },
-  row: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.sm,
+    alignItems: "center",
+    gap: spacing.md,
   },
-  grow: {
+  cardPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  content: {
     flex: 1,
-    gap: 4,
+    gap: 8,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
   },
   name: {
-    fontSize: 17,
-    fontWeight: "700",
+    flex: 1,
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: "800",
     color: colors.text,
+  },
+  metaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
   },
   meta: {
+    flex: 1,
     fontSize: 13,
+    lineHeight: 18,
     color: colors.subtext,
   },
-  badge: {
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: "700",
+  dateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
   },
   dateLabel: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: colors.subtext,
+  },
+  badgeColumn: {
+    alignItems: "flex-end",
+    gap: 6,
+  },
+  badge: {
+    minWidth: 72,
+    minHeight: 34,
+    borderRadius: 12,
+    paddingHorizontal: 9,
+    paddingVertical: 7,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+  badgeText: {
     fontSize: 14,
-    color: colors.text,
+    lineHeight: 18,
+    fontWeight: "800",
+  },
+  bucketLabel: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: "700",
   },
 });

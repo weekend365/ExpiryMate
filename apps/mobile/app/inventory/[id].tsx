@@ -80,7 +80,6 @@ export default function InventoryDetailScreen() {
     if (itemQuery.data) {
       form.reset({
         productId: itemQuery.data.productId ?? undefined,
-        barcode: itemQuery.data.barcode ?? "",
         displayName: itemQuery.data.displayName,
         brand: itemQuery.data.brand ?? "",
         category: itemQuery.data.category ?? undefined,
@@ -113,12 +112,11 @@ export default function InventoryDetailScreen() {
   return (
     <Screen
       title={itemQuery.data?.displayName ?? "재고 상세"}
-      subtitle="핵심 정보 수정, 소비 완료, 폐기 처리를 할 수 있어요."
+      subtitle="재료 정보 수정, 사용 완료, 폐기 처리를 할 수 있어요."
     >
       <View style={styles.formCard}>
-        <FormField control={form.control} name="displayName" label="상품명" />
+        <FormField control={form.control} name="displayName" label="재료명" />
         <FormField control={form.control} name="brand" label="브랜드" />
-        <FormField control={form.control} name="barcode" label="바코드" />
         <FormField control={form.control} name="expiryDate" label="유통기한" />
         <FormField control={form.control} name="quantity" label="수량" keyboardType="numeric" />
         <FormField control={form.control} name="unit" label="단위" />

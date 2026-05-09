@@ -16,7 +16,6 @@ export enum ItemStatus {
 export enum ExpirySource {
   MANUAL = "manual",
   PRESET = "preset",
-  BARCODE_DECODED = "barcode_decoded",
   OCR_DETECTED = "ocr_detected",
 }
 

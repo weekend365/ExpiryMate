@@ -1,11 +1,7 @@
 import { ProductCategory } from "@expirymate/shared";
-import { IsEnum, IsOptional, IsString, IsUrl, Length, MinLength } from "class-validator";
+import { IsEnum, IsOptional, IsString, IsUrl, MinLength } from "class-validator";
 
 export class CreateProductDto {
-  @IsString()
-  @Length(8, 32)
-  barcode!: string;
-
   @IsString()
   @MinLength(1)
   name!: string;

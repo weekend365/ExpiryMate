@@ -7,7 +7,6 @@ import type {
 
 export interface Product {
   id: string;
-  barcode: string;
   name: string;
   brand: string;
   category: ProductCategory;
@@ -20,7 +19,6 @@ export interface InventoryItem {
   id: string;
   productId?: string | null;
   ownerKey?: string;
-  barcode?: string | null;
   displayName: string;
   brand?: string | null;
   category?: ProductCategory | null;
@@ -44,14 +42,6 @@ export interface NotificationPreference {
   quietHoursStart: string;
   quietHoursEnd: string;
   updatedAt: string;
-}
-
-export interface ScanLog {
-  id: string;
-  barcode: string;
-  matched: boolean;
-  note?: string | null;
-  createdAt: string;
 }
 
 export interface DashboardSummary {

@@ -1,25 +1,26 @@
 # ExpiryMate MVP Monorepo
 
-ExpiryMate is a Korean-first barcode inventory and expiry reminder MVP for food and household goods.
+ExpiryMate is a Korean-first ingredient inventory, expiry reminder, and recipe recommendation preparation MVP.
 
-The product assumption for this MVP is explicit:
+The current product assumption for this MVP is explicit:
 
-- barcode is used for product identification
+- users register ingredients and household goods manually
 - expiry date is entered separately
-- future sources are reserved for `barcode_decoded` and `ocr_detected`
+- registered inventory data will be used for recipe recommendation in a future step
+- future sources are reserved for `ocr_detected`
 
-## Why this monorepo shape
+## Why This Monorepo Shape
 
 This repository uses `pnpm` workspaces only.
 
 - `apps/mobile` is the Korean user-facing product
-- `apps/admin` is the internal operations tool for barcode and product mapping
+- `apps/admin` is the internal operations tool for product and inventory data
 - `apps/api` is the single REST backend for both clients
 - `packages/shared` holds safe-to-share contracts and inventory/expiry utilities
 
 This keeps the MVP simple while leaving a clean path for:
 
-- replacing the seeded barcode mapping with a real external product source
+- adding recipe recommendation from registered inventory
 - adding OCR-based expiry detection later
 - adding auth, households, analytics, and subscriptions without a rewrite
 
@@ -36,6 +37,7 @@ This keeps the MVP simple while leaving a clean path for:
 │   │   └── src
 │   └── mobile
 │       ├── app
+│       ├── assets
 │       └── src
 ├── packages
 │   └── shared
@@ -55,7 +57,6 @@ This keeps the MVP simple while leaving a clean path for:
 - TanStack Query
 - React Hook Form + Zod
 - AsyncStorage
-- `expo-camera`
 - `expo-notifications` ready structure
 
 ### Admin
@@ -159,20 +160,18 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 
 - onboarding
 - home dashboard
-- barcode scan flow
-- product lookup by barcode
-- manual/semi-automatic registration
+- manual ingredient registration
 - inventory list
 - inventory detail and edit
 - consume/discard actions
 - notification settings UI
+- mascot asset for recipe-oriented empty and success states
 
 ### Admin
 
 - dashboard
 - product list and quick create
 - product detail/edit
-- barcode lookup page
 - inventory list
 - seed status page
 
@@ -183,14 +182,12 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - inventory
 - dashboard summary
 - settings/preferences
-- scan logs
 
 ## Initial Database Design
 
 ### `Product`
 
 - `id`
-- `barcode`
 - `name`
 - `brand`
 - `category`
@@ -203,7 +200,6 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - `id`
 - `ownerKey`
 - `productId`
-- `barcode`
 - `displayName`
 - `brand`
 - `category`
@@ -228,15 +224,6 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - `quietHoursEnd`
 - `createdAt`
 - `updatedAt`
-
-### `ScanLog`
-
-- `id`
-- `ownerKey`
-- `barcode`
-- `matched`
-- `note`
-- `createdAt`
 
 ## API Response Convention
 
@@ -270,7 +257,6 @@ This is intentionally simple and easy for both mobile and admin clients.
 
 - `GET /products`
 - `GET /products/:id`
-- `GET /products/barcode/:barcode`
 - `POST /products`
 - `PATCH /products/:id`
 
@@ -288,7 +274,6 @@ This is intentionally simple and easy for both mobile and admin clients.
 - `GET /dashboard/summary`
 - `GET /settings/notification-preferences`
 - `PATCH /settings/notification-preferences`
-- `GET /scan-logs`
 - `GET /auth/placeholder`
 
 ## Seed Data
@@ -323,13 +308,13 @@ Inventory seed also includes mixed states:
 - shared contracts and expiry utilities
 - Nest REST modules
 - Prisma schema and seed
-- barcode lookup against stored product mappings
-- mobile onboarding, scan, register, inventory, settings flows
-- admin product/inventory/barcode tooling
+- mobile onboarding, register, inventory, settings flows
+- admin product and inventory tooling
+- recipe-oriented mascot asset
 
 ### Mocked or intentionally limited
 
-- no real external barcode product API
+- no real recipe recommendation engine yet
 - no OCR expiry extraction
 - no real multi-user auth
 - no real push token registration backend
@@ -338,36 +323,33 @@ Inventory seed also includes mixed states:
 
 ## Recommended Production Replacements First
 
-1. Replace internal seeded barcode lookup with a real product data source and fallback cache strategy.
-2. Add authentication and real user ownership instead of `ownerKey="demo-user"`.
+1. Add authentication and real user ownership instead of `ownerKey="demo-user"`.
+2. Add recipe recommendation based on active inventory, expiry date, and category.
 3. Add a reminder scheduler and push delivery pipeline.
 4. Add image upload/storage instead of placeholder image URLs.
-5. Add OCR-based expiry parsing after the registration flow is already stable.
+5. Add OCR-based expiry parsing after the registration flow is stable.
 
 ## Recommended Next Implementation Order
 
-1. Harden API validation and add API tests
-2. Add mobile date picker and better input UX for expiry dates
-3. Add admin create/edit validation feedback
-4. Add push token registration + scheduled reminder jobs
-5. Add unmatched barcode triage workflow
-6. Add auth and multi-household data model
-7. Add analytics and subscription boundaries only after retention signals exist
+1. Add recipe recommendation contracts, API, and mobile recommendation UI.
+2. Harden API validation and add API tests.
+3. Add admin create/edit validation feedback.
+4. Add push token registration + scheduled reminder jobs.
+5. Add auth and multi-household data model.
+6. Add analytics and subscription boundaries only after retention signals exist.
 
 ## Notes On Running
 
 - `packages/shared` is built to `dist` and consumed as a workspace package
 - root `dev` watches `packages/shared` so changes propagate during local development
-- mobile barcode scanning uses Expo camera and product lookup is API-ready
 - notification UI is real, but remote push delivery is not implemented yet
+- recipe recommendation is the next major product capability
 
 ## Versioning Notes
 
 This repo was shaped around current official docs for the main framework assumptions used here:
 
 - Expo SDK reference and package docs: https://docs.expo.dev/versions/latest/
-- Expo Camera: https://docs.expo.dev/versions/latest/sdk/camera/
 - Expo Notifications: https://docs.expo.dev/versions/latest/sdk/notifications/
 - Next.js App Router installation: https://nextjs.org/docs/app/getting-started/installation
 - Next.js dynamic segments: https://nextjs.org/docs/15/app/api-reference/file-conventions/dynamic-routes
-# ExpiryMate

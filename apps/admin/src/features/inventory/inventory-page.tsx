@@ -22,7 +22,7 @@ export function InventoryPage() {
     }
 
     return items.filter((item) =>
-      `${item.displayName} ${item.brand ?? ""} ${item.barcode ?? ""}`
+      `${item.displayName} ${item.brand ?? ""}`
         .toLowerCase()
         .includes(query.toLowerCase()),
     );
@@ -38,7 +38,7 @@ export function InventoryPage() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="상품명, 브랜드, 바코드 검색"
+            placeholder="상품명 또는 브랜드 검색"
             className="w-full min-w-72 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
           />
         }

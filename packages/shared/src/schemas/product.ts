@@ -3,7 +3,6 @@ import { ProductCategory } from "../enums/app-enums";
 
 export const productSchema = z.object({
   id: z.string(),
-  barcode: z.string().min(8).max(32),
   name: z.string().min(1),
   brand: z.string().min(1),
   category: z.nativeEnum(ProductCategory),
