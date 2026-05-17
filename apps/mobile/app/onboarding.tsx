@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "../src/components/Button";
+import { Mascot } from "../src/components/Mascot";
 import { Screen } from "../src/components/Screen";
 import { colors, spacing } from "../src/shared/theme";
 import { useAppStore } from "../src/store/app-store";
@@ -19,6 +20,7 @@ export default function OnboardingScreen() {
         <View style={styles.badge}>
           <Text style={styles.badgeText}>ExpiryMate</Text>
         </View>
+        <Mascot size="large" style={styles.mascot} />
         <Text style={styles.title}>냉장고 속 재료로 오늘 만들 요리를 찾아보세요</Text>
         <Text style={styles.description}>
           보관 중인 재료와 유통기한을 정리하고, 남은 재료로 만들 수 있는 요리를 준비해요.
@@ -53,6 +55,9 @@ const styles = StyleSheet.create({
   badgeText: {
     color: colors.primary,
     fontWeight: "700",
+  },
+  mascot: {
+    alignSelf: "center",
   },
   title: {
     fontSize: 34,

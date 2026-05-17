@@ -4,7 +4,6 @@ import {
   ItemStatus,
   ProductCategory,
   StorageLocation,
-  expiryPresetOptions,
   formatDateKorean,
   inventoryFormSchema,
   productCategoryLabels,
@@ -15,16 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import {
   CalendarDays,
+  ChefHat,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck,
   MapPin,
   Package,
 } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { FormField } from "../src/components/FormField";
@@ -53,7 +52,16 @@ type RegistrationFormValues = {
   notes: string;
 };
 
-type RegistrationStep = "product" | "expiry" | "storage" | "review";
+type RegistrationStep = "product" | "expiry" | "storage";
+
+type RegisteredSessionItem = {
+  id: string;
+  displayName: string;
+  quantity: number;
+  unit?: string | null;
+  storageLocation: StorageLocation;
+  expiryDate: string;
+};
 
 const STORAGE_LOCATION_ORDER = [
   StorageLocation.FRIDGE,
@@ -85,14 +93,15 @@ const REGISTRATION_STEPS: Array<{
     key: "storage",
     label: "보관",
     title: "어디에 몇 개 있나요?",
-    description: "보관 위치와 수량만 확인하면 기본 등록 정보는 끝나요.",
+    description: "보관 위치와 수량을 정하면 바로 등록할 수 있어요.",
   },
-  {
-    key: "review",
-    label: "확인",
-    title: "등록 전 마지막 확인",
-    description: "필요하면 브랜드, 카테고리, 메모를 추가할 수 있어요.",
-  },
+];
+
+const QUICK_EXPIRY_OPTIONS = [
+  { label: "오늘", days: 0 },
+  { label: "내일", days: 1 },
+  { label: "3일", days: 3 },
+  { label: "7일", days: 7 },
 ];
 
 const createDefaultFormValues = (): RegistrationFormValues => ({
@@ -161,6 +170,13 @@ export default function RegisterScreen() {
   const [step, setStep] = useState<RegistrationStep>("product");
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(
     Boolean(prefill?.brand || prefill?.category),
+  );
+  const [registeredSessionItems, setRegisteredSessionItems] = useState<
+    RegisteredSessionItem[]
+  >([]);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
+    null,
   );
   const initializedRef = useRef(false);
   const appliedPrefillKeyRef = useRef("");
@@ -234,18 +250,18 @@ export default function RegisterScreen() {
   const quantity = Number(form.watch("quantity")) || 1;
   const displayName = form.watch("displayName")?.trim() ?? "";
   const expiryDate = form.watch("expiryDate");
+  const expirySource = form.watch("expirySource");
   const storageLocation = form.watch("storageLocation");
   const unit = form.watch("unit") || "개";
   const brand = form.watch("brand")?.trim() ?? "";
   const category = form.watch("category");
   const stepIndex = REGISTRATION_STEPS.findIndex((item) => item.key === step);
   const activeStep = REGISTRATION_STEPS[stepIndex];
-  const isLastStep = step === "review";
+  const isLastStep = step === "storage";
   const canGoNext =
     (step === "product" && Boolean(displayName)) ||
     (step === "expiry" && Boolean(expiryDate)) ||
-    (step === "storage" && Boolean(storageLocation) && quantity > 0) ||
-    step === "review";
+    (step === "storage" && Boolean(storageLocation) && quantity > 0);
 
   const recentTemplates = useMemo(
     () =>
@@ -298,6 +314,8 @@ export default function RegisterScreen() {
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
+      setSubmitErrorMessage(null);
+      setSuccessMessage(null);
       const created = await mutation.mutateAsync({
         productId: values.productId,
         displayName: values.displayName,
@@ -315,36 +333,31 @@ export default function RegisterScreen() {
       clearDraft();
       appliedPrefillKeyRef.current = "";
 
-      const nextDefaults = buildInitialValues(null, {
-        storageLocation: values.storageLocation,
-        unit: values.unit,
-      });
+      setRegisteredSessionItems((current) => [
+        {
+          id: created.id,
+          displayName: created.displayName,
+          quantity: created.quantity,
+          unit: created.unit,
+          storageLocation: created.storageLocation,
+          expiryDate: created.expiryDate,
+        },
+        ...current,
+      ]);
+      setSuccessMessage(`${created.displayName}을(를) 등록했어요.`);
 
-      Alert.alert(
-        "등록했어요",
-        `${created.displayName}을(를) 재고에 추가했어요.`,
-        [
-          {
-            text: "하나 더 등록",
-            onPress: () => {
-              form.reset(nextDefaults);
-              setShowAdditionalInfo(false);
-              setStep("product");
-            },
-          },
-          {
-            text: "재고 보기",
-            onPress: () => {
-              form.reset(nextDefaults);
-              setStep("product");
-              router.replace("/(tabs)/inventory");
-            },
-          },
-        ],
-      );
+      const nextDefaults = {
+        ...createDefaultFormValues(),
+        storageLocation: values.storageLocation,
+        quantity: values.quantity,
+        unit: values.unit,
+      };
+
+      form.reset(nextDefaults);
+      setShowAdditionalInfo(false);
+      setStep("product");
     } catch (error) {
-      Alert.alert(
-        "저장에 실패했어요",
+      setSubmitErrorMessage(
         error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
       );
     }
@@ -353,7 +366,7 @@ export default function RegisterScreen() {
   return (
     <Screen
       title="등록하기"
-      subtitle={`${stepIndex + 1}/4 · ${activeStep.label} 정보를 입력해요.`}
+      subtitle={`${stepIndex + 1}/${REGISTRATION_STEPS.length} · ${activeStep.label} 정보를 입력해요.`}
     >
       <View style={styles.progressCard}>
         <View style={styles.progressTrack}>
@@ -383,9 +396,6 @@ export default function RegisterScreen() {
             {step === "storage" ? (
               <MapPin color={colors.primary} size={22} strokeWidth={2.5} />
             ) : null}
-            {step === "review" ? (
-              <ClipboardCheck color={colors.primary} size={22} strokeWidth={2.5} />
-            ) : null}
           </View>
           <View style={styles.stepCopy}>
             <Text style={styles.stepTitle}>{activeStep.title}</Text>
@@ -393,6 +403,25 @@ export default function RegisterScreen() {
           </View>
         </View>
       </View>
+
+      {successMessage ? (
+        <View style={styles.successStrip}>
+          <CheckCircle2 color={colors.success} size={20} strokeWidth={2.5} />
+          <View style={styles.successCopy}>
+            <Text style={styles.successTitle}>{successMessage}</Text>
+            <Text style={styles.successDescription}>
+              다음 재료 이름과 유통기한만 입력하면 이어서 등록할 수 있어요.
+            </Text>
+          </View>
+        </View>
+      ) : null}
+
+      {submitErrorMessage ? (
+        <View style={styles.errorStrip}>
+          <Text style={styles.errorTitle}>저장에 실패했어요</Text>
+          <Text style={styles.errorDescription}>{submitErrorMessage}</Text>
+        </View>
+      ) : null}
 
       {step === "product" ? (
         <>
@@ -493,7 +522,7 @@ export default function RegisterScreen() {
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>빠른 유통기한 선택</Text>
             <View style={styles.pillRow}>
-              {expiryPresetOptions.map((option) => {
+              {QUICK_EXPIRY_OPTIONS.map((option) => {
                 const presetDate = toIsoDate(addDays(new Date(), option.days));
 
                 return (
@@ -506,6 +535,16 @@ export default function RegisterScreen() {
                   />
                 );
               })}
+              <Pill
+                label="직접 선택"
+                icon={CalendarDays}
+                selected={expirySource === ExpirySource.MANUAL}
+                onPress={() =>
+                  form.setValue("expirySource", ExpirySource.MANUAL, {
+                    shouldValidate: true,
+                  })
+                }
+              />
             </View>
           </View>
         </>
@@ -549,11 +588,7 @@ export default function RegisterScreen() {
               </Text>
             </View>
           </View>
-        </>
-      ) : null}
 
-      {step === "review" ? (
-        <>
           {similarItems.length ? (
             <View style={styles.warningCard}>
               <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
@@ -673,6 +708,42 @@ export default function RegisterScreen() {
         </>
       ) : null}
 
+      {registeredSessionItems.length ? (
+        <View style={styles.sessionCard}>
+          <View style={styles.sessionHeader}>
+            <View>
+              <Text style={styles.sessionEyebrow}>오늘 등록한 재료</Text>
+              <Text style={styles.sessionTitle}>
+                {registeredSessionItems.length}개 등록됨
+              </Text>
+            </View>
+            <Button
+              size="small"
+              icon={ChefHat}
+              onPress={() =>
+                router.push({
+                  pathname: "/(tabs)/recommendations",
+                  params: { autoGenerateAt: Date.now().toString() },
+                })
+              }
+            >
+              추천 받기
+            </Button>
+          </View>
+          <View style={styles.sessionList}>
+            {registeredSessionItems.slice(0, 3).map((item) => (
+              <View key={item.id} style={styles.sessionRow}>
+                <Text style={styles.sessionName}>{item.displayName}</Text>
+                <Text style={styles.sessionMeta}>
+                  {storageLocationLabels[item.storageLocation]} · {item.quantity}
+                  {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ) : null}
+
       <View style={styles.ctaBar}>
         {stepIndex > 0 ? (
           <Button
@@ -748,6 +819,46 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: colors.subtext,
+  },
+  successStrip: {
+    backgroundColor: colors.successSoft,
+    borderRadius: 16,
+    padding: spacing.md,
+    flexDirection: "row",
+    gap: spacing.sm,
+    alignItems: "flex-start",
+  },
+  successCopy: {
+    flex: 1,
+    gap: 3,
+  },
+  successTitle: {
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  successDescription: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.subtext,
+  },
+  errorStrip: {
+    backgroundColor: colors.dangerSoft,
+    borderRadius: 16,
+    padding: spacing.md,
+    gap: 3,
+  },
+  errorTitle: {
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "800",
+    color: colors.danger,
+  },
+  errorDescription: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.text,
   },
   formCard: {
     backgroundColor: colors.surface,
@@ -946,6 +1057,52 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     color: colors.text,
+  },
+  sessionCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.lg,
+    gap: spacing.md,
+  },
+  sessionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.md,
+  },
+  sessionEyebrow: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "800",
+    color: colors.primary,
+  },
+  sessionTitle: {
+    fontSize: 19,
+    lineHeight: 26,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  sessionList: {
+    gap: spacing.sm,
+  },
+  sessionRow: {
+    borderRadius: 12,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.md,
+    gap: 3,
+  },
+  sessionName: {
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  sessionMeta: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.subtext,
   },
   ctaBar: {
     flexDirection: "row",

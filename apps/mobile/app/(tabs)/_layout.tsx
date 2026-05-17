@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Archive, Bell, House } from "lucide-react-native";
+import { Archive, Bell, ChefHat, House } from "lucide-react-native";
 import { colors } from "../../src/shared/theme";
 
 export default function TabsLayout() {
@@ -24,6 +24,15 @@ export default function TabsLayout() {
           title: "홈",
           tabBarIcon: ({ color, size }) => (
             <House color={color} size={size} strokeWidth={2.4} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="recommendations"
+        options={{
+          title: "추천",
+          tabBarIcon: ({ color, size }) => (
+            <ChefHat color={color} size={size} strokeWidth={2.4} />
           ),
         }}
       />

@@ -5,6 +5,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { DashboardModule } from "./modules/dashboard/dashboard.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
 import { ProductsModule } from "./modules/products/products.module";
+import { RecipesModule } from "./modules/recipes/recipes.module";
 import { SettingsModule } from "./modules/settings/settings.module";
 
 @Module({
@@ -18,6 +19,7 @@ import { SettingsModule } from "./modules/settings/settings.module";
     ProductsModule,
     InventoryModule,
     DashboardModule,
+    RecipesModule,
     SettingsModule,
   ],
 })

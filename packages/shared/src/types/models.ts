@@ -55,6 +55,55 @@ export interface DashboardSummary {
   locationCounts: Record<string, number>;
 }
 
+export type RecipeMealType = "any" | "breakfast" | "lunch" | "dinner" | "snack";
+
+export interface RecipeRecommendationRequest {
+  ownerKey?: string;
+  servings: number;
+  maxCookingMinutes: number;
+  mealType: RecipeMealType;
+  useExpiringFirst: boolean;
+}
+
+export interface RecipeInventorySnapshotItem {
+  inventoryItemId: string;
+  name: string;
+  category?: ProductCategory | null;
+  quantity: number;
+  unit?: string | null;
+  storageLocation: StorageLocation;
+  expiryDate: string;
+  daysUntilExpiry: number;
+}
+
+export interface RecipeRecommendationDish {
+  title: string;
+  summary: string;
+  cookingTimeMinutes: number;
+  difficulty: "easy" | "medium" | "hard";
+  servings: number;
+  usedIngredients: Array<{
+    inventoryItemId: string | null;
+    name: string;
+  }>;
+  optionalMissingIngredients: Array<{
+    name: string;
+    reason: string;
+  }>;
+  steps: string[];
+  tips: string[];
+  safetyNote: string;
+}
+
+export interface RecipeRecommendation {
+  id: string;
+  ownerKey: string;
+  createdAt: string;
+  request: RecipeRecommendationRequest;
+  inventorySnapshot: RecipeInventorySnapshotItem[];
+  recommendations: RecipeRecommendationDish[];
+}
+
 export interface SuccessResponse<T> {
   success: true;
   data: T;

@@ -1,12 +1,12 @@
 # ExpiryMate MVP Monorepo
 
-ExpiryMate is a Korean-first ingredient inventory, expiry reminder, and recipe recommendation preparation MVP.
+ExpiryMate is a Korean-first ingredient inventory, expiry reminder, and AI recipe recommendation MVP.
 
 The current product assumption for this MVP is explicit:
 
 - users register ingredients and household goods manually
 - expiry date is entered separately
-- registered inventory data will be used for recipe recommendation in a future step
+- registered inventory data is used for AI recipe recommendation
 - future sources are reserved for `ocr_detected`
 
 ## Why This Monorepo Shape
@@ -20,7 +20,7 @@ This repository uses `pnpm` workspaces only.
 
 This keeps the MVP simple while leaving a clean path for:
 
-- adding recipe recommendation from registered inventory
+- improving recipe recommendation from registered inventory
 - adding OCR-based expiry detection later
 - adding auth, households, analytics, and subscriptions without a rewrite
 
@@ -71,6 +71,7 @@ This keeps the MVP simple while leaving a clean path for:
 - Nest.js
 - Prisma
 - PostgreSQL
+- OpenAI Responses API for recipe recommendations
 - DTO validation
 - REST API
 
@@ -119,6 +120,8 @@ PORT=4000
 CORS_ORIGIN_ADMIN="http://localhost:3000"
 CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
+OPENAI_API_KEY="sk-..."
+RECIPE_AI_MODEL="gpt-5-mini"
 ```
 
 ### Admin
@@ -136,6 +139,100 @@ Copy `apps/mobile/.env.example` to `apps/mobile/.env`
 ```env
 EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
 EXPO_PUBLIC_APP_ENV="development"
+```
+
+For Expo Go on a real device, `localhost` points to the phone, not your Mac.
+Use your Mac's current LAN IP instead:
+
+```bash
+ifconfig | rg "inet "
+```
+
+Example:
+
+```env
+EXPO_PUBLIC_API_BASE_URL="http://172.29.58.200:4000"
+EXPO_PUBLIC_APP_ENV="development"
+```
+
+Restart Expo after changing `.env`:
+
+```bash
+pnpm --filter @expirymate/mobile exec expo start -c
+```
+
+## Running Locally
+
+### 1. Install dependencies
+
+```bash
+pnpm install
+```
+
+If `pnpm` reports an unexpected store location, use the same store used by the existing `node_modules`:
+
+```bash
+pnpm --store-dir /Users/namu/Library/pnpm/store/v3 install
+```
+
+### 2. Prepare environment files
+
+```bash
+cp apps/api/.env.example apps/api/.env
+cp apps/admin/.env.example apps/admin/.env.local
+cp apps/mobile/.env.example apps/mobile/.env
+```
+
+Then fill in:
+
+- `apps/api/.env`: `DATABASE_URL`, `OPENAI_API_KEY`
+- `apps/mobile/.env`: `EXPO_PUBLIC_API_BASE_URL`
+
+### 3. Start PostgreSQL and migrate
+
+PostgreSQL must be running and the `DATABASE_URL` user needs `CREATEDB` permission because Prisma `migrate dev` creates a shadow database.
+
+```bash
+pnpm db:generate
+pnpm db:migrate
+pnpm db:seed
+```
+
+### 4. Run the apps
+
+In separate terminals:
+
+```bash
+pnpm dev:api
+pnpm dev:admin
+pnpm dev:mobile
+```
+
+URLs:
+
+- API: `http://localhost:4000`
+- Admin: `http://localhost:3000`
+- Mobile: Expo QR from `pnpm dev:mobile`
+
+You can also run everything at once:
+
+```bash
+pnpm dev
+```
+
+### 5. Quick health checks
+
+```bash
+curl http://localhost:4000/dashboard/summary
+curl http://localhost:4000/recipes/recommendations
+```
+
+To test AI recommendation generation, register at least one non-expired ingredient first, then call:
+
+```bash
+curl -X POST http://localhost:4000/recipes/recommendations \
+  -H "Content-Type: application/json" \
+  -d '{"servings":2,"maxCookingMinutes":30,"mealType":"any","useExpiringFirst":true}'
 ```
 
 ## Recommended Local Development Order
@@ -163,6 +260,7 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - manual ingredient registration
 - inventory list
 - inventory detail and edit
+- AI recipe recommendation tab
 - consume/discard actions
 - notification settings UI
 - mascot asset for recipe-oriented empty and success states
@@ -180,6 +278,7 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - auth placeholder
 - products
 - inventory
+- recipe recommendations
 - dashboard summary
 - settings/preferences
 
@@ -272,6 +371,9 @@ This is intentionally simple and easy for both mobile and admin clients.
 ### Other
 
 - `GET /dashboard/summary`
+- `POST /recipes/recommendations`
+- `GET /recipes/recommendations`
+- `GET /recipes/recommendations/:id`
 - `GET /settings/notification-preferences`
 - `PATCH /settings/notification-preferences`
 - `GET /auth/placeholder`
@@ -309,12 +411,12 @@ Inventory seed also includes mixed states:
 - Nest REST modules
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
+- AI recipe recommendation API and mobile recommendation tab
 - admin product and inventory tooling
 - recipe-oriented mascot asset
 
 ### Mocked or intentionally limited
 
-- no real recipe recommendation engine yet
 - no OCR expiry extraction
 - no real multi-user auth
 - no real push token registration backend
@@ -324,15 +426,15 @@ Inventory seed also includes mixed states:
 ## Recommended Production Replacements First
 
 1. Add authentication and real user ownership instead of `ownerKey="demo-user"`.
-2. Add recipe recommendation based on active inventory, expiry date, and category.
+2. Harden recipe recommendation quality, rate limits, caching, and feedback loops.
 3. Add a reminder scheduler and push delivery pipeline.
 4. Add image upload/storage instead of placeholder image URLs.
 5. Add OCR-based expiry parsing after the registration flow is stable.
 
 ## Recommended Next Implementation Order
 
-1. Add recipe recommendation contracts, API, and mobile recommendation UI.
-2. Harden API validation and add API tests.
+1. Harden API validation and add API tests.
+2. Add recipe recommendation feedback and history UX.
 3. Add admin create/edit validation feedback.
 4. Add push token registration + scheduled reminder jobs.
 5. Add auth and multi-household data model.
@@ -343,7 +445,7 @@ Inventory seed also includes mixed states:
 - `packages/shared` is built to `dist` and consumed as a workspace package
 - root `dev` watches `packages/shared` so changes propagate during local development
 - notification UI is real, but remote push delivery is not implemented yet
-- recipe recommendation is the next major product capability
+- recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
 
 ## Versioning Notes
 

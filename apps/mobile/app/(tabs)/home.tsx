@@ -1,15 +1,21 @@
 import { router } from "expo-router";
-import { Plus, Sparkles, Utensils } from "lucide-react-native";
+import { ChefHat, CheckCircle2, Plus, Sparkles, Utensils } from "lucide-react-native";
 import { RefreshControl, StyleSheet, Text, View } from "react-native";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { Button } from "../../src/components/Button";
 import { InventoryCard } from "../../src/components/InventoryCard";
+import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
+import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { colors, spacing } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 export default function HomeScreen() {
   const { data, isLoading, refetch, isRefetching } = useDashboardSummary();
+  const {
+    status: recipeGenerationStatus,
+    errorMessage: recipeGenerationError,
+  } = useRecipeGeneration();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const expiringItems = data?.expiringItems ?? [];
   const recentItems = data?.recentItems ?? [];
@@ -36,29 +42,81 @@ export default function HomeScreen() {
       }
     >
       <View style={styles.heroCard}>
-        <View style={styles.heroIcon}>
-          <Sparkles color={colors.primary} size={20} strokeWidth={2.5} />
+        <View style={styles.heroRow}>
+          <View style={styles.heroCopy}>
+            <Text style={styles.heroEyebrow}>오늘 처리할 항목</Text>
+            <Text style={styles.heroTitle}>{heroTitle}</Text>
+            <Text style={styles.heroDescription}>{heroDescription}</Text>
+          </View>
+          <Mascot size="small" style={styles.heroMascot} />
         </View>
-        <Text style={styles.heroEyebrow}>오늘 처리할 항목</Text>
-        <Text style={styles.heroTitle}>{heroTitle}</Text>
-        <Text style={styles.heroDescription}>{heroDescription}</Text>
       </View>
 
-      <View style={styles.actionGrid}>
+      <View style={styles.actionStack}>
         <Button
-          icon={Utensils}
-          onPress={() => {
-            clearPrefill();
-            router.push("/register");
-          }}
-          style={styles.actionButton}
+          icon={ChefHat}
+          onPress={() => router.push("/(tabs)/recommendations")}
+          fullWidth
         >
-          요리 재료 추가
+          오늘 뭐 먹지?
         </Button>
-        <Button variant="secondary" icon={Plus} onPress={() => router.push("/(tabs)/inventory")} style={styles.actionButton}>
-          보관함 보기
-        </Button>
+        <View style={styles.actionGrid}>
+          <Button
+            icon={Utensils}
+            variant="secondary"
+            onPress={() => {
+              clearPrefill();
+              router.push("/register");
+            }}
+            style={styles.actionButton}
+          >
+            요리 재료 추가
+          </Button>
+          <Button
+            variant="secondary"
+            icon={Plus}
+            onPress={() => router.push("/(tabs)/inventory")}
+            style={styles.actionButton}
+          >
+            보관함 보기
+          </Button>
+        </View>
       </View>
+
+      {recipeGenerationStatus !== "idle" ? (
+        <View style={styles.recipeStatusCard}>
+          <View style={styles.recipeStatusIcon}>
+            {recipeGenerationStatus === "success" ? (
+              <CheckCircle2 color={colors.success} size={22} strokeWidth={2.5} />
+            ) : (
+              <Sparkles color={colors.primary} size={22} strokeWidth={2.5} />
+            )}
+          </View>
+          <View style={styles.recipeStatusCopy}>
+            <Text style={styles.recipeStatusTitle}>
+              {recipeGenerationStatus === "pending"
+                ? "요리 조합을 찾고 있어요"
+                : recipeGenerationStatus === "success"
+                  ? "추천 준비 완료"
+                  : "추천을 만들지 못했어요"}
+            </Text>
+            <Text style={styles.recipeStatusDescription}>
+              {recipeGenerationStatus === "pending"
+                ? "다른 화면을 봐도 완료되면 알려드릴게요."
+                : recipeGenerationStatus === "success"
+                  ? "오늘 만들 요리법을 추천 탭에서 확인하세요."
+                  : recipeGenerationError ?? "추천 탭에서 다시 시도할 수 있어요."}
+            </Text>
+          </View>
+          <Button
+            size="small"
+            variant="secondary"
+            onPress={() => router.push("/(tabs)/recommendations")}
+          >
+            보기
+          </Button>
+        </View>
+      ) : null}
 
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
@@ -147,16 +205,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
+  },
+  heroRow: {
+    flexDirection: "row",
+    gap: spacing.md,
+    alignItems: "center",
+  },
+  heroCopy: {
+    flex: 1,
     gap: spacing.xs,
   },
-  heroIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: colors.primarySoft,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: spacing.xs,
+  heroMascot: {
+    flexShrink: 0,
   },
   heroEyebrow: {
     fontSize: 13,
@@ -175,12 +235,48 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     color: colors.subtext,
   },
+  actionStack: {
+    gap: spacing.sm,
+  },
   actionGrid: {
     flexDirection: "row",
     gap: spacing.md,
   },
   actionButton: {
     flex: 1,
+  },
+  recipeStatusCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+  },
+  recipeStatusIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  recipeStatusCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  recipeStatusTitle: {
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  recipeStatusDescription: {
+    fontSize: 13,
+    lineHeight: 19,
+    color: colors.subtext,
   },
   section: {
     gap: spacing.sm,

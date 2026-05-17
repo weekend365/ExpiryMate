@@ -2,6 +2,8 @@ import type {
   DashboardSummary,
   InventoryItem,
   NotificationPreference,
+  RecipeRecommendation,
+  RecipeRecommendationRequest,
 } from "@expirymate/shared";
 
 const API_BASE_URL =
@@ -27,6 +29,13 @@ type InventoryPayload = {
   expirySource: string;
   notes?: string;
 };
+
+export type RecipeRecommendationPayload = Partial<
+  Pick<
+    RecipeRecommendationRequest,
+    "ownerKey" | "servings" | "maxCookingMinutes" | "mealType" | "useExpiringFirst"
+  >
+>;
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 
@@ -93,6 +102,18 @@ export const discardInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}/discard`, {
     method: "POST",
   });
+
+export const listRecipeRecommendations = () =>
+  request<RecipeRecommendation[]>("/recipes/recommendations");
+
+export const createRecipeRecommendation = (payload: RecipeRecommendationPayload) =>
+  request<RecipeRecommendation>("/recipes/recommendations", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const getRecipeRecommendation = (id: string) =>
+  request<RecipeRecommendation>(`/recipes/recommendations/${id}`);
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

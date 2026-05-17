@@ -19,7 +19,13 @@ export const requestNotificationPermissions = async () => {
   return Notifications.requestPermissionsAsync();
 };
 
-export const scheduleMockExpiryReminder = async (title: string, body: string) => {
+export const scheduleLocalNotification = async (title: string, body: string) => {
+  const permissions = await requestNotificationPermissions();
+
+  if (!permissions.granted) {
+    return null;
+  }
+
   return Notifications.scheduleNotificationAsync({
     content: {
       title,
@@ -28,3 +34,5 @@ export const scheduleMockExpiryReminder = async (title: string, body: string) =>
     trigger: null,
   });
 };
+
+export const scheduleMockExpiryReminder = scheduleLocalNotification;
