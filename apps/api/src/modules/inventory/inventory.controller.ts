@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { ItemStatus, StorageLocation } from "@expirymate/shared";
+import { BatchDiscardInventoryItemsDto } from "./dto/batch-discard-inventory-items.dto";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
 import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto";
 import { InventoryService } from "./inventory.service";
@@ -33,6 +34,14 @@ export class InventoryController {
   @Post()
   create(@Body() dto: CreateInventoryItemDto) {
     return this.inventoryService.create(dto);
+  }
+
+  @Post("batch-discard")
+  batchDiscard(@Body() dto: BatchDiscardInventoryItemsDto) {
+    return this.inventoryService.batchDiscard({
+      ids: dto.ids,
+      ownerKey: dto.ownerKey ?? process.env.DEFAULT_OWNER_KEY ?? "demo-user",
+    });
   }
 
   @Patch(":id")

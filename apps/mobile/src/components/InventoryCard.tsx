@@ -8,6 +8,7 @@ import {
 } from "@expirymate/shared";
 import {
   CalendarDays,
+  CheckCircle2,
   ChevronRight,
   CircleAlert,
   Clock3,
@@ -20,6 +21,9 @@ import { colors, spacing } from "../shared/theme";
 interface InventoryCardProps {
   item: InventoryItem;
   onPress?: () => void;
+  onLongPress?: () => void;
+  selected?: boolean;
+  selectionMode?: boolean;
 }
 
 const expiryLabelMap = {
@@ -30,7 +34,13 @@ const expiryLabelMap = {
   safe: "안전",
 };
 
-export function InventoryCard({ item, onPress }: InventoryCardProps) {
+export function InventoryCard({
+  item,
+  onPress,
+  onLongPress,
+  selected,
+  selectionMode,
+}: InventoryCardProps) {
   const bucket = getExpiryBucket(item.expiryDate);
   const bucketStyle = bucketStyles[bucket];
   const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
@@ -45,16 +55,34 @@ export function InventoryCard({ item, onPress }: InventoryCardProps) {
   return (
     <Pressable
       onPress={onPress}
+      onLongPress={onLongPress}
       disabled={!onPress}
       style={({ pressed }) => [
         styles.card,
+        selectionMode && styles.selectableCard,
+        selected && styles.selectedCard,
         pressed && styles.cardPressed,
       ]}
     >
+      {selectionMode ? (
+        <View
+          style={[
+            styles.selectionIndicator,
+            selected && styles.selectionIndicatorSelected,
+          ]}
+        >
+          {selected ? (
+            <CheckCircle2 color={colors.surface} size={19} strokeWidth={2.7} />
+          ) : null}
+        </View>
+      ) : null}
+
       <View style={styles.content}>
         <View style={styles.titleRow}>
           <Text style={styles.name} numberOfLines={1}>{item.displayName}</Text>
-          {onPress ? <ChevronRight color={colors.mutedText} size={18} /> : null}
+          {onPress && !selectionMode ? (
+            <ChevronRight color={colors.mutedText} size={18} />
+          ) : null}
         </View>
         <View style={styles.metaRow}>
           <MapPin color={colors.mutedText} size={14} strokeWidth={2.3} />
@@ -114,6 +142,27 @@ const styles = StyleSheet.create({
   },
   cardPressed: {
     backgroundColor: colors.surfacePressed,
+  },
+  selectableCard: {
+    paddingLeft: spacing.sm,
+  },
+  selectedCard: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+  },
+  selectionIndicator: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectionIndicatorSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   content: {
     flex: 1,

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import {
   ExpirySource,
   ItemStatus,
@@ -16,6 +16,11 @@ interface FindInventoryParams {
   status?: SharedItemStatus;
   storageLocation?: StorageLocation;
   expiringWithin?: number;
+}
+
+interface BatchDiscardParams {
+  ids: string[];
+  ownerKey: string;
 }
 
 @Injectable()
@@ -134,5 +139,52 @@ export class InventoryService {
     });
 
     return serializeInventoryItem(item);
+  }
+
+  async batchDiscard(params: BatchDiscardParams) {
+    const ids = [...new Set(params.ids)];
+
+    if (ids.length > 100) {
+      throw new BadRequestException("한 번에 최대 100개까지 폐기할 수 있어요.");
+    }
+
+    const items = await this.prisma.inventoryItem.findMany({
+      where: {
+        id: { in: ids },
+        ownerKey: params.ownerKey,
+      },
+    });
+
+    const canDiscardAll =
+      items.length === ids.length &&
+      items.every((item) => item.status === ItemStatus.active);
+
+    if (!canDiscardAll) {
+      throw new BadRequestException("폐기할 수 없는 항목이 포함되어 있어요.");
+    }
+
+    await this.prisma.inventoryItem.updateMany({
+      where: {
+        id: { in: ids },
+        ownerKey: params.ownerKey,
+        status: ItemStatus.active,
+      },
+      data: {
+        status: ItemStatus.discarded,
+      },
+    });
+
+    const discardedItems = await this.prisma.inventoryItem.findMany({
+      where: {
+        id: { in: ids },
+        ownerKey: params.ownerKey,
+      },
+      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+    });
+
+    return {
+      count: discardedItems.length,
+      items: discardedItems.map(serializeInventoryItem),
+    };
   }
 }

@@ -17,6 +17,7 @@ interface ScreenProps extends PropsWithChildren {
   scroll?: boolean;
   refreshControl?: ReactElement<RefreshControlProps>;
   headerAction?: ReactNode;
+  footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
 }
 
@@ -27,6 +28,7 @@ export function Screen({
   scroll = true,
   refreshControl,
   headerAction,
+  footer,
   contentStyle,
 }: ScreenProps) {
   const content = (
@@ -57,6 +59,7 @@ export function Screen({
       ) : (
         <View style={[styles.content, styles.staticContent, contentStyle]}>{content}</View>
       )}
+      {footer ? <View style={styles.footer}>{footer}</View> : null}
     </SafeAreaView>
   );
 }
@@ -87,6 +90,14 @@ const styles = StyleSheet.create({
   },
   headerAction: {
     paddingTop: 2,
+  },
+  footer: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
   },
   title: {
     fontSize: 30,

@@ -30,6 +30,11 @@ type InventoryPayload = {
   notes?: string;
 };
 
+type BatchDiscardInventoryItemsResponse = {
+  count: number;
+  items: InventoryItem[];
+};
+
 export type RecipeRecommendationPayload = Partial<
   Pick<
     RecipeRecommendationRequest,
@@ -101,6 +106,12 @@ export const consumeInventoryItem = (id: string) =>
 export const discardInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}/discard`, {
     method: "POST",
+  });
+
+export const batchDiscardInventoryItems = (ids: string[]) =>
+  request<BatchDiscardInventoryItemsResponse>("/inventory/batch-discard", {
+    method: "POST",
+    body: JSON.stringify({ ids }),
   });
 
 export const listRecipeRecommendations = () =>
