@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { PrismaModule } from "./database/prisma.module";
+import { AdminModule } from "./modules/admin/admin.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { DashboardModule } from "./modules/dashboard/dashboard.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
@@ -16,6 +17,7 @@ import { SettingsModule } from "./modules/settings/settings.module";
     }),
     PrismaModule,
     AuthModule,
+    AdminModule,
     ProductsModule,
     InventoryModule,
     DashboardModule,

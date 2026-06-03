@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { adminLogout, getMe } from "../lib/api";
 
 const navItems = [
   { href: "/dashboard", label: "대시보드" },
@@ -13,6 +16,49 @@ const navItems = [
 
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
+  const router = useRouter();
+  const isLoginPage = pathname === "/login";
+  const meQuery = useQuery({
+    queryKey: ["admin", "me"],
+    queryFn: getMe,
+    enabled: !isLoginPage,
+  });
+
+  useEffect(() => {
+    if (!isLoginPage && meQuery.isError) {
+      router.replace("/login");
+    }
+  }, [isLoginPage, meQuery.isError, router]);
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  if (meQuery.isLoading) {
+    return (
+      <div className="grid min-h-screen place-items-center text-sm font-semibold text-[var(--muted)]">
+        관리자 세션을 확인하고 있습니다.
+      </div>
+    );
+  }
+
+  if (meQuery.data?.role !== "admin") {
+    return (
+      <div className="grid min-h-screen place-items-center px-4">
+        <div className="rounded-[28px] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-[0_24px_70px_rgba(29,39,32,0.08)]">
+          <div className="text-xl font-black">관리자 권한이 필요합니다</div>
+          <button
+            className="mt-5 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-bold text-white"
+            onClick={() => {
+              adminLogout().finally(() => router.replace("/login"));
+            }}
+          >
+            로그인으로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -26,6 +72,14 @@ export function AppShell({ children }: PropsWithChildren) {
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               기준 상품, 재고 상태, 요리 추천 준비 데이터를 한 곳에서 관리합니다.
             </p>
+            <button
+              className="mt-4 rounded-full bg-[var(--surface-muted)] px-3 py-2 text-sm font-bold text-[var(--foreground)]"
+              onClick={() => {
+                adminLogout().finally(() => router.replace("/login"));
+              }}
+            >
+              로그아웃
+            </button>
           </div>
 
           <nav className="space-y-2">

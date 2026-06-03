@@ -28,6 +28,17 @@ export default function RootLayout() {
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "등록하기" }} />
               <Stack.Screen name="inventory/[id]" options={{ title: "재고 상세" }} />
+              <Stack.Screen name="auth/login" options={{ title: "로그인" }} />
+              <Stack.Screen name="auth/register" options={{ title: "회원가입" }} />
+              <Stack.Screen
+                name="auth/forgot-password"
+                options={{ title: "비밀번호 찾기" }}
+              />
+              <Stack.Screen
+                name="auth/reset-password"
+                options={{ title: "비밀번호 재설정" }}
+              />
+              <Stack.Screen name="auth/verify-email" options={{ title: "이메일 인증" }} />
             </Stack>
           </RecipeGenerationProvider>
         </QueryClientProvider>

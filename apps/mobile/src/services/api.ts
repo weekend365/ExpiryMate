@@ -1,11 +1,17 @@
 import type {
+  AuthSession,
+  AuthUser,
   DashboardSummary,
   InventoryItem,
+  LoginRequest,
   NotificationPreference,
+  OAuthLoginRequest,
   RecipeRecommendation,
   RecipeRecommendationRequest,
+  RegisterRequest,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
@@ -16,12 +22,6 @@ interface ApiEnvelope<T> {
   error?: {
     message?: string;
   };
-}
-
-interface AuthSession {
-  ownerKey: string;
-  tokenType: "Bearer";
-  accessToken: string;
 }
 
 type InventoryPayload = {
@@ -50,41 +50,33 @@ export type RecipeRecommendationPayload = Partial<
 >;
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
-const AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
-let authSessionPromise: Promise<AuthSession> | null = null;
+const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
+const REFRESH_TOKEN_STORAGE_KEY = "expirymate.refreshToken.v2";
+const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
+
+let accessToken: string | null = null;
+let currentUser: AuthUser | null = null;
+let sessionPromise: Promise<AuthSession> | null = null;
 
 async function request<T>(
   path: string,
   init?: RequestInit,
   options: { retryOnUnauthorized?: boolean } = { retryOnUnauthorized: true },
 ): Promise<T> {
-  let response: Response;
-  const authSession = await getAuthSession();
-
-  try {
-    response = await fetch(buildUrl(path), {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${authSession.tokenType} ${authSession.accessToken}`,
-        ...(init?.headers ?? {}),
-      },
-      ...init,
-    });
-  } catch {
-    throw new Error("네트워크 연결을 확인해주세요.");
-  }
-
-  let body: ApiEnvelope<T>;
-
-  try {
-    body = (await response.json()) as ApiEnvelope<T>;
-  } catch {
-    throw new Error("서버 응답을 확인하지 못했어요.");
-  }
+  const session = await getOrCreateSession();
+  const response = await fetchWithNetworkError(path, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.accessToken}`,
+      ...(init?.headers ?? {}),
+    },
+  });
+  const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
     if (response.status === 401 && options.retryOnUnauthorized) {
-      await clearAuthSession();
+      await refreshOrCreateAnonymousSession();
       return request<T>(path, init, { retryOnUnauthorized: false });
     }
 
@@ -98,95 +90,208 @@ async function request<T>(
   return body.data;
 }
 
-async function getAuthSession() {
-  if (!authSessionPromise) {
-    authSessionPromise = loadOrCreateAuthSession().catch((error: unknown) => {
-      authSessionPromise = null;
+async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetchWithNetworkError(path, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+  });
+  const body = await parseEnvelope<T>(response);
+
+  if (!response.ok || !body.success) {
+    throw new Error(body.error?.message ?? "요청을 처리하지 못했어요.");
+  }
+
+  return body.data;
+}
+
+async function fetchWithNetworkError(path: string, init?: RequestInit) {
+  try {
+    return await fetch(buildUrl(path), init);
+  } catch {
+    throw new Error("네트워크 연결을 확인해주세요.");
+  }
+}
+
+async function parseEnvelope<T>(response: Response) {
+  try {
+    return (await response.json()) as ApiEnvelope<T>;
+  } catch {
+    throw new Error("서버 응답을 확인하지 못했어요.");
+  }
+}
+
+async function getOrCreateSession() {
+  if (!sessionPromise) {
+    sessionPromise = loadOrCreateSession().catch((error: unknown) => {
+      sessionPromise = null;
       throw error;
     });
   }
 
-  return authSessionPromise;
+  return sessionPromise;
 }
 
-async function loadOrCreateAuthSession() {
-  const stored = await AsyncStorage.getItem(AUTH_SESSION_STORAGE_KEY);
+async function loadOrCreateSession() {
+  if (accessToken && currentUser) {
+    return { user: currentUser, accessToken };
+  }
 
-  if (stored) {
+  await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
+
+  const storedUser = await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY);
+  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+
+  if (storedUser && refreshToken) {
     try {
-      return parseAuthSession(JSON.parse(stored));
+      currentUser = JSON.parse(storedUser) as AuthUser;
+      return await refreshSession(refreshToken);
     } catch {
-      await AsyncStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+      await clearAuthSession();
     }
   }
 
-  const session = await createAnonymousAuthSession();
-  await AsyncStorage.setItem(AUTH_SESSION_STORAGE_KEY, JSON.stringify(session));
+  return createAnonymousSession();
+}
+
+async function refreshOrCreateAnonymousSession() {
+  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+
+  if (refreshToken) {
+    try {
+      sessionPromise = refreshSession(refreshToken);
+      return await sessionPromise;
+    } catch {
+      await clearAuthSession();
+    }
+  }
+
+  sessionPromise = createAnonymousSession();
+  return sessionPromise;
+}
+
+async function createAnonymousSession() {
+  const session = await publicRequest<AuthSession>("/auth/anonymous", {
+    method: "POST",
+  });
+
+  return persistAuthSession(session);
+}
+
+async function refreshSession(refreshToken: string) {
+  const session = await publicRequest<AuthSession>("/auth/refresh", {
+    method: "POST",
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  return persistAuthSession(session);
+}
+
+async function persistAuthSession(session: AuthSession) {
+  accessToken = session.accessToken;
+  currentUser = session.user;
+  await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user));
+
+  if (session.refreshToken) {
+    await SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, session.refreshToken);
+  }
 
   return session;
 }
 
-async function clearAuthSession() {
-  authSessionPromise = null;
-  await AsyncStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+export async function clearAuthSession() {
+  accessToken = null;
+  currentUser = null;
+  sessionPromise = null;
+  await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
+  await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
+  await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
 }
 
-async function createAnonymousAuthSession() {
-  let response: Response;
+async function authenticatedAuthRequest<T>(path: string, init?: RequestInit) {
+  const session = await getOrCreateSession();
 
-  try {
-    response = await fetch(buildUrl("/auth/anonymous"), {
+  return publicRequest<T>(path, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+      ...(init?.headers ?? {}),
+    },
+  });
+}
+
+export const getCurrentUser = async () => {
+  const session = await getOrCreateSession();
+  return session.user;
+};
+
+export const getMe = () => request<AuthUser>("/auth/me");
+
+export const register = async (payload: RegisterRequest) =>
+  persistAuthSession(
+    await authenticatedAuthRequest<AuthSession>("/auth/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch {
-    throw new Error("네트워크 연결을 확인해주세요.");
+      body: JSON.stringify(payload),
+    }),
+  );
+
+export const login = async (payload: LoginRequest) =>
+  persistAuthSession(
+    await authenticatedAuthRequest<AuthSession>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  );
+
+export const logout = async () => {
+  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+
+  if (refreshToken) {
+    await publicRequest<{ ok: boolean }>("/auth/logout", {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    }).catch(() => null);
   }
 
-  let body: ApiEnvelope<AuthSession>;
+  await clearAuthSession();
+};
 
-  try {
-    body = (await response.json()) as ApiEnvelope<AuthSession>;
-  } catch {
-    throw new Error("서버 응답을 확인하지 못했어요.");
-  }
+export const requestEmailVerification = (email?: string) =>
+  authenticatedAuthRequest<{ ok: boolean }>("/auth/email/verify/request", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
 
-  if (!response.ok || !body.success) {
-    throw new Error(body.error?.message ?? "로그인 세션을 만들지 못했어요.");
-  }
+export const verifyEmail = (token: string) =>
+  publicRequest<{ ok: boolean }>("/auth/email/verify", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
 
-  return parseAuthSession(body.data);
-}
+export const forgotPassword = (email: string) =>
+  publicRequest<{ ok: boolean }>("/auth/password/forgot", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
 
-function parseAuthSession(value: unknown): AuthSession {
-  if (
-    !value ||
-    typeof value !== "object" ||
-    !("ownerKey" in value) ||
-    !("tokenType" in value) ||
-    !("accessToken" in value)
-  ) {
-    throw new Error("로그인 세션이 올바르지 않습니다.");
-  }
+export const resetPassword = (token: string, password: string) =>
+  publicRequest<{ ok: boolean }>("/auth/password/reset", {
+    method: "POST",
+    body: JSON.stringify({ token, password }),
+  });
 
-  const session = value as Partial<AuthSession>;
-
-  if (
-    typeof session.ownerKey !== "string" ||
-    session.tokenType !== "Bearer" ||
-    typeof session.accessToken !== "string"
-  ) {
-    throw new Error("로그인 세션이 올바르지 않습니다.");
-  }
-
-  return {
-    ownerKey: session.ownerKey,
-    tokenType: session.tokenType,
-    accessToken: session.accessToken,
-  };
-}
+export const oauthLogin = async (
+  provider: "apple" | "google" | "kakao",
+  payload: OAuthLoginRequest,
+) =>
+  persistAuthSession(
+    await authenticatedAuthRequest<AuthSession>(`/auth/oauth/${provider}`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+  );
 
 export const getDashboardSummary = () =>
   request<DashboardSummary>("/dashboard/summary");

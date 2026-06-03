@@ -13,27 +13,51 @@ describe("AuthService", () => {
     process.env.AUTH_TOKEN_SECRET = originalSecret;
   });
 
-  it("issues and verifies an anonymous bearer session", () => {
-    const service = new AuthService();
-    const session = service.issueAnonymousSession();
+  it("issues and verifies an anonymous bearer session", async () => {
+    const service = createAuthService();
+    const session = await service.issueAnonymousSession();
 
-    const user = service.verifyBearerToken(session.accessToken);
+    const user = service.verifyAccessToken(session.accessToken);
 
-    expect(session.tokenType).toBe("Bearer");
-    expect(session.ownerKey).toMatch(/^anon_/);
-    expect(user).toEqual({
-      ownerKey: session.ownerKey,
-      tokenKind: "anonymous",
-    });
+    expect(session.user.id).toMatch(/^anon_/);
+    expect(session.refreshToken).toBeTruthy();
+    expect(user.ownerKey).toBe(session.user.id);
+    expect(user.tokenKind).toBe("access");
   });
 
-  it("rejects a tampered token", () => {
-    const service = new AuthService();
-    const session = service.issueAnonymousSession();
+  it("rejects a tampered token", async () => {
+    const service = createAuthService();
+    const session = await service.issueAnonymousSession();
     const tamperedToken = `${session.accessToken.slice(0, -1)}x`;
 
-    expect(() => service.verifyBearerToken(tamperedToken)).toThrow(
+    expect(() => service.verifyAccessToken(tamperedToken)).toThrow(
       UnauthorizedException,
     );
   });
 });
+
+function createAuthService() {
+  const createdUser = {
+    id: "anon_test-user",
+    email: null,
+    displayName: null,
+    role: "user",
+    accountType: "anonymous",
+    emailVerifiedAt: null,
+    mergedIntoUserId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  return new AuthService(
+    {
+      user: {
+        create: async () => createdUser,
+      },
+      refreshSession: {
+        create: async () => ({}),
+      },
+    } as never,
+    {} as never,
+  );
+}

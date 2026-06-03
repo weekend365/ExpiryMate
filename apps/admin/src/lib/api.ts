@@ -1,4 +1,6 @@
 import type {
+  AuthSession,
+  AuthUser,
   DashboardSummary,
   InventoryItem,
   NotificationPreference,
@@ -8,6 +10,7 @@ import type {
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+const ACCESS_TOKEN_KEY = "expirymate.admin.accessToken";
 
 type ProductPayload = {
   name: string;
@@ -24,27 +27,106 @@ type ApiEnvelope<T> = {
   };
 };
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
+export const getAdminAccessToken = () =>
+  typeof window === "undefined" ? null : window.localStorage.getItem(ACCESS_TOKEN_KEY);
+
+const setAdminAccessToken = (token: string | null) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (token) {
+    window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
+    return;
+  }
+
+  window.localStorage.removeItem(ACCESS_TOKEN_KEY);
+};
+
+async function request<T>(
+  path: string,
+  init?: RequestInit,
+  options: { retryOnUnauthorized?: boolean } = { retryOnUnauthorized: true },
+): Promise<T> {
+  const token = getAdminAccessToken();
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers ?? {}),
     },
+    credentials: "include",
     cache: "no-store",
     ...init,
   });
-
   const body = (await response.json()) as ApiEnvelope<T>;
 
   if (!response.ok || !body.success) {
+    if (response.status === 401 && options.retryOnUnauthorized) {
+      await refreshAdminSession();
+      return request<T>(path, init, { retryOnUnauthorized: false });
+    }
+
     throw new Error(body.error?.message ?? "요청에 실패했습니다.");
   }
 
   return body.data;
 }
 
+export const adminLogin = async (payload: { email: string; password: string }) => {
+  const session = await request<Omit<AuthSession, "refreshToken">>(
+    "/auth/login",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "x-expirymate-client": "admin",
+      },
+    },
+    { retryOnUnauthorized: false },
+  );
+
+  setAdminAccessToken(session.accessToken);
+  return session;
+};
+
+export const refreshAdminSession = async () => {
+  const session = await fetch(`${API_BASE_URL}/auth/refresh`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-expirymate-client": "admin",
+    },
+    credentials: "include",
+    body: JSON.stringify({}),
+  }).then(async (response) => {
+    const body = (await response.json()) as ApiEnvelope<Omit<AuthSession, "refreshToken">>;
+
+    if (!response.ok || !body.success) {
+      throw new Error(body.error?.message ?? "세션 갱신에 실패했습니다.");
+    }
+
+    return body.data;
+  });
+
+  setAdminAccessToken(session.accessToken);
+  return session;
+};
+
+export const adminLogout = async () => {
+  await fetch(`${API_BASE_URL}/auth/logout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({}),
+  }).catch(() => null);
+  setAdminAccessToken(null);
+};
+
+export const getMe = () => request<AuthUser>("/auth/me");
+
 export const getDashboardSummary = () =>
-  request<DashboardSummary>("/dashboard/summary");
+  request<DashboardSummary>("/admin/dashboard/summary");
 
 export const listProducts = (query?: string) => {
   const search = query ? `?q=${encodeURIComponent(query)}` : "";
@@ -65,7 +147,7 @@ export const updateProduct = (id: string, payload: Partial<ProductPayload>) =>
     body: JSON.stringify(payload),
   });
 
-export const listInventory = () => request<InventoryItem[]>("/inventory");
+export const listInventory = () => request<InventoryItem[]>("/admin/inventory");
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

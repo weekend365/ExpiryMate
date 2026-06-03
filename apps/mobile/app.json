@@ -9,7 +9,9 @@
     "plugins": [
       "expo-router",
       "expo-notifications",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": false

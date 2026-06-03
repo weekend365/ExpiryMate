@@ -1,4 +1,13 @@
-import { PrismaClient, ProductCategory, StorageLocation, ExpirySource, ItemStatus } from "@prisma/client";
+import {
+  AccountType,
+  ExpirySource,
+  ItemStatus,
+  PrismaClient,
+  ProductCategory,
+  StorageLocation,
+  UserRole,
+} from "@prisma/client";
+import argon2 from "argon2";
 
 const prisma = new PrismaClient();
 
@@ -10,9 +19,43 @@ const addDays = (days: number) => {
 };
 
 async function main() {
+  await prisma.oneTimeAuthToken.deleteMany();
+  await prisma.refreshSession.deleteMany();
+  await prisma.oAuthAccount.deleteMany();
+  await prisma.passwordCredential.deleteMany();
+  await prisma.recipeRecommendation.deleteMany();
   await prisma.inventoryItem.deleteMany();
   await prisma.notificationPreference.deleteMany();
   await prisma.product.deleteMany();
+  await prisma.user.deleteMany();
+
+  await prisma.user.create({
+    data: {
+      id: "demo-user",
+      accountType: AccountType.registered,
+      role: UserRole.user,
+      email: "demo@expirymate.local",
+      displayName: "Demo User",
+      emailVerifiedAt: new Date(),
+    },
+  });
+
+  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@expirymate.local";
+  const adminPassword = process.env.ADMIN_PASSWORD ?? "admin1234";
+  await prisma.user.create({
+    data: {
+      email: adminEmail,
+      displayName: "ExpiryMate Admin",
+      accountType: AccountType.registered,
+      role: UserRole.admin,
+      emailVerifiedAt: new Date(),
+      passwordCredential: {
+        create: {
+          passwordHash: await argon2.hash(adminPassword),
+        },
+      },
+    },
+  });
 
   const products = await Promise.all(
     [

@@ -15,6 +15,42 @@ export interface Product {
   updatedAt: string;
 }
 
+export type AuthUserRole = "user" | "admin";
+export type AuthAccountType = "anonymous" | "registered";
+export type OAuthProvider = "apple" | "google" | "kakao";
+
+export interface AuthUser {
+  id: string;
+  email?: string | null;
+  displayName?: string | null;
+  role: AuthUserRole;
+  accountType: AuthAccountType;
+  emailVerifiedAt?: string | null;
+}
+
+export interface AuthSession {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken?: string;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  displayName?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface OAuthLoginRequest {
+  providerToken: string;
+  email?: string;
+  displayName?: string;
+}
+
 export interface InventoryItem {
   id: string;
   productId?: string | null;

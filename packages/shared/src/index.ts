@@ -2,6 +2,7 @@ export * from "./constants/defaults";
 export * from "./constants/labels";
 export * from "./enums/app-enums";
 export * from "./schemas/inventory";
+export * from "./schemas/auth";
 export * from "./schemas/product";
 export * from "./schemas/recipes";
 export * from "./schemas/settings";

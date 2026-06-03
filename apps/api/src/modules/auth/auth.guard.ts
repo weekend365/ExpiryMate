@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
       : null;
 
     if (token) {
-      request.user = this.authService.verifyBearerToken(token);
+      request.user = this.authService.verifyAccessToken(token);
       return true;
     }
 

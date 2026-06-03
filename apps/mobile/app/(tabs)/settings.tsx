@@ -1,9 +1,11 @@
 import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Switch, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
+import { useAuth } from "../../src/features/auth/use-auth";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
 import { requestNotificationPermissions } from "../../src/services/notifications";
 import { colors, spacing } from "../../src/shared/theme";
@@ -11,6 +13,7 @@ import { colors, spacing } from "../../src/shared/theme";
 const reminderOptions = [0, 1, 3, 7, 14];
 
 export default function SettingsScreen() {
+  const auth = useAuth();
   const { query, mutation } = useNotificationPreferences();
   const [enabled, setEnabled] = useState(true);
   const [remindOnDayOf, setRemindOnDayOf] = useState(true);
@@ -47,8 +50,62 @@ export default function SettingsScreen() {
     });
   };
 
+  const user = auth.query.data;
+  const isRegistered = user?.accountType === "registered";
+  const emailVerified = Boolean(user?.emailVerifiedAt);
+
   return (
     <Screen title="알림 설정" subtitle="유통기한 리마인더와 앱 기본 정보를 관리해요.">
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <View style={styles.rowCopy}>
+            <Text style={styles.rowTitle}>계정</Text>
+            <Text style={styles.rowDescription}>
+              {isRegistered
+                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 이메일 미인증"}`
+                : "익명으로 사용 중이에요. 로그인하면 현재 재료가 계정에 연결돼요."}
+            </Text>
+          </View>
+        </View>
+        {isRegistered ? (
+          <View style={styles.actionRow}>
+            {!emailVerified ? (
+              <Button
+                variant="secondary"
+                size="small"
+                onPress={() =>
+                  auth.requestVerificationMutation.mutate(undefined, {
+                    onSuccess: () => Alert.alert("메일 발송", "인증 메일을 보냈어요."),
+                    onError: (error) => Alert.alert("요청 실패", getErrorMessage(error)),
+                  })
+                }
+              >
+                인증 메일
+              </Button>
+            ) : null}
+            <Button
+              variant="secondary"
+              size="small"
+              onPress={() =>
+                auth.logoutMutation.mutate(undefined, {
+                  onSuccess: () => Alert.alert("로그아웃", "로그아웃했어요."),
+                })
+              }
+            >
+              로그아웃
+            </Button>
+          </View>
+        ) : (
+          <Button
+            variant="secondary"
+            onPress={() => router.push("/auth/login")}
+            fullWidth
+          >
+            로그인 또는 회원가입
+          </Button>
+        )}
+      </View>
+
       <View style={styles.card}>
         <View style={styles.row}>
           <View style={styles.rowCopy}>
@@ -132,4 +189,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.subtext,
   },
+  actionRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+  },
 });
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+}
