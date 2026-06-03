@@ -27,7 +27,6 @@ import { PrismaService } from "../../database/prisma.service";
 import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
 
 const PROMPT_VERSION = "recipe-recommendation-v1";
-const DEFAULT_OWNER_KEY = "demo-user";
 const DEFAULT_MODEL = "gpt-5-mini";
 const MAX_INGREDIENTS = 30;
 
@@ -42,16 +41,15 @@ const nonFoodCategories = new Set<ProductCategory>([
 export class RecipesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createRecommendation(dto: CreateRecipeRecommendationDto) {
+  async createRecommendation(ownerKey: string, dto: CreateRecipeRecommendationDto) {
     const request = recipeRecommendationRequestSchema.parse({
-      ownerKey: dto.ownerKey ?? process.env.DEFAULT_OWNER_KEY ?? DEFAULT_OWNER_KEY,
       servings: dto.servings ?? 2,
       maxCookingMinutes: dto.maxCookingMinutes ?? 30,
       mealType: dto.mealType ?? "any",
       useExpiringFirst: dto.useExpiringFirst ?? true,
     });
 
-    const inventorySnapshot = await this.buildInventorySnapshot(request);
+    const inventorySnapshot = await this.buildInventorySnapshot(ownerKey, request);
 
     if (inventorySnapshot.length === 0) {
       throw new BadRequestException("추천 가능한 재료가 없습니다.");
@@ -64,7 +62,7 @@ export class RecipesService {
 
     const record = await this.prisma.recipeRecommendation.create({
       data: {
-        ownerKey: request.ownerKey ?? DEFAULT_OWNER_KEY,
+        ownerKey,
         request: toJson(request),
         inventorySnapshot: toJson(inventorySnapshot),
         recommendations: toJson(recommendations),
@@ -87,12 +85,12 @@ export class RecipesService {
     return records.map((record) => this.serializeRecommendation(record));
   }
 
-  async getRecommendation(id: string) {
+  async getRecommendation(id: string, ownerKey: string) {
     const record = await this.prisma.recipeRecommendation.findUnique({
       where: { id },
     });
 
-    if (!record) {
+    if (!record || record.ownerKey !== ownerKey) {
       throw new NotFoundException("추천 결과를 찾을 수 없습니다.");
     }
 
@@ -100,12 +98,13 @@ export class RecipesService {
   }
 
   private async buildInventorySnapshot(
+    ownerKey: string,
     request: RecipeRecommendationRequest,
   ): Promise<RecipeInventorySnapshotItem[]> {
     const today = startOfToday();
     const items = await this.prisma.inventoryItem.findMany({
       where: {
-        ownerKey: request.ownerKey ?? DEFAULT_OWNER_KEY,
+        ownerKey,
         status: "active",
         expiryDate: {
           gte: today,

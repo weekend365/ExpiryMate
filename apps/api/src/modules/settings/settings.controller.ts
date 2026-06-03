@@ -1,26 +1,24 @@
-import { Body, Controller, Get, Patch, Query } from "@nestjs/common";
+import { Body, Controller, Get, Patch, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "../auth/auth.guard";
+import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { SettingsService } from "./settings.service";
 import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 
+@UseGuards(AuthGuard)
 @Controller("settings")
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
   @Get("notification-preferences")
-  getNotificationPreferences(@Query("ownerKey") ownerKey?: string) {
-    return this.settingsService.getNotificationPreferences(
-      ownerKey ?? process.env.DEFAULT_OWNER_KEY ?? "demo-user",
-    );
+  getNotificationPreferences(@CurrentOwnerKey() ownerKey: string) {
+    return this.settingsService.getNotificationPreferences(ownerKey);
   }
 
   @Patch("notification-preferences")
   updateNotificationPreferences(
     @Body() dto: UpdateNotificationPreferenceDto,
-    @Query("ownerKey") ownerKey?: string,
+    @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.settingsService.updateNotificationPreferences(
-      ownerKey ?? process.env.DEFAULT_OWNER_KEY ?? "demo-user",
-      dto,
-    );
+    return this.settingsService.updateNotificationPreferences(ownerKey, dto);
   }
 }

@@ -58,7 +58,6 @@ export interface DashboardSummary {
 export type RecipeMealType = "any" | "breakfast" | "lunch" | "dinner" | "snack";
 
 export interface RecipeRecommendationRequest {
-  ownerKey?: string;
   servings: number;
   maxCookingMinutes: number;
   mealType: RecipeMealType;

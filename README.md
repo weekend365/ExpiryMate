@@ -120,9 +120,13 @@ PORT=4000
 CORS_ORIGIN_ADMIN="http://localhost:3000"
 CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
+AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
+AUTH_ALLOW_DEV_FALLBACK="true"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5-mini"
 ```
+
+`AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK=true` keeps local admin/dev tools usable without a bearer token; set it to `false` for production-like checks.
 
 ### Admin
 
@@ -275,7 +279,7 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 
 ### API
 
-- auth placeholder
+- anonymous bearer session
 - products
 - inventory
 - recipe recommendations
@@ -368,8 +372,11 @@ This is intentionally simple and easy for both mobile and admin clients.
 - `POST /inventory/:id/consume`
 - `POST /inventory/:id/discard`
 
+Inventory, dashboard, recipe, and settings endpoints use the `Authorization: Bearer <token>` owner from `POST /auth/anonymous`. Client-supplied `ownerKey` query/body values are not trusted.
+
 ### Other
 
+- `POST /auth/anonymous`
 - `GET /dashboard/summary`
 - `POST /recipes/recommendations`
 - `GET /recipes/recommendations`
@@ -418,14 +425,14 @@ Inventory seed also includes mixed states:
 ### Mocked or intentionally limited
 
 - no OCR expiry extraction
-- no real multi-user auth
+- no email/social login or account recovery
 - no real push token registration backend
 - no scheduled reminder worker/cron
 - no family/household model
 
 ## Recommended Production Replacements First
 
-1. Add authentication and real user ownership instead of `ownerKey="demo-user"`.
+1. Upgrade anonymous bearer auth to account login, token refresh, and recovery.
 2. Harden recipe recommendation quality, rate limits, caching, and feedback loops.
 3. Add a reminder scheduler and push delivery pipeline.
 4. Add image upload/storage instead of placeholder image URLs.
@@ -437,7 +444,7 @@ Inventory seed also includes mixed states:
 2. Add recipe recommendation feedback and history UX.
 3. Add admin create/edit validation feedback.
 4. Add push token registration + scheduled reminder jobs.
-5. Add auth and multi-household data model.
+5. Add multi-household data model.
 6. Add analytics and subscription boundaries only after retention signals exist.
 
 ## Notes On Running

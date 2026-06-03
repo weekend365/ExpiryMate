@@ -26,6 +26,7 @@ export const inventoryItemSchema = z.object({
 
 export const inventoryUpsertSchema = inventoryItemSchema.omit({
   id: true,
+  ownerKey: true,
   createdAt: true,
   updatedAt: true,
 });

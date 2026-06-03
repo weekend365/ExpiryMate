@@ -61,21 +61,19 @@ export class InventoryService {
     return items.map(serializeInventoryItem);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, ownerKey: string) {
     const item = await this.prisma.inventoryItem.findUnique({
       where: { id },
     });
 
-    if (!item) {
+    if (!item || item.ownerKey !== ownerKey) {
       throw new NotFoundException("재고 항목을 찾을 수 없습니다.");
     }
 
     return serializeInventoryItem(item);
   }
 
-  async create(dto: CreateInventoryItemDto) {
-    const ownerKey = process.env.DEFAULT_OWNER_KEY ?? "demo-user";
-
+  async create(dto: CreateInventoryItemDto, ownerKey: string) {
     const item = await this.prisma.inventoryItem.create({
       data: {
         ownerKey,
@@ -96,8 +94,8 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async update(id: string, dto: Partial<CreateInventoryItemDto>) {
-    await this.findOne(id);
+  async update(id: string, dto: Partial<CreateInventoryItemDto>, ownerKey: string) {
+    await this.findOne(id, ownerKey);
 
     const item = await this.prisma.inventoryItem.update({
       where: { id },
@@ -119,7 +117,9 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async consume(id: string) {
+  async consume(id: string, ownerKey: string) {
+    await this.findOne(id, ownerKey);
+
     const item = await this.prisma.inventoryItem.update({
       where: { id },
       data: {
@@ -130,7 +130,9 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async discard(id: string) {
+  async discard(id: string, ownerKey: string) {
+    await this.findOne(id, ownerKey);
+
     const item = await this.prisma.inventoryItem.update({
       where: { id },
       data: {

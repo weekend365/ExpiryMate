@@ -10,7 +10,6 @@ export const recipeMealTypeSchema = z.enum([
 ]);
 
 export const recipeRecommendationRequestSchema = z.object({
-  ownerKey: z.string().min(1).optional(),
   servings: z.coerce.number().int().min(1).max(6).default(2),
   maxCookingMinutes: z.coerce.number().int().min(5).max(120).default(30),
   mealType: recipeMealTypeSchema.default("any"),

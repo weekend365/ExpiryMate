@@ -4,7 +4,6 @@ import {
   IsIn,
   IsInt,
   IsOptional,
-  IsString,
   Max,
   Min,
 } from "class-validator";
@@ -43,10 +42,6 @@ const toOptionalNumber = ({ value }: { value: unknown }) => {
 };
 
 export class CreateRecipeRecommendationDto {
-  @IsOptional()
-  @IsString()
-  ownerKey?: string;
-
   @IsOptional()
   @Transform(toOptionalNumber)
   @IsInt()
