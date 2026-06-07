@@ -242,6 +242,14 @@ social login links. AI recipe recommendation sends an inventory snapshot and
 recommendation conditions from the API server to OpenAI; the mobile app never
 receives or stores the OpenAI API key.
 
+Recipe generation is protected by configurable server-side limits:
+`RECIPE_RATE_LIMIT_MAX`, `RECIPE_RATE_LIMIT_WINDOW_SECONDS`,
+`RECIPE_DAILY_QUOTA`, `RECIPE_CACHE_TTL_SECONDS`,
+`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Cost
+estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
+`RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
+`RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.
+
 You can also run everything at once:
 
 ```bash
@@ -457,7 +465,7 @@ Inventory seed also includes mixed states:
 ## Recommended Production Replacements First
 
 1. Upgrade anonymous bearer auth to account login, token refresh, and recovery.
-2. Harden recipe recommendation quality, rate limits, caching, and feedback loops.
+2. Harden recipe recommendation quality evaluation and feedback loops.
 3. Add a reminder scheduler and push delivery pipeline.
 4. Add image upload/storage instead of placeholder image URLs.
 5. Add OCR-based expiry parsing after the registration flow is stable.
@@ -477,6 +485,8 @@ Inventory seed also includes mixed states:
 - root `dev` watches `packages/shared` so changes propagate during local development
 - notification UI is real, but remote push delivery is not implemented yet
 - recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
+- recommendation rate limit, quota, cache TTL, output token cap, and daily cost
+  cap are controlled with the `RECIPE_*` environment variables
 
 ## Versioning Notes
 
