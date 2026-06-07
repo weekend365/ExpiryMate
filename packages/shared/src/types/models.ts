@@ -103,6 +103,27 @@ export interface NotificationPreference {
   updatedAt: string;
 }
 
+export type PushTokenPlatform = "ios" | "android" | "web" | "unknown";
+
+export interface PushToken {
+  id: string;
+  ownerKey: string;
+  token: string;
+  platform: PushTokenPlatform;
+  deviceId?: string | null;
+  appVersion?: string | null;
+  enabled: boolean;
+  lastSeenAt: string;
+  updatedAt: string;
+}
+
+export interface RegisterPushTokenRequest {
+  token: string;
+  platform?: PushTokenPlatform;
+  deviceId?: string;
+  appVersion?: string;
+}
+
 export type SubscriptionStore = "apple_app_store" | "google_play";
 export type SubscriptionEntitlementStatus =
   | "active"

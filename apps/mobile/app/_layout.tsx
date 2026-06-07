@@ -1,10 +1,12 @@
 import "react-native-gesture-handler";
 import { Stack } from "expo-router";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
+import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
 import { queryClient } from "../src/services/query-client";
 import { colors } from "../src/shared/theme";
 
@@ -14,6 +16,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <RecipeGenerationProvider>
+            <PushTokenSync />
             <StatusBar style="dark" />
             <Stack
               screenOptions={{
@@ -54,4 +57,12 @@ export default function RootLayout() {
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
+}
+
+function PushTokenSync() {
+  useEffect(() => {
+    syncPushTokenIfPermissionGranted().catch(() => null);
+  }, []);
+
+  return null;
 }

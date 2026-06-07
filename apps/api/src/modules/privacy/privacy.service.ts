@@ -63,6 +63,8 @@ export class PrivacyService {
     const deletedAt = new Date();
 
     await this.prisma.$transaction(async (tx) => {
+      await tx.pushNotificationDelivery.deleteMany({ where: { ownerKey: userId } });
+      await tx.pushToken.deleteMany({ where: { ownerKey: userId } });
       await tx.inventoryItem.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.subscriptionEntitlement.deleteMany({ where: { ownerKey: userId } });

@@ -2,6 +2,7 @@ import {
   type InventoryItem as PrismaInventoryItem,
   type NotificationPreference as PrismaNotificationPreference,
   type Product as PrismaProduct,
+  type PushToken as PrismaPushToken,
 } from "@prisma/client";
 import {
   calculateDaysLeftUntilExpiry,
@@ -11,6 +12,8 @@ import {
   type NotificationPreference,
   type Product,
   ProductCategory,
+  type PushToken,
+  type PushTokenPlatform,
   StorageLocation,
 } from "@expirymate/shared";
 
@@ -66,4 +69,16 @@ export const serializeNotificationPreference = (
   quietHoursStart: preference.quietHoursStart,
   quietHoursEnd: preference.quietHoursEnd,
   updatedAt: preference.updatedAt.toISOString(),
+});
+
+export const serializePushToken = (pushToken: PrismaPushToken): PushToken => ({
+  id: pushToken.id,
+  ownerKey: pushToken.ownerKey,
+  token: pushToken.token,
+  platform: pushToken.platform as PushTokenPlatform,
+  deviceId: pushToken.deviceId,
+  appVersion: pushToken.appVersion,
+  enabled: pushToken.enabled,
+  lastSeenAt: pushToken.lastSeenAt.toISOString(),
+  updatedAt: pushToken.updatedAt.toISOString(),
 });

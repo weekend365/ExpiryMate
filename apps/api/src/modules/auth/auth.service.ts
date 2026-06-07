@@ -499,6 +499,14 @@ export class AuthService {
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
+      await tx.pushToken.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.pushNotificationDelivery.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
 
       const targetPreference = await tx.notificationPreference.findUnique({
         where: { ownerKey: targetUserId },

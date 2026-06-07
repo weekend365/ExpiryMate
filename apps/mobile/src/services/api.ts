@@ -7,8 +7,10 @@ import type {
   InventoryItem,
   LoginRequest,
   NotificationPreference,
+  PushToken,
   OAuthLoginRequest,
   PrivacyStatus,
+  RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
   RecipeRecommendation,
   RecipeRecommendationRequest,
@@ -378,6 +380,12 @@ export const updateNotificationPreferences = (
 ) =>
   request<NotificationPreference>("/settings/notification-preferences", {
     method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const registerPushToken = (payload: RegisterPushTokenRequest) =>
+  request<PushToken>("/notifications/push-tokens", {
+    method: "POST",
     body: JSON.stringify(payload),
   });
 

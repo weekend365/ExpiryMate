@@ -80,29 +80,45 @@ enum SubscriptionEntitlementStatus {
   unknown
 }
 
+enum PushTokenPlatform {
+  ios
+  android
+  web
+  unknown
+}
+
+enum PushNotificationDeliveryStatus {
+  pending
+  sent
+  failed
+  skipped
+}
+
 model User {
-  id                    String           @id @default(cuid())
-  email                 String?          @unique
-  displayName           String?
-  role                  UserRole         @default(user)
-  accountType           AccountType      @default(anonymous)
-  emailVerifiedAt       DateTime?
-  aiDataNoticeAcceptedAt DateTime?
-  aiDataNoticeVersion   String?
-  deletedAt             DateTime?
-  mergedIntoUserId      String?
-  mergedIntoUser        User?            @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
-  mergedAnonymousUsers  User[]           @relation("UserMerge")
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
-  passwordCredential    PasswordCredential?
-  oauthAccounts         OAuthAccount[]
-  refreshSessions       RefreshSession[]
-  oneTimeAuthTokens     OneTimeAuthToken[]
-  inventoryItems        InventoryItem[]
-  notificationPreference NotificationPreference?
-  recipeRecommendations RecipeRecommendation[]
-  subscriptionEntitlements SubscriptionEntitlement[]
+  id                         String                     @id @default(cuid())
+  email                      String?                    @unique
+  displayName                String?
+  role                       UserRole                   @default(user)
+  accountType                AccountType                @default(anonymous)
+  emailVerifiedAt            DateTime?
+  aiDataNoticeAcceptedAt     DateTime?
+  aiDataNoticeVersion        String?
+  deletedAt                  DateTime?
+  mergedIntoUserId           String?
+  mergedIntoUser             User?                      @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
+  mergedAnonymousUsers       User[]                     @relation("UserMerge")
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @updatedAt
+  passwordCredential         PasswordCredential?
+  oauthAccounts              OAuthAccount[]
+  refreshSessions            RefreshSession[]
+  oneTimeAuthTokens          OneTimeAuthToken[]
+  inventoryItems             InventoryItem[]
+  notificationPreference     NotificationPreference?
+  recipeRecommendations      RecipeRecommendation[]
+  subscriptionEntitlements   SubscriptionEntitlement[]
+  pushTokens                 PushToken[]
+  pushNotificationDeliveries PushNotificationDelivery[]
 
   @@index([accountType])
   @@index([role])
@@ -131,15 +147,15 @@ model OAuthAccount {
 }
 
 model RefreshSession {
-  id              String    @id @default(cuid())
-  userId          String
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tokenHash       String    @unique
-  expiresAt       DateTime
-  revokedAt       DateTime?
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash           String    @unique
+  expiresAt           DateTime
+  revokedAt           DateTime?
   replacedByTokenHash String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@index([userId, expiresAt])
 }
@@ -170,23 +186,24 @@ model Product {
 }
 
 model InventoryItem {
-  id              String           @id @default(cuid())
-  ownerKey        String           @default("demo-user")
-  owner           User             @relation(fields: [ownerKey], references: [id])
-  productId       String?
-  product         Product?         @relation(fields: [productId], references: [id])
-  displayName     String
-  brand           String?
-  category        ProductCategory?
-  quantity        Int
-  unit            String?          @default("개")
-  storageLocation StorageLocation
-  expiryDate      DateTime
-  expirySource    ExpirySource
-  status          ItemStatus       @default(active)
-  notes           String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
+  id                         String                     @id @default(cuid())
+  ownerKey                   String                     @default("demo-user")
+  owner                      User                       @relation(fields: [ownerKey], references: [id])
+  productId                  String?
+  product                    Product?                   @relation(fields: [productId], references: [id])
+  displayName                String
+  brand                      String?
+  category                   ProductCategory?
+  quantity                   Int
+  unit                       String?                    @default("개")
+  storageLocation            StorageLocation
+  expiryDate                 DateTime
+  expirySource               ExpirySource
+  status                     ItemStatus                 @default(active)
+  notes                      String?
+  createdAt                  DateTime                   @default(now())
+  updatedAt                  DateTime                   @updatedAt
+  pushNotificationDeliveries PushNotificationDelivery[]
 
   @@index([ownerKey, status])
   @@index([ownerKey, expiryDate])
@@ -246,8 +263,52 @@ model SubscriptionEntitlement {
   createdAt             DateTime                      @default(now())
   updatedAt             DateTime                      @updatedAt
 
-  @@index([ownerKey, isActive, expiresAt])
-  @@index([store, productId])
   @@unique([store, originalTransactionId])
   @@unique([store, purchaseTokenHash])
+  @@index([ownerKey, isActive, expiresAt])
+  @@index([store, productId])
+}
+
+model PushToken {
+  id         String                     @id @default(cuid())
+  ownerKey   String
+  owner      User                       @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  token      String                     @unique
+  platform   PushTokenPlatform          @default(unknown)
+  deviceId   String?
+  appVersion String?
+  enabled    Boolean                    @default(true)
+  lastSeenAt DateTime                   @default(now())
+  disabledAt DateTime?
+  createdAt  DateTime                   @default(now())
+  updatedAt  DateTime                   @updatedAt
+  deliveries PushNotificationDelivery[]
+
+  @@index([ownerKey, enabled])
+}
+
+model PushNotificationDelivery {
+  id              String                         @id @default(cuid())
+  ownerKey        String
+  owner           User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  pushTokenId     String
+  pushToken       PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
+  inventoryItemId String
+  inventoryItem   InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  reminderDate    DateTime
+  daysBefore      Int
+  status          PushNotificationDeliveryStatus @default(pending)
+  expoTicketId    String?
+  title           String
+  body            String
+  errorCode       String?
+  errorMessage    String?
+  attempts        Int                            @default(0)
+  sentAt          DateTime?
+  createdAt       DateTime                       @default(now())
+  updatedAt       DateTime                       @updatedAt
+
+  @@unique([pushTokenId, inventoryItemId, reminderDate, daysBefore])
+  @@index([ownerKey, reminderDate])
+  @@index([pushTokenId, status])
 }

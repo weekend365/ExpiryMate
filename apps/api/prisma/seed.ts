@@ -23,6 +23,8 @@ async function main() {
   await prisma.refreshSession.deleteMany();
   await prisma.oAuthAccount.deleteMany();
   await prisma.passwordCredential.deleteMany();
+  await prisma.pushNotificationDelivery.deleteMany();
+  await prisma.pushToken.deleteMany();
   await prisma.recipeRecommendation.deleteMany();
   await prisma.inventoryItem.deleteMany();
   await prisma.notificationPreference.deleteMany();

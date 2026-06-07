@@ -57,6 +57,8 @@ describe("PrivacyService", () => {
 
     expect(response.ok).toBe(true);
     expect(operations).toEqual([
+      "pushNotificationDelivery.deleteMany",
+      "pushToken.deleteMany",
       "inventoryItem.deleteMany",
       "recipeRecommendation.deleteMany",
       "subscriptionEntitlement.deleteMany",
@@ -94,6 +96,11 @@ function createPrismaMock(
     ...userState,
   };
   const tx = {
+    pushNotificationDelivery: createDeleteManyMock(
+      "pushNotificationDelivery.deleteMany",
+      operations,
+    ),
+    pushToken: createDeleteManyMock("pushToken.deleteMany", operations),
     inventoryItem: createDeleteManyMock("inventoryItem.deleteMany", operations),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",

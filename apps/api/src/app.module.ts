@@ -5,6 +5,7 @@ import { AdminModule } from "./modules/admin/admin.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { DashboardModule } from "./modules/dashboard/dashboard.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
+import { NotificationsModule } from "./modules/notifications/notifications.module";
 import { PrivacyModule } from "./modules/privacy/privacy.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { RecipesModule } from "./modules/recipes/recipes.module";
@@ -27,6 +28,7 @@ import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.modul
     RecipesModule,
     SubscriptionsModule,
     SettingsModule,
+    NotificationsModule,
   ],
 })
 export class AppModule {}

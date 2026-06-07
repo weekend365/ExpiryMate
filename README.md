@@ -128,6 +128,12 @@ PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
 AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5-mini"
+PUSH_REMINDER_SCHEDULER_ENABLED="false"
+PUSH_REMINDER_SCHEDULER_INTERVAL_MINUTES=30
+PUSH_REMINDER_DELIVERY_HOUR=9
+PUSH_REMINDER_MAX_ATTEMPTS=3
+PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES=540
+EXPO_PUSH_ACCESS_TOKEN=""
 IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
 APPLE_BUNDLE_ID="com.expirymate.mobile"
 APPLE_APP_STORE_ENVIRONMENT="sandbox"
@@ -140,6 +146,7 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
 ```
 
 `AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK=true` keeps local admin/dev tools usable without a bearer token; set it to `false` for production-like checks.
+Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` only on the server instance that should send remote expiry reminders. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
 
 ### Admin
 
@@ -494,8 +501,6 @@ Inventory seed also includes mixed states:
 
 - no OCR expiry extraction
 - no email/social login or account recovery
-- no real push token registration backend
-- no scheduled reminder worker/cron
 - no native purchase sheet yet; mobile currently displays server entitlement status
 - no family/household model
 
@@ -503,7 +508,7 @@ Inventory seed also includes mixed states:
 
 1. Upgrade anonymous bearer auth to account login, token refresh, and recovery.
 2. Harden recipe recommendation quality evaluation and feedback loops.
-3. Add a reminder scheduler and push delivery pipeline.
+3. Add Expo push receipt polling and delivery health monitoring.
 4. Add image upload/storage instead of placeholder image URLs.
 5. Add OCR-based expiry parsing after the registration flow is stable.
 
@@ -512,7 +517,7 @@ Inventory seed also includes mixed states:
 1. Harden API validation and add API tests.
 2. Add recipe recommendation feedback and history UX.
 3. Add admin create/edit validation feedback.
-4. Add push token registration + scheduled reminder jobs.
+4. Add notification inbox/history UX and push receipt cleanup jobs.
 5. Add multi-household data model.
 6. Add analytics and subscription-gated feature boundaries after retention signals exist.
 
@@ -520,7 +525,8 @@ Inventory seed also includes mixed states:
 
 - `packages/shared` is built to `dist` and consumed as a workspace package
 - root `dev` watches `packages/shared` so changes propagate during local development
-- notification UI is real, but remote push delivery is not implemented yet
+- remote push delivery requires an EAS project with push credentials and
+  `PUSH_REMINDER_SCHEDULER_ENABLED=true` on one API server
 - recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
 - recommendation rate limit, quota, cache TTL, output token cap, and daily cost
   cap are controlled with the `RECIPE_*` environment variables
@@ -537,5 +543,6 @@ This repo was shaped around current official docs for the main framework assumpt
 - Expo app config reference: https://docs.expo.dev/versions/latest/config/app/
 - EAS Build config: https://docs.expo.dev/build/eas-json/
 - Expo Notifications: https://docs.expo.dev/versions/latest/sdk/notifications/
+- Expo Push Service sending API: https://docs.expo.dev/push-notifications/sending-notifications/
 - Next.js App Router installation: https://nextjs.org/docs/app/getting-started/installation
 - Next.js dynamic segments: https://nextjs.org/docs/15/app/api-reference/file-conventions/dynamic-routes

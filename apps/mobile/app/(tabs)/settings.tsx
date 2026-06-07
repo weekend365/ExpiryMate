@@ -17,7 +17,7 @@ import { useAuth } from "../../src/features/auth/use-auth";
 import { usePrivacyStatus } from "../../src/features/privacy/use-privacy";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
-import { requestNotificationPermissions } from "../../src/services/notifications";
+import { registerDevicePushToken } from "../../src/services/notifications";
 import { colors, spacing } from "../../src/shared/theme";
 
 const reminderOptions = [0, 1, 3, 7, 14];
@@ -49,9 +49,14 @@ export default function SettingsScreen() {
 
   const handleSave = async () => {
     if (enabled) {
-      const permission = await requestNotificationPermissions();
-      if (!permission.granted) {
-        Alert.alert("알림 권한이 필요해요", "기기 설정에서 알림을 허용해주세요.");
+      try {
+        const pushToken = await registerDevicePushToken();
+
+        if (!pushToken) {
+          Alert.alert("알림 권한이 필요해요", "기기 설정에서 알림을 허용해주세요.");
+        }
+      } catch {
+        Alert.alert("푸시 등록 실패", "알림 토큰을 서버에 저장하지 못했어요.");
       }
     }
 
@@ -247,7 +252,7 @@ export default function SettingsScreen() {
       <View style={styles.card}>
         <Text style={styles.rowTitle}>앱 정보</Text>
         <Text style={styles.infoText}>ExpiryMate MVP · 한국어 우선 재고/유통기한 관리</Text>
-        <Text style={styles.infoText}>푸시 알림과 OCR 인식은 아직 준비 중이에요.</Text>
+        <Text style={styles.infoText}>OCR 인식은 아직 준비 중이에요.</Text>
       </View>
 
       <Button onPress={handleSave} loading={mutation.isPending}>
