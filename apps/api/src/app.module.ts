@@ -5,6 +5,7 @@ import { AdminModule } from "./modules/admin/admin.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { DashboardModule } from "./modules/dashboard/dashboard.module";
 import { InventoryModule } from "./modules/inventory/inventory.module";
+import { PrivacyModule } from "./modules/privacy/privacy.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { RecipesModule } from "./modules/recipes/recipes.module";
 import { SettingsModule } from "./modules/settings/settings.module";
@@ -21,6 +22,7 @@ import { SettingsModule } from "./modules/settings/settings.module";
     ProductsModule,
     InventoryModule,
     DashboardModule,
+    PrivacyModule,
     RecipesModule,
     SettingsModule,
   ],

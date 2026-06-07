@@ -72,6 +72,9 @@ model User {
   role                  UserRole         @default(user)
   accountType           AccountType      @default(anonymous)
   emailVerifiedAt       DateTime?
+  aiDataNoticeAcceptedAt DateTime?
+  aiDataNoticeVersion   String?
+  deletedAt             DateTime?
   mergedIntoUserId      String?
   mergedIntoUser        User?            @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
   mergedAnonymousUsers  User[]           @relation("UserMerge")
@@ -87,6 +90,7 @@ model User {
 
   @@index([accountType])
   @@index([role])
+  @@index([deletedAt])
 }
 
 model PasswordCredential {

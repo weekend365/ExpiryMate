@@ -24,6 +24,7 @@ import {
 import OpenAI from "openai";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
+import { PrivacyService } from "../privacy/privacy.service";
 import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
 
 const PROMPT_VERSION = "recipe-recommendation-v1";
@@ -39,9 +40,14 @@ const nonFoodCategories = new Set<ProductCategory>([
 
 @Injectable()
 export class RecipesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly privacyService: PrivacyService,
+  ) {}
 
   async createRecommendation(ownerKey: string, dto: CreateRecipeRecommendationDto) {
+    await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
+
     const request = recipeRecommendationRequestSchema.parse({
       servings: dto.servings ?? 2,
       maxCookingMinutes: dto.maxCookingMinutes ?? 30,

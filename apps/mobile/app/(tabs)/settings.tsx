@@ -1,11 +1,14 @@
 import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
+import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
+import { ExternalLink, ShieldCheck, Trash2 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Switch, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
+import { usePrivacyStatus } from "../../src/features/privacy/use-privacy";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
 import { requestNotificationPermissions } from "../../src/services/notifications";
 import { colors, spacing } from "../../src/shared/theme";
@@ -15,6 +18,7 @@ const reminderOptions = [0, 1, 3, 7, 14];
 export default function SettingsScreen() {
   const auth = useAuth();
   const { query, mutation } = useNotificationPreferences();
+  const privacyStatusQuery = usePrivacyStatus();
   const [enabled, setEnabled] = useState(true);
   const [remindOnDayOf, setRemindOnDayOf] = useState(true);
   const [days, setDays] = useState<number[]>(DEFAULT_NOTIFICATION_DAYS);
@@ -53,9 +57,10 @@ export default function SettingsScreen() {
   const user = auth.query.data;
   const isRegistered = user?.accountType === "registered";
   const emailVerified = Boolean(user?.emailVerifiedAt);
+  const privacyPolicyUrl = privacyStatusQuery.data?.privacyPolicyUrl;
 
   return (
-    <Screen title="알림 설정" subtitle="유통기한 리마인더와 앱 기본 정보를 관리해요.">
+    <Screen title="설정" subtitle="계정, 알림, 개인정보와 AI 데이터 사용을 관리해요.">
       <View style={styles.card}>
         <View style={styles.row}>
           <View style={styles.rowCopy}>
@@ -104,6 +109,57 @@ export default function SettingsScreen() {
             로그인 또는 회원가입
           </Button>
         )}
+      </View>
+
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <View style={styles.rowCopy}>
+            <Text style={styles.rowTitle}>개인정보 및 AI 데이터</Text>
+            <Text style={styles.rowDescription}>
+              개인정보처리방침, AI 추천 데이터 사용, 계정 삭제를 확인할 수 있어요.
+            </Text>
+          </View>
+        </View>
+        <View style={styles.actionRow}>
+          <Button
+            variant="secondary"
+            size="small"
+            icon={ShieldCheck}
+            onPress={() => router.push("/privacy")}
+          >
+            개인정보처리방침
+          </Button>
+          <Button
+            variant="secondary"
+            size="small"
+            icon={ShieldCheck}
+            onPress={() => router.push("/privacy/ai-data-notice")}
+          >
+            AI 데이터 고지
+          </Button>
+          <Button
+            variant="danger"
+            size="small"
+            icon={Trash2}
+            onPress={() => router.push("/privacy/account-delete")}
+          >
+            데이터 삭제
+          </Button>
+          {privacyPolicyUrl ? (
+            <Button
+              variant="secondary"
+              size="small"
+              icon={ExternalLink}
+              onPress={() => {
+                WebBrowser.openBrowserAsync(privacyPolicyUrl).catch(() =>
+                  Alert.alert("열기 실패", "개인정보처리방침 URL을 열지 못했어요."),
+                );
+              }}
+            >
+              웹에서 보기
+            </Button>
+          ) : null}
+        </View>
       </View>
 
       <View style={styles.card}>

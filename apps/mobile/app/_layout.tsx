@@ -39,6 +39,15 @@ export default function RootLayout() {
                 options={{ title: "비밀번호 재설정" }}
               />
               <Stack.Screen name="auth/verify-email" options={{ title: "이메일 인증" }} />
+              <Stack.Screen name="privacy/index" options={{ title: "개인정보" }} />
+              <Stack.Screen
+                name="privacy/ai-data-notice"
+                options={{ title: "AI 데이터 고지" }}
+              />
+              <Stack.Screen
+                name="privacy/account-delete"
+                options={{ title: "계정 및 데이터 삭제" }}
+              />
             </Stack>
           </RecipeGenerationProvider>
         </QueryClientProvider>

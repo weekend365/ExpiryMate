@@ -122,6 +122,10 @@ CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
 AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
 AUTH_ALLOW_DEV_FALLBACK="true"
+PRIVACY_POLICY_URL="http://localhost:3000/privacy"
+PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
+PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
+AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5-mini"
 ```
@@ -134,6 +138,7 @@ Copy `apps/admin/.env.example` to `apps/admin/.env.local`
 
 ```env
 NEXT_PUBLIC_API_BASE_URL="http://localhost:4000"
+PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
 ```
 
 ### Mobile
@@ -217,6 +222,25 @@ URLs:
 - API: `http://localhost:4000`
 - Admin: `http://localhost:3000`
 - Mobile: Expo QR from `pnpm dev:mobile`
+
+## Privacy, Data Deletion, and AI Notice
+
+Public pages for App Store review:
+
+- Privacy Policy: `http://localhost:3000/privacy`
+- Data Deletion Choices: `http://localhost:3000/privacy/choices`
+
+Before submitting to the App Store, replace localhost URLs with the production
+domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
+
+Mobile users can manage privacy controls in `설정` → `개인정보 및 AI 데이터`.
+The first AI recipe recommendation requires one-time AI data notice consent.
+
+Account/data deletion immediately removes owned ingredients, recommendation
+history, notification preferences, auth sessions, password credentials, and
+social login links. AI recipe recommendation sends an inventory snapshot and
+recommendation conditions from the API server to OpenAI; the mobile app never
+receives or stores the OpenAI API key.
 
 You can also run everything at once:
 

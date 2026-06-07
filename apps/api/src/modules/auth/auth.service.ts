@@ -110,7 +110,11 @@ export class AuthService {
       include: { passwordCredential: true },
     });
 
-    if (!user?.passwordCredential) {
+    if (
+      !user?.passwordCredential ||
+      user.deletedAt ||
+      user.mergedIntoUserId
+    ) {
       throw new UnauthorizedException("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
 
@@ -139,7 +143,8 @@ export class AuthService {
       !session ||
       session.revokedAt ||
       session.expiresAt.getTime() <= Date.now() ||
-      session.user.mergedIntoUserId
+      session.user.mergedIntoUserId ||
+      session.user.deletedAt
     ) {
       throw new UnauthorizedException("로그인 세션이 만료되었습니다.");
     }
@@ -189,7 +194,7 @@ export class AuthService {
   async getMe(userId: string): Promise<AuthUser> {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
 
-    if (!user || user.mergedIntoUserId) {
+    if (!user || user.mergedIntoUserId || user.deletedAt) {
       throw new UnauthorizedException("로그인이 필요합니다.");
     }
 
@@ -295,6 +300,25 @@ export class AuthService {
     };
   }
 
+  async authenticateAccessToken(token: string): Promise<AuthenticatedUser> {
+    const payloadUser = this.verifyAccessToken(token);
+    const user = await this.prisma.user.findUnique({
+      where: { id: payloadUser.userId },
+    });
+
+    if (!user || user.mergedIntoUserId || user.deletedAt) {
+      throw new UnauthorizedException("로그인이 필요합니다.");
+    }
+
+    return {
+      userId: user.id,
+      ownerKey: user.id,
+      role: user.role,
+      accountType: user.accountType,
+      tokenKind: "access",
+    };
+  }
+
   getDevFallbackUser(): AuthenticatedUser | null {
     if (process.env.AUTH_ALLOW_DEV_FALLBACK === "false") {
       return null;
@@ -323,13 +347,17 @@ export class AuthService {
     }
 
     try {
-      return this.verifyAccessToken(token);
+      return await this.authenticateAccessToken(token);
     } catch {
       return undefined;
     }
   }
 
   private async createSession(user: User): Promise<AuthSession> {
+    if (user.deletedAt || user.mergedIntoUserId) {
+      throw new UnauthorizedException("로그인이 필요합니다.");
+    }
+
     const refreshToken = createOpaqueToken();
     await this.prisma.refreshSession.create({
       data: {
@@ -444,12 +472,21 @@ export class AuthService {
     if (
       !anonymousUser ||
       anonymousUser.accountType !== AccountType.anonymous ||
-      anonymousUser.mergedIntoUserId
+      anonymousUser.mergedIntoUserId ||
+      anonymousUser.deletedAt
     ) {
       return;
     }
 
     await this.prisma.$transaction(async (tx) => {
+      const targetUser = await tx.user.findUnique({
+        where: { id: targetUserId },
+        select: {
+          aiDataNoticeAcceptedAt: true,
+          aiDataNoticeVersion: true,
+        },
+      });
+
       await tx.inventoryItem.updateMany({
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
@@ -477,6 +514,18 @@ export class AuthService {
         where: { userId: anonymousUserId, revokedAt: null },
         data: { revokedAt: new Date() },
       });
+      if (
+        anonymousUser.aiDataNoticeAcceptedAt &&
+        !targetUser?.aiDataNoticeAcceptedAt
+      ) {
+        await tx.user.update({
+          where: { id: targetUserId },
+          data: {
+            aiDataNoticeAcceptedAt: anonymousUser.aiDataNoticeAcceptedAt,
+            aiDataNoticeVersion: anonymousUser.aiDataNoticeVersion,
+          },
+        });
+      }
       await tx.user.update({
         where: { id: anonymousUserId },
         data: { mergedIntoUserId: targetUserId },

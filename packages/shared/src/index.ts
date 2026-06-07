@@ -4,6 +4,7 @@ export * from "./enums/app-enums";
 export * from "./schemas/inventory";
 export * from "./schemas/auth";
 export * from "./schemas/product";
+export * from "./schemas/privacy";
 export * from "./schemas/recipes";
 export * from "./schemas/settings";
 export * from "./types/models";

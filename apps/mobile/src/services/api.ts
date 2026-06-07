@@ -2,10 +2,14 @@ import type {
   AuthSession,
   AuthUser,
   DashboardSummary,
+  DeleteAccountRequest,
+  DeleteAccountResponse,
   InventoryItem,
   LoginRequest,
   NotificationPreference,
   OAuthLoginRequest,
+  PrivacyStatus,
+  AcceptAiDataNoticeResponse,
   RecipeRecommendation,
   RecipeRecommendationRequest,
   RegisterRequest,
@@ -228,6 +232,23 @@ export const getCurrentUser = async () => {
 };
 
 export const getMe = () => request<AuthUser>("/auth/me");
+
+export const getPrivacyStatus = () => request<PrivacyStatus>("/privacy/status");
+
+export const acceptAiDataNotice = () =>
+  request<AcceptAiDataNoticeResponse>("/privacy/ai-data-notice/accept", {
+    method: "POST",
+  });
+
+export const deleteAccount = async (payload: DeleteAccountRequest) => {
+  const result = await request<DeleteAccountResponse>("/privacy/account/delete", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+  await clearAuthSession();
+  return result;
+};
 
 export const register = async (payload: RegisterRequest) =>
   persistAuthSession(

@@ -11,7 +11,7 @@ import type { AuthenticatedRequest } from "./auth.types";
 export class AuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
     const authorization = readHeader(request, "authorization");
     const token = authorization?.startsWith("Bearer ")
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
       : null;
 
     if (token) {
-      request.user = this.authService.verifyAccessToken(token);
+      request.user = await this.authService.authenticateAccessToken(token);
       return true;
     }
 

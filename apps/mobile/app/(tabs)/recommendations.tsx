@@ -8,17 +8,23 @@ import {
   CheckCircle2,
   Clock3,
   Plus,
+  ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { RefreshControl, StyleSheet, Text, View } from "react-native";
+import { Modal, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
+import {
+  useAcceptAiDataNotice,
+  usePrivacyStatus,
+} from "../../src/features/privacy/use-privacy";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useRecipeRecommendations } from "../../src/features/recipes/use-recipe-recommendations";
+import type { RecipeRecommendationPayload } from "../../src/services/api";
 import { colors, spacing } from "../../src/shared/theme";
 
 const servingOptions = [1, 2, 3, 4];
@@ -51,10 +57,15 @@ export default function RecommendationsScreen() {
     errorMessage: generationErrorMessage,
     generateRecipeRecommendation,
   } = useRecipeGeneration();
+  const privacyStatusQuery = usePrivacyStatus();
+  const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
   const [servings, setServings] = useState(2);
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
   const [useExpiringFirst, setUseExpiringFirst] = useState(true);
+  const [showAiNotice, setShowAiNotice] = useState(false);
+  const [pendingPayload, setPendingPayload] =
+    useState<RecipeRecommendationPayload | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
   const isGenerating = generationStatus === "pending";
 
@@ -65,19 +76,44 @@ export default function RecommendationsScreen() {
   const errorMessage =
     generationErrorMessage ?? getErrorMessage(historyQuery.error);
 
-  const handleCreateRecommendation = useCallback(async () => {
-    await generateRecipeRecommendation({
+  const buildRecommendationPayload = useCallback(
+    (): RecipeRecommendationPayload => ({
       servings,
       maxCookingMinutes,
       mealType,
       useExpiringFirst,
-    });
+    }),
+    [maxCookingMinutes, mealType, servings, useExpiringFirst],
+  );
+
+  const handleCreateRecommendation = useCallback(async () => {
+    const payload = buildRecommendationPayload();
+    const privacyStatus =
+      privacyStatusQuery.data ?? (await privacyStatusQuery.refetch()).data;
+
+    if (!privacyStatus?.hasAcceptedCurrentAiDataNotice) {
+      setPendingPayload(payload);
+      setShowAiNotice(true);
+      return;
+    }
+
+    await generateRecipeRecommendation(payload);
   }, [
+    buildRecommendationPayload,
     generateRecipeRecommendation,
-    maxCookingMinutes,
-    mealType,
-    servings,
-    useExpiringFirst,
+    privacyStatusQuery,
+  ]);
+
+  const handleAcceptAiNotice = useCallback(async () => {
+    await acceptAiDataNoticeMutation.mutateAsync();
+    setShowAiNotice(false);
+    await generateRecipeRecommendation(pendingPayload ?? buildRecommendationPayload());
+    setPendingPayload(null);
+  }, [
+    acceptAiDataNoticeMutation,
+    buildRecommendationPayload,
+    generateRecipeRecommendation,
+    pendingPayload,
   ]);
 
   useEffect(() => {
@@ -272,7 +308,66 @@ export default function RecommendationsScreen() {
           </View>
         </View>
       ) : null}
+
+      <AiDataNoticeModal
+        visible={showAiNotice}
+        loading={acceptAiDataNoticeMutation.isPending}
+        onClose={() => setShowAiNotice(false)}
+        onAccept={handleAcceptAiNotice}
+      />
     </Screen>
+  );
+}
+
+function AiDataNoticeModal({
+  visible,
+  loading,
+  onClose,
+  onAccept,
+}: {
+  visible: boolean;
+  loading: boolean;
+  onClose: () => void;
+  onAccept: () => void;
+}) {
+  return (
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalCard}>
+          <View style={styles.modalIcon}>
+            <ShieldCheck color={colors.primary} size={24} strokeWidth={2.5} />
+          </View>
+          <Text style={styles.modalTitle}>AI 추천에 사용할 데이터를 확인해 주세요</Text>
+          <Text style={styles.modalDescription}>
+            요리 추천을 만들 때 재료명, 카테고리, 수량과 단위, 보관 위치,
+            유통기한, 만료까지 남은 일수, 추천 조건이 서버를 통해 OpenAI API로
+            전송돼요. 추천 결과와 입력 snapshot은 히스토리 확인과 품질 개선을
+            위해 내 계정에 저장돼요.
+          </Text>
+          <Text style={styles.modalFootnote}>
+            OpenAI API 데이터는 기본적으로 모델 학습에 사용되지 않지만, 서비스
+            보안과 abuse monitoring을 위해 일정 기간 보관될 수 있어요.
+          </Text>
+          <View style={styles.modalActions}>
+            <Button variant="secondary" onPress={onClose} style={styles.modalButton}>
+              취소
+            </Button>
+            <Button
+              onPress={onAccept}
+              loading={loading}
+              style={styles.modalButton}
+            >
+              동의하고 추천 받기
+            </Button>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -634,5 +729,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: colors.subtext,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(25,31,40,0.42)",
+    justifyContent: "center",
+    padding: spacing.lg,
+  },
+  modalCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 20,
+    padding: spacing.lg,
+    gap: spacing.md,
+  },
+  modalIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalTitle: {
+    fontSize: 21,
+    lineHeight: 29,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  modalDescription: {
+    fontSize: 15,
+    lineHeight: 23,
+    color: colors.text,
+  },
+  modalFootnote: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.subtext,
+  },
+  modalActions: {
+    flexDirection: "row",
+    gap: spacing.sm,
+  },
+  modalButton: {
+    flex: 1,
   },
 });

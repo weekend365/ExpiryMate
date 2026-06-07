@@ -17,20 +17,20 @@ const navItems = [
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
-  const isLoginPage = pathname === "/login";
+  const isPublicPage = pathname === "/login" || pathname.startsWith("/privacy");
   const meQuery = useQuery({
     queryKey: ["admin", "me"],
     queryFn: getMe,
-    enabled: !isLoginPage,
+    enabled: !isPublicPage,
   });
 
   useEffect(() => {
-    if (!isLoginPage && meQuery.isError) {
+    if (!isPublicPage && meQuery.isError) {
       router.replace("/login");
     }
-  }, [isLoginPage, meQuery.isError, router]);
+  }, [isPublicPage, meQuery.isError, router]);
 
-  if (isLoginPage) {
+  if (isPublicPage) {
     return <>{children}</>;
   }
 

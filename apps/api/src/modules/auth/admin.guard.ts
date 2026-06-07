@@ -12,8 +12,8 @@ import type { AuthenticatedRequest } from "./auth.types";
 export class AdminGuard implements CanActivate {
   constructor(private readonly authGuard: AuthGuard) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    this.authGuard.canActivate(context);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    await this.authGuard.canActivate(context);
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
 

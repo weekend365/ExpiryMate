@@ -28,6 +28,29 @@ export interface AuthUser {
   emailVerifiedAt?: string | null;
 }
 
+export interface PrivacyStatus {
+  privacyPolicyUrl: string;
+  privacyChoicesUrl: string;
+  contactEmail: string;
+  aiDataNoticeVersion: string;
+  aiDataNoticeAcceptedAt: string | null;
+  hasAcceptedCurrentAiDataNotice: boolean;
+}
+
+export interface AcceptAiDataNoticeResponse {
+  ok: true;
+  status: PrivacyStatus;
+}
+
+export interface DeleteAccountRequest {
+  confirmation: "삭제";
+}
+
+export interface DeleteAccountResponse {
+  ok: true;
+  deletedAt: string;
+}
+
 export interface AuthSession {
   user: AuthUser;
   accessToken: string;
