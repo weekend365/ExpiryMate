@@ -1,14 +1,28 @@
 {
   "expo": {
     "name": "ExpiryMate",
-    "slug": "expirymate-mobile",
+    "slug": "expirymate",
+    "description": "Korean-first ingredient inventory, expiry reminder, and recipe recommendation app.",
+    "platforms": ["ios", "android"],
     "scheme": "expirymate",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#F8FAFC",
+    "primaryColor": "#2F7DF6",
+    "icon": "./assets/branding/icon.png",
     "plugins": [
       "expo-router",
       "expo-notifications",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/branding/splash-icon.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#F8FAFC"
+        }
+      ],
       "@react-native-community/datetimepicker",
       "expo-secure-store",
       "expo-web-browser"
@@ -18,10 +32,24 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expirymate.mobile"
+      "bundleIdentifier": "com.expirymate.mobile",
+      "buildNumber": "1",
+      "icon": "./assets/branding/icon.png",
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "ko"
+      }
     },
     "android": {
-      "package": "com.expirymate.mobile"
+      "package": "com.expirymate.mobile",
+      "versionCode": 1,
+      "icon": "./assets/branding/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/branding/adaptive-icon.png",
+        "backgroundColor": "#F8FAFC"
+      }
     }
   }
 }

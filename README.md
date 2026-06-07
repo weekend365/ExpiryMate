@@ -180,6 +180,29 @@ Restart Expo after changing `.env`:
 pnpm --filter @expirymate/mobile exec expo start -c
 ```
 
+## App Store Build
+
+Mobile App Store configuration lives in `apps/mobile/app.json` and
+`apps/mobile/eas.json`. The current app icon and splash assets are generated
+from `apps/mobile/assets/characters/mate-fridge-chef.png` into
+`apps/mobile/assets/branding/`.
+
+Install and authenticate EAS CLI before building:
+
+```bash
+npm install --global eas-cli
+eas login
+```
+
+Run App Store builds from the Expo project directory:
+
+```bash
+cd apps/mobile
+eas config
+eas build --platform ios --profile production
+eas submit --platform ios --profile production
+```
+
 ## Running Locally
 
 ### 1. Install dependencies
@@ -503,12 +526,16 @@ Inventory seed also includes mixed states:
   cap are controlled with the `RECIPE_*` environment variables
 - subscription server verification requires App Store Server API or Google Play
   Developer API credentials in `apps/api/.env`
+- App Store/EAS build config is in `apps/mobile/app.json` and
+  `apps/mobile/eas.json`; EAS CLI is not bundled with this repo
 
 ## Versioning Notes
 
 This repo was shaped around current official docs for the main framework assumptions used here:
 
 - Expo SDK reference and package docs: https://docs.expo.dev/versions/latest/
+- Expo app config reference: https://docs.expo.dev/versions/latest/config/app/
+- EAS Build config: https://docs.expo.dev/build/eas-json/
 - Expo Notifications: https://docs.expo.dev/versions/latest/sdk/notifications/
 - Next.js App Router installation: https://nextjs.org/docs/app/getting-started/installation
 - Next.js dynamic segments: https://nextjs.org/docs/15/app/api-reference/file-conventions/dynamic-routes
