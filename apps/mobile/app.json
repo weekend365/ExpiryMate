@@ -17,7 +17,8 @@
       "typedRoutes": false
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.expirymate.mobile"
     },
     "android": {
       "package": "com.expirymate.mobile"

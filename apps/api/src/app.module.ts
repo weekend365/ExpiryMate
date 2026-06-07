@@ -9,6 +9,7 @@ import { PrivacyModule } from "./modules/privacy/privacy.module";
 import { ProductsModule } from "./modules/products/products.module";
 import { RecipesModule } from "./modules/recipes/recipes.module";
 import { SettingsModule } from "./modules/settings/settings.module";
+import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SettingsModule } from "./modules/settings/settings.module";
     DashboardModule,
     PrivacyModule,
     RecipesModule,
+    SubscriptionsModule,
     SettingsModule,
   ],
 })

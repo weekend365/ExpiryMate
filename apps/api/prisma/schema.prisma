@@ -65,6 +65,21 @@ enum OneTimeAuthTokenPurpose {
   password_reset
 }
 
+enum SubscriptionStore {
+  apple_app_store
+  google_play
+}
+
+enum SubscriptionEntitlementStatus {
+  active
+  grace_period
+  billing_retry
+  paused
+  expired
+  revoked
+  unknown
+}
+
 model User {
   id                    String           @id @default(cuid())
   email                 String?          @unique
@@ -87,6 +102,7 @@ model User {
   inventoryItems        InventoryItem[]
   notificationPreference NotificationPreference?
   recipeRecommendations RecipeRecommendation[]
+  subscriptionEntitlements SubscriptionEntitlement[]
 
   @@index([accountType])
   @@index([role])
@@ -209,4 +225,29 @@ model RecipeRecommendation {
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
+}
+
+model SubscriptionEntitlement {
+  id                    String                        @id @default(cuid())
+  ownerKey              String
+  owner                 User                          @relation(fields: [ownerKey], references: [id])
+  store                 SubscriptionStore
+  productId             String
+  originalTransactionId String?
+  transactionId         String?
+  purchaseTokenHash     String?
+  status                SubscriptionEntitlementStatus @default(unknown)
+  isActive              Boolean                       @default(false)
+  willRenew             Boolean?
+  expiresAt             DateTime?
+  environment           String?
+  verifiedAt            DateTime                      @default(now())
+  rawVerification       Json?
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+
+  @@index([ownerKey, isActive, expiresAt])
+  @@index([store, productId])
+  @@unique([store, originalTransactionId])
+  @@unique([store, purchaseTokenHash])
 }

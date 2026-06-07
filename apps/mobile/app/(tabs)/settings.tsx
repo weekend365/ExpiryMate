@@ -1,7 +1,13 @@
 import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
-import { ExternalLink, ShieldCheck, Trash2 } from "lucide-react-native";
+import {
+  CreditCard,
+  ExternalLink,
+  RefreshCw,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Switch, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
@@ -10,6 +16,7 @@ import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { usePrivacyStatus } from "../../src/features/privacy/use-privacy";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
+import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { requestNotificationPermissions } from "../../src/services/notifications";
 import { colors, spacing } from "../../src/shared/theme";
 
@@ -19,6 +26,7 @@ export default function SettingsScreen() {
   const auth = useAuth();
   const { query, mutation } = useNotificationPreferences();
   const privacyStatusQuery = usePrivacyStatus();
+  const subscription = useSubscriptionEntitlement();
   const [enabled, setEnabled] = useState(true);
   const [remindOnDayOf, setRemindOnDayOf] = useState(true);
   const [days, setDays] = useState<number[]>(DEFAULT_NOTIFICATION_DAYS);
@@ -58,6 +66,13 @@ export default function SettingsScreen() {
   const isRegistered = user?.accountType === "registered";
   const emailVerified = Boolean(user?.emailVerifiedAt);
   const privacyPolicyUrl = privacyStatusQuery.data?.privacyPolicyUrl;
+  const entitlement = subscription.query.data;
+  const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
+  const refreshSubscription = () => {
+    subscription.query.refetch().catch(() =>
+      Alert.alert("확인 실패", "구독 상태를 확인하지 못했어요."),
+    );
+  };
 
   return (
     <Screen title="설정" subtitle="계정, 알림, 개인정보와 AI 데이터 사용을 관리해요.">
@@ -109,6 +124,40 @@ export default function SettingsScreen() {
             로그인 또는 회원가입
           </Button>
         )}
+      </View>
+
+      <View style={styles.card}>
+        <View style={styles.row}>
+          <View style={styles.rowCopy}>
+            <View style={styles.titleRow}>
+              <Text style={styles.rowTitle}>구독</Text>
+              <CreditCard size={18} color={colors.primary} />
+            </View>
+            <Text style={styles.rowDescription}>
+              {subscription.query.isLoading
+                ? "구독 상태를 확인하고 있어요."
+                : hasActiveEntitlement
+                  ? `${formatStore(entitlement?.store)} · ${formatExpiry(entitlement?.expiresAt)}까지`
+                  : "활성화된 구독이 없어요."}
+            </Text>
+          </View>
+          <Pill
+            label={hasActiveEntitlement ? "활성" : "비활성"}
+            selected={hasActiveEntitlement}
+            onPress={refreshSubscription}
+          />
+        </View>
+        <View style={styles.actionRow}>
+          <Button
+            variant="secondary"
+            size="small"
+            icon={RefreshCw}
+            loading={subscription.query.isFetching}
+            onPress={refreshSubscription}
+          >
+            상태 새로고침
+          </Button>
+        </View>
       </View>
 
       <View style={styles.card}>
@@ -230,6 +279,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.text,
   },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
   rowDescription: {
     fontSize: 14,
     lineHeight: 22,
@@ -254,4 +308,28 @@ const styles = StyleSheet.create({
 
 function getErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+}
+
+function formatStore(store?: string | null) {
+  if (store === "apple_app_store") {
+    return "App Store";
+  }
+
+  if (store === "google_play") {
+    return "Google Play";
+  }
+
+  return "스토어";
+}
+
+function formatExpiry(value?: string | null) {
+  if (!value) {
+    return "갱신 확인 전";
+  }
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(new Date(value));
 }

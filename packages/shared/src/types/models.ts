@@ -103,6 +103,40 @@ export interface NotificationPreference {
   updatedAt: string;
 }
 
+export type SubscriptionStore = "apple_app_store" | "google_play";
+export type SubscriptionEntitlementStatus =
+  | "active"
+  | "grace_period"
+  | "billing_retry"
+  | "paused"
+  | "expired"
+  | "revoked"
+  | "unknown";
+
+export interface SubscriptionEntitlement {
+  hasActiveEntitlement: boolean;
+  store: SubscriptionStore | null;
+  productId: string | null;
+  status: SubscriptionEntitlementStatus;
+  expiresAt: string | null;
+  willRenew: boolean | null;
+  environment: string | null;
+  verifiedAt: string | null;
+}
+
+export interface SubscriptionVerificationRequest {
+  store: SubscriptionStore;
+  productId?: string;
+  transactionId?: string;
+  purchaseToken?: string;
+  environment?: "sandbox" | "production";
+}
+
+export interface SubscriptionVerificationResponse {
+  ok: true;
+  entitlement: SubscriptionEntitlement;
+}
+
 export interface DashboardSummary {
   todayExpiryCount: number;
   within3DaysCount: number;

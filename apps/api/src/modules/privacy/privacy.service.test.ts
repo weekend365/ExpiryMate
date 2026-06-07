@@ -59,6 +59,7 @@ describe("PrivacyService", () => {
     expect(operations).toEqual([
       "inventoryItem.deleteMany",
       "recipeRecommendation.deleteMany",
+      "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
       "refreshSession.deleteMany",
       "oneTimeAuthToken.deleteMany",
@@ -96,6 +97,10 @@ function createPrismaMock(
     inventoryItem: createDeleteManyMock("inventoryItem.deleteMany", operations),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",
+      operations,
+    ),
+    subscriptionEntitlement: createDeleteManyMock(
+      "subscriptionEntitlement.deleteMany",
       operations,
     ),
     notificationPreference: createDeleteManyMock(

@@ -128,6 +128,15 @@ PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
 AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5-mini"
+IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
+APPLE_BUNDLE_ID="com.expirymate.mobile"
+APPLE_APP_STORE_ENVIRONMENT="sandbox"
+APPLE_APP_STORE_ISSUER_ID=""
+APPLE_APP_STORE_KEY_ID=""
+APPLE_APP_STORE_PRIVATE_KEY=""
+GOOGLE_PLAY_PACKAGE_NAME="com.expirymate.mobile"
+GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL=""
+GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
 ```
 
 `AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK=true` keeps local admin/dev tools usable without a bearer token; set it to `false` for production-like checks.
@@ -148,6 +157,7 @@ Copy `apps/mobile/.env.example` to `apps/mobile/.env`
 ```env
 EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
 EXPO_PUBLIC_APP_ENV="development"
+EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
 ```
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
@@ -413,6 +423,8 @@ Inventory, dashboard, recipe, and settings endpoints use the `Authorization: Bea
 - `POST /recipes/recommendations`
 - `GET /recipes/recommendations`
 - `GET /recipes/recommendations/:id`
+- `GET /subscriptions/entitlement`
+- `POST /subscriptions/verify`
 - `GET /settings/notification-preferences`
 - `PATCH /settings/notification-preferences`
 - `GET /auth/placeholder`
@@ -451,6 +463,7 @@ Inventory seed also includes mixed states:
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
 - AI recipe recommendation API and mobile recommendation tab
+- subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling
 - recipe-oriented mascot asset
 
@@ -460,6 +473,7 @@ Inventory seed also includes mixed states:
 - no email/social login or account recovery
 - no real push token registration backend
 - no scheduled reminder worker/cron
+- no native purchase sheet yet; mobile currently displays server entitlement status
 - no family/household model
 
 ## Recommended Production Replacements First
@@ -477,7 +491,7 @@ Inventory seed also includes mixed states:
 3. Add admin create/edit validation feedback.
 4. Add push token registration + scheduled reminder jobs.
 5. Add multi-household data model.
-6. Add analytics and subscription boundaries only after retention signals exist.
+6. Add analytics and subscription-gated feature boundaries after retention signals exist.
 
 ## Notes On Running
 
@@ -487,6 +501,8 @@ Inventory seed also includes mixed states:
 - recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
 - recommendation rate limit, quota, cache TTL, output token cap, and daily cost
   cap are controlled with the `RECIPE_*` environment variables
+- subscription server verification requires App Store Server API or Google Play
+  Developer API credentials in `apps/api/.env`
 
 ## Versioning Notes
 

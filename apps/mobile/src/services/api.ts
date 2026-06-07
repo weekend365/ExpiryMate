@@ -13,6 +13,9 @@ import type {
   RecipeRecommendation,
   RecipeRecommendationRequest,
   RegisterRequest,
+  SubscriptionEntitlement,
+  SubscriptionVerificationRequest,
+  SubscriptionVerificationResponse,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -375,5 +378,14 @@ export const updateNotificationPreferences = (
 ) =>
   request<NotificationPreference>("/settings/notification-preferences", {
     method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const getSubscriptionEntitlement = () =>
+  request<SubscriptionEntitlement>("/subscriptions/entitlement");
+
+export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
+  request<SubscriptionVerificationResponse>("/subscriptions/verify", {
+    method: "POST",
     body: JSON.stringify(payload),
   });

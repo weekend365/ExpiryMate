@@ -25,6 +25,7 @@ export const useAuth = () => {
     queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
     queryClient.invalidateQueries({ queryKey: ["recipe-recommendations"] });
     queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
+    queryClient.invalidateQueries({ queryKey: ["subscription-entitlement"] });
   };
 
   const loginMutation = useMutation({

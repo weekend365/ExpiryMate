@@ -7,6 +7,7 @@ export * from "./schemas/product";
 export * from "./schemas/privacy";
 export * from "./schemas/recipes";
 export * from "./schemas/settings";
+export * from "./schemas/subscriptions";
 export * from "./types/models";
 export * from "./utils/date";
 export * from "./utils/inventory";
