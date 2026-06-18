@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NotificationsService } from "./notifications.service";
 
@@ -164,6 +165,69 @@ describe("NotificationsService", () => {
       },
       data: expect.objectContaining({
         enabled: false,
+      }),
+    });
+  });
+
+  it("retries a previously failed delivery when the duplicate guard is hit", async () => {
+    const { prisma, expoPush, service } = createService();
+    const duplicateError = new Prisma.PrismaClientKnownRequestError(
+      "Unique constraint failed",
+      {
+        code: "P2002",
+        clientVersion: "test",
+      },
+    );
+    prisma.notificationPreference.findMany.mockResolvedValue([preference]);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+    prisma.pushNotificationDelivery.create.mockRejectedValueOnce(duplicateError);
+    prisma.pushNotificationDelivery.findUnique.mockResolvedValue({
+      id: "delivery-1",
+      status: "failed",
+      attempts: 1,
+    });
+    prisma.pushNotificationDelivery.update
+      .mockResolvedValueOnce({
+        id: "delivery-1",
+        title: "1일 뒤 유통기한이 끝나요",
+        body: "계란의 유통기한이 1일 남았어요.",
+      })
+      .mockResolvedValueOnce({
+        id: "delivery-1",
+        status: "sent",
+      });
+    expoPush.send.mockResolvedValue({
+      status: "ok",
+      id: "ticket-1",
+    });
+
+    const stats = await service.runDueReminders(
+      new Date("2026-06-07T01:00:00.000Z"),
+    );
+
+    expect(stats.notificationsCreated).toBe(1);
+    expect(stats.notificationsSent).toBe(1);
+    expect(prisma.pushNotificationDelivery.findUnique).toHaveBeenCalledWith({
+      where: {
+        pushTokenId_inventoryItemId_reminderDate_daysBefore: {
+          pushTokenId: "push-token-1",
+          inventoryItemId: "item-1",
+          reminderDate: new Date("2026-06-07T15:00:00.000Z"),
+          daysBefore: 1,
+        },
+      },
+    });
+    expect(prisma.pushNotificationDelivery.update).toHaveBeenNthCalledWith(1, {
+      where: {
+        id: "delivery-1",
+      },
+      data: expect.objectContaining({
+        status: "pending",
+        attempts: {
+          increment: 1,
+        },
+        errorCode: null,
+        errorMessage: null,
       }),
     });
   });
