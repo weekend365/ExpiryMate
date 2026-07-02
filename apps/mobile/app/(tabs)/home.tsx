@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { ChefHat, CheckCircle2, Plus, Sparkles, Utensils } from "lucide-react-native";
-import { RefreshControl, StyleSheet, Text, View } from "react-native";
+import { RefreshControl, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { Button } from "../../src/components/Button";
 import { InventoryCard } from "../../src/components/InventoryCard";
@@ -11,6 +11,8 @@ import { colors, spacing } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 export default function HomeScreen() {
+  const { width } = useWindowDimensions();
+  const isCompact = width < 380;
   const { data, isLoading, refetch, isRefetching } = useDashboardSummary();
   const {
     status: recipeGenerationStatus,
@@ -42,13 +44,13 @@ export default function HomeScreen() {
       }
     >
       <View style={styles.heroCard}>
-        <View style={styles.heroRow}>
+        <View style={[styles.heroRow, isCompact && styles.heroRowCompact]}>
           <View style={styles.heroCopy}>
             <Text style={styles.heroEyebrow}>오늘 처리할 항목</Text>
             <Text style={styles.heroTitle}>{heroTitle}</Text>
             <Text style={styles.heroDescription}>{heroDescription}</Text>
           </View>
-          <Mascot size="small" style={styles.heroMascot} />
+          <Mascot size="small" style={[styles.heroMascot, isCompact && styles.heroMascotCompact]} />
         </View>
       </View>
 
@@ -60,7 +62,7 @@ export default function HomeScreen() {
         >
           오늘 뭐 먹지?
         </Button>
-        <View style={styles.actionGrid}>
+        <View style={[styles.actionGrid, isCompact && styles.actionGridCompact]}>
           <Button
             icon={Utensils}
             variant="secondary"
@@ -84,7 +86,7 @@ export default function HomeScreen() {
       </View>
 
       {recipeGenerationStatus !== "idle" ? (
-        <View style={styles.recipeStatusCard}>
+        <View style={[styles.recipeStatusCard, isCompact && styles.recipeStatusCardCompact]}>
           <View style={styles.recipeStatusIcon}>
             {recipeGenerationStatus === "success" ? (
               <CheckCircle2 color={colors.success} size={22} strokeWidth={2.5} />
@@ -112,6 +114,8 @@ export default function HomeScreen() {
             size="small"
             variant="secondary"
             onPress={() => router.push("/(tabs)/recommendations")}
+            fullWidth={isCompact}
+            style={isCompact ? styles.recipeStatusButtonCompact : undefined}
           >
             보기
           </Button>
@@ -211,12 +215,18 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     alignItems: "center",
   },
+  heroRowCompact: {
+    alignItems: "flex-start",
+  },
   heroCopy: {
     flex: 1,
     gap: spacing.xs,
   },
   heroMascot: {
     flexShrink: 0,
+  },
+  heroMascotCompact: {
+    marginTop: spacing.xs,
   },
   heroEyebrow: {
     fontSize: 13,
@@ -242,6 +252,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.md,
   },
+  actionGridCompact: {
+    flexDirection: "column",
+  },
   actionButton: {
     flex: 1,
   },
@@ -254,6 +267,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
+  },
+  recipeStatusCardCompact: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  recipeStatusButtonCompact: {
+    alignSelf: "stretch",
   },
   recipeStatusIcon: {
     width: 42,

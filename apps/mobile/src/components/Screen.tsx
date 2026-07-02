@@ -5,6 +5,7 @@ import {
   StyleSheet,
   type StyleProp,
   Text,
+  useWindowDimensions,
   View,
   type ViewStyle,
 } from "react-native";
@@ -31,6 +32,10 @@ export function Screen({
   footer,
   contentStyle,
 }: ScreenProps) {
+  const { width } = useWindowDimensions();
+  const isCompact = width < 380;
+  const horizontalPadding = isCompact ? spacing.md : spacing.lg;
+
   const content = (
     <>
       {title ? (
@@ -50,14 +55,27 @@ export function Screen({
     <SafeAreaView style={styles.safeArea} edges={["top", "right", "left"]}>
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[styles.content, contentStyle]}
+          contentContainerStyle={[
+            styles.content,
+            { paddingHorizontal: horizontalPadding },
+            contentStyle,
+          ]}
           showsVerticalScrollIndicator={false}
           refreshControl={refreshControl}
         >
           {content}
         </ScrollView>
       ) : (
-        <View style={[styles.content, styles.staticContent, contentStyle]}>{content}</View>
+        <View
+          style={[
+            styles.content,
+            styles.staticContent,
+            { paddingHorizontal: horizontalPadding },
+            contentStyle,
+          ]}
+        >
+          {content}
+        </View>
       )}
       {footer ? <View style={styles.footer}>{footer}</View> : null}
     </SafeAreaView>
@@ -70,7 +88,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   content: {
-    paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     paddingBottom: spacing.xl * 2,
     gap: spacing.lg,
@@ -100,8 +117,8 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.md,
   },
   title: {
-    fontSize: 30,
-    lineHeight: 38,
+    fontSize: 28,
+    lineHeight: 36,
     fontWeight: "800",
     color: colors.text,
   },
