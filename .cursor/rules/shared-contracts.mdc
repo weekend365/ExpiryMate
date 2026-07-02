@@ -1,0 +1,15 @@
+---
+description: Shared package contract and utility conventions
+globs: packages/shared/**/*.ts
+alwaysApply: false
+---
+
+# Shared Package Conventions
+
+- `packages/shared` must stay safe for API, admin, and mobile clients; do not import Nest, Prisma, Next, React Native, secrets, or runtime-only app code here.
+- Export public contracts from `packages/shared/src/index.ts` so workspace consumers can import from `@expirymate/shared`.
+- Keep enums, labels, zod schemas, and TypeScript model types in sync when adding or changing domain fields.
+- Prefer zod schemas as the shared source for form validation and client payload validation.
+- Keep date, inventory, expiry, and dashboard utilities pure and deterministic.
+- Add Vitest coverage for shared utility behavior and edge cases that affect expiry status, dashboard summaries, or filtering.
+- Build output is consumed from `dist`; root `pnpm typecheck` already builds shared before checking apps.

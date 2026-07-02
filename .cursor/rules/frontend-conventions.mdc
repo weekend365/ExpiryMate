@@ -1,0 +1,18 @@
+---
+description: Admin Next.js and mobile Expo frontend conventions
+globs: apps/{admin,mobile}/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Frontend Conventions
+
+- Admin uses Next.js App Router: route files live in `apps/admin/app`, feature UI in `apps/admin/src/features`, and reusable UI in `apps/admin/src/components`.
+- Mobile uses Expo Router: screens live in `apps/mobile/app`, with feature hooks, services, stores, and shared UI under `apps/mobile/src`.
+- Route all HTTP calls through the existing API clients: `apps/admin/src/lib/api.ts` and `apps/mobile/src/services/api.ts`.
+- Parse the API envelope in one place and surface friendly Korean error messages to users.
+- Use TanStack Query for server state; keep stable query keys and invalidate related queries after mutations.
+- Use React Hook Form with zod schemas from `@expirymate/shared` for forms when a shared schema exists.
+- Keep user-facing labels, empty states, errors, and navigation titles in natural Korean.
+- For admin styling, follow existing Tailwind and CSS variable patterns; for mobile styling, use `colors`, `spacing`, and shared components before adding new tokens.
+- Avoid browser-only APIs in mobile code; guard browser storage and `window` access inside client-only admin code.
+- Keep app-specific state in the established stores and avoid duplicating server state outside TanStack Query.

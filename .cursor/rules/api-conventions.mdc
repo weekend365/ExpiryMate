@@ -1,0 +1,18 @@
+---
+description: Nest API, Prisma, and REST conventions for ExpiryMate
+globs: apps/api/**/*.ts
+alwaysApply: false
+---
+
+# API Conventions
+
+- Keep Nest domains under `apps/api/src/modules/<domain>` with thin controllers and service-centered business logic.
+- Use `PrismaService` for persistence and keep owner-scoped queries constrained by the authenticated owner.
+- Protect owner data routes with `AuthGuard` and `@CurrentOwnerKey()`; do not trust client-supplied `ownerKey` values.
+- Validate request bodies with DTO classes and `class-validator`; reuse enums from `@expirymate/shared` where possible.
+- Return plain data from controllers and services; let `ResponseInterceptor` wrap successful API responses.
+- Throw Nest HTTP exceptions with concise Korean messages for user-visible failures.
+- Serialize Prisma records through `apps/api/src/common/serializers.ts` so dates become ISO strings and Prisma enums map to shared contracts.
+- When changing data models, update `prisma/schema.prisma`, add a migration, update serializers/contracts, and keep seed data coherent.
+- Keep OpenAI, push, subscription, SMTP, and auth secrets server-side in API environment variables only.
+- Add or update Vitest coverage when changing service logic, limits, ownership checks, auth/session behavior, or cost-sensitive recipe flows.

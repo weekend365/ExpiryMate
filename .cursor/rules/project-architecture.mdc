@@ -1,0 +1,16 @@
+---
+description: ExpiryMate monorepo architecture and project-wide conventions
+alwaysApply: true
+---
+
+# ExpiryMate Project Rules
+
+- Treat this repository as a `pnpm` workspace monorepo: `apps/mobile`, `apps/admin`, `apps/api`, and `packages/shared`.
+- Keep the MVP Korean-first: user-facing copy should be natural Korean, while code identifiers should stay clear English.
+- Preserve the current product assumption: manual inventory and expiry-date entry are real; OCR is future-facing and only reserved as `ocr_detected`.
+- Put cross-app domain contracts, enums, labels, zod schemas, and pure expiry/dashboard utilities in `packages/shared`.
+- Do not duplicate domain types independently in apps when `@expirymate/shared` already exposes the contract.
+- API responses are wrapped as `{ success, data }` or `{ success, error }`; clients should consume this envelope through their API helpers.
+- Use root scripts for common work: `pnpm dev`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm db:generate`, `pnpm db:migrate`, and `pnpm db:seed`.
+- Each app owns its environment file: `apps/api/.env`, `apps/admin/.env.local`, and `apps/mobile/.env`; never commit secrets.
+- Prefer focused tests for shared utilities, API service behavior, auth/session flows, notifications, subscriptions, and recipe generation edge cases.
