@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { filterInventoryItems, type InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
@@ -43,6 +43,8 @@ const filters: Array<{
 ];
 
 export default function InventoryScreen() {
+  const { width } = useWindowDimensions();
+  const isCompact = width < 380;
   const { data = [] } = useInventoryList();
   const batchDiscardMutation = useBatchDiscardInventoryItems();
   const discardMutation = useDiscardInventoryItem();
@@ -243,7 +245,7 @@ export default function InventoryScreen() {
       ) : null}
 
       {isSelectionMode ? (
-        <View style={styles.selectionPanel}>
+        <View style={[styles.selectionPanel, isCompact && styles.selectionPanelCompact]}>
           <View style={styles.selectionCopy}>
             <Text style={styles.selectionTitle}>
               {selectedIds.length}개 선택됨
@@ -257,6 +259,8 @@ export default function InventoryScreen() {
             size="small"
             onPress={handleToggleAllVisible}
             disabled={!visibleIds.length}
+            fullWidth={isCompact}
+            style={isCompact ? styles.selectionButtonCompact : undefined}
           >
             {allVisibleSelected ? "전체 해제" : "전체 선택"}
           </Button>
@@ -452,6 +456,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
+  },
+  selectionPanelCompact: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  selectionButtonCompact: {
+    alignSelf: "stretch",
   },
   selectionCopy: {
     flex: 1,
