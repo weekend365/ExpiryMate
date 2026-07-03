@@ -24,6 +24,13 @@ This keeps the MVP simple while leaving a clean path for:
 - adding OCR-based expiry detection later
 - adding auth, households, analytics, and subscriptions without a rewrite
 
+## Production Launch Roadmap
+
+For service launch priorities (infrastructure, security, store submission, operations),
+see **[docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md)**.
+That document is the source of truth for go-live planning and supersedes the outdated
+sections below where they conflict (for example auth scope and next implementation order).
+
 ## Folder Structure
 
 ```text
@@ -485,6 +492,9 @@ Inventory seed also includes mixed states:
 
 ## What Is Real vs Mocked
 
+> **Note:** This section is partially outdated. For the current implementation status and
+> launch scope, see [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md).
+
 ### Real in this starter
 
 - monorepo wiring
@@ -500,13 +510,16 @@ Inventory seed also includes mixed states:
 ### Mocked or intentionally limited
 
 - no OCR expiry extraction
-- no email/social login or account recovery
+- email/social login and account recovery are implemented; see roadmap doc for auth scope
 - no native purchase sheet yet; mobile currently displays server entitlement status
 - no family/household model
 
 ## Recommended Production Replacements First
 
-1. Upgrade anonymous bearer auth to account login, token refresh, and recovery.
+See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
+current phased launch plan. The list below is kept for historical context only.
+
+1. Upgrade anonymous bearer auth to account login, token refresh, and recovery. *(done in code; see roadmap doc)*
 2. Harden recipe recommendation quality evaluation and feedback loops.
 3. Add Expo push receipt polling and delivery health monitoring.
 4. Add image upload/storage instead of placeholder image URLs.
@@ -514,12 +527,13 @@ Inventory seed also includes mixed states:
 
 ## Recommended Next Implementation Order
 
-1. Harden API validation and add API tests.
-2. Add recipe recommendation feedback and history UX.
-3. Add admin create/edit validation feedback.
-4. Add notification inbox/history UX and push receipt cleanup jobs.
-5. Add multi-household data model.
-6. Add analytics and subscription-gated feature boundaries after retention signals exist.
+See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
+authoritative priority order. Summary:
+
+1. Deploy API, Admin, and PostgreSQL; harden production env and security.
+2. Staging QA, CI/CD, health checks, and monitoring.
+3. App Store / Play Store submission with production privacy URLs.
+4. Post-launch: IAP purchase UI, catalog UX, OCR, analytics, households.
 
 ## Notes On Running
 
