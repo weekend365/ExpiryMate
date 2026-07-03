@@ -51,11 +51,33 @@ flowchart TD
 | **3** | 안정적 운영 | 모니터링, 알림 신뢰성, 비용 통제 |
 | **4** | 수익화·성장 | IAP, 카탈로그 UX, OCR, 분석 |
 
+### Phase 전환 원칙
+
+각 Phase는 체크리스트를 단순히 수행하는 것이 아니라, 아래 **Done Criteria**를 만족해야 다음 Phase로 넘어갑니다.
+
+| Phase | 다음 단계로 넘어가기 위한 최소 기준 |
+|-------|--------------------------------------|
+| **0 → 1** | 프로덕션/스테이징 API, DB, Admin이 외부에서 접속 가능하고 `/health`가 정상 응답 |
+| **1 → 2** | 내부 빌드 QA, CI, crash/error reporting, 핵심 인증·재고·AI 추천 플로우 검증 완료 |
+| **2 → 3** | 스토어 심사 제출/승인, 개인정보·데이터 삭제·AI 고지·계정 삭제 정책 검증 완료 |
+| **3 → 4** | 장애 대응, 백업, 비용 한도, 알림 운영 체계가 실제 운영 환경에서 검증됨 |
+
 ---
 
 ## Phase 0 — 출시 차단 해소 (최우선)
 
 **목표:** 로컬 MVP → 외부에서 접속 가능한 서비스
+
+### Phase 0 Done Criteria
+
+- [ ] 프로덕션 또는 스테이징 API URL에서 `GET /health` 200 응답
+- [ ] 프로덕션 또는 스테이징 DB에 `prisma migrate deploy` 성공
+- [ ] Admin 프로덕션 또는 스테이징 URL 접속 가능
+- [ ] `AUTH_ALLOW_DEV_FALLBACK=false` 환경에서 로그인/인증 플로우 정상 동작
+- [ ] 프로덕션 환경에서 seed 스크립트 실행 방지 또는 운영 절차상 금지 명시
+- [ ] SMTP 실제 발송으로 이메일 인증·비밀번호 재설정 성공
+- [ ] EAS preview/production 빌드가 실제 API URL을 호출
+- [ ] 최소 CI(`lint`, `typecheck`, `test`)가 PR에서 통과
 
 ### 0-1. 백엔드 + DB 호스팅
 
@@ -123,14 +145,25 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL / PRIVATE_KEY
 
 ### 0-3. 보안 하드닝
 
-| 항목 | 현재 | 조치 |
-|------|------|------|
+| 항목 | 현재 | 조치 | 관련 경로 |
+|------|------|------|-----------|
 | Dev auth fallback | `AUTH_ALLOW_DEV_FALLBACK=true` 시 admin 권한 부여 | 프로덕션 `false` | `apps/api/src/modules/auth/auth.service.ts` |
 | Seed admin 비밀번호 | 기본 `admin1234` | 프로덕션 seed 금지 또는 강제 변경 | `apps/api/prisma/seed.ts` |
 | API rate limit | 레시피만 in-memory | Redis 또는 API Gateway | `apps/api/src/modules/recipes/recipes.service.ts` |
 | 보안 헤더 | 없음 | `@nestjs/helmet` 추가 | `apps/api/src/main.ts` |
 | 500 에러 | exception message 노출 | 프로덕션에서 details 제거 | `apps/api/src/common/http-exception.filter.ts` |
 | Health check | 없음 | `GET /health`, `GET /ready` 추가 | **신규** |
+
+#### Admin 보안 체크리스트
+
+Admin은 내부 운영 도구이지만 개인정보·재고 데이터 접근 권한이 있으므로 별도 보안 기준이 필요합니다.
+
+- [ ] Admin refresh cookie 설정 검토: `HttpOnly`, `Secure`, `SameSite`, production domain
+- [ ] Admin 로그인 brute-force 방지: rate limit 또는 WAF/API Gateway 제한
+- [ ] 프로덕션 관리자 계정 생성·초기화 절차 문서화
+- [ ] 기본 관리자 비밀번호 사용 금지 (`admin1234` 등)
+- [ ] 관리자 권한 확인 로직과 `AdminGuard` 테스트 보강
+- [ ] 주요 관리자 작업 감사 로그 검토: 상품 변경, 사용자/재고 조회, 권한 변경
 
 ### 0-4. CI/CD 파이프라인
 
@@ -149,15 +182,37 @@ main → API/Admin 빌드 (+ 선택: 스테이징 배포)
 
 **목표:** TestFlight / 내부 테스트로 실제 사용자 시나리오 검증
 
+### Phase 1 Done Criteria
+
+- [ ] EAS preview 빌드가 스테이징 API와 정상 연동
+- [ ] 수동 QA 체크리스트 전 항목 통과
+- [ ] PR CI에서 `lint`, `typecheck`, `test` 통과
+- [ ] API/Admin/Mobile crash/error reporting 연동
+- [ ] `/health` uptime monitor 등록
+- [ ] 핵심 외부 의존성 장애 시 UX 확인: OpenAI, SMTP, Expo Push
+- [ ] 스토어 심사에 필요한 Privacy URL, Support URL, 계정 삭제 플로우 검증
+
 ### 1-1. 스테이징 환경
 
-| 구성 | 예시 | 용도 |
-|------|------|------|
-| API | `api.staging.expirymate.com` | 모바일·Admin 연동 |
-| Admin | `admin.staging.expirymate.com` | Privacy 페이지, 운영 도구 |
+| 구성 | 예시 | 용도 | 관련 경로 |
+|------|------|------|-----------|
+| API | `api.staging.expirymate.com` | 모바일·Admin 연동 | `apps/api/` |
+| Admin | `admin.staging.expirymate.com` | Privacy 페이지, 운영 도구 | `apps/admin/` |
 | Mobile | EAS `preview` 프로필 | 내부 빌드 | `apps/mobile/eas.json` |
 
-### 1-2. 수동 QA 체크리스트
+### 1-2. 출시 전 관측성
+
+Sentry와 uptime monitor는 운영 안정화 항목이지만, **스토어 제출 전** 연동되어 있어야 합니다. 심사 중 크래시나 API 장애가 발생하면 원인 파악이 어려워집니다.
+
+| 항목 | 최소 기준 |
+|------|-----------|
+| Mobile crash reporting | production/preview 빌드에서 JS/native error 수집 |
+| API error reporting | 5xx, auth failure, external API failure 추적 |
+| Admin error reporting | 로그인/운영 화면 오류 추적 |
+| Uptime monitor | `GET /health` 외부 모니터링 |
+| Release tagging | EAS build version, API git SHA, Admin build version 식별 가능 |
+
+### 1-3. 수동 QA 체크리스트
 
 ```
 [ ] 익명 세션 → 재료 등록 → 대시보드 반영
@@ -172,7 +227,7 @@ main → API/Admin 빌드 (+ 선택: 스테이징 배포)
 [ ] Privacy Policy / Data Deletion URL 접근 (심사용)
 ```
 
-### 1-3. 테스트 자동화 보강
+### 1-4. 테스트 자동화 보강
 
 | 우선순위 | 대상 | 현재 |
 |----------|------|------|
@@ -189,6 +244,17 @@ main → API/Admin 빌드 (+ 선택: 스테이징 배포)
 
 **목표:** 심사 통과 및 첫 공개
 
+### Phase 2 Done Criteria
+
+- [ ] iOS/Android production 빌드 생성 및 실제 API 연동 확인
+- [ ] App Store Privacy Nutrition Label 작성 완료
+- [ ] Google Play Data Safety Form 작성 완료
+- [ ] Privacy Policy, Data Deletion, Support URL이 프로덕션 도메인에서 접근 가능
+- [ ] 앱 아이콘, 스플래시, 스크린샷, 앱 설명, 키워드, 연령 등급 준비
+- [ ] 푸시 알림 권한 설명 문구와 실제 사용 목적 일치
+- [ ] AI 추천 기능에 대한 사용자 고지와 심사 노트 준비
+- [ ] 계정 삭제 플로우가 심사 계정으로 재현 가능
+
 ### 2-1. App Store 심사 필수 항목
 
 | 항목 | 상태 | 조치 |
@@ -198,6 +264,11 @@ main → API/Admin 빌드 (+ 선택: 스테이징 배포)
 | AI 데이터 고지 | 구현됨 | 심사 노트에 OpenAI 전송 명시 |
 | Sign in with Apple | 구현됨 | App Store Connect 설정 |
 | 계정 삭제 | `"삭제"` 확인 문구 | 가이드라인 충족 |
+| Support URL | 미정 | 문의/지원 페이지 또는 이메일 안내 URL 준비 |
+| App Privacy | 미작성 | Apple Privacy Nutrition Label과 실제 SDK/데이터 수집 일치 |
+| Data Safety | 미작성 | Google Play Data Safety Form과 실제 SDK/데이터 수집 일치 |
+| 앱 메타데이터 | 미정 | 앱 이름, 설명, 키워드, 카테고리, 연령 등급, 스크린샷 준비 |
+| 권한 설명 | 일부 구현 | 푸시 알림, 소셜 로그인, AI 추천 목적을 사용자에게 명확히 설명 |
 
 관련 경로:
 
@@ -205,7 +276,23 @@ main → API/Admin 빌드 (+ 선택: 스테이징 배포)
 - `apps/admin/app/privacy/choices/page.tsx`
 - `apps/mobile/app/privacy/account-delete.tsx`
 
-### 2-2. EAS 빌드·제출
+### 2-2. 스토어 제출 자료 체크리스트
+
+```
+[ ] 앱 아이콘, 스플래시, 6.7인치/6.5인치 iPhone 스크린샷
+[ ] Android phone 스크린샷 및 feature graphic
+[ ] 앱 설명: 유통기한 관리, 재고, AI 추천 범위 명확화
+[ ] Support URL 또는 고객 문의 페이지
+[ ] Marketing URL 또는 서비스 소개 페이지 (선택)
+[ ] App Store Privacy Nutrition Label
+[ ] Google Play Data Safety Form
+[ ] 심사 계정 또는 심사용 로그인 절차
+[ ] 계정 삭제 방법 안내
+[ ] AI 기능 심사 노트: 어떤 데이터가 OpenAI로 전송되는지
+[ ] 푸시 알림 권한 사용 목적
+```
+
+### 2-3. EAS 빌드·제출
 
 설정: `apps/mobile/app.json`, `apps/mobile/eas.json`
 
@@ -223,7 +310,7 @@ eas submit --platform ios --profile production
 - OAuth client IDs (사용 시)
 - (권장) Sentry DSN
 
-### 2-3. 딥링크 / Universal Links
+### 2-4. 딥링크 / Universal Links
 
 이메일 인증·비밀번호 재설정: `APP_BASE_URL` + `/auth/verify-email`, `/auth/reset-password`
 
@@ -231,7 +318,7 @@ eas submit --platform ios --profile production
 - Android: App Links
 - 모바일 화면: `apps/mobile/app/auth/verify-email.tsx`, `reset-password.tsx`
 
-### 2-4. v1 출시 범위 vs v1.1+
+### 2-5. v1 출시 범위 vs v1.1+
 
 | 기능 | v1 (첫 출시) | v1.1+ |
 |------|--------------|-------|
@@ -248,6 +335,15 @@ eas submit --platform ios --profile production
 
 **목표:** 장애 대응, 비용 통제, 알림 신뢰성
 
+### Phase 3 Done Criteria
+
+- [ ] API/Admin/Mobile 에러 추적 대시보드 확인 가능
+- [ ] `/health` uptime alert가 실제 알림 채널로 전달
+- [ ] DB 자동 백업과 복구 절차 검증
+- [ ] OpenAI 비용 한도와 rate limit이 운영 환경에서 적용
+- [ ] Expo push 실패·receipt 처리 정책 확정
+- [ ] 장애 대응 런북 작성 및 팀 내 공유
+
 ### 3-1. 모니터링·에러 추적
 
 | 도구 | 대상 |
@@ -255,6 +351,8 @@ eas submit --platform ios --profile production
 | Sentry (또는 동급) | API, Mobile, Admin |
 | Uptime monitor | `GET /health` |
 | OpenAI usage alert | `RECIPE_DAILY_COST_LIMIT_USD` |
+
+> Sentry와 uptime monitor는 Phase 1에서 먼저 연동하고, Phase 3에서는 알림 품질·대시보드·운영 절차를 안정화합니다.
 
 ### 3-2. 푸시 알림 운영
 
@@ -278,6 +376,27 @@ eas submit --platform ios --profile production
 
 - PostgreSQL 자동 백업 (호스팅 제공 또는 `pg_dump` cron)
 - Seed 스크립트 프로덕션 실행 금지
+
+### 3-5. Operational Runbook
+
+출시 후 장애 대응을 위해 최소한 아래 절차를 문서화합니다.
+
+| 상황 | 1차 확인 | 대응 원칙 |
+|------|----------|-----------|
+| API 5xx 증가 | API logs, Sentry, DB connection | 최근 배포·마이그레이션·외부 API 장애 확인 |
+| 모바일 크래시 증가 | Sentry release, EAS build version | 재현 가능 여부 확인 후 hotfix 또는 rollback |
+| DB 장애 | DB provider status, connection pool | 백업 상태 확인, write 중단 여부 판단 |
+| OpenAI 장애/비용 초과 | OpenAI status, recipe error rate, cost dashboard | AI 추천 일시 제한, 사용자에게 재시도 안내 |
+| SMTP 장애 | SMTP provider status, mail logs | 인증/재설정 메일 지연 안내, 재발송 UX 확인 |
+| Expo Push 장애 | Expo status, push tickets/receipts | 예약 알림 지연 허용 범위 안내, 중복 발송 방지 |
+| Push scheduler 중복 실행 | API instance count, scheduler env | `PUSH_REMINDER_SCHEDULER_ENABLED=true` 인스턴스 1개 유지 |
+
+#### 배포·마이그레이션 원칙
+
+- DB migration은 `prisma migrate deploy`로 실행합니다.
+- destructive seed는 운영 DB에서 실행하지 않습니다.
+- migration rollback은 자동화보다 **forward fix**를 기본 원칙으로 합니다.
+- 배포 버전은 API git SHA, Admin build ID, EAS build version으로 추적 가능해야 합니다.
 
 ---
 
@@ -310,7 +429,9 @@ eas submit --platform ios --profile production
 - [ ] API 스테이징 배포 + `prisma migrate deploy`
 - [ ] Admin 스테이징 배포
 - [ ] `GET /health`, `GET /ready` 추가
+- [ ] `/health` uptime monitor 등록
 - [ ] `AUTH_ALLOW_DEV_FALLBACK=false` 검증
+- [ ] 프로덕션 seed 실행 금지 정책 확정
 
 ### Step C — 연동
 
@@ -318,18 +439,21 @@ eas submit --platform ios --profile production
 - [ ] SMTP 실제 메일 (인증 / 재설정)
 - [ ] OAuth 프로덕션 client ID
 - [ ] `PRIVACY_*_URL` 프로덕션 반영
+- [ ] Mobile/API/Admin Sentry 또는 동급 에러 추적 연동
 
 ### Step D — QA + CI
 
 - [ ] 수동 QA 체크리스트 전 항목
 - [ ] GitHub Actions (`lint`, `typecheck`, `test`)
-- [ ] Sentry (또는 동급) 연동
+- [ ] 스토어 제출 자료 체크리스트 전 항목
+- [ ] OpenAI / SMTP / Expo Push 장애 시 UX 확인
 
 ### Step E — 제출
 
 - [ ] EAS production 빌드 (iOS / Android)
 - [ ] App Store / Play 심사 제출
 - [ ] 심사 노트 작성 (AI 데이터, 계정 삭제, OAuth)
+- [ ] 심사 승인 후 운영 런북과 알림 채널 점검
 
 ---
 
@@ -341,12 +465,14 @@ eas submit --platform ios --profile production
 ├── 프로덕션 env / AUTH 하드닝
 ├── Admin Privacy URL 프로덕션
 ├── SMTP (이메일 인증)
+├── Health check + uptime monitor
 └── EAS + EXPO_PUBLIC_API_BASE_URL
 
 중요 + 덜 긴급 (Phase 1–3)
 ├── CI/CD
-├── Health check + Sentry
+├── Sentry / crash reporting
 ├── E2E / QA 자동화
+├── Operational runbook
 └── Rate limit Redis화
 
 나중에 해도 됨 (Phase 4, v1.1+)
