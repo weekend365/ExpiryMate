@@ -15,7 +15,7 @@ import {
   MapPin,
   ShieldCheck,
 } from "lucide-react-native";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { colors, spacing } from "../shared/theme";
 
 interface InventoryCardProps {
@@ -41,6 +41,8 @@ export function InventoryCard({
   selected,
   selectionMode,
 }: InventoryCardProps) {
+  const { width } = useWindowDimensions();
+  const isCompact = width < 380;
   const bucket = getExpiryBucket(item.expiryDate);
   const bucketStyle = bucketStyles[bucket];
   const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
@@ -59,6 +61,7 @@ export function InventoryCard({
       disabled={!onPress}
       style={({ pressed }) => [
         styles.card,
+        isCompact && styles.cardCompact,
         selectionMode && styles.selectableCard,
         selected && styles.selectedCard,
         pressed && styles.cardPressed,
@@ -99,7 +102,7 @@ export function InventoryCard({
         </View>
       </View>
 
-      <View style={styles.badgeColumn}>
+      <View style={[styles.badgeColumn, isCompact && styles.badgeColumnCompact]}>
         <View
           style={[
             styles.badge,
@@ -139,6 +142,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
+  },
+  cardCompact: {
+    alignItems: "flex-start",
   },
   cardPressed: {
     backgroundColor: colors.surfacePressed,
@@ -204,6 +210,12 @@ const styles = StyleSheet.create({
   badgeColumn: {
     alignItems: "flex-end",
     gap: 6,
+  },
+  badgeColumnCompact: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   badge: {
     minWidth: 72,
