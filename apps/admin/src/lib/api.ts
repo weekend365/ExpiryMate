@@ -99,15 +99,16 @@ async function request<T>(
   options: { retryOnUnauthorized?: boolean } = { retryOnUnauthorized: true },
 ): Promise<T> {
   const token = getAdminAccessToken();
+  const { headers: initHeaders, ...restInit } = init ?? {};
   const response = await fetch(`${API_BASE_URL}${path}`, {
+    credentials: "include",
+    cache: "no-store",
+    ...restInit,
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(init?.headers ?? {}),
+      ...(initHeaders ?? {}),
     },
-    credentials: "include",
-    cache: "no-store",
-    ...init,
   });
   const body = (await response.json()) as ApiEnvelope<T>;
 
