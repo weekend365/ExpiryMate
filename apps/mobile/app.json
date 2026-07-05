@@ -30,7 +30,7 @@
       "expo-secure-store",
       "expo-web-browser",
       [
-        "@sentry/react-native/expo",
+        "@sentry/react-native",
         {
           "organization": "expirymate",
           "project": "mobile"

@@ -1,7 +1,11 @@
 const appJson = require("./app.json");
 
+const sentryPluginNames = new Set(["@sentry/react-native", "@sentry/react-native/expo"]);
+
 const plugins = appJson.expo.plugins.filter((plugin) => {
-  if (Array.isArray(plugin) && plugin[0] === "@sentry/react-native/expo") {
+  const pluginName = Array.isArray(plugin) ? plugin[0] : plugin;
+
+  if (sentryPluginNames.has(pluginName)) {
     return Boolean(process.env.EXPO_PUBLIC_SENTRY_DSN?.trim());
   }
 

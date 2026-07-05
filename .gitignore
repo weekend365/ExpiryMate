@@ -12,4 +12,5 @@ apps/api/prisma/dev.db-journal
 apps/api/.env
 apps/admin/.env.local
 apps/mobile/.env
+apps/mobile/android/
 .env
