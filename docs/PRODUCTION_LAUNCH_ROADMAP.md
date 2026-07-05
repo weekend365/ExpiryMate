@@ -3,7 +3,7 @@
 ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.  
 기능 구현 우선순위, 인프라·보안·스토어 제출·운영 작업의 순서를 정의합니다.
 
-> **문서 기준일:** 2026-07-03  
+> **문서 기준일:** 2026-07-05  
 > **대상 저장소:** `expirymate-monorepo` (`apps/mobile`, `apps/api`, `apps/admin`, `packages/shared`)
 
 ---
@@ -14,10 +14,66 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 |------|--------|------|
 | 모바일 핵심 UX | ~80% | 온보딩, 재고, AI 추천, 설정, 프라이버시 UI 구현 |
 | API 비즈니스 로직 | ~85% | Auth, 재고, 레시피, 프라이버시, 구독 검증 API 존재 |
-| Admin | ~70% | 상품/재고 관리, App Store용 개인정보 페이지 |
-| 배포/인프라 | ~15% | Docker, CI/CD, 헬스체크 미구현 |
-| 스토어 출시 준비 | ~55% | EAS 설정 있음, 프로덕션 URL·자격증명 미완 |
-| 테스트/QA | ~35% | API 단위 테스트 일부, E2E·CI 없음 |
+| Admin | ~75% | 상품/재고 관리, Privacy URL, Railway 프로덕션 배포·로그인 검증 |
+| 배포/인프라 | ~70% | Railway API·Admin·Postgres, Docker, CI, health, Resend 메일 연동 |
+| 스토어 출시 준비 | ~60% | EAS preview 설정·빌드 수정 진행 중, APK 실기기 QA 미완 |
+| 테스트/QA | ~45% | API 단위 테스트, GitHub Actions CI; E2E·모바일 QA 미완 |
+
+### 1-1. 현재 개발 진척도 (2026-07-05)
+
+**현재 Phase:** Phase 0 거의 완료 → **Phase 1(스테이징 QA) 착수 직전**
+
+#### 프로덕션 인프라 (Railway, 커스텀 도메인 없음)
+
+| 서비스 | URL | 상태 |
+|--------|-----|------|
+| API | `https://api-production-1504.up.railway.app` | `/health`, `/ready` 200 |
+| Admin | `https://admin-production-da74.up.railway.app` | 로그인, `/privacy`, `/privacy/choices` 접근 가능 |
+| Postgres | Railway internal | `prisma migrate deploy` 적용 (10 migrations) |
+
+#### 완료된 작업
+
+| 구분 | 항목 | 비고 |
+|------|------|------|
+| **인프라** | API·Admin Dockerfile, `docker-compose.yml` | 로컬 풀스택 검증 |
+| **인프라** | Railway API·Admin·Postgres 배포 | `docs/RAILWAY_STAGING.md` 기준 |
+| **보안** | `GET /health`, `GET /ready`, `@nestjs/helmet` | release metadata 포함 |
+| **보안** | 프로덕션 seed 가드, `AUTH_ALLOW_DEV_FALLBACK=false` 검증 | `production-env.ts` |
+| **보안** | Admin CORS/CORP, Admin 로그인 HTTP 400 수정 | `main.ts`, `apps/admin/src/lib/api.ts` |
+| **CI/CD** | GitHub Actions: `lint`, `typecheck`, `test` + main push 시 API/Admin build | `.github/workflows/ci.yml` |
+| **관측성** | Sentry SDK 연동 (API, Admin, Mobile) | DSN·대시보드 운영 설정은 미완 |
+| **메일** | Resend HTTP API 연동 (Railway SMTP 포트 차단 대응) | `mail.service.ts` |
+| **메일** | 이메일 인증 API 수동 검증 | Resend 무료 도메인: 가입 이메일로만 발송 가능 |
+| **모바일 빌드** | EAS monorepo `@expirymate/shared` 빌드 훅 | `eas-build-post-install` |
+| **모바일 빌드** | Reanimated 4 + `react-native-worklets`, Sentry SDK 54 정렬 | `b677ee8` |
+| **모바일 빌드** | Babel duplicate plugin 수정 | `f05e4a4` — JS 번들 로컬 통과 |
+
+#### 진행 중 / 다음 작업
+
+| 우선순위 | 항목 | 상태 |
+|----------|------|------|
+| 1 | EAS Android `preview` 빌드 성공 → APK 설치 | Babel 수정 후 **재빌드 필요** |
+| 2 | Preview APK로 Railway API 회원가입·로그인·AI 추천 QA | 빌드 성공 후 |
+| 3 | Resend 도메인 인증 | 임의 수신자(예: naver.com)로 메일 발송 |
+| 4 | Sentry DSN 3종 (API, Admin, Mobile) EAS/Railway env | 코드만 연동됨 |
+| 5 | `/health` uptime monitor | Better Stack, UptimeRobot 등 |
+| 6 | OAuth 프로덕션 client ID (Google/Kakao/Apple) | preview/production 빌드용 |
+
+#### 알려진 제약
+
+- **Resend 무료 tier:** 도메인 미인증 시 Resend 가입 이메일로만 발송 가능
+- **Expo Go vs EAS:** Expo Go는 같은 Wi‑Fi 또는 `expo start --tunnel` 필요; Railway API 연동 QA는 **EAS preview APK** 권장
+- **EAS 빌드 이력:** shared `dist` 누락 → Gradle 실패 → Babel duplicate → 순차 수정 완료, 최종 빌드 결과 대기
+
+#### 관련 커밋 (main)
+
+| 커밋 | 내용 |
+|------|------|
+| `cea9ef9`~`0c9f9c2` | Phase 0: health, Docker, CI, Sentry, Admin Docker |
+| `7bb9d98` | Resend HTTP API (Railway SMTP 우회) |
+| `1a67faf`, `575109a` | EAS monorepo shared 빌드 훅 |
+| `b677ee8` | worklets + Sentry Expo 54 정렬 |
+| `f05e4a4` | Babel duplicate plugin 수정 |
 
 ### README와 코드베이스 차이
 
@@ -70,14 +126,14 @@ flowchart TD
 
 ### Phase 0 Done Criteria
 
-- [ ] 프로덕션 또는 스테이징 API URL에서 `GET /health` 200 응답
-- [ ] 프로덕션 또는 스테이징 DB에 `prisma migrate deploy` 성공
-- [ ] Admin 프로덕션 또는 스테이징 URL 접속 가능
-- [ ] `AUTH_ALLOW_DEV_FALLBACK=false` 환경에서 로그인/인증 플로우 정상 동작
-- [ ] 프로덕션 환경에서 seed 스크립트 실행 방지 또는 운영 절차상 금지 명시
-- [ ] SMTP 실제 발송으로 이메일 인증·비밀번호 재설정 성공
-- [ ] EAS preview/production 빌드가 실제 API URL을 호출
-- [ ] 최소 CI(`lint`, `typecheck`, `test`)가 PR에서 통과
+- [x] 프로덕션 또는 스테이징 API URL에서 `GET /health` 200 응답 — Railway API
+- [x] 프로덕션 또는 스테이징 DB에 `prisma migrate deploy` 성공 — Railway Postgres
+- [x] Admin 프로덕션 또는 스테이징 URL 접속 가능 — Railway Admin
+- [x] `AUTH_ALLOW_DEV_FALLBACK=false` 환경에서 로그인/인증 플로우 정상 동작 — Admin 로그인 검증
+- [x] 프로덕션 환경에서 seed 스크립트 실행 방지 또는 운영 절차상 금지 명시 — `seed.ts` 가드
+- [~] SMTP 실제 발송으로 이메일 인증·비밀번호 재설정 성공 — Resend HTTP API 동작, **도메인 인증·임의 수신자 발송 미완**
+- [ ] EAS preview/production 빌드가 실제 API URL을 호출 — env 설정 완료, **APK 빌드·실기기 QA 대기**
+- [x] 최소 CI(`lint`, `typecheck`, `test`)가 PR에서 통과 — GitHub Actions
 
 ### 0-1. 백엔드 + DB 호스팅
 
@@ -88,8 +144,8 @@ flowchart TD
 | PostgreSQL 프로덕션 DB | Prisma 마이그레이션 9개 적용 | `apps/api/prisma/migrations/` |
 | API 호스팅 | Nest `build` + `start` 기반 PaaS 배포 | `apps/api/package.json` |
 | Admin 호스팅 | Next.js 빌드·배포 (Privacy URL 의존) | `apps/admin/` |
-| Docker Compose | 로컬·스테이징·CI 환경 통일 | **신규** `docker-compose.yml` |
-| 마이그레이션 스크립트 분리 | dev: `migrate dev` / prod: `migrate deploy` | `apps/api/package.json` `db:migrate` |
+| Docker Compose | 로컬·스테이징·CI 환경 통일 | ✅ `docker-compose.yml` |
+| 마이그레이션 스크립트 분리 | dev: `migrate dev` / prod: `migrate deploy` | ✅ `db:migrate:deploy` |
 
 **프로덕션 DB 주의:** `pnpm db:seed`는 모든 테이블을 wipe합니다. 프로덕션 DB에서 실행 금지.
 
@@ -150,9 +206,9 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL / PRIVATE_KEY
 | Dev auth fallback | `AUTH_ALLOW_DEV_FALLBACK=true` 시 admin 권한 부여 | 프로덕션 `false` | `apps/api/src/modules/auth/auth.service.ts` |
 | Seed admin 비밀번호 | 기본 `admin1234` | 프로덕션 seed 금지 또는 강제 변경 | `apps/api/prisma/seed.ts` |
 | API rate limit | 레시피만 in-memory | Redis 또는 API Gateway | `apps/api/src/modules/recipes/recipes.service.ts` |
-| 보안 헤더 | 없음 | `@nestjs/helmet` 추가 | `apps/api/src/main.ts` |
-| 500 에러 | exception message 노출 | 프로덕션에서 details 제거 | `apps/api/src/common/http-exception.filter.ts` |
-| Health check | 없음 | `GET /health`, `GET /ready` 추가 | **신규** |
+| 보안 헤더 | 없음 | `@nestjs/helmet` 추가 | ✅ `apps/api/src/main.ts` |
+| 500 에러 | exception message 노출 | 프로덕션에서 details 제거 | ✅ `http-exception.filter.ts` |
+| Health check | 없음 | `GET /health`, `GET /ready` 추가 | ✅ `apps/api/src/modules/health/` |
 
 #### Admin 보안 체크리스트
 
@@ -167,11 +223,11 @@ Admin은 내부 운영 도구이지만 개인정보·재고 데이터 접근 권
 
 ### 0-4. CI/CD 파이프라인
 
-`.github/workflows` 없음. 최소 파이프라인:
+✅ `.github/workflows/ci.yml` 구현됨:
 
 ```
 PR  → lint + typecheck + test
-main → API/Admin 빌드 (+ 선택: 스테이징 배포)
+main → API/Admin 빌드
 ```
 
 루트 스크립트: `pnpm lint`, `pnpm typecheck`, `pnpm test`
@@ -418,33 +474,33 @@ eas submit --platform ios --profile production
 
 ### Step A — 결정
 
-- [ ] 호스팅 플랫폼 선택 (API + DB + Admin)
-- [ ] 프로덕션 도메인 (`api`, `admin`, privacy)
+- [x] 호스팅 플랫폼 선택 (API + DB + Admin) — **Railway**
+- [~] 프로덕션 도메인 (`api`, `admin`, privacy) — **Railway 기본 URL 사용** (`*.up.railway.app`), 커스텀 도메인 미적용
 - [ ] App Store Connect / Play Console 계정
-- [ ] OpenAI, SMTP, OAuth 자격증명 준비
+- [~] OpenAI, SMTP, OAuth 자격증명 준비 — OpenAI·Resend API 키 설정, OAuth prod ID·Resend 도메인 미완
 
 ### Step B — 인프라
 
-- [ ] `docker-compose.yml` (Postgres + API 로컬/스테이징)
-- [ ] API 스테이징 배포 + `prisma migrate deploy`
-- [ ] Admin 스테이징 배포
-- [ ] `GET /health`, `GET /ready` 추가
+- [x] `docker-compose.yml` (Postgres + API + Admin 로컬)
+- [x] API 프로덕션 배포 + `prisma migrate deploy` — Railway
+- [x] Admin 프로덕션 배포 — Railway
+- [x] `GET /health`, `GET /ready` 추가
 - [ ] `/health` uptime monitor 등록
-- [ ] `AUTH_ALLOW_DEV_FALLBACK=false` 검증
-- [ ] 프로덕션 seed 실행 금지 정책 확정
+- [x] `AUTH_ALLOW_DEV_FALLBACK=false` 검증
+- [x] 프로덕션 seed 실행 금지 정책 확정
 
 ### Step C — 연동
 
-- [ ] EAS preview 빌드 → 스테이징 API 연결
-- [ ] SMTP 실제 메일 (인증 / 재설정)
+- [~] EAS preview 빌드 → 프로덕션 API 연결 — EAS env 설정 완료, **Android preview 빌드 재시도 중**
+- [~] SMTP 실제 메일 (인증 / 재설정) — Resend HTTP API 동작, 도메인 인증 필요
 - [ ] OAuth 프로덕션 client ID
-- [ ] `PRIVACY_*_URL` 프로덕션 반영
-- [ ] Mobile/API/Admin Sentry 또는 동급 에러 추적 연동
+- [x] `PRIVACY_*_URL` 프로덕션 반영 — Admin Railway URL
+- [~] Mobile/API/Admin Sentry 또는 동급 에러 추적 연동 — SDK 연동 완료, **DSN env 미설정**
 
 ### Step D — QA + CI
 
-- [ ] 수동 QA 체크리스트 전 항목
-- [ ] GitHub Actions (`lint`, `typecheck`, `test`)
+- [ ] 수동 QA 체크리스트 전 항목 — Admin 로그인만 부분 검증
+- [x] GitHub Actions (`lint`, `typecheck`, `test`)
 - [ ] 스토어 제출 자료 체크리스트 전 항목
 - [ ] OpenAI / SMTP / Expo Push 장애 시 UX 확인
 
@@ -488,8 +544,10 @@ eas submit --platform ios --profile production
 
 | 문서/경로 | 설명 |
 |-----------|------|
-| `README.md` | 로컬 개발, env 레이아웃 (일부 outdated) |
-| **본 문서** | 출시·운영 우선순위 **기준** |
+| `README.md` | 로컬 개발, env 레이아웃, **현재 진척도 요약** |
+| **본 문서** | 출시·운영 우선순위 **기준**, **상세 진척도** |
+| `docs/RAILWAY_STAGING.md` | Railway 배포 가이드 (프로덕션 URL 반영 시 갱신) |
+| `docs/DEPLOYMENT.md` | Docker, EAS, Sentry, uptime |
 | `apps/mobile/eas.json` | EAS 빌드 프로필 |
 | `apps/api/prisma/schema.prisma` | 데이터 모델 |
 | `apps/api/.env.example` | API env (루트 `.env.example`과 병행 참조) |
@@ -507,5 +565,6 @@ eas submit --platform ios --profile production
 
 ## 7. 한 줄 결론
 
-**기능 MVP는 갖춰져 있고, 서비스 출시는 Phase 0(호스팅·시크릿·보안) → Phase 1(스테이징 QA) → Phase 2(스토어 제출) 순으로 진행한다.**  
+**기능 MVP는 갖춰져 있고, Railway 프로덕션(API·Admin·DB)과 Phase 0 대부분이 완료되었다.**  
+**다음 관문:** EAS preview APK 빌드 성공 → Railway API 실기기 QA → Resend 도메인·Sentry·uptime → Phase 2 스토어 제출.  
 IAP·OCR·카탈로그 UX는 첫 출시 이후(Phase 4)로 미뤄도 된다.
