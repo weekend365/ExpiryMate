@@ -125,20 +125,24 @@ async function request<T>(
 }
 
 export const adminLogin = async (payload: { email: string; password: string }) => {
-  const session = await request<Omit<AuthSession, "refreshToken">>(
-    "/auth/login",
-    {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "x-expirymate-client": "admin",
-      },
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "x-expirymate-client": "admin",
     },
-    { retryOnUnauthorized: false },
-  );
+    credentials: "include",
+    body: JSON.stringify(payload),
+  });
+  const body = (await response.json()) as ApiEnvelope<Omit<AuthSession, "refreshToken">>;
 
-  setAdminAccessToken(session.accessToken);
-  return session;
+  if (!response.ok || !body.success) {
+    throw new Error(body.error?.message ?? "로그인에 실패했습니다.");
+  }
+
+  setAdminAccessToken(body.data.accessToken);
+  return body.data;
 };
 
 export const refreshAdminSession = async () => {

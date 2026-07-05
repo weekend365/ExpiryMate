@@ -16,8 +16,15 @@ export default function AdminLoginPage() {
     setErrorMessage(null);
     setIsSubmitting(true);
 
+    const formData = new FormData(event.currentTarget);
+    const submittedEmail = String(formData.get("email") ?? email).trim();
+    const submittedPassword = String(formData.get("password") ?? password);
+
     try {
-      const session = await adminLogin({ email, password });
+      const session = await adminLogin({
+        email: submittedEmail,
+        password: submittedPassword,
+      });
       if (session.user.role !== "admin") {
         setErrorMessage("관리자 권한이 필요합니다.");
         return;
@@ -48,6 +55,8 @@ export default function AdminLoginPage() {
 
         <div className="mt-8 space-y-3">
           <input
+            name="email"
+            autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             type="email"
@@ -55,6 +64,8 @@ export default function AdminLoginPage() {
             className="h-12 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
           />
           <input
+            name="password"
+            autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             type="password"
