@@ -1,7 +1,7 @@
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { formatDateKorean, toIsoDate } from "@expirymate/shared";
+import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
 import { useState } from "react";
 import {
   Modal,
@@ -29,11 +29,11 @@ export function DatePickerField({
 }: DatePickerFieldProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [draftDate, setDraftDate] = useState<Date>(
-    value ? new Date(value) : new Date(),
+    value ? toDatePickerDate(value) : new Date(),
   );
 
   const openPicker = () => {
-    setDraftDate(value ? new Date(value) : new Date());
+    setDraftDate(value ? toDatePickerDate(value) : new Date());
     setIsVisible(true);
   };
 
@@ -49,7 +49,7 @@ export function DatePickerField({
         return;
       }
 
-      onChange(toIsoDate(selectedDate));
+      onChange(toDatePickerDateOnly(selectedDate));
       return;
     }
 
@@ -59,7 +59,7 @@ export function DatePickerField({
   };
 
   const confirmIOSDate = () => {
-    onChange(toIsoDate(draftDate));
+    onChange(toDatePickerDateOnly(draftDate));
     setIsVisible(false);
   };
 
@@ -107,7 +107,7 @@ export function DatePickerField({
           </Modal>
         ) : (
           <DateTimePicker
-            value={value ? new Date(value) : new Date()}
+            value={value ? toDatePickerDate(value) : new Date()}
             mode="date"
             display="default"
             onChange={handleChange}
@@ -116,6 +116,23 @@ export function DatePickerField({
       ) : null}
     </View>
   );
+}
+
+function toDatePickerDate(value: string) {
+  if (!isDateOnlyString(value)) {
+    return new Date(value);
+  }
+
+  const [yearText, monthText, dayText] = value.split("-");
+  return new Date(Number(yearText), Number(monthText) - 1, Number(dayText));
+}
+
+function toDatePickerDateOnly(value: Date) {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 const styles = StyleSheet.create({

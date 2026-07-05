@@ -8,8 +8,7 @@ import type {
   ProductCategory,
 } from "@expirymate/shared";
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+const API_BASE_URL = resolveApiBaseUrl();
 const ACCESS_TOKEN_KEY = "expirymate.admin.accessToken";
 
 type ProductPayload = {
@@ -26,6 +25,56 @@ type ApiEnvelope<T> = {
     message?: string;
   };
 };
+
+function resolveApiBaseUrl() {
+  const value = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (process.env.NODE_ENV === "production") {
+    if (!value) {
+      throw new Error("NEXT_PUBLIC_API_BASE_URL is required in production.");
+    }
+
+    const url = parseUrl(value);
+
+    if (!url || url.protocol !== "https:" || isUnsafeProductionHostname(url.hostname)) {
+      throw new Error(
+        "NEXT_PUBLIC_API_BASE_URL must be a public https:// URL in production.",
+      );
+    }
+
+    return stripTrailingSlash(value);
+  }
+
+  return stripTrailingSlash(value ?? "http://localhost:4000");
+}
+
+function stripTrailingSlash(value: string) {
+  return value.replace(/\/$/, "");
+}
+
+function parseUrl(value: string) {
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+}
+
+function isUnsafeProductionHostname(hostname: string) {
+  const normalized = hostname.toLowerCase();
+
+  return (
+    normalized === "localhost" ||
+    normalized === "127.0.0.1" ||
+    normalized === "::1" ||
+    normalized.endsWith(".localhost") ||
+    normalized.endsWith(".local") ||
+    normalized.endsWith(".example") ||
+    normalized.endsWith(".invalid") ||
+    normalized.endsWith(".test") ||
+    normalized.includes("your-domain")
+  );
+}
 
 export const getAdminAccessToken = () =>
   typeof window === "undefined" ? null : window.localStorage.getItem(ACCESS_TOKEN_KEY);

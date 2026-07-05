@@ -212,7 +212,7 @@ describe("NotificationsService", () => {
         pushTokenId_inventoryItemId_reminderDate_daysBefore: {
           pushTokenId: "push-token-1",
           inventoryItemId: "item-1",
-          reminderDate: new Date("2026-06-07T15:00:00.000Z"),
+          reminderDate: new Date("2026-06-08T00:00:00.000Z"),
           daysBefore: 1,
         },
       },

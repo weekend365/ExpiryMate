@@ -197,7 +197,7 @@ model InventoryItem {
   quantity                   Int
   unit                       String?                    @default("개")
   storageLocation            StorageLocation
-  expiryDate                 DateTime
+  expiryDate                 DateTime                   @db.Date
   expirySource               ExpirySource
   status                     ItemStatus                 @default(active)
   notes                      String?

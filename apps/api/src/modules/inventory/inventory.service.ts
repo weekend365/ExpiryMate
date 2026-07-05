@@ -5,7 +5,12 @@ import {
   ProductCategory,
   StorageLocation,
 } from "@prisma/client";
-import { addDays, ItemStatus as SharedItemStatus } from "@expirymate/shared";
+import {
+  addDaysToDateOnly,
+  dateOnlyToUtcDate,
+  isDateOnlyString,
+  ItemStatus as SharedItemStatus,
+} from "@expirymate/shared";
 import { serializeInventoryItem } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
@@ -35,7 +40,9 @@ export class InventoryService {
         storageLocation: params.storageLocation,
         expiryDate: params.expiringWithin
           ? {
-              lte: addDays(new Date(), params.expiringWithin),
+              lte: dateOnlyToUtcDate(
+                addDaysToDateOnly(new Date(), params.expiringWithin),
+              ),
             }
           : undefined,
         OR: params.q
@@ -84,7 +91,7 @@ export class InventoryService {
         quantity: dto.quantity,
         unit: dto.unit ?? "개",
         storageLocation: dto.storageLocation as StorageLocation,
-        expiryDate: new Date(dto.expiryDate),
+        expiryDate: parseExpiryDate(dto.expiryDate),
         expirySource: dto.expirySource as ExpirySource,
         status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
         notes: dto.notes,
@@ -107,7 +114,8 @@ export class InventoryService {
         quantity: dto.quantity,
         unit: dto.unit,
         storageLocation: dto.storageLocation as StorageLocation | undefined,
-        expiryDate: dto.expiryDate ? new Date(dto.expiryDate) : undefined,
+        expiryDate:
+          dto.expiryDate === undefined ? undefined : parseExpiryDate(dto.expiryDate),
         expirySource: dto.expirySource as ExpirySource | undefined,
         status: dto.status as ItemStatus | undefined,
         notes: dto.notes,
@@ -189,4 +197,12 @@ export class InventoryService {
       items: discardedItems.map(serializeInventoryItem),
     };
   }
+}
+
+function parseExpiryDate(value: string) {
+  if (!isDateOnlyString(value)) {
+    throw new BadRequestException("유통기한은 YYYY-MM-DD 형식이어야 합니다.");
+  }
+
+  return dateOnlyToUtcDate(value);
 }

@@ -20,10 +20,10 @@ describe("mobile inventory filters", () => {
   it("returns expiring items within seven days sorted by nearest expiry", () => {
     const result = filterInventoryItems(
       [
-        createItem("later", "두부", "2026-06-15T00:00:00.000Z"),
-        createItem("soon", "계란", "2026-06-10T00:00:00.000Z"),
-        createItem("expired", "우유", "2026-06-06T00:00:00.000Z"),
-        createItem("today", "요거트", "2026-06-07T00:00:00.000Z"),
+        createItem("later", "두부", "2026-06-15"),
+        createItem("soon", "계란", "2026-06-10"),
+        createItem("expired", "우유", "2026-06-06"),
+        createItem("today", "요거트", "2026-06-07"),
       ],
       "expiring",
       "all",
@@ -35,14 +35,14 @@ describe("mobile inventory filters", () => {
   it("combines expired and location filters", () => {
     const result = filterInventoryItems(
       [
-        createItem("fridge-expired", "우유", "2026-06-06T00:00:00.000Z"),
+        createItem("fridge-expired", "우유", "2026-06-06"),
         createItem(
           "room-expired",
           "컵라면",
-          "2026-06-05T00:00:00.000Z",
+          "2026-06-05",
           StorageLocation.ROOM,
         ),
-        createItem("fridge-active", "계란", "2026-06-10T00:00:00.000Z"),
+        createItem("fridge-active", "계란", "2026-06-10"),
       ],
       "expired",
       StorageLocation.FRIDGE,

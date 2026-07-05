@@ -320,7 +320,7 @@ export class AuthService {
   }
 
   getDevFallbackUser(): AuthenticatedUser | null {
-    if (process.env.AUTH_ALLOW_DEV_FALLBACK === "false") {
+    if (process.env.AUTH_ALLOW_DEV_FALLBACK !== "true") {
       return null;
     }
 
@@ -719,6 +719,10 @@ function safeEqual(left: string, right: string) {
 }
 
 async function verifyGoogleToken(providerToken: string): Promise<OAuthProfile> {
+  const expectedClientId = getRequiredOAuthClientId(
+    "GOOGLE_OAUTH_CLIENT_ID",
+    "Google",
+  );
   const response = await fetch(
     `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(providerToken)}`,
   );
@@ -734,9 +738,8 @@ async function verifyGoogleToken(providerToken: string): Promise<OAuthProfile> {
     name?: string;
     aud?: string;
   };
-  const expectedClientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
 
-  if (expectedClientId && payload.aud !== expectedClientId) {
+  if (payload.aud !== expectedClientId) {
     throw new UnauthorizedException("Google 로그인 토큰 대상이 올바르지 않습니다.");
   }
 
@@ -754,6 +757,8 @@ async function verifyGoogleToken(providerToken: string): Promise<OAuthProfile> {
 }
 
 async function verifyKakaoToken(providerToken: string): Promise<OAuthProfile> {
+  getRequiredOAuthClientId("KAKAO_OAUTH_CLIENT_ID", "Kakao");
+
   const response = await fetch("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: `Bearer ${providerToken}` },
   });
@@ -787,6 +792,10 @@ async function verifyAppleToken(
   providerToken: string,
   dto: OAuthLoginDto,
 ): Promise<OAuthProfile> {
+  const expectedClientId = getRequiredOAuthClientId(
+    "APPLE_OAUTH_CLIENT_ID",
+    "Apple",
+  );
   const [, payloadPart] = providerToken.split(".");
 
   if (!payloadPart) {
@@ -795,15 +804,14 @@ async function verifyAppleToken(
 
   await verifyAppleSignature(providerToken);
 
-  const payload = JSON.parse(Buffer.from(payloadPart, "base64url").toString("utf8")) as {
+  const payload = parseBase64UrlJson<{
     sub?: string;
     email?: string;
     aud?: string;
     exp?: number;
-  };
-  const expectedClientId = process.env.APPLE_OAUTH_CLIENT_ID;
+  }>(payloadPart, "Apple 로그인 토큰이 올바르지 않습니다.");
 
-  if (expectedClientId && payload.aud !== expectedClientId) {
+  if (payload.aud !== expectedClientId) {
     throw new UnauthorizedException("Apple 로그인 토큰 대상이 올바르지 않습니다.");
   }
 
@@ -825,10 +833,10 @@ async function verifyAppleSignature(token: string) {
   if (!headerPart) {
     throw new UnauthorizedException("Apple 로그인 토큰이 올바르지 않습니다.");
   }
-  const header = JSON.parse(Buffer.from(headerPart, "base64url").toString("utf8")) as {
+  const header = parseBase64UrlJson<{
     kid?: string;
     alg?: string;
-  };
+  }>(headerPart, "Apple 로그인 토큰이 올바르지 않습니다.");
 
   if (header.alg !== "RS256" || !header.kid || !payloadPart || !signaturePart) {
     throw new UnauthorizedException("Apple 로그인 토큰이 올바르지 않습니다.");
@@ -856,5 +864,31 @@ async function verifyAppleSignature(token: string) {
 
   if (!isValid) {
     throw new UnauthorizedException("Apple 로그인 토큰 서명이 올바르지 않습니다.");
+  }
+}
+
+function getRequiredOAuthClientId(
+  key:
+    | "APPLE_OAUTH_CLIENT_ID"
+    | "GOOGLE_OAUTH_CLIENT_ID"
+    | "KAKAO_OAUTH_CLIENT_ID",
+  providerLabel: string,
+) {
+  const value = process.env[key]?.trim();
+
+  if (!value) {
+    throw new ServiceUnavailableException(
+      `${providerLabel} OAuth 설정을 확인할 수 없습니다.`,
+    );
+  }
+
+  return value;
+}
+
+function parseBase64UrlJson<T>(value: string, errorMessage: string): T {
+  try {
+    return JSON.parse(Buffer.from(value, "base64url").toString("utf8")) as T;
+  } catch {
+    throw new UnauthorizedException(errorMessage);
   }
 }

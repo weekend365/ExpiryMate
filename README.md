@@ -109,6 +109,11 @@ Each individual app `dev` script also prebuilds `packages/shared` so the app can
 ### Root reference
 
 Use the root `.env.example` as a reference map only.
+Production examples live next to each app:
+
+- `apps/api/.env.production.example`
+- `apps/admin/.env.production.example`
+- `apps/mobile/.env.production.example`
 
 ### API
 
@@ -121,7 +126,7 @@ CORS_ORIGIN_ADMIN="http://localhost:3000"
 CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
 AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
-AUTH_ALLOW_DEV_FALLBACK="true"
+AUTH_ALLOW_DEV_FALLBACK="false"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
@@ -145,17 +150,33 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL=""
 GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
 ```
 
-`AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK=true` keeps local admin/dev tools usable without a bearer token; set it to `false` for production-like checks.
+`AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK` defaults to disabled; set it to `true` only for local admin/dev fallback without a bearer token.
 Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` only on the server instance that should send remote expiry reminders. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
+Auth endpoints have built-in rate limits. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
+
+When `NODE_ENV=production`, the API fails fast if production-critical values are missing, unsafe, or still local:
+
+- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`
+- auth: `AUTH_TOKEN_SECRET` with at least 32 characters and `AUTH_ALLOW_DEV_FALLBACK=false`
+- OAuth: `APPLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_ID`, `KAKAO_OAUTH_CLIENT_ID`
+- SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
+- IAP: `IAP_ALLOWED_PRODUCT_IDS`, Apple App Store server API keys, Google Play service account keys
+- privacy contact: `PRIVACY_CONTACT_EMAIL`
 
 ### Admin
 
 Copy `apps/admin/.env.example` to `apps/admin/.env.local`
 
 ```env
+NEXT_PUBLIC_APP_ENV="development"
 NEXT_PUBLIC_API_BASE_URL="http://localhost:4000"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
 ```
+
+For production builds, set `NEXT_PUBLIC_APP_ENV=production`,
+`NEXT_PUBLIC_API_BASE_URL` to the public HTTPS API URL, and
+`PRIVACY_CONTACT_EMAIL` to the real support/privacy email. The Admin build
+fails if production values still point to localhost or `.local`.
 
 ### Mobile
 
@@ -166,6 +187,12 @@ EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
 EXPO_PUBLIC_APP_ENV="development"
 EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
 ```
+
+For production EAS builds, configure the values from
+`apps/mobile/.env.production.example` in EAS environment variables or secrets.
+`EXPO_PUBLIC_API_BASE_URL` must be a public `https://` API URL, and the Google,
+Kakao, and IAP public identifiers must be present. The Expo config fails the
+production build when these values are missing or local.
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
 Use your Mac's current LAN IP instead:
@@ -381,7 +408,7 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - `quantity`
 - `unit`
 - `storageLocation`
-- `expiryDate`
+- `expiryDate` (`YYYY-MM-DD` date-only, KST calendar date)
 - `expirySource`
 - `status`
 - `notes`

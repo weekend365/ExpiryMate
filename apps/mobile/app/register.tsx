@@ -131,7 +131,7 @@ const buildInitialValues = (
     unit: draft?.unit ?? DEFAULT_INVENTORY_FORM.unit ?? "개",
     storageLocation:
       draft?.storageLocation ?? DEFAULT_INVENTORY_FORM.storageLocation,
-    expiryDate: draft?.expiryDate ?? DEFAULT_INVENTORY_FORM.expiryDate,
+    expiryDate: normalizeDraftExpiryDate(draft?.expiryDate),
     expirySource: draft?.expirySource ?? DEFAULT_INVENTORY_FORM.expirySource,
     notes: draft?.notes ?? DEFAULT_INVENTORY_FORM.notes ?? "",
     displayName: draft?.displayName ?? "",
@@ -147,6 +147,18 @@ const buildInitialValues = (
 
   return nextValues;
 };
+
+function normalizeDraftExpiryDate(value?: string) {
+  if (!value) {
+    return DEFAULT_INVENTORY_FORM.expiryDate;
+  }
+
+  try {
+    return toIsoDate(value);
+  } catch {
+    return DEFAULT_INVENTORY_FORM.expiryDate;
+  }
+}
 
 const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],

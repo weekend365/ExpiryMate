@@ -20,9 +20,12 @@ import type {
   RecipeRecommendationRequest,
 } from "@expirymate/shared";
 import {
+  calculateDaysLeftUntilExpiry,
+  dateOnlyToUtcDate,
   recipeInventorySnapshotItemSchema,
   recipeRecommendationRequestSchema,
   recipeRecommendationsPayloadSchema,
+  toKstDateOnly,
 } from "@expirymate/shared";
 import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
@@ -317,13 +320,13 @@ export class RecipesService {
     ownerKey: string,
     request: RecipeRecommendationRequest,
   ): Promise<RecipeInventorySnapshotItem[]> {
-    const today = startOfDay();
+    const today = toKstDateOnly(new Date());
     const items = await this.prisma.inventoryItem.findMany({
       where: {
         ownerKey,
         status: "active",
         expiryDate: {
-          gte: today,
+          gte: dateOnlyToUtcDate(today),
         },
         OR: [
           {
@@ -350,8 +353,8 @@ export class RecipesService {
       unit: item.unit,
       storageLocation:
         item.storageLocation as RecipeInventorySnapshotItem["storageLocation"],
-      expiryDate: item.expiryDate.toISOString(),
-      daysUntilExpiry: differenceInCalendarDays(item.expiryDate, today),
+      expiryDate: toKstDateOnly(item.expiryDate),
+      daysUntilExpiry: calculateDaysLeftUntilExpiry(item.expiryDate, today),
     }));
   }
 
@@ -589,12 +592,6 @@ function startOfDay(date = new Date()) {
   const day = new Date(date);
   day.setHours(0, 0, 0, 0);
   return day;
-}
-
-function differenceInCalendarDays(date: Date, baseDate: Date) {
-  const dayMs = 24 * 60 * 60 * 1000;
-  const target = startOfDay(date);
-  return Math.round((target.getTime() - baseDate.getTime()) / dayMs);
 }
 
 function estimateTokenCount(text: string) {

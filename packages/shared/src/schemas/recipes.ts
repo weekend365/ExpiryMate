@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ProductCategory, StorageLocation } from "../enums/app-enums";
+import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
 
 export const recipeMealTypeSchema = z.enum([
   "any",
@@ -23,7 +24,10 @@ export const recipeInventorySnapshotItemSchema = z.object({
   quantity: z.number(),
   unit: z.string().nullable().optional(),
   storageLocation: z.nativeEnum(StorageLocation),
-  expiryDate: z.string(),
+  expiryDate: z
+    .string()
+    .regex(DATE_ONLY_PATTERN)
+    .refine(isDateOnlyString, "올바른 날짜를 입력해주세요"),
   daysUntilExpiry: z.number().int(),
 });
 

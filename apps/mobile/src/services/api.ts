@@ -22,8 +22,7 @@ import type {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
+const API_BASE_URL = resolveApiBaseUrl();
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -66,6 +65,57 @@ const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
 let sessionPromise: Promise<AuthSession> | null = null;
+
+function resolveApiBaseUrl() {
+  const value = process.env.EXPO_PUBLIC_API_BASE_URL;
+  const appEnv = process.env.EXPO_PUBLIC_APP_ENV ?? "development";
+
+  if (appEnv === "production") {
+    if (!value) {
+      throw new Error("EXPO_PUBLIC_API_BASE_URL is required in production.");
+    }
+
+    const url = parseUrl(value);
+
+    if (!url || url.protocol !== "https:" || isUnsafeProductionHostname(url.hostname)) {
+      throw new Error(
+        "EXPO_PUBLIC_API_BASE_URL must be a public https:// URL in production.",
+      );
+    }
+
+    return stripTrailingSlash(value);
+  }
+
+  return stripTrailingSlash(value ?? "http://localhost:4000");
+}
+
+function stripTrailingSlash(value: string) {
+  return value.replace(/\/$/, "");
+}
+
+function parseUrl(value: string) {
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+}
+
+function isUnsafeProductionHostname(hostname: string) {
+  const normalized = hostname.toLowerCase();
+
+  return (
+    normalized === "localhost" ||
+    normalized === "127.0.0.1" ||
+    normalized === "::1" ||
+    normalized.endsWith(".localhost") ||
+    normalized.endsWith(".local") ||
+    normalized.endsWith(".example") ||
+    normalized.endsWith(".invalid") ||
+    normalized.endsWith(".test") ||
+    normalized.includes("your-domain")
+  );
+}
 
 async function request<T>(
   path: string,

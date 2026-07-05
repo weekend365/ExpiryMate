@@ -96,4 +96,42 @@ describe("InventoryService owner isolation", () => {
       }),
     ).rejects.toThrow(BadRequestException);
   });
+
+  it("stores expiryDate as a date-only UTC date", async () => {
+    prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
+
+    await service.create(
+      {
+        displayName: "계란",
+        quantity: 1,
+        storageLocation: "fridge" as never,
+        expiryDate: "2026-06-10",
+        expirySource: "manual" as never,
+      },
+      "owner-a",
+    );
+
+    expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        expiryDate: new Date("2026-06-10T00:00:00.000Z"),
+      }),
+    });
+  });
+
+  it("rejects timestamp expiryDate input", async () => {
+    await expect(
+      service.create(
+        {
+          displayName: "계란",
+          quantity: 1,
+          storageLocation: "fridge" as never,
+          expiryDate: "2026-06-10T00:00:00.000Z",
+          expirySource: "manual" as never,
+        },
+        "owner-a",
+      ),
+    ).rejects.toThrow(BadRequestException);
+
+    expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
 });

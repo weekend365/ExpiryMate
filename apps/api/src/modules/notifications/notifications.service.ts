@@ -10,12 +10,12 @@ import {
   PushNotificationDeliveryStatus,
   PushTokenPlatform,
 } from "@prisma/client";
+import { dateOnlyToUtcDate } from "@expirymate/shared";
 import { serializePushToken } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
 import { RegisterPushTokenDto } from "./dto/register-push-token.dto";
 import { ExpoPushService, type ExpoPushTicket } from "./expo-push.service";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_INTERVAL_MINUTES = 30;
 const DEFAULT_DELIVERY_HOUR = 9;
 const DEFAULT_MAX_ATTEMPTS = 3;
@@ -171,15 +171,14 @@ export class NotificationsService
       );
 
       for (const daysBefore of daysBeforeValues) {
-        const { start, end } = getLocalDayRange(now, daysBefore);
+        const reminderDate = dateOnlyToUtcDate(
+          getLocalDateOnly(now, daysBefore),
+        );
         const items = await this.prisma.inventoryItem.findMany({
           where: {
             ownerKey: preference.ownerKey,
             status: ItemStatus.active,
-            expiryDate: {
-              gte: start,
-              lt: end,
-            },
+            expiryDate: reminderDate,
           },
           select: {
             id: true,
@@ -196,7 +195,7 @@ export class NotificationsService
               ownerKey: preference.ownerKey,
               pushTokenId: pushToken.id,
               inventoryItemId: item.id,
-              reminderDate: start,
+              reminderDate,
               daysBefore,
               ...buildReminderCopy(item, daysBefore),
             });
@@ -375,18 +374,17 @@ function getLocalMinutes(now: Date) {
   return localNow.getUTCHours() * 60 + localNow.getUTCMinutes();
 }
 
-function getLocalDayRange(now: Date, daysFromNow: number) {
+function getLocalDateOnly(now: Date, daysFromNow: number) {
   const offsetMs = getTimezoneOffsetMinutes() * 60 * 1000;
-  const localStart = new Date(now.getTime() + offsetMs);
-  localStart.setUTCHours(0, 0, 0, 0);
-  localStart.setUTCDate(localStart.getUTCDate() + daysFromNow);
+  const localDate = new Date(now.getTime() + offsetMs);
+  localDate.setUTCHours(0, 0, 0, 0);
+  localDate.setUTCDate(localDate.getUTCDate() + daysFromNow);
 
-  const start = new Date(localStart.getTime() - offsetMs);
+  const year = localDate.getUTCFullYear();
+  const month = String(localDate.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getUTCDate()).padStart(2, "0");
 
-  return {
-    start,
-    end: new Date(start.getTime() + DAY_MS),
-  };
+  return `${year}-${month}-${day}`;
 }
 
 function getReminderDays(reminderDaysBefore: number[], remindOnDayOf: boolean) {

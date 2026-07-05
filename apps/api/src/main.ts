@@ -3,8 +3,11 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./common/http-exception.filter";
 import { ResponseInterceptor } from "./common/response.interceptor";
+import { validateProductionEnvironment } from "./config/production-env";
 
 async function bootstrap() {
+  validateProductionEnvironment();
+
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({

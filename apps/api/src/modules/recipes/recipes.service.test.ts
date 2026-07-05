@@ -53,7 +53,7 @@ const inventorySnapshot = [
     quantity: 2,
     unit: "개",
     storageLocation: "fridge",
-    expiryDate: "2099-06-10T00:00:00.000Z",
+    expiryDate: "2099-06-10",
     daysUntilExpiry: 3,
   },
 ];

@@ -15,6 +15,7 @@ import {
   type PushToken,
   type PushTokenPlatform,
   StorageLocation,
+  toKstDateOnly,
 } from "@expirymate/shared";
 
 export const serializeProduct = (product: PrismaProduct): Product => ({
@@ -50,7 +51,7 @@ export const serializeInventoryItem = (
   quantity: item.quantity,
   unit: item.unit,
   storageLocation: item.storageLocation as StorageLocation,
-  expiryDate: item.expiryDate.toISOString(),
+  expiryDate: toKstDateOnly(item.expiryDate),
   expirySource: item.expirySource as ExpirySource,
   status: resolveStatus(item),
   notes: item.notes,

@@ -12,11 +12,29 @@ import argon2 from "argon2";
 const prisma = new PrismaClient();
 
 const addDays = (days: number) => {
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  date.setDate(date.getDate() + days);
+  const date = new Date(toKstDateOnly(new Date()));
+  date.setUTCDate(date.getUTCDate() + days);
   return date;
 };
+
+function toKstDateOnly(value: Date) {
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Seoul",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = formatter.formatToParts(value);
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  const day = parts.find((part) => part.type === "day")?.value;
+
+  if (!year || !month || !day) {
+    throw new Error("Failed to format seed date");
+  }
+
+  return `${year}-${month}-${day}`;
+}
 
 async function main() {
   await prisma.oneTimeAuthToken.deleteMany();
