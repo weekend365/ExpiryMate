@@ -7,6 +7,9 @@
     "development": {
       "distribution": "internal",
       "environment": "development",
+      "install": {
+        "workingDirectory": "../.."
+      },
       "ios": {
         "simulator": true
       },
@@ -20,6 +23,9 @@
     "preview": {
       "distribution": "internal",
       "environment": "preview",
+      "install": {
+        "workingDirectory": "../.."
+      },
       "ios": {
         "simulator": false
       },
@@ -34,6 +40,9 @@
       "distribution": "store",
       "autoIncrement": true,
       "environment": "production",
+      "install": {
+        "workingDirectory": "../.."
+      },
       "ios": {
         "image": "latest",
         "resourceClass": "medium"

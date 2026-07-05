@@ -12,6 +12,7 @@
     "eas:config": "eas config",
     "eas:build:ios": "eas build --platform ios --profile production",
     "eas:submit:ios": "eas submit --platform ios --profile production",
+    "eas-build-post-install": "pnpm --filter @expirymate/shared build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"

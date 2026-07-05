@@ -3,7 +3,10 @@
     "name": "ExpiryMate",
     "slug": "expirymate",
     "description": "Korean-first ingredient inventory, expiry reminder, and recipe recommendation app.",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "scheme": "expirymate",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -57,6 +60,13 @@
         "foregroundImage": "./assets/branding/adaptive-icon.png",
         "backgroundColor": "#F8FAFC"
       }
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9d2b3113-c0c5-4017-9263-4faab84f637a"
+      }
+    },
+    "owner": "weekend365"
   }
 }

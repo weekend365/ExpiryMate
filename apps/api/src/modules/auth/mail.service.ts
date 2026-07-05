@@ -70,6 +70,7 @@ async function sendViaResendApi(from: string, apiKey: string, message: MailMessa
       subject: message.subject,
       text: message.text,
     }),
+    signal: AbortSignal.timeout(10_000),
   });
 
   if (!response.ok) {
