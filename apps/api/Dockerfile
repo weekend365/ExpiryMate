@@ -11,6 +11,8 @@ COPY packages/shared/package.json packages/shared/
 RUN pnpm install --frozen-lockfile
 
 FROM base AS build
+ARG GIT_SHA=unknown
+ARG APP_VERSION=0.1.0
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
@@ -23,7 +25,11 @@ RUN pnpm --filter @expirymate/api exec prisma generate
 RUN pnpm --filter @expirymate/api build
 
 FROM base AS runner
+ARG GIT_SHA=unknown
+ARG APP_VERSION=0.1.0
 ENV NODE_ENV=production
+ENV GIT_SHA=$GIT_SHA
+ENV APP_VERSION=$APP_VERSION
 WORKDIR /app
 
 RUN apk add --no-cache curl

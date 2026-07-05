@@ -10,11 +10,19 @@ describe("HealthController", () => {
     prisma = {
       $queryRaw: vi.fn(),
     };
+    process.env.NODE_ENV = "test";
+    delete process.env.APP_VERSION;
+    delete process.env.GIT_SHA;
     controller = new HealthController(prisma as never);
   });
 
   it("returns ok for liveness without touching the database", () => {
-    expect(controller.getHealth()).toEqual({ status: "ok" });
+    expect(controller.getHealth()).toEqual({
+      status: "ok",
+      version: "0.1.0",
+      gitSha: "unknown",
+      env: "test",
+    });
     expect(prisma.$queryRaw).not.toHaveBeenCalled();
   });
 

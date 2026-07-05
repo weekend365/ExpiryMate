@@ -28,8 +28,9 @@ type ApiEnvelope<T> = {
 
 function resolveApiBaseUrl() {
   const value = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV ?? "development";
 
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production" && appEnv === "production") {
     if (!value) {
       throw new Error("NEXT_PUBLIC_API_BASE_URL is required in production.");
     }

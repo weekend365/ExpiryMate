@@ -1,18 +1,27 @@
 /** @type {import('next').NextConfig} */
+import { withSentryConfig } from "@sentry/nextjs";
+
 validateAdminProductionEnvironment();
 
 const nextConfig = {
+  output: "standalone",
   transpilePackages: ["@expirymate/shared"],
 };
 
-export default nextConfig;
+const hasSentry =
+  Boolean(process.env.SENTRY_DSN?.trim()) ||
+  Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN?.trim());
+
+export default hasSentry
+  ? withSentryConfig(nextConfig, { silent: true })
+  : nextConfig;
 
 function validateAdminProductionEnvironment() {
-  if (
-    process.env.NODE_ENV !== "production" &&
-    process.env.NEXT_PUBLIC_APP_ENV !== "production" &&
-    process.env.VERCEL_ENV !== "production"
-  ) {
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV ?? "development";
+  const isProductionDeploy =
+    appEnv === "production" || process.env.VERCEL_ENV === "production";
+
+  if (!isProductionDeploy) {
     return;
   }
 

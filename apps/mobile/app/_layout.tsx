@@ -8,7 +8,10 @@ import { StatusBar } from "expo-status-bar";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
 import { queryClient } from "../src/services/query-client";
+import { initMobileSentry } from "../src/services/sentry";
 import { colors } from "../src/shared/theme";
+
+initMobileSentry();
 
 export default function RootLayout() {
   return (

@@ -35,3 +35,38 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  build:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: quality
+    runs-on: ubuntu-latest
+    env:
+      GIT_SHA: ${{ github.sha }}
+      APP_VERSION: 0.1.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: pnpm --filter @expirymate/api build
+
+      - name: Build Admin
+        run: pnpm --filter @expirymate/admin build
+        env:
+          NEXT_PUBLIC_APP_ENV: development
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:4000
+          PRIVACY_CONTACT_EMAIL: privacy@expirymate.local

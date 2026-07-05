@@ -5,6 +5,7 @@ import {
   HttpException,
   HttpStatus,
 } from "@nestjs/common";
+import * as Sentry from "@sentry/node";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -15,6 +16,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
+      if (status >= HttpStatus.INTERNAL_SERVER_ERROR && process.env.SENTRY_DSN?.trim()) {
+        Sentry.captureException(exception);
+      }
       const payload = exception.getResponse();
       const details =
         typeof payload === "object" && payload !== null ? payload : undefined;
@@ -50,6 +54,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (includeDetails) {
       error.details =
         exception instanceof Error ? exception.message : "Unknown exception";
+    }
+
+    if (process.env.SENTRY_DSN?.trim()) {
+      Sentry.captureException(exception);
     }
 
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

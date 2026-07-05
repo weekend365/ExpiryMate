@@ -14,6 +14,7 @@
   "dependencies": {
     "@expirymate/shared": "workspace:*",
     "@hookform/resolvers": "^5.2.1",
+    "@sentry/nextjs": "^10.63.0",
     "@tanstack/react-query": "^5.87.1",
     "next": "^15.5.2",
     "react": "19.0.0",

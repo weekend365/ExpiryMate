@@ -7,7 +7,6 @@ node_modules
 **/dist
 **/.expo
 apps/mobile
-apps/admin
 **/*.test.ts
 **/*.spec.ts
 **/coverage

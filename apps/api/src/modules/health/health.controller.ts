@@ -8,7 +8,12 @@ export class HealthController {
   @Get("health")
   @HttpCode(HttpStatus.OK)
   getHealth() {
-    return { status: "ok" };
+    return {
+      status: "ok",
+      version: process.env.APP_VERSION ?? "0.1.0",
+      gitSha: process.env.GIT_SHA ?? "unknown",
+      env: process.env.NODE_ENV ?? "development",
+    };
   }
 
   @Get("ready")
