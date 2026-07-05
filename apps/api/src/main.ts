@@ -20,7 +20,12 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      // Admin/mobile clients call this API from separate origins in the browser.
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    }),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({
