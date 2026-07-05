@@ -12,7 +12,10 @@
     "test": "pnpm -r --if-present test",
     "db:generate": "pnpm --filter @expirymate/api db:generate",
     "db:migrate": "pnpm --filter @expirymate/api db:migrate",
-    "db:seed": "pnpm --filter @expirymate/api db:seed"
+    "db:migrate:deploy": "pnpm --filter @expirymate/api db:migrate:deploy",
+    "db:seed": "pnpm --filter @expirymate/api db:seed",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",

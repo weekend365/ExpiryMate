@@ -1,5 +1,6 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
+import helmet from "helmet";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./common/http-exception.filter";
 import { ResponseInterceptor } from "./common/response.interceptor";
@@ -17,6 +18,8 @@ async function bootstrap() {
     ],
     credentials: true,
   });
+
+  app.use(helmet());
 
   app.useGlobalPipes(
     new ValidationPipe({

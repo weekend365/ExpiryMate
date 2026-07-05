@@ -9,6 +9,10 @@ import {
 } from "@prisma/client";
 import argon2 from "argon2";
 
+if (process.env.NODE_ENV === "production") {
+  throw new Error("db:seed must not run in production — it wipes all tables.");
+}
+
 const prisma = new PrismaClient();
 
 const addDays = (days: number) => {
