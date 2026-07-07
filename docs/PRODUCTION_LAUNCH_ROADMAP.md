@@ -21,7 +21,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 
 ### 1-1. 현재 개발 진척도 (2026-07-05)
 
-**현재 Phase:** Phase 0 거의 완료 → **Phase 1(스테이징 QA) 착수 직전**
+**현재 Phase:** Phase 0 완료 → **Phase 1(스테이징 QA) 진행 중**
 
 #### 프로덕션 인프라 (Railway, 커스텀 도메인 없음)
 
@@ -47,13 +47,14 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | **모바일 빌드** | EAS monorepo `@expirymate/shared` 빌드 훅 | `eas-build-post-install` |
 | **모바일 빌드** | Reanimated 4 + `react-native-worklets`, Sentry SDK 54 정렬 | `b677ee8` |
 | **모바일 빌드** | Babel duplicate plugin 수정 | `f05e4a4` — JS 번들 로컬 통과 |
+| **모바일 빌드** | EAS Android `preview` 빌드 성공 → APK 설치 | `60cb0089` — 에뮬레이터 설치·실행 확인 |
 
 #### 진행 중 / 다음 작업
 
 | 우선순위 | 항목 | 상태 |
 |----------|------|------|
-| 1 | EAS Android `preview` 빌드 성공 → APK 설치 | Babel 수정 후 **재빌드 필요** |
-| 2 | Preview APK로 Railway API 회원가입·로그인·AI 추천 QA | 빌드 성공 후 |
+| 1 | ~~EAS Android `preview` 빌드 성공 → APK 설치~~ | ✅ 완료 (`60cb0089`) |
+| 2 | Preview APK로 Railway API 회원가입·로그인·AI 추천 QA | **진행 중** |
 | 3 | Resend 도메인 인증 | 임의 수신자(예: naver.com)로 메일 발송 |
 | 4 | Sentry DSN 3종 (API, Admin, Mobile) EAS/Railway env | 코드만 연동됨 |
 | 5 | `/health` uptime monitor | Better Stack, UptimeRobot 등 |
@@ -63,7 +64,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 
 - **Resend 무료 tier:** 도메인 미인증 시 Resend 가입 이메일로만 발송 가능
 - **Expo Go vs EAS:** Expo Go는 같은 Wi‑Fi 또는 `expo start --tunnel` 필요; Railway API 연동 QA는 **EAS preview APK** 권장
-- **EAS 빌드 이력:** shared `dist` 누락 → Gradle 실패 → Babel duplicate → 순차 수정 완료, 최종 빌드 결과 대기
+- **EAS 빌드 이력:** shared `dist` 누락 → Gradle 실패 → Babel duplicate → 순차 수정 → `60cb0089` 빌드 성공
 
 #### 관련 커밋 (main)
 
@@ -132,7 +133,7 @@ flowchart TD
 - [x] `AUTH_ALLOW_DEV_FALLBACK=false` 환경에서 로그인/인증 플로우 정상 동작 — Admin 로그인 검증
 - [x] 프로덕션 환경에서 seed 스크립트 실행 방지 또는 운영 절차상 금지 명시 — `seed.ts` 가드
 - [~] SMTP 실제 발송으로 이메일 인증·비밀번호 재설정 성공 — Resend HTTP API 동작, **도메인 인증·임의 수신자 발송 미완**
-- [ ] EAS preview/production 빌드가 실제 API URL을 호출 — env 설정 완료, **APK 빌드·실기기 QA 대기**
+- [~] EAS preview/production 빌드가 실제 API URL을 호출 — preview APK 빌드·설치 완료, **실기기/에뮬레이터 QA 진행 중**
 - [x] 최소 CI(`lint`, `typecheck`, `test`)가 PR에서 통과 — GitHub Actions
 
 ### 0-1. 백엔드 + DB 호스팅
@@ -491,7 +492,7 @@ eas submit --platform ios --profile production
 
 ### Step C — 연동
 
-- [~] EAS preview 빌드 → 프로덕션 API 연결 — EAS env 설정 완료, **Android preview 빌드 재시도 중**
+- [~] EAS preview 빌드 → 프로덕션 API 연결 — preview APK 빌드·설치 완료, **QA 진행 중**
 - [~] SMTP 실제 메일 (인증 / 재설정) — Resend HTTP API 동작, 도메인 인증 필요
 - [ ] OAuth 프로덕션 client ID
 - [x] `PRIVACY_*_URL` 프로덕션 반영 — Admin Railway URL
@@ -566,5 +567,5 @@ eas submit --platform ios --profile production
 ## 7. 한 줄 결론
 
 **기능 MVP는 갖춰져 있고, Railway 프로덕션(API·Admin·DB)과 Phase 0 대부분이 완료되었다.**  
-**다음 관문:** EAS preview APK 빌드 성공 → Railway API 실기기 QA → Resend 도메인·Sentry·uptime → Phase 2 스토어 제출.  
+**다음 관문:** Railway API 실기기 QA(Phase 1) → Resend 도메인·Sentry·uptime → Phase 2 스토어 제출.  
 IAP·OCR·카탈로그 UX는 첫 출시 이후(Phase 4)로 미뤄도 된다.
