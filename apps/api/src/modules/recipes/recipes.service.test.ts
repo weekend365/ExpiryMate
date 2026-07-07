@@ -78,7 +78,7 @@ const cachedRecord = {
   inventorySnapshot,
   recommendations,
   aiProvider: "openai",
-  aiModel: "gpt-5-mini",
+  aiModel: "gpt-5.4-mini",
   promptVersion: "recipe-recommendation-v1",
   requestCacheKey: "cache-key",
   inputTokens: 10,
@@ -111,7 +111,7 @@ type TestableRecipesService = RecipesService & {
 describe("RecipesService recommendation guards", () => {
   beforeEach(() => {
     restoreManagedEnv();
-    process.env.RECIPE_AI_MODEL = "gpt-5-mini";
+    process.env.RECIPE_AI_MODEL = "gpt-5.4-mini";
     process.env.RECIPE_RATE_LIMIT_MAX = "0";
   });
 
