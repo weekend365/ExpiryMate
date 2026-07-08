@@ -8,13 +8,14 @@
     "dev": "nest start --watch",
     "build": "pnpm --filter @expirymate/shared build && nest build",
     "start": "node dist/main.js",
-    "lint": "eslint src prisma --ext .ts",
+    "lint": "eslint src prisma scripts --ext .ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "db:seed": "NODE_ENV=development tsx prisma/seed.ts"
+    "db:seed": "NODE_ENV=development tsx prisma/seed.ts",
+    "db:seed:barcodes": "tsx scripts/seedBarcode.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

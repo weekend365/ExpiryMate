@@ -185,6 +185,19 @@ model Product {
   inventoryItems InventoryItem[]
 }
 
+model ProductMaster {
+  id        String   @id @default(cuid())
+  barcode   String   @unique
+  name      String
+  brand     String
+  category  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([category])
+}
+
 model InventoryItem {
   id                         String                     @id @default(cuid())
   ownerKey                   String                     @default("demo-user")
