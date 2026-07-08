@@ -33,16 +33,16 @@ sections below where they conflict (for example auth scope and next implementati
 
 ### Current Development Status (2026-07-05)
 
-| Area | Progress | Notes |
-|------|----------|-------|
-| **Phase** | Phase 0 ~90% → Phase 1 next | See roadmap for full checklist |
-| **API (Railway)** | Live | `https://api-production-1504.up.railway.app` — `/health`, `/ready` OK |
-| **Admin (Railway)** | Live | `https://admin-production-da74.up.railway.app` — login, privacy pages OK |
-| **Database** | Migrated | Railway Postgres, 10 Prisma migrations applied |
-| **CI** | Done | GitHub Actions: lint, typecheck, test; main push builds API + Admin |
-| **Email (Resend)** | Partial | HTTP API works; domain verification needed for arbitrary recipients |
-| **EAS Mobile preview** | In progress | Monorepo + Reanimated/Sentry fixes on `main`; APK build retry pending |
-| **Next up** | | EAS preview APK → mobile QA, Sentry DSNs, uptime monitor, OAuth prod IDs |
+| Area                   | Progress                    | Notes                                                                    |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------ |
+| **Phase**              | Phase 0 ~90% → Phase 1 next | See roadmap for full checklist                                           |
+| **API (Railway)**      | Live                        | `https://api-production-1504.up.railway.app` — `/health`, `/ready` OK    |
+| **Admin (Railway)**    | Live                        | `https://admin-production-da74.up.railway.app` — login, privacy pages OK |
+| **Database**           | Migrated                    | Railway Postgres, 10 Prisma migrations applied                           |
+| **CI**                 | Done                        | GitHub Actions: lint, typecheck, test; main push builds API + Admin      |
+| **Email (Resend)**     | Partial                     | HTTP API works; domain verification needed for arbitrary recipients      |
+| **EAS Mobile preview** | In progress                 | Monorepo + Reanimated/Sentry fixes on `main`; APK build retry pending    |
+| **Next up**            |                             | EAS preview APK → mobile QA, Sentry DSNs, uptime monitor, OAuth prod IDs |
 
 Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-05).
 
@@ -154,7 +154,7 @@ PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
 AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
 OPENAI_API_KEY="sk-..."
-RECIPE_AI_MODEL="gpt-5-mini"
+RECIPE_AI_MODEL="gpt-5.4-mini"
 PUSH_REMINDER_SCHEDULER_ENABLED="false"
 PUSH_REMINDER_SCHEDULER_INTERVAL_MINUTES=30
 PUSH_REMINDER_DELIVERY_HOUR=9
@@ -561,7 +561,7 @@ Inventory seed also includes mixed states:
 See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
 current phased launch plan. The list below is kept for historical context only.
 
-1. Upgrade anonymous bearer auth to account login, token refresh, and recovery. *(done in code; see roadmap doc)*
+1. Upgrade anonymous bearer auth to account login, token refresh, and recovery. _(done in code; see roadmap doc)_
 2. Harden recipe recommendation quality evaluation and feedback loops.
 3. Add Expo push receipt polling and delivery health monitoring.
 4. Add image upload/storage instead of placeholder image URLs.

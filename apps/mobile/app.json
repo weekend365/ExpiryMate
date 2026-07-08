@@ -27,8 +27,22 @@
         }
       ],
       "@react-native-community/datetimepicker",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다."
+        }
+      ],
       "expo-secure-store",
       "expo-web-browser",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "deploymentTarget": "16.4"
+          }
+        }
+      ],
       [
         "@sentry/react-native",
         {
@@ -49,12 +63,16 @@
         "usesNonExemptEncryption": false
       },
       "infoPlist": {
-        "CFBundleDevelopmentRegion": "ko"
+        "CFBundleDevelopmentRegion": "ko",
+        "NSCameraUsageDescription": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다."
       }
     },
     "android": {
       "package": "com.expirymate.mobile",
       "versionCode": 1,
+      "permissions": [
+        "CAMERA"
+      ],
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/branding/adaptive-icon.png",

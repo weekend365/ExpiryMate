@@ -251,6 +251,7 @@ async function refreshSession(refreshToken: string) {
 async function persistAuthSession(session: AuthSession) {
   accessToken = session.accessToken;
   currentUser = session.user;
+  sessionPromise = Promise.resolve(session);
   await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user));
 
   if (session.refreshToken) {

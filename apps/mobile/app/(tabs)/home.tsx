@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { ChefHat, CheckCircle2, Plus, Sparkles, Utensils } from "lucide-react-native";
+import { Barcode, ChefHat, CheckCircle2, Plus, Sparkles, Utensils } from "lucide-react-native";
 import { RefreshControl, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { Button } from "../../src/components/Button";
@@ -56,7 +56,15 @@ export default function HomeScreen() {
 
       <View style={styles.actionStack}>
         <Button
+          icon={Barcode}
+          onPress={() => router.push("/scanner")}
+          fullWidth
+        >
+          바코드로 바로 등록
+        </Button>
+        <Button
           icon={ChefHat}
+          variant="secondary"
           onPress={() => router.push("/(tabs)/recommendations")}
           fullWidth
         >

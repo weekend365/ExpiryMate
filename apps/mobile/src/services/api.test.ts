@@ -125,6 +125,55 @@ describe("mobile API client core flow", () => {
     expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe("refresh-3");
   });
 
+  it("uses the new access token immediately after login", async () => {
+    const anonymousUser: AuthUser = {
+      ...authUser,
+      id: "anon-1",
+      accountType: "anonymous",
+    };
+    const registeredUser: AuthUser = {
+      ...authUser,
+      id: "user-registered",
+      email: "test@example.com",
+      accountType: "registered",
+    };
+
+    stores.fetch
+      .mockResolvedValueOnce(
+        successResponse(createSession("anon-access", "anon-refresh", anonymousUser)),
+      )
+      .mockResolvedValueOnce(
+        successResponse(
+          createSession("registered-access", "registered-refresh", registeredUser),
+        ),
+      )
+      .mockResolvedValueOnce(successResponse(registeredUser));
+    const { login, getMe } = await import("./api");
+
+    await login({ email: "test@example.com", password: "password123" });
+    const result = await getMe();
+
+    expect(result.id).toBe("user-registered");
+    expect(stores.fetch).toHaveBeenNthCalledWith(
+      2,
+      "http://localhost:4000/auth/login",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: "Bearer anon-access",
+        }),
+      }),
+    );
+    expect(stores.fetch).toHaveBeenNthCalledWith(
+      3,
+      "http://localhost:4000/auth/me",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          Authorization: "Bearer registered-access",
+        }),
+      }),
+    );
+  });
+
   it("registers a push token through an authenticated request", async () => {
     stores.fetch
       .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
@@ -167,9 +216,13 @@ describe("mobile API client core flow", () => {
   });
 });
 
-function createSession(accessToken: string, refreshToken: string): AuthSession {
+function createSession(
+  accessToken: string,
+  refreshToken: string,
+  user: AuthUser = authUser,
+): AuthSession {
   return {
-    user: authUser,
+    user,
     accessToken,
     refreshToken,
   };

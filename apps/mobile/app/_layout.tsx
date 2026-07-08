@@ -32,6 +32,7 @@ export default function RootLayout() {
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="onboarding" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="scanner" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "등록하기" }} />
               <Stack.Screen name="inventory/[id]" options={{ title: "재고 상세" }} />
               <Stack.Screen name="auth/login" options={{ title: "로그인" }} />
