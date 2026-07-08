@@ -21,7 +21,7 @@ This repository uses `pnpm` workspaces only.
 This keeps the MVP simple while leaving a clean path for:
 
 - improving recipe recommendation from registered inventory
-- adding OCR-based expiry detection later
+- barcode scan + OCR-based expiry detection (dev build verified on iOS)
 - adding auth, households, analytics, and subscriptions without a rewrite
 
 ## Production Launch Roadmap
@@ -31,20 +31,21 @@ see **[docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md)**
 That document is the source of truth for go-live planning and supersedes the outdated
 sections below where they conflict (for example auth scope and next implementation order).
 
-### Current Development Status (2026-07-05)
+### Current Development Status (2026-07-08)
 
 | Area                   | Progress                    | Notes                                                                    |
 | ---------------------- | --------------------------- | ------------------------------------------------------------------------ |
-| **Phase**              | Phase 0 ~90% → Phase 1 next | See roadmap for full checklist                                           |
+| **Phase**              | Phase 0 done → Phase 1      | See roadmap for full checklist                                           |
 | **API (Railway)**      | Live                        | `https://api-production-1504.up.railway.app` — `/health`, `/ready` OK    |
 | **Admin (Railway)**    | Live                        | `https://admin-production-da74.up.railway.app` — login, privacy pages OK |
 | **Database**           | Migrated                    | Railway Postgres, 10 Prisma migrations applied                           |
 | **CI**                 | Done                        | GitHub Actions: lint, typecheck, test; main push builds API + Admin      |
 | **Email (Resend)**     | Partial                     | HTTP API works; domain verification needed for arbitrary recipients      |
-| **EAS Mobile preview** | In progress                 | Monorepo + Reanimated/Sentry fixes on `main`; APK build retry pending    |
-| **Next up**            |                             | EAS preview APK → mobile QA, Sentry DSNs, uptime monitor, OAuth prod IDs |
+| **EAS Mobile preview** | Android APK done            | iOS dev build + scanner QA on physical device                            |
+| **Product scanner**    | Dev build verified (iOS)    | Barcode → OFF → expiry OCR → register prefill; see roadmap §1-2          |
+| **Next up**            |                             | Full mobile QA, EAS iOS build, Sentry DSNs, uptime monitor, OAuth prod   |
 
-Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-05).
+Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-08).
 
 ## Folder Structure
 
@@ -59,8 +60,10 @@ Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1]
 │   │   └── src
 │   └── mobile
 │       ├── app
+│       │   └── scanner.tsx          # 바코드·유통기한 스캐너 라우트
 │       ├── assets
 │       └── src
+│           └── features/scanner/    # ScannerScreen, useProductScanner, parseExpirationDate
 ├── packages
 │   └── shared
 │       └── src
@@ -235,6 +238,19 @@ Restart Expo after changing `.env`:
 ```bash
 pnpm --filter @expirymate/mobile exec expo start -c
 ```
+
+**Barcode / expiry scanner (camera, ML Kit):** not available in Expo Go. Use a native dev build:
+
+```bash
+# Terminal 1
+pnpm --filter @expirymate/mobile dev
+
+# Terminal 2 (first time or after native dep changes)
+pnpm --filter @expirymate/mobile exec expo run:ios --device "Your iPhone"
+# or: expo run:android
+```
+
+See [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-2](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-2-제품-스캐너-바코드--유통기한-ocr--2026-07-08) for iOS signing (Personal Team) and troubleshooting.
 
 ## App Store Build
 
@@ -544,6 +560,7 @@ Inventory seed also includes mixed states:
 - Nest REST modules
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
+- **product scanner:** barcode (expo-camera) → Open Food Facts lookup → expiry OCR (ML Kit) → register prefill
 - AI recipe recommendation API and mobile recommendation tab
 - subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling
@@ -551,7 +568,7 @@ Inventory seed also includes mixed states:
 
 ### Mocked or intentionally limited
 
-- no OCR expiry extraction
+- OCR expiry extraction is implemented in **dev/native builds only** (not Expo Go); EAS production iOS/Android QA pending
 - email/social login and account recovery are implemented; see roadmap doc for auth scope
 - no native purchase sheet yet; mobile currently displays server entitlement status
 - no family/household model
@@ -565,17 +582,17 @@ current phased launch plan. The list below is kept for historical context only.
 2. Harden recipe recommendation quality evaluation and feedback loops.
 3. Add Expo push receipt polling and delivery health monitoring.
 4. Add image upload/storage instead of placeholder image URLs.
-5. Add OCR-based expiry parsing after the registration flow is stable.
+5. ~~Add OCR-based expiry parsing after the registration flow is stable.~~ _(dev build done; EAS/store rollout pending)_
 
 ## Recommended Next Implementation Order
 
 See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
-authoritative priority order. As of 2026-07-05:
+authoritative priority order. As of 2026-07-08:
 
-1. ~~Deploy API, Admin, and PostgreSQL; harden production env and security.~~ **Mostly done (Railway)**
-2. **Now:** EAS preview APK build → mobile QA against Railway API; Resend domain, Sentry DSNs, uptime monitor
+1. ~~Deploy API, Admin, and PostgreSQL; harden production env and security.~~ **Done (Railway)**
+2. **Now:** Full mobile QA (Android + iOS EAS), Resend domain, Sentry DSNs, uptime monitor
 3. App Store / Play Store submission with production privacy URLs
-4. Post-launch: IAP purchase UI, catalog UX, OCR, analytics, households
+4. Post-launch: IAP purchase UI, catalog UX, analytics, households
 
 ## Notes On Running
 

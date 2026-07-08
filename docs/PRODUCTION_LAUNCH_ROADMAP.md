@@ -3,7 +3,7 @@
 ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.  
 기능 구현 우선순위, 인프라·보안·스토어 제출·운영 작업의 순서를 정의합니다.
 
-> **문서 기준일:** 2026-07-05  
+> **문서 기준일:** 2026-07-08 (최종 갱신)  
 > **대상 저장소:** `expirymate-monorepo` (`apps/mobile`, `apps/api`, `apps/admin`, `packages/shared`)
 
 ---
@@ -12,16 +12,18 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 
 | 영역 | 완성도 | 평가 |
 |------|--------|------|
-| 모바일 핵심 UX | ~80% | 온보딩, 재고, AI 추천, 설정, 프라이버시 UI 구현 |
+| 모바일 핵심 UX | ~85% | 온보딩, 재고, AI 추천, 설정, 프라이버시 UI + **바코드/OCR 스캐너** (dev 빌드 검증) |
 | API 비즈니스 로직 | ~85% | Auth, 재고, 레시피, 프라이버시, 구독 검증 API 존재 |
 | Admin | ~75% | 상품/재고 관리, Privacy URL, Railway 프로덕션 배포·로그인 검증 |
 | 배포/인프라 | ~70% | Railway API·Admin·Postgres, Docker, CI, health, Resend 메일 연동 |
-| 스토어 출시 준비 | ~60% | EAS preview 설정·빌드 수정 진행 중, APK 실기기 QA 미완 |
-| 테스트/QA | ~45% | API 단위 테스트, GitHub Actions CI; E2E·모바일 QA 미완 |
+| 스토어 출시 준비 | ~65% | EAS preview APK 성공, **iOS dev 빌드·실기기 스캐너 QA** 진행 |
+| 테스트/QA | ~50% | API 단위 테스트, GitHub Actions CI, 스캐너 단위 테스트; E2E·전체 모바일 QA 미완 |
 
-### 1-1. 현재 개발 진척도 (2026-07-05)
+### 1-1. 현재 개발 진척도 (2026-07-08)
 
 **현재 Phase:** Phase 0 완료 → **Phase 1(스테이징 QA) 진행 중**
+
+> 이전 스냅샷(2026-07-05)은 Git 히스토리 `5ef3f7c` 기준입니다.
 
 #### 프로덕션 인프라 (Railway, 커스텀 도메인 없음)
 
@@ -48,25 +50,34 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | **모바일 빌드** | Reanimated 4 + `react-native-worklets`, Sentry SDK 54 정렬 | `b677ee8` |
 | **모바일 빌드** | Babel duplicate plugin 수정 | `f05e4a4` — JS 번들 로컬 통과 |
 | **모바일 빌드** | EAS Android `preview` 빌드 성공 → APK 설치 | `60cb0089` — 에뮬레이터 설치·실행 확인 |
+| **모바일 인증** | 로그인 직후 access token 즉시 사용, 세션 관리 개선 | `9fffc23`, `17f8b49` |
+| **모바일 스캐너** | 바코드 → OFF 조회 → 유통기한 OCR → 등록 prefill | `54bcd6a` — iOS 실기기 QA 통과 |
+| **iOS 네이티브** | `expo prebuild` iOS 프로젝트, `expo-camera`, ML Kit, deployment target 16.4 | `apps/mobile/ios/` |
+| **개발 도구** | Cursor 프로젝트 규칙 (API/프론트/아키텍처/공유 계약) | `cursor/add-project-rules` → `main` |
+| **모바일 UI** | 홈·보관함·공통 Screen 반응형(compact) 개선 | `cursor/mobile-first-uiux-58b9` → `main` |
 
 #### 진행 중 / 다음 작업
 
 | 우선순위 | 항목 | 상태 |
 |----------|------|------|
 | 1 | ~~EAS Android `preview` 빌드 성공 → APK 설치~~ | ✅ 완료 (`60cb0089`) |
-| 2 | Preview APK로 Railway API 회원가입·로그인·AI 추천 QA | **진행 중** |
-| 3 | Resend 도메인 인증 | 임의 수신자(예: naver.com)로 메일 발송 |
-| 4 | Sentry DSN 3종 (API, Admin, Mobile) EAS/Railway env | 코드만 연동됨 |
-| 5 | `/health` uptime monitor | Better Stack, UptimeRobot 등 |
-| 6 | OAuth 프로덕션 client ID (Google/Kakao/Apple) | preview/production 빌드용 |
+| 2 | Preview APK / iOS dev 빌드로 Railway API 회원가입·로그인·AI 추천 QA | **진행 중** |
+| 3 | iOS EAS preview/production 빌드 (스캐너 포함) | **미착수** — 현재는 로컬 dev 빌드만 검증 |
+| 4 | Resend 도메인 인증 | 임의 수신자(예: naver.com)로 메일 발송 |
+| 5 | Sentry DSN 3종 (API, Admin, Mobile) EAS/Railway env | 코드만 연동됨 |
+| 6 | `/health` uptime monitor | Better Stack, UptimeRobot 등 |
+| 7 | OAuth 프로덕션 client ID (Google/Kakao/Apple) | preview/production 빌드용 |
+| 8 | Apple Developer Program ($99/년) | 스토어 출시·Push·Sign in with Apple용 (Personal Team 제한 해소) |
 
 #### 알려진 제약
 
 - **Resend 무료 tier:** 도메인 미인증 시 Resend 가입 이메일로만 발송 가능
-- **Expo Go vs EAS:** Expo Go는 같은 Wi‑Fi 또는 `expo start --tunnel` 필요; Railway API 연동 QA는 **EAS preview APK** 권장
+- **Expo Go vs EAS/dev build:** 카메라·ML Kit·바코드 스캔은 **Expo Go 불가**. `expo run:ios` / `expo run:android` 또는 EAS internal 빌드 필요
+- **iOS Personal Team:** Push Notifications·Sign In with Apple entitlement 미지원 → 로컬 테스트 시 `ExpiryMate.entitlements` 비우기 또는 `EXPO_IOS_PERSONAL_TEAM=1` (§1-2 참고)
+- **iOS 26 + Vision Camera v5:** Nitro 기반 `react-native-vision-camera` v5는 iOS 26에서 SIGABRT 이슈 보고됨 → **expo-camera**로 대체 완료
 - **EAS 빌드 이력:** shared `dist` 누락 → Gradle 실패 → Babel duplicate → 순차 수정 → `60cb0089` 빌드 성공
 
-#### 관련 커밋 (main)
+#### 관련 커밋 (`main`, 2026-07-08 기준)
 
 | 커밋 | 내용 |
 |------|------|
@@ -75,6 +86,90 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | `1a67faf`, `575109a` | EAS monorepo shared 빌드 훅 |
 | `b677ee8` | worklets + Sentry Expo 54 정렬 |
 | `f05e4a4` | Babel duplicate plugin 수정 |
+| `9fffc23`, `17f8b49` | 모바일 세션·토큰 즉시 사용 개선 |
+| `54bcd6a` | 제품 스캐너 (바코드 + OCR + OFF + iOS 네이티브) |
+| `a38174d` | PR #6: `ai-model-auth` → `main` 머지 |
+| `dd1ee6a` | Cursor 프로젝트 규칙 → `main` |
+| `21a7414` | 모바일 반응형 UI → `main` (홈 바코드 버튼 유지) |
+
+#### 브랜치 통합 상태 (2026-07-08)
+
+| 브랜치 | `main` 반영 |
+|--------|-------------|
+| `ai-model-auth` | ✅ PR #6 |
+| `cursor/add-project-rules` | ✅ `dd1ee6a` |
+| `cursor/mobile-first-uiux-58b9` | ✅ `21a7414` |
+| `cursor/phase-0-code-foundation` | ✅ 기존 PR #3–#5 |
+| `cursor/production-launch-roadmap-58b9` | ✅ 기존 머지 |
+
+### 1-2. 제품 스캐너 (바코드 + 유통기한 OCR) — 2026-07-08
+
+홈 화면 **「바코드로 바로 등록」** 에서 진입하는 단일 카메라 화면으로, 바코드 인식 → 상품 조회 → 유통기한 OCR → 등록 화면 prefill까지 **끊김 없이** 처리합니다.
+
+#### 사용자 플로우
+
+```
+홈 → 바코드로 바로 등록
+  → [1/2] 실시간 바코드 스캔 (EAN-13/8, UPC-A/E)
+  → OFF API 비동기 상품명·이미지 조회
+  → [2/2] 유통기한 OCR (ML Kit, 한국어 날짜 형식)
+  → 확인 바텀시트 → 등록 화면 (prefill + expirySource: ocr_detected)
+```
+
+#### 기술 스택
+
+| 역할 | 라이브러리 | 비고 |
+|------|-----------|------|
+| 카메라 프리뷰·바코드 | `expo-camera` (`CameraView.onBarcodeScanned`) | iOS 26 안정성 위해 Vision Camera v5 대신 채택 |
+| 유통기한 OCR | `@react-native-ml-kit/text-recognition` | 스냅샷 `takePictureAsync` → ML Kit |
+| 상품 조회 | Open Food Facts REST API | `product_name_ko`, `product_name`, `image_url` |
+| 날짜 파싱 | `parseExpirationDate` | `YYYY.MM.DD`, `YY.MM.DD`, `YYYY년 MM월 DD일` 등 |
+
+#### 주요 파일
+
+| 경로 | 설명 |
+|------|------|
+| `apps/mobile/app/scanner.tsx` | Expo Router 라우트 |
+| `apps/mobile/src/features/scanner/ScannerScreen.tsx` | 카메라 UI, ROI, 확인 바텀시트 |
+| `apps/mobile/src/features/scanner/useProductScanner.ts` | 상태 머신·OFF·OCR 루프 |
+| `apps/mobile/src/features/scanner/parseExpirationDate.ts` | 유통기한 정규식 파서 |
+| `apps/mobile/src/features/scanner/parseExpirationDate.test.ts` | 파서 단위 테스트 (8건) |
+| `apps/mobile/app/(tabs)/home.tsx` | 진입 버튼 |
+| `apps/mobile/app.json` | 카메라 권한, `expo-camera` 플러그인, iOS 16.4 deployment target |
+| `apps/mobile/ios/` | `expo prebuild` 생성 네이티브 프로젝트 |
+
+#### 검증 상태
+
+| 항목 | 상태 |
+|------|------|
+| `parseExpirationDate` 단위 테스트 | ✅ |
+| typecheck / lint | ✅ |
+| iOS 실기기 바코드 인식 | ✅ (expo-camera 실시간 스캔) |
+| iOS 실기기 유통기한 OCR | ✅ |
+| OFF 등록 바코드 상품명 조회 | ✅ |
+| Android 실기기 QA | ⬜ 미완 |
+| EAS 빌드에 스캐너 포함 | ⬜ 미완 |
+
+#### iOS 로컬 개발 빌드 (실기기)
+
+```bash
+# 터미널 1 — Metro
+pnpm --filter @expirymate/mobile dev
+
+# 터미널 2 — 네이티브 빌드·설치 (최초 또는 네이티브 의존성 변경 시)
+pnpm --filter @expirymate/mobile exec expo run:ios --device "기기 이름"
+```
+
+- **Metro 없이 앱만 실행**하면 `No script URL provided` 오류 발생 — dev 빌드는 Metro 번들러 필요
+- Mac과 iPhone **동일 Wi‑Fi** 또는 USB + Xcode 네트워크 페어링
+- **Personal Team(무료 Apple ID):** `apps/mobile/ios/ExpiryMate/ExpiryMate.entitlements`에서 Push/Apple 로그인 제거, Xcode Signing에서 해당 capability 제거. 또는 `EXPO_IOS_PERSONAL_TEAM=1`로 prebuild 시 플러그인 제외 (`app.config.js`)
+
+#### 남은 작업 (스캐너)
+
+- Android 실기기 QA
+- EAS `preview` / `production` 프로필에 스캐너 포함 빌드·검증
+- 흐릿한 바코드·반사·저조도 환경 인식률 개선 (필요 시)
+- 상품 카탈로그(`GET /products`)와 스캐너 결과 병합 UX (Phase 4)
 
 ### README와 코드베이스 차이
 
@@ -273,6 +368,7 @@ Sentry와 uptime monitor는 운영 안정화 항목이지만, **스토어 제출
 
 ```
 [ ] 익명 세션 → 재료 등록 → 대시보드 반영
+[ ] 홈 → 바코드로 바로 등록 → OFF 상품 조회 → 유통기한 OCR → 등록 prefill
 [ ] 회원가입 → 이메일 인증 → 로그인
 [ ] 익명 데이터 → 로그인/가입 시 merge
 [ ] Apple / Google / Kakao OAuth
@@ -291,7 +387,8 @@ Sentry와 uptime monitor는 운영 안정화 항목이지만, **스토어 제출
 | 1 | Auth (OAuth, refresh, merge) | API 단위 테스트 일부 |
 | 2 | Products, Dashboard, Admin | 테스트 없음 |
 | 3 | Mobile auth / recipe UI | 3개 unit test |
-| 4 | E2E (Detox / Maestro) | 없음 |
+| 4 | Scanner `parseExpirationDate` | ✅ 8 tests (`parseExpirationDate.test.ts`) |
+| 5 | E2E (Detox / Maestro) | 없음 |
 
 테스트 위치: `apps/api/src/modules/*/*.test.ts`, `apps/mobile/src/**/*.test.ts`
 
@@ -380,8 +477,9 @@ eas submit --platform ios --profile production
 | 기능 | v1 (첫 출시) | v1.1+ |
 |------|--------------|-------|
 | 네이티브 IAP 구매 UI | ❌ entitlement 표시만 | ✅ |
-| OCR 유통기한 인식 | ❌ | ✅ |
-| 상품 카탈로그 → 등록 UX | ❌ 자유 입력 | ✅ `/products` 연동 |
+| OCR 유통기한 인식 | ⚠️ dev/내부 빌드 검증 완료 | EAS production 빌드·스토어 포함 |
+| 상품 카탈로그 → 등록 UX | ❌ 자유 입력 (OFF 바코드 조회만) | ✅ `/products` 연동 |
+| 바코드 스캔 등록 | ⚠️ dev/내부 빌드 검증 완료 | EAS production 빌드·스토어 포함 |
 | 가족/공유 보관함 | ❌ | ✅ |
 
 수익화 없이 먼저 출시하는 경우 IAP는 Phase 4로 미룰 수 있습니다.
@@ -465,7 +563,7 @@ eas submit --platform ios --profile production
 | 2 | Apple/Google 구독 webhook | 갱신·취소 자동 반영 |
 | 3 | Premium 기능 게이팅 | AI 추천 횟수, 고급 필터 등 |
 | 4 | 상품 카탈로그 → 등록 UX | `GET /products` — 모바일 미연동 |
-| 5 | OCR 유통기한 | `expirySource: ocr_detected` 스키마 예약 |
+| 5 | OCR 유통기한 | ✅ **dev 빌드 구현·실기기 검증** (`ocr_detected`); EAS production·Android QA 남음 |
 | 6 | Analytics | Mixpanel / Amplitude 등 |
 | 7 | 다중 가구/공유 | 스키마 확장 필요 |
 
@@ -493,6 +591,7 @@ eas submit --platform ios --profile production
 ### Step C — 연동
 
 - [~] EAS preview 빌드 → 프로덕션 API 연결 — preview APK 빌드·설치 완료, **QA 진행 중**
+- [~] iOS dev 빌드 (`expo run:ios`) → 스캐너 실기기 검증 — **바코드·OCR 통과**, EAS iOS 빌드 미착수
 - [~] SMTP 실제 메일 (인증 / 재설정) — Resend HTTP API 동작, 도메인 인증 필요
 - [ ] OAuth 프로덕션 client ID
 - [x] `PRIVACY_*_URL` 프로덕션 반영 — Admin Railway URL
