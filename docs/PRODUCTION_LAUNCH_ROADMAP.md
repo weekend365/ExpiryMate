@@ -31,7 +31,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 |--------|-----|------|
 | API | `https://api-production-1504.up.railway.app` | `/health`, `/ready` 200 |
 | Admin | `https://admin-production-da74.up.railway.app` | 로그인, `/privacy`, `/privacy/choices` 접근 가능 |
-| Postgres | Railway internal | `prisma migrate deploy` 적용 (10 migrations) |
+| Postgres | Railway internal | `prisma migrate deploy` 적용 (10 migrations); `ProductMaster` migration(11번째) **미배포** |
 
 #### 완료된 작업
 
@@ -55,6 +55,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | **iOS 네이티브** | `expo prebuild` iOS 프로젝트, `expo-camera`, ML Kit, deployment target 16.4 | `apps/mobile/ios/` |
 | **개발 도구** | Cursor 프로젝트 규칙 (API/프론트/아키텍처/공유 계약) | `cursor/add-project-rules` → `main` |
 | **모바일 UI** | 홈·보관함·공통 Screen 반응형(compact) 개선 | `cursor/mobile-first-uiux-58b9` → `main` |
+| **데이터** | `ProductMaster` 스키마·migration·바코드 seed 스크립트 | `apps/api/prisma/schema.prisma`, `apps/api/scripts/seedBarcode.ts`, `pnpm db:seed:barcodes` |
 
 #### 진행 중 / 다음 작업
 
@@ -68,6 +69,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | 6 | `/health` uptime monitor | Better Stack, UptimeRobot 등 |
 | 7 | OAuth 프로덕션 client ID (Google/Kakao/Apple) | preview/production 빌드용 |
 | 8 | Apple Developer Program ($99/년) | 스토어 출시·Push·Sign in with Apple용 (Personal Team 제한 해소) |
+| 9 | `ProductMaster` migration 배포 + 식품안전나라 바코드 적재 | **코드 완료, 적재 미착수** — API `ERROR-500`, Railway internal URL로 로컬 migrate 실패 (§1-3) |
 
 #### 알려진 제약
 
@@ -76,6 +78,8 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 - **iOS Personal Team:** Push Notifications·Sign In with Apple entitlement 미지원 → 로컬 테스트 시 `ExpiryMate.entitlements` 비우기 또는 `EXPO_IOS_PERSONAL_TEAM=1` (§1-2 참고)
 - **iOS 26 + Vision Camera v5:** Nitro 기반 `react-native-vision-camera` v5는 iOS 26에서 SIGABRT 이슈 보고됨 → **expo-camera**로 대체 완료
 - **EAS 빌드 이력:** shared `dist` 누락 → Gradle 실패 → Babel duplicate → 순차 수정 → `60cb0089` 빌드 성공
+- **Railway Postgres internal URL:** `postgres.railway.internal`은 Railway 내부 네트워크 전용. 로컬 Mac에서 `prisma migrate deploy`·seed 실행 시 **Public Networking / TCP Proxy URL** 필요
+- **식품안전나라 C005 API:** 2026-07-08 1차 실행 시 `ERROR-500 (서버오류입니다.)` — 제공 서버 장애로 스크래핑·DB 적재 미진행
 
 #### 관련 커밋 (`main`, 2026-07-08 기준)
 
@@ -170,6 +174,66 @@ pnpm --filter @expirymate/mobile exec expo run:ios --device "기기 이름"
 - EAS `preview` / `production` 프로필에 스캐너 포함 빌드·검증
 - 흐릿한 바코드·반사·저조도 환경 인식률 개선 (필요 시)
 - 상품 카탈로그(`GET /products`)와 스캐너 결과 병합 UX (Phase 4)
+- 국내 바코드 마스터(`ProductMaster`) 조회 API 연동 — OFF 대체·병행 (§1-3)
+
+### 1-3. 바코드 상품 마스터 (`ProductMaster`) 적재 — 2026-07-08
+
+국내 식품 바코드 초기 카탈로그를 **식품안전나라 공공데이터 API (C005)** 에서 1회성 배치로 수집해 `ProductMaster` 테이블에 적재하는 작업입니다. 기존 `Product`(Admin/데모 카탈로그)와 분리된 **원천 바코드 마스터**이며, 향후 모바일 스캐너가 Open Food Facts 대신·병행 조회할 데이터 소스가 됩니다.
+
+#### 데이터 소스·매핑
+
+| API 필드 | DB 컬럼 | 비고 |
+|----------|---------|------|
+| `BAR_CD` | `barcode` | `@unique`, 숫자만·전부 0·공백 제외 |
+| `PRDLST_NM` | `name` | 빈 값 제외 |
+| `BSSH_NM` | `brand` | 없으면 `알 수 없음` |
+| `PRDLST_DCNM` | `category` | 없으면 `기타` (공공데이터 원문 문자열) |
+
+- **Endpoint:** `http://openapi.foodsafetykorea.go.kr/api/{API_KEY}/C005/json/{startIdx}/{endIdx}`
+- **페이징:** 1~1000, 1001~2000 … (요청당 최대 1,000건)
+- **Rate limit:** 요청 간 **500ms** 이상 순차 대기 (병렬 요청 금지)
+- **저장:** `upsert` — 동일 바코드는 `name`, `category`만 갱신 (`brand` 유지)
+
+#### 구현 파일
+
+| 경로 | 설명 |
+|------|------|
+| `apps/api/prisma/schema.prisma` | `ProductMaster` 모델 |
+| `apps/api/prisma/migrations/20260708041000_add_product_master/` | 테이블 migration |
+| `apps/api/scripts/seedBarcode.ts` | 스크래핑·검증·upsert 배치 스크립트 |
+| `apps/api/package.json` | `db:seed:barcodes` |
+| 루트 `package.json` | `pnpm db:seed:barcodes` 프록시 |
+
+#### 실행 절차 (1회성)
+
+```bash
+# 1) ProductMaster 테이블 생성 (Railway **외부 접속** Postgres URL 사용)
+DATABASE_URL="postgresql://...@...railway.app:PORT/railway" pnpm db:migrate:deploy
+
+# 2) 바코드 적재 (API 키는 코드에 저장하지 않고 env로 주입)
+DATABASE_URL="postgresql://...@...railway.app:PORT/railway" \
+FOODSAFETY_API_KEY="..." \
+pnpm db:seed:barcodes
+```
+
+- `pnpm db:seed` (개발용 wipe seed)와 **별개** — 프로덕션에서도 `db:seed:barcodes`만 단독 실행 가능 (upsert만 수행)
+- migration 실패 시 seed는 `ProductMaster` 테이블 부재로 실패할 수 있으므로 `&&`로 묶어 순서 보장 권장
+
+#### 검증·적재 상태 (2026-07-08)
+
+| 항목 | 상태 |
+|------|------|
+| 스키마·migration·스크립트·실행 명령 | ✅ |
+| `typecheck` / `lint` | ✅ |
+| Railway `ProductMaster` migration 배포 | ⬜ **미완** — `postgres.railway.internal` URL로 로컬 실행 시 `P1001` (내부 DNS 미해석) |
+| 식품안전나라 API 스크래핑·DB 적재 | ⬜ **미착수** — 1페이지(`1~1000`) 요청 시 `ERROR-500 (서버오류입니다.)`, 수신 0건으로 종료 |
+| 모바일/API `ProductMaster` 조회 연동 | ⬜ Phase 4 |
+
+#### 다음 작업
+
+1. Railway Postgres **Public URL**로 `pnpm db:migrate:deploy` 재실행
+2. 식품안전나라 API 서버 정상화 확인 후 `FOODSAFETY_API_KEY`와 함께 `pnpm db:seed:barcodes` 재실행
+3. 적재 완료 후 `GET /product-masters?barcode=` (또는 동등 API) 설계·모바일 스캐너 OFF 병행/대체 연동
 
 ### README와 코드베이스 차이
 
@@ -237,13 +301,14 @@ flowchart TD
 
 | 작업 | 상세 | 관련 경로 |
 |------|------|-----------|
-| PostgreSQL 프로덕션 DB | Prisma 마이그레이션 9개 적용 | `apps/api/prisma/migrations/` |
+| PostgreSQL 프로덕션 DB | Prisma 마이그레이션 10개 적용, `ProductMaster`(11번째) 미배포 | `apps/api/prisma/migrations/` |
 | API 호스팅 | Nest `build` + `start` 기반 PaaS 배포 | `apps/api/package.json` |
 | Admin 호스팅 | Next.js 빌드·배포 (Privacy URL 의존) | `apps/admin/` |
 | Docker Compose | 로컬·스테이징·CI 환경 통일 | ✅ `docker-compose.yml` |
 | 마이그레이션 스크립트 분리 | dev: `migrate dev` / prod: `migrate deploy` | ✅ `db:migrate:deploy` |
 
-**프로덕션 DB 주의:** `pnpm db:seed`는 모든 테이블을 wipe합니다. 프로덕션 DB에서 실행 금지.
+**프로덕션 DB 주의:** `pnpm db:seed`는 모든 테이블을 wipe합니다. 프로덕션 DB에서 실행 금지.  
+**바코드 마스터 적재:** `pnpm db:seed:barcodes`는 `ProductMaster`만 upsert하며 wipe하지 않음. `FOODSAFETY_API_KEY` 필요 (§1-3).
 
 ### 0-2. 프로덕션 환경변수·시크릿
 
@@ -292,6 +357,14 @@ IAP_ALLOWED_PRODUCT_IDS=expirymate_premium_monthly,expirymate_premium_yearly
 APPLE_APP_STORE_ISSUER_ID / KEY_ID / PRIVATE_KEY
 GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL / PRIVATE_KEY
 ```
+
+#### 바코드 마스터 적재 (1회성 배치, §1-3)
+
+```env
+FOODSAFETY_API_KEY=                    # 식품안전나라 공공데이터 API 인증키 (코드·저장소에 커밋 금지)
+```
+
+> Railway에서 로컬 실행 시 `DATABASE_URL`은 `postgres.railway.internal`이 아닌 **Public Postgres URL**을 사용하세요.
 
 > **참고:** 루트 `.env.example`에 `RECIPE_*` 변수가 더 완전합니다. `apps/api/.env.example`보다 루트 파일을 참조하세요.
 
@@ -478,8 +551,9 @@ eas submit --platform ios --profile production
 |------|--------------|-------|
 | 네이티브 IAP 구매 UI | ❌ entitlement 표시만 | ✅ |
 | OCR 유통기한 인식 | ⚠️ dev/내부 빌드 검증 완료 | EAS production 빌드·스토어 포함 |
-| 상품 카탈로그 → 등록 UX | ❌ 자유 입력 (OFF 바코드 조회만) | ✅ `/products` 연동 |
+| 상품 카탈로그 → 등록 UX | ❌ 자유 입력 (OFF 바코드 조회만) | ✅ `/products`·`ProductMaster` 연동 |
 | 바코드 스캔 등록 | ⚠️ dev/내부 빌드 검증 완료 | EAS production 빌드·스토어 포함 |
+| 국내 바코드 DB (`ProductMaster`) | ⚠️ 스크립트 완료, **적재 미착수** (API `ERROR-500`) | 스캐너 조회 API 연동 |
 | 가족/공유 보관함 | ❌ | ✅ |
 
 수익화 없이 먼저 출시하는 경우 IAP는 Phase 4로 미룰 수 있습니다.
@@ -562,7 +636,7 @@ eas submit --platform ios --profile production
 | 1 | 네이티브 IAP UI (`expo-iap` 등) | 서버 verify API 존재: `POST /subscriptions/verify` |
 | 2 | Apple/Google 구독 webhook | 갱신·취소 자동 반영 |
 | 3 | Premium 기능 게이팅 | AI 추천 횟수, 고급 필터 등 |
-| 4 | 상품 카탈로그 → 등록 UX | `GET /products` — 모바일 미연동 |
+| 4 | 상품 카탈로그 → 등록 UX | `GET /products` — 모바일 미연동; `ProductMaster` 바코드 lookup API·적재 후 연동 (§1-3) |
 | 5 | OCR 유통기한 | ✅ **dev 빌드 구현·실기기 검증** (`ocr_detected`); EAS production·Android QA 남음 |
 | 6 | Analytics | Mixpanel / Amplitude 등 |
 | 7 | 다중 가구/공유 | 스키마 확장 필요 |
@@ -581,12 +655,13 @@ eas submit --platform ios --profile production
 ### Step B — 인프라
 
 - [x] `docker-compose.yml` (Postgres + API + Admin 로컬)
-- [x] API 프로덕션 배포 + `prisma migrate deploy` — Railway
+- [x] API 프로덕션 배포 + `prisma migrate deploy` — Railway (10 migrations; `ProductMaster` 11번째 **미배포**)
 - [x] Admin 프로덕션 배포 — Railway
 - [x] `GET /health`, `GET /ready` 추가
 - [ ] `/health` uptime monitor 등록
 - [x] `AUTH_ALLOW_DEV_FALLBACK=false` 검증
 - [x] 프로덕션 seed 실행 금지 정책 확정
+- [ ] `ProductMaster` migration 배포 + 식품안전나라 바코드 적재 — 스크립트 완료, **API 서버 `ERROR-500`으로 적재 미착수** (§1-3)
 
 ### Step C — 연동
 
@@ -634,7 +709,7 @@ eas submit --platform ios --profile production
 나중에 해도 됨 (Phase 4, v1.1+)
 ├── IAP 구매 UI
 ├── OCR
-├── 상품 카탈로그 UX
+├── 상품 카탈로그 UX (`ProductMaster` 국내 바코드 적재 후)
 └── 가족 공유
 ```
 
