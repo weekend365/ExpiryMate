@@ -11,8 +11,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F8FAFC",
-    "primaryColor": "#2F7DF6",
+    "backgroundColor": "#F7F8F7",
+    "primaryColor": "#178A53",
     "icon": "./assets/branding/icon.png",
     "plugins": [
       "expo-router",
@@ -23,7 +23,7 @@
           "image": "./assets/branding/splash-icon.png",
           "imageWidth": 220,
           "resizeMode": "contain",
-          "backgroundColor": "#F8FAFC"
+          "backgroundColor": "#F7F8F7"
         }
       ],
       "@react-native-community/datetimepicker",
@@ -76,7 +76,7 @@
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/branding/adaptive-icon.png",
-        "backgroundColor": "#F8FAFC"
+        "backgroundColor": "#F7F8F7"
       }
     },
     "extra": {

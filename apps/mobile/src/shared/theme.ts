@@ -1,31 +1,24 @@
-export const colors = {
-  background: "#F7F8FA",
-  surface: "#FFFFFF",
-  surfacePressed: "#F2F4F6",
-  mutedSurface: "#F2F4F6",
-  primary: "#3182F6",
-  primaryPressed: "#1B64DA",
-  primarySoft: "#EAF3FF",
-  accent: "#4E5968",
-  accentSoft: "#F2F4F6",
-  text: "#191F28",
-  subtext: "#6B7684",
-  mutedText: "#8B95A1",
-  border: "#E5E8EB",
-  danger: "#F04452",
-  dangerSoft: "#FFE8EA",
-  warning: "#F79009",
-  warningSoft: "#FFF4E5",
-  success: "#12B76A",
-  successSoft: "#E9F9F0",
-  disabled: "#D1D6DB",
-  disabledText: "#AEB7C2",
-};
+/**
+ * Mobile theme facade.
+ *
+ * Values come from the shared design token module (`@expirymate/shared`) so the
+ * app and admin stay on one source of truth. This file only re-shapes tokens
+ * into the `colors` / `spacing` API that mobile screens already import; add new
+ * design values in `packages/shared/src/design`, not here.
+ */
+import {
+  radius as designRadius,
+  fontWeight,
+  semanticColors,
+  spacing as designSpacing,
+  typography,
+} from "@expirymate/shared";
 
-export const spacing = {
-  xs: 6,
-  sm: 10,
-  md: 16,
-  lg: 20,
-  xl: 28,
-};
+export const colors = semanticColors;
+
+/** 8pt grid spacing: xs=8, sm=16, md=24, lg=32, xl=40 (+ xxs/xxl/xxxl). */
+export const spacing = designSpacing;
+
+export const radius = designRadius;
+
+export { fontWeight, typography };
