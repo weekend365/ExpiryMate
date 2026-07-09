@@ -15,6 +15,7 @@
     "db:migrate:deploy": "pnpm --filter @expirymate/api db:migrate:deploy",
     "db:seed": "pnpm --filter @expirymate/api db:seed",
     "db:seed:barcodes": "pnpm --filter @expirymate/api db:seed:barcodes",
+    "db:upload:product-master": "pnpm --filter @expirymate/api db:upload:product-master",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   },
