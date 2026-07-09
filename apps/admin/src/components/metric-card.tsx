@@ -6,8 +6,8 @@ interface MetricCardProps {
 
 const toneClasses = {
   default: "bg-[var(--surface-muted)] text-[var(--foreground)]",
-  warning: "bg-[#fff0d7] text-[#9b5a10]",
-  danger: "bg-[#fde7e1] text-[var(--danger)]",
+  warning: "bg-[var(--warning-soft)] text-[var(--warning)]",
+  danger: "bg-[var(--danger-soft)] text-[var(--danger)]",
 };
 
 export function MetricCard({ label, value, tone = "default" }: MetricCardProps) {

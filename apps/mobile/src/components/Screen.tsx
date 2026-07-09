@@ -34,7 +34,7 @@ export function Screen({
 }: ScreenProps) {
   const { width } = useWindowDimensions();
   const isCompact = width < 380;
-  const horizontalPadding = isCompact ? spacing.md : spacing.lg;
+  const horizontalPadding = isCompact ? spacing.sm : spacing.md;
 
   const content = (
     <>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.border,
     backgroundColor: colors.surface,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     paddingBottom: spacing.md,
   },

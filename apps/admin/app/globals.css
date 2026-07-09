@@ -1,23 +1,48 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens mirror `@expirymate/shared` (packages/shared/src/design).
+ * Keep these values in sync with `cssVariables` in that module, which is the
+ * single source of truth shared with the mobile app.
+ */
 :root {
-  --background: #f4efe6;
-  --surface: #fffdf8;
-  --surface-muted: #f8f2ea;
-  --foreground: #1e2a23;
-  --muted: #637164;
-  --border: #e2d9cc;
-  --primary: #1c6a4e;
-  --primary-soft: #dff1e8;
-  --accent: #c7681f;
-  --danger: #b53815;
-  --font-sans: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --background: #f1f3f5;
+  --surface: #ffffff;
+  --surface-muted: #e8ebee;
+  --surface-pressed: #e8ebee;
+  --foreground: #1a1f27;
+  --muted: #4e5561;
+  --muted-strong: #8a939f;
+  --border: #dbdfe4;
+
+  --primary: #10b981;
+  --primary-pressed: #059669;
+  --primary-soft: #ecfdf5;
+
+  --accent: #4e5561;
+  --accent-soft: #e8ebee;
+
+  --danger: #ef4444;
+  --danger-soft: #fef2f2;
+  --warning: #f59e0b;
+  --warning-soft: #fffbeb;
+  --success: #22c55e;
+  --success-soft: #f0fdf4;
+  --info: #3b82f6;
+  --info-soft: #eff6ff;
+
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(199, 104, 31, 0.08), transparent 24%),
-    linear-gradient(180deg, #f7f2ea 0%, #f1ebe2 100%);
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.06), transparent 26%),
+    linear-gradient(180deg, #f1f3f5 0%, #e8ebee 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
 }

@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors, spacing } from "../shared/theme";
+import { colors, radius, spacing } from "../shared/theme";
 
 interface ButtonProps extends PropsWithChildren {
   onPress: () => void;
@@ -95,14 +95,14 @@ const buttonPalettes = {
   },
   secondary: {
     backgroundColor: colors.primarySoft,
-    pressedBackgroundColor: "#D7E9FF",
+    pressedBackgroundColor: colors.primarySoftPressed,
     disabledBackgroundColor: colors.mutedSurface,
     textColor: colors.primary,
     disabledTextColor: colors.disabledText,
   },
   danger: {
     backgroundColor: colors.dangerSoft,
-    pressedBackgroundColor: "#FFD9DE",
+    pressedBackgroundColor: colors.dangerSoftPressed,
     disabledBackgroundColor: colors.mutedSurface,
     textColor: colors.danger,
     disabledTextColor: colors.disabledText,
@@ -111,7 +111,7 @@ const buttonPalettes = {
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 12,
+    borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -119,11 +119,11 @@ const styles = StyleSheet.create({
   },
   mediumButton: {
     minHeight: 52,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.md,
   },
   smallButton: {
-    minHeight: 40,
-    paddingHorizontal: spacing.md,
+    minHeight: 48,
+    paddingHorizontal: spacing.sm,
   },
   fullWidth: {
     alignSelf: "stretch",

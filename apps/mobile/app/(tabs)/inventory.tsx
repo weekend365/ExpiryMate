@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing.sm,
   },
   swipeActionPressed: {
-    backgroundColor: "#D92D3A",
+    backgroundColor: colors.dangerPressed,
   },
   swipeActionDisabled: {
     opacity: 0.55,
