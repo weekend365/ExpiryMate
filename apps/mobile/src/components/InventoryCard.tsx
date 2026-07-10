@@ -16,7 +16,7 @@ import {
   ShieldCheck,
 } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
-import { colors, radius, spacing, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface InventoryCardProps {
   item: InventoryItem;
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,

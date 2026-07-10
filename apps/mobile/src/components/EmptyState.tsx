@@ -41,7 +41,7 @@ export function EmptyState({
         {description ? <Text style={styles.description}>{description}</Text> : null}
       </View>
       {actionLabel && onAction ? (
-        <Button variant="secondary" onPress={onAction} fullWidth>
+        <Button onPress={onAction} fullWidth>
           {actionLabel}
         </Button>
       ) : null}
@@ -56,12 +56,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
+    padding: spacing.lg,
     gap: spacing.md,
     alignItems: "stretch",
   },
   mascotWrap: {
     alignItems: "center",
+    paddingVertical: spacing.xs,
   },
   iconWrap: {
     width: spacing.xl,
@@ -73,17 +74,20 @@ const styles = StyleSheet.create({
   },
   copy: {
     gap: spacing.xs,
+    alignItems: "center",
   },
   title: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontWeight: typography.subheading.fontWeight,
     color: colors.text,
+    textAlign: "center",
   },
   description: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontWeight: typography.bodySmall.fontWeight,
     color: colors.subtext,
+    textAlign: "center",
   },
 });
