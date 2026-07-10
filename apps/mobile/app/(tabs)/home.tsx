@@ -1,11 +1,11 @@
 import { router } from "expo-router";
 import {
+  Barcode,
   CheckCircle2,
   Package,
-  Plus,
   Sparkles,
 } from "lucide-react-native";
-import { RefreshControl, StyleSheet, Text, View } from "react-native";
+import { Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { InventoryCard } from "../../src/components/InventoryCard";
@@ -15,7 +15,7 @@ import { SectionHeader } from "../../src/components/SectionHeader";
 import { StatCard } from "../../src/components/StatCard";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 export default function HomeScreen() {
@@ -44,13 +44,23 @@ export default function HomeScreen() {
   });
 
   const handlePrimaryAction = () => {
-    if (focus.action === "register") {
+    if (focus.action === "scanner") {
       clearPrefill();
-      router.push("/register");
+      router.push("/scanner");
       return;
     }
 
     router.push("/(tabs)/inventory");
+  };
+
+  const handleManualRegister = () => {
+    clearPrefill();
+    router.push("/register");
+  };
+
+  const handleOpenScanner = () => {
+    clearPrefill();
+    router.push("/scanner");
   };
 
   return (
@@ -94,7 +104,7 @@ export default function HomeScreen() {
         </View>
 
         <Button
-          icon={focus.action === "register" ? Plus : Package}
+          icon={focus.action === "scanner" ? Barcode : Package}
           onPress={handlePrimaryAction}
           fullWidth
           variant={needsAttention ? "danger" : "primary"}
@@ -102,6 +112,30 @@ export default function HomeScreen() {
         >
           {focus.ctaLabel}
         </Button>
+
+        {!isLoading ? (
+          <Pressable
+            onPress={
+              focus.action === "scanner" ? handleManualRegister : handleOpenScanner
+            }
+            style={({ pressed }) => [
+              styles.secondaryEntry,
+              pressed && styles.secondaryEntryPressed,
+            ]}
+            accessibilityRole="button"
+          >
+            <Text style={styles.secondaryEntryTitle}>
+              {focus.action === "scanner"
+                ? "직접 입력할게요"
+                : "바코드로 넣을래요"}
+            </Text>
+            <Text style={styles.secondaryEntryDescription}>
+              {focus.action === "scanner"
+                ? "이름과 유통기한을 손으로 적을 수도 있어요."
+                : "장고가 바코드를 읽어 등록을 도와줄게요."}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
 
       {recipeGenerationStatus !== "idle" ? (
@@ -286,17 +320,17 @@ function getHomeFocus({
   if (!hasInventory) {
     return {
       title: "냉장고가 비어 있어요",
-      description: "첫 재료를 넣으면 유통기한과 요리 추천을 챙겨 드릴게요.",
-      ctaLabel: "재료 추가하기",
-      action: "register" as const,
+      description: "바코드만 비춰도 첫 재료를 넣을 수 있어요. 장고가 도와드릴게요.",
+      ctaLabel: "바코드로 넣을래요",
+      action: "scanner" as const,
     };
   }
 
   return {
     title: "오늘은 급한 재료가 없어요",
-    description: "여유 있을 때 재료를 더 넣거나, 보관함을 천천히 둘러보세요.",
-    ctaLabel: "재료 추가하기",
-    action: "register" as const,
+    description: "여유 있을 때 바코드로 재료를 더 넣어볼까요?",
+    ctaLabel: "바코드로 넣을래요",
+    action: "scanner" as const,
   };
 }
 
@@ -348,6 +382,29 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontWeight: typography.bodySmall.fontWeight,
+    color: colors.subtext,
+  },
+  secondaryEntry: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    gap: spacing.xxs,
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+  },
+  secondaryEntryPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  secondaryEntryTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.title.fontWeight,
+    color: colors.primary,
+  },
+  secondaryEntryDescription: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
   recipeStatusCard: {

@@ -1,4 +1,5 @@
 import { BarcodeLookupSource, ExpirySource } from "@expirymate/shared";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import {
   Barcode,
@@ -19,10 +20,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
+import { Mascot, type MascotMood } from "../../components/Mascot";
 import { contributeBarcodeProduct } from "../../services/api";
-import { colors, radius, spacing } from "../../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
 import { useProductScanner } from "./useProductScanner";
 
@@ -36,14 +38,7 @@ export function ScannerScreen() {
       {!hasPermission ? (
         <SafeAreaView style={styles.overlay}>
           <View style={styles.topBar}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="스캐너 닫기"
-              onPress={() => router.back()}
-              style={({ pressed }) => [styles.iconButton, pressed && styles.iconButtonPressed]}
-            >
-              <X color={colors.surface} size={22} strokeWidth={2.6} />
-            </Pressable>
+            <CloseButton onPress={() => router.back()} />
           </View>
           <PermissionCard
             canRequestPermission={canRequestPermission}
@@ -68,17 +63,6 @@ function ScannerCameraExperience() {
   const [isContributing, setIsContributing] = useState(false);
   const [contributeError, setContributeError] = useState<string | null>(null);
 
-  const instruction =
-    scanner.mode === "barcode"
-      ? "상품 뒷면의 바코드를 스캔해 주세요."
-      : "유통기한 날짜가 잘 보이게 비춰주세요";
-  const stepLabel =
-    scanner.mode === "barcode"
-      ? "1/2 바코드 스캔"
-      : scanner.mode === "ocr"
-        ? "2/2 유통기한 인식"
-        : "등록 정보 확인";
-
   const needsManualName =
     scanner.productLookupStatus === "not-found" ||
     scanner.productLookupStatus === "error" ||
@@ -88,16 +72,30 @@ function ScannerCameraExperience() {
     ? manualName.trim()
     : scanner.product?.name?.trim() ?? "";
 
+  const resultMood: MascotMood = needsManualName ? "worry" : "happy";
+
   const productSourceLabel =
     scanner.productLookupStatus === "loading"
       ? "상품 정보를 찾고 있어요"
       : scanner.product?.source === BarcodeLookupSource.PRODUCT_MASTER
-        ? "우리 냉장고 목록에서 찾았어요"
+        ? "우리 목록에서 찾았어요"
         : scanner.product?.source === BarcodeLookupSource.OPEN_FOOD_FACTS
-          ? "Open Food Facts에서 찾았어요"
+          ? "공개 상품 정보에서 찾았어요"
           : needsManualName
             ? "이름을 직접 알려주세요"
             : "상품 정보";
+
+  const instructionTitle =
+    scanner.mode === "barcode"
+      ? "바코드를 가운데에 맞춰 주세요"
+      : "유통기한이 잘 보이게 비춰 주세요";
+
+  const instructionDescription =
+    scanner.mode === "barcode"
+      ? "인식되면 이어서 유통기한도 확인할게요."
+      : scanner.isOcrProcessing
+        ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
+        : "날짜가 또렷하게 보이면 장고가 읽어볼게요.";
 
   const handleUseScanResult = async () => {
     if (!scanner.confirmation || !resolvedProductName) {
@@ -120,7 +118,7 @@ function ScannerCameraExperience() {
         setContributeError(
           error instanceof Error
             ? error.message
-            : "재료 이름은 저장했지만, 공유 목록에는 아직 못 넣었어요.",
+            : "이름은 저장했지만, 공유 목록에는 아직 못 넣었어요.",
         );
       } finally {
         setIsContributing(false);
@@ -138,6 +136,12 @@ function ScannerCameraExperience() {
       expirySource: ExpirySource.OCR_DETECTED,
     });
     router.push("/register");
+  };
+
+  const handleRescan = () => {
+    setManualName("");
+    setContributeError(null);
+    scanner.resetScanner();
   };
 
   return (
@@ -159,34 +163,32 @@ function ScannerCameraExperience() {
         onMountError={scanner.handleMountError}
       />
 
-      <SafeAreaView style={styles.overlay}>
+      <SafeAreaView style={styles.overlay} pointerEvents="box-none">
         <View style={styles.topBar}>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="스캐너 닫기"
-            onPress={() => router.back()}
-            style={({ pressed }) => [styles.iconButton, pressed && styles.iconButtonPressed]}
-          >
-            <X color={colors.surface} size={22} strokeWidth={2.6} />
-          </Pressable>
+          <CloseButton onPress={() => router.back()} />
           <View style={styles.stepPill}>
             {scanner.mode === "barcode" ? (
-              <Barcode color={colors.surface} size={17} strokeWidth={2.6} />
+              <Barcode color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
             ) : (
-              <CalendarDays color={colors.surface} size={17} strokeWidth={2.6} />
+              <CalendarDays color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
             )}
-            <Text style={styles.stepPillText}>{stepLabel}</Text>
+            <Text style={styles.stepPillText}>
+              {scanner.mode === "barcode" ? "1/2 바코드" : "2/2 유통기한"}
+            </Text>
           </View>
         </View>
 
         {!scanner.isCameraReady ? (
-          <StatusCard
-            title="카메라를 준비하고 있어요"
-            description="잠시만 기다려 주세요."
-          />
+          <View style={styles.centerCard}>
+            <Mascot size="small" mood="idle" />
+            <Text style={styles.centerTitle}>카메라를 준비하고 있어요</Text>
+            <Text style={styles.centerDescription}>
+              장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요.
+            </Text>
+          </View>
         ) : (
           <>
-            <View style={styles.guideArea}>
+            <View style={styles.guideArea} pointerEvents="none">
               <View
                 style={[
                   styles.roiBox,
@@ -204,7 +206,7 @@ function ScannerCameraExperience() {
               {scanner.productLookupStatus === "loading" ? (
                 <View style={styles.loadingStrip}>
                   <ActivityIndicator color={colors.primary} />
-                  <Text style={styles.loadingText}>상품 정보를 조회 중입니다...</Text>
+                  <Text style={styles.loadingText}>상품을 찾아보고 있어요</Text>
                 </View>
               ) : null}
 
@@ -219,19 +221,19 @@ function ScannerCameraExperience() {
               <View style={styles.instructionCard}>
                 <View style={styles.instructionIcon}>
                   {scanner.mode === "barcode" ? (
-                    <Barcode color={colors.primary} size={22} strokeWidth={2.6} />
+                    <Barcode color={colors.primary} size={spacing.md} strokeWidth={2.4} />
                   ) : (
-                    <CalendarDays color={colors.primary} size={22} strokeWidth={2.6} />
+                    <CalendarDays
+                      color={colors.primary}
+                      size={spacing.md}
+                      strokeWidth={2.4}
+                    />
                   )}
                 </View>
                 <View style={styles.instructionCopy}>
-                  <Text style={styles.instructionTitle}>{instruction}</Text>
+                  <Text style={styles.instructionTitle}>{instructionTitle}</Text>
                   <Text style={styles.instructionDescription}>
-                    {scanner.mode === "barcode"
-                      ? "인식되면 같은 화면에서 바로 유통기한 스캔으로 이어집니다."
-                      : scanner.isOcrProcessing
-                        ? "날짜 후보를 확인하고 있어요."
-                        : "YYYY.MM.DD, YY.MM.DD, YYYY년 MM월 DD일 형태를 찾고 있어요."}
+                    {instructionDescription}
                   </Text>
                 </View>
               </View>
@@ -240,39 +242,70 @@ function ScannerCameraExperience() {
         )}
       </SafeAreaView>
 
-      {scanner.confirmation ? (
-        <View style={styles.sheetOverlay}>
-          <View style={styles.sheet}>
-            <View style={styles.sheetHandle} />
-            <View style={styles.sheetHeader}>
-              <View style={styles.sheetIcon}>
-                <CheckCircle2 color={colors.success} size={24} strokeWidth={2.6} />
-              </View>
-              <View style={styles.sheetHeaderCopy}>
-                <Text style={styles.sheetTitle}>스캔 결과를 확인해 주세요</Text>
-                <Text style={styles.sheetDescription}>
-                  상품명과 유통기한을 등록 화면에 자동으로 채워드릴게요.
-                </Text>
-              </View>
-            </View>
-
+      <BottomSheet
+        visible={Boolean(scanner.confirmation)}
+        onClose={handleRescan}
+        mascotMood={resultMood}
+        title={
+          needsManualName
+            ? "이 재료 이름을 알려줄래요?"
+            : "스캔 결과를 확인할까요?"
+        }
+        description={
+          needsManualName
+            ? "목록에서 못 찾았어요. 이름만 알려주시면 등록으로 이어갈게요."
+            : "상품명과 유통기한을 등록 화면에 채워 드릴게요."
+        }
+        footer={
+          <View style={styles.sheetFooter}>
+            <Button
+              variant="secondary"
+              icon={RotateCcw}
+              onPress={handleRescan}
+              disabled={isContributing}
+              fullWidth
+            >
+              다시 스캔할게요
+            </Button>
+            <Button
+              icon={CheckCircle2}
+              iconPosition="right"
+              onPress={() => {
+                void handleUseScanResult();
+              }}
+              disabled={
+                !resolvedProductName ||
+                isContributing ||
+                scanner.productLookupStatus === "loading"
+              }
+              loading={isContributing || scanner.productLookupStatus === "loading"}
+              fullWidth
+            >
+              등록하러 갈게요
+            </Button>
+          </View>
+        }
+      >
+        {scanner.confirmation ? (
+          <>
             <View style={styles.productRow}>
               {scanner.product?.imageUrl ? (
-                <Image source={{ uri: scanner.product.imageUrl }} style={styles.productImage} />
+                <Image
+                  source={{ uri: scanner.product.imageUrl }}
+                  style={styles.productImage}
+                />
               ) : (
                 <View style={styles.productImageFallback}>
-                  <Package color={colors.primary} size={24} strokeWidth={2.6} />
+                  <Package color={colors.primary} size={spacing.md} strokeWidth={2.4} />
                 </View>
               )}
               <View style={styles.productCopy}>
                 <Text style={styles.productEyebrow}>{productSourceLabel}</Text>
-                {needsManualName ? (
-                  <Text style={styles.productName}>아직 이름이 없어요</Text>
-                ) : (
-                  <Text style={styles.productName}>
-                    {scanner.product?.name ?? "상품명 확인 중"}
-                  </Text>
-                )}
+                <Text style={styles.productName}>
+                  {needsManualName
+                    ? "아직 이름이 없어요"
+                    : scanner.product?.name ?? "상품명 확인 중"}
+                </Text>
                 <Text style={styles.productBarcode}>
                   바코드 {scanner.confirmation.barcode}
                 </Text>
@@ -298,8 +331,10 @@ function ScannerCameraExperience() {
             ) : null}
 
             <View style={styles.expiryCard}>
-              <Text style={styles.expiryLabel}>인식한 유통기한</Text>
-              <Text style={styles.expiryValue}>{scanner.confirmation.expirationDate}</Text>
+              <Text style={styles.expiryLabel}>읽은 유통기한</Text>
+              <Text style={styles.expiryValue}>
+                {scanner.confirmation.expirationDate}
+              </Text>
             </View>
 
             {scanner.productErrorMessage ? (
@@ -311,42 +346,27 @@ function ScannerCameraExperience() {
             {contributeError ? (
               <Text style={styles.sheetFootnote}>{contributeError}</Text>
             ) : null}
-
-            <View style={styles.sheetActions}>
-              <Button
-                variant="secondary"
-                icon={RotateCcw}
-                onPress={() => {
-                  setManualName("");
-                  setContributeError(null);
-                  scanner.resetScanner();
-                }}
-                style={styles.sheetButton}
-                disabled={isContributing}
-              >
-                다시 스캔
-              </Button>
-              <Button
-                icon={CheckCircle2}
-                iconPosition="right"
-                onPress={() => {
-                  void handleUseScanResult();
-                }}
-                style={styles.sheetButton}
-                disabled={
-                  !resolvedProductName ||
-                  isContributing ||
-                  scanner.productLookupStatus === "loading"
-                }
-                loading={isContributing || scanner.productLookupStatus === "loading"}
-              >
-                등록하기
-              </Button>
-            </View>
-          </View>
-        </View>
-      ) : null}
+          </>
+        ) : null}
+      </BottomSheet>
     </>
+  );
+}
+
+function CloseButton({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="스캐너 닫기"
+      onPress={onPress}
+      hitSlop={spacing.xs}
+      style={({ pressed }) => [
+        styles.iconButton,
+        pressed && styles.iconButtonPressed,
+      ]}
+    >
+      <X color={colors.surface} size={spacing.md} strokeWidth={2.4} />
+    </Pressable>
   );
 }
 
@@ -361,26 +381,18 @@ function PermissionCard({
 }) {
   return (
     <View style={styles.centerCard}>
-      <Text style={styles.centerTitle}>카메라 권한이 필요해요</Text>
+      <Mascot size="medium" mood="worry" />
+      <Text style={styles.centerTitle}>카메라가 필요해요</Text>
       <Text style={styles.centerDescription}>
-        바코드와 유통기한을 스캔하려면 카메라 접근을 허용해 주세요.
+        바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요.
       </Text>
       <Button
         onPress={onRequestPermission}
         disabled={!canRequestPermission && !isRequesting}
         fullWidth
       >
-        권한 허용
+        카메라 켤게요
       </Button>
-    </View>
-  );
-}
-
-function StatusCard({ title, description }: { title: string; description: string }) {
-  return (
-    <View style={styles.centerCard}>
-      <Text style={styles.centerTitle}>{title}</Text>
-      <Text style={styles.centerDescription}>{description}</Text>
     </View>
   );
 }
@@ -388,6 +400,7 @@ function StatusCard({ title, description }: { title: string; description: string
 function InlineError({ message }: { message: string }) {
   return (
     <View style={styles.errorStrip}>
+      <Mascot size="small" mood="worry" />
       <Text style={styles.errorText}>{message}</Text>
     </View>
   );
@@ -396,17 +409,13 @@ function InlineError({ message }: { message: string }) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: "#05070A",
-  },
-  emptyCamera: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#05070A",
+    backgroundColor: colors.text,
   },
   overlay: {
     flex: 1,
     justifyContent: "space-between",
-    paddingHorizontal: spacing.lg,
-    paddingBottom: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.md,
   },
   topBar: {
     flexDirection: "row",
@@ -415,29 +424,31 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
   },
   iconButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: touchTarget.min,
+    height: touchTarget.min,
+    borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.42)",
+    backgroundColor: colors.text,
+    opacity: 0.72,
   },
   iconButtonPressed: {
-    backgroundColor: "rgba(0,0,0,0.62)",
+    opacity: 0.9,
   },
   stepPill: {
-    minHeight: 40,
-    borderRadius: 999,
+    minHeight: touchTarget.min,
+    borderRadius: radius.pill,
     paddingHorizontal: spacing.md,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    backgroundColor: "rgba(0,0,0,0.42)",
+    backgroundColor: colors.text,
+    opacity: 0.72,
   },
   stepPillText: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "800",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.surface,
   },
   guideArea: {
@@ -447,59 +458,58 @@ const styles = StyleSheet.create({
   },
   roiBox: {
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.78)",
-    backgroundColor: "rgba(0,0,0,0.08)",
+    borderColor: colors.surface,
   },
   barcodeRoiBox: {
     width: "86%",
-    height: 180,
-    borderRadius: 22,
+    height: spacing.xxxl + spacing.xxxl + spacing.xl,
+    borderRadius: radius.xxl,
   },
   ocrRoiBox: {
     width: "88%",
-    height: 104,
-    borderRadius: 16,
+    height: spacing.xxxl + spacing.xl,
+    borderRadius: radius.lg,
   },
   corner: {
     position: "absolute",
-    width: 34,
-    height: 34,
+    width: spacing.lg,
+    height: spacing.lg,
     borderColor: colors.surface,
   },
   cornerTopLeft: {
-    top: -2,
-    left: -2,
-    borderTopWidth: 4,
-    borderLeftWidth: 4,
-    borderTopLeftRadius: 18,
+    top: 0,
+    left: 0,
+    borderTopWidth: spacing.xxs,
+    borderLeftWidth: spacing.xxs,
+    borderTopLeftRadius: radius.lg,
   },
   cornerTopRight: {
-    top: -2,
-    right: -2,
-    borderTopWidth: 4,
-    borderRightWidth: 4,
-    borderTopRightRadius: 18,
+    top: 0,
+    right: 0,
+    borderTopWidth: spacing.xxs,
+    borderRightWidth: spacing.xxs,
+    borderTopRightRadius: radius.lg,
   },
   cornerBottomLeft: {
-    bottom: -2,
-    left: -2,
-    borderBottomWidth: 4,
-    borderLeftWidth: 4,
-    borderBottomLeftRadius: 18,
+    bottom: 0,
+    left: 0,
+    borderBottomWidth: spacing.xxs,
+    borderLeftWidth: spacing.xxs,
+    borderBottomLeftRadius: radius.lg,
   },
   cornerBottomRight: {
-    right: -2,
-    bottom: -2,
-    borderRightWidth: 4,
-    borderBottomWidth: 4,
-    borderBottomRightRadius: 18,
+    right: 0,
+    bottom: 0,
+    borderRightWidth: spacing.xxs,
+    borderBottomWidth: spacing.xxs,
+    borderBottomRightRadius: radius.lg,
   },
   bottomStack: {
     gap: spacing.sm,
   },
   loadingStrip: {
-    minHeight: 48,
-    borderRadius: 14,
+    minHeight: touchTarget.min,
+    borderRadius: radius.xxl,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     flexDirection: "row",
@@ -507,223 +517,177 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   loadingText: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.text,
   },
   instructionCard: {
-    borderRadius: 20,
+    borderRadius: radius.xxl,
     backgroundColor: colors.surface,
-    padding: spacing.lg,
+    padding: spacing.md,
     flexDirection: "row",
     gap: spacing.md,
     alignItems: "flex-start",
   },
   instructionIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 14,
+    width: spacing.xl,
+    height: spacing.xl,
+    borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
     alignItems: "center",
     justifyContent: "center",
   },
   instructionCopy: {
     flex: 1,
-    gap: 5,
+    gap: spacing.xs,
   },
   instructionTitle: {
-    fontSize: 18,
-    lineHeight: 25,
-    fontWeight: "800",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   instructionDescription: {
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
   },
   errorStrip: {
-    borderRadius: 14,
+    borderRadius: radius.xxl,
     backgroundColor: colors.dangerSoft,
     padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    minHeight: touchTarget.min,
   },
   errorText: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
+    flex: 1,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.danger,
   },
   centerCard: {
     alignSelf: "center",
     width: "100%",
-    borderRadius: 20,
+    borderRadius: radius.xxl,
     backgroundColor: colors.surface,
     padding: spacing.lg,
     gap: spacing.md,
-    marginTop: "45%",
+    alignItems: "center",
+    marginTop: "40%",
   },
   centerTitle: {
-    fontSize: 20,
-    lineHeight: 28,
-    fontWeight: "800",
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.heading.fontWeight,
     color: colors.text,
+    textAlign: "center",
   },
   centerDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
+    textAlign: "center",
   },
-  sheetOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0,0,0,0.34)",
-  },
-  sheet: {
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xl,
-    gap: spacing.md,
-  },
-  sheetHandle: {
-    alignSelf: "center",
-    width: 46,
-    height: 5,
-    borderRadius: 999,
-    backgroundColor: colors.border,
-    marginBottom: spacing.sm,
-  },
-  sheetHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.md,
-  },
-  sheetIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    backgroundColor: colors.successSoft,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  sheetHeaderCopy: {
-    flex: 1,
-    gap: 5,
-  },
-  sheetTitle: {
-    fontSize: 21,
-    lineHeight: 29,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  sheetDescription: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: colors.subtext,
+  sheetFooter: {
+    gap: spacing.sm,
   },
   productRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
   },
   productImage: {
-    width: 66,
-    height: 66,
-    borderRadius: 14,
+    width: spacing.xxxl,
+    height: spacing.xxxl,
+    borderRadius: radius.lg,
     backgroundColor: colors.surface,
   },
   productImageFallback: {
-    width: 66,
-    height: 66,
-    borderRadius: 14,
+    width: spacing.xxxl,
+    height: spacing.xxxl,
+    borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
     alignItems: "center",
     justifyContent: "center",
   },
   productCopy: {
     flex: 1,
-    gap: 4,
+    gap: spacing.xxs,
   },
   productEyebrow: {
-    fontSize: 12,
-    lineHeight: 17,
-    fontWeight: "800",
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.primary,
   },
   productName: {
-    fontSize: 17,
-    lineHeight: 24,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   productBarcode: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
   manualNameCard: {
-    borderRadius: radius.lg,
+    borderRadius: radius.xxl,
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
     gap: spacing.sm,
   },
   manualNameLabel: {
-    fontSize: 15,
-    lineHeight: 22,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   manualNameInput: {
-    minHeight: 52,
+    minHeight: touchTarget.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     color: colors.text,
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.bodyStrong.fontWeight,
   },
   manualNameHint: {
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
   expiryCard: {
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
-    gap: 4,
+    gap: spacing.xxs,
   },
   expiryLabel: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: "800",
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.subtext,
   },
   expiryValue: {
-    fontSize: 24,
-    lineHeight: 32,
-    fontWeight: "800",
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   sheetFootnote: {
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
-  },
-  sheetActions: {
-    flexDirection: "row",
-    gap: spacing.sm,
-  },
-  sheetButton: {
-    flex: 1,
   },
 });
