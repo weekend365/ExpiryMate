@@ -4,11 +4,13 @@ import {
   ItemStatus,
   ProductCategory,
   StorageLocation,
+  addDays,
   formatDateKorean,
   inventoryFormSchema,
   productCategoryLabels,
   productCategoryOptions,
   storageLocationLabels,
+  toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -23,8 +25,8 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Button } from "../src/components/Button";
 import { BottomSheet } from "../src/components/BottomSheet";
+import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { EmptyState } from "../src/components/EmptyState";
 import { FormField } from "../src/components/FormField";
@@ -35,8 +37,7 @@ import { SectionHeader } from "../src/components/SectionHeader";
 import { StepFlow } from "../src/components/StepFlow";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
-import { addDays, toIsoDate } from "@expirymate/shared";
-import { colors, radius, spacing, typography } from "../src/shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
 import {
   type RegistrationDraft,
   useRegistrationStore,
@@ -55,7 +56,8 @@ type RegistrationFormValues = {
   notes: string;
 };
 
-type RegistrationStep = "product" | "expiry" | "storage";
+/** 1) 재료명 → 2) 보관/수량 → 3) 유통기한 확인 */
+type RegistrationStep = "product" | "storage" | "expiry";
 
 type RegisteredSessionItem = {
   id: string;
@@ -84,27 +86,27 @@ const REGISTRATION_STEPS: Array<{
     key: "product",
     label: "재료",
     title: "어떤 재료인가요?",
-    description: "재료명을 확인하고, 자주 등록한 재료는 바로 불러올 수 있어요.",
-  },
-  {
-    key: "expiry",
-    label: "기한",
-    title: "유통기한을 선택하세요",
-    description: "자주 쓰는 기간은 빠른 선택으로 바로 입력할 수 있어요.",
+    description: "이름만 알려주시면 돼요. 예전에 넣었던 재료도 불러올 수 있어요.",
   },
   {
     key: "storage",
     label: "보관",
-    title: "어디에 몇 개 있나요?",
-    description: "보관 위치와 수량을 정하면 바로 등록할 수 있어요.",
+    title: "어디에, 몇 개 두나요?",
+    description: "보관 위치와 수량만 정하면 다음으로 넘어가요.",
+  },
+  {
+    key: "expiry",
+    label: "기한",
+    title: "유통기한을 확인할까요?",
+    description: "빠른 선택으로 고르거나, 직접 날짜를 골라주세요.",
   },
 ];
 
 const QUICK_EXPIRY_OPTIONS = [
   { label: "오늘", days: 0 },
   { label: "내일", days: 1 },
-  { label: "3일", days: 3 },
-  { label: "7일", days: 7 },
+  { label: "3일 뒤", days: 3 },
+  { label: "일주일", days: 7 },
 ];
 
 const createDefaultFormValues = (): RegistrationFormValues => ({
@@ -167,10 +169,7 @@ const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
 ) =>
   prefill
-    ? [
-        prefill.productId ?? "",
-        prefill.displayName ?? "",
-      ].join(":")
+    ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":")
     : "";
 
 export default function RegisterScreen() {
@@ -271,11 +270,11 @@ export default function RegisterScreen() {
   const brand = form.watch("brand")?.trim() ?? "";
   const category = form.watch("category");
   const stepIndex = REGISTRATION_STEPS.findIndex((item) => item.key === step);
-  const isLastStep = step === "storage";
+  const isLastStep = step === "expiry";
   const canGoNext =
     (step === "product" && Boolean(displayName)) ||
-    (step === "expiry" && Boolean(expiryDate)) ||
-    (step === "storage" && Boolean(storageLocation) && quantity > 0);
+    (step === "storage" && Boolean(storageLocation) && quantity > 0) ||
+    (step === "expiry" && Boolean(expiryDate));
 
   const recentTemplates = useMemo(
     () =>
@@ -313,7 +312,7 @@ export default function RegisterScreen() {
     form.setValue("storageLocation", item.storageLocation, {
       shouldValidate: true,
     });
-    setShowAdditionalInfo(true);
+    setShowAdditionalInfo(Boolean(item.brand || item.category));
   };
 
   const goToPreviousStep = () => {
@@ -327,8 +326,11 @@ export default function RegisterScreen() {
   };
 
   const goToNextStep = () => {
-    const nextStep = REGISTRATION_STEPS[Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)];
+    const nextStep =
+      REGISTRATION_STEPS[Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)];
     setStep(nextStep.key);
+    setSuccessMessage(null);
+    setSubmitErrorMessage(null);
   };
 
   const onSubmit = form.handleSubmit(async (values) => {
@@ -363,7 +365,7 @@ export default function RegisterScreen() {
         },
         ...current,
       ]);
-      setSuccessMessage(`${created.displayName}을(를) 등록했어요.`);
+      setSuccessMessage(`${created.displayName}을(를) 냉장고에 잘 넣어뒀어요.`);
 
       const nextDefaults = {
         ...createDefaultFormValues(),
@@ -377,14 +379,22 @@ export default function RegisterScreen() {
       setStep("product");
     } catch (error) {
       setSubmitErrorMessage(
-        error instanceof Error ? error.message : "잠시 후 다시 시도해주세요.",
+        error instanceof Error
+          ? error.message
+          : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
       );
     }
   });
 
+  const primaryCtaLabel = isLastStep
+    ? "여기에 보관할까요?"
+    : step === "product"
+      ? "이 재료로 할게요"
+      : "다음으로 갈게요";
+
   return (
     <Screen
-      title="등록하기"
+      title="재료 넣기"
       subtitle="한 번에 하나씩, 차근차근 넣어볼게요."
     >
       <StepFlow
@@ -396,11 +406,11 @@ export default function RegisterScreen() {
             {step === "product" ? (
               <Package color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
-            {step === "expiry" ? (
-              <CalendarDays color={colors.primary} size={spacing.md} strokeWidth={2.5} />
-            ) : null}
             {step === "storage" ? (
               <MapPin color={colors.primary} size={spacing.md} strokeWidth={2.5} />
+            ) : null}
+            {step === "expiry" ? (
+              <CalendarDays color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
           </View>
         }
@@ -413,17 +423,17 @@ export default function RegisterScreen() {
             disabled={!canGoNext}
             fullWidth
           >
-            {isLastStep ? "냉장고에 넣을게요" : "다음으로"}
+            {primaryCtaLabel}
           </Button>
         }
       >
-        {successMessage ? (
+        {successMessage && step === "product" ? (
           <View style={styles.successStrip}>
             <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
             <View style={styles.successCopy}>
               <Text style={styles.successTitle}>{successMessage}</Text>
               <Text style={styles.successDescription}>
-                다음 재료 이름과 유통기한만 입력하면 이어서 등록할 수 있어요.
+                다음 재료 이름만 알려주시면 이어서 넣을 수 있어요.
               </Text>
             </View>
           </View>
@@ -439,31 +449,39 @@ export default function RegisterScreen() {
         {step === "product" ? (
           <>
             {prefill?.displayName ? (
-              <View style={styles.prefillCard}>
-                <View style={styles.cardIcon}>
-                  <Package color={colors.primary} size={spacing.sm} strokeWidth={2.5} />
-                </View>
-                <Text style={styles.prefillEyebrow}>불러온 재료 정보</Text>
-                <Text style={styles.prefillTitle}>{prefill.displayName}</Text>
-                <Text style={styles.prefillDescription}>
+              <View style={styles.noticeCard}>
+                <Text style={styles.noticeEyebrow}>불러온 재료</Text>
+                <Text style={styles.noticeTitle}>{prefill.displayName}</Text>
+                <Text style={styles.noticeDescription}>
                   {prefill.brand ? `${prefill.brand} · ` : ""}
-                  재료 정보가 자동으로 채워졌어요. 이름만 확인하면 됩니다.
+                  이름만 한 번 확인해 주세요.
                 </Text>
               </View>
             ) : null}
 
             {!prefill?.displayName && draft?.displayName ? (
-              <View style={styles.draftCard}>
-                <Text style={styles.draftTitle}>이전에 입력하던 내용을 이어서 보여주고 있어요</Text>
-                <Text style={styles.draftDescription}>
-                  저장하기 전까지 입력 내용이 자동으로 보관됩니다.
+              <View style={styles.softCard}>
+                <Text style={styles.softTitle}>이어서 작성 중이에요</Text>
+                <Text style={styles.softDescription}>
+                  아까 적어두신 내용을 그대로 보여드릴게요.
                 </Text>
               </View>
             ) : null}
 
+            <View style={styles.formCard}>
+              <FormField
+                control={form.control}
+                name="displayName"
+                label="재료 이름"
+                placeholder="예: 서울우유 1L"
+              />
+            </View>
+
             {similarItems.length ? (
               <View style={styles.warningCard}>
-                <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
+                <Text style={styles.warningTitle}>
+                  집에 이미 {similarItems.length}개 있어요
+                </Text>
                 <Text style={styles.warningDescription}>
                   {similarItems
                     .slice(0, 2)
@@ -476,20 +494,11 @@ export default function RegisterScreen() {
               </View>
             ) : null}
 
-            <View style={styles.formCard}>
-              <FormField
-                control={form.control}
-                name="displayName"
-                label="재료명"
-                placeholder="예: 서울우유 1L"
-              />
-            </View>
-
             {recentTemplates.length ? (
               <View style={styles.card}>
                 <SectionHeader
-                  title="최근 등록 재료 다시 쓰기"
-                  description="예전에 넣었던 재료를 불러와 빠르게 채울 수 있어요."
+                  title="예전에 넣었던 재료"
+                  description="누르면 이름을 바로 채워 드려요."
                 />
                 <View style={styles.templateList}>
                   {recentTemplates.map((item) => (
@@ -503,7 +512,8 @@ export default function RegisterScreen() {
                     >
                       <Text style={styles.templateName}>{item.displayName}</Text>
                       <Text style={styles.templateMeta}>
-                        {storageLocationLabels[item.storageLocation]} · {item.unit ?? "개"}
+                        {storageLocationLabels[item.storageLocation]} ·{" "}
+                        {item.unit ?? "개"}
                       </Text>
                     </Pressable>
                   ))}
@@ -513,72 +523,19 @@ export default function RegisterScreen() {
               <EmptyState
                 icon={Package}
                 title="아직 불러올 재료가 없어요"
-                description="한 번 등록해 두면, 다음부터는 여기서 바로 불러올 수 있어요."
+                description="한 번 넣어 두면, 다음부터는 여기서 바로 불러올 수 있어요."
               />
             )}
-          </>
-        ) : null}
-
-        {step === "expiry" ? (
-          <>
-            <View style={styles.formCard}>
-              <DatePickerField
-                label="유통기한"
-                value={expiryDate}
-                onChange={(nextDate) => {
-                  form.setValue("expiryDate", nextDate, { shouldValidate: true });
-                  form.setValue("expirySource", ExpirySource.MANUAL, {
-                    shouldValidate: true,
-                  });
-                }}
-                error={form.formState.errors.expiryDate?.message}
-              />
-              <View style={styles.inlineMeta}>
-                <Text style={styles.inlineMetaLabel}>선택된 날짜</Text>
-                <Text style={styles.inlineMetaValue}>
-                  {expiryDate ? formatDateKorean(expiryDate) : "아직 선택하지 않았어요"}
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.card}>
-              <SectionHeader
-                title="빠른 유통기한 선택"
-                description="자주 쓰는 기간은 한 번에 골라볼 수 있어요."
-              />
-              <View style={styles.pillRow}>
-                {QUICK_EXPIRY_OPTIONS.map((option) => {
-                  const presetDate = toIsoDate(addDays(new Date(), option.days));
-
-                  return (
-                    <Pill
-                      key={option.days}
-                      label={option.label}
-                      icon={CalendarDays}
-                      selected={expiryDate === presetDate}
-                      onPress={() => handlePreset(option.days)}
-                    />
-                  );
-                })}
-                <Pill
-                  label="직접 선택"
-                  icon={CalendarDays}
-                  selected={expirySource === ExpirySource.MANUAL}
-                  onPress={() =>
-                    form.setValue("expirySource", ExpirySource.MANUAL, {
-                      shouldValidate: true,
-                    })
-                  }
-                />
-              </View>
-            </View>
           </>
         ) : null}
 
         {step === "storage" ? (
           <>
             <View style={styles.card}>
-              <SectionHeader title="저장 위치" description="어디에 두고 계신가요?" />
+              <SectionHeader
+                title="어디에 두나요?"
+                description="보관 위치를 하나만 골라 주세요."
+              />
               <View style={styles.pillRow}>
                 {STORAGE_LOCATION_ORDER.map((location) => (
                   <Pill
@@ -598,15 +555,17 @@ export default function RegisterScreen() {
 
             <View style={styles.formCard}>
               <QuantityStepper
-                label="수량"
+                label="몇 개인가요?"
                 value={quantity}
                 onChange={(nextQuantity) =>
-                  form.setValue("quantity", nextQuantity, { shouldValidate: true })
+                  form.setValue("quantity", nextQuantity, {
+                    shouldValidate: true,
+                  })
                 }
                 error={form.formState.errors.quantity?.message}
               />
               <View style={styles.inlineMeta}>
-                <Text style={styles.inlineMetaLabel}>현재 선택</Text>
+                <Text style={styles.inlineMetaLabel}>지금 선택</Text>
                 <Text style={styles.inlineMetaValue}>
                   {storageLocationLabels[storageLocation]} · {quantity}
                   {unit}
@@ -614,34 +573,78 @@ export default function RegisterScreen() {
               </View>
             </View>
 
-            {similarItems.length ? (
-              <View style={styles.warningCard}>
-                <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
-                <Text style={styles.warningDescription}>
-                  {similarItems
-                    .slice(0, 2)
-                    .map(
-                      (item) =>
-                        `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
-                    )
-                    .join(" / ")}
+            <Pressable
+              onPress={() => setShowAdditionalInfo(true)}
+              style={({ pressed }) => [
+                styles.extraTrigger,
+                pressed && styles.templateCardPressed,
+              ]}
+            >
+              <View style={styles.extraTriggerCopy}>
+                <Text style={styles.extraTriggerTitle}>브랜드·메모도 적을까요?</Text>
+                <Text style={styles.extraTriggerDescription}>
+                  필요할 때만 적어도 괜찮아요.
                 </Text>
               </View>
-            ) : null}
+              <Text style={styles.extraTriggerAction}>열기</Text>
+            </Pressable>
+          </>
+        ) : null}
+
+        {step === "expiry" ? (
+          <>
+            <View style={styles.card}>
+              <SectionHeader
+                title="언제까지인가요?"
+                description="자주 쓰는 기간을 먼저 골라볼 수 있어요."
+              />
+              <View style={styles.pillRow}>
+                {QUICK_EXPIRY_OPTIONS.map((option) => {
+                  const presetDate = toIsoDate(addDays(new Date(), option.days));
+
+                  return (
+                    <Pill
+                      key={option.days}
+                      label={option.label}
+                      icon={CalendarDays}
+                      selected={
+                        expiryDate === presetDate &&
+                        expirySource === ExpirySource.PRESET
+                      }
+                      onPress={() => handlePreset(option.days)}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+
+            <View style={styles.formCard}>
+              <DatePickerField
+                label="직접 고르기"
+                value={expiryDate}
+                onChange={(nextDate) => {
+                  form.setValue("expiryDate", nextDate, { shouldValidate: true });
+                  form.setValue("expirySource", ExpirySource.MANUAL, {
+                    shouldValidate: true,
+                  });
+                }}
+                error={form.formState.errors.expiryDate?.message}
+              />
+            </View>
 
             <View style={styles.summaryCard}>
               <View style={styles.summaryHeader}>
-                <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
-                <Text style={styles.summaryTitle}>이대로 등록할게요</Text>
+                <CheckCircle2
+                  color={colors.success}
+                  size={spacing.md}
+                  strokeWidth={2.5}
+                />
+                <Text style={styles.summaryTitle}>이렇게 넣을게요</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryLabel}>재료</Text>
-                <Text style={styles.summaryValue}>{displayName || "입력 필요"}</Text>
-              </View>
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>유통기한</Text>
                 <Text style={styles.summaryValue}>
-                  {expiryDate ? formatDateKorean(expiryDate) : "입력 필요"}
+                  {displayName || "아직 없어요"}
                 </Text>
               </View>
               <View style={styles.summaryRow}>
@@ -649,6 +652,12 @@ export default function RegisterScreen() {
                 <Text style={styles.summaryValue}>
                   {storageLocationLabels[storageLocation]} · {quantity}
                   {unit}
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>유통기한</Text>
+                <Text style={styles.summaryValue}>
+                  {expiryDate ? formatDateKorean(expiryDate) : "아직 고르지 않았어요"}
                 </Text>
               </View>
               {brand ? (
@@ -660,38 +669,22 @@ export default function RegisterScreen() {
               {category ? (
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>카테고리</Text>
-                  <Text style={styles.summaryValue}>{productCategoryLabels[category]}</Text>
+                  <Text style={styles.summaryValue}>
+                    {productCategoryLabels[category]}
+                  </Text>
                 </View>
               ) : null}
-            </View>
-
-            <View style={styles.card}>
-              <Pressable
-                onPress={() => setShowAdditionalInfo(true)}
-                style={({ pressed }) => [
-                  styles.toggleRow,
-                  pressed && styles.templateCardPressed,
-                ]}
-              >
-                <View style={styles.toggleCopy}>
-                  <SectionHeader
-                    title="추가 정보"
-                    description="브랜드, 카테고리, 단위, 메모는 필요할 때만 입력하세요."
-                  />
-                </View>
-                <Text style={styles.toggleAction}>열기</Text>
-              </Pressable>
             </View>
           </>
         ) : null}
 
-        {registeredSessionItems.length ? (
+        {registeredSessionItems.length && step === "product" ? (
           <View style={styles.sessionCard}>
             <View style={styles.sessionHeader}>
-              <View>
-                <Text style={styles.sessionEyebrow}>오늘 등록한 재료</Text>
+              <View style={styles.sessionCopy}>
+                <Text style={styles.sessionEyebrow}>오늘 넣은 재료</Text>
                 <Text style={styles.sessionTitle}>
-                  {registeredSessionItems.length}개 등록됨
+                  {registeredSessionItems.length}개 넣어뒀어요
                 </Text>
               </View>
               <Button
@@ -704,7 +697,7 @@ export default function RegisterScreen() {
                   })
                 }
               >
-                추천 받기
+                요리 추천 받기
               </Button>
             </View>
             <View style={styles.sessionList}>
@@ -763,7 +756,7 @@ export default function RegisterScreen() {
           </View>
           {category ? (
             <Text style={styles.inlineMetaValue}>
-              현재 선택: {productCategoryLabels[category]}
+              지금 선택: {productCategoryLabels[category]}
             </Text>
           ) : null}
         </View>
@@ -771,7 +764,7 @@ export default function RegisterScreen() {
           control={form.control}
           name="notes"
           label="메모"
-          placeholder="추가로 기록할 내용"
+          placeholder="기억해 둘 말이 있으면 적어 주세요"
           multiline
         />
       </BottomSheet>
@@ -836,50 +829,41 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.md,
   },
-  prefillCard: {
+  noticeCard: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.xs,
   },
-  cardIcon: {
-    width: spacing.lg,
-    height: spacing.lg,
-    borderRadius: radius.sm,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: spacing.xs,
-  },
-  prefillEyebrow: {
+  noticeEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontWeight: typography.label.fontWeight,
     color: colors.primary,
   },
-  prefillTitle: {
+  noticeTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
     fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
-  prefillDescription: {
+  noticeDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
   },
-  draftCard: {
+  softCard: {
     backgroundColor: colors.mutedSurface,
     borderRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.xs,
   },
-  draftTitle: {
+  softTitle: {
     fontSize: typography.body.fontSize,
     fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
-  draftDescription: {
+  softDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
@@ -937,7 +921,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
     gap: spacing.xxs,
-    minHeight: spacing.xxl,
+    minHeight: touchTarget.min,
+    justifyContent: "center",
   },
   templateCardPressed: {
     backgroundColor: colors.surfacePressed,
@@ -950,6 +935,36 @@ const styles = StyleSheet.create({
   templateMeta: {
     fontSize: typography.label.fontSize,
     color: colors.subtext,
+  },
+  extraTrigger: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+    minHeight: touchTarget.min,
+  },
+  extraTriggerCopy: {
+    flex: 1,
+    gap: spacing.xxs,
+  },
+  extraTriggerTitle: {
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.text,
+  },
+  extraTriggerDescription: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    color: colors.subtext,
+  },
+  extraTriggerAction: {
+    fontSize: typography.bodySmall.fontSize,
+    fontWeight: typography.title.fontWeight,
+    color: colors.primary,
   },
   summaryCard: {
     backgroundColor: colors.surface,
@@ -990,21 +1005,6 @@ const styles = StyleSheet.create({
     fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
-  toggleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.md,
-    minHeight: spacing.xxl,
-  },
-  toggleCopy: {
-    flex: 1,
-  },
-  toggleAction: {
-    fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
-    color: colors.primary,
-  },
   extraSection: {
     gap: spacing.sm,
   },
@@ -1026,6 +1026,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
+  },
+  sessionCopy: {
+    flex: 1,
+    gap: spacing.xxs,
   },
   sessionEyebrow: {
     fontSize: typography.label.fontSize,
