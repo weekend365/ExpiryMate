@@ -1,6 +1,8 @@
-# ExpiryMate MVP Monorepo
+# 장고야 부탁해 (Jango) MVP Monorepo
 
-ExpiryMate is a Korean-first ingredient inventory, expiry reminder, and AI recipe recommendation MVP.
+**장고야 부탁해** (영문: **Jango**) is a Korean-first ingredient inventory, expiry reminder, and AI recipe recommendation MVP. The mascot character is **장고** (Jango).
+
+> Technical package names and bundle IDs still use the legacy `expirymate` namespace (`@expirymate/*`, `com.expirymate.mobile`). User-facing brand strings live in `@expirymate/shared` → `appBrand`.
 
 The current product assumption for this MVP is explicit:
 
@@ -256,8 +258,8 @@ See [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-2](./docs/PRODUCTION_LAUNCH_ROADMAP.m
 
 Mobile App Store configuration lives in `apps/mobile/app.json` and
 `apps/mobile/eas.json`. The current app icon and splash assets are generated
-from `apps/mobile/assets/characters/mate-fridge-chef.png` into
-`apps/mobile/assets/branding/`.
+from `apps/mobile/assets/characters/jango-idle.png` (mascot **장고** / Jango) into
+`apps/mobile/assets/branding/`. Mood variants live beside it as `jango-{idle,happy,worry,cooking,empty}.png`.
 
 Install and authenticate EAS CLI before building:
 
@@ -404,7 +406,7 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 - AI recipe recommendation tab
 - consume/discard actions
 - notification settings UI
-- mascot asset for recipe-oriented empty and success states
+- mascot **장고** (Jango) for recipe-oriented empty and success states
 
 ### Admin
 

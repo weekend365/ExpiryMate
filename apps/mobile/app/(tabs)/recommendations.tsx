@@ -154,7 +154,7 @@ export default function RecommendationsScreen() {
               임박한 재료를 먼저 살피고, 부족한 재료는 선택 재료로만 제안해요.
             </Text>
           </View>
-          <Mascot size="medium" style={styles.heroMascot} />
+          <Mascot size="medium" mood="cooking" style={styles.heroMascot} />
         </View>
         <Button
           icon={Sparkles}
@@ -169,7 +169,7 @@ export default function RecommendationsScreen() {
 
       {isGenerating ? (
         <View style={styles.pendingCard}>
-          <Mascot size="small" style={styles.pendingMascot} />
+          <Mascot size="small" mood="cooking" style={styles.pendingMascot} />
           <View style={styles.pendingCopy}>
             <Text style={styles.pendingTitle}>요리 조합을 찾고 있어요</Text>
             <Text style={styles.pendingDescription}>
@@ -273,7 +273,7 @@ export default function RecommendationsScreen() {
           {generationStatus === "success" &&
           latestRecommendation.id === latestGeneratedRecommendationId ? (
             <View style={styles.readyCard}>
-              <Mascot size="small" style={styles.readyMascot} />
+              <Mascot size="small" mood="happy" style={styles.readyMascot} />
               <View style={styles.readyCopy}>
                 <View style={styles.readyTitleRow}>
                   <CheckCircle2 color={colors.success} size={18} strokeWidth={2.5} />
@@ -291,7 +291,7 @@ export default function RecommendationsScreen() {
         </View>
       ) : !isGenerating ? (
         <View style={styles.emptyCard}>
-          <Mascot size="small" style={styles.emptyMascot} />
+          <Mascot size="small" mood="empty" style={styles.emptyMascot} />
           <View style={styles.emptyCopy}>
             <Text style={styles.emptyTitle}>아직 추천 결과가 없어요</Text>
             <Text style={styles.emptyDescription}>

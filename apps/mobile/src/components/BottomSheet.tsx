@@ -19,12 +19,15 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { Mascot, type MascotMood } from "./Mascot";
 
 interface BottomSheetProps extends PropsWithChildren {
   visible: boolean;
   onClose: () => void;
   title?: string;
   description?: string;
+  /** Optional 장고 mood above the sheet title (success / confirm / guide). */
+  mascotMood?: MascotMood;
   footer?: ReactNode;
 }
 
@@ -41,6 +44,7 @@ export function BottomSheet({
   onClose,
   title,
   description,
+  mascotMood,
   footer,
   children,
 }: BottomSheetProps) {
@@ -120,6 +124,11 @@ export function BottomSheet({
           ]}
         >
           <View style={styles.handle} />
+          {mascotMood ? (
+            <View style={styles.mascotWrap}>
+              <Mascot size="small" mood={mascotMood} />
+            </View>
+          ) : null}
           {title ? (
             <View style={styles.header}>
               <Text style={styles.title}>{title}</Text>
@@ -169,6 +178,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     backgroundColor: colors.border,
     marginBottom: spacing.xs,
+  },
+  mascotWrap: {
+    alignItems: "center",
   },
   header: {
     gap: spacing.xs,

@@ -1,3 +1,4 @@
+export * from "./constants/brand";
 export * from "./constants/defaults";
 export * from "./constants/labels";
 export * from "./design";

@@ -39,7 +39,7 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     SMTP_PORT: "587",
     SMTP_USER: "smtp-user",
     SMTP_PASS: "smtp-pass",
-    SMTP_FROM: "ExpiryMate <no-reply@expirymate.app>",
+    SMTP_FROM: "Jango <no-reply@expirymate.app>",
     APPLE_OAUTH_CLIENT_ID: "com.expirymate.mobile",
     GOOGLE_OAUTH_CLIENT_ID: "google-client-id.apps.googleusercontent.com",
     KAKAO_OAUTH_CLIENT_ID: "kakao-client-id",

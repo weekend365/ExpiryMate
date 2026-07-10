@@ -1,4 +1,4 @@
-import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
+import { DEFAULT_NOTIFICATION_DAYS, appBrand } from "@expirymate/shared";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
 import {
@@ -251,7 +251,9 @@ export default function SettingsScreen() {
 
       <View style={styles.card}>
         <Text style={styles.rowTitle}>앱 정보</Text>
-        <Text style={styles.infoText}>ExpiryMate MVP · 한국어 우선 재고/유통기한 관리</Text>
+        <Text style={styles.infoText}>
+          {appBrand.appNameKo} ({appBrand.appNameEn}) · {appBrand.productLineKo}
+        </Text>
         <Text style={styles.infoText}>OCR 인식은 아직 준비 중이에요.</Text>
       </View>
 

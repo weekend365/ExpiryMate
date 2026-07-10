@@ -84,7 +84,13 @@ export default function HomeScreen() {
             <Text style={styles.focusTitle}>{focus.title}</Text>
             <Text style={styles.focusDescription}>{focus.description}</Text>
           </View>
-          <Mascot size="small" style={styles.focusMascot} />
+          <Mascot
+            size="small"
+            mood={
+              needsAttention ? "worry" : hasInventory ? "idle" : "empty"
+            }
+            style={styles.focusMascot}
+          />
         </View>
 
         <Button
@@ -184,7 +190,9 @@ export default function HomeScreen() {
           </View>
         ) : (
           <EmptyState
-            icon={Package}
+            mood={
+              isLoading ? "idle" : hasInventory ? "idle" : "empty"
+            }
             title={
               isLoading
                 ? "보관함을 살펴보고 있어요"
@@ -228,7 +236,7 @@ export default function HomeScreen() {
           </View>
         ) : (
           <EmptyState
-            icon={Plus}
+            mood={isLoading ? "idle" : "empty"}
             title={
               isLoading
                 ? "최근 기록을 불러오고 있어요"

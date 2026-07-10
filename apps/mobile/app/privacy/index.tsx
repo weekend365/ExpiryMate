@@ -1,3 +1,4 @@
+import { appBrand } from "@expirymate/shared";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
 import { ExternalLink, ShieldCheck, Trash2 } from "lucide-react-native";
@@ -25,12 +26,12 @@ export default function PrivacyScreen() {
   return (
     <Screen
       title="개인정보 및 AI 데이터"
-      subtitle="ExpiryMate가 어떤 데이터를 쓰고, 어떻게 삭제할 수 있는지 확인해요."
+      subtitle={`${appBrand.appNameKo}에서 어떤 데이터를 쓰고, 어떻게 삭제할 수 있는지 확인해요.`}
     >
       <View style={styles.card}>
         <Text style={styles.cardTitle}>개인정보처리방침</Text>
         <Text style={styles.bodyText}>
-          ExpiryMate는 계정, 재료와 유통기한, 알림 설정, AI 추천 히스토리를
+          {appBrand.appNameKo}는 계정, 재료와 유통기한, 알림 설정, AI 추천 히스토리를
           서비스 제공을 위해 사용해요. 자세한 공개 정책은 웹에서도 확인할 수
           있어요.
         </Text>

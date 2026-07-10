@@ -1,30 +1,55 @@
+import { appBrand } from "@expirymate/shared";
 import {
   Image,
   StyleSheet,
   View,
+  type ImageSourcePropType,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import mascotSource from "../../assets/characters/mate-fridge-chef.png";
-import { colors, radius, spacing } from "../shared/theme";
+import jangoCooking from "../../assets/characters/jango-cooking.png";
+import jangoEmpty from "../../assets/characters/jango-empty.png";
+import jangoHappy from "../../assets/characters/jango-happy.png";
+import jangoIdle from "../../assets/characters/jango-idle.png";
+import jangoWorry from "../../assets/characters/jango-worry.png";
+import { spacing } from "../shared/theme";
+
+export type MascotMood = "idle" | "happy" | "worry" | "cooking" | "empty";
 
 interface MascotProps {
   size?: "small" | "medium" | "large";
+  mood?: MascotMood;
   style?: StyleProp<ViewStyle>;
 }
 
-export function Mascot({ size = "medium", style }: MascotProps) {
+const mascotSources: Record<MascotMood, ImageSourcePropType> = {
+  idle: jangoIdle,
+  happy: jangoHappy,
+  worry: jangoWorry,
+  cooking: jangoCooking,
+  empty: jangoEmpty,
+};
+
+const moodLabels: Record<MascotMood, string> = {
+  idle: "기본",
+  happy: "기쁜",
+  worry: "걱정하는",
+  cooking: "요리하는",
+  empty: "빈 냉장고",
+};
+
+export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
   return (
     <View
       pointerEvents="none"
       style={[styles.frame, sizeStyles[size], style]}
     >
       <Image
-        source={mascotSource}
+        source={mascotSources[mood]}
         style={styles.image}
         resizeMode="contain"
         accessibilityIgnoresInvertColors
-        accessibilityLabel="ExpiryMate 냉장고 셰프 마스코트"
+        accessibilityLabel={`${appBrand.characterNameKo}, ${moodLabels[mood]} 표정`}
       />
     </View>
   );
@@ -32,11 +57,6 @@ export function Mascot({ size = "medium", style }: MascotProps) {
 
 const styles = StyleSheet.create({
   frame: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderWidth: 1,
-    borderRadius: radius.xxl,
-    overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
   },

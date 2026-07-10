@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { appBrand } from "@expirymate/shared";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -8,7 +9,7 @@ export default function PrivacyPolicyPage() {
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
       <div className="rounded-[32px] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[0_30px_80px_rgba(29,39,32,0.08)]">
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
-          ExpiryMate Privacy
+          {appBrand.appNameKo} Privacy
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">
           개인정보처리방침
@@ -20,7 +21,7 @@ export default function PrivacyPolicyPage() {
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
           <h2 className="text-xl font-black">수집하는 정보</h2>
           <p>
-            ExpiryMate는 계정 식별 정보, 이메일, 표시 이름, 소셜 로그인 연결
+            {appBrand.appNameKo}({appBrand.appNameEn})는 계정 식별 정보, 이메일, 표시 이름, 소셜 로그인 연결
             정보, 재료명, 수량, 보관 위치, 유통기한, 알림 설정, AI 요리 추천
             요청과 결과를 서비스 제공을 위해 처리합니다.
           </p>

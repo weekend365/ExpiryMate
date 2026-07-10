@@ -1,5 +1,6 @@
 "use client";
 
+import { appBrand } from "@expirymate/shared";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
@@ -66,7 +67,7 @@ export function AppShell({ children }: PropsWithChildren) {
         <aside className="rounded-[28px] border border-[var(--border)] bg-[var(--surface)]/95 p-5 shadow-[0_24px_70px_rgba(29,39,32,0.08)] backdrop-blur">
           <div className="mb-8">
             <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
-              ExpiryMate Admin
+              {appBrand.appNameKo} Admin
             </div>
             <h1 className="mt-4 text-2xl font-black tracking-tight">재료 기반 운영 관리</h1>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">

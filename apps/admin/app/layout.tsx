@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { appBrand } from "@expirymate/shared";
 import "./globals.css";
 import { AppShell } from "../src/components/app-shell";
 import { Providers } from "../src/components/providers";
 
 export const metadata: Metadata = {
-  title: "ExpiryMate Admin",
-  description: "ExpiryMate internal management dashboard",
+  title: `${appBrand.appNameKo} Admin`,
+  description: `${appBrand.appNameEn} (${appBrand.appNameKo}) internal management dashboard`,
 };
 
 export default function RootLayout({

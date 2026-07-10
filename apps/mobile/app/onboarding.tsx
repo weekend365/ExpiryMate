@@ -1,3 +1,4 @@
+import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "../src/components/Button";
@@ -18,9 +19,9 @@ export default function OnboardingScreen() {
     <Screen scroll={false}>
       <View style={styles.hero}>
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>ExpiryMate</Text>
+          <Text style={styles.badgeText}>{appBrand.appNameKo}</Text>
         </View>
-        <Mascot size="large" style={styles.mascot} />
+        <Mascot size="large" mood="idle" style={styles.mascot} />
         <Text style={styles.title}>냉장고 속 재료로 오늘 만들 요리를 찾아보세요</Text>
         <Text style={styles.description}>
           보관 중인 재료와 유통기한을 정리하고, 남은 재료로 만들 수 있는 요리를 준비해요.

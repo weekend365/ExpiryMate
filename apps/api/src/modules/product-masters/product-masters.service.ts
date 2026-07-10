@@ -152,7 +152,7 @@ export class ProductMastersService {
         {
           headers: {
             Accept: "application/json",
-            "User-Agent": "ExpiryMate/1.0 (barcode-lookup)",
+            "User-Agent": "Jango/1.0 (barcode-lookup)",
           },
         },
       );

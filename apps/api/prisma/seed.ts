@@ -69,7 +69,7 @@ async function main() {
   await prisma.user.create({
     data: {
       email: adminEmail,
-      displayName: "ExpiryMate Admin",
+      displayName: "장고야 부탁해 Admin",
       accountType: AccountType.registered,
       role: UserRole.admin,
       emailVerifiedAt: new Date(),

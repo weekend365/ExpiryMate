@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { appBrand } from "@expirymate/shared";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -8,20 +9,20 @@ export default function PrivacyChoicesPage() {
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
       <div className="rounded-[32px] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[0_30px_80px_rgba(29,39,32,0.08)]">
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
-          ExpiryMate Privacy Choices
+          {appBrand.appNameKo} Privacy Choices
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">
           데이터 삭제 안내
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          사용자는 ExpiryMate 앱 안에서 계정과 사용자 데이터를 직접 삭제할 수
+          사용자는 {appBrand.appNameKo} 앱 안에서 계정과 사용자 데이터를 직접 삭제할 수
           있습니다.
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
           <h2 className="text-xl font-black">앱에서 삭제하는 방법</h2>
           <ol className="list-decimal space-y-2 pl-5">
-            <li>ExpiryMate 앱을 엽니다.</li>
+            <li>{appBrand.appNameKo} 앱을 엽니다.</li>
             <li>설정 탭으로 이동합니다.</li>
             <li>개인정보 및 AI 데이터 섹션에서 데이터 삭제를 선택합니다.</li>
             <li>확인 문구를 입력하고 계정 및 데이터 삭제를 실행합니다.</li>

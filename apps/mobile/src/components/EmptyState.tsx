@@ -2,11 +2,14 @@ import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { Button } from "./Button";
+import { Mascot, type MascotMood } from "./Mascot";
 import { colors, radius, spacing, typography } from "../shared/theme";
 
 interface EmptyStateProps {
   title: string;
   description?: string;
+  /** Prefer `mood` for 장고 empty/success states. Icon is a fallback only. */
+  mood?: MascotMood;
   icon?: LucideIcon;
   actionLabel?: string;
   onAction?: () => void;
@@ -16,6 +19,7 @@ interface EmptyStateProps {
 export function EmptyState({
   title,
   description,
+  mood,
   icon: Icon,
   actionLabel,
   onAction,
@@ -23,7 +27,11 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.root}>
-      {Icon ? (
+      {mood ? (
+        <View style={styles.mascotWrap}>
+          <Mascot size="medium" mood={mood} />
+        </View>
+      ) : Icon ? (
         <View style={styles.iconWrap}>
           <Icon color={colors.primary} size={spacing.md} strokeWidth={2.4} />
         </View>
@@ -51,6 +59,9 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.md,
     alignItems: "stretch",
+  },
+  mascotWrap: {
+    alignItems: "center",
   },
   iconWrap: {
     width: spacing.xl,

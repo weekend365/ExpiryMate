@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "ExpiryMate",
+    "name": "장고야 부탁해",
     "slug": "expirymate",
-    "description": "Korean-first ingredient inventory, expiry reminder, and recipe recommendation app.",
+    "description": "Jango (장고야 부탁해) — Korean-first ingredient inventory, expiry reminder, and recipe recommendation app.",
     "platforms": [
       "ios",
       "android"
@@ -11,8 +11,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F7F8F7",
-    "primaryColor": "#178A53",
+    "backgroundColor": "#F1F3F5",
+    "primaryColor": "#10B981",
     "icon": "./assets/branding/icon.png",
     "plugins": [
       "expo-router",
@@ -23,7 +23,7 @@
           "image": "./assets/branding/splash-icon.png",
           "imageWidth": 220,
           "resizeMode": "contain",
-          "backgroundColor": "#F7F8F7"
+          "backgroundColor": "#F1F3F5"
         }
       ],
       "@react-native-community/datetimepicker",
@@ -64,6 +64,7 @@
       },
       "infoPlist": {
         "CFBundleDevelopmentRegion": "ko",
+        "CFBundleDisplayName": "장고야 부탁해",
         "NSCameraUsageDescription": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다."
       }
     },
@@ -76,7 +77,7 @@
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/branding/adaptive-icon.png",
-        "backgroundColor": "#F7F8F7"
+        "backgroundColor": "#F1F3F5"
       }
     },
     "extra": {

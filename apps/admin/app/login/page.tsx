@@ -1,5 +1,6 @@
 "use client";
 
+import { appBrand } from "@expirymate/shared";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { adminLogin } from "../../src/lib/api";
@@ -46,7 +47,7 @@ export default function AdminLoginPage() {
         className="w-full max-w-md rounded-[32px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(29,39,32,0.08)]"
       >
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
-          ExpiryMate Admin
+          {appBrand.appNameKo} Admin
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">관리자 로그인</h1>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">

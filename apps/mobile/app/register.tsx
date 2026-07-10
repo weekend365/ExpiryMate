@@ -16,8 +16,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import {
   CalendarDays,
-  ChefHat,
   CheckCircle2,
+  ChefHat,
   ChevronRight,
   MapPin,
   Package,
@@ -30,6 +30,7 @@ import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { EmptyState } from "../src/components/EmptyState";
 import { FormField } from "../src/components/FormField";
+import { Mascot } from "../src/components/Mascot";
 import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
@@ -429,7 +430,7 @@ export default function RegisterScreen() {
       >
         {successMessage && step === "product" ? (
           <View style={styles.successStrip}>
-            <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
+            <Mascot size="small" mood="happy" style={styles.successMascot} />
             <View style={styles.successCopy}>
               <Text style={styles.successTitle}>{successMessage}</Text>
               <Text style={styles.successDescription}>
@@ -521,7 +522,7 @@ export default function RegisterScreen() {
               </View>
             ) : (
               <EmptyState
-                icon={Package}
+                mood="empty"
                 title="아직 불러올 재료가 없어요"
                 description="한 번 넣어 두면, 다음부터는 여기서 바로 불러올 수 있어요."
               />
@@ -718,6 +719,7 @@ export default function RegisterScreen() {
       <BottomSheet
         visible={showAdditionalInfo && step === "storage"}
         onClose={() => setShowAdditionalInfo(false)}
+        mascotMood="idle"
         title="조금만 더 알려주세요"
         description="브랜드, 카테고리, 단위, 메모는 필요할 때만 적어도 돼요."
         footer={
@@ -787,7 +789,10 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     flexDirection: "row",
     gap: spacing.sm,
-    alignItems: "flex-start",
+    alignItems: "center",
+  },
+  successMascot: {
+    flexShrink: 0,
   },
   successCopy: {
     flex: 1,

@@ -1,5 +1,5 @@
 /**
- * Primitive color scales for the ExpiryMate design system.
+ * Primitive color scales for the Jango (장고야 부탁해) design system.
  *
  * The brand hue centers on a fresh emerald/mint (`brand[500] = #10B981`) to
  * reflect the food-freshness domain. All values here are original to this

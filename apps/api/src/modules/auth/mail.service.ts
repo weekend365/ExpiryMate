@@ -1,4 +1,5 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
+import { appBrand } from "@expirymate/shared";
 import nodemailer from "nodemailer";
 
 type MailMessage = { to: string; subject: string; text: string };
@@ -18,8 +19,8 @@ export class MailService {
 
     await this.send({
       to: email,
-      subject: "ExpiryMate 이메일을 인증해주세요",
-      text: `ExpiryMate 이메일 인증 링크입니다.\n\n${url}`,
+      subject: `${appBrand.appNameKo} 이메일을 인증해주세요`,
+      text: `${appBrand.appNameKo} 이메일 인증 링크입니다.\n\n${url}`,
     });
   }
 
@@ -28,8 +29,8 @@ export class MailService {
 
     await this.send({
       to: email,
-      subject: "ExpiryMate 비밀번호 재설정",
-      text: `ExpiryMate 비밀번호 재설정 링크입니다. 15분 안에 사용해주세요.\n\n${url}`,
+      subject: `${appBrand.appNameKo} 비밀번호 재설정`,
+      text: `${appBrand.appNameKo} 비밀번호 재설정 링크입니다. 15분 안에 사용해주세요.\n\n${url}`,
     });
   }
 
@@ -42,8 +43,8 @@ export class MailService {
         throw new ServiceUnavailableException("SMTP 환경변수가 설정되지 않았습니다.");
       }
 
-      console.log(`[ExpiryMate mail:dev] to=${message.to}`);
-      console.log(`[ExpiryMate mail:dev] subject=${message.subject}`);
+      console.log(`[${appBrand.appNameEn} mail:dev] to=${message.to}`);
+      console.log(`[${appBrand.appNameEn} mail:dev] subject=${message.subject}`);
       console.log(message.text);
       return;
     }
