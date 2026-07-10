@@ -15,7 +15,8 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "NODE_ENV=development tsx prisma/seed.ts",
-    "db:seed:barcodes": "tsx scripts/seedBarcode.ts"
+    "db:seed:barcodes": "tsx scripts/seedBarcode.ts",
+    "db:upload:product-master": "bash scripts/uploadProductMaster.sh"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
