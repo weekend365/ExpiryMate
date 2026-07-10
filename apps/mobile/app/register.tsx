@@ -16,7 +16,6 @@ import {
   CalendarDays,
   ChefHat,
   CheckCircle2,
-  ChevronLeft,
   ChevronRight,
   MapPin,
   Package,
@@ -25,15 +24,19 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Button } from "../src/components/Button";
+import { BottomSheet } from "../src/components/BottomSheet";
 import { DatePickerField } from "../src/components/DatePickerField";
+import { EmptyState } from "../src/components/EmptyState";
 import { FormField } from "../src/components/FormField";
 import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
+import { SectionHeader } from "../src/components/SectionHeader";
+import { StepFlow } from "../src/components/StepFlow";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { addDays, toIsoDate } from "@expirymate/shared";
-import { colors, spacing } from "../src/shared/theme";
+import { colors, radius, spacing, typography } from "../src/shared/theme";
 import {
   type RegistrationDraft,
   useRegistrationStore,
@@ -268,7 +271,6 @@ export default function RegisterScreen() {
   const brand = form.watch("brand")?.trim() ?? "";
   const category = form.watch("category");
   const stepIndex = REGISTRATION_STEPS.findIndex((item) => item.key === step);
-  const activeStep = REGISTRATION_STEPS[stepIndex];
   const isLastStep = step === "storage";
   const canGoNext =
     (step === "product" && Boolean(displayName)) ||
@@ -315,6 +317,11 @@ export default function RegisterScreen() {
   };
 
   const goToPreviousStep = () => {
+    if (stepIndex <= 0) {
+      router.back();
+      return;
+    }
+
     const previousStep = REGISTRATION_STEPS[Math.max(0, stepIndex - 1)];
     setStep(previousStep.key);
   };
@@ -378,463 +385,412 @@ export default function RegisterScreen() {
   return (
     <Screen
       title="등록하기"
-      subtitle={`${stepIndex + 1}/${REGISTRATION_STEPS.length} · ${activeStep.label} 정보를 입력해요.`}
+      subtitle="한 번에 하나씩, 차근차근 넣어볼게요."
     >
-      <View style={styles.progressCard}>
-        <View style={styles.progressTrack}>
-          {REGISTRATION_STEPS.map((item, index) => {
-            const isActive = item.key === step;
-            const isCompleted = index < stepIndex;
-
-            return (
-              <View
-                key={item.key}
-                style={[
-                  styles.progressSegment,
-                  (isActive || isCompleted) && styles.progressSegmentActive,
-                ]}
-              />
-            );
-          })}
-        </View>
-        <View style={styles.stepHeader}>
+      <StepFlow
+        steps={REGISTRATION_STEPS}
+        currentIndex={stepIndex}
+        onBack={goToPreviousStep}
+        headerAccessory={
           <View style={styles.stepIcon}>
             {step === "product" ? (
-              <Package color={colors.primary} size={22} strokeWidth={2.5} />
+              <Package color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
             {step === "expiry" ? (
-              <CalendarDays color={colors.primary} size={22} strokeWidth={2.5} />
+              <CalendarDays color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
             {step === "storage" ? (
-              <MapPin color={colors.primary} size={22} strokeWidth={2.5} />
+              <MapPin color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
           </View>
-          <View style={styles.stepCopy}>
-            <Text style={styles.stepTitle}>{activeStep.title}</Text>
-            <Text style={styles.stepDescription}>{activeStep.description}</Text>
+        }
+        footer={
+          <Button
+            icon={isLastStep ? CheckCircle2 : ChevronRight}
+            iconPosition="right"
+            onPress={isLastStep ? onSubmit : goToNextStep}
+            loading={mutation.isPending}
+            disabled={!canGoNext}
+            fullWidth
+          >
+            {isLastStep ? "냉장고에 넣을게요" : "다음으로"}
+          </Button>
+        }
+      >
+        {successMessage ? (
+          <View style={styles.successStrip}>
+            <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
+            <View style={styles.successCopy}>
+              <Text style={styles.successTitle}>{successMessage}</Text>
+              <Text style={styles.successDescription}>
+                다음 재료 이름과 유통기한만 입력하면 이어서 등록할 수 있어요.
+              </Text>
+            </View>
           </View>
-        </View>
-      </View>
+        ) : null}
 
-      {successMessage ? (
-        <View style={styles.successStrip}>
-          <CheckCircle2 color={colors.success} size={20} strokeWidth={2.5} />
-          <View style={styles.successCopy}>
-            <Text style={styles.successTitle}>{successMessage}</Text>
-            <Text style={styles.successDescription}>
-              다음 재료 이름과 유통기한만 입력하면 이어서 등록할 수 있어요.
-            </Text>
+        {submitErrorMessage ? (
+          <View style={styles.errorStrip}>
+            <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
+            <Text style={styles.errorDescription}>{submitErrorMessage}</Text>
           </View>
-        </View>
-      ) : null}
+        ) : null}
 
-      {submitErrorMessage ? (
-        <View style={styles.errorStrip}>
-          <Text style={styles.errorTitle}>저장에 실패했어요</Text>
-          <Text style={styles.errorDescription}>{submitErrorMessage}</Text>
-        </View>
-      ) : null}
-
-      {step === "product" ? (
-        <>
-          {prefill?.displayName ? (
-            <View style={styles.prefillCard}>
-              <View style={styles.cardIcon}>
-                <Package color={colors.primary} size={18} strokeWidth={2.5} />
+        {step === "product" ? (
+          <>
+            {prefill?.displayName ? (
+              <View style={styles.prefillCard}>
+                <View style={styles.cardIcon}>
+                  <Package color={colors.primary} size={spacing.sm} strokeWidth={2.5} />
+                </View>
+                <Text style={styles.prefillEyebrow}>불러온 재료 정보</Text>
+                <Text style={styles.prefillTitle}>{prefill.displayName}</Text>
+                <Text style={styles.prefillDescription}>
+                  {prefill.brand ? `${prefill.brand} · ` : ""}
+                  재료 정보가 자동으로 채워졌어요. 이름만 확인하면 됩니다.
+                </Text>
               </View>
-              <Text style={styles.prefillEyebrow}>불러온 재료 정보</Text>
-              <Text style={styles.prefillTitle}>{prefill.displayName}</Text>
-              <Text style={styles.prefillDescription}>
-                {prefill.brand ? `${prefill.brand} · ` : ""}
-                재료 정보가 자동으로 채워졌어요. 이름만 확인하면 됩니다.
-              </Text>
-            </View>
-          ) : null}
+            ) : null}
 
-          {!prefill?.displayName && draft?.displayName ? (
-            <View style={styles.draftCard}>
-              <Text style={styles.draftTitle}>이전에 입력하던 내용을 이어서 보여주고 있어요</Text>
-              <Text style={styles.draftDescription}>
-                저장하기 전까지 입력 내용이 자동으로 보관됩니다.
-              </Text>
-            </View>
-          ) : null}
-
-          {similarItems.length ? (
-            <View style={styles.warningCard}>
-              <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
-              <Text style={styles.warningDescription}>
-                {similarItems
-                  .slice(0, 2)
-                  .map(
-                    (item) =>
-                      `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
-                  )
-                  .join(" / ")}
-              </Text>
-            </View>
-          ) : null}
-
-          <View style={styles.formCard}>
-            <FormField
-              control={form.control}
-              name="displayName"
-              label="재료명"
-              placeholder="예: 서울우유 1L"
-            />
-          </View>
-
-          {recentTemplates.length ? (
-            <View style={styles.card}>
-              <Text style={styles.sectionTitle}>최근 등록 재료 다시 쓰기</Text>
-              <View style={styles.templateList}>
-                {recentTemplates.map((item) => (
-                  <Pressable
-                    key={item.id}
-                    onPress={() => applyRecentTemplate(item)}
-                    style={({ pressed }) => [
-                      styles.templateCard,
-                      pressed && styles.templateCardPressed,
-                    ]}
-                  >
-                    <Text style={styles.templateName}>{item.displayName}</Text>
-                    <Text style={styles.templateMeta}>
-                      {storageLocationLabels[item.storageLocation]} · {item.unit ?? "개"}
-                    </Text>
-                  </Pressable>
-                ))}
+            {!prefill?.displayName && draft?.displayName ? (
+              <View style={styles.draftCard}>
+                <Text style={styles.draftTitle}>이전에 입력하던 내용을 이어서 보여주고 있어요</Text>
+                <Text style={styles.draftDescription}>
+                  저장하기 전까지 입력 내용이 자동으로 보관됩니다.
+                </Text>
               </View>
-            </View>
-          ) : null}
-        </>
-      ) : null}
+            ) : null}
 
-      {step === "expiry" ? (
-        <>
-          <View style={styles.formCard}>
-            <DatePickerField
-              label="유통기한"
-              value={expiryDate}
-              onChange={(nextDate) => {
-                form.setValue("expiryDate", nextDate, { shouldValidate: true });
-                form.setValue("expirySource", ExpirySource.MANUAL, {
-                  shouldValidate: true,
-                });
-              }}
-              error={form.formState.errors.expiryDate?.message}
-            />
-            <View style={styles.inlineMeta}>
-              <Text style={styles.inlineMetaLabel}>선택된 날짜</Text>
-              <Text style={styles.inlineMetaValue}>
-                {expiryDate ? formatDateKorean(expiryDate) : "아직 선택하지 않았어요"}
-              </Text>
-            </View>
-          </View>
+            {similarItems.length ? (
+              <View style={styles.warningCard}>
+                <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
+                <Text style={styles.warningDescription}>
+                  {similarItems
+                    .slice(0, 2)
+                    .map(
+                      (item) =>
+                        `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
+                    )
+                    .join(" / ")}
+                </Text>
+              </View>
+            ) : null}
 
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>빠른 유통기한 선택</Text>
-            <View style={styles.pillRow}>
-              {QUICK_EXPIRY_OPTIONS.map((option) => {
-                const presetDate = toIsoDate(addDays(new Date(), option.days));
-
-                return (
-                  <Pill
-                    key={option.days}
-                    label={option.label}
-                    icon={CalendarDays}
-                    selected={expiryDate === presetDate}
-                    onPress={() => handlePreset(option.days)}
-                  />
-                );
-              })}
-              <Pill
-                label="직접 선택"
-                icon={CalendarDays}
-                selected={expirySource === ExpirySource.MANUAL}
-                onPress={() =>
-                  form.setValue("expirySource", ExpirySource.MANUAL, {
-                    shouldValidate: true,
-                  })
-                }
+            <View style={styles.formCard}>
+              <FormField
+                control={form.control}
+                name="displayName"
+                label="재료명"
+                placeholder="예: 서울우유 1L"
               />
             </View>
-          </View>
-        </>
-      ) : null}
 
-      {step === "storage" ? (
-        <>
-          <View style={styles.card}>
-            <Text style={styles.sectionTitle}>저장 위치</Text>
-            <View style={styles.pillRow}>
-              {STORAGE_LOCATION_ORDER.map((location) => (
+            {recentTemplates.length ? (
+              <View style={styles.card}>
+                <SectionHeader
+                  title="최근 등록 재료 다시 쓰기"
+                  description="예전에 넣었던 재료를 불러와 빠르게 채울 수 있어요."
+                />
+                <View style={styles.templateList}>
+                  {recentTemplates.map((item) => (
+                    <Pressable
+                      key={item.id}
+                      onPress={() => applyRecentTemplate(item)}
+                      style={({ pressed }) => [
+                        styles.templateCard,
+                        pressed && styles.templateCardPressed,
+                      ]}
+                    >
+                      <Text style={styles.templateName}>{item.displayName}</Text>
+                      <Text style={styles.templateMeta}>
+                        {storageLocationLabels[item.storageLocation]} · {item.unit ?? "개"}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+            ) : (
+              <EmptyState
+                icon={Package}
+                title="아직 불러올 재료가 없어요"
+                description="한 번 등록해 두면, 다음부터는 여기서 바로 불러올 수 있어요."
+              />
+            )}
+          </>
+        ) : null}
+
+        {step === "expiry" ? (
+          <>
+            <View style={styles.formCard}>
+              <DatePickerField
+                label="유통기한"
+                value={expiryDate}
+                onChange={(nextDate) => {
+                  form.setValue("expiryDate", nextDate, { shouldValidate: true });
+                  form.setValue("expirySource", ExpirySource.MANUAL, {
+                    shouldValidate: true,
+                  });
+                }}
+                error={form.formState.errors.expiryDate?.message}
+              />
+              <View style={styles.inlineMeta}>
+                <Text style={styles.inlineMetaLabel}>선택된 날짜</Text>
+                <Text style={styles.inlineMetaValue}>
+                  {expiryDate ? formatDateKorean(expiryDate) : "아직 선택하지 않았어요"}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.card}>
+              <SectionHeader
+                title="빠른 유통기한 선택"
+                description="자주 쓰는 기간은 한 번에 골라볼 수 있어요."
+              />
+              <View style={styles.pillRow}>
+                {QUICK_EXPIRY_OPTIONS.map((option) => {
+                  const presetDate = toIsoDate(addDays(new Date(), option.days));
+
+                  return (
+                    <Pill
+                      key={option.days}
+                      label={option.label}
+                      icon={CalendarDays}
+                      selected={expiryDate === presetDate}
+                      onPress={() => handlePreset(option.days)}
+                    />
+                  );
+                })}
                 <Pill
-                  key={location}
-                  label={storageLocationLabels[location]}
-                  icon={MapPin}
-                  selected={storageLocation === location}
+                  label="직접 선택"
+                  icon={CalendarDays}
+                  selected={expirySource === ExpirySource.MANUAL}
                   onPress={() =>
-                    form.setValue("storageLocation", location, {
+                    form.setValue("expirySource", ExpirySource.MANUAL, {
                       shouldValidate: true,
                     })
                   }
                 />
+              </View>
+            </View>
+          </>
+        ) : null}
+
+        {step === "storage" ? (
+          <>
+            <View style={styles.card}>
+              <SectionHeader title="저장 위치" description="어디에 두고 계신가요?" />
+              <View style={styles.pillRow}>
+                {STORAGE_LOCATION_ORDER.map((location) => (
+                  <Pill
+                    key={location}
+                    label={storageLocationLabels[location]}
+                    icon={MapPin}
+                    selected={storageLocation === location}
+                    onPress={() =>
+                      form.setValue("storageLocation", location, {
+                        shouldValidate: true,
+                      })
+                    }
+                  />
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.formCard}>
+              <QuantityStepper
+                label="수량"
+                value={quantity}
+                onChange={(nextQuantity) =>
+                  form.setValue("quantity", nextQuantity, { shouldValidate: true })
+                }
+                error={form.formState.errors.quantity?.message}
+              />
+              <View style={styles.inlineMeta}>
+                <Text style={styles.inlineMetaLabel}>현재 선택</Text>
+                <Text style={styles.inlineMetaValue}>
+                  {storageLocationLabels[storageLocation]} · {quantity}
+                  {unit}
+                </Text>
+              </View>
+            </View>
+
+            {similarItems.length ? (
+              <View style={styles.warningCard}>
+                <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
+                <Text style={styles.warningDescription}>
+                  {similarItems
+                    .slice(0, 2)
+                    .map(
+                      (item) =>
+                        `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
+                    )
+                    .join(" / ")}
+                </Text>
+              </View>
+            ) : null}
+
+            <View style={styles.summaryCard}>
+              <View style={styles.summaryHeader}>
+                <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
+                <Text style={styles.summaryTitle}>이대로 등록할게요</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>재료</Text>
+                <Text style={styles.summaryValue}>{displayName || "입력 필요"}</Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>유통기한</Text>
+                <Text style={styles.summaryValue}>
+                  {expiryDate ? formatDateKorean(expiryDate) : "입력 필요"}
+                </Text>
+              </View>
+              <View style={styles.summaryRow}>
+                <Text style={styles.summaryLabel}>보관</Text>
+                <Text style={styles.summaryValue}>
+                  {storageLocationLabels[storageLocation]} · {quantity}
+                  {unit}
+                </Text>
+              </View>
+              {brand ? (
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>브랜드</Text>
+                  <Text style={styles.summaryValue}>{brand}</Text>
+                </View>
+              ) : null}
+              {category ? (
+                <View style={styles.summaryRow}>
+                  <Text style={styles.summaryLabel}>카테고리</Text>
+                  <Text style={styles.summaryValue}>{productCategoryLabels[category]}</Text>
+                </View>
+              ) : null}
+            </View>
+
+            <View style={styles.card}>
+              <Pressable
+                onPress={() => setShowAdditionalInfo(true)}
+                style={({ pressed }) => [
+                  styles.toggleRow,
+                  pressed && styles.templateCardPressed,
+                ]}
+              >
+                <View style={styles.toggleCopy}>
+                  <SectionHeader
+                    title="추가 정보"
+                    description="브랜드, 카테고리, 단위, 메모는 필요할 때만 입력하세요."
+                  />
+                </View>
+                <Text style={styles.toggleAction}>열기</Text>
+              </Pressable>
+            </View>
+          </>
+        ) : null}
+
+        {registeredSessionItems.length ? (
+          <View style={styles.sessionCard}>
+            <View style={styles.sessionHeader}>
+              <View>
+                <Text style={styles.sessionEyebrow}>오늘 등록한 재료</Text>
+                <Text style={styles.sessionTitle}>
+                  {registeredSessionItems.length}개 등록됨
+                </Text>
+              </View>
+              <Button
+                size="small"
+                icon={ChefHat}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(tabs)/recommendations",
+                    params: { autoGenerateAt: Date.now().toString() },
+                  })
+                }
+              >
+                추천 받기
+              </Button>
+            </View>
+            <View style={styles.sessionList}>
+              {registeredSessionItems.slice(0, 3).map((item) => (
+                <View key={item.id} style={styles.sessionRow}>
+                  <Text style={styles.sessionName}>{item.displayName}</Text>
+                  <Text style={styles.sessionMeta}>
+                    {storageLocationLabels[item.storageLocation]} · {item.quantity}
+                    {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
+                  </Text>
+                </View>
               ))}
             </View>
           </View>
+        ) : null}
+      </StepFlow>
 
-          <View style={styles.formCard}>
-            <QuantityStepper
-              label="수량"
-              value={quantity}
-              onChange={(nextQuantity) =>
-                form.setValue("quantity", nextQuantity, { shouldValidate: true })
-              }
-              error={form.formState.errors.quantity?.message}
-            />
-            <View style={styles.inlineMeta}>
-              <Text style={styles.inlineMetaLabel}>현재 선택</Text>
-              <Text style={styles.inlineMetaValue}>
-                {storageLocationLabels[storageLocation]} · {quantity}
-                {unit}
-              </Text>
-            </View>
-          </View>
-
-          {similarItems.length ? (
-            <View style={styles.warningCard}>
-              <Text style={styles.warningTitle}>집에 이미 {similarItems.length}개 있어요</Text>
-              <Text style={styles.warningDescription}>
-                {similarItems
-                  .slice(0, 2)
-                  .map(
-                    (item) =>
-                      `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
-                  )
-                  .join(" / ")}
-              </Text>
-            </View>
-          ) : null}
-
-          <View style={styles.summaryCard}>
-            <View style={styles.summaryHeader}>
-              <CheckCircle2 color={colors.success} size={22} strokeWidth={2.5} />
-              <Text style={styles.summaryTitle}>이대로 등록할게요</Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>재료</Text>
-              <Text style={styles.summaryValue}>{displayName || "입력 필요"}</Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>유통기한</Text>
-              <Text style={styles.summaryValue}>
-                {expiryDate ? formatDateKorean(expiryDate) : "입력 필요"}
-              </Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>보관</Text>
-              <Text style={styles.summaryValue}>
-                {storageLocationLabels[storageLocation]} · {quantity}
-                {unit}
-              </Text>
-            </View>
-            {brand ? (
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>브랜드</Text>
-                <Text style={styles.summaryValue}>{brand}</Text>
-              </View>
-            ) : null}
-            {category ? (
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>카테고리</Text>
-                <Text style={styles.summaryValue}>{productCategoryLabels[category]}</Text>
-              </View>
-            ) : null}
-          </View>
-
-          <View style={styles.card}>
-            <Pressable
-              onPress={() => setShowAdditionalInfo((current) => !current)}
-              style={({ pressed }) => [
-                styles.toggleRow,
-                pressed && styles.templateCardPressed,
-              ]}
-            >
-              <View style={styles.toggleCopy}>
-                <Text style={styles.sectionTitle}>추가 정보</Text>
-                <Text style={styles.sectionDescription}>
-                  브랜드, 카테고리, 단위, 메모는 필요할 때만 입력하세요.
-                </Text>
-              </View>
-              <Text style={styles.toggleAction}>
-                {showAdditionalInfo ? "접기" : "열기"}
-              </Text>
-            </Pressable>
-
-            {showAdditionalInfo ? (
-              <View style={styles.extraFields}>
-                <FormField
-                  control={form.control}
-                  name="brand"
-                  label="브랜드"
-                  placeholder="예: 서울우유"
-                />
-                <FormField
-                  control={form.control}
-                  name="unit"
-                  label="단위"
-                  placeholder="개 / 통 / 봉"
-                />
-                <View style={styles.extraSection}>
-                  <Text style={styles.extraSectionTitle}>카테고리</Text>
-                  <View style={styles.pillRow}>
-                    {productCategoryOptions.map((option) => (
-                      <Pill
-                        key={option.value}
-                        label={option.label}
-                        selected={category === option.value}
-                        onPress={() =>
-                          form.setValue("category", option.value as ProductCategory, {
-                            shouldValidate: true,
-                          })
-                        }
-                      />
-                    ))}
-                  </View>
-                  {category ? (
-                    <Text style={styles.inlineMetaValue}>
-                      현재 선택: {productCategoryLabels[category]}
-                    </Text>
-                  ) : null}
-                </View>
-                <FormField
-                  control={form.control}
-                  name="notes"
-                  label="메모"
-                  placeholder="추가로 기록할 내용"
-                  multiline
-                />
-              </View>
-            ) : null}
-          </View>
-        </>
-      ) : null}
-
-      {registeredSessionItems.length ? (
-        <View style={styles.sessionCard}>
-          <View style={styles.sessionHeader}>
-            <View>
-              <Text style={styles.sessionEyebrow}>오늘 등록한 재료</Text>
-              <Text style={styles.sessionTitle}>
-                {registeredSessionItems.length}개 등록됨
-              </Text>
-            </View>
-            <Button
-              size="small"
-              icon={ChefHat}
-              onPress={() =>
-                router.push({
-                  pathname: "/(tabs)/recommendations",
-                  params: { autoGenerateAt: Date.now().toString() },
-                })
-              }
-            >
-              추천 받기
-            </Button>
-          </View>
-          <View style={styles.sessionList}>
-            {registeredSessionItems.slice(0, 3).map((item) => (
-              <View key={item.id} style={styles.sessionRow}>
-                <Text style={styles.sessionName}>{item.displayName}</Text>
-                <Text style={styles.sessionMeta}>
-                  {storageLocationLabels[item.storageLocation]} · {item.quantity}
-                  {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
-                </Text>
-              </View>
+      <BottomSheet
+        visible={showAdditionalInfo && step === "storage"}
+        onClose={() => setShowAdditionalInfo(false)}
+        title="조금만 더 알려주세요"
+        description="브랜드, 카테고리, 단위, 메모는 필요할 때만 적어도 돼요."
+        footer={
+          <Button onPress={() => setShowAdditionalInfo(false)} fullWidth>
+            여기까지 할게요
+          </Button>
+        }
+      >
+        <FormField
+          control={form.control}
+          name="brand"
+          label="브랜드"
+          placeholder="예: 서울우유"
+        />
+        <FormField
+          control={form.control}
+          name="unit"
+          label="단위"
+          placeholder="개 / 통 / 봉"
+        />
+        <View style={styles.extraSection}>
+          <Text style={styles.extraSectionTitle}>카테고리</Text>
+          <View style={styles.pillRow}>
+            {productCategoryOptions.map((option) => (
+              <Pill
+                key={option.value}
+                label={option.label}
+                selected={category === option.value}
+                onPress={() =>
+                  form.setValue("category", option.value as ProductCategory, {
+                    shouldValidate: true,
+                  })
+                }
+              />
             ))}
           </View>
+          {category ? (
+            <Text style={styles.inlineMetaValue}>
+              현재 선택: {productCategoryLabels[category]}
+            </Text>
+          ) : null}
         </View>
-      ) : null}
-
-      <View style={styles.ctaBar}>
-        {stepIndex > 0 ? (
-          <Button
-            variant="secondary"
-            icon={ChevronLeft}
-            onPress={goToPreviousStep}
-            style={styles.ctaButton}
-          >
-            이전
-          </Button>
-        ) : null}
-        <Button
-          icon={isLastStep ? CheckCircle2 : ChevronRight}
-          iconPosition="right"
-          onPress={isLastStep ? onSubmit : goToNextStep}
-          loading={mutation.isPending}
-          disabled={!canGoNext}
-          style={styles.ctaButton}
-        >
-          {isLastStep ? "등록하기" : "다음"}
-        </Button>
-      </View>
+        <FormField
+          control={form.control}
+          name="notes"
+          label="메모"
+          placeholder="추가로 기록할 내용"
+          multiline
+        />
+      </BottomSheet>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  progressCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.lg,
-    gap: spacing.md,
-  },
-  progressTrack: {
-    flexDirection: "row",
-    gap: 6,
-  },
-  progressSegment: {
-    flex: 1,
-    height: 5,
-    borderRadius: 999,
-    backgroundColor: colors.mutedSurface,
-  },
-  progressSegmentActive: {
-    backgroundColor: colors.primary,
-  },
-  stepHeader: {
-    flexDirection: "row",
-    gap: spacing.md,
-    alignItems: "flex-start",
-  },
   stepIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 14,
+    width: spacing.xl,
+    height: spacing.xl,
+    borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
     alignItems: "center",
     justifyContent: "center",
   },
-  stepCopy: {
-    flex: 1,
-    gap: 4,
-  },
-  stepTitle: {
-    fontSize: 22,
-    lineHeight: 29,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  stepDescription: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: colors.subtext,
-  },
   successStrip: {
     backgroundColor: colors.successSoft,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
     gap: spacing.sm,
@@ -842,39 +798,39 @@ const styles = StyleSheet.create({
   },
   successCopy: {
     flex: 1,
-    gap: 3,
+    gap: spacing.xxs,
   },
   successTitle: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   successDescription: {
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
   errorStrip: {
     backgroundColor: colors.dangerSoft,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     padding: spacing.md,
-    gap: 3,
+    gap: spacing.xxs,
   },
   errorTitle: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.danger,
   },
   errorDescription: {
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.text,
   },
   formCard: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
@@ -882,87 +838,75 @@ const styles = StyleSheet.create({
   },
   prefillCard: {
     backgroundColor: colors.primarySoft,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.xs,
   },
   cardIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
+    width: spacing.lg,
+    height: spacing.lg,
+    borderRadius: radius.sm,
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: spacing.xs,
   },
   prefillEyebrow: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: "800",
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.primary,
   },
   prefillTitle: {
-    fontSize: 22,
-    lineHeight: 29,
-    fontWeight: "800",
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   prefillDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
   },
   draftCard: {
     backgroundColor: colors.mutedSurface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.xs,
   },
   draftTitle: {
-    fontSize: 16,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   draftDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
   },
   warningCard: {
     backgroundColor: colors.warningSoft,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.xs,
   },
   warningTitle: {
-    fontSize: 16,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.title.fontWeight,
     color: colors.warning,
   },
   warningDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.text,
   },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
     gap: spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  sectionDescription: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: colors.subtext,
-    marginTop: 4,
   },
   pillRow: {
     flexDirection: "row",
@@ -970,45 +914,46 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   inlineMeta: {
-    borderRadius: 12,
+    borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
-    gap: 4,
+    gap: spacing.xxs,
   },
   inlineMetaLabel: {
-    fontSize: 13,
-    fontWeight: "700",
+    fontSize: typography.label.fontSize,
+    fontWeight: typography.label.fontWeight,
     color: colors.subtext,
   },
   inlineMetaValue: {
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.text,
   },
   templateList: {
     gap: spacing.sm,
   },
   templateCard: {
-    borderRadius: 12,
+    borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
-    gap: 4,
+    gap: spacing.xxs,
+    minHeight: spacing.xxl,
   },
   templateCardPressed: {
     backgroundColor: colors.surfacePressed,
   },
   templateName: {
-    fontSize: 15,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   templateMeta: {
-    fontSize: 13,
+    fontSize: typography.label.fontSize,
     color: colors.subtext,
   },
   summaryCard: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
@@ -1021,9 +966,9 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xs,
   },
   summaryTitle: {
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: "800",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   summaryRow: {
@@ -1032,17 +977,17 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   summaryLabel: {
-    fontSize: 14,
-    lineHeight: 21,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.subtext,
   },
   summaryValue: {
     flex: 1,
     textAlign: "right",
-    fontSize: 14,
-    lineHeight: 21,
-    fontWeight: "800",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   toggleRow: {
@@ -1050,29 +995,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
+    minHeight: spacing.xxl,
   },
   toggleCopy: {
     flex: 1,
   },
   toggleAction: {
-    fontSize: 14,
-    fontWeight: "800",
+    fontSize: typography.bodySmall.fontSize,
+    fontWeight: typography.title.fontWeight,
     color: colors.primary,
-  },
-  extraFields: {
-    gap: spacing.md,
   },
   extraSection: {
     gap: spacing.sm,
   },
   extraSectionTitle: {
-    fontSize: 14,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.text,
   },
   sessionCard: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
@@ -1085,42 +1028,35 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   sessionEyebrow: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: "800",
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.primary,
   },
   sessionTitle: {
-    fontSize: 19,
-    lineHeight: 26,
-    fontWeight: "800",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   sessionList: {
     gap: spacing.sm,
   },
   sessionRow: {
-    borderRadius: 12,
+    borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
-    gap: 3,
+    gap: spacing.xxs,
   },
   sessionName: {
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   sessionMeta: {
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
-  },
-  ctaBar: {
-    flexDirection: "row",
-    gap: spacing.md,
-  },
-  ctaButton: {
-    flex: 1,
   },
 });

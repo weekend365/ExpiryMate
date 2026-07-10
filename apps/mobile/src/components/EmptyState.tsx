@@ -1,0 +1,78 @@
+import type { ReactNode } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import type { LucideIcon } from "lucide-react-native";
+import { Button } from "./Button";
+import { colors, radius, spacing, typography } from "../shared/theme";
+
+interface EmptyStateProps {
+  title: string;
+  description?: string;
+  icon?: LucideIcon;
+  actionLabel?: string;
+  onAction?: () => void;
+  accessory?: ReactNode;
+}
+
+export function EmptyState({
+  title,
+  description,
+  icon: Icon,
+  actionLabel,
+  onAction,
+  accessory,
+}: EmptyStateProps) {
+  return (
+    <View style={styles.root}>
+      {Icon ? (
+        <View style={styles.iconWrap}>
+          <Icon color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+        </View>
+      ) : null}
+      <View style={styles.copy}>
+        <Text style={styles.title}>{title}</Text>
+        {description ? <Text style={styles.description}>{description}</Text> : null}
+      </View>
+      {actionLabel && onAction ? (
+        <Button variant="secondary" onPress={onAction} fullWidth>
+          {actionLabel}
+        </Button>
+      ) : null}
+      {accessory}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  root: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    gap: spacing.md,
+    alignItems: "stretch",
+  },
+  iconWrap: {
+    width: spacing.xl,
+    height: spacing.xl,
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  copy: {
+    gap: spacing.xs,
+  },
+  title: {
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.subheading.fontWeight,
+    color: colors.text,
+  },
+  description: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
+    color: colors.subtext,
+  },
+});
