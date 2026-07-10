@@ -10,6 +10,7 @@ import { InventoryModule } from "./modules/inventory/inventory.module";
 import { NotificationsModule } from "./modules/notifications/notifications.module";
 import { PrivacyModule } from "./modules/privacy/privacy.module";
 import { ProductsModule } from "./modules/products/products.module";
+import { ProductMastersModule } from "./modules/product-masters/product-masters.module";
 import { RecipesModule } from "./modules/recipes/recipes.module";
 import { SettingsModule } from "./modules/settings/settings.module";
 import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.module";
@@ -26,6 +27,7 @@ import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.modul
     AuthModule,
     AdminModule,
     ProductsModule,
+    ProductMastersModule,
     InventoryModule,
     DashboardModule,
     PrivacyModule,

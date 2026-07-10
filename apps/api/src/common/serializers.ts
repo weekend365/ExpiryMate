@@ -2,6 +2,7 @@ import {
   type InventoryItem as PrismaInventoryItem,
   type NotificationPreference as PrismaNotificationPreference,
   type Product as PrismaProduct,
+  type ProductMaster as PrismaProductMaster,
   type PushToken as PrismaPushToken,
 } from "@prisma/client";
 import {
@@ -12,6 +13,8 @@ import {
   type NotificationPreference,
   type Product,
   ProductCategory,
+  type ProductMaster,
+  ProductMasterSource,
   type PushToken,
   type PushTokenPlatform,
   StorageLocation,
@@ -24,6 +27,21 @@ export const serializeProduct = (product: PrismaProduct): Product => ({
   brand: product.brand,
   category: product.category as ProductCategory,
   imageUrl: product.imageUrl,
+  createdAt: product.createdAt.toISOString(),
+  updatedAt: product.updatedAt.toISOString(),
+});
+
+export const serializeProductMaster = (
+  product: PrismaProductMaster,
+): ProductMaster => ({
+  id: product.id,
+  barcode: product.barcode,
+  name: product.name,
+  brand: product.brand,
+  category: product.category,
+  imageUrl: product.imageUrl,
+  source: product.source as ProductMasterSource,
+  contributedByUserId: product.contributedByUserId,
   createdAt: product.createdAt.toISOString(),
   updatedAt: product.updatedAt.toISOString(),
 });

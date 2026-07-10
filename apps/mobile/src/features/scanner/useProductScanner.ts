@@ -2,10 +2,12 @@ import TextRecognition, {
   TextRecognitionScript,
   type TextRecognitionResult,
 } from "@react-native-ml-kit/text-recognition";
+import { BarcodeLookupSource } from "@expirymate/shared";
 import type { BarcodeScanningResult } from "expo-camera";
 import type { CameraView } from "expo-camera";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { Vibration } from "react-native";
+import { lookupBarcodeProduct } from "../../services/api";
 import { parseExpirationDate } from "./parseExpirationDate";
 
 export type ScannerMode = "barcode" | "ocr" | "confirm";
@@ -13,22 +15,17 @@ export type ProductLookupStatus = "idle" | "loading" | "success" | "not-found" |
 
 export type ProductInfo = {
   barcode: string;
-  name: string;
-  imageUrl?: string;
+  name: string | null;
+  brand: string | null;
+  category: string | null;
+  imageUrl?: string | null;
+  source: BarcodeLookupSource;
+  productMasterId: string | null;
 };
 
 export type ScannerConfirmation = {
   barcode: string;
   expirationDate: string;
-};
-
-type OpenFoodFactsResponse = {
-  status?: number;
-  product?: {
-    product_name_ko?: string;
-    product_name?: string;
-    image_url?: string;
-  };
 };
 
 const PRODUCT_BARCODE_TYPES = new Set([
@@ -86,39 +83,24 @@ export function useProductScanner() {
     setProductLookupStatus("loading");
 
     try {
-      const response = await fetch(
-        `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(
-          barcode,
-        )}.json?fields=product_name_ko,product_name,image_url`,
-        {
-          headers: {
-            Accept: "application/json",
-          },
-          signal: controller.signal,
-        },
-      );
+      const result = await lookupBarcodeProduct(barcode);
 
-      if (!response.ok) {
-        throw new Error("Open Food Facts lookup failed");
-      }
-
-      const payload = (await response.json()) as OpenFoodFactsResponse;
-
-      if (scanTokenRef.current !== scanToken) {
+      if (controller.signal.aborted || scanTokenRef.current !== scanToken) {
         return;
       }
 
-      const productName = [
-        payload.product?.product_name_ko,
-        payload.product?.product_name,
-      ].find((name) => typeof name === "string" && name.trim().length > 0);
-
       setProduct({
-        barcode,
-        name: productName?.trim() ?? `바코드 ${barcode}`,
-        imageUrl: payload.product?.image_url,
+        barcode: result.barcode,
+        name: result.name,
+        brand: result.brand,
+        category: result.category,
+        imageUrl: result.imageUrl,
+        source: result.source,
+        productMasterId: result.productMasterId,
       });
-      setProductLookupStatus(payload.status === 1 ? "success" : "not-found");
+      setProductLookupStatus(
+        result.source === BarcodeLookupSource.NOT_FOUND ? "not-found" : "success",
+      );
     } catch (error) {
       if (controller.signal.aborted || scanTokenRef.current !== scanToken) {
         return;
@@ -126,11 +108,18 @@ export function useProductScanner() {
 
       setProduct({
         barcode,
-        name: `바코드 ${barcode}`,
+        name: null,
+        brand: null,
+        category: null,
+        imageUrl: null,
+        source: BarcodeLookupSource.NOT_FOUND,
+        productMasterId: null,
       });
       setProductLookupStatus("error");
       setProductErrorMessage(
-        error instanceof Error ? error.message : "상품 정보를 조회하지 못했어요.",
+        error instanceof Error
+          ? error.message
+          : "상품 정보를 조회하지 못했어요.",
       );
     }
   }, []);
