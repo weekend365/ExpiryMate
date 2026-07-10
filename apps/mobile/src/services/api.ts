@@ -1,6 +1,9 @@
 import type {
   AuthSession,
   AuthUser,
+  BarcodeLookupResult,
+  ContributeBarcodeProductRequest,
+  ContributeBarcodeProductResponse,
   DashboardSummary,
   DeleteAccountRequest,
   DeleteAccountResponse,
@@ -372,6 +375,19 @@ export const oauthLogin = async (
 
 export const getDashboardSummary = () =>
   request<DashboardSummary>("/dashboard/summary");
+
+export const lookupBarcodeProduct = (barcode: string) =>
+  request<BarcodeLookupResult>(
+    `/product-masters/lookup?barcode=${encodeURIComponent(barcode)}`,
+  );
+
+export const contributeBarcodeProduct = (
+  payload: ContributeBarcodeProductRequest,
+) =>
+  request<ContributeBarcodeProductResponse>("/product-masters/contribute", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
 export const listInventory = () => request<InventoryItem[]>("/inventory");
 

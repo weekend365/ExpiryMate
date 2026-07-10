@@ -34,3 +34,15 @@ export enum ProductCategory {
   SNACK = "snack",
   HOUSEHOLD = "household",
 }
+
+export enum ProductMasterSource {
+  FOODSAFETY_API = "foodsafety_api",
+  OPEN_FOOD_FACTS = "open_food_facts",
+  USER_CONTRIBUTED = "user_contributed",
+}
+
+export enum BarcodeLookupSource {
+  PRODUCT_MASTER = "product_master",
+  OPEN_FOOD_FACTS = "open_food_facts",
+  NOT_FOUND = "not_found",
+}

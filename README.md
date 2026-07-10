@@ -560,7 +560,7 @@ Inventory seed also includes mixed states:
 - Nest REST modules
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
-- **product scanner:** barcode (expo-camera) → Open Food Facts lookup → expiry OCR (ML Kit) → register prefill
+- **product scanner:** barcode (expo-camera) → waterfall lookup (`ProductMaster` → Open Food Facts → manual contribute) → expiry OCR (ML Kit) → register prefill
 - AI recipe recommendation API and mobile recommendation tab
 - subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling

@@ -186,16 +186,20 @@ model Product {
 }
 
 model ProductMaster {
-  id        String   @id @default(cuid())
-  barcode   String   @unique
-  name      String
-  brand     String
-  category  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                  String   @id @default(cuid())
+  barcode             String   @unique
+  name                String
+  brand               String
+  category            String
+  imageUrl            String?
+  source              String   @default("foodsafety_api")
+  contributedByUserId String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@index([name])
   @@index([category])
+  @@index([source])
 }
 
 model InventoryItem {

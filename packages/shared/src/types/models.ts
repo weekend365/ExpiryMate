@@ -1,7 +1,9 @@
 import type {
+  BarcodeLookupSource,
   ExpirySource,
   ItemStatus,
   ProductCategory,
+  ProductMasterSource,
   StorageLocation,
 } from "../enums/app-enums";
 
@@ -13,6 +15,41 @@ export interface Product {
   imageUrl?: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ProductMaster {
+  id: string;
+  barcode: string;
+  name: string;
+  brand: string;
+  category: string;
+  imageUrl?: string | null;
+  source: ProductMasterSource;
+  contributedByUserId?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BarcodeLookupResult {
+  barcode: string;
+  name: string | null;
+  brand: string | null;
+  category: string | null;
+  imageUrl: string | null;
+  source: BarcodeLookupSource;
+  productMasterId: string | null;
+}
+
+export interface ContributeBarcodeProductRequest {
+  barcode: string;
+  name: string;
+  brand?: string;
+  category?: string;
+}
+
+export interface ContributeBarcodeProductResponse {
+  product: ProductMaster;
+  created: boolean;
 }
 
 export type AuthUserRole = "user" | "admin";

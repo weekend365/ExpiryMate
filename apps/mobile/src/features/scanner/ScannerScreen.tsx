@@ -1,4 +1,4 @@
-import { ExpirySource } from "@expirymate/shared";
+import { BarcodeLookupSource, ExpirySource } from "@expirymate/shared";
 import { router } from "expo-router";
 import {
   Barcode,
@@ -8,18 +8,21 @@ import {
   RotateCcw,
   X,
 } from "lucide-react-native";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Image,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { Button } from "../../components/Button";
-import { colors, spacing } from "../../shared/theme";
+import { contributeBarcodeProduct } from "../../services/api";
+import { colors, radius, spacing } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
 import { useProductScanner } from "./useProductScanner";
 
@@ -61,6 +64,9 @@ function ScannerCameraExperience() {
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const [manualName, setManualName] = useState("");
+  const [isContributing, setIsContributing] = useState(false);
+  const [contributeError, setContributeError] = useState<string | null>(null);
 
   const instruction =
     scanner.mode === "barcode"
@@ -72,20 +78,62 @@ function ScannerCameraExperience() {
       : scanner.mode === "ocr"
         ? "2/2 유통기한 인식"
         : "등록 정보 확인";
-  const scannedProductName =
-    scanner.product?.name ??
-    (scanner.scannedBarcode ? `바코드 ${scanner.scannedBarcode}` : "상품명 미확인");
 
-  const handleUseScanResult = () => {
-    if (!scanner.confirmation) {
+  const needsManualName =
+    scanner.productLookupStatus === "not-found" ||
+    scanner.productLookupStatus === "error" ||
+    (scanner.productLookupStatus === "success" && !scanner.product?.name);
+
+  const resolvedProductName = needsManualName
+    ? manualName.trim()
+    : scanner.product?.name?.trim() ?? "";
+
+  const productSourceLabel =
+    scanner.productLookupStatus === "loading"
+      ? "상품 정보를 찾고 있어요"
+      : scanner.product?.source === BarcodeLookupSource.PRODUCT_MASTER
+        ? "우리 냉장고 목록에서 찾았어요"
+        : scanner.product?.source === BarcodeLookupSource.OPEN_FOOD_FACTS
+          ? "Open Food Facts에서 찾았어요"
+          : needsManualName
+            ? "이름을 직접 알려주세요"
+            : "상품 정보";
+
+  const handleUseScanResult = async () => {
+    if (!scanner.confirmation || !resolvedProductName) {
       return;
     }
 
+    setContributeError(null);
+
+    if (needsManualName && scanner.confirmation.barcode) {
+      setIsContributing(true);
+
+      try {
+        await contributeBarcodeProduct({
+          barcode: scanner.confirmation.barcode,
+          name: resolvedProductName,
+          brand: scanner.product?.brand ?? undefined,
+          category: scanner.product?.category ?? undefined,
+        });
+      } catch (error) {
+        setContributeError(
+          error instanceof Error
+            ? error.message
+            : "재료 이름은 저장했지만, 공유 목록에는 아직 못 넣었어요.",
+        );
+      } finally {
+        setIsContributing(false);
+      }
+    }
+
     setPrefill({
-      displayName: scannedProductName,
+      displayName: resolvedProductName,
+      brand: scanner.product?.brand ?? undefined,
     });
     setDraft({
-      displayName: scannedProductName,
+      displayName: resolvedProductName,
+      brand: scanner.product?.brand ?? undefined,
       expiryDate: scanner.confirmation.expirationDate,
       expirySource: ExpirySource.OCR_DETECTED,
     });
@@ -217,19 +265,37 @@ function ScannerCameraExperience() {
                 </View>
               )}
               <View style={styles.productCopy}>
-                <Text style={styles.productEyebrow}>
-                  {scanner.productLookupStatus === "loading"
-                    ? "상품 정보 조회 중"
-                    : scanner.productLookupStatus === "not-found"
-                      ? "OFF에서 이름을 찾지 못했어요"
-                      : "상품 정보"}
-                </Text>
-                <Text style={styles.productName}>{scannedProductName}</Text>
+                <Text style={styles.productEyebrow}>{productSourceLabel}</Text>
+                {needsManualName ? (
+                  <Text style={styles.productName}>아직 이름이 없어요</Text>
+                ) : (
+                  <Text style={styles.productName}>
+                    {scanner.product?.name ?? "상품명 확인 중"}
+                  </Text>
+                )}
                 <Text style={styles.productBarcode}>
                   바코드 {scanner.confirmation.barcode}
                 </Text>
               </View>
             </View>
+
+            {needsManualName ? (
+              <View style={styles.manualNameCard}>
+                <Text style={styles.manualNameLabel}>이 재료 이름이 뭐예요?</Text>
+                <TextInput
+                  value={manualName}
+                  onChangeText={setManualName}
+                  placeholder="예: 서울우유 1L"
+                  placeholderTextColor={colors.mutedText}
+                  style={styles.manualNameInput}
+                  autoCorrect={false}
+                  returnKeyType="done"
+                />
+                <Text style={styles.manualNameHint}>
+                  알려주시면 다음에도 바로 불러올 수 있어요.
+                </Text>
+              </View>
+            ) : null}
 
             <View style={styles.expiryCard}>
               <Text style={styles.expiryLabel}>인식한 유통기한</Text>
@@ -238,24 +304,41 @@ function ScannerCameraExperience() {
 
             {scanner.productErrorMessage ? (
               <Text style={styles.sheetFootnote}>
-                상품 조회는 실패했지만 바코드와 유통기한은 사용할 수 있어요.
+                상품 조회는 잠시 막혔지만, 이름을 직접 적으면 등록할 수 있어요.
               </Text>
+            ) : null}
+
+            {contributeError ? (
+              <Text style={styles.sheetFootnote}>{contributeError}</Text>
             ) : null}
 
             <View style={styles.sheetActions}>
               <Button
                 variant="secondary"
                 icon={RotateCcw}
-                onPress={scanner.resetScanner}
+                onPress={() => {
+                  setManualName("");
+                  setContributeError(null);
+                  scanner.resetScanner();
+                }}
                 style={styles.sheetButton}
+                disabled={isContributing}
               >
                 다시 스캔
               </Button>
               <Button
                 icon={CheckCircle2}
                 iconPosition="right"
-                onPress={handleUseScanResult}
+                onPress={() => {
+                  void handleUseScanResult();
+                }}
                 style={styles.sheetButton}
+                disabled={
+                  !resolvedProductName ||
+                  isContributing ||
+                  scanner.productLookupStatus === "loading"
+                }
+                loading={isContributing || scanner.productLookupStatus === "loading"}
               >
                 등록하기
               </Button>
@@ -582,6 +665,34 @@ const styles = StyleSheet.create({
   productBarcode: {
     fontSize: 13,
     lineHeight: 18,
+    color: colors.subtext,
+  },
+  manualNameCard: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  manualNameLabel: {
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  manualNameInput: {
+    minHeight: 52,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  manualNameHint: {
+    fontSize: 13,
+    lineHeight: 19,
     color: colors.subtext,
   },
   expiryCard: {

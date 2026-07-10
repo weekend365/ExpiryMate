@@ -34,6 +34,7 @@ type NormalizedProduct = {
   name: string;
   brand: string;
   category: string;
+  source: "foodsafety_api";
 };
 
 const prisma = new PrismaClient();
@@ -69,6 +70,7 @@ function normalizeProduct(row: FoodSafetyRow): NormalizedProduct | null {
     name,
     brand: brand || DEFAULT_BRAND,
     category: category || DEFAULT_CATEGORY,
+    source: "foodsafety_api",
   };
 }
 
@@ -134,6 +136,7 @@ async function upsertProducts(products: NormalizedProduct[], page: number) {
       update: {
         name: product.name,
         category: product.category,
+        source: product.source,
       },
     });
 

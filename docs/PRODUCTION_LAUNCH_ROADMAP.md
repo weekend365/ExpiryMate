@@ -115,7 +115,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 ```
 홈 → 바코드로 바로 등록
   → [1/2] 실시간 바코드 스캔 (EAN-13/8, UPC-A/E)
-  → OFF API 비동기 상품명·이미지 조회
+  → 워터폴 상품 조회 (ProductMaster → Open Food Facts → 수동 입력)
   → [2/2] 유통기한 OCR (ML Kit, 한국어 날짜 형식)
   → 확인 바텀시트 → 등록 화면 (prefill + expirySource: ocr_detected)
 ```
@@ -126,7 +126,8 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 |------|-----------|------|
 | 카메라 프리뷰·바코드 | `expo-camera` (`CameraView.onBarcodeScanned`) | iOS 26 안정성 위해 Vision Camera v5 대신 채택 |
 | 유통기한 OCR | `@react-native-ml-kit/text-recognition` | 스냅샷 `takePictureAsync` → ML Kit |
-| 상품 조회 | Open Food Facts REST API | `product_name_ko`, `product_name`, `image_url` |
+| 상품 조회 | `GET /product-masters/lookup` | DB → OFF → `not_found` 워터폴 |
+| 크라우드소싱 | `POST /product-masters/contribute` | 미조회 시 유저 이름 저장 |
 | 날짜 파싱 | `parseExpirationDate` | `YYYY.MM.DD`, `YY.MM.DD`, `YYYY년 MM월 DD일` 등 |
 
 #### 주요 파일
@@ -134,8 +135,9 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | 경로 | 설명 |
 |------|------|
 | `apps/mobile/app/scanner.tsx` | Expo Router 라우트 |
-| `apps/mobile/src/features/scanner/ScannerScreen.tsx` | 카메라 UI, ROI, 확인 바텀시트 |
-| `apps/mobile/src/features/scanner/useProductScanner.ts` | 상태 머신·OFF·OCR 루프 |
+| `apps/mobile/src/features/scanner/ScannerScreen.tsx` | 카메라 UI, ROI, 확인 바텀시트·수동 입력 |
+| `apps/mobile/src/features/scanner/useProductScanner.ts` | 상태 머신·워터폴 조회·OCR 루프 |
+| `apps/api/src/modules/product-masters/` | 워터폴 lookup·contribute API |
 | `apps/mobile/src/features/scanner/parseExpirationDate.ts` | 유통기한 정규식 파서 |
 | `apps/mobile/src/features/scanner/parseExpirationDate.test.ts` | 파서 단위 테스트 (8건) |
 | `apps/mobile/app/(tabs)/home.tsx` | 진입 버튼 |
@@ -150,7 +152,7 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | typecheck / lint | ✅ |
 | iOS 실기기 바코드 인식 | ✅ (expo-camera 실시간 스캔) |
 | iOS 실기기 유통기한 OCR | ✅ |
-| OFF 등록 바코드 상품명 조회 | ✅ |
+| ProductMaster 워터폴 상품명 조회 | ✅ |
 | Android 실기기 QA | ⬜ 미완 |
 | EAS 빌드에 스캐너 포함 | ⬜ 미완 |
 
@@ -174,7 +176,7 @@ pnpm --filter @expirymate/mobile exec expo run:ios --device "기기 이름"
 - EAS `preview` / `production` 프로필에 스캐너 포함 빌드·검증
 - 흐릿한 바코드·반사·저조도 환경 인식률 개선 (필요 시)
 - 상품 카탈로그(`GET /products`)와 스캐너 결과 병합 UX (Phase 4)
-- 국내 바코드 마스터(`ProductMaster`) 조회 API 연동 — OFF 대체·병행 (§1-3)
+- 국내 바코드 마스터(`ProductMaster`) 조회 API 연동 — OFF 대체·병행 (§1-3) ✅ 2026-07-10
 
 ### 1-3. 바코드 상품 마스터 (`ProductMaster`) 적재 — 2026-07-08
 
@@ -219,22 +221,31 @@ pnpm db:seed:barcodes
 - `pnpm db:seed` (개발용 wipe seed)와 **별개** — 프로덕션에서도 `db:seed:barcodes`만 단독 실행 가능 (upsert만 수행)
 - migration 실패 시 seed는 `ProductMaster` 테이블 부재로 실패할 수 있으므로 `&&`로 묶어 순서 보장 권장
 
-#### 검증·적재 상태 (2026-07-08)
+#### 검증·적재 상태 (2026-07-10)
 
 | 항목 | 상태 |
 |------|------|
 | 스키마·migration·스크립트·실행 명령 | ✅ |
-| `typecheck` / `lint` | ✅ |
-| Railway `ProductMaster` migration 배포 | ⬜ **미완** — `postgres.railway.internal` URL로 로컬 실행 시 `P1001` (내부 DNS 미해석) |
-| 식품안전나라 API 스크래핑·DB 적재 | ⬜ **미착수** — 1페이지(`1~1000`) 요청 시 `ERROR-500 (서버오류입니다.)`, 수신 0건으로 종료 |
-| 모바일/API `ProductMaster` 조회 연동 | ⬜ Phase 4 |
+| `source` / `imageUrl` / `contributedByUserId` 필드 | ✅ (`20260710050000_product_master_source_fields`) |
+| 워터폴 조회 API `GET /product-masters/lookup?barcode=` | ✅ DB → Open Food Facts → `not_found` |
+| 크라우드소싱 `POST /product-masters/contribute` | ✅ 인증 사용자, 식품안전/OFF 행은 덮어쓰지 않음 |
+| 모바일 스캐너 워터폴 연동 | ✅ 클라이언트 OFF 직접 호출 제거 |
+| Railway `ProductMaster` 적재 | ✅ (사용자 확인: 식품안전나라 스크래핑 데이터 적재됨) |
+
+#### 워터폴 조회 순서
+
+```
+GET /product-masters/lookup?barcode=
+  1) ProductMaster (식품안전나라 / OFF 캐시 / 유저 기여)
+  2) Open Food Facts (히트 시 ProductMaster에 캐시)
+  3) not_found → 모바일에서 수동 입력 → POST /product-masters/contribute
+```
 
 #### 다음 작업
 
-1. Railway Postgres **Public URL**로 `pnpm db:migrate:deploy` 재실행
-2. 식품안전나라 API 서버 정상화 확인 후 `FOODSAFETY_API_KEY`와 함께 `pnpm db:seed:barcodes` 재실행
-3. 적재 완료 후 `GET /product-masters?barcode=` (또는 동등 API) 설계·모바일 스캐너 OFF 병행/대체 연동
-
+1. Railway에 `20260710050000_product_master_source_fields` migration 배포
+2. Android 실기기 QA
+3. 유저 기여 데이터 관리자 검수 UX (선택)
 ### README와 코드베이스 차이
 
 `README.md`의 **What Is Real vs Mocked** 섹션은 일부 outdated 합니다. 아래는 **코드 기준** 현재 상태입니다.
@@ -441,7 +452,7 @@ Sentry와 uptime monitor는 운영 안정화 항목이지만, **스토어 제출
 
 ```
 [ ] 익명 세션 → 재료 등록 → 대시보드 반영
-[ ] 홈 → 바코드로 바로 등록 → OFF 상품 조회 → 유통기한 OCR → 등록 prefill
+[ ] 홈 → 바코드로 바로 등록 → 워터폴 상품 조회 → 유통기한 OCR → 등록 prefill
 [ ] 회원가입 → 이메일 인증 → 로그인
 [ ] 익명 데이터 → 로그인/가입 시 merge
 [ ] Apple / Google / Kakao OAuth
