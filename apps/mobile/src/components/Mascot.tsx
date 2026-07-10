@@ -6,7 +6,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import mascotSource from "../../assets/characters/mate-fridge-chef.png";
-import { colors } from "../shared/theme";
+import { colors, radius, spacing } from "../shared/theme";
 
 interface MascotProps {
   size?: "small" | "medium" | "large";
@@ -35,30 +35,28 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderWidth: 1,
+    borderRadius: radius.xxl,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
   },
   image: {
-    width: "118%",
-    height: "118%",
+    width: "100%",
+    height: "100%",
   },
 });
 
 const sizeStyles = StyleSheet.create({
   small: {
-    width: 74,
-    height: 74,
-    borderRadius: 22,
+    width: spacing.xxxl + spacing.xs,
+    height: spacing.xxxl + spacing.xs,
   },
   medium: {
-    width: 112,
-    height: 112,
-    borderRadius: 28,
+    width: spacing.xxxl + spacing.xl + spacing.xs,
+    height: spacing.xxxl + spacing.xl + spacing.xs,
   },
   large: {
-    width: 164,
-    height: 164,
-    borderRadius: 36,
+    width: spacing.xxxl + spacing.xxxl + spacing.lg,
+    height: spacing.xxxl + spacing.xxxl + spacing.lg,
   },
 });

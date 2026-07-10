@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors, radius, spacing } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface ButtonProps extends PropsWithChildren {
   onPress: () => void;
@@ -36,7 +36,7 @@ export function Button({
 }: ButtonProps) {
   const palette = buttonPalettes[variant];
   const isDisabled = disabled || loading;
-  const iconSize = size === "small" ? 16 : 18;
+  const iconSize = size === "small" ? spacing.sm : spacing.sm + spacing.xxs;
   const textColor = isDisabled ? palette.disabledTextColor : palette.textColor;
   const label = (
     <Text
@@ -118,26 +118,26 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   mediumButton: {
-    minHeight: 52,
+    minHeight: touchTarget.cta,
     paddingHorizontal: spacing.md,
   },
   smallButton: {
-    minHeight: 48,
+    minHeight: touchTarget.min,
     paddingHorizontal: spacing.sm,
   },
   fullWidth: {
     alignSelf: "stretch",
   },
   label: {
-    fontWeight: "700",
+    fontWeight: typography.bodyStrong.fontWeight,
   },
   mediumLabel: {
-    fontSize: 16,
-    lineHeight: 22,
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
   },
   smallLabel: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
   },
 });

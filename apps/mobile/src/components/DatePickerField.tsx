@@ -11,7 +11,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { colors, spacing } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { Button } from "./Button";
 
 interface DatePickerFieldProps {
@@ -137,46 +137,53 @@ function toDatePickerDateOnly(value: Date) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 8,
+    gap: spacing.xs,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.text,
   },
   trigger: {
-    minHeight: 58,
-    borderRadius: 18,
+    minHeight: touchTarget.ctaLarge,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     justifyContent: "space-between",
-    gap: 6,
+    gap: spacing.xs,
   },
   triggerPressed: {
-    opacity: 0.85,
+    backgroundColor: colors.surfacePressed,
   },
   errorTrigger: {
     borderColor: colors.danger,
   },
   valueText: {
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.text,
   },
   placeholderText: {
-    fontSize: 15,
-    color: colors.subtext,
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.body.fontWeight,
+    color: colors.mutedText,
   },
   triggerAction: {
-    fontSize: 13,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.primary,
-    fontWeight: "700",
+    fontWeight: typography.label.fontWeight,
   },
   errorText: {
-    fontSize: 13,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.danger,
   },
   modalRoot: {
@@ -185,18 +192,20 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(31, 41, 51, 0.28)",
+    backgroundColor: colors.text,
+    opacity: 0.28,
   },
   sheet: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
+    borderTopLeftRadius: radius.xxl,
+    borderTopRightRadius: radius.xxl,
     padding: spacing.lg,
     gap: spacing.md,
   },
   sheetTitle: {
-    fontSize: 18,
-    fontWeight: "800",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   buttonRow: {

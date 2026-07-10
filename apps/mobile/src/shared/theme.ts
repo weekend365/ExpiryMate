@@ -21,4 +21,15 @@ export const spacing = designSpacing;
 
 export const radius = designRadius;
 
+/**
+ * Touch-target heights from .cursorrules (not a visual spacing token).
+ * Interactive controls must be at least `min`; primary CTAs use `cta`–`ctaLarge`.
+ */
+export const touchTarget = {
+  min: 48,
+  cta: 52,
+  ctaLarge: 56,
+  icon: 44,
+} as const;
+
 export { fontWeight, typography };

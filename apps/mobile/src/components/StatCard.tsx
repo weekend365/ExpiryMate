@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { colors, spacing } from "../shared/theme";
+import { colors, radius, spacing, typography } from "../shared/theme";
 
 interface StatCardProps {
   label: string;
@@ -36,18 +36,20 @@ const tones = {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    borderRadius: 22,
+    borderRadius: radius.xxl,
     padding: spacing.md,
-    gap: 6,
-    minHeight: 110,
+    gap: spacing.xs,
+    minHeight: spacing.xxxl + spacing.xl,
   },
   value: {
-    fontSize: 30,
-    fontWeight: "800",
+    fontSize: typography.display.fontSize,
+    lineHeight: typography.display.lineHeight,
+    fontWeight: typography.display.fontWeight,
   },
   label: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.subtext,
   },
 });

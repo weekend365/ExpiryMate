@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface PillProps {
   label: string;
@@ -21,6 +21,8 @@ export function Pill({
 }: PillProps) {
   const palette = tonePalettes[tone];
   const foregroundColor = selected ? colors.surface : palette.textColor;
+  const countBackgroundColor = selected ? colors.surface : colors.mutedSurface;
+  const countTextColor = selected ? palette.selectedBackgroundColor : foregroundColor;
 
   return (
     <Pressable
@@ -38,7 +40,7 @@ export function Pill({
       ]}
     >
       {Icon ? (
-        <Icon color={foregroundColor} size={15} strokeWidth={2.4} />
+        <Icon color={foregroundColor} size={spacing.sm} strokeWidth={2.4} />
       ) : null}
       <Text style={[styles.label, { color: foregroundColor }]}>
         {label}
@@ -48,8 +50,8 @@ export function Pill({
           style={[
             styles.count,
             {
-              backgroundColor: selected ? "rgba(255,255,255,0.2)" : colors.mutedSurface,
-              color: foregroundColor,
+              backgroundColor: countBackgroundColor,
+              color: countTextColor,
             },
           ]}
         >
@@ -81,29 +83,29 @@ const tonePalettes = {
 
 const styles = StyleSheet.create({
   base: {
-    minHeight: 38,
-    paddingHorizontal: 13,
-    paddingVertical: 8,
-    borderRadius: 12,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
     borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: spacing.xs,
   },
   label: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
   },
   count: {
-    minWidth: 20,
+    minWidth: spacing.md,
     overflow: "hidden",
-    borderRadius: 10,
-    paddingHorizontal: 6,
-    paddingVertical: 1,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
     textAlign: "center",
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: "800",
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: typography.title.fontWeight,
   },
 });

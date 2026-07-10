@@ -5,12 +5,11 @@ import {
   StyleSheet,
   type StyleProp,
   Text,
-  useWindowDimensions,
   View,
   type ViewStyle,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors, spacing } from "../shared/theme";
+import { colors, spacing, typography } from "../shared/theme";
 
 interface ScreenProps extends PropsWithChildren {
   title?: string;
@@ -32,10 +31,6 @@ export function Screen({
   footer,
   contentStyle,
 }: ScreenProps) {
-  const { width } = useWindowDimensions();
-  const isCompact = width < 380;
-  const horizontalPadding = isCompact ? spacing.sm : spacing.md;
-
   const content = (
     <>
       {title ? (
@@ -55,25 +50,14 @@ export function Screen({
     <SafeAreaView style={styles.safeArea} edges={["top", "right", "left"]}>
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[
-            styles.content,
-            { paddingHorizontal: horizontalPadding },
-            contentStyle,
-          ]}
+          contentContainerStyle={[styles.content, contentStyle]}
           showsVerticalScrollIndicator={false}
           refreshControl={refreshControl}
         >
           {content}
         </ScrollView>
       ) : (
-        <View
-          style={[
-            styles.content,
-            styles.staticContent,
-            { paddingHorizontal: horizontalPadding },
-            contentStyle,
-          ]}
-        >
+        <View style={[styles.content, styles.staticContent, contentStyle]}>
           {content}
         </View>
       )}
@@ -88,8 +72,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   content: {
+    paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
-    paddingBottom: spacing.xl * 2,
+    paddingBottom: spacing.xxxl + spacing.sm,
     gap: spacing.lg,
   },
   staticContent: {
@@ -103,10 +88,10 @@ const styles = StyleSheet.create({
   },
   headerCopy: {
     flex: 1,
-    gap: 6,
+    gap: spacing.xs,
   },
   headerAction: {
-    paddingTop: 2,
+    paddingTop: spacing.none,
   },
   footer: {
     borderTopWidth: 1,
@@ -117,14 +102,15 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.md,
   },
   title: {
-    fontSize: 28,
-    lineHeight: 36,
-    fontWeight: "800",
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   subtitle: {
-    fontSize: 15,
-    lineHeight: 23,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.subtext,
   },
 });

@@ -16,7 +16,7 @@ import {
   ShieldCheck,
 } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
-import { colors, spacing } from "../shared/theme";
+import { colors, radius, spacing, typography } from "../shared/theme";
 
 interface InventoryCardProps {
   item: InventoryItem;
@@ -75,7 +75,7 @@ export function InventoryCard({
           ]}
         >
           {selected ? (
-            <CheckCircle2 color={colors.surface} size={19} strokeWidth={2.7} />
+            <CheckCircle2 color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
           ) : null}
         </View>
       ) : null}
@@ -84,18 +84,18 @@ export function InventoryCard({
         <View style={styles.titleRow}>
           <Text style={styles.name} numberOfLines={1}>{item.displayName}</Text>
           {onPress && !selectionMode ? (
-            <ChevronRight color={colors.mutedText} size={18} />
+            <ChevronRight color={colors.mutedText} size={spacing.sm + spacing.xxs} />
           ) : null}
         </View>
         <View style={styles.metaRow}>
-          <MapPin color={colors.mutedText} size={14} strokeWidth={2.3} />
+          <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
           <Text style={styles.meta} numberOfLines={1}>
             {storageLocationLabels[item.storageLocation]} · {item.quantity}
             {item.unit ?? "개"} · {itemStatusLabels[item.status]}
           </Text>
         </View>
         <View style={styles.dateRow}>
-          <CalendarDays color={colors.mutedText} size={14} strokeWidth={2.3} />
+          <CalendarDays color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
           <Text style={styles.dateLabel}>
             유통기한 {formatDateKoreanCompact(item.expiryDate)}
           </Text>
@@ -111,7 +111,7 @@ export function InventoryCard({
             },
           ]}
         >
-          <DDayIcon color={bucketStyle.color} size={15} strokeWidth={2.5} />
+          <DDayIcon color={bucketStyle.color} size={spacing.sm} strokeWidth={2.5} />
           <Text style={[styles.badgeText, { color: bucketStyle.color }]}>
             {ddayLabel}
           </Text>
@@ -135,7 +135,7 @@ const bucketStyles = {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
@@ -157,9 +157,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   selectionIndicator: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: spacing.lg,
+    height: spacing.lg,
+    borderRadius: radius.pill,
     borderWidth: 2,
     borderColor: colors.border,
     backgroundColor: colors.surface,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    gap: 8,
+    gap: spacing.xs,
   },
   titleRow: {
     flexDirection: "row",
@@ -181,35 +181,37 @@ const styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    fontSize: 18,
-    lineHeight: 24,
-    fontWeight: "800",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   metaRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: spacing.xxs,
   },
   meta: {
     flex: 1,
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.subtext,
   },
   dateRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: spacing.xxs,
   },
   dateLabel: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.subtext,
   },
   badgeColumn: {
     alignItems: "flex-end",
-    gap: 6,
+    gap: spacing.xs,
   },
   badgeColumnCompact: {
     width: "100%",
@@ -218,24 +220,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   badge: {
-    minWidth: 72,
-    minHeight: 34,
-    borderRadius: 12,
-    paddingHorizontal: 9,
-    paddingVertical: 7,
+    minWidth: spacing.xl + spacing.lg,
+    minHeight: spacing.lg,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 4,
+    gap: spacing.xxs,
   },
   badgeText: {
-    fontSize: 14,
-    lineHeight: 18,
-    fontWeight: "800",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.title.fontWeight,
   },
   bucketLabel: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: "700",
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: typography.label.fontWeight,
   },
 });

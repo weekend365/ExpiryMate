@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { colors } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface QuantityStepperProps {
   label: string;
@@ -22,6 +22,7 @@ export function QuantityStepper({
       <View style={[styles.container, error ? styles.errorContainer : null]}>
         <Pressable
           onPress={() => onChange(Math.max(1, safeValue - 1))}
+          hitSlop={spacing.xxs}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,
@@ -40,6 +41,7 @@ export function QuantityStepper({
         />
         <Pressable
           onPress={() => onChange(safeValue + 1)}
+          hitSlop={spacing.xxs}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,
@@ -55,16 +57,17 @@ export function QuantityStepper({
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 8,
+    gap: spacing.xs,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.text,
   },
   container: {
-    minHeight: 58,
-    borderRadius: 18,
+    minHeight: touchTarget.ctaLarge,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
@@ -76,30 +79,36 @@ const styles = StyleSheet.create({
     borderColor: colors.danger,
   },
   iconButton: {
-    width: 56,
+    width: touchTarget.ctaLarge,
+    minHeight: touchTarget.ctaLarge,
     alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.primarySoft,
   },
   iconButtonPressed: {
-    opacity: 0.82,
+    backgroundColor: colors.primarySoftPressed,
   },
   iconButtonLabel: {
-    fontSize: 22,
-    fontWeight: "800",
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.primary,
   },
   input: {
     flex: 1,
     alignSelf: "stretch",
+    minHeight: touchTarget.ctaLarge,
     textAlign: "center",
-    fontSize: 18,
-    fontWeight: "700",
+    fontSize: typography.subheading.fontSize,
+    lineHeight: typography.subheading.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
     color: colors.text,
   },
   errorText: {
-    fontSize: 13,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.danger,
   },
 });

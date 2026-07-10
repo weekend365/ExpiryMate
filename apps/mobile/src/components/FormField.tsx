@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { colors, spacing } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface FormFieldProps {
   control: any;
@@ -36,6 +36,7 @@ export function FormField({
             value={field.value ? String(field.value) : ""}
             onChangeText={field.onChange}
             placeholder={placeholder}
+            placeholderTextColor={colors.mutedText}
             keyboardType={keyboardType}
             multiline={multiline}
             numberOfLines={multiline ? 4 : 1}
@@ -56,25 +57,28 @@ export function FormField({
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 8,
+    gap: spacing.xs,
   },
   label: {
-    fontSize: 14,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
     color: colors.text,
   },
   input: {
-    minHeight: 52,
-    borderRadius: 18,
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     color: colors.text,
-    fontSize: 15,
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.body.fontWeight,
   },
   multiline: {
-    minHeight: 110,
+    minHeight: spacing.xxxl + spacing.xl,
     paddingVertical: spacing.md,
     textAlignVertical: "top",
   },
@@ -82,7 +86,9 @@ const styles = StyleSheet.create({
     borderColor: colors.danger,
   },
   errorText: {
-    fontSize: 13,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.bodySmall.fontWeight,
     color: colors.danger,
   },
 });
