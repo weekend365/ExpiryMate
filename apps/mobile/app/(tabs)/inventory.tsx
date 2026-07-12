@@ -246,7 +246,7 @@ export default function InventoryScreen() {
                 pressed && styles.headerFilterButtonPressed,
               ]}
               accessibilityRole="button"
-              accessibilityLabel="선택 취소"
+              accessibilityLabel="고르기 그만두기"
             >
               <Text style={styles.headerFilterLabel}>그만두기</Text>
             </Pressable>
@@ -286,7 +286,7 @@ export default function InventoryScreen() {
               >
                 {selectedIds.length
                   ? `${selectedIds.length}개 정리할게요`
-                  : "정리할 재료를 골라주세요"}
+                  : "정리할 재료를 골라 주세요"}
               </Button>
             )
             : (
@@ -354,7 +354,7 @@ export default function InventoryScreen() {
             ]}
           >
             <Text style={styles.headerFilterLabel}>
-              {allVisibleSelected ? "해제" : "전체"}
+              {allVisibleSelected ? "전부 해제" : "전부 고르기"}
             </Text>
           </Pressable>
         </View>

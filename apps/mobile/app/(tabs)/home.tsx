@@ -132,7 +132,7 @@ export default function HomeScreen() {
             <Text style={styles.secondaryEntryDescription}>
               {focus.action === "scanner"
                 ? "이름과 유통기한을 손으로 적을 수도 있어요."
-                : "장고가 바코드를 읽어 등록을 도와줄게요."}
+                : "장고가 바코드를 읽어 넣는 걸 도와줄게요."}
             </Text>
           </Pressable>
         ) : null}
@@ -170,7 +170,7 @@ export default function HomeScreen() {
               {recipeGenerationStatus === "pending"
                 ? "다른 화면을 봐도 괜찮아요. 끝나면 알려드릴게요."
                 : recipeGenerationStatus === "success"
-                  ? "추천 탭에서 오늘 만들 요리를 확인해 보세요."
+                  ? "추천 탭에서 오늘 만들 요리를 살펴보세요."
                   : recipeGenerationError ?? "추천 탭에서 다시 해볼 수 있어요."}
             </Text>
           </View>
@@ -197,7 +197,7 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         <SectionHeader
-          title="먼저 확인할 재료"
+          title="먼저 살펴볼 재료"
           description={
             needsAttention
               ? "유통기한이 가까운 재료부터 보여드릴게요."
@@ -238,7 +238,7 @@ export default function HomeScreen() {
               isLoading
                 ? "잠시만 기다려 주세요."
                 : hasInventory
-                  ? "여유 있는 재료는 보관함에서 천천히 확인할 수 있어요."
+                  ? "여유 있는 재료는 보관함에서 천천히 볼 수 있어요."
                   : "첫 재료를 넣으면 여기서 임박한 재료를 알려드릴게요."
             }
           />
@@ -248,7 +248,7 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <SectionHeader
           title="최근에 넣은 재료"
-          description="방금 넣은 재료를 다시 확인할 수 있어요."
+          description="방금 넣은 재료를 다시 볼 수 있어요."
           action={
             <Text style={styles.sectionCount}>{recentItems.length}개</Text>
           }
@@ -274,7 +274,7 @@ export default function HomeScreen() {
             title={
               isLoading
                 ? "최근 기록을 불러오고 있어요"
-                : "아직 등록한 재료가 없어요"
+                : "아직 넣어둔 재료가 없어요"
             }
             description={
               isLoading
@@ -301,7 +301,7 @@ function getHomeFocus({
 }) {
   if (isLoading) {
     return {
-      title: "보관함을 확인하고 있어요",
+      title: "보관함을 살펴보고 있어요",
       description: "조금만 기다려 주시면 오늘 할 일을 알려드릴게요.",
       ctaLabel: "잠시만요",
       action: "inventory" as const,
@@ -311,7 +311,7 @@ function getHomeFocus({
   if (needsAttention) {
     return {
       title: `${priorityCount}개를 먼저 살펴볼까요?`,
-      description: "유통기한이 가까운 재료부터 확인하고, 요리에 쓰거나 정리해 보세요.",
+      description: "유통기한이 가까운 재료부터 살펴보고, 요리에 쓰거나 정리해 보세요.",
       ctaLabel: "임박한 재료 보기",
       action: "expiring" as const,
     };

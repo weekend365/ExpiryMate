@@ -12,7 +12,7 @@ const toneClasses = {
 
 export function MetricCard({ label, value, tone = "default" }: MetricCardProps) {
   return (
-    <div className={`rounded-[28px] p-5 ${toneClasses[tone]}`}>
+    <div className={`rounded-[var(--radius-2xl)] p-5 ${toneClasses[tone]}`}>
       <div className="text-4xl font-black tracking-tight">{value}</div>
       <div className="mt-2 text-sm font-semibold">{label}</div>
     </div>

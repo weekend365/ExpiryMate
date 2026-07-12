@@ -1,3 +1,4 @@
+import { appBrand } from "@expirymate/shared";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as AuthSession from "expo-auth-session";
 import { router } from "expo-router";
@@ -5,9 +6,16 @@ import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Button } from "../../src/components/Button";
+import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
-import { colors, spacing } from "../../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,7 +31,7 @@ export default function LoginScreen() {
       await loginMutation.mutateAsync({ email, password });
       router.back();
     } catch (error) {
-      Alert.alert("로그인 실패", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }
   };
 
@@ -53,7 +61,7 @@ export default function LoginScreen() {
       if ((error as { code?: string }).code === "ERR_REQUEST_CANCELED") {
         return;
       }
-      Alert.alert("Apple 로그인 실패", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }
   };
 
@@ -120,65 +128,107 @@ export default function LoginScreen() {
       await oauthMutation.mutateAsync({ provider, providerToken });
       router.back();
     } catch (error) {
-      Alert.alert("소셜 로그인 실패", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }
   };
 
   return (
-    <Screen title="로그인" subtitle="계정으로 연결하면 익명으로 등록한 재료가 계정에 병합돼요.">
+    <Screen
+      title="어서 오세요"
+      subtitle="계정으로 이어가면, 익명으로 넣은 재료도 함께 옮겨 드릴게요."
+      footer={
+        <Button
+          onPress={handleLogin}
+          loading={loginMutation.isPending}
+          disabled={!email || !password}
+          fullWidth
+        >
+          로그인할게요
+        </Button>
+      }
+    >
+      <View style={styles.brandRow}>
+        <Mascot size="small" mood="idle" />
+        <View style={styles.brandBadge}>
+          <Text style={styles.brandBadgeText}>{appBrand.appNameKo}</Text>
+        </View>
+      </View>
+
       <View style={styles.fieldGroup}>
+        <Text style={styles.label}>이메일</Text>
         <TextInput
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
-          placeholder="이메일"
+          placeholder="예: jango@example.com"
+          placeholderTextColor={colors.mutedText}
           style={styles.input}
         />
+        <Text style={styles.label}>비밀번호</Text>
         <TextInput
           value={password}
           onChangeText={setPassword}
           secureTextEntry
-          placeholder="비밀번호"
+          placeholder="비밀번호를 입력해 주세요"
+          placeholderTextColor={colors.mutedText}
           style={styles.input}
         />
       </View>
 
-      <Button
-        onPress={handleLogin}
-        loading={loginMutation.isPending}
-        disabled={!email || !password}
-        fullWidth
-      >
-        로그인
-      </Button>
-
       <View style={styles.links}>
-        <Pressable onPress={() => router.push("/auth/register")}>
-          <Text style={styles.linkText}>회원가입</Text>
+        <Pressable
+          onPress={() => router.push("/auth/register")}
+          style={styles.linkButton}
+        >
+          <Text style={styles.linkText}>계정 만들기</Text>
         </Pressable>
-        <Pressable onPress={() => router.push("/auth/forgot-password")}>
-          <Text style={styles.linkText}>비밀번호 찾기</Text>
+        <Pressable
+          onPress={() => router.push("/auth/forgot-password")}
+          style={styles.linkButton}
+        >
+          <Text style={styles.linkText}>비밀번호를 잊었어요</Text>
         </Pressable>
       </View>
 
-      <View style={styles.divider} />
-
-      <Button variant="secondary" onPress={handleAppleLogin} fullWidth>
-        Apple로 계속하기
-      </Button>
-      <Button variant="secondary" onPress={handleGoogleLogin} fullWidth>
-        Google로 계속하기
-      </Button>
-      <Button variant="secondary" onPress={handleKakaoLogin} fullWidth>
-        Kakao로 계속하기
-      </Button>
+      <View style={styles.oauthCard}>
+        <Text style={styles.oauthTitle}>다른 방법으로 이어갈까요?</Text>
+        <Pressable
+          onPress={handleAppleLogin}
+          style={({ pressed }) => [
+            styles.oauthRow,
+            pressed && styles.oauthRowPressed,
+          ]}
+        >
+          <Text style={styles.oauthRowText}>Apple로 계속하기</Text>
+        </Pressable>
+        <Pressable
+          onPress={handleGoogleLogin}
+          style={({ pressed }) => [
+            styles.oauthRow,
+            pressed && styles.oauthRowPressed,
+          ]}
+        >
+          <Text style={styles.oauthRowText}>Google로 계속하기</Text>
+        </Pressable>
+        <Pressable
+          onPress={handleKakaoLogin}
+          style={({ pressed }) => [
+            styles.oauthRow,
+            pressed && styles.oauthRowPressed,
+          ]}
+        >
+          <Text style={styles.oauthRowText}>Kakao로 계속하기</Text>
+        </Pressable>
+      </View>
     </Screen>
   );
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 function parseOAuthReturnUrl(url: string): Record<string, string> {
@@ -195,32 +245,88 @@ function parseOAuthReturnUrl(url: string): Record<string, string> {
 }
 
 const styles = StyleSheet.create({
-  fieldGroup: {
+  brandRow: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm,
   },
+  brandBadge: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  brandBadgeText: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
+    color: colors.primary,
+  },
+  fieldGroup: {
+    gap: spacing.xs,
+  },
+  label: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
+    color: colors.text,
+    marginTop: spacing.xs,
+  },
   input: {
-    minHeight: 52,
-    borderRadius: 12,
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
     color: colors.text,
-    fontSize: 16,
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.body.fontWeight,
   },
   links: {
     flexDirection: "row",
     justifyContent: "center",
     gap: spacing.lg,
-    marginVertical: spacing.md,
+  },
+  linkButton: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
   },
   linkText: {
+    fontSize: typography.bodySmall.fontSize,
+    fontWeight: typography.title.fontWeight,
     color: colors.primary,
-    fontWeight: "700",
   },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: spacing.sm,
+  oauthCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: "hidden",
+  },
+  oauthTitle: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
+    color: colors.mutedText,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xs,
+  },
+  oauthRow: {
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.md,
+    justifyContent: "center",
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  oauthRowPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  oauthRowText: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.text,
   },
 });

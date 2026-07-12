@@ -8,7 +8,7 @@ interface PanelProps extends PropsWithChildren {
 
 export function Panel({ title, description, action, children }: PanelProps) {
   return (
-    <section className="rounded-[28px] border border-[var(--border)] bg-[var(--surface)] p-5">
+    <section className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-5">
       {title || description || action ? (
         <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>

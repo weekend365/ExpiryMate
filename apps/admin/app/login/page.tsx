@@ -44,7 +44,7 @@ export default function AdminLoginPage() {
     <main className="grid min-h-screen place-items-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-[32px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[0_30px_80px_rgba(29,39,32,0.08)]"
+        className="w-full max-w-md rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-lift)]"
       >
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
           {appBrand.appNameKo} Admin
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
             onChange={(event) => setEmail(event.target.value)}
             type="email"
             placeholder="이메일"
-            className="h-12 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
+            className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
           />
           <input
             name="password"
@@ -71,12 +71,12 @@ export default function AdminLoginPage() {
             onChange={(event) => setPassword(event.target.value)}
             type="password"
             placeholder="비밀번호"
-            className="h-12 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
+            className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
           />
         </div>
 
         {errorMessage ? (
-          <div className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+          <div className="mt-4 rounded-[var(--radius-lg)] bg-[var(--danger-soft)] px-4 py-3 text-sm font-semibold text-[var(--danger)]">
             {errorMessage}
           </div>
         ) : null}
@@ -84,7 +84,7 @@ export default function AdminLoginPage() {
         <button
           type="submit"
           disabled={!email || !password || isSubmitting}
-          className="mt-6 h-12 w-full rounded-2xl bg-[var(--primary)] text-sm font-black text-white disabled:cursor-not-allowed disabled:bg-[var(--border)]"
+          className="mt-6 h-12 w-full rounded-[var(--radius-lg)] bg-[var(--primary)] text-sm font-black text-[var(--surface)] disabled:cursor-not-allowed disabled:bg-[var(--border)]"
         >
           {isSubmitting ? "로그인 중" : "로그인"}
         </button>

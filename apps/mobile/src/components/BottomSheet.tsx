@@ -112,7 +112,7 @@ export function BottomSheet({
             style={StyleSheet.absoluteFill}
             onPress={onClose}
             accessibilityRole="button"
-            accessibilityLabel="닫기"
+            accessibilityLabel="시트 닫기"
           />
         </Animated.View>
 

@@ -24,7 +24,7 @@ export function DashboardPage() {
         actions={
           <Link
             href="/products"
-            className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-white"
+            className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--surface)]"
           >
             상품 관리
           </Link>
@@ -44,7 +44,7 @@ export function DashboardPage() {
             {summary?.recentItems?.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-2xl bg-[var(--surface-muted)] px-4 py-3"
+                className="flex items-center justify-between rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3"
               >
                 <div>
                   <div className="font-bold">{item.displayName}</div>
@@ -61,7 +61,7 @@ export function DashboardPage() {
             {summary?.expiringItems?.map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3"
               >
                 <div className="font-semibold">{item.displayName}</div>
                 <div className="mt-1 text-sm text-[var(--muted)]">{item.brand ?? "브랜드 없음"}</div>

@@ -587,7 +587,7 @@ export default function RegisterScreen() {
                   필요할 때만 적어도 괜찮아요.
                 </Text>
               </View>
-              <Text style={styles.extraTriggerAction}>열기</Text>
+              <Text style={styles.extraTriggerAction}>적어볼게요</Text>
             </Pressable>
           </>
         ) : null}

@@ -1,48 +1,32 @@
 @import "tailwindcss";
 
 /*
- * Design tokens mirror `@expirymate/shared` (packages/shared/src/design).
- * Keep these values in sync with `cssVariables` in that module, which is the
- * single source of truth shared with the mobile app.
+ * Color / radius / font tokens come from `@expirymate/shared` `cssVariableBlock`
+ * injected in `app/layout.tsx`. That keeps admin in sync with mobile semantic
+ * tokens — do not redeclare raw hex brand colors here.
+ *
+ * Elevation helpers below only compose existing CSS variables.
  */
+
 :root {
-  --background: #f1f3f5;
-  --surface: #ffffff;
-  --surface-muted: #e8ebee;
-  --surface-pressed: #e8ebee;
-  --foreground: #1a1f27;
-  --muted: #4e5561;
-  --muted-strong: #8a939f;
-  --border: #dbdfe4;
-
-  --primary: #10b981;
-  --primary-pressed: #059669;
-  --primary-soft: #ecfdf5;
-
-  --accent: #4e5561;
-  --accent-soft: #e8ebee;
-
-  --danger: #ef4444;
-  --danger-soft: #fef2f2;
-  --warning: #f59e0b;
-  --warning-soft: #fffbeb;
-  --success: #22c55e;
-  --success-soft: #f0fdf4;
-  --info: #3b82f6;
-  --info-soft: #eff6ff;
-
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
-
-  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --shadow-soft: 0 24px 70px
+    color-mix(in srgb, var(--foreground) 8%, transparent);
+  --shadow-lift: 0 30px 80px
+    color-mix(in srgb, var(--foreground) 8%, transparent);
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(16, 185, 129, 0.06), transparent 26%),
-    linear-gradient(180deg, #f1f3f5 0%, #e8ebee 100%);
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--primary) 12%, transparent),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      var(--background) 0%,
+      var(--surface-muted) 100%
+    );
   color: var(--foreground);
   font-family: var(--font-sans);
 }

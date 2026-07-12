@@ -74,7 +74,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
 
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <Panel title="현재 정보" description="모바일 등록과 요리 추천에 사용되는 기준 데이터입니다.">
-          <div className="space-y-3 rounded-[28px] bg-[var(--surface-muted)] p-5">
+          <div className="space-y-3 rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-5">
             <div>
               <div className="text-sm text-[var(--muted)]">상품명</div>
               <div className="text-xl font-black">{productQuery.data?.name}</div>
@@ -97,21 +97,21 @@ export function ProductDetailPage({ productId }: { productId: string }) {
             <label className="grid gap-2 text-sm font-semibold">
               상품명
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("name")}
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold">
               브랜드
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("brand")}
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold">
               카테고리
               <select
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("category")}
               >
                 {productCategoryOptions.map((option) => (
@@ -124,13 +124,13 @@ export function ProductDetailPage({ productId }: { productId: string }) {
             <label className="grid gap-2 text-sm font-semibold">
               이미지 URL
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("imageUrl")}
               />
             </label>
             <button
               type="submit"
-              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-white"
+              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
             >
               수정 저장
             </button>

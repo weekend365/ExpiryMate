@@ -73,7 +73,7 @@ const EDIT_STEPS: Array<{
     key: "expiry",
     label: "기한",
     title: "유통기한과 메모",
-    description: "날짜를 확인하고, 필요할 때만 메모를 남겨 주세요.",
+    description: "날짜를 맞춰 두고, 필요할 때만 메모를 남겨 주세요.",
   },
 ];
 
@@ -302,7 +302,7 @@ export default function InventoryDetailScreen() {
               disabled={!canGoNext}
               fullWidth
             >
-              {isLastEditStep ? "이대로 저장할까요?" : "다음으로 갈게요"}
+              {isLastEditStep ? "이렇게 바꿔둘까요?" : "다음으로 갈게요"}
             </Button>
           }
         >
@@ -607,7 +607,7 @@ export default function InventoryDetailScreen() {
         onClose={() => setConfirmAction(null)}
         mascotMood="happy"
         title="다 드신 거죠?"
-        description="사용 완료로 표시하면 보관함 목록에서 빠져요."
+        description="다 드셨다고 알려주시면 보관함 목록에서 빠져요."
         footer={
           <View style={styles.sheetFooter}>
             <Button
@@ -628,7 +628,7 @@ export default function InventoryDetailScreen() {
         }
       >
         <View style={styles.confirmCard}>
-          <Text style={styles.confirmLabel}>완료할 재료</Text>
+          <Text style={styles.confirmLabel}>다 드신 재료</Text>
           <Text style={styles.confirmValue}>{item.displayName}</Text>
         </View>
       </BottomSheet>

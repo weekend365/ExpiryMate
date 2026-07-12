@@ -143,10 +143,15 @@ async function request<T>(
     }
 
     if (response.status >= 500) {
-      throw new Error("서버가 일시적으로 불안정해요. 잠시 후 다시 시도해주세요.");
+      throw new Error(
+        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+      );
     }
 
-    throw new Error(body.error?.message ?? "요청을 처리하지 못했어요.");
+    throw new Error(
+      body.error?.message ??
+        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+    );
   }
 
   return body.data;
@@ -163,7 +168,10 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
-    throw new Error(body.error?.message ?? "요청을 처리하지 못했어요.");
+    throw new Error(
+      body.error?.message ??
+        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+    );
   }
 
   return body.data;
@@ -173,7 +181,7 @@ async function fetchWithNetworkError(path: string, init?: RequestInit) {
   try {
     return await fetch(buildUrl(path), init);
   } catch {
-    throw new Error("네트워크 연결을 확인해주세요.");
+    throw new Error("인터넷 연결을 한번 봐 주세요.");
   }
 }
 
@@ -181,7 +189,7 @@ async function parseEnvelope<T>(response: Response) {
   try {
     return (await response.json()) as ApiEnvelope<T>;
   } catch {
-    throw new Error("서버 응답을 확인하지 못했어요.");
+    throw new Error("앗, 답을 제대로 받지 못했어요.");
   }
 }
 

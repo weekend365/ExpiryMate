@@ -7,7 +7,7 @@ const contactEmail =
 export default function PrivacyPolicyPage() {
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
-      <div className="rounded-[32px] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[0_30px_80px_rgba(29,39,32,0.08)]">
+      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
           {appBrand.appNameKo} Privacy
         </div>
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/privacy/choices"
-            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-white"
+            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
           >
             데이터 삭제 안내
           </Link>

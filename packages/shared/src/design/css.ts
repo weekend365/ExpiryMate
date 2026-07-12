@@ -5,8 +5,8 @@
  * such as `var(--primary)`. This module derives those variables from the same
  * semantic tokens the mobile app uses, so both apps share one source of truth.
  *
- * `apps/admin/app/globals.css` mirrors these values in its `:root` block; keep
- * the two in sync (or generate the block via `cssVariableBlock`).
+ * Admin injects this map via `cssVariableBlock()` in `app/layout.tsx`. Prefer
+ * that injection over copying hex values into `globals.css`.
  */
 
 import { semanticColors, fontFamily, radius } from "./tokens";
@@ -47,8 +47,7 @@ export const cssVariables: Record<string, string> = {
 };
 
 /**
- * Render the tokens as a `:root { ... }` CSS block. Useful for code generation
- * or injecting a style tag; the admin globals.css currently mirrors this.
+ * Render the tokens as a `:root { ... }` CSS block for admin injection.
  */
 export function cssVariableBlock(selector = ":root"): string {
   const body = Object.entries(cssVariables)

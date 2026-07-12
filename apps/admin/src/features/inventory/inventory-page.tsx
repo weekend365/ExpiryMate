@@ -49,7 +49,7 @@ export function InventoryPage() {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="grid gap-4 rounded-[28px] border border-[var(--border)] bg-[var(--surface-muted)] p-4 lg:grid-cols-[minmax(0,1fr)_auto]"
+              className="grid gap-4 rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4 lg:grid-cols-[minmax(0,1fr)_auto]"
             >
               <div>
                 <div className="text-lg font-black">{item.displayName}</div>

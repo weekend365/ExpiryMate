@@ -269,7 +269,7 @@ export default function RecommendationsScreen() {
       {latestRecommendation && !isGenerating ? (
         <View style={styles.resultSection}>
           <SectionHeader
-            title="추천 결과"
+            title="이번에 골라본 요리"
             description={`${formatCreatedAt(latestRecommendation.createdAt)} · 보관 재료 ${latestRecommendation.inventorySnapshot.length}개 기준`}
           />
 
@@ -399,8 +399,8 @@ export default function RecommendationsScreen() {
         <Text style={styles.noticeBody}>
           요리 추천을 만들 때 재료명, 카테고리, 수량과 단위, 보관 위치,
           유통기한, 만료까지 남은 일수, 추천 조건이 서버를 통해 OpenAI API로
-          전송돼요. 추천 결과와 입력 snapshot은 히스토리 확인과 품질 개선을
-          위해 내 계정에 저장돼요.
+          전송돼요. 추천 결과와 입력 snapshot은 히스토리와 품질 개선을
+          위해 내 계정에 남겨 둬요.
         </Text>
         <Text style={styles.noticeFootnote}>
           OpenAI API 데이터는 기본적으로 모델 학습에 사용되지 않지만, 서비스
@@ -481,7 +481,9 @@ function getErrorMessage(error: unknown) {
     return null;
   }
 
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 function isRecommendationQuotaError(message: string | null) {

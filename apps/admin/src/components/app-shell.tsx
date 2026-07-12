@@ -46,10 +46,10 @@ export function AppShell({ children }: PropsWithChildren) {
   if (meQuery.data?.role !== "admin") {
     return (
       <div className="grid min-h-screen place-items-center px-4">
-        <div className="rounded-[28px] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-[0_24px_70px_rgba(29,39,32,0.08)]">
+        <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-[var(--shadow-soft)]">
           <div className="text-xl font-black">관리자 권한이 필요합니다</div>
           <button
-            className="mt-5 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-bold text-white"
+            className="mt-5 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-bold text-[var(--surface)]"
             onClick={() => {
               adminLogout().finally(() => router.replace("/login"));
             }}
@@ -64,7 +64,7 @@ export function AppShell({ children }: PropsWithChildren) {
   return (
     <div className="min-h-screen">
       <div className="mx-auto grid min-h-screen max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[250px_minmax(0,1fr)]">
-        <aside className="rounded-[28px] border border-[var(--border)] bg-[var(--surface)]/95 p-5 shadow-[0_24px_70px_rgba(29,39,32,0.08)] backdrop-blur">
+        <aside className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)]/95 p-5 shadow-[var(--shadow-soft)] backdrop-blur">
           <div className="mb-8">
             <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
               {appBrand.appNameKo} Admin
@@ -90,9 +90,9 @@ export function AppShell({ children }: PropsWithChildren) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block rounded-2xl px-4 py-3 text-sm font-semibold transition ${
+                  className={`block rounded-[var(--radius-lg)] px-4 py-3 text-sm font-semibold transition ${
                     isActive
-                      ? "bg-[var(--primary)] text-white"
+                      ? "bg-[var(--primary)] text-[var(--surface)]"
                       : "bg-[var(--surface-muted)] text-[var(--foreground)] hover:bg-[var(--primary-soft)]"
                   }`}
                 >
@@ -103,7 +103,7 @@ export function AppShell({ children }: PropsWithChildren) {
           </nav>
         </aside>
 
-        <main className="rounded-[32px] border border-[var(--border)] bg-[var(--surface)]/92 p-6 shadow-[0_30px_80px_rgba(29,39,32,0.08)] backdrop-blur lg:p-8">
+        <main className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)]/92 p-6 shadow-[var(--shadow-lift)] backdrop-blur lg:p-8">
           {children}
         </main>
       </div>

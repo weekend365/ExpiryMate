@@ -75,9 +75,9 @@ export function DatePickerField({
         ]}
       >
         <Text style={value ? styles.valueText : styles.placeholderText}>
-          {value ? formatDateKorean(value) : "유통기한을 선택해주세요"}
+          {value ? formatDateKorean(value) : "날짜를 골라 주세요"}
         </Text>
-        <Text style={styles.triggerAction}>직접 선택</Text>
+        <Text style={styles.triggerAction}>직접 고르기</Text>
       </Pressable>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -87,7 +87,7 @@ export function DatePickerField({
             <View style={styles.modalRoot}>
               <Pressable style={styles.backdrop} onPress={closePicker} />
               <View style={styles.sheet}>
-                <Text style={styles.sheetTitle}>유통기한 선택</Text>
+                <Text style={styles.sheetTitle}>언제까지인가요?</Text>
                 <DateTimePicker
                   value={draftDate}
                   mode="date"
@@ -96,10 +96,10 @@ export function DatePickerField({
                 />
                 <View style={styles.buttonRow}>
                   <Button variant="secondary" onPress={closePicker} style={styles.button}>
-                    취소
+                    그만둘래요
                   </Button>
                   <Button onPress={confirmIOSDate} style={styles.button}>
-                    선택
+                    이 날짜로 할게요
                   </Button>
                 </View>
               </View>

@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { Alert, StyleSheet, TextInput } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { Button } from "../../src/components/Button";
+import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
-import { colors, spacing } from "../../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
 
 export default function ForgotPasswordScreen() {
   const { forgotPasswordMutation } = useAuth();
@@ -12,47 +19,87 @@ export default function ForgotPasswordScreen() {
   const handleSubmit = async () => {
     try {
       await forgotPasswordMutation.mutateAsync(email);
-      Alert.alert("메일 발송", "가입된 이메일이면 비밀번호 재설정 메일을 받을 수 있어요.");
+      Alert.alert(
+        "메일 보냈어요",
+        "가입된 이메일이라면 비밀번호 재설정 메일을 보내드렸어요.",
+      );
     } catch (error) {
-      Alert.alert("요청 실패", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }
   };
 
   return (
-    <Screen title="비밀번호 찾기" subtitle="재설정 링크를 이메일로 보내드릴게요.">
+    <Screen
+      title="비밀번호를 잊었어요"
+      subtitle="재설정 링크를 메일로 보내드릴게요."
+      footer={
+        <Button
+          onPress={handleSubmit}
+          loading={forgotPasswordMutation.isPending}
+          disabled={!email}
+          fullWidth
+        >
+          재설정 메일 받을게요
+        </Button>
+      }
+    >
+      <View style={styles.hero}>
+        <Mascot size="small" mood="idle" />
+        <Text style={styles.heroText}>
+          이메일만 알려주시면, 장고가 재설정 길을 안내할게요.
+        </Text>
+      </View>
+
+      <Text style={styles.label}>이메일</Text>
       <TextInput
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
-        placeholder="이메일"
+        placeholder="가입할 때 쓴 이메일"
+        placeholderTextColor={colors.mutedText}
         style={styles.input}
       />
-      <Button
-        onPress={handleSubmit}
-        loading={forgotPasswordMutation.isPending}
-        disabled={!email}
-        fullWidth
-      >
-        재설정 메일 받기
-      </Button>
     </Screen>
   );
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 const styles = StyleSheet.create({
+  hero: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+  },
+  heroText: {
+    flex: 1,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
+  },
+  label: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.label.fontWeight,
+    color: colors.text,
+  },
   input: {
-    minHeight: 52,
-    borderRadius: 12,
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
     color: colors.text,
-    fontSize: 16,
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.body.fontWeight,
   },
 });

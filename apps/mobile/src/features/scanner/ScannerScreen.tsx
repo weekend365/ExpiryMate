@@ -118,7 +118,7 @@ function ScannerCameraExperience() {
         setContributeError(
           error instanceof Error
             ? error.message
-            : "이름은 저장했지만, 공유 목록에는 아직 못 넣었어요.",
+            : "이름은 기억해 뒀지만, 공유 목록에는 아직 못 넣었어요.",
         );
       } finally {
         setIsContributing(false);
@@ -253,8 +253,8 @@ function ScannerCameraExperience() {
         }
         description={
           needsManualName
-            ? "목록에서 못 찾았어요. 이름만 알려주시면 등록으로 이어갈게요."
-            : "상품명과 유통기한을 등록 화면에 채워 드릴게요."
+            ? "목록에서 못 찾았어요. 이름만 알려주시면 넣는 화면으로 이어갈게요."
+            : "상품명과 유통기한을 넣기 화면에 채워 드릴게요."
         }
         footer={
           <View style={styles.sheetFooter}>
@@ -281,7 +281,7 @@ function ScannerCameraExperience() {
               loading={isContributing || scanner.productLookupStatus === "loading"}
               fullWidth
             >
-              등록하러 갈게요
+              넣으러 갈게요
             </Button>
           </View>
         }
@@ -304,7 +304,7 @@ function ScannerCameraExperience() {
                 <Text style={styles.productName}>
                   {needsManualName
                     ? "아직 이름이 없어요"
-                    : scanner.product?.name ?? "상품명 확인 중"}
+                    : scanner.product?.name ?? "상품명을 찾고 있어요"}
                 </Text>
                 <Text style={styles.productBarcode}>
                   바코드 {scanner.confirmation.barcode}
@@ -339,7 +339,7 @@ function ScannerCameraExperience() {
 
             {scanner.productErrorMessage ? (
               <Text style={styles.sheetFootnote}>
-                상품 조회는 잠시 막혔지만, 이름을 직접 적으면 등록할 수 있어요.
+                상품 조회는 잠시 막혔지만, 이름을 직접 적으면 넣을 수 있어요.
               </Text>
             ) : null}
 

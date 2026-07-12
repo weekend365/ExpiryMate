@@ -60,7 +60,7 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
 
         scheduleLocalNotification(
           "요리 추천이 준비됐어요",
-          "보관 중인 재료로 만들 수 있는 요리법을 확인해보세요.",
+          "어떤 요리가 나왔는지 볼까요?",
         ).catch(() => null);
 
         return recommendation;
@@ -116,8 +116,10 @@ export function useRecipeGeneration() {
 
 function getErrorMessage(error: unknown) {
   if (!error) {
-    return "요청을 처리하지 못했어요.";
+    return "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
   }
 
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }

@@ -1,15 +1,24 @@
+import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
-import { Trash2 } from "lucide-react-native";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
+import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useDeleteAccount } from "../../src/features/privacy/use-privacy";
-import { colors, spacing } from "../../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
 
 export default function AccountDeleteScreen() {
   const deleteAccountMutation = useDeleteAccount();
   const [confirmation, setConfirmation] = useState("");
+  const [confirmSheetOpen, setConfirmSheetOpen] = useState(false);
   const canDelete = confirmation.trim() === "삭제";
 
   const handleDelete = () => {
@@ -21,113 +30,193 @@ export default function AccountDeleteScreen() {
       { confirmation: "삭제" },
       {
         onSuccess: () => {
-          Alert.alert("삭제 완료", "계정과 데이터가 삭제됐어요.");
+          setConfirmSheetOpen(false);
+          Alert.alert(
+            "잘 보내드릴게요",
+            "계정과 데이터를 정리했어요. 언제든 다시 와 주세요.",
+          );
           router.replace("/");
         },
-        onError: (error) => Alert.alert("삭제 실패", getErrorMessage(error)),
+        onError: (error) => {
+          setConfirmSheetOpen(false);
+          Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+        },
       },
     );
   };
 
   return (
-    <Screen
-      title="계정 및 데이터 삭제"
-      subtitle="삭제하면 되돌릴 수 없어요. 필요한 정보를 먼저 확인해 주세요."
-    >
-      <View style={styles.warningCard}>
-        <Trash2 color={colors.danger} size={28} strokeWidth={2.5} />
-        <View style={styles.warningCopy}>
-          <Text style={styles.warningTitle}>즉시 삭제되는 데이터</Text>
-          <Text style={styles.warningText}>
+    <>
+      <Screen
+        title="계정과 데이터 정리"
+        subtitle="정리하면 되돌릴 수 없어요. 천천히 확인해 주세요."
+        footer={
+          <Button
+            variant="danger"
+            disabled={!canDelete}
+            onPress={() => setConfirmSheetOpen(true)}
+            fullWidth
+          >
+            계정을 정리할게요
+          </Button>
+        }
+      >
+        <View style={styles.hero}>
+          <Mascot size="medium" mood="worry" />
+          <View style={styles.heroCopy}>
+            <Text style={styles.heroTitle}>
+              {appBrand.characterNameKo}가 조금 걱정돼요
+            </Text>
+            <Text style={styles.heroText}>
+              떠나셔도 괜찮아요. 다만 아래 정보는 바로 지워지니, 한 번만 더
+              살펴봐 주세요.
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>바로 지워지는 것들</Text>
+          <Text style={styles.bodyText}>
             재료와 유통기한, AI 추천 히스토리, 알림 설정, 로그인 세션, 이메일
-            비밀번호 또는 소셜 로그인 연결 정보가 삭제돼요.
+            비밀번호 또는 소셜 로그인 연결 정보가 지워져요.
           </Text>
         </View>
-      </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>삭제 확인</Text>
-        <Text style={styles.bodyText}>
-          계속하려면 아래 입력칸에 `삭제`를 입력해 주세요.
-        </Text>
-        <TextInput
-          value={confirmation}
-          onChangeText={setConfirmation}
-          placeholder="삭제"
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholderTextColor={colors.mutedText}
-        />
-      </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>실수하지 않게 한 번 더</Text>
+          <Text style={styles.bodyText}>
+            계속하시려면 아래 칸에{" "}
+            <Text style={styles.emphasis}>삭제</Text>를 입력해 주세요.
+          </Text>
+          <TextInput
+            value={confirmation}
+            onChangeText={setConfirmation}
+            placeholder="삭제"
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={styles.input}
+            placeholderTextColor={colors.mutedText}
+          />
+        </View>
+      </Screen>
 
-      <Button
-        variant="danger"
-        icon={Trash2}
-        disabled={!canDelete}
-        loading={deleteAccountMutation.isPending}
-        onPress={handleDelete}
+      <BottomSheet
+        visible={confirmSheetOpen}
+        onClose={() => setConfirmSheetOpen(false)}
+        mascotMood="worry"
+        title="정말 계정을 정리할까요?"
+        description={`${appBrand.appNameKo} 안의 재료와 기록이 모두 사라져요. 이 선택은 되돌릴 수 없어요.`}
+        footer={
+          <View style={styles.sheetFooter}>
+            <Button
+              variant="secondary"
+              onPress={() => setConfirmSheetOpen(false)}
+              fullWidth
+            >
+              조금 더 생각해 볼게요
+            </Button>
+            <Button
+              variant="danger"
+              onPress={handleDelete}
+              loading={deleteAccountMutation.isPending}
+              fullWidth
+            >
+              네, 정리할게요
+            </Button>
+          </View>
+        }
       >
-        계정 및 데이터 삭제
-      </Button>
-    </Screen>
+        <View style={styles.confirmCard}>
+          <Text style={styles.confirmLabel}>정리 대상</Text>
+          <Text style={styles.confirmValue}>계정 · 재료 · 추천 · 알림 · 로그인</Text>
+        </View>
+      </BottomSheet>
+    </>
   );
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 const styles = StyleSheet.create({
-  warningCard: {
+  hero: {
     backgroundColor: colors.dangerSoft,
-    borderRadius: 16,
-    padding: spacing.lg,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
     flexDirection: "row",
-    gap: spacing.md,
+    alignItems: "center",
+    gap: spacing.sm,
   },
-  warningCopy: {
+  heroCopy: {
     flex: 1,
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
-  warningTitle: {
-    fontSize: 18,
-    lineHeight: 25,
-    fontWeight: "800",
+  heroTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.danger,
   },
-  warningText: {
-    fontSize: 15,
-    lineHeight: 23,
+  heroText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.text,
   },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.lg,
-    gap: spacing.md,
+    padding: spacing.md,
+    gap: spacing.sm,
   },
   cardTitle: {
-    fontSize: 18,
-    lineHeight: 25,
-    fontWeight: "800",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
   bodyText: {
-    fontSize: 15,
-    lineHeight: 23,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     color: colors.subtext,
   },
+  emphasis: {
+    fontWeight: typography.title.fontWeight,
+    color: colors.text,
+  },
   input: {
-    minHeight: 52,
-    borderRadius: 12,
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
-    fontSize: 16,
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.body.fontWeight,
     color: colors.text,
     backgroundColor: colors.background,
+  },
+  sheetFooter: {
+    gap: spacing.sm,
+  },
+  confirmCard: {
+    backgroundColor: colors.background,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.xxs,
+  },
+  confirmLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    color: colors.mutedText,
+  },
+  confirmValue: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
+    color: colors.text,
   },
 });

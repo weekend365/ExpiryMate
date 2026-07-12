@@ -72,21 +72,21 @@ export function ProductsPage() {
             <label className="grid gap-2 text-sm font-semibold">
               상품명
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("name")}
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold">
               브랜드
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("brand")}
               />
             </label>
             <label className="grid gap-2 text-sm font-semibold">
               카테고리
               <select
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("category")}
               >
                 {productCategoryOptions.map((option) => (
@@ -99,13 +99,13 @@ export function ProductsPage() {
             <label className="grid gap-2 text-sm font-semibold">
               이미지 URL
               <input
-                className="rounded-2xl border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
                 {...form.register("imageUrl")}
               />
             </label>
             <button
               type="submit"
-              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-white"
+              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
             >
               등록하기
             </button>
@@ -129,7 +129,7 @@ export function ProductsPage() {
               <Link
                 key={product.id}
                 href={`/products/${product.id}`}
-                className="block rounded-3xl border border-[var(--border)] bg-[var(--surface-muted)] p-4 transition hover:-translate-y-0.5"
+                className="block rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4 transition hover:-translate-y-0.5"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>

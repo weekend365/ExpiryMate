@@ -81,7 +81,7 @@ export default function SettingsScreen() {
       } catch {
         Alert.alert(
           "앗, 잠시 문제가 생겼어요",
-          "알림 토큰을 아직 저장하지 못했어요. 조금 뒤에 다시 해볼까요?",
+          "알림 연결을 아직 못 했어요. 조금 뒤에 다시 해볼까요?",
         );
       }
     }
@@ -94,7 +94,7 @@ export default function SettingsScreen() {
       },
       {
         onSuccess: () =>
-          Alert.alert("저장해 두었어요", "알려줄 시점을 잘 기억해 둘게요."),
+          Alert.alert("맞춰뒀어요", "알려줄 시점을 잘 기억해 둘게요."),
         onError: (error) =>
           Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error)),
       },
@@ -111,7 +111,7 @@ export default function SettingsScreen() {
     subscription.query.refetch().catch(() =>
       Alert.alert(
         "앗, 잠시 문제가 생겼어요",
-        "구독 상태를 아직 확인하지 못했어요.",
+        "구독 상태를 아직 못 불러왔어요.",
       ),
     );
   };
@@ -122,7 +122,7 @@ export default function SettingsScreen() {
       subtitle="계정과 알림을 장고랑 맞춰볼까요?"
       footer={
         <Button onPress={handleSave} loading={mutation.isPending} fullWidth>
-          알려줄 시점을 저장할게요
+          알림 타이밍 맞춰둘게요
         </Button>
       }
     >
@@ -140,14 +140,14 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
-        <SectionHeader title="계정" description="로그인하면 재료를 안전하게 이어갈 수 있어요." />
+        <SectionHeader title="계정" description="계정으로 이어가면 재료를 안전하게 지킬 수 있어요." />
         <View style={styles.card}>
           <ListRow
             title={isRegistered ? "내 계정" : "익명으로 사용 중이에요"}
             description={
               isRegistered
-                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 이메일 인증이 필요해요"}`
-                : "로그인하면 지금 넣은 재료가 계정에 연결돼요."
+                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 메일 확인이 필요해요"}`
+                : "이어가면 지금 넣은 재료가 계정에 연결돼요."
             }
             onPress={
               isRegistered ? undefined : () => router.push("/auth/login")
@@ -157,15 +157,15 @@ export default function SettingsScreen() {
             <>
               {!emailVerified ? (
                 <ListRow
-                  title="인증 메일 보내기"
-                  description="메일함에서 인증을 마쳐 주세요."
+                  title="인증 메일 다시 받을게요"
+                  description="메일함에서 인증만 마쳐 주세요."
                   icon={Mail}
                   onPress={() =>
                     auth.requestVerificationMutation.mutate(undefined, {
                       onSuccess: () =>
                         Alert.alert(
                           "메일을 보냈어요",
-                          "인증 메일을 확인해 주세요.",
+                          "메일함에서 인증만 마쳐 주세요. 장고가 기다리고 있어요.",
                         ),
                       onError: (error) =>
                         Alert.alert(
@@ -183,15 +183,15 @@ export default function SettingsScreen() {
                 onPress={() =>
                   auth.logoutMutation.mutate(undefined, {
                     onSuccess: () =>
-                      Alert.alert("다음에 또 만나요", "로그아웃했어요."),
+                      Alert.alert("다음에 또 만나요", "이 기기에서 나갔어요."),
                   })
                 }
               />
             </>
           ) : (
             <ListRow
-              title="로그인 또는 회원가입"
-              description="계정을 만들거나 이어갈 수 있어요."
+              title="계정으로 이어가기"
+              description="계정을 만들거나 이어서 쓸 수 있어요."
               onPress={() => router.push("/auth/login")}
             />
           )}
@@ -199,16 +199,16 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
-        <SectionHeader title="구독" description="추천 한도와 혜택을 확인할 수 있어요." />
+        <SectionHeader title="구독" description="추천 한도와 혜택을 살펴볼 수 있어요." />
         <View style={styles.card}>
           <ListRow
             title={hasActiveEntitlement ? "구독이 켜져 있어요" : "아직 구독이 없어요"}
             description={
               subscription.query.isLoading
-                ? "구독 상태를 확인하고 있어요."
+                ? "구독 상태를 불러오고 있어요."
                 : hasActiveEntitlement
                   ? `${formatStore(entitlement?.store)} · ${formatExpiry(entitlement?.expiresAt)}까지`
-                  : "필요할 때 구독 상태를 새로고침해 보세요."
+                  : "스토어 반영이 늦을 때 다시 불러와 보세요."
             }
             icon={CreditCard}
             trailing={
@@ -228,13 +228,13 @@ export default function SettingsScreen() {
                       : styles.statusChipTextOff,
                   ]}
                 >
-                  {hasActiveEntitlement ? "활성" : "비활성"}
+                  {hasActiveEntitlement ? "켜져 있어요" : "아직 없어요"}
                 </Text>
               </View>
             }
           />
           <ListRow
-            title="구독 상태 새로고침"
+            title="구독 상태 다시 불러오기"
             description="스토어 반영이 늦을 때 눌러 보세요."
             icon={RefreshCw}
             onPress={refreshSubscription}
@@ -245,7 +245,7 @@ export default function SettingsScreen() {
       <View style={styles.section}>
         <SectionHeader
           title="개인정보"
-          description="데이터 사용과 삭제를 직접 확인할 수 있어요."
+          description="어떤 정보를 쓰는지, 어떻게 지울 수 있는지 볼 수 있어요."
         />
         <View style={styles.card}>
           <ListRow
@@ -255,8 +255,8 @@ export default function SettingsScreen() {
             onPress={() => router.push("/privacy")}
           />
           <ListRow
-            title="AI 데이터 고지"
-            description="추천에 쓰이는 정보를 확인해 보세요."
+            title="AI 추천 안내"
+            description="추천에 쓰이는 정보를 살펴볼 수 있어요."
             icon={ShieldCheck}
             onPress={() => router.push("/privacy/ai-data-notice")}
           />
@@ -276,7 +276,7 @@ export default function SettingsScreen() {
             />
           ) : null}
           <ListRow
-            title="데이터 삭제"
+            title="계정과 데이터 정리"
             description="계정과 재료 기록을 정리할 수 있어요."
             icon={Trash2}
             destructive
@@ -538,7 +538,9 @@ const styles = StyleSheet.create({
 });
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "요청을 처리하지 못했어요.";
+  return error instanceof Error
+    ? error.message
+    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 function formatStore(store?: string | null) {
@@ -555,7 +557,7 @@ function formatStore(store?: string | null) {
 
 function formatExpiry(value?: string | null) {
   if (!value) {
-    return "갱신 확인 전";
+    return "만료일을 아직 못 불러왔어요";
   }
 
   return new Intl.DateTimeFormat("ko-KR", {

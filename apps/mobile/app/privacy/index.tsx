@@ -1,12 +1,19 @@
 import { appBrand } from "@expirymate/shared";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
-import { ExternalLink, ShieldCheck, Trash2 } from "lucide-react-native";
-import { Alert, StyleSheet, Text, View } from "react-native";
-import { Button } from "../../src/components/Button";
+import { ChevronRight, ExternalLink, ShieldCheck, Trash2 } from "lucide-react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
+import { SectionHeader } from "../../src/components/SectionHeader";
 import { usePrivacyStatus } from "../../src/features/privacy/use-privacy";
-import { colors, spacing } from "../../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
 
 export default function PrivacyScreen() {
   const privacyStatusQuery = usePrivacyStatus();
@@ -14,60 +21,71 @@ export default function PrivacyScreen() {
 
   const openPolicy = () => {
     if (!status?.privacyPolicyUrl) {
-      Alert.alert("준비 중", "개인정보처리방침 URL을 불러오는 중이에요.");
+      Alert.alert(
+        "조금만 기다려 주세요",
+        "개인정보처리방침을 아직 불러오는 중이에요.",
+      );
       return;
     }
 
     WebBrowser.openBrowserAsync(status.privacyPolicyUrl).catch(() =>
-      Alert.alert("열기 실패", "개인정보처리방침 URL을 열지 못했어요."),
+      Alert.alert(
+        "앗, 잠시 문제가 생겼어요",
+        "개인정보처리방침을 열지 못했어요. 조금 뒤에 다시 해볼까요?",
+      ),
     );
   };
 
   return (
     <Screen
-      title="개인정보 및 AI 데이터"
-      subtitle={`${appBrand.appNameKo}에서 어떤 데이터를 쓰고, 어떻게 삭제할 수 있는지 확인해요.`}
+      title="개인정보와 AI 데이터"
+      subtitle={`${appBrand.appNameKo}가 어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.`}
     >
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>개인정보처리방침</Text>
-        <Text style={styles.bodyText}>
-          {appBrand.appNameKo}는 계정, 재료와 유통기한, 알림 설정, AI 추천 히스토리를
-          서비스 제공을 위해 사용해요. 자세한 공개 정책은 웹에서도 확인할 수
-          있어요.
+      <View style={styles.hero}>
+        <Mascot size="small" mood="idle" />
+        <Text style={styles.heroText}>
+          궁금한 것만 골라 보시면 돼요. {appBrand.characterNameKo}가 옆에서
+          도와드릴게요.
         </Text>
-        <Button variant="secondary" icon={ExternalLink} onPress={openPolicy}>
-          공개 정책 열기
-        </Button>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>AI 추천 데이터 고지</Text>
-        <Text style={styles.bodyText}>
-          요리 추천을 요청하면 보관 중인 재료 일부와 추천 조건이 서버를 통해
-          OpenAI API로 전송돼요. 첫 추천 전에 한 번 동의가 필요해요.
-        </Text>
-        <Button
-          variant="secondary"
-          icon={ShieldCheck}
-          onPress={() => router.push("/privacy/ai-data-notice")}
-        >
-          AI 데이터 고지 보기
-        </Button>
+      <View style={styles.section}>
+        <SectionHeader
+          title="살펴보기"
+          description="짧게 읽고, 필요할 때만 더 열어보세요."
+        />
+        <View style={styles.card}>
+          <PrivacyRow
+            icon={ExternalLink}
+            title="개인정보처리방침"
+            description={`${appBrand.appNameKo}는 계정, 재료와 유통기한, 알림 설정, AI 추천 히스토리를 서비스 제공을 위해 사용해요.`}
+            onPress={openPolicy}
+          />
+          <PrivacyRow
+            icon={ShieldCheck}
+            title="AI 추천 안내"
+            description="요리 추천을 요청하면 보관 중인 재료 일부와 추천 조건이 서버를 통해 OpenAI API로 전송돼요. 첫 추천 전에 한 번 동의가 필요해요."
+            onPress={() => router.push("/privacy/ai-data-notice")}
+            last
+          />
+        </View>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>계정 및 데이터 삭제</Text>
-        <Text style={styles.bodyText}>
-          삭제하면 재료, 추천 히스토리, 알림 설정, 로그인 세션과 연결 계정 정보가
-          즉시 제거돼요.
-        </Text>
-        <Button
-          variant="danger"
-          icon={Trash2}
-          onPress={() => router.push("/privacy/account-delete")}
-        >
-          계정 및 데이터 삭제
-        </Button>
+      <View style={styles.section}>
+        <SectionHeader
+          title="계정 정리"
+          description="떠나실 때도 데이터를 직접 지우실 수 있어요."
+        />
+        <View style={styles.card}>
+          <PrivacyRow
+            icon={Trash2}
+            title="계정과 데이터 정리"
+            description="재료, 추천 히스토리, 알림 설정, 로그인 세션과 연결 계정 정보가 바로 지워져요."
+            tone="danger"
+            onPress={() => router.push("/privacy/account-delete")}
+            last
+          />
+        </View>
       </View>
 
       {status?.contactEmail ? (
@@ -77,29 +95,133 @@ export default function PrivacyScreen() {
   );
 }
 
+function PrivacyRow({
+  icon: Icon,
+  title,
+  description,
+  onPress,
+  tone = "default",
+  last = false,
+}: {
+  icon: typeof ExternalLink;
+  title: string;
+  description: string;
+  onPress: () => void;
+  tone?: "default" | "danger";
+  last?: boolean;
+}) {
+  const iconColor = tone === "danger" ? colors.danger : colors.primary;
+
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.row,
+        last && styles.rowLast,
+        pressed && styles.rowPressed,
+      ]}
+      accessibilityRole="button"
+    >
+      <View
+        style={[
+          styles.rowIcon,
+          tone === "danger" ? styles.rowIconDanger : styles.rowIconDefault,
+        ]}
+      >
+        <Icon color={iconColor} size={spacing.sm} strokeWidth={2.4} />
+      </View>
+      <View style={styles.rowCopy}>
+        <Text
+          style={[
+            styles.rowTitle,
+            tone === "danger" ? styles.rowTitleDanger : null,
+          ]}
+        >
+          {title}
+        </Text>
+        <Text style={styles.rowDescription}>{description}</Text>
+      </View>
+      <ChevronRight color={colors.mutedText} size={20} strokeWidth={2.2} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  hero: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+  },
+  heroText: {
+    flex: 1,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
+  },
+  section: {
+    gap: spacing.sm,
+  },
   card: {
     backgroundColor: colors.surface,
-    borderRadius: 16,
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.lg,
-    gap: spacing.md,
+    overflow: "hidden",
   },
-  cardTitle: {
-    fontSize: 19,
-    lineHeight: 26,
-    fontWeight: "800",
+  row: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  rowLast: {
+    borderBottomWidth: 0,
+  },
+  rowPressed: {
+    backgroundColor: colors.background,
+  },
+  rowIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rowIconDefault: {
+    backgroundColor: colors.primarySoft,
+  },
+  rowIconDanger: {
+    backgroundColor: colors.dangerSoft,
+  },
+  rowCopy: {
+    flex: 1,
+    gap: spacing.xxs,
+  },
+  rowTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.text,
   },
-  bodyText: {
-    fontSize: 15,
-    lineHeight: 23,
+  rowTitleDanger: {
+    color: colors.danger,
+  },
+  rowDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
     color: colors.subtext,
   },
   footerText: {
-    fontSize: 13,
-    lineHeight: 20,
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
     color: colors.mutedText,
+    textAlign: "center",
   },
 });
