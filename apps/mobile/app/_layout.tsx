@@ -33,8 +33,8 @@ export default function RootLayout() {
               <Stack.Screen name="onboarding" options={{ headerShown: false }} />
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
-              <Stack.Screen name="register" options={{ title: "등록하기" }} />
-              <Stack.Screen name="inventory/[id]" options={{ title: "재고 상세" }} />
+              <Stack.Screen name="register" options={{ title: "재료 넣기" }} />
+              <Stack.Screen name="inventory/[id]" options={{ title: "재료 살펴보기" }} />
               <Stack.Screen name="auth/login" options={{ title: "로그인" }} />
               <Stack.Screen name="auth/register" options={{ title: "회원가입" }} />
               <Stack.Screen
@@ -53,7 +53,7 @@ export default function RootLayout() {
               />
               <Stack.Screen
                 name="privacy/account-delete"
-                options={{ title: "계정 및 데이터 삭제" }}
+                options={{ title: "데이터 정리" }}
               />
             </Stack>
           </RecipeGenerationProvider>
