@@ -2,23 +2,43 @@ import { DEFAULT_NOTIFICATION_DAYS, appBrand } from "@expirymate/shared";
 import * as WebBrowser from "expo-web-browser";
 import { router } from "expo-router";
 import {
+  ChevronRight,
   CreditCard,
   ExternalLink,
+  LogOut,
+  Mail,
   RefreshCw,
   ShieldCheck,
   Trash2,
+  type LucideIcon,
 } from "lucide-react-native";
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Switch, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
+} from "react-native";
 import { Button } from "../../src/components/Button";
+import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
+import { SectionHeader } from "../../src/components/SectionHeader";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { usePrivacyStatus } from "../../src/features/privacy/use-privacy";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { registerDevicePushToken } from "../../src/services/notifications";
-import { colors, spacing } from "../../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
 
 const reminderOptions = [0, 1, 3, 7, 14];
 
@@ -53,18 +73,32 @@ export default function SettingsScreen() {
         const pushToken = await registerDevicePushToken();
 
         if (!pushToken) {
-          Alert.alert("알림 권한이 필요해요", "기기 설정에서 알림을 허용해주세요.");
+          Alert.alert(
+            "알림을 켜둘까요?",
+            "기기 설정에서 알림을 허용해 주시면 장고가 알려드릴 수 있어요.",
+          );
         }
       } catch {
-        Alert.alert("푸시 등록 실패", "알림 토큰을 서버에 저장하지 못했어요.");
+        Alert.alert(
+          "앗, 잠시 문제가 생겼어요",
+          "알림 토큰을 아직 저장하지 못했어요. 조금 뒤에 다시 해볼까요?",
+        );
       }
     }
 
-    mutation.mutate({
-      enabled,
-      remindOnDayOf,
-      reminderDaysBefore: days.filter((value) => value > 0),
-    });
+    mutation.mutate(
+      {
+        enabled,
+        remindOnDayOf,
+        reminderDaysBefore: days.filter((value) => value > 0),
+      },
+      {
+        onSuccess: () =>
+          Alert.alert("저장해 두었어요", "알려줄 시점을 잘 기억해 둘게요."),
+        onError: (error) =>
+          Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error)),
+      },
+    );
   };
 
   const user = auth.query.data;
@@ -75,238 +109,428 @@ export default function SettingsScreen() {
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
   const refreshSubscription = () => {
     subscription.query.refetch().catch(() =>
-      Alert.alert("확인 실패", "구독 상태를 확인하지 못했어요."),
+      Alert.alert(
+        "앗, 잠시 문제가 생겼어요",
+        "구독 상태를 아직 확인하지 못했어요.",
+      ),
     );
   };
 
   return (
-    <Screen title="설정" subtitle="계정, 알림, 개인정보와 AI 데이터 사용을 관리해요.">
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.rowCopy}>
-            <Text style={styles.rowTitle}>계정</Text>
-            <Text style={styles.rowDescription}>
-              {isRegistered
-                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 이메일 미인증"}`
-                : "익명으로 사용 중이에요. 로그인하면 현재 재료가 계정에 연결돼요."}
-            </Text>
-          </View>
+    <Screen
+      title="설정"
+      subtitle="계정과 알림을 장고랑 맞춰볼까요?"
+      footer={
+        <Button onPress={handleSave} loading={mutation.isPending} fullWidth>
+          알려줄 시점을 저장할게요
+        </Button>
+      }
+    >
+      <View style={styles.brandCard}>
+        <Mascot size="small" mood="idle" />
+        <View style={styles.brandCopy}>
+          <Text style={styles.brandName}>{appBrand.appNameKo}</Text>
+          <Text style={styles.brandMeta}>
+            {appBrand.appNameEn} · {appBrand.productLineKo}
+          </Text>
+          <Text style={styles.brandNote}>
+            OCR 인식은 아직 준비 중이에요. 지금은 직접 넣어주시면 돼요.
+          </Text>
         </View>
-        {isRegistered ? (
-          <View style={styles.actionRow}>
-            {!emailVerified ? (
-              <Button
-                variant="secondary"
-                size="small"
-                onPress={() =>
-                  auth.requestVerificationMutation.mutate(undefined, {
-                    onSuccess: () => Alert.alert("메일 발송", "인증 메일을 보냈어요."),
-                    onError: (error) => Alert.alert("요청 실패", getErrorMessage(error)),
-                  })
-                }
-              >
-                인증 메일
-              </Button>
-            ) : null}
-            <Button
-              variant="secondary"
-              size="small"
-              onPress={() =>
-                auth.logoutMutation.mutate(undefined, {
-                  onSuccess: () => Alert.alert("로그아웃", "로그아웃했어요."),
-                })
-              }
-            >
-              로그아웃
-            </Button>
-          </View>
-        ) : (
-          <Button
-            variant="secondary"
-            onPress={() => router.push("/auth/login")}
-            fullWidth
-          >
-            로그인 또는 회원가입
-          </Button>
-        )}
       </View>
 
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.rowCopy}>
-            <View style={styles.titleRow}>
-              <Text style={styles.rowTitle}>구독</Text>
-              <CreditCard size={18} color={colors.primary} />
-            </View>
-            <Text style={styles.rowDescription}>
-              {subscription.query.isLoading
+      <View style={styles.section}>
+        <SectionHeader title="계정" description="로그인하면 재료를 안전하게 이어갈 수 있어요." />
+        <View style={styles.card}>
+          <ListRow
+            title={isRegistered ? "내 계정" : "익명으로 사용 중이에요"}
+            description={
+              isRegistered
+                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 이메일 인증이 필요해요"}`
+                : "로그인하면 지금 넣은 재료가 계정에 연결돼요."
+            }
+            onPress={
+              isRegistered ? undefined : () => router.push("/auth/login")
+            }
+          />
+          {isRegistered ? (
+            <>
+              {!emailVerified ? (
+                <ListRow
+                  title="인증 메일 보내기"
+                  description="메일함에서 인증을 마쳐 주세요."
+                  icon={Mail}
+                  onPress={() =>
+                    auth.requestVerificationMutation.mutate(undefined, {
+                      onSuccess: () =>
+                        Alert.alert(
+                          "메일을 보냈어요",
+                          "인증 메일을 확인해 주세요.",
+                        ),
+                      onError: (error) =>
+                        Alert.alert(
+                          "앗, 잠시 문제가 생겼어요",
+                          getErrorMessage(error),
+                        ),
+                    })
+                  }
+                />
+              ) : null}
+              <ListRow
+                title="로그아웃"
+                description="이 기기에서 잠시 나갈게요."
+                icon={LogOut}
+                onPress={() =>
+                  auth.logoutMutation.mutate(undefined, {
+                    onSuccess: () =>
+                      Alert.alert("다음에 또 만나요", "로그아웃했어요."),
+                  })
+                }
+              />
+            </>
+          ) : (
+            <ListRow
+              title="로그인 또는 회원가입"
+              description="계정을 만들거나 이어갈 수 있어요."
+              onPress={() => router.push("/auth/login")}
+            />
+          )}
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <SectionHeader title="구독" description="추천 한도와 혜택을 확인할 수 있어요." />
+        <View style={styles.card}>
+          <ListRow
+            title={hasActiveEntitlement ? "구독이 켜져 있어요" : "아직 구독이 없어요"}
+            description={
+              subscription.query.isLoading
                 ? "구독 상태를 확인하고 있어요."
                 : hasActiveEntitlement
                   ? `${formatStore(entitlement?.store)} · ${formatExpiry(entitlement?.expiresAt)}까지`
-                  : "활성화된 구독이 없어요."}
-            </Text>
-          </View>
-          <Pill
-            label={hasActiveEntitlement ? "활성" : "비활성"}
-            selected={hasActiveEntitlement}
+                  : "필요할 때 구독 상태를 새로고침해 보세요."
+            }
+            icon={CreditCard}
+            trailing={
+              <View
+                style={[
+                  styles.statusChip,
+                  hasActiveEntitlement
+                    ? styles.statusChipOn
+                    : styles.statusChipOff,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.statusChipText,
+                    hasActiveEntitlement
+                      ? styles.statusChipTextOn
+                      : styles.statusChipTextOff,
+                  ]}
+                >
+                  {hasActiveEntitlement ? "활성" : "비활성"}
+                </Text>
+              </View>
+            }
+          />
+          <ListRow
+            title="구독 상태 새로고침"
+            description="스토어 반영이 늦을 때 눌러 보세요."
+            icon={RefreshCw}
             onPress={refreshSubscription}
           />
         </View>
-        <View style={styles.actionRow}>
-          <Button
-            variant="secondary"
-            size="small"
-            icon={RefreshCw}
-            loading={subscription.query.isFetching}
-            onPress={refreshSubscription}
-          >
-            상태 새로고침
-          </Button>
-        </View>
       </View>
 
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.rowCopy}>
-            <Text style={styles.rowTitle}>개인정보 및 AI 데이터</Text>
-            <Text style={styles.rowDescription}>
-              개인정보처리방침, AI 추천 데이터 사용, 계정 삭제를 확인할 수 있어요.
-            </Text>
-          </View>
-        </View>
-        <View style={styles.actionRow}>
-          <Button
-            variant="secondary"
-            size="small"
+      <View style={styles.section}>
+        <SectionHeader
+          title="개인정보"
+          description="데이터 사용과 삭제를 직접 확인할 수 있어요."
+        />
+        <View style={styles.card}>
+          <ListRow
+            title="개인정보처리방침"
+            description="어떤 정보를 어떻게 지키는지 살펴볼 수 있어요."
             icon={ShieldCheck}
             onPress={() => router.push("/privacy")}
-          >
-            개인정보처리방침
-          </Button>
-          <Button
-            variant="secondary"
-            size="small"
+          />
+          <ListRow
+            title="AI 데이터 고지"
+            description="추천에 쓰이는 정보를 확인해 보세요."
             icon={ShieldCheck}
             onPress={() => router.push("/privacy/ai-data-notice")}
-          >
-            AI 데이터 고지
-          </Button>
-          <Button
-            variant="danger"
-            size="small"
-            icon={Trash2}
-            onPress={() => router.push("/privacy/account-delete")}
-          >
-            데이터 삭제
-          </Button>
+          />
           {privacyPolicyUrl ? (
-            <Button
-              variant="secondary"
-              size="small"
+            <ListRow
+              title="웹에서 보기"
+              description="브라우저로 개인정보처리방침을 열어요."
               icon={ExternalLink}
               onPress={() => {
                 WebBrowser.openBrowserAsync(privacyPolicyUrl).catch(() =>
-                  Alert.alert("열기 실패", "개인정보처리방침 URL을 열지 못했어요."),
+                  Alert.alert(
+                    "앗, 잠시 문제가 생겼어요",
+                    "개인정보처리방침 페이지를 열지 못했어요.",
+                  ),
                 );
               }}
-            >
-              웹에서 보기
-            </Button>
-          ) : null}
-        </View>
-      </View>
-
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <View style={styles.rowCopy}>
-            <Text style={styles.rowTitle}>알림 받기</Text>
-            <Text style={styles.rowDescription}>
-              만료 전과 당일 알림을 받을 수 있어요.
-            </Text>
-          </View>
-          <Switch value={enabled} onValueChange={setEnabled} />
-        </View>
-        <View style={styles.row}>
-          <View style={styles.rowCopy}>
-            <Text style={styles.rowTitle}>당일 알림</Text>
-            <Text style={styles.rowDescription}>오늘 만료되는 상품을 다시 알려드려요.</Text>
-          </View>
-          <Switch value={remindOnDayOf} onValueChange={setRemindOnDayOf} />
-        </View>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.rowTitle}>리마인드 시점</Text>
-        <View style={styles.pillRow}>
-          {reminderOptions.map((value) => (
-            <Pill
-              key={value}
-              label={value === 0 ? "오늘" : `${value}일 전`}
-              selected={value === 0 ? remindOnDayOf : days.includes(value)}
-              onPress={() => (value === 0 ? setRemindOnDayOf((current) => !current) : toggleDay(value))}
             />
-          ))}
+          ) : null}
+          <ListRow
+            title="데이터 삭제"
+            description="계정과 재료 기록을 정리할 수 있어요."
+            icon={Trash2}
+            destructive
+            onPress={() => router.push("/privacy/account-delete")}
+          />
         </View>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.rowTitle}>앱 정보</Text>
-        <Text style={styles.infoText}>
-          {appBrand.appNameKo} ({appBrand.appNameEn}) · {appBrand.productLineKo}
-        </Text>
-        <Text style={styles.infoText}>OCR 인식은 아직 준비 중이에요.</Text>
+      <View style={styles.section}>
+        <SectionHeader
+          title="알림"
+          description="유통기한이 다가오면 장고가 살짝 알려드릴게요."
+        />
+        <View style={styles.card}>
+          <ListRow
+            title="알림 받기"
+            description="만료 전과 당일 알림을 받을 수 있어요."
+            trailing={
+              <Switch
+                value={enabled}
+                onValueChange={setEnabled}
+                trackColor={{
+                  false: colors.border,
+                  true: colors.primarySoft,
+                }}
+                thumbColor={enabled ? colors.primary : colors.mutedSurface}
+              />
+            }
+          />
+          <ListRow
+            title="당일에도 알려주기"
+            description="오늘 만료되는 재료를 한 번 더 알려드려요."
+            trailing={
+              <Switch
+                value={remindOnDayOf}
+                onValueChange={setRemindOnDayOf}
+                trackColor={{
+                  false: colors.border,
+                  true: colors.primarySoft,
+                }}
+                thumbColor={remindOnDayOf ? colors.primary : colors.mutedSurface}
+              />
+            }
+          />
+          <View style={styles.reminderBlock}>
+            <Text style={styles.reminderTitle}>언제 알려줄까요?</Text>
+            <View style={styles.pillRow}>
+              {reminderOptions.map((value) => (
+                <Pill
+                  key={value}
+                  label={value === 0 ? "오늘" : `${value}일 전`}
+                  selected={value === 0 ? remindOnDayOf : days.includes(value)}
+                  onPress={() =>
+                    value === 0
+                      ? setRemindOnDayOf((current) => !current)
+                      : toggleDay(value)
+                  }
+                />
+              ))}
+            </View>
+          </View>
+        </View>
       </View>
-
-      <Button onPress={handleSave} loading={mutation.isPending}>
-        저장
-      </Button>
     </Screen>
   );
 }
 
+function ListRow({
+  title,
+  description,
+  icon: Icon,
+  trailing,
+  onPress,
+  destructive = false,
+}: {
+  title: string;
+  description?: string;
+  icon?: LucideIcon;
+  trailing?: ReactNode;
+  onPress?: () => void;
+  destructive?: boolean;
+}) {
+  const content = (
+    <>
+      {Icon ? (
+        <View
+          style={[
+            styles.listIcon,
+            destructive && styles.listIconDanger,
+          ]}
+        >
+          <Icon
+            color={destructive ? colors.danger : colors.primary}
+            size={spacing.sm + spacing.xxs}
+            strokeWidth={2.4}
+          />
+        </View>
+      ) : null}
+      <View style={styles.listCopy}>
+        <Text
+          style={[styles.listTitle, destructive && styles.listTitleDanger]}
+        >
+          {title}
+        </Text>
+        {description ? (
+          <Text style={styles.listDescription}>{description}</Text>
+        ) : null}
+      </View>
+      {trailing ??
+        (onPress ? (
+          <ChevronRight color={colors.mutedText} size={spacing.sm + spacing.xxs} />
+        ) : null)}
+    </>
+  );
+
+  if (!onPress) {
+    return <View style={styles.listRow}>{content}</View>;
+  }
+
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.listRow,
+        pressed && styles.listRowPressed,
+      ]}
+      accessibilityRole="button"
+    >
+      {content}
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 24,
-    padding: spacing.lg,
-    gap: spacing.md,
-  },
-  row: {
+  brandCard: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primarySoft,
+    padding: spacing.md,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     gap: spacing.md,
   },
-  rowCopy: {
+  brandCopy: {
     flex: 1,
-    gap: 4,
+    gap: spacing.xxs,
   },
-  rowTitle: {
-    fontSize: 18,
-    fontWeight: "700",
+  brandName: {
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.heading.fontWeight,
     color: colors.text,
   },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
+  brandMeta: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.primary,
   },
-  rowDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+  brandNote: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
-  pillRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  section: {
     gap: spacing.sm,
   },
-  infoText: {
-    fontSize: 14,
-    lineHeight: 22,
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: "hidden",
+  },
+  listRow: {
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  listRowPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  listIcon: {
+    width: spacing.xl,
+    height: spacing.xl,
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  listIconDanger: {
+    backgroundColor: colors.dangerSoft,
+  },
+  listCopy: {
+    flex: 1,
+    gap: spacing.xxs,
+  },
+  listTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.text,
+  },
+  listTitleDanger: {
+    color: colors.danger,
+  },
+  listDescription: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
     color: colors.subtext,
   },
-  actionRow: {
+  statusChip: {
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
+    minHeight: spacing.lg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statusChipOn: {
+    backgroundColor: colors.successSoft,
+  },
+  statusChipOff: {
+    backgroundColor: colors.mutedSurface,
+  },
+  statusChipText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: typography.label.fontWeight,
+  },
+  statusChipTextOn: {
+    color: colors.success,
+  },
+  statusChipTextOff: {
+    color: colors.mutedText,
+  },
+  reminderBlock: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    gap: spacing.sm,
+  },
+  reminderTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.text,
+  },
+  pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: spacing.sm,

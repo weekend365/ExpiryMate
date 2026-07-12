@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
-import { Archive, Bell, ChefHat, House } from "lucide-react-native";
-import { colors } from "../../src/shared/theme";
+import { Archive, ChefHat, House, Settings } from "lucide-react-native";
+import { colors, spacing } from "../../src/shared/theme";
 
 export default function TabsLayout() {
   return (
@@ -12,9 +12,9 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          height: 72,
-          paddingBottom: 10,
-          paddingTop: 10,
+          height: spacing.xxxl + spacing.sm,
+          paddingBottom: spacing.xs,
+          paddingTop: spacing.xs,
         },
       }}
     >
@@ -50,7 +50,7 @@ export default function TabsLayout() {
         options={{
           title: "설정",
           tabBarIcon: ({ color, size }) => (
-            <Bell color={color} size={size} strokeWidth={2.4} />
+            <Settings color={color} size={size} strokeWidth={2.4} />
           ),
         }}
       />
