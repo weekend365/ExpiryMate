@@ -3,7 +3,7 @@
 ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.  
 기능 구현 우선순위, 인프라·보안·스토어 제출·운영 작업의 순서를 정의합니다.
 
-> **문서 기준일:** 2026-07-08 (최종 갱신)  
+> **문서 기준일:** 2026-07-13 (최종 갱신)  
 > **대상 저장소:** `expirymate-monorepo` (`apps/mobile`, `apps/api`, `apps/admin`, `packages/shared`)
 
 ---
@@ -12,18 +12,19 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 
 | 영역 | 완성도 | 평가 |
 |------|--------|------|
-| 모바일 핵심 UX | ~85% | 온보딩, 재고, AI 추천, 설정, 프라이버시 UI + **바코드/OCR 스캐너** (dev 빌드 검증) |
+| 모바일 핵심 UX | ~95% | 장고 브랜드 UI 리디자인(1→14) 완료 + 바코드/OCR 스캐너 (dev 빌드 검증) |
 | API 비즈니스 로직 | ~85% | Auth, 재고, 레시피, 프라이버시, 구독 검증 API 존재 |
-| Admin | ~75% | 상품/재고 관리, Privacy URL, Railway 프로덕션 배포·로그인 검증 |
+| Admin | ~80% | 상품/재고 관리, Privacy URL, Railway 배포 + **shared 토큰·브랜드 표시 동기화** |
 | 배포/인프라 | ~70% | Railway API·Admin·Postgres, Docker, CI, health, Resend 메일 연동 |
 | 스토어 출시 준비 | ~65% | EAS preview APK 성공, **iOS dev 빌드·실기기 스캐너 QA** 진행 |
 | 테스트/QA | ~50% | API 단위 테스트, GitHub Actions CI, 스캐너 단위 테스트; E2E·전체 모바일 QA 미완 |
 
-### 1-1. 현재 개발 진척도 (2026-07-08)
+### 1-1. 현재 개발 진척도 (2026-07-13)
 
-**현재 Phase:** Phase 0 완료 → **Phase 1(스테이징 QA) 진행 중**
+**현재 Phase:** Phase 0 완료 → **Phase 1(스테이징 QA) 진행 중**  
+**최근 완료(2026-07-13):** 장고야 부탁해 모바일 UI/UX 리디자인 + 장고 캐릭터 리디자인 + Admin 토큰 동기화 — 상세는 [§1-4](#1-4-장고야-부탁해-모바일-uiux--캐릭터-리디자인--2026-07-13)
 
-> 이전 스냅샷(2026-07-05)은 Git 히스토리 `5ef3f7c` 기준입니다.
+> 이전 스냅샷(2026-07-08)은 아래 인프라·스캐너 표를 유지합니다. UI 리디자인은 §1-4를 보세요.
 
 #### 프로덕션 인프라 (Railway, 커스텀 도메인 없음)
 
@@ -55,6 +56,9 @@ ExpiryMate 서비스 출시를 위한 **기준 문서**입니다.
 | **iOS 네이티브** | `expo prebuild` iOS 프로젝트, `expo-camera`, ML Kit, deployment target 16.4 | `apps/mobile/ios/` |
 | **개발 도구** | Cursor 프로젝트 규칙 (API/프론트/아키텍처/공유 계약) | `cursor/add-project-rules` → `main` |
 | **모바일 UI** | 홈·보관함·공통 Screen 반응형(compact) 개선 | `cursor/mobile-first-uiux-58b9` → `main` |
+| **모바일 UI** | 장고야 부탁해 UI/UX 전면 리디자인 (템플릿 1→14) | §1-4, `docs/MOBILE_REDESIGN_PROMPTS.md` |
+| **브랜드** | 장고 캐릭터 리디자인 (아무무형 비율, 냉장고 머리+요리사 모자) | `apps/mobile/assets/characters/jango-*.png` |
+| **Admin UI** | shared `cssVariables` 주입 + `appBrand.appNameKo` Admin 표시 | §1-4 |
 | **데이터** | `ProductMaster` 스키마·migration·바코드 seed 스크립트 | `apps/api/prisma/schema.prisma`, `apps/api/scripts/seedBarcode.ts`, `pnpm db:seed:barcodes` |
 
 #### 진행 중 / 다음 작업
@@ -246,6 +250,61 @@ GET /product-masters/lookup?barcode=
 1. Railway에 `20260710050000_product_master_source_fields` migration 배포
 2. Android 실기기 QA
 3. 유저 기여 데이터 관리자 검수 UX (선택)
+
+### 1-4. 장고야 부탁해 모바일 UI/UX · 캐릭터 리디자인 — 2026-07-13
+
+`.cursorrules` + `@expirymate/shared` 디자인 토큰 + `docs/MOBILE_REDESIGN_PROMPTS.md` 템플릿(1→14) 기준으로 **UI/카피/브랜드만** 정리했습니다. API·상태관리·비즈니스 로직은 변경하지 않았습니다.
+
+#### 완료 범위
+
+| 순서 | 항목 | 상태 |
+|------|------|------|
+| 1 | 공통 컴포넌트 (`Screen`, `Button`, `FormField`, `Mascot`, 토큰) | ✅ |
+| 2 | `BottomSheet` / `StepFlow` / `EmptyState` / `SectionHeader` | ✅ |
+| 3 | 재료 등록 (`register.tsx` Step) | ✅ |
+| 4 | 홈 | ✅ |
+| 5 | 보관함 목록 | ✅ |
+| 6 | 재료 상세 | ✅ |
+| 7 | 스캐너 UI (로직 유지) | ✅ |
+| 8 | 요리 추천 | ✅ |
+| 9 | 설정 | ✅ |
+| 10 | 온보딩 / 진입 | ✅ |
+| 11 | 인증 화면군 | ✅ |
+| 12 | 개인정보 / 계정 정리 | ✅ |
+| 13 | UX 라이팅 전수 (대화형 한국어·장고 톤) | ✅ |
+| 14 | Admin 토큰·브랜드 동기화 | ✅ |
+
+#### 장고 캐릭터
+
+| 항목 | 내용 |
+|------|------|
+| 정체성 | 냉장고 셰프 메이트 — 머리=미니 냉장고, 요리사 모자 |
+| 비율 | 아무무형 chibi (머리 비중↑, 몸통·팔다리 짧게) |
+| mood | `idle` / `happy` / `worry` / `cooking` / `empty` |
+| 에셋 | `apps/mobile/assets/characters/jango-{mood}.png` |
+| 컴포넌트 | `apps/mobile/src/components/Mascot.tsx`만 사용 |
+
+#### Admin
+
+- `cssVariableBlock()`을 `apps/admin/app/layout.tsx`에서 주입 → mobile과 동일 semantic 토큰
+- 표시명: `{appBrand.appNameKo} Admin` (ExpiryMate Admin 금지)
+- raw hex / Tailwind `red-*` 제거, `var(--primary|danger|surface|radius-*)` 사용
+
+#### 지시·검증 문서
+
+| 경로 | 역할 |
+|------|------|
+| `docs/MOBILE_REDESIGN_PROMPTS.md` | 화면별 리디자인 프롬프트·장고 가이드 |
+| `.cursorrules` | 8pt·터치 타깃·대화형 카피 규칙 |
+| `packages/shared/src/design/` | semanticColors / spacing / radius / cssVariables |
+| `packages/shared/src/constants/brand.ts` | `appBrand` |
+
+#### 남은 UX 후속 (출시 블로커 아님)
+
+- 실기기에서 장고 새 에셋·리디자인 화면 시각 QA
+- Metro 캐시로 옛 PNG가 보이면 번들러 재시작
+- E2E·전체 모바일 QA는 Phase 1 기존 트랙과 동일
+
 ### README와 코드베이스 차이
 
 `README.md`의 **What Is Real vs Mocked** 섹션은 일부 outdated 합니다. 아래는 **코드 기준** 현재 상태입니다.
@@ -734,6 +793,7 @@ eas submit --platform ios --profile production
 | **본 문서** | 출시·운영 우선순위 **기준**, **상세 진척도** |
 | `docs/RAILWAY_STAGING.md` | Railway 배포 가이드 (프로덕션 URL 반영 시 갱신) |
 | `docs/DEPLOYMENT.md` | Docker, EAS, Sentry, uptime |
+| `docs/MOBILE_REDESIGN_PROMPTS.md` | 장고야 부탁해 모바일 UI 리디자인 템플릿·장고 가이드 (§1-4) |
 | `apps/mobile/eas.json` | EAS 빌드 프로필 |
 | `apps/api/prisma/schema.prisma` | 데이터 모델 |
 | `apps/api/.env.example` | API env (루트 `.env.example`과 병행 참조) |
@@ -752,5 +812,6 @@ eas submit --platform ios --profile production
 ## 7. 한 줄 결론
 
 **기능 MVP는 갖춰져 있고, Railway 프로덕션(API·Admin·DB)과 Phase 0 대부분이 완료되었다.**  
+**브랜드 UI:** 장고야 부탁해 모바일 리디자인·캐릭터·Admin 토큰 동기화가 반영되었다 (§1-4).  
 **다음 관문:** Railway API 실기기 QA(Phase 1) → Resend 도메인·Sentry·uptime → Phase 2 스토어 제출.  
-IAP·OCR·카탈로그 UX는 첫 출시 이후(Phase 4)로 미뤄도 된다.
+IAP·OCR 고도화·카탈로그 UX는 첫 출시 이후(Phase 4)로 미뤄도 된다.

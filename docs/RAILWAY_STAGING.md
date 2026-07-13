@@ -1,7 +1,7 @@
 # Railway 스테이징 배포 가이드
 
 > **현재 운영 상태 (2026-07-05):** 아래 가이드대로 Railway **프로덕션** 환경이 구축되어 있습니다.  
-> 상세 진척도는 [PRODUCTION_LAUNCH_ROADMAP.md](./PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-05) 참조.
+> 상세 진척도는 [PRODUCTION_LAUNCH_ROADMAP.md](./PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-13) 참조.
 >
 > | 서비스 | URL |
 > |--------|-----|

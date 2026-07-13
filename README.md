@@ -33,7 +33,7 @@ see **[docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md)**
 That document is the source of truth for go-live planning and supersedes the outdated
 sections below where they conflict (for example auth scope and next implementation order).
 
-### Current Development Status (2026-07-08)
+### Current Development Status (2026-07-13)
 
 | Area                   | Progress                    | Notes                                                                    |
 | ---------------------- | --------------------------- | ------------------------------------------------------------------------ |
@@ -45,9 +45,12 @@ sections below where they conflict (for example auth scope and next implementati
 | **Email (Resend)**     | Partial                     | HTTP API works; domain verification needed for arbitrary recipients      |
 | **EAS Mobile preview** | Android APK done            | iOS dev build + scanner QA on physical device                            |
 | **Product scanner**    | Dev build verified (iOS)    | Barcode → OFF → expiry OCR → register prefill; see roadmap §1-2          |
+| **Jango mobile UI**    | Redesign done (1→14)        | Tokens, conversational copy, mascot moods; see roadmap §1-4              |
+| **Jango character**    | Redesigned                  | Amumu-like proportions, fridge head + chef hat PNGs                      |
 | **Next up**            |                             | Full mobile QA, EAS iOS build, Sentry DSNs, uptime monitor, OAuth prod   |
 
-Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-08).
+Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-13).
+UI redesign details: [§1-4](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-4-장고야-부탁해-모바일-uiux--캐릭터-리디자인--2026-07-13).
 
 ## Folder Structure
 
