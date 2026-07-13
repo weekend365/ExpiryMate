@@ -34,7 +34,7 @@ import { PrismaService } from "../../database/prisma.service";
 import { PrivacyService } from "../privacy/privacy.service";
 import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
 
-const PROMPT_VERSION = "recipe-recommendation-v1";
+const PROMPT_VERSION = "recipe-recommendation-v2";
 const DEFAULT_MODEL = "gpt-5-mini";
 const MAX_INGREDIENTS = 30;
 
@@ -43,7 +43,7 @@ const DEFAULT_RATE_LIMIT_WINDOW_SECONDS = 60;
 const DEFAULT_DAILY_QUOTA = 20;
 const DEFAULT_CACHE_TTL_SECONDS = 6 * 60 * 60;
 const DEFAULT_DAILY_COST_LIMIT_USD = 1;
-const DEFAULT_MAX_OUTPUT_TOKENS = 2500;
+const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
   inputTokens: number;
@@ -456,6 +456,18 @@ function buildInstructions() {
     "부족한 재료는 선택 재료로만 제안하고, 없어도 조리가 가능한 방향을 선호하세요.",
     "의학적 효능, 치료, 다이어트 효과를 주장하지 마세요.",
     "각 추천에는 재료 상태와 냄새를 확인하라는 짧은 안전 문구를 포함하세요.",
+    "",
+    "[조리 단계 작성 규칙]",
+    "steps는 초보도 바로 따라 할 수 있도록 구체적이고 디테일하게 작성하세요.",
+    "각 추천의 steps는 4~8단계로 구성하고, 한 단계에는 핵심 행동 하나만 담으세요.",
+    "각 단계 문장에는 가능하면 다음을 포함하세요: 실제 사용량(ml/g/개/큰술), 불 세기(약불/중불/강불), 대략 시간(분/초), 완성 감각 기준(거품이 난다, 가장자리가 노릇해진다 등).",
+    "재료 목록의 포장 단위(예: 우유 1L)를 그대로 쓰지 말고, 이 요리에 실제로 쓰는 분량을 단계와 tips에 명시하세요.",
+    "면·밥·고기·계란처럼 익힘 시간이 중요한 재료는 분 단위로 안내하세요. 패키지 표기가 있으면 '표기 시간의 약 1분 전'처럼 표현해도 됩니다.",
+    "'적당히', '잘', '살짝', '충분히'만으로 끝내거나 '끓인다', '섞는다', '익힌다'처럼 한 단어에 가까운 뭉뚱그린 단계는 금지합니다.",
+    "나쁜 예: '면을 삶는다.' / 좋은 예: '소금 1작은술을 넣은 끓는 물에 면을 넣고 7~8분 삶아 알덴테로 익힌 뒤, 면수는 종이컵 반 컵(약 100ml)만 남기고 건집니다.'",
+    "나쁜 예: '우유와 치즈를 넣고 녹인다.' / 좋은 예: '팬에 우유 200ml를 넣고 약불로 2~3분 데운 뒤, 치즈를 넣고 국자로 30초~1분 저어 완전히 녹입니다.'",
+    "tips에는 농도 조절, 간 맞추기, 재료가 적을 때의 대체법처럼 실패를 줄이는 실전 조언을 1~3개 넣으세요.",
+    "cookingTimeMinutes는 모든 단계 시간의 합과 크게 어긋나지 않게 맞추고, maxCookingMinutes를 넘기지 마세요.",
   ].join("\n");
 }
 

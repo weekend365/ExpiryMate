@@ -79,7 +79,7 @@ const cachedRecord = {
   recommendations,
   aiProvider: "openai",
   aiModel: "gpt-5.4-mini",
-  promptVersion: "recipe-recommendation-v1",
+  promptVersion: "recipe-recommendation-v2",
   requestCacheKey: "cache-key",
   inputTokens: 10,
   cachedInputTokens: 0,
