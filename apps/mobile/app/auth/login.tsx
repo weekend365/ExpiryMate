@@ -39,6 +39,9 @@ const appReturnUri = AuthSession.makeRedirectUri({
   path: "oauth",
 });
 
+/** Base64url-wrapped return URI so Kakao/Naver state survives round-trip. */
+const oauthReturnState = encodeOAuthReturnState(appReturnUri);
+
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
 export default function LoginScreen() {
@@ -86,7 +89,7 @@ export default function LoginScreen() {
       tokenParam: "code",
       params: {
         response_type: "code",
-        state: appReturnUri,
+        state: oauthReturnState,
       },
       includeRedirectUriInPayload: true,
     });
@@ -99,9 +102,9 @@ export default function LoginScreen() {
       tokenParam: "code",
       params: {
         response_type: "code",
-        state: appReturnUri,
+        state: oauthReturnState,
       },
-      oauthState: appReturnUri,
+      oauthState: oauthReturnState,
     });
 
   const handleGoogleLogin = () =>
@@ -114,7 +117,7 @@ export default function LoginScreen() {
         response_type: "id_token",
         scope: "openid email profile",
         nonce: String(Date.now()),
-        state: appReturnUri,
+        state: oauthReturnState,
       },
     });
 
@@ -289,6 +292,19 @@ function parseOAuthReturnUrl(url: string): Record<string, string> {
     ...Object.fromEntries(fragmentParams.entries()),
     url: baseUrl,
   };
+}
+
+function encodeOAuthReturnState(returnUri: string) {
+  const bytes = new TextEncoder().encode(returnUri);
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  const base64 = btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  return `em1.${base64}`;
 }
 
 const styles = StyleSheet.create({

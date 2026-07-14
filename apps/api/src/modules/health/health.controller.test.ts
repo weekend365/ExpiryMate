@@ -40,4 +40,47 @@ describe("HealthController", () => {
       ServiceUnavailableException,
     );
   });
+
+  it("302-redirects Kakao-style query callbacks into the app scheme", () => {
+    const response = {
+      redirect: vi.fn(),
+      status: vi.fn().mockReturnThis(),
+      type: vi.fn().mockReturnThis(),
+      send: vi.fn(),
+    };
+
+    controller.oauthCallback(
+      {
+        code: "kakao-code",
+        state: "expirymate://oauth",
+      },
+      response as never,
+    );
+
+    expect(response.redirect).toHaveBeenCalledWith(
+      302,
+      "expirymate://oauth?code=kakao-code",
+    );
+  });
+
+  it("serves the HTML bridge when only state is present (Google hash flow)", () => {
+    const response = {
+      redirect: vi.fn(),
+      status: vi.fn().mockReturnThis(),
+      type: vi.fn().mockReturnThis(),
+      send: vi.fn(),
+    };
+
+    controller.oauthCallback(
+      {
+        state: "expirymate://oauth",
+      },
+      response as never,
+    );
+
+    expect(response.redirect).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.type).toHaveBeenCalledWith("html");
+    expect(response.send).toHaveBeenCalledOnce();
+  });
 });
