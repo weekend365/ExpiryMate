@@ -191,6 +191,7 @@ export default function LoginScreen() {
   };
 
   const isBusy = pendingProvider !== null || oauthMutation.isPending;
+  const naverClientId = process.env.EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID?.trim();
 
   return (
     <Screen
@@ -216,12 +217,14 @@ export default function LoginScreen() {
 
       <View style={styles.oauthCard}>
         <Text style={styles.oauthTitle}>다른 방법으로 이어갈까요?</Text>
-        <OAuthRow
-          label="네이버로 이어갈게요"
-          onPress={handleNaverLogin}
-          loading={pendingProvider === "naver"}
-          disabled={isBusy && pendingProvider !== "naver"}
-        />
+        {naverClientId ? (
+          <OAuthRow
+            label="네이버로 이어갈게요"
+            onPress={handleNaverLogin}
+            loading={pendingProvider === "naver"}
+            disabled={isBusy && pendingProvider !== "naver"}
+          />
+        ) : null}
         <OAuthRow
           label="Google로 이어갈게요"
           onPress={handleGoogleLogin}

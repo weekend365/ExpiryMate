@@ -24,6 +24,14 @@ describe("validateProductionEnvironment", () => {
   it("accepts a complete production configuration", () => {
     expect(() => validateProductionEnvironment(validProductionEnv())).not.toThrow();
   });
+
+  it("allows production without Naver OAuth credentials", () => {
+    const env = validProductionEnv();
+    delete env.NAVER_OAUTH_CLIENT_ID;
+    delete env.NAVER_OAUTH_CLIENT_SECRET;
+
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -43,8 +51,6 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     APPLE_OAUTH_CLIENT_ID: "com.expirymate.mobile",
     GOOGLE_OAUTH_CLIENT_ID: "google-client-id.apps.googleusercontent.com",
     KAKAO_OAUTH_CLIENT_ID: "kakao-client-id",
-    NAVER_OAUTH_CLIENT_ID: "naver-client-id",
-    NAVER_OAUTH_CLIENT_SECRET: "naver-client-secret",
     PRIVACY_POLICY_URL: "https://admin.expirymate.app/privacy",
     PRIVACY_CHOICES_URL: "https://admin.expirymate.app/privacy/choices",
     PRIVACY_CONTACT_EMAIL: "privacy@expirymate.app",
