@@ -82,6 +82,14 @@ describe("AuthService", () => {
     ).rejects.toThrow(ServiceUnavailableException);
   });
 
+  it("requires the Naver OAuth client id before code exchange", async () => {
+    const service = createAuthService();
+
+    await expect(
+      service.oauthLogin(OAuthProvider.naver, { providerToken: "code" }),
+    ).rejects.toThrow(ServiceUnavailableException);
+  });
+
   it("rejects malformed Apple OAuth tokens as unauthorized", async () => {
     process.env.APPLE_OAUTH_CLIENT_ID = "com.expirymate.test";
     const service = createAuthService();

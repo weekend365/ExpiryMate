@@ -224,6 +224,22 @@ export class AuthController {
     return this.oauth(OAuthProvider.kakao, dto, request, response, client);
   }
 
+  @AuthRateLimit({
+    name: "oauth_naver",
+    max: 20,
+    windowSeconds: 300,
+    bodyFields: ["providerToken"],
+  })
+  @Post("oauth/naver")
+  oauthNaver(
+    @Body() dto: OAuthLoginDto,
+    @Req() request: AuthenticatedRequest,
+    @Res({ passthrough: true }) response: CookieResponse,
+    @Headers("x-expirymate-client") client?: string,
+  ) {
+    return this.oauth(OAuthProvider.naver, dto, request, response, client);
+  }
+
   @Get("placeholder")
   getPlaceholderSession() {
     return {

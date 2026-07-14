@@ -613,6 +613,10 @@ export class AuthService {
       return verifyKakaoToken(dto.providerToken);
     }
 
+    if (provider === OAuthProvider.naver) {
+      return verifyNaverCode(dto.providerToken);
+    }
+
     return verifyAppleToken(dto.providerToken, dto);
   }
 
@@ -788,6 +792,80 @@ async function verifyKakaoToken(providerToken: string): Promise<OAuthProfile> {
   };
 }
 
+async function verifyNaverCode(authorizationCode: string): Promise<OAuthProfile> {
+  const clientId = getRequiredOAuthClientId("NAVER_OAUTH_CLIENT_ID", "Naver");
+  const clientSecret = process.env.NAVER_OAUTH_CLIENT_SECRET?.trim();
+
+  if (!clientSecret) {
+    throw new ServiceUnavailableException(
+      "Naver OAuth 설정을 확인할 수 없습니다.",
+    );
+  }
+
+  const tokenResponse = await fetch("https://nid.naver.com/oauth2.0/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: clientId,
+      client_secret: clientSecret,
+      code: authorizationCode,
+      state: "expirymate",
+    }).toString(),
+  });
+
+  if (!tokenResponse.ok) {
+    throw new UnauthorizedException("Naver 로그인 코드를 확인하지 못했습니다.");
+  }
+
+  const tokenPayload = (await tokenResponse.json()) as {
+    access_token?: string;
+    error?: string;
+    error_description?: string;
+  };
+
+  if (!tokenPayload.access_token) {
+    throw new UnauthorizedException(
+      tokenPayload.error_description ??
+        "Naver 로그인 토큰을 받지 못했어요.",
+    );
+  }
+
+  const profileResponse = await fetch("https://openapi.naver.com/v1/nid/me", {
+    headers: { Authorization: `Bearer ${tokenPayload.access_token}` },
+  });
+
+  if (!profileResponse.ok) {
+    throw new UnauthorizedException("Naver 사용자 정보를 확인하지 못했습니다.");
+  }
+
+  const profilePayload = (await profileResponse.json()) as {
+    resultcode?: string;
+    response?: {
+      id?: string;
+      email?: string;
+      name?: string;
+      nickname?: string;
+    };
+  };
+
+  if (profilePayload.resultcode !== "00" || !profilePayload.response?.id) {
+    throw new UnauthorizedException("Naver 사용자 정보를 확인하지 못했습니다.");
+  }
+
+  const profile = profilePayload.response;
+
+  return {
+    provider: OAuthProvider.naver,
+    providerUserId: profile.id,
+    email: profile.email,
+    displayName: profile.nickname ?? profile.name,
+    emailVerified: Boolean(profile.email),
+  };
+}
+
 async function verifyAppleToken(
   providerToken: string,
   dto: OAuthLoginDto,
@@ -871,7 +949,8 @@ function getRequiredOAuthClientId(
   key:
     | "APPLE_OAUTH_CLIENT_ID"
     | "GOOGLE_OAUTH_CLIENT_ID"
-    | "KAKAO_OAUTH_CLIENT_ID",
+    | "KAKAO_OAUTH_CLIENT_ID"
+    | "NAVER_OAUTH_CLIENT_ID",
   providerLabel: string,
 ) {
   const value = process.env[key]?.trim();

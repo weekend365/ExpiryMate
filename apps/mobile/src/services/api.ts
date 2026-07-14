@@ -371,7 +371,7 @@ export const resetPassword = (token: string, password: string) =>
   });
 
 export const oauthLogin = async (
-  provider: "apple" | "google" | "kakao",
+  provider: "apple" | "google" | "kakao" | "naver",
   payload: OAuthLoginRequest,
 ) =>
   persistAuthSession(

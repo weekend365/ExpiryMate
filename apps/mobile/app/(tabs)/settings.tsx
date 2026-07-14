@@ -146,7 +146,11 @@ export default function SettingsScreen() {
             title={isRegistered ? "내 계정" : "익명으로 사용 중이에요"}
             description={
               isRegistered
-                ? `${user?.email ?? "연결된 계정"}${emailVerified ? "" : " · 메일 확인이 필요해요"}`
+                ? `${user?.email ?? "연결된 계정"}${
+                    !emailVerified && user?.email
+                      ? " · 메일 확인이 필요해요"
+                      : ""
+                  }`
                 : "이어가면 지금 넣은 재료가 계정에 연결돼요."
             }
             onPress={
@@ -155,7 +159,7 @@ export default function SettingsScreen() {
           />
           {isRegistered ? (
             <>
-              {!emailVerified ? (
+              {!emailVerified && user?.email ? (
                 <ListRow
                   title="인증 메일 다시 받을게요"
                   description="메일함에서 인증만 마쳐 주세요."
@@ -191,7 +195,7 @@ export default function SettingsScreen() {
           ) : (
             <ListRow
               title="계정으로 이어가기"
-              description="계정을 만들거나 이어서 쓸 수 있어요."
+              description="카카오·네이버 등으로 이어서 쓸 수 있어요."
               onPress={() => router.push("/auth/login")}
             />
           )}

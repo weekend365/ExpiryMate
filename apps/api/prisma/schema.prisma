@@ -58,6 +58,7 @@ enum OAuthProvider {
   apple
   google
   kakao
+  naver
 }
 
 enum OneTimeAuthTokenPurpose {

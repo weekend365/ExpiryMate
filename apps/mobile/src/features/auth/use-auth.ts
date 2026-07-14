@@ -53,12 +53,20 @@ export const useAuth = () => {
       providerToken,
       email,
       displayName,
+      redirectUri,
     }: {
-      provider: "apple" | "google" | "kakao";
+      provider: "apple" | "google" | "kakao" | "naver";
       providerToken: string;
       email?: string;
       displayName?: string;
-    }) => oauthLogin(provider, { providerToken, email, displayName }),
+      redirectUri?: string;
+    }) =>
+      oauthLogin(provider, {
+        providerToken,
+        email,
+        displayName,
+        redirectUri,
+      }),
     onSuccess: resetAppQueries,
   });
 

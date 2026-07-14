@@ -75,6 +75,10 @@ export class OAuthLoginDto {
   @IsOptional()
   @IsString()
   displayName?: string;
+
+  @IsOptional()
+  @IsString()
+  redirectUri?: string;
 }
 
 export class AdminClientDto {

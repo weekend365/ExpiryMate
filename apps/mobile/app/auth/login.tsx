@@ -4,7 +4,14 @@ import * as AuthSession from "expo-auth-session";
 import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -20,23 +27,17 @@ import {
 WebBrowser.maybeCompleteAuthSession();
 
 const redirectUri = AuthSession.makeRedirectUri({ scheme: "expirymate" });
+const NAVER_OAUTH_STATE = "expirymate";
+
+type WebOAuthProvider = "google" | "kakao" | "naver";
 
 export default function LoginScreen() {
-  const { loginMutation, oauthMutation } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      await loginMutation.mutateAsync({ email, password });
-      router.back();
-    } catch (error) {
-      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
-    }
-  };
+  const { oauthMutation } = useAuth();
+  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
 
   const handleAppleLogin = async () => {
     try {
+      setPendingProvider("apple");
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -62,8 +63,33 @@ export default function LoginScreen() {
         return;
       }
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+    } finally {
+      setPendingProvider(null);
     }
   };
+
+  const handleKakaoLogin = () =>
+    handleWebOAuth({
+      provider: "kakao",
+      clientId: process.env.EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID,
+      url: "https://kauth.kakao.com/oauth/authorize",
+      tokenParam: "access_token",
+      params: {
+        response_type: "token",
+      },
+    });
+
+  const handleNaverLogin = () =>
+    handleWebOAuth({
+      provider: "naver",
+      clientId: process.env.EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID,
+      url: "https://nid.naver.com/oauth2.0/authorize",
+      tokenParam: "code",
+      params: {
+        response_type: "code",
+        state: NAVER_OAUTH_STATE,
+      },
+    });
 
   const handleGoogleLogin = () =>
     handleWebOAuth({
@@ -78,17 +104,6 @@ export default function LoginScreen() {
       },
     });
 
-  const handleKakaoLogin = () =>
-    handleWebOAuth({
-      provider: "kakao",
-      clientId: process.env.EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID,
-      url: "https://kauth.kakao.com/oauth/authorize",
-      tokenParam: "access_token",
-      params: {
-        response_type: "token",
-      },
-    });
-
   const handleWebOAuth = async ({
     provider,
     clientId,
@@ -96,15 +111,16 @@ export default function LoginScreen() {
     tokenParam,
     params,
   }: {
-    provider: "google" | "kakao";
+    provider: WebOAuthProvider;
     clientId?: string;
     url: string;
     tokenParam: string;
     params: Record<string, string>;
   }) => {
     try {
+      setPendingProvider(provider);
       if (!clientId) {
-        throw new Error("OAuth client id 환경변수가 설정되지 않았어요.");
+        throw new Error("소셜 로그인 설정을 아직 준비 중이에요.");
       }
 
       const authUrl = `${url}?${new URLSearchParams({
@@ -125,12 +141,19 @@ export default function LoginScreen() {
         throw new Error("소셜 로그인 토큰을 받지 못했어요.");
       }
 
-      await oauthMutation.mutateAsync({ provider, providerToken });
+      await oauthMutation.mutateAsync({
+        provider,
+        providerToken,
+      });
       router.back();
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+    } finally {
+      setPendingProvider(null);
     }
   };
+
+  const isBusy = pendingProvider !== null || oauthMutation.isPending;
 
   return (
     <Screen
@@ -138,12 +161,12 @@ export default function LoginScreen() {
       subtitle="계정으로 이어가면, 익명으로 넣은 재료도 함께 옮겨 드릴게요."
       footer={
         <Button
-          onPress={handleLogin}
-          loading={loginMutation.isPending}
-          disabled={!email || !password}
+          onPress={handleKakaoLogin}
+          loading={pendingProvider === "kakao"}
+          disabled={isBusy && pendingProvider !== "kakao"}
           fullWidth
         >
-          로그인할게요
+          카카오로 이어갈게요
         </Button>
       }
     >
@@ -154,74 +177,58 @@ export default function LoginScreen() {
         </View>
       </View>
 
-      <View style={styles.fieldGroup}>
-        <Text style={styles.label}>이메일</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          placeholder="예: jango@example.com"
-          placeholderTextColor={colors.mutedText}
-          style={styles.input}
-        />
-        <Text style={styles.label}>비밀번호</Text>
-        <TextInput
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholder="비밀번호를 입력해 주세요"
-          placeholderTextColor={colors.mutedText}
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.links}>
-        <Pressable
-          onPress={() => router.push("/auth/register")}
-          style={styles.linkButton}
-        >
-          <Text style={styles.linkText}>계정 만들기</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => router.push("/auth/forgot-password")}
-          style={styles.linkButton}
-        >
-          <Text style={styles.linkText}>비밀번호를 잊었어요</Text>
-        </Pressable>
-      </View>
-
       <View style={styles.oauthCard}>
         <Text style={styles.oauthTitle}>다른 방법으로 이어갈까요?</Text>
-        <Pressable
-          onPress={handleAppleLogin}
-          style={({ pressed }) => [
-            styles.oauthRow,
-            pressed && styles.oauthRowPressed,
-          ]}
-        >
-          <Text style={styles.oauthRowText}>Apple로 계속하기</Text>
-        </Pressable>
-        <Pressable
+        <OAuthRow
+          label="네이버로 이어갈게요"
+          onPress={handleNaverLogin}
+          loading={pendingProvider === "naver"}
+          disabled={isBusy && pendingProvider !== "naver"}
+        />
+        <OAuthRow
+          label="Google로 이어갈게요"
           onPress={handleGoogleLogin}
-          style={({ pressed }) => [
-            styles.oauthRow,
-            pressed && styles.oauthRowPressed,
-          ]}
-        >
-          <Text style={styles.oauthRowText}>Google로 계속하기</Text>
-        </Pressable>
-        <Pressable
-          onPress={handleKakaoLogin}
-          style={({ pressed }) => [
-            styles.oauthRow,
-            pressed && styles.oauthRowPressed,
-          ]}
-        >
-          <Text style={styles.oauthRowText}>Kakao로 계속하기</Text>
-        </Pressable>
+          loading={pendingProvider === "google"}
+          disabled={isBusy && pendingProvider !== "google"}
+        />
+        {Platform.OS === "ios" ? (
+          <OAuthRow
+            label="Apple로 이어갈게요"
+            onPress={handleAppleLogin}
+            loading={pendingProvider === "apple"}
+            disabled={isBusy && pendingProvider !== "apple"}
+          />
+        ) : null}
       </View>
     </Screen>
+  );
+}
+
+function OAuthRow({
+  label,
+  onPress,
+  loading,
+  disabled,
+}: {
+  label: string;
+  onPress: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled || loading}
+      style={({ pressed }) => [
+        styles.oauthRow,
+        pressed && styles.oauthRowPressed,
+        (disabled || loading) && styles.oauthRowDisabled,
+      ]}
+    >
+      <Text style={styles.oauthRowText}>
+        {loading ? "잠시만요…" : label}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -262,41 +269,6 @@ const styles = StyleSheet.create({
     fontWeight: typography.label.fontWeight,
     color: colors.primary,
   },
-  fieldGroup: {
-    gap: spacing.xs,
-  },
-  label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.label.fontWeight,
-    color: colors.text,
-    marginTop: spacing.xs,
-  },
-  input: {
-    minHeight: touchTarget.cta,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    color: colors.text,
-    fontSize: typography.body.fontSize,
-    fontWeight: typography.body.fontWeight,
-  },
-  links: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: spacing.lg,
-  },
-  linkButton: {
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-  },
-  linkText: {
-    fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
-    color: colors.primary,
-  },
   oauthCard: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
@@ -322,6 +294,9 @@ const styles = StyleSheet.create({
   },
   oauthRowPressed: {
     backgroundColor: colors.surfacePressed,
+  },
+  oauthRowDisabled: {
+    opacity: 0.5,
   },
   oauthRowText: {
     fontSize: typography.body.fontSize,

@@ -54,7 +54,7 @@ export interface ContributeBarcodeProductResponse {
 
 export type AuthUserRole = "user" | "admin";
 export type AuthAccountType = "anonymous" | "registered";
-export type OAuthProvider = "apple" | "google" | "kakao";
+export type OAuthProvider = "apple" | "google" | "kakao" | "naver";
 
 export interface AuthUser {
   id: string;
@@ -109,6 +109,8 @@ export interface OAuthLoginRequest {
   providerToken: string;
   email?: string;
   displayName?: string;
+  /** Required for Naver code → token exchange on the API. */
+  redirectUri?: string;
 }
 
 export interface InventoryItem {

@@ -2,7 +2,12 @@ import { z } from "zod";
 
 export const authUserRoleSchema = z.enum(["user", "admin"]);
 export const authAccountTypeSchema = z.enum(["anonymous", "registered"]);
-export const oauthProviderSchema = z.enum(["apple", "google", "kakao"]);
+export const oauthProviderSchema = z.enum([
+  "apple",
+  "google",
+  "kakao",
+  "naver",
+]);
 
 export const authUserSchema = z.object({
   id: z.string(),
@@ -59,4 +64,6 @@ export const oauthLoginRequestSchema = z.object({
   providerToken: z.string().min(1),
   email: z.string().email().optional(),
   displayName: z.string().optional(),
+  /** Naver authorization-code exchange must reuse the same redirect URI. */
+  redirectUri: z.string().min(1).optional(),
 });
