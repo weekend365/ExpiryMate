@@ -131,7 +131,9 @@ function validateHttpsUrls(env: EnvMap, errors: string[]) {
     }
 
     if (isUnsafeProductionHostname(url.hostname)) {
-      errors.push(`${key} must not point to localhost or a private development host.`);
+      errors.push(
+        `${key} must not point to localhost or a private development host.`,
+      );
     }
   }
 }
@@ -155,7 +157,9 @@ function validateAppBaseUrl(env: EnvMap, errors: string[]) {
   }
 
   if (isUnsafeProductionHostname(url.hostname)) {
-    errors.push("APP_BASE_URL must not point to localhost or a private development host.");
+    errors.push(
+      "APP_BASE_URL must not point to localhost or a private development host.",
+    );
   }
 }
 
@@ -188,7 +192,9 @@ function validateSmtpPort(env: EnvMap, errors: string[]) {
 
 function validateAppleStoreEnvironment(env: EnvMap, errors: string[]) {
   if (env.APPLE_APP_STORE_ENVIRONMENT !== "production") {
-    errors.push("APPLE_APP_STORE_ENVIRONMENT must be production for production deploys.");
+    errors.push(
+      "APPLE_APP_STORE_ENVIRONMENT must be production for production deploys.",
+    );
   }
 }
 

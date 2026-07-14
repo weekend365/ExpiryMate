@@ -22,7 +22,9 @@ describe("validateProductionEnvironment", () => {
   });
 
   it("accepts a complete production configuration", () => {
-    expect(() => validateProductionEnvironment(validProductionEnv())).not.toThrow();
+    expect(() =>
+      validateProductionEnvironment(validProductionEnv()),
+    ).not.toThrow();
   });
 
   it("allows production without Naver OAuth credentials", () => {
