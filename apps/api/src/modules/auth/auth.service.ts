@@ -610,11 +610,11 @@ export class AuthService {
     }
 
     if (provider === OAuthProvider.kakao) {
-      return verifyKakaoToken(dto.providerToken);
+      return verifyKakaoCode(dto.providerToken, dto.redirectUri);
     }
 
     if (provider === OAuthProvider.naver) {
-      return verifyNaverCode(dto.providerToken);
+      return verifyNaverCode(dto.providerToken, dto.state);
     }
 
     return verifyAppleToken(dto.providerToken, dto);
@@ -760,11 +760,59 @@ async function verifyGoogleToken(providerToken: string): Promise<OAuthProfile> {
   };
 }
 
-async function verifyKakaoToken(providerToken: string): Promise<OAuthProfile> {
-  getRequiredOAuthClientId("KAKAO_OAUTH_CLIENT_ID", "Kakao");
+async function verifyKakaoCode(
+  authorizationCode: string,
+  redirectUri?: string,
+): Promise<OAuthProfile> {
+  const clientId = getRequiredOAuthClientId("KAKAO_OAUTH_CLIENT_ID", "Kakao");
+  const clientSecret = process.env.KAKAO_OAUTH_CLIENT_SECRET?.trim();
 
+  if (!redirectUri?.trim()) {
+    throw new UnauthorizedException("Kakao 로그인 리다이렉트 주소가 없어요.");
+  }
+
+  const tokenBody = new URLSearchParams({
+    grant_type: "authorization_code",
+    client_id: clientId,
+    redirect_uri: redirectUri.trim(),
+    code: authorizationCode,
+  });
+
+  if (clientSecret) {
+    tokenBody.set("client_secret", clientSecret);
+  }
+
+  const tokenResponse = await fetch("https://kauth.kakao.com/oauth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
+    body: tokenBody.toString(),
+  });
+
+  if (!tokenResponse.ok) {
+    throw new UnauthorizedException("Kakao 로그인 코드를 확인하지 못했습니다.");
+  }
+
+  const tokenPayload = (await tokenResponse.json()) as {
+    access_token?: string;
+    error?: string;
+    error_description?: string;
+  };
+
+  if (!tokenPayload.access_token) {
+    throw new UnauthorizedException(
+      tokenPayload.error_description ??
+        "Kakao 로그인 토큰을 받지 못했어요.",
+    );
+  }
+
+  return verifyKakaoAccessToken(tokenPayload.access_token);
+}
+
+async function verifyKakaoAccessToken(accessToken: string): Promise<OAuthProfile> {
   const response = await fetch("https://kapi.kakao.com/v2/user/me", {
-    headers: { Authorization: `Bearer ${providerToken}` },
+    headers: { Authorization: `Bearer ${accessToken}` },
   });
 
   if (!response.ok) {
@@ -792,7 +840,10 @@ async function verifyKakaoToken(providerToken: string): Promise<OAuthProfile> {
   };
 }
 
-async function verifyNaverCode(authorizationCode: string): Promise<OAuthProfile> {
+async function verifyNaverCode(
+  authorizationCode: string,
+  oauthState?: string,
+): Promise<OAuthProfile> {
   const clientId = getRequiredOAuthClientId("NAVER_OAUTH_CLIENT_ID", "Naver");
   const clientSecret = process.env.NAVER_OAUTH_CLIENT_SECRET?.trim();
 
@@ -812,7 +863,7 @@ async function verifyNaverCode(authorizationCode: string): Promise<OAuthProfile>
       client_id: clientId,
       client_secret: clientSecret,
       code: authorizationCode,
-      state: "expirymate",
+      state: oauthState?.trim() || "expirymate",
     }).toString(),
   });
 
@@ -856,10 +907,15 @@ async function verifyNaverCode(authorizationCode: string): Promise<OAuthProfile>
   }
 
   const profile = profilePayload.response;
+  const providerUserId = profile.id;
+
+  if (!providerUserId) {
+    throw new UnauthorizedException("Naver 사용자 정보를 확인하지 못했습니다.");
+  }
 
   return {
     provider: OAuthProvider.naver,
-    providerUserId: profile.id,
+    providerUserId,
     email: profile.email,
     displayName: profile.nickname ?? profile.name,
     emailVerified: Boolean(profile.email),

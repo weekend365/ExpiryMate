@@ -67,7 +67,7 @@ const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
 
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
-let sessionPromise: Promise<AuthSession> | null = null;
+let sessionPromise: Promise<AuthSession | null> | null = null;
 
 function resolveApiBaseUrl() {
   const value = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -125,7 +125,7 @@ async function request<T>(
   init?: RequestInit,
   options: { retryOnUnauthorized?: boolean } = { retryOnUnauthorized: true },
 ): Promise<T> {
-  const session = await getOrCreateSession();
+  const session = await requireRegisteredSession();
   const response = await fetchWithNetworkError(path, {
     ...init,
     headers: {
@@ -138,8 +138,13 @@ async function request<T>(
 
   if (!response.ok || !body.success) {
     if (response.status === 401 && options.retryOnUnauthorized) {
-      await refreshOrCreateAnonymousSession();
-      return request<T>(path, init, { retryOnUnauthorized: false });
+      const refreshed = await tryRefreshRegisteredSession();
+      if (refreshed) {
+        return request<T>(path, init, { retryOnUnauthorized: false });
+      }
+
+      await clearAuthSession();
+      throw new Error("로그인이 만료됐어요. 다시 이어가 주세요.");
     }
 
     if (response.status >= 500) {
@@ -193,19 +198,42 @@ async function parseEnvelope<T>(response: Response) {
   }
 }
 
-async function getOrCreateSession() {
+async function requireRegisteredSession() {
   if (!sessionPromise) {
-    sessionPromise = loadOrCreateSession().catch((error: unknown) => {
+    sessionPromise = loadRegisteredSession().catch((error: unknown) => {
       sessionPromise = null;
       throw error;
     });
   }
 
-  return sessionPromise;
+  const session = await sessionPromise;
+
+  if (!session) {
+    throw new Error("로그인이 필요해요. 계정으로 이어가 주세요.");
+  }
+
+  return session;
 }
 
-async function loadOrCreateSession() {
-  if (accessToken && currentUser) {
+/** Restores a registered session from storage, or returns null (no anonymous fallback). */
+export async function restoreRegisteredSession(): Promise<AuthSession | null> {
+  if (!sessionPromise) {
+    sessionPromise = loadRegisteredSession().catch((error: unknown) => {
+      sessionPromise = null;
+      throw error;
+    });
+  }
+
+  try {
+    return await sessionPromise;
+  } catch {
+    sessionPromise = null;
+    return null;
+  }
+}
+
+async function loadRegisteredSession(): Promise<AuthSession | null> {
+  if (accessToken && currentUser?.accountType === "registered") {
     return { user: currentUser, accessToken };
   }
 
@@ -214,40 +242,68 @@ async function loadOrCreateSession() {
   const storedUser = await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY);
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
 
-  if (storedUser && refreshToken) {
-    try {
-      currentUser = JSON.parse(storedUser) as AuthUser;
-      return await refreshSession(refreshToken);
-    } catch {
-      await clearAuthSession();
-    }
+  if (!storedUser || !refreshToken) {
+    await clearAuthSession();
+    return null;
   }
 
-  return createAnonymousSession();
+  let parsed: AuthUser;
+  try {
+    parsed = JSON.parse(storedUser) as AuthUser;
+  } catch {
+    await clearAuthSession();
+    return null;
+  }
+
+  if (parsed.accountType !== "registered") {
+    await clearAuthSession();
+    return null;
+  }
+
+  try {
+    currentUser = parsed;
+    return await refreshSession(refreshToken);
+  } catch {
+    await clearAuthSession();
+    return null;
+  }
 }
 
-async function refreshOrCreateAnonymousSession() {
+async function tryRefreshRegisteredSession() {
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
 
-  if (refreshToken) {
-    try {
-      sessionPromise = refreshSession(refreshToken);
-      return await sessionPromise;
-    } catch {
-      await clearAuthSession();
-    }
+  if (!refreshToken) {
+    return null;
   }
 
-  sessionPromise = createAnonymousSession();
-  return sessionPromise;
+  try {
+    sessionPromise = refreshSession(refreshToken);
+    const session = await sessionPromise;
+    if (!session || session.user.accountType !== "registered") {
+      await clearAuthSession();
+      return null;
+    }
+    return session;
+  } catch {
+    await clearAuthSession();
+    return null;
+  }
 }
 
-async function createAnonymousSession() {
-  const session = await publicRequest<AuthSession>("/auth/anonymous", {
-    method: "POST",
-  });
+async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit) {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(init?.headers as Record<string, string> | undefined),
+  };
 
-  return persistAuthSession(session);
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return publicRequest<T>(path, {
+    ...init,
+    headers,
+  });
 }
 
 async function refreshSession(refreshToken: string) {
@@ -260,6 +316,11 @@ async function refreshSession(refreshToken: string) {
 }
 
 async function persistAuthSession(session: AuthSession) {
+  if (session.user.accountType !== "registered") {
+    await clearAuthSession();
+    throw new Error("등록된 계정으로만 이어갈 수 있어요.");
+  }
+
   accessToken = session.accessToken;
   currentUser = session.user;
   sessionPromise = Promise.resolve(session);
@@ -281,24 +342,19 @@ export async function clearAuthSession() {
   await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
 }
 
-async function authenticatedAuthRequest<T>(path: string, init?: RequestInit) {
-  const session = await getOrCreateSession();
-
-  return publicRequest<T>(path, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${session.accessToken}`,
-      ...(init?.headers ?? {}),
-    },
-  });
-}
-
 export const getCurrentUser = async () => {
-  const session = await getOrCreateSession();
-  return session.user;
+  const session = await restoreRegisteredSession();
+  return session?.user ?? null;
 };
 
-export const getMe = () => request<AuthUser>("/auth/me");
+export const getMe = async (): Promise<AuthUser | null> => {
+  const session = await restoreRegisteredSession();
+  if (!session) {
+    return null;
+  }
+
+  return request<AuthUser>("/auth/me");
+};
 
 export const getPrivacyStatus = () => request<PrivacyStatus>("/privacy/status");
 
@@ -319,7 +375,7 @@ export const deleteAccount = async (payload: DeleteAccountRequest) => {
 
 export const register = async (payload: RegisterRequest) =>
   persistAuthSession(
-    await authenticatedAuthRequest<AuthSession>("/auth/register", {
+    await authRequestWithOptionalBearer<AuthSession>("/auth/register", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
@@ -327,7 +383,7 @@ export const register = async (payload: RegisterRequest) =>
 
 export const login = async (payload: LoginRequest) =>
   persistAuthSession(
-    await authenticatedAuthRequest<AuthSession>("/auth/login", {
+    await authRequestWithOptionalBearer<AuthSession>("/auth/login", {
       method: "POST",
       body: JSON.stringify(payload),
     }),
@@ -346,8 +402,8 @@ export const logout = async () => {
   await clearAuthSession();
 };
 
-export const requestEmailVerification = (email?: string) =>
-  authenticatedAuthRequest<{ ok: boolean }>("/auth/email/verify/request", {
+export const requestEmailVerification = async (email?: string) =>
+  request<{ ok: boolean }>("/auth/email/verify/request", {
     method: "POST",
     body: JSON.stringify({ email }),
   });
@@ -375,7 +431,7 @@ export const oauthLogin = async (
   payload: OAuthLoginRequest,
 ) =>
   persistAuthSession(
-    await authenticatedAuthRequest<AuthSession>(`/auth/oauth/${provider}`, {
+    await authRequestWithOptionalBearer<AuthSession>(`/auth/oauth/${provider}`, {
       method: "POST",
       body: JSON.stringify(payload),
     }),

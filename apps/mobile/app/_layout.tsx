@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { AuthRedirectGate } from "../src/features/auth/auth-gate";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
 import { queryClient } from "../src/services/query-client";
@@ -20,6 +21,7 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
           <RecipeGenerationProvider>
             <PushTokenSync />
+            <AuthRedirectGate />
             <StatusBar style="dark" />
             <Stack
               screenOptions={{

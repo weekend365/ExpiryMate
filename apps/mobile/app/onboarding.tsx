@@ -50,10 +50,10 @@ const STEPS: OnboardingStep[] = [
   {
     key: "start",
     eyebrow: `${appBrand.appNameEn}`,
-    title: "이제 장고와 시작해볼까요?",
-    description: "첫 재료만 넣으면 바로 쓸 수 있어요. 천천히 함께해요.",
+    title: "계정으로 이어가면 시작할 수 있어요",
+    description: "카카오·네이버 등으로 이어가면, 장고가 재료를 안전하게 챙겨 드릴게요.",
     mood: "happy",
-    cta: "장고와 시작할게요",
+    cta: "계정으로 이어갈게요",
   },
 ];
 
@@ -100,7 +100,7 @@ export default function OnboardingScreen() {
   const handlePrimary = () => {
     if (isLastStep) {
       completeOnboarding();
-      router.replace("/(tabs)/home");
+      router.replace("/auth/login");
       return;
     }
 

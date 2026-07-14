@@ -102,7 +102,6 @@ export default function SettingsScreen() {
   };
 
   const user = auth.query.data;
-  const isRegistered = user?.accountType === "registered";
   const emailVerified = Boolean(user?.emailVerifiedAt);
   const privacyPolicyUrl = privacyStatusQuery.data?.privacyPolicyUrl;
   const entitlement = subscription.query.data;
@@ -140,65 +139,48 @@ export default function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
-        <SectionHeader title="계정" description="계정으로 이어가면 재료를 안전하게 지킬 수 있어요." />
+        <SectionHeader title="계정" description="연결된 계정으로 재료를 안전하게 지킬 수 있어요." />
         <View style={styles.card}>
           <ListRow
-            title={isRegistered ? "내 계정" : "익명으로 사용 중이에요"}
-            description={
-              isRegistered
-                ? `${user?.email ?? "연결된 계정"}${
-                    !emailVerified && user?.email
-                      ? " · 메일 확인이 필요해요"
-                      : ""
-                  }`
-                : "이어가면 지금 넣은 재료가 계정에 연결돼요."
-            }
-            onPress={
-              isRegistered ? undefined : () => router.push("/auth/login")
+            title="내 계정"
+            description={`${user?.email ?? "연결된 계정"}${
+              !emailVerified && user?.email ? " · 메일 확인이 필요해요" : ""
+            }`}
+          />
+          {!emailVerified && user?.email ? (
+            <ListRow
+              title="인증 메일 다시 받을게요"
+              description="메일함에서 인증만 마쳐 주세요."
+              icon={Mail}
+              onPress={() =>
+                auth.requestVerificationMutation.mutate(undefined, {
+                  onSuccess: () =>
+                    Alert.alert(
+                      "메일을 보냈어요",
+                      "메일함에서 인증만 마쳐 주세요. 장고가 기다리고 있어요.",
+                    ),
+                  onError: (error) =>
+                    Alert.alert(
+                      "앗, 잠시 문제가 생겼어요",
+                      getErrorMessage(error),
+                    ),
+                })
+              }
+            />
+          ) : null}
+          <ListRow
+            title="로그아웃"
+            description="이 기기에서 잠시 나갈게요."
+            icon={LogOut}
+            onPress={() =>
+              auth.logoutMutation.mutate(undefined, {
+                onSuccess: () => {
+                  Alert.alert("다음에 또 만나요", "이 기기에서 나갔어요.");
+                  router.replace("/auth/login");
+                },
+              })
             }
           />
-          {isRegistered ? (
-            <>
-              {!emailVerified && user?.email ? (
-                <ListRow
-                  title="인증 메일 다시 받을게요"
-                  description="메일함에서 인증만 마쳐 주세요."
-                  icon={Mail}
-                  onPress={() =>
-                    auth.requestVerificationMutation.mutate(undefined, {
-                      onSuccess: () =>
-                        Alert.alert(
-                          "메일을 보냈어요",
-                          "메일함에서 인증만 마쳐 주세요. 장고가 기다리고 있어요.",
-                        ),
-                      onError: (error) =>
-                        Alert.alert(
-                          "앗, 잠시 문제가 생겼어요",
-                          getErrorMessage(error),
-                        ),
-                    })
-                  }
-                />
-              ) : null}
-              <ListRow
-                title="로그아웃"
-                description="이 기기에서 잠시 나갈게요."
-                icon={LogOut}
-                onPress={() =>
-                  auth.logoutMutation.mutate(undefined, {
-                    onSuccess: () =>
-                      Alert.alert("다음에 또 만나요", "이 기기에서 나갔어요."),
-                  })
-                }
-              />
-            </>
-          ) : (
-            <ListRow
-              title="계정으로 이어가기"
-              description="카카오·네이버 등으로 이어서 쓸 수 있어요."
-              onPress={() => router.push("/auth/login")}
-            />
-          )}
         </View>
       </View>
 

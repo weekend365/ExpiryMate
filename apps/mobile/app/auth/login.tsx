@@ -26,8 +26,18 @@ import {
 
 WebBrowser.maybeCompleteAuthSession();
 
-const redirectUri = AuthSession.makeRedirectUri({ scheme: "expirymate" });
-const NAVER_OAUTH_STATE = "expirymate";
+/** HTTPS Redirect URI registered in Kakao/Naver/Google consoles. */
+const providerRedirectUri =
+  process.env.EXPO_PUBLIC_OAUTH_REDIRECT_URI?.trim() ?? "";
+
+/**
+ * URI WebBrowser waits for. Must be an app / Expo scheme — not https.
+ * Expo Go → exp://…/--/oauth, standalone → expirymate://oauth
+ */
+const appReturnUri = AuthSession.makeRedirectUri({
+  scheme: "expirymate",
+  path: "oauth",
+});
 
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
@@ -57,7 +67,7 @@ export default function LoginScreen() {
           .filter(Boolean)
           .join(" "),
       });
-      router.back();
+      router.replace("/(tabs)/home");
     } catch (error) {
       if ((error as { code?: string }).code === "ERR_REQUEST_CANCELED") {
         return;
@@ -73,10 +83,12 @@ export default function LoginScreen() {
       provider: "kakao",
       clientId: process.env.EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID,
       url: "https://kauth.kakao.com/oauth/authorize",
-      tokenParam: "access_token",
+      tokenParam: "code",
       params: {
-        response_type: "token",
+        response_type: "code",
+        state: appReturnUri,
       },
+      includeRedirectUriInPayload: true,
     });
 
   const handleNaverLogin = () =>
@@ -87,8 +99,9 @@ export default function LoginScreen() {
       tokenParam: "code",
       params: {
         response_type: "code",
-        state: NAVER_OAUTH_STATE,
+        state: appReturnUri,
       },
+      oauthState: appReturnUri,
     });
 
   const handleGoogleLogin = () =>
@@ -101,6 +114,7 @@ export default function LoginScreen() {
         response_type: "id_token",
         scope: "openid email profile",
         nonce: String(Date.now()),
+        state: appReturnUri,
       },
     });
 
@@ -110,28 +124,47 @@ export default function LoginScreen() {
     url,
     tokenParam,
     params,
+    oauthState,
+    includeRedirectUriInPayload = false,
   }: {
     provider: WebOAuthProvider;
     clientId?: string;
     url: string;
     tokenParam: string;
     params: Record<string, string>;
+    oauthState?: string;
+    includeRedirectUriInPayload?: boolean;
   }) => {
     try {
       setPendingProvider(provider);
-      if (!clientId) {
+      if (!clientId?.trim()) {
         throw new Error("소셜 로그인 설정을 아직 준비 중이에요.");
       }
 
+      if (!providerRedirectUri) {
+        throw new Error(
+          "로그인 연결 주소(EXPO_PUBLIC_OAUTH_REDIRECT_URI)를 아직 준비 중이에요.",
+        );
+      }
+
       const authUrl = `${url}?${new URLSearchParams({
-        client_id: clientId,
-        redirect_uri: redirectUri,
+        client_id: clientId.trim(),
+        redirect_uri: providerRedirectUri,
         ...params,
       }).toString()}`;
-      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
 
-      if (result.type !== "success") {
+      // Wait for the app scheme deep link (not the https provider redirect).
+      const result = await WebBrowser.openAuthSessionAsync(
+        authUrl,
+        appReturnUri,
+      );
+
+      if (result.type === "cancel" || result.type === "dismiss") {
         return;
+      }
+
+      if (result.type !== "success" || !("url" in result) || !result.url) {
+        throw new Error("소셜 로그인을 끝까지 마치지 못했어요.");
       }
 
       const parsed = parseOAuthReturnUrl(result.url);
@@ -144,8 +177,12 @@ export default function LoginScreen() {
       await oauthMutation.mutateAsync({
         provider,
         providerToken,
+        ...(oauthState ? { state: oauthState } : {}),
+        ...(includeRedirectUriInPayload
+          ? { redirectUri: providerRedirectUri }
+          : {}),
       });
-      router.back();
+      router.replace("/(tabs)/home");
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     } finally {
@@ -158,7 +195,7 @@ export default function LoginScreen() {
   return (
     <Screen
       title="어서 오세요"
-      subtitle="계정으로 이어가면, 익명으로 넣은 재료도 함께 옮겨 드릴게요."
+      subtitle="계정으로 이어가면 장고가 냉장고를 함께 챙겨 드릴게요."
       footer={
         <Button
           onPress={handleKakaoLogin}

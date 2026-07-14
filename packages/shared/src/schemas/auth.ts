@@ -64,6 +64,8 @@ export const oauthLoginRequestSchema = z.object({
   providerToken: z.string().min(1),
   email: z.string().email().optional(),
   displayName: z.string().optional(),
-  /** Naver authorization-code exchange must reuse the same redirect URI. */
+  /** Kakao/Naver authorization-code exchange must reuse the same redirect URI. */
   redirectUri: z.string().min(1).optional(),
+  /** Naver authorize/token exchange state (must match). */
+  state: z.string().min(1).optional(),
 });

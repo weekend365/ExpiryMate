@@ -111,6 +111,8 @@ export interface OAuthLoginRequest {
   displayName?: string;
   /** Required for Naver code → token exchange on the API. */
   redirectUri?: string;
+  /** Naver authorize/token exchange state (must match). */
+  state?: string;
 }
 
 export interface InventoryItem {

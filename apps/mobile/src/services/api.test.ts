@@ -31,10 +31,10 @@ vi.mock("expo-secure-store", () => ({
 
 const authUser: AuthUser = {
   id: "user-1",
-  email: null,
+  email: "test@example.com",
   displayName: "테스트 사용자",
   role: "user",
-  accountType: "anonymous",
+  accountType: "registered",
   emailVerifiedAt: null,
 };
 
@@ -63,7 +63,16 @@ describe("mobile API client core flow", () => {
     vi.restoreAllMocks();
   });
 
-  it("creates an anonymous session before calling an authenticated endpoint", async () => {
+  it("requires a registered session before calling an authenticated endpoint", async () => {
+    const { getDashboardSummary } = await import("./api");
+
+    await expect(getDashboardSummary()).rejects.toThrow(/로그인/);
+    expect(stores.fetch).not.toHaveBeenCalled();
+  });
+
+  it("uses a restored registered session for authenticated requests", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
     stores.fetch
       .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
       .mockResolvedValueOnce(successResponse(dashboardSummary));
@@ -74,7 +83,7 @@ describe("mobile API client core flow", () => {
     expect(result.todayExpiryCount).toBe(1);
     expect(stores.fetch).toHaveBeenNthCalledWith(
       1,
-      "http://localhost:4000/auth/anonymous",
+      "http://localhost:4000/auth/refresh",
       expect.objectContaining({
         method: "POST",
       }),
@@ -88,7 +97,6 @@ describe("mobile API client core flow", () => {
         }),
       }),
     );
-    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe("refresh-1");
   });
 
   it("refreshes the session and retries once when an authenticated request expires", async () => {
@@ -103,7 +111,7 @@ describe("mobile API client core flow", () => {
 
     const result = await getMe();
 
-    expect(result.displayName).toBe("갱신됨");
+    expect(result?.displayName).toBe("갱신됨");
     expect(stores.fetch).toHaveBeenNthCalledWith(
       2,
       "http://localhost:4000/auth/me",
@@ -126,11 +134,6 @@ describe("mobile API client core flow", () => {
   });
 
   it("uses the new access token immediately after login", async () => {
-    const anonymousUser: AuthUser = {
-      ...authUser,
-      id: "anon-1",
-      accountType: "anonymous",
-    };
     const registeredUser: AuthUser = {
       ...authUser,
       id: "user-registered",
@@ -139,9 +142,6 @@ describe("mobile API client core flow", () => {
     };
 
     stores.fetch
-      .mockResolvedValueOnce(
-        successResponse(createSession("anon-access", "anon-refresh", anonymousUser)),
-      )
       .mockResolvedValueOnce(
         successResponse(
           createSession("registered-access", "registered-refresh", registeredUser),
@@ -153,18 +153,16 @@ describe("mobile API client core flow", () => {
     await login({ email: "test@example.com", password: "password123" });
     const result = await getMe();
 
-    expect(result.id).toBe("user-registered");
+    expect(result?.id).toBe("user-registered");
     expect(stores.fetch).toHaveBeenNthCalledWith(
-      2,
+      1,
       "http://localhost:4000/auth/login",
       expect.objectContaining({
-        headers: expect.objectContaining({
-          Authorization: "Bearer anon-access",
-        }),
+        method: "POST",
       }),
     );
     expect(stores.fetch).toHaveBeenNthCalledWith(
-      3,
+      2,
       "http://localhost:4000/auth/me",
       expect.objectContaining({
         headers: expect.objectContaining({
@@ -175,6 +173,8 @@ describe("mobile API client core flow", () => {
   });
 
   it("registers a push token through an authenticated request", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
     stores.fetch
       .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
       .mockResolvedValueOnce(

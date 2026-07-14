@@ -79,6 +79,11 @@ export class OAuthLoginDto {
   @IsOptional()
   @IsString()
   redirectUri?: string;
+
+  /** Naver authorize/token exchange state (must match). */
+  @IsOptional()
+  @IsString()
+  state?: string;
 }
 
 export class AdminClientDto {

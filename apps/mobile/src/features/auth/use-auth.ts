@@ -17,7 +17,10 @@ export const useAuth = () => {
   const query = useQuery({
     queryKey: authQueryKey,
     queryFn: getMe,
+    retry: false,
   });
+
+  const isRegistered = query.data?.accountType === "registered";
 
   const resetAppQueries = () => {
     queryClient.invalidateQueries({ queryKey: authQueryKey });
@@ -54,24 +57,28 @@ export const useAuth = () => {
       email,
       displayName,
       redirectUri,
+      state,
     }: {
       provider: "apple" | "google" | "kakao" | "naver";
       providerToken: string;
       email?: string;
       displayName?: string;
       redirectUri?: string;
+      state?: string;
     }) =>
       oauthLogin(provider, {
         providerToken,
         email,
         displayName,
         redirectUri,
+        state,
       }),
     onSuccess: resetAppQueries,
   });
 
   return {
     query,
+    isRegistered,
     loginMutation,
     registerMutation,
     logoutMutation,

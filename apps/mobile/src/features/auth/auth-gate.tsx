@@ -1,0 +1,126 @@
+import { Redirect, useRouter, useSegments } from "expo-router";
+import { useEffect, type ReactNode } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { appBrand } from "@expirymate/shared";
+import { Mascot } from "../../components/Mascot";
+import { colors, spacing, typography } from "../../shared/theme";
+import { useAppStore } from "../../store/app-store";
+import { useAuth } from "./use-auth";
+
+const PUBLIC_ROOT_SEGMENTS = new Set([
+  "index",
+  "onboarding",
+  "auth",
+]);
+
+/**
+ * Keeps unauthenticated users on onboarding/login, and sends registered users
+ * away from the login screen into the main app.
+ */
+export function AuthRedirectGate() {
+  const router = useRouter();
+  const segments = useSegments();
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
+  const hasCompletedOnboarding = useAppStore(
+    (state) => state.hasCompletedOnboarding,
+  );
+  const { query } = useAuth();
+
+  const isRegistered = query.data?.accountType === "registered";
+  const rootSegment = segments[0];
+  const isPublicRoute =
+    !rootSegment || PUBLIC_ROOT_SEGMENTS.has(String(rootSegment));
+
+  useEffect(() => {
+    if (!hasHydrated || query.isLoading || query.isFetching) {
+      return;
+    }
+
+    if (!hasCompletedOnboarding) {
+      if (rootSegment !== "onboarding") {
+        router.replace("/onboarding");
+      }
+      return;
+    }
+
+    if (!isRegistered) {
+      if (!isPublicRoute || rootSegment === "index") {
+        router.replace("/auth/login");
+      }
+      return;
+    }
+
+    if (rootSegment === "auth") {
+      const routeSegments = segments as string[];
+      const authScreen = routeSegments[1] ?? "";
+      if (authScreen === "login") {
+        router.replace("/(tabs)/home");
+      }
+    }
+  }, [
+    hasCompletedOnboarding,
+    hasHydrated,
+    isPublicRoute,
+    isRegistered,
+    query.isFetching,
+    query.isLoading,
+    rootSegment,
+    router,
+    segments,
+  ]);
+
+  return null;
+}
+
+export function AuthLoadingScreen() {
+  return (
+    <View style={styles.root}>
+      <Mascot size="medium" mood="idle" />
+      <Text style={styles.brand}>{appBrand.appNameKo}</Text>
+      <ActivityIndicator color={colors.primary} />
+      <Text style={styles.caption}>장고가 준비하고 있어요</Text>
+    </View>
+  );
+}
+
+export function RequireRegisteredAuth({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const hasHydrated = useAppStore((state) => state.hasHydrated);
+  const { query } = useAuth();
+  const isRegistered = query.data?.accountType === "registered";
+
+  if (!hasHydrated || query.isLoading) {
+    return <AuthLoadingScreen />;
+  }
+
+  if (!isRegistered) {
+    return <Redirect href="/auth/login" />;
+  }
+
+  return <>{children}</>;
+}
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.background,
+    gap: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  brand: {
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.heading.fontWeight,
+    color: colors.text,
+  },
+  caption: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
+  },
+});
