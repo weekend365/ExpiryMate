@@ -258,7 +258,7 @@ export function useProductScanner() {
     setCameraErrorMessage(null);
     setConfirmation(null);
     setIsScanProcessing(false);
-    setIsCameraReady(false);
+    // CameraView stays mounted; onCameraReady won't re-fire on rescan.
     updateMode("barcode");
   }, [updateMode]);
 
