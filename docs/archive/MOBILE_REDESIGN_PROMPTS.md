@@ -35,7 +35,7 @@
 | 13   | 문구 전수        | mobile 전체 copy                                                    | 장고가 말하는 톤                     | ✅   |
 | 14   | Admin            | `apps/admin/*`                                                      | `appBrand` 표시명 동기화             | ✅   |
 
-> **진척도 반영:** `docs/PRODUCTION_LAUNCH_ROADMAP.md` §1-4 (2026-07-13)
+> **진척도 반영:** `docs/PROJECT.md` (UI 리디자인 완료, 2026-07-13). 이 파일은 archive.
 
 ---
 

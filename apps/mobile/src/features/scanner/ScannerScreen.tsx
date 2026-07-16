@@ -13,6 +13,7 @@ import { useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Linking,
   Pressable,
   StyleSheet,
   Text,
@@ -135,7 +136,10 @@ function ScannerCameraExperience() {
       expiryDate: scanner.confirmation.expirationDate,
       expirySource: ExpirySource.OCR_DETECTED,
     });
-    router.push("/register");
+    // Clear confirmation so the Modal sheet dismisses; replace so scanner
+    // unmounts and cannot keep overlaying /register.
+    scanner.resetScanner();
+    router.replace("/register");
   };
 
   const handleRescan = () => {
@@ -386,13 +390,20 @@ function PermissionCard({
       <Text style={styles.centerDescription}>
         바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요.
       </Text>
-      <Button
-        onPress={onRequestPermission}
-        disabled={!canRequestPermission && !isRequesting}
-        fullWidth
-      >
-        카메라 켤게요
-      </Button>
+      {canRequestPermission || isRequesting ? (
+        <Button onPress={onRequestPermission} disabled={isRequesting} fullWidth>
+          카메라 켤게요
+        </Button>
+      ) : (
+        <Button
+          onPress={() => {
+            void Linking.openSettings();
+          }}
+          fullWidth
+        >
+          설정에서 켤게요
+        </Button>
+      )}
     </View>
   );
 }

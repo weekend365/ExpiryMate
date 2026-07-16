@@ -1,7 +1,9 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import {
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -116,38 +118,44 @@ export function BottomSheet({
           />
         </Animated.View>
 
-        <Animated.View
-          style={[
-            styles.sheet,
-            sheetStyle,
-            { paddingBottom: Math.max(insets.bottom, spacing.md) },
-          ]}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.keyboardAvoid}
+          pointerEvents="box-none"
         >
-          <View style={styles.handle} />
-          {mascotMood ? (
-            <View style={styles.mascotWrap}>
-              <Mascot size="small" mood={mascotMood} />
-            </View>
-          ) : null}
-          {title ? (
-            <View style={styles.header}>
-              <Text style={styles.title}>{title}</Text>
-              {description ? (
-                <Text style={styles.description}>{description}</Text>
-              ) : null}
-            </View>
-          ) : null}
-          <ScrollView
-            style={styles.bodyScroll}
-            contentContainerStyle={styles.body}
-            showsVerticalScrollIndicator={false}
-            bounces={false}
-            keyboardShouldPersistTaps="handled"
+          <Animated.View
+            style={[
+              styles.sheet,
+              sheetStyle,
+              { paddingBottom: Math.max(insets.bottom, spacing.md) },
+            ]}
           >
-            {children}
-          </ScrollView>
-          {footer ? <View style={styles.footer}>{footer}</View> : null}
-        </Animated.View>
+            <View style={styles.handle} />
+            {mascotMood ? (
+              <View style={styles.mascotWrap}>
+                <Mascot size="small" mood={mascotMood} />
+              </View>
+            ) : null}
+            {title ? (
+              <View style={styles.header}>
+                <Text style={styles.title}>{title}</Text>
+                {description ? (
+                  <Text style={styles.description}>{description}</Text>
+                ) : null}
+              </View>
+            ) : null}
+            <ScrollView
+              style={styles.bodyScroll}
+              contentContainerStyle={styles.body}
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+              keyboardShouldPersistTaps="handled"
+            >
+              {children}
+            </ScrollView>
+            {footer ? <View style={styles.footer}>{footer}</View> : null}
+          </Animated.View>
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   );
@@ -156,6 +164,10 @@ export function BottomSheet({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    justifyContent: "flex-end",
+  },
+  keyboardAvoid: {
+    width: "100%",
     justifyContent: "flex-end",
   },
   backdrop: {

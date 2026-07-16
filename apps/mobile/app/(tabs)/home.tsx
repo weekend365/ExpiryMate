@@ -32,7 +32,8 @@ export default function HomeScreen() {
   const within3DaysCount = data?.within3DaysCount ?? 0;
   const within7DaysCount = data?.within7DaysCount ?? 0;
   const totalActiveCount = data?.totalActiveCount ?? 0;
-  const priorityCount = todayExpiryCount + within3DaysCount;
+  // within3DaysCount already includes "today" — do not add todayExpiryCount again.
+  const priorityCount = within3DaysCount;
   const hasInventory = totalActiveCount > 0;
   const needsAttention = priorityCount > 0;
 

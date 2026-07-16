@@ -13,18 +13,20 @@ import {
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import {
+  Barcode,
   CalendarDays,
   CheckCircle2,
   ChefHat,
   ChevronRight,
   MapPin,
   Package,
+  PencilLine,
 } from "lucide-react-native";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
@@ -57,8 +59,10 @@ type RegistrationFormValues = {
   notes: string;
 };
 
-/** 1) 재료명 → 2) 보관/수량 → 3) 유통기한 확인 */
-type RegistrationStep = "product" | "storage" | "expiry";
+/** 1) 재료명 → 2) 보관/수량 → 3) 유통기한 확인 → done(성공·다음 행동) */
+type RegistrationStep = "product" | "storage" | "expiry" | "done";
+
+type InputRegistrationStep = Exclude<RegistrationStep, "done">;
 
 type RegisteredSessionItem = {
   id: string;
@@ -78,7 +82,7 @@ const STORAGE_LOCATION_ORDER = [
 ];
 
 const REGISTRATION_STEPS: Array<{
-  key: RegistrationStep;
+  key: InputRegistrationStep;
   label: string;
   title: string;
   description: string;
@@ -174,6 +178,7 @@ const getPrefillKey = (
     : "";
 
 export default function RegisterScreen() {
+  const navigation = useNavigation();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
   const draft = useRegistrationStore((state) => state.draft);
@@ -183,13 +188,11 @@ export default function RegisterScreen() {
   const mutation = useSaveInventoryItem();
   const { data: inventory = [] } = useInventoryList();
   const [step, setStep] = useState<RegistrationStep>("product");
-  const [showAdditionalInfo, setShowAdditionalInfo] = useState(
-    Boolean(prefill?.brand || prefill?.category),
-  );
+  // Only open when the user taps — prefill must not auto-pop the sheet on storage step.
+  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
   const [registeredSessionItems, setRegisteredSessionItems] = useState<
     RegisteredSessionItem[]
   >([]);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
     null,
   );
@@ -223,7 +226,6 @@ export default function RegisterScreen() {
     if (prefill && nextPrefillKey !== appliedPrefillKeyRef.current) {
       form.reset(nextValues);
       appliedPrefillKeyRef.current = nextPrefillKey;
-      setShowAdditionalInfo(Boolean(prefill.brand || prefill.category));
     }
   }, [draft, form, hasHydrated, prefill]);
 
@@ -270,12 +272,57 @@ export default function RegisterScreen() {
   const unit = form.watch("unit") || "개";
   const brand = form.watch("brand")?.trim() ?? "";
   const category = form.watch("category");
-  const stepIndex = REGISTRATION_STEPS.findIndex((item) => item.key === step);
+  const isInputStep = step !== "done";
+  const stepIndex = isInputStep
+    ? REGISTRATION_STEPS.findIndex((item) => item.key === step)
+    : -1;
   const isLastStep = step === "expiry";
   const canGoNext =
     (step === "product" && Boolean(displayName)) ||
     (step === "storage" && Boolean(storageLocation) && quantity > 0) ||
     (step === "expiry" && Boolean(expiryDate));
+  const latestRegisteredItem = registeredSessionItems[0] ?? null;
+
+  useLayoutEffect(() => {
+    if (step !== "done") {
+      navigation.setOptions({
+        title: "재료 넣기",
+        headerLeft: undefined,
+      });
+      return;
+    }
+
+    navigation.setOptions({
+      title: "잘 넣어뒀어요",
+      headerLeft: () => (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="홈으로 돌아가기"
+          onPress={() => router.replace("/(tabs)/home")}
+          hitSlop={spacing.xs}
+          style={styles.headerBackButton}
+        >
+          <Text style={styles.headerBackLabel}>홈</Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation, step]);
+
+  useEffect(() => {
+    if (step !== "done") {
+      return undefined;
+    }
+
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        router.replace("/(tabs)/home");
+        return true;
+      },
+    );
+
+    return () => subscription.remove();
+  }, [step]);
 
   const recentTemplates = useMemo(
     () =>
@@ -330,14 +377,33 @@ export default function RegisterScreen() {
     const nextStep =
       REGISTRATION_STEPS[Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)];
     setStep(nextStep.key);
-    setSuccessMessage(null);
     setSubmitErrorMessage(null);
+  };
+
+  const finishRegistration = () => {
+    router.replace("/(tabs)/home");
+  };
+
+  const continueWithBarcode = () => {
+    clearPrefill();
+    router.replace("/scanner");
+  };
+
+  const continueWithManual = () => {
+    setSubmitErrorMessage(null);
+    setStep("product");
+  };
+
+  const openRecipeRecommendations = () => {
+    router.replace({
+      pathname: "/(tabs)/recommendations",
+      params: { autoGenerateAt: Date.now().toString() },
+    });
   };
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       setSubmitErrorMessage(null);
-      setSuccessMessage(null);
       const created = await mutation.mutateAsync({
         productId: values.productId,
         displayName: values.displayName,
@@ -366,7 +432,6 @@ export default function RegisterScreen() {
         },
         ...current,
       ]);
-      setSuccessMessage(`${created.displayName}을(를) 냉장고에 잘 넣어뒀어요.`);
 
       const nextDefaults = {
         ...createDefaultFormValues(),
@@ -377,7 +442,7 @@ export default function RegisterScreen() {
 
       form.reset(nextDefaults);
       setShowAdditionalInfo(false);
-      setStep("product");
+      setStep("done");
     } catch (error) {
       setSubmitErrorMessage(
         error instanceof Error
@@ -393,6 +458,92 @@ export default function RegisterScreen() {
       ? "이 재료로 할게요"
       : "다음으로 갈게요";
 
+  if (step === "done") {
+    return (
+      <Screen
+        title="잘 넣어뒀어요"
+        subtitle="더 넣을까요, 아니면 여기까지 할까요?"
+        footer={
+          <View style={styles.doneFooter}>
+            <Button
+              icon={CheckCircle2}
+              iconPosition="right"
+              onPress={finishRegistration}
+              fullWidth
+            >
+              그만 추가할래요
+            </Button>
+            <Button
+              variant="secondary"
+              icon={Barcode}
+              onPress={continueWithBarcode}
+              fullWidth
+            >
+              바코드로 더 넣을게요
+            </Button>
+            <Button
+              variant="secondary"
+              icon={PencilLine}
+              onPress={continueWithManual}
+              fullWidth
+            >
+              손으로 더 넣을게요
+            </Button>
+          </View>
+        }
+      >
+        <View style={styles.doneHero}>
+          <Mascot size="medium" mood="happy" />
+          <Text style={styles.doneTitle}>
+            {latestRegisteredItem
+              ? `${latestRegisteredItem.displayName}을(를) 냉장고에 잘 넣어뒀어요`
+              : "냉장고에 잘 넣어뒀어요"}
+          </Text>
+          <Text style={styles.doneDescription}>
+            다음으로 하고 싶은 일을 골라 주세요.
+          </Text>
+        </View>
+
+        {registeredSessionItems.length ? (
+          <View style={styles.sessionCard}>
+            <View style={styles.sessionHeader}>
+              <View style={styles.sessionCopy}>
+                <Text style={styles.sessionEyebrow}>오늘 넣은 재료</Text>
+                <Text style={styles.sessionTitle}>
+                  {registeredSessionItems.length}개 넣어뒀어요
+                </Text>
+              </View>
+            </View>
+            <View style={styles.sessionList}>
+              {registeredSessionItems.slice(0, 3).map((item) => (
+                <View key={item.id} style={styles.sessionRow}>
+                  <Text style={styles.sessionName}>{item.displayName}</Text>
+                  <Text style={styles.sessionMeta}>
+                    {storageLocationLabels[item.storageLocation]} · {item.quantity}
+                    {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : null}
+
+        {registeredSessionItems.length >= 2 ? (
+          <Pressable
+            onPress={openRecipeRecommendations}
+            style={({ pressed }) => [
+              styles.recipeHint,
+              pressed && styles.templateCardPressed,
+            ]}
+          >
+            <ChefHat color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+            <Text style={styles.recipeHintText}>요리 추천 받아볼까요?</Text>
+          </Pressable>
+        ) : null}
+      </Screen>
+    );
+  }
+
   return (
     <Screen
       title="재료 넣기"
@@ -400,7 +551,7 @@ export default function RegisterScreen() {
     >
       <StepFlow
         steps={REGISTRATION_STEPS}
-        currentIndex={stepIndex}
+        currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}
         headerAccessory={
           <View style={styles.stepIcon}>
@@ -428,18 +579,6 @@ export default function RegisterScreen() {
           </Button>
         }
       >
-        {successMessage && step === "product" ? (
-          <View style={styles.successStrip}>
-            <Mascot size="small" mood="happy" style={styles.successMascot} />
-            <View style={styles.successCopy}>
-              <Text style={styles.successTitle}>{successMessage}</Text>
-              <Text style={styles.successDescription}>
-                다음 재료 이름만 알려주시면 이어서 넣을 수 있어요.
-              </Text>
-            </View>
-          </View>
-        ) : null}
-
         {submitErrorMessage ? (
           <View style={styles.errorStrip}>
             <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
@@ -584,7 +723,9 @@ export default function RegisterScreen() {
               <View style={styles.extraTriggerCopy}>
                 <Text style={styles.extraTriggerTitle}>브랜드·메모도 적을까요?</Text>
                 <Text style={styles.extraTriggerDescription}>
-                  필요할 때만 적어도 괜찮아요.
+                  {brand || category
+                    ? "스캔에서 채워 둔 내용이 있어요. 확인하고 싶을 때 열어 주세요."
+                    : "필요할 때만 적어도 괜찮아요."}
                 </Text>
               </View>
               <Text style={styles.extraTriggerAction}>적어볼게요</Text>
@@ -691,12 +832,7 @@ export default function RegisterScreen() {
               <Button
                 size="small"
                 icon={ChefHat}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(tabs)/recommendations",
-                    params: { autoGenerateAt: Date.now().toString() },
-                  })
-                }
+                onPress={openRecipeRecommendations}
               >
                 요리 추천 받기
               </Button>
@@ -775,6 +911,17 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
+  headerBackButton: {
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
+    justifyContent: "center",
+  },
+  headerBackLabel: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.primary,
+  },
   stepIcon: {
     width: spacing.xl,
     height: spacing.xl,
@@ -783,31 +930,42 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  successStrip: {
-    backgroundColor: colors.successSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    gap: spacing.sm,
+  doneHero: {
     alignItems: "center",
+    gap: spacing.md,
+    paddingVertical: spacing.md,
   },
-  successMascot: {
-    flexShrink: 0,
+  doneTitle: {
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontWeight: typography.heading.fontWeight,
+    color: colors.text,
+    textAlign: "center",
   },
-  successCopy: {
-    flex: 1,
-    gap: spacing.xxs,
+  doneDescription: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
+    textAlign: "center",
   },
-  successTitle: {
+  doneFooter: {
+    gap: spacing.sm,
+  },
+  recipeHint: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.xxl,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
+  },
+  recipeHintText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontWeight: typography.title.fontWeight,
-    color: colors.text,
-  },
-  successDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    color: colors.subtext,
+    color: colors.primary,
   },
   errorStrip: {
     backgroundColor: colors.dangerSoft,

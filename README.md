@@ -6,10 +6,10 @@
 
 The current product assumption for this MVP is explicit:
 
-- users register ingredients and household goods manually
-- expiry date is entered separately
+- users must log in (social-first: Kakao → Naver → Google → Apple)
+- users register ingredients and household goods manually (or via barcode/OCR scanner on native builds)
+- expiry date is entered separately (or OCR-assisted)
 - registered inventory data is used for AI recipe recommendation
-- future sources are reserved for `ocr_detected`
 
 ## Why This Monorepo Shape
 
@@ -23,34 +23,24 @@ This repository uses `pnpm` workspaces only.
 This keeps the MVP simple while leaving a clean path for:
 
 - improving recipe recommendation from registered inventory
-- barcode scan + OCR-based expiry detection (dev build verified on iOS)
-- adding auth, households, analytics, and subscriptions without a rewrite
+- shipping barcode + OCR scanner in EAS/store builds (already verified on iOS dev builds)
+- subscriptions, households, and analytics without a rewrite
 
-## Production Launch Roadmap
+## Project status & launch priorities
 
-For service launch priorities (infrastructure, security, store submission, operations),
-see **[docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md)**.
-That document is the source of truth for go-live planning and supersedes the outdated
-sections below where they conflict (for example auth scope and next implementation order).
+출시 진척도·우선순위·배포 런북은 **단일 기준 문서**를 보세요:
 
-### Current Development Status (2026-07-13)
+**[docs/PROJECT.md](./docs/PROJECT.md)**
 
-| Area                   | Progress                    | Notes                                                                    |
-| ---------------------- | --------------------------- | ------------------------------------------------------------------------ |
-| **Phase**              | Phase 0 done → Phase 1      | See roadmap for full checklist                                           |
-| **API (Railway)**      | Live                        | `https://api-production-1504.up.railway.app` — `/health`, `/ready` OK    |
-| **Admin (Railway)**    | Live                        | `https://admin-production-da74.up.railway.app` — login, privacy pages OK |
-| **Database**           | Migrated                    | Railway Postgres, 10 Prisma migrations applied                           |
-| **CI**                 | Done                        | GitHub Actions: lint, typecheck, test; main push builds API + Admin      |
-| **Email (Resend)**     | Partial                     | HTTP API works; domain verification needed for arbitrary recipients      |
-| **EAS Mobile preview** | Android APK done            | iOS dev build + scanner QA on physical device                            |
-| **Product scanner**    | Dev build verified (iOS)    | Barcode → OFF → expiry OCR → register prefill; see roadmap §1-2          |
-| **Jango mobile UI**    | Redesign done (1→14)        | Tokens, conversational copy, mascot moods; see roadmap §1-4              |
-| **Jango character**    | Redesigned                  | Amumu-like proportions, fridge head + chef hat PNGs                      |
-| **Next up**            |                             | Full mobile QA, EAS iOS build, Sentry DSNs, uptime monitor, OAuth prod   |
+### Current status (2026-07-16)
 
-Details, blockers, and commit history: [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-1](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-1-현재-개발-진척도-2026-07-13).
-UI redesign details: [§1-4](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-4-장고야-부탁해-모바일-uiux--캐릭터-리디자인--2026-07-13).
+| Area | Status | Notes |
+| ---- | ------ | ----- |
+| **Phase** | 0 done → **1 (QA)** | [docs/PROJECT.md](./docs/PROJECT.md) |
+| **Auth** | Kakao · Naver · Google ✅ | Login required · social-first · Apple needs paid Apple Developer |
+| **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` |
+| **Scanner** | iOS device verified | Expo Go ❌ · EAS/dev build |
+| **Next (P0)** | | Device QA · Sentry DSN · uptime · Resend domain |
 
 ## Folder Structure
 
@@ -255,7 +245,7 @@ pnpm --filter @expirymate/mobile exec expo run:ios --device "Your iPhone"
 # or: expo run:android
 ```
 
-See [docs/PRODUCTION_LAUNCH_ROADMAP.md §1-2](./docs/PRODUCTION_LAUNCH_ROADMAP.md#1-2-제품-스캐너-바코드--유통기한-ocr--2026-07-08) for iOS signing (Personal Team) and troubleshooting.
+See [docs/PROJECT.md](./docs/PROJECT.md) (scanner + Personal Team notes) for iOS signing and troubleshooting.
 
 ## App Store Build
 
@@ -421,11 +411,11 @@ For daily work after the first setup, `pnpm dev` is the simplest option.
 
 ### API
 
-- anonymous bearer session
-- products
-- inventory
+- registered auth (email + Kakao/Naver/Google/Apple OAuth) — login required on mobile
+- products / inventory / dashboard
 - recipe recommendations
-- dashboard summary
+- privacy & account deletion
+- product-masters lookup (barcode waterfall)
 - settings/preferences
 
 ## Initial Database Design
@@ -555,8 +545,7 @@ Inventory seed also includes mixed states:
 
 ## What Is Real vs Mocked
 
-> **Note:** This section is partially outdated. For the current implementation status and
-> launch scope, see [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md).
+> Authoritative launch status: [docs/PROJECT.md](./docs/PROJECT.md).
 
 ### Real in this starter
 
@@ -565,39 +554,29 @@ Inventory seed also includes mixed states:
 - Nest REST modules
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
-- **product scanner:** barcode (expo-camera) → waterfall lookup (`ProductMaster` → Open Food Facts → manual contribute) → expiry OCR (ML Kit) → register prefill
+- **login required** · social-first (Kakao → Naver → Google → Apple iOS)
+- **product scanner:** barcode → ProductMaster/OFF → expiry OCR → register prefill
 - AI recipe recommendation API and mobile recommendation tab
 - subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling
-- recipe-oriented mascot asset
+- recipe-oriented mascot asset (장고)
 
 ### Mocked or intentionally limited
 
-- OCR expiry extraction is implemented in **dev/native builds only** (not Expo Go); EAS production iOS/Android QA pending
-- email/social login and account recovery are implemented; see roadmap doc for auth scope
-- no native purchase sheet yet; mobile currently displays server entitlement status
+- OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
+- Apple Sign In: code ready; needs paid Apple Developer Program
+- email auth implemented but UI hidden (social-first); Resend domain verification still needed for arbitrary recipients
+- no native IAP purchase sheet yet (entitlement status only)
 - no family/household model
 
-## Recommended Production Replacements First
+## Recommended next work
 
-See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
-current phased launch plan. The list below is kept for historical context only.
+See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
 
-1. Upgrade anonymous bearer auth to account login, token refresh, and recovery. _(done in code; see roadmap doc)_
-2. Harden recipe recommendation quality evaluation and feedback loops.
-3. Add Expo push receipt polling and delivery health monitoring.
-4. Add image upload/storage instead of placeholder image URLs.
-5. ~~Add OCR-based expiry parsing after the registration flow is stable.~~ _(dev build done; EAS/store rollout pending)_
-
-## Recommended Next Implementation Order
-
-See [docs/PRODUCTION_LAUNCH_ROADMAP.md](./docs/PRODUCTION_LAUNCH_ROADMAP.md) for the
-authoritative priority order. As of 2026-07-08:
-
-1. ~~Deploy API, Admin, and PostgreSQL; harden production env and security.~~ **Done (Railway)**
-2. **Now:** Full mobile QA (Android + iOS EAS), Resend domain, Sentry DSNs, uptime monitor
-3. App Store / Play Store submission with production privacy URLs
-4. Post-launch: IAP purchase UI, catalog UX, analytics, households
+1. Device QA sign-off (Kakao/Naver/Google + inventory + AI + account delete)
+2. Sentry DSNs · `/health` uptime · Resend domain
+3. Apple Developer Program · EAS iOS · store submission
+4. Post-launch: IAP UI, catalog UX, analytics, households
 
 ## Notes On Running
 
