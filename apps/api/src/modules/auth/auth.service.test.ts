@@ -8,6 +8,9 @@ describe("AuthService", () => {
   const originalDevFallback = process.env.AUTH_ALLOW_DEV_FALLBACK;
   const originalAppleClientId = process.env.APPLE_OAUTH_CLIENT_ID;
   const originalGoogleClientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
+  const originalGoogleClientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+  const originalNaverClientId = process.env.NAVER_OAUTH_CLIENT_ID;
+  const originalNaverClientSecret = process.env.NAVER_OAUTH_CLIENT_SECRET;
   const originalNodeEnv = process.env.NODE_ENV;
 
   beforeEach(() => {
@@ -15,6 +18,9 @@ describe("AuthService", () => {
     delete process.env.AUTH_ALLOW_DEV_FALLBACK;
     delete process.env.APPLE_OAUTH_CLIENT_ID;
     delete process.env.GOOGLE_OAUTH_CLIENT_ID;
+    delete process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+    delete process.env.NAVER_OAUTH_CLIENT_ID;
+    delete process.env.NAVER_OAUTH_CLIENT_SECRET;
     process.env.NODE_ENV = "test";
   });
 
@@ -23,6 +29,9 @@ describe("AuthService", () => {
     restoreEnv("AUTH_ALLOW_DEV_FALLBACK", originalDevFallback);
     restoreEnv("APPLE_OAUTH_CLIENT_ID", originalAppleClientId);
     restoreEnv("GOOGLE_OAUTH_CLIENT_ID", originalGoogleClientId);
+    restoreEnv("GOOGLE_OAUTH_CLIENT_SECRET", originalGoogleClientSecret);
+    restoreEnv("NAVER_OAUTH_CLIENT_ID", originalNaverClientId);
+    restoreEnv("NAVER_OAUTH_CLIENT_SECRET", originalNaverClientSecret);
     restoreEnv("NODE_ENV", originalNodeEnv);
   });
 
@@ -74,11 +83,28 @@ describe("AuthService", () => {
     expect(service.getDevFallbackUser()).toBeNull();
   });
 
-  it("requires the Google OAuth client id before token verification", async () => {
+  it("requires the Google OAuth client id before code exchange", async () => {
     const service = createAuthService();
 
     await expect(
-      service.oauthLogin(OAuthProvider.google, { providerToken: "token" }),
+      service.oauthLogin(OAuthProvider.google, {
+        providerToken: "code",
+        redirectUri: "https://example.com/oauth/callback",
+      }),
+    ).rejects.toThrow(ServiceUnavailableException);
+  });
+
+  it("requires the Google OAuth client secret before code exchange", async () => {
+    process.env.GOOGLE_OAUTH_CLIENT_ID =
+      "google-client-id.apps.googleusercontent.com";
+    delete process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+    const service = createAuthService();
+
+    await expect(
+      service.oauthLogin(OAuthProvider.google, {
+        providerToken: "code",
+        redirectUri: "https://example.com/oauth/callback",
+      }),
     ).rejects.toThrow(ServiceUnavailableException);
   });
 

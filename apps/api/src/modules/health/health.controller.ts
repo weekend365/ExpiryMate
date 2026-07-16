@@ -48,8 +48,8 @@ export class HealthController {
 
   /**
    * Kakao/Naver/Google only allow http(s) Redirect URIs.
-   * Query-based providers (Kakao/Naver) get a 302 deep link so the in-app
-   * auth session can finish; hash-based Google still needs the HTML bridge.
+   * Authorization-code providers return `?code=` so we 302 deep-link back
+   * into the app; legacy hash responses still fall back to the HTML bridge.
    */
   @Get("oauth/callback")
   @Header("Cache-Control", "no-store")

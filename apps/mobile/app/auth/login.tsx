@@ -112,13 +112,15 @@ export default function LoginScreen() {
       provider: "google",
       clientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID,
       url: "https://accounts.google.com/o/oauth2/v2/auth",
-      tokenParam: "id_token",
+      tokenParam: "code",
       params: {
-        response_type: "id_token",
+        response_type: "code",
         scope: "openid email profile",
-        nonce: String(Date.now()),
         state: oauthReturnState,
+        access_type: "online",
+        prompt: "select_account",
       },
+      includeRedirectUriInPayload: true,
     });
 
   const handleWebOAuth = async ({

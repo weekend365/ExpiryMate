@@ -606,7 +606,7 @@ export class AuthService {
     dto: OAuthLoginDto,
   ): Promise<OAuthProfile> {
     if (provider === OAuthProvider.google) {
-      return verifyGoogleToken(dto.providerToken);
+      return verifyGoogleCode(dto.providerToken, dto.redirectUri);
     }
 
     if (provider === OAuthProvider.kakao) {
@@ -722,11 +722,61 @@ function safeEqual(left: string, right: string) {
   return timingSafeEqual(new Uint8Array(leftBuffer), new Uint8Array(rightBuffer));
 }
 
-async function verifyGoogleToken(providerToken: string): Promise<OAuthProfile> {
-  const expectedClientId = getRequiredOAuthClientId(
-    "GOOGLE_OAUTH_CLIENT_ID",
-    "Google",
-  );
+async function verifyGoogleCode(
+  authorizationCode: string,
+  redirectUri?: string,
+): Promise<OAuthProfile> {
+  const clientId = getRequiredOAuthClientId("GOOGLE_OAUTH_CLIENT_ID", "Google");
+  const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET?.trim();
+
+  if (!clientSecret) {
+    throw new ServiceUnavailableException(
+      "Google OAuth 설정을 확인할 수 없습니다.",
+    );
+  }
+
+  if (!redirectUri?.trim()) {
+    throw new UnauthorizedException("Google 로그인 리다이렉트 주소가 없어요.");
+  }
+
+  const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    },
+    body: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: clientId,
+      client_secret: clientSecret,
+      code: authorizationCode,
+      redirect_uri: redirectUri.trim(),
+    }).toString(),
+  });
+
+  if (!tokenResponse.ok) {
+    throw new UnauthorizedException("Google 로그인 코드를 확인하지 못했습니다.");
+  }
+
+  const tokenPayload = (await tokenResponse.json()) as {
+    id_token?: string;
+    error?: string;
+    error_description?: string;
+  };
+
+  if (!tokenPayload.id_token) {
+    throw new UnauthorizedException(
+      tokenPayload.error_description ??
+        "Google 로그인 토큰을 받지 못했어요.",
+    );
+  }
+
+  return verifyGoogleIdToken(tokenPayload.id_token, clientId);
+}
+
+async function verifyGoogleIdToken(
+  providerToken: string,
+  expectedClientId: string,
+): Promise<OAuthProfile> {
   const response = await fetch(
     `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(providerToken)}`,
   );

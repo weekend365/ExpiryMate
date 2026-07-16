@@ -20,9 +20,7 @@ const REQUIRED_PRODUCTION_VALUES = [
   "SMTP_USER",
   "SMTP_PASS",
   "SMTP_FROM",
-  "APPLE_OAUTH_CLIENT_ID",
-  "GOOGLE_OAUTH_CLIENT_ID",
-  "KAKAO_OAUTH_CLIENT_ID",
+  // OAuth provider keys are optional at boot — validated when that login is used.
   "PRIVACY_POLICY_URL",
   "PRIVACY_CHOICES_URL",
   "PRIVACY_CONTACT_EMAIL",
