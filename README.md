@@ -6,7 +6,7 @@
 
 The current product assumption for this MVP is explicit:
 
-- users must log in (social-first: Kakao → Naver → Google → Apple)
+- users must log in (Kakao → Naver → Google → Apple, or email)
 - users register ingredients and household goods manually (or via barcode/OCR scanner on native builds)
 - expiry date is entered separately (or OCR-assisted)
 - registered inventory data is used for AI recipe recommendation
@@ -32,15 +32,15 @@ This keeps the MVP simple while leaving a clean path for:
 
 **[docs/PROJECT.md](./docs/PROJECT.md)**
 
-### Current status (2026-07-16)
+### Current status (2026-07-20)
 
 | Area | Status | Notes |
 | ---- | ------ | ----- |
 | **Phase** | 0 done → **1 (QA)** | [docs/PROJECT.md](./docs/PROJECT.md) |
-| **Auth** | Kakao · Naver · Google ✅ | Login required · social-first · Apple needs paid Apple Developer |
+| **Auth** | Kakao · Naver · Google · Email ✅ | Login required · mail domain `mail.devnamu.com` · Apple needs paid Apple Developer |
 | **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` |
 | **Scanner** | iOS device verified | Expo Go ❌ · EAS/dev build |
-| **Next (P0)** | | Device QA · Sentry DSN · uptime · Resend domain |
+| **Next (P0)** | | Create 3 Sentry projects + paste DSNs ([docs/PROJECT.md §5](./docs/PROJECT.md#sentry)) · remaining device QA · uptime |
 
 ## Folder Structure
 
@@ -554,18 +554,19 @@ Inventory seed also includes mixed states:
 - Nest REST modules
 - Prisma schema and seed
 - mobile onboarding, register, inventory, settings flows
-- **login required** · social-first (Kakao → Naver → Google → Apple iOS)
+- **login required** · Kakao → Naver → Google → Apple iOS, plus email register/login/verify
 - **product scanner:** barcode → ProductMaster/OFF → expiry OCR → register prefill
 - AI recipe recommendation API and mobile recommendation tab
 - subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling
 - recipe-oriented mascot asset (장고)
+- Resend mail via `mail.devnamu.com` (domain verified)
 
 ### Mocked or intentionally limited
 
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
 - Apple Sign In: code ready; needs paid Apple Developer Program
-- email auth implemented but UI hidden (social-first); Resend domain verification still needed for arbitrary recipients
+- API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
 - no native IAP purchase sheet yet (entitlement status only)
 - no family/household model
 
@@ -573,10 +574,10 @@ Inventory seed also includes mixed states:
 
 See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
 
-1. Device QA sign-off (Kakao/Naver/Google + inventory + AI + account delete)
-2. Sentry DSNs · `/health` uptime · Resend domain
-3. Apple Developer Program · EAS iOS · store submission
-4. Post-launch: IAP UI, catalog UX, analytics, households
+1. Sentry: create `jango-api` / `jango-admin` / `jango-mobile` → set Railway + EAS DSNs ([docs/PROJECT.md §5](./docs/PROJECT.md#sentry))
+2. Remaining device QA (social · inventory · AI · account delete) — email E2E ✅
+3. `/health` uptime · Apple Developer Program · EAS iOS · store submission
+4. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, households
 
 ## Notes On Running
 
