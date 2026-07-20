@@ -1,12 +1,14 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, router } from "expo-router";
-import { useEffect, useState } from "react";
-import { Linking } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Linking, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import type { MascotMood } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
-import { useAuth } from "../../src/features/auth/use-auth";
+import { authQueryKey } from "../../src/features/auth/use-auth";
 import { verifyEmail } from "../../src/services/api";
+import { spacing } from "../../src/shared/theme";
 
 function tokenFromParam(paramToken: string | string[] | undefined): string | null {
   const fromParam = Array.isArray(paramToken) ? paramToken[0] : paramToken;
@@ -31,9 +33,12 @@ function tokenFromUrl(url: string | null): string | null {
   }
 }
 
+/** Share one in-flight verify per token across Strict Mode remounts. */
+const verifyInFlight = new Map<string, Promise<unknown>>();
+
 export default function VerifyEmailScreen() {
   const { token: paramToken } = useLocalSearchParams<{ token?: string }>();
-  const { query } = useAuth();
+  const queryClient = useQueryClient();
   /** `undefined` while resolving deep-link token; `null` when missing. */
   const [token, setToken] = useState<string | null | undefined>(() =>
     tokenFromParam(paramToken) ?? undefined,
@@ -42,6 +47,8 @@ export default function VerifyEmailScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [mood, setMood] = useState<MascotMood>("idle");
   const [succeeded, setSucceeded] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const completedTokensRef = useRef(new Set<string>());
 
   useEffect(() => {
     const fromParam = tokenFromParam(paramToken);
@@ -83,19 +90,40 @@ export default function VerifyEmailScreen() {
       return;
     }
 
+    if (completedTokensRef.current.has(token)) {
+      setSucceeded(true);
+      setMood("happy");
+      setMessage("메일 확인이 끝났어요. 이제 함께 시작해요.");
+      setIsLoading(false);
+      router.replace("/(tabs)/home");
+      return;
+    }
+
     let cancelled = false;
     setIsLoading(true);
+    setMood("idle");
+    setMessage("메일함을 살펴보고 있어요.");
 
-    verifyEmail(token)
+    const cacheKey = `${token}:${retryCount}`;
+    let pending = verifyInFlight.get(cacheKey);
+    if (!pending) {
+      pending = verifyEmail(token).finally(() => {
+        verifyInFlight.delete(cacheKey);
+      });
+      verifyInFlight.set(cacheKey, pending);
+    }
+
+    void pending
       .then(async () => {
+        completedTokensRef.current.add(token);
+        await queryClient.invalidateQueries({ queryKey: authQueryKey });
+        router.replace("/(tabs)/home");
         if (cancelled) {
           return;
         }
-        await query.refetch();
         setMessage("메일 확인이 끝났어요. 이제 함께 시작해요.");
         setMood("happy");
         setSucceeded(true);
-        router.replace("/(tabs)/home");
       })
       .catch((error: unknown) => {
         if (cancelled) {
@@ -117,7 +145,7 @@ export default function VerifyEmailScreen() {
     return () => {
       cancelled = true;
     };
-  }, [query, token]);
+  }, [queryClient, retryCount, token]);
 
   const title = isLoading
     ? "메일함을 살펴보고 있어요"
@@ -125,22 +153,39 @@ export default function VerifyEmailScreen() {
       ? "가입이 끝났어요"
       : "앗, 잠시 문제가 생겼어요";
 
+  const isRateLimited = message.includes("너무 많");
+
   return (
     <Screen
       title="메일 확인"
       subtitle="장고가 메일을 같이 살펴볼게요."
       footer={
         isLoading ? undefined : (
-          <Button
-            onPress={() =>
-              router.replace(
-                succeeded ? "/(tabs)/home" : "/auth/verify-pending",
-              )
-            }
-            fullWidth
-          >
-            {succeeded ? "홈으로 갈게요" : "메일 확인 화면으로"}
-          </Button>
+          <View style={{ gap: spacing.sm }}>
+            {succeeded ? (
+              <Button onPress={() => router.replace("/(tabs)/home")} fullWidth>
+                홈으로 갈게요
+              </Button>
+            ) : (
+              <>
+                <Button
+                  onPress={() => setRetryCount((count) => count + 1)}
+                  fullWidth
+                >
+                  {isRateLimited
+                    ? "잠시 뒤 다시 확인할게요"
+                    : "다시 확인할게요"}
+                </Button>
+                <Button
+                  onPress={() => router.replace("/auth/verify-pending")}
+                  fullWidth
+                  variant="secondary"
+                >
+                  메일 확인 화면으로
+                </Button>
+              </>
+            )}
+          </View>
         )
       }
     >

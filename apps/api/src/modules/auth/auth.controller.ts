@@ -236,8 +236,9 @@ export class AuthController {
 
   @AuthRateLimit({
     name: "email_verify",
-    max: 10,
-    windowSeconds: 600,
+    // Token verify is idempotent-ish; allow retries after deep-link / remount noise.
+    max: 30,
+    windowSeconds: 300,
     bodyFields: ["token"],
   })
   @Post("email/verify")
