@@ -269,17 +269,39 @@ export class AuthService {
   }
 
   async verifyEmail(token: string): Promise<AuthSession> {
+    const user = await this.markEmailVerifiedFromToken(token);
+    return this.createSession(user, true);
+  }
+
+  /** Desktop bridge: mark verified without issuing an app session. */
+  async confirmEmailVerification(token: string): Promise<{ ok: true }> {
+    await this.markEmailVerifiedFromToken(token);
+    return { ok: true };
+  }
+
+  async getEmailVerificationStatus(email: string): Promise<{ verified: boolean }> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: normalizeEmail(email) },
+      select: { emailVerifiedAt: true, deletedAt: true, mergedIntoUserId: true },
+    });
+
+    if (!user || user.deletedAt || user.mergedIntoUserId) {
+      return { verified: false };
+    }
+
+    return { verified: Boolean(user.emailVerifiedAt) };
+  }
+
+  private async markEmailVerifiedFromToken(token: string) {
     const record = await this.consumeOneTimeToken(
       token,
       OneTimeAuthTokenPurpose.email_verification,
     );
 
-    const user = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { id: record.userId },
       data: { emailVerifiedAt: new Date() },
     });
-
-    return this.createSession(user, true);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {

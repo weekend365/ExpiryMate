@@ -459,6 +459,11 @@ export const requestEmailVerification = async (email?: string) => {
   });
 };
 
+export const getEmailVerificationStatus = (email: string) =>
+  publicRequest<{ verified: boolean }>(
+    `/auth/email/verification-status?email=${encodeURIComponent(email)}`,
+  );
+
 export const verifyEmail = async (token: string) =>
   persistAuthSession(
     await publicRequest<AuthSession>("/auth/email/verify", {

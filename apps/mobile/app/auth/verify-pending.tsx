@@ -1,11 +1,19 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
-import { colors, spacing, typography } from "../../src/shared/theme";
+import { getEmailVerificationStatus } from "../../src/services/api";
+import {
+  colors,
+  spacing,
+  touchTarget,
+  typography,
+} from "../../src/shared/theme";
+
+const POLL_INTERVAL_MS = 3000;
 
 export default function VerifyPendingScreen() {
   const { email: emailParam } = useLocalSearchParams<{ email?: string }>();
@@ -15,6 +23,59 @@ export default function VerifyPendingScreen() {
     query.data?.email ??
     "";
   const [resent, setResent] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const navigatedRef = useRef(false);
+
+  useEffect(() => {
+    if (!email.trim() || verified) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const check = async () => {
+      try {
+        const status = await getEmailVerificationStatus(email.trim());
+        if (!cancelled && status.verified) {
+          setVerified(true);
+        }
+      } catch {
+        // Keep waiting; network blips should not leave the pending screen.
+      }
+    };
+
+    void check();
+    const timer = setInterval(() => {
+      void check();
+    }, POLL_INTERVAL_MS);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [email, verified]);
+
+  useEffect(() => {
+    if (!verified || navigatedRef.current) {
+      return;
+    }
+
+    navigatedRef.current = true;
+    Alert.alert(
+      "메일 확인이 끝났어요",
+      "이제 로그인해 가입을 마무리해 주세요.",
+      [
+        {
+          text: "로그인할게요",
+          onPress: () =>
+            router.replace({
+              pathname: "/auth/login",
+              params: email ? { email } : undefined,
+            }),
+        },
+      ],
+    );
+  }, [email, verified]);
 
   const handleResend = async () => {
     if (!email.trim()) {
@@ -30,7 +91,7 @@ export default function VerifyPendingScreen() {
       setResent(true);
       Alert.alert(
         "메일을 다시 보냈어요",
-        "받은편지함과 스팸함도 살짝 살펴봐 주세요.",
+        "받은편지함과 스팸함도 살짝 살펴봐 주세요. 휴대폰에서 링크를 누르면 앱으로 이어져요.",
       );
     } catch (error) {
       Alert.alert(
@@ -45,42 +106,46 @@ export default function VerifyPendingScreen() {
   return (
     <Screen
       title="메일을 보냈어요"
-      subtitle="링크를 확인한 뒤 로그인해 주세요."
+      subtitle="링크를 누르면 가입이 끝나요."
       footer={
         <View style={styles.footer}>
           <Button
+            onPress={() => void handleResend()}
+            fullWidth
+            loading={requestVerificationMutation.isPending}
+          >
+            {resent ? "인증 메일 한 번 더 보낼게요" : "인증 메일 다시 보내기"}
+          </Button>
+          <Pressable
             onPress={() =>
               router.replace({
                 pathname: "/auth/login",
                 params: email ? { email } : undefined,
               })
             }
-            fullWidth
+            style={styles.secondaryLink}
+            accessibilityRole="button"
           >
-            메일 확인했어요 · 로그인할게요
-          </Button>
-          <Button
-            onPress={() => void handleResend()}
-            fullWidth
-            loading={requestVerificationMutation.isPending}
-            variant="secondary"
-          >
-            {resent ? "인증 메일 한 번 더 보낼게요" : "인증 메일 다시 보내기"}
-          </Button>
+            <Text style={styles.secondaryLinkText}>로그인 화면으로</Text>
+          </Pressable>
         </View>
       }
     >
       <View style={styles.content}>
-        <Mascot size="large" mood="happy" />
-        <Text style={styles.headline}>메일함을 열어볼까요?</Text>
+        <Mascot size="large" mood={verified ? "happy" : "idle"} />
+        <Text style={styles.headline}>
+          {verified ? "확인됐어요!" : "메일함을 열어볼까요?"}
+        </Text>
         <Text style={styles.body}>
           {email
-            ? `${email} 으로 확인 메일을 보내 뒀어요. 메일 속 링크를 누르면 가입이 끝나요.`
-            : "확인 메일을 보내 뒀어요. 메일 속 링크를 누르면 가입이 끝나요."}
+            ? `${email} 으로 확인 메일을 보내 뒀어요.`
+            : "확인 메일을 보내 뒀어요."}
+          {verified
+            ? " 이제 로그인하면 바로 시작할 수 있어요."
+            : " 휴대폰에서 링크를 누르면 앱으로 이어지고, 컴퓨터에서 열면 확인 후 여기서 로그인해 주세요."}
         </Text>
         <Text style={styles.hint}>
-          컴퓨터에서 링크를 열어도 괜찮아요. 확인이 끝나면 이 화면에서 로그인해
-          주세요. 메일이 안 보이면 스팸함도 살펴봐 주세요.
+          메일이 안 보이면 스팸함도 한번 살펴봐 주세요.
         </Text>
       </View>
     </Screen>
@@ -117,5 +182,15 @@ const styles = StyleSheet.create({
   },
   footer: {
     gap: spacing.sm,
+  },
+  secondaryLink: {
+    minHeight: touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  secondaryLinkText: {
+    fontSize: typography.body.fontSize,
+    fontWeight: "600",
+    color: colors.primary,
   },
 });

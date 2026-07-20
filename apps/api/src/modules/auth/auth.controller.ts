@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -17,9 +18,11 @@ import { AuthRateLimit } from "./auth-rate-limit.decorator";
 import { AuthRateLimitGuard } from "./auth-rate-limit.guard";
 import { AuthGuard } from "./auth.guard";
 import {
-  buildAuthBridgeDeepLink,
-  buildAuthBridgeHtml,
-  type AuthBridgeKind,
+  buildDesktopVerifyEmailResultHtml,
+  buildInvalidAuthLinkHtml,
+  buildMobileVerifyEmailBridgeHtml,
+  buildResetPasswordBridgeHtml,
+  isMobileUserAgent,
 } from "./auth-bridge";
 import { AuthService } from "./auth.service";
 import { CurrentOwnerKey } from "./current-owner-key.decorator";
@@ -70,16 +73,50 @@ export class AuthController {
   }
 
   /**
-   * HTTPS bridge for email clients: opens the app deep link with the token.
-   * Mail links should point here (AUTH_LINK_BASE_URL), not at the custom scheme.
+   * HTTPS bridge for email clients.
+   * Mobile UA → deep-link into the app (token unused until the app verifies).
+   * Desktop UA → confirm verification server-side, then ask the user to log in on the app.
    */
   @Get("verify-email")
   @Header("Cache-Control", "no-store")
-  bridgeVerifyEmail(
+  async bridgeVerifyEmail(
     @Query("token") token: string | undefined,
+    @Headers("user-agent") userAgent: string | undefined,
     @Res() response: Response,
   ) {
-    return sendAuthBridge(response, "verify-email", token);
+    const trimmed = token?.trim();
+
+    if (!trimmed) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .type("html")
+        .send(buildInvalidAuthLinkHtml());
+    }
+
+    if (isMobileUserAgent(userAgent)) {
+      return response
+        .status(HttpStatus.OK)
+        .type("html")
+        .send(buildMobileVerifyEmailBridgeHtml(trimmed));
+    }
+
+    try {
+      await this.authService.confirmEmailVerification(trimmed);
+      return response
+        .status(HttpStatus.OK)
+        .type("html")
+        .send(buildDesktopVerifyEmailResultHtml({ ok: true }));
+    } catch (error) {
+      const message =
+        error instanceof BadRequestException
+          ? readExceptionMessage(error)
+          : undefined;
+
+      return response
+        .status(HttpStatus.OK)
+        .type("html")
+        .send(buildDesktopVerifyEmailResultHtml({ ok: false, message }));
+    }
   }
 
   @Get("reset-password")
@@ -88,7 +125,19 @@ export class AuthController {
     @Query("token") token: string | undefined,
     @Res() response: Response,
   ) {
-    return sendAuthBridge(response, "reset-password", token);
+    const trimmed = token?.trim();
+
+    if (!trimmed) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .type("html")
+        .send(buildInvalidAuthLinkHtml());
+    }
+
+    return response
+      .status(HttpStatus.OK)
+      .type("html")
+      .send(buildResetPasswordBridgeHtml(trimmed));
   }
 
   @AuthRateLimit({
@@ -169,6 +218,20 @@ export class AuthController {
     );
 
     return this.authService.requestEmailVerification(actor?.userId, dto.email);
+  }
+
+  @AuthRateLimit({
+    name: "email_verify_status",
+    max: 60,
+    windowSeconds: 60,
+  })
+  @Get("email/verification-status")
+  getEmailVerificationStatus(@Query("email") email: string | undefined) {
+    if (!email?.trim()) {
+      return { verified: false };
+    }
+
+    return this.authService.getEmailVerificationStatus(email);
   }
 
   @AuthRateLimit({
@@ -313,37 +376,28 @@ function formatSessionForClient(
   return session;
 }
 
-function sendAuthBridge(
-  response: Response,
-  kind: AuthBridgeKind,
-  token: string | undefined,
-) {
-  const trimmed = token?.trim();
+function readExceptionMessage(error: BadRequestException) {
+  const payload = error.getResponse();
 
-  if (!trimmed) {
-    return response
-      .status(HttpStatus.BAD_REQUEST)
-      .type("html")
-      .send(
-        "<!DOCTYPE html><html lang=\"ko\"><body><p>유효하지 않은 링크예요. 메일의 링크를 다시 확인해 주세요.</p></body></html>",
-      );
+  if (typeof payload === "string") {
+    return payload;
   }
 
-  const deepLink = buildAuthBridgeDeepLink(kind, trimmed);
-
-  if (canRedirectAuthBridge()) {
-    return response.redirect(HttpStatus.FOUND, deepLink);
+  if (
+    typeof payload === "object" &&
+    payload !== null &&
+    "message" in payload
+  ) {
+    const message = (payload as { message?: string | string[] }).message;
+    if (Array.isArray(message)) {
+      return message[0];
+    }
+    if (typeof message === "string") {
+      return message;
+    }
   }
 
-  return response
-    .status(HttpStatus.OK)
-    .type("html")
-    .send(buildAuthBridgeHtml(kind, trimmed));
-}
-
-function canRedirectAuthBridge() {
-  // Prefer HTML bridge for mail clients that mishandle custom-scheme 302s.
-  return process.env.AUTH_BRIDGE_REDIRECT === "true";
+  return error.message;
 }
 
 function readAuthorization(request: AuthenticatedRequest) {

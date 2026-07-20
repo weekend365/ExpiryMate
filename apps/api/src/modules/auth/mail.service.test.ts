@@ -22,10 +22,10 @@ describe("MailService", () => {
     process.env.SMTP_FROM = "noreply@mail.devnamu.com";
     process.env.AUTH_LINK_BASE_URL = "https://api.example.com";
 
-    const fetchMock = vi.fn(async () =>
+    const fetchMock = vi.fn<typeof fetch>(async () =>
       new Response(JSON.stringify({ id: "email_1" }), { status: 200 }),
     );
-    globalThis.fetch = fetchMock as unknown as typeof fetch;
+    globalThis.fetch = fetchMock;
 
     const service = new MailService();
     await service.sendEmailVerification("user@example.com", "tok");
@@ -40,7 +40,7 @@ describe("MailService", () => {
       }),
     });
 
-    const body = JSON.parse(String(init?.body));
+    const body = JSON.parse(String((init as RequestInit).body));
     expect(body.to).toEqual(["user@example.com"]);
     expect(body.html).toContain(
       "https://api.example.com/auth/verify-email?token=tok",
