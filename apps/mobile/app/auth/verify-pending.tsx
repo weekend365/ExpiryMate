@@ -1,11 +1,11 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
-import { colors, spacing, touchTarget, typography } from "../../src/shared/theme";
+import { colors, spacing, typography } from "../../src/shared/theme";
 
 export default function VerifyPendingScreen() {
   const { email: emailParam } = useLocalSearchParams<{ email?: string }>();
@@ -45,23 +45,28 @@ export default function VerifyPendingScreen() {
   return (
     <Screen
       title="메일을 보냈어요"
-      subtitle="링크를 누르면 가입이 끝나요."
+      subtitle="링크를 확인한 뒤 로그인해 주세요."
       footer={
         <View style={styles.footer}>
+          <Button
+            onPress={() =>
+              router.replace({
+                pathname: "/auth/login",
+                params: email ? { email } : undefined,
+              })
+            }
+            fullWidth
+          >
+            메일 확인했어요 · 로그인할게요
+          </Button>
           <Button
             onPress={() => void handleResend()}
             fullWidth
             loading={requestVerificationMutation.isPending}
+            variant="secondary"
           >
             {resent ? "인증 메일 한 번 더 보낼게요" : "인증 메일 다시 보내기"}
           </Button>
-          <Pressable
-            onPress={() => router.replace("/auth/login")}
-            style={styles.secondaryLink}
-            accessibilityRole="button"
-          >
-            <Text style={styles.secondaryLinkText}>로그인 화면으로</Text>
-          </Pressable>
         </View>
       }
     >
@@ -70,11 +75,12 @@ export default function VerifyPendingScreen() {
         <Text style={styles.headline}>메일함을 열어볼까요?</Text>
         <Text style={styles.body}>
           {email
-            ? `${email} 으로 확인 메일을 보내 뒀어요. 링크를 누르면 바로 시작할 수 있어요.`
-            : "확인 메일을 보내 뒀어요. 링크를 누르면 바로 시작할 수 있어요."}
+            ? `${email} 으로 확인 메일을 보내 뒀어요. 메일 속 링크를 누르면 가입이 끝나요.`
+            : "확인 메일을 보내 뒀어요. 메일 속 링크를 누르면 가입이 끝나요."}
         </Text>
         <Text style={styles.hint}>
-          메일이 안 보이면 스팸함도 한번 살펴봐 주세요.
+          컴퓨터에서 링크를 열어도 괜찮아요. 확인이 끝나면 이 화면에서 로그인해
+          주세요. 메일이 안 보이면 스팸함도 살펴봐 주세요.
         </Text>
       </View>
     </Screen>
@@ -111,15 +117,5 @@ const styles = StyleSheet.create({
   },
   footer: {
     gap: spacing.sm,
-  },
-  secondaryLink: {
-    minHeight: touchTarget.min,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  secondaryLinkText: {
-    fontSize: typography.body.fontSize,
-    fontWeight: "600",
-    color: colors.primary,
   },
 });

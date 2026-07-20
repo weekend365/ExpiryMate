@@ -5,15 +5,25 @@ import {
 } from "./auth-bridge";
 
 describe("auth-bridge", () => {
-  it("builds verify-email deep links without a triple slash", () => {
+  it("points verify-email CTA at the login deep link after browser verify", () => {
     process.env.APP_BASE_URL = "expirymate://";
 
     expect(buildAuthBridgeDeepLink("verify-email", "tok123")).toBe(
-      "expirymate://auth/verify-email?token=tok123",
+      "expirymate://auth/login",
     );
   });
 
-  it("embeds the deep link in the HTML bridge", () => {
+  it("verifies email in the browser before offering the app login link", () => {
+    process.env.APP_BASE_URL = "expirymate://";
+    const html = buildAuthBridgeHtml("verify-email", "tok123");
+
+    expect(html).toContain("/auth/email/verify");
+    expect(html).toContain("tok123");
+    expect(html).toContain("expirymate://auth/login");
+    expect(html).toContain("메일 확인이 끝났어요");
+  });
+
+  it("embeds the reset-password deep link with token", () => {
     process.env.APP_BASE_URL = "expirymate://";
     const html = buildAuthBridgeHtml("reset-password", "abc");
 

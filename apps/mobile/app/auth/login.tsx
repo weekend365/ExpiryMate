@@ -1,7 +1,7 @@
 import { appBrand } from "@expirymate/shared";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as AuthSession from "expo-auth-session";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import {
@@ -47,8 +47,11 @@ const oauthReturnState = encodeOAuthReturnState(appReturnUri);
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
 export default function LoginScreen() {
+  const { email: emailParam } = useLocalSearchParams<{ email?: string }>();
   const { loginMutation, oauthMutation } = useAuth();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+    () => (typeof emailParam === "string" ? emailParam : emailParam?.[0]) ?? "",
+  );
   const [password, setPassword] = useState("");
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
 
