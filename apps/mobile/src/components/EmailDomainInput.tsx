@@ -1,7 +1,8 @@
 import { ChevronDown, ChevronUp } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { StyleProp, TextInputProps, TextStyle } from "react-native";
 import {
+  Keyboard,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -50,6 +51,8 @@ export function EmailDomainInput({
     resolveDomainMode(parsed.domain),
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const localInputRef = useRef<TextInput>(null);
+  const domainInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     const next = splitEmail(value);
@@ -75,11 +78,19 @@ export function EmailDomainInput({
     emit(localPart, sanitized);
   };
 
+  const focusDomainInput = () => {
+    // Wait for manual-mode TextInput to mount after mode switch.
+    setTimeout(() => {
+      domainInputRef.current?.focus();
+    }, 0);
+  };
+
   const handleSelectMode = (nextMode: EmailDomainMode) => {
     setMenuOpen(false);
 
     if (nextMode === EMAIL_DOMAIN_MANUAL) {
       setMode(EMAIL_DOMAIN_MANUAL);
+      focusDomainInput();
       return;
     }
 
@@ -92,7 +103,17 @@ export function EmailDomainInput({
     if (!editable) {
       return;
     }
-    setMenuOpen((open) => !open);
+
+    if (menuOpen) {
+      setMenuOpen(false);
+      return;
+    }
+
+    // Blur inputs so keyboard doesn't cover the menu / re-fire onFocus.
+    localInputRef.current?.blur();
+    domainInputRef.current?.blur();
+    Keyboard.dismiss();
+    setMenuOpen(true);
   };
 
   const isManual = mode === EMAIL_DOMAIN_MANUAL;
@@ -103,6 +124,7 @@ export function EmailDomainInput({
     <View style={[styles.wrap, menuOpen && styles.wrapElevated]}>
       <View style={[styles.row, style]}>
         <TextInput
+          ref={localInputRef}
           value={localPart}
           onChangeText={handleLocalChange}
           autoCapitalize="none"
@@ -120,6 +142,7 @@ export function EmailDomainInput({
         <Text style={styles.atSign}>@</Text>
         {isManual ? (
           <TextInput
+            ref={domainInputRef}
             value={domainPart}
             onChangeText={handleDomainChange}
             autoCapitalize="none"
