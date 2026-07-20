@@ -40,7 +40,7 @@ This keeps the MVP simple while leaving a clean path for:
 | **Auth** | Kakao · Naver · Google · Email ✅ | Login required · mail domain `mail.devnamu.com` · Apple needs paid Apple Developer |
 | **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` |
 | **Scanner** | iOS device verified | Expo Go ❌ · EAS/dev build |
-| **Next (P0)** | | Create 3 Sentry projects + paste DSNs ([docs/PROJECT.md §5](./docs/PROJECT.md#sentry)) · remaining device QA · uptime |
+| **Next (P0)** | | `/health` uptime · remaining device QA · Mobile Sentry later ([docs/PROJECT.md](./docs/PROJECT.md)) |
 
 ## Folder Structure
 
@@ -574,9 +574,9 @@ Inventory seed also includes mixed states:
 
 See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
 
-1. Sentry: create `jango-api` / `jango-admin` / `jango-mobile` → set Railway + EAS DSNs ([docs/PROJECT.md §5](./docs/PROJECT.md#sentry))
-2. Remaining device QA (social · inventory · AI · account delete) — email E2E ✅
-3. `/health` uptime · Apple Developer Program · EAS iOS · store submission
+1. `/health` uptime monitor
+2. Remaining device QA (social · inventory · AI · account delete) — email E2E ✅ · Sentry API/Admin ✅
+3. Mobile Sentry preview smoke (deferred) · Apple Developer · EAS iOS · store submission
 4. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, households
 
 ## Notes On Running
