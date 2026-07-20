@@ -184,11 +184,30 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
   return body.data;
 }
 
+const DEFAULT_FETCH_TIMEOUT_MS = 25_000;
+
 async function fetchWithNetworkError(path: string, init?: RequestInit) {
+  const timeoutMs = DEFAULT_FETCH_TIMEOUT_MS;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const upstreamSignal = init?.signal;
+
+  const onUpstreamAbort = () => controller.abort();
+  upstreamSignal?.addEventListener("abort", onUpstreamAbort);
+
   try {
-    return await fetch(buildUrl(path), init);
-  } catch {
+    return await fetch(buildUrl(path), {
+      ...init,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("응답이 너무 늦어요. 잠시 뒤 다시 해볼까요?");
+    }
     throw new Error("인터넷 연결을 한번 봐 주세요.");
+  } finally {
+    clearTimeout(timer);
+    upstreamSignal?.removeEventListener("abort", onUpstreamAbort);
   }
 }
 

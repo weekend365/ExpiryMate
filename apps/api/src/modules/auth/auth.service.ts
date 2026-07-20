@@ -117,11 +117,7 @@ export class AuthService {
       }
 
       await this.mergeAnonymousUser(actor?.userId, existingUser.id);
-      await this.createAndSendOneTimeToken(
-        existingUser.id,
-        email,
-        OneTimeAuthTokenPurpose.email_verification,
-      );
+      await this.sendEmailVerificationOrThrow(existingUser.id, email);
 
       return { requiresEmailVerification: true, email };
     }
@@ -141,11 +137,7 @@ export class AuthService {
     });
 
     await this.mergeAnonymousUser(actor?.userId, user.id);
-    await this.createAndSendOneTimeToken(
-      user.id,
-      email,
-      OneTimeAuthTokenPurpose.email_verification,
-    );
+    await this.sendEmailVerificationOrThrow(user.id, email);
 
     return { requiresEmailVerification: true, email };
   }
@@ -471,6 +463,27 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  private async sendEmailVerificationOrThrow(userId: string, email: string) {
+    try {
+      await this.createAndSendOneTimeToken(
+        userId,
+        email,
+        OneTimeAuthTokenPurpose.email_verification,
+      );
+    } catch (error) {
+      if (
+        error instanceof ServiceUnavailableException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+
+      throw new ServiceUnavailableException(
+        "확인 메일을 보내지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    }
   }
 
   private async createAndSendOneTimeToken(

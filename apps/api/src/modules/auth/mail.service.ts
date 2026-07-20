@@ -2,6 +2,8 @@ import { Injectable, Logger, ServiceUnavailableException } from "@nestjs/common"
 import nodemailer from "nodemailer";
 import { buildAuthHttpsLink } from "./app-links";
 
+const MAIL_TIMEOUT_MS = 12_000;
+
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
@@ -52,13 +54,13 @@ export class MailService {
     text: string;
     html?: string;
   }) {
-    const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT ?? 587);
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
+    const host = process.env.SMTP_HOST?.trim();
+    const user = process.env.SMTP_USER?.trim();
+    const pass = process.env.SMTP_PASS?.trim();
+    const resendApiKey = process.env.RESEND_API_KEY?.trim() || pass;
     const from = process.env.SMTP_FROM ?? "Jango <no-reply@expirymate.local>";
 
-    if (!host || !user || !pass) {
+    if (!resendApiKey && (!host || !user || !pass)) {
       if (process.env.NODE_ENV === "production") {
         throw new ServiceUnavailableException(
           "메일 발송 설정이 아직 준비되지 않았어요.",
@@ -71,19 +73,144 @@ export class MailService {
       return;
     }
 
+    try {
+      // Railway and many PaaS block outbound SMTP; Resend HTTP works over 443.
+      if (shouldUseResendHttp(host, user, process.env.RESEND_API_KEY)) {
+        await this.sendViaResendHttp({
+          apiKey: resendApiKey!,
+          from,
+          to: input.to,
+          subject: input.subject,
+          text: input.text,
+          html: input.html,
+        });
+        return;
+      }
+
+      await this.sendViaSmtp({
+        host: host!,
+        user: user!,
+        pass: pass!,
+        from,
+        to: input.to,
+        subject: input.subject,
+        text: input.text,
+        html: input.html,
+      });
+    } catch (error) {
+      if (error instanceof ServiceUnavailableException) {
+        throw error;
+      }
+
+      this.logger.error(
+        `Failed to send mail to ${input.to}: ${input.subject}`,
+        error instanceof Error ? error.stack : String(error),
+      );
+      throw new ServiceUnavailableException(
+        "확인 메일을 보내지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    }
+  }
+
+  private async sendViaResendHttp(input: {
+    apiKey: string;
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+    html?: string;
+  }) {
+    const response = await fetchWithTimeout(
+      "https://api.resend.com/emails",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${input.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: input.from,
+          to: [input.to],
+          subject: input.subject,
+          text: input.text,
+          html: input.html,
+        }),
+      },
+      MAIL_TIMEOUT_MS,
+    );
+
+    if (!response.ok) {
+      const detail = await response.text().catch(() => "");
+      this.logger.error(
+        `Resend API ${response.status}: ${detail.slice(0, 500)}`,
+      );
+      throw new ServiceUnavailableException(
+        "확인 메일을 보내지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    }
+  }
+
+  private async sendViaSmtp(input: {
+    host: string;
+    user: string;
+    pass: string;
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+    html?: string;
+  }) {
+    const port = Number(process.env.SMTP_PORT ?? 587);
     const transporter = nodemailer.createTransport({
-      host,
+      host: input.host,
       port,
       secure: port === 465,
-      auth: { user, pass },
+      auth: { user: input.user, pass: input.pass },
+      connectionTimeout: MAIL_TIMEOUT_MS,
+      greetingTimeout: MAIL_TIMEOUT_MS,
+      socketTimeout: MAIL_TIMEOUT_MS,
     });
 
     await transporter.sendMail({
-      from,
+      from: input.from,
       to: input.to,
       subject: input.subject,
       text: input.text,
       html: input.html,
     });
+  }
+}
+
+function shouldUseResendHttp(
+  host: string | undefined,
+  user: string | undefined,
+  resendApiKey: string | undefined,
+) {
+  if (resendApiKey?.trim()) {
+    return true;
+  }
+
+  return host === "smtp.resend.com" || user === "resend";
+}
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new ServiceUnavailableException(
+        "확인 메일을 보내지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    }
+    throw error;
+  } finally {
+    clearTimeout(timer);
   }
 }
