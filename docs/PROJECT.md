@@ -3,7 +3,7 @@
 출시 진척도, 우선순위, 배포·운영을 **이 문서 하나**에 모았습니다.  
 로컬 개발 온보딩은 [`README.md`](../README.md)를 보세요.
 
-> **문서 기준일:** 2026-07-16  
+> **문서 기준일:** 2026-07-20  
 > **제품 표시명:** 장고야 부탁해 (EN: Jango) · 마스코트: 장고  
 > **기술 네임스페이스:** `@expirymate/*`, `com.expirymate.mobile` (의도적 레거시 ID)
 
@@ -14,23 +14,26 @@
 | 영역 | 완성도 | 한 줄 |
 |------|--------|------|
 | 모바일 핵심 UX | ~95% | 장고 UI 리디자인 완료 · 바코드/OCR 스캐너 iOS 실기기 검증 |
-| 인증 | ~90% | **카카오·네이버·구글 code 플로우 완료** · 로그인 필수 · 이메일 UI 숨김 · Apple은 유료 개발자 계정 대기 |
+| 인증 | ~95% | **카카오·네이버·구글 + 이메일 실기기 E2E ✅** · Apple은 유료 개발자 계정 대기 |
 | API 비즈니스 | ~85% | 재고·레시피·프라이버시·구독 검증·OAuth 콜백 |
 | Admin | ~80% | Railway 배포 · shared 토큰·브랜드 동기화 |
-| 배포/인프라 | ~75% | Railway API·Admin·Postgres · CI · Resend · health |
+| 배포/인프라 | ~85% | Railway API·Admin·Postgres · CI · Resend(`mail.devnamu.com`) · health |
 | 스토어 출시 | ~55% | Android preview APK 있음 · iOS EAS·심사 자료 미착수 |
-| 테스트/QA | ~50% | API 단위·CI · **실기기 E2E QA 미완료** |
+| 테스트/QA | ~65% | API 단위·CI · **이메일 실기기 E2E 전부 ✅** · 소셜·핵심 플로우 QA 잔여 · Sentry DSN 대기 |
 
 **현재 Phase:** Phase 0 완료 → **Phase 1 (실기기 QA · 관측성)**  
-**최근 완료 (2026-07-16):** 소셜 로그인 우선 + 로그인 필수 + HTTPS OAuth 콜백 + 카카오/네이버/구글 authorization code 연동
+**최근 완료 (2026-07-20):** `mail.devnamu.com` + 이메일 UX · 실기기 이메일 E2E(가입·확인·재발송·비밀번호 재설정) · Sentry 프로젝트 생성 런북 정리(DSN 대기)
 
 ### 프로덕션 URL
 
 | 서비스 | URL |
 |--------|-----|
-| API | `https://api-production-1504.up.railway.app` (`/health`, `/ready`, `/oauth/callback`) |
+| API | `https://api-production-1504.up.railway.app` (`/health`, `/ready`, `/oauth/callback`, `/auth/verify-email`) |
 | Admin | `https://admin-production-da74.up.railway.app` (로그인, `/privacy`, `/privacy/choices`) |
+| 메일 From | `noreply@mail.devnamu.com` (Resend · 도메인 `devnamu.com`) |
 | Postgres | Railway internal |
+
+> API/Admin 커스텀 도메인(예: `api.` / `admin.`)은 아직 `*.up.railway.app`. 메일 전용 서브도메인만 먼저 연결됨.
 
 ### 인증 현황
 
@@ -40,7 +43,7 @@
 | 네이버 | ✅ | code → API (`NAVER_OAUTH_*`) |
 | 구글 | ✅ | code → API (`GOOGLE_OAUTH_CLIENT_ID` + **`GOOGLE_OAUTH_CLIENT_SECRET`**) |
 | Apple | ⚠️ 코드 있음 | Personal Team에서는 entitlement 불가 → **Apple Developer Program ($99/년)** 필요 |
-| 이메일 | 구현됨 · UI 숨김 | 소셜 우선. 인증/재설정 메일은 Resend **도메인 인증** 후 완전 동작 |
+| 이메일 | ✅ 실기기 E2E | 가입·확인·재발송·비밀번호 재설정 통과. Resend HTTP + `mail.devnamu.com` |
 | 익명 세션 | ❌ 제거 | 온보딩 → 로그인 → 앱. 비로그인 사용 불가 |
 
 공통 Redirect URI (콘솔에 HTTPS만 등록):
@@ -51,20 +54,22 @@
 모바일: `EXPO_PUBLIC_OAUTH_REDIRECT_URI` = 위 URL  
 앱 복귀: `WebBrowser.openAuthSessionAsync`가 **앱 스킴**을 대기
 
+이메일 인증 링크: `AUTH_LINK_BASE_URL` → HTTPS 브릿지(`/auth/verify-email`) → `expirymate://auth/verify-email?token=…`  
+프로덕션: `AUTH_LINK_BASE_URL=https://api-production-1504.up.railway.app` (실기기 E2E로 확인됨) · 로컬: `http://localhost:4000`
+
 ---
 
 ## 2. 서비스 전 우선순위 (지금 당장)
 
-기능 MVP와 소셜 로그인은 갖춰졌습니다. **출시 블로커는 “검증·운영·스토어”** 쪽입니다.
+기능 MVP·소셜·**이메일 실기기 인증**은 갖춰졌습니다. **출시 블로커는 “나머지 실기기 QA·관측·스토어”** 쪽입니다.
 
 ### P0 — 이번 주에 끝낼 것 (Phase 1 관문)
 
 | # | 작업 | 왜 |
 |---|------|-----|
-| 1 | **실기기 QA 사인오프** (Android preview APK + iOS dev/preview) | 카카오/네이버/구글 로그인 → 재료 등록 → 홈/보관함 → AI 추천 → 계정 삭제까지 Railway API로 한 바퀴 |
-| 2 | **Sentry DSN 3종** (API / Admin / Mobile) | SDK만 있고 DSN 없음 → 심사·내부 배포 중 크래시 원인 추적 불가 |
+| 1 | **실기기 QA 잔여 사인오프** | 소셜 로그인 → 재료 등록 → 홈/보관함 → AI 추천 → 계정 삭제 (이메일은 ✅) |
+| 2 | **Sentry DSN 3종** (API / Admin / Mobile) — **생성 가이드 준비됨 · DSN 대기** | SDK는 연결됨. §5 Sentry에서 프로젝트 만든 뒤 Railway/EAS에 넣으면 끝 |
 | 3 | **`/health` uptime 모니터** | API 다운을 사용자가 먼저 알게 됨 |
-| 4 | **Resend 도메인 인증** | 임의 수신자 이메일 인증·비밀번호 재설정 (소셜만 써도 계정 복구·문의에 필요) |
 
 ### P1 — 스토어 제출 직전 (Phase 1→2)
 
@@ -79,10 +84,11 @@
 
 | # | 작업 | 비고 |
 |---|------|------|
-| 9 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
-| 10 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` 단일 인스턴스 |
-| 11 | Android 스캐너 실기기 QA | iOS는 통과 |
-| 12 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료된 상태 — migration 잔여분만 점검 |
+| 9 | API/Admin 커스텀 도메인 (`devnamu.com` 또는 제품 도메인) | Privacy·Support URL·브랜드 일관성. 메일 도메인은 이미 연결됨 |
+| 10 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
+| 11 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` 단일 인스턴스 |
+| 12 | Android 스캐너 실기기 QA | iOS는 통과 |
+| 13 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료된 상태 — migration 잔여분만 점검 |
 
 ### 의도적으로 미룸 (v1.1+ / Phase 4)
 
@@ -106,25 +112,31 @@ flowchart LR
 | Phase | 목표 | Done Criteria (요약) |
 |-------|------|----------------------|
 | **0** ✅ | 외부 접속 가능 | Railway API/Admin/DB · health · CI · AUTH 하드닝 |
-| **1** 👈 | 실사용 검증 | 실기기 QA · Sentry DSN · uptime · Privacy URL 검증 |
+| **1** 👈 | 실사용 검증 | 실기기 QA(이메일 ✅) · Sentry DSN · uptime · Privacy URL 검증 |
 | **2** | 스토어 공개 | EAS production · 심사 자료 · iOS/Android 승인 |
 | **3** | 안정 운영 | 알림·백업·비용 한도·런북 |
 | **4** | 수익화 | IAP UI · 카탈로그 · 분석 · 공유 |
 
 ### Phase 1 Done Criteria
 
-- [ ] Android/iOS 내부 빌드에서 Railway API 핵심 플로우 QA 통과
-- [ ] Sentry DSN 설정 (API·Admin·Mobile)
+- [ ] Android/iOS 내부 빌드에서 Railway API 핵심 플로우 QA 통과 (소셜·재고·AI·계정삭제)
+- [ ] Sentry DSN 설정 (API·Admin·Mobile) — 프로젝트 생성·주입 대기 (§5)
 - [ ] `/health` uptime monitor 등록
-- [ ] Resend 도메인 인증 (임의 수신자 메일)
+- [x] Resend 도메인 인증 (`mail.devnamu.com`) — 임의 수신자 메일
+- [x] 프로덕션 `AUTH_LINK_BASE_URL` = Railway API HTTPS
+- [x] **이메일 가입·메일 확인·로그인** 실기기 E2E
+- [x] **미확인 재발송 · 비밀번호 재설정** 실기기 E2E
 - [ ] Privacy / Data Deletion URL 심사용으로 재확인
-- [ ] 소셜 로그인 3종(카카오·네이버·구글) 프로덕션 빌드에서 재검증
+- [ ] 소셜 로그인 3종 프로덕션 빌드에서 재검증
 
 ### Phase 1 수동 QA 체크리스트
 
 ```
 [ ] 온보딩 → 로그인(필수) → 탭 진입
 [ ] 카카오 / 네이버 / 구글 로그인 (HTTPS 콜백 → 앱 복귀)
+[x] 이메일 가입 → 인증 메일 수신 → 링크/딥링크로 확인 → 홈 진입
+[x] 이메일 로그인 · 미확인 계정 → verify-pending · 재발송
+[x] 비밀번호 재설정 메일 → 새 비밀번호로 로그인
 [ ] (가능 시) Apple 로그인 — 유료 개발자 계정 이후
 [ ] 재료 수동 등록 → 홈·보관함 반영
 [ ] 홈 → 바코드 등록 → 워터폴 조회 → 유통기한 OCR → prefill (dev/EAS 빌드)
@@ -150,14 +162,28 @@ flowchart LR
 |------|------|
 | 인프라 | Railway API·Admin·Postgres · Docker · `GET /health` `/ready` · helmet · seed 가드 |
 | CI | GitHub Actions lint/typecheck/test · main push API/Admin build |
-| 메일 | Resend HTTP API (Railway SMTP 포트 우회) |
+| 메일·도메인 | `devnamu.com` 구입 · Resend에 `mail.devnamu.com` 인증 · Resend HTTP API (Railway SMTP 포트 우회) · `SMTP_FROM=noreply@mail.devnamu.com` |
+| 이메일 인증 | 가입/로그인 UI · `EmailDomainInput` · verify-pending/verify-email · HTTPS 브릿지 → 딥링크 · 재발송·비밀번호 재설정 · **실기기 E2E 전부 ✅** |
+| 관측성 | Sentry SDK 배선 완료 (API Nest / Admin Next / Mobile RN) · **DSN 프로젝트 생성·주입 대기** |
 | 모바일 빌드 | EAS Android preview APK · monorepo shared 훅 · Reanimated 정렬 |
 | 스캐너 | 바코드 → ProductMaster/OFF → OCR → 등록 prefill (iOS 실기기 ✅) |
 | 바코드 DB | `ProductMaster` + 식품안전나라 적재 · lookup/contribute API |
 | 브랜드 UI | 리디자인 템플릿 1→14 ✅ · 장고 mood PNG · Admin 토큰 동기화 |
-| 인증 | 로그인 필수 · 소셜 우선(카카오→네이버→구글→Apple) · OAuth HTTPS 콜백 · 구글 code+secret |
+| 소셜 인증 | 로그인 필수 · 카카오→네이버→구글→Apple · OAuth HTTPS 콜백 · 구글 code+secret |
 
 상세 프롬프트 기록(완료): [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archive/MOBILE_REDESIGN_PROMPTS.md)
+
+### 2026-07-20 작업 메모 (도메인 · 이메일 로그인)
+
+| 항목 | 내용 |
+|------|------|
+| 도메인 | `devnamu.com` 구입 · 발송용 `mail.devnamu.com`을 Resend에 DNS 인증 |
+| From | `noreply@mail.devnamu.com` |
+| 발송 | Railway에서 SMTP 대신 Resend HTTP(`api.resend.com`) 사용 · 타임아웃·에러 메시지 정리 |
+| 모바일 UX | 로그인/가입/비밀번호 찾기에 이메일 경로 노출 · 국내 도메인 칩(`EmailDomainInput`) |
+| 메일 확인 | 미확인 계정은 `auth-gate`가 `verify-pending`으로 보냄 · 폴링·재발송·딥링크 확인 |
+| 브릿지 | 메일 본문 HTTPS 링크 → API HTML 브릿지 → `expirymate://auth/verify-email` |
+| 관련 env | `SMTP_*` / `RESEND_API_KEY` · `AUTH_LINK_BASE_URL` · `APP_BASE_URL=expirymate://` |
 
 ### 스캐너 (요약)
 
@@ -176,7 +202,8 @@ flowchart LR
 
 | 제약 | 대응 |
 |------|------|
-| Resend 무료 · 도메인 미인증 | 가입 이메일로만 발송 → 도메인 인증 |
+| API/Admin 커스텀 도메인 미연결 | 당분간 `*.up.railway.app` · Privacy URL도 Admin Railway 호스트 |
+| 로컬 vs 프로덕션 `AUTH_LINK_BASE_URL` | 로컬 `http://localhost:4000` · 프로덕션 Railway API(실기기 E2E로 검증됨) |
 | iOS Personal Team | Push · Sign in with Apple 불가 |
 | Railway Postgres internal URL | 로컬 migrate/seed는 Public TCP URL |
 | OAuth 콘솔 | Redirect는 `http(s)`만 · 앱 스킴 직접 등록 불가 |
@@ -211,13 +238,26 @@ pnpm docker:down
 2. API 서비스: Dockerfile `apps/api/Dockerfile`, `DATABASE_URL` 등 env
 3. Admin 서비스: Dockerfile `apps/admin/Dockerfile`, `NEXT_PUBLIC_API_BASE_URL`
 4. `prisma migrate deploy` (API 기동 또는 one-off)
-5. 커스텀 도메인 없음 → `*.up.railway.app` 사용 중
+5. 메일: Resend 도메인 `mail.devnamu.com` + `SMTP_FROM` / API 키  
+6. (선택) API·Admin에 `devnamu.com` 커스텀 도메인 연결 — 현재는 `*.up.railway.app`
 
 로컬에서 Railway DB 작업 시 **Public Networking URL** 사용 (`postgres.railway.internal`은 외부에서 안 됨).
 
 ### 필수 프로덕션 env (요지)
 
-**API:** `DATABASE_URL`, `AUTH_TOKEN_SECRET`(32+), `AUTH_ALLOW_DEV_FALLBACK=false`, CORS/Privacy HTTPS URL, OpenAI, Resend/SMTP, OAuth(사용 중인 provider), IAP 키(구독 검증 시)
+**API:** `DATABASE_URL`, `AUTH_TOKEN_SECRET`(32+), `AUTH_ALLOW_DEV_FALLBACK=false`, CORS/Privacy HTTPS URL, OpenAI, Resend/SMTP, **`AUTH_LINK_BASE_URL`**, OAuth(사용 중인 provider), IAP 키(구독 검증 시)
+
+**메일 (현재):**
+
+```env
+SMTP_HOST=smtp.resend.com
+SMTP_PORT=587
+SMTP_USER=resend
+SMTP_PASS=re_...          # 또는 RESEND_API_KEY
+SMTP_FROM=noreply@mail.devnamu.com
+AUTH_LINK_BASE_URL=https://api-production-1504.up.railway.app
+APP_BASE_URL=expirymate://
+```
 
 **OAuth (현재 사용):**
 
@@ -261,13 +301,90 @@ eas submit --platform ios --profile production
 
 ### Sentry
 
-| App | Env |
-|-----|-----|
-| API | `SENTRY_DSN` |
-| Admin | `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` |
-| Mobile | `EXPO_PUBLIC_SENTRY_DSN` |
+SDK는 이미 연결됨. DSN이 비어 있으면 no-op.
 
-DSN 비어 있으면 SDK no-op.
+| App | SDK 진입점 | Env | 배포 위치 |
+|-----|-----------|-----|----------|
+| API | `apps/api/src/instrument.ts` | `SENTRY_DSN` | Railway API 서비스 |
+| Admin | `apps/admin/instrumentation.ts` | `SENTRY_DSN` (서버) · `NEXT_PUBLIC_SENTRY_DSN` (클라이언트, 동일 DSN 권장) | Railway Admin 서비스 |
+| Mobile | `apps/mobile/src/services/sentry.ts` | `EXPO_PUBLIC_SENTRY_DSN` | EAS secret (preview/production) |
+
+Mobile는 `EXPO_PUBLIC_APP_ENV === "development"`이면 Sentry를 건너뜀. **preview / production** 빌드에서만 전송.
+
+#### 1) Sentry 프로젝트 생성 순서
+
+1. [sentry.io](https://sentry.io) 가입 · 조직 1개 생성 (무료 플랜 OK)
+2. 아래 **프로젝트 3개**를 각각 만든다 (이름 권장값):
+
+| 프로젝트 | Platform | 복사할 DSN → |
+|----------|----------|-------------|
+| `jango-api` | NestJS / Node | Railway API `SENTRY_DSN` |
+| `jango-admin` | Next.js | Railway Admin `SENTRY_DSN` (+ `NEXT_PUBLIC_SENTRY_DSN`) |
+| `jango-mobile` | React Native | EAS `EXPO_PUBLIC_SENTRY_DSN` |
+
+3. 각 프로젝트 **Settings → Client Keys (DSN)** 에서 DSN 문자열 복사  
+4. (권장) Alerts → 새 이슈/회귀 시 이메일 또는 Slack  
+5. DSN 3개를 채팅으로 전달하거나, 아래 위치에 직접 넣은 뒤 이 문서 Phase 1 Done의 Sentry 항목을 ☑로 바꾼다
+
+> **상태 (2026-07-20):** 런북 준비됨 · **DSN 미주입** (프로젝트 생성 후 값만 넣으면 됨)
+
+#### 2) Railway / EAS에 넣기
+
+Railway UI → 각 서비스 Variables, 또는 CLI:
+
+```bash
+# API (Railway 프로젝트에서 해당 서비스 선택 후)
+# SENTRY_DSN=https://...@....ingest.sentry.io/...
+# GIT_SHA=<배포 커밋>   # release 태깅용, 선택
+
+# Admin
+# SENTRY_DSN=https://...@....ingest.sentry.io/...
+# NEXT_PUBLIC_SENTRY_DSN=https://...@....ingest.sentry.io/...   # Admin 프로젝트 DSN과 동일
+```
+
+EAS (mobile, `apps/mobile`에서):
+
+```bash
+cd apps/mobile
+eas secret:create --name EXPO_PUBLIC_SENTRY_DSN --value 'https://...@....ingest.sentry.io/...' --type string
+# 이미 있으면:
+# eas secret:update --name EXPO_PUBLIC_SENTRY_DSN --value 'https://...'
+eas build --platform android --profile preview   # EXPO_PUBLIC_APP_ENV=preview → Sentry ON
+```
+
+로컬 `apps/*/.env`에 넣어도 되지만, Mobile development는 전송하지 않음. **비밀은 git에 커밋하지 말 것.**
+
+#### 3) 주입 후 스모크 검증
+
+| App | 방법 | 확인 |
+|-----|------|------|
+| API | 배포 후 의도적 5xx 1회, 또는 임시로 `Sentry.captureException(new Error("sentry-smoke-api"))` | `jango-api` Issues · environment=`production` |
+| Admin | 런타임 오류 1건 또는 Admin Issues에 smoke 이벤트 | `jango-admin` Issues |
+| Mobile | preview 빌드에서 테스트 캡처/크래시 1건 | `jango-mobile` Issues · environment=`preview` |
+
+검증 후 테스트 이슈는 Resolve. DSN·Issues 확인되면 Phase 1 Done Criteria의 **Sentry DSN 설정**을 ☑로 갱신.
+
+#### 4) DSN 수령 후 체크리스트 (값 넣은 뒤)
+
+```
+[ ] jango-api / jango-admin / jango-mobile 프로젝트 생성
+[ ] Railway API ← SENTRY_DSN (jango-api)
+[ ] Railway Admin ← SENTRY_DSN + NEXT_PUBLIC_SENTRY_DSN (jango-admin)
+[ ] EAS ← EXPO_PUBLIC_SENTRY_DSN (jango-mobile) · preview 빌드 재생성
+[ ] API / Admin / Mobile Issues에 smoke 이벤트 각 1건 확인
+[ ] Phase 1 Done Criteria「Sentry DSN 설정」☑ · P0 #2 완료로 갱신
+```
+
+DSN 3개를 채팅으로 주면 Railway/EAS 주입 명령과 위 체크를 이어서 반영한다.
+
+#### 5) 트러블슈팅
+
+| 증상 | 확인 |
+|------|------|
+| 이벤트가 안 옴 | 해당 서비스에 DSN이 실제로 들어갔는지 · 재배포 여부 |
+| Mobile만 안 옴 | preview/production인지 (`development`면 skip) · EAS secret이 빌드에 포함됐는지 |
+| Admin만 서버/클라 한쪽만 | `SENTRY_DSN`과 `NEXT_PUBLIC_SENTRY_DSN` 둘 다 넣었는지 |
+| release가 unknown | API/Admin에 `GIT_SHA` 배포 시 주입 |
 
 ### Uptime
 
@@ -279,7 +396,7 @@ DSN 비어 있으면 SDK no-op.
 |------|------|
 | API 5xx | Railway logs · Sentry · DB |
 | 모바일 크래시 | Sentry release · EAS build |
-| 메일 미도착 | Resend 도메인·로그 |
+| 메일 미도착 | Resend 대시보드 · `mail.devnamu.com` DNS · `SMTP_FROM` · `AUTH_LINK_BASE_URL` |
 | OAuth 실패 | Redirect URI 일치 · client secret · `/oauth/callback` |
 | Push 중복 | `PUSH_REMINDER_SCHEDULER_ENABLED=true` 인스턴스 1개만 |
 
@@ -291,8 +408,9 @@ DSN 비어 있으면 SDK no-op.
 |------|------|
 | API 기동 실패 | `validateProductionEnvironment()` 로그 |
 | migrate 실패 | Public DB URL · 네트워크 |
-| Sentry 무반응 | DSN 설정 여부 |
+| Sentry 무반응 | §5 Sentry · DSN 주입·재배포 · Mobile는 preview/production만 |
 | 구글 “거의 다 됐어요” 정지 | code 플로우 + `GOOGLE_OAUTH_CLIENT_SECRET` (해시 토큰 방식 폐기) |
+| 인증 메일이 앱을 안 엶 | `AUTH_LINK_BASE_URL`이 프로덕션 API인지 · 브릿지 HTML · 앱 스킴 `expirymate://` |
 
 ---
 
@@ -301,6 +419,7 @@ DSN 비어 있으면 SDK no-op.
 | 기능 | v1 | v1.1+ |
 |------|----|-------|
 | 소셜 로그인 (카카오·네이버·구글) | ✅ | |
+| 이메일 가입·로그인·메일 확인 | ✅ | |
 | Apple 로그인 | 유료 계정 후 | |
 | 수동 재고·유통기한 | ✅ | |
 | 바코드·OCR 등록 | EAS 빌드 포함 권장 | 인식률 고도화 |
@@ -329,6 +448,6 @@ DSN 비어 있으면 SDK no-op.
 
 ## 8. 한 줄 결론
 
-**소셜 로그인(카카오·네이버·구글)과 핵심 기능은 준비됐다.**  
-다음 관문은 **실기기 QA 사인오프 → Sentry·uptime·Resend 도메인 → Apple 개발자 계정·EAS iOS → 스토어 제출**이다.  
-IAP·공유 보관함은 첫 출시 이후로 미뤄도 된다.
+**소셜 + 이메일 실기기 인증과 핵심 기능은 준비됐다.**  
+다음 관문은 **Sentry 프로젝트 3개 생성·DSN 주입 → 잔여 실기기 QA → uptime → Apple 개발자 계정·EAS iOS → 스토어 제출**이다.  
+IAP·공유 보관함·API 커스텀 도메인은 첫 출시와 병행하거나 이후로 미뤄도 된다.
