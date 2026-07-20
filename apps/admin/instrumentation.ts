@@ -16,6 +16,4 @@ export async function register() {
     release: process.env.GIT_SHA,
     tracesSampleRate: 0.1,
   });
-
-  Sentry.captureMessage("sentry-smoke-admin");
 }

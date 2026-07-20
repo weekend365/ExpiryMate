@@ -15,6 +15,4 @@ export function initMobileSentry() {
     release: `${Constants.expoConfig?.version ?? "1.0.0"}-${appEnv}`,
     tracesSampleRate: 0.2,
   });
-
-  Sentry.captureMessage("sentry-smoke-mobile");
 }
