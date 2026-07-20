@@ -2,16 +2,25 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Headers,
+  HttpStatus,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
 } from "@nestjs/common";
 import { OAuthProvider } from "@prisma/client";
+import type { Response } from "express";
 import { AuthRateLimit } from "./auth-rate-limit.decorator";
 import { AuthRateLimitGuard } from "./auth-rate-limit.guard";
 import { AuthGuard } from "./auth.guard";
+import {
+  buildAuthBridgeDeepLink,
+  buildAuthBridgeHtml,
+  type AuthBridgeKind,
+} from "./auth-bridge";
 import { AuthService } from "./auth.service";
 import { CurrentOwnerKey } from "./current-owner-key.decorator";
 import {
@@ -52,15 +61,34 @@ export class AuthController {
   async register(
     @Body() dto: RegisterDto,
     @Req() request: AuthenticatedRequest,
-    @Res({ passthrough: true }) response: CookieResponse,
-    @Headers("x-expirymate-client") client?: string,
   ) {
     const actor = await this.authService.getOptionalUserFromBearer(
       readAuthorization(request),
     );
-    const session = await this.authService.register(dto, actor);
 
-    return formatSessionForClient(session, client, response);
+    return this.authService.register(dto, actor);
+  }
+
+  /**
+   * HTTPS bridge for email clients: opens the app deep link with the token.
+   * Mail links should point here (AUTH_LINK_BASE_URL), not at the custom scheme.
+   */
+  @Get("verify-email")
+  @Header("Cache-Control", "no-store")
+  bridgeVerifyEmail(
+    @Query("token") token: string | undefined,
+    @Res() response: Response,
+  ) {
+    return sendAuthBridge(response, "verify-email", token);
+  }
+
+  @Get("reset-password")
+  @Header("Cache-Control", "no-store")
+  bridgeResetPassword(
+    @Query("token") token: string | undefined,
+    @Res() response: Response,
+  ) {
+    return sendAuthBridge(response, "reset-password", token);
   }
 
   @AuthRateLimit({
@@ -150,8 +178,14 @@ export class AuthController {
     bodyFields: ["token"],
   })
   @Post("email/verify")
-  verifyEmail(@Body() dto: VerifyEmailDto) {
-    return this.authService.verifyEmail(dto.token);
+  async verifyEmail(
+    @Body() dto: VerifyEmailDto,
+    @Res({ passthrough: true }) response: CookieResponse,
+    @Headers("x-expirymate-client") client?: string,
+  ) {
+    const session = await this.authService.verifyEmail(dto.token);
+
+    return formatSessionForClient(session, client, response);
   }
 
   @AuthRateLimit({
@@ -277,6 +311,39 @@ function formatSessionForClient(
   }
 
   return session;
+}
+
+function sendAuthBridge(
+  response: Response,
+  kind: AuthBridgeKind,
+  token: string | undefined,
+) {
+  const trimmed = token?.trim();
+
+  if (!trimmed) {
+    return response
+      .status(HttpStatus.BAD_REQUEST)
+      .type("html")
+      .send(
+        "<!DOCTYPE html><html lang=\"ko\"><body><p>유효하지 않은 링크예요. 메일의 링크를 다시 확인해 주세요.</p></body></html>",
+      );
+  }
+
+  const deepLink = buildAuthBridgeDeepLink(kind, trimmed);
+
+  if (canRedirectAuthBridge()) {
+    return response.redirect(HttpStatus.FOUND, deepLink);
+  }
+
+  return response
+    .status(HttpStatus.OK)
+    .type("html")
+    .send(buildAuthBridgeHtml(kind, trimmed));
+}
+
+function canRedirectAuthBridge() {
+  // Prefer HTML bridge for mail clients that mishandle custom-scheme 302s.
+  return process.env.AUTH_BRIDGE_REDIRECT === "true";
 }
 
 function readAuthorization(request: AuthenticatedRequest) {

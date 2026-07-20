@@ -47,6 +47,10 @@ export default function RootLayout() {
                 name="auth/reset-password"
                 options={{ title: "비밀번호 다시 정하기" }}
               />
+              <Stack.Screen
+                name="auth/verify-pending"
+                options={{ title: "메일함 확인", headerBackVisible: false }}
+              />
               <Stack.Screen name="auth/verify-email" options={{ title: "메일 확인" }} />
               <Stack.Screen name="privacy/index" options={{ title: "개인정보와 AI 데이터" }} />
               <Stack.Screen

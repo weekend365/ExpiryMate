@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   ServiceUnavailableException,
   UnauthorizedException,
@@ -12,7 +13,11 @@ import {
   UserRole,
   type User,
 } from "@prisma/client";
-import type { AuthSession, AuthUser } from "@expirymate/shared";
+import type {
+  AuthSession,
+  AuthUser,
+  RegisterPendingResponse,
+} from "@expirymate/shared";
 import argon2 from "argon2";
 import {
   createHash,
@@ -70,15 +75,57 @@ export class AuthService {
     return this.createSession(user);
   }
 
-  async register(dto: RegisterDto, actor?: AuthenticatedUser): Promise<AuthSession> {
+  async register(
+    dto: RegisterDto,
+    actor?: AuthenticatedUser,
+  ): Promise<RegisterPendingResponse> {
     const email = normalizeEmail(dto.email);
-    const existingUser = await this.prisma.user.findUnique({ where: { email } });
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+      include: { passwordCredential: true },
+    });
 
-    if (existingUser) {
-      throw new ConflictException("이미 가입된 이메일입니다.");
+    if (existingUser && existingUser.emailVerifiedAt) {
+      throw new ConflictException("이미 가입된 이메일이에요. 로그인으로 들어와 주세요.");
     }
 
     const passwordHash = await argon2.hash(dto.password);
+
+    if (existingUser && !existingUser.emailVerifiedAt) {
+      if (existingUser.passwordCredential) {
+        await this.prisma.passwordCredential.update({
+          where: { userId: existingUser.id },
+          data: {
+            passwordHash,
+            passwordUpdatedAt: new Date(),
+          },
+        });
+      } else {
+        await this.prisma.passwordCredential.create({
+          data: {
+            userId: existingUser.id,
+            passwordHash,
+          },
+        });
+      }
+
+      if (dto.displayName) {
+        await this.prisma.user.update({
+          where: { id: existingUser.id },
+          data: { displayName: dto.displayName },
+        });
+      }
+
+      await this.mergeAnonymousUser(actor?.userId, existingUser.id);
+      await this.createAndSendOneTimeToken(
+        existingUser.id,
+        email,
+        OneTimeAuthTokenPurpose.email_verification,
+      );
+
+      return { requiresEmailVerification: true, email };
+    }
+
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -100,7 +147,7 @@ export class AuthService {
       OneTimeAuthTokenPurpose.email_verification,
     );
 
-    return this.createSession(user);
+    return { requiresEmailVerification: true, email };
   }
 
   async login(dto: LoginDto, actor?: AuthenticatedUser): Promise<AuthSession> {
@@ -127,9 +174,15 @@ export class AuthService {
       throw new UnauthorizedException("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
 
+    if (!user.emailVerifiedAt) {
+      throw new ForbiddenException(
+        "메일 확인이 아직이에요. 받은편지함을 살펴봐 주세요.",
+      );
+    }
+
     await this.mergeAnonymousUser(actor?.userId, user.id);
 
-    return this.createSession(user);
+    return this.createSession(user, true);
   }
 
   async refresh(refreshToken: string): Promise<AuthSession> {
@@ -170,8 +223,13 @@ export class AuthService {
       }),
     ]);
 
+    const hasPassword = await this.prisma.passwordCredential.findUnique({
+      where: { userId: session.userId },
+      select: { userId: true },
+    });
+
     return {
-      user: serializeUser(session.user),
+      user: serializeUser(session.user, Boolean(hasPassword)),
       accessToken: this.signAccessToken(session.user),
       refreshToken: nextRefreshToken,
     };
@@ -192,13 +250,16 @@ export class AuthService {
   }
 
   async getMe(userId: string): Promise<AuthUser> {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { passwordCredential: true },
+    });
 
     if (!user || user.mergedIntoUserId || user.deletedAt) {
       throw new UnauthorizedException("로그인이 필요합니다.");
     }
 
-    return serializeUser(user);
+    return serializeUser(user, Boolean(user.passwordCredential));
   }
 
   async requestEmailVerification(userId?: string, email?: string) {
@@ -215,18 +276,18 @@ export class AuthService {
     return { ok: true };
   }
 
-  async verifyEmail(token: string) {
+  async verifyEmail(token: string): Promise<AuthSession> {
     const record = await this.consumeOneTimeToken(
       token,
       OneTimeAuthTokenPurpose.email_verification,
     );
 
-    await this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id: record.userId },
       data: { emailVerifiedAt: new Date() },
     });
 
-    return { ok: true };
+    return this.createSession(user, true);
   }
 
   async forgotPassword(dto: ForgotPasswordDto) {
@@ -281,7 +342,7 @@ export class AuthService {
 
     await this.mergeAnonymousUser(actor?.userId, user.id);
 
-    return this.createSession(user);
+    return this.createSession(user, false);
   }
 
   verifyAccessToken(token: string): AuthenticatedUser {
@@ -353,7 +414,10 @@ export class AuthService {
     }
   }
 
-  private async createSession(user: User): Promise<AuthSession> {
+  private async createSession(
+    user: User,
+    hasPasswordCredential = false,
+  ): Promise<AuthSession> {
     if (user.deletedAt || user.mergedIntoUserId) {
       throw new UnauthorizedException("로그인이 필요합니다.");
     }
@@ -368,7 +432,7 @@ export class AuthService {
     });
 
     return {
-      user: serializeUser(user),
+      user: serializeUser(user, hasPasswordCredential),
       accessToken: this.signAccessToken(user),
       refreshToken,
     };
@@ -637,14 +701,19 @@ export class AuthService {
   }
 }
 
-export function serializeUser(user: User): AuthUser {
+export function serializeUser(
+  user: User,
+  hasPasswordCredential = false,
+): AuthUser {
   return {
     id: user.id,
     email: user.email,
     displayName: user.displayName,
     role: user.role,
     accountType: user.accountType,
-    emailVerifiedAt: user.emailVerifiedAt?.toISOString(),
+    emailVerifiedAt: user.emailVerifiedAt?.toISOString() ?? null,
+    requiresEmailVerification:
+      hasPasswordCredential && !user.emailVerifiedAt,
   };
 }
 

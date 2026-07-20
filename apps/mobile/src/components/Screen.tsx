@@ -1,5 +1,7 @@
 import type { PropsWithChildren, ReactElement, ReactNode } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
   type RefreshControlProps,
   ScrollView,
   StyleSheet,
@@ -8,7 +10,7 @@ import {
   View,
   type ViewStyle,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, spacing, typography } from "../shared/theme";
 
 interface ScreenProps extends PropsWithChildren {
@@ -31,6 +33,8 @@ export function Screen({
   footer,
   contentStyle,
 }: ScreenProps) {
+  const insets = useSafeAreaInsets();
+
   const content = (
     <>
       {title ? (
@@ -48,20 +52,38 @@ export function Screen({
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "right", "left"]}>
-      {scroll ? (
-        <ScrollView
-          contentContainerStyle={[styles.content, contentStyle]}
-          showsVerticalScrollIndicator={false}
-          refreshControl={refreshControl}
-        >
-          {content}
-        </ScrollView>
-      ) : (
-        <View style={[styles.content, styles.staticContent, contentStyle]}>
-          {content}
-        </View>
-      )}
-      {footer ? <View style={styles.footer}>{footer}</View> : null}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        // Screen already sits below the stack header — extra offset double-shifts content.
+        keyboardVerticalOffset={0}
+      >
+        {scroll ? (
+          <ScrollView
+            contentContainerStyle={[styles.content, contentStyle]}
+            showsVerticalScrollIndicator={false}
+            refreshControl={refreshControl}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
+          >
+            {content}
+          </ScrollView>
+        ) : (
+          <View style={[styles.content, styles.staticContent, contentStyle]}>
+            {content}
+          </View>
+        )}
+        {footer ? (
+          <View
+            style={[
+              styles.footer,
+              { paddingBottom: Math.max(insets.bottom, spacing.md) },
+            ]}
+          >
+            {footer}
+          </View>
+        ) : null}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -70,6 +92,9 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  keyboardAvoid: {
+    flex: 1,
   },
   content: {
     paddingHorizontal: spacing.md,
@@ -99,7 +124,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
-    paddingBottom: spacing.md,
   },
   title: {
     fontSize: typography.title.fontSize,

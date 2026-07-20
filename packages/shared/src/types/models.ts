@@ -63,6 +63,8 @@ export interface AuthUser {
   role: AuthUserRole;
   accountType: AuthAccountType;
   emailVerifiedAt?: string | null;
+  /** True when the account has a password and email is not verified yet. */
+  requiresEmailVerification?: boolean;
 }
 
 export interface PrivacyStatus {
@@ -93,6 +95,14 @@ export interface AuthSession {
   accessToken: string;
   refreshToken?: string;
 }
+
+/** Returned from register when email verification is required before a session. */
+export interface RegisterPendingResponse {
+  requiresEmailVerification: true;
+  email: string;
+}
+
+export type RegisterResponse = RegisterPendingResponse | AuthSession;
 
 export interface RegisterRequest {
   email: string;

@@ -16,6 +16,7 @@ export const authUserSchema = z.object({
   role: authUserRoleSchema,
   accountType: authAccountTypeSchema,
   emailVerifiedAt: z.string().nullable().optional(),
+  requiresEmailVerification: z.boolean().optional(),
 });
 
 export const authSessionSchema = z.object({
@@ -23,6 +24,16 @@ export const authSessionSchema = z.object({
   accessToken: z.string(),
   refreshToken: z.string().optional(),
 });
+
+export const registerPendingResponseSchema = z.object({
+  requiresEmailVerification: z.literal(true),
+  email: z.string().email(),
+});
+
+export const registerResponseSchema = z.union([
+  registerPendingResponseSchema,
+  authSessionSchema,
+]);
 
 export const registerRequestSchema = z.object({
   email: z.string().email(),

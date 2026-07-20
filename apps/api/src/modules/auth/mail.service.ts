@@ -1,146 +1,89 @@
-import { Injectable, ServiceUnavailableException } from "@nestjs/common";
-import { appBrand } from "@expirymate/shared";
+import { Injectable, Logger, ServiceUnavailableException } from "@nestjs/common";
 import nodemailer from "nodemailer";
-
-type MailMessage = { to: string; subject: string; text: string };
-
-type SmtpConfig = {
-  host: string;
-  port: number;
-  user?: string;
-  pass?: string;
-  from: string;
-};
+import { buildAuthHttpsLink } from "./app-links";
 
 @Injectable()
 export class MailService {
-  async sendEmailVerification(email: string, token: string) {
-    const url = `${getBaseUrl()}/auth/verify-email?token=${encodeURIComponent(token)}`;
+  private readonly logger = new Logger(MailService.name);
 
-    await this.send({
+  async sendEmailVerification(email: string, token: string) {
+    const verifyUrl = buildAuthHttpsLink("auth/verify-email", { token });
+
+    await this.sendMail({
       to: email,
-      subject: `${appBrand.appNameKo} 이메일을 인증해주세요`,
-      text: `${appBrand.appNameKo} 이메일 인증 링크입니다.\n\n${url}`,
+      subject: "메일 확인으로 가입을 마저 마무리해 주세요",
+      text: [
+        "안녕하세요, 장고예요.",
+        "",
+        "아래 링크를 누르면 가입이 끝나요.",
+        verifyUrl,
+        "",
+        "링크는 잠시 뒤 만료돼요. 요청한 적이 없다면 이 메일은 무시해 주세요.",
+      ].join("\n"),
+      html: `
+        <p>안녕하세요, 장고예요.</p>
+        <p>아래 버튼을 누르면 가입이 끝나요.</p>
+        <p><a href="${verifyUrl}">메일 확인하고 시작하기</a></p>
+        <p>링크는 잠시 뒤 만료돼요. 요청한 적이 없다면 이 메일은 무시해 주세요.</p>
+      `,
     });
   }
 
   async sendPasswordReset(email: string, token: string) {
-    const url = `${getBaseUrl()}/auth/reset-password?token=${encodeURIComponent(token)}`;
+    const resetUrl = buildAuthHttpsLink("auth/reset-password", { token });
 
-    await this.send({
+    await this.sendMail({
       to: email,
-      subject: `${appBrand.appNameKo} 비밀번호 재설정`,
-      text: `${appBrand.appNameKo} 비밀번호 재설정 링크입니다. 15분 안에 사용해주세요.\n\n${url}`,
+      subject: "비밀번호를 다시 정해 주세요",
+      text: [
+        "안녕하세요, 장고예요.",
+        "",
+        "아래 링크로 비밀번호를 다시 정할 수 있어요.",
+        resetUrl,
+        "",
+        "요청한 적이 없다면 이 메일은 무시해 주세요.",
+      ].join("\n"),
     });
   }
 
-  private async send(message: MailMessage) {
-    const config = getSmtpConfig();
-    const resendApiKey = getResendApiKey(config);
+  private async sendMail(input: {
+    to: string;
+    subject: string;
+    text: string;
+    html?: string;
+  }) {
+    const host = process.env.SMTP_HOST;
+    const port = Number(process.env.SMTP_PORT ?? 587);
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+    const from = process.env.SMTP_FROM ?? "Jango <no-reply@expirymate.local>";
 
-    if (!config) {
+    if (!host || !user || !pass) {
       if (process.env.NODE_ENV === "production") {
-        throw new ServiceUnavailableException("SMTP 환경변수가 설정되지 않았습니다.");
+        throw new ServiceUnavailableException(
+          "메일 발송 설정이 아직 준비되지 않았어요.",
+        );
       }
 
-      console.log(`[${appBrand.appNameEn} mail:dev] to=${message.to}`);
-      console.log(`[${appBrand.appNameEn} mail:dev] subject=${message.subject}`);
-      console.log(message.text);
+      this.logger.warn(
+        `SMTP is not configured. Skipping mail to ${input.to}: ${input.subject}`,
+      );
       return;
     }
 
-    if (resendApiKey) {
-      await sendViaResendApi(config.from, resendApiKey, message);
-      return;
-    }
-
-    await sendViaSmtp(config, message);
-  }
-}
-
-async function sendViaResendApi(from: string, apiKey: string, message: MailMessage) {
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [message.to],
-      subject: message.subject,
-      text: message.text,
-    }),
-    signal: AbortSignal.timeout(10_000),
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new ServiceUnavailableException(`메일 발송에 실패했습니다: ${body}`);
-  }
-}
-
-async function sendViaSmtp(config: SmtpConfig, message: MailMessage) {
-  const transporter = nodemailer.createTransport({
-    host: config.host,
-    port: config.port,
-    secure: config.port === 465,
-    requireTLS: config.port === 587,
-    auth: config.user
-      ? {
-          user: config.user,
-          pass: config.pass,
-        }
-      : undefined,
-    connectionTimeout: 10_000,
-    greetingTimeout: 10_000,
-    socketTimeout: 15_000,
-  });
-
-  try {
-    await transporter.sendMail({
-      from: config.from,
-      ...message,
+    const transporter = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
     });
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : "unknown SMTP error";
-    throw new ServiceUnavailableException(`메일 발송에 실패했습니다: ${reason}`);
+
+    await transporter.sendMail({
+      from,
+      to: input.to,
+      subject: input.subject,
+      text: input.text,
+      html: input.html,
+    });
   }
-}
-
-function getSmtpConfig(): SmtpConfig | null {
-  const host = process.env.SMTP_HOST;
-  const from = process.env.SMTP_FROM;
-
-  if (!host || !from) {
-    return null;
-  }
-
-  return {
-    host,
-    port: Number(process.env.SMTP_PORT ?? 587),
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-    from,
-  };
-}
-
-function getResendApiKey(config: SmtpConfig | null) {
-  const explicitKey = process.env.RESEND_API_KEY?.trim();
-  if (explicitKey) {
-    return explicitKey;
-  }
-
-  const pass = config?.pass?.trim();
-  const host = config?.host.trim().toLowerCase() ?? "";
-
-  if (host === "smtp.resend.com" && pass?.startsWith("re_")) {
-    return pass;
-  }
-
-  return null;
-}
-
-function getBaseUrl() {
-  return process.env.APP_BASE_URL ?? "expirymate://";
 }

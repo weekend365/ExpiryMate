@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
+import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -51,14 +52,10 @@ export default function ForgotPasswordScreen() {
       </View>
 
       <Text style={styles.label}>이메일</Text>
-      <TextInput
+      <EmailDomainInput
         value={email}
         onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        placeholder="가입할 때 쓴 이메일"
-        placeholderTextColor={colors.mutedText}
-        style={styles.input}
+        placeholder="아이디"
       />
     </Screen>
   );

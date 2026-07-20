@@ -10,9 +10,11 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from "react-native";
 import { Button } from "../../src/components/Button";
+import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -45,8 +47,37 @@ const oauthReturnState = encodeOAuthReturnState(appReturnUri);
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
 export default function LoginScreen() {
-  const { oauthMutation } = useAuth();
+  const { loginMutation, oauthMutation } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
+
+  const handleEmailLogin = async () => {
+    try {
+      await loginMutation.mutateAsync({
+        email: email.trim(),
+        password,
+      });
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      const message = getErrorMessage(error);
+      if (message.includes("메일 확인")) {
+        Alert.alert("메일 확인이 필요해요", message, [
+          {
+            text: "메일함 확인으로",
+            onPress: () =>
+              router.replace({
+                pathname: "/auth/verify-pending",
+                params: { email: email.trim() },
+              }),
+          },
+          { text: "닫기", style: "cancel" },
+        ]);
+        return;
+      }
+      Alert.alert("앗, 잠시 문제가 생겼어요", message);
+    }
+  };
 
   const handleAppleLogin = async () => {
     try {
@@ -195,8 +226,12 @@ export default function LoginScreen() {
     }
   };
 
-  const isBusy = pendingProvider !== null || oauthMutation.isPending;
+  const isBusy =
+    pendingProvider !== null ||
+    oauthMutation.isPending ||
+    loginMutation.isPending;
   const naverClientId = process.env.EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID?.trim();
+  const canEmailLogin = Boolean(email.trim() && password);
 
   return (
     <Screen
@@ -204,12 +239,14 @@ export default function LoginScreen() {
       subtitle="계정으로 이어가면 장고가 냉장고를 함께 챙겨 드릴게요."
       footer={
         <Button
-          onPress={handleKakaoLogin}
-          loading={pendingProvider === "kakao"}
-          disabled={isBusy && pendingProvider !== "kakao"}
+          onPress={() => {
+            void handleEmailLogin();
+          }}
+          loading={loginMutation.isPending}
+          disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
           fullWidth
         >
-          카카오로 이어갈게요
+          이메일로 이어갈게요
         </Button>
       }
     >
@@ -220,8 +257,59 @@ export default function LoginScreen() {
         </View>
       </View>
 
+      <View style={styles.emailCard}>
+        <Text style={styles.emailTitle}>이메일로 이어갈까요?</Text>
+        <EmailDomainInput
+          value={email}
+          onChangeText={setEmail}
+          autoCorrect={false}
+          placeholder="아이디"
+          editable={!isBusy}
+        />
+        <TextInput
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          textContentType="password"
+          placeholder="비밀번호"
+          placeholderTextColor={colors.mutedText}
+          editable={!isBusy}
+          style={styles.input}
+        />
+        <View style={styles.emailLinks}>
+          <Pressable
+            onPress={() => router.push("/auth/register")}
+            disabled={isBusy}
+            hitSlop={spacing.xs}
+            style={({ pressed }) => [
+              styles.emailLink,
+              pressed && styles.emailLinkPressed,
+            ]}
+          >
+            <Text style={styles.emailLinkText}>함께 시작하기</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => router.push("/auth/forgot-password")}
+            disabled={isBusy}
+            hitSlop={spacing.xs}
+            style={({ pressed }) => [
+              styles.emailLink,
+              pressed && styles.emailLinkPressed,
+            ]}
+          >
+            <Text style={styles.emailLinkText}>비밀번호를 잊으셨나요?</Text>
+          </Pressable>
+        </View>
+      </View>
+
       <View style={styles.oauthCard}>
         <Text style={styles.oauthTitle}>다른 방법으로 이어갈까요?</Text>
+        <OAuthRow
+          label="카카오로 이어갈게요"
+          onPress={handleKakaoLogin}
+          loading={pendingProvider === "kakao"}
+          disabled={isBusy && pendingProvider !== "kakao"}
+        />
         {naverClientId ? (
           <OAuthRow
             label="네이버로 이어갈게요"
@@ -325,6 +413,51 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontWeight: typography.label.fontWeight,
+    color: colors.primary,
+  },
+  emailCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  emailTitle: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontWeight: typography.label.fontWeight,
+    color: colors.mutedText,
+  },
+  input: {
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
+    backgroundColor: colors.mutedSurface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    color: colors.text,
+    fontSize: typography.body.fontSize,
+    fontWeight: typography.bodyStrong.fontWeight,
+  },
+  emailLinks: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: spacing.sm,
+    paddingTop: spacing.xs,
+  },
+  emailLink: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+  },
+  emailLinkPressed: {
+    opacity: 0.7,
+  },
+  emailLinkText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.title.fontWeight,
     color: colors.primary,
   },
   oauthCard: {

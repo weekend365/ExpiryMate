@@ -8,6 +8,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { Button } from "../../src/components/Button";
+import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -80,16 +81,24 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     try {
-      await registerMutation.mutateAsync({
+      const result = await registerMutation.mutateAsync({
         email,
         password,
         displayName: displayName || undefined,
       });
-      Alert.alert(
-        "환영해요!",
-        "확인 메일을 보냈어요. 익명으로 넣은 재료도 계정으로 잘 옮겨 뒀어요.",
-      );
-      router.back();
+
+      if (
+        "requiresEmailVerification" in result &&
+        result.requiresEmailVerification
+      ) {
+        router.replace({
+          pathname: "/auth/verify-pending",
+          params: { email: result.email },
+        });
+        return;
+      }
+
+      router.replace("/(tabs)/home");
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }
@@ -115,8 +124,6 @@ export default function RegisterScreen() {
 
   return (
     <Screen
-      title="함께 시작하기"
-      subtitle={`${appBrand.characterNameKo}랑 계정을 만들어볼까요?`}
       footer={
         <Button
           onPress={handlePrimary}
@@ -156,6 +163,9 @@ export default function RegisterScreen() {
 
       <Animated.View style={[styles.stepBody, contentStyle]}>
         <Mascot size="small" mood="idle" style={styles.mascot} />
+        <Text style={styles.stepEyebrow}>
+          {appBrand.characterNameKo}랑 계정을 만들어볼까요?
+        </Text>
         <Text style={styles.stepTitle}>{step.title}</Text>
         <Text style={styles.stepDescription}>{step.description}</Text>
 
@@ -166,18 +176,18 @@ export default function RegisterScreen() {
             placeholder="이름 또는 닉네임"
             placeholderTextColor={colors.mutedText}
             style={styles.input}
+            returnKeyType="next"
+            onSubmitEditing={handlePrimary}
           />
         ) : null}
 
         {step.key === "email" ? (
-          <TextInput
+          <EmailDomainInput
             value={email}
             onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            placeholder="예: jango@example.com"
-            placeholderTextColor={colors.mutedText}
-            style={styles.input}
+            placeholder="아이디"
+            returnKeyType="next"
+            onSubmitEditing={handlePrimary}
           />
         ) : null}
 
@@ -189,6 +199,8 @@ export default function RegisterScreen() {
             placeholder="비밀번호 8자 이상"
             placeholderTextColor={colors.mutedText}
             style={styles.input}
+            returnKeyType="done"
+            onSubmitEditing={handlePrimary}
           />
         ) : null}
       </Animated.View>
@@ -239,6 +251,12 @@ const styles = StyleSheet.create({
   },
   mascot: {
     alignSelf: "flex-start",
+  },
+  stepEyebrow: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.subtext,
   },
   stepTitle: {
     fontSize: typography.heading.fontSize,

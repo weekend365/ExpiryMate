@@ -13,9 +13,14 @@ const PUBLIC_ROOT_SEGMENTS = new Set([
   "auth",
 ]);
 
+const EMAIL_VERIFY_AUTH_SCREENS = new Set([
+  "verify-pending",
+  "verify-email",
+]);
+
 /**
  * Keeps unauthenticated users on onboarding/login, and sends registered users
- * away from the login screen into the main app.
+ * away from the login screen into the main app (after email verification when required).
  */
 export function AuthRedirectGate() {
   const router = useRouter();
@@ -27,6 +32,7 @@ export function AuthRedirectGate() {
   const { query } = useAuth();
 
   const isRegistered = query.data?.accountType === "registered";
+  const needsEmailVerification = Boolean(query.data?.requiresEmailVerification);
   const rootSegment = segments[0];
   const isPublicRoute =
     !rootSegment || PUBLIC_ROOT_SEGMENTS.has(String(rootSegment));
@@ -50,10 +56,30 @@ export function AuthRedirectGate() {
       return;
     }
 
+    const routeSegments = segments as string[];
+    const authScreen = routeSegments[1] ?? "";
+
+    if (needsEmailVerification) {
+      if (
+        rootSegment !== "auth" ||
+        !EMAIL_VERIFY_AUTH_SCREENS.has(authScreen)
+      ) {
+        router.replace({
+          pathname: "/auth/verify-pending",
+          params: query.data?.email
+            ? { email: query.data.email }
+            : undefined,
+        });
+      }
+      return;
+    }
+
     if (rootSegment === "auth") {
-      const routeSegments = segments as string[];
-      const authScreen = routeSegments[1] ?? "";
-      if (authScreen === "login") {
+      if (
+        authScreen === "login" ||
+        authScreen === "register" ||
+        authScreen === "verify-pending"
+      ) {
         router.replace("/(tabs)/home");
       }
     }
@@ -62,6 +88,8 @@ export function AuthRedirectGate() {
     hasHydrated,
     isPublicRoute,
     isRegistered,
+    needsEmailVerification,
+    query.data?.email,
     query.isFetching,
     query.isLoading,
     rootSegment,
@@ -91,6 +119,7 @@ export function RequireRegisteredAuth({
   const hasHydrated = useAppStore((state) => state.hasHydrated);
   const { query } = useAuth();
   const isRegistered = query.data?.accountType === "registered";
+  const needsEmailVerification = Boolean(query.data?.requiresEmailVerification);
 
   if (!hasHydrated || query.isLoading) {
     return <AuthLoadingScreen />;
@@ -98,6 +127,21 @@ export function RequireRegisteredAuth({
 
   if (!isRegistered) {
     return <Redirect href="/auth/login" />;
+  }
+
+  if (needsEmailVerification) {
+    return (
+      <Redirect
+        href={
+          query.data?.email
+            ? {
+                pathname: "/auth/verify-pending",
+                params: { email: query.data.email },
+              }
+            : "/auth/verify-pending"
+        }
+      />
+    );
   }
 
   return <>{children}</>;

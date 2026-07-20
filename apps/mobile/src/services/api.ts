@@ -17,7 +17,9 @@ import type {
   AcceptAiDataNoticeResponse,
   RecipeRecommendation,
   RecipeRecommendationRequest,
+  RegisterPendingResponse,
   RegisterRequest,
+  RegisterResponse,
   SubscriptionEntitlement,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
@@ -373,13 +375,33 @@ export const deleteAccount = async (payload: DeleteAccountRequest) => {
   return result;
 };
 
-export const register = async (payload: RegisterRequest) =>
-  persistAuthSession(
-    await authRequestWithOptionalBearer<AuthSession>("/auth/register", {
+export const register = async (
+  payload: RegisterRequest,
+): Promise<RegisterResponse> => {
+  const result = await authRequestWithOptionalBearer<RegisterResponse>(
+    "/auth/register",
+    {
       method: "POST",
       body: JSON.stringify(payload),
-    }),
+    },
   );
+
+  if (isRegisterPendingResponse(result)) {
+    return result;
+  }
+
+  return persistAuthSession(result);
+};
+
+function isRegisterPendingResponse(
+  value: RegisterResponse,
+): value is RegisterPendingResponse {
+  return (
+    "requiresEmailVerification" in value &&
+    value.requiresEmailVerification === true &&
+    typeof value.email === "string"
+  );
+}
 
 export const login = async (payload: LoginRequest) =>
   persistAuthSession(
@@ -402,17 +424,29 @@ export const logout = async () => {
   await clearAuthSession();
 };
 
-export const requestEmailVerification = async (email?: string) =>
-  request<{ ok: boolean }>("/auth/email/verify/request", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-  });
+export const requestEmailVerification = async (email?: string) => {
+  const body = JSON.stringify({ email });
 
-export const verifyEmail = (token: string) =>
-  publicRequest<{ ok: boolean }>("/auth/email/verify", {
+  if (accessToken) {
+    return request<{ ok: boolean }>("/auth/email/verify/request", {
+      method: "POST",
+      body,
+    });
+  }
+
+  return publicRequest<{ ok: boolean }>("/auth/email/verify/request", {
     method: "POST",
-    body: JSON.stringify({ token }),
+    body,
   });
+};
+
+export const verifyEmail = async (token: string) =>
+  persistAuthSession(
+    await publicRequest<AuthSession>("/auth/email/verify", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    }),
+  );
 
 export const forgotPassword = (email: string) =>
   publicRequest<{ ok: boolean }>("/auth/password/forgot", {

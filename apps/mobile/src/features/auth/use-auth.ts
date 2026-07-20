@@ -37,7 +37,15 @@ export const useAuth = () => {
   });
   const registerMutation = useMutation({
     mutationFn: (payload: RegisterRequest) => register(payload),
-    onSuccess: resetAppQueries,
+    onSuccess: (result) => {
+      if (
+        "requiresEmailVerification" in result &&
+        result.requiresEmailVerification
+      ) {
+        return;
+      }
+      resetAppQueries();
+    },
   });
   const logoutMutation = useMutation({
     mutationFn: logout,
