@@ -128,13 +128,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: typography.title.fontSize,
     lineHeight: typography.title.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   subtitle: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
 });

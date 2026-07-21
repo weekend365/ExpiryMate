@@ -74,7 +74,7 @@ export default function LoginScreen() {
                 params: { email: email.trim() },
               }),
           },
-          { text: "닫기", style: "cancel" },
+          { text: "조금 뒤에 할게요", style: "cancel" },
         ]);
         return;
       }
@@ -305,36 +305,38 @@ export default function LoginScreen() {
         </View>
       </View>
 
-      <View style={styles.oauthCard}>
-        <Text style={styles.oauthTitle}>다른 방법으로 이어갈까요?</Text>
-        <OAuthRow
-          label="카카오로 이어갈게요"
-          onPress={handleKakaoLogin}
-          loading={pendingProvider === "kakao"}
-          disabled={isBusy && pendingProvider !== "kakao"}
-        />
-        {naverClientId ? (
+      <View style={styles.oauthSection}>
+        <Text style={styles.oauthTitle}>다른 방법으로도 이어갈 수 있어요</Text>
+        <View style={styles.oauthList}>
           <OAuthRow
-            label="네이버로 이어갈게요"
-            onPress={handleNaverLogin}
-            loading={pendingProvider === "naver"}
-            disabled={isBusy && pendingProvider !== "naver"}
+            label="카카오로 이어갈게요"
+            onPress={handleKakaoLogin}
+            loading={pendingProvider === "kakao"}
+            disabled={isBusy && pendingProvider !== "kakao"}
           />
-        ) : null}
-        <OAuthRow
-          label="Google로 이어갈게요"
-          onPress={handleGoogleLogin}
-          loading={pendingProvider === "google"}
-          disabled={isBusy && pendingProvider !== "google"}
-        />
-        {Platform.OS === "ios" ? (
+          {naverClientId ? (
+            <OAuthRow
+              label="네이버로 이어갈게요"
+              onPress={handleNaverLogin}
+              loading={pendingProvider === "naver"}
+              disabled={isBusy && pendingProvider !== "naver"}
+            />
+          ) : null}
           <OAuthRow
-            label="Apple로 이어갈게요"
-            onPress={handleAppleLogin}
-            loading={pendingProvider === "apple"}
-            disabled={isBusy && pendingProvider !== "apple"}
+            label="Google로 이어갈게요"
+            onPress={handleGoogleLogin}
+            loading={pendingProvider === "google"}
+            disabled={isBusy && pendingProvider !== "google"}
           />
-        ) : null}
+          {Platform.OS === "ios" ? (
+            <OAuthRow
+              label="Apple로 이어갈게요"
+              onPress={handleAppleLogin}
+              loading={pendingProvider === "apple"}
+              disabled={isBusy && pendingProvider !== "apple"}
+            />
+          ) : null}
+        </View>
       </View>
     </Screen>
   );
@@ -355,6 +357,8 @@ function OAuthRow({
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      accessibilityRole="button"
+      accessibilityLabel={label}
       style={({ pressed }) => [
         styles.oauthRow,
         pressed && styles.oauthRowPressed,
@@ -415,7 +419,7 @@ const styles = StyleSheet.create({
   brandBadgeText: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   emailCard: {
@@ -429,7 +433,7 @@ const styles = StyleSheet.create({
   emailTitle: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   input: {
@@ -441,7 +445,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   emailLinks: {
     flexDirection: "row",
@@ -460,34 +464,31 @@ const styles = StyleSheet.create({
   emailLinkText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
-  oauthCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    overflow: "hidden",
+  oauthSection: {
+    gap: spacing.xs,
   },
   oauthTitle: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xs,
+  },
+  oauthList: {
+    gap: spacing.xs,
   },
   oauthRow: {
     minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
     paddingHorizontal: spacing.md,
     justifyContent: "center",
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
+    alignItems: "center",
   },
   oauthRowPressed: {
-    backgroundColor: colors.surfacePressed,
+    backgroundColor: colors.primarySoftPressed,
   },
   oauthRowDisabled: {
     opacity: 0.5,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   oauthRowText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
-    color: colors.text,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
   },
 });

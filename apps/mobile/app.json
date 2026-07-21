@@ -16,7 +16,26 @@
     "icon": "./assets/branding/icon.png",
     "plugins": [
       "expo-router",
-      "expo-notifications",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Pretendard-Regular.otf",
+            "./assets/fonts/Pretendard-Medium.otf",
+            "./assets/fonts/Pretendard-SemiBold.otf",
+            "./assets/fonts/Pretendard-Bold.otf",
+            "./assets/fonts/Pretendard-ExtraBold.otf"
+          ]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/branding/notification-icon.png",
+          "color": "#10B981",
+          "defaultChannel": "expiry-reminders"
+        }
+      ],
       [
         "expo-splash-screen",
         {

@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
   },
   count: {
     minWidth: spacing.md,
@@ -106,6 +106,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
   },
 });

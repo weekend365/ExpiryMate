@@ -527,7 +527,7 @@ const styles = StyleSheet.create({
   headerFilterLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   filterSummary: {
@@ -552,18 +552,18 @@ const styles = StyleSheet.create({
   filterSummaryLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   filterSummaryValue: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   filterSummaryAction: {
     fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   list: {
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   swipeActionLabel: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.surface,
     textAlign: "center",
   },
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   errorStrip: {
@@ -623,12 +623,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
   errorDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   sheetSection: {
@@ -658,12 +659,13 @@ const styles = StyleSheet.create({
   selectionTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   selectionDescription: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   selectionToggle: {

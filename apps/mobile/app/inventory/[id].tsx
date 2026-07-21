@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
   heroEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
   },
   heroEyebrowWorry: {
     color: colors.warning,
@@ -713,12 +713,13 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   heroDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   summaryCard: {
@@ -744,7 +745,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.subtext,
   },
   summaryValue: {
@@ -752,7 +753,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   notesBlock: {
@@ -764,12 +765,13 @@ const styles = StyleSheet.create({
   notesLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   notesValue: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.text,
   },
   softActions: {
@@ -795,7 +797,7 @@ const styles = StyleSheet.create({
   softActionTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   softActionTitleDanger: {
@@ -804,6 +806,7 @@ const styles = StyleSheet.create({
   softActionDescription: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   formCard: {
@@ -839,7 +842,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   errorStrip: {
@@ -857,12 +860,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
   errorDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   sheetFooter: {
@@ -877,13 +881,13 @@ const styles = StyleSheet.create({
   confirmLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   confirmValue: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
 });

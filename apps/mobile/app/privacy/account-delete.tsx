@@ -157,12 +157,13 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
   heroText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   card: {
@@ -176,16 +177,17 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   bodyText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   emphasis: {
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   input: {
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.text,
     backgroundColor: colors.background,
   },
@@ -211,12 +213,13 @@ const styles = StyleSheet.create({
   confirmLabel: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.mutedText,
   },
   confirmValue: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
 });

@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
   focusEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
   },
   focusEyebrowDanger: {
     color: colors.danger,
@@ -376,13 +376,13 @@ const styles = StyleSheet.create({
   focusTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   focusDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   secondaryEntry: {
@@ -400,12 +400,13 @@ const styles = StyleSheet.create({
   secondaryEntryTitle: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   secondaryEntryDescription: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   recipeStatusCard: {
@@ -436,12 +437,13 @@ const styles = StyleSheet.create({
   recipeStatusTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   recipeStatusDescription: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   statsRow: {
@@ -454,7 +456,7 @@ const styles = StyleSheet.create({
   sectionCount: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.mutedText,
   },
   list: {

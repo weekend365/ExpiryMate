@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
   value: {
     fontSize: typography.display.fontSize,
     lineHeight: typography.display.lineHeight,
-    fontWeight: typography.display.fontWeight,
+    fontFamily: typography.display.fontFamily,
   },
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
   },
 });

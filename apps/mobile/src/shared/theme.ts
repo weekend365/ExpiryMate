@@ -5,14 +5,18 @@
  * app and admin stay on one source of truth. This file only re-shapes tokens
  * into the `colors` / `spacing` API that mobile screens already import; add new
  * design values in `packages/shared/src/design`, not here.
+ *
+ * Typography on mobile uses Pretendard file-per-weight (`fontFamily`) instead of
+ * CSS-style `fontWeight`, which Android often mishandles with custom faces.
  */
 import {
   radius as designRadius,
-  fontWeight,
+  fontWeight as designFontWeight,
   semanticColors,
   spacing as designSpacing,
-  typography,
+  typography as sharedTypography,
 } from "@expirymate/shared";
+import { fontFamily, fontFamilyForWeight } from "./fonts";
 
 export const colors = semanticColors;
 
@@ -32,4 +36,30 @@ export const touchTarget = {
   icon: 44,
 } as const;
 
-export { fontWeight, typography };
+/** Kept for rare cases that still reference weight tokens; prefer `fontFamily`. */
+export const fontWeight = designFontWeight;
+
+export { fontFamily };
+
+type SharedTypography = typeof sharedTypography;
+type TypographyKey = keyof SharedTypography;
+
+export type AppTextStyle = {
+  fontSize: number;
+  lineHeight: number;
+  fontFamily: string;
+};
+
+export const typography = Object.fromEntries(
+  (Object.keys(sharedTypography) as TypographyKey[]).map((key) => {
+    const token = sharedTypography[key];
+    return [
+      key,
+      {
+        fontSize: token.fontSize,
+        lineHeight: token.lineHeight,
+        fontFamily: fontFamilyForWeight(token.fontWeight),
+      } satisfies AppTextStyle,
+    ];
+  }),
+) as { [K in TypographyKey]: AppTextStyle };

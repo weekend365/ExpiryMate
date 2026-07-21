@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   label: {
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   mediumLabel: {
     fontSize: typography.body.fontSize,
@@ -138,6 +138,6 @@ const styles = StyleSheet.create({
   smallLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
 });

@@ -93,12 +93,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.text,
   },
   input: {
@@ -110,6 +111,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
   },
 });

@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   stepPillText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.surface,
   },
   guideArea: {
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   instructionCard: {
@@ -556,12 +556,13 @@ const styles = StyleSheet.create({
   instructionTitle: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   instructionDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   errorStrip: {
@@ -577,7 +578,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.danger,
   },
   centerCard: {
@@ -593,13 +594,14 @@ const styles = StyleSheet.create({
   centerTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
     textAlign: "center",
   },
   centerDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
     textAlign: "center",
   },
@@ -635,18 +637,19 @@ const styles = StyleSheet.create({
   productEyebrow: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   productName: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   productBarcode: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   manualNameCard: {
@@ -658,7 +661,7 @@ const styles = StyleSheet.create({
   manualNameLabel: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   manualNameInput: {
@@ -670,11 +673,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   manualNameHint: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   expiryCard: {
@@ -687,18 +691,19 @@ const styles = StyleSheet.create({
   expiryLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   expiryValue: {
     fontSize: typography.title.fontSize,
     lineHeight: typography.title.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   sheetFootnote: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
 });

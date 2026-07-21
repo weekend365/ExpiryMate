@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.subheading.fontWeight,
+    fontFamily: typography.subheading.fontFamily,
     color: colors.text,
     textAlign: "center",
   },
   description: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
     textAlign: "center",
   },

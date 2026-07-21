@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.text,
   },
   trigger: {
@@ -165,25 +165,25 @@ const styles = StyleSheet.create({
   valueText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   placeholderText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.mutedText,
   },
   triggerAction: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     color: colors.primary,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
   },
   errorText: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.danger,
   },
   modalRoot: {
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   buttonRow: {

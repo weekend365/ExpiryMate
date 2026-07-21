@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
   backLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   progressLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   progressTrack: {
@@ -186,19 +186,19 @@ const styles = StyleSheet.create({
   stepEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   stepTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   stepDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   headerAccessory: {

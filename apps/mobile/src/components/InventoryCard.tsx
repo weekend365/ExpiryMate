@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   metaRow: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   dateRow: {
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   dateLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   badgeColumn: {
@@ -234,11 +234,11 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
   },
   bucketLabel: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
   },
 });

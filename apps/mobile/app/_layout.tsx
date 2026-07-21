@@ -1,5 +1,7 @@
 import "react-native-gesture-handler";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -11,11 +13,26 @@ import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generat
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
 import { queryClient } from "../src/services/query-client";
 import { initMobileSentry } from "../src/services/sentry";
-import { colors } from "../src/shared/theme";
+import { pretendardFonts } from "../src/shared/fonts";
+import { colors, fontFamily, typography } from "../src/shared/theme";
 
 initMobileSentry();
 
+SplashScreen.preventAutoHideAsync().catch(() => null);
+
 export default function RootLayout() {
+  const [fontsLoaded, fontError] = useFonts(pretendardFonts);
+
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync().catch(() => null);
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
       <SafeAreaProvider>
@@ -31,6 +48,13 @@ export default function RootLayout() {
                   backgroundColor: colors.background,
                 },
                 headerTintColor: colors.text,
+                headerTitleStyle: {
+                  fontFamily: fontFamily.bold,
+                  fontSize: typography.heading.fontSize,
+                },
+                headerBackTitleStyle: {
+                  fontFamily: fontFamily.medium,
+                },
               }}
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />
@@ -62,6 +86,15 @@ export default function RootLayout() {
               <Stack.Screen
                 name="privacy/account-delete"
                 options={{ title: "계정과 데이터 정리" }}
+              />
+              <Stack.Screen
+                name="settings/notifications"
+                options={{ title: "알림" }}
+              />
+              <Stack.Screen name="settings/account" options={{ title: "계정" }} />
+              <Stack.Screen
+                name="settings/subscription"
+                options={{ title: "구독" }}
               />
             </Stack>
           </RecipeGenerationProvider>
