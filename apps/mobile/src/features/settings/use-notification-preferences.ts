@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../auth/use-auth";
+import { sessionQueryKeys, withSessionUser } from "../auth/session-boundary";
 import {
   getNotificationPreferences,
   updateNotificationPreferences,
@@ -6,16 +8,22 @@ import {
 
 export const useNotificationPreferences = () => {
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const queryKey = withSessionUser(
+    sessionQueryKeys.notificationPreferences,
+    sessionUserId,
+  );
 
   const query = useQuery({
-    queryKey: ["notification-preferences"],
+    queryKey,
     queryFn: getNotificationPreferences,
+    enabled: Boolean(sessionUserId),
   });
 
   const mutation = useMutation({
     mutationFn: updateNotificationPreferences,
     onSuccess: (data) => {
-      queryClient.setQueryData(["notification-preferences"], data);
+      queryClient.setQueryData(queryKey, data);
     },
   });
 

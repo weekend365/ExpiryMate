@@ -12,6 +12,8 @@ import type {
   NotificationPreference,
   PushToken,
   OAuthLoginRequest,
+  StartOAuthRequest,
+  StartOAuthResponse,
   PrivacyStatus,
   RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
@@ -431,6 +433,10 @@ export const login = async (payload: LoginRequest) =>
   );
 
 export const logout = async () => {
+  // Unregister this device's push token while the session is still valid.
+  const { unregisterDevicePushToken } = await import("./notifications");
+  await unregisterDevicePushToken().catch(() => null);
+
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
 
   if (refreshToken) {
@@ -482,6 +488,12 @@ export const resetPassword = (token: string, password: string) =>
   publicRequest<{ ok: boolean }>("/auth/password/reset", {
     method: "POST",
     body: JSON.stringify({ token, password }),
+  });
+
+export const startOAuth = (payload: StartOAuthRequest) =>
+  publicRequest<StartOAuthResponse>("/auth/oauth/start", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
 
 export const oauthLogin = async (
@@ -576,6 +588,12 @@ export const registerPushToken = (payload: RegisterPushTokenRequest) =>
   request<PushToken>("/notifications/push-tokens", {
     method: "POST",
     body: JSON.stringify(payload),
+  });
+
+export const unregisterPushToken = (token: string) =>
+  request<{ ok: true }>("/notifications/push-tokens/unregister", {
+    method: "POST",
+    body: JSON.stringify({ token }),
   });
 
 export const getSubscriptionEntitlement = () =>

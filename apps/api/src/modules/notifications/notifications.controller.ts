@@ -1,5 +1,5 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "../auth/auth.guard";
+import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import {
   RegisterPushTokenDto,
@@ -7,7 +7,7 @@ import {
 } from "./dto/register-push-token.dto";
 import { NotificationsService } from "./notifications.service";
 
-@UseGuards(AuthGuard)
+@UseGuards(RegisteredGuard)
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}

@@ -119,10 +119,23 @@ export interface OAuthLoginRequest {
   providerToken: string;
   email?: string;
   displayName?: string;
-  /** Required for Naver code → token exchange on the API. */
+  /** @deprecated Prefer server-stored redirect from /auth/oauth/start. */
   redirectUri?: string;
-  /** Naver authorize/token exchange state (must match). */
+  /** Opaque server-issued state from /auth/oauth/start (required for Google/Kakao/Naver). */
   state?: string;
+}
+
+export interface StartOAuthRequest {
+  provider: "google" | "kakao" | "naver";
+  returnUri: string;
+}
+
+export interface StartOAuthResponse {
+  state: string;
+  codeChallenge: string;
+  codeChallengeMethod: "S256";
+  redirectUri: string;
+  expiresAt: string;
 }
 
 export interface InventoryItem {

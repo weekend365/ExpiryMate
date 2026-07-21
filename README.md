@@ -508,11 +508,10 @@ This is intentionally simple and easy for both mobile and admin clients.
 - `POST /inventory/:id/consume`
 - `POST /inventory/:id/discard`
 
-Inventory, dashboard, recipe, and settings endpoints use the `Authorization: Bearer <token>` owner from `POST /auth/anonymous`. Client-supplied `ownerKey` query/body values are not trusted.
+Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous minting (`POST /auth/anonymous`) is closed. Client-supplied `ownerKey` query/body values are not trusted.
 
 ### Other
 
-- `POST /auth/anonymous`
 - `GET /dashboard/summary`
 - `POST /recipes/recommendations`
 - `GET /recipes/recommendations`

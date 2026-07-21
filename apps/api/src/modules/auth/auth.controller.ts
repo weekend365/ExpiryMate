@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  GoneException,
   Header,
   Headers,
   HttpStatus,
@@ -12,11 +13,11 @@ import {
   Res,
   UseGuards,
 } from "@nestjs/common";
+import { RegisteredGuard } from "./registered.guard";
 import { OAuthProvider } from "@prisma/client";
 import type { Response } from "express";
 import { AuthRateLimit } from "./auth-rate-limit.decorator";
 import { AuthRateLimitGuard } from "./auth-rate-limit.guard";
-import { AuthGuard } from "./auth.guard";
 import {
   buildDesktopVerifyEmailResultHtml,
   buildInvalidAuthLinkHtml,
@@ -35,6 +36,7 @@ import {
   RegisterDto,
   RequestEmailVerificationDto,
   ResetPasswordDto,
+  StartOAuthDto,
   VerifyEmailDto,
 } from "./dto/auth.dto";
 import type { AuthenticatedRequest } from "./auth.types";
@@ -48,10 +50,12 @@ interface CookieResponse {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @AuthRateLimit({ name: "anonymous", max: 30, windowSeconds: 60 })
+  /** Closed: anonymous sessions are no longer issued (P0-04). */
   @Post("anonymous")
-  async issueAnonymousSession() {
-    return this.authService.issueAnonymousSession();
+  issueAnonymousSession() {
+    throw new GoneException(
+      "익명으로 이어가기는 더 이상 지원하지 않아요. 계정으로 로그인해 주세요.",
+    );
   }
 
   @AuthRateLimit({
@@ -196,7 +200,7 @@ export class AuthController {
     return { ok: true };
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(RegisteredGuard)
   @Get("me")
   getMe(@CurrentOwnerKey() ownerKey: string) {
     return this.authService.getMe(ownerKey);
@@ -275,6 +279,17 @@ export class AuthController {
   }
 
   @AuthRateLimit({
+    name: "oauth_start",
+    max: 30,
+    windowSeconds: 300,
+    bodyFields: ["provider", "returnUri"],
+  })
+  @Post("oauth/start")
+  startOAuth(@Body() dto: StartOAuthDto) {
+    return this.authService.startOAuthAuthorization(dto);
+  }
+
+  @AuthRateLimit({
     name: "oauth_apple",
     max: 20,
     windowSeconds: 300,
@@ -341,7 +356,7 @@ export class AuthController {
   @Get("placeholder")
   getPlaceholderSession() {
     return {
-      message: "인증은 /auth/anonymous, /auth/login, /auth/register를 사용합니다.",
+      message: "인증은 /auth/login, /auth/register, /auth/oauth/* 를 사용합니다.",
     };
   }
 

@@ -5,6 +5,7 @@ const stores = vi.hoisted(() => ({
   asyncStorage: new Map<string, string>(),
   secureStore: new Map<string, string>(),
   fetch: vi.fn(),
+  unregisterDevicePushToken: vi.fn(async () => ({ ok: true, skipped: false })),
 }));
 
 vi.mock("@react-native-async-storage/async-storage", () => ({
@@ -27,6 +28,10 @@ vi.mock("expo-secure-store", () => ({
   deleteItemAsync: vi.fn(async (key: string) => {
     stores.secureStore.delete(key);
   }),
+}));
+
+vi.mock("./notifications", () => ({
+  unregisterDevicePushToken: () => stores.unregisterDevicePushToken(),
 }));
 
 const authUser: AuthUser = {
@@ -170,6 +175,33 @@ describe("mobile API client core flow", () => {
         }),
       }),
     );
+  });
+
+  it("unregisters the push token before clearing the session on logout", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    const callOrder: string[] = [];
+    stores.unregisterDevicePushToken.mockImplementation(async () => {
+      callOrder.push("unregister");
+      return { ok: true, skipped: false };
+    });
+    stores.fetch.mockImplementation(async (url: string) => {
+      if (String(url).includes("/auth/logout")) {
+        callOrder.push("logout");
+        return successResponse({ ok: true });
+      }
+      if (String(url).includes("/auth/refresh")) {
+        return successResponse(createSession("access-1", "refresh-1"));
+      }
+      return errorResponse(500, "unexpected");
+    });
+    const { logout } = await import("./api");
+
+    await logout();
+
+    expect(callOrder).toEqual(["unregister", "logout"]);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
   });
 
   it("registers a push token through an authenticated request", async () => {

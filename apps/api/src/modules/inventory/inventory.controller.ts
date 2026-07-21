@@ -9,14 +9,14 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ItemStatus, StorageLocation } from "@expirymate/shared";
-import { AuthGuard } from "../auth/auth.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
+import { RegisteredGuard } from "../auth/registered.guard";
 import { BatchDiscardInventoryItemsDto } from "./dto/batch-discard-inventory-items.dto";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
 import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto";
 import { InventoryService } from "./inventory.service";
 
-@UseGuards(AuthGuard)
+@UseGuards(RegisteredGuard)
 @Controller("inventory")
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) {}

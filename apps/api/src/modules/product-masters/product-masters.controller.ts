@@ -6,8 +6,8 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { AuthGuard } from "../auth/auth.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
+import { RegisteredGuard } from "../auth/registered.guard";
 import { ContributeBarcodeProductDto } from "./dto/contribute-barcode-product.dto";
 import { ProductMastersService } from "./product-masters.service";
 
@@ -21,7 +21,7 @@ export class ProductMastersController {
   }
 
   @Post("contribute")
-  @UseGuards(AuthGuard)
+  @UseGuards(RegisteredGuard)
   contribute(
     @Body() dto: ContributeBarcodeProductDto,
     @CurrentOwnerKey() ownerKey: string,

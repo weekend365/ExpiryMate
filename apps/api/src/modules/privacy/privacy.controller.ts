@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "../auth/auth.guard";
+import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { DeleteAccountDto } from "./dto/privacy.dto";
 import { PrivacyService } from "./privacy.service";
 
-@UseGuards(AuthGuard)
+@UseGuards(RegisteredGuard)
 @Controller("privacy")
 export class PrivacyController {
   constructor(private readonly privacyService: PrivacyService) {}

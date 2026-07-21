@@ -147,6 +147,23 @@ model OAuthAccount {
   @@index([userId])
 }
 
+/// One-time authorize session: opaque state + PKCE verifier + allowlisted app return URI.
+model OAuthAuthorizationSession {
+  id           String        @id @default(cuid())
+  state        String        @unique
+  provider     OAuthProvider
+  returnUri    String
+  redirectUri  String
+  codeVerifier String
+  expiresAt    DateTime
+  redirectedAt DateTime?
+  consumedAt   DateTime?
+  createdAt    DateTime      @default(now())
+
+  @@index([expiresAt])
+  @@index([provider, createdAt])
+}
+
 model RefreshSession {
   id                  String    @id @default(cuid())
   userId              String

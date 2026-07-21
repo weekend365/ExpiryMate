@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "../auth/auth.guard";
+import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { VerifySubscriptionDto } from "./dto/verify-subscription.dto";
 import { SubscriptionsService } from "./subscriptions.service";
 
-@UseGuards(AuthGuard)
+@UseGuards(RegisteredGuard)
 @Controller("subscriptions")
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}

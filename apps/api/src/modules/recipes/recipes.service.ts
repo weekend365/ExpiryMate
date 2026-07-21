@@ -43,6 +43,9 @@ const DEFAULT_RATE_LIMIT_WINDOW_SECONDS = 60;
 const DEFAULT_DAILY_QUOTA = 20;
 const DEFAULT_CACHE_TTL_SECONDS = 6 * 60 * 60;
 const DEFAULT_DAILY_COST_LIMIT_USD = 1;
+/** Account-wide OpenAI spend cap across all owners (0 = disabled). */
+const DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD = 10;
+const DEFAULT_MAX_INFLIGHT = 5;
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -94,6 +97,7 @@ const nonFoodCategories = new Set<ProductCategory>([
 @Injectable()
 export class RecipesService {
   private readonly rateLimitHitsByOwner = new Map<string, number[]>();
+  private inflightGenerations = 0;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -103,6 +107,7 @@ export class RecipesService {
   async createRecommendation(ownerKey: string, dto: CreateRecipeRecommendationDto) {
     const now = new Date();
 
+    this.ensureAiEnabled();
     this.enforceRateLimit(ownerKey, now);
     await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
 
@@ -137,11 +142,10 @@ export class RecipesService {
 
     await this.enforceDailyQuota(ownerKey, now);
     await this.enforceDailyCostLimit(ownerKey, request, inventorySnapshot, now);
+    await this.enforceGlobalDailyCostLimit(request, inventorySnapshot, now);
 
-    const generation = await this.generateRecommendations(
-      ownerKey,
-      request,
-      inventorySnapshot,
+    const generation = await this.withInflightLimit(() =>
+      this.generateRecommendations(ownerKey, request, inventorySnapshot),
     );
 
     const record = await this.prisma.recipeRecommendation.create({
@@ -185,6 +189,15 @@ export class RecipesService {
     }
 
     return this.serializeRecommendation(record);
+  }
+
+  private ensureAiEnabled() {
+    const raw = process.env.RECIPE_AI_ENABLED?.trim().toLowerCase();
+    if (raw === "false" || raw === "0" || raw === "off") {
+      throw new ServiceUnavailableException(
+        "지금은 레시피 추천을 잠시 쉬고 있어요. 조금 뒤에 다시 시도해 주세요.",
+      );
+    }
   }
 
   private enforceRateLimit(ownerKey: string, now: Date) {
@@ -285,6 +298,71 @@ export class RecipesService {
         "오늘의 추천 생성 예산을 모두 사용했습니다.",
         HttpStatus.TOO_MANY_REQUESTS,
       );
+    }
+  }
+
+  private async enforceGlobalDailyCostLimit(
+    request: RecipeRecommendationRequest,
+    inventorySnapshot: RecipeInventorySnapshotItem[],
+    now: Date,
+  ) {
+    const globalDailyCostLimitUsd = getNonNegativeNumberEnv(
+      "RECIPE_GLOBAL_DAILY_COST_LIMIT_USD",
+      DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD,
+    );
+
+    if (globalDailyCostLimitUsd === 0) {
+      return;
+    }
+
+    const aggregate = await this.prisma.recipeRecommendation.aggregate({
+      _sum: {
+        estimatedCostUsd: true,
+      },
+      where: {
+        aiProvider: "openai",
+        createdAt: {
+          gte: startOfDay(now),
+        },
+      },
+    });
+    const spentToday = decimalToNumber(aggregate._sum.estimatedCostUsd);
+    const projectedCost = estimateGenerationCostUsd(
+      request,
+      inventorySnapshot,
+      this.getModel(),
+    );
+
+    if (spentToday + projectedCost > globalDailyCostLimitUsd) {
+      throw new HttpException(
+        "오늘은 추천 요청이 많았어요. 내일 다시 부탁해 주세요.",
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+  }
+
+  private async withInflightLimit<T>(run: () => Promise<T>): Promise<T> {
+    const maxInflight = getNonNegativeIntegerEnv(
+      "RECIPE_MAX_INFLIGHT",
+      DEFAULT_MAX_INFLIGHT,
+    );
+
+    if (maxInflight === 0) {
+      return run();
+    }
+
+    if (this.inflightGenerations >= maxInflight) {
+      throw new HttpException(
+        "지금 추천을 기다리는 분이 많아요. 잠시 후 다시 시도해 주세요.",
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    this.inflightGenerations += 1;
+    try {
+      return await run();
+    } finally {
+      this.inflightGenerations = Math.max(0, this.inflightGenerations - 1);
     }
   }
 
