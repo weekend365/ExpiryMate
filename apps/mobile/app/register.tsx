@@ -189,6 +189,7 @@ export default function RegisterScreen() {
   const [step, setStep] = useState<RegistrationStep>("product");
   // Only open when the user taps — prefill must not auto-pop the sheet on storage step.
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+  const [showAllRecentTemplates, setShowAllRecentTemplates] = useState(false);
   const [registeredSessionItems, setRegisteredSessionItems] = useState<
     RegisteredSessionItem[]
   >([]);
@@ -334,6 +335,11 @@ export default function RegisterScreen() {
         .slice(0, 4),
     [inventory],
   );
+  const visibleRecentTemplates = showAllRecentTemplates
+    ? recentTemplates
+    : recentTemplates.slice(0, 2);
+  const hasMoreRecentTemplates =
+    recentTemplates.length > visibleRecentTemplates.length;
 
   const similarItems = useMemo(() => {
     const normalizedName = displayName.toLowerCase();
@@ -390,6 +396,7 @@ export default function RegisterScreen() {
 
   const continueWithManual = () => {
     setSubmitErrorMessage(null);
+    setShowAllRecentTemplates(false);
     setStep("product");
   };
 
@@ -553,6 +560,18 @@ export default function RegisterScreen() {
     <Screen
       title="재료 넣기"
       subtitle="한 번에 하나씩, 차근차근 넣어볼게요."
+      footer={
+        <Button
+          icon={isLastStep ? CheckCircle2 : ChevronRight}
+          iconPosition="right"
+          onPress={isLastStep ? onSubmit : goToNextStep}
+          loading={mutation.isPending}
+          disabled={!canGoNext}
+          fullWidth
+        >
+          {primaryCtaLabel}
+        </Button>
+      }
     >
       <StepFlow
         steps={REGISTRATION_STEPS}
@@ -570,18 +589,6 @@ export default function RegisterScreen() {
               <CalendarDays color={colors.primary} size={spacing.md} strokeWidth={2.5} />
             ) : null}
           </View>
-        }
-        footer={
-          <Button
-            icon={isLastStep ? CheckCircle2 : ChevronRight}
-            iconPosition="right"
-            onPress={isLastStep ? onSubmit : goToNextStep}
-            loading={mutation.isPending}
-            disabled={!canGoNext}
-            fullWidth
-          >
-            {primaryCtaLabel}
-          </Button>
         }
       >
         {submitErrorMessage ? (
@@ -646,7 +653,7 @@ export default function RegisterScreen() {
                   description="누르면 이름을 바로 채워 드려요."
                 />
                 <View style={styles.templateList}>
-                  {recentTemplates.map((item) => (
+                  {visibleRecentTemplates.map((item) => (
                     <Pressable
                       key={item.id}
                       onPress={() => applyRecentTemplate(item)}
@@ -665,6 +672,22 @@ export default function RegisterScreen() {
                     </Pressable>
                   ))}
                 </View>
+                {hasMoreRecentTemplates ? (
+                  <Pressable
+                    onPress={() => setShowAllRecentTemplates(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="예전 재료 더 보기"
+                    hitSlop={spacing.xs}
+                    style={({ pressed }) => [
+                      styles.moreTemplatesButton,
+                      pressed && styles.templateCardPressed,
+                    ]}
+                  >
+                    <Text style={styles.moreTemplatesLabel}>
+                      더 볼게요 ({recentTemplates.length - visibleRecentTemplates.length}개)
+                    </Text>
+                  </Pressable>
+                ) : null}
               </View>
             ) : (
               <EmptyState
@@ -1129,6 +1152,19 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
+  },
+  moreTemplatesButton: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+  },
+  moreTemplatesLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
   },
   extraTrigger: {
     backgroundColor: colors.surface,

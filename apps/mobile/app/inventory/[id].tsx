@@ -278,6 +278,18 @@ export default function InventoryDetailScreen() {
       <Screen
         title="내용 바꾸기"
         subtitle="한 번에 하나씩만 고쳐볼게요."
+        footer={
+          <Button
+            icon={isLastEditStep ? CheckCircle2 : ChevronRight}
+            iconPosition="right"
+            onPress={isLastEditStep ? handleSave : goToNextEditStep}
+            loading={updateMutation.isPending}
+            disabled={!canGoNext}
+            fullWidth
+          >
+            {isLastEditStep ? "이렇게 바꿔둘까요?" : "다음으로 갈게요"}
+          </Button>
+        }
       >
         {errorMessage ? (
           <View style={styles.errorStrip}>
@@ -293,18 +305,6 @@ export default function InventoryDetailScreen() {
           steps={EDIT_STEPS}
           currentIndex={stepIndex}
           onBack={goToPreviousEditStep}
-          footer={
-            <Button
-              icon={isLastEditStep ? CheckCircle2 : ChevronRight}
-              iconPosition="right"
-              onPress={isLastEditStep ? handleSave : goToNextEditStep}
-              loading={updateMutation.isPending}
-              disabled={!canGoNext}
-              fullWidth
-            >
-              {isLastEditStep ? "이렇게 바꿔둘까요?" : "다음으로 갈게요"}
-            </Button>
-          }
         >
           {editStep === "product" ? (
             <View style={styles.formCard}>

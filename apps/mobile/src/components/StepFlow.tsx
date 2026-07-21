@@ -20,6 +20,10 @@ interface StepFlowProps extends PropsWithChildren {
   steps: StepFlowStep[];
   currentIndex: number;
   onBack: () => void;
+  /**
+   * Prefer `Screen` `footer` for the primary CTA so it stays sticky above the
+   * keyboard/safe area. Keep this only for rare in-flow secondary actions.
+   */
   footer?: ReactNode;
   headerAccessory?: ReactNode;
 }
