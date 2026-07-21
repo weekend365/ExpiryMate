@@ -121,6 +121,8 @@ function PrivacyRow({
         pressed && styles.rowPressed,
       ]}
       accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityHint={description}
     >
       <View
         style={[

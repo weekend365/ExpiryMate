@@ -200,6 +200,9 @@ export default function RecommendationsScreen() {
 
       <Pressable
         onPress={() => setShowOptionsSheet(true)}
+        accessibilityRole="button"
+        accessibilityLabel="추천 조건 고르기"
+        accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
         style={({ pressed }) => [
           styles.optionsSummary,
           pressed && styles.optionsSummaryPressed,
@@ -236,6 +239,8 @@ export default function RecommendationsScreen() {
               {!hasActiveEntitlement ? (
                 <Pressable
                   onPress={() => router.push("/(tabs)/settings")}
+                  accessibilityRole="button"
+                  accessibilityLabel="구독 안내 보러 가기"
                   style={({ pressed }) => [
                     styles.quotaLink,
                     pressed && styles.optionsSummaryPressed,
@@ -254,6 +259,8 @@ export default function RecommendationsScreen() {
               <Text style={styles.errorDescription}>{errorMessage}</Text>
               <Pressable
                 onPress={() => router.push("/register")}
+                accessibilityRole="button"
+                accessibilityLabel="재료부터 넣어볼까요?"
                 style={({ pressed }) => [
                   styles.quotaLink,
                   pressed && styles.optionsSummaryPressed,

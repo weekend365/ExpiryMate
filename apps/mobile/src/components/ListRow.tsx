@@ -66,6 +66,8 @@ export function ListRow({
         pressed && styles.listRowPressed,
       ]}
       accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityHint={description}
     >
       {content}
     </Pressable>

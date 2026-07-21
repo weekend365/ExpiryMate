@@ -529,6 +529,9 @@ export default function InventoryDetailScreen() {
               setSuccessMessage(null);
               setConfirmAction("consume");
             }}
+            accessibilityRole="button"
+            accessibilityLabel="다 먹었어요"
+            accessibilityHint="다 쓰신 재료라고 장고에게 알려 주세요."
             style={({ pressed }) => [
               styles.softAction,
               pressed && styles.softActionPressed,
@@ -544,6 +547,9 @@ export default function InventoryDetailScreen() {
               setSuccessMessage(null);
               setConfirmAction("discard");
             }}
+            accessibilityRole="button"
+            accessibilityLabel="정리할게요"
+            accessibilityHint="버리거나 비울 재료라면 여기서 정리할 수 있어요."
             style={({ pressed }) => [
               styles.softAction,
               styles.softActionDanger,

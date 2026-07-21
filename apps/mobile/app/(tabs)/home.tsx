@@ -124,6 +124,16 @@ export default function HomeScreen() {
               pressed && styles.secondaryEntryPressed,
             ]}
             accessibilityRole="button"
+            accessibilityLabel={
+              focus.action === "scanner"
+                ? "직접 입력할게요"
+                : "바코드로 넣을래요"
+            }
+            accessibilityHint={
+              focus.action === "scanner"
+                ? "이름과 유통기한을 손으로 적을 수도 있어요."
+                : "장고가 바코드를 읽어 넣는 걸 도와줄게요."
+            }
           >
             <Text style={styles.secondaryEntryTitle}>
               {focus.action === "scanner"

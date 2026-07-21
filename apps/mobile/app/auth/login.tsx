@@ -284,6 +284,8 @@ export default function LoginScreen() {
             onPress={() => router.push("/auth/register")}
             disabled={isBusy}
             hitSlop={spacing.xs}
+            accessibilityRole="button"
+            accessibilityLabel="함께 시작하기"
             style={({ pressed }) => [
               styles.emailLink,
               pressed && styles.emailLinkPressed,
@@ -295,6 +297,8 @@ export default function LoginScreen() {
             onPress={() => router.push("/auth/forgot-password")}
             disabled={isBusy}
             hitSlop={spacing.xs}
+            accessibilityRole="button"
+            accessibilityLabel="비밀번호를 잊으셨나요?"
             style={({ pressed }) => [
               styles.emailLink,
               pressed && styles.emailLinkPressed,

@@ -483,6 +483,7 @@ export default function RegisterScreen() {
             <Pressable
               onPress={continueWithManual}
               accessibilityRole="button"
+              accessibilityLabel="손으로 더 넣을게요"
               hitSlop={spacing.xs}
               style={({ pressed }) => [
                 styles.doneTextLink,
@@ -533,6 +534,8 @@ export default function RegisterScreen() {
         {registeredSessionItems.length >= 2 ? (
           <Pressable
             onPress={openRecipeRecommendations}
+            accessibilityRole="button"
+            accessibilityLabel="요리 추천 받아볼까요?"
             style={({ pressed }) => [
               styles.recipeHint,
               pressed && styles.templateCardPressed,
@@ -647,6 +650,8 @@ export default function RegisterScreen() {
                     <Pressable
                       key={item.id}
                       onPress={() => applyRecentTemplate(item)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${item.displayName} 불러오기`}
                       style={({ pressed }) => [
                         styles.templateCard,
                         pressed && styles.templateCardPressed,
@@ -717,6 +722,9 @@ export default function RegisterScreen() {
 
             <Pressable
               onPress={() => setShowAdditionalInfo(true)}
+              accessibilityRole="button"
+              accessibilityLabel="브랜드·메모도 적을까요?"
+              accessibilityHint="필요할 때만 적어도 괜찮아요."
               style={({ pressed }) => [
                 styles.extraTrigger,
                 pressed && styles.templateCardPressed,

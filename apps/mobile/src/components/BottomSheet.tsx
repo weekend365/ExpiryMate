@@ -31,6 +31,8 @@ interface BottomSheetProps extends PropsWithChildren {
   /** Optional 장고 mood above the sheet title (success / confirm / guide). */
   mascotMood?: MascotMood;
   footer?: ReactNode;
+  /** When false, body content is not wrapped in a ScrollView (e.g. native date picker). */
+  scrollEnabled?: boolean;
 }
 
 const SPRING = {
@@ -48,6 +50,7 @@ export function BottomSheet({
   description,
   mascotMood,
   footer,
+  scrollEnabled = true,
   children,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
@@ -114,7 +117,7 @@ export function BottomSheet({
             style={StyleSheet.absoluteFill}
             onPress={onClose}
             accessibilityRole="button"
-            accessibilityLabel="시트 닫기"
+            accessibilityLabel="이 창을 닫을게요"
           />
         </Animated.View>
 
@@ -127,7 +130,10 @@ export function BottomSheet({
             style={[
               styles.sheet,
               sheetStyle,
-              { paddingBottom: Math.max(insets.bottom, spacing.md) },
+              {
+                maxHeight: windowHeight * 0.88,
+                paddingBottom: Math.max(insets.bottom, spacing.md),
+              },
             ]}
           >
             <View style={styles.handle} />
@@ -144,15 +150,19 @@ export function BottomSheet({
                 ) : null}
               </View>
             ) : null}
-            <ScrollView
-              style={styles.bodyScroll}
-              contentContainerStyle={styles.body}
-              showsVerticalScrollIndicator={false}
-              bounces={false}
-              keyboardShouldPersistTaps="handled"
-            >
-              {children}
-            </ScrollView>
+            {scrollEnabled ? (
+              <ScrollView
+                style={styles.bodyScroll}
+                contentContainerStyle={styles.body}
+                showsVerticalScrollIndicator={false}
+                bounces={false}
+                keyboardShouldPersistTaps="handled"
+              >
+                {children}
+              </ScrollView>
+            ) : (
+              <View style={[styles.body, styles.bodyFixed]}>{children}</View>
+            )}
             {footer ? <View style={styles.footer}>{footer}</View> : null}
           </Animated.View>
         </KeyboardAvoidingView>
@@ -167,6 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   keyboardAvoid: {
+    flex: 1,
     width: "100%",
     justifyContent: "flex-end",
   },
@@ -181,7 +192,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     gap: spacing.md,
-    maxHeight: "88%",
+    overflow: "hidden",
   },
   handle: {
     alignSelf: "center",
@@ -190,12 +201,15 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     backgroundColor: colors.border,
     marginBottom: spacing.xs,
+    flexShrink: 0,
   },
   mascotWrap: {
     alignItems: "center",
+    flexShrink: 0,
   },
   header: {
     gap: spacing.xs,
+    flexShrink: 0,
   },
   title: {
     fontSize: typography.heading.fontSize,
@@ -210,7 +224,12 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   bodyScroll: {
-    flexGrow: 0,
+    flexShrink: 1,
+    minHeight: 0,
+  },
+  bodyFixed: {
+    flexShrink: 1,
+    minHeight: 0,
   },
   body: {
     gap: spacing.md,
@@ -219,5 +238,6 @@ const styles = StyleSheet.create({
   footer: {
     gap: spacing.sm,
     minHeight: touchTarget.min,
+    flexShrink: 0,
   },
 });

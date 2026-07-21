@@ -150,6 +150,8 @@ export default function RegisterScreen() {
         <Pressable
           onPress={handleBack}
           hitSlop={spacing.xs}
+          accessibilityRole="button"
+          accessibilityLabel={isFirstStep ? "나중에 할게요" : "이전으로 돌아가기"}
           style={({ pressed }) => [
             styles.backLink,
             pressed && styles.backLinkPressed,

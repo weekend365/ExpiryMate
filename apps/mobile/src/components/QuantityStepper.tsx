@@ -23,6 +23,8 @@ export function QuantityStepper({
         <Pressable
           onPress={() => onChange(Math.max(1, safeValue - 1))}
           hitSlop={spacing.xxs}
+          accessibilityRole="button"
+          accessibilityLabel={`${label} 하나 줄이기`}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,
@@ -37,11 +39,14 @@ export function QuantityStepper({
             onChange(nextValue > 0 ? nextValue : 1);
           }}
           keyboardType="number-pad"
+          accessibilityLabel={`${label} 수량`}
           style={styles.input}
         />
         <Pressable
           onPress={() => onChange(safeValue + 1)}
           hitSlop={spacing.xxs}
+          accessibilityRole="button"
+          accessibilityLabel={`${label} 하나 늘리기`}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,

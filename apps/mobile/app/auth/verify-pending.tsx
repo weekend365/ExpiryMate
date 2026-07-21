@@ -126,6 +126,7 @@ export default function VerifyPendingScreen() {
             }
             style={styles.secondaryLink}
             accessibilityRole="button"
+            accessibilityLabel="로그인 화면으로"
           >
             <Text style={styles.secondaryLinkText}>로그인 화면으로</Text>
           </Pressable>

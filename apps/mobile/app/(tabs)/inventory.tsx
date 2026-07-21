@@ -316,6 +316,9 @@ export default function InventoryScreen() {
       {!isEmptyInventory && !isSelectionMode ? (
         <Pressable
           onPress={() => setIsFilterSheetOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel="어떤 재료를 볼까요?"
+          accessibilityHint="상태와 보관 위치로 골라 볼 수 있어요."
           style={({ pressed }) => [
             styles.filterSummary,
             pressed && styles.filterSummaryPressed,
@@ -348,6 +351,10 @@ export default function InventoryScreen() {
           <Pressable
             onPress={handleToggleAllVisible}
             disabled={!visibleIds.length}
+            accessibilityRole="button"
+            accessibilityLabel={
+              allVisibleSelected ? "전부 해제" : "전부 고르기"
+            }
             style={({ pressed }) => [
               styles.selectionToggle,
               pressed && styles.headerFilterButtonPressed,

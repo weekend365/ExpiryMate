@@ -61,6 +61,9 @@ export function Button({
     <Pressable
       onPress={onPress}
       disabled={isDisabled}
+      accessibilityRole="button"
+      accessibilityLabel={typeof children === "string" ? children : undefined}
+      accessibilityState={{ disabled: isDisabled, busy: Boolean(loading) }}
       style={({ pressed }) => [
         styles.base,
         size === "small" ? styles.smallButton : styles.mediumButton,

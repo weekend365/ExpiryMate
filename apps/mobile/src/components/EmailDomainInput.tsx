@@ -160,6 +160,9 @@ export function EmailDomainInput({
           <Pressable
             onPress={toggleMenu}
             disabled={!editable}
+            accessibilityRole="button"
+            accessibilityLabel={`이메일 도메인, ${domainLabel}`}
+            accessibilityHint="눌러서 도메인을 바꿀 수 있어요"
             style={({ pressed }) => [
               styles.domainButton,
               pressed && styles.pressed,
@@ -201,6 +204,9 @@ export function EmailDomainInput({
           >
             <Pressable
               onPress={() => handleSelectMode(EMAIL_DOMAIN_MANUAL)}
+              accessibilityRole="button"
+              accessibilityLabel="직접 입력할게요"
+              accessibilityState={{ selected: isManual }}
               style={({ pressed }) => [
                 styles.optionRow,
                 pressed && styles.optionRowPressed,
@@ -222,6 +228,9 @@ export function EmailDomainInput({
                 <Pressable
                   key={domain}
                   onPress={() => handleSelectMode(domain)}
+                  accessibilityRole="button"
+                  accessibilityLabel={domain}
+                  accessibilityState={{ selected }}
                   style={({ pressed }) => [
                     styles.optionRow,
                     pressed && styles.optionRowPressed,

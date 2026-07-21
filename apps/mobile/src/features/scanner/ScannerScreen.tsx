@@ -361,7 +361,7 @@ function CloseButton({ onPress }: { onPress: () => void }) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="스캐너 닫기"
+      accessibilityLabel="스캐너를 닫을게요"
       onPress={onPress}
       hitSlop={spacing.xs}
       style={({ pressed }) => [

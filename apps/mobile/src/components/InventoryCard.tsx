@@ -59,6 +59,20 @@ export function InventoryCard({
       onPress={onPress}
       onLongPress={onLongPress}
       disabled={!onPress}
+      accessibilityRole={onPress ? "button" : undefined}
+      accessibilityLabel={item.displayName}
+      accessibilityHint={
+        selectionMode
+          ? selected
+            ? "선택됨. 다시 누르면 선택을 해제해요."
+            : "길게 눌러 여러 개를 고를 수 있어요. 누르면 선택해요."
+          : onPress
+            ? "눌러서 자세히 살펴볼 수 있어요"
+            : undefined
+      }
+      accessibilityState={
+        selectionMode ? { selected: Boolean(selected) } : undefined
+      }
       style={({ pressed }) => [
         styles.card,
         isCompact && styles.cardCompact,

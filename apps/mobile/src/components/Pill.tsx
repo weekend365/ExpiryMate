@@ -27,6 +27,11 @@ export function Pill({
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={
+        typeof count === "number" ? `${label}, ${count}개` : label
+      }
+      accessibilityState={{ selected: Boolean(selected) }}
       style={({ pressed }) => [
         styles.base,
         {

@@ -3,15 +3,9 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
 import { useState } from "react";
-import {
-  Modal,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 
 interface DatePickerFieldProps {
@@ -63,11 +57,16 @@ export function DatePickerField({
     setIsVisible(false);
   };
 
+  const displayValue = value ? formatDateKorean(value) : "날짜를 골라 주세요";
+
   return (
     <View style={styles.wrapper}>
       <Text style={styles.label}>{label}</Text>
       <Pressable
         onPress={openPicker}
+        accessibilityRole="button"
+        accessibilityLabel={`${label}, ${displayValue}`}
+        accessibilityHint="날짜를 직접 고를 수 있어요"
         style={({ pressed }) => [
           styles.trigger,
           pressed && styles.triggerPressed,
@@ -75,44 +74,50 @@ export function DatePickerField({
         ]}
       >
         <Text style={value ? styles.valueText : styles.placeholderText}>
-          {value ? formatDateKorean(value) : "날짜를 골라 주세요"}
+          {displayValue}
         </Text>
         <Text style={styles.triggerAction}>직접 고르기</Text>
       </Pressable>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      {isVisible ? (
-        Platform.OS === "ios" ? (
-          <Modal transparent animationType="slide" visible>
-            <View style={styles.modalRoot}>
-              <Pressable style={styles.backdrop} onPress={closePicker} />
-              <View style={styles.sheet}>
-                <Text style={styles.sheetTitle}>언제까지인가요?</Text>
-                <DateTimePicker
-                  value={draftDate}
-                  mode="date"
-                  display="inline"
-                  onChange={handleChange}
-                />
-                <View style={styles.buttonRow}>
-                  <Button variant="secondary" onPress={closePicker} style={styles.button}>
-                    그만둘래요
-                  </Button>
-                  <Button onPress={confirmIOSDate} style={styles.button}>
-                    이 날짜로 할게요
-                  </Button>
-                </View>
-              </View>
+      {Platform.OS === "ios" ? (
+        <BottomSheet
+          visible={isVisible}
+          onClose={closePicker}
+          title="언제까지인가요?"
+          description="유통기한을 손가락으로 골라 주세요."
+          footer={
+            <View style={styles.buttonRow}>
+              <Button
+                variant="secondary"
+                onPress={closePicker}
+                style={styles.button}
+              >
+                그만둘래요
+              </Button>
+              <Button onPress={confirmIOSDate} style={styles.button}>
+                이 날짜로 할게요
+              </Button>
             </View>
-          </Modal>
-        ) : (
-          <DateTimePicker
-            value={value ? toDatePickerDate(value) : new Date()}
-            mode="date"
-            display="default"
-            onChange={handleChange}
-          />
-        )
+          }
+        >
+          <View style={styles.pickerWrap}>
+            <DateTimePicker
+              value={draftDate}
+              mode="date"
+              display="inline"
+              onChange={handleChange}
+              style={styles.picker}
+            />
+          </View>
+        </BottomSheet>
+      ) : isVisible ? (
+        <DateTimePicker
+          value={value ? toDatePickerDate(value) : new Date()}
+          mode="date"
+          display="default"
+          onChange={handleChange}
+        />
       ) : null}
     </View>
   );
@@ -186,33 +191,18 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.danger,
   },
-  modalRoot: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  backdrop: {
-    flex: 1,
-    backgroundColor: colors.text,
-    opacity: 0.28,
-  },
-  sheet: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: radius.xxl,
-    borderTopRightRadius: radius.xxl,
-    padding: spacing.lg,
-    gap: spacing.md,
-  },
-  sheetTitle: {
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
   buttonRow: {
     flexDirection: "row",
     gap: spacing.md,
   },
   button: {
     flex: 1,
+  },
+  pickerWrap: {
+    alignItems: "center",
+    width: "100%",
+  },
+  picker: {
+    alignSelf: "center",
   },
 });
