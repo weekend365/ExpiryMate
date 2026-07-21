@@ -1,27 +1,47 @@
-import { StyleSheet, Text, View } from "react-native";
-import { colors, radius, spacing, typography } from "../shared/theme";
+import { StyleSheet, View } from "react-native";
+import { colors, radius, spacing } from "../shared/theme";
+import { AppText } from "./AppText";
 
 interface StatCardProps {
   label: string;
   value: number;
   tone?: "default" | "warning" | "danger" | "success";
+  /** `inline` = open metric strip (preferred under a hero). `card` = bordered tile. */
+  variant?: "card" | "inline";
 }
 
-export function StatCard({ label, value, tone = "default" }: StatCardProps) {
+export function StatCard({
+  label,
+  value,
+  tone = "default",
+  variant = "card",
+}: StatCardProps) {
   const toneStyle = tones[tone];
+  const isInline = variant === "inline";
 
   return (
     <View
       style={[
-        styles.card,
-        {
+        isInline ? styles.inline : styles.card,
+        !isInline && {
           backgroundColor: toneStyle.backgroundColor,
           borderColor: toneStyle.borderColor,
         },
       ]}
     >
-      <Text style={[styles.value, { color: toneStyle.valueColor }]}>{value}</Text>
-      <Text style={[styles.label, { color: toneStyle.labelColor }]}>{label}</Text>
+      <AppText
+        variant={isInline ? "heading" : "display"}
+        style={{ color: toneStyle.valueColor }}
+      >
+        {value}
+      </AppText>
+      <AppText
+        variant={isInline ? "caption" : "bodySmall"}
+        tone="subtext"
+        style={!isInline ? { color: toneStyle.labelColor } : undefined}
+      >
+        {label}
+      </AppText>
     </View>
   );
 }
@@ -62,14 +82,10 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     minHeight: spacing.xxxl + spacing.xl,
   },
-  value: {
-    fontSize: typography.display.fontSize,
-    lineHeight: typography.display.lineHeight,
-    fontFamily: typography.display.fontFamily,
-  },
-  label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
+  inline: {
+    flex: 1,
+    gap: spacing.xxs,
+    paddingVertical: spacing.xs,
+    alignItems: "flex-start",
   },
 });

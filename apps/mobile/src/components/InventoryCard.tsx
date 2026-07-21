@@ -9,10 +9,10 @@ import {
 import {
   CalendarDays,
   CheckCircle2,
-  ChevronRight,
   CircleAlert,
   Clock3,
   MapPin,
+  MoreVertical,
   ShieldCheck,
 } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
@@ -22,6 +22,8 @@ interface InventoryCardProps {
   item: InventoryItem;
   onPress?: () => void;
   onLongPress?: () => void;
+  /** Opens an accessible action sheet (자세히 / 고르기 / 정리). */
+  onMenuPress?: () => void;
   selected?: boolean;
   selectionMode?: boolean;
 }
@@ -38,6 +40,7 @@ export function InventoryCard({
   item,
   onPress,
   onLongPress,
+  onMenuPress,
   selected,
   selectionMode,
 }: InventoryCardProps) {
@@ -65,9 +68,9 @@ export function InventoryCard({
         selectionMode
           ? selected
             ? "선택됨. 다시 누르면 선택을 해제해요."
-            : "길게 눌러 여러 개를 고를 수 있어요. 누르면 선택해요."
+            : "누르면 선택해요. 헤더의 고르기로도 시작할 수 있어요."
           : onPress
-            ? "눌러서 자세히 살펴볼 수 있어요"
+            ? "눌러서 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
             : undefined
       }
       accessibilityState={
@@ -96,9 +99,27 @@ export function InventoryCard({
 
       <View style={styles.content}>
         <View style={styles.titleRow}>
-          <Text style={styles.name} numberOfLines={1}>{item.displayName}</Text>
-          {onPress && !selectionMode ? (
-            <ChevronRight color={colors.mutedText} size={spacing.sm + spacing.xxs} />
+          <Text style={styles.name} numberOfLines={1}>
+            {item.displayName}
+          </Text>
+          {!selectionMode && onMenuPress ? (
+            <Pressable
+              onPress={onMenuPress}
+              hitSlop={spacing.xs}
+              accessibilityRole="button"
+              accessibilityLabel={`${item.displayName} 더보기`}
+              accessibilityHint="자세히 보기, 고르기, 정리하기를 고를 수 있어요."
+              style={({ pressed }) => [
+                styles.menuButton,
+                pressed && styles.menuButtonPressed,
+              ]}
+            >
+              <MoreVertical
+                color={colors.subtext}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+              />
+            </Pressable>
           ) : null}
         </View>
         <View style={styles.metaRow}>
@@ -198,8 +219,18 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.subheading.fontFamily,
     color: colors.text,
+  },
+  menuButton: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  menuButtonPressed: {
+    backgroundColor: colors.surfacePressed,
   },
   metaRow: {
     flexDirection: "row",
@@ -248,7 +279,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   bucketLabel: {
     fontSize: typography.caption.fontSize,

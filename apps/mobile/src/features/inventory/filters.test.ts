@@ -5,7 +5,7 @@ import {
   type InventoryItem,
 } from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { filterInventoryItems } from "./filters";
+import { filterInventoryItems, parseInventoryViewFilter } from "./filters";
 
 describe("mobile inventory filters", () => {
   beforeEach(() => {
@@ -15,6 +15,14 @@ describe("mobile inventory filters", () => {
 
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it("parses known inventory view filters from route params", () => {
+    expect(parseInventoryViewFilter("expiring")).toBe("expiring");
+    expect(parseInventoryViewFilter(["expired"])).toBe("expired");
+    expect(parseInventoryViewFilter("all")).toBe("all");
+    expect(parseInventoryViewFilter("unknown")).toBeNull();
+    expect(parseInventoryViewFilter(undefined)).toBeNull();
   });
 
   it("returns expiring items within seven days sorted by nearest expiry", () => {
