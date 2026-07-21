@@ -7,8 +7,10 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Archive,
+  CheckSquare,
   CircleAlert,
   Clock3,
+  Eye,
   MapPin,
   Plus,
   SlidersHorizontal,
@@ -24,6 +26,7 @@ import { InventoryListSkeleton } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCard } from "../../src/components/InventoryCard";
+import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
@@ -34,7 +37,7 @@ import {
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
-import { useDiscardInventoryItem } from "../../src/features/inventory/use-discard-inventory-item";
+import { useDeferredDiscardInventoryItem } from "../../src/features/inventory/use-deferred-discard-inventory-item";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
@@ -67,13 +70,14 @@ export default function InventoryScreen() {
     isRefetching,
   } = useInventoryList();
   const batchDiscardMutation = useBatchDiscardInventoryItems();
-  const discardMutation = useDiscardInventoryItem();
+  const deferredDiscard = useDeferredDiscardInventoryItem();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [filter, setFilter] = useState<InventoryViewFilter>(
     () => filterParam ?? "all",
   );
   const [location, setLocation] = useState<StorageLocation | "all">("all");
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
+  const [menuItem, setMenuItem] = useState<InventoryItem | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -160,11 +164,14 @@ export default function InventoryScreen() {
     router.push("/register");
   };
 
-  const enterSelectionMode = () => {
+  const enterSelectionMode = (initialId?: string) => {
     setIsSelectionMode(true);
     setIsFilterSheetOpen(false);
+    setMenuItem(null);
     setSuccessMessage(null);
     setActionErrorMessage(null);
+    deferredDiscard.clearError();
+    setSelectedIds(initialId ? [initialId] : []);
   };
 
   const cancelSelectionMode = () => {
@@ -205,10 +212,44 @@ export default function InventoryScreen() {
   };
 
   const handleCardLongPress = (id: string) => {
-    enterSelectionMode();
-    setSelectedIds((current) =>
-      current.includes(id) ? current : [...current, id],
-    );
+    enterSelectionMode(id);
+  };
+
+  const handleOpenItemMenu = (item: InventoryItem) => {
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    setMenuItem(item);
+  };
+
+  const handleMenuViewDetail = () => {
+    if (!menuItem) {
+      return;
+    }
+
+    const id = menuItem.id;
+    setMenuItem(null);
+    router.push({
+      pathname: "/inventory/[id]",
+      params: { id },
+    });
+  };
+
+  const handleMenuStartSelection = () => {
+    if (!menuItem) {
+      return;
+    }
+
+    enterSelectionMode(menuItem.id);
+  };
+
+  const handleMenuDiscard = () => {
+    if (!menuItem) {
+      return;
+    }
+
+    const item = menuItem;
+    setMenuItem(null);
+    void deferredDiscard.scheduleDiscard(item);
   };
 
   const handleConfirmBatchDiscard = () => {
@@ -227,6 +268,7 @@ export default function InventoryScreen() {
           onPress: async () => {
             try {
               setActionErrorMessage(null);
+              deferredDiscard.clearError();
               const result = await batchDiscardMutation.mutateAsync(selectedIds);
               setSuccessMessage(
                 `${result.count}개 재료를 정리했어요. 장고도 한숨 돌렸어요.`,
@@ -246,24 +288,14 @@ export default function InventoryScreen() {
     );
   };
 
-  const handleSwipeDiscard = async (
+  const handleSwipeDiscard = (
     item: InventoryItem,
     swipeable: SwipeableControl,
   ) => {
-    try {
-      setSuccessMessage(null);
-      setActionErrorMessage(null);
-      await discardMutation.mutateAsync(item.id);
-      swipeable.close();
-      setSuccessMessage(`${item.displayName}을(를) 정리했어요.`);
-    } catch (error) {
-      swipeable.close();
-      setActionErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-      );
-    }
+    swipeable.close();
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    void deferredDiscard.scheduleDiscard(item);
   };
 
   return (
@@ -303,23 +335,43 @@ export default function InventoryScreen() {
               <Text style={styles.headerFilterLabel}>그만두기</Text>
             </Pressable>
           ) : (
-            <Pressable
-              onPress={() => setIsFilterSheetOpen(true)}
-              hitSlop={spacing.xs}
-              style={({ pressed }) => [
-                styles.headerFilterButton,
-                pressed && styles.headerFilterButtonPressed,
-              ]}
-              accessibilityRole="button"
-              accessibilityLabel="필터 열기"
-            >
-              <SlidersHorizontal
-                color={colors.primary}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-              />
-              <Text style={styles.headerFilterLabel}>필터</Text>
-            </Pressable>
+            <View style={styles.headerActions}>
+              <Pressable
+                onPress={() => enterSelectionMode()}
+                hitSlop={spacing.xs}
+                style={({ pressed }) => [
+                  styles.headerFilterButton,
+                  pressed && styles.headerFilterButtonPressed,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="고르기"
+                accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
+              >
+                <CheckSquare
+                  color={colors.primary}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                />
+                <Text style={styles.headerFilterLabel}>고르기</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setIsFilterSheetOpen(true)}
+                hitSlop={spacing.xs}
+                style={({ pressed }) => [
+                  styles.headerFilterButton,
+                  pressed && styles.headerFilterButtonPressed,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="필터 열기"
+              >
+                <SlidersHorizontal
+                  color={colors.primary}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                />
+                <Text style={styles.headerFilterLabel}>필터</Text>
+              </Pressable>
+            </View>
           )
         ) : null
       }
@@ -348,15 +400,25 @@ export default function InventoryScreen() {
             )
       }
     >
-      {successMessage ? (
+      {deferredDiscard.undoLabel ? (
+        <FeedbackBanner
+          tone="success"
+          title={deferredDiscard.undoLabel}
+          description="잘못 눌렀다면 바로 되돌릴 수 있어요."
+          actionLabel="되돌릴게요"
+          onAction={deferredDiscard.undoDiscard}
+        />
+      ) : successMessage ? (
         <FeedbackBanner tone="success" title={successMessage} />
       ) : null}
 
-      {actionErrorMessage ? (
+      {deferredDiscard.errorMessage || actionErrorMessage ? (
         <FeedbackBanner
           tone="danger"
           title="앗, 잠시 문제가 생겼어요"
-          description={actionErrorMessage}
+          description={
+            deferredDiscard.errorMessage ?? actionErrorMessage ?? undefined
+          }
         />
       ) : null}
 
@@ -395,7 +457,15 @@ export default function InventoryScreen() {
       ) : null}
 
       {isSelectionMode ? (
-        <View style={styles.selectionStrip}>
+        <View
+          style={styles.selectionStrip}
+          accessibilityLiveRegion="polite"
+          accessibilityLabel={
+            selectedIds.length
+              ? `${selectedIds.length}개 골랐어요`
+              : "고르기 모드예요. 정리할 재료를 눌러 주세요."
+          }
+        >
           <Mascot size="small" mood="worry" />
           <View style={styles.selectionCopy}>
             <Text style={styles.selectionTitle}>
@@ -404,7 +474,7 @@ export default function InventoryScreen() {
                 : "정리할 재료를 눌러 주세요"}
             </Text>
             <Text style={styles.selectionDescription}>
-              길게 눌러 선택을 시작했어요. 아래에서 한 번에 정리할 수 있어요.
+              고르기 모드예요. 아래에서 한 번에 정리할 수 있어요.
             </Text>
           </View>
           <Pressable
@@ -470,18 +540,47 @@ export default function InventoryScreen() {
               <SwipeableInventoryCard
                 key={item.id}
                 item={item}
-                isDiscarding={
-                  discardMutation.isPending &&
-                  discardMutation.variables === item.id
-                }
+                isDiscarding={deferredDiscard.isPending}
                 onPress={() => handleCardPress(item.id)}
                 onLongPress={() => handleCardLongPress(item.id)}
+                onMenuPress={() => handleOpenItemMenu(item)}
                 onDiscard={handleSwipeDiscard}
               />
             ),
           )}
         </View>
       )}
+
+      <BottomSheet
+        visible={Boolean(menuItem)}
+        onClose={() => setMenuItem(null)}
+        mascotMood="idle"
+        title={menuItem?.displayName ?? "이 재료를 어떻게 할까요?"}
+        description="자세히 보거나, 골라서 정리할 수 있어요."
+      >
+        <View style={styles.menuList}>
+          <ListRow
+            title="자세히 볼게요"
+            description="유통기한과 메모를 살펴봐요."
+            icon={Eye}
+            onPress={handleMenuViewDetail}
+          />
+          <ListRow
+            title="고르기 시작할게요"
+            description="여러 개를 모아 한 번에 정리해요."
+            icon={CheckSquare}
+            onPress={handleMenuStartSelection}
+          />
+          <ListRow
+            title="정리할게요"
+            description="목록에서 바로 치울게요. 잠시 되돌릴 수 있어요."
+            icon={Trash2}
+            destructive
+            last
+            onPress={handleMenuDiscard}
+          />
+        </View>
+      </BottomSheet>
 
       <BottomSheet
         visible={isFilterSheetOpen}
@@ -494,7 +593,7 @@ export default function InventoryScreen() {
             {activeItems.length ? (
               <Button
                 variant="secondary"
-                onPress={enterSelectionMode}
+                onPress={() => enterSelectionMode()}
                 fullWidth
               >
                 여러 개 골라서 정리
@@ -554,12 +653,14 @@ function SwipeableInventoryCard({
   isDiscarding,
   onPress,
   onLongPress,
+  onMenuPress,
   onDiscard,
 }: {
   item: InventoryItem;
   isDiscarding: boolean;
   onPress: () => void;
   onLongPress: () => void;
+  onMenuPress: () => void;
   onDiscard: (item: InventoryItem, swipeable: SwipeableControl) => void;
 }) {
   return (
@@ -584,12 +685,22 @@ function SwipeableInventoryCard({
         </Pressable>
       )}
     >
-      <InventoryCard item={item} onPress={onPress} onLongPress={onLongPress} />
+      <InventoryCard
+        item={item}
+        onPress={onPress}
+        onLongPress={onLongPress}
+        onMenuPress={onMenuPress}
+      />
     </Swipeable>
   );
 }
 
 const styles = StyleSheet.create({
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
   headerFilterButton: {
     minHeight: touchTarget.min,
     minWidth: touchTarget.icon,
@@ -681,6 +792,9 @@ const styles = StyleSheet.create({
   },
   sheetFooter: {
     gap: spacing.sm,
+  },
+  menuList: {
+    marginHorizontal: -spacing.md,
   },
   selectionStrip: {
     backgroundColor: colors.warningSoft,
