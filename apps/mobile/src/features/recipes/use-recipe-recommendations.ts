@@ -1,17 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../auth/use-auth";
+import { sessionQueryKeys, withSessionUser } from "../auth/session-boundary";
 import {
   createRecipeRecommendation,
   listRecipeRecommendations,
   type RecipeRecommendationPayload,
 } from "../../services/api";
 
-export const recipeRecommendationsQueryKey = ["recipe-recommendations"];
+export const recipeRecommendationsQueryKey = sessionQueryKeys.recipes;
 
-export const useRecipeRecommendations = () =>
-  useQuery({
-    queryKey: recipeRecommendationsQueryKey,
+export const useRecipeRecommendations = () => {
+  const { sessionUserId } = useAuth();
+
+  return useQuery({
+    queryKey: withSessionUser(recipeRecommendationsQueryKey, sessionUserId),
     queryFn: listRecipeRecommendations,
+    enabled: Boolean(sessionUserId),
   });
+};
 
 export const useCreateRecipeRecommendation = () => {
   const queryClient = useQueryClient();
@@ -23,8 +29,8 @@ export const useCreateRecipeRecommendation = () => {
       queryClient.invalidateQueries({
         queryKey: recipeRecommendationsQueryKey,
       });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
+      queryClient.invalidateQueries({ queryKey: sessionQueryKeys.dashboard });
+      queryClient.invalidateQueries({ queryKey: sessionQueryKeys.inventory });
     },
   });
 };

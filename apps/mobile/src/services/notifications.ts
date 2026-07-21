@@ -1,7 +1,7 @@
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
-import { registerPushToken } from "./api";
+import { registerPushToken, unregisterPushToken } from "./api";
 
 export const NOTIFICATION_TYPES = {
   recipeReady: "recipe_ready",
@@ -60,6 +60,22 @@ export const syncPushTokenIfPermissionGranted = async () => {
   return registerCurrentPushToken();
 };
 
+/** Best-effort: disable this device token for the current authenticated owner. */
+export const unregisterDevicePushToken = async () => {
+  try {
+    const permissions = await Notifications.getPermissionsAsync();
+    if (!permissions.granted) {
+      return { ok: true as const, skipped: true as const };
+    }
+
+    const token = await getExpoPushToken();
+    await unregisterPushToken(token);
+    return { ok: true as const, skipped: false as const };
+  } catch {
+    return { ok: false as const, skipped: false as const };
+  }
+};
+
 export const scheduleLocalNotification = async (
   title: string,
   body: string,
@@ -112,17 +128,23 @@ export function getNotificationResponseData(
 }
 
 async function registerCurrentPushToken() {
+  const token = await getExpoPushToken();
+
+  return registerPushToken({
+    token,
+    platform: getPushTokenPlatform(),
+    appVersion: Constants.expoConfig?.version,
+  });
+}
+
+async function getExpoPushToken() {
   const projectId =
     Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
   const tokenResponse = projectId
     ? await Notifications.getExpoPushTokenAsync({ projectId })
     : await Notifications.getExpoPushTokenAsync();
 
-  return registerPushToken({
-    token: tokenResponse.data,
-    platform: getPushTokenPlatform(),
-    appVersion: Constants.expoConfig?.version,
-  });
+  return tokenResponse.data;
 }
 
 async function ensureAndroidNotificationChannel() {

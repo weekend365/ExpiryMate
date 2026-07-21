@@ -1,5 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { LoginRequest, RegisterRequest } from "@expirymate/shared";
+import type {
+  AuthSession,
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
+} from "@expirymate/shared";
 import {
   forgotPassword,
   getMe,
@@ -9,8 +14,13 @@ import {
   register,
   requestEmailVerification,
 } from "../../services/api";
+import {
+  clearUserScopedClientState,
+  sessionQueryKeys,
+  withSessionUser,
+} from "./session-boundary";
 
-export const authQueryKey = ["auth", "me"];
+export const authQueryKey = sessionQueryKeys.auth;
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -21,19 +31,33 @@ export const useAuth = () => {
   });
 
   const isRegistered = query.data?.accountType === "registered";
+  const sessionUserId =
+    isRegistered && query.data?.id ? query.data.id : undefined;
 
-  const resetAppQueries = () => {
-    queryClient.invalidateQueries({ queryKey: authQueryKey });
-    queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-    queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
-    queryClient.invalidateQueries({ queryKey: ["recipe-recommendations"] });
-    queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
-    queryClient.invalidateQueries({ queryKey: ["subscription-entitlement"] });
+  const refreshSessionQueries = () => {
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.auth });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.dashboard });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.inventory });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.recipes });
+    queryClient.invalidateQueries({
+      queryKey: sessionQueryKeys.notificationPreferences,
+    });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.subscription });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.privacy });
+  };
+
+  const bindRegisteredSession = (user: AuthUser) => {
+    // Drop previous user cache/drafts, then seed auth so gates don't flicker.
+    clearUserScopedClientState(queryClient);
+    queryClient.setQueryData(authQueryKey, user);
+    refreshSessionQueries();
   };
 
   const loginMutation = useMutation({
     mutationFn: (payload: LoginRequest) => login(payload),
-    onSuccess: resetAppQueries,
+    onSuccess: (session: AuthSession) => {
+      bindRegisteredSession(session.user);
+    },
   });
   const registerMutation = useMutation({
     mutationFn: (payload: RegisterRequest) => register(payload),
@@ -44,19 +68,23 @@ export const useAuth = () => {
       ) {
         return;
       }
-      resetAppQueries();
+      if ("user" in result) {
+        bindRegisteredSession(result.user);
+      }
     },
   });
   const logoutMutation = useMutation({
     mutationFn: logout,
-    onSuccess: resetAppQueries,
+    onSuccess: () => {
+      clearUserScopedClientState(queryClient);
+    },
   });
   const forgotPasswordMutation = useMutation({
     mutationFn: forgotPassword,
   });
   const requestVerificationMutation = useMutation({
     mutationFn: requestEmailVerification,
-    onSuccess: resetAppQueries,
+    onSuccess: refreshSessionQueries,
   });
   const oauthMutation = useMutation({
     mutationFn: ({
@@ -81,12 +109,17 @@ export const useAuth = () => {
         redirectUri,
         state,
       }),
-    onSuccess: resetAppQueries,
+    onSuccess: (session: AuthSession) => {
+      bindRegisteredSession(session.user);
+    },
   });
 
   return {
     query,
     isRegistered,
+    sessionUserId,
+    sessionQueryKey: (key: readonly string[]) =>
+      withSessionUser(key, sessionUserId),
     loginMutation,
     registerMutation,
     logoutMutation,

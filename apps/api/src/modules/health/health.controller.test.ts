@@ -4,16 +4,22 @@ import { HealthController } from "./health.controller";
 
 describe("HealthController", () => {
   let prisma: { $queryRaw: ReturnType<typeof vi.fn> };
+  let authService: {
+    markOAuthAuthorizationRedirected: ReturnType<typeof vi.fn>;
+  };
   let controller: HealthController;
 
   beforeEach(() => {
     prisma = {
       $queryRaw: vi.fn(),
     };
+    authService = {
+      markOAuthAuthorizationRedirected: vi.fn(),
+    };
     process.env.NODE_ENV = "test";
     delete process.env.APP_VERSION;
     delete process.env.GIT_SHA;
-    controller = new HealthController(prisma as never);
+    controller = new HealthController(prisma as never, authService as never);
   });
 
   it("returns ok for liveness without touching the database", () => {
@@ -41,7 +47,12 @@ describe("HealthController", () => {
     );
   });
 
-  it("302-redirects Kakao-style query callbacks into the app scheme", () => {
+  it("302-redirects only when state resolves to a server-stored return URI", async () => {
+    authService.markOAuthAuthorizationRedirected.mockResolvedValue({
+      state: "server-state",
+      returnUri: "expirymate://oauth",
+      provider: "kakao",
+    });
     const response = {
       redirect: vi.fn(),
       status: vi.fn().mockReturnThis(),
@@ -49,21 +60,22 @@ describe("HealthController", () => {
       send: vi.fn(),
     };
 
-    controller.oauthCallback(
+    await controller.oauthCallback(
       {
         code: "kakao-code",
-        state: "expirymate://oauth",
+        state: "server-state",
       },
       response as never,
     );
 
     expect(response.redirect).toHaveBeenCalledWith(
       302,
-      "expirymate://oauth?code=kakao-code",
+      "expirymate://oauth?code=kakao-code&state=server-state",
     );
   });
 
-  it("serves the HTML bridge when only state is present (Google hash flow)", () => {
+  it("returns 400 and does not redirect code for unknown/tampered state", async () => {
+    authService.markOAuthAuthorizationRedirected.mockResolvedValue(null);
     const response = {
       redirect: vi.fn(),
       status: vi.fn().mockReturnThis(),
@@ -71,9 +83,36 @@ describe("HealthController", () => {
       send: vi.fn(),
     };
 
-    controller.oauthCallback(
+    await controller.oauthCallback(
       {
-        state: "expirymate://oauth",
+        code: "stolen-code",
+        state: "https://auth.expo.io/@attacker/app",
+      },
+      response as never,
+    );
+
+    expect(response.redirect).not.toHaveBeenCalled();
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.type).toHaveBeenCalledWith("html");
+    expect(response.send).toHaveBeenCalledOnce();
+  });
+
+  it("serves the HTML bridge with a baked deep link when auth params are absent", async () => {
+    authService.markOAuthAuthorizationRedirected.mockResolvedValue({
+      state: "server-state",
+      returnUri: "expirymate://oauth",
+      provider: "google",
+    });
+    const response = {
+      redirect: vi.fn(),
+      status: vi.fn().mockReturnThis(),
+      type: vi.fn().mockReturnThis(),
+      send: vi.fn(),
+    };
+
+    await controller.oauthCallback(
+      {
+        state: "server-state",
       },
       response as never,
     );
@@ -81,6 +120,8 @@ describe("HealthController", () => {
     expect(response.redirect).not.toHaveBeenCalled();
     expect(response.status).toHaveBeenCalledWith(200);
     expect(response.type).toHaveBeenCalledWith("html");
-    expect(response.send).toHaveBeenCalledOnce();
+    expect(response.send).toHaveBeenCalledWith(
+      expect.stringContaining("expirymate://oauth?state=server-state"),
+    );
   });
 });

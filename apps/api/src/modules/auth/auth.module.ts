@@ -7,6 +7,7 @@ import { AuthController } from "./auth.controller";
 import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
 import { MailService } from "./mail.service";
+import { RegisteredGuard } from "./registered.guard";
 
 @Module({
   imports: [PrismaModule],
@@ -15,10 +16,11 @@ import { MailService } from "./mail.service";
     AuthService,
     MailService,
     AuthGuard,
+    RegisteredGuard,
     AdminGuard,
     AuthRateLimitGuard,
     AuthRateLimitService,
   ],
-  exports: [AdminGuard, AuthGuard, AuthService],
+  exports: [AdminGuard, AuthGuard, RegisteredGuard, AuthService],
 })
 export class AuthModule {}

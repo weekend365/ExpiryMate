@@ -2,28 +2,30 @@ import {
   Controller,
   Get,
   Header,
-  HttpCode,
   HttpStatus,
   Query,
   Res,
   ServiceUnavailableException,
 } from "@nestjs/common";
 import type { Response } from "express";
+import { AuthService } from "../auth/auth.service";
 import { PrismaService } from "../../database/prisma.service";
 import {
+  buildInvalidOAuthCallbackHtml,
   buildOAuthCallbackHtml,
   buildOAuthDeepLink,
   canRedirectServerSide,
-  resolveOAuthReturnUri,
   type OAuthCallbackQuery,
 } from "./oauth-callback";
 
 @Controller()
 export class HealthController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get("health")
-  @HttpCode(HttpStatus.OK)
   getHealth() {
     return {
       status: "ok",
@@ -49,19 +51,37 @@ export class HealthController {
   /**
    * Kakao/Naver/Google only allow http(s) Redirect URIs.
    * Authorization-code providers return `?code=` so we 302 deep-link back
-   * into the app; legacy hash responses still fall back to the HTML bridge.
+   * into the app using the server-stored return URI for `state` (never client-decoded).
    */
   @Get("oauth/callback")
   @Header("Cache-Control", "no-store")
-  oauthCallback(
+  async oauthCallback(
     @Query() query: OAuthCallbackQuery,
     @Res() response: Response,
   ) {
+    const session = await this.authService.markOAuthAuthorizationRedirected(
+      query.state,
+    );
+
+    if (!session) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .type("html")
+        .send(buildInvalidOAuthCallbackHtml());
+    }
+
+    const deepLink = buildOAuthDeepLink(session.returnUri, {
+      ...query,
+      state: session.state,
+    });
+
     if (canRedirectServerSide(query)) {
-      const deepLink = buildOAuthDeepLink(resolveOAuthReturnUri(query.state), query);
       return response.redirect(HttpStatus.FOUND, deepLink);
     }
 
-    return response.status(HttpStatus.OK).type("html").send(buildOAuthCallbackHtml());
+    return response
+      .status(HttpStatus.OK)
+      .type("html")
+      .send(buildOAuthCallbackHtml(deepLink));
   }
 }

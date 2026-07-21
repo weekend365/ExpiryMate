@@ -17,6 +17,7 @@ const mocks = vi.hoisted(() => ({
   },
   api: {
     registerPushToken: vi.fn(),
+    unregisterPushToken: vi.fn(),
   },
   platform: {
     Platform: {
@@ -76,6 +77,32 @@ describe("mobile notification service", () => {
       platform: "ios",
       appVersion: "1.0.0",
     });
+  });
+
+  it("unregisters the Expo push token for the current session", async () => {
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
+      data: "ExpoPushToken[token]",
+    });
+    mocks.api.unregisterPushToken.mockResolvedValue({ ok: true });
+    const { unregisterDevicePushToken } = await import("./notifications");
+
+    const result = await unregisterDevicePushToken();
+
+    expect(result).toEqual({ ok: true, skipped: false });
+    expect(mocks.api.unregisterPushToken).toHaveBeenCalledWith(
+      "ExpoPushToken[token]",
+    );
+  });
+
+  it("skips unregister when notification permission is not granted", async () => {
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: false });
+    const { unregisterDevicePushToken } = await import("./notifications");
+
+    const result = await unregisterDevicePushToken();
+
+    expect(result).toEqual({ ok: true, skipped: true });
+    expect(mocks.api.unregisterPushToken).not.toHaveBeenCalled();
   });
 
   it("does not request permissions during silent startup sync", async () => {

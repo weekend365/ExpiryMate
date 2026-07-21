@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { AuthRedirectGate } from "../src/features/auth/auth-gate";
+import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
@@ -108,9 +109,16 @@ export default function RootLayout() {
 }
 
 function PushTokenSync() {
+  const { isRegistered, sessionUserId } = useAuth();
+
   useEffect(() => {
+    if (!isRegistered || !sessionUserId) {
+      return;
+    }
+
+    // Re-bind Expo token to the active registered owner after login / user switch.
     syncPushTokenIfPermissionGranted().catch(() => null);
-  }, []);
+  }, [isRegistered, sessionUserId]);
 
   return null;
 }

@@ -18,6 +18,7 @@ import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
+import { startOAuth } from "../../src/services/api";
 import {
   colors,
   radius,
@@ -28,10 +29,6 @@ import {
 
 WebBrowser.maybeCompleteAuthSession();
 
-/** HTTPS Redirect URI registered in Kakao/Naver/Google consoles. */
-const providerRedirectUri =
-  process.env.EXPO_PUBLIC_OAUTH_REDIRECT_URI?.trim() ?? "";
-
 /**
  * URI WebBrowser waits for. Must be an app / Expo scheme — not https.
  * Expo Go → exp://…/--/oauth, standalone → expirymate://oauth
@@ -40,9 +37,6 @@ const appReturnUri = AuthSession.makeRedirectUri({
   scheme: "expirymate",
   path: "oauth",
 });
-
-/** Base64url-wrapped return URI so Kakao/Naver state survives round-trip. */
-const oauthReturnState = encodeOAuthReturnState(appReturnUri);
 
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
@@ -123,9 +117,8 @@ export default function LoginScreen() {
       tokenParam: "code",
       params: {
         response_type: "code",
-        state: oauthReturnState,
       },
-      includeRedirectUriInPayload: true,
+      includePkce: true,
     });
 
   const handleNaverLogin = () =>
@@ -136,9 +129,8 @@ export default function LoginScreen() {
       tokenParam: "code",
       params: {
         response_type: "code",
-        state: oauthReturnState,
       },
-      oauthState: oauthReturnState,
+      includePkce: false,
     });
 
   const handleGoogleLogin = () =>
@@ -150,11 +142,10 @@ export default function LoginScreen() {
       params: {
         response_type: "code",
         scope: "openid email profile",
-        state: oauthReturnState,
         access_type: "online",
         prompt: "select_account",
       },
-      includeRedirectUriInPayload: true,
+      includePkce: true,
     });
 
   const handleWebOAuth = async ({
@@ -163,16 +154,14 @@ export default function LoginScreen() {
     url,
     tokenParam,
     params,
-    oauthState,
-    includeRedirectUriInPayload = false,
+    includePkce,
   }: {
     provider: WebOAuthProvider;
     clientId?: string;
     url: string;
     tokenParam: string;
     params: Record<string, string>;
-    oauthState?: string;
-    includeRedirectUriInPayload?: boolean;
+    includePkce: boolean;
   }) => {
     try {
       setPendingProvider(provider);
@@ -180,15 +169,21 @@ export default function LoginScreen() {
         throw new Error("소셜 로그인 설정을 아직 준비 중이에요.");
       }
 
-      if (!providerRedirectUri) {
-        throw new Error(
-          "로그인 연결 주소(EXPO_PUBLIC_OAUTH_REDIRECT_URI)를 아직 준비 중이에요.",
-        );
-      }
+      const oauthStart = await startOAuth({
+        provider,
+        returnUri: appReturnUri,
+      });
 
       const authUrl = `${url}?${new URLSearchParams({
         client_id: clientId.trim(),
-        redirect_uri: providerRedirectUri,
+        redirect_uri: oauthStart.redirectUri,
+        state: oauthStart.state,
+        ...(includePkce
+          ? {
+              code_challenge: oauthStart.codeChallenge,
+              code_challenge_method: oauthStart.codeChallengeMethod,
+            }
+          : {}),
         ...params,
       }).toString()}`;
 
@@ -208,6 +203,7 @@ export default function LoginScreen() {
 
       const parsed = parseOAuthReturnUrl(result.url);
       const providerToken = parsed[tokenParam];
+      const state = parsed.state || oauthStart.state;
 
       if (!providerToken) {
         throw new Error("소셜 로그인 토큰을 받지 못했어요.");
@@ -216,10 +212,7 @@ export default function LoginScreen() {
       await oauthMutation.mutateAsync({
         provider,
         providerToken,
-        ...(oauthState ? { state: oauthState } : {}),
-        ...(includeRedirectUriInPayload
-          ? { redirectUri: providerRedirectUri }
-          : {}),
+        state,
       });
       router.replace("/(tabs)/home");
     } catch (error) {
@@ -393,19 +386,6 @@ function parseOAuthReturnUrl(url: string): Record<string, string> {
     ...Object.fromEntries(fragmentParams.entries()),
     url: baseUrl,
   };
-}
-
-function encodeOAuthReturnState(returnUri: string) {
-  const bytes = new TextEncoder().encode(returnUri);
-  let binary = "";
-  for (const byte of bytes) {
-    binary += String.fromCharCode(byte);
-  }
-  const base64 = btoa(binary)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-  return `em1.${base64}`;
 }
 
 const styles = StyleSheet.create({

@@ -75,8 +75,21 @@ export const oauthLoginRequestSchema = z.object({
   providerToken: z.string().min(1),
   email: z.string().email().optional(),
   displayName: z.string().optional(),
-  /** Kakao/Naver authorization-code exchange must reuse the same redirect URI. */
+  /** @deprecated Prefer server-stored redirect from /auth/oauth/start. */
   redirectUri: z.string().min(1).optional(),
-  /** Naver authorize/token exchange state (must match). */
+  /** Opaque server-issued state from /auth/oauth/start. */
   state: z.string().min(1).optional(),
+});
+
+export const startOAuthRequestSchema = z.object({
+  provider: z.enum(["google", "kakao", "naver"]),
+  returnUri: z.string().min(1),
+});
+
+export const startOAuthResponseSchema = z.object({
+  state: z.string().min(1),
+  codeChallenge: z.string().min(1),
+  codeChallengeMethod: z.literal("S256"),
+  redirectUri: z.string().min(1),
+  expiresAt: z.string().min(1),
 });

@@ -36,9 +36,15 @@ import {
   OAuthLoginDto,
   RegisterDto,
   ResetPasswordDto,
+  StartOAuthDto,
 } from "./dto/auth.dto";
 import { MailService } from "./mail.service";
 import type { AuthenticatedUser, OAuthProfile } from "./auth.types";
+import {
+  getOAuthAppReturnAllowlist,
+  getOAuthProviderRedirectUri,
+  isAllowedOAuthReturnUri,
+} from "../health/oauth-callback";
 
 interface AccessTokenPayload {
   sub: string;
@@ -55,6 +61,7 @@ const ACCESS_TOKEN_TTL_SECONDS = 15 * 60;
 const REFRESH_TOKEN_DAYS = 30;
 const PASSWORD_RESET_MINUTES = 15;
 const EMAIL_VERIFICATION_HOURS = 24;
+const OAUTH_AUTHORIZATION_MINUTES = 10;
 
 @Injectable()
 export class AuthService {
@@ -89,39 +96,16 @@ export class AuthService {
       throw new ConflictException("이미 가입된 이메일이에요. 로그인으로 들어와 주세요.");
     }
 
-    const passwordHash = await argon2.hash(dto.password);
-
+    // Unverified re-register: only resend verification. Never overwrite password/displayName
+    // (attackers must not replace credentials before the victim verifies).
     if (existingUser && !existingUser.emailVerifiedAt) {
-      if (existingUser.passwordCredential) {
-        await this.prisma.passwordCredential.update({
-          where: { userId: existingUser.id },
-          data: {
-            passwordHash,
-            passwordUpdatedAt: new Date(),
-          },
-        });
-      } else {
-        await this.prisma.passwordCredential.create({
-          data: {
-            userId: existingUser.id,
-            passwordHash,
-          },
-        });
-      }
-
-      if (dto.displayName) {
-        await this.prisma.user.update({
-          where: { id: existingUser.id },
-          data: { displayName: dto.displayName },
-        });
-      }
-
       await this.mergeAnonymousUser(actor?.userId, existingUser.id);
       await this.sendEmailVerificationOrThrow(existingUser.id, email);
 
       return { requiresEmailVerification: true, email };
     }
 
+    const passwordHash = await argon2.hash(dto.password);
     const user = await this.prisma.user.create({
       data: {
         email,
@@ -357,6 +341,115 @@ export class AuthService {
     await this.mergeAnonymousUser(actor?.userId, user.id);
 
     return this.createSession(user, false);
+  }
+
+  async startOAuthAuthorization(dto: StartOAuthDto) {
+    const provider = dto.provider as OAuthProvider;
+    const returnUri = dto.returnUri.trim();
+    const allowlist = getOAuthAppReturnAllowlist();
+
+    if (!isAllowedOAuthReturnUri(returnUri, allowlist)) {
+      throw new BadRequestException(
+        "이 앱 주소로는 소셜 로그인을 이어갈 수 없어요.",
+      );
+    }
+
+    const redirectUri = getOAuthProviderRedirectUri();
+    if (!redirectUri) {
+      throw new ServiceUnavailableException(
+        "소셜 로그인 연결 주소 설정을 확인할 수 없어요.",
+      );
+    }
+
+    const state = createOpaqueToken();
+    const codeVerifier = createPkceVerifier();
+    const codeChallenge = createPkceChallengeS256(codeVerifier);
+    const expiresAt = addMinutes(new Date(), OAUTH_AUTHORIZATION_MINUTES);
+
+    await this.prisma.oAuthAuthorizationSession.create({
+      data: {
+        state,
+        provider,
+        returnUri,
+        redirectUri,
+        codeVerifier,
+        expiresAt,
+      },
+    });
+
+    return {
+      state,
+      codeChallenge,
+      codeChallengeMethod: "S256" as const,
+      redirectUri,
+      expiresAt: expiresAt.toISOString(),
+    };
+  }
+
+  async markOAuthAuthorizationRedirected(rawState?: string | null) {
+    const state = rawState?.trim();
+    if (!state) {
+      return null;
+    }
+
+    const session = await this.prisma.oAuthAuthorizationSession.findUnique({
+      where: { state },
+    });
+
+    if (!session || session.consumedAt || session.expiresAt.getTime() <= Date.now()) {
+      return null;
+    }
+
+    if (!isAllowedOAuthReturnUri(session.returnUri)) {
+      return null;
+    }
+
+    if (!session.redirectedAt) {
+      await this.prisma.oAuthAuthorizationSession.update({
+        where: { id: session.id },
+        data: { redirectedAt: new Date() },
+      });
+    }
+
+    return {
+      state: session.state,
+      returnUri: session.returnUri,
+      provider: session.provider,
+    };
+  }
+
+  private async consumeOAuthAuthorizationSession(
+    provider: OAuthProvider,
+    rawState?: string,
+  ) {
+    const state = rawState?.trim();
+    if (!state) {
+      throw new UnauthorizedException(
+        "소셜 로그인 연결 정보가 없어요. 다시 시작해 주세요.",
+      );
+    }
+
+    const session = await this.prisma.oAuthAuthorizationSession.findUnique({
+      where: { state },
+    });
+
+    if (
+      !session ||
+      session.provider !== provider ||
+      session.consumedAt ||
+      session.expiresAt.getTime() <= Date.now()
+    ) {
+      throw new UnauthorizedException(
+        "소셜 로그인 연결이 만료됐어요. 다시 시작해 주세요.",
+      );
+    }
+
+    await this.prisma.oAuthAuthorizationSession.update({
+      where: { id: session.id },
+      data: { consumedAt: new Date() },
+    });
+
+    return session;
   }
 
   verifyAccessToken(token: string): AuthenticatedUser {
@@ -660,26 +753,15 @@ export class AuthService {
     }
 
     const email = profile.email ? normalizeEmail(profile.email) : undefined;
-    const existingUser = email
-      ? await this.prisma.user.findUnique({ where: { email } })
-      : null;
-
-    if (existingUser) {
-      return this.prisma.user.update({
-        where: { id: existingUser.id },
-        data: {
-          emailVerifiedAt:
-            existingUser.emailVerifiedAt ??
-            (profile.emailVerified ? new Date() : undefined),
-          oauthAccounts: {
-            create: {
-              provider: profile.provider,
-              providerUserId: profile.providerUserId,
-              email,
-            },
-          },
-        },
-      });
+    // Never auto-link by email alone — that lets a forged/untrusted email claim
+    // take over an existing password account. Account linking needs step-up auth.
+    if (email) {
+      const existingUser = await this.prisma.user.findUnique({ where: { email } });
+      if (existingUser) {
+        throw new ConflictException(
+          "이미 다른 방법으로 가입된 이메일이에요. 그 계정으로 로그인해 주세요.",
+        );
+      }
     }
 
     return this.prisma.user.create({
@@ -704,19 +786,36 @@ export class AuthService {
     provider: OAuthProvider,
     dto: OAuthLoginDto,
   ): Promise<OAuthProfile> {
+    if (provider === OAuthProvider.apple) {
+      return verifyAppleToken(dto.providerToken, dto.displayName);
+    }
+
+    const authorization = await this.consumeOAuthAuthorizationSession(
+      provider,
+      dto.state,
+    );
+
     if (provider === OAuthProvider.google) {
-      return verifyGoogleCode(dto.providerToken, dto.redirectUri);
+      return verifyGoogleCode(
+        dto.providerToken,
+        authorization.redirectUri,
+        authorization.codeVerifier,
+      );
     }
 
     if (provider === OAuthProvider.kakao) {
-      return verifyKakaoCode(dto.providerToken, dto.redirectUri);
+      return verifyKakaoCode(
+        dto.providerToken,
+        authorization.redirectUri,
+        authorization.codeVerifier,
+      );
     }
 
     if (provider === OAuthProvider.naver) {
-      return verifyNaverCode(dto.providerToken, dto.state);
+      return verifyNaverCode(dto.providerToken, authorization.state);
     }
 
-    return verifyAppleToken(dto.providerToken, dto);
+    throw new UnauthorizedException("지원하지 않는 소셜 로그인이에요.");
   }
 
   private getSecret() {
@@ -758,6 +857,15 @@ function normalizeEmail(email: string) {
 
 function createOpaqueToken() {
   return randomBytes(32).toString("base64url");
+}
+
+/** RFC 7636 code_verifier: 43–128 chars from unreserved set. */
+function createPkceVerifier() {
+  return randomBytes(32).toString("base64url");
+}
+
+function createPkceChallengeS256(verifier: string) {
+  return createHash("sha256").update(verifier).digest("base64url");
 }
 
 function hashToken(token: string) {
@@ -828,7 +936,8 @@ function safeEqual(left: string, right: string) {
 
 async function verifyGoogleCode(
   authorizationCode: string,
-  redirectUri?: string,
+  redirectUri: string,
+  codeVerifier: string,
 ): Promise<OAuthProfile> {
   const clientId = getRequiredOAuthClientId("GOOGLE_OAUTH_CLIENT_ID", "Google");
   const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET?.trim();
@@ -837,10 +946,6 @@ async function verifyGoogleCode(
     throw new ServiceUnavailableException(
       "Google OAuth 설정을 확인할 수 없습니다.",
     );
-  }
-
-  if (!redirectUri?.trim()) {
-    throw new UnauthorizedException("Google 로그인 리다이렉트 주소가 없어요.");
   }
 
   const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
@@ -854,6 +959,7 @@ async function verifyGoogleCode(
       client_secret: clientSecret,
       code: authorizationCode,
       redirect_uri: redirectUri.trim(),
+      code_verifier: codeVerifier,
     }).toString(),
   });
 
@@ -916,20 +1022,18 @@ async function verifyGoogleIdToken(
 
 async function verifyKakaoCode(
   authorizationCode: string,
-  redirectUri?: string,
+  redirectUri: string,
+  codeVerifier: string,
 ): Promise<OAuthProfile> {
   const clientId = getRequiredOAuthClientId("KAKAO_OAUTH_CLIENT_ID", "Kakao");
   const clientSecret = process.env.KAKAO_OAUTH_CLIENT_SECRET?.trim();
-
-  if (!redirectUri?.trim()) {
-    throw new UnauthorizedException("Kakao 로그인 리다이렉트 주소가 없어요.");
-  }
 
   const tokenBody = new URLSearchParams({
     grant_type: "authorization_code",
     client_id: clientId,
     redirect_uri: redirectUri.trim(),
     code: authorizationCode,
+    code_verifier: codeVerifier,
   });
 
   if (clientSecret) {
@@ -1078,7 +1182,7 @@ async function verifyNaverCode(
 
 async function verifyAppleToken(
   providerToken: string,
-  dto: OAuthLoginDto,
+  displayName?: string,
 ): Promise<OAuthProfile> {
   const expectedClientId = getRequiredOAuthClientId(
     "APPLE_OAUTH_CLIENT_ID",
@@ -1095,6 +1199,7 @@ async function verifyAppleToken(
   const payload = parseBase64UrlJson<{
     sub?: string;
     email?: string;
+    email_verified?: boolean | string;
     aud?: string;
     exp?: number;
   }>(payloadPart, "Apple 로그인 토큰이 올바르지 않습니다.");
@@ -1107,12 +1212,20 @@ async function verifyAppleToken(
     throw new UnauthorizedException("Apple 로그인 토큰이 만료되었거나 올바르지 않습니다.");
   }
 
+  // Only trust the signed id_token email claim — never client body email.
+  const email = payload.email;
+  const emailVerified =
+    Boolean(email) &&
+    (payload.email_verified === undefined ||
+      payload.email_verified === true ||
+      payload.email_verified === "true");
+
   return {
     provider: OAuthProvider.apple,
     providerUserId: payload.sub,
-    email: payload.email ?? dto.email,
-    displayName: dto.displayName,
-    emailVerified: Boolean(payload.email ?? dto.email),
+    email,
+    displayName,
+    emailVerified,
   };
 }
 

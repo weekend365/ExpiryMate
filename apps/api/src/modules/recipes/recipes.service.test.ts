@@ -1,15 +1,22 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  ServiceUnavailableException,
+} from "@nestjs/common";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RecipesService } from "./recipes.service";
 
 const managedEnvKeys = [
   "OPENAI_API_KEY",
   "RECIPE_AI_MODEL",
+  "RECIPE_AI_ENABLED",
   "RECIPE_RATE_LIMIT_MAX",
   "RECIPE_RATE_LIMIT_WINDOW_SECONDS",
   "RECIPE_DAILY_QUOTA",
   "RECIPE_CACHE_TTL_SECONDS",
   "RECIPE_DAILY_COST_LIMIT_USD",
+  "RECIPE_GLOBAL_DAILY_COST_LIMIT_USD",
+  "RECIPE_MAX_INFLIGHT",
   "RECIPE_AI_MAX_OUTPUT_TOKENS",
   "RECIPE_AI_INPUT_COST_PER_1M_TOKENS",
   "RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS",
@@ -113,6 +120,8 @@ describe("RecipesService recommendation guards", () => {
     restoreManagedEnv();
     process.env.RECIPE_AI_MODEL = "gpt-5.4-mini";
     process.env.RECIPE_RATE_LIMIT_MAX = "0";
+    process.env.RECIPE_GLOBAL_DAILY_COST_LIMIT_USD = "0";
+    process.env.RECIPE_MAX_INFLIGHT = "0";
   });
 
   afterEach(() => {
@@ -162,6 +171,38 @@ describe("RecipesService recommendation guards", () => {
 
     await expectTooManyRequests(service.createRecommendation("owner-a", {}));
     expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalled();
+    expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
+  });
+
+  it("blocks new generations when the global daily cost budget is exhausted", async () => {
+    process.env.RECIPE_DAILY_QUOTA = "0";
+    process.env.RECIPE_DAILY_COST_LIMIT_USD = "0";
+    process.env.RECIPE_GLOBAL_DAILY_COST_LIMIT_USD = "0.001";
+    process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
+    const { prisma, service } = createService();
+    prisma.recipeRecommendation.aggregate.mockResolvedValue({
+      _sum: { estimatedCostUsd: "0.001" },
+    });
+
+    await expectTooManyRequests(service.createRecommendation("owner-a", {}));
+    expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          aiProvider: "openai",
+        }),
+      }),
+    );
+    expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
+  });
+
+  it("refuses generation when the AI kill switch is off", async () => {
+    process.env.RECIPE_AI_ENABLED = "false";
+    const { prisma, service } = createService();
+
+    await expect(service.createRecommendation("owner-a", {})).rejects.toBeInstanceOf(
+      ServiceUnavailableException,
+    );
+    expect(prisma.inventoryItem.findMany).not.toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
 

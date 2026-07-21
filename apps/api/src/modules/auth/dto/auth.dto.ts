@@ -80,10 +80,18 @@ export class OAuthLoginDto {
   @IsString()
   redirectUri?: string;
 
-  /** Naver authorize/token exchange state (must match). */
+  /** Opaque server-issued state (required for Google/Kakao/Naver code exchange). */
   @IsOptional()
   @IsString()
   state?: string;
+}
+
+export class StartOAuthDto {
+  @IsIn(["google", "kakao", "naver"])
+  provider!: "google" | "kakao" | "naver";
+
+  @IsString()
+  returnUri!: string;
 }
 
 export class AdminClientDto {

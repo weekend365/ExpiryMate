@@ -3,6 +3,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -16,6 +17,8 @@ import {
   NOTIFICATION_TYPES,
   scheduleLocalNotification,
 } from "../../services/notifications";
+import { sessionQueryKeys } from "../auth/session-boundary";
+import { registerRecipeGenerationReset } from "./recipe-generation-reset";
 import { recipeRecommendationsQueryKey } from "./use-recipe-recommendations";
 
 type RecipeGenerationStatus = "idle" | "pending" | "success" | "error";
@@ -58,8 +61,8 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
         queryClient.invalidateQueries({
           queryKey: recipeRecommendationsQueryKey,
         });
-        queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-        queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
+        queryClient.invalidateQueries({ queryKey: sessionQueryKeys.dashboard });
+        queryClient.invalidateQueries({ queryKey: sessionQueryKeys.inventory });
 
         scheduleLocalNotification(
           "요리 추천이 준비됐어요",
@@ -83,7 +86,14 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
   const resetRecipeGeneration = useCallback(() => {
     setStatus("idle");
     setErrorMessage(null);
+    setLatestGeneratedRecommendation(null);
+    setLatestGeneratedRecommendationId(null);
   }, []);
+
+  useEffect(() => {
+    registerRecipeGenerationReset(resetRecipeGeneration);
+    return () => registerRecipeGenerationReset(null);
+  }, [resetRecipeGeneration]);
 
   const value = useMemo(
     () => ({
