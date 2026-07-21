@@ -63,20 +63,26 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 ### 3-2. 시그니처
 
-- **파인애플 자석** (노란 몸 + 초록 꼭지)을 손잡이 쪽 **문 왼쪽 상단**에 고정
-- 사과·하트 등 다른 자석으로 교체하지 않음
-- 모자: 큰 흰프 토크 + 민트 밴드. 오른쪽이 살짝 더 부푼 비대칭 + 밴드에 실밥/스티치 힌트 허용
+- **파인애플 마크 (브랜드 배지)**
+  - 형태: 노란 타원 몸 + 교차 해치(또는 단순 다이아) + 초록 잎 스파이크 3~4개
+  - 위치: 문 **왼쪽 상단**, 손잡이 **바로 위**
+  - 크기: 문 가로폭의 **약 8~10%** (TINY 스티커·과장된 과일 금지)
+  - 전 mood·아이콘 크롭에서 **동일 마크** 유지. 사과/하트 등으로 교체 금지
+- 모자: 큰 셰프 토크 + 민트 밴드. 오른쪽이 살짝 더 부푼 비대칭 + 밴드에 실밥/스티치 힌트 허용
 - 앞치마: 흰 면 + 민트 테두리 + **가운데** 민트 포켓 (아주 살짝 비뚤어짐 허용)
 - 손: 항상 **민트 오븐장갑** (퀼팅은 마름모 선 몇 개만). 손가락 분리 금지
 - 발: 짧은 다리 + 민트 둥근 슈즈
 - 팔·다리는 **짧고 통통한 흰색** (가느다란 검정 막대팔 금지)
 
-### 3-3. 얼굴 문법
+### 3-3. 마스터 고정 · 얼굴 문법
 
-- 선 위주. **유리알 눈 + 이중 하이라이트** 금지
+- **마스터:** `jango-idle.png` — 몸·모자·앞치마·손잡이·경첩·파인애플 마크·선 스타일의 기준
+- 나머지 mood는 위 파츠를 공유하고 **얼굴·포즈·(cooking만) 소품**만 변경
+- 선 위주. **유리알 눈 + 이중 하이라이트** 금지 (idle과 같은 단색 눈 문법)
 - 기본: 점/타원 단색 눈 + 작은 입
 - 볼터치: 기본 없음. `happy`에서만 Mint Soft를 아주 작게
 - 코·귀·사람 얼굴형으로 진화 금지
+
 
 ---
 
@@ -148,31 +154,33 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 | 파일 | 용도 |
 | --- | --- |
-| `jango-idle.png` | 기본 · **브랜딩 마스터** |
-| `jango-happy.png` | 기쁨 |
+| `jango-idle.png` | 기본 · **풀바디 마스터** (splash·알림 실루엣 원본) |
+| `jango-happy.png` | 기쁨 (idle 파츠 고정, 얼굴·포즈만) |
 | `jango-worry.png` | 걱정 |
 | `jango-cooking.png` | 요리 |
 | `jango-empty.png` | 빈 상태 |
 | `jango.png` | idle과 동일 마스터 카피 |
+| `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+엄지척, 투명 PNG). `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
 | `mate-fridge-chef.png` | 비례 레퍼런스 (앱 mood로 직접 쓰지 않음) |
 
 경로: `apps/mobile/assets/characters/`
 
 ### 브랜딩 / 스토어 / 알림
 
-`jango-idle.png`에서 파생. 재생성: `pnpm --filter @expirymate/mobile branding:sync`
+재생성: `pnpm --filter @expirymate/mobile branding:sync`
 
-| 파일 | 용도 |
-| --- | --- |
-| `assets/branding/icon.png` | iOS/Android 앱 아이콘 (불투명 `#F1F3F5` 배경) |
-| `assets/branding/adaptive-icon.png` | Android adaptive foreground (투명, safe zone) |
-| `assets/branding/splash-icon.png` | Expo splash (`app.json` → `expo-splash-screen`) |
-| `assets/branding/notification-icon.png` | Android 알림용 흰색 실루엣 (투명 배경) |
-| `ios/.../AppIcon.appiconset/` | native App Icon (`branding:sync`가 동기화) |
-| `ios/.../SplashScreenLogo.imageset/` | native splash logo (`branding:sync`가 동기화) |
+| 파일 | 원본 | 용도 |
+| --- | --- | --- |
+| `assets/branding/icon.png` | `jango-icon-crop` | iOS/Android 앱 아이콘 (불투명 `#F1F3F5`) |
+| `assets/branding/adaptive-icon.png` | `jango-icon-crop` | Android adaptive foreground (투명) |
+| `assets/branding/splash-icon.png` | `jango-idle` | Expo splash |
+| `assets/branding/notification-icon-192.png` | `jango-idle` 실루엣 마스터 | 알림용 고해상 실루엣 |
+| `assets/branding/notification-icon.png` | 192→96 다운스케일 | Android 알림 아이콘 |
+| `ios/.../AppIcon.appiconset/` | icon 동기화 | native App Icon |
+| `ios/.../SplashScreenLogo.imageset/` | splash 동기화 | native splash |
 
-`app.json`의 `expo-notifications.icon` / `color`(`#10B981`)가 notification-icon을 가리킨다.  
-mood PNG를 바꾼 뒤에는 **반드시 `branding:sync`를 다시 실행**하고, 네이티브 반영이 필요하면 `expo prebuild` / EAS 빌드를 돌린다.
+`app.json`의 `expo-notifications.icon` / `color`(`#10B981`)가 `notification-icon.png`를 가리킨다.  
+mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EAS 빌드로 확인.
 
 ### 기술
 

@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Derive branding + native iOS icons from jango-idle.png.
+"""Derive branding + native iOS icons from Jango character masters.
+
+Sources:
+  - assets/characters/jango-icon-crop.png
+      → app icon / adaptive (dedicated icon pose; transparent source)
+      → final icon.png is opaque on #F1F3F5 (iOS-safe)
+  - assets/characters/jango-idle.png
+      → splash, notification silhouette
+
+Does NOT overwrite jango-icon-crop.png (hand-authored icon pose).
 
 Requires: pip install pillow
 
@@ -13,13 +22,14 @@ import sys
 from pathlib import Path
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageFilter
 except ImportError:
     print("Pillow is required: python3 -m pip install pillow", file=sys.stderr)
     raise SystemExit(1)
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "assets/characters/jango-idle.png"
+IDLE = ROOT / "assets/characters/jango-idle.png"
+CROP = ROOT / "assets/characters/jango-icon-crop.png"
 BRAND = ROOT / "assets/branding"
 APPICON = (
     ROOT
@@ -28,6 +38,35 @@ APPICON = (
 SPLASH_DIR = ROOT / "ios/ExpiryMate/Images.xcassets/SplashScreenLogo.imageset"
 
 BG_RGB = (241, 243, 245)  # semanticColors.background
+
+
+def build_icon_crop_from_idle(idle: Image.Image, size: int = 1024) -> Image.Image:
+    """Deterministic bust crop from idle master — no AI redraw drift."""
+    bbox = idle.getbbox()
+    if not bbox:
+        raise SystemExit(f"{IDLE} has no opaque pixels")
+    content = idle.crop(bbox)
+    cw, ch = content.size
+    slice_img = content.crop((0, 0, cw, min(ch, int(ch * 0.70))))
+    sw, sh = slice_img.size
+    side = max(sw, sh)
+    pad = int(side * 0.06)
+    canvas_side = side + pad * 2
+    canvas = Image.new("RGBA", (canvas_side, canvas_side), (0, 0, 0, 0))
+    x = (canvas_side - sw) // 2
+    y = max(pad // 2, (canvas_side - sh) // 2 - int(canvas_side * 0.02))
+    canvas.alpha_composite(slice_img, (x, y))
+    final = canvas.resize((size, size), Image.Resampling.LANCZOS)
+    pixels = final.load()
+    w, h = final.size
+    for yy in range(h):
+        for xx in range(w):
+            r, g, b, a = pixels[xx, yy]
+            if a < 16:
+                pixels[xx, yy] = (r, g, b, 0)
+            elif a > 240:
+                pixels[xx, yy] = (r, g, b, 255)
+    return final
 
 
 def fit_on_canvas(
@@ -40,7 +79,7 @@ def fit_on_canvas(
 ) -> Image.Image:
     bbox = character.getbbox()
     if not bbox:
-        raise SystemExit(f"{SRC} has no opaque pixels")
+        raise SystemExit("source has no opaque pixels")
     cropped = character.crop(bbox)
     max_side = int(size * scale)
     cw, ch = cropped.size
@@ -66,45 +105,96 @@ def to_opaque_rgb(im: Image.Image, bg: tuple[int, int, int] = BG_RGB) -> Image.I
     return base
 
 
-def make_notification_monochrome(character: Image.Image, size: int = 96) -> Image.Image:
+def simplified_silhouette(
+    character: Image.Image, master: int = 192, final: int = 96
+) -> tuple[Image.Image, Image.Image]:
+    """White silhouette: simplify edges at high res, save 192 master, downscale to 96."""
     bbox = character.getbbox()
     if not bbox:
-        raise SystemExit(f"{SRC} has no opaque pixels")
+        raise SystemExit("source has no opaque pixels")
     cropped = character.crop(bbox)
-    max_side = int(size * 0.72)
+
+    work_size = master * 2
+    work = Image.new("RGBA", (work_size, work_size), (0, 0, 0, 0))
+    max_side = int(work_size * 0.78)
     cw, ch = cropped.size
     ratio = min(max_side / cw, max_side / ch)
     new_w = max(1, int(cw * ratio))
     new_h = max(1, int(ch * ratio))
     resized = cropped.resize((new_w, new_h), Image.Resampling.LANCZOS)
-    alpha = resized.split()[3]
-    mask = alpha.point(lambda a: 255 if a >= 40 else 0)
 
-    out = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    white = Image.new("RGBA", (new_w, new_h), (255, 255, 255, 255))
-    white.putalpha(mask)
-    out.alpha_composite(white, ((size - new_w) // 2, (size - new_h) // 2))
+    mask = resized.split()[3].point(lambda a: 255 if a >= 48 else 0)
+    mask = mask.filter(ImageFilter.MaxFilter(5))
+    mask = mask.filter(ImageFilter.MinFilter(3))
+    mask = mask.filter(ImageFilter.GaussianBlur(1.2))
+    mask = mask.point(lambda a: 255 if a >= 128 else 0)
+
+    layer = Image.new("RGBA", (new_w, new_h), (255, 255, 255, 255))
+    layer.putalpha(mask)
+    work.alpha_composite(layer, ((work_size - new_w) // 2, (work_size - new_h) // 2))
+
+    master_scaled = work.resize((master, master), Image.Resampling.LANCZOS)
+    master_alpha = master_scaled.split()[3].point(lambda v: 255 if v >= 100 else 0)
+    master_out = Image.new("RGBA", (master, master), (255, 255, 255, 255))
+    master_out.putalpha(master_alpha)
+
+    final_scaled = master_out.resize((final, final), Image.Resampling.LANCZOS)
+    final_alpha = final_scaled.split()[3].point(lambda v: 255 if v >= 90 else 0)
+    final_out = Image.new("RGBA", (final, final), (255, 255, 255, 255))
+    final_out.putalpha(final_alpha)
+    return master_out, final_out
+
+
+def harden_rgba_alpha(im: Image.Image, low: int = 40, high: int = 200) -> Image.Image:
+    """Binary-ize soft alpha fringe from resize (noise on transparent areas)."""
+    out = im.convert("RGBA")
+    px = out.load()
+    w, h = out.size
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a == 0 or a == 255:
+                continue
+            if a < low:
+                px[x, y] = (0, 0, 0, 0)
+            elif a > high:
+                px[x, y] = (r, g, b, 255)
+            else:
+                # Mid fringe → drop (prevents speckles on adaptive FG)
+                px[x, y] = (0, 0, 0, 0)
     return out
 
 
 def main() -> None:
-    if not SRC.exists():
-        raise SystemExit(f"missing source: {SRC}")
+    if not IDLE.exists():
+        raise SystemExit(f"missing source: {IDLE}")
+    if not CROP.exists():
+        raise SystemExit(
+            f"missing icon pose: {CROP} (create wink/thumbs-up icon crop first)"
+        )
 
-    src = Image.open(SRC).convert("RGBA")
+    idle = Image.open(IDLE).convert("RGBA")
+    crop = Image.open(CROP).convert("RGBA")
     BRAND.mkdir(parents=True, exist_ok=True)
 
-    icon = to_opaque_rgb(fit_on_canvas(src, 1024, scale=0.82, background=(*BG_RGB, 255), y_bias=0.02))
+    # App icon must be opaque; adaptive FG keeps transparency.
+    icon = to_opaque_rgb(
+        fit_on_canvas(crop, 1024, scale=0.90, background=(*BG_RGB, 255))
+    )
     icon.save(BRAND / "icon.png", optimize=True)
 
-    adaptive = fit_on_canvas(src, 1024, scale=0.66, background=None, y_bias=0.02)
+    adaptive = fit_on_canvas(crop, 1024, scale=0.72, background=None)
+    adaptive = harden_rgba_alpha(adaptive)
     adaptive.save(BRAND / "adaptive-icon.png", optimize=True)
 
-    splash = fit_on_canvas(src, 1024, scale=0.88, background=None)
+    # Splash: full-body idle
+    splash = fit_on_canvas(idle, 1024, scale=0.88, background=None)
     splash.save(BRAND / "splash-icon.png", optimize=True)
 
-    notif = make_notification_monochrome(src, 96)
-    notif.save(BRAND / "notification-icon.png", optimize=True)
+    # Notification: 192 master → 96
+    notif_192, notif_96 = simplified_silhouette(idle, 192, 96)
+    notif_192.save(BRAND / "notification-icon-192.png", optimize=True)
+    notif_96.save(BRAND / "notification-icon.png", optimize=True)
 
     if APPICON.parent.exists():
         icon.save(APPICON, optimize=True)
@@ -119,7 +209,7 @@ def main() -> None:
     else:
         print(f"skip SplashScreenLogo (missing {SPLASH_DIR})")
 
-    print("synced branding from jango-idle.png:")
+    print("synced branding from jango-idle + jango-icon-crop:")
     for path in sorted(BRAND.glob("*.png")):
         im = Image.open(path)
         print(f"  {path.relative_to(ROOT)}  {im.mode} {im.size[0]}x{im.size[1]}")
