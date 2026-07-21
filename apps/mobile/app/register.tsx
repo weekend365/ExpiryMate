@@ -22,7 +22,6 @@ import {
   ChevronRight,
   MapPin,
   Package,
-  PencilLine,
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -462,7 +461,7 @@ export default function RegisterScreen() {
     return (
       <Screen
         title="잘 넣어뒀어요"
-        subtitle="더 넣을까요, 아니면 여기까지 할까요?"
+        subtitle="여기까지 해도 충분해요."
         footer={
           <View style={styles.doneFooter}>
             <Button
@@ -481,14 +480,17 @@ export default function RegisterScreen() {
             >
               바코드로 더 넣을게요
             </Button>
-            <Button
-              variant="secondary"
-              icon={PencilLine}
+            <Pressable
               onPress={continueWithManual}
-              fullWidth
+              accessibilityRole="button"
+              hitSlop={spacing.xs}
+              style={({ pressed }) => [
+                styles.doneTextLink,
+                pressed && styles.doneTextLinkPressed,
+              ]}
             >
-              손으로 더 넣을게요
-            </Button>
+              <Text style={styles.doneTextLinkLabel}>손으로 더 넣을게요</Text>
+            </Pressable>
           </View>
         }
       >
@@ -500,7 +502,7 @@ export default function RegisterScreen() {
               : "냉장고에 잘 넣어뒀어요"}
           </Text>
           <Text style={styles.doneDescription}>
-            다음으로 하고 싶은 일을 골라 주세요.
+            더 넣고 싶으면 아래에서 이어갈 수 있어요.
           </Text>
         </View>
 
@@ -950,6 +952,20 @@ const styles = StyleSheet.create({
   },
   doneFooter: {
     gap: spacing.sm,
+  },
+  doneTextLink: {
+    minHeight: touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  doneTextLinkPressed: {
+    opacity: 0.7,
+  },
+  doneTextLinkLabel: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontWeight: typography.bodyStrong.fontWeight,
+    color: colors.primary,
   },
   recipeHint: {
     minHeight: touchTarget.min,
