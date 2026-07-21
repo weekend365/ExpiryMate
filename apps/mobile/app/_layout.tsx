@@ -78,10 +78,13 @@ export default function RootLayout() {
                 options={{ title: "메일함 확인", headerBackVisible: false }}
               />
               <Stack.Screen name="auth/verify-email" options={{ title: "메일 확인" }} />
-              <Stack.Screen name="privacy/index" options={{ title: "개인정보와 AI 데이터" }} />
+              <Stack.Screen
+                name="privacy/index"
+                options={{ title: "개인정보와 추천 안내" }}
+              />
               <Stack.Screen
                 name="privacy/ai-data-notice"
-                options={{ title: "AI 추천 안내" }}
+                options={{ title: "요리 추천 안내" }}
               />
               <Stack.Screen
                 name="privacy/account-delete"

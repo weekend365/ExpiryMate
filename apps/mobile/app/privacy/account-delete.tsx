@@ -77,8 +77,9 @@ export default function AccountDeleteScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>바로 지워지는 것들</Text>
           <Text style={styles.bodyText}>
-            재료와 유통기한, AI 추천 히스토리, 알림 설정, 로그인 세션, 이메일
-            비밀번호 또는 소셜 로그인 연결 정보가 지워져요.
+            넣은 재료와 유통기한, 그동안 받은 요리 추천, 알림 설정, 이 기기
+            로그인 기록, 이메일·비밀번호 또는 소셜 로그인 연결 정보가
+            지워져요.
           </Text>
         </View>
 

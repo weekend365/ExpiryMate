@@ -397,14 +397,14 @@ export default function RecommendationsScreen() {
         }
       >
         <Text style={styles.noticeBody}>
-          요리 추천을 만들 때 재료명, 카테고리, 수량과 단위, 보관 위치,
-          유통기한, 만료까지 남은 일수, 추천 조건이 서버를 통해 OpenAI API로
-          전송돼요. 추천 결과와 입력 snapshot은 히스토리와 품질 개선을
-          위해 내 계정에 남겨 둬요.
+          요리 추천을 만들 때 재료 이름, 종류, 수량과 단위, 보관 위치,
+          유통기한, 만료까지 남은 일수, 고른 조건이 장고 서버를 거쳐 외부 요리
+          도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록은 기록과 더
+          나은 추천을 위해 내 계정에 남겨 둬요.
         </Text>
         <Text style={styles.noticeFootnote}>
-          OpenAI API 데이터는 기본적으로 모델 학습에 사용되지 않지만, 서비스
-          보안과 abuse monitoring을 위해 일정 기간 보관될 수 있어요.
+          외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지 않아요.
+          다만 서비스 안전과 이상 이용 확인을 위해 잠깐 보관될 수 있어요.
         </Text>
       </BottomSheet>
     </Screen>

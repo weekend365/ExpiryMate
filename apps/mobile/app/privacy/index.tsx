@@ -23,7 +23,7 @@ export default function PrivacyScreen() {
     if (!status?.privacyPolicyUrl) {
       Alert.alert(
         "조금만 기다려 주세요",
-        "개인정보처리방침을 아직 불러오는 중이에요.",
+        "개인정보 안내를 아직 불러오는 중이에요.",
       );
       return;
     }
@@ -31,14 +31,14 @@ export default function PrivacyScreen() {
     WebBrowser.openBrowserAsync(status.privacyPolicyUrl).catch(() =>
       Alert.alert(
         "앗, 잠시 문제가 생겼어요",
-        "개인정보처리방침을 열지 못했어요. 조금 뒤에 다시 해볼까요?",
+        "개인정보 안내를 열지 못했어요. 조금 뒤에 다시 해볼까요?",
       ),
     );
   };
 
   return (
     <Screen
-      title="개인정보와 AI 데이터"
+      title="개인정보와 추천 안내"
       subtitle={`${appBrand.appNameKo}가 어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.`}
     >
       <View style={styles.hero}>
@@ -57,14 +57,14 @@ export default function PrivacyScreen() {
         <View style={styles.card}>
           <PrivacyRow
             icon={ExternalLink}
-            title="개인정보처리방침"
-            description={`${appBrand.appNameKo}는 계정, 재료와 유통기한, 알림 설정, AI 추천 히스토리를 서비스 제공을 위해 사용해요.`}
+            title="개인정보 다루는 방법"
+            description={`${appBrand.appNameKo}는 계정, 넣은 재료와 유통기한, 알림 설정, 그동안 받은 요리 추천을 서비스를 위해 써요.`}
             onPress={openPolicy}
           />
           <PrivacyRow
             icon={ShieldCheck}
-            title="AI 추천 안내"
-            description="요리 추천을 요청하면 보관 중인 재료 일부와 추천 조건이 서버를 통해 OpenAI API로 전송돼요. 첫 추천 전에 한 번 동의가 필요해요."
+            title="요리 추천 안내"
+            description="요리 추천을 부탁하면, 보관 중인 재료 일부와 고른 조건이 장고 서버를 거쳐 외부 요리 도우미로 전달돼요. 첫 추천 전에 한 번만 살펴봐 주세요."
             onPress={() => router.push("/privacy/ai-data-notice")}
             last
           />
@@ -80,7 +80,7 @@ export default function PrivacyScreen() {
           <PrivacyRow
             icon={Trash2}
             title="계정과 데이터 정리"
-            description="재료, 추천 히스토리, 알림 설정, 로그인 세션과 연결 계정 정보가 바로 지워져요."
+            description="넣은 재료, 받은 추천, 알림 설정, 로그인 기록과 연결된 계정 정보가 바로 지워져요."
             tone="danger"
             onPress={() => router.push("/privacy/account-delete")}
             last

@@ -35,7 +35,7 @@ export default function AiDataNoticeScreen() {
 
   return (
     <Screen
-      title="AI 추천 안내"
+      title="요리 추천 안내"
       subtitle={`${appBrand.characterNameKo}가 요리를 추천할 때 어떤 정보가 쓰이는지 알려드릴게요.`}
       footer={
         accepted ? undefined : (
@@ -54,11 +54,11 @@ export default function AiDataNoticeScreen() {
         <View style={styles.statusCopy}>
           <Text style={styles.statusTitle}>
             {accepted
-              ? "현재 버전에 동의해 주셨어요"
+              ? "안내를 살펴보시고 동의해 주셨어요"
               : "첫 추천 전에 한 번만 살펴봐 주세요"}
           </Text>
           <Text style={styles.statusDescription}>
-            버전 {status?.aiDataNoticeVersion ?? "불러오는 중"}
+            안내 버전 {status?.aiDataNoticeVersion ?? "불러오는 중"}
             {status?.aiDataNoticeAcceptedAt
               ? ` · ${formatDate(status.aiDataNoticeAcceptedAt)}에 동의`
               : ""}
@@ -69,24 +69,26 @@ export default function AiDataNoticeScreen() {
       <View style={styles.section}>
         <SectionHeader title="자세히 알아보기" />
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>OpenAI API로 전송되는 데이터</Text>
+          <Text style={styles.cardTitle}>추천할 때 전달되는 정보</Text>
           <Text style={styles.bodyText}>
-            재료명, 카테고리, 수량과 단위, 보관 위치, 유통기한, 만료까지 남은
-            일수, 인원·조리 시간·식사 유형 같은 추천 조건이 전송돼요.
+            재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한, 만료까지 남은
+            일수, 인원·조리 시간·식사 유형 같은 조건이 장고 서버를 거쳐 외부
+            요리 도우미(OpenAI)로 전달돼요.
           </Text>
         </View>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>장고가 기억해 두는 것</Text>
           <Text style={styles.bodyText}>
-            추천 요청 조건, 추천 당시 재료 snapshot, 생성된 요리 추천 결과는
-            히스토리와 품질 개선을 위해 내 계정에 남겨 둬요.
+            추천할 때 고른 조건, 그때의 재료 목록, 나온 요리 추천은 기록과 더
+            나은 추천을 위해 내 계정에 남겨 둬요.
           </Text>
         </View>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>학습 사용 여부</Text>
+          <Text style={styles.cardTitle}>학습에 쓰이나요?</Text>
           <Text style={styles.bodyText}>
-            OpenAI API 데이터는 기본적으로 모델 학습에 사용되지 않아요. 다만
-            서비스 보안과 abuse monitoring을 위해 일정 기간 보관될 수 있어요.
+            외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지
+            않아요. 다만 서비스 안전과 이상 이용 확인을 위해 잠깐 보관될 수
+            있어요.
           </Text>
         </View>
       </View>

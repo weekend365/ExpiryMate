@@ -58,7 +58,7 @@ export default function SettingsScreen() {
           />
           <ListRow
             title="개인정보"
-            description="어떤 정보를 쓰는지, 어떻게 지울 수 있는지 볼 수 있어요."
+            description="어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요."
             icon={ShieldCheck}
             last
             onPress={() => router.push("/privacy")}
