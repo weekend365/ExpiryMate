@@ -3,6 +3,22 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { registerPushToken } from "./api";
 
+export const NOTIFICATION_TYPES = {
+  recipeReady: "recipe_ready",
+  expiryReminder: "expiry_reminder",
+} as const;
+
+export type NotificationType =
+  (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
+
+export type LocalNotificationData = {
+  type: NotificationType | string;
+  recommendationId?: string;
+  inventoryItemId?: string;
+};
+
+export type NotificationNavigationPath = "/(tabs)/recommendations";
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldPlaySound: false,
@@ -44,7 +60,11 @@ export const syncPushTokenIfPermissionGranted = async () => {
   return registerCurrentPushToken();
 };
 
-export const scheduleLocalNotification = async (title: string, body: string) => {
+export const scheduleLocalNotification = async (
+  title: string,
+  body: string,
+  data?: LocalNotificationData,
+) => {
   const permissions = await requestNotificationPermissions();
 
   if (!permissions.granted) {
@@ -55,12 +75,41 @@ export const scheduleLocalNotification = async (title: string, body: string) => 
     content: {
       title,
       body,
+      ...(data ? { data } : {}),
     },
     trigger: null,
   });
 };
 
 export const scheduleMockExpiryReminder = scheduleLocalNotification;
+
+export function getNotificationNavigationPath(
+  data: unknown,
+): NotificationNavigationPath | null {
+  if (!data || typeof data !== "object") {
+    return null;
+  }
+
+  const type = "type" in data ? data.type : undefined;
+
+  if (type === NOTIFICATION_TYPES.recipeReady) {
+    return "/(tabs)/recommendations";
+  }
+
+  return null;
+}
+
+export function getNotificationResponseId(
+  response: Notifications.NotificationResponse,
+) {
+  return response.notification.request.identifier;
+}
+
+export function getNotificationResponseData(
+  response: Notifications.NotificationResponse,
+) {
+  return response.notification.request.content.data;
+}
 
 async function registerCurrentPushToken() {
   const projectId =
