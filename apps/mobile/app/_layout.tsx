@@ -87,6 +87,15 @@ export default function RootLayout() {
                 name="privacy/account-delete"
                 options={{ title: "계정과 데이터 정리" }}
               />
+              <Stack.Screen
+                name="settings/notifications"
+                options={{ title: "알림" }}
+              />
+              <Stack.Screen name="settings/account" options={{ title: "계정" }} />
+              <Stack.Screen
+                name="settings/subscription"
+                options={{ title: "구독" }}
+              />
             </Stack>
           </RecipeGenerationProvider>
         </QueryClientProvider>
