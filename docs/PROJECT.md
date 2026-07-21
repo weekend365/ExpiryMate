@@ -3,7 +3,7 @@
 출시 진척도, 우선순위, 배포·운영을 **이 문서 하나**에 모았습니다.  
 로컬 개발 온보딩은 [`README.md`](../README.md)를 보세요.
 
-> **문서 기준일:** 2026-07-20  
+> **문서 기준일:** 2026-07-21  
 > **제품 표시명:** 장고야 부탁해 (EN: Jango) · 마스코트: 장고  
 > **기술 네임스페이스:** `@expirymate/*`, `com.expirymate.mobile` (의도적 레거시 ID)
 
@@ -17,12 +17,12 @@
 | 인증 | ~95% | **카카오·네이버·구글 + 이메일 실기기 E2E ✅** · Apple은 유료 개발자 계정 대기 |
 | API 비즈니스 | ~85% | 재고·레시피·프라이버시·구독 검증·OAuth 콜백 |
 | Admin | ~80% | Railway 배포 · shared 토큰·브랜드 동기화 |
-| 배포/인프라 | ~85% | Railway API·Admin·Postgres · CI · Resend(`mail.devnamu.com`) · health |
+| 배포/인프라 | ~90% | Railway · Resend · `/health` uptime ✅ · Sentry API/Admin ✅ |
 | 스토어 출시 | ~55% | Android preview APK 있음 · iOS EAS·심사 자료 미착수 |
-| 테스트/QA | ~65% | API 단위·CI · **이메일 실기기 E2E 전부 ✅** · 소셜·핵심 플로우 QA 잔여 · Sentry DSN 대기 |
+| 테스트/QA | ~90% | **실기기 QA·uptime ✅** · Sentry Mobile·Apple 로그인 후순위 |
 
-**현재 Phase:** Phase 0 완료 → **Phase 1 (실기기 QA · 관측성)**  
-**최근 완료 (2026-07-20):** 이메일 실기기 E2E 전부 · Sentry `jango-api`/`jango-admin` 스모크 ✅ · Mobile Sentry는 EAS 빌드 이슈로 후순위
+**현재 Phase:** Phase 1 관문 대부분 완료 → **Phase 2 (스토어 제출 준비)**  
+**최근 완료 (2026-07-21):** `/health` uptime · 실기기 QA 사인오프 (소셜·재고·AI·계정삭제·Admin·privacy)
 
 ### 프로덕션 URL
 
@@ -61,34 +61,25 @@
 
 ## 2. 서비스 전 우선순위 (지금 당장)
 
-기능 MVP·소셜·**이메일 실기기 인증**은 갖춰졌습니다. **출시 블로커는 “나머지 실기기 QA·관측·스토어”** 쪽입니다.
+기능·실기기 QA·uptime·Sentry(API/Admin)까지 갖춰졌습니다. **출시 블로커는 “Apple 계정·EAS 스토어 빌드·심사 자료”** 쪽입니다.
 
-### P0 — 이번 주에 끝낼 것 (Phase 1 관문)
-
-| # | 작업 | 왜 |
-|---|------|-----|
-| 1 | **실기기 QA 잔여 사인오프** | 소셜 로그인 → 재료 등록 → 홈/보관함 → AI 추천 → 계정 삭제 (이메일은 ✅) |
-| 2 | **Sentry Mobile** (`jango-mobile` preview 스모크) — 후순위 | API·Admin ✅. Android preview는 Sentry 플러그인/업로드 설정 정리 후 재시도 |
-| 3 | **`/health` uptime 모니터** | API 다운을 사용자가 먼저 알게 됨 |
-
-### P1 — 스토어 제출 직전 (Phase 1→2)
+### P0 — 스토어 직전 (Phase 2 관문)
 
 | # | 작업 | 왜 |
 |---|------|-----|
-| 5 | **Apple Developer Program 등록** | Sign in with Apple · Push · TestFlight · App Store 공통 전제 |
-| 6 | **EAS iOS preview/production** (스캐너 포함) | 지금은 로컬 `expo run:ios` 검증 위주 |
-| 7 | **EAS production 빌드**가 Railway API + OAuth env 사용 확인 | `EXPO_PUBLIC_API_BASE_URL`, OAuth client ID, redirect URI |
-| 8 | **스토어 메타·심사용 자료** | Privacy Nutrition Label / Play Data Safety · 스크린샷 · Support URL · AI·계정삭제 심사 노트 |
+| 1 | **Apple Developer Program 등록** | Sign in with Apple · Push · TestFlight · App Store 공통 전제 |
+| 2 | **EAS iOS/Android production** (스캐너 포함) | Railway API + OAuth env로 스토어용 빌드 |
+| 3 | **스토어 메타·심사용 자료** | Privacy Nutrition Label / Play Data Safety · 스크린샷 · Support URL · AI·계정삭제 심사 노트 |
 
-### P2 — 출시 직후 / 병행 가능
+### P1 — 병행 / 후순위
 
-| # | 작업 | 비고 |
-|---|------|------|
-| 9 | API/Admin 커스텀 도메인 (`devnamu.com` 또는 제품 도메인) | Privacy·Support URL·브랜드 일관성. 메일 도메인은 이미 연결됨 |
-| 10 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
-| 11 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` 단일 인스턴스 |
-| 12 | Android 스캐너 실기기 QA | iOS는 통과 |
-| 13 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료된 상태 — migration 잔여분만 점검 |
+| # | 작업 | 왜 |
+|---|------|-----|
+| 4 | **Sentry Mobile** preview 스모크 | API·Admin ✅. Android preview는 Sentry 업로드 설정 정리 후 |
+| 5 | API/Admin 커스텀 도메인 | Privacy·Support URL·브랜드 일관성 |
+| 6 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
+| 7 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` 단일 인스턴스 |
+| 8 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료 — migration 잔여분만 |
 
 ### 의도적으로 미룸 (v1.1+ / Phase 4)
 
@@ -112,40 +103,40 @@ flowchart LR
 | Phase | 목표 | Done Criteria (요약) |
 |-------|------|----------------------|
 | **0** ✅ | 외부 접속 가능 | Railway API/Admin/DB · health · CI · AUTH 하드닝 |
-| **1** 👈 | 실사용 검증 | 실기기 QA(이메일 ✅) · Sentry API/Admin ✅ · Mobile·uptime 잔여 |
-| **2** | 스토어 공개 | EAS production · 심사 자료 · iOS/Android 승인 |
+| **1** ✅ | 실사용 검증 | 실기기 QA · uptime · Sentry API/Admin ✅ (Mobile Sentry 후순위) |
+| **2** 👈 | 스토어 공개 | Apple 계정 · EAS production · 심사 자료 · iOS/Android 승인 |
 | **3** | 안정 운영 | 알림·백업·비용 한도·런북 |
 | **4** | 수익화 | IAP UI · 카탈로그 · 분석 · 공유 |
 
 ### Phase 1 Done Criteria
 
-- [ ] Android/iOS 내부 빌드에서 Railway API 핵심 플로우 QA 통과 (소셜·재고·AI·계정삭제)
+- [x] Android/iOS 내부 빌드에서 Railway API 핵심 플로우 QA 통과 (소셜·재고·AI·계정삭제)
 - [x] Sentry DSN · 스모크 — **API·Admin** (`sentry-smoke-api` / `sentry-smoke-admin`)
 - [ ] Sentry Mobile preview 스모크 (`jango-mobile`) — 후순위
-- [ ] `/health` uptime monitor 등록
+- [x] `/health` uptime monitor 등록
 - [x] Resend 도메인 인증 (`mail.devnamu.com`) — 임의 수신자 메일
 - [x] 프로덕션 `AUTH_LINK_BASE_URL` = Railway API HTTPS
 - [x] **이메일 가입·메일 확인·로그인** 실기기 E2E
 - [x] **미확인 재발송 · 비밀번호 재설정** 실기기 E2E
-- [ ] Privacy / Data Deletion URL 심사용으로 재확인
-- [ ] 소셜 로그인 3종 프로덕션 빌드에서 재검증
+- [x] Privacy / Data Deletion URL 심사용으로 재확인
+- [x] 소셜 로그인 3종 실기기 재검증
 
 ### Phase 1 수동 QA 체크리스트
 
 ```
-[ ] 온보딩 → 로그인(필수) → 탭 진입
-[ ] 카카오 / 네이버 / 구글 로그인 (HTTPS 콜백 → 앱 복귀)
+[x] 온보딩 → 로그인(필수) → 탭 진입
+[x] 카카오 / 네이버 / 구글 로그인 (HTTPS 콜백 → 앱 복귀)
 [x] 이메일 가입 → 인증 메일 수신 → 링크/딥링크로 확인 → 홈 진입
 [x] 이메일 로그인 · 미확인 계정 → verify-pending · 재발송
 [x] 비밀번호 재설정 메일 → 새 비밀번호로 로그인
 [ ] (가능 시) Apple 로그인 — 유료 개발자 계정 이후
-[ ] 재료 수동 등록 → 홈·보관함 반영
-[ ] 홈 → 바코드 등록 → 워터폴 조회 → 유통기한 OCR → prefill (dev/EAS 빌드)
-[ ] AI 추천: 동의 → 생성 → 히스토리
-[ ] 푸시 토큰 등록 (+ 스케줄러 ON 시 만료 알림)
-[ ] 계정 삭제 → 데이터 제거 확인
-[ ] Admin 로그인 → 상품 CRUD
-[ ] /privacy, /privacy/choices 접근
+[x] 재료 수동 등록 → 홈·보관함 반영
+[x] 홈 → 바코드 등록 → 워터폴 조회 → 유통기한 OCR → prefill (dev/EAS 빌드)
+[x] AI 추천: 동의 → 생성 → 히스토리
+[ ] 푸시 토큰 등록 (+ 스케줄러 ON 시 만료 알림) — Apple 계정·스케줄러 이후
+[x] 계정 삭제 → 데이터 제거 확인
+[x] Admin 로그인 → 상품 CRUD
+[x] /privacy, /privacy/choices 접근
 ```
 
 ### Phase 2 Done Criteria (요약)
@@ -451,6 +442,6 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 
 ## 8. 한 줄 결론
 
-**소셜 + 이메일 실기기 인증과 Sentry(API·Admin)는 준비됐다.**  
-다음 관문은 **uptime → 잔여 실기기 QA → (후순위) Mobile Sentry · Apple 개발자 계정·EAS → 스토어 제출**이다.  
-IAP·공유 보관함·API 커스텀 도메인은 첫 출시와 병행하거나 이후로 미뤄도 된다.
+**Phase 1(실기기 QA·uptime·Sentry API/Admin)은 통과했다.**  
+다음 관문은 **Apple Developer Program → EAS production → 스토어 메타·심사 제출**이다.  
+Mobile Sentry·푸시·커스텀 도메인·IAP는 병행하거나 출시 직후로 미뤄도 된다.
