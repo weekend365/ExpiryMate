@@ -530,18 +530,19 @@ const styles = StyleSheet.create({
   heroEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   heroTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   heroDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   optionsSummary: {
@@ -566,13 +567,13 @@ const styles = StyleSheet.create({
   optionsSummaryLabel: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   optionsSummaryValue: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   optionsSummaryAction: {
@@ -582,7 +583,7 @@ const styles = StyleSheet.create({
   },
   optionsSummaryActionLabel: {
     fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   quotaCard: {
@@ -600,12 +601,13 @@ const styles = StyleSheet.create({
   quotaTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   quotaDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   quotaLink: {
@@ -616,7 +618,7 @@ const styles = StyleSheet.create({
   },
   quotaLinkText: {
     fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   errorCard: {
@@ -634,12 +636,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
   errorDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   resultSection: {
@@ -669,7 +672,7 @@ const styles = StyleSheet.create({
   recipeBadgeText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.surface,
   },
   recipeTitleGroup: {
@@ -679,18 +682,19 @@ const styles = StyleSheet.create({
   recipeTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   recipeMeta: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   recipeSummary: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.text,
   },
   recipeBlock: {
@@ -699,12 +703,13 @@ const styles = StyleSheet.create({
   blockTitle: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   blockText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   stepList: {
@@ -718,18 +723,20 @@ const styles = StyleSheet.create({
     width: spacing.md,
     fontSize: typography.label.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   stepText: {
     flex: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   safetyNote: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   optionGroup: {
@@ -743,7 +750,7 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   pillRow: {
@@ -757,11 +764,13 @@ const styles = StyleSheet.create({
   noticeBody: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.text,
   },
   noticeFootnote: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
 });

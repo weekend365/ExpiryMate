@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
   brandBadgeText: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   emailCard: {
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   emailTitle: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   input: {
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   emailLinks: {
     flexDirection: "row",
@@ -464,7 +464,7 @@ const styles = StyleSheet.create({
   emailLinkText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   oauthSection: {
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   oauthTitle: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
   oauthList: {
@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
   oauthRowText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
 });

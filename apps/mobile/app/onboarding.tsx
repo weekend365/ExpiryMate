@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   backLinkText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.subtext,
   },
   hero: {
@@ -218,14 +218,14 @@ const styles = StyleSheet.create({
   brand: {
     fontSize: typography.title.fontSize,
     lineHeight: typography.title.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
     textAlign: "center",
   },
   brandEn: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.subtext,
     textAlign: "center",
     marginTop: -spacing.sm,
@@ -241,21 +241,21 @@ const styles = StyleSheet.create({
   eyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
     textAlign: "center",
   },
   title: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
     textAlign: "center",
   },
   description: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.subtext,
     textAlign: "center",
   },

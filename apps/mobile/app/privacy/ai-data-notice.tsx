@@ -126,12 +126,13 @@ const styles = StyleSheet.create({
   statusTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   statusDescription: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   section: {
@@ -148,12 +149,13 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   bodyText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
 });

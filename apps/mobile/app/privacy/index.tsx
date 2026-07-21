@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   section: {
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   rowTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   rowTitleDanger: {
@@ -216,11 +217,13 @@ const styles = StyleSheet.create({
   rowDescription: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   footerText: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.mutedText,
     textAlign: "center",
   },

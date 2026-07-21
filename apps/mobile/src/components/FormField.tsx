@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.text,
   },
   input: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
   },
   multiline: {
     minHeight: spacing.xxxl + spacing.xl,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.bodySmall.fontWeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.danger,
   },
 });

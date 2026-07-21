@@ -271,13 +271,13 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.cta,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     paddingVertical: spacing.sm,
   },
   atSign: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.subtext,
   },
   domainInput: {
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.cta,
     color: colors.text,
     fontSize: typography.body.fontSize,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     paddingVertical: spacing.sm,
   },
   domainButton: {
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   domainButtonText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   chevronButton: {
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   optionTextSelected: {

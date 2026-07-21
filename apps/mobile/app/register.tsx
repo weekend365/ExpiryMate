@@ -921,7 +921,7 @@ const styles = StyleSheet.create({
   headerBackLabel: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   stepIcon: {
@@ -940,13 +940,14 @@ const styles = StyleSheet.create({
   doneTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
     textAlign: "center",
   },
   doneDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
     textAlign: "center",
   },
@@ -964,7 +965,7 @@ const styles = StyleSheet.create({
   doneTextLinkLabel: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   recipeHint: {
@@ -980,7 +981,7 @@ const styles = StyleSheet.create({
   recipeHintText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   errorStrip: {
@@ -992,12 +993,13 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
   errorDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   formCard: {
@@ -1017,18 +1019,19 @@ const styles = StyleSheet.create({
   noticeEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   noticeTitle: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   noticeDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   softCard: {
@@ -1039,12 +1042,13 @@ const styles = StyleSheet.create({
   },
   softTitle: {
     fontSize: typography.body.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   softDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   warningCard: {
@@ -1055,12 +1059,13 @@ const styles = StyleSheet.create({
   },
   warningTitle: {
     fontSize: typography.body.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.warning,
   },
   warningDescription: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   card: {
@@ -1084,12 +1089,13 @@ const styles = StyleSheet.create({
   },
   inlineMetaLabel: {
     fontSize: typography.label.fontSize,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   inlineMetaValue: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   templateList: {
@@ -1108,11 +1114,12 @@ const styles = StyleSheet.create({
   },
   templateName: {
     fontSize: typography.body.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   templateMeta: {
     fontSize: typography.label.fontSize,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   extraTrigger: {
@@ -1132,17 +1139,18 @@ const styles = StyleSheet.create({
   },
   extraTriggerTitle: {
     fontSize: typography.body.fontSize,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   extraTriggerDescription: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
   extraTriggerAction: {
     fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   summaryCard: {
@@ -1162,7 +1170,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   summaryRow: {
@@ -1173,7 +1181,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.subtext,
   },
   summaryValue: {
@@ -1181,7 +1189,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   extraSection: {
@@ -1189,7 +1197,7 @@ const styles = StyleSheet.create({
   },
   extraSectionTitle: {
     fontSize: typography.bodySmall.fontSize,
-    fontWeight: typography.bodyStrong.fontWeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   sessionCard: {
@@ -1213,13 +1221,13 @@ const styles = StyleSheet.create({
   sessionEyebrow: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    fontWeight: typography.label.fontWeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.primary,
   },
   sessionTitle: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   sessionList: {
@@ -1234,12 +1242,13 @@ const styles = StyleSheet.create({
   sessionName: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.title.fontWeight,
+    fontFamily: typography.title.fontFamily,
     color: colors.text,
   },
   sessionMeta: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
 });
