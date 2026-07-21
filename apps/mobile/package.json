@@ -16,7 +16,8 @@
     "eas-build-post-install": "cd ../.. && pnpm --filter @expirymate/shared build",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "branding:sync": "python3 scripts/sync-branding-from-jango.py"
   },
   "dependencies": {
     "@expirymate/shared": "workspace:*",

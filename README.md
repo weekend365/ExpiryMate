@@ -250,9 +250,12 @@ See [docs/PROJECT.md](./docs/PROJECT.md) (scanner + Personal Team notes) for iOS
 ## App Store Build
 
 Mobile App Store configuration lives in `apps/mobile/app.json` and
-`apps/mobile/eas.json`. The current app icon and splash assets are generated
-from `apps/mobile/assets/characters/jango-idle.png` (mascot **장고** / Jango) into
-`apps/mobile/assets/branding/`. Mood variants live beside it as `jango-{idle,happy,worry,cooking,empty}.png`.
+`apps/mobile/eas.json`. App icon / adaptive icon / splash / Android notification
+icon are derived from `apps/mobile/assets/characters/jango-idle.png` into
+`apps/mobile/assets/branding/` (regenerate with
+`pnpm --filter @expirymate/mobile branding:sync`). Mood variants live beside
+the source as `jango-{idle,happy,worry,cooking,empty}.png`. Character rules:
+[`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](./docs/JANGO_CHARACTER_STYLE_GUIDE.md).
 
 Install and authenticate EAS CLI before building:
 

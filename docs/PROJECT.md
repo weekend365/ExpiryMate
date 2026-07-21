@@ -433,7 +433,8 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 
 ## 7. 문서 유지
 
-- **단일 기준:** 본 문서 (`docs/PROJECT.md`)
+- **출시·운영 단일 기준:** 본 문서 (`docs/PROJECT.md`)
+- **장고 캐릭터 비주얼 기준:** [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](./JANGO_CHARACTER_STYLE_GUIDE.md)
 - **README:** 로컬 온보딩 + 진척 요약만. 상세·우선순위는 여기로 링크
 - Phase 완료·블로커 발견 시 이 파일의 §1·§2·체크리스트를 갱신
 
@@ -444,7 +445,7 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 | `docs/PRODUCTION_LAUNCH_ROADMAP.md` | 본 문서로 통합 |
 | `docs/DEPLOYMENT.md` | §5로 통합 |
 | `docs/RAILWAY_STAGING.md` | §5로 통합 |
-| `docs/MOBILE_REDESIGN_PROMPTS.md` | `docs/archive/` (완료 기록) |
+| `docs/MOBILE_REDESIGN_PROMPTS.md` | `docs/archive/` (완료 기록). 캐릭터 비주얼은 `JANGO_CHARACTER_STYLE_GUIDE.md`가 우선 |
 
 ---
 
