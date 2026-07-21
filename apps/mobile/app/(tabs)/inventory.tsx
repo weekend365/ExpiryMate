@@ -16,11 +16,13 @@ import {
   type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
+import { InventoryListSkeleton } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCard } from "../../src/components/InventoryCard";
 import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
@@ -53,7 +55,14 @@ const filters: Array<{
 ];
 
 export default function InventoryScreen() {
-  const { data = [] } = useInventoryList();
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useInventoryList();
   const batchDiscardMutation = useBatchDiscardInventoryItems();
   const discardMutation = useDiscardInventoryItem();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
@@ -63,11 +72,20 @@ export default function InventoryScreen() {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
+    null,
+  );
+
+  const items = data ?? [];
+  const hasLoadedInventory = data !== undefined;
+  const loadErrorMessage =
+    error instanceof Error
+      ? error.message
+      : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 
   const activeItems = useMemo(
-    () => data.filter((item) => item.status === ItemStatus.ACTIVE),
-    [data],
+    () => items.filter((item) => item.status === ItemStatus.ACTIVE),
+    [items],
   );
 
   const filtered = useMemo(
@@ -103,8 +121,11 @@ export default function InventoryScreen() {
   const activeLocationLabel =
     location === "all" ? "모든 위치" : storageLocationLabels[location];
   const hasActiveFilters = filter !== "all" || location !== "all";
-  const isEmptyInventory = activeItems.length === 0;
+  // Only treat as empty after a successful load — never during loading/error.
+  const isEmptyInventory =
+    hasLoadedInventory && !isError && activeItems.length === 0;
   const isFilteredEmpty = !isEmptyInventory && filtered.length === 0;
+  const showListChrome = hasLoadedInventory && !isError && !isEmptyInventory;
 
   useEffect(() => {
     const visibleIdSet = new Set(visibleIds);
@@ -125,13 +146,13 @@ export default function InventoryScreen() {
     setIsSelectionMode(true);
     setIsFilterSheetOpen(false);
     setSuccessMessage(null);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
   };
 
   const cancelSelectionMode = () => {
     setIsSelectionMode(false);
     setSelectedIds([]);
-    setErrorMessage(null);
+    setActionErrorMessage(null);
   };
 
   const toggleSelectedId = (id: string) => {
@@ -187,7 +208,7 @@ export default function InventoryScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              setErrorMessage(null);
+              setActionErrorMessage(null);
               const result = await batchDiscardMutation.mutateAsync(selectedIds);
               setSuccessMessage(
                 `${result.count}개 재료를 정리했어요. 장고도 한숨 돌렸어요.`,
@@ -195,7 +216,7 @@ export default function InventoryScreen() {
               setSelectedIds([]);
               setIsSelectionMode(false);
             } catch (error) {
-              setErrorMessage(
+              setActionErrorMessage(
                 error instanceof Error
                   ? error.message
                   : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
@@ -213,13 +234,13 @@ export default function InventoryScreen() {
   ) => {
     try {
       setSuccessMessage(null);
-      setErrorMessage(null);
+      setActionErrorMessage(null);
       await discardMutation.mutateAsync(item.id);
       swipeable.close();
       setSuccessMessage(`${item.displayName}을(를) 정리했어요.`);
     } catch (error) {
       swipeable.close();
-      setErrorMessage(
+      setActionErrorMessage(
         error instanceof Error
           ? error.message
           : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
@@ -231,12 +252,25 @@ export default function InventoryScreen() {
     <Screen
       title="보관함"
       subtitle={
-        isEmptyInventory
-          ? "장고랑 같이 재료를 채워볼까요?"
-          : `${filtered.length}개를 유통기한이 가까운 순서로 보여드릴게요.`
+        isLoading && !hasLoadedInventory
+          ? "장고가 보관함을 살펴보고 있어요."
+          : isError && !hasLoadedInventory
+            ? "앗, 보관함을 불러오지 못했어요."
+            : isEmptyInventory
+              ? "장고랑 같이 재료를 채워볼까요?"
+              : `${filtered.length}개를 유통기한이 가까운 순서로 보여드릴게요.`
+      }
+      refreshControl={
+        <RefreshControl
+          tintColor={colors.primary}
+          refreshing={isRefetching}
+          onRefresh={() => {
+            void refetch();
+          }}
+        />
       }
       headerAction={
-        activeItems.length ? (
+        showListChrome ? (
           isSelectionMode ? (
             <Pressable
               onPress={cancelSelectionMode}
@@ -272,7 +306,7 @@ export default function InventoryScreen() {
         ) : null
       }
       footer={
-        isEmptyInventory || isFilteredEmpty
+        !showListChrome || isFilteredEmpty
           ? null
           : isSelectionMode
             ? (
@@ -297,23 +331,30 @@ export default function InventoryScreen() {
       }
     >
       {successMessage ? (
-        <View style={styles.successStrip}>
-          <Mascot size="small" mood="happy" />
-          <Text style={styles.successTitle}>{successMessage}</Text>
-        </View>
+        <FeedbackBanner tone="success" title={successMessage} />
       ) : null}
 
-      {errorMessage ? (
-        <View style={styles.errorStrip}>
-          <Mascot size="small" mood="worry" />
-          <View style={styles.errorCopy}>
-            <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
-            <Text style={styles.errorDescription}>{errorMessage}</Text>
-          </View>
-        </View>
+      {actionErrorMessage ? (
+        <FeedbackBanner
+          tone="danger"
+          title="앗, 잠시 문제가 생겼어요"
+          description={actionErrorMessage}
+        />
       ) : null}
 
-      {!isEmptyInventory && !isSelectionMode ? (
+      {isError && hasLoadedInventory ? (
+        <FeedbackBanner
+          tone="danger"
+          title="앗, 보관함을 불러오지 못했어요"
+          description={loadErrorMessage}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void refetch();
+          }}
+        />
+      ) : null}
+
+      {showListChrome && !isSelectionMode ? (
         <Pressable
           onPress={() => setIsFilterSheetOpen(true)}
           accessibilityRole="button"
@@ -367,7 +408,19 @@ export default function InventoryScreen() {
         </View>
       ) : null}
 
-      {isEmptyInventory ? (
+      {isLoading && !hasLoadedInventory ? (
+        <InventoryListSkeleton />
+      ) : isError && !hasLoadedInventory ? (
+        <EmptyState
+          mood="worry"
+          title="앗, 보관함을 불러오지 못했어요"
+          description={loadErrorMessage}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void refetch();
+          }}
+        />
+      ) : isEmptyInventory ? (
         <EmptyState
           mood="empty"
           title="아직 넣어둔 재료가 없어요"
@@ -599,45 +652,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.surface,
     textAlign: "center",
-  },
-  successStrip: {
-    backgroundColor: colors.successSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  successTitle: {
-    flex: 1,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  errorStrip: {
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  errorCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
-  errorTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.danger,
-  },
-  errorDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
   },
   sheetSection: {
     gap: spacing.sm,

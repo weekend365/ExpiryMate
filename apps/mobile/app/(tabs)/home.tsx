@@ -7,7 +7,12 @@ import {
 } from "lucide-react-native";
 import { Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { Button } from "../../src/components/Button";
+import {
+  HomeListSkeleton,
+  HomeStatsSkeleton,
+} from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCard } from "../../src/components/InventoryCard";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -19,12 +24,27 @@ import { colors, radius, spacing, touchTarget, typography } from "../../src/shar
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 export default function HomeScreen() {
-  const { data, isLoading, refetch, isRefetching } = useDashboardSummary();
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useDashboardSummary();
   const {
     status: recipeGenerationStatus,
     errorMessage: recipeGenerationError,
   } = useRecipeGeneration();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
+
+  const hasLoaded = data !== undefined;
+  const isInitialLoading = isLoading && !hasLoaded;
+  const isInitialError = isError && !hasLoaded;
+  const loadErrorMessage =
+    error instanceof Error
+      ? error.message
+      : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 
   const expiringItems = data?.expiringItems ?? [];
   const recentItems = data?.recentItems ?? [];
@@ -34,17 +54,23 @@ export default function HomeScreen() {
   const totalActiveCount = data?.totalActiveCount ?? 0;
   // within3DaysCount already includes "today" — do not add todayExpiryCount again.
   const priorityCount = within3DaysCount;
-  const hasInventory = totalActiveCount > 0;
-  const needsAttention = priorityCount > 0;
+  const hasInventory = hasLoaded && totalActiveCount > 0;
+  const needsAttention = hasLoaded && priorityCount > 0;
 
   const focus = getHomeFocus({
-    isLoading,
+    isInitialLoading,
+    isInitialError,
     needsAttention,
     hasInventory,
     priorityCount,
   });
 
   const handlePrimaryAction = () => {
+    if (focus.action === "retry") {
+      void refetch();
+      return;
+    }
+
     if (focus.action === "scanner") {
       clearPrefill();
       router.push("/scanner");
@@ -67,19 +93,27 @@ export default function HomeScreen() {
   return (
     <Screen
       title="오늘"
-      subtitle="지금 손볼 일 하나만 먼저 볼게요."
+      subtitle={
+        isInitialError
+          ? "앗, 오늘 할 일을 불러오지 못했어요."
+          : "지금 손볼 일 하나만 먼저 볼게요."
+      }
       refreshControl={
         <RefreshControl
           tintColor={colors.primary}
           refreshing={isRefetching}
-          onRefresh={refetch}
+          onRefresh={() => {
+            void refetch();
+          }}
         />
       }
     >
       <View
         style={[
           styles.focusCard,
-          needsAttention ? styles.focusCardDanger : styles.focusCardSafe,
+          isInitialError || needsAttention
+            ? styles.focusCardDanger
+            : styles.focusCardSafe,
         ]}
       >
         <View style={styles.focusRow}>
@@ -87,7 +121,9 @@ export default function HomeScreen() {
             <Text
               style={[
                 styles.focusEyebrow,
-                needsAttention ? styles.focusEyebrowDanger : styles.focusEyebrowSafe,
+                isInitialError || needsAttention
+                  ? styles.focusEyebrowDanger
+                  : styles.focusEyebrowSafe,
               ]}
             >
               지금 해야 할 한 가지
@@ -98,23 +134,38 @@ export default function HomeScreen() {
           <Mascot
             size="small"
             mood={
-              needsAttention ? "worry" : hasInventory ? "idle" : "empty"
+              isInitialError || needsAttention
+                ? "worry"
+                : isInitialLoading
+                  ? "idle"
+                  : hasInventory
+                    ? "idle"
+                    : "empty"
             }
             style={styles.focusMascot}
           />
         </View>
 
-        <Button
-          icon={focus.action === "scanner" ? Barcode : Package}
-          onPress={handlePrimaryAction}
-          fullWidth
-          variant={needsAttention ? "danger" : "primary"}
-          disabled={isLoading}
-        >
-          {focus.ctaLabel}
-        </Button>
+        {focus.ctaLabel ? (
+          <Button
+            icon={
+              focus.action === "scanner"
+                ? Barcode
+                : focus.action === "retry"
+                  ? undefined
+                  : Package
+            }
+            onPress={handlePrimaryAction}
+            fullWidth
+            variant={
+              isInitialError || needsAttention ? "danger" : "primary"
+            }
+          >
+            {focus.ctaLabel}
+          </Button>
+        ) : null}
 
-        {!isLoading ? (
+        {focus.showSecondaryEntry ? (
           <Pressable
             onPress={
               focus.action === "scanner" ? handleManualRegister : handleOpenScanner
@@ -148,6 +199,18 @@ export default function HomeScreen() {
           </Pressable>
         ) : null}
       </View>
+
+      {isError && hasLoaded ? (
+        <FeedbackBanner
+          tone="danger"
+          title="앗, 최신 내용을 불러오지 못했어요"
+          description={loadErrorMessage}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void refetch();
+          }}
+        />
+      ) : null}
 
       {recipeGenerationStatus !== "idle" ? (
         <View style={styles.recipeStatusCard}>
@@ -188,37 +251,59 @@ export default function HomeScreen() {
         </View>
       ) : null}
 
-      <View style={styles.statsRow}>
-        <StatCard
-          label="오늘 만료"
-          value={todayExpiryCount}
-          tone={todayExpiryCount > 0 ? "danger" : "default"}
-        />
-        <StatCard
-          label="7일 이내"
-          value={within7DaysCount}
-          tone={within7DaysCount > 0 ? "warning" : "default"}
-        />
-        <StatCard
-          label="보관 중"
-          value={totalActiveCount}
-          tone={totalActiveCount > 0 ? "success" : "default"}
-        />
-      </View>
+      {isInitialLoading ? (
+        <HomeStatsSkeleton />
+      ) : isInitialError ? null : (
+        <View style={styles.statsRow}>
+          <StatCard
+            label="오늘 만료"
+            value={todayExpiryCount}
+            tone={todayExpiryCount > 0 ? "danger" : "default"}
+          />
+          <StatCard
+            label="7일 이내"
+            value={within7DaysCount}
+            tone={within7DaysCount > 0 ? "warning" : "default"}
+          />
+          <StatCard
+            label="보관 중"
+            value={totalActiveCount}
+            tone={totalActiveCount > 0 ? "success" : "default"}
+          />
+        </View>
+      )}
 
       <View style={styles.section}>
         <SectionHeader
           title="먼저 살펴볼 재료"
           description={
-            needsAttention
-              ? "유통기한이 가까운 재료부터 보여드릴게요."
-              : "급한 재료가 없으면 여유 있게 둘러보세요."
+            isInitialLoading
+              ? "곧 임박한 재료를 보여드릴게요."
+              : isInitialError
+                ? "다시 불러오면 여기서 확인할 수 있어요."
+                : needsAttention
+                  ? "유통기한이 가까운 재료부터 보여드릴게요."
+                  : "급한 재료가 없으면 여유 있게 둘러보세요."
           }
           action={
-            <Text style={styles.sectionCount}>{expiringItems.length}개</Text>
+            hasLoaded ? (
+              <Text style={styles.sectionCount}>{expiringItems.length}개</Text>
+            ) : null
           }
         />
-        {expiringItems.length ? (
+        {isInitialLoading ? (
+          <HomeListSkeleton />
+        ) : isInitialError ? (
+          <FeedbackBanner
+            tone="danger"
+            title="앗, 목록을 불러오지 못했어요"
+            description={loadErrorMessage}
+            actionLabel="다시 불러올게요"
+            onAction={() => {
+              void refetch();
+            }}
+          />
+        ) : expiringItems.length ? (
           <View style={styles.list}>
             {expiringItems.map((item) => (
               <InventoryCard
@@ -235,22 +320,16 @@ export default function HomeScreen() {
           </View>
         ) : (
           <EmptyState
-            mood={
-              isLoading ? "idle" : hasInventory ? "idle" : "empty"
-            }
+            mood={hasInventory ? "idle" : "empty"}
             title={
-              isLoading
-                ? "보관함을 살펴보고 있어요"
-                : hasInventory
-                  ? "지금은 급한 재료가 없어요"
-                  : "아직 넣어둔 재료가 없어요"
+              hasInventory
+                ? "지금은 급한 재료가 없어요"
+                : "아직 넣어둔 재료가 없어요"
             }
             description={
-              isLoading
-                ? "잠시만 기다려 주세요."
-                : hasInventory
-                  ? "여유 있는 재료는 보관함에서 천천히 볼 수 있어요."
-                  : "첫 재료를 넣으면 여기서 임박한 재료를 알려드릴게요."
+              hasInventory
+                ? "여유 있는 재료는 보관함에서 천천히 볼 수 있어요."
+                : "첫 재료를 넣으면 여기서 임박한 재료를 알려드릴게요."
             }
           />
         )}
@@ -259,12 +338,22 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <SectionHeader
           title="최근에 넣은 재료"
-          description="방금 넣은 재료를 다시 볼 수 있어요."
+          description={
+            isInitialLoading
+              ? "최근 기록을 준비하고 있어요."
+              : isInitialError
+                ? "다시 불러오면 여기서 확인할 수 있어요."
+                : "방금 넣은 재료를 다시 볼 수 있어요."
+          }
           action={
-            <Text style={styles.sectionCount}>{recentItems.length}개</Text>
+            hasLoaded ? (
+              <Text style={styles.sectionCount}>{recentItems.length}개</Text>
+            ) : null
           }
         />
-        {recentItems.length ? (
+        {isInitialLoading ? (
+          <HomeListSkeleton />
+        ) : isInitialError ? null : recentItems.length ? (
           <View style={styles.list}>
             {recentItems.map((item) => (
               <InventoryCard
@@ -281,17 +370,9 @@ export default function HomeScreen() {
           </View>
         ) : (
           <EmptyState
-            mood={isLoading ? "idle" : "empty"}
-            title={
-              isLoading
-                ? "최근 기록을 불러오고 있어요"
-                : "아직 넣어둔 재료가 없어요"
-            }
-            description={
-              isLoading
-                ? "곧 보여드릴게요."
-                : "첫 재료를 넣으면 요리 추천도 준비할 수 있어요."
-            }
+            mood="empty"
+            title="아직 넣어둔 재료가 없어요"
+            description="첫 재료를 넣으면 요리 추천도 준비할 수 있어요."
           />
         )}
       </View>
@@ -300,22 +381,35 @@ export default function HomeScreen() {
 }
 
 function getHomeFocus({
-  isLoading,
+  isInitialLoading,
+  isInitialError,
   needsAttention,
   hasInventory,
   priorityCount,
 }: {
-  isLoading: boolean;
+  isInitialLoading: boolean;
+  isInitialError: boolean;
   needsAttention: boolean;
   hasInventory: boolean;
   priorityCount: number;
 }) {
-  if (isLoading) {
+  if (isInitialLoading) {
     return {
       title: "보관함을 살펴보고 있어요",
       description: "조금만 기다려 주시면 오늘 할 일을 알려드릴게요.",
-      ctaLabel: "잠시만요",
+      ctaLabel: null as string | null,
       action: "inventory" as const,
+      showSecondaryEntry: false,
+    };
+  }
+
+  if (isInitialError) {
+    return {
+      title: "앗, 오늘 할 일을 불러오지 못했어요",
+      description: "네트워크가 잠시 흔들렸을 수 있어요. 다시 불러와 볼까요?",
+      ctaLabel: "다시 불러올게요",
+      action: "retry" as const,
+      showSecondaryEntry: false,
     };
   }
 
@@ -325,6 +419,7 @@ function getHomeFocus({
       description: "유통기한이 가까운 재료부터 살펴보고, 요리에 쓰거나 정리해 보세요.",
       ctaLabel: "임박한 재료 보기",
       action: "expiring" as const,
+      showSecondaryEntry: true,
     };
   }
 
@@ -334,6 +429,7 @@ function getHomeFocus({
       description: "바코드만 비춰도 첫 재료를 넣을 수 있어요. 장고가 도와드릴게요.",
       ctaLabel: "바코드로 넣을래요",
       action: "scanner" as const,
+      showSecondaryEntry: true,
     };
   }
 
@@ -342,6 +438,7 @@ function getHomeFocus({
     description: "여유 있을 때 바코드로 재료를 더 넣어볼까요?",
     ctaLabel: "바코드로 넣을래요",
     action: "scanner" as const,
+    showSecondaryEntry: true,
   };
 }
 
