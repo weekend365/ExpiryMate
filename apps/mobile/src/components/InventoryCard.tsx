@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.subheading.fontFamily,
     color: colors.text,
   },
   metaRow: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
   bucketLabel: {
     fontSize: typography.caption.fontSize,

@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
+import { colors, radius, spacing } from "../shared/theme";
+import { AppText } from "./AppText";
 import { Button } from "./Button";
 import { Mascot, type MascotMood } from "./Mascot";
-import { colors, radius, spacing, typography } from "../shared/theme";
 
 interface EmptyStateProps {
   title: string;
@@ -14,6 +15,13 @@ interface EmptyStateProps {
   actionLabel?: string;
   onAction?: () => void;
   accessory?: ReactNode;
+  /**
+   * `plain` = no card chrome (nested under a hero/section).
+   * `card` = bordered surface for standalone empty screens.
+   */
+  variant?: "plain" | "card";
+  /** Hide mascot even when mood is set — use when another hero already shows 장고. */
+  showMascot?: boolean;
 }
 
 export function EmptyState({
@@ -24,12 +32,16 @@ export function EmptyState({
   actionLabel,
   onAction,
   accessory,
+  variant = "card",
+  showMascot = true,
 }: EmptyStateProps) {
+  const shouldShowMascot = Boolean(mood) && showMascot;
+
   return (
-    <View style={styles.root}>
-      {mood ? (
+    <View style={[styles.root, variant === "card" ? styles.card : styles.plain]}>
+      {shouldShowMascot ? (
         <View style={styles.mascotWrap}>
-          <Mascot size="medium" mood={mood} />
+          <Mascot size={variant === "card" ? "medium" : "small"} mood={mood} />
         </View>
       ) : Icon ? (
         <View style={styles.iconWrap}>
@@ -37,8 +49,14 @@ export function EmptyState({
         </View>
       ) : null}
       <View style={styles.copy}>
-        <Text style={styles.title}>{title}</Text>
-        {description ? <Text style={styles.description}>{description}</Text> : null}
+        <AppText variant="subheading" style={styles.centered}>
+          {title}
+        </AppText>
+        {description ? (
+          <AppText variant="bodySmall" tone="subtext" style={styles.centered}>
+            {description}
+          </AppText>
+        ) : null}
       </View>
       {actionLabel && onAction ? (
         <Button onPress={onAction} fullWidth>
@@ -52,13 +70,19 @@ export function EmptyState({
 
 const styles = StyleSheet.create({
   root: {
+    gap: spacing.md,
+    alignItems: "stretch",
+  },
+  card: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.lg,
-    gap: spacing.md,
-    alignItems: "stretch",
+  },
+  plain: {
+    paddingVertical: spacing.sm,
+    gap: spacing.sm,
   },
   mascotWrap: {
     alignItems: "center",
@@ -71,23 +95,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "center",
   },
   copy: {
     gap: spacing.xs,
     alignItems: "center",
   },
-  title: {
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
-    color: colors.text,
-    textAlign: "center",
-  },
-  description: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
+  centered: {
     textAlign: "center",
   },
 });

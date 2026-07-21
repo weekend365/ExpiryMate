@@ -49,16 +49,16 @@ export function InventoryListSkeleton({ rows = 4 }: { rows?: number }) {
 export function HomeStatsSkeleton() {
   return (
     <View style={styles.statsRow} accessibilityLabel="통계를 불러오고 있어요">
-      <View style={styles.statCard}>
-        <SkeletonBlock height={spacing.xl} width={spacing.xl} />
+      <View style={styles.statInline}>
+        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
         <SkeletonBlock height={spacing.sm} width="70%" />
       </View>
-      <View style={styles.statCard}>
-        <SkeletonBlock height={spacing.xl} width={spacing.xl} />
+      <View style={styles.statInline}>
+        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
         <SkeletonBlock height={spacing.sm} width="70%" />
       </View>
-      <View style={styles.statCard}>
-        <SkeletonBlock height={spacing.xl} width={spacing.xl} />
+      <View style={styles.statInline}>
+        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
         <SkeletonBlock height={spacing.sm} width="70%" />
       </View>
     </View>
@@ -107,14 +107,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.sm,
   },
-  statCard: {
+  statInline: {
     flex: 1,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    padding: spacing.md,
-    gap: spacing.xs,
-    minHeight: spacing.xxxl + spacing.xl,
+    gap: spacing.xxs,
+    paddingVertical: spacing.xs,
   },
 });

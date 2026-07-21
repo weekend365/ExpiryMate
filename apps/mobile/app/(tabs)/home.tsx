@@ -1,11 +1,7 @@
 import { router } from "expo-router";
-import {
-  Barcode,
-  CheckCircle2,
-  Package,
-  Sparkles,
-} from "lucide-react-native";
-import { Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
+import { Barcode, Package } from "lucide-react-native";
+import { Pressable, RefreshControl, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import {
   HomeListSkeleton,
@@ -18,10 +14,13 @@ import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { StatCard } from "../../src/components/StatCard";
+import { SurfaceCard } from "../../src/components/SurfaceCard";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
-import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
+import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
+
+const RECENT_PREVIEW_COUNT = 2;
 
 export default function HomeScreen() {
   const {
@@ -48,6 +47,7 @@ export default function HomeScreen() {
 
   const expiringItems = data?.expiringItems ?? [];
   const recentItems = data?.recentItems ?? [];
+  const recentPreview = recentItems.slice(0, RECENT_PREVIEW_COUNT);
   const todayExpiryCount = data?.todayExpiryCount ?? 0;
   const within3DaysCount = data?.within3DaysCount ?? 0;
   const within7DaysCount = data?.within7DaysCount ?? 0;
@@ -98,6 +98,10 @@ export default function HomeScreen() {
     router.push("/scanner");
   };
 
+  const openInventory = () => {
+    router.push("/(tabs)/inventory");
+  };
+
   return (
     <Screen
       title="오늘"
@@ -116,28 +120,22 @@ export default function HomeScreen() {
         />
       }
     >
-      <View
-        style={[
-          styles.focusCard,
-          isInitialError || needsAttention
-            ? styles.focusCardDanger
-            : styles.focusCardSafe,
-        ]}
+      <SurfaceCard
+        variant="hero"
+        tone={isInitialError || needsAttention ? "danger" : "primary"}
       >
         <View style={styles.focusRow}>
           <View style={styles.focusCopy}>
-            <Text
-              style={[
-                styles.focusEyebrow,
-                isInitialError || needsAttention
-                  ? styles.focusEyebrowDanger
-                  : styles.focusEyebrowSafe,
-              ]}
+            <AppText
+              variant="label"
+              tone={isInitialError || needsAttention ? "danger" : "primary"}
             >
               지금 해야 할 한 가지
-            </Text>
-            <Text style={styles.focusTitle}>{focus.title}</Text>
-            <Text style={styles.focusDescription}>{focus.description}</Text>
+            </AppText>
+            <AppText variant="heading">{focus.title}</AppText>
+            <AppText variant="bodySmall" tone="subtext">
+              {focus.description}
+            </AppText>
           </View>
           <Mascot
             size="small"
@@ -194,19 +192,19 @@ export default function HomeScreen() {
                 : "장고가 바코드를 읽어 넣는 걸 도와줄게요."
             }
           >
-            <Text style={styles.secondaryEntryTitle}>
+            <AppText variant="bodyStrong" tone="primary">
               {focus.action === "scanner"
                 ? "직접 입력할게요"
                 : "바코드로 넣을래요"}
-            </Text>
-            <Text style={styles.secondaryEntryDescription}>
+            </AppText>
+            <AppText variant="label" tone="subtext">
               {focus.action === "scanner"
                 ? "이름과 유통기한을 손으로 적을 수도 있어요."
                 : "장고가 바코드를 읽어 넣는 걸 도와줄게요."}
-            </Text>
+            </AppText>
           </Pressable>
         ) : null}
-      </View>
+      </SurfaceCard>
 
       {isError && hasLoaded ? (
         <FeedbackBanner
@@ -221,64 +219,55 @@ export default function HomeScreen() {
       ) : null}
 
       {recipeGenerationStatus !== "idle" ? (
-        <View style={styles.recipeStatusCard}>
-          <View
-            style={[
-              styles.recipeStatusIcon,
-              recipeGenerationStatus === "error" && styles.recipeStatusIconDanger,
-            ]}
-          >
-            {recipeGenerationStatus === "success" ? (
-              <CheckCircle2 color={colors.success} size={spacing.md} strokeWidth={2.5} />
-            ) : (
-              <Sparkles
-                color={
-                  recipeGenerationStatus === "error" ? colors.danger : colors.primary
-                }
-                size={spacing.md}
-                strokeWidth={2.5}
-              />
-            )}
-          </View>
-          <View style={styles.recipeStatusCopy}>
-            <Text style={styles.recipeStatusTitle}>
-              {recipeGenerationStatus === "pending"
-                ? "요리 조합을 찾고 있어요"
-                : recipeGenerationStatus === "success"
-                  ? "추천이 준비됐어요"
-                  : "추천을 만들지 못했어요"}
-            </Text>
-            <Text style={styles.recipeStatusDescription}>
-              {recipeGenerationStatus === "pending"
-                ? "다른 화면을 봐도 괜찮아요. 끝나면 알려드릴게요."
-                : recipeGenerationStatus === "success"
-                  ? "추천 탭에서 오늘 만들 요리를 살펴보세요."
-                  : recipeGenerationError ?? "추천 탭에서 다시 해볼 수 있어요."}
-            </Text>
-          </View>
-        </View>
+        <FeedbackBanner
+          tone={
+            recipeGenerationStatus === "error"
+              ? "danger"
+              : recipeGenerationStatus === "success"
+                ? "success"
+                : "info"
+          }
+          title={
+            recipeGenerationStatus === "pending"
+              ? "요리 조합을 찾고 있어요"
+              : recipeGenerationStatus === "success"
+                ? "추천이 준비됐어요"
+                : "추천을 만들지 못했어요"
+          }
+          description={
+            recipeGenerationStatus === "pending"
+              ? "다른 화면을 봐도 괜찮아요. 끝나면 알려드릴게요."
+              : recipeGenerationStatus === "success"
+                ? "추천 탭에서 오늘 만들 요리를 살펴보세요."
+                : recipeGenerationError ?? "추천 탭에서 다시 해볼 수 있어요."
+          }
+          showMascot={false}
+        />
       ) : null}
 
       {isInitialLoading ? (
         <HomeStatsSkeleton />
       ) : isInitialError ? null : (
-        <View style={styles.statsRow}>
+        <SurfaceCard variant="inline" style={styles.statsRow}>
           <StatCard
+            variant="inline"
             label="오늘 만료"
             value={todayExpiryCount}
             tone={todayExpiryCount > 0 ? "danger" : "default"}
           />
           <StatCard
+            variant="inline"
             label="7일 이내"
             value={within7DaysCount}
             tone={within7DaysCount > 0 ? "warning" : "default"}
           />
           <StatCard
+            variant="inline"
             label="보관 중"
             value={totalActiveCount}
             tone={totalActiveCount > 0 ? "success" : "default"}
           />
-        </View>
+        </SurfaceCard>
       )}
 
       <View style={styles.section}>
@@ -295,7 +284,9 @@ export default function HomeScreen() {
           }
           action={
             hasLoaded ? (
-              <Text style={styles.sectionCount}>{expiringItems.length}개</Text>
+              <AppText variant="bodyStrong" tone="muted">
+                {expiringItems.length}개
+              </AppText>
             ) : null
           }
         />
@@ -328,6 +319,8 @@ export default function HomeScreen() {
           </View>
         ) : (
           <EmptyState
+            variant="plain"
+            showMascot={!hasInventory}
             mood={hasInventory ? "idle" : "empty"}
             title={
               hasInventory
@@ -343,47 +336,83 @@ export default function HomeScreen() {
         )}
       </View>
 
-      <View style={styles.section}>
-        <SectionHeader
-          title="최근에 넣은 재료"
-          description={
-            isInitialLoading
-              ? "최근 기록을 준비하고 있어요."
-              : isInitialError
-                ? "다시 불러오면 여기서 확인할 수 있어요."
-                : "방금 넣은 재료를 다시 볼 수 있어요."
-          }
-          action={
-            hasLoaded ? (
-              <Text style={styles.sectionCount}>{recentItems.length}개</Text>
-            ) : null
-          }
-        />
-        {isInitialLoading ? (
-          <HomeListSkeleton />
-        ) : isInitialError ? null : recentItems.length ? (
-          <View style={styles.list}>
-            {recentItems.map((item) => (
-              <InventoryCard
-                key={item.id}
-                item={item}
-                onPress={() =>
-                  router.push({
-                    pathname: "/inventory/[id]",
-                    params: { id: item.id },
-                  })
-                }
-              />
-            ))}
-          </View>
-        ) : (
-          <EmptyState
-            mood="empty"
-            title="아직 넣어둔 재료가 없어요"
-            description="첫 재료를 넣으면 요리 추천도 준비할 수 있어요."
+      {!isInitialError ? (
+        <View style={styles.section}>
+          <SectionHeader
+            title="최근에 넣은 재료"
+            description={
+              isInitialLoading
+                ? "최근 기록을 준비하고 있어요."
+                : recentItems.length
+                  ? "방금 넣은 재료를 다시 볼 수 있어요."
+                  : hasInventory
+                    ? "보관함에서 전체 목록을 볼 수 있어요."
+                    : "첫 재료를 넣으면 여기에 보여드릴게요."
+            }
+            action={
+              hasLoaded && recentItems.length ? (
+                <AppText variant="bodyStrong" tone="muted">
+                  {recentItems.length}개
+                </AppText>
+              ) : null
+            }
           />
-        )}
-      </View>
+          {isInitialLoading ? (
+            <HomeListSkeleton rows={2} />
+          ) : recentPreview.length ? (
+            <View style={styles.list}>
+              {recentPreview.map((item) => (
+                <InventoryCard
+                  key={item.id}
+                  item={item}
+                  onPress={() =>
+                    router.push({
+                      pathname: "/inventory/[id]",
+                      params: { id: item.id },
+                    })
+                  }
+                />
+              ))}
+              {recentItems.length > RECENT_PREVIEW_COUNT || hasInventory ? (
+                <Pressable
+                  onPress={openInventory}
+                  accessibilityRole="button"
+                  accessibilityLabel="보관함에서 더 보기"
+                  style={({ pressed }) => [
+                    styles.inventoryLink,
+                    pressed && styles.inventoryLinkPressed,
+                  ]}
+                >
+                  <AppText variant="bodyStrong" tone="primary">
+                    보관함에서 더 볼게요
+                  </AppText>
+                </Pressable>
+              ) : null}
+            </View>
+          ) : hasInventory ? (
+            <Pressable
+              onPress={openInventory}
+              accessibilityRole="button"
+              accessibilityLabel="보관함으로 갈게요"
+              style={({ pressed }) => [
+                styles.inventoryLink,
+                pressed && styles.inventoryLinkPressed,
+              ]}
+            >
+              <AppText variant="bodyStrong" tone="primary">
+                보관함으로 갈게요
+              </AppText>
+            </Pressable>
+          ) : !isInitialLoading ? (
+            <EmptyState
+              variant="plain"
+              showMascot={false}
+              title="아직 최근 기록이 없어요"
+              description="첫 재료를 넣으면 요리 추천도 준비할 수 있어요."
+            />
+          ) : null}
+        </View>
+      ) : null}
     </Screen>
   );
 }
@@ -451,20 +480,6 @@ function getHomeFocus({
 }
 
 const styles = StyleSheet.create({
-  focusCard: {
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    padding: spacing.lg,
-    gap: spacing.md,
-  },
-  focusCardDanger: {
-    backgroundColor: colors.dangerSoft,
-    borderColor: colors.dangerSoft,
-  },
-  focusCardSafe: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primarySoft,
-  },
   focusRow: {
     flexDirection: "row",
     gap: spacing.md,
@@ -476,29 +491,6 @@ const styles = StyleSheet.create({
   },
   focusMascot: {
     flexShrink: 0,
-  },
-  focusEyebrow: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-  },
-  focusEyebrowDanger: {
-    color: colors.danger,
-  },
-  focusEyebrowSafe: {
-    color: colors.primary,
-  },
-  focusTitle: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
-    color: colors.text,
-  },
-  focusDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   secondaryEntry: {
     borderRadius: radius.lg,
@@ -512,69 +504,25 @@ const styles = StyleSheet.create({
   secondaryEntryPressed: {
     backgroundColor: colors.surfacePressed,
   },
-  secondaryEntryTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.primary,
-  },
-  secondaryEntryDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  recipeStatusCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-  },
-  recipeStatusIcon: {
-    width: spacing.xl,
-    height: spacing.xl,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  recipeStatusIconDanger: {
-    backgroundColor: colors.dangerSoft,
-  },
-  recipeStatusCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
-  recipeStatusTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  recipeStatusDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
   statsRow: {
     flexDirection: "row",
-    gap: spacing.sm,
+    gap: spacing.md,
+    paddingVertical: spacing.xs,
   },
   section: {
     gap: spacing.sm,
   },
-  sectionCount: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.mutedText,
-  },
   list: {
     gap: spacing.sm,
+  },
+  inventoryLink: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+  },
+  inventoryLinkPressed: {
+    backgroundColor: colors.surfacePressed,
   },
 });
