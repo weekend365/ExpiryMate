@@ -8,6 +8,25 @@ import {
 
 export type InventoryViewFilter = "all" | "expiring" | "expired";
 
+const inventoryViewFilters = new Set<InventoryViewFilter>([
+  "all",
+  "expiring",
+  "expired",
+]);
+
+/** Parse a route/search param into a known inventory view filter. */
+export const parseInventoryViewFilter = (
+  value: string | string[] | undefined | null,
+): InventoryViewFilter | null => {
+  const raw = Array.isArray(value) ? value[0] : value;
+
+  if (!raw || !inventoryViewFilters.has(raw as InventoryViewFilter)) {
+    return null;
+  }
+
+  return raw as InventoryViewFilter;
+};
+
 export const filterInventoryItems = (
   items: InventoryItem[],
   filter: InventoryViewFilter,

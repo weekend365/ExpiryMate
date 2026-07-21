@@ -77,6 +77,14 @@ export default function HomeScreen() {
       return;
     }
 
+    if (focus.action === "expiring") {
+      router.push({
+        pathname: "/(tabs)/inventory",
+        params: { filter: "expiring" },
+      });
+      return;
+    }
+
     router.push("/(tabs)/inventory");
   };
 

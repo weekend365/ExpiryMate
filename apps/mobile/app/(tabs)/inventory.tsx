@@ -4,7 +4,7 @@ import {
   storageLocationLabels,
   type InventoryItem,
 } from "@expirymate/shared";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Archive,
   CircleAlert,
@@ -30,6 +30,7 @@ import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import {
   filterInventoryItems,
+  parseInventoryViewFilter,
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
@@ -55,6 +56,8 @@ const filters: Array<{
 ];
 
 export default function InventoryScreen() {
+  const params = useLocalSearchParams<{ filter?: string | string[] }>();
+  const filterParam = parseInventoryViewFilter(params.filter);
   const {
     data,
     isLoading,
@@ -66,7 +69,9 @@ export default function InventoryScreen() {
   const batchDiscardMutation = useBatchDiscardInventoryItems();
   const discardMutation = useDiscardInventoryItem();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
-  const [filter, setFilter] = useState<InventoryViewFilter>("all");
+  const [filter, setFilter] = useState<InventoryViewFilter>(
+    () => filterParam ?? "all",
+  );
   const [location, setLocation] = useState<StorageLocation | "all">("all");
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -75,6 +80,19 @@ export default function InventoryScreen() {
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
+
+  useEffect(() => {
+    if (filterParam) {
+      setFilter(filterParam);
+    }
+  }, [filterParam]);
+
+  const applyFilter = (nextFilter: InventoryViewFilter) => {
+    setFilter(nextFilter);
+    router.setParams({
+      filter: nextFilter === "all" ? undefined : nextFilter,
+    });
+  };
 
   const items = data ?? [];
   const hasLoadedInventory = data !== undefined;
@@ -499,7 +517,7 @@ export default function InventoryScreen() {
                 count={filterCounts[item.key]}
                 tone={item.tone}
                 selected={filter === item.key}
-                onPress={() => setFilter(item.key)}
+                onPress={() => applyFilter(item.key)}
               />
             ))}
           </View>
