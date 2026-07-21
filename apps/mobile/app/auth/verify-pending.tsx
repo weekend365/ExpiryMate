@@ -8,6 +8,7 @@ import { useAuth } from "../../src/features/auth/use-auth";
 import { getEmailVerificationStatus } from "../../src/services/api";
 import {
   colors,
+  fontFamily,
   spacing,
   touchTarget,
   typography,
@@ -163,20 +164,21 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: typography.heading.fontSize,
     lineHeight: typography.heading.lineHeight,
-    fontWeight: typography.heading.fontWeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
     textAlign: "center",
   },
   body: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
-    fontWeight: typography.body.fontWeight,
+    fontFamily: typography.body.fontFamily,
     color: colors.subtext,
     textAlign: "center",
   },
   hint: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.mutedText,
     textAlign: "center",
   },
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
   },
   secondaryLinkText: {
     fontSize: typography.body.fontSize,
-    fontWeight: "600",
+    fontFamily: fontFamily.semibold,
     color: colors.primary,
   },
 });

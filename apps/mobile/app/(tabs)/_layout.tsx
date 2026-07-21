@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Archive, ChefHat, House, Settings } from "lucide-react-native";
 import { RequireRegisteredAuth } from "../../src/features/auth/auth-gate";
-import { colors, spacing } from "../../src/shared/theme";
+import { colors, fontFamily, spacing, typography } from "../../src/shared/theme";
 
 export default function TabsLayout() {
   return (
@@ -11,6 +11,10 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.subtext,
+          tabBarLabelStyle: {
+            fontFamily: fontFamily.medium,
+            fontSize: typography.caption.fontSize,
+          },
           tabBarStyle: {
             backgroundColor: colors.surface,
             borderTopColor: colors.border,
