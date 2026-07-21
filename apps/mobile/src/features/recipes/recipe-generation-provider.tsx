@@ -12,7 +12,10 @@ import {
   createRecipeRecommendation,
   type RecipeRecommendationPayload,
 } from "../../services/api";
-import { scheduleLocalNotification } from "../../services/notifications";
+import {
+  NOTIFICATION_TYPES,
+  scheduleLocalNotification,
+} from "../../services/notifications";
 import { recipeRecommendationsQueryKey } from "./use-recipe-recommendations";
 
 type RecipeGenerationStatus = "idle" | "pending" | "success" | "error";
@@ -61,6 +64,10 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
         scheduleLocalNotification(
           "요리 추천이 준비됐어요",
           "어떤 요리가 나왔는지 볼까요?",
+          {
+            type: NOTIFICATION_TYPES.recipeReady,
+            recommendationId: recommendation.id,
+          },
         ).catch(() => null);
 
         return recommendation;

@@ -11,6 +11,9 @@ const mocks = vi.hoisted(() => ({
     getExpoPushTokenAsync: vi.fn(),
     scheduleNotificationAsync: vi.fn(),
     setNotificationChannelAsync: vi.fn(),
+    addNotificationResponseReceivedListener: vi.fn(),
+    getLastNotificationResponseAsync: vi.fn(),
+    clearLastNotificationResponseAsync: vi.fn(),
   },
   api: {
     registerPushToken: vi.fn(),
@@ -113,5 +116,56 @@ describe("mobile notification service", () => {
         platform: "android",
       }),
     );
+  });
+
+  it("schedules a local notification with navigation data", async () => {
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.scheduleNotificationAsync.mockResolvedValue("notification-1");
+    const {
+      NOTIFICATION_TYPES,
+      scheduleLocalNotification,
+    } = await import("./notifications");
+
+    await scheduleLocalNotification(
+      "요리 추천이 준비됐어요",
+      "어떤 요리가 나왔는지 볼까요?",
+      {
+        type: NOTIFICATION_TYPES.recipeReady,
+        recommendationId: "rec-1",
+      },
+    );
+
+    expect(mocks.notifications.scheduleNotificationAsync).toHaveBeenCalledWith({
+      content: {
+        title: "요리 추천이 준비됐어요",
+        body: "어떤 요리가 나왔는지 볼까요?",
+        data: {
+          type: "recipe_ready",
+          recommendationId: "rec-1",
+        },
+      },
+      trigger: null,
+    });
+  });
+
+  it("maps recipe-ready notification data to the recommendations path", async () => {
+    const {
+      NOTIFICATION_TYPES,
+      getNotificationNavigationPath,
+    } = await import("./notifications");
+
+    expect(
+      getNotificationNavigationPath({
+        type: NOTIFICATION_TYPES.recipeReady,
+        recommendationId: "rec-1",
+      }),
+    ).toBe("/(tabs)/recommendations");
+    expect(
+      getNotificationNavigationPath({
+        type: NOTIFICATION_TYPES.expiryReminder,
+        inventoryItemId: "item-1",
+      }),
+    ).toBeNull();
+    expect(getNotificationNavigationPath(undefined)).toBeNull();
   });
 });
