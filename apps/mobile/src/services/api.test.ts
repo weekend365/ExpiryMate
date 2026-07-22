@@ -304,6 +304,37 @@ describe("mobile API client core flow", () => {
       }),
     );
   });
+
+  it("normalizes legacy inventory array responses for listAllInventory", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    const legacyItem = {
+      id: "item-1",
+      displayName: "우유",
+      quantity: 1,
+      unit: "개",
+      storageLocation: "fridge",
+      status: "active",
+      expiryDate: "2026-07-30",
+    };
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(successResponse([legacyItem]));
+    const { listAllInventory } = await import("./api");
+
+    await expect(listAllInventory()).resolves.toEqual([legacyItem]);
+  });
+
+  it("rejects unreadable inventory payloads with a conversational message", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(successResponse({ page: 1 }));
+    const { listAllInventory } = await import("./api");
+
+    await expect(listAllInventory()).rejects.toThrow(/보관함 정보를 읽지 못했어요/);
+  });
 });
 
 function createSession(
