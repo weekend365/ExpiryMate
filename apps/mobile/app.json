@@ -36,6 +36,7 @@
           "defaultChannel": "expiry-reminders"
         }
       ],
+      "expo-apple-authentication",
       [
         "expo-splash-screen",
         {
@@ -78,6 +79,13 @@
       "bundleIdentifier": "com.expirymate.mobile",
       "buildNumber": "1",
       "icon": "./assets/branding/icon.png",
+      "usesAppleSignIn": true,
+      "entitlements": {
+        "com.apple.developer.applesignin": [
+          "Default"
+        ],
+        "aps-environment": "development"
+      },
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -102,9 +110,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "9d2b3113-c0c5-4017-9263-4faab84f637a"
+        "projectId": "6c64c29f-a2bb-4416-99c3-0b4d88898ea6"
       }
     },
-    "owner": "weekend365"
+    "owner": "devnamu"
   }
 }

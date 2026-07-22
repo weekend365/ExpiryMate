@@ -559,9 +559,10 @@ export const listInventory = async (params?: {
     search.set("q", params.q.trim());
   }
   const query = search.toString();
-  return request<InventoryListResponse>(
+  const data = await request<unknown>(
     `/inventory${query ? `?${query}` : ""}`,
   );
+  return normalizeInventoryListResponse(data, params);
 };
 
 /** Loads paginated inventory pages until exhausted (owner-scoped soft cap). */
@@ -582,6 +583,54 @@ export const listAllInventory = async (): Promise<InventoryItem[]> => {
 
   return items;
 };
+
+/**
+ * Accepts both the current paginated envelope and the legacy bare array
+ * (`InventoryItem[]`) still served by older production API deploys.
+ */
+function normalizeInventoryListResponse(
+  data: unknown,
+  params?: { page?: number; limit?: number },
+): InventoryListResponse {
+  if (Array.isArray(data)) {
+    return {
+      items: data as InventoryItem[],
+      page: params?.page ?? 1,
+      limit: params?.limit ?? data.length,
+      totalCount: data.length,
+      hasMore: false,
+    };
+  }
+
+  if (
+    data &&
+    typeof data === "object" &&
+    Array.isArray((data as InventoryListResponse).items)
+  ) {
+    const page = (data as InventoryListResponse).page ?? params?.page ?? 1;
+    const limit =
+      (data as InventoryListResponse).limit ?? params?.limit ?? 100;
+    const items = (data as InventoryListResponse).items;
+    const totalCount =
+      (data as InventoryListResponse).totalCount ?? items.length;
+    const hasMore =
+      typeof (data as InventoryListResponse).hasMore === "boolean"
+        ? (data as InventoryListResponse).hasMore
+        : page * limit < totalCount;
+
+    return {
+      items,
+      page,
+      limit,
+      totalCount,
+      hasMore,
+    };
+  }
+
+  throw new Error(
+    "보관함 정보를 읽지 못했어요. 잠시 후 다시 해볼까요?",
+  );
+}
 
 export const getInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}`);

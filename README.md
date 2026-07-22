@@ -37,10 +37,10 @@ This keeps the MVP simple while leaving a clean path for:
 | Area | Status | Notes |
 | ---- | ------ | ----- |
 | **Phase** | 1 mostly done → **2 (store)** | [docs/PROJECT.md](./docs/PROJECT.md) |
-| **Auth** | Kakao · Naver · Google · Email ✅ | Login required · mail domain `mail.devnamu.com` · Apple needs paid Apple Developer |
+| **Auth** | Kakao · Naver · Google · Email ✅ | Login required · mail domain `mail.devnamu.com` · Apple entitlement wired · TestFlight verify pending |
 | **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅ |
 | **QA** | Device + uptime ✅ | Sentry API/Admin ✅ · Mobile Sentry later |
-| **Next (P0)** | | Apple Developer · EAS production · store metadata |
+| **Next (P0)** | | EAS production build · TestFlight Apple/push · store metadata |
 
 ## Folder Structure
 
@@ -269,10 +269,14 @@ See [docs/PROJECT.md](./docs/PROJECT.md) (scanner + Personal Team notes) for iOS
 
 ## App Store Build
 
-Mobile App Store configuration lives in `apps/mobile/app.json` and
-`apps/mobile/eas.json`. App icon / adaptive icon come from
-`jango-icon-crop.png` (face + hat + pineapple). Splash and notification
-silhouette come from `jango-idle.png`. Regenerate with
+Mobile App Store configuration lives in `apps/mobile/app.json`,
+`apps/mobile/app.config.js`, and `apps/mobile/eas.json`. Sign in with Apple +
+Push entitlements are declared for paid-team preview/production profiles;
+Personal Team device builds use `development-device` (`EXPO_IOS_PERSONAL_TEAM=1`).
+Full checklist: [`docs/ios-eas-production.md`](./docs/ios-eas-production.md).
+
+App icon / adaptive icon come from `jango-icon-crop.png` (face + hat + pineapple).
+Splash and notification silhouette come from `jango-idle.png`. Regenerate with
 `pnpm --filter @expirymate/mobile branding:sync` (writes
 `notification-icon-192.png` then downscales to `notification-icon.png`).
 Mood variants: `jango-{idle,happy,worry,cooking,empty}.png`. Character rules:
@@ -285,11 +289,11 @@ npm install --global eas-cli
 eas login
 ```
 
-Run App Store builds from the Expo project directory:
+Run App Store / TestFlight builds from the Expo project directory:
 
 ```bash
 cd apps/mobile
-eas config
+eas credentials
 eas build --platform ios --profile production
 eas submit --platform ios --profile production
 ```
@@ -594,7 +598,7 @@ Inventory seed also includes mixed states:
 ### Mocked or intentionally limited
 
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
-- Apple Sign In: code ready; needs paid Apple Developer Program
+- Apple Sign In: entitlement/plugin/EAS production wired; TestFlight verify pending
 - API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
 - no native IAP purchase sheet yet (entitlement status only)
 - no family/household model
@@ -603,7 +607,7 @@ Inventory seed also includes mixed states:
 
 See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
 
-1. Apple Developer Program · EAS iOS/Android production · store metadata/review notes
+1. EAS iOS/Android production build · TestFlight Apple/push · store metadata/review notes
 2. Mobile Sentry preview smoke (deferred) · push scheduler
 3. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, households
 
