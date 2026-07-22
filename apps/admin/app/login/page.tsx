@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
       });
       if (session.user.role !== "admin") {
         await adminLogout();
-        setErrorMessage("관리자 권한이 필요해요. 관리자 계정으로 다시 로그인해 주세요.");
+        setErrorMessage("관리자만 들어올 수 있어요. 관리자 계정으로 다시 들어와 주세요.");
         return;
       }
       router.replace("/dashboard");
@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "앗, 로그인에 잠시 문제가 생겼어요.",
+          : "앗, 들어오는 중에 잠시 문제가 생겼어요.",
       );
     } finally {
       setIsSubmitting(false);
@@ -53,12 +53,12 @@ export default function AdminLoginPage() {
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
           {appBrand.appNameKo} Admin
         </div>
-        <h1 className="mt-5 text-3xl font-black tracking-tight">관리자 로그인</h1>
+        <h1 className="mt-6 text-3xl font-black tracking-tight">관리자로 들어올게요</h1>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          관리자 권한이 있는 이메일 계정으로 로그인하세요.
+          관리자 권한이 있는 이메일 계정으로 들어와 주세요.
         </p>
 
-        <div className="mt-8 space-y-3">
+        <div className="mt-8 space-y-4">
           <input
             name="email"
             autoComplete="email"
@@ -90,7 +90,7 @@ export default function AdminLoginPage() {
           disabled={!email || !password || isSubmitting}
           className="mt-6 h-12 w-full rounded-[var(--radius-lg)] bg-[var(--primary)] text-sm font-black text-[var(--surface)] disabled:cursor-not-allowed disabled:bg-[var(--border)]"
         >
-          {isSubmitting ? "로그인 중" : "로그인"}
+          {isSubmitting ? "들어가는 중이에요" : "들어갈게요"}
         </button>
       </form>
     </main>

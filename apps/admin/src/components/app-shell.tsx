@@ -38,7 +38,7 @@ export function AppShell({ children }: PropsWithChildren) {
   if (meQuery.isLoading) {
     return (
       <div className="grid min-h-screen place-items-center text-sm font-semibold text-[var(--muted)]">
-        관리자 세션을 확인하고 있습니다.
+        관리자 권한을 잠깐 살펴보는 중이에요.
       </div>
     );
   }
@@ -47,14 +47,14 @@ export function AppShell({ children }: PropsWithChildren) {
     return (
       <div className="grid min-h-screen place-items-center px-4">
         <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-8 text-center shadow-[var(--shadow-soft)]">
-          <div className="text-xl font-black">관리자 권한이 필요합니다</div>
+          <div className="text-xl font-black">관리자만 들어올 수 있어요</div>
           <button
-            className="mt-5 rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-bold text-[var(--surface)]"
+            className="mt-6 rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-bold text-[var(--surface)]"
             onClick={() => {
               adminLogout().finally(() => router.replace("/login"));
             }}
           >
-            로그인으로 돌아가기
+            다시 들어가기
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@ export function AppShell({ children }: PropsWithChildren) {
                 adminLogout().finally(() => router.replace("/login"));
               }}
             >
-              로그아웃
+              여기서 나갈게요
             </button>
           </div>
 

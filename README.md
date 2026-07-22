@@ -147,6 +147,9 @@ CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
 AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
 AUTH_ALLOW_DEV_FALLBACK="false"
+APP_BASE_URL="expirymate://"
+AUTH_LINK_BASE_URL="http://localhost:4000"
+ADMIN_BASE_URL="http://localhost:3000"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
@@ -531,7 +534,7 @@ This is intentionally simple and easy for both mobile and admin clients.
 - `POST /inventory/:id/consume`
 - `POST /inventory/:id/discard`
 
-Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous minting (`POST /auth/anonymous`) is closed. Client-supplied `ownerKey` query/body values are not trusted.
+Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous sessions are not supported — there is no `/auth/anonymous` minting path. Client-supplied `ownerKey` query/body values are not trusted.
 
 ### Other
 

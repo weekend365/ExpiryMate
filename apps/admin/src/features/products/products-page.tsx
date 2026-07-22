@@ -63,11 +63,11 @@ export function ProductsPage() {
       <PageHeader
         eyebrow="Products"
         title="상품 관리"
-        description="요리 추천과 재료 등록에 사용할 기준 상품 데이터를 생성하거나 수정합니다."
+        description="요리 추천과 재료 안내에 쓸 기준 상품을 넣거나 다듬어요."
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <Panel title="새 상품 등록" description="반복해서 쓰는 재료와 생활용품 기준 데이터를 등록합니다.">
+        <Panel title="새 기준 상품 넣기" description="자주 쓰는 재료와 생활용품 기준을 여기에 남겨 두어요.">
           <form className="grid gap-4" onSubmit={onSubmit}>
             <label className="grid gap-2 text-sm font-semibold">
               상품명
@@ -107,7 +107,7 @@ export function ProductsPage() {
               type="submit"
               className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
             >
-              등록하기
+              기준 상품으로 넣을게요
             </button>
           </form>
         </Panel>

@@ -70,6 +70,10 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
+  /**
+   * Test/legacy helper only — HTTP minting was removed (PROJECT: 익명 세션 ❌).
+   * Keeps merge/JWT coverage for residual anonymous rows until they age out.
+   */
   async issueAnonymousSession(): Promise<AuthSession> {
     const user = await this.prisma.user.create({
       data: {

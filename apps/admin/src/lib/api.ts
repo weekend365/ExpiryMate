@@ -118,7 +118,7 @@ async function request<T>(
       return request<T>(path, init, { retryOnUnauthorized: false });
     }
 
-    throw new Error(body.error?.message ?? "요청에 실패했습니다.");
+    throw new Error(body.error?.message ?? "앗, 요청을 처리하지 못했어요.");
   }
 
   return body.data;
@@ -138,7 +138,7 @@ export const adminLogin = async (payload: { email: string; password: string }) =
   const body = (await response.json()) as ApiEnvelope<Omit<AuthSession, "refreshToken">>;
 
   if (!response.ok || !body.success) {
-    throw new Error(body.error?.message ?? "로그인에 실패했습니다.");
+    throw new Error(body.error?.message ?? "앗, 들어오지 못했어요.");
   }
 
   setAdminAccessToken(body.data.accessToken);
@@ -158,7 +158,7 @@ export const refreshAdminSession = async () => {
     const body = (await response.json()) as ApiEnvelope<Omit<AuthSession, "refreshToken">>;
 
     if (!response.ok || !body.success) {
-      throw new Error(body.error?.message ?? "세션 갱신에 실패했습니다.");
+      throw new Error(body.error?.message ?? "앗, 세션을 이어가지 못했어요.");
     }
 
     return body.data;

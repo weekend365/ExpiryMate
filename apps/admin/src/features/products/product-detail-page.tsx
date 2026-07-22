@@ -92,7 +92,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
           </div>
         </Panel>
 
-        <Panel title="상품 수정" description="운영자가 기준 상품 레코드를 정리하는 화면입니다.">
+        <Panel title="상품 정보 다듬기" description="기준 상품 내용을 가볍게 고쳐 둘 수 있어요.">
           <form className="grid gap-4" onSubmit={onSubmit}>
             <label className="grid gap-2 text-sm font-semibold">
               상품명
@@ -132,7 +132,7 @@ export function ProductDetailPage({ productId }: { productId: string }) {
               type="submit"
               className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
             >
-              수정 저장
+              이대로 반영할게요
             </button>
           </form>
         </Panel>

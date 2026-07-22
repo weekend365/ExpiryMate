@@ -3,7 +3,6 @@ import {
   Body,
   Controller,
   Get,
-  GoneException,
   Header,
   Headers,
   HttpStatus,
@@ -50,14 +49,6 @@ interface CookieResponse {
 @UseGuards(AuthRateLimitGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  /** Closed: anonymous sessions are no longer issued (P0-04). */
-  @Post("anonymous")
-  issueAnonymousSession() {
-    throw new GoneException(
-      "익명으로 이어가기는 더 이상 지원하지 않아요. 계정으로 로그인해 주세요.",
-    );
-  }
 
   @AuthRateLimit({
     name: "register",

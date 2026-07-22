@@ -53,8 +53,8 @@ describe("AuthService", () => {
     vi.restoreAllMocks();
   });
 
-  it("still signs bearer tokens for legacy anonymous users (endpoint closed)", async () => {
-    // HTTP POST /auth/anonymous is gone; service helper remains for merge/JWT tests.
+  it("still signs bearer tokens for legacy anonymous users (no HTTP mint path)", async () => {
+    // HTTP /auth/anonymous was removed; helper remains for merge/JWT tests.
     const service = createAuthService();
     const session = await service.issueAnonymousSession();
 

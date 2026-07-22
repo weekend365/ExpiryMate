@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Env key parity
+        run: pnpm validate:env-parity
+
       - name: Lint
         run: pnpm lint
 

@@ -82,7 +82,7 @@ export default function PrivacyChoicesPage() {
             href="/login"
             className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
           >
-            관리자 로그인
+            관리자로 들어가기
           </Link>
         </div>
       </div>
