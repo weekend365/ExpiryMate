@@ -371,3 +371,18 @@ model SchedulerLease {
 
   @@index([expiresAt])
 }
+
+/// Append-only admin action trail (never update/delete from app code).
+model AdminAuditLog {
+  id           String   @id @default(cuid())
+  actorUserId  String
+  action       String
+  resourceType String?
+  resourceId   String?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([action, createdAt])
+}

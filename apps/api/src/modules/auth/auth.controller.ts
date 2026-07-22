@@ -40,9 +40,10 @@ import {
   VerifyEmailDto,
 } from "./dto/auth.dto";
 import type { AuthenticatedRequest } from "./auth.types";
+import { ensureAdminClientAllowed } from "./admin-client-session";
 
 interface CookieResponse {
-  setHeader(name: string, value: string): void;
+  setHeader(name: string, value: string | string[]): void;
 }
 
 @Controller("auth")
@@ -162,7 +163,7 @@ export class AuthController {
     );
     const session = await this.authService.login(dto, actor);
 
-    return formatSessionForClient(session, client, response);
+    return finalizeSessionForClient(this.authService, session, client, response);
   }
 
   @AuthRateLimit({
@@ -181,7 +182,7 @@ export class AuthController {
     const refreshToken = dto.refreshToken ?? readRefreshCookie(request);
     const session = await this.authService.refresh(refreshToken ?? "");
 
-    return formatSessionForClient(session, client, response);
+    return finalizeSessionForClient(this.authService, session, client, response);
   }
 
   @Post("logout")
@@ -372,8 +373,21 @@ export class AuthController {
     );
     const session = await this.authService.oauthLogin(provider, dto, actor);
 
-    return formatSessionForClient(session, client, response);
+    return finalizeSessionForClient(this.authService, session, client, response);
   }
+}
+
+async function finalizeSessionForClient(
+  authService: AuthService,
+  session: Awaited<ReturnType<AuthService["login"]>>,
+  client: string | undefined,
+  response: CookieResponse,
+) {
+  await ensureAdminClientAllowed(authService, session, client, () => {
+    clearRefreshCookie(response);
+  });
+
+  return formatSessionForClient(session, client, response);
 }
 
 function formatSessionForClient(
@@ -438,31 +452,31 @@ function readRefreshCookie(request: AuthenticatedRequest) {
 function setRefreshCookie(response: CookieResponse, refreshToken: string) {
   response.setHeader(
     "Set-Cookie",
-    [
-      `expiry_admin_refresh=${encodeURIComponent(refreshToken)}`,
-      "Path=/",
-      "HttpOnly",
-      "SameSite=Lax",
-      "Max-Age=2592000",
-      process.env.NODE_ENV === "production" ? "Secure" : "",
-    ]
-      .filter(Boolean)
-      .join("; "),
+    buildRefreshCookieHeader(refreshToken, 2592000),
   );
 }
 
 function clearRefreshCookie(response: CookieResponse) {
-  response.setHeader(
-    "Set-Cookie",
-    [
-      "expiry_admin_refresh=",
-      "Path=/",
-      "HttpOnly",
-      "SameSite=Lax",
-      "Max-Age=0",
-      process.env.NODE_ENV === "production" ? "Secure" : "",
-    ]
-      .filter(Boolean)
-      .join("; "),
-  );
+  // Clear both legacy Path=/ and scoped Path=/auth cookies.
+  response.setHeader("Set-Cookie", [
+    buildRefreshCookieHeader("", 0, "/"),
+    buildRefreshCookieHeader("", 0, "/auth"),
+  ]);
+}
+
+function buildRefreshCookieHeader(
+  refreshToken: string,
+  maxAgeSeconds: number,
+  path = "/auth",
+) {
+  return [
+    `expiry_admin_refresh=${encodeURIComponent(refreshToken)}`,
+    `Path=${path}`,
+    "HttpOnly",
+    "SameSite=Lax",
+    `Max-Age=${maxAgeSeconds}`,
+    process.env.NODE_ENV === "production" ? "Secure" : "",
+  ]
+    .filter(Boolean)
+    .join("; ");
 }

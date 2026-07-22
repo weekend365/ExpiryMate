@@ -3,7 +3,7 @@
 import { appBrand } from "@expirymate/shared";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { adminLogin } from "../../src/lib/api";
+import { adminLogin, adminLogout } from "../../src/lib/api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -27,13 +27,17 @@ export default function AdminLoginPage() {
         password: submittedPassword,
       });
       if (session.user.role !== "admin") {
-        setErrorMessage("관리자 권한이 필요합니다.");
+        await adminLogout();
+        setErrorMessage("관리자 권한이 필요해요. 관리자 계정으로 다시 로그인해 주세요.");
         return;
       }
       router.replace("/dashboard");
     } catch (error) {
+      await adminLogout().catch(() => null);
       setErrorMessage(
-        error instanceof Error ? error.message : "로그인에 실패했습니다.",
+        error instanceof Error
+          ? error.message
+          : "앗, 로그인에 잠시 문제가 생겼어요.",
       );
     } finally {
       setIsSubmitting(false);

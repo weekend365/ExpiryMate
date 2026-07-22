@@ -77,7 +77,7 @@
 |---|------|-----|
 | 4 | **Sentry Mobile** preview 스모크 | API·Admin ✅. Android preview는 Sentry 업로드 설정 정리 후 |
 | 5 | API/Admin 커스텀 도메인 | Privacy·Support URL·브랜드 일관성 |
-| 6 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
+| 6 | Admin 보안 하드닝 | admin client role 거부 · refresh cookie Path=/auth · inventory pagination/mask · AdminAuditLog |
 | 7 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` · DB lease · receipt poll · stale pending 재시도 |
 | 8 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료 — migration 잔여분만 |
 
