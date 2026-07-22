@@ -206,13 +206,21 @@ export class NotificationsService
       },
     });
 
-    for (const preference of preferences) {
+    const activePreferences = preferences.filter((preference) => {
       stats.preferencesChecked += 1;
+      return !isWithinQuietHours(
+        now,
+        preference.quietHoursStart,
+        preference.quietHoursEnd,
+      );
+    });
 
-      if (isWithinQuietHours(now, preference.quietHoursStart, preference.quietHoursEnd)) {
-        continue;
-      }
+    if (activePreferences.length === 0) {
+      return;
+    }
 
+    const reminderDateByKey = new Map<string, Date>();
+    const preferencePlans = activePreferences.map((preference) => {
       const daysBeforeValues = getReminderDays(
         preference.reminderDaysBefore,
         preference.remindOnDayOf,
@@ -222,30 +230,70 @@ export class NotificationsService
         const reminderDate = dateOnlyToUtcDate(
           getLocalDateOnly(now, daysBefore),
         );
-        const items = await this.prisma.inventoryItem.findMany({
-          where: {
-            ownerKey: preference.ownerKey,
-            status: ItemStatus.active,
-            expiryDate: reminderDate,
-          },
-          select: {
-            id: true,
-            displayName: true,
-          },
-          orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
-        });
+        reminderDateByKey.set(reminderDate.toISOString(), reminderDate);
+      }
 
+      return { preference, daysBeforeValues };
+    });
+
+    const reminderDates = [...reminderDateByKey.values()];
+    const ownerKeys = activePreferences.map((preference) => preference.ownerKey);
+    const dueItems = await this.prisma.inventoryItem.findMany({
+      where: {
+        ownerKey: { in: ownerKeys },
+        status: ItemStatus.active,
+        expiryDate: { in: reminderDates },
+      },
+      select: {
+        id: true,
+        displayName: true,
+        ownerKey: true,
+        expiryDate: true,
+      },
+      orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
+    });
+
+    const itemsByOwnerAndDate = new Map<string, DueItem[]>();
+    for (const item of dueItems) {
+      const key = `${item.ownerKey}:${item.expiryDate.toISOString()}`;
+      const bucket = itemsByOwnerAndDate.get(key) ?? [];
+      bucket.push({ id: item.id, displayName: item.displayName });
+      itemsByOwnerAndDate.set(key, bucket);
+    }
+
+    type OutboundJob = {
+      deliveryId: string;
+      title: string;
+      body: string;
+      pushTokenId: string;
+      token: string;
+      inventoryItemId: string;
+      daysBefore: number;
+    };
+
+    const outbound: OutboundJob[] = [];
+
+    for (const plan of preferencePlans) {
+      for (const daysBefore of plan.daysBeforeValues) {
+        const reminderDate = dateOnlyToUtcDate(
+          getLocalDateOnly(now, daysBefore),
+        );
+        const items =
+          itemsByOwnerAndDate.get(
+            `${plan.preference.ownerKey}:${reminderDate.toISOString()}`,
+          ) ?? [];
         stats.itemsMatched += items.length;
 
         for (const item of items) {
-          for (const pushToken of preference.owner.pushTokens) {
+          for (const pushToken of plan.preference.owner.pushTokens) {
+            const copy = buildReminderCopy(item, daysBefore);
             const delivery = await this.createPendingDelivery({
-              ownerKey: preference.ownerKey,
+              ownerKey: plan.preference.ownerKey,
               pushTokenId: pushToken.id,
               inventoryItemId: item.id,
               reminderDate,
               daysBefore,
-              ...buildReminderCopy(item, daysBefore),
+              ...copy,
             });
 
             if (!delivery) {
@@ -253,18 +301,63 @@ export class NotificationsService
             }
 
             stats.notificationsCreated += 1;
-            await this.dispatchDelivery(
-              delivery,
-              {
-                id: pushToken.id,
-                token: pushToken.token,
-              },
-              item.id,
+            outbound.push({
+              deliveryId: delivery.id,
+              title: delivery.title,
+              body: delivery.body,
+              pushTokenId: pushToken.id,
+              token: pushToken.token,
+              inventoryItemId: item.id,
               daysBefore,
-              stats,
-            );
+            });
           }
         }
+      }
+    }
+
+    if (outbound.length === 0) {
+      return;
+    }
+
+    const tickets = await this.expoPush.sendMany(
+      outbound.map((job) => ({
+        to: job.token,
+        title: job.title,
+        body: job.body,
+        data: {
+          type: "expiry_reminder",
+          inventoryItemId: job.inventoryItemId,
+          daysBefore: job.daysBefore,
+        },
+      })),
+    );
+
+    for (let index = 0; index < outbound.length; index += 1) {
+      const job = outbound[index];
+      if (!job) {
+        continue;
+      }
+
+      const ticket = tickets[index] ?? {
+        status: "error" as const,
+        message: "Expo Push API returned an empty ticket.",
+        details: { error: "EMPTY_TICKET" },
+      };
+      const update = toDeliveryUpdate(ticket);
+
+      await this.prisma.pushNotificationDelivery.update({
+        where: { id: job.deliveryId },
+        data: update,
+      });
+
+      if (ticket.status === "ok") {
+        stats.notificationsSent += 1;
+        continue;
+      }
+
+      stats.notificationsFailed += 1;
+      if (ticket.details?.error === "DeviceNotRegistered") {
+        await this.disablePushToken(job.pushTokenId, stats);
       }
     }
   }

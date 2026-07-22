@@ -50,6 +50,8 @@ const preference = {
 const inventoryItem = {
   id: "item-1",
   displayName: "계란",
+  ownerKey: "owner-a",
+  expiryDate: new Date("2026-06-08T00:00:00.000Z"),
 };
 
 describe("NotificationsService", () => {
@@ -108,10 +110,12 @@ describe("NotificationsService", () => {
         ...data,
       }),
     );
-    expoPush.send.mockResolvedValue({
-      status: "ok",
-      id: "ticket-1",
-    });
+    expoPush.sendMany.mockResolvedValue([
+      {
+        status: "ok",
+        id: "ticket-1",
+      },
+    ]);
 
     const stats = await service.runDueReminders(
       new Date("2026-06-07T01:00:00.000Z"),
@@ -120,16 +124,18 @@ describe("NotificationsService", () => {
     expect(stats.skippedByLock).toBe(false);
     expect(stats.notificationsCreated).toBe(1);
     expect(stats.notificationsSent).toBe(1);
-    expect(expoPush.send).toHaveBeenCalledWith({
-      to: "ExpoPushToken[device-token]",
-      title: "1일 뒤 유통기한이 끝나요",
-      body: "계란의 유통기한이 1일 남았어요.",
-      data: {
-        type: "expiry_reminder",
-        inventoryItemId: "item-1",
-        daysBefore: 1,
+    expect(expoPush.sendMany).toHaveBeenCalledWith([
+      {
+        to: "ExpoPushToken[device-token]",
+        title: "1일 뒤 유통기한이 끝나요",
+        body: "계란의 유통기한이 1일 남았어요.",
+        data: {
+          type: "expiry_reminder",
+          inventoryItemId: "item-1",
+          daysBefore: 1,
+        },
       },
-    });
+    ]);
     expect(prisma.pushNotificationDelivery.update).toHaveBeenCalledWith({
       where: {
         id: "delivery-1",
@@ -154,7 +160,7 @@ describe("NotificationsService", () => {
     );
 
     expect(stats.skippedByLock).toBe(true);
-    expect(expoPush.send).not.toHaveBeenCalled();
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
     expect(prisma.notificationPreference.findMany).not.toHaveBeenCalled();
   });
 
@@ -169,13 +175,15 @@ describe("NotificationsService", () => {
         ...data,
       }),
     );
-    expoPush.send.mockResolvedValue({
-      status: "error",
-      message: "Device is not registered.",
-      details: {
-        error: "DeviceNotRegistered",
+    expoPush.sendMany.mockResolvedValue([
+      {
+        status: "error",
+        message: "Device is not registered.",
+        details: {
+          error: "DeviceNotRegistered",
+        },
       },
-    });
+    ]);
 
     const stats = await service.runDueReminders(
       new Date("2026-06-07T01:00:00.000Z"),
@@ -222,10 +230,12 @@ describe("NotificationsService", () => {
         id: "delivery-1",
         status: "sent",
       });
-    expoPush.send.mockResolvedValue({
-      status: "ok",
-      id: "ticket-1",
-    });
+    expoPush.sendMany.mockResolvedValue([
+      {
+        status: "ok",
+        id: "ticket-1",
+      },
+    ]);
 
     const stats = await service.runDueReminders(
       new Date("2026-06-07T01:00:00.000Z"),
@@ -369,6 +379,12 @@ function createService() {
   };
   const expoPush = {
     send: vi.fn(),
+    sendMany: vi.fn().mockImplementation(async (messages: unknown[]) =>
+      (messages as unknown[]).map(() => ({
+        status: "ok",
+        id: "ticket-batch",
+      })),
+    ),
     getReceipts: vi.fn().mockResolvedValue({}),
   };
 

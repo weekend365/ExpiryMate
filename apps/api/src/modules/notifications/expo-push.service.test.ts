@@ -11,7 +11,7 @@ describe("ExpoPushService", () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        data: { status: "ok", id: "ticket-1" },
+        data: [{ status: "ok", id: "ticket-1" }],
       }),
     });
     vi.stubGlobal("fetch", fetchMock);
@@ -26,8 +26,39 @@ describe("ExpoPushService", () => {
     expect(ticket).toEqual({ status: "ok", id: "ticket-1" });
     expect(fetchMock).toHaveBeenCalledWith(
       "https://exp.host/--/api/v2/push/send",
-      expect.objectContaining({ method: "POST" }),
+      expect.objectContaining({
+        method: "POST",
+        body: JSON.stringify([
+          {
+            to: "ExpoPushToken[test]",
+            title: "hello",
+            body: "world",
+          },
+        ]),
+      }),
     );
+  });
+
+  it("batches multiple push messages", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        data: [
+          { status: "ok", id: "ticket-1" },
+          { status: "ok", id: "ticket-2" },
+        ],
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const service = new ExpoPushService();
+    const tickets = await service.sendMany([
+      { to: "ExpoPushToken[a]", title: "a", body: "1" },
+      { to: "ExpoPushToken[b]", title: "b", body: "2" },
+    ]);
+
+    expect(tickets).toHaveLength(2);
+    expect(fetchMock).toHaveBeenCalledOnce();
   });
 
   it("fetches push receipts by ticket id", async () => {

@@ -10,10 +10,14 @@ import {
   dateOnlyToUtcDate,
   isDateOnlyString,
   ItemStatus as SharedItemStatus,
+  type InventoryListResponse,
 } from "@expirymate/shared";
 import { serializeInventoryItem } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
 import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
+
+const DEFAULT_PAGE_SIZE = 100;
+const MAX_PAGE_SIZE = 200;
 
 interface FindInventoryParams {
   ownerKey: string;
@@ -21,6 +25,8 @@ interface FindInventoryParams {
   status?: SharedItemStatus;
   storageLocation?: StorageLocation;
   expiringWithin?: number;
+  page?: number;
+  limit?: number;
 }
 
 interface BatchDiscardParams {
@@ -32,40 +38,58 @@ interface BatchDiscardParams {
 export class InventoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(params: FindInventoryParams) {
-    const items = await this.prisma.inventoryItem.findMany({
-      where: {
-        ownerKey: params.ownerKey,
-        status: params.status as ItemStatus | undefined,
-        storageLocation: params.storageLocation,
-        expiryDate: params.expiringWithin
-          ? {
-              lte: dateOnlyToUtcDate(
-                addDaysToDateOnly(new Date(), params.expiringWithin),
-              ),
-            }
-          : undefined,
-        OR: params.q
-          ? [
-              {
-                displayName: {
-                  contains: params.q,
-                  mode: "insensitive",
-                },
+  async findAll(params: FindInventoryParams): Promise<InventoryListResponse> {
+    const page = Math.max(1, params.page ?? 1);
+    const limit = Math.min(
+      MAX_PAGE_SIZE,
+      Math.max(1, params.limit ?? DEFAULT_PAGE_SIZE),
+    );
+    const where = {
+      ownerKey: params.ownerKey,
+      status: params.status as ItemStatus | undefined,
+      storageLocation: params.storageLocation,
+      expiryDate: params.expiringWithin
+        ? {
+            lte: dateOnlyToUtcDate(
+              addDaysToDateOnly(new Date(), params.expiringWithin),
+            ),
+          }
+        : undefined,
+      OR: params.q
+        ? [
+            {
+              displayName: {
+                contains: params.q,
+                mode: "insensitive" as const,
               },
-              {
-                brand: {
-                  contains: params.q,
-                  mode: "insensitive",
-                },
+            },
+            {
+              brand: {
+                contains: params.q,
+                mode: "insensitive" as const,
               },
-            ]
-          : undefined,
-      },
-      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
-    });
+            },
+          ]
+        : undefined,
+    };
 
-    return items.map(serializeInventoryItem);
+    const [totalCount, items] = await this.prisma.$transaction([
+      this.prisma.inventoryItem.count({ where }),
+      this.prisma.inventoryItem.findMany({
+        where,
+        orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+    ]);
+
+    return {
+      items: items.map(serializeInventoryItem),
+      page,
+      limit,
+      totalCount,
+      hasMore: page * limit < totalCount,
+    };
   }
 
   async findOne(id: string, ownerKey: string) {

@@ -156,6 +156,14 @@ export interface InventoryItem {
   updatedAt: string;
 }
 
+export interface InventoryListResponse {
+  items: InventoryItem[];
+  page: number;
+  limit: number;
+  totalCount: number;
+  hasMore: boolean;
+}
+
 export interface NotificationPreference {
   id: string;
   ownerKey: string;

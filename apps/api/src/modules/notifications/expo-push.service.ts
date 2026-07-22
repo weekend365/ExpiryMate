@@ -46,18 +46,9 @@ const EXPO_PUSH_RECEIPTS_URL = "https://exp.host/--/api/v2/push/getReceipts";
 @Injectable()
 export class ExpoPushService {
   async send(message: ExpoPushMessage): Promise<ExpoPushTicket> {
-    const payload = await this.postJson<ExpoPushResponse>(EXPO_PUSH_SEND_URL, message);
-
-    if (!payload.ok) {
-      return payload.ticket;
-    }
-
-    const ticket = Array.isArray(payload.body.data)
-      ? payload.body.data[0]
-      : payload.body.data;
-
+    const tickets = await this.sendMany([message]);
     return (
-      ticket ?? {
+      tickets[0] ?? {
         status: "error",
         message: "Expo Push API returned an empty ticket.",
         details: {
@@ -65,6 +56,50 @@ export class ExpoPushService {
         },
       }
     );
+  }
+
+  /** Expo accepts up to 100 messages per request. */
+  async sendMany(messages: ExpoPushMessage[]): Promise<ExpoPushTicket[]> {
+    if (messages.length === 0) {
+      return [];
+    }
+
+    const tickets: ExpoPushTicket[] = [];
+
+    for (let offset = 0; offset < messages.length; offset += 100) {
+      const chunk = messages.slice(offset, offset + 100);
+      const payload = await this.postJson<ExpoPushResponse>(
+        EXPO_PUSH_SEND_URL,
+        chunk,
+      );
+
+      if (!payload.ok) {
+        tickets.push(
+          ...chunk.map(() => payload.ticket),
+        );
+        continue;
+      }
+
+      const chunkTickets = Array.isArray(payload.body.data)
+        ? payload.body.data
+        : payload.body.data
+          ? [payload.body.data]
+          : [];
+
+      for (let index = 0; index < chunk.length; index += 1) {
+        tickets.push(
+          chunkTickets[index] ?? {
+            status: "error",
+            message: "Expo Push API returned an empty ticket.",
+            details: {
+              error: "EMPTY_TICKET",
+            },
+          },
+        );
+      }
+    }
+
+    return tickets;
   }
 
   async getReceipts(

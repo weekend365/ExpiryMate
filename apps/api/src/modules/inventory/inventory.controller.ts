@@ -28,6 +28,8 @@ export class InventoryController {
     @Query("status") status?: ItemStatus,
     @Query("storageLocation") storageLocation?: StorageLocation,
     @Query("expiringWithin") expiringWithin?: string,
+    @Query("page") page?: string,
+    @Query("limit") limit?: string,
   ) {
     return this.inventoryService.findAll({
       ownerKey,
@@ -35,6 +37,8 @@ export class InventoryController {
       status,
       storageLocation,
       expiringWithin: expiringWithin ? Number(expiringWithin) : undefined,
+      page: page ? Number(page) : undefined,
+      limit: limit ? Number(limit) : undefined,
     });
   }
 

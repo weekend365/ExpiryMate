@@ -8,6 +8,7 @@ import type {
   DeleteAccountRequest,
   DeleteAccountResponse,
   InventoryItem,
+  InventoryListResponse,
   LoginRequest,
   NotificationPreference,
   PushToken,
@@ -543,7 +544,45 @@ export const contributeBarcodeProduct = (
     body: JSON.stringify(payload),
   });
 
-export const listInventory = () => request<InventoryItem[]>("/inventory");
+export const listInventory = async (params?: {
+  page?: number;
+  limit?: number;
+  q?: string;
+}): Promise<InventoryListResponse> => {
+  const search = new URLSearchParams();
+  if (params?.page) {
+    search.set("page", String(params.page));
+  }
+  if (params?.limit) {
+    search.set("limit", String(params.limit));
+  }
+  if (params?.q?.trim()) {
+    search.set("q", params.q.trim());
+  }
+  const query = search.toString();
+  return request<InventoryListResponse>(
+    `/inventory${query ? `?${query}` : ""}`,
+  );
+};
+
+/** Loads paginated inventory pages until exhausted (owner-scoped soft cap). */
+export const listAllInventory = async (): Promise<InventoryItem[]> => {
+  const items: InventoryItem[] = [];
+  let page = 1;
+
+  for (;;) {
+    const response = await listInventory({ page, limit: 100 });
+    items.push(...response.items);
+
+    if (!response.hasMore || page >= 50) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return items;
+};
 
 export const getInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}`);

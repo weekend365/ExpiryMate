@@ -161,7 +161,13 @@ describe("mobile API client core flow", () => {
         );
         if (auth.includes("access-fresh")) {
           return path.includes("/inventory")
-            ? successResponse([])
+            ? successResponse({
+                items: [],
+                page: 1,
+                limit: 100,
+                totalCount: 0,
+                hasMore: false,
+              })
             : successResponse(dashboardSummary);
         }
         return errorResponse(401, "만료된 세션입니다.");
@@ -169,10 +175,10 @@ describe("mobile API client core flow", () => {
       return errorResponse(500, "unexpected");
     });
 
-    const { login, getDashboardSummary, listInventory } = await import("./api");
+    const { login, getDashboardSummary, listAllInventory } = await import("./api");
     await login({ email: "test@example.com", password: "password123" });
 
-    const pending = Promise.all([getDashboardSummary(), listInventory()]);
+    const pending = Promise.all([getDashboardSummary(), listAllInventory()]);
     await vi.waitFor(() => {
       expect(refreshCalls).toBe(1);
     });

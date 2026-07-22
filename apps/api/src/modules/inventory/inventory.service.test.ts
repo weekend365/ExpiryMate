@@ -22,9 +22,11 @@ const inventoryItem = {
 
 describe("InventoryService owner isolation", () => {
   let prisma: {
+    $transaction: ReturnType<typeof vi.fn>;
     inventoryItem: {
       findUnique: ReturnType<typeof vi.fn>;
       findMany: ReturnType<typeof vi.fn>;
+      count: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
@@ -34,9 +36,11 @@ describe("InventoryService owner isolation", () => {
 
   beforeEach(() => {
     prisma = {
+      $transaction: vi.fn(async (ops: Array<Promise<unknown>>) => Promise.all(ops)),
       inventoryItem: {
         findUnique: vi.fn(),
         findMany: vi.fn(),
+        count: vi.fn(),
         update: vi.fn(),
         updateMany: vi.fn(),
         create: vi.fn(),
@@ -133,5 +137,26 @@ describe("InventoryService owner isolation", () => {
     ).rejects.toThrow(BadRequestException);
 
     expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
+
+  it("paginates inventory for an owner", async () => {
+    prisma.inventoryItem.count.mockResolvedValue(1);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+
+    const result = await service.findAll({
+      ownerKey: "owner-a",
+      page: 1,
+      limit: 50,
+    });
+
+    expect(result.items).toHaveLength(1);
+    expect(result.totalCount).toBe(1);
+    expect(result.hasMore).toBe(false);
+    expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        skip: 0,
+        take: 50,
+      }),
+    );
   });
 });

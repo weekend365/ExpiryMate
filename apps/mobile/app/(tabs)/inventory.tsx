@@ -18,7 +18,15 @@ import {
   type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Alert, Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
@@ -300,6 +308,7 @@ export default function InventoryScreen() {
 
   return (
     <Screen
+      scroll={false}
       title="보관함"
       subtitle={
         isLoading && !hasLoadedInventory
@@ -309,15 +318,6 @@ export default function InventoryScreen() {
             : isEmptyInventory
               ? "장고랑 같이 재료를 채워볼까요?"
               : `${filtered.length}개를 유통기한이 가까운 순서로 보여드릴게요.`
-      }
-      refreshControl={
-        <RefreshControl
-          tintColor={colors.primary}
-          refreshing={isRefetching}
-          onRefresh={() => {
-            void refetch();
-          }}
-        />
       }
       headerAction={
         showListChrome ? (
@@ -399,157 +399,187 @@ export default function InventoryScreen() {
               </Button>
             )
       }
+      contentStyle={styles.screenContent}
     >
-      {deferredDiscard.undoLabel ? (
-        <FeedbackBanner
-          tone="success"
-          title={deferredDiscard.undoLabel}
-          description="잘못 눌렀다면 바로 되돌릴 수 있어요."
-          actionLabel="되돌릴게요"
-          onAction={deferredDiscard.undoDiscard}
-        />
-      ) : successMessage ? (
-        <FeedbackBanner tone="success" title={successMessage} />
-      ) : null}
-
-      {deferredDiscard.errorMessage || actionErrorMessage ? (
-        <FeedbackBanner
-          tone="danger"
-          title="앗, 잠시 문제가 생겼어요"
-          description={
-            deferredDiscard.errorMessage ?? actionErrorMessage ?? undefined
-          }
-        />
-      ) : null}
-
-      {isError && hasLoadedInventory ? (
-        <FeedbackBanner
-          tone="danger"
-          title="앗, 보관함을 불러오지 못했어요"
-          description={loadErrorMessage}
-          actionLabel="다시 불러올게요"
-          onAction={() => {
-            void refetch();
-          }}
-        />
-      ) : null}
-
-      {showListChrome && !isSelectionMode ? (
-        <Pressable
-          onPress={() => setIsFilterSheetOpen(true)}
-          accessibilityRole="button"
-          accessibilityLabel="어떤 재료를 볼까요?"
-          accessibilityHint="상태와 보관 위치로 골라 볼 수 있어요."
-          style={({ pressed }) => [
-            styles.filterSummary,
-            pressed && styles.filterSummaryPressed,
-          ]}
-        >
-          <View style={styles.filterSummaryCopy}>
-            <Text style={styles.filterSummaryLabel}>지금 보는 목록</Text>
-            <Text style={styles.filterSummaryValue}>
-              {activeFilterLabel} · {activeLocationLabel}
-              {hasActiveFilters ? "" : " · 가까운 순"}
-            </Text>
-          </View>
-          <Text style={styles.filterSummaryAction}>바꾸기</Text>
-        </Pressable>
-      ) : null}
-
-      {isSelectionMode ? (
-        <View
-          style={styles.selectionStrip}
-          accessibilityLiveRegion="polite"
-          accessibilityLabel={
-            selectedIds.length
-              ? `${selectedIds.length}개 골랐어요`
-              : "고르기 모드예요. 정리할 재료를 눌러 주세요."
-          }
-        >
-          <Mascot size="small" mood="worry" />
-          <View style={styles.selectionCopy}>
-            <Text style={styles.selectionTitle}>
-              {selectedIds.length
-                ? `${selectedIds.length}개 골랐어요`
-                : "정리할 재료를 눌러 주세요"}
-            </Text>
-            <Text style={styles.selectionDescription}>
-              고르기 모드예요. 아래에서 한 번에 정리할 수 있어요.
-            </Text>
-          </View>
-          <Pressable
-            onPress={handleToggleAllVisible}
-            disabled={!visibleIds.length}
-            accessibilityRole="button"
-            accessibilityLabel={
-              allVisibleSelected ? "전부 해제" : "전부 고르기"
-            }
-            style={({ pressed }) => [
-              styles.selectionToggle,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-          >
-            <Text style={styles.headerFilterLabel}>
-              {allVisibleSelected ? "전부 해제" : "전부 고르기"}
-            </Text>
-          </Pressable>
-        </View>
-      ) : null}
-
-      {isLoading && !hasLoadedInventory ? (
-        <InventoryListSkeleton />
-      ) : isError && !hasLoadedInventory ? (
-        <EmptyState
-          mood="worry"
-          title="앗, 보관함을 불러오지 못했어요"
-          description={loadErrorMessage}
-          actionLabel="다시 불러올게요"
-          onAction={() => {
-            void refetch();
-          }}
-        />
-      ) : isEmptyInventory ? (
-        <EmptyState
-          mood="empty"
-          title="아직 넣어둔 재료가 없어요"
-          description="장고가 빈 냉장고를 바라보고 있어요. 첫 재료를 넣으러 가볼까요?"
-          actionLabel="재료 넣으러 가기"
-          onAction={goToRegister}
-        />
-      ) : isFilteredEmpty ? (
-        <EmptyState
-          mood="worry"
-          title="이 조건에는 재료가 없어요"
-          description="필터를 조금 넓히거나, 새 재료를 넣어볼까요?"
-          actionLabel="필터 다시 고르기"
-          onAction={() => setIsFilterSheetOpen(true)}
-        />
-      ) : (
-        <View style={styles.list}>
-          {filtered.map((item) =>
-            isSelectionMode ? (
-              <InventoryCard
-                key={item.id}
-                item={item}
-                selected={selectedIdSet.has(item.id)}
-                selectionMode
-                onPress={() => handleCardPress(item.id)}
-                onLongPress={() => handleCardLongPress(item.id)}
+      <FlatList
+        style={styles.listFlex}
+        data={
+          isLoading && !hasLoadedInventory
+            ? []
+            : isError && !hasLoadedInventory
+              ? []
+              : isEmptyInventory || isFilteredEmpty
+                ? []
+                : filtered
+        }
+        keyExtractor={(item) => item.id}
+        refreshControl={
+          <RefreshControl
+            tintColor={colors.primary}
+            refreshing={isRefetching}
+            onRefresh={() => {
+              void refetch();
+            }}
+          />
+        }
+        contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={false}
+        initialNumToRender={12}
+        maxToRenderPerBatch={12}
+        windowSize={7}
+        removeClippedSubviews
+        ListHeaderComponent={
+          <View style={styles.listHeader}>
+            {deferredDiscard.undoLabel ? (
+              <FeedbackBanner
+                tone="success"
+                title={deferredDiscard.undoLabel}
+                description="잘못 눌렀다면 바로 되돌릴 수 있어요."
+                actionLabel="되돌릴게요"
+                onAction={deferredDiscard.undoDiscard}
               />
-            ) : (
-              <SwipeableInventoryCard
-                key={item.id}
-                item={item}
-                isDiscarding={deferredDiscard.isPending}
-                onPress={() => handleCardPress(item.id)}
-                onLongPress={() => handleCardLongPress(item.id)}
-                onMenuPress={() => handleOpenItemMenu(item)}
-                onDiscard={handleSwipeDiscard}
+            ) : successMessage ? (
+              <FeedbackBanner tone="success" title={successMessage} />
+            ) : null}
+
+            {deferredDiscard.errorMessage || actionErrorMessage ? (
+              <FeedbackBanner
+                tone="danger"
+                title="앗, 잠시 문제가 생겼어요"
+                description={
+                  deferredDiscard.errorMessage ?? actionErrorMessage ?? undefined
+                }
               />
-            ),
-          )}
-        </View>
-      )}
+            ) : null}
+
+            {isError && hasLoadedInventory ? (
+              <FeedbackBanner
+                tone="danger"
+                title="앗, 보관함을 불러오지 못했어요"
+                description={loadErrorMessage}
+                actionLabel="다시 불러올게요"
+                onAction={() => {
+                  void refetch();
+                }}
+              />
+            ) : null}
+
+            {showListChrome && !isSelectionMode ? (
+              <Pressable
+                onPress={() => setIsFilterSheetOpen(true)}
+                accessibilityRole="button"
+                accessibilityLabel="어떤 재료를 볼까요?"
+                accessibilityHint="상태와 보관 위치로 골라 볼 수 있어요."
+                style={({ pressed }) => [
+                  styles.filterSummary,
+                  pressed && styles.filterSummaryPressed,
+                ]}
+              >
+                <View style={styles.filterSummaryCopy}>
+                  <Text style={styles.filterSummaryLabel}>지금 보는 목록</Text>
+                  <Text style={styles.filterSummaryValue}>
+                    {activeFilterLabel} · {activeLocationLabel}
+                    {hasActiveFilters ? "" : " · 가까운 순"}
+                  </Text>
+                </View>
+                <Text style={styles.filterSummaryAction}>바꾸기</Text>
+              </Pressable>
+            ) : null}
+
+            {isSelectionMode ? (
+              <View
+                style={styles.selectionStrip}
+                accessibilityLiveRegion="polite"
+                accessibilityLabel={
+                  selectedIds.length
+                    ? `${selectedIds.length}개 골랐어요`
+                    : "고르기 모드예요. 정리할 재료를 눌러 주세요."
+                }
+              >
+                <Mascot size="small" mood="worry" />
+                <View style={styles.selectionCopy}>
+                  <Text style={styles.selectionTitle}>
+                    {selectedIds.length
+                      ? `${selectedIds.length}개 골랐어요`
+                      : "정리할 재료를 눌러 주세요"}
+                  </Text>
+                  <Text style={styles.selectionDescription}>
+                    고르기 모드예요. 아래에서 한 번에 정리할 수 있어요.
+                  </Text>
+                </View>
+                <Pressable
+                  onPress={handleToggleAllVisible}
+                  disabled={!visibleIds.length}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    allVisibleSelected ? "전부 해제" : "전부 고르기"
+                  }
+                  style={({ pressed }) => [
+                    styles.selectionToggle,
+                    pressed && styles.headerFilterButtonPressed,
+                  ]}
+                >
+                  <Text style={styles.headerFilterLabel}>
+                    {allVisibleSelected ? "전부 해제" : "전부 고르기"}
+                  </Text>
+                </Pressable>
+              </View>
+            ) : null}
+          </View>
+        }
+        ListEmptyComponent={
+          isLoading && !hasLoadedInventory ? (
+            <InventoryListSkeleton />
+          ) : isError && !hasLoadedInventory ? (
+            <EmptyState
+              mood="worry"
+              title="앗, 보관함을 불러오지 못했어요"
+              description={loadErrorMessage}
+              actionLabel="다시 불러올게요"
+              onAction={() => {
+                void refetch();
+              }}
+            />
+          ) : isEmptyInventory ? (
+            <EmptyState
+              mood="empty"
+              title="아직 넣어둔 재료가 없어요"
+              description="장고가 빈 냉장고를 바라보고 있어요. 첫 재료를 넣으러 가볼까요?"
+              actionLabel="재료 넣으러 가기"
+              onAction={goToRegister}
+            />
+          ) : isFilteredEmpty ? (
+            <EmptyState
+              mood="worry"
+              title="이 조건에는 재료가 없어요"
+              description="필터를 조금 넓히거나, 새 재료를 넣어볼까요?"
+              actionLabel="필터 다시 고르기"
+              onAction={() => setIsFilterSheetOpen(true)}
+            />
+          ) : null
+        }
+        renderItem={({ item }) =>
+          isSelectionMode ? (
+            <InventoryCard
+              item={item}
+              selected={selectedIdSet.has(item.id)}
+              selectionMode
+              onPress={() => handleCardPress(item.id)}
+              onLongPress={() => handleCardLongPress(item.id)}
+            />
+          ) : (
+            <SwipeableInventoryCard
+              item={item}
+              isDiscarding={deferredDiscard.isPending}
+              onPress={() => handleCardPress(item.id)}
+              onLongPress={() => handleCardLongPress(item.id)}
+              onMenuPress={() => handleOpenItemMenu(item)}
+              onDiscard={handleSwipeDiscard}
+            />
+          )
+        }
+        ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
+      />
 
       <BottomSheet
         visible={Boolean(menuItem)}
@@ -755,8 +785,25 @@ const styles = StyleSheet.create({
     fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
-  list: {
+  screenContent: {
+    flex: 1,
+    gap: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  listFlex: {
+    flex: 1,
+  },
+  listContent: {
+    flexGrow: 1,
+    paddingBottom: spacing.xxxl + spacing.sm,
     gap: spacing.sm,
+  },
+  listHeader: {
+    gap: spacing.lg,
+    paddingBottom: spacing.sm,
+  },
+  listSeparator: {
+    height: spacing.sm,
   },
   swipeAction: {
     width: spacing.xxxl + spacing.lg,
