@@ -1,3 +1,4 @@
+import { semanticColors, spacing } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
 import {
   buildAuthBridgeDeepLink,
@@ -19,12 +20,14 @@ describe("auth-bridge", () => {
     expect(html).toContain("expirymate://auth/verify-email?token=tok123");
     expect(html).toContain("앱으로 이어갈게요");
     expect(html).not.toContain("/auth/email/verify");
+    expect(html).toContain(semanticColors.primary);
+    expect(html).toContain(`padding: ${spacing.md}px`);
   });
 
   it("renders desktop success and failure without client fetch", () => {
     const ok = buildDesktopVerifyEmailResultHtml({ ok: true });
     expect(ok).toContain("메일 확인이 끝났어요");
-    expect(ok).toContain("앱으로 돌아가 로그인해 주세요");
+    expect(ok).toContain("앱으로 돌아와 들어와 주세요");
     expect(ok).not.toContain("fetch(");
 
     const fail = buildDesktopVerifyEmailResultHtml({

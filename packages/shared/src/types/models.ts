@@ -6,6 +6,7 @@ import type {
   ProductMasterSource,
   StorageLocation,
 } from "../enums/app-enums";
+import type { PushTokenPlatform } from "../schemas/notifications";
 
 export interface Product {
   id: string;
@@ -40,13 +41,6 @@ export interface BarcodeLookupResult {
   productMasterId: string | null;
 }
 
-export interface ContributeBarcodeProductRequest {
-  barcode: string;
-  name: string;
-  brand?: string;
-  category?: string;
-}
-
 export interface ContributeBarcodeProductResponse {
   product: ProductMaster;
   created: boolean;
@@ -65,29 +59,6 @@ export interface AuthUser {
   emailVerifiedAt?: string | null;
   /** True when the account has a password and email is not verified yet. */
   requiresEmailVerification?: boolean;
-}
-
-export interface PrivacyStatus {
-  privacyPolicyUrl: string;
-  privacyChoicesUrl: string;
-  contactEmail: string;
-  aiDataNoticeVersion: string;
-  aiDataNoticeAcceptedAt: string | null;
-  hasAcceptedCurrentAiDataNotice: boolean;
-}
-
-export interface AcceptAiDataNoticeResponse {
-  ok: true;
-  status: PrivacyStatus;
-}
-
-export interface DeleteAccountRequest {
-  confirmation: "삭제";
-}
-
-export interface DeleteAccountResponse {
-  ok: true;
-  deletedAt: string;
 }
 
 export interface AuthSession {
@@ -138,6 +109,7 @@ export interface StartOAuthResponse {
   expiresAt: string;
 }
 
+/** Response entity shape; write contracts live in schemas/inventory.ts. */
 export interface InventoryItem {
   id: string;
   productId?: string | null;
@@ -156,6 +128,14 @@ export interface InventoryItem {
   updatedAt: string;
 }
 
+export interface InventoryListResponse {
+  items: InventoryItem[];
+  page: number;
+  limit: number;
+  totalCount: number;
+  hasMore: boolean;
+}
+
 export interface NotificationPreference {
   id: string;
   ownerKey: string;
@@ -166,8 +146,6 @@ export interface NotificationPreference {
   quietHoursEnd: string;
   updatedAt: string;
 }
-
-export type PushTokenPlatform = "ios" | "android" | "web" | "unknown";
 
 export interface PushToken {
   id: string;
@@ -181,47 +159,6 @@ export interface PushToken {
   updatedAt: string;
 }
 
-export interface RegisterPushTokenRequest {
-  token: string;
-  platform?: PushTokenPlatform;
-  deviceId?: string;
-  appVersion?: string;
-}
-
-export type SubscriptionStore = "apple_app_store" | "google_play";
-export type SubscriptionEntitlementStatus =
-  | "active"
-  | "grace_period"
-  | "billing_retry"
-  | "paused"
-  | "expired"
-  | "revoked"
-  | "unknown";
-
-export interface SubscriptionEntitlement {
-  hasActiveEntitlement: boolean;
-  store: SubscriptionStore | null;
-  productId: string | null;
-  status: SubscriptionEntitlementStatus;
-  expiresAt: string | null;
-  willRenew: boolean | null;
-  environment: string | null;
-  verifiedAt: string | null;
-}
-
-export interface SubscriptionVerificationRequest {
-  store: SubscriptionStore;
-  productId?: string;
-  transactionId?: string;
-  purchaseToken?: string;
-  environment?: "sandbox" | "production";
-}
-
-export interface SubscriptionVerificationResponse {
-  ok: true;
-  entitlement: SubscriptionEntitlement;
-}
-
 export interface DashboardSummary {
   todayExpiryCount: number;
   within3DaysCount: number;
@@ -231,54 +168,6 @@ export interface DashboardSummary {
   recentItems: InventoryItem[];
   expiringItems: InventoryItem[];
   locationCounts: Record<string, number>;
-}
-
-export type RecipeMealType = "any" | "breakfast" | "lunch" | "dinner" | "snack";
-
-export interface RecipeRecommendationRequest {
-  servings: number;
-  maxCookingMinutes: number;
-  mealType: RecipeMealType;
-  useExpiringFirst: boolean;
-}
-
-export interface RecipeInventorySnapshotItem {
-  inventoryItemId: string;
-  name: string;
-  category?: ProductCategory | null;
-  quantity: number;
-  unit?: string | null;
-  storageLocation: StorageLocation;
-  expiryDate: string;
-  daysUntilExpiry: number;
-}
-
-export interface RecipeRecommendationDish {
-  title: string;
-  summary: string;
-  cookingTimeMinutes: number;
-  difficulty: "easy" | "medium" | "hard";
-  servings: number;
-  usedIngredients: Array<{
-    inventoryItemId: string | null;
-    name: string;
-  }>;
-  optionalMissingIngredients: Array<{
-    name: string;
-    reason: string;
-  }>;
-  steps: string[];
-  tips: string[];
-  safetyNote: string;
-}
-
-export interface RecipeRecommendation {
-  id: string;
-  ownerKey: string;
-  createdAt: string;
-  request: RecipeRecommendationRequest;
-  inventorySnapshot: RecipeInventorySnapshotItem[];
-  recommendations: RecipeRecommendationDish[];
 }
 
 export interface SuccessResponse<T> {

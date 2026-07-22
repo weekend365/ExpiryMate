@@ -178,6 +178,16 @@ model RefreshSession {
   @@index([userId, expiresAt])
 }
 
+/// Shared auth rate-limit counters (fixed window) for multi-instance API deploys.
+model AuthRateLimitBucket {
+  key             String   @id
+  windowStartedAt DateTime
+  hitCount        Int      @default(0)
+  updatedAt       DateTime @updatedAt
+
+  @@index([windowStartedAt])
+}
+
 model OneTimeAuthToken {
   id         String                  @id @default(cuid())
   userId     String
@@ -323,27 +333,56 @@ model PushToken {
 }
 
 model PushNotificationDelivery {
-  id              String                         @id @default(cuid())
-  ownerKey        String
-  owner           User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  pushTokenId     String
-  pushToken       PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
-  inventoryItemId String
-  inventoryItem   InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
-  reminderDate    DateTime
-  daysBefore      Int
-  status          PushNotificationDeliveryStatus @default(pending)
-  expoTicketId    String?
-  title           String
-  body            String
-  errorCode       String?
-  errorMessage    String?
-  attempts        Int                            @default(0)
-  sentAt          DateTime?
-  createdAt       DateTime                       @default(now())
-  updatedAt       DateTime                       @updatedAt
+  id                String                         @id @default(cuid())
+  ownerKey          String
+  owner             User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  pushTokenId       String
+  pushToken         PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
+  inventoryItemId   String
+  inventoryItem     InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  reminderDate      DateTime
+  daysBefore        Int
+  status            PushNotificationDeliveryStatus @default(pending)
+  expoTicketId      String?
+  title             String
+  body              String
+  errorCode         String?
+  errorMessage      String?
+  attempts          Int                            @default(0)
+  sentAt            DateTime?
+  /// Set once Expo push receipts are fetched for expoTicketId (ok or error).
+  receiptCheckedAt  DateTime?
+  createdAt         DateTime                       @default(now())
+  updatedAt         DateTime                       @updatedAt
 
   @@unique([pushTokenId, inventoryItemId, reminderDate, daysBefore])
   @@index([ownerKey, reminderDate])
   @@index([pushTokenId, status])
+  @@index([status, receiptCheckedAt, sentAt])
+  @@index([status, updatedAt])
+}
+
+/// Cross-instance lease so only one API replica runs the push reminder worker.
+model SchedulerLease {
+  key       String   @id
+  ownerId   String
+  expiresAt DateTime
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+
+/// Append-only admin action trail (never update/delete from app code).
+model AdminAuditLog {
+  id           String   @id @default(cuid())
+  actorUserId  String
+  action       String
+  resourceType String?
+  resourceId   String?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([action, createdAt])
 }

@@ -1,5 +1,6 @@
 export * from "./constants/brand";
 export * from "./constants/defaults";
+export * from "./constants/field-limits";
 export * from "./constants/labels";
 export * from "./design";
 export * from "./enums/app-enums";

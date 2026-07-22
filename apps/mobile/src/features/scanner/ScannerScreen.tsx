@@ -183,12 +183,14 @@ function ScannerCameraExperience() {
         </View>
 
         {!scanner.isCameraReady ? (
-          <View style={styles.centerCard}>
-            <Mascot size="small" mood="idle" />
-            <Text style={styles.centerTitle}>카메라를 준비하고 있어요</Text>
-            <Text style={styles.centerDescription}>
-              장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요.
-            </Text>
+          <View style={styles.centerStage}>
+            <View style={styles.centerCard}>
+              <Mascot size="small" mood="idle" />
+              <Text style={styles.centerTitle}>카메라를 준비하고 있어요</Text>
+              <Text style={styles.centerDescription}>
+                장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요.
+              </Text>
+            </View>
           </View>
         ) : (
           <>
@@ -384,26 +386,28 @@ function PermissionCard({
   isRequesting?: boolean;
 }) {
   return (
-    <View style={styles.centerCard}>
-      <Mascot size="medium" mood="worry" />
-      <Text style={styles.centerTitle}>카메라가 필요해요</Text>
-      <Text style={styles.centerDescription}>
-        바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요.
-      </Text>
-      {canRequestPermission || isRequesting ? (
-        <Button onPress={onRequestPermission} disabled={isRequesting} fullWidth>
-          카메라 켤게요
-        </Button>
-      ) : (
-        <Button
-          onPress={() => {
-            void Linking.openSettings();
-          }}
-          fullWidth
-        >
-          설정에서 켤게요
-        </Button>
-      )}
+    <View style={styles.centerStage}>
+      <View style={styles.centerCard}>
+        <Mascot size="medium" mood="worry" />
+        <Text style={styles.centerTitle}>카메라가 필요해요</Text>
+        <Text style={styles.centerDescription}>
+          바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요.
+        </Text>
+        {canRequestPermission || isRequesting ? (
+          <Button onPress={onRequestPermission} disabled={isRequesting} fullWidth>
+            카메라 켤게요
+          </Button>
+        ) : (
+          <Button
+            onPress={() => {
+              void Linking.openSettings();
+            }}
+            fullWidth
+          >
+            설정에서 켤게요
+          </Button>
+        )}
+      </View>
     </View>
   );
 }
@@ -472,12 +476,14 @@ const styles = StyleSheet.create({
     borderColor: colors.surface,
   },
   barcodeRoiBox: {
-    width: "86%",
+    alignSelf: "stretch",
+    marginHorizontal: spacing.lg,
     height: spacing.xxxl + spacing.xxxl + spacing.xl,
     borderRadius: radius.xxl,
   },
   ocrRoiBox: {
-    width: "88%",
+    alignSelf: "stretch",
+    marginHorizontal: spacing.lg,
     height: spacing.xxxl + spacing.xl,
     borderRadius: radius.lg,
   },
@@ -581,15 +587,18 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.danger,
   },
+  centerStage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "stretch",
+  },
   centerCard: {
-    alignSelf: "center",
-    width: "100%",
+    alignSelf: "stretch",
     borderRadius: radius.xxl,
     backgroundColor: colors.surface,
     padding: spacing.lg,
     gap: spacing.md,
     alignItems: "center",
-    marginTop: "40%",
   },
   centerTitle: {
     fontSize: typography.heading.fontSize,

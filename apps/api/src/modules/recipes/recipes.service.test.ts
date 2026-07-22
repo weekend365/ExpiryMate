@@ -4,6 +4,7 @@ import {
   ServiceUnavailableException,
 } from "@nestjs/common";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { RecipePolicyService } from "./recipe-policy.service";
 import { RecipesService } from "./recipes.service";
 
 const managedEnvKeys = [
@@ -133,7 +134,7 @@ describe("RecipesService recommendation guards", () => {
     const { prisma, service } = createService();
     prisma.recipeRecommendation.findFirst.mockResolvedValue(cachedRecord);
 
-    const result = await service.createRecommendation("owner-a", {});
+    const result = await service.createRecommendation("owner-a", request);
 
     expect(result.id).toBe("cached-recommendation");
     expect(prisma.recipeRecommendation.count).not.toHaveBeenCalled();
@@ -147,9 +148,9 @@ describe("RecipesService recommendation guards", () => {
     const { prisma, service } = createService();
     prisma.recipeRecommendation.findFirst.mockResolvedValue(cachedRecord);
 
-    await service.createRecommendation("owner-a", {});
+    await service.createRecommendation("owner-a", request);
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", {}));
+    await expectTooManyRequests(service.createRecommendation("owner-a", request));
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(1);
   });
 
@@ -158,7 +159,7 @@ describe("RecipesService recommendation guards", () => {
     const { prisma, service } = createService();
     prisma.recipeRecommendation.count.mockResolvedValue(1);
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", {}));
+    await expectTooManyRequests(service.createRecommendation("owner-a", request));
     expect(prisma.recipeRecommendation.aggregate).not.toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
@@ -169,7 +170,7 @@ describe("RecipesService recommendation guards", () => {
     process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
     const { prisma, service } = createService();
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", {}));
+    await expectTooManyRequests(service.createRecommendation("owner-a", request));
     expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
@@ -184,7 +185,7 @@ describe("RecipesService recommendation guards", () => {
       _sum: { estimatedCostUsd: "0.001" },
     });
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", {}));
+    await expectTooManyRequests(service.createRecommendation("owner-a", request));
     expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
@@ -199,7 +200,7 @@ describe("RecipesService recommendation guards", () => {
     process.env.RECIPE_AI_ENABLED = "false";
     const { prisma, service } = createService();
 
-    await expect(service.createRecommendation("owner-a", {})).rejects.toBeInstanceOf(
+    await expect(service.createRecommendation("owner-a", request)).rejects.toBeInstanceOf(
       ServiceUnavailableException,
     );
     expect(prisma.inventoryItem.findMany).not.toHaveBeenCalled();
@@ -244,7 +245,7 @@ describe("RecipesService recommendation guards", () => {
       }),
     );
 
-    const result = await service.createRecommendation("owner-a", {});
+    const result = await service.createRecommendation("owner-a", request);
 
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
@@ -284,7 +285,11 @@ function createService() {
   return {
     prisma,
     privacyService,
-    service: new RecipesService(prisma as never, privacyService as never),
+    service: new RecipesService(
+      prisma as never,
+      privacyService as never,
+      new RecipePolicyService(prisma as never),
+    ),
   };
 }
 

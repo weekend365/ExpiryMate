@@ -58,6 +58,8 @@ export function validateProductionEnvironment(env: EnvMap = process.env) {
   validateDevFallback(env, errors);
   validateHttpsUrls(env, errors);
   validateAppBaseUrl(env, errors);
+  validateAuthLinkBaseUrl(env, errors);
+  validateOpenAi(env, errors);
   validateEmail(env, "SMTP_FROM", errors);
   validateEmail(env, "PRIVACY_CONTACT_EMAIL", errors);
   validateSmtpPort(env, errors);
@@ -159,6 +161,68 @@ function validateAppBaseUrl(env: EnvMap, errors: string[]) {
       "APP_BASE_URL must not point to localhost or a private development host.",
     );
   }
+}
+
+/**
+ * Email verify/reset links must hit a public HTTPS API bridge in production.
+ * Deep-link-only fallbacks break most mail clients.
+ */
+function validateAuthLinkBaseUrl(env: EnvMap, errors: string[]) {
+  const value = env.AUTH_LINK_BASE_URL?.trim();
+
+  if (!value) {
+    errors.push("AUTH_LINK_BASE_URL is required in production.");
+    return;
+  }
+
+  if (looksLikePlaceholder(value)) {
+    errors.push("AUTH_LINK_BASE_URL must not use a placeholder value.");
+    return;
+  }
+
+  const url = parseUrl(value);
+
+  if (!url) {
+    errors.push("AUTH_LINK_BASE_URL must be a valid HTTPS URL.");
+    return;
+  }
+
+  if (url.protocol !== "https:") {
+    errors.push("AUTH_LINK_BASE_URL must use https:// in production.");
+  }
+
+  if (isUnsafeProductionHostname(url.hostname)) {
+    errors.push(
+      "AUTH_LINK_BASE_URL must not point to localhost or a private development host.",
+    );
+  }
+}
+
+/**
+ * Recipe AI is on unless explicitly disabled — require a real OpenAI key then.
+ */
+function validateOpenAi(env: EnvMap, errors: string[]) {
+  if (!isRecipeAiEnabled(env)) {
+    return;
+  }
+
+  const value = env.OPENAI_API_KEY?.trim();
+
+  if (!value) {
+    errors.push(
+      "OPENAI_API_KEY is required when RECIPE_AI_ENABLED is on (default).",
+    );
+    return;
+  }
+
+  if (looksLikePlaceholder(value) || value === "sk-...") {
+    errors.push("OPENAI_API_KEY must not use a placeholder value.");
+  }
+}
+
+function isRecipeAiEnabled(env: EnvMap) {
+  const raw = env.RECIPE_AI_ENABLED?.trim().toLowerCase();
+  return !(raw === "false" || raw === "0" || raw === "off");
 }
 
 function validateEmail(env: EnvMap, key: string, errors: string[]) {

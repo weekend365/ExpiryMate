@@ -17,7 +17,10 @@ export type LocalNotificationData = {
   inventoryItemId?: string;
 };
 
-export type NotificationNavigationPath = "/(tabs)/recommendations";
+export type NotificationNavigationPath =
+  | "/(tabs)/recommendations"
+  | "/(tabs)/inventory"
+  | `/inventory/${string}`;
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -110,6 +113,19 @@ export function getNotificationNavigationPath(
 
   if (type === NOTIFICATION_TYPES.recipeReady) {
     return "/(tabs)/recommendations";
+  }
+
+  if (type === NOTIFICATION_TYPES.expiryReminder) {
+    const inventoryItemId =
+      "inventoryItemId" in data && typeof data.inventoryItemId === "string"
+        ? data.inventoryItemId.trim()
+        : "";
+
+    if (inventoryItemId) {
+      return `/inventory/${inventoryItemId}`;
+    }
+
+    return "/(tabs)/inventory";
   }
 
   return null;

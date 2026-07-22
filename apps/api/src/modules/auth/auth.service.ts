@@ -70,6 +70,10 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
+  /**
+   * Test/legacy helper only — HTTP minting was removed (PROJECT: 익명 세션 ❌).
+   * Keeps merge/JWT coverage for residual anonymous rows until they age out.
+   */
   async issueAnonymousSession(): Promise<AuthSession> {
     const user = await this.prisma.user.create({
       data: {
@@ -168,13 +172,22 @@ export class AuthService {
       include: { user: true },
     });
 
-    if (
-      !session ||
-      session.revokedAt ||
-      session.expiresAt.getTime() <= Date.now() ||
-      session.user.mergedIntoUserId ||
-      session.user.deletedAt
-    ) {
+    if (!session || session.user.mergedIntoUserId || session.user.deletedAt) {
+      throw new UnauthorizedException("로그인 세션이 만료되었습니다.");
+    }
+
+    // Reuse of an already-rotated refresh token → revoke the whole family.
+    if (session.revokedAt && session.replacedByTokenHash) {
+      await this.prisma.refreshSession.updateMany({
+        where: { userId: session.userId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      throw new UnauthorizedException(
+        "로그인 세션이 만료됐어요. 다시 이어가 주세요.",
+      );
+    }
+
+    if (session.revokedAt || session.expiresAt.getTime() <= Date.now()) {
       throw new UnauthorizedException("로그인 세션이 만료되었습니다.");
     }
 
@@ -182,22 +195,30 @@ export class AuthService {
     const nextRefreshTokenHash = hashToken(nextRefreshToken);
     const expiresAt = addDays(new Date(), getRefreshTokenDays());
 
-    await this.prisma.$transaction([
-      this.prisma.refreshSession.update({
-        where: { id: session.id },
+    await this.prisma.$transaction(async (tx) => {
+      const rotated = await tx.refreshSession.updateMany({
+        where: {
+          id: session.id,
+          revokedAt: null,
+        },
         data: {
           revokedAt: new Date(),
           replacedByTokenHash: nextRefreshTokenHash,
         },
-      }),
-      this.prisma.refreshSession.create({
+      });
+
+      if (rotated.count !== 1) {
+        throw new UnauthorizedException("로그인 세션이 만료되었습니다.");
+      }
+
+      await tx.refreshSession.create({
         data: {
           userId: session.userId,
           tokenHash: nextRefreshTokenHash,
           expiresAt,
         },
-      }),
-    ]);
+      });
+    });
 
     const hasPassword = await this.prisma.passwordCredential.findUnique({
       where: { userId: session.userId },

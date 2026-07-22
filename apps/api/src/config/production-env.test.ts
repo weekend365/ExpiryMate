@@ -34,6 +34,35 @@ describe("validateProductionEnvironment", () => {
 
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("requires AUTH_LINK_BASE_URL as a public HTTPS URL", () => {
+    const env = validProductionEnv();
+    delete env.AUTH_LINK_BASE_URL;
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /AUTH_LINK_BASE_URL/,
+    );
+
+    env.AUTH_LINK_BASE_URL = "http://localhost:4000";
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /AUTH_LINK_BASE_URL/,
+    );
+  });
+
+  it("requires OPENAI_API_KEY when recipe AI is enabled", () => {
+    const env = validProductionEnv();
+    delete env.OPENAI_API_KEY;
+
+    expect(() => validateProductionEnvironment(env)).toThrow(/OPENAI_API_KEY/);
+  });
+
+  it("allows missing OPENAI_API_KEY when recipe AI is disabled", () => {
+    const env = validProductionEnv();
+    delete env.OPENAI_API_KEY;
+    env.RECIPE_AI_ENABLED = "false";
+
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -43,6 +72,7 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     CORS_ORIGIN_MOBILE: "https://app.expirymate.app",
     AUTH_TOKEN_SECRET: "1234567890abcdef1234567890abcdef",
     AUTH_ALLOW_DEV_FALLBACK: "false",
+    AUTH_LINK_BASE_URL: "https://api.expirymate.app",
     APP_BASE_URL: "expirymate://",
     ADMIN_BASE_URL: "https://admin.expirymate.app",
     SMTP_HOST: "smtp.expirymate.app",
@@ -56,6 +86,7 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     PRIVACY_POLICY_URL: "https://admin.expirymate.app/privacy",
     PRIVACY_CHOICES_URL: "https://admin.expirymate.app/privacy/choices",
     PRIVACY_CONTACT_EMAIL: "privacy@expirymate.app",
+    OPENAI_API_KEY: "sk-live-test-key-not-a-placeholder",
     IAP_ALLOWED_PRODUCT_IDS:
       "expirymate_premium_monthly,expirymate_premium_yearly",
     APPLE_BUNDLE_ID: "com.expirymate.mobile",

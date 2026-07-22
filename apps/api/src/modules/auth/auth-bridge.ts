@@ -1,35 +1,9 @@
+import { buildHtmlBridgeStyles } from "../../common/html-bridge-styles";
 import { buildAppDeepLink } from "./app-links";
 
 export type AuthBridgeKind = "verify-email" | "reset-password";
 
-const BRIDGE_STYLES = `
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f1f3f5;
-      color: #1a1f27;
-      text-align: center;
-      padding: 24px;
-    }
-    h1 { font-size: 24px; margin: 0 0 16px; }
-    p { color: #4e5561; line-height: 1.5; margin: 0 0 24px; }
-    a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 52px;
-      padding: 0 24px;
-      border-radius: 16px;
-      background: #10b981;
-      color: #fff;
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .hint { color: #8a939f; font-size: 14px; margin-top: 16px; }
-`;
+const BRIDGE_STYLES = buildHtmlBridgeStyles({ includeHint: true });
 
 /** Mobile mail clients: open the app with the raw token (app consumes it). */
 export function buildMobileVerifyEmailBridgeHtml(token: string): string {
@@ -75,7 +49,7 @@ export function buildDesktopVerifyEmailResultHtml(input: {
     return renderStaticPage({
       title: "메일 확인이 끝났어요",
       status:
-        "이제 앱으로 돌아가 로그인해 주세요. 가입이 끝난 상태예요.",
+        "이제 앱으로 돌아와 들어와 주세요. 가입이 끝난 상태예요.",
     });
   }
 

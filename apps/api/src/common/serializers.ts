@@ -5,6 +5,7 @@ import {
   type ProductMaster as PrismaProductMaster,
   type PushToken as PrismaPushToken,
 } from "@prisma/client";
+import { createHash } from "node:crypto";
 import {
   calculateDaysLeftUntilExpiry,
   ExpirySource,
@@ -76,6 +77,23 @@ export const serializeInventoryItem = (
   createdAt: item.createdAt.toISOString(),
   updatedAt: item.updatedAt.toISOString(),
 });
+
+/** Admin list/summary views: drop free-text notes and mask owner ids. */
+export const serializeAdminInventoryItem = (
+  item: PrismaInventoryItem,
+): InventoryItem => {
+  const serialized = serializeInventoryItem(item);
+
+  return {
+    ...serialized,
+    ownerKey: maskOwnerKey(serialized.ownerKey ?? item.ownerKey),
+    notes: null,
+  };
+};
+
+export function maskOwnerKey(ownerKey: string) {
+  return createHash("sha256").update(ownerKey).digest("hex").slice(0, 12);
+}
 
 export const serializeNotificationPreference = (
   preference: PrismaNotificationPreference,

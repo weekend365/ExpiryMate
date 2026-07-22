@@ -50,7 +50,8 @@ WORKDIR /app/apps/api
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && npx prisma generate
 
 EXPOSE 4000
+# Use /ready (DB check), not /health (liveness only). Railway: set Healthcheck Path to /ready.
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:4000/health || exit 1
+  CMD curl -f http://localhost:4000/ready || exit 1
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

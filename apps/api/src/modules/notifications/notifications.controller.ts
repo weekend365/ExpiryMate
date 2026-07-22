@@ -1,10 +1,13 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import {
+  registerPushTokenSchema,
+  unregisterPushTokenSchema,
+  type RegisterPushTokenRequest,
+  type UnregisterPushTokenRequest,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
-import {
-  RegisterPushTokenDto,
-  UnregisterPushTokenDto,
-} from "./dto/register-push-token.dto";
 import { NotificationsService } from "./notifications.service";
 
 @UseGuards(RegisteredGuard)
@@ -14,7 +17,8 @@ export class NotificationsController {
 
   @Post("push-tokens")
   registerPushToken(
-    @Body() dto: RegisterPushTokenDto,
+    @Body(new ZodValidationPipe(registerPushTokenSchema))
+    dto: RegisterPushTokenRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.notificationsService.registerPushToken(ownerKey, dto);
@@ -22,7 +26,8 @@ export class NotificationsController {
 
   @Post("push-tokens/unregister")
   unregisterPushToken(
-    @Body() dto: UnregisterPushTokenDto,
+    @Body(new ZodValidationPipe(unregisterPushTokenSchema))
+    dto: UnregisterPushTokenRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.notificationsService.unregisterPushToken(ownerKey, dto.token);

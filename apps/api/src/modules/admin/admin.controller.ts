@@ -1,29 +1,27 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
-import { generateDashboardSummary } from "@expirymate/shared";
-import { serializeInventoryItem } from "../../common/serializers";
-import { PrismaService } from "../../database/prisma.service";
+import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 import { AdminGuard } from "../auth/admin.guard";
+import { AdminService } from "./admin.service";
 
 @UseGuards(AdminGuard)
 @Controller("admin")
 export class AdminController {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly adminService: AdminService) {}
 
   @Get("inventory")
-  async listInventory() {
-    const items = await this.prisma.inventoryItem.findMany({
-      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+  listInventory(
+    @Query("page") page?: string,
+    @Query("limit") limit?: string,
+    @Query("q") q?: string,
+  ) {
+    return this.adminService.listInventory({
+      page: page ? Number(page) : undefined,
+      limit: limit ? Number(limit) : undefined,
+      q,
     });
-
-    return items.map(serializeInventoryItem);
   }
 
   @Get("dashboard/summary")
-  async getDashboardSummary() {
-    const items = await this.prisma.inventoryItem.findMany({
-      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
-    });
-
-    return generateDashboardSummary(items.map(serializeInventoryItem));
+  getDashboardSummary() {
+    return this.adminService.getDashboardSummary();
   }
 }

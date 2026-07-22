@@ -7,6 +7,7 @@ import {
   StorageLocation,
   UserRole,
 } from "@prisma/client";
+import { addDays } from "@expirymate/shared";
 import argon2 from "argon2";
 
 if (process.env.NODE_ENV === "production") {
@@ -15,30 +16,7 @@ if (process.env.NODE_ENV === "production") {
 
 const prisma = new PrismaClient();
 
-const addDays = (days: number) => {
-  const date = new Date(toKstDateOnly(new Date()));
-  date.setUTCDate(date.getUTCDate() + days);
-  return date;
-};
-
-function toKstDateOnly(value: Date) {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Seoul",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const parts = formatter.formatToParts(value);
-  const year = parts.find((part) => part.type === "year")?.value;
-  const month = parts.find((part) => part.type === "month")?.value;
-  const day = parts.find((part) => part.type === "day")?.value;
-
-  if (!year || !month || !day) {
-    throw new Error("Failed to format seed date");
-  }
-
-  return `${year}-${month}-${day}`;
-}
+const seedDay = (daysFromToday: number) => addDays(new Date(), daysFromToday);
 
 async function main() {
   await prisma.oneTimeAuthToken.deleteMany();
@@ -173,7 +151,7 @@ async function main() {
         quantity: 1,
         unit: "팩",
         storageLocation: StorageLocation.fridge,
-        expiryDate: addDays(0),
+        expiryDate: seedDay(0),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
         notes: "아침 시리얼용",
@@ -187,7 +165,7 @@ async function main() {
         quantity: 1,
         unit: "판",
         storageLocation: StorageLocation.fridge,
-        expiryDate: addDays(3),
+        expiryDate: seedDay(3),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
         notes: "주말 브런치용",
@@ -201,7 +179,7 @@ async function main() {
         quantity: 2,
         unit: "모",
         storageLocation: StorageLocation.fridge,
-        expiryDate: addDays(-1),
+        expiryDate: seedDay(-1),
         expirySource: ExpirySource.manual,
         status: ItemStatus.expired,
         notes: "찌개용",
@@ -215,7 +193,7 @@ async function main() {
         quantity: 1,
         unit: "통",
         storageLocation: StorageLocation.fridge,
-        expiryDate: addDays(7),
+        expiryDate: seedDay(7),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
         notes: "",
@@ -229,7 +207,7 @@ async function main() {
         quantity: 1,
         unit: "병",
         storageLocation: StorageLocation.room,
-        expiryDate: addDays(14),
+        expiryDate: seedDay(14),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
         notes: "손님용",
@@ -243,7 +221,7 @@ async function main() {
         quantity: 4,
         unit: "개",
         storageLocation: StorageLocation.kitchen,
-        expiryDate: addDays(30),
+        expiryDate: seedDay(30),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
         notes: "",
@@ -257,7 +235,7 @@ async function main() {
         quantity: 1,
         unit: "병",
         storageLocation: StorageLocation.bathroom,
-        expiryDate: addDays(90),
+        expiryDate: seedDay(90),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
         notes: "",
@@ -271,7 +249,7 @@ async function main() {
         quantity: 1,
         unit: "봉",
         storageLocation: StorageLocation.freezer,
-        expiryDate: addDays(2),
+        expiryDate: seedDay(2),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
         notes: "야식 후보",
@@ -285,7 +263,7 @@ async function main() {
         quantity: 12,
         unit: "롤",
         storageLocation: StorageLocation.room,
-        expiryDate: addDays(180),
+        expiryDate: seedDay(180),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
         notes: "재구매 여유 있음",
@@ -299,7 +277,7 @@ async function main() {
         quantity: 1,
         unit: "통",
         storageLocation: StorageLocation.kitchen,
-        expiryDate: addDays(120),
+        expiryDate: seedDay(120),
         expirySource: ExpirySource.manual,
         status: ItemStatus.consumed,
         notes: "리필 구매 예정",

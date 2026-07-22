@@ -1,6 +1,18 @@
 import { BadRequestException, NotFoundException } from "@nestjs/common";
+import { ExpirySource, StorageLocation, type CreateInventoryItemBody } from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InventoryService } from "./inventory.service";
+
+const createBody = (
+  overrides: Partial<CreateInventoryItemBody> = {},
+): CreateInventoryItemBody => ({
+  displayName: "계란",
+  quantity: 1,
+  storageLocation: StorageLocation.FRIDGE,
+  expiryDate: "2026-06-10",
+  expirySource: ExpirySource.MANUAL,
+  ...overrides,
+});
 
 const inventoryItem = {
   id: "item-1",
@@ -22,9 +34,11 @@ const inventoryItem = {
 
 describe("InventoryService owner isolation", () => {
   let prisma: {
+    $transaction: ReturnType<typeof vi.fn>;
     inventoryItem: {
       findUnique: ReturnType<typeof vi.fn>;
       findMany: ReturnType<typeof vi.fn>;
+      count: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
@@ -34,9 +48,11 @@ describe("InventoryService owner isolation", () => {
 
   beforeEach(() => {
     prisma = {
+      $transaction: vi.fn(async (ops: Array<Promise<unknown>>) => Promise.all(ops)),
       inventoryItem: {
         findUnique: vi.fn(),
         findMany: vi.fn(),
+        count: vi.fn(),
         update: vi.fn(),
         updateMany: vi.fn(),
         create: vi.fn(),
@@ -101,13 +117,7 @@ describe("InventoryService owner isolation", () => {
     prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
 
     await service.create(
-      {
-        displayName: "계란",
-        quantity: 1,
-        storageLocation: "fridge" as never,
-        expiryDate: "2026-06-10",
-        expirySource: "manual" as never,
-      },
+      createBody(),
       "owner-a",
     );
 
@@ -121,17 +131,34 @@ describe("InventoryService owner isolation", () => {
   it("rejects timestamp expiryDate input", async () => {
     await expect(
       service.create(
-        {
-          displayName: "계란",
-          quantity: 1,
-          storageLocation: "fridge" as never,
+        createBody({
           expiryDate: "2026-06-10T00:00:00.000Z",
-          expirySource: "manual" as never,
-        },
+        }),
         "owner-a",
       ),
     ).rejects.toThrow(BadRequestException);
 
     expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
+
+  it("paginates inventory for an owner", async () => {
+    prisma.inventoryItem.count.mockResolvedValue(1);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+
+    const result = await service.findAll({
+      ownerKey: "owner-a",
+      page: 1,
+      limit: 50,
+    });
+
+    expect(result.items).toHaveLength(1);
+    expect(result.totalCount).toBe(1);
+    expect(result.hasMore).toBe(false);
+    expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        skip: 0,
+        take: 50,
+      }),
+    );
   });
 });

@@ -2,12 +2,21 @@ import { BadRequestException } from "@nestjs/common";
 import {
   BarcodeLookupSource,
   ProductMasterSource,
+  type ContributeBarcodeProductRequest,
 } from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   normalizeBarcode,
   ProductMastersService,
 } from "./product-masters.service";
+
+const contributeBody = (
+  overrides: Partial<ContributeBarcodeProductRequest> = {},
+): ContributeBarcodeProductRequest => ({
+  barcode: "8801059001234",
+  name: "직접 입력한 우유",
+  ...overrides,
+});
 
 const localProduct = {
   id: "pm-1",
@@ -179,10 +188,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "직접 입력한 우유",
-      },
+      contributeBody({ barcode: "8801059001234", name: "직접 입력한 우유" }),
       "owner-a",
     );
 
@@ -203,10 +209,7 @@ describe("ProductMastersService contribute", () => {
     prisma.productMaster.findUnique.mockResolvedValue(localProduct);
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "다른 이름",
-      },
+      contributeBody({ barcode: "8801059001234", name: "다른 이름" }),
       "owner-a",
     );
 
@@ -216,11 +219,11 @@ describe("ProductMastersService contribute", () => {
     expect(prisma.productMaster.create).not.toHaveBeenCalled();
   });
 
-  it("updates an existing user-contributed row", async () => {
+  it("updates an existing user-contributed row owned by the same user", async () => {
     prisma.productMaster.findUnique.mockResolvedValue({
       ...localProduct,
       source: ProductMasterSource.USER_CONTRIBUTED,
-      contributedByUserId: "owner-b",
+      contributedByUserId: "owner-a",
     });
     prisma.productMaster.update.mockResolvedValue({
       ...localProduct,
@@ -230,11 +233,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "수정된 이름",
-        brand: "우리집",
-      },
+      contributeBody({ barcode: "8801059001234", name: "수정된 이름", brand: "우리집" }),
       "owner-a",
     );
 
@@ -247,6 +246,52 @@ describe("ProductMastersService contribute", () => {
         category: "기타",
         contributedByUserId: "owner-a",
       },
+    });
+  });
+
+  it("does not let another user overwrite a user-contributed row", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      ...localProduct,
+      name: "원래 이름",
+      source: ProductMasterSource.USER_CONTRIBUTED,
+      contributedByUserId: "owner-b",
+    });
+
+    const result = await service.contribute(
+      contributeBody({ barcode: "8801059001234", name: "덮어쓰기 시도" }),
+      "owner-a",
+    );
+
+    expect(result.created).toBe(false);
+    expect(result.product.name).toBe("원래 이름");
+    expect(prisma.productMaster.update).not.toHaveBeenCalled();
+  });
+
+  it("allows adopting an orphaned user-contributed row", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      ...localProduct,
+      source: ProductMasterSource.USER_CONTRIBUTED,
+      contributedByUserId: null,
+    });
+    prisma.productMaster.update.mockResolvedValue({
+      ...localProduct,
+      name: "새 이름",
+      source: ProductMasterSource.USER_CONTRIBUTED,
+      contributedByUserId: "owner-a",
+    });
+
+    const result = await service.contribute(
+      contributeBody({ barcode: "8801059001234", name: "새 이름" }),
+      "owner-a",
+    );
+
+    expect(result.created).toBe(false);
+    expect(prisma.productMaster.update).toHaveBeenCalledWith({
+      where: { barcode: "8801059001234" },
+      data: expect.objectContaining({
+        name: "새 이름",
+        contributedByUserId: "owner-a",
+      }),
     });
   });
 });

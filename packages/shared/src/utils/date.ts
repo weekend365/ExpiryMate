@@ -51,6 +51,24 @@ export const dateOnlyToKstStartDate = (value: string) => {
   return new Date(dateOnlyToUtcDate(value).getTime() - KST_OFFSET_MINUTES * 60 * 1000);
 };
 
+/**
+ * Instant of the start of the KST calendar day that contains `now`.
+ * Use for daily quota/cost windows so resets follow Asia/Seoul, not server TZ.
+ */
+export const getKstDayStart = (now: Date | string = new Date()) => {
+  return dateOnlyToKstStartDate(toKstDateOnly(now));
+};
+
+/**
+ * Half-open KST day window: `[start, endExclusive)`.
+ */
+export const getKstDayWindow = (now: Date | string = new Date()) => {
+  const dateOnly = toKstDateOnly(now);
+  const start = dateOnlyToKstStartDate(dateOnly);
+  const endExclusive = dateOnlyToKstStartDate(addDaysToDateOnly(dateOnly, 1));
+  return { start, endExclusive };
+};
+
 export const addDaysToDateOnly = (value: Date | string, days: number) => {
   const base = dateOnlyToUtcDate(toKstDateOnly(value));
   base.setUTCDate(base.getUTCDate() + days);

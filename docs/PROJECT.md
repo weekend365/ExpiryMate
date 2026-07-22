@@ -77,8 +77,8 @@
 |---|------|-----|
 | 4 | **Sentry Mobile** preview 스모크 | API·Admin ✅. Android preview는 Sentry 업로드 설정 정리 후 |
 | 5 | API/Admin 커스텀 도메인 | Privacy·Support URL·브랜드 일관성 |
-| 6 | Admin 보안 하드닝 | refresh cookie · 로그인 rate limit · 관리자 계정 절차 |
-| 7 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` 단일 인스턴스 |
+| 6 | Admin 보안 하드닝 | admin client role 거부 · refresh cookie Path=/auth · inventory pagination/mask · AdminAuditLog |
+| 7 | 푸시 스케줄러 ON + receipt 처리 | `PUSH_REMINDER_SCHEDULER_ENABLED` · DB lease · receipt poll · stale pending 재시도 |
 | 8 | ProductMaster source-fields migration 배포 확인 | 바코드 적재는 완료 — migration 잔여분만 |
 
 ### 의도적으로 미룸 (v1.1+ / Phase 4)
@@ -142,7 +142,7 @@ flowchart LR
 ### Phase 2 Done Criteria (요약)
 
 - [ ] iOS/Android production 빌드 + 실제 API
-- [ ] App Store Privacy Label / Play Data Safety
+- [ ] App Store Privacy Label / Play Data Safety (`docs/store-privacy-declarations.md` 대조)
 - [ ] Support URL · 스크린샷 · 앱 설명 · 심사 노트(AI·계정 삭제·OAuth)
 - [ ] Sign in with Apple (유료 계정) 스토어 정책 충족
 
@@ -153,7 +153,7 @@ flowchart LR
 | 구분 | 항목 |
 |------|------|
 | 인프라 | Railway API·Admin·Postgres · Docker · `GET /health` `/ready` · helmet · seed 가드 |
-| CI | GitHub Actions lint/typecheck/test · main push API/Admin build |
+| CI | GitHub Actions lint/typecheck/test · Prisma migrate deploy · API/Admin production build |
 | 메일·도메인 | `devnamu.com` 구입 · Resend에 `mail.devnamu.com` 인증 · Resend HTTP API (Railway SMTP 포트 우회) · `SMTP_FROM=noreply@mail.devnamu.com` |
 | 이메일 인증 | 가입/로그인 UI · `EmailDomainInput` · verify-pending/verify-email · HTTPS 브릿지 → 딥링크 · 재발송·비밀번호 재설정 · **실기기 E2E 전부 ✅** |
 | 관측성 | Sentry API·Admin DSN 주입·스모크 ✅ · Mobile DSN은 EAS에 있음 · preview 빌드/스모크 후순위 |
@@ -228,7 +228,7 @@ pnpm docker:down
 
 1. Railway 프로젝트 + PostgreSQL
 2. API 서비스: Dockerfile `apps/api/Dockerfile`, `DATABASE_URL` 등 env
-3. Admin 서비스: Dockerfile `apps/admin/Dockerfile`, `NEXT_PUBLIC_API_BASE_URL`
+3. Admin 서비스: Dockerfile `apps/admin/Dockerfile`. **Build args 필수** (기본값 없음): `NEXT_PUBLIC_APP_ENV=production`, `NEXT_PUBLIC_API_BASE_URL`(공개 HTTPS API), `PRIVACY_CONTACT_EMAIL`(실제 메일). 누락·localhost 시 이미지 빌드가 실패한다.
 4. `prisma migrate deploy` (API 기동 또는 one-off)
 5. 메일: Resend 도메인 `mail.devnamu.com` + `SMTP_FROM` / API 키  
 6. (선택) API·Admin에 `devnamu.com` 커스텀 도메인 연결 — 현재는 `*.up.railway.app`
@@ -381,7 +381,9 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 
 ### Uptime
 
-`GET https://api-production-1504.up.railway.app/health` → Better Stack / UptimeRobot 등, non-200·타임아웃 알림.
+`GET https://api-production-1504.up.railway.app/health` → Better Stack / UptimeRobot 등, non-200·타임아웃 알림 (프로세스 liveness).
+
+Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 확인). Docker `HEALTHCHECK`도 `/ready`를 사용한다. `/health`만 보면 DB 장애 컨테이너가 healthy로 남을 수 있다.
 
 ### 장애 1차 확인
 
@@ -391,7 +393,7 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 | 모바일 크래시 | Sentry release · EAS build |
 | 메일 미도착 | Resend 대시보드 · `mail.devnamu.com` DNS · `SMTP_FROM` · `AUTH_LINK_BASE_URL` |
 | OAuth 실패 | Redirect URI 일치 · client secret · `/oauth/callback` |
-| Push 중복 | `PUSH_REMINDER_SCHEDULER_ENABLED=true` 인스턴스 1개만 |
+| Push 중복 | `SchedulerLease`가 replica 중복 실행을 막음 · 가능하면 worker 1대만 `PUSH_REMINDER_SCHEDULER_ENABLED=true` |
 
 마이그레이션: `prisma migrate deploy` · destructive seed 금지 · rollback보다 forward fix.
 

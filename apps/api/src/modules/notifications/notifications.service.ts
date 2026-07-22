@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
   Injectable,
   Logger,
@@ -10,16 +11,24 @@ import {
   PushNotificationDeliveryStatus,
   PushTokenPlatform,
 } from "@prisma/client";
-import { dateOnlyToUtcDate } from "@expirymate/shared";
+import { addDaysToDateOnly, dateOnlyToUtcDate, toKstDateOnly } from "@expirymate/shared";
 import { serializePushToken } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
-import { RegisterPushTokenDto } from "./dto/register-push-token.dto";
-import { ExpoPushService, type ExpoPushTicket } from "./expo-push.service";
+import type { RegisterPushTokenRequest } from "@expirymate/shared";
+import {
+  ExpoPushService,
+  type ExpoPushReceipt,
+  type ExpoPushTicket,
+} from "./expo-push.service";
 
 const DEFAULT_INTERVAL_MINUTES = 30;
 const DEFAULT_DELIVERY_HOUR = 9;
 const DEFAULT_MAX_ATTEMPTS = 3;
 const DEFAULT_TIMEZONE_OFFSET_MINUTES = 9 * 60;
+const DEFAULT_STALE_PENDING_MINUTES = 15;
+const DEFAULT_RECEIPT_MIN_AGE_MINUTES = 5;
+const DEFAULT_RECEIPT_BATCH_SIZE = 100;
+const PUSH_REMINDER_LEASE_KEY = "push_reminders";
 
 interface ReminderStats {
   preferencesChecked: number;
@@ -28,7 +37,11 @@ interface ReminderStats {
   notificationsSent: number;
   notificationsFailed: number;
   tokensDisabled: number;
+  stalePendingRetried: number;
+  receiptsChecked: number;
+  receiptsFailed: number;
   skippedByTime: boolean;
+  skippedByLock: boolean;
 }
 
 interface DueItem {
@@ -41,6 +54,7 @@ export class NotificationsService
   implements OnApplicationBootstrap, OnModuleDestroy
 {
   private readonly logger = new Logger(NotificationsService.name);
+  private readonly leaseOwnerId = randomUUID();
   private timer?: ReturnType<typeof setInterval>;
 
   constructor(
@@ -68,9 +82,15 @@ export class NotificationsService
     if (this.timer) {
       clearInterval(this.timer);
     }
+
+    void this.releaseLease(PUSH_REMINDER_LEASE_KEY, this.leaseOwnerId).catch(
+      (error: unknown) => {
+        this.logger.warn("Failed to release push reminder lease on shutdown", error);
+      },
+    );
   }
 
-  async registerPushToken(ownerKey: string, dto: RegisterPushTokenDto) {
+  async registerPushToken(ownerKey: string, dto: RegisterPushTokenRequest) {
     const now = new Date();
     const pushToken = await this.prisma.pushToken.upsert({
       where: { token: dto.token },
@@ -120,14 +140,42 @@ export class NotificationsService
       notificationsSent: 0,
       notificationsFailed: 0,
       tokensDisabled: 0,
+      stalePendingRetried: 0,
+      receiptsChecked: 0,
+      receiptsFailed: 0,
       skippedByTime: false,
+      skippedByLock: false,
     };
 
-    if (getLocalHour(now) < getDeliveryHour()) {
-      stats.skippedByTime = true;
+    const leased = await this.tryAcquireLease(
+      PUSH_REMINDER_LEASE_KEY,
+      this.leaseOwnerId,
+      getLeaseTtlMs(),
+      now,
+    );
+
+    if (!leased) {
+      stats.skippedByLock = true;
       return stats;
     }
 
+    try {
+      await this.processPushReceipts(now, stats);
+      await this.recoverStalePendingDeliveries(now, stats);
+
+      if (getLocalHour(now) < getDeliveryHour()) {
+        stats.skippedByTime = true;
+        return stats;
+      }
+
+      await this.sendDueExpiryReminders(now, stats);
+      return stats;
+    } finally {
+      await this.releaseLease(PUSH_REMINDER_LEASE_KEY, this.leaseOwnerId);
+    }
+  }
+
+  private async sendDueExpiryReminders(now: Date, stats: ReminderStats) {
     const preferences = await this.prisma.notificationPreference.findMany({
       where: {
         enabled: true,
@@ -158,13 +206,21 @@ export class NotificationsService
       },
     });
 
-    for (const preference of preferences) {
+    const activePreferences = preferences.filter((preference) => {
       stats.preferencesChecked += 1;
+      return !isWithinQuietHours(
+        now,
+        preference.quietHoursStart,
+        preference.quietHoursEnd,
+      );
+    });
 
-      if (isWithinQuietHours(now, preference.quietHoursStart, preference.quietHoursEnd)) {
-        continue;
-      }
+    if (activePreferences.length === 0) {
+      return;
+    }
 
+    const reminderDateByKey = new Map<string, Date>();
+    const preferencePlans = activePreferences.map((preference) => {
       const daysBeforeValues = getReminderDays(
         preference.reminderDaysBefore,
         preference.remindOnDayOf,
@@ -174,30 +230,70 @@ export class NotificationsService
         const reminderDate = dateOnlyToUtcDate(
           getLocalDateOnly(now, daysBefore),
         );
-        const items = await this.prisma.inventoryItem.findMany({
-          where: {
-            ownerKey: preference.ownerKey,
-            status: ItemStatus.active,
-            expiryDate: reminderDate,
-          },
-          select: {
-            id: true,
-            displayName: true,
-          },
-          orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
-        });
+        reminderDateByKey.set(reminderDate.toISOString(), reminderDate);
+      }
 
+      return { preference, daysBeforeValues };
+    });
+
+    const reminderDates = [...reminderDateByKey.values()];
+    const ownerKeys = activePreferences.map((preference) => preference.ownerKey);
+    const dueItems = await this.prisma.inventoryItem.findMany({
+      where: {
+        ownerKey: { in: ownerKeys },
+        status: ItemStatus.active,
+        expiryDate: { in: reminderDates },
+      },
+      select: {
+        id: true,
+        displayName: true,
+        ownerKey: true,
+        expiryDate: true,
+      },
+      orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
+    });
+
+    const itemsByOwnerAndDate = new Map<string, DueItem[]>();
+    for (const item of dueItems) {
+      const key = `${item.ownerKey}:${item.expiryDate.toISOString()}`;
+      const bucket = itemsByOwnerAndDate.get(key) ?? [];
+      bucket.push({ id: item.id, displayName: item.displayName });
+      itemsByOwnerAndDate.set(key, bucket);
+    }
+
+    type OutboundJob = {
+      deliveryId: string;
+      title: string;
+      body: string;
+      pushTokenId: string;
+      token: string;
+      inventoryItemId: string;
+      daysBefore: number;
+    };
+
+    const outbound: OutboundJob[] = [];
+
+    for (const plan of preferencePlans) {
+      for (const daysBefore of plan.daysBeforeValues) {
+        const reminderDate = dateOnlyToUtcDate(
+          getLocalDateOnly(now, daysBefore),
+        );
+        const items =
+          itemsByOwnerAndDate.get(
+            `${plan.preference.ownerKey}:${reminderDate.toISOString()}`,
+          ) ?? [];
         stats.itemsMatched += items.length;
 
         for (const item of items) {
-          for (const pushToken of preference.owner.pushTokens) {
+          for (const pushToken of plan.preference.owner.pushTokens) {
+            const copy = buildReminderCopy(item, daysBefore);
             const delivery = await this.createPendingDelivery({
-              ownerKey: preference.ownerKey,
+              ownerKey: plan.preference.ownerKey,
               pushTokenId: pushToken.id,
               inventoryItemId: item.id,
               reminderDate,
               daysBefore,
-              ...buildReminderCopy(item, daysBefore),
+              ...copy,
             });
 
             if (!delivery) {
@@ -205,45 +301,265 @@ export class NotificationsService
             }
 
             stats.notificationsCreated += 1;
-            const ticket = await this.expoPush.send({
-              to: pushToken.token,
+            outbound.push({
+              deliveryId: delivery.id,
               title: delivery.title,
               body: delivery.body,
-              data: {
-                type: "expiry_reminder",
-                inventoryItemId: item.id,
-                daysBefore,
-              },
+              pushTokenId: pushToken.id,
+              token: pushToken.token,
+              inventoryItemId: item.id,
+              daysBefore,
             });
-            const update = toDeliveryUpdate(ticket);
-
-            await this.prisma.pushNotificationDelivery.update({
-              where: { id: delivery.id },
-              data: update,
-            });
-
-            if (ticket.status === "ok") {
-              stats.notificationsSent += 1;
-            } else {
-              stats.notificationsFailed += 1;
-
-              if (ticket.details?.error === "DeviceNotRegistered") {
-                await this.prisma.pushToken.update({
-                  where: { id: pushToken.id },
-                  data: {
-                    enabled: false,
-                    disabledAt: new Date(),
-                  },
-                });
-                stats.tokensDisabled += 1;
-              }
-            }
           }
         }
       }
     }
 
-    return stats;
+    if (outbound.length === 0) {
+      return;
+    }
+
+    const tickets = await this.expoPush.sendMany(
+      outbound.map((job) => ({
+        to: job.token,
+        title: job.title,
+        body: job.body,
+        data: {
+          type: "expiry_reminder",
+          inventoryItemId: job.inventoryItemId,
+          daysBefore: job.daysBefore,
+        },
+      })),
+    );
+
+    for (let index = 0; index < outbound.length; index += 1) {
+      const job = outbound[index];
+      if (!job) {
+        continue;
+      }
+
+      const ticket = tickets[index] ?? {
+        status: "error" as const,
+        message: "Expo Push API returned an empty ticket.",
+        details: { error: "EMPTY_TICKET" },
+      };
+      const update = toDeliveryUpdate(ticket);
+
+      await this.prisma.pushNotificationDelivery.update({
+        where: { id: job.deliveryId },
+        data: update,
+      });
+
+      if (ticket.status === "ok") {
+        stats.notificationsSent += 1;
+        continue;
+      }
+
+      stats.notificationsFailed += 1;
+      if (ticket.details?.error === "DeviceNotRegistered") {
+        await this.disablePushToken(job.pushTokenId, stats);
+      }
+    }
+  }
+
+  private async recoverStalePendingDeliveries(now: Date, stats: ReminderStats) {
+    const staleBefore = new Date(now.getTime() - getStalePendingMs());
+    const staleDeliveries = await this.prisma.pushNotificationDelivery.findMany({
+      where: {
+        status: PushNotificationDeliveryStatus.pending,
+        updatedAt: {
+          lt: staleBefore,
+        },
+        attempts: {
+          lt: getMaxAttempts(),
+        },
+        pushToken: {
+          enabled: true,
+        },
+      },
+      include: {
+        pushToken: {
+          select: {
+            id: true,
+            token: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: "asc",
+      },
+      take: getReceiptBatchSize(),
+    });
+
+    for (const delivery of staleDeliveries) {
+      const claimed = await this.prisma.pushNotificationDelivery.updateMany({
+        where: {
+          id: delivery.id,
+          status: PushNotificationDeliveryStatus.pending,
+          updatedAt: delivery.updatedAt,
+        },
+        data: {
+          attempts: {
+            increment: 1,
+          },
+        },
+      });
+
+      if (claimed.count === 0) {
+        continue;
+      }
+
+      stats.stalePendingRetried += 1;
+      stats.notificationsCreated += 1;
+      await this.dispatchDelivery(
+        {
+          id: delivery.id,
+          title: delivery.title,
+          body: delivery.body,
+        },
+        {
+          id: delivery.pushToken.id,
+          token: delivery.pushToken.token,
+        },
+        delivery.inventoryItemId,
+        delivery.daysBefore,
+        stats,
+      );
+    }
+  }
+
+  private async processPushReceipts(now: Date, stats: ReminderStats) {
+    const readyBefore = new Date(now.getTime() - getReceiptMinAgeMs());
+    const deliveries = await this.prisma.pushNotificationDelivery.findMany({
+      where: {
+        status: PushNotificationDeliveryStatus.sent,
+        receiptCheckedAt: null,
+        expoTicketId: {
+          not: null,
+        },
+        sentAt: {
+          lte: readyBefore,
+        },
+      },
+      select: {
+        id: true,
+        expoTicketId: true,
+        pushTokenId: true,
+      },
+      orderBy: {
+        sentAt: "asc",
+      },
+      take: getReceiptBatchSize(),
+    });
+
+    if (deliveries.length === 0) {
+      return;
+    }
+
+    const ticketIds = deliveries
+      .map((delivery) => delivery.expoTicketId)
+      .filter((ticketId): ticketId is string => Boolean(ticketId));
+    const receipts = await this.expoPush.getReceipts(ticketIds);
+    const checkedAt = new Date();
+
+    for (const delivery of deliveries) {
+      const ticketId = delivery.expoTicketId;
+      if (!ticketId) {
+        continue;
+      }
+
+      const receipt = receipts[ticketId];
+      if (!receipt) {
+        // Receipt not ready yet — leave receiptCheckedAt null for the next pass.
+        continue;
+      }
+
+      stats.receiptsChecked += 1;
+      await this.applyPushReceipt(delivery.id, delivery.pushTokenId, receipt, checkedAt, stats);
+    }
+  }
+
+  private async applyPushReceipt(
+    deliveryId: string,
+    pushTokenId: string,
+    receipt: ExpoPushReceipt,
+    checkedAt: Date,
+    stats: ReminderStats,
+  ) {
+    if (receipt.status === "ok") {
+      await this.prisma.pushNotificationDelivery.update({
+        where: { id: deliveryId },
+        data: {
+          receiptCheckedAt: checkedAt,
+          errorCode: null,
+          errorMessage: null,
+        },
+      });
+      return;
+    }
+
+    stats.receiptsFailed += 1;
+    await this.prisma.pushNotificationDelivery.update({
+      where: { id: deliveryId },
+      data: {
+        status: PushNotificationDeliveryStatus.failed,
+        receiptCheckedAt: checkedAt,
+        errorCode: receipt.details?.error ?? "EXPO_PUSH_RECEIPT_ERROR",
+        errorMessage:
+          receipt.message ?? "Expo Push receipt reported delivery failure.",
+      },
+    });
+
+    if (receipt.details?.error === "DeviceNotRegistered") {
+      await this.disablePushToken(pushTokenId, stats);
+    }
+  }
+
+  private async dispatchDelivery(
+    delivery: { id: string; title: string; body: string },
+    pushToken: { id: string; token: string },
+    inventoryItemId: string,
+    daysBefore: number,
+    stats: ReminderStats,
+  ) {
+    const ticket = await this.expoPush.send({
+      to: pushToken.token,
+      title: delivery.title,
+      body: delivery.body,
+      data: {
+        type: "expiry_reminder",
+        inventoryItemId,
+        daysBefore,
+      },
+    });
+    const update = toDeliveryUpdate(ticket);
+
+    await this.prisma.pushNotificationDelivery.update({
+      where: { id: delivery.id },
+      data: update,
+    });
+
+    if (ticket.status === "ok") {
+      stats.notificationsSent += 1;
+      return;
+    }
+
+    stats.notificationsFailed += 1;
+
+    if (ticket.details?.error === "DeviceNotRegistered") {
+      await this.disablePushToken(pushToken.id, stats);
+    }
+  }
+
+  private async disablePushToken(pushTokenId: string, stats: ReminderStats) {
+    await this.prisma.pushToken.update({
+      where: { id: pushTokenId },
+      data: {
+        enabled: false,
+        disabledAt: new Date(),
+      },
+    });
+    stats.tokensDisabled += 1;
   }
 
   private async createPendingDelivery(params: {
@@ -279,30 +595,80 @@ export class NotificationsService
           },
         });
 
-        if (
-          existing?.status === PushNotificationDeliveryStatus.failed &&
-          existing.attempts < getMaxAttempts()
-        ) {
-          return this.prisma.pushNotificationDelivery.update({
-            where: { id: existing.id },
-            data: {
-              title: params.title,
-              body: params.body,
-              status: PushNotificationDeliveryStatus.pending,
-              attempts: {
-                increment: 1,
-              },
-              errorCode: null,
-              errorMessage: null,
-            },
-          });
+        if (!existing || existing.attempts >= getMaxAttempts()) {
+          return null;
         }
 
-        return null;
+        const canRetryFailed =
+          existing.status === PushNotificationDeliveryStatus.failed;
+        const canRetryStalePending =
+          existing.status === PushNotificationDeliveryStatus.pending &&
+          isStalePending(existing.updatedAt, new Date());
+
+        if (!canRetryFailed && !canRetryStalePending) {
+          return null;
+        }
+
+        return this.prisma.pushNotificationDelivery.update({
+          where: { id: existing.id },
+          data: {
+            title: params.title,
+            body: params.body,
+            status: PushNotificationDeliveryStatus.pending,
+            attempts: {
+              increment: 1,
+            },
+            errorCode: null,
+            errorMessage: null,
+            receiptCheckedAt: null,
+            expoTicketId: null,
+            sentAt: null,
+          },
+        });
       }
 
       throw error;
     }
+  }
+
+  /**
+   * Atomic lease via INSERT … ON CONFLICT DO UPDATE … WHERE expired/same owner.
+   * Returns true only when this owner holds the row after the write.
+   */
+  private async tryAcquireLease(
+    key: string,
+    ownerId: string,
+    ttlMs: number,
+    now: Date,
+  ) {
+    const expiresAt = new Date(now.getTime() + ttlMs);
+
+    await this.prisma.$executeRaw`
+      INSERT INTO "SchedulerLease" ("key", "ownerId", "expiresAt", "updatedAt")
+      VALUES (${key}, ${ownerId}, ${expiresAt}, ${now})
+      ON CONFLICT ("key") DO UPDATE SET
+        "ownerId" = EXCLUDED."ownerId",
+        "expiresAt" = EXCLUDED."expiresAt",
+        "updatedAt" = EXCLUDED."updatedAt"
+      WHERE "SchedulerLease"."expiresAt" < ${now}
+         OR "SchedulerLease"."ownerId" = ${ownerId}
+    `;
+
+    const lease = await this.prisma.schedulerLease.findUnique({
+      where: { key },
+      select: { ownerId: true },
+    });
+
+    return lease?.ownerId === ownerId;
+  }
+
+  private async releaseLease(key: string, ownerId: string) {
+    await this.prisma.schedulerLease.deleteMany({
+      where: {
+        key,
+        ownerId,
+      },
+    });
   }
 }
 
@@ -333,6 +699,11 @@ function getSchedulerIntervalMs() {
   );
 }
 
+function getLeaseTtlMs() {
+  // Slightly longer than one interval so a slow batch can finish before expiry.
+  return getSchedulerIntervalMs() + 5 * 60 * 1000;
+}
+
 function getDeliveryHour() {
   return Math.min(
     23,
@@ -344,6 +715,35 @@ function getMaxAttempts() {
   return readPositiveIntegerEnv(
     "PUSH_REMINDER_MAX_ATTEMPTS",
     DEFAULT_MAX_ATTEMPTS,
+  );
+}
+
+function getStalePendingMs() {
+  return (
+    readPositiveIntegerEnv(
+      "PUSH_REMINDER_STALE_PENDING_MINUTES",
+      DEFAULT_STALE_PENDING_MINUTES,
+    ) *
+    60 *
+    1000
+  );
+}
+
+function getReceiptMinAgeMs() {
+  return (
+    readPositiveIntegerEnv(
+      "PUSH_REMINDER_RECEIPT_MIN_AGE_MINUTES",
+      DEFAULT_RECEIPT_MIN_AGE_MINUTES,
+    ) *
+    60 *
+    1000
+  );
+}
+
+function getReceiptBatchSize() {
+  return readPositiveIntegerEnv(
+    "PUSH_REMINDER_RECEIPT_BATCH_SIZE",
+    DEFAULT_RECEIPT_BATCH_SIZE,
   );
 }
 
@@ -375,16 +775,8 @@ function getLocalMinutes(now: Date) {
 }
 
 function getLocalDateOnly(now: Date, daysFromNow: number) {
-  const offsetMs = getTimezoneOffsetMinutes() * 60 * 1000;
-  const localDate = new Date(now.getTime() + offsetMs);
-  localDate.setUTCHours(0, 0, 0, 0);
-  localDate.setUTCDate(localDate.getUTCDate() + daysFromNow);
-
-  const year = localDate.getUTCFullYear();
-  const month = String(localDate.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(localDate.getUTCDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+  // Inventory expiry dates are KST calendar days — keep reminder matching on the same clock.
+  return addDaysToDateOnly(toKstDateOnly(now), daysFromNow);
 }
 
 function getReminderDays(reminderDaysBefore: number[], remindOnDayOf: boolean) {
@@ -432,12 +824,17 @@ function buildReminderCopy(item: DueItem, daysBefore: number) {
   };
 }
 
+function isStalePending(updatedAt: Date, now: Date) {
+  return updatedAt.getTime() <= now.getTime() - getStalePendingMs();
+}
+
 function toDeliveryUpdate(ticket: ExpoPushTicket) {
   if (ticket.status === "ok") {
     return {
       status: PushNotificationDeliveryStatus.sent,
       expoTicketId: ticket.id,
       sentAt: new Date(),
+      receiptCheckedAt: null,
       errorCode: null,
       errorMessage: null,
     };

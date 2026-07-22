@@ -138,6 +138,64 @@ describe("mobile API client core flow", () => {
     expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe("refresh-3");
   });
 
+  it("single-flights parallel refresh after concurrent 401s", async () => {
+    let refreshCalls = 0;
+    let releaseRefresh: ((value: Response) => void) | undefined;
+    const refreshGate = new Promise<Response>((resolve) => {
+      releaseRefresh = resolve;
+    });
+
+    stores.fetch.mockImplementation(async (url: string, init?: RequestInit) => {
+      const path = String(url);
+      if (path.includes("/auth/login")) {
+        return successResponse(createSession("access-stale", "refresh-shared"));
+      }
+      if (path.includes("/auth/refresh")) {
+        refreshCalls += 1;
+        return refreshGate;
+      }
+      if (path.includes("/dashboard/summary") || path.includes("/inventory")) {
+        const auth = String(
+          (init?.headers as Record<string, string> | undefined)?.Authorization ??
+            "",
+        );
+        if (auth.includes("access-fresh")) {
+          return path.includes("/inventory")
+            ? successResponse({
+                items: [],
+                page: 1,
+                limit: 100,
+                totalCount: 0,
+                hasMore: false,
+              })
+            : successResponse(dashboardSummary);
+        }
+        return errorResponse(401, "만료된 세션입니다.");
+      }
+      return errorResponse(500, "unexpected");
+    });
+
+    const { login, getDashboardSummary, listAllInventory } = await import("./api");
+    await login({ email: "test@example.com", password: "password123" });
+
+    const pending = Promise.all([getDashboardSummary(), listAllInventory()]);
+    await vi.waitFor(() => {
+      expect(refreshCalls).toBe(1);
+    });
+
+    releaseRefresh!(
+      successResponse(createSession("access-fresh", "refresh-rotated")),
+    );
+    const [summary, inventory] = await pending;
+
+    expect(summary.todayExpiryCount).toBe(1);
+    expect(inventory).toEqual([]);
+    expect(refreshCalls).toBe(1);
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe(
+      "refresh-rotated",
+    );
+  });
+
   it("uses the new access token immediately after login", async () => {
     const registeredUser: AuthUser = {
       ...authUser,

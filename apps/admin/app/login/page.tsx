@@ -3,7 +3,7 @@
 import { appBrand } from "@expirymate/shared";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { adminLogin } from "../../src/lib/api";
+import { adminLogin, adminLogout } from "../../src/lib/api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -27,13 +27,17 @@ export default function AdminLoginPage() {
         password: submittedPassword,
       });
       if (session.user.role !== "admin") {
-        setErrorMessage("관리자 권한이 필요합니다.");
+        await adminLogout();
+        setErrorMessage("관리자만 들어올 수 있어요. 관리자 계정으로 다시 들어와 주세요.");
         return;
       }
       router.replace("/dashboard");
     } catch (error) {
+      await adminLogout().catch(() => null);
       setErrorMessage(
-        error instanceof Error ? error.message : "로그인에 실패했습니다.",
+        error instanceof Error
+          ? error.message
+          : "앗, 들어오는 중에 잠시 문제가 생겼어요.",
       );
     } finally {
       setIsSubmitting(false);
@@ -49,12 +53,12 @@ export default function AdminLoginPage() {
         <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary)]">
           {appBrand.appNameKo} Admin
         </div>
-        <h1 className="mt-5 text-3xl font-black tracking-tight">관리자 로그인</h1>
+        <h1 className="mt-6 text-3xl font-black tracking-tight">관리자로 들어올게요</h1>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          관리자 권한이 있는 이메일 계정으로 로그인하세요.
+          관리자 권한이 있는 이메일 계정으로 들어와 주세요.
         </p>
 
-        <div className="mt-8 space-y-3">
+        <div className="mt-8 space-y-4">
           <input
             name="email"
             autoComplete="email"
@@ -86,7 +90,7 @@ export default function AdminLoginPage() {
           disabled={!email || !password || isSubmitting}
           className="mt-6 h-12 w-full rounded-[var(--radius-lg)] bg-[var(--primary)] text-sm font-black text-[var(--surface)] disabled:cursor-not-allowed disabled:bg-[var(--border)]"
         >
-          {isSubmitting ? "로그인 중" : "로그인"}
+          {isSubmitting ? "들어가는 중이에요" : "들어갈게요"}
         </button>
       </form>
     </main>

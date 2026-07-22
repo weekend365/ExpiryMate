@@ -6,10 +6,12 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from "@nestjs/common";
 import { ProductCategory } from "@expirymate/shared";
 import { AdminGuard } from "../auth/admin.guard";
+import type { AuthenticatedRequest } from "../auth/auth.types";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
@@ -36,13 +38,17 @@ export class ProductsController {
 
   @Post()
   @UseGuards(AdminGuard)
-  create(@Body() dto: CreateProductDto) {
-    return this.productsService.create(dto);
+  create(@Body() dto: CreateProductDto, @Req() request: AuthenticatedRequest) {
+    return this.productsService.create(dto, request.user!.ownerKey);
   }
 
   @Patch(":id")
   @UseGuards(AdminGuard)
-  update(@Param("id") id: string, @Body() dto: UpdateProductDto) {
-    return this.productsService.update(id, dto);
+  update(
+    @Param("id") id: string,
+    @Body() dto: UpdateProductDto,
+    @Req() request: AuthenticatedRequest,
+  ) {
+    return this.productsService.update(id, dto, request.user!.ownerKey);
   }
 }

@@ -14,10 +14,10 @@ import {
 } from "@prisma/client";
 import type {
   SubscriptionEntitlement,
+  SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
 } from "@expirymate/shared";
 import { PrismaService } from "../../database/prisma.service";
-import { VerifySubscriptionDto } from "./dto/verify-subscription.dto";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -127,13 +127,14 @@ export class SubscriptionsService {
 
   async verifySubscription(
     ownerKey: string,
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<SubscriptionVerificationResponse> {
     const verification =
       dto.store === "apple_app_store"
         ? await this.verifyAppleSubscription(dto)
         : await this.verifyGoogleSubscription(dto);
 
+    this.assertProductionSafeIapEnvironment(verification);
     this.assertAllowedProduct(verification.productId);
     await this.ensurePurchaseIsAvailableForOwner(ownerKey, verification);
 
@@ -146,7 +147,7 @@ export class SubscriptionsService {
   }
 
   private async verifyAppleSubscription(
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<VerifiedStoreSubscription> {
     if (!dto.transactionId) {
       throw new BadRequestException("Apple transactionId가 필요합니다.");
@@ -202,7 +203,7 @@ export class SubscriptionsService {
   }
 
   private async verifyGoogleSubscription(
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<VerifiedStoreSubscription> {
     if (!dto.purchaseToken) {
       throw new BadRequestException("Google Play purchaseToken이 필요합니다.");
@@ -261,6 +262,22 @@ export class SubscriptionsService {
         lineItem,
       }),
     };
+  }
+
+  private assertProductionSafeIapEnvironment(
+    verification: VerifiedStoreSubscription,
+  ) {
+    if (!isSandboxLikeEnvironment(verification.environment)) {
+      return;
+    }
+
+    if (areSandboxPurchasesAllowed()) {
+      return;
+    }
+
+    throw new BadRequestException(
+      "테스트용 결제는 여기서 쓸 수 없어요. 실제 구독으로 다시 확인해 주세요.",
+    );
   }
 
   private assertAllowedProduct(productId: string) {
@@ -400,6 +417,17 @@ function normalizeAppleTransaction({
 }): VerifiedStoreSubscription {
   if (!transaction.productId) {
     throw new BadRequestException("Apple 구독 상품을 확인하지 못했습니다.");
+  }
+
+  const expectedBundleId = process.env.APPLE_BUNDLE_ID?.trim();
+  if (
+    expectedBundleId &&
+    transaction.bundleId &&
+    transaction.bundleId !== expectedBundleId
+  ) {
+    throw new BadRequestException(
+      "이 앱에서 확인된 구독이 아니에요. 다시 한번 확인해 주세요.",
+    );
   }
 
   const expiresAt = getLatestAppleExpiryDate(transaction, renewal);
@@ -829,11 +857,36 @@ function getAllowedProductIds() {
 }
 
 function getAppleEnvironment(requested?: "sandbox" | "production") {
-  return (
-    requested ??
-    (process.env.APPLE_APP_STORE_ENVIRONMENT === "sandbox"
+  const configured =
+    process.env.APPLE_APP_STORE_ENVIRONMENT === "sandbox"
       ? "sandbox"
-      : "production")
+      : "production";
+
+  // Production deploys must never honor a client-requested sandbox override.
+  if (process.env.NODE_ENV === "production" || configured === "production") {
+    return "production";
+  }
+
+  return requested ?? configured;
+}
+
+function areSandboxPurchasesAllowed() {
+  if (process.env.IAP_ALLOW_SANDBOX_PURCHASES === "true") {
+    return true;
+  }
+
+  // Local/staging can accept sandbox only when Apple API target is sandbox.
+  if (process.env.NODE_ENV !== "production") {
+    return process.env.APPLE_APP_STORE_ENVIRONMENT === "sandbox";
+  }
+
+  return false;
+}
+
+function isSandboxLikeEnvironment(environment: string | null | undefined) {
+  const value = (environment ?? "").trim().toLowerCase();
+  return (
+    value === "sandbox" || value === "xcode" || value === "localtesting"
   );
 }
 

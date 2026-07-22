@@ -1,7 +1,11 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import {
+  recipeRecommendationRequestSchema,
+  type RecipeRecommendationRequest,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
-import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
 import { RecipesService } from "./recipes.service";
 
 @UseGuards(RegisteredGuard)
@@ -11,10 +15,11 @@ export class RecipesController {
 
   @Post("recommendations")
   createRecommendation(
-    @Body() dto: CreateRecipeRecommendationDto,
+    @Body(new ZodValidationPipe(recipeRecommendationRequestSchema))
+    request: RecipeRecommendationRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.recipesService.createRecommendation(ownerKey, dto);
+    return this.recipesService.createRecommendation(ownerKey, request);
   }
 
   @Get("recommendations")

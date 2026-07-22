@@ -4,7 +4,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SubscriptionsService } from "./subscriptions.service";
 
 const managedEnvKeys = [
+  "NODE_ENV",
   "IAP_ALLOWED_PRODUCT_IDS",
+  "IAP_ALLOW_SANDBOX_PURCHASES",
   "APPLE_APP_STORE_ISSUER_ID",
   "APPLE_APP_STORE_KEY_ID",
   "APPLE_BUNDLE_ID",
@@ -235,6 +237,146 @@ describe("SubscriptionsService", () => {
         purchaseToken: "token",
       }),
     ).rejects.toThrow(ConflictException);
+  });
+
+  it("rejects Google test purchases in production", async () => {
+    process.env.NODE_ENV = "production";
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
+    delete process.env.IAP_ALLOW_SANDBOX_PURCHASES;
+    const privateKey = createRsaPrivateKey();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async (url: string) => {
+        if (url === "https://oauth2.googleapis.com/token") {
+          return jsonResponse({ access_token: "google-access-token" });
+        }
+
+        return jsonResponse({
+          subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+          latestOrderId: "GPA.test",
+          testPurchase: {},
+          lineItems: [
+            {
+              productId: "expirymate_premium_monthly",
+              expiryTime: "2099-07-07T00:00:00Z",
+              autoRenewingPlan: { autoRenewEnabled: true },
+            },
+          ],
+        });
+      }),
+    );
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "google_play",
+        purchaseToken: "test-token",
+      }),
+    ).rejects.toThrow(/테스트용 결제/);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+  });
+
+  it("rejects Apple sandbox entitlements in production even if the client asks for sandbox", async () => {
+    process.env.NODE_ENV = "production";
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
+    delete process.env.IAP_ALLOW_SANDBOX_PURCHASES;
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse({
+        environment: "Sandbox",
+        bundleId: "com.expirymate.mobile",
+        data: [
+          {
+            lastTransactions: [
+              {
+                originalTransactionId: "original-transaction-1",
+                status: 1,
+                signedTransactionInfo: jws({
+                  transactionId: "transaction-2",
+                  originalTransactionId: "original-transaction-1",
+                  productId: "expirymate_premium_monthly",
+                  bundleId: "com.expirymate.mobile",
+                  environment: "Sandbox",
+                  expiresDate,
+                }),
+                signedRenewalInfo: jws({
+                  autoRenewStatus: 1,
+                  autoRenewProductId: "expirymate_premium_monthly",
+                }),
+              },
+            ],
+          },
+        ],
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "apple_app_store",
+        transactionId: "transaction-2",
+        environment: "sandbox",
+      }),
+    ).rejects.toThrow(/테스트용 결제/);
+
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain(
+      "api.storekit.apple.com",
+    );
+    expect(String(fetchMock.mock.calls[0]?.[0])).not.toContain(
+      "storekit-sandbox",
+    );
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+  });
+
+  it("allows sandbox purchases only when explicitly opted in", async () => {
+    process.env.NODE_ENV = "production";
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
+    process.env.IAP_ALLOW_SANDBOX_PURCHASES = "true";
+    const privateKey = createRsaPrivateKey();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async (url: string) => {
+        if (url === "https://oauth2.googleapis.com/token") {
+          return jsonResponse({ access_token: "google-access-token" });
+        }
+
+        return jsonResponse({
+          subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+          latestOrderId: "GPA.test",
+          testPurchase: {},
+          lineItems: [
+            {
+              productId: "expirymate_premium_monthly",
+              expiryTime: "2099-07-07T00:00:00Z",
+              autoRenewingPlan: { autoRenewEnabled: true },
+            },
+          ],
+        });
+      }),
+    );
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "google_play",
+      purchaseToken: "test-token",
+    });
+
+    expect(response.entitlement.hasActiveEntitlement).toBe(true);
+    expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledOnce();
   });
 });
 

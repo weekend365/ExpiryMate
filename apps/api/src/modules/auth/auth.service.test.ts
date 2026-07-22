@@ -1,7 +1,6 @@
 import {
   ConflictException,
   ForbiddenException,
-  ServiceUnavailableException,
   UnauthorizedException,
 } from "@nestjs/common";
 import {
@@ -54,8 +53,8 @@ describe("AuthService", () => {
     vi.restoreAllMocks();
   });
 
-  it("still signs bearer tokens for legacy anonymous users (endpoint closed)", async () => {
-    // HTTP POST /auth/anonymous is gone; service helper remains for merge/JWT tests.
+  it("still signs bearer tokens for legacy anonymous users (no HTTP mint path)", async () => {
+    // HTTP /auth/anonymous was removed; helper remains for merge/JWT tests.
     const service = createAuthService();
     const session = await service.issueAnonymousSession();
 
@@ -349,6 +348,97 @@ describe("AuthService", () => {
     expect(prisma.user.update).not.toHaveBeenCalled();
   });
 
+  it("rotates a refresh token only once under concurrent CAS", async () => {
+    const user = makeUser({
+      id: "user_refresh",
+      email: "refresh@example.com",
+      emailVerifiedAt: new Date(),
+    });
+    let casWins = 0;
+    const updateMany = vi.fn(async () => {
+      casWins += 1;
+      return { count: casWins === 1 ? 1 : 0 };
+    });
+    const create = vi.fn(async () => ({}));
+    const prisma = {
+      refreshSession: {
+        findUnique: vi.fn(async () => ({
+          id: "rs_1",
+          userId: user.id,
+          tokenHash: "unused",
+          revokedAt: null,
+          replacedByTokenHash: null,
+          expiresAt: new Date(Date.now() + 60_000),
+          user,
+        })),
+        updateMany,
+        create,
+      },
+      passwordCredential: {
+        findUnique: vi.fn(async () => ({ userId: user.id })),
+      },
+      $transaction: vi.fn(async (fn: (tx: {
+        refreshSession: { updateMany: typeof updateMany; create: typeof create };
+      }) => Promise<unknown>) =>
+        fn({ refreshSession: { updateMany, create } }),
+      ),
+    };
+    const service = new AuthService(prisma as never, {
+      sendEmailVerification: vi.fn(),
+      sendPasswordReset: vi.fn(),
+    } as never);
+
+    const winner = await service.refresh("refresh-token-raw");
+    await expect(service.refresh("refresh-token-raw")).rejects.toThrow(
+      UnauthorizedException,
+    );
+
+    expect(winner.refreshToken).toBeTruthy();
+    expect(create).toHaveBeenCalledOnce();
+    expect(updateMany).toHaveBeenCalledTimes(2);
+  });
+
+  it("revokes the refresh family when a rotated token is reused", async () => {
+    const user = makeUser({
+      id: "user_reuse",
+      email: "reuse@example.com",
+      emailVerifiedAt: new Date(),
+    });
+    const updateMany = vi.fn(async () => ({ count: 2 }));
+    const prisma = {
+      refreshSession: {
+        findUnique: vi.fn(async () => ({
+          id: "rs_old",
+          userId: user.id,
+          tokenHash: "old-hash",
+          revokedAt: new Date(),
+          replacedByTokenHash: "next-hash",
+          expiresAt: new Date(Date.now() + 60_000),
+          user,
+        })),
+        updateMany,
+        create: vi.fn(),
+      },
+      passwordCredential: {
+        findUnique: vi.fn(),
+      },
+      $transaction: vi.fn(),
+    };
+    const service = new AuthService(prisma as never, {
+      sendEmailVerification: vi.fn(),
+      sendPasswordReset: vi.fn(),
+    } as never);
+
+    await expect(service.refresh("old-refresh-token")).rejects.toThrow(
+      UnauthorizedException,
+    );
+    expect(updateMany).toHaveBeenCalledWith({
+      where: { userId: user.id, revokedAt: null },
+      data: { revokedAt: expect.any(Date) },
+    });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
   it("registers without issuing a session and requires email verification", async () => {
     const mailService = {
       sendEmailVerification: vi.fn(async () => undefined),
@@ -593,7 +683,7 @@ describe("AuthService", () => {
       user: {
         findUnique: vi.fn(async () => null),
         create: vi.fn(),
-        update: vi.fn(async (_args: { data: { emailVerifiedAt: Date } }) => ({
+        update: vi.fn(async () => ({
           ...user,
           emailVerifiedAt: new Date(),
         })),

@@ -2,7 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   acceptAiDataNotice,
   deleteAccount,
+  deleteRecommendationHistory,
   getPrivacyStatus,
+  revokeAiDataNotice,
 } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
 import {
@@ -10,6 +12,7 @@ import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
+import { recipeRecommendationsQueryKey } from "../recipes/use-recipe-recommendations";
 
 export const privacyStatusQueryKey = sessionQueryKeys.privacy;
 
@@ -33,6 +36,35 @@ export const useAcceptAiDataNotice = () => {
     onSuccess: (response) => {
       queryClient.setQueryData(queryKey, response.status);
       queryClient.invalidateQueries({ queryKey: privacyStatusQueryKey });
+    },
+  });
+};
+
+export const useRevokeAiDataNotice = () => {
+  const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const queryKey = withSessionUser(privacyStatusQueryKey, sessionUserId);
+
+  return useMutation({
+    mutationFn: revokeAiDataNotice,
+    onSuccess: (response) => {
+      queryClient.setQueryData(queryKey, response.status);
+      queryClient.invalidateQueries({ queryKey: privacyStatusQueryKey });
+    },
+  });
+};
+
+export const useDeleteRecommendationHistory = () => {
+  const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const privacyQueryKey = withSessionUser(privacyStatusQueryKey, sessionUserId);
+
+  return useMutation({
+    mutationFn: deleteRecommendationHistory,
+    onSuccess: (response) => {
+      queryClient.setQueryData(privacyQueryKey, response.status);
+      queryClient.invalidateQueries({ queryKey: privacyStatusQueryKey });
+      queryClient.invalidateQueries({ queryKey: recipeRecommendationsQueryKey });
     },
   });
 };

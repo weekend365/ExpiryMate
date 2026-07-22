@@ -6,12 +6,12 @@ import {
 import {
   BarcodeLookupSource,
   type BarcodeLookupResult,
+  type ContributeBarcodeProductRequest,
   type ContributeBarcodeProductResponse,
   ProductMasterSource,
 } from "@expirymate/shared";
 import { PrismaService } from "../../database/prisma.service";
 import { serializeProductMaster } from "../../common/serializers";
-import { ContributeBarcodeProductDto } from "./dto/contribute-barcode-product.dto";
 
 type OpenFoodFactsResponse = {
   status?: number;
@@ -81,7 +81,7 @@ export class ProductMastersService {
   }
 
   async contribute(
-    dto: ContributeBarcodeProductDto,
+    dto: ContributeBarcodeProductRequest,
     ownerKey: string,
   ): Promise<ContributeBarcodeProductResponse> {
     const barcode = normalizeBarcode(dto.barcode);
@@ -103,7 +103,21 @@ export class ProductMastersService {
     });
 
     if (existing) {
+      // Authoritative catalog rows are never overwritten by user contributions.
       if (existing.source !== ProductMasterSource.USER_CONTRIBUTED) {
+        return {
+          product: serializeProductMaster(existing),
+          created: false,
+        };
+      }
+
+      // Only the original contributor may edit; others keep the existing catalog entry.
+      // Orphaned rows (contributor cleared on account delete) may be adopted.
+      const canEdit =
+        !existing.contributedByUserId ||
+        existing.contributedByUserId === ownerKey;
+
+      if (!canEdit) {
         return {
           product: serializeProductMaster(existing),
           created: false,

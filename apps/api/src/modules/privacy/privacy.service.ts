@@ -6,12 +6,15 @@ import {
 import { AccountType, UserRole } from "@prisma/client";
 import type {
   DeleteAccountResponse,
+  DeleteRecommendationHistoryResponse,
   PrivacyStatus,
+  RevokeAiDataNoticeResponse,
 } from "@expirymate/shared";
 import { PrismaService } from "../../database/prisma.service";
 
 const DEFAULT_CONTACT_EMAIL = "privacy@expirymate.local";
-const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v1";
+/** Bumped in P1-12 when retention / transfer / withdrawal disclosures changed. */
+const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v2";
 
 @Injectable()
 export class PrivacyService {
@@ -19,10 +22,12 @@ export class PrivacyService {
 
   async getStatus(userId: string): Promise<PrivacyStatus> {
     const user = await this.findActiveUser(userId);
+    const recommendationHistoryCount = await this.countRecommendationHistory(userId);
 
     return this.buildStatus({
       aiDataNoticeAcceptedAt: user.aiDataNoticeAcceptedAt,
       aiDataNoticeVersion: user.aiDataNoticeVersion,
+      recommendationHistoryCount,
     });
   }
 
@@ -43,7 +48,50 @@ export class PrivacyService {
 
     return {
       ok: true as const,
-      status: this.buildStatus(user),
+      status: this.buildStatus({
+        ...user,
+        recommendationHistoryCount: await this.countRecommendationHistory(userId),
+      }),
+    };
+  }
+
+  async revokeAiDataNotice(userId: string): Promise<RevokeAiDataNoticeResponse> {
+    await this.findActiveUser(userId);
+
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        aiDataNoticeAcceptedAt: null,
+        aiDataNoticeVersion: null,
+      },
+      select: {
+        aiDataNoticeAcceptedAt: true,
+        aiDataNoticeVersion: true,
+      },
+    });
+
+    return {
+      ok: true,
+      status: this.buildStatus({
+        ...user,
+        recommendationHistoryCount: await this.countRecommendationHistory(userId),
+      }),
+    };
+  }
+
+  async deleteRecommendationHistory(
+    userId: string,
+  ): Promise<DeleteRecommendationHistoryResponse> {
+    await this.findActiveUser(userId);
+
+    const result = await this.prisma.recipeRecommendation.deleteMany({
+      where: { ownerKey: userId },
+    });
+
+    return {
+      ok: true,
+      deletedCount: result.count,
+      status: await this.getStatus(userId),
     };
   }
 
@@ -73,6 +121,11 @@ export class PrivacyService {
       await tx.oneTimeAuthToken.deleteMany({ where: { userId } });
       await tx.oAuthAccount.deleteMany({ where: { userId } });
       await tx.passwordCredential.deleteMany({ where: { userId } });
+      // Keep shared barcode catalog rows, but drop the deleted user's identity.
+      await tx.productMaster.updateMany({
+        where: { contributedByUserId: userId },
+        data: { contributedByUserId: null },
+      });
 
       await tx.user.update({
         where: { id: userId },
@@ -94,6 +147,12 @@ export class PrivacyService {
       ok: true,
       deletedAt: deletedAt.toISOString(),
     };
+  }
+
+  private async countRecommendationHistory(userId: string) {
+    return this.prisma.recipeRecommendation.count({
+      where: { ownerKey: userId },
+    });
   }
 
   private async findActiveUser(userId: string) {
@@ -118,6 +177,7 @@ export class PrivacyService {
   private buildStatus(user: {
     aiDataNoticeAcceptedAt: Date | null;
     aiDataNoticeVersion: string | null;
+    recommendationHistoryCount: number;
   }): PrivacyStatus {
     const aiDataNoticeVersion = getAiDataNoticeVersion();
 
@@ -133,6 +193,7 @@ export class PrivacyService {
       hasAcceptedCurrentAiDataNotice:
         Boolean(user.aiDataNoticeAcceptedAt) &&
         user.aiDataNoticeVersion === aiDataNoticeVersion,
+      recommendationHistoryCount: user.recommendationHistoryCount,
     };
   }
 }

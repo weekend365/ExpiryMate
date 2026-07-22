@@ -10,7 +10,7 @@ export function SeedStatusPage() {
   const [productsQuery, inventoryQuery, summaryQuery] = useQueries({
     queries: [
       { queryKey: ["products", "seed-status"], queryFn: () => listProducts() },
-      { queryKey: ["inventory", "seed-status"], queryFn: listInventory },
+      { queryKey: ["inventory", "seed-status"], queryFn: () => listInventory({ limit: 1 }) },
       { queryKey: ["dashboard-summary", "seed-status"], queryFn: getDashboardSummary },
     ],
   });
@@ -25,7 +25,7 @@ export function SeedStatusPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="시드 상품 수" value={productsQuery.data?.length ?? 0} />
-        <MetricCard label="시드 재고 수" value={inventoryQuery.data?.length ?? 0} />
+        <MetricCard label="시드 재고 수" value={inventoryQuery.data?.totalCount ?? 0} />
         <MetricCard label="보관 중" value={summaryQuery.data?.totalActiveCount ?? 0} />
         <MetricCard label="오늘 만료 수" value={summaryQuery.data?.todayExpiryCount ?? 0} tone="danger" />
       </div>

@@ -4,10 +4,12 @@ import type {
   BarcodeLookupResult,
   ContributeBarcodeProductRequest,
   ContributeBarcodeProductResponse,
+  CreateInventoryItemBody,
   DashboardSummary,
   DeleteAccountRequest,
   DeleteAccountResponse,
   InventoryItem,
+  InventoryListResponse,
   LoginRequest,
   NotificationPreference,
   PushToken,
@@ -17,14 +19,17 @@ import type {
   PrivacyStatus,
   RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
+  DeleteRecommendationHistoryResponse,
+  RevokeAiDataNoticeResponse,
   RecipeRecommendation,
-  RecipeRecommendationRequest,
+  RecipeRecommendationRequestInput,
   RegisterPendingResponse,
   RegisterRequest,
   RegisterResponse,
   SubscriptionEntitlement,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
+  UpdateInventoryItemBody,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -39,30 +44,12 @@ interface ApiEnvelope<T> {
   };
 }
 
-type InventoryPayload = {
-  productId?: string;
-  displayName: string;
-  brand?: string;
-  category?: string;
-  quantity: number;
-  unit?: string;
-  storageLocation: string;
-  expiryDate: string;
-  expirySource: string;
-  notes?: string;
-};
-
 type BatchDiscardInventoryItemsResponse = {
   count: number;
   items: InventoryItem[];
 };
 
-export type RecipeRecommendationPayload = Partial<
-  Pick<
-    RecipeRecommendationRequest,
-    "servings" | "maxCookingMinutes" | "mealType" | "useExpiringFirst"
-  >
->;
+export type RecipeRecommendationPayload = RecipeRecommendationRequestInput;
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
@@ -72,6 +59,8 @@ const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
 let sessionPromise: Promise<AuthSession | null> | null = null;
+/** Single-flight mutex so parallel 401s share one refresh instead of racing. */
+let refreshInFlight: Promise<AuthSession | null> | null = null;
 
 function resolveApiBaseUrl() {
   const value = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -285,7 +274,7 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
 
   try {
     currentUser = parsed;
-    return await refreshSession(refreshToken);
+    return await refreshRegisteredSessionSingleFlight();
   } catch {
     await clearAuthSession();
     return null;
@@ -293,24 +282,41 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
 }
 
 async function tryRefreshRegisteredSession() {
-  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+  return refreshRegisteredSessionSingleFlight();
+}
 
-  if (!refreshToken) {
-    return null;
+/**
+ * One in-flight refresh at a time. Parallel 401 handlers await the same promise
+ * so a loser never clears a winner's newly rotated session.
+ */
+async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | null> {
+  if (refreshInFlight) {
+    return refreshInFlight;
   }
 
-  try {
-    sessionPromise = refreshSession(refreshToken);
-    const session = await sessionPromise;
-    if (!session || session.user.accountType !== "registered") {
+  refreshInFlight = (async () => {
+    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+
+    if (!refreshToken) {
+      return null;
+    }
+
+    try {
+      const session = await refreshSession(refreshToken);
+      if (!session || session.user.accountType !== "registered") {
+        await clearAuthSession();
+        return null;
+      }
+      return session;
+    } catch {
       await clearAuthSession();
       return null;
     }
-    return session;
-  } catch {
-    await clearAuthSession();
-    return null;
-  }
+  })().finally(() => {
+    refreshInFlight = null;
+  });
+
+  return refreshInFlight;
 }
 
 async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit) {
@@ -360,6 +366,7 @@ export async function clearAuthSession() {
   accessToken = null;
   currentUser = null;
   sessionPromise = null;
+  refreshInFlight = null;
   await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
   await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
   await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
@@ -385,6 +392,19 @@ export const acceptAiDataNotice = () =>
   request<AcceptAiDataNoticeResponse>("/privacy/ai-data-notice/accept", {
     method: "POST",
   });
+
+export const revokeAiDataNotice = () =>
+  request<RevokeAiDataNoticeResponse>("/privacy/ai-data-notice/revoke", {
+    method: "POST",
+  });
+
+export const deleteRecommendationHistory = () =>
+  request<DeleteRecommendationHistoryResponse>(
+    "/privacy/recommendation-history/delete",
+    {
+      method: "POST",
+    },
+  );
 
 export const deleteAccount = async (payload: DeleteAccountRequest) => {
   const result = await request<DeleteAccountResponse>("/privacy/account/delete", {
@@ -523,18 +543,56 @@ export const contributeBarcodeProduct = (
     body: JSON.stringify(payload),
   });
 
-export const listInventory = () => request<InventoryItem[]>("/inventory");
+export const listInventory = async (params?: {
+  page?: number;
+  limit?: number;
+  q?: string;
+}): Promise<InventoryListResponse> => {
+  const search = new URLSearchParams();
+  if (params?.page) {
+    search.set("page", String(params.page));
+  }
+  if (params?.limit) {
+    search.set("limit", String(params.limit));
+  }
+  if (params?.q?.trim()) {
+    search.set("q", params.q.trim());
+  }
+  const query = search.toString();
+  return request<InventoryListResponse>(
+    `/inventory${query ? `?${query}` : ""}`,
+  );
+};
+
+/** Loads paginated inventory pages until exhausted (owner-scoped soft cap). */
+export const listAllInventory = async (): Promise<InventoryItem[]> => {
+  const items: InventoryItem[] = [];
+  let page = 1;
+
+  for (;;) {
+    const response = await listInventory({ page, limit: 100 });
+    items.push(...response.items);
+
+    if (!response.hasMore || page >= 50) {
+      break;
+    }
+
+    page += 1;
+  }
+
+  return items;
+};
 
 export const getInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}`);
 
-export const createInventoryItem = (payload: InventoryPayload) =>
+export const createInventoryItem = (payload: CreateInventoryItemBody) =>
   request<InventoryItem>("/inventory", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 
-export const updateInventoryItem = (id: string, payload: Partial<InventoryPayload>) =>
+export const updateInventoryItem = (id: string, payload: UpdateInventoryItemBody) =>
   request<InventoryItem>(`/inventory/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),

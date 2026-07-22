@@ -175,7 +175,7 @@ describe("mobile notification service", () => {
     });
   });
 
-  it("maps recipe-ready notification data to the recommendations path", async () => {
+  it("maps notification data to in-app paths", async () => {
     const {
       NOTIFICATION_TYPES,
       getNotificationNavigationPath,
@@ -192,7 +192,12 @@ describe("mobile notification service", () => {
         type: NOTIFICATION_TYPES.expiryReminder,
         inventoryItemId: "item-1",
       }),
-    ).toBeNull();
+    ).toBe("/inventory/item-1");
+    expect(
+      getNotificationNavigationPath({
+        type: NOTIFICATION_TYPES.expiryReminder,
+      }),
+    ).toBe("/(tabs)/inventory");
     expect(getNotificationNavigationPath(undefined)).toBeNull();
   });
 });

@@ -1,3 +1,5 @@
+import { buildHtmlBridgeStyles } from "../../common/html-bridge-styles";
+
 const DEFAULT_RETURN_URI = "expirymate://oauth";
 
 export type OAuthCallbackQuery = {
@@ -71,20 +73,7 @@ export function buildInvalidOAuthCallbackHtml(): string {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>로그인 연결</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f1f3f5;
-      color: #1a1f27;
-      text-align: center;
-      padding: 24px;
-    }
-    p { color: #4e5561; line-height: 1.5; margin: 0; }
-  </style>
+  <style>${buildHtmlBridgeStyles({ includeHint: false })}</style>
 </head>
 <body>
   <div>
@@ -105,32 +94,7 @@ export function buildOAuthCallbackHtml(deepLink: string): string {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>로그인 연결 중</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f1f3f5;
-      color: #1a1f27;
-      text-align: center;
-      padding: 24px;
-    }
-    p { color: #4e5561; line-height: 1.5; margin: 0 0 24px; }
-    a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 52px;
-      padding: 0 24px;
-      border-radius: 16px;
-      background: #10b981;
-      color: #fff;
-      font-weight: 700;
-      text-decoration: none;
-    }
-  </style>
+  <style>${buildHtmlBridgeStyles({ includeHint: false })}</style>
 </head>
 <body>
   <div>

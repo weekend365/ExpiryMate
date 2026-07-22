@@ -147,10 +147,13 @@ CORS_ORIGIN_MOBILE="http://localhost:8081"
 DEFAULT_OWNER_KEY="demo-user"
 AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
 AUTH_ALLOW_DEV_FALLBACK="false"
+APP_BASE_URL="expirymate://"
+AUTH_LINK_BASE_URL="http://localhost:4000"
+ADMIN_BASE_URL="http://localhost:3000"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
+AI_DATA_NOTICE_VERSION="ai-data-notice-v2"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5.4-mini"
 PUSH_REMINDER_SCHEDULER_ENABLED="false"
@@ -171,17 +174,20 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
 ```
 
 `AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK` defaults to disabled; set it to `true` only for local admin/dev fallback without a bearer token.
-Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` only on the server instance that should send remote expiry reminders. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
-Auth endpoints have built-in rate limits. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
+Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` on API instances that should run remote expiry reminders. A DB `SchedulerLease` prevents duplicate sends across replicas; still prefer enabling it on one primary worker when possible. The worker also retries stale `pending` deliveries and polls Expo push receipts. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
+Auth endpoints have built-in rate limits (DB-backed by default via `AUTH_RATE_LIMIT_STORE=database`, shared across replicas). Set `TRUST_PROXY` so Express `request.ip` reflects the client behind your reverse proxy — do not trust raw `X-Forwarded-For` in app code. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
 
 When `NODE_ENV=production`, the API fails fast if production-critical values are missing, unsafe, or still local:
 
-- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`
+- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`, `AUTH_LINK_BASE_URL`
 - auth: `AUTH_TOKEN_SECRET` with at least 32 characters and `AUTH_ALLOW_DEV_FALLBACK=false`
 - OAuth: `APPLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `KAKAO_OAUTH_CLIENT_ID` (optional: `KAKAO_OAUTH_CLIENT_SECRET`, `NAVER_OAUTH_CLIENT_ID`, `NAVER_OAUTH_CLIENT_SECRET`)
 - SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
+- AI: `OPENAI_API_KEY` when `RECIPE_AI_ENABLED` is on (default); omit only if AI is explicitly disabled
 - IAP: `IAP_ALLOWED_PRODUCT_IDS`, Apple App Store server API keys, Google Play service account keys
 - privacy contact: `PRIVACY_CONTACT_EMAIL`
+
+Docker/`docker-compose` healthchecks and Railway traffic probes should hit **`GET /ready`** (DB readiness), not `/health` (process liveness only). In Railway → API service → Settings → Healthcheck Path, set `/ready`.
 
 ### Admin
 
@@ -198,6 +204,18 @@ For production builds, set `NEXT_PUBLIC_APP_ENV=production`,
 `PRIVACY_CONTACT_EMAIL` to the real support/privacy email. The Admin build
 fails if production values still point to localhost or `.local`.
 
+Docker image builds (`apps/admin/Dockerfile`) take the same three values as
+**required build-args** — there are no localhost defaults. Pass them explicitly
+in `docker-compose` (development) or Railway Build Variables (production):
+
+```bash
+docker build -f apps/admin/Dockerfile \
+  --build-arg NEXT_PUBLIC_APP_ENV=production \
+  --build-arg NEXT_PUBLIC_API_BASE_URL=https://api.example.com \
+  --build-arg PRIVACY_CONTACT_EMAIL=privacy@example.com \
+  .
+```
+
 ### Mobile
 
 Copy `apps/mobile/.env.example` to `apps/mobile/.env`
@@ -210,9 +228,11 @@ EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearl
 
 For production EAS builds, configure the values from
 `apps/mobile/.env.production.example` in EAS environment variables or secrets.
-`EXPO_PUBLIC_API_BASE_URL` must be a public `https://` API URL, and the Google,
-Kakao, and IAP public identifiers must be present. The Expo config fails the
-production build when these values are missing or local.
+`EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_OAUTH_REDIRECT_URI` must be public
+`https://` URLs on the same origin (redirect ending in `/oauth/callback`), and
+Google, Kakao, and IAP public identifiers must be present. `app.config.js` and
+`eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
+builds fail fast when these values are missing, local, or placeholders.
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
 Use your Mac's current LAN IP instead:
@@ -337,8 +357,14 @@ Public pages for App Store review:
 Before submitting to the App Store, replace localhost URLs with the production
 domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
 
-Mobile users can manage privacy controls in `설정` → `개인정보 및 AI 데이터`.
-The first AI recipe recommendation requires one-time AI data notice consent.
+Mobile users can manage privacy controls in `설정` → `개인정보와 추천 안내`.
+The first AI recipe recommendation requires AI data notice consent for the
+current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v2`).
+Users can revoke that consent, delete recommendation history only, or wipe the
+account from the same privacy hub. Public copy covers retention periods,
+processors / cross-border transfer (including OpenAI in the US), and withdrawal
+paths. Use `docs/store-privacy-declarations.md` when filling App Store Privacy
+Label / Play Data Safety so declarations match the live product.
 
 Account/data deletion immediately removes owned ingredients, recommendation
 history, notification preferences, auth sessions, password credentials, and
@@ -508,7 +534,7 @@ This is intentionally simple and easy for both mobile and admin clients.
 - `POST /inventory/:id/consume`
 - `POST /inventory/:id/discard`
 
-Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous minting (`POST /auth/anonymous`) is closed. Client-supplied `ownerKey` query/body values are not trusted.
+Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous sessions are not supported — there is no `/auth/anonymous` minting path. Client-supplied `ownerKey` query/body values are not trusted.
 
 ### Other
 
@@ -586,7 +612,7 @@ See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지�
 - `packages/shared` is built to `dist` and consumed as a workspace package
 - root `dev` watches `packages/shared` so changes propagate during local development
 - remote push delivery requires an EAS project with push credentials and
-  `PUSH_REMINDER_SCHEDULER_ENABLED=true` on one API server
+  `PUSH_REMINDER_SCHEDULER_ENABLED=true` (DB lease guards multi-replica; prefer one worker)
 - recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
 - recommendation rate limit, quota, cache TTL, output token cap, and daily cost
   cap are controlled with the `RECIPE_*` environment variables

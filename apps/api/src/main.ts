@@ -16,6 +16,8 @@ async function bootstrap() {
     bodyParser: false,
   });
 
+  configureTrustProxy(app);
+
   app.use(normalizeJsonContentType);
   app.use(json({ limit: "10mb" }));
   app.use(urlencoded({ extended: true, limit: "10mb" }));
@@ -65,6 +67,42 @@ function normalizeJsonContentType(req: Request, _res: Response, next: NextFuncti
   }
 
   next();
+}
+
+/**
+ * Auth rate limits use Express `request.ip`. Without trust proxy, that is the
+ * socket peer (e.g. Railway edge). With trust proxy, Express derives client IP
+ * from X-Forwarded-For safely — never trust raw forwarded headers in app code.
+ *
+ * TRUST_PROXY: unset → 1 hop in production, off otherwise;
+ * true | N | Express trust setting string; false | 0 → disabled.
+ */
+function configureTrustProxy(app: NestExpressApplication) {
+  const raw = process.env.TRUST_PROXY?.trim();
+
+  if (raw === undefined || raw === "") {
+    if (process.env.NODE_ENV === "production") {
+      app.set("trust proxy", 1);
+    }
+    return;
+  }
+
+  if (raw === "false" || raw === "0") {
+    return;
+  }
+
+  if (raw === "true") {
+    app.set("trust proxy", 1);
+    return;
+  }
+
+  const asNumber = Number(raw);
+  if (Number.isInteger(asNumber) && asNumber >= 0) {
+    app.set("trust proxy", asNumber);
+    return;
+  }
+
+  app.set("trust proxy", raw);
 }
 
 bootstrap();

@@ -2,8 +2,6 @@ import { createHash } from "node:crypto";
 import {
   BadGatewayException,
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
   ServiceUnavailableException,
@@ -32,20 +30,13 @@ import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
 import { PrivacyService } from "../privacy/privacy.service";
-import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
+import { RecipePolicyService } from "./recipe-policy.service";
 
 const PROMPT_VERSION = "recipe-recommendation-v2";
 const DEFAULT_MODEL = "gpt-5-mini";
 const MAX_INGREDIENTS = 30;
 
-const DEFAULT_RATE_LIMIT_MAX = 3;
-const DEFAULT_RATE_LIMIT_WINDOW_SECONDS = 60;
-const DEFAULT_DAILY_QUOTA = 20;
 const DEFAULT_CACHE_TTL_SECONDS = 6 * 60 * 60;
-const DEFAULT_DAILY_COST_LIMIT_USD = 1;
-/** Account-wide OpenAI spend cap across all owners (0 = disabled). */
-const DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD = 10;
-const DEFAULT_MAX_INFLIGHT = 5;
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -96,27 +87,21 @@ const nonFoodCategories = new Set<ProductCategory>([
 
 @Injectable()
 export class RecipesService {
-  private readonly rateLimitHitsByOwner = new Map<string, number[]>();
-  private inflightGenerations = 0;
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly privacyService: PrivacyService,
+    private readonly recipePolicy: RecipePolicyService,
   ) {}
 
-  async createRecommendation(ownerKey: string, dto: CreateRecipeRecommendationDto) {
+  async createRecommendation(
+    ownerKey: string,
+    request: RecipeRecommendationRequest,
+  ) {
     const now = new Date();
 
-    this.ensureAiEnabled();
-    this.enforceRateLimit(ownerKey, now);
+    this.recipePolicy.ensureAiEnabled();
+    this.recipePolicy.enforceRateLimit(ownerKey, now);
     await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
-
-    const request = recipeRecommendationRequestSchema.parse({
-      servings: dto.servings ?? 2,
-      maxCookingMinutes: dto.maxCookingMinutes ?? 30,
-      mealType: dto.mealType ?? "any",
-      useExpiringFirst: dto.useExpiringFirst ?? true,
-    });
 
     const inventorySnapshot = await this.buildInventorySnapshot(ownerKey, request);
 
@@ -140,11 +125,20 @@ export class RecipesService {
       return this.serializeRecommendation(cachedRecord);
     }
 
-    await this.enforceDailyQuota(ownerKey, now);
-    await this.enforceDailyCostLimit(ownerKey, request, inventorySnapshot, now);
-    await this.enforceGlobalDailyCostLimit(request, inventorySnapshot, now);
+    const projectedCostUsd = estimateGenerationCostUsd(
+      request,
+      inventorySnapshot,
+      model,
+    );
+    await this.recipePolicy.enforceDailyQuota(ownerKey, now);
+    await this.recipePolicy.enforceDailyCostLimit(
+      ownerKey,
+      projectedCostUsd,
+      now,
+    );
+    await this.recipePolicy.enforceGlobalDailyCostLimit(projectedCostUsd, now);
 
-    const generation = await this.withInflightLimit(() =>
+    const generation = await this.recipePolicy.withInflightLimit(() =>
       this.generateRecommendations(ownerKey, request, inventorySnapshot),
     );
 
@@ -189,181 +183,6 @@ export class RecipesService {
     }
 
     return this.serializeRecommendation(record);
-  }
-
-  private ensureAiEnabled() {
-    const raw = process.env.RECIPE_AI_ENABLED?.trim().toLowerCase();
-    if (raw === "false" || raw === "0" || raw === "off") {
-      throw new ServiceUnavailableException(
-        "지금은 레시피 추천을 잠시 쉬고 있어요. 조금 뒤에 다시 시도해 주세요.",
-      );
-    }
-  }
-
-  private enforceRateLimit(ownerKey: string, now: Date) {
-    const maxRequests = getNonNegativeIntegerEnv(
-      "RECIPE_RATE_LIMIT_MAX",
-      DEFAULT_RATE_LIMIT_MAX,
-    );
-    const windowSeconds = getNonNegativeIntegerEnv(
-      "RECIPE_RATE_LIMIT_WINDOW_SECONDS",
-      DEFAULT_RATE_LIMIT_WINDOW_SECONDS,
-    );
-
-    if (maxRequests === 0 || windowSeconds === 0) {
-      return;
-    }
-
-    const nowMs = now.getTime();
-    const cutoffMs = nowMs - windowSeconds * 1000;
-    const hits = (this.rateLimitHitsByOwner.get(ownerKey) ?? []).filter(
-      (timestamp) => timestamp > cutoffMs,
-    );
-
-    if (hits.length >= maxRequests) {
-      throw new HttpException(
-        "추천 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
-    hits.push(nowMs);
-    this.rateLimitHitsByOwner.set(ownerKey, hits);
-  }
-
-  private async enforceDailyQuota(ownerKey: string, now: Date) {
-    const dailyQuota = getNonNegativeIntegerEnv(
-      "RECIPE_DAILY_QUOTA",
-      DEFAULT_DAILY_QUOTA,
-    );
-
-    if (dailyQuota === 0) {
-      return;
-    }
-
-    const usedToday = await this.prisma.recipeRecommendation.count({
-      where: {
-        ownerKey,
-        aiProvider: "openai",
-        createdAt: {
-          gte: startOfDay(now),
-        },
-      },
-    });
-
-    if (usedToday >= dailyQuota) {
-      throw new HttpException(
-        "오늘의 추천 생성 한도를 모두 사용했습니다.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-  }
-
-  private async enforceDailyCostLimit(
-    ownerKey: string,
-    request: RecipeRecommendationRequest,
-    inventorySnapshot: RecipeInventorySnapshotItem[],
-    now: Date,
-  ) {
-    const dailyCostLimitUsd = getNonNegativeNumberEnv(
-      "RECIPE_DAILY_COST_LIMIT_USD",
-      DEFAULT_DAILY_COST_LIMIT_USD,
-    );
-
-    if (dailyCostLimitUsd === 0) {
-      return;
-    }
-
-    const aggregate = await this.prisma.recipeRecommendation.aggregate({
-      _sum: {
-        estimatedCostUsd: true,
-      },
-      where: {
-        ownerKey,
-        aiProvider: "openai",
-        createdAt: {
-          gte: startOfDay(now),
-        },
-      },
-    });
-    const spentToday = decimalToNumber(aggregate._sum.estimatedCostUsd);
-    const projectedCost = estimateGenerationCostUsd(
-      request,
-      inventorySnapshot,
-      this.getModel(),
-    );
-
-    if (spentToday + projectedCost > dailyCostLimitUsd) {
-      throw new HttpException(
-        "오늘의 추천 생성 예산을 모두 사용했습니다.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-  }
-
-  private async enforceGlobalDailyCostLimit(
-    request: RecipeRecommendationRequest,
-    inventorySnapshot: RecipeInventorySnapshotItem[],
-    now: Date,
-  ) {
-    const globalDailyCostLimitUsd = getNonNegativeNumberEnv(
-      "RECIPE_GLOBAL_DAILY_COST_LIMIT_USD",
-      DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD,
-    );
-
-    if (globalDailyCostLimitUsd === 0) {
-      return;
-    }
-
-    const aggregate = await this.prisma.recipeRecommendation.aggregate({
-      _sum: {
-        estimatedCostUsd: true,
-      },
-      where: {
-        aiProvider: "openai",
-        createdAt: {
-          gte: startOfDay(now),
-        },
-      },
-    });
-    const spentToday = decimalToNumber(aggregate._sum.estimatedCostUsd);
-    const projectedCost = estimateGenerationCostUsd(
-      request,
-      inventorySnapshot,
-      this.getModel(),
-    );
-
-    if (spentToday + projectedCost > globalDailyCostLimitUsd) {
-      throw new HttpException(
-        "오늘은 추천 요청이 많았어요. 내일 다시 부탁해 주세요.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-  }
-
-  private async withInflightLimit<T>(run: () => Promise<T>): Promise<T> {
-    const maxInflight = getNonNegativeIntegerEnv(
-      "RECIPE_MAX_INFLIGHT",
-      DEFAULT_MAX_INFLIGHT,
-    );
-
-    if (maxInflight === 0) {
-      return run();
-    }
-
-    if (this.inflightGenerations >= maxInflight) {
-      throw new HttpException(
-        "지금 추천을 기다리는 분이 많아요. 잠시 후 다시 시도해 주세요.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
-    this.inflightGenerations += 1;
-    try {
-      return await run();
-    } finally {
-      this.inflightGenerations = Math.max(0, this.inflightGenerations - 1);
-    }
   }
 
   private async findCachedRecommendation(
@@ -676,12 +495,6 @@ function resolveModelPricing(model: string) {
   );
 
   return match ? match[1] : FALLBACK_MODEL_PRICING;
-}
-
-function startOfDay(date = new Date()) {
-  const day = new Date(date);
-  day.setHours(0, 0, 0, 0);
-  return day;
 }
 
 function estimateTokenCount(text: string) {
