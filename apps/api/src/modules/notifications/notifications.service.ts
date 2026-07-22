@@ -14,7 +14,7 @@ import {
 import { dateOnlyToUtcDate } from "@expirymate/shared";
 import { serializePushToken } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
-import { RegisterPushTokenDto } from "./dto/register-push-token.dto";
+import type { RegisterPushTokenRequest } from "@expirymate/shared";
 import {
   ExpoPushService,
   type ExpoPushReceipt,
@@ -90,7 +90,7 @@ export class NotificationsService
     );
   }
 
-  async registerPushToken(ownerKey: string, dto: RegisterPushTokenDto) {
+  async registerPushToken(ownerKey: string, dto: RegisterPushTokenRequest) {
     const now = new Date();
     const pushToken = await this.prisma.pushToken.upsert({
       where: { token: dto.token },

@@ -150,7 +150,7 @@ AUTH_ALLOW_DEV_FALLBACK="false"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-AI_DATA_NOTICE_VERSION="ai-data-notice-v1"
+AI_DATA_NOTICE_VERSION="ai-data-notice-v2"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5.4-mini"
 PUSH_REMINDER_SCHEDULER_ENABLED="false"
@@ -354,8 +354,14 @@ Public pages for App Store review:
 Before submitting to the App Store, replace localhost URLs with the production
 domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
 
-Mobile users can manage privacy controls in `설정` → `개인정보 및 AI 데이터`.
-The first AI recipe recommendation requires one-time AI data notice consent.
+Mobile users can manage privacy controls in `설정` → `개인정보와 추천 안내`.
+The first AI recipe recommendation requires AI data notice consent for the
+current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v2`).
+Users can revoke that consent, delete recommendation history only, or wipe the
+account from the same privacy hub. Public copy covers retention periods,
+processors / cross-border transfer (including OpenAI in the US), and withdrawal
+paths. Use `docs/store-privacy-declarations.md` when filling App Store Privacy
+Label / Play Data Safety so declarations match the live product.
 
 Account/data deletion immediately removes owned ingredients, recommendation
 history, notification preferences, auth sessions, password credentials, and

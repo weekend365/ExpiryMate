@@ -8,12 +8,18 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ItemStatus, StorageLocation } from "@expirymate/shared";
+import {
+  createInventoryItemBodySchema,
+  ItemStatus,
+  StorageLocation,
+  updateInventoryItemBodySchema,
+  type CreateInventoryItemBody,
+  type UpdateInventoryItemBody,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { BatchDiscardInventoryItemsDto } from "./dto/batch-discard-inventory-items.dto";
-import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
-import { UpdateInventoryItemDto } from "./dto/update-inventory-item.dto";
 import { InventoryService } from "./inventory.service";
 
 @UseGuards(RegisteredGuard)
@@ -48,7 +54,11 @@ export class InventoryController {
   }
 
   @Post()
-  create(@Body() dto: CreateInventoryItemDto, @CurrentOwnerKey() ownerKey: string) {
+  create(
+    @Body(new ZodValidationPipe(createInventoryItemBodySchema))
+    dto: CreateInventoryItemBody,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
     return this.inventoryService.create(dto, ownerKey);
   }
 
@@ -66,7 +76,8 @@ export class InventoryController {
   @Patch(":id")
   update(
     @Param("id") id: string,
-    @Body() dto: UpdateInventoryItemDto,
+    @Body(new ZodValidationPipe(updateInventoryItemBodySchema))
+    dto: UpdateInventoryItemBody,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.inventoryService.update(id, dto, ownerKey);

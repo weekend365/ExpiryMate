@@ -6,9 +6,13 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
+import {
+  contributeBarcodeProductSchema,
+  type ContributeBarcodeProductRequest,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
-import { ContributeBarcodeProductDto } from "./dto/contribute-barcode-product.dto";
 import { ProductMastersService } from "./product-masters.service";
 
 @Controller("product-masters")
@@ -23,7 +27,8 @@ export class ProductMastersController {
   @Post("contribute")
   @UseGuards(RegisteredGuard)
   contribute(
-    @Body() dto: ContributeBarcodeProductDto,
+    @Body(new ZodValidationPipe(contributeBarcodeProductSchema))
+    dto: ContributeBarcodeProductRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.productMastersService.contribute(dto, ownerKey);

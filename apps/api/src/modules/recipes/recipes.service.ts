@@ -32,7 +32,6 @@ import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
 import { PrivacyService } from "../privacy/privacy.service";
-import { CreateRecipeRecommendationDto } from "./dto/create-recipe-recommendation.dto";
 
 const PROMPT_VERSION = "recipe-recommendation-v2";
 const DEFAULT_MODEL = "gpt-5-mini";
@@ -104,19 +103,15 @@ export class RecipesService {
     private readonly privacyService: PrivacyService,
   ) {}
 
-  async createRecommendation(ownerKey: string, dto: CreateRecipeRecommendationDto) {
+  async createRecommendation(
+    ownerKey: string,
+    request: RecipeRecommendationRequest,
+  ) {
     const now = new Date();
 
     this.ensureAiEnabled();
     this.enforceRateLimit(ownerKey, now);
     await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
-
-    const request = recipeRecommendationRequestSchema.parse({
-      servings: dto.servings ?? 2,
-      maxCookingMinutes: dto.maxCookingMinutes ?? 30,
-      mealType: dto.mealType ?? "any",
-      useExpiringFirst: dto.useExpiringFirst ?? true,
-    });
 
     const inventorySnapshot = await this.buildInventorySnapshot(ownerKey, request);
 

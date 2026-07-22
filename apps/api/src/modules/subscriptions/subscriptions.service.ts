@@ -14,10 +14,10 @@ import {
 } from "@prisma/client";
 import type {
   SubscriptionEntitlement,
+  SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
 } from "@expirymate/shared";
 import { PrismaService } from "../../database/prisma.service";
-import { VerifySubscriptionDto } from "./dto/verify-subscription.dto";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -127,7 +127,7 @@ export class SubscriptionsService {
 
   async verifySubscription(
     ownerKey: string,
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<SubscriptionVerificationResponse> {
     const verification =
       dto.store === "apple_app_store"
@@ -147,7 +147,7 @@ export class SubscriptionsService {
   }
 
   private async verifyAppleSubscription(
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<VerifiedStoreSubscription> {
     if (!dto.transactionId) {
       throw new BadRequestException("Apple transactionId가 필요합니다.");
@@ -203,7 +203,7 @@ export class SubscriptionsService {
   }
 
   private async verifyGoogleSubscription(
-    dto: VerifySubscriptionDto,
+    dto: SubscriptionVerificationRequest,
   ): Promise<VerifiedStoreSubscription> {
     if (!dto.purchaseToken) {
       throw new BadRequestException("Google Play purchaseToken이 필요합니다.");

@@ -6,12 +6,12 @@ import {
 import {
   BarcodeLookupSource,
   type BarcodeLookupResult,
+  type ContributeBarcodeProductRequest,
   type ContributeBarcodeProductResponse,
   ProductMasterSource,
 } from "@expirymate/shared";
 import { PrismaService } from "../../database/prisma.service";
 import { serializeProductMaster } from "../../common/serializers";
-import { ContributeBarcodeProductDto } from "./dto/contribute-barcode-product.dto";
 
 type OpenFoodFactsResponse = {
   status?: number;
@@ -81,7 +81,7 @@ export class ProductMastersService {
   }
 
   async contribute(
-    dto: ContributeBarcodeProductDto,
+    dto: ContributeBarcodeProductRequest,
     ownerKey: string,
   ): Promise<ContributeBarcodeProductResponse> {
     const barcode = normalizeBarcode(dto.barcode);

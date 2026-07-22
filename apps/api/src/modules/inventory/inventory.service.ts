@@ -14,7 +14,10 @@ import {
 } from "@expirymate/shared";
 import { serializeInventoryItem } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
-import { CreateInventoryItemDto } from "./dto/create-inventory-item.dto";
+import type {
+  CreateInventoryItemBody,
+  UpdateInventoryItemBody,
+} from "@expirymate/shared";
 
 const DEFAULT_PAGE_SIZE = 100;
 const MAX_PAGE_SIZE = 200;
@@ -104,7 +107,7 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async create(dto: CreateInventoryItemDto, ownerKey: string) {
+  async create(dto: CreateInventoryItemBody, ownerKey: string) {
     const item = await this.prisma.inventoryItem.create({
       data: {
         ownerKey,
@@ -125,7 +128,7 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async update(id: string, dto: Partial<CreateInventoryItemDto>, ownerKey: string) {
+  async update(id: string, dto: UpdateInventoryItemBody, ownerKey: string) {
     await this.findOne(id, ownerKey);
 
     const item = await this.prisma.inventoryItem.update({

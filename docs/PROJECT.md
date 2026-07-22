@@ -142,7 +142,7 @@ flowchart LR
 ### Phase 2 Done Criteria (요약)
 
 - [ ] iOS/Android production 빌드 + 실제 API
-- [ ] App Store Privacy Label / Play Data Safety
+- [ ] App Store Privacy Label / Play Data Safety (`docs/store-privacy-declarations.md` 대조)
 - [ ] Support URL · 스크린샷 · 앱 설명 · 심사 노트(AI·계정 삭제·OAuth)
 - [ ] Sign in with Apple (유료 계정) 스토어 정책 충족
 

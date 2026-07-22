@@ -1,7 +1,11 @@
 import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import {
+  subscriptionVerificationRequestSchema,
+  type SubscriptionVerificationRequest,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
-import { VerifySubscriptionDto } from "./dto/verify-subscription.dto";
 import { SubscriptionsService } from "./subscriptions.service";
 
 @UseGuards(RegisteredGuard)
@@ -16,7 +20,8 @@ export class SubscriptionsController {
 
   @Post("verify")
   verifySubscription(
-    @Body() dto: VerifySubscriptionDto,
+    @Body(new ZodValidationPipe(subscriptionVerificationRequestSchema))
+    dto: SubscriptionVerificationRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.subscriptionsService.verifySubscription(ownerKey, dto);

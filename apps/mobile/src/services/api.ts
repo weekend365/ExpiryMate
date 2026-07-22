@@ -4,6 +4,7 @@ import type {
   BarcodeLookupResult,
   ContributeBarcodeProductRequest,
   ContributeBarcodeProductResponse,
+  CreateInventoryItemBody,
   DashboardSummary,
   DeleteAccountRequest,
   DeleteAccountResponse,
@@ -18,14 +19,17 @@ import type {
   PrivacyStatus,
   RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
+  DeleteRecommendationHistoryResponse,
+  RevokeAiDataNoticeResponse,
   RecipeRecommendation,
-  RecipeRecommendationRequest,
+  RecipeRecommendationRequestInput,
   RegisterPendingResponse,
   RegisterRequest,
   RegisterResponse,
   SubscriptionEntitlement,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
+  UpdateInventoryItemBody,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -40,30 +44,12 @@ interface ApiEnvelope<T> {
   };
 }
 
-type InventoryPayload = {
-  productId?: string;
-  displayName: string;
-  brand?: string;
-  category?: string;
-  quantity: number;
-  unit?: string;
-  storageLocation: string;
-  expiryDate: string;
-  expirySource: string;
-  notes?: string;
-};
-
 type BatchDiscardInventoryItemsResponse = {
   count: number;
   items: InventoryItem[];
 };
 
-export type RecipeRecommendationPayload = Partial<
-  Pick<
-    RecipeRecommendationRequest,
-    "servings" | "maxCookingMinutes" | "mealType" | "useExpiringFirst"
-  >
->;
+export type RecipeRecommendationPayload = RecipeRecommendationRequestInput;
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
@@ -407,6 +393,19 @@ export const acceptAiDataNotice = () =>
     method: "POST",
   });
 
+export const revokeAiDataNotice = () =>
+  request<RevokeAiDataNoticeResponse>("/privacy/ai-data-notice/revoke", {
+    method: "POST",
+  });
+
+export const deleteRecommendationHistory = () =>
+  request<DeleteRecommendationHistoryResponse>(
+    "/privacy/recommendation-history/delete",
+    {
+      method: "POST",
+    },
+  );
+
 export const deleteAccount = async (payload: DeleteAccountRequest) => {
   const result = await request<DeleteAccountResponse>("/privacy/account/delete", {
     method: "POST",
@@ -587,13 +586,13 @@ export const listAllInventory = async (): Promise<InventoryItem[]> => {
 export const getInventoryItem = (id: string) =>
   request<InventoryItem>(`/inventory/${id}`);
 
-export const createInventoryItem = (payload: InventoryPayload) =>
+export const createInventoryItem = (payload: CreateInventoryItemBody) =>
   request<InventoryItem>("/inventory", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 
-export const updateInventoryItem = (id: string, payload: Partial<InventoryPayload>) =>
+export const updateInventoryItem = (id: string, payload: UpdateInventoryItemBody) =>
   request<InventoryItem>(`/inventory/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),

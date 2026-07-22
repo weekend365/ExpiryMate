@@ -1,6 +1,18 @@
 import { BadRequestException, NotFoundException } from "@nestjs/common";
+import { ExpirySource, StorageLocation, type CreateInventoryItemBody } from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InventoryService } from "./inventory.service";
+
+const createBody = (
+  overrides: Partial<CreateInventoryItemBody> = {},
+): CreateInventoryItemBody => ({
+  displayName: "계란",
+  quantity: 1,
+  storageLocation: StorageLocation.FRIDGE,
+  expiryDate: "2026-06-10",
+  expirySource: ExpirySource.MANUAL,
+  ...overrides,
+});
 
 const inventoryItem = {
   id: "item-1",
@@ -105,13 +117,7 @@ describe("InventoryService owner isolation", () => {
     prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
 
     await service.create(
-      {
-        displayName: "계란",
-        quantity: 1,
-        storageLocation: "fridge" as never,
-        expiryDate: "2026-06-10",
-        expirySource: "manual" as never,
-      },
+      createBody(),
       "owner-a",
     );
 
@@ -125,13 +131,9 @@ describe("InventoryService owner isolation", () => {
   it("rejects timestamp expiryDate input", async () => {
     await expect(
       service.create(
-        {
-          displayName: "계란",
-          quantity: 1,
-          storageLocation: "fridge" as never,
+        createBody({
           expiryDate: "2026-06-10T00:00:00.000Z",
-          expirySource: "manual" as never,
-        },
+        }),
         "owner-a",
       ),
     ).rejects.toThrow(BadRequestException);

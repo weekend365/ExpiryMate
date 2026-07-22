@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { fieldLimits } from "../constants/field-limits";
 import {
   BarcodeLookupSource,
   ProductMasterSource,
@@ -27,9 +28,27 @@ export const barcodeLookupResultSchema = z.object({
   productMasterId: z.string().nullable(),
 });
 
+const optionalContributeText = (max: number) =>
+  z.preprocess((value) => {
+    if (value === undefined || value === null) {
+      return undefined;
+    }
+    if (typeof value !== "string") {
+      return value;
+    }
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : undefined;
+  }, z.string().max(max).optional());
+
 export const contributeBarcodeProductSchema = z.object({
-  barcode: z.string().min(8).max(18),
-  name: z.string().trim().min(1).max(120),
-  brand: z.string().trim().max(80).optional(),
-  category: z.string().trim().max(80).optional(),
+  barcode: z
+    .string()
+    .regex(/^\d{8,18}$/, "바코드는 8~18자리 숫자여야 해요"),
+  name: z.string().trim().min(1).max(fieldLimits.displayName),
+  brand: optionalContributeText(fieldLimits.brand),
+  category: optionalContributeText(fieldLimits.brand),
 });
+
+export type ContributeBarcodeProductRequest = z.output<
+  typeof contributeBarcodeProductSchema
+>;

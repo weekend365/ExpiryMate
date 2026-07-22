@@ -2,12 +2,21 @@ import { BadRequestException } from "@nestjs/common";
 import {
   BarcodeLookupSource,
   ProductMasterSource,
+  type ContributeBarcodeProductRequest,
 } from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   normalizeBarcode,
   ProductMastersService,
 } from "./product-masters.service";
+
+const contributeBody = (
+  overrides: Partial<ContributeBarcodeProductRequest> = {},
+): ContributeBarcodeProductRequest => ({
+  barcode: "8801059001234",
+  name: "직접 입력한 우유",
+  ...overrides,
+});
 
 const localProduct = {
   id: "pm-1",
@@ -179,10 +188,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "직접 입력한 우유",
-      },
+      contributeBody({ barcode: "8801059001234", name: "직접 입력한 우유" }),
       "owner-a",
     );
 
@@ -203,10 +209,7 @@ describe("ProductMastersService contribute", () => {
     prisma.productMaster.findUnique.mockResolvedValue(localProduct);
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "다른 이름",
-      },
+      contributeBody({ barcode: "8801059001234", name: "다른 이름" }),
       "owner-a",
     );
 
@@ -230,11 +233,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "수정된 이름",
-        brand: "우리집",
-      },
+      contributeBody({ barcode: "8801059001234", name: "수정된 이름", brand: "우리집" }),
       "owner-a",
     );
 
@@ -259,10 +258,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "덮어쓰기 시도",
-      },
+      contributeBody({ barcode: "8801059001234", name: "덮어쓰기 시도" }),
       "owner-a",
     );
 
@@ -285,10 +281,7 @@ describe("ProductMastersService contribute", () => {
     });
 
     const result = await service.contribute(
-      {
-        barcode: "8801059001234",
-        name: "새 이름",
-      },
+      contributeBody({ barcode: "8801059001234", name: "새 이름" }),
       "owner-a",
     );
 
