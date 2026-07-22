@@ -73,6 +73,11 @@ export class PrivacyService {
       await tx.oneTimeAuthToken.deleteMany({ where: { userId } });
       await tx.oAuthAccount.deleteMany({ where: { userId } });
       await tx.passwordCredential.deleteMany({ where: { userId } });
+      // Keep shared barcode catalog rows, but drop the deleted user's identity.
+      await tx.productMaster.updateMany({
+        where: { contributedByUserId: userId },
+        data: { contributedByUserId: null },
+      });
 
       await tx.user.update({
         where: { id: userId },

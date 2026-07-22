@@ -103,7 +103,21 @@ export class ProductMastersService {
     });
 
     if (existing) {
+      // Authoritative catalog rows are never overwritten by user contributions.
       if (existing.source !== ProductMasterSource.USER_CONTRIBUTED) {
+        return {
+          product: serializeProductMaster(existing),
+          created: false,
+        };
+      }
+
+      // Only the original contributor may edit; others keep the existing catalog entry.
+      // Orphaned rows (contributor cleared on account delete) may be adopted.
+      const canEdit =
+        !existing.contributedByUserId ||
+        existing.contributedByUserId === ownerKey;
+
+      if (!canEdit) {
         return {
           product: serializeProductMaster(existing),
           created: false,

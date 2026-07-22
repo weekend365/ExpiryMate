@@ -42,6 +42,7 @@ describe("PrivacyService", () => {
   it("deletes owned data and anonymizes the account shell", async () => {
     const operations: string[] = [];
     const updatedUsers: unknown[] = [];
+    const productMasterUpdates: unknown[] = [];
     const service = new PrivacyService(
       createPrismaMock(
         {
@@ -50,6 +51,7 @@ describe("PrivacyService", () => {
         },
         operations,
         updatedUsers,
+        productMasterUpdates,
       ) as never,
     );
 
@@ -67,8 +69,13 @@ describe("PrivacyService", () => {
       "oneTimeAuthToken.deleteMany",
       "oAuthAccount.deleteMany",
       "passwordCredential.deleteMany",
+      "productMaster.updateMany",
       "user.update",
     ]);
+    expect(productMasterUpdates[0]).toEqual({
+      where: { contributedByUserId: "user_1" },
+      data: { contributedByUserId: null },
+    });
     expect(updatedUsers[0]).toMatchObject({
       data: {
         email: null,
@@ -88,6 +95,7 @@ function createPrismaMock(
   },
   operations: string[] = [],
   updatedUsers: unknown[] = [],
+  productMasterUpdates: unknown[] = [],
 ) {
   const user = {
     id: "user_1",
@@ -124,6 +132,13 @@ function createPrismaMock(
       "passwordCredential.deleteMany",
       operations,
     ),
+    productMaster: {
+      updateMany: async (payload: unknown) => {
+        operations.push("productMaster.updateMany");
+        productMasterUpdates.push(payload);
+        return { count: 1 };
+      },
+    },
     user: {
       update: async (payload: unknown) => {
         operations.push("user.update");
