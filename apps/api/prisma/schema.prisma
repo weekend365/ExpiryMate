@@ -178,6 +178,16 @@ model RefreshSession {
   @@index([userId, expiresAt])
 }
 
+/// Shared auth rate-limit counters (fixed window) for multi-instance API deploys.
+model AuthRateLimitBucket {
+  key             String   @id
+  windowStartedAt DateTime
+  hitCount        Int      @default(0)
+  updatedAt       DateTime @updatedAt
+
+  @@index([windowStartedAt])
+}
+
 model OneTimeAuthToken {
   id         String                  @id @default(cuid())
   userId     String

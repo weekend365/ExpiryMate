@@ -13,7 +13,7 @@ export class AuthRateLimitGuard implements CanActivate {
     private readonly rateLimitService: AuthRateLimitService,
   ) {}
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext) {
     const policy = this.reflector.getAllAndOverride<AuthRateLimitPolicy>(
       AUTH_RATE_LIMIT_METADATA,
       [context.getHandler(), context.getClass()],
@@ -23,7 +23,7 @@ export class AuthRateLimitGuard implements CanActivate {
       return true;
     }
 
-    this.rateLimitService.assertAllowed(
+    await this.rateLimitService.assertAllowed(
       policy,
       context.switchToHttp().getRequest(),
     );

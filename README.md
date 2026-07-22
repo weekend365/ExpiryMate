@@ -172,7 +172,7 @@ GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
 
 `AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK` defaults to disabled; set it to `true` only for local admin/dev fallback without a bearer token.
 Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` only on the server instance that should send remote expiry reminders. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
-Auth endpoints have built-in rate limits. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
+Auth endpoints have built-in rate limits (DB-backed by default via `AUTH_RATE_LIMIT_STORE=database`, shared across replicas). Set `TRUST_PROXY` so Express `request.ip` reflects the client behind your reverse proxy — do not trust raw `X-Forwarded-For` in app code. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
 
 When `NODE_ENV=production`, the API fails fast if production-critical values are missing, unsafe, or still local:
 

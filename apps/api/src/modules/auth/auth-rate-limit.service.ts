@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Optional } from "@nestjs/common";
+import { PrismaService } from "../../database/prisma.service";
 import type { AuthRateLimitPolicy } from "./auth-rate-limit.decorator";
 
 interface RateLimitedRequest {
@@ -11,14 +12,23 @@ interface RateLimitedRequest {
   };
 }
 
+interface MemoryBucket {
+  hits: number[];
+  /** Window length used when recording hits — cleanup must not reuse another policy's cutoff. */
+  windowMs: number;
+}
+
 const CLEANUP_INTERVAL_MS = 60_000;
 
 @Injectable()
 export class AuthRateLimitService {
-  private readonly hitsByKey = new Map<string, number[]>();
-  private lastCleanupAt = 0;
+  private readonly memoryBuckets = new Map<string, MemoryBucket>();
+  private lastMemoryCleanupAt = 0;
+  private lastDbCleanupAt = 0;
 
-  assertAllowed(policy: AuthRateLimitPolicy, request: RateLimitedRequest) {
+  constructor(@Optional() private readonly prisma?: PrismaService) {}
+
+  async assertAllowed(policy: AuthRateLimitPolicy, request: RateLimitedRequest) {
     const max = readPositiveIntegerEnv(
       `AUTH_RATE_LIMIT_${toEnvName(policy.name)}_MAX`,
       policy.max,
@@ -34,42 +44,114 @@ export class AuthRateLimitService {
 
     const now = Date.now();
     const windowMs = windowSeconds * 1000;
-    const cutoff = now - windowMs;
+    const keys = this.buildKeys(policy, request);
 
-    this.cleanup(now, cutoff);
+    if (this.shouldUseDatabase()) {
+      await this.assertAllowedWithDatabase(keys, max, windowMs, now);
+      return;
+    }
 
-    const states = this.buildKeys(policy, request).map((key) => ({
-      key,
-      hits: (this.hitsByKey.get(key) ?? []).filter(
-        (timestamp) => timestamp > cutoff,
-      ),
-    }));
+    this.assertAllowedInMemory(keys, max, windowMs, now);
+  }
+
+  reset() {
+    this.memoryBuckets.clear();
+    this.lastMemoryCleanupAt = 0;
+    this.lastDbCleanupAt = 0;
+  }
+
+  private shouldUseDatabase() {
+    if (process.env.AUTH_RATE_LIMIT_STORE === "memory") {
+      return false;
+    }
+
+    if (process.env.AUTH_RATE_LIMIT_STORE === "database") {
+      return Boolean(this.prisma);
+    }
+
+    return Boolean(this.prisma);
+  }
+
+  private assertAllowedInMemory(
+    keys: string[],
+    max: number,
+    windowMs: number,
+    now: number,
+  ) {
+    this.cleanupMemory(now);
+
+    const states = keys.map((key) => {
+      const bucket = this.memoryBuckets.get(key);
+      const cutoff = now - windowMs;
+      const hits = (bucket?.hits ?? []).filter((timestamp) => timestamp > cutoff);
+      return { key, hits };
+    });
     const exceeded = states.find((state) => state.hits.length >= max);
 
     if (exceeded) {
-      const retryAfterSeconds = Math.max(
-        1,
-        Math.ceil(((exceeded.hits[0] ?? now) + windowMs - now) / 1000),
-      );
-
-      throw new HttpException(
-        {
-          message: "요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
-          retryAfterSeconds,
-        },
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
+      throwTooManyRequests(exceeded.hits[0] ?? now, windowMs, now);
     }
 
     for (const state of states) {
       state.hits.push(now);
-      this.hitsByKey.set(state.key, state.hits);
+      this.memoryBuckets.set(state.key, {
+        hits: state.hits,
+        windowMs,
+      });
     }
   }
 
-  reset() {
-    this.hitsByKey.clear();
-    this.lastCleanupAt = 0;
+  private async assertAllowedWithDatabase(
+    keys: string[],
+    max: number,
+    windowMs: number,
+    now: number,
+  ) {
+    if (!this.prisma) {
+      this.assertAllowedInMemory(keys, max, windowMs, now);
+      return;
+    }
+
+    await this.cleanupDatabase(now);
+    const windowStartedAt = new Date(Math.floor(now / windowMs) * windowMs);
+    const counts: Array<{ key: string; hitCount: number }> = [];
+
+    for (const key of keys) {
+      const hitCount = await this.incrementDatabaseBucket(key, windowStartedAt);
+      counts.push({ key, hitCount });
+    }
+
+    const exceeded = counts.find((state) => state.hitCount > max);
+    if (exceeded) {
+      throwTooManyRequests(windowStartedAt.getTime(), windowMs, now);
+    }
+  }
+
+  private async incrementDatabaseBucket(key: string, windowStartedAt: Date) {
+    if (!this.prisma) {
+      return 0;
+    }
+
+    // Atomic fixed-window counter shared across API replicas.
+    await this.prisma.$executeRaw`
+      INSERT INTO "AuthRateLimitBucket" ("key", "windowStartedAt", "hitCount", "updatedAt")
+      VALUES (${key}, ${windowStartedAt}, 1, CURRENT_TIMESTAMP)
+      ON CONFLICT ("key") DO UPDATE SET
+        "hitCount" = CASE
+          WHEN "AuthRateLimitBucket"."windowStartedAt" = ${windowStartedAt}
+          THEN "AuthRateLimitBucket"."hitCount" + 1
+          ELSE 1
+        END,
+        "windowStartedAt" = ${windowStartedAt},
+        "updatedAt" = CURRENT_TIMESTAMP
+    `;
+
+    const bucket = await this.prisma.authRateLimitBucket.findUnique({
+      where: { key },
+      select: { hitCount: true },
+    });
+
+    return bucket?.hitCount ?? 0;
   }
 
   private buildKeys(policy: AuthRateLimitPolicy, request: RateLimitedRequest) {
@@ -83,52 +165,80 @@ export class AuthRateLimitService {
         continue;
       }
 
-      keys.push(`${policy.name}:${field}:${hashValue(normalizeIdentity(rawValue))}`);
+      keys.push(
+        `${policy.name}:${field}:${hashValue(normalizeIdentity(rawValue))}`,
+      );
     }
 
     return keys;
   }
 
-  private cleanup(now: number, cutoff: number) {
-    if (now - this.lastCleanupAt < CLEANUP_INTERVAL_MS) {
+  private cleanupMemory(now: number) {
+    if (now - this.lastMemoryCleanupAt < CLEANUP_INTERVAL_MS) {
       return;
     }
 
-    this.lastCleanupAt = now;
+    this.lastMemoryCleanupAt = now;
 
-    for (const [key, hits] of this.hitsByKey.entries()) {
-      const activeHits = hits.filter((timestamp) => timestamp > cutoff);
+    for (const [key, bucket] of this.memoryBuckets.entries()) {
+      const cutoff = now - bucket.windowMs;
+      const activeHits = bucket.hits.filter((timestamp) => timestamp > cutoff);
 
       if (activeHits.length === 0) {
-        this.hitsByKey.delete(key);
+        this.memoryBuckets.delete(key);
         continue;
       }
 
-      this.hitsByKey.set(key, activeHits);
+      this.memoryBuckets.set(key, {
+        hits: activeHits,
+        windowMs: bucket.windowMs,
+      });
     }
+  }
+
+  private async cleanupDatabase(now: number) {
+    if (!this.prisma || now - this.lastDbCleanupAt < CLEANUP_INTERVAL_MS) {
+      return;
+    }
+
+    this.lastDbCleanupAt = now;
+    // Drop buckets whose window started more than 2 hours ago (covers longest policies).
+    const staleBefore = new Date(now - 2 * 60 * 60 * 1000);
+    await this.prisma.authRateLimitBucket.deleteMany({
+      where: {
+        windowStartedAt: {
+          lt: staleBefore,
+        },
+      },
+    });
   }
 }
 
-function readClientIp(request: RateLimitedRequest) {
-  return (
-    readForwardedFor(request) ??
-    readHeader(request, "x-real-ip") ??
-    request.ip ??
-    request.socket?.remoteAddress ??
-    "unknown"
+function throwTooManyRequests(
+  oldestHitOrWindowStart: number,
+  windowMs: number,
+  now: number,
+): never {
+  const retryAfterSeconds = Math.max(
+    1,
+    Math.ceil((oldestHitOrWindowStart + windowMs - now) / 1000),
+  );
+
+  throw new HttpException(
+    {
+      message: "요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
+      retryAfterSeconds,
+    },
+    HttpStatus.TOO_MANY_REQUESTS,
   );
 }
 
-function readForwardedFor(request: RateLimitedRequest) {
-  const forwardedFor = readHeader(request, "x-forwarded-for");
-
-  return forwardedFor?.split(",")[0]?.trim() || undefined;
-}
-
-function readHeader(request: RateLimitedRequest, key: string) {
-  const value = request.headers[key];
-
-  return Array.isArray(value) ? value[0] : value;
+/**
+ * Prefer Express `request.ip` (honors trust proxy). Never trust raw
+ * X-Forwarded-For / X-Real-IP headers from the client socket.
+ */
+export function readClientIp(request: RateLimitedRequest) {
+  return request.ip?.trim() || request.socket?.remoteAddress?.trim() || "unknown";
 }
 
 function normalizeIdentity(value: string) {
