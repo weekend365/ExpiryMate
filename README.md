@@ -176,12 +176,15 @@ Auth endpoints have built-in rate limits (DB-backed by default via `AUTH_RATE_LI
 
 When `NODE_ENV=production`, the API fails fast if production-critical values are missing, unsafe, or still local:
 
-- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`
+- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`, `AUTH_LINK_BASE_URL`
 - auth: `AUTH_TOKEN_SECRET` with at least 32 characters and `AUTH_ALLOW_DEV_FALLBACK=false`
 - OAuth: `APPLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `KAKAO_OAUTH_CLIENT_ID` (optional: `KAKAO_OAUTH_CLIENT_SECRET`, `NAVER_OAUTH_CLIENT_ID`, `NAVER_OAUTH_CLIENT_SECRET`)
 - SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
+- AI: `OPENAI_API_KEY` when `RECIPE_AI_ENABLED` is on (default); omit only if AI is explicitly disabled
 - IAP: `IAP_ALLOWED_PRODUCT_IDS`, Apple App Store server API keys, Google Play service account keys
 - privacy contact: `PRIVACY_CONTACT_EMAIL`
+
+Docker/`docker-compose` healthchecks and Railway traffic probes should hit **`GET /ready`** (DB readiness), not `/health` (process liveness only). In Railway → API service → Settings → Healthcheck Path, set `/ready`.
 
 ### Admin
 

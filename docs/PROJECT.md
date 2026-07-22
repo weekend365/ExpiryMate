@@ -381,7 +381,9 @@ Mobile 재시도 시: `SENTRY_DISABLE_AUTO_UPLOAD=true` 또는 `SENTRY_AUTH_TOKE
 
 ### Uptime
 
-`GET https://api-production-1504.up.railway.app/health` → Better Stack / UptimeRobot 등, non-200·타임아웃 알림.
+`GET https://api-production-1504.up.railway.app/health` → Better Stack / UptimeRobot 등, non-200·타임아웃 알림 (프로세스 liveness).
+
+Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 확인). Docker `HEALTHCHECK`도 `/ready`를 사용한다. `/health`만 보면 DB 장애 컨테이너가 healthy로 남을 수 있다.
 
 ### 장애 1차 확인
 

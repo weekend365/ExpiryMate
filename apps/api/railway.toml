@@ -1,0 +1,5 @@
+# Applied when this service Root Directory is apps/api (or config is linked).
+# Prefer Healthcheck Path = /ready in the Railway UI if this file is not used.
+[deploy]
+healthcheckPath = "/ready"
+healthcheckTimeout = 30
