@@ -72,6 +72,8 @@ const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
 let sessionPromise: Promise<AuthSession | null> | null = null;
+/** Single-flight mutex so parallel 401s share one refresh instead of racing. */
+let refreshInFlight: Promise<AuthSession | null> | null = null;
 
 function resolveApiBaseUrl() {
   const value = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -285,7 +287,7 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
 
   try {
     currentUser = parsed;
-    return await refreshSession(refreshToken);
+    return await refreshRegisteredSessionSingleFlight();
   } catch {
     await clearAuthSession();
     return null;
@@ -293,24 +295,41 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
 }
 
 async function tryRefreshRegisteredSession() {
-  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+  return refreshRegisteredSessionSingleFlight();
+}
 
-  if (!refreshToken) {
-    return null;
+/**
+ * One in-flight refresh at a time. Parallel 401 handlers await the same promise
+ * so a loser never clears a winner's newly rotated session.
+ */
+async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | null> {
+  if (refreshInFlight) {
+    return refreshInFlight;
   }
 
-  try {
-    sessionPromise = refreshSession(refreshToken);
-    const session = await sessionPromise;
-    if (!session || session.user.accountType !== "registered") {
+  refreshInFlight = (async () => {
+    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+
+    if (!refreshToken) {
+      return null;
+    }
+
+    try {
+      const session = await refreshSession(refreshToken);
+      if (!session || session.user.accountType !== "registered") {
+        await clearAuthSession();
+        return null;
+      }
+      return session;
+    } catch {
       await clearAuthSession();
       return null;
     }
-    return session;
-  } catch {
-    await clearAuthSession();
-    return null;
-  }
+  })().finally(() => {
+    refreshInFlight = null;
+  });
+
+  return refreshInFlight;
 }
 
 async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit) {
@@ -360,6 +379,7 @@ export async function clearAuthSession() {
   accessToken = null;
   currentUser = null;
   sessionPromise = null;
+  refreshInFlight = null;
   await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
   await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
   await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
