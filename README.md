@@ -213,9 +213,11 @@ EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearl
 
 For production EAS builds, configure the values from
 `apps/mobile/.env.production.example` in EAS environment variables or secrets.
-`EXPO_PUBLIC_API_BASE_URL` must be a public `https://` API URL, and the Google,
-Kakao, and IAP public identifiers must be present. The Expo config fails the
-production build when these values are missing or local.
+`EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_OAUTH_REDIRECT_URI` must be public
+`https://` URLs on the same origin (redirect ending in `/oauth/callback`), and
+Google, Kakao, and IAP public identifiers must be present. `app.config.js` and
+`eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
+builds fail fast when these values are missing, local, or placeholders.
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
 Use your Mac's current LAN IP instead:

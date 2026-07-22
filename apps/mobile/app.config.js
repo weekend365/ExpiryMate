@@ -1,4 +1,8 @@
 const appJson = require("./app.json");
+const { validateExpoPublicEnv } = require("./scripts/validate-public-env.cjs");
+
+// Fail fast for production EAS/store builds before native compile.
+validateExpoPublicEnv(process.env);
 
 const sentryPluginNames = new Set(["@sentry/react-native", "@sentry/react-native/expo"]);
 
