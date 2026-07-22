@@ -5,11 +5,13 @@ import {
   Barcode,
   CalendarDays,
   CheckCircle2,
+  Flashlight,
   Package,
+  PenLine,
   RotateCcw,
   X,
 } from "lucide-react-native";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -20,6 +22,15 @@ import {
   TextInput,
   View,
 } from "react-native";
+import Animated, {
+  cancelAnimation,
+  Easing,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
@@ -28,6 +39,9 @@ import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
 import { useProductScanner } from "./useProductScanner";
+
+const SCAN_FRAME_HEIGHT = spacing.xxxl + spacing.xxxl + spacing.xl;
+const SCAN_LINE_TRAVEL = SCAN_FRAME_HEIGHT - spacing.lg;
 
 export function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -63,6 +77,9 @@ function ScannerCameraExperience() {
   const [manualName, setManualName] = useState("");
   const [isContributing, setIsContributing] = useState(false);
   const [contributeError, setContributeError] = useState<string | null>(null);
+  const [torchEnabled, setTorchEnabled] = useState(false);
+  const [showBarcodeSuccess, setShowBarcodeSuccess] = useState(false);
+  const previousModeRef = useRef(scanner.mode);
 
   const needsManualName =
     scanner.productLookupStatus === "not-found" ||
@@ -86,17 +103,35 @@ function ScannerCameraExperience() {
             ? "이름을 직접 알려주세요"
             : "상품 정보";
 
-  const instructionTitle =
-    scanner.mode === "barcode"
+  const instructionTitle = showBarcodeSuccess
+    ? "바코드를 읽었어요"
+    : scanner.mode === "barcode"
       ? "바코드를 가운데에 맞춰 주세요"
       : "유통기한이 잘 보이게 비춰 주세요";
 
-  const instructionDescription =
-    scanner.mode === "barcode"
+  const instructionDescription = showBarcodeSuccess
+    ? "이제 같은 영역에 유통기한을 비춰 주세요."
+    : scanner.mode === "barcode"
       ? "인식되면 이어서 유통기한도 확인할게요."
       : scanner.isOcrProcessing
         ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
         : "날짜가 또렷하게 보이면 장고가 읽어볼게요.";
+
+  useEffect(() => {
+    const previousMode = previousModeRef.current;
+    previousModeRef.current = scanner.mode;
+
+    if (previousMode !== "barcode" || scanner.mode !== "ocr") {
+      return undefined;
+    }
+
+    setShowBarcodeSuccess(true);
+    const timeoutId = setTimeout(() => {
+      setShowBarcodeSuccess(false);
+    }, 700);
+
+    return () => clearTimeout(timeoutId);
+  }, [scanner.mode]);
 
   const handleUseScanResult = async () => {
     if (!scanner.confirmation || !resolvedProductName) {
@@ -145,7 +180,15 @@ function ScannerCameraExperience() {
   const handleRescan = () => {
     setManualName("");
     setContributeError(null);
+    setShowBarcodeSuccess(false);
     scanner.resetScanner();
+  };
+
+  const handleManualRegistration = () => {
+    setPrefill(null);
+    setDraft(null);
+    scanner.resetScanner();
+    router.replace("/register");
   };
 
   return (
@@ -157,6 +200,7 @@ function ScannerCameraExperience() {
         active={scanner.isCameraActive}
         animateShutter={false}
         autofocus="off"
+        enableTorch={torchEnabled && scanner.isCameraActive}
         barcodeScannerSettings={{
           barcodeTypes: ["ean13", "ean8", "upc_a", "upc_e"],
         }}
@@ -170,7 +214,24 @@ function ScannerCameraExperience() {
       <SafeAreaView style={styles.overlay} pointerEvents="box-none">
         <View style={styles.topBar}>
           <CloseButton onPress={() => router.back()} />
-          <View style={styles.stepPill}>
+          <View
+            style={styles.stepPill}
+            accessible
+            accessibilityLabel={
+              scanner.mode === "barcode"
+                ? "2단계 중 1단계, 바코드"
+                : "2단계 중 2단계, 유통기한"
+            }
+          >
+            <View style={styles.stepProgress}>
+              <View style={[styles.stepSegment, styles.stepSegmentActive]} />
+              <View
+                style={[
+                  styles.stepSegment,
+                  scanner.mode !== "barcode" && styles.stepSegmentActive,
+                ]}
+              />
+            </View>
             {scanner.mode === "barcode" ? (
               <Barcode color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
             ) : (
@@ -194,19 +255,7 @@ function ScannerCameraExperience() {
           </View>
         ) : (
           <>
-            <View style={styles.guideArea} pointerEvents="none">
-              <View
-                style={[
-                  styles.roiBox,
-                  scanner.mode === "ocr" ? styles.ocrRoiBox : styles.barcodeRoiBox,
-                ]}
-              >
-                <View style={[styles.corner, styles.cornerTopLeft]} />
-                <View style={[styles.corner, styles.cornerTopRight]} />
-                <View style={[styles.corner, styles.cornerBottomLeft]} />
-                <View style={[styles.corner, styles.cornerBottomRight]} />
-              </View>
-            </View>
+            <ScannerGuide showSuccess={showBarcodeSuccess} />
 
             <View style={styles.bottomStack}>
               {scanner.productLookupStatus === "loading" ? (
@@ -224,9 +273,67 @@ function ScannerCameraExperience() {
                 <InlineError message={scanner.ocrErrorMessage} />
               ) : null}
 
-              <View style={styles.instructionCard}>
+              <View style={styles.cameraActions}>
+                <Pressable
+                  onPress={() => setTorchEnabled((current) => !current)}
+                  accessibilityRole="switch"
+                  accessibilityState={{ checked: torchEnabled }}
+                  accessibilityLabel={
+                    torchEnabled ? "플래시 끌게요" : "플래시 켤게요"
+                  }
+                  style={({ pressed }) => [
+                    styles.cameraAction,
+                    torchEnabled && styles.cameraActionActive,
+                    pressed &&
+                      (torchEnabled
+                        ? styles.cameraActionActivePressed
+                        : styles.cameraActionPressed),
+                  ]}
+                >
+                  <Flashlight
+                    color={torchEnabled ? colors.text : colors.surface}
+                    size={spacing.sm + spacing.xxs}
+                    strokeWidth={2.4}
+                  />
+                  <Text
+                    style={[
+                      styles.cameraActionLabel,
+                      torchEnabled && styles.cameraActionLabelActive,
+                    ]}
+                  >
+                    {torchEnabled ? "플래시 켰어요" : "플래시 켤게요"}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleManualRegistration}
+                  accessibilityRole="button"
+                  accessibilityLabel="바코드 없이 직접 입력할게요"
+                  style={({ pressed }) => [
+                    styles.cameraAction,
+                    pressed && styles.cameraActionPressed,
+                  ]}
+                >
+                  <PenLine
+                    color={colors.surface}
+                    size={spacing.sm + spacing.xxs}
+                    strokeWidth={2.4}
+                  />
+                  <Text style={styles.cameraActionLabel}>직접 입력할게요</Text>
+                </Pressable>
+              </View>
+
+              <View
+                style={styles.instructionCard}
+                accessibilityLiveRegion="polite"
+              >
                 <View style={styles.instructionIcon}>
-                  {scanner.mode === "barcode" ? (
+                  {showBarcodeSuccess ? (
+                    <CheckCircle2
+                      color={colors.success}
+                      size={spacing.md}
+                      strokeWidth={2.4}
+                    />
+                  ) : scanner.mode === "barcode" ? (
                     <Barcode color={colors.primary} size={spacing.md} strokeWidth={2.4} />
                   ) : (
                     <CalendarDays
@@ -299,6 +406,7 @@ function ScannerCameraExperience() {
                 <Image
                   source={{ uri: scanner.product.imageUrl }}
                   style={styles.productImage}
+                  accessibilityLabel={`${scanner.product?.name ?? "상품"} 이미지`}
                 />
               ) : (
                 <View style={styles.productImageFallback}>
@@ -324,6 +432,7 @@ function ScannerCameraExperience() {
                 <TextInput
                   value={manualName}
                   onChangeText={setManualName}
+                  accessibilityLabel="재료 이름"
                   placeholder="예: 서울우유 1L"
                   placeholderTextColor={colors.mutedText}
                   style={styles.manualNameInput}
@@ -356,6 +465,68 @@ function ScannerCameraExperience() {
         ) : null}
       </BottomSheet>
     </>
+  );
+}
+
+function ScannerGuide({ showSuccess }: { showSuccess: boolean }) {
+  const reduceMotion = useReducedMotion();
+  const scanLineOffset = useSharedValue<number>(spacing.none);
+
+  useEffect(() => {
+    cancelAnimation(scanLineOffset);
+
+    if (reduceMotion || showSuccess) {
+      scanLineOffset.value = spacing.none;
+      return undefined;
+    }
+
+    scanLineOffset.value = spacing.none;
+    scanLineOffset.value = withRepeat(
+      withTiming(SCAN_LINE_TRAVEL, {
+        duration: 1600,
+        easing: Easing.inOut(Easing.cubic),
+      }),
+      -1,
+      true,
+    );
+
+    return () => cancelAnimation(scanLineOffset);
+  }, [reduceMotion, scanLineOffset, showSuccess]);
+
+  const scanLineStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: scanLineOffset.value }],
+  }));
+
+  return (
+    <View style={styles.guideArea} pointerEvents="none">
+      <View style={styles.guideScrim} />
+      <View style={styles.guideMiddle}>
+        <View style={styles.guideSideScrim} />
+        <View style={styles.scanFrame}>
+          <View style={[styles.corner, styles.cornerTopLeft]} />
+          <View style={[styles.corner, styles.cornerTopRight]} />
+          <View style={[styles.corner, styles.cornerBottomLeft]} />
+          <View style={[styles.corner, styles.cornerBottomRight]} />
+          {showSuccess ? (
+            <View style={styles.scanSuccess}>
+              <CheckCircle2
+                color={colors.surface}
+                size={spacing.xl}
+                strokeWidth={2.5}
+              />
+            </View>
+          ) : reduceMotion ? (
+            <View style={styles.scanLine} />
+          ) : (
+            <Animated.View
+              style={[styles.scanLine, styles.scanLineAnimated, scanLineStyle]}
+            />
+          )}
+        </View>
+        <View style={styles.guideSideScrim} />
+      </View>
+      <View style={styles.guideScrim} />
+    </View>
   );
 }
 
@@ -444,11 +615,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.text,
-    opacity: 0.72,
+    backgroundColor: colors.cameraControl,
   },
   iconButtonPressed: {
-    opacity: 0.9,
+    backgroundColor: colors.cameraControlPressed,
   },
   stepPill: {
     minHeight: touchTarget.min,
@@ -457,41 +627,75 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    backgroundColor: colors.text,
-    opacity: 0.72,
+    backgroundColor: colors.cameraControl,
+  },
+  stepProgress: {
+    flexDirection: "row",
+    gap: spacing.xxs,
+  },
+  stepSegment: {
+    width: spacing.sm,
+    height: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedText,
+  },
+  stepSegmentActive: {
+    backgroundColor: colors.primary,
   },
   stepPillText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.surface,
   },
   guideArea: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: "stretch",
   },
-  roiBox: {
+  guideScrim: {
+    flex: 1,
+    backgroundColor: colors.cameraScrim,
+  },
+  guideMiddle: {
+    height: SCAN_FRAME_HEIGHT,
+    flexDirection: "row",
+  },
+  guideSideScrim: {
+    width: spacing.lg,
+    backgroundColor: colors.cameraScrim,
+  },
+  scanFrame: {
+    flex: 1,
+    height: SCAN_FRAME_HEIGHT,
     borderWidth: 1,
     borderColor: colors.surface,
-  },
-  barcodeRoiBox: {
-    alignSelf: "stretch",
-    marginHorizontal: spacing.lg,
-    height: spacing.xxxl + spacing.xxxl + spacing.xl,
     borderRadius: radius.xxl,
+    overflow: "hidden",
   },
-  ocrRoiBox: {
-    alignSelf: "stretch",
-    marginHorizontal: spacing.lg,
-    height: spacing.xxxl + spacing.xl,
-    borderRadius: radius.lg,
+  scanLine: {
+    position: "absolute",
+    top: spacing.sm,
+    left: spacing.md,
+    right: spacing.md,
+    height: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
+  },
+  scanLineAnimated: {
+    opacity: 0.9,
+  },
+  scanSuccess: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.cameraScrim,
   },
   corner: {
     position: "absolute",
     width: spacing.lg,
     height: spacing.lg,
-    borderColor: colors.surface,
+    borderColor: colors.primary,
+    zIndex: 1,
   },
   cornerTopLeft: {
     top: 0,
@@ -523,6 +727,39 @@ const styles = StyleSheet.create({
   },
   bottomStack: {
     gap: spacing.sm,
+  },
+  cameraActions: {
+    flexDirection: "row",
+    gap: spacing.sm,
+  },
+  cameraAction: {
+    flex: 1,
+    minHeight: touchTarget.min,
+    borderRadius: radius.pill,
+    backgroundColor: colors.cameraControl,
+    paddingHorizontal: spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xs,
+  },
+  cameraActionActive: {
+    backgroundColor: colors.primarySoft,
+  },
+  cameraActionActivePressed: {
+    backgroundColor: colors.primarySoftPressed,
+  },
+  cameraActionPressed: {
+    backgroundColor: colors.cameraControlPressed,
+  },
+  cameraActionLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.surface,
+  },
+  cameraActionLabelActive: {
+    color: colors.text,
   },
   loadingStrip: {
     minHeight: touchTarget.min,
@@ -562,7 +799,7 @@ const styles = StyleSheet.create({
   instructionTitle: {
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.subheading.fontFamily,
     color: colors.text,
   },
   instructionDescription: {

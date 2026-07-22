@@ -35,6 +35,7 @@ const PRODUCT_BARCODE_TYPES = new Set([
   "upc_e",
 ]);
 const OCR_SCAN_INTERVAL_MS = 1400;
+const OCR_START_DELAY_MS = 900;
 
 export function useProductScanner() {
   const cameraRef = useRef<CameraView>(null);
@@ -232,7 +233,7 @@ export function useProductScanner() {
 
     const startDelayId = setTimeout(() => {
       void scanOcrFrame();
-    }, 400);
+    }, OCR_START_DELAY_MS);
     const intervalId = setInterval(() => {
       void scanOcrFrame();
     }, OCR_SCAN_INTERVAL_MS);

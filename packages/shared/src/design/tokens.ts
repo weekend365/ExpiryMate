@@ -44,6 +44,11 @@ export const semanticColors = {
   // Lines
   border: neutral[200],
 
+  // Camera overlays
+  cameraScrim: "rgba(26, 31, 39, 0.38)",
+  cameraControl: "rgba(26, 31, 39, 0.72)",
+  cameraControlPressed: "rgba(26, 31, 39, 0.9)",
+
   // Status: danger
   danger: red[500],
   dangerPressed: red[600],
@@ -144,6 +149,24 @@ export const fontFamily = {
 
 export type FontFamily = typeof fontFamily;
 
+/**
+ * Third-party OAuth brand marks (not ExpiryMate primary).
+ * Use only for provider buttons so Kakao/Naver/Google/Apple stay recognizable.
+ */
+export const oauthBrand = {
+  kakao: { background: "#FEE500", text: "#1A1F27" },
+  naver: { background: "#03C75A", text: "#FFFFFF" },
+  google: {
+    background: "#FFFFFF",
+    text: "#1A1F27",
+    border: neutral[200],
+  },
+  apple: { background: "#000000", text: "#FFFFFF" },
+} as const;
+
+export type OauthBrand = typeof oauthBrand;
+export type OauthBrandProvider = keyof OauthBrand;
+
 /** Aggregate token object for convenient single-import consumption. */
 export const designTokens = {
   palette,
@@ -153,6 +176,7 @@ export const designTokens = {
   fontWeight,
   typography,
   fontFamily,
+  oauthBrand,
 } as const;
 
 export type DesignTokens = typeof designTokens;

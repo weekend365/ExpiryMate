@@ -116,28 +116,43 @@ function isUnsafeProductionHostname(hostname: string) {
 async function request<T>(
   path: string,
   init?: RequestInit,
-  options: { retryOnUnauthorized?: boolean } = { retryOnUnauthorized: true },
+  options: {
+    retryOnUnauthorized?: boolean;
+    timeoutMs?: number;
+  } = { retryOnUnauthorized: true },
 ): Promise<T> {
   const session = await requireRegisteredSession();
-  const response = await fetchWithNetworkError(path, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.accessToken}`,
-      ...(init?.headers ?? {}),
+  const response = await fetchWithNetworkError(
+    path,
+    {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
+        ...(init?.headers ?? {}),
+      },
     },
-  });
+    options.timeoutMs,
+  );
   const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
-    if (response.status === 401 && options.retryOnUnauthorized) {
+    if (response.status === 401 && options.retryOnUnauthorized !== false) {
       const refreshed = await tryRefreshRegisteredSession();
       if (refreshed) {
-        return request<T>(path, init, { retryOnUnauthorized: false });
+        return request<T>(path, init, {
+          ...options,
+          retryOnUnauthorized: false,
+        });
       }
 
       await clearAuthSession();
       throw new Error("로그인이 만료됐어요. 다시 이어가 주세요.");
+    }
+
+    const serverMessage = body.error?.message?.trim();
+    if (serverMessage) {
+      throw new Error(serverMessage);
     }
 
     if (response.status >= 500) {
@@ -146,10 +161,7 @@ async function request<T>(
       );
     }
 
-    throw new Error(
-      body.error?.message ??
-        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-    );
+    throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
   }
 
   return body.data;
@@ -176,9 +188,13 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 const DEFAULT_FETCH_TIMEOUT_MS = 25_000;
+const RECIPE_GENERATION_TIMEOUT_MS = 90_000;
 
-async function fetchWithNetworkError(path: string, init?: RequestInit) {
-  const timeoutMs = DEFAULT_FETCH_TIMEOUT_MS;
+async function fetchWithNetworkError(
+  path: string,
+  init?: RequestInit,
+  timeoutMs = DEFAULT_FETCH_TIMEOUT_MS,
+) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const upstreamSignal = init?.signal;
@@ -667,10 +683,14 @@ export const listRecipeRecommendations = () =>
   request<RecipeRecommendation[]>("/recipes/recommendations");
 
 export const createRecipeRecommendation = (payload: RecipeRecommendationPayload) =>
-  request<RecipeRecommendation>("/recipes/recommendations", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  request<RecipeRecommendation>(
+    "/recipes/recommendations",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+    { timeoutMs: RECIPE_GENERATION_TIMEOUT_MS },
+  );
 
 export const getRecipeRecommendation = (id: string) =>
   request<RecipeRecommendation>(`/recipes/recommendations/${id}`);
