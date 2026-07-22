@@ -11,9 +11,71 @@ COPY packages/shared/package.json packages/shared/
 RUN pnpm install --frozen-lockfile
 
 FROM base AS build
-ARG NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-ARG NEXT_PUBLIC_APP_ENV=development
-ARG PRIVACY_CONTACT_EMAIL=privacy@expirymate.local
+# Required build-args — no localhost/development defaults (P1-11).
+# Local compose must pass development values explicitly; Railway must pass production.
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_APP_ENV
+ARG PRIVACY_CONTACT_EMAIL
+
+# Fail fast before installing app sources when args are missing or unsafe for production.
+# Mirrors apps/admin/next.config.mjs production checks (hostname-based).
+RUN node <<'EOF'
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() ?? "";
+const appEnv = process.env.NEXT_PUBLIC_APP_ENV?.trim() ?? "";
+const privacyEmail = process.env.PRIVACY_CONTACT_EMAIL?.trim() ?? "";
+const errors = [];
+
+if (!apiBaseUrl) errors.push("NEXT_PUBLIC_API_BASE_URL build-arg is required");
+if (!appEnv) errors.push("NEXT_PUBLIC_APP_ENV build-arg is required");
+if (!privacyEmail) errors.push("PRIVACY_CONTACT_EMAIL build-arg is required");
+
+if (appEnv === "production") {
+  if (apiBaseUrl) {
+    let url;
+    try {
+      url = new URL(apiBaseUrl);
+    } catch {
+      errors.push("NEXT_PUBLIC_API_BASE_URL must be a valid HTTPS URL");
+      url = null;
+    }
+    if (url) {
+      if (url.protocol !== "https:") {
+        errors.push("NEXT_PUBLIC_API_BASE_URL must use https:// in production");
+      }
+      const host = url.hostname.toLowerCase();
+      const unsafe =
+        host === "localhost" ||
+        host === "127.0.0.1" ||
+        host === "::1" ||
+        host.endsWith(".localhost") ||
+        host.endsWith(".local") ||
+        host.endsWith(".example") ||
+        host.endsWith(".invalid") ||
+        host.endsWith(".test") ||
+        host.includes("your-domain");
+      if (unsafe) {
+        errors.push(
+          "NEXT_PUBLIC_API_BASE_URL must not target a development host in production",
+        );
+      }
+    }
+  }
+  if (privacyEmail) {
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(privacyEmail);
+    if (!emailOk || privacyEmail.endsWith(".local")) {
+      errors.push(
+        "PRIVACY_CONTACT_EMAIL must be a real public email address in production",
+      );
+    }
+  }
+}
+
+if (errors.length > 0) {
+  console.error("Invalid Admin Docker build-args:\n- " + errors.join("\n- "));
+  process.exit(1);
+}
+EOF
+
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV
 ENV PRIVACY_CONTACT_EMAIL=$PRIVACY_CONTACT_EMAIL

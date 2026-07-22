@@ -201,6 +201,18 @@ For production builds, set `NEXT_PUBLIC_APP_ENV=production`,
 `PRIVACY_CONTACT_EMAIL` to the real support/privacy email. The Admin build
 fails if production values still point to localhost or `.local`.
 
+Docker image builds (`apps/admin/Dockerfile`) take the same three values as
+**required build-args** — there are no localhost defaults. Pass them explicitly
+in `docker-compose` (development) or Railway Build Variables (production):
+
+```bash
+docker build -f apps/admin/Dockerfile \
+  --build-arg NEXT_PUBLIC_APP_ENV=production \
+  --build-arg NEXT_PUBLIC_API_BASE_URL=https://api.example.com \
+  --build-arg PRIVACY_CONTACT_EMAIL=privacy@example.com \
+  .
+```
+
 ### Mobile
 
 Copy `apps/mobile/.env.example` to `apps/mobile/.env`

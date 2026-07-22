@@ -228,7 +228,7 @@ pnpm docker:down
 
 1. Railway 프로젝트 + PostgreSQL
 2. API 서비스: Dockerfile `apps/api/Dockerfile`, `DATABASE_URL` 등 env
-3. Admin 서비스: Dockerfile `apps/admin/Dockerfile`, `NEXT_PUBLIC_API_BASE_URL`
+3. Admin 서비스: Dockerfile `apps/admin/Dockerfile`. **Build args 필수** (기본값 없음): `NEXT_PUBLIC_APP_ENV=production`, `NEXT_PUBLIC_API_BASE_URL`(공개 HTTPS API), `PRIVACY_CONTACT_EMAIL`(실제 메일). 누락·localhost 시 이미지 빌드가 실패한다.
 4. `prisma migrate deploy` (API 기동 또는 one-off)
 5. 메일: Resend 도메인 `mail.devnamu.com` + `SMTP_FROM` / API 키  
 6. (선택) API·Admin에 `devnamu.com` 커스텀 도메인 연결 — 현재는 `*.up.railway.app`

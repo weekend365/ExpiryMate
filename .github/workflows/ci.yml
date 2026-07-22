@@ -116,3 +116,37 @@ jobs:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_PUBLIC_API_BASE_URL: https://api.expirymate.app
           PRIVACY_CONTACT_EMAIL: privacy@expirymate.app
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Admin Docker fails without build args
+        run: |
+          set +e
+          output="$(docker build \
+            --progress=plain \
+            --target build \
+            -f apps/admin/Dockerfile \
+            . 2>&1)"
+          status=$?
+          set -e
+          echo "$output"
+          if [ "$status" -eq 0 ]; then
+            echo "Expected Admin Docker build to fail without build-args" >&2
+            exit 1
+          fi
+          echo "$output" | grep -q "NEXT_PUBLIC_API_BASE_URL build-arg is required"
+
+      - name: Admin Docker production build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/admin/Dockerfile
+          push: false
+          tags: expirymate-admin:ci
+          build-args: |
+            NEXT_PUBLIC_APP_ENV=production
+            NEXT_PUBLIC_API_BASE_URL=https://api.expirymate.app
+            PRIVACY_CONTACT_EMAIL=privacy@expirymate.app
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
