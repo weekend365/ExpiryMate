@@ -153,7 +153,7 @@ flowchart LR
 | 구분 | 항목 |
 |------|------|
 | 인프라 | Railway API·Admin·Postgres · Docker · `GET /health` `/ready` · helmet · seed 가드 |
-| CI | GitHub Actions lint/typecheck/test · main push API/Admin build |
+| CI | GitHub Actions lint/typecheck/test · Prisma migrate deploy · API/Admin production build |
 | 메일·도메인 | `devnamu.com` 구입 · Resend에 `mail.devnamu.com` 인증 · Resend HTTP API (Railway SMTP 포트 우회) · `SMTP_FROM=noreply@mail.devnamu.com` |
 | 이메일 인증 | 가입/로그인 UI · `EmailDomainInput` · verify-pending/verify-email · HTTPS 브릿지 → 딥링크 · 재발송·비밀번호 재설정 · **실기기 E2E 전부 ✅** |
 | 관측성 | Sentry API·Admin DSN 주입·스모크 ✅ · Mobile DSN은 EAS에 있음 · preview 빌드/스모크 후순위 |

@@ -3,7 +3,9 @@ import { useFonts } from "expo-font";
 /**
  * Pretendard static faces used by the mobile typography ramp.
  * Family names must match the keys passed to `useFonts` / `expo-font` plugin.
+ * Metro resolves font assets via `require()` — keep that form here.
  */
+/* eslint-disable @typescript-eslint/no-require-imports -- Expo/Metro font asset modules */
 export const pretendardFonts = {
   "Pretendard-Regular": require("../../assets/fonts/Pretendard-Regular.otf"),
   "Pretendard-Medium": require("../../assets/fonts/Pretendard-Medium.otf"),
@@ -11,6 +13,7 @@ export const pretendardFonts = {
   "Pretendard-Bold": require("../../assets/fonts/Pretendard-Bold.otf"),
   "Pretendard-ExtraBold": require("../../assets/fonts/Pretendard-ExtraBold.otf"),
 } as const;
+/* eslint-enable @typescript-eslint/no-require-imports */
 
 /** RN fontFamily names keyed by design weight. */
 export const fontFamily = {

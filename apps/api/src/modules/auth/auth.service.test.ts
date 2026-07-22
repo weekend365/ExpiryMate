@@ -1,7 +1,6 @@
 import {
   ConflictException,
   ForbiddenException,
-  ServiceUnavailableException,
   UnauthorizedException,
 } from "@nestjs/common";
 import {
@@ -684,7 +683,7 @@ describe("AuthService", () => {
       user: {
         findUnique: vi.fn(async () => null),
         create: vi.fn(),
-        update: vi.fn(async (_args: { data: { emailVerifiedAt: Date } }) => ({
+        update: vi.fn(async () => ({
           ...user,
           emailVerifiedAt: new Date(),
         })),

@@ -106,7 +106,6 @@ export default function InventoryScreen() {
     });
   };
 
-  const items = data ?? [];
   const hasLoadedInventory = data !== undefined;
   const loadErrorMessage =
     error instanceof Error
@@ -114,8 +113,8 @@ export default function InventoryScreen() {
       : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 
   const activeItems = useMemo(
-    () => items.filter((item) => item.status === ItemStatus.ACTIVE),
-    [items],
+    () => (data ?? []).filter((item) => item.status === ItemStatus.ACTIVE),
+    [data],
   );
 
   const filtered = useMemo(
