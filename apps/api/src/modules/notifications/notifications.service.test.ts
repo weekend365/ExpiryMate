@@ -5,6 +5,8 @@ import { NotificationsService } from "./notifications.service";
 const managedEnvKeys = [
   "PUSH_REMINDER_DELIVERY_HOUR",
   "PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES",
+  "PUSH_REMINDER_STALE_PENDING_MINUTES",
+  "PUSH_REMINDER_RECEIPT_MIN_AGE_MINUTES",
 ] as const;
 
 const originalEnv = new Map(
@@ -54,6 +56,8 @@ describe("NotificationsService", () => {
   beforeEach(() => {
     process.env.PUSH_REMINDER_DELIVERY_HOUR = "9";
     process.env.PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES = "540";
+    process.env.PUSH_REMINDER_STALE_PENDING_MINUTES = "15";
+    process.env.PUSH_REMINDER_RECEIPT_MIN_AGE_MINUTES = "5";
   });
 
   afterEach(() => {
@@ -95,6 +99,7 @@ describe("NotificationsService", () => {
 
   it("sends a due expiry reminder once per token and item", async () => {
     const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
     prisma.notificationPreference.findMany.mockResolvedValue([preference]);
     prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
     prisma.pushNotificationDelivery.create.mockImplementation(
@@ -112,6 +117,7 @@ describe("NotificationsService", () => {
       new Date("2026-06-07T01:00:00.000Z"),
     );
 
+    expect(stats.skippedByLock).toBe(false);
     expect(stats.notificationsCreated).toBe(1);
     expect(stats.notificationsSent).toBe(1);
     expect(expoPush.send).toHaveBeenCalledWith({
@@ -133,10 +139,28 @@ describe("NotificationsService", () => {
         expoTicketId: "ticket-1",
       }),
     });
+    expect(prisma.schedulerLease.deleteMany).toHaveBeenCalled();
+  });
+
+  it("skips the batch when another instance holds the lease", async () => {
+    const { prisma, expoPush, service } = createService();
+    prisma.$executeRaw.mockResolvedValue(0);
+    prisma.schedulerLease.findUnique.mockResolvedValue({
+      ownerId: "someone-else",
+    });
+
+    const stats = await service.runDueReminders(
+      new Date("2026-06-07T01:00:00.000Z"),
+    );
+
+    expect(stats.skippedByLock).toBe(true);
+    expect(expoPush.send).not.toHaveBeenCalled();
+    expect(prisma.notificationPreference.findMany).not.toHaveBeenCalled();
   });
 
   it("disables a token when Expo reports DeviceNotRegistered", async () => {
     const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
     prisma.notificationPreference.findMany.mockResolvedValue([preference]);
     prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
     prisma.pushNotificationDelivery.create.mockImplementation(
@@ -171,6 +195,7 @@ describe("NotificationsService", () => {
 
   it("retries a previously failed delivery when the duplicate guard is hit", async () => {
     const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
     const duplicateError = new Prisma.PrismaClientKnownRequestError(
       "Unique constraint failed",
       {
@@ -185,6 +210,7 @@ describe("NotificationsService", () => {
       id: "delivery-1",
       status: "failed",
       attempts: 1,
+      updatedAt: new Date("2026-06-07T00:30:00.000Z"),
     });
     prisma.pushNotificationDelivery.update
       .mockResolvedValueOnce({
@@ -231,6 +257,88 @@ describe("NotificationsService", () => {
       }),
     });
   });
+
+  it("retries stale pending deliveries left after a mid-send crash", async () => {
+    const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
+    prisma.notificationPreference.findMany.mockResolvedValue([]);
+    prisma.pushNotificationDelivery.findMany
+      .mockResolvedValueOnce([]) // receipts query
+      .mockResolvedValueOnce([
+        {
+          id: "delivery-stale",
+          title: "1일 뒤 유통기한이 끝나요",
+          body: "계란의 유통기한이 1일 남았어요.",
+          inventoryItemId: "item-1",
+          daysBefore: 1,
+          updatedAt: new Date("2026-06-07T00:30:00.000Z"),
+          pushToken: {
+            id: "push-token-1",
+            token: "ExpoPushToken[device-token]",
+          },
+        },
+      ]);
+    prisma.pushNotificationDelivery.updateMany.mockResolvedValue({ count: 1 });
+    expoPush.send.mockResolvedValue({
+      status: "ok",
+      id: "ticket-stale",
+    });
+
+    const stats = await service.runDueReminders(
+      new Date("2026-06-07T01:00:00.000Z"),
+    );
+
+    expect(stats.stalePendingRetried).toBe(1);
+    expect(stats.notificationsSent).toBe(1);
+    expect(expoPush.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: "ExpoPushToken[device-token]",
+        data: expect.objectContaining({
+          inventoryItemId: "item-1",
+        }),
+      }),
+    );
+  });
+
+  it("marks sent deliveries failed when Expo receipts report DeviceNotRegistered", async () => {
+    const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
+    prisma.notificationPreference.findMany.mockResolvedValue([]);
+    prisma.pushNotificationDelivery.findMany
+      .mockResolvedValueOnce([
+        {
+          id: "delivery-sent",
+          expoTicketId: "ticket-receipt",
+          pushTokenId: "push-token-1",
+        },
+      ])
+      .mockResolvedValueOnce([]); // stale pending
+    expoPush.getReceipts.mockResolvedValue({
+      "ticket-receipt": {
+        status: "error",
+        message: "Device is not registered.",
+        details: {
+          error: "DeviceNotRegistered",
+        },
+      },
+    });
+
+    const stats = await service.runDueReminders(
+      new Date("2026-06-07T01:00:00.000Z"),
+    );
+
+    expect(stats.receiptsChecked).toBe(1);
+    expect(stats.receiptsFailed).toBe(1);
+    expect(stats.tokensDisabled).toBe(1);
+    expect(prisma.pushNotificationDelivery.update).toHaveBeenCalledWith({
+      where: { id: "delivery-sent" },
+      data: expect.objectContaining({
+        status: "failed",
+        errorCode: "DeviceNotRegistered",
+        receiptCheckedAt: expect.any(Date),
+      }),
+    });
+  });
 });
 
 function createService() {
@@ -241,19 +349,27 @@ function createService() {
       updateMany: vi.fn(),
     },
     notificationPreference: {
-      findMany: vi.fn(),
+      findMany: vi.fn().mockResolvedValue([]),
     },
     inventoryItem: {
-      findMany: vi.fn(),
+      findMany: vi.fn().mockResolvedValue([]),
     },
     pushNotificationDelivery: {
       create: vi.fn(),
       findUnique: vi.fn(),
+      findMany: vi.fn().mockResolvedValue([]),
       update: vi.fn(),
+      updateMany: vi.fn(),
     },
+    schedulerLease: {
+      findUnique: vi.fn(),
+      deleteMany: vi.fn().mockResolvedValue({ count: 1 }),
+    },
+    $executeRaw: vi.fn().mockResolvedValue(1),
   };
   const expoPush = {
     send: vi.fn(),
+    getReceipts: vi.fn().mockResolvedValue({}),
   };
 
   return {
@@ -263,12 +379,31 @@ function createService() {
   };
 }
 
+function mockLeaseAcquired(prisma: {
+  $executeRaw: ReturnType<typeof vi.fn>;
+  schedulerLease: { findUnique: ReturnType<typeof vi.fn> };
+}) {
+  let acquiredOwnerId: string | undefined;
+
+  prisma.$executeRaw.mockImplementation(
+    async (...args: unknown[]) => {
+      // Tagged template: (strings, key, ownerId, expiresAt, now, now, ownerId)
+      acquiredOwnerId = args[2] as string;
+      return 1;
+    },
+  );
+  prisma.schedulerLease.findUnique.mockImplementation(async () => ({
+    ownerId: acquiredOwnerId,
+  }));
+}
+
 function restoreManagedEnv() {
   for (const [key, value] of originalEnv) {
     if (value === undefined) {
       delete process.env[key];
-    } else {
-      process.env[key] = value;
+      continue;
     }
+
+    process.env[key] = value;
   }
 }
