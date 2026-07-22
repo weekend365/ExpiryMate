@@ -12,6 +12,7 @@
 import {
   radius as designRadius,
   fontWeight as designFontWeight,
+  oauthBrand as designOauthBrand,
   semanticColors,
   spacing as designSpacing,
   typography as sharedTypography,
@@ -19,6 +20,9 @@ import {
 import { fontFamily, fontFamilyForWeight } from "./fonts";
 
 export const colors = semanticColors;
+
+/** Third-party OAuth button colors (not app primary). */
+export const oauthBrand = designOauthBrand;
 
 /** 8pt grid spacing: xs=8, sm=16, md=24, lg=32, xl=40 (+ xxs/xxl/xxxl). */
 export const spacing = designSpacing;
