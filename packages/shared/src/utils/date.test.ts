@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   addDaysToDateOnly,
   calculateDaysLeftUntilExpiry,
+  getKstDayStart,
+  getKstDayWindow,
   isDateOnlyString,
   toIsoDate,
   toKstDateOnly,
@@ -26,5 +28,21 @@ describe("date-only utilities", () => {
     expect(addDaysToDateOnly("2026-02-28", 1)).toBe("2026-03-01");
     expect(isDateOnlyString("2026-02-29")).toBe(false);
     expect(isDateOnlyString("2028-02-29")).toBe(true);
+  });
+
+  it("uses KST midnight for day-window starts, not server-local midnight", () => {
+    const justBeforeKstMidnight = new Date("2026-06-09T14:59:59.000Z");
+    const justAfterKstMidnight = new Date("2026-06-09T15:00:00.000Z");
+
+    expect(getKstDayStart(justBeforeKstMidnight).toISOString()).toBe(
+      "2026-06-08T15:00:00.000Z",
+    );
+    expect(getKstDayStart(justAfterKstMidnight).toISOString()).toBe(
+      "2026-06-09T15:00:00.000Z",
+    );
+
+    const window = getKstDayWindow(justAfterKstMidnight);
+    expect(window.start.toISOString()).toBe("2026-06-09T15:00:00.000Z");
+    expect(window.endExclusive.toISOString()).toBe("2026-06-10T15:00:00.000Z");
   });
 });

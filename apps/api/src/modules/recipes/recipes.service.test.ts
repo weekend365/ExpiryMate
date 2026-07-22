@@ -4,6 +4,7 @@ import {
   ServiceUnavailableException,
 } from "@nestjs/common";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { RecipePolicyService } from "./recipe-policy.service";
 import { RecipesService } from "./recipes.service";
 
 const managedEnvKeys = [
@@ -284,7 +285,11 @@ function createService() {
   return {
     prisma,
     privacyService,
-    service: new RecipesService(prisma as never, privacyService as never),
+    service: new RecipesService(
+      prisma as never,
+      privacyService as never,
+      new RecipePolicyService(prisma as never),
+    ),
   };
 }
 

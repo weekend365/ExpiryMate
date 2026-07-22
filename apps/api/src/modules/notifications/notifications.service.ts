@@ -11,7 +11,7 @@ import {
   PushNotificationDeliveryStatus,
   PushTokenPlatform,
 } from "@prisma/client";
-import { dateOnlyToUtcDate } from "@expirymate/shared";
+import { addDaysToDateOnly, dateOnlyToUtcDate, toKstDateOnly } from "@expirymate/shared";
 import { serializePushToken } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
 import type { RegisterPushTokenRequest } from "@expirymate/shared";
@@ -775,16 +775,8 @@ function getLocalMinutes(now: Date) {
 }
 
 function getLocalDateOnly(now: Date, daysFromNow: number) {
-  const offsetMs = getTimezoneOffsetMinutes() * 60 * 1000;
-  const localDate = new Date(now.getTime() + offsetMs);
-  localDate.setUTCHours(0, 0, 0, 0);
-  localDate.setUTCDate(localDate.getUTCDate() + daysFromNow);
-
-  const year = localDate.getUTCFullYear();
-  const month = String(localDate.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(localDate.getUTCDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+  // Inventory expiry dates are KST calendar days — keep reminder matching on the same clock.
+  return addDaysToDateOnly(toKstDateOnly(now), daysFromNow);
 }
 
 function getReminderDays(reminderDaysBefore: number[], remindOnDayOf: boolean) {
