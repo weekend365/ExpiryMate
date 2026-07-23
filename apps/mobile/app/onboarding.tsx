@@ -8,7 +8,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { Button } from "../src/components/Button";
-import { Mascot, type MascotMood } from "../src/components/Mascot";
+import { type MascotMood } from "../src/components/Mascot";
+import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Screen } from "../src/components/Screen";
 import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
 import { useAppStore } from "../src/store/app-store";
@@ -158,17 +159,17 @@ export default function OnboardingScreen() {
         <Text style={styles.brand}>{appBrand.appNameKo}</Text>
         <Text style={styles.brandEn}>{appBrand.appNameEn}</Text>
 
-        <Mascot
-          size="large"
-          mood={isFirstStep ? heroMood : step.mood}
-          style={styles.mascot}
-        />
-
         <View style={styles.copy}>
           <Text style={styles.eyebrow}>{step.eyebrow}</Text>
           <Text style={styles.title}>{step.title}</Text>
-          <Text style={styles.description}>{step.description}</Text>
         </View>
+
+        <MascotSpeechBubble
+          message={step.description}
+          mood={isFirstStep ? heroMood : step.mood}
+          size="medium"
+          style={styles.guideBubble}
+        />
       </Animated.View>
     </Screen>
   );
@@ -230,9 +231,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: -spacing.sm,
   },
-  mascot: {
-    alignSelf: "center",
-    marginVertical: spacing.sm,
+  guideBubble: {
+    alignSelf: "stretch",
   },
   copy: {
     gap: spacing.sm,
@@ -250,13 +250,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.heading.lineHeight,
     fontFamily: typography.heading.fontFamily,
     color: colors.text,
-    textAlign: "center",
-  },
-  description: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.subtext,
     textAlign: "center",
   },
 });

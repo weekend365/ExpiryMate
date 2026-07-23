@@ -53,25 +53,25 @@ const EDIT_STEPS: Array<{
   key: EditStep;
   label: string;
   title: string;
-  description: string;
+  guideMessage: string;
 }> = [
   {
     key: "product",
     label: "재료",
     title: "이름을 확인할까요?",
-    description: "재료 이름과 브랜드만 먼저 살펴볼게요.",
+    guideMessage: "재료 이름과 브랜드만 먼저 살펴볼게요.",
   },
   {
     key: "storage",
     label: "보관",
     title: "어디에, 몇 개 있나요?",
-    description: "보관 위치와 수량을 맞춰 주세요.",
+    guideMessage: "보관 위치와 수량을 맞춰 주세요.",
   },
   {
     key: "expiry",
     label: "기한",
     title: "유통기한과 메모",
-    description: "날짜를 맞춰 두고, 필요할 때만 메모를 남겨 주세요.",
+    guideMessage: "날짜를 맞춰 두고, 필요할 때만 메모를 남겨 주세요.",
   },
 ];
 
@@ -304,6 +304,8 @@ export default function InventoryDetailScreen() {
           steps={EDIT_STEPS}
           currentIndex={stepIndex}
           onBack={goToPreviousEditStep}
+          guideMessage={EDIT_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
+          guideMood="speak"
         >
           {editStep === "product" ? (
             <View style={styles.formCard}>

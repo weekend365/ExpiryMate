@@ -5,6 +5,7 @@ import {
   groupInventoryItems,
   ItemStatus,
   type InventoryItem,
+  type InventoryItemGroup,
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -17,6 +18,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
+  ImageBackground,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -26,6 +28,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
@@ -36,7 +39,8 @@ import {
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
-import { Mascot, type MascotMood } from "../../src/components/Mascot";
+import { type MascotMood } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
@@ -138,16 +142,27 @@ export default function InventoryScreen() {
   );
   const listSections = useMemo(() => {
     const sections = buildInventoryUrgencySections(filteredGroups);
+    const titled =
+      filter !== "expired"
+        ? sections
+        : sections.map((section) =>
+            section.key === "today"
+              ? { ...section, title: "만료됐어요" }
+              : section,
+          );
 
-    if (filter !== "expired") {
-      return sections;
-    }
-
-    return sections.map((section) =>
-      section.key === "today"
-        ? { ...section, title: "만료됐어요" }
-        : section,
-    );
+    // One SectionList item per urgency bucket so title + groups share a card.
+    return titled.map((section) => ({
+      key: section.key,
+      title: section.title,
+      data: [
+        {
+          id: section.key,
+          title: section.title,
+          groups: section.data,
+        } satisfies InventoryUrgencySectionCard,
+      ],
+    }));
   }, [filteredGroups, filter]);
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -210,16 +225,14 @@ export default function InventoryScreen() {
     if (deferredDiscard.undoLabel || successMessage) {
       return {
         mood: "happy" as MascotMood,
-        title: "잘 정리하고 있어요",
-        description: "장고도 한숨 돌렸어요.",
+        message: "잘 정리하고 있어요. 장고도 한숨 돌렸어요.",
       };
     }
 
     if (trafficStats.todayExpiryCount > 0) {
       return {
         mood: "worry" as MascotMood,
-        title: "오늘 손볼 재료가 있어요",
-        description: "유통기한이 가까운 것부터 살펴볼까요?",
+        message: "오늘 손볼 재료가 있어요. 유통기한이 가까운 것부터 살펴볼까요?",
       };
     }
 
@@ -229,8 +242,7 @@ export default function InventoryScreen() {
     ) {
       return {
         mood: "happy" as MascotMood,
-        title: "지금은 여유로워요",
-        description: "냉장고가 한산해서 장고도 편해요.",
+        message: "지금은 여유로워요. 냉장고가 한산해서 장고도 편해요.",
       };
     }
 
@@ -439,36 +451,50 @@ export default function InventoryScreen() {
       }
       contentStyle={styles.screenContent}
     >
-      <SectionList
-        style={styles.listFlex}
-        sections={
-          isLoading && !hasLoadedInventory
-            ? []
-            : isError && !hasLoadedInventory
+      <View style={styles.fridgeScene}>
+        <ImageBackground
+          source={fridgeInteriorBg}
+          style={styles.fridgeSceneBackground}
+          resizeMode="contain"
+          accessibilityIgnoresInvertColors
+          importantForAccessibility="no"
+        />
+        {/* Soft wash so white inventory cards stay readable on the fridge cavity. */}
+        <View
+          pointerEvents="none"
+          style={styles.fridgeSceneVeil}
+          importantForAccessibility="no-hide-descendants"
+        />
+        <SectionList
+          style={styles.listFlex}
+          sections={
+            isLoading && !hasLoadedInventory
               ? []
-              : isEmptyInventory || isFilteredEmpty
+              : isError && !hasLoadedInventory
                 ? []
-                : listSections
-        }
-        keyExtractor={(group) => group.id}
-        stickySectionHeadersEnabled={false}
-        refreshControl={
-          <RefreshControl
-            tintColor={colors.primary}
-            refreshing={isRefetching}
-            onRefresh={() => {
-              void refetch();
-            }}
-          />
-        }
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-        initialNumToRender={12}
-        maxToRenderPerBatch={12}
-        windowSize={7}
-        removeClippedSubviews
-        ListHeaderComponent={
-          <View style={styles.listHeader}>
+                : isEmptyInventory || isFilteredEmpty
+                  ? []
+                  : listSections
+          }
+          keyExtractor={(card) => card.id}
+          stickySectionHeadersEnabled={false}
+          refreshControl={
+            <RefreshControl
+              tintColor={colors.primary}
+              refreshing={isRefetching}
+              onRefresh={() => {
+                void refetch();
+              }}
+            />
+          }
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          initialNumToRender={12}
+          maxToRenderPerBatch={12}
+          windowSize={7}
+          removeClippedSubviews
+          ListHeaderComponent={
+            <View style={styles.listHeader}>
             {isLoading && !hasLoadedInventory ? (
               <HomeStatsSkeleton />
             ) : showListChrome && !isSelectionMode ? (
@@ -568,23 +594,15 @@ export default function InventoryScreen() {
                 </View>
 
                 {companion ? (
-                  <View
-                    style={styles.companionCard}
-                    accessibilityRole="summary"
-                    accessibilityLabel={`${companion.title}. ${companion.description}`}
-                  >
-                    <Mascot size="small" mood={companion.mood} />
-                    <View style={styles.companionCopy}>
-                      <Text style={styles.companionTitle}>{companion.title}</Text>
-                      <Text style={styles.companionDescription}>
-                        {companion.description}
-                      </Text>
-                    </View>
-                  </View>
+                  <MascotSpeechBubble
+                    message={companion.message}
+                    mood={companion.mood}
+                    size="small"
+                    style={styles.companionBubble}
+                  />
                 ) : null}
 
-                <View style={styles.compartmentBlock}>
-                  <Text style={styles.compartmentHeading}>어디서 볼까요?</Text>
+                <View style={styles.findBlock}>
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -696,9 +714,6 @@ export default function InventoryScreen() {
                       </Text>
                     </View>
                   ) : null}
-                </View>
-
-                <View style={styles.controlBlock}>
                   <View style={styles.searchRow}>
                     <View style={styles.searchField}>
                       <Search
@@ -910,38 +925,42 @@ export default function InventoryScreen() {
             />
           ) : null
         }
-        renderSectionHeader={({ section }) => (
+        renderItem={({ item: card }) => (
           <View
-            style={[
-              styles.sectionHeader,
-              hasLocationFilter && styles.sectionHeaderShelf,
-            ]}
+            style={styles.urgencySectionCard}
+            accessibilityRole="summary"
+            accessibilityLabel={`${card.title}, ${card.groups.length}개`}
           >
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <Text style={styles.sectionCount}>{section.data.length}개</Text>
+            <View style={styles.urgencySectionHeader}>
+              <Text style={styles.sectionTitle}>{card.title}</Text>
+              <Text style={styles.sectionCount}>{card.groups.length}개</Text>
+            </View>
+            <View style={styles.urgencySectionList}>
+              {card.groups.map((group) => (
+                <InventoryGroupCard
+                  key={group.id}
+                  group={group}
+                  expanded={expandedGroupIds.includes(group.id)}
+                  onExpandedChange={(expanded) =>
+                    setGroupExpanded(group.id, expanded)
+                  }
+                  selectionMode={isSelectionMode}
+                  selectedIds={selectedIdSet}
+                  isDiscarding={deferredDiscard.isPending}
+                  resolveLocationLabel={resolveLabel}
+                  onItemPress={(item) => handleCardPress(item.id)}
+                  onItemLongPress={(item) => handleCardLongPress(item.id)}
+                  onItemDiscard={handleDiscard}
+                />
+              ))}
+            </View>
           </View>
-        )}
-        renderItem={({ item: group }) => (
-          <InventoryGroupCard
-            group={group}
-            expanded={expandedGroupIds.includes(group.id)}
-            onExpandedChange={(expanded) =>
-              setGroupExpanded(group.id, expanded)
-            }
-            selectionMode={isSelectionMode}
-            selectedIds={selectedIdSet}
-            isDiscarding={deferredDiscard.isPending}
-            resolveLocationLabel={resolveLabel}
-            onItemPress={(item) => handleCardPress(item.id)}
-            onItemLongPress={(item) => handleCardLongPress(item.id)}
-            onItemDiscard={handleDiscard}
-          />
         )}
         SectionSeparatorComponent={() => (
           <View style={styles.sectionSeparator} />
         )}
-        ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
       />
+      </View>
 
       <BottomSheet
         visible={addLocationVisible}
@@ -984,6 +1003,12 @@ function getFilteredEmptyMood(filter: InventoryViewFilter) {
 
   return "idle" as const;
 }
+
+type InventoryUrgencySectionCard = {
+  id: string;
+  title: string;
+  groups: InventoryItemGroup[];
+};
 
 function getFilteredEmptyTitle(
   filter: InventoryViewFilter,
@@ -1069,7 +1094,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
-  controlBlock: {
+  findBlock: {
     gap: spacing.sm,
     padding: spacing.sm,
     borderRadius: radius.xxl,
@@ -1077,41 +1102,12 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  companionCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
+  companionBubble: {
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-  },
-  companionCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
-  companionTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  companionDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  compartmentBlock: {
-    gap: spacing.sm,
-  },
-  compartmentHeading: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-    paddingHorizontal: spacing.xxs,
   },
   compartmentRail: {
     flexDirection: "row",
@@ -1311,30 +1307,54 @@ const styles = StyleSheet.create({
   screenContent: {
     flex: 1,
     gap: spacing.none,
+    // Bleed fridge scene to Screen edges; list keeps the 24px inset itself.
+    paddingHorizontal: spacing.none,
+    paddingTop: spacing.none,
     paddingBottom: spacing.none,
+  },
+  fridgeScene: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  fridgeSceneBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  fridgeSceneVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+    opacity: 0.24,
   },
   listFlex: {
     flex: 1,
   },
   listContent: {
     flexGrow: 1,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   listHeader: {
     gap: spacing.md,
-    paddingBottom: spacing.md,
+    paddingBottom: spacing.lg,
   },
-  sectionHeader: {
+  urgencySectionCard: {
+    gap: spacing.sm,
+    padding: spacing.sm,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  urgencySectionHeader: {
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.sm,
-    paddingBottom: spacing.sm,
+    paddingHorizontal: spacing.xxs,
   },
-  sectionHeaderShelf: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.border,
-    marginBottom: spacing.xs,
+  urgencySectionList: {
+    gap: spacing.sm,
   },
   sectionTitle: {
     fontSize: typography.subheading.fontSize,
@@ -1349,9 +1369,6 @@ const styles = StyleSheet.create({
     color: colors.mutedText,
   },
   sectionSeparator: {
-    height: spacing.md,
-  },
-  listSeparator: {
-    height: spacing.sm,
+    height: spacing.xl,
   },
 });
