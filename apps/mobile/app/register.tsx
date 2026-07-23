@@ -30,7 +30,7 @@ import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { EmptyState } from "../src/components/EmptyState";
 import { FormField } from "../src/components/FormField";
-import { Mascot } from "../src/components/Mascot";
+import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
@@ -502,15 +502,17 @@ export default function RegisterScreen() {
         }
       >
         <View style={styles.doneHero}>
-          <Mascot size="medium" mood="happy" />
           <Text style={styles.doneTitle}>
             {latestRegisteredItem
               ? `${latestRegisteredItem.displayName}을(를) 냉장고에 잘 넣어뒀어요`
               : "냉장고에 잘 넣어뒀어요"}
           </Text>
-          <Text style={styles.doneDescription}>
-            더 넣고 싶으면 아래에서 이어갈 수 있어요.
-          </Text>
+          <MascotSpeechBubble
+            message="더 넣고 싶으면 아래에서 이어갈 수 있어요."
+            mood="happy"
+            size="medium"
+            style={styles.doneBubble}
+          />
         </View>
 
         {registeredSessionItems.length ? (
@@ -1029,7 +1031,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   doneHero: {
-    alignItems: "center",
+    alignItems: "stretch",
     gap: spacing.md,
     paddingVertical: spacing.md,
   },
@@ -1040,12 +1042,8 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: "center",
   },
-  doneDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-    textAlign: "center",
+  doneBubble: {
+    alignSelf: "stretch",
   },
   doneFooter: {
     gap: spacing.sm,

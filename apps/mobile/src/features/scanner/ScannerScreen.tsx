@@ -35,7 +35,7 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
-import { Mascot, type MascotMood } from "../../components/Mascot";
+import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
@@ -256,11 +256,13 @@ function ScannerCameraExperience() {
         {!scanner.isCameraReady ? (
           <View style={styles.centerStage}>
             <View style={styles.centerCard}>
-              <Mascot size="small" mood="idle" />
               <Text style={styles.centerTitle}>카메라를 준비하고 있어요</Text>
-              <Text style={styles.centerDescription}>
-                장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요.
-              </Text>
+              <MascotSpeechBubble
+                message="장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요."
+                mood="idle"
+                size="small"
+                style={styles.centerBubble}
+              />
             </View>
           </View>
         ) : (
@@ -589,11 +591,13 @@ function PermissionCard({
   return (
     <View style={styles.centerStage}>
       <View style={styles.centerCard}>
-        <Mascot size="medium" mood="worry" />
         <Text style={styles.centerTitle}>카메라가 필요해요</Text>
-        <Text style={styles.centerDescription}>
-          바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요.
-        </Text>
+        <MascotSpeechBubble
+          message="바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요."
+          mood="worry"
+          size="small"
+          style={styles.centerBubble}
+        />
         {canRequestPermission || isRequesting ? (
           <Button onPress={onRequestPermission} disabled={isRequesting} fullWidth>
             카메라 켤게요
@@ -857,7 +861,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.lg,
     gap: spacing.md,
-    alignItems: "center",
+    alignItems: "stretch",
   },
   centerTitle: {
     fontSize: typography.heading.fontSize,
@@ -866,12 +870,8 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: "center",
   },
-  centerDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-    textAlign: "center",
+  centerBubble: {
+    alignSelf: "stretch",
   },
   sheetFooter: {
     gap: spacing.sm,

@@ -12,7 +12,7 @@ import { Mascot, type MascotMood } from "./Mascot";
 
 interface MascotSpeechBubbleProps {
   message: string;
-  mood?: Extract<MascotMood, "speak" | "think" | "point" | "idle">;
+  mood?: MascotMood;
   size?: "small" | "medium";
   style?: StyleProp<ViewStyle>;
 }

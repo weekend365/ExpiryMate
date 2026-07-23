@@ -30,7 +30,7 @@ interface StepFlowProps extends PropsWithChildren {
   headerAccessory?: ReactNode;
   /** When set, replaces the step description with a speaking-mascot bubble. */
   guideMessage?: string;
-  guideMood?: Extract<MascotMood, "speak" | "think" | "point" | "idle">;
+  guideMood?: MascotMood;
 }
 
 const SPRING = {

@@ -33,6 +33,7 @@ import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
@@ -333,52 +334,51 @@ export default function RecommendationsScreen() {
       {errorMessage && !isGenerating ? (
         isQuotaError ? (
           <View style={styles.quotaCard}>
-            <Mascot
-              size="small"
-              mood={hasActiveEntitlement ? "idle" : "worry"}
-            />
-            <View style={styles.quotaCopy}>
-              <Text style={styles.quotaTitle}>
-                오늘은 추천을 조금 쉬어갈까요?
-              </Text>
-              <Text style={styles.quotaDescription}>
-                {errorMessage.includes("너무 많")
+            <Text style={styles.quotaTitle}>
+              오늘은 추천을 조금 쉬어갈까요?
+            </Text>
+            <MascotSpeechBubble
+              message={
+                errorMessage.includes("너무 많")
                   ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
-                  : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."}
-              </Text>
-              {!hasActiveEntitlement ? (
-                <Pressable
-                  onPress={() => router.push("/(tabs)/settings")}
-                  accessibilityRole="button"
-                  accessibilityLabel="구독 안내 보러 가기"
-                  style={({ pressed }) => [
-                    styles.quotaLink,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <Text style={styles.quotaLinkText}>구독 안내 보러 가기</Text>
-                </Pressable>
-              ) : null}
-            </View>
-          </View>
-        ) : (
-          <View style={styles.errorCard}>
-            <Mascot size="small" mood="worry" />
-            <View style={styles.errorCopy}>
-              <Text style={styles.errorTitle}>앗, 추천을 만들지 못했어요</Text>
-              <Text style={styles.errorDescription}>{errorMessage}</Text>
+                  : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
+              }
+              mood={hasActiveEntitlement ? "idle" : "worry"}
+              size="small"
+            />
+            {!hasActiveEntitlement ? (
               <Pressable
-                onPress={() => router.push("/register")}
+                onPress={() => router.push("/(tabs)/settings")}
                 accessibilityRole="button"
-                accessibilityLabel="재료부터 넣어볼까요?"
+                accessibilityLabel="구독 안내 보러 가기"
                 style={({ pressed }) => [
                   styles.quotaLink,
                   pressed && styles.optionsSummaryPressed,
                 ]}
               >
-                <Text style={styles.quotaLinkText}>재료부터 넣어볼까요?</Text>
+                <Text style={styles.quotaLinkText}>구독 안내 보러 가기</Text>
               </Pressable>
-            </View>
+            ) : null}
+          </View>
+        ) : (
+          <View style={styles.errorCard}>
+            <Text style={styles.errorTitle}>앗, 추천을 만들지 못했어요</Text>
+            <MascotSpeechBubble
+              message={errorMessage}
+              mood="worry"
+              size="small"
+            />
+            <Pressable
+              onPress={() => router.push("/register")}
+              accessibilityRole="button"
+              accessibilityLabel="재료부터 넣어볼까요?"
+              style={({ pressed }) => [
+                styles.quotaLink,
+                pressed && styles.optionsSummaryPressed,
+              ]}
+            >
+              <Text style={styles.quotaLinkText}>재료부터 넣어볼까요?</Text>
+            </Pressable>
           </View>
         )
       ) : null}
@@ -1150,25 +1150,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.warningSoft,
     borderRadius: radius.xxl,
     padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-  },
-  quotaCopy: {
-    flex: 1,
-    gap: spacing.xxs,
+    gap: spacing.sm,
   },
   quotaTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
-  },
-  quotaDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   quotaLink: {
     alignSelf: "flex-start",
@@ -1185,25 +1173,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.dangerSoft,
     borderRadius: radius.xxl,
     padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-  },
-  errorCopy: {
-    flex: 1,
-    gap: spacing.xxs,
+    gap: spacing.sm,
   },
   errorTitle: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.danger,
-  },
-  errorDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
   },
   resultSection: {
     gap: spacing.sm,

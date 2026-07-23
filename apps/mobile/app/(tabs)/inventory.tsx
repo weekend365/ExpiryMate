@@ -39,7 +39,8 @@ import {
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
-import { Mascot, type MascotMood } from "../../src/components/Mascot";
+import { type MascotMood } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
@@ -224,16 +225,14 @@ export default function InventoryScreen() {
     if (deferredDiscard.undoLabel || successMessage) {
       return {
         mood: "happy" as MascotMood,
-        title: "잘 정리하고 있어요",
-        description: "장고도 한숨 돌렸어요.",
+        message: "잘 정리하고 있어요. 장고도 한숨 돌렸어요.",
       };
     }
 
     if (trafficStats.todayExpiryCount > 0) {
       return {
         mood: "worry" as MascotMood,
-        title: "오늘 손볼 재료가 있어요",
-        description: "유통기한이 가까운 것부터 살펴볼까요?",
+        message: "오늘 손볼 재료가 있어요. 유통기한이 가까운 것부터 살펴볼까요?",
       };
     }
 
@@ -243,8 +242,7 @@ export default function InventoryScreen() {
     ) {
       return {
         mood: "happy" as MascotMood,
-        title: "지금은 여유로워요",
-        description: "냉장고가 한산해서 장고도 편해요.",
+        message: "지금은 여유로워요. 냉장고가 한산해서 장고도 편해요.",
       };
     }
 
@@ -596,19 +594,12 @@ export default function InventoryScreen() {
                 </View>
 
                 {companion ? (
-                  <View
-                    style={styles.companionCard}
-                    accessibilityRole="summary"
-                    accessibilityLabel={`${companion.title}. ${companion.description}`}
-                  >
-                    <Mascot size="small" mood={companion.mood} />
-                    <View style={styles.companionCopy}>
-                      <Text style={styles.companionTitle}>{companion.title}</Text>
-                      <Text style={styles.companionDescription}>
-                        {companion.description}
-                      </Text>
-                    </View>
-                  </View>
+                  <MascotSpeechBubble
+                    message={companion.message}
+                    mood={companion.mood}
+                    size="small"
+                    style={styles.companionBubble}
+                  />
                 ) : null}
 
                 <View style={styles.findBlock}>
@@ -1111,31 +1102,12 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  companionCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
+  companionBubble: {
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-  },
-  companionCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
-  companionTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  companionDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
   },
   compartmentRail: {
     flexDirection: "row",
