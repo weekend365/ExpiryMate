@@ -15,10 +15,7 @@ import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 export default function SettingsScreen() {
   return (
-    <Screen
-      title="설정"
-      subtitle="바꾸고 싶은 것만 골라 보세요."
-    >
+    <Screen>
       <View style={styles.brandCard}>
         <Mascot size="small" mood="idle" />
         <View style={styles.brandCopy}>

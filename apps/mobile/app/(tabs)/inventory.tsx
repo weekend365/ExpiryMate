@@ -1,5 +1,7 @@
 import {
+  calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
+  getExpiryBucket,
   groupInventoryItems,
   ItemStatus,
   StorageLocation,
@@ -8,16 +10,11 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
-  Archive,
   CheckSquare,
-  CircleAlert,
-  Clock3,
   Eye,
   MapPin,
   Plus,
-  SlidersHorizontal,
   Trash2,
-  type LucideIcon,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -29,9 +26,13 @@ import {
   Text,
   View,
 } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
-import { InventoryListSkeleton } from "../../src/components/ContentSkeleton";
+import {
+  HomeStatsSkeleton,
+  InventoryListSkeleton,
+} from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
@@ -40,6 +41,7 @@ import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { StatCard } from "../../src/components/StatCard";
 import {
   filterInventoryItems,
   parseInventoryViewFilter,
@@ -50,19 +52,6 @@ import { useDeferredDiscardInventoryItem } from "../../src/features/inventory/us
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
-
-type PillTone = "default" | "warning" | "danger" | "success";
-
-const filters: Array<{
-  key: InventoryViewFilter;
-  label: string;
-  icon: LucideIcon;
-  tone?: PillTone;
-}> = [
-  { key: "all", label: "전체", icon: Archive },
-  { key: "expiring", label: "임박", icon: Clock3, tone: "warning" },
-  { key: "expired", label: "만료", icon: CircleAlert, tone: "danger" },
-];
 
 export default function InventoryScreen() {
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
@@ -105,6 +94,10 @@ export default function InventoryScreen() {
     });
   };
 
+  const toggleTrafficFilter = (nextFilter: InventoryViewFilter) => {
+    applyFilter(filter === nextFilter ? "all" : nextFilter);
+  };
+
   const hasLoadedInventory = data !== undefined;
   const loadErrorMessage =
     error instanceof Error
@@ -132,18 +125,6 @@ export default function InventoryScreen() {
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
   const allVisibleSelected =
     visibleIds.length > 0 && visibleIds.every((id) => selectedIdSet.has(id));
-  const filterCounts = useMemo(
-    () => ({
-      all: activeGroups.length,
-      expiring: groupInventoryItems(
-        filterInventoryItems(activeItems, "expiring", "all"),
-      ).length,
-      expired: groupInventoryItems(
-        filterInventoryItems(activeItems, "expired", "all"),
-      ).length,
-    }),
-    [activeGroups, activeItems],
-  );
   const locationCounts = useMemo(() => {
     const counts = Object.fromEntries(
       Object.values(StorageLocation).map((value) => [value, 0]),
@@ -158,11 +139,37 @@ export default function InventoryScreen() {
     return counts;
   }, [activeItems]);
 
-  const activeFilterLabel =
-    filters.find((item) => item.key === filter)?.label ?? "전체";
+  const trafficStats = useMemo(() => {
+    let todayExpiryCount = 0;
+    let within7DaysCount = 0;
+
+    activeItems.forEach((item) => {
+      const bucket = getExpiryBucket(item.expiryDate);
+      const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
+
+      if (bucket === "today") {
+        todayExpiryCount += 1;
+      }
+
+      if (daysLeft >= 0 && daysLeft <= 7) {
+        within7DaysCount += 1;
+      }
+    });
+
+    return {
+      todayExpiryCount,
+      within7DaysCount,
+      totalActiveCount: activeItems.length,
+    };
+  }, [activeItems]);
+
   const activeLocationLabel =
     location === "all" ? "모든 위치" : storageLocationLabels[location];
-  const hasActiveFilters = filter !== "all" || location !== "all";
+  const hasLocationFilter = location !== "all";
+  const trafficFilterCaption = getTrafficFilterCaption(
+    filter,
+    filteredGroups.length,
+  );
   // Only treat as empty after a successful load — never during loading/error.
   const isEmptyInventory =
     hasLoadedInventory && !isError && activeItems.length === 0;
@@ -325,72 +332,6 @@ export default function InventoryScreen() {
   return (
     <Screen
       scroll={false}
-      title="보관함"
-      subtitle={
-        isLoading && !hasLoadedInventory
-          ? "장고가 보관함을 살펴보고 있어요."
-          : isError && !hasLoadedInventory
-            ? "앗, 보관함을 불러오지 못했어요."
-            : isEmptyInventory
-              ? "장고랑 같이 재료를 채워볼까요?"
-              : `${filteredGroups.length}개 품목을 유통기한이 가까운 순서로 보여드릴게요.`
-      }
-      headerAction={
-        showListChrome ? (
-          isSelectionMode ? (
-            <Pressable
-              onPress={cancelSelectionMode}
-              hitSlop={spacing.xs}
-              style={({ pressed }) => [
-                styles.headerFilterButton,
-                pressed && styles.headerFilterButtonPressed,
-              ]}
-              accessibilityRole="button"
-              accessibilityLabel="고르기 그만두기"
-            >
-              <Text style={styles.headerFilterLabel}>그만두기</Text>
-            </Pressable>
-          ) : (
-            <View style={styles.headerActions}>
-              <Pressable
-                onPress={() => enterSelectionMode()}
-                hitSlop={spacing.xs}
-                style={({ pressed }) => [
-                  styles.headerFilterButton,
-                  pressed && styles.headerFilterButtonPressed,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="고르기"
-                accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
-              >
-                <CheckSquare
-                  color={colors.primary}
-                  size={spacing.sm + spacing.xxs}
-                  strokeWidth={2.4}
-                />
-                <Text style={styles.headerFilterLabel}>고르기</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => setIsFilterSheetOpen(true)}
-                hitSlop={spacing.xs}
-                style={({ pressed }) => [
-                  styles.headerFilterButton,
-                  pressed && styles.headerFilterButtonPressed,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="필터 열기"
-              >
-                <SlidersHorizontal
-                  color={colors.primary}
-                  size={spacing.sm + spacing.xxs}
-                  strokeWidth={2.4}
-                />
-                <Text style={styles.headerFilterLabel}>필터</Text>
-              </Pressable>
-            </View>
-          )
-        ) : null
-      }
       footer={
         !showListChrome || isFilteredEmpty
           ? null
@@ -446,6 +387,64 @@ export default function InventoryScreen() {
         removeClippedSubviews
         ListHeaderComponent={
           <View style={styles.listHeader}>
+            {showListChrome ? (
+              <View style={styles.actionBar}>
+                {isSelectionMode ? (
+                  <Pressable
+                    onPress={cancelSelectionMode}
+                    hitSlop={spacing.xs}
+                    style={({ pressed }) => [
+                      styles.headerFilterButton,
+                      pressed && styles.headerFilterButtonPressed,
+                    ]}
+                    accessibilityRole="button"
+                    accessibilityLabel="고르기 그만두기"
+                  >
+                    <Text style={styles.headerFilterLabel}>그만두기</Text>
+                  </Pressable>
+                ) : (
+                  <View style={styles.headerActions}>
+                    <Pressable
+                      onPress={() => enterSelectionMode()}
+                      hitSlop={spacing.xs}
+                      style={({ pressed }) => [
+                        styles.headerFilterButton,
+                        pressed && styles.headerFilterButtonPressed,
+                      ]}
+                      accessibilityRole="button"
+                      accessibilityLabel="고르기"
+                      accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
+                    >
+                      <CheckSquare
+                        color={colors.primary}
+                        size={spacing.sm + spacing.xxs}
+                        strokeWidth={2.4}
+                      />
+                      <Text style={styles.headerFilterLabel}>고르기</Text>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => setIsFilterSheetOpen(true)}
+                      hitSlop={spacing.xs}
+                      style={({ pressed }) => [
+                        styles.headerFilterButton,
+                        pressed && styles.headerFilterButtonPressed,
+                      ]}
+                      accessibilityRole="button"
+                      accessibilityLabel="위치 고르기"
+                      accessibilityHint="보관 위치로 목록을 골라 볼 수 있어요."
+                    >
+                      <MapPin
+                        color={colors.primary}
+                        size={spacing.sm + spacing.xxs}
+                        strokeWidth={2.4}
+                      />
+                      <Text style={styles.headerFilterLabel}>위치</Text>
+                    </Pressable>
+                  </View>
+                )}
+              </View>
+            ) : null}
+
             {deferredDiscard.undoLabel ? (
               <FeedbackBanner
                 tone="success"
@@ -480,22 +479,121 @@ export default function InventoryScreen() {
               />
             ) : null}
 
+            {isLoading && !hasLoadedInventory ? (
+              <HomeStatsSkeleton />
+            ) : hasLoadedInventory && !isError && !isSelectionMode ? (
+              <View style={styles.trafficGroup}>
+                <View
+                  style={styles.trafficStrip}
+                  accessibilityRole="summary"
+                  accessibilityLabel={`오늘 만료 ${trafficStats.todayExpiryCount}개, 7일 이내 ${trafficStats.within7DaysCount}개, 보관 중 ${trafficStats.totalActiveCount}개`}
+                >
+                  <Pressable
+                    style={styles.trafficLampPressable}
+                    onPress={() => toggleTrafficFilter("today")}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: filter === "today" }}
+                    accessibilityLabel={`오늘 만료 ${trafficStats.todayExpiryCount}개`}
+                    accessibilityHint={
+                      filter === "today"
+                        ? "다시 누르면 전체 목록으로 돌아가요."
+                        : "오늘 만료되는 재료만 보여 드릴게요."
+                    }
+                  >
+                    <StatCard
+                      variant="traffic"
+                      label="오늘 만료"
+                      value={trafficStats.todayExpiryCount}
+                      tone="danger"
+                      showLabel={false}
+                      selected={filter === "today"}
+                    />
+                  </Pressable>
+                  <Pressable
+                    style={styles.trafficLampPressable}
+                    onPress={() => toggleTrafficFilter("within7")}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: filter === "within7" }}
+                    accessibilityLabel={`7일 이내 ${trafficStats.within7DaysCount}개`}
+                    accessibilityHint={
+                      filter === "within7"
+                        ? "다시 누르면 전체 목록으로 돌아가요."
+                        : "7일 안에 손볼 재료만 보여 드릴게요."
+                    }
+                  >
+                    <StatCard
+                      variant="traffic"
+                      label="7일 이내"
+                      value={trafficStats.within7DaysCount}
+                      tone="warning"
+                      showLabel={false}
+                      selected={filter === "within7"}
+                    />
+                  </Pressable>
+                  <Pressable
+                    style={styles.trafficLampPressable}
+                    onPress={() => applyFilter("all")}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: filter === "all" }}
+                    accessibilityLabel={`보관 중 ${trafficStats.totalActiveCount}개`}
+                    accessibilityHint="전체 보관 재료를 보여 드릴게요."
+                  >
+                    <StatCard
+                      variant="traffic"
+                      label="보관 중"
+                      value={trafficStats.totalActiveCount}
+                      tone="success"
+                      showLabel={false}
+                      selected={filter === "all"}
+                    />
+                  </Pressable>
+                </View>
+                <View
+                  style={styles.trafficLabels}
+                  importantForAccessibility="no-hide-descendants"
+                >
+                  <AppText
+                    variant="caption"
+                    tone="subtext"
+                    style={styles.trafficLabel}
+                  >
+                    오늘 만료
+                  </AppText>
+                  <AppText
+                    variant="caption"
+                    tone="subtext"
+                    style={styles.trafficLabel}
+                  >
+                    7일 이내
+                  </AppText>
+                  <AppText
+                    variant="caption"
+                    tone="subtext"
+                    style={styles.trafficLabel}
+                  >
+                    보관 중
+                  </AppText>
+                </View>
+                <Text style={styles.trafficCaption}>{trafficFilterCaption}</Text>
+              </View>
+            ) : null}
+
             {showListChrome && !isSelectionMode ? (
               <Pressable
                 onPress={() => setIsFilterSheetOpen(true)}
                 accessibilityRole="button"
-                accessibilityLabel="어떤 재료를 볼까요?"
-                accessibilityHint="상태와 보관 위치로 골라 볼 수 있어요."
+                accessibilityLabel="보관 위치 고르기"
+                accessibilityHint="냉장, 냉동 같은 위치로 목록을 골라 볼 수 있어요."
                 style={({ pressed }) => [
                   styles.filterSummary,
                   pressed && styles.filterSummaryPressed,
                 ]}
               >
                 <View style={styles.filterSummaryCopy}>
-                  <Text style={styles.filterSummaryLabel}>지금 보는 목록</Text>
+                  <Text style={styles.filterSummaryLabel}>지금 보는 위치</Text>
                   <Text style={styles.filterSummaryValue}>
-                    {activeFilterLabel} · {activeLocationLabel}
-                    {hasActiveFilters ? "" : " · 가까운 순"}
+                    {activeLocationLabel}
+                    {hasLocationFilter ? "" : " · 가까운 순"}
                   </Text>
                 </View>
                 <Text style={styles.filterSummaryAction}>바꾸기</Text>
@@ -567,10 +665,21 @@ export default function InventoryScreen() {
           ) : isFilteredEmpty ? (
             <EmptyState
               mood="worry"
-              title="이 조건에는 재료가 없어요"
-              description="필터를 조금 넓히거나, 새 재료를 넣어볼까요?"
-              actionLabel="필터 다시 고르기"
-              onAction={() => setIsFilterSheetOpen(true)}
+              title={getFilteredEmptyTitle(filter)}
+              description={getFilteredEmptyDescription(filter, hasLocationFilter)}
+              actionLabel={
+                filter === "all" && hasLocationFilter
+                  ? "모든 위치 볼게요"
+                  : "전체 보관함 볼게요"
+              }
+              onAction={() => {
+                if (filter !== "all") {
+                  applyFilter("all");
+                }
+                if (hasLocationFilter) {
+                  setLocation("all");
+                }
+              }}
             />
           ) : null
         }
@@ -632,8 +741,8 @@ export default function InventoryScreen() {
         visible={isFilterSheetOpen}
         onClose={() => setIsFilterSheetOpen(false)}
         mascotMood="idle"
-        title="어떤 재료를 볼까요?"
-        description="상태와 위치를 고르면 목록을 바로 바꿔 드릴게요."
+        title="어디에 둔 재료를 볼까요?"
+        description="보관 위치만 고르면 목록을 바로 바꿔 드릴게요."
         footer={
           <View style={styles.sheetFooter}>
             {activeItems.length ? (
@@ -652,24 +761,10 @@ export default function InventoryScreen() {
         }
       >
         <View style={styles.sheetSection}>
-          <SectionHeader title="상태" description="임박하거나 만료된 재료만 볼 수 있어요." />
-          <View style={styles.pillRow}>
-            {filters.map((item) => (
-              <Pill
-                key={item.key}
-                label={item.label}
-                icon={item.icon}
-                count={filterCounts[item.key]}
-                tone={item.tone}
-                selected={filter === item.key}
-                onPress={() => applyFilter(item.key)}
-              />
-            ))}
-          </View>
-        </View>
-
-        <View style={styles.sheetSection}>
-          <SectionHeader title="위치" description="어디에 둔 재료인지 골라 주세요." />
+          <SectionHeader
+            title="위치"
+            description="어디에 둔 재료인지 골라 주세요."
+          />
           <View style={styles.pillRow}>
             <Pill
               label="전체 위치"
@@ -694,7 +789,71 @@ export default function InventoryScreen() {
   );
 }
 
+function getTrafficFilterCaption(
+  filter: InventoryViewFilter,
+  visibleGroupCount: number,
+) {
+  if (filter === "today") {
+    return `오늘 만료 ${visibleGroupCount}개만 보여드릴게요`;
+  }
+
+  if (filter === "within7") {
+    return `7일 이내 ${visibleGroupCount}개만 보여드릴게요`;
+  }
+
+  if (filter === "expired") {
+    return `만료된 재료 ${visibleGroupCount}개만 보여드릴게요`;
+  }
+
+  return `보관 중 ${visibleGroupCount}개를 가까운 순으로 보여드릴게요`;
+}
+
+function getFilteredEmptyTitle(filter: InventoryViewFilter) {
+  if (filter === "today") {
+    return "오늘 만료되는 재료가 없어요";
+  }
+
+  if (filter === "within7") {
+    return "7일 안에 손볼 재료가 없어요";
+  }
+
+  if (filter === "expired") {
+    return "만료된 재료가 없어요";
+  }
+
+  return "이 위치에는 재료가 없어요";
+}
+
+function getFilteredEmptyDescription(
+  filter: InventoryViewFilter,
+  hasLocationFilter: boolean,
+) {
+  if (filter === "today") {
+    return hasLocationFilter
+      ? "위치를 넓히거나 전체 보관함을 둘러볼까요?"
+      : "여유 있을 때 전체 보관함을 천천히 둘러볼 수 있어요.";
+  }
+
+  if (filter === "within7") {
+    return hasLocationFilter
+      ? "위치를 넓히거나 전체 보관함을 둘러볼까요?"
+      : "급한 재료가 없으면 전체 목록에서 여유 있게 볼 수 있어요.";
+  }
+
+  if (hasLocationFilter) {
+    return "다른 위치를 고르거나 전체 보관함을 볼까요?";
+  }
+
+  return "조건을 조금 넓히거나, 새 재료를 넣어볼까요?";
+}
+
 const styles = StyleSheet.create({
+  actionBar: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
   headerActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -753,6 +912,41 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     fontFamily: typography.title.fontFamily,
     color: colors.primary,
+  },
+  trafficGroup: {
+    gap: spacing.xs,
+  },
+  trafficStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.pill,
+    backgroundColor: colors.text,
+  },
+  trafficLampPressable: {
+    flex: 1,
+    alignItems: "center",
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+  },
+  trafficLabels: {
+    flexDirection: "row",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  trafficLabel: {
+    flex: 1,
+    textAlign: "center",
+  },
+  trafficCaption: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+    textAlign: "center",
+    paddingHorizontal: spacing.sm,
   },
   screenContent: {
     flex: 1,

@@ -18,14 +18,30 @@ describe("mobile inventory filters", () => {
   });
 
   it("parses known inventory view filters from route params", () => {
-    expect(parseInventoryViewFilter("expiring")).toBe("expiring");
+    expect(parseInventoryViewFilter("today")).toBe("today");
+    expect(parseInventoryViewFilter("within7")).toBe("within7");
+    expect(parseInventoryViewFilter("expiring")).toBe("within7");
     expect(parseInventoryViewFilter(["expired"])).toBe("expired");
     expect(parseInventoryViewFilter("all")).toBe("all");
     expect(parseInventoryViewFilter("unknown")).toBeNull();
     expect(parseInventoryViewFilter(undefined)).toBeNull();
   });
 
-  it("returns expiring items within seven days sorted by nearest expiry", () => {
+  it("returns today-only items when today filter is applied", () => {
+    const result = filterInventoryItems(
+      [
+        createItem("later", "두부", "2026-06-15"),
+        createItem("soon", "계란", "2026-06-10"),
+        createItem("today", "요거트", "2026-06-07"),
+      ],
+      "today",
+      "all",
+    );
+
+    expect(result.map((item) => item.id)).toEqual(["today"]);
+  });
+
+  it("returns items within seven days sorted by nearest expiry", () => {
     const result = filterInventoryItems(
       [
         createItem("later", "두부", "2026-06-15"),
@@ -33,7 +49,7 @@ describe("mobile inventory filters", () => {
         createItem("expired", "우유", "2026-06-06"),
         createItem("today", "요거트", "2026-06-07"),
       ],
-      "expiring",
+      "within7",
       "all",
     );
 

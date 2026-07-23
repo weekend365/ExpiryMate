@@ -229,8 +229,6 @@ export default function RecommendationsScreen() {
 
   return (
     <Screen
-      title="오늘 뭐 먹지?"
-      subtitle="장고가 냉장고 재료로 만들기 쉬운 요리를 골라줄게요."
       refreshControl={
         <RefreshControl
           tintColor={colors.primary}

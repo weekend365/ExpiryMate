@@ -131,12 +131,6 @@ export default function HomeScreen() {
 
   return (
     <Screen
-      title="오늘"
-      subtitle={
-        isInitialError
-          ? "앗, 오늘 할 일을 불러오지 못했어요."
-          : "지금 손볼 일 하나만 먼저 볼게요."
-      }
       refreshControl={
         <RefreshControl
           tintColor={colors.primary}
