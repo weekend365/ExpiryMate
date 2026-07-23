@@ -1,4 +1,6 @@
 import {
+  formatDateKoreanCompact,
+  groupInventoryItems,
   ItemStatus,
   StorageLocation,
   storageLocationLabels,
@@ -27,13 +29,12 @@ import {
   Text,
   View,
 } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { InventoryListSkeleton } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
-import { InventoryCard } from "../../src/components/InventoryCard";
+import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
 import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
 import { Pill } from "../../src/components/Pill";
@@ -51,9 +52,6 @@ import { colors, radius, spacing, touchTarget, typography } from "../../src/shar
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 type PillTone = "default" | "warning" | "danger" | "success";
-type SwipeableControl = {
-  close: () => void;
-};
 
 const filters: Array<{
   key: InventoryViewFilter;
@@ -88,6 +86,7 @@ export default function InventoryScreen() {
   const [menuItem, setMenuItem] = useState<InventoryItem | null>(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
@@ -116,10 +115,18 @@ export default function InventoryScreen() {
     () => (data ?? []).filter((item) => item.status === ItemStatus.ACTIVE),
     [data],
   );
+  const activeGroups = useMemo(
+    () => groupInventoryItems(activeItems),
+    [activeItems],
+  );
 
   const filtered = useMemo(
     () => filterInventoryItems(activeItems, filter, location),
     [activeItems, filter, location],
+  );
+  const filteredGroups = useMemo(
+    () => groupInventoryItems(filtered),
+    [filtered],
   );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -127,19 +134,25 @@ export default function InventoryScreen() {
     visibleIds.length > 0 && visibleIds.every((id) => selectedIdSet.has(id));
   const filterCounts = useMemo(
     () => ({
-      all: activeItems.length,
-      expiring: filterInventoryItems(activeItems, "expiring", "all").length,
-      expired: filterInventoryItems(activeItems, "expired", "all").length,
+      all: activeGroups.length,
+      expiring: groupInventoryItems(
+        filterInventoryItems(activeItems, "expiring", "all"),
+      ).length,
+      expired: groupInventoryItems(
+        filterInventoryItems(activeItems, "expired", "all"),
+      ).length,
     }),
-    [activeItems],
+    [activeGroups, activeItems],
   );
   const locationCounts = useMemo(() => {
     const counts = Object.fromEntries(
       Object.values(StorageLocation).map((value) => [value, 0]),
     ) as Record<StorageLocation, number>;
 
-    activeItems.forEach((item) => {
-      counts[item.storageLocation] += 1;
+    Object.values(StorageLocation).forEach((storageLocation) => {
+      counts[storageLocation] = groupInventoryItems(
+        activeItems.filter((item) => item.storageLocation === storageLocation),
+      ).length;
     });
 
     return counts;
@@ -222,6 +235,14 @@ export default function InventoryScreen() {
     enterSelectionMode(id);
   };
 
+  const setGroupExpanded = (groupId: string, expanded: boolean) => {
+    setExpandedGroupIds((current) =>
+      expanded
+        ? [...new Set([...current, groupId])]
+        : current.filter((id) => id !== groupId),
+    );
+  };
+
   const handleOpenItemMenu = (item: InventoryItem) => {
     setSuccessMessage(null);
     setActionErrorMessage(null);
@@ -295,11 +316,7 @@ export default function InventoryScreen() {
     );
   };
 
-  const handleSwipeDiscard = (
-    item: InventoryItem,
-    swipeable: SwipeableControl,
-  ) => {
-    swipeable.close();
+  const handleDiscard = (item: InventoryItem) => {
     setSuccessMessage(null);
     setActionErrorMessage(null);
     void deferredDiscard.scheduleDiscard(item);
@@ -316,7 +333,7 @@ export default function InventoryScreen() {
             ? "앗, 보관함을 불러오지 못했어요."
             : isEmptyInventory
               ? "장고랑 같이 재료를 채워볼까요?"
-              : `${filtered.length}개를 유통기한이 가까운 순서로 보여드릴게요.`
+              : `${filteredGroups.length}개 품목을 유통기한이 가까운 순서로 보여드릴게요.`
       }
       headerAction={
         showListChrome ? (
@@ -409,9 +426,9 @@ export default function InventoryScreen() {
               ? []
               : isEmptyInventory || isFilteredEmpty
                 ? []
-                : filtered
+                : filteredGroups
         }
-        keyExtractor={(item) => item.id}
+        keyExtractor={(group) => group.id}
         refreshControl={
           <RefreshControl
             tintColor={colors.primary}
@@ -557,26 +574,22 @@ export default function InventoryScreen() {
             />
           ) : null
         }
-        renderItem={({ item }) =>
-          isSelectionMode ? (
-            <InventoryCard
-              item={item}
-              selected={selectedIdSet.has(item.id)}
-              selectionMode
-              onPress={() => handleCardPress(item.id)}
-              onLongPress={() => handleCardLongPress(item.id)}
-            />
-          ) : (
-            <SwipeableInventoryCard
-              item={item}
-              isDiscarding={deferredDiscard.isPending}
-              onPress={() => handleCardPress(item.id)}
-              onLongPress={() => handleCardLongPress(item.id)}
-              onMenuPress={() => handleOpenItemMenu(item)}
-              onDiscard={handleSwipeDiscard}
-            />
-          )
-        }
+        renderItem={({ item: group }) => (
+          <InventoryGroupCard
+            group={group}
+            expanded={expandedGroupIds.includes(group.id)}
+            onExpandedChange={(expanded) =>
+              setGroupExpanded(group.id, expanded)
+            }
+            selectionMode={isSelectionMode}
+            selectedIds={selectedIdSet}
+            isDiscarding={deferredDiscard.isPending}
+            onItemPress={(item) => handleCardPress(item.id)}
+            onItemLongPress={(item) => handleCardLongPress(item.id)}
+            onItemMenuPress={handleOpenItemMenu}
+            onItemDiscard={handleDiscard}
+          />
+        )}
         ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
       />
 
@@ -585,7 +598,11 @@ export default function InventoryScreen() {
         onClose={() => setMenuItem(null)}
         mascotMood="idle"
         title={menuItem?.displayName ?? "이 재료를 어떻게 할까요?"}
-        description="자세히 보거나, 골라서 정리할 수 있어요."
+        description={
+          menuItem
+            ? `${formatDateKoreanCompact(menuItem.expiryDate)} · ${menuItem.quantity}${menuItem.unit ?? "개"} 보관 중이에요.`
+            : "자세히 보거나, 골라서 정리할 수 있어요."
+        }
       >
         <View style={styles.menuList}>
           <ListRow
@@ -657,7 +674,7 @@ export default function InventoryScreen() {
             <Pill
               label="전체 위치"
               icon={MapPin}
-              count={activeItems.length}
+              count={activeGroups.length}
               selected={location === "all"}
               onPress={() => setLocation("all")}
             />
@@ -674,53 +691,6 @@ export default function InventoryScreen() {
         </View>
       </BottomSheet>
     </Screen>
-  );
-}
-
-function SwipeableInventoryCard({
-  item,
-  isDiscarding,
-  onPress,
-  onLongPress,
-  onMenuPress,
-  onDiscard,
-}: {
-  item: InventoryItem;
-  isDiscarding: boolean;
-  onPress: () => void;
-  onLongPress: () => void;
-  onMenuPress: () => void;
-  onDiscard: (item: InventoryItem, swipeable: SwipeableControl) => void;
-}) {
-  return (
-    <Swipeable
-      friction={2}
-      rightThreshold={touchTarget.icon}
-      overshootRight={false}
-      renderRightActions={(_, __, swipeable) => (
-        <Pressable
-          disabled={isDiscarding}
-          onPress={() => onDiscard(item, swipeable)}
-          style={({ pressed }) => [
-            styles.swipeAction,
-            pressed && styles.swipeActionPressed,
-            isDiscarding && styles.swipeActionDisabled,
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel="이 재료 정리하기"
-        >
-          <Trash2 color={colors.surface} size={spacing.md} strokeWidth={2.4} />
-          <Text style={styles.swipeActionLabel}>정리할게요</Text>
-        </Pressable>
-      )}
-    >
-      <InventoryCard
-        item={item}
-        onPress={onPress}
-        onLongPress={onLongPress}
-        onMenuPress={onMenuPress}
-      />
-    </Swipeable>
   );
 }
 
@@ -803,30 +773,6 @@ const styles = StyleSheet.create({
   },
   listSeparator: {
     height: spacing.sm,
-  },
-  swipeAction: {
-    width: spacing.xxxl + spacing.lg,
-    minHeight: touchTarget.min,
-    borderRadius: radius.xxl,
-    backgroundColor: colors.danger,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: spacing.sm,
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-  },
-  swipeActionPressed: {
-    backgroundColor: colors.dangerPressed,
-  },
-  swipeActionDisabled: {
-    opacity: 0.55,
-  },
-  swipeActionLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.surface,
-    textAlign: "center",
   },
   sheetSection: {
     gap: spacing.sm,
