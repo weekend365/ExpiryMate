@@ -18,7 +18,7 @@
 | API 비즈니스 | ~85% | 재고·레시피·프라이버시·구독 검증·OAuth 콜백 |
 | Admin | ~80% | Railway 배포 · shared 토큰·브랜드 동기화 |
 | 배포/인프라 | ~90% | Railway · Resend · `/health` uptime ✅ · Sentry API/Admin ✅ |
-| 스토어 출시 | ~55% | Android preview APK 있음 · iOS EAS·심사 자료 미착수 |
+| 스토어 출시 | ~70% | iOS TestFlight QA ✅ · 메타·심사 자료 진행 중 (`docs/store-metadata-draft.md`) |
 | 테스트/QA | ~90% | **실기기 QA·uptime ✅** · Sentry Mobile·Apple 로그인 후순위 |
 
 **현재 Phase:** Phase 1 관문 대부분 완료 → **Phase 2 (스토어 제출 준비)**  
@@ -68,8 +68,8 @@
 | # | 작업 | 왜 |
 |---|------|-----|
 | 1 | ~~**Apple Developer Program 등록**~~ ✅ | Sign in with Apple · Push · TestFlight · App Store 공통 전제 |
-| 2 | **EAS iOS/Android production 빌드** (스캐너 포함) | Capability는 코드 반영됨 → Railway API env로 archive · TestFlight 검증. 런북: [`docs/ios-eas-production.md`](./ios-eas-production.md) |
-| 3 | **스토어 메타·심사용 자료** | Privacy Nutrition Label / Play Data Safety · 스크린샷 · Support URL · AI·계정삭제 심사 노트 |
+| 2 | ~~**EAS iOS production + TestFlight QA**~~ ✅ | Apple·소셜·재고·추천·푸시 통과. 런북: [`docs/ios-eas-production.md`](./ios-eas-production.md) |
+| 3 | **스토어 메타·심사용 자료** | 초안: [`docs/store-metadata-draft.md`](./store-metadata-draft.md) · Privacy Label · 스크린샷 · Support URL · 심사 노트 |
 
 ### P1 — 병행 / 후순위
 
@@ -129,11 +129,11 @@ flowchart LR
 [x] 이메일 가입 → 인증 메일 수신 → 링크/딥링크로 확인 → 홈 진입
 [x] 이메일 로그인 · 미확인 계정 → verify-pending · 재발송
 [x] 비밀번호 재설정 메일 → 새 비밀번호로 로그인
-[ ] Apple 로그인 — TestFlight/유료 팀 서명 빌드에서 신규·재로그인
+- [x] Apple 로그인 — TestFlight 신규·재로그인
 [x] 재료 수동 등록 → 홈·보관함 반영
 [x] 홈 → 바코드 등록 → 워터폴 조회 → 유통기한 OCR → prefill (dev/EAS 빌드)
 [x] AI 추천: 동의 → 생성 → 히스토리
-[ ] 푸시 토큰 등록 (+ 스케줄러 ON 시 만료 알림) — capability 반영됨 · 실기기 수신 확인
+[x] 푸시 토큰 등록 (+ 스케줄러 ON 시 만료 알림) — 토큰 등록 TestFlight 확인 · 실수신은 스케줄러 선택
 [x] 계정 삭제 → 데이터 제거 확인
 [x] Admin 로그인 → 상품 CRUD
 [x] /privacy, /privacy/choices 접근
@@ -141,10 +141,10 @@ flowchart LR
 
 ### Phase 2 Done Criteria (요약)
 
-- [ ] iOS/Android production 빌드 + 실제 API
+- [x] iOS production 빌드 + TestFlight QA (Android production은 병행)
 - [ ] App Store Privacy Label / Play Data Safety (`docs/store-privacy-declarations.md` 대조)
-- [ ] Support URL · 스크린샷 · 앱 설명 · 심사 노트(AI·계정 삭제·OAuth)
-- [ ] Sign in with Apple TestFlight 검증 + 스토어 정책 충족
+- [ ] Support URL · 스크린샷 · 앱 설명 · 심사 노트 — 초안 `docs/store-metadata-draft.md`
+- [x] Sign in with Apple TestFlight 검증 + 스토어 정책 충족 준비
 
 ---
 

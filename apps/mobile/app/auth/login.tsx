@@ -16,6 +16,7 @@ import {
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
+import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { startOAuth } from "../../src/services/api";
@@ -233,18 +234,6 @@ export default function LoginScreen() {
     <Screen
       title="어서 오세요"
       subtitle="계정으로 이어가면 장고가 냉장고를 함께 챙겨 드릴게요."
-      footer={
-        <Button
-          onPress={() => {
-            void handleEmailLogin();
-          }}
-          loading={loginMutation.isPending}
-          disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
-          fullWidth
-        >
-          이메일로 이어갈게요
-        </Button>
-      }
     >
       <View style={styles.brandRow}>
         <Mascot size="small" mood="idle" />
@@ -273,19 +262,14 @@ export default function LoginScreen() {
           style={styles.input}
         />
         <View style={styles.emailLinks}>
-          <Pressable
+          <Button
+            variant="secondary"
+            size="small"
             onPress={() => router.push("/auth/register")}
             disabled={isBusy}
-            hitSlop={spacing.xs}
-            accessibilityRole="button"
-            accessibilityLabel="함께 시작하기"
-            style={({ pressed }) => [
-              styles.emailLink,
-              pressed && styles.emailLinkPressed,
-            ]}
           >
-            <Text style={styles.emailLinkText}>함께 시작하기</Text>
-          </Pressable>
+            함께 시작하기
+          </Button>
           <Pressable
             onPress={() => router.push("/auth/forgot-password")}
             disabled={isBusy}
@@ -300,33 +284,47 @@ export default function LoginScreen() {
             <Text style={styles.emailLinkText}>비밀번호를 잊으셨나요?</Text>
           </Pressable>
         </View>
+        <Button
+          onPress={() => {
+            void handleEmailLogin();
+          }}
+          loading={loginMutation.isPending}
+          disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
+          fullWidth
+        >
+          이메일로 이어갈게요
+        </Button>
       </View>
 
       <View style={styles.oauthSection}>
         <Text style={styles.oauthTitle}>다른 방법으로도 이어갈 수 있어요</Text>
         <View style={styles.oauthList}>
-          <OAuthRow
+          <OAuthButton
+            provider="kakao"
             label="카카오로 이어갈게요"
             onPress={handleKakaoLogin}
             loading={pendingProvider === "kakao"}
             disabled={isBusy && pendingProvider !== "kakao"}
           />
           {naverClientId ? (
-            <OAuthRow
+            <OAuthButton
+              provider="naver"
               label="네이버로 이어갈게요"
               onPress={handleNaverLogin}
               loading={pendingProvider === "naver"}
               disabled={isBusy && pendingProvider !== "naver"}
             />
           ) : null}
-          <OAuthRow
+          <OAuthButton
+            provider="google"
             label="Google로 이어갈게요"
             onPress={handleGoogleLogin}
             loading={pendingProvider === "google"}
             disabled={isBusy && pendingProvider !== "google"}
           />
           {Platform.OS === "ios" ? (
-            <OAuthRow
+            <OAuthButton
+              provider="apple"
               label="Apple로 이어갈게요"
               onPress={handleAppleLogin}
               loading={pendingProvider === "apple"}
@@ -336,36 +334,6 @@ export default function LoginScreen() {
         </View>
       </View>
     </Screen>
-  );
-}
-
-function OAuthRow({
-  label,
-  onPress,
-  loading,
-  disabled,
-}: {
-  label: string;
-  onPress: () => void;
-  loading?: boolean;
-  disabled?: boolean;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled || loading}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      style={({ pressed }) => [
-        styles.oauthRow,
-        pressed && styles.oauthRowPressed,
-        (disabled || loading) && styles.oauthRowDisabled,
-      ]}
-    >
-      <Text style={styles.oauthRowText}>
-        {loading ? "잠시만요…" : label}
-      </Text>
-    </Pressable>
   );
 }
 
@@ -423,7 +391,7 @@ const styles = StyleSheet.create({
   input: {
     minHeight: touchTarget.cta,
     borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
@@ -434,9 +402,9 @@ const styles = StyleSheet.create({
   emailLinks: {
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.sm,
-    paddingTop: spacing.xs,
   },
   emailLink: {
     minHeight: touchTarget.min,
@@ -462,25 +430,5 @@ const styles = StyleSheet.create({
   },
   oauthList: {
     gap: spacing.xs,
-  },
-  oauthRow: {
-    minHeight: touchTarget.min,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-    paddingHorizontal: spacing.md,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  oauthRowPressed: {
-    backgroundColor: colors.primarySoftPressed,
-  },
-  oauthRowDisabled: {
-    opacity: 0.5,
-  },
-  oauthRowText: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
 });

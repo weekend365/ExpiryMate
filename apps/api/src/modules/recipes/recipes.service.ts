@@ -3,6 +3,7 @@ import {
   BadGatewayException,
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
   ServiceUnavailableException,
 } from "@nestjs/common";
@@ -87,6 +88,8 @@ const nonFoodCategories = new Set<ProductCategory>([
 
 @Injectable()
 export class RecipesService {
+  private readonly logger = new Logger(RecipesService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly privacyService: PrivacyService,
@@ -315,7 +318,23 @@ export class RecipesService {
         throw error;
       }
 
-      throw new BadGatewayException("요리 추천을 생성하지 못했습니다.");
+      this.logger.error(
+        "Recipe generation failed",
+        error instanceof Error ? error.stack : String(error),
+      );
+
+      // Keep the user-facing copy conversational; include a short operator hint
+      // when OpenAI rejects the configured model or credentials.
+      const detail =
+        error instanceof Error ? error.message.trim().slice(0, 160) : "";
+      const looksLikeConfigIssue =
+        /api key|invalid_api_key|model|does not exist|404|401|429/i.test(detail);
+
+      throw new BadGatewayException(
+        looksLikeConfigIssue
+          ? "요리 추천 설정에 문제가 있어요. 잠시 후 다시 부탁하거나, 관리자에게 알려 주세요."
+          : "요리 추천을 생성하지 못했습니다.",
+      );
     }
   }
 

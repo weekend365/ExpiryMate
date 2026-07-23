@@ -5,6 +5,8 @@ interface SkeletonBlockProps {
   height?: number;
   width?: number | `${number}%`;
   radiusToken?: keyof typeof radius;
+  /** Use on dark surfaces (e.g. traffic strip) so placeholders stay visible. */
+  onDark?: boolean;
 }
 
 /** Soft placeholder block for loading layouts (keeps screen structure). */
@@ -12,6 +14,7 @@ export function SkeletonBlock({
   height = spacing.lg,
   width = "100%",
   radiusToken = "lg",
+  onDark = false,
 }: SkeletonBlockProps) {
   return (
     <View
@@ -19,6 +22,7 @@ export function SkeletonBlock({
       importantForAccessibility="no-hide-descendants"
       style={[
         styles.block,
+        onDark && styles.blockOnDark,
         {
           height,
           width,
@@ -46,20 +50,32 @@ export function InventoryListSkeleton({ rows = 4 }: { rows?: number }) {
   );
 }
 
+const TRAFFIC_LAMP_SIZE = spacing.xxl + spacing.sm;
+
 export function HomeStatsSkeleton() {
   return (
-    <View style={styles.statsRow} accessibilityLabel="통계를 불러오고 있어요">
-      <View style={styles.statInline}>
-        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
-        <SkeletonBlock height={spacing.sm} width="70%" />
+    <View
+      style={styles.trafficGroup}
+      accessibilityLabel="통계를 불러오고 있어요"
+    >
+      <View style={styles.trafficStrip}>
+        {[0, 1, 2].map((index) => (
+          <View key={index} style={styles.trafficLampSlot}>
+            <SkeletonBlock
+              height={TRAFFIC_LAMP_SIZE}
+              width={TRAFFIC_LAMP_SIZE}
+              radiusToken="pill"
+              onDark
+            />
+          </View>
+        ))}
       </View>
-      <View style={styles.statInline}>
-        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
-        <SkeletonBlock height={spacing.sm} width="70%" />
-      </View>
-      <View style={styles.statInline}>
-        <SkeletonBlock height={spacing.lg} width={spacing.xl} />
-        <SkeletonBlock height={spacing.sm} width="70%" />
+      <View style={styles.trafficLabels}>
+        {[0, 1, 2].map((index) => (
+          <View key={index} style={styles.trafficLabelSlot}>
+            <SkeletonBlock height={spacing.sm} width="72%" />
+          </View>
+        ))}
       </View>
     </View>
   );
@@ -85,6 +101,9 @@ const styles = StyleSheet.create({
   block: {
     backgroundColor: colors.mutedSurface,
   },
+  blockOnDark: {
+    backgroundColor: colors.accent,
+  },
   list: {
     gap: spacing.sm,
   },
@@ -103,13 +122,29 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xs,
   },
-  statsRow: {
-    flexDirection: "row",
-    gap: spacing.sm,
+  trafficGroup: {
+    gap: spacing.xs,
   },
-  statInline: {
+  trafficStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.pill,
+    backgroundColor: colors.text,
+  },
+  trafficLampSlot: {
     flex: 1,
-    gap: spacing.xxs,
-    paddingVertical: spacing.xs,
+    alignItems: "center",
+  },
+  trafficLabels: {
+    flexDirection: "row",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  trafficLabelSlot: {
+    flex: 1,
+    alignItems: "center",
   },
 });

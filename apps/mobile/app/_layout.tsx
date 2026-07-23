@@ -64,21 +64,24 @@ export default function RootLayout() {
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "재료 넣기" }} />
               <Stack.Screen name="inventory/[id]" options={{ title: "재료 살펴보기" }} />
-              <Stack.Screen name="auth/login" options={{ title: "어서 오세요" }} />
-              <Stack.Screen name="auth/register" options={{ title: "함께 시작하기" }} />
+              <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+              <Stack.Screen name="auth/register" options={{ headerShown: false }} />
               <Stack.Screen
                 name="auth/forgot-password"
-                options={{ title: "비밀번호를 잊었어요" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="auth/reset-password"
-                options={{ title: "비밀번호 다시 정하기" }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="auth/verify-pending"
-                options={{ title: "메일함 확인", headerBackVisible: false }}
+                options={{ headerShown: false }}
               />
-              <Stack.Screen name="auth/verify-email" options={{ title: "메일 확인" }} />
+              <Stack.Screen
+                name="auth/verify-email"
+                options={{ headerShown: false }}
+              />
               <Stack.Screen
                 name="privacy/index"
                 options={{ title: "개인정보와 추천 안내" }}

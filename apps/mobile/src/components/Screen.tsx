@@ -1,7 +1,10 @@
+import { router } from "expo-router";
+import { ChevronLeft } from "lucide-react-native";
 import type { PropsWithChildren, ReactElement, ReactNode } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   type RefreshControlProps,
   ScrollView,
   StyleSheet,
@@ -11,7 +14,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors, spacing, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface ScreenProps extends PropsWithChildren {
   title?: string;
@@ -21,6 +24,12 @@ interface ScreenProps extends PropsWithChildren {
   headerAction?: ReactNode;
   footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
+  /**
+   * When true, show a back control if the stack can go back.
+   * Opt-in only — home/tabs must not inherit a back chevron.
+   * Pair with stack `headerShown: false` so Screen owns the intro chrome.
+   */
+  showBack?: boolean;
 }
 
 export function Screen({
@@ -32,18 +41,44 @@ export function Screen({
   headerAction,
   footer,
   contentStyle,
+  showBack = false,
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
+  const shouldShowBack = Boolean(showBack && router.canGoBack());
 
   const content = (
     <>
-      {title ? (
-        <View style={styles.header}>
-          <View style={styles.headerCopy}>
-            <Text style={styles.title}>{title}</Text>
-            {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
-          </View>
-          {headerAction ? <View style={styles.headerAction}>{headerAction}</View> : null}
+      {shouldShowBack || title ? (
+        <View style={styles.headerBlock}>
+          {shouldShowBack ? (
+            <Pressable
+              onPress={() => router.back()}
+              accessibilityRole="button"
+              accessibilityLabel="이전 화면으로"
+              hitSlop={spacing.xs}
+              style={({ pressed }) => [
+                styles.backButton,
+                pressed && styles.backButtonPressed,
+              ]}
+            >
+              <ChevronLeft
+                color={colors.text}
+                size={spacing.md}
+                strokeWidth={2.4}
+              />
+            </Pressable>
+          ) : null}
+          {title ? (
+            <View style={styles.header}>
+              <View style={styles.headerCopy}>
+                <Text style={styles.title}>{title}</Text>
+                {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+              </View>
+              {headerAction ? (
+                <View style={styles.headerAction}>{headerAction}</View>
+              ) : null}
+            </View>
+          ) : null}
         </View>
       ) : null}
       {children}
@@ -105,11 +140,25 @@ const styles = StyleSheet.create({
   staticContent: {
     flex: 1,
   },
+  headerBlock: {
+    gap: spacing.xs,
+    marginBottom: spacing.xs,
+  },
+  backButton: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: -spacing.xs,
+  },
+  backButtonPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
   header: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: spacing.md,
-    marginBottom: spacing.xs,
   },
   headerCopy: {
     flex: 1,
