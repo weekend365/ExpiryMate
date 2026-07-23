@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { Barcode, Package } from "lucide-react-native";
+import { Barcode, Package, PenLine } from "lucide-react-native";
 import { Pressable, RefreshControl, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
@@ -21,6 +21,9 @@ import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 const RECENT_PREVIEW_COUNT = 2;
+const EXPIRING_PREVIEW_COUNT = 2;
+/** Escalate hero to danger when priority items reach this count. */
+const DANGER_PRIORITY_THRESHOLD = 3;
 
 export default function HomeScreen() {
   const {
@@ -47,6 +50,7 @@ export default function HomeScreen() {
 
   const expiringItems = data?.expiringItems ?? [];
   const recentItems = data?.recentItems ?? [];
+  const expiringPreview = expiringItems.slice(0, EXPIRING_PREVIEW_COUNT);
   const recentPreview = recentItems.slice(0, RECENT_PREVIEW_COUNT);
   const todayExpiryCount = data?.todayExpiryCount ?? 0;
   const within3DaysCount = data?.within3DaysCount ?? 0;
@@ -56,6 +60,13 @@ export default function HomeScreen() {
   const priorityCount = within3DaysCount;
   const hasInventory = hasLoaded && totalActiveCount > 0;
   const needsAttention = hasLoaded && priorityCount > 0;
+
+  const focusTone = getHomeFocusTone({
+    isInitialError,
+    needsAttention,
+    priorityCount,
+    todayExpiryCount,
+  });
 
   const focus = getHomeFocus({
     isInitialLoading,
@@ -102,6 +113,17 @@ export default function HomeScreen() {
     router.push("/(tabs)/inventory");
   };
 
+  const openExpiringInventory = () => {
+    router.push({
+      pathname: "/(tabs)/inventory",
+      params: { filter: "expiring" },
+    });
+  };
+
+  const showAddEntries = focus.showSecondaryEntry;
+  const showBarcodeEntry = showAddEntries && focus.action !== "scanner";
+  const showManualEntry = showAddEntries;
+
   return (
     <Screen
       title="오늘"
@@ -120,15 +142,18 @@ export default function HomeScreen() {
         />
       }
     >
-      <SurfaceCard
-        variant="hero"
-        tone={isInitialError || needsAttention ? "danger" : "primary"}
-      >
+      <SurfaceCard variant="hero" tone={focusTone}>
         <View style={styles.focusRow}>
           <View style={styles.focusCopy}>
             <AppText
               variant="label"
-              tone={isInitialError || needsAttention ? "danger" : "primary"}
+              tone={
+                focusTone === "danger"
+                  ? "danger"
+                  : focusTone === "warning"
+                    ? "warning"
+                    : "primary"
+              }
             >
               지금 해야 할 한 가지
             </AppText>
@@ -153,56 +178,42 @@ export default function HomeScreen() {
         </View>
 
         {focus.ctaLabel ? (
-          <Button
-            icon={
-              focus.action === "scanner"
-                ? Barcode
-                : focus.action === "retry"
-                  ? undefined
-                  : Package
-            }
-            onPress={handlePrimaryAction}
-            fullWidth
-            variant={
-              isInitialError || needsAttention ? "danger" : "primary"
-            }
-          >
-            {focus.ctaLabel}
-          </Button>
-        ) : null}
-
-        {focus.showSecondaryEntry ? (
-          <Pressable
-            onPress={
-              focus.action === "scanner" ? handleManualRegister : handleOpenScanner
-            }
-            style={({ pressed }) => [
-              styles.secondaryEntry,
-              pressed && styles.secondaryEntryPressed,
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel={
-              focus.action === "scanner"
-                ? "직접 입력할게요"
-                : "바코드로 넣을래요"
-            }
-            accessibilityHint={
-              focus.action === "scanner"
-                ? "이름과 유통기한을 손으로 적을 수도 있어요."
-                : "장고가 바코드를 읽어 넣는 걸 도와줄게요."
-            }
-          >
-            <AppText variant="bodyStrong" tone="primary">
-              {focus.action === "scanner"
-                ? "직접 입력할게요"
-                : "바코드로 넣을래요"}
-            </AppText>
-            <AppText variant="label" tone="subtext">
-              {focus.action === "scanner"
-                ? "이름과 유통기한을 손으로 적을 수도 있어요."
-                : "장고가 바코드를 읽어 넣는 걸 도와줄게요."}
-            </AppText>
-          </Pressable>
+          <View style={styles.ctaBlock}>
+            <Button
+              icon={
+                focus.action === "scanner"
+                  ? Barcode
+                  : focus.action === "retry"
+                    ? undefined
+                    : Package
+              }
+              onPress={handlePrimaryAction}
+              fullWidth
+              variant={focusTone === "danger" ? "danger" : "primary"}
+            >
+              {focus.ctaLabel}
+            </Button>
+            {showBarcodeEntry ? (
+              <Button
+                icon={Barcode}
+                onPress={handleOpenScanner}
+                fullWidth
+                variant="surface"
+              >
+                바코드로 넣을래요
+              </Button>
+            ) : null}
+            {showManualEntry ? (
+              <Button
+                icon={PenLine}
+                onPress={handleManualRegister}
+                fullWidth
+                variant="surface"
+              >
+                직접 입력할게요
+              </Button>
+            ) : null}
+          </View>
         ) : null}
       </SurfaceCard>
 
@@ -248,26 +259,46 @@ export default function HomeScreen() {
       {isInitialLoading ? (
         <HomeStatsSkeleton />
       ) : isInitialError ? null : (
-        <SurfaceCard variant="inline" style={styles.statsRow}>
-          <StatCard
-            variant="inline"
-            label="오늘 만료"
-            value={todayExpiryCount}
-            tone={todayExpiryCount > 0 ? "danger" : "default"}
-          />
-          <StatCard
-            variant="inline"
-            label="7일 이내"
-            value={within7DaysCount}
-            tone={within7DaysCount > 0 ? "warning" : "default"}
-          />
-          <StatCard
-            variant="inline"
-            label="보관 중"
-            value={totalActiveCount}
-            tone={totalActiveCount > 0 ? "success" : "default"}
-          />
-        </SurfaceCard>
+        <View
+          style={styles.trafficGroup}
+          accessibilityRole="summary"
+          accessibilityLabel={`오늘 만료 ${todayExpiryCount}개, 7일 이내 ${within7DaysCount}개, 보관 중 ${totalActiveCount}개`}
+        >
+          <View style={styles.trafficStrip}>
+            <StatCard
+              variant="traffic"
+              label="오늘 만료"
+              value={todayExpiryCount}
+              tone="danger"
+              showLabel={false}
+            />
+            <StatCard
+              variant="traffic"
+              label="7일 이내"
+              value={within7DaysCount}
+              tone="warning"
+              showLabel={false}
+            />
+            <StatCard
+              variant="traffic"
+              label="보관 중"
+              value={totalActiveCount}
+              tone="success"
+              showLabel={false}
+            />
+          </View>
+          <View style={styles.trafficLabels} importantForAccessibility="no-hide-descendants">
+            <AppText variant="caption" tone="subtext" style={styles.trafficLabel}>
+              오늘 만료
+            </AppText>
+            <AppText variant="caption" tone="subtext" style={styles.trafficLabel}>
+              7일 이내
+            </AppText>
+            <AppText variant="caption" tone="subtext" style={styles.trafficLabel}>
+              보관 중
+            </AppText>
+          </View>
+        </View>
       )}
 
       <View style={styles.section}>
@@ -302,9 +333,9 @@ export default function HomeScreen() {
               void refetch();
             }}
           />
-        ) : expiringItems.length ? (
+        ) : expiringPreview.length ? (
           <View style={styles.list}>
-            {expiringItems.map((item) => (
+            {expiringPreview.map((item) => (
               <InventoryCard
                 key={item.id}
                 item={item}
@@ -316,6 +347,21 @@ export default function HomeScreen() {
                 }
               />
             ))}
+            {expiringItems.length > EXPIRING_PREVIEW_COUNT ? (
+              <Pressable
+                onPress={openExpiringInventory}
+                accessibilityRole="button"
+                accessibilityLabel="임박한 재료 더 보기"
+                style={({ pressed }) => [
+                  styles.inventoryLink,
+                  pressed && styles.inventoryLinkPressed,
+                ]}
+              >
+                <AppText variant="bodyStrong" tone="primary">
+                  보관함에서 더 볼게요
+                </AppText>
+              </Pressable>
+            ) : null}
           </View>
         ) : (
           <EmptyState
@@ -417,6 +463,35 @@ export default function HomeScreen() {
   );
 }
 
+function getHomeFocusTone({
+  isInitialError,
+  needsAttention,
+  priorityCount,
+  todayExpiryCount,
+}: {
+  isInitialError: boolean;
+  needsAttention: boolean;
+  priorityCount: number;
+  todayExpiryCount: number;
+}): "primary" | "warning" | "danger" {
+  if (isInitialError) {
+    return "danger";
+  }
+
+  if (!needsAttention) {
+    return "primary";
+  }
+
+  if (
+    todayExpiryCount > 0 ||
+    priorityCount >= DANGER_PRIORITY_THRESHOLD
+  ) {
+    return "danger";
+  }
+
+  return "warning";
+}
+
 function getHomeFocus({
   isInitialLoading,
   isInitialError,
@@ -492,22 +567,29 @@ const styles = StyleSheet.create({
   focusMascot: {
     flexShrink: 0,
   },
-  secondaryEntry: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
+  ctaBlock: {
+    gap: spacing.xs,
+  },
+  trafficGroup: {
+    gap: spacing.xs,
+  },
+  trafficStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    gap: spacing.xxs,
-    minHeight: touchTarget.min,
-    justifyContent: "center",
+    borderRadius: radius.pill,
+    backgroundColor: colors.text,
   },
-  secondaryEntryPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  statsRow: {
+  trafficLabels: {
     flexDirection: "row",
-    gap: spacing.md,
-    paddingVertical: spacing.xs,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+  },
+  trafficLabel: {
+    flex: 1,
+    textAlign: "center",
   },
   section: {
     gap: spacing.sm,

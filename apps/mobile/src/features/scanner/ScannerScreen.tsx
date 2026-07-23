@@ -25,6 +25,7 @@ import {
 import Animated, {
   cancelAnimation,
   Easing,
+  interpolate,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -38,10 +39,14 @@ import { Mascot, type MascotMood } from "../../components/Mascot";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
+import {
+  SCAN_FRAME_HEIGHT,
+  SCAN_FRAME_SIDE_INSET,
+  SCAN_LINE_HEIGHT,
+  SCAN_LINE_INSET,
+  SCAN_LINE_TRAVEL,
+} from "./scanGuide";
 import { useProductScanner } from "./useProductScanner";
-
-const SCAN_FRAME_HEIGHT = spacing.xxxl + spacing.xxxl + spacing.xl;
-const SCAN_LINE_TRAVEL = SCAN_FRAME_HEIGHT - spacing.lg;
 
 export function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -255,7 +260,10 @@ function ScannerCameraExperience() {
           </View>
         ) : (
           <>
-            <ScannerGuide showSuccess={showBarcodeSuccess} />
+            <ScannerGuide
+              showSuccess={showBarcodeSuccess}
+              onGuideFrameChange={scanner.setGuideFrame}
+            />
 
             <View style={styles.bottomStack}>
               {scanner.productLookupStatus === "loading" ? (
@@ -282,12 +290,12 @@ function ScannerCameraExperience() {
                     torchEnabled ? "플래시 끌게요" : "플래시 켤게요"
                   }
                   style={({ pressed }) => [
-                    styles.cameraAction,
-                    torchEnabled && styles.cameraActionActive,
+                    styles.flashButton,
+                    torchEnabled && styles.flashButtonActive,
                     pressed &&
                       (torchEnabled
-                        ? styles.cameraActionActivePressed
-                        : styles.cameraActionPressed),
+                        ? styles.flashButtonActivePressed
+                        : styles.flashButtonPressed),
                   ]}
                 >
                   <Flashlight
@@ -295,22 +303,14 @@ function ScannerCameraExperience() {
                     size={spacing.sm + spacing.xxs}
                     strokeWidth={2.4}
                   />
-                  <Text
-                    style={[
-                      styles.cameraActionLabel,
-                      torchEnabled && styles.cameraActionLabelActive,
-                    ]}
-                  >
-                    {torchEnabled ? "플래시 켰어요" : "플래시 켤게요"}
-                  </Text>
                 </Pressable>
                 <Pressable
                   onPress={handleManualRegistration}
                   accessibilityRole="button"
                   accessibilityLabel="바코드 없이 직접 입력할게요"
                   style={({ pressed }) => [
-                    styles.cameraAction,
-                    pressed && styles.cameraActionPressed,
+                    styles.manualAction,
+                    pressed && styles.manualActionPressed,
                   ]}
                 >
                   <PenLine
@@ -318,7 +318,7 @@ function ScannerCameraExperience() {
                     size={spacing.sm + spacing.xxs}
                     strokeWidth={2.4}
                   />
-                  <Text style={styles.cameraActionLabel}>직접 입력할게요</Text>
+                  <Text style={styles.manualActionLabel}>직접 입력할게요</Text>
                 </Pressable>
               </View>
 
@@ -468,64 +468,99 @@ function ScannerCameraExperience() {
   );
 }
 
-function ScannerGuide({ showSuccess }: { showSuccess: boolean }) {
+function ScannerGuide({
+  showSuccess,
+  onGuideFrameChange,
+}: {
+  showSuccess: boolean;
+  onGuideFrameChange: (frame: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null) => void;
+}) {
   const reduceMotion = useReducedMotion();
-  const scanLineOffset = useSharedValue<number>(spacing.none);
+  const scanLineProgress = useSharedValue(0);
+  const frameRef = useRef<View>(null);
 
   useEffect(() => {
-    cancelAnimation(scanLineOffset);
+    cancelAnimation(scanLineProgress);
 
     if (reduceMotion || showSuccess) {
-      scanLineOffset.value = spacing.none;
+      scanLineProgress.value = 0;
       return undefined;
     }
 
-    scanLineOffset.value = spacing.none;
-    scanLineOffset.value = withRepeat(
-      withTiming(SCAN_LINE_TRAVEL, {
-        duration: 1600,
-        easing: Easing.inOut(Easing.cubic),
+    scanLineProgress.value = 0;
+    scanLineProgress.value = withRepeat(
+      withTiming(1, {
+        duration: 1800,
+        easing: Easing.inOut(Easing.quad),
       }),
       -1,
       true,
     );
 
-    return () => cancelAnimation(scanLineOffset);
-  }, [reduceMotion, scanLineOffset, showSuccess]);
+    return () => cancelAnimation(scanLineProgress);
+  }, [reduceMotion, scanLineProgress, showSuccess]);
 
-  const scanLineStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: scanLineOffset.value }],
-  }));
+  const scanLineStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(
+      scanLineProgress.value,
+      [0, 1],
+      [0, SCAN_LINE_TRAVEL],
+    );
+    const opacity = interpolate(
+      scanLineProgress.value,
+      [0, 0.15, 0.85, 1],
+      [0.35, 1, 1, 0.35],
+    );
+
+    return {
+      opacity,
+      transform: [{ translateY }],
+    };
+  });
+
+  const handleFrameLayout = () => {
+    frameRef.current?.measureInWindow((x, y, width, height) => {
+      if (width <= 0 || height <= 0) {
+        onGuideFrameChange(null);
+        return;
+      }
+
+      onGuideFrameChange({ x, y, width, height });
+    });
+  };
 
   return (
     <View style={styles.guideArea} pointerEvents="none">
-      <View style={styles.guideScrim} />
-      <View style={styles.guideMiddle}>
-        <View style={styles.guideSideScrim} />
-        <View style={styles.scanFrame}>
-          <View style={[styles.corner, styles.cornerTopLeft]} />
-          <View style={[styles.corner, styles.cornerTopRight]} />
-          <View style={[styles.corner, styles.cornerBottomLeft]} />
-          <View style={[styles.corner, styles.cornerBottomRight]} />
-          {showSuccess ? (
-            <View style={styles.scanSuccess}>
-              <CheckCircle2
-                color={colors.surface}
-                size={spacing.xl}
-                strokeWidth={2.5}
-              />
-            </View>
-          ) : reduceMotion ? (
-            <View style={styles.scanLine} />
-          ) : (
-            <Animated.View
-              style={[styles.scanLine, styles.scanLineAnimated, scanLineStyle]}
+      <View
+        ref={frameRef}
+        style={styles.scanFrame}
+        onLayout={handleFrameLayout}
+      >
+        <View style={[styles.corner, styles.cornerTopLeft]} />
+        <View style={[styles.corner, styles.cornerTopRight]} />
+        <View style={[styles.corner, styles.cornerBottomLeft]} />
+        <View style={[styles.corner, styles.cornerBottomRight]} />
+        {showSuccess ? (
+          <View style={styles.scanSuccess}>
+            <CheckCircle2
+              color={colors.surface}
+              size={spacing.xl}
+              strokeWidth={2.5}
             />
-          )}
-        </View>
-        <View style={styles.guideSideScrim} />
+          </View>
+        ) : reduceMotion ? (
+          <View style={[styles.scanLine, styles.scanLineStatic]} />
+        ) : (
+          <Animated.View style={[styles.scanLine, scanLineStyle]}>
+            <View style={styles.scanLineCore} />
+          </Animated.View>
+        )}
       </View>
-      <View style={styles.guideScrim} />
     </View>
   );
 }
@@ -647,42 +682,41 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.surface,
+    textShadowColor: colors.cameraControl,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   guideArea: {
     flex: 1,
-    alignItems: "stretch",
-  },
-  guideScrim: {
-    flex: 1,
-    backgroundColor: colors.cameraScrim,
-  },
-  guideMiddle: {
-    height: SCAN_FRAME_HEIGHT,
-    flexDirection: "row",
-  },
-  guideSideScrim: {
-    width: spacing.lg,
-    backgroundColor: colors.cameraScrim,
+    justifyContent: "center",
+    paddingHorizontal: SCAN_FRAME_SIDE_INSET,
   },
   scanFrame: {
-    flex: 1,
     height: SCAN_FRAME_HEIGHT,
-    borderWidth: 1,
-    borderColor: colors.surface,
     borderRadius: radius.xxl,
     overflow: "hidden",
   },
   scanLine: {
     position: "absolute",
-    top: spacing.sm,
+    top: SCAN_LINE_INSET,
     left: spacing.md,
     right: spacing.md,
-    height: spacing.xxs,
+    height: SCAN_LINE_HEIGHT + spacing.xxs,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  scanLineStatic: {
+    top: SCAN_FRAME_HEIGHT / 2 - SCAN_LINE_HEIGHT,
+  },
+  scanLineCore: {
+    width: "100%",
+    height: SCAN_LINE_HEIGHT,
     borderRadius: radius.pill,
     backgroundColor: colors.primary,
-  },
-  scanLineAnimated: {
-    opacity: 0.9,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.9,
+    shadowRadius: spacing.xs,
   },
   scanSuccess: {
     ...StyleSheet.absoluteFillObject,
@@ -692,35 +726,35 @@ const styles = StyleSheet.create({
   },
   corner: {
     position: "absolute",
-    width: spacing.lg,
-    height: spacing.lg,
+    width: spacing.xl,
+    height: spacing.xl,
     borderColor: colors.primary,
     zIndex: 1,
   },
   cornerTopLeft: {
-    top: 0,
-    left: 0,
+    top: spacing.xs,
+    left: spacing.xs,
     borderTopWidth: spacing.xxs,
     borderLeftWidth: spacing.xxs,
     borderTopLeftRadius: radius.lg,
   },
   cornerTopRight: {
-    top: 0,
-    right: 0,
+    top: spacing.xs,
+    right: spacing.xs,
     borderTopWidth: spacing.xxs,
     borderRightWidth: spacing.xxs,
     borderTopRightRadius: radius.lg,
   },
   cornerBottomLeft: {
-    bottom: 0,
-    left: 0,
+    bottom: spacing.xs,
+    left: spacing.xs,
     borderBottomWidth: spacing.xxs,
     borderLeftWidth: spacing.xxs,
     borderBottomLeftRadius: radius.lg,
   },
   cornerBottomRight: {
-    right: 0,
-    bottom: 0,
+    right: spacing.xs,
+    bottom: spacing.xs,
     borderRightWidth: spacing.xxs,
     borderBottomWidth: spacing.xxs,
     borderBottomRightRadius: radius.lg,
@@ -730,36 +764,48 @@ const styles = StyleSheet.create({
   },
   cameraActions: {
     flexDirection: "row",
+    alignItems: "center",
     gap: spacing.sm,
   },
-  cameraAction: {
+  flashButton: {
+    width: touchTarget.min,
+    height: touchTarget.min,
+    borderRadius: radius.pill,
+    backgroundColor: colors.cameraControl,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  flashButtonActive: {
+    backgroundColor: colors.primarySoft,
+  },
+  flashButtonActivePressed: {
+    backgroundColor: colors.primarySoftPressed,
+  },
+  flashButtonPressed: {
+    backgroundColor: colors.cameraControlPressed,
+  },
+  manualAction: {
     flex: 1,
     minHeight: touchTarget.min,
     borderRadius: radius.pill,
     backgroundColor: colors.cameraControl,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: spacing.md,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xs,
   },
-  cameraActionActive: {
-    backgroundColor: colors.primarySoft,
-  },
-  cameraActionActivePressed: {
-    backgroundColor: colors.primarySoftPressed,
-  },
-  cameraActionPressed: {
+  manualActionPressed: {
     backgroundColor: colors.cameraControlPressed,
   },
-  cameraActionLabel: {
+  manualActionLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.surface,
-  },
-  cameraActionLabelActive: {
-    color: colors.text,
+    textShadowColor: colors.cameraControl,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   loadingStrip: {
     minHeight: touchTarget.min,

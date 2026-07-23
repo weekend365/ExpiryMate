@@ -12,7 +12,7 @@ import { colors, radius, spacing, touchTarget, typography } from "../shared/them
 
 interface ButtonProps extends PropsWithChildren {
   onPress: () => void;
-  variant?: "primary" | "secondary" | "danger";
+  variant?: "primary" | "secondary" | "danger" | "surface";
   icon?: LucideIcon;
   iconPosition?: "left" | "right";
   size?: "medium" | "small";
@@ -68,6 +68,8 @@ export function Button({
         styles.base,
         size === "small" ? styles.smallButton : styles.mediumButton,
         fullWidth && styles.fullWidth,
+        (variant === "surface" || variant === "danger") && styles.outlined,
+        variant === "danger" && styles.dangerOutline,
         { backgroundColor: pressed ? palette.pressedBackgroundColor : palette.backgroundColor },
         isDisabled && {
           backgroundColor: palette.disabledBackgroundColor,
@@ -103,11 +105,20 @@ const buttonPalettes = {
     textColor: colors.primary,
     disabledTextColor: colors.disabledText,
   },
+  /** White fill + danger border — stays visible on soft-tinted hero cards. */
   danger: {
-    backgroundColor: colors.dangerSoft,
-    pressedBackgroundColor: colors.dangerSoftPressed,
+    backgroundColor: colors.surface,
+    pressedBackgroundColor: colors.dangerSoft,
     disabledBackgroundColor: colors.mutedSurface,
     textColor: colors.danger,
+    disabledTextColor: colors.disabledText,
+  },
+  /** White surface — use on soft-tinted cards so the control doesn't blend in. */
+  surface: {
+    backgroundColor: colors.surface,
+    pressedBackgroundColor: colors.surfacePressed,
+    disabledBackgroundColor: colors.mutedSurface,
+    textColor: colors.primary,
     disabledTextColor: colors.disabledText,
   },
 };
@@ -130,6 +141,13 @@ const styles = StyleSheet.create({
   },
   fullWidth: {
     alignSelf: "stretch",
+  },
+  outlined: {
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  dangerOutline: {
+    borderColor: colors.danger,
   },
   label: {
     fontFamily: typography.bodyStrong.fontFamily,

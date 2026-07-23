@@ -46,9 +46,11 @@ export function SurfaceCard({
           borderColor:
             tone === "danger"
               ? colors.dangerSoft
-              : tone === "primary"
-                ? colors.primarySoft
-                : colors.border,
+              : tone === "warning"
+                ? colors.warningSoft
+                : tone === "primary"
+                  ? colors.primarySoft
+                  : colors.border,
         },
         style,
       ]}

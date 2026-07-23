@@ -1,14 +1,22 @@
 import TextRecognition, {
   TextRecognitionScript,
+  type Frame,
   type TextRecognitionResult,
 } from "@react-native-ml-kit/text-recognition";
 import { BarcodeLookupSource } from "@expirymate/shared";
 import type { BarcodeScanningResult } from "expo-camera";
 import type { CameraView } from "expo-camera";
 import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
-import { Vibration } from "react-native";
+import { Dimensions, Vibration } from "react-native";
 import { lookupBarcodeProduct } from "../../services/api";
 import { parseExpirationDate } from "./parseExpirationDate";
+import {
+  guideFrameToImageRect,
+  isBarcodeCenterInGuide,
+  isImageFrameCenterInGuide,
+  type GuideFrameLayout,
+  type ImageFrame,
+} from "./scanGuide";
 
 export type ScannerMode = "barcode" | "ocr" | "confirm";
 export type ProductLookupStatus = "idle" | "loading" | "success" | "not-found" | "error";
@@ -44,6 +52,7 @@ export function useProductScanner() {
   const scanProcessingRef = useRef(false);
   const scanTokenRef = useRef(0);
   const lookupAbortRef = useRef<AbortController | null>(null);
+  const guideFrameRef = useRef<GuideFrameLayout | null>(null);
 
   const [mode, setMode] = useState<ScannerMode>("barcode");
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -60,6 +69,10 @@ export function useProductScanner() {
   const updateMode = useCallback((nextMode: ScannerMode) => {
     modeRef.current = nextMode;
     setMode(nextMode);
+  }, []);
+
+  const setGuideFrame = useCallback((frame: GuideFrameLayout | null) => {
+    guideFrameRef.current = frame;
   }, []);
 
   useEffect(() => {
@@ -171,6 +184,17 @@ export function useProductScanner() {
         return;
       }
 
+      const windowSize = Dimensions.get("window");
+      if (
+        !isBarcodeCenterInGuide(
+          result.bounds,
+          guideFrameRef.current,
+          windowSize,
+        )
+      ) {
+        return;
+      }
+
       const normalizedBarcode = normalizeProductBarcode(result.data);
 
       if (!normalizedBarcode) {
@@ -197,12 +221,13 @@ export function useProductScanner() {
     setIsScanProcessing(true);
 
     try {
-      const imageUrl = await captureImageUri(cameraRef);
+      const capture = await captureImage(cameraRef);
       const result = await TextRecognition.recognize(
-        imageUrl,
+        capture.uri,
         TextRecognitionScript.KOREAN,
       );
-      const expirationDate = findExpirationDate(result);
+      const guideRect = resolveGuideRectInImage(capture, guideFrameRef.current);
+      const expirationDate = findExpirationDate(result, guideRect);
 
       if (!expirationDate || scanTokenRef.current !== scanToken) {
         return;
@@ -277,6 +302,7 @@ export function useProductScanner() {
     cameraErrorMessage,
     confirmation,
     resetScanner,
+    setGuideFrame,
     handleCameraReady,
     handleMountError,
     handleBarcodeScanEvent,
@@ -297,7 +323,7 @@ function normalizeProductBarcode(rawValue: string) {
   return null;
 }
 
-async function captureImageUri(cameraRef: RefObject<CameraView | null>) {
+async function captureImage(cameraRef: RefObject<CameraView | null>) {
   const camera = cameraRef.current;
 
   if (!camera) {
@@ -313,11 +339,32 @@ async function captureImageUri(cameraRef: RefObject<CameraView | null>) {
     throw new Error("Failed to capture image");
   }
 
-  return photo.uri.startsWith("file://") ? photo.uri : `file://${photo.uri}`;
+  return {
+    uri: photo.uri.startsWith("file://") ? photo.uri : `file://${photo.uri}`,
+    width: photo.width,
+    height: photo.height,
+  };
 }
 
-function findExpirationDate(result: TextRecognitionResult) {
-  for (const text of getRecognizedTextCandidates(result)) {
+function resolveGuideRectInImage(
+  capture: { width: number; height: number },
+  guide: GuideFrameLayout | null,
+): ImageFrame | null {
+  if (!guide || capture.width <= 0 || capture.height <= 0) {
+    return null;
+  }
+
+  return guideFrameToImageRect(guide, capture, Dimensions.get("window"));
+}
+
+function findExpirationDate(
+  result: TextRecognitionResult,
+  guideRect: ImageFrame | null,
+) {
+  const guided = getGuidedTextCandidates(result, guideRect);
+  const candidates = guided.length > 0 ? guided : getRecognizedTextCandidates(result);
+
+  for (const text of candidates) {
     const parsed = parseExpirationDate(text);
 
     if (parsed) {
@@ -326,6 +373,55 @@ function findExpirationDate(result: TextRecognitionResult) {
   }
 
   return null;
+}
+
+function getGuidedTextCandidates(
+  result: TextRecognitionResult,
+  guideRect: ImageFrame | null,
+) {
+  if (!guideRect) {
+    return [];
+  }
+
+  const texts: string[] = [];
+
+  for (const block of result.blocks) {
+    if (!isImageFrameCenterInGuide(toImageFrame(block.frame), guideRect)) {
+      continue;
+    }
+
+    texts.push(block.text);
+
+    for (const line of block.lines) {
+      if (
+        line.frame &&
+        !isImageFrameCenterInGuide(toImageFrame(line.frame), guideRect)
+      ) {
+        continue;
+      }
+
+      texts.push(line.text);
+
+      for (const element of line.elements) {
+        texts.push(element.text);
+      }
+    }
+  }
+
+  return texts;
+}
+
+function toImageFrame(frame: Frame | undefined): ImageFrame | undefined {
+  if (!frame) {
+    return undefined;
+  }
+
+  return {
+    left: frame.left,
+    top: frame.top,
+    width: frame.width,
+    height: frame.height,
+  };
 }
 
 function getRecognizedTextCandidates(result: TextRecognitionResult) {
