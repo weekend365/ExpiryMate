@@ -24,9 +24,6 @@ export default function SettingsScreen() {
           <Text style={styles.brandMeta}>
             {appBrand.appNameEn} · {appBrand.productLineKo}
           </Text>
-          <Text style={styles.brandNote}>
-            OCR 인식은 아직 준비 중이에요. 지금은 직접 넣어주시면 돼요.
-          </Text>
         </View>
       </View>
 
