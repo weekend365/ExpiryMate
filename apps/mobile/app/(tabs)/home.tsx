@@ -47,6 +47,7 @@ export default function HomeScreen() {
   const {
     status: recipeGenerationStatus,
     errorMessage: recipeGenerationError,
+    acknowledgeRecipeGeneration,
   } = useRecipeGeneration();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
@@ -128,6 +129,13 @@ export default function HomeScreen() {
   };
 
   const openRecommendations = () => {
+    if (
+      recipeGenerationStatus === "success" ||
+      recipeGenerationStatus === "error"
+    ) {
+      acknowledgeRecipeGeneration();
+    }
+
     router.push("/(tabs)/recommendations");
   };
 
