@@ -8,6 +8,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { ChevronLeft } from "lucide-react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
+import type { MascotMood } from "./Mascot";
 
 export interface StepFlowStep {
   key: string;
@@ -26,6 +28,9 @@ interface StepFlowProps extends PropsWithChildren {
    */
   footer?: ReactNode;
   headerAccessory?: ReactNode;
+  /** When set, replaces the step description with a speaking-mascot bubble. */
+  guideMessage?: string;
+  guideMood?: Extract<MascotMood, "speak" | "think" | "point" | "idle">;
 }
 
 const SPRING = {
@@ -40,12 +45,15 @@ export function StepFlow({
   onBack,
   footer,
   headerAccessory,
+  guideMessage,
+  guideMood = "speak",
   children,
 }: StepFlowProps) {
   const safeIndex = Math.min(Math.max(currentIndex, 0), Math.max(steps.length - 1, 0));
   const activeStep = steps[safeIndex];
   const contentOpacity = useSharedValue(1);
   const contentOffset = useSharedValue(0);
+  const resolvedGuide = guideMessage?.trim() || undefined;
 
   useEffect(() => {
     contentOpacity.value = 0;
@@ -106,7 +114,7 @@ export function StepFlow({
           <View style={styles.stepCopy}>
             <Text style={styles.stepEyebrow}>{activeStep.label}</Text>
             <Text style={styles.stepTitle}>{activeStep.title}</Text>
-            {activeStep.description ? (
+            {!resolvedGuide && activeStep.description ? (
               <Text style={styles.stepDescription}>{activeStep.description}</Text>
             ) : null}
           </View>
@@ -114,6 +122,14 @@ export function StepFlow({
             <View style={styles.headerAccessory}>{headerAccessory}</View>
           ) : null}
         </View>
+
+        {resolvedGuide ? (
+          <MascotSpeechBubble
+            message={resolvedGuide}
+            mood={guideMood}
+            size="small"
+          />
+        ) : null}
       </View>
 
       <Animated.View style={[styles.content, contentStyle]}>{children}</Animated.View>

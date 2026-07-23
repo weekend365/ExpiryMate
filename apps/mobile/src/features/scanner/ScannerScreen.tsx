@@ -36,6 +36,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { Mascot, type MascotMood } from "../../components/Mascot";
+import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
@@ -108,19 +109,23 @@ function ScannerCameraExperience() {
             ? "이름을 직접 알려주세요"
             : "상품 정보";
 
-  const instructionTitle = showBarcodeSuccess
-    ? "바코드를 읽었어요"
-    : scanner.mode === "barcode"
-      ? "바코드를 가운데에 맞춰 주세요"
-      : "유통기한이 잘 보이게 비춰 주세요";
+  const guideMood: Extract<MascotMood, "speak" | "think"> =
+    scanner.mode === "ocr" && scanner.isOcrProcessing && !showBarcodeSuccess
+      ? "think"
+      : "speak";
 
-  const instructionDescription = showBarcodeSuccess
-    ? "이제 같은 영역에 유통기한을 비춰 주세요."
+  const guideMessage = showBarcodeSuccess
+    ? "바코드를 읽었어요. 이제 유통기한을 같은 곳에 비춰 주세요."
     : scanner.mode === "barcode"
-      ? "인식되면 이어서 유통기한도 확인할게요."
+      ? "바코드를 가운데에 맞춰 주세요. 인식되면 유통기한도 이어서 볼게요."
       : scanner.isOcrProcessing
         ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
-        : "날짜가 또렷하게 보이면 장고가 읽어볼게요.";
+        : "유통기한이 잘 보이게 비춰 주세요. 또렷하면 장고가 읽어볼게요.";
+
+  const hasInlineScanError = Boolean(
+    scanner.cameraErrorMessage ||
+      (scanner.mode === "ocr" && scanner.ocrErrorMessage),
+  );
 
   useEffect(() => {
     const previousMode = previousModeRef.current;
@@ -262,6 +267,8 @@ function ScannerCameraExperience() {
           <>
             <ScannerGuide
               showSuccess={showBarcodeSuccess}
+              guideMessage={hasInlineScanError ? null : guideMessage}
+              guideMood={guideMood}
               onGuideFrameChange={scanner.setGuideFrame}
             />
 
@@ -320,35 +327,6 @@ function ScannerCameraExperience() {
                   />
                   <Text style={styles.manualActionLabel}>직접 입력할게요</Text>
                 </Pressable>
-              </View>
-
-              <View
-                style={styles.instructionCard}
-                accessibilityLiveRegion="polite"
-              >
-                <View style={styles.instructionIcon}>
-                  {showBarcodeSuccess ? (
-                    <CheckCircle2
-                      color={colors.success}
-                      size={spacing.md}
-                      strokeWidth={2.4}
-                    />
-                  ) : scanner.mode === "barcode" ? (
-                    <Barcode color={colors.primary} size={spacing.md} strokeWidth={2.4} />
-                  ) : (
-                    <CalendarDays
-                      color={colors.primary}
-                      size={spacing.md}
-                      strokeWidth={2.4}
-                    />
-                  )}
-                </View>
-                <View style={styles.instructionCopy}>
-                  <Text style={styles.instructionTitle}>{instructionTitle}</Text>
-                  <Text style={styles.instructionDescription}>
-                    {instructionDescription}
-                  </Text>
-                </View>
               </View>
             </View>
           </>
@@ -470,9 +448,13 @@ function ScannerCameraExperience() {
 
 function ScannerGuide({
   showSuccess,
+  guideMessage,
+  guideMood = "speak",
   onGuideFrameChange,
 }: {
   showSuccess: boolean;
+  guideMessage: string | null;
+  guideMood?: Extract<MascotMood, "speak" | "think">;
   onGuideFrameChange: (frame: {
     x: number;
     y: number;
@@ -535,31 +517,44 @@ function ScannerGuide({
   };
 
   return (
-    <View style={styles.guideArea} pointerEvents="none">
-      <View
-        ref={frameRef}
-        style={styles.scanFrame}
-        onLayout={handleFrameLayout}
-      >
-        <View style={[styles.corner, styles.cornerTopLeft]} />
-        <View style={[styles.corner, styles.cornerTopRight]} />
-        <View style={[styles.corner, styles.cornerBottomLeft]} />
-        <View style={[styles.corner, styles.cornerBottomRight]} />
-        {showSuccess ? (
-          <View style={styles.scanSuccess}>
-            <CheckCircle2
-              color={colors.surface}
-              size={spacing.xl}
-              strokeWidth={2.5}
+    <View style={styles.guideStage} pointerEvents="box-none">
+      <View style={styles.guideCluster} pointerEvents="box-none">
+        {guideMessage ? (
+          <View style={styles.guideBubbleWrap} pointerEvents="none">
+            <MascotSpeechBubble
+              message={guideMessage}
+              mood={guideMood}
+              size="small"
             />
           </View>
-        ) : reduceMotion ? (
-          <View style={[styles.scanLine, styles.scanLineStatic]} />
-        ) : (
-          <Animated.View style={[styles.scanLine, scanLineStyle]}>
-            <View style={styles.scanLineCore} />
-          </Animated.View>
-        )}
+        ) : null}
+        <View style={styles.guideArea} pointerEvents="none">
+          <View
+            ref={frameRef}
+            style={styles.scanFrame}
+            onLayout={handleFrameLayout}
+          >
+            <View style={[styles.corner, styles.cornerTopLeft]} />
+            <View style={[styles.corner, styles.cornerTopRight]} />
+            <View style={[styles.corner, styles.cornerBottomLeft]} />
+            <View style={[styles.corner, styles.cornerBottomRight]} />
+            {showSuccess ? (
+              <View style={styles.scanSuccess}>
+                <CheckCircle2
+                  color={colors.surface}
+                  size={spacing.xl}
+                  strokeWidth={2.5}
+                />
+              </View>
+            ) : reduceMotion ? (
+              <View style={[styles.scanLine, styles.scanLineStatic]} />
+            ) : (
+              <Animated.View style={[styles.scanLine, scanLineStyle]}>
+                <View style={styles.scanLineCore} />
+              </Animated.View>
+            )}
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -620,8 +615,7 @@ function PermissionCard({
 
 function InlineError({ message }: { message: string }) {
   return (
-    <View style={styles.errorStrip}>
-      <Mascot size="small" mood="worry" />
+    <View style={styles.errorStrip} accessibilityLiveRegion="polite">
       <Text style={styles.errorText}>{message}</Text>
     </View>
   );
@@ -686,10 +680,24 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
   },
-  guideArea: {
+  guideStage: {
     flex: 1,
     justifyContent: "center",
-    paddingHorizontal: SCAN_FRAME_SIDE_INSET,
+  },
+  guideCluster: {
+    position: "relative",
+    width: "100%",
+  },
+  guideBubbleWrap: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: "100%",
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.xxs,
+  },
+  guideArea: {
+    paddingHorizontal: SCAN_FRAME_SIDE_INSET - spacing.md,
   },
   scanFrame: {
     height: SCAN_FRAME_HEIGHT,
@@ -821,38 +829,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
-  },
-  instructionCard: {
-    borderRadius: radius.xxl,
-    backgroundColor: colors.surface,
-    padding: spacing.md,
-    flexDirection: "row",
-    gap: spacing.md,
-    alignItems: "flex-start",
-  },
-  instructionIcon: {
-    width: spacing.xl,
-    height: spacing.xl,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  instructionCopy: {
-    flex: 1,
-    gap: spacing.xs,
-  },
-  instructionTitle: {
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
-    color: colors.text,
-  },
-  instructionDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   errorStrip: {
     borderRadius: radius.xxl,

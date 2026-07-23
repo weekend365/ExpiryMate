@@ -20,7 +20,6 @@ import {
   ChefHat,
   ChevronRight,
   MapPin,
-  Package,
   Plus,
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -78,28 +77,30 @@ const REGISTRATION_STEPS: Array<{
   key: InputRegistrationStep;
   label: string;
   title: string;
-  description: string;
+  guideMessage: string;
 }> = [
   {
     key: "product",
     label: "재료",
     title: "어떤 재료인가요?",
-    description: "이름만 알려주시면 돼요. 예전에 넣었던 재료도 불러올 수 있어요.",
+    guideMessage:
+      "재료 이름만 알려주세요. 예전에 넣었던 재료라면 바로 불러올 수도 있어요.",
   },
   {
     key: "storage",
     label: "보관",
     title: "어디에, 몇 개 두나요?",
-    description: "보관 위치와 수량만 정하면 다음으로 넘어가요.",
+    guideMessage:
+      "어디에 둘지와 수량을 골라 주세요. 나머지는 필요할 때만 적어도 괜찮아요.",
   },
   {
     key: "expiry",
     label: "기한",
     title: "유통기한을 확인할까요?",
-    description: "빠른 선택으로 고르거나, 직접 날짜를 골라주세요.",
+    guideMessage:
+      "빠른 날짜를 고르거나, 달력에서 직접 확인해 주세요.",
   },
 ];
-
 const QUICK_EXPIRY_OPTIONS = [
   { label: "오늘", days: 0 },
   { label: "내일", days: 1 },
@@ -575,19 +576,10 @@ export default function RegisterScreen() {
         steps={REGISTRATION_STEPS}
         currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}
-        headerAccessory={
-          <View style={styles.stepIcon}>
-            {step === "product" ? (
-              <Package color={colors.primary} size={spacing.md} strokeWidth={2.5} />
-            ) : null}
-            {step === "storage" ? (
-              <MapPin color={colors.primary} size={spacing.md} strokeWidth={2.5} />
-            ) : null}
-            {step === "expiry" ? (
-              <CalendarDays color={colors.primary} size={spacing.md} strokeWidth={2.5} />
-            ) : null}
-          </View>
+        guideMessage={
+          REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage
         }
+        guideMood="speak"
       >
         {submitErrorMessage ? (
           <View style={styles.errorStrip}>
@@ -689,11 +681,11 @@ export default function RegisterScreen() {
               </View>
             ) : (
               <EmptyState
+                showMascot={false}
                 mood="empty"
                 title="아직 불러올 재료가 없어요"
                 description="한 번 넣어 두면, 다음부터는 여기서 바로 불러올 수 있어요."
-              />
-            )}
+              />            )}
           </>
         ) : null}
 
@@ -1035,14 +1027,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
-  },
-  stepIcon: {
-    width: spacing.xl,
-    height: spacing.xl,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-    alignItems: "center",
-    justifyContent: "center",
   },
   doneHero: {
     alignItems: "center",
