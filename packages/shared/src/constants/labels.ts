@@ -13,6 +13,48 @@ export const storageLocationLabels: Record<StorageLocation, string> = {
   [StorageLocation.KITCHEN]: "주방",
 };
 
+/** Fixed system keys users can pick. Bathroom stays for legacy rows only. */
+export const SYSTEM_STORAGE_LOCATION_KEYS = [
+  StorageLocation.FRIDGE,
+  StorageLocation.FREEZER,
+  StorageLocation.ROOM,
+  StorageLocation.KITCHEN,
+] as const;
+
+export type SystemStorageLocationKey =
+  (typeof SYSTEM_STORAGE_LOCATION_KEYS)[number];
+
+/** @deprecated Prefer SYSTEM_STORAGE_LOCATION_KEYS */
+export const selectableStorageLocations: StorageLocation[] = [
+  ...SYSTEM_STORAGE_LOCATION_KEYS,
+];
+
+export const isSystemStorageLocationKey = (
+  key: string,
+): key is SystemStorageLocationKey =>
+  (SYSTEM_STORAGE_LOCATION_KEYS as readonly string[]).includes(key);
+
+export const isKnownStorageLocationKey = (key: string): key is StorageLocation =>
+  Object.values(StorageLocation).includes(key as StorageLocation);
+
+export type StorageLocationLabelSource = {
+  key: string;
+  label: string;
+};
+
+/** Resolve a display label for a system, legacy, or custom storage key. */
+export const resolveStorageLocationLabel = (
+  key: string,
+  customLocations: StorageLocationLabelSource[] = [],
+): string => {
+  if (isKnownStorageLocationKey(key)) {
+    return storageLocationLabels[key];
+  }
+
+  const custom = customLocations.find((location) => location.key === key);
+  return custom?.label ?? key;
+};
+
 export const itemStatusLabels: Record<ItemStatus, string> = {
   [ItemStatus.ACTIVE]: "보관 중",
   [ItemStatus.CONSUMED]: "소비 완료",
@@ -42,10 +84,10 @@ export const productCategoryLabels: Record<ProductCategory, string> = {
   [ProductCategory.HOUSEHOLD]: "생활용품",
 };
 
-export const storageLocationOptions = Object.entries(storageLocationLabels).map(
-  ([value, label]) => ({
+export const storageLocationOptions = SYSTEM_STORAGE_LOCATION_KEYS.map(
+  (value) => ({
     value,
-    label,
+    label: storageLocationLabels[value],
   }),
 );
 

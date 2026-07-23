@@ -252,7 +252,7 @@ export class RecipesService {
       quantity: item.quantity,
       unit: item.unit,
       storageLocation:
-        item.storageLocation as RecipeInventorySnapshotItem["storageLocation"],
+        item.storageLocation,
       expiryDate: toKstDateOnly(item.expiryDate),
       daysUntilExpiry: calculateDaysLeftUntilExpiry(item.expiryDate, today),
     }));

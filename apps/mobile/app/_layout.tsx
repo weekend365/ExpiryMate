@@ -98,6 +98,10 @@ export default function RootLayout() {
                 name="settings/notifications"
                 options={{ title: "알림" }}
               />
+              <Stack.Screen
+                name="settings/storage-locations"
+                options={{ title: "보관 위치" }}
+              />
               <Stack.Screen name="settings/account" options={{ title: "계정" }} />
               <Stack.Screen
                 name="settings/subscription"

@@ -2,7 +2,7 @@ import {
   calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
   getExpiryBucket,
-  storageLocationLabels,
+  resolveStorageLocationLabel,
   type InventoryItem,
   type InventoryItemGroup,
 } from "@expirymate/shared";
@@ -14,7 +14,6 @@ import {
   CircleAlert,
   Clock3,
   MapPin,
-  MoreVertical,
   ShieldCheck,
   Trash2,
 } from "lucide-react-native";
@@ -28,11 +27,11 @@ interface InventoryGroupCardProps {
   onExpandedChange: (expanded: boolean) => void;
   onItemPress: (item: InventoryItem) => void;
   onItemLongPress?: (item: InventoryItem) => void;
-  onItemMenuPress?: (item: InventoryItem) => void;
   onItemDiscard?: (item: InventoryItem) => void;
   isDiscarding?: boolean;
   selectionMode?: boolean;
   selectedIds?: ReadonlySet<string>;
+  resolveLocationLabel?: (key: string) => string;
 }
 
 export function InventoryGroupCard({
@@ -41,21 +40,30 @@ export function InventoryGroupCard({
   onExpandedChange,
   onItemPress,
   onItemLongPress,
-  onItemMenuPress,
   onItemDiscard,
   isDiscarding = false,
   selectionMode = false,
   selectedIds,
+  resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryGroupCardProps) {
   const isExpandable = group.items.length > 1;
   const showLots = selectionMode || expanded;
-  const nearestExpiry = getExpiryPresentation(group.nearestExpiryDate);
+  const nearestItem = group.items[0]!;
   const expiryDateCount = new Set(
     group.items.map((item) => item.expiryDate),
   ).size;
   const quantityLabel = group.hasMixedUnits
-    ? `${group.items.length}개 보관 기록`
+    ? `보관 기록 ${group.items.length}건`
     : `총 ${group.totalQuantity}${group.unit ?? "개"}`;
+  const locationLabel = getGroupLocationLabel(group.items, resolveLocationLabel);
+  const nearestBucket = getExpiryBucket(group.nearestExpiryDate);
+  const showUrgentDiscard =
+    !selectionMode &&
+    !showLots &&
+    Boolean(onItemDiscard) &&
+    (nearestBucket === "expired" ||
+      nearestBucket === "today" ||
+      nearestBucket === "within_3_days");
 
   const handleSummaryPress = () => {
     if (selectionMode) {
@@ -63,7 +71,7 @@ export function InventoryGroupCard({
     }
 
     if (!isExpandable) {
-      onItemPress(group.items[0]!);
+      onItemPress(nearestItem);
       return;
     }
 
@@ -77,7 +85,7 @@ export function InventoryGroupCard({
         onPress={handleSummaryPress}
         disabled={selectionMode}
         accessibilityRole={selectionMode ? undefined : "button"}
-        accessibilityLabel={`${group.displayName}, ${quantityLabel}`}
+        accessibilityLabel={`${group.displayName}, ${locationLabel}, ${quantityLabel}`}
         accessibilityHint={
           isExpandable
             ? showLots
@@ -100,64 +108,94 @@ export function InventoryGroupCard({
               {group.brand}
             </Text>
           ) : null}
-          <Text style={styles.groupMeta}>
-            {quantityLabel} · 유통기한 {expiryDateCount}개
-          </Text>
+          <View style={styles.metaRow}>
+            <View style={styles.locationChip}>
+              <MapPin
+                color={colors.subtext}
+                size={spacing.sm}
+                strokeWidth={2.3}
+              />
+              <Text style={styles.locationChipLabel}>{locationLabel}</Text>
+            </View>
+            <Text style={styles.groupMeta}>
+              {quantityLabel} · 유통기한 {expiryDateCount}개
+            </Text>
+          </View>
         </View>
 
         <View style={styles.summaryAside}>
           <ExpiryBadge expiryDate={group.nearestExpiryDate} />
           {isExpandable ? (
-            <View style={styles.expandAffordance}>
-              <Text style={styles.expandLabel}>
-                {showLots ? "접기" : "날짜별 보기"}
-              </Text>
-              {showLots ? (
-                <ChevronUp
-                  color={colors.primary}
-                  size={spacing.sm}
-                  strokeWidth={2.4}
-                />
-              ) : (
-                <ChevronDown
-                  color={colors.primary}
-                  size={spacing.sm}
-                  strokeWidth={2.4}
-                />
-              )}
-            </View>
-          ) : (
-            <Text style={[styles.expiryState, { color: nearestExpiry.color }]}>
-              {nearestExpiry.stateLabel}
-            </Text>
-          )}
+            showLots ? (
+              <ChevronUp
+                color={colors.primary}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+              />
+            ) : (
+              <ChevronDown
+                color={colors.primary}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+              />
+            )
+          ) : null}
         </View>
       </Pressable>
+
+      {showUrgentDiscard ? (
+        <View style={styles.urgentActionRow}>
+          <Pressable
+            disabled={isDiscarding}
+            onPress={() => onItemDiscard?.(nearestItem)}
+            accessibilityRole="button"
+            accessibilityLabel={`${group.displayName} 정리할게요`}
+            style={({ pressed }) => [
+              styles.urgentActionButton,
+              pressed && styles.urgentActionButtonPressed,
+              isDiscarding && styles.urgentActionButtonDisabled,
+            ]}
+          >
+            <Trash2
+              color={colors.danger}
+              size={spacing.sm + spacing.xxs}
+              strokeWidth={2.4}
+            />
+            <Text style={styles.urgentActionLabel}>정리할게요</Text>
+          </Pressable>
+        </View>
+      ) : null}
 
       {showLots ? (
         <View style={styles.lotList}>
           <View style={styles.divider} />
-          <Text style={styles.lotSectionLabel}>유통기한별 보관 목록</Text>
-          {group.items.map((item) => {
+          {group.items.map((item, index) => {
             const selected = selectedIds?.has(item.id) ?? false;
+            const bucket = getExpiryBucket(item.expiryDate);
+            const showUrgentBadge = bucket !== "safe";
             const row = (
               <Pressable
                 onPress={() => onItemPress(item)}
                 onLongPress={() => onItemLongPress?.(item)}
                 accessibilityRole="button"
-                accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${item.quantity}${item.unit ?? "개"}`}
+                accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${resolveLocationLabel(item.storageLocation)}, ${item.quantity}${item.unit ?? "개"}`}
                 accessibilityHint={
                   selectionMode
                     ? selected
                       ? "선택됨. 다시 누르면 선택을 해제해요."
                       : "누르면 정리할 재료로 골라요."
-                    : "이 유통기한의 재료를 자세히 살펴봐요."
+                    : "자세히 보려면 누르고, 고르려면 길게 누르고, 정리하려면 밀어 주세요."
                 }
                 accessibilityState={
                   selectionMode ? { selected } : undefined
                 }
                 style={({ pressed }) => [
                   styles.lotRow,
+                  index > 0 && styles.lotRowBorder,
                   selected && styles.lotRowSelected,
                   pressed && styles.lotRowPressed,
                 ]}
@@ -180,48 +218,17 @@ export function InventoryGroupCard({
                 ) : null}
 
                 <View style={styles.lotCopy}>
-                  <View style={styles.lotDateRow}>
-                    <CalendarDays
-                      color={colors.mutedText}
-                      size={spacing.sm}
-                      strokeWidth={2.3}
-                    />
-                    <Text style={styles.lotDate}>
-                      {formatDateKoreanCompact(item.expiryDate)}
-                    </Text>
-                  </View>
-                  <View style={styles.lotMetaRow}>
-                    <MapPin
-                      color={colors.mutedText}
-                      size={spacing.sm}
-                      strokeWidth={2.3}
-                    />
-                    <Text style={styles.lotMeta} numberOfLines={1}>
-                      {storageLocationLabels[item.storageLocation]} · {item.quantity}
-                      {item.unit ?? "개"}
-                    </Text>
-                  </View>
+                  <Text style={styles.lotDate}>
+                    {formatDateKoreanCompact(item.expiryDate)}
+                  </Text>
+                  <Text style={styles.lotMeta} numberOfLines={1}>
+                    {resolveLocationLabel(item.storageLocation)} · {item.quantity}
+                    {item.unit ?? "개"}
+                  </Text>
                 </View>
 
-                <ExpiryBadge expiryDate={item.expiryDate} compact />
-
-                {!selectionMode && onItemMenuPress ? (
-                  <Pressable
-                    onPress={() => onItemMenuPress(item)}
-                    hitSlop={spacing.xs}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)} 재료 더보기`}
-                    style={({ pressed }) => [
-                      styles.menuButton,
-                      pressed && styles.menuButtonPressed,
-                    ]}
-                  >
-                    <MoreVertical
-                      color={colors.subtext}
-                      size={spacing.sm + spacing.xxs}
-                      strokeWidth={2.4}
-                    />
-                  </Pressable>
+                {showUrgentBadge ? (
+                  <ExpiryBadge expiryDate={item.expiryDate} compact />
                 ) : null}
               </Pressable>
             );
@@ -270,6 +277,21 @@ export function InventoryGroupCard({
   );
 }
 
+function getGroupLocationLabel(
+  items: InventoryItem[],
+  resolveLocationLabel: (key: string) => string,
+): string {
+  const locations = new Set(
+    items.map((item) => item.storageLocation),
+  );
+
+  if (locations.size === 1) {
+    return resolveLocationLabel([...locations][0]!);
+  }
+
+  return "여러 위치";
+}
+
 function ExpiryBadge({
   expiryDate,
   compact = false,
@@ -311,31 +333,26 @@ function getExpiryPresentation(expiryDate: string) {
       backgroundColor: colors.dangerSoft,
       color: colors.danger,
       icon: CircleAlert,
-      stateLabel: "만료됨",
     },
     today: {
       backgroundColor: colors.dangerSoft,
       color: colors.danger,
       icon: Clock3,
-      stateLabel: "오늘 만료",
     },
     within_3_days: {
       backgroundColor: colors.warningSoft,
       color: colors.warning,
       icon: Clock3,
-      stateLabel: "임박",
     },
     within_7_days: {
       backgroundColor: colors.primarySoft,
       color: colors.primary,
       icon: CalendarDays,
-      stateLabel: "곧 만료",
     },
     safe: {
       backgroundColor: colors.successSoft,
       color: colors.success,
       icon: ShieldCheck,
-      stateLabel: "안전",
     },
   }[bucket];
 
@@ -376,6 +393,27 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
+  metaRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  locationChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+  },
+  locationChipLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
+  },
   groupMeta: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
@@ -383,53 +421,56 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   summaryAside: {
-    alignItems: "flex-end",
+    alignItems: "center",
+    flexDirection: "row",
     gap: spacing.xs,
   },
-  expandAffordance: {
-    minHeight: touchTarget.icon,
+  urgentActionRow: {
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  urgentActionButton: {
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
-    gap: spacing.xxs,
+    justifyContent: "center",
+    gap: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.dangerSoft,
+    backgroundColor: colors.dangerSoft,
+    paddingHorizontal: spacing.sm,
   },
-  expandLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
+  urgentActionButtonPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  urgentActionButtonDisabled: {
+    opacity: 0.55,
+  },
+  urgentActionLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
-  },
-  expiryState: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    color: colors.danger,
   },
   divider: {
     height: 1,
     backgroundColor: colors.border,
   },
   lotList: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.md,
-    gap: spacing.xs,
-  },
-  lotSectionLabel: {
-    paddingTop: spacing.xs,
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
+    paddingBottom: spacing.xs,
   },
   lotRow: {
-    minHeight: touchTarget.cta,
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-    paddingLeft: spacing.sm,
-    paddingRight: spacing.xs,
-    paddingVertical: spacing.xs,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
+    gap: spacing.sm,
+  },
+  lotRowBorder: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   lotRowSelected: {
     backgroundColor: colors.primarySoft,
@@ -441,24 +482,13 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xxs,
   },
-  lotDateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
   lotDate: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
-  lotMetaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
   lotMeta: {
-    flex: 1,
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
@@ -481,16 +511,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
   },
-  menuButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuButtonPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
   selectionIndicator: {
     width: spacing.lg,
     height: spacing.lg,
@@ -512,7 +532,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.danger,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: spacing.xs,
+    marginVertical: spacing.xs,
+    marginRight: spacing.sm,
     gap: spacing.xxs,
     paddingHorizontal: spacing.xs,
   },

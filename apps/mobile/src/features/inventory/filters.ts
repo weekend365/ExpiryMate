@@ -2,11 +2,28 @@ import {
   calculateDaysLeftUntilExpiry,
   getExpiryBucket,
   sortInventoryByNearestExpiry,
-  StorageLocation,
   type InventoryItem,
+  type InventoryItemGroup,
 } from "@expirymate/shared";
 
 export type InventoryViewFilter = "all" | "today" | "within7" | "expired";
+
+export type InventoryUrgencySection = "today" | "within7" | "safe";
+
+export const inventoryUrgencySectionOrder: InventoryUrgencySection[] = [
+  "today",
+  "within7",
+  "safe",
+];
+
+export const inventoryUrgencySectionTitles: Record<
+  InventoryUrgencySection,
+  string
+> = {
+  today: "오늘 만료",
+  within7: "7일 이내",
+  safe: "여유 있어요",
+};
 
 const inventoryViewFilters = new Set<InventoryViewFilter>([
   "all",
@@ -37,12 +54,31 @@ export const parseInventoryViewFilter = (
   return raw as InventoryViewFilter;
 };
 
+const matchesSearchQuery = (item: InventoryItem, searchQuery: string) => {
+  const needle = searchQuery.trim().toLowerCase();
+
+  if (!needle) {
+    return true;
+  }
+
+  const haystacks = [item.displayName, item.brand].filter(
+    (value): value is string => Boolean(value),
+  );
+
+  return haystacks.some((value) => value.toLowerCase().includes(needle));
+};
+
 export const filterInventoryItems = (
   items: InventoryItem[],
   filter: InventoryViewFilter,
-  location: StorageLocation | "all",
+  location: string | "all",
+  searchQuery = "",
 ) => {
   const filtered = items.filter((item) => {
+    if (!matchesSearchQuery(item, searchQuery)) {
+      return false;
+    }
+
     if (location !== "all" && item.storageLocation !== location) {
       return false;
     }
@@ -66,4 +102,43 @@ export const filterInventoryItems = (
   });
 
   return sortInventoryByNearestExpiry(filtered);
+};
+
+/** Map a group's nearest expiry into a list section bucket. */
+export const getInventoryUrgencySection = (
+  nearestExpiryDate: string,
+): InventoryUrgencySection => {
+  const daysLeft = calculateDaysLeftUntilExpiry(nearestExpiryDate);
+
+  if (daysLeft <= 0) {
+    return "today";
+  }
+
+  if (daysLeft <= 7) {
+    return "within7";
+  }
+
+  return "safe";
+};
+
+export const buildInventoryUrgencySections = (
+  groups: InventoryItemGroup[],
+) => {
+  const buckets: Record<InventoryUrgencySection, InventoryItemGroup[]> = {
+    today: [],
+    within7: [],
+    safe: [],
+  };
+
+  groups.forEach((group) => {
+    buckets[getInventoryUrgencySection(group.nearestExpiryDate)].push(group);
+  });
+
+  return inventoryUrgencySectionOrder
+    .filter((key) => buckets[key].length > 0)
+    .map((key) => ({
+      key,
+      title: inventoryUrgencySectionTitles[key],
+      data: buckets[key],
+    }));
 };

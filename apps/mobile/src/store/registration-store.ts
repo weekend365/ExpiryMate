@@ -2,7 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   ExpirySource,
   type ProductCategory,
-  StorageLocation,
 } from "@expirymate/shared";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -17,7 +16,7 @@ export interface RegistrationPrefill {
 export interface RegistrationDraft extends RegistrationPrefill {
   quantity?: number;
   unit?: string;
-  storageLocation?: StorageLocation;
+  storageLocation?: string;
   expiryDate?: string;
   expirySource?: ExpirySource;
   notes?: string;

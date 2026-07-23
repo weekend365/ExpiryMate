@@ -3,13 +3,12 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
-  StorageLocation,
   addDays,
+  fieldLimits,
   formatDateKorean,
   inventoryFormSchema,
   productCategoryLabels,
   productCategoryOptions,
-  storageLocationLabels,
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,10 +21,11 @@ import {
   ChevronRight,
   MapPin,
   Package,
+  Plus,
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, BackHandler, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
@@ -39,6 +39,8 @@ import { SectionHeader } from "../src/components/SectionHeader";
 import { StepFlow } from "../src/components/StepFlow";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
+import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
+import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
 import {
   type RegistrationDraft,
@@ -52,7 +54,7 @@ type RegistrationFormValues = {
   category?: ProductCategory;
   quantity: number;
   unit: string;
-  storageLocation: StorageLocation;
+  storageLocation: string;
   expiryDate: string;
   expirySource: ExpirySource;
   notes: string;
@@ -68,17 +70,9 @@ type RegisteredSessionItem = {
   displayName: string;
   quantity: number;
   unit?: string | null;
-  storageLocation: StorageLocation;
+  storageLocation: string;
   expiryDate: string;
 };
-
-const STORAGE_LOCATION_ORDER = [
-  StorageLocation.FRIDGE,
-  StorageLocation.FREEZER,
-  StorageLocation.ROOM,
-  StorageLocation.KITCHEN,
-  StorageLocation.BATHROOM,
-];
 
 const REGISTRATION_STEPS: Array<{
   key: InputRegistrationStep;
@@ -189,6 +183,10 @@ export default function RegisterScreen() {
   const [step, setStep] = useState<RegistrationStep>("product");
   // Only open when the user taps — prefill must not auto-pop the sheet on storage step.
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+  const [addLocationVisible, setAddLocationVisible] = useState(false);
+  const [newLocationLabel, setNewLocationLabel] = useState("");
+  const { selectableOptions, resolveLabel, createMutation } =
+    useStorageLocations();
   const [showAllRecentTemplates, setShowAllRecentTemplates] = useState(false);
   const [registeredSessionItems, setRegisteredSessionItems] = useState<
     RegisteredSessionItem[]
@@ -529,7 +527,7 @@ export default function RegisterScreen() {
                 <View key={item.id} style={styles.sessionRow}>
                   <Text style={styles.sessionName}>{item.displayName}</Text>
                   <Text style={styles.sessionMeta}>
-                    {storageLocationLabels[item.storageLocation]} · {item.quantity}
+                    {resolveLabel(item.storageLocation)} · {item.quantity}
                     {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
                   </Text>
                 </View>
@@ -639,7 +637,7 @@ export default function RegisterScreen() {
                     .slice(0, 2)
                     .map(
                       (item) =>
-                        `${storageLocationLabels[item.storageLocation]} · ${item.quantity}${item.unit ?? "개"}`,
+                        `${resolveLabel(item.storageLocation)} · ${item.quantity}${item.unit ?? "개"}`,
                     )
                     .join(" / ")}
                 </Text>
@@ -666,7 +664,7 @@ export default function RegisterScreen() {
                     >
                       <Text style={styles.templateName}>{item.displayName}</Text>
                       <Text style={styles.templateMeta}>
-                        {storageLocationLabels[item.storageLocation]} ·{" "}
+                        {resolveLabel(item.storageLocation)} ·{" "}
                         {item.unit ?? "개"}
                       </Text>
                     </Pressable>
@@ -707,19 +705,28 @@ export default function RegisterScreen() {
                 description="보관 위치를 하나만 골라 주세요."
               />
               <View style={styles.pillRow}>
-                {STORAGE_LOCATION_ORDER.map((location) => (
+                {selectableOptions.map((option) => (
                   <Pill
-                    key={location}
-                    label={storageLocationLabels[location]}
+                    key={option.key}
+                    label={option.label}
                     icon={MapPin}
-                    selected={storageLocation === location}
+                    selected={storageLocation === option.key}
                     onPress={() =>
-                      form.setValue("storageLocation", location, {
+                      form.setValue("storageLocation", option.key, {
                         shouldValidate: true,
                       })
                     }
                   />
                 ))}
+                <Pill
+                  label="위치 추가"
+                  icon={Plus}
+                  selected={false}
+                  onPress={() => {
+                    setNewLocationLabel("");
+                    setAddLocationVisible(true);
+                  }}
+                />
               </View>
             </View>
 
@@ -737,7 +744,7 @@ export default function RegisterScreen() {
               <View style={styles.inlineMeta}>
                 <Text style={styles.inlineMetaLabel}>지금 선택</Text>
                 <Text style={styles.inlineMetaValue}>
-                  {storageLocationLabels[storageLocation]} · {quantity}
+                  {resolveLabel(storageLocation)} · {quantity}
                   {unit}
                 </Text>
               </View>
@@ -825,7 +832,7 @@ export default function RegisterScreen() {
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryLabel}>보관</Text>
                 <Text style={styles.summaryValue}>
-                  {storageLocationLabels[storageLocation]} · {quantity}
+                  {resolveLabel(storageLocation)} · {quantity}
                   {unit}
                 </Text>
               </View>
@@ -875,7 +882,7 @@ export default function RegisterScreen() {
                 <View key={item.id} style={styles.sessionRow}>
                   <Text style={styles.sessionName}>{item.displayName}</Text>
                   <Text style={styles.sessionMeta}>
-                    {storageLocationLabels[item.storageLocation]} · {item.quantity}
+                    {resolveLabel(item.storageLocation)} · {item.quantity}
                     {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
                   </Text>
                 </View>
@@ -939,6 +946,59 @@ export default function RegisterScreen() {
           multiline
         />
       </BottomSheet>
+
+      <BottomSheet
+        visible={addLocationVisible}
+        onClose={() => setAddLocationVisible(false)}
+        title="어디에 둘까요?"
+        description="위치 이름을 알려 주시면 목록에 넣어 둘게요."
+        mascotMood="idle"
+        footer={
+          <Button
+            onPress={() => {
+              createMutation.mutate(
+                { label: newLocationLabel },
+                {
+                  onSuccess: (created) => {
+                    setAddLocationVisible(false);
+                    setNewLocationLabel("");
+                    form.setValue("storageLocation", created.key, {
+                      shouldValidate: true,
+                    });
+                    Alert.alert(
+                      "위치를 만들었어요",
+                      "방금 만든 위치를 골라 뒀어요.",
+                    );
+                  },
+                  onError: (error) =>
+                    Alert.alert(
+                      "앗, 잠시 문제가 생겼어요",
+                      getSettingsErrorMessage(error),
+                    ),
+                },
+              );
+            }}
+            loading={createMutation.isPending}
+            disabled={newLocationLabel.trim().length === 0}
+            fullWidth
+          >
+            여기에 보관할까요?
+          </Button>
+        }
+      >
+        <View style={styles.addLocationField}>
+          <Text style={styles.addLocationLabel}>위치 이름</Text>
+          <TextInput
+            value={newLocationLabel}
+            onChangeText={setNewLocationLabel}
+            placeholder="예: 팬트리"
+            placeholderTextColor={colors.mutedText}
+            maxLength={fieldLimits.storageLocationLabel}
+            autoFocus
+            style={styles.addLocationInput}
+          />
+        </View>
+      </BottomSheet>
     </Screen>
   );
 }
@@ -948,6 +1008,27 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.min,
     paddingHorizontal: spacing.sm,
     justifyContent: "center",
+  },
+  addLocationField: {
+    gap: spacing.xs,
+  },
+  addLocationLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.text,
+  },
+  addLocationInput: {
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    color: colors.text,
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.body.fontFamily,
   },
   headerBackLabel: {
     fontSize: typography.body.fontSize,

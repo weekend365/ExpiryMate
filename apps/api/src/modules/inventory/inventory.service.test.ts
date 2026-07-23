@@ -58,7 +58,9 @@ describe("InventoryService owner isolation", () => {
         create: vi.fn(),
       },
     };
-    service = new InventoryService(prisma as never);
+    service = new InventoryService(prisma as never, {
+      assertValidStorageLocation: vi.fn().mockResolvedValue(undefined),
+    } as never);
   });
 
   it("hides an item when the owner does not match", async () => {
@@ -124,6 +126,24 @@ describe("InventoryService owner isolation", () => {
     expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         expiryDate: new Date("2026-06-10T00:00:00.000Z"),
+      }),
+    });
+  });
+
+  it("creates inventory with a custom storage location key", async () => {
+    prisma.inventoryItem.create.mockResolvedValue({
+      ...inventoryItem,
+      storageLocation: "custom_pantry",
+    });
+
+    await service.create(
+      createBody({ storageLocation: "custom_pantry" }),
+      "owner-a",
+    );
+
+    expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        storageLocation: "custom_pantry",
       }),
     });
   });

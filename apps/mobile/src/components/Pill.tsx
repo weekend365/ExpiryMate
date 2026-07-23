@@ -9,6 +9,7 @@ interface PillProps {
   count?: number;
   tone?: "default" | "warning" | "danger" | "success";
   onPress: () => void;
+  accessibilityLabel?: string;
 }
 
 export function Pill({
@@ -18,6 +19,7 @@ export function Pill({
   count,
   tone = "default",
   onPress,
+  accessibilityLabel,
 }: PillProps) {
   const palette = tonePalettes[tone];
   const foregroundColor = selected ? colors.surface : palette.textColor;
@@ -29,7 +31,8 @@ export function Pill({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={
-        typeof count === "number" ? `${label}, ${count}개` : label
+        accessibilityLabel ??
+        (typeof count === "number" ? `${label}, ${count}개` : label)
       }
       accessibilityState={{ selected: Boolean(selected) }}
       style={({ pressed }) => [

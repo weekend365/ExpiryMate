@@ -42,6 +42,9 @@ export const useAuth = () => {
     queryClient.invalidateQueries({
       queryKey: sessionQueryKeys.notificationPreferences,
     });
+    queryClient.invalidateQueries({
+      queryKey: sessionQueryKeys.storageLocations,
+    });
     queryClient.invalidateQueries({ queryKey: sessionQueryKeys.subscription });
     queryClient.invalidateQueries({ queryKey: sessionQueryKeys.privacy });
   };

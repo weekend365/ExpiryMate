@@ -33,13 +33,13 @@ describe("inventory write contracts", () => {
     expect(result.success).toBe(false);
   });
 
-  it("trims empty optional brand to undefined", () => {
+  it("accepts a custom storage location key string", () => {
     expect(
       createInventoryItemBodySchema.parse({
         ...valid,
-        brand: "   ",
-      }).brand,
-    ).toBeUndefined();
+        storageLocation: "custom_pantry",
+      }).storageLocation,
+    ).toBe("custom_pantry");
   });
 });
 

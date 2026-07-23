@@ -133,14 +133,18 @@ export const filterExpiringItems = (
   });
 };
 
-export const buildLocationCounts = (items: InventoryItem[]) => {
-  const counts = Object.values(StorageLocation).reduce<Record<string, number>>(
-    (result, location) => {
-      result[location] = 0;
-      return result;
-    },
-    {},
-  );
+export const buildLocationCounts = (
+  items: InventoryItem[],
+  customKeys: string[] = [],
+) => {
+  const keys = [
+    ...Object.values(StorageLocation),
+    ...customKeys.filter((key) => !Object.values(StorageLocation).includes(key as StorageLocation)),
+  ];
+  const counts = keys.reduce<Record<string, number>>((result, location) => {
+    result[location] = 0;
+    return result;
+  }, {});
 
   items.forEach((item) => {
     counts[item.storageLocation] = (counts[item.storageLocation] ?? 0) + 1;

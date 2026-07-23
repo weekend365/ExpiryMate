@@ -11,7 +11,6 @@ import {
 import {
   createInventoryItemBodySchema,
   ItemStatus,
-  StorageLocation,
   updateInventoryItemBodySchema,
   type CreateInventoryItemBody,
   type UpdateInventoryItemBody,
@@ -32,7 +31,7 @@ export class InventoryController {
     @CurrentOwnerKey() ownerKey: string,
     @Query("q") q?: string,
     @Query("status") status?: ItemStatus,
-    @Query("storageLocation") storageLocation?: StorageLocation,
+    @Query("storageLocation") storageLocation?: string,
     @Query("expiringWithin") expiringWithin?: string,
     @Query("page") page?: string,
     @Query("limit") limit?: string,

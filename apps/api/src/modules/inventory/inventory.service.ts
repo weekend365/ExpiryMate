@@ -3,7 +3,6 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
-  StorageLocation,
 } from "@prisma/client";
 import {
   addDaysToDateOnly,
@@ -18,6 +17,7 @@ import type {
   CreateInventoryItemBody,
   UpdateInventoryItemBody,
 } from "@expirymate/shared";
+import { SettingsService } from "../settings/settings.service";
 
 const DEFAULT_PAGE_SIZE = 100;
 const MAX_PAGE_SIZE = 200;
@@ -26,7 +26,7 @@ interface FindInventoryParams {
   ownerKey: string;
   q?: string;
   status?: SharedItemStatus;
-  storageLocation?: StorageLocation;
+  storageLocation?: string;
   expiringWithin?: number;
   page?: number;
   limit?: number;
@@ -39,7 +39,10 @@ interface BatchDiscardParams {
 
 @Injectable()
 export class InventoryService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly settingsService: SettingsService,
+  ) {}
 
   async findAll(params: FindInventoryParams): Promise<InventoryListResponse> {
     const page = Math.max(1, params.page ?? 1);
@@ -108,6 +111,11 @@ export class InventoryService {
   }
 
   async create(dto: CreateInventoryItemBody, ownerKey: string) {
+    await this.settingsService.assertValidStorageLocation(
+      ownerKey,
+      dto.storageLocation,
+    );
+
     const item = await this.prisma.inventoryItem.create({
       data: {
         ownerKey,
@@ -117,7 +125,7 @@ export class InventoryService {
         category: dto.category as ProductCategory | undefined,
         quantity: dto.quantity,
         unit: dto.unit ?? "개",
-        storageLocation: dto.storageLocation as StorageLocation,
+        storageLocation: dto.storageLocation,
         expiryDate: parseExpiryDate(dto.expiryDate),
         expirySource: dto.expirySource as ExpirySource,
         status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
@@ -131,6 +139,13 @@ export class InventoryService {
   async update(id: string, dto: UpdateInventoryItemBody, ownerKey: string) {
     await this.findOne(id, ownerKey);
 
+    if (dto.storageLocation !== undefined) {
+      await this.settingsService.assertValidStorageLocation(
+        ownerKey,
+        dto.storageLocation,
+      );
+    }
+
     const item = await this.prisma.inventoryItem.update({
       where: { id },
       data: {
@@ -140,7 +155,7 @@ export class InventoryService {
         category: dto.category as ProductCategory | undefined,
         quantity: dto.quantity,
         unit: dto.unit,
-        storageLocation: dto.storageLocation as StorageLocation | undefined,
+        storageLocation: dto.storageLocation,
         expiryDate:
           dto.expiryDate === undefined ? undefined : parseExpiryDate(dto.expiryDate),
         expirySource: dto.expirySource as ExpirySource | undefined,

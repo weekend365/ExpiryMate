@@ -3,7 +3,7 @@ import {
   formatDateKoreanCompact,
   getExpiryBucket,
   itemStatusLabels,
-  storageLocationLabels,
+  resolveStorageLocationLabel,
   type InventoryItem,
 } from "@expirymate/shared";
 import {
@@ -125,7 +125,7 @@ export function InventoryCard({
         <View style={styles.metaRow}>
           <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
           <Text style={styles.meta} numberOfLines={1}>
-            {storageLocationLabels[item.storageLocation]} · {item.quantity}
+            {resolveStorageLocationLabel(item.storageLocation)} · {item.quantity}
             {item.unit ?? "개"} · {itemStatusLabels[item.status]}
           </Text>
         </View>

@@ -2,15 +2,12 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
-  StorageLocation,
   formatDateKorean,
   getExpiryBucket,
   inventoryFormSchema,
   itemStatusLabels,
   productCategoryLabels,
   productCategoryOptions,
-  storageLocationLabels,
-  storageLocationOptions,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -44,6 +41,7 @@ import {
   getInventoryItem,
   updateInventoryItem,
 } from "../../src/services/api";
+import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 
 type InventoryFormInput = z.input<typeof inventoryFormSchema>;
@@ -85,6 +83,7 @@ export default function InventoryDetailScreen() {
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { selectableOptions, resolveLabel } = useStorageLocations();
 
   const itemQuery = useQuery({
     queryKey: ["inventory-item", id],
@@ -125,7 +124,7 @@ export default function InventoryDetailScreen() {
     defaultValues: {
       displayName: "",
       quantity: 1,
-      storageLocation: StorageLocation.FRIDGE,
+      storageLocation: "fridge",
       expiryDate: "",
       expirySource: ExpirySource.MANUAL,
     },
@@ -331,18 +330,16 @@ export default function InventoryDetailScreen() {
                   description="보관 위치를 하나만 골라 주세요."
                 />
                 <View style={styles.pillRow}>
-                  {storageLocationOptions.map((option) => (
+                  {selectableOptions.map((option) => (
                     <Pill
-                      key={option.value}
+                      key={option.key}
                       label={option.label}
                       icon={MapPin}
-                      selected={storageLocation === option.value}
+                      selected={storageLocation === option.key}
                       onPress={() =>
-                        form.setValue(
-                          "storageLocation",
-                          option.value as StorageLocation,
-                          { shouldValidate: true },
-                        )
+                        form.setValue("storageLocation", option.key, {
+                          shouldValidate: true,
+                        })
                       }
                     />
                   ))}
@@ -480,7 +477,7 @@ export default function InventoryDetailScreen() {
             </Text>
             <Text style={styles.heroTitle}>{item.displayName}</Text>
             <Text style={styles.heroDescription}>
-              {storageLocationLabels[item.storageLocation]} · {item.quantity}
+              {resolveLabel(item.storageLocation)} · {item.quantity}
               {item.unit ?? "개"}
             </Text>
           </View>
@@ -497,7 +494,7 @@ export default function InventoryDetailScreen() {
         <SummaryRow
           icon={MapPin}
           label="보관 위치"
-          value={storageLocationLabels[item.storageLocation]}
+          value={resolveLabel(item.storageLocation)}
         />
         <SummaryRow
           icon={Package}

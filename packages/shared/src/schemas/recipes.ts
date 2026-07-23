@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { fieldLimits } from "../constants/field-limits";
-import { ProductCategory, StorageLocation } from "../enums/app-enums";
+import { ProductCategory } from "../enums/app-enums";
 import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
+import { storageLocationKeySchema } from "./inventory";
 
 export const recipeMealTypeSchema = z.enum([
   "any",
@@ -24,7 +25,7 @@ export const recipeInventorySnapshotItemSchema = z.object({
   category: z.nativeEnum(ProductCategory).nullable().optional(),
   quantity: z.number(),
   unit: z.string().max(fieldLimits.unit).nullable().optional(),
-  storageLocation: z.nativeEnum(StorageLocation),
+  storageLocation: storageLocationKeySchema,
   expiryDate: z
     .string()
     .regex(DATE_ONLY_PATTERN)
