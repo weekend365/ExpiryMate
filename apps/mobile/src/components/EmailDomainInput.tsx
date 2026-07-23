@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.xs,
   },
   localInput: {
-    flex: 1,
+    flex: 2.2,
     minHeight: touchTarget.cta,
     color: colors.text,
     fontSize: typography.body.fontSize,
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   domainInput: {
-    flex: 1.2,
+    flex: 1,
     minHeight: touchTarget.cta,
     color: colors.text,
     fontSize: typography.body.fontSize,
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   domainButton: {
-    flex: 1.2,
+    flex: 1,
     minHeight: touchTarget.min,
     justifyContent: "center",
   },

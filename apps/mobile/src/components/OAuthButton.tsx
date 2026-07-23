@@ -19,6 +19,14 @@ type OAuthButtonProps = {
 
 const ICON_SIZE = spacing.sm + spacing.xxs;
 
+/** Optical scale so logos feel equal despite different glyph mass in the same box. */
+const OPTICAL_SCALE: Record<OauthBrandProvider, number> = {
+  kakao: 1.08,
+  naver: 1.15,
+  google: 1,
+  apple: 1,
+};
+
 export function OAuthButton({
   provider,
   label,
@@ -52,7 +60,14 @@ export function OAuthButton({
       ) : (
         <>
           <View style={styles.iconSlot}>
-            <ProviderMark provider={provider} color={brand.text} />
+            <View
+              style={[
+                styles.iconOptical,
+                { transform: [{ scale: OPTICAL_SCALE[provider] }] },
+              ]}
+            >
+              <ProviderMark provider={provider} color={brand.text} />
+            </View>
           </View>
           <Text style={[styles.label, { color: brand.text }]}>{label}</Text>
         </>
@@ -156,6 +171,13 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   iconSlot: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "visible",
+  },
+  iconOptical: {
     width: ICON_SIZE,
     height: ICON_SIZE,
     alignItems: "center",

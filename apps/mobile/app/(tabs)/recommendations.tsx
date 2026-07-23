@@ -4,13 +4,22 @@ import type {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  ChevronDown,
+  ChevronUp,
   Clock3,
   SlidersHorizontal,
   Sparkles,
   Users,
 } from "lucide-react-native";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
+import {
+  LayoutAnimation,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -425,60 +434,105 @@ function RecipeCard({
   dish: RecipeRecommendationDish;
   index: number;
 }) {
+  const [expanded, setExpanded] = useState(false);
+  const ChevronIcon = expanded ? ChevronUp : ChevronDown;
+
+  const handleToggle = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setExpanded((current) => !current);
+  };
+
   return (
     <View style={styles.recipeCard}>
-      <View style={styles.recipeHeader}>
-        <View style={styles.recipeBadge}>
-          <Text style={styles.recipeBadgeText}>{index + 1}</Text>
+      <Pressable
+        onPress={handleToggle}
+        accessibilityRole="button"
+        accessibilityLabel={`${dish.title}, ${
+          expanded ? "레시피를 접어요" : "레시피를 펼쳐요"
+        }`}
+        accessibilityState={{ expanded }}
+        style={({ pressed }) => [
+          styles.recipeSummaryPressable,
+          pressed && styles.recipeSummaryPressed,
+        ]}
+      >
+        <View style={styles.recipeHeader}>
+          <View style={styles.recipeBadge}>
+            <Text style={styles.recipeBadgeText}>{index + 1}</Text>
+          </View>
+          <View style={styles.recipeTitleGroup}>
+            <Text style={styles.recipeTitle}>{dish.title}</Text>
+            <Text style={styles.recipeMeta}>
+              {dish.cookingTimeMinutes}분 · {difficultyLabels[dish.difficulty]} ·{" "}
+              {dish.servings}인분
+            </Text>
+          </View>
+          <View style={styles.recipeExpandAffordance}>
+            <Text style={styles.recipeExpandLabel}>
+              {expanded ? "접기" : "펼치기"}
+            </Text>
+            <ChevronIcon
+              color={colors.primary}
+              size={spacing.sm}
+              strokeWidth={2.4}
+            />
+          </View>
         </View>
-        <View style={styles.recipeTitleGroup}>
-          <Text style={styles.recipeTitle}>{dish.title}</Text>
-          <Text style={styles.recipeMeta}>
-            {dish.cookingTimeMinutes}분 · {difficultyLabels[dish.difficulty]} ·{" "}
-            {dish.servings}인분
-          </Text>
-        </View>
-      </View>
-      <Text style={styles.recipeSummary}>{dish.summary}</Text>
-
-      <View style={styles.recipeBlock}>
-        <Text style={styles.blockTitle}>사용할 재료</Text>
-        <Text style={styles.blockText}>
-          {dish.usedIngredients.map((ingredient) => ingredient.name).join(", ")}
+        <Text style={styles.recipeSummary} numberOfLines={expanded ? undefined : 2}>
+          {dish.summary}
         </Text>
-      </View>
+      </Pressable>
 
-      {dish.optionalMissingIngredients.length ? (
-        <View style={styles.recipeBlock}>
-          <Text style={styles.blockTitle}>있으면 좋은 재료</Text>
-          <Text style={styles.blockText}>
-            {dish.optionalMissingIngredients
-              .map((ingredient) => `${ingredient.name} (${ingredient.reason})`)
-              .join(", ")}
-          </Text>
-        </View>
-      ) : null}
+      {expanded ? (
+        <>
+          <View style={styles.recipeBlock}>
+            <Text style={styles.blockTitle}>사용할 재료</Text>
+            <Text style={styles.blockText}>
+              {dish.usedIngredients
+                .map((ingredient) => ingredient.name)
+                .join(", ")}
+            </Text>
+          </View>
 
-      <View style={styles.recipeBlock}>
-        <Text style={styles.blockTitle}>조리 순서</Text>
-        <View style={styles.stepList}>
-          {dish.steps.map((step, stepIndex) => (
-            <View key={`${dish.title}-step-${stepIndex}`} style={styles.stepRow}>
-              <Text style={styles.stepNumber}>{stepIndex + 1}</Text>
-              <Text style={styles.stepText}>{step}</Text>
+          {dish.optionalMissingIngredients.length ? (
+            <View style={styles.recipeBlock}>
+              <Text style={styles.blockTitle}>있으면 좋은 재료</Text>
+              <Text style={styles.blockText}>
+                {dish.optionalMissingIngredients
+                  .map(
+                    (ingredient) =>
+                      `${ingredient.name} (${ingredient.reason})`,
+                  )
+                  .join(", ")}
+              </Text>
             </View>
-          ))}
-        </View>
-      </View>
+          ) : null}
 
-      {dish.tips.length ? (
-        <View style={styles.recipeBlock}>
-          <Text style={styles.blockTitle}>팁</Text>
-          <Text style={styles.blockText}>{dish.tips.join(" ")}</Text>
-        </View>
+          <View style={styles.recipeBlock}>
+            <Text style={styles.blockTitle}>조리 순서</Text>
+            <View style={styles.stepList}>
+              {dish.steps.map((step, stepIndex) => (
+                <View
+                  key={`${dish.title}-step-${stepIndex}`}
+                  style={styles.stepRow}
+                >
+                  <Text style={styles.stepNumber}>{stepIndex + 1}</Text>
+                  <Text style={styles.stepText}>{step}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {dish.tips.length ? (
+            <View style={styles.recipeBlock}>
+              <Text style={styles.blockTitle}>팁</Text>
+              <Text style={styles.blockText}>{dish.tips.join(" ")}</Text>
+            </View>
+          ) : null}
+
+          <Text style={styles.safetyNote}>{dish.safetyNote}</Text>
+        </>
       ) : null}
-
-      <Text style={styles.safetyNote}>{dish.safetyNote}</Text>
     </View>
   );
 }
@@ -663,6 +717,13 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     gap: spacing.md,
   },
+  recipeSummaryPressable: {
+    gap: spacing.sm,
+    borderRadius: radius.lg,
+  },
+  recipeSummaryPressed: {
+    opacity: 0.85,
+  },
   recipeHeader: {
     flexDirection: "row",
     gap: spacing.sm,
@@ -696,6 +757,19 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
+    color: colors.primary,
+  },
+  recipeExpandAffordance: {
+    minHeight: touchTarget.icon,
+    minWidth: touchTarget.icon,
+    alignItems: "flex-end",
+    justifyContent: "center",
+    gap: spacing.xxs,
+  },
+  recipeExpandLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   recipeSummary: {
