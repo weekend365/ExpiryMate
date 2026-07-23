@@ -4,6 +4,7 @@ import {
   Bell,
   CreditCard,
   MapPin,
+  MessageCircleHeart,
   ShieldCheck,
   UserRound,
 } from "lucide-react-native";
@@ -23,9 +24,6 @@ export default function SettingsScreen() {
           <Text style={styles.brandName}>{appBrand.appNameKo}</Text>
           <Text style={styles.brandMeta}>
             {appBrand.appNameEn} · {appBrand.productLineKo}
-          </Text>
-          <Text style={styles.brandNote}>
-            OCR 인식은 아직 준비 중이에요. 지금은 직접 넣어주시면 돼요.
           </Text>
         </View>
       </View>
@@ -59,6 +57,12 @@ export default function SettingsScreen() {
             description="추천 한도와 구독 상태를 확인할 수 있어요."
             icon={CreditCard}
             onPress={() => router.push("/settings/subscription")}
+          />
+          <ListRow
+            title="장고에게 물어보기"
+            description="불편한 점이나 궁금한 점을 남겨 주세요."
+            icon={MessageCircleHeart}
+            onPress={() => router.push("/settings/support")}
           />
           <ListRow
             title="개인정보"

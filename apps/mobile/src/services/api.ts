@@ -30,6 +30,8 @@ import type {
   CreateUserStorageLocationBody,
   UpdateUserStorageLocationBody,
   UserStorageLocation,
+  SupportInquiry,
+  SupportInquiryCreateInput,
   SubscriptionEntitlement,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
@@ -407,6 +409,12 @@ export const getMe = async (): Promise<AuthUser | null> => {
 };
 
 export const getPrivacyStatus = () => request<PrivacyStatus>("/privacy/status");
+
+export const createSupportInquiry = (payload: SupportInquiryCreateInput) =>
+  request<SupportInquiry>("/support/inquiries", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
 export const acceptAiDataNotice = () =>
   request<AcceptAiDataNoticeResponse>("/privacy/ai-data-notice/accept", {

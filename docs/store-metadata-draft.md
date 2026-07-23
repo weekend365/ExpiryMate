@@ -19,8 +19,10 @@ Privacy Label 데이터 유형 근거: [`store-privacy-declarations.md`](./store
 | Marketing (없으면 비움 또는 Support와 동일) | 비워 두거나 Support와 동일 |
 
 문의 메일(방침에 노출): `PRIVACY_CONTACT_EMAIL` / 운영 연락처와 동일하게 맞출 것.
+인앱 고객 문의 수신: `SUPPORT_INBOX_EMAIL` (없으면 `PRIVACY_CONTACT_EMAIL`로 알림).
 
 App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 넣습니다.
+앱 안 문의: 설정 → **장고에게 물어보기** (티켓 저장 + 운영 메일 알림).
 
 ---
 
@@ -91,7 +93,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 |------------|------|------|------------------------|
 | Contact Info | 이메일 | App Functionality | 연결됨 / 추적 아님 |
 | Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
-| User Content | 재료·유통기한·추천 관련 내용 | App Functionality | 연결됨 / 추적 아님 |
+| User Content | 재료·유통기한·추천 관련 내용·고객 문의 본문 | App Functionality | 연결됨 / 추적 아님 |
 | Purchases | (IAP 검증 시) 구매 이력 | App Functionality | 연결됨 / 추적 아님 |
 
 제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push.  

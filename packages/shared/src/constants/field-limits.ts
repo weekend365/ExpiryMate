@@ -16,6 +16,7 @@ export const fieldLimits = {
   subscriptionPurchaseToken: 4096,
   recipeIngredientName: 120,
   recipeText: 2000,
+  supportInquiryBody: { min: 10, max: 2000 },
 } as const;
 
 /** Max custom storage locations per owner. */

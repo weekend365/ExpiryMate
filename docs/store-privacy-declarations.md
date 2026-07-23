@@ -24,6 +24,7 @@
 | 재료·유통기한·보관 위치 | 예 | 재고·알림·추천 입력 | 호스팅 DB; 추천 시 OpenAI로 snapshot | 항목 삭제·계정 정리 | User Content | App activity / Personal info (제품 데이터) |
 | 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers / Diagnostics(해당 시) | App info and performance / Device IDs |
 | AI 추천 요청·결과·재료 snapshot | 예 (추천 사용 시) | 추천 제공·히스토리 | **OpenAI(미국)** | 동의 철회·기록 삭제·계정 정리 | User Content | App activity |
+| 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
 | 결제/구독 영수증 검증 | 예 (IAP 사용 시) | 구독 확인 | Apple/Google | 스토어 구독 관리 | Purchases | Financial info |
 | 추적(광고 ID 등) | **아니오** | — | — | — | Data Not Collected / Tracking=No | Data is not collected for ads tracking |
 | 기기 연락처·사진 라이브러리(일반) | MVP 기준 아니오* | — | — | — | Not collected | Not collected |

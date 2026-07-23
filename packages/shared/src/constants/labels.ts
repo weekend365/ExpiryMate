@@ -3,6 +3,8 @@ import {
   ItemStatus,
   ProductCategory,
   StorageLocation,
+  SupportInquiryCategory,
+  SupportInquiryStatus,
 } from "../enums/app-enums";
 
 export const storageLocationLabels: Record<StorageLocation, string> = {
@@ -105,3 +107,26 @@ export const expiryPresetOptions = [
   { label: "14일 뒤", days: 14 },
   { label: "30일 뒤", days: 30 },
 ];
+
+export const supportInquiryCategoryLabels: Record<
+  SupportInquiryCategory,
+  string
+> = {
+  [SupportInquiryCategory.BUG]: "버그·오류",
+  [SupportInquiryCategory.ACCOUNT]: "계정·로그인",
+  [SupportInquiryCategory.RECIPE_AI]: "추천·AI",
+  [SupportInquiryCategory.OTHER]: "그 외",
+};
+
+export const supportInquiryStatusLabels: Record<SupportInquiryStatus, string> =
+  {
+    [SupportInquiryStatus.OPEN]: "열어 둔 문의",
+    [SupportInquiryStatus.CLOSED]: "마무리함",
+  };
+
+export const supportInquiryCategoryOptions = (
+  Object.values(SupportInquiryCategory) as SupportInquiryCategory[]
+).map((value) => ({
+  value,
+  label: supportInquiryCategoryLabels[value],
+}));

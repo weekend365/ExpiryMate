@@ -113,6 +113,7 @@ model User {
   subscriptionEntitlements   SubscriptionEntitlement[]
   pushTokens                 PushToken[]
   pushNotificationDeliveries PushNotificationDelivery[]
+  supportInquiries           SupportInquiry[]
 
   @@index([accountType])
   @@index([role])
@@ -392,4 +393,34 @@ model AdminAuditLog {
   @@index([createdAt])
   @@index([actorUserId, createdAt])
   @@index([action, createdAt])
+}
+
+enum SupportInquiryCategory {
+  bug
+  account
+  recipe_ai
+  other
+}
+
+enum SupportInquiryStatus {
+  open
+  closed
+}
+
+/// In-app customer support tickets (reply via email, not in-app thread).
+model SupportInquiry {
+  id          String                  @id @default(cuid())
+  userId      String
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category    SupportInquiryCategory
+  body        String
+  appVersion  String?
+  platform    String?
+  status      SupportInquiryStatus    @default(open)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@index([category, createdAt])
 }

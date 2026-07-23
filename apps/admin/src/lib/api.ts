@@ -6,6 +6,7 @@ import type {
   NotificationPreference,
   Product,
   ProductCategory,
+  SupportInquiry,
 } from "@expirymate/shared";
 
 const API_BASE_URL = resolveApiBaseUrl();
@@ -225,6 +226,45 @@ export const listInventory = (params?: {
 
 export type AdminInventoryListResponse = {
   items: InventoryItem[];
+  page: number;
+  limit: number;
+  totalCount: number;
+  hasMore: boolean;
+};
+
+export const listSupportInquiries = (params?: {
+  page?: number;
+  limit?: number;
+  status?: string;
+  category?: string;
+}) => {
+  const search = new URLSearchParams();
+  if (params?.page) {
+    search.set("page", String(params.page));
+  }
+  if (params?.limit) {
+    search.set("limit", String(params.limit));
+  }
+  if (params?.status?.trim()) {
+    search.set("status", params.status.trim());
+  }
+  if (params?.category?.trim()) {
+    search.set("category", params.category.trim());
+  }
+  const query = search.toString();
+  return request<SupportInquiryListResponse>(
+    `/support/inquiries${query ? `?${query}` : ""}`,
+  );
+};
+
+export const closeSupportInquiry = (id: string) =>
+  request<SupportInquiry>(`/support/inquiries/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status: "closed" }),
+  });
+
+export type SupportInquiryListResponse = {
+  items: SupportInquiry[];
   page: number;
   limit: number;
   totalCount: number;

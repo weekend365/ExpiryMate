@@ -13,6 +13,7 @@ export * from "./schemas/recipes";
 export * from "./schemas/settings";
 export * from "./schemas/notifications";
 export * from "./schemas/subscriptions";
+export * from "./schemas/support";
 export * from "./types/models";
 export * from "./utils/date";
 export * from "./utils/inventory";
