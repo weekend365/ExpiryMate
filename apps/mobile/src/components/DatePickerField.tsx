@@ -86,6 +86,7 @@ export function DatePickerField({
           onClose={closePicker}
           title="언제까지인가요?"
           description="유통기한을 손가락으로 골라 주세요."
+          scrollEnabled={false}
           footer={
             <View style={styles.buttonRow}>
               <Button
@@ -106,6 +107,10 @@ export function DatePickerField({
               value={draftDate}
               mode="date"
               display="inline"
+              // Light sheet + dark-mode device → white labels on white (invisible).
+              themeVariant="light"
+              accentColor={colors.primary}
+              locale="ko-KR"
               onChange={handleChange}
               style={styles.picker}
             />
