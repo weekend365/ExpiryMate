@@ -1,4 +1,8 @@
-import { itemStatusLabels, storageLocationLabels, type ItemStatus, type StorageLocation } from "@expirymate/shared";
+import {
+  itemStatusLabels,
+  resolveStorageLocationLabel,
+  type ItemStatus,
+} from "@expirymate/shared";
 
 export function StatusPill({
   label,
@@ -32,6 +36,6 @@ export function InventoryStatusPill({ status }: { status: ItemStatus }) {
   return <StatusPill label={itemStatusLabels[status]} tone={tone} />;
 }
 
-export function StoragePill({ location }: { location: StorageLocation }) {
-  return <StatusPill label={storageLocationLabels[location]} />;
+export function StoragePill({ location }: { location: string }) {
+  return <StatusPill label={resolveStorageLocationLabel(location)} />;
 }
