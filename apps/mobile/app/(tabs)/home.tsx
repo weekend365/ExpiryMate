@@ -25,6 +25,7 @@ import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { StatCard } from "../../src/components/StatCard";
 import { SurfaceCard } from "../../src/components/SurfaceCard";
+import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
@@ -98,14 +99,11 @@ export default function HomeScreen() {
     }
 
     if (focus.action === "expiring") {
-      router.push({
-        pathname: "/(tabs)/inventory",
-        params: { filter: "expiring" },
-      });
+      openInventoryFilter("within7");
       return;
     }
 
-    router.push("/(tabs)/inventory");
+    openInventoryFilter("all");
   };
 
   const handleManualRegister = () => {
@@ -119,10 +117,18 @@ export default function HomeScreen() {
   };
 
   const openExpiringInventory = () => {
+    openInventoryFilter("within7");
+  };
+
+  const openInventoryFilter = (nextFilter: InventoryViewFilter) => {
     router.push({
       pathname: "/(tabs)/inventory",
-      params: { filter: "expiring" },
+      params: { filter: nextFilter },
     });
+  };
+
+  const openRecommendations = () => {
+    router.push("/(tabs)/recommendations");
   };
 
   const setGroupExpanded = (groupId: string, expanded: boolean) => {
@@ -279,39 +285,75 @@ export default function HomeScreen() {
                 : recipeGenerationError ?? "추천 탭에서 다시 해볼 수 있어요."
           }
           showMascot={false}
+          actionLabel={
+            recipeGenerationStatus === "pending"
+              ? undefined
+              : recipeGenerationStatus === "success"
+                ? "추천 보러 갈게요"
+                : "추천 탭으로 갈게요"
+          }
+          onAction={
+            recipeGenerationStatus === "pending"
+              ? undefined
+              : openRecommendations
+          }
         />
       ) : null}
 
       {isInitialLoading ? (
         <HomeStatsSkeleton />
       ) : isInitialError ? null : (
-        <View
-          style={styles.trafficGroup}
-          accessibilityRole="summary"
-          accessibilityLabel={`오늘 만료 ${todayExpiryCount}개, 7일 이내 ${within7DaysCount}개, 보관 중 ${totalActiveCount}개`}
-        >
-          <View style={styles.trafficStrip}>
-            <StatCard
-              variant="traffic"
-              label="오늘 만료"
-              value={todayExpiryCount}
-              tone="danger"
-              showLabel={false}
-            />
-            <StatCard
-              variant="traffic"
-              label="7일 이내"
-              value={within7DaysCount}
-              tone="warning"
-              showLabel={false}
-            />
-            <StatCard
-              variant="traffic"
-              label="보관 중"
-              value={totalActiveCount}
-              tone="success"
-              showLabel={false}
-            />
+        <View style={styles.trafficGroup}>
+          <View
+            style={styles.trafficStrip}
+            accessibilityRole="summary"
+            accessibilityLabel={`오늘 만료 ${todayExpiryCount}개, 7일 이내 ${within7DaysCount}개, 보관 중 ${totalActiveCount}개`}
+          >
+            <Pressable
+              style={styles.trafficLampPressable}
+              onPress={() => openInventoryFilter("today")}
+              accessibilityRole="button"
+              accessibilityLabel={`오늘 만료 ${todayExpiryCount}개`}
+              accessibilityHint="오늘 만료되는 재료만 보관함에서 보여 드릴게요."
+            >
+              <StatCard
+                variant="traffic"
+                label="오늘 만료"
+                value={todayExpiryCount}
+                tone="danger"
+                showLabel={false}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.trafficLampPressable}
+              onPress={() => openInventoryFilter("within7")}
+              accessibilityRole="button"
+              accessibilityLabel={`7일 이내 ${within7DaysCount}개`}
+              accessibilityHint="7일 안에 손볼 재료만 보관함에서 보여 드릴게요."
+            >
+              <StatCard
+                variant="traffic"
+                label="7일 이내"
+                value={within7DaysCount}
+                tone="warning"
+                showLabel={false}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.trafficLampPressable}
+              onPress={() => openInventoryFilter("all")}
+              accessibilityRole="button"
+              accessibilityLabel={`보관 중 ${totalActiveCount}개`}
+              accessibilityHint="전체 보관 재료를 보관함에서 보여 드릴게요."
+            >
+              <StatCard
+                variant="traffic"
+                label="보관 중"
+                value={totalActiveCount}
+                tone="success"
+                showLabel={false}
+              />
+            </Pressable>
           </View>
           <View style={styles.trafficLabels} importantForAccessibility="no-hide-descendants">
             <AppText variant="caption" tone="subtext" style={styles.trafficLabel}>
@@ -407,6 +449,14 @@ export default function HomeScreen() {
               hasInventory
                 ? "여유 있는 재료는 보관함에서 천천히 볼 수 있어요."
                 : "첫 재료를 넣으면 여기서 임박한 재료를 알려드릴게요."
+            }
+            actionLabel={
+              hasInventory ? "보관함 둘러볼게요" : "재료 넣을래요"
+            }
+            onAction={
+              hasInventory
+                ? () => openInventoryFilter("all")
+                : handleManualRegister
             }
           />
         )}
@@ -564,6 +614,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: radius.pill,
     backgroundColor: colors.text,
+  },
+  trafficLampPressable: {
+    flex: 1,
+    alignItems: "center",
+    minHeight: touchTarget.min,
+    justifyContent: "center",
   },
   trafficLabels: {
     flexDirection: "row",
