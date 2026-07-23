@@ -2,7 +2,15 @@ import { groupInventoryItems } from "@expirymate/shared";
 import { router } from "expo-router";
 import { Barcode, Package, PenLine } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, RefreshControl, StyleSheet, View } from "react-native";
+import {
+  ImageBackground,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
+import homeWelcomeBg from "../../assets/backgrounds/home-welcome-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import {
@@ -130,17 +138,36 @@ export default function HomeScreen() {
   const showManualEntry = showAddEntries;
 
   return (
-    <Screen
-      refreshControl={
-        <RefreshControl
-          tintColor={colors.primary}
-          refreshing={isRefetching}
-          onRefresh={() => {
-            void refetch();
-          }}
+    <Screen scroll={false} contentStyle={styles.screenContent}>
+      <View style={styles.homeScene}>
+        <ImageBackground
+          source={homeWelcomeBg}
+          style={styles.homeSceneBackground}
+          resizeMode="contain"
+          accessibilityIgnoresInvertColors
+          importantForAccessibility="no"
         />
-      }
-    >
+        <View
+          pointerEvents="none"
+          style={styles.homeSceneVeil}
+          importantForAccessibility="no-hide-descendants"
+        />
+        <ScrollView
+          style={styles.scrollFlex}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          refreshControl={
+            <RefreshControl
+              tintColor={colors.primary}
+              refreshing={isRefetching}
+              onRefresh={() => {
+                void refetch();
+              }}
+            />
+          }
+        >
       <SurfaceCard variant="hero" tone={focusTone}>
         <View style={styles.focusRow}>
           <View style={styles.focusCopy}>
@@ -384,6 +411,8 @@ export default function HomeScreen() {
           />
         )}
       </View>
+        </ScrollView>
+      </View>
     </Screen>
   );
 }
@@ -480,6 +509,35 @@ function getHomeFocus({
 }
 
 const styles = StyleSheet.create({
+  screenContent: {
+    flex: 1,
+    gap: spacing.none,
+    paddingHorizontal: spacing.none,
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  homeScene: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  homeSceneBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  homeSceneVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+    opacity: 0.24,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    gap: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxxl + spacing.sm,
+  },
   focusRow: {
     flexDirection: "row",
     gap: spacing.md,

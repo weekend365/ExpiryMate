@@ -127,7 +127,7 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 ## 6. Mood · 포즈
 
-앱 `MascotMood`: `idle` | `happy` | `worry` | `cooking` | `empty`
+앱 `MascotMood`: `idle` | `happy` | `worry` | `cooking` | `empty` | `speak` | `think` | `point`
 
 | mood | 얼굴 | 포즈 | 앱에서 쓸 때 | 카피 톤 예 |
 | --- | --- | --- | --- | --- |
@@ -136,6 +136,9 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `worry` | 눈썹 안쪽 올림 + 물결 입 + 땀 1방울 ok | 살짝 움츠림, 장갑이 볼 근처 | 임박·만료·삭제 확인 | 이 재료, 곧 써야 해요 |
 | `cooking` | 살짝 치켜올린 눈썹 + 집중 미소 | 나무 거품기 **1개만** | 레시피 추천·생성 | 지금 있는 재료로 이 요리 어때요? |
 | `empty` | 처진 눈 + 작은 입 (하이라이트 과다 금지) | 어깨 처짐, 시선 아래 | 빈 목록/추천 | 아직 비어 있어요. 하나 넣어볼까요? |
+| `speak` | 타원 눈 + **열린 입**(말하는 형태) | 한 장갑을 살짝 들어 설명 제스처 | 안내·팁·말풍선 UI와 함께 | 이 재료부터 살펴볼까요? |
+| `think` | 타원 눈 + 시선 위/옆 + 작은 다문 입 | 장갑이 턱·볼 근처 (생각하는 포즈) | 로딩·추천 생성 중 | 잠깐만요, 요리를 고르는 중이에요 |
+| `point` | 타원 눈 + 가리키는 쪽을 봄 + 작은 미소 | 한 장갑으로 **옆/아래 CTA 방향** 가리킴 | 다음 행동·주 CTA 유도 | 여기 눌러 이어가 볼까요? |
 
 ### 포즈 공통 규칙
 
@@ -159,6 +162,9 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `jango-worry.png` | 걱정 |
 | `jango-cooking.png` | 요리 |
 | `jango-empty.png` | 빈 상태 |
+| `jango-speak.png` | 말하기 (안내·말풍선 UI와 함께). **에셋에 말풍선 금지** |
+| `jango-think.png` | 생각·로딩 |
+| `jango-point.png` | 가리키기 (CTA 유도) |
 | `jango.png` | idle과 동일 마스터 카피 |
 | `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+엄지척, 투명 PNG). `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
 | `mate-fridge-chef.png` | 비례 레퍼런스 (앱 mood로 직접 쓰지 않음) |

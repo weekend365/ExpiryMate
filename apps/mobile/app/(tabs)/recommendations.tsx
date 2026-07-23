@@ -19,13 +19,16 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
+  ImageBackground,
   LayoutAnimation,
   Pressable,
   RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -229,13 +232,8 @@ export default function RecommendationsScreen() {
 
   return (
     <Screen
-      refreshControl={
-        <RefreshControl
-          tintColor={colors.primary}
-          refreshing={historyQuery.isRefetching}
-          onRefresh={historyQuery.refetch}
-        />
-      }
+      scroll={false}
+      contentStyle={styles.screenContent}
       footer={
         <Button
           icon={Sparkles}
@@ -251,6 +249,33 @@ export default function RecommendationsScreen() {
         </Button>
       }
     >
+      <View style={styles.kitchenScene}>
+        <ImageBackground
+          source={kitchenCookingBg}
+          style={styles.kitchenSceneBackground}
+          resizeMode="contain"
+          accessibilityIgnoresInvertColors
+          importantForAccessibility="no"
+        />
+        <View
+          pointerEvents="none"
+          style={styles.kitchenSceneVeil}
+          importantForAccessibility="no-hide-descendants"
+        />
+        <ScrollView
+          style={styles.scrollFlex}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          refreshControl={
+            <RefreshControl
+              tintColor={colors.primary}
+              refreshing={historyQuery.isRefetching}
+              onRefresh={historyQuery.refetch}
+            />
+          }
+        >
       <View style={styles.heroCard}>
         <View style={styles.heroRow}>
           <View style={styles.heroCopy}>
@@ -425,6 +450,8 @@ export default function RecommendationsScreen() {
           description="아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
         />
       ) : null}
+        </ScrollView>
+      </View>
 
       <BottomSheet
         visible={showOptionsSheet}
@@ -1011,6 +1038,35 @@ function formatCreatedAt(value: string) {
 }
 
 const styles = StyleSheet.create({
+  screenContent: {
+    flex: 1,
+    gap: spacing.none,
+    paddingHorizontal: spacing.none,
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  kitchenScene: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  kitchenSceneBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  kitchenSceneVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+    opacity: 0.24,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    gap: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxxl + spacing.sm,
+  },
   heroCard: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.xxl,

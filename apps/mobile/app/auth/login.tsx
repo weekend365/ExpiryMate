@@ -6,16 +6,18 @@ import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import {
   Alert,
+  ImageBackground,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import loginWelcomeBg from "../../assets/backgrounds/login-welcome-bg.png";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
-import { Mascot } from "../../src/components/Mascot";
 import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -231,107 +233,134 @@ export default function LoginScreen() {
   const canEmailLogin = Boolean(email.trim() && password);
 
   return (
-    <Screen
-      title="어서 오세요"
-      subtitle="계정으로 이어가면 장고가 냉장고를 함께 챙겨 드릴게요."
-    >
-      <View style={styles.brandRow}>
-        <Mascot size="small" mood="idle" />
-        <View style={styles.brandBadge}>
-          <Text style={styles.brandBadgeText}>{appBrand.appNameKo}</Text>
-        </View>
-      </View>
-
-      <View style={styles.emailCard}>
-        <Text style={styles.emailTitle}>이메일로 이어갈까요?</Text>
-        <EmailDomainInput
-          value={email}
-          onChangeText={setEmail}
-          autoCorrect={false}
-          placeholder="아이디"
-          editable={!isBusy}
+    <Screen scroll={false} contentStyle={styles.screenContent}>
+      <View style={styles.loginScene}>
+        <ImageBackground
+          source={loginWelcomeBg}
+          style={styles.loginSceneBackground}
+          resizeMode="contain"
+          accessibilityIgnoresInvertColors
+          importantForAccessibility="no"
         />
-        <TextInput
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          textContentType="password"
-          placeholder="비밀번호"
-          placeholderTextColor={colors.mutedText}
-          editable={!isBusy}
-          style={styles.input}
+        <View
+          pointerEvents="none"
+          style={styles.loginSceneVeil}
+          importantForAccessibility="no-hide-descendants"
         />
-        <View style={styles.emailLinks}>
-          <Button
-            variant="secondary"
-            size="small"
-            onPress={() => router.push("/auth/register")}
-            disabled={isBusy}
-          >
-            함께 시작하기
-          </Button>
-          <Pressable
-            onPress={() => router.push("/auth/forgot-password")}
-            disabled={isBusy}
-            hitSlop={spacing.xs}
-            accessibilityRole="button"
-            accessibilityLabel="비밀번호를 잊으셨나요?"
-            style={({ pressed }) => [
-              styles.emailLink,
-              pressed && styles.emailLinkPressed,
-            ]}
-          >
-            <Text style={styles.emailLinkText}>비밀번호를 잊으셨나요?</Text>
-          </Pressable>
-        </View>
-        <Button
-          onPress={() => {
-            void handleEmailLogin();
-          }}
-          loading={loginMutation.isPending}
-          disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
-          fullWidth
+        <ScrollView
+          style={styles.scrollFlex}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
         >
-          이메일로 이어갈게요
-        </Button>
-      </View>
+          <View
+            style={styles.welcomeHero}
+            accessibilityRole="summary"
+            accessibilityLabel={`${appBrand.characterNameKo}가 맞이해요. 어서 오세요.`}
+          >
+            <View style={styles.brandBadge}>
+              <Text style={styles.brandBadgeText}>{appBrand.appNameKo}</Text>
+            </View>
+            <Text style={styles.welcomeTitle}>어서 오세요</Text>
+            <Text style={styles.welcomeSubtitle} numberOfLines={2}>
+              계정으로 이어가면 {appBrand.characterNameKo}가 냉장고를 함께 챙겨
+              드릴게요.
+            </Text>
+          </View>
 
-      <View style={styles.oauthSection}>
-        <Text style={styles.oauthTitle}>다른 방법으로도 이어갈 수 있어요</Text>
-        <View style={styles.oauthList}>
-          <OAuthButton
-            provider="kakao"
-            label="카카오로 이어갈게요"
-            onPress={handleKakaoLogin}
-            loading={pendingProvider === "kakao"}
-            disabled={isBusy && pendingProvider !== "kakao"}
-          />
-          {naverClientId ? (
-            <OAuthButton
-              provider="naver"
-              label="네이버로 이어갈게요"
-              onPress={handleNaverLogin}
-              loading={pendingProvider === "naver"}
-              disabled={isBusy && pendingProvider !== "naver"}
+          <View style={styles.emailCard}>
+            <Text style={styles.emailTitle}>이메일로 이어갈까요?</Text>
+            <EmailDomainInput
+              value={email}
+              onChangeText={setEmail}
+              autoCorrect={false}
+              placeholder="아이디"
+              editable={!isBusy}
             />
-          ) : null}
-          <OAuthButton
-            provider="google"
-            label="Google로 이어갈게요"
-            onPress={handleGoogleLogin}
-            loading={pendingProvider === "google"}
-            disabled={isBusy && pendingProvider !== "google"}
-          />
-          {Platform.OS === "ios" ? (
-            <OAuthButton
-              provider="apple"
-              label="Apple로 이어갈게요"
-              onPress={handleAppleLogin}
-              loading={pendingProvider === "apple"}
-              disabled={isBusy && pendingProvider !== "apple"}
+            <TextInput
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              textContentType="password"
+              placeholder="비밀번호"
+              placeholderTextColor={colors.mutedText}
+              editable={!isBusy}
+              style={styles.input}
             />
-          ) : null}
-        </View>
+            <View style={styles.emailLinks}>
+              <Button
+                variant="secondary"
+                size="small"
+                onPress={() => router.push("/auth/register")}
+                disabled={isBusy}
+              >
+                함께 시작하기
+              </Button>
+              <Pressable
+                onPress={() => router.push("/auth/forgot-password")}
+                disabled={isBusy}
+                hitSlop={spacing.xs}
+                accessibilityRole="button"
+                accessibilityLabel="비밀번호를 잊으셨나요?"
+                style={({ pressed }) => [
+                  styles.emailLink,
+                  pressed && styles.emailLinkPressed,
+                ]}
+              >
+                <Text style={styles.emailLinkText}>비밀번호를 잊으셨나요?</Text>
+              </Pressable>
+            </View>
+            <Button
+              onPress={() => {
+                void handleEmailLogin();
+              }}
+              loading={loginMutation.isPending}
+              disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
+              fullWidth
+            >
+              이메일로 이어갈게요
+            </Button>
+          </View>
+
+          <View style={styles.oauthSection}>
+            <Text style={styles.oauthTitle}>다른 방법으로도 이어갈 수 있어요</Text>
+            <View style={styles.oauthList}>
+              <OAuthButton
+                provider="kakao"
+                label="카카오로 이어갈게요"
+                onPress={handleKakaoLogin}
+                loading={pendingProvider === "kakao"}
+                disabled={isBusy && pendingProvider !== "kakao"}
+              />
+              {naverClientId ? (
+                <OAuthButton
+                  provider="naver"
+                  label="네이버로 이어갈게요"
+                  onPress={handleNaverLogin}
+                  loading={pendingProvider === "naver"}
+                  disabled={isBusy && pendingProvider !== "naver"}
+                />
+              ) : null}
+              <OAuthButton
+                provider="google"
+                label="Google로 이어갈게요"
+                onPress={handleGoogleLogin}
+                loading={pendingProvider === "google"}
+                disabled={isBusy && pendingProvider !== "google"}
+              />
+              {Platform.OS === "ios" ? (
+                <OAuthButton
+                  provider="apple"
+                  label="Apple로 이어갈게요"
+                  onPress={handleAppleLogin}
+                  loading={pendingProvider === "apple"}
+                  disabled={isBusy && pendingProvider !== "apple"}
+                />
+              ) : null}
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </Screen>
   );
@@ -357,10 +386,40 @@ function parseOAuthReturnUrl(url: string): Record<string, string> {
 }
 
 const styles = StyleSheet.create({
-  brandRow: {
-    flexDirection: "row",
+  screenContent: {
+    flex: 1,
+    gap: spacing.none,
+    paddingHorizontal: spacing.none,
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  loginScene: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  loginSceneBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  loginSceneVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+    // Keep light so the baked-in greeter on the mat stays readable.
+    opacity: 0.16,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    gap: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xxxl + spacing.sm,
+  },
+  welcomeHero: {
     alignItems: "center",
-    gap: spacing.sm,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.sm,
   },
   brandBadge: {
     backgroundColor: colors.primarySoft,
@@ -373,6 +432,20 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.primary,
+  },
+  welcomeTitle: {
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+    textAlign: "center",
+  },
+  welcomeSubtitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
+    color: colors.subtext,
+    textAlign: "center",
   },
   emailCard: {
     backgroundColor: colors.surface,

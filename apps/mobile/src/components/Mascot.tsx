@@ -11,10 +11,21 @@ import jangoCooking from "../../assets/characters/jango-cooking.png";
 import jangoEmpty from "../../assets/characters/jango-empty.png";
 import jangoHappy from "../../assets/characters/jango-happy.png";
 import jangoIdle from "../../assets/characters/jango-idle.png";
+import jangoPoint from "../../assets/characters/jango-point.png";
+import jangoSpeak from "../../assets/characters/jango-speak.png";
+import jangoThink from "../../assets/characters/jango-think.png";
 import jangoWorry from "../../assets/characters/jango-worry.png";
 import { spacing } from "../shared/theme";
 
-export type MascotMood = "idle" | "happy" | "worry" | "cooking" | "empty";
+export type MascotMood =
+  | "idle"
+  | "happy"
+  | "worry"
+  | "cooking"
+  | "empty"
+  | "speak"
+  | "think"
+  | "point";
 
 interface MascotProps {
   size?: "small" | "medium" | "large";
@@ -28,6 +39,9 @@ const mascotSources: Record<MascotMood, ImageSourcePropType> = {
   worry: jangoWorry,
   cooking: jangoCooking,
   empty: jangoEmpty,
+  speak: jangoSpeak,
+  think: jangoThink,
+  point: jangoPoint,
 };
 
 const moodLabels: Record<MascotMood, string> = {
@@ -36,6 +50,9 @@ const moodLabels: Record<MascotMood, string> = {
   worry: "걱정하는",
   cooking: "요리하는",
   empty: "빈 냉장고",
+  speak: "말하는",
+  think: "생각하는",
+  point: "가리키는",
 };
 
 export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
