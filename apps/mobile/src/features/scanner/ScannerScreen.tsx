@@ -1,4 +1,14 @@
-import { BarcodeLookupSource, ExpirySource } from "@expirymate/shared";
+import {
+  addDays,
+  BarcodeLookupSource,
+  ExpirySource,
+  formatDateKorean,
+  isDateOnlyString,
+  toIsoDate,
+} from "@expirymate/shared";
+import DateTimePicker, {
+  type DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import {
@@ -16,6 +26,7 @@ import {
   ActivityIndicator,
   Image,
   Linking,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -37,6 +48,7 @@ import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
+import { Pill } from "../../components/Pill";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
@@ -48,6 +60,13 @@ import {
   SCAN_LINE_TRAVEL,
 } from "./scanGuide";
 import { useProductScanner } from "./useProductScanner";
+
+const QUICK_EXPIRY_OPTIONS = [
+  { label: "오늘", days: 0 },
+  { label: "내일", days: 1 },
+  { label: "3일 뒤", days: 3 },
+  { label: "일주일", days: 7 },
+];
 
 export function ScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -81,6 +100,10 @@ function ScannerCameraExperience() {
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
   const [manualName, setManualName] = useState("");
+  const [manualExpiryDate, setManualExpiryDate] = useState("");
+  const [manualExpirySource, setManualExpirySource] = useState<ExpirySource>(
+    ExpirySource.MANUAL,
+  );
   const [isContributing, setIsContributing] = useState(false);
   const [contributeError, setContributeError] = useState<string | null>(null);
   const [torchEnabled, setTorchEnabled] = useState(false);
@@ -92,11 +115,20 @@ function ScannerCameraExperience() {
     scanner.productLookupStatus === "error" ||
     (scanner.productLookupStatus === "success" && !scanner.product?.name);
 
+  const needsManualExpiry = scanner.confirmation?.expirationDate == null;
+  const resolvedExpiryDate = needsManualExpiry
+    ? manualExpiryDate
+    : (scanner.confirmation?.expirationDate ?? "");
+  const resolvedExpirySource = needsManualExpiry
+    ? manualExpirySource
+    : ExpirySource.OCR_DETECTED;
+
   const resolvedProductName = needsManualName
     ? manualName.trim()
     : scanner.product?.name?.trim() ?? "";
 
-  const resultMood: MascotMood = needsManualName ? "worry" : "happy";
+  const resultMood: MascotMood =
+    needsManualName || needsManualExpiry ? "worry" : "happy";
 
   const productSourceLabel =
     scanner.productLookupStatus === "loading"
@@ -143,8 +175,15 @@ function ScannerCameraExperience() {
     return () => clearTimeout(timeoutId);
   }, [scanner.mode]);
 
+  useEffect(() => {
+    if (!scanner.confirmation) {
+      setManualExpiryDate("");
+      setManualExpirySource(ExpirySource.MANUAL);
+    }
+  }, [scanner.confirmation]);
+
   const handleUseScanResult = async () => {
-    if (!scanner.confirmation || !resolvedProductName) {
+    if (!scanner.confirmation || !resolvedProductName || !resolvedExpiryDate) {
       return;
     }
 
@@ -178,8 +217,8 @@ function ScannerCameraExperience() {
     setDraft({
       displayName: resolvedProductName,
       brand: scanner.product?.brand ?? undefined,
-      expiryDate: scanner.confirmation.expirationDate,
-      expirySource: ExpirySource.OCR_DETECTED,
+      expiryDate: resolvedExpiryDate,
+      expirySource: resolvedExpirySource,
     });
     // Clear confirmation so the Modal sheet dismisses; replace so scanner
     // unmounts and cannot keep overlaying /register.
@@ -189,6 +228,8 @@ function ScannerCameraExperience() {
 
   const handleRescan = () => {
     setManualName("");
+    setManualExpiryDate("");
+    setManualExpirySource(ExpirySource.MANUAL);
     setContributeError(null);
     setShowBarcodeSuccess(false);
     scanner.resetScanner();
@@ -199,6 +240,16 @@ function ScannerCameraExperience() {
     setDraft(null);
     scanner.resetScanner();
     router.replace("/register");
+  };
+
+  const handlePresetExpiry = (days: number) => {
+    setManualExpiryDate(toIsoDate(addDays(new Date(), days)));
+    setManualExpirySource(ExpirySource.PRESET);
+  };
+
+  const handleManualExpiryChange = (nextDate: string) => {
+    setManualExpiryDate(nextDate);
+    setManualExpirySource(ExpirySource.MANUAL);
   };
 
   return (
@@ -313,22 +364,43 @@ function ScannerCameraExperience() {
                     strokeWidth={2.4}
                   />
                 </Pressable>
-                <Pressable
-                  onPress={handleManualRegistration}
-                  accessibilityRole="button"
-                  accessibilityLabel="바코드 없이 직접 입력할게요"
-                  style={({ pressed }) => [
-                    styles.manualAction,
-                    pressed && styles.manualActionPressed,
-                  ]}
-                >
-                  <PenLine
-                    color={colors.surface}
-                    size={spacing.sm + spacing.xxs}
-                    strokeWidth={2.4}
-                  />
-                  <Text style={styles.manualActionLabel}>직접 입력할게요</Text>
-                </Pressable>
+                {scanner.mode === "ocr" ? (
+                  <Pressable
+                    onPress={scanner.confirmWithManualExpiry}
+                    accessibilityRole="button"
+                    accessibilityLabel="유통기한이 안 보여서 직접 고를게요"
+                    style={({ pressed }) => [
+                      styles.manualAction,
+                      pressed && styles.manualActionPressed,
+                    ]}
+                  >
+                    <CalendarDays
+                      color={colors.surface}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <Text style={styles.manualActionLabel}>
+                      유통기한이 안 보여요
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    onPress={handleManualRegistration}
+                    accessibilityRole="button"
+                    accessibilityLabel="바코드 없이 직접 입력할게요"
+                    style={({ pressed }) => [
+                      styles.manualAction,
+                      pressed && styles.manualActionPressed,
+                    ]}
+                  >
+                    <PenLine
+                      color={colors.surface}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <Text style={styles.manualActionLabel}>직접 입력할게요</Text>
+                  </Pressable>
+                )}
               </View>
             </View>
           </>
@@ -342,12 +414,18 @@ function ScannerCameraExperience() {
         title={
           needsManualName
             ? "이 재료 이름을 알려줄래요?"
-            : "스캔 결과를 확인할까요?"
+            : needsManualExpiry
+              ? "유통기한은 언제까지인가요?"
+              : "스캔 결과를 확인할까요?"
         }
         description={
-          needsManualName
-            ? "목록에서 못 찾았어요. 이름만 알려주시면 넣는 화면으로 이어갈게요."
-            : "상품명과 유통기한을 넣기 화면에 채워 드릴게요."
+          needsManualName && needsManualExpiry
+            ? "목록에서 못 찾았어요. 이름과 유통기한을 알려주시면 이어서 넣을게요."
+            : needsManualExpiry
+              ? "날짜가 안 보여도 괜찮아요. 직접 골라 주시면 이어서 넣을게요."
+              : needsManualName
+                ? "목록에서 못 찾았어요. 이름만 알려주시면 넣는 화면으로 이어갈게요."
+                : "상품명과 유통기한을 넣기 화면에 채워 드릴게요."
         }
         footer={
           <View style={styles.sheetFooter}>
@@ -368,6 +446,7 @@ function ScannerCameraExperience() {
               }}
               disabled={
                 !resolvedProductName ||
+                !resolvedExpiryDate ||
                 isContributing ||
                 scanner.productLookupStatus === "loading"
               }
@@ -425,12 +504,21 @@ function ScannerCameraExperience() {
               </View>
             ) : null}
 
-            <View style={styles.expiryCard}>
-              <Text style={styles.expiryLabel}>읽은 유통기한</Text>
-              <Text style={styles.expiryValue}>
-                {scanner.confirmation.expirationDate}
-              </Text>
-            </View>
+            {needsManualExpiry ? (
+              <ManualExpirySection
+                expiryDate={manualExpiryDate}
+                expirySource={manualExpirySource}
+                onPreset={handlePresetExpiry}
+                onManualChange={handleManualExpiryChange}
+              />
+            ) : (
+              <View style={styles.expiryCard}>
+                <Text style={styles.expiryLabel}>읽은 유통기한</Text>
+                <Text style={styles.expiryValue}>
+                  {scanner.confirmation.expirationDate}
+                </Text>
+              </View>
+            )}
 
             {scanner.productErrorMessage ? (
               <Text style={styles.sheetFootnote}>
@@ -623,6 +711,154 @@ function InlineError({ message }: { message: string }) {
       <Text style={styles.errorText}>{message}</Text>
     </View>
   );
+}
+
+function ManualExpirySection({
+  expiryDate,
+  expirySource,
+  onPreset,
+  onManualChange,
+}: {
+  expiryDate: string;
+  expirySource: ExpirySource;
+  onPreset: (days: number) => void;
+  onManualChange: (value: string) => void;
+}) {
+  const [showAndroidPicker, setShowAndroidPicker] = useState(false);
+  const [draftDate, setDraftDate] = useState<Date>(
+    expiryDate ? toDatePickerDate(expiryDate) : new Date(),
+  );
+  const didSeedDefaultRef = useRef(false);
+
+  useEffect(() => {
+    setDraftDate(expiryDate ? toDatePickerDate(expiryDate) : new Date());
+  }, [expiryDate]);
+
+  // iOS spinner shows today visually; seed the same value so CTA stays in sync.
+  useEffect(() => {
+    if (Platform.OS !== "ios" || expiryDate || didSeedDefaultRef.current) {
+      return;
+    }
+
+    didSeedDefaultRef.current = true;
+    onManualChange(toDatePickerDateOnly(new Date()));
+  }, [expiryDate, onManualChange]);
+
+  const handleInlineChange = (
+    _event: DateTimePickerEvent,
+    selectedDate?: Date,
+  ) => {
+    if (!selectedDate) {
+      return;
+    }
+
+    setDraftDate(selectedDate);
+    onManualChange(toDatePickerDateOnly(selectedDate));
+  };
+
+  const handleAndroidChange = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date,
+  ) => {
+    setShowAndroidPicker(false);
+
+    if (event.type === "dismissed" || !selectedDate) {
+      return;
+    }
+
+    onManualChange(toDatePickerDateOnly(selectedDate));
+  };
+
+  const displayValue = expiryDate
+    ? formatDateKorean(expiryDate)
+    : "날짜를 골라 주세요";
+
+  return (
+    <View style={styles.manualExpiryCard}>
+      <Text style={styles.manualExpiryLabel}>유통기한은 언제까지인가요?</Text>
+      <View style={styles.pillRow}>
+        {QUICK_EXPIRY_OPTIONS.map((option) => {
+          const presetDate = toIsoDate(addDays(new Date(), option.days));
+
+          return (
+            <Pill
+              key={option.days}
+              label={option.label}
+              icon={CalendarDays}
+              selected={
+                expiryDate === presetDate && expirySource === ExpirySource.PRESET
+              }
+              onPress={() => onPreset(option.days)}
+            />
+          );
+        })}
+      </View>
+
+      {Platform.OS === "ios" ? (
+        <View style={styles.inlinePickerWrap}>
+          <DateTimePicker
+            value={draftDate}
+            mode="date"
+            display="spinner"
+            themeVariant="light"
+            accentColor={colors.primary}
+            locale="ko-KR"
+            onChange={handleInlineChange}
+            style={styles.inlinePicker}
+          />
+        </View>
+      ) : (
+        <>
+          <Pressable
+            onPress={() => setShowAndroidPicker(true)}
+            accessibilityRole="button"
+            accessibilityLabel={`유통기한, ${displayValue}`}
+            accessibilityHint="날짜를 직접 고를 수 있어요"
+            style={({ pressed }) => [
+              styles.androidDateTrigger,
+              pressed && styles.androidDateTriggerPressed,
+            ]}
+          >
+            <Text
+              style={
+                expiryDate
+                  ? styles.androidDateValue
+                  : styles.androidDatePlaceholder
+              }
+            >
+              {displayValue}
+            </Text>
+            <Text style={styles.androidDateAction}>직접 고르기</Text>
+          </Pressable>
+          {showAndroidPicker ? (
+            <DateTimePicker
+              value={expiryDate ? toDatePickerDate(expiryDate) : new Date()}
+              mode="date"
+              display="default"
+              onChange={handleAndroidChange}
+            />
+          ) : null}
+        </>
+      )}
+    </View>
+  );
+}
+
+function toDatePickerDate(value: string) {
+  if (!isDateOnlyString(value)) {
+    return new Date(value);
+  }
+
+  const [yearText, monthText, dayText] = value.split("-");
+  return new Date(Number(yearText), Number(monthText) - 1, Number(dayText));
+}
+
+function toDatePickerDateOnly(value: Date) {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 const styles = StyleSheet.create({
@@ -967,6 +1203,66 @@ const styles = StyleSheet.create({
     lineHeight: typography.title.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
+  },
+  manualExpiryCard: {
+    borderRadius: radius.xxl,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.md,
+    gap: spacing.md,
+  },
+  manualExpiryLabel: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  pillRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+  },
+  inlinePickerWrap: {
+    alignItems: "center",
+    width: "100%",
+    borderRadius: radius.lg,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
+  },
+  inlinePicker: {
+    alignSelf: "center",
+    width: "100%",
+  },
+  androidDateTrigger: {
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    justifyContent: "space-between",
+    gap: spacing.xs,
+  },
+  androidDateTriggerPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  androidDateValue: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  androidDatePlaceholder: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.body.fontFamily,
+    color: colors.mutedText,
+  },
+  androidDateAction: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    color: colors.primary,
+    fontFamily: typography.label.fontFamily,
   },
   sheetFootnote: {
     fontSize: typography.label.fontSize,
