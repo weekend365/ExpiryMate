@@ -4,7 +4,6 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
-  StorageLocation,
 } from "../enums/app-enums";
 import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
 
@@ -27,6 +26,16 @@ const optionalText = (max: number, message?: string) =>
     return trimmed.length > 0 ? trimmed : undefined;
   }, z.string().max(max, message).optional());
 
+/** Storage location key (system or owner custom). Server validates ownership. */
+export const storageLocationKeySchema = z
+  .string()
+  .trim()
+  .min(1, "보관 위치를 골라 주세요")
+  .max(
+    fieldLimits.storageLocationKey,
+    `보관 위치 키는 ${fieldLimits.storageLocationKey}자까지예요`,
+  );
+
 export const inventoryItemSchema = z.object({
   id: z.string(),
   productId: z.string().nullable().optional(),
@@ -36,7 +45,7 @@ export const inventoryItemSchema = z.object({
   category: z.nativeEnum(ProductCategory).nullable().optional(),
   quantity: z.number().positive(),
   unit: z.string().max(fieldLimits.unit).nullable().optional(),
-  storageLocation: z.nativeEnum(StorageLocation),
+  storageLocation: storageLocationKeySchema,
   expiryDate: dateOnlySchema,
   expirySource: z.nativeEnum(ExpirySource),
   status: z.nativeEnum(ItemStatus),
@@ -67,7 +76,7 @@ export const inventoryFormSchema = z.object({
   category: z.nativeEnum(ProductCategory).optional(),
   quantity: z.coerce.number().int().min(1, "수량은 1 이상이어야 해요"),
   unit: optionalText(fieldLimits.unit),
-  storageLocation: z.nativeEnum(StorageLocation),
+  storageLocation: storageLocationKeySchema,
   expiryDate: dateOnlySchema,
   expirySource: z.nativeEnum(ExpirySource),
   notes: optionalText(

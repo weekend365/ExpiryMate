@@ -4,7 +4,6 @@ import type {
   ItemStatus,
   ProductCategory,
   ProductMasterSource,
-  StorageLocation,
 } from "../enums/app-enums";
 import type { PushTokenPlatform } from "../schemas/notifications";
 
@@ -119,7 +118,8 @@ export interface InventoryItem {
   category?: ProductCategory | null;
   quantity: number;
   unit?: string | null;
-  storageLocation: StorageLocation;
+  /** System key (fridge/…) or owner custom key. */
+  storageLocation: string;
   expiryDate: string;
   expirySource: ExpirySource;
   status: ItemStatus;
@@ -145,6 +145,27 @@ export interface NotificationPreference {
   quietHoursStart: string;
   quietHoursEnd: string;
   updatedAt: string;
+}
+
+export interface UserStorageLocation {
+  id: string;
+  ownerKey: string;
+  key: string;
+  label: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SystemStorageLocationOption {
+  key: string;
+  label: string;
+  readonly: true;
+}
+
+export interface StorageLocationsResponse {
+  system: SystemStorageLocationOption[];
+  custom: UserStorageLocation[];
 }
 
 export interface PushToken {

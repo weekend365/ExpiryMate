@@ -2,6 +2,17 @@ import { ItemStatus, StorageLocation } from "../enums/app-enums";
 import type { DashboardSummary, InventoryItem } from "../types/models";
 import { calculateDaysLeftUntilExpiry } from "./date";
 
+export interface InventoryItemGroup {
+  id: string;
+  displayName: string;
+  brand?: string | null;
+  items: InventoryItem[];
+  nearestExpiryDate: string;
+  totalQuantity: number;
+  unit?: string | null;
+  hasMixedUnits: boolean;
+}
+
 export type ExpiryBucket =
   | "expired"
   | "today"
@@ -53,6 +64,60 @@ export const sortInventoryByNearestExpiry = (
   });
 };
 
+const normalizeIdentityPart = (value?: string | null) =>
+  value?.normalize("NFKC").trim().replace(/\s+/g, "").toLocaleLowerCase("ko-KR") ??
+  "";
+
+/**
+ * Groups expiry lots that belong to the same product while preserving each lot.
+ * A stable product id wins; manually-entered items fall back to name + brand.
+ */
+export const groupInventoryItems = (
+  items: InventoryItem[],
+  now: Date | string = new Date(),
+): InventoryItemGroup[] => {
+  const sortedItems = sortInventoryByNearestExpiry(items, now);
+  const groups = new Map<string, InventoryItem[]>();
+
+  sortedItems.forEach((item) => {
+    const fallbackIdentity = [
+      normalizeIdentityPart(item.displayName),
+      normalizeIdentityPart(item.brand),
+    ].join(":");
+    const groupId = item.productId
+      ? `product:${item.productId}`
+      : `manual:${fallbackIdentity}`;
+    const currentItems = groups.get(groupId);
+
+    if (currentItems) {
+      currentItems.push(item);
+    } else {
+      groups.set(groupId, [item]);
+    }
+  });
+
+  return Array.from(groups, ([id, groupItems]) => {
+    const representative = groupItems[0]!;
+    const normalizedUnits = new Set(
+      groupItems.map((item) => normalizeIdentityPart(item.unit ?? "개")),
+    );
+
+    return {
+      id,
+      displayName: representative.displayName,
+      brand: representative.brand,
+      items: groupItems,
+      nearestExpiryDate: representative.expiryDate,
+      totalQuantity: groupItems.reduce(
+        (total, item) => total + item.quantity,
+        0,
+      ),
+      unit: representative.unit ?? "개",
+      hasMixedUnits: normalizedUnits.size > 1,
+    };
+  });
+};
+
 export const filterExpiringItems = (
   items: InventoryItem[],
   maxDays: number,
@@ -68,14 +133,18 @@ export const filterExpiringItems = (
   });
 };
 
-export const buildLocationCounts = (items: InventoryItem[]) => {
-  const counts = Object.values(StorageLocation).reduce<Record<string, number>>(
-    (result, location) => {
-      result[location] = 0;
-      return result;
-    },
-    {},
-  );
+export const buildLocationCounts = (
+  items: InventoryItem[],
+  customKeys: string[] = [],
+) => {
+  const keys = [
+    ...Object.values(StorageLocation),
+    ...customKeys.filter((key) => !Object.values(StorageLocation).includes(key as StorageLocation)),
+  ];
+  const counts = keys.reduce<Record<string, number>>((result, location) => {
+    result[location] = 0;
+    return result;
+  }, {});
 
   items.forEach((item) => {
     counts[item.storageLocation] = (counts[item.storageLocation] ?? 0) + 1;
@@ -90,6 +159,7 @@ export const generateDashboardSummary = (
 ): DashboardSummary => {
   const trackedItems = items.filter(isTrackedItem);
   const sortedItems = sortInventoryByNearestExpiry(trackedItems, now);
+  const expiringGroups = groupInventoryItems(sortedItems, now).slice(0, 5);
 
   return {
     todayExpiryCount: trackedItems.filter(
@@ -117,7 +187,7 @@ export const generateDashboardSummary = (
           new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
       )
       .slice(0, 5),
-    expiringItems: sortedItems.slice(0, 5),
+    expiringItems: expiringGroups.flatMap((group) => group.items),
     locationCounts: buildLocationCounts(trackedItems),
   };
 };

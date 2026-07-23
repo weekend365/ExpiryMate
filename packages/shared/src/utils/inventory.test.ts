@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { ExpirySource, ItemStatus, StorageLocation } from "../enums/app-enums";
 import { addDays, toIsoDate } from "./date";
-import { generateDashboardSummary, getExpiryBucket } from "./inventory";
+import {
+  generateDashboardSummary,
+  getExpiryBucket,
+  groupInventoryItems,
+} from "./inventory";
 
 describe("inventory utils", () => {
   it("classifies expiry buckets correctly", () => {
@@ -59,5 +63,47 @@ describe("inventory utils", () => {
     expect(summary.within7DaysCount).toBe(2);
     expect(summary.expiredCount).toBe(1);
     expect(summary.totalActiveCount).toBe(3);
+  });
+
+  it("groups the same product while keeping its expiry lots", () => {
+    const baseItem = {
+      displayName: "얼큰한 너구리",
+      brand: "농심",
+      quantity: 1,
+      unit: "개",
+      storageLocation: StorageLocation.ROOM,
+      expirySource: ExpirySource.MANUAL,
+      status: ItemStatus.ACTIVE,
+      createdAt: "2026-04-19",
+      updatedAt: "2026-04-19",
+    };
+    const groups = groupInventoryItems([
+      { ...baseItem, id: "later", expiryDate: "2026-04-27" },
+      { ...baseItem, id: "today", expiryDate: "2026-04-19" },
+    ]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.items.map((item) => item.id)).toEqual(["today", "later"]);
+    expect(groups[0]?.totalQuantity).toBe(2);
+    expect(groups[0]?.nearestExpiryDate).toBe("2026-04-19");
+  });
+
+  it("does not group products with different stable product ids", () => {
+    const baseItem = {
+      displayName: "같은 표시 이름",
+      quantity: 1,
+      storageLocation: StorageLocation.FRIDGE,
+      expiryDate: "2026-04-19",
+      expirySource: ExpirySource.MANUAL,
+      status: ItemStatus.ACTIVE,
+      createdAt: "2026-04-19",
+      updatedAt: "2026-04-19",
+    };
+    const groups = groupInventoryItems([
+      { ...baseItem, id: "1", productId: "product-a" },
+      { ...baseItem, id: "2", productId: "product-b" },
+    ]);
+
+    expect(groups).toHaveLength(2);
   });
 });

@@ -5,6 +5,8 @@ export const fieldLimits = {
   brand: 80,
   unit: 32,
   notes: 500,
+  storageLocationKey: 32,
+  storageLocationLabel: 20,
   barcode: { min: 8, max: 18 },
   pushToken: 512,
   deviceId: 128,
@@ -15,3 +17,6 @@ export const fieldLimits = {
   recipeIngredientName: 120,
   recipeText: 2000,
 } as const;
+
+/** Max custom storage locations per owner. */
+export const MAX_CUSTOM_STORAGE_LOCATIONS = 10;

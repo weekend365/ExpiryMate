@@ -1,4 +1,4 @@
-import { ItemStatus, StorageLocation } from "@prisma/client";
+import { ItemStatus } from "@prisma/client";
 import { describe, expect, it, vi } from "vitest";
 import { maskOwnerKey } from "../../common/serializers";
 import { AdminService } from "./admin.service";
@@ -14,7 +14,7 @@ describe("AdminService", () => {
       category: null,
       quantity: 1,
       unit: "개",
-      storageLocation: StorageLocation.fridge,
+      storageLocation: "fridge",
       expiryDate: new Date("2026-07-23T00:00:00.000Z"),
       expirySource: "manual",
       status: ItemStatus.active,
@@ -59,7 +59,7 @@ describe("AdminService", () => {
           .mockResolvedValueOnce(3)
           .mockResolvedValueOnce(4),
         groupBy: vi.fn().mockResolvedValue([
-          { storageLocation: StorageLocation.fridge, _count: { _all: 7 } },
+          { storageLocation: "fridge", _count: { _all: 7 } },
         ]),
         findMany: vi.fn().mockResolvedValue([]),
       },

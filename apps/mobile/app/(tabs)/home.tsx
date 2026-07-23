@@ -1,5 +1,7 @@
+import { groupInventoryItems } from "@expirymate/shared";
 import { router } from "expo-router";
 import { Barcode, Package, PenLine } from "lucide-react-native";
+import { useState } from "react";
 import { Pressable, RefreshControl, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
@@ -9,7 +11,7 @@ import {
 } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
-import { InventoryCard } from "../../src/components/InventoryCard";
+import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
@@ -20,7 +22,6 @@ import { useRecipeGeneration } from "../../src/features/recipes/recipe-generatio
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
-const RECENT_PREVIEW_COUNT = 2;
 const EXPIRING_PREVIEW_COUNT = 2;
 /** Escalate hero to danger when priority items reach this count. */
 const DANGER_PRIORITY_THRESHOLD = 3;
@@ -39,6 +40,7 @@ export default function HomeScreen() {
     errorMessage: recipeGenerationError,
   } = useRecipeGeneration();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
+  const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
 
   const hasLoaded = data !== undefined;
   const isInitialLoading = isLoading && !hasLoaded;
@@ -49,9 +51,8 @@ export default function HomeScreen() {
       : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 
   const expiringItems = data?.expiringItems ?? [];
-  const recentItems = data?.recentItems ?? [];
-  const expiringPreview = expiringItems.slice(0, EXPIRING_PREVIEW_COUNT);
-  const recentPreview = recentItems.slice(0, RECENT_PREVIEW_COUNT);
+  const expiringGroups = groupInventoryItems(expiringItems);
+  const expiringPreview = expiringGroups.slice(0, EXPIRING_PREVIEW_COUNT);
   const todayExpiryCount = data?.todayExpiryCount ?? 0;
   const within3DaysCount = data?.within3DaysCount ?? 0;
   const within7DaysCount = data?.within7DaysCount ?? 0;
@@ -109,15 +110,19 @@ export default function HomeScreen() {
     router.push("/scanner");
   };
 
-  const openInventory = () => {
-    router.push("/(tabs)/inventory");
-  };
-
   const openExpiringInventory = () => {
     router.push({
       pathname: "/(tabs)/inventory",
       params: { filter: "expiring" },
     });
+  };
+
+  const setGroupExpanded = (groupId: string, expanded: boolean) => {
+    setExpandedGroupIds((current) =>
+      expanded
+        ? [...new Set([...current, groupId])]
+        : current.filter((id) => id !== groupId),
+    );
   };
 
   const showAddEntries = focus.showSecondaryEntry;
@@ -126,12 +131,6 @@ export default function HomeScreen() {
 
   return (
     <Screen
-      title="오늘"
-      subtitle={
-        isInitialError
-          ? "앗, 오늘 할 일을 불러오지 못했어요."
-          : "지금 손볼 일 하나만 먼저 볼게요."
-      }
       refreshControl={
         <RefreshControl
           tintColor={colors.primary}
@@ -316,7 +315,7 @@ export default function HomeScreen() {
           action={
             hasLoaded ? (
               <AppText variant="bodyStrong" tone="muted">
-                {expiringItems.length}개
+                {expiringGroups.length}개 품목
               </AppText>
             ) : null
           }
@@ -335,11 +334,15 @@ export default function HomeScreen() {
           />
         ) : expiringPreview.length ? (
           <View style={styles.list}>
-            {expiringPreview.map((item) => (
-              <InventoryCard
-                key={item.id}
-                item={item}
-                onPress={() =>
+            {expiringPreview.map((group) => (
+              <InventoryGroupCard
+                key={group.id}
+                group={group}
+                expanded={expandedGroupIds.includes(group.id)}
+                onExpandedChange={(expanded) =>
+                  setGroupExpanded(group.id, expanded)
+                }
+                onItemPress={(item) =>
                   router.push({
                     pathname: "/inventory/[id]",
                     params: { id: item.id },
@@ -347,7 +350,7 @@ export default function HomeScreen() {
                 }
               />
             ))}
-            {expiringItems.length > EXPIRING_PREVIEW_COUNT ? (
+            {expiringGroups.length > EXPIRING_PREVIEW_COUNT ? (
               <Pressable
                 onPress={openExpiringInventory}
                 accessibilityRole="button"
@@ -381,84 +384,6 @@ export default function HomeScreen() {
           />
         )}
       </View>
-
-      {!isInitialError ? (
-        <View style={styles.section}>
-          <SectionHeader
-            title="최근에 넣은 재료"
-            description={
-              isInitialLoading
-                ? "최근 기록을 준비하고 있어요."
-                : recentItems.length
-                  ? "방금 넣은 재료를 다시 볼 수 있어요."
-                  : hasInventory
-                    ? "보관함에서 전체 목록을 볼 수 있어요."
-                    : "첫 재료를 넣으면 여기에 보여드릴게요."
-            }
-            action={
-              hasLoaded && recentItems.length ? (
-                <AppText variant="bodyStrong" tone="muted">
-                  {recentItems.length}개
-                </AppText>
-              ) : null
-            }
-          />
-          {isInitialLoading ? (
-            <HomeListSkeleton rows={2} />
-          ) : recentPreview.length ? (
-            <View style={styles.list}>
-              {recentPreview.map((item) => (
-                <InventoryCard
-                  key={item.id}
-                  item={item}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/inventory/[id]",
-                      params: { id: item.id },
-                    })
-                  }
-                />
-              ))}
-              {recentItems.length > RECENT_PREVIEW_COUNT || hasInventory ? (
-                <Pressable
-                  onPress={openInventory}
-                  accessibilityRole="button"
-                  accessibilityLabel="보관함에서 더 보기"
-                  style={({ pressed }) => [
-                    styles.inventoryLink,
-                    pressed && styles.inventoryLinkPressed,
-                  ]}
-                >
-                  <AppText variant="bodyStrong" tone="primary">
-                    보관함에서 더 볼게요
-                  </AppText>
-                </Pressable>
-              ) : null}
-            </View>
-          ) : hasInventory ? (
-            <Pressable
-              onPress={openInventory}
-              accessibilityRole="button"
-              accessibilityLabel="보관함으로 갈게요"
-              style={({ pressed }) => [
-                styles.inventoryLink,
-                pressed && styles.inventoryLinkPressed,
-              ]}
-            >
-              <AppText variant="bodyStrong" tone="primary">
-                보관함으로 갈게요
-              </AppText>
-            </Pressable>
-          ) : !isInitialLoading ? (
-            <EmptyState
-              variant="plain"
-              showMascot={false}
-              title="아직 최근 기록이 없어요"
-              description="첫 재료를 넣으면 요리 추천도 준비할 수 있어요."
-            />
-          ) : null}
-        </View>
-      ) : null}
     </Screen>
   );
 }

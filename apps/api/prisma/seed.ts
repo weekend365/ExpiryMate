@@ -4,7 +4,6 @@ import {
   ItemStatus,
   PrismaClient,
   ProductCategory,
-  StorageLocation,
   UserRole,
 } from "@prisma/client";
 import { addDays } from "@expirymate/shared";
@@ -28,6 +27,7 @@ async function main() {
   await prisma.recipeRecommendation.deleteMany();
   await prisma.inventoryItem.deleteMany();
   await prisma.notificationPreference.deleteMany();
+  await prisma.userStorageLocation.deleteMany();
   await prisma.product.deleteMany();
   await prisma.user.deleteMany();
 
@@ -150,7 +150,7 @@ async function main() {
         category: ProductCategory.dairy,
         quantity: 1,
         unit: "팩",
-        storageLocation: StorageLocation.fridge,
+        storageLocation: "fridge",
         expiryDate: seedDay(0),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
@@ -164,7 +164,7 @@ async function main() {
         category: ProductCategory.egg,
         quantity: 1,
         unit: "판",
-        storageLocation: StorageLocation.fridge,
+        storageLocation: "fridge",
         expiryDate: seedDay(3),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
@@ -178,7 +178,7 @@ async function main() {
         category: ProductCategory.tofu,
         quantity: 2,
         unit: "모",
-        storageLocation: StorageLocation.fridge,
+        storageLocation: "fridge",
         expiryDate: seedDay(-1),
         expirySource: ExpirySource.manual,
         status: ItemStatus.expired,
@@ -192,7 +192,7 @@ async function main() {
         category: ProductCategory.dairy,
         quantity: 1,
         unit: "통",
-        storageLocation: StorageLocation.fridge,
+        storageLocation: "fridge",
         expiryDate: seedDay(7),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
@@ -206,7 +206,7 @@ async function main() {
         category: ProductCategory.beverage,
         quantity: 1,
         unit: "병",
-        storageLocation: StorageLocation.room,
+        storageLocation: "room",
         expiryDate: seedDay(14),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
@@ -220,7 +220,7 @@ async function main() {
         category: ProductCategory.instant_food,
         quantity: 4,
         unit: "개",
-        storageLocation: StorageLocation.kitchen,
+        storageLocation: "kitchen",
         expiryDate: seedDay(30),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
@@ -234,7 +234,7 @@ async function main() {
         category: ProductCategory.personal_care,
         quantity: 1,
         unit: "병",
-        storageLocation: StorageLocation.bathroom,
+        storageLocation: "bathroom",
         expiryDate: seedDay(90),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
@@ -248,7 +248,7 @@ async function main() {
         category: ProductCategory.frozen_food,
         quantity: 1,
         unit: "봉",
-        storageLocation: StorageLocation.freezer,
+        storageLocation: "freezer",
         expiryDate: seedDay(2),
         expirySource: ExpirySource.preset,
         status: ItemStatus.active,
@@ -262,7 +262,7 @@ async function main() {
         category: ProductCategory.paper_goods,
         quantity: 12,
         unit: "롤",
-        storageLocation: StorageLocation.room,
+        storageLocation: "room",
         expiryDate: seedDay(180),
         expirySource: ExpirySource.manual,
         status: ItemStatus.active,
@@ -276,7 +276,7 @@ async function main() {
         category: ProductCategory.cleaning,
         quantity: 1,
         unit: "통",
-        storageLocation: StorageLocation.kitchen,
+        storageLocation: "kitchen",
         expiryDate: seedDay(120),
         expirySource: ExpirySource.manual,
         status: ItemStatus.consumed,

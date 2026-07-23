@@ -1,4 +1,20 @@
-import { Body, Controller, Get, Patch, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
+import {
+  createUserStorageLocationBodySchema,
+  updateUserStorageLocationBodySchema,
+  type CreateUserStorageLocationBody,
+  type UpdateUserStorageLocationBody,
+} from "@expirymate/shared";
+import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { SettingsService } from "./settings.service";
@@ -20,5 +36,37 @@ export class SettingsController {
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.settingsService.updateNotificationPreferences(ownerKey, dto);
+  }
+
+  @Get("storage-locations")
+  listStorageLocations(@CurrentOwnerKey() ownerKey: string) {
+    return this.settingsService.listStorageLocations(ownerKey);
+  }
+
+  @Post("storage-locations")
+  createStorageLocation(
+    @Body(new ZodValidationPipe(createUserStorageLocationBodySchema))
+    dto: CreateUserStorageLocationBody,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.settingsService.createStorageLocation(ownerKey, dto);
+  }
+
+  @Patch("storage-locations/:id")
+  updateStorageLocation(
+    @Param("id") id: string,
+    @Body(new ZodValidationPipe(updateUserStorageLocationBodySchema))
+    dto: UpdateUserStorageLocationBody,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.settingsService.updateStorageLocation(id, ownerKey, dto);
+  }
+
+  @Delete("storage-locations/:id")
+  deleteStorageLocation(
+    @Param("id") id: string,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.settingsService.deleteStorageLocation(id, ownerKey);
   }
 }

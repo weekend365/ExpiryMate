@@ -4,6 +4,7 @@ import {
   type Product as PrismaProduct,
   type ProductMaster as PrismaProductMaster,
   type PushToken as PrismaPushToken,
+  type UserStorageLocation as PrismaUserStorageLocation,
 } from "@prisma/client";
 import { createHash } from "node:crypto";
 import {
@@ -18,7 +19,7 @@ import {
   ProductMasterSource,
   type PushToken,
   type PushTokenPlatform,
-  StorageLocation,
+  type UserStorageLocation,
   toKstDateOnly,
 } from "@expirymate/shared";
 
@@ -69,7 +70,7 @@ export const serializeInventoryItem = (
   category: item.category ? (item.category as ProductCategory) : null,
   quantity: item.quantity,
   unit: item.unit,
-  storageLocation: item.storageLocation as StorageLocation,
+  storageLocation: item.storageLocation,
   expiryDate: toKstDateOnly(item.expiryDate),
   expirySource: item.expirySource as ExpirySource,
   status: resolveStatus(item),
@@ -106,6 +107,18 @@ export const serializeNotificationPreference = (
   quietHoursStart: preference.quietHoursStart,
   quietHoursEnd: preference.quietHoursEnd,
   updatedAt: preference.updatedAt.toISOString(),
+});
+
+export const serializeUserStorageLocation = (
+  location: PrismaUserStorageLocation,
+): UserStorageLocation => ({
+  id: location.id,
+  ownerKey: location.ownerKey,
+  key: location.key,
+  label: location.label,
+  sortOrder: location.sortOrder,
+  createdAt: location.createdAt.toISOString(),
+  updatedAt: location.updatedAt.toISOString(),
 });
 
 export const serializePushToken = (pushToken: PrismaPushToken): PushToken => ({

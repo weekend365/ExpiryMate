@@ -7,14 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum StorageLocation {
-  fridge
-  freezer
-  room
-  bathroom
-  kitchen
-}
-
 enum ItemStatus {
   active
   consumed
@@ -116,6 +108,7 @@ model User {
   oneTimeAuthTokens          OneTimeAuthToken[]
   inventoryItems             InventoryItem[]
   notificationPreference     NotificationPreference?
+  userStorageLocations       UserStorageLocation[]
   recipeRecommendations      RecipeRecommendation[]
   subscriptionEntitlements   SubscriptionEntitlement[]
   pushTokens                 PushToken[]
@@ -241,7 +234,7 @@ model InventoryItem {
   category                   ProductCategory?
   quantity                   Int
   unit                       String?                    @default("개")
-  storageLocation            StorageLocation
+  storageLocation            String
   expiryDate                 DateTime                   @db.Date
   expirySource               ExpirySource
   status                     ItemStatus                 @default(active)
@@ -265,6 +258,20 @@ model NotificationPreference {
   quietHoursEnd      String   @default("07:00")
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+}
+
+model UserStorageLocation {
+  id        String   @id @default(cuid())
+  ownerKey  String
+  owner     User     @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  key       String
+  label     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ownerKey, key])
+  @@index([ownerKey])
 }
 
 model RecipeRecommendation {

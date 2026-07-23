@@ -14,6 +14,11 @@ interface StatCardProps {
   variant?: "card" | "inline" | "traffic";
   /** When false, traffic variant renders lamp only (labels live outside the housing). */
   showLabel?: boolean;
+  /**
+   * Traffic selection state. When set, overrides the default value>0 on/off look
+   * so the lamp can act as a filter control.
+   */
+  selected?: boolean;
 }
 
 const LAMP_SIZE = spacing.xxl + spacing.sm;
@@ -26,16 +31,17 @@ export function StatCard({
   tone = "default",
   variant = "card",
   showLabel = true,
+  selected,
 }: StatCardProps) {
   if (variant === "traffic") {
-    const isOn = value > 0;
+    const isOn = selected ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
     const lampStyle = trafficLamps[lampTone];
 
     return (
       <View
         style={styles.traffic}
-        accessible
+        accessible={selected == null}
         accessibilityRole="text"
         accessibilityLabel={`${label} ${value}개`}
       >

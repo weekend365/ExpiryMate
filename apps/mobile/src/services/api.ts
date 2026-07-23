@@ -26,6 +26,10 @@ import type {
   RegisterPendingResponse,
   RegisterRequest,
   RegisterResponse,
+  StorageLocationsResponse,
+  CreateUserStorageLocationBody,
+  UpdateUserStorageLocationBody,
+  UserStorageLocation,
   SubscriptionEntitlement,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
@@ -709,6 +713,29 @@ export const updateNotificationPreferences = (
   request<NotificationPreference>("/settings/notification-preferences", {
     method: "PATCH",
     body: JSON.stringify(payload),
+  });
+
+export const listStorageLocations = () =>
+  request<StorageLocationsResponse>("/settings/storage-locations");
+
+export const createStorageLocation = (payload: CreateUserStorageLocationBody) =>
+  request<UserStorageLocation>("/settings/storage-locations", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const updateStorageLocation = (
+  id: string,
+  payload: UpdateUserStorageLocationBody,
+) =>
+  request<UserStorageLocation>(`/settings/storage-locations/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const deleteStorageLocation = (id: string) =>
+  request<{ id: string }>(`/settings/storage-locations/${id}`, {
+    method: "DELETE",
   });
 
 export const registerPushToken = (payload: RegisterPushTokenRequest) =>

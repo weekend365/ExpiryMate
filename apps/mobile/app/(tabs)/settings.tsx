@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import {
   Bell,
   CreditCard,
+  MapPin,
   ShieldCheck,
   UserRound,
 } from "lucide-react-native";
@@ -15,10 +16,7 @@ import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 export default function SettingsScreen() {
   return (
-    <Screen
-      title="설정"
-      subtitle="바꾸고 싶은 것만 골라 보세요."
-    >
+    <Screen>
       <View style={styles.brandCard}>
         <Mascot size="small" mood="idle" />
         <View style={styles.brandCopy}>
@@ -43,6 +41,12 @@ export default function SettingsScreen() {
             description="유통기한 알림 시점과 켜고 끄기를 맞춰요."
             icon={Bell}
             onPress={() => router.push("/settings/notifications")}
+          />
+          <ListRow
+            title="보관 위치"
+            description="냉장·냉동 외에 나만의 자리를 추가해요."
+            icon={MapPin}
+            onPress={() => router.push("/settings/storage-locations")}
           />
           <ListRow
             title="계정"
