@@ -48,6 +48,38 @@ export class MailService {
     });
   }
 
+  async sendSupportInquiryAlert(input: {
+    to: string;
+    inquiryId: string;
+    categoryLabel: string;
+    body: string;
+    userId: string;
+    userEmail?: string | null;
+    createdAt: Date;
+  }) {
+    const when = input.createdAt.toISOString();
+    const contact = input.userEmail?.trim() || "(이메일 없음)";
+
+    await this.sendMail({
+      to: input.to,
+      subject: `[장고 문의] ${input.categoryLabel} · ${input.inquiryId}`,
+      text: [
+        "앱에서 새 문의가 도착했어요.",
+        "",
+        `문의 ID: ${input.inquiryId}`,
+        `주제: ${input.categoryLabel}`,
+        `사용자: ${input.userId}`,
+        `이메일: ${contact}`,
+        `시각: ${when}`,
+        "",
+        "—— 내용 ——",
+        input.body,
+        "",
+        "답장은 사용자 이메일로 직접 보내 주세요.",
+      ].join("\n"),
+    });
+  }
+
   private async sendMail(input: {
     to: string;
     subject: string;

@@ -117,6 +117,7 @@ export class PrivacyService {
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.subscriptionEntitlement.deleteMany({ where: { ownerKey: userId } });
       await tx.notificationPreference.deleteMany({ where: { ownerKey: userId } });
+      await tx.supportInquiry.deleteMany({ where: { userId } });
       await tx.refreshSession.deleteMany({ where: { userId } });
       await tx.oneTimeAuthToken.deleteMany({ where: { userId } });
       await tx.oAuthAccount.deleteMany({ where: { userId } });

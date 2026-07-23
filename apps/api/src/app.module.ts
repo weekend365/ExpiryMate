@@ -14,6 +14,7 @@ import { ProductMastersModule } from "./modules/product-masters/product-masters.
 import { RecipesModule } from "./modules/recipes/recipes.module";
 import { SettingsModule } from "./modules/settings/settings.module";
 import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.module";
+import { SupportModule } from "./modules/support/support.module";
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.modul
     SubscriptionsModule,
     SettingsModule,
     NotificationsModule,
+    SupportModule,
   ],
 })
 export class AppModule {}

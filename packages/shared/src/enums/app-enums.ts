@@ -46,3 +46,15 @@ export enum BarcodeLookupSource {
   OPEN_FOOD_FACTS = "open_food_facts",
   NOT_FOUND = "not_found",
 }
+
+export enum SupportInquiryCategory {
+  BUG = "bug",
+  ACCOUNT = "account",
+  RECIPE_AI = "recipe_ai",
+  OTHER = "other",
+}
+
+export enum SupportInquiryStatus {
+  OPEN = "open",
+  CLOSED = "closed",
+}

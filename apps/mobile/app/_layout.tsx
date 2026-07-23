@@ -107,6 +107,10 @@ export default function RootLayout() {
                 name="settings/subscription"
                 options={{ title: "구독" }}
               />
+              <Stack.Screen
+                name="settings/support"
+                options={{ title: "장고에게 물어보기" }}
+              />
             </Stack>
           </RecipeGenerationProvider>
         </QueryClientProvider>

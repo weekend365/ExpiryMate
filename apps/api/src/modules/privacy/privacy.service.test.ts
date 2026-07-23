@@ -123,6 +123,7 @@ describe("PrivacyService", () => {
       "recipeRecommendation.deleteMany",
       "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
+      "supportInquiry.deleteMany",
       "refreshSession.deleteMany",
       "oneTimeAuthToken.deleteMany",
       "oAuthAccount.deleteMany",
@@ -186,6 +187,10 @@ function createPrismaMock(
     ),
     notificationPreference: createDeleteManyMock(
       "notificationPreference.deleteMany",
+      operations,
+    ),
+    supportInquiry: createDeleteManyMock(
+      "supportInquiry.deleteMany",
       operations,
     ),
     refreshSession: createDeleteManyMock("refreshSession.deleteMany", operations),
