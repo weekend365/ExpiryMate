@@ -22,7 +22,7 @@
 | 테스트/QA | ~92% | 자동 검사 269개 ✅ · 공유 기능 운영 배포·2계정 실기기 E2E 대기 |
 
 **현재 Phase:** Phase 1 관문 대부분 완료 → **Phase 2 (스토어 제출 준비)**  
-**최근 완료 (2026-07-24):** 재고 공간 기반 공유와 이메일/1회용 코드 초대 구현 · Prisma 확장 마이그레이션 · API/공유/모바일 자동 검사 269개 통과
+**최근 완료 (2026-07-24):** 재고 공간 기반 공유와 이메일/1회용 코드 초대 구현 · Prisma 확장 마이그레이션 · API/공유/모바일 자동 검사 269개 통과 · iOS 1.0.0 (4) App Store Connect 업로드 · Android production 권한 점검
 
 > **출시 판단 주의:** 공유 기능은 코드·자동 검증까지 완료됐지만 아직 Railway 운영 마이그레이션과 공유 기능 포함 새 TestFlight/Play 빌드의 2계정 E2E를 통과하지 않았다.
 
@@ -70,7 +70,7 @@
 | # | 작업 | 왜 |
 |---|------|-----|
 | 1 | **공유 공간 마이그레이션 운영 배포** | Railway API 배포 시 공간·초대 코드 마이그레이션 2개 적용 · `/ready` · `prisma migrate status` 확인 |
-| 2 | **공유 기능 포함 EAS production 재빌드** | 기존 TestFlight 통과 빌드는 공유 기능 이전 버전. iOS TestFlight와 Android internal에 새 빌드 배포 |
+| 2 | **공유 기능 포함 EAS production 재빌드** | iOS 1.0.0 (4) 업로드 후 Apple 처리 중 · Android 1.0.0 (2)는 불필요한 오디오 권한으로 폐기하고 수정 빌드 생성 |
 | 3 | **2계정 공유 E2E + 핵심 회귀 QA** | 초대·가입/로그인 이어가기·역할·공간 전환·재고 동기화·알림·소유권·계정 삭제 확인 |
 | 4 | **초대 개인정보 보관 정책 확정** | 수락·취소·만료 초대 레코드 정리 주기 구현 · 공개 Privacy/Choices와 실제 DB 동작 대조 |
 | 5 | **스토어 메타·심사용 자료 확정** | [`store-metadata-draft.md`](./store-metadata-draft.md) · Privacy Label/Data Safety · 공유 화면 포함 스크린샷 · 데모 계정 |
@@ -152,8 +152,8 @@ flowchart LR
 
 ### Phase 2 Done Criteria (요약)
 
-- [ ] 공유 기능 포함 iOS production 빌드 + TestFlight QA (기존 빌드는 통과)
-- [ ] Android production AAB 내부 테스트 + Play Console production 준비
+- [ ] 공유 기능 포함 iOS production 빌드 + TestFlight QA (1.0.0 build 4 업로드 완료 · Apple 처리/실기기 QA 대기)
+- [ ] Android production AAB 내부 테스트 + Play Console production 준비 (versionCode 2 폐기 · 오디오 권한 제거 후 새 AAB 및 서비스 계정 키/EAS 연결 대기)
 - [ ] Railway 공유 공간 migration 적용 · 개인 공간/기존 데이터 백필 확인
 - [ ] 두 계정 공유 시나리오와 기존 로그인·스캔·추천·삭제 회귀 QA
 - [ ] 수락·취소·만료 초대 개인정보의 보관/정리 정책과 공개 방침 일치
@@ -225,6 +225,19 @@ WHERE "spaceId" IS NULL;
 상세 프롬프트 기록(완료): [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archive/MOBILE_REDESIGN_PROMPTS.md)
 
 ### 2026-07-24 작업 메모 (재고 공간 기반 공유)
+
+#### Release candidate 빌드/제출
+
+| 플랫폼 | 산출물 | 상태 |
+|------|------|------|
+| iOS | EAS production · `1.0.0 (4)` · commit `84166fc` | App Store Connect 업로드 완료 · TestFlight 처리 및 실기기 회귀 QA 대기 |
+| Android | EAS production AAB · `1.0.0 (2)` · commit `84166fc` | `RECORD_AUDIO` 불필요 권한 발견으로 제출하지 않고 폐기 · 권한 제거 후 재빌드 |
+
+릴리스 전 자동 검증은 ESLint, 전체 typecheck, 환경 키 정합성, 269개 테스트를 모두 통과했다.
+운영 `GET /health`, `GET /ready`, Privacy, Choices URL도 HTTP 200을 확인했다.
+
+Android 제출 계정에는 대상 앱의 **Release apps to testing tracks** 권한만 우선 부여한다.
+서비스 계정 JSON은 저장소에 커밋하지 않고 EAS Credentials에 업로드한다.
 
 #### 구현 범위
 

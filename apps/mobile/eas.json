@@ -67,7 +67,8 @@
   "submit": {
     "production": {
       "ios": {
-        "bundleIdentifier": "com.expirymate.mobile"
+        "bundleIdentifier": "com.expirymate.mobile",
+        "ascAppId": "6793375883"
       },
       "android": {
         "track": "internal"

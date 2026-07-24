@@ -50,7 +50,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다."
+          "cameraPermission": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다.",
+          "recordAudioAndroid": false
         }
       ],
       "expo-secure-store",
@@ -100,6 +101,9 @@
       "versionCode": 1,
       "permissions": [
         "CAMERA"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
       ],
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {
