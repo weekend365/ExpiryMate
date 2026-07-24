@@ -292,6 +292,18 @@ export default function HomeScreen() {
           ) : isInitialError ? null : (
             <View style={styles.trafficGroup}>
               <View
+                style={styles.trafficGuide}
+                accessibilityRole="header"
+                accessibilityLabel="유통기한 신호등. 빨간불은 오늘 만료, 노란불은 7일 안, 초록불은 보관 중인 재료예요. 불을 누르면 그 재료만 보관함에서 보여 드릴게요."
+              >
+                <AppText variant="subheading">유통기한 신호등</AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  빨간불은 오늘까지, 노란불은 7일 안, 초록불은 유통기한이
+                  여유로운 상태를 나타내요. 램프를 누르면 보관함에서 그 재료만
+                  보여 드릴게요.
+                </AppText>
+              </View>
+              <View
                 style={styles.trafficStrip}
                 accessibilityRole="summary"
                 accessibilityLabel={`오늘 만료 ${todayExpiryCount}개, 7일 이내 ${within7DaysCount}개, 보관 중 ${totalActiveCount}개`}
@@ -520,13 +532,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoftPressed,
   },
   trafficGroup: {
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+  },
+  trafficGuide: {
     gap: spacing.xs,
   },
   trafficStrip: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     borderRadius: radius.pill,
     backgroundColor: colors.text,
@@ -540,7 +560,6 @@ const styles = StyleSheet.create({
   trafficLabels: {
     flexDirection: "row",
     gap: spacing.xs,
-    paddingHorizontal: spacing.md,
   },
   trafficLabel: {
     flex: 1,

@@ -56,8 +56,13 @@ export function HomeStatsSkeleton() {
   return (
     <View
       style={styles.trafficGroup}
-      accessibilityLabel="통계를 불러오고 있어요"
+      accessibilityLabel="유통기한 신호등을 불러오고 있어요"
     >
+      <View style={styles.trafficGuide}>
+        <SkeletonBlock height={spacing.md} width="42%" />
+        <SkeletonBlock height={spacing.sm} width="88%" />
+        <SkeletonBlock height={spacing.sm} width="72%" />
+      </View>
       <View style={styles.trafficStrip}>
         {[0, 1, 2].map((index) => (
           <View key={index} style={styles.trafficLampSlot}>
@@ -123,13 +128,21 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   trafficGroup: {
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+  },
+  trafficGuide: {
     gap: spacing.xs,
   },
   trafficStrip: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     borderRadius: radius.pill,
     backgroundColor: colors.text,
@@ -141,7 +154,6 @@ const styles = StyleSheet.create({
   trafficLabels: {
     flexDirection: "row",
     gap: spacing.xs,
-    paddingHorizontal: spacing.md,
   },
   trafficLabelSlot: {
     flex: 1,
