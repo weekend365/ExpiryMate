@@ -24,7 +24,7 @@ This keeps the MVP simple while leaving a clean path for:
 
 - improving recipe recommendation from registered inventory
 - shipping barcode + OCR scanner in EAS/store builds (already verified on iOS dev builds)
-- subscriptions, households, and analytics without a rewrite
+- subscriptions, shared-space collaboration, and analytics without a rewrite
 
 ## Project status & launch priorities
 
@@ -32,15 +32,16 @@ This keeps the MVP simple while leaving a clean path for:
 
 **[docs/PROJECT.md](./docs/PROJECT.md)**
 
-### Current status (2026-07-21)
+### Current status (2026-07-24)
 
 | Area | Status | Notes |
 | ---- | ------ | ----- |
 | **Phase** | 1 mostly done → **2 (store)** | [docs/PROJECT.md](./docs/PROJECT.md) |
-| **Auth** | Kakao · Naver · Google · Email ✅ | Login required · mail domain `mail.devnamu.com` · Apple entitlement wired · TestFlight verify pending |
+| **Auth** | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
 | **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅ |
-| **QA** | Device + uptime ✅ | Sentry API/Admin ✅ · Mobile Sentry later |
-| **Next (P0)** | | EAS production build · TestFlight Apple/push · store metadata |
+| **Shared inventory** | Implemented · deploy/2-user QA pending | personal/household/store spaces · email/one-time-code invites · owner/manager/member |
+| **QA** | 269 automated checks ✅ | Existing device QA ✅ · shared-space release E2E pending |
+| **Next (P0)** | | Railway migration → new production build → 2-user QA → store submission |
 
 ## Folder Structure
 
@@ -113,6 +114,7 @@ This keeps the MVP simple while leaving a clean path for:
 - `pnpm test`
 - `pnpm db:generate`
 - `pnpm db:migrate`
+- `pnpm db:migrate:deploy`
 - `pnpm db:seed`
 
 `pnpm dev` runs:
@@ -590,6 +592,8 @@ Inventory seed also includes mixed states:
 - **login required** · Kakao → Naver → Google → Apple iOS, plus email register/login/verify
 - **product scanner:** barcode → ProductMaster/OFF → expiry OCR → register prefill
 - AI recipe recommendation API and mobile recommendation tab
+- personal/household/store inventory spaces, email/one-time-code invitations, and three-level roles
+- space-scoped inventory/storage/dashboard/recommendations with personal favorites/settings
 - subscription entitlement API with App Store and Google Play server verification
 - admin product and inventory tooling
 - recipe-oriented mascot asset (장고)
@@ -598,18 +602,18 @@ Inventory seed also includes mixed states:
 ### Mocked or intentionally limited
 
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
-- Apple Sign In: entitlement/plugin/EAS production wired; TestFlight verify pending
+- shared inventory is refresh/focus based; no realtime WebSocket/SSE or change ledger in v1
 - API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
 - no native IAP purchase sheet yet (entitlement status only)
-- no family/household model
 
 ## Recommended next work
 
 See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
 
-1. EAS iOS/Android production build · TestFlight Apple/push · store metadata/review notes
-2. Mobile Sentry preview smoke (deferred) · push scheduler
-3. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, households
+1. Deploy `20260724133000_add_inventory_spaces` and `20260724150000_add_space_invitation_codes` on Railway, then verify personal-space backfill
+2. Build new iOS/Android release candidates and run two-account invitation/role/inventory regression QA
+3. Finalize privacy declarations, shared-space screenshots, review notes, and submit iOS then Android
+4. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, realtime collaboration
 
 ## Notes On Running
 

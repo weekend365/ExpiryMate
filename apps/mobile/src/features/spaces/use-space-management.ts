@@ -4,11 +4,14 @@ import type {
 } from "@expirymate/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createSpaceInvitationCode,
   inviteSpaceMember,
+  listSpaceInvitationCodes,
   listSpaceInvitations,
   listSpaceMembers,
   removeSpaceMember,
   revokeSpaceInvitation,
+  revokeSpaceInvitationCode,
   transferSpaceOwnership,
   updateSpaceMember,
 } from "../../services/api";
@@ -18,6 +21,10 @@ export const spaceMembersQueryKey = (userId: string, spaceId: string) =>
   ["inventory-space-members", userId, spaceId] as const;
 export const spaceInvitationsQueryKey = (userId: string, spaceId: string) =>
   ["inventory-space-invitations", userId, spaceId] as const;
+export const spaceInvitationCodesQueryKey = (
+  userId: string,
+  spaceId: string,
+) => ["inventory-space-invitation-codes", userId, spaceId] as const;
 
 export function useSpaceManagement(
   spaceId: string | undefined,
@@ -36,6 +43,11 @@ export function useSpaceManagement(
     queryFn: () => listSpaceInvitations(spaceId as string),
     enabled: Boolean(spaceId && canManage),
   });
+  const invitationCodesQuery = useQuery({
+    queryKey: spaceInvitationCodesQueryKey(userKey, spaceId ?? ""),
+    queryFn: () => listSpaceInvitationCodes(spaceId as string),
+    enabled: Boolean(spaceId && canManage),
+  });
 
   const invalidate = () =>
     Promise.all([
@@ -44,6 +56,9 @@ export function useSpaceManagement(
       }),
       queryClient.invalidateQueries({
         queryKey: spaceInvitationsQueryKey(userKey, spaceId ?? ""),
+      }),
+      queryClient.invalidateQueries({
+        queryKey: spaceInvitationCodesQueryKey(userKey, spaceId ?? ""),
       }),
       queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] }),
     ]);
@@ -78,14 +93,26 @@ export function useSpaceManagement(
       revokeSpaceInvitation(spaceId as string, invitationId),
     onSuccess: invalidate,
   });
+  const createCodeMutation = useMutation({
+    mutationFn: () => createSpaceInvitationCode(spaceId as string),
+    onSuccess: invalidate,
+  });
+  const revokeCodeMutation = useMutation({
+    mutationFn: (invitationId: string) =>
+      revokeSpaceInvitationCode(spaceId as string, invitationId),
+    onSuccess: invalidate,
+  });
 
   return {
     membersQuery,
     invitationsQuery,
+    invitationCodesQuery,
     inviteMutation,
     updateRoleMutation,
     removeMutation,
     transferMutation,
     revokeMutation,
+    createCodeMutation,
+    revokeCodeMutation,
   };
 }

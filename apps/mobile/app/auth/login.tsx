@@ -328,6 +328,21 @@ export default function LoginScreen() {
             >
               이메일로 이어갈게요
             </Button>
+            <Pressable
+              onPress={() => router.push("/spaces/invitations/code")}
+              disabled={isBusy}
+              hitSlop={spacing.xs}
+              accessibilityRole="button"
+              accessibilityLabel="초대 코드로 참여"
+              style={({ pressed }) => [
+                styles.invitationLink,
+                pressed && styles.emailLinkPressed,
+              ]}
+            >
+              <Text style={styles.invitationLinkText}>
+                초대 코드가 있으신가요?
+              </Text>
+            </Pressable>
           </View>
 
           <View style={styles.oauthSection}>
@@ -497,6 +512,17 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.title.fontFamily,
+    color: colors.primary,
+  },
+  invitationLink: {
+    minHeight: touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  invitationLinkText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   oauthSection: {
