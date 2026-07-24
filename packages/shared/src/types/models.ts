@@ -4,6 +4,7 @@ import type {
   ItemStatus,
   ProductCategory,
   ProductMasterSource,
+  UnitCode,
 } from "../enums/app-enums";
 import type { PushTokenPlatform } from "../schemas/notifications";
 
@@ -118,6 +119,8 @@ export interface InventoryItem {
   category?: ProductCategory | null;
   quantity: number;
   unit?: string | null;
+  quantityBase: number;
+  unitCode: UnitCode;
   /** System key (fridge/…) or owner custom key. */
   storageLocation: string;
   expiryDate: string;

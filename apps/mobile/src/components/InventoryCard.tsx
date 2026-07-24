@@ -1,6 +1,7 @@
 import {
   calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
+  formatInventoryQuantity,
   getExpiryBucket,
   itemStatusLabels,
   resolveStorageLocationLabel,
@@ -125,8 +126,8 @@ export function InventoryCard({
         <View style={styles.metaRow}>
           <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
           <Text style={styles.meta} numberOfLines={1}>
-            {resolveStorageLocationLabel(item.storageLocation)} · {item.quantity}
-            {item.unit ?? "개"} · {itemStatusLabels[item.status]}
+            {resolveStorageLocationLabel(item.storageLocation)} ·{" "}
+            {formatInventoryQuantity(item)} · {itemStatusLabels[item.status]}
           </Text>
         </View>
         <View style={styles.dateRow}>

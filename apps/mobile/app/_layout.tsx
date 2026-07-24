@@ -64,6 +64,10 @@ export default function RootLayout() {
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "재료 넣기" }} />
               <Stack.Screen name="inventory/[id]" options={{ title: "재료 살펴보기" }} />
+              <Stack.Screen
+                name="cooking/[recommendationId]"
+                options={{ title: "요리하기" }}
+              />
               <Stack.Screen name="auth/login" options={{ headerShown: false }} />
               <Stack.Screen name="auth/register" options={{ headerShown: false }} />
               <Stack.Screen

@@ -9,9 +9,11 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import {
+  batchConsumeInventoryItemsBodySchema,
   createInventoryItemBodySchema,
   ItemStatus,
   updateInventoryItemBodySchema,
+  type BatchConsumeInventoryItemsBody,
   type CreateInventoryItemBody,
   type UpdateInventoryItemBody,
 } from "@expirymate/shared";
@@ -68,6 +70,18 @@ export class InventoryController {
   ) {
     return this.inventoryService.batchDiscard({
       ids: dto.ids,
+      ownerKey,
+    });
+  }
+
+  @Post("batch-consume")
+  batchConsume(
+    @Body(new ZodValidationPipe(batchConsumeInventoryItemsBodySchema))
+    dto: BatchConsumeInventoryItemsBody,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.inventoryService.batchConsume({
+      items: dto.items,
       ownerKey,
     });
   }

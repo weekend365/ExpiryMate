@@ -4,6 +4,7 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
+  UnitCode,
 } from "../enums/app-enums";
 import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
 
@@ -45,6 +46,8 @@ export const inventoryItemSchema = z.object({
   category: z.nativeEnum(ProductCategory).nullable().optional(),
   quantity: z.number().positive(),
   unit: z.string().max(fieldLimits.unit).nullable().optional(),
+  quantityBase: z.number().int().min(0),
+  unitCode: z.nativeEnum(UnitCode),
   storageLocation: storageLocationKeySchema,
   expiryDate: dateOnlySchema,
   expirySource: z.nativeEnum(ExpirySource),
@@ -76,6 +79,8 @@ export const inventoryFormSchema = z.object({
   category: z.nativeEnum(ProductCategory).optional(),
   quantity: z.coerce.number().int().min(1, "수량은 1 이상이어야 해요"),
   unit: optionalText(fieldLimits.unit),
+  quantityBase: z.coerce.number().int().min(1).optional(),
+  unitCode: z.nativeEnum(UnitCode).optional(),
   storageLocation: storageLocationKeySchema,
   expiryDate: dateOnlySchema,
   expirySource: z.nativeEnum(ExpirySource),
@@ -92,7 +97,50 @@ export const createInventoryItemBodySchema = inventoryFormSchema.extend({
 
 export const updateInventoryItemBodySchema = createInventoryItemBodySchema.partial();
 
+export const batchConsumeInventoryItemSchema = z.object({
+  inventoryItemId: z.string().trim().min(1),
+  amountBase: z.coerce
+    .number()
+    .int()
+    .min(1, "사용량은 1 이상이어야 해요"),
+});
+
+export const batchConsumeInventoryItemsBodySchema = z.object({
+  items: z
+    .array(batchConsumeInventoryItemSchema)
+    .min(1, "사용할 재료를 하나 이상 골라 주세요")
+    .max(100, "한 번에 최대 100개까지 반영할 수 있어요")
+    .superRefine((items, context) => {
+      const seen = new Set<string>();
+
+      items.forEach((item, index) => {
+        if (seen.has(item.inventoryItemId)) {
+          context.addIssue({
+            code: "custom",
+            message: "같은 재료는 한 번만 반영할 수 있어요",
+            path: [index, "inventoryItemId"],
+          });
+        }
+        seen.add(item.inventoryItemId);
+      });
+    }),
+});
+
+export const batchConsumeInventoryItemsResponseSchema = z.object({
+  count: z.number().int().min(0),
+  items: z.array(inventoryItemSchema),
+});
+
 export type InventoryFormValues = z.output<typeof inventoryFormSchema>;
 export type InventoryFormInput = z.input<typeof inventoryFormSchema>;
 export type CreateInventoryItemBody = z.output<typeof createInventoryItemBodySchema>;
 export type UpdateInventoryItemBody = z.output<typeof updateInventoryItemBodySchema>;
+export type BatchConsumeInventoryItem = z.output<
+  typeof batchConsumeInventoryItemSchema
+>;
+export type BatchConsumeInventoryItemsBody = z.output<
+  typeof batchConsumeInventoryItemsBodySchema
+>;
+export type BatchConsumeInventoryItemsResponse = z.output<
+  typeof batchConsumeInventoryItemsResponseSchema
+>;

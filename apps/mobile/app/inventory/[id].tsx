@@ -2,12 +2,16 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
+  UnitCode,
   formatDateKorean,
+  formatInventoryQuantity,
   getExpiryBucket,
   inventoryFormSchema,
+  inventoryItemToFormValues,
   itemStatusLabels,
   productCategoryLabels,
   productCategoryOptions,
+  unitCodeLabels,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -132,18 +136,7 @@ export default function InventoryDetailScreen() {
 
   useEffect(() => {
     if (itemQuery.data) {
-      form.reset({
-        productId: itemQuery.data.productId ?? undefined,
-        displayName: itemQuery.data.displayName,
-        brand: itemQuery.data.brand ?? "",
-        category: itemQuery.data.category ?? undefined,
-        quantity: itemQuery.data.quantity,
-        unit: itemQuery.data.unit ?? "개",
-        storageLocation: itemQuery.data.storageLocation,
-        expiryDate: itemQuery.data.expiryDate,
-        expirySource: itemQuery.data.expirySource,
-        notes: itemQuery.data.notes ?? "",
-      });
+      form.reset(inventoryItemToFormValues(itemQuery.data));
     }
   }, [form, itemQuery.data]);
 
@@ -174,18 +167,7 @@ export default function InventoryDetailScreen() {
 
   const closeEdit = () => {
     if (item) {
-      form.reset({
-        productId: item.productId ?? undefined,
-        displayName: item.displayName,
-        brand: item.brand ?? "",
-        category: item.category ?? undefined,
-        quantity: item.quantity,
-        unit: item.unit ?? "개",
-        storageLocation: item.storageLocation,
-        expiryDate: item.expiryDate,
-        expirySource: item.expirySource,
-        notes: item.notes ?? "",
-      });
+      form.reset(inventoryItemToFormValues(item));
     }
     setMode("view");
     setEditStep("product");
@@ -208,7 +190,13 @@ export default function InventoryDetailScreen() {
   const handleSave = form.handleSubmit(async (values) => {
     try {
       setErrorMessage(null);
-      await updateMutation.mutateAsync(values);
+      const unitCode = values.unitCode ?? item?.unitCode ?? UnitCode.EA;
+      await updateMutation.mutateAsync({
+        ...values,
+        quantityBase: values.quantityBase ?? values.quantity,
+        unitCode,
+        unit: values.unit || unitCodeLabels[unitCode],
+      });
       setMode("view");
       setEditStep("product");
       setSuccessMessage("내용을 잘 바꿔 뒀어요. 장고도 안심했어요.");
@@ -350,20 +338,33 @@ export default function InventoryDetailScreen() {
 
               <View style={styles.formCard}>
                 <QuantityStepper
-                  label="몇 개인가요?"
+                  label={
+                    item?.unitCode === UnitCode.ML ||
+                    item?.unitCode === UnitCode.G
+                      ? "얼마나 남았나요?"
+                      : "몇 개인가요?"
+                  }
                   value={quantity}
-                  onChange={(nextQuantity) =>
+                  onChange={(nextQuantity) => {
                     form.setValue("quantity", nextQuantity, {
                       shouldValidate: true,
-                    })
-                  }
+                    });
+                    form.setValue("quantityBase", nextQuantity, {
+                      shouldValidate: true,
+                    });
+                    if (item?.unitCode) {
+                      form.setValue("unitCode", item.unitCode, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
                   error={form.formState.errors.quantity?.message}
                 />
                 <FormField
                   control={form.control}
                   name="unit"
                   label="단위"
-                  placeholder="개 / 통 / 봉"
+                  placeholder="개 / ml / g"
                 />
               </View>
             </>
@@ -479,8 +480,8 @@ export default function InventoryDetailScreen() {
             </Text>
             <Text style={styles.heroTitle}>{item.displayName}</Text>
             <Text style={styles.heroDescription}>
-              {resolveLabel(item.storageLocation)} · {item.quantity}
-              {item.unit ?? "개"}
+              {resolveLabel(item.storageLocation)} ·{" "}
+              {formatInventoryQuantity(item)}
             </Text>
           </View>
           <Mascot size="small" mood={viewMood} />
@@ -501,7 +502,7 @@ export default function InventoryDetailScreen() {
         <SummaryRow
           icon={Package}
           label="수량"
-          value={`${item.quantity}${item.unit ?? "개"}`}
+          value={formatInventoryQuantity(item)}
         />
         {item.brand ? (
           <SummaryRow icon={Package} label="브랜드" value={item.brand} />

@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { ExpirySource, StorageLocation } from "../enums/app-enums";
+import { ExpirySource, StorageLocation, UnitCode } from "../enums/app-enums";
 import { fieldLimits } from "../constants/field-limits";
 import {
   createInventoryItemBodySchema,
+  batchConsumeInventoryItemsBodySchema,
   inventoryFormSchema,
 } from "./inventory";
 import { registerPushTokenSchema } from "./notifications";
@@ -40,6 +41,37 @@ describe("inventory write contracts", () => {
         storageLocation: "custom_pantry",
       }).storageLocation,
     ).toBe("custom_pantry");
+  });
+
+  it("accepts canonical quantity fields without requiring them from legacy clients", () => {
+    expect(
+      createInventoryItemBodySchema.parse({
+        ...valid,
+        unit: "L",
+        quantityBase: 1000,
+        unitCode: UnitCode.ML,
+      }),
+    ).toMatchObject({
+      quantityBase: 1000,
+      unitCode: UnitCode.ML,
+    });
+    expect(createInventoryItemBodySchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("rejects duplicate or fractional batch consumption", () => {
+    expect(
+      batchConsumeInventoryItemsBodySchema.safeParse({
+        items: [
+          { inventoryItemId: "milk-1", amountBase: 500 },
+          { inventoryItemId: "milk-1", amountBase: 100 },
+        ],
+      }).success,
+    ).toBe(false);
+    expect(
+      batchConsumeInventoryItemsBodySchema.safeParse({
+        items: [{ inventoryItemId: "milk-1", amountBase: 0.5 }],
+      }).success,
+    ).toBe(false);
   });
 });
 

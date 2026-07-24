@@ -44,6 +44,8 @@ const inventoryItem = {
   category: "egg",
   quantity: 2,
   unit: "개",
+  quantityBase: 2,
+  unitCode: "ea",
   storageLocation: "fridge",
   expiryDate: new Date("2099-06-10T00:00:00.000Z"),
   expirySource: "manual",
@@ -60,6 +62,8 @@ const inventorySnapshot = [
     category: "egg",
     quantity: 2,
     unit: "개",
+    quantityBase: 2,
+    unitCode: "ea",
     storageLocation: "fridge",
     expiryDate: "2099-06-10",
     daysUntilExpiry: 3,
@@ -250,6 +254,7 @@ describe("RecipesService recommendation guards", () => {
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
     expect(createPayload?.data).toMatchObject({
+      promptVersion: "recipe-recommendation-v3",
       inputTokens: 1000,
       cachedInputTokens: 100,
       outputTokens: 500,

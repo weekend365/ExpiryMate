@@ -19,6 +19,7 @@ import {
   ProductMasterSource,
   type PushToken,
   type PushTokenPlatform,
+  UnitCode,
   type UserStorageLocation,
   toKstDateOnly,
 } from "@expirymate/shared";
@@ -70,6 +71,8 @@ export const serializeInventoryItem = (
   category: item.category ? (item.category as ProductCategory) : null,
   quantity: item.quantity,
   unit: item.unit,
+  quantityBase: item.quantityBase,
+  unitCode: item.unitCode as UnitCode,
   storageLocation: item.storageLocation,
   expiryDate: toKstDateOnly(item.expiryDate),
   expirySource: item.expirySource as ExpirySource,
