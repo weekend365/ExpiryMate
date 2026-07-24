@@ -1,9 +1,18 @@
 import type { InventorySpaceMember } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
-import { Bell, MailPlus, Pencil, UserRound } from "lucide-react-native";
+import {
+  Bell,
+  Copy,
+  KeyRound,
+  MailPlus,
+  Pencil,
+  Share2,
+  UserRound,
+} from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Share, StyleSheet, Text, TextInput, View } from "react-native";
 import { BottomSheet } from "../../../src/components/BottomSheet";
 import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
@@ -37,8 +46,11 @@ export default function SpaceDetailScreen() {
   const isOwner = space?.myRole === "owner";
   const management = useSpaceManagement(spaceId, canManage);
   const [inviteVisible, setInviteVisible] = useState(false);
+  const [inviteMethod, setInviteMethod] = useState<"email" | "code">("email");
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<"manager" | "member">("member");
+  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
   const [renameVisible, setRenameVisible] = useState(false);
   const [spaceName, setSpaceName] = useState("");
   const [exitAction, setExitAction] = useState<"delete" | "leave" | null>(null);
@@ -46,6 +58,7 @@ export default function SpaceDetailScreen() {
     useState<InventorySpaceMember | null>(null);
   const members = management.membersQuery.data ?? [];
   const invitations = management.invitationsQuery.data ?? [];
+  const invitationCodes = management.invitationCodesQuery.data ?? [];
 
   const notificationsMutation = useMutation({
     mutationFn: (enabled: boolean) =>
@@ -116,6 +129,39 @@ export default function SpaceDetailScreen() {
         },
       },
     );
+  };
+
+  const closeInviteSheet = () => {
+    setInviteVisible(false);
+    setGeneratedCode(null);
+    setCopyStatus("");
+    management.createCodeMutation.reset();
+  };
+
+  const createCode = () => {
+    management.createCodeMutation.mutate(undefined, {
+      onSuccess: (result) => {
+        setGeneratedCode(result.code);
+        setCopyStatus("");
+      },
+    });
+  };
+
+  const copyCode = async () => {
+    if (!generatedCode) {
+      return;
+    }
+    await Clipboard.setStringAsync(generatedCode);
+    setCopyStatus("코드를 복사했어요.");
+  };
+
+  const shareCode = async () => {
+    if (!generatedCode) {
+      return;
+    }
+    await Share.share({
+      message: `${space?.name ?? "함께 쓰는 냉장고"} 초대 코드: ${generatedCode}\n7일 안에 한 번 사용할 수 있어요.`,
+    });
   };
 
   const closeMemberSheet = () => setSelectedMember(null);
@@ -209,6 +255,27 @@ export default function SpaceDetailScreen() {
         </View>
       ) : null}
 
+      {canManage && invitationCodes.length ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>사용을 기다리는 초대 코드</Text>
+          <View style={styles.card}>
+            {invitationCodes.map((invitation, index) => (
+              <ListRow
+                key={invitation.id}
+                title="1회용 초대 코드"
+                description={`${formatExpiry(invitation.expiresAt)}까지 · 구성원으로 참여`}
+                icon={KeyRound}
+                destructive
+                last={index === invitationCodes.length - 1}
+                onPress={() =>
+                  management.revokeCodeMutation.mutate(invitation.id)
+                }
+              />
+            ))}
+          </View>
+        </View>
+      ) : null}
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>이 냉장고 알림</Text>
         <View style={styles.card}>
@@ -269,55 +336,134 @@ export default function SpaceDetailScreen() {
 
       <BottomSheet
         visible={inviteVisible}
-        onClose={() => setInviteVisible(false)}
+        onClose={closeInviteSheet}
         title="누구와 함께 쓸까요?"
-        description="초대받을 분의 가입 이메일을 알려 주세요."
+        description={
+          inviteMethod === "email"
+            ? "초대받을 분의 가입 이메일을 알려 주세요."
+            : "7일 안에 한 명만 사용할 수 있는 코드를 만들어요."
+        }
         footer={
-          <Button
-            onPress={submitInvite}
-            disabled={!inviteEmail.trim()}
-            loading={management.inviteMutation.isPending}
-            fullWidth
-          >
-            초대 메일을 보낼게요
-          </Button>
+          inviteMethod === "email" ? (
+            <Button
+              onPress={submitInvite}
+              disabled={!inviteEmail.trim()}
+              loading={management.inviteMutation.isPending}
+              fullWidth
+            >
+              초대 메일을 보낼게요
+            </Button>
+          ) : generatedCode ? (
+            <Button
+              icon={Share2}
+              onPress={() => {
+                void shareCode();
+              }}
+              fullWidth
+            >
+              코드를 공유할게요
+            </Button>
+          ) : (
+            <Button
+              icon={KeyRound}
+              onPress={createCode}
+              loading={management.createCodeMutation.isPending}
+              fullWidth
+            >
+              1회용 코드를 만들게요
+            </Button>
+          )
         }
       >
-        <View style={styles.field}>
-          <Text style={styles.label}>이메일</Text>
-          <TextInput
-            value={inviteEmail}
-            onChangeText={setInviteEmail}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="family@example.com"
-            placeholderTextColor={colors.mutedText}
-            style={styles.input}
+        <View style={styles.pillRow}>
+          <Pill
+            label="이메일"
+            selected={inviteMethod === "email"}
+            onPress={() => {
+              setInviteMethod("email");
+              setGeneratedCode(null);
+            }}
           />
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.label}>역할</Text>
-          <View style={styles.pillRow}>
+          {space?.type !== "personal" ? (
             <Pill
-              label="구성원"
-              selected={inviteRole === "member"}
-              onPress={() => setInviteRole("member")}
+              label="초대 코드"
+              selected={inviteMethod === "code"}
+              onPress={() => setInviteMethod("code")}
             />
-            {isOwner ? (
-              <Pill
-                label="관리자"
-                selected={inviteRole === "manager"}
-                onPress={() => setInviteRole("manager")}
-              />
-            ) : null}
-          </View>
+          ) : null}
         </View>
-        {management.inviteMutation.error ? (
+        {inviteMethod === "email" ? (
+          <>
+            <View style={styles.field}>
+              <Text style={styles.label}>이메일</Text>
+              <TextInput
+                value={inviteEmail}
+                onChangeText={setInviteEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholder="family@example.com"
+                placeholderTextColor={colors.mutedText}
+                style={styles.input}
+              />
+            </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>역할</Text>
+              <View style={styles.pillRow}>
+                <Pill
+                  label="구성원"
+                  selected={inviteRole === "member"}
+                  onPress={() => setInviteRole("member")}
+                />
+                {isOwner ? (
+                  <Pill
+                    label="관리자"
+                    selected={inviteRole === "manager"}
+                    onPress={() => setInviteRole("manager")}
+                  />
+                ) : null}
+              </View>
+            </View>
+            {management.inviteMutation.error ? (
+              <Text style={styles.errorText}>
+                {management.inviteMutation.error instanceof Error
+                  ? management.inviteMutation.error.message
+                  : "앗, 초대 메일을 보내지 못했어요."}
+              </Text>
+            ) : null}
+          </>
+        ) : generatedCode ? (
+          <View style={styles.codeCard}>
+            <Text style={styles.codeEyebrow}>지금만 확인할 수 있어요</Text>
+            <Text style={styles.generatedCode} selectable>
+              {generatedCode}
+            </Text>
+            <Text style={styles.codeDescription}>
+              7일 안에 먼저 입력한 한 명이 구성원으로 참여해요. 닫으면 이
+              코드는 다시 볼 수 없어요.
+            </Text>
+            <View style={styles.codeActions}>
+              <Button
+                icon={Copy}
+                variant="surface"
+                size="small"
+                onPress={() => {
+                  void copyCode();
+                }}
+                style={styles.codeAction}
+              >
+                복사
+              </Button>
+              <Text style={styles.copyStatus}>
+                {copyStatus || "공유하거나 닫기 전에 복사해 두세요."}
+              </Text>
+            </View>
+          </View>
+        ) : management.createCodeMutation.error ? (
           <Text style={styles.errorText}>
-            {management.inviteMutation.error instanceof Error
-              ? management.inviteMutation.error.message
-              : "앗, 초대 메일을 보내지 못했어요."}
+            {management.createCodeMutation.error instanceof Error
+              ? management.createCodeMutation.error.message
+              : "앗, 초대 코드를 만들지 못했어요."}
           </Text>
         ) : null}
       </BottomSheet>
@@ -460,6 +606,15 @@ function roleLabel(role?: "owner" | "manager" | "member") {
   return role === "owner" ? "소유자" : role === "manager" ? "관리자" : "구성원";
 }
 
+function formatExpiry(value: string) {
+  return new Intl.DateTimeFormat("ko-KR", {
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
 const styles = StyleSheet.create({
   section: {
     gap: spacing.sm,
@@ -517,5 +672,46 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.danger,
+  },
+  codeCard: {
+    borderRadius: radius.xl,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+    gap: spacing.sm,
+    alignItems: "center",
+  },
+  codeEyebrow: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.primary,
+  },
+  generatedCode: {
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+    letterSpacing: 2,
+  },
+  codeDescription: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
+    color: colors.subtext,
+    textAlign: "center",
+  },
+  codeActions: {
+    alignSelf: "stretch",
+    gap: spacing.xs,
+  },
+  codeAction: {
+    alignSelf: "stretch",
+  },
+  copyStatus: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
+    color: colors.subtext,
+    textAlign: "center",
   },
 });

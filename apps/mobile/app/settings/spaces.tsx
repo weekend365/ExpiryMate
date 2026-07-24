@@ -1,7 +1,7 @@
 import type { InventorySpaceType } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
-import { Building2, House, Plus, Users } from "lucide-react-native";
+import { Building2, House, KeyRound, Plus, Users } from "lucide-react-native";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { BottomSheet } from "../../src/components/BottomSheet";
@@ -67,6 +67,16 @@ export default function SpacesSettingsScreen() {
         </Button>
       }
     >
+      <View style={styles.card}>
+        <ListRow
+          title="초대 코드로 참여할게요"
+          description="가족이나 매장 동료에게 받은 8자리 코드를 입력해요."
+          icon={KeyRound}
+          last
+          onPress={() => router.push("/spaces/invitations/code")}
+        />
+      </View>
+
       {error ? (
         <EmptyState
           mood="worry"

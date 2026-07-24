@@ -21,6 +21,14 @@ import { RegisteredGuard } from "./registered.guard";
     AuthRateLimitGuard,
     AuthRateLimitService,
   ],
-  exports: [AdminGuard, AuthGuard, RegisteredGuard, AuthService, MailService],
+  exports: [
+    AdminGuard,
+    AuthGuard,
+    RegisteredGuard,
+    AuthRateLimitGuard,
+    AuthRateLimitService,
+    AuthService,
+    MailService,
+  ],
 })
 export class AuthModule {}

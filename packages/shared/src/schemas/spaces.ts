@@ -42,6 +42,73 @@ export const spaceInvitationSchema = z.object({
   createdAt: z.string(),
 });
 
+export const SPACE_INVITATION_CODE_LENGTH = 8;
+export const SPACE_INVITATION_CODE_ALPHABET =
+  "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+export function normalizeSpaceInvitationCode(value: string) {
+  return value.toUpperCase().replace(/[\s-]/g, "");
+}
+
+export function formatSpaceInvitationCode(value: string) {
+  const normalized = normalizeSpaceInvitationCode(value).slice(
+    0,
+    SPACE_INVITATION_CODE_LENGTH,
+  );
+  return normalized.length > 4
+    ? `${normalized.slice(0, 4)}-${normalized.slice(4)}`
+    : normalized;
+}
+
+export function isValidSpaceInvitationCode(value: string) {
+  const normalized = normalizeSpaceInvitationCode(value);
+  return (
+    normalized.length === SPACE_INVITATION_CODE_LENGTH &&
+    [...normalized].every((character) =>
+      SPACE_INVITATION_CODE_ALPHABET.includes(character),
+    )
+  );
+}
+
+const spaceInvitationCodeValueSchema = z
+  .string()
+  .transform(normalizeSpaceInvitationCode)
+  .refine(isValidSpaceInvitationCode, "초대 코드 8자리를 확인해 주세요");
+
+export const spaceInvitationCodeSchema = z.object({
+  id: z.string(),
+  spaceId: z.string(),
+  role: z.literal("member"),
+  expiresAt: z.string(),
+  createdAt: z.string(),
+});
+
+export const createSpaceInvitationCodeResponseSchema = z.object({
+  invitation: spaceInvitationCodeSchema,
+  code: z.string().refine(isValidSpaceInvitationCode),
+});
+
+export const previewSpaceInvitationCodeBodySchema = z.object({
+  code: spaceInvitationCodeValueSchema,
+});
+
+export const spaceInvitationCodePreviewSchema = z.object({
+  spaceId: z.string(),
+  spaceName: z.string(),
+  spaceType: z.enum(["household", "store"]),
+  expiresAt: z.string(),
+});
+
+export const acceptSpaceInvitationCodeBodySchema = z.object({
+  code: spaceInvitationCodeValueSchema,
+  notificationsEnabled: z.boolean().default(false),
+});
+
+export const acceptSpaceInvitationResultSchema = z.object({
+  spaceId: z.string(),
+  spaceName: z.string(),
+});
+
 export const createInventorySpaceBodySchema = z.object({
   name: z
     .string()
@@ -87,6 +154,24 @@ export type InventorySpaceSummary = z.infer<
 >;
 export type InventorySpaceMember = z.infer<typeof inventorySpaceMemberSchema>;
 export type SpaceInvitation = z.infer<typeof spaceInvitationSchema>;
+export type SpaceInvitationCode = z.infer<
+  typeof spaceInvitationCodeSchema
+>;
+export type CreateSpaceInvitationCodeResponse = z.infer<
+  typeof createSpaceInvitationCodeResponseSchema
+>;
+export type PreviewSpaceInvitationCodeBody = z.output<
+  typeof previewSpaceInvitationCodeBodySchema
+>;
+export type SpaceInvitationCodePreview = z.infer<
+  typeof spaceInvitationCodePreviewSchema
+>;
+export type AcceptSpaceInvitationCodeBody = z.output<
+  typeof acceptSpaceInvitationCodeBodySchema
+>;
+export type AcceptSpaceInvitationResult = z.infer<
+  typeof acceptSpaceInvitationResultSchema
+>;
 export type CreateInventorySpaceBody = z.output<
   typeof createInventorySpaceBodySchema
 >;

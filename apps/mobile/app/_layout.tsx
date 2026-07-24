@@ -99,6 +99,10 @@ export default function RootLayout() {
                 options={{ title: "냉장고 초대" }}
               />
               <Stack.Screen
+                name="spaces/invitations/code"
+                options={{ title: "초대 코드" }}
+              />
+              <Stack.Screen
                 name="privacy/ai-data-notice"
                 options={{ title: "요리 추천 안내" }}
               />

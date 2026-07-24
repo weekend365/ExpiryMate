@@ -6,23 +6,40 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { InventorySpaceRole, InventorySpaceType } from "@prisma/client";
 import {
+  InventorySpaceRole,
+  InventorySpaceType,
+  Prisma,
+  SpaceInvitationMethod,
+} from "@prisma/client";
+import {
+  SPACE_INVITATION_CODE_ALPHABET,
+  SPACE_INVITATION_CODE_LENGTH,
+  formatSpaceInvitationCode,
+  normalizeSpaceInvitationCode,
+  type AcceptSpaceInvitationCodeBody,
   type AcceptSpaceInvitationBody,
+  type CreateSpaceInvitationCodeResponse,
   type CreateInventorySpaceBody,
   type InventorySpaceMember,
   type InventorySpaceRole as SharedInventorySpaceRole,
   type InventorySpaceSummary,
   type InviteSpaceMemberBody,
+  type PreviewSpaceInvitationCodeBody,
   type SpaceInvitation,
+  type SpaceInvitationCode,
+  type SpaceInvitationCodePreview,
   type UpdateInventorySpaceBody,
 } from "@expirymate/shared";
-import { createHash, randomBytes } from "node:crypto";
+import { createHash, randomBytes, randomInt } from "node:crypto";
 import { PrismaService } from "../../database/prisma.service";
 import { MailService } from "../auth/mail.service";
 
 const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const PERSONAL_SPACE_PREFIX = "personal_";
+const INVALID_CODE_MESSAGE =
+  "초대 코드가 만료됐거나 취소 또는 이미 사용됐어요.";
+const CODE_GENERATION_ATTEMPTS = 5;
 
 @Injectable()
 export class SpacesService {
@@ -179,6 +196,7 @@ export class SpacesService {
     const invitations = await this.prisma.spaceInvitation.findMany({
       where: {
         spaceId,
+        method: SpaceInvitationMethod.email,
         acceptedAt: null,
         revokedAt: null,
         expiresAt: { gt: new Date() },
@@ -230,12 +248,19 @@ export class SpacesService {
     const token = randomBytes(32).toString("base64url");
     const invitation = await this.prisma.$transaction(async (tx) => {
       await tx.spaceInvitation.updateMany({
-        where: { spaceId, email, acceptedAt: null, revokedAt: null },
+        where: {
+          spaceId,
+          method: SpaceInvitationMethod.email,
+          email,
+          acceptedAt: null,
+          revokedAt: null,
+        },
         data: { revokedAt: new Date() },
       });
       return tx.spaceInvitation.create({
         data: {
           spaceId,
+          method: SpaceInvitationMethod.email,
           email,
           role: body.role as InventorySpaceRole,
           tokenHash: hashToken(token),
@@ -271,6 +296,7 @@ export class SpacesService {
       where: {
         id: invitationId,
         spaceId,
+        method: SpaceInvitationMethod.email,
         acceptedAt: null,
         revokedAt: null,
       },
@@ -297,6 +323,8 @@ export class SpacesService {
     });
     if (
       !invitation ||
+      invitation.method !== SpaceInvitationMethod.email ||
+      !invitation.email ||
       invitation.acceptedAt ||
       invitation.revokedAt ||
       invitation.expiresAt.getTime() <= Date.now()
@@ -313,6 +341,7 @@ export class SpacesService {
       const claimed = await tx.spaceInvitation.updateMany({
         where: {
           id: invitation.id,
+          method: SpaceInvitationMethod.email,
           acceptedAt: null,
           revokedAt: null,
           expiresAt: { gt: new Date() },
@@ -342,6 +371,191 @@ export class SpacesService {
       spaceId: invitation.spaceId,
       spaceName: invitation.space.name,
     };
+  }
+
+  async listInvitationCodes(
+    spaceId: string,
+    userId: string,
+  ): Promise<SpaceInvitationCode[]> {
+    await this.requireRole(spaceId, userId, [
+      InventorySpaceRole.owner,
+      InventorySpaceRole.manager,
+    ]);
+    const invitations = await this.prisma.spaceInvitation.findMany({
+      where: {
+        spaceId,
+        method: SpaceInvitationMethod.code,
+        acceptedAt: null,
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    return invitations.map(serializeInvitationCode);
+  }
+
+  async createInvitationCode(
+    spaceId: string,
+    userId: string,
+  ): Promise<CreateSpaceInvitationCodeResponse> {
+    const actor = await this.requireRole(spaceId, userId, [
+      InventorySpaceRole.owner,
+      InventorySpaceRole.manager,
+    ]);
+    if (actor.space.type === InventorySpaceType.personal) {
+      throw new BadRequestException(
+        "내 냉장고에는 다른 구성원을 초대할 수 없어요.",
+      );
+    }
+
+    for (let attempt = 0; attempt < CODE_GENERATION_ATTEMPTS; attempt += 1) {
+      const normalizedCode = generateInvitationCode();
+      try {
+        const invitation = await this.prisma.spaceInvitation.create({
+          data: {
+            spaceId,
+            method: SpaceInvitationMethod.code,
+            email: null,
+            role: InventorySpaceRole.member,
+            tokenHash: hashToken(normalizedCode),
+            invitedByUserId: userId,
+            expiresAt: new Date(Date.now() + INVITATION_TTL_MS),
+          },
+        });
+        return {
+          invitation: serializeInvitationCode(invitation),
+          code: formatSpaceInvitationCode(normalizedCode),
+        };
+      } catch (error) {
+        if (!isUniqueConstraintError(error)) {
+          throw error;
+        }
+      }
+    }
+
+    throw new ConflictException(
+      "초대 코드를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+    );
+  }
+
+  async revokeInvitationCode(
+    spaceId: string,
+    invitationId: string,
+    userId: string,
+  ) {
+    await this.requireRole(spaceId, userId, [
+      InventorySpaceRole.owner,
+      InventorySpaceRole.manager,
+    ]);
+    const updated = await this.prisma.spaceInvitation.updateMany({
+      where: {
+        id: invitationId,
+        spaceId,
+        method: SpaceInvitationMethod.code,
+        acceptedAt: null,
+        revokedAt: null,
+      },
+      data: { revokedAt: new Date() },
+    });
+    if (updated.count !== 1) {
+      throw new NotFoundException("초대 코드를 다시 찾지 못했어요.");
+    }
+    return { id: invitationId };
+  }
+
+  async previewInvitationCode(
+    userId: string,
+    body: PreviewSpaceInvitationCodeBody,
+  ): Promise<SpaceInvitationCodePreview> {
+    const invitation = await this.findUsableCodeInvitation(body.code);
+    const existingMembership =
+      await this.prisma.inventorySpaceMembership.findUnique({
+        where: {
+          spaceId_userId: { spaceId: invitation.spaceId, userId },
+        },
+      });
+    if (existingMembership) {
+      throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
+    }
+    if (invitation.space.type === InventorySpaceType.personal) {
+      throw new BadRequestException(INVALID_CODE_MESSAGE);
+    }
+    return {
+      spaceId: invitation.spaceId,
+      spaceName: invitation.space.name,
+      spaceType: invitation.space.type,
+      expiresAt: invitation.expiresAt.toISOString(),
+    };
+  }
+
+  async acceptInvitationCode(
+    userId: string,
+    body: AcceptSpaceInvitationCodeBody,
+  ) {
+    const invitation = await this.findUsableCodeInvitation(body.code);
+    const existingMembership =
+      await this.prisma.inventorySpaceMembership.findUnique({
+        where: {
+          spaceId_userId: { spaceId: invitation.spaceId, userId },
+        },
+      });
+    if (existingMembership) {
+      throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
+    }
+
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        const claimed = await tx.spaceInvitation.updateMany({
+          where: {
+            id: invitation.id,
+            method: SpaceInvitationMethod.code,
+            acceptedAt: null,
+            revokedAt: null,
+            expiresAt: { gt: new Date() },
+          },
+          data: { acceptedAt: new Date() },
+        });
+        if (claimed.count !== 1) {
+          throw new ConflictException(INVALID_CODE_MESSAGE);
+        }
+        await tx.inventorySpaceMembership.create({
+          data: {
+            spaceId: invitation.spaceId,
+            userId,
+            role: InventorySpaceRole.member,
+            notificationsEnabled: body.notificationsEnabled,
+          },
+        });
+      });
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
+      }
+      throw error;
+    }
+
+    return {
+      spaceId: invitation.spaceId,
+      spaceName: invitation.space.name,
+    };
+  }
+
+  private async findUsableCodeInvitation(code: string) {
+    const normalizedCode = normalizeSpaceInvitationCode(code);
+    const invitation = await this.prisma.spaceInvitation.findUnique({
+      where: { tokenHash: hashToken(normalizedCode) },
+      include: { space: true },
+    });
+    if (
+      !invitation ||
+      invitation.method !== SpaceInvitationMethod.code ||
+      invitation.acceptedAt ||
+      invitation.revokedAt ||
+      invitation.expiresAt.getTime() <= Date.now()
+    ) {
+      throw new BadRequestException(INVALID_CODE_MESSAGE);
+    }
+    return invitation;
   }
 
   async updateMemberRole(
@@ -465,6 +679,24 @@ function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
 }
 
+function generateInvitationCode() {
+  let code = "";
+  for (let index = 0; index < SPACE_INVITATION_CODE_LENGTH; index += 1) {
+    code +=
+      SPACE_INVITATION_CODE_ALPHABET[
+        randomInt(SPACE_INVITATION_CODE_ALPHABET.length)
+      ];
+  }
+  return code;
+}
+
+function isUniqueConstraintError(error: unknown) {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  );
+}
+
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
@@ -472,17 +704,36 @@ function normalizeEmail(email: string) {
 function serializeInvitation(invitation: {
   id: string;
   spaceId: string;
-  email: string;
+  email: string | null;
   role: InventorySpaceRole;
   expiresAt: Date;
   createdAt: Date;
 }): SpaceInvitation {
+  if (!invitation.email) {
+    throw new Error("Email invitation is missing its recipient.");
+  }
   return {
     id: invitation.id,
     spaceId: invitation.spaceId,
     email: invitation.email,
     role:
       invitation.role === InventorySpaceRole.manager ? "manager" : "member",
+    expiresAt: invitation.expiresAt.toISOString(),
+    createdAt: invitation.createdAt.toISOString(),
+  };
+}
+
+function serializeInvitationCode(invitation: {
+  id: string;
+  spaceId: string;
+  role: InventorySpaceRole;
+  expiresAt: Date;
+  createdAt: Date;
+}): SpaceInvitationCode {
+  return {
+    id: invitation.id,
+    spaceId: invitation.spaceId,
+    role: "member",
     expiresAt: invitation.expiresAt.toISOString(),
     createdAt: invitation.createdAt.toISOString(),
   };

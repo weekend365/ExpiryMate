@@ -12,22 +12,28 @@ import {
 } from "@nestjs/common";
 import type { Response } from "express";
 import {
+  acceptSpaceInvitationCodeBodySchema,
   acceptSpaceInvitationBodySchema,
   createInventorySpaceBodySchema,
   inviteSpaceMemberBodySchema,
+  previewSpaceInvitationCodeBodySchema,
   transferSpaceOwnershipBodySchema,
   updateInventorySpaceBodySchema,
   updateSpaceMemberBodySchema,
   updateSpaceNotificationBodySchema,
+  type AcceptSpaceInvitationCodeBody,
   type AcceptSpaceInvitationBody,
   type CreateInventorySpaceBody,
   type InviteSpaceMemberBody,
+  type PreviewSpaceInvitationCodeBody,
   type TransferSpaceOwnershipBody,
   type UpdateInventorySpaceBody,
   type UpdateSpaceMemberBody,
   type UpdateSpaceNotificationBody,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
+import { AuthRateLimit } from "../auth/auth-rate-limit.decorator";
+import { AuthRateLimitGuard } from "../auth/auth-rate-limit.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { buildAppDeepLink } from "../auth/app-links";
 import { RegisteredGuard } from "../auth/registered.guard";
@@ -131,6 +137,41 @@ export class SpacesController {
     return this.spacesService.inviteMember(spaceId, userId, body);
   }
 
+  @Get(":spaceId/invitation-codes")
+  invitationCodes(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    return this.spacesService.listInvitationCodes(spaceId, userId);
+  }
+
+  @Post(":spaceId/invitation-codes")
+  @UseGuards(AuthRateLimitGuard)
+  @AuthRateLimit({
+    name: "space-invite-code-create",
+    max: 10,
+    windowSeconds: 600,
+  })
+  createInvitationCode(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    return this.spacesService.createInvitationCode(spaceId, userId);
+  }
+
+  @Delete(":spaceId/invitation-codes/:invitationId")
+  revokeInvitationCode(
+    @Param("spaceId") spaceId: string,
+    @Param("invitationId") invitationId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    return this.spacesService.revokeInvitationCode(
+      spaceId,
+      invitationId,
+      userId,
+    );
+  }
+
   @Delete(":spaceId/invitations/:invitationId")
   revokeInvite(
     @Param("spaceId") spaceId: string,
@@ -159,7 +200,7 @@ export class SpacesController {
   }
 }
 
-@UseGuards(RegisteredGuard)
+@UseGuards(RegisteredGuard, AuthRateLimitGuard)
 @Controller("space-invitations")
 export class SpaceInvitationsController {
   constructor(private readonly spacesService: SpacesService) {}
@@ -171,6 +212,36 @@ export class SpaceInvitationsController {
     body: AcceptSpaceInvitationBody,
   ) {
     return this.spacesService.acceptInvitation(userId, body);
+  }
+
+  @Post("code/preview")
+  @AuthRateLimit({
+    name: "space-invite-code-preview",
+    max: 10,
+    windowSeconds: 300,
+    bodyFields: ["code"],
+  })
+  previewCode(
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(previewSpaceInvitationCodeBodySchema))
+    body: PreviewSpaceInvitationCodeBody,
+  ) {
+    return this.spacesService.previewInvitationCode(userId, body);
+  }
+
+  @Post("code/accept")
+  @AuthRateLimit({
+    name: "space-invite-code-accept",
+    max: 10,
+    windowSeconds: 300,
+    bodyFields: ["code"],
+  })
+  acceptCode(
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(acceptSpaceInvitationCodeBodySchema))
+    body: AcceptSpaceInvitationCodeBody,
+  ) {
+    return this.spacesService.acceptInvitationCode(userId, body);
   }
 }
 

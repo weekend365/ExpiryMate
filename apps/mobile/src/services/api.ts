@@ -48,6 +48,12 @@ import type {
   InviteSpaceMemberBody,
   UpdateSpaceMemberBody,
   AcceptSpaceInvitationBody,
+  AcceptSpaceInvitationCodeBody,
+  AcceptSpaceInvitationResult,
+  CreateSpaceInvitationCodeResponse,
+  PreviewSpaceInvitationCodeBody,
+  SpaceInvitationCode,
+  SpaceInvitationCodePreview,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -921,13 +927,47 @@ export const revokeSpaceInvitation = (
   );
 
 export const acceptSpaceInvitation = (payload: AcceptSpaceInvitationBody) =>
-  request<{ spaceId: string; spaceName: string }>(
+  request<AcceptSpaceInvitationResult>(
     "/space-invitations/accept",
     {
       method: "POST",
       body: JSON.stringify(payload),
     },
   );
+
+export const listSpaceInvitationCodes = (spaceId: string) =>
+  request<SpaceInvitationCode[]>(`/spaces/${spaceId}/invitation-codes`);
+
+export const createSpaceInvitationCode = (spaceId: string) =>
+  request<CreateSpaceInvitationCodeResponse>(
+    `/spaces/${spaceId}/invitation-codes`,
+    { method: "POST" },
+  );
+
+export const revokeSpaceInvitationCode = (
+  spaceId: string,
+  invitationId: string,
+) =>
+  request<{ id: string }>(
+    `/spaces/${spaceId}/invitation-codes/${invitationId}`,
+    { method: "DELETE" },
+  );
+
+export const previewSpaceInvitationCode = (
+  payload: PreviewSpaceInvitationCodeBody,
+) =>
+  request<SpaceInvitationCodePreview>("/space-invitations/code/preview", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const acceptSpaceInvitationCode = (
+  payload: AcceptSpaceInvitationCodeBody,
+) =>
+  request<AcceptSpaceInvitationResult>("/space-invitations/code/accept", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
 export const updateSpaceNotifications = (
   spaceId: string,

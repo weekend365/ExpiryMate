@@ -105,6 +105,11 @@ enum InventorySpaceRole {
   member
 }
 
+enum SpaceInvitationMethod {
+  email
+  code
+}
+
 model User {
   id                         String                     @id @default(cuid())
   email                      String?                    @unique
@@ -178,20 +183,22 @@ model InventorySpaceMembership {
 }
 
 model SpaceInvitation {
-  id              String             @id @default(cuid())
+  id              String                  @id @default(cuid())
   spaceId         String
-  space           InventorySpace     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  email           String
-  role            InventorySpaceRole @default(member)
-  tokenHash       String             @unique
+  space           InventorySpace          @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  method          SpaceInvitationMethod   @default(email)
+  email           String?
+  role            InventorySpaceRole      @default(member)
+  tokenHash       String                  @unique
   invitedByUserId String
-  invitedBy       User               @relation("SpaceInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+  invitedBy       User                    @relation("SpaceInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
   expiresAt       DateTime
   acceptedAt      DateTime?
   revokedAt       DateTime?
-  createdAt       DateTime           @default(now())
+  createdAt       DateTime                @default(now())
 
   @@index([spaceId, email, createdAt])
+  @@index([spaceId, method, createdAt])
   @@index([email, expiresAt])
 }
 
