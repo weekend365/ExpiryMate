@@ -905,17 +905,17 @@ function RecipeCard({
               <Text style={styles.safetyCardBody}>{dish.safetyNote}</Text>
             </View>
           ) : null}
-
-          <Button
-            icon={Utensils}
-            variant="secondary"
-            onPress={handleStartCooking}
-            fullWidth
-          >
-            이 요리로 해볼게요
-          </Button>
         </>
       ) : null}
+
+      <Button
+        icon={Utensils}
+        variant="secondary"
+        onPress={handleStartCooking}
+        fullWidth
+      >
+        이 요리로 해볼게요
+      </Button>
     </View>
   );
 }
