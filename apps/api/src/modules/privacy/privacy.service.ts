@@ -84,8 +84,14 @@ export class PrivacyService {
   ): Promise<DeleteRecommendationHistoryResponse> {
     await this.findActiveUser(userId);
 
-    const result = await this.prisma.recipeRecommendation.deleteMany({
-      where: { ownerKey: userId },
+    const result = await this.prisma.$transaction(async (tx) => {
+      await tx.recipeFavorite.deleteMany({
+        where: { ownerKey: userId },
+      });
+
+      return tx.recipeRecommendation.deleteMany({
+        where: { ownerKey: userId },
+      });
     });
 
     return {
@@ -114,6 +120,7 @@ export class PrivacyService {
       await tx.pushNotificationDelivery.deleteMany({ where: { ownerKey: userId } });
       await tx.pushToken.deleteMany({ where: { ownerKey: userId } });
       await tx.inventoryItem.deleteMany({ where: { ownerKey: userId } });
+      await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.subscriptionEntitlement.deleteMany({ where: { ownerKey: userId } });
       await tx.notificationPreference.deleteMany({ where: { ownerKey: userId } });

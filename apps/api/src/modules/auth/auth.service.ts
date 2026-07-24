@@ -708,6 +708,10 @@ export class AuthService {
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
+      await tx.recipeFavorite.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
       await tx.subscriptionEntitlement.updateMany({
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },

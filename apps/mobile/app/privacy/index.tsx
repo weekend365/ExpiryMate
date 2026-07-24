@@ -56,9 +56,9 @@ export default function PrivacyScreen() {
       onSuccess: (response) => {
         setHistorySheetOpen(false);
         Alert.alert(
-          "추천 기록을 정리했어요",
+          "추천 기록과 즐겨찾기를 정리했어요",
           response.deletedCount > 0
-            ? "그동안 받아 두신 요리 추천을 지웠어요."
+            ? "그동안 받아 두신 요리 추천과 즐겨찾기를 지웠어요."
             : "지울 추천 기록이 없어요.",
         );
       },
@@ -116,12 +116,12 @@ export default function PrivacyScreen() {
         <View style={styles.section}>
           <SectionHeader
             title="추천 기록"
-            description="계정은 두고, 받은 추천만 지울 수 있어요."
+            description="계정은 두고, 받은 추천과 즐겨찾기만 지울 수 있어요."
           />
           <View style={styles.card}>
             <PrivacyRow
               icon={History}
-              title="받은 추천 기록 정리"
+              title="추천 기록과 즐겨찾기 정리"
               description={
                 historyCount > 0
                   ? `지금 ${historyCount}건의 추천이 남아 있어요. 정리하면 바로 지워져요.`
@@ -169,8 +169,8 @@ export default function PrivacyScreen() {
         visible={historySheetOpen}
         onClose={() => setHistorySheetOpen(false)}
         mascotMood="worry"
-        title="받은 추천을 정리할까요?"
-        description="그동안 받아 두신 요리 추천 기록이 사라져요. 계정과 재료는 그대로 두어요."
+        title="추천과 즐겨찾기를 정리할까요?"
+        description="그동안 받아 두신 요리 추천 기록과 즐겨찾기가 사라져요. 계정과 재료는 그대로 두어요."
         footer={
           <View style={styles.sheetFooter}>
             <Button
@@ -186,7 +186,7 @@ export default function PrivacyScreen() {
               loading={deleteHistoryMutation.isPending}
               fullWidth
             >
-              추천 기록을 정리할게요
+              추천과 즐겨찾기를 정리할게요
             </Button>
           </View>
         }

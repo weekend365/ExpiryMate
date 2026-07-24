@@ -93,6 +93,20 @@ export const recipeRecommendationSchema = z.object({
   recommendations: z.array(recipeRecommendationDishSchema),
 });
 
+export const recipeFavoriteSchema = z.object({
+  id: z.string(),
+  ownerKey: z.string(),
+  sourceRecommendationId: z.string(),
+  sourceDishIndex: z.number().int().nonnegative(),
+  dish: recipeRecommendationDishSchema,
+  inventorySnapshot: z.array(recipeInventorySnapshotItemSchema),
+  createdAt: z.string(),
+});
+
+export const deleteRecipeFavoriteResponseSchema = z.object({
+  ok: z.literal(true),
+});
+
 export type RecipeMealType = z.infer<typeof recipeMealTypeSchema>;
 export type RecipeRecommendationRequest = z.infer<
   typeof recipeRecommendationRequestSchema
@@ -107,3 +121,7 @@ export type RecipeRecommendationDish = z.infer<
   typeof recipeRecommendationDishSchema
 >;
 export type RecipeRecommendation = z.infer<typeof recipeRecommendationSchema>;
+export type RecipeFavorite = z.infer<typeof recipeFavoriteSchema>;
+export type DeleteRecipeFavoriteResponse = z.infer<
+  typeof deleteRecipeFavoriteResponseSchema
+>;

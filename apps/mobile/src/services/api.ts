@@ -22,8 +22,10 @@ import type {
   BatchConsumeInventoryItemsBody,
   BatchConsumeInventoryItemsResponse,
   DeleteRecommendationHistoryResponse,
+  DeleteRecipeFavoriteResponse,
   RevokeAiDataNoticeResponse,
   RecipeRecommendation,
+  RecipeFavorite,
   RecipeRecommendationRequestInput,
   RegisterPendingResponse,
   RegisterRequest,
@@ -716,6 +718,27 @@ export const createRecipeRecommendation = (payload: RecipeRecommendationPayload)
 
 export const getRecipeRecommendation = (id: string) =>
   request<RecipeRecommendation>(`/recipes/recommendations/${id}`);
+
+export const listRecipeFavorites = () =>
+  request<RecipeFavorite[]>("/recipes/favorites");
+
+export const saveRecipeFavorite = (
+  recommendationId: string,
+  dishIndex: number,
+) =>
+  request<RecipeFavorite>(
+    `/recipes/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
+    { method: "PUT" },
+  );
+
+export const deleteRecipeFavorite = (
+  recommendationId: string,
+  dishIndex: number,
+) =>
+  request<DeleteRecipeFavoriteResponse>(
+    `/recipes/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
+    { method: "DELETE" },
+  );
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -11,6 +11,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Easing,
   runOnJS,
@@ -42,6 +43,8 @@ const SPRING = {
 };
 
 const BACKDROP_OPACITY = 0.28;
+const DRAG_DISMISS_DISTANCE = 96;
+const DRAG_DISMISS_VELOCITY = 900;
 
 export function BottomSheet({
   visible,
@@ -58,6 +61,7 @@ export function BottomSheet({
   const [mounted, setMounted] = useState(false);
   const translateY = useSharedValue(windowHeight);
   const backdropOpacity = useSharedValue(0);
+  const dragStartY = useSharedValue(0);
 
   useEffect(() => {
     if (visible) {
@@ -99,6 +103,53 @@ export function BottomSheet({
     opacity: backdropOpacity.value,
   }));
 
+  const dragGesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .enabled(visible)
+        .activeOffsetY([-spacing.xs, spacing.xs])
+        .onStart(() => {
+          dragStartY.value = translateY.value;
+        })
+        .onUpdate((event) => {
+          const nextTranslateY = Math.max(
+            0,
+            dragStartY.value + event.translationY,
+          );
+          const dragProgress = Math.min(
+            1,
+            nextTranslateY / Math.max(windowHeight, 1),
+          );
+
+          translateY.value = nextTranslateY;
+          backdropOpacity.value = BACKDROP_OPACITY * (1 - dragProgress);
+        })
+        .onEnd((event) => {
+          const shouldDismiss =
+            event.translationY >= DRAG_DISMISS_DISTANCE ||
+            event.velocityY >= DRAG_DISMISS_VELOCITY;
+
+          if (shouldDismiss) {
+            runOnJS(onClose)();
+            return;
+          }
+
+          translateY.value = withSpring(0, SPRING);
+          backdropOpacity.value = withTiming(BACKDROP_OPACITY, {
+            duration: 180,
+            easing: Easing.out(Easing.cubic),
+          });
+        }),
+    [
+      backdropOpacity,
+      dragStartY,
+      onClose,
+      translateY,
+      visible,
+      windowHeight,
+    ],
+  );
+
   if (!mounted) {
     return null;
   }
@@ -136,20 +187,31 @@ export function BottomSheet({
               },
             ]}
           >
-            <View style={styles.handle} />
-            {mascotMood ? (
-              <View style={styles.mascotWrap}>
-                <Mascot size="small" mood={mascotMood} />
-              </View>
-            ) : null}
-            {title ? (
-              <View style={styles.header}>
-                <Text style={styles.title}>{title}</Text>
-                {description ? (
-                  <Text style={styles.description}>{description}</Text>
+            <GestureDetector gesture={dragGesture}>
+              <View
+                style={styles.dragHeader}
+                accessible
+                accessibilityLabel={
+                  [title, description].filter(Boolean).join(". ") || "바텀시트"
+                }
+                accessibilityHint="아래로 끌어 닫을 수 있어요"
+              >
+                <View style={styles.handle} />
+                {mascotMood ? (
+                  <View style={styles.mascotWrap}>
+                    <Mascot size="small" mood={mascotMood} />
+                  </View>
+                ) : null}
+                {title ? (
+                  <View style={styles.header}>
+                    <Text style={styles.title}>{title}</Text>
+                    {description ? (
+                      <Text style={styles.description}>{description}</Text>
+                    ) : null}
+                  </View>
                 ) : null}
               </View>
-            ) : null}
+            </GestureDetector>
             {scrollEnabled ? (
               <ScrollView
                 style={styles.bodyScroll}
@@ -194,13 +256,18 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     overflow: "hidden",
   },
+  dragHeader: {
+    minHeight: touchTarget.min,
+    gap: spacing.md,
+    justifyContent: "center",
+    flexShrink: 0,
+  },
   handle: {
     alignSelf: "center",
     width: spacing.xl,
     height: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.border,
-    marginBottom: spacing.xs,
     flexShrink: 0,
   },
   mascotWrap: {

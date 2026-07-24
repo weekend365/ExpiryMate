@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { UnitCode } from "../enums/app-enums";
 import {
+  recipeFavoriteSchema,
   generatedRecipeRecommendationsPayloadSchema,
   recipeRecommendationDishSchema,
 } from "./recipes";
@@ -44,5 +45,30 @@ describe("recipe ingredient quantity contracts", () => {
         recommendations: [dish, dish, dish],
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("recipe favorite contracts", () => {
+  it("keeps the saved dish and inventory snapshot together", () => {
+    const result = recipeFavoriteSchema.safeParse({
+      id: "favorite-1",
+      ownerKey: "user-1",
+      sourceRecommendationId: "recommendation-1",
+      sourceDishIndex: 0,
+      dish,
+      inventorySnapshot: [
+        {
+          inventoryItemId: "milk-1",
+          name: "우유",
+          quantity: 1,
+          storageLocation: "fridge",
+          expiryDate: "2099-06-10",
+          daysUntilExpiry: 3,
+        },
+      ],
+      createdAt: "2099-06-07T00:00:00.000Z",
+    });
+
+    expect(result.success).toBe(true);
   });
 });

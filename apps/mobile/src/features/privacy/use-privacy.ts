@@ -12,7 +12,10 @@ import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
-import { recipeRecommendationsQueryKey } from "../recipes/use-recipe-recommendations";
+import {
+  recipeFavoritesQueryKey,
+  recipeRecommendationsQueryKey,
+} from "../recipes/use-recipe-recommendations";
 
 export const privacyStatusQueryKey = sessionQueryKeys.privacy;
 
@@ -65,6 +68,7 @@ export const useDeleteRecommendationHistory = () => {
       queryClient.setQueryData(privacyQueryKey, response.status);
       queryClient.invalidateQueries({ queryKey: privacyStatusQueryKey });
       queryClient.invalidateQueries({ queryKey: recipeRecommendationsQueryKey });
+      queryClient.invalidateQueries({ queryKey: recipeFavoritesQueryKey });
     },
   });
 };

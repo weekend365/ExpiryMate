@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UseGuards,
+} from "@nestjs/common";
 import {
   recipeRecommendationRequestSchema,
   type RecipeRecommendationRequest,
@@ -25,6 +35,29 @@ export class RecipesController {
   @Get("recommendations")
   listRecommendations(@CurrentOwnerKey() ownerKey: string) {
     return this.recipesService.listRecommendations(ownerKey);
+  }
+
+  @Get("favorites")
+  listFavorites(@CurrentOwnerKey() ownerKey: string) {
+    return this.recipesService.listFavorites(ownerKey);
+  }
+
+  @Put("recommendations/:id/dishes/:dishIndex/favorite")
+  saveFavorite(
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.recipesService.saveFavorite(id, dishIndex, ownerKey);
+  }
+
+  @Delete("recommendations/:id/dishes/:dishIndex/favorite")
+  deleteFavorite(
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.recipesService.deleteFavorite(id, dishIndex, ownerKey);
   }
 
   @Get("recommendations/:id")
