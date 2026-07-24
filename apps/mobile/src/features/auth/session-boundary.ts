@@ -18,12 +18,14 @@ export const sessionQueryKeys = {
   auth: ["auth", "me"] as const,
   dashboard: ["dashboard-summary"] as const,
   inventory: ["inventory-list"] as const,
+  inventoryItem: ["inventory-item"] as const,
   recipes: ["recipe-recommendations"] as const,
   recipeFavorites: ["recipe-favorites"] as const,
   notificationPreferences: ["notification-preferences"] as const,
   storageLocations: ["storage-locations"] as const,
   subscription: ["subscription-entitlement"] as const,
   privacy: ["privacy-status"] as const,
+  spaces: ["inventory-spaces"] as const,
 };
 
 export function withSessionUser(
@@ -31,4 +33,16 @@ export function withSessionUser(
   userId: string | undefined,
 ) {
   return [...key, userId ?? "signed-out"] as const;
+}
+
+export function withInventorySpace(
+  key: readonly string[],
+  userId: string | undefined,
+  spaceId: string | undefined,
+) {
+  return [
+    ...key,
+    userId ?? "signed-out",
+    spaceId ?? "no-space",
+  ] as const;
 }

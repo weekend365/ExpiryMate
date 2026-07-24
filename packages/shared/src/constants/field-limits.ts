@@ -7,6 +7,7 @@ export const fieldLimits = {
   notes: 500,
   storageLocationKey: 32,
   storageLocationLabel: 20,
+  inventorySpaceName: 40,
   barcode: { min: 8, max: 18 },
   pushToken: 512,
   deviceId: 128,

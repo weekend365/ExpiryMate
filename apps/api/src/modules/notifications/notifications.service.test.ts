@@ -51,6 +51,7 @@ const inventoryItem = {
   id: "item-1",
   displayName: "계란",
   ownerKey: "owner-a",
+  spaceId: "space-a",
   expiryDate: new Date("2026-06-08T00:00:00.000Z"),
 };
 
@@ -133,6 +134,7 @@ describe("NotificationsService", () => {
           type: "expiry_reminder",
           inventoryItemId: "item-1",
           daysBefore: 1,
+          spaceId: "space-a",
         },
       },
     ]);
@@ -360,6 +362,14 @@ function createService() {
     },
     notificationPreference: {
       findMany: vi.fn().mockResolvedValue([]),
+    },
+    inventorySpaceMembership: {
+      findMany: vi.fn().mockResolvedValue([
+        {
+          userId: "owner-a",
+          spaceId: "space-a",
+        },
+      ]),
     },
     inventoryItem: {
       findMany: vi.fn().mockResolvedValue([]),

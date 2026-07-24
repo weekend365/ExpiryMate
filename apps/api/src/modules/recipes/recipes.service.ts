@@ -102,6 +102,7 @@ export class RecipesService {
   async createRecommendation(
     ownerKey: string,
     request: RecipeRecommendationRequest,
+    spaceId?: string,
   ) {
     const now = new Date();
 
@@ -109,7 +110,11 @@ export class RecipesService {
     this.recipePolicy.enforceRateLimit(ownerKey, now);
     await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
 
-    const inventorySnapshot = await this.buildInventorySnapshot(ownerKey, request);
+    const inventorySnapshot = await this.buildInventorySnapshot(
+      ownerKey,
+      request,
+      spaceId,
+    );
 
     if (inventorySnapshot.length === 0) {
       throw new BadRequestException("추천 가능한 재료가 없습니다.");
@@ -125,6 +130,7 @@ export class RecipesService {
       ownerKey,
       requestCacheKey,
       now,
+      spaceId,
     );
 
     if (cachedRecord) {
@@ -151,6 +157,7 @@ export class RecipesService {
     const record = await this.prisma.recipeRecommendation.create({
       data: {
         ownerKey,
+        spaceId,
         requestCacheKey,
         request: toJson(request),
         inventorySnapshot: toJson(inventorySnapshot),
@@ -169,9 +176,9 @@ export class RecipesService {
     return this.serializeRecommendation(record);
   }
 
-  async listRecommendations(ownerKey: string) {
+  async listRecommendations(ownerKey: string, spaceId?: string) {
     const records = await this.prisma.recipeRecommendation.findMany({
-      where: { ownerKey },
+      where: recipeScope(ownerKey, spaceId),
       orderBy: { createdAt: "desc" },
       take: 20,
     });
@@ -179,12 +186,15 @@ export class RecipesService {
     return records.map((record) => this.serializeRecommendation(record));
   }
 
-  async getRecommendation(id: string, ownerKey: string) {
+  async getRecommendation(id: string, ownerKey: string, spaceId?: string) {
     const record = await this.prisma.recipeRecommendation.findUnique({
       where: { id },
     });
 
-    if (!record || record.ownerKey !== ownerKey) {
+    if (
+      !record ||
+      (spaceId ? record.spaceId !== spaceId : record.ownerKey !== ownerKey)
+    ) {
       throw new NotFoundException("추천 결과를 찾을 수 없습니다.");
     }
 
@@ -204,12 +214,18 @@ export class RecipesService {
     recommendationId: string,
     dishIndex: number,
     ownerKey: string,
+    spaceId?: string,
   ): Promise<RecipeFavorite> {
     const recommendation = await this.prisma.recipeRecommendation.findUnique({
       where: { id: recommendationId },
     });
 
-    if (!recommendation || recommendation.ownerKey !== ownerKey) {
+    if (
+      !recommendation ||
+      (spaceId
+        ? recommendation.spaceId !== spaceId
+        : recommendation.ownerKey !== ownerKey)
+    ) {
       throw new NotFoundException("추천 결과를 찾을 수 없습니다.");
     }
 
@@ -269,6 +285,7 @@ export class RecipesService {
     ownerKey: string,
     requestCacheKey: string,
     now: Date,
+    spaceId?: string,
   ) {
     const cacheTtlSeconds = getNonNegativeIntegerEnv(
       "RECIPE_CACHE_TTL_SECONDS",
@@ -281,7 +298,7 @@ export class RecipesService {
 
     return this.prisma.recipeRecommendation.findFirst({
       where: {
-        ownerKey,
+        ...recipeScope(ownerKey, spaceId),
         requestCacheKey,
         createdAt: {
           gte: new Date(now.getTime() - cacheTtlSeconds * 1000),
@@ -296,11 +313,12 @@ export class RecipesService {
   private async buildInventorySnapshot(
     ownerKey: string,
     request: RecipeRecommendationRequest,
+    spaceId?: string,
   ): Promise<RecipeInventorySnapshotItem[]> {
     const today = toKstDateOnly(new Date());
     const items = await this.prisma.inventoryItem.findMany({
       where: {
-        ownerKey,
+        ...(spaceId ? { spaceId } : { ownerKey }),
         status: "active",
         expiryDate: {
           gte: dateOnlyToUtcDate(today),
@@ -430,6 +448,7 @@ export class RecipesService {
     return {
       id: record.id,
       ownerKey: record.ownerKey,
+      spaceId: record.spaceId,
       createdAt: record.createdAt.toISOString(),
       request,
       inventorySnapshot,
@@ -456,6 +475,10 @@ export class RecipesService {
   private getModel() {
     return process.env.RECIPE_AI_MODEL ?? DEFAULT_MODEL;
   }
+}
+
+function recipeScope(ownerKey: string, spaceId?: string) {
+  return spaceId ? { spaceId } : { ownerKey };
 }
 
 function buildInstructions() {

@@ -114,6 +114,10 @@ export interface InventoryItem {
   id: string;
   productId?: string | null;
   ownerKey?: string;
+  spaceId?: string | null;
+  createdByUserId?: string | null;
+  updatedByUserId?: string | null;
+  version?: number;
   displayName: string;
   brand?: string | null;
   category?: ProductCategory | null;
@@ -153,6 +157,7 @@ export interface NotificationPreference {
 export interface UserStorageLocation {
   id: string;
   ownerKey: string;
+  spaceId?: string | null;
   key: string;
   label: string;
   sortOrder: number;

@@ -40,7 +40,10 @@ export class SettingsController {
 
   @Get("storage-locations")
   listStorageLocations(@CurrentOwnerKey() ownerKey: string) {
-    return this.settingsService.listStorageLocations(ownerKey);
+    return this.settingsService.listStorageLocations(
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Post("storage-locations")
@@ -49,7 +52,11 @@ export class SettingsController {
     dto: CreateUserStorageLocationBody,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.settingsService.createStorageLocation(ownerKey, dto);
+    return this.settingsService.createStorageLocation(
+      ownerKey,
+      dto,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Patch("storage-locations/:id")
@@ -59,7 +66,12 @@ export class SettingsController {
     dto: UpdateUserStorageLocationBody,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.settingsService.updateStorageLocation(id, ownerKey, dto);
+    return this.settingsService.updateStorageLocation(
+      id,
+      ownerKey,
+      dto,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Delete("storage-locations/:id")
@@ -67,6 +79,10 @@ export class SettingsController {
     @Param("id") id: string,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.settingsService.deleteStorageLocation(id, ownerKey);
+    return this.settingsService.deleteStorageLocation(
+      id,
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 }

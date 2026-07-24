@@ -9,5 +9,6 @@ import { RecipesService } from "./recipes.service";
   imports: [AuthModule, PrivacyModule],
   controllers: [RecipesController],
   providers: [RecipesService, RecipePolicyService],
+  exports: [RecipesService],
 })
 export class RecipesModule {}

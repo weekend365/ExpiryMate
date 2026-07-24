@@ -64,9 +64,12 @@ export class SettingsService {
     return serializeNotificationPreference(preference);
   }
 
-  async listStorageLocations(ownerKey: string): Promise<StorageLocationsResponse> {
+  async listStorageLocations(
+    ownerKey: string,
+    spaceId?: string,
+  ): Promise<StorageLocationsResponse> {
     const custom = await this.prisma.userStorageLocation.findMany({
-      where: { ownerKey },
+      where: storageLocationScope(ownerKey, spaceId),
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     });
 
@@ -83,10 +86,11 @@ export class SettingsService {
   async createStorageLocation(
     ownerKey: string,
     dto: CreateUserStorageLocationBody,
+    spaceId?: string,
   ) {
     const label = dto.label.trim();
     const existingCount = await this.prisma.userStorageLocation.count({
-      where: { ownerKey },
+      where: storageLocationScope(ownerKey, spaceId),
     });
 
     if (existingCount >= MAX_CUSTOM_STORAGE_LOCATIONS) {
@@ -97,7 +101,7 @@ export class SettingsService {
 
     const duplicate = await this.prisma.userStorageLocation.findFirst({
       where: {
-        ownerKey,
+        ...storageLocationScope(ownerKey, spaceId),
         label: {
           equals: label,
           mode: "insensitive",
@@ -121,6 +125,7 @@ export class SettingsService {
     const location = await this.prisma.userStorageLocation.create({
       data: {
         ownerKey,
+        spaceId,
         key: `custom_${randomBytes(6).toString("hex")}`,
         label,
         sortOrder: existingCount,
@@ -134,13 +139,18 @@ export class SettingsService {
     id: string,
     ownerKey: string,
     dto: UpdateUserStorageLocationBody,
+    spaceId?: string,
   ) {
-    const existing = await this.requireOwnedStorageLocation(id, ownerKey);
+    const existing = await this.requireOwnedStorageLocation(
+      id,
+      ownerKey,
+      spaceId,
+    );
     const label = dto.label.trim();
 
     const duplicate = await this.prisma.userStorageLocation.findFirst({
       where: {
-        ownerKey,
+        ...storageLocationScope(ownerKey, spaceId),
         id: { not: existing.id },
         label: {
           equals: label,
@@ -170,12 +180,16 @@ export class SettingsService {
     return serializeUserStorageLocation(location);
   }
 
-  async deleteStorageLocation(id: string, ownerKey: string) {
-    const existing = await this.requireOwnedStorageLocation(id, ownerKey);
+  async deleteStorageLocation(id: string, ownerKey: string, spaceId?: string) {
+    const existing = await this.requireOwnedStorageLocation(
+      id,
+      ownerKey,
+      spaceId,
+    );
 
     const inUseCount = await this.prisma.inventoryItem.count({
       where: {
-        ownerKey,
+        ...(spaceId ? { spaceId } : { ownerKey }),
         storageLocation: existing.key,
         status: ItemStatus.ACTIVE,
       },
@@ -194,17 +208,19 @@ export class SettingsService {
     return { id: existing.id };
   }
 
-  async assertValidStorageLocation(ownerKey: string, key: string) {
+  async assertValidStorageLocation(
+    ownerKey: string,
+    key: string,
+    spaceId?: string,
+  ) {
     if (isSystemStorageLocationKey(key) || key === "bathroom") {
       return;
     }
 
-    const custom = await this.prisma.userStorageLocation.findUnique({
+    const custom = await this.prisma.userStorageLocation.findFirst({
       where: {
-        ownerKey_key: {
-          ownerKey,
-          key,
-        },
+        ...storageLocationScope(ownerKey, spaceId),
+        key,
       },
     });
 
@@ -215,15 +231,25 @@ export class SettingsService {
     }
   }
 
-  private async requireOwnedStorageLocation(id: string, ownerKey: string) {
-    const location = await this.prisma.userStorageLocation.findUnique({
-      where: { id },
-    });
+  private async requireOwnedStorageLocation(
+    id: string,
+    ownerKey: string,
+    spaceId?: string,
+  ) {
+    const location = spaceId
+      ? await this.prisma.userStorageLocation.findFirst({
+          where: { id, spaceId },
+        })
+      : await this.prisma.userStorageLocation.findUnique({ where: { id } });
 
-    if (!location || location.ownerKey !== ownerKey) {
+    if (!location || (!spaceId && location.ownerKey !== ownerKey)) {
       throw new NotFoundException("보관 위치를 찾을 수 없어요.");
     }
 
     return location;
   }
+}
+
+function storageLocationScope(ownerKey: string, spaceId?: string) {
+  return spaceId ? { spaceId } : { ownerKey };
 }

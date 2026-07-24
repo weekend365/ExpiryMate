@@ -93,6 +93,18 @@ enum PushNotificationDeliveryStatus {
   skipped
 }
 
+enum InventorySpaceType {
+  personal
+  household
+  store
+}
+
+enum InventorySpaceRole {
+  owner
+  manager
+  member
+}
+
 model User {
   id                         String                     @id @default(cuid())
   email                      String?                    @unique
@@ -121,10 +133,66 @@ model User {
   pushTokens                 PushToken[]
   pushNotificationDeliveries PushNotificationDelivery[]
   supportInquiries           SupportInquiry[]
+  ownedInventorySpaces       InventorySpace[]           @relation("InventorySpaceOwner")
+  inventorySpaceMemberships  InventorySpaceMembership[]
+  sentSpaceInvitations       SpaceInvitation[]          @relation("SpaceInvitationSender")
+  createdInventoryItems      InventoryItem[]            @relation("InventoryItemCreator")
+  updatedInventoryItems      InventoryItem[]            @relation("InventoryItemUpdater")
 
   @@index([accountType])
   @@index([role])
   @@index([deletedAt])
+}
+
+model InventorySpace {
+  id               String                     @id @default(cuid())
+  name             String
+  type             InventorySpaceType
+  ownerUserId      String
+  owner            User                       @relation("InventorySpaceOwner", fields: [ownerUserId], references: [id])
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  memberships      InventorySpaceMembership[]
+  invitations      SpaceInvitation[]
+  inventoryItems   InventoryItem[]
+  storageLocations UserStorageLocation[]
+  recommendations  RecipeRecommendation[]
+
+  @@index([ownerUserId])
+  @@index([type])
+}
+
+model InventorySpaceMembership {
+  spaceId              String
+  space                InventorySpace     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  userId               String
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role                 InventorySpaceRole
+  notificationsEnabled Boolean            @default(false)
+  joinedAt             DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@id([spaceId, userId])
+  @@index([userId, joinedAt])
+  @@index([spaceId, role])
+}
+
+model SpaceInvitation {
+  id              String             @id @default(cuid())
+  spaceId         String
+  space           InventorySpace     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  email           String
+  role            InventorySpaceRole @default(member)
+  tokenHash       String             @unique
+  invitedByUserId String
+  invitedBy       User               @relation("SpaceInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+  expiresAt       DateTime
+  acceptedAt      DateTime?
+  revokedAt       DateTime?
+  createdAt       DateTime           @default(now())
+
+  @@index([spaceId, email, createdAt])
+  @@index([email, expiresAt])
 }
 
 model PasswordCredential {
@@ -235,6 +303,13 @@ model InventoryItem {
   id                         String                     @id @default(cuid())
   ownerKey                   String                     @default("demo-user")
   owner                      User                       @relation(fields: [ownerKey], references: [id])
+  spaceId                    String?
+  space                      InventorySpace?            @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  createdByUserId            String?
+  createdBy                  User?                      @relation("InventoryItemCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  updatedByUserId            String?
+  updatedBy                  User?                      @relation("InventoryItemUpdater", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+  version                    Int                        @default(1)
   productId                  String?
   product                    Product?                   @relation(fields: [productId], references: [id])
   displayName                String
@@ -255,6 +330,8 @@ model InventoryItem {
 
   @@index([ownerKey, status])
   @@index([ownerKey, expiryDate])
+  @@index([spaceId, status])
+  @@index([spaceId, expiryDate])
 }
 
 model NotificationPreference {
@@ -271,23 +348,28 @@ model NotificationPreference {
 }
 
 model UserStorageLocation {
-  id        String   @id @default(cuid())
+  id        String          @id @default(cuid())
   ownerKey  String
-  owner     User     @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  owner     User            @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId   String?
+  space     InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   key       String
   label     String
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sortOrder Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
-  @@unique([ownerKey, key])
+  @@unique([spaceId, key])
   @@index([ownerKey])
+  @@index([spaceId])
 }
 
 model RecipeRecommendation {
-  id                String   @id @default(cuid())
-  ownerKey          String   @default("demo-user")
-  owner             User     @relation(fields: [ownerKey], references: [id])
+  id                String          @id @default(cuid())
+  ownerKey          String          @default("demo-user")
+  owner             User            @relation(fields: [ownerKey], references: [id])
+  spaceId           String?
+  space             InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   requestCacheKey   String?
   request           Json
   inventorySnapshot Json
@@ -295,15 +377,17 @@ model RecipeRecommendation {
   aiProvider        String
   aiModel           String
   promptVersion     String
-  inputTokens       Int      @default(0)
-  cachedInputTokens Int      @default(0)
-  outputTokens      Int      @default(0)
-  totalTokens       Int      @default(0)
-  estimatedCostUsd  Decimal  @default(0) @db.Decimal(10, 6)
-  createdAt         DateTime @default(now())
+  inputTokens       Int             @default(0)
+  cachedInputTokens Int             @default(0)
+  outputTokens      Int             @default(0)
+  totalTokens       Int             @default(0)
+  estimatedCostUsd  Decimal         @default(0) @db.Decimal(10, 6)
+  createdAt         DateTime        @default(now())
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
+  @@index([spaceId, createdAt])
+  @@index([spaceId, requestCacheKey, createdAt])
 }
 
 model RecipeFavorite {
@@ -364,27 +448,27 @@ model PushToken {
 }
 
 model PushNotificationDelivery {
-  id                String                         @id @default(cuid())
-  ownerKey          String
-  owner             User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  pushTokenId       String
-  pushToken         PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
-  inventoryItemId   String
-  inventoryItem     InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
-  reminderDate      DateTime
-  daysBefore        Int
-  status            PushNotificationDeliveryStatus @default(pending)
-  expoTicketId      String?
-  title             String
-  body              String
-  errorCode         String?
-  errorMessage      String?
-  attempts          Int                            @default(0)
-  sentAt            DateTime?
+  id               String                         @id @default(cuid())
+  ownerKey         String
+  owner            User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  pushTokenId      String
+  pushToken        PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
+  inventoryItemId  String
+  inventoryItem    InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  reminderDate     DateTime
+  daysBefore       Int
+  status           PushNotificationDeliveryStatus @default(pending)
+  expoTicketId     String?
+  title            String
+  body             String
+  errorCode        String?
+  errorMessage     String?
+  attempts         Int                            @default(0)
+  sentAt           DateTime?
   /// Set once Expo push receipts are fetched for expoTicketId (ok or error).
-  receiptCheckedAt  DateTime?
-  createdAt         DateTime                       @default(now())
-  updatedAt         DateTime                       @updatedAt
+  receiptCheckedAt DateTime?
+  createdAt        DateTime                       @default(now())
+  updatedAt        DateTime                       @updatedAt
 
   @@unique([pushTokenId, inventoryItemId, reminderDate, daysBefore])
   @@index([ownerKey, reminderDate])
@@ -432,16 +516,16 @@ enum SupportInquiryStatus {
 
 /// In-app customer support tickets (reply via email, not in-app thread).
 model SupportInquiry {
-  id          String                  @id @default(cuid())
-  userId      String
-  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category    SupportInquiryCategory
-  body        String
-  appVersion  String?
-  platform    String?
-  status      SupportInquiryStatus    @default(open)
-  createdAt   DateTime                @default(now())
-  updatedAt   DateTime                @updatedAt
+  id         String                 @id @default(cuid())
+  userId     String
+  user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   SupportInquiryCategory
+  body       String
+  appVersion String?
+  platform   String?
+  status     SupportInquiryStatus   @default(open)
+  createdAt  DateTime               @default(now())
+  updatedAt  DateTime               @updatedAt
 
   @@index([userId, createdAt])
   @@index([status, createdAt])

@@ -383,7 +383,7 @@ describe("AuthService", () => {
         fn({ refreshSession: { updateMany, create } }),
       ),
     };
-    const service = new AuthService(prisma as never, {
+    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never);
@@ -424,7 +424,7 @@ describe("AuthService", () => {
       },
       $transaction: vi.fn(),
     };
-    const service = new AuthService(prisma as never, {
+    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never);
@@ -612,7 +612,7 @@ describe("AuthService", () => {
           .mockResolvedValueOnce(null),
       },
     };
-    const service = new AuthService(prisma as never, {
+    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never);
@@ -654,7 +654,7 @@ describe("AuthService", () => {
         create: vi.fn(async () => ({})),
       },
     };
-    const service = new AuthService(prisma as never, {
+    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never);
@@ -703,7 +703,7 @@ describe("AuthService", () => {
         updateMany: vi.fn(),
       },
     };
-    const service = new AuthService(prisma as never, {
+    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never);
@@ -758,14 +758,14 @@ function createAuthService() {
   };
 
   return new AuthService(
-    {
+    withPersonalSpacePrisma({
       user: {
         create: async () => createdUser,
       },
       refreshSession: {
         create: async () => ({}),
       },
-    } as never,
+    }) as never,
     {} as never,
   );
 }
@@ -815,7 +815,10 @@ function createRegisterableAuthService(options?: {
   };
 
   return {
-    service: new AuthService(prisma as never, mailService as never),
+    service: new AuthService(
+      withPersonalSpacePrisma(prisma) as never,
+      mailService as never,
+    ),
     prisma,
     mailService,
   };
@@ -885,12 +888,30 @@ function createOAuthAuthService(options?: {
   };
 
   return {
-    service: new AuthService(prisma as never, {
+    service: new AuthService(withPersonalSpacePrisma(prisma) as never, {
       sendEmailVerification: vi.fn(),
       sendPasswordReset: vi.fn(),
     } as never),
     prisma,
   };
+}
+
+function withPersonalSpacePrisma<T extends Record<string, unknown>>(prisma: T) {
+  const decorated = prisma as T & {
+    inventorySpace: { upsert: ReturnType<typeof vi.fn> };
+    inventorySpaceMembership: { upsert: ReturnType<typeof vi.fn> };
+    $transaction: <R>(
+      callback: (transaction: typeof decorated) => Promise<R>,
+    ) => Promise<R>;
+  };
+
+  decorated.inventorySpace ??= { upsert: vi.fn(async () => ({})) };
+  decorated.inventorySpaceMembership ??= {
+    upsert: vi.fn(async () => ({})),
+  };
+  decorated.$transaction ??= vi.fn(async (callback) => callback(decorated));
+
+  return decorated;
 }
 
 function createAppleTestKeys() {

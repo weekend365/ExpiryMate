@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import {
   ExpirySource,
   InventoryUnitCode,
@@ -28,6 +33,7 @@ const MAX_PAGE_SIZE = 200;
 
 interface FindInventoryParams {
   ownerKey: string;
+  spaceId?: string;
   q?: string;
   status?: SharedItemStatus;
   storageLocation?: string;
@@ -39,10 +45,12 @@ interface FindInventoryParams {
 interface BatchDiscardParams {
   ids: string[];
   ownerKey: string;
+  spaceId?: string;
 }
 
 interface BatchConsumeParams extends BatchConsumeInventoryItemsBody {
   ownerKey: string;
+  spaceId?: string;
 }
 
 @Injectable()
@@ -59,7 +67,7 @@ export class InventoryService {
       Math.max(1, params.limit ?? DEFAULT_PAGE_SIZE),
     );
     const where = {
-      ownerKey: params.ownerKey,
+      ...inventoryScope(params.ownerKey, params.spaceId),
       status: params.status as ItemStatus | undefined,
       storageLocation: params.storageLocation,
       expiryDate: params.expiringWithin
@@ -106,28 +114,38 @@ export class InventoryService {
     };
   }
 
-  async findOne(id: string, ownerKey: string) {
-    const item = await this.prisma.inventoryItem.findUnique({
-      where: { id },
-    });
+  async findOne(id: string, ownerKey: string, spaceId?: string) {
+    const item = spaceId
+      ? await this.prisma.inventoryItem.findFirst({
+          where: { id, spaceId },
+        })
+      : await this.prisma.inventoryItem.findUnique({ where: { id } });
 
-    if (!item || item.ownerKey !== ownerKey) {
+    if (!item || (!spaceId && item.ownerKey !== ownerKey)) {
       throw new NotFoundException("재고 항목을 찾을 수 없습니다.");
     }
 
     return serializeInventoryItem(item);
   }
 
-  async create(dto: CreateInventoryItemBody, ownerKey: string) {
+  async create(
+    dto: CreateInventoryItemBody,
+    ownerKey: string,
+    spaceId?: string,
+  ) {
     await this.settingsService.assertValidStorageLocation(
       ownerKey,
       dto.storageLocation,
+      spaceId,
     );
 
     const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
     const item = await this.prisma.inventoryItem.create({
       data: {
         ownerKey,
+        spaceId,
+        createdByUserId: ownerKey,
+        updatedByUserId: ownerKey,
         productId: dto.productId,
         displayName: dto.displayName,
         brand: dto.brand,
@@ -148,13 +166,19 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
-  async update(id: string, dto: UpdateInventoryItemBody, ownerKey: string) {
-    const current = await this.findOne(id, ownerKey);
+  async update(
+    id: string,
+    dto: UpdateInventoryItemBody,
+    ownerKey: string,
+    spaceId?: string,
+  ) {
+    const current = await this.findOne(id, ownerKey, spaceId);
 
     if (dto.storageLocation !== undefined) {
       await this.settingsService.assertValidStorageLocation(
         ownerKey,
         dto.storageLocation,
+        spaceId,
       );
     }
 
@@ -166,8 +190,12 @@ export class InventoryService {
       unitCode: dto.unitCode,
     });
 
-    const item = await this.prisma.inventoryItem.update({
-      where: { id },
+    const updated = await this.prisma.inventoryItem.updateMany({
+      where: {
+        id,
+        ...inventoryScope(ownerKey, spaceId),
+        version: dto.expectedVersion,
+      },
       data: {
         productId: dto.productId,
         displayName: dto.displayName,
@@ -185,36 +213,55 @@ export class InventoryService {
         expirySource: dto.expirySource as ExpirySource | undefined,
         status: dto.status as ItemStatus | undefined,
         notes: dto.notes,
+        updatedByUserId: ownerKey,
+        version: { increment: 1 },
       },
     });
 
+    if (updated.count !== 1) {
+      throw new ConflictException(
+        "다른 구성원이 먼저 바꿨어요. 최신 내용을 불러온 뒤 다시 해볼까요?",
+      );
+    }
+
+    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
+      where: { id },
+    });
     return serializeInventoryItem(item);
   }
 
-  async consume(id: string, ownerKey: string) {
-    await this.findOne(id, ownerKey);
-
-    const item = await this.prisma.inventoryItem.update({
-      where: { id },
+  async consume(id: string, ownerKey: string, spaceId?: string) {
+    await this.findOne(id, ownerKey, spaceId);
+    await this.prisma.inventoryItem.updateMany({
+      where: { id, ...inventoryScope(ownerKey, spaceId) },
       data: {
         status: ItemStatus.consumed,
         quantityBase: 0,
+        updatedByUserId: ownerKey,
+        version: { increment: 1 },
       },
     });
 
+    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
+      where: { id },
+    });
     return serializeInventoryItem(item);
   }
 
-  async discard(id: string, ownerKey: string) {
-    await this.findOne(id, ownerKey);
-
-    const item = await this.prisma.inventoryItem.update({
-      where: { id },
+  async discard(id: string, ownerKey: string, spaceId?: string) {
+    await this.findOne(id, ownerKey, spaceId);
+    await this.prisma.inventoryItem.updateMany({
+      where: { id, ...inventoryScope(ownerKey, spaceId) },
       data: {
         status: ItemStatus.discarded,
+        updatedByUserId: ownerKey,
+        version: { increment: 1 },
       },
     });
 
+    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
+      where: { id },
+    });
     return serializeInventoryItem(item);
   }
 
@@ -228,7 +275,7 @@ export class InventoryService {
     const items = await this.prisma.inventoryItem.findMany({
       where: {
         id: { in: ids },
-        ownerKey: params.ownerKey,
+        ...inventoryScope(params.ownerKey, params.spaceId),
       },
     });
 
@@ -243,18 +290,20 @@ export class InventoryService {
     await this.prisma.inventoryItem.updateMany({
       where: {
         id: { in: ids },
-        ownerKey: params.ownerKey,
+        ...inventoryScope(params.ownerKey, params.spaceId),
         status: ItemStatus.active,
       },
       data: {
         status: ItemStatus.discarded,
+        updatedByUserId: params.ownerKey,
+        version: { increment: 1 },
       },
     });
 
     const discardedItems = await this.prisma.inventoryItem.findMany({
       where: {
         id: { in: ids },
-        ownerKey: params.ownerKey,
+        ...inventoryScope(params.ownerKey, params.spaceId),
       },
       orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
     });
@@ -276,7 +325,7 @@ export class InventoryService {
       const storedItems = await tx.inventoryItem.findMany({
         where: {
           id: { in: ids },
-          ownerKey: params.ownerKey,
+          ...inventoryScope(params.ownerKey, params.spaceId),
           status: ItemStatus.active,
         },
       });
@@ -308,12 +357,14 @@ export class InventoryService {
         const updated = await tx.inventoryItem.updateMany({
           where: {
             id: requestItem.inventoryItemId,
-            ownerKey: params.ownerKey,
+            ...inventoryScope(params.ownerKey, params.spaceId),
             status: ItemStatus.active,
             quantityBase: { gte: requestItem.amountBase },
           },
           data: {
             quantityBase: { decrement: requestItem.amountBase },
+            updatedByUserId: params.ownerKey,
+            version: { increment: 1 },
             ...(syncCountQuantity ? { quantity: nextQuantityBase } : {}),
           },
         });
@@ -328,7 +379,7 @@ export class InventoryService {
       await tx.inventoryItem.updateMany({
         where: {
           id: { in: ids },
-          ownerKey: params.ownerKey,
+          ...inventoryScope(params.ownerKey, params.spaceId),
           status: ItemStatus.active,
           quantityBase: 0,
         },
@@ -340,7 +391,7 @@ export class InventoryService {
       const consumedItems = await tx.inventoryItem.findMany({
         where: {
           id: { in: ids },
-          ownerKey: params.ownerKey,
+          ...inventoryScope(params.ownerKey, params.spaceId),
         },
         orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
       });
@@ -351,6 +402,10 @@ export class InventoryService {
       };
     });
   }
+}
+
+function inventoryScope(ownerKey: string, spaceId?: string) {
+  return spaceId ? { spaceId } : { ownerKey };
 }
 
 function parseExpiryDate(value: string) {

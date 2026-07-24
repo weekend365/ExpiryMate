@@ -550,6 +550,7 @@ export class AuthService {
       throw new UnauthorizedException("로그인이 필요합니다.");
     }
 
+    await this.ensurePersonalInventorySpace(user.id);
     const refreshToken = createOpaqueToken();
     await this.prisma.refreshSession.create({
       data: {
@@ -564,6 +565,32 @@ export class AuthService {
       accessToken: this.signAccessToken(user),
       refreshToken,
     };
+  }
+
+  private async ensurePersonalInventorySpace(userId: string) {
+    const spaceId = `personal_${userId}`;
+    await this.prisma.$transaction(async (tx) => {
+      await tx.inventorySpace.upsert({
+        where: { id: spaceId },
+        create: {
+          id: spaceId,
+          name: "내 냉장고",
+          type: "personal",
+          ownerUserId: userId,
+        },
+        update: {},
+      });
+      await tx.inventorySpaceMembership.upsert({
+        where: { spaceId_userId: { spaceId, userId } },
+        create: {
+          spaceId,
+          userId,
+          role: "owner",
+          notificationsEnabled: true,
+        },
+        update: { role: "owner" },
+      });
+    });
   }
 
   private signAccessToken(user: User) {
@@ -692,6 +719,32 @@ export class AuthService {
     }
 
     await this.prisma.$transaction(async (tx) => {
+      const targetPersonalSpaceId = `personal_${targetUserId}`;
+      await tx.inventorySpace.upsert({
+        where: { id: targetPersonalSpaceId },
+        create: {
+          id: targetPersonalSpaceId,
+          name: "내 냉장고",
+          type: "personal",
+          ownerUserId: targetUserId,
+        },
+        update: {},
+      });
+      await tx.inventorySpaceMembership.upsert({
+        where: {
+          spaceId_userId: {
+            spaceId: targetPersonalSpaceId,
+            userId: targetUserId,
+          },
+        },
+        create: {
+          spaceId: targetPersonalSpaceId,
+          userId: targetUserId,
+          role: "owner",
+          notificationsEnabled: true,
+        },
+        update: { role: "owner" },
+      });
       const targetUser = await tx.user.findUnique({
         where: { id: targetUserId },
         select: {
@@ -702,11 +755,26 @@ export class AuthService {
 
       await tx.inventoryItem.updateMany({
         where: { ownerKey: anonymousUserId },
-        data: { ownerKey: targetUserId },
+        data: {
+          ownerKey: targetUserId,
+          spaceId: targetPersonalSpaceId,
+          createdByUserId: targetUserId,
+          updatedByUserId: targetUserId,
+        },
+      });
+      await tx.userStorageLocation.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: {
+          ownerKey: targetUserId,
+          spaceId: targetPersonalSpaceId,
+        },
       });
       await tx.recipeRecommendation.updateMany({
         where: { ownerKey: anonymousUserId },
-        data: { ownerKey: targetUserId },
+        data: {
+          ownerKey: targetUserId,
+          spaceId: targetPersonalSpaceId,
+        },
       });
       await tx.recipeFavorite.updateMany({
         where: { ownerKey: anonymousUserId },
@@ -755,6 +823,9 @@ export class AuthService {
           },
         });
       }
+      await tx.inventorySpace.deleteMany({
+        where: { id: `personal_${anonymousUserId}` },
+      });
       await tx.user.update({
         where: { id: anonymousUserId },
         data: { mergedIntoUserId: targetUserId },

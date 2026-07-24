@@ -14,12 +14,16 @@ import { PrismaService } from "../../database/prisma.service";
 export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getSummary(ownerKey: string, now = new Date()): Promise<DashboardSummary> {
+  async getSummary(
+    ownerKey: string,
+    now = new Date(),
+    spaceId?: string,
+  ): Promise<DashboardSummary> {
     const today = dateOnlyToUtcDate(toKstDateOnly(now));
     const in3Days = addUtcDays(today, 3);
     const in7Days = addUtcDays(today, 7);
     const trackedWhere: Prisma.InventoryItemWhereInput = {
-      ownerKey,
+      ...(spaceId ? { spaceId } : { ownerKey }),
       status: {
         in: [ItemStatus.active, ItemStatus.expired],
       },
@@ -72,7 +76,7 @@ export class DashboardService {
         _count: { _all: true },
       }),
       this.prisma.inventoryItem.findMany({
-        where: { ownerKey },
+        where: spaceId ? { spaceId } : { ownerKey },
         orderBy: { createdAt: "desc" },
         take: 5,
       }),

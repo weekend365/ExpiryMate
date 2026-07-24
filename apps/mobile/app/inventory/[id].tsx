@@ -46,6 +46,12 @@ import {
   updateInventoryItem,
 } from "../../src/services/api";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
+import { useAuth } from "../../src/features/auth/use-auth";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../../src/features/auth/session-boundary";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 
 type InventoryFormInput = z.input<typeof inventoryFormSchema>;
@@ -82,6 +88,26 @@ const EDIT_STEPS: Array<{
 export default function InventoryDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const { activeSpaceId, isReady } = useActiveSpace();
+  const inventoryKey = withInventorySpace(
+    sessionQueryKeys.inventory,
+    sessionUserId,
+    activeSpaceId,
+  );
+  const dashboardKey = withInventorySpace(
+    sessionQueryKeys.dashboard,
+    sessionUserId,
+    activeSpaceId,
+  );
+  const itemKey = [
+    ...withInventorySpace(
+      sessionQueryKeys.inventoryItem,
+      sessionUserId,
+      activeSpaceId,
+    ),
+    id,
+  ] as const;
   const [mode, setMode] = useState<"view" | "edit">("view");
   const [editStep, setEditStep] = useState<EditStep>("product");
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
@@ -90,36 +116,43 @@ export default function InventoryDetailScreen() {
   const { selectableOptions, resolveLabel } = useStorageLocations();
 
   const itemQuery = useQuery({
-    queryKey: ["inventory-item", id],
-    queryFn: () => getInventoryItem(id),
-    enabled: Boolean(id),
+    queryKey: itemKey,
+    queryFn: () => getInventoryItem(id, activeSpaceId),
+    enabled: Boolean(id && activeSpaceId && isReady),
   });
 
   const updateMutation = useMutation({
     mutationFn: (values: Partial<InventoryFormValues>) =>
-      updateInventoryItem(id, values),
+      updateInventoryItem(
+        id,
+        {
+          ...values,
+          expectedVersion: itemQuery.data?.version,
+        },
+        activeSpaceId,
+      ),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-item", id] });
+      queryClient.invalidateQueries({ queryKey: inventoryKey });
+      queryClient.invalidateQueries({ queryKey: dashboardKey });
+      queryClient.invalidateQueries({ queryKey: itemKey });
     },
   });
 
   const consumeMutation = useMutation({
-    mutationFn: () => consumeInventoryItem(id),
+    mutationFn: () => consumeInventoryItem(id, activeSpaceId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-item", id] });
+      queryClient.invalidateQueries({ queryKey: inventoryKey });
+      queryClient.invalidateQueries({ queryKey: dashboardKey });
+      queryClient.invalidateQueries({ queryKey: itemKey });
     },
   });
 
   const discardMutation = useMutation({
-    mutationFn: () => discardInventoryItem(id),
+    mutationFn: () => discardInventoryItem(id, activeSpaceId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["inventory-list"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      queryClient.invalidateQueries({ queryKey: ["inventory-item", id] });
+      queryClient.invalidateQueries({ queryKey: inventoryKey });
+      queryClient.invalidateQueries({ queryKey: dashboardKey });
+      queryClient.invalidateQueries({ queryKey: itemKey });
     },
   });
 

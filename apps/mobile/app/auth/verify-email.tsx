@@ -7,6 +7,7 @@ import { EmptyState } from "../../src/components/EmptyState";
 import type { MascotMood } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { authQueryKey } from "../../src/features/auth/use-auth";
+import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
 import { verifyEmail } from "../../src/services/api";
 import { spacing } from "../../src/shared/theme";
 
@@ -95,7 +96,11 @@ export default function VerifyEmailScreen() {
       setMood("happy");
       setMessage("메일 확인이 끝났어요. 이제 함께 시작해요.");
       setIsLoading(false);
-      router.replace("/(tabs)/home");
+      void continuePendingSpaceInvitation().then((continued) => {
+        if (!continued) {
+          router.replace("/(tabs)/home");
+        }
+      });
       return;
     }
 
@@ -117,7 +122,9 @@ export default function VerifyEmailScreen() {
       .then(async () => {
         completedTokensRef.current.add(token);
         await queryClient.invalidateQueries({ queryKey: authQueryKey });
-        router.replace("/(tabs)/home");
+        if (!(await continuePendingSpaceInvitation())) {
+          router.replace("/(tabs)/home");
+        }
         if (cancelled) {
           return;
         }
@@ -163,7 +170,16 @@ export default function VerifyEmailScreen() {
         isLoading ? undefined : (
           <View style={{ gap: spacing.sm }}>
             {succeeded ? (
-              <Button onPress={() => router.replace("/(tabs)/home")} fullWidth>
+              <Button
+                onPress={() => {
+                  void continuePendingSpaceInvitation().then((continued) => {
+                    if (!continued) {
+                      router.replace("/(tabs)/home");
+                    }
+                  });
+                }}
+                fullWidth
+              >
                 홈으로 갈게요
               </Button>
             ) : (

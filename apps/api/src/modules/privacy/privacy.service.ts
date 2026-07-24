@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   PreconditionFailedException,
   UnauthorizedException,
@@ -113,15 +114,40 @@ export class PrivacyService {
 
   async deleteAccount(userId: string): Promise<DeleteAccountResponse> {
     await this.findActiveUser(userId);
+    const ownedSharedSpace = await this.prisma.inventorySpace.findFirst({
+      where: {
+        ownerUserId: userId,
+        type: { not: "personal" },
+        memberships: {
+          some: { userId: { not: userId } },
+        },
+      },
+      select: { name: true },
+    });
+    if (ownedSharedSpace) {
+      throw new ConflictException(
+        `'${ownedSharedSpace.name}' 냉장고의 소유권을 먼저 넘기거나 공간을 정리해 주세요.`,
+      );
+    }
 
     const deletedAt = new Date();
 
     await this.prisma.$transaction(async (tx) => {
       await tx.pushNotificationDelivery.deleteMany({ where: { ownerKey: userId } });
       await tx.pushToken.deleteMany({ where: { ownerKey: userId } });
-      await tx.inventoryItem.deleteMany({ where: { ownerKey: userId } });
+      await tx.inventoryItem.updateMany({
+        where: {
+          OR: [{ createdByUserId: userId }, { updatedByUserId: userId }],
+        },
+        data: { createdByUserId: null, updatedByUserId: null },
+      });
       await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
+      await tx.spaceInvitation.deleteMany({
+        where: { invitedByUserId: userId },
+      });
+      await tx.inventorySpaceMembership.deleteMany({ where: { userId } });
+      await tx.inventorySpace.deleteMany({ where: { ownerUserId: userId } });
       await tx.subscriptionEntitlement.deleteMany({ where: { ownerKey: userId } });
       await tx.notificationPreference.deleteMany({ where: { ownerKey: userId } });
       await tx.supportInquiry.deleteMany({ where: { userId } });

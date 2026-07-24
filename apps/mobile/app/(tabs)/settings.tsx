@@ -7,6 +7,7 @@ import {
   MessageCircleHeart,
   ShieldCheck,
   UserRound,
+  Users,
 } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { ListRow } from "../../src/components/ListRow";
@@ -45,6 +46,12 @@ export default function SettingsScreen() {
             description="냉장·냉동 외에 나만의 자리를 추가해요."
             icon={MapPin}
             onPress={() => router.push("/settings/storage-locations")}
+          />
+          <ListRow
+            title="함께 쓰는 냉장고"
+            description="가족이나 동료를 초대하고 냉장고를 바꿔요."
+            icon={Users}
+            onPress={() => router.push("/settings/spaces")}
           />
           <ListRow
             title="계정"

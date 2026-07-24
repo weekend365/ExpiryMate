@@ -21,6 +21,7 @@ import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
+import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
 import { startOAuth } from "../../src/services/api";
 import {
   colors,
@@ -58,7 +59,9 @@ export default function LoginScreen() {
         email: email.trim(),
         password,
       });
-      router.replace("/(tabs)/home");
+      if (!(await continuePendingSpaceInvitation())) {
+        router.replace("/(tabs)/home");
+      }
     } catch (error) {
       const message = getErrorMessage(error);
       if (message.includes("메일 확인")) {
@@ -101,7 +104,9 @@ export default function LoginScreen() {
           .filter(Boolean)
           .join(" "),
       });
-      router.replace("/(tabs)/home");
+      if (!(await continuePendingSpaceInvitation())) {
+        router.replace("/(tabs)/home");
+      }
     } catch (error) {
       if ((error as { code?: string }).code === "ERR_REQUEST_CANCELED") {
         return;
@@ -217,7 +222,9 @@ export default function LoginScreen() {
         providerToken,
         state,
       });
-      router.replace("/(tabs)/home");
+      if (!(await continuePendingSpaceInvitation())) {
+        router.replace("/(tabs)/home");
+      }
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     } finally {

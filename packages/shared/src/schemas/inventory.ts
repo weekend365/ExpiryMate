@@ -41,6 +41,10 @@ export const inventoryItemSchema = z.object({
   id: z.string(),
   productId: z.string().nullable().optional(),
   ownerKey: z.string().optional(),
+  spaceId: z.string().nullable().optional(),
+  createdByUserId: z.string().nullable().optional(),
+  updatedByUserId: z.string().nullable().optional(),
+  version: z.number().int().positive().default(1),
   displayName: z.string().min(1).max(fieldLimits.displayName),
   brand: z.string().max(fieldLimits.brand).nullable().optional(),
   category: z.nativeEnum(ProductCategory).nullable().optional(),
@@ -60,6 +64,10 @@ export const inventoryItemSchema = z.object({
 export const inventoryUpsertSchema = inventoryItemSchema.omit({
   id: true,
   ownerKey: true,
+  spaceId: true,
+  createdByUserId: true,
+  updatedByUserId: true,
+  version: true,
   createdAt: true,
   updatedAt: true,
 });
@@ -95,7 +103,10 @@ export const createInventoryItemBodySchema = inventoryFormSchema.extend({
   status: z.nativeEnum(ItemStatus).optional(),
 });
 
-export const updateInventoryItemBodySchema = createInventoryItemBodySchema.partial();
+export const updateInventoryItemBodySchema =
+  createInventoryItemBodySchema.partial().extend({
+    expectedVersion: z.number().int().positive().optional(),
+  });
 
 export const batchConsumeInventoryItemSchema = z.object({
   inventoryItemId: z.string().trim().min(1),

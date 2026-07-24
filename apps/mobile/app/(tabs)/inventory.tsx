@@ -42,6 +42,7 @@ import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
 import { type MascotMood } from "../../src/components/Mascot";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
+import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import {
   buildInventoryUrgencySections,
   filterInventoryItems,
@@ -464,6 +465,7 @@ export default function InventoryScreen() {
           removeClippedSubviews
           ListHeaderComponent={
             <View style={styles.listHeader}>
+            <SpaceSwitcher />
             {isLoading && !hasLoadedInventory ? (
               <HomeStatsSkeleton />
             ) : showListChrome && !isSelectionMode ? (

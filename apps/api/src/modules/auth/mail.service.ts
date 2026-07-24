@@ -48,6 +48,39 @@ export class MailService {
     });
   }
 
+  async sendSpaceInvitation(input: {
+    email: string;
+    token: string;
+    spaceName: string;
+    inviterName: string;
+  }) {
+    const inviteUrl = buildAuthHttpsLink("space-invitations/open", {
+      token: input.token,
+    });
+    const spaceName = input.spaceName.replace(/[\r\n]+/g, " ").trim();
+    const inviterName = input.inviterName.replace(/[\r\n]+/g, " ").trim();
+
+    await this.sendMail({
+      to: input.email,
+      subject: `${spaceName} 냉장고를 함께 써볼까요?`,
+      text: [
+        "안녕하세요, 장고예요.",
+        "",
+        `${inviterName}님이 '${spaceName}' 냉장고로 초대했어요.`,
+        "아래 링크를 누르면 함께 재고를 정리할 수 있어요.",
+        inviteUrl,
+        "",
+        "초대 링크는 7일 뒤 만료돼요. 모르는 초대라면 무시해 주세요.",
+      ].join("\n"),
+      html: `
+        <p>안녕하세요, 장고예요.</p>
+        <p>${escapeHtml(inviterName)}님이 <strong>${escapeHtml(spaceName)}</strong> 냉장고로 초대했어요.</p>
+        <p><a href="${escapeHtml(inviteUrl)}">함께 쓰러 갈게요</a></p>
+        <p>초대 링크는 7일 뒤 만료돼요. 모르는 초대라면 무시해 주세요.</p>
+      `,
+    });
+  }
+
   async sendSupportInquiryAlert(input: {
     to: string;
     inquiryId: string;
@@ -211,6 +244,15 @@ export class MailService {
       html: input.html,
     });
   }
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function shouldUseResendHttp(

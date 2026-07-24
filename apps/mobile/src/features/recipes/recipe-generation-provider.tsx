@@ -17,7 +17,12 @@ import {
   NOTIFICATION_TYPES,
   scheduleLocalNotification,
 } from "../../services/notifications";
-import { sessionQueryKeys } from "../auth/session-boundary";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../auth/session-boundary";
+import { useAuth } from "../auth/use-auth";
+import { useActiveSpace } from "../spaces/space-provider";
 import {
   registerRecipeGenerationAcknowledge,
   registerRecipeGenerationReset,
@@ -43,6 +48,8 @@ const RecipeGenerationContext =
 
 export function RecipeGenerationProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const { activeSpaceId } = useActiveSpace();
   const [status, setStatus] = useState<RecipeGenerationStatus>("idle");
   const [latestGeneratedRecommendation, setLatestGeneratedRecommendation] =
     useState<RecipeRecommendation | null>(null);
@@ -56,17 +63,39 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
       setErrorMessage(null);
 
       try {
-        const recommendation = await createRecipeRecommendation(payload);
+        if (!activeSpaceId) {
+          throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+        }
+        const recommendation = await createRecipeRecommendation(
+          payload,
+          activeSpaceId,
+        );
 
         setLatestGeneratedRecommendation(recommendation);
         setLatestGeneratedRecommendationId(recommendation.id);
         setStatus("success");
 
         queryClient.invalidateQueries({
-          queryKey: recipeRecommendationsQueryKey,
+          queryKey: withInventorySpace(
+            recipeRecommendationsQueryKey,
+            sessionUserId,
+            activeSpaceId,
+          ),
         });
-        queryClient.invalidateQueries({ queryKey: sessionQueryKeys.dashboard });
-        queryClient.invalidateQueries({ queryKey: sessionQueryKeys.inventory });
+        queryClient.invalidateQueries({
+          queryKey: withInventorySpace(
+            sessionQueryKeys.dashboard,
+            sessionUserId,
+            activeSpaceId,
+          ),
+        });
+        queryClient.invalidateQueries({
+          queryKey: withInventorySpace(
+            sessionQueryKeys.inventory,
+            sessionUserId,
+            activeSpaceId,
+          ),
+        });
 
         scheduleLocalNotification(
           "요리 추천이 준비됐어요",
@@ -84,7 +113,7 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
         return null;
       }
     },
-    [queryClient],
+    [activeSpaceId, queryClient, sessionUserId],
   );
 
   const acknowledgeRecipeGeneration = useCallback(() => {
@@ -103,6 +132,10 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
     registerRecipeGenerationReset(resetRecipeGeneration);
     return () => registerRecipeGenerationReset(null);
   }, [resetRecipeGeneration]);
+
+  useEffect(() => {
+    resetRecipeGeneration();
+  }, [activeSpaceId, resetRecipeGeneration]);
 
   useEffect(() => {
     registerRecipeGenerationAcknowledge(acknowledgeRecipeGeneration);

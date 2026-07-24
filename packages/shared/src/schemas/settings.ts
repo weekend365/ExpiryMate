@@ -22,6 +22,7 @@ export const notificationPreferenceUpdateSchema = notificationPreferenceSchema.o
 export const userStorageLocationSchema = z.object({
   id: z.string(),
   ownerKey: z.string(),
+  spaceId: z.string().nullable().optional(),
   key: z.string().min(1).max(fieldLimits.storageLocationKey),
   label: z.string().min(1).max(fieldLimits.storageLocationLabel),
   sortOrder: z.number().int(),

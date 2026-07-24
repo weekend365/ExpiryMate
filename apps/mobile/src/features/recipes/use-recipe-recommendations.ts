@@ -5,7 +5,12 @@ import type {
 } from "@expirymate/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../auth/use-auth";
-import { sessionQueryKeys, withSessionUser } from "../auth/session-boundary";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+  withSessionUser,
+} from "../auth/session-boundary";
+import { useActiveSpace } from "../spaces/space-provider";
 import {
   createRecipeRecommendation,
   deleteRecipeFavorite,
@@ -25,26 +30,49 @@ export const getRecipeFavoriteKey = (
 
 export const useRecipeRecommendations = () => {
   const { sessionUserId } = useAuth();
+  const { activeSpaceId, isReady } = useActiveSpace();
 
   return useQuery({
-    queryKey: withSessionUser(recipeRecommendationsQueryKey, sessionUserId),
-    queryFn: listRecipeRecommendations,
-    enabled: Boolean(sessionUserId),
+    queryKey: withInventorySpace(
+      recipeRecommendationsQueryKey,
+      sessionUserId,
+      activeSpaceId,
+    ),
+    queryFn: () => listRecipeRecommendations(activeSpaceId),
+    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
   });
 };
 
 export const useCreateRecipeRecommendation = () => {
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const { activeSpaceId } = useActiveSpace();
 
   return useMutation({
     mutationFn: (payload: RecipeRecommendationPayload) =>
-      createRecipeRecommendation(payload),
+      createRecipeRecommendation(payload, activeSpaceId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: recipeRecommendationsQueryKey,
+        queryKey: withInventorySpace(
+          recipeRecommendationsQueryKey,
+          sessionUserId,
+          activeSpaceId,
+        ),
       });
-      queryClient.invalidateQueries({ queryKey: sessionQueryKeys.dashboard });
-      queryClient.invalidateQueries({ queryKey: sessionQueryKeys.inventory });
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.dashboard,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.inventory,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
     },
   });
 };
@@ -70,6 +98,7 @@ type SetRecipeFavoriteVariables = {
 export const useSetRecipeFavorite = () => {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
+  const { activeSpaceId } = useActiveSpace();
   const queryKey = withSessionUser(recipeFavoritesQueryKey, sessionUserId);
 
   return useMutation({
@@ -79,7 +108,7 @@ export const useSetRecipeFavorite = () => {
       favorite,
     }: SetRecipeFavoriteVariables) =>
       favorite
-        ? saveRecipeFavorite(recommendationId, dishIndex)
+        ? saveRecipeFavorite(recommendationId, dishIndex, activeSpaceId)
         : deleteRecipeFavorite(recommendationId, dishIndex),
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey });
