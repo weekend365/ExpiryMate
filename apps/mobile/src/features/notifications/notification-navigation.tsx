@@ -5,9 +5,11 @@ import {
   getNotificationNavigationPath,
   getNotificationResponseData,
   getNotificationResponseId,
+  NOTIFICATION_TYPES,
 } from "../../services/notifications";
 import { useAppStore } from "../../store/app-store";
 import { useAuth } from "../auth/use-auth";
+import { acknowledgeRecipeGenerationState } from "../recipes/recipe-generation-reset";
 
 /**
  * Opens the matching in-app screen when the user taps a notification
@@ -37,12 +39,20 @@ export function NotificationNavigationBridge() {
         return;
       }
 
-      const path = getNotificationNavigationPath(
-        getNotificationResponseData(response),
-      );
+      const data = getNotificationResponseData(response);
+      const path = getNotificationNavigationPath(data);
 
       if (!path) {
         return;
+      }
+
+      if (
+        data &&
+        typeof data === "object" &&
+        "type" in data &&
+        data.type === NOTIFICATION_TYPES.recipeReady
+      ) {
+        acknowledgeRecipeGenerationState();
       }
 
       handledResponseIdRef.current = responseId;

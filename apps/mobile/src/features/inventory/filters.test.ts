@@ -3,6 +3,7 @@ import {
   ItemStatus,
   StorageLocation,
   type InventoryItem,
+  UnitCode,
 } from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -171,6 +172,8 @@ function createItem(
     category: null,
     quantity: 1,
     unit: "개",
+    quantityBase: 1,
+    unitCode: UnitCode.EA,
     storageLocation,
     expiryDate,
     expirySource: ExpirySource.MANUAL,

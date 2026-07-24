@@ -5,6 +5,8 @@ interface QuantityStepperProps {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  /** Inclusive upper bound for cooking / partial-use flows. */
+  max?: number;
   error?: string;
 }
 
@@ -12,16 +14,23 @@ export function QuantityStepper({
   label,
   value,
   onChange,
+  max,
   error,
 }: QuantityStepperProps) {
-  const safeValue = Number.isFinite(value) && value > 0 ? value : 1;
+  const upperBound =
+    typeof max === "number" && Number.isFinite(max) && max >= 1
+      ? Math.floor(max)
+      : undefined;
+  const safeValue = Number.isFinite(value) && value > 0 ? Math.floor(value) : 1;
+  const clampedValue =
+    upperBound === undefined ? safeValue : Math.min(safeValue, upperBound);
 
   return (
     <View style={styles.wrapper}>
       <Text style={styles.label}>{label}</Text>
       <View style={[styles.container, error ? styles.errorContainer : null]}>
         <Pressable
-          onPress={() => onChange(Math.max(1, safeValue - 1))}
+          onPress={() => onChange(Math.max(1, clampedValue - 1))}
           hitSlop={spacing.xxs}
           accessibilityRole="button"
           accessibilityLabel={`${label} 하나 줄이기`}
@@ -33,23 +42,38 @@ export function QuantityStepper({
           <Text style={styles.iconButtonLabel}>-</Text>
         </Pressable>
         <TextInput
-          value={String(safeValue)}
+          value={String(clampedValue)}
           onChangeText={(text) => {
             const nextValue = Number(text.replace(/[^0-9]/g, ""));
-            onChange(nextValue > 0 ? nextValue : 1);
+            const normalized = nextValue > 0 ? nextValue : 1;
+            onChange(
+              upperBound === undefined
+                ? normalized
+                : Math.min(normalized, upperBound),
+            );
           }}
           keyboardType="number-pad"
           accessibilityLabel={`${label} 수량`}
           style={styles.input}
         />
         <Pressable
-          onPress={() => onChange(safeValue + 1)}
+          onPress={() =>
+            onChange(
+              upperBound === undefined
+                ? clampedValue + 1
+                : Math.min(clampedValue + 1, upperBound),
+            )
+          }
           hitSlop={spacing.xxs}
           accessibilityRole="button"
           accessibilityLabel={`${label} 하나 늘리기`}
+          disabled={upperBound !== undefined && clampedValue >= upperBound}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,
+            upperBound !== undefined &&
+              clampedValue >= upperBound &&
+              styles.iconButtonDisabled,
           ]}
         >
           <Text style={styles.iconButtonLabel}>+</Text>
@@ -93,6 +117,9 @@ const styles = StyleSheet.create({
   },
   iconButtonPressed: {
     backgroundColor: colors.primarySoftPressed,
+  },
+  iconButtonDisabled: {
+    opacity: 0.45,
   },
   iconButtonLabel: {
     fontSize: typography.heading.fontSize,

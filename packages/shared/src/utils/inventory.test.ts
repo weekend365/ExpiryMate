@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { ExpirySource, ItemStatus, StorageLocation } from "../enums/app-enums";
+import {
+  ExpirySource,
+  ItemStatus,
+  StorageLocation,
+  UnitCode,
+} from "../enums/app-enums";
 import { addDays, toIsoDate } from "./date";
 import {
   generateDashboardSummary,
@@ -25,6 +30,8 @@ describe("inventory utils", () => {
         id: "1",
         displayName: "서울우유 1L",
         quantity: 1,
+        quantityBase: 1000,
+        unitCode: UnitCode.ML,
         storageLocation: StorageLocation.FRIDGE,
         expiryDate: toIsoDate(now),
         expirySource: ExpirySource.MANUAL,
@@ -36,6 +43,8 @@ describe("inventory utils", () => {
         id: "2",
         displayName: "계란 10구",
         quantity: 1,
+        quantityBase: 10,
+        unitCode: UnitCode.EA,
         storageLocation: StorageLocation.FRIDGE,
         expiryDate: toIsoDate(addDays(now, 3)),
         expirySource: ExpirySource.PRESET,
@@ -47,6 +56,8 @@ describe("inventory utils", () => {
         id: "3",
         displayName: "냉동 만두",
         quantity: 1,
+        quantityBase: 1,
+        unitCode: UnitCode.EA,
         storageLocation: StorageLocation.FREEZER,
         expiryDate: toIsoDate(addDays(now, -2)),
         expirySource: ExpirySource.MANUAL,
@@ -71,6 +82,8 @@ describe("inventory utils", () => {
       brand: "농심",
       quantity: 1,
       unit: "개",
+      quantityBase: 1,
+      unitCode: UnitCode.EA,
       storageLocation: StorageLocation.ROOM,
       expirySource: ExpirySource.MANUAL,
       status: ItemStatus.ACTIVE,
@@ -92,6 +105,8 @@ describe("inventory utils", () => {
     const baseItem = {
       displayName: "같은 표시 이름",
       quantity: 1,
+      quantityBase: 1,
+      unitCode: UnitCode.EA,
       storageLocation: StorageLocation.FRIDGE,
       expiryDate: "2026-04-19",
       expirySource: ExpirySource.MANUAL,
@@ -105,5 +120,27 @@ describe("inventory utils", () => {
     ]);
 
     expect(groups).toHaveLength(2);
+  });
+
+  it("uses canonical remaining quantities after partial consumption", () => {
+    const groups = groupInventoryItems([
+      {
+        id: "milk-1",
+        displayName: "우유 1L",
+        quantity: 1,
+        unit: "팩",
+        quantityBase: 500,
+        unitCode: UnitCode.ML,
+        storageLocation: StorageLocation.FRIDGE,
+        expiryDate: "2026-04-20",
+        expirySource: ExpirySource.MANUAL,
+        status: ItemStatus.ACTIVE,
+        createdAt: "2026-04-19",
+        updatedAt: "2026-04-19",
+      },
+    ]);
+
+    expect(groups[0]?.totalQuantity).toBe(500);
+    expect(groups[0]?.unit).toBe("ml");
   });
 });

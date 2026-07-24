@@ -14,6 +14,12 @@ enum ItemStatus {
   expired
 }
 
+enum InventoryUnitCode {
+  ea
+  ml
+  g
+}
+
 enum ExpirySource {
   manual
   preset
@@ -235,6 +241,8 @@ model InventoryItem {
   category                   ProductCategory?
   quantity                   Int
   unit                       String?                    @default("개")
+  quantityBase               Int                        @default(1)
+  unitCode                   InventoryUnitCode          @default(ea)
   storageLocation            String
   expiryDate                 DateTime                   @db.Date
   expirySource               ExpirySource

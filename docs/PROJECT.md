@@ -158,7 +158,7 @@ flowchart LR
 | 이메일 인증 | 가입/로그인 UI · `EmailDomainInput` · verify-pending/verify-email · HTTPS 브릿지 → 딥링크 · 재발송·비밀번호 재설정 · **실기기 E2E 전부 ✅** |
 | 관측성 | Sentry API·Admin DSN 주입·스모크 ✅ · Mobile DSN은 EAS에 있음 · preview 빌드/스모크 후순위 |
 | 모바일 빌드 | EAS Android preview APK · monorepo shared 훅 · Reanimated 정렬 |
-| 스캐너 | 바코드 → ProductMaster/OFF → OCR → 등록 prefill (iOS 실기기 ✅) |
+| 스캐너 | 바코드 → ProductMaster/OFF → OCR(또는 수기 유통기한) → 등록 prefill (iOS 실기기 ✅) |
 | 바코드 DB | `ProductMaster` + 식품안전나라 적재 · lookup/contribute API |
 | 브랜드 UI | 리디자인 템플릿 1→14 ✅ · 장고 mood PNG · Admin 토큰 동기화 |
 | 소셜 인증 | 로그인 필수 · 카카오→네이버→구글→Apple · OAuth HTTPS 콜백 · 구글 code+secret |
@@ -184,7 +184,8 @@ flowchart LR
   → [1/2] 바코드 스캔
   → ProductMaster → OFF → 수동
   → [2/2] 유통기한 OCR
-  → 등록 화면 prefill (expirySource: ocr_detected)
+  → OCR 실패/미표시 시 수기 유통기한(빠른 선택·달력) → 동일 confirm
+  → 등록 화면 prefill (expirySource: ocr_detected | manual | preset)
 ```
 
 - Expo Go 불가 → `expo run:ios|android` 또는 EAS 빌드

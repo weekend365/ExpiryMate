@@ -21,6 +21,7 @@ import type {
 import {
   calculateDaysLeftUntilExpiry,
   dateOnlyToUtcDate,
+  generatedRecipeRecommendationsPayloadSchema,
   recipeInventorySnapshotItemSchema,
   recipeRecommendationRequestSchema,
   recipeRecommendationsPayloadSchema,
@@ -33,7 +34,7 @@ import { PrismaService } from "../../database/prisma.service";
 import { PrivacyService } from "../privacy/privacy.service";
 import { RecipePolicyService } from "./recipe-policy.service";
 
-const PROMPT_VERSION = "recipe-recommendation-v2";
+const PROMPT_VERSION = "recipe-recommendation-v3";
 const DEFAULT_MODEL = "gpt-5-mini";
 const MAX_INGREDIENTS = 30;
 
@@ -251,6 +252,8 @@ export class RecipesService {
       category: item.category as RecipeInventorySnapshotItem["category"],
       quantity: item.quantity,
       unit: item.unit,
+      quantityBase: item.quantityBase,
+      unitCode: item.unitCode as RecipeInventorySnapshotItem["unitCode"],
       storageLocation:
         item.storageLocation,
       expiryDate: toKstDateOnly(item.expiryDate),
@@ -291,7 +294,7 @@ export class RecipesService {
         },
         text: {
           format: zodTextFormat(
-            recipeRecommendationsPayloadSchema,
+            generatedRecipeRecommendationsPayloadSchema,
             "recipe_recommendations",
           ),
           verbosity: "low",
@@ -305,7 +308,7 @@ export class RecipesService {
       }
 
       const recommendations =
-        recipeRecommendationsPayloadSchema.parse(parsed).recommendations;
+        generatedRecipeRecommendationsPayloadSchema.parse(parsed).recommendations;
       const usage = normalizeUsage(response.usage, instructions, input, parsed);
 
       return {
@@ -378,6 +381,9 @@ function buildInstructions() {
     "각 추천의 steps는 4~8단계로 구성하고, 한 단계에는 핵심 행동 하나만 담으세요.",
     "각 단계 문장에는 가능하면 다음을 포함하세요: 실제 사용량(ml/g/개/큰술), 불 세기(약불/중불/강불), 대략 시간(분/초), 완성 감각 기준(거품이 난다, 가장자리가 노릇해진다 등).",
     "재료 목록의 포장 단위(예: 우유 1L)를 그대로 쓰지 말고, 이 요리에 실제로 쓰는 분량을 단계와 tips에 명시하세요.",
+    "usedIngredients의 각 항목에는 이 요리에 실제로 사용할 정수 amount와 unitCode를 반드시 넣으세요.",
+    "unitCode는 ea, ml, g 중 하나만 쓰고, ml와 g는 최소 단위 정수로 적으세요. 예: 우유 0.5L는 amount 500, unitCode ml입니다.",
+    "inventoryItemId가 있는 재료는 입력 inventory의 unitCode와 같은 단위를 쓰고 amount가 quantityBase를 넘지 않게 하세요.",
     "면·밥·고기·계란처럼 익힘 시간이 중요한 재료는 분 단위로 안내하세요. 패키지 표기가 있으면 '표기 시간의 약 1분 전'처럼 표현해도 됩니다.",
     "'적당히', '잘', '살짝', '충분히'만으로 끝내거나 '끓인다', '섞는다', '익힌다'처럼 한 단어에 가까운 뭉뚱그린 단계는 금지합니다.",
     "나쁜 예: '면을 삶는다.' / 좋은 예: '소금 1작은술을 넣은 끓는 물에 면을 넣고 7~8분 삶아 알덴테로 익힌 뒤, 면수는 종이컵 반 컵(약 100ml)만 남기고 건집니다.'",
@@ -401,6 +407,8 @@ function buildInput(
         maxCookingMinutes: request.maxCookingMinutes,
         servings: request.servings,
         mealType: request.mealType,
+        usedIngredientUnits: ["ea", "ml", "g"],
+        requireUsedIngredientAmount: true,
       },
     },
     null,

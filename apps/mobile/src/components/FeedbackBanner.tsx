@@ -54,12 +54,10 @@ export function FeedbackBanner({
   showMascot = true,
 }: FeedbackBannerProps) {
   const palette = toneConfig[tone];
+  const isActionable = Boolean(actionLabel && onAction);
 
-  return (
-    <View
-      style={[styles.root, { backgroundColor: palette.backgroundColor }]}
-      accessibilityLiveRegion="polite"
-    >
+  const content = (
+    <>
       {showMascot ? <Mascot size="small" mood={palette.mascotMood} /> : null}
       <View style={styles.copy}>
         <AppText variant="bodyStrong" tone={palette.titleTone}>
@@ -69,22 +67,40 @@ export function FeedbackBanner({
           <AppText variant="bodySmall">{description}</AppText>
         ) : null}
         {actionLabel && onAction ? (
-          <Pressable
-            onPress={onAction}
-            accessibilityRole="button"
-            accessibilityLabel={actionLabel}
-            hitSlop={spacing.xs}
-            style={({ pressed }) => [
-              styles.action,
-              pressed && styles.actionPressed,
-            ]}
-          >
+          <View style={styles.action}>
             <AppText variant="bodyStrong" tone="primary">
               {actionLabel}
             </AppText>
-          </Pressable>
+          </View>
         ) : null}
       </View>
+    </>
+  );
+
+  if (isActionable && onAction) {
+    return (
+      <Pressable
+        onPress={onAction}
+        accessibilityRole="button"
+        accessibilityLabel={actionLabel}
+        accessibilityLiveRegion="polite"
+        style={({ pressed }) => [
+          styles.root,
+          { backgroundColor: palette.backgroundColor },
+          pressed && styles.rootPressed,
+        ]}
+      >
+        {content}
+      </Pressable>
+    );
+  }
+
+  return (
+    <View
+      style={[styles.root, { backgroundColor: palette.backgroundColor }]}
+      accessibilityLiveRegion="polite"
+    >
+      {content}
     </View>
   );
 }
@@ -98,6 +114,9 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     minHeight: touchTarget.min,
   },
+  rootPressed: {
+    opacity: 0.85,
+  },
   copy: {
     flex: 1,
     gap: spacing.xxs,
@@ -107,8 +126,5 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.min,
     justifyContent: "center",
     paddingRight: spacing.sm,
-  },
-  actionPressed: {
-    opacity: 0.7,
   },
 });

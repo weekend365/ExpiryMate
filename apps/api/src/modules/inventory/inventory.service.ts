@@ -1,15 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import {
   ExpirySource,
+  InventoryUnitCode,
   ItemStatus,
   ProductCategory,
 } from "@prisma/client";
 import {
   addDaysToDateOnly,
+  type BatchConsumeInventoryItemsBody,
   dateOnlyToUtcDate,
   isDateOnlyString,
   ItemStatus as SharedItemStatus,
   type InventoryListResponse,
+  toBaseQuantity,
+  resolveCanonicalQuantityUpdate,
 } from "@expirymate/shared";
 import { serializeInventoryItem } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
@@ -34,6 +38,10 @@ interface FindInventoryParams {
 
 interface BatchDiscardParams {
   ids: string[];
+  ownerKey: string;
+}
+
+interface BatchConsumeParams extends BatchConsumeInventoryItemsBody {
   ownerKey: string;
 }
 
@@ -116,6 +124,7 @@ export class InventoryService {
       dto.storageLocation,
     );
 
+    const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
     const item = await this.prisma.inventoryItem.create({
       data: {
         ownerKey,
@@ -125,6 +134,9 @@ export class InventoryService {
         category: dto.category as ProductCategory | undefined,
         quantity: dto.quantity,
         unit: dto.unit ?? "개",
+        quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
+        unitCode: (dto.unitCode ??
+          derivedQuantity.unitCode) as InventoryUnitCode,
         storageLocation: dto.storageLocation,
         expiryDate: parseExpiryDate(dto.expiryDate),
         expirySource: dto.expirySource as ExpirySource,
@@ -137,7 +149,7 @@ export class InventoryService {
   }
 
   async update(id: string, dto: UpdateInventoryItemBody, ownerKey: string) {
-    await this.findOne(id, ownerKey);
+    const current = await this.findOne(id, ownerKey);
 
     if (dto.storageLocation !== undefined) {
       await this.settingsService.assertValidStorageLocation(
@@ -145,6 +157,14 @@ export class InventoryService {
         dto.storageLocation,
       );
     }
+
+    const canonicalUpdate = resolveCanonicalQuantityUpdate({
+      current,
+      quantity: dto.quantity,
+      unit: dto.unit,
+      quantityBase: dto.quantityBase,
+      unitCode: dto.unitCode,
+    });
 
     const item = await this.prisma.inventoryItem.update({
       where: { id },
@@ -155,6 +175,10 @@ export class InventoryService {
         category: dto.category as ProductCategory | undefined,
         quantity: dto.quantity,
         unit: dto.unit,
+        quantityBase: canonicalUpdate?.quantityBase,
+        unitCode: canonicalUpdate
+          ? (canonicalUpdate.unitCode as InventoryUnitCode)
+          : undefined,
         storageLocation: dto.storageLocation,
         expiryDate:
           dto.expiryDate === undefined ? undefined : parseExpiryDate(dto.expiryDate),
@@ -174,6 +198,7 @@ export class InventoryService {
       where: { id },
       data: {
         status: ItemStatus.consumed,
+        quantityBase: 0,
       },
     });
 
@@ -238,6 +263,93 @@ export class InventoryService {
       count: discardedItems.length,
       items: discardedItems.map(serializeInventoryItem),
     };
+  }
+
+  async batchConsume(params: BatchConsumeParams) {
+    const ids = params.items.map((item) => item.inventoryItemId);
+
+    if (new Set(ids).size !== ids.length) {
+      throw new BadRequestException("같은 재료는 한 번만 반영할 수 있어요.");
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const storedItems = await tx.inventoryItem.findMany({
+        where: {
+          id: { in: ids },
+          ownerKey: params.ownerKey,
+          status: ItemStatus.active,
+        },
+      });
+
+      if (storedItems.length !== ids.length) {
+        throw new BadRequestException(
+          "지금은 반영할 수 없는 재료가 포함되어 있어요.",
+        );
+      }
+
+      const storedById = new Map(
+        storedItems.map((item) => [item.id, item] as const),
+      );
+
+      for (const requestItem of params.items) {
+        const current = storedById.get(requestItem.inventoryItemId);
+        if (!current) {
+          throw new BadRequestException(
+            "지금은 반영할 수 없는 재료가 포함되어 있어요.",
+          );
+        }
+
+        const nextQuantityBase = current.quantityBase - requestItem.amountBase;
+        const syncCountQuantity =
+          current.unitCode === InventoryUnitCode.ea &&
+          current.quantity === current.quantityBase &&
+          nextQuantityBase > 0;
+
+        const updated = await tx.inventoryItem.updateMany({
+          where: {
+            id: requestItem.inventoryItemId,
+            ownerKey: params.ownerKey,
+            status: ItemStatus.active,
+            quantityBase: { gte: requestItem.amountBase },
+          },
+          data: {
+            quantityBase: { decrement: requestItem.amountBase },
+            ...(syncCountQuantity ? { quantity: nextQuantityBase } : {}),
+          },
+        });
+
+        if (updated.count !== 1) {
+          throw new BadRequestException(
+            "남아 있는 양보다 많이 사용할 수 없어요.",
+          );
+        }
+      }
+
+      await tx.inventoryItem.updateMany({
+        where: {
+          id: { in: ids },
+          ownerKey: params.ownerKey,
+          status: ItemStatus.active,
+          quantityBase: 0,
+        },
+        data: {
+          status: ItemStatus.consumed,
+        },
+      });
+
+      const consumedItems = await tx.inventoryItem.findMany({
+        where: {
+          id: { in: ids },
+          ownerKey: params.ownerKey,
+        },
+        orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+      });
+
+      return {
+        count: consumedItems.length,
+        items: consumedItems.map(serializeInventoryItem),
+      };
+    });
   }
 }
 

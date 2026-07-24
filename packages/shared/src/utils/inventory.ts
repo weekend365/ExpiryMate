@@ -1,4 +1,5 @@
-import { ItemStatus, StorageLocation } from "../enums/app-enums";
+import { unitCodeLabels } from "../constants/labels";
+import { ItemStatus, StorageLocation, UnitCode } from "../enums/app-enums";
 import type { DashboardSummary, InventoryItem } from "../types/models";
 import { calculateDaysLeftUntilExpiry } from "./date";
 
@@ -98,8 +99,17 @@ export const groupInventoryItems = (
 
   return Array.from(groups, ([id, groupItems]) => {
     const representative = groupItems[0]!;
+    const usesCanonicalQuantity = groupItems.some(
+      (item) =>
+        item.unitCode !== UnitCode.EA ||
+        item.quantityBase !== item.quantity,
+    );
     const normalizedUnits = new Set(
-      groupItems.map((item) => normalizeIdentityPart(item.unit ?? "개")),
+      groupItems.map((item) =>
+        usesCanonicalQuantity
+          ? item.unitCode
+          : normalizeIdentityPart(item.unit ?? "개"),
+      ),
     );
 
     return {
@@ -109,10 +119,14 @@ export const groupInventoryItems = (
       items: groupItems,
       nearestExpiryDate: representative.expiryDate,
       totalQuantity: groupItems.reduce(
-        (total, item) => total + item.quantity,
+        (total, item) =>
+          total +
+          (usesCanonicalQuantity ? item.quantityBase : item.quantity),
         0,
       ),
-      unit: representative.unit ?? "개",
+      unit: usesCanonicalQuantity
+        ? unitCodeLabels[representative.unitCode]
+        : (representative.unit ?? "개"),
       hasMixedUnits: normalizedUnits.size > 1,
     };
   });

@@ -13,6 +13,13 @@ export enum ItemStatus {
   EXPIRED = "expired",
 }
 
+/** Canonical integer units used for inventory arithmetic. */
+export enum UnitCode {
+  EA = "ea",
+  ML = "ml",
+  G = "g",
+}
+
 export enum ExpirySource {
   MANUAL = "manual",
   PRESET = "preset",

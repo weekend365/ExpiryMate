@@ -18,7 +18,10 @@ import {
   scheduleLocalNotification,
 } from "../../services/notifications";
 import { sessionQueryKeys } from "../auth/session-boundary";
-import { registerRecipeGenerationReset } from "./recipe-generation-reset";
+import {
+  registerRecipeGenerationAcknowledge,
+  registerRecipeGenerationReset,
+} from "./recipe-generation-reset";
 import { recipeRecommendationsQueryKey } from "./use-recipe-recommendations";
 
 type RecipeGenerationStatus = "idle" | "pending" | "success" | "error";
@@ -31,6 +34,7 @@ interface RecipeGenerationContextValue {
   generateRecipeRecommendation: (
     payload: RecipeRecommendationPayload,
   ) => Promise<RecipeRecommendation | null>;
+  acknowledgeRecipeGeneration: () => void;
   resetRecipeGeneration: () => void;
 }
 
@@ -83,6 +87,11 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
     [queryClient],
   );
 
+  const acknowledgeRecipeGeneration = useCallback(() => {
+    setStatus("idle");
+    setErrorMessage(null);
+  }, []);
+
   const resetRecipeGeneration = useCallback(() => {
     setStatus("idle");
     setErrorMessage(null);
@@ -95,6 +104,11 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
     return () => registerRecipeGenerationReset(null);
   }, [resetRecipeGeneration]);
 
+  useEffect(() => {
+    registerRecipeGenerationAcknowledge(acknowledgeRecipeGeneration);
+    return () => registerRecipeGenerationAcknowledge(null);
+  }, [acknowledgeRecipeGeneration]);
+
   const value = useMemo(
     () => ({
       status,
@@ -102,9 +116,11 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
       latestGeneratedRecommendationId,
       errorMessage,
       generateRecipeRecommendation,
+      acknowledgeRecipeGeneration,
       resetRecipeGeneration,
     }),
     [
+      acknowledgeRecipeGeneration,
       errorMessage,
       generateRecipeRecommendation,
       latestGeneratedRecommendation,

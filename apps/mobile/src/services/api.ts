@@ -19,6 +19,8 @@ import type {
   PrivacyStatus,
   RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
+  BatchConsumeInventoryItemsBody,
+  BatchConsumeInventoryItemsResponse,
   DeleteRecommendationHistoryResponse,
   RevokeAiDataNoticeResponse,
   RecipeRecommendation,
@@ -689,6 +691,14 @@ export const batchDiscardInventoryItems = (ids: string[]) =>
   request<BatchDiscardInventoryItemsResponse>("/inventory/batch-discard", {
     method: "POST",
     body: JSON.stringify({ ids }),
+  });
+
+export const batchConsumeInventoryItems = (
+  payload: BatchConsumeInventoryItemsBody,
+) =>
+  request<BatchConsumeInventoryItemsResponse>("/inventory/batch-consume", {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
 
 export const listRecipeRecommendations = () =>

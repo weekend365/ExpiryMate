@@ -33,7 +33,8 @@ export type ProductInfo = {
 
 export type ScannerConfirmation = {
   barcode: string;
-  expirationDate: string;
+  /** ISO date from OCR, or null when the user will enter expiry manually. */
+  expirationDate: string | null;
 };
 
 const PRODUCT_BARCODE_TYPES = new Set([
@@ -271,6 +272,24 @@ export function useProductScanner() {
 
   const isCameraActive = mode !== "confirm";
 
+  const confirmWithManualExpiry = useCallback(() => {
+    if (!scannedBarcode || modeRef.current !== "ocr") {
+      return;
+    }
+
+    // Invalidate in-flight OCR captures so the loop cannot reopen confirm.
+    scanTokenRef.current += 1;
+    scanProcessingRef.current = false;
+    setIsScanProcessing(false);
+    setOcrErrorMessage(null);
+    setConfirmation({
+      barcode: scannedBarcode,
+      expirationDate: null,
+    });
+    updateMode("confirm");
+    Vibration.vibrate(80);
+  }, [scannedBarcode, updateMode]);
+
   const resetScanner = useCallback(() => {
     lookupAbortRef.current?.abort();
     scanTokenRef.current += 1;
@@ -302,6 +321,7 @@ export function useProductScanner() {
     cameraErrorMessage,
     confirmation,
     resetScanner,
+    confirmWithManualExpiry,
     setGuideFrame,
     handleCameraReady,
     handleMountError,

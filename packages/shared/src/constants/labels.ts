@@ -5,6 +5,7 @@ import {
   StorageLocation,
   SupportInquiryCategory,
   SupportInquiryStatus,
+  UnitCode,
 } from "../enums/app-enums";
 
 export const storageLocationLabels: Record<StorageLocation, string> = {
@@ -62,6 +63,12 @@ export const itemStatusLabels: Record<ItemStatus, string> = {
   [ItemStatus.CONSUMED]: "소비 완료",
   [ItemStatus.DISCARDED]: "폐기",
   [ItemStatus.EXPIRED]: "만료",
+};
+
+export const unitCodeLabels: Record<UnitCode, string> = {
+  [UnitCode.EA]: "개",
+  [UnitCode.ML]: "ml",
+  [UnitCode.G]: "g",
 };
 
 export const expirySourceLabels: Record<ExpirySource, string> = {

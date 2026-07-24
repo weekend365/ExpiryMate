@@ -1,4 +1,4 @@
-import { ExpirySource, ItemStatus, StorageLocation } from "../enums/app-enums";
+import { ExpirySource, ItemStatus, StorageLocation, UnitCode } from "../enums/app-enums";
 
 export const DEFAULT_OWNER_KEY = "demo-user";
 export const DEFAULT_NOTIFICATION_DAYS = [1, 3, 7];
@@ -13,6 +13,8 @@ export const DEFAULT_INVENTORY_FORM = {
   category: undefined,
   quantity: 1,
   unit: "개",
+  quantityBase: 1,
+  unitCode: UnitCode.EA,
   storageLocation: StorageLocation.FRIDGE,
   expiryDate: "",
   expirySource: ExpirySource.MANUAL,

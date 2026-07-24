@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { fieldLimits } from "../constants/field-limits";
-import { ProductCategory } from "../enums/app-enums";
+import { ProductCategory, UnitCode } from "../enums/app-enums";
 import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
 import { storageLocationKeySchema } from "./inventory";
 
@@ -25,6 +25,8 @@ export const recipeInventorySnapshotItemSchema = z.object({
   category: z.nativeEnum(ProductCategory).nullable().optional(),
   quantity: z.number(),
   unit: z.string().max(fieldLimits.unit).nullable().optional(),
+  quantityBase: z.number().int().min(0).optional(),
+  unitCode: z.nativeEnum(UnitCode).optional(),
   storageLocation: storageLocationKeySchema,
   expiryDate: z
     .string()
@@ -33,10 +35,22 @@ export const recipeInventorySnapshotItemSchema = z.object({
   daysUntilExpiry: z.number().int(),
 });
 
-export const recipeUsedIngredientSchema = z.object({
+const recipeUsedIngredientBaseSchema = z.object({
   inventoryItemId: z.string().nullable(),
   name: z.string().min(1).max(fieldLimits.recipeIngredientName),
 });
+
+export const recipeUsedIngredientSchema = recipeUsedIngredientBaseSchema.extend({
+  /** Canonical integer amount for new recommendations; optional for stored legacy JSON. */
+  amount: z.number().int().positive().optional(),
+  unitCode: z.nativeEnum(UnitCode).optional(),
+});
+
+export const generatedRecipeUsedIngredientSchema =
+  recipeUsedIngredientBaseSchema.extend({
+    amount: z.number().int().positive(),
+    unitCode: z.nativeEnum(UnitCode),
+  });
 
 export const recipeOptionalMissingIngredientSchema = z.object({
   name: z.string().min(1).max(fieldLimits.recipeIngredientName),
@@ -58,6 +72,16 @@ export const recipeRecommendationDishSchema = z.object({
 
 export const recipeRecommendationsPayloadSchema = z.object({
   recommendations: z.array(recipeRecommendationDishSchema).length(3),
+});
+
+export const generatedRecipeRecommendationsPayloadSchema = z.object({
+  recommendations: z
+    .array(
+      recipeRecommendationDishSchema.extend({
+        usedIngredients: z.array(generatedRecipeUsedIngredientSchema),
+      }),
+    )
+    .length(3),
 });
 
 export const recipeRecommendationSchema = z.object({

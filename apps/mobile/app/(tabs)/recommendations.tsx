@@ -1,8 +1,9 @@
-import type {
-  RecipeInventorySnapshotItem,
-  RecipeMealType,
-  RecipeRecommendation,
-  RecipeRecommendationDish,
+import {
+  formatBaseQuantity,
+  type RecipeInventorySnapshotItem,
+  type RecipeMealType,
+  type RecipeRecommendation,
+  type RecipeRecommendationDish,
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
@@ -32,7 +33,6 @@ import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
-import { Mascot } from "../../src/components/Mascot";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
@@ -64,6 +64,7 @@ type HighlightIngredient = {
   key: string;
   name: string;
   inventoryItemId: string | null;
+  amountLabel: string | null;
   daysUntilExpiry: number | null;
   isExpiring: boolean;
 };
@@ -278,30 +279,27 @@ export default function RecommendationsScreen() {
           }
         >
       <View style={styles.heroCard}>
-        <View style={styles.heroRow}>
-          <View style={styles.heroCopy}>
-            <Text style={styles.heroEyebrow}>장고의 요리 추천</Text>
-            <Text style={styles.heroTitle}>
-              {isGenerating
-                ? "냉장고를 들여다보는 중이에요"
-                : justGenerated
-                  ? "추천이 준비됐어요"
-                  : "오늘 뭐 해먹을까요?"}
-            </Text>
-            {isGenerating || !hasRecommendationResult ? (
-              <Text style={styles.heroDescription} numberOfLines={1}>
-                {isGenerating
-                  ? "다른 화면을 봐도 괜찮아요. 끝나면 알려드릴게요."
-                  : "임박 재료를 먼저 살피고 요리를 골라 드릴게요."}
-              </Text>
-            ) : null}
-          </View>
-          <Mascot
-            size="small"
-            mood={justGenerated ? "happy" : "cooking"}
-            style={styles.heroMascot}
-          />
-        </View>
+        <MascotSpeechBubble
+          message={
+            isGenerating
+              ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
+              : justGenerated
+                ? "추천이 준비됐어요. 같이 살펴볼까요?"
+                : hasRecommendationResult
+                  ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
+                  : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요."
+          }
+          mood={
+            isGenerating
+              ? "think"
+              : justGenerated
+                ? "happy"
+                : hasRecommendationResult
+                  ? "cooking"
+                  : "speak"
+          }
+          size="small"
+        />
 
         <Pressable
           onPress={() => setShowOptionsSheet(true)}
@@ -394,6 +392,7 @@ export default function RecommendationsScreen() {
             latestRecommendation.recommendations.map((dish, index) => (
               <RecipeCard
                 key={`${latestRecommendation.id}-${dish.title}-${index}`}
+                recommendationId={latestRecommendation.id}
                 dish={dish}
                 index={index}
                 inventorySnapshot={latestRecommendation.inventorySnapshot}
@@ -595,9 +594,11 @@ export default function RecommendationsScreen() {
             {historyRecommendation.recommendations.map((dish, index) => (
               <RecipeCard
                 key={`${historyRecommendation.id}-${dish.title}-${index}`}
+                recommendationId={historyRecommendation.id}
                 dish={dish}
                 index={index}
                 inventorySnapshot={historyRecommendation.inventorySnapshot}
+                onStartCooking={() => setHistoryRecommendation(null)}
               />
             ))}
           </View>
@@ -616,13 +617,17 @@ export default function RecommendationsScreen() {
 }
 
 function RecipeCard({
+  recommendationId,
   dish,
   index,
   inventorySnapshot,
+  onStartCooking,
 }: {
+  recommendationId: string;
   dish: RecipeRecommendationDish;
   index: number;
   inventorySnapshot: RecipeInventorySnapshotItem[];
+  onStartCooking?: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [checkedIngredientKeys, setCheckedIngredientKeys] = useState<string[]>(
@@ -673,13 +678,13 @@ function RecipeCard({
   };
 
   const handleStartCooking = () => {
-    const hasExpiringUsed = usedIngredientRows.some(
-      (ingredient) => ingredient.isExpiring,
-    );
-
+    onStartCooking?.();
     router.push({
-      pathname: "/(tabs)/inventory",
-      params: hasExpiringUsed ? { filter: "expiring" } : undefined,
+      pathname: "/cooking/[recommendationId]",
+      params: {
+        recommendationId,
+        dishIndex: String(index),
+      },
     });
   };
 
@@ -804,8 +809,10 @@ function RecipeCard({
                     accessibilityRole="checkbox"
                     accessibilityState={{ checked }}
                     accessibilityLabel={`${ingredient.name}${
-                      ingredient.isExpiring ? ", 유통기한 임박" : ""
-                    }`}
+                      ingredient.amountLabel
+                        ? ` ${ingredient.amountLabel}`
+                        : ""
+                    }${ingredient.isExpiring ? ", 유통기한 임박" : ""}`}
                     style={({ pressed }) => [
                       styles.checklistRow,
                       checked && styles.checklistRowChecked,
@@ -825,9 +832,16 @@ function RecipeCard({
                         strokeWidth={2.2}
                       />
                     )}
-                    <Text style={[styles.checklistText]}>
-                      {ingredient.name}
-                    </Text>
+                    <View style={styles.checklistCopy}>
+                      <Text style={styles.checklistText}>
+                        {ingredient.name}
+                      </Text>
+                      {ingredient.amountLabel ? (
+                        <Text style={styles.checklistAmount}>
+                          추천 {ingredient.amountLabel}
+                        </Text>
+                      ) : null}
+                    </View>
                     {ingredient.isExpiring ? (
                       <View style={styles.checklistBadge}>
                         <Clock3
@@ -927,6 +941,10 @@ function getUsedIngredientRows(
       key: ingredient.inventoryItemId ?? `${ingredient.name}-${index}`,
       name: ingredient.name,
       inventoryItemId: ingredient.inventoryItemId,
+      amountLabel:
+        ingredient.amount && ingredient.unitCode
+          ? formatBaseQuantity(ingredient.amount, ingredient.unitCode)
+          : null,
       daysUntilExpiry,
       isExpiring,
     } satisfies HighlightIngredient;
@@ -1074,36 +1092,6 @@ const styles = StyleSheet.create({
     borderColor: colors.primarySoft,
     padding: spacing.md,
     gap: spacing.md,
-  },
-  heroRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  heroCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
-  heroMascot: {
-    flexShrink: 0,
-  },
-  heroEyebrow: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
-  heroTitle: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
-    color: colors.text,
-  },
-  heroDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   optionsSummary: {
     backgroundColor: colors.surface,
@@ -1369,12 +1357,21 @@ const styles = StyleSheet.create({
   checklistRowPressed: {
     opacity: 0.85,
   },
-  checklistText: {
+  checklistCopy: {
     flex: 1,
+    gap: spacing.xxs,
+  },
+  checklistText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
+  },
+  checklistAmount: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
   },
   checklistBadge: {
     flexDirection: "row",
