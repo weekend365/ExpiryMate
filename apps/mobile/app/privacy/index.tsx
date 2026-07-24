@@ -92,7 +92,7 @@ export default function PrivacyScreen() {
             <PrivacyRow
               icon={ExternalLink}
               title="개인정보 다루는 방법"
-              description={`${appBrand.appNameKo}는 계정, 넣은 재료와 유통기한, 알림 설정, 그동안 받은 요리 추천을 서비스를 위해 써요.`}
+              description={`${appBrand.appNameKo}는 계정, 넣은 재료와 유통기한, 알림 설정, 공유 초대, 그동안 받은 요리 추천을 서비스를 위해 써요.`}
               onPress={() => openUrl(status?.privacyPolicyUrl, "개인정보 안내")}
             />
             <PrivacyRow

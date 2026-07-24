@@ -264,7 +264,7 @@ describe("SpacesService", () => {
         acceptedAt: null,
         revokedAt: null,
       },
-      data: { revokedAt: expect.any(Date) },
+      data: { revokedAt: expect.any(Date), email: null },
     });
   });
 
@@ -321,6 +321,15 @@ describe("SpacesService", () => {
     expect(result).toEqual({
       spaceId: "space-house",
       spaceName: "우리 집",
+    });
+    expect(prisma.spaceInvitation.updateMany).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        id: "invite-1",
+        method: SpaceInvitationMethod.email,
+        acceptedAt: null,
+        revokedAt: null,
+      }),
+      data: { acceptedAt: expect.any(Date), email: null },
     });
     expect(prisma.inventorySpaceMembership.upsert).toHaveBeenCalledWith({
       where: {
@@ -418,6 +427,52 @@ describe("SpacesService", () => {
     expect(prisma.inventorySpaceMembership.create).not.toHaveBeenCalled();
   });
 
+  it("redacts leftover invite emails and deletes inactive invitations past retention", async () => {
+    prisma.spaceInvitation.updateMany.mockResolvedValue({ count: 2 });
+    prisma.spaceInvitation.deleteMany.mockResolvedValue({ count: 3 });
+    const now = new Date("2026-07-24T12:00:00.000Z");
+
+    await expect(service.purgeInactiveInvitations(now)).resolves.toEqual({
+      redactedCount: 2,
+      deletedCount: 3,
+    });
+
+    expect(prisma.spaceInvitation.updateMany).toHaveBeenCalledWith({
+      where: {
+        email: { not: null },
+        OR: [
+          { acceptedAt: { not: null } },
+          { revokedAt: { not: null } },
+          { expiresAt: { lt: now } },
+        ],
+      },
+      data: { email: null },
+    });
+    expect(prisma.spaceInvitation.deleteMany).toHaveBeenCalledWith({
+      where: {
+        OR: [
+          {
+            acceptedAt: {
+              not: null,
+              lt: new Date("2026-06-24T12:00:00.000Z"),
+            },
+          },
+          {
+            revokedAt: {
+              not: null,
+              lt: new Date("2026-06-24T12:00:00.000Z"),
+            },
+          },
+          {
+            acceptedAt: null,
+            revokedAt: null,
+            expiresAt: { lt: new Date("2026-06-24T12:00:00.000Z") },
+          },
+        ],
+      },
+    });
+  });
+
   it("never deletes the personal inventory space", async () => {
     prisma.inventorySpaceMembership.findUnique.mockResolvedValue({
       userId: "user-owner",
@@ -480,6 +535,7 @@ function createPrismaMock() {
     spaceInvitation: {
       create: vi.fn(),
       delete: vi.fn(),
+      deleteMany: vi.fn(),
       findUnique: vi.fn(),
       findMany: vi.fn(),
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),

@@ -20,7 +20,7 @@
 | 데이터 | 수집 여부 | 목적 | 제3자 / 국외 | 사용자 제어 | App Store Label 초안 | Play Data Safety 초안 |
 | --- | --- | --- | --- | --- | --- | --- |
 | 계정 이메일·표시 이름 | 예 (가입·소셜 시) | 계정·복구·문의 | 메일 발송 수탁자(해당 시) | 계정 정리 | Contact Info | Personal info |
-| 공유 초대 이메일·1회용 코드 해시·멤버십·역할 | 예 (공유 기능 사용 시) | 공간 초대·권한·알림 수신 설정 | 이메일 방식은 메일 발송 수탁자·같은 공간 구성원 | 초대/코드 취소·공간 나가기·구성원 제거·공간 삭제 | Contact Info / Identifiers | Personal info / App activity |
+| 공유 초대 이메일·1회용 코드 해시·멤버십·역할 | 예 (공유 기능 사용 시) | 공간 초대·권한·알림 수신 설정 | 이메일 방식은 메일 발송 수탁자·같은 공간 구성원 | 초대/코드 취소(이메일 즉시 제거) · 수락·취소·만료 후 최대 30일 내 기록 삭제 · 공간 나가기·구성원 제거·공간 삭제 · 계정 정리 시 보낸/받은 초대 삭제 | Contact Info / Identifiers | Personal info / App activity |
 | 소셜 로그인 식별자 | 예 (OAuth 사용 시) | 로그인 | OAuth 제공자 | 계정 정리 | Identifiers | Personal info |
 | 재료·유통기한·보관 위치 | 예 | 재고·알림·추천 입력 | 호스팅 DB·선택한 공간 구성원; 추천 시 OpenAI로 snapshot | 항목 삭제·공간 삭제·계정 정리 | User Content | App activity / Personal info (제품 데이터) |
 | 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers / Diagnostics(해당 시) | App info and performance / Device IDs |

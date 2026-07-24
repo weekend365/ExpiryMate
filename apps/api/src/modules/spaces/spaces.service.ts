@@ -15,6 +15,8 @@ import {
 import {
   SPACE_INVITATION_CODE_ALPHABET,
   SPACE_INVITATION_CODE_LENGTH,
+  SPACE_INVITATION_RETENTION_AFTER_INACTIVE_DAYS,
+  SPACE_INVITATION_TTL_DAYS,
   formatSpaceInvitationCode,
   normalizeSpaceInvitationCode,
   type AcceptSpaceInvitationCodeBody,
@@ -35,7 +37,9 @@ import { createHash, randomBytes, randomInt } from "node:crypto";
 import { PrismaService } from "../../database/prisma.service";
 import { MailService } from "../auth/mail.service";
 
-const INVITATION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const INVITATION_TTL_MS = SPACE_INVITATION_TTL_DAYS * 24 * 60 * 60 * 1000;
+const INVITATION_RETENTION_MS =
+  SPACE_INVITATION_RETENTION_AFTER_INACTIVE_DAYS * 24 * 60 * 60 * 1000;
 const PERSONAL_SPACE_PREFIX = "personal_";
 const INVALID_CODE_MESSAGE =
   "초대 코드가 만료됐거나 취소 또는 이미 사용됐어요.";
@@ -255,7 +259,7 @@ export class SpacesService {
           acceptedAt: null,
           revokedAt: null,
         },
-        data: { revokedAt: new Date() },
+        data: { revokedAt: new Date(), email: null },
       });
       return tx.spaceInvitation.create({
         data: {
@@ -300,7 +304,7 @@ export class SpacesService {
         acceptedAt: null,
         revokedAt: null,
       },
-      data: { revokedAt: new Date() },
+      data: { revokedAt: new Date(), email: null },
     });
     if (updated.count !== 1) {
       throw new NotFoundException("초대를 다시 찾지 못했어요.");
@@ -346,7 +350,7 @@ export class SpacesService {
           revokedAt: null,
           expiresAt: { gt: new Date() },
         },
-        data: { acceptedAt: new Date() },
+        data: { acceptedAt: new Date(), email: null },
       });
       if (claimed.count !== 1) {
         throw new ConflictException("이미 사용된 초대 링크예요.");
@@ -461,6 +465,45 @@ export class SpacesService {
       throw new NotFoundException("초대 코드를 다시 찾지 못했어요.");
     }
     return { id: invitationId };
+  }
+
+  /**
+   * Redacts leftover invite emails once an invitation is no longer usable,
+   * then deletes accepted / revoked / expired rows past the retention window.
+   */
+  async purgeInactiveInvitations(now = new Date()) {
+    const retentionCutoff = new Date(now.getTime() - INVITATION_RETENTION_MS);
+
+    const redacted = await this.prisma.spaceInvitation.updateMany({
+      where: {
+        email: { not: null },
+        OR: [
+          { acceptedAt: { not: null } },
+          { revokedAt: { not: null } },
+          { expiresAt: { lt: now } },
+        ],
+      },
+      data: { email: null },
+    });
+
+    const deleted = await this.prisma.spaceInvitation.deleteMany({
+      where: {
+        OR: [
+          { acceptedAt: { not: null, lt: retentionCutoff } },
+          { revokedAt: { not: null, lt: retentionCutoff } },
+          {
+            acceptedAt: null,
+            revokedAt: null,
+            expiresAt: { lt: retentionCutoff },
+          },
+        ],
+      },
+    });
+
+    return {
+      redactedCount: redacted.count,
+      deletedCount: deleted.count,
+    };
   }
 
   async previewInvitationCode(

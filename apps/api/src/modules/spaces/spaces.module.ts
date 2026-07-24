@@ -10,6 +10,7 @@ import {
   SpaceRecipesController,
   SpaceStorageLocationsController,
 } from "./space-resources.controller";
+import { SpaceInvitationCleanupService } from "./space-invitation-cleanup.service";
 import {
   SpaceInvitationLinksController,
   SpaceInvitationsController,
@@ -34,7 +35,7 @@ import { SpacesService } from "./spaces.service";
     SpaceStorageLocationsController,
     SpaceRecipesController,
   ],
-  providers: [SpacesService],
+  providers: [SpacesService, SpaceInvitationCleanupService],
   exports: [SpacesService],
 })
 export class SpacesModule {}

@@ -105,6 +105,7 @@ describe("PrivacyService", () => {
     const operations: string[] = [];
     const updatedUsers: unknown[] = [];
     const productMasterUpdates: unknown[] = [];
+    const invitationDeletes: unknown[] = [];
     const service = new PrivacyService(
       createPrismaMock(
         {
@@ -114,6 +115,9 @@ describe("PrivacyService", () => {
         operations,
         updatedUsers,
         productMasterUpdates,
+        [],
+        0,
+        invitationDeletes,
       ) as never,
     );
 
@@ -139,6 +143,14 @@ describe("PrivacyService", () => {
       "productMaster.updateMany",
       "user.update",
     ]);
+    expect(invitationDeletes[0]).toEqual({
+      where: {
+        OR: [
+          { invitedByUserId: "user_1" },
+          { email: "user@example.com" },
+        ],
+      },
+    });
     expect(productMasterUpdates[0]).toEqual({
       where: { contributedByUserId: "user_1" },
       data: { contributedByUserId: null },
@@ -183,10 +195,12 @@ function createPrismaMock(
   productMasterUpdates: unknown[] = [],
   topLevelUserUpdates: unknown[] = [],
   recommendationCount = 0,
+  invitationDeletes: unknown[] = [],
 ) {
   let remainingRecommendations = recommendationCount;
   const user = {
     id: "user_1",
+    email: "user@example.com",
     mergedIntoUserId: null,
     deletedAt: null,
     ...userState,
@@ -235,10 +249,15 @@ function createPrismaMock(
       "passwordCredential.deleteMany",
       operations,
     ),
-    spaceInvitation: createDeleteManyMock(
-      "spaceInvitation.deleteMany",
-      operations,
-    ),
+    spaceInvitation: {
+      deleteMany: async (payload?: unknown) => {
+        operations.push("spaceInvitation.deleteMany");
+        if (payload !== undefined) {
+          invitationDeletes.push(payload);
+        }
+        return { count: 1 };
+      },
+    },
     inventorySpaceMembership: createDeleteManyMock(
       "inventorySpaceMembership.deleteMany",
       operations,

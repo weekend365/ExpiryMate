@@ -46,6 +46,15 @@ export const SPACE_INVITATION_CODE_LENGTH = 8;
 export const SPACE_INVITATION_CODE_ALPHABET =
   "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
+/** Pending invitation link/code usable window (days). */
+export const SPACE_INVITATION_TTL_DAYS = 7;
+
+/**
+ * After accept, revoke, or expiry, invitation rows (email / code hash)
+ * are deleted within this many days.
+ */
+export const SPACE_INVITATION_RETENTION_AFTER_INACTIVE_DAYS = 30;
+
 export function normalizeSpaceInvitationCode(value: string) {
   return value.toUpperCase().replace(/[\s-]/g, "");
 }

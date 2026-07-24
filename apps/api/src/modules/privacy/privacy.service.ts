@@ -113,7 +113,7 @@ export class PrivacyService {
   }
 
   async deleteAccount(userId: string): Promise<DeleteAccountResponse> {
-    await this.findActiveUser(userId);
+    const user = await this.findActiveUser(userId);
     const ownedSharedSpace = await this.prisma.inventorySpace.findFirst({
       where: {
         ownerUserId: userId,
@@ -131,6 +131,7 @@ export class PrivacyService {
     }
 
     const deletedAt = new Date();
+    const invitationEmail = user.email?.trim().toLowerCase() || null;
 
     await this.prisma.$transaction(async (tx) => {
       await tx.pushNotificationDelivery.deleteMany({ where: { ownerKey: userId } });
@@ -144,7 +145,12 @@ export class PrivacyService {
       await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
-        where: { invitedByUserId: userId },
+        where: {
+          OR: [
+            { invitedByUserId: userId },
+            ...(invitationEmail ? [{ email: invitationEmail }] : []),
+          ],
+        },
       });
       await tx.inventorySpaceMembership.deleteMany({ where: { userId } });
       await tx.inventorySpace.deleteMany({ where: { ownerUserId: userId } });
@@ -194,6 +200,7 @@ export class PrivacyService {
       where: { id: userId },
       select: {
         id: true,
+        email: true,
         mergedIntoUserId: true,
         deletedAt: true,
         aiDataNoticeAcceptedAt: true,

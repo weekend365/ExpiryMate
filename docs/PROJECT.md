@@ -22,7 +22,7 @@
 | 테스트/QA | ~92% | 자동 검사 269개 ✅ · 공유 기능 운영 배포·2계정 실기기 E2E 대기 |
 
 **현재 Phase:** Phase 1 관문 대부분 완료 → **Phase 2 (스토어 제출 준비)**  
-**최근 완료 (2026-07-24):** 자동 검사 269개 통과 · Expo SDK 54 의존성 정렬 · iOS 1.0.0 (5) App Store Connect 업로드 · Android production 최소 권한 RC 빌드
+**최근 완료 (2026-07-24):** 자동 검사 269개 통과 · Expo SDK 54 의존성 정렬 · iOS 1.0.0 (5) App Store Connect 업로드 · Android production 최소 권한 RC 빌드 · 초대 개인정보 보관(수락·취소 즉시 이메일 제거 · 비활성 30일 cleanup)과 Privacy/Choices 일치
 
 > **출시 판단 주의:** 공유 기능은 코드·자동 검증까지 완료됐지만 아직 Railway 운영 마이그레이션과 공유 기능 포함 새 TestFlight/Play 빌드의 2계정 E2E를 통과하지 않았다.
 
@@ -72,7 +72,7 @@
 | 1 | **공유 공간 마이그레이션 운영 배포** | Railway API 배포 시 공간·초대 코드 마이그레이션 2개 적용 · `/ready` · `prisma migrate status` 확인 |
 | 2 | **공유 기능 포함 EAS production 재빌드** | iOS 1.0.0 (5) 업로드 후 Apple 처리 중 · Android 1.0.0 (5) 최소 권한 AAB 빌드 진행 중 |
 | 3 | **2계정 공유 E2E + 핵심 회귀 QA** | 초대·가입/로그인 이어가기·역할·공간 전환·재고 동기화·알림·소유권·계정 삭제 확인 |
-| 4 | **초대 개인정보 보관 정책 확정** | 수락·취소·만료 초대 레코드 정리 주기 구현 · 공개 Privacy/Choices와 실제 DB 동작 대조 |
+| 4 | ~~**초대 개인정보 보관 정책 확정**~~ ✅ | 수락·취소 시 이메일 즉시 제거 · 비활성 초대 최대 30일 보관 후 삭제 · Privacy/Choices·계정 정리와 일치 |
 | 5 | **스토어 메타·심사용 자료 확정** | [`store-metadata-draft.md`](./store-metadata-draft.md) · Privacy Label/Data Safety · 공유 화면 포함 스크린샷 · 데모 계정 |
 | 6 | **App Store 제출 후 Play production 준비** | iOS 심사 노트/빌드 제출 → Android AAB 내부 테스트·Data Safety·production 제출 |
 
@@ -156,7 +156,7 @@ flowchart LR
 - [ ] Android production AAB 내부 테스트 + Play Console production 준비 (1.0.0 versionCode 5 빌드 진행 · 서비스 계정 키/EAS 연결 대기)
 - [ ] Railway 공유 공간 migration 적용 · 개인 공간/기존 데이터 백필 확인
 - [ ] 두 계정 공유 시나리오와 기존 로그인·스캔·추천·삭제 회귀 QA
-- [ ] 수락·취소·만료 초대 개인정보의 보관/정리 정책과 공개 방침 일치
+- [x] 수락·취소·만료 초대 개인정보의 보관/정리 정책과 공개 방침 일치
 - [ ] App Store Privacy Label / Play Data Safety (`docs/store-privacy-declarations.md` 대조)
 - [ ] Support URL · 스크린샷 · 앱 설명 · 심사 노트 — 초안 `docs/store-metadata-draft.md`
 - [x] Sign in with Apple TestFlight 검증 + 스토어 정책 충족 준비
@@ -251,7 +251,7 @@ Android 제출 계정에는 대상 앱의 **Release apps to testing tracks** 권
 | 백필 | 사용자별 `내 냉장고`와 소유자 멤버십 생성 · 기존 재고/보관 위치/추천을 개인 공간에 연결 |
 | 재고 | 공간별 격리 · 생성/수정 사용자 기록 · `version`/`expectedVersion` 충돌 시 HTTP 409 |
 | 권한 | 소유자 전체 관리 · 관리자는 재고/보관 위치/초대/일반 구성원 관리 · 구성원은 재고와 추천 사용 |
-| 초대 | 가입 이메일 링크 또는 8자리 1회용 코드 · 원문 미저장(SHA-256) · 7일 만료 · 취소/재사용 차단 · 코드는 항상 구성원 |
+| 초대 | 가입 이메일 링크 또는 8자리 1회용 코드 · 원문 미저장(SHA-256) · 7일 만료 · 취소/재사용 차단 · 코드는 항상 구성원 · 수락·취소 시 이메일 즉시 제거 · 비활성 기록 최대 30일 후 삭제(일일 cleanup) |
 | 모바일 | `SpaceProvider` · 사용자별 마지막 공간 저장 · 접근 상실 시 개인 공간 복귀 · 홈/추천/보관함 공간 선택기 |
 | 관리 UX | 공간 생성/이름 변경/삭제 · 구성원/초대/역할/소유권/나가기 · 공간별 알림 수신 |
 | 동기화 | 실시간 연결 없음 · 탭 진입/앱 복귀/당겨서 새로고침 시 활성 공간 쿼리 재검증 |
