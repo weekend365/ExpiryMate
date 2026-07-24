@@ -42,7 +42,7 @@ export default function AcceptSpaceInvitationScreen() {
 
   if (!token) {
     return (
-      <Screen>
+      <Screen contentWidth="form">
         <EmptyState
           mood="worry"
           title="초대 링크를 다시 확인해 주세요"
@@ -55,6 +55,7 @@ export default function AcceptSpaceInvitationScreen() {
   if (!isRegistered) {
     return (
       <Screen
+        contentWidth="form"
         footer={
           <Button
             icon={LogIn}
@@ -76,6 +77,7 @@ export default function AcceptSpaceInvitationScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       title="함께 쓸 준비가 됐어요"
       subtitle="유통기한 알림을 받을지도 지금 고를 수 있어요."
     >

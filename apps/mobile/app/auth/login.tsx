@@ -240,7 +240,11 @@ export default function LoginScreen() {
   const canEmailLogin = Boolean(email.trim() && password);
 
   return (
-    <Screen scroll={false} contentStyle={styles.screenContent}>
+    <Screen
+      scroll={false}
+      contentWidth="form"
+      contentStyle={styles.screenContent}
+    >
       <View style={styles.loginScene}>
         <ImageBackground
           source={loginWelcomeBg}

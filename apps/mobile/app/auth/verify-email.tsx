@@ -164,6 +164,7 @@ export default function VerifyEmailScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       title="메일 확인"
       subtitle="장고가 메일을 같이 살펴볼게요."
       footer={

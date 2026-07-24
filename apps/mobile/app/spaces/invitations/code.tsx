@@ -95,6 +95,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       title="초대 코드로 참여"
       subtitle="받은 8자리 코드로 가족이나 매장 냉장고에 함께할 수 있어요."
       footer={

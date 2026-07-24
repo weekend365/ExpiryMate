@@ -119,6 +119,7 @@ export default function OnboardingScreen() {
   return (
     <Screen
       scroll={false}
+      contentWidth="form"
       footer={
         <Button onPress={handlePrimary} fullWidth>
           {step.cta}

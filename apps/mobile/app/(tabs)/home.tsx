@@ -165,7 +165,11 @@ export default function HomeScreen() {
   };
 
   return (
-    <Screen scroll={false} contentStyle={styles.screenContent}>
+    <Screen
+      scroll={false}
+      contentWidth="wide"
+      contentStyle={styles.screenContent}
+    >
       <View style={styles.homeScene}>
         <ImageBackground
           source={homeWelcomeBg}

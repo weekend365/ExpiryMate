@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -21,6 +20,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  TABLET_SHEET_MAX_WIDTH,
+  useResponsiveLayout,
+} from "../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { Mascot, type MascotMood } from "./Mascot";
 
@@ -57,7 +60,7 @@ export function BottomSheet({
   children,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, isRegular } = useResponsiveLayout();
   const [mounted, setMounted] = useState(false);
   const translateY = useSharedValue(windowHeight);
   const backdropOpacity = useSharedValue(0);
@@ -180,6 +183,7 @@ export function BottomSheet({
           <Animated.View
             style={[
               styles.sheet,
+              isRegular && styles.regularSheet,
               sheetStyle,
               {
                 maxHeight: windowHeight * 0.88,
@@ -248,6 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text,
   },
   sheet: {
+    width: "100%",
     backgroundColor: colors.surface,
     borderTopLeftRadius: radius.xxl,
     borderTopRightRadius: radius.xxl,
@@ -255,6 +260,12 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
     gap: spacing.md,
     overflow: "hidden",
+  },
+  regularSheet: {
+    maxWidth: TABLET_SHEET_MAX_WIDTH,
+    alignSelf: "center",
+    borderBottomLeftRadius: radius.xxl,
+    borderBottomRightRadius: radius.xxl,
   },
   dragHeader: {
     minHeight: touchTarget.min,

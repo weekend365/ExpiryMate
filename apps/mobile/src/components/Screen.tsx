@@ -14,6 +14,11 @@ import {
   type ViewStyle,
 } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  type ContentWidthPreset,
+  getContentMaxWidth,
+  useResponsiveLayout,
+} from "../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface ScreenProps extends PropsWithChildren {
@@ -24,6 +29,11 @@ interface ScreenProps extends PropsWithChildren {
   headerAction?: ReactNode;
   footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
+  /**
+   * Constrains content on regular-width windows while compact windows remain fluid.
+   * Use `fluid` for full-bleed experiences such as camera previews.
+   */
+  contentWidth?: ContentWidthPreset;
   /**
    * When true, show a back control if the stack can go back.
    * Opt-in only — home/tabs must not inherit a back chevron.
@@ -41,10 +51,16 @@ export function Screen({
   headerAction,
   footer,
   contentStyle,
+  contentWidth = "content",
   showBack = false,
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
+  const { width } = useResponsiveLayout();
   const shouldShowBack = Boolean(showBack && router.canGoBack());
+  const maxContentWidth = getContentMaxWidth(contentWidth, width);
+  const constrainedContentStyle = {
+    maxWidth: maxContentWidth,
+  };
 
   const content = (
     <>
@@ -95,7 +111,11 @@ export function Screen({
       >
         {scroll ? (
           <ScrollView
-            contentContainerStyle={[styles.content, contentStyle]}
+            contentContainerStyle={[
+              styles.content,
+              constrainedContentStyle,
+              contentStyle,
+            ]}
             showsVerticalScrollIndicator={false}
             refreshControl={refreshControl}
             keyboardShouldPersistTaps="handled"
@@ -104,7 +124,14 @@ export function Screen({
             {content}
           </ScrollView>
         ) : (
-          <View style={[styles.content, styles.staticContent, contentStyle]}>
+          <View
+            style={[
+              styles.content,
+              styles.staticContent,
+              constrainedContentStyle,
+              contentStyle,
+            ]}
+          >
             {content}
           </View>
         )}
@@ -115,7 +142,9 @@ export function Screen({
               { paddingBottom: Math.max(insets.bottom, spacing.md) },
             ]}
           >
-            {footer}
+            <View style={[styles.footerContent, constrainedContentStyle]}>
+              {footer}
+            </View>
           </View>
         ) : null}
       </KeyboardAvoidingView>
@@ -132,6 +161,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
+    width: "100%",
+    alignSelf: "center",
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     paddingBottom: spacing.xxxl + spacing.sm,
@@ -173,6 +204,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
+  },
+  footerContent: {
+    width: "100%",
+    alignSelf: "center",
   },
   title: {
     fontSize: typography.title.fontSize,

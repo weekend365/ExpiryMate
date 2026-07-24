@@ -127,6 +127,7 @@ export default function RegisterScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       footer={
         <Button
           onPress={handlePrimary}

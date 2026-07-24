@@ -396,6 +396,7 @@ export default function InventoryScreen() {
   return (
     <Screen
       scroll={false}
+      contentWidth="wide"
       footer={
         !showListChrome || isFilteredEmpty
           ? null

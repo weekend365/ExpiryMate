@@ -106,6 +106,7 @@ export default function VerifyPendingScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       title="메일을 보냈어요"
       subtitle="링크를 누르면 가입이 끝나요."
       footer={

@@ -466,6 +466,7 @@ export default function RegisterScreen() {
   if (step === "done") {
     return (
       <Screen
+        contentWidth="form"
         title="잘 넣어뒀어요"
         subtitle="여기까지 해도 충분해요."
         footer={
@@ -559,6 +560,7 @@ export default function RegisterScreen() {
 
   return (
     <Screen
+      contentWidth="form"
       title="재료 넣기"
       subtitle="한 번에 하나씩, 차근차근 넣어볼게요."
       footer={

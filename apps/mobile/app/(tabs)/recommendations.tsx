@@ -281,6 +281,7 @@ export default function RecommendationsScreen() {
   return (
     <Screen
       scroll={false}
+      contentWidth="wide"
       contentStyle={styles.screenContent}
       footer={
         recipeView === "favorites" ? (

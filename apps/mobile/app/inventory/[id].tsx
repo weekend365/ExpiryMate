@@ -296,6 +296,7 @@ export default function InventoryDetailScreen() {
   if (mode === "edit") {
     return (
       <Screen
+        contentWidth="form"
         title="내용 바꾸기"
         subtitle="한 번에 하나씩만 고쳐볼게요."
         footer={
