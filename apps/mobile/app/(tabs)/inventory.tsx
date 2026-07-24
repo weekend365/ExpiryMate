@@ -10,6 +10,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import {
   CheckSquare,
   Plus,
+  RefreshCw,
   Search,
   Trash2,
   X,
@@ -487,59 +488,84 @@ export default function InventoryScreen() {
                       onToggleWithin7={() => toggleTrafficFilter("within7")}
                       onSelectAll={() => applyFilter("all")}
                     />
-                    <View style={styles.searchField}>
-                      <Search
-                        color={colors.mutedText}
-                        size={spacing.sm + spacing.xxs}
-                        strokeWidth={2.4}
-                      />
-                      <TextInput
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        placeholder="찾아보기"
-                        placeholderTextColor={colors.mutedText}
-                        accessibilityLabel="재료 이름 검색"
-                        returnKeyType="search"
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        style={styles.searchInput}
-                      />
-                      {hasSearchQuery ? (
-                        <Pressable
-                          onPress={() => setSearchQuery("")}
-                          hitSlop={spacing.xs}
-                          accessibilityRole="button"
-                          accessibilityLabel="검색어 지우기"
-                          style={({ pressed }) => [
-                            styles.searchClearButton,
-                            pressed && styles.headerFilterButtonPressed,
-                          ]}
-                        >
-                          <X
-                            color={colors.subtext}
-                            size={spacing.sm + spacing.xxs}
-                            strokeWidth={2.4}
-                          />
-                        </Pressable>
-                      ) : null}
+                    <View style={styles.filterIconActions}>
+                      <Pressable
+                        onPress={() => {
+                          void refetch();
+                        }}
+                        disabled={isRefetching}
+                        hitSlop={spacing.xs}
+                        style={({ pressed }) => [
+                          styles.headerIconButton,
+                          pressed && styles.headerFilterButtonPressed,
+                          isRefetching && styles.headerIconButtonDisabled,
+                        ]}
+                        accessibilityRole="button"
+                        accessibilityLabel="목록 새로고침"
+                        accessibilityHint="보관함 목록을 다시 불러올게요."
+                        accessibilityState={{ busy: isRefetching }}
+                      >
+                        <RefreshCw
+                          color={colors.primary}
+                          size={spacing.md}
+                          strokeWidth={2.4}
+                        />
+                      </Pressable>
+                      <Pressable
+                        onPress={() => enterSelectionMode()}
+                        hitSlop={spacing.xs}
+                        style={({ pressed }) => [
+                          styles.headerIconButton,
+                          pressed && styles.headerFilterButtonPressed,
+                        ]}
+                        accessibilityRole="button"
+                        accessibilityLabel="고르기"
+                        accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
+                      >
+                        <CheckSquare
+                          color={colors.primary}
+                          size={spacing.md}
+                          strokeWidth={2.4}
+                        />
+                      </Pressable>
                     </View>
-                    <Pressable
-                      onPress={() => enterSelectionMode()}
-                      hitSlop={spacing.xs}
-                      style={({ pressed }) => [
-                        styles.headerIconButton,
-                        pressed && styles.headerFilterButtonPressed,
-                      ]}
-                      accessibilityRole="button"
-                      accessibilityLabel="고르기"
-                      accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
-                    >
-                      <CheckSquare
-                        color={colors.primary}
-                        size={spacing.md}
-                        strokeWidth={2.4}
-                      />
-                    </Pressable>
+                  </View>
+
+                  <View style={styles.searchField}>
+                    <Search
+                      color={colors.mutedText}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <TextInput
+                      value={searchQuery}
+                      onChangeText={setSearchQuery}
+                      placeholder="찾아보기"
+                      placeholderTextColor={colors.mutedText}
+                      accessibilityLabel="재료 이름 검색"
+                      returnKeyType="search"
+                      autoCorrect={false}
+                      autoCapitalize="none"
+                      style={styles.searchInput}
+                    />
+                    {hasSearchQuery ? (
+                      <Pressable
+                        onPress={() => setSearchQuery("")}
+                        hitSlop={spacing.xs}
+                        accessibilityRole="button"
+                        accessibilityLabel="검색어 지우기"
+                        style={({ pressed }) => [
+                          styles.searchClearButton,
+                          pressed && styles.headerFilterButtonPressed,
+                        ]}
+                      >
+                        <X
+                          color={colors.subtext}
+                          size={spacing.sm + spacing.xxs}
+                          strokeWidth={2.4}
+                        />
+                      </Pressable>
+                    ) : null}
                   </View>
 
                   <ScrollView
@@ -1068,8 +1094,15 @@ const styles = StyleSheet.create({
   filterTopRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
+    justifyContent: "space-between",
+    gap: spacing.sm,
     minHeight: touchTarget.min,
+  },
+  filterIconActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexShrink: 0,
+    gap: spacing.xxs,
   },
   trafficHousing: {
     flexDirection: "row",
@@ -1261,11 +1294,14 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   headerIconButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: touchTarget.min,
+    height: touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
+  },
+  headerIconButtonDisabled: {
+    opacity: 0.45,
   },
   headerFilterButton: {
     minHeight: touchTarget.min,

@@ -1,20 +1,17 @@
 import {
   calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
+  formatInventoryQuantity,
   getExpiryBucket,
   resolveStorageLocationLabel,
   type InventoryItem,
   type InventoryItemGroup,
 } from "@expirymate/shared";
 import {
-  CalendarDays,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  CircleAlert,
-  Clock3,
   MapPin,
-  ShieldCheck,
   Trash2,
 } from "lucide-react-native";
 import { LayoutAnimation, Pressable, StyleSheet, Text, View } from "react-native";
@@ -182,7 +179,7 @@ export function InventoryGroupCard({
                 onPress={() => onItemPress(item)}
                 onLongPress={() => onItemLongPress?.(item)}
                 accessibilityRole="button"
-                accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${resolveLocationLabel(item.storageLocation)}, ${item.quantity}${item.unit ?? "개"}`}
+                accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${resolveLocationLabel(item.storageLocation)}, ${formatInventoryQuantity(item)}`}
                 accessibilityHint={
                   selectionMode
                     ? selected
@@ -222,8 +219,8 @@ export function InventoryGroupCard({
                     {formatDateKoreanCompact(item.expiryDate)}
                   </Text>
                   <Text style={styles.lotMeta} numberOfLines={1}>
-                    {resolveLocationLabel(item.storageLocation)} · {item.quantity}
-                    {item.unit ?? "개"}
+                    {resolveLocationLabel(item.storageLocation)} ·{" "}
+                    {formatInventoryQuantity(item)}
                   </Text>
                 </View>
 
@@ -299,26 +296,23 @@ function ExpiryBadge({
   expiryDate: string;
   compact?: boolean;
 }) {
-  const presentation = getExpiryPresentation(expiryDate);
-  const Icon = presentation.icon;
+  const presentation = getExpiryLampPresentation(expiryDate);
 
   return (
     <View
       style={[
-        styles.badge,
-        compact && styles.badgeCompact,
-        { backgroundColor: presentation.backgroundColor },
+        styles.expiryLamp,
+        compact && styles.expiryLampCompact,
+        { backgroundColor: presentation.lampColor },
       ]}
+      accessibilityLabel={presentation.ddayLabel}
     >
-      <Icon color={presentation.color} size={spacing.sm} strokeWidth={2.5} />
-      <Text style={[styles.badgeText, { color: presentation.color }]}>
-        {presentation.ddayLabel}
-      </Text>
+      <Text style={styles.expiryLampText}>{presentation.ddayLabel}</Text>
     </View>
   );
 }
 
-function getExpiryPresentation(expiryDate: string) {
+function getExpiryLampPresentation(expiryDate: string) {
   const bucket = getExpiryBucket(expiryDate);
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate);
   const ddayLabel =
@@ -328,35 +322,15 @@ function getExpiryPresentation(expiryDate: string) {
         ? "오늘"
         : `D-${daysLeft}`;
 
-  const presentation = {
-    expired: {
-      backgroundColor: colors.dangerSoft,
-      color: colors.danger,
-      icon: CircleAlert,
-    },
-    today: {
-      backgroundColor: colors.dangerSoft,
-      color: colors.danger,
-      icon: Clock3,
-    },
-    within_3_days: {
-      backgroundColor: colors.warningSoft,
-      color: colors.warning,
-      icon: Clock3,
-    },
-    within_7_days: {
-      backgroundColor: colors.primarySoft,
-      color: colors.primary,
-      icon: CalendarDays,
-    },
-    safe: {
-      backgroundColor: colors.successSoft,
-      color: colors.success,
-      icon: ShieldCheck,
-    },
+  const lampColor = {
+    expired: colors.danger,
+    today: colors.danger,
+    within_3_days: colors.warning,
+    within_7_days: colors.primary,
+    safe: colors.success,
   }[bucket];
 
-  return { ...presentation, ddayLabel };
+  return { lampColor, ddayLabel };
 }
 
 const styles = StyleSheet.create({
@@ -494,22 +468,24 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  badge: {
-    minHeight: spacing.lg,
-    borderRadius: radius.pill,
+  expiryLamp: {
+    minWidth: spacing.xl,
+    height: spacing.xl,
     paddingHorizontal: spacing.xs,
-    flexDirection: "row",
+    borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.xxs,
   },
-  badgeCompact: {
-    minWidth: spacing.xl + spacing.md,
+  expiryLampCompact: {
+    minWidth: spacing.lg + spacing.xs,
+    height: spacing.lg + spacing.xs,
+    paddingHorizontal: spacing.xxs,
   },
-  badgeText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+  expiryLampText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.surface,
   },
   selectionIndicator: {
     width: spacing.lg,
