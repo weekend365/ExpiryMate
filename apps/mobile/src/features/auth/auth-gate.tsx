@@ -11,6 +11,7 @@ const PUBLIC_ROOT_SEGMENTS = new Set([
   "index",
   "onboarding",
   "auth",
+  "spaces",
 ]);
 
 const EMAIL_VERIFY_AUTH_SCREENS = new Set([

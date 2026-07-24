@@ -1,4 +1,7 @@
-import { PreconditionFailedException } from "@nestjs/common";
+import {
+  ConflictException,
+  PreconditionFailedException,
+} from "@nestjs/common";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { PrivacyService } from "./privacy.service";
 
@@ -120,9 +123,12 @@ describe("PrivacyService", () => {
     expect(operations).toEqual([
       "pushNotificationDelivery.deleteMany",
       "pushToken.deleteMany",
-      "inventoryItem.deleteMany",
+      "inventoryItem.updateMany",
       "recipeFavorite.deleteMany",
       "recipeRecommendation.deleteMany",
+      "spaceInvitation.deleteMany",
+      "inventorySpaceMembership.deleteMany",
+      "inventorySpace.deleteMany",
       "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
       "supportInquiry.deleteMany",
@@ -146,6 +152,24 @@ describe("PrivacyService", () => {
         aiDataNoticeVersion: null,
       },
     });
+  });
+
+  it("blocks account deletion until shared-space ownership is resolved", async () => {
+    const operations: string[] = [];
+    const prisma = createPrismaMock(
+      {
+        aiDataNoticeAcceptedAt: null,
+        aiDataNoticeVersion: null,
+      },
+      operations,
+    );
+    prisma.inventorySpace.findFirst = async () => ({ name: "우리 매장" });
+    const service = new PrivacyService(prisma as never);
+
+    await expect(service.deleteAccount("user_1")).rejects.toThrow(
+      ConflictException,
+    );
+    expect(operations).toEqual([]);
   });
 });
 
@@ -173,7 +197,12 @@ function createPrismaMock(
       operations,
     ),
     pushToken: createDeleteManyMock("pushToken.deleteMany", operations),
-    inventoryItem: createDeleteManyMock("inventoryItem.deleteMany", operations),
+    inventoryItem: {
+      updateMany: async () => {
+        operations.push("inventoryItem.updateMany");
+        return { count: 1 };
+      },
+    },
     recipeFavorite: createDeleteManyMock("recipeFavorite.deleteMany", operations),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",
@@ -204,6 +233,18 @@ function createPrismaMock(
     oAuthAccount: createDeleteManyMock("oAuthAccount.deleteMany", operations),
     passwordCredential: createDeleteManyMock(
       "passwordCredential.deleteMany",
+      operations,
+    ),
+    spaceInvitation: createDeleteManyMock(
+      "spaceInvitation.deleteMany",
+      operations,
+    ),
+    inventorySpaceMembership: createDeleteManyMock(
+      "inventorySpaceMembership.deleteMany",
+      operations,
+    ),
+    inventorySpace: createDeleteManyMock(
+      "inventorySpace.deleteMany",
       operations,
     ),
     productMaster: {
@@ -250,6 +291,9 @@ function createPrismaMock(
         remainingRecommendations = 0;
         return { count: deleted };
       },
+    },
+    inventorySpace: {
+      findFirst: async (): Promise<{ name: string } | null> => null,
     },
     $transaction: async (callback: (transaction: typeof tx) => Promise<unknown>) =>
       callback(tx),

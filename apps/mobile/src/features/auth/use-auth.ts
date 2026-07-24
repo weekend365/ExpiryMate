@@ -47,6 +47,7 @@ export const useAuth = () => {
     });
     queryClient.invalidateQueries({ queryKey: sessionQueryKeys.subscription });
     queryClient.invalidateQueries({ queryKey: sessionQueryKeys.privacy });
+    queryClient.invalidateQueries({ queryKey: sessionQueryKeys.spaces });
   };
 
   const bindRegisteredSession = (user: AuthUser) => {

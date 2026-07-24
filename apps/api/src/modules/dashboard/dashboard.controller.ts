@@ -10,6 +10,10 @@ export class DashboardController {
 
   @Get("summary")
   getSummary(@CurrentOwnerKey() ownerKey: string) {
-    return this.dashboardService.getSummary(ownerKey);
+    return this.dashboardService.getSummary(
+      ownerKey,
+      new Date(),
+      `personal_${ownerKey}`,
+    );
   }
 }

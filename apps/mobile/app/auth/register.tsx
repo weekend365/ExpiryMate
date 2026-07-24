@@ -12,6 +12,7 @@ import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
+import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
 import {
   colors,
   radius,
@@ -98,7 +99,9 @@ export default function RegisterScreen() {
         return;
       }
 
-      router.replace("/(tabs)/home");
+      if (!(await continuePendingSpaceInvitation())) {
+        router.replace("/(tabs)/home");
+      }
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
     }

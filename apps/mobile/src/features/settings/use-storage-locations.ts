@@ -8,20 +8,26 @@ import {
   updateStorageLocation,
 } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
-import { sessionQueryKeys, withSessionUser } from "../auth/session-boundary";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../auth/session-boundary";
+import { useActiveSpace } from "../spaces/space-provider";
 
 export const useStorageLocations = () => {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
-  const queryKey = withSessionUser(
+  const { activeSpaceId, isReady } = useActiveSpace();
+  const queryKey = withInventorySpace(
     sessionQueryKeys.storageLocations,
     sessionUserId,
+    activeSpaceId,
   );
 
   const query = useQuery({
     queryKey,
-    queryFn: listStorageLocations,
-    enabled: Boolean(sessionUserId),
+    queryFn: () => listStorageLocations(activeSpaceId),
+    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
   });
 
   const selectableOptions = useMemo(() => {
@@ -50,7 +56,8 @@ export const useStorageLocations = () => {
   };
 
   const createMutation = useMutation({
-    mutationFn: createStorageLocation,
+    mutationFn: (payload: { label: string }) =>
+      createStorageLocation(payload, activeSpaceId),
     onSuccess: invalidate,
   });
 
@@ -61,12 +68,12 @@ export const useStorageLocations = () => {
     }: {
       id: string;
       label: string;
-    }) => updateStorageLocation(id, { label }),
+    }) => updateStorageLocation(id, { label }, activeSpaceId),
     onSuccess: invalidate,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: deleteStorageLocation,
+    mutationFn: (id: string) => deleteStorageLocation(id, activeSpaceId),
     onSuccess: invalidate,
   });
 

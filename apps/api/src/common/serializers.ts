@@ -66,6 +66,10 @@ export const serializeInventoryItem = (
   id: item.id,
   productId: item.productId,
   ownerKey: item.ownerKey,
+  spaceId: item.spaceId,
+  createdByUserId: item.createdByUserId,
+  updatedByUserId: item.updatedByUserId,
+  version: item.version,
   displayName: item.displayName,
   brand: item.brand,
   category: item.category ? (item.category as ProductCategory) : null,
@@ -117,6 +121,7 @@ export const serializeUserStorageLocation = (
 ): UserStorageLocation => ({
   id: location.id,
   ownerKey: location.ownerKey,
+  spaceId: location.spaceId,
   key: location.key,
   label: location.label,
   sortOrder: location.sortOrder,

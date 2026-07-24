@@ -37,6 +37,7 @@ import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import {
   useAcceptAiDataNotice,
   usePrivacyStatus,
@@ -342,6 +343,7 @@ export default function RecommendationsScreen() {
             />
           }
         >
+      <SpaceSwitcher />
       <View style={styles.recipeViewSwitch}>
         <Pressable
           onPress={() => setRecipeView("recommendations")}

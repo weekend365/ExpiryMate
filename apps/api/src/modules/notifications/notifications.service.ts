@@ -47,6 +47,7 @@ interface ReminderStats {
 interface DueItem {
   id: string;
   displayName: string;
+  spaceId: string;
 }
 
 @Injectable()
@@ -236,29 +237,51 @@ export class NotificationsService
       return { preference, daysBeforeValues };
     });
 
-    const reminderDates = [...reminderDateByKey.values()];
     const ownerKeys = activePreferences.map((preference) => preference.ownerKey);
+    const memberships = await this.prisma.inventorySpaceMembership.findMany({
+      where: {
+        userId: { in: ownerKeys },
+        notificationsEnabled: true,
+      },
+      select: { userId: true, spaceId: true },
+    });
+    const spaceIdsByUser = new Map<string, string[]>();
+    for (const membership of memberships) {
+      const current = spaceIdsByUser.get(membership.userId) ?? [];
+      current.push(membership.spaceId);
+      spaceIdsByUser.set(membership.userId, current);
+    }
+
+    const reminderDates = [...reminderDateByKey.values()];
+    const spaceIds = [...new Set(memberships.map((item) => item.spaceId))];
     const dueItems = await this.prisma.inventoryItem.findMany({
       where: {
-        ownerKey: { in: ownerKeys },
+        spaceId: { in: spaceIds },
         status: ItemStatus.active,
         expiryDate: { in: reminderDates },
       },
       select: {
         id: true,
         displayName: true,
-        ownerKey: true,
+        spaceId: true,
         expiryDate: true,
       },
       orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
     });
 
-    const itemsByOwnerAndDate = new Map<string, DueItem[]>();
+    const itemsBySpaceAndDate = new Map<string, DueItem[]>();
     for (const item of dueItems) {
-      const key = `${item.ownerKey}:${item.expiryDate.toISOString()}`;
-      const bucket = itemsByOwnerAndDate.get(key) ?? [];
-      bucket.push({ id: item.id, displayName: item.displayName });
-      itemsByOwnerAndDate.set(key, bucket);
+      if (!item.spaceId) {
+        continue;
+      }
+      const key = `${item.spaceId}:${item.expiryDate.toISOString()}`;
+      const bucket = itemsBySpaceAndDate.get(key) ?? [];
+      bucket.push({
+        id: item.id,
+        displayName: item.displayName,
+        spaceId: item.spaceId,
+      });
+      itemsBySpaceAndDate.set(key, bucket);
     }
 
     type OutboundJob = {
@@ -269,19 +292,24 @@ export class NotificationsService
       token: string;
       inventoryItemId: string;
       daysBefore: number;
+      spaceId: string;
     };
 
     const outbound: OutboundJob[] = [];
 
     for (const plan of preferencePlans) {
+      const memberSpaceIds =
+        spaceIdsByUser.get(plan.preference.ownerKey) ?? [];
       for (const daysBefore of plan.daysBeforeValues) {
         const reminderDate = dateOnlyToUtcDate(
           getLocalDateOnly(now, daysBefore),
         );
-        const items =
-          itemsByOwnerAndDate.get(
-            `${plan.preference.ownerKey}:${reminderDate.toISOString()}`,
-          ) ?? [];
+        const items = memberSpaceIds.flatMap(
+          (spaceId) =>
+            itemsBySpaceAndDate.get(
+              `${spaceId}:${reminderDate.toISOString()}`,
+            ) ?? [],
+        );
         stats.itemsMatched += items.length;
 
         for (const item of items) {
@@ -309,6 +337,7 @@ export class NotificationsService
               token: pushToken.token,
               inventoryItemId: item.id,
               daysBefore,
+              spaceId: item.spaceId,
             });
           }
         }
@@ -328,6 +357,7 @@ export class NotificationsService
           type: "expiry_reminder",
           inventoryItemId: job.inventoryItemId,
           daysBefore: job.daysBefore,
+          spaceId: job.spaceId,
         },
       })),
     );

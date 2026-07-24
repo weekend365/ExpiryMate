@@ -14,9 +14,12 @@ import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 
 export default function StorageLocationsSettingsScreen() {
+  const { activeRole } = useActiveSpace();
+  const canManage = activeRole === "owner" || activeRole === "manager";
   const {
     query,
     createMutation,
@@ -101,11 +104,17 @@ export default function StorageLocationsSettingsScreen() {
   return (
     <Screen
       title="보관 위치"
-      subtitle="기본 위치는 그대로 두고, 나만의 자리를 더 만들 수 있어요."
+      subtitle={
+        canManage
+          ? "기본 위치는 그대로 두고, 함께 쓸 자리를 더 만들 수 있어요."
+          : "이 냉장고에서 함께 쓰는 보관 위치예요."
+      }
       footer={
-        <Button onPress={openAdd} fullWidth>
-          위치 추가
-        </Button>
+        canManage ? (
+          <Button onPress={openAdd} fullWidth>
+            위치 추가
+          </Button>
+        ) : undefined
       }
     >
       <View style={styles.section}>
@@ -142,9 +151,15 @@ export default function StorageLocationsSettingsScreen() {
               <ListRow
                 key={location.id}
                 title={location.label}
-                description="이름 바꾸기 · 정리하기"
+                description={
+                  canManage ? "이름 바꾸기 · 정리하기" : "함께 쓰는 위치"
+                }
                 last={index === list.length - 1}
-                onPress={() => openEdit(location.id, location.label)}
+                onPress={
+                  canManage
+                    ? () => openEdit(location.id, location.label)
+                    : undefined
+                }
               />
             ))
           )}

@@ -40,6 +40,7 @@ export class InventoryController {
   ) {
     return this.inventoryService.findAll({
       ownerKey,
+      spaceId: personalSpaceId(ownerKey),
       q,
       status,
       storageLocation,
@@ -51,7 +52,7 @@ export class InventoryController {
 
   @Get(":id")
   findOne(@Param("id") id: string, @CurrentOwnerKey() ownerKey: string) {
-    return this.inventoryService.findOne(id, ownerKey);
+    return this.inventoryService.findOne(id, ownerKey, personalSpaceId(ownerKey));
   }
 
   @Post()
@@ -60,7 +61,7 @@ export class InventoryController {
     dto: CreateInventoryItemBody,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.inventoryService.create(dto, ownerKey);
+    return this.inventoryService.create(dto, ownerKey, personalSpaceId(ownerKey));
   }
 
   @Post("batch-discard")
@@ -71,6 +72,7 @@ export class InventoryController {
     return this.inventoryService.batchDiscard({
       ids: dto.ids,
       ownerKey,
+      spaceId: personalSpaceId(ownerKey),
     });
   }
 
@@ -83,6 +85,7 @@ export class InventoryController {
     return this.inventoryService.batchConsume({
       items: dto.items,
       ownerKey,
+      spaceId: personalSpaceId(ownerKey),
     });
   }
 
@@ -93,16 +96,25 @@ export class InventoryController {
     dto: UpdateInventoryItemBody,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.inventoryService.update(id, dto, ownerKey);
+    return this.inventoryService.update(
+      id,
+      dto,
+      ownerKey,
+      personalSpaceId(ownerKey),
+    );
   }
 
   @Post(":id/consume")
   consume(@Param("id") id: string, @CurrentOwnerKey() ownerKey: string) {
-    return this.inventoryService.consume(id, ownerKey);
+    return this.inventoryService.consume(id, ownerKey, personalSpaceId(ownerKey));
   }
 
   @Post(":id/discard")
   discard(@Param("id") id: string, @CurrentOwnerKey() ownerKey: string) {
-    return this.inventoryService.discard(id, ownerKey);
+    return this.inventoryService.discard(id, ownerKey, personalSpaceId(ownerKey));
   }
+}
+
+function personalSpaceId(userId: string) {
+  return `personal_${userId}`;
 }

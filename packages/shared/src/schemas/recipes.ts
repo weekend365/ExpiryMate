@@ -87,6 +87,7 @@ export const generatedRecipeRecommendationsPayloadSchema = z.object({
 export const recipeRecommendationSchema = z.object({
   id: z.string(),
   ownerKey: z.string(),
+  spaceId: z.string().nullable().optional(),
   createdAt: z.string(),
   request: recipeRecommendationRequestSchema,
   inventorySnapshot: z.array(recipeInventorySnapshotItemSchema),

@@ -29,12 +29,19 @@ export class RecipesController {
     request: RecipeRecommendationRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.recipesService.createRecommendation(ownerKey, request);
+    return this.recipesService.createRecommendation(
+      ownerKey,
+      request,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Get("recommendations")
   listRecommendations(@CurrentOwnerKey() ownerKey: string) {
-    return this.recipesService.listRecommendations(ownerKey);
+    return this.recipesService.listRecommendations(
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Get("favorites")
@@ -48,7 +55,12 @@ export class RecipesController {
     @Param("dishIndex", ParseIntPipe) dishIndex: number,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.recipesService.saveFavorite(id, dishIndex, ownerKey);
+    return this.recipesService.saveFavorite(
+      id,
+      dishIndex,
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Delete("recommendations/:id/dishes/:dishIndex/favorite")
@@ -62,6 +74,10 @@ export class RecipesController {
 
   @Get("recommendations/:id")
   getRecommendation(@Param("id") id: string, @CurrentOwnerKey() ownerKey: string) {
-    return this.recipesService.getRecommendation(id, ownerKey);
+    return this.recipesService.getRecommendation(
+      id,
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 }

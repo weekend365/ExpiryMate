@@ -1,20 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRecipeRecommendation } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
-import { withSessionUser } from "../auth/session-boundary";
+import { withInventorySpace } from "../auth/session-boundary";
+import { useActiveSpace } from "../spaces/space-provider";
 
-export const recipeRecommendationQueryKey = (id: string) =>
-  ["recipe-recommendation", id] as const;
+export const recipeRecommendationQueryKey = ["recipe-recommendation"] as const;
 
 export const useRecipeRecommendation = (id: string | undefined) => {
   const { sessionUserId } = useAuth();
+  const { activeSpaceId, isReady } = useActiveSpace();
 
   return useQuery({
-    queryKey: withSessionUser(
-      recipeRecommendationQueryKey(id ?? ""),
-      sessionUserId,
-    ),
-    queryFn: () => getRecipeRecommendation(id as string),
-    enabled: Boolean(id && sessionUserId),
+    queryKey: [
+      ...withInventorySpace(
+        recipeRecommendationQueryKey,
+        sessionUserId,
+        activeSpaceId,
+      ),
+      id ?? "",
+    ],
+    queryFn: () => getRecipeRecommendation(id as string, activeSpaceId),
+    enabled: Boolean(id && sessionUserId && activeSpaceId && isReady),
   });
 };

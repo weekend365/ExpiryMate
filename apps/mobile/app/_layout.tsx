@@ -11,6 +11,8 @@ import { AuthRedirectGate } from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
+import { SpaceProvider } from "../src/features/spaces/space-provider";
+import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
 import { queryClient } from "../src/services/query-client";
 import { initMobileSentry } from "../src/services/sentry";
@@ -38,12 +40,14 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
-          <RecipeGenerationProvider>
-            <PushTokenSync />
-            <NotificationNavigationBridge />
-            <AuthRedirectGate />
-            <StatusBar style="dark" />
-            <Stack
+          <SpaceProvider>
+            <RecipeGenerationProvider>
+              <PushTokenSync />
+              <PendingSpaceInvitationBridge />
+              <NotificationNavigationBridge />
+              <AuthRedirectGate />
+              <StatusBar style="dark" />
+              <Stack
               screenOptions={{
                 contentStyle: {
                   backgroundColor: colors.background,
@@ -91,6 +95,10 @@ export default function RootLayout() {
                 options={{ title: "개인정보와 추천 안내" }}
               />
               <Stack.Screen
+                name="spaces/invitations/accept"
+                options={{ title: "냉장고 초대" }}
+              />
+              <Stack.Screen
                 name="privacy/ai-data-notice"
                 options={{ title: "요리 추천 안내" }}
               />
@@ -106,6 +114,14 @@ export default function RootLayout() {
                 name="settings/storage-locations"
                 options={{ title: "보관 위치" }}
               />
+              <Stack.Screen
+                name="settings/spaces"
+                options={{ title: "함께 쓰는 냉장고" }}
+              />
+              <Stack.Screen
+                name="settings/spaces/[spaceId]"
+                options={{ title: "냉장고 구성원" }}
+              />
               <Stack.Screen name="settings/account" options={{ title: "계정" }} />
               <Stack.Screen
                 name="settings/subscription"
@@ -115,8 +131,9 @@ export default function RootLayout() {
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />
-            </Stack>
-          </RecipeGenerationProvider>
+              </Stack>
+            </RecipeGenerationProvider>
+          </SpaceProvider>
         </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

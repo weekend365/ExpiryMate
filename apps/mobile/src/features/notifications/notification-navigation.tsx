@@ -10,6 +10,7 @@ import {
 import { useAppStore } from "../../store/app-store";
 import { useAuth } from "../auth/use-auth";
 import { acknowledgeRecipeGenerationState } from "../recipes/recipe-generation-reset";
+import { useActiveSpace } from "../spaces/space-provider";
 
 /**
  * Opens the matching in-app screen when the user taps a notification
@@ -22,6 +23,7 @@ export function NotificationNavigationBridge() {
     (state) => state.hasCompletedOnboarding,
   );
   const { query } = useAuth();
+  const { setActiveSpaceId } = useActiveSpace();
   const handledResponseIdRef = useRef<string | null>(null);
 
   const canNavigate =
@@ -55,11 +57,21 @@ export function NotificationNavigationBridge() {
         acknowledgeRecipeGenerationState();
       }
 
+      if (
+        data &&
+        typeof data === "object" &&
+        "spaceId" in data &&
+        typeof data.spaceId === "string" &&
+        data.spaceId
+      ) {
+        setActiveSpaceId(data.spaceId);
+      }
+
       handledResponseIdRef.current = responseId;
       router.push(path);
       void Notifications.clearLastNotificationResponseAsync();
     },
-    [router],
+    [router, setActiveSpaceId],
   );
 
   useEffect(() => {

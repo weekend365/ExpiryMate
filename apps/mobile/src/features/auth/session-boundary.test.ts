@@ -73,4 +73,32 @@ describe("session boundary cleanup", () => {
       "signed-out",
     ]);
   });
+
+  it("keeps the same user's inventory caches isolated by space", async () => {
+    const { withInventorySpace, sessionQueryKeys } = await import(
+      "./session-boundary"
+    );
+    const queryClient = new QueryClient();
+    const personalKey = withInventorySpace(
+      sessionQueryKeys.inventory,
+      "user-a",
+      "personal_user-a",
+    );
+    const householdKey = withInventorySpace(
+      sessionQueryKeys.inventory,
+      "user-a",
+      "space-house",
+    );
+
+    queryClient.setQueryData(personalKey, [{ id: "personal-item" }]);
+    queryClient.setQueryData(householdKey, [{ id: "shared-item" }]);
+
+    expect(queryClient.getQueryData(personalKey)).toEqual([
+      { id: "personal-item" },
+    ]);
+    expect(queryClient.getQueryData(householdKey)).toEqual([
+      { id: "shared-item" },
+    ]);
+    expect(personalKey).not.toEqual(householdKey);
+  });
 });

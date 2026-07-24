@@ -1,7 +1,13 @@
 import type { InventoryItem } from "@expirymate/shared";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { discardInventoryItem } from "../../services/api";
+import { useAuth } from "../auth/use-auth";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../auth/session-boundary";
+import { useActiveSpace } from "../spaces/space-provider";
 
 const UNDO_WINDOW_MS = 5000;
 
@@ -16,13 +22,33 @@ type PendingDiscard = {
  */
 export function useDeferredDiscardInventoryItem() {
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
+  const { activeSpaceId } = useActiveSpace();
+  const inventoryKey = useMemo(
+    () =>
+      withInventorySpace(
+        sessionQueryKeys.inventory,
+        sessionUserId,
+        activeSpaceId,
+      ),
+    [activeSpaceId, sessionUserId],
+  );
+  const dashboardKey = useMemo(
+    () =>
+      withInventorySpace(
+        sessionQueryKeys.dashboard,
+        sessionUserId,
+        activeSpaceId,
+      ),
+    [activeSpaceId, sessionUserId],
+  );
   const pendingRef = useRef<PendingDiscard | null>(null);
   const [undoLabel, setUndoLabel] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const removeFromCache = useCallback(
     (id: string) => {
-      queryClient.setQueryData<InventoryItem[]>(["inventory-list"], (current) => {
+      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
         if (!current) {
           return current;
         }
@@ -30,12 +56,12 @@ export function useDeferredDiscardInventoryItem() {
         return current.filter((item) => item.id !== id);
       });
     },
-    [queryClient],
+    [inventoryKey, queryClient],
   );
 
   const restoreToCache = useCallback(
     (item: InventoryItem) => {
-      queryClient.setQueryData<InventoryItem[]>(["inventory-list"], (current) => {
+      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
         if (!current) {
           return [item];
         }
@@ -47,7 +73,7 @@ export function useDeferredDiscardInventoryItem() {
         return [item, ...current];
       });
     },
-    [queryClient],
+    [inventoryKey, queryClient],
   );
 
   const commitPending = useCallback(async () => {
@@ -62,10 +88,10 @@ export function useDeferredDiscardInventoryItem() {
     setUndoLabel(null);
 
     try {
-      await discardInventoryItem(pending.item.id);
+      await discardInventoryItem(pending.item.id, activeSpaceId);
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["inventory-list"] }),
-        queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] }),
+        queryClient.invalidateQueries({ queryKey: inventoryKey }),
+        queryClient.invalidateQueries({ queryKey: dashboardKey }),
       ]);
     } catch (error) {
       restoreToCache(pending.item);
@@ -75,7 +101,13 @@ export function useDeferredDiscardInventoryItem() {
           : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
       );
     }
-  }, [queryClient, restoreToCache]);
+  }, [
+    activeSpaceId,
+    dashboardKey,
+    inventoryKey,
+    queryClient,
+    restoreToCache,
+  ]);
 
   const scheduleDiscard = useCallback(
     (item: InventoryItem) => {
@@ -86,11 +118,11 @@ export function useDeferredDiscardInventoryItem() {
         clearTimeout(previous.timeoutId);
         pendingRef.current = null;
         // Commit the previous soft-delete without waiting for its undo window.
-        void discardInventoryItem(previous.item.id)
+        void discardInventoryItem(previous.item.id, activeSpaceId)
           .then(() =>
             Promise.all([
-              queryClient.invalidateQueries({ queryKey: ["inventory-list"] }),
-              queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] }),
+              queryClient.invalidateQueries({ queryKey: inventoryKey }),
+              queryClient.invalidateQueries({ queryKey: dashboardKey }),
             ]),
           )
           .catch(() => {
@@ -110,7 +142,15 @@ export function useDeferredDiscardInventoryItem() {
 
       pendingRef.current = { item, timeoutId };
     },
-    [commitPending, queryClient, removeFromCache, restoreToCache],
+    [
+      activeSpaceId,
+      commitPending,
+      dashboardKey,
+      inventoryKey,
+      queryClient,
+      removeFromCache,
+      restoreToCache,
+    ],
   );
 
   const undoDiscard = useCallback(() => {
@@ -140,18 +180,18 @@ export function useDeferredDiscardInventoryItem() {
 
       clearTimeout(pending.timeoutId);
       pendingRef.current = null;
-      void discardInventoryItem(pending.item.id)
+      void discardInventoryItem(pending.item.id, activeSpaceId)
         .then(() =>
           Promise.all([
-            queryClient.invalidateQueries({ queryKey: ["inventory-list"] }),
-            queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] }),
+            queryClient.invalidateQueries({ queryKey: inventoryKey }),
+            queryClient.invalidateQueries({ queryKey: dashboardKey }),
           ]),
         )
         .catch(() => {
           // Unmount path — best effort; list will refresh on next visit.
         });
     },
-    [queryClient],
+    [activeSpaceId, dashboardKey, inventoryKey, queryClient],
   );
 
   return {

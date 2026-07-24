@@ -19,6 +19,7 @@ import { HomeStatsSkeleton } from "../../src/components/ContentSkeleton";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
+import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { SurfaceCard } from "../../src/components/SurfaceCard";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import {
@@ -194,6 +195,7 @@ export default function HomeScreen() {
             />
           }
         >
+          <SpaceSwitcher />
           <SurfaceCard variant="hero" tone={heroTone}>
             {notices.length > 0 ? (
               <View
