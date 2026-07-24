@@ -1,0 +1,10 @@
+setup:
+  - project: expirymate-api
+    config: dev
+    path: apps/api/
+  - project: expirymate-admin
+    config: dev
+    path: apps/admin/
+  - project: expirymate-mobile
+    config: dev
+    path: apps/mobile/

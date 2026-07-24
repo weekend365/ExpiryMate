@@ -316,15 +316,25 @@ pnpm --store-dir /Users/namu/Library/pnpm/store/v3 install
 
 ### 2. Prepare environment files
 
+**Recommended (Doppler):** pull the shared `dev` secrets after `doppler login` and `doppler setup --no-interactive` at the repo root. Full guide: [`docs/dev-secrets.md`](docs/dev-secrets.md) (also covers Cursor Cloud Agents).
+
+```bash
+doppler secrets download -p expirymate-api -c dev --no-file --format env > apps/api/.env
+doppler secrets download -p expirymate-admin -c dev --no-file --format env > apps/admin/.env.local
+doppler secrets download -p expirymate-mobile -c dev --no-file --format env > apps/mobile/.env
+```
+
+**Without Doppler:** copy examples and fill values by hand.
+
 ```bash
 cp apps/api/.env.example apps/api/.env
 cp apps/admin/.env.example apps/admin/.env.local
 cp apps/mobile/.env.example apps/mobile/.env
 ```
 
-Then fill in:
+Then fill in at least:
 
-- `apps/api/.env`: `DATABASE_URL`, `OPENAI_API_KEY`
+- `apps/api/.env`: `DATABASE_URL`, `OPENAI_API_KEY`, `AUTH_TOKEN_SECRET`
 - `apps/mobile/.env`: `EXPO_PUBLIC_API_BASE_URL`
 
 ### 3. Start PostgreSQL and migrate

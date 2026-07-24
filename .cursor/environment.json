@@ -1,0 +1,14 @@
+{
+  "name": "expirymate-cloud",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "install": "corepack enable && corepack prepare pnpm@9.15.0 --activate && pnpm install --frozen-lockfile && pnpm --filter @expirymate/shared build && pnpm db:generate",
+  "start": "sudo service docker start || true; node scripts/cursor-cloud-env.mjs; docker compose -f docker-compose.yml -f .cursor/compose.postgres.yml up -d postgres || echo '[cursor-cloud] docker postgres skipped — set DATABASE_URL secret if needed'",
+  "ports": [
+    { "name": "api", "port": 4000 },
+    { "name": "admin", "port": 3000 },
+    { "name": "expo", "port": 8081 }
+  ]
+}
