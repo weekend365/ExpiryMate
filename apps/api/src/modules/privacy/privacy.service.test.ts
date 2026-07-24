@@ -94,6 +94,7 @@ describe("PrivacyService", () => {
         recommendationHistoryCount: 0,
       }),
     });
+    expect(operations).toContain("recipeFavorite.deleteMany");
     expect(operations).toContain("recipeRecommendation.deleteMany");
   });
 
@@ -120,6 +121,7 @@ describe("PrivacyService", () => {
       "pushNotificationDelivery.deleteMany",
       "pushToken.deleteMany",
       "inventoryItem.deleteMany",
+      "recipeFavorite.deleteMany",
       "recipeRecommendation.deleteMany",
       "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
@@ -172,6 +174,7 @@ function createPrismaMock(
     ),
     pushToken: createDeleteManyMock("pushToken.deleteMany", operations),
     inventoryItem: createDeleteManyMock("inventoryItem.deleteMany", operations),
+    recipeFavorite: createDeleteManyMock("recipeFavorite.deleteMany", operations),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",
       operations,

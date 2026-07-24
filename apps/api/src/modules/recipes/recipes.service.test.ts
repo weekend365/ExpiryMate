@@ -265,6 +265,83 @@ describe("RecipesService recommendation guards", () => {
   });
 });
 
+describe("RecipesService favorites", () => {
+  beforeEach(() => {
+    restoreManagedEnv();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    restoreManagedEnv();
+  });
+
+  it("saves an owned dish snapshot with an idempotent upsert", async () => {
+    const { prisma, service } = createService();
+    prisma.recipeRecommendation.findUnique.mockResolvedValue(cachedRecord);
+    prisma.recipeFavorite.upsert.mockImplementation(
+      async ({ create }: { create: Record<string, unknown> }) => ({
+        id: "favorite-1",
+        ...create,
+        createdAt: new Date("2099-06-08T00:00:00.000Z"),
+      }),
+    );
+
+    const result = await service.saveFavorite(
+      "cached-recommendation",
+      1,
+      "owner-a",
+    );
+
+    expect(result.dish.title).toBe("계란 요리 2");
+    expect(prisma.recipeFavorite.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          ownerKey_sourceRecommendationId_sourceDishIndex: {
+            ownerKey: "owner-a",
+            sourceRecommendationId: "cached-recommendation",
+            sourceDishIndex: 1,
+          },
+        },
+      }),
+    );
+  });
+
+  it("rejects an out-of-range dish index", async () => {
+    const { prisma, service } = createService();
+    prisma.recipeRecommendation.findUnique.mockResolvedValue(cachedRecord);
+
+    await expect(
+      service.saveFavorite("cached-recommendation", 5, "owner-a"),
+    ).rejects.toThrow("즐겨찾기할 요리를 찾을 수 없습니다.");
+    expect(prisma.recipeFavorite.upsert).not.toHaveBeenCalled();
+  });
+
+  it("does not expose another owner's recommendation", async () => {
+    const { prisma, service } = createService();
+    prisma.recipeRecommendation.findUnique.mockResolvedValue(cachedRecord);
+
+    await expect(
+      service.saveFavorite("cached-recommendation", 0, "owner-b"),
+    ).rejects.toThrow("추천 결과를 찾을 수 없습니다.");
+    expect(prisma.recipeFavorite.upsert).not.toHaveBeenCalled();
+  });
+
+  it("removes a favorite idempotently within the current owner", async () => {
+    const { prisma, service } = createService();
+
+    await expect(
+      service.deleteFavorite("recommendation-1", 2, "owner-a"),
+    ).resolves.toEqual({ ok: true });
+    expect(prisma.recipeFavorite.deleteMany).toHaveBeenCalledWith({
+      where: {
+        ownerKey: "owner-a",
+        sourceRecommendationId: "recommendation-1",
+        sourceDishIndex: 2,
+      },
+    });
+  });
+});
+
 function createService() {
   const prisma = {
     inventoryItem: {
@@ -281,6 +358,11 @@ function createService() {
         },
       }),
       create: vi.fn(),
+    },
+    recipeFavorite: {
+      findMany: vi.fn().mockResolvedValue([]),
+      upsert: vi.fn(),
+      deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     },
   };
   const privacyService = {

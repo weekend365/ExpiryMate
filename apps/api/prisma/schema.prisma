@@ -116,6 +116,7 @@ model User {
   notificationPreference     NotificationPreference?
   userStorageLocations       UserStorageLocation[]
   recipeRecommendations      RecipeRecommendation[]
+  recipeFavorites            RecipeFavorite[]
   subscriptionEntitlements   SubscriptionEntitlement[]
   pushTokens                 PushToken[]
   pushNotificationDeliveries PushNotificationDelivery[]
@@ -303,6 +304,20 @@ model RecipeRecommendation {
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
+}
+
+model RecipeFavorite {
+  id                     String   @id @default(cuid())
+  ownerKey               String
+  owner                  User     @relation(fields: [ownerKey], references: [id])
+  sourceRecommendationId String
+  sourceDishIndex        Int
+  dishSnapshot           Json
+  inventorySnapshot      Json
+  createdAt              DateTime @default(now())
+
+  @@unique([ownerKey, sourceRecommendationId, sourceDishIndex])
+  @@index([ownerKey, createdAt])
 }
 
 model SubscriptionEntitlement {

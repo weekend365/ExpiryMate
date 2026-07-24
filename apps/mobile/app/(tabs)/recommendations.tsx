@@ -12,6 +12,7 @@ import {
   ChevronUp,
   Circle,
   Clock3,
+  Heart,
   SlidersHorizontal,
   Sparkles,
   Utensils,
@@ -33,6 +34,7 @@ import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
@@ -42,7 +44,12 @@ import {
   usePrivacyStatus,
 } from "../../src/features/privacy/use-privacy";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
-import { useRecipeRecommendations } from "../../src/features/recipes/use-recipe-recommendations";
+import {
+  getRecipeFavoriteKey,
+  useRecipeFavorites,
+  useRecipeRecommendations,
+  useSetRecipeFavorite,
+} from "../../src/features/recipes/use-recipe-recommendations";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import type { RecipeRecommendationPayload } from "../../src/services/api";
 import {
@@ -59,6 +66,7 @@ const HIGHLIGHT_INGREDIENT_COUNT = 3;
 const COLLAPSED_HIGHLIGHT_INGREDIENT_COUNT = 2;
 const EXPIRING_DAYS_THRESHOLD = 7;
 const PREVIOUS_RECOMMENDATION_LIMIT = 5;
+type RecipeView = "recommendations" | "favorites";
 
 type HighlightIngredient = {
   key: string;
@@ -90,6 +98,8 @@ const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
 export default function RecommendationsScreen() {
   const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
+  const favoritesQuery = useRecipeFavorites();
+  const setFavoriteMutation = useSetRecipeFavorite();
   const {
     status: generationStatus,
     latestGeneratedRecommendation,
@@ -104,6 +114,7 @@ export default function RecommendationsScreen() {
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
   const [useExpiringFirst, setUseExpiringFirst] = useState(true);
+  const [recipeView, setRecipeView] = useState<RecipeView>("recommendations");
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
@@ -125,6 +136,18 @@ export default function RecommendationsScreen() {
       .filter((item) => item.id !== latestId)
       .slice(0, PREVIOUS_RECOMMENDATION_LIMIT);
   }, [historyQuery.data, latestRecommendation?.id]);
+  const favoriteKeys = useMemo(
+    () =>
+      new Set(
+        (favoritesQuery.data ?? []).map((favorite) =>
+          getRecipeFavoriteKey(
+            favorite.sourceRecommendationId,
+            favorite.sourceDishIndex,
+          ),
+        ),
+      ),
+    [favoritesQuery.data],
+  );
   const errorMessage =
     generationErrorMessage ?? getErrorMessage(historyQuery.error);
   const isQuotaError = isRecommendationQuotaError(errorMessage);
@@ -237,18 +260,29 @@ export default function RecommendationsScreen() {
       scroll={false}
       contentStyle={styles.screenContent}
       footer={
-        <Button
-          icon={Sparkles}
-          onPress={handlePrimaryCta}
-          loading={isGenerating}
-          disabled={isGenerating}
-          fullWidth
-          variant={
-            hasRecommendationResult && !isGenerating ? "surface" : "primary"
-          }
-        >
-          {primaryCtaLabel}
-        </Button>
+        recipeView === "favorites" ? (
+          <Button
+            icon={Sparkles}
+            onPress={() => setRecipeView("recommendations")}
+            fullWidth
+            variant="surface"
+          >
+            추천으로 돌아갈게요
+          </Button>
+        ) : (
+          <Button
+            icon={Sparkles}
+            onPress={handlePrimaryCta}
+            loading={isGenerating}
+            disabled={isGenerating}
+            fullWidth
+            variant={
+              hasRecommendationResult && !isGenerating ? "surface" : "primary"
+            }
+          >
+            {primaryCtaLabel}
+          </Button>
+        )
       }
     >
       <View style={styles.kitchenScene}>
@@ -273,11 +307,83 @@ export default function RecommendationsScreen() {
           refreshControl={
             <RefreshControl
               tintColor={colors.primary}
-              refreshing={historyQuery.isRefetching}
-              onRefresh={historyQuery.refetch}
+              refreshing={
+                recipeView === "favorites"
+                  ? favoritesQuery.isRefetching
+                  : historyQuery.isRefetching
+              }
+              onRefresh={
+                recipeView === "favorites"
+                  ? favoritesQuery.refetch
+                  : historyQuery.refetch
+              }
             />
           }
         >
+      <View style={styles.recipeViewSwitch}>
+        <Pressable
+          onPress={() => setRecipeView("recommendations")}
+          accessibilityRole="tab"
+          accessibilityState={{ selected: recipeView === "recommendations" }}
+          style={({ pressed }) => [
+            styles.recipeViewOption,
+            recipeView === "recommendations" && styles.recipeViewOptionSelected,
+            pressed && styles.recipeViewOptionPressed,
+          ]}
+        >
+          <Sparkles
+            color={
+              recipeView === "recommendations" ? colors.primary : colors.subtext
+            }
+            size={spacing.sm}
+            strokeWidth={2.4}
+          />
+          <Text
+            style={[
+              styles.recipeViewLabel,
+              recipeView === "recommendations" &&
+                styles.recipeViewLabelSelected,
+            ]}
+          >
+            추천받기
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setRecipeView("favorites")}
+          accessibilityRole="tab"
+          accessibilityState={{ selected: recipeView === "favorites" }}
+          style={({ pressed }) => [
+            styles.recipeViewOption,
+            recipeView === "favorites" && styles.recipeViewOptionSelected,
+            pressed && styles.recipeViewOptionPressed,
+          ]}
+        >
+          <Heart
+            color={recipeView === "favorites" ? colors.primary : colors.subtext}
+            fill={recipeView === "favorites" ? colors.primary : "none"}
+            size={spacing.sm}
+            strokeWidth={2.4}
+          />
+          <Text
+            style={[
+              styles.recipeViewLabel,
+              recipeView === "favorites" && styles.recipeViewLabelSelected,
+            ]}
+          >
+            즐겨찾기 {favoritesQuery.data?.length ?? 0}
+          </Text>
+        </Pressable>
+      </View>
+
+      {setFavoriteMutation.error ? (
+        <FeedbackBanner
+          showMascot={false}
+          title="즐겨찾기를 바꾸지 못했어요"
+          description={getErrorMessage(setFavoriteMutation.error) ?? undefined}
+        />
+      ) : null}
+
+      {recipeView === "recommendations" ? (
       <View style={styles.heroCard}>
         <MascotSpeechBubble
           message={
@@ -328,8 +434,9 @@ export default function RecommendationsScreen() {
           </View>
         </Pressable>
       </View>
+      ) : null}
 
-      {errorMessage && !isGenerating ? (
+      {recipeView === "recommendations" && errorMessage && !isGenerating ? (
         isQuotaError ? (
           <View style={styles.quotaCard}>
             <Text style={styles.quotaTitle}>
@@ -381,7 +488,9 @@ export default function RecommendationsScreen() {
         )
       ) : null}
 
-      {latestRecommendation && !isGenerating ? (
+      {recipeView === "recommendations" &&
+      latestRecommendation &&
+      !isGenerating ? (
         <View style={styles.resultSection}>
           <SectionHeader
             title="이번에 골라본 요리"
@@ -396,6 +505,24 @@ export default function RecommendationsScreen() {
                 dish={dish}
                 index={index}
                 inventorySnapshot={latestRecommendation.inventorySnapshot}
+                isFavorite={favoriteKeys.has(
+                  getRecipeFavoriteKey(latestRecommendation.id, index),
+                )}
+                isFavoritePending={
+                  setFavoriteMutation.isPending &&
+                  setFavoriteMutation.variables?.recommendationId ===
+                    latestRecommendation.id &&
+                  setFavoriteMutation.variables.dishIndex === index
+                }
+                onToggleFavorite={(favorite) =>
+                  setFavoriteMutation.mutate({
+                    recommendationId: latestRecommendation.id,
+                    dishIndex: index,
+                    dish,
+                    inventorySnapshot: latestRecommendation.inventorySnapshot,
+                    favorite,
+                  })
+                }
               />
             ))
           ) : (
@@ -408,7 +535,9 @@ export default function RecommendationsScreen() {
         </View>
       ) : null}
 
-      {previousRecommendations.length && !isGenerating ? (
+      {recipeView === "recommendations" &&
+      previousRecommendations.length > 0 &&
+      !isGenerating ? (
         <View style={styles.resultSection}>
           <SectionHeader
             title="이전 추천"
@@ -442,12 +571,80 @@ export default function RecommendationsScreen() {
         </View>
       ) : null}
 
-      {!latestRecommendation && !isGenerating && !errorMessage ? (
+      {recipeView === "recommendations" &&
+      !latestRecommendation &&
+      !isGenerating &&
+      !errorMessage ? (
         <EmptyState
           mood="empty"
           title="아직 추천이 없어요"
           description="아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
         />
+      ) : null}
+
+      {recipeView === "favorites" ? (
+        <View style={styles.resultSection}>
+          <SectionHeader
+            title="즐겨찾는 요리"
+            description="저장해 둔 요리를 언제든 다시 펼쳐볼 수 있어요."
+          />
+          {favoritesQuery.isPending ? (
+            <View
+              style={styles.favoriteLoading}
+              accessibilityLabel="즐겨찾기를 불러오고 있어요"
+            >
+              <Text style={styles.favoriteLoadingText}>
+                즐겨찾기를 불러오고 있어요…
+              </Text>
+            </View>
+          ) : favoritesQuery.error ? (
+            <FeedbackBanner
+              showMascot={false}
+              title="즐겨찾기를 불러오지 못했어요"
+              description={getErrorMessage(favoritesQuery.error) ?? undefined}
+              actionLabel="다시 불러오기"
+              onAction={() => {
+                void favoritesQuery.refetch();
+              }}
+            />
+          ) : favoritesQuery.data?.length ? (
+            favoritesQuery.data.map((favorite, favoriteIndex) => (
+              <RecipeCard
+                key={favorite.id}
+                recommendationId={favorite.sourceRecommendationId}
+                dish={favorite.dish}
+                index={favorite.sourceDishIndex}
+                badgeLabel={String(favoriteIndex + 1)}
+                inventorySnapshot={favorite.inventorySnapshot}
+                isFavorite
+                isFavoritePending={
+                  setFavoriteMutation.isPending &&
+                  setFavoriteMutation.variables?.recommendationId ===
+                    favorite.sourceRecommendationId &&
+                  setFavoriteMutation.variables.dishIndex ===
+                    favorite.sourceDishIndex
+                }
+                onToggleFavorite={(isFavorite) =>
+                  setFavoriteMutation.mutate({
+                    recommendationId: favorite.sourceRecommendationId,
+                    dishIndex: favorite.sourceDishIndex,
+                    dish: favorite.dish,
+                    inventorySnapshot: favorite.inventorySnapshot,
+                    favorite: isFavorite,
+                  })
+                }
+              />
+            ))
+          ) : (
+            <EmptyState
+              icon={Heart}
+              title="아직 즐겨찾는 요리가 없어요"
+              description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
+              actionLabel="추천 보러 가기"
+              onAction={() => setRecipeView("recommendations")}
+            />
+          )}
+        </View>
       ) : null}
         </ScrollView>
       </View>
@@ -599,6 +796,24 @@ export default function RecommendationsScreen() {
                 index={index}
                 inventorySnapshot={historyRecommendation.inventorySnapshot}
                 onStartCooking={() => setHistoryRecommendation(null)}
+                isFavorite={favoriteKeys.has(
+                  getRecipeFavoriteKey(historyRecommendation.id, index),
+                )}
+                isFavoritePending={
+                  setFavoriteMutation.isPending &&
+                  setFavoriteMutation.variables?.recommendationId ===
+                    historyRecommendation.id &&
+                  setFavoriteMutation.variables.dishIndex === index
+                }
+                onToggleFavorite={(favorite) =>
+                  setFavoriteMutation.mutate({
+                    recommendationId: historyRecommendation.id,
+                    dishIndex: index,
+                    dish,
+                    inventorySnapshot: historyRecommendation.inventorySnapshot,
+                    favorite,
+                  })
+                }
               />
             ))}
           </View>
@@ -620,14 +835,22 @@ function RecipeCard({
   recommendationId,
   dish,
   index,
+  badgeLabel,
   inventorySnapshot,
   onStartCooking,
+  isFavorite = false,
+  isFavoritePending = false,
+  onToggleFavorite,
 }: {
   recommendationId: string;
   dish: RecipeRecommendationDish;
   index: number;
+  badgeLabel?: string;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   onStartCooking?: () => void;
+  isFavorite?: boolean;
+  isFavoritePending?: boolean;
+  onToggleFavorite?: (favorite: boolean) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [checkedIngredientKeys, setCheckedIngredientKeys] = useState<string[]>(
@@ -690,6 +913,36 @@ function RecipeCard({
 
   return (
     <View style={styles.recipeCard}>
+      {onToggleFavorite ? (
+        <Pressable
+          onPress={() => onToggleFavorite(!isFavorite)}
+          disabled={isFavoritePending}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isFavorite
+              ? `${dish.title} 즐겨찾기에서 빼기`
+              : `${dish.title} 즐겨찾기에 저장`
+          }
+          accessibilityState={{
+            selected: isFavorite,
+            disabled: isFavoritePending,
+          }}
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.favoriteButton,
+            isFavorite && styles.favoriteButtonSelected,
+            pressed && styles.favoriteButtonPressed,
+            isFavoritePending && styles.favoriteButtonPending,
+          ]}
+        >
+          <Heart
+            color={isFavorite ? colors.primary : colors.subtext}
+            fill={isFavorite ? colors.primary : "none"}
+            size={spacing.md}
+            strokeWidth={2.4}
+          />
+        </Pressable>
+      ) : null}
       <Pressable
         onPress={handleToggle}
         accessibilityRole="button"
@@ -704,7 +957,9 @@ function RecipeCard({
       >
         <View style={styles.recipeHeader}>
           <View style={styles.recipeBadge}>
-            <Text style={styles.recipeBadgeText}>{index + 1}</Text>
+            <Text style={styles.recipeBadgeText}>
+              {badgeLabel ?? index + 1}
+            </Text>
           </View>
           <Text style={styles.recipeTitle} numberOfLines={2}>
             {dish.title}
@@ -1085,6 +1340,40 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
+  recipeViewSwitch: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.xxs,
+    flexDirection: "row",
+    gap: spacing.xxs,
+  },
+  recipeViewOption: {
+    flex: 1,
+    minHeight: touchTarget.min,
+    borderRadius: radius.pill,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xs,
+  },
+  recipeViewOptionSelected: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  recipeViewOptionPressed: {
+    opacity: 0.8,
+  },
+  recipeViewLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.subtext,
+  },
+  recipeViewLabelSelected: {
+    color: colors.primary,
+  },
   heroCard: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.xxl,
@@ -1172,6 +1461,22 @@ const styles = StyleSheet.create({
   resultSection: {
     gap: spacing.sm,
   },
+  favoriteLoading: {
+    minHeight: spacing.xxxl,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: spacing.md,
+  },
+  favoriteLoadingText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.body.fontFamily,
+    color: colors.subtext,
+  },
   historyList: {
     gap: spacing.sm,
   },
@@ -1226,6 +1531,7 @@ const styles = StyleSheet.create({
   recipeSummaryPressable: {
     gap: spacing.sm,
     borderRadius: radius.lg,
+    paddingRight: touchTarget.icon + spacing.xs,
   },
   recipeSummaryPressed: {
     opacity: 0.85,
@@ -1261,6 +1567,27 @@ const styles = StyleSheet.create({
     height: touchTarget.icon,
     alignItems: "center",
     justifyContent: "center",
+  },
+  favoriteButton: {
+    position: "absolute",
+    zIndex: 1,
+    top: spacing.md,
+    right: spacing.md,
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  favoriteButtonSelected: {
+    backgroundColor: colors.primarySoft,
+  },
+  favoriteButtonPressed: {
+    opacity: 0.75,
+  },
+  favoriteButtonPending: {
+    opacity: 0.55,
   },
   recipeSummary: {
     fontSize: typography.bodySmall.fontSize,

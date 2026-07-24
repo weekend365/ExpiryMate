@@ -10,10 +10,12 @@ import {
 import {
   Prisma,
   ProductCategory,
+  type RecipeFavorite as PrismaRecipeFavorite,
   type RecipeRecommendation as PrismaRecipeRecommendation,
 } from "@prisma/client";
 import type {
   RecipeInventorySnapshotItem,
+  RecipeFavorite,
   RecipeRecommendation,
   RecipeRecommendationDish,
   RecipeRecommendationRequest,
@@ -189,6 +191,80 @@ export class RecipesService {
     return this.serializeRecommendation(record);
   }
 
+  async listFavorites(ownerKey: string): Promise<RecipeFavorite[]> {
+    const records = await this.prisma.recipeFavorite.findMany({
+      where: { ownerKey },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return records.map((record) => this.serializeFavorite(record));
+  }
+
+  async saveFavorite(
+    recommendationId: string,
+    dishIndex: number,
+    ownerKey: string,
+  ): Promise<RecipeFavorite> {
+    const recommendation = await this.prisma.recipeRecommendation.findUnique({
+      where: { id: recommendationId },
+    });
+
+    if (!recommendation || recommendation.ownerKey !== ownerKey) {
+      throw new NotFoundException("추천 결과를 찾을 수 없습니다.");
+    }
+
+    const dishes = recipeRecommendationsPayloadSchema.shape.recommendations.parse(
+      recommendation.recommendations,
+    );
+    const dish = dishes[dishIndex];
+
+    if (!Number.isInteger(dishIndex) || dishIndex < 0 || !dish) {
+      throw new BadRequestException("즐겨찾기할 요리를 찾을 수 없습니다.");
+    }
+
+    const inventorySnapshot = recipeInventorySnapshotItemSchema
+      .array()
+      .parse(recommendation.inventorySnapshot);
+    const favorite = await this.prisma.recipeFavorite.upsert({
+      where: {
+        ownerKey_sourceRecommendationId_sourceDishIndex: {
+          ownerKey,
+          sourceRecommendationId: recommendationId,
+          sourceDishIndex: dishIndex,
+        },
+      },
+      create: {
+        ownerKey,
+        sourceRecommendationId: recommendationId,
+        sourceDishIndex: dishIndex,
+        dishSnapshot: toJson(dish),
+        inventorySnapshot: toJson(inventorySnapshot),
+      },
+      update: {
+        dishSnapshot: toJson(dish),
+        inventorySnapshot: toJson(inventorySnapshot),
+      },
+    });
+
+    return this.serializeFavorite(favorite);
+  }
+
+  async deleteFavorite(
+    recommendationId: string,
+    dishIndex: number,
+    ownerKey: string,
+  ) {
+    await this.prisma.recipeFavorite.deleteMany({
+      where: {
+        ownerKey,
+        sourceRecommendationId: recommendationId,
+        sourceDishIndex: dishIndex,
+      },
+    });
+
+    return { ok: true as const };
+  }
+
   private async findCachedRecommendation(
     ownerKey: string,
     requestCacheKey: string,
@@ -358,6 +434,22 @@ export class RecipesService {
       request,
       inventorySnapshot,
       recommendations,
+    };
+  }
+
+  private serializeFavorite(record: PrismaRecipeFavorite): RecipeFavorite {
+    return {
+      id: record.id,
+      ownerKey: record.ownerKey,
+      sourceRecommendationId: record.sourceRecommendationId,
+      sourceDishIndex: record.sourceDishIndex,
+      dish: recipeRecommendationsPayloadSchema.shape.recommendations.element.parse(
+        record.dishSnapshot,
+      ),
+      inventorySnapshot: recipeInventorySnapshotItemSchema
+        .array()
+        .parse(record.inventorySnapshot),
+      createdAt: record.createdAt.toISOString(),
     };
   }
 
@@ -554,24 +646,6 @@ function getNonNegativeNumberEnv(name: string, fallback: number) {
   }
 
   return value;
-}
-
-function decimalToNumber(
-  value: Prisma.Decimal | number | string | null | undefined,
-) {
-  if (value === null || value === undefined) {
-    return 0;
-  }
-
-  if (typeof value === "number") {
-    return value;
-  }
-
-  if (typeof value === "string") {
-    return Number(value);
-  }
-
-  return value.toNumber();
 }
 
 function roundCost(value: number) {

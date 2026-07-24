@@ -110,8 +110,9 @@ export default function AiDataNoticeScreen() {
             <Text style={styles.cardTitle}>장고가 기억해 두는 것</Text>
             <Text style={styles.bodyText}>
               추천할 때 고른 조건, 그때의 재료 목록, 나온 요리 추천은 나중에 다시
-              볼 수 있도록 내 계정에 남겨 둬요. 원하시면 「받은 추천 기록
-              정리」에서 언제든 지울 수 있어요.
+              볼 수 있도록 내 계정에 남겨 둬요. 즐겨찾기에 저장한 요리도 같은
+              계정에 남으며, 원하시면 「추천 기록과 즐겨찾기 정리」에서 언제든
+              지울 수 있어요.
             </Text>
           </View>
           <View style={styles.card}>
