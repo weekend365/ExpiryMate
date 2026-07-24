@@ -24,10 +24,8 @@ function isPersonalTeamBuild(env = process.env) {
 if (require.main === module) {
   try {
     assertIosTeamCompatibleWithAppEnv();
-    // eslint-disable-next-line no-console
     console.log("iOS team / app env combination looks good.");
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error(error instanceof Error ? error.message : error);
     process.exit(1);
   }

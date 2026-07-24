@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Circle,
   CookingPot,
+  Heart,
   Refrigerator,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
@@ -36,6 +37,11 @@ import {
 } from "../../src/features/recipes/cooking";
 import { useRecipeRecommendation } from "../../src/features/recipes/use-recipe-recommendation";
 import {
+  getRecipeFavoriteKey,
+  useRecipeFavorites,
+  useSetRecipeFavorite,
+} from "../../src/features/recipes/use-recipe-recommendations";
+import {
   colors,
   radius,
   spacing,
@@ -56,6 +62,8 @@ export default function CookingScreen() {
   const recommendationQuery = useRecipeRecommendation(recommendationId);
   const inventoryQuery = useInventoryList();
   const consumeMutation = useBatchConsumeInventoryItems();
+  const favoritesQuery = useRecipeFavorites();
+  const setFavoriteMutation = useSetRecipeFavorite();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [checkedPrepKeys, setCheckedPrepKeys] = useState<string[]>([]);
   const [completedCookingSteps, setCompletedCookingSteps] = useState<number[]>(
@@ -99,6 +107,16 @@ export default function CookingScreen() {
         ? resolveConsumableIngredients(dish, inventoryQuery.data ?? [])
         : [],
     [dish, inventoryQuery.data],
+  );
+  const isFavorite = Boolean(
+    recommendationId &&
+      favoritesQuery.data?.some(
+        (favorite) =>
+          getRecipeFavoriteKey(
+            favorite.sourceRecommendationId,
+            favorite.sourceDishIndex,
+          ) === getRecipeFavoriteKey(recommendationId, requestedDishIndex),
+      ),
   );
 
   useEffect(() => {
@@ -201,6 +219,10 @@ export default function CookingScreen() {
     consumeMutation.error instanceof Error
       ? consumeMutation.error.message
       : null;
+  const favoriteMutationError =
+    setFavoriteMutation.error instanceof Error
+      ? setFavoriteMutation.error.message
+      : null;
 
   const goBack = () => {
     if (currentIndex === 0) {
@@ -247,6 +269,16 @@ export default function CookingScreen() {
 
     const result = await consumeMutation.mutateAsync({ items });
     setUpdatedItems(result.items);
+  };
+
+  const handleToggleFavorite = () => {
+    setFavoriteMutation.mutate({
+      recommendationId,
+      dishIndex: requestedDishIndex,
+      dish,
+      inventorySnapshot: recommendation?.inventorySnapshot ?? [],
+      favorite: !isFavorite,
+    });
   };
 
   const footer =
@@ -412,6 +444,67 @@ export default function CookingScreen() {
             <Text style={styles.sectionHint}>
               실제로 쓴 양과 다르면 재료별로 바로 바꿀 수 있어요.
             </Text>
+            <Pressable
+              onPress={handleToggleFavorite}
+              disabled={setFavoriteMutation.isPending}
+              accessibilityRole="checkbox"
+              accessibilityState={{
+                checked: isFavorite,
+                disabled: setFavoriteMutation.isPending,
+              }}
+              accessibilityLabel={
+                isFavorite
+                  ? `${dish.title} 즐겨찾기에서 빼기`
+                  : `${dish.title} 즐겨찾기에 추가`
+              }
+              style={({ pressed }) => [
+                styles.favoriteCard,
+                isFavorite && styles.favoriteCardSelected,
+                pressed && styles.pressed,
+                setFavoriteMutation.isPending && styles.favoriteCardPending,
+              ]}
+            >
+              <View
+                style={[
+                  styles.favoriteIcon,
+                  isFavorite && styles.favoriteIconSelected,
+                ]}
+              >
+                <Heart
+                  color={isFavorite ? colors.primary : colors.subtext}
+                  fill={isFavorite ? colors.primary : "none"}
+                  size={spacing.md}
+                  strokeWidth={2.4}
+                />
+              </View>
+              <View style={styles.rowCopy}>
+                <Text style={styles.rowTitle}>
+                  {isFavorite
+                    ? "즐겨찾기에 담아뒀어요"
+                    : "이 요리, 다음에도 쉽게 찾을까요?"}
+                </Text>
+                <Text style={styles.rowDescription}>
+                  {isFavorite
+                    ? "추천 탭에서 언제든 다시 볼 수 있어요."
+                    : "하트를 눌러 즐겨찾기에 담아두세요."}
+                </Text>
+              </View>
+              <Text
+                style={[
+                  styles.favoriteAction,
+                  isFavorite && styles.favoriteActionSelected,
+                ]}
+              >
+                {isFavorite ? "담았어요" : "담기"}
+              </Text>
+            </Pressable>
+            {favoriteMutationError ? (
+              <View style={styles.errorCard}>
+                <Text style={styles.errorText}>
+                  즐겨찾기를 바꾸지 못했어요. 잠시 뒤 다시 눌러주세요.
+                </Text>
+              </View>
+            ) : null}
             {inventoryQuery.isError ? (
               <View style={styles.errorCard}>
                 <Text style={styles.errorText}>
@@ -675,6 +768,44 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
+  },
+  favoriteCard: {
+    minHeight: touchTarget.ctaLarge,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  favoriteCardSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+  },
+  favoriteCardPending: {
+    opacity: 0.55,
+  },
+  favoriteIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  favoriteIconSelected: {
+    backgroundColor: colors.surface,
+  },
+  favoriteAction: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
+  },
+  favoriteActionSelected: {
+    color: colors.primary,
   },
   consumptionCard: {
     borderRadius: radius.xxl,

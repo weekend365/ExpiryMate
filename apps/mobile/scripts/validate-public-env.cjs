@@ -159,10 +159,8 @@ function isUnsafeProductionHostname(hostname) {
 if (require.main === module) {
   try {
     validateExpoPublicEnv();
-    // eslint-disable-next-line no-console
     console.log("Expo public production env looks good.");
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error(error instanceof Error ? error.message : error);
     process.exit(1);
   }
