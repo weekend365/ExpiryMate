@@ -142,6 +142,12 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     [sessionUserId],
   );
 
+  // Keep the switcher in a loading state until both the saved selection and
+  // the spaces list are ready. Otherwise a fast/cached spaces response can
+  // clear isLoading while activeSpace is still null, and SpaceSwitcher hides.
+  const isLoading =
+    Boolean(sessionUserId) && (!selectionHydrated || query.isPending);
+
   const value = useMemo<SpaceContextValue>(
     () => ({
       spaces,
@@ -151,13 +157,14 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       isReady:
         !sessionUserId ||
         (selectionHydrated && !query.isPending && Boolean(activeSpace)),
-      isLoading: Boolean(sessionUserId) && query.isPending,
+      isLoading,
       error: query.error instanceof Error ? query.error : null,
       setActiveSpaceId,
       refetchSpaces: query.refetch,
     }),
     [
       activeSpace,
+      isLoading,
       query.error,
       query.isPending,
       query.refetch,

@@ -1,23 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "../auth/use-auth";
 import {
   sessionQueryKeys,
   withInventorySpace,
 } from "../auth/session-boundary";
-import { useActiveSpace } from "../spaces/space-provider";
+import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 import { getDashboardSummary } from "../../services/api";
 
 export const useDashboardSummary = () => {
-  const { sessionUserId } = useAuth();
-  const { activeSpaceId, isReady } = useActiveSpace();
+  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
+    useSpaceScopedQueryGate();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: withInventorySpace(
       sessionQueryKeys.dashboard,
       sessionUserId,
       activeSpaceId,
     ),
     queryFn: () => getDashboardSummary(activeSpaceId),
-    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
+    enabled,
   });
+
+  return {
+    ...query,
+    isLoading: isAwaitingSpace || query.isLoading,
+    isPending: isAwaitingSpace || query.isPending,
+  };
 };
