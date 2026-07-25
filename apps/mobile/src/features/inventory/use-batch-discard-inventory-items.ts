@@ -1,3 +1,4 @@
+import type { InventoryItem } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { batchDiscardInventoryItems } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
@@ -25,7 +26,23 @@ export const useBatchDiscardInventoryItems = () => {
   return useMutation({
     mutationFn: (ids: string[]) =>
       batchDiscardInventoryItems(ids, activeSpaceId),
-    onSuccess: () => {
+    onMutate: async (ids) => {
+      await queryClient.cancelQueries({ queryKey: inventoryKey });
+      const previous = queryClient.getQueryData<InventoryItem[]>(inventoryKey);
+      const idSet = new Set(ids);
+
+      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) =>
+        (current ?? []).filter((item) => !idSet.has(item.id)),
+      );
+
+      return { previous };
+    },
+    onError: (_error, _ids, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(inventoryKey, context.previous);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
     },
