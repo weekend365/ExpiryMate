@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -61,42 +61,25 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
   const { height: windowHeight, isRegular } = useResponsiveLayout();
-  const [mounted, setMounted] = useState(false);
   const translateY = useSharedValue(windowHeight);
   const backdropOpacity = useSharedValue(0);
   const dragStartY = useSharedValue(0);
 
   useEffect(() => {
-    if (visible) {
-      setMounted(true);
-    }
-  }, [visible]);
-
-  useEffect(() => {
-    if (!mounted) {
-      return;
-    }
-
-    if (visible) {
+    if (!visible) {
       translateY.value = windowHeight;
-      translateY.value = withSpring(0, SPRING);
-      backdropOpacity.value = withTiming(BACKDROP_OPACITY, {
-        duration: 220,
-        easing: Easing.out(Easing.cubic),
-      });
+      backdropOpacity.value = 0;
       return;
     }
 
-    translateY.value = withSpring(windowHeight, SPRING, (finished) => {
-      if (finished) {
-        runOnJS(setMounted)(false);
-      }
+    translateY.value = windowHeight;
+    backdropOpacity.value = 0;
+    translateY.value = withSpring(0, SPRING);
+    backdropOpacity.value = withTiming(BACKDROP_OPACITY, {
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
     });
-    backdropOpacity.value = withTiming(0, {
-      duration: 180,
-      easing: Easing.in(Easing.cubic),
-    });
-  }, [backdropOpacity, mounted, translateY, visible, windowHeight]);
+  }, [backdropOpacity, translateY, visible, windowHeight]);
 
   const sheetStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
@@ -153,14 +136,16 @@ export function BottomSheet({
     ],
   );
 
-  if (!mounted) {
+  // Unmount in the same render as dismiss. Keeping a transparent Modal around
+  // for exit animation steals taps from stack headers (홈/뒤로) app-wide on iOS.
+  if (!visible) {
     return null;
   }
 
   return (
     <Modal
       transparent
-      visible={mounted}
+      visible
       animationType="none"
       onRequestClose={onClose}
       statusBarTranslucent
