@@ -7,17 +7,16 @@ import {
   listStorageLocations,
   updateStorageLocation,
 } from "../../services/api";
-import { useAuth } from "../auth/use-auth";
 import {
   sessionQueryKeys,
   withInventorySpace,
 } from "../auth/session-boundary";
-import { useActiveSpace } from "../spaces/space-provider";
+import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 
 export const useStorageLocations = () => {
   const queryClient = useQueryClient();
-  const { sessionUserId } = useAuth();
-  const { activeSpaceId, isReady } = useActiveSpace();
+  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
+    useSpaceScopedQueryGate();
   const queryKey = withInventorySpace(
     sessionQueryKeys.storageLocations,
     sessionUserId,
@@ -27,7 +26,7 @@ export const useStorageLocations = () => {
   const query = useQuery({
     queryKey,
     queryFn: () => listStorageLocations(activeSpaceId),
-    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
+    enabled,
   });
 
   const selectableOptions = useMemo(() => {
@@ -78,7 +77,11 @@ export const useStorageLocations = () => {
   });
 
   return {
-    query,
+    query: {
+      ...query,
+      isLoading: isAwaitingSpace || query.isLoading,
+      isPending: isAwaitingSpace || query.isPending,
+    },
     selectableOptions,
     resolveLabel,
     createMutation,

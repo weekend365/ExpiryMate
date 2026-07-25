@@ -2,17 +2,24 @@ import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
+import type { PropsWithChildren } from "react";
 import { useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 
-interface DatePickerFieldProps {
-  label: string;
+interface DatePickerFieldProps extends PropsWithChildren {
+  label?: string;
   value?: string;
   onChange: (value: string) => void;
   error?: string;
+  /** field = labeled row (default); hero = large date + secondary action */
+  presentation?: "field" | "hero";
+  actionLabel?: string;
+  emptyLabel?: string;
+  /** Hero eyebrow above the large date. Pass null to hide when a parent already guides. */
+  heroEyebrow?: string | null;
 }
 
 export function DatePickerField({
@@ -20,6 +27,11 @@ export function DatePickerField({
   value,
   onChange,
   error,
+  presentation = "field",
+  actionLabel,
+  emptyLabel = "날짜를 골라 주세요",
+  heroEyebrow = "이 날짜로 넣을게요",
+  children,
 }: DatePickerFieldProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [draftDate, setDraftDate] = useState<Date>(
@@ -57,27 +69,76 @@ export function DatePickerField({
     setIsVisible(false);
   };
 
-  const displayValue = value ? formatDateKorean(value) : "날짜를 골라 주세요";
+  const displayValue = value ? formatDateKorean(value) : emptyLabel;
+  const resolvedActionLabel =
+    actionLabel ??
+    (presentation === "hero" ? "다른 날짜 고르기" : "직접 고르기");
+  const isHero = presentation === "hero";
 
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
-      <Pressable
-        onPress={openPicker}
-        accessibilityRole="button"
-        accessibilityLabel={`${label}, ${displayValue}`}
-        accessibilityHint="날짜를 직접 고를 수 있어요"
-        style={({ pressed }) => [
-          styles.trigger,
-          pressed && styles.triggerPressed,
-          error ? styles.errorTrigger : null,
-        ]}
-      >
-        <Text style={value ? styles.valueText : styles.placeholderText}>
-          {displayValue}
-        </Text>
-        <Text style={styles.triggerAction}>직접 고르기</Text>
-      </Pressable>
+      {label && !isHero ? <Text style={styles.label}>{label}</Text> : null}
+
+      {isHero ? (
+        <>
+          <Pressable
+            onPress={openPicker}
+            accessibilityRole="button"
+            accessibilityLabel={`선택한 유통기한 ${displayValue}`}
+            accessibilityHint="다른 날짜를 고르려면 눌러 주세요"
+            style={({ pressed }) => [
+              styles.heroValueBlock,
+              pressed && styles.heroValueBlockPressed,
+              error ? styles.errorTrigger : null,
+            ]}
+          >
+            {heroEyebrow ? (
+              <Text style={styles.heroEyebrow}>{heroEyebrow}</Text>
+            ) : null}
+            <Text
+              style={[
+                styles.heroValue,
+                !value && styles.heroValuePlaceholder,
+              ]}
+            >
+              {displayValue}
+            </Text>
+          </Pressable>
+
+          {children}
+
+          <Pressable
+            onPress={openPicker}
+            accessibilityRole="button"
+            accessibilityLabel={resolvedActionLabel}
+            accessibilityHint="달력에서 유통기한을 직접 고를 수 있어요"
+            style={({ pressed }) => [
+              styles.heroAction,
+              pressed && styles.heroActionPressed,
+            ]}
+          >
+            <Text style={styles.heroActionLabel}>{resolvedActionLabel}</Text>
+          </Pressable>
+        </>
+      ) : (
+        <Pressable
+          onPress={openPicker}
+          accessibilityRole="button"
+          accessibilityLabel={`${label ?? "날짜"}, ${displayValue}`}
+          accessibilityHint="날짜를 직접 고를 수 있어요"
+          style={({ pressed }) => [
+            styles.trigger,
+            pressed && styles.triggerPressed,
+            error ? styles.errorTrigger : null,
+          ]}
+        >
+          <Text style={value ? styles.valueText : styles.placeholderText}>
+            {displayValue}
+          </Text>
+          <Text style={styles.triggerAction}>{resolvedActionLabel}</Text>
+        </Pressable>
+      )}
+
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       {Platform.OS === "ios" ? (
@@ -147,7 +208,7 @@ function toDatePickerDateOnly(value: Date) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: spacing.xs,
+    gap: spacing.sm,
   },
   label: {
     fontSize: typography.bodySmall.fontSize,
@@ -189,6 +250,52 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     color: colors.primary,
     fontFamily: typography.label.fontFamily,
+  },
+  heroValueBlock: {
+    minHeight: touchTarget.ctaLarge,
+    borderRadius: radius.xxl,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    gap: spacing.xxs,
+  },
+  heroValueBlockPressed: {
+    opacity: 0.88,
+  },
+  heroEyebrow: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.primary,
+  },
+  heroValue: {
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  heroValuePlaceholder: {
+    color: colors.mutedText,
+    fontFamily: typography.body.fontFamily,
+  },
+  heroAction: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: spacing.md,
+  },
+  heroActionPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  heroActionLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
   },
   errorText: {
     fontSize: typography.label.fontSize,

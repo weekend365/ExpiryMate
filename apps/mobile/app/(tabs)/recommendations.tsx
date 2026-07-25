@@ -250,12 +250,13 @@ export default function RecommendationsScreen() {
       return;
     }
 
+    const { recommendationId, dishIndex } = recipeDetail;
     setRecipeDetail(null);
     router.push({
       pathname: "/cooking/[recommendationId]",
       params: {
-        recommendationId: recipeDetail.recommendationId,
-        dishIndex: String(recipeDetail.dishIndex),
+        recommendationId,
+        dishIndex: String(dishIndex),
       },
     });
   };

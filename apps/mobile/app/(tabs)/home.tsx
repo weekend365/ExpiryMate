@@ -304,9 +304,8 @@ export default function HomeScreen() {
               >
                 <AppText variant="subheading">유통기한 신호등</AppText>
                 <AppText variant="bodySmall" tone="subtext">
-                  빨간불은 오늘까지, 노란불은 7일 안, 초록불은 유통기한이
-                  여유로운 상태를 나타내요. 램프를 누르면 보관함에서 그 재료만
-                  보여 드릴게요.
+                  빨강(오늘까지)·노랑(7일 이내)·초록(여유) 램프를 누르면 해당
+                  재료만 보관함에서 보여드려요.
                 </AppText>
               </View>
               <View

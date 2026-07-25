@@ -121,7 +121,9 @@ export function InventoryGroupCard({
         </View>
 
         <View style={styles.summaryAside}>
-          <ExpiryBadge expiryDate={group.nearestExpiryDate} />
+          {!showLots ? (
+            <ExpiryBadge expiryDate={group.nearestExpiryDate} />
+          ) : null}
           {isExpandable ? (
             showLots ? (
               <ChevronUp

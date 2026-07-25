@@ -95,7 +95,8 @@ export type Spacing = typeof spacing;
 
 /**
  * Corner radius scale in px.
- * Frictionless UI: buttons/inputs use `lg` (16), cards/bottom sheets use `xxl` (24).
+ * Frictionless UI: buttons/inputs use `lg` (16), cards/bottom sheets use `xxl` (24),
+ * selection chips use `md` (12), status/info badges use `pill`.
  */
 export const radius = {
   none: 0,

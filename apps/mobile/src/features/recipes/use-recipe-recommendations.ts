@@ -11,6 +11,7 @@ import {
   withSessionUser,
 } from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
+import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 import {
   createRecipeRecommendation,
   deleteRecipeFavorite,
@@ -29,18 +30,24 @@ export const getRecipeFavoriteKey = (
 ) => `${recommendationId}:${dishIndex}`;
 
 export const useRecipeRecommendations = () => {
-  const { sessionUserId } = useAuth();
-  const { activeSpaceId, isReady } = useActiveSpace();
+  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
+    useSpaceScopedQueryGate();
 
-  return useQuery({
+  const query = useQuery({
     queryKey: withInventorySpace(
       recipeRecommendationsQueryKey,
       sessionUserId,
       activeSpaceId,
     ),
     queryFn: () => listRecipeRecommendations(activeSpaceId),
-    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
+    enabled,
   });
+
+  return {
+    ...query,
+    isLoading: isAwaitingSpace || query.isLoading,
+    isPending: isAwaitingSpace || query.isPending,
+  };
 };
 
 export const useCreateRecipeRecommendation = () => {

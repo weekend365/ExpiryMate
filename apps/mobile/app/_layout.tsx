@@ -64,7 +64,16 @@ export default function RootLayout() {
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(tabs)"
+                options={{
+                  headerShown: false,
+                  // Fallback when tab sync has not run yet; tabs layout keeps this
+                  // aligned with the active tab (홈/보관함/추천/설정).
+                  title: "홈",
+                  headerBackTitle: "홈",
+                }}
+              />
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "재료 넣기" }} />
               <Stack.Screen name="inventory/[id]" options={{ title: "재료 살펴보기" }} />
