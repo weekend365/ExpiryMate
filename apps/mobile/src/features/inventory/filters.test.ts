@@ -154,6 +154,7 @@ describe("mobile inventory filters", () => {
       "safe",
     ]);
     expect(sections[0]?.title).toBe("만료됨");
+    expect(sections.map((section) => section.itemCount)).toEqual([1, 1, 1]);
     expect(sections[2]?.data[0]?.items.map((item) => item.id)).toEqual([
       "later",
     ]);
@@ -162,15 +163,18 @@ describe("mobile inventory filters", () => {
   it("groups the same product only within each urgency section", () => {
     const sections = buildInventoryUrgencySections([
       createItem("expired", "우유", "2026-06-06"),
+      createItem("expired-lot-2", "우유", "2026-06-05"),
       createItem("safe", "우유", "2026-06-20"),
     ]);
 
     expect(sections).toHaveLength(2);
     expect(sections[0]?.data[0]?.items.map((item) => item.id)).toEqual([
+      "expired-lot-2",
       "expired",
     ]);
     expect(sections[1]?.data[0]?.items.map((item) => item.id)).toEqual(["safe"]);
     expect(sections[0]?.data[0]?.id).not.toBe(sections[1]?.data[0]?.id);
+    expect(sections.map((section) => section.itemCount)).toEqual([2, 1]);
   });
 });
 

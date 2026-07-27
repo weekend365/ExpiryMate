@@ -133,6 +133,7 @@ export const buildInventoryUrgencySections = (
     .map((key) => ({
       key,
       title: inventoryUrgencySectionTitles[key],
+      itemCount: buckets[key].length,
       data: groupInventoryItems(buckets[key]).map((group) => ({
         ...group,
         id: `${key}:${group.id}`,

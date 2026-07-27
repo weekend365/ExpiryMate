@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  MapPin,
   Trash2,
 } from "lucide-react-native";
 import { LayoutAnimation, Pressable, StyleSheet, Text, View } from "react-native";
@@ -79,84 +78,74 @@ export function InventoryGroupCard({
 
   return (
     <View style={styles.card}>
-      <Pressable
-        onPress={handleSummaryPress}
-        disabled={selectionMode}
-        accessibilityRole={selectionMode ? undefined : "button"}
-        accessibilityLabel={`${group.displayName}, ${locationLabel}, ${quantityLabel}`}
-        accessibilityHint={
-          isExpandable
-            ? showLots
-              ? "유통기한별 목록을 접어요."
-              : "유통기한별 목록을 펼쳐요."
-            : "재료를 자세히 살펴봐요."
-        }
-        accessibilityState={isExpandable ? { expanded: showLots } : undefined}
-        style={({ pressed }) => [
-          styles.summary,
-          pressed && styles.summaryPressed,
-        ]}
-      >
-        <View style={styles.summaryCopy}>
-          <Text style={styles.name} numberOfLines={1}>
-            {group.displayName}
-          </Text>
-          {group.brand ? (
-            <Text style={styles.brand} numberOfLines={1}>
-              {group.brand}
+      <View style={styles.summaryRow}>
+        <Pressable
+          onPress={handleSummaryPress}
+          disabled={selectionMode}
+          accessibilityRole={selectionMode ? undefined : "button"}
+          accessibilityLabel={`${group.displayName}, ${locationLabel}, ${quantityLabel}`}
+          accessibilityHint={
+            isExpandable
+              ? showLots
+                ? "유통기한별 목록을 접어요."
+                : "유통기한별 목록을 펼쳐요."
+              : "재료를 자세히 살펴봐요."
+          }
+          accessibilityState={isExpandable ? { expanded: showLots } : undefined}
+          style={({ pressed }) => [
+            styles.summaryMain,
+            pressed && styles.summaryPressed,
+          ]}
+        >
+          <View style={styles.summaryCopy}>
+            <Text style={styles.name} numberOfLines={1}>
+              {group.displayName}
+              {group.brand ? (
+                <Text style={styles.brandInline}> · {group.brand}</Text>
+              ) : null}
             </Text>
-          ) : null}
-          <View style={styles.metaRow}>
-            <View style={styles.locationChip}>
-              <MapPin
-                color={colors.subtext}
-                size={spacing.sm}
-                strokeWidth={2.3}
-              />
-              <Text style={styles.locationChipLabel}>{locationLabel}</Text>
-            </View>
-            <Text style={styles.groupMeta}>
-              {quantityLabel} · 유통기한 {expiryDateCount}개
+            <Text style={styles.groupMeta} numberOfLines={1}>
+              {locationLabel} · {quantityLabel}
+              {expiryDateCount > 1
+                ? ` · 유통기한 ${expiryDateCount}개`
+                : ""}
             </Text>
           </View>
-        </View>
 
-        <View style={styles.summaryAside}>
-          {!showLots ? (
-            <ExpiryBadge expiryDate={group.nearestExpiryDate} />
-          ) : null}
-          {isExpandable ? (
-            showLots ? (
-              <ChevronUp
-                color={colors.primary}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-              />
-            ) : (
-              <ChevronDown
-                color={colors.primary}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-              />
-            )
-          ) : null}
-        </View>
-      </Pressable>
-
-      {showUrgentDiscard ? (
-        <View style={styles.urgentActionRow}>
+          <View style={styles.summaryAside}>
+            {!showLots ? (
+              <ExpiryBadge expiryDate={group.nearestExpiryDate} />
+            ) : null}
+            {isExpandable ? (
+              showLots ? (
+                <ChevronUp
+                  color={colors.primary}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                />
+              ) : (
+                <ChevronDown
+                  color={colors.primary}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                />
+              )
+            ) : null}
+          </View>
+        </Pressable>
+        {showUrgentDiscard ? (
           <Pressable
             disabled={isDiscarding}
             onPress={() => onItemDiscard?.(nearestItem)}
             accessibilityRole="button"
             accessibilityLabel={`${group.displayName} 정리할게요`}
             style={({ pressed }) => [
-              styles.urgentActionButton,
-              pressed && styles.urgentActionButtonPressed,
+              styles.urgentActionIcon,
+              pressed && styles.urgentActionIconPressed,
               isDiscarding && styles.urgentActionButtonDisabled,
             ]}
           >
@@ -165,10 +154,9 @@ export function InventoryGroupCard({
               size={spacing.sm + spacing.xxs}
               strokeWidth={2.4}
             />
-            <Text style={styles.urgentActionLabel}>정리할게요</Text>
           </Pressable>
-        </View>
-      ) : null}
+        ) : null}
+      </View>
 
       {showLots ? (
         <View style={styles.lotList}>
@@ -342,18 +330,27 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
-  summary: {
+  summaryRow: {
     minHeight: touchTarget.min,
-    padding: spacing.md,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.md,
+  },
+  summaryMain: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
   },
   summaryPressed: {
     backgroundColor: colors.surfacePressed,
   },
   summaryCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   name: {
@@ -362,37 +359,16 @@ const styles = StyleSheet.create({
     fontFamily: typography.subheading.fontFamily,
     color: colors.text,
   },
-  brand: {
+  brandInline: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
-  metaRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  locationChip: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-  },
-  locationChipLabel: {
+  groupMeta: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  groupMeta: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   summaryAside: {
@@ -400,33 +376,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.xs,
   },
-  urgentActionRow: {
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.sm,
-  },
-  urgentActionButton: {
-    minHeight: touchTarget.min,
-    flexDirection: "row",
+  urgentActionIcon: {
+    width: touchTarget.min,
+    height: touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.xs,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.dangerSoft,
     backgroundColor: colors.dangerSoft,
-    paddingHorizontal: spacing.sm,
+    marginRight: spacing.xs,
   },
-  urgentActionButtonPressed: {
-    backgroundColor: colors.surfacePressed,
+  urgentActionIconPressed: {
+    opacity: 0.8,
   },
   urgentActionButtonDisabled: {
     opacity: 0.55,
-  },
-  urgentActionLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.danger,
   },
   divider: {
     height: 1,

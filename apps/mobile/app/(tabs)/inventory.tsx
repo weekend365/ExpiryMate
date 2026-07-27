@@ -6,12 +6,13 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  ArrowLeft,
   Barcode,
   CheckSquare,
   PenLine,
   Plus,
-  RefreshCw,
   Search,
+  SlidersHorizontal,
   Trash2,
   X,
 } from "lucide-react-native";
@@ -23,7 +24,6 @@ import {
   Pressable,
   RefreshControl,
   SectionList,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -39,8 +39,6 @@ import {
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
-import { type MascotMood } from "../../src/components/Mascot";
-import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import {
@@ -78,6 +76,8 @@ export default function InventoryScreen() {
   );
   const [location, setLocation] = useState<string | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [filterSheetVisible, setFilterSheetVisible] = useState(false);
   const [addLocationVisible, setAddLocationVisible] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [newLocationLabel, setNewLocationLabel] = useState("");
@@ -158,7 +158,10 @@ export default function InventoryScreen() {
   const hasStatusFilter = filter !== "all";
   const hasActiveListFilters =
     hasStatusFilter || hasLocationFilter || hasSearchQuery;
-  const activeLocationLabel = hasLocationFilter ? resolveLabel(location) : null;
+  const activeFilterCount =
+    Number(hasStatusFilter) +
+    Number(hasLocationFilter) +
+    Number(hasSearchQuery);
   const trafficStats = useMemo(() => {
     let expiredCount = 0;
     let within7DaysCount = 0;
@@ -180,48 +183,14 @@ export default function InventoryScreen() {
       expiredCount,
       within7DaysCount,
       safeCount,
-      totalTrackedCount: trackedItems.length,
     };
   }, [trackedItems]);
 
-  const companion = useMemo(() => {
-    if (deferredDiscard.undoLabel || successMessage) {
-      return {
-        mood: "happy" as MascotMood,
-        message: "잘 정리하고 있어요. 장고도 한숨 돌렸어요.",
-      };
-    }
-
-    if (trafficStats.expiredCount > 0) {
-      return {
-        mood: "worry" as MascotMood,
-        message: "유통기한이 지난 재료가 있어요. 먼저 정리해 볼까요?",
-      };
-    }
-
-    if (
-      trafficStats.totalTrackedCount > 0 &&
-      trafficStats.within7DaysCount === 0
-    ) {
-      return {
-        mood: "happy" as MascotMood,
-        message: "지금은 여유로워요. 냉장고가 한산해서 장고도 편해요.",
-      };
-    }
-
-    return null;
-  }, [
-    deferredDiscard.undoLabel,
-    successMessage,
-    trafficStats.expiredCount,
-    trafficStats.totalTrackedCount,
-    trafficStats.within7DaysCount,
-  ]);
-
-  const selectCompartment = (next: string | "all") => {
+  const selectLocationFilter = (next: string | "all") => {
     setLocation((current) =>
       next !== "all" && current === next ? "all" : next,
     );
+    setFilterSheetVisible(false);
   };
 
   const handleCreateLocation = () => {
@@ -301,6 +270,8 @@ export default function InventoryScreen() {
   };
 
   const enterSelectionMode = (initialId?: string) => {
+    setIsSearchOpen(false);
+    setFilterSheetVisible(false);
     setIsSelectionMode(true);
     setSuccessMessage(null);
     setActionErrorMessage(null);
@@ -463,17 +434,62 @@ export default function InventoryScreen() {
               {isLoading && !hasLoadedInventory ? (
                 <HomeStatsSkeleton />
               ) : showListChrome && !isSelectionMode ? (
-                <View style={styles.chromeStack}>
-                  {companion ? (
-                    <MascotSpeechBubble
-                      message={companion.message}
-                      mood={companion.mood}
-                      size="small"
-                      style={styles.companionBubble}
-                    />
-                  ) : null}
-
-                  <View style={styles.filterPanel}>
+                <View style={styles.filterToolbar}>
+                  {isSearchOpen ? (
+                    <View style={styles.searchToolbar}>
+                      <Pressable
+                        onPress={() => setIsSearchOpen(false)}
+                        style={({ pressed }) => [
+                          styles.toolbarIconButton,
+                          pressed && styles.headerFilterButtonPressed,
+                        ]}
+                        accessibilityRole="button"
+                        accessibilityLabel="검색 닫기"
+                      >
+                        <ArrowLeft
+                          color={colors.subtext}
+                          size={spacing.md}
+                          strokeWidth={2.4}
+                        />
+                      </Pressable>
+                      <View style={styles.searchField}>
+                        <Search
+                          color={colors.mutedText}
+                          size={spacing.sm + spacing.xxs}
+                          strokeWidth={2.4}
+                        />
+                        <TextInput
+                          value={searchQuery}
+                          onChangeText={setSearchQuery}
+                          placeholder="재료 이름이나 브랜드 찾기"
+                          placeholderTextColor={colors.mutedText}
+                          accessibilityLabel="재료 이름 검색"
+                          returnKeyType="search"
+                          autoCorrect={false}
+                          autoCapitalize="none"
+                          autoFocus
+                          style={styles.searchInput}
+                        />
+                        {hasSearchQuery ? (
+                          <Pressable
+                            onPress={() => setSearchQuery("")}
+                            accessibilityRole="button"
+                            accessibilityLabel="검색어 지우기"
+                            style={({ pressed }) => [
+                              styles.toolbarIconButton,
+                              pressed && styles.headerFilterButtonPressed,
+                            ]}
+                          >
+                            <X
+                              color={colors.subtext}
+                              size={spacing.sm + spacing.xxs}
+                              strokeWidth={2.4}
+                            />
+                          </Pressable>
+                        ) : null}
+                      </View>
+                    </View>
+                  ) : (
                     <View style={styles.filterTopRow}>
                       <TrafficLightFilter
                         expiredCount={trafficStats.expiredCount}
@@ -486,37 +502,52 @@ export default function InventoryScreen() {
                       />
                       <View style={styles.filterIconActions}>
                         <Pressable
-                          onPress={clearListFilters}
-                          disabled={!hasActiveListFilters}
-                          hitSlop={spacing.xs}
+                          onPress={() => setIsSearchOpen(true)}
                           style={({ pressed }) => [
-                            styles.headerIconButton,
+                            styles.toolbarIconButton,
                             pressed && styles.headerFilterButtonPressed,
-                            !hasActiveListFilters &&
-                              styles.headerIconButtonDisabled,
                           ]}
                           accessibilityRole="button"
-                          accessibilityLabel="조건 모두 풀기"
-                          accessibilityHint="신호등·위치·검색 조건을 모두 풀고 전체를 보여 드릴게요."
-                          accessibilityState={{
-                            disabled: !hasActiveListFilters,
-                          }}
+                          accessibilityLabel="재료 검색"
+                          accessibilityHint="재료 이름이나 브랜드를 검색해요."
                         >
-                          <RefreshCw
+                          <Search
                             color={
-                              hasActiveListFilters
-                                ? colors.primary
-                                : colors.mutedText
+                              hasSearchQuery ? colors.primary : colors.subtext
                             }
                             size={spacing.md}
                             strokeWidth={2.4}
                           />
                         </Pressable>
                         <Pressable
-                          onPress={() => enterSelectionMode()}
-                          hitSlop={spacing.xs}
+                          onPress={() => setFilterSheetVisible(true)}
                           style={({ pressed }) => [
-                            styles.headerIconButton,
+                            styles.toolbarIconButton,
+                            pressed && styles.headerFilterButtonPressed,
+                          ]}
+                          accessibilityRole="button"
+                          accessibilityLabel={`상세 필터${activeFilterCount ? `, ${activeFilterCount}개 적용 중` : ""}`}
+                          accessibilityHint="보관 위치를 고르거나 모든 조건을 풀 수 있어요."
+                        >
+                          <SlidersHorizontal
+                            color={
+                              activeFilterCount ? colors.primary : colors.subtext
+                            }
+                            size={spacing.md}
+                            strokeWidth={2.4}
+                          />
+                          {activeFilterCount ? (
+                            <View style={styles.filterCountBadge}>
+                              <Text style={styles.filterCountBadgeText}>
+                                {activeFilterCount}
+                              </Text>
+                            </View>
+                          ) : null}
+                        </Pressable>
+                        <Pressable
+                          onPress={() => enterSelectionMode()}
+                          style={({ pressed }) => [
+                            styles.toolbarIconButton,
                             pressed && styles.headerFilterButtonPressed,
                           ]}
                           accessibilityRole="button"
@@ -531,238 +562,7 @@ export default function InventoryScreen() {
                         </Pressable>
                       </View>
                     </View>
-
-                    <Text style={styles.trafficGuideCaption}>
-                      빨강(만료됨)·노랑(7일 이내)·초록(여유) 램프를 누르면
-                      해당 재료만 보관함에서 보여드려요.
-                    </Text>
-
-                    <View style={styles.searchField}>
-                      <Search
-                        color={colors.mutedText}
-                        size={spacing.sm + spacing.xxs}
-                        strokeWidth={2.4}
-                      />
-                      <TextInput
-                        value={searchQuery}
-                        onChangeText={setSearchQuery}
-                        placeholder="찾아보기"
-                        placeholderTextColor={colors.mutedText}
-                        accessibilityLabel="재료 이름 검색"
-                        returnKeyType="search"
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        style={styles.searchInput}
-                      />
-                      {hasSearchQuery ? (
-                        <Pressable
-                          onPress={() => setSearchQuery("")}
-                          hitSlop={spacing.xs}
-                          accessibilityRole="button"
-                          accessibilityLabel="검색어 지우기"
-                          style={({ pressed }) => [
-                            styles.searchClearButton,
-                            pressed && styles.headerFilterButtonPressed,
-                          ]}
-                        >
-                          <X
-                            color={colors.subtext}
-                            size={spacing.sm + spacing.xxs}
-                            strokeWidth={2.4}
-                          />
-                        </Pressable>
-                      ) : null}
-                    </View>
-
-                    <ScrollView
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      contentContainerStyle={styles.compartmentRail}
-                    >
-                      <Pressable
-                        onPress={() => selectCompartment("all")}
-                        hitSlop={spacing.xxs}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: location === "all" }}
-                        accessibilityLabel={`전체 위치, ${trackedItems.length}개`}
-                        style={({ pressed }) => [
-                          styles.compartmentChip,
-                          location === "all" && styles.compartmentChipSelected,
-                          pressed && styles.headerFilterButtonPressed,
-                        ]}
-                      >
-                        <Text
-                          style={[
-                            styles.compartmentChipLabel,
-                            location === "all" &&
-                              styles.compartmentChipLabelSelected,
-                          ]}
-                        >
-                          전체
-                        </Text>
-                        <Text
-                          style={[
-                            styles.compartmentChipCount,
-                            location === "all" &&
-                              styles.compartmentChipCountSelected,
-                          ]}
-                        >
-                          {trackedItems.length}
-                        </Text>
-                      </Pressable>
-                      {selectableOptions.map((option) => {
-                        const selected = location === option.key;
-                        const count = locationCounts[option.key] ?? 0;
-
-                        return (
-                          <Pressable
-                            key={option.key}
-                            onPress={() => selectCompartment(option.key)}
-                            onLongPress={() => {
-                              if (!option.readonly) {
-                                router.push("/settings/storage-locations");
-                              }
-                            }}
-                            hitSlop={spacing.xxs}
-                            accessibilityRole="button"
-                            accessibilityState={{ selected }}
-                            accessibilityLabel={`${option.label}, ${count}개`}
-                            accessibilityHint={
-                              selected
-                                ? "다시 누르면 전체 위치로 돌아가요."
-                                : `${option.label}만 보여 드릴게요.`
-                            }
-                            style={({ pressed }) => [
-                              styles.compartmentChip,
-                              selected && styles.compartmentChipSelected,
-                              pressed && styles.headerFilterButtonPressed,
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                styles.compartmentChipLabel,
-                                selected && styles.compartmentChipLabelSelected,
-                              ]}
-                            >
-                              {option.label}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.compartmentChipCount,
-                                selected && styles.compartmentChipCountSelected,
-                              ]}
-                            >
-                              {count}
-                            </Text>
-                          </Pressable>
-                        );
-                      })}
-                      <Pressable
-                        onPress={() => {
-                          setNewLocationLabel("");
-                          setAddLocationVisible(true);
-                        }}
-                        hitSlop={spacing.xxs}
-                        accessibilityRole="button"
-                        accessibilityLabel="위치 추가"
-                        accessibilityHint="나만의 보관 위치를 만들어요."
-                        style={({ pressed }) => [
-                          styles.compartmentChip,
-                          styles.compartmentChipAdd,
-                          pressed && styles.headerFilterButtonPressed,
-                        ]}
-                      >
-                        <Plus
-                          color={colors.primary}
-                          size={spacing.sm}
-                          strokeWidth={2.4}
-                        />
-                        <Text style={styles.compartmentChipAddLabel}>
-                          위치 추가
-                        </Text>
-                      </Pressable>
-                    </ScrollView>
-
-                    {hasActiveListFilters ? (
-                      <View
-                        style={styles.activeFiltersBlock}
-                        accessibilityRole="summary"
-                        accessibilityLabel="지금 적용된 조건"
-                      >
-                        <Text style={styles.activeFiltersLabel}>
-                          지금 보는 중
-                        </Text>
-                        <View style={styles.activeFiltersRow}>
-                          {hasStatusFilter ? (
-                            <Pressable
-                              onPress={() => applyFilter("all")}
-                              hitSlop={spacing.xxs}
-                              accessibilityRole="button"
-                              accessibilityLabel={`${getActiveStatusFilterLabel(filter)} 조건 풀기`}
-                              style={({ pressed }) => [
-                                styles.activeFilterChip,
-                                pressed && styles.headerFilterButtonPressed,
-                              ]}
-                            >
-                              <Text style={styles.activeFilterChipLabel}>
-                                {getActiveStatusFilterLabel(filter)}
-                              </Text>
-                              <X
-                                color={colors.primary}
-                                size={spacing.sm}
-                                strokeWidth={2.4}
-                              />
-                            </Pressable>
-                          ) : null}
-                          {hasLocationFilter && activeLocationLabel ? (
-                            <Pressable
-                              onPress={() => setLocation("all")}
-                              hitSlop={spacing.xxs}
-                              accessibilityRole="button"
-                              accessibilityLabel={`${activeLocationLabel} 조건 풀기`}
-                              style={({ pressed }) => [
-                                styles.activeFilterChip,
-                                pressed && styles.headerFilterButtonPressed,
-                              ]}
-                            >
-                              <Text style={styles.activeFilterChipLabel}>
-                                {activeLocationLabel}
-                              </Text>
-                              <X
-                                color={colors.primary}
-                                size={spacing.sm}
-                                strokeWidth={2.4}
-                              />
-                            </Pressable>
-                          ) : null}
-                          {hasSearchQuery ? (
-                            <Pressable
-                              onPress={() => setSearchQuery("")}
-                              hitSlop={spacing.xxs}
-                              accessibilityRole="button"
-                              accessibilityLabel={`검색어 ${searchQuery.trim()} 지우기`}
-                              style={({ pressed }) => [
-                                styles.activeFilterChip,
-                                pressed && styles.headerFilterButtonPressed,
-                              ]}
-                            >
-                              <Text
-                                style={styles.activeFilterChipLabel}
-                                numberOfLines={1}
-                              >
-                                {searchQuery.trim()}
-                              </Text>
-                              <X
-                                color={colors.primary}
-                                size={spacing.sm}
-                                strokeWidth={2.4}
-                              />
-                            </Pressable>
-                          ) : null}
-                        </View>
-                      </View>
-                    ) : null}
-                  </View>
+                  )}
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
@@ -923,11 +723,123 @@ export default function InventoryScreen() {
             />
           )}
           renderSectionHeader={({ section }) => (
-            <Text style={styles.urgencySectionTitle}>{section.title}</Text>
+            <Text style={styles.urgencySectionTitle}>
+              {section.title} {section.itemCount}건
+            </Text>
           )}
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
+
+      <BottomSheet
+        visible={filterSheetVisible}
+        onClose={() => setFilterSheetVisible(false)}
+        title="보관 위치"
+        description="보고 싶은 위치를 고르면 바로 목록에 적용돼요."
+        footer={
+          <Button
+            variant="secondary"
+            disabled={!hasActiveListFilters}
+            onPress={() => {
+              clearListFilters();
+              setFilterSheetVisible(false);
+            }}
+            fullWidth
+          >
+            조건 모두 풀기
+          </Button>
+        }
+      >
+        <View style={styles.locationOptionGrid}>
+          <Pressable
+            onPress={() => selectLocationFilter("all")}
+            accessibilityRole="button"
+            accessibilityState={{ selected: location === "all" }}
+            accessibilityLabel={`전체 위치, ${trackedItems.length}개`}
+            style={({ pressed }) => [
+              styles.locationOption,
+              location === "all" && styles.locationOptionSelected,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <Text
+              style={[
+                styles.locationOptionLabel,
+                location === "all" && styles.locationOptionLabelSelected,
+              ]}
+            >
+              전체
+            </Text>
+            <Text style={styles.locationOptionCount}>{trackedItems.length}</Text>
+          </Pressable>
+          {selectableOptions.map((option) => {
+            const selected = location === option.key;
+            const count = locationCounts[option.key] ?? 0;
+
+            return (
+              <Pressable
+                key={option.key}
+                onPress={() => selectLocationFilter(option.key)}
+                onLongPress={() => {
+                  if (!option.readonly) {
+                    setFilterSheetVisible(false);
+                    router.push("/settings/storage-locations");
+                  }
+                }}
+                accessibilityRole="button"
+                accessibilityState={{ selected }}
+                accessibilityLabel={`${option.label}, ${count}개`}
+                accessibilityHint={
+                  option.readonly
+                    ? `${option.label}만 보여 드릴게요.`
+                    : "길게 누르면 위치를 관리할 수 있어요."
+                }
+                style={({ pressed }) => [
+                  styles.locationOption,
+                  selected && styles.locationOptionSelected,
+                  pressed && styles.headerFilterButtonPressed,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.locationOptionLabel,
+                    selected && styles.locationOptionLabelSelected,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {option.label}
+                </Text>
+                <Text style={styles.locationOptionCount}>{count}</Text>
+              </Pressable>
+            );
+          })}
+          <Pressable
+            onPress={() => {
+              setFilterSheetVisible(false);
+              setNewLocationLabel("");
+              setAddLocationVisible(true);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel="위치 추가"
+            accessibilityHint="나만의 보관 위치를 만들어요."
+            style={({ pressed }) => [
+              styles.locationOption,
+              styles.locationOptionAdd,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <Plus color={colors.primary} size={spacing.sm} strokeWidth={2.4} />
+            <Text
+              style={[
+                styles.locationOptionLabel,
+                styles.locationOptionLabelSelected,
+              ]}
+            >
+              위치 추가
+            </Text>
+          </Pressable>
+        </View>
+      </BottomSheet>
 
       <BottomSheet
         visible={entryMethodVisible}
@@ -998,22 +910,6 @@ function getFilteredEmptyMood(filter: InventoryViewFilter) {
   return "idle" as const;
 }
 
-function getActiveStatusFilterLabel(filter: InventoryViewFilter) {
-  if (filter === "within7") {
-    return "7일 이내";
-  }
-
-  if (filter === "expired") {
-    return "만료됨";
-  }
-
-  if (filter === "safe") {
-    return "여유";
-  }
-
-  return "전체";
-}
-
 function getFilteredEmptyTitle(
   filter: InventoryViewFilter,
   hasSearchQuery: boolean,
@@ -1067,7 +963,7 @@ function getFilteredEmptyDescription(
   return "조건을 조금 넓히거나, 새 재료를 넣어볼까요?";
 }
 
-const TRAFFIC_LAMP_SIZE = touchTarget.min;
+const TRAFFIC_LAMP_SIZE = touchTarget.icon;
 const TRAFFIC_LAMP_OFF_OPACITY = 0.28;
 
 function TrafficLightFilter({
@@ -1213,38 +1109,70 @@ const trafficLampPalettes = {
 } as const;
 
 const styles = StyleSheet.create({
-  chromeStack: {
-    gap: spacing.sm,
-  },
-  filterPanel: {
-    gap: spacing.sm,
-    padding: spacing.sm,
+  filterToolbar: {
+    minHeight: touchTarget.ctaLarge,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
   filterTopRow: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: spacing.sm,
-    minHeight: touchTarget.min,
+    gap: spacing.none,
+    minHeight: touchTarget.icon,
   },
   filterIconActions: {
     flexDirection: "row",
     alignItems: "center",
     flexShrink: 0,
+    gap: spacing.none,
+  },
+  searchToolbar: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.icon,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xxs,
+  },
+  toolbarIconButton: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+  },
+  filterCountBadge: {
+    position: "absolute",
+    top: spacing.xxs,
+    right: spacing.xxs,
+    minWidth: spacing.sm,
+    height: spacing.sm,
+    paddingHorizontal: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
+  },
+  filterCountBadgeText: {
+    fontSize: 10,
+    lineHeight: 12,
+    fontFamily: typography.title.fontFamily,
+    color: colors.surface,
   },
   trafficHousing: {
     flexDirection: "row",
     alignItems: "center",
     flexShrink: 0,
-    gap: spacing.xxs,
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
+    gap: spacing.none,
+    minHeight: touchTarget.icon,
+    paddingHorizontal: spacing.none,
     borderRadius: radius.pill,
     backgroundColor: colors.text,
   },
@@ -1284,72 +1212,51 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.title.fontFamily,
   },
-  companionBubble: {
-    padding: spacing.sm,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  compartmentRail: {
+  locationOptionGrid: {
     flexDirection: "row",
-    alignItems: "center",
+    flexWrap: "wrap",
     gap: spacing.xs,
-    paddingVertical: spacing.xxs,
   },
-  compartmentChip: {
-    // Selection chip: compact rectangle; rail hit area stays near 48 via padding.
-    minHeight: spacing.xl,
+  locationOption: {
+    minWidth: "47%",
+    minHeight: touchTarget.min,
+    flexGrow: 1,
+    flexBasis: 0,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: spacing.xs,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.background,
   },
-  compartmentChipSelected: {
+  locationOptionSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  compartmentChipLabel: {
+  locationOptionAdd: {
+    justifyContent: "center",
+    borderStyle: "dashed",
+    borderColor: colors.primary,
+  },
+  locationOptionLabel: {
+    flexShrink: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
-  compartmentChipLabelSelected: {
+  locationOptionLabelSelected: {
     color: colors.primary,
+    fontFamily: typography.bodyStrong.fontFamily,
   },
-  compartmentChipCount: {
-    minWidth: spacing.md,
-    overflow: "hidden",
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    textAlign: "center",
+  locationOptionCount: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.subtext,
-    backgroundColor: colors.mutedSurface,
-  },
-  compartmentChipCountSelected: {
-    color: colors.primary,
-    backgroundColor: colors.surface,
-  },
-  compartmentChipAdd: {
-    borderStyle: "dashed",
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  compartmentChipAddLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
   entryMethodActions: {
     gap: spacing.xs,
@@ -1375,52 +1282,10 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,
   },
-  trafficGuideCaption: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
-    paddingHorizontal: spacing.xxs,
-  },
-  activeFiltersBlock: {
-    gap: spacing.xs,
-    paddingHorizontal: spacing.xxs,
-  },
-  activeFiltersLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
-  },
-  activeFiltersRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.xs,
-  },
-  activeFilterChip: {
-    minHeight: spacing.xl,
-    maxWidth: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  activeFilterChipLabel: {
-    flexShrink: 1,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
-  },
   searchField: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: touchTarget.icon,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
@@ -1434,35 +1299,18 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
-    paddingVertical: spacing.xs,
+    minHeight: touchTarget.icon,
+    paddingVertical: spacing.xxs,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.body.fontFamily,
     color: colors.text,
-  },
-  searchClearButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.lg,
   },
   headerActions: {
     flexDirection: "row",
     alignItems: "center",
     flexShrink: 0,
     gap: spacing.xxs,
-  },
-  headerIconButton: {
-    width: touchTarget.min,
-    height: touchTarget.min,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.lg,
-  },
-  headerIconButtonDisabled: {
-    opacity: 0.45,
   },
   headerFilterButton: {
     minHeight: touchTarget.min,
@@ -1531,22 +1379,22 @@ const styles = StyleSheet.create({
   },
   listContent: {
     flexGrow: 1,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   listHeader: {
-    gap: spacing.sm,
-    paddingBottom: spacing.sm,
+    gap: spacing.xs,
+    paddingBottom: spacing.xs,
   },
   urgencySectionTitle: {
     ...typography.bodySmall,
     color: colors.subtext,
     fontWeight: "700",
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xs,
     paddingBottom: spacing.xs,
   },
   itemSeparator: {
-    height: spacing.xs,
+    height: spacing.xxs,
   },
 });
