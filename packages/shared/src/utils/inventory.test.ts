@@ -9,6 +9,7 @@ import { addDays, toIsoDate } from "./date";
 import {
   generateDashboardSummary,
   getExpiryBucket,
+  getExpiryTrafficBucket,
   groupInventoryItems,
 } from "./inventory";
 
@@ -21,6 +22,21 @@ describe("inventory utils", () => {
     expect(getExpiryBucket(toIsoDate(addDays(now, 2)), now)).toBe("within_3_days");
     expect(getExpiryBucket(toIsoDate(addDays(now, 6)), now)).toBe("within_7_days");
     expect(getExpiryBucket(toIsoDate(addDays(now, 10)), now)).toBe("safe");
+  });
+
+  it("classifies mutually exclusive traffic-light boundaries", () => {
+    const now = new Date("2026-04-19T09:00:00.000Z");
+
+    expect(getExpiryTrafficBucket(toIsoDate(addDays(now, -1)), now)).toBe(
+      "expired",
+    );
+    expect(getExpiryTrafficBucket(toIsoDate(now), now)).toBe("within_7_days");
+    expect(getExpiryTrafficBucket(toIsoDate(addDays(now, 7)), now)).toBe(
+      "within_7_days",
+    );
+    expect(getExpiryTrafficBucket(toIsoDate(addDays(now, 8)), now)).toBe(
+      "safe",
+    );
   });
 
   it("builds dashboard summary counts", () => {
@@ -65,6 +81,19 @@ describe("inventory utils", () => {
         createdAt: toIsoDate(now),
         updatedAt: toIsoDate(now),
       },
+      {
+        id: "4",
+        displayName: "올리브유",
+        quantity: 1,
+        quantityBase: 1,
+        unitCode: UnitCode.EA,
+        storageLocation: StorageLocation.ROOM,
+        expiryDate: toIsoDate(addDays(now, 8)),
+        expirySource: ExpirySource.MANUAL,
+        status: ItemStatus.ACTIVE,
+        createdAt: toIsoDate(now),
+        updatedAt: toIsoDate(now),
+      },
     ];
 
     const summary = generateDashboardSummary(items, now);
@@ -73,7 +102,13 @@ describe("inventory utils", () => {
     expect(summary.within3DaysCount).toBe(2);
     expect(summary.within7DaysCount).toBe(2);
     expect(summary.expiredCount).toBe(1);
-    expect(summary.totalActiveCount).toBe(3);
+    expect(summary.safeCount).toBe(1);
+    expect(summary.totalActiveCount).toBe(4);
+    expect(
+      summary.expiredCount +
+        summary.within7DaysCount +
+        summary.safeCount,
+    ).toBe(summary.totalActiveCount);
   });
 
   it("groups the same product while keeping its expiry lots", () => {

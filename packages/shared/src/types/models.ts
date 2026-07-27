@@ -193,6 +193,7 @@ export interface DashboardSummary {
   within3DaysCount: number;
   within7DaysCount: number;
   expiredCount: number;
+  safeCount: number;
   totalActiveCount: number;
   recentItems: InventoryItem[];
   expiringItems: InventoryItem[];

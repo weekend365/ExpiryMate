@@ -162,9 +162,9 @@ export function InventoryCard({
 
 const bucketStyles = {
   expired: { backgroundColor: colors.dangerSoft, color: colors.danger, icon: CircleAlert },
-  today: { backgroundColor: colors.dangerSoft, color: colors.danger, icon: Clock3 },
+  today: { backgroundColor: colors.warningSoft, color: colors.warning, icon: Clock3 },
   within_3_days: { backgroundColor: colors.warningSoft, color: colors.warning, icon: Clock3 },
-  within_7_days: { backgroundColor: colors.primarySoft, color: colors.primary, icon: CalendarDays },
+  within_7_days: { backgroundColor: colors.warningSoft, color: colors.warning, icon: CalendarDays },
   safe: { backgroundColor: colors.successSoft, color: colors.success, icon: ShieldCheck },
 };
 

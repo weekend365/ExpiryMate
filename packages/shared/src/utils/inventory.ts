@@ -21,6 +21,8 @@ export type ExpiryBucket =
   | "within_7_days"
   | "safe";
 
+export type ExpiryTrafficBucket = "expired" | "within_7_days" | "safe";
+
 export const isTrackedItem = (item: InventoryItem) =>
   item.status === ItemStatus.ACTIVE || item.status === ItemStatus.EXPIRED;
 
@@ -40,6 +42,24 @@ export const getExpiryBucket = (
 
   if (daysLeft <= 3) {
     return "within_3_days";
+  }
+
+  if (daysLeft <= 7) {
+    return "within_7_days";
+  }
+
+  return "safe";
+};
+
+/** Mutually exclusive buckets used by the home and inventory traffic lights. */
+export const getExpiryTrafficBucket = (
+  expiryDate: string,
+  now: Date | string = new Date(),
+): ExpiryTrafficBucket => {
+  const daysLeft = calculateDaysLeftUntilExpiry(expiryDate, now);
+
+  if (daysLeft < 0) {
+    return "expired";
   }
 
   if (daysLeft <= 7) {
@@ -192,7 +212,10 @@ export const generateDashboardSummary = (
       );
     }).length,
     expiredCount: trackedItems.filter(
-      (item) => getExpiryBucket(item.expiryDate, now) === "expired",
+      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "expired",
+    ).length,
+    safeCount: trackedItems.filter(
+      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "safe",
     ).length,
     totalActiveCount: trackedItems.length,
     recentItems: [...items]

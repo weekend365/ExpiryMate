@@ -35,6 +35,7 @@ export class DashboardService {
       todayExpiryCount,
       within3DaysCount,
       within7DaysCount,
+      safeCount,
       locationGroups,
       recentRows,
       expiringRows,
@@ -68,6 +69,12 @@ export class DashboardService {
             gte: today,
             lte: in7Days,
           },
+        },
+      }),
+      this.prisma.inventoryItem.count({
+        where: {
+          ...trackedWhere,
+          expiryDate: { gt: in7Days },
         },
       }),
       this.prisma.inventoryItem.groupBy({
@@ -109,6 +116,7 @@ export class DashboardService {
       within3DaysCount,
       within7DaysCount,
       expiredCount,
+      safeCount,
       totalActiveCount,
       recentItems,
       expiringItems,

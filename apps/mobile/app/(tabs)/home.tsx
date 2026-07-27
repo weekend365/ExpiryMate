@@ -61,9 +61,12 @@ export default function HomeScreen() {
 
   const expiringItems = data?.expiringItems ?? [];
   const expiringGroups = groupInventoryItems(expiringItems);
-  const todayExpiryCount = data?.todayExpiryCount ?? 0;
+  const expiredCount = data?.expiredCount ?? 0;
   const within7DaysCount = data?.within7DaysCount ?? 0;
   const totalActiveCount = data?.totalActiveCount ?? 0;
+  const safeCount =
+    data?.safeCount ??
+    Math.max(totalActiveCount - expiredCount - within7DaysCount, 0);
   const hasInventory = hasLoaded && totalActiveCount > 0;
 
   const notices = useMemo(
@@ -300,30 +303,30 @@ export default function HomeScreen() {
               <View
                 style={styles.trafficGuide}
                 accessibilityRole="header"
-                accessibilityLabel="유통기한 신호등. 빨간불은 오늘 만료, 노란불은 7일 안, 초록불은 보관 중인 재료예요. 불을 누르면 그 재료만 보관함에서 보여 드릴게요."
+                accessibilityLabel="유통기한 신호등. 빨간불은 만료됨, 노란불은 7일 이내, 초록불은 여유 있는 재료예요. 불을 누르면 그 재료만 보관함에서 보여 드릴게요."
               >
                 <AppText variant="subheading">유통기한 신호등</AppText>
                 <AppText variant="bodySmall" tone="subtext">
-                  빨강(오늘까지)·노랑(7일 이내)·초록(여유) 램프를 누르면 해당
+                  빨강(만료됨)·노랑(7일 이내)·초록(여유) 램프를 누르면 해당
                   재료만 보관함에서 보여드려요.
                 </AppText>
               </View>
               <View
                 style={styles.trafficStrip}
                 accessibilityRole="summary"
-                accessibilityLabel={`오늘 만료 ${todayExpiryCount}개, 7일 이내 ${within7DaysCount}개, 보관 중 ${totalActiveCount}개`}
+                accessibilityLabel={`만료됨 ${expiredCount}개, 7일 이내 ${within7DaysCount}개, 여유 ${safeCount}개`}
               >
                 <Pressable
                   style={styles.trafficLampPressable}
-                  onPress={() => openInventoryFilter("today")}
+                  onPress={() => openInventoryFilter("expired")}
                   accessibilityRole="button"
-                  accessibilityLabel={`오늘 만료 ${todayExpiryCount}개`}
-                  accessibilityHint="오늘 만료되는 재료만 보관함에서 보여 드릴게요."
+                  accessibilityLabel={`만료됨 ${expiredCount}개`}
+                  accessibilityHint="유통기한이 지난 재료만 보관함에서 보여 드릴게요."
                 >
                   <StatCard
                     variant="traffic"
-                    label="오늘 만료"
-                    value={todayExpiryCount}
+                    label="만료됨"
+                    value={expiredCount}
                     tone="danger"
                     showLabel={false}
                   />
@@ -345,15 +348,15 @@ export default function HomeScreen() {
                 </Pressable>
                 <Pressable
                   style={styles.trafficLampPressable}
-                  onPress={() => openInventoryFilter("all")}
+                  onPress={() => openInventoryFilter("safe")}
                   accessibilityRole="button"
-                  accessibilityLabel={`보관 중 ${totalActiveCount}개`}
-                  accessibilityHint="전체 보관 재료를 보관함에서 보여 드릴게요."
+                  accessibilityLabel={`여유 ${safeCount}개`}
+                  accessibilityHint="유통기한이 8일 이상 남은 재료만 보관함에서 보여 드릴게요."
                 >
                   <StatCard
                     variant="traffic"
-                    label="보관 중"
-                    value={totalActiveCount}
+                    label="여유"
+                    value={safeCount}
                     tone="success"
                     showLabel={false}
                   />
@@ -368,7 +371,7 @@ export default function HomeScreen() {
                   tone="subtext"
                   style={styles.trafficLabel}
                 >
-                  오늘 만료
+                  만료됨
                 </AppText>
                 <AppText
                   variant="caption"
@@ -382,7 +385,7 @@ export default function HomeScreen() {
                   tone="subtext"
                   style={styles.trafficLabel}
                 >
-                  보관 중
+                  여유
                 </AppText>
               </View>
             </View>

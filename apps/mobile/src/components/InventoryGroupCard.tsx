@@ -3,6 +3,7 @@ import {
   formatDateKoreanCompact,
   formatInventoryQuantity,
   getExpiryBucket,
+  getExpiryTrafficBucket,
   resolveStorageLocationLabel,
   type InventoryItem,
   type InventoryItemGroup,
@@ -315,7 +316,7 @@ function ExpiryBadge({
 }
 
 function getExpiryLampPresentation(expiryDate: string) {
-  const bucket = getExpiryBucket(expiryDate);
+  const bucket = getExpiryTrafficBucket(expiryDate);
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate);
   const ddayLabel =
     daysLeft < 0
@@ -326,9 +327,7 @@ function getExpiryLampPresentation(expiryDate: string) {
 
   const lampColor = {
     expired: colors.danger,
-    today: colors.danger,
-    within_3_days: colors.warning,
-    within_7_days: colors.primary,
+    within_7_days: colors.warning,
     safe: colors.success,
   }[bucket];
 

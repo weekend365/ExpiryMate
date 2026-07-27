@@ -1,17 +1,16 @@
 import {
-  calculateDaysLeftUntilExpiry,
-  getExpiryBucket,
+  getExpiryTrafficBucket,
+  groupInventoryItems,
   sortInventoryByNearestExpiry,
   type InventoryItem,
-  type InventoryItemGroup,
 } from "@expirymate/shared";
 
-export type InventoryViewFilter = "all" | "today" | "within7" | "expired";
+export type InventoryViewFilter = "all" | "expired" | "within7" | "safe";
 
-export type InventoryUrgencySection = "today" | "within7" | "safe";
+export type InventoryUrgencySection = "expired" | "within7" | "safe";
 
 export const inventoryUrgencySectionOrder: InventoryUrgencySection[] = [
-  "today",
+  "expired",
   "within7",
   "safe",
 ];
@@ -20,15 +19,15 @@ export const inventoryUrgencySectionTitles: Record<
   InventoryUrgencySection,
   string
 > = {
-  today: "오늘 만료",
+  expired: "만료됨",
   within7: "7일 이내",
   safe: "여유 있어요",
 };
 
 const inventoryViewFilters = new Set<InventoryViewFilter>([
   "all",
-  "today",
   "within7",
+  "safe",
   "expired",
 ]);
 
@@ -42,8 +41,8 @@ export const parseInventoryViewFilter = (
     return null;
   }
 
-  // Legacy deep link from home/recommendations.
-  if (raw === "expiring") {
+  // Legacy deep links: today's items now belong to the inclusive seven-day bucket.
+  if (raw === "today" || raw === "expiring") {
     return "within7";
   }
 
@@ -83,19 +82,18 @@ export const filterInventoryItems = (
       return false;
     }
 
-    const bucket = getExpiryBucket(item.expiryDate);
-    const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
-
-    if (filter === "today") {
-      return bucket === "today";
-    }
-
-    if (filter === "within7") {
-      return daysLeft <= 7 && daysLeft >= 0;
-    }
+    const bucket = getExpiryTrafficBucket(item.expiryDate);
 
     if (filter === "expired") {
       return bucket === "expired";
+    }
+
+    if (filter === "within7") {
+      return bucket === "within_7_days";
+    }
+
+    if (filter === "safe") {
+      return bucket === "safe";
     }
 
     return true;
@@ -108,30 +106,26 @@ export const filterInventoryItems = (
 export const getInventoryUrgencySection = (
   nearestExpiryDate: string,
 ): InventoryUrgencySection => {
-  const daysLeft = calculateDaysLeftUntilExpiry(nearestExpiryDate);
+  const bucket = getExpiryTrafficBucket(nearestExpiryDate);
 
-  if (daysLeft <= 0) {
-    return "today";
-  }
-
-  if (daysLeft <= 7) {
+  if (bucket === "within_7_days") {
     return "within7";
   }
 
-  return "safe";
+  return bucket;
 };
 
 export const buildInventoryUrgencySections = (
-  groups: InventoryItemGroup[],
+  items: InventoryItem[],
 ) => {
-  const buckets: Record<InventoryUrgencySection, InventoryItemGroup[]> = {
-    today: [],
+  const buckets: Record<InventoryUrgencySection, InventoryItem[]> = {
+    expired: [],
     within7: [],
     safe: [],
   };
 
-  groups.forEach((group) => {
-    buckets[getInventoryUrgencySection(group.nearestExpiryDate)].push(group);
+  items.forEach((item) => {
+    buckets[getInventoryUrgencySection(item.expiryDate)].push(item);
   });
 
   return inventoryUrgencySectionOrder
@@ -139,6 +133,9 @@ export const buildInventoryUrgencySections = (
     .map((key) => ({
       key,
       title: inventoryUrgencySectionTitles[key],
-      data: buckets[key],
+      data: groupInventoryItems(buckets[key]).map((group) => ({
+        ...group,
+        id: `${key}:${group.id}`,
+      })),
     }));
 };

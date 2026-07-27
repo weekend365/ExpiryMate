@@ -24,27 +24,42 @@ describe("mobile inventory filters", () => {
   });
 
   it("parses known inventory view filters from route params", () => {
-    expect(parseInventoryViewFilter("today")).toBe("today");
+    expect(parseInventoryViewFilter("today")).toBe("within7");
     expect(parseInventoryViewFilter("within7")).toBe("within7");
     expect(parseInventoryViewFilter("expiring")).toBe("within7");
     expect(parseInventoryViewFilter(["expired"])).toBe("expired");
+    expect(parseInventoryViewFilter("safe")).toBe("safe");
     expect(parseInventoryViewFilter("all")).toBe("all");
     expect(parseInventoryViewFilter("unknown")).toBeNull();
     expect(parseInventoryViewFilter(undefined)).toBeNull();
   });
 
-  it("returns today-only items when today filter is applied", () => {
+  it("returns only past items when the expired filter is applied", () => {
     const result = filterInventoryItems(
       [
         createItem("later", "두부", "2026-06-15"),
         createItem("soon", "계란", "2026-06-10"),
         createItem("today", "요거트", "2026-06-07"),
+        createItem("expired", "우유", "2026-06-06"),
       ],
-      "today",
+      "expired",
       "all",
     );
 
-    expect(result.map((item) => item.id)).toEqual(["today"]);
+    expect(result.map((item) => item.id)).toEqual(["expired"]);
+  });
+
+  it("returns only items at least eight days away for the safe filter", () => {
+    const result = filterInventoryItems(
+      [
+        createItem("day-7", "계란", "2026-06-14"),
+        createItem("day-8", "두부", "2026-06-15"),
+      ],
+      "safe",
+      "all",
+    );
+
+    expect(result.map((item) => item.id)).toEqual(["day-8"]);
   });
 
   it("returns items within seven days sorted by nearest expiry", () => {
@@ -120,39 +135,42 @@ describe("mobile inventory filters", () => {
   });
 
   it("maps nearest expiry dates into urgency sections", () => {
-    expect(getInventoryUrgencySection("2026-06-06")).toBe("today");
-    expect(getInventoryUrgencySection("2026-06-07")).toBe("today");
+    expect(getInventoryUrgencySection("2026-06-06")).toBe("expired");
+    expect(getInventoryUrgencySection("2026-06-07")).toBe("within7");
     expect(getInventoryUrgencySection("2026-06-10")).toBe("within7");
     expect(getInventoryUrgencySection("2026-06-20")).toBe("safe");
   });
 
-  it("builds urgency sections and hides empty buckets", () => {
+  it("builds exclusive urgency sections and hides empty buckets", () => {
     const sections = buildInventoryUrgencySections([
-      {
-        id: "today-group",
-        displayName: "요거트",
-        brand: null,
-        items: [createItem("today", "요거트", "2026-06-07")],
-        nearestExpiryDate: "2026-06-07",
-        totalQuantity: 1,
-        unit: "개",
-        hasMixedUnits: false,
-      },
-      {
-        id: "safe-group",
-        displayName: "두부",
-        brand: null,
-        items: [createItem("later", "두부", "2026-06-20")],
-        nearestExpiryDate: "2026-06-20",
-        totalQuantity: 1,
-        unit: "개",
-        hasMixedUnits: false,
-      },
+      createItem("expired", "우유", "2026-06-06"),
+      createItem("today", "요거트", "2026-06-07"),
+      createItem("later", "두부", "2026-06-20"),
     ]);
 
-    expect(sections.map((section) => section.key)).toEqual(["today", "safe"]);
-    expect(sections[0]?.title).toBe("오늘 만료");
-    expect(sections[1]?.data.map((group) => group.id)).toEqual(["safe-group"]);
+    expect(sections.map((section) => section.key)).toEqual([
+      "expired",
+      "within7",
+      "safe",
+    ]);
+    expect(sections[0]?.title).toBe("만료됨");
+    expect(sections[2]?.data[0]?.items.map((item) => item.id)).toEqual([
+      "later",
+    ]);
+  });
+
+  it("groups the same product only within each urgency section", () => {
+    const sections = buildInventoryUrgencySections([
+      createItem("expired", "우유", "2026-06-06"),
+      createItem("safe", "우유", "2026-06-20"),
+    ]);
+
+    expect(sections).toHaveLength(2);
+    expect(sections[0]?.data[0]?.items.map((item) => item.id)).toEqual([
+      "expired",
+    ]);
+    expect(sections[1]?.data[0]?.items.map((item) => item.id)).toEqual(["safe"]);
+    expect(sections[0]?.data[0]?.id).not.toBe(sections[1]?.data[0]?.id);
   });
 });
 

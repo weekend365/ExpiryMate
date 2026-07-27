@@ -57,6 +57,7 @@ describe("AdminService", () => {
           .mockResolvedValueOnce(2)
           .mockResolvedValueOnce(1)
           .mockResolvedValueOnce(3)
+          .mockResolvedValueOnce(4)
           .mockResolvedValueOnce(4),
         groupBy: vi.fn().mockResolvedValue([
           { storageLocation: "fridge", _count: { _all: 7 } },
@@ -73,6 +74,32 @@ describe("AdminService", () => {
     expect(summary.totalActiveCount).toBe(10);
     expect(summary.expiredCount).toBe(2);
     expect(summary.todayExpiryCount).toBe(1);
+    expect(summary.within7DaysCount).toBe(4);
+    expect(summary.safeCount).toBe(4);
+    expect(
+      summary.expiredCount +
+        summary.within7DaysCount +
+        summary.safeCount,
+    ).toBe(summary.totalActiveCount);
+    expect(prisma.inventoryItem.count).toHaveBeenNthCalledWith(
+      5,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          expiryDate: {
+            gte: new Date("2026-07-22T00:00:00.000Z"),
+            lte: new Date("2026-07-29T00:00:00.000Z"),
+          },
+        }),
+      }),
+    );
+    expect(prisma.inventoryItem.count).toHaveBeenNthCalledWith(
+      6,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          expiryDate: { gt: new Date("2026-07-29T00:00:00.000Z") },
+        }),
+      }),
+    );
     expect(summary.locationCounts.fridge).toBe(7);
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(2);
   });

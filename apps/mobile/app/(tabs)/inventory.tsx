@@ -1,9 +1,7 @@
 import {
-  calculateDaysLeftUntilExpiry,
   fieldLimits,
-  getExpiryBucket,
-  groupInventoryItems,
-  ItemStatus,
+  getExpiryTrafficBucket,
+  isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
@@ -20,11 +18,11 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
-  FlatList,
   ImageBackground,
   Platform,
   Pressable,
   RefreshControl,
+  SectionList,
   ScrollView,
   StyleSheet,
   Text,
@@ -122,29 +120,22 @@ export default function InventoryScreen() {
       ? error.message
       : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 
-  const activeItems = useMemo(
-    () => (data ?? []).filter((item) => item.status === ItemStatus.ACTIVE),
+  const trackedItems = useMemo(
+    () => (data ?? []).filter(isTrackedItem),
     [data],
-  );
-  const activeGroups = useMemo(
-    () => groupInventoryItems(activeItems),
-    [activeItems],
   );
 
   const filtered = useMemo(
-    () => filterInventoryItems(activeItems, filter, location, searchQuery),
-    [activeItems, filter, location, searchQuery],
+    () => filterInventoryItems(trackedItems, filter, location, searchQuery),
+    [trackedItems, filter, location, searchQuery],
   );
-  const filteredGroups = useMemo(
-    () => groupInventoryItems(filtered),
+  const urgencySections = useMemo(
+    () => buildInventoryUrgencySections(filtered),
     [filtered],
   );
   const flatGroups = useMemo(
-    () =>
-      buildInventoryUrgencySections(filteredGroups).flatMap(
-        (section) => section.data,
-      ),
-    [filteredGroups],
+    () => urgencySections.flatMap((section) => section.data),
+    [urgencySections],
   );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -154,13 +145,13 @@ export default function InventoryScreen() {
     const counts: Record<string, number> = {};
 
     selectableOptions.forEach((option) => {
-      counts[option.key] = groupInventoryItems(
-        activeItems.filter((item) => item.storageLocation === option.key),
+      counts[option.key] = trackedItems.filter(
+        (item) => item.storageLocation === option.key,
       ).length;
     });
 
     return counts;
-  }, [activeItems, selectableOptions]);
+  }, [trackedItems, selectableOptions]);
 
   const hasLocationFilter = location !== "all";
   const hasSearchQuery = searchQuery.trim().length > 0;
@@ -169,28 +160,29 @@ export default function InventoryScreen() {
     hasStatusFilter || hasLocationFilter || hasSearchQuery;
   const activeLocationLabel = hasLocationFilter ? resolveLabel(location) : null;
   const trafficStats = useMemo(() => {
-    let todayExpiryCount = 0;
+    let expiredCount = 0;
     let within7DaysCount = 0;
+    let safeCount = 0;
 
-    activeGroups.forEach((group) => {
-      const bucket = getExpiryBucket(group.nearestExpiryDate);
-      const daysLeft = calculateDaysLeftUntilExpiry(group.nearestExpiryDate);
+    trackedItems.forEach((item) => {
+      const bucket = getExpiryTrafficBucket(item.expiryDate);
 
-      if (bucket === "today") {
-        todayExpiryCount += 1;
-      }
-
-      if (daysLeft >= 0 && daysLeft <= 7) {
+      if (bucket === "expired") {
+        expiredCount += 1;
+      } else if (bucket === "within_7_days") {
         within7DaysCount += 1;
+      } else {
+        safeCount += 1;
       }
     });
 
     return {
-      todayExpiryCount,
+      expiredCount,
       within7DaysCount,
-      totalActiveCount: activeGroups.length,
+      safeCount,
+      totalTrackedCount: trackedItems.length,
     };
-  }, [activeGroups]);
+  }, [trackedItems]);
 
   const companion = useMemo(() => {
     if (deferredDiscard.undoLabel || successMessage) {
@@ -200,16 +192,15 @@ export default function InventoryScreen() {
       };
     }
 
-    if (trafficStats.todayExpiryCount > 0) {
+    if (trafficStats.expiredCount > 0) {
       return {
         mood: "worry" as MascotMood,
-        message:
-          "오늘 손볼 재료가 있어요. 유통기한이 가까운 것부터 살펴볼까요?",
+        message: "유통기한이 지난 재료가 있어요. 먼저 정리해 볼까요?",
       };
     }
 
     if (
-      trafficStats.totalActiveCount > 0 &&
+      trafficStats.totalTrackedCount > 0 &&
       trafficStats.within7DaysCount === 0
     ) {
       return {
@@ -222,8 +213,8 @@ export default function InventoryScreen() {
   }, [
     deferredDiscard.undoLabel,
     successMessage,
-    trafficStats.todayExpiryCount,
-    trafficStats.totalActiveCount,
+    trafficStats.expiredCount,
+    trafficStats.totalTrackedCount,
     trafficStats.within7DaysCount,
   ]);
 
@@ -254,11 +245,11 @@ export default function InventoryScreen() {
 
   // Only treat as empty after a successful load — never during loading/error.
   const isEmptyInventory =
-    hasLoadedInventory && !isError && activeItems.length === 0;
+    hasLoadedInventory && !isError && trackedItems.length === 0;
   const isFilteredEmpty = !isEmptyInventory && filtered.length === 0;
   const showListChrome = hasLoadedInventory && !isError && !isEmptyInventory;
   const soloGroupId =
-    filteredGroups.length === 1 ? (filteredGroups[0]?.id ?? null) : null;
+    flatGroups.length === 1 ? (flatGroups[0]?.id ?? null) : null;
 
   useEffect(() => {
     const visibleIdSet = new Set(visibleIds);
@@ -438,18 +429,19 @@ export default function InventoryScreen() {
           style={styles.fridgeSceneVeil}
           importantForAccessibility="no-hide-descendants"
         />
-        <FlatList
+        <SectionList
           style={styles.listFlex}
-          data={
+          sections={
             isLoading && !hasLoadedInventory
               ? []
               : isError && !hasLoadedInventory
                 ? []
                 : isEmptyInventory || isFilteredEmpty
                   ? []
-                  : flatGroups
+                  : urgencySections
           }
           keyExtractor={(group) => group.id}
+          stickySectionHeadersEnabled={false}
           refreshControl={
             <RefreshControl
               tintColor={colors.primary}
@@ -484,13 +476,13 @@ export default function InventoryScreen() {
                   <View style={styles.filterPanel}>
                     <View style={styles.filterTopRow}>
                       <TrafficLightFilter
-                        todayCount={trafficStats.todayExpiryCount}
+                        expiredCount={trafficStats.expiredCount}
                         within7Count={trafficStats.within7DaysCount}
-                        totalCount={trafficStats.totalActiveCount}
+                        safeCount={trafficStats.safeCount}
                         activeFilter={filter}
-                        onToggleToday={() => toggleTrafficFilter("today")}
+                        onToggleExpired={() => toggleTrafficFilter("expired")}
                         onToggleWithin7={() => toggleTrafficFilter("within7")}
-                        onSelectAll={() => applyFilter("all")}
+                        onToggleSafe={() => toggleTrafficFilter("safe")}
                       />
                       <View style={styles.filterIconActions}>
                         <Pressable
@@ -541,7 +533,7 @@ export default function InventoryScreen() {
                     </View>
 
                     <Text style={styles.trafficGuideCaption}>
-                      빨강(오늘까지)·노랑(7일 이내)·초록(여유) 램프를 누르면
+                      빨강(만료됨)·노랑(7일 이내)·초록(여유) 램프를 누르면
                       해당 재료만 보관함에서 보여드려요.
                     </Text>
 
@@ -592,7 +584,7 @@ export default function InventoryScreen() {
                         hitSlop={spacing.xxs}
                         accessibilityRole="button"
                         accessibilityState={{ selected: location === "all" }}
-                        accessibilityLabel={`전체 위치, ${activeGroups.length}개`}
+                        accessibilityLabel={`전체 위치, ${trackedItems.length}개`}
                         style={({ pressed }) => [
                           styles.compartmentChip,
                           location === "all" && styles.compartmentChipSelected,
@@ -615,7 +607,7 @@ export default function InventoryScreen() {
                               styles.compartmentChipCountSelected,
                           ]}
                         >
-                          {activeGroups.length}
+                          {trackedItems.length}
                         </Text>
                       </Pressable>
                       {selectableOptions.map((option) => {
@@ -930,6 +922,9 @@ export default function InventoryScreen() {
               onItemDiscard={handleDiscard}
             />
           )}
+          renderSectionHeader={({ section }) => (
+            <Text style={styles.urgencySectionTitle}>{section.title}</Text>
+          )}
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
@@ -996,7 +991,7 @@ export default function InventoryScreen() {
 }
 
 function getFilteredEmptyMood(filter: InventoryViewFilter) {
-  if (filter === "today" || filter === "within7") {
+  if (filter === "within7" || filter === "safe") {
     return "happy" as const;
   }
 
@@ -1004,16 +999,16 @@ function getFilteredEmptyMood(filter: InventoryViewFilter) {
 }
 
 function getActiveStatusFilterLabel(filter: InventoryViewFilter) {
-  if (filter === "today") {
-    return "오늘";
-  }
-
   if (filter === "within7") {
     return "7일 이내";
   }
 
   if (filter === "expired") {
-    return "지났어요";
+    return "만료됨";
+  }
+
+  if (filter === "safe") {
+    return "여유";
   }
 
   return "전체";
@@ -1027,16 +1022,16 @@ function getFilteredEmptyTitle(
     return "찾는 재료가 없어요";
   }
 
-  if (filter === "today") {
-    return "오늘 만료가 없어요";
-  }
-
   if (filter === "within7") {
     return "7일 안에 손볼 재료가 없어요";
   }
 
   if (filter === "expired") {
     return "만료된 재료가 없어요";
+  }
+
+  if (filter === "safe") {
+    return "여유 있는 재료가 없어요";
   }
 
   return "이 위치에는 재료가 없어요";
@@ -1053,16 +1048,16 @@ function getFilteredEmptyDescription(
       : "다른 이름으로 찾아보거나, 새 재료를 넣어볼까요?";
   }
 
-  if (filter === "today") {
-    return hasLocationFilter
-      ? "위치를 바꾸거나 전체 보관함을 둘러볼까요?"
-      : "오늘은 여유롭네요. 전체 목록을 둘러보거나 새 재료를 넣어볼까요?";
-  }
-
   if (filter === "within7") {
     return hasLocationFilter
       ? "위치를 바꾸거나 전체 보관함을 둘러볼까요?"
       : "급한 재료가 없어요. 전체 목록을 보거나 재료를 더 넣어볼까요?";
+  }
+
+  if (filter === "expired" || filter === "safe") {
+    return hasLocationFilter
+      ? "위치를 바꾸거나 전체 보관함을 둘러볼까요?"
+      : "전체 목록을 둘러보거나 새 재료를 넣어볼까요?";
   }
 
   if (hasLocationFilter) {
@@ -1076,38 +1071,38 @@ const TRAFFIC_LAMP_SIZE = touchTarget.min;
 const TRAFFIC_LAMP_OFF_OPACITY = 0.28;
 
 function TrafficLightFilter({
-  todayCount,
+  expiredCount,
   within7Count,
-  totalCount,
+  safeCount,
   activeFilter,
-  onToggleToday,
+  onToggleExpired,
   onToggleWithin7,
-  onSelectAll,
+  onToggleSafe,
 }: {
-  todayCount: number;
+  expiredCount: number;
   within7Count: number;
-  totalCount: number;
+  safeCount: number;
   activeFilter: InventoryViewFilter;
-  onToggleToday: () => void;
+  onToggleExpired: () => void;
   onToggleWithin7: () => void;
-  onSelectAll: () => void;
+  onToggleSafe: () => void;
 }) {
   return (
     <View
       style={styles.trafficHousing}
       accessibilityRole="summary"
-      accessibilityLabel={`오늘 만료 ${todayCount}개, 7일 이내 ${within7Count}개, 보관 중 ${totalCount}개`}
+      accessibilityLabel={`만료됨 ${expiredCount}개, 7일 이내 ${within7Count}개, 여유 ${safeCount}개`}
     >
       <TrafficLamp
-        label="오늘 만료"
-        count={todayCount}
+        label="만료됨"
+        count={expiredCount}
         tone="danger"
-        selected={activeFilter === "today"}
-        onPress={onToggleToday}
+        selected={activeFilter === "expired"}
+        onPress={onToggleExpired}
         accessibilityHint={
-          activeFilter === "today"
+          activeFilter === "expired"
             ? "다시 누르면 전체 목록으로 돌아가요."
-            : "오늘 만료되는 재료만 보여 드릴게요."
+            : "유통기한이 지난 재료만 보여 드릴게요."
         }
       />
       <TrafficLamp
@@ -1123,12 +1118,16 @@ function TrafficLightFilter({
         }
       />
       <TrafficLamp
-        label="보관 중"
-        count={totalCount}
+        label="여유"
+        count={safeCount}
         tone="success"
-        selected={activeFilter === "all"}
-        onPress={onSelectAll}
-        accessibilityHint="전체 보관 재료를 보여 드릴게요."
+        selected={activeFilter === "safe"}
+        onPress={onToggleSafe}
+        accessibilityHint={
+          activeFilter === "safe"
+            ? "다시 누르면 전체 목록으로 돌아가요."
+            : "유통기한이 8일 이상 남은 재료만 보여 드릴게요."
+        }
       />
     </View>
   );
@@ -1539,6 +1538,13 @@ const styles = StyleSheet.create({
   listHeader: {
     gap: spacing.sm,
     paddingBottom: spacing.sm,
+  },
+  urgencySectionTitle: {
+    ...typography.bodySmall,
+    color: colors.subtext,
+    fontWeight: "700",
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   itemSeparator: {
     height: spacing.xs,

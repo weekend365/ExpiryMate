@@ -48,6 +48,7 @@ const dashboardSummary: DashboardSummary = {
   within3DaysCount: 1,
   within7DaysCount: 2,
   expiredCount: 0,
+  safeCount: 1,
   totalActiveCount: 3,
   recentItems: [],
   expiringItems: [],
