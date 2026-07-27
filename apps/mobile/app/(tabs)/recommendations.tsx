@@ -7,9 +7,6 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
-  CheckCircle2,
-  ChevronRight,
-  Circle,
   Clock3,
   Heart,
   SlidersHorizontal,
@@ -61,7 +58,7 @@ import {
 
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
-const COLLAPSED_HIGHLIGHT_INGREDIENT_COUNT = 2;
+const COLLAPSED_INGREDIENT_PREVIEW_COUNT = 2;
 const EXPIRING_DAYS_THRESHOLD = 7;
 const PREVIOUS_RECOMMENDATION_LIMIT = 5;
 const SHEET_TRANSITION_DELAY_MS = 320;
@@ -70,7 +67,6 @@ type RecipeView = "recommendations" | "favorites";
 type HighlightIngredient = {
   key: string;
   name: string;
-  inventoryItemId: string | null;
   amountLabel: string | null;
   daysUntilExpiry: number | null;
   isExpiring: boolean;
@@ -931,153 +927,70 @@ function RecipeCard({
     dish,
     inventorySnapshot,
   );
-  const visibleHighlights = highlightIngredients.slice(
-    0,
-    COLLAPSED_HIGHLIGHT_INGREDIENT_COUNT,
-  );
-  const remainingHighlightCount =
-    highlightIngredients.length - visibleHighlights.length;
-
-  const openIngredient = (ingredient: HighlightIngredient) => {
-    if (!ingredient.inventoryItemId) {
-      router.push("/(tabs)/inventory");
-      return;
-    }
-
-    router.push({
-      pathname: "/inventory/[id]",
-      params: { id: ingredient.inventoryItemId },
-    });
-  };
+  const ingredientPreview = formatIngredientPreview(highlightIngredients);
 
   return (
     <View style={styles.recipeCard}>
-      <View style={styles.recipeHeader}>
-        <View style={styles.recipeTitleBlock}>
-          <Text style={styles.recipeEyebrow}>추천 {badgeLabel ?? "1"}</Text>
-          <Text style={styles.recipeTitle} numberOfLines={2}>
-            {dish.title}
-          </Text>
-        </View>
-        {onToggleFavorite ? (
-          <Pressable
-            onPress={() => onToggleFavorite(!isFavorite)}
-            disabled={isFavoritePending}
-            accessibilityRole="button"
-            accessibilityLabel={
-              isFavorite
-                ? `${dish.title} 즐겨찾기에서 빼기`
-                : `${dish.title} 즐겨찾기에 저장`
-            }
-            accessibilityState={{
-              selected: isFavorite,
-              disabled: isFavoritePending,
-            }}
-            hitSlop={spacing.xs}
-            style={({ pressed }) => [
-              styles.favoriteButton,
-              isFavorite && styles.favoriteButtonSelected,
-              pressed && styles.favoriteButtonPressed,
-              isFavoritePending && styles.favoriteButtonPending,
-            ]}
-          >
-            <Heart
-              color={isFavorite ? colors.primary : colors.subtext}
-              fill={isFavorite ? colors.primary : "none"}
-              size={spacing.md}
-              strokeWidth={2.4}
-            />
-          </Pressable>
-        ) : null}
-      </View>
-
-      <Text style={styles.recipeMetaLine}>{formatDishMeta(dish)}</Text>
-
-      {highlightIngredients.length > 0 ? (
-        <View style={styles.recipeChipRow}>
-          {visibleHighlights.map((ingredient) => {
-            const ddayLabel = formatIngredientDdayLabel(
-              ingredient.daysUntilExpiry,
-            );
-            const chipLabel = ddayLabel
-              ? `${ingredient.name} · ${ddayLabel}`
-              : ingredient.name;
-
-            return (
-              <Pressable
-                key={ingredient.key}
-                onPress={() => openIngredient(ingredient)}
-                hitSlop={{
-                  top: spacing.xs,
-                  bottom: spacing.xs,
-                  left: spacing.xxs,
-                  right: spacing.xxs,
-                }}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  ingredient.isExpiring
-                    ? `${chipLabel}, 유통기한 임박 재료 살펴보기`
-                    : `${chipLabel} 재료 살펴보기`
-                }
-                style={({ pressed }) => [
-                  styles.ingredientChip,
-                  ingredient.isExpiring
-                    ? styles.ingredientChipExpiring
-                    : styles.ingredientChipDefault,
-                  pressed && styles.ingredientChipPressed,
-                ]}
-              >
-                {ingredient.isExpiring ? (
-                  <Clock3
-                    color={colors.warning}
-                    size={spacing.sm}
-                    strokeWidth={2.4}
-                  />
-                ) : null}
-                <Text
-                  style={[
-                    styles.ingredientChipText,
-                    ingredient.isExpiring
-                      ? styles.ingredientChipTextExpiring
-                      : styles.ingredientChipTextDefault,
-                  ]}
-                  numberOfLines={1}
-                >
-                  {chipLabel}
-                </Text>
-              </Pressable>
-            );
-          })}
-          {remainingHighlightCount > 0 ? (
-            <View
-              style={styles.ingredientOverflowChip}
-              accessibilityLabel={`재료 ${remainingHighlightCount}개 더 있어요`}
-            >
-              <Text style={styles.ingredientOverflowChipText}>
-                +{remainingHighlightCount}
-              </Text>
-            </View>
-          ) : null}
-        </View>
-      ) : null}
-
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
-        accessibilityLabel={`${dish.title} 자세히 볼게요`}
-        accessibilityHint="재료와 조리 순서를 바텀시트에서 살펴볼 수 있어요."
+        accessibilityLabel={`${dish.title} 레시피 상세 보기`}
+        accessibilityHint="사용할 재료와 조리 순서를 확인합니다."
         style={({ pressed }) => [
-          styles.recipeDetailButton,
-          pressed && styles.recipeDetailButtonPressed,
+          styles.recipeCardMain,
+          pressed && styles.recipeCardMainPressed,
         ]}
       >
-        <Text style={styles.recipeDetailLabel}>자세히 볼게요</Text>
-        <ChevronRight
-          color={colors.primary}
-          size={spacing.sm + spacing.xxs}
-          strokeWidth={2.4}
-        />
+        <View style={styles.recipeCompactTitleRow}>
+          <View style={styles.recipeNumberBadge}>
+            <Text style={styles.recipeNumberBadgeText}>
+              {badgeLabel ?? "1"}
+            </Text>
+          </View>
+          <Text style={styles.recipeTitle} numberOfLines={1}>
+            {dish.title}
+          </Text>
+        </View>
+
+        <Text style={styles.recipeMetaLine} numberOfLines={1}>
+          {formatDishMeta(dish)}
+        </Text>
+
+        <Text style={styles.recipeIngredientPreview} numberOfLines={1}>
+          {ingredientPreview}
+        </Text>
       </Pressable>
+
+      {onToggleFavorite ? (
+        <Pressable
+          onPress={() => onToggleFavorite(!isFavorite)}
+          disabled={isFavoritePending}
+          accessibilityRole="button"
+          accessibilityLabel={
+            isFavorite
+              ? `${dish.title} 즐겨찾기에서 빼기`
+              : `${dish.title} 즐겨찾기에 저장`
+          }
+          accessibilityState={{
+            selected: isFavorite,
+            disabled: isFavoritePending,
+          }}
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.favoriteButton,
+            isFavorite && styles.favoriteButtonSelected,
+            pressed && styles.favoriteButtonPressed,
+            isFavoritePending && styles.favoriteButtonPending,
+          ]}
+        >
+          <Heart
+            color={isFavorite ? colors.primary : colors.subtext}
+            fill={isFavorite ? colors.primary : "none"}
+            size={spacing.md}
+            strokeWidth={2.4}
+          />
+        </Pressable>
+      ) : null}
     </View>
   );
 }
@@ -1089,22 +1002,7 @@ function RecipeDetailContent({
   dish: RecipeRecommendationDish;
   inventorySnapshot: RecipeInventorySnapshotItem[];
 }) {
-  const [checkedIngredientKeys, setCheckedIngredientKeys] = useState<string[]>(
-    [],
-  );
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
-  const checkedIngredientKeySet = useMemo(
-    () => new Set(checkedIngredientKeys),
-    [checkedIngredientKeys],
-  );
-
-  const toggleIngredientChecked = (key: string) => {
-    setCheckedIngredientKeys((current) =>
-      current.includes(key)
-        ? current.filter((item) => item !== key)
-        : [...current, key],
-    );
-  };
 
   return (
     <>
@@ -1112,66 +1010,62 @@ function RecipeDetailContent({
 
       <View style={styles.recipeBlock}>
         <Text style={styles.blockTitle}>사용할 재료</Text>
-        <Text style={styles.blockHint}>
-          준비된 재료는 눌러서 체크해 주세요.
-        </Text>
-        <View style={styles.checklist}>
-          {usedIngredientRows.map((ingredient) => {
-            const checked = checkedIngredientKeySet.has(ingredient.key);
-
-            return (
-              <Pressable
-                key={ingredient.key}
-                onPress={() => toggleIngredientChecked(ingredient.key)}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked }}
-                accessibilityLabel={`${ingredient.name}${
-                  ingredient.amountLabel ? ` ${ingredient.amountLabel}` : ""
-                }${ingredient.isExpiring ? ", 유통기한 임박" : ""}`}
-                style={({ pressed }) => [
-                  styles.checklistRow,
-                  checked && styles.checklistRowChecked,
-                  pressed && styles.checklistRowPressed,
-                ]}
-              >
-                {checked ? (
-                  <CheckCircle2
-                    color={colors.primary}
-                    size={spacing.md}
-                    strokeWidth={2.4}
-                  />
-                ) : (
-                  <Circle
-                    color={colors.mutedText}
-                    size={spacing.md}
-                    strokeWidth={2.2}
-                  />
-                )}
-                <View style={styles.checklistCopy}>
-                  <Text style={styles.checklistText}>{ingredient.name}</Text>
+        {usedIngredientRows.length > 0 ? (
+          <View style={styles.ingredientInfoList}>
+            {usedIngredientRows.map((ingredient) => (
+              <View key={ingredient.key} style={styles.ingredientInfoRow}>
+                <View style={styles.ingredientInfoCopy}>
+                  <Text style={styles.ingredientInfoName} numberOfLines={1}>
+                    {ingredient.name}
+                  </Text>
                   {ingredient.amountLabel ? (
-                    <Text style={styles.checklistAmount}>
+                    <Text style={styles.ingredientInfoAmount} numberOfLines={1}>
                       추천 {ingredient.amountLabel}
                     </Text>
                   ) : null}
                 </View>
-                {ingredient.isExpiring ? (
-                  <View style={styles.checklistBadge}>
+                {ingredient.daysUntilExpiry !== null ? (
+                  <View
+                    style={[
+                      styles.ingredientExpiryBadge,
+                      ingredient.isExpiring
+                        ? styles.ingredientExpiryBadgeExpiring
+                        : styles.ingredientExpiryBadgeSafe,
+                    ]}
+                    accessibilityLabel={`유통기한 ${
+                      formatIngredientDdayLabel(
+                        ingredient.daysUntilExpiry,
+                      ) ?? "임박"
+                    }`}
+                  >
                     <Clock3
-                      color={colors.warning}
+                      color={
+                        ingredient.isExpiring
+                          ? colors.warning
+                          : colors.success
+                      }
                       size={spacing.sm}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.checklistBadgeText}>
+                    <Text
+                      style={[
+                        styles.ingredientExpiryBadgeText,
+                        ingredient.isExpiring
+                          ? styles.ingredientExpiryBadgeTextExpiring
+                          : styles.ingredientExpiryBadgeTextSafe,
+                      ]}
+                    >
                       {formatIngredientDdayLabel(ingredient.daysUntilExpiry) ??
                         "임박"}
                     </Text>
                   </View>
                 ) : null}
-              </Pressable>
-            );
-          })}
-        </View>
+              </View>
+            ))}
+          </View>
+        ) : (
+          <Text style={styles.blockHint}>표시할 재료 정보가 없어요.</Text>
+        )}
       </View>
 
       {dish.optionalMissingIngredients.length > 0 ? (
@@ -1241,7 +1135,6 @@ function getUsedIngredientRows(
     return {
       key: ingredient.inventoryItemId ?? `${ingredient.name}-${index}`,
       name: ingredient.name,
-      inventoryItemId: ingredient.inventoryItemId,
       amountLabel:
         ingredient.amount && ingredient.unitCode
           ? formatBaseQuantity(ingredient.amount, ingredient.unitCode)
@@ -1292,9 +1185,24 @@ function formatRecommendationDescription(recommendation: RecipeRecommendation) {
 }
 
 function formatDishMeta(dish: RecipeRecommendationDish) {
-  return `${dish.cookingTimeMinutes}분 · ${difficultyLabels[dish.difficulty]} · ${
-    dish.servings
-  }인분`;
+  return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${
+    difficultyLabels[dish.difficulty]
+  }`;
+}
+
+function formatIngredientPreview(ingredients: HighlightIngredient[]) {
+  if (ingredients.length === 0) {
+    return "재료 정보 없음";
+  }
+
+  const visibleNames = ingredients
+    .slice(0, COLLAPSED_INGREDIENT_PREVIEW_COUNT)
+    .map((ingredient) => ingredient.name);
+  const remainingCount = ingredients.length - visibleNames.length;
+
+  return `재료 ${visibleNames.join(" · ")}${
+    remainingCount > 0 ? ` +${remainingCount}` : ""
+  }`;
 }
 
 function formatHistoryPreview(recommendation: RecipeRecommendation) {
@@ -1574,30 +1482,50 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   recipeCard: {
+    minHeight: touchTarget.min * 2,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    gap: spacing.sm,
-  },
-  recipeHeader: {
     flexDirection: "row",
-    gap: spacing.sm,
     alignItems: "flex-start",
+    overflow: "hidden",
   },
-  recipeTitleBlock: {
+  recipeCardMain: {
     flex: 1,
+    minWidth: 0,
+    alignSelf: "stretch",
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    gap: spacing.xxs,
+  },
+  recipeCardMainPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  recipeCompactTitleRow: {
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
   },
-  recipeEyebrow: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
+  recipeNumberBadge: {
+    minWidth: spacing.md,
+    height: spacing.md,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.xxs,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  recipeNumberBadgeText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
   recipeTitle: {
+    flex: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.subheading.fontFamily,
@@ -1609,6 +1537,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: spacing.xs,
+    marginRight: spacing.xs,
   },
   favoriteButtonSelected: {
     backgroundColor: colors.primarySoft,
@@ -1620,84 +1550,16 @@ const styles = StyleSheet.create({
     opacity: 0.55,
   },
   recipeMetaLine: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  recipeChipRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  ingredientChip: {
-    // Compact info chip (32px); hitSlop keeps the touch target near 48px.
-    minHeight: spacing.lg,
-    maxWidth: "100%",
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-  },
-  ingredientChipDefault: {
-    backgroundColor: colors.primarySoft,
-    borderColor: colors.primarySoft,
-  },
-  ingredientChipExpiring: {
-    backgroundColor: colors.warningSoft,
-    borderColor: colors.warningSoft,
-  },
-  ingredientChipPressed: {
-    opacity: 0.8,
-  },
-  ingredientChipText: {
+  recipeIngredientPreview: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  ingredientChipTextDefault: {
-    color: colors.primary,
-  },
-  ingredientChipTextExpiring: {
-    color: colors.warning,
-  },
-  ingredientOverflowChip: {
-    minHeight: spacing.lg,
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.sm,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ingredientOverflowChipText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
-  },
-  recipeDetailButton: {
-    minHeight: touchTarget.min,
-    alignSelf: "stretch",
-    borderRadius: radius.lg,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-  },
-  recipeDetailButtonPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  recipeDetailLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
   recipeDetailSummary: {
     fontSize: typography.body.fontSize,
@@ -1720,10 +1582,10 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.mutedText,
   },
-  checklist: {
+  ingredientInfoList: {
     gap: spacing.xs,
   },
-  checklistRow: {
+  ingredientInfoRow: {
     minHeight: touchTarget.min,
     borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
@@ -1731,43 +1593,53 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
-  checklistRowChecked: {
-    backgroundColor: colors.primarySoft,
-  },
-  checklistRowPressed: {
-    opacity: 0.85,
-  },
-  checklistCopy: {
+  ingredientInfoCopy: {
     flex: 1,
-    gap: spacing.xxs,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
   },
-  checklistText: {
+  ingredientInfoName: {
+    flexShrink: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
-  checklistAmount: {
+  ingredientInfoAmount: {
+    flexShrink: 0,
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  checklistBadge: {
+  ingredientExpiryBadge: {
+    flexShrink: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
     borderRadius: radius.pill,
-    backgroundColor: colors.warningSoft,
     paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xxs,
   },
-  checklistBadgeText: {
+  ingredientExpiryBadgeSafe: {
+    backgroundColor: colors.successSoft,
+  },
+  ingredientExpiryBadgeExpiring: {
+    backgroundColor: colors.warningSoft,
+  },
+  ingredientExpiryBadgeText: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
+  },
+  ingredientExpiryBadgeTextSafe: {
+    color: colors.success,
+  },
+  ingredientExpiryBadgeTextExpiring: {
     color: colors.warning,
   },
   softNoteCard: {
