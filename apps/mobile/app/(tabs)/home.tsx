@@ -307,8 +307,8 @@ export default function HomeScreen() {
               >
                 <AppText variant="subheading">유통기한 신호등</AppText>
                 <AppText variant="bodySmall" tone="subtext">
-                  빨강(만료됨)·노랑(7일 이내)·초록(여유) 램프를 누르면 해당
-                  재료만 보관함에서 보여드려요.
+                  빨강은 만료, 노랑은 7일 이내, 초록은 여유예요. 램프를 눌러
+                  확인해 보세요.
                 </AppText>
               </View>
               <View
@@ -361,32 +361,6 @@ export default function HomeScreen() {
                     showLabel={false}
                   />
                 </Pressable>
-              </View>
-              <View
-                style={styles.trafficLabels}
-                importantForAccessibility="no-hide-descendants"
-              >
-                <AppText
-                  variant="caption"
-                  tone="subtext"
-                  style={styles.trafficLabel}
-                >
-                  만료됨
-                </AppText>
-                <AppText
-                  variant="caption"
-                  tone="subtext"
-                  style={styles.trafficLabel}
-                >
-                  7일 이내
-                </AppText>
-                <AppText
-                  variant="caption"
-                  tone="subtext"
-                  style={styles.trafficLabel}
-                >
-                  여유
-                </AppText>
               </View>
             </View>
           )}
