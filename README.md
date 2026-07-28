@@ -390,8 +390,11 @@ receives or stores the OpenAI API key.
 
 Recipe generation is protected by configurable server-side limits:
 `RECIPE_RATE_LIMIT_MAX`, `RECIPE_RATE_LIMIT_WINDOW_SECONDS`,
-`RECIPE_DAILY_QUOTA`, `RECIPE_CACHE_TTL_SECONDS`,
-`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Cost
+`RECIPE_FREE_DAILY_LIMIT`, `RECIPE_REWARDED_DAILY_LIMIT`,
+`RECIPE_SUBSCRIBER_DAILY_LIMIT`, `RECIPE_ABSOLUTE_DAILY_LIMIT`,
+`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Repeated
+network attempts are deduplicated with `Idempotency-Key`; recommendation
+content is no longer reused by a time-based cache. Cost
 estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
 `RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
 `RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.

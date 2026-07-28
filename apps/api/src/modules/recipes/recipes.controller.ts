@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Post,
@@ -28,11 +29,13 @@ export class RecipesController {
     @Body(new ZodValidationPipe(recipeRecommendationRequestSchema))
     request: RecipeRecommendationRequest,
     @CurrentOwnerKey() ownerKey: string,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     return this.recipesService.createRecommendation(
       ownerKey,
       request,
       `personal_${ownerKey}`,
+      idempotencyKey,
     );
   }
 

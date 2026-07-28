@@ -33,6 +33,7 @@ import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
+import { MonetizationService } from "../monetization/monetization.service";
 import { PrivacyService } from "../privacy/privacy.service";
 import { RecipePolicyService } from "./recipe-policy.service";
 
@@ -40,7 +41,6 @@ const PROMPT_VERSION = "recipe-recommendation-v3";
 const DEFAULT_MODEL = "gpt-5-mini";
 const MAX_INGREDIENTS = 30;
 
-const DEFAULT_CACHE_TTL_SECONDS = 6 * 60 * 60;
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -97,14 +97,24 @@ export class RecipesService {
     private readonly prisma: PrismaService,
     private readonly privacyService: PrivacyService,
     private readonly recipePolicy: RecipePolicyService,
+    private readonly monetization: MonetizationService,
   ) {}
 
   async createRecommendation(
     ownerKey: string,
     request: RecipeRecommendationRequest,
     spaceId?: string,
+    idempotencyKey = "",
   ) {
     const now = new Date();
+    const completedRecommendationId =
+      await this.monetization.getCompletedRecommendationId(
+        ownerKey,
+        idempotencyKey,
+      );
+    if (completedRecommendationId) {
+      return this.getRecommendation(completedRecommendationId, ownerKey, spaceId);
+    }
 
     this.recipePolicy.ensureAiEnabled();
     this.recipePolicy.enforceRateLimit(ownerKey, now);
@@ -121,28 +131,11 @@ export class RecipesService {
     }
 
     const model = this.getModel();
-    const requestCacheKey = buildRequestCacheKey(
-      model,
-      request,
-      inventorySnapshot,
-    );
-    const cachedRecord = await this.findCachedRecommendation(
-      ownerKey,
-      requestCacheKey,
-      now,
-      spaceId,
-    );
-
-    if (cachedRecord) {
-      return this.serializeRecommendation(cachedRecord);
-    }
-
     const projectedCostUsd = estimateGenerationCostUsd(
       request,
       inventorySnapshot,
       model,
     );
-    await this.recipePolicy.enforceDailyQuota(ownerKey, now);
     await this.recipePolicy.enforceDailyCostLimit(
       ownerKey,
       projectedCostUsd,
@@ -150,30 +143,49 @@ export class RecipesService {
     );
     await this.recipePolicy.enforceGlobalDailyCostLimit(projectedCostUsd, now);
 
-    const generation = await this.recipePolicy.withInflightLimit(() =>
-      this.generateRecommendations(ownerKey, request, inventorySnapshot),
+    const reservation = await this.monetization.reserveRecommendation(
+      ownerKey,
+      idempotencyKey,
+      now,
     );
+    if (reservation.kind === "existing") {
+      return this.getRecommendation(reservation.recommendationId, ownerKey, spaceId);
+    }
 
-    const record = await this.prisma.recipeRecommendation.create({
-      data: {
-        ownerKey,
-        spaceId,
-        requestCacheKey,
-        request: toJson(request),
-        inventorySnapshot: toJson(inventorySnapshot),
-        recommendations: toJson(generation.recommendations),
-        aiProvider: "openai",
-        aiModel: model,
-        promptVersion: PROMPT_VERSION,
-        inputTokens: generation.usage.inputTokens,
-        cachedInputTokens: generation.usage.cachedInputTokens,
-        outputTokens: generation.usage.outputTokens,
-        totalTokens: generation.usage.totalTokens,
-        estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
-      },
-    });
-
-    return this.serializeRecommendation(record);
+    try {
+      const generation = await this.recipePolicy.withInflightLimit(() =>
+        this.generateRecommendations(ownerKey, request, inventorySnapshot),
+      );
+      const record = await this.prisma.recipeRecommendation.create({
+        data: {
+          ownerKey,
+          spaceId,
+          requestCacheKey: null,
+          request: toJson(request),
+          inventorySnapshot: toJson(inventorySnapshot),
+          recommendations: toJson(generation.recommendations),
+          aiProvider: "openai",
+          aiModel: model,
+          promptVersion: PROMPT_VERSION,
+          inputTokens: generation.usage.inputTokens,
+          cachedInputTokens: generation.usage.cachedInputTokens,
+          outputTokens: generation.usage.outputTokens,
+          totalTokens: generation.usage.totalTokens,
+          estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
+        },
+      });
+      await this.monetization.completeRecommendation(
+        reservation.usageEventId,
+        record.id,
+      );
+      return this.serializeRecommendation(record);
+    } catch (error) {
+      await this.monetization.releaseRecommendation(
+        reservation.usageEventId,
+        error instanceof Error ? error.name : "unknown_error",
+      );
+      throw error;
+    }
   }
 
   async listRecommendations(ownerKey: string, spaceId?: string) {
@@ -279,35 +291,6 @@ export class RecipesService {
     });
 
     return { ok: true as const };
-  }
-
-  private async findCachedRecommendation(
-    ownerKey: string,
-    requestCacheKey: string,
-    now: Date,
-    spaceId?: string,
-  ) {
-    const cacheTtlSeconds = getNonNegativeIntegerEnv(
-      "RECIPE_CACHE_TTL_SECONDS",
-      DEFAULT_CACHE_TTL_SECONDS,
-    );
-
-    if (cacheTtlSeconds === 0) {
-      return null;
-    }
-
-    return this.prisma.recipeRecommendation.findFirst({
-      where: {
-        ...recipeScope(ownerKey, spaceId),
-        requestCacheKey,
-        createdAt: {
-          gte: new Date(now.getTime() - cacheTtlSeconds * 1000),
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
   }
 
   private async buildInventorySnapshot(
@@ -528,21 +511,6 @@ function buildInput(
     },
     null,
     2,
-  );
-}
-
-function buildRequestCacheKey(
-  model: string,
-  request: RecipeRecommendationRequest,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
-) {
-  return hashValue(
-    stableStringify({
-      model,
-      promptVersion: PROMPT_VERSION,
-      request,
-      inventorySnapshot,
-    }),
   );
 }
 

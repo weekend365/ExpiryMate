@@ -143,6 +143,8 @@ export class PrivacyService {
         data: { createdByUserId: null, updatedByUserId: null },
       });
       await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
+      await tx.recommendationUsageEvent.deleteMany({ where: { ownerKey: userId } });
+      await tx.rewardedAdSession.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
         where: {

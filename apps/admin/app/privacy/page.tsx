@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
           개인정보처리방침
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 6월 3일 · 최종 개정: 2026년 7월 24일
+          시행일: 2026년 6월 3일 · 최종 개정: 2026년 7월 28일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -26,6 +26,13 @@ export default function PrivacyPolicyPage() {
             요청과 결과를 서비스 제공을 위해 처리합니다. 공유 냉장고를 사용하는
             경우 초대 이메일, 1회용 초대 코드의 해시값, 공간 멤버십, 역할,
             공간별 알림 수신 설정도 처리합니다.
+          </p>
+          <p>
+            보상형 광고를 선택하면 Google Mobile Ads SDK가 IP 주소를 바탕으로 한
+            대략적 위치, 광고 및 앱 상호작용, 진단 정보, 기기 식별자를 처리할 수
+            있습니다. 광고 보상 검증을 위해 광고 세션, 거래 식별자, 광고 단위,
+            검증 시각을 서버에 저장합니다. 맞춤형 광고와 앱 추적 투명성(ATT)
+            추적은 사용하지 않습니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">이용 목적</h2>
@@ -90,6 +97,15 @@ export default function PrivacyPolicyPage() {
             <li>
               푸시 알림 전달 사업자(예: Expo Push): 기기 푸시 토큰과 알림 내용.
             </li>
+            <li>
+              Google LLC(미국 등): 사용자가 선택한 비맞춤형 보상 광고 제공과
+              서버측 보상 검증. IP 기반 대략적 위치, 앱·광고 상호작용, 진단,
+              기기 식별자가 처리될 수 있습니다.
+            </li>
+            <li>
+              Apple 및 Google: 인앱 구독 결제, 구매 복원, 영수증·구매 토큰 검증,
+              갱신·취소·환불 상태 전달.
+            </li>
           </ul>
           <p>
             국외 이전은 AI 추천 요청 시점 및 인프라·메일·푸시 서비스 이용 시
@@ -124,6 +140,12 @@ export default function PrivacyPolicyPage() {
               거두면 동의 시각·버전 정보를 즉시 지웁니다.
             </li>
             <li>
+              추천 사용 원장·광고 보상 세션·구독 권한: 서비스 제공, 중복 지급
+              방지와 결제 상태 확인을 위해 계정 유지 기간 동안 보관하며 계정
+              정리 시 함께 삭제합니다. 원본 구매 토큰과 광고 거래 식별자는
+              운영 로그에 남기지 않습니다.
+            </li>
+            <li>
               OpenAI API 측 보관: 위 AI 추천 데이터 처리 절(최대 약 30일, 정책
               변경 가능)을 따릅니다.
             </li>
@@ -156,6 +178,11 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
           <p>
+            계정 삭제는 App Store 또는 Google Play의 자동 갱신 구독을 해지하지
+            않습니다. 활성 구독이 있다면 계정 삭제 전에 스토어 구독 관리에서
+            별도로 해지해야 합니다.
+          </p>
+          <p>
             자세한 삭제 절차는{" "}
             <Link className="font-bold text-[var(--primary)]" href="/privacy/choices">
               데이터 삭제 안내
@@ -179,6 +206,12 @@ export default function PrivacyPolicyPage() {
             className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
           >
             데이터 삭제 안내
+          </Link>
+          <Link
+            href="/terms"
+            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
+          >
+            이용약관
           </Link>
           <Link
             href="/login"

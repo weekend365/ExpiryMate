@@ -17,6 +17,11 @@ import type {
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
 } from "@expirymate/shared";
+import {
+  Environment as AppleEnvironment,
+  SignedDataVerifier,
+} from "@apple/app-store-server-library";
+import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
@@ -28,6 +33,9 @@ const GOOGLE_ANDROID_PUBLISHER_SCOPE =
 interface VerifiedStoreSubscription {
   store: SubscriptionStore;
   productId: string;
+  planCode: "jango_plus";
+  billingPeriod: "monthly" | "yearly";
+  basePlanId?: string;
   originalTransactionId?: string;
   transactionId?: string;
   purchaseTokenHash?: string;
@@ -93,6 +101,10 @@ interface GoogleSubscriptionResponse {
 interface GoogleSubscriptionLineItem {
   productId?: string;
   expiryTime?: string;
+  offerDetails?: {
+    basePlanId?: string;
+    offerId?: string;
+  };
   autoRenewingPlan?: {
     autoRenewEnabled?: boolean;
   };
@@ -144,6 +156,107 @@ export class SubscriptionsService {
       ok: true,
       entitlement: serializeEntitlement(record),
     };
+  }
+
+  async processAppleNotification(signedPayload?: string) {
+    if (!signedPayload) {
+      throw new BadRequestException("Apple signedPayload가 필요합니다.");
+    }
+
+    const unverified = decodeJwsPayload<{
+      data?: { environment?: string };
+    }>(signedPayload);
+    const environment =
+      unverified.data?.environment === AppleEnvironment.SANDBOX
+        ? AppleEnvironment.SANDBOX
+        : AppleEnvironment.PRODUCTION;
+    const verifier = createAppleSignedDataVerifier(environment);
+    const notification = await verifier.verifyAndDecodeNotification(signedPayload);
+    const signedTransaction = notification.data?.signedTransactionInfo;
+    if (!signedTransaction) {
+      return { ok: true as const };
+    }
+
+    const transaction =
+      await verifier.verifyAndDecodeTransaction(signedTransaction);
+    if (!transaction.originalTransactionId || !transaction.transactionId) {
+      throw new BadRequestException("Apple 구독 거래를 확인하지 못했습니다.");
+    }
+    const existing = await this.prisma.subscriptionEntitlement.findUnique({
+      where: {
+        store_originalTransactionId: {
+          store: SubscriptionStore.apple_app_store,
+          originalTransactionId: transaction.originalTransactionId,
+        },
+      },
+    });
+    if (!existing) {
+      return { ok: true as const };
+    }
+
+    const verification = await this.verifyAppleSubscription({
+      store: "apple_app_store",
+      transactionId: transaction.transactionId,
+      environment:
+        environment === AppleEnvironment.SANDBOX ? "sandbox" : "production",
+    });
+    this.assertAllowedProduct(verification.productId);
+    await this.saveEntitlement(existing.ownerKey, verification);
+    return { ok: true as const };
+  }
+
+  async processGoogleNotification(
+    authorization?: string,
+    encodedData?: string,
+  ) {
+    if (!authorization?.startsWith("Bearer ") || !encodedData) {
+      throw new BadRequestException("Google 알림 인증 정보가 필요합니다.");
+    }
+    const audience = getRequiredEnv(
+      "GOOGLE_RTDN_AUDIENCE",
+      "Google RTDN audience가 설정되지 않았습니다.",
+    );
+    await new OAuth2Client().verifyIdToken({
+      idToken: authorization.slice("Bearer ".length),
+      audience,
+    });
+
+    const payload = JSON.parse(
+      Buffer.from(encodedData, "base64").toString("utf8"),
+    ) as {
+      packageName?: string;
+      subscriptionNotification?: { purchaseToken?: string };
+    };
+    const expectedPackage = getRequiredEnv(
+      "GOOGLE_PLAY_PACKAGE_NAME",
+      "Google Play package name이 설정되지 않았습니다.",
+    );
+    if (payload.packageName !== expectedPackage) {
+      throw new BadRequestException("Google Play 패키지가 일치하지 않습니다.");
+    }
+    const purchaseToken = payload.subscriptionNotification?.purchaseToken;
+    if (!purchaseToken) {
+      return { ok: true as const };
+    }
+    const existing = await this.prisma.subscriptionEntitlement.findUnique({
+      where: {
+        store_purchaseTokenHash: {
+          store: SubscriptionStore.google_play,
+          purchaseTokenHash: hashToken(purchaseToken),
+        },
+      },
+    });
+    if (!existing) {
+      return { ok: true as const };
+    }
+
+    const verification = await this.verifyGoogleSubscription({
+      store: "google_play",
+      purchaseToken,
+    });
+    this.assertAllowedProduct(verification.productId);
+    await this.saveEntitlement(existing.ownerKey, verification);
+    return { ok: true as const };
   }
 
   private async verifyAppleSubscription(
@@ -238,6 +351,22 @@ export class SubscriptionsService {
     if (!lineItem?.productId) {
       throw new BadRequestException("Google Play 구독 상품을 확인하지 못했습니다.");
     }
+    const verifiedBasePlanId = lineItem.offerDetails?.basePlanId;
+    if (
+      dto.basePlanId &&
+      verifiedBasePlanId &&
+      dto.basePlanId !== verifiedBasePlanId
+    ) {
+      throw new BadRequestException("Google Play 구독 기간이 일치하지 않습니다.");
+    }
+    if (
+      lineItem.productId === "jango_plus" &&
+      !["monthly", "yearly"].includes(verifiedBasePlanId ?? "")
+    ) {
+      throw new BadRequestException(
+        "Google Play 구독 기간을 확인하지 못했습니다.",
+      );
+    }
 
     const expiresAt = lineItem.expiryTime ? new Date(lineItem.expiryTime) : null;
     const status = mapGoogleStatus(payload.subscriptionState, expiresAt);
@@ -246,6 +375,12 @@ export class SubscriptionsService {
     return {
       store: SubscriptionStore.google_play,
       productId: lineItem.productId,
+      planCode: "jango_plus",
+      billingPeriod: resolveBillingPeriod(
+        lineItem.productId,
+        verifiedBasePlanId,
+      ),
+      basePlanId: verifiedBasePlanId,
       transactionId: payload.latestOrderId,
       purchaseTokenHash: hashToken(dto.purchaseToken),
       status,
@@ -317,6 +452,9 @@ export class SubscriptionsService {
       ownerKey,
       store: verification.store,
       productId: verification.productId,
+      planCode: verification.planCode,
+      billingPeriod: verification.billingPeriod,
+      basePlanId: verification.basePlanId,
       originalTransactionId: verification.originalTransactionId,
       transactionId: verification.transactionId,
       purchaseTokenHash: verification.purchaseTokenHash,
@@ -437,6 +575,8 @@ function normalizeAppleTransaction({
   return {
     store: SubscriptionStore.apple_app_store,
     productId: transaction.productId,
+    planCode: "jango_plus",
+    billingPeriod: resolveBillingPeriod(transaction.productId),
     originalTransactionId: transaction.originalTransactionId,
     transactionId: transaction.transactionId,
     status: normalizedStatus,
@@ -819,6 +959,9 @@ function serializeEntitlement(
       hasActiveEntitlement: false,
       store: null,
       productId: null,
+      planCode: null,
+      billingPeriod: null,
+      basePlanId: null,
       status: "unknown",
       expiresAt: null,
       willRenew: null,
@@ -841,6 +984,9 @@ function serializeEntitlement(
     hasActiveEntitlement,
     store: record.store,
     productId: record.productId,
+    planCode: record.planCode === "jango_plus" ? "jango_plus" : null,
+    billingPeriod: record.billingPeriod,
+    basePlanId: record.basePlanId,
     status,
     expiresAt: record.expiresAt?.toISOString() ?? null,
     willRenew: record.willRenew,
@@ -854,6 +1000,51 @@ function getAllowedProductIds() {
     .split(",")
     .map((value) => value.trim())
     .filter(Boolean);
+}
+
+function resolveBillingPeriod(
+  productId: string,
+  basePlanId?: string,
+): "monthly" | "yearly" {
+  const value = `${productId}:${basePlanId ?? ""}`.toLowerCase();
+  return value.includes("year") ? "yearly" : "monthly";
+}
+
+function createAppleSignedDataVerifier(environment: AppleEnvironment) {
+  const roots = (process.env.APPLE_ROOT_CERTIFICATES_BASE64 ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => Buffer.from(value, "base64"));
+  if (roots.length === 0) {
+    throw new ServiceUnavailableException(
+      "Apple Root 인증서가 설정되지 않았습니다.",
+    );
+  }
+  const bundleId = getRequiredEnv(
+    "APPLE_BUNDLE_ID",
+    "Apple bundle ID가 설정되지 않았습니다.",
+  );
+  const appAppleId =
+    environment === AppleEnvironment.PRODUCTION
+      ? Number(
+          getRequiredEnv(
+            "APPLE_APP_ID",
+            "Apple app ID가 설정되지 않았습니다.",
+          ),
+        )
+      : undefined;
+  if (appAppleId !== undefined && !Number.isInteger(appAppleId)) {
+    throw new ServiceUnavailableException("Apple app ID가 올바르지 않습니다.");
+  }
+
+  return new SignedDataVerifier(
+    roots,
+    true,
+    environment,
+    bundleId,
+    appAppleId,
+  );
 }
 
 function getAppleEnvironment(requested?: "sandbox" | "production") {

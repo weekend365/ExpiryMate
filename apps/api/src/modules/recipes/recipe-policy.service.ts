@@ -5,11 +5,11 @@ import {
   ServiceUnavailableException,
 } from "@nestjs/common";
 import { getKstDayStart } from "@expirymate/shared";
+import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 
 const DEFAULT_RATE_LIMIT_MAX = 3;
 const DEFAULT_RATE_LIMIT_WINDOW_SECONDS = 60;
-const DEFAULT_DAILY_QUOTA = 20;
 const DEFAULT_DAILY_COST_LIMIT_USD = 1;
 const DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD = 10;
 const DEFAULT_MAX_INFLIGHT = 5;
@@ -65,34 +65,6 @@ export class RecipePolicyService {
     this.rateLimitHitsByOwner.set(ownerKey, hits);
   }
 
-  async enforceDailyQuota(ownerKey: string, now: Date) {
-    const dailyQuota = getNonNegativeIntegerEnv(
-      "RECIPE_DAILY_QUOTA",
-      DEFAULT_DAILY_QUOTA,
-    );
-
-    if (dailyQuota === 0) {
-      return;
-    }
-
-    const usedToday = await this.prisma.recipeRecommendation.count({
-      where: {
-        ownerKey,
-        aiProvider: "openai",
-        createdAt: {
-          gte: getKstDayStart(now),
-        },
-      },
-    });
-
-    if (usedToday >= dailyQuota) {
-      throw new HttpException(
-        "오늘의 추천 생성 한도를 모두 사용했습니다.",
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-  }
-
   async enforceDailyCostLimit(
     ownerKey: string,
     projectedCostUsd: number,
@@ -122,9 +94,11 @@ export class RecipePolicyService {
     const spentToday = decimalToNumber(aggregate._sum.estimatedCostUsd);
 
     if (spentToday + projectedCostUsd > dailyCostLimitUsd) {
-      throw new HttpException(
-        "오늘의 추천 생성 예산을 모두 사용했습니다.",
+      throw new CodedHttpException(
         HttpStatus.TOO_MANY_REQUESTS,
+        "RECOMMENDATION_QUOTA_EXHAUSTED",
+        "오늘의 추천 생성 예산을 모두 사용했습니다.",
+        { reason: "owner_daily_cost_limit" },
       );
     }
   }
@@ -153,9 +127,11 @@ export class RecipePolicyService {
     const spentToday = decimalToNumber(aggregate._sum.estimatedCostUsd);
 
     if (spentToday + projectedCostUsd > globalDailyCostLimitUsd) {
-      throw new HttpException(
-        "오늘은 추천 요청이 많았어요. 내일 다시 부탁해 주세요.",
+      throw new CodedHttpException(
         HttpStatus.TOO_MANY_REQUESTS,
+        "RECIPE_SERVICE_CAPACITY_REACHED",
+        "오늘은 추천 요청이 많았어요. 내일 다시 부탁해 주세요.",
+        { reason: "global_daily_cost_limit" },
       );
     }
   }
@@ -171,9 +147,11 @@ export class RecipePolicyService {
     }
 
     if (this.inflightGenerations >= maxInflight) {
-      throw new HttpException(
-        "지금 추천을 기다리는 분이 많아요. 잠시 후 다시 시도해 주세요.",
+      throw new CodedHttpException(
         HttpStatus.TOO_MANY_REQUESTS,
+        "RECIPE_SERVICE_CAPACITY_REACHED",
+        "지금 추천을 기다리는 분이 많아요. 잠시 후 다시 시도해 주세요.",
+        { reason: "inflight_limit" },
       );
     }
 

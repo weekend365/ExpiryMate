@@ -24,15 +24,12 @@ const REQUIRED_PRODUCTION_VALUES = [
   "PRIVACY_POLICY_URL",
   "PRIVACY_CHOICES_URL",
   "PRIVACY_CONTACT_EMAIL",
-  "IAP_ALLOWED_PRODUCT_IDS",
-  "APPLE_BUNDLE_ID",
-  "APPLE_APP_STORE_ENVIRONMENT",
-  "APPLE_APP_STORE_ISSUER_ID",
-  "APPLE_APP_STORE_KEY_ID",
-  "APPLE_APP_STORE_PRIVATE_KEY",
-  "GOOGLE_PLAY_PACKAGE_NAME",
-  "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
-  "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+  "RECIPE_FREE_DAILY_LIMIT",
+  "RECIPE_REWARDED_DAILY_LIMIT",
+  "RECIPE_SUBSCRIBER_DAILY_LIMIT",
+  "RECIPE_ABSOLUTE_DAILY_LIMIT",
+  "REWARDED_ADS_ENABLED",
+  "SUBSCRIPTIONS_ENABLED",
 ] as const;
 
 const HTTPS_URL_VALUES = [
@@ -64,7 +61,7 @@ export function validateProductionEnvironment(env: EnvMap = process.env) {
   validateEmail(env, "PRIVACY_CONTACT_EMAIL", errors);
   validateSmtpPort(env, errors);
   validateAppleStoreEnvironment(env, errors);
-  validateCommaList(env, "IAP_ALLOWED_PRODUCT_IDS", errors);
+  validateMonetization(env, errors);
 
   if (errors.length > 0) {
     throw new Error(
@@ -253,11 +250,88 @@ function validateSmtpPort(env: EnvMap, errors: string[]) {
 }
 
 function validateAppleStoreEnvironment(env: EnvMap, errors: string[]) {
+  if (!isEnabled(env.SUBSCRIPTIONS_ENABLED)) {
+    return;
+  }
+
   if (env.APPLE_APP_STORE_ENVIRONMENT !== "production") {
     errors.push(
       "APPLE_APP_STORE_ENVIRONMENT must be production for production deploys.",
     );
   }
+}
+
+function validateMonetization(env: EnvMap, errors: string[]) {
+  validateBooleanFlag(env, "REWARDED_ADS_ENABLED", errors);
+  validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
+
+  for (const key of [
+    "RECIPE_FREE_DAILY_LIMIT",
+    "RECIPE_REWARDED_DAILY_LIMIT",
+    "RECIPE_SUBSCRIBER_DAILY_LIMIT",
+    "RECIPE_ABSOLUTE_DAILY_LIMIT",
+  ]) {
+    const value = Number(env[key]);
+    if (!Number.isInteger(value) || value < 0) {
+      errors.push(`${key} must be a non-negative integer.`);
+    }
+  }
+
+  if (isEnabled(env.REWARDED_ADS_ENABLED)) {
+    for (const key of [
+      "ADMOB_IOS_REWARDED_AD_UNIT_ID",
+      "ADMOB_ANDROID_REWARDED_AD_UNIT_ID",
+      "ADMOB_SSV_USER_ID_SECRET",
+    ]) {
+      requireFeatureValue(env, key, "REWARDED_ADS_ENABLED", errors);
+    }
+  }
+
+  if (isEnabled(env.SUBSCRIPTIONS_ENABLED)) {
+    for (const key of [
+      "IAP_ALLOWED_PRODUCT_IDS",
+      "APPLE_BUNDLE_ID",
+      "APPLE_APP_STORE_ENVIRONMENT",
+      "APPLE_APP_STORE_ISSUER_ID",
+      "APPLE_APP_STORE_KEY_ID",
+      "APPLE_APP_STORE_PRIVATE_KEY",
+      "APPLE_ROOT_CERTIFICATES_BASE64",
+      "APPLE_APP_ID",
+      "GOOGLE_PLAY_PACKAGE_NAME",
+      "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
+      "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+      "GOOGLE_RTDN_AUDIENCE",
+    ]) {
+      requireFeatureValue(env, key, "SUBSCRIPTIONS_ENABLED", errors);
+    }
+    validateCommaList(env, "IAP_ALLOWED_PRODUCT_IDS", errors);
+  }
+}
+
+function validateBooleanFlag(
+  env: EnvMap,
+  key: string,
+  errors: string[],
+) {
+  if (!["true", "false"].includes(env[key]?.trim().toLowerCase() ?? "")) {
+    errors.push(`${key} must be true or false.`);
+  }
+}
+
+function requireFeatureValue(
+  env: EnvMap,
+  key: string,
+  featureFlag: string,
+  errors: string[],
+) {
+  const value = env[key]?.trim();
+  if (!value || looksLikePlaceholder(value)) {
+    errors.push(`${key} is required when ${featureFlag}=true.`);
+  }
+}
+
+function isEnabled(value: string | undefined) {
+  return value?.trim().toLowerCase() === "true";
 }
 
 function validateCommaList(env: EnvMap, key: string, errors: string[]) {

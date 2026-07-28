@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import { AuthRedirectGate } from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
+import { MonetizationProvider } from "../src/features/monetization/monetization-provider";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { SpaceProvider } from "../src/features/spaces/space-provider";
 import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
@@ -41,7 +42,8 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <SpaceProvider>
-            <RecipeGenerationProvider>
+            <MonetizationProvider>
+              <RecipeGenerationProvider>
               <PushTokenSync />
               <PendingSpaceInvitationBridge />
               <NotificationNavigationBridge />
@@ -145,7 +147,8 @@ export default function RootLayout() {
                 options={{ title: "장고에게 물어보기" }}
               />
               </Stack>
-            </RecipeGenerationProvider>
+              </RecipeGenerationProvider>
+            </MonetizationProvider>
           </SpaceProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

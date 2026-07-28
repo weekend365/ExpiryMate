@@ -6,6 +6,7 @@ import {
   HttpStatus,
 } from "@nestjs/common";
 import * as Sentry from "@sentry/node";
+import { CodedHttpException } from "./coded-http.exception";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -22,16 +23,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const payload = exception.getResponse();
       const details =
         typeof payload === "object" && payload !== null ? payload : undefined;
+      const coded = exception instanceof CodedHttpException;
       const error: {
         code: string;
         message: string;
         details?: unknown;
       } = {
-        code: `HTTP_${status}`,
+        code: coded ? exception.errorCode : `HTTP_${status}`,
         message: exception.message,
       };
 
-      if (includeDetails && details) {
+      if (coded && exception.safeDetails !== undefined) {
+        error.details = exception.safeDetails;
+      } else if (includeDetails && details) {
         error.details = details;
       }
 

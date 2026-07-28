@@ -23,6 +23,11 @@ const personalTeamPluginNames = new Set([
   "expo-apple-authentication",
 ]);
 const personalTeam = isPersonalTeamBuild(process.env);
+const isProduction = process.env.EXPO_PUBLIC_APP_ENV === "production";
+const googleTestAppIds = {
+  ios: "ca-app-pub-3940256099942544~1458002511",
+  android: "ca-app-pub-3940256099942544~3347511713",
+};
 
 const plugins = appJson.expo.plugins.filter((plugin) => {
   const pluginName = Array.isArray(plugin) ? plugin[0] : plugin;
@@ -37,6 +42,22 @@ const plugins = appJson.expo.plugins.filter((plugin) => {
 
   return true;
 });
+
+plugins.push("expo-iap");
+plugins.push([
+  "react-native-google-mobile-ads",
+  {
+    iosAppId:
+      (isProduction && process.env.EXPO_PUBLIC_ADMOB_IOS_APP_ID?.trim()) ||
+      googleTestAppIds.ios,
+    androidAppId:
+      (isProduction && process.env.EXPO_PUBLIC_ADMOB_ANDROID_APP_ID?.trim()) ||
+      googleTestAppIds.android,
+    delayAppMeasurementInit: true,
+    optimizeInitialization: true,
+    optimizeAdLoading: true,
+  },
+]);
 
 const paidTeamIosCapabilities = {
   usesAppleSignIn: true,

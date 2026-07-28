@@ -28,9 +28,17 @@ async function bootstrap() {
       process.env.CORS_ORIGIN_MOBILE ?? "http://localhost:8081",
     ],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization", "x-expirymate-client"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Idempotency-Key",
+      "X-App-Version",
+      "X-Client-Platform",
+      "x-expirymate-client",
+    ],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
   });
+  app.use(enforceMinimumMobileVersion);
 
   app.use(
     helmet({
@@ -51,6 +59,53 @@ async function bootstrap() {
 
   const port = Number(process.env.PORT ?? 4000);
   await app.listen(port);
+}
+
+function enforceMinimumMobileVersion(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const minimumVersion = process.env.MINIMUM_MOBILE_APP_VERSION?.trim();
+  const guardedPath =
+    req.path.startsWith("/recipes/recommendations") ||
+    req.path.startsWith("/monetization");
+  if (!minimumVersion || !guardedPath) {
+    next();
+    return;
+  }
+
+  const platform = req.headers["x-client-platform"];
+  const appVersion = req.headers["x-app-version"];
+  if (
+    (platform === "ios" || platform === "android" || platform === "mobile") &&
+    typeof appVersion === "string" &&
+    compareVersions(appVersion, minimumVersion) >= 0
+  ) {
+    next();
+    return;
+  }
+
+  res.status(426).json({
+    success: false,
+    data: null,
+    error: {
+      code: "APP_UPDATE_REQUIRED",
+      message: "새 추천 방식을 사용하려면 앱을 업데이트해 주세요.",
+      details: { minimumVersion },
+    },
+  });
+}
+
+function compareVersions(left: string, right: string) {
+  const leftParts = left.split(".").map((part) => Number(part) || 0);
+  const rightParts = right.split(".").map((part) => Number(part) || 0);
+  const length = Math.max(leftParts.length, rightParts.length);
+  for (let index = 0; index < length; index += 1) {
+    const difference = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
+    if (difference !== 0) return difference;
+  }
+  return 0;
 }
 
 function normalizeJsonContentType(req: Request, _res: Response, next: NextFunction) {

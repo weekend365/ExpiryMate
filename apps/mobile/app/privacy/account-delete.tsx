@@ -1,5 +1,6 @@
 import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
+import { deepLinkToSubscriptions } from "expo-iap";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { BottomSheet } from "../../src/components/BottomSheet";
@@ -7,6 +8,7 @@ import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useDeleteAccount } from "../../src/features/privacy/use-privacy";
+import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import {
   colors,
   radius,
@@ -17,6 +19,10 @@ import {
 
 export default function AccountDeleteScreen() {
   const deleteAccountMutation = useDeleteAccount();
+  const subscription = useSubscriptionEntitlement();
+  const hasActiveSubscription = Boolean(
+    subscription.query.data?.hasActiveEntitlement,
+  );
   const [confirmation, setConfirmation] = useState("");
   const [confirmSheetOpen, setConfirmSheetOpen] = useState(false);
   const canDelete = confirmation.trim() === "삭제";
@@ -82,6 +88,28 @@ export default function AccountDeleteScreen() {
             지워져요.
           </Text>
         </View>
+
+        {hasActiveSubscription ? (
+          <View style={styles.subscriptionWarning}>
+            <Text style={styles.cardTitle}>스토어 구독은 따로 해지해 주세요</Text>
+            <Text style={styles.bodyText}>
+              계정을 삭제해도 App Store나 Google Play의 자동 갱신 구독은
+              해지되지 않아요. 먼저 스토어에서 구독을 관리해 주세요.
+            </Text>
+            <Button
+              variant="secondary"
+              onPress={() =>
+                void deepLinkToSubscriptions({
+                  skuAndroid: "jango_plus",
+                  packageNameAndroid: "com.expirymate.mobile",
+                })
+              }
+              fullWidth
+            >
+              구독 관리 열기
+            </Button>
+          </View>
+        ) : null}
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>실수하지 않게 한 번 더</Text>
@@ -172,6 +200,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  subscriptionWarning: {
+    backgroundColor: colors.warningSoft,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.warning,
     padding: spacing.md,
     gap: spacing.sm,
   },

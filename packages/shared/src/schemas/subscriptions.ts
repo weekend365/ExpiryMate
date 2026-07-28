@@ -20,6 +20,9 @@ export const subscriptionEntitlementSchema = z.object({
   hasActiveEntitlement: z.boolean(),
   store: subscriptionStoreSchema.nullable(),
   productId: z.string().nullable(),
+  planCode: z.literal("jango_plus").nullable(),
+  billingPeriod: z.enum(["monthly", "yearly"]).nullable(),
+  basePlanId: z.string().nullable(),
   status: subscriptionEntitlementStatusSchema,
   expiresAt: z.string().nullable(),
   willRenew: z.boolean().nullable(),
@@ -44,6 +47,7 @@ export const subscriptionVerificationRequestSchema = z.object({
     .min(1)
     .max(fieldLimits.subscriptionPurchaseToken)
     .optional(),
+  basePlanId: z.string().min(1).max(128).optional(),
   environment: z.enum(["sandbox", "production"]).optional(),
 });
 

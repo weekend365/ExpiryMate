@@ -784,6 +784,14 @@ export class AuthService {
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
+      await tx.recommendationUsageEvent.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.rewardedAdSession.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
       await tx.pushToken.updateMany({
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },

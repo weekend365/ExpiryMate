@@ -19,7 +19,10 @@ const navItems = [
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
-  const isPublicPage = pathname === "/login" || pathname.startsWith("/privacy");
+  const isPublicPage =
+    pathname === "/login" ||
+    pathname === "/terms" ||
+    pathname.startsWith("/privacy");
   const meQuery = useQuery({
     queryKey: ["admin", "me"],
     queryFn: getMe,

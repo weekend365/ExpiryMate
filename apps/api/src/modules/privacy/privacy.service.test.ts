@@ -129,6 +129,8 @@ describe("PrivacyService", () => {
       "pushToken.deleteMany",
       "inventoryItem.updateMany",
       "recipeFavorite.deleteMany",
+      "recommendationUsageEvent.deleteMany",
+      "rewardedAdSession.deleteMany",
       "recipeRecommendation.deleteMany",
       "spaceInvitation.deleteMany",
       "inventorySpaceMembership.deleteMany",
@@ -218,6 +220,14 @@ function createPrismaMock(
       },
     },
     recipeFavorite: createDeleteManyMock("recipeFavorite.deleteMany", operations),
+    recommendationUsageEvent: createDeleteManyMock(
+      "recommendationUsageEvent.deleteMany",
+      operations,
+    ),
+    rewardedAdSession: createDeleteManyMock(
+      "rewardedAdSession.deleteMany",
+      operations,
+    ),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",
       operations,

@@ -79,6 +79,35 @@ enum SubscriptionEntitlementStatus {
   unknown
 }
 
+enum SubscriptionBillingPeriod {
+  monthly
+  yearly
+}
+
+enum RecommendationUsageSource {
+  free
+  rewarded_ad
+  subscription
+}
+
+enum RecommendationUsageStatus {
+  reserved
+  completed
+  released
+}
+
+enum RewardedAdPlatform {
+  ios
+  android
+}
+
+enum RewardedAdSessionStatus {
+  pending
+  verified
+  cancelled
+  expired
+}
+
 enum PushTokenPlatform {
   ios
   android
@@ -135,6 +164,8 @@ model User {
   recipeRecommendations      RecipeRecommendation[]
   recipeFavorites            RecipeFavorite[]
   subscriptionEntitlements   SubscriptionEntitlement[]
+  recommendationUsageEvents  RecommendationUsageEvent[]
+  rewardedAdSessions         RewardedAdSession[]
   pushTokens                 PushToken[]
   pushNotificationDeliveries PushNotificationDelivery[]
   supportInquiries           SupportInquiry[]
@@ -183,19 +214,19 @@ model InventorySpaceMembership {
 }
 
 model SpaceInvitation {
-  id              String                  @id @default(cuid())
+  id              String                @id @default(cuid())
   spaceId         String
-  space           InventorySpace          @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  method          SpaceInvitationMethod   @default(email)
+  space           InventorySpace        @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  method          SpaceInvitationMethod @default(email)
   email           String?
-  role            InventorySpaceRole      @default(member)
-  tokenHash       String                  @unique
+  role            InventorySpaceRole    @default(member)
+  tokenHash       String                @unique
   invitedByUserId String
-  invitedBy       User                    @relation("SpaceInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
+  invitedBy       User                  @relation("SpaceInvitationSender", fields: [invitedByUserId], references: [id], onDelete: Cascade)
   expiresAt       DateTime
   acceptedAt      DateTime?
   revokedAt       DateTime?
-  createdAt       DateTime                @default(now())
+  createdAt       DateTime              @default(now())
 
   @@index([spaceId, email, createdAt])
   @@index([spaceId, method, createdAt])
@@ -372,11 +403,11 @@ model UserStorageLocation {
 }
 
 model RecipeRecommendation {
-  id                String          @id @default(cuid())
-  ownerKey          String          @default("demo-user")
-  owner             User            @relation(fields: [ownerKey], references: [id])
+  id                String                    @id @default(cuid())
+  ownerKey          String                    @default("demo-user")
+  owner             User                      @relation(fields: [ownerKey], references: [id])
   spaceId           String?
-  space             InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  space             InventorySpace?           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   requestCacheKey   String?
   request           Json
   inventorySnapshot Json
@@ -384,17 +415,61 @@ model RecipeRecommendation {
   aiProvider        String
   aiModel           String
   promptVersion     String
-  inputTokens       Int             @default(0)
-  cachedInputTokens Int             @default(0)
-  outputTokens      Int             @default(0)
-  totalTokens       Int             @default(0)
-  estimatedCostUsd  Decimal         @default(0) @db.Decimal(10, 6)
-  createdAt         DateTime        @default(now())
+  inputTokens       Int                       @default(0)
+  cachedInputTokens Int                       @default(0)
+  outputTokens      Int                       @default(0)
+  totalTokens       Int                       @default(0)
+  estimatedCostUsd  Decimal                   @default(0) @db.Decimal(10, 6)
+  createdAt         DateTime                  @default(now())
+  usageEvent        RecommendationUsageEvent?
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
   @@index([spaceId, createdAt])
   @@index([spaceId, requestCacheKey, createdAt])
+}
+
+model RewardedAdSession {
+  id                    String                    @id @default(cuid())
+  ownerKey              String
+  owner                 User                      @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  platform              RewardedAdPlatform
+  status                RewardedAdSessionStatus   @default(pending)
+  adUnitId              String
+  transactionId         String?                   @unique
+  showExpiresAt         DateTime
+  verificationExpiresAt DateTime
+  verifiedAt            DateTime?
+  cancelledAt           DateTime?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  usageEvent            RecommendationUsageEvent?
+
+  @@index([ownerKey, status, createdAt])
+  @@index([status, verificationExpiresAt])
+}
+
+model RecommendationUsageEvent {
+  id                  String                    @id @default(cuid())
+  ownerKey            String
+  owner               User                      @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  usageDay            DateTime
+  source              RecommendationUsageSource
+  status              RecommendationUsageStatus @default(reserved)
+  idempotencyKey      String
+  recommendationId    String?                   @unique
+  recommendation      RecipeRecommendation?     @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
+  rewardedAdSessionId String?                   @unique
+  rewardedAdSession   RewardedAdSession?        @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  releaseReason       String?
+  completedAt         DateTime?
+  releasedAt          DateTime?
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+
+  @@unique([ownerKey, idempotencyKey])
+  @@index([ownerKey, usageDay, status])
+  @@index([source, usageDay, status])
 }
 
 model RecipeFavorite {
@@ -417,6 +492,9 @@ model SubscriptionEntitlement {
   owner                 User                          @relation(fields: [ownerKey], references: [id])
   store                 SubscriptionStore
   productId             String
+  planCode              String?
+  billingPeriod         SubscriptionBillingPeriod?
+  basePlanId            String?
   originalTransactionId String?
   transactionId         String?
   purchaseTokenHash     String?

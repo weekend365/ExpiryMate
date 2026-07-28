@@ -13,8 +13,6 @@ const managedEnvKeys = [
   "RECIPE_AI_ENABLED",
   "RECIPE_RATE_LIMIT_MAX",
   "RECIPE_RATE_LIMIT_WINDOW_SECONDS",
-  "RECIPE_DAILY_QUOTA",
-  "RECIPE_CACHE_TTL_SECONDS",
   "RECIPE_DAILY_COST_LIMIT_USD",
   "RECIPE_GLOBAL_DAILY_COST_LIMIT_USD",
   "RECIPE_MAX_INFLIGHT",
@@ -134,42 +132,69 @@ describe("RecipesService recommendation guards", () => {
     restoreManagedEnv();
   });
 
-  it("returns a cached recommendation before requiring a new OpenAI call", async () => {
-    const { prisma, service } = createService();
-    prisma.recipeRecommendation.findFirst.mockResolvedValue(cachedRecord);
+  it("returns the existing result for a completed Idempotency-Key", async () => {
+    const { prisma, service, monetizationService } = createService();
+    monetizationService.getCompletedRecommendationId.mockResolvedValue(
+      cachedRecord.id,
+    );
+    prisma.recipeRecommendation.findUnique.mockResolvedValue(cachedRecord);
 
-    const result = await service.createRecommendation("owner-a", request);
-
+    const result = await service.createRecommendation(
+      "owner-a",
+      request,
+      undefined,
+      "retry-key",
+    );
     expect(result.id).toBe("cached-recommendation");
-    expect(prisma.recipeRecommendation.count).not.toHaveBeenCalled();
-    expect(prisma.recipeRecommendation.aggregate).not.toHaveBeenCalled();
+    expect(prisma.inventoryItem.findMany).not.toHaveBeenCalled();
+    expect(monetizationService.reserveRecommendation).not.toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
 
-  it("rate limits repeated API requests even when cache can answer", async () => {
+  it("rate limits repeated user actions even with different idempotency keys", async () => {
     process.env.RECIPE_RATE_LIMIT_MAX = "1";
     process.env.RECIPE_RATE_LIMIT_WINDOW_SECONDS = "60";
     const { prisma, service } = createService();
-    prisma.recipeRecommendation.findFirst.mockResolvedValue(cachedRecord);
+    vi.spyOn(
+      service as TestableRecipesService,
+      "generateRecommendations",
+    ).mockResolvedValue({
+      recommendations,
+      usage: {
+        inputTokens: 10,
+        cachedInputTokens: 0,
+        outputTokens: 20,
+        totalTokens: 30,
+      },
+      estimatedCostUsd: 0.000043,
+    });
+    prisma.recipeRecommendation.create.mockResolvedValue(cachedRecord);
 
-    await service.createRecommendation("owner-a", request);
+    await service.createRecommendation("owner-a", request, undefined, "key-1");
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", request));
+    await expectTooManyRequests(
+      service.createRecommendation("owner-a", request, undefined, "key-2"),
+    );
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(1);
   });
 
-  it("blocks new generations when the daily quota is exhausted", async () => {
-    process.env.RECIPE_DAILY_QUOTA = "1";
-    const { prisma, service } = createService();
-    prisma.recipeRecommendation.count.mockResolvedValue(1);
+  it("releases a reserved recommendation when generation fails", async () => {
+    const { service, monetizationService } = createService();
+    vi.spyOn(
+      service as TestableRecipesService,
+      "generateRecommendations",
+    ).mockRejectedValue(new Error("upstream failed"));
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", request));
-    expect(prisma.recipeRecommendation.aggregate).not.toHaveBeenCalled();
-    expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
+    await expect(
+      service.createRecommendation("owner-a", request, undefined, "key-fail"),
+    ).rejects.toThrow("upstream failed");
+    expect(monetizationService.releaseRecommendation).toHaveBeenCalledWith(
+      "usage-1",
+      "Error",
+    );
   });
 
   it("blocks new generations when the projected daily cost exceeds the cap", async () => {
-    process.env.RECIPE_DAILY_QUOTA = "0";
     process.env.RECIPE_DAILY_COST_LIMIT_USD = "0.001";
     process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
     const { prisma, service } = createService();
@@ -180,7 +205,6 @@ describe("RecipesService recommendation guards", () => {
   });
 
   it("blocks new generations when the global daily cost budget is exhausted", async () => {
-    process.env.RECIPE_DAILY_QUOTA = "0";
     process.env.RECIPE_DAILY_COST_LIMIT_USD = "0";
     process.env.RECIPE_GLOBAL_DAILY_COST_LIMIT_USD = "0.001";
     process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
@@ -212,7 +236,6 @@ describe("RecipesService recommendation guards", () => {
   });
 
   it("stores usage and estimated cost metadata for new generations", async () => {
-    process.env.RECIPE_DAILY_QUOTA = "0";
     process.env.RECIPE_DAILY_COST_LIMIT_USD = "0";
     const { prisma, service } = createService();
     const generation: RecipeRecommendationGeneration = {
@@ -261,7 +284,7 @@ describe("RecipesService recommendation guards", () => {
       totalTokens: 1500,
     });
     expect(String(createPayload?.data.estimatedCostUsd)).toBe("0.001225");
-    expect(typeof createPayload?.data.requestCacheKey).toBe("string");
+    expect(createPayload?.data.requestCacheKey).toBeNull();
   });
 });
 
@@ -368,14 +391,24 @@ function createService() {
   const privacyService = {
     ensureAiDataNoticeAccepted: vi.fn().mockResolvedValue(undefined),
   };
+  const monetizationService = {
+    getCompletedRecommendationId: vi.fn().mockResolvedValue(null),
+    reserveRecommendation: vi
+      .fn()
+      .mockResolvedValue({ kind: "reserved", usageEventId: "usage-1" }),
+    completeRecommendation: vi.fn().mockResolvedValue(undefined),
+    releaseRecommendation: vi.fn().mockResolvedValue(undefined),
+  };
 
   return {
     prisma,
     privacyService,
+    monetizationService,
     service: new RecipesService(
       prisma as never,
       privacyService as never,
       new RecipePolicyService(prisma as never),
+      monetizationService as never,
     ),
   };
 }

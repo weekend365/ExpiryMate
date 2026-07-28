@@ -54,6 +54,9 @@ import type {
   PreviewSpaceInvitationCodeBody,
   SpaceInvitationCode,
   SpaceInvitationCodePreview,
+  RecommendationAccess,
+  RewardedAdSession,
+  MonetizationPlatform,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -64,8 +67,22 @@ interface ApiEnvelope<T> {
   success: boolean;
   data: T;
   error?: {
+    code?: string;
     message?: string;
+    details?: unknown;
   };
+}
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly code: string,
+    readonly status: number,
+    readonly details?: unknown,
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
 }
 
 type BatchDiscardInventoryItemsResponse = {
@@ -79,6 +96,10 @@ const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
 const REFRESH_TOKEN_STORAGE_KEY = "expirymate.refreshToken.v2";
 const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
+const clientHeaders = {
+  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.1.0",
+  "X-Client-Platform": "mobile",
+};
 
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
@@ -153,6 +174,7 @@ async function request<T>(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session.accessToken}`,
+        ...clientHeaders,
         ...(init?.headers ?? {}),
       },
     },
@@ -176,7 +198,12 @@ async function request<T>(
 
     const serverMessage = body.error?.message?.trim();
     if (serverMessage) {
-      throw new Error(serverMessage);
+      throw new ApiError(
+        serverMessage,
+        body.error?.code ?? `HTTP_${response.status}`,
+        response.status,
+        body.error?.details,
+      );
     }
 
     if (response.status >= 500) {
@@ -196,15 +223,19 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
     headers: {
       "Content-Type": "application/json",
+      ...clientHeaders,
       ...(init?.headers ?? {}),
     },
   });
   const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
-    throw new Error(
+    throw new ApiError(
       body.error?.message ??
         "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+      body.error?.code ?? `HTTP_${response.status}`,
+      response.status,
+      body.error?.details,
     );
   }
 
@@ -756,6 +787,9 @@ export const createRecipeRecommendation = (
     `${spaceResourcePath(spaceId, "recipes")}/recommendations`,
     {
       method: "POST",
+      headers: {
+        "Idempotency-Key": createIdempotencyKey(),
+      },
       body: JSON.stringify(payload),
     },
     { timeoutMs: RECIPE_GENERATION_TIMEOUT_MS },
@@ -993,8 +1027,32 @@ export const unregisterPushToken = (token: string) =>
 export const getSubscriptionEntitlement = () =>
   request<SubscriptionEntitlement>("/subscriptions/entitlement");
 
+export const getMonetizationStatus = () =>
+  request<RecommendationAccess>("/monetization/status");
+
+export const createRewardedAdSession = (platform: MonetizationPlatform) =>
+  request<RewardedAdSession>("/monetization/rewarded-ad-sessions", {
+    method: "POST",
+    body: JSON.stringify({ platform }),
+  });
+
+export const getRewardedAdSession = (id: string) =>
+  request<RewardedAdSession>(`/monetization/rewarded-ad-sessions/${id}`);
+
+export const cancelRewardedAdSession = (id: string) =>
+  request<RewardedAdSession>(
+    `/monetization/rewarded-ad-sessions/${id}/cancel`,
+    { method: "POST" },
+  );
+
 export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
   request<SubscriptionVerificationResponse>("/subscriptions/verify", {
     method: "POST",
     body: JSON.stringify(payload),
   });
+
+function createIdempotencyKey() {
+  return `mobile-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()
+    .toString(36)
+    .slice(2)}`;
+}

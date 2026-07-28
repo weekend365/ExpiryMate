@@ -16,6 +16,7 @@ import { SettingsModule } from "./modules/settings/settings.module";
 import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.module";
 import { SupportModule } from "./modules/support/support.module";
 import { SpacesModule } from "./modules/spaces/spaces.module";
+import { MonetizationModule } from "./modules/monetization/monetization.module";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SpacesModule } from "./modules/spaces/spaces.module";
     DashboardModule,
     PrivacyModule,
     RecipesModule,
+    MonetizationModule,
     SubscriptionsModule,
     SettingsModule,
     NotificationsModule,

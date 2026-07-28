@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Patch,
@@ -249,9 +250,15 @@ export class SpaceRecipesController {
     @CurrentOwnerKey() userId: string,
     @Body(new ZodValidationPipe(recipeRecommendationRequestSchema))
     request: RecipeRecommendationRequest,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
-    return this.recipesService.createRecommendation(userId, request, spaceId);
+    return this.recipesService.createRecommendation(
+      userId,
+      request,
+      spaceId,
+      idempotencyKey,
+    );
   }
 
   @Get("recommendations")

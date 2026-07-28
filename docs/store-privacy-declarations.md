@@ -27,7 +27,8 @@
 | AI 추천 요청·결과·재료 snapshot | 예 (추천 사용 시) | 추천 제공·히스토리 | **OpenAI(미국)** | 동의 철회·기록 삭제·계정 정리 | User Content | App activity |
 | 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
 | 결제/구독 영수증 검증 | 예 (IAP 사용 시) | 구독 확인 | Apple/Google | 스토어 구독 관리 | Purchases | Financial info |
-| 추적(광고 ID 등) | **아니오** | — | — | — | Data Not Collected / Tracking=No | Data is not collected for ads tracking |
+| 비맞춤형 보상 광고 | 예 (사용자가 광고 선택 시) | 광고 제공·보상 검증·부정 이용 방지 | **Google Mobile Ads(국외)** | 광고는 매회 선택, 기능 플래그로 중단 가능, 계정 정리 시 서버 세션 삭제 | Coarse Location / Identifiers / Usage Data / Diagnostics · Third-Party Advertising · Tracking=No | Approximate location / Device or other IDs / App interactions / Diagnostics · Advertising |
+| 추적(ATT·다른 회사 앱/웹 간 연결) | **아니오** | — | — | ATT 요청 없음, Android 광고 ID 권한 제거 | Tracking=No | 앱 간 추적 목적으로 광고 ID를 수집하지 않음 |
 | 기기 연락처·사진 라이브러리(일반) | 아니오* | — | — | — | Not collected | Not collected |
 
 \* 바코드/OCR은 카메라 권한을 사용하지만 사진 라이브러리를 읽지 않습니다.
@@ -63,3 +64,7 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 - [ ] 공유 초대 이메일/1회용 코드·구성원 공개 범위·공간 나가기/삭제·소유권 이전을 2계정으로 확인
 - [ ] `PrivacyInfo.xcprivacy` Required Reasons와 실제 API 사용 일치
   (`NSPrivacyCollectedDataTypes`는 Label과 별개이나 수집 유형 추가 시 검토)
+- [ ] Play Console `앱에 광고 포함` = 예
+- [ ] AdMob 콘텐츠 등급 `G`, 아동 대상 = 아니오, 광고 단위 보상 `recipe_generation` / `1`
+- [ ] 개발자 웹사이트 루트 `/app-ads.txt`에 실제 `pub-…` 값 공개
+- [ ] iOS ATT 문구·요청 없음, Android merged manifest에 `AD_ID` 권한 없음

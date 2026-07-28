@@ -39,6 +39,7 @@ import {
   useAcceptAiDataNotice,
   usePrivacyStatus,
 } from "../../src/features/privacy/use-privacy";
+import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import {
   getRecipeFavoriteKey,
@@ -107,11 +108,13 @@ export default function RecommendationsScreen() {
     latestGeneratedRecommendation,
     latestGeneratedRecommendationId,
     errorMessage: generationErrorMessage,
+    errorCode: generationErrorCode,
     generateRecipeRecommendation,
   } = useRecipeGeneration();
   const privacyStatusQuery = usePrivacyStatus();
   const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
   const subscription = useSubscriptionEntitlement();
+  const monetization = useMonetization();
   const [servings, setServings] = useState(2);
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
@@ -119,6 +122,7 @@ export default function RecommendationsScreen() {
   const [recipeView, setRecipeView] = useState<RecipeView>("recommendations");
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
+  const [showRewardedAdSheet, setShowRewardedAdSheet] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
     useState<RecipeRecommendation | null>(null);
   const [recipeDetail, setRecipeDetail] =
@@ -154,7 +158,9 @@ export default function RecommendationsScreen() {
   );
   const errorMessage =
     generationErrorMessage ?? getErrorMessage(historyQuery.error);
-  const isQuotaError = isRecommendationQuotaError(errorMessage);
+  const isQuotaError =
+    generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED" ||
+    isRecommendationQuotaError(errorMessage);
   const hasActiveEntitlement = Boolean(
     subscription.query.data?.hasActiveEntitlement,
   );
@@ -240,6 +246,24 @@ export default function RecommendationsScreen() {
     generateRecipeRecommendation,
     pendingPayload,
   ]);
+
+  const handleWatchRewardedAd = useCallback(async () => {
+    try {
+      const result = await monetization.watchRewardedAd();
+      setShowRewardedAdSheet(false);
+      Alert.alert(
+        result === "verified" ? "추천 1회를 받았어요" : "광고 보상을 확인 중이에요",
+        result === "verified"
+          ? "오늘 안에 추천할 때 사용할 수 있어요."
+          : "확인이 끝나면 자동으로 반영돼요. 다른 화면을 다녀와도 괜찮아요.",
+      );
+    } catch (error) {
+      Alert.alert(
+        "광고를 완료하지 못했어요",
+        getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",
+      );
+    }
+  }, [monetization]);
 
   const handleStartCooking = () => {
     if (!recipeDetail) {
@@ -342,6 +366,24 @@ export default function RecommendationsScreen() {
           }
         >
       <SpaceSwitcher />
+      {recipeView === "recommendations" && monetization.access ? (
+        <View style={styles.usageCard}>
+          <View style={styles.usageCopy}>
+            <Text style={styles.usageTitle}>
+              {monetization.access.tier === "jango_plus"
+                ? `오늘 추천 ${monetization.access.used}/${monetization.access.dailyLimit}`
+                : `오늘 무료 추천 ${monetization.access.free.used}/${monetization.access.free.limit}`}
+            </Text>
+            <Text style={styles.usageDescription}>
+              {monetization.access.tier === "jango_plus"
+                ? `장고 플러스 · ${monetization.access.remaining}회 남았어요`
+                : monetization.access.rewardedAdsEnabled
+                  ? `광고 추천권 ${monetization.access.rewardedAds.creditsAvailable}회 · 오늘 광고 ${monetization.access.rewardedAds.remainingToWatch}편 남음`
+                  : `임시 무료 추천 ${monetization.access.remaining}회 남았어요`}
+            </Text>
+          </View>
+        </View>
+      ) : null}
       <View style={styles.recipeViewSwitch}>
         <Pressable
           onPress={() => setRecipeView("recommendations")}
@@ -473,17 +515,28 @@ export default function RecommendationsScreen() {
               mood={hasActiveEntitlement ? "idle" : "worry"}
               size="small"
             />
-            {!hasActiveEntitlement ? (
+            {!hasActiveEntitlement &&
+            monetization.access?.rewardedAds.canWatch ? (
+              <Button
+                onPress={() => setShowRewardedAdSheet(true)}
+                loading={monetization.adState === "loading"}
+                fullWidth
+              >
+                광고 보고 추천 1회 받기
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            monetization.access?.subscriptionsEnabled ? (
               <Pressable
-                onPress={() => router.push("/(tabs)/settings")}
+                onPress={() => router.push("/settings/subscription")}
                 accessibilityRole="button"
-                accessibilityLabel="구독 안내 보러 가기"
+                accessibilityLabel="장고 플러스 살펴보기"
                 style={({ pressed }) => [
                   styles.quotaLink,
                   pressed && styles.optionsSummaryPressed,
                 ]}
               >
-                <Text style={styles.quotaLinkText}>구독 안내 보러 가기</Text>
+                <Text style={styles.quotaLinkText}>장고 플러스 살펴보기</Text>
               </Pressable>
             ) : null}
           </View>
@@ -756,6 +809,38 @@ export default function RecommendationsScreen() {
             onPress={() => setUseExpiringFirst((value) => !value)}
           />
         </View>
+      </BottomSheet>
+
+      <BottomSheet
+        visible={showRewardedAdSheet}
+        onClose={() => setShowRewardedAdSheet(false)}
+        mascotMood="idle"
+        title="광고 보고 추천 1회 받기"
+        description="보상형 광고 한 편을 끝까지 보면 오늘 사용할 추천 1회를 드려요."
+        footer={
+          <View style={styles.sheetFooter}>
+            <Button
+              variant="secondary"
+              onPress={() => setShowRewardedAdSheet(false)}
+              disabled={monetization.adState === "loading"}
+              fullWidth
+            >
+              다음에 볼게요
+            </Button>
+            <Button
+              onPress={() => void handleWatchRewardedAd()}
+              loading={monetization.adState === "loading"}
+              fullWidth
+            >
+              광고 볼게요
+            </Button>
+          </View>
+        }
+      >
+        <Text style={styles.noticeBody}>
+          광고를 닫거나 불러오지 못하면 추천권은 지급되지 않아요. 광고를 다 본
+          뒤에는 서버 확인에 최대 몇 초가 걸릴 수 있어요.
+        </Text>
       </BottomSheet>
 
       <BottomSheet
@@ -1342,6 +1427,29 @@ const styles = StyleSheet.create({
     borderColor: colors.primarySoft,
     padding: spacing.md,
     gap: spacing.md,
+  },
+  usageCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  usageCopy: {
+    gap: spacing.xxs,
+  },
+  usageTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  usageDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
   },
   optionsSummary: {
     backgroundColor: colors.surface,

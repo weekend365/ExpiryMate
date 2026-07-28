@@ -15,6 +15,7 @@ Privacy Label 데이터 유형 근거: [`store-privacy-declarations.md`](./store
 |------|-----|
 | Privacy Policy | `https://admin-production-da74.up.railway.app/privacy` |
 | 데이터 삭제 / 선택 | `https://admin-production-da74.up.railway.app/privacy/choices` |
+| 이용약관 | `https://admin-production-da74.up.railway.app/terms` |
 | Support (임시) | `https://admin-production-da74.up.railway.app/privacy/choices` |
 | Marketing (없으면 비움 또는 Support와 동일) | 비워 두거나 Support와 동일 |
 
@@ -90,8 +91,8 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 
 ## 4. App Privacy (Nutrition Label) 입력 요지
 
-**추적(Tracking):** 사용 안 함  
-**광고 목적 수집:** 해당 없음 (MVP)
+**광고:** 사용자가 직접 선택하는 비맞춤형 보상 광고만 제공
+**추적(Tracking):** `No` 유지 — ATT 미요청, Android 광고 ID 권한 제거
 
 선언할 수집(요지):
 
@@ -101,6 +102,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 | Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
 | User Content | 재료·유통기한·추천 관련 내용·고객 문의 본문 | App Functionality | 연결됨 / 추적 아님 |
 | Purchases | (IAP 검증 시) 구매 이력 | App Functionality | 연결됨 / 추적 아님 |
+| Coarse Location / Identifiers / Usage Data / Diagnostics | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 기기 식별자, 광고·앱 상호작용, 진단 | Third-Party Advertising / Analytics | SDK 실제 설정대로 신고 / Tracking=No |
 
 제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push.  
 상세는 `store-privacy-declarations.md` 표와 `/privacy` 본문을 따릅니다.
@@ -145,8 +147,16 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 【카메라】
 바코드·유통기한 스캔(OCR)에만 사용합니다. Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
 
-【구독】
-네이티브 구매 UI는 아직 없습니다. 서버 영수증 검증 API만 준비되어 있습니다. (해당 없으면 “In-App Purchases 없음”으로 맞춰 주세요.)
+【보상형 광고】
+- 무료 추천 소진 후 사용자가 “광고 보고 추천 1회 받기”를 명시적으로 선택합니다.
+- 광고 닫기·실패는 보상하지 않으며 Google SSV 검증 성공 후에만 당일 추천권 1회를 지급합니다.
+- 비맞춤형 보상 광고만 사용하며 배너·강제 전면 광고·ATT 추적은 없습니다.
+
+【구독 · v1.2】
+- 장고 플러스: 월간/연간 자동 갱신, 무료 체험 없음, 광고 제거, 하루 총 추천 30회.
+- 구매 완료 후 서버 영수증 검증과 권한 저장이 성공한 뒤 스토어 거래를 완료합니다.
+- 구매 복원·구독 관리·이용약관·개인정보처리방침 링크를 앱에서 제공합니다.
+- 첫 Apple 자동 갱신 구독은 v1.2 앱 버전과 함께 심사에 제출합니다.
 ```
 
 ---

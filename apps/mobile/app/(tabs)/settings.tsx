@@ -14,9 +14,12 @@ import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 export default function SettingsScreen() {
+  const monetization = useMonetization();
+
   return (
     <Screen>
       <View style={styles.brandCard}>
@@ -59,12 +62,14 @@ export default function SettingsScreen() {
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />
-          <ListRow
-            title="구독"
-            description="추천 한도와 구독 상태를 확인할 수 있어요."
-            icon={CreditCard}
-            onPress={() => router.push("/settings/subscription")}
-          />
+          {monetization.access?.subscriptionsEnabled ? (
+            <ListRow
+              title="장고 플러스"
+              description="광고 제거와 하루 30회 추천 혜택을 살펴봐요."
+              icon={CreditCard}
+              onPress={() => router.push("/settings/subscription")}
+            />
+          ) : null}
           <ListRow
             title="장고에게 물어보기"
             description="불편한 점이나 궁금한 점을 남겨 주세요."
