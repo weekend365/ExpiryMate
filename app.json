@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "ed78d114-7312-492a-87db-abc4c63a4fdd"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.devnamu.expirymatemonorepo",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}
