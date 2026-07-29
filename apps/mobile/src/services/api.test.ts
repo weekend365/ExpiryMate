@@ -53,6 +53,7 @@ const dashboardSummary: DashboardSummary = {
   recentItems: [],
   expiringItems: [],
   locationCounts: {},
+  latestRecommendationPreview: null,
 };
 
 describe("mobile API client core flow", () => {

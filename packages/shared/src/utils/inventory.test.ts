@@ -109,6 +109,7 @@ describe("inventory utils", () => {
         summary.within7DaysCount +
         summary.safeCount,
     ).toBe(summary.totalActiveCount);
+    expect(summary.latestRecommendationPreview).toBeNull();
   });
 
   it("groups the same product while keeping its expiry lots", () => {

@@ -1,6 +1,15 @@
 import { groupInventoryItems } from "@expirymate/shared";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { Barcode, PenLine } from "lucide-react-native";
+import {
+  Barcode,
+  ChevronRight,
+  Clock3,
+  PenLine,
+  Sparkles,
+  Users,
+  X,
+} from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ImageBackground,
@@ -15,7 +24,7 @@ import {
 import homeWelcomeBg from "../../assets/backgrounds/home-welcome-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
-import { HomeStatsSkeleton } from "../../src/components/ContentSkeleton";
+import { SkeletonBlock } from "../../src/components/ContentSkeleton";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
@@ -34,8 +43,14 @@ import { useRegistrationStore } from "../../src/store/registration-store";
 
 /** Temporary release notice — remove when feedback channel is no longer needed on home. */
 const SHOW_TEMP_RELEASE_NOTICE = true;
+const RELEASE_NOTICE_DISMISSED_KEY = "home-release-notice-v1-dismissed";
 const TEMP_RELEASE_NOTICE_MESSAGE =
-  "안녕하세요! 지금은 새 버전을 다듬는 중이에요. 건의사항이나 불편한 점이 있으면 여기를 눌러 장고에게 알려 주세요. 빠르게 수정 할게요.";
+  "새 버전을 다듬고 있어요. 불편한 점을 알려 주세요.";
+const difficultyLabels = {
+  easy: "쉬움",
+  medium: "보통",
+  hard: "어려움",
+} as const;
 
 export default function HomeScreen() {
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -48,6 +63,9 @@ export default function HomeScreen() {
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [noticeIndex, setNoticeIndex] = useState(0);
   const [carouselWidth, setCarouselWidth] = useState(0);
+  const [releaseNoticeVisible, setReleaseNoticeVisible] = useState<
+    boolean | null
+  >(null);
   const noticeCarouselRef = useRef<ScrollView>(null);
 
   const hasLoaded = data !== undefined;
@@ -98,8 +116,8 @@ export default function HomeScreen() {
   const noticeIds = notices.map((notice) => notice.id).join("|");
   const hasMultipleNotices = notices.length > 1;
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
-  const showEntryActions = hasLoaded && !isInitialError && !isInitialLoading;
   const heroTone = getHeroTone(activeNotice);
+  const recommendationPreview = data?.latestRecommendationPreview ?? null;
 
   useEffect(() => {
     setNoticeIndex((current) => {
@@ -111,6 +129,31 @@ export default function HomeScreen() {
     });
     noticeCarouselRef.current?.scrollTo({ x: 0, animated: false });
   }, [noticeIds, notices.length]);
+
+  useEffect(() => {
+    if (!SHOW_TEMP_RELEASE_NOTICE) {
+      setReleaseNoticeVisible(false);
+      return;
+    }
+
+    let active = true;
+
+    void AsyncStorage.getItem(RELEASE_NOTICE_DISMISSED_KEY)
+      .then((dismissed) => {
+        if (active) {
+          setReleaseNoticeVisible(!dismissed);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setReleaseNoticeVisible(true);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const openInventoryFilter = (nextFilter: InventoryViewFilter) => {
     router.push({
@@ -129,14 +172,25 @@ export default function HomeScreen() {
     router.push("/scanner");
   };
 
+  const handleOpenRecommendations = () => {
+    acknowledgeRecipeGeneration();
+    router.push("/(tabs)/recommendations");
+  };
+
+  const dismissReleaseNotice = () => {
+    setReleaseNoticeVisible(false);
+    void AsyncStorage.setItem(RELEASE_NOTICE_DISMISSED_KEY, "true").catch(
+      () => undefined,
+    );
+  };
+
   const handleNoticeAction = (action: HomeNoticeAction) => {
     switch (action) {
       case "retry":
         void refetch();
         return;
       case "recommendations":
-        acknowledgeRecipeGeneration();
-        router.push("/(tabs)/recommendations");
+        handleOpenRecommendations();
         return;
       case "expiring":
         openInventoryFilter("within7");
@@ -274,50 +328,165 @@ export default function HomeScreen() {
               </View>
             ) : null}
 
-            {showEntryActions ? (
-              <View style={styles.ctaBlock}>
-                <Button
-                  icon={Barcode}
-                  onPress={handleOpenScanner}
-                  fullWidth
-                  variant="primary"
-                >
-                  바코드로 넣을래요
-                </Button>
-                <Button
-                  icon={PenLine}
-                  onPress={handleManualRegister}
-                  fullWidth
-                  variant="surface"
-                >
-                  직접 입력할게요
-                </Button>
-              </View>
-            ) : null}
           </SurfaceCard>
 
-          {isInitialLoading ? (
-            <HomeStatsSkeleton />
-          ) : isInitialError ? null : (
-            <View style={styles.trafficGroup}>
+          <View style={styles.previewCard}>
+            <HomeSectionHeader
+              title="추천 미리보기"
+              actionLabel={recommendationPreview ? "추천 보기" : "추천 받기"}
+              accessibilityLabel={
+                recommendationPreview ? "추천 요리 보기" : "요리 추천 받기"
+              }
+              onPress={handleOpenRecommendations}
+            />
+            {isInitialLoading ? (
               <View
-                style={styles.trafficGuide}
-                accessibilityRole="header"
-                accessibilityLabel="유통기한 신호등. 빨간불은 만료됨, 노란불은 7일 이내, 초록불은 여유 있는 재료예요. 불을 누르면 그 재료만 보관함에서 보여 드릴게요."
+                style={styles.recommendationPreview}
+                accessibilityLabel="추천 미리보기를 불러오고 있어요"
               >
-                <AppText variant="subheading">유통기한 신호등</AppText>
-                <AppText variant="bodySmall" tone="subtext">
-                  빨강은 만료, 노랑은 7일 이내, 초록은 여유예요. 램프를 눌러
-                  확인해 보세요.
-                </AppText>
+                <SkeletonBlock
+                  width={spacing.xl}
+                  height={spacing.xl}
+                  radiusToken="md"
+                />
+                <View style={styles.recommendationSkeletonCopy}>
+                  <SkeletonBlock height={spacing.sm} width="68%" />
+                  <SkeletonBlock height={spacing.sm} width="52%" />
+                </View>
               </View>
+            ) : isInitialError ? (
+              <View style={styles.recommendationPreview}>
+                <View style={styles.recommendationIcon}>
+                  <Sparkles
+                    color={colors.primary}
+                    size={spacing.md}
+                    strokeWidth={2.2}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                  />
+                </View>
+                <View style={styles.recommendationCopy}>
+                  <AppText variant="bodySmall" tone="subtext">
+                    추천을 불러오지 못했어요. 위에서 다시 시도해 주세요.
+                  </AppText>
+                </View>
+              </View>
+            ) : (
+              <Pressable
+                onPress={handleOpenRecommendations}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  recommendationPreview
+                    ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}`
+                    : hasInventory
+                      ? "아직 받은 추천이 없어요. 추천 받기"
+                      : "재료를 넣으면 맞춤 요리를 추천해 드려요. 추천 탭으로 이동"
+                }
+                style={({ pressed }) => [
+                  styles.recommendationPreview,
+                  pressed && styles.previewBodyPressed,
+                ]}
+              >
+                <View style={styles.recommendationIcon}>
+                  <Sparkles
+                    color={colors.primary}
+                    size={spacing.md}
+                    strokeWidth={2.2}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                  />
+                </View>
+                <View style={styles.recommendationCopy}>
+                  <AppText
+                    variant={recommendationPreview ? "bodyStrong" : "bodySmall"}
+                    numberOfLines={2}
+                  >
+                    {recommendationPreview
+                      ? recommendationPreview.title
+                      : hasInventory
+                        ? "아직 받은 추천이 없어요"
+                        : "재료를 넣으면 맞춤 요리를 추천해 드려요"}
+                  </AppText>
+                  {recommendationPreview ? (
+                    <View style={styles.recipeMeta}>
+                      <View style={styles.recipeMetaItem}>
+                        <Users
+                          color={colors.subtext}
+                          size={spacing.sm}
+                          strokeWidth={2.2}
+                        />
+                        <AppText variant="caption" tone="subtext">
+                          {recommendationPreview.servings}인분
+                        </AppText>
+                      </View>
+                      <View style={styles.recipeMetaItem}>
+                        <Clock3
+                          color={colors.subtext}
+                          size={spacing.sm}
+                          strokeWidth={2.2}
+                        />
+                        <AppText variant="caption" tone="subtext">
+                          {recommendationPreview.cookingTimeMinutes}분
+                        </AppText>
+                      </View>
+                      <AppText variant="caption" tone="subtext">
+                        {difficultyLabels[recommendationPreview.difficulty]}
+                      </AppText>
+                    </View>
+                  ) : (
+                    <AppText variant="caption" tone="subtext">
+                      {hasInventory
+                        ? "보관 중인 재료로 새 요리를 찾아볼까요?"
+                        : "먼저 보관함에 재료를 등록해 주세요."}
+                    </AppText>
+                  )}
+                </View>
+                <ChevronRight
+                  color={colors.subtext}
+                  size={spacing.sm}
+                  strokeWidth={2.4}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                />
+              </Pressable>
+            )}
+          </View>
+
+          <View style={styles.trafficGroup}>
+            <HomeSectionHeader
+              title="유통기한 현황"
+              actionLabel="보관함 보기"
+              accessibilityLabel="전체 보관함 보기"
+              onPress={() => openInventoryFilter("all")}
+            />
+            {isInitialLoading ? (
               <View
                 style={styles.trafficStrip}
-                accessibilityRole="summary"
-                accessibilityLabel={`만료됨 ${expiredCount}개, 7일 이내 ${within7DaysCount}개, 여유 ${safeCount}개`}
+                accessibilityLabel="유통기한 현황을 불러오고 있어요"
               >
+                {[0, 1, 2].map((index) => (
+                  <View key={index} style={styles.trafficLampPressable}>
+                    <SkeletonBlock
+                      width={spacing.xxl}
+                      height={spacing.xxl}
+                      radiusToken="pill"
+                    />
+                  </View>
+                ))}
+              </View>
+            ) : isInitialError ? (
+              <View style={styles.inventoryEmpty}>
+                <AppText variant="bodySmall" tone="subtext">
+                  현황을 불러오지 못했어요. 위에서 다시 시도해 주세요.
+                </AppText>
+              </View>
+            ) : hasInventory ? (
+              <View style={styles.trafficStrip}>
                 <Pressable
-                  style={styles.trafficLampPressable}
+                  style={({ pressed }) => [
+                    styles.trafficLampPressable,
+                    pressed && styles.trafficLampPressablePressed,
+                  ]}
                   onPress={() => openInventoryFilter("expired")}
                   accessibilityRole="button"
                   accessibilityLabel={`만료됨 ${expiredCount}개`}
@@ -325,14 +494,17 @@ export default function HomeScreen() {
                 >
                   <StatCard
                     variant="traffic"
-                    label="만료됨"
+                    label="만료"
                     value={expiredCount}
                     tone="danger"
-                    showLabel={false}
+                    compact
                   />
                 </Pressable>
                 <Pressable
-                  style={styles.trafficLampPressable}
+                  style={({ pressed }) => [
+                    styles.trafficLampPressable,
+                    pressed && styles.trafficLampPressablePressed,
+                  ]}
                   onPress={() => openInventoryFilter("within7")}
                   accessibilityRole="button"
                   accessibilityLabel={`7일 이내 ${within7DaysCount}개`}
@@ -343,11 +515,14 @@ export default function HomeScreen() {
                     label="7일 이내"
                     value={within7DaysCount}
                     tone="warning"
-                    showLabel={false}
+                    compact
                   />
                 </Pressable>
                 <Pressable
-                  style={styles.trafficLampPressable}
+                  style={({ pressed }) => [
+                    styles.trafficLampPressable,
+                    pressed && styles.trafficLampPressablePressed,
+                  ]}
                   onPress={() => openInventoryFilter("safe")}
                   accessibilityRole="button"
                   accessibilityLabel={`여유 ${safeCount}개`}
@@ -358,34 +533,141 @@ export default function HomeScreen() {
                     label="여유"
                     value={safeCount}
                     tone="success"
-                    showLabel={false}
+                    compact
+                    showGlow={false}
+                  />
+                </Pressable>
+              </View>
+            ) : (
+              <View style={styles.inventoryEmpty}>
+                <AppText variant="bodySmall">
+                  아직 보관 중인 재료가 없어요
+                </AppText>
+                <AppText variant="caption" tone="subtext">
+                  아래 방법으로 첫 재료를 등록해 보세요.
+                </AppText>
+              </View>
+            )}
+            <View style={styles.quickEntryActions}>
+              <Button
+                icon={Barcode}
+                onPress={handleOpenScanner}
+                size="small"
+                fullWidth
+                style={styles.quickEntryAction}
+              >
+                바코드 스캔
+              </Button>
+              <Button
+                icon={PenLine}
+                onPress={handleManualRegister}
+                variant="surface"
+                size="small"
+                fullWidth
+                style={styles.quickEntryAction}
+              >
+                직접 입력
+              </Button>
+            </View>
+          </View>
+
+          {releaseNoticeVisible ? (
+            <View style={styles.announcementSection}>
+              <AppText
+                variant="bodySmall"
+                tone="subtext"
+                accessibilityRole="header"
+                style={styles.sectionTitle}
+              >
+                공지사항
+              </AppText>
+              <View style={styles.releaseNoticeBanner}>
+                <Pressable
+                  onPress={() => router.push("/settings/support")}
+                  accessibilityRole="button"
+                  accessibilityLabel={TEMP_RELEASE_NOTICE_MESSAGE}
+                  accessibilityHint="설정의 장고에게 물어보기로 이동해요."
+                  style={({ pressed }) => [
+                    styles.releaseNoticeLink,
+                    pressed && styles.releaseNoticeLinkPressed,
+                  ]}
+                >
+                  <AppText
+                    variant="bodySmall"
+                    tone="primary"
+                    numberOfLines={1}
+                  >
+                    {TEMP_RELEASE_NOTICE_MESSAGE}
+                  </AppText>
+                </Pressable>
+                <Pressable
+                  onPress={dismissReleaseNotice}
+                  accessibilityRole="button"
+                  accessibilityLabel="새 버전 안내 닫기"
+                  hitSlop={spacing.xs}
+                  style={({ pressed }) => [
+                    styles.releaseNoticeClose,
+                    pressed && styles.releaseNoticeClosePressed,
+                  ]}
+                >
+                  <X
+                    color={colors.subtext}
+                    size={spacing.sm + spacing.xxs}
+                    strokeWidth={2.4}
                   />
                 </Pressable>
               </View>
             </View>
-          )}
-
-          {SHOW_TEMP_RELEASE_NOTICE ? (
-            <Pressable
-              onPress={() => router.push("/settings/support")}
-              accessibilityRole="button"
-              accessibilityLabel={TEMP_RELEASE_NOTICE_MESSAGE}
-              accessibilityHint="설정의 장고에게 물어보기로 이동해요."
-              style={({ pressed }) => [
-                styles.releaseNoticeCard,
-                pressed && styles.releaseNoticeCardPressed,
-              ]}
-            >
-              <MascotSpeechBubble
-                message={TEMP_RELEASE_NOTICE_MESSAGE}
-                mood="idle"
-                size="small"
-              />
-            </Pressable>
           ) : null}
         </ScrollView>
       </View>
     </Screen>
+  );
+}
+
+function HomeSectionHeader({
+  title,
+  actionLabel,
+  accessibilityLabel,
+  onPress,
+}: {
+  title: string;
+  actionLabel: string;
+  accessibilityLabel: string;
+  onPress: () => void;
+}) {
+  return (
+    <View style={styles.sectionHeader}>
+      <AppText
+        variant="bodySmall"
+        tone="subtext"
+        accessibilityRole="header"
+        style={styles.sectionTitle}
+      >
+        {title}
+      </AppText>
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        hitSlop={spacing.xs}
+        style={({ pressed }) => [
+          styles.sectionHeaderAction,
+          pressed && styles.sectionHeaderActionPressed,
+        ]}
+      >
+        <AppText variant="caption" tone="primary">
+          {actionLabel}
+        </AppText>
+        <ChevronRight
+          color={colors.primary}
+          size={spacing.sm}
+          strokeWidth={2.4}
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+        />
+      </Pressable>
+    </View>
   );
 }
 
@@ -500,51 +782,158 @@ const styles = StyleSheet.create({
   noticePressed: {
     opacity: 0.88,
   },
-  ctaBlock: {
+  previewCard: {
     gap: spacing.xs,
-  },
-  releaseNoticeCard: {
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.primarySoft,
-    backgroundColor: colors.primarySoft,
-    padding: spacing.md,
-  },
-  releaseNoticeCardPressed: {
-    backgroundColor: colors.primarySoftPressed,
-  },
-  trafficGroup: {
-    gap: spacing.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
-  trafficGuide: {
+  recommendationPreview: {
+    minHeight: spacing.xxxl,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
+    padding: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+  },
+  previewBodyPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  recommendationIcon: {
+    width: spacing.xl,
+    height: spacing.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.md,
+    backgroundColor: colors.primarySoft,
+  },
+  recommendationCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  recommendationSkeletonCopy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  recipeMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
+  recipeMetaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
+  quickEntryActions: {
+    flexDirection: "row",
+    gap: spacing.xs,
+  },
+  quickEntryAction: {
+    flex: 1,
+  },
+  announcementSection: {
+    gap: spacing.xs,
+  },
+  releaseNoticeBanner: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.primarySoft,
+    backgroundColor: colors.primarySoft,
+    overflow: "hidden",
+  },
+  releaseNoticeLink: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.xs,
+  },
+  releaseNoticeLinkPressed: {
+    backgroundColor: colors.primarySoftPressed,
+  },
+  releaseNoticeClose: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.pill,
+  },
+  releaseNoticeClosePressed: {
+    backgroundColor: colors.primarySoftPressed,
+  },
+  trafficGroup: {
+    gap: spacing.xs,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+  },
+  sectionHeader: {
+    minHeight: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.xs,
+  },
+  sectionTitle: {
+    fontWeight: "700",
+  },
+  sectionHeaderAction: {
+    minHeight: touchTarget.icon,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    paddingLeft: spacing.xs,
+    borderRadius: radius.md,
+  },
+  sectionHeaderActionPressed: {
+    backgroundColor: colors.surfacePressed,
   },
   trafficStrip: {
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    backgroundColor: colors.text,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
   },
   trafficLampPressable: {
     flex: 1,
     alignItems: "center",
     minHeight: touchTarget.min,
     justifyContent: "center",
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.md,
   },
-  trafficLabels: {
-    flexDirection: "row",
-    gap: spacing.xs,
+  trafficLampPressablePressed: {
+    backgroundColor: colors.surfacePressed,
   },
-  trafficLabel: {
-    flex: 1,
-    textAlign: "center",
+  inventoryEmpty: {
+    minHeight: touchTarget.ctaLarge,
+    justifyContent: "center",
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
   },
 });

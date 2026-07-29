@@ -14,6 +14,10 @@ interface StatCardProps {
   variant?: "card" | "inline" | "traffic";
   /** When false, traffic variant renders lamp only (labels live outside the housing). */
   showLabel?: boolean;
+  /** Reduces traffic lamp and spacing for dense dashboard summaries. */
+  compact?: boolean;
+  /** Controls the active lamp glow independently from its on/off fill. */
+  showGlow?: boolean;
   /**
    * Traffic selection state. When set, overrides the default value>0 on/off look
    * so the lamp can act as a filter control.
@@ -31,6 +35,8 @@ export function StatCard({
   tone = "default",
   variant = "card",
   showLabel = true,
+  compact = false,
+  showGlow = true,
   selected,
 }: StatCardProps) {
   if (variant === "traffic") {
@@ -40,7 +46,7 @@ export function StatCard({
 
     return (
       <View
-        style={styles.traffic}
+        style={[styles.traffic, compact && styles.trafficCompact]}
         accessible={selected == null}
         accessibilityRole="text"
         accessibilityLabel={`${label} ${value}개`}
@@ -48,7 +54,8 @@ export function StatCard({
         <View
           style={[
             styles.lamp,
-            isOn && {
+            compact && styles.lampCompact,
+            isOn && showGlow && {
               shadowColor: lampStyle.glow,
               ...styles.lampGlow,
             },
@@ -66,7 +73,7 @@ export function StatCard({
             ]}
           />
           <AppText
-            variant="heading"
+            variant={compact ? "subheading" : "heading"}
             style={{
               color: isOn ? lampStyle.onText : lampStyle.onBackground,
             }}
@@ -182,6 +189,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  trafficCompact: {
+    gap: spacing.xxs,
+  },
   lamp: {
     width: LAMP_SIZE,
     height: LAMP_SIZE,
@@ -189,6 +199,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
+  },
+  lampCompact: {
+    width: spacing.xxl,
+    height: spacing.xxl,
   },
   lampFill: {
     ...StyleSheet.absoluteFillObject,

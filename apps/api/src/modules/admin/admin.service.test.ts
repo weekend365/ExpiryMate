@@ -101,6 +101,7 @@ describe("AdminService", () => {
       }),
     );
     expect(summary.locationCounts.fridge).toBe(7);
+    expect(summary.latestRecommendationPreview).toBeNull();
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(2);
   });
 });
