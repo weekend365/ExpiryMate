@@ -86,7 +86,10 @@ const EDIT_STEPS: Array<{
 ];
 
 export default function InventoryDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, mode: initialMode } = useLocalSearchParams<{
+    id: string;
+    mode?: string;
+  }>();
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId, isReady } = useActiveSpace();
@@ -108,7 +111,9 @@ export default function InventoryDetailScreen() {
     ),
     id,
   ] as const;
-  const [mode, setMode] = useState<"view" | "edit">("view");
+  const [mode, setMode] = useState<"view" | "edit">(() =>
+    initialMode === "edit" ? "edit" : "view",
+  );
   const [editStep, setEditStep] = useState<EditStep>("product");
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

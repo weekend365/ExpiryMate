@@ -1,8 +1,13 @@
-import type { InventoryItem } from "@expirymate/shared";
+import {
+  formatDateKoreanCompact,
+  type InventoryItem,
+} from "@expirymate/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  batchConsumeInventoryItems,
   batchDiscardInventoryItems,
+  consumeInventoryItem,
   discardInventoryItem,
 } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
@@ -14,16 +19,65 @@ import { useActiveSpace } from "../spaces/space-provider";
 
 const UNDO_WINDOW_MS = 5000;
 
-type PendingDiscard = {
-  items: InventoryItem[];
+export type InventoryRemovalAction = "consume" | "discard";
+
+type PendingRemovalEntry = {
+  action: InventoryRemovalAction;
+  item: InventoryItem;
+};
+
+type PendingRemoval = {
+  entries: PendingRemovalEntry[];
   timeoutId: ReturnType<typeof setTimeout>;
 };
 
+async function submitRemovals(
+  entries: PendingRemovalEntry[],
+  activeSpaceId?: string,
+) {
+  const consumedItems = entries.flatMap((entry) =>
+    entry.action === "consume" ? [entry.item] : [],
+  );
+  const discardedItems = entries.flatMap((entry) =>
+    entry.action === "discard" ? [entry.item] : [],
+  );
+  const requests: Promise<unknown>[] = [];
+
+  if (consumedItems.length === 1) {
+    requests.push(consumeInventoryItem(consumedItems[0]!.id, activeSpaceId));
+  } else if (consumedItems.length > 1) {
+    requests.push(
+      batchConsumeInventoryItems(
+        {
+          items: consumedItems.map((item) => ({
+            inventoryItemId: item.id,
+            amountBase: item.quantityBase,
+          })),
+        },
+        activeSpaceId,
+      ),
+    );
+  }
+
+  if (discardedItems.length === 1) {
+    requests.push(discardInventoryItem(discardedItems[0]!.id, activeSpaceId));
+  } else if (discardedItems.length > 1) {
+    requests.push(
+      batchDiscardInventoryItems(
+        discardedItems.map((item) => item.id),
+        activeSpaceId,
+      ),
+    );
+  }
+
+  await Promise.all(requests);
+}
+
 /**
- * Soft-remove items from the inventory list for a short undo window,
- * then commit discard to the server. Multiple quick discards share one window.
+ * Soft-remove items from the inventory list for a short undo window, then
+ * commit the selected outcomes to the server. Quick actions share one window.
  */
-export function useDeferredDiscardInventoryItem() {
+export function useDeferredInventoryItemRemoval() {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
@@ -45,7 +99,7 @@ export function useDeferredDiscardInventoryItem() {
       ),
     [activeSpaceId, sessionUserId],
   );
-  const pendingRef = useRef<PendingDiscard | null>(null);
+  const pendingRef = useRef<PendingRemoval | null>(null);
   const [undoLabel, setUndoLabel] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCommitting, setIsCommitting] = useState(false);
@@ -88,25 +142,19 @@ export function useDeferredDiscardInventoryItem() {
   }, [dashboardKey, inventoryKey, queryClient]);
 
   const commitItems = useCallback(
-    async (items: InventoryItem[]) => {
-      if (!items.length) {
+    async (entries: PendingRemovalEntry[]) => {
+      if (!entries.length) {
         return;
       }
 
       setIsCommitting(true);
 
       try {
-        if (items.length === 1) {
-          await discardInventoryItem(items[0]!.id, activeSpaceId);
-        } else {
-          await batchDiscardInventoryItems(
-            items.map((item) => item.id),
-            activeSpaceId,
-          );
-        }
+        await submitRemovals(entries, activeSpaceId);
         await invalidateLists();
       } catch (error) {
-        restoreToCache(items);
+        restoreToCache(entries.map((entry) => entry.item));
+        await invalidateLists().catch(() => undefined);
         setErrorMessage(
           error instanceof Error
             ? error.message
@@ -129,24 +177,33 @@ export function useDeferredDiscardInventoryItem() {
     clearTimeout(pending.timeoutId);
     pendingRef.current = null;
     setUndoLabel(null);
-    await commitItems(pending.items);
+    await commitItems(pending.entries);
   }, [commitItems]);
 
-  const buildUndoLabel = (items: InventoryItem[]) => {
-    if (items.length === 1) {
-      return `${items[0]!.displayName}을(를) 정리했어요`;
+  const buildUndoLabel = (entries: PendingRemovalEntry[]) => {
+    if (entries.length === 1) {
+      const [{ action, item }] = entries;
+      const itemLabel = `${formatDateKoreanCompact(item.expiryDate)}까지인 ${item.displayName}`;
+
+      return action === "consume"
+        ? `${itemLabel}을(를) 다 먹음으로 표시했어요`
+        : `${itemLabel}을(를) 보관함에서 뺐어요`;
     }
 
-    return `${items.length}개 재료를 정리했어요`;
+    const allConsumed = entries.every((entry) => entry.action === "consume");
+
+    return allConsumed
+      ? `${entries.length}개 재료를 다 먹음으로 표시했어요`
+      : `${entries.length}개 재료를 보관함에서 뺐어요`;
   };
 
-  const scheduleDiscard = useCallback(
-    (item: InventoryItem) => {
+  const scheduleRemoval = useCallback(
+    (item: InventoryItem, action: InventoryRemovalAction) => {
       setErrorMessage(null);
 
       const previous = pendingRef.current;
-      const alreadyQueued = previous?.items.some(
-        (entry) => entry.id === item.id,
+      const alreadyQueued = previous?.entries.some(
+        (entry) => entry.item.id === item.id,
       );
 
       if (alreadyQueued) {
@@ -155,24 +212,26 @@ export function useDeferredDiscardInventoryItem() {
 
       removeFromCache([item.id]);
 
-      const nextItems = previous ? [...previous.items, item] : [item];
+      const nextEntries = previous
+        ? [...previous.entries, { action, item }]
+        : [{ action, item }];
 
       if (previous) {
         clearTimeout(previous.timeoutId);
       }
 
-      setUndoLabel(buildUndoLabel(nextItems));
+      setUndoLabel(buildUndoLabel(nextEntries));
 
       const timeoutId = setTimeout(() => {
         void commitPending();
       }, UNDO_WINDOW_MS);
 
-      pendingRef.current = { items: nextItems, timeoutId };
+      pendingRef.current = { entries: nextEntries, timeoutId };
     },
     [commitPending, removeFromCache],
   );
 
-  const undoDiscard = useCallback(() => {
+  const undoRemoval = useCallback(() => {
     const pending = pendingRef.current;
 
     if (!pending) {
@@ -182,7 +241,7 @@ export function useDeferredDiscardInventoryItem() {
     clearTimeout(pending.timeoutId);
     pendingRef.current = null;
     setUndoLabel(null);
-    restoreToCache(pending.items);
+    restoreToCache(pending.entries.map((entry) => entry.item));
   }, [restoreToCache]);
 
   const clearError = useCallback(() => {
@@ -201,21 +260,9 @@ export function useDeferredDiscardInventoryItem() {
       pendingRef.current = null;
 
       // Unmount path — commit without toggling React state.
-      const items = pending.items;
-      void (async () => {
-        try {
-          if (items.length === 1) {
-            await discardInventoryItem(items[0]!.id, activeSpaceId);
-          } else {
-            await batchDiscardInventoryItems(
-              items.map((item) => item.id),
-              activeSpaceId,
-            );
-          }
-        } catch {
-          // Best effort; list refreshes on the next visit.
-        }
-      })();
+      void submitRemovals(pending.entries, activeSpaceId).catch(() => {
+        // Best effort; list refreshes on the next visit.
+      });
     },
     [activeSpaceId],
   );
@@ -223,8 +270,8 @@ export function useDeferredDiscardInventoryItem() {
   return {
     undoLabel,
     errorMessage,
-    scheduleDiscard,
-    undoDiscard,
+    scheduleRemoval,
+    undoRemoval,
     clearError,
     /** True only while the server commit is in flight — not during the undo window. */
     isPending: isCommitting,

@@ -4,6 +4,7 @@ import {
   isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   ArrowLeft,
@@ -16,7 +17,7 @@ import {
   Trash2,
   X,
 } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   ImageBackground,
@@ -48,7 +49,7 @@ import {
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
-import { useDeferredDiscardInventoryItem } from "../../src/features/inventory/use-deferred-discard-inventory-item";
+import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
@@ -61,13 +62,15 @@ import {
 } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
+const SWIPE_DELETE_HINT_KEY = "inventory-swipe-delete-hint-seen";
+
 export default function InventoryScreen() {
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useInventoryList();
   const batchDiscardMutation = useBatchDiscardInventoryItems();
-  const deferredDiscard = useDeferredDiscardInventoryItem();
+  const deferredRemoval = useDeferredInventoryItemRemoval();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const { selectableOptions, resolveLabel, createMutation } =
     useStorageLocations();
@@ -85,9 +88,39 @@ export default function InventoryScreen() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [showSwipeHint, setShowSwipeHint] = useState(false);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
+  const openSwipeableCloseRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    void AsyncStorage.getItem(SWIPE_DELETE_HINT_KEY)
+      .then((seen) => {
+        if (active && !seen) {
+          setShowSwipeHint(true);
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const markSwipeHintSeen = useCallback(() => {
+    setShowSwipeHint(false);
+    void AsyncStorage.setItem(SWIPE_DELETE_HINT_KEY, "true").catch(
+      () => undefined,
+    );
+  }, []);
+
+  const handleSwipeableOpen = useCallback((closeSwipeable: () => void) => {
+    openSwipeableCloseRef.current?.();
+    openSwipeableCloseRef.current = closeSwipeable;
+  }, []);
 
   useEffect(() => {
     if (filterParam) {
@@ -275,7 +308,7 @@ export default function InventoryScreen() {
     setIsSelectionMode(true);
     setSuccessMessage(null);
     setActionErrorMessage(null);
-    deferredDiscard.clearError();
+    deferredRemoval.clearError();
     setSelectedIds(initialId ? [initialId] : []);
   };
 
@@ -312,7 +345,7 @@ export default function InventoryScreen() {
 
     router.push({
       pathname: "/inventory/[id]",
-      params: { id },
+      params: { id, mode: "edit" },
     });
   };
 
@@ -337,7 +370,7 @@ export default function InventoryScreen() {
 
     // Optimistic: leave selection mode immediately so the next pick feels instant.
     setActionErrorMessage(null);
-    deferredDiscard.clearError();
+    deferredRemoval.clearError();
     setSelectedIds([]);
     setIsSelectionMode(false);
     setSuccessMessage(
@@ -357,33 +390,63 @@ export default function InventoryScreen() {
   const handleDiscard = (item: InventoryItem) => {
     setSuccessMessage(null);
     setActionErrorMessage(null);
-    void deferredDiscard.scheduleDiscard(item);
+    deferredRemoval.scheduleRemoval(item, "discard");
   };
+
+  const primaryFooter =
+    !showListChrome || isFilteredEmpty ? null : isSelectionMode ? (
+      <Button
+        variant="danger"
+        icon={Trash2}
+        onPress={handleConfirmBatchDiscard}
+        loading={batchDiscardMutation.isPending}
+        disabled={!selectedIds.length}
+        fullWidth
+      >
+        {selectedIds.length
+          ? `${selectedIds.length}개 정리할게요`
+          : "정리할 재료를 골라 주세요"}
+      </Button>
+    ) : (
+      <Button icon={Plus} onPress={openEntryMethodSheet} fullWidth>
+        재료 넣으러 가기
+      </Button>
+    );
+
+  const footer = deferredRemoval.undoLabel ? (
+    <View style={styles.footerStack}>
+      <View
+        style={styles.undoSnackbar}
+        accessibilityLiveRegion="assertive"
+        accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌리기`}
+      >
+        <Text style={styles.undoSnackbarLabel} numberOfLines={2}>
+          {deferredRemoval.undoLabel}
+        </Text>
+        <Pressable
+          onPress={deferredRemoval.undoRemoval}
+          accessibilityRole="button"
+          accessibilityLabel="삭제 되돌리기"
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.undoSnackbarAction,
+            pressed && styles.undoSnackbarActionPressed,
+          ]}
+        >
+          <Text style={styles.undoSnackbarActionLabel}>되돌리기</Text>
+        </Pressable>
+      </View>
+      {primaryFooter}
+    </View>
+  ) : (
+    primaryFooter
+  );
 
   return (
     <Screen
       scroll={false}
       contentWidth="wide"
-      footer={
-        !showListChrome || isFilteredEmpty ? null : isSelectionMode ? (
-          <Button
-            variant="danger"
-            icon={Trash2}
-            onPress={handleConfirmBatchDiscard}
-            loading={batchDiscardMutation.isPending}
-            disabled={!selectedIds.length}
-            fullWidth
-          >
-            {selectedIds.length
-              ? `${selectedIds.length}개 정리할게요`
-              : "정리할 재료를 골라 주세요"}
-          </Button>
-        ) : (
-          <Button icon={Plus} onPress={openEntryMethodSheet} fullWidth>
-            재료 넣으러 가기
-          </Button>
-        )
-      }
+      footer={footer}
       contentStyle={styles.screenContent}
     >
       <View style={styles.fridgeScene}>
@@ -615,24 +678,16 @@ export default function InventoryScreen() {
                 </View>
               ) : null}
 
-              {deferredDiscard.undoLabel ? (
-                <FeedbackBanner
-                  tone="success"
-                  title={deferredDiscard.undoLabel}
-                  description="잘못 눌렀다면 바로 되돌릴 수 있어요."
-                  actionLabel="되돌릴게요"
-                  onAction={deferredDiscard.undoDiscard}
-                />
-              ) : successMessage ? (
+              {successMessage ? (
                 <FeedbackBanner tone="success" title={successMessage} />
               ) : null}
 
-              {deferredDiscard.errorMessage || actionErrorMessage ? (
+              {deferredRemoval.errorMessage || actionErrorMessage ? (
                 <FeedbackBanner
                   tone="danger"
                   title="앗, 잠시 문제가 생겼어요"
                   description={
-                    deferredDiscard.errorMessage ??
+                    deferredRemoval.errorMessage ??
                     actionErrorMessage ??
                     undefined
                   }
@@ -715,11 +770,16 @@ export default function InventoryScreen() {
               }
               selectionMode={isSelectionMode}
               selectedIds={selectedIdSet}
-              isDiscarding={deferredDiscard.isPending}
+              isDiscarding={deferredRemoval.isPending}
               resolveLocationLabel={resolveLabel}
               onItemPress={(item) => handleCardPress(item.id)}
               onItemLongPress={(item) => handleCardLongPress(item.id)}
               onItemDiscard={handleDiscard}
+              onSwipeableOpen={handleSwipeableOpen}
+              showSwipeHint={
+                showSwipeHint && flatGroups[0]?.id === group.id
+              }
+              onSwipeHintSeen={markSwipeHintSeen}
             />
           )}
           renderSectionHeader={({ section }) => (
@@ -1353,6 +1413,42 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
+  },
+  footerStack: {
+    gap: spacing.sm,
+  },
+  undoSnackbar: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    backgroundColor: colors.text,
+  },
+  undoSnackbarLabel: {
+    flex: 1,
+    minWidth: 0,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.surface,
+  },
+  undoSnackbarAction: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.md,
+  },
+  undoSnackbarActionPressed: {
+    backgroundColor: colors.subtext,
+  },
+  undoSnackbarActionLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.warningSoft,
   },
   screenContent: {
     flex: 1,
