@@ -1296,9 +1296,14 @@ async function verifyAppleToken(
     sub?: string;
     email?: string;
     email_verified?: boolean | string;
+    iss?: string;
     aud?: string;
     exp?: number;
   }>(payloadPart, "Apple 로그인 토큰이 올바르지 않습니다.");
+
+  if (payload.iss !== "https://appleid.apple.com") {
+    throw new UnauthorizedException("Apple 로그인 토큰 발급자가 올바르지 않습니다.");
+  }
 
   if (payload.aud !== expectedClientId) {
     throw new UnauthorizedException("Apple 로그인 토큰 대상이 올바르지 않습니다.");

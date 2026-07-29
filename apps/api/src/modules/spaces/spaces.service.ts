@@ -219,6 +219,11 @@ export class SpacesService {
       InventorySpaceRole.owner,
       InventorySpaceRole.manager,
     ]);
+    if (actor.space.type === InventorySpaceType.personal) {
+      throw new BadRequestException(
+        "내 냉장고에는 다른 구성원을 초대할 수 없어요.",
+      );
+    }
     if (
       body.role === InventorySpaceRole.manager &&
       actor.role !== InventorySpaceRole.owner

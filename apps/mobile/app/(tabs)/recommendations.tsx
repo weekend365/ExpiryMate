@@ -473,19 +473,6 @@ export default function RecommendationsScreen() {
               mood={hasActiveEntitlement ? "idle" : "worry"}
               size="small"
             />
-            {!hasActiveEntitlement ? (
-              <Pressable
-                onPress={() => router.push("/(tabs)/settings")}
-                accessibilityRole="button"
-                accessibilityLabel="구독 안내 보러 가기"
-                style={({ pressed }) => [
-                  styles.quotaLink,
-                  pressed && styles.optionsSummaryPressed,
-                ]}
-              >
-                <Text style={styles.quotaLinkText}>구독 안내 보러 가기</Text>
-              </Pressable>
-            ) : null}
           </View>
         ) : (
           <View style={styles.errorCard}>

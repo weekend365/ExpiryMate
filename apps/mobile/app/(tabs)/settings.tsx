@@ -2,7 +2,6 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import {
   Bell,
-  CreditCard,
   MapPin,
   MessageCircleHeart,
   ShieldCheck,
@@ -58,12 +57,6 @@ export default function SettingsScreen() {
             description="내 계정 확인, 인증 메일, 로그아웃을 살펴봐요."
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
-          />
-          <ListRow
-            title="구독"
-            description="추천 한도와 구독 상태를 확인할 수 있어요."
-            icon={CreditCard}
-            onPress={() => router.push("/settings/subscription")}
           />
           <ListRow
             title="장고에게 물어보기"

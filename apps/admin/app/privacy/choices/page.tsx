@@ -57,12 +57,12 @@ export default function PrivacyChoicesPage() {
 
           <h2 className="pt-4 text-xl font-black">공유 냉장고를 이용 중이라면</h2>
           <p>
-            일반 구성원과 관리자는 공유 냉장고에서 나간 뒤 계정을 정리할 수
-            있습니다. 다른 구성원이 있는 공유 냉장고의 소유자는 설정 → 함께
+            일반 구성원과 관리자는 계정을 정리하면 공유 냉장고 멤버십도 함께
+            제거됩니다. 다른 구성원이 있는 공유 냉장고의 소유자는 설정 → 함께
             쓰는 냉장고에서 소유권을 다른 구성원에게 넘기거나 공간을 삭제해야
-            계정 정리를 마칠 수 있습니다. 구성원이 초대를 취소하면 해당 초대
-            이메일은 즉시 지워지고, 수락·취소·만료된 초대 기록은 최대 30일
-            이내에 서버에서 삭제됩니다.
+            계정 정리를 마칠 수 있습니다. 초대를 취소하면 해당 초대 이메일은
+            즉시 지워지고, 수락·취소·만료된 초대 기록은 최대 30일 이내에
+            서버에서 삭제됩니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">삭제되지 않는 데이터</h2>
@@ -79,7 +79,9 @@ export default function PrivacyChoicesPage() {
 
           <h2 className="pt-4 text-xl font-black">도움이 필요한 경우</h2>
           <p>
-            앱에 접근할 수 없거나 삭제·철회 요청에 문제가 있으면{" "}
+            앱에 접근할 수 없으면 아래 이메일로 계정 삭제를 요청할 수 있습니다.
+            본인 확인 후 계정과 연결 데이터를 정리합니다. 삭제·철회 과정에
+            문제가 있는 경우에도{" "}
             <a className="font-bold text-[var(--primary)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>

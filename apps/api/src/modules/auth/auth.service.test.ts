@@ -232,6 +232,39 @@ describe("AuthService", () => {
     ).rejects.toThrow(UnauthorizedException);
   });
 
+  it("rejects an Apple id_token with an unexpected issuer", async () => {
+    process.env.APPLE_OAUTH_CLIENT_ID = "com.expirymate.test";
+    const { privateKey, publicJwk } = createAppleTestKeys();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        return {
+          ok: true,
+          json: async () => ({
+            keys: [{ ...publicJwk, kid: "test-kid", alg: "RS256", use: "sig" }],
+          }),
+        } as Response;
+      }),
+    );
+    const service = createAuthService();
+    const providerToken = signAppleIdToken(
+      privateKey,
+      {
+        iss: "https://attacker.example",
+        sub: "apple.user.sub",
+        aud: "com.expirymate.test",
+        exp: Math.floor(Date.now() / 1000) + 3600,
+      },
+      "test-kid",
+    );
+
+    await expect(
+      service.oauthLogin(OAuthProvider.apple, {
+        providerToken,
+      }),
+    ).rejects.toThrow(UnauthorizedException);
+  });
+
   it("ignores client-supplied Apple email when the id_token has no email claim", async () => {
     process.env.APPLE_OAUTH_CLIENT_ID = "com.expirymate.test";
     const { privateKey, publicJwk } = createAppleTestKeys();
@@ -258,6 +291,7 @@ describe("AuthService", () => {
     const providerToken = signAppleIdToken(
       privateKey,
       {
+        iss: "https://appleid.apple.com",
         sub: "apple.user.sub",
         aud: "com.expirymate.test",
         exp: Math.floor(Date.now() / 1000) + 3600,

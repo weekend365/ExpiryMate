@@ -77,9 +77,10 @@ export default function AccountDeleteScreen() {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>바로 지워지는 것들</Text>
           <Text style={styles.bodyText}>
-            넣은 재료와 유통기한, 그동안 받은 요리 추천, 알림 설정, 이 기기
-            로그인 기록, 이메일·비밀번호 또는 소셜 로그인 연결 정보가
-            지워져요.
+            개인 냉장고의 재료와 유통기한, 그동안 받은 요리 추천, 알림 설정,
+            로그인 기록, 이메일·비밀번호 또는 소셜 로그인 연결 정보가 지워져요.
+            함께 쓰는 냉장고의 공동 재고는 다른 구성원을 위해 남고, 내
+            생성·수정자 연결만 제거돼요.
           </Text>
         </View>
 
@@ -106,7 +107,7 @@ export default function AccountDeleteScreen() {
         onClose={() => setConfirmSheetOpen(false)}
         mascotMood="worry"
         title="정말 계정을 정리할까요?"
-        description={`${appBrand.appNameKo} 안의 재료와 기록이 모두 사라져요. 이 선택은 되돌릴 수 없어요.`}
+        description={`개인 냉장고와 내 계정 기록이 사라져요. 공동 재고는 다른 구성원을 위해 남으며, 이 선택은 되돌릴 수 없어요.`}
         footer={
           <View style={styles.sheetFooter}>
             <Button
@@ -129,7 +130,9 @@ export default function AccountDeleteScreen() {
       >
         <View style={styles.confirmCard}>
           <Text style={styles.confirmLabel}>정리 대상</Text>
-          <Text style={styles.confirmValue}>계정 · 재료 · 추천 · 알림 · 로그인</Text>
+          <Text style={styles.confirmValue}>
+            계정 · 개인 재료 · 추천 · 알림 · 로그인
+          </Text>
         </View>
       </BottomSheet>
     </>

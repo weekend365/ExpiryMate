@@ -3,7 +3,6 @@ import {
   toKstDateOnly,
   type DashboardRecommendationPreview,
 } from "@expirymate/shared";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
   Barcode,
@@ -12,7 +11,6 @@ import {
   PenLine,
   Sparkles,
   Users,
-  X,
 } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -45,11 +43,6 @@ import { useRecipeGeneration } from "../../src/features/recipes/recipe-generatio
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
-/** Temporary release notice — remove when feedback channel is no longer needed on home. */
-const SHOW_TEMP_RELEASE_NOTICE = true;
-const RELEASE_NOTICE_DISMISSED_KEY = "home-release-notice-v1-dismissed";
-const TEMP_RELEASE_NOTICE_MESSAGE =
-  "새 버전을 다듬고 있어요. 불편한 점을 알려 주세요.";
 const difficultyLabels = {
   easy: "쉬움",
   medium: "보통",
@@ -67,9 +60,6 @@ export default function HomeScreen() {
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [noticeIndex, setNoticeIndex] = useState(0);
   const [carouselWidth, setCarouselWidth] = useState(0);
-  const [releaseNoticeVisible, setReleaseNoticeVisible] = useState<
-    boolean | null
-  >(null);
   const noticeCarouselRef = useRef<ScrollView>(null);
 
   const hasLoaded = data !== undefined;
@@ -143,31 +133,6 @@ export default function HomeScreen() {
     noticeCarouselRef.current?.scrollTo({ x: 0, animated: false });
   }, [noticeIds, notices.length]);
 
-  useEffect(() => {
-    if (!SHOW_TEMP_RELEASE_NOTICE) {
-      setReleaseNoticeVisible(false);
-      return;
-    }
-
-    let active = true;
-
-    void AsyncStorage.getItem(RELEASE_NOTICE_DISMISSED_KEY)
-      .then((dismissed) => {
-        if (active) {
-          setReleaseNoticeVisible(!dismissed);
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setReleaseNoticeVisible(true);
-        }
-      });
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
   const openInventoryFilter = (nextFilter: InventoryViewFilter) => {
     router.push({
       pathname: "/(tabs)/inventory",
@@ -188,13 +153,6 @@ export default function HomeScreen() {
   const handleOpenRecommendations = () => {
     acknowledgeRecipeGeneration();
     router.push("/(tabs)/recommendations");
-  };
-
-  const dismissReleaseNotice = () => {
-    setReleaseNoticeVisible(false);
-    void AsyncStorage.setItem(RELEASE_NOTICE_DISMISSED_KEY, "true").catch(
-      () => undefined,
-    );
   };
 
   const handleNoticeAction = (action: HomeNoticeAction) => {
@@ -616,43 +574,6 @@ export default function HomeScreen() {
               </View>
             </View>
           </View>
-
-          {releaseNoticeVisible ? (
-            <View style={styles.announcementSection}>
-              <View style={styles.releaseNoticeBanner}>
-                <Pressable
-                  onPress={() => router.push("/settings/support")}
-                  accessibilityRole="button"
-                  accessibilityLabel={TEMP_RELEASE_NOTICE_MESSAGE}
-                  accessibilityHint="설정의 장고에게 물어보기로 이동해요."
-                  style={({ pressed }) => [
-                    styles.releaseNoticeLink,
-                    pressed && styles.releaseNoticeLinkPressed,
-                  ]}
-                >
-                  <AppText variant="bodySmall" tone="primary" numberOfLines={1}>
-                    {TEMP_RELEASE_NOTICE_MESSAGE}
-                  </AppText>
-                </Pressable>
-                <Pressable
-                  onPress={dismissReleaseNotice}
-                  accessibilityRole="button"
-                  accessibilityLabel="새 버전 안내 닫기"
-                  hitSlop={spacing.xs}
-                  style={({ pressed }) => [
-                    styles.releaseNoticeClose,
-                    pressed && styles.releaseNoticeClosePressed,
-                  ]}
-                >
-                  <X
-                    color={colors.subtext}
-                    size={spacing.sm + spacing.xxs}
-                    strokeWidth={2.4}
-                  />
-                </Pressable>
-              </View>
-            </View>
-          ) : null}
         </ScrollView>
       </View>
     </Screen>
@@ -951,40 +872,6 @@ const styles = StyleSheet.create({
   },
   quickEntryAction: {
     flex: 1,
-  },
-  announcementSection: {
-    gap: spacing.xs,
-  },
-  releaseNoticeBanner: {
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.primarySoft,
-    backgroundColor: colors.primarySoft,
-    overflow: "hidden",
-  },
-  releaseNoticeLink: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingLeft: spacing.sm,
-    paddingRight: spacing.xs,
-  },
-  releaseNoticeLinkPressed: {
-    backgroundColor: colors.primarySoftPressed,
-  },
-  releaseNoticeClose: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.pill,
-  },
-  releaseNoticeClosePressed: {
-    backgroundColor: colors.primarySoftPressed,
   },
   trafficGroup: {
     gap: spacing.sm,

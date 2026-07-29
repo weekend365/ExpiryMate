@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import {
   isValidSpaceInvitationCode,
   normalizeSpaceInvitationCode,
@@ -7,6 +8,7 @@ import { router, useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { useAuth } from "../auth/use-auth";
 import {
+  type PendingSpaceInvitation,
   parsePendingSpaceInvitation,
 } from "./pending-invitation-storage";
 
@@ -16,18 +18,20 @@ export {
 } from "./pending-invitation-storage";
 
 const LEGACY_PENDING_INVITATION_KEY = "expirymate.pending-space-invitation";
-const PENDING_INVITATION_KEY = "expirymate.pending-space-invitation.v2";
+const LEGACY_V2_PENDING_INVITATION_KEY =
+  "expirymate.pending-space-invitation.v2";
+const PENDING_INVITATION_KEY = "expirymate.pending-space-invitation.v3";
 
 export async function rememberPendingEmailInvitation(token: string) {
   const trimmed = token.trim();
   if (!trimmed) {
     return;
   }
-  await AsyncStorage.setItem(
+  await SecureStore.setItemAsync(
     PENDING_INVITATION_KEY,
     JSON.stringify({ version: 2, kind: "email", token: trimmed }),
   );
-  await AsyncStorage.removeItem(LEGACY_PENDING_INVITATION_KEY);
+  await clearLegacyPendingInvitations();
 }
 
 export const rememberPendingSpaceInvitation =
@@ -38,16 +42,17 @@ export async function rememberPendingCodeInvitation(code: string) {
   if (!isValidSpaceInvitationCode(normalized)) {
     throw new Error("초대 코드 8자리를 확인해 주세요.");
   }
-  await AsyncStorage.setItem(
+  await SecureStore.setItemAsync(
     PENDING_INVITATION_KEY,
     JSON.stringify({ version: 2, kind: "code", code: normalized }),
   );
-  await AsyncStorage.removeItem(LEGACY_PENDING_INVITATION_KEY);
+  await clearLegacyPendingInvitations();
 }
 
 export async function clearPendingSpaceInvitation() {
   await Promise.all([
-    AsyncStorage.removeItem(PENDING_INVITATION_KEY),
+    SecureStore.deleteItemAsync(PENDING_INVITATION_KEY),
+    AsyncStorage.removeItem(LEGACY_V2_PENDING_INVITATION_KEY),
     AsyncStorage.removeItem(LEGACY_PENDING_INVITATION_KEY),
   ]);
 }
@@ -72,16 +77,45 @@ export async function continuePendingSpaceInvitation() {
 }
 
 export async function readPendingSpaceInvitation() {
-  const current = await AsyncStorage.getItem(PENDING_INVITATION_KEY);
+  const current = await SecureStore.getItemAsync(PENDING_INVITATION_KEY);
   const parsed = parsePendingSpaceInvitation(current);
   if (parsed) {
     return parsed;
   }
 
+  const legacyV2 = parsePendingSpaceInvitation(
+    await AsyncStorage.getItem(LEGACY_V2_PENDING_INVITATION_KEY),
+  );
+  if (legacyV2) {
+    await migratePendingInvitation(legacyV2);
+    return legacyV2;
+  }
+
   const legacyToken = await AsyncStorage.getItem(
     LEGACY_PENDING_INVITATION_KEY,
   );
-  return parsePendingSpaceInvitation(legacyToken, true);
+  const legacyInvitation = parsePendingSpaceInvitation(legacyToken, true);
+  if (legacyInvitation) {
+    await migratePendingInvitation(legacyInvitation);
+  }
+  return legacyInvitation;
+}
+
+async function migratePendingInvitation(
+  invitation: PendingSpaceInvitation,
+) {
+  await SecureStore.setItemAsync(
+    PENDING_INVITATION_KEY,
+    JSON.stringify(invitation),
+  );
+  await clearLegacyPendingInvitations();
+}
+
+async function clearLegacyPendingInvitations() {
+  await Promise.all([
+    AsyncStorage.removeItem(LEGACY_V2_PENDING_INVITATION_KEY),
+    AsyncStorage.removeItem(LEGACY_PENDING_INVITATION_KEY),
+  ]);
 }
 
 export function PendingSpaceInvitationBridge() {

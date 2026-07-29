@@ -117,9 +117,12 @@ export function ProductsPage() {
           description="상품명과 브랜드로 검색할 수 있습니다."
           action={
             <input
+              aria-label="기준 상품명 또는 브랜드 검색"
+              name="product-search"
+              autoComplete="off"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="상품명 또는 브랜드 검색"
+              placeholder="상품명 또는 브랜드 검색…"
               className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
             />
           }

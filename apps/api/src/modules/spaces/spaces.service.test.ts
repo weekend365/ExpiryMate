@@ -62,6 +62,28 @@ describe("SpacesService", () => {
     expect(prisma.spaceInvitation.create).not.toHaveBeenCalled();
   });
 
+  it("never creates an email invitation for a personal space", async () => {
+    prisma.inventorySpaceMembership.findUnique.mockResolvedValue({
+      userId: "user-owner",
+      role: InventorySpaceRole.owner,
+      space: {
+        ...sharedSpace,
+        id: "personal_user-owner",
+        type: InventorySpaceType.personal,
+      },
+    });
+
+    await expect(
+      service.inviteMember("personal_user-owner", "user-owner", {
+        email: "family@example.com",
+        role: "member",
+      }),
+    ).rejects.toThrow(BadRequestException);
+    expect(prisma.user.findUnique).not.toHaveBeenCalled();
+    expect(prisma.spaceInvitation.create).not.toHaveBeenCalled();
+    expect(mailService.sendSpaceInvitation).not.toHaveBeenCalled();
+  });
+
   it("stores only the invitation token hash and mails the original token", async () => {
     prisma.inventorySpaceMembership.findUnique.mockResolvedValue({
       userId: "user-owner",

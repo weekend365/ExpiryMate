@@ -152,7 +152,7 @@ export default function PrivacyScreen() {
             <PrivacyRow
               icon={Trash2}
               title="계정과 데이터 정리"
-              description="넣은 재료, 받은 추천, 알림 설정, 로그인 기록과 연결된 계정 정보가 바로 지워져요."
+              description="개인 냉장고의 재료와 내 추천·알림·로그인 정보가 지워져요. 함께 쓰는 공동 재고는 유지돼요."
               tone="danger"
               onPress={() => router.push("/privacy/account-delete")}
               last

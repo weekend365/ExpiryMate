@@ -137,10 +137,6 @@ export default function RootLayout() {
               />
               <Stack.Screen name="settings/account" options={{ title: "계정" }} />
               <Stack.Screen
-                name="settings/subscription"
-                options={{ title: "구독" }}
-              />
-              <Stack.Screen
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />

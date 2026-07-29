@@ -1,14 +1,8 @@
 import * as Sentry from "@sentry/nextjs";
 
-export async function register() {
-  const dsn =
-    process.env.SENTRY_DSN?.trim() ??
-    process.env.NEXT_PUBLIC_SENTRY_DSN?.trim();
+const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN?.trim();
 
-  if (!dsn) {
-    return;
-  }
-
+if (dsn) {
   Sentry.init({
     dsn,
     environment:
@@ -18,4 +12,5 @@ export async function register() {
   });
 }
 
-export const onRequestError = Sentry.captureRequestError;
+export const onRouterTransitionStart =
+  Sentry.captureRouterTransitionStart;

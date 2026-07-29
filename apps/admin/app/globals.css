@@ -39,3 +39,8 @@ a {
 * {
   box-sizing: border-box;
 }
+
+:is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
