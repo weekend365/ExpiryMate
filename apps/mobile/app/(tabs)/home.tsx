@@ -123,18 +123,14 @@ export default function HomeScreen() {
   const heroTone = getHeroTone(activeNotice);
   const recommendationPreview = data?.latestRecommendationPreview ?? null;
   const recommendationReason = recommendationPreview
-    ? formatRecommendationReason(
-        recommendationPreview.reasonIngredients ?? [],
-      )
+    ? formatRecommendationReason(recommendationPreview.reasonIngredients ?? [])
     : null;
   const hasUrgentRecommendationIngredient =
     recommendationPreview?.reasonIngredients?.some(
       (ingredient) =>
-        ingredient.daysUntilExpiry != null &&
-        ingredient.daysUntilExpiry <= 7,
+        ingredient.daysUntilExpiry != null && ingredient.daysUntilExpiry <= 7,
     ) ?? false;
-  const emphasizeEntryActions =
-    hasLoaded && !isInitialError && !hasInventory;
+  const emphasizeEntryActions = hasLoaded && !isInitialError && !hasInventory;
 
   useEffect(() => {
     setNoticeIndex((current) => {
@@ -274,11 +270,7 @@ export default function HomeScreen() {
           }
         >
           <SpaceSwitcher />
-          <SurfaceCard
-            variant="hero"
-            tone={heroTone}
-            style={styles.heroCard}
-          >
+          <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
             {notices.length > 0 ? (
               <View
                 style={styles.noticeBlock}
@@ -348,7 +340,6 @@ export default function HomeScreen() {
                 ) : null}
               </View>
             ) : null}
-
           </SurfaceCard>
 
           <View style={styles.previewCard}>
@@ -465,8 +456,8 @@ export default function HomeScreen() {
                       {hasInventory
                         ? "보관 중인 재료로 새 요리를 찾아볼까요?"
                         : "먼저 보관함에 재료를 등록해 주세요."}
-                      </AppText>
-                    )}
+                    </AppText>
+                  )}
                   {recommendationReason ? (
                     <View
                       style={[
@@ -628,14 +619,6 @@ export default function HomeScreen() {
 
           {releaseNoticeVisible ? (
             <View style={styles.announcementSection}>
-              <AppText
-                variant="bodySmall"
-                tone="subtext"
-                accessibilityRole="header"
-                style={styles.sectionTitle}
-              >
-                공지사항
-              </AppText>
               <View style={styles.releaseNoticeBanner}>
                 <Pressable
                   onPress={() => router.push("/settings/support")}
@@ -647,11 +630,7 @@ export default function HomeScreen() {
                     pressed && styles.releaseNoticeLinkPressed,
                   ]}
                 >
-                  <AppText
-                    variant="bodySmall"
-                    tone="primary"
-                    numberOfLines={1}
-                  >
+                  <AppText variant="bodySmall" tone="primary" numberOfLines={1}>
                     {TEMP_RELEASE_NOTICE_MESSAGE}
                   </AppText>
                 </Pressable>
@@ -713,10 +692,7 @@ function HomeSectionHeader({
           pressed && styles.sectionHeaderActionPressed,
         ]}
       >
-        <AppText
-          variant="caption"
-          tone={subtleAction ? "subtext" : "primary"}
-        >
+        <AppText variant="caption" tone={subtleAction ? "subtext" : "primary"}>
           {actionLabel}
         </AppText>
         <ChevronRight
@@ -898,7 +874,7 @@ const styles = StyleSheet.create({
     opacity: 0.88,
   },
   previewCard: {
-    gap: spacing.xs,
+    gap: spacing.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
@@ -909,8 +885,8 @@ const styles = StyleSheet.create({
     minHeight: spacing.xxxl,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
-    padding: spacing.xs,
+    gap: spacing.sm,
+    padding: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -930,7 +906,7 @@ const styles = StyleSheet.create({
   recommendationCopy: {
     flex: 1,
     minWidth: 0,
-    gap: spacing.xxs,
+    gap: spacing.xs,
   },
   recommendationSkeletonCopy: {
     flex: 1,
@@ -1011,7 +987,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoftPressed,
   },
   trafficGroup: {
-    gap: spacing.xs,
+    gap: spacing.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
@@ -1029,7 +1005,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   sectionHeaderAction: {
-    minHeight: touchTarget.icon,
+    minHeight: spacing.lg,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -1044,8 +1020,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
