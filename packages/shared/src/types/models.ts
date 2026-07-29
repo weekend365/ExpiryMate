@@ -195,6 +195,10 @@ export interface DashboardRecommendationPreview {
   servings: number;
   cookingTimeMinutes: number;
   difficulty: "easy" | "medium" | "hard";
+  reasonIngredients: Array<{
+    name: string;
+    daysUntilExpiry: number | null;
+  }>;
 }
 
 export interface DashboardSummary {

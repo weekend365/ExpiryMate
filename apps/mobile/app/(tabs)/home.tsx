@@ -1,4 +1,8 @@
-import { groupInventoryItems } from "@expirymate/shared";
+import {
+  groupInventoryItems,
+  toKstDateOnly,
+  type DashboardRecommendationPreview,
+} from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import {
@@ -118,6 +122,19 @@ export default function HomeScreen() {
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
   const heroTone = getHeroTone(activeNotice);
   const recommendationPreview = data?.latestRecommendationPreview ?? null;
+  const recommendationReason = recommendationPreview
+    ? formatRecommendationReason(
+        recommendationPreview.reasonIngredients ?? [],
+      )
+    : null;
+  const hasUrgentRecommendationIngredient =
+    recommendationPreview?.reasonIngredients?.some(
+      (ingredient) =>
+        ingredient.daysUntilExpiry != null &&
+        ingredient.daysUntilExpiry <= 7,
+    ) ?? false;
+  const emphasizeEntryActions =
+    hasLoaded && !isInitialError && !hasInventory;
 
   useEffect(() => {
     setNoticeIndex((current) => {
@@ -257,7 +274,11 @@ export default function HomeScreen() {
           }
         >
           <SpaceSwitcher />
-          <SurfaceCard variant="hero" tone={heroTone}>
+          <SurfaceCard
+            variant="hero"
+            tone={heroTone}
+            style={styles.heroCard}
+          >
             {notices.length > 0 ? (
               <View
                 style={styles.noticeBlock}
@@ -338,6 +359,7 @@ export default function HomeScreen() {
                 recommendationPreview ? "추천 요리 보기" : "요리 추천 받기"
               }
               onPress={handleOpenRecommendations}
+              subtleAction
             />
             {isInitialLoading ? (
               <View
@@ -377,7 +399,7 @@ export default function HomeScreen() {
                 accessibilityRole="button"
                 accessibilityLabel={
                   recommendationPreview
-                    ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}`
+                    ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}${recommendationReason ? `, ${recommendationReason}` : ""}`
                     : hasInventory
                       ? "아직 받은 추천이 없어요. 추천 받기"
                       : "재료를 넣으면 맞춤 요리를 추천해 드려요. 추천 탭으로 이동"
@@ -432,14 +454,42 @@ export default function HomeScreen() {
                       <AppText variant="caption" tone="subtext">
                         {difficultyLabels[recommendationPreview.difficulty]}
                       </AppText>
+                      <AppText variant="caption" tone="muted">
+                        {formatRecommendationCreatedAt(
+                          recommendationPreview.createdAt,
+                        )}
+                      </AppText>
                     </View>
                   ) : (
                     <AppText variant="caption" tone="subtext">
                       {hasInventory
                         ? "보관 중인 재료로 새 요리를 찾아볼까요?"
                         : "먼저 보관함에 재료를 등록해 주세요."}
-                    </AppText>
-                  )}
+                      </AppText>
+                    )}
+                  {recommendationReason ? (
+                    <View
+                      style={[
+                        styles.recommendationReason,
+                        hasUrgentRecommendationIngredient
+                          ? styles.recommendationReasonUrgent
+                          : styles.recommendationReasonCalm,
+                      ]}
+                    >
+                      <AppText
+                        variant="caption"
+                        tone={
+                          hasUrgentRecommendationIngredient
+                            ? "warning"
+                            : "primary"
+                        }
+                        numberOfLines={1}
+                        style={styles.recommendationReasonText}
+                      >
+                        {recommendationReason}
+                      </AppText>
+                    </View>
+                  ) : null}
                 </View>
                 <ChevronRight
                   color={colors.subtext}
@@ -548,26 +598,31 @@ export default function HomeScreen() {
                 </AppText>
               </View>
             )}
-            <View style={styles.quickEntryActions}>
-              <Button
-                icon={Barcode}
-                onPress={handleOpenScanner}
-                size="small"
-                fullWidth
-                style={styles.quickEntryAction}
-              >
-                바코드 스캔
-              </Button>
-              <Button
-                icon={PenLine}
-                onPress={handleManualRegister}
-                variant="surface"
-                size="small"
-                fullWidth
-                style={styles.quickEntryAction}
-              >
-                직접 입력
-              </Button>
+            <View style={styles.quickEntrySection}>
+              <AppText variant="label" tone="subtext">
+                재료 추가
+              </AppText>
+              <View style={styles.quickEntryActions}>
+                <Button
+                  icon={Barcode}
+                  onPress={handleOpenScanner}
+                  size={emphasizeEntryActions ? "medium" : "small"}
+                  fullWidth
+                  style={styles.quickEntryAction}
+                >
+                  바코드 스캔
+                </Button>
+                <Button
+                  icon={PenLine}
+                  onPress={handleManualRegister}
+                  variant="surface"
+                  size={emphasizeEntryActions ? "medium" : "small"}
+                  fullWidth
+                  style={styles.quickEntryAction}
+                >
+                  직접 입력
+                </Button>
+              </View>
             </View>
           </View>
 
@@ -630,11 +685,13 @@ function HomeSectionHeader({
   actionLabel,
   accessibilityLabel,
   onPress,
+  subtleAction = false,
 }: {
   title: string;
   actionLabel: string;
   accessibilityLabel: string;
   onPress: () => void;
+  subtleAction?: boolean;
 }) {
   return (
     <View style={styles.sectionHeader}>
@@ -656,11 +713,14 @@ function HomeSectionHeader({
           pressed && styles.sectionHeaderActionPressed,
         ]}
       >
-        <AppText variant="caption" tone="primary">
+        <AppText
+          variant="caption"
+          tone={subtleAction ? "subtext" : "primary"}
+        >
           {actionLabel}
         </AppText>
         <ChevronRight
-          color={colors.primary}
+          color={subtleAction ? colors.subtext : colors.primary}
           size={spacing.sm}
           strokeWidth={2.4}
           accessibilityElementsHidden
@@ -684,6 +744,8 @@ function HomeJangoNotice({
         message={notice.message}
         mood={notice.mood}
         size="small"
+        numberOfLines={2}
+        style={styles.heroNotice}
       />
     );
   }
@@ -700,6 +762,8 @@ function HomeJangoNotice({
         message={notice.message}
         mood={notice.mood}
         size="small"
+        numberOfLines={2}
+        style={styles.heroNotice}
       />
     </Pressable>
   );
@@ -721,6 +785,48 @@ function getHeroTone(
   }
 
   return "primary";
+}
+
+function formatRecommendationReason(
+  ingredients: DashboardRecommendationPreview["reasonIngredients"],
+) {
+  if (ingredients.length === 0) {
+    return null;
+  }
+
+  const labels = ingredients.map((ingredient) => {
+    if (ingredient.daysUntilExpiry == null) {
+      return ingredient.name;
+    }
+
+    if (ingredient.daysUntilExpiry === 0) {
+      return `${ingredient.name} D-day`;
+    }
+
+    if (ingredient.daysUntilExpiry > 0) {
+      return `${ingredient.name} D-${ingredient.daysUntilExpiry}`;
+    }
+
+    return `${ingredient.name} D+${Math.abs(ingredient.daysUntilExpiry)}`;
+  });
+
+  return `${labels.join(" · ")} 활용 추천`;
+}
+
+function formatRecommendationCreatedAt(createdAt: string) {
+  try {
+    const createdDate = toKstDateOnly(createdAt);
+    const today = toKstDateOnly(new Date());
+
+    if (createdDate === today) {
+      return "오늘 추천";
+    }
+
+    const [, month, day] = createdDate.split("-");
+    return `${Number(month)}월 ${Number(day)}일 추천`;
+  } catch {
+    return "최근 추천";
+  }
 }
 
 const styles = StyleSheet.create({
@@ -753,8 +859,17 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
+  heroCard: {
+    gap: spacing.xs,
+    padding: spacing.sm,
+  },
+  heroNotice: {
+    minHeight: spacing.xxxl + spacing.xs,
+  },
   noticeBlock: {
     gap: spacing.xs,
+    minHeight: spacing.xxxl + spacing.md,
+    justifyContent: "center",
   },
   noticeGuide: {
     alignItems: "center",
@@ -831,6 +946,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
+  },
+  recommendationReason: {
+    alignSelf: "flex-start",
+    maxWidth: "100%",
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.pill,
+  },
+  recommendationReasonUrgent: {
+    backgroundColor: colors.warningSoft,
+  },
+  recommendationReasonCalm: {
+    backgroundColor: colors.primarySoft,
+  },
+  recommendationReasonText: {
+    flexShrink: 1,
+  },
+  quickEntrySection: {
+    gap: spacing.xs,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
   quickEntryActions: {
     flexDirection: "row",

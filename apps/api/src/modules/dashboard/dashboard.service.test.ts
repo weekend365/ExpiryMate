@@ -6,6 +6,32 @@ describe("DashboardService", () => {
     const latestRecommendation = {
       id: "recommendation-1",
       createdAt: new Date("2026-07-29T03:00:00.000Z"),
+      inventorySnapshot: [
+        {
+          inventoryItemId: "tofu-1",
+          name: "두부",
+          quantity: 1,
+          storageLocation: "fridge",
+          expiryDate: "2026-07-31",
+          daysUntilExpiry: 8,
+        },
+        {
+          inventoryItemId: "egg-1",
+          name: "달걀",
+          quantity: 6,
+          storageLocation: "fridge",
+          expiryDate: "2026-08-02",
+          daysUntilExpiry: 10,
+        },
+        {
+          inventoryItemId: "milk-1",
+          name: "우유",
+          quantity: 1,
+          storageLocation: "fridge",
+          expiryDate: "2026-07-28",
+          daysUntilExpiry: 5,
+        },
+      ],
       recommendations: [
         {
           title: "두부 달걀 볶음",
@@ -13,7 +39,11 @@ describe("DashboardService", () => {
           cookingTimeMinutes: 15,
           difficulty: "easy",
           servings: 2,
-          usedIngredients: [],
+          usedIngredients: [
+            { inventoryItemId: "milk-1", name: "우유" },
+            { inventoryItemId: "egg-1", name: "달걀" },
+            { inventoryItemId: "tofu-1", name: "두부" },
+          ],
           optionalMissingIngredients: [],
           steps: ["재료를 볶아요."],
           tips: [],
@@ -36,6 +66,7 @@ describe("DashboardService", () => {
       select: {
         id: true,
         createdAt: true,
+        inventorySnapshot: true,
         recommendations: true,
       },
     });
@@ -46,6 +77,10 @@ describe("DashboardService", () => {
       cookingTimeMinutes: 15,
       difficulty: "easy",
       servings: 2,
+      reasonIngredients: [
+        { name: "두부", daysUntilExpiry: 2 },
+        { name: "달걀", daysUntilExpiry: 4 },
+      ],
     });
   });
 
@@ -53,6 +88,7 @@ describe("DashboardService", () => {
     const prisma = createPrismaMock({
       id: "recommendation-invalid",
       createdAt: new Date("2026-07-29T03:00:00.000Z"),
+      inventorySnapshot: [],
       recommendations: [{ title: "" }],
     });
     const service = new DashboardService(prisma as never);
