@@ -55,29 +55,8 @@ export function InventoryGroupCard({
   const isExpandable = group.items.length > 1;
   const showLots = selectionMode || expanded;
   const nearestItem = group.items[0]!;
-  const expiryDates = new Set<string>();
-  const urgencyCounts = {
-    expired: 0,
-    within_7_days: 0,
-    safe: 0,
-  };
 
-  group.items.forEach((item) => {
-    expiryDates.add(item.expiryDate);
-    urgencyCounts[getExpiryTrafficBucket(item.expiryDate)] += 1;
-  });
 
-  const expiryDateCount = expiryDates.size;
-  const showFooterSwipeHint = showSwipeHint && !selectionMode;
-  const urgencyAccessibilityLabel = [
-    urgencyCounts.expired ? `만료 ${urgencyCounts.expired}개` : null,
-    urgencyCounts.within_7_days
-      ? `7일 이내 ${urgencyCounts.within_7_days}개`
-      : null,
-    urgencyCounts.safe ? `안전 ${urgencyCounts.safe}개` : null,
-  ]
-    .filter(Boolean)
-    .join(", ");
   const quantityLabel = group.hasMixedUnits
     ? `보관 기록 ${group.items.length}건`
     : `총 ${group.totalQuantity}${group.unit ?? "개"}`;
@@ -213,9 +192,7 @@ export function InventoryGroupCard({
             </Text>
             <Text style={styles.groupMeta} numberOfLines={1}>
               {locationLabel} · {quantityLabel}
-              {expiryDateCount > 1
-                ? ` · 유통기한 ${expiryDateCount}개`
-                : ""}
+
             </Text>
           </View>
 
@@ -347,62 +324,7 @@ export function InventoryGroupCard({
               </ReanimatedSwipeable>
             );
           })}
-          <View
-            style={styles.lotListFooter}
-            accessible
-            accessibilityLabel={`유통기한 긴급도, ${urgencyAccessibilityLabel}${
-              showFooterSwipeHint
-                ? ". 왼쪽으로 밀어 삭제할 수 있어요."
-                : ""
-            }`}
-          >
-            <View
-              style={styles.urgencyRatioBar}
-              importantForAccessibility="no-hide-descendants"
-            >
-              {urgencyCounts.expired > 0 ? (
-                <View
-                  style={[
-                    styles.urgencyRatioSegment,
-                    {
-                      flexGrow: urgencyCounts.expired,
-                      backgroundColor: colors.danger,
-                    },
-                  ]}
-                />
-              ) : null}
-              {urgencyCounts.within_7_days > 0 ? (
-                <View
-                  style={[
-                    styles.urgencyRatioSegment,
-                    {
-                      flexGrow: urgencyCounts.within_7_days,
-                      backgroundColor: colors.warning,
-                    },
-                  ]}
-                />
-              ) : null}
-              {urgencyCounts.safe > 0 ? (
-                <View
-                  style={[
-                    styles.urgencyRatioSegment,
-                    {
-                      flexGrow: urgencyCounts.safe,
-                      backgroundColor: colors.success,
-                    },
-                  ]}
-                />
-              ) : null}
-            </View>
-            {showFooterSwipeHint ? (
-              <Text
-                style={styles.lotListFooterHint}
-                accessibilityLiveRegion="polite"
-              >
-                ← 왼쪽으로 밀어 삭제
-              </Text>
-            ) : null}
-          </View>
+
         </View>
       ) : null}
     </View>
@@ -616,31 +538,10 @@ const styles = StyleSheet.create({
   lotList: {
     paddingBottom: spacing.none,
   },
-  lotListFooter: {
-    height: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  urgencyRatioBar: {
-    height: spacing.xxs,
-    flexDirection: "row",
-    backgroundColor: colors.mutedSurface,
-    overflow: "hidden",
-  },
-  urgencyRatioSegment: {
-    flexBasis: spacing.none,
-    height: "100%",
-  },
-  lotListFooterHint: {
-    flex: 1,
-    textAlign: "center",
-    textAlignVertical: "center",
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
-  },
+
+
+
+
   lotRow: {
     height: touchTarget.cta + spacing.xxs,
     paddingHorizontal: spacing.sm,
