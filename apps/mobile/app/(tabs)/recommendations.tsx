@@ -516,7 +516,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="이번에 골라본 요리"
-            description={formatRecommendationDescription(latestRecommendation)}
+            surface
+            accentColor={colors.primary}
           />
 
           {latestRecommendation.recommendations.length ? (
@@ -570,7 +571,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="이전 추천"
-            description="예전에 받아 둔 요리도 다시 살펴볼 수 있어요."
+            surface
+            accentColor={colors.primary}
           />
           <View style={styles.historyList}>
             {previousRecommendations.map((recommendation) => (
@@ -615,7 +617,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="즐겨찾는 요리"
-            description="저장해 둔 요리를 언제든 다시 살펴볼 수 있어요."
+            surface
+            accentColor={colors.primary}
           />
           {favoritesQuery.isPending ? (
             <View
@@ -1180,10 +1183,6 @@ function formatRecommendationContext(recommendation: RecipeRecommendation) {
   return `보관 재료 ${inventoryCount}개 기준`;
 }
 
-function formatRecommendationDescription(recommendation: RecipeRecommendation) {
-  return `${formatCreatedAt(recommendation.createdAt)} · ${formatRecommendationContext(recommendation)}`;
-}
-
 function formatDishMeta(dish: RecipeRecommendationDish) {
   return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${
     difficultyLabels[dish.difficulty]
@@ -1296,9 +1295,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    gap: spacing.lg,
+    gap: spacing.md,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   recipeViewSwitch: {
@@ -1420,7 +1419,7 @@ const styles = StyleSheet.create({
     color: colors.danger,
   },
   resultSection: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   favoriteLoading: {
     minHeight: spacing.xxxl,
@@ -1439,7 +1438,7 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   historyList: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   historyRow: {
     minHeight: touchTarget.min,

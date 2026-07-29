@@ -46,6 +46,7 @@ import {
   buildInventoryUrgencySections,
   filterInventoryItems,
   parseInventoryViewFilter,
+  type InventoryUrgencySection,
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
@@ -63,6 +64,11 @@ import {
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 const SWIPE_DELETE_HINT_KEY = "inventory-swipe-delete-hint-seen";
+const urgencySectionAccentColors: Record<InventoryUrgencySection, string> = {
+  expired: colors.danger,
+  within7: colors.warning,
+  safe: colors.success,
+};
 
 export default function InventoryScreen() {
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
@@ -783,9 +789,25 @@ export default function InventoryScreen() {
             />
           )}
           renderSectionHeader={({ section }) => (
-            <Text style={styles.urgencySectionTitle}>
-              {section.title} {section.itemCount}건
-            </Text>
+            <View style={styles.urgencySectionHeader}>
+              <View
+                style={styles.urgencySectionAccentSlot}
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+              >
+                <View
+                  style={[
+                    styles.urgencySectionAccent,
+                    {
+                      backgroundColor: urgencySectionAccentColors[section.key],
+                    },
+                  ]}
+                />
+              </View>
+              <Text style={styles.urgencySectionTitle}>
+                {section.title} {section.itemCount}건
+              </Text>
+            </View>
           )}
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
@@ -1481,14 +1503,36 @@ const styles = StyleSheet.create({
   },
   listHeader: {
     gap: spacing.xs,
-    paddingBottom: spacing.xs,
+  },
+  urgencySectionHeader: {
+    paddingLeft: spacing.md,
+    paddingRight: spacing.xs + spacing.xxs,
+    paddingVertical: spacing.xs,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surfaceTranslucent,
+    overflow: "hidden",
+  },
+  urgencySectionAccentSlot: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: spacing.xs,
+    width: spacing.xxs,
+    justifyContent: "center",
+  },
+  urgencySectionAccent: {
+    width: spacing.xxs,
+    height: spacing.md,
+    borderRadius: radius.pill,
   },
   urgencySectionTitle: {
     ...typography.bodySmall,
     color: colors.subtext,
     fontWeight: "700",
-    paddingTop: spacing.xs,
-    paddingBottom: spacing.xs,
   },
   itemSeparator: {
     height: spacing.xxs,

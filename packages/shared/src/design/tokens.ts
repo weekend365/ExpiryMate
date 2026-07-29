@@ -23,6 +23,7 @@ export const semanticColors = {
   // Surfaces
   background: neutral[50],
   surface: neutral[0],
+  surfaceTranslucent: "rgba(255, 255, 255, 0.94)",
   surfacePressed: neutral[100],
   mutedSurface: neutral[100],
 
