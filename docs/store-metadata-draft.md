@@ -99,8 +99,10 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 |------------|------|------|------------------------|
 | Contact Info | 계정·공유 초대 이메일 | App Functionality | 연결됨 / 추적 아님 |
 | Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
-| User Content | 재료·유통기한·추천 관련 내용·고객 문의 본문 | App Functionality | 연결됨 / 추적 아님 |
-| Purchases | (IAP 검증 시) 구매 이력 | App Functionality | 연결됨 / 추적 아님 |
+| Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
+| Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
+
+v1에는 네이티브 구매 UI가 없으므로 **Purchases는 선언하지 않습니다**.
 
 제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push.  
 상세는 `store-privacy-declarations.md` 표와 `/privacy` 본문을 따릅니다.
