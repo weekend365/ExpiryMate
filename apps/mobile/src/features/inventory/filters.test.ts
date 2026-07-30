@@ -7,6 +7,7 @@ import {
 } from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  buildInventoryFacetCounts,
   buildInventoryUrgencySections,
   filterInventoryItems,
   getInventoryUrgencySection,
@@ -132,6 +133,38 @@ describe("mobile inventory filters", () => {
     );
 
     expect(result.map((item) => item.id)).toEqual(["fridge-egg"]);
+  });
+
+  it("counts each filter facet against the other active facets", () => {
+    const items = [
+      createItem("fridge-expired", "우유", "2026-06-06"),
+      createItem("fridge-soon", "계란", "2026-06-10"),
+      createItem(
+        "room-soon",
+        "계란",
+        "2026-06-10",
+        StorageLocation.ROOM,
+      ),
+      createItem("fridge-safe", "두부", "2026-06-20"),
+    ];
+
+    const counts = buildInventoryFacetCounts(
+      items,
+      "within7",
+      StorageLocation.FRIDGE,
+    );
+
+    expect(counts.status).toEqual({
+      all: 3,
+      expired: 1,
+      within7: 1,
+      safe: 1,
+    });
+    expect(counts.locationTotal).toBe(2);
+    expect(counts.location).toEqual({
+      [StorageLocation.FRIDGE]: 1,
+      [StorageLocation.ROOM]: 1,
+    });
   });
 
   it("maps nearest expiry dates into urgency sections", () => {

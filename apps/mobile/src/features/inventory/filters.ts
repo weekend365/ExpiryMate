@@ -67,6 +67,66 @@ const matchesSearchQuery = (item: InventoryItem, searchQuery: string) => {
   return haystacks.some((value) => value.toLowerCase().includes(needle));
 };
 
+const getItemViewFilter = (
+  item: InventoryItem,
+): Exclude<InventoryViewFilter, "all"> => {
+  const bucket = getExpiryTrafficBucket(item.expiryDate);
+
+  return bucket === "within_7_days" ? "within7" : bucket;
+};
+
+export interface InventoryFacetCounts {
+  status: Record<InventoryViewFilter, number>;
+  location: Record<string, number>;
+  locationTotal: number;
+}
+
+/**
+ * Counts each facet against the other active facets:
+ * status excludes the active status, while location excludes the active location.
+ */
+export const buildInventoryFacetCounts = (
+  items: InventoryItem[],
+  activeFilter: InventoryViewFilter,
+  activeLocation: string | "all",
+  searchQuery = "",
+): InventoryFacetCounts => {
+  const counts: InventoryFacetCounts = {
+    status: {
+      all: 0,
+      expired: 0,
+      within7: 0,
+      safe: 0,
+    },
+    location: {},
+    locationTotal: 0,
+  };
+
+  items.forEach((item) => {
+    if (!matchesSearchQuery(item, searchQuery)) {
+      return;
+    }
+
+    const itemFilter = getItemViewFilter(item);
+
+    if (
+      activeLocation === "all" ||
+      item.storageLocation === activeLocation
+    ) {
+      counts.status.all += 1;
+      counts.status[itemFilter] += 1;
+    }
+
+    if (activeFilter === "all" || itemFilter === activeFilter) {
+      counts.location[item.storageLocation] =
+        (counts.location[item.storageLocation] ?? 0) + 1;
+      counts.locationTotal += 1;
+    }
+  });
+
+  return counts;
+};
+
 export const filterInventoryItems = (
   items: InventoryItem[],
   filter: InventoryViewFilter,
@@ -82,21 +142,7 @@ export const filterInventoryItems = (
       return false;
     }
 
-    const bucket = getExpiryTrafficBucket(item.expiryDate);
-
-    if (filter === "expired") {
-      return bucket === "expired";
-    }
-
-    if (filter === "within7") {
-      return bucket === "within_7_days";
-    }
-
-    if (filter === "safe") {
-      return bucket === "safe";
-    }
-
-    return true;
+    return filter === "all" || getItemViewFilter(item) === filter;
   });
 
   return sortInventoryByNearestExpiry(filtered);
