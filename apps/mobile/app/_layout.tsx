@@ -2,20 +2,28 @@ import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { useIsRestoring } from "@tanstack/react-query";
+import { useEffect, type ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
-import { AuthRedirectGate } from "../src/features/auth/auth-gate";
+import {
+  AuthLoadingScreen,
+  AuthRedirectGate,
+} from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { SpaceProvider } from "../src/features/spaces/space-provider";
 import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
-import { queryClient } from "../src/services/query-client";
+import {
+  queryCachePersistOptions,
+  queryClient,
+  refreshRestoredQueries,
+} from "../src/services/query-client";
 import { initMobileSentry } from "../src/services/sentry";
 import { pretendardFonts } from "../src/shared/fonts";
 import { colors, fontFamily, typography } from "../src/shared/theme";
@@ -40,15 +48,20 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <SpaceProvider>
-            <RecipeGenerationProvider>
-              <PushTokenSync />
-              <PendingSpaceInvitationBridge />
-              <NotificationNavigationBridge />
-              <AuthRedirectGate />
-              <StatusBar style="dark" />
-              <Stack
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={queryCachePersistOptions}
+          onSuccess={refreshRestoredQueries}
+        >
+          <QueryCacheRestoreBoundary>
+            <SpaceProvider>
+              <RecipeGenerationProvider>
+                <PushTokenSync />
+                <PendingSpaceInvitationBridge />
+                <NotificationNavigationBridge />
+                <AuthRedirectGate />
+                <StatusBar style="dark" />
+                <Stack
               screenOptions={({ navigation }) => ({
                 contentStyle: {
                   backgroundColor: colors.background,
@@ -146,13 +159,24 @@ export default function RootLayout() {
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />
-              </Stack>
-            </RecipeGenerationProvider>
-          </SpaceProvider>
-        </QueryClientProvider>
+                </Stack>
+              </RecipeGenerationProvider>
+            </SpaceProvider>
+          </QueryCacheRestoreBoundary>
+        </PersistQueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
+}
+
+function QueryCacheRestoreBoundary({ children }: { children: ReactNode }) {
+  const isRestoring = useIsRestoring();
+
+  if (isRestoring) {
+    return <AuthLoadingScreen />;
+  }
+
+  return <>{children}</>;
 }
 
 function PushTokenSync() {

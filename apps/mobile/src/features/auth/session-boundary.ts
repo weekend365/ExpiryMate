@@ -1,5 +1,6 @@
 import type { QueryClient } from "@tanstack/react-query";
 import { clearRecipeGenerationState } from "../recipes/recipe-generation-reset";
+import { clearPersistedQueryCache } from "../../services/query-client";
 import { useRegistrationStore } from "../../store/registration-store";
 
 /**
@@ -8,6 +9,7 @@ import { useRegistrationStore } from "../../store/registration-store";
  */
 export function clearUserScopedClientState(queryClient: QueryClient) {
   queryClient.clear();
+  void Promise.resolve(clearPersistedQueryCache()).catch(() => undefined);
   useRegistrationStore.getState().clearDraft();
   useRegistrationStore.getState().clearPrefill();
   clearRecipeGenerationState();

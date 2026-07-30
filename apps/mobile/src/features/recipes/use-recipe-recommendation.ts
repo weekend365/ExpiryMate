@@ -6,8 +6,14 @@ import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 export const recipeRecommendationQueryKey = ["recipe-recommendation"] as const;
 
 export const useRecipeRecommendation = (id: string | undefined) => {
-  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
-    useSpaceScopedQueryGate();
+  const {
+    sessionUserId,
+    activeSpaceId,
+    enabled,
+    isAwaitingSpace,
+    blockingSpaceError,
+    refetchSpaces,
+  } = useSpaceScopedQueryGate();
 
   const query = useQuery({
     queryKey: [
@@ -24,7 +30,16 @@ export const useRecipeRecommendation = (id: string | undefined) => {
 
   return {
     ...query,
-    isLoading: Boolean(id) && (isAwaitingSpace || query.isLoading),
-    isPending: Boolean(id) && (isAwaitingSpace || query.isPending),
+    error: blockingSpaceError ?? query.error,
+    isError: Boolean(blockingSpaceError) || query.isError,
+    isLoading:
+      Boolean(id) &&
+      !blockingSpaceError &&
+      (isAwaitingSpace || query.isLoading),
+    isPending:
+      Boolean(id) &&
+      !blockingSpaceError &&
+      (isAwaitingSpace || query.isPending),
+    refetch: blockingSpaceError ? refetchSpaces : query.refetch,
   };
 };

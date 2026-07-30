@@ -150,8 +150,11 @@ export default function RecommendationsScreen() {
       ),
     [favoritesQuery.data],
   );
-  const errorMessage =
-    generationErrorMessage ?? getErrorMessage(historyQuery.error);
+  const historyErrorMessage = getErrorMessage(historyQuery.error);
+  const errorMessage = generationErrorMessage ?? historyErrorMessage;
+  const isHistoryLoadError = Boolean(
+    historyQuery.error && !generationErrorMessage,
+  );
   const isQuotaError = isRecommendationQuotaError(errorMessage);
   const justGenerated =
     generationStatus === "success" &&
@@ -471,22 +474,40 @@ export default function RecommendationsScreen() {
           </View>
         ) : (
           <View style={styles.errorCard}>
-            <Text style={styles.errorTitle}>앗, 추천을 만들지 못했어요</Text>
+            <Text style={styles.errorTitle}>
+              {isHistoryLoadError
+                ? "앗, 추천을 불러오지 못했어요"
+                : "앗, 추천을 만들지 못했어요"}
+            </Text>
             <MascotSpeechBubble
               message={errorMessage}
               mood="worry"
               size="small"
             />
             <Pressable
-              onPress={() => router.push("/register")}
+              onPress={() => {
+                if (isHistoryLoadError) {
+                  void historyQuery.refetch();
+                  return;
+                }
+                router.push("/register");
+              }}
               accessibilityRole="button"
-              accessibilityLabel="재료부터 넣어볼까요?"
+              accessibilityLabel={
+                isHistoryLoadError
+                  ? "추천 다시 불러오기"
+                  : "재료부터 넣어볼까요?"
+              }
               style={({ pressed }) => [
                 styles.quotaLink,
                 pressed && styles.optionsSummaryPressed,
               ]}
             >
-              <Text style={styles.quotaLinkText}>재료부터 넣어볼까요?</Text>
+              <Text style={styles.quotaLinkText}>
+                {isHistoryLoadError
+                  ? "다시 불러올게요"
+                  : "재료부터 넣어볼까요?"}
+              </Text>
             </Pressable>
           </View>
         )

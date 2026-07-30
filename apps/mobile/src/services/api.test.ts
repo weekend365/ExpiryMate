@@ -106,6 +106,30 @@ describe("mobile API client core flow", () => {
     );
   });
 
+  it("keeps the stored session when the initial refresh fails transiently", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch.mockRejectedValueOnce(new TypeError("Network request failed"));
+    const { getMe } = await import("./api");
+
+    await expect(getMe()).rejects.toThrow(/인터넷 연결/);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(true);
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe(
+      "refresh-existing",
+    );
+  });
+
+  it("clears an invalid stored session after refresh is rejected", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-invalid");
+    stores.fetch.mockResolvedValueOnce(errorResponse(401, "만료된 세션입니다."));
+    const { getMe } = await import("./api");
+
+    await expect(getMe()).resolves.toBeNull();
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+  });
+
   it("refreshes the session and retries once when an authenticated request expires", async () => {
     stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
     stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");

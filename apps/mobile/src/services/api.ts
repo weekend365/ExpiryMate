@@ -65,6 +65,16 @@ interface ApiEnvelope<T> {
   };
 }
 
+class ApiResponseError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = "ApiResponseError";
+  }
+}
+
 type BatchDiscardInventoryItemsResponse = {
   count: number;
   items: InventoryItem[];
@@ -199,9 +209,10 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
-    throw new Error(
+    throw new ApiResponseError(
       body.error?.message ??
         "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+      response.status,
     );
   }
 
@@ -273,12 +284,7 @@ export async function restoreRegisteredSession(): Promise<AuthSession | null> {
     });
   }
 
-  try {
-    return await sessionPromise;
-  } catch {
-    sessionPromise = null;
-    return null;
-  }
+  return sessionPromise;
 }
 
 async function loadRegisteredSession(): Promise<AuthSession | null> {
@@ -312,9 +318,10 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
   try {
     currentUser = parsed;
     return await refreshRegisteredSessionSingleFlight();
-  } catch {
-    await clearAuthSession();
-    return null;
+  } catch (error) {
+    accessToken = null;
+    currentUser = null;
+    throw error;
   }
 }
 
@@ -345,15 +352,28 @@ async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | nul
         return null;
       }
       return session;
-    } catch {
-      await clearAuthSession();
-      return null;
+    } catch (error) {
+      if (isTerminalRefreshError(error)) {
+        await clearAuthSession();
+        return null;
+      }
+      throw error;
     }
   })().finally(() => {
     refreshInFlight = null;
   });
 
   return refreshInFlight;
+}
+
+function isTerminalRefreshError(error: unknown) {
+  return (
+    error instanceof ApiResponseError &&
+    error.status >= 400 &&
+    error.status < 500 &&
+    error.status !== 408 &&
+    error.status !== 429
+  );
 }
 
 async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit) {

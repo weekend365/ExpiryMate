@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   clearRecipeGenerationState: vi.fn(),
+  clearPersistedQueryCache: vi.fn(() => Promise.resolve()),
   clearDraft: vi.fn(),
   clearPrefill: vi.fn(),
 }));
@@ -18,6 +19,10 @@ vi.mock("../../store/registration-store", () => ({
       clearPrefill: mocks.clearPrefill,
     }),
   },
+}));
+
+vi.mock("../../services/query-client", () => ({
+  clearPersistedQueryCache: mocks.clearPersistedQueryCache,
 }));
 
 describe("session boundary cleanup", () => {
@@ -53,6 +58,7 @@ describe("session boundary cleanup", () => {
     expect(mocks.clearDraft).toHaveBeenCalledOnce();
     expect(mocks.clearPrefill).toHaveBeenCalledOnce();
     expect(mocks.clearRecipeGenerationState).toHaveBeenCalledOnce();
+    expect(mocks.clearPersistedQueryCache).toHaveBeenCalledOnce();
   });
 
   it("scopes query keys by session user id", async () => {

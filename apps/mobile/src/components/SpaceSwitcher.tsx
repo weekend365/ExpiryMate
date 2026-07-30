@@ -25,6 +25,7 @@ import {
 } from "../shared/theme";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
+import { FeedbackBanner } from "./FeedbackBanner";
 
 export function SpaceSwitcher() {
   const queryClient = useQueryClient();
@@ -34,6 +35,8 @@ export function SpaceSwitcher() {
     activeSpace,
     activeSpaceId,
     isLoading,
+    error,
+    refetchSpaces,
     setActiveSpaceId,
   } = useActiveSpace();
   const [visible, setVisible] = useState(false);
@@ -68,6 +71,20 @@ export function SpaceSwitcher() {
       ]);
     }, [activeSpaceId, queryClient, sessionUserId]),
   );
+
+  if (error && !activeSpace) {
+    return (
+      <FeedbackBanner
+        tone="danger"
+        title="냉장고를 불러오지 못했어요"
+        description={error.message}
+        actionLabel="다시 불러올게요"
+        onAction={() => {
+          void refetchSpaces();
+        }}
+      />
+    );
+  }
 
   if (!activeSpace && !isLoading) {
     return null;
@@ -105,6 +122,19 @@ export function SpaceSwitcher() {
         </View>
         <ChevronDown color={colors.subtext} size={spacing.md} strokeWidth={2.2} />
       </Pressable>
+
+      {error ? (
+        <FeedbackBanner
+          tone="warning"
+          title="최신 냉장고 목록을 확인하지 못했어요"
+          description="저장된 냉장고 데이터는 그대로 보여드리고 있어요."
+          actionLabel="다시 확인할게요"
+          onAction={() => {
+            void refetchSpaces();
+          }}
+          showMascot={false}
+        />
+      ) : null}
 
       <BottomSheet
         visible={visible}
