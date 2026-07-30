@@ -13,13 +13,13 @@ describe("validateExpoPublicEnv", () => {
     ).not.toThrow();
   });
 
-  it("requires API, IAP, OAuth redirect, Google, and Kakao in production", () => {
+  it("requires API, OAuth redirect, Google, and Kakao in production", () => {
     expect(() =>
       validateExpoPublicEnv({
         EXPO_PUBLIC_APP_ENV: "production",
         EXPO_PUBLIC_API_BASE_URL: "https://api.expirymate.app",
       }),
-    ).toThrow(/EXPO_PUBLIC_OAUTH_REDIRECT_URI|EXPO_PUBLIC_IAP_PRODUCT_IDS|EXPO_PUBLIC_GOOGLE|EXPO_PUBLIC_KAKAO/s);
+    ).toThrow(/EXPO_PUBLIC_OAUTH_REDIRECT_URI|EXPO_PUBLIC_GOOGLE|EXPO_PUBLIC_KAKAO/s);
   });
 
   it("rejects localhost API and mismatched OAuth redirect origins", () => {
@@ -27,7 +27,6 @@ describe("validateExpoPublicEnv", () => {
       validateExpoPublicEnv({
         EXPO_PUBLIC_APP_ENV: "production",
         EXPO_PUBLIC_API_BASE_URL: "http://localhost:4000",
-        EXPO_PUBLIC_IAP_PRODUCT_IDS: "expirymate_premium_monthly",
         EXPO_PUBLIC_OAUTH_REDIRECT_URI: "https://api.expirymate.app/oauth/callback",
         EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID: "google-client.apps.googleusercontent.com",
         EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID: "kakao-client-id",
@@ -40,8 +39,6 @@ describe("validateExpoPublicEnv", () => {
       validateExpoPublicEnv({
         EXPO_PUBLIC_APP_ENV: "production",
         EXPO_PUBLIC_API_BASE_URL: "https://api.expirymate.app",
-        EXPO_PUBLIC_IAP_PRODUCT_IDS:
-          "expirymate_premium_monthly,expirymate_premium_yearly",
         EXPO_PUBLIC_OAUTH_REDIRECT_URI:
           "https://api.expirymate.app/oauth/callback",
         EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID:
@@ -57,7 +54,6 @@ describe("validateExpoPublicEnv", () => {
       validateExpoPublicEnv({
         EXPO_PUBLIC_APP_ENV: "production",
         EXPO_PUBLIC_API_BASE_URL: "https://api.expirymate.app",
-        EXPO_PUBLIC_IAP_PRODUCT_IDS: "expirymate_premium_monthly",
         EXPO_PUBLIC_OAUTH_REDIRECT_URI:
           "https://api.expirymate.app/oauth/callback",
         EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID:

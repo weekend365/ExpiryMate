@@ -26,7 +26,6 @@
 | 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers | Device or other IDs |
 | AI 추천 요청·결과·재료 snapshot | 예 (추천 사용 시) | 추천 제공·히스토리 | **OpenAI(미국)** | 동의 철회·기록 삭제·계정 정리 | User Content | App activity |
 | 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
-| 결제/구독 영수증 검증 | **아니오 (v1)** | 네이티브 구매 UI 미제공 | — | — | 선언 안 함 | 선언 안 함 |
 | 추적(광고 ID 등) | **아니오** | — | — | — | Data Not Collected / Tracking=No | Data is not collected for ads tracking |
 | 기기 연락처·사진 라이브러리(일반) | 아니오* | — | — | — | Not collected | Not collected |
 

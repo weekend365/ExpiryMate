@@ -225,14 +225,13 @@ Copy `apps/mobile/.env.example` to `apps/mobile/.env`
 ```env
 EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
 EXPO_PUBLIC_APP_ENV="development"
-EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
 ```
 
 For production EAS builds, configure the values from
 `apps/mobile/.env.production.example` in EAS environment variables or secrets.
 `EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_OAUTH_REDIRECT_URI` must be public
 `https://` URLs on the same origin (redirect ending in `/oauth/callback`), and
-Google, Kakao, and IAP public identifiers must be present. `app.config.js` and
+Google and Kakao public identifiers must be present. `app.config.js` and
 `eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
 builds fail fast when these values are missing, local, or placeholders.
 

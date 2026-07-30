@@ -36,9 +36,6 @@ import type {
   UserStorageLocation,
   SupportInquiry,
   SupportInquiryCreateInput,
-  SubscriptionEntitlement,
-  SubscriptionVerificationRequest,
-  SubscriptionVerificationResponse,
   UpdateInventoryItemBody,
   InventorySpaceSummary,
   InventorySpaceMember,
@@ -988,13 +985,4 @@ export const unregisterPushToken = (token: string) =>
   request<{ ok: true }>("/notifications/push-tokens/unregister", {
     method: "POST",
     body: JSON.stringify({ token }),
-  });
-
-export const getSubscriptionEntitlement = () =>
-  request<SubscriptionEntitlement>("/subscriptions/entitlement");
-
-export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
-  request<SubscriptionVerificationResponse>("/subscriptions/verify", {
-    method: "POST",
-    body: JSON.stringify(payload),
   });

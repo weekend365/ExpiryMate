@@ -46,7 +46,6 @@ import {
   useRecipeRecommendations,
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
-import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import type { RecipeRecommendationPayload } from "../../src/services/api";
 import {
   colors,
@@ -111,7 +110,6 @@ export default function RecommendationsScreen() {
   } = useRecipeGeneration();
   const privacyStatusQuery = usePrivacyStatus();
   const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
-  const subscription = useSubscriptionEntitlement();
   const [servings, setServings] = useState(2);
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
@@ -155,9 +153,6 @@ export default function RecommendationsScreen() {
   const errorMessage =
     generationErrorMessage ?? getErrorMessage(historyQuery.error);
   const isQuotaError = isRecommendationQuotaError(errorMessage);
-  const hasActiveEntitlement = Boolean(
-    subscription.query.data?.hasActiveEntitlement,
-  );
   const justGenerated =
     generationStatus === "success" &&
     Boolean(latestRecommendation) &&
@@ -470,7 +465,7 @@ export default function RecommendationsScreen() {
                   ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
                   : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
               }
-              mood={hasActiveEntitlement ? "idle" : "worry"}
+              mood="worry"
               size="small"
             />
           </View>

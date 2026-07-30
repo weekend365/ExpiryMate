@@ -1,6 +1,5 @@
 const REQUIRED_PRODUCTION_VALUES = [
   "EXPO_PUBLIC_API_BASE_URL",
-  "EXPO_PUBLIC_IAP_PRODUCT_IDS",
   "EXPO_PUBLIC_OAUTH_REDIRECT_URI",
   "EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID",
   "EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID",
@@ -43,8 +42,6 @@ function validateExpoPublicEnv(env = process.env) {
     env.EXPO_PUBLIC_OAUTH_REDIRECT_URI,
     errors,
   );
-  validateProductIds(env.EXPO_PUBLIC_IAP_PRODUCT_IDS, errors);
-
   for (const key of OPTIONAL_PROVIDER_CLIENT_IDS) {
     const value = env[key]?.trim();
     if (!value) {
@@ -113,18 +110,6 @@ function validateOAuthRedirectMatchesApi(apiBaseUrl, redirectUri, errors) {
     errors.push(
       "EXPO_PUBLIC_OAUTH_REDIRECT_URI must end with /oauth/callback.",
     );
-  }
-}
-
-function validateProductIds(value, errors) {
-  const productIds =
-    value
-      ?.split(",")
-      .map((item) => item.trim())
-      .filter(Boolean) ?? [];
-
-  if (productIds.length === 0) {
-    errors.push("EXPO_PUBLIC_IAP_PRODUCT_IDS must contain at least one product id.");
   }
 }
 
