@@ -27,6 +27,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, BackHandler, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { BottomSheet } from "../src/components/BottomSheet";
+import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { FormField } from "../src/components/FormField";
@@ -295,7 +296,10 @@ export default function RegisterScreen() {
     if (step !== "done") {
       navigation.setOptions({
         title: "재료 넣기",
-        headerLeft: undefined,
+        headerLeft: () =>
+          navigation.canGoBack() ? (
+            <HeaderBackButton onPress={() => navigation.goBack()} />
+          ) : undefined,
       });
       return;
     }
@@ -303,15 +307,7 @@ export default function RegisterScreen() {
     navigation.setOptions({
       title: "잘 넣어뒀어요",
       headerLeft: () => (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="홈으로 돌아가기"
-          onPress={() => router.replace("/(tabs)/home")}
-          hitSlop={spacing.xs}
-          style={styles.headerBackButton}
-        >
-          <Text style={styles.headerBackLabel}>홈</Text>
-        </Pressable>
+        <HeaderBackButton onPress={() => router.replace("/(tabs)/home")} />
       ),
     });
   }, [navigation, step]);
@@ -937,11 +933,6 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  headerBackButton: {
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.sm,
-    justifyContent: "center",
-  },
   addLocationField: {
     gap: spacing.xs,
   },
@@ -962,12 +953,6 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,
-  },
-  headerBackLabel: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
   doneHero: {
     alignItems: "stretch",

@@ -147,9 +147,9 @@ export default function OnboardingScreen() {
               pressed && styles.backLinkPressed,
             ]}
             accessibilityRole="button"
-            accessibilityLabel="이전으로 돌아가기"
+            accessibilityLabel="뒤로가기"
           >
-            <Text style={styles.backLinkText}>뒤로</Text>
+            <Text style={styles.backLinkText}>뒤로가기</Text>
           </Pressable>
         ) : (
           <View style={styles.backLinkSpacer} />

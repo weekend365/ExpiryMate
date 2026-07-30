@@ -83,10 +83,10 @@ export function StepFlow({
               pressed && styles.backButtonPressed,
             ]}
             accessibilityRole="button"
-            accessibilityLabel="이전으로 돌아가기"
+            accessibilityLabel="뒤로가기"
           >
             <ChevronLeft color={colors.text} size={spacing.sm + spacing.xxs} strokeWidth={2.4} />
-            <Text style={styles.backLabel}>뒤로</Text>
+            <Text style={styles.backLabel}>뒤로가기</Text>
           </Pressable>
           <Text style={styles.progressLabel}>
             {safeIndex + 1}/{steps.length}

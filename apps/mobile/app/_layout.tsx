@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { AuthRedirectGate } from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
@@ -48,7 +49,7 @@ export default function RootLayout() {
               <AuthRedirectGate />
               <StatusBar style="dark" />
               <Stack
-              screenOptions={{
+              screenOptions={({ navigation }) => ({
                 contentStyle: {
                   backgroundColor: colors.background,
                 },
@@ -60,7 +61,12 @@ export default function RootLayout() {
                 headerBackTitleStyle: {
                   fontFamily: fontFamily.medium,
                 },
-              }}
+                headerBackTitle: "뒤로가기",
+                headerLeft: () =>
+                  navigation.canGoBack() ? (
+                    <HeaderBackButton onPress={() => navigation.goBack()} />
+                  ) : undefined,
+              })}
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="onboarding" options={{ headerShown: false }} />
@@ -68,10 +74,10 @@ export default function RootLayout() {
                 name="(tabs)"
                 options={{
                   headerShown: false,
-                  // Fallback when tab sync has not run yet; tabs layout keeps this
-                  // aligned with the active tab (홈/보관함/추천/설정).
-                  title: "홈",
-                  headerBackTitle: "홈",
+                  // Native stack uses the previous scene's options for the iOS
+                  // back label, so keep the hidden tabs scene label explicit.
+                  title: "뒤로가기",
+                  headerBackTitle: "뒤로가기",
                 }}
               />
               <Stack.Screen name="scanner" options={{ headerShown: false }} />

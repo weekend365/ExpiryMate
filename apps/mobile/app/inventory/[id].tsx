@@ -291,7 +291,7 @@ export default function InventoryDetailScreen() {
           mood="worry"
           title="이 재료를 찾지 못했어요"
           description="목록으로 돌아가서 다시 골라볼까요?"
-          actionLabel="보관함으로 갈게요"
+          actionLabel="뒤로가기"
           onAction={() => router.back()}
         />
       </Screen>
@@ -473,7 +473,7 @@ export default function InventoryDetailScreen() {
       footer={
         isFinalStatus ? (
           <Button onPress={() => router.back()} fullWidth>
-            보관함으로 갈게요
+            뒤로가기
           </Button>
         ) : (
           <Button icon={Pencil} onPress={openEdit} fullWidth>

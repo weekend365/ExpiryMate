@@ -5,16 +5,16 @@ import {
 } from "./header-back-title";
 
 describe("resolveTabHeaderBackTitle", () => {
-  it("maps known tabs to conversational labels", () => {
-    expect(resolveTabHeaderBackTitle("home")).toBe("홈");
-    expect(resolveTabHeaderBackTitle("inventory")).toBe("보관함");
-    expect(resolveTabHeaderBackTitle("recommendations")).toBe("추천");
-    expect(resolveTabHeaderBackTitle("settings")).toBe("설정");
+  it("uses one label for every tab", () => {
+    expect(resolveTabHeaderBackTitle("home")).toBe("뒤로가기");
+    expect(resolveTabHeaderBackTitle("inventory")).toBe("뒤로가기");
+    expect(resolveTabHeaderBackTitle("recommendations")).toBe("뒤로가기");
+    expect(resolveTabHeaderBackTitle("settings")).toBe("뒤로가기");
   });
 
-  it("falls back to 홈 for unknown tabs", () => {
-    expect(resolveTabHeaderBackTitle(undefined)).toBe("홈");
-    expect(resolveTabHeaderBackTitle("mystery")).toBe("홈");
+  it("uses the same label for unknown tabs", () => {
+    expect(resolveTabHeaderBackTitle(undefined)).toBe("뒤로가기");
+    expect(resolveTabHeaderBackTitle("mystery")).toBe("뒤로가기");
   });
 });
 
@@ -33,11 +33,11 @@ describe("resolveHeaderBackTitle", () => {
           ],
         },
       }),
-    ).toBe("보관함");
+    ).toBe("뒤로가기");
   });
 
   it("falls back safely without tab state", () => {
-    expect(resolveHeaderBackTitle({ name: "(tabs)" })).toBe("홈");
-    expect(resolveHeaderBackTitle(null)).toBe("뒤로");
+    expect(resolveHeaderBackTitle({ name: "(tabs)" })).toBe("뒤로가기");
+    expect(resolveHeaderBackTitle(null)).toBe("뒤로가기");
   });
 });

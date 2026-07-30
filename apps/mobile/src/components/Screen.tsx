@@ -70,7 +70,7 @@ export function Screen({
             <Pressable
               onPress={() => router.back()}
               accessibilityRole="button"
-              accessibilityLabel="이전 화면으로"
+              accessibilityLabel="뒤로가기"
               hitSlop={spacing.xs}
               style={({ pressed }) => [
                 styles.backButton,

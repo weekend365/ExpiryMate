@@ -137,7 +137,7 @@ export function BottomSheet({
   );
 
   // Unmount in the same render as dismiss. Keeping a transparent Modal around
-  // for exit animation steals taps from stack headers (홈/뒤로) app-wide on iOS.
+  // for exit animation steals taps from stack headers (뒤로가기) app-wide on iOS.
   if (!visible) {
     return null;
   }
