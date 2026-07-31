@@ -20,6 +20,7 @@ import ReanimatedSwipeable, {
   type SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 
 interface InventoryGroupCardProps {
   group: InventoryItemGroup;
@@ -52,6 +53,7 @@ export function InventoryGroupCard({
   selectedIds,
   resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryGroupCardProps) {
+  const { shouldStack } = useResponsiveLayout();
   const isExpandable = group.items.length > 1;
   const showLots = selectionMode || expanded;
   const nearestItem = group.items[0]!;
@@ -176,6 +178,7 @@ export function InventoryGroupCard({
           }}
           style={({ pressed }) => [
             styles.summaryMain,
+            shouldStack && styles.summaryMainStacked,
             pressed && styles.summaryPressed,
           ]}
         >
@@ -184,13 +187,13 @@ export function InventoryGroupCard({
           ) : null}
 
           <View style={styles.summaryCopy}>
-            <Text style={styles.name} numberOfLines={1}>
+            <Text style={styles.name}>
               {group.displayName}
               {group.brand ? (
                 <Text style={styles.brandInline}> · {group.brand}</Text>
               ) : null}
             </Text>
-            <Text style={styles.groupMeta} numberOfLines={1}>
+            <Text style={styles.groupMeta}>
               {locationLabel} · {quantityLabel}
 
             </Text>
@@ -254,6 +257,7 @@ export function InventoryGroupCard({
                 }}
                 style={({ pressed }) => [
                   styles.lotRow,
+                  shouldStack && styles.lotRowAccessible,
                   index > 0 && styles.lotRowBorder,
                   selected && styles.lotRowSelected,
                   pressed && styles.lotRowPressed,
@@ -265,7 +269,7 @@ export function InventoryGroupCard({
                   <Text style={styles.lotDate}>
                     {formatDateKoreanCompact(item.expiryDate)}
                   </Text>
-                  <Text style={styles.lotMeta} numberOfLines={1}>
+                  <Text style={styles.lotMeta}>
                     {resolveLocationLabel(item.storageLocation)} ·{" "}
                     {formatInventoryQuantity(item)}
                   </Text>
@@ -500,6 +504,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
   },
+  summaryMainStacked: {
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+  },
   summaryPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -509,6 +517,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   name: {
+    flexShrink: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.subheading.fontFamily,
@@ -521,6 +530,7 @@ const styles = StyleSheet.create({
     color: colors.mutedText,
   },
   groupMeta: {
+    flexShrink: 1,
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
@@ -543,12 +553,16 @@ const styles = StyleSheet.create({
 
 
   lotRow: {
-    height: touchTarget.cta + spacing.xxs,
+    minHeight: touchTarget.cta + spacing.xxs,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
+  },
+  lotRowAccessible: {
+    alignItems: "flex-start",
+    paddingVertical: spacing.xs,
   },
   lotRowBorder: {
     borderTopWidth: 1,
@@ -562,6 +576,7 @@ const styles = StyleSheet.create({
   },
   lotCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   lotDate: {
@@ -571,6 +586,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   lotMeta: {
+    flexShrink: 1,
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
@@ -605,8 +621,9 @@ const styles = StyleSheet.create({
   },
   listSwipeAction: {
     width: spacing.xxxl,
-    height: touchTarget.cta + spacing.xxs,
-    alignSelf: "center",
+    minHeight: touchTarget.cta + spacing.xxs,
+    height: "100%",
+    alignSelf: "stretch",
     borderRadius: radius.none,
     backgroundColor: colors.danger,
     alignItems: "center",

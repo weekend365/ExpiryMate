@@ -14,11 +14,13 @@ import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function SettingsScreen() {
+  const { shouldStack } = useResponsiveLayout();
   return (
-    <Screen>
-      <View style={styles.brandCard}>
+    <Screen bottomInsetMode="navigator" testID="settings-screen">
+      <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
         <Mascot size="small" mood="idle" />
         <View style={styles.brandCopy}>
           <Text style={styles.brandName}>{appBrand.appNameKo}</Text>
@@ -88,8 +90,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.md,
   },
+  brandCardStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
   brandCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   brandName: {

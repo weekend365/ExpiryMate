@@ -468,6 +468,7 @@ export default function InventoryDetailScreen() {
 
   return (
     <Screen
+      testID="inventory-detail-screen"
       title={item.displayName}
       subtitle="장고랑 같이 이 재료를 살펴볼게요."
       footer={
@@ -737,11 +738,13 @@ const styles = StyleSheet.create({
   },
   heroRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.md,
   },
   heroCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   heroEyebrow: {
@@ -777,6 +780,7 @@ const styles = StyleSheet.create({
   },
   summaryRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
@@ -795,6 +799,8 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     textAlign: "right",
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
@@ -880,11 +886,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   successTitle: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
@@ -895,11 +903,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   feedbackCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   errorTitle: {

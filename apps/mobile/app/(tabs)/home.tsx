@@ -39,6 +39,7 @@ import {
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 const difficultyLabels = {
@@ -48,6 +49,7 @@ const difficultyLabels = {
 } as const;
 
 export default function HomeScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useDashboardSummary();
   const {
@@ -194,6 +196,8 @@ export default function HomeScreen() {
     <Screen
       scroll={false}
       contentWidth="wide"
+      bottomInsetMode="navigator"
+      testID="home-screen"
       contentStyle={styles.screenContent}
     >
       <View style={styles.homeScene}>
@@ -311,7 +315,10 @@ export default function HomeScreen() {
             />
             {isInitialLoading ? (
               <View
-                style={styles.recommendationPreview}
+                style={[
+                  styles.recommendationPreview,
+                  shouldStack && styles.recommendationPreviewStacked,
+                ]}
                 accessibilityLabel="오늘의 요리 추천을 불러오고 있어요"
               >
                 <SkeletonBlock
@@ -328,6 +335,7 @@ export default function HomeScreen() {
               <View
                 style={[
                   styles.recommendationPreview,
+                  shouldStack && styles.recommendationPreviewStacked,
                   styles.recommendationError,
                 ]}
               >
@@ -376,6 +384,7 @@ export default function HomeScreen() {
                 }
                 style={({ pressed }) => [
                   styles.recommendationPreview,
+                  shouldStack && styles.recommendationPreviewStacked,
                   pressed && styles.previewBodyPressed,
                 ]}
               >
@@ -400,7 +409,7 @@ export default function HomeScreen() {
                     <AppText
                       variant="bodySmall"
                       tone="subtext"
-                      numberOfLines={1}
+                      numberOfLines={2}
                     >
                       {recommendationPreview.servings}인분
                       {"  ·  "}
@@ -423,7 +432,7 @@ export default function HomeScreen() {
                           ? "warning"
                           : "primary"
                       }
-                      numberOfLines={1}
+                      numberOfLines={2}
                       style={styles.recommendationReasonText}
                     >
                       {recommendationReason}
@@ -541,13 +550,22 @@ export default function HomeScreen() {
               <AppText variant="label" tone="subtext">
                 재료 추가
               </AppText>
-              <View style={styles.quickEntryActions}>
+              <View
+                style={[
+                  styles.quickEntryActions,
+                  shouldStack && styles.quickEntryActionsStacked,
+                ]}
+              >
                 <Button
                   icon={Barcode}
                   onPress={handleOpenScanner}
                   size={emphasizeEntryActions ? "medium" : "small"}
                   fullWidth
-                  style={styles.quickEntryAction}
+                  style={[
+                    styles.quickEntryAction,
+                    shouldStack && styles.quickEntryActionStacked,
+                  ]}
+                  testID="home-scan-button"
                 >
                   바코드 스캔
                 </Button>
@@ -557,7 +575,11 @@ export default function HomeScreen() {
                   variant="surface"
                   size={emphasizeEntryActions ? "medium" : "small"}
                   fullWidth
-                  style={styles.quickEntryAction}
+                  style={[
+                    styles.quickEntryAction,
+                    shouldStack && styles.quickEntryActionStacked,
+                  ]}
+                  testID="home-manual-register-button"
                 >
                   직접 입력
                 </Button>
@@ -583,8 +605,11 @@ function HomeSectionHeader({
   accessibilityLabel?: string;
   onPress?: () => void;
 }) {
+  const { shouldStack } = useResponsiveLayout();
   return (
-    <View style={styles.sectionHeader}>
+    <View
+      style={[styles.sectionHeader, shouldStack && styles.sectionHeaderStacked]}
+    >
       <AppText
         variant="bodySmall"
         tone="subtext"
@@ -637,7 +662,6 @@ function HomeJangoNotice({
         message={notice.message}
         mood={notice.mood}
         size="small"
-        numberOfLines={2}
         style={styles.heroNotice}
       />
     );
@@ -655,7 +679,6 @@ function HomeJangoNotice({
         message={notice.message}
         mood={notice.mood}
         size="small"
-        numberOfLines={2}
         style={styles.heroNotice}
       />
     </Pressable>
@@ -814,6 +837,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.mutedSurface,
   },
+  recommendationPreviewStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   previewBodyPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -853,8 +880,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.xs,
   },
+  quickEntryActionsStacked: {
+    flexDirection: "column",
+  },
   quickEntryAction: {
     flex: 1,
+  },
+  quickEntryActionStacked: {
+    flex: 0,
   },
   trafficGroup: {
     gap: spacing.sm,
@@ -870,6 +903,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.xs,
+  },
+  sectionHeaderStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   sectionTitle: {
     fontWeight: "700",

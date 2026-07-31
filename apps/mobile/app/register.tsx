@@ -41,6 +41,7 @@ import { useSaveInventoryItem } from "../src/features/registration/use-save-inve
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import { useResponsiveLayout } from "../src/shared/responsive-layout";
 import {
   type RegistrationDraft,
   useRegistrationStore,
@@ -180,6 +181,7 @@ const getPrefillKey = (
     : "";
 
 export default function RegisterScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const navigation = useNavigation();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
@@ -527,7 +529,12 @@ export default function RegisterScreen() {
 
         {registeredSessionItems.length ? (
           <View style={styles.sessionCard}>
-            <View style={styles.sessionHeader}>
+            <View
+              style={[
+                styles.sessionHeader,
+                shouldStack && styles.sessionHeaderStacked,
+              ]}
+            >
               <View style={styles.sessionCopy}>
                 <Text style={styles.sessionEyebrow}>오늘 넣은 재료</Text>
                 <Text style={styles.sessionTitle}>
@@ -556,6 +563,7 @@ export default function RegisterScreen() {
             accessibilityLabel="요리 추천 받아볼까요?"
             style={({ pressed }) => [
               styles.recipeHint,
+              shouldStack && styles.recipeHintStacked,
               pressed && styles.templateCardPressed,
             ]}
           >
@@ -570,6 +578,7 @@ export default function RegisterScreen() {
   return (
     <Screen
       contentWidth="form"
+      testID="register-screen"
       footer={
         <Button
           icon={isLastStep ? CheckCircle2 : ChevronRight}
@@ -578,6 +587,7 @@ export default function RegisterScreen() {
           loading={mutation.isPending}
           disabled={!canGoNext}
           fullWidth
+          testID="register-next-button"
         >
           {primaryCtaLabel}
         </Button>
@@ -617,7 +627,9 @@ export default function RegisterScreen() {
               </View>
             ) : null}
 
-            <View style={styles.formCard}>
+            <View
+              style={[styles.formCard, shouldStack && styles.formCardCompact]}
+            >
               <FormField
                 control={form.control}
                 name="displayName"
@@ -669,7 +681,9 @@ export default function RegisterScreen() {
 
         {step === "storage" ? (
           <>
-            <View style={styles.formCard}>
+            <View
+              style={[styles.formCard, shouldStack && styles.formCardCompact]}
+            >
               <View style={styles.storageBlock}>
                 <Text style={styles.storageBlockLabel}>어디에 두나요?</Text>
                 <View style={styles.pillRow}>
@@ -731,7 +745,9 @@ export default function RegisterScreen() {
         ) : null}
 
         {step === "expiry" ? (
-          <View style={styles.formCard}>
+          <View
+            style={[styles.formCard, shouldStack && styles.formCardCompact]}
+          >
             <DatePickerField
               presentation="hero"
               heroEyebrow={null}
@@ -781,37 +797,80 @@ export default function RegisterScreen() {
               />
               <Text style={styles.summaryTitle}>이렇게 넣을게요</Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+            >
               <Text style={styles.summaryLabel}>재료</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStack && styles.summaryValueStacked,
+                ]}
+              >
                 {displayName || "아직 없어요"}
               </Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+            >
               <Text style={styles.summaryLabel}>보관</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStack && styles.summaryValueStacked,
+                ]}
+              >
                 {resolveLabel(storageLocation)} · {quantity}
                 {unit}
               </Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+            >
               <Text style={styles.summaryLabel}>유통기한</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStack && styles.summaryValueStacked,
+                ]}
+              >
                 {expiryDate
                   ? formatDateKorean(expiryDate)
                   : "아직 고르지 않았어요"}
               </Text>
             </View>
             {brand ? (
-              <View style={styles.summaryRow}>
+              <View
+                style={[
+                  styles.summaryRow,
+                  shouldStack && styles.summaryRowStacked,
+                ]}
+              >
                 <Text style={styles.summaryLabel}>브랜드</Text>
-                <Text style={styles.summaryValue}>{brand}</Text>
+                <Text
+                  style={[
+                    styles.summaryValue,
+                    shouldStack && styles.summaryValueStacked,
+                  ]}
+                >
+                  {brand}
+                </Text>
               </View>
             ) : null}
             {category ? (
-              <View style={styles.summaryRow}>
+              <View
+                style={[
+                  styles.summaryRow,
+                  shouldStack && styles.summaryRowStacked,
+                ]}
+              >
                 <Text style={styles.summaryLabel}>카테고리</Text>
-                <Text style={styles.summaryValue}>
+                <Text
+                  style={[
+                    styles.summaryValue,
+                    shouldStack && styles.summaryValueStacked,
+                  ]}
+                >
                   {productCategoryLabels[category]}
                 </Text>
               </View>
@@ -996,6 +1055,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.sm,
   },
+  recipeHintStacked: {
+    alignItems: "flex-start",
+    flexDirection: "column",
+  },
   recipeHintText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
@@ -1027,6 +1090,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.lg,
     gap: spacing.md,
+  },
+  formCardCompact: {
+    padding: spacing.sm,
   },
   noticeCard: {
     backgroundColor: colors.primarySoft,
@@ -1161,6 +1227,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: spacing.md,
   },
+  summaryRowStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: spacing.xxs,
+  },
   summaryLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
@@ -1174,6 +1245,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
+  },
+  summaryValueStacked: {
+    textAlign: "left",
   },
   extraSection: {
     gap: spacing.sm,
@@ -1196,6 +1270,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
+  },
+  sessionHeaderStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   sessionCopy: {
     flex: 1,

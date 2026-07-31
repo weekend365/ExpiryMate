@@ -1,6 +1,7 @@
 import { ChevronLeft } from "lucide-react-native";
 import { Pressable, StyleSheet, Text } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 
 interface HeaderBackButtonProps {
   onPress: () => void;
@@ -12,6 +13,7 @@ interface HeaderBackButtonProps {
  * the tappable native-stack label.
  */
 export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
+  const { isLargeText } = useResponsiveLayout();
   return (
     <Pressable
       accessibilityRole="button"
@@ -25,7 +27,7 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
         size={spacing.sm + spacing.xxs}
         strokeWidth={2.4}
       />
-      <Text style={styles.label}>뒤로가기</Text>
+      {!isLargeText ? <Text style={styles.label}>뒤로가기</Text> : null}
     </Pressable>
   );
 }

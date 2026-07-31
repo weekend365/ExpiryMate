@@ -60,6 +60,7 @@ import {
   touchTarget,
   typography,
 } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 const SWIPE_DELETE_HINT_KEY = "inventory-swipe-delete-hint-seen";
@@ -76,6 +77,7 @@ const inventoryFilterLabels: Record<InventoryViewFilter, string> = {
 };
 
 export default function InventoryScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -358,13 +360,19 @@ export default function InventoryScreen() {
         loading={batchDiscardMutation.isPending}
         disabled={!selectedIds.length}
         fullWidth
+        testID="inventory-discard-selected-button"
       >
         {selectedIds.length
           ? `${selectedIds.length}개 정리할게요`
           : "정리할 재료를 골라 주세요"}
       </Button>
     ) : (
-      <Button icon={Plus} onPress={openEntryMethodSheet} fullWidth>
+      <Button
+        icon={Plus}
+        onPress={openEntryMethodSheet}
+        fullWidth
+        testID="inventory-add-button"
+      >
         재료 넣으러 가기
       </Button>
     );
@@ -372,7 +380,10 @@ export default function InventoryScreen() {
   const footer = deferredRemoval.undoLabel ? (
     <View style={styles.footerStack}>
       <View
-        style={styles.undoSnackbar}
+        style={[
+          styles.undoSnackbar,
+          shouldStack && styles.undoSnackbarStacked,
+        ]}
         accessibilityLiveRegion="assertive"
         accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌리기`}
       >
@@ -402,6 +413,8 @@ export default function InventoryScreen() {
     <Screen
       scroll={false}
       contentWidth="wide"
+      bottomInsetMode="navigator"
+      testID="inventory-screen"
       footer={footer}
       contentStyle={styles.screenContent}
     >
@@ -421,6 +434,7 @@ export default function InventoryScreen() {
         />
         <SectionList
           style={styles.listFlex}
+          testID="inventory-list"
           sections={
             isLoading && !hasLoadedInventory
               ? []
@@ -558,12 +572,14 @@ export default function InventoryScreen() {
 
                   {hasActiveListFilters ? (
                     <View
-                      style={styles.activeFilterSummary}
+                      style={[
+                        styles.activeFilterSummary,
+                        shouldStack && styles.activeFilterSummaryStacked,
+                      ]}
                       accessibilityLiveRegion="polite"
                     >
                       <Text
                         style={styles.activeFilterSummaryText}
-                        numberOfLines={1}
                       >
                         {activeFilterSummary} · {filtered.length}개
                       </Text>
@@ -585,7 +601,10 @@ export default function InventoryScreen() {
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
-                  style={styles.selectionRow}
+                  style={[
+                    styles.selectionRow,
+                    shouldStack && styles.selectionRowStacked,
+                  ]}
                   accessibilityLiveRegion="polite"
                   accessibilityLabel={
                     selectedIds.length
@@ -594,13 +613,18 @@ export default function InventoryScreen() {
                   }
                 >
                   <View style={styles.selectionSummary}>
-                    <Text style={styles.selectionTitle} numberOfLines={1}>
+                    <Text style={styles.selectionTitle}>
                       {selectedIds.length
                         ? `${selectedIds.length}개 선택됨`
                         : "정리할 재료를 선택해 주세요"}
                     </Text>
                   </View>
-                  <View style={styles.headerActions}>
+                  <View
+                    style={[
+                      styles.headerActions,
+                      shouldStack && styles.headerActionsStacked,
+                    ]}
+                  >
                     <Pressable
                       onPress={handleToggleAllVisible}
                       disabled={!visibleIds.length}
@@ -848,7 +872,6 @@ export default function InventoryScreen() {
                     styles.locationOptionLabel,
                     selected && styles.locationOptionLabelSelected,
                   ]}
-                  numberOfLines={1}
                 >
                   {option.label}
                 </Text>
@@ -1102,7 +1125,6 @@ function FixedLocationFilter({
           styles.fixedLocationFilterLabel,
           selected && styles.fixedLocationFilterLabelSelected,
         ]}
-        numberOfLines={1}
       >
         {label}
       </Text>
@@ -1256,6 +1278,11 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     paddingLeft: spacing.xs,
   },
+  activeFilterSummaryStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    paddingLeft: spacing.none,
+  },
   activeFilterSummaryText: {
     flex: 1,
     minWidth: 0,
@@ -1356,6 +1383,10 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     gap: spacing.xxs,
   },
+  headerActionsStacked: {
+    width: "100%",
+    justifyContent: "space-between",
+  },
   headerFilterButton: {
     minHeight: touchTarget.min,
     minWidth: touchTarget.icon,
@@ -1386,6 +1417,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  selectionRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   selectionSummary: {
     flex: 1,
     minWidth: 0,
@@ -1410,6 +1445,10 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     backgroundColor: colors.text,
+  },
+  undoSnackbarStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   undoSnackbarLabel: {
     flex: 1,

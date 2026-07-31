@@ -107,10 +107,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
     flexDirection: "row",
+    maxWidth: "100%",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.xs,
   },
   label: {
+    flexShrink: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.label.fontFamily,

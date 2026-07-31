@@ -153,3 +153,109 @@ jobs:
             PRIVACY_CONTACT_EMAIL=privacy@expirymate.app
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  mobile-layout:
+    runs-on: ubuntu-latest
+    needs: quality
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        profile:
+          - small-three-button
+          - modern-gesture
+          - small-large-text
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: expirymate_layout
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d expirymate_layout"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/expirymate_layout?schema=public
+      NODE_ENV: development
+      PORT: 4000
+      AUTH_TOKEN_SECRET: layout-e2e-auth-token-secret-at-least-32-characters
+      AUTH_ALLOW_DEV_FALLBACK: "false"
+      EXPO_PUBLIC_APP_ENV: development
+      EXPO_PUBLIC_API_BASE_URL: http://10.0.2.2:4000
+      EXPO_PUBLIC_OAUTH_REDIRECT_URI: http://10.0.2.2:4000/auth/oauth/callback
+      ALLOW_MISSING_SCREENSHOT_BASELINES: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Maestro
+        run: |
+          curl -Ls https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Prepare deterministic API data
+        run: |
+          pnpm --filter @expirymate/api exec prisma migrate deploy
+          E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
+          nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &
+          for attempt in {1..60}; do
+            curl --fail --silent http://localhost:4000/ready && break
+            if [ "$attempt" -eq 60 ]; then
+              cat /tmp/expirymate-layout-api.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Build, run, and compare Android layout
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: |
+            pnpm --filter @expirymate/mobile exec expo prebuild --platform android --clean --no-install
+            sed -i 's/<application /<application android:usesCleartextTraffic="true" /' apps/mobile/android/app/src/main/AndroidManifest.xml
+            pnpm --filter @expirymate/mobile exec expo run:android --variant release --no-bundler
+            pnpm --filter @expirymate/mobile e2e:layout -- ${{ matrix.profile }}
+
+      - name: Upload layout evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-layout-${{ matrix.profile }}
+          path: |
+            apps/mobile/e2e/results/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/current/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/baseline/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/diff/${{ matrix.profile }}
+            /tmp/expirymate-layout-api.log
+          if-no-files-found: warn

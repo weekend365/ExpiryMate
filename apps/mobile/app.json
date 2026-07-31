@@ -105,6 +105,7 @@
     "android": {
       "package": "com.expirymate.mobile",
       "versionCode": 1,
+      "softwareKeyboardLayoutMode": "resize",
       "permissions": ["CAMERA"],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
@@ -117,6 +118,11 @@
         "foregroundImage": "./assets/branding/adaptive-icon.png",
         "backgroundColor": "#F1F3F5"
       }
+    },
+    "androidNavigationBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#F1F3F5",
+      "enforceContrast": true
     },
     "extra": {
       "router": {},

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 
 interface SectionHeaderProps {
@@ -18,8 +19,15 @@ export function SectionHeader({
   surface = false,
   accentColor,
 }: SectionHeaderProps) {
+  const { shouldStack } = useResponsiveLayout();
   return (
-    <View style={[styles.root, surface && styles.surface]}>
+    <View
+      style={[
+        styles.root,
+        shouldStack && styles.rootStacked,
+        surface && styles.surface,
+      ]}
+    >
       {surface && accentColor ? (
         <View
           style={styles.accentSlot}
@@ -45,7 +53,11 @@ export function SectionHeader({
           </AppText>
         ) : null}
       </View>
-      {action ? <View style={styles.action}>{action}</View> : null}
+      {action ? (
+        <View style={[styles.action, shouldStack && styles.actionStacked]}>
+          {action}
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -56,6 +68,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "space-between",
     gap: spacing.md,
+  },
+  rootStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: spacing.xs,
   },
   surface: {
     paddingLeft: spacing.md,
@@ -82,6 +99,7 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   surfaceCopy: {
@@ -91,6 +109,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   action: {
+    flexShrink: 1,
     paddingTop: spacing.xxs,
+  },
+  actionStacked: {
+    alignSelf: "flex-start",
+    paddingTop: spacing.none,
   },
 });

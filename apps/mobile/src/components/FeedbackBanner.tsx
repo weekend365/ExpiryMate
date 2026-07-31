@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
 
@@ -53,6 +54,7 @@ export function FeedbackBanner({
   onAction,
   showMascot = true,
 }: FeedbackBannerProps) {
+  const { shouldStack } = useResponsiveLayout();
   const palette = toneConfig[tone];
   const isActionable = Boolean(actionLabel && onAction);
 
@@ -86,6 +88,7 @@ export function FeedbackBanner({
         accessibilityLiveRegion="polite"
         style={({ pressed }) => [
           styles.root,
+          shouldStack && styles.rootStacked,
           { backgroundColor: palette.backgroundColor },
           pressed && styles.rootPressed,
         ]}
@@ -97,7 +100,11 @@ export function FeedbackBanner({
 
   return (
     <View
-      style={[styles.root, { backgroundColor: palette.backgroundColor }]}
+      style={[
+        styles.root,
+        shouldStack && styles.rootStacked,
+        { backgroundColor: palette.backgroundColor },
+      ]}
       accessibilityLiveRegion="polite"
     >
       {content}
@@ -114,11 +121,16 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     minHeight: touchTarget.min,
   },
+  rootStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
   rootPressed: {
     opacity: 0.85,
   },
   copy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   action: {

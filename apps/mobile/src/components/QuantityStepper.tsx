@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    minWidth: 0,
     alignSelf: "stretch",
     minHeight: touchTarget.ctaLarge,
     textAlign: "center",

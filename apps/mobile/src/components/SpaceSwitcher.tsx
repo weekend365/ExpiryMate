@@ -116,7 +116,7 @@ export function SpaceSwitcher() {
         </View>
         <View style={styles.triggerCopy}>
           <Text style={styles.eyebrow}>지금 보고 있는 냉장고</Text>
-          <Text style={styles.triggerTitle} numberOfLines={1}>
+          <Text style={styles.triggerTitle}>
             {activeSpace?.name ?? "냉장고를 펼치고 있어요"}
           </Text>
         </View>
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
   },
   triggerCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   eyebrow: {
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     color: colors.mutedText,
   },
   triggerTitle: {
+    flexShrink: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
@@ -269,6 +271,7 @@ const styles = StyleSheet.create({
   },
   spaceCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   spaceName: {

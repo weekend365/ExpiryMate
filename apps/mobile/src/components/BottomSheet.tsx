@@ -149,6 +149,7 @@ export function BottomSheet({
       animationType="none"
       onRequestClose={onClose}
       statusBarTranslucent
+      navigationBarTranslucent
     >
       <View style={styles.root}>
         <Animated.View style={[styles.backdrop, backdropStyle]}>

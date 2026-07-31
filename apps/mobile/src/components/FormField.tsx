@@ -33,6 +33,7 @@ export function FormField({
         <View style={styles.wrapper}>
           <Text style={styles.label}>{label}</Text>
           <TextInput
+            testID={`form-field-${name}`}
             value={field.value ? String(field.value) : ""}
             onChangeText={field.onChange}
             placeholder={placeholder}

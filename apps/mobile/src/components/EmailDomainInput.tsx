@@ -19,6 +19,7 @@ import {
   type EmailDomainMode,
 } from "../shared/email-domains";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 
 type EmailDomainInputProps = {
   value: string;
@@ -31,6 +32,7 @@ type EmailDomainInputProps = {
   onSubmitEditing?: TextInputProps["onSubmitEditing"];
   textContentType?: TextInputProps["textContentType"];
   autoCorrect?: boolean;
+  testID?: string;
 };
 
 export function EmailDomainInput({
@@ -43,7 +45,9 @@ export function EmailDomainInput({
   returnKeyType,
   onSubmitEditing,
   autoCorrect = false,
+  testID,
 }: EmailDomainInputProps) {
+  const { shouldStack } = useResponsiveLayout();
   const parsed = splitEmail(value);
   const [localPart, setLocalPart] = useState(parsed.local);
   const [domainPart, setDomainPart] = useState(parsed.domain);
@@ -122,8 +126,9 @@ export function EmailDomainInput({
 
   return (
     <View style={[styles.wrap, menuOpen && styles.wrapElevated]}>
-      <View style={[styles.row, style]}>
+      <View style={[styles.row, shouldStack && styles.rowStacked, style]}>
         <TextInput
+          testID={testID ? `${testID}-local` : undefined}
           ref={localInputRef}
           value={localPart}
           onChangeText={handleLocalChange}
@@ -134,7 +139,7 @@ export function EmailDomainInput({
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor}
           editable={editable}
-          style={styles.localInput}
+          style={[styles.localInput, shouldStack && styles.inputStacked]}
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
           onFocus={() => setMenuOpen(false)}
@@ -142,6 +147,7 @@ export function EmailDomainInput({
         <Text style={styles.atSign}>@</Text>
         {isManual ? (
           <TextInput
+            testID={testID ? `${testID}-domain-input` : undefined}
             ref={domainInputRef}
             value={domainPart}
             onChangeText={handleDomainChange}
@@ -151,13 +157,14 @@ export function EmailDomainInput({
             placeholder="도메인"
             placeholderTextColor={placeholderTextColor}
             editable={editable}
-            style={styles.domainInput}
+            style={[styles.domainInput, shouldStack && styles.inputStacked]}
             returnKeyType={returnKeyType}
             onSubmitEditing={onSubmitEditing}
             onFocus={() => setMenuOpen(false)}
           />
         ) : (
           <Pressable
+            testID={testID ? `${testID}-domain` : undefined}
             onPress={toggleMenu}
             disabled={!editable}
             accessibilityRole="button"
@@ -165,15 +172,17 @@ export function EmailDomainInput({
             accessibilityHint="눌러서 도메인을 바꿀 수 있어요"
             style={({ pressed }) => [
               styles.domainButton,
+              shouldStack && styles.domainButtonStacked,
               pressed && styles.pressed,
             ]}
           >
-            <Text style={styles.domainButtonText} numberOfLines={1}>
+            <Text style={styles.domainButtonText}>
               {domainLabel}
             </Text>
           </Pressable>
         )}
         <Pressable
+          testID={testID ? `${testID}-domain-toggle` : undefined}
           accessibilityRole="button"
           accessibilityLabel="이메일 도메인 고르기"
           accessibilityState={{ expanded: menuOpen }}
@@ -182,6 +191,7 @@ export function EmailDomainInput({
           hitSlop={spacing.xs}
           style={({ pressed }) => [
             styles.chevronButton,
+            shouldStack && styles.chevronButtonStacked,
             pressed && styles.pressed,
             !editable && styles.disabled,
           ]}
@@ -275,6 +285,12 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.md,
     paddingRight: spacing.xs,
   },
+  rowStacked: {
+    alignItems: "stretch",
+    flexDirection: "column",
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+  },
   localInput: {
     flex: 2.2,
     minHeight: touchTarget.cta,
@@ -282,6 +298,10 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     fontFamily: typography.body.fontFamily,
     paddingVertical: spacing.sm,
+  },
+  inputStacked: {
+    flex: 0,
+    width: "100%",
   },
   atSign: {
     fontSize: typography.body.fontSize,
@@ -302,10 +322,15 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.min,
     justifyContent: "center",
   },
+  domainButtonStacked: {
+    flex: 0,
+    width: "100%",
+  },
   pressed: {
     opacity: 0.7,
   },
   domainButtonText: {
+    flexShrink: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
@@ -317,6 +342,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
+  },
+  chevronButtonStacked: {
+    alignSelf: "flex-end",
   },
   disabled: {
     opacity: 0.5,

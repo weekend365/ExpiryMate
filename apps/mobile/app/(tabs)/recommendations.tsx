@@ -54,6 +54,7 @@ import {
   touchTarget,
   typography,
 } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
@@ -97,6 +98,7 @@ const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
   };
 
 export default function RecommendationsScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
@@ -277,6 +279,8 @@ export default function RecommendationsScreen() {
     <Screen
       scroll={false}
       contentWidth="wide"
+      bottomInsetMode="navigator"
+      testID="recommendations-screen"
       contentStyle={styles.screenContent}
       footer={
         recipeView === "favorites" ? (
@@ -428,23 +432,30 @@ export default function RecommendationsScreen() {
         />
 
         <Pressable
+          testID="recommendation-options-button"
           onPress={() => setShowOptionsSheet(true)}
           accessibilityRole="button"
           accessibilityLabel="추천 조건 고르기"
           accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
           style={({ pressed }) => [
             styles.optionsSummary,
+            shouldStack && styles.optionsSummaryStacked,
             pressed && styles.optionsSummaryPressed,
           ]}
         >
           <View style={styles.optionsSummaryCopy}>
             <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
-            <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+            <Text style={styles.optionsSummaryValue}>
               {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
               {useExpiringFirst ? " · 임박 먼저" : ""}
             </Text>
           </View>
-          <View style={styles.optionsSummaryAction}>
+          <View
+            style={[
+              styles.optionsSummaryAction,
+              shouldStack && styles.optionsSummaryActionStacked,
+            ]}
+          >
             <SlidersHorizontal
               color={colors.primary}
               size={spacing.sm + spacing.xxs}
@@ -587,6 +598,7 @@ export default function RecommendationsScreen() {
                 accessibilityHint="그때 받아 둔 요리를 다시 열어 볼 수 있어요."
                 style={({ pressed }) => [
                   styles.historyRow,
+                  shouldStack && styles.historyRowStacked,
                   pressed && styles.historyRowPressed,
                 ]}
               >
@@ -598,7 +610,14 @@ export default function RecommendationsScreen() {
                     {formatHistoryPreview(recommendation)}
                   </Text>
                 </View>
-                <Text style={styles.historyAction}>다시 볼게요</Text>
+                <Text
+                  style={[
+                    styles.historyAction,
+                    shouldStack && styles.historyActionStacked,
+                  ]}
+                >
+                  다시 볼게요
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -929,6 +948,7 @@ function RecipeCard({
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const highlightIngredients = getHighlightedIngredients(
     dish,
     inventorySnapshot,
@@ -936,7 +956,7 @@ function RecipeCard({
   const ingredientPreview = formatIngredientPreview(highlightIngredients);
 
   return (
-    <View style={styles.recipeCard}>
+    <View style={[styles.recipeCard, shouldStack && styles.recipeCardStacked]}>
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
@@ -953,16 +973,16 @@ function RecipeCard({
               {badgeLabel ?? "1"}
             </Text>
           </View>
-          <Text style={styles.recipeTitle} numberOfLines={1}>
+          <Text style={styles.recipeTitle}>
             {dish.title}
           </Text>
         </View>
 
-        <Text style={styles.recipeMetaLine} numberOfLines={1}>
+        <Text style={styles.recipeMetaLine}>
           {formatDishMeta(dish)}
         </Text>
 
-        <Text style={styles.recipeIngredientPreview} numberOfLines={1}>
+        <Text style={styles.recipeIngredientPreview} numberOfLines={2}>
           {ingredientPreview}
         </Text>
       </Pressable>
@@ -984,6 +1004,7 @@ function RecipeCard({
           hitSlop={spacing.xs}
           style={({ pressed }) => [
             styles.favoriteButton,
+            shouldStack && styles.favoriteButtonStacked,
             isFavorite && styles.favoriteButtonSelected,
             pressed && styles.favoriteButtonPressed,
             isFavoritePending && styles.favoriteButtonPending,
@@ -1008,6 +1029,7 @@ function RecipeDetailContent({
   dish: RecipeRecommendationDish;
   inventorySnapshot: RecipeInventorySnapshotItem[];
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
 
   return (
@@ -1019,13 +1041,24 @@ function RecipeDetailContent({
         {usedIngredientRows.length > 0 ? (
           <View style={styles.ingredientInfoList}>
             {usedIngredientRows.map((ingredient) => (
-              <View key={ingredient.key} style={styles.ingredientInfoRow}>
-                <View style={styles.ingredientInfoCopy}>
-                  <Text style={styles.ingredientInfoName} numberOfLines={1}>
+              <View
+                key={ingredient.key}
+                style={[
+                  styles.ingredientInfoRow,
+                  shouldStack && styles.ingredientInfoRowStacked,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.ingredientInfoCopy,
+                    shouldStack && styles.ingredientInfoCopyStacked,
+                  ]}
+                >
+                  <Text style={styles.ingredientInfoName}>
                     {ingredient.name}
                   </Text>
                   {ingredient.amountLabel ? (
-                    <Text style={styles.ingredientInfoAmount} numberOfLines={1}>
+                    <Text style={styles.ingredientInfoAmount}>
                       추천 {ingredient.amountLabel}
                     </Text>
                   ) : null}
@@ -1357,6 +1390,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
   },
+  optionsSummaryStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   optionsSummaryPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -1380,6 +1417,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
+  },
+  optionsSummaryActionStacked: {
+    alignSelf: "flex-end",
   },
   optionsSummaryActionLabel: {
     fontSize: typography.bodySmall.fontSize,
@@ -1455,6 +1495,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.md,
   },
+  historyRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   historyRowPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -1480,6 +1524,9 @@ const styles = StyleSheet.create({
     fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
+  historyActionStacked: {
+    alignSelf: "flex-end",
+  },
   historySheetList: {
     gap: spacing.sm,
   },
@@ -1492,6 +1539,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     overflow: "hidden",
+  },
+  recipeCardStacked: {
+    flexDirection: "column",
   },
   recipeCardMain: {
     flex: 1,
@@ -1541,6 +1591,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: spacing.xs,
     marginRight: spacing.xs,
+  },
+  favoriteButtonStacked: {
+    alignSelf: "flex-end",
+    marginBottom: spacing.xs,
   },
   favoriteButtonSelected: {
     backgroundColor: colors.primarySoft,
@@ -1597,12 +1651,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  ingredientInfoRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   ingredientInfoCopy: {
     flex: 1,
     minWidth: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
+  },
+  ingredientInfoCopyStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   ingredientInfoName: {
     flexShrink: 1,

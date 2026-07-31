@@ -11,12 +11,13 @@ export type AppTextVariant = keyof typeof typography;
 
 type AppTextTone = "default" | "subtext" | "muted" | "primary" | "danger" | "warning" | "success" | "inverse";
 
-interface AppTextProps extends PropsWithChildren {
+export interface AppTextProps
+  extends PropsWithChildren,
+    Omit<TextProps, "children" | "numberOfLines" | "style"> {
   variant?: AppTextVariant;
   tone?: AppTextTone;
   numberOfLines?: number;
   style?: StyleProp<TextStyle>;
-  accessibilityRole?: TextProps["accessibilityRole"];
 }
 
 const toneColors: Record<AppTextTone, string> = {
@@ -44,11 +45,11 @@ export function AppText({
   tone = "default",
   numberOfLines,
   style,
-  accessibilityRole,
+  ...textProps
 }: AppTextProps) {
   return (
     <Text
-      accessibilityRole={accessibilityRole}
+      {...textProps}
       numberOfLines={numberOfLines}
       style={[textStyle(variant), { color: toneColors[tone] }, style]}
     >

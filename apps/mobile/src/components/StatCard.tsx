@@ -82,11 +82,7 @@ export function StatCard({
           </AppText>
         </View>
         {showLabel ? (
-          <AppText
-            variant="caption"
-            style={styles.trafficLabel}
-            numberOfLines={1}
-          >
+          <AppText variant="caption" style={styles.trafficLabel}>
             {label}
           </AppText>
         ) : null}
@@ -220,5 +216,6 @@ const styles = StyleSheet.create({
   trafficLabel: {
     color: colors.subtext,
     textAlign: "center",
+    flexShrink: 1,
   },
 });

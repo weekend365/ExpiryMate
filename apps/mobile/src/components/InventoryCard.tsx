@@ -16,7 +16,8 @@ import {
   MoreVertical,
   ShieldCheck,
 } from "lucide-react-native";
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 
 interface InventoryCardProps {
@@ -45,8 +46,7 @@ export function InventoryCard({
   selected,
   selectionMode,
 }: InventoryCardProps) {
-  const { width } = useWindowDimensions();
-  const isCompact = width < 380;
+  const { shouldStack } = useResponsiveLayout();
   const bucket = getExpiryBucket(item.expiryDate);
   const bucketStyle = bucketStyles[bucket];
   const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
@@ -79,7 +79,7 @@ export function InventoryCard({
       }
       style={({ pressed }) => [
         styles.card,
-        isCompact && styles.cardCompact,
+        shouldStack && styles.cardCompact,
         selectionMode && styles.selectableCard,
         selected && styles.selectedCard,
         pressed && styles.cardPressed,
@@ -100,7 +100,7 @@ export function InventoryCard({
 
       <View style={styles.content}>
         <View style={styles.titleRow}>
-          <Text style={styles.name} numberOfLines={1}>
+          <Text style={styles.name}>
             {item.displayName}
           </Text>
           {!selectionMode && onMenuPress ? (
@@ -125,7 +125,7 @@ export function InventoryCard({
         </View>
         <View style={styles.metaRow}>
           <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
-          <Text style={styles.meta} numberOfLines={1}>
+          <Text style={styles.meta}>
             {resolveStorageLocationLabel(item.storageLocation)} ·{" "}
             {formatInventoryQuantity(item)} · {itemStatusLabels[item.status]}
           </Text>
@@ -138,7 +138,12 @@ export function InventoryCard({
         </View>
       </View>
 
-      <View style={[styles.badgeColumn, isCompact && styles.badgeColumnCompact]}>
+      <View
+        style={[
+          styles.badgeColumn,
+          shouldStack && styles.badgeColumnCompact,
+        ]}
+      >
         <View
           style={[
             styles.badge,
@@ -181,6 +186,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   cardCompact: {
+    flexDirection: "column",
     alignItems: "flex-start",
   },
   cardPressed: {
@@ -209,15 +215,19 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   titleRow: {
+    minWidth: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
   },
   name: {
     flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.subheading.fontFamily,
@@ -240,6 +250,8 @@ const styles = StyleSheet.create({
   },
   meta: {
     flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
@@ -251,6 +263,9 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   dateLabel: {
+    flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,

@@ -151,11 +151,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   heroCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   heroTitle: {

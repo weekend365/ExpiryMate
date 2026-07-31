@@ -20,6 +20,7 @@ interface ButtonProps extends PropsWithChildren {
   disabled?: boolean;
   loading?: boolean;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 }
 
 export function Button({
@@ -33,6 +34,7 @@ export function Button({
   disabled,
   loading,
   style,
+  testID,
 }: ButtonProps) {
   const palette = buttonPalettes[variant];
   const isDisabled = disabled || loading;
@@ -64,6 +66,7 @@ export function Button({
       accessibilityRole="button"
       accessibilityLabel={typeof children === "string" ? children : undefined}
       accessibilityState={{ disabled: isDisabled, busy: Boolean(loading) }}
+      testID={testID}
       style={({ pressed }) => [
         styles.base,
         size === "small" ? styles.smallButton : styles.mediumButton,
@@ -125,6 +128,7 @@ const buttonPalettes = {
 
 const styles = StyleSheet.create({
   base: {
+    minWidth: 0,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
@@ -134,10 +138,12 @@ const styles = StyleSheet.create({
   mediumButton: {
     minHeight: touchTarget.cta,
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
   },
   smallButton: {
     minHeight: touchTarget.min,
     paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
   },
   fullWidth: {
     alignSelf: "stretch",
@@ -150,6 +156,8 @@ const styles = StyleSheet.create({
     borderColor: colors.danger,
   },
   label: {
+    flexShrink: 1,
+    textAlign: "center",
     fontFamily: typography.bodyStrong.fontFamily,
   },
   mediumLabel: {

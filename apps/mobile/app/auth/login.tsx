@@ -243,6 +243,7 @@ export default function LoginScreen() {
     <Screen
       scroll={false}
       contentWidth="form"
+      testID="login-screen"
       contentStyle={styles.screenContent}
     >
       <View style={styles.loginScene}>
@@ -274,7 +275,7 @@ export default function LoginScreen() {
               <Text style={styles.brandBadgeText}>{appBrand.appNameKo}</Text>
             </View>
             <Text style={styles.welcomeTitle}>어서 오세요</Text>
-            <Text style={styles.welcomeSubtitle} numberOfLines={2}>
+            <Text style={styles.welcomeSubtitle}>
               계정으로 이어가면 {appBrand.characterNameKo}가 냉장고를 함께 챙겨
               드릴게요.
             </Text>
@@ -283,6 +284,7 @@ export default function LoginScreen() {
           <View style={styles.emailCard}>
             <Text style={styles.emailTitle}>이메일로 이어갈까요?</Text>
             <EmailDomainInput
+              testID="login-email"
               value={email}
               onChangeText={setEmail}
               autoCorrect={false}
@@ -290,6 +292,7 @@ export default function LoginScreen() {
               editable={!isBusy}
             />
             <TextInput
+              testID="login-password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -323,6 +326,7 @@ export default function LoginScreen() {
               </Pressable>
             </View>
             <Button
+              testID="login-submit-button"
               onPress={() => {
                 void handleEmailLogin();
               }}
