@@ -34,14 +34,14 @@ This keeps the MVP simple while leaving a clean path for:
 
 ### Current status (2026-07-24)
 
-| Area | Status | Notes |
-| ---- | ------ | ----- |
-| **Phase** | 1 mostly done → **2 (store)** | [docs/PROJECT.md](./docs/PROJECT.md) |
-| **Auth** | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
-| **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅ |
-| **Shared inventory** | Implemented · deploy/2-user QA pending | personal/household/store spaces · email/one-time-code invites · owner/manager/member |
-| **QA** | 269 automated checks ✅ | Existing device QA ✅ · shared-space release E2E pending |
-| **Next (P0)** | | Railway migration → new production build → 2-user QA → store submission |
+| Area                 | Status                                    | Notes                                                                                   |
+| -------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Phase**            | 1 mostly done → **2 (store)**             | [docs/PROJECT.md](./docs/PROJECT.md)                                                    |
+| **Auth**             | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
+| **API / Admin**      | Live on Railway                           | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅                   |
+| **Shared inventory** | Implemented · deploy/2-user QA pending    | personal/household/store spaces · email/one-time-code invites · owner/manager/member    |
+| **QA**               | 269 automated checks ✅                   | Existing device QA ✅ · shared-space release E2E pending                                |
+| **Next (P0)**        |                                           | Railway migration → new production build → 2-user QA → store submission                 |
 
 ## Folder Structure
 
@@ -347,6 +347,14 @@ pnpm db:seed
 ```
 
 ### 4. Run the apps
+
+# 터미널 1 — Metro (항상 켜 두기)
+
+pnpm --filter @expirymate/mobile exec expo start -c --tunnel --dev-client
+
+# 터미널 2 — 네이티브 설치/실행 (최초·네이티브 변경 시)
+
+pnpm --filter @expirymate/mobile exec expo run:ios --device "남우현의 iPhone"
 
 In separate terminals:
 

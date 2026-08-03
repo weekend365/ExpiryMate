@@ -56,7 +56,7 @@ export default function SettingsScreen() {
           />
           <ListRow
             title="계정"
-            description="내 계정 확인, 인증 메일, 로그아웃을 살펴봐요."
+            description="내 계정 확인, 로그아웃, 계정 정리를 살펴봐요."
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />

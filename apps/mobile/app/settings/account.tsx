@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import { LogOut, Mail } from "lucide-react-native";
+import { LogOut, Mail, Trash2 } from "lucide-react-native";
 import { Alert, StyleSheet, View } from "react-native";
 import { ListRow } from "../../src/components/ListRow";
 import { Screen } from "../../src/components/Screen";
@@ -75,6 +75,23 @@ export default function AccountSettingsScreen() {
                 },
               })
             }
+          />
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <SectionHeader
+          title="계정 정리"
+          description="떠나실 때도 데이터를 직접 지우실 수 있어요."
+        />
+        <View style={styles.card}>
+          <ListRow
+            title="계정과 데이터 정리"
+            description="개인 냉장고의 재료와 내 추천·알림·로그인 정보가 지워져요."
+            icon={Trash2}
+            destructive
+            last
+            onPress={() => router.push("/privacy/account-delete")}
           />
         </View>
       </View>
