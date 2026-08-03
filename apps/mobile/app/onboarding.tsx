@@ -51,10 +51,10 @@ const STEPS: OnboardingStep[] = [
   {
     key: "start",
     eyebrow: `${appBrand.appNameEn}`,
-    title: "계정으로 이어가면 시작할 수 있어요",
-    description: "카카오·네이버 등으로 이어가면, 장고가 재료를 안전하게 챙겨 드릴게요.",
+    title: "로그인하면 바로 시작할 수 있어요",
+    description: "카카오·네이버 또는 이메일로 로그인하면, 장고가 재료를 안전하게 챙겨 드릴게요.",
     mood: "happy",
-    cta: "계정으로 이어갈게요",
+    cta: "로그인",
   },
 ];
 

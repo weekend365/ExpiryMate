@@ -26,10 +26,10 @@ import {
   SectionList,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
 import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import {
@@ -77,7 +77,7 @@ const inventoryFilterLabels: Record<InventoryViewFilter, string> = {
 };
 
 export default function InventoryScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -475,11 +475,10 @@ export default function InventoryScreen() {
                         size={spacing.sm + spacing.xxs}
                         strokeWidth={2.4}
                       />
-                      <TextInput
+                      <AppTextInput
                         value={searchQuery}
                         onChangeText={setSearchQuery}
                         placeholder="재료 이름이나 브랜드 검색"
-                        placeholderTextColor={colors.mutedText}
                         accessibilityLabel="재료 이름이나 브랜드 검색"
                         returnKeyType="search"
                         autoCorrect={false}
@@ -574,7 +573,7 @@ export default function InventoryScreen() {
                     <View
                       style={[
                         styles.activeFilterSummary,
-                        shouldStack && styles.activeFilterSummaryStacked,
+                        shouldStackDense && styles.activeFilterSummaryStacked,
                       ]}
                       accessibilityLiveRegion="polite"
                     >
@@ -603,7 +602,7 @@ export default function InventoryScreen() {
                 <View
                   style={[
                     styles.selectionRow,
-                    shouldStack && styles.selectionRowStacked,
+                    shouldStackDense && styles.selectionRowStacked,
                   ]}
                   accessibilityLiveRegion="polite"
                   accessibilityLabel={
@@ -622,7 +621,7 @@ export default function InventoryScreen() {
                   <View
                     style={[
                       styles.headerActions,
-                      shouldStack && styles.headerActionsStacked,
+                      shouldStackDense && styles.headerActionsStacked,
                     ]}
                   >
                     <Pressable
@@ -1161,16 +1160,16 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   toolbarIconButton: {
-    width: touchTarget.min,
-    height: touchTarget.min,
+    minWidth: touchTarget.min,
+    minHeight: touchTarget.min,
     flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
   },
   selectionModeButton: {
-    width: touchTarget.min,
-    height: touchTarget.min,
+    minWidth: touchTarget.min,
+    minHeight: touchTarget.min,
     flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",

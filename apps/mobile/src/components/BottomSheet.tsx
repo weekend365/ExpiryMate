@@ -7,7 +7,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -24,7 +23,8 @@ import {
   TABLET_SHEET_MAX_WIDTH,
   useResponsiveLayout,
 } from "../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { AppText } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
 
 interface BottomSheetProps extends PropsWithChildren {
@@ -162,9 +162,12 @@ export function BottomSheet({
         </Animated.View>
 
         <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          // Modal sheets don't inherit Android window resize the same way as
+          // the root activity — pad on both platforms so footers stay visible.
+          behavior="padding"
           style={styles.keyboardAvoid}
           pointerEvents="box-none"
+          keyboardVerticalOffset={Platform.OS === "android" ? spacing.xs : 0}
         >
           <Animated.View
             style={[
@@ -194,9 +197,11 @@ export function BottomSheet({
                 ) : null}
                 {title ? (
                   <View style={styles.header}>
-                    <Text style={styles.title}>{title}</Text>
+                    <AppText variant="heading">{title}</AppText>
                     {description ? (
-                      <Text style={styles.description}>{description}</Text>
+                      <AppText variant="bodySmall" tone="subtext">
+                        {description}
+                      </AppText>
                     ) : null}
                   </View>
                 ) : null}
@@ -274,18 +279,6 @@ const styles = StyleSheet.create({
   header: {
     gap: spacing.xs,
     flexShrink: 0,
-  },
-  title: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
-    color: colors.text,
-  },
-  description: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   bodyScroll: {
     flexShrink: 1,

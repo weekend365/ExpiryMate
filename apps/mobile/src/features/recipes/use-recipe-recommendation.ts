@@ -32,10 +32,12 @@ export const useRecipeRecommendation = (id: string | undefined) => {
     ...query,
     error: blockingSpaceError ?? query.error,
     isError: Boolean(blockingSpaceError) || query.isError,
+    // Prefer isPending over query.isLoading (pending && fetching) so the first
+    // enabled frame still counts as loading before fetchStatus flips.
     isLoading:
       Boolean(id) &&
       !blockingSpaceError &&
-      (isAwaitingSpace || query.isLoading),
+      (isAwaitingSpace || query.isPending),
     isPending:
       Boolean(id) &&
       !blockingSpaceError &&

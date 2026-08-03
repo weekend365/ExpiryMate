@@ -24,6 +24,7 @@ import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
+import { prefetchActiveSpaceQueries } from "./prefetch-space-queries";
 import { chooseActiveInventorySpace } from "./space-selection";
 
 type HydratedSelection = {
@@ -106,6 +107,20 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       activeSpace.id,
     ).catch(() => null);
   }, [activeSpace, hydratedSelection?.spaceId, sessionUserId]);
+
+  useEffect(() => {
+    if (!sessionUserId || !activeSpace?.id) {
+      return;
+    }
+
+    // Auth → space hydration can finish before tab observers mount. Prefetch so
+    // home/inventory/recipes already have data (or an in-flight fetch) ready.
+    void prefetchActiveSpaceQueries(
+      queryClient,
+      sessionUserId,
+      activeSpace.id,
+    ).catch(() => null);
+  }, [activeSpace?.id, queryClient, sessionUserId]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {

@@ -87,8 +87,9 @@ export const useStorageLocations = () => {
       ...query,
       error: blockingSpaceError ?? query.error,
       isError: Boolean(blockingSpaceError) || query.isError,
+      // Prefer isPending: enabled queries can be pending+idle briefly before fetch.
       isLoading:
-        !blockingSpaceError && (isAwaitingSpace || query.isLoading),
+        !blockingSpaceError && (isAwaitingSpace || query.isPending),
       isPending:
         !blockingSpaceError && (isAwaitingSpace || query.isPending),
       refetch: blockingSpaceError ? refetchSpaces : query.refetch,

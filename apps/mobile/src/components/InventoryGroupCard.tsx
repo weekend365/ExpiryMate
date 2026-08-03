@@ -21,6 +21,10 @@ import ReanimatedSwipeable, {
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
+import { AppText } from "./AppText";
+
+/** Wider than icon-only so "삭제" stays readable under capped large text. */
+const SWIPE_ACTION_WIDTH = spacing.xxxl + spacing.sm;
 
 interface InventoryGroupCardProps {
   group: InventoryItemGroup;
@@ -426,7 +430,14 @@ function DeleteActionContent() {
   return (
     <>
       <Trash2 color={colors.surface} size={spacing.md} strokeWidth={2.4} />
-      <Text style={styles.swipeActionLabel}>삭제</Text>
+      <AppText
+        variant="caption"
+        scaleRole="chrome"
+        densityAware={false}
+        style={styles.swipeActionLabel}
+      >
+        삭제
+      </AppText>
     </>
   );
 }
@@ -457,7 +468,14 @@ function ExpiryBadge({ expiryDate }: { expiryDate: string }) {
       ]}
       accessibilityLabel={presentation.ddayLabel}
     >
-      <Text style={styles.expiryLampText}>{presentation.ddayLabel}</Text>
+      <AppText
+        variant="caption"
+        scaleRole="chrome"
+        densityAware={false}
+        style={styles.expiryLampText}
+      >
+        {presentation.ddayLabel}
+      </AppText>
     </View>
   );
 }
@@ -600,8 +618,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   expiryLampText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.surface,
   },
@@ -620,7 +636,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   listSwipeAction: {
-    width: spacing.xxxl,
+    width: SWIPE_ACTION_WIDTH,
     minHeight: touchTarget.cta + spacing.xxs,
     height: "100%",
     alignSelf: "stretch",
@@ -632,7 +648,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xs,
   },
   singleSwipeActionSlot: {
-    width: spacing.xxxl,
+    width: SWIPE_ACTION_WIDTH,
     height: "100%",
     alignSelf: "stretch",
     overflow: "visible",
@@ -642,13 +658,13 @@ const styles = StyleSheet.create({
     top: spacing.none,
     right: spacing.none,
     bottom: spacing.none,
-    width: spacing.xxxl + spacing.md,
+    width: SWIPE_ACTION_WIDTH + spacing.md,
     borderTopRightRadius: radius.xxl,
     borderBottomRightRadius: radius.xxl,
     backgroundColor: colors.danger,
   },
   singleSwipeActionContent: {
-    width: spacing.xxxl,
+    width: SWIPE_ACTION_WIDTH,
     height: "100%",
     alignSelf: "flex-end",
     alignItems: "center",
@@ -663,8 +679,6 @@ const styles = StyleSheet.create({
     opacity: 0.55,
   },
   swipeActionLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.surface,
     textAlign: "center",

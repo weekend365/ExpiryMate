@@ -9,7 +9,6 @@ import {
   ScrollView,
   StyleSheet,
   type StyleProp,
-  Text,
   View,
   type ViewStyle,
 } from "react-native";
@@ -21,7 +20,8 @@ import {
   getContentMaxWidth,
   useResponsiveLayout,
 } from "../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { AppText } from "./AppText";
 
 export interface ScreenProps extends PropsWithChildren {
   title?: string;
@@ -108,8 +108,14 @@ export function Screen({
           {title ? (
             <View style={[styles.header, shouldStack && styles.headerStacked]}>
               <View style={styles.headerCopy}>
-                <Text style={styles.title}>{title}</Text>
-                {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+                <AppText variant="title" style={styles.title}>
+                  {title}
+                </AppText>
+                {subtitle ? (
+                  <AppText variant="bodySmall" tone="subtext">
+                    {subtitle}
+                  </AppText>
+                ) : null}
               </View>
               {headerAction ? (
                 <View
@@ -137,7 +143,11 @@ export function Screen({
     >
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        // Android uses softwareKeyboardLayoutMode=resize; only pad when a sticky
+        // footer would otherwise sit under the keyboard inside the resized window.
+        behavior={
+          Platform.OS === "ios" || footer ? "padding" : undefined
+        }
         // Screen already sits below the stack header — extra offset double-shifts content.
         keyboardVerticalOffset={0}
       >
@@ -209,8 +219,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   backButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
@@ -254,15 +264,5 @@ const styles = StyleSheet.create({
   },
   title: {
     flexShrink: 1,
-    fontSize: typography.title.fontSize,
-    lineHeight: typography.title.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
 });

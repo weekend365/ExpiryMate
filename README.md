@@ -350,7 +350,10 @@ pnpm db:seed
 
 # 터미널 1 — Metro (항상 켜 두기)
 
-pnpm --filter @expirymate/mobile exec expo start -c --tunnel --dev-client
+pnpm --filter @expirymate/mobile exec expo start -c
+
+같은 Wi‑Fi가 아니면:
+pnpm --filter @expirymate/mobile exec expo start -c --tunnel
 
 # 터미널 2 — 네이티브 설치/실행 (최초·네이티브 변경 시)
 

@@ -1,12 +1,8 @@
 import { Controller } from "react-hook-form";
-import {
-  KeyboardTypeOptions,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { KeyboardTypeOptions, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { AppText } from "./AppText";
+import { AppTextInput } from "./AppTextInput";
 
 interface FormFieldProps {
   control: any;
@@ -31,16 +27,18 @@ export function FormField({
       name={name}
       render={({ field, fieldState }) => (
         <View style={styles.wrapper}>
-          <Text style={styles.label}>{label}</Text>
-          <TextInput
+          <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
+            {label}
+          </AppText>
+          <AppTextInput
             testID={`form-field-${name}`}
             value={field.value ? String(field.value) : ""}
             onChangeText={field.onChange}
             placeholder={placeholder}
-            placeholderTextColor={colors.mutedText}
             keyboardType={keyboardType}
             multiline={multiline}
             numberOfLines={multiline ? 4 : 1}
+            scaleRole="body"
             style={[
               styles.input,
               multiline && styles.multiline,
@@ -48,7 +46,9 @@ export function FormField({
             ]}
           />
           {fieldState.error ? (
-            <Text style={styles.errorText}>{fieldState.error.message}</Text>
+            <AppText variant="label" tone="danger" densityAware={false}>
+              {fieldState.error.message}
+            </AppText>
           ) : null}
         </View>
       )}
@@ -61,10 +61,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.text,
   },
   input: {
     minHeight: touchTarget.cta,
@@ -73,10 +70,6 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
-    color: colors.text,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
   },
   multiline: {
     minHeight: spacing.xxxl + spacing.xl,
@@ -85,11 +78,5 @@ const styles = StyleSheet.create({
   },
   errorInput: {
     borderColor: colors.danger,
-  },
-  errorText: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
   },
 });

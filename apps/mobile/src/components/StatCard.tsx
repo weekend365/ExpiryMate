@@ -1,4 +1,5 @@
 import { Platform, StyleSheet, View } from "react-native";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { colors, radius, spacing } from "../shared/theme";
 import { AppText } from "./AppText";
 
@@ -26,6 +27,7 @@ interface StatCardProps {
 }
 
 const LAMP_SIZE = spacing.xxl + spacing.sm;
+const LAMP_SIZE_COMPACT = spacing.xxl;
 /** Dimmed fill when off — keeps hue so the bulb role is still readable. */
 const OFF_FILL_OPACITY = 0.28;
 
@@ -39,10 +41,13 @@ export function StatCard({
   showGlow = true,
   selected,
 }: StatCardProps) {
+  const { isLargeText } = useResponsiveLayout();
+
   if (variant === "traffic") {
     const isOn = selected ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
     const lampStyle = trafficLamps[lampTone];
+    const lampMin = compact ? LAMP_SIZE_COMPACT : LAMP_SIZE;
 
     return (
       <View
@@ -54,11 +59,15 @@ export function StatCard({
         <View
           style={[
             styles.lamp,
-            compact && styles.lampCompact,
-            isOn && showGlow && {
-              shadowColor: lampStyle.glow,
-              ...styles.lampGlow,
+            {
+              minWidth: lampMin,
+              minHeight: lampMin,
             },
+            isOn &&
+              showGlow && {
+                shadowColor: lampStyle.glow,
+                ...styles.lampGlow,
+              },
           ]}
         >
           {/* Color disc: full when on, same hue dimmed when off */}
@@ -73,7 +82,11 @@ export function StatCard({
             ]}
           />
           <AppText
-            variant={compact ? "subheading" : "heading"}
+            variant={
+              isLargeText ? "bodySmall" : compact ? "subheading" : "heading"
+            }
+            scaleRole="chrome"
+            densityAware={false}
             style={{
               color: isOn ? lampStyle.onText : lampStyle.onBackground,
             }}
@@ -82,7 +95,11 @@ export function StatCard({
           </AppText>
         </View>
         {showLabel ? (
-          <AppText variant="caption" style={styles.trafficLabel}>
+          <AppText
+            variant="caption"
+            scaleRole="chrome"
+            style={styles.trafficLabel}
+          >
             {label}
           </AppText>
         ) : null}
@@ -189,16 +206,11 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   lamp: {
-    width: LAMP_SIZE,
-    height: LAMP_SIZE,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    overflow: "hidden",
-  },
-  lampCompact: {
-    width: spacing.xxl,
-    height: spacing.xxl,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
   },
   lampFill: {
     ...StyleSheet.absoluteFillObject,

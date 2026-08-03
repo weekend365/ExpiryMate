@@ -57,7 +57,7 @@ export default function ForgotPasswordScreen() {
       <EmailDomainInput
         value={email}
         onChangeText={setEmail}
-        placeholder="아이디"
+        placeholder="이메일"
       />
     </Screen>
   );

@@ -94,7 +94,7 @@ export default function VerifyEmailScreen() {
     if (completedTokensRef.current.has(token)) {
       setSucceeded(true);
       setMood("happy");
-      setMessage("메일 확인이 끝났어요. 이제 함께 시작해요.");
+      setMessage("메일 확인이 끝났어요. 이제 로그인할 수 있어요.");
       setIsLoading(false);
       void continuePendingSpaceInvitation().then((continued) => {
         if (!continued) {
@@ -128,7 +128,7 @@ export default function VerifyEmailScreen() {
         if (cancelled) {
           return;
         }
-        setMessage("메일 확인이 끝났어요. 이제 함께 시작해요.");
+        setMessage("메일 확인이 끝났어요. 이제 로그인할 수 있어요.");
         setMood("happy");
         setSucceeded(true);
       })

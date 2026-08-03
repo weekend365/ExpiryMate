@@ -25,7 +25,15 @@ import {
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, BackHandler, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
@@ -40,7 +48,13 @@ import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
-import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../src/shared/theme";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
 import {
   type RegistrationDraft,
@@ -61,12 +75,7 @@ type RegistrationFormValues = {
 };
 
 /** 1) 재료명 → 2) 보관/수량 → 3) 기한 선택 → 4) 확인 → done */
-type RegistrationStep =
-  | "product"
-  | "storage"
-  | "expiry"
-  | "confirm"
-  | "done";
+type RegistrationStep = "product" | "storage" | "expiry" | "confirm" | "done";
 
 type InputRegistrationStep = Exclude<RegistrationStep, "done">;
 
@@ -176,12 +185,10 @@ function normalizeDraftExpiryDate(value?: string) {
 const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
 ) =>
-  prefill
-    ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":")
-    : "";
+  prefill ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":") : "";
 
 export default function RegisterScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense } = useResponsiveLayout();
   const navigation = useNavigation();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
@@ -388,7 +395,9 @@ export default function RegisterScreen() {
 
   const goToNextStep = () => {
     const nextStep =
-      REGISTRATION_STEPS[Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)];
+      REGISTRATION_STEPS[
+        Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)
+      ];
     setStep(nextStep.key);
     setSubmitErrorMessage(null);
   };
@@ -567,7 +576,11 @@ export default function RegisterScreen() {
               pressed && styles.templateCardPressed,
             ]}
           >
-            <ChefHat color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+            <ChefHat
+              color={colors.primary}
+              size={spacing.md}
+              strokeWidth={2.4}
+            />
             <Text style={styles.recipeHintText}>요리 추천 받아볼까요?</Text>
           </Pressable>
         ) : null}
@@ -597,9 +610,7 @@ export default function RegisterScreen() {
         steps={REGISTRATION_STEPS}
         currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}
-        guideMessage={
-          REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage
-        }
+        guideMessage={REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
         guideMood="speak"
       >
         {submitErrorMessage ? (
@@ -621,12 +632,6 @@ export default function RegisterScreen() {
               </View>
             ) : null}
 
-            {!prefill?.displayName && draft?.displayName ? (
-              <View style={styles.softCard}>
-                <Text style={styles.softTitle}>이어서 작성 중이에요</Text>
-              </View>
-            ) : null}
-
             <View
               style={[styles.formCard, shouldStack && styles.formCardCompact]}
             >
@@ -638,7 +643,9 @@ export default function RegisterScreen() {
               />
               {recentTemplates.length ? (
                 <View style={styles.recentTemplateBlock}>
-                  <Text style={styles.recentTemplateCaption}>최근에 넣었어요</Text>
+                  <Text style={styles.recentTemplateCaption}>
+                    최근에 넣었어요
+                  </Text>
                   <View style={styles.pillRow}>
                     {recentTemplates.map((item) => {
                       const selected =
@@ -798,26 +805,32 @@ export default function RegisterScreen() {
               <Text style={styles.summaryTitle}>이렇게 넣을게요</Text>
             </View>
             <View
-              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
             >
               <Text style={styles.summaryLabel}>재료</Text>
               <Text
                 style={[
                   styles.summaryValue,
-                  shouldStack && styles.summaryValueStacked,
+                  shouldStackDense && styles.summaryValueStacked,
                 ]}
               >
                 {displayName || "아직 없어요"}
               </Text>
             </View>
             <View
-              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
             >
               <Text style={styles.summaryLabel}>보관</Text>
               <Text
                 style={[
                   styles.summaryValue,
-                  shouldStack && styles.summaryValueStacked,
+                  shouldStackDense && styles.summaryValueStacked,
                 ]}
               >
                 {resolveLabel(storageLocation)} · {quantity}
@@ -825,13 +838,16 @@ export default function RegisterScreen() {
               </Text>
             </View>
             <View
-              style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
             >
               <Text style={styles.summaryLabel}>유통기한</Text>
               <Text
                 style={[
                   styles.summaryValue,
-                  shouldStack && styles.summaryValueStacked,
+                  shouldStackDense && styles.summaryValueStacked,
                 ]}
               >
                 {expiryDate
@@ -843,14 +859,14 @@ export default function RegisterScreen() {
               <View
                 style={[
                   styles.summaryRow,
-                  shouldStack && styles.summaryRowStacked,
+                  shouldStackDense && styles.summaryRowStacked,
                 ]}
               >
                 <Text style={styles.summaryLabel}>브랜드</Text>
                 <Text
                   style={[
                     styles.summaryValue,
-                    shouldStack && styles.summaryValueStacked,
+                    shouldStackDense && styles.summaryValueStacked,
                   ]}
                 >
                   {brand}
@@ -861,14 +877,14 @@ export default function RegisterScreen() {
               <View
                 style={[
                   styles.summaryRow,
-                  shouldStack && styles.summaryRowStacked,
+                  shouldStackDense && styles.summaryRowStacked,
                 ]}
               >
                 <Text style={styles.summaryLabel}>카테고리</Text>
                 <Text
                   style={[
                     styles.summaryValue,
-                    shouldStack && styles.summaryValueStacked,
+                    shouldStackDense && styles.summaryValueStacked,
                   ]}
                 >
                   {productCategoryLabels[category]}
@@ -877,7 +893,6 @@ export default function RegisterScreen() {
             ) : null}
           </View>
         ) : null}
-
       </StepFlow>
 
       <BottomSheet
@@ -976,11 +991,10 @@ export default function RegisterScreen() {
       >
         <View style={styles.addLocationField}>
           <Text style={styles.addLocationLabel}>위치 이름</Text>
-          <TextInput
+          <AppTextInput
             value={newLocationLabel}
             onChangeText={setNewLocationLabel}
             placeholder="예: 팬트리"
-            placeholderTextColor={colors.mutedText}
             maxLength={fieldLimits.storageLocationLabel}
             autoFocus
             style={styles.addLocationInput}

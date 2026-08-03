@@ -17,6 +17,7 @@ export function useResponsiveLayout() {
     fontScale,
     sizeClass,
     isRegular: sizeClass === "regular",
+    isCompact: sizeClass === "compact",
     ...responsiveFlags,
   } as const;
 }

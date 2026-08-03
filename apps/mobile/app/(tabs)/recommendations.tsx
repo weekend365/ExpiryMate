@@ -157,6 +157,8 @@ export default function RecommendationsScreen() {
   const isHistoryLoadError = Boolean(
     historyQuery.error && !generationErrorMessage,
   );
+  const isHistoryInitialLoading =
+    historyQuery.isPending && historyQuery.data === undefined;
   const isQuotaError = isRecommendationQuotaError(errorMessage);
   const justGenerated =
     generationStatus === "success" &&
@@ -625,6 +627,21 @@ export default function RecommendationsScreen() {
       ) : null}
 
       {recipeView === "recommendations" &&
+      isHistoryInitialLoading &&
+      !isGenerating &&
+      !errorMessage ? (
+        <View
+          style={styles.favoriteLoading}
+          accessibilityLabel="추천을 불러오고 있어요"
+        >
+          <Text style={styles.favoriteLoadingText}>
+            추천을 불러오고 있어요…
+          </Text>
+        </View>
+      ) : null}
+
+      {recipeView === "recommendations" &&
+      !isHistoryInitialLoading &&
       !latestRecommendation &&
       !isGenerating &&
       !errorMessage ? (
