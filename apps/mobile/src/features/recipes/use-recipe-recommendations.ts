@@ -12,6 +12,7 @@ import {
 } from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 import {
   createRecipeRecommendation,
   deleteRecipeFavorite,
@@ -30,37 +31,20 @@ export const getRecipeFavoriteKey = (
 ) => `${recommendationId}:${dishIndex}`;
 
 export const useRecipeRecommendations = () => {
-  const {
-    sessionUserId,
-    activeSpaceId,
-    enabled,
-    isAwaitingSpace,
-    blockingSpaceError,
-    refetchSpaces,
-  } = useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
 
   const query = useQuery({
     queryKey: withInventorySpace(
       recipeRecommendationsQueryKey,
-      sessionUserId,
-      activeSpaceId,
+      gate.sessionUserId,
+      gate.activeSpaceId,
     ),
-    queryFn: () => listRecipeRecommendations(activeSpaceId),
-    enabled,
+    queryFn: () => listRecipeRecommendations(gate.activeSpaceId),
+    enabled: gate.enabled,
+    refetchOnMount: "always",
   });
 
-  return {
-    ...query,
-    error: blockingSpaceError ?? query.error,
-    isError: Boolean(blockingSpaceError) || query.isError,
-    // Prefer isPending: enabled queries can be pending+idle for a beat before
-    // fetchStatus flips to fetching (isLoading = pending && fetching).
-    isLoading:
-      !blockingSpaceError && (isAwaitingSpace || query.isPending),
-    isPending:
-      !blockingSpaceError && (isAwaitingSpace || query.isPending),
-    refetch: blockingSpaceError ? refetchSpaces : query.refetch,
-  };
+  return useSpaceScopedQueryResult(query, gate);
 };
 
 export const useCreateRecipeRecommendation = () => {

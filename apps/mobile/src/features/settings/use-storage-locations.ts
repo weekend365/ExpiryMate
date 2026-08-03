@@ -12,38 +12,35 @@ import {
   withInventorySpace,
 } from "../auth/session-boundary";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 
 export const useStorageLocations = () => {
   const queryClient = useQueryClient();
-  const {
-    sessionUserId,
-    activeSpaceId,
-    enabled,
-    isAwaitingSpace,
-    blockingSpaceError,
-    refetchSpaces,
-  } = useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
   const queryKey = withInventorySpace(
     sessionQueryKeys.storageLocations,
-    sessionUserId,
-    activeSpaceId,
+    gate.sessionUserId,
+    gate.activeSpaceId,
   );
 
   const query = useQuery({
     queryKey,
-    queryFn: () => listStorageLocations(activeSpaceId),
-    enabled,
+    queryFn: () => listStorageLocations(gate.activeSpaceId),
+    enabled: gate.enabled,
+    refetchOnMount: "always",
   });
+
+  const scopedQuery = useSpaceScopedQueryResult(query, gate);
 
   const selectableOptions = useMemo(() => {
     const system =
-      query.data?.system.map((location) => ({
+      scopedQuery.data?.system.map((location) => ({
         key: location.key,
         label: location.label,
         readonly: true as const,
       })) ?? [];
     const custom =
-      query.data?.custom.map((location) => ({
+      scopedQuery.data?.custom.map((location) => ({
         key: location.key,
         label: location.label,
         id: location.id,
@@ -51,10 +48,10 @@ export const useStorageLocations = () => {
       })) ?? [];
 
     return [...system, ...custom];
-  }, [query.data]);
+  }, [scopedQuery.data]);
 
   const resolveLabel = (key: string) =>
-    resolveStorageLocationLabel(key, query.data?.custom ?? []);
+    resolveStorageLocationLabel(key, scopedQuery.data?.custom ?? []);
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey });
@@ -62,7 +59,7 @@ export const useStorageLocations = () => {
 
   const createMutation = useMutation({
     mutationFn: (payload: { label: string }) =>
-      createStorageLocation(payload, activeSpaceId),
+      createStorageLocation(payload, gate.activeSpaceId),
     onSuccess: invalidate,
   });
 
@@ -73,27 +70,18 @@ export const useStorageLocations = () => {
     }: {
       id: string;
       label: string;
-    }) => updateStorageLocation(id, { label }, activeSpaceId),
+    }) => updateStorageLocation(id, { label }, gate.activeSpaceId),
     onSuccess: invalidate,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteStorageLocation(id, activeSpaceId),
+    mutationFn: (id: string) =>
+      deleteStorageLocation(id, gate.activeSpaceId),
     onSuccess: invalidate,
   });
 
   return {
-    query: {
-      ...query,
-      error: blockingSpaceError ?? query.error,
-      isError: Boolean(blockingSpaceError) || query.isError,
-      // Prefer isPending: enabled queries can be pending+idle briefly before fetch.
-      isLoading:
-        !blockingSpaceError && (isAwaitingSpace || query.isPending),
-      isPending:
-        !blockingSpaceError && (isAwaitingSpace || query.isPending),
-      refetch: blockingSpaceError ? refetchSpaces : query.refetch,
-    },
+    query: scopedQuery,
     selectableOptions,
     resolveLabel,
     createMutation,

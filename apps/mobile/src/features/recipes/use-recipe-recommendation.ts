@@ -2,46 +2,38 @@ import { useQuery } from "@tanstack/react-query";
 import { getRecipeRecommendation } from "../../services/api";
 import { withInventorySpace } from "../auth/session-boundary";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 
 export const recipeRecommendationQueryKey = ["recipe-recommendation"] as const;
 
 export const useRecipeRecommendation = (id: string | undefined) => {
-  const {
-    sessionUserId,
-    activeSpaceId,
-    enabled,
-    isAwaitingSpace,
-    blockingSpaceError,
-    refetchSpaces,
-  } = useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
+  const enabled = Boolean(id && gate.enabled);
 
   const query = useQuery({
     queryKey: [
       ...withInventorySpace(
         recipeRecommendationQueryKey,
-        sessionUserId,
-        activeSpaceId,
+        gate.sessionUserId,
+        gate.activeSpaceId,
       ),
       id ?? "",
     ],
-    queryFn: () => getRecipeRecommendation(id as string, activeSpaceId),
-    enabled: Boolean(id && enabled),
+    queryFn: () => getRecipeRecommendation(id as string, gate.activeSpaceId),
+    enabled,
+    refetchOnMount: "always",
+  });
+
+  const result = useSpaceScopedQueryResult(query, {
+    ...gate,
+    enabled,
   });
 
   return {
-    ...query,
-    error: blockingSpaceError ?? query.error,
-    isError: Boolean(blockingSpaceError) || query.isError,
-    // Prefer isPending over query.isLoading (pending && fetching) so the first
-    // enabled frame still counts as loading before fetchStatus flips.
-    isLoading:
-      Boolean(id) &&
-      !blockingSpaceError &&
-      (isAwaitingSpace || query.isPending),
-    isPending:
-      Boolean(id) &&
-      !blockingSpaceError &&
-      (isAwaitingSpace || query.isPending),
-    refetch: blockingSpaceError ? refetchSpaces : query.refetch,
+    ...result,
+    // Detail screens only load once an id exists; keep awaiting-space loading
+    // gated the same way when the route param is present.
+    isLoading: Boolean(id) && result.isLoading,
+    isPending: Boolean(id) && result.isPending,
   };
 };

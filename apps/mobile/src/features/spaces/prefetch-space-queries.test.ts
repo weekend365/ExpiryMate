@@ -4,7 +4,10 @@ import {
   sessionQueryKeys,
   withInventorySpace,
 } from "../auth/session-boundary";
-import { prefetchActiveSpaceQueries } from "./prefetch-space-queries";
+import {
+  prefetchActiveSpaceQueries,
+  refetchActiveSpaceQueries,
+} from "./prefetch-space-queries";
 
 vi.mock("../../services/api", () => ({
   getDashboardSummary: vi.fn(async () => ({ totalActiveCount: 1 })),
@@ -67,5 +70,32 @@ describe("prefetchActiveSpaceQueries", () => {
         ),
       ),
     ).toEqual({ system: [], custom: [] });
+  });
+
+  it("refetches active observers for the same space-scoped keys", async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false } },
+    });
+    const sessionUserId = "user-a";
+    const activeSpaceId = "space-a";
+    const dashboardKey = withInventorySpace(
+      sessionQueryKeys.dashboard,
+      sessionUserId,
+      activeSpaceId,
+    );
+
+    queryClient.setQueryData(dashboardKey, { totalActiveCount: 0 });
+    const refetchSpy = vi.spyOn(queryClient, "refetchQueries");
+
+    await refetchActiveSpaceQueries(
+      queryClient,
+      sessionUserId,
+      activeSpaceId,
+    );
+
+    expect(refetchSpy).toHaveBeenCalledWith({
+      queryKey: dashboardKey,
+      type: "active",
+    });
   });
 });

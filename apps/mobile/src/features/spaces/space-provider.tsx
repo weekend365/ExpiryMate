@@ -24,7 +24,11 @@ import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
-import { prefetchActiveSpaceQueries } from "./prefetch-space-queries";
+import { useEnsureEnabledQueryFetch } from "./ensure-enabled-query-fetch";
+import {
+  prefetchActiveSpaceQueries,
+  refetchActiveSpaceQueries,
+} from "./prefetch-space-queries";
 import { chooseActiveInventorySpace } from "./space-selection";
 
 type HydratedSelection = {
@@ -57,6 +61,16 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
     queryFn: listInventorySpaces,
     enabled: Boolean(sessionUserId),
+    refetchOnMount: "always",
+  });
+
+  useEnsureEnabledQueryFetch({
+    enabled: Boolean(sessionUserId),
+    data: query.data,
+    isPending: query.isPending,
+    isFetching: query.isFetching,
+    fetchStatus: query.fetchStatus,
+    refetch: query.refetch,
   });
 
   useEffect(() => {
@@ -113,13 +127,21 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       return;
     }
 
-    // Auth → space hydration can finish before tab observers mount. Prefetch so
-    // home/inventory/recipes already have data (or an in-flight fetch) ready.
-    void prefetchActiveSpaceQueries(
-      queryClient,
-      sessionUserId,
-      activeSpace.id,
-    ).catch(() => null);
+    const spaceId = activeSpace.id;
+
+    // Auth → space hydration can finish before tab observers mount. Fetch so
+    // home/inventory/recipes already have data (or an in-flight request) ready.
+    // Afterward, nudge any already-mounted observers that missed the
+    // enabled→auto-fetch transition (pending+idle until pull-to-refresh).
+    void prefetchActiveSpaceQueries(queryClient, sessionUserId, spaceId)
+      .catch(() => undefined)
+      .finally(() => {
+        void refetchActiveSpaceQueries(
+          queryClient,
+          sessionUserId,
+          spaceId,
+        ).catch(() => undefined);
+      });
   }, [activeSpace?.id, queryClient, sessionUserId]);
 
   useEffect(() => {

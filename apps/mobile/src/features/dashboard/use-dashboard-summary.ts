@@ -4,38 +4,22 @@ import {
   withInventorySpace,
 } from "../auth/session-boundary";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 import { getDashboardSummary } from "../../services/api";
 
 export const useDashboardSummary = () => {
-  const {
-    sessionUserId,
-    activeSpaceId,
-    enabled,
-    isAwaitingSpace,
-    blockingSpaceError,
-    refetchSpaces,
-  } = useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
 
   const query = useQuery({
     queryKey: withInventorySpace(
       sessionQueryKeys.dashboard,
-      sessionUserId,
-      activeSpaceId,
+      gate.sessionUserId,
+      gate.activeSpaceId,
     ),
-    queryFn: () => getDashboardSummary(activeSpaceId),
-    enabled,
+    queryFn: () => getDashboardSummary(gate.activeSpaceId),
+    enabled: gate.enabled,
+    refetchOnMount: "always",
   });
 
-  return {
-    ...query,
-    error: blockingSpaceError ?? query.error,
-    isError: Boolean(blockingSpaceError) || query.isError,
-    // Prefer isPending: enabled queries can be pending+idle for a beat before
-    // fetchStatus flips to fetching (isLoading = pending && fetching).
-    isLoading:
-      !blockingSpaceError && (isAwaitingSpace || query.isPending),
-    isPending:
-      !blockingSpaceError && (isAwaitingSpace || query.isPending),
-    refetch: blockingSpaceError ? refetchSpaces : query.refetch,
-  };
+  return useSpaceScopedQueryResult(query, gate);
 };
