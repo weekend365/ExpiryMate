@@ -23,6 +23,17 @@ describe("persisted query cache policy", () => {
     expect(isPersistedQueryRoot(queryKey)).toBe(true);
   });
 
+  it("does not persist empty list snapshots that would strand space gates", () => {
+    const queryClient = new QueryClient();
+    const spacesKey = ["inventory-spaces", "user-a"] as const;
+    const inventoryKey = ["inventory-list", "user-a", "space-a"] as const;
+    queryClient.setQueryData(spacesKey, []);
+    queryClient.setQueryData(inventoryKey, []);
+
+    expect(shouldPersistQuery(getQuery(queryClient, spacesKey))).toBe(false);
+    expect(shouldPersistQuery(getQuery(queryClient, inventoryKey))).toBe(false);
+  });
+
   it("does not persist signed-out, no-space, auth, or failed queries", async () => {
     const queryClient = new QueryClient({
       defaultOptions: { queries: { retry: false } },

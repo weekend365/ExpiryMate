@@ -76,7 +76,11 @@ export function prefetchActiveSpaceQueries(
   );
 }
 
-/** Nudge already-mounted observers that missed the enabled→fetch transition. */
+/**
+ * Nudge observers (and cached inactive queries) that missed the
+ * enabled→fetch transition. Prefer `all` over `active` so lazy tabs that
+ * mounted while the gate was closed still pick up a network pass.
+ */
 export function refetchActiveSpaceQueries(
   queryClient: QueryClient,
   sessionUserId: string,
@@ -93,7 +97,7 @@ export function refetchActiveSpaceQueries(
     roots.map((root) =>
       queryClient.refetchQueries({
         queryKey: withInventorySpace(root, sessionUserId, activeSpaceId),
-        type: "active",
+        type: "all",
       }),
     ),
   );

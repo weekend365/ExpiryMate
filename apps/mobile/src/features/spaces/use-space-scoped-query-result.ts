@@ -12,6 +12,7 @@ type SpaceScopedGate = {
   enabled: boolean;
   isAwaitingSpace: boolean;
   blockingSpaceError: Error | null;
+  activeSpaceId?: string;
   refetchSpaces: () => Promise<QueryObserverResult<unknown, Error>>;
 };
 
@@ -27,6 +28,7 @@ export function useSpaceScopedQueryResult<TData, TError>(
     enabled,
     isAwaitingSpace,
     blockingSpaceError,
+    activeSpaceId,
     refetchSpaces,
   } = gate;
 
@@ -37,6 +39,7 @@ export function useSpaceScopedQueryResult<TData, TError>(
     isFetching: query.isFetching,
     fetchStatus: query.fetchStatus,
     refetch: query.refetch,
+    fetchEpoch: activeSpaceId,
   });
 
   const isStalled = useStalledInitialQuery({

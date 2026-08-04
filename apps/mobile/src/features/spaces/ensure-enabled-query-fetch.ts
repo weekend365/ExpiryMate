@@ -40,11 +40,20 @@ type EnsureEnabledQueryFetchInput = {
   isFetching: boolean;
   fetchStatus: string;
   refetch: () => unknown;
+  /**
+   * Changes when the space (or other gate input) changes so a newly enabled
+   * observer always issues a network request, not only on the first enable.
+   */
+  fetchEpoch?: string;
 };
 
 /**
  * Force a fetch when an enabled space-scoped query is stuck without data, and
  * retry once more shortly after so cold start cannot sit on a skeleton forever.
+ *
+ * Also refetches on the enabled rising edge / space change. TanStack Query can
+ * leave dependent observers in pending+idle after `enabled` flips true — the
+ * same state that pull-to-refresh recovers from.
  */
 export function useEnsureEnabledQueryFetch({
   enabled,
@@ -53,6 +62,7 @@ export function useEnsureEnabledQueryFetch({
   isFetching,
   fetchStatus,
   refetch,
+  fetchEpoch,
 }: EnsureEnabledQueryFetchInput) {
   const hasData = data !== undefined;
   const shouldKick = shouldKickEnabledQueryFetch({
@@ -62,16 +72,31 @@ export function useEnsureEnabledQueryFetch({
     isFetching,
     fetchStatus,
   });
-
-  useEffect(() => {
-    if (!shouldKick) {
-      return;
-    }
-    void refetch();
-  }, [refetch, shouldKick]);
+  const prevEnabledRef = useRef(false);
+  const prevEpochRef = useRef<string | undefined>(undefined);
 
   const refetchRef = useRef(refetch);
   refetchRef.current = refetch;
+
+  useEffect(() => {
+    const justEnabled = enabled && !prevEnabledRef.current;
+    const epochChanged =
+      enabled &&
+      fetchEpoch !== undefined &&
+      fetchEpoch !== prevEpochRef.current;
+
+    prevEnabledRef.current = enabled;
+    if (enabled && fetchEpoch !== undefined) {
+      prevEpochRef.current = fetchEpoch;
+    }
+    if (!enabled) {
+      prevEpochRef.current = undefined;
+    }
+
+    if ((justEnabled || epochChanged || shouldKick) && enabled && !hasData) {
+      void refetchRef.current();
+    }
+  }, [enabled, fetchEpoch, hasData, shouldKick]);
 
   useEffect(() => {
     if (!enabled || hasData) {
@@ -83,7 +108,7 @@ export function useEnsureEnabledQueryFetch({
     }, STALLED_INITIAL_FETCH_MS);
 
     return () => clearTimeout(timer);
-  }, [enabled, hasData]);
+  }, [enabled, hasData, fetchEpoch]);
 }
 
 /**

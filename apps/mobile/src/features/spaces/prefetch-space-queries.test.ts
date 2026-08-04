@@ -95,7 +95,7 @@ describe("prefetchActiveSpaceQueries", () => {
 
     expect(refetchSpy).toHaveBeenCalledWith({
       queryKey: dashboardKey,
-      type: "active",
+      type: "all",
     });
   });
 });

@@ -1,7 +1,8 @@
 import type { Query, QueryClient } from "@tanstack/react-query";
 
 export const PERSISTED_QUERY_CACHE_KEY = "expirymate.query-cache.v1";
-export const PERSISTED_QUERY_CACHE_BUSTER = "expirymate-mobile-v1";
+/** Bump when restored snapshots can strand first-screen gates (e.g. empty spaces). */
+export const PERSISTED_QUERY_CACHE_BUSTER = "expirymate-mobile-v2-spaces";
 export const PERSISTED_QUERY_MAX_AGE_MS = 1000 * 60 * 60 * 24;
 
 const persistedQueryRoots = new Set([
@@ -18,6 +19,12 @@ const persistedQueryRoots = new Set([
  */
 export function shouldPersistQuery(query: Query) {
   if (query.state.data === undefined) {
+    return false;
+  }
+
+  // Empty spaces/inventory snapshots hide SpaceSwitcher and leave tab queries
+  // disabled (isReady stays false). Never restore that dead-end state.
+  if (Array.isArray(query.state.data) && query.state.data.length === 0) {
     return false;
   }
 

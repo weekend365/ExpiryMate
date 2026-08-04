@@ -15,6 +15,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { AppState } from "react-native";
@@ -52,11 +53,17 @@ type SpaceContextValue = {
 
 const SpaceContext = createContext<SpaceContextValue | null>(null);
 
+const EMPTY_SPACES_MESSAGE =
+  "내 냉장고를 아직 찾지 못했어요. 다시 한번 불러와 볼까요?";
+const MAX_EMPTY_SPACES_RETRIES = 3;
+
 export function SpaceProvider({ children }: PropsWithChildren) {
   const { sessionUserId } = useAuth();
   const queryClient = useQueryClient();
   const [hydratedSelection, setHydratedSelection] =
     useState<HydratedSelection | null>(null);
+  const emptySpacesRetryCountRef = useRef(0);
+  const [emptySpacesRetries, setEmptySpacesRetries] = useState(0);
   const query = useQuery({
     queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
     queryFn: listInventorySpaces,
@@ -71,11 +78,14 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     isFetching: query.isFetching,
     fetchStatus: query.fetchStatus,
     refetch: query.refetch,
+    fetchEpoch: sessionUserId,
   });
 
   useEffect(() => {
     if (!sessionUserId) {
       setHydratedSelection(null);
+      emptySpacesRetryCountRef.current = 0;
+      setEmptySpacesRetries(0);
       return;
     }
 
@@ -97,7 +107,10 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     };
   }, [sessionUserId]);
 
-  const spaces = useMemo(() => query.data ?? [], [query.data]);
+  const spaces = useMemo(
+    () => (Array.isArray(query.data) ? query.data : []),
+    [query.data],
+  );
   const selectionHydrated =
     Boolean(sessionUserId) && hydratedSelection?.userId === sessionUserId;
   const activeSpace = useMemo(() => {
@@ -106,6 +119,37 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     }
     return chooseActiveInventorySpace(spaces, hydratedSelection?.spaceId);
   }, [hydratedSelection?.spaceId, selectionHydrated, spaces]);
+
+  const spacesSettled =
+    Boolean(sessionUserId) &&
+    selectionHydrated &&
+    !query.isPending &&
+    !query.isFetching;
+  const missingSpaces =
+    spacesSettled && spaces.length === 0 && !query.isError;
+
+  useEffect(() => {
+    if (!missingSpaces) {
+      if (spaces.length > 0 && emptySpacesRetries !== 0) {
+        emptySpacesRetryCountRef.current = 0;
+        setEmptySpacesRetries(0);
+      }
+      return;
+    }
+
+    if (emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES) {
+      return;
+    }
+
+    const attempt = emptySpacesRetries + 1;
+    const timer = setTimeout(() => {
+      emptySpacesRetryCountRef.current = attempt;
+      setEmptySpacesRetries(attempt);
+      void query.refetch();
+    }, 400 * attempt);
+
+    return () => clearTimeout(timer);
+  }, [missingSpaces, emptySpacesRetries, query.refetch, spaces.length]);
 
   useEffect(() => {
     if (
@@ -179,11 +223,20 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     [sessionUserId],
   );
 
-  // Keep the switcher in a loading state until both the saved selection and
-  // the spaces list are ready. Otherwise a fast/cached spaces response can
-  // clear isLoading while activeSpace is still null, and SpaceSwitcher hides.
+  const emptySpacesError =
+    missingSpaces && emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES
+      ? new Error(EMPTY_SPACES_MESSAGE)
+      : null;
+
+  // Keep the switcher visible while selection/spaces settle or while we retry
+  // an empty list. Returning null here used to hide the fridge switcher and
+  // leave every space-scoped tab query disabled forever.
   const isLoading =
-    Boolean(sessionUserId) && (!selectionHydrated || query.isPending);
+    Boolean(sessionUserId) &&
+    (!selectionHydrated ||
+      query.isPending ||
+      query.isFetching ||
+      (missingSpaces && emptySpacesRetries < MAX_EMPTY_SPACES_RETRIES));
 
   const value = useMemo<SpaceContextValue>(
     () => ({
@@ -195,12 +248,20 @@ export function SpaceProvider({ children }: PropsWithChildren) {
         !sessionUserId ||
         (selectionHydrated && !query.isPending && Boolean(activeSpace)),
       isLoading,
-      error: query.error instanceof Error ? query.error : null,
+      error:
+        query.error instanceof Error
+          ? query.error
+          : emptySpacesError,
       setActiveSpaceId,
-      refetchSpaces: query.refetch,
+      refetchSpaces: async () => {
+        emptySpacesRetryCountRef.current = 0;
+        setEmptySpacesRetries(0);
+        return query.refetch();
+      },
     }),
     [
       activeSpace,
+      emptySpacesError,
       isLoading,
       query.error,
       query.isPending,
