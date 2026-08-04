@@ -17,6 +17,11 @@ async function bootstrap() {
   });
 
   configureTrustProxy(app);
+  // User-scoped JSON must always reach the handlers. Express ETags otherwise
+  // allow native URL caches to receive an empty 304 body, which cannot be
+  // decoded as the API envelope after an app update or restored session.
+  app.disable("etag");
+  app.use(disableResponseCaching);
 
   app.use(normalizeJsonContentType);
   app.use(json({ limit: "10mb" }));
@@ -66,6 +71,15 @@ function normalizeJsonContentType(req: Request, _res: Response, next: NextFuncti
     req.headers["content-type"] = "application/json";
   }
 
+  next();
+}
+
+function disableResponseCaching(
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  res.setHeader("Cache-Control", "no-store");
   next();
 }
 

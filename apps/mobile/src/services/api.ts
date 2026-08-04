@@ -237,6 +237,10 @@ async function fetchWithNetworkError(
   try {
     return await fetch(buildUrl(path), {
       ...init,
+      // Authenticated inventory responses must never be satisfied by a stale
+      // native URL cache. In particular, an empty 304 response cannot be
+      // decoded as our JSON envelope on a restored/review-device session.
+      cache: "no-store",
       signal: controller.signal,
     });
   } catch (error) {

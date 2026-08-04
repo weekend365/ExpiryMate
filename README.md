@@ -234,6 +234,8 @@ For production EAS builds, configure the values from
 Google and Kakao public identifiers must be present. `app.config.js` and
 `eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
 builds fail fast when these values are missing, local, or placeholders.
+Until the custom API domain is configured, both production URLs use
+`https://api-production-1504.up.railway.app`.
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
 Use your Mac's current LAN IP instead:

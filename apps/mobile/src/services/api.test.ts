@@ -99,6 +99,7 @@ describe("mobile API client core flow", () => {
       2,
       "http://localhost:4000/dashboard/summary",
       expect.objectContaining({
+        cache: "no-store",
         headers: expect.objectContaining({
           Authorization: "Bearer access-1",
         }),
