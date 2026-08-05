@@ -122,20 +122,29 @@ export default function InventoryDetailScreen() {
 
   const itemQuery = useQuery({
     queryKey: itemKey,
-    queryFn: () => getInventoryItem(id, activeSpaceId),
+    queryFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return getInventoryItem(id, activeSpaceId);
+    },
     enabled: Boolean(id && activeSpaceId && isReady),
   });
 
   const updateMutation = useMutation({
-    mutationFn: (values: Partial<InventoryFormValues>) =>
-      updateInventoryItem(
+    mutationFn: (values: Partial<InventoryFormValues>) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return updateInventoryItem(
         id,
         {
           ...values,
           expectedVersion: itemQuery.data?.version,
         },
         activeSpaceId,
-      ),
+      );
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
@@ -144,7 +153,12 @@ export default function InventoryDetailScreen() {
   });
 
   const consumeMutation = useMutation({
-    mutationFn: () => consumeInventoryItem(id, activeSpaceId),
+    mutationFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return consumeInventoryItem(id, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
@@ -153,7 +167,12 @@ export default function InventoryDetailScreen() {
   });
 
   const discardMutation = useMutation({
-    mutationFn: () => discardInventoryItem(id, activeSpaceId),
+    mutationFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return discardInventoryItem(id, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });

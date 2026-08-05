@@ -594,10 +594,21 @@ export const oauthLogin = async (
     }),
   );
 
-const spaceResourcePath = (spaceId: string | undefined, path: string) =>
-  spaceId ? `/spaces/${spaceId}/${path}` : `/${path}`;
+const MISSING_SPACE_ID_MESSAGE =
+  "함께 쓸 냉장고를 먼저 골라 주세요.";
 
-export const getDashboardSummary = (spaceId?: string) =>
+function requireSpaceId(spaceId: string | undefined): string {
+  if (!spaceId || spaceId === "no-space" || spaceId === "signed-out") {
+    throw new Error(MISSING_SPACE_ID_MESSAGE);
+  }
+  return spaceId;
+}
+
+/** Space-scoped paths only — never fall back to personal legacy routes. */
+const spaceResourcePath = (spaceId: string, path: string) =>
+  `/spaces/${requireSpaceId(spaceId)}/${path}`;
+
+export const getDashboardSummary = (spaceId: string) =>
   request<DashboardSummary>(spaceResourcePath(spaceId, "dashboard/summary"));
 
 export const lookupBarcodeProduct = (barcode: string) =>
@@ -613,33 +624,34 @@ export const contributeBarcodeProduct = (
     body: JSON.stringify(payload),
   });
 
-export const listInventory = async (params?: {
+export const listInventory = async (params: {
+  spaceId: string;
   page?: number;
   limit?: number;
   q?: string;
-  spaceId?: string;
 }): Promise<InventoryListResponse> => {
+  const spaceId = requireSpaceId(params.spaceId);
   const search = new URLSearchParams();
-  if (params?.page) {
+  if (params.page) {
     search.set("page", String(params.page));
   }
-  if (params?.limit) {
+  if (params.limit) {
     search.set("limit", String(params.limit));
   }
-  if (params?.q?.trim()) {
+  if (params.q?.trim()) {
     search.set("q", params.q.trim());
   }
   const query = search.toString();
   const data = await request<unknown>(
-    `${spaceResourcePath(params?.spaceId, "inventory")}${
-      query ? `?${query}` : ""
-    }`,
+    `${spaceResourcePath(spaceId, "inventory")}${query ? `?${query}` : ""}`,
   );
   return normalizeInventoryListResponse(data, params);
 };
 
 /** Loads paginated inventory pages until exhausted (owner-scoped soft cap). */
-export const listAllInventory = async (spaceId?: string): Promise<InventoryItem[]> => {
+export const listAllInventory = async (
+  spaceId: string,
+): Promise<InventoryItem[]> => {
   const items: InventoryItem[] = [];
   let page = 1;
 
@@ -705,12 +717,12 @@ function normalizeInventoryListResponse(
   );
 }
 
-export const getInventoryItem = (id: string, spaceId?: string) =>
+export const getInventoryItem = (id: string, spaceId: string) =>
   request<InventoryItem>(`${spaceResourcePath(spaceId, "inventory")}/${id}`);
 
 export const createInventoryItem = (
   payload: CreateInventoryItemBody,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<InventoryItem>(spaceResourcePath(spaceId, "inventory"), {
     method: "POST",
@@ -720,41 +732,41 @@ export const createInventoryItem = (
 export const updateInventoryItem = (
   id: string,
   payload: UpdateInventoryItemBody,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<InventoryItem>(`${spaceResourcePath(spaceId, "inventory")}/${id}`, {
     method: "PATCH",
     body: JSON.stringify(payload),
   });
 
-export const consumeInventoryItem = (id: string, spaceId?: string) =>
+export const consumeInventoryItem = (id: string, spaceId: string) =>
   request<InventoryItem>(
     `${spaceResourcePath(spaceId, "inventory")}/${id}/consume`,
     {
-    method: "POST",
+      method: "POST",
     },
   );
 
-export const discardInventoryItem = (id: string, spaceId?: string) =>
+export const discardInventoryItem = (id: string, spaceId: string) =>
   request<InventoryItem>(
     `${spaceResourcePath(spaceId, "inventory")}/${id}/discard`,
     {
-    method: "POST",
+      method: "POST",
     },
   );
 
-export const batchDiscardInventoryItems = (ids: string[], spaceId?: string) =>
+export const batchDiscardInventoryItems = (ids: string[], spaceId: string) =>
   request<BatchDiscardInventoryItemsResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/batch-discard`,
     {
-    method: "POST",
-    body: JSON.stringify({ ids }),
+      method: "POST",
+      body: JSON.stringify({ ids }),
     },
   );
 
 export const batchConsumeInventoryItems = (
   payload: BatchConsumeInventoryItemsBody,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<BatchConsumeInventoryItemsResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/batch-consume`,
@@ -764,14 +776,14 @@ export const batchConsumeInventoryItems = (
     },
   );
 
-export const listRecipeRecommendations = (spaceId?: string) =>
+export const listRecipeRecommendations = (spaceId: string) =>
   request<RecipeRecommendation[]>(
     `${spaceResourcePath(spaceId, "recipes")}/recommendations`,
   );
 
 export const createRecipeRecommendation = (
   payload: RecipeRecommendationPayload,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<RecipeRecommendation>(
     `${spaceResourcePath(spaceId, "recipes")}/recommendations`,
@@ -782,7 +794,7 @@ export const createRecipeRecommendation = (
     { timeoutMs: RECIPE_GENERATION_TIMEOUT_MS },
   );
 
-export const getRecipeRecommendation = (id: string, spaceId?: string) =>
+export const getRecipeRecommendation = (id: string, spaceId: string) =>
   request<RecipeRecommendation>(
     `${spaceResourcePath(spaceId, "recipes")}/recommendations/${id}`,
   );
@@ -793,7 +805,7 @@ export const listRecipeFavorites = () =>
 export const saveRecipeFavorite = (
   recommendationId: string,
   dishIndex: number,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<RecipeFavorite>(
     `${spaceResourcePath(
@@ -808,13 +820,18 @@ export const deleteRecipeFavorite = (
   dishIndex: number,
   spaceId?: string,
 ) =>
-  request<DeleteRecipeFavoriteResponse>(
-    `${spaceResourcePath(
-      spaceId,
-      "recipes",
-    )}/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
-    { method: "DELETE" },
-  );
+  spaceId
+    ? request<DeleteRecipeFavoriteResponse>(
+        `${spaceResourcePath(
+          spaceId,
+          "recipes",
+        )}/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
+        { method: "DELETE" },
+      )
+    : request<DeleteRecipeFavoriteResponse>(
+        `/recipes/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
+        { method: "DELETE" },
+      );
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");
@@ -832,47 +849,39 @@ export const updateNotificationPreferences = (
     body: JSON.stringify(payload),
   });
 
-export const listStorageLocations = (spaceId?: string) =>
+export const listStorageLocations = (spaceId: string) =>
   request<StorageLocationsResponse>(
-    spaceId
-      ? `/spaces/${spaceId}/storage-locations`
-      : "/settings/storage-locations",
+    `/spaces/${requireSpaceId(spaceId)}/storage-locations`,
   );
 
 export const createStorageLocation = (
   payload: CreateUserStorageLocationBody,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<UserStorageLocation>(
-    spaceId
-      ? `/spaces/${spaceId}/storage-locations`
-      : "/settings/storage-locations",
+    `/spaces/${requireSpaceId(spaceId)}/storage-locations`,
     {
-    method: "POST",
-    body: JSON.stringify(payload),
+      method: "POST",
+      body: JSON.stringify(payload),
     },
   );
 
 export const updateStorageLocation = (
   id: string,
   payload: UpdateUserStorageLocationBody,
-  spaceId?: string,
+  spaceId: string,
 ) =>
   request<UserStorageLocation>(
-    spaceId
-      ? `/spaces/${spaceId}/storage-locations/${id}`
-      : `/settings/storage-locations/${id}`,
+    `/spaces/${requireSpaceId(spaceId)}/storage-locations/${id}`,
     {
       method: "PATCH",
       body: JSON.stringify(payload),
     },
   );
 
-export const deleteStorageLocation = (id: string, spaceId?: string) =>
+export const deleteStorageLocation = (id: string, spaceId: string) =>
   request<{ id: string }>(
-    spaceId
-      ? `/spaces/${spaceId}/storage-locations/${id}`
-      : `/settings/storage-locations/${id}`,
+    `/spaces/${requireSpaceId(spaceId)}/storage-locations/${id}`,
     {
       method: "DELETE",
     },

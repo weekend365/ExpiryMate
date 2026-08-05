@@ -20,12 +20,16 @@ import {
 } from "react";
 import { AppState } from "react-native";
 import { listInventorySpaces } from "../../services/api";
+import { captureSpaceBootstrapBreadcrumb } from "../../services/sentry";
 import { useAuth } from "../auth/use-auth";
 import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
-import { useEnsureEnabledQueryFetch } from "./ensure-enabled-query-fetch";
+import {
+  STALLED_INITIAL_FETCH_MESSAGE,
+  useEnsureEnabledQueryFetch,
+} from "./ensure-enabled-query-fetch";
 import {
   prefetchActiveSpaceQueries,
   refetchActiveSpaceQueries,
@@ -56,14 +60,22 @@ const SpaceContext = createContext<SpaceContextValue | null>(null);
 const EMPTY_SPACES_MESSAGE =
   "내 냉장고를 아직 찾지 못했어요. 다시 한번 불러와 볼까요?";
 const MAX_EMPTY_SPACES_RETRIES = 3;
+/** AsyncStorage selection restore must not block boot forever. */
+export const SELECTION_HYDRATION_TIMEOUT_MS = 2_000;
+/** Show a recoverable retry if spaces never resolve. */
+export const SPACE_BOOTSTRAP_STALL_MS = 8_000;
 
 export function SpaceProvider({ children }: PropsWithChildren) {
   const { sessionUserId } = useAuth();
   const queryClient = useQueryClient();
   const [hydratedSelection, setHydratedSelection] =
     useState<HydratedSelection | null>(null);
+  const [selectionHydrateEpoch, setSelectionHydrateEpoch] = useState(0);
+  const [bootstrapStalled, setBootstrapStalled] = useState(false);
   const emptySpacesRetryCountRef = useRef(0);
   const [emptySpacesRetries, setEmptySpacesRetries] = useState(0);
+  /** Explicit picks (invite accept, switcher, notification) wait for list refresh. */
+  const pendingExplicitSpaceIdRef = useRef<string | null>(null);
   const query = useQuery({
     queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
     queryFn: listInventorySpaces,
@@ -86,26 +98,44 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       setHydratedSelection(null);
       emptySpacesRetryCountRef.current = 0;
       setEmptySpacesRetries(0);
+      setBootstrapStalled(false);
+      pendingExplicitSpaceIdRef.current = null;
       return;
     }
 
     let cancelled = false;
+    let settled = false;
+
+    const finish = (spaceId: string | null) => {
+      if (cancelled || settled) {
+        return;
+      }
+      settled = true;
+      setHydratedSelection({ userId: sessionUserId, spaceId });
+    };
+
+    const timer = setTimeout(() => {
+      finish(null);
+      captureSpaceBootstrapBreadcrumb("selection_hydrate_timeout", {
+        userIdPresent: true,
+      });
+    }, SELECTION_HYDRATION_TIMEOUT_MS);
+
     AsyncStorage.getItem(selectionStorageKey(sessionUserId))
       .then((spaceId) => {
-        if (!cancelled) {
-          setHydratedSelection({ userId: sessionUserId, spaceId });
-        }
+        clearTimeout(timer);
+        finish(spaceId);
       })
       .catch(() => {
-        if (!cancelled) {
-          setHydratedSelection({ userId: sessionUserId, spaceId: null });
-        }
+        clearTimeout(timer);
+        finish(null);
       });
 
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
-  }, [sessionUserId]);
+  }, [sessionUserId, selectionHydrateEpoch]);
 
   const spaces = useMemo(
     () => (Array.isArray(query.data) ? query.data : []),
@@ -113,20 +143,50 @@ export function SpaceProvider({ children }: PropsWithChildren) {
   );
   const selectionHydrated =
     Boolean(sessionUserId) && hydratedSelection?.userId === sessionUserId;
-  const activeSpace = useMemo(() => {
-    if (!selectionHydrated) {
-      return null;
-    }
-    return chooseActiveInventorySpace(spaces, hydratedSelection?.spaceId);
-  }, [hydratedSelection?.spaceId, selectionHydrated, spaces]);
-
-  const spacesSettled =
+  const spacesListSettled =
     Boolean(sessionUserId) &&
     selectionHydrated &&
     !query.isPending &&
     !query.isFetching;
+  const requestedSpaceId = hydratedSelection?.spaceId ?? null;
+  const requestedMissingFromList = Boolean(
+    requestedSpaceId &&
+      !spaces.some((space) => space.id === requestedSpaceId),
+  );
+  const waitingForRequestedSpace =
+    requestedMissingFromList &&
+    (query.isPending ||
+      query.isFetching ||
+      pendingExplicitSpaceIdRef.current === requestedSpaceId);
+
+  const activeSpace = useMemo(() => {
+    if (!selectionHydrated) {
+      return null;
+    }
+    return chooseActiveInventorySpace(spaces, requestedSpaceId, {
+      allowFallbackWhenMissing: !waitingForRequestedSpace,
+    });
+  }, [
+    requestedSpaceId,
+    selectionHydrated,
+    spaces,
+    waitingForRequestedSpace,
+  ]);
+
+  useEffect(() => {
+    if (
+      pendingExplicitSpaceIdRef.current &&
+      spaces.some((space) => space.id === pendingExplicitSpaceIdRef.current)
+    ) {
+      pendingExplicitSpaceIdRef.current = null;
+    }
+  }, [spaces]);
+
   const missingSpaces =
-    spacesSettled && spaces.length === 0 && !query.isError;
+    spacesListSettled &&
+    spaces.length === 0 &&
+    !query.isError &&
+    !waitingForRequestedSpace;
 
   useEffect(() => {
     if (!missingSpaces) {
@@ -159,12 +219,22 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     ) {
       return;
     }
+    // Never persist a personal fallback while we are still waiting for an
+    // explicitly requested (or restored) shared space id to appear in the list.
+    if (waitingForRequestedSpace) {
+      return;
+    }
     setHydratedSelection({ userId: sessionUserId, spaceId: activeSpace.id });
     AsyncStorage.setItem(
       selectionStorageKey(sessionUserId),
       activeSpace.id,
     ).catch(() => null);
-  }, [activeSpace, hydratedSelection?.spaceId, sessionUserId]);
+  }, [
+    activeSpace,
+    hydratedSelection?.spaceId,
+    sessionUserId,
+    waitingForRequestedSpace,
+  ]);
 
   useEffect(() => {
     if (!sessionUserId || !activeSpace?.id) {
@@ -172,11 +242,11 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     }
 
     const spaceId = activeSpace.id;
+    captureSpaceBootstrapBreadcrumb("active_space_ready", {
+      spaceIdPresent: true,
+      spaceType: activeSpace.type,
+    });
 
-    // Auth → space hydration can finish before tab observers mount. Fetch so
-    // home/inventory/recipes already have data (or an in-flight request) ready.
-    // Afterward, nudge any already-mounted observers that missed the
-    // enabled→auto-fetch transition (pending+idle until pull-to-refresh).
     void prefetchActiveSpaceQueries(queryClient, sessionUserId, spaceId)
       .catch(() => undefined)
       .finally(() => {
@@ -186,11 +256,17 @@ export function SpaceProvider({ children }: PropsWithChildren) {
           spaceId,
         ).catch(() => undefined);
       });
-  }, [activeSpace?.id, queryClient, sessionUserId]);
+  }, [activeSpace?.id, activeSpace?.type, queryClient, sessionUserId]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active" || !sessionUserId || !activeSpace?.id) {
+      if (state !== "active" || !sessionUserId) {
+        return;
+      }
+      void queryClient.invalidateQueries({
+        queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
+      });
+      if (!activeSpace?.id) {
         return;
       }
       void Promise.all(
@@ -215,28 +291,89 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       if (!sessionUserId) {
         return;
       }
+      pendingExplicitSpaceIdRef.current = spaceId;
       setHydratedSelection({ userId: sessionUserId, spaceId });
       AsyncStorage.setItem(selectionStorageKey(sessionUserId), spaceId).catch(
         () => null,
       );
+      void queryClient.invalidateQueries({
+        queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
+      });
     },
-    [sessionUserId],
+    [queryClient, sessionUserId],
   );
+
+  const refetchSpaces = useCallback(async () => {
+    emptySpacesRetryCountRef.current = 0;
+    setEmptySpacesRetries(0);
+    setBootstrapStalled(false);
+    if (sessionUserId) {
+      setSelectionHydrateEpoch((epoch) => epoch + 1);
+      captureSpaceBootstrapBreadcrumb("spaces_refetch", {
+        userIdPresent: true,
+        fetchStatus: query.fetchStatus,
+        isPending: query.isPending,
+      });
+    }
+    return query.refetch();
+  }, [query.fetchStatus, query.isPending, query.refetch, sessionUserId]);
 
   const emptySpacesError =
     missingSpaces && emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES
       ? new Error(EMPTY_SPACES_MESSAGE)
       : null;
 
-  // Keep the switcher visible while selection/spaces settle or while we retry
-  // an empty list. Returning null here used to hide the fridge switcher and
-  // leave every space-scoped tab query disabled forever.
   const isLoading =
     Boolean(sessionUserId) &&
     (!selectionHydrated ||
       query.isPending ||
       query.isFetching ||
+      waitingForRequestedSpace ||
       (missingSpaces && emptySpacesRetries < MAX_EMPTY_SPACES_RETRIES));
+
+  const isReady =
+    !sessionUserId ||
+    (selectionHydrated &&
+      !query.isPending &&
+      !waitingForRequestedSpace &&
+      Boolean(activeSpace));
+
+  useEffect(() => {
+    if (!sessionUserId || isReady || query.isError || emptySpacesError) {
+      setBootstrapStalled(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setBootstrapStalled(true);
+      captureSpaceBootstrapBreadcrumb("bootstrap_stalled", {
+        userIdPresent: true,
+        selectionHydrated,
+        fetchStatus: query.fetchStatus,
+        isPending: query.isPending,
+        isFetching: query.isFetching,
+        spacesCount: spaces.length,
+        waitingForRequestedSpace,
+      });
+    }, SPACE_BOOTSTRAP_STALL_MS);
+
+    return () => clearTimeout(timer);
+  }, [
+    emptySpacesError,
+    isReady,
+    query.fetchStatus,
+    query.isError,
+    query.isFetching,
+    query.isPending,
+    selectionHydrated,
+    sessionUserId,
+    spaces.length,
+    waitingForRequestedSpace,
+  ]);
+
+  const stalledError = bootstrapStalled
+    ? new Error(STALLED_INITIAL_FETCH_MESSAGE)
+    : null;
 
   const value = useMemo<SpaceContextValue>(
     () => ({
@@ -244,32 +381,27 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       activeSpace,
       activeSpaceId: activeSpace?.id,
       activeRole: activeSpace?.myRole,
-      isReady:
-        !sessionUserId ||
-        (selectionHydrated && !query.isPending && Boolean(activeSpace)),
-      isLoading,
+      isReady,
+      isLoading: isLoading && !bootstrapStalled && !query.isError && !emptySpacesError,
       error:
         query.error instanceof Error
           ? query.error
-          : emptySpacesError,
+          : emptySpacesError ?? stalledError,
       setActiveSpaceId,
-      refetchSpaces: async () => {
-        emptySpacesRetryCountRef.current = 0;
-        setEmptySpacesRetries(0);
-        return query.refetch();
-      },
+      refetchSpaces,
     }),
     [
       activeSpace,
+      bootstrapStalled,
       emptySpacesError,
       isLoading,
+      isReady,
       query.error,
-      query.isPending,
-      query.refetch,
-      selectionHydrated,
-      sessionUserId,
+      query.isError,
+      refetchSpaces,
       setActiveSpaceId,
       spaces,
+      stalledError,
     ],
   );
 

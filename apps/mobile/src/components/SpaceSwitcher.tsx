@@ -43,7 +43,11 @@ export function SpaceSwitcher() {
 
   useFocusEffect(
     useCallback(() => {
-      if (!sessionUserId || !activeSpaceId) {
+      if (!sessionUserId) {
+        return;
+      }
+      if (!activeSpaceId) {
+        void refetchSpaces();
         return;
       }
       void Promise.all([
@@ -69,7 +73,7 @@ export function SpaceSwitcher() {
           ),
         }),
       ]);
-    }, [activeSpaceId, queryClient, sessionUserId]),
+    }, [activeSpaceId, queryClient, refetchSpaces, sessionUserId]),
   );
 
   // Never return null: a hidden switcher means activeSpace is missing, which

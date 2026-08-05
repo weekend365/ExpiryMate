@@ -19,7 +19,12 @@ export const useRecipeRecommendation = (id: string | undefined) => {
       ),
       id ?? "",
     ],
-    queryFn: () => getRecipeRecommendation(id as string, gate.activeSpaceId),
+    queryFn: () => {
+      if (!id || !gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return getRecipeRecommendation(id, gate.activeSpaceId);
+    },
     enabled,
     refetchOnMount: "always",
   });

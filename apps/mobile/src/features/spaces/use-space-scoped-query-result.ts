@@ -16,9 +16,25 @@ type SpaceScopedGate = {
   refetchSpaces: () => Promise<QueryObserverResult<unknown, Error>>;
 };
 
+/** While the space bootstrap is unresolved, refresh must retry spaces — not legacy personal endpoints. */
+export function resolveSpaceScopedRefetch<T>(input: {
+  isAwaitingSpace: boolean;
+  blockingSpaceError: Error | null;
+  refetchSpaces: () => T;
+  refetchQuery: () => T;
+}) {
+  return input.isAwaitingSpace || input.blockingSpaceError
+    ? input.refetchSpaces
+    : input.refetchQuery;
+}
+
 /**
  * Shared loading/error/refetch mapping for queries gated on an active space.
  * Also kicks a fetch when TanStack leaves an enabled query in pending+idle.
+ *
+ * While the active space is still resolving, pull-to-refresh retries the
+ * spaces bootstrap — never the disabled resource query (which would hit
+ * legacy personal endpoints without a spaceId).
  */
 export function useSpaceScopedQueryResult<TData, TError>(
   query: UseQueryResult<TData, TError>,
@@ -68,6 +84,11 @@ export function useSpaceScopedQueryResult<TData, TError>(
       !blockingSpaceError &&
       !isStalled &&
       (isAwaitingSpace || query.isPending),
-    refetch: blockingSpaceError ? refetchSpaces : query.refetch,
+    refetch: resolveSpaceScopedRefetch({
+      isAwaitingSpace,
+      blockingSpaceError,
+      refetchSpaces: refetchSpaces as typeof query.refetch,
+      refetchQuery: query.refetch,
+    }),
   };
 }

@@ -25,6 +25,26 @@ describe("chooseActiveInventorySpace", () => {
       chooseActiveInventorySpace([personal, household], "removed-space"),
     ).toBe(personal);
   });
+
+  it("does not fall back while the spaces list may still be incomplete", () => {
+    expect(
+      chooseActiveInventorySpace([personal], "space-house", {
+        allowFallbackWhenMissing: false,
+      }),
+    ).toBeNull();
+  });
+
+  it("falls back when the incomplete-list guard is not requested", () => {
+    expect(chooseActiveInventorySpace([personal], "space-house")).toBe(
+      personal,
+    );
+  });
+
+  it("picks personal when no requested id is stored", () => {
+    expect(chooseActiveInventorySpace([household, personal], null)).toBe(
+      personal,
+    );
+  });
 });
 
 function makeSpace(

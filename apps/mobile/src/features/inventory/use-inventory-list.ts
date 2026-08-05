@@ -16,7 +16,12 @@ export const useInventoryList = () => {
       gate.sessionUserId,
       gate.activeSpaceId,
     ),
-    queryFn: () => listAllInventory(gate.activeSpaceId),
+    queryFn: () => {
+      if (!gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return listAllInventory(gate.activeSpaceId);
+    },
     enabled: gate.enabled,
     refetchOnMount: "always",
   });

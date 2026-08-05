@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HealthController } from "./health.controller";
 
 describe("HealthController", () => {
-  let prisma: { $queryRaw: ReturnType<typeof vi.fn> };
+  let prisma: {
+    $queryRaw: ReturnType<typeof vi.fn>;
+    inventorySpace: { findFirst: ReturnType<typeof vi.fn> };
+  };
   let authService: {
     markOAuthAuthorizationRedirected: ReturnType<typeof vi.fn>;
   };
@@ -12,6 +15,9 @@ describe("HealthController", () => {
   beforeEach(() => {
     prisma = {
       $queryRaw: vi.fn(),
+      inventorySpace: {
+        findFirst: vi.fn(),
+      },
     };
     authService = {
       markOAuthAuthorizationRedirected: vi.fn(),
@@ -32,15 +38,28 @@ describe("HealthController", () => {
     expect(prisma.$queryRaw).not.toHaveBeenCalled();
   });
 
-  it("returns ready when the database responds", async () => {
+  it("returns ready when the database and space tables respond", async () => {
     prisma.$queryRaw.mockResolvedValue([{ "?column?": 1 }]);
+    prisma.inventorySpace.findFirst.mockResolvedValue({ id: "personal_user" });
 
     await expect(controller.getReady()).resolves.toEqual({ status: "ready" });
     expect(prisma.$queryRaw).toHaveBeenCalledOnce();
+    expect(prisma.inventorySpace.findFirst).toHaveBeenCalledOnce();
   });
 
   it("returns 503 when the database is unavailable", async () => {
     prisma.$queryRaw.mockRejectedValue(new Error("connection refused"));
+
+    await expect(controller.getReady()).rejects.toBeInstanceOf(
+      ServiceUnavailableException,
+    );
+  });
+
+  it("returns 503 when inventory space tables are missing", async () => {
+    prisma.$queryRaw.mockResolvedValue([{ "?column?": 1 }]);
+    prisma.inventorySpace.findFirst.mockRejectedValue(
+      new Error("relation InventorySpace does not exist"),
+    );
 
     await expect(controller.getReady()).rejects.toBeInstanceOf(
       ServiceUnavailableException,

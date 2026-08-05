@@ -31,6 +31,61 @@ describe("SpacesService", () => {
     service = new SpacesService(prisma as never, mailService as never);
   });
 
+  it("lists memberships without rewriting personal space when already present", async () => {
+    prisma.inventorySpaceMembership.findMany.mockResolvedValue([
+      {
+        role: InventorySpaceRole.owner,
+        notificationsEnabled: true,
+        space: {
+          id: "personal_user-owner",
+          name: "내 냉장고",
+          type: InventorySpaceType.personal,
+          createdAt: new Date("2026-07-24T00:00:00.000Z"),
+          updatedAt: new Date("2026-07-24T00:00:00.000Z"),
+          _count: { memberships: 1 },
+        },
+      },
+    ]);
+
+    const result = await service.listSpaces("user-owner");
+
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(result).toEqual([
+      expect.objectContaining({
+        id: "personal_user-owner",
+        type: "personal",
+        myRole: "owner",
+        memberCount: 1,
+      }),
+    ]);
+  });
+
+  it("repairs a missing personal space only when the member has no spaces", async () => {
+    prisma.inventorySpaceMembership.findMany
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([
+        {
+          role: InventorySpaceRole.owner,
+          notificationsEnabled: true,
+          space: {
+            id: "personal_user-owner",
+            name: "내 냉장고",
+            type: InventorySpaceType.personal,
+            createdAt: new Date("2026-07-24T00:00:00.000Z"),
+            updatedAt: new Date("2026-07-24T00:00:00.000Z"),
+            _count: { memberships: 1 },
+          },
+        },
+      ]);
+    prisma.inventorySpace.upsert = vi.fn();
+    prisma.inventorySpaceMembership.upsert.mockResolvedValue({});
+
+    const result = await service.listSpaces("user-owner");
+
+    expect(prisma.$transaction).toHaveBeenCalledOnce();
+    expect(result[0]?.id).toBe("personal_user-owner");
+  });
+
   it("denies manager-only work to a regular member", async () => {
     prisma.inventorySpaceMembership.findUnique.mockResolvedValue({
       userId: "user-member",
@@ -548,10 +603,12 @@ function createPrismaMock() {
   const prisma = {
     inventorySpace: {
       delete: vi.fn(),
+      upsert: vi.fn(),
     },
     inventorySpaceMembership: {
       create: vi.fn(),
       findUnique: vi.fn(),
+      findMany: vi.fn(),
       upsert: vi.fn(),
     },
     spaceInvitation: {

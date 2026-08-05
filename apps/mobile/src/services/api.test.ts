@@ -73,7 +73,14 @@ describe("mobile API client core flow", () => {
   it("requires a registered session before calling an authenticated endpoint", async () => {
     const { getDashboardSummary } = await import("./api");
 
-    await expect(getDashboardSummary()).rejects.toThrow(/로그인/);
+    await expect(getDashboardSummary("personal_user-1")).rejects.toThrow(/로그인/);
+    expect(stores.fetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects space-scoped calls without a space id", async () => {
+    const { getDashboardSummary } = await import("./api");
+
+    expect(() => getDashboardSummary("")).toThrow(/냉장고를 먼저/);
     expect(stores.fetch).not.toHaveBeenCalled();
   });
 
@@ -85,7 +92,7 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse(dashboardSummary));
     const { getDashboardSummary } = await import("./api");
 
-    const result = await getDashboardSummary();
+    const result = await getDashboardSummary("personal_user-1");
 
     expect(result.todayExpiryCount).toBe(1);
     expect(stores.fetch).toHaveBeenNthCalledWith(
@@ -97,7 +104,7 @@ describe("mobile API client core flow", () => {
     );
     expect(stores.fetch).toHaveBeenNthCalledWith(
       2,
-      "http://localhost:4000/dashboard/summary",
+      "http://localhost:4000/spaces/personal_user-1/dashboard/summary",
       expect.objectContaining({
         cache: "no-store",
         headers: expect.objectContaining({
@@ -205,7 +212,10 @@ describe("mobile API client core flow", () => {
     const { login, getDashboardSummary, listAllInventory } = await import("./api");
     await login({ email: "test@example.com", password: "password123" });
 
-    const pending = Promise.all([getDashboardSummary(), listAllInventory()]);
+    const pending = Promise.all([
+      getDashboardSummary("personal_user-1"),
+      listAllInventory("personal_user-1"),
+    ]);
     await vi.waitFor(() => {
       expect(refreshCalls).toBe(1);
     });
@@ -349,7 +359,9 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse([legacyItem]));
     const { listAllInventory } = await import("./api");
 
-    await expect(listAllInventory()).resolves.toEqual([legacyItem]);
+    await expect(listAllInventory("personal_user-1")).resolves.toEqual([
+      legacyItem,
+    ]);
   });
 
   it("rejects unreadable inventory payloads with a conversational message", async () => {
@@ -360,7 +372,9 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse({ page: 1 }));
     const { listAllInventory } = await import("./api");
 
-    await expect(listAllInventory()).rejects.toThrow(/보관함 정보를 읽지 못했어요/);
+    await expect(listAllInventory("personal_user-1")).rejects.toThrow(
+      /보관함 정보를 읽지 못했어요/,
+    );
   });
 });
 

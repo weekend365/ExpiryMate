@@ -39,7 +39,12 @@ export const useRecipeRecommendations = () => {
       gate.sessionUserId,
       gate.activeSpaceId,
     ),
-    queryFn: () => listRecipeRecommendations(gate.activeSpaceId),
+    queryFn: () => {
+      if (!gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return listRecipeRecommendations(gate.activeSpaceId);
+    },
     enabled: gate.enabled,
     refetchOnMount: "always",
   });
@@ -53,8 +58,12 @@ export const useCreateRecipeRecommendation = () => {
   const { activeSpaceId } = useActiveSpace();
 
   return useMutation({
-    mutationFn: (payload: RecipeRecommendationPayload) =>
-      createRecipeRecommendation(payload, activeSpaceId),
+    mutationFn: (payload: RecipeRecommendationPayload) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return createRecipeRecommendation(payload, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(
@@ -110,10 +119,15 @@ export const useSetRecipeFavorite = () => {
       recommendationId,
       dishIndex,
       favorite,
-    }: SetRecipeFavoriteVariables) =>
-      favorite
-        ? saveRecipeFavorite(recommendationId, dishIndex, activeSpaceId)
-        : deleteRecipeFavorite(recommendationId, dishIndex),
+    }: SetRecipeFavoriteVariables) => {
+      if (favorite) {
+        if (!activeSpaceId) {
+          throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+        }
+        return saveRecipeFavorite(recommendationId, dishIndex, activeSpaceId);
+      }
+      return deleteRecipeFavorite(recommendationId, dishIndex, activeSpaceId);
+    },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<RecipeFavorite[]>(queryKey);

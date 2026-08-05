@@ -25,7 +25,12 @@ export const useStorageLocations = () => {
 
   const query = useQuery({
     queryKey,
-    queryFn: () => listStorageLocations(gate.activeSpaceId),
+    queryFn: () => {
+      if (!gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return listStorageLocations(gate.activeSpaceId);
+    },
     enabled: gate.enabled,
     refetchOnMount: "always",
   });
@@ -57,9 +62,16 @@ export const useStorageLocations = () => {
     void queryClient.invalidateQueries({ queryKey });
   };
 
+  const requireSpaceId = () => {
+    if (!gate.activeSpaceId) {
+      throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+    }
+    return gate.activeSpaceId;
+  };
+
   const createMutation = useMutation({
     mutationFn: (payload: { label: string }) =>
-      createStorageLocation(payload, gate.activeSpaceId),
+      createStorageLocation(payload, requireSpaceId()),
     onSuccess: invalidate,
   });
 
@@ -70,13 +82,12 @@ export const useStorageLocations = () => {
     }: {
       id: string;
       label: string;
-    }) => updateStorageLocation(id, { label }, gate.activeSpaceId),
+    }) => updateStorageLocation(id, { label }, requireSpaceId()),
     onSuccess: invalidate,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) =>
-      deleteStorageLocation(id, gate.activeSpaceId),
+    mutationFn: (id: string) => deleteStorageLocation(id, requireSpaceId()),
     onSuccess: invalidate,
   });
 

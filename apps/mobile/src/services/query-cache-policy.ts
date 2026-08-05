@@ -2,7 +2,7 @@ import type { Query, QueryClient } from "@tanstack/react-query";
 
 export const PERSISTED_QUERY_CACHE_KEY = "expirymate.query-cache.v1";
 /** Bump when restored snapshots can strand first-screen gates (e.g. empty spaces). */
-export const PERSISTED_QUERY_CACHE_BUSTER = "expirymate-mobile-v2-spaces";
+export const PERSISTED_QUERY_CACHE_BUSTER = "expirymate-mobile-v3-space-bootstrap";
 export const PERSISTED_QUERY_MAX_AGE_MS = 1000 * 60 * 60 * 24;
 
 const persistedQueryRoots = new Set([

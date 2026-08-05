@@ -24,8 +24,12 @@ export const useBatchDiscardInventoryItems = () => {
   );
 
   return useMutation({
-    mutationFn: (ids: string[]) =>
-      batchDiscardInventoryItems(ids, activeSpaceId),
+    mutationFn: (ids: string[]) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return batchDiscardInventoryItems(ids, activeSpaceId);
+    },
     onMutate: async (ids) => {
       await queryClient.cancelQueries({ queryKey: inventoryKey });
       const previous = queryClient.getQueryData<InventoryItem[]>(inventoryKey);

@@ -24,8 +24,12 @@ export const useBatchConsumeInventoryItems = () => {
   );
 
   return useMutation({
-    mutationFn: (payload: BatchConsumeInventoryItemsBody) =>
-      batchConsumeInventoryItems(payload, activeSpaceId),
+    mutationFn: (payload: BatchConsumeInventoryItemsBody) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return batchConsumeInventoryItems(payload, activeSpaceId);
+    },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });

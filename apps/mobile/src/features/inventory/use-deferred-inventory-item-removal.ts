@@ -33,7 +33,7 @@ type PendingRemoval = {
 
 async function submitRemovals(
   entries: PendingRemovalEntry[],
-  activeSpaceId?: string,
+  activeSpaceId: string,
 ) {
   const consumedItems = entries.flatMap((entry) =>
     entry.action === "consume" ? [entry.item] : [],
@@ -144,6 +144,11 @@ export function useDeferredInventoryItemRemoval() {
   const commitItems = useCallback(
     async (entries: PendingRemovalEntry[]) => {
       if (!entries.length) {
+        return;
+      }
+      if (!activeSpaceId) {
+        restoreToCache(entries.map((entry) => entry.item));
+        setErrorMessage("함께 쓸 냉장고를 먼저 골라 주세요.");
         return;
       }
 
@@ -260,6 +265,9 @@ export function useDeferredInventoryItemRemoval() {
       pendingRef.current = null;
 
       // Unmount path — commit without toggling React state.
+      if (!activeSpaceId) {
+        return;
+      }
       void submitRemovals(pending.entries, activeSpaceId).catch(() => {
         // Best effort; list refreshes on the next visit.
       });
