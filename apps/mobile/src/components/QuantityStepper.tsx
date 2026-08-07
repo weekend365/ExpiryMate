@@ -1,5 +1,7 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { AppText } from "./AppText";
+import { AppTextInput } from "./AppTextInput";
 
 interface QuantityStepperProps {
   label: string;
@@ -27,7 +29,9 @@ export function QuantityStepper({
 
   return (
     <View style={styles.wrapper}>
-      <Text style={styles.label}>{label}</Text>
+      <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
+        {label}
+      </AppText>
       <View style={[styles.container, error ? styles.errorContainer : null]}>
         <Pressable
           onPress={() => onChange(Math.max(1, clampedValue - 1))}
@@ -39,9 +43,16 @@ export function QuantityStepper({
             pressed && styles.iconButtonPressed,
           ]}
         >
-          <Text style={styles.iconButtonLabel}>-</Text>
+          <AppText
+            variant="heading"
+            scaleRole="chrome"
+            densityAware={false}
+            style={styles.iconButtonLabel}
+          >
+            -
+          </AppText>
         </Pressable>
-        <TextInput
+        <AppTextInput
           value={String(clampedValue)}
           onChangeText={(text) => {
             const nextValue = Number(text.replace(/[^0-9]/g, ""));
@@ -54,6 +65,7 @@ export function QuantityStepper({
           }}
           keyboardType="number-pad"
           accessibilityLabel={`${label} 수량`}
+          scaleRole="chrome"
           style={styles.input}
         />
         <Pressable
@@ -76,10 +88,21 @@ export function QuantityStepper({
               styles.iconButtonDisabled,
           ]}
         >
-          <Text style={styles.iconButtonLabel}>+</Text>
+          <AppText
+            variant="heading"
+            scaleRole="chrome"
+            densityAware={false}
+            style={styles.iconButtonLabel}
+          >
+            +
+          </AppText>
         </Pressable>
       </View>
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? (
+        <AppText variant="label" tone="danger" densityAware={false}>
+          {error}
+        </AppText>
+      ) : null}
     </View>
   );
 }
@@ -89,10 +112,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.text,
   },
   container: {
     minHeight: touchTarget.ctaLarge,
@@ -108,11 +128,12 @@ const styles = StyleSheet.create({
     borderColor: colors.danger,
   },
   iconButton: {
-    width: touchTarget.ctaLarge,
+    minWidth: touchTarget.ctaLarge,
     minHeight: touchTarget.ctaLarge,
     alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: spacing.xs,
     backgroundColor: colors.primarySoft,
   },
   iconButtonPressed: {
@@ -122,25 +143,16 @@ const styles = StyleSheet.create({
     opacity: 0.45,
   },
   iconButtonLabel: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
   input: {
     flex: 1,
+    minWidth: 0,
     alignSelf: "stretch",
     minHeight: touchTarget.ctaLarge,
     textAlign: "center",
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  errorText: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
   },
 });

@@ -1,10 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { ItemStatus, Prisma } from "@prisma/client";
 import {
+  calculateDaysLeftUntilExpiry,
   dateOnlyToUtcDate,
+  recipeInventorySnapshotItemSchema,
+  recipeRecommendationDishSchema,
   sortInventoryByNearestExpiry,
   StorageLocation,
   toKstDateOnly,
+  type DashboardRecommendationPreview,
   type DashboardSummary,
 } from "@expirymate/shared";
 import { serializeInventoryItem } from "../../common/serializers";
@@ -39,6 +43,7 @@ export class DashboardService {
       locationGroups,
       recentRows,
       expiringRows,
+      latestRecommendationRow,
     ] = await Promise.all([
       this.prisma.inventoryItem.count({ where: trackedWhere }),
       this.prisma.inventoryItem.count({
@@ -92,6 +97,16 @@ export class DashboardService {
         orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
         take: 40,
       }),
+      this.prisma.recipeRecommendation.findFirst({
+        where: spaceId ? { spaceId } : { ownerKey },
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          createdAt: true,
+          inventorySnapshot: true,
+          recommendations: true,
+        },
+      }),
     ]);
 
     const recentItems = recentRows.map(serializeInventoryItem);
@@ -121,8 +136,87 @@ export class DashboardService {
       recentItems,
       expiringItems,
       locationCounts,
+      latestRecommendationPreview:
+        toRecommendationPreview(latestRecommendationRow, now),
     };
   }
+}
+
+function toRecommendationPreview(
+  row: {
+    id: string;
+    createdAt: Date;
+    inventorySnapshot: Prisma.JsonValue;
+    recommendations: Prisma.JsonValue;
+  } | null,
+  now: Date,
+): DashboardRecommendationPreview | null {
+  if (!row || !Array.isArray(row.recommendations)) {
+    return null;
+  }
+
+  const result = recipeRecommendationDishSchema.safeParse(
+    row.recommendations[0],
+  );
+
+  if (!result.success) {
+    return null;
+  }
+
+  const snapshotResult = recipeInventorySnapshotItemSchema
+    .array()
+    .safeParse(row.inventorySnapshot);
+  const snapshotById = new Map(
+    snapshotResult.success
+      ? snapshotResult.data.map((item) => [item.inventoryItemId, item])
+      : [],
+  );
+  const reasonIngredients = result.data.usedIngredients
+    .map((ingredient, index) => {
+      const snapshot = ingredient.inventoryItemId
+        ? snapshotById.get(ingredient.inventoryItemId)
+        : undefined;
+
+      return {
+        name: ingredient.name,
+        daysUntilExpiry: snapshot
+          ? calculateDaysLeftUntilExpiry(snapshot.expiryDate, now)
+          : null,
+        index,
+      };
+    })
+    .filter(
+      (ingredient) =>
+        ingredient.daysUntilExpiry == null ||
+        ingredient.daysUntilExpiry >= 0,
+    )
+    .sort((left, right) => {
+      if (left.daysUntilExpiry == null && right.daysUntilExpiry == null) {
+        return left.index - right.index;
+      }
+
+      if (left.daysUntilExpiry == null) {
+        return 1;
+      }
+
+      if (right.daysUntilExpiry == null) {
+        return -1;
+      }
+
+      return left.daysUntilExpiry - right.daysUntilExpiry;
+    })
+    .slice(0, 2)
+    .map(({ name, daysUntilExpiry }) => ({ name, daysUntilExpiry }));
+
+  return {
+    recommendationId: row.id,
+    createdAt: row.createdAt.toISOString(),
+    title: result.data.title,
+    servings: result.data.servings,
+    cookingTimeMinutes: result.data.cookingTimeMinutes,
+    difficulty: result.data.difficulty,
+    reasonIngredients,
+  };
 }
 
 function addUtcDays(date: Date, days: number) {

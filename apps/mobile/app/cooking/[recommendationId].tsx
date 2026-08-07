@@ -664,6 +664,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
@@ -676,6 +677,7 @@ const styles = StyleSheet.create({
   },
   rowCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   rowTitle: {
@@ -716,6 +718,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "flex-start",
     gap: spacing.sm,
   },
@@ -739,6 +742,7 @@ const styles = StyleSheet.create({
   },
   cookingText: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,
@@ -777,6 +781,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
@@ -817,6 +822,7 @@ const styles = StyleSheet.create({
   },
   consumptionHeader: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "flex-start",
     gap: spacing.sm,
   },
@@ -859,12 +865,15 @@ const styles = StyleSheet.create({
   remainingRow: {
     minHeight: touchTarget.min,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.sm,
   },
   remainingName: {
     flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,

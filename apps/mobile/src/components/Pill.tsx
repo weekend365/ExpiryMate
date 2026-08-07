@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
 import { colors, radius, spacing, typography } from "../shared/theme";
+import { AppText } from "./AppText";
 
 interface PillProps {
   label: string;
@@ -57,13 +58,26 @@ export function Pill({
       ]}
     >
       {Icon ? (
-        <Icon color={foregroundColor} size={spacing.sm} strokeWidth={2.4} />
+        <View style={styles.iconSlot}>
+          <Icon color={foregroundColor} size={spacing.sm} strokeWidth={2.4} />
+        </View>
       ) : null}
-      <Text style={[styles.label, { color: foregroundColor }]}>
+      <AppText
+        variant="bodySmall"
+        scaleRole="chrome"
+        densityAware={false}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+        style={[styles.label, { color: foregroundColor }]}
+      >
         {label}
-      </Text>
+      </AppText>
       {typeof count === "number" ? (
-        <Text
+        <AppText
+          variant="caption"
+          scaleRole="chrome"
+          densityAware={false}
+          numberOfLines={1}
           style={[
             styles.count,
             {
@@ -73,7 +87,7 @@ export function Pill({
           ]}
         >
           {count}
-        </Text>
+        </AppText>
       ) : null}
     </Pressable>
   );
@@ -100,30 +114,34 @@ const tonePalettes = {
 
 const styles = StyleSheet.create({
   base: {
-    // Selection chip: compact rectangle; hitSlop keeps the press area at 48px.
+    // Selection chip: keep icon + label on one row; grow horizontally in wrap grids.
     minHeight: spacing.xl,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: radius.md,
     borderWidth: 1,
     flexDirection: "row",
+    flexWrap: "nowrap",
     alignItems: "center",
+    alignSelf: "flex-start",
+    maxWidth: "100%",
     gap: spacing.xs,
   },
+  iconSlot: {
+    flexShrink: 0,
+  },
   label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
+    flexShrink: 1,
     fontFamily: typography.label.fontFamily,
   },
   count: {
+    flexShrink: 0,
     minWidth: spacing.md,
     overflow: "hidden",
     borderRadius: radius.sm,
     paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xxs,
     textAlign: "center",
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
     fontFamily: typography.title.fontFamily,
   },
 });

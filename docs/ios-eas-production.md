@@ -28,7 +28,6 @@ Bundle ID: `com.expirymate.mobile`
 - `EXPO_PUBLIC_OAUTH_REDIRECT_URI` (같은 origin + `/oauth/callback`)
 - `EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID`
 - `EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID`
-- `EXPO_PUBLIC_IAP_PRODUCT_IDS`
 
 선택:
 

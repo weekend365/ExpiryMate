@@ -188,6 +188,19 @@ export interface PushToken {
   updatedAt: string;
 }
 
+export interface DashboardRecommendationPreview {
+  recommendationId: string;
+  createdAt: string;
+  title: string;
+  servings: number;
+  cookingTimeMinutes: number;
+  difficulty: "easy" | "medium" | "hard";
+  reasonIngredients: Array<{
+    name: string;
+    daysUntilExpiry: number | null;
+  }>;
+}
+
 export interface DashboardSummary {
   todayExpiryCount: number;
   within3DaysCount: number;
@@ -198,6 +211,7 @@ export interface DashboardSummary {
   recentItems: InventoryItem[];
   expiringItems: InventoryItem[];
   locationCounts: Record<string, number>;
+  latestRecommendationPreview: DashboardRecommendationPreview | null;
 }
 
 export interface SuccessResponse<T> {

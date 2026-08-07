@@ -26,6 +26,48 @@ describe("getHomeNotices", () => {
     ]);
   });
 
+  it("offers an explicit retry when the first load fails", () => {
+    const notices = getHomeNotices({
+      ...base,
+      isInitialError: true,
+      hasLoaded: false,
+    });
+
+    expect(notices).toEqual([
+      expect.objectContaining({
+        id: "initial-error",
+        action: "retry",
+      }),
+    ]);
+  });
+
+  it("keeps loaded content notices alongside a background refresh error", () => {
+    const notices = getHomeNotices({
+      ...base,
+      isRefreshError: true,
+      expiringGroups: [
+        {
+          id: "g1",
+          displayName: "우유",
+          brand: null,
+          items: [],
+          nearestExpiryDate: "2026-07-24",
+          totalQuantity: 1,
+          unit: "개",
+          hasMixedUnits: false,
+        },
+      ],
+    });
+
+    expect(notices.map((notice) => notice.id)).toEqual([
+      "refresh-error",
+      "expiring",
+    ]);
+    expect(notices[0]).toEqual(
+      expect.objectContaining({ action: "retry" }),
+    );
+  });
+
   it("prioritizes recipe success ahead of expiring items", () => {
     const notices = getHomeNotices({
       ...base,

@@ -75,14 +75,14 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 | 스토어 | 세트 | 장수 | 권장 크기 |
 |---|---|---:|---|
 | App Store | iPhone 6.9형 | 6장 | `1320 × 2868` 또는 `1290 × 2796` |
-| App Store | iPad 13형 | 6장 | `2064 × 2752` 또는 `2048 × 2732` |
 | Google Play | 휴대전화 | 6장 | `1080 × 1920`, 9:16 |
 
-> 현재 `ios.supportsTablet: true`라 iPad 13형 세트가 필요합니다. iPad를 v1에서 지원하지 않을 계획이라면 설정을 `false`로 바꾼 새 빌드를 제출해야 합니다.
+> 현재 `ios.supportsTablet: false`이고 네이티브 타깃도 iPhone 전용이므로,
+> v1에는 iPad 스크린샷이 필요하지 않습니다.
 
 화면 순서: **홈 → 보관함 → 요리 추천 → 스캔 → 공유 냉장고 → 재료 등록**.
 
-- 홈의 `SHOW_TEMP_RELEASE_NOTICE`와 “새 버전을 다듬는 중” 문구를 최종 빌드·이미지에서 제거
+- 홈과 설정에 임시 출시 안내·placeholder 기능이 없는지 최종 빌드에서 확인
 - 실제 제출 빌드와 같은 커밋·환경에서 촬영
 - 개인 이메일·실명·초대 코드·민감 메모를 노출하지 않음
 - 라이트 모드, 기본 글자 크기, 동일한 상태바 사용
@@ -100,9 +100,10 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 |------------|------|------|------------------------|
 | Contact Info | 계정·공유 초대 이메일 | App Functionality | 연결됨 / 추적 아님 |
 | Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
-| User Content | 재료·유통기한·추천 관련 내용·고객 문의 본문 | App Functionality | 연결됨 / 추적 아님 |
 | Purchases | (IAP 검증 시) 구매 이력 | App Functionality | 연결됨 / 추적 아님 |
 | Coarse Location / Identifiers / Usage Data / Diagnostics | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 기기 식별자, 광고·앱 상호작용, 진단 | Third-Party Advertising / Analytics | SDK 실제 설정대로 신고 / Tracking=No |
+| Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
+| Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
 
 제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push.  
 상세는 `store-privacy-declarations.md` 표와 `/privacy` 본문을 따릅니다.
@@ -135,13 +136,14 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 【공유 냉장고】
 - 사용자가 가족/매장 공간을 만들고 가입 이메일 또는 8자리 1회용 코드로 구성원을 초대할 수 있습니다.
 - 역할은 소유자·관리자·구성원이며, 같은 공간의 재고·보관 위치·추천 기록을 공유합니다.
-- 즐겨찾기·구독·AI 동의·개인 알림 시간은 공유되지 않습니다.
+- 즐겨찾기·AI 동의·개인 알림 시간은 공유되지 않습니다.
 - 이메일 초대 링크는 초대받은 이메일 계정으로만 수락할 수 있습니다.
 - 초대 링크와 1회용 코드는 7일 후 만료되며, 코드는 먼저 수락한 한 계정만 사용할 수 있습니다.
 - 수락·취소 시 초대 이메일은 즉시 제거하고, 수락·취소·만료된 초대 기록은 최대 30일 이내에 삭제합니다.
 
 【계정 삭제】
-설정 → 개인정보와 추천 안내 → 계정 정리(삭제). 서버에서 재고·추천·토큰 등을 삭제합니다.
+설정 → 개인정보와 추천 안내 → 계정 정리(삭제). 서버에서 개인 공간 재고·추천·토큰 등을 삭제합니다.
+다른 구성원이 계속 사용하는 공유 공간의 공동 재고는 유지되고 탈퇴자의 생성·수정자 연결은 제거됩니다.
 다른 구성원이 있는 공유 공간의 소유자는 먼저 소유권을 이전하거나 공간을 삭제해야 합니다.
 
 【카메라】
@@ -176,7 +178,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 - [ ] Support/Privacy URL이 브라우저에서 열리는지
 - [ ] 심사 전용 데모 이메일 계정 준비(또는 Apple 로그인만으로 가능한지 명시)
 - [ ] 공유 냉장고가 준비된 심사 계정 2개 또는 재현 가능한 초대 절차 준비
-- [ ] 6.5" 스크린샷 3장 이상(공유 공간 화면 1장 포함 권장)
+- [ ] 6.9형 스크린샷 3장 이상(공유 공간 화면 1장 포함 권장)
 - [ ] App Privacy 질문 저장
 - [ ] 연령 등급·수출 규정(암호화: 앱은 `usesNonExemptEncryption: false` 설정됨)
 - [ ] (병행) Play Data Safety는 같은 표로 Android 때 작성

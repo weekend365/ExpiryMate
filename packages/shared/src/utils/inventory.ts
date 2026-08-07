@@ -226,5 +226,6 @@ export const generateDashboardSummary = (
       .slice(0, 5),
     expiringItems: expiringGroups.flatMap((group) => group.items),
     locationCounts: buildLocationCounts(trackedItems),
+    latestRecommendationPreview: null,
   };
 };

@@ -1,12 +1,13 @@
 import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
@@ -135,7 +136,7 @@ export default function RegisterScreen() {
           disabled={!canContinue}
           fullWidth
         >
-          {isLastStep ? "가입하고 연결할게요" : "다음으로 갈게요"}
+          {isLastStep ? "회원가입" : "다음"}
         </Button>
       }
     >
@@ -155,14 +156,14 @@ export default function RegisterScreen() {
           onPress={handleBack}
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel={isFirstStep ? "나중에 할게요" : "이전으로 돌아가기"}
+          accessibilityLabel={isFirstStep ? "나중에 할게요" : "뒤로가기"}
           style={({ pressed }) => [
             styles.backLink,
             pressed && styles.backLinkPressed,
           ]}
         >
           <Text style={styles.backLinkText}>
-            {isFirstStep ? "나중에 할게요" : "뒤로"}
+            {isFirstStep ? "나중에 할게요" : "뒤로가기"}
           </Text>
         </Pressable>
       </View>
@@ -170,17 +171,16 @@ export default function RegisterScreen() {
       <Animated.View style={[styles.stepBody, contentStyle]}>
         <Mascot size="small" mood="idle" style={styles.mascot} />
         <Text style={styles.stepEyebrow}>
-          {appBrand.characterNameKo}랑 계정을 만들어볼까요?
+          {appBrand.characterNameKo}랑 회원가입할까요?
         </Text>
         <Text style={styles.stepTitle}>{step.title}</Text>
         <Text style={styles.stepDescription}>{step.description}</Text>
 
         {step.key === "name" ? (
-          <TextInput
+          <AppTextInput
             value={displayName}
             onChangeText={setDisplayName}
             placeholder="이름 또는 닉네임"
-            placeholderTextColor={colors.mutedText}
             style={styles.input}
             returnKeyType="next"
             onSubmitEditing={handlePrimary}
@@ -191,19 +191,18 @@ export default function RegisterScreen() {
           <EmailDomainInput
             value={email}
             onChangeText={setEmail}
-            placeholder="아이디"
+            placeholder="이메일"
             returnKeyType="next"
             onSubmitEditing={handlePrimary}
           />
         ) : null}
 
         {step.key === "password" ? (
-          <TextInput
+          <AppTextInput
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             placeholder="비밀번호 8자 이상"
-            placeholderTextColor={colors.mutedText}
             style={styles.input}
             returnKeyType="done"
             onSubmitEditing={handlePrimary}

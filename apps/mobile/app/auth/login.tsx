@@ -3,19 +3,21 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import * as AuthSession from "expo-auth-session";
 import { router, useLocalSearchParams } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
+import { ChevronDown, ChevronUp, Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import {
   Alert,
   ImageBackground,
+  LayoutAnimation,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   View,
 } from "react-native";
 import loginWelcomeBg from "../../assets/backgrounds/login-welcome-bg.png";
+import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { OAuthButton } from "../../src/components/OAuthButton";
@@ -23,6 +25,7 @@ import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
 import { startOAuth } from "../../src/services/api";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import {
   colors,
   radius,
@@ -44,13 +47,22 @@ const appReturnUri = AuthSession.makeRedirectUri({
 
 type WebOAuthProvider = "google" | "kakao" | "naver";
 
+function resolveEmailParam(emailParam?: string | string[]) {
+  return (typeof emailParam === "string" ? emailParam : emailParam?.[0]) ?? "";
+}
+
 export default function LoginScreen() {
   const { email: emailParam } = useLocalSearchParams<{ email?: string }>();
+  const initialEmail = resolveEmailParam(emailParam);
   const { loginMutation, oauthMutation } = useAuth();
-  const [email, setEmail] = useState(
-    () => (typeof emailParam === "string" ? emailParam : emailParam?.[0]) ?? "",
-  );
+  const { shouldStackDense } = useResponsiveLayout();
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [emailExpanded, setEmailExpanded] = useState(() =>
+    Boolean(initialEmail),
+  );
   const [pendingProvider, setPendingProvider] = useState<string | null>(null);
 
   const handleEmailLogin = async () => {
@@ -100,7 +112,10 @@ export default function LoginScreen() {
         provider: "apple",
         providerToken: credential.identityToken,
         email: credential.email ?? undefined,
-        displayName: [credential.fullName?.familyName, credential.fullName?.givenName]
+        displayName: [
+          credential.fullName?.familyName,
+          credential.fullName?.givenName,
+        ]
           .filter(Boolean)
           .join(" "),
       });
@@ -232,6 +247,11 @@ export default function LoginScreen() {
     }
   };
 
+  const toggleEmailExpanded = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setEmailExpanded((current) => !current);
+  };
+
   const isBusy =
     pendingProvider !== null ||
     oauthMutation.isPending ||
@@ -243,6 +263,7 @@ export default function LoginScreen() {
     <Screen
       scroll={false}
       contentWidth="form"
+      testID="login-screen"
       contentStyle={styles.screenContent}
     >
       <View style={styles.loginScene}>
@@ -266,125 +287,282 @@ export default function LoginScreen() {
           keyboardDismissMode="interactive"
         >
           <View
-            style={styles.welcomeHero}
+            style={[
+              styles.welcomeHero,
+              shouldStackDense && styles.welcomeHeroCompact,
+            ]}
             accessibilityRole="summary"
-            accessibilityLabel={`${appBrand.characterNameKo}가 맞이해요. 어서 오세요.`}
+            accessibilityLabel={`${appBrand.characterNameKo}예요. 냉장고, 같이 챙길까요?`}
           >
-            <View style={styles.brandBadge}>
-              <Text style={styles.brandBadgeText}>{appBrand.appNameKo}</Text>
-            </View>
-            <Text style={styles.welcomeTitle}>어서 오세요</Text>
-            <Text style={styles.welcomeSubtitle} numberOfLines={2}>
-              계정으로 이어가면 {appBrand.characterNameKo}가 냉장고를 함께 챙겨
-              드릴게요.
-            </Text>
+            <View style={styles.brandBadge}></View>
+            <AppText variant="title" style={styles.welcomeTitle}>
+              장고야 부탁해
+            </AppText>
+            <AppText
+              variant="bodySmall"
+              tone="subtext"
+              style={styles.welcomeSubtitle}
+            >
+              냉장고, 저와 함께 챙겨볼까요?
+            </AppText>
           </View>
 
-          <View style={styles.emailCard}>
-            <Text style={styles.emailTitle}>이메일로 이어갈까요?</Text>
-            <EmailDomainInput
-              value={email}
-              onChangeText={setEmail}
-              autoCorrect={false}
-              placeholder="아이디"
-              editable={!isBusy}
+          <View style={styles.primaryPath}>
+            <OAuthButton
+              provider="kakao"
+              label="카카오로 들어가기"
+              onPress={handleKakaoLogin}
+              loading={pendingProvider === "kakao"}
+              disabled={isBusy && pendingProvider !== "kakao"}
             />
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              textContentType="password"
-              placeholder="비밀번호"
-              placeholderTextColor={colors.mutedText}
-              editable={!isBusy}
-              style={styles.input}
+            {naverClientId ? (
+              <OAuthButton
+                provider="naver"
+                label="네이버로 들어가기"
+                onPress={handleNaverLogin}
+                loading={pendingProvider === "naver"}
+                disabled={isBusy && pendingProvider !== "naver"}
+              />
+            ) : null}
+            <OAuthButton
+              provider="google"
+              label="Google로 들어가기"
+              onPress={handleGoogleLogin}
+              loading={pendingProvider === "google"}
+              disabled={isBusy && pendingProvider !== "google"}
             />
-            <View style={styles.emailLinks}>
-              <Button
-                variant="secondary"
-                size="small"
-                onPress={() => router.push("/auth/register")}
-                disabled={isBusy}
-              >
-                함께 시작하기
-              </Button>
+            {Platform.OS === "ios" ? (
+              <OAuthButton
+                provider="apple"
+                label="Apple로 들어가기"
+                onPress={handleAppleLogin}
+                loading={pendingProvider === "apple"}
+                disabled={isBusy && pendingProvider !== "apple"}
+              />
+            ) : null}
+          </View>
+
+          <View style={styles.orDivider} accessibilityRole="text">
+            <View style={styles.orLine} />
+            <AppText variant="caption" tone="muted" scaleRole="chrome">
+              또는
+            </AppText>
+            <View style={styles.orLine} />
+          </View>
+
+          {emailExpanded ? (
+            <View
+              style={[
+                styles.emailCard,
+                shouldStackDense && styles.emailCardCompact,
+              ]}
+            >
               <Pressable
-                onPress={() => router.push("/auth/forgot-password")}
+                onPress={toggleEmailExpanded}
                 disabled={isBusy}
-                hitSlop={spacing.xs}
                 accessibilityRole="button"
-                accessibilityLabel="비밀번호를 잊으셨나요?"
+                accessibilityLabel="이메일 입력 접기"
+                accessibilityState={{ expanded: true }}
+                hitSlop={{
+                  top: spacing.xs,
+                  bottom: spacing.xs,
+                  left: spacing.xs,
+                  right: spacing.xs,
+                }}
                 style={({ pressed }) => [
-                  styles.emailLink,
-                  pressed && styles.emailLinkPressed,
+                  styles.emailToggleRow,
+                  pressed && styles.linkPressed,
                 ]}
               >
-                <Text style={styles.emailLinkText}>비밀번호를 잊으셨나요?</Text>
+                <AppText variant="label" tone="muted" scaleRole="chrome">
+                  이메일로 계속하기
+                </AppText>
+                <ChevronUp
+                  color={colors.mutedText}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                />
               </Pressable>
+
+              <View style={styles.fieldBlock}>
+                <EmailDomainInput
+                  testID="login-email"
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCorrect={false}
+                  placeholder="이메일"
+                  editable={!isBusy}
+                />
+              </View>
+
+              <View style={styles.fieldBlock}>
+                <View
+                  style={[
+                    styles.passwordField,
+                    passwordFocused && styles.passwordFieldFocused,
+                  ]}
+                >
+                  <AppTextInput
+                    testID="login-password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!passwordVisible}
+                    textContentType="password"
+                    placeholder="비밀번호"
+                    editable={!isBusy}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                    style={styles.passwordInput}
+                  />
+                  <Pressable
+                    onPress={() => setPasswordVisible((current) => !current)}
+                    disabled={isBusy}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      passwordVisible ? "비밀번호 숨기기" : "비밀번호 보기"
+                    }
+                    hitSlop={{
+                      top: spacing.xs,
+                      bottom: spacing.xs,
+                      left: spacing.xs,
+                      right: spacing.xs,
+                    }}
+                    style={({ pressed }) => [
+                      styles.passwordToggle,
+                      pressed && styles.linkPressed,
+                    ]}
+                  >
+                    {passwordVisible ? (
+                      <EyeOff
+                        color={colors.subtext}
+                        size={spacing.sm + spacing.xxs}
+                        strokeWidth={2.2}
+                      />
+                    ) : (
+                      <Eye
+                        color={colors.subtext}
+                        size={spacing.sm + spacing.xxs}
+                        strokeWidth={2.2}
+                      />
+                    )}
+                  </Pressable>
+                </View>
+                <Pressable
+                  onPress={() => router.push("/auth/forgot-password")}
+                  disabled={isBusy}
+                  hitSlop={{
+                    top: spacing.sm,
+                    bottom: spacing.sm,
+                    left: spacing.xs,
+                    right: spacing.xs,
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel="비밀번호를 잊으셨나요?"
+                  style={({ pressed }) => [
+                    styles.forgotLink,
+                    pressed && styles.linkPressed,
+                  ]}
+                >
+                  <AppText
+                    variant="bodySmall"
+                    tone="primary"
+                    numberOfLines={1}
+                    style={styles.forgotLinkText}
+                  >
+                    비밀번호를 잊으셨나요?
+                  </AppText>
+                </Pressable>
+              </View>
+
+              <Button
+                testID="login-submit-button"
+                onPress={() => {
+                  void handleEmailLogin();
+                }}
+                loading={loginMutation.isPending}
+                disabled={
+                  !canEmailLogin || (isBusy && !loginMutation.isPending)
+                }
+                fullWidth
+              >
+                들어가 볼까요?
+              </Button>
             </View>
+          ) : (
             <Button
-              onPress={() => {
-                void handleEmailLogin();
-              }}
-              loading={loginMutation.isPending}
-              disabled={!canEmailLogin || (isBusy && !loginMutation.isPending)}
+              testID="login-email-expand"
+              variant="surface"
+              onPress={toggleEmailExpanded}
+              disabled={isBusy}
               fullWidth
+              icon={ChevronDown}
+              iconPosition="right"
             >
-              이메일로 이어갈게요
+              이메일로 계속하기
             </Button>
+          )}
+
+          <View
+            style={[
+              styles.secondaryLinks,
+              shouldStackDense && styles.secondaryLinksStacked,
+            ]}
+          >
+            <Pressable
+              onPress={() => router.push("/auth/register")}
+              disabled={isBusy}
+              hitSlop={{
+                top: spacing.sm,
+                bottom: spacing.sm,
+                left: spacing.xs,
+                right: spacing.xs,
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="처음이에요"
+              style={({ pressed }) => [
+                styles.secondaryLink,
+                pressed && styles.linkPressed,
+              ]}
+            >
+              <AppText
+                variant="bodySmall"
+                tone="primary"
+                numberOfLines={1}
+                style={styles.secondaryLinkText}
+              >
+                처음이에요
+              </AppText>
+            </Pressable>
+            {shouldStackDense ? null : (
+              <AppText variant="caption" tone="muted">
+                ·
+              </AppText>
+            )}
             <Pressable
               onPress={() => router.push("/spaces/invitations/code")}
               disabled={isBusy}
-              hitSlop={spacing.xs}
+              hitSlop={{
+                top: spacing.sm,
+                bottom: spacing.sm,
+                left: spacing.xs,
+                right: spacing.xs,
+              }}
               accessibilityRole="button"
-              accessibilityLabel="초대 코드로 참여"
+              accessibilityLabel="초대 코드로 올래요"
               style={({ pressed }) => [
-                styles.invitationLink,
-                pressed && styles.emailLinkPressed,
+                styles.secondaryLink,
+                pressed && styles.linkPressed,
               ]}
             >
-              <Text style={styles.invitationLinkText}>
-                초대 코드가 있으신가요?
-              </Text>
+              <AppText
+                variant="bodySmall"
+                tone="primary"
+                numberOfLines={1}
+                style={styles.secondaryLinkText}
+              >
+                초대 코드로 올래요
+              </AppText>
             </Pressable>
-          </View>
-
-          <View style={styles.oauthSection}>
-            <Text style={styles.oauthTitle}>다른 방법으로도 이어갈 수 있어요</Text>
-            <View style={styles.oauthList}>
-              <OAuthButton
-                provider="kakao"
-                label="카카오로 이어갈게요"
-                onPress={handleKakaoLogin}
-                loading={pendingProvider === "kakao"}
-                disabled={isBusy && pendingProvider !== "kakao"}
-              />
-              {naverClientId ? (
-                <OAuthButton
-                  provider="naver"
-                  label="네이버로 이어갈게요"
-                  onPress={handleNaverLogin}
-                  loading={pendingProvider === "naver"}
-                  disabled={isBusy && pendingProvider !== "naver"}
-                />
-              ) : null}
-              <OAuthButton
-                provider="google"
-                label="Google로 이어갈게요"
-                onPress={handleGoogleLogin}
-                loading={pendingProvider === "google"}
-                disabled={isBusy && pendingProvider !== "google"}
-              />
-              {Platform.OS === "ios" ? (
-                <OAuthButton
-                  provider="apple"
-                  label="Apple로 이어갈게요"
-                  onPress={handleAppleLogin}
-                  loading={pendingProvider === "apple"}
-                  disabled={isBusy && pendingProvider !== "apple"}
-                />
-              ) : null}
-            </View>
           </View>
         </ScrollView>
       </View>
@@ -437,108 +615,132 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    gap: spacing.md,
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xxxl + spacing.sm,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.lg,
   },
   welcomeHero: {
     alignItems: "center",
-    gap: spacing.xs,
+    gap: spacing.xxs,
     paddingHorizontal: spacing.sm,
+  },
+  welcomeHeroCompact: {
+    gap: spacing.xxs,
   },
   brandBadge: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.pill,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-  },
-  brandBadgeText: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    maxWidth: "100%",
   },
   welcomeTitle: {
-    fontSize: typography.title.fontSize,
-    lineHeight: typography.title.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
     textAlign: "center",
   },
   welcomeSubtitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
     textAlign: "center",
+  },
+  primaryPath: {
+    gap: spacing.xs,
+  },
+  orDivider: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  orLine: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
   },
   emailCard: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
+    padding: spacing.sm,
+    gap: spacing.sm,
+    // Soft depth so the form reads as the foreground over the hero art.
+    shadowColor: colors.text,
+    shadowOpacity: 0.06,
+    shadowRadius: spacing.xs,
+    shadowOffset: { width: 0, height: spacing.xxs },
+    elevation: 2,
+  },
+  emailCardCompact: {
+    padding: spacing.sm,
     gap: spacing.sm,
   },
-  emailTitle: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
+  emailToggleRow: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.xs,
   },
-  input: {
+  fieldBlock: {
+    gap: spacing.xs,
+  },
+  passwordField: {
     minHeight: touchTarget.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    color: colors.text,
-    fontSize: typography.body.fontSize,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: spacing.md,
+    // Optical: keep icon button inside the field without crowding the text.
+    paddingRight: spacing.xxs,
+  },
+  passwordFieldFocused: {
+    borderColor: colors.primary,
+  },
+  passwordInput: {
+    flex: 1,
+    minHeight: touchTarget.cta,
+    paddingVertical: spacing.xs,
     fontFamily: typography.bodyStrong.fontFamily,
   },
-  emailLinks: {
+  passwordToggle: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  forgotLink: {
+    // Visual height stays compact; hitSlop keeps the 48px touch target.
+    alignSelf: "flex-end",
+    justifyContent: "center",
+    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.xxs,
+  },
+  forgotLinkText: {
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
+  secondaryLinks: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.sm,
+    justifyContent: "center",
+    gap: spacing.xs,
   },
-  emailLink: {
+  secondaryLinksStacked: {
+    flexDirection: "column",
+    gap: spacing.xxs,
+  },
+  secondaryLink: {
+    // Compact row; hitSlop on Pressable keeps the touch target.
     minHeight: touchTarget.min,
     justifyContent: "center",
+    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.xs,
   },
-  emailLinkPressed: {
-    opacity: 0.7,
-  },
-  emailLinkText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.primary,
-  },
-  invitationLink: {
-    minHeight: touchTarget.min,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  invitationLinkText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
+  secondaryLinkText: {
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
-  oauthSection: {
-    gap: spacing.xs,
-  },
-  oauthTitle: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
-  },
-  oauthList: {
-    gap: spacing.xs,
+  linkPressed: {
+    opacity: 0.7,
   },
 });

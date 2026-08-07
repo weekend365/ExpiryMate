@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -184,6 +185,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   label: {
+    flexShrink: 1,
+    textAlign: "center",
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,

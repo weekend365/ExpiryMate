@@ -60,6 +60,7 @@ import {
   SCAN_LINE_TRAVEL,
 } from "./scanGuide";
 import { useProductScanner } from "./useProductScanner";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
 
 const QUICK_EXPIRY_OPTIONS = [
   { label: "오늘", days: 0 },
@@ -69,15 +70,16 @@ const QUICK_EXPIRY_OPTIONS = [
 ];
 
 export function ScannerScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const [permission, requestPermission] = useCameraPermissions();
   const hasPermission = permission?.granted ?? false;
   const canRequestPermission = permission?.canAskAgain ?? true;
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID="scanner-screen">
       {!hasPermission ? (
         <SafeAreaView style={styles.overlay}>
-          <View style={styles.topBar}>
+          <View style={[styles.topBar, shouldStack && styles.topBarStacked]}>
             <CloseButton onPress={() => router.back()} />
           </View>
           <PermissionCard
@@ -96,6 +98,7 @@ export function ScannerScreen() {
 }
 
 function ScannerCameraExperience() {
+  const { shouldStack } = useResponsiveLayout();
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
@@ -273,7 +276,7 @@ function ScannerCameraExperience() {
       />
 
       <SafeAreaView style={styles.overlay} pointerEvents="box-none">
-        <View style={styles.topBar}>
+        <View style={[styles.topBar, shouldStack && styles.topBarStacked]}>
           <CloseButton onPress={() => router.back()} />
           <View
             style={styles.stepPill}
@@ -341,7 +344,12 @@ function ScannerCameraExperience() {
                 <InlineError message={scanner.ocrErrorMessage} />
               ) : null}
 
-              <View style={styles.cameraActions}>
+              <View
+                style={[
+                  styles.cameraActions,
+                  shouldStack && styles.cameraActionsStacked,
+                ]}
+              >
                 <Pressable
                   onPress={() => setTorchEnabled((current) => !current)}
                   accessibilityRole="switch"
@@ -369,10 +377,11 @@ function ScannerCameraExperience() {
                     onPress={scanner.confirmWithManualExpiry}
                     accessibilityRole="button"
                     accessibilityLabel="유통기한이 안 보여서 직접 고를게요"
-                    style={({ pressed }) => [
-                      styles.manualAction,
-                      pressed && styles.manualActionPressed,
-                    ]}
+                  style={({ pressed }) => [
+                    styles.manualAction,
+                    shouldStack && styles.manualActionStacked,
+                    pressed && styles.manualActionPressed,
+                  ]}
                   >
                     <CalendarDays
                       color={colors.surface}
@@ -388,10 +397,11 @@ function ScannerCameraExperience() {
                     onPress={handleManualRegistration}
                     accessibilityRole="button"
                     accessibilityLabel="바코드 없이 직접 입력할게요"
-                    style={({ pressed }) => [
-                      styles.manualAction,
-                      pressed && styles.manualActionPressed,
-                    ]}
+                  style={({ pressed }) => [
+                    styles.manualAction,
+                    shouldStack && styles.manualActionStacked,
+                    pressed && styles.manualActionPressed,
+                  ]}
                   >
                     <PenLine
                       color={colors.surface}
@@ -878,6 +888,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingTop: spacing.sm,
   },
+  topBarStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: spacing.xs,
+  },
   iconButton: {
     width: touchTarget.min,
     height: touchTarget.min,
@@ -890,6 +905,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cameraControlPressed,
   },
   stepPill: {
+    maxWidth: "80%",
     minHeight: touchTarget.min,
     borderRadius: radius.pill,
     paddingHorizontal: spacing.md,
@@ -912,6 +928,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
   stepPillText: {
+    flexShrink: 1,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
@@ -1015,6 +1032,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
   },
+  cameraActionsStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   flashButton: {
     width: touchTarget.min,
     height: touchTarget.min,
@@ -1043,10 +1064,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xs,
   },
+  manualActionStacked: {
+    flex: 0,
+    width: "100%",
+    paddingVertical: spacing.xs,
+  },
   manualActionPressed: {
     backgroundColor: colors.cameraControlPressed,
   },
   manualActionLabel: {
+    flexShrink: 1,
+    textAlign: "center",
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,

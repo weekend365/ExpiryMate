@@ -2,7 +2,7 @@ import {
   ConflictException,
   PreconditionFailedException,
 } from "@nestjs/common";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PrivacyService } from "./privacy.service";
 
 describe("PrivacyService", () => {
@@ -106,24 +106,32 @@ describe("PrivacyService", () => {
     const updatedUsers: unknown[] = [];
     const productMasterUpdates: unknown[] = [];
     const invitationDeletes: unknown[] = [];
-    const service = new PrivacyService(
-      createPrismaMock(
-        {
-          aiDataNoticeAcceptedAt: new Date("2026-06-03T00:00:00.000Z"),
-          aiDataNoticeVersion: "test-ai-notice-v2",
-        },
-        operations,
-        updatedUsers,
-        productMasterUpdates,
-        [],
-        0,
-        invitationDeletes,
-      ) as never,
+    const prisma = createPrismaMock(
+      {
+        aiDataNoticeAcceptedAt: new Date("2026-06-03T00:00:00.000Z"),
+        aiDataNoticeVersion: "test-ai-notice-v2",
+      },
+      operations,
+      updatedUsers,
+      productMasterUpdates,
+      [],
+      0,
+      invitationDeletes,
     );
+    const service = new PrivacyService(prisma as never);
 
     const response = await service.deleteAccount("user_1");
 
     expect(response.ok).toBe(true);
+    expect(prisma.inventorySpace.findFirst).toHaveBeenCalledWith({
+      where: {
+        ownerUserId: "user_1",
+        memberships: {
+          some: { userId: { not: "user_1" } },
+        },
+      },
+      select: { name: true },
+    });
     expect(operations).toEqual([
       "pushNotificationDelivery.deleteMany",
       "pushToken.deleteMany",
@@ -177,7 +185,7 @@ describe("PrivacyService", () => {
       },
       operations,
     );
-    prisma.inventorySpace.findFirst = async () => ({ name: "우리 매장" });
+    prisma.inventorySpace.findFirst.mockResolvedValue({ name: "우리 매장" });
     const service = new PrivacyService(prisma as never);
 
     await expect(service.deleteAccount("user_1")).rejects.toThrow(
@@ -322,7 +330,7 @@ function createPrismaMock(
       },
     },
     inventorySpace: {
-      findFirst: async (): Promise<{ name: string } | null> => null,
+      findFirst: vi.fn().mockResolvedValue(null),
     },
     $transaction: async (callback: (transaction: typeof tx) => Promise<unknown>) =>
       callback(tx),

@@ -25,6 +25,7 @@ import {
 } from "../shared/theme";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
+import { FeedbackBanner } from "./FeedbackBanner";
 
 export function SpaceSwitcher() {
   const queryClient = useQueryClient();
@@ -34,13 +35,19 @@ export function SpaceSwitcher() {
     activeSpace,
     activeSpaceId,
     isLoading,
+    error,
+    refetchSpaces,
     setActiveSpaceId,
   } = useActiveSpace();
   const [visible, setVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      if (!sessionUserId || !activeSpaceId) {
+      if (!sessionUserId) {
+        return;
+      }
+      if (!activeSpaceId) {
+        void refetchSpaces();
         return;
       }
       void Promise.all([
@@ -66,17 +73,47 @@ export function SpaceSwitcher() {
           ),
         }),
       ]);
-    }, [activeSpaceId, queryClient, sessionUserId]),
+    }, [activeSpaceId, queryClient, refetchSpaces, sessionUserId]),
   );
 
-  if (!activeSpace && !isLoading) {
-    return null;
+  // Never return null: a hidden switcher means activeSpace is missing, which
+  // also keeps home/inventory/recipes disabled. Always show loading or retry.
+  if (!activeSpace) {
+    if (error) {
+      return (
+        <FeedbackBanner
+          tone="danger"
+          title="냉장고를 불러오지 못했어요"
+          description={error.message}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void refetchSpaces();
+          }}
+        />
+      );
+    }
+
+    return (
+      <View
+        style={[styles.trigger, styles.disabled]}
+        accessibilityRole="text"
+        accessibilityLabel="냉장고를 불러오는 중"
+      >
+        <View style={styles.triggerIcon}>
+          <House color={colors.primary} size={spacing.md} strokeWidth={2.3} />
+        </View>
+        <View style={styles.triggerCopy}>
+          <Text style={styles.eyebrow}>지금 보고 있는 냉장고</Text>
+          <Text style={styles.triggerTitle}>냉장고를 펼치고 있어요</Text>
+        </View>
+      </View>
+    );
   }
 
   const ActiveIcon =
-    activeSpace?.type === "store"
+    activeSpace.type === "store"
       ? Building2
-      : activeSpace?.type === "household"
+      : activeSpace.type === "household"
         ? Users
         : House;
 
@@ -86,7 +123,7 @@ export function SpaceSwitcher() {
         onPress={() => setVisible(true)}
         disabled={isLoading}
         accessibilityRole="button"
-        accessibilityLabel={`현재 냉장고 ${activeSpace?.name ?? "불러오는 중"}`}
+        accessibilityLabel={`현재 냉장고 ${activeSpace.name}`}
         accessibilityHint="다른 냉장고로 바꿀 수 있어요"
         style={({ pressed }) => [
           styles.trigger,
@@ -99,12 +136,23 @@ export function SpaceSwitcher() {
         </View>
         <View style={styles.triggerCopy}>
           <Text style={styles.eyebrow}>지금 보고 있는 냉장고</Text>
-          <Text style={styles.triggerTitle} numberOfLines={1}>
-            {activeSpace?.name ?? "냉장고를 펼치고 있어요"}
-          </Text>
+          <Text style={styles.triggerTitle}>{activeSpace.name}</Text>
         </View>
         <ChevronDown color={colors.subtext} size={spacing.md} strokeWidth={2.2} />
       </Pressable>
+
+      {error ? (
+        <FeedbackBanner
+          tone="warning"
+          title="최신 냉장고 목록을 확인하지 못했어요"
+          description="저장된 냉장고 데이터는 그대로 보여드리고 있어요."
+          actionLabel="다시 확인할게요"
+          onAction={() => {
+            void refetchSpaces();
+          }}
+          showMascot={false}
+        />
+      ) : null}
 
       <BottomSheet
         visible={visible}
@@ -199,6 +247,7 @@ const styles = StyleSheet.create({
   },
   triggerCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   eyebrow: {
@@ -208,6 +257,7 @@ const styles = StyleSheet.create({
     color: colors.mutedText,
   },
   triggerTitle: {
+    flexShrink: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
@@ -239,6 +289,7 @@ const styles = StyleSheet.create({
   },
   spaceCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   spaceName: {

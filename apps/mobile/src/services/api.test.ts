@@ -53,6 +53,7 @@ const dashboardSummary: DashboardSummary = {
   recentItems: [],
   expiringItems: [],
   locationCounts: {},
+  latestRecommendationPreview: null,
 };
 
 describe("mobile API client core flow", () => {
@@ -72,7 +73,14 @@ describe("mobile API client core flow", () => {
   it("requires a registered session before calling an authenticated endpoint", async () => {
     const { getDashboardSummary } = await import("./api");
 
-    await expect(getDashboardSummary()).rejects.toThrow(/로그인/);
+    await expect(getDashboardSummary("personal_user-1")).rejects.toThrow(/로그인/);
+    expect(stores.fetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects space-scoped calls without a space id", async () => {
+    const { getDashboardSummary } = await import("./api");
+
+    expect(() => getDashboardSummary("")).toThrow(/냉장고를 먼저/);
     expect(stores.fetch).not.toHaveBeenCalled();
   });
 
@@ -84,7 +92,7 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse(dashboardSummary));
     const { getDashboardSummary } = await import("./api");
 
-    const result = await getDashboardSummary();
+    const result = await getDashboardSummary("personal_user-1");
 
     expect(result.todayExpiryCount).toBe(1);
     expect(stores.fetch).toHaveBeenNthCalledWith(
@@ -96,13 +104,38 @@ describe("mobile API client core flow", () => {
     );
     expect(stores.fetch).toHaveBeenNthCalledWith(
       2,
-      "http://localhost:4000/dashboard/summary",
+      "http://localhost:4000/spaces/personal_user-1/dashboard/summary",
       expect.objectContaining({
+        cache: "no-store",
         headers: expect.objectContaining({
           Authorization: "Bearer access-1",
         }),
       }),
     );
+  });
+
+  it("keeps the stored session when the initial refresh fails transiently", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch.mockRejectedValueOnce(new TypeError("Network request failed"));
+    const { getMe } = await import("./api");
+
+    await expect(getMe()).rejects.toThrow(/인터넷 연결/);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(true);
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe(
+      "refresh-existing",
+    );
+  });
+
+  it("clears an invalid stored session after refresh is rejected", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-invalid");
+    stores.fetch.mockResolvedValueOnce(errorResponse(401, "만료된 세션입니다."));
+    const { getMe } = await import("./api");
+
+    await expect(getMe()).resolves.toBeNull();
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
   });
 
   it("refreshes the session and retries once when an authenticated request expires", async () => {
@@ -179,7 +212,10 @@ describe("mobile API client core flow", () => {
     const { login, getDashboardSummary, listAllInventory } = await import("./api");
     await login({ email: "test@example.com", password: "password123" });
 
-    const pending = Promise.all([getDashboardSummary(), listAllInventory()]);
+    const pending = Promise.all([
+      getDashboardSummary("personal_user-1"),
+      listAllInventory("personal_user-1"),
+    ]);
     await vi.waitFor(() => {
       expect(refreshCalls).toBe(1);
     });
@@ -323,7 +359,9 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse([legacyItem]));
     const { listAllInventory } = await import("./api");
 
-    await expect(listAllInventory()).resolves.toEqual([legacyItem]);
+    await expect(listAllInventory("personal_user-1")).resolves.toEqual([
+      legacyItem,
+    ]);
   });
 
   it("rejects unreadable inventory payloads with a conversational message", async () => {
@@ -334,7 +372,9 @@ describe("mobile API client core flow", () => {
       .mockResolvedValueOnce(successResponse({ page: 1 }));
     const { listAllInventory } = await import("./api");
 
-    await expect(listAllInventory()).rejects.toThrow(/보관함 정보를 읽지 못했어요/);
+    await expect(listAllInventory("personal_user-1")).rejects.toThrow(
+      /보관함 정보를 읽지 못했어요/,
+    );
   });
 });
 

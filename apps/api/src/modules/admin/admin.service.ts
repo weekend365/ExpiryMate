@@ -180,6 +180,7 @@ export class AdminService {
       recentItems,
       expiringItems,
       locationCounts,
+      latestRecommendationPreview: null,
     };
   }
 }

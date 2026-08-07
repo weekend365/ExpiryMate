@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nextjs";
+
 export async function register() {
   const dsn =
     process.env.SENTRY_DSN?.trim() ??
@@ -7,8 +9,6 @@ export async function register() {
     return;
   }
 
-  const Sentry = await import("@sentry/nextjs");
-
   Sentry.init({
     dsn,
     environment:
@@ -17,3 +17,5 @@ export async function register() {
     tracesSampleRate: 0.1,
   });
 }
+
+export const onRequestError = Sentry.captureRequestError;

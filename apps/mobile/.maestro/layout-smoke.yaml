@@ -1,0 +1,118 @@
+appId: com.expirymate.mobile
+name: Responsive layout smoke
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+    permissions:
+      camera: allow
+- extendedWaitUntil:
+    visible:
+      id: onboarding-screen
+    timeout: 20000
+- repeat:
+    times: 4
+    commands:
+      - tapOn:
+          id: onboarding-next-button
+      - waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 10000
+- tapOn:
+    id: login-email-local
+- inputText: demo
+- tapOn:
+    id: login-email-domain-input
+- inputText: gmail.com
+- tapOn:
+    id: login-password
+- inputText: demo1234!
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: home-screen
+    timeout: 30000
+- takeScreenshot: ${SCREENSHOT_DIR}/home
+- tapOn:
+    id: tab-inventory
+- extendedWaitUntil:
+    visible:
+      id: inventory-screen
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/inventory
+- tapOn: "서울우유 1L.*"
+- extendedWaitUntil:
+    visible:
+      id: inventory-detail-screen
+    timeout: 10000
+- back
+- extendedWaitUntil:
+    visible:
+      id: inventory-screen
+    timeout: 10000
+- tapOn:
+    id: inventory-add-button
+- assertVisible: "어떻게 넣을까요?"
+- tapOn: "직접 입력할게요"
+- extendedWaitUntil:
+    visible:
+      id: register-screen
+    timeout: 10000
+- tapOn:
+    id: form-field-displayName
+- inputText: 반응형 테스트 재료
+- takeScreenshot: ${SCREENSHOT_DIR}/register-keyboard
+- hideKeyboard
+- back
+- extendedWaitUntil:
+    visible:
+      id: inventory-screen
+    timeout: 10000
+- setPermissions:
+    permissions:
+      camera: deny
+- tapOn:
+    id: inventory-add-button
+- tapOn: "바코드로 넣을래요"
+- extendedWaitUntil:
+    visible:
+      id: scanner-screen
+    timeout: 10000
+- assertVisible: "카메라가 필요해요"
+- takeScreenshot: ${SCREENSHOT_DIR}/scanner-permission-denied
+- back
+- setPermissions:
+    permissions:
+      camera: allow
+- tapOn:
+    id: inventory-add-button
+- tapOn: "바코드로 넣을래요"
+- extendedWaitUntil:
+    visible:
+      id: scanner-screen
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/scanner
+- back
+- tapOn:
+    id: tab-recommendations
+- extendedWaitUntil:
+    visible:
+      id: recommendations-screen
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/recommendations
+- tapOn:
+    id: recommendation-options-button
+- assertVisible: "추천 조건을 고를까요?"
+- takeScreenshot: ${SCREENSHOT_DIR}/recommendation-options
+- back
+- tapOn:
+    id: tab-settings
+- extendedWaitUntil:
+    visible:
+      id: settings-screen
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings

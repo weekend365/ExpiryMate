@@ -9,19 +9,21 @@ import {
   ScrollView,
   StyleSheet,
   type StyleProp,
-  Text,
   View,
   type ViewStyle,
 } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import {
+  type BottomInsetMode,
   type ContentWidthPreset,
+  getBottomInsetPadding,
   getContentMaxWidth,
   useResponsiveLayout,
 } from "../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { AppText } from "./AppText";
 
-interface ScreenProps extends PropsWithChildren {
+export interface ScreenProps extends PropsWithChildren {
   title?: string;
   subtitle?: string;
   scroll?: boolean;
@@ -35,11 +37,18 @@ interface ScreenProps extends PropsWithChildren {
    */
   contentWidth?: ContentWidthPreset;
   /**
+   * `system`: this screen owns the Android/iOS bottom safe area.
+   * `navigator`: the surrounding tab navigator owns it.
+   * `none`: full-screen content intentionally draws to the edge.
+   */
+  bottomInsetMode?: BottomInsetMode;
+  /**
    * When true, show a back control if the stack can go back.
    * Opt-in only — home/tabs must not inherit a back chevron.
    * Pair with stack `headerShown: false` so Screen owns the intro chrome.
    */
   showBack?: boolean;
+  testID?: string;
 }
 
 export function Screen({
@@ -52,15 +61,27 @@ export function Screen({
   footer,
   contentStyle,
   contentWidth = "content",
+  bottomInsetMode = "system",
   showBack = false,
+  testID,
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
-  const { width } = useResponsiveLayout();
+  const { width, shouldStack } = useResponsiveLayout();
   const shouldShowBack = Boolean(showBack && router.canGoBack());
   const maxContentWidth = getContentMaxWidth(contentWidth, width);
   const constrainedContentStyle = {
     maxWidth: maxContentWidth,
   };
+  const contentBottomPadding = getBottomInsetPadding(
+    bottomInsetMode,
+    insets.bottom + spacing.md,
+    spacing.xxxl + spacing.sm,
+  );
+  const footerBottomPadding = getBottomInsetPadding(
+    bottomInsetMode,
+    insets.bottom,
+    bottomInsetMode === "none" ? spacing.none : spacing.md,
+  );
 
   const content = (
     <>
@@ -70,7 +91,7 @@ export function Screen({
             <Pressable
               onPress={() => router.back()}
               accessibilityRole="button"
-              accessibilityLabel="이전 화면으로"
+              accessibilityLabel="뒤로가기"
               hitSlop={spacing.xs}
               style={({ pressed }) => [
                 styles.backButton,
@@ -85,13 +106,26 @@ export function Screen({
             </Pressable>
           ) : null}
           {title ? (
-            <View style={styles.header}>
+            <View style={[styles.header, shouldStack && styles.headerStacked]}>
               <View style={styles.headerCopy}>
-                <Text style={styles.title}>{title}</Text>
-                {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+                <AppText variant="title" style={styles.title}>
+                  {title}
+                </AppText>
+                {subtitle ? (
+                  <AppText variant="bodySmall" tone="subtext">
+                    {subtitle}
+                  </AppText>
+                ) : null}
               </View>
               {headerAction ? (
-                <View style={styles.headerAction}>{headerAction}</View>
+                <View
+                  style={[
+                    styles.headerAction,
+                    shouldStack && styles.headerActionStacked,
+                  ]}
+                >
+                  {headerAction}
+                </View>
               ) : null}
             </View>
           ) : null}
@@ -102,10 +136,18 @@ export function Screen({
   );
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top", "right", "left"]}>
+    <SafeAreaView
+      style={styles.safeArea}
+      edges={["top", "right", "left"]}
+      testID={testID}
+    >
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        // Android uses softwareKeyboardLayoutMode=resize; only pad when a sticky
+        // footer would otherwise sit under the keyboard inside the resized window.
+        behavior={
+          Platform.OS === "ios" || footer ? "padding" : undefined
+        }
         // Screen already sits below the stack header — extra offset double-shifts content.
         keyboardVerticalOffset={0}
       >
@@ -114,6 +156,7 @@ export function Screen({
             contentContainerStyle={[
               styles.content,
               constrainedContentStyle,
+              { paddingBottom: contentBottomPadding },
               contentStyle,
             ]}
             showsVerticalScrollIndicator={false}
@@ -129,6 +172,7 @@ export function Screen({
               styles.content,
               styles.staticContent,
               constrainedContentStyle,
+              { paddingBottom: contentBottomPadding },
               contentStyle,
             ]}
           >
@@ -139,7 +183,7 @@ export function Screen({
           <View
             style={[
               styles.footer,
-              { paddingBottom: Math.max(insets.bottom, spacing.md) },
+              { paddingBottom: footerBottomPadding },
             ]}
           >
             <View style={[styles.footerContent, constrainedContentStyle]}>
@@ -165,7 +209,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
-    paddingBottom: spacing.xxxl + spacing.sm,
     gap: spacing.lg,
   },
   staticContent: {
@@ -176,8 +219,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   backButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
@@ -191,12 +234,22 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.md,
   },
+  headerStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: spacing.sm,
+  },
   headerCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   headerAction: {
+    flexShrink: 1,
     paddingTop: spacing.none,
+  },
+  headerActionStacked: {
+    alignSelf: "flex-start",
   },
   footer: {
     borderTopWidth: 1,
@@ -210,15 +263,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   title: {
-    fontSize: typography.title.fontSize,
-    lineHeight: typography.title.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  subtitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
+    flexShrink: 1,
   },
 });

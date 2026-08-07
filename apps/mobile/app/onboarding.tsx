@@ -51,10 +51,10 @@ const STEPS: OnboardingStep[] = [
   {
     key: "start",
     eyebrow: `${appBrand.appNameEn}`,
-    title: "계정으로 이어가면 시작할 수 있어요",
-    description: "카카오·네이버 등으로 이어가면, 장고가 재료를 안전하게 챙겨 드릴게요.",
+    title: "로그인하면 바로 시작할 수 있어요",
+    description: "카카오·네이버 또는 이메일로 로그인하면, 장고가 재료를 안전하게 챙겨 드릴게요.",
     mood: "happy",
-    cta: "계정으로 이어갈게요",
+    cta: "로그인",
   },
 ];
 
@@ -118,10 +118,14 @@ export default function OnboardingScreen() {
 
   return (
     <Screen
-      scroll={false}
       contentWidth="form"
+      testID="onboarding-screen"
       footer={
-        <Button onPress={handlePrimary} fullWidth>
+        <Button
+          onPress={handlePrimary}
+          fullWidth
+          testID="onboarding-next-button"
+        >
           {step.cta}
         </Button>
       }
@@ -147,9 +151,9 @@ export default function OnboardingScreen() {
               pressed && styles.backLinkPressed,
             ]}
             accessibilityRole="button"
-            accessibilityLabel="이전으로 돌아가기"
+            accessibilityLabel="뒤로가기"
           >
-            <Text style={styles.backLinkText}>뒤로</Text>
+            <Text style={styles.backLinkText}>뒤로가기</Text>
           </Pressable>
         ) : (
           <View style={styles.backLinkSpacer} />

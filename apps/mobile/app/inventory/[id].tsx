@@ -86,7 +86,10 @@ const EDIT_STEPS: Array<{
 ];
 
 export default function InventoryDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, mode: initialMode } = useLocalSearchParams<{
+    id: string;
+    mode?: string;
+  }>();
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId, isReady } = useActiveSpace();
@@ -108,7 +111,9 @@ export default function InventoryDetailScreen() {
     ),
     id,
   ] as const;
-  const [mode, setMode] = useState<"view" | "edit">("view");
+  const [mode, setMode] = useState<"view" | "edit">(() =>
+    initialMode === "edit" ? "edit" : "view",
+  );
   const [editStep, setEditStep] = useState<EditStep>("product");
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -117,20 +122,29 @@ export default function InventoryDetailScreen() {
 
   const itemQuery = useQuery({
     queryKey: itemKey,
-    queryFn: () => getInventoryItem(id, activeSpaceId),
+    queryFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return getInventoryItem(id, activeSpaceId);
+    },
     enabled: Boolean(id && activeSpaceId && isReady),
   });
 
   const updateMutation = useMutation({
-    mutationFn: (values: Partial<InventoryFormValues>) =>
-      updateInventoryItem(
+    mutationFn: (values: Partial<InventoryFormValues>) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return updateInventoryItem(
         id,
         {
           ...values,
           expectedVersion: itemQuery.data?.version,
         },
         activeSpaceId,
-      ),
+      );
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
@@ -139,7 +153,12 @@ export default function InventoryDetailScreen() {
   });
 
   const consumeMutation = useMutation({
-    mutationFn: () => consumeInventoryItem(id, activeSpaceId),
+    mutationFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return consumeInventoryItem(id, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
@@ -148,7 +167,12 @@ export default function InventoryDetailScreen() {
   });
 
   const discardMutation = useMutation({
-    mutationFn: () => discardInventoryItem(id, activeSpaceId),
+    mutationFn: () => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return discardInventoryItem(id, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inventoryKey });
       queryClient.invalidateQueries({ queryKey: dashboardKey });
@@ -286,7 +310,7 @@ export default function InventoryDetailScreen() {
           mood="worry"
           title="이 재료를 찾지 못했어요"
           description="목록으로 돌아가서 다시 골라볼까요?"
-          actionLabel="보관함으로 갈게요"
+          actionLabel="뒤로가기"
           onAction={() => router.back()}
         />
       </Screen>
@@ -463,12 +487,13 @@ export default function InventoryDetailScreen() {
 
   return (
     <Screen
+      testID="inventory-detail-screen"
       title={item.displayName}
       subtitle="장고랑 같이 이 재료를 살펴볼게요."
       footer={
         isFinalStatus ? (
           <Button onPress={() => router.back()} fullWidth>
-            보관함으로 갈게요
+            뒤로가기
           </Button>
         ) : (
           <Button icon={Pencil} onPress={openEdit} fullWidth>
@@ -732,11 +757,13 @@ const styles = StyleSheet.create({
   },
   heroRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.md,
   },
   heroCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   heroEyebrow: {
@@ -772,6 +799,7 @@ const styles = StyleSheet.create({
   },
   summaryRow: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
@@ -790,6 +818,8 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     flex: 1,
+    minWidth: 0,
+    flexShrink: 1,
     textAlign: "right",
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
@@ -875,11 +905,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   successTitle: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
@@ -890,11 +922,13 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   feedbackCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   errorTitle: {

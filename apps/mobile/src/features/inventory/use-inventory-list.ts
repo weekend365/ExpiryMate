@@ -4,25 +4,27 @@ import {
   withInventorySpace,
 } from "../auth/session-boundary";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 import { listAllInventory } from "../../services/api";
 
 export const useInventoryList = () => {
-  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
-    useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
 
   const query = useQuery({
     queryKey: withInventorySpace(
       sessionQueryKeys.inventory,
-      sessionUserId,
-      activeSpaceId,
+      gate.sessionUserId,
+      gate.activeSpaceId,
     ),
-    queryFn: () => listAllInventory(activeSpaceId),
-    enabled,
+    queryFn: () => {
+      if (!gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return listAllInventory(gate.activeSpaceId);
+    },
+    enabled: gate.enabled,
+    refetchOnMount: "always",
   });
 
-  return {
-    ...query,
-    isLoading: isAwaitingSpace || query.isLoading,
-    isPending: isAwaitingSpace || query.isPending,
-  };
+  return useSpaceScopedQueryResult(query, gate);
 };

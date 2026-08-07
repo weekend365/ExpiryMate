@@ -3,6 +3,7 @@ import { useEffect, type ReactNode } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { appBrand } from "@expirymate/shared";
 import { Mascot } from "../../components/Mascot";
+import { Button } from "../../components/Button";
 import { colors, spacing, typography } from "../../shared/theme";
 import { useAppStore } from "../../store/app-store";
 import { useAuth } from "./use-auth";
@@ -39,7 +40,12 @@ export function AuthRedirectGate() {
     !rootSegment || PUBLIC_ROOT_SEGMENTS.has(String(rootSegment));
 
   useEffect(() => {
-    if (!hasHydrated || query.isLoading || query.isFetching) {
+    if (
+      !hasHydrated ||
+      query.isLoading ||
+      query.isFetching ||
+      query.isError
+    ) {
       return;
     }
 
@@ -92,6 +98,7 @@ export function AuthRedirectGate() {
     needsEmailVerification,
     query.data?.email,
     query.isFetching,
+    query.isError,
     query.isLoading,
     rootSegment,
     router,
@@ -112,6 +119,25 @@ export function AuthLoadingScreen() {
   );
 }
 
+export function AuthSessionErrorScreen({
+  message,
+  onRetry,
+}: {
+  message?: string;
+  onRetry: () => void;
+}) {
+  return (
+    <View style={styles.root}>
+      <Mascot size="medium" mood="worry" />
+      <Text style={styles.brand}>로그인을 확인하지 못했어요</Text>
+      <Text style={styles.caption}>
+        {message ?? "인터넷 연결을 확인하고 다시 시도해 주세요."}
+      </Text>
+      <Button onPress={onRetry}>다시 확인할게요</Button>
+    </View>
+  );
+}
+
 export function RequireRegisteredAuth({
   children,
 }: {
@@ -124,6 +150,17 @@ export function RequireRegisteredAuth({
 
   if (!hasHydrated || query.isLoading) {
     return <AuthLoadingScreen />;
+  }
+
+  if (query.isError) {
+    return (
+      <AuthSessionErrorScreen
+        message={query.error instanceof Error ? query.error.message : undefined}
+        onRetry={() => {
+          void query.refetch();
+        }}
+      />
+    );
   }
 
   if (!isRegistered) {

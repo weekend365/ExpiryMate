@@ -131,6 +131,7 @@ export default function SupportSettingsScreen() {
 const styles = StyleSheet.create({
   hero: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.md,
     backgroundColor: colors.primarySoft,
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
   },
   heroText: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,

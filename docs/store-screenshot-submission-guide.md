@@ -13,18 +13,15 @@
 | 세트 | 권장 장수 | 권장 원본 크기 | 비고 |
 |---|---:|---|---|
 | iPhone 6.9형 | 6장 | `1320 × 2868` 또는 `1290 × 2796` 세로 | 6.9형을 올리면 더 작은 iPhone용은 자동 축소 가능 |
-| iPad 13형 | 6장 | `2064 × 2752` 또는 `2048 × 2732` 세로 | 현재 빌드가 iPad를 지원하므로 필요 |
 
 - 장치 크기별 최소 1장, 최대 10장
 - JPEG/JPG/PNG, 투명도(alpha) 없음
 - 가로·세로 모두 가능하지만 이 앱은 **세로 통일** 권장
 
-현재 [`apps/mobile/app.json`](../apps/mobile/app.json)의 `ios.supportsTablet`이 `true`입니다. 따라서 아래 중 하나를 빌드 확정 전에 결정해야 합니다.
-
-1. **iPad 지원 유지:** iPad 13형에서 6개 핵심 화면을 실제로 QA하고 별도 촬영합니다.
-2. **v1을 iPhone 전용으로 출시:** `supportsTablet: false`로 바꾼 새 스토어 빌드를 제출합니다. 기존 빌드에서 iPad 스크린샷만 생략하는 방식은 사용하지 않습니다.
-
-현재 공통 `Screen` 레이아웃은 휴대폰 중심이고 iPad 전용 최대 너비·다단 레이아웃이 없으므로, 별도의 iPad QA 계획이 없다면 **v1은 iPhone 전용으로 출시하는 편을 권장**합니다. 이 문서는 설정을 자동 변경하지 않습니다.
+현재 [`apps/mobile/app.json`](../apps/mobile/app.json)의
+`ios.supportsTablet`과 네이티브 `TARGETED_DEVICE_FAMILY` 설정은 iPhone
+전용입니다. 따라서 v1 제출에는 iPad 스크린샷이 필요하지 않습니다. 향후 iPad를
+지원할 때는 설정을 바꾼 새 빌드에서 별도 레이아웃 QA와 iPad 스크린샷을 준비합니다.
 
 ### Google Play
 
@@ -86,10 +83,7 @@ Apple 심사 지침도 실제 인물 정보 대신 가상 계정 정보를 사�
 ## 4. 촬영 직전 P0 체크
 
 - [ ] 제출할 Release Candidate와 같은 커밋·환경의 빌드를 사용
-- [ ] 홈의 임시 출시 안내를 제거한 빌드인지 확인
-  - 현재 [`home.tsx`](<../apps/mobile/app/(tabs)/home.tsx>)의 `SHOW_TEMP_RELEASE_NOTICE`가 `true`
-  - “새 버전을 다듬는 중” 문구가 스토어 이미지나 최종 바이너리에 보이지 않게 처리
-- [ ] iPad 지원 유지 여부 확정
+- [ ] 홈과 설정에 임시 출시 안내·placeholder 기능이 남아 있지 않은지 확인
 - [ ] 라이트 모드, 기본 글자 크기, 기본 화면 확대 설정
 - [ ] 상태바 시간·배터리·통신 상태를 모든 장에서 동일하게
 - [ ] 로딩, skeleton, 오류, 키보드, 권한 팝업, 알림 배너가 없는 상태
@@ -113,8 +107,6 @@ Apple은 로그인·스플래시·타이틀 화면만 보여주는 스크린샷�
 
 - iPhone 16 Pro Max: `1320 × 2868`
 - iPhone 15 Pro Max: `1290 × 2796`
-- iPad Pro 13형 M4/M5: `2064 × 2752`
-- 이전 12.9/13형 iPad Pro 계열: `2048 × 2732`
 
 ### 반복 촬영이 편한 방법: iOS Simulator
 
@@ -133,8 +125,6 @@ xcrun simctl status_bar booted override \
 xcrun simctl io booted screenshot --type=png \
   store-assets/screenshots/raw/ios/ko/iphone-6.9/01-home.png
 ```
-
-iPad 지원을 유지한다면 iPad Pro 13형 Simulator로 바꾸고 같은 화면을 다시 촬영합니다. iPhone 이미지를 확대해 iPad 이미지로 만들면 안 됩니다.
 
 촬영 후 상태바 override 해제:
 
@@ -209,11 +199,9 @@ store-assets/
   screenshots/
     raw/
       ios/ko/iphone-6.9/
-      ios/ko/ipad-13/
       android/ko/phone/
     final/
       app-store/ko/iphone-6.9/
-      app-store/ko/ipad-13/
       google-play/ko/phone/
 ```
 

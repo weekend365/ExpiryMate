@@ -14,6 +14,7 @@ interface MascotSpeechBubbleProps {
   message: string;
   mood?: MascotMood;
   size?: "small" | "medium";
+  numberOfLines?: number;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -31,6 +32,7 @@ export function MascotSpeechBubble({
   message,
   mood = "speak",
   size = "small",
+  numberOfLines,
   style,
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
@@ -57,7 +59,9 @@ export function MascotSpeechBubble({
       <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
         <View style={styles.bubble}>
-          <AppText variant="bodySmall">{message}</AppText>
+          <AppText variant="bodySmall" numberOfLines={numberOfLines}>
+            {message}
+          </AppText>
         </View>
         {/* Tail points toward the mascot (left). */}
         <View style={styles.tail} />

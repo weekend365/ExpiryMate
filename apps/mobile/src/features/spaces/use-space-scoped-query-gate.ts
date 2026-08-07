@@ -9,14 +9,18 @@ import { useActiveSpace } from "./space-provider";
  */
 export function useSpaceScopedQueryGate() {
   const { sessionUserId } = useAuth();
-  const { activeSpaceId, isReady } = useActiveSpace();
+  const { activeSpaceId, isReady, error, refetchSpaces } = useActiveSpace();
   const enabled = Boolean(sessionUserId && activeSpaceId && isReady);
   const isAwaitingSpace = Boolean(sessionUserId) && !enabled;
+  const blockingSpaceError =
+    sessionUserId && !activeSpaceId && error ? error : null;
 
   return {
     sessionUserId,
     activeSpaceId,
     enabled,
     isAwaitingSpace,
+    blockingSpaceError,
+    refetchSpaces,
   } as const;
 }

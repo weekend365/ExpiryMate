@@ -8,6 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { ChevronLeft } from "lucide-react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
 import type { MascotMood } from "./Mascot";
 
@@ -49,6 +50,7 @@ export function StepFlow({
   guideMood = "speak",
   children,
 }: StepFlowProps) {
+  const { shouldStack } = useResponsiveLayout();
   const safeIndex = Math.min(Math.max(currentIndex, 0), Math.max(steps.length - 1, 0));
   const activeStep = steps[safeIndex];
   const contentOpacity = useSharedValue(1);
@@ -83,10 +85,10 @@ export function StepFlow({
               pressed && styles.backButtonPressed,
             ]}
             accessibilityRole="button"
-            accessibilityLabel="이전으로 돌아가기"
+            accessibilityLabel="뒤로가기"
           >
             <ChevronLeft color={colors.text} size={spacing.sm + spacing.xxs} strokeWidth={2.4} />
-            <Text style={styles.backLabel}>뒤로</Text>
+            <Text style={styles.backLabel}>뒤로가기</Text>
           </Pressable>
           <Text style={styles.progressLabel}>
             {safeIndex + 1}/{steps.length}
@@ -110,7 +112,7 @@ export function StepFlow({
           })}
         </View>
 
-        <View style={styles.stepHeader}>
+        <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
           <View style={styles.stepCopy}>
             <Text style={styles.stepEyebrow}>{activeStep.label}</Text>
             <Text style={styles.stepTitle}>{activeStep.title}</Text>
@@ -119,7 +121,14 @@ export function StepFlow({
             ) : null}
           </View>
           {headerAccessory ? (
-            <View style={styles.headerAccessory}>{headerAccessory}</View>
+            <View
+              style={[
+                styles.headerAccessory,
+                shouldStack && styles.headerAccessoryStacked,
+              ]}
+            >
+              {headerAccessory}
+            </View>
           ) : null}
         </View>
 
@@ -199,8 +208,13 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.md,
   },
+  stepHeaderStacked: {
+    flexDirection: "column",
+    gap: spacing.sm,
+  },
   stepCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xs,
   },
   stepEyebrow: {
@@ -222,7 +236,12 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   headerAccessory: {
+    flexShrink: 1,
     paddingTop: spacing.xxs,
+  },
+  headerAccessoryStacked: {
+    width: "100%",
+    paddingTop: spacing.none,
   },
   content: {
     gap: spacing.lg,

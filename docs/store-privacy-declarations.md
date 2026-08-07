@@ -23,7 +23,7 @@
 | 공유 초대 이메일·1회용 코드 해시·멤버십·역할 | 예 (공유 기능 사용 시) | 공간 초대·권한·알림 수신 설정 | 이메일 방식은 메일 발송 수탁자·같은 공간 구성원 | 초대/코드 취소(이메일 즉시 제거) · 수락·취소·만료 후 최대 30일 내 기록 삭제 · 공간 나가기·구성원 제거·공간 삭제 · 계정 정리 시 보낸/받은 초대 삭제 | Contact Info / Identifiers | Personal info / App activity |
 | 소셜 로그인 식별자 | 예 (OAuth 사용 시) | 로그인 | OAuth 제공자 | 계정 정리 | Identifiers | Personal info |
 | 재료·유통기한·보관 위치 | 예 | 재고·알림·추천 입력 | 호스팅 DB·선택한 공간 구성원; 추천 시 OpenAI로 snapshot | 항목 삭제·공간 삭제·계정 정리 | User Content | App activity / Personal info (제품 데이터) |
-| 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers / Diagnostics(해당 시) | App info and performance / Device IDs |
+| 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers | Device or other IDs |
 | AI 추천 요청·결과·재료 snapshot | 예 (추천 사용 시) | 추천 제공·히스토리 | **OpenAI(미국)** | 동의 철회·기록 삭제·계정 정리 | User Content | App activity |
 | 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
 | 결제/구독 영수증 검증 | 예 (IAP 사용 시) | 구독 확인 | Apple/Google | 스토어 구독 관리 | Purchases | Financial info |
@@ -34,6 +34,55 @@
 \* 바코드/OCR은 카메라 권한을 사용하지만 사진 라이브러리를 읽지 않습니다.
 OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 서버에 업로드하지 않습니다.
 스토어 권한 문구와 `PrivacyInfo.xcprivacy`는 이 실제 동작과 일치시킵니다.
+
+---
+
+## 현재 v1 콘솔 입력값
+
+### App Store Connect · App Privacy
+
+모든 항목은 **사용자에게 연결됨 = 예**, **추적에 사용 = 아니오**입니다.
+
+| 데이터 유형 | 목적 |
+| --- | --- |
+| Contact Info → Name | App Functionality |
+| Contact Info → Email Address | App Functionality |
+| Identifiers → User ID | App Functionality |
+| Identifiers → Device ID | App Functionality |
+| User Content → Customer Support | App Functionality |
+| User Content → Other User Content | App Functionality · Product Personalization |
+| Purchases → Purchase History | App Functionality |
+| Location → Coarse Location | Third-Party Advertising |
+| Identifiers → Device ID | Third-Party Advertising · Analytics |
+| Usage Data → Advertising Data | Third-Party Advertising |
+| Usage Data → Product Interaction | Analytics |
+| Diagnostics → Crash Data | Analytics |
+| Diagnostics → Performance Data | Analytics |
+
+- Tracking: **No**
+- Photos or Videos: **선언하지 않음**
+- `apps/mobile/ios/ExpiryMate/PrivacyInfo.xcprivacy`의
+  `NSPrivacyCollectedDataTypes`와 같은 범위를 유지
+
+### Google Play Console · Data safety
+
+- 사용자 데이터를 수집하거나 공유하는가: **예**
+- 수집 데이터가 전송 중 암호화되는가: **예**
+- 데이터 삭제 요청 방법을 제공하는가: **예**
+- 제3자와 공유하는가: **아니오**
+  - 호스팅·메일·AI·푸시 제공자는 개발자 지시에 따라 처리하는 서비스 제공자
+  - 공유 냉장고 구성원 공개는 사용자가 시작하고 기대하는 기능
+
+| 데이터 유형 | 수집 | 필수 여부 | 목적 |
+| --- | --- | --- | --- |
+| Personal info → Name | 예 | 선택 | App functionality · Account management |
+| Personal info → Email address | 예 | 필수 | App functionality · Account management |
+| Personal info → User IDs | 예 | 필수 | App functionality · Account management |
+| App activity → Other user-generated content | 예 | 선택 | App functionality · Personalization |
+| Device or other IDs → Device or other IDs | 예 | 선택 | App functionality |
+
+외부 계정 삭제 URL:
+`https://admin-production-da74.up.railway.app/privacy/choices`
 
 ---
 

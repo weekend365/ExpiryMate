@@ -114,19 +114,19 @@ export class PrivacyService {
 
   async deleteAccount(userId: string): Promise<DeleteAccountResponse> {
     const user = await this.findActiveUser(userId);
-    const ownedSharedSpace = await this.prisma.inventorySpace.findFirst({
-      where: {
-        ownerUserId: userId,
-        type: { not: "personal" },
-        memberships: {
-          some: { userId: { not: userId } },
+    const ownedSpaceWithOtherMembers =
+      await this.prisma.inventorySpace.findFirst({
+        where: {
+          ownerUserId: userId,
+          memberships: {
+            some: { userId: { not: userId } },
+          },
         },
-      },
-      select: { name: true },
-    });
-    if (ownedSharedSpace) {
+        select: { name: true },
+      });
+    if (ownedSpaceWithOtherMembers) {
       throw new ConflictException(
-        `'${ownedSharedSpace.name}' 냉장고의 소유권을 먼저 넘기거나 공간을 정리해 주세요.`,
+        `'${ownedSpaceWithOtherMembers.name}' 냉장고의 소유권을 먼저 넘기거나 공간을 정리해 주세요.`,
       );
     }
 

@@ -84,8 +84,9 @@ export class SpacesService {
   }
 
   async listSpaces(userId: string): Promise<InventorySpaceSummary[]> {
-    await this.ensurePersonalSpace(userId);
-    const memberships = await this.prisma.inventorySpaceMembership.findMany({
+    // Prefer a read-only path. Personal space is created on login/session;
+    // only repair when the member has no spaces at all (legacy/orphan accounts).
+    let memberships = await this.prisma.inventorySpaceMembership.findMany({
       where: { userId },
       include: {
         space: {
@@ -96,6 +97,21 @@ export class SpacesService {
       },
       orderBy: [{ space: { type: "asc" } }, { joinedAt: "asc" }],
     });
+
+    if (memberships.length === 0) {
+      await this.ensurePersonalSpace(userId);
+      memberships = await this.prisma.inventorySpaceMembership.findMany({
+        where: { userId },
+        include: {
+          space: {
+            include: {
+              _count: { select: { memberships: true } },
+            },
+          },
+        },
+        orderBy: [{ space: { type: "asc" } }, { joinedAt: "asc" }],
+      });
+    }
 
     return memberships.map((membership) => ({
       id: membership.space.id,
@@ -219,6 +235,11 @@ export class SpacesService {
       InventorySpaceRole.owner,
       InventorySpaceRole.manager,
     ]);
+    if (actor.space.type === InventorySpaceType.personal) {
+      throw new BadRequestException(
+        "내 냉장고에는 다른 구성원을 초대할 수 없어요.",
+      );
+    }
     if (
       body.role === InventorySpaceRole.manager &&
       actor.role !== InventorySpaceRole.owner

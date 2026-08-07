@@ -39,6 +39,10 @@ export class HealthController {
   async getReady() {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
+      // Shared-fridge tables must exist after inventory-spaces migration.
+      await this.prisma.inventorySpace.findFirst({
+        select: { id: true },
+      });
       return { status: "ready" };
     } catch {
       throw new ServiceUnavailableException({

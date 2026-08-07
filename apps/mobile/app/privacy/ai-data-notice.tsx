@@ -186,11 +186,13 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
   statusCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   statusTitle: {

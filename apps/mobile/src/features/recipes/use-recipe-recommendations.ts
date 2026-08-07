@@ -12,6 +12,7 @@ import {
 } from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
+import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 import {
   createRecipeRecommendation,
   deleteRecipeFavorite,
@@ -30,24 +31,25 @@ export const getRecipeFavoriteKey = (
 ) => `${recommendationId}:${dishIndex}`;
 
 export const useRecipeRecommendations = () => {
-  const { sessionUserId, activeSpaceId, enabled, isAwaitingSpace } =
-    useSpaceScopedQueryGate();
+  const gate = useSpaceScopedQueryGate();
 
   const query = useQuery({
     queryKey: withInventorySpace(
       recipeRecommendationsQueryKey,
-      sessionUserId,
-      activeSpaceId,
+      gate.sessionUserId,
+      gate.activeSpaceId,
     ),
-    queryFn: () => listRecipeRecommendations(activeSpaceId),
-    enabled,
+    queryFn: () => {
+      if (!gate.activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return listRecipeRecommendations(gate.activeSpaceId);
+    },
+    enabled: gate.enabled,
+    refetchOnMount: "always",
   });
 
-  return {
-    ...query,
-    isLoading: isAwaitingSpace || query.isLoading,
-    isPending: isAwaitingSpace || query.isPending,
-  };
+  return useSpaceScopedQueryResult(query, gate);
 };
 
 export const useCreateRecipeRecommendation = () => {
@@ -56,8 +58,12 @@ export const useCreateRecipeRecommendation = () => {
   const { activeSpaceId } = useActiveSpace();
 
   return useMutation({
-    mutationFn: (payload: RecipeRecommendationPayload) =>
-      createRecipeRecommendation(payload, activeSpaceId),
+    mutationFn: (payload: RecipeRecommendationPayload) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return createRecipeRecommendation(payload, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(
@@ -113,10 +119,15 @@ export const useSetRecipeFavorite = () => {
       recommendationId,
       dishIndex,
       favorite,
-    }: SetRecipeFavoriteVariables) =>
-      favorite
-        ? saveRecipeFavorite(recommendationId, dishIndex, activeSpaceId)
-        : deleteRecipeFavorite(recommendationId, dishIndex),
+    }: SetRecipeFavoriteVariables) => {
+      if (favorite) {
+        if (!activeSpaceId) {
+          throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+        }
+        return saveRecipeFavorite(recommendationId, dishIndex, activeSpaceId);
+      }
+      return deleteRecipeFavorite(recommendationId, dishIndex, activeSpaceId);
+    },
     onMutate: async (variables) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<RecipeFavorite[]>(queryKey);

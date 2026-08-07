@@ -45,9 +45,12 @@ export function InventoryPage() {
             }}
           >
             <input
+              aria-label="재고 상품명 또는 브랜드 검색"
+              name="inventory-search"
+              autoComplete="off"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="상품명 또는 브랜드 검색"
+              placeholder="상품명 또는 브랜드 검색…"
               className="w-full rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
             />
             <button

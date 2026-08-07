@@ -16,13 +16,15 @@ import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function SettingsScreen() {
   const monetization = useMonetization();
+  const { shouldStack } = useResponsiveLayout();
 
   return (
-    <Screen>
-      <View style={styles.brandCard}>
+    <Screen bottomInsetMode="navigator" testID="settings-screen">
+      <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
         <Mascot size="small" mood="idle" />
         <View style={styles.brandCopy}>
           <Text style={styles.brandName}>{appBrand.appNameKo}</Text>
@@ -58,7 +60,7 @@ export default function SettingsScreen() {
           />
           <ListRow
             title="계정"
-            description="내 계정 확인, 인증 메일, 로그아웃을 살펴봐요."
+            description="내 계정 확인, 로그아웃, 계정 정리를 살펴봐요."
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />
@@ -100,8 +102,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.md,
   },
+  brandCardStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+  },
   brandCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   brandName: {

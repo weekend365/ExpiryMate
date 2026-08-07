@@ -2,6 +2,7 @@ import { ChevronRight, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 
 interface ListRowProps {
   title: string;
@@ -22,38 +23,52 @@ export function ListRow({
   destructive = false,
   last = false,
 }: ListRowProps) {
+  const { shouldStack } = useResponsiveLayout();
+  const endAdornment =
+    trailing ??
+    (onPress ? (
+      <ChevronRight
+        color={colors.mutedText}
+        size={spacing.sm + spacing.xxs}
+      />
+    ) : null);
   const content = (
     <>
-      {Icon ? (
-        <View style={[styles.listIcon, destructive && styles.listIconDanger]}>
-          <Icon
-            color={destructive ? colors.danger : colors.primary}
-            size={spacing.sm + spacing.xxs}
-            strokeWidth={2.4}
-          />
+      <View style={[styles.listMain, shouldStack && styles.listMainStacked]}>
+        {Icon ? (
+          <View style={[styles.listIcon, destructive && styles.listIconDanger]}>
+            <Icon
+              color={destructive ? colors.danger : colors.primary}
+              size={spacing.sm + spacing.xxs}
+              strokeWidth={2.4}
+            />
+          </View>
+        ) : null}
+        <View style={styles.listCopy}>
+          <Text style={[styles.listTitle, destructive && styles.listTitleDanger]}>
+            {title}
+          </Text>
+          {description ? (
+            <Text style={styles.listDescription}>{description}</Text>
+          ) : null}
+        </View>
+      </View>
+      {endAdornment ? (
+        <View style={[styles.trailing, shouldStack && styles.trailingStacked]}>
+          {endAdornment}
         </View>
       ) : null}
-      <View style={styles.listCopy}>
-        <Text style={[styles.listTitle, destructive && styles.listTitleDanger]}>
-          {title}
-        </Text>
-        {description ? (
-          <Text style={styles.listDescription}>{description}</Text>
-        ) : null}
-      </View>
-      {trailing ??
-        (onPress ? (
-          <ChevronRight
-            color={colors.mutedText}
-            size={spacing.sm + spacing.xxs}
-          />
-        ) : null)}
     </>
   );
+  const rowStyles = [
+    styles.listRow,
+    shouldStack && styles.listRowStacked,
+    last && styles.listRowLast,
+  ];
 
   if (!onPress) {
     return (
-      <View style={[styles.listRow, last && styles.listRowLast]}>{content}</View>
+      <View style={rowStyles}>{content}</View>
     );
   }
 
@@ -61,8 +76,7 @@ export function ListRow({
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        styles.listRow,
-        last && styles.listRowLast,
+        ...rowStyles,
         pressed && styles.listRowPressed,
       ]}
       accessibilityRole="button"
@@ -85,6 +99,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
+  listRowStacked: {
+    alignItems: "stretch",
+    flexDirection: "column",
+    gap: spacing.xs,
+  },
+  listMain: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  listMainStacked: {
+    width: "100%",
+    alignItems: "flex-start",
+  },
   listRowLast: {
     borderBottomWidth: 0,
   },
@@ -98,15 +128,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   },
   listIconDanger: {
     backgroundColor: colors.dangerSoft,
   },
   listCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
+  trailing: {
+    flexShrink: 0,
+  },
+  trailingStacked: {
+    alignSelf: "flex-end",
+  },
   listTitle: {
+    flexShrink: 1,
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
@@ -116,6 +155,7 @@ const styles = StyleSheet.create({
     color: colors.danger,
   },
   listDescription: {
+    flexShrink: 1,
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,

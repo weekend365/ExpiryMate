@@ -34,14 +34,14 @@ This keeps the MVP simple while leaving a clean path for:
 
 ### Current status (2026-07-24)
 
-| Area | Status | Notes |
-| ---- | ------ | ----- |
-| **Phase** | 1 mostly done → **2 (store)** | [docs/PROJECT.md](./docs/PROJECT.md) |
-| **Auth** | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
-| **API / Admin** | Live on Railway | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅ |
-| **Shared inventory** | Implemented · deploy/2-user QA pending | personal/household/store spaces · email/one-time-code invites · owner/manager/member |
-| **QA** | 269 automated checks ✅ | Existing device QA ✅ · shared-space release E2E pending |
-| **Next (P0)** | | Railway migration → new production build → 2-user QA → store submission |
+| Area                 | Status                                    | Notes                                                                                   |
+| -------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Phase**            | 1 mostly done → **2 (store)**             | [docs/PROJECT.md](./docs/PROJECT.md)                                                    |
+| **Auth**             | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
+| **API / Admin**      | Live on Railway                           | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅                   |
+| **Shared inventory** | Implemented · deploy/2-user QA pending    | personal/household/store spaces · email/one-time-code invites · owner/manager/member    |
+| **QA**               | 269 automated checks ✅                   | Existing device QA ✅ · shared-space release E2E pending                                |
+| **Next (P0)**        |                                           | Railway migration → new production build → 2-user QA → store submission                 |
 
 ## Folder Structure
 
@@ -225,16 +225,17 @@ Copy `apps/mobile/.env.example` to `apps/mobile/.env`
 ```env
 EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
 EXPO_PUBLIC_APP_ENV="development"
-EXPO_PUBLIC_IAP_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
 ```
 
 For production EAS builds, configure the values from
 `apps/mobile/.env.production.example` in EAS environment variables or secrets.
 `EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_OAUTH_REDIRECT_URI` must be public
 `https://` URLs on the same origin (redirect ending in `/oauth/callback`), and
-Google, Kakao, and IAP public identifiers must be present. `app.config.js` and
+Google and Kakao public identifiers must be present. `app.config.js` and
 `eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
 builds fail fast when these values are missing, local, or placeholders.
+Until the custom API domain is configured, both production URLs use
+`https://api-production-1504.up.railway.app`.
 
 For Expo Go on a real device, `localhost` points to the phone, not your Mac.
 Use your Mac's current LAN IP instead:
@@ -348,6 +349,17 @@ pnpm db:seed
 ```
 
 ### 4. Run the apps
+
+# 터미널 1 — Metro (항상 켜 두기)
+
+pnpm --filter @expirymate/mobile exec expo start -c
+
+같은 Wi‑Fi가 아니면:
+pnpm --filter @expirymate/mobile exec expo start -c --tunnel
+
+# 터미널 2 — 네이티브 설치/실행 (최초·네이티브 변경 시)
+
+pnpm --filter @expirymate/mobile exec expo run:ios --device "남우현의 iPhone"
 
 In separate terminals:
 

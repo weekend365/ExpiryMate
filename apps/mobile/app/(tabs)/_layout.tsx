@@ -1,12 +1,28 @@
 import { Tabs, useNavigation } from "expo-router";
 import { Archive, ChefHat, House, Settings } from "lucide-react-native";
 import { useCallback, useEffect } from "react";
+import { Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RequireRegisteredAuth } from "../../src/features/auth/auth-gate";
 import { resolveTabHeaderBackTitle } from "../../src/features/navigation/header-back-title";
-import { colors, fontFamily, spacing, typography } from "../../src/shared/theme";
+import { getMaxFontSizeMultiplier } from "../../src/shared/font-scale";
+import {
+  getTabBarMetrics,
+  useResponsiveLayout,
+} from "../../src/shared/responsive-layout";
+import {
+  colors,
+  fontFamily,
+  typography,
+} from "../../src/shared/theme";
 
 export default function TabsLayout() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  const { isLargeText } = useResponsiveLayout();
+  // Include system navigation-bar / home-indicator inset so tab chrome never
+  // sits under Android's 3-button / gesture bar (edge-to-edge).
+  const tabBar = getTabBarMetrics(isLargeText, insets.bottom);
 
   const syncParentBackTitle = useCallback(
     (tabName?: string) => {
@@ -33,17 +49,34 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.subtext,
-          tabBarLabelStyle: {
-            fontFamily: fontFamily.medium,
-            fontSize: typography.caption.fontSize,
-          },
+          tabBarShowLabel: !isLargeText,
+          tabBarLabel: ({ color, children }) => (
+            <Text
+              numberOfLines={1}
+              maxFontSizeMultiplier={getMaxFontSizeMultiplier("chrome")}
+              style={{
+                color,
+                fontFamily: fontFamily.medium,
+                fontSize: typography.caption.fontSize,
+                lineHeight: typography.caption.lineHeight,
+              }}
+            >
+              {children}
+            </Text>
+          ),
           tabBarStyle: {
             backgroundColor: colors.surface,
             borderTopColor: colors.border,
-            height: spacing.xxxl + spacing.sm,
-            paddingBottom: spacing.xs,
-            paddingTop: spacing.xs,
+            // Override React Navigation's default height (49 + inset) so the
+            // content row cannot overflow into the system nav padding.
+            height: tabBar.height,
+            paddingTop: tabBar.paddingTop,
+            paddingBottom: tabBar.paddingBottom,
           },
+          tabBarItemStyle: {
+            height: tabBar.contentMinHeight,
+          },
+          tabBarHideOnKeyboard: true,
         }}
         screenListeners={{
           state: (event) => {
@@ -57,6 +90,7 @@ export default function TabsLayout() {
           name="home"
           options={{
             title: "홈",
+            tabBarButtonTestID: "tab-home",
             tabBarIcon: ({ color, size }) => (
               <House color={color} size={size} strokeWidth={2.4} />
             ),
@@ -66,6 +100,7 @@ export default function TabsLayout() {
           name="recommendations"
           options={{
             title: "추천",
+            tabBarButtonTestID: "tab-recommendations",
             tabBarIcon: ({ color, size }) => (
               <ChefHat color={color} size={size} strokeWidth={2.4} />
             ),
@@ -75,6 +110,7 @@ export default function TabsLayout() {
           name="inventory"
           options={{
             title: "보관함",
+            tabBarButtonTestID: "tab-inventory",
             tabBarIcon: ({ color, size }) => (
               <Archive color={color} size={size} strokeWidth={2.4} />
             ),
@@ -84,6 +120,7 @@ export default function TabsLayout() {
           name="settings"
           options={{
             title: "설정",
+            tabBarButtonTestID: "tab-settings",
             tabBarIcon: ({ color, size }) => (
               <Settings color={color} size={size} strokeWidth={2.4} />
             ),

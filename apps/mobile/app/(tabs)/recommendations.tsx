@@ -56,6 +56,7 @@ import {
   touchTarget,
   typography,
 } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
@@ -99,6 +100,7 @@ const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
   };
 
 export default function RecommendationsScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
@@ -156,14 +158,19 @@ export default function RecommendationsScreen() {
       ),
     [favoritesQuery.data],
   );
-  const errorMessage =
-    generationErrorMessage ?? getErrorMessage(historyQuery.error);
+  const historyErrorMessage = getErrorMessage(historyQuery.error);
+  const errorMessage = generationErrorMessage ?? historyErrorMessage;
+  const isHistoryLoadError = Boolean(
+    historyQuery.error && !generationErrorMessage,
+  );
   const isQuotaError =
     generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED" ||
     isRecommendationQuotaError(errorMessage);
   const hasActiveEntitlement = Boolean(
     subscription.query.data?.hasActiveEntitlement,
   );
+  const isHistoryInitialLoading =
+    historyQuery.isPending && historyQuery.data === undefined;
   const justGenerated =
     generationStatus === "success" &&
     Boolean(latestRecommendation) &&
@@ -303,6 +310,8 @@ export default function RecommendationsScreen() {
     <Screen
       scroll={false}
       contentWidth="wide"
+      bottomInsetMode="navigator"
+      testID="recommendations-screen"
       contentStyle={styles.screenContent}
       footer={
         recipeView === "favorites" ? (
@@ -472,23 +481,30 @@ export default function RecommendationsScreen() {
         />
 
         <Pressable
+          testID="recommendation-options-button"
           onPress={() => setShowOptionsSheet(true)}
           accessibilityRole="button"
           accessibilityLabel="추천 조건 고르기"
           accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
           style={({ pressed }) => [
             styles.optionsSummary,
+            shouldStack && styles.optionsSummaryStacked,
             pressed && styles.optionsSummaryPressed,
           ]}
         >
           <View style={styles.optionsSummaryCopy}>
             <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
-            <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+            <Text style={styles.optionsSummaryValue}>
               {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
               {useExpiringFirst ? " · 임박 먼저" : ""}
             </Text>
           </View>
-          <View style={styles.optionsSummaryAction}>
+          <View
+            style={[
+              styles.optionsSummaryAction,
+              shouldStack && styles.optionsSummaryActionStacked,
+            ]}
+          >
             <SlidersHorizontal
               color={colors.primary}
               size={spacing.sm + spacing.xxs}
@@ -512,7 +528,7 @@ export default function RecommendationsScreen() {
                   ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
                   : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
               }
-              mood={hasActiveEntitlement ? "idle" : "worry"}
+              mood="worry"
               size="small"
             />
             {!hasActiveEntitlement &&
@@ -542,22 +558,40 @@ export default function RecommendationsScreen() {
           </View>
         ) : (
           <View style={styles.errorCard}>
-            <Text style={styles.errorTitle}>앗, 추천을 만들지 못했어요</Text>
+            <Text style={styles.errorTitle}>
+              {isHistoryLoadError
+                ? "앗, 추천을 불러오지 못했어요"
+                : "앗, 추천을 만들지 못했어요"}
+            </Text>
             <MascotSpeechBubble
               message={errorMessage}
               mood="worry"
               size="small"
             />
             <Pressable
-              onPress={() => router.push("/register")}
+              onPress={() => {
+                if (isHistoryLoadError) {
+                  void historyQuery.refetch();
+                  return;
+                }
+                router.push("/register");
+              }}
               accessibilityRole="button"
-              accessibilityLabel="재료부터 넣어볼까요?"
+              accessibilityLabel={
+                isHistoryLoadError
+                  ? "추천 다시 불러오기"
+                  : "재료부터 넣어볼까요?"
+              }
               style={({ pressed }) => [
                 styles.quotaLink,
                 pressed && styles.optionsSummaryPressed,
               ]}
             >
-              <Text style={styles.quotaLinkText}>재료부터 넣어볼까요?</Text>
+              <Text style={styles.quotaLinkText}>
+                {isHistoryLoadError
+                  ? "다시 불러올게요"
+                  : "재료부터 넣어볼까요?"}
+              </Text>
             </Pressable>
           </View>
         )
@@ -569,7 +603,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="이번에 골라본 요리"
-            description={formatRecommendationDescription(latestRecommendation)}
+            surface
+            accentColor={colors.primary}
           />
 
           {latestRecommendation.recommendations.length ? (
@@ -623,7 +658,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="이전 추천"
-            description="예전에 받아 둔 요리도 다시 살펴볼 수 있어요."
+            surface
+            accentColor={colors.primary}
           />
           <View style={styles.historyList}>
             {previousRecommendations.map((recommendation) => (
@@ -635,6 +671,7 @@ export default function RecommendationsScreen() {
                 accessibilityHint="그때 받아 둔 요리를 다시 열어 볼 수 있어요."
                 style={({ pressed }) => [
                   styles.historyRow,
+                  shouldStack && styles.historyRowStacked,
                   pressed && styles.historyRowPressed,
                 ]}
               >
@@ -646,7 +683,14 @@ export default function RecommendationsScreen() {
                     {formatHistoryPreview(recommendation)}
                   </Text>
                 </View>
-                <Text style={styles.historyAction}>다시 볼게요</Text>
+                <Text
+                  style={[
+                    styles.historyAction,
+                    shouldStack && styles.historyActionStacked,
+                  ]}
+                >
+                  다시 볼게요
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -654,6 +698,21 @@ export default function RecommendationsScreen() {
       ) : null}
 
       {recipeView === "recommendations" &&
+      isHistoryInitialLoading &&
+      !isGenerating &&
+      !errorMessage ? (
+        <View
+          style={styles.favoriteLoading}
+          accessibilityLabel="추천을 불러오고 있어요"
+        >
+          <Text style={styles.favoriteLoadingText}>
+            추천을 불러오고 있어요…
+          </Text>
+        </View>
+      ) : null}
+
+      {recipeView === "recommendations" &&
+      !isHistoryInitialLoading &&
       !latestRecommendation &&
       !isGenerating &&
       !errorMessage ? (
@@ -668,7 +727,8 @@ export default function RecommendationsScreen() {
         <View style={styles.resultSection}>
           <SectionHeader
             title="즐겨찾는 요리"
-            description="저장해 둔 요리를 언제든 다시 살펴볼 수 있어요."
+            surface
+            accentColor={colors.primary}
           />
           {favoritesQuery.isPending ? (
             <View
@@ -1008,6 +1068,7 @@ function RecipeCard({
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const highlightIngredients = getHighlightedIngredients(
     dish,
     inventorySnapshot,
@@ -1015,7 +1076,7 @@ function RecipeCard({
   const ingredientPreview = formatIngredientPreview(highlightIngredients);
 
   return (
-    <View style={styles.recipeCard}>
+    <View style={[styles.recipeCard, shouldStack && styles.recipeCardStacked]}>
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
@@ -1032,16 +1093,16 @@ function RecipeCard({
               {badgeLabel ?? "1"}
             </Text>
           </View>
-          <Text style={styles.recipeTitle} numberOfLines={1}>
+          <Text style={styles.recipeTitle}>
             {dish.title}
           </Text>
         </View>
 
-        <Text style={styles.recipeMetaLine} numberOfLines={1}>
+        <Text style={styles.recipeMetaLine}>
           {formatDishMeta(dish)}
         </Text>
 
-        <Text style={styles.recipeIngredientPreview} numberOfLines={1}>
+        <Text style={styles.recipeIngredientPreview} numberOfLines={2}>
           {ingredientPreview}
         </Text>
       </Pressable>
@@ -1063,6 +1124,7 @@ function RecipeCard({
           hitSlop={spacing.xs}
           style={({ pressed }) => [
             styles.favoriteButton,
+            shouldStack && styles.favoriteButtonStacked,
             isFavorite && styles.favoriteButtonSelected,
             pressed && styles.favoriteButtonPressed,
             isFavoritePending && styles.favoriteButtonPending,
@@ -1087,6 +1149,7 @@ function RecipeDetailContent({
   dish: RecipeRecommendationDish;
   inventorySnapshot: RecipeInventorySnapshotItem[];
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
 
   return (
@@ -1098,13 +1161,24 @@ function RecipeDetailContent({
         {usedIngredientRows.length > 0 ? (
           <View style={styles.ingredientInfoList}>
             {usedIngredientRows.map((ingredient) => (
-              <View key={ingredient.key} style={styles.ingredientInfoRow}>
-                <View style={styles.ingredientInfoCopy}>
-                  <Text style={styles.ingredientInfoName} numberOfLines={1}>
+              <View
+                key={ingredient.key}
+                style={[
+                  styles.ingredientInfoRow,
+                  shouldStack && styles.ingredientInfoRowStacked,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.ingredientInfoCopy,
+                    shouldStack && styles.ingredientInfoCopyStacked,
+                  ]}
+                >
+                  <Text style={styles.ingredientInfoName}>
                     {ingredient.name}
                   </Text>
                   {ingredient.amountLabel ? (
-                    <Text style={styles.ingredientInfoAmount} numberOfLines={1}>
+                    <Text style={styles.ingredientInfoAmount}>
                       추천 {ingredient.amountLabel}
                     </Text>
                   ) : null}
@@ -1265,10 +1339,6 @@ function formatRecommendationContext(recommendation: RecipeRecommendation) {
   return `보관 재료 ${inventoryCount}개 기준`;
 }
 
-function formatRecommendationDescription(recommendation: RecipeRecommendation) {
-  return `${formatCreatedAt(recommendation.createdAt)} · ${formatRecommendationContext(recommendation)}`;
-}
-
 function formatDishMeta(dish: RecipeRecommendationDish) {
   return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${
     difficultyLabels[dish.difficulty]
@@ -1381,9 +1451,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    gap: spacing.lg,
+    gap: spacing.md,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   recipeViewSwitch: {
@@ -1463,6 +1533,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
   },
+  optionsSummaryStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   optionsSummaryPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -1486,6 +1560,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
+  },
+  optionsSummaryActionStacked: {
+    alignSelf: "flex-end",
   },
   optionsSummaryActionLabel: {
     fontSize: typography.bodySmall.fontSize,
@@ -1528,7 +1605,7 @@ const styles = StyleSheet.create({
     color: colors.danger,
   },
   resultSection: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   favoriteLoading: {
     minHeight: spacing.xxxl,
@@ -1547,7 +1624,7 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   historyList: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   historyRow: {
     minHeight: touchTarget.min,
@@ -1560,6 +1637,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
+  },
+  historyRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   historyRowPressed: {
     backgroundColor: colors.surfacePressed,
@@ -1586,6 +1667,9 @@ const styles = StyleSheet.create({
     fontFamily: typography.title.fontFamily,
     color: colors.primary,
   },
+  historyActionStacked: {
+    alignSelf: "flex-end",
+  },
   historySheetList: {
     gap: spacing.sm,
   },
@@ -1598,6 +1682,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     overflow: "hidden",
+  },
+  recipeCardStacked: {
+    flexDirection: "column",
   },
   recipeCardMain: {
     flex: 1,
@@ -1647,6 +1734,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: spacing.xs,
     marginRight: spacing.xs,
+  },
+  favoriteButtonStacked: {
+    alignSelf: "flex-end",
+    marginBottom: spacing.xs,
   },
   favoriteButtonSelected: {
     backgroundColor: colors.primarySoft,
@@ -1703,12 +1794,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  ingredientInfoRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   ingredientInfoCopy: {
     flex: 1,
     minWidth: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
+  },
+  ingredientInfoCopyStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   ingredientInfoName: {
     flexShrink: 1,

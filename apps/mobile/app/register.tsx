@@ -25,8 +25,17 @@ import {
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, BackHandler, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  BackHandler,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
+import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { FormField } from "../src/components/FormField";
@@ -39,7 +48,14 @@ import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
-import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  touchTarget,
+  typography,
+} from "../src/shared/theme";
+import { useResponsiveLayout } from "../src/shared/responsive-layout";
 import {
   type RegistrationDraft,
   useRegistrationStore,
@@ -59,12 +75,7 @@ type RegistrationFormValues = {
 };
 
 /** 1) 재료명 → 2) 보관/수량 → 3) 기한 선택 → 4) 확인 → done */
-type RegistrationStep =
-  | "product"
-  | "storage"
-  | "expiry"
-  | "confirm"
-  | "done";
+type RegistrationStep = "product" | "storage" | "expiry" | "confirm" | "done";
 
 type InputRegistrationStep = Exclude<RegistrationStep, "done">;
 
@@ -174,11 +185,10 @@ function normalizeDraftExpiryDate(value?: string) {
 const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
 ) =>
-  prefill
-    ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":")
-    : "";
+  prefill ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":") : "";
 
 export default function RegisterScreen() {
+  const { shouldStack, shouldStackDense } = useResponsiveLayout();
   const navigation = useNavigation();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
@@ -295,7 +305,10 @@ export default function RegisterScreen() {
     if (step !== "done") {
       navigation.setOptions({
         title: "재료 넣기",
-        headerLeft: undefined,
+        headerLeft: () =>
+          navigation.canGoBack() ? (
+            <HeaderBackButton onPress={() => navigation.goBack()} />
+          ) : undefined,
       });
       return;
     }
@@ -303,15 +316,7 @@ export default function RegisterScreen() {
     navigation.setOptions({
       title: "잘 넣어뒀어요",
       headerLeft: () => (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="홈으로 돌아가기"
-          onPress={() => router.replace("/(tabs)/home")}
-          hitSlop={spacing.xs}
-          style={styles.headerBackButton}
-        >
-          <Text style={styles.headerBackLabel}>홈</Text>
-        </Pressable>
+        <HeaderBackButton onPress={() => router.replace("/(tabs)/home")} />
       ),
     });
   }, [navigation, step]);
@@ -390,7 +395,9 @@ export default function RegisterScreen() {
 
   const goToNextStep = () => {
     const nextStep =
-      REGISTRATION_STEPS[Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)];
+      REGISTRATION_STEPS[
+        Math.min(REGISTRATION_STEPS.length - 1, stepIndex + 1)
+      ];
     setStep(nextStep.key);
     setSubmitErrorMessage(null);
   };
@@ -531,7 +538,12 @@ export default function RegisterScreen() {
 
         {registeredSessionItems.length ? (
           <View style={styles.sessionCard}>
-            <View style={styles.sessionHeader}>
+            <View
+              style={[
+                styles.sessionHeader,
+                shouldStack && styles.sessionHeaderStacked,
+              ]}
+            >
               <View style={styles.sessionCopy}>
                 <Text style={styles.sessionEyebrow}>오늘 넣은 재료</Text>
                 <Text style={styles.sessionTitle}>
@@ -560,10 +572,15 @@ export default function RegisterScreen() {
             accessibilityLabel="요리 추천 받아볼까요?"
             style={({ pressed }) => [
               styles.recipeHint,
+              shouldStack && styles.recipeHintStacked,
               pressed && styles.templateCardPressed,
             ]}
           >
-            <ChefHat color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+            <ChefHat
+              color={colors.primary}
+              size={spacing.md}
+              strokeWidth={2.4}
+            />
             <Text style={styles.recipeHintText}>요리 추천 받아볼까요?</Text>
           </Pressable>
         ) : null}
@@ -574,6 +591,7 @@ export default function RegisterScreen() {
   return (
     <Screen
       contentWidth="form"
+      testID="register-screen"
       footer={
         <Button
           icon={isLastStep ? CheckCircle2 : ChevronRight}
@@ -582,6 +600,7 @@ export default function RegisterScreen() {
           loading={mutation.isPending}
           disabled={!canGoNext}
           fullWidth
+          testID="register-next-button"
         >
           {primaryCtaLabel}
         </Button>
@@ -591,9 +610,7 @@ export default function RegisterScreen() {
         steps={REGISTRATION_STEPS}
         currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}
-        guideMessage={
-          REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage
-        }
+        guideMessage={REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
         guideMood="speak"
       >
         {submitErrorMessage ? (
@@ -615,13 +632,9 @@ export default function RegisterScreen() {
               </View>
             ) : null}
 
-            {!prefill?.displayName && draft?.displayName ? (
-              <View style={styles.softCard}>
-                <Text style={styles.softTitle}>이어서 작성 중이에요</Text>
-              </View>
-            ) : null}
-
-            <View style={styles.formCard}>
+            <View
+              style={[styles.formCard, shouldStack && styles.formCardCompact]}
+            >
               <FormField
                 control={form.control}
                 name="displayName"
@@ -630,7 +643,9 @@ export default function RegisterScreen() {
               />
               {recentTemplates.length ? (
                 <View style={styles.recentTemplateBlock}>
-                  <Text style={styles.recentTemplateCaption}>최근에 넣었어요</Text>
+                  <Text style={styles.recentTemplateCaption}>
+                    최근에 넣었어요
+                  </Text>
                   <View style={styles.pillRow}>
                     {recentTemplates.map((item) => {
                       const selected =
@@ -673,7 +688,9 @@ export default function RegisterScreen() {
 
         {step === "storage" ? (
           <>
-            <View style={styles.formCard}>
+            <View
+              style={[styles.formCard, shouldStack && styles.formCardCompact]}
+            >
               <View style={styles.storageBlock}>
                 <Text style={styles.storageBlockLabel}>어디에 두나요?</Text>
                 <View style={styles.pillRow}>
@@ -735,7 +752,9 @@ export default function RegisterScreen() {
         ) : null}
 
         {step === "expiry" ? (
-          <View style={styles.formCard}>
+          <View
+            style={[styles.formCard, shouldStack && styles.formCardCompact]}
+          >
             <DatePickerField
               presentation="hero"
               heroEyebrow={null}
@@ -785,44 +804,95 @@ export default function RegisterScreen() {
               />
               <Text style={styles.summaryTitle}>이렇게 넣을게요</Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
+            >
               <Text style={styles.summaryLabel}>재료</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStackDense && styles.summaryValueStacked,
+                ]}
+              >
                 {displayName || "아직 없어요"}
               </Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
+            >
               <Text style={styles.summaryLabel}>보관</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStackDense && styles.summaryValueStacked,
+                ]}
+              >
                 {resolveLabel(storageLocation)} · {quantity}
                 {unit}
               </Text>
             </View>
-            <View style={styles.summaryRow}>
+            <View
+              style={[
+                styles.summaryRow,
+                shouldStackDense && styles.summaryRowStacked,
+              ]}
+            >
               <Text style={styles.summaryLabel}>유통기한</Text>
-              <Text style={styles.summaryValue}>
+              <Text
+                style={[
+                  styles.summaryValue,
+                  shouldStackDense && styles.summaryValueStacked,
+                ]}
+              >
                 {expiryDate
                   ? formatDateKorean(expiryDate)
                   : "아직 고르지 않았어요"}
               </Text>
             </View>
             {brand ? (
-              <View style={styles.summaryRow}>
+              <View
+                style={[
+                  styles.summaryRow,
+                  shouldStackDense && styles.summaryRowStacked,
+                ]}
+              >
                 <Text style={styles.summaryLabel}>브랜드</Text>
-                <Text style={styles.summaryValue}>{brand}</Text>
+                <Text
+                  style={[
+                    styles.summaryValue,
+                    shouldStackDense && styles.summaryValueStacked,
+                  ]}
+                >
+                  {brand}
+                </Text>
               </View>
             ) : null}
             {category ? (
-              <View style={styles.summaryRow}>
+              <View
+                style={[
+                  styles.summaryRow,
+                  shouldStackDense && styles.summaryRowStacked,
+                ]}
+              >
                 <Text style={styles.summaryLabel}>카테고리</Text>
-                <Text style={styles.summaryValue}>
+                <Text
+                  style={[
+                    styles.summaryValue,
+                    shouldStackDense && styles.summaryValueStacked,
+                  ]}
+                >
                   {productCategoryLabels[category]}
                 </Text>
               </View>
             ) : null}
           </View>
         ) : null}
-
       </StepFlow>
 
       <BottomSheet
@@ -921,11 +991,10 @@ export default function RegisterScreen() {
       >
         <View style={styles.addLocationField}>
           <Text style={styles.addLocationLabel}>위치 이름</Text>
-          <TextInput
+          <AppTextInput
             value={newLocationLabel}
             onChangeText={setNewLocationLabel}
             placeholder="예: 팬트리"
-            placeholderTextColor={colors.mutedText}
             maxLength={fieldLimits.storageLocationLabel}
             autoFocus
             style={styles.addLocationInput}
@@ -937,11 +1006,6 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  headerBackButton: {
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.sm,
-    justifyContent: "center",
-  },
   addLocationField: {
     gap: spacing.xs,
   },
@@ -962,12 +1026,6 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.body.fontFamily,
-  },
-  headerBackLabel: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
   doneHero: {
     alignItems: "stretch",
@@ -1011,6 +1069,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.sm,
   },
+  recipeHintStacked: {
+    alignItems: "flex-start",
+    flexDirection: "column",
+  },
   recipeHintText: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
@@ -1042,6 +1104,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.lg,
     gap: spacing.md,
+  },
+  formCardCompact: {
+    padding: spacing.sm,
   },
   noticeCard: {
     backgroundColor: colors.primarySoft,
@@ -1176,6 +1241,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: spacing.md,
   },
+  summaryRowStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    gap: spacing.xxs,
+  },
   summaryLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
@@ -1189,6 +1259,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
+  },
+  summaryValueStacked: {
+    textAlign: "left",
   },
   extraSection: {
     gap: spacing.sm,
@@ -1211,6 +1284,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.md,
+  },
+  sessionHeaderStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   sessionCopy: {
     flex: 1,

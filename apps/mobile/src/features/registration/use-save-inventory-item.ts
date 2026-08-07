@@ -13,8 +13,12 @@ export const useSaveInventoryItem = () => {
   const { sessionUserId } = useAuth();
 
   return useMutation({
-    mutationFn: (payload: Parameters<typeof createInventoryItem>[0]) =>
-      createInventoryItem(payload, activeSpaceId),
+    mutationFn: (payload: Parameters<typeof createInventoryItem>[0]) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return createInventoryItem(payload, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(

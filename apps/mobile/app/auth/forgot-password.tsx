@@ -57,7 +57,7 @@ export default function ForgotPasswordScreen() {
       <EmailDomainInput
         value={email}
         onChangeText={setEmail}
-        placeholder="아이디"
+        placeholder="이메일"
       />
     </Screen>
   );
@@ -72,6 +72,7 @@ function getErrorMessage(error: unknown) {
 const styles = StyleSheet.create({
   hero: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
     backgroundColor: colors.primarySoft,
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
   },
   heroText: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,

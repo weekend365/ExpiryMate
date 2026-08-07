@@ -15,15 +15,25 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { AppState } from "react-native";
 import { listInventorySpaces } from "../../services/api";
+import { captureSpaceBootstrapBreadcrumb } from "../../services/sentry";
 import { useAuth } from "../auth/use-auth";
 import {
   sessionQueryKeys,
   withSessionUser,
 } from "../auth/session-boundary";
+import {
+  STALLED_INITIAL_FETCH_MESSAGE,
+  useEnsureEnabledQueryFetch,
+} from "./ensure-enabled-query-fetch";
+import {
+  prefetchActiveSpaceQueries,
+  refetchActiveSpaceQueries,
+} from "./prefetch-space-queries";
 import { chooseActiveInventorySpace } from "./space-selection";
 
 type HydratedSelection = {
@@ -47,50 +57,159 @@ type SpaceContextValue = {
 
 const SpaceContext = createContext<SpaceContextValue | null>(null);
 
+const EMPTY_SPACES_MESSAGE =
+  "내 냉장고를 아직 찾지 못했어요. 다시 한번 불러와 볼까요?";
+const MAX_EMPTY_SPACES_RETRIES = 3;
+/** AsyncStorage selection restore must not block boot forever. */
+export const SELECTION_HYDRATION_TIMEOUT_MS = 2_000;
+/** Show a recoverable retry if spaces never resolve. */
+export const SPACE_BOOTSTRAP_STALL_MS = 8_000;
+
 export function SpaceProvider({ children }: PropsWithChildren) {
   const { sessionUserId } = useAuth();
   const queryClient = useQueryClient();
   const [hydratedSelection, setHydratedSelection] =
     useState<HydratedSelection | null>(null);
+  const [selectionHydrateEpoch, setSelectionHydrateEpoch] = useState(0);
+  const [bootstrapStalled, setBootstrapStalled] = useState(false);
+  const emptySpacesRetryCountRef = useRef(0);
+  const [emptySpacesRetries, setEmptySpacesRetries] = useState(0);
+  /** Explicit picks (invite accept, switcher, notification) wait for list refresh. */
+  const pendingExplicitSpaceIdRef = useRef<string | null>(null);
   const query = useQuery({
     queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
     queryFn: listInventorySpaces,
     enabled: Boolean(sessionUserId),
+    refetchOnMount: "always",
+  });
+
+  useEnsureEnabledQueryFetch({
+    enabled: Boolean(sessionUserId),
+    data: query.data,
+    isPending: query.isPending,
+    isFetching: query.isFetching,
+    fetchStatus: query.fetchStatus,
+    refetch: query.refetch,
+    fetchEpoch: sessionUserId,
   });
 
   useEffect(() => {
     if (!sessionUserId) {
       setHydratedSelection(null);
+      emptySpacesRetryCountRef.current = 0;
+      setEmptySpacesRetries(0);
+      setBootstrapStalled(false);
+      pendingExplicitSpaceIdRef.current = null;
       return;
     }
 
     let cancelled = false;
+    let settled = false;
+
+    const finish = (spaceId: string | null) => {
+      if (cancelled || settled) {
+        return;
+      }
+      settled = true;
+      setHydratedSelection({ userId: sessionUserId, spaceId });
+    };
+
+    const timer = setTimeout(() => {
+      finish(null);
+      captureSpaceBootstrapBreadcrumb("selection_hydrate_timeout", {
+        userIdPresent: true,
+      });
+    }, SELECTION_HYDRATION_TIMEOUT_MS);
+
     AsyncStorage.getItem(selectionStorageKey(sessionUserId))
       .then((spaceId) => {
-        if (!cancelled) {
-          setHydratedSelection({ userId: sessionUserId, spaceId });
-        }
+        clearTimeout(timer);
+        finish(spaceId);
       })
       .catch(() => {
-        if (!cancelled) {
-          setHydratedSelection({ userId: sessionUserId, spaceId: null });
-        }
+        clearTimeout(timer);
+        finish(null);
       });
 
     return () => {
       cancelled = true;
+      clearTimeout(timer);
     };
-  }, [sessionUserId]);
+  }, [sessionUserId, selectionHydrateEpoch]);
 
-  const spaces = useMemo(() => query.data ?? [], [query.data]);
+  const spaces = useMemo(
+    () => (Array.isArray(query.data) ? query.data : []),
+    [query.data],
+  );
   const selectionHydrated =
     Boolean(sessionUserId) && hydratedSelection?.userId === sessionUserId;
+  const spacesListSettled =
+    Boolean(sessionUserId) &&
+    selectionHydrated &&
+    !query.isPending &&
+    !query.isFetching;
+  const requestedSpaceId = hydratedSelection?.spaceId ?? null;
+  const requestedMissingFromList = Boolean(
+    requestedSpaceId &&
+      !spaces.some((space) => space.id === requestedSpaceId),
+  );
+  const waitingForRequestedSpace =
+    requestedMissingFromList &&
+    (query.isPending ||
+      query.isFetching ||
+      pendingExplicitSpaceIdRef.current === requestedSpaceId);
+
   const activeSpace = useMemo(() => {
     if (!selectionHydrated) {
       return null;
     }
-    return chooseActiveInventorySpace(spaces, hydratedSelection?.spaceId);
-  }, [hydratedSelection?.spaceId, selectionHydrated, spaces]);
+    return chooseActiveInventorySpace(spaces, requestedSpaceId, {
+      allowFallbackWhenMissing: !waitingForRequestedSpace,
+    });
+  }, [
+    requestedSpaceId,
+    selectionHydrated,
+    spaces,
+    waitingForRequestedSpace,
+  ]);
+
+  useEffect(() => {
+    if (
+      pendingExplicitSpaceIdRef.current &&
+      spaces.some((space) => space.id === pendingExplicitSpaceIdRef.current)
+    ) {
+      pendingExplicitSpaceIdRef.current = null;
+    }
+  }, [spaces]);
+
+  const missingSpaces =
+    spacesListSettled &&
+    spaces.length === 0 &&
+    !query.isError &&
+    !waitingForRequestedSpace;
+
+  useEffect(() => {
+    if (!missingSpaces) {
+      if (spaces.length > 0 && emptySpacesRetries !== 0) {
+        emptySpacesRetryCountRef.current = 0;
+        setEmptySpacesRetries(0);
+      }
+      return;
+    }
+
+    if (emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES) {
+      return;
+    }
+
+    const attempt = emptySpacesRetries + 1;
+    const timer = setTimeout(() => {
+      emptySpacesRetryCountRef.current = attempt;
+      setEmptySpacesRetries(attempt);
+      void query.refetch();
+    }, 400 * attempt);
+
+    return () => clearTimeout(timer);
+  }, [missingSpaces, emptySpacesRetries, query.refetch, spaces.length]);
 
   useEffect(() => {
     if (
@@ -100,16 +219,54 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     ) {
       return;
     }
+    // Never persist a personal fallback while we are still waiting for an
+    // explicitly requested (or restored) shared space id to appear in the list.
+    if (waitingForRequestedSpace) {
+      return;
+    }
     setHydratedSelection({ userId: sessionUserId, spaceId: activeSpace.id });
     AsyncStorage.setItem(
       selectionStorageKey(sessionUserId),
       activeSpace.id,
     ).catch(() => null);
-  }, [activeSpace, hydratedSelection?.spaceId, sessionUserId]);
+  }, [
+    activeSpace,
+    hydratedSelection?.spaceId,
+    sessionUserId,
+    waitingForRequestedSpace,
+  ]);
+
+  useEffect(() => {
+    if (!sessionUserId || !activeSpace?.id) {
+      return;
+    }
+
+    const spaceId = activeSpace.id;
+    captureSpaceBootstrapBreadcrumb("active_space_ready", {
+      spaceIdPresent: true,
+      spaceType: activeSpace.type,
+    });
+
+    void prefetchActiveSpaceQueries(queryClient, sessionUserId, spaceId)
+      .catch(() => undefined)
+      .finally(() => {
+        void refetchActiveSpaceQueries(
+          queryClient,
+          sessionUserId,
+          spaceId,
+        ).catch(() => undefined);
+      });
+  }, [activeSpace?.id, activeSpace?.type, queryClient, sessionUserId]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active" || !sessionUserId || !activeSpace?.id) {
+      if (state !== "active" || !sessionUserId) {
+        return;
+      }
+      void queryClient.invalidateQueries({
+        queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
+      });
+      if (!activeSpace?.id) {
         return;
       }
       void Promise.all(
@@ -134,19 +291,89 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       if (!sessionUserId) {
         return;
       }
+      pendingExplicitSpaceIdRef.current = spaceId;
       setHydratedSelection({ userId: sessionUserId, spaceId });
       AsyncStorage.setItem(selectionStorageKey(sessionUserId), spaceId).catch(
         () => null,
       );
+      void queryClient.invalidateQueries({
+        queryKey: withSessionUser(sessionQueryKeys.spaces, sessionUserId),
+      });
     },
-    [sessionUserId],
+    [queryClient, sessionUserId],
   );
 
-  // Keep the switcher in a loading state until both the saved selection and
-  // the spaces list are ready. Otherwise a fast/cached spaces response can
-  // clear isLoading while activeSpace is still null, and SpaceSwitcher hides.
+  const refetchSpaces = useCallback(async () => {
+    emptySpacesRetryCountRef.current = 0;
+    setEmptySpacesRetries(0);
+    setBootstrapStalled(false);
+    if (sessionUserId) {
+      setSelectionHydrateEpoch((epoch) => epoch + 1);
+      captureSpaceBootstrapBreadcrumb("spaces_refetch", {
+        userIdPresent: true,
+        fetchStatus: query.fetchStatus,
+        isPending: query.isPending,
+      });
+    }
+    return query.refetch();
+  }, [query.fetchStatus, query.isPending, query.refetch, sessionUserId]);
+
+  const emptySpacesError =
+    missingSpaces && emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES
+      ? new Error(EMPTY_SPACES_MESSAGE)
+      : null;
+
   const isLoading =
-    Boolean(sessionUserId) && (!selectionHydrated || query.isPending);
+    Boolean(sessionUserId) &&
+    (!selectionHydrated ||
+      query.isPending ||
+      query.isFetching ||
+      waitingForRequestedSpace ||
+      (missingSpaces && emptySpacesRetries < MAX_EMPTY_SPACES_RETRIES));
+
+  const isReady =
+    !sessionUserId ||
+    (selectionHydrated &&
+      !query.isPending &&
+      !waitingForRequestedSpace &&
+      Boolean(activeSpace));
+
+  useEffect(() => {
+    if (!sessionUserId || isReady || query.isError || emptySpacesError) {
+      setBootstrapStalled(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setBootstrapStalled(true);
+      captureSpaceBootstrapBreadcrumb("bootstrap_stalled", {
+        userIdPresent: true,
+        selectionHydrated,
+        fetchStatus: query.fetchStatus,
+        isPending: query.isPending,
+        isFetching: query.isFetching,
+        spacesCount: spaces.length,
+        waitingForRequestedSpace,
+      });
+    }, SPACE_BOOTSTRAP_STALL_MS);
+
+    return () => clearTimeout(timer);
+  }, [
+    emptySpacesError,
+    isReady,
+    query.fetchStatus,
+    query.isError,
+    query.isFetching,
+    query.isPending,
+    selectionHydrated,
+    sessionUserId,
+    spaces.length,
+    waitingForRequestedSpace,
+  ]);
+
+  const stalledError = bootstrapStalled
+    ? new Error(STALLED_INITIAL_FETCH_MESSAGE)
+    : null;
 
   const value = useMemo<SpaceContextValue>(
     () => ({
@@ -154,24 +381,27 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       activeSpace,
       activeSpaceId: activeSpace?.id,
       activeRole: activeSpace?.myRole,
-      isReady:
-        !sessionUserId ||
-        (selectionHydrated && !query.isPending && Boolean(activeSpace)),
-      isLoading,
-      error: query.error instanceof Error ? query.error : null,
+      isReady,
+      isLoading: isLoading && !bootstrapStalled && !query.isError && !emptySpacesError,
+      error:
+        query.error instanceof Error
+          ? query.error
+          : emptySpacesError ?? stalledError,
       setActiveSpaceId,
-      refetchSpaces: query.refetch,
+      refetchSpaces,
     }),
     [
       activeSpace,
+      bootstrapStalled,
+      emptySpacesError,
       isLoading,
+      isReady,
       query.error,
-      query.isPending,
-      query.refetch,
-      selectionHydrated,
-      sessionUserId,
+      query.isError,
+      refetchSpaces,
       setActiveSpaceId,
       spaces,
+      stalledError,
     ],
   );
 

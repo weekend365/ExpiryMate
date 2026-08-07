@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
+import { EmptyState } from "../../src/components/EmptyState";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { ListRow } from "../../src/components/ListRow";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
@@ -31,6 +33,8 @@ export default function StorageLocationsSettingsScreen() {
   const [labelDraft, setLabelDraft] = useState("");
 
   const editing = query.data?.custom.find((item) => item.id === editId) ?? null;
+  const hasLoadedLocations = query.data !== undefined;
+  const loadErrorMessage = getSettingsErrorMessage(query.error);
 
   const openAdd = () => {
     setLabelDraft("");
@@ -110,13 +114,42 @@ export default function StorageLocationsSettingsScreen() {
           : "이 냉장고에서 함께 쓰는 보관 위치예요."
       }
       footer={
-        canManage ? (
+        canManage && hasLoadedLocations ? (
           <Button onPress={openAdd} fullWidth>
             위치 추가
           </Button>
         ) : undefined
       }
     >
+      {query.isPending && !hasLoadedLocations ? (
+        <EmptyState
+          mood="think"
+          title="보관 위치를 펼치고 있어요"
+          description="냉장고에서 사용하는 위치를 확인하고 있어요."
+        />
+      ) : query.isError && !hasLoadedLocations ? (
+        <EmptyState
+          mood="worry"
+          title="보관 위치를 불러오지 못했어요"
+          description={loadErrorMessage}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void query.refetch();
+          }}
+        />
+      ) : (
+        <>
+          {query.isError ? (
+            <FeedbackBanner
+              showMascot={false}
+              title="최신 보관 위치를 확인하지 못했어요"
+              description="저장된 위치는 그대로 보여드리고 있어요."
+              actionLabel="다시 확인할게요"
+              onAction={() => {
+                void query.refetch();
+              }}
+            />
+          ) : null}
       <View style={styles.section}>
         <SectionHeader
           title="기본 위치"
@@ -219,6 +252,8 @@ export default function StorageLocationsSettingsScreen() {
       >
         <LabelField value={labelDraft} onChange={setLabelDraft} />
       </BottomSheet>
+        </>
+      )}
     </Screen>
   );
 }

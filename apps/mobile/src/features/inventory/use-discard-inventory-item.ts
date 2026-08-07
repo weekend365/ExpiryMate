@@ -13,7 +13,12 @@ export const useDiscardInventoryItem = () => {
   const { activeSpaceId } = useActiveSpace();
 
   return useMutation({
-    mutationFn: (id: string) => discardInventoryItem(id, activeSpaceId),
+    mutationFn: (id: string) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return discardInventoryItem(id, activeSpaceId);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(

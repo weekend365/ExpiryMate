@@ -2,12 +2,17 @@ import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { useIsRestoring } from "@tanstack/react-query";
+import { useEffect, type ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { AuthRedirectGate } from "../src/features/auth/auth-gate";
+import { HeaderBackButton } from "../src/components/HeaderBackButton";
+import {
+  AuthLoadingScreen,
+  AuthRedirectGate,
+} from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
 import { MonetizationProvider } from "../src/features/monetization/monetization-provider";
@@ -15,7 +20,11 @@ import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generat
 import { SpaceProvider } from "../src/features/spaces/space-provider";
 import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
 import { syncPushTokenIfPermissionGranted } from "../src/services/notifications";
-import { queryClient } from "../src/services/query-client";
+import {
+  queryCachePersistOptions,
+  queryClient,
+  refreshRestoredQueries,
+} from "../src/services/query-client";
 import { initMobileSentry } from "../src/services/sentry";
 import { pretendardFonts } from "../src/shared/fonts";
 import { colors, fontFamily, typography } from "../src/shared/theme";
@@ -40,17 +49,22 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.background }}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <SpaceProvider>
-            <MonetizationProvider>
-              <RecipeGenerationProvider>
-              <PushTokenSync />
-              <PendingSpaceInvitationBridge />
-              <NotificationNavigationBridge />
-              <AuthRedirectGate />
-              <StatusBar style="dark" />
-              <Stack
-              screenOptions={{
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={queryCachePersistOptions}
+          onSuccess={refreshRestoredQueries}
+        >
+          <QueryCacheRestoreBoundary>
+            <SpaceProvider>
+              <MonetizationProvider>
+                <RecipeGenerationProvider>
+                  <PushTokenSync />
+                  <PendingSpaceInvitationBridge />
+                  <NotificationNavigationBridge />
+                  <AuthRedirectGate />
+                  <StatusBar style="dark" />
+                  <Stack
+              screenOptions={({ navigation }) => ({
                 contentStyle: {
                   backgroundColor: colors.background,
                 },
@@ -62,7 +76,12 @@ export default function RootLayout() {
                 headerBackTitleStyle: {
                   fontFamily: fontFamily.medium,
                 },
-              }}
+                headerBackTitle: "뒤로가기",
+                headerLeft: () =>
+                  navigation.canGoBack() ? (
+                    <HeaderBackButton onPress={() => navigation.goBack()} />
+                  ) : undefined,
+              })}
             >
               <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="onboarding" options={{ headerShown: false }} />
@@ -70,10 +89,10 @@ export default function RootLayout() {
                 name="(tabs)"
                 options={{
                   headerShown: false,
-                  // Fallback when tab sync has not run yet; tabs layout keeps this
-                  // aligned with the active tab (홈/보관함/추천/설정).
-                  title: "홈",
-                  headerBackTitle: "홈",
+                  // Native stack uses the previous scene's options for the iOS
+                  // back label, so keep the hidden tabs scene label explicit.
+                  title: "뒤로가기",
+                  headerBackTitle: "뒤로가기",
                 }}
               />
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
@@ -146,14 +165,25 @@ export default function RootLayout() {
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />
-              </Stack>
-              </RecipeGenerationProvider>
-            </MonetizationProvider>
-          </SpaceProvider>
-        </QueryClientProvider>
+                  </Stack>
+                </RecipeGenerationProvider>
+              </MonetizationProvider>
+            </SpaceProvider>
+          </QueryCacheRestoreBoundary>
+        </PersistQueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
+}
+
+function QueryCacheRestoreBoundary({ children }: { children: ReactNode }) {
+  const isRestoring = useIsRestoring();
+
+  if (isRestoring) {
+    return <AuthLoadingScreen />;
+  }
+
+  return <>{children}</>;
 }
 
 function PushTokenSync() {

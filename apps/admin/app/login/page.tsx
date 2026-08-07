@@ -59,28 +59,41 @@ export default function AdminLoginPage() {
         </p>
 
         <div className="mt-8 space-y-4">
-          <input
-            name="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            type="email"
-            placeholder="이메일"
-            className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
-          />
-          <input
-            name="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            type="password"
-            placeholder="비밀번호"
-            className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
-          />
+          <label className="grid gap-2 text-sm font-semibold">
+            이메일
+            <input
+              name="email"
+              autoComplete="email"
+              spellCheck={false}
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              type="email"
+              placeholder="admin@example.com"
+              className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
+            />
+          </label>
+          <label className="grid gap-2 text-sm font-semibold">
+            비밀번호
+            <input
+              name="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              type="password"
+              placeholder="비밀번호"
+              className="h-12 w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 text-sm outline-none"
+            />
+          </label>
         </div>
 
         {errorMessage ? (
-          <div className="mt-4 rounded-[var(--radius-lg)] bg-[var(--danger-soft)] px-4 py-3 text-sm font-semibold text-[var(--danger)]">
+          <div
+            role="alert"
+            aria-live="polite"
+            className="mt-4 rounded-[var(--radius-lg)] bg-[var(--danger-soft)] px-4 py-3 text-sm font-semibold text-[var(--danger)]"
+          >
             {errorMessage}
           </div>
         ) : null}
@@ -90,7 +103,7 @@ export default function AdminLoginPage() {
           disabled={!email || !password || isSubmitting}
           className="mt-6 h-12 w-full rounded-[var(--radius-lg)] bg-[var(--primary)] text-sm font-black text-[var(--surface)] disabled:cursor-not-allowed disabled:bg-[var(--border)]"
         >
-          {isSubmitting ? "들어가는 중이에요" : "들어갈게요"}
+          {isSubmitting ? "들어가는 중이에요…" : "들어갈게요"}
         </button>
       </form>
     </main>

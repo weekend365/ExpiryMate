@@ -44,6 +44,26 @@ async function main() {
     },
   });
 
+  // Dedicated local/CI account for mobile layout smoke tests. Production
+  // seeding is rejected at the top of this file.
+  const e2eUserPassword = process.env.E2E_USER_PASSWORD ?? "demo1234!";
+  const e2eUserId = "layout-e2e-user";
+  await prisma.user.create({
+    data: {
+      id: e2eUserId,
+      accountType: AccountType.registered,
+      role: UserRole.user,
+      email: "demo@gmail.com",
+      displayName: "Layout E2E User",
+      emailVerifiedAt: new Date(),
+      passwordCredential: {
+        create: {
+          passwordHash: await argon2.hash(e2eUserPassword),
+        },
+      },
+    },
+  });
+
   const adminEmail = process.env.ADMIN_EMAIL ?? "admin@expirymate.local";
   const adminPassword = process.env.ADMIN_PASSWORD ?? "admin1234";
   await prisma.user.create({
@@ -143,9 +163,9 @@ async function main() {
   };
 
   await prisma.inventoryItem.createMany({
-    data: [
+    data: ["demo-user", e2eUserId].flatMap((ownerKey) => [
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("서울우유 1L").id,
         displayName: "서울우유 1L",
         brand: "서울우유",
@@ -161,7 +181,7 @@ async function main() {
         notes: "아침 시리얼용",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("계란 10구").id,
         displayName: "계란 10구",
         brand: "행복란",
@@ -177,7 +197,7 @@ async function main() {
         notes: "주말 브런치용",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("두부").id,
         displayName: "두부",
         brand: "풀무원",
@@ -192,7 +212,7 @@ async function main() {
         notes: "찌개용",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("플레인 요거트").id,
         displayName: "플레인 요거트",
         brand: "매일",
@@ -207,7 +227,7 @@ async function main() {
         notes: "",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("오렌지 주스").id,
         displayName: "오렌지 주스",
         brand: "델몬트",
@@ -222,7 +242,7 @@ async function main() {
         notes: "손님용",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("컵라면").id,
         displayName: "컵라면",
         brand: "농심",
@@ -237,7 +257,7 @@ async function main() {
         notes: "",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("샴푸").id,
         displayName: "샴푸",
         brand: "려",
@@ -252,7 +272,7 @@ async function main() {
         notes: "",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("냉동 만두").id,
         displayName: "냉동 만두",
         brand: "비비고",
@@ -267,7 +287,7 @@ async function main() {
         notes: "야식 후보",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("휴지").id,
         displayName: "휴지",
         brand: "크리넥스",
@@ -282,7 +302,7 @@ async function main() {
         notes: "재구매 여유 있음",
       },
       {
-        ownerKey: "demo-user",
+        ownerKey,
         productId: requireProduct("세제").id,
         displayName: "세제",
         brand: "피죤",
@@ -296,18 +316,18 @@ async function main() {
         status: ItemStatus.consumed,
         notes: "리필 구매 예정",
       },
-    ],
+    ]),
   });
 
-  await prisma.notificationPreference.create({
-    data: {
-      ownerKey: "demo-user",
+  await prisma.notificationPreference.createMany({
+    data: ["demo-user", e2eUserId].map((ownerKey) => ({
+      ownerKey,
       enabled: true,
       reminderDaysBefore: [1, 3, 7],
       remindOnDayOf: true,
       quietHoursStart: "22:00",
       quietHoursEnd: "07:00",
-    },
+    })),
   });
 
 }
