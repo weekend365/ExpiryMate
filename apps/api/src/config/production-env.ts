@@ -28,6 +28,10 @@ const REQUIRED_PRODUCTION_VALUES = [
   "RECIPE_REWARDED_DAILY_LIMIT",
   "RECIPE_SUBSCRIBER_DAILY_LIMIT",
   "RECIPE_ABSOLUTE_DAILY_LIMIT",
+  "BARCODE_REWARDS_ENABLED",
+  "BARCODE_REWARD_ROLLOUT_PERCENT",
+  "BARCODE_REWARD_DAILY_LIMIT",
+  "BARCODE_REWARD_BALANCE_LIMIT",
   "REWARDED_ADS_ENABLED",
   "SUBSCRIPTIONS_ENABLED",
 ] as const;
@@ -264,6 +268,7 @@ function validateAppleStoreEnvironment(env: EnvMap, errors: string[]) {
 function validateMonetization(env: EnvMap, errors: string[]) {
   validateBooleanFlag(env, "REWARDED_ADS_ENABLED", errors);
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
+  validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
 
   for (const key of [
     "RECIPE_FREE_DAILY_LIMIT",
@@ -274,6 +279,62 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     const value = Number(env[key]);
     if (!Number.isInteger(value) || value < 0) {
       errors.push(`${key} must be a non-negative integer.`);
+    }
+  }
+
+  for (const key of [
+    "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT",
+    "RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT",
+    "RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT",
+    "BARCODE_REWARD_ROLLOUT_PERCENT",
+    "BARCODE_REWARD_DAILY_LIMIT",
+    "BARCODE_REWARD_BALANCE_LIMIT",
+  ]) {
+    if (env[key] === undefined || env[key] === "") continue;
+    const value = Number(env[key]);
+    if (!Number.isInteger(value) || value < 0) {
+      errors.push(`${key} must be a non-negative integer.`);
+    }
+  }
+
+  const rolloutPercent = Number(
+    env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT ?? 0,
+  );
+  if (Number.isFinite(rolloutPercent) && rolloutPercent > 100) {
+    errors.push(
+      "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT must be between 0 and 100.",
+    );
+  }
+  if (
+    Number.isFinite(rolloutPercent) &&
+    rolloutPercent > 0 &&
+    !env.MONETIZATION_EXPERIMENT_SALT?.trim()
+  ) {
+    errors.push(
+      "MONETIZATION_EXPERIMENT_SALT is required when the monetization experiment is enabled.",
+    );
+  }
+
+  const barcodeRolloutPercent = Number(
+    env.BARCODE_REWARD_ROLLOUT_PERCENT ?? 0,
+  );
+  if (
+    Number.isFinite(barcodeRolloutPercent) &&
+    barcodeRolloutPercent > 100
+  ) {
+    errors.push("BARCODE_REWARD_ROLLOUT_PERCENT must be between 0 and 100.");
+  }
+  if (isEnabled(env.BARCODE_REWARDS_ENABLED)) {
+    requireFeatureValue(
+      env,
+      "BARCODE_REWARD_TOKEN_SECRET",
+      "BARCODE_REWARDS_ENABLED",
+      errors,
+    );
+    if (!env.MONETIZATION_EXPERIMENT_SALT?.trim()) {
+      errors.push(
+        "MONETIZATION_EXPERIMENT_SALT is required when barcode rewards are enabled.",
+      );
     }
   }
 

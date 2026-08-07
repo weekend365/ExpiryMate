@@ -87,6 +87,7 @@ enum SubscriptionBillingPeriod {
 enum RecommendationUsageSource {
   free
   rewarded_ad
+  barcode_contribution
   subscription
 }
 
@@ -166,6 +167,8 @@ model User {
   subscriptionEntitlements   SubscriptionEntitlement[]
   recommendationUsageEvents  RecommendationUsageEvent[]
   rewardedAdSessions         RewardedAdSession[]
+  barcodeRewardCredits       BarcodeRewardCredit[]
+  monetizationFunnelEvents   MonetizationFunnelEvent[]
   pushTokens                 PushToken[]
   pushNotificationDeliveries PushNotificationDelivery[]
   supportInquiries           SupportInquiry[]
@@ -331,6 +334,7 @@ model ProductMaster {
   contributedByUserId String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  rewardCredit        BarcodeRewardCredit?
 
   @@index([name])
   @@index([category])
@@ -449,6 +453,20 @@ model RewardedAdSession {
   @@index([status, verificationExpiresAt])
 }
 
+model BarcodeRewardCredit {
+  id              String   @id @default(cuid())
+  ownerKey        String
+  owner           User     @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  productMasterId String   @unique
+  productMaster   ProductMaster @relation(fields: [productMasterId], references: [id], onDelete: Restrict)
+  earnedDay       DateTime
+  createdAt       DateTime @default(now())
+  usageEvent      RecommendationUsageEvent?
+
+  @@index([ownerKey, earnedDay])
+  @@index([ownerKey, createdAt])
+}
+
 model RecommendationUsageEvent {
   id                  String                    @id @default(cuid())
   ownerKey            String
@@ -461,6 +479,8 @@ model RecommendationUsageEvent {
   recommendation      RecipeRecommendation?     @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
   rewardedAdSessionId String?                   @unique
   rewardedAdSession   RewardedAdSession?        @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  barcodeRewardCreditId String?                 @unique
+  barcodeRewardCredit   BarcodeRewardCredit?    @relation(fields: [barcodeRewardCreditId], references: [id], onDelete: SetNull)
   releaseReason       String?
   completedAt         DateTime?
   releasedAt          DateTime?
@@ -512,6 +532,21 @@ model SubscriptionEntitlement {
   @@unique([store, purchaseTokenHash])
   @@index([ownerKey, isActive, expiresAt])
   @@index([store, productId])
+}
+
+model MonetizationFunnelEvent {
+  id                String   @id @default(cuid())
+  ownerKey          String
+  owner             User     @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  eventName         String
+  experimentKey     String
+  experimentVariant String
+  properties        Json?
+  createdAt         DateTime @default(now())
+
+  @@index([eventName, createdAt])
+  @@index([experimentKey, experimentVariant, createdAt])
+  @@index([ownerKey, createdAt])
 }
 
 model PushToken {

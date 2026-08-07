@@ -67,7 +67,7 @@ export default function SettingsScreen() {
           {monetization.access?.subscriptionsEnabled ? (
             <ListRow
               title="장고 플러스"
-              description="광고 제거와 하루 30회 추천 혜택을 살펴봐요."
+              description={`광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`}
               icon={CreditCard}
               onPress={() => router.push("/settings/subscription")}
             />

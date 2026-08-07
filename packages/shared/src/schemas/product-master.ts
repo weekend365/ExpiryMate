@@ -26,7 +26,19 @@ export const barcodeLookupResultSchema = z.object({
   imageUrl: z.string().url().nullable(),
   source: z.nativeEnum(BarcodeLookupSource),
   productMasterId: z.string().nullable(),
+  contributionToken: z.string().optional(),
 });
+
+export const barcodeRewardReasonSchema = z.enum([
+  "granted",
+  "existing_barcode",
+  "invalid_gtin",
+  "lookup_unverified",
+  "insufficient_product_data",
+  "daily_limit_reached",
+  "balance_limit_reached",
+  "rewards_disabled",
+]);
 
 const optionalContributeText = (max: number) =>
   z.preprocess((value) => {
@@ -47,8 +59,10 @@ export const contributeBarcodeProductSchema = z.object({
   name: z.string().trim().min(1).max(fieldLimits.displayName),
   brand: optionalContributeText(fieldLimits.brand),
   category: optionalContributeText(fieldLimits.brand),
+  contributionToken: z.string().max(2048).optional(),
 });
 
 export type ContributeBarcodeProductRequest = z.output<
   typeof contributeBarcodeProductSchema
 >;
+export type BarcodeRewardReason = z.infer<typeof barcodeRewardReasonSchema>;

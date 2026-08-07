@@ -11,6 +11,8 @@ import {
 import {
   createRewardedAdSessionRequestSchema,
   type CreateRewardedAdSessionRequest,
+  trackMonetizationEventRequestSchema,
+  type TrackMonetizationEventRequest,
 } from "@expirymate/shared";
 import type { Request } from "express";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
@@ -36,6 +38,16 @@ export class MonetizationController {
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.monetization.createRewardedAdSession(ownerKey, body.platform);
+  }
+
+  @Post("events")
+  @UseGuards(RegisteredGuard)
+  trackFunnelEvent(
+    @Body(new ZodValidationPipe(trackMonetizationEventRequestSchema))
+    body: TrackMonetizationEventRequest,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.monetization.trackFunnelEvent(ownerKey, body);
   }
 
   @Get("rewarded-ad-sessions/:id")

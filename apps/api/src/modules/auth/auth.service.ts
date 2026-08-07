@@ -792,6 +792,14 @@ export class AuthService {
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
+      await tx.barcodeRewardCredit.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.monetizationFunnelEvent.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
       await tx.pushToken.updateMany({
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },

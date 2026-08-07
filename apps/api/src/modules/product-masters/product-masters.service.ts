@@ -1,17 +1,21 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-} from "@nestjs/common";
+import { createHmac, timingSafeEqual } from "node:crypto";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
 import {
   BarcodeLookupSource,
   type BarcodeLookupResult,
+  type BarcodeRewardReason,
   type ContributeBarcodeProductRequest,
   type ContributeBarcodeProductResponse,
+  getKstDayWindow,
   ProductMasterSource,
 } from "@expirymate/shared";
-import { PrismaService } from "../../database/prisma.service";
 import { serializeProductMaster } from "../../common/serializers";
+import { PrismaService } from "../../database/prisma.service";
+import {
+  barcodeRewardsGloballyEnabled,
+  resolveBarcodeRewardPolicy,
+} from "../monetization/barcode-reward-policy";
 
 type OpenFoodFactsResponse = {
   status?: number;
@@ -24,6 +28,25 @@ type OpenFoodFactsResponse = {
   };
 };
 
+type OpenFoodFactsProduct = {
+  name: string;
+  brand: string;
+  category: string;
+  imageUrl: string | null;
+};
+
+type OpenFoodFactsLookup =
+  | { kind: "found"; product: OpenFoodFactsProduct }
+  | { kind: "not_found" }
+  | { kind: "unavailable" };
+
+type RewardSnapshot = {
+  balance: number;
+  earnedToday: number;
+};
+
+const CONTRIBUTION_TOKEN_TTL_MS = 15 * 60 * 1000;
+
 @Injectable()
 export class ProductMastersService {
   private readonly logger = new Logger(ProductMastersService.name);
@@ -32,7 +55,6 @@ export class ProductMastersService {
 
   async lookupByBarcode(rawBarcode: string): Promise<BarcodeLookupResult> {
     const barcode = normalizeBarcode(rawBarcode);
-
     if (!barcode) {
       throw new BadRequestException("올바른 바코드 번호를 입력해 주세요.");
     }
@@ -40,7 +62,6 @@ export class ProductMastersService {
     const local = await this.prisma.productMaster.findUnique({
       where: { barcode },
     });
-
     if (local) {
       return {
         barcode: local.barcode,
@@ -53,17 +74,18 @@ export class ProductMastersService {
       };
     }
 
-    const offProduct = await this.fetchOpenFoodFacts(barcode);
-
-    if (offProduct) {
-      const cached = await this.cacheOpenFoodFactsProduct(barcode, offProduct);
-
+    const offLookup = await this.fetchOpenFoodFacts(barcode);
+    if (offLookup.kind === "found") {
+      const cached = await this.cacheOpenFoodFactsProduct(
+        barcode,
+        offLookup.product,
+      );
       return {
         barcode,
-        name: offProduct.name,
-        brand: offProduct.brand,
-        category: offProduct.category,
-        imageUrl: offProduct.imageUrl,
+        name: offLookup.product.name,
+        brand: offLookup.product.brand,
+        category: offLookup.product.category,
+        imageUrl: offLookup.product.imageUrl,
         source: BarcodeLookupSource.OPEN_FOOD_FACTS,
         productMasterId: cached?.id ?? null,
       };
@@ -77,6 +99,10 @@ export class ProductMastersService {
       imageUrl: null,
       source: BarcodeLookupSource.NOT_FOUND,
       productMasterId: null,
+      contributionToken:
+        offLookup.kind === "not_found" && isValidGtin(barcode)
+          ? this.createContributionToken(barcode)
+          : undefined,
     };
   }
 
@@ -85,79 +111,258 @@ export class ProductMastersService {
     ownerKey: string,
   ): Promise<ContributeBarcodeProductResponse> {
     const barcode = normalizeBarcode(dto.barcode);
-
     if (!barcode) {
       throw new BadRequestException("올바른 바코드 번호를 입력해 주세요.");
     }
 
     const name = dto.name.trim();
-    const brand = dto.brand?.trim() || "알 수 없음";
-    const category = dto.category?.trim() || "기타";
-
+    const providedBrand = dto.brand?.trim();
+    const providedCategory = dto.category?.trim();
+    const brand = providedBrand || "브랜드 없음";
+    const category = providedCategory || "기타";
     if (!name) {
       throw new BadRequestException("재료명을 입력해 주세요.");
     }
 
-    const existing = await this.prisma.productMaster.findUnique({
-      where: { barcode },
-    });
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        return await this.prisma.$transaction(
+          async (tx) => {
+            const now = new Date();
+            const existing = await tx.productMaster.findUnique({
+              where: { barcode },
+            });
 
-    if (existing) {
-      // Authoritative catalog rows are never overwritten by user contributions.
-      if (existing.source !== ProductMasterSource.USER_CONTRIBUTED) {
-        return {
-          product: serializeProductMaster(existing),
-          created: false,
-        };
+            if (existing) {
+              let product = existing;
+              const canEdit =
+                existing.source === ProductMasterSource.USER_CONTRIBUTED &&
+                (!existing.contributedByUserId ||
+                  existing.contributedByUserId === ownerKey);
+              if (canEdit) {
+                product = await tx.productMaster.update({
+                  where: { barcode },
+                  data: {
+                    name,
+                    brand,
+                    category,
+                    contributedByUserId: ownerKey,
+                  },
+                });
+              }
+
+              return {
+                product: serializeProductMaster(product),
+                created: false,
+                reward: await this.buildDeniedReward(
+                  tx,
+                  ownerKey,
+                  now,
+                  "existing_barcode",
+                ),
+              };
+            }
+
+            const created = await tx.productMaster.create({
+              data: {
+                barcode,
+                name,
+                brand,
+                category,
+                source: ProductMasterSource.USER_CONTRIBUTED,
+                contributedByUserId: ownerKey,
+              },
+            });
+            const reward = await this.grantBarcodeReward(tx, {
+              ownerKey,
+              productMasterId: created.id,
+              barcode,
+              contributionToken: dto.contributionToken,
+              hasAdditionalData: Boolean(providedBrand || providedCategory),
+              now,
+            });
+
+            return {
+              product: serializeProductMaster(created),
+              created: true,
+              reward,
+            };
+          },
+          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+        );
+      } catch (error) {
+        if (isRetryableTransactionError(error) && attempt < 2) continue;
+        throw error;
       }
-
-      // Only the original contributor may edit; others keep the existing catalog entry.
-      // Orphaned rows (contributor cleared on account delete) may be adopted.
-      const canEdit =
-        !existing.contributedByUserId ||
-        existing.contributedByUserId === ownerKey;
-
-      if (!canEdit) {
-        return {
-          product: serializeProductMaster(existing),
-          created: false,
-        };
-      }
-
-      const updated = await this.prisma.productMaster.update({
-        where: { barcode },
-        data: {
-          name,
-          brand,
-          category,
-          contributedByUserId: ownerKey,
-        },
-      });
-
-      return {
-        product: serializeProductMaster(updated),
-        created: false,
-      };
     }
 
-    const created = await this.prisma.productMaster.create({
+    throw new Error("Barcode contribution transaction did not complete.");
+  }
+
+  private async grantBarcodeReward(
+    tx: Prisma.TransactionClient,
+    input: {
+      ownerKey: string;
+      productMasterId: string;
+      barcode: string;
+      contributionToken?: string;
+      hasAdditionalData: boolean;
+      now: Date;
+    },
+  ): Promise<ContributeBarcodeProductResponse["reward"]> {
+    const policy = resolveBarcodeRewardPolicy(input.ownerKey);
+    const snapshot = await this.getRewardSnapshot(tx, input.ownerKey, input.now);
+    let reason: BarcodeRewardReason | null = null;
+
+    if (!policy.enabled) reason = "rewards_disabled";
+    else if (!isValidGtin(input.barcode)) reason = "invalid_gtin";
+    else if (!this.verifyContributionToken(input.contributionToken, input.barcode)) {
+      reason = "lookup_unverified";
+    } else if (!input.hasAdditionalData) reason = "insufficient_product_data";
+    else if (snapshot.earnedToday >= policy.dailyLimit) {
+      reason = "daily_limit_reached";
+    } else if (snapshot.balance >= policy.balanceLimit) {
+      reason = "balance_limit_reached";
+    }
+
+    if (reason) {
+      await this.recordRewardEvent(tx, input.ownerKey, policy.cohort, reason);
+      return this.formatReward(policy, snapshot, reason);
+    }
+
+    await tx.barcodeRewardCredit.create({
       data: {
-        barcode,
-        name,
-        brand,
-        category,
-        source: ProductMasterSource.USER_CONTRIBUTED,
-        contributedByUserId: ownerKey,
+        ownerKey: input.ownerKey,
+        productMasterId: input.productMasterId,
+        earnedDay: getKstDayWindow(input.now).start,
       },
     });
+    const grantedSnapshot = {
+      balance: snapshot.balance + 1,
+      earnedToday: snapshot.earnedToday + 1,
+    };
+    await this.recordRewardEvent(tx, input.ownerKey, policy.cohort, "granted");
+    return this.formatReward(policy, grantedSnapshot, "granted");
+  }
 
+  private async buildDeniedReward(
+    tx: Prisma.TransactionClient,
+    ownerKey: string,
+    now: Date,
+    reason: BarcodeRewardReason,
+  ) {
+    const policy = resolveBarcodeRewardPolicy(ownerKey);
+    const snapshot = await this.getRewardSnapshot(tx, ownerKey, now);
+    await this.recordRewardEvent(tx, ownerKey, policy.cohort, reason);
+    return this.formatReward(policy, snapshot, reason);
+  }
+
+  private formatReward(
+    policy: ReturnType<typeof resolveBarcodeRewardPolicy>,
+    snapshot: RewardSnapshot,
+    reason: BarcodeRewardReason,
+  ): ContributeBarcodeProductResponse["reward"] {
     return {
-      product: serializeProductMaster(created),
-      created: true,
+      granted: reason === "granted",
+      creditsGranted: reason === "granted" ? 1 : 0,
+      balance: snapshot.balance,
+      earnedToday: snapshot.earnedToday,
+      dailyLimit: policy.dailyLimit,
+      balanceLimit: policy.balanceLimit,
+      reason,
     };
   }
 
-  private async fetchOpenFoodFacts(barcode: string) {
+  private async getRewardSnapshot(
+    tx: Prisma.TransactionClient,
+    ownerKey: string,
+    now: Date,
+  ): Promise<RewardSnapshot> {
+    const { start } = getKstDayWindow(now);
+    const [balance, earnedToday] = await Promise.all([
+      tx.barcodeRewardCredit.count({
+        where: { ownerKey, usageEvent: { is: null } },
+      }),
+      tx.barcodeRewardCredit.count({
+        where: { ownerKey, earnedDay: start },
+      }),
+    ]);
+    return { balance, earnedToday };
+  }
+
+  private async recordRewardEvent(
+    tx: Prisma.TransactionClient,
+    ownerKey: string,
+    cohort: "control" | "reward",
+    reason: BarcodeRewardReason,
+  ) {
+    await tx.monetizationFunnelEvent.create({
+      data: {
+        ownerKey,
+        eventName:
+          reason === "granted"
+            ? "barcode_reward_granted"
+            : "barcode_reward_denied",
+        experimentKey: "barcode-rewards-v1",
+        experimentVariant: cohort,
+        properties: { reason },
+      },
+    });
+  }
+
+  private createContributionToken(barcode: string) {
+    if (!barcodeRewardsGloballyEnabled()) return undefined;
+    const secret = process.env.BARCODE_REWARD_TOKEN_SECRET?.trim();
+    if (!secret) {
+      this.logger.warn("BARCODE_REWARD_TOKEN_SECRET is missing.");
+      return undefined;
+    }
+    const payload = Buffer.from(
+      JSON.stringify({
+        barcode,
+        expiresAt: Date.now() + CONTRIBUTION_TOKEN_TTL_MS,
+      }),
+      "utf8",
+    ).toString("base64url");
+    const signature = createHmac("sha256", secret)
+      .update(payload)
+      .digest("base64url");
+    return `${payload}.${signature}`;
+  }
+
+  private verifyContributionToken(token: string | undefined, barcode: string) {
+    const secret = process.env.BARCODE_REWARD_TOKEN_SECRET?.trim();
+    if (!token || !secret) return false;
+    const [payload, signature, extra] = token.split(".");
+    if (!payload || !signature || extra) return false;
+    const expected = createHmac("sha256", secret)
+      .update(payload)
+      .digest("base64url");
+    const actualBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expected);
+    if (
+      actualBuffer.length !== expectedBuffer.length ||
+      !timingSafeEqual(actualBuffer, expectedBuffer)
+    ) {
+      return false;
+    }
+    try {
+      const parsed = JSON.parse(
+        Buffer.from(payload, "base64url").toString("utf8"),
+      ) as { barcode?: unknown; expiresAt?: unknown };
+      return (
+        parsed.barcode === barcode &&
+        typeof parsed.expiresAt === "number" &&
+        parsed.expiresAt >= Date.now()
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  private async fetchOpenFoodFacts(
+    barcode: string,
+  ): Promise<OpenFoodFactsLookup> {
     try {
       const response = await fetch(
         `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(
@@ -171,15 +376,15 @@ export class ProductMastersService {
         },
       );
 
+      if (response.status === 404) return { kind: "not_found" };
       if (!response.ok) {
         this.logger.warn(`Open Food Facts lookup failed: HTTP ${response.status}`);
-        return null;
+        return { kind: "unavailable" };
       }
 
       const payload = (await response.json()) as OpenFoodFactsResponse;
-
       if (payload.status !== 1 || !payload.product) {
-        return null;
+        return { kind: "not_found" };
       }
 
       const name = [
@@ -188,17 +393,17 @@ export class ProductMastersService {
       ]
         .find((value) => typeof value === "string" && value.trim().length > 0)
         ?.trim();
-
-      if (!name) {
-        return null;
-      }
+      if (!name) return { kind: "not_found" };
 
       return {
-        name,
-        brand: payload.product.brands?.split(",")[0]?.trim() || "알 수 없음",
-        category:
-          payload.product.categories?.split(",")[0]?.trim() || "기타",
-        imageUrl: payload.product.image_url?.trim() || null,
+        kind: "found",
+        product: {
+          name,
+          brand: payload.product.brands?.split(",")[0]?.trim() || "브랜드 없음",
+          category:
+            payload.product.categories?.split(",")[0]?.trim() || "기타",
+          imageUrl: payload.product.image_url?.trim() || null,
+        },
       };
     } catch (error) {
       this.logger.warn(
@@ -206,18 +411,13 @@ export class ProductMastersService {
           error instanceof Error ? error.message : "unknown"
         }`,
       );
-      return null;
+      return { kind: "unavailable" };
     }
   }
 
   private async cacheOpenFoodFactsProduct(
     barcode: string,
-    product: {
-      name: string;
-      brand: string;
-      category: string;
-      imageUrl: string | null;
-    },
+    product: OpenFoodFactsProduct,
   ) {
     try {
       return await this.prisma.productMaster.create({
@@ -231,15 +431,10 @@ export class ProductMastersService {
         },
       });
     } catch (error) {
-      // Concurrent lookups may race on unique barcode; prefer existing row.
       const existing = await this.prisma.productMaster.findUnique({
         where: { barcode },
       });
-
-      if (existing) {
-        return existing;
-      }
-
+      if (existing) return existing;
       this.logger.warn(
         `Failed to cache Open Food Facts product ${barcode}: ${
           error instanceof Error ? error.message : "unknown"
@@ -252,14 +447,32 @@ export class ProductMastersService {
 
 export function normalizeBarcode(rawValue: string) {
   const digits = rawValue.replace(/\D/g, "");
-
-  if (digits.length === 12) {
-    return digits.padStart(13, "0");
-  }
-
+  if (digits.length === 12) return digits.padStart(13, "0");
   if (digits.length === 8 || digits.length === 13 || digits.length === 14) {
     return digits;
   }
-
   return null;
+}
+
+export function isValidGtin(value: string) {
+  if (!/^\d+$/.test(value) || ![8, 12, 13, 14].includes(value.length)) {
+    return false;
+  }
+  const digits = [...value].map(Number);
+  const checkDigit = digits.pop();
+  if (checkDigit === undefined) return false;
+  const sum = digits
+    .reverse()
+    .reduce(
+      (total, digit, index) => total + digit * (index % 2 === 0 ? 3 : 1),
+      0,
+    );
+  return (10 - (sum % 10)) % 10 === checkDigit;
+}
+
+function isRetryableTransactionError(error: unknown) {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    (error.code === "P2034" || error.code === "P2002")
+  );
 }

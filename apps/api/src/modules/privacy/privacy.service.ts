@@ -145,6 +145,8 @@ export class PrivacyService {
       await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
       await tx.recommendationUsageEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.rewardedAdSession.deleteMany({ where: { ownerKey: userId } });
+      await tx.barcodeRewardCredit.deleteMany({ where: { ownerKey: userId } });
+      await tx.monetizationFunnelEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
         where: {

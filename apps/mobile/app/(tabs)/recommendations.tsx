@@ -49,6 +49,7 @@ import {
 } from "../../src/features/recipes/use-recipe-recommendations";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import type { RecipeRecommendationPayload } from "../../src/services/api";
+import { trackMonetizationEvent } from "../../src/services/api";
 import {
   colors,
   radius,
@@ -132,6 +133,7 @@ export default function RecommendationsScreen() {
   const [pendingPayload, setPendingPayload] =
     useState<RecipeRecommendationPayload | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
+  const trackedQuotaEventRef = useRef<string | null>(null);
   const isGenerating = generationStatus === "pending";
 
   const latestRecommendation = useMemo(
@@ -186,6 +188,20 @@ export default function RecommendationsScreen() {
     : hasRecommendationResult
       ? "다시 골라볼게요"
       : "추천 받을게요";
+
+  useEffect(() => {
+    if (!isQuotaError || !monetization.access) return;
+    const eventKey = `${monetization.access.day}:${generationErrorCode ?? "quota"}`;
+    if (trackedQuotaEventRef.current === eventKey) return;
+    trackedQuotaEventRef.current = eventKey;
+    void trackMonetizationEvent({
+      event: "quota_exhausted",
+      properties: {
+        tier: monetization.access.tier,
+        error_code: generationErrorCode ?? "unknown",
+      },
+    }).catch(() => undefined);
+  }, [generationErrorCode, isQuotaError, monetization.access]);
 
   const buildRecommendationPayload = useCallback(
     (): RecipeRecommendationPayload => ({
@@ -375,6 +391,16 @@ export default function RecommendationsScreen() {
           }
         >
       <SpaceSwitcher />
+      {monetization.rewardNotice === "verified" ? (
+        <FeedbackBanner
+          tone="success"
+          title="광고 추천권 1회가 지급됐어요"
+          description="오늘 추천을 만들 때 바로 사용할 수 있어요."
+          actionLabel="확인"
+          onAction={monetization.dismissRewardNotice}
+          showMascot={false}
+        />
+      ) : null}
       {recipeView === "recommendations" && monetization.access ? (
         <View style={styles.usageCard}>
           <View style={styles.usageCopy}>
@@ -390,6 +416,15 @@ export default function RecommendationsScreen() {
                   ? `광고 추천권 ${monetization.access.rewardedAds.creditsAvailable}회 · 오늘 광고 ${monetization.access.rewardedAds.remainingToWatch}편 남음`
                   : `임시 무료 추천 ${monetization.access.remaining}회 남았어요`}
             </Text>
+            {monetization.access.tier === "free" &&
+            monetization.access.contributionRewards.enabled ? (
+              <Text style={styles.usageDescription}>
+                바코드 추천권 {monetization.access.contributionRewards.balance}회
+                {monetization.access.contributionRewards.canEarn
+                  ? ` · 오늘 ${monetization.access.contributionRewards.dailyLimit - monetization.access.contributionRewards.earnedToday}회 더 적립 가능`
+                  : ""}
+              </Text>
+            ) : null}
           </View>
         </View>
       ) : null}

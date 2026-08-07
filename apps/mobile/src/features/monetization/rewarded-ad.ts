@@ -11,9 +11,12 @@ const POLL_TIMEOUT_MS = 10_000;
 let mobileAdsInitialization: Promise<unknown> | null = null;
 
 export type RewardedAdResult = "verified" | "verifying";
+type RewardVerificationResult = RewardedAdResult | "failed";
+export type RewardedAdLifecycleEvent = "loaded" | "opened" | "earned";
 
 export async function presentRewardedAd(
   session: RewardedAdSession,
+  onLifecycleEvent?: (event: RewardedAdLifecycleEvent) => void,
 ): Promise<RewardedAdResult> {
   const ads = await import("react-native-google-mobile-ads");
 
@@ -65,14 +68,19 @@ export async function presentRewardedAd(
 
     removers.push(
       ad.addAdEventListener(ads.RewardedAdEventType.LOADED, () => {
+        onLifecycleEvent?.("loaded");
         ad.show().catch(() => {
           void fail("광고를 열지 못했어요. 잠시 뒤에 다시 시도해 주세요.");
         });
+      }),
+      ad.addAdEventListener(ads.AdEventType.OPENED, () => {
+        onLifecycleEvent?.("opened");
       }),
       ad.addAdEventListener(ads.RewardedAdEventType.EARNED_REWARD, () => {
         // This client event only starts polling. The server-side callback is
         // the sole authority that grants a recommendation credit.
         earnedReward = true;
+        onLifecycleEvent?.("earned");
       }),
       ad.addAdEventListener(ads.AdEventType.ERROR, () => {
         void fail("지금 볼 수 있는 광고가 없어요. 잠시 뒤에 다시 시도해 주세요.");
@@ -83,11 +91,15 @@ export async function presentRewardedAd(
           return;
         }
 
-        void pollForServerVerification(session.id).then((verified) => {
+        void pollForServerVerification(session.id).then((result) => {
           if (settled) return;
+          if (result === "failed") {
+            void fail("광고 보상을 확인하지 못했어요. 다시 시도해 주세요.");
+            return;
+          }
           settled = true;
           cleanup();
-          resolve(verified ? "verified" : "verifying");
+          resolve(result);
         });
       }),
     );
@@ -96,19 +108,25 @@ export async function presentRewardedAd(
   });
 }
 
-async function pollForServerVerification(sessionId: string) {
+async function pollForServerVerification(
+  sessionId: string,
+): Promise<RewardVerificationResult> {
   const deadline = Date.now() + POLL_TIMEOUT_MS;
 
   while (Date.now() < deadline) {
-    const result = await getRewardedAdSession(sessionId);
-    if (result.status === "verified") {
-      return true;
-    }
-    if (result.status === "cancelled" || result.status === "expired") {
-      return false;
+    try {
+      const result = await getRewardedAdSession(sessionId);
+      if (result.status === "verified") {
+        return "verified";
+      }
+      if (result.status === "cancelled" || result.status === "expired") {
+        return "failed";
+      }
+    } catch {
+      // A temporary network failure must not discard an earned server reward.
     }
     await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL_MS));
   }
 
-  return false;
+  return "verifying";
 }

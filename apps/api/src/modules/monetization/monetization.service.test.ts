@@ -22,6 +22,14 @@ const managedEnvKeys = [
   "RECIPE_REWARDED_DAILY_LIMIT",
   "RECIPE_SUBSCRIBER_DAILY_LIMIT",
   "RECIPE_ABSOLUTE_DAILY_LIMIT",
+  "MONETIZATION_EXPERIMENT_SALT",
+  "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT",
+  "RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT",
+  "RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT",
+  "BARCODE_REWARDS_ENABLED",
+  "BARCODE_REWARD_ROLLOUT_PERCENT",
+  "BARCODE_REWARD_DAILY_LIMIT",
+  "BARCODE_REWARD_BALANCE_LIMIT",
 ] as const;
 
 const originalEnv = new Map(
@@ -36,6 +44,14 @@ describe("MonetizationService", () => {
     process.env.RECIPE_REWARDED_DAILY_LIMIT = "3";
     process.env.RECIPE_SUBSCRIBER_DAILY_LIMIT = "30";
     process.env.RECIPE_ABSOLUTE_DAILY_LIMIT = "30";
+    process.env.MONETIZATION_EXPERIMENT_SALT = "test-experiment-salt";
+    process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "0";
+    process.env.RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT = "2";
+    process.env.RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT = "2";
+    process.env.BARCODE_REWARDS_ENABLED = "true";
+    process.env.BARCODE_REWARD_ROLLOUT_PERCENT = "100";
+    process.env.BARCODE_REWARD_DAILY_LIMIT = "3";
+    process.env.BARCODE_REWARD_BALANCE_LIMIT = "10";
     process.env.ADMOB_IOS_REWARDED_AD_UNIT_ID =
       "ca-app-pub-1234567890123456/1111111111";
     process.env.ADMOB_ANDROID_REWARDED_AD_UNIT_ID =
@@ -100,6 +116,44 @@ describe("MonetizationService", () => {
     expect(status.rewardedAds.canWatch).toBe(false);
   });
 
+  it("assigns a stable value-first policy from the server rollout", async () => {
+    process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "100";
+    const prisma = createPrismaMock();
+    const service = new MonetizationService(prisma as never);
+
+    const first = await service.getStatus("owner-a");
+    const second = await service.getStatus("owner-a");
+
+    expect(first.experiment).toEqual({
+      key: "monetization-v1",
+      variant: "value_first",
+      defaultBillingPeriod: "monthly",
+    });
+    expect(first.free.limit).toBe(2);
+    expect(first.rewardedAds.dailyLimit).toBe(2);
+    expect(second.experiment).toEqual(first.experiment);
+  });
+
+  it("stores only allow-listed funnel event data with the assigned variant", async () => {
+    const prisma = createPrismaMock();
+    const service = new MonetizationService(prisma as never);
+
+    await service.trackFunnelEvent("owner-a", {
+      event: "paywall_viewed",
+      properties: { source: "settings" },
+    });
+
+    expect(prisma.monetizationFunnelEvent.create).toHaveBeenCalledWith({
+      data: {
+        ownerKey: "owner-a",
+        eventName: "paywall_viewed",
+        experimentKey: "monetization-v1",
+        experimentVariant: "control",
+        properties: { source: "settings" },
+      },
+    });
+  });
+
   it("returns a completed recommendation for a duplicate idempotency key", async () => {
     const prisma = createPrismaMock();
     prisma.recommendationUsageEvent.findUnique.mockResolvedValue({
@@ -143,6 +197,7 @@ describe("MonetizationService", () => {
       data: expect.objectContaining({
         status: RecommendationUsageStatus.released,
         rewardedAdSessionId: null,
+        barcodeRewardCreditId: null,
         releaseReason: "upstream_error",
       }),
     });
@@ -163,6 +218,80 @@ describe("MonetizationService", () => {
     ).rejects.toMatchObject({
       errorCode: "RECIPE_SERVICE_CAPACITY_REACHED",
     });
+  });
+
+  it("uses an available ad credit before a barcode credit", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      {
+        source: RecommendationUsageSource.free,
+        _count: { _all: 1 },
+      },
+    ]);
+    prisma.rewardedAdSession.findFirst.mockResolvedValue({ id: "ad-1" });
+    prisma.barcodeRewardCredit.count.mockResolvedValue(1);
+    prisma.barcodeRewardCredit.findFirst.mockResolvedValue({ id: "barcode-1" });
+    prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
+    const service = new MonetizationService(prisma as never);
+
+    await service.reserveRecommendation("owner-a", "ad-key");
+
+    expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: RecommendationUsageSource.rewarded_ad,
+        rewardedAdSessionId: "ad-1",
+        barcodeRewardCreditId: null,
+      }),
+    });
+    expect(prisma.barcodeRewardCredit.findFirst).not.toHaveBeenCalled();
+  });
+
+  it("falls back to a barcode credit after free and ad credits", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      {
+        source: RecommendationUsageSource.free,
+        _count: { _all: 1 },
+      },
+    ]);
+    prisma.barcodeRewardCredit.count.mockResolvedValue(1);
+    prisma.barcodeRewardCredit.findFirst.mockResolvedValue({ id: "barcode-1" });
+    prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
+    const service = new MonetizationService(prisma as never);
+
+    await service.reserveRecommendation("owner-a", "barcode-key");
+
+    expect(prisma.rewardedAdSession.findFirst).toHaveBeenCalled();
+    expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: RecommendationUsageSource.barcode_contribution,
+        barcodeRewardCreditId: "barcode-1",
+      }),
+    });
+    expect(prisma.monetizationFunnelEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ eventName: "barcode_reward_used" }),
+    });
+  });
+
+  it("preserves barcode credits while a subscription is active", async () => {
+    const prisma = createPrismaMock();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "subscription-1",
+      isActive: true,
+    });
+    prisma.barcodeRewardCredit.count.mockResolvedValue(2);
+    prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
+    const service = new MonetizationService(prisma as never);
+
+    await service.reserveRecommendation("owner-a", "subscription-key");
+
+    expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: RecommendationUsageSource.subscription,
+        barcodeRewardCreditId: null,
+      }),
+    });
+    expect(prisma.barcodeRewardCredit.findFirst).not.toHaveBeenCalled();
   });
 
   it("creates 15-minute display and 24-hour verification windows", async () => {
@@ -278,6 +407,14 @@ function createPrismaMock() {
       findFirst: vi.fn().mockResolvedValue(null),
       findUnique: vi.fn().mockResolvedValue(null),
       count: vi.fn().mockResolvedValue(0),
+    },
+    barcodeRewardCredit: {
+      findFirst: vi.fn().mockResolvedValue(null),
+      count: vi.fn().mockResolvedValue(0),
+    },
+    monetizationFunnelEvent: {
+      count: vi.fn().mockResolvedValue(0),
+      create: vi.fn().mockResolvedValue({ id: "event-1" }),
     },
   };
 

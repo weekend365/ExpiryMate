@@ -29,6 +29,7 @@ export type ProductInfo = {
   imageUrl?: string | null;
   source: BarcodeLookupSource;
   productMasterId: string | null;
+  contributionToken?: string;
 };
 
 export type ScannerConfirmation = {
@@ -112,6 +113,7 @@ export function useProductScanner() {
         imageUrl: result.imageUrl,
         source: result.source,
         productMasterId: result.productMasterId,
+        contributionToken: result.contributionToken,
       });
       setProductLookupStatus(
         result.source === BarcodeLookupSource.NOT_FOUND ? "not-found" : "success",
@@ -129,6 +131,7 @@ export function useProductScanner() {
         imageUrl: null,
         source: BarcodeLookupSource.NOT_FOUND,
         productMasterId: null,
+        contributionToken: undefined,
       });
       setProductLookupStatus("error");
       setProductErrorMessage(

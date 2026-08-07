@@ -4,6 +4,9 @@ import {
   ExpirySource,
   formatDateKorean,
   isDateOnlyString,
+  ProductCategory,
+  productCategoryLabels,
+  productCategoryOptions,
   toIsoDate,
 } from "@expirymate/shared";
 import DateTimePicker, {
@@ -49,6 +52,7 @@ import { Button } from "../../components/Button";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Pill } from "../../components/Pill";
+import { useMonetization } from "../monetization/monetization-provider";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
@@ -102,7 +106,13 @@ function ScannerCameraExperience() {
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
+  const monetization = useMonetization();
   const [manualName, setManualName] = useState("");
+  const [manualBrand, setManualBrand] = useState("");
+  const [manualCategory, setManualCategory] = useState<ProductCategory | null>(
+    null,
+  );
   const [manualExpiryDate, setManualExpiryDate] = useState("");
   const [manualExpirySource, setManualExpirySource] = useState<ExpirySource>(
     ExpirySource.MANUAL,
@@ -129,6 +139,24 @@ function ScannerCameraExperience() {
   const resolvedProductName = needsManualName
     ? manualName.trim()
     : scanner.product?.name?.trim() ?? "";
+  const resolvedBrand = needsManualName
+    ? manualBrand.trim() || undefined
+    : scanner.product?.brand?.trim() || undefined;
+  const resolvedCategory = needsManualName
+    ? manualCategory ?? undefined
+    : undefined;
+  const contributionRewards = monetization.access?.contributionRewards;
+  const rewardEligibilityMessage = !contributionRewards?.enabled
+    ? "알려주시면 다음에도 바로 불러올 수 있어요."
+    : !scanner.product?.contributionToken
+      ? "상품 조회가 정상 확인된 새 바코드에만 추천권을 드려요."
+      : !contributionRewards.canEarn
+        ? contributionRewards.balance >= contributionRewards.balanceLimit
+          ? `추천권을 ${contributionRewards.balanceLimit}회 보유하고 있어 먼저 사용해야 해요.`
+          : "오늘 받을 수 있는 바코드 추천권을 모두 받았어요."
+        : resolvedBrand || resolvedCategory
+          ? "새 상품이면 추천권 1회를 바로 드려요."
+          : "브랜드 또는 카테고리를 더하면 추천권 1회를 받을 수 있어요.";
 
   const resultMood: MascotMood =
     needsManualName || needsManualExpiry ? "worry" : "happy";
@@ -191,17 +219,31 @@ function ScannerCameraExperience() {
     }
 
     setContributeError(null);
+    setRewardNotice(null);
 
     if (needsManualName && scanner.confirmation.barcode) {
       setIsContributing(true);
 
       try {
-        await contributeBarcodeProduct({
+        const contribution = await contributeBarcodeProduct({
           barcode: scanner.confirmation.barcode,
           name: resolvedProductName,
-          brand: scanner.product?.brand ?? undefined,
-          category: scanner.product?.category ?? undefined,
+          brand: resolvedBrand,
+          category: resolvedCategory,
+          contributionToken: scanner.product?.contributionToken,
         });
+        if (contribution.reward.reason !== "rewards_disabled") {
+          setRewardNotice({
+            granted: contribution.reward.granted,
+            reason: contribution.reward.reason,
+            creditsGranted: contribution.reward.creditsGranted,
+            balance: contribution.reward.balance,
+            balanceLimit: contribution.reward.balanceLimit,
+          });
+        }
+        if (contribution.reward.granted) {
+          await monetization.refresh().catch(() => undefined);
+        }
       } catch (error) {
         setContributeError(
           error instanceof Error
@@ -215,11 +257,13 @@ function ScannerCameraExperience() {
 
     setPrefill({
       displayName: resolvedProductName,
-      brand: scanner.product?.brand ?? undefined,
+      brand: resolvedBrand,
+      category: resolvedCategory,
     });
     setDraft({
       displayName: resolvedProductName,
-      brand: scanner.product?.brand ?? undefined,
+      brand: resolvedBrand,
+      category: resolvedCategory,
       expiryDate: resolvedExpiryDate,
       expirySource: resolvedExpirySource,
     });
@@ -231,6 +275,8 @@ function ScannerCameraExperience() {
 
   const handleRescan = () => {
     setManualName("");
+    setManualBrand("");
+    setManualCategory(null);
     setManualExpiryDate("");
     setManualExpirySource(ExpirySource.MANUAL);
     setContributeError(null);
@@ -508,8 +554,37 @@ function ScannerCameraExperience() {
                   autoCorrect={false}
                   returnKeyType="done"
                 />
+                <Text style={styles.manualNameLabel}>브랜드</Text>
+                <TextInput
+                  value={manualBrand}
+                  onChangeText={setManualBrand}
+                  accessibilityLabel="브랜드"
+                  placeholder="예: 서울우유"
+                  placeholderTextColor={colors.mutedText}
+                  style={styles.manualNameInput}
+                  autoCorrect={false}
+                  returnKeyType="done"
+                />
+                <Text style={styles.manualNameLabel}>카테고리</Text>
+                <View style={styles.pillRow}>
+                  {productCategoryOptions.map((option) => (
+                    <Pill
+                      key={option.value}
+                      label={option.label}
+                      selected={manualCategory === option.value}
+                      onPress={() =>
+                        setManualCategory(option.value as ProductCategory)
+                      }
+                    />
+                  ))}
+                </View>
+                {manualCategory ? (
+                  <Text style={styles.manualNameHint}>
+                    선택: {productCategoryLabels[manualCategory]}
+                  </Text>
+                ) : null}
                 <Text style={styles.manualNameHint}>
-                  알려주시면 다음에도 바로 불러올 수 있어요.
+                  {rewardEligibilityMessage}
                 </Text>
               </View>
             ) : null}

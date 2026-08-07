@@ -23,9 +23,11 @@ import {
   type MonetizationPlatform,
   type RecommendationAccess,
   type RewardedAdSession,
+  type TrackMonetizationEventRequest,
 } from "@expirymate/shared";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
+import { resolveBarcodeRewardPolicy } from "./barcode-reward-policy";
 
 const KST_TIMEZONE = "Asia/Seoul" as const;
 const ADMOB_PUBLIC_KEYS_URL =
@@ -43,6 +45,13 @@ type ReservationResult =
 interface AdMobPublicKeyResponse {
   keys?: Array<{ keyId?: number; base64?: string }>;
 }
+
+type MonetizationPolicy = {
+  experiment: RecommendationAccess["experiment"];
+  freeDailyLimit: number;
+  rewardedDailyLimit: number;
+  subscriberDailyLimit: number;
+};
 
 @Injectable()
 export class MonetizationService {
@@ -63,6 +72,33 @@ export class MonetizationService {
     });
 
     return this.buildStatus(this.prisma, ownerKey, now);
+  }
+
+  async trackFunnelEvent(
+    ownerKey: string,
+    event: TrackMonetizationEventRequest,
+  ) {
+    const recentEventCount = await this.prisma.monetizationFunnelEvent.count({
+      where: {
+        ownerKey,
+        createdAt: { gte: new Date(Date.now() - 60_000) },
+      },
+    });
+    if (recentEventCount >= 60) {
+      return { ok: true as const };
+    }
+
+    const policy = resolveMonetizationPolicy(ownerKey);
+    await this.prisma.monetizationFunnelEvent.create({
+      data: {
+        ownerKey,
+        eventName: event.event,
+        experimentKey: policy.experiment.key,
+        experimentVariant: policy.experiment.variant,
+        properties: event.properties ?? undefined,
+      },
+    });
+    return { ok: true as const };
   }
 
   async createRewardedAdSession(
@@ -217,6 +253,7 @@ export class MonetizationService {
 
             let source: RecommendationUsageSource;
             let rewardedAdSessionId: string | null = null;
+            let barcodeRewardCreditId: string | null = null;
 
             if (access.tier === "jango_plus" && access.remaining > 0) {
               source = RecommendationUsageSource.subscription;
@@ -233,8 +270,14 @@ export class MonetizationService {
                 },
                 orderBy: { verifiedAt: "asc" },
               });
+              const contributionReward = reward
+                ? null
+                : await tx.barcodeRewardCredit.findFirst({
+                    where: { ownerKey, usageEvent: { is: null } },
+                    orderBy: { createdAt: "asc" },
+                  });
 
-              if (!reward) {
+              if (!reward && !contributionReward) {
                 throw new CodedHttpException(
                   429,
                   "RECOMMENDATION_QUOTA_EXHAUSTED",
@@ -243,8 +286,13 @@ export class MonetizationService {
                 );
               }
 
-              source = RecommendationUsageSource.rewarded_ad;
-              rewardedAdSessionId = reward.id;
+              if (reward) {
+                source = RecommendationUsageSource.rewarded_ad;
+                rewardedAdSessionId = reward.id;
+              } else {
+                source = RecommendationUsageSource.barcode_contribution;
+                barcodeRewardCreditId = contributionReward!.id;
+              }
             }
 
             const data = {
@@ -252,6 +300,7 @@ export class MonetizationService {
               source,
               status: RecommendationUsageStatus.reserved,
               rewardedAdSessionId,
+              barcodeRewardCreditId,
               recommendationId: null,
               releaseReason: null,
               releasedAt: null,
@@ -270,6 +319,19 @@ export class MonetizationService {
                     ...data,
                   },
                 });
+
+            if (source === RecommendationUsageSource.barcode_contribution) {
+              const barcodePolicy = resolveBarcodeRewardPolicy(ownerKey);
+              await tx.monetizationFunnelEvent.create({
+                data: {
+                  ownerKey,
+                  eventName: "barcode_reward_used",
+                  experimentKey: "barcode-rewards-v1",
+                  experimentVariant: barcodePolicy.cohort,
+                  properties: { source: "recommendation" },
+                },
+              });
+            }
 
             return { kind: "reserved" as const, usageEventId: event.id };
           },
@@ -310,6 +372,7 @@ export class MonetizationService {
       data: {
         status: RecommendationUsageStatus.released,
         rewardedAdSessionId: null,
+        barcodeRewardCreditId: null,
         releaseReason: reason.slice(0, 160),
         releasedAt: new Date(),
       },
@@ -372,7 +435,8 @@ export class MonetizationService {
           },
         });
         if (
-          alreadyVerified >= getLimit("RECIPE_REWARDED_DAILY_LIMIT", 3)
+          alreadyVerified >=
+            resolveMonetizationPolicy(session.ownerKey).rewardedDailyLimit
         ) {
           await tx.rewardedAdSession.update({
             where: { id: session.id },
@@ -406,6 +470,8 @@ export class MonetizationService {
     const { start, endExclusive } = getKstDayWindow(now);
     const subscriptionsEnabled = isEnabled("SUBSCRIPTIONS_ENABLED");
     const rewardedAdsEnabled = isEnabled("REWARDED_ADS_ENABLED");
+    const policy = resolveMonetizationPolicy(ownerKey);
+    const barcodePolicy = resolveBarcodeRewardPolicy(ownerKey);
     const activeEntitlement = subscriptionsEnabled
       ? await db.subscriptionEntitlement.findFirst({
           where: {
@@ -434,6 +500,8 @@ export class MonetizationService {
       events.map((event) => [event.source, event._count._all]),
     );
     const freeUsed = counts.get(RecommendationUsageSource.free) ?? 0;
+    const barcodeUsed =
+      counts.get(RecommendationUsageSource.barcode_contribution) ?? 0;
     const totalUsed = [...counts.values()].reduce((sum, value) => sum + value, 0);
     const verifiedRewards = await db.rewardedAdSession.count({
       where: {
@@ -458,20 +526,38 @@ export class MonetizationService {
         showExpiresAt: { gt: now },
       },
     });
+    const barcodeRewardBalance = await db.barcodeRewardCredit.count({
+      where: { ownerKey, usageEvent: { is: null } },
+    });
+    const barcodeRewardsEarnedToday = await db.barcodeRewardCredit.count({
+      where: { ownerKey, earnedDay: start },
+    });
 
     const freeLimit = rewardedAdsEnabled
-      ? getLimit("RECIPE_FREE_DAILY_LIMIT", 1)
+      ? policy.freeDailyLimit
       : getLimit("RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT", 4);
     const rewardedLimit = rewardedAdsEnabled
-      ? getLimit("RECIPE_REWARDED_DAILY_LIMIT", 3)
+      ? policy.rewardedDailyLimit
       : 0;
-    const subscriberLimit = getLimit("RECIPE_SUBSCRIBER_DAILY_LIMIT", 30);
+    const subscriberLimit = policy.subscriberDailyLimit;
     const isSubscriber = Boolean(activeEntitlement);
     const freeRemaining = Math.max(0, freeLimit - freeUsed);
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);
-    const remaining = isSubscriber
+    const uncappedRemaining = isSubscriber
       ? Math.max(0, subscriberLimit - totalUsed)
-      : freeRemaining + availableRewards;
+      : freeRemaining + availableRewards + barcodeRewardBalance;
+    const absoluteLimit = getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
+    const remaining =
+      absoluteLimit > 0
+        ? Math.min(
+            uncappedRemaining,
+            Math.max(0, absoluteLimit - totalUsed),
+          )
+        : uncappedRemaining;
+    const freeTierLimit =
+      freeLimit + rewardedLimit + barcodeRewardBalance + barcodeUsed;
+    const effectiveFreeTierLimit =
+      absoluteLimit > 0 ? Math.min(absoluteLimit, freeTierLimit) : freeTierLimit;
 
     return {
       day: toKstDateOnly(now),
@@ -480,7 +566,9 @@ export class MonetizationService {
       tier: isSubscriber ? "jango_plus" : "free",
       rewardedAdsEnabled,
       subscriptionsEnabled,
-      dailyLimit: isSubscriber ? subscriberLimit : freeLimit + rewardedLimit,
+      experiment: policy.experiment,
+      dailyLimit: isSubscriber ? subscriberLimit : effectiveFreeTierLimit,
+      subscriberDailyLimit: subscriberLimit,
       used: totalUsed,
       remaining,
       free: {
@@ -497,8 +585,20 @@ export class MonetizationService {
           rewardedAdsEnabled &&
           !isSubscriber &&
           freeRemaining === 0 &&
+          (absoluteLimit === 0 || totalUsed < absoluteLimit) &&
           remainingToWatch > 0 &&
           pendingDisplaySessionCount === 0,
+      },
+      contributionRewards: {
+        enabled: barcodePolicy.enabled || barcodeRewardBalance > 0,
+        balance: barcodeRewardBalance,
+        earnedToday: barcodeRewardsEarnedToday,
+        dailyLimit: barcodePolicy.dailyLimit,
+        balanceLimit: barcodePolicy.balanceLimit,
+        canEarn:
+          barcodePolicy.enabled &&
+          barcodeRewardsEarnedToday < barcodePolicy.dailyLimit &&
+          barcodeRewardBalance < barcodePolicy.balanceLimit,
       },
     };
   }
@@ -645,6 +745,35 @@ function normalizeIdempotencyKey(value: string) {
 function getLimit(name: string, fallback: number) {
   const parsed = Number(process.env[name]);
   return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+export function resolveMonetizationPolicy(ownerKey: string): MonetizationPolicy {
+  const rolloutPercent = Math.min(
+    100,
+    getLimit("MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT", 0),
+  );
+  const salt =
+    process.env.MONETIZATION_EXPERIMENT_SALT?.trim() || "monetization-v1";
+  const bucket =
+    createHmac("sha256", salt).update(ownerKey).digest().readUInt32BE(0) % 100;
+  const variant = bucket < rolloutPercent ? "value_first" : "control";
+
+  return {
+    experiment: {
+      key: "monetization-v1",
+      variant,
+      defaultBillingPeriod: variant === "value_first" ? "monthly" : "yearly",
+    },
+    freeDailyLimit:
+      variant === "value_first"
+        ? getLimit("RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT", 2)
+        : getLimit("RECIPE_FREE_DAILY_LIMIT", 1),
+    rewardedDailyLimit:
+      variant === "value_first"
+        ? getLimit("RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT", 2)
+        : getLimit("RECIPE_REWARDED_DAILY_LIMIT", 3),
+    subscriberDailyLimit: getLimit("RECIPE_SUBSCRIBER_DAILY_LIMIT", 30),
+  };
 }
 
 function isEnabled(name: string) {

@@ -16,6 +16,10 @@ export const useSubscriptionEntitlement = () => {
     subscriptionEntitlementQueryKey,
     sessionUserId,
   );
+  const monetizationQueryKey = withSessionUser(
+    sessionQueryKeys.monetization,
+    sessionUserId,
+  );
 
   const query = useQuery({
     queryKey,
@@ -27,6 +31,9 @@ export const useSubscriptionEntitlement = () => {
       verifySubscription(payload),
     onSuccess: (response) => {
       queryClient.setQueryData(queryKey, response.entitlement);
+      void queryClient
+        .invalidateQueries({ queryKey: monetizationQueryKey })
+        .catch(() => undefined);
     },
   });
 

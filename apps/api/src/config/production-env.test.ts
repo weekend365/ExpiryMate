@@ -63,6 +63,22 @@ describe("validateProductionEnvironment", () => {
 
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("requires reward secrets when barcode rewards are enabled", () => {
+    const env = validProductionEnv();
+    env.BARCODE_REWARDS_ENABLED = "true";
+    env.BARCODE_REWARD_ROLLOUT_PERCENT = "10";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /BARCODE_REWARD_TOKEN_SECRET.*MONETIZATION_EXPERIMENT_SALT/s,
+    );
+
+    env.BARCODE_REWARD_TOKEN_SECRET =
+      "1234567890abcdef1234567890abcdef";
+    env.MONETIZATION_EXPERIMENT_SALT =
+      "abcdef1234567890abcdef1234567890";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -91,6 +107,10 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     RECIPE_REWARDED_DAILY_LIMIT: "3",
     RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
     RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
+    BARCODE_REWARDS_ENABLED: "false",
+    BARCODE_REWARD_ROLLOUT_PERCENT: "0",
+    BARCODE_REWARD_DAILY_LIMIT: "3",
+    BARCODE_REWARD_BALANCE_LIMIT: "10",
     REWARDED_ADS_ENABLED: "false",
     SUBSCRIPTIONS_ENABLED: "false",
     IAP_ALLOWED_PRODUCT_IDS:

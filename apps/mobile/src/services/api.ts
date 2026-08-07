@@ -57,6 +57,7 @@ import type {
   RecommendationAccess,
   RewardedAdSession,
   MonetizationPlatform,
+  TrackMonetizationEventRequest,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -1066,6 +1067,14 @@ export const cancelRewardedAdSession = (id: string) =>
     `/monetization/rewarded-ad-sessions/${id}/cancel`,
     { method: "POST" },
   );
+
+export const trackMonetizationEvent = (
+  payload: TrackMonetizationEventRequest,
+) =>
+  request<{ ok: true }>("/monetization/events", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
 export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
   request<SubscriptionVerificationResponse>("/subscriptions/verify", {

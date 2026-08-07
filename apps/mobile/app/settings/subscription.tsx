@@ -5,7 +5,7 @@ import {
   useIAP,
 } from "expo-iap";
 import { CreditCard, RefreshCw, ShieldCheck } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Linking,
@@ -19,11 +19,13 @@ import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   formatSubscriptionExpiry,
   formatSubscriptionStore,
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
+import { trackMonetizationEvent } from "../../src/services/api";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
@@ -42,6 +44,7 @@ type StorePlan = {
 
 export default function SubscriptionSettingsScreen() {
   const subscription = useSubscriptionEntitlement();
+  const monetization = useMonetization();
   const entitlement = subscription.query.data;
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
   const [selectedPeriod, setSelectedPeriod] =
@@ -49,6 +52,8 @@ export default function SubscriptionSettingsScreen() {
   const [busyAction, setBusyAction] = useState<
     "purchase" | "restore" | null
   >(null);
+  const appliedExperimentRef = useRef(false);
+  const trackedPaywallRef = useRef(false);
 
   async function handleStorePurchase(purchase: Purchase) {
     if (purchase.purchaseState === "pending") {
@@ -76,17 +81,28 @@ export default function SubscriptionSettingsScreen() {
             };
       await subscription.verifyMutation.mutateAsync(verification);
       await finishTransaction({ purchase, isConsumable: false });
+      trackFunnelEvent("purchase_verified", {
+        store: Platform.OS,
+        product_id: purchase.productId,
+        billing_period: purchase.currentPlanId ?? selectedPeriod,
+      });
       setBusyAction(null);
       Alert.alert(
         "장고 플러스가 시작됐어요",
-        "오늘 총 30회까지 광고 없이 추천받을 수 있어요.",
+        `오늘 총 ${monetization.access?.subscriberDailyLimit ?? 30}회까지 광고 없이 추천받을 수 있어요.`,
       );
+      return true;
     } catch (error) {
       setBusyAction(null);
+      trackFunnelEvent("checkout_failed", {
+        stage: "verification",
+        reason: error instanceof Error ? error.name : "unknown",
+      });
       Alert.alert(
         "구독을 확인하지 못했어요",
         getErrorMessage(error),
       );
+      return false;
     }
   }
 
@@ -102,11 +118,20 @@ export default function SubscriptionSettingsScreen() {
     },
     onPurchaseError: (error) => {
       setBusyAction(null);
-      if (String(error.code).includes("cancel")) return;
+      const cancelled = String(error.code).toLowerCase().includes("cancel");
+      trackFunnelEvent(
+        cancelled ? "checkout_cancelled" : "checkout_failed",
+        { reason: String(error.code) },
+      );
+      if (cancelled) return;
       Alert.alert("결제를 완료하지 못했어요", error.message);
     },
     onError: (error) => {
       setBusyAction(null);
+      trackFunnelEvent("checkout_failed", {
+        stage: "store_connection",
+        reason: error.name,
+      });
       Alert.alert("스토어를 불러오지 못했어요", error.message);
     },
   });
@@ -122,6 +147,31 @@ export default function SubscriptionSettingsScreen() {
     });
   }, [connected, fetchProducts]);
 
+  useEffect(() => {
+    if (appliedExperimentRef.current || !monetization.access) return;
+    appliedExperimentRef.current = true;
+    setSelectedPeriod(monetization.access.experiment.defaultBillingPeriod);
+  }, [monetization.access]);
+
+  useEffect(() => {
+    if (
+      trackedPaywallRef.current ||
+      subscription.query.isLoading ||
+      hasActiveEntitlement ||
+      !monetization.access
+    ) {
+      return;
+    }
+    trackedPaywallRef.current = true;
+    trackFunnelEvent("paywall_viewed", {
+      variant: monetization.access.experiment.variant,
+    });
+  }, [
+    hasActiveEntitlement,
+    monetization.access,
+    subscription.query.isLoading,
+  ]);
+
   const plans = useMemo(() => resolvePlans(subscriptions), [subscriptions]);
   const selectedPlan = plans.find((plan) => plan.period === selectedPeriod);
   const annualSavings = getAnnualSavings(plans);
@@ -136,6 +186,10 @@ export default function SubscriptionSettingsScreen() {
     }
 
     setBusyAction("purchase");
+    trackFunnelEvent("checkout_started", {
+      billing_period: selectedPlan.period,
+      product_id: selectedPlan.productId,
+    });
     try {
       await requestPurchase({
         type: "subs",
@@ -158,12 +212,17 @@ export default function SubscriptionSettingsScreen() {
       });
     } catch (error) {
       setBusyAction(null);
+      trackFunnelEvent("checkout_failed", {
+        stage: "request_purchase",
+        reason: error instanceof Error ? error.name : "unknown",
+      });
       Alert.alert("결제를 시작하지 못했어요", getErrorMessage(error));
     }
   };
 
   const restore = async () => {
     setBusyAction("restore");
+    trackFunnelEvent("restore_started");
     try {
       const purchases = await getAvailablePurchases();
       if (!purchases.length) {
@@ -171,11 +230,23 @@ export default function SubscriptionSettingsScreen() {
         Alert.alert("복원할 구독이 없어요", "현재 스토어 계정을 확인해 주세요.");
         return;
       }
+      let restoredCount = 0;
       for (const purchase of purchases) {
-        await handleStorePurchase(purchase);
+        if (await handleStorePurchase(purchase)) {
+          restoredCount += 1;
+        }
       }
+      trackFunnelEvent(
+        restoredCount > 0 ? "restore_completed" : "restore_failed",
+        restoredCount > 0
+          ? { purchase_count: String(restoredCount) }
+          : { reason: "no_verified_purchase" },
+      );
     } catch (error) {
       setBusyAction(null);
+      trackFunnelEvent("restore_failed", {
+        reason: error instanceof Error ? error.name : "unknown",
+      });
       Alert.alert("구매를 복원하지 못했어요", getErrorMessage(error));
     }
   };
@@ -189,7 +260,10 @@ export default function SubscriptionSettingsScreen() {
     );
 
   return (
-    <Screen title="장고 플러스" subtitle="광고 없이 하루 총 30회 추천받아요.">
+    <Screen
+      title="장고 플러스"
+      subtitle={`광고 없이 하루 총 ${monetization.access?.subscriberDailyLimit ?? 30}회 추천받아요.`}
+    >
       <View style={styles.section}>
         <SectionHeader
           title="지금 상태"
@@ -217,7 +291,11 @@ export default function SubscriptionSettingsScreen() {
         <View style={styles.section}>
           <SectionHeader
             title="이용권 고르기"
-            description="무료 체험 없이 선택한 기간마다 자동 갱신돼요."
+            description={
+              monetization.access?.experiment.variant === "value_first"
+                ? "부담이 적은 월간부터 시작하거나 연간으로 절약할 수 있어요."
+                : "무료 체험 없이 선택한 기간마다 자동 갱신돼요."
+            }
           />
           <View style={styles.planList}>
             {(["yearly", "monthly"] as const).map((period) => {
@@ -226,7 +304,12 @@ export default function SubscriptionSettingsScreen() {
               return (
                 <Pressable
                   key={period}
-                  onPress={() => setSelectedPeriod(period)}
+                  onPress={() => {
+                    setSelectedPeriod(period);
+                    trackFunnelEvent("plan_selected", {
+                      billing_period: period,
+                    });
+                  }}
                   accessibilityRole="radio"
                   accessibilityState={{ selected }}
                   style={[
@@ -364,6 +447,13 @@ function getErrorMessage(error: unknown) {
   return error instanceof Error
     ? error.message
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
+}
+
+function trackFunnelEvent(
+  event: Parameters<typeof trackMonetizationEvent>[0]["event"],
+  properties?: Record<string, string>,
+) {
+  void trackMonetizationEvent({ event, properties }).catch(() => undefined);
 }
 
 const styles = StyleSheet.create({

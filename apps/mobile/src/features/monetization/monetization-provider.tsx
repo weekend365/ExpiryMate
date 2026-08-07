@@ -13,6 +13,8 @@ import { AppState, Platform } from "react-native";
 import {
   createRewardedAdSession,
   getMonetizationStatus,
+  getRewardedAdSession,
+  trackMonetizationEvent,
 } from "../../services/api";
 import {
   sessionQueryKeys,
@@ -20,7 +22,13 @@ import {
 } from "../auth/session-boundary";
 import { useAuth } from "../auth/use-auth";
 import {
+  clearPendingRewardedAdSession,
+  getPendingRewardedAdSession,
+  savePendingRewardedAdSession,
+} from "./pending-rewarded-ad";
+import {
   presentRewardedAd,
+  type RewardedAdLifecycleEvent,
   type RewardedAdResult,
 } from "./rewarded-ad";
 
@@ -28,6 +36,8 @@ type MonetizationContextValue = {
   access: RecommendationAccess | undefined;
   isLoading: boolean;
   adState: "idle" | "loading" | "verifying";
+  rewardNotice: "verified" | null;
+  dismissRewardNotice: () => void;
   refresh: () => Promise<RecommendationAccess | undefined>;
   watchRewardedAd: () => Promise<RewardedAdResult>;
 };
@@ -42,6 +52,8 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
   const queryKey = withSessionUser(sessionQueryKeys.monetization, sessionUserId);
   const [adState, setAdState] =
     useState<MonetizationContextValue["adState"]>("idle");
+  const [rewardNotice, setRewardNotice] =
+    useState<MonetizationContextValue["rewardNotice"]>(null);
   const query = useQuery({
     queryKey,
     queryFn: getMonetizationStatus,
@@ -59,16 +71,60 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     return result;
   }, [isRegistered, queryClient, queryKey, sessionUserId]);
 
+  const reconcilePendingReward = useCallback(async () => {
+    if (!isRegistered || !sessionUserId) {
+      setAdState("idle");
+      return;
+    }
+
+    const pendingSessionId =
+      await getPendingRewardedAdSession(sessionUserId).catch(() => null);
+    if (!pendingSessionId) {
+      setAdState("idle");
+      return;
+    }
+
+    setAdState("verifying");
+    try {
+      const session = await getRewardedAdSession(pendingSessionId);
+      if (session.status === "pending") return;
+
+      await clearPendingRewardedAdSession(
+        sessionUserId,
+        pendingSessionId,
+      ).catch(() => undefined);
+      setAdState("idle");
+      if (session.status === "verified") {
+        setRewardNotice("verified");
+        void trackMonetizationEvent({
+          event: "rewarded_ad_verified",
+          properties: { resolution: "app_resume" },
+        }).catch(() => undefined);
+      }
+      await refresh();
+    } catch {
+      // Keep the session id and retry when the app becomes active again.
+    }
+  }, [isRegistered, refresh, sessionUserId]);
+
+  useEffect(() => {
+    void reconcilePendingReward();
+  }, [reconcilePendingReward]);
+
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
       if (state === "active") {
         void refresh();
+        void reconcilePendingReward();
       }
     });
     return () => subscription.remove();
-  }, [refresh]);
+  }, [reconcilePendingReward, refresh]);
 
   const watchRewardedAd = useCallback(async () => {
+    if (!sessionUserId) {
+      throw new Error("로그인 상태를 확인한 뒤 다시 시도해 주세요.");
+    }
     if (query.data?.tier === "jango_plus") {
       throw new Error("장고 플러스 이용자는 광고 없이 추천할 수 있어요.");
     }
@@ -78,28 +134,71 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
 
     setAdState("loading");
     try {
+      void trackMonetizationEvent({ event: "rewarded_ad_requested" }).catch(
+        () => undefined,
+      );
       const session = await createRewardedAdSession(
         Platform.OS === "ios" ? "ios" : "android",
       );
-      const result = await presentRewardedAd(session);
+      await savePendingRewardedAdSession(sessionUserId, session.id);
+      const result = await presentRewardedAd(session, (event) => {
+        trackRewardedAdLifecycleEvent(event, session.id);
+      });
       setAdState(result === "verified" ? "idle" : "verifying");
-      await refresh();
+      if (result === "verified") {
+        await clearPendingRewardedAdSession(
+          sessionUserId,
+          session.id,
+        ).catch(() => undefined);
+      }
+      void trackMonetizationEvent({
+        event:
+          result === "verified"
+            ? "rewarded_ad_verified"
+            : "rewarded_ad_verifying",
+        properties: { session_id: session.id },
+      }).catch(() => undefined);
+      await refresh().catch(() => undefined);
       return result;
     } catch (error) {
       setAdState("idle");
+      await clearPendingRewardedAdSession(sessionUserId).catch(() => undefined);
+      void trackMonetizationEvent({
+        event: "rewarded_ad_failed",
+        properties: {
+          reason: error instanceof Error ? error.name : "unknown",
+        },
+      }).catch(() => undefined);
       throw error;
     }
-  }, [query.data?.rewardedAds.canWatch, query.data?.tier, refresh]);
+  }, [
+    query.data?.rewardedAds.canWatch,
+    query.data?.tier,
+    refresh,
+    sessionUserId,
+  ]);
+
+  const dismissRewardNotice = useCallback(() => setRewardNotice(null), []);
 
   const value = useMemo(
     () => ({
       access: query.data,
       isLoading: query.isLoading,
       adState,
+      rewardNotice,
+      dismissRewardNotice,
       refresh,
       watchRewardedAd,
     }),
-    [adState, query.data, query.isLoading, refresh, watchRewardedAd],
+    [
+      adState,
+      dismissRewardNotice,
+      query.data,
+      query.isLoading,
+      refresh,
+      rewardNotice,
+      watchRewardedAd,
+    ],
   );
 
   return (
@@ -115,4 +214,19 @@ export function useMonetization() {
     throw new Error("useMonetization must be used within MonetizationProvider");
   }
   return value;
+}
+
+function trackRewardedAdLifecycleEvent(
+  event: RewardedAdLifecycleEvent,
+  sessionId: string,
+) {
+  const eventNames = {
+    loaded: "rewarded_ad_loaded",
+    opened: "rewarded_ad_opened",
+    earned: "rewarded_ad_earned",
+  } as const;
+  void trackMonetizationEvent({
+    event: eventNames[event],
+    properties: { session_id: sessionId },
+  }).catch(() => undefined);
 }

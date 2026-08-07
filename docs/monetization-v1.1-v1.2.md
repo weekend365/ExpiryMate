@@ -15,6 +15,8 @@
 5. v1.0은 14일 동안 기존 정책을 유지한 뒤 최소 지원 버전을 v1.1로 올립니다.
 6. v1.2 상품 승인과 양 플랫폼 구매 QA가 끝난 뒤
    `SUBSCRIPTIONS_ENABLED=true`로 바꿉니다.
+7. 바코드 추천권 migration과 API를 플래그가 꺼진 상태로 먼저 배포한 뒤
+   스테이징 100%, 프로덕션 10% → 50% → 100% 순으로 확대합니다.
 
 ## API 환경변수
 
@@ -24,6 +26,15 @@ RECIPE_REWARDED_DAILY_LIMIT=3
 RECIPE_SUBSCRIBER_DAILY_LIMIT=30
 RECIPE_ABSOLUTE_DAILY_LIMIT=30
 RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT=4
+MONETIZATION_EXPERIMENT_SALT=replace-with-a-stable-secret
+MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT=0
+RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT=2
+RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT=2
+BARCODE_REWARDS_ENABLED=false
+BARCODE_REWARD_ROLLOUT_PERCENT=0
+BARCODE_REWARD_DAILY_LIMIT=3
+BARCODE_REWARD_BALANCE_LIMIT=10
+BARCODE_REWARD_TOKEN_SECRET=replace-with-a-long-random-secret
 REWARDED_ADS_ENABLED=false
 SUBSCRIPTIONS_ENABLED=false
 MINIMUM_MOBILE_APP_VERSION=
@@ -40,6 +51,17 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
 
 `ADMOB_SSV_USER_ID_SECRET`, 구매 토큰, Apple 키, Google 서비스 계정 키는 로그나
 저장소에 남기지 않습니다. Google 구매 토큰은 서버에 SHA-256 해시만 저장합니다.
+
+## 바코드 기여 추천권
+
+- Open Food Facts가 정상적으로 미등록을 확인한 유효 GTIN에만 15분 서명
+  토큰을 발급합니다. 조회 장애나 위조·만료 토큰은 상품 등록만 허용합니다.
+- 전역 최초 상품에 상품명과 브랜드 또는 카테고리가 있을 때 추천권 1회를
+  지급합니다. 하루 최대 3회, 보유 최대 10회이며 만료·양도·현금화는 없습니다.
+- 차감 순서는 구독 → 무료 → 광고 → 바코드 추천권입니다. 구독 중에는 적립만
+  하고 추천권을 소비하지 않습니다.
+- `BARCODE_REWARD_TOKEN_SECRET`과 `MONETIZATION_EXPERIMENT_SALT`는 출시 후
+  변경하지 않습니다. 원본 바코드는 퍼널 이벤트 속성에 저장하지 않습니다.
 
 ## 모바일 EAS 환경변수
 
@@ -73,6 +95,8 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
 - App Store Server Notifications V2 URL:
   `https://API_HOST/subscriptions/notifications/apple`.
 - 첫 자동 갱신 구독은 v1.2 앱 버전의 In-App Purchases 섹션에 함께 추가합니다.
+- 심사 노트에는 바코드 추천권이 기존 무료 AI 추천의 비구매 보너스 사용량이며
+  구매·양도·현금화되지 않고 구독의 광고 제거 기능을 열지 않는다고 설명합니다.
 
 ### Google Play
 
@@ -91,6 +115,8 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
 - 구독 계정에서 Google Mobile Ads 네트워크 요청이 없는지 프록시로 확인.
 - 월간·연간 구매, Android pending, 복원, 관리, 취소 후 만료, 유예·환불.
 - 활성 구독 계정 삭제 화면의 별도 스토어 해지 경고.
+- 바코드 토큰 만료·위조·OFF 장애, 하루 3회·잔액 10회, 동시 최초 등록.
+- 바코드 추천권 추천 실패 복구와 구독 중 잔액 보존.
 - iPhone, iPad, Android 내부 테스트 production-like 빌드.
 
 ## 운영 지표
@@ -98,3 +124,8 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
 서버 이벤트에는 원본 광고 거래 ID나 구매 토큰을 싣지 않고 내부 세션 ID와
 집계값만 사용합니다. 무료 소진율, 광고 시작/완주/SSV 성공률, fill rate,
 추천당 AI 비용, paywall 노출/구매/복원, 월간·연간 전환과 해지를 확인합니다.
+
+`MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT`는 사용자 ID를 안정적인 해시 버킷에
+배정합니다. 운영을 시작한 뒤에는 `MONETIZATION_EXPERIMENT_SALT`를 변경하지
+않아야 동일 사용자가 같은 실험군을 유지합니다. 퍼널 이벤트는 허용된 이름과
+짧은 문자열 속성만 저장하며 영수증·구매 토큰·광고 거래 ID는 받지 않습니다.
