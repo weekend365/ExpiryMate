@@ -24,20 +24,27 @@ const REQUIRED_PRODUCTION_VALUES = [
   "PRIVACY_POLICY_URL",
   "PRIVACY_CHOICES_URL",
   "PRIVACY_CONTACT_EMAIL",
-  "RECIPE_FREE_DAILY_LIMIT",
-  "RECIPE_REWARDED_DAILY_LIMIT",
-  "RECIPE_SUBSCRIBER_DAILY_LIMIT",
-  "RECIPE_ABSOLUTE_DAILY_LIMIT",
-  "MONETIZATION_OFFER_MODE",
-  "MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED",
-  "BARCODE_REWARDS_ENABLED",
-  "BARCODE_REWARD_ROLLOUT_PERCENT",
-  "BARCODE_REWARD_DAILY_LIMIT",
-  "BARCODE_REWARD_BALANCE_LIMIT",
-  "PAID_RECOMMENDATION_CREDITS_ENABLED",
-  "REWARDED_ADS_ENABLED",
-  "SUBSCRIPTIONS_ENABLED",
 ] as const;
+
+/**
+ * Safe launch defaults when Railway/ops omit monetization keys.
+ * Features stay off until explicitly enabled; limits match .env.production.example.
+ */
+export const PRODUCTION_MONETIZATION_DEFAULTS = {
+  RECIPE_FREE_DAILY_LIMIT: "1",
+  RECIPE_REWARDED_DAILY_LIMIT: "3",
+  RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
+  RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
+  MONETIZATION_OFFER_MODE: "core",
+  MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "false",
+  BARCODE_REWARDS_ENABLED: "false",
+  BARCODE_REWARD_ROLLOUT_PERCENT: "0",
+  BARCODE_REWARD_DAILY_LIMIT: "3",
+  BARCODE_REWARD_BALANCE_LIMIT: "10",
+  PAID_RECOMMENDATION_CREDITS_ENABLED: "false",
+  REWARDED_ADS_ENABLED: "false",
+  SUBSCRIPTIONS_ENABLED: "false",
+} as const;
 
 const HTTPS_URL_VALUES = [
   "CORS_ORIGIN_ADMIN",
@@ -52,6 +59,7 @@ export function validateProductionEnvironment(env: EnvMap = process.env) {
     return;
   }
 
+  const appliedDefaults = applyProductionMonetizationDefaults(env);
   const errors: string[] = [];
 
   for (const key of REQUIRED_PRODUCTION_VALUES) {
@@ -78,6 +86,27 @@ export function validateProductionEnvironment(env: EnvMap = process.env) {
       ].join("\n"),
     );
   }
+
+  if (appliedDefaults.length > 0) {
+    console.warn(
+      `[production-env] Applied monetization defaults for missing keys: ${appliedDefaults.join(", ")}`,
+    );
+  }
+}
+
+function applyProductionMonetizationDefaults(env: EnvMap) {
+  const applied: string[] = [];
+
+  for (const [key, value] of Object.entries(PRODUCTION_MONETIZATION_DEFAULTS)) {
+    if (env[key]?.trim()) {
+      continue;
+    }
+
+    env[key] = value;
+    applied.push(key);
+  }
+
+  return applied;
 }
 
 function requireNonPlaceholder(

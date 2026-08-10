@@ -26,8 +26,22 @@ if (!requiredBlock) {
   process.exit(1);
 }
 
+const monetizationDefaultsBlock = productionEnvSource.match(
+  /export const PRODUCTION_MONETIZATION_DEFAULTS = \{([\s\S]*?)\} as const/,
+)?.[1];
+
+if (!monetizationDefaultsBlock) {
+  console.error(
+    "[env-parity] Could not parse PRODUCTION_MONETIZATION_DEFAULTS from production-env.ts",
+  );
+  process.exit(1);
+}
+
 const REQUIRED_KEYS = [
   ...[...requiredBlock.matchAll(/"([A-Z0-9_]+)"/g)].map((match) => match[1]),
+  ...[...monetizationDefaultsBlock.matchAll(/^\s*([A-Z0-9_]+):/gm)].map(
+    (match) => match[1],
+  ),
   "AUTH_LINK_BASE_URL",
   "AUTH_ALLOW_DEV_FALLBACK",
   "BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS",

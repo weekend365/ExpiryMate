@@ -111,6 +111,39 @@ describe("validateProductionEnvironment", () => {
     });
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("applies safe monetization defaults when production omits those keys", () => {
+    const env = validProductionEnv();
+    delete env.RECIPE_FREE_DAILY_LIMIT;
+    delete env.RECIPE_REWARDED_DAILY_LIMIT;
+    delete env.RECIPE_SUBSCRIBER_DAILY_LIMIT;
+    delete env.RECIPE_ABSOLUTE_DAILY_LIMIT;
+    delete env.MONETIZATION_OFFER_MODE;
+    delete env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED;
+    delete env.BARCODE_REWARDS_ENABLED;
+    delete env.BARCODE_REWARD_ROLLOUT_PERCENT;
+    delete env.BARCODE_REWARD_DAILY_LIMIT;
+    delete env.BARCODE_REWARD_BALANCE_LIMIT;
+    delete env.PAID_RECOMMENDATION_CREDITS_ENABLED;
+    delete env.REWARDED_ADS_ENABLED;
+    delete env.SUBSCRIPTIONS_ENABLED;
+
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+    expect(env.MONETIZATION_OFFER_MODE).toBe("core");
+    expect(env.REWARDED_ADS_ENABLED).toBe("false");
+    expect(env.SUBSCRIPTIONS_ENABLED).toBe("false");
+    expect(env.RECIPE_FREE_DAILY_LIMIT).toBe("1");
+  });
+
+  it("still rejects invalid monetization values when they are set", () => {
+    const env = validProductionEnv();
+    env.MONETIZATION_OFFER_MODE = "legacy";
+    env.RECIPE_FREE_DAILY_LIMIT = "-1";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /MONETIZATION_OFFER_MODE.*RECIPE_FREE_DAILY_LIMIT/s,
+    );
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
