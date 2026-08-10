@@ -455,6 +455,16 @@ describe("SubscriptionsService", () => {
         findFirst: vi.fn().mockResolvedValue({ id: "entitlement-1" }),
       },
       inventoryItem: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            displayName: "?곗쑀",
+            expiryDate: new Date("2026-08-12T00:00:00.000Z"),
+          },
+          {
+            displayName: "?먮몢遺",
+            expiryDate: new Date("2026-08-13T00:00:00.000Z"),
+          },
+        ]),
         groupBy: vi
           .fn()
           .mockResolvedValueOnce([
@@ -488,6 +498,19 @@ describe("SubscriptionsService", () => {
       wasteRatePercent: 20,
       expiringSoon: 3,
       topDiscardedCategories: [{ category: "dairy", count: 2 }],
+      actions: [
+        expect.objectContaining({
+          kind: "use_expiring",
+          priority: "high",
+          count: 3,
+          nearestExpiryDate: "2026-08-12",
+        }),
+        expect.objectContaining({
+          kind: "reduce_category_waste",
+          category: "dairy",
+        }),
+        expect.objectContaining({ kind: "keep_momentum" }),
+      ],
       weekly: {
         current: expect.objectContaining({
           consumed: 4,

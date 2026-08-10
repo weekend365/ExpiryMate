@@ -28,6 +28,8 @@ const REQUIRED_PRODUCTION_VALUES = [
   "RECIPE_REWARDED_DAILY_LIMIT",
   "RECIPE_SUBSCRIBER_DAILY_LIMIT",
   "RECIPE_ABSOLUTE_DAILY_LIMIT",
+  "MONETIZATION_OFFER_MODE",
+  "MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED",
   "BARCODE_REWARDS_ENABLED",
   "BARCODE_REWARD_ROLLOUT_PERCENT",
   "BARCODE_REWARD_DAILY_LIMIT",
@@ -267,6 +269,18 @@ function validateAppleStoreEnvironment(env: EnvMap, errors: string[]) {
 }
 
 function validateMonetization(env: EnvMap, errors: string[]) {
+  if (
+    !["core", "expanded"].includes(
+      env.MONETIZATION_OFFER_MODE?.trim().toLowerCase() ?? "",
+    )
+  ) {
+    errors.push("MONETIZATION_OFFER_MODE must be core or expanded.");
+  }
+  validateBooleanFlag(
+    env,
+    "MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED",
+    errors,
+  );
   validateBooleanFlag(env, "REWARDED_ADS_ENABLED", errors);
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
@@ -403,6 +417,7 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     );
   }
 
+  let monetizationEstimatesValid = false;
   if (env.MONETIZATION_ESTIMATES_JSON?.trim()) {
     try {
       const estimates = JSON.parse(env.MONETIZATION_ESTIMATES_JSON) as {
@@ -427,9 +442,56 @@ function validateMonetization(env: EnvMap, errors: string[]) {
         )
       ) {
         errors.push("MONETIZATION_ESTIMATES_JSON has an invalid shape.");
+      } else {
+        monetizationEstimatesValid = true;
       }
     } catch {
       errors.push("MONETIZATION_ESTIMATES_JSON must be valid JSON.");
+    }
+  }
+
+  for (const key of [
+    "MONETIZATION_GUARDRAIL_LOOKBACK_DAYS",
+    "MONETIZATION_GUARDRAIL_MIN_SAMPLES",
+    "MONETIZATION_GUARDRAIL_CACHE_SECONDS",
+    "REWARDED_AD_COST_COVERAGE_TARGET",
+    "PAID_CREDIT_COST_COVERAGE_TARGET",
+    "MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW",
+    "MONETIZATION_HOUSEHOLD_DAILY_AI_BUDGET_KRW",
+  ]) {
+    if (env[key] === undefined || env[key] === "") continue;
+    const value = Number(env[key]);
+    if (!Number.isFinite(value) || value <= 0) {
+      errors.push(`${key} must be a positive number.`);
+    }
+  }
+  if (isEnabled(env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED)) {
+    if (!isEnabled(env.MONETIZATION_REVENUE_LEDGER_ENABLED)) {
+      errors.push(
+        "MONETIZATION_REVENUE_LEDGER_ENABLED must be enabled when unit-economics guardrails are enabled.",
+      );
+    }
+    if (Number(env.MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT) !== 100) {
+      errors.push(
+        "MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT must be 100 when unit-economics guardrails are enabled.",
+      );
+    }
+    if (!monetizationEstimatesValid) {
+      errors.push(
+        "MONETIZATION_ESTIMATES_JSON must be configured when unit-economics guardrails are enabled.",
+      );
+    }
+    if (isEnabled(env.SUBSCRIPTIONS_ENABLED)) {
+      for (const key of [
+        "MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW",
+        "MONETIZATION_HOUSEHOLD_DAILY_AI_BUDGET_KRW",
+      ]) {
+        if (!env[key]?.trim()) {
+          errors.push(
+            `${key} is required when subscriptions and unit-economics guardrails are enabled.`,
+          );
+        }
+      }
     }
   }
 

@@ -1,3 +1,5 @@
+import { expandedMonetizationOffersEnabled } from "./monetization-offer-mode";
+
 export type RecommendationCreditProduct = {
   productId: string;
   credits: number;
@@ -7,6 +9,13 @@ export function paidRecommendationCreditsEnabled() {
   return process.env.PAID_RECOMMENDATION_CREDITS_ENABLED
     ?.trim()
     .toLowerCase() === "true";
+}
+
+export function paidRecommendationCreditSalesEnabled() {
+  return (
+    expandedMonetizationOffersEnabled() &&
+    paidRecommendationCreditsEnabled()
+  );
 }
 
 export function getRecommendationCreditProducts(): RecommendationCreditProduct[] {

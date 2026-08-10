@@ -33,10 +33,12 @@ import { PrismaService } from "../../database/prisma.service";
 import { resolveBarcodeRewardPolicy } from "./barcode-reward-policy";
 import {
   getRecommendationCreditProducts,
-  paidRecommendationCreditsEnabled,
+  paidRecommendationCreditSalesEnabled,
 } from "./paid-credit-policy";
 import { recordRevenueEvent } from "./revenue-ledger";
 import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
+import { expandedMonetizationOffersEnabled } from "./monetization-offer-mode";
+import { getUnitEconomicsAvailability } from "./unit-economics-guardrail";
 
 const KST_TIMEZONE = "Asia/Seoul" as const;
 const ADMOB_PUBLIC_KEYS_URL =
@@ -616,7 +618,10 @@ export class MonetizationService {
   ): Promise<RecommendationAccess> {
     const { start, endExclusive } = getKstDayWindow(now);
     const subscriptionsEnabled = isEnabled("SUBSCRIPTIONS_ENABLED");
-    const rewardedAdsEnabled = isEnabled("REWARDED_ADS_ENABLED");
+    const economicsAvailability = await getUnitEconomicsAvailability(db, now);
+    const rewardedAdsEnabled =
+      isEnabled("REWARDED_ADS_ENABLED") &&
+      economicsAvailability.rewardedAds.allowed;
     const policy = resolveMonetizationPolicy(ownerKey);
     const barcodePolicy = resolveBarcodeRewardPolicy(ownerKey);
     const space = spaceId
@@ -755,16 +760,23 @@ export class MonetizationService {
       : rewardedAdsEnabled
       ? policy.rewardedDailyLimit
       : 0;
-    const subscriberLimit = policy.subscriberDailyLimit;
-    const householdLimit = getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60);
+    const subscriberLimit = applyLimitCap(
+      policy.subscriberDailyLimit,
+      economicsAvailability.subscriptionDailyLimitCaps.subscriber,
+    );
+    const householdLimit = applyLimitCap(
+      getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60),
+      economicsAvailability.subscriptionDailyLimitCaps.household,
+    );
     const householdSubscriptionsEnabled =
       Boolean(householdEntitlement) ||
-      isStableMonetizationRolloutEnabled({
-        subjectKey: ownerKey,
-        enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
-        rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
-        experimentKey: "household-subscriptions",
-      });
+      (expandedMonetizationOffersEnabled() &&
+        isStableMonetizationRolloutEnabled({
+          subjectKey: ownerKey,
+          enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+          rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+          experimentKey: "household-subscriptions",
+        }));
     const isSubscriber = tier !== "free";
     const freeRemaining = Math.max(0, freeLimit - freeUsed);
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);
@@ -805,6 +817,9 @@ export class MonetizationService {
     const effectiveFreeTierLimit =
       absoluteLimit > 0 ? Math.min(absoluteLimit, freeTierLimit) : freeTierLimit;
 
+    const paidCreditSalesEnabled =
+      paidRecommendationCreditSalesEnabled() &&
+      economicsAvailability.paidCredits.allowed;
     const access: RecommendationAccess = {
       day: toKstDateOnly(now),
       timezone: KST_TIMEZONE,
@@ -859,10 +874,10 @@ export class MonetizationService {
           barcodeRewardBalance < barcodePolicy.balanceLimit,
       },
       paidCredits: {
-        enabled:
-          paidRecommendationCreditsEnabled() || paidCreditBalance > 0,
+        enabled: paidCreditSalesEnabled || paidCreditBalance > 0,
+        salesEnabled: paidCreditSalesEnabled,
         balance: paidCreditBalance,
-        products: paidRecommendationCreditsEnabled()
+        products: paidCreditSalesEnabled
           ? getRecommendationCreditProducts()
           : [],
       },
@@ -911,7 +926,7 @@ export class MonetizationService {
       space._count.memberships <= getLimit("HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT", 5);
     const legacyAlternatives = uniqueOfferKinds([
       access.rewardedAds.canWatch ? "rewarded_ad" : null,
-      access.paidCredits.enabled ? "paid_credits" : null,
+      access.paidCredits.salesEnabled ? "paid_credits" : null,
       householdEligible ? "jango_household" : null,
       access.subscriptionsEnabled ? "jango_plus" : null,
     ]);
@@ -976,7 +991,7 @@ export class MonetizationService {
     } else if (hasAvailableRecommendation) {
       kind = "none";
       reason = "unavailable";
-    } else if (declines >= 2 && access.paidCredits.enabled) {
+    } else if (declines >= 2 && access.paidCredits.salesEnabled) {
       kind = "paid_credits";
       reason = "subscription_declined";
     } else {
@@ -988,7 +1003,7 @@ export class MonetizationService {
     const contextualAlternatives = uniqueOfferKinds([
       householdEligible ? "jango_household" : null,
       access.subscriptionsEnabled ? "jango_plus" : null,
-      access.paidCredits.enabled ? "paid_credits" : null,
+      access.paidCredits.salesEnabled ? "paid_credits" : null,
       access.rewardedAds.canWatch ? "rewarded_ad" : null,
     ]);
     return {
@@ -1144,6 +1159,10 @@ function normalizeIdempotencyKey(value: string) {
 function getLimit(name: string, fallback: number) {
   const parsed = Number(process.env[name]);
   return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+function applyLimitCap(configuredLimit: number, cap: number | null) {
+  return cap === null ? configuredLimit : Math.min(configuredLimit, cap);
 }
 
 export function resolveMonetizationPolicy(ownerKey: string): MonetizationPolicy {

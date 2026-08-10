@@ -30,6 +30,7 @@ import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
 import { isStableMonetizationRolloutEnabled } from "../monetization/monetization-rollout";
+import { expandedMonetizationOffersEnabled } from "../monetization/monetization-offer-mode";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -221,6 +222,7 @@ export class SubscriptionsService {
       currentWeekGroups,
       previousWeekGroups,
       expiringSoon,
+      expiringItems,
       discardedCategories,
     ] = await Promise.all([
       this.prisma.inventoryItem.groupBy({
@@ -257,6 +259,16 @@ export class SubscriptionsService {
           expiryDate: { gte: to, lte: nextWeek },
         },
       }),
+      this.prisma.inventoryItem.findMany({
+        where: {
+          ...scope,
+          status: ItemStatus.active,
+          expiryDate: { gte: to, lte: nextWeek },
+        },
+        select: { displayName: true, expiryDate: true },
+        orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
+        take: 3,
+      }),
       this.prisma.inventoryItem.groupBy({
         by: ["category"],
         where: {
@@ -292,6 +304,12 @@ export class SubscriptionsService {
         category: group.category,
         count: group._count._all,
       })),
+      actions: buildInsightActions({
+        expiringSoon,
+        expiringItems,
+        topDiscardedCategory: discardedCategories[0] ?? null,
+        weeklyTrend: resolveWasteTrend(wasteRateChangePercentagePoints),
+      }),
       weekly: {
         current: {
           from: currentWeekFrom.toISOString().slice(0, 10),
@@ -320,6 +338,7 @@ export class SubscriptionsService {
     spaceId?: string,
   ) {
     if (
+      !expandedMonetizationOffersEnabled() ||
       !isStableMonetizationRolloutEnabled({
         subjectKey: ownerKey,
         enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
@@ -1276,6 +1295,73 @@ function resolveWasteTrend(change: number | null) {
   if (change <= -1) return "improved" as const;
   if (change >= 1) return "worse" as const;
   return "steady" as const;
+}
+
+function buildInsightActions(input: {
+  expiringSoon: number;
+  expiringItems: Array<{ displayName: string; expiryDate: Date }>;
+  topDiscardedCategory: {
+    category: string | null;
+    _count: { _all: number };
+  } | null;
+  weeklyTrend: ReturnType<typeof resolveWasteTrend>;
+}) {
+  const actions: Array<{
+    kind:
+      | "use_expiring"
+      | "reduce_category_waste"
+      | "review_waste_trend"
+      | "keep_momentum";
+    priority: "high" | "medium" | "low";
+    count: number;
+    itemNames: string[];
+    category: string | null;
+    nearestExpiryDate: string | null;
+  }> = [];
+  if (input.expiringSoon > 0) {
+    actions.push({
+      kind: "use_expiring",
+      priority: "high",
+      count: input.expiringSoon,
+      itemNames: input.expiringItems.map((item) => item.displayName),
+      category: null,
+      nearestExpiryDate:
+        input.expiringItems[0]?.expiryDate.toISOString().slice(0, 10) ?? null,
+    });
+  }
+  if (
+    input.topDiscardedCategory?.category &&
+    input.topDiscardedCategory._count._all > 0
+  ) {
+    actions.push({
+      kind: "reduce_category_waste",
+      priority: input.weeklyTrend === "worse" ? "high" : "medium",
+      count: input.topDiscardedCategory._count._all,
+      itemNames: [],
+      category: input.topDiscardedCategory.category,
+      nearestExpiryDate: null,
+    });
+  }
+  if (input.weeklyTrend === "worse") {
+    actions.push({
+      kind: "review_waste_trend",
+      priority: "medium",
+      count: 0,
+      itemNames: [],
+      category: null,
+      nearestExpiryDate: null,
+    });
+  } else if (input.weeklyTrend === "improved") {
+    actions.push({
+      kind: "keep_momentum",
+      priority: "low",
+      count: 0,
+      itemNames: [],
+      category: null,
+      nearestExpiryDate: null,
+    });
+  }
+  return actions.slice(0, 3);
 }
 
 function serializeEntitlement(

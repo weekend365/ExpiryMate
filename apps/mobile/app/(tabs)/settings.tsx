@@ -76,9 +76,17 @@ export default function SettingsScreen() {
           {monetization.access?.paidCredits.enabled ? (
             <ListRow
               title="AI 추천권"
-              description={`보유 ${monetization.access.paidCredits.balance}회 · 필요한 만큼만 충전해요.`}
+              description={
+                monetization.access.paidCredits.salesEnabled
+                  ? `보유 ${monetization.access.paidCredits.balance}회 · 필요한 만큼만 충전해요.`
+                  : `보유 ${monetization.access.paidCredits.balance}회 · 추천할 때 자동 사용돼요.`
+              }
               icon={Ticket}
-              onPress={() => router.push("/settings/recommendation-credits")}
+              onPress={
+                monetization.access.paidCredits.salesEnabled
+                  ? () => router.push("/settings/recommendation-credits")
+                  : undefined
+              }
             />
           ) : null}
           <ListRow

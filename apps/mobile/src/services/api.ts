@@ -1061,6 +1061,18 @@ export type PlusInsights = {
   wasteRatePercent: number;
   expiringSoon: number;
   topDiscardedCategories: Array<{ category: string; count: number }>;
+  actions: Array<{
+    kind:
+      | "use_expiring"
+      | "reduce_category_waste"
+      | "review_waste_trend"
+      | "keep_momentum";
+    priority: "high" | "medium" | "low";
+    count: number;
+    itemNames: string[];
+    category: string | null;
+    nearestExpiryDate: string | null;
+  }>;
   weekly: {
     current: InsightPeriod;
     previous: InsightPeriod;

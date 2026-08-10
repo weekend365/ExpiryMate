@@ -26,6 +26,15 @@ RECIPE_REWARDED_DAILY_LIMIT=3
 RECIPE_SUBSCRIBER_DAILY_LIMIT=30
 RECIPE_ABSOLUTE_DAILY_LIMIT=30
 RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT=4
+MONETIZATION_OFFER_MODE=core
+MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED=false
+MONETIZATION_GUARDRAIL_LOOKBACK_DAYS=30
+MONETIZATION_GUARDRAIL_MIN_SAMPLES=50
+MONETIZATION_GUARDRAIL_CACHE_SECONDS=300
+REWARDED_AD_COST_COVERAGE_TARGET=1
+PAID_CREDIT_COST_COVERAGE_TARGET=3
+MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW=
+MONETIZATION_HOUSEHOLD_DAILY_AI_BUDGET_KRW=
 MONETIZATION_EXPERIMENT_SALT=replace-with-a-stable-secret
 MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT=0
 PERSONALIZED_MONETIZATION_OFFERS_ENABLED=false
@@ -64,6 +73,18 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
 
 `ADMOB_SSV_USER_ID_SECRET`, 구매 토큰, Apple 키, Google 서비스 계정 키는 로그나
 저장소에 남기지 않습니다. Google 구매 토큰은 서버에 SHA-256 해시만 저장합니다.
+
+`MONETIZATION_OFFER_MODE=core`는 초기 출시용입니다. 보상 광고와 개인 플러스만
+신규 판매하며 추천권·가족 플러스 신규 판매는 숨깁니다. 이미 지급된 추천권과 활성
+가족 플러스 권리는 모드 전환 뒤에도 유지됩니다. 충분한 전환 표본을 확보한 뒤
+`expanded`로 바꿉니다.
+
+단위경제 자동 가드레일은 수익 원장 rollout 100%, 검토된
+`MONETIZATION_ESTIMATES_JSON`, 개인·가족 일일 AI 예산을 설정한 뒤에만 켭니다.
+최근 표본이 `MONETIZATION_GUARDRAIL_MIN_SAMPLES`에 도달하면 광고는 원가 1배,
+추천권은 원가 3배 미만일 때 신규 공급을 멈춥니다. 최근 추천 p95 원가가 일일 AI
+예산을 초과하지 않도록 구독 30회·가족 60회 한도도 자동으로 낮춥니다. 표본이
+부족하거나 가드레일이 꺼져 있으면 기존 한도를 유지합니다.
 
 ## 바코드 기여 추천권
 

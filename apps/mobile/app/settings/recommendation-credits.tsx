@@ -97,10 +97,10 @@ export default function RecommendationCreditsScreen() {
   }, [configuredProducts, selectedId]);
 
   useEffect(() => {
-    if (viewedRef.current || !monetization.access?.paidCredits.enabled) return;
+    if (viewedRef.current || !monetization.access?.paidCredits.salesEnabled) return;
     viewedRef.current = true;
     track("credit_pack_viewed");
-  }, [monetization.access?.paidCredits.enabled]);
+  }, [monetization.access?.paidCredits.salesEnabled]);
 
   const storeProducts = useMemo(
     () => new Map(products.map((product) => [product.id, product])),

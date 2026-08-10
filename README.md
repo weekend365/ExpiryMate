@@ -415,6 +415,14 @@ estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
 `RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
 `RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.
 
+Initial monetization launches should set `MONETIZATION_OFFER_MODE=core`, which
+allows rewarded ads and personal Plus while preventing new paid-credit and
+Household sales. Existing credit balances and active Household entitlements
+remain usable. After finance-reviewed estimates and the revenue ledger are in
+place, `MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED=true` automatically
+pauses unprofitable ad/credit supply and caps subscription daily limits from
+recent p95 AI cost and the configured daily AI budgets.
+
 You can also run everything at once:
 
 ```bash

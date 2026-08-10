@@ -91,6 +91,26 @@ describe("validateProductionEnvironment", () => {
     env.RECOMMENDATION_CREDIT_PRODUCTS = "credits_5:5,credits_15:15";
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("requires complete revenue data before enabling automatic economics guardrails", () => {
+    const env = validProductionEnv();
+    env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED = "true";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /MONETIZATION_REVENUE_LEDGER_ENABLED.*MONETIZATION_ESTIMATES_JSON/s,
+    );
+
+    env.MONETIZATION_REVENUE_LEDGER_ENABLED = "true";
+    env.MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT = "100";
+    env.MONETIZATION_EXPERIMENT_SALT =
+      "abcdef1234567890abcdef1234567890";
+    env.MONETIZATION_ESTIMATES_JSON = JSON.stringify({
+      usdKrw: 1300,
+      rewardedAdEcpmKrw: 5000,
+      productNetProceedsKrw: { expirymate_premium_monthly: 3000 },
+    });
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -119,6 +139,8 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     RECIPE_REWARDED_DAILY_LIMIT: "3",
     RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
     RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
+    MONETIZATION_OFFER_MODE: "core",
+    MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "false",
     BARCODE_REWARDS_ENABLED: "false",
     BARCODE_REWARD_ROLLOUT_PERCENT: "0",
     BARCODE_REWARD_DAILY_LIMIT: "3",

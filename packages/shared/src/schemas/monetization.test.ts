@@ -44,6 +44,7 @@ describe("monetization schemas", () => {
         },
         paidCredits: {
           enabled: true,
+          salesEnabled: true,
           balance: 5,
           products: [{ productId: "credits_5", credits: 5 }],
         },

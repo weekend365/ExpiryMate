@@ -490,7 +490,7 @@ export default function RecommendationsScreen() {
               </Text>
             ) : null}
             {monetization.access.tier === "free" &&
-            monetization.access.paidCredits.enabled ? (
+            monetization.access.paidCredits.salesEnabled ? (
               <Pressable
                 onPress={() => router.push("/settings/recommendation-credits")}
                 accessibilityRole="button"
@@ -500,6 +500,11 @@ export default function RecommendationsScreen() {
                   구매 추천권 {monetization.access.paidCredits.balance}회 · 충전하기
                 </Text>
               </Pressable>
+            ) : monetization.access.tier === "free" &&
+              monetization.access.paidCredits.balance > 0 ? (
+              <Text style={styles.usageDescription}>
+                보유 추천권 {monetization.access.paidCredits.balance}회 · 추천할 때 자동 사용돼요
+              </Text>
             ) : null}
             {monetization.access.tier === "free" &&
             monetization.access.paidCredits.balance > 0 &&
@@ -720,7 +725,7 @@ export default function RecommendationsScreen() {
             ) : null}
             {!hasActiveEntitlement &&
             !monetization.access?.offer.personalized &&
-            monetization.access?.paidCredits.enabled ? (
+            monetization.access?.paidCredits.salesEnabled ? (
               <Button
                 onPress={() => router.push("/settings/recommendation-credits")}
                 variant="secondary"

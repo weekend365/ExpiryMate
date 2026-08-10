@@ -6,7 +6,12 @@ import {
   getAvailablePurchases,
   useIAP,
 } from "expo-iap";
-import { CreditCard, RefreshCw, ShieldCheck } from "lucide-react-native";
+import {
+  CreditCard,
+  Lightbulb,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
@@ -425,6 +430,17 @@ export default function SubscriptionSettingsScreen() {
           {insightsQuery.data?.weekly ? (
             <WeeklyTrendCard weekly={insightsQuery.data.weekly} />
           ) : null}
+          {insightsQuery.data?.actions.length ? (
+            <View style={styles.insightActions}>
+              <SectionHeader
+                title="이번 주 실천 제안"
+                description="실제 재고와 소비·폐기 기록을 기준으로 골랐어요."
+              />
+              {insightsQuery.data.actions.map((action) => (
+                <InsightActionCard key={action.kind} action={action} />
+              ))}
+            </View>
+          ) : null}
           {insightsQuery.data?.topDiscardedCategories.length ? (
             <Text style={styles.insightFootnote}>
               자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
@@ -707,6 +723,58 @@ function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
   );
 }
 
+function InsightActionCard({
+  action,
+}: {
+  action: PlusInsights["actions"][number];
+}) {
+  const copy = getInsightActionCopy(action);
+  return (
+    <View style={styles.insightActionCard}>
+      <View style={styles.insightActionIcon}>
+        <Lightbulb color={colors.primary} size={20} />
+      </View>
+      <View style={styles.insightActionCopy}>
+        <Text style={styles.insightActionTitle}>{copy.title}</Text>
+        <Text style={styles.insightActionDescription}>{copy.description}</Text>
+      </View>
+    </View>
+  );
+}
+
+function getInsightActionCopy(action: PlusInsights["actions"][number]) {
+  if (action.kind === "use_expiring") {
+    const names = action.itemNames.length
+      ? action.itemNames.join(", ")
+      : "임박 재료";
+    const date = action.nearestExpiryDate?.slice(5).replace("-", "/");
+    return {
+      title: `만료 임박 ${action.count}개 먼저 사용하기`,
+      description: `${names}${date ? ` · 가장 가까운 기한 ${date}` : ""}`,
+    };
+  }
+  if (action.kind === "reduce_category_waste") {
+    const category = action.category
+      ? productCategoryLabels[action.category as ProductCategory] ??
+        action.category
+      : "자주 버린 분류";
+    return {
+      title: `${category} 구매량 한 번 점검하기`,
+      description: `최근 30일 동안 ${action.count}개를 폐기했어요. 다음 구매량을 조금 줄여보세요.`,
+    };
+  }
+  if (action.kind === "review_waste_trend") {
+    return {
+      title: "이번 주 폐기 원인 돌아보기",
+      description: "지난주보다 폐기 비율이 높아졌어요. 보관 위치와 구매량을 확인해보세요.",
+    };
+  }
+  return {
+    title: "좋아진 소비 흐름 이어가기",
+    description: "지난주보다 폐기 비율이 낮아졌어요. 지금의 구매량과 소비 순서를 유지해보세요.",
+  };
+}
+
 function trackFunnelEvent(
   event: Parameters<typeof trackMonetizationEvent>[0]["event"],
   properties?: Record<string, string>,
@@ -739,6 +807,35 @@ const styles = StyleSheet.create({
   insightNumber: { fontSize: typography.title.fontSize, fontWeight: "900", color: colors.text },
   insightLabel: { marginTop: spacing.xxs, fontSize: typography.caption.fontSize, color: colors.subtext },
   insightFootnote: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
+  insightActions: { gap: spacing.sm },
+  insightActionCard: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    padding: spacing.md,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  insightActionIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.primarySoft,
+  },
+  insightActionCopy: { flex: 1, gap: spacing.xxs },
+  insightActionTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    fontWeight: "800",
+    color: colors.text,
+  },
+  insightActionDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    color: colors.subtext,
+  },
   weeklyTrendCard: {
     gap: spacing.xxs,
     padding: spacing.md,

@@ -121,6 +121,7 @@ export const recommendationAccessSchema = z.object({
   }),
   paidCredits: z.object({
     enabled: z.boolean(),
+    salesEnabled: z.boolean(),
     balance: z.number().int().nonnegative(),
     products: z.array(
       z.object({
