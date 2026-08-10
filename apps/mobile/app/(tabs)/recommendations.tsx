@@ -1,5 +1,6 @@
 import {
   formatBaseQuantity,
+  type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
   type RecipeRecommendation,
@@ -40,6 +41,7 @@ import {
   usePrivacyStatus,
 } from "../../src/features/privacy/use-privacy";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
+import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import {
   getRecipeFavoriteKey,
@@ -126,6 +128,7 @@ export default function RecommendationsScreen() {
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const [showRewardedAdSheet, setShowRewardedAdSheet] = useState(false);
+  const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
     useState<RecipeRecommendation | null>(null);
   const [recipeDetail, setRecipeDetail] =
@@ -134,6 +137,8 @@ export default function RecommendationsScreen() {
     useState<RecipeRecommendationPayload | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
   const trackedQuotaEventRef = useRef<string | null>(null);
+  const trackedScreenDayRef = useRef<string | null>(null);
+  const trackedOfferRef = useRef<string | null>(null);
   const isGenerating = generationStatus === "pending";
 
   const latestRecommendation = useMemo(
@@ -202,6 +207,32 @@ export default function RecommendationsScreen() {
       },
     }).catch(() => undefined);
   }, [generationErrorCode, isQuotaError, monetization.access]);
+
+  useEffect(() => {
+    const day = monetization.access?.day;
+    if (!day || trackedScreenDayRef.current === day) return;
+    trackedScreenDayRef.current = day;
+    void trackMonetizationEvent({
+      event: "recommendation_screen_viewed",
+      properties: { day },
+    }).catch(() => undefined);
+  }, [monetization.access?.day]);
+
+  useEffect(() => {
+    const offer = monetization.access?.offer;
+    if (
+      !isQuotaError ||
+      !offer?.personalized ||
+      offer.kind === "none"
+    ) return;
+    const key = `${monetization.access?.day}:${offer.kind}:${offer.reason}`;
+    if (trackedOfferRef.current === key) return;
+    trackedOfferRef.current = key;
+    void trackMonetizationEvent({
+      event: "offer_presented",
+      properties: { kind: offer.kind, reason: offer.reason },
+    }).catch(() => undefined);
+  }, [isQuotaError, monetization.access?.day, monetization.access?.offer]);
 
   const buildRecommendationPayload = useCallback(
     (): RecipeRecommendationPayload => ({
@@ -287,6 +318,26 @@ export default function RecommendationsScreen() {
       );
     }
   }, [monetization]);
+
+  const handleMonetizationOffer = useCallback(
+    (kind: RecommendationAccess["offer"]["kind"]) => {
+      if (kind === "none") return;
+      const offer = resolveMonetizationOffer(kind);
+      void trackMonetizationEvent({
+        event: "offer_selected",
+        properties: { kind },
+      }).catch(() => undefined);
+      setShowOfferAlternatives(false);
+      if (offer.action === "rewarded_ad") {
+        setShowRewardedAdSheet(true);
+      } else if (offer.action === "paid_credits") {
+        router.push("/settings/recommendation-credits");
+      } else {
+        router.push("/settings/subscription");
+      }
+    },
+    [],
+  );
 
   const handleStartCooking = () => {
     if (!recipeDetail) {
@@ -579,6 +630,35 @@ export default function RecommendationsScreen() {
               size="small"
             />
             {!hasActiveEntitlement &&
+            monetization.access?.offer.personalized &&
+            monetization.access?.offer.kind !== "none" ? (
+              <Button
+                onPress={() =>
+                  handleMonetizationOffer(monetization.access!.offer.kind)
+                }
+                loading={monetization.adState === "loading"}
+                fullWidth
+              >
+                {offerLabel(monetization.access!.offer.kind)}
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            monetization.access?.offer.personalized &&
+            monetization.access?.offer.alternatives.length ? (
+              <Pressable
+                onPress={() => setShowOfferAlternatives(true)}
+                accessibilityRole="button"
+                accessibilityLabel="다른 이용 방법 보기"
+                style={({ pressed }) => [
+                  styles.quotaLink,
+                  pressed && styles.optionsSummaryPressed,
+                ]}
+              >
+                <Text style={styles.quotaLinkText}>다른 방법</Text>
+              </Pressable>
+            ) : null}
+            {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
             monetization.access?.rewardedAds.canWatch ? (
               <Button
                 onPress={() => setShowRewardedAdSheet(true)}
@@ -589,6 +669,7 @@ export default function RecommendationsScreen() {
               </Button>
             ) : null}
             {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
             monetization.access?.paidCredits.enabled ? (
               <Button
                 onPress={() => router.push("/settings/recommendation-credits")}
@@ -599,6 +680,7 @@ export default function RecommendationsScreen() {
               </Button>
             ) : null}
             {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
             monetization.access?.subscriptionsEnabled ? (
               <Pressable
                 onPress={() => router.push("/settings/subscription")}
@@ -925,6 +1007,27 @@ export default function RecommendationsScreen() {
             selected={useExpiringFirst}
             onPress={() => setUseExpiringFirst((value) => !value)}
           />
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        visible={showOfferAlternatives}
+        onClose={() => setShowOfferAlternatives(false)}
+        mascotMood="idle"
+        title="다른 이용 방법"
+        description="지금 사용할 수 있는 방법만 모았어요."
+      >
+        <View style={styles.sheetFooter}>
+          {monetization.access?.offer.alternatives.map((kind) => (
+            <Button
+              key={kind}
+              variant="secondary"
+              onPress={() => handleMonetizationOffer(kind)}
+              fullWidth
+            >
+              {offerLabel(kind)}
+            </Button>
+          ))}
         </View>
       </BottomSheet>
 
@@ -1481,6 +1584,10 @@ function formatCreatedAt(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function offerLabel(kind: RecommendationAccess["offer"]["kind"]) {
+  return resolveMonetizationOffer(kind).label;
 }
 
 const styles = StyleSheet.create({

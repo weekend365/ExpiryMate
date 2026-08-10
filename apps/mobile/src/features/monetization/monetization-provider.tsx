@@ -21,6 +21,7 @@ import {
   withSessionUser,
 } from "../auth/session-boundary";
 import { useAuth } from "../auth/use-auth";
+import { useActiveSpace } from "../spaces/space-provider";
 import {
   clearPendingRewardedAdSession,
   getPendingRewardedAdSession,
@@ -48,28 +49,36 @@ const MonetizationContext = createContext<MonetizationContextValue | null>(
 
 export function MonetizationProvider({ children }: PropsWithChildren) {
   const { isRegistered, sessionUserId } = useAuth();
+  const { activeSpaceId, isReady: isSpaceReady } = useActiveSpace();
   const queryClient = useQueryClient();
-  const queryKey = withSessionUser(sessionQueryKeys.monetization, sessionUserId);
+  const queryKey = useMemo(
+    () =>
+      [
+        ...withSessionUser(sessionQueryKeys.monetization, sessionUserId),
+        activeSpaceId ?? "no-space",
+      ] as const,
+    [activeSpaceId, sessionUserId],
+  );
   const [adState, setAdState] =
     useState<MonetizationContextValue["adState"]>("idle");
   const [rewardNotice, setRewardNotice] =
     useState<MonetizationContextValue["rewardNotice"]>(null);
   const query = useQuery({
     queryKey,
-    queryFn: getMonetizationStatus,
-    enabled: Boolean(isRegistered && sessionUserId),
+    queryFn: () => getMonetizationStatus(activeSpaceId),
+    enabled: Boolean(isRegistered && sessionUserId && activeSpaceId && isSpaceReady),
     staleTime: 15_000,
   });
 
   const refresh = useCallback(async () => {
-    if (!isRegistered || !sessionUserId) return undefined;
+    if (!isRegistered || !sessionUserId || !activeSpaceId) return undefined;
     const result = await queryClient.fetchQuery({
       queryKey,
-      queryFn: getMonetizationStatus,
+      queryFn: () => getMonetizationStatus(activeSpaceId),
       staleTime: 0,
     });
     return result;
-  }, [isRegistered, queryClient, queryKey, sessionUserId]);
+  }, [activeSpaceId, isRegistered, queryClient, queryKey, sessionUserId]);
 
   const reconcilePendingReward = useCallback(async () => {
     if (!isRegistered || !sessionUserId) {
@@ -125,7 +134,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     if (!sessionUserId) {
       throw new Error("로그인 상태를 확인한 뒤 다시 시도해 주세요.");
     }
-    if (query.data?.tier === "jango_plus") {
+    if (query.data?.tier !== "free") {
       throw new Error("장고 플러스 이용자는 광고 없이 추천할 수 있어요.");
     }
     if (!query.data?.rewardedAds.canWatch) {
@@ -139,6 +148,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       );
       const session = await createRewardedAdSession(
         Platform.OS === "ios" ? "ios" : "android",
+        activeSpaceId,
       );
       await savePendingRewardedAdSession(sessionUserId, session.id);
       const result = await presentRewardedAd(session, (event) => {
@@ -174,6 +184,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
   }, [
     query.data?.rewardedAds.canWatch,
     query.data?.tier,
+    activeSpaceId,
     refresh,
     sessionUserId,
   ]);

@@ -9,7 +9,9 @@ import {
 } from "@nestjs/common";
 import {
   Prisma,
+  InventorySpaceType,
   ItemStatus,
+  MonetizationRevenueEventKind,
   SubscriptionEntitlementStatus,
   SubscriptionStore,
   type SubscriptionEntitlement as PrismaSubscriptionEntitlement,
@@ -26,6 +28,8 @@ import {
 } from "@apple/app-store-server-library";
 import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
+import { recordRevenueEvent } from "../monetization/revenue-ledger";
+import { isStableMonetizationRolloutEnabled } from "../monetization/monetization-rollout";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -36,7 +40,7 @@ const GOOGLE_ANDROID_PUBLISHER_SCOPE =
 interface VerifiedStoreSubscription {
   store: SubscriptionStore;
   productId: string;
-  planCode: "jango_plus";
+  planCode: "jango_plus" | "jango_household";
   billingPeriod: "monthly" | "yearly";
   basePlanId?: string;
   originalTransactionId?: string;
@@ -117,11 +121,29 @@ interface GoogleSubscriptionLineItem {
 export class SubscriptionsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getEntitlement(ownerKey: string): Promise<SubscriptionEntitlement> {
+  async getEntitlement(
+    ownerKey: string,
+    spaceId?: string,
+  ): Promise<SubscriptionEntitlement> {
     const now = new Date();
+    if (spaceId) {
+      const household = await this.prisma.subscriptionEntitlement.findFirst({
+        where: {
+          spaceId,
+          planCode: "jango_household",
+          isActive: true,
+          OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+          space: { memberships: { some: { userId: ownerKey } } },
+        },
+        orderBy: [{ expiresAt: "desc" }, { verifiedAt: "desc" }],
+      });
+      if (household) return serializeEntitlement(household, now);
+    }
     const activeRecord = await this.prisma.subscriptionEntitlement.findFirst({
       where: {
         ownerKey,
+        spaceId: null,
+        planCode: "jango_plus",
         isActive: true,
         OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
       },
@@ -133,7 +155,7 @@ export class SubscriptionsService {
     }
 
     const latestRecord = await this.prisma.subscriptionEntitlement.findFirst({
-      where: { ownerKey },
+      where: { ownerKey, spaceId: null },
       orderBy: [{ verifiedAt: "desc" }, { createdAt: "desc" }],
     });
 
@@ -144,6 +166,8 @@ export class SubscriptionsService {
     const entitlement = await this.prisma.subscriptionEntitlement.findFirst({
       where: {
         ownerKey,
+        spaceId: null,
+        planCode: "jango_plus",
         isActive: true,
         OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
       },
@@ -214,6 +238,141 @@ export class SubscriptionsService {
     };
   }
 
+  async getHouseholdInsights(ownerKey: string, spaceId: string, now = new Date()) {
+    const access = await this.prisma.inventorySpace.findFirst({
+      where: {
+        id: spaceId,
+        type: InventorySpaceType.household,
+        memberships: { some: { userId: ownerKey } },
+        subscriptionEntitlements: {
+          some: {
+            planCode: "jango_household",
+            isActive: true,
+            OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+          },
+        },
+      },
+      select: { id: true },
+    });
+    if (!access) {
+      throw new ForbiddenException("이 가족 공간의 플러스 리포트를 볼 수 없어요.");
+    }
+    return this.buildInsights({ spaceId }, now);
+  }
+
+  private async buildInsights(
+    scope: { ownerKey?: string; spaceId?: string },
+    now: Date,
+  ) {
+    const to = dateOnlyToUtcDate(toKstDateOnly(now));
+    const from = new Date(to);
+    from.setUTCDate(from.getUTCDate() - 29);
+    const nextWeek = new Date(to);
+    nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
+    const [statusGroups, expiringSoon, discardedCategories] = await Promise.all([
+      this.prisma.inventoryItem.groupBy({
+        by: ["status"],
+        where: {
+          ...scope,
+          updatedAt: { gte: from },
+          status: { in: [ItemStatus.consumed, ItemStatus.discarded] },
+        },
+        _count: { _all: true },
+      }),
+      this.prisma.inventoryItem.count({
+        where: {
+          ...scope,
+          status: ItemStatus.active,
+          expiryDate: { gte: to, lte: nextWeek },
+        },
+      }),
+      this.prisma.inventoryItem.groupBy({
+        by: ["category"],
+        where: {
+          ...scope,
+          status: ItemStatus.discarded,
+          updatedAt: { gte: from },
+          category: { not: null },
+        },
+        _count: { _all: true },
+        orderBy: { _count: { category: "desc" } },
+        take: 3,
+      }),
+    ]);
+    const count = (status: ItemStatus) =>
+      statusGroups.find((group) => group.status === status)?._count._all ?? 0;
+    const consumed = count(ItemStatus.consumed);
+    const discarded = count(ItemStatus.discarded);
+    const resolved = consumed + discarded;
+    return {
+      period: {
+        from: from.toISOString().slice(0, 10),
+        to: to.toISOString().slice(0, 10),
+      },
+      consumed,
+      discarded,
+      wasteRatePercent:
+        resolved > 0 ? Math.round((discarded / resolved) * 1000) / 10 : 0,
+      expiringSoon,
+      topDiscardedCategories: discardedCategories.map((group) => ({
+        category: group.category,
+        count: group._count._all,
+      })),
+    };
+  }
+
+  private async requireHouseholdPurchaseSpace(
+    ownerKey: string,
+    spaceId?: string,
+  ) {
+    if (
+      !isStableMonetizationRolloutEnabled({
+        subjectKey: ownerKey,
+        enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+        rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+        experimentKey: "household-subscriptions",
+      })
+    ) {
+      throw new ForbiddenException("가족 플러스는 아직 이 계정에서 이용할 수 없어요.");
+    }
+    if (!spaceId) {
+      throw new BadRequestException("가족 플러스를 연결할 공간이 필요합니다.");
+    }
+    const memberLimit = readPositiveInt(
+      "HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT",
+      5,
+    );
+    const space = await this.prisma.inventorySpace.findFirst({
+      where: {
+        id: spaceId,
+        type: InventorySpaceType.household,
+        ownerUserId: ownerKey,
+      },
+      select: { id: true, _count: { select: { memberships: true } } },
+    });
+    if (!space) {
+      throw new ForbiddenException("가족 공간 소유자만 이 구독을 시작할 수 있어요.");
+    }
+    if (space._count.memberships > memberLimit) {
+      throw new ConflictException(
+        `가족 플러스는 ${memberLimit}명 이하 공간에서 이용할 수 있어요.`,
+      );
+    }
+    const activeForSpace = await this.prisma.subscriptionEntitlement.findFirst({
+      where: {
+        spaceId,
+        planCode: "jango_household",
+        isActive: true,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
+      select: { ownerKey: true },
+    });
+    if (activeForSpace && activeForSpace.ownerKey !== ownerKey) {
+      throw new ConflictException("이 공간에는 이미 다른 가족 구독이 연결되어 있어요.");
+    }
+    return space.id;
+  }
+
   async verifySubscription(
     ownerKey: string,
     dto: SubscriptionVerificationRequest,
@@ -227,7 +386,17 @@ export class SubscriptionsService {
     this.assertAllowedProduct(verification.productId);
     await this.ensurePurchaseIsAvailableForOwner(ownerKey, verification);
 
-    const record = await this.saveEntitlement(ownerKey, verification);
+    const existingPurchase = await this.findExistingPurchase(verification);
+    const spaceId =
+      verification.planCode === "jango_household"
+        ? existingPurchase?.ownerKey === ownerKey && existingPurchase.spaceId
+          ? existingPurchase.spaceId
+          : await this.requireHouseholdPurchaseSpace(ownerKey, dto.spaceId)
+        : null;
+    if (verification.planCode === "jango_plus" && dto.spaceId) {
+      throw new BadRequestException("개인 플러스는 공간에 연결할 수 없습니다.");
+    }
+    const record = await this.saveEntitlement(ownerKey, verification, spaceId);
 
     return {
       ok: true,
@@ -278,7 +447,7 @@ export class SubscriptionsService {
         environment === AppleEnvironment.SANDBOX ? "sandbox" : "production",
     });
     this.assertAllowedProduct(verification.productId);
-    await this.saveEntitlement(existing.ownerKey, verification);
+    await this.saveEntitlement(existing.ownerKey, verification, existing.spaceId);
     return { ok: true as const };
   }
 
@@ -332,7 +501,7 @@ export class SubscriptionsService {
       purchaseToken,
     });
     this.assertAllowedProduct(verification.productId);
-    await this.saveEntitlement(existing.ownerKey, verification);
+    await this.saveEntitlement(existing.ownerKey, verification, existing.spaceId);
     return { ok: true as const };
   }
 
@@ -437,7 +606,7 @@ export class SubscriptionsService {
       throw new BadRequestException("Google Play 구독 기간이 일치하지 않습니다.");
     }
     if (
-      lineItem.productId === "jango_plus" &&
+      ["jango_plus", "jango_household"].includes(lineItem.productId) &&
       !["monthly", "yearly"].includes(verifiedBasePlanId ?? "")
     ) {
       throw new BadRequestException(
@@ -452,7 +621,7 @@ export class SubscriptionsService {
     return {
       store: SubscriptionStore.google_play,
       productId: lineItem.productId,
-      planCode: "jango_plus",
+      planCode: resolvePlanCode(lineItem.productId),
       billingPeriod: resolveBillingPeriod(
         lineItem.productId,
         verifiedBasePlanId,
@@ -523,10 +692,12 @@ export class SubscriptionsService {
   private async saveEntitlement(
     ownerKey: string,
     verification: VerifiedStoreSubscription,
+    spaceId: string | null,
   ) {
     const existing = await this.findExistingPurchase(verification);
     const data = {
       ownerKey,
+      spaceId,
       store: verification.store,
       productId: verification.productId,
       planCode: verification.planCode,
@@ -544,14 +715,76 @@ export class SubscriptionsService {
       rawVerification: verification.rawVerification,
     };
 
-    if (existing) {
-      return this.prisma.subscriptionEntitlement.update({
+    const record = existing
+      ? await this.prisma.subscriptionEntitlement.update({
         where: { id: existing.id },
         data,
+      })
+      : await this.prisma.subscriptionEntitlement.create({ data });
+    if (hasRevenueLedger(this.prisma)) {
+      await this.recordSubscriptionRevenue(existing, record, verification);
+    }
+    return record;
+  }
+
+  private async recordSubscriptionRevenue(
+    existing: PrismaSubscriptionEntitlement | null,
+    record: PrismaSubscriptionEntitlement,
+    verification: VerifiedStoreSubscription,
+  ) {
+    const identity =
+      verification.transactionId ??
+      verification.purchaseTokenHash ??
+      verification.originalTransactionId ??
+      record.id;
+    const source = verification.planCode;
+    if (verification.status === SubscriptionEntitlementStatus.revoked) {
+      await recordRevenueEvent(this.prisma, {
+        ownerKey: record.ownerKey,
+        spaceId: record.spaceId,
+        kind: MonetizationRevenueEventKind.subscription_refund,
+        source,
+        store: verification.store,
+        productId: verification.productId,
+        billingPeriod: record.billingPeriod,
+        basePlanId: verification.basePlanId,
+        externalKey: `subscription-refund:${identity}`,
+        multiplier: -1,
+      });
+      return;
+    }
+    if (existing?.willRenew === true && verification.willRenew === false) {
+      await recordRevenueEvent(this.prisma, {
+        ownerKey: record.ownerKey,
+        spaceId: record.spaceId,
+        kind: MonetizationRevenueEventKind.subscription_cancelled,
+        source,
+        store: verification.store,
+        productId: verification.productId,
+        billingPeriod: record.billingPeriod,
+        basePlanId: verification.basePlanId,
+        externalKey: `subscription-cancelled:${identity}`,
       });
     }
-
-    return this.prisma.subscriptionEntitlement.create({ data });
+    if (!verification.isActive) return;
+    const isRenewal = Boolean(
+      existing &&
+        verification.transactionId &&
+        existing.transactionId !== verification.transactionId,
+    );
+    await recordRevenueEvent(this.prisma, {
+      ownerKey: record.ownerKey,
+      spaceId: record.spaceId,
+      kind: isRenewal
+        ? MonetizationRevenueEventKind.subscription_renewal
+        : MonetizationRevenueEventKind.subscription_purchase,
+      source,
+      store: verification.store,
+      productId: verification.productId,
+      billingPeriod: record.billingPeriod,
+      basePlanId: verification.basePlanId,
+      externalKey: `subscription-${isRenewal ? "renewal" : "purchase"}:${identity}`,
+    });
   }
 
   private async findExistingPurchase(verification: VerifiedStoreSubscription) {
@@ -652,7 +885,7 @@ function normalizeAppleTransaction({
   return {
     store: SubscriptionStore.apple_app_store,
     productId: transaction.productId,
-    planCode: "jango_plus",
+    planCode: resolvePlanCode(transaction.productId),
     billingPeriod: resolveBillingPeriod(transaction.productId),
     originalTransactionId: transaction.originalTransactionId,
     transactionId: transaction.transactionId,
@@ -1037,6 +1270,8 @@ function serializeEntitlement(
       store: null,
       productId: null,
       planCode: null,
+      scope: "user",
+      spaceId: null,
       billingPeriod: null,
       basePlanId: null,
       status: "unknown",
@@ -1061,7 +1296,12 @@ function serializeEntitlement(
     hasActiveEntitlement,
     store: record.store,
     productId: record.productId,
-    planCode: record.planCode === "jango_plus" ? "jango_plus" : null,
+    planCode:
+      record.planCode === "jango_plus" || record.planCode === "jango_household"
+        ? record.planCode
+        : null,
+    scope: record.spaceId ? "space" : "user",
+    spaceId: record.spaceId,
     billingPeriod: record.billingPeriod,
     basePlanId: record.basePlanId,
     status,
@@ -1085,6 +1325,10 @@ function resolveBillingPeriod(
 ): "monthly" | "yearly" {
   const value = `${productId}:${basePlanId ?? ""}`.toLowerCase();
   return value.includes("year") ? "yearly" : "monthly";
+}
+
+function resolvePlanCode(productId: string): "jango_plus" | "jango_household" {
+  return productId.includes("household") ? "jango_household" : "jango_plus";
 }
 
 function createAppleSignedDataVerifier(environment: AppleEnvironment) {
@@ -1174,6 +1418,18 @@ function getPrivateKeyEnv(name: string, message: string) {
 
 function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
+}
+
+function readPositiveInt(name: string, fallback: number) {
+  const parsed = Number(process.env[name]);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function hasRevenueLedger(db: PrismaService) {
+  return Boolean(
+    (db as unknown as { monetizationRevenueEvent?: unknown })
+      .monetizationRevenueEvent,
+  );
 }
 
 function millisToDate(value: number | undefined) {

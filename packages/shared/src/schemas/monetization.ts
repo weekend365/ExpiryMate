@@ -1,7 +1,25 @@
 import { z } from "zod";
 
 export const monetizationPlatformSchema = z.enum(["ios", "android"]);
-export const monetizationTierSchema = z.enum(["free", "jango_plus"]);
+export const monetizationTierSchema = z.enum([
+  "free",
+  "jango_plus",
+  "jango_household",
+]);
+export const monetizationOfferKindSchema = z.enum([
+  "rewarded_ad",
+  "paid_credits",
+  "jango_plus",
+  "jango_household",
+  "none",
+]);
+export const monetizationOfferReasonSchema = z.enum([
+  "casual",
+  "engaged",
+  "subscription_declined",
+  "active_entitlement",
+  "unavailable",
+]);
 export const rewardedAdSessionStatusSchema = z.enum([
   "pending",
   "verified",
@@ -43,6 +61,10 @@ export const monetizationFunnelEventNameSchema = z.enum([
   "credit_checkout_failed",
   "credit_purchase_verified",
   "paid_credit_used",
+  "recommendation_screen_viewed",
+  "offer_presented",
+  "offer_selected",
+  "paywall_dismissed",
 ]);
 
 export const trackMonetizationEventRequestSchema = z.object({
@@ -60,8 +82,13 @@ export const recommendationAccessSchema = z.object({
   timezone: z.literal("Asia/Seoul"),
   resetsAt: z.string(),
   tier: monetizationTierSchema,
+  usageScope: z.object({
+    type: z.enum(["user", "space"]),
+    spaceId: z.string().nullable(),
+  }),
   rewardedAdsEnabled: z.boolean(),
   subscriptionsEnabled: z.boolean(),
+  householdSubscriptionsEnabled: z.boolean(),
   experiment: z.object({
     key: z.literal("monetization-v1"),
     variant: monetizationExperimentVariantSchema,
@@ -69,6 +96,7 @@ export const recommendationAccessSchema = z.object({
   }),
   dailyLimit: z.number().int().nonnegative(),
   subscriberDailyLimit: z.number().int().nonnegative(),
+  householdDailyLimit: z.number().int().nonnegative(),
   used: z.number().int().nonnegative(),
   remaining: z.number().int().nonnegative(),
   free: z.object({
@@ -101,6 +129,12 @@ export const recommendationAccessSchema = z.object({
       }),
     ),
   }),
+  offer: z.object({
+    kind: monetizationOfferKindSchema,
+    reason: monetizationOfferReasonSchema,
+    personalized: z.boolean(),
+    alternatives: z.array(monetizationOfferKindSchema.exclude(["none"])),
+  }),
 });
 
 export const recommendationCreditPurchaseVerificationRequestSchema = z.object({
@@ -120,6 +154,7 @@ export const recommendationCreditPurchaseVerificationResponseSchema = z.object({
 
 export const createRewardedAdSessionRequestSchema = z.object({
   platform: monetizationPlatformSchema,
+  spaceId: z.string().min(1).max(128).optional(),
 });
 
 export const rewardedAdSessionSchema = z.object({
@@ -134,6 +169,10 @@ export const rewardedAdSessionSchema = z.object({
 
 export type MonetizationPlatform = z.infer<typeof monetizationPlatformSchema>;
 export type MonetizationTier = z.infer<typeof monetizationTierSchema>;
+export type MonetizationOfferKind = z.infer<typeof monetizationOfferKindSchema>;
+export type MonetizationOfferReason = z.infer<
+  typeof monetizationOfferReasonSchema
+>;
 export type RewardedAdSessionStatus = z.infer<
   typeof rewardedAdSessionStatusSchema
 >;

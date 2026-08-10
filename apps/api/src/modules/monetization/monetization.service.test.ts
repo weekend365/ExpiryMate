@@ -26,6 +26,11 @@ const managedEnvKeys = [
   "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT",
   "RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT",
   "RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT",
+  "PERSONALIZED_MONETIZATION_OFFERS_ENABLED",
+  "PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT",
+  "RECIPE_HOUSEHOLD_DAILY_LIMIT",
+  "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+  "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
   "BARCODE_REWARDS_ENABLED",
   "BARCODE_REWARD_ROLLOUT_PERCENT",
   "BARCODE_REWARD_DAILY_LIMIT",
@@ -48,6 +53,11 @@ describe("MonetizationService", () => {
     process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "0";
     process.env.RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT = "2";
     process.env.RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT = "2";
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED = "false";
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT = "0";
+    process.env.RECIPE_HOUSEHOLD_DAILY_LIMIT = "60";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT = "100";
     process.env.BARCODE_REWARDS_ENABLED = "true";
     process.env.BARCODE_REWARD_ROLLOUT_PERCENT = "100";
     process.env.BARCODE_REWARD_DAILY_LIMIT = "3";
@@ -116,6 +126,38 @@ describe("MonetizationService", () => {
     expect(status.rewardedAds.canWatch).toBe(false);
   });
 
+  it("isolates personal Plus usage from Household usage when switching spaces", async () => {
+    const prisma = createPrismaMock();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-personal",
+      type: "personal",
+      ownerUserId: "owner-a",
+      _count: { memberships: 1 },
+    });
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "personal-plus",
+      ownerKey: "owner-a",
+      spaceId: null,
+      planCode: "jango_plus",
+      isActive: true,
+    });
+    const service = new MonetizationService(prisma as never);
+
+    await service.getStatusForSpace("owner-a", "space-personal");
+
+    expect(prisma.recommendationUsageEvent.groupBy).toHaveBeenCalledWith({
+      by: ["source"],
+      where: expect.objectContaining({
+        ownerKey: "owner-a",
+        OR: [
+          { subscriptionEntitlementId: null },
+          { subscriptionEntitlementId: "personal-plus" },
+        ],
+      }),
+      _count: { _all: true },
+    });
+  });
+
   it("assigns a stable value-first policy from the server rollout", async () => {
     process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "100";
     const prisma = createPrismaMock();
@@ -132,6 +174,125 @@ describe("MonetizationService", () => {
     expect(first.free.limit).toBe(2);
     expect(first.rewardedAds.dailyLimit).toBe(2);
     expect(second.experiment).toEqual(first.experiment);
+  });
+
+  it("offers Plus to engaged users after the free quota is exhausted", async () => {
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED = "true";
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT = "100";
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      { source: RecommendationUsageSource.free, _count: { _all: 1 } },
+    ]);
+    prisma.recommendationUsageEvent.count.mockImplementation(async (args) =>
+      args?.where?.completedAt ? 3 : 0,
+    );
+    prisma.monetizationFunnelEvent.findMany.mockResolvedValue([
+      { createdAt: new Date("2026-08-09T03:00:00.000Z") },
+      { createdAt: new Date("2026-08-10T03:00:00.000Z") },
+    ]);
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus(
+      "owner-engaged",
+      new Date("2026-08-10T04:00:00.000Z"),
+    );
+
+    expect(status.offer).toMatchObject({
+      kind: "jango_plus",
+      reason: "engaged",
+      personalized: true,
+    });
+  });
+
+  it("uses the active household space entitlement and shared daily limit", async () => {
+    const prisma = createPrismaMock();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-home",
+      type: "household",
+      ownerUserId: "owner-a",
+      _count: { memberships: 3 },
+    });
+    prisma.subscriptionEntitlement.findFirst
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({
+        id: "household-subscription",
+        ownerKey: "owner-a",
+        spaceId: "space-home",
+        planCode: "jango_household",
+        isActive: true,
+      });
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      { source: RecommendationUsageSource.subscription, _count: { _all: 10 } },
+    ]);
+    prisma.recommendationUsageEvent.count.mockResolvedValue(10);
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatusForSpace(
+      "member-a",
+      "space-home",
+      new Date("2026-08-10T04:00:00.000Z"),
+    );
+
+    expect(status.tier).toBe("jango_household");
+    expect(status.usageScope).toEqual({ type: "space", spaceId: "space-home" });
+    expect(status.dailyLimit).toBe(60);
+    expect(status.remaining).toBe(50);
+    expect(status.rewardedAds.canWatch).toBe(false);
+  });
+
+  it("serializes household reservations so concurrent requests cannot exceed 60", async () => {
+    const prisma = createPrismaMock();
+    let householdUsage = 59;
+    let transactionQueue = Promise.resolve();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-home",
+      type: "household",
+      ownerUserId: "owner-a",
+      _count: { memberships: 3 },
+    });
+    prisma.subscriptionEntitlement.findFirst.mockImplementation(
+      async (query: { where?: { planCode?: string } }) =>
+        query.where?.planCode === "jango_household"
+          ? {
+              id: "household-subscription",
+              ownerKey: "owner-a",
+              spaceId: "space-home",
+              planCode: "jango_household",
+              isActive: true,
+            }
+          : null,
+    );
+    prisma.recommendationUsageEvent.groupBy.mockImplementation(async () => [
+      {
+        source: RecommendationUsageSource.subscription,
+        _count: { _all: householdUsage },
+      },
+    ]);
+    prisma.recommendationUsageEvent.count.mockImplementation(
+      async (query: { where?: { subscriptionEntitlementId?: string } }) =>
+        query.where?.subscriptionEntitlementId ? householdUsage : 0,
+    );
+    prisma.recommendationUsageEvent.create.mockImplementation(async () => {
+      householdUsage += 1;
+      return { id: `usage-${householdUsage}` };
+    });
+    prisma.$transaction.mockImplementation(
+      (callback: (tx: typeof prisma) => Promise<unknown>) => {
+        const result = transactionQueue.then(() => callback(prisma));
+        transactionQueue = result.then(() => undefined, () => undefined);
+        return result;
+      },
+    );
+    const service = new MonetizationService(prisma as never);
+
+    const results = await Promise.allSettled([
+      service.reserveRecommendation("member-a", "request-a", new Date(), "space-home"),
+      service.reserveRecommendation("member-b", "request-b", new Date(), "space-home"),
+    ]);
+
+    expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+    expect(results.filter((result) => result.status === "rejected")).toHaveLength(1);
+    expect(householdUsage).toBe(60);
   });
 
   it("subtracts paid-credit usage across all previous days", async () => {
@@ -171,6 +332,22 @@ describe("MonetizationService", () => {
         properties: { source: "settings" },
       },
     });
+  });
+
+  it("records a recommendation screen view at most once per KST day", async () => {
+    const prisma = createPrismaMock();
+    prisma.monetizationFunnelEvent.count.mockResolvedValue(1);
+    const service = new MonetizationService(prisma as never);
+
+    await service.trackFunnelEvent("owner-a", {
+      event: "recommendation_screen_viewed",
+    });
+
+    expect(prisma.monetizationFunnelEvent.create).not.toHaveBeenCalled();
+    expect(prisma.$transaction).toHaveBeenCalledWith(
+      expect.any(Function),
+      { isolationLevel: "Serializable" },
+    );
   });
 
   it("returns a completed recommendation for a duplicate idempotency key", async () => {
@@ -448,6 +625,9 @@ describe("MonetizationService", () => {
 
 function createPrismaMock() {
   const prisma = {
+    inventorySpace: {
+      findFirst: vi.fn().mockResolvedValue(null),
+    },
     subscriptionEntitlement: {
       findFirst: vi.fn().mockResolvedValue(null),
     },
@@ -476,6 +656,7 @@ function createPrismaMock() {
     },
     monetizationFunnelEvent: {
       count: vi.fn().mockResolvedValue(0),
+      findMany: vi.fn().mockResolvedValue([]),
       create: vi.fn().mockResolvedValue({ id: "event-1" }),
     },
   };

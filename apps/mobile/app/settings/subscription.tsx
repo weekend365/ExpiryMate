@@ -29,41 +29,71 @@ import {
   formatSubscriptionStore,
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
-import { getPlusInsights, trackMonetizationEvent } from "../../src/services/api";
+import {
+  getHouseholdInsights,
+  getPlusInsights,
+  trackMonetizationEvent,
+} from "../../src/services/api";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 
 const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
 const APPLE_YEARLY_ID = "expirymate_premium_yearly";
 const GOOGLE_PRODUCT_ID = "jango_plus";
+const APPLE_HOUSEHOLD_MONTHLY_ID = "expirymate_household_monthly";
+const APPLE_HOUSEHOLD_YEARLY_ID = "expirymate_household_yearly";
+const GOOGLE_HOUSEHOLD_PRODUCT_ID = "jango_household";
 const PACKAGE_NAME = "com.expirymate.mobile";
 
 type BillingPeriod = "monthly" | "yearly";
+type PlanCode = "jango_plus" | "jango_household";
 type StorePlan = {
   period: BillingPeriod;
   displayPrice: string;
   price: number | null;
   productId: string;
   offerToken?: string;
+  planCode: PlanCode;
 };
 
 export default function SubscriptionSettingsScreen() {
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
   const { sessionUserId } = useAuth();
+  const { activeSpaceId, spaces } = useActiveSpace();
+  const activeSpace = spaces.find((space) => space.id === activeSpaceId);
+  const householdEligible = Boolean(
+    monetization.access?.householdSubscriptionsEnabled &&
+    activeSpace?.type === "household" &&
+      activeSpace.myRole === "owner" &&
+      activeSpace.memberCount <= 5,
+  );
   const entitlement = subscription.query.data;
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
   const insightsQuery = useQuery({
-    queryKey: withSessionUser(["subscriptions", "plus-insights"], sessionUserId),
-    queryFn: getPlusInsights,
+    queryKey: withSessionUser(
+      ["subscriptions", "plus-insights", entitlement?.planCode ?? "none", activeSpaceId ?? "no-space"],
+      sessionUserId,
+    ),
+    queryFn: () =>
+      entitlement?.planCode === "jango_household" && activeSpaceId
+        ? getHouseholdInsights(activeSpaceId)
+        : getPlusInsights(),
     enabled: hasActiveEntitlement,
   });
   const [selectedPeriod, setSelectedPeriod] =
     useState<BillingPeriod>("yearly");
+  const [selectedPlanCode, setSelectedPlanCode] = useState<PlanCode>(
+    householdEligible ? "jango_household" : "jango_plus",
+  );
   const [busyAction, setBusyAction] = useState<
     "purchase" | "restore" | null
   >(null);
   const appliedExperimentRef = useRef(false);
   const trackedPaywallRef = useRef(false);
+  const purchaseCompletedRef = useRef(false);
+  const selectedPlanCodeRef = useRef<PlanCode>(selectedPlanCode);
+  selectedPlanCodeRef.current = selectedPlanCode;
 
   async function handleStorePurchase(purchase: Purchase) {
     if (purchase.purchaseState === "pending") {
@@ -80,17 +110,24 @@ export default function SubscriptionSettingsScreen() {
         Platform.OS === "ios"
           ? {
               store: "apple_app_store" as const,
-              productId: purchase.productId,
-              transactionId: purchase.transactionId ?? undefined,
+            productId: purchase.productId,
+            transactionId: purchase.transactionId ?? undefined,
+            spaceId: isHouseholdProduct(purchase.productId)
+              ? activeSpaceId
+              : undefined,
             }
           : {
               store: "google_play" as const,
               productId: purchase.productId,
               purchaseToken: purchase.purchaseToken ?? undefined,
               basePlanId: purchase.currentPlanId ?? selectedPeriod,
+              spaceId: isHouseholdProduct(purchase.productId)
+                ? activeSpaceId
+                : undefined,
             };
       await subscription.verifyMutation.mutateAsync(verification);
       await finishTransaction({ purchase, isConsumable: false });
+      purchaseCompletedRef.current = true;
       trackFunnelEvent("purchase_verified", {
         store: Platform.OS,
         product_id: purchase.productId,
@@ -151,11 +188,31 @@ export default function SubscriptionSettingsScreen() {
     void fetchProducts({
       skus:
         Platform.OS === "ios"
-          ? [APPLE_MONTHLY_ID, APPLE_YEARLY_ID]
-          : [GOOGLE_PRODUCT_ID],
+          ? [
+              APPLE_MONTHLY_ID,
+              APPLE_YEARLY_ID,
+              APPLE_HOUSEHOLD_MONTHLY_ID,
+              APPLE_HOUSEHOLD_YEARLY_ID,
+            ]
+          : [GOOGLE_PRODUCT_ID, GOOGLE_HOUSEHOLD_PRODUCT_ID],
       type: "subs",
     });
   }, [connected, fetchProducts]);
+
+  useEffect(() => {
+    if (!householdEligible && selectedPlanCode === "jango_household") {
+      setSelectedPlanCode("jango_plus");
+    } else if (
+      householdEligible &&
+      monetization.access?.offer.kind === "jango_household"
+    ) {
+      setSelectedPlanCode("jango_household");
+    }
+  }, [
+    householdEligible,
+    monetization.access?.offer.kind,
+    selectedPlanCode,
+  ]);
 
   useEffect(() => {
     if (appliedExperimentRef.current || !monetization.access) return;
@@ -182,7 +239,21 @@ export default function SubscriptionSettingsScreen() {
     subscription.query.isLoading,
   ]);
 
-  const plans = useMemo(() => resolvePlans(subscriptions), [subscriptions]);
+  useEffect(
+    () => () => {
+      if (trackedPaywallRef.current && !purchaseCompletedRef.current) {
+        trackFunnelEvent("paywall_dismissed", {
+          plan_code: selectedPlanCodeRef.current,
+        });
+      }
+    },
+    [],
+  );
+
+  const plans = useMemo(
+    () => resolvePlans(subscriptions, selectedPlanCode),
+    [selectedPlanCode, subscriptions],
+  );
   const selectedPlan = plans.find((plan) => plan.period === selectedPeriod);
   const annualSavings = getAnnualSavings(plans);
 
@@ -199,6 +270,7 @@ export default function SubscriptionSettingsScreen() {
     trackFunnelEvent("checkout_started", {
       billing_period: selectedPlan.period,
       product_id: selectedPlan.productId,
+      plan_code: selectedPlan.planCode,
     });
     try {
       await requestPurchase({
@@ -263,7 +335,10 @@ export default function SubscriptionSettingsScreen() {
 
   const manage = () =>
     deepLinkToSubscriptions({
-      skuAndroid: GOOGLE_PRODUCT_ID,
+      skuAndroid:
+        entitlement?.planCode === "jango_household"
+          ? GOOGLE_HOUSEHOLD_PRODUCT_ID
+          : GOOGLE_PRODUCT_ID,
       packageNameAndroid: PACKAGE_NAME,
     }).catch((error) =>
       Alert.alert("구독 관리를 열지 못했어요", getErrorMessage(error)),
@@ -272,7 +347,11 @@ export default function SubscriptionSettingsScreen() {
   return (
     <Screen
       title="장고 플러스"
-      subtitle={`광고 없이 하루 총 ${monetization.access?.subscriberDailyLimit ?? 30}회 추천받아요.`}
+      subtitle={
+        entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
+          ? `가족 공간에서 하루 ${monetization.access?.householdDailyLimit ?? 60}회를 함께 써요.`
+          : `광고 없이 하루 총 ${monetization.access?.subscriberDailyLimit ?? 30}회 추천받아요.`
+      }
     >
       <View style={styles.section}>
         <SectionHeader
@@ -282,7 +361,11 @@ export default function SubscriptionSettingsScreen() {
         <View style={styles.card}>
           <ListRow
             title={
-              hasActiveEntitlement ? "장고 플러스를 이용 중이에요" : "무료 이용 중이에요"
+              hasActiveEntitlement
+                ? entitlement?.planCode === "jango_household"
+                  ? "가족 플러스를 이용 중이에요"
+                  : "장고 플러스를 이용 중이에요"
+                : "무료 이용 중이에요"
             }
             description={
               subscription.query.isLoading
@@ -303,8 +386,17 @@ export default function SubscriptionSettingsScreen() {
           description="추천 횟수뿐 아니라 냉장고를 꾸준히 관리할수록 가치가 쌓여요."
         />
         <View style={styles.benefitCard}>
-          <BenefitLine text={`광고 없이 하루 ${monetization.access?.subscriberDailyLimit ?? 30}회 AI 추천`} />
+          <BenefitLine
+            text={
+              entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
+                ? `최대 5명이 하루 ${monetization.access?.householdDailyLimit ?? 60}회 AI 추천 공유`
+                : `광고 없이 하루 ${monetization.access?.subscriberDailyLimit ?? 30}회 AI 추천`
+            }
+          />
           <BenefitLine text="최근 30일 소비·폐기 리포트" />
+          {(entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household") ? (
+            <BenefitLine text="가족 공간 구성원 모두 광고 없이 이용" />
+          ) : null}
           <BenefitLine text="구독 중 바코드 추천권 적립 및 잔액 보존" />
         </View>
       </View>
@@ -333,6 +425,40 @@ export default function SubscriptionSettingsScreen() {
 
       {!hasActiveEntitlement ? (
         <View style={styles.section}>
+          {householdEligible ? (
+            <>
+              <SectionHeader
+                title="플러스 종류"
+                description="나만 쓰거나 가족 공간 전체가 함께 쓸 수 있어요."
+              />
+              <View style={styles.planList}>
+                {(["jango_plus", "jango_household"] as const).map((planCode) => (
+                  <Pressable
+                    key={planCode}
+                    onPress={() => {
+                      setSelectedPlanCode(planCode);
+                      trackFunnelEvent("plan_selected", { plan_code: planCode });
+                    }}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: selectedPlanCode === planCode }}
+                    style={[
+                      styles.planCard,
+                      selectedPlanCode === planCode && styles.planCardSelected,
+                    ]}
+                  >
+                    <View style={styles.planCopy}>
+                      <Text style={styles.planTitle}>
+                        {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
+                      </Text>
+                      <Text style={styles.planDescription}>
+                        {planCode === "jango_household" ? "최대 5명 · 하루 60회 공유" : "하루 30회 · 개인 전용"}
+                      </Text>
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
+            </>
+          ) : null}
           <SectionHeader
             title="이용권 고르기"
             description={
@@ -352,6 +478,7 @@ export default function SubscriptionSettingsScreen() {
                     setSelectedPeriod(period);
                     trackFunnelEvent("plan_selected", {
                       billing_period: period,
+                      plan_code: selectedPlanCode,
                     });
                   }}
                   accessibilityRole="radio"
@@ -428,14 +555,25 @@ export default function SubscriptionSettingsScreen() {
   );
 }
 
-function resolvePlans(products: ProductSubscription[]): StorePlan[] {
+function resolvePlans(
+  products: ProductSubscription[],
+  planCode: PlanCode,
+): StorePlan[] {
   if (Platform.OS === "ios") {
+    const monthlyId =
+      planCode === "jango_household"
+        ? APPLE_HOUSEHOLD_MONTHLY_ID
+        : APPLE_MONTHLY_ID;
+    const yearlyId =
+      planCode === "jango_household"
+        ? APPLE_HOUSEHOLD_YEARLY_ID
+        : APPLE_YEARLY_ID;
     return products.flatMap((product) => {
       if (product.platform !== "ios") return [];
       const period =
-        product.id === APPLE_YEARLY_ID
+        product.id === yearlyId
           ? "yearly"
-          : product.id === APPLE_MONTHLY_ID
+          : product.id === monthlyId
             ? "monthly"
             : null;
       return period
@@ -444,13 +582,18 @@ function resolvePlans(products: ProductSubscription[]): StorePlan[] {
             displayPrice: product.displayPrice,
             price: product.price ?? null,
             productId: product.id,
+            planCode,
           }]
         : [];
     });
   }
 
+  const googleProductId =
+    planCode === "jango_household"
+      ? GOOGLE_HOUSEHOLD_PRODUCT_ID
+      : GOOGLE_PRODUCT_ID;
   const product = products.find(
-    (item) => item.platform === "android" && item.id === GOOGLE_PRODUCT_ID,
+    (item) => item.platform === "android" && item.id === googleProductId,
   );
   if (!product || product.platform !== "android") return [];
 
@@ -468,6 +611,7 @@ function resolvePlans(products: ProductSubscription[]): StorePlan[] {
           price: offer.price,
           productId: product.id,
           offerToken: offer.offerTokenAndroid ?? undefined,
+          planCode,
         }]
       : [];
   });
@@ -491,6 +635,10 @@ function getErrorMessage(error: unknown) {
   return error instanceof Error
     ? error.message
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
+}
+
+function isHouseholdProduct(productId: string) {
+  return productId.includes("household");
 }
 
 function BenefitLine({ text }: { text: string }) {

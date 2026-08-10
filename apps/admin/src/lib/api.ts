@@ -194,6 +194,14 @@ export type AdminMonetizationOverview = {
     totalTokens: number;
     paidCreditsSold: number;
     paidCreditPurchases: number;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    arppuKrw: number | null;
+    estimatedMrrKrw: number | null;
+    renewalRatePercent: number;
+    churnRefundRatePercent: number;
   };
   usageBySource: Array<{ source: string; count: number }>;
   funnel: Array<{
@@ -207,6 +215,25 @@ export type AdminMonetizationOverview = {
     paywallToPurchasePercent: number;
     rewardedAdVerificationPercent: number;
     barcodeRewardGrantPercent: number;
+  };
+  economicsConfigured: boolean;
+  economicsBySource: Array<{
+    source: string;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    events: number;
+  }>;
+  retention: {
+    d7Percent: number;
+    d30Percent: number;
+    cohorts: Array<{
+      cohort: string;
+      users: number;
+      d7Percent: number | null;
+      d30Percent: number | null;
+    }>;
   };
   daily: Array<{ day: string; recommendations: number; aiCostUsd: number }>;
 };

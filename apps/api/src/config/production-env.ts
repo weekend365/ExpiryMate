@@ -370,6 +370,69 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     validateCommaList(env, "IAP_ALLOWED_PRODUCT_IDS", errors);
   }
 
+  for (const [enabledKey, rolloutKey] of [
+    [
+      "PERSONALIZED_MONETIZATION_OFFERS_ENABLED",
+      "PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT",
+    ],
+    [
+      "MONETIZATION_REVENUE_LEDGER_ENABLED",
+      "MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT",
+    ],
+    [
+      "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+      "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+    ],
+  ] as const) {
+    const rollout = Number(env[rolloutKey] ?? 0);
+    if (!Number.isInteger(rollout) || rollout < 0 || rollout > 100) {
+      errors.push(`${rolloutKey} must be between 0 and 100.`);
+    }
+    if (isEnabled(env[enabledKey]) && !env.MONETIZATION_EXPERIMENT_SALT?.trim()) {
+      errors.push(
+        `MONETIZATION_EXPERIMENT_SALT is required when ${enabledKey} is enabled.`,
+      );
+    }
+  }
+  if (
+    isEnabled(env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED) &&
+    !isEnabled(env.SUBSCRIPTIONS_ENABLED)
+  ) {
+    errors.push(
+      "SUBSCRIPTIONS_ENABLED must be enabled when HOUSEHOLD_SUBSCRIPTIONS_ENABLED is enabled.",
+    );
+  }
+
+  if (env.MONETIZATION_ESTIMATES_JSON?.trim()) {
+    try {
+      const estimates = JSON.parse(env.MONETIZATION_ESTIMATES_JSON) as {
+        usdKrw?: unknown;
+        rewardedAdEcpmKrw?: unknown;
+        productNetProceedsKrw?: unknown;
+      };
+      if (
+        typeof estimates.usdKrw !== "number" ||
+        estimates.usdKrw <= 0 ||
+        typeof estimates.rewardedAdEcpmKrw !== "number" ||
+        estimates.rewardedAdEcpmKrw <= 0 ||
+        !estimates.productNetProceedsKrw ||
+        typeof estimates.productNetProceedsKrw !== "object" ||
+        Array.isArray(estimates.productNetProceedsKrw) ||
+        Object.keys(estimates.productNetProceedsKrw).length === 0 ||
+        Object.values(estimates.productNetProceedsKrw).some(
+          (value) =>
+            typeof value !== "number" ||
+            !Number.isFinite(value) ||
+            value < 0,
+        )
+      ) {
+        errors.push("MONETIZATION_ESTIMATES_JSON has an invalid shape.");
+      }
+    } catch {
+      errors.push("MONETIZATION_ESTIMATES_JSON must be valid JSON.");
+    }
+  }
+
   if (isEnabled(env.PAID_RECOMMENDATION_CREDITS_ENABLED)) {
     const products = env.RECOMMENDATION_CREDIT_PRODUCTS?.trim();
     if (!products) {

@@ -4,11 +4,13 @@ import { DashboardModule } from "../dashboard/dashboard.module";
 import { InventoryModule } from "../inventory/inventory.module";
 import { RecipesModule } from "../recipes/recipes.module";
 import { SettingsModule } from "../settings/settings.module";
+import { SubscriptionsModule } from "../subscriptions/subscriptions.module";
 import {
   SpaceDashboardController,
   SpaceInventoryController,
   SpaceRecipesController,
   SpaceStorageLocationsController,
+  SpaceSubscriptionsController,
 } from "./space-resources.controller";
 import { SpaceInvitationCleanupService } from "./space-invitation-cleanup.service";
 import {
@@ -25,6 +27,7 @@ import { SpacesService } from "./spaces.service";
     InventoryModule,
     RecipesModule,
     SettingsModule,
+    SubscriptionsModule,
   ],
   controllers: [
     SpacesController,
@@ -34,6 +37,7 @@ import { SpacesService } from "./spaces.service";
     SpaceDashboardController,
     SpaceStorageLocationsController,
     SpaceRecipesController,
+    SpaceSubscriptionsController,
   ],
   providers: [SpacesService, SpaceInvitationCleanupService],
   exports: [SpacesService],

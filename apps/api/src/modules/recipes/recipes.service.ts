@@ -147,6 +147,7 @@ export class RecipesService {
       ownerKey,
       idempotencyKey,
       now,
+      spaceId,
     );
     if (reservation.kind === "existing") {
       return this.getRecommendation(reservation.recommendationId, ownerKey, spaceId);

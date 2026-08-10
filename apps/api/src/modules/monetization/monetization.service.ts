@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import {
   Prisma,
+  MonetizationRevenueEventKind,
   RecommendationCreditPurchaseStatus,
   RecommendationUsageSource,
   RecommendationUsageStatus,
@@ -21,6 +22,7 @@ import {
 import {
   getKstDayWindow,
   toKstDateOnly,
+  type MonetizationOfferKind,
   type MonetizationPlatform,
   type RecommendationAccess,
   type RewardedAdSession,
@@ -33,6 +35,8 @@ import {
   getRecommendationCreditProducts,
   paidRecommendationCreditsEnabled,
 } from "./paid-credit-policy";
+import { recordRevenueEvent } from "./revenue-ledger";
+import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
 
 const KST_TIMEZONE = "Asia/Seoul" as const;
 const ADMOB_PUBLIC_KEYS_URL =
@@ -79,10 +83,26 @@ export class MonetizationService {
     return this.buildStatus(this.prisma, ownerKey, now);
   }
 
+  async getStatusForSpace(ownerKey: string, spaceId?: string, now = new Date()) {
+    if (!spaceId) return this.getStatus(ownerKey, now);
+    await this.prisma.rewardedAdSession.updateMany({
+      where: {
+        ownerKey,
+        status: RewardedAdSessionStatus.pending,
+        verificationExpiresAt: { lte: now },
+      },
+      data: { status: RewardedAdSessionStatus.expired },
+    });
+    return this.buildStatus(this.prisma, ownerKey, now, spaceId);
+  }
+
   async trackFunnelEvent(
     ownerKey: string,
     event: TrackMonetizationEventRequest,
   ) {
+    if (event.event === "recommendation_screen_viewed") {
+      return this.trackRecommendationScreenView(ownerKey, event);
+    }
     const recentEventCount = await this.prisma.monetizationFunnelEvent.count({
       where: {
         ownerKey,
@@ -106,15 +126,55 @@ export class MonetizationService {
     return { ok: true as const };
   }
 
+  private async trackRecommendationScreenView(
+    ownerKey: string,
+    event: TrackMonetizationEventRequest,
+  ) {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        return await this.prisma.$transaction(
+          async (tx) => {
+            const { start, endExclusive } = getKstDayWindow(new Date());
+            const alreadyTracked = await tx.monetizationFunnelEvent.count({
+              where: {
+                ownerKey,
+                eventName: event.event,
+                createdAt: { gte: start, lt: endExclusive },
+              },
+            });
+            if (alreadyTracked > 0) return { ok: true as const };
+            const policy = resolveMonetizationPolicy(ownerKey);
+            await tx.monetizationFunnelEvent.create({
+              data: {
+                ownerKey,
+                eventName: event.event,
+                experimentKey: policy.experiment.key,
+                experimentVariant: policy.experiment.variant,
+                properties: event.properties ?? undefined,
+              },
+            });
+            return { ok: true as const };
+          },
+          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+        );
+      } catch (error) {
+        if (isRetryableTransactionError(error) && attempt < 2) continue;
+        throw error;
+      }
+    }
+    return { ok: true as const };
+  }
+
   async createRewardedAdSession(
     ownerKey: string,
     platform: MonetizationPlatform,
+    spaceId?: string,
   ): Promise<RewardedAdSession> {
     const now = new Date();
     const adUnitId = getAdUnitId(platform);
     return this.prisma.$transaction(
       async (tx) => {
-        const access = await this.buildStatus(tx, ownerKey, now);
+        const access = await this.buildStatus(tx, ownerKey, now, spaceId);
         if (!access.rewardedAdsEnabled || !access.rewardedAds.canWatch) {
           throw new CodedHttpException(
             409,
@@ -210,6 +270,7 @@ export class MonetizationService {
     ownerKey: string,
     idempotencyKey: string,
     now = new Date(),
+    spaceId?: string,
   ): Promise<ReservationResult> {
     const normalizedKey = normalizeIdempotencyKey(idempotencyKey);
 
@@ -244,9 +305,12 @@ export class MonetizationService {
               );
             }
 
-            const access = await this.buildStatus(tx, ownerKey, now);
+            const access = await this.buildStatus(tx, ownerKey, now, spaceId);
             const totalReservedOrCompleted = access.used;
-            const absoluteLimit = getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
+            const absoluteLimit =
+              access.tier === "jango_household"
+                ? access.dailyLimit
+                : getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
             if (absoluteLimit > 0 && totalReservedOrCompleted >= absoluteLimit) {
               throw new CodedHttpException(
                 429,
@@ -260,9 +324,54 @@ export class MonetizationService {
             let rewardedAdSessionId: string | null = null;
             let barcodeRewardCreditId: string | null = null;
             let paidCreditPurchaseId: string | null = null;
+            let subscriptionEntitlementId: string | null = null;
 
-            if (access.tier === "jango_plus" && access.remaining > 0) {
+            if (access.tier === "jango_household" && spaceId) {
+              const householdEntitlement = await findActiveEntitlement(
+                tx,
+                now,
+                { spaceId, planCode: "jango_household" },
+              );
+              const householdUsed = householdEntitlement
+                ? await countEntitlementUsage(tx, householdEntitlement.id, now)
+                : 0;
+              if (
+                householdEntitlement &&
+                householdUsed < getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60)
+              ) {
+                source = RecommendationUsageSource.subscription;
+                subscriptionEntitlementId = householdEntitlement.id;
+              } else {
+                const personalEntitlement = await findActiveEntitlement(
+                  tx,
+                  now,
+                  { ownerKey, spaceId: null, planCode: "jango_plus" },
+                );
+                const personalUsed = personalEntitlement
+                  ? await countEntitlementUsage(tx, personalEntitlement.id, now)
+                  : 0;
+                if (
+                  !personalEntitlement ||
+                  personalUsed >= access.subscriberDailyLimit
+                ) {
+                  throw new CodedHttpException(
+                    429,
+                    "RECOMMENDATION_QUOTA_EXHAUSTED",
+                    "가족 공간의 오늘 추천을 모두 사용했어요.",
+                    access,
+                  );
+                }
+                source = RecommendationUsageSource.subscription;
+                subscriptionEntitlementId = personalEntitlement.id;
+              }
+            } else if (access.tier === "jango_plus" && access.remaining > 0) {
               source = RecommendationUsageSource.subscription;
+              const personalEntitlement = await findActiveEntitlement(tx, now, {
+                ownerKey,
+                spaceId: null,
+                planCode: "jango_plus",
+              });
+              subscriptionEntitlementId = personalEntitlement?.id ?? null;
             } else if (access.free.remaining > 0) {
               source = RecommendationUsageSource.free;
             } else {
@@ -317,6 +426,8 @@ export class MonetizationService {
               rewardedAdSessionId,
               barcodeRewardCreditId,
               paidCreditPurchaseId,
+              subscriptionEntitlementId,
+              spaceId: spaceId ?? null,
               recommendationId: null,
               releaseReason: null,
               releasedAt: null,
@@ -485,6 +596,15 @@ export class MonetizationService {
             verifiedAt: new Date(),
           },
         });
+        if (hasRevenueLedger(tx)) {
+          await recordRevenueEvent(tx, {
+            ownerKey: session.ownerKey,
+            kind: MonetizationRevenueEventKind.rewarded_ad_impression,
+            source: "rewarded_ad",
+            externalKey: `admob:${transactionId}`,
+            occurredAt: new Date(),
+          });
+        }
         return { ok: true as const };
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
@@ -495,26 +615,64 @@ export class MonetizationService {
     db: DbClient,
     ownerKey: string,
     now: Date,
+    spaceId?: string,
   ): Promise<RecommendationAccess> {
     const { start, endExclusive } = getKstDayWindow(now);
     const subscriptionsEnabled = isEnabled("SUBSCRIPTIONS_ENABLED");
     const rewardedAdsEnabled = isEnabled("REWARDED_ADS_ENABLED");
     const policy = resolveMonetizationPolicy(ownerKey);
     const barcodePolicy = resolveBarcodeRewardPolicy(ownerKey);
-    const activeEntitlement = subscriptionsEnabled
-      ? await db.subscriptionEntitlement.findFirst({
+    const space = spaceId
+      ? await db.inventorySpace.findFirst({
           where: {
-            ownerKey,
-            isActive: true,
-            OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+            id: spaceId,
+            memberships: { some: { userId: ownerKey } },
           },
-          orderBy: [{ expiresAt: "desc" }, { verifiedAt: "desc" }],
+          select: {
+            id: true,
+            type: true,
+            ownerUserId: true,
+            _count: { select: { memberships: true } },
+          },
         })
       : null;
+    if (spaceId && !space) {
+      throw new ForbiddenException("이 공간의 수익화 정보를 볼 수 없어요.");
+    }
+    const personalEntitlement = subscriptionsEnabled
+      ? await findActiveEntitlement(db, now, {
+          ownerKey,
+          spaceId: null,
+          planCode: "jango_plus",
+        })
+      : null;
+    const householdEntitlement =
+      subscriptionsEnabled && space?.type === "household"
+        ? await findActiveEntitlement(db, now, {
+            spaceId: space.id,
+            planCode: "jango_household",
+          })
+        : null;
+    const tier: RecommendationAccess["tier"] = householdEntitlement
+      ? "jango_household"
+      : personalEntitlement
+        ? "jango_plus"
+        : "free";
+    const usageWhere = householdEntitlement
+      ? { spaceId: space!.id }
+      : {
+          ownerKey,
+          OR: [
+            { subscriptionEntitlementId: null },
+            ...(personalEntitlement
+              ? [{ subscriptionEntitlementId: personalEntitlement.id }]
+              : []),
+          ],
+        };
     const events = await db.recommendationUsageEvent.groupBy({
       by: ["source"],
       where: {
-        ownerKey,
+        ...usageWhere,
         usageDay: start,
         status: {
           in: [
@@ -533,7 +691,7 @@ export class MonetizationService {
       counts.get(RecommendationUsageSource.barcode_contribution) ?? 0;
     const paidCreditsUsedToday =
       counts.get(RecommendationUsageSource.paid_credit) ?? 0;
-    const totalUsed = [...counts.values()].reduce((sum, value) => sum + value, 0);
+    const scopedUsed = [...counts.values()].reduce((sum, value) => sum + value, 0);
     const verifiedRewards = await db.rewardedAdSession.count({
       where: {
         ownerKey,
@@ -590,25 +748,54 @@ export class MonetizationService {
       ) - paidCreditsUsedTotal,
     );
 
-    const freeLimit = rewardedAdsEnabled
+    const freeLimit = householdEntitlement
+      ? 0
+      : rewardedAdsEnabled
       ? policy.freeDailyLimit
       : getLimit("RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT", 4);
-    const rewardedLimit = rewardedAdsEnabled
+    const rewardedLimit = householdEntitlement
+      ? 0
+      : rewardedAdsEnabled
       ? policy.rewardedDailyLimit
       : 0;
     const subscriberLimit = policy.subscriberDailyLimit;
-    const isSubscriber = Boolean(activeEntitlement);
+    const householdLimit = getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60);
+    const householdSubscriptionsEnabled =
+      Boolean(householdEntitlement) ||
+      isStableMonetizationRolloutEnabled({
+        subjectKey: ownerKey,
+        enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+        rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+        experimentKey: "household-subscriptions",
+      });
+    const isSubscriber = tier !== "free";
     const freeRemaining = Math.max(0, freeLimit - freeUsed);
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);
-    const uncappedRemaining = isSubscriber
-      ? Math.max(0, subscriberLimit - totalUsed)
-      : freeRemaining + paidCreditBalance + availableRewards + barcodeRewardBalance;
+    const personalSubscriptionUsed = personalEntitlement
+      ? await countEntitlementUsage(db, personalEntitlement.id, now)
+      : 0;
+    const householdSubscriptionUsed = householdEntitlement
+      ? await countEntitlementUsage(db, householdEntitlement.id, now)
+      : 0;
+    const householdRemaining = householdEntitlement
+      ? Math.max(0, householdLimit - householdSubscriptionUsed)
+      : 0;
+    const personalSubscriptionRemaining = personalEntitlement
+      ? Math.max(0, subscriberLimit - personalSubscriptionUsed)
+      : 0;
+    const uncappedRemaining = householdEntitlement
+      ? householdRemaining + personalSubscriptionRemaining
+      : personalEntitlement
+        ? Math.max(0, subscriberLimit - scopedUsed)
+        : freeRemaining + paidCreditBalance + availableRewards + barcodeRewardBalance;
     const absoluteLimit = getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
     const remaining =
-      absoluteLimit > 0
+      householdEntitlement
+        ? uncappedRemaining
+        : absoluteLimit > 0
         ? Math.min(
             uncappedRemaining,
-            Math.max(0, absoluteLimit - totalUsed),
+            Math.max(0, absoluteLimit - scopedUsed),
           )
         : uncappedRemaining;
     const freeTierLimit =
@@ -621,17 +808,29 @@ export class MonetizationService {
     const effectiveFreeTierLimit =
       absoluteLimit > 0 ? Math.min(absoluteLimit, freeTierLimit) : freeTierLimit;
 
-    return {
+    const access: RecommendationAccess = {
       day: toKstDateOnly(now),
       timezone: KST_TIMEZONE,
       resetsAt: endExclusive.toISOString(),
-      tier: isSubscriber ? "jango_plus" : "free",
+      tier,
+      usageScope: {
+        type: householdEntitlement ? "space" : "user",
+        spaceId: householdEntitlement ? space!.id : null,
+      },
       rewardedAdsEnabled,
       subscriptionsEnabled,
+      householdSubscriptionsEnabled,
       experiment: policy.experiment,
-      dailyLimit: isSubscriber ? subscriberLimit : effectiveFreeTierLimit,
+      dailyLimit: householdEntitlement
+        ? householdLimit + (personalEntitlement ? subscriberLimit : 0)
+        : isSubscriber
+          ? subscriberLimit
+          : effectiveFreeTierLimit,
       subscriberDailyLimit: subscriberLimit,
-      used: totalUsed,
+      householdDailyLimit: householdLimit,
+      used: householdEntitlement
+        ? householdSubscriptionUsed + personalSubscriptionUsed
+        : scopedUsed,
       remaining,
       free: {
         limit: freeLimit,
@@ -648,7 +847,7 @@ export class MonetizationService {
           !isSubscriber &&
           freeRemaining === 0 &&
           paidCreditBalance === 0 &&
-          (absoluteLimit === 0 || totalUsed < absoluteLimit) &&
+          (absoluteLimit === 0 || scopedUsed < absoluteLimit) &&
           remainingToWatch > 0 &&
           pendingDisplaySessionCount === 0,
       },
@@ -671,6 +870,121 @@ export class MonetizationService {
           ? getRecommendationCreditProducts()
           : [],
       },
+      offer: {
+        kind: "none",
+        reason: isSubscriber ? "active_entitlement" : "unavailable",
+        personalized: false,
+        alternatives: [],
+      },
+    };
+    access.offer = await this.resolveOffer(db, ownerKey, access, now, space);
+    return access;
+  }
+
+  private async resolveOffer(
+    db: DbClient,
+    ownerKey: string,
+    access: RecommendationAccess,
+    now: Date,
+    space: {
+      id: string;
+      type: string;
+      ownerUserId: string;
+      _count: { memberships: number };
+    } | null,
+  ): Promise<RecommendationAccess["offer"]> {
+    if (access.tier !== "free") {
+      return {
+        kind: "none",
+        reason: "active_entitlement",
+        personalized: isPersonalizedOffersEnabled(ownerKey),
+        alternatives: [],
+      };
+    }
+    if (
+      access.free.remaining > 0 ||
+      access.rewardedAds.creditsAvailable > 0 ||
+      access.paidCredits.balance > 0 ||
+      access.contributionRewards.balance > 0
+    ) {
+      return {
+        kind: "none",
+        reason: "unavailable",
+        personalized: isPersonalizedOffersEnabled(ownerKey),
+        alternatives: [],
+      };
+    }
+
+    const householdEligible =
+      access.subscriptionsEnabled &&
+      access.householdSubscriptionsEnabled &&
+      space?.type === "household" &&
+      space.ownerUserId === ownerKey &&
+      space._count.memberships <= getLimit("HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT", 5);
+    const alternatives = uniqueOfferKinds([
+      access.rewardedAds.canWatch ? "rewarded_ad" : null,
+      access.paidCredits.enabled ? "paid_credits" : null,
+      householdEligible ? "jango_household" : null,
+      access.subscriptionsEnabled ? "jango_plus" : null,
+    ]);
+    const personalized = isPersonalizedOffersEnabled(ownerKey);
+    if (!personalized) {
+      return {
+        kind: alternatives[0] ?? "none",
+        reason: alternatives.length ? "casual" : "unavailable",
+        personalized: false,
+        alternatives: alternatives.slice(1),
+      };
+    }
+
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    const [screenViews, completedRecommendations, declines] = await Promise.all([
+      db.monetizationFunnelEvent.findMany({
+        where: {
+          ownerKey,
+          eventName: "recommendation_screen_viewed",
+          createdAt: { gte: sevenDaysAgo },
+        },
+        select: { createdAt: true },
+      }),
+      db.recommendationUsageEvent.count({
+        where: {
+          ownerKey,
+          status: RecommendationUsageStatus.completed,
+          completedAt: { gte: sevenDaysAgo },
+        },
+      }),
+      db.monetizationFunnelEvent.count({
+        where: {
+          ownerKey,
+          eventName: { in: ["paywall_dismissed", "checkout_cancelled"] },
+          createdAt: { gte: thirtyDaysAgo },
+        },
+      }),
+    ]);
+    const activeDays = new Set(
+      screenViews.map((event) => toKstDateOnly(event.createdAt)),
+    ).size;
+    let kind: RecommendationAccess["offer"]["kind"];
+    let reason: RecommendationAccess["offer"]["reason"];
+    if (declines >= 2 && access.paidCredits.enabled) {
+      kind = "paid_credits";
+      reason = "subscription_declined";
+    } else if (activeDays >= 2 && completedRecommendations >= 3) {
+      kind = householdEligible ? "jango_household" : "jango_plus";
+      reason = "engaged";
+    } else {
+      kind = access.rewardedAds.canWatch
+        ? "rewarded_ad"
+        : alternatives[0] ?? "none";
+      reason = kind === "none" ? "unavailable" : "casual";
+    }
+    return {
+      kind,
+      reason,
+      personalized: true,
+      alternatives: alternatives.filter((candidate) => candidate !== kind),
     };
   }
 
@@ -884,6 +1198,13 @@ function isRetryableTransactionError(error: unknown) {
   );
 }
 
+function hasRevenueLedger(db: DbClient) {
+  return Boolean(
+    (db as unknown as { monetizationRevenueEvent?: unknown })
+      .monetizationRevenueEvent,
+  );
+}
+
 async function findAvailablePaidCreditPurchase(
   db: Prisma.TransactionClient,
   ownerKey: string,
@@ -917,4 +1238,54 @@ async function findAvailablePaidCreditPurchase(
   return purchases.find(
     (purchase) => purchase._count.usageEvents < purchase.creditsGranted,
   );
+}
+
+async function findActiveEntitlement(
+  db: DbClient,
+  now: Date,
+  scope: { ownerKey?: string; spaceId?: string | null; planCode: string },
+) {
+  return db.subscriptionEntitlement.findFirst({
+    where: {
+      ...scope,
+      isActive: true,
+      OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+    },
+    orderBy: [{ expiresAt: "desc" }, { verifiedAt: "desc" }],
+  });
+}
+
+async function countEntitlementUsage(
+  db: DbClient,
+  entitlementId: string,
+  now: Date,
+) {
+  const { start } = getKstDayWindow(now);
+  return db.recommendationUsageEvent.count({
+    where: {
+      subscriptionEntitlementId: entitlementId,
+      usageDay: start,
+      status: {
+        in: [
+          RecommendationUsageStatus.reserved,
+          RecommendationUsageStatus.completed,
+        ],
+      },
+    },
+  });
+}
+
+function isPersonalizedOffersEnabled(ownerKey: string) {
+  return isStableMonetizationRolloutEnabled({
+    subjectKey: ownerKey,
+    enabledFlag: "PERSONALIZED_MONETIZATION_OFFERS_ENABLED",
+    rolloutFlag: "PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT",
+    experimentKey: "personalized-offers",
+  });
+}
+
+function uniqueOfferKinds(
+  values: Array<Exclude<MonetizationOfferKind, "none"> | null>,
+) {
+  return [...new Set(values.filter((value): value is Exclude<MonetizationOfferKind, "none"> => Boolean(value)))];
 }

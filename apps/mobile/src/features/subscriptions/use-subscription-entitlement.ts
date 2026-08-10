@@ -6,14 +6,16 @@ import {
   getSubscriptionEntitlement,
   verifySubscription,
 } from "../../services/api";
+import { useActiveSpace } from "../spaces/space-provider";
 
 export const subscriptionEntitlementQueryKey = sessionQueryKeys.subscription;
 
 export const useSubscriptionEntitlement = () => {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
+  const { activeSpaceId, isReady } = useActiveSpace();
   const queryKey = withSessionUser(
-    subscriptionEntitlementQueryKey,
+    [...subscriptionEntitlementQueryKey, activeSpaceId ?? "no-space"],
     sessionUserId,
   );
   const monetizationQueryKey = withSessionUser(
@@ -23,8 +25,8 @@ export const useSubscriptionEntitlement = () => {
 
   const query = useQuery({
     queryKey,
-    queryFn: getSubscriptionEntitlement,
-    enabled: Boolean(sessionUserId),
+    queryFn: () => getSubscriptionEntitlement(activeSpaceId),
+    enabled: Boolean(sessionUserId && activeSpaceId && isReady),
   });
   const verifyMutation = useMutation({
     mutationFn: (payload: SubscriptionVerificationRequest) =>

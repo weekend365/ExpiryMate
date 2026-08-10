@@ -32,8 +32,11 @@ export class MonetizationController {
 
   @Get("status")
   @UseGuards(RegisteredGuard)
-  getStatus(@CurrentOwnerKey() ownerKey: string) {
-    return this.monetization.getStatus(ownerKey);
+  getStatus(
+    @CurrentOwnerKey() ownerKey: string,
+    @Query("spaceId") spaceId?: string,
+  ) {
+    return this.monetization.getStatusForSpace(ownerKey, spaceId);
   }
 
   @Post("rewarded-ad-sessions")
@@ -43,7 +46,11 @@ export class MonetizationController {
     body: CreateRewardedAdSessionRequest,
     @CurrentOwnerKey() ownerKey: string,
   ) {
-    return this.monetization.createRewardedAdSession(ownerKey, body.platform);
+    return this.monetization.createRewardedAdSession(
+      ownerKey,
+      body.platform,
+      body.spaceId,
+    );
   }
 
   @Post("events")

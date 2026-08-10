@@ -8,6 +8,7 @@ import {
 } from "@nestjs/common";
 import {
   Prisma,
+  MonetizationRevenueEventKind,
   RecommendationCreditPurchaseStatus,
   RecommendationUsageSource,
   RecommendationUsageStatus,
@@ -19,6 +20,7 @@ import {
   getRecommendationCreditProducts,
   paidRecommendationCreditsEnabled,
 } from "./paid-credit-policy";
+import { recordRevenueEvent } from "./revenue-ledger";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -127,6 +129,16 @@ export class CreditPurchasesService {
                 },
               },
             });
+            if (hasRevenueLedger(tx)) {
+              await recordRevenueEvent(tx, {
+                ownerKey,
+                kind: MonetizationRevenueEventKind.credit_purchase,
+                source: "paid_credit",
+                store: verification.store,
+                productId: verification.productId,
+                externalKey: `credit-purchase:${purchaseIdentity(verification)}`,
+              });
+            }
 
             return { creditsGranted: product.credits };
           },
@@ -274,6 +286,17 @@ export class CreditPurchasesService {
         },
       }),
     ]);
+    if (hasRevenueLedger(this.prisma)) {
+      await recordRevenueEvent(this.prisma, {
+        ownerKey: purchase.ownerKey,
+        kind: MonetizationRevenueEventKind.credit_refund,
+        source: "paid_credit",
+        store: purchase.store,
+        productId: purchase.productId,
+        externalKey: `credit-refund:${purchase.id}`,
+        multiplier: -1,
+      });
+    }
   }
 }
 
@@ -305,6 +328,22 @@ async function findExistingPurchase(
   }
 
   return null;
+}
+
+function purchaseIdentity(verification: VerifiedCreditPurchase) {
+  return (
+    verification.transactionId ??
+    verification.purchaseTokenHash ??
+    verification.orderId ??
+    `${verification.store}:${verification.productId}`
+  );
+}
+
+function hasRevenueLedger(db: Prisma.TransactionClient | PrismaService) {
+  return Boolean(
+    (db as unknown as { monetizationRevenueEvent?: unknown })
+      .monetizationRevenueEvent,
+  );
 }
 
 async function verifyApplePurchase(

@@ -164,7 +164,7 @@ PUSH_REMINDER_DELIVERY_HOUR=9
 PUSH_REMINDER_MAX_ATTEMPTS=3
 PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES=540
 EXPO_PUSH_ACCESS_TOKEN=""
-IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
+IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly,jango_plus,expirymate_household_monthly,expirymate_household_yearly,jango_household"
 APPLE_BUNDLE_ID="com.expirymate.mobile"
 APPLE_APP_STORE_ENVIRONMENT="sandbox"
 APPLE_APP_STORE_ISSUER_ID=""
@@ -633,7 +633,7 @@ Inventory seed also includes mixed states:
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
 - shared inventory is refresh/focus based; no realtime WebSocket/SSE or change ledger in v1
 - API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
-- no native IAP purchase sheet yet (entitlement status only)
+- native IAP purchase, restore, server verification, paid recommendation credits, and Household subscription UI are implemented; store product approval and production-like QA remain required
 
 ## Recommended next work
 

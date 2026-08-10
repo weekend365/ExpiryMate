@@ -36,6 +36,7 @@ import { BatchDiscardInventoryItemsDto } from "../inventory/dto/batch-discard-in
 import { InventoryService } from "../inventory/inventory.service";
 import { RecipesService } from "../recipes/recipes.service";
 import { SettingsService } from "../settings/settings.service";
+import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { SpacesService } from "./spaces.service";
 
 @UseGuards(RegisteredGuard)
@@ -300,5 +301,19 @@ export class SpaceRecipesController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.recipesService.deleteFavorite(id, dishIndex, userId);
+  }
+}
+
+@UseGuards(RegisteredGuard)
+@Controller("spaces/:spaceId/subscriptions")
+export class SpaceSubscriptionsController {
+  constructor(private readonly subscriptionsService: SubscriptionsService) {}
+
+  @Get("insights")
+  getInsights(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    return this.subscriptionsService.getHouseholdInsights(userId, spaceId);
   }
 }

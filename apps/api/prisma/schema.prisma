@@ -115,6 +115,16 @@ enum RewardedAdSessionStatus {
   expired
 }
 
+enum MonetizationRevenueEventKind {
+  subscription_purchase
+  subscription_renewal
+  subscription_refund
+  subscription_cancelled
+  credit_purchase
+  credit_refund
+  rewarded_ad_impression
+}
+
 enum PushTokenPlatform {
   ios
   android
@@ -176,6 +186,7 @@ model User {
   barcodeRewardCredits          BarcodeRewardCredit[]
   recommendationCreditPurchases RecommendationCreditPurchase[]
   monetizationFunnelEvents      MonetizationFunnelEvent[]
+  monetizationRevenueEvents     MonetizationRevenueEvent[]
   pushTokens                    PushToken[]
   pushNotificationDeliveries    PushNotificationDelivery[]
   supportInquiries              SupportInquiry[]
@@ -191,18 +202,21 @@ model User {
 }
 
 model InventorySpace {
-  id               String                     @id @default(cuid())
-  name             String
-  type             InventorySpaceType
-  ownerUserId      String
-  owner            User                       @relation("InventorySpaceOwner", fields: [ownerUserId], references: [id])
-  createdAt        DateTime                   @default(now())
-  updatedAt        DateTime                   @updatedAt
-  memberships      InventorySpaceMembership[]
-  invitations      SpaceInvitation[]
-  inventoryItems   InventoryItem[]
-  storageLocations UserStorageLocation[]
-  recommendations  RecipeRecommendation[]
+  id                        String                     @id @default(cuid())
+  name                      String
+  type                      InventorySpaceType
+  ownerUserId               String
+  owner                     User                       @relation("InventorySpaceOwner", fields: [ownerUserId], references: [id])
+  createdAt                 DateTime                   @default(now())
+  updatedAt                 DateTime                   @updatedAt
+  memberships               InventorySpaceMembership[]
+  invitations               SpaceInvitation[]
+  inventoryItems            InventoryItem[]
+  storageLocations          UserStorageLocation[]
+  recommendations           RecipeRecommendation[]
+  recommendationUsageEvents RecommendationUsageEvent[]
+  subscriptionEntitlements  SubscriptionEntitlement[]
+  monetizationRevenueEvents MonetizationRevenueEvent[]
 
   @@index([ownerUserId])
   @@index([type])
@@ -499,31 +513,37 @@ model RecommendationCreditPurchase {
 }
 
 model RecommendationUsageEvent {
-  id                    String                        @id @default(cuid())
-  ownerKey              String
-  owner                 User                          @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  usageDay              DateTime
-  source                RecommendationUsageSource
-  status                RecommendationUsageStatus     @default(reserved)
-  idempotencyKey        String
-  recommendationId      String?                       @unique
-  recommendation        RecipeRecommendation?         @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
-  rewardedAdSessionId   String?                       @unique
-  rewardedAdSession     RewardedAdSession?            @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
-  barcodeRewardCreditId String?                       @unique
-  barcodeRewardCredit   BarcodeRewardCredit?          @relation(fields: [barcodeRewardCreditId], references: [id], onDelete: SetNull)
-  paidCreditPurchaseId  String?
-  paidCreditPurchase    RecommendationCreditPurchase? @relation(fields: [paidCreditPurchaseId], references: [id], onDelete: SetNull)
-  releaseReason         String?
-  completedAt           DateTime?
-  releasedAt            DateTime?
-  createdAt             DateTime                      @default(now())
-  updatedAt             DateTime                      @updatedAt
+  id                        String                        @id @default(cuid())
+  ownerKey                  String
+  owner                     User                          @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId                   String?
+  space                     InventorySpace?               @relation(fields: [spaceId], references: [id], onDelete: SetNull)
+  usageDay                  DateTime
+  source                    RecommendationUsageSource
+  status                    RecommendationUsageStatus     @default(reserved)
+  idempotencyKey            String
+  recommendationId          String?                       @unique
+  recommendation            RecipeRecommendation?         @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
+  rewardedAdSessionId       String?                       @unique
+  rewardedAdSession         RewardedAdSession?            @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  barcodeRewardCreditId     String?                       @unique
+  barcodeRewardCredit       BarcodeRewardCredit?          @relation(fields: [barcodeRewardCreditId], references: [id], onDelete: SetNull)
+  paidCreditPurchaseId      String?
+  paidCreditPurchase        RecommendationCreditPurchase? @relation(fields: [paidCreditPurchaseId], references: [id], onDelete: SetNull)
+  subscriptionEntitlementId String?
+  subscriptionEntitlement   SubscriptionEntitlement?      @relation(fields: [subscriptionEntitlementId], references: [id], onDelete: SetNull)
+  releaseReason             String?
+  completedAt               DateTime?
+  releasedAt                DateTime?
+  createdAt                 DateTime                      @default(now())
+  updatedAt                 DateTime                      @updatedAt
 
   @@unique([ownerKey, idempotencyKey])
   @@index([ownerKey, usageDay, status])
+  @@index([spaceId, usageDay, status])
   @@index([source, usageDay, status])
   @@index([paidCreditPurchaseId, status])
+  @@index([subscriptionEntitlementId, status])
 }
 
 model RecipeFavorite {
@@ -544,6 +564,8 @@ model SubscriptionEntitlement {
   id                    String                        @id @default(cuid())
   ownerKey              String
   owner                 User                          @relation(fields: [ownerKey], references: [id])
+  spaceId               String?
+  space                 InventorySpace?               @relation(fields: [spaceId], references: [id], onDelete: SetNull)
   store                 SubscriptionStore
   productId             String
   planCode              String?
@@ -561,10 +583,12 @@ model SubscriptionEntitlement {
   rawVerification       Json?
   createdAt             DateTime                      @default(now())
   updatedAt             DateTime                      @updatedAt
+  usageEvents           RecommendationUsageEvent[]
 
   @@unique([store, originalTransactionId])
   @@unique([store, purchaseTokenHash])
   @@index([ownerKey, isActive, expiresAt])
+  @@index([spaceId, isActive, expiresAt])
   @@index([store, productId])
 }
 
@@ -581,6 +605,30 @@ model MonetizationFunnelEvent {
   @@index([eventName, createdAt])
   @@index([experimentKey, experimentVariant, createdAt])
   @@index([ownerKey, createdAt])
+}
+
+model MonetizationRevenueEvent {
+  id                     String                       @id @default(cuid())
+  ownerKey               String?
+  owner                  User?                        @relation(fields: [ownerKey], references: [id], onDelete: SetNull)
+  spaceId                String?
+  space                  InventorySpace?              @relation(fields: [spaceId], references: [id], onDelete: SetNull)
+  kind                   MonetizationRevenueEventKind
+  source                 String
+  store                  SubscriptionStore?
+  productId              String?
+  billingPeriod          SubscriptionBillingPeriod?
+  externalKeyHash        String                       @unique
+  estimatedNetRevenueKrw Decimal                      @db.Decimal(14, 2)
+  estimateConfigured     Boolean                      @default(false)
+  properties             Json?
+  occurredAt             DateTime
+  createdAt              DateTime                     @default(now())
+
+  @@index([kind, occurredAt])
+  @@index([source, occurredAt])
+  @@index([ownerKey, occurredAt])
+  @@index([spaceId, occurredAt])
 }
 
 model PushToken {

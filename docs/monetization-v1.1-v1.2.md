@@ -28,8 +28,16 @@ RECIPE_ABSOLUTE_DAILY_LIMIT=30
 RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT=4
 MONETIZATION_EXPERIMENT_SALT=replace-with-a-stable-secret
 MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT=0
+PERSONALIZED_MONETIZATION_OFFERS_ENABLED=false
+PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT=0
+MONETIZATION_REVENUE_LEDGER_ENABLED=false
+MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT=0
+HOUSEHOLD_SUBSCRIPTIONS_ENABLED=false
+HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT=0
 RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT=2
 RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT=2
+RECIPE_HOUSEHOLD_DAILY_LIMIT=60
+HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT=5
 BARCODE_REWARDS_ENABLED=false
 BARCODE_REWARD_ROLLOUT_PERCENT=0
 BARCODE_REWARD_DAILY_LIMIT=3
@@ -47,7 +55,8 @@ ADMOB_IOS_REWARDED_AD_UNIT_ID=
 ADMOB_ANDROID_REWARDED_AD_UNIT_ID=
 ADMOB_SSV_USER_ID_SECRET=
 
-IAP_ALLOWED_PRODUCT_IDS=expirymate_premium_monthly,expirymate_premium_yearly,jango_plus
+IAP_ALLOWED_PRODUCT_IDS=expirymate_premium_monthly,expirymate_premium_yearly,jango_plus,expirymate_household_monthly,expirymate_household_yearly,jango_household
+MONETIZATION_ESTIMATES_JSON=
 APPLE_ROOT_CERTIFICATES_BASE64=
 APPLE_APP_ID=
 GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
@@ -97,6 +106,25 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
 - 활성 구독자는 최근 30일간 소비·폐기 완료 수, 폐기 비율, 7일 내 만료 수와
   주요 폐기 카테고리를 확인할 수 있습니다.
 - 리포트는 기존 재고 상태와 갱신 시각만 집계하며 별도 AI 호출을 만들지 않습니다.
+
+## 개인화 오퍼와 가족 플러스
+
+- 개인화 오퍼는 최근 7일 추천 화면 방문일과 완료 추천 수, 최근 30일 페이월
+  닫기·결제 취소를 서버에서 계산합니다. 모바일은 서버가 선택한 주 CTA 하나와
+  별도 `다른 방법` 시트만 표시합니다.
+- `PERSONALIZED_MONETIZATION_OFFERS_ENABLED`를 켠 뒤 rollout을 10% → 50% →
+  100%로 확대합니다. 장애 시 플래그를 끄면 기존 우선순위로 즉시 복귀합니다.
+- `MONETIZATION_REVENUE_LEDGER_ENABLED`와
+  `HOUSEHOLD_SUBSCRIPTIONS_ENABLED`도 각각 독립된 rollout percentage를 사용합니다.
+  두 단계 모두 동일 사용자에게 안정적으로 유지되는 버킷으로 10% → 50% → 100% 확대합니다.
+  Household 판매 플래그를 꺼도 이미 활성화된 공간 권리는 만료 시까지 유지됩니다.
+- 가족 플러스는 household 공간 소유자만 구매할 수 있고 최대 5명이 하루 60회
+  추천을 공유합니다. 가격은 월 6,900원·연 59,000원이며 무료 체험은 없습니다.
+- Apple 상품은 `expirymate_household_monthly`·`expirymate_household_yearly`,
+  Google 상품은 `jango_household`의 `monthly`·`yearly` base plan입니다.
+- `MONETIZATION_ESTIMATES_JSON`에는 `usdKrw`, `rewardedAdEcpmKrw`,
+  `productNetProceedsKrw`를 넣습니다. 값이 없으면 관리자 금액 지표는 0원이 아닌
+  `설정되지 않음`으로 표시합니다.
 
 ## 모바일 EAS 환경변수
 

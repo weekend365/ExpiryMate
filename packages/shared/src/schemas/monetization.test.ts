@@ -12,8 +12,10 @@ describe("monetization schemas", () => {
         timezone: "Asia/Seoul",
         resetsAt: "2026-08-07T15:00:00.000Z",
         tier: "free",
+        usageScope: { type: "user", spaceId: null },
         rewardedAdsEnabled: true,
         subscriptionsEnabled: true,
+        householdSubscriptionsEnabled: true,
         experiment: {
           key: "monetization-v1",
           variant: "value_first",
@@ -21,6 +23,7 @@ describe("monetization schemas", () => {
         },
         dailyLimit: 4,
         subscriberDailyLimit: 30,
+        householdDailyLimit: 60,
         used: 0,
         remaining: 2,
         free: { limit: 2, used: 0, remaining: 2 },
@@ -43,6 +46,12 @@ describe("monetization schemas", () => {
           enabled: true,
           balance: 5,
           products: [{ productId: "credits_5", credits: 5 }],
+        },
+        offer: {
+          kind: "rewarded_ad",
+          reason: "casual",
+          personalized: true,
+          alternatives: ["jango_plus"],
         },
       }).experiment.variant,
     ).toBe("value_first");

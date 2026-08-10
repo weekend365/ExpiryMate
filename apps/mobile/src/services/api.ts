@@ -1049,8 +1049,10 @@ export const unregisterPushToken = (token: string) =>
     body: JSON.stringify({ token }),
   });
 
-export const getSubscriptionEntitlement = () =>
-  request<SubscriptionEntitlement>("/subscriptions/entitlement");
+export const getSubscriptionEntitlement = (spaceId?: string) =>
+  request<SubscriptionEntitlement>(
+    `/subscriptions/entitlement${spaceId ? `?spaceId=${encodeURIComponent(spaceId)}` : ""}`,
+  );
 
 export type PlusInsights = {
   period: { from: string; to: string };
@@ -1064,13 +1066,21 @@ export type PlusInsights = {
 export const getPlusInsights = () =>
   request<PlusInsights>("/subscriptions/plus-insights");
 
-export const getMonetizationStatus = () =>
-  request<RecommendationAccess>("/monetization/status");
+export const getHouseholdInsights = (spaceId: string) =>
+  request<PlusInsights>(spaceResourcePath(spaceId, "subscriptions/insights"));
 
-export const createRewardedAdSession = (platform: MonetizationPlatform) =>
+export const getMonetizationStatus = (spaceId?: string) =>
+  request<RecommendationAccess>(
+    `/monetization/status${spaceId ? `?spaceId=${encodeURIComponent(spaceId)}` : ""}`,
+  );
+
+export const createRewardedAdSession = (
+  platform: MonetizationPlatform,
+  spaceId?: string,
+) =>
   request<RewardedAdSession>("/monetization/rewarded-ad-sessions", {
     method: "POST",
-    body: JSON.stringify({ platform }),
+    body: JSON.stringify({ platform, spaceId }),
   });
 
 export const getRewardedAdSession = (id: string) =>

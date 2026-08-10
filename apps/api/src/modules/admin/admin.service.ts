@@ -11,6 +11,10 @@ import {
 } from "@expirymate/shared";
 import { serializeAdminInventoryItem } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
+import {
+  getMonetizationEstimateConfig,
+  validateMonetizationEstimates,
+} from "../monetization/revenue-ledger";
 
 const DEFAULT_PAGE_SIZE = 50;
 const MAX_PAGE_SIZE = 100;
@@ -39,6 +43,14 @@ export interface AdminMonetizationOverview {
     totalTokens: number;
     paidCreditsSold: number;
     paidCreditPurchases: number;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    arppuKrw: number | null;
+    estimatedMrrKrw: number | null;
+    renewalRatePercent: number;
+    churnRefundRatePercent: number;
   };
   usageBySource: Array<{ source: string; count: number }>;
   funnel: Array<{
@@ -52,6 +64,25 @@ export interface AdminMonetizationOverview {
     paywallToPurchasePercent: number;
     rewardedAdVerificationPercent: number;
     barcodeRewardGrantPercent: number;
+  };
+  economicsConfigured: boolean;
+  economicsBySource: Array<{
+    source: string;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    events: number;
+  }>;
+  retention: {
+    d7Percent: number;
+    d30Percent: number;
+    cohorts: Array<{
+      cohort: string;
+      users: number;
+      d7Percent: number | null;
+      d30Percent: number | null;
+    }>;
   };
   daily: Array<{
     day: string;
@@ -233,14 +264,23 @@ export class AdminService {
       recommendationRows,
       funnelGroups,
       creditPurchaseAggregate,
+      revenueRows,
+      uniqueFunnelRows,
+      cohortUsers,
+      cohortActivity,
     ] = await Promise.all([
       this.prisma.subscriptionEntitlement.findMany({
         where: {
           isActive: true,
           OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
         },
-        distinct: ["ownerKey"],
-        select: { ownerKey: true },
+        select: {
+          ownerKey: true,
+          store: true,
+          productId: true,
+          billingPeriod: true,
+          basePlanId: true,
+        },
       }),
       this.prisma.recommendationUsageEvent.findMany({
         where: {
@@ -264,6 +304,12 @@ export class AdminService {
           createdAt: true,
           estimatedCostUsd: true,
           totalTokens: true,
+          usageEvent: {
+            select: {
+              source: true,
+              subscriptionEntitlement: { select: { planCode: true } },
+            },
+          },
         },
       }),
       this.prisma.monetizationFunnelEvent.groupBy({
@@ -279,6 +325,53 @@ export class AdminService {
         _count: { _all: true },
         _sum: { creditsGranted: true },
       }),
+      hasDelegate(this.prisma, "monetizationRevenueEvent")
+        ? this.prisma.monetizationRevenueEvent.findMany({
+            where: { occurredAt: { gte: from, lte: to } },
+            select: {
+              ownerKey: true,
+              source: true,
+              kind: true,
+              billingPeriod: true,
+              estimatedNetRevenueKrw: true,
+              estimateConfigured: true,
+            },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.monetizationFunnelEvent, "findMany")
+        ? this.prisma.monetizationFunnelEvent.findMany({
+            where: {
+              createdAt: { gte: from, lte: to },
+              eventName: {
+                in: [
+                  "paywall_viewed",
+                  "purchase_verified",
+                  "rewarded_ad_requested",
+                  "rewarded_ad_verified",
+                  "barcode_reward_granted",
+                  "barcode_reward_denied",
+                ],
+              },
+            },
+            distinct: ["ownerKey", "eventName"],
+            select: { ownerKey: true, eventName: true },
+          })
+        : Promise.resolve([]),
+      hasDelegate(this.prisma, "user")
+        ? this.prisma.user.findMany({
+            where: {
+              accountType: "registered",
+              createdAt: { gte: addUtcDays(today, -90), lte: to },
+            },
+            select: { id: true, createdAt: true },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.monetizationFunnelEvent, "findMany")
+        ? this.prisma.monetizationFunnelEvent.findMany({
+            where: { createdAt: { gte: addUtcDays(today, -90), lte: to } },
+            select: { ownerKey: true, createdAt: true },
+          })
+        : Promise.resolve([]),
     ]);
 
     const usageBySource = new Map<string, number>();
@@ -333,26 +426,144 @@ export class AdminService {
     };
     const percent = (numerator: number, denominator: number) =>
       denominator > 0 ? Math.round((numerator / denominator) * 10_000) / 100 : 0;
+    const totalAiCostUsd = recommendationRows.reduce(
+      (sum, row) => sum + Number(row.estimatedCostUsd),
+      0,
+    );
+    const estimates = getMonetizationEstimateConfig();
+    const economicsConfigured =
+      validateMonetizationEstimates() &&
+      revenueRows.every((row) => row.estimateConfigured);
+    const estimatedNetRevenueKrw = economicsConfigured
+      ? roundKrw(
+          revenueRows.reduce(
+            (sum, row) => sum + Number(row.estimatedNetRevenueKrw),
+            0,
+          ),
+        )
+      : null;
+    const estimatedAiCostKrw = estimates.usdKrw
+      ? roundKrw(totalAiCostUsd * estimates.usdKrw)
+      : null;
+    const estimatedContributionKrw =
+      estimatedNetRevenueKrw !== null && estimatedAiCostKrw !== null
+        ? roundKrw(estimatedNetRevenueKrw - estimatedAiCostKrw)
+        : null;
+    const payingUsers = new Set(
+      revenueRows
+        .filter((row) => Number(row.estimatedNetRevenueKrw) > 0)
+        .map((row) => row.ownerKey)
+        .filter(Boolean),
+    ).size;
+    const subscriptionRevenueEvents = revenueRows.filter((row) =>
+      ["subscription_purchase", "subscription_renewal"].includes(row.kind),
+    );
+    const renewalEvents = revenueRows.filter(
+      (row) => row.kind === "subscription_renewal",
+    ).length;
+    const churnEvents = revenueRows.filter((row) =>
+      ["subscription_cancelled", "subscription_refund"].includes(row.kind),
+    ).length;
+    const uniqueFunnelCount = (eventName: string) =>
+      new Set(
+        uniqueFunnelRows
+          .filter((row) => row.eventName === eventName)
+          .map((row) => row.ownerKey),
+      ).size;
+    const uniqueFunnelOwners = (eventName: string) =>
+      new Set(
+        uniqueFunnelRows
+          .filter((row) => row.eventName === eventName)
+          .map((row) => row.ownerKey),
+      );
+    const paywallOwners = uniqueFunnelOwners("paywall_viewed");
+    const purchasingPaywallOwners = [...uniqueFunnelOwners(
+      "purchase_verified",
+    )].filter((ownerKey) => paywallOwners.has(ownerKey)).length;
+    const aiCostBySourceUsd = groupAiCostByRevenueSource(recommendationRows);
+    const economicsBySource = [...groupRevenueBySource(revenueRows).entries()]
+      .map(([source, row]) => {
+        const sourceRevenue =
+          row.events === 0
+            ? economicsConfigured
+              ? 0
+              : null
+            : row.configured
+              ? roundKrw(row.amount)
+              : null;
+        const sourceAiCost = estimates.usdKrw
+          ? roundKrw((aiCostBySourceUsd.get(source) ?? 0) * estimates.usdKrw)
+          : null;
+        const sourceContribution =
+          sourceRevenue !== null && sourceAiCost !== null
+            ? roundKrw(sourceRevenue - sourceAiCost)
+            : null;
+        return {
+          source,
+          events: row.events,
+          estimatedNetRevenueKrw: sourceRevenue,
+          estimatedAiCostKrw: sourceAiCost,
+          estimatedContributionKrw: sourceContribution,
+          estimatedContributionMarginPercent:
+            sourceRevenue && sourceContribution !== null
+              ? percent(sourceContribution, sourceRevenue)
+              : null,
+        };
+      })
+      .sort((left, right) => right.events - left.events);
+    const activeMonthlyRevenue = activeSubscriberRows.map((row) => {
+      const amount = resolveConfiguredProductRevenue(estimates, row);
+      if (amount === null) return null;
+      return row.billingPeriod === "yearly" ? amount / 12 : amount;
+    });
+    const estimatedMrrKrw =
+      validateMonetizationEstimates() &&
+      activeMonthlyRevenue.every((amount) => amount !== null)
+        ? roundKrw(
+            activeMonthlyRevenue.reduce<number>(
+              (sum, amount) => sum + (amount ?? 0),
+              0,
+            ),
+          )
+        : null;
+    const retention = calculateRetention(cohortUsers, cohortActivity, now);
 
     return {
       period: { days, from: from.toISOString(), to: to.toISOString() },
       totals: {
-        activeSubscribers: activeSubscriberRows.length,
+        activeSubscribers: new Set(
+          activeSubscriberRows.map((row) => row.ownerKey),
+        ).size,
         activeUsers: activeUserRows.length,
         completedRecommendations: recommendationRows.length,
         estimatedAiCostUsd:
-          Math.round(
-            recommendationRows.reduce(
-              (sum, row) => sum + Number(row.estimatedCostUsd),
-              0,
-            ) * 1_000_000,
-          ) / 1_000_000,
+          Math.round(totalAiCostUsd * 1_000_000) / 1_000_000,
         totalTokens: recommendationRows.reduce(
           (sum, row) => sum + row.totalTokens,
           0,
         ),
         paidCreditsSold: creditPurchaseAggregate._sum.creditsGranted ?? 0,
         paidCreditPurchases: creditPurchaseAggregate._count._all,
+        estimatedNetRevenueKrw,
+        estimatedAiCostKrw,
+        estimatedContributionKrw,
+        estimatedContributionMarginPercent:
+          estimatedNetRevenueKrw && estimatedContributionKrw !== null
+            ? percent(estimatedContributionKrw, estimatedNetRevenueKrw)
+            : null,
+        arppuKrw:
+          estimatedNetRevenueKrw !== null && payingUsers > 0
+            ? roundKrw(estimatedNetRevenueKrw / payingUsers)
+            : null,
+        estimatedMrrKrw,
+        renewalRatePercent: percent(
+          renewalEvents,
+          subscriptionRevenueEvents.length,
+        ),
+        churnRefundRatePercent: percent(
+          churnEvents,
+          subscriptionRevenueEvents.length,
+        ),
       },
       usageBySource: [...usageBySource.entries()]
         .map(([source, count]) => ({ source, count }))
@@ -365,20 +576,39 @@ export class AdminService {
         }))
         .sort((left, right) => right.total - left.total),
       conversion: {
-        paywallToPurchasePercent: percent(
-          funnelTotal("purchase_verified"),
-          funnelTotal("paywall_viewed"),
-        ),
-        rewardedAdVerificationPercent: percent(
-          funnelTotal("rewarded_ad_verified"),
-          funnelTotal("rewarded_ad_requested"),
-        ),
-        barcodeRewardGrantPercent: percent(
-          funnelTotal("barcode_reward_granted"),
-          funnelTotal("barcode_reward_granted") +
-            funnelTotal("barcode_reward_denied"),
-        ),
+        paywallToPurchasePercent: uniqueFunnelRows.length
+          ? percent(
+              purchasingPaywallOwners,
+              paywallOwners.size,
+            )
+          : percent(
+              funnelTotal("purchase_verified"),
+              funnelTotal("paywall_viewed"),
+            ),
+        rewardedAdVerificationPercent: uniqueFunnelRows.length
+          ? percent(
+              uniqueFunnelCount("rewarded_ad_verified"),
+              uniqueFunnelCount("rewarded_ad_requested"),
+            )
+          : percent(
+              funnelTotal("rewarded_ad_verified"),
+              funnelTotal("rewarded_ad_requested"),
+            ),
+        barcodeRewardGrantPercent: uniqueFunnelRows.length
+          ? percent(
+              uniqueFunnelCount("barcode_reward_granted"),
+              uniqueFunnelCount("barcode_reward_granted") +
+                uniqueFunnelCount("barcode_reward_denied"),
+            )
+          : percent(
+              funnelTotal("barcode_reward_granted"),
+              funnelTotal("barcode_reward_granted") +
+                funnelTotal("barcode_reward_denied"),
+            ),
       },
+      economicsConfigured,
+      economicsBySource,
+      retention,
       daily: [...dailyMap.entries()].map(([day, row]) => ({
         day,
         recommendations: row.recommendations,
@@ -392,4 +622,155 @@ function addUtcDays(date: Date, days: number) {
   const next = new Date(date.getTime());
   next.setUTCDate(next.getUTCDate() + days);
   return next;
+}
+
+function roundKrw(value: number) {
+  return Math.round(value * 100) / 100;
+}
+
+function hasDelegate(value: unknown, key: string) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      key in value &&
+      (value as Record<string, unknown>)[key],
+  );
+}
+
+function hasMethod(value: unknown, key: string) {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      typeof (value as Record<string, unknown>)[key] === "function",
+  );
+}
+
+function groupRevenueBySource(
+  rows: Array<{
+    source: string;
+    estimatedNetRevenueKrw: Prisma.Decimal;
+    estimateConfigured: boolean;
+  }>,
+) {
+  const grouped = new Map<
+    string,
+    { amount: number; events: number; configured: boolean }
+  >(
+    ["rewarded_ad", "paid_credit", "jango_plus", "jango_household"].map(
+      (source) => [source, { amount: 0, events: 0, configured: true }],
+    ),
+  );
+  for (const row of rows) {
+    const current = grouped.get(row.source) ?? {
+      amount: 0,
+      events: 0,
+      configured: true,
+    };
+    current.amount += Number(row.estimatedNetRevenueKrw);
+    current.events += 1;
+    current.configured = current.configured && row.estimateConfigured;
+    grouped.set(row.source, current);
+  }
+  return grouped;
+}
+
+function resolveConfiguredProductRevenue(
+  config: ReturnType<typeof getMonetizationEstimateConfig>,
+  row: {
+    store: string;
+    productId: string;
+    billingPeriod: string | null;
+    basePlanId: string | null;
+  },
+) {
+  const keys = [
+    [row.store, row.productId, row.basePlanId].filter(Boolean).join(":"),
+    [row.store, row.productId, row.billingPeriod].filter(Boolean).join(":"),
+    [row.store, row.productId].join(":"),
+  ];
+  return (
+    keys
+      .map((key) => config.productNetProceedsKrw[key])
+      .find((value) => typeof value === "number") ?? null
+  );
+}
+
+function calculateRetention(
+  users: Array<{ id: string; createdAt: Date }>,
+  activity: Array<{ ownerKey: string; createdAt: Date }>,
+  now: Date,
+) {
+  const activityByOwner = new Map<string, Date[]>();
+  for (const event of activity) {
+    const values = activityByOwner.get(event.ownerKey) ?? [];
+    values.push(event.createdAt);
+    activityByOwner.set(event.ownerKey, values);
+  }
+  const calculate = (
+    candidateUsers: Array<{ id: string; createdAt: Date }>,
+    day: number,
+  ) => {
+    const eligible = candidateUsers.filter(
+      (user) => user.createdAt.getTime() <= now.getTime() - day * 86_400_000,
+    );
+    if (!eligible.length) return null;
+    const retained = eligible.filter((user) => {
+      const start = user.createdAt.getTime() + day * 86_400_000;
+      const end = start + 86_400_000;
+      return (activityByOwner.get(user.id) ?? []).some(
+        (event) => event.getTime() >= start && event.getTime() < end,
+      );
+    }).length;
+    return Math.round((retained / eligible.length) * 10_000) / 100;
+  };
+  const usersByCohort = new Map<string, Array<{ id: string; createdAt: Date }>>();
+  for (const user of users) {
+    const cohort = toKstDateOnly(user.createdAt);
+    const cohortUsers = usersByCohort.get(cohort) ?? [];
+    cohortUsers.push(user);
+    usersByCohort.set(cohort, cohortUsers);
+  }
+  return {
+    d7Percent: calculate(users, 7) ?? 0,
+    d30Percent: calculate(users, 30) ?? 0,
+    cohorts: [...usersByCohort.entries()]
+      .map(([cohort, cohortUsers]) => ({
+        cohort,
+        users: cohortUsers.length,
+        d7Percent: calculate(cohortUsers, 7),
+        d30Percent: calculate(cohortUsers, 30),
+      }))
+      .sort((left, right) => left.cohort.localeCompare(right.cohort)),
+  };
+}
+
+function groupAiCostByRevenueSource(
+  rows: Array<{
+    estimatedCostUsd: Prisma.Decimal;
+    usageEvent?: {
+      source: string;
+      subscriptionEntitlement: { planCode: string | null } | null;
+    } | null;
+  }>,
+) {
+  const grouped = new Map<string, number>();
+  for (const row of rows) {
+    const usage = row.usageEvent;
+    const source =
+      usage?.source === "rewarded_ad"
+        ? "rewarded_ad"
+        : usage?.source === "paid_credit"
+          ? "paid_credit"
+          : usage?.source === "subscription"
+            ? usage.subscriptionEntitlement?.planCode === "jango_household"
+              ? "jango_household"
+              : "jango_plus"
+            : null;
+    if (!source) continue;
+    grouped.set(
+      source,
+      (grouped.get(source) ?? 0) + Number(row.estimatedCostUsd),
+    );
+  }
+  return grouped;
 }

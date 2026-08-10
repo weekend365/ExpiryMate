@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Headers,
+  Query,
   Post,
   UseGuards,
 } from "@nestjs/common";
@@ -25,8 +26,11 @@ export class SubscriptionsController {
 
   @Get("entitlement")
   @UseGuards(RegisteredGuard)
-  getEntitlement(@CurrentOwnerKey() ownerKey: string) {
-    return this.subscriptionsService.getEntitlement(ownerKey);
+  getEntitlement(
+    @CurrentOwnerKey() ownerKey: string,
+    @Query("spaceId") spaceId?: string,
+  ) {
+    return this.subscriptionsService.getEntitlement(ownerKey, spaceId);
   }
 
   @Get("plus-insights")

@@ -13,6 +13,8 @@ const sourceLabels: Record<string, string> = {
   rewarded_ad: "보상 광고",
   barcode_contribution: "바코드 기여",
   subscription: "장고 플러스",
+  jango_plus: "개인 플러스",
+  jango_household: "가족 플러스",
 };
 
 const eventLabels: Record<string, string> = {
@@ -100,6 +102,61 @@ export function MonetizationPage() {
         />
       </div>
 
+      <Panel
+        title="추정 공헌이익"
+        description="환경설정 기반 추정치이며 실제 정산액은 스토어·AdMob 재무 보고서와 대조해야 합니다."
+      >
+        {!overview?.economicsConfigured ? (
+          <p className="mb-4 text-sm font-semibold text-[var(--warning)]">
+            수익 추정 설정이 없어 금액 지표를 계산하지 않았습니다.
+          </p>
+        ) : null}
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <MetricCard label="추정 순매출" value={formatKrw(overview?.totals.estimatedNetRevenueKrw)} />
+          <MetricCard label="AI 원가" value={formatKrw(overview?.totals.estimatedAiCostKrw)} tone="warning" />
+          <MetricCard label="공헌이익" value={formatKrw(overview?.totals.estimatedContributionKrw)} />
+          <MetricCard
+            label="공헌이익률"
+            value={formatPercent(overview?.totals.estimatedContributionMarginPercent)}
+          />
+          <MetricCard label="ARPPU" value={formatKrw(overview?.totals.arppuKrw)} />
+          <MetricCard label="추정 MRR" value={formatKrw(overview?.totals.estimatedMrrKrw)} />
+          <MetricCard label="갱신률" value={`${overview?.totals.renewalRatePercent ?? 0}%`} />
+          <MetricCard label="해지·환불률" value={`${overview?.totals.churnRefundRatePercent ?? 0}%`} tone="warning" />
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-2">
+          {overview?.economicsBySource.map((row) => (
+            <div key={row.source} className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold">{sourceLabels[row.source] ?? row.source} · {row.events}건</span>
+                <span className="font-black">{formatKrw(row.estimatedContributionKrw)}</span>
+              </div>
+              <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                순매출 {formatKrw(row.estimatedNetRevenueKrw)} · AI 원가 {formatKrw(row.estimatedAiCostKrw)} · 마진 {formatPercent(row.estimatedContributionMarginPercent)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <MetricCard label="D7 유지율" value={`${overview?.retention.d7Percent ?? 0}%`} />
+        <MetricCard label="D30 유지율" value={`${overview?.retention.d30Percent ?? 0}%`} />
+      </div>
+
+      <Panel title="가입 코호트 유지율" description="가입일(KST)별 D7·D30 활동 유지율입니다.">
+        <div className="space-y-2">
+          {overview?.retention.cohorts.slice(-8).reverse().map((cohort) => (
+            <div key={cohort.cohort} className="grid grid-cols-4 gap-3 rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3 text-sm">
+              <span className="font-semibold">{cohort.cohort}</span>
+              <span>{cohort.users}명</span>
+              <span>D7 {formatPercent(cohort.d7Percent)}</span>
+              <span>D30 {formatPercent(cohort.d30Percent)}</span>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <Panel title="일별 추천량" description="KST 기준 완료된 AI 추천입니다.">
           <div className="space-y-2">
@@ -168,4 +225,12 @@ export function MonetizationPage() {
       </Panel>
     </div>
   );
+}
+
+function formatKrw(value: number | null | undefined) {
+  return value == null ? "설정되지 않음" : `${Math.round(value).toLocaleString("ko-KR")}원`;
+}
+
+function formatPercent(value: number | null | undefined) {
+  return value == null ? "설정되지 않음" : `${value}%`;
 }
