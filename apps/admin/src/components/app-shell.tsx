@@ -10,6 +10,7 @@ import { adminLogout, getMe } from "../lib/api";
 
 const navItems = [
   { href: "/dashboard", label: "대시보드" },
+  { href: "/monetization", label: "수익화" },
   { href: "/products", label: "상품 관리" },
   { href: "/inventory", label: "재고 조회" },
   { href: "/inquiries", label: "고객 문의" },
@@ -19,7 +20,10 @@ const navItems = [
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
-  const isPublicPage = pathname === "/login" || pathname.startsWith("/privacy");
+  const isPublicPage =
+    pathname === "/login" ||
+    pathname === "/terms" ||
+    pathname.startsWith("/privacy");
   const meQuery = useQuery({
     queryKey: ["admin", "me"],
     queryFn: getMe,

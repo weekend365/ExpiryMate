@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Patch,
@@ -18,12 +19,14 @@ import {
   createUserStorageLocationBodySchema,
   ItemStatus,
   recipeRecommendationRequestSchema,
+  updateRecipeEngagementSchema,
   updateInventoryItemBodySchema,
   updateUserStorageLocationBodySchema,
   type BatchConsumeInventoryItemsBody,
   type CreateInventoryItemBody,
   type CreateUserStorageLocationBody,
   type RecipeRecommendationRequest,
+  type UpdateRecipeEngagement,
   type UpdateInventoryItemBody,
   type UpdateUserStorageLocationBody,
 } from "@expirymate/shared";
@@ -35,6 +38,7 @@ import { BatchDiscardInventoryItemsDto } from "../inventory/dto/batch-discard-in
 import { InventoryService } from "../inventory/inventory.service";
 import { RecipesService } from "../recipes/recipes.service";
 import { SettingsService } from "../settings/settings.service";
+import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { SpacesService } from "./spaces.service";
 
 @UseGuards(RegisteredGuard)
@@ -249,9 +253,15 @@ export class SpaceRecipesController {
     @CurrentOwnerKey() userId: string,
     @Body(new ZodValidationPipe(recipeRecommendationRequestSchema))
     request: RecipeRecommendationRequest,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
-    return this.recipesService.createRecommendation(userId, request, spaceId);
+    return this.recipesService.createRecommendation(
+      userId,
+      request,
+      spaceId,
+      idempotencyKey,
+    );
   }
 
   @Get("recommendations")
@@ -284,6 +294,25 @@ export class SpaceRecipesController {
     return this.recipesService.saveFavorite(id, dishIndex, userId, spaceId);
   }
 
+  @Put("recommendations/:id/dishes/:dishIndex/engagement")
+  async recordEngagement(
+    @Param("spaceId") spaceId: string,
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(updateRecipeEngagementSchema))
+    body: UpdateRecipeEngagement,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.recipesService.recordEngagement(
+      id,
+      dishIndex,
+      body.action,
+      userId,
+      spaceId,
+    );
+  }
+
   @Delete("recommendations/:id/dishes/:dishIndex/favorite")
   async deleteFavorite(
     @Param("spaceId") spaceId: string,
@@ -293,5 +322,19 @@ export class SpaceRecipesController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.recipesService.deleteFavorite(id, dishIndex, userId);
+  }
+}
+
+@UseGuards(RegisteredGuard)
+@Controller("spaces/:spaceId/subscriptions")
+export class SpaceSubscriptionsController {
+  constructor(private readonly subscriptionsService: SubscriptionsService) {}
+
+  @Get("insights")
+  getInsights(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    return this.subscriptionsService.getHouseholdInsights(userId, spaceId);
   }
 }

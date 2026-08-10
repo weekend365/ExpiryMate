@@ -4,6 +4,9 @@ import {
   ExpirySource,
   formatDateKorean,
   isDateOnlyString,
+  ProductCategory,
+  productCategoryLabels,
+  productCategoryOptions,
   toIsoDate,
 } from "@expirymate/shared";
 import DateTimePicker, {
@@ -49,6 +52,7 @@ import { Button } from "../../components/Button";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Pill } from "../../components/Pill";
+import { useMonetization } from "../monetization/monetization-provider";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
@@ -59,6 +63,11 @@ import {
   SCAN_LINE_INSET,
   SCAN_LINE_TRAVEL,
 } from "./scanGuide";
+import {
+  type BarcodeContributionField,
+  getBarcodeContributionModerationMessage,
+  getProhibitedBarcodeContributionFields,
+} from "./barcodeContributionModeration";
 import { useProductScanner } from "./useProductScanner";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
 
@@ -102,13 +111,23 @@ function ScannerCameraExperience() {
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
+  const monetization = useMonetization();
   const [manualName, setManualName] = useState("");
+  const [manualBrand, setManualBrand] = useState("");
+  const [manualCategory, setManualCategory] = useState<ProductCategory | null>(
+    null,
+  );
   const [manualExpiryDate, setManualExpiryDate] = useState("");
   const [manualExpirySource, setManualExpirySource] = useState<ExpirySource>(
     ExpirySource.MANUAL,
   );
   const [isContributing, setIsContributing] = useState(false);
   const [contributeError, setContributeError] = useState<string | null>(null);
+  const [prohibitedContribution, setProhibitedContribution] = useState<{
+    fields: BarcodeContributionField[];
+    message: string;
+  } | null>(null);
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [showBarcodeSuccess, setShowBarcodeSuccess] = useState(false);
   const previousModeRef = useRef(scanner.mode);
@@ -129,6 +148,24 @@ function ScannerCameraExperience() {
   const resolvedProductName = needsManualName
     ? manualName.trim()
     : scanner.product?.name?.trim() ?? "";
+  const resolvedBrand = needsManualName
+    ? manualBrand.trim() || undefined
+    : scanner.product?.brand?.trim() || undefined;
+  const resolvedCategory = needsManualName
+    ? manualCategory ?? undefined
+    : undefined;
+  const contributionRewards = monetization.access?.contributionRewards;
+  const rewardEligibilityMessage = !contributionRewards?.enabled
+    ? "알려주시면 다음에도 바로 불러올 수 있어요."
+    : !scanner.product?.contributionToken
+      ? "상품 조회가 정상 확인된 새 바코드에만 추천권을 드려요."
+      : !contributionRewards.canEarn
+        ? contributionRewards.balance >= contributionRewards.balanceLimit
+          ? `추천권을 ${contributionRewards.balanceLimit}회 보유하고 있어 먼저 사용해야 해요.`
+          : "오늘 받을 수 있는 바코드 추천권을 모두 받았어요."
+        : resolvedBrand || resolvedCategory
+          ? "새 상품이면 추천권 1회를 바로 드려요."
+          : "브랜드 또는 카테고리를 더하면 추천권 1회를 받을 수 있어요.";
 
   const resultMood: MascotMood =
     needsManualName || needsManualExpiry ? "worry" : "happy";
@@ -185,24 +222,66 @@ function ScannerCameraExperience() {
     }
   }, [scanner.confirmation]);
 
+  const completeRegistration = () => {
+    setPrefill({
+      displayName: resolvedProductName,
+      brand: resolvedBrand,
+      category: resolvedCategory,
+    });
+    setDraft({
+      displayName: resolvedProductName,
+      brand: resolvedBrand,
+      category: resolvedCategory,
+      expiryDate: resolvedExpiryDate,
+      expirySource: resolvedExpirySource,
+    });
+    // Clear confirmation so the Modal sheet dismisses; replace so scanner
+    // unmounts and cannot keep overlaying /register.
+    scanner.resetScanner();
+    router.replace("/register");
+  };
+
   const handleUseScanResult = async () => {
     if (!scanner.confirmation || !resolvedProductName || !resolvedExpiryDate) {
       return;
     }
 
     setContributeError(null);
+    setProhibitedContribution(null);
+    setRewardNotice(null);
 
     if (needsManualName && scanner.confirmation.barcode) {
       setIsContributing(true);
 
       try {
-        await contributeBarcodeProduct({
+        const contribution = await contributeBarcodeProduct({
           barcode: scanner.confirmation.barcode,
           name: resolvedProductName,
-          brand: scanner.product?.brand ?? undefined,
-          category: scanner.product?.category ?? undefined,
+          brand: resolvedBrand,
+          category: resolvedCategory,
+          contributionToken: scanner.product?.contributionToken,
         });
+        if (contribution.reward.reason !== "rewards_disabled") {
+          setRewardNotice({
+            granted: contribution.reward.granted,
+            reason: contribution.reward.reason,
+            creditsGranted: contribution.reward.creditsGranted,
+            balance: contribution.reward.balance,
+            balanceLimit: contribution.reward.balanceLimit,
+          });
+        }
+        if (contribution.reward.granted) {
+          await monetization.refresh().catch(() => undefined);
+        }
       } catch (error) {
+        const prohibitedFields = getProhibitedBarcodeContributionFields(error);
+        if (prohibitedFields) {
+          setProhibitedContribution({
+            fields: prohibitedFields,
+            message: getBarcodeContributionModerationMessage(prohibitedFields),
+          });
+          return;
+        }
         setContributeError(
           error instanceof Error
             ? error.message
@@ -213,27 +292,22 @@ function ScannerCameraExperience() {
       }
     }
 
-    setPrefill({
-      displayName: resolvedProductName,
-      brand: scanner.product?.brand ?? undefined,
-    });
-    setDraft({
-      displayName: resolvedProductName,
-      brand: scanner.product?.brand ?? undefined,
-      expiryDate: resolvedExpiryDate,
-      expirySource: resolvedExpirySource,
-    });
-    // Clear confirmation so the Modal sheet dismisses; replace so scanner
-    // unmounts and cannot keep overlaying /register.
-    scanner.resetScanner();
-    router.replace("/register");
+    completeRegistration();
+  };
+
+  const handleContinueWithoutContribution = () => {
+    setRewardNotice(null);
+    completeRegistration();
   };
 
   const handleRescan = () => {
     setManualName("");
+    setManualBrand("");
+    setManualCategory(null);
     setManualExpiryDate("");
     setManualExpirySource(ExpirySource.MANUAL);
     setContributeError(null);
+    setProhibitedContribution(null);
     setShowBarcodeSuccess(false);
     scanner.resetScanner();
   };
@@ -448,6 +522,16 @@ function ScannerCameraExperience() {
             >
               다시 스캔할게요
             </Button>
+            {prohibitedContribution ? (
+              <Button
+                variant="secondary"
+                onPress={handleContinueWithoutContribution}
+                disabled={isContributing}
+                fullWidth
+              >
+                기여 없이 계속 등록
+              </Button>
+            ) : null}
             <Button
               icon={CheckCircle2}
               iconPosition="right"
@@ -463,7 +547,7 @@ function ScannerCameraExperience() {
               loading={isContributing || scanner.productLookupStatus === "loading"}
               fullWidth
             >
-              넣으러 갈게요
+              {prohibitedContribution ? "수정 후 다시 시도" : "넣으러 갈게요"}
             </Button>
           </View>
         }
@@ -504,12 +588,49 @@ function ScannerCameraExperience() {
                   accessibilityLabel="재료 이름"
                   placeholder="예: 서울우유 1L"
                   placeholderTextColor={colors.mutedText}
-                  style={styles.manualNameInput}
+                  style={[
+                    styles.manualNameInput,
+                    prohibitedContribution?.fields.includes("name") &&
+                      styles.manualNameInputError,
+                  ]}
                   autoCorrect={false}
                   returnKeyType="done"
                 />
+                <Text style={styles.manualNameLabel}>브랜드</Text>
+                <TextInput
+                  value={manualBrand}
+                  onChangeText={setManualBrand}
+                  accessibilityLabel="브랜드"
+                  placeholder="예: 서울우유"
+                  placeholderTextColor={colors.mutedText}
+                  style={[
+                    styles.manualNameInput,
+                    prohibitedContribution?.fields.includes("brand") &&
+                      styles.manualNameInputError,
+                  ]}
+                  autoCorrect={false}
+                  returnKeyType="done"
+                />
+                <Text style={styles.manualNameLabel}>카테고리</Text>
+                <View style={styles.pillRow}>
+                  {productCategoryOptions.map((option) => (
+                    <Pill
+                      key={option.value}
+                      label={option.label}
+                      selected={manualCategory === option.value}
+                      onPress={() =>
+                        setManualCategory(option.value as ProductCategory)
+                      }
+                    />
+                  ))}
+                </View>
+                {manualCategory ? (
+                  <Text style={styles.manualNameHint}>
+                    선택: {productCategoryLabels[manualCategory]}
+                  </Text>
+                ) : null}
                 <Text style={styles.manualNameHint}>
-                  알려주시면 다음에도 바로 불러올 수 있어요.
+                  {rewardEligibilityMessage}
                 </Text>
               </View>
             ) : null}
@@ -536,7 +657,16 @@ function ScannerCameraExperience() {
               </Text>
             ) : null}
 
-            {contributeError ? (
+            {prohibitedContribution ? (
+              <View
+                style={styles.moderationErrorCard}
+                accessibilityRole="alert"
+              >
+                <Text style={styles.moderationErrorText}>
+                  {prohibitedContribution.message}
+                </Text>
+              </View>
+            ) : contributeError ? (
               <Text style={styles.sheetFootnote}>{contributeError}</Text>
             ) : null}
           </>
@@ -1207,6 +1337,9 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     fontFamily: typography.bodyStrong.fontFamily,
   },
+  manualNameInputError: {
+    borderColor: colors.danger,
+  },
   manualNameHint: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
@@ -1297,5 +1430,18 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
+  },
+  moderationErrorCard: {
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.danger,
+    backgroundColor: colors.dangerSoft,
+    padding: spacing.md,
+  },
+  moderationErrorText: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.danger,
   },
 });

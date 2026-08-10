@@ -89,7 +89,7 @@
 
 ### 의도적으로 미룸 (v1.1+ / Phase 4)
 
-- 네이티브 IAP 구매 UI (서버 verify API만 있음)
+- 네이티브 IAP·보상 광고 코드는 구현 완료. 스토어 상품 승인·production-like 결제/복원/환불 QA 후 단계 공개
 - 실시간 동기화(WebSocket/SSE)와 공간 변경 이력 원장
 - 초대 QR·전화번호·공개 재사용 링크
 - E2E 자동화 (Detox/Maestro)
@@ -113,7 +113,7 @@ flowchart LR
 | **1** ✅ | 실사용 검증 | 실기기 QA · uptime · Sentry API/Admin ✅ (Mobile Sentry 후순위) |
 | **2** 👈 | 스토어 공개 | 운영 migration · 공유 2계정 QA · 새 production 빌드 · 심사 자료 · iOS/Android 승인 |
 | **3** | 안정 운영 | 알림·백업·비용 한도·런북 |
-| **4** | 수익화·성장 | IAP UI · 카탈로그 · 분석 · 실시간 협업/변경 이력 |
+| **4** | 수익화·성장 | 수익화 단계 공개·가격 실험 · 카탈로그 · 분석 · 실시간 협업/변경 이력 |
 
 ### Phase 1 Done Criteria
 
@@ -584,7 +584,7 @@ Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 �
 | AI 레시피 | ✅ | |
 | 개인 즐겨찾기 | ✅ | |
 | 가족/매장 공유 공간 | ✅ 이메일·1회용 코드 초대·3단계 역할 | 실시간 동기화·변경 이력·QR/전화번호 |
-| IAP 구매 UI | ❌ | ✅ |
+| IAP 구매 UI | ✅ 코드·서버 검증 | 스토어 상품 승인·production-like QA |
 
 ---
 

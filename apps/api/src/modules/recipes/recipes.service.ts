@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import {
   BadGatewayException,
   BadRequestException,
+  HttpStatus,
   Injectable,
   Logger,
   NotFoundException,
@@ -16,14 +17,17 @@ import {
 import type {
   RecipeInventorySnapshotItem,
   RecipeFavorite,
+  RecipeEngagementAction,
   RecipeRecommendation,
   RecipeRecommendationDish,
   RecipeRecommendationRequest,
+  RecipePreference,
 } from "@expirymate/shared";
 import {
   calculateDaysLeftUntilExpiry,
   dateOnlyToUtcDate,
   generatedRecipeRecommendationsPayloadSchema,
+  recipeDishEngagementSchema,
   recipeInventorySnapshotItemSchema,
   recipeRecommendationRequestSchema,
   recipeRecommendationsPayloadSchema,
@@ -33,14 +37,24 @@ import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
+import { CodedHttpException } from "../../common/coded-http.exception";
+import { MonetizationService } from "../monetization/monetization.service";
 import { PrivacyService } from "../privacy/privacy.service";
+import { SettingsService } from "../settings/settings.service";
 import { RecipePolicyService } from "./recipe-policy.service";
+import {
+  isCandidateBlocked,
+  MAX_RECIPE_INGREDIENTS,
+  normalizeRecipeTerm,
+  rankRecipeCandidates,
+  RECIPE_SELECTION_VERSION,
+  type RecipeRankingCandidate,
+} from "./recipe-ranking";
+import { validateGeneratedRecommendations } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v3";
+const PROMPT_VERSION = "recipe-recommendation-v4";
 const DEFAULT_MODEL = "gpt-5-mini";
-const MAX_INGREDIENTS = 30;
 
-const DEFAULT_CACHE_TTL_SECONDS = 6 * 60 * 60;
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -54,6 +68,14 @@ interface RecipeRecommendationGeneration {
   recommendations: RecipeRecommendationDish[];
   usage: RecipeRecommendationUsage;
   estimatedCostUsd: number;
+  generationAttempts: number;
+  repairApplied: boolean;
+}
+
+interface RecipePersonalizationContext {
+  positiveDishTitles: string[];
+  dismissedDishTitles: string[];
+  recentDishTitles: string[];
 }
 
 interface ModelPricing {
@@ -97,22 +119,36 @@ export class RecipesService {
     private readonly prisma: PrismaService,
     private readonly privacyService: PrivacyService,
     private readonly recipePolicy: RecipePolicyService,
+    private readonly monetization: MonetizationService,
+    private readonly settingsService: SettingsService,
   ) {}
 
   async createRecommendation(
     ownerKey: string,
     request: RecipeRecommendationRequest,
     spaceId?: string,
+    idempotencyKey = "",
   ) {
     const now = new Date();
+    const completedRecommendationId =
+      await this.monetization.getCompletedRecommendationId(
+        ownerKey,
+        idempotencyKey,
+      );
+    if (completedRecommendationId) {
+      return this.getRecommendation(completedRecommendationId, ownerKey, spaceId);
+    }
 
     this.recipePolicy.ensureAiEnabled();
     this.recipePolicy.enforceRateLimit(ownerKey, now);
     await this.privacyService.ensureAiDataNoticeAccepted(ownerKey);
 
+    const preference = await this.settingsService.getRecipePreferences(ownerKey);
+
     const inventorySnapshot = await this.buildInventorySnapshot(
       ownerKey,
       request,
+      preference,
       spaceId,
     );
 
@@ -121,28 +157,9 @@ export class RecipesService {
     }
 
     const model = this.getModel();
-    const requestCacheKey = buildRequestCacheKey(
-      model,
-      request,
-      inventorySnapshot,
+    const projectedCostUsd = roundCost(
+      estimateGenerationCostUsd(request, inventorySnapshot, model) * 2.2,
     );
-    const cachedRecord = await this.findCachedRecommendation(
-      ownerKey,
-      requestCacheKey,
-      now,
-      spaceId,
-    );
-
-    if (cachedRecord) {
-      return this.serializeRecommendation(cachedRecord);
-    }
-
-    const projectedCostUsd = estimateGenerationCostUsd(
-      request,
-      inventorySnapshot,
-      model,
-    );
-    await this.recipePolicy.enforceDailyQuota(ownerKey, now);
     await this.recipePolicy.enforceDailyCostLimit(
       ownerKey,
       projectedCostUsd,
@@ -150,30 +167,63 @@ export class RecipesService {
     );
     await this.recipePolicy.enforceGlobalDailyCostLimit(projectedCostUsd, now);
 
-    const generation = await this.recipePolicy.withInflightLimit(() =>
-      this.generateRecommendations(ownerKey, request, inventorySnapshot),
+    const reservation = await this.monetization.reserveRecommendation(
+      ownerKey,
+      idempotencyKey,
+      now,
+      spaceId,
     );
+    if (reservation.kind === "existing") {
+      return this.getRecommendation(reservation.recommendationId, ownerKey, spaceId);
+    }
 
-    const record = await this.prisma.recipeRecommendation.create({
-      data: {
+    try {
+      const personalization = await this.buildPersonalizationContext(
         ownerKey,
         spaceId,
-        requestCacheKey,
-        request: toJson(request),
-        inventorySnapshot: toJson(inventorySnapshot),
-        recommendations: toJson(generation.recommendations),
-        aiProvider: "openai",
-        aiModel: model,
-        promptVersion: PROMPT_VERSION,
-        inputTokens: generation.usage.inputTokens,
-        cachedInputTokens: generation.usage.cachedInputTokens,
-        outputTokens: generation.usage.outputTokens,
-        totalTokens: generation.usage.totalTokens,
-        estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
-      },
-    });
-
-    return this.serializeRecommendation(record);
+      );
+      const generation = await this.recipePolicy.withInflightLimit(() =>
+        this.generateRecommendations(
+          ownerKey,
+          request,
+          inventorySnapshot,
+          preference,
+          personalization,
+        ),
+      );
+      const record = await this.prisma.recipeRecommendation.create({
+        data: {
+          ownerKey,
+          spaceId,
+          requestCacheKey: null,
+          request: toJson(request),
+          inventorySnapshot: toJson(inventorySnapshot),
+          recommendations: toJson(generation.recommendations),
+          aiProvider: "openai",
+          aiModel: model,
+          promptVersion: PROMPT_VERSION,
+          inputTokens: generation.usage.inputTokens,
+          cachedInputTokens: generation.usage.cachedInputTokens,
+          outputTokens: generation.usage.outputTokens,
+          totalTokens: generation.usage.totalTokens,
+          estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
+          generationAttempts: generation.generationAttempts,
+          repairApplied: generation.repairApplied,
+          selectionVersion: RECIPE_SELECTION_VERSION,
+        },
+      });
+      await this.monetization.completeRecommendation(
+        reservation.usageEventId,
+        record.id,
+      );
+      return this.serializeRecommendation(record);
+    } catch (error) {
+      await this.monetization.releaseRecommendation(
+        reservation.usageEventId,
+        error instanceof Error ? error.name : "unknown_error",
+      );
+      throw error;
+    }
   }
 
   async listRecommendations(ownerKey: string, spaceId?: string) {
@@ -241,25 +291,40 @@ export class RecipesService {
     const inventorySnapshot = recipeInventorySnapshotItemSchema
       .array()
       .parse(recommendation.inventorySnapshot);
-    const favorite = await this.prisma.recipeFavorite.upsert({
-      where: {
-        ownerKey_sourceRecommendationId_sourceDishIndex: {
+    const now = new Date();
+    const favorite = await this.prisma.$transaction(async (tx) => {
+      const saved = await tx.recipeFavorite.upsert({
+        where: {
+          ownerKey_sourceRecommendationId_sourceDishIndex: {
+            ownerKey,
+            sourceRecommendationId: recommendationId,
+            sourceDishIndex: dishIndex,
+          },
+        },
+        create: {
           ownerKey,
           sourceRecommendationId: recommendationId,
           sourceDishIndex: dishIndex,
+          dishSnapshot: toJson(dish),
+          inventorySnapshot: toJson(inventorySnapshot),
         },
-      },
-      create: {
-        ownerKey,
-        sourceRecommendationId: recommendationId,
-        sourceDishIndex: dishIndex,
-        dishSnapshot: toJson(dish),
-        inventorySnapshot: toJson(inventorySnapshot),
-      },
-      update: {
-        dishSnapshot: toJson(dish),
-        inventorySnapshot: toJson(inventorySnapshot),
-      },
+        update: {
+          dishSnapshot: toJson(dish),
+          inventorySnapshot: toJson(inventorySnapshot),
+        },
+      });
+      await tx.recipeDishEngagement.upsert({
+        where: {
+          ownerKey_recommendationId_dishIndex: {
+            ownerKey,
+            recommendationId,
+            dishIndex,
+          },
+        },
+        create: { ownerKey, recommendationId, dishIndex, favoritedAt: now },
+        update: { favoritedAt: now },
+      });
+      return saved;
     });
 
     return this.serializeFavorite(favorite);
@@ -270,77 +335,155 @@ export class RecipesService {
     dishIndex: number,
     ownerKey: string,
   ) {
-    await this.prisma.recipeFavorite.deleteMany({
-      where: {
-        ownerKey,
-        sourceRecommendationId: recommendationId,
-        sourceDishIndex: dishIndex,
-      },
+    await this.prisma.$transaction(async (tx) => {
+      await tx.recipeFavorite.deleteMany({
+        where: {
+          ownerKey,
+          sourceRecommendationId: recommendationId,
+          sourceDishIndex: dishIndex,
+        },
+      });
+      await tx.recipeDishEngagement.updateMany({
+        where: { ownerKey, recommendationId, dishIndex },
+        data: { favoritedAt: null },
+      });
     });
 
     return { ok: true as const };
   }
 
-  private async findCachedRecommendation(
+  async recordEngagement(
+    recommendationId: string,
+    dishIndex: number,
+    action: RecipeEngagementAction,
     ownerKey: string,
-    requestCacheKey: string,
-    now: Date,
     spaceId?: string,
   ) {
-    const cacheTtlSeconds = getNonNegativeIntegerEnv(
-      "RECIPE_CACHE_TTL_SECONDS",
-      DEFAULT_CACHE_TTL_SECONDS,
+    const recommendation = await this.prisma.recipeRecommendation.findUnique({
+      where: { id: recommendationId },
+    });
+    if (
+      !recommendation ||
+      (spaceId
+        ? recommendation.spaceId !== spaceId
+        : recommendation.ownerKey !== ownerKey)
+    ) {
+      throw new NotFoundException("추천 결과를 찾을 수 없습니다.");
+    }
+    const dishes = recipeRecommendationsPayloadSchema.shape.recommendations.parse(
+      recommendation.recommendations,
     );
-
-    if (cacheTtlSeconds === 0) {
-      return null;
+    if (!Number.isInteger(dishIndex) || dishIndex < 0 || !dishes[dishIndex]) {
+      throw new BadRequestException("추천 요리를 찾을 수 없습니다.");
     }
 
-    return this.prisma.recipeRecommendation.findFirst({
+    const now = new Date();
+    const patch = engagementPatch(action, now);
+    const engagementKey = { ownerKey, recommendationId, dishIndex };
+    const existing = await this.prisma.recipeDishEngagement.findUnique({
       where: {
-        ...recipeScope(ownerKey, spaceId),
-        requestCacheKey,
-        createdAt: {
-          gte: new Date(now.getTime() - cacheTtlSeconds * 1000),
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
+        ownerKey_recommendationId_dishIndex: engagementKey,
       },
     });
+    if (existing && engagementActionAlreadyApplied(existing, action)) {
+      return serializeDishEngagement(existing);
+    }
+    const engagement = await this.prisma.recipeDishEngagement.upsert({
+      where: {
+        ownerKey_recommendationId_dishIndex: engagementKey,
+      },
+      create: { ownerKey, recommendationId, dishIndex, ...patch },
+      update: patch,
+    });
+
+    return serializeDishEngagement(engagement);
   }
 
   private async buildInventorySnapshot(
     ownerKey: string,
     request: RecipeRecommendationRequest,
+    preference: RecipePreference,
     spaceId?: string,
   ): Promise<RecipeInventorySnapshotItem[]> {
     const today = toKstDateOnly(new Date());
-    const items = await this.prisma.inventoryItem.findMany({
-      where: {
-        ...(spaceId ? { spaceId } : { ownerKey }),
-        status: "active",
-        expiryDate: {
-          gte: dateOnlyToUtcDate(today),
-        },
-        OR: [
-          {
-            category: null,
-          },
-          {
-            category: {
-              notIn: Array.from(nonFoodCategories),
-            },
-          },
-        ],
-      },
-      orderBy: request.useExpiringFirst
-        ? [{ expiryDate: "asc" }, { createdAt: "desc" }]
-        : [{ createdAt: "desc" }],
-      take: MAX_INGREDIENTS,
-    });
+    const where = {
+      ...(spaceId ? { spaceId } : { ownerKey }),
+      status: "active" as const,
+      quantityBase: { gt: 0 },
+      expiryDate: { gte: dateOnlyToUtcDate(today) },
+      OR: [
+        { category: null },
+        { category: { notIn: Array.from(nonFoodCategories) } },
+      ],
+    };
+    const [expiringItems, recentlyUpdatedItems, recentRecommendations] =
+      await Promise.all([
+        this.prisma.inventoryItem.findMany({
+          where,
+          orderBy: [{ expiryDate: "asc" }, { updatedAt: "desc" }],
+          take: 100,
+        }),
+        this.prisma.inventoryItem.findMany({
+          where,
+          orderBy: [{ updatedAt: "desc" }, { expiryDate: "asc" }],
+          take: 100,
+        }),
+        this.prisma.recipeRecommendation.findMany({
+          where: recipeScope(ownerKey, spaceId),
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: { recommendations: true },
+        }),
+      ]);
 
-    return items.map((item) => ({
+    const candidatesById = new Map(
+      [...expiringItems, ...recentlyUpdatedItems].map((item) => [item.id, item]),
+    );
+    if (candidatesById.size === 0) return [];
+
+    const recentUsage = new Map<string, number>();
+    for (const record of recentRecommendations) {
+      const parsed = recipeRecommendationsPayloadSchema.safeParse({
+        recommendations: record.recommendations,
+      });
+      if (!parsed.success) continue;
+      for (const dish of parsed.data.recommendations) {
+        for (const ingredient of dish.usedIngredients) {
+          if (ingredient.inventoryItemId) {
+            recentUsage.set(
+              ingredient.inventoryItemId,
+              (recentUsage.get(ingredient.inventoryItemId) ?? 0) + 1,
+            );
+          }
+          const nameKey = normalizeRecipeTerm(ingredient.name);
+          recentUsage.set(nameKey, (recentUsage.get(nameKey) ?? 0) + 1);
+        }
+      }
+    }
+
+    const safeCandidates = [...candidatesById.values()]
+      .map((item) => ({
+        ...item,
+        category: item.category as RecipeRankingCandidate["category"],
+        unitCode: item.unitCode as string,
+        daysUntilExpiry: calculateDaysLeftUntilExpiry(item.expiryDate, today),
+      }))
+      .filter((item) => !isCandidateBlocked(item, preference));
+
+    if (safeCandidates.length === 0) {
+      throw new CodedHttpException(
+        HttpStatus.BAD_REQUEST,
+        "NO_SAFE_RECIPE_INGREDIENTS",
+        "현재 안전·식단 설정에 맞는 추천 재료가 없어요.",
+      );
+    }
+
+    const selected = rankRecipeCandidates(safeCandidates, request, recentUsage).slice(
+      0,
+      MAX_RECIPE_INGREDIENTS,
+    );
+
+    return selected.map((item) => ({
       inventoryItemId: item.id,
       name: item.displayName,
       category: item.category as RecipeInventorySnapshotItem["category"],
@@ -348,17 +491,75 @@ export class RecipesService {
       unit: item.unit,
       quantityBase: item.quantityBase,
       unitCode: item.unitCode as RecipeInventorySnapshotItem["unitCode"],
-      storageLocation:
-        item.storageLocation,
+      storageLocation: item.storageLocation,
       expiryDate: toKstDateOnly(item.expiryDate),
-      daysUntilExpiry: calculateDaysLeftUntilExpiry(item.expiryDate, today),
+      daysUntilExpiry: item.daysUntilExpiry,
     }));
+  }
+
+  private async buildPersonalizationContext(
+    ownerKey: string,
+    spaceId?: string,
+  ): Promise<RecipePersonalizationContext> {
+    const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    const [favorites, completed, dismissed, recent] = await Promise.all([
+      this.prisma.recipeFavorite.findMany({
+        where: { ownerKey, createdAt: { gte: since } },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: { dishSnapshot: true },
+      }),
+      this.prisma.recipeDishEngagement.findMany({
+        where: { ownerKey, cookingCompletedAt: { gte: since } },
+        orderBy: { cookingCompletedAt: "desc" },
+        take: 5,
+        include: { recommendation: { select: { recommendations: true } } },
+      }),
+      this.prisma.recipeDishEngagement.findMany({
+        where: { ownerKey, dismissedAt: { gte: since } },
+        orderBy: { dismissedAt: "desc" },
+        take: 10,
+        include: { recommendation: { select: { recommendations: true } } },
+      }),
+      this.prisma.recipeRecommendation.findMany({
+        where: recipeScope(ownerKey, spaceId),
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        select: { recommendations: true },
+      }),
+    ]);
+
+    const positiveDishTitles = favorites.flatMap((favorite) => {
+      const parsed = recipeRecommendationsPayloadSchema.shape.recommendations.element.safeParse(
+        favorite.dishSnapshot,
+      );
+      return parsed.success ? [parsed.data.title] : [];
+    });
+    positiveDishTitles.push(
+      ...completed.flatMap((item) =>
+        getDishTitle(item.recommendation.recommendations, item.dishIndex),
+      ),
+    );
+
+    return {
+      positiveDishTitles: [...new Set(positiveDishTitles)].slice(0, 5),
+      dismissedDishTitles: dismissed
+        .flatMap((item) =>
+          getDishTitle(item.recommendation.recommendations, item.dishIndex),
+        )
+        .slice(0, 10),
+      recentDishTitles: recent
+        .flatMap((item) => getDishTitles(item.recommendations))
+        .slice(0, 15),
+    };
   }
 
   private async generateRecommendations(
     ownerKey: string,
     request: RecipeRecommendationRequest,
     inventorySnapshot: RecipeInventorySnapshotItem[],
+    preference: RecipePreference,
+    personalization: RecipePersonalizationContext,
   ): Promise<RecipeRecommendationGeneration> {
     const apiKey = process.env.OPENAI_API_KEY;
 
@@ -368,47 +569,113 @@ export class RecipesService {
 
     const model = this.getModel();
     const instructions = buildInstructions();
-    const input = buildInput(request, inventorySnapshot);
+    const input = buildInput(
+      request,
+      inventorySnapshot,
+      preference,
+      personalization,
+    );
     const client = new OpenAI({ apiKey });
 
     try {
-      const response = await client.responses.parse({
-        model,
-        instructions,
-        input,
-        max_output_tokens: getNonNegativeIntegerEnv(
-          "RECIPE_AI_MAX_OUTPUT_TOKENS",
-          DEFAULT_MAX_OUTPUT_TOKENS,
-        ),
-        prompt_cache_key: buildOpenAIPromptCacheKey(ownerKey),
-        safety_identifier: hashValue(ownerKey),
-        metadata: {
-          feature: "recipe_recommendation",
-          promptVersion: PROMPT_VERSION,
-        },
-        text: {
-          format: zodTextFormat(
-            generatedRecipeRecommendationsPayloadSchema,
-            "recipe_recommendations",
+      const run = async (requestInput: string, attempt: number) => {
+        const response = await client.responses.parse({
+          model,
+          instructions,
+          input: requestInput,
+          max_output_tokens: getNonNegativeIntegerEnv(
+            "RECIPE_AI_MAX_OUTPUT_TOKENS",
+            DEFAULT_MAX_OUTPUT_TOKENS,
           ),
-          verbosity: "low",
-        },
-      });
+          prompt_cache_key: buildOpenAIPromptCacheKey(ownerKey),
+          safety_identifier: hashValue(ownerKey),
+          metadata: {
+            feature: "recipe_recommendation",
+            promptVersion: PROMPT_VERSION,
+            attempt: String(attempt),
+          },
+          text: {
+            format: zodTextFormat(
+              generatedRecipeRecommendationsPayloadSchema,
+              "recipe_recommendations",
+            ),
+            verbosity: "low",
+          },
+        });
 
-      const parsed = response.output_parsed;
+        if (hasOpenAiRefusal(response.output)) {
+          throw new Error("OpenAI refused the recipe generation request.");
+        }
+        if (response.status === "incomplete") {
+          throw new Error(
+            `OpenAI returned an incomplete recipe response: ${response.incomplete_details?.reason ?? "unknown_reason"}`,
+          );
+        }
+        const parsed = response.output_parsed;
+        if (!parsed) {
+          throw new Error("OpenAI response did not include parsed output.");
+        }
+        const recommendations =
+          generatedRecipeRecommendationsPayloadSchema.parse(parsed).recommendations;
+        return {
+          recommendations,
+          usage: normalizeUsage(
+            response.usage,
+            instructions,
+            requestInput,
+            parsed,
+          ),
+        };
+      };
 
-      if (!parsed) {
-        throw new Error("OpenAI response did not include parsed output.");
+      const first = await run(input, 1);
+      const firstValidation = validateGeneratedRecommendations(
+        first.recommendations,
+        request,
+        inventorySnapshot,
+        preference,
+      );
+      if (firstValidation.valid) {
+        return {
+          recommendations: firstValidation.recommendations,
+          usage: first.usage,
+          estimatedCostUsd: calculateCostUsd(
+            first.usage,
+            getModelPricing(model),
+          ),
+          generationAttempts: 1,
+          repairApplied: false,
+        };
       }
 
-      const recommendations =
-        generatedRecipeRecommendationsPayloadSchema.parse(parsed).recommendations;
-      const usage = normalizeUsage(response.usage, instructions, input, parsed);
+      this.logger.warn(
+        `Recipe semantic validation requested repair: ${firstValidation.violations.join(",")}`,
+      );
+      const repairInput = buildRepairInput(
+        input,
+        first.recommendations,
+        firstValidation.violations,
+      );
+      const second = await run(repairInput, 2);
+      const secondValidation = validateGeneratedRecommendations(
+        second.recommendations,
+        request,
+        inventorySnapshot,
+        preference,
+      );
+      if (!secondValidation.valid) {
+        throw new Error(
+          `Recipe semantic validation failed after repair: ${secondValidation.violations.join(",")}`,
+        );
+      }
 
+      const usage = combineUsage(first.usage, second.usage);
       return {
-        recommendations,
+        recommendations: secondValidation.recommendations,
         usage,
         estimatedCostUsd: calculateCostUsd(usage, getModelPricing(model)),
+        generationAttempts: 2,
+        repairApplied: true,
       };
     } catch (error) {
       if (error instanceof ServiceUnavailableException) {
@@ -485,11 +752,15 @@ function buildInstructions() {
   return [
     "당신은 한국어로 답하는 실용적인 가정식 요리 추천 엔진입니다.",
     "사용자의 보관 재료만 주요 재료로 사용해 추천 요리 3개를 만드세요.",
+    "첫 번째는 임박 재료 활용형, 두 번째는 추가 재료 최소형, 세 번째는 빠르고 새로운 탐색형 메뉴로 만드세요.",
     "만료된 재료는 입력되지 않으며, 유통기한이 가까운 재료를 우선 활용하세요.",
     "카테고리가 없는 재료는 실제 식재료로 확실할 때만 사용하세요.",
     "부족한 재료는 선택 재료로만 제안하고, 없어도 조리가 가능한 방향을 선호하세요.",
     "의학적 효능, 치료, 다이어트 효과를 주장하지 마세요.",
     "각 추천에는 재료 상태와 냄새를 확인하라는 짧은 안전 문구를 포함하세요.",
+    "preferences의 알레르기, 제외 재료, 식단, 최대 매운맛, 사용 가능한 조리도구는 절대 위반하지 마세요.",
+    "spiceLevel은 none, mild, medium, hot 중 하나로, requiredEquipment는 입력된 availableEquipment의 값만 사용하세요.",
+    "positiveDishTitles의 성향은 참고하되 그대로 반복하지 말고, dismissedDishTitles와 recentDishTitles는 피하세요.",
     "",
     "[조리 단계 작성 규칙]",
     "steps는 초보도 바로 따라 할 수 있도록 구체적이고 디테일하게 작성하세요.",
@@ -511,11 +782,21 @@ function buildInstructions() {
 function buildInput(
   request: RecipeRecommendationRequest,
   inventorySnapshot: RecipeInventorySnapshotItem[],
+  preference: RecipePreference = defaultRecipePreference(),
+  personalization: RecipePersonalizationContext = emptyPersonalizationContext(),
 ) {
   return JSON.stringify(
     {
       request,
       inventory: inventorySnapshot,
+      preferences: {
+        allergens: preference.allergens,
+        excludedIngredients: preference.excludedIngredients,
+        dietaryStyle: preference.dietaryStyle,
+        maxSpiceLevel: preference.maxSpiceLevel,
+        availableEquipment: preference.availableEquipment,
+      },
+      personalization,
       outputRules: {
         language: "ko",
         count: 3,
@@ -524,6 +805,8 @@ function buildInput(
         mealType: request.mealType,
         usedIngredientUnits: ["ea", "ml", "g"],
         requireUsedIngredientAmount: true,
+        requireSpiceLevel: true,
+        requireRequiredEquipment: true,
       },
     },
     null,
@@ -531,18 +814,24 @@ function buildInput(
   );
 }
 
-function buildRequestCacheKey(
-  model: string,
-  request: RecipeRecommendationRequest,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
+function buildRepairInput(
+  originalInput: string,
+  recommendations: RecipeRecommendationDish[],
+  violations: string[],
 ) {
-  return hashValue(
-    stableStringify({
-      model,
-      promptVersion: PROMPT_VERSION,
-      request,
-      inventorySnapshot,
-    }),
+  return JSON.stringify(
+    {
+      task: "아래 기존 결과의 위반 사항을 모두 수정해 전체 추천 3개를 다시 출력하세요.",
+      originalContext: JSON.parse(originalInput) as unknown,
+      violations,
+      invalidRecommendations: recommendations,
+      rules: [
+        "위반되지 않은 내용도 구조화 출력 스키마에 맞춰 함께 반환합니다.",
+        "재고 ID, 단위, 수량, 안전 설정을 임의로 바꾸거나 추측하지 않습니다.",
+      ],
+    },
+    null,
+    2,
   );
 }
 
@@ -593,6 +882,72 @@ function normalizeUsage(
     outputTokens: normalizeTokenCount(outputTokens),
     totalTokens: normalizeTokenCount(totalTokens),
   };
+}
+
+function combineUsage(
+  first: RecipeRecommendationUsage,
+  second: RecipeRecommendationUsage,
+): RecipeRecommendationUsage {
+  return {
+    inputTokens: first.inputTokens + second.inputTokens,
+    cachedInputTokens: first.cachedInputTokens + second.cachedInputTokens,
+    outputTokens: first.outputTokens + second.outputTokens,
+    totalTokens: first.totalTokens + second.totalTokens,
+  };
+}
+
+function hasOpenAiRefusal(output: unknown) {
+  if (!Array.isArray(output)) return false;
+  return output.some((item) => {
+    if (!item || typeof item !== "object") return false;
+    const content = (item as { content?: unknown }).content;
+    return (
+      Array.isArray(content) &&
+      content.some(
+        (entry) =>
+          Boolean(entry) &&
+          typeof entry === "object" &&
+          (entry as { type?: unknown }).type === "refusal",
+      )
+    );
+  });
+}
+
+type EngagementRecord = {
+  recommendationId: string;
+  dishIndex: number;
+  viewedAt: Date | null;
+  cookingStartedAt: Date | null;
+  cookingCompletedAt: Date | null;
+  dismissedAt: Date | null;
+  favoritedAt: Date | null;
+  updatedAt: Date;
+};
+
+function engagementActionAlreadyApplied(
+  engagement: EngagementRecord,
+  action: RecipeEngagementAction,
+) {
+  if (action === "view") return engagement.viewedAt !== null;
+  if (action === "cooking_started") return engagement.cookingStartedAt !== null;
+  if (action === "cooking_completed") {
+    return engagement.cookingCompletedAt !== null;
+  }
+  if (action === "dismiss") return engagement.dismissedAt !== null;
+  return engagement.dismissedAt === null;
+}
+
+function serializeDishEngagement(engagement: EngagementRecord) {
+  return recipeDishEngagementSchema.parse({
+    recommendationId: engagement.recommendationId,
+    dishIndex: engagement.dishIndex,
+    viewedAt: engagement.viewedAt?.toISOString() ?? null,
+    cookingStartedAt: engagement.cookingStartedAt?.toISOString() ?? null,
+    cookingCompletedAt: engagement.cookingCompletedAt?.toISOString() ?? null,
+    dismissedAt: engagement.dismissedAt?.toISOString() ?? null,
+    favoritedAt: engagement.favoritedAt?.toISOString() ?? null,
+    updatedAt: engagement.updatedAt.toISOString(),
+  });
 }
 
 function calculateCostUsd(
@@ -712,4 +1067,55 @@ function sortForStableStringify(value: unknown): unknown {
 
 function toJson(value: unknown): Prisma.InputJsonValue {
   return value as Prisma.InputJsonValue;
+}
+
+function defaultRecipePreference(): RecipePreference {
+  return {
+    allergens: [],
+    excludedIngredients: [],
+    dietaryStyle: "any",
+    maxSpiceLevel: "any",
+    availableEquipment: ["stovetop"],
+    updatedAt: new Date(0).toISOString(),
+  };
+}
+
+function emptyPersonalizationContext(): RecipePersonalizationContext {
+  return {
+    positiveDishTitles: [],
+    dismissedDishTitles: [],
+    recentDishTitles: [],
+  };
+}
+
+function getDishTitles(value: Prisma.JsonValue) {
+  const parsed = recipeRecommendationsPayloadSchema.safeParse({
+    recommendations: value,
+  });
+  return parsed.success
+    ? parsed.data.recommendations.map((dish) => dish.title)
+    : [];
+}
+
+function getDishTitle(value: Prisma.JsonValue, dishIndex: number) {
+  return getDishTitles(value).slice(dishIndex, dishIndex + 1);
+}
+
+function engagementPatch(action: RecipeEngagementAction, now: Date) {
+  switch (action) {
+    case "view":
+      return { viewedAt: now };
+    case "cooking_started":
+      return { viewedAt: now, cookingStartedAt: now };
+    case "cooking_completed":
+      return {
+        viewedAt: now,
+        cookingStartedAt: now,
+        cookingCompletedAt: now,
+      };
+    case "dismiss":
+      return { dismissedAt: now };
+    case "undo_dismiss":
+      return { dismissedAt: null };
+  }
 }

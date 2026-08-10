@@ -1,5 +1,6 @@
 import type {
   RecipeFavorite,
+  RecipeEngagementAction,
   RecipeInventorySnapshotItem,
   RecipeRecommendationDish,
 } from "@expirymate/shared";
@@ -19,6 +20,7 @@ import {
   listRecipeFavorites,
   listRecipeRecommendations,
   saveRecipeFavorite,
+  updateRecipeEngagement,
   type RecipeRecommendationPayload,
 } from "../../services/api";
 
@@ -200,6 +202,32 @@ export const useSetRecipeFavorite = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
+    },
+  });
+};
+
+export const useRecipeEngagement = () => {
+  const { activeSpaceId } = useActiveSpace();
+
+  return useMutation({
+    mutationFn: ({
+      recommendationId,
+      dishIndex,
+      action,
+    }: {
+      recommendationId: string;
+      dishIndex: number;
+      action: RecipeEngagementAction;
+    }) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      return updateRecipeEngagement(
+        recommendationId,
+        dishIndex,
+        action,
+        activeSpaceId,
+      );
     },
   });
 };

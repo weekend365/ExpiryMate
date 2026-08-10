@@ -3,6 +3,7 @@ import { UnitCode } from "../enums/app-enums";
 import {
   recipeFavoriteSchema,
   generatedRecipeRecommendationsPayloadSchema,
+  updateRecipePreferenceSchema,
   recipeRecommendationDishSchema,
 } from "./recipes";
 
@@ -28,6 +29,8 @@ describe("recipe ingredient quantity contracts", () => {
     const result = generatedRecipeRecommendationsPayloadSchema.safeParse({
       recommendations: [0, 1, 2].map(() => ({
         ...dish,
+        spiceLevel: "mild",
+        requiredEquipment: ["stovetop"],
         usedIngredients: [
           {
             inventoryItemId: "milk-1",
@@ -43,6 +46,34 @@ describe("recipe ingredient quantity contracts", () => {
     expect(
       generatedRecipeRecommendationsPayloadSchema.safeParse({
         recommendations: [dish, dish, dish],
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe("recipe preference contracts", () => {
+  it("trims and deduplicates user-entered exclusions", () => {
+    const parsed = updateRecipePreferenceSchema.parse({
+      allergens: ["egg", "egg"],
+      excludedIngredients: [" 고수 ", "고수"],
+      dietaryStyle: "any",
+      maxSpiceLevel: "mild",
+      availableEquipment: ["stovetop", "stovetop"],
+    });
+
+    expect(parsed.allergens).toEqual(["egg"]);
+    expect(parsed.excludedIngredients).toEqual(["고수"]);
+    expect(parsed.availableEquipment).toEqual(["stovetop"]);
+  });
+
+  it("requires at least one available cooking tool", () => {
+    expect(
+      updateRecipePreferenceSchema.safeParse({
+        allergens: [],
+        excludedIngredients: [],
+        dietaryStyle: "any",
+        maxSpiceLevel: "any",
+        availableEquipment: [],
       }).success,
     ).toBe(false);
   });

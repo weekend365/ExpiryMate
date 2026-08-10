@@ -363,6 +363,7 @@ export class SpacesService {
     }
 
     await this.prisma.$transaction(async (tx) => {
+      await assertHouseholdSeatAvailable(tx, invitation.spaceId, userId);
       const claimed = await tx.spaceInvitation.updateMany({
         where: {
           id: invitation.id,
@@ -390,7 +391,7 @@ export class SpacesService {
           notificationsEnabled: body.notificationsEnabled,
         },
       });
-    });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
     return {
       spaceId: invitation.spaceId,
@@ -569,6 +570,7 @@ export class SpacesService {
 
     try {
       await this.prisma.$transaction(async (tx) => {
+        await assertHouseholdSeatAvailable(tx, invitation.spaceId, userId);
         const claimed = await tx.spaceInvitation.updateMany({
           where: {
             id: invitation.id,
@@ -590,7 +592,7 @@ export class SpacesService {
             notificationsEnabled: body.notificationsEnabled,
           },
         });
-      });
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
     } catch (error) {
       if (isUniqueConstraintError(error)) {
         throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
@@ -666,6 +668,21 @@ export class SpacesService {
     if (!canRemove) {
       throw new ForbiddenException("이 구성원을 내보낼 권한이 없어요.");
     }
+    const sponsoredEntitlement = await this.prisma.subscriptionEntitlement.findFirst({
+      where: {
+        spaceId,
+        ownerKey: targetUserId,
+        planCode: "jango_household",
+        isActive: true,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
+      select: { id: true },
+    });
+    if (sponsoredEntitlement) {
+      throw new ConflictException(
+        "가족 플러스 결제자는 구독이 끝날 때까지 공간에서 나갈 수 없어요.",
+      );
+    }
     await this.prisma.inventorySpaceMembership.delete({
       where: { spaceId_userId: { spaceId, userId: targetUserId } },
     });
@@ -737,6 +754,40 @@ export class SpacesService {
     }
     return membership;
   }
+}
+
+async function assertHouseholdSeatAvailable(
+  tx: Prisma.TransactionClient,
+  spaceId: string,
+  userId: string,
+) {
+  const existing = await tx.inventorySpaceMembership.findUnique({
+    where: { spaceId_userId: { spaceId, userId } },
+    select: { userId: true },
+  });
+  if (existing) return;
+  const activeHousehold = await tx.subscriptionEntitlement.findFirst({
+    where: {
+      spaceId,
+      planCode: "jango_household",
+      isActive: true,
+      OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+    },
+    select: { id: true },
+  });
+  if (!activeHousehold) return;
+  const memberLimit = readPositiveInt("HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT", 5);
+  const count = await tx.inventorySpaceMembership.count({ where: { spaceId } });
+  if (count >= memberLimit) {
+    throw new ConflictException(
+      `가족 플러스 공간은 최대 ${memberLimit}명까지 함께 쓸 수 있어요.`,
+    );
+  }
+}
+
+function readPositiveInt(name: string, fallback: number) {
+  const parsed = Number(process.env[name]);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 function hashToken(token: string) {

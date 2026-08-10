@@ -39,6 +39,7 @@ import { useRecipeRecommendation } from "../../src/features/recipes/use-recipe-r
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
+  useRecipeEngagement,
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
 import {
@@ -64,6 +65,7 @@ export default function CookingScreen() {
   const consumeMutation = useBatchConsumeInventoryItems();
   const favoritesQuery = useRecipeFavorites();
   const setFavoriteMutation = useSetRecipeFavorite();
+  const engagementMutation = useRecipeEngagement();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [checkedPrepKeys, setCheckedPrepKeys] = useState<string[]>([]);
   const [completedCookingSteps, setCompletedCookingSteps] = useState<number[]>(
@@ -233,6 +235,13 @@ export default function CookingScreen() {
   };
 
   const goForward = () => {
+    if (currentIndex === 0 && recommendationId && Number.isInteger(requestedDishIndex)) {
+      engagementMutation.mutate({
+        recommendationId,
+        dishIndex: requestedDishIndex,
+        action: "cooking_started",
+      });
+    }
     setCurrentIndex((index) => Math.min(consumptionStepIndex, index + 1));
   };
 
@@ -253,6 +262,13 @@ export default function CookingScreen() {
         ? current
         : [...current, cookingStepIndex],
     );
+    if (cookingStepIndex === dish.steps.length - 1) {
+      engagementMutation.mutate({
+        recommendationId,
+        dishIndex: requestedDishIndex,
+        action: "cooking_completed",
+      });
+    }
     goForward();
   };
 

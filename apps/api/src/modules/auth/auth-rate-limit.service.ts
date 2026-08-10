@@ -1,5 +1,11 @@
 import { createHash } from "node:crypto";
-import { HttpException, HttpStatus, Injectable, Optional } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  Optional,
+} from "@nestjs/common";
 import { PrismaService } from "../../database/prisma.service";
 import type { AuthRateLimitPolicy } from "./auth-rate-limit.decorator";
 
@@ -22,6 +28,7 @@ const CLEANUP_INTERVAL_MS = 60_000;
 
 @Injectable()
 export class AuthRateLimitService {
+  private readonly logger = new Logger(AuthRateLimitService.name);
   private readonly memoryBuckets = new Map<string, MemoryBucket>();
   private lastMemoryCleanupAt = 0;
   private lastDbCleanupAt = 0;
@@ -112,18 +119,30 @@ export class AuthRateLimitService {
       return;
     }
 
-    await this.cleanupDatabase(now);
-    const windowStartedAt = new Date(Math.floor(now / windowMs) * windowMs);
-    const counts: Array<{ key: string; hitCount: number }> = [];
+    try {
+      await this.cleanupDatabase(now);
+      const windowStartedAt = new Date(Math.floor(now / windowMs) * windowMs);
+      const counts: Array<{ key: string; hitCount: number }> = [];
 
-    for (const key of keys) {
-      const hitCount = await this.incrementDatabaseBucket(key, windowStartedAt);
-      counts.push({ key, hitCount });
-    }
+      for (const key of keys) {
+        const hitCount = await this.incrementDatabaseBucket(key, windowStartedAt);
+        counts.push({ key, hitCount });
+      }
 
-    const exceeded = counts.find((state) => state.hitCount > max);
-    if (exceeded) {
-      throwTooManyRequests(windowStartedAt.getTime(), windowMs, now);
+      const exceeded = counts.find((state) => state.hitCount > max);
+      if (exceeded) {
+        throwTooManyRequests(windowStartedAt.getTime(), windowMs, now);
+      }
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // Keep auth usable during transient DB outages; still rate-limit in-process.
+      this.logger.warn(
+        `Auth rate-limit database store unavailable; falling back to memory. ${formatError(error)}`,
+      );
+      this.assertAllowedInMemory(keys, max, windowMs, now);
     }
   }
 
@@ -271,4 +290,12 @@ function readPositiveIntegerEnv(key: string, fallback: number) {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function formatError(error: unknown) {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Unknown error";
 }

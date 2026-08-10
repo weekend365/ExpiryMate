@@ -39,6 +39,7 @@ import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { FormField } from "../src/components/FormField";
+import { FeedbackBanner } from "../src/components/FeedbackBanner";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
@@ -193,7 +194,9 @@ export default function RegisterScreen() {
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
   const draft = useRegistrationStore((state) => state.draft);
+  const rewardNotice = useRegistrationStore((state) => state.rewardNotice);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const clearDraft = useRegistrationStore((state) => state.clearDraft);
   const mutation = useSaveInventoryItem();
@@ -613,6 +616,24 @@ export default function RegisterScreen() {
         guideMessage={REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
         guideMood="speak"
       >
+        {rewardNotice ? (
+          <FeedbackBanner
+            tone={rewardNotice.granted ? "success" : "info"}
+            title={
+              rewardNotice.granted
+                ? `바코드 추천권 +${rewardNotice.creditsGranted}`
+                : getBarcodeRewardNoticeTitle(rewardNotice.reason)
+            }
+            description={
+              rewardNotice.granted
+                ? `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`
+                : "상품은 정상적으로 등록했어요."
+            }
+            actionLabel="확인"
+            onAction={() => setRewardNotice(null)}
+            showMascot={false}
+          />
+        ) : null}
         {submitErrorMessage ? (
           <View style={styles.errorStrip}>
             <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
@@ -1003,6 +1024,24 @@ export default function RegisterScreen() {
       </BottomSheet>
     </Screen>
   );
+}
+
+function getBarcodeRewardNoticeTitle(
+  reason: NonNullable<
+    ReturnType<typeof useRegistrationStore.getState>["rewardNotice"]
+  >["reason"],
+) {
+  const messages = {
+    granted: "바코드 추천권을 받았어요",
+    existing_barcode: "이미 등록된 바코드예요",
+    invalid_gtin: "추천권 대상 바코드가 아니에요",
+    lookup_unverified: "상품 조회를 확인하지 못했어요",
+    insufficient_product_data: "추가 상품 정보가 필요해요",
+    daily_limit_reached: "오늘 적립 한도를 모두 사용했어요",
+    balance_limit_reached: "추천권 보유 한도에 도달했어요",
+    rewards_disabled: "추천권 적립이 준비 중이에요",
+  } as const;
+  return messages[reason];
 }
 
 const styles = StyleSheet.create({

@@ -29,6 +29,9 @@ describe("SettingsService notification preferences", () => {
     notificationPreference: {
       upsert: ReturnType<typeof vi.fn>;
     };
+    recipePreference: {
+      upsert: ReturnType<typeof vi.fn>;
+    };
     userStorageLocation: {
       findMany: ReturnType<typeof vi.fn>;
       findFirst: ReturnType<typeof vi.fn>;
@@ -47,6 +50,9 @@ describe("SettingsService notification preferences", () => {
   beforeEach(() => {
     prisma = {
       notificationPreference: {
+        upsert: vi.fn(),
+      },
+      recipePreference: {
         upsert: vi.fn(),
       },
       userStorageLocation: {
@@ -94,6 +100,50 @@ describe("SettingsService notification preferences", () => {
 
     expect(result.enabled).toBe(false);
     expect(result.reminderDaysBefore).toEqual([2, 5]);
+  });
+
+  it("creates default recipe preferences", async () => {
+    prisma.recipePreference.upsert.mockResolvedValue({
+      ownerKey: "owner-a",
+      allergens: [],
+      excludedIngredients: [],
+      dietaryStyle: "any",
+      maxSpiceLevel: "any",
+      availableEquipment: ["stovetop"],
+      createdAt: preference.createdAt,
+      updatedAt: preference.updatedAt,
+    });
+
+    await expect(service.getRecipePreferences("owner-a")).resolves.toEqual({
+      allergens: [],
+      excludedIngredients: [],
+      dietaryStyle: "any",
+      maxSpiceLevel: "any",
+      availableEquipment: ["stovetop"],
+      updatedAt: preference.updatedAt.toISOString(),
+    });
+  });
+
+  it("upserts complete recipe preference updates", async () => {
+    const update = {
+      allergens: ["egg" as const],
+      excludedIngredients: ["고수"],
+      dietaryStyle: "vegetarian" as const,
+      maxSpiceLevel: "mild" as const,
+      availableEquipment: ["stovetop" as const, "microwave" as const],
+    };
+    prisma.recipePreference.upsert.mockResolvedValue({
+      ownerKey: "owner-a",
+      ...update,
+      createdAt: preference.createdAt,
+      updatedAt: preference.updatedAt,
+    });
+
+    const result = await service.updateRecipePreferences("owner-a", update);
+    expect(result).toMatchObject(update);
+    expect(prisma.recipePreference.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({ update, create: { ownerKey: "owner-a", ...update } }),
+    );
   });
 
   it("creates a custom storage location", async () => {

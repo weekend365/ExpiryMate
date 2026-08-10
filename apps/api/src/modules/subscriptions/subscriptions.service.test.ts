@@ -15,6 +15,9 @@ const managedEnvKeys = [
   "GOOGLE_PLAY_PACKAGE_NAME",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+  "MONETIZATION_EXPERIMENT_SALT",
+  "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+  "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
 ] as const;
 
 const originalEnv = new Map(
@@ -29,6 +32,9 @@ describe("SubscriptionsService", () => {
     vi.setSystemTime(now);
     restoreManagedEnv();
     process.env.IAP_ALLOWED_PRODUCT_IDS = "expirymate_premium_monthly";
+    process.env.MONETIZATION_EXPERIMENT_SALT = "subscription-test";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT = "100";
   });
 
   afterEach(() => {
@@ -48,6 +54,11 @@ describe("SubscriptionsService", () => {
       hasActiveEntitlement: false,
       store: null,
       productId: null,
+      planCode: null,
+      scope: "user",
+      spaceId: null,
+      billingPeriod: null,
+      basePlanId: null,
       status: "unknown",
       expiresAt: null,
       willRenew: null,
@@ -378,10 +389,151 @@ describe("SubscriptionsService", () => {
     expect(response.entitlement.hasActiveEntitlement).toBe(true);
     expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledOnce();
   });
+
+  it("attaches a Household purchase only to an eligible owned space", async () => {
+    const privateKey = createEcPrivateKey();
+    process.env.IAP_ALLOWED_PRODUCT_IDS = "expirymate_household_monthly";
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-home",
+      _count: { memberships: 3 },
+    });
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          data: [{
+            lastTransactions: [{
+              originalTransactionId: "household-original",
+              status: 1,
+              signedTransactionInfo: jws({
+                transactionId: "household-transaction",
+                originalTransactionId: "household-original",
+                productId: "expirymate_household_monthly",
+                bundleId: "com.expirymate.mobile",
+                environment: "Sandbox",
+                expiresDate,
+              }),
+              signedRenewalInfo: jws({ autoRenewStatus: 1 }),
+            }],
+          }],
+        }),
+      ),
+    );
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "apple_app_store",
+      productId: "expirymate_household_monthly",
+      transactionId: "household-transaction",
+      environment: "sandbox",
+      spaceId: "space-home",
+    });
+
+    expect(response.entitlement).toMatchObject({
+      planCode: "jango_household",
+      scope: "space",
+      spaceId: "space-home",
+    });
+    expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        ownerKey: "owner-a",
+        spaceId: "space-home",
+        planCode: "jango_household",
+      }),
+    });
+  });
+
+  it("builds a 30-day plus consumption report for active subscribers", async () => {
+    const prisma = {
+      subscriptionEntitlement: {
+        findFirst: vi.fn().mockResolvedValue({ id: "entitlement-1" }),
+      },
+      inventoryItem: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            displayName: "?곗쑀",
+            expiryDate: new Date("2026-08-12T00:00:00.000Z"),
+          },
+          {
+            displayName: "?먮몢遺",
+            expiryDate: new Date("2026-08-13T00:00:00.000Z"),
+          },
+        ]),
+        groupBy: vi
+          .fn()
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 8 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 4 } },
+            { status: "discarded", _count: { _all: 1 } },
+          ])
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 3 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
+            { category: "dairy", _count: { _all: 2 } },
+          ]),
+        count: vi.fn().mockResolvedValue(3),
+      },
+    };
+    const service = new SubscriptionsService(prisma as never);
+
+    const insights = await service.getPlusInsights(
+      "owner-a",
+      new Date("2026-08-10T03:00:00.000Z"),
+    );
+
+    expect(insights).toMatchObject({
+      consumed: 8,
+      discarded: 2,
+      wasteRatePercent: 20,
+      expiringSoon: 3,
+      topDiscardedCategories: [{ category: "dairy", count: 2 }],
+      actions: [
+        expect.objectContaining({
+          kind: "use_expiring",
+          priority: "high",
+          count: 3,
+          nearestExpiryDate: "2026-08-12",
+        }),
+        expect.objectContaining({
+          kind: "reduce_category_waste",
+          category: "dairy",
+        }),
+        expect.objectContaining({ kind: "keep_momentum" }),
+      ],
+      weekly: {
+        current: expect.objectContaining({
+          consumed: 4,
+          discarded: 1,
+          wasteRatePercent: 20,
+        }),
+        previous: expect.objectContaining({
+          consumed: 3,
+          discarded: 2,
+          wasteRatePercent: 40,
+        }),
+        wasteRateChangePercentagePoints: -20,
+        trend: "improved",
+      },
+    });
+  });
 });
 
 function createService() {
   const prisma = {
+    inventorySpace: {
+      findFirst: vi.fn(),
+    },
     subscriptionEntitlement: {
       findFirst: vi.fn(),
       findUnique: vi.fn().mockResolvedValue(null),

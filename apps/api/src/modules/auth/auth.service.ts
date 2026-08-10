@@ -780,7 +780,31 @@ export class AuthService {
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
+      await tx.recipeDishEngagement.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
       await tx.subscriptionEntitlement.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.recommendationUsageEvent.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.recommendationCreditPurchase.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.rewardedAdSession.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.barcodeRewardCredit.updateMany({
+        where: { ownerKey: anonymousUserId },
+        data: { ownerKey: targetUserId },
+      });
+      await tx.monetizationFunnelEvent.updateMany({
         where: { ownerKey: anonymousUserId },
         data: { ownerKey: targetUserId },
       });
@@ -804,6 +828,52 @@ export class AuthService {
         await tx.notificationPreference.update({
           where: { ownerKey: anonymousUserId },
           data: { ownerKey: targetUserId },
+        });
+      }
+
+      const targetRecipePreference = await tx.recipePreference.findUnique({
+        where: { ownerKey: targetUserId },
+      });
+      const anonymousRecipePreference = await tx.recipePreference.findUnique({
+        where: { ownerKey: anonymousUserId },
+      });
+      if (anonymousRecipePreference && !targetRecipePreference) {
+        await tx.recipePreference.update({
+          where: { ownerKey: anonymousUserId },
+          data: { ownerKey: targetUserId },
+        });
+      } else if (anonymousRecipePreference && targetRecipePreference) {
+        await tx.recipePreference.update({
+          where: { ownerKey: targetUserId },
+          data: {
+            allergens: [
+              ...new Set([
+                ...targetRecipePreference.allergens,
+                ...anonymousRecipePreference.allergens,
+              ]),
+            ],
+            excludedIngredients: mergeRecipeExcludedIngredients(
+              targetRecipePreference.excludedIngredients,
+              anonymousRecipePreference.excludedIngredients,
+            ),
+            availableEquipment: [
+              ...new Set([
+                ...targetRecipePreference.availableEquipment,
+                ...anonymousRecipePreference.availableEquipment,
+              ]),
+            ],
+            dietaryStyle:
+              targetRecipePreference.dietaryStyle === "any"
+                ? anonymousRecipePreference.dietaryStyle
+                : targetRecipePreference.dietaryStyle,
+            maxSpiceLevel:
+              targetRecipePreference.maxSpiceLevel === "any"
+                ? anonymousRecipePreference.maxSpiceLevel
+                : targetRecipePreference.maxSpiceLevel,
+          },
+        });
+        await tx.recipePreference.delete({
+          where: { ownerKey: anonymousUserId },
         });
       }
 
@@ -945,6 +1015,20 @@ export function serializeUser(
     requiresEmailVerification:
       hasPasswordCredential && !user.emailVerifiedAt,
   };
+}
+
+function mergeRecipeExcludedIngredients(target: string[], source: string[]) {
+  const seen = new Set<string>();
+  const merged: string[] = [];
+  for (const rawValue of [...target, ...source]) {
+    const value = rawValue.trim();
+    const key = value.toLocaleLowerCase("ko-KR");
+    if (!value || seen.has(key)) continue;
+    seen.add(key);
+    merged.push(value);
+    if (merged.length === 20) break;
+  }
+  return merged;
 }
 
 function normalizeEmail(email: string) {

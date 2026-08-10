@@ -26,7 +26,11 @@ import type {
   RevokeAiDataNoticeResponse,
   RecipeRecommendation,
   RecipeFavorite,
+  RecipeDishEngagement,
+  RecipeEngagementAction,
+  RecipePreference,
   RecipeRecommendationRequestInput,
+  UpdateRecipePreference,
   RegisterPendingResponse,
   RegisterRequest,
   RegisterResponse,
@@ -36,6 +40,9 @@ import type {
   UserStorageLocation,
   SupportInquiry,
   SupportInquiryCreateInput,
+  SubscriptionEntitlement,
+  SubscriptionVerificationRequest,
+  SubscriptionVerificationResponse,
   UpdateInventoryItemBody,
   InventorySpaceSummary,
   InventorySpaceMember,
@@ -51,6 +58,12 @@ import type {
   PreviewSpaceInvitationCodeBody,
   SpaceInvitationCode,
   SpaceInvitationCodePreview,
+  RecommendationAccess,
+  RewardedAdSession,
+  MonetizationPlatform,
+  TrackMonetizationEventRequest,
+  RecommendationCreditPurchaseVerificationRequest,
+  RecommendationCreditPurchaseVerificationResponse,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -61,17 +74,21 @@ interface ApiEnvelope<T> {
   success: boolean;
   data: T;
   error?: {
+    code?: string;
     message?: string;
+    details?: unknown;
   };
 }
 
-class ApiResponseError extends Error {
+export class ApiError extends Error {
   constructor(
     message: string,
+    readonly code: string,
     readonly status: number,
+    readonly details?: unknown,
   ) {
     super(message);
-    this.name = "ApiResponseError";
+    this.name = "ApiError";
   }
 }
 
@@ -86,6 +103,10 @@ const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
 const REFRESH_TOKEN_STORAGE_KEY = "expirymate.refreshToken.v2";
 const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
+const clientHeaders = {
+  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.1.0",
+  "X-Client-Platform": "mobile",
+};
 
 let accessToken: string | null = null;
 let currentUser: AuthUser | null = null;
@@ -160,6 +181,7 @@ async function request<T>(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session.accessToken}`,
+        ...clientHeaders,
         ...(init?.headers ?? {}),
       },
     },
@@ -183,7 +205,12 @@ async function request<T>(
 
     const serverMessage = body.error?.message?.trim();
     if (serverMessage) {
-      throw new Error(serverMessage);
+      throw new ApiError(
+        serverMessage,
+        body.error?.code ?? `HTTP_${response.status}`,
+        response.status,
+        body.error?.details,
+      );
     }
 
     if (response.status >= 500) {
@@ -203,16 +230,19 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
     headers: {
       "Content-Type": "application/json",
+      ...clientHeaders,
       ...(init?.headers ?? {}),
     },
   });
   const body = await parseEnvelope<T>(response);
 
   if (!response.ok || !body.success) {
-    throw new ApiResponseError(
+    throw new ApiError(
       body.error?.message ??
         "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+      body.error?.code ?? `HTTP_${response.status}`,
       response.status,
+      body.error?.details,
     );
   }
 
@@ -372,7 +402,7 @@ async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | nul
 
 function isTerminalRefreshError(error: unknown) {
   return (
-    error instanceof ApiResponseError &&
+    error instanceof ApiError &&
     error.status >= 400 &&
     error.status < 500 &&
     error.status !== 408 &&
@@ -789,6 +819,9 @@ export const createRecipeRecommendation = (
     `${spaceResourcePath(spaceId, "recipes")}/recommendations`,
     {
       method: "POST",
+      headers: {
+        "Idempotency-Key": createIdempotencyKey(),
+      },
       body: JSON.stringify(payload),
     },
     { timeoutMs: RECIPE_GENERATION_TIMEOUT_MS },
@@ -832,6 +865,32 @@ export const deleteRecipeFavorite = (
         `/recipes/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
         { method: "DELETE" },
       );
+
+export const updateRecipeEngagement = (
+  recommendationId: string,
+  dishIndex: number,
+  action: RecipeEngagementAction,
+  spaceId: string,
+) =>
+  request<RecipeDishEngagement>(
+    `${spaceResourcePath(
+      spaceId,
+      "recipes",
+    )}/recommendations/${recommendationId}/dishes/${dishIndex}/engagement`,
+    {
+      method: "PUT",
+      body: JSON.stringify({ action }),
+    },
+  );
+
+export const getRecipePreferences = () =>
+  request<RecipePreference>("/settings/recipe-preferences");
+
+export const updateRecipePreferences = (payload: UpdateRecipePreference) =>
+  request<RecipePreference>("/settings/recipe-preferences", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");
@@ -1019,3 +1078,103 @@ export const unregisterPushToken = (token: string) =>
     method: "POST",
     body: JSON.stringify({ token }),
   });
+
+export const getSubscriptionEntitlement = (spaceId?: string) =>
+  request<SubscriptionEntitlement>(
+    `/subscriptions/entitlement${spaceId ? `?spaceId=${encodeURIComponent(spaceId)}` : ""}`,
+  );
+
+export type PlusInsights = {
+  period: { from: string; to: string };
+  consumed: number;
+  discarded: number;
+  wasteRatePercent: number;
+  expiringSoon: number;
+  topDiscardedCategories: Array<{ category: string; count: number }>;
+  actions: Array<{
+    kind:
+      | "use_expiring"
+      | "reduce_category_waste"
+      | "review_waste_trend"
+      | "keep_momentum";
+    priority: "high" | "medium" | "low";
+    count: number;
+    itemNames: string[];
+    category: string | null;
+    nearestExpiryDate: string | null;
+  }>;
+  weekly: {
+    current: InsightPeriod;
+    previous: InsightPeriod;
+    wasteRateChangePercentagePoints: number | null;
+    trend: "improved" | "steady" | "worse" | "insufficient_data";
+  };
+};
+
+type InsightPeriod = {
+  from: string;
+  to: string;
+  consumed: number;
+  discarded: number;
+  wasteRatePercent: number;
+};
+
+export const getPlusInsights = () =>
+  request<PlusInsights>("/subscriptions/plus-insights");
+
+export const getHouseholdInsights = (spaceId: string) =>
+  request<PlusInsights>(spaceResourcePath(spaceId, "subscriptions/insights"));
+
+export const getMonetizationStatus = (spaceId?: string) =>
+  request<RecommendationAccess>(
+    `/monetization/status${spaceId ? `?spaceId=${encodeURIComponent(spaceId)}` : ""}`,
+  );
+
+export const createRewardedAdSession = (
+  platform: MonetizationPlatform,
+  spaceId?: string,
+) =>
+  request<RewardedAdSession>("/monetization/rewarded-ad-sessions", {
+    method: "POST",
+    body: JSON.stringify({ platform, spaceId }),
+  });
+
+export const getRewardedAdSession = (id: string) =>
+  request<RewardedAdSession>(`/monetization/rewarded-ad-sessions/${id}`);
+
+export const cancelRewardedAdSession = (id: string) =>
+  request<RewardedAdSession>(
+    `/monetization/rewarded-ad-sessions/${id}/cancel`,
+    { method: "POST" },
+  );
+
+export const trackMonetizationEvent = (
+  payload: TrackMonetizationEventRequest,
+) =>
+  request<{ ok: true }>("/monetization/events", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
+  request<SubscriptionVerificationResponse>("/subscriptions/verify", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const verifyRecommendationCreditPurchase = (
+  payload: RecommendationCreditPurchaseVerificationRequest,
+) =>
+  request<RecommendationCreditPurchaseVerificationResponse>(
+    "/monetization/credit-purchases/verify",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+
+function createIdempotencyKey() {
+  return `mobile-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()
+    .toString(36)
+    .slice(2)}`;
+}
