@@ -6,6 +6,7 @@ import {
   MapPin,
   MessageCircleHeart,
   ShieldCheck,
+  Ticket,
   UserRound,
   Users,
 } from "lucide-react-native";
@@ -70,6 +71,14 @@ export default function SettingsScreen() {
               description={`광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`}
               icon={CreditCard}
               onPress={() => router.push("/settings/subscription")}
+            />
+          ) : null}
+          {monetization.access?.paidCredits.enabled ? (
+            <ListRow
+              title="AI 추천권"
+              description={`보유 ${monetization.access.paidCredits.balance}회 · 필요한 만큼만 충전해요.`}
+              icon={Ticket}
+              onPress={() => router.push("/settings/recommendation-credits")}
             />
           ) : null}
           <ListRow

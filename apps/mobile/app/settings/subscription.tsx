@@ -1,3 +1,5 @@
+import { productCategoryLabels, type ProductCategory } from "@expirymate/shared";
+import { useQuery } from "@tanstack/react-query";
 import type { Purchase, ProductSubscription } from "expo-iap";
 import {
   deepLinkToSubscriptions,
@@ -20,12 +22,14 @@ import { ListRow } from "../../src/components/ListRow";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
+import { useAuth } from "../../src/features/auth/use-auth";
+import { withSessionUser } from "../../src/features/auth/session-boundary";
 import {
   formatSubscriptionExpiry,
   formatSubscriptionStore,
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
-import { trackMonetizationEvent } from "../../src/services/api";
+import { getPlusInsights, trackMonetizationEvent } from "../../src/services/api";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
@@ -45,8 +49,14 @@ type StorePlan = {
 export default function SubscriptionSettingsScreen() {
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
+  const { sessionUserId } = useAuth();
   const entitlement = subscription.query.data;
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
+  const insightsQuery = useQuery({
+    queryKey: withSessionUser(["subscriptions", "plus-insights"], sessionUserId),
+    queryFn: getPlusInsights,
+    enabled: hasActiveEntitlement,
+  });
   const [selectedPeriod, setSelectedPeriod] =
     useState<BillingPeriod>("yearly");
   const [busyAction, setBusyAction] = useState<
@@ -287,6 +297,40 @@ export default function SubscriptionSettingsScreen() {
         </View>
       </View>
 
+      <View style={styles.section}>
+        <SectionHeader
+          title="플러스 혜택"
+          description="추천 횟수뿐 아니라 냉장고를 꾸준히 관리할수록 가치가 쌓여요."
+        />
+        <View style={styles.benefitCard}>
+          <BenefitLine text={`광고 없이 하루 ${monetization.access?.subscriberDailyLimit ?? 30}회 AI 추천`} />
+          <BenefitLine text="최근 30일 소비·폐기 리포트" />
+          <BenefitLine text="구독 중 바코드 추천권 적립 및 잔액 보존" />
+        </View>
+      </View>
+
+      {hasActiveEntitlement ? (
+        <View style={styles.section}>
+          <SectionHeader
+            title="나의 30일 소비 리포트"
+            description="소비·폐기로 상태를 바꾼 재료를 기준으로 계산해요."
+          />
+          <View style={styles.insightGrid}>
+            <InsightValue label="소비 완료" value={insightsQuery.data?.consumed ?? 0} suffix="개" />
+            <InsightValue label="폐기" value={insightsQuery.data?.discarded ?? 0} suffix="개" />
+            <InsightValue label="폐기 비율" value={insightsQuery.data?.wasteRatePercent ?? 0} suffix="%" />
+            <InsightValue label="7일 내 만료" value={insightsQuery.data?.expiringSoon ?? 0} suffix="개" />
+          </View>
+          {insightsQuery.data?.topDiscardedCategories.length ? (
+            <Text style={styles.insightFootnote}>
+              자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
+                .map((item) => `${productCategoryLabels[item.category as ProductCategory] ?? item.category} ${item.count}개`)
+                .join(" · ")}
+            </Text>
+          ) : null}
+        </View>
+      ) : null}
+
       {!hasActiveEntitlement ? (
         <View style={styles.section}>
           <SectionHeader
@@ -449,6 +493,24 @@ function getErrorMessage(error: unknown) {
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
+function BenefitLine({ text }: { text: string }) {
+  return (
+    <View style={styles.benefitLine}>
+      <Text style={styles.benefitCheck}>✓</Text>
+      <Text style={styles.benefitText}>{text}</Text>
+    </View>
+  );
+}
+
+function InsightValue({ label, value, suffix }: { label: string; value: number; suffix: string }) {
+  return (
+    <View style={styles.insightValue}>
+      <Text style={styles.insightNumber}>{value}{suffix}</Text>
+      <Text style={styles.insightLabel}>{label}</Text>
+    </View>
+  );
+}
+
 function trackFunnelEvent(
   event: Parameters<typeof trackMonetizationEvent>[0]["event"],
   properties?: Record<string, string>,
@@ -460,6 +522,27 @@ const styles = StyleSheet.create({
   section: {
     gap: spacing.sm,
   },
+  benefitCard: {
+    gap: spacing.sm,
+    padding: spacing.md,
+    borderRadius: radius.xl,
+    backgroundColor: colors.primarySoft,
+  },
+  benefitLine: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+  benefitCheck: { fontSize: typography.body.fontSize, fontWeight: "900", color: colors.primary },
+  benefitText: { flex: 1, fontSize: typography.bodySmall.fontSize, color: colors.text },
+  insightGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
+  insightValue: {
+    width: "48%",
+    padding: spacing.md,
+    borderRadius: radius.xl,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  insightNumber: { fontSize: typography.title.fontSize, fontWeight: "900", color: colors.text },
+  insightLabel: { marginTop: spacing.xxs, fontSize: typography.caption.fontSize, color: colors.subtext },
+  insightFootnote: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,

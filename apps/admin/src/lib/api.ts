@@ -184,6 +184,38 @@ export const getMe = () => request<AuthUser>("/auth/me");
 export const getDashboardSummary = () =>
   request<DashboardSummary>("/admin/dashboard/summary");
 
+export type AdminMonetizationOverview = {
+  period: { days: number; from: string; to: string };
+  totals: {
+    activeSubscribers: number;
+    activeUsers: number;
+    completedRecommendations: number;
+    estimatedAiCostUsd: number;
+    totalTokens: number;
+    paidCreditsSold: number;
+    paidCreditPurchases: number;
+  };
+  usageBySource: Array<{ source: string; count: number }>;
+  funnel: Array<{
+    event: string;
+    control: number;
+    valueFirst: number;
+    other: number;
+    total: number;
+  }>;
+  conversion: {
+    paywallToPurchasePercent: number;
+    rewardedAdVerificationPercent: number;
+    barcodeRewardGrantPercent: number;
+  };
+  daily: Array<{ day: string; recommendations: number; aiCostUsd: number }>;
+};
+
+export const getMonetizationOverview = (days: 7 | 30 | 90) =>
+  request<AdminMonetizationOverview>(
+    `/admin/monetization/overview?days=${days}`,
+  );
+
 export const listProducts = (query?: string) => {
   const search = query ? `?q=${encodeURIComponent(query)}` : "";
   return request<Product[]>(`/products${search}`);

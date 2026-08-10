@@ -425,6 +425,18 @@ export default function RecommendationsScreen() {
                   : ""}
               </Text>
             ) : null}
+            {monetization.access.tier === "free" &&
+            monetization.access.paidCredits.enabled ? (
+              <Pressable
+                onPress={() => router.push("/settings/recommendation-credits")}
+                accessibilityRole="button"
+                accessibilityLabel="AI 추천권 충전하기"
+              >
+                <Text style={styles.usageCreditLink}>
+                  구매 추천권 {monetization.access.paidCredits.balance}회 · 충전하기
+                </Text>
+              </Pressable>
+            ) : null}
           </View>
         </View>
       ) : null}
@@ -574,6 +586,16 @@ export default function RecommendationsScreen() {
                 fullWidth
               >
                 광고 보고 추천 1회 받기
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            monetization.access?.paidCredits.enabled ? (
+              <Button
+                onPress={() => router.push("/settings/recommendation-credits")}
+                variant="secondary"
+                fullWidth
+              >
+                AI 추천권 충전하기
               </Button>
             ) : null}
             {!hasActiveEntitlement &&
@@ -1555,6 +1577,12 @@ const styles = StyleSheet.create({
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
+  },
+  usageCreditLink: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: "700",
+    color: colors.primary,
   },
   optionsSummary: {
     backgroundColor: colors.surface,

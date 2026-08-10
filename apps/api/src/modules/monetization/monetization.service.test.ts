@@ -134,6 +134,25 @@ describe("MonetizationService", () => {
     expect(second.experiment).toEqual(first.experiment);
   });
 
+  it("subtracts paid-credit usage across all previous days", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationCreditPurchase.findMany.mockResolvedValue([
+      { creditsGranted: 5 },
+    ]);
+    prisma.recommendationUsageEvent.count.mockResolvedValue(3);
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus("owner-a");
+
+    expect(status.paidCredits.balance).toBe(2);
+    expect(prisma.recommendationUsageEvent.count).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        ownerKey: "owner-a",
+        source: RecommendationUsageSource.paid_credit,
+      }),
+    });
+  });
+
   it("stores only allow-listed funnel event data with the assigned variant", async () => {
     const prisma = createPrismaMock();
     const service = new MonetizationService(prisma as never);
@@ -198,6 +217,7 @@ describe("MonetizationService", () => {
         status: RecommendationUsageStatus.released,
         rewardedAdSessionId: null,
         barcodeRewardCreditId: null,
+        paidCreditPurchaseId: null,
         releaseReason: "upstream_error",
       }),
     });
@@ -244,6 +264,44 @@ describe("MonetizationService", () => {
       }),
     });
     expect(prisma.barcodeRewardCredit.findFirst).not.toHaveBeenCalled();
+  });
+
+  it("uses a purchased credit before ad and barcode credits", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      {
+        source: RecommendationUsageSource.free,
+        _count: { _all: 1 },
+      },
+    ]);
+    prisma.recommendationCreditPurchase.findMany
+      .mockResolvedValueOnce([{ creditsGranted: 5 }])
+      .mockResolvedValueOnce([
+        {
+          id: "purchase-1",
+          creditsGranted: 5,
+          _count: { usageEvents: 0 },
+        },
+      ]);
+    prisma.rewardedAdSession.findFirst.mockResolvedValue({ id: "ad-1" });
+    prisma.barcodeRewardCredit.count.mockResolvedValue(1);
+    prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
+    const service = new MonetizationService(prisma as never);
+
+    await service.reserveRecommendation("owner-a", "paid-key");
+
+    expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: RecommendationUsageSource.paid_credit,
+        paidCreditPurchaseId: "purchase-1",
+        rewardedAdSessionId: null,
+        barcodeRewardCreditId: null,
+      }),
+    });
+    expect(prisma.rewardedAdSession.findFirst).not.toHaveBeenCalled();
+    expect(prisma.monetizationFunnelEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({ eventName: "paid_credit_used" }),
+    });
   });
 
   it("falls back to a barcode credit after free and ad credits", async () => {
@@ -396,6 +454,7 @@ function createPrismaMock() {
     recommendationUsageEvent: {
       findUnique: vi.fn().mockResolvedValue(null),
       groupBy: vi.fn().mockResolvedValue([]),
+      count: vi.fn().mockResolvedValue(0),
       create: vi.fn(),
       update: vi.fn(),
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
@@ -411,6 +470,9 @@ function createPrismaMock() {
     barcodeRewardCredit: {
       findFirst: vi.fn().mockResolvedValue(null),
       count: vi.fn().mockResolvedValue(0),
+    },
+    recommendationCreditPurchase: {
+      findMany: vi.fn().mockResolvedValue([]),
     },
     monetizationFunnelEvent: {
       count: vi.fn().mockResolvedValue(0),

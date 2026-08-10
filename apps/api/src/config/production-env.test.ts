@@ -79,6 +79,18 @@ describe("validateProductionEnvironment", () => {
       "abcdef1234567890abcdef1234567890";
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("requires a valid catalog when paid recommendation credits are enabled", () => {
+    const env = validProductionEnv();
+    env.PAID_RECOMMENDATION_CREDITS_ENABLED = "true";
+    delete env.RECOMMENDATION_CREDIT_PRODUCTS;
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /RECOMMENDATION_CREDIT_PRODUCTS/,
+    );
+
+    env.RECOMMENDATION_CREDIT_PRODUCTS = "credits_5:5,credits_15:15";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -111,6 +123,9 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     BARCODE_REWARD_ROLLOUT_PERCENT: "0",
     BARCODE_REWARD_DAILY_LIMIT: "3",
     BARCODE_REWARD_BALANCE_LIMIT: "10",
+    PAID_RECOMMENDATION_CREDITS_ENABLED: "false",
+    RECOMMENDATION_CREDIT_PRODUCTS:
+      "expirymate_recipe_credits_5:5,expirymate_recipe_credits_15:15",
     REWARDED_ADS_ENABLED: "false",
     SUBSCRIPTIONS_ENABLED: "false",
     IAP_ALLOWED_PRODUCT_IDS:

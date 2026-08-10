@@ -104,4 +104,70 @@ describe("AdminService", () => {
     expect(summary.latestRecommendationPreview).toBeNull();
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(2);
   });
+
+  it("aggregates monetization usage, cost, and conversion rates", async () => {
+    const prisma = {
+      subscriptionEntitlement: {
+        findMany: vi.fn().mockResolvedValue([
+          { ownerKey: "subscriber-1" },
+          { ownerKey: "subscriber-2" },
+          { ownerKey: "subscriber-3" },
+          { ownerKey: "subscriber-4" },
+        ]),
+      },
+      recommendationUsageEvent: {
+        findMany: vi.fn().mockResolvedValue([
+          { ownerKey: "user-1" },
+          { ownerKey: "user-2" },
+        ]),
+        groupBy: vi.fn().mockResolvedValue([
+          { source: "free", status: "completed", _count: { _all: 5 } },
+          { source: "subscription", status: "completed", _count: { _all: 3 } },
+        ]),
+      },
+      recipeRecommendation: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            createdAt: new Date("2026-08-10T01:00:00.000Z"),
+            estimatedCostUsd: 0.012,
+            totalTokens: 1000,
+          },
+          {
+            createdAt: new Date("2026-08-10T02:00:00.000Z"),
+            estimatedCostUsd: 0.008,
+            totalTokens: 800,
+          },
+        ]),
+      },
+      monetizationFunnelEvent: {
+        groupBy: vi.fn().mockResolvedValue([
+          { eventName: "paywall_viewed", experimentVariant: "control", _count: { _all: 10 } },
+          { eventName: "purchase_verified", experimentVariant: "control", _count: { _all: 2 } },
+          { eventName: "rewarded_ad_requested", experimentVariant: "control", _count: { _all: 8 } },
+          { eventName: "rewarded_ad_verified", experimentVariant: "control", _count: { _all: 6 } },
+        ]),
+      },
+      recommendationCreditPurchase: {
+        aggregate: vi.fn().mockResolvedValue({
+          _count: { _all: 2 },
+          _sum: { creditsGranted: 20 },
+        }),
+      },
+    };
+
+    const service = new AdminService(prisma as never);
+    const overview = await service.getMonetizationOverview(
+      30,
+      new Date("2026-08-10T03:00:00.000Z"),
+    );
+
+    expect(overview.totals.activeSubscribers).toBe(4);
+    expect(overview.totals.activeUsers).toBe(2);
+    expect(overview.totals.estimatedAiCostUsd).toBe(0.02);
+    expect(overview.totals.totalTokens).toBe(1800);
+    expect(overview.totals.paidCreditsSold).toBe(20);
+    expect(overview.conversion.paywallToPurchasePercent).toBe(20);
+    expect(overview.conversion.rewardedAdVerificationPercent).toBe(75);
+    expect(overview.usageBySource).toContainEqual({ source: "free", count: 5 });
+  });
 });

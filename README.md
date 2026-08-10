@@ -363,6 +363,10 @@ pnpm --filter @expirymate/mobile exec expo run:ios --device "남우현의 iPhone
 
 In separate terminals:
 
+# 윈도우 PC에서 Expo Go 실행
+
+pnpm.cmd dev:mobile
+
 ```bash
 pnpm dev:api
 pnpm dev:admin

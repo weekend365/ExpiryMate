@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import {
   Prisma,
+  RecommendationCreditPurchaseStatus,
   RecommendationUsageSource,
   RecommendationUsageStatus,
   RewardedAdPlatform,
@@ -28,6 +29,10 @@ import {
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 import { resolveBarcodeRewardPolicy } from "./barcode-reward-policy";
+import {
+  getRecommendationCreditProducts,
+  paidRecommendationCreditsEnabled,
+} from "./paid-credit-policy";
 
 const KST_TIMEZONE = "Asia/Seoul" as const;
 const ADMOB_PUBLIC_KEYS_URL =
@@ -254,14 +259,21 @@ export class MonetizationService {
             let source: RecommendationUsageSource;
             let rewardedAdSessionId: string | null = null;
             let barcodeRewardCreditId: string | null = null;
+            let paidCreditPurchaseId: string | null = null;
 
             if (access.tier === "jango_plus" && access.remaining > 0) {
               source = RecommendationUsageSource.subscription;
             } else if (access.free.remaining > 0) {
               source = RecommendationUsageSource.free;
             } else {
+              const paidCreditPurchase = await findAvailablePaidCreditPurchase(
+                tx,
+                ownerKey,
+              );
               const { start, endExclusive } = getKstDayWindow(now);
-              const reward = await tx.rewardedAdSession.findFirst({
+              const reward = paidCreditPurchase
+                ? null
+                : await tx.rewardedAdSession.findFirst({
                 where: {
                   ownerKey,
                   status: RewardedAdSessionStatus.verified,
@@ -270,14 +282,14 @@ export class MonetizationService {
                 },
                 orderBy: { verifiedAt: "asc" },
               });
-              const contributionReward = reward
+              const contributionReward = paidCreditPurchase || reward
                 ? null
                 : await tx.barcodeRewardCredit.findFirst({
                     where: { ownerKey, usageEvent: { is: null } },
                     orderBy: { createdAt: "asc" },
                   });
 
-              if (!reward && !contributionReward) {
+              if (!paidCreditPurchase && !reward && !contributionReward) {
                 throw new CodedHttpException(
                   429,
                   "RECOMMENDATION_QUOTA_EXHAUSTED",
@@ -286,7 +298,10 @@ export class MonetizationService {
                 );
               }
 
-              if (reward) {
+              if (paidCreditPurchase) {
+                source = RecommendationUsageSource.paid_credit;
+                paidCreditPurchaseId = paidCreditPurchase.id;
+              } else if (reward) {
                 source = RecommendationUsageSource.rewarded_ad;
                 rewardedAdSessionId = reward.id;
               } else {
@@ -301,6 +316,7 @@ export class MonetizationService {
               status: RecommendationUsageStatus.reserved,
               rewardedAdSessionId,
               barcodeRewardCreditId,
+              paidCreditPurchaseId,
               recommendationId: null,
               releaseReason: null,
               releasedAt: null,
@@ -328,6 +344,18 @@ export class MonetizationService {
                   eventName: "barcode_reward_used",
                   experimentKey: "barcode-rewards-v1",
                   experimentVariant: barcodePolicy.cohort,
+                  properties: { source: "recommendation" },
+                },
+              });
+            }
+
+            if (source === RecommendationUsageSource.paid_credit) {
+              await tx.monetizationFunnelEvent.create({
+                data: {
+                  ownerKey,
+                  eventName: "paid_credit_used",
+                  experimentKey: access.experiment.key,
+                  experimentVariant: access.experiment.variant,
                   properties: { source: "recommendation" },
                 },
               });
@@ -373,6 +401,7 @@ export class MonetizationService {
         status: RecommendationUsageStatus.released,
         rewardedAdSessionId: null,
         barcodeRewardCreditId: null,
+        paidCreditPurchaseId: null,
         releaseReason: reason.slice(0, 160),
         releasedAt: new Date(),
       },
@@ -502,6 +531,8 @@ export class MonetizationService {
     const freeUsed = counts.get(RecommendationUsageSource.free) ?? 0;
     const barcodeUsed =
       counts.get(RecommendationUsageSource.barcode_contribution) ?? 0;
+    const paidCreditsUsedToday =
+      counts.get(RecommendationUsageSource.paid_credit) ?? 0;
     const totalUsed = [...counts.values()].reduce((sum, value) => sum + value, 0);
     const verifiedRewards = await db.rewardedAdSession.count({
       where: {
@@ -532,6 +563,32 @@ export class MonetizationService {
     const barcodeRewardsEarnedToday = await db.barcodeRewardCredit.count({
       where: { ownerKey, earnedDay: start },
     });
+    const paidCreditPurchases = await db.recommendationCreditPurchase.findMany({
+      where: {
+        ownerKey,
+        status: RecommendationCreditPurchaseStatus.active,
+      },
+      select: { creditsGranted: true },
+    });
+    const paidCreditsUsedTotal = await db.recommendationUsageEvent.count({
+      where: {
+        ownerKey,
+        source: RecommendationUsageSource.paid_credit,
+        status: {
+          in: [
+            RecommendationUsageStatus.reserved,
+            RecommendationUsageStatus.completed,
+          ],
+        },
+      },
+    });
+    const paidCreditBalance = Math.max(
+      0,
+      paidCreditPurchases.reduce(
+        (total, purchase) => total + purchase.creditsGranted,
+        0,
+      ) - paidCreditsUsedTotal,
+    );
 
     const freeLimit = rewardedAdsEnabled
       ? policy.freeDailyLimit
@@ -545,7 +602,7 @@ export class MonetizationService {
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);
     const uncappedRemaining = isSubscriber
       ? Math.max(0, subscriberLimit - totalUsed)
-      : freeRemaining + availableRewards + barcodeRewardBalance;
+      : freeRemaining + paidCreditBalance + availableRewards + barcodeRewardBalance;
     const absoluteLimit = getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
     const remaining =
       absoluteLimit > 0
@@ -555,7 +612,12 @@ export class MonetizationService {
           )
         : uncappedRemaining;
     const freeTierLimit =
-      freeLimit + rewardedLimit + barcodeRewardBalance + barcodeUsed;
+      freeLimit +
+      rewardedLimit +
+      paidCreditBalance +
+      paidCreditsUsedToday +
+      barcodeRewardBalance +
+      barcodeUsed;
     const effectiveFreeTierLimit =
       absoluteLimit > 0 ? Math.min(absoluteLimit, freeTierLimit) : freeTierLimit;
 
@@ -585,6 +647,7 @@ export class MonetizationService {
           rewardedAdsEnabled &&
           !isSubscriber &&
           freeRemaining === 0 &&
+          paidCreditBalance === 0 &&
           (absoluteLimit === 0 || totalUsed < absoluteLimit) &&
           remainingToWatch > 0 &&
           pendingDisplaySessionCount === 0,
@@ -599,6 +662,14 @@ export class MonetizationService {
           barcodePolicy.enabled &&
           barcodeRewardsEarnedToday < barcodePolicy.dailyLimit &&
           barcodeRewardBalance < barcodePolicy.balanceLimit,
+      },
+      paidCredits: {
+        enabled:
+          paidRecommendationCreditsEnabled() || paidCreditBalance > 0,
+        balance: paidCreditBalance,
+        products: paidRecommendationCreditsEnabled()
+          ? getRecommendationCreditProducts()
+          : [],
       },
     };
   }
@@ -810,5 +881,40 @@ function isRetryableTransactionError(error: unknown) {
   return (
     error instanceof Prisma.PrismaClientKnownRequestError &&
     (error.code === "P2034" || error.code === "P2002")
+  );
+}
+
+async function findAvailablePaidCreditPurchase(
+  db: Prisma.TransactionClient,
+  ownerKey: string,
+) {
+  const purchases = await db.recommendationCreditPurchase.findMany({
+    where: {
+      ownerKey,
+      status: RecommendationCreditPurchaseStatus.active,
+    },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: {
+      id: true,
+      creditsGranted: true,
+      _count: {
+        select: {
+          usageEvents: {
+            where: {
+              status: {
+                in: [
+                  RecommendationUsageStatus.reserved,
+                  RecommendationUsageStatus.completed,
+                ],
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return purchases.find(
+    (purchase) => purchase._count.usageEvents < purchase.creditsGranted,
   );
 }

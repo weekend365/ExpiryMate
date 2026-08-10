@@ -32,6 +32,7 @@ const REQUIRED_PRODUCTION_VALUES = [
   "BARCODE_REWARD_ROLLOUT_PERCENT",
   "BARCODE_REWARD_DAILY_LIMIT",
   "BARCODE_REWARD_BALANCE_LIMIT",
+  "PAID_RECOMMENDATION_CREDITS_ENABLED",
   "REWARDED_ADS_ENABLED",
   "SUBSCRIPTIONS_ENABLED",
 ] as const;
@@ -269,6 +270,7 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   validateBooleanFlag(env, "REWARDED_ADS_ENABLED", errors);
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
+  validateBooleanFlag(env, "PAID_RECOMMENDATION_CREDITS_ENABLED", errors);
 
   for (const key of [
     "RECIPE_FREE_DAILY_LIMIT",
@@ -366,6 +368,46 @@ function validateMonetization(env: EnvMap, errors: string[]) {
       requireFeatureValue(env, key, "SUBSCRIPTIONS_ENABLED", errors);
     }
     validateCommaList(env, "IAP_ALLOWED_PRODUCT_IDS", errors);
+  }
+
+  if (isEnabled(env.PAID_RECOMMENDATION_CREDITS_ENABLED)) {
+    const products = env.RECOMMENDATION_CREDIT_PRODUCTS?.trim();
+    if (!products) {
+      errors.push(
+        "RECOMMENDATION_CREDIT_PRODUCTS is required when paid recommendation credits are enabled.",
+      );
+    } else if (
+      products.split(",").some((entry) => {
+        const [productId, credits, ...extra] = entry.split(":");
+        return (
+          extra.length > 0 ||
+          !productId?.trim() ||
+          !Number.isInteger(Number(credits)) ||
+          Number(credits) <= 0
+        );
+      })
+    ) {
+      errors.push(
+        "RECOMMENDATION_CREDIT_PRODUCTS must use product_id:positive_credits entries.",
+      );
+    }
+    for (const key of [
+      "APPLE_BUNDLE_ID",
+      "APPLE_APP_STORE_ENVIRONMENT",
+      "APPLE_APP_STORE_ISSUER_ID",
+      "APPLE_APP_STORE_KEY_ID",
+      "APPLE_APP_STORE_PRIVATE_KEY",
+      "GOOGLE_PLAY_PACKAGE_NAME",
+      "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
+      "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+    ]) {
+      requireFeatureValue(
+        env,
+        key,
+        "PAID_RECOMMENDATION_CREDITS_ENABLED",
+        errors,
+      );
+    }
   }
 }
 

@@ -381,6 +381,40 @@ describe("SubscriptionsService", () => {
     expect(response.entitlement.hasActiveEntitlement).toBe(true);
     expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledOnce();
   });
+
+  it("builds a 30-day plus consumption report for active subscribers", async () => {
+    const prisma = {
+      subscriptionEntitlement: {
+        findFirst: vi.fn().mockResolvedValue({ id: "entitlement-1" }),
+      },
+      inventoryItem: {
+        groupBy: vi
+          .fn()
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 8 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
+            { category: "dairy", _count: { _all: 2 } },
+          ]),
+        count: vi.fn().mockResolvedValue(3),
+      },
+    };
+    const service = new SubscriptionsService(prisma as never);
+
+    const insights = await service.getPlusInsights(
+      "owner-a",
+      new Date("2026-08-10T03:00:00.000Z"),
+    );
+
+    expect(insights).toMatchObject({
+      consumed: 8,
+      discarded: 2,
+      wasteRatePercent: 20,
+      expiringSoon: 3,
+      topDiscardedCategories: [{ category: "dairy", count: 2 }],
+    });
+  });
 });
 
 function createService() {

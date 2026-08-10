@@ -36,6 +36,13 @@ export const monetizationFunnelEventNameSchema = z.enum([
   "barcode_reward_granted",
   "barcode_reward_denied",
   "barcode_reward_used",
+  "credit_pack_viewed",
+  "credit_pack_selected",
+  "credit_checkout_started",
+  "credit_checkout_cancelled",
+  "credit_checkout_failed",
+  "credit_purchase_verified",
+  "paid_credit_used",
 ]);
 
 export const trackMonetizationEventRequestSchema = z.object({
@@ -84,6 +91,31 @@ export const recommendationAccessSchema = z.object({
     balanceLimit: z.number().int().nonnegative(),
     canEarn: z.boolean(),
   }),
+  paidCredits: z.object({
+    enabled: z.boolean(),
+    balance: z.number().int().nonnegative(),
+    products: z.array(
+      z.object({
+        productId: z.string(),
+        credits: z.number().int().positive(),
+      }),
+    ),
+  }),
+});
+
+export const recommendationCreditPurchaseVerificationRequestSchema = z.object({
+  store: z.enum(["apple_app_store", "google_play"]),
+  productId: z.string().min(1).max(128),
+  transactionId: z.string().min(1).max(256).optional(),
+  purchaseToken: z.string().min(1).max(4096).optional(),
+  environment: z.enum(["sandbox", "production"]).optional(),
+});
+
+export const recommendationCreditPurchaseVerificationResponseSchema = z.object({
+  ok: z.literal(true),
+  creditsGranted: z.number().int().nonnegative(),
+  balance: z.number().int().nonnegative(),
+  access: recommendationAccessSchema,
 });
 
 export const createRewardedAdSessionRequestSchema = z.object({
@@ -119,3 +151,9 @@ export type CreateRewardedAdSessionRequest = z.infer<
   typeof createRewardedAdSessionRequestSchema
 >;
 export type RewardedAdSession = z.infer<typeof rewardedAdSessionSchema>;
+export type RecommendationCreditPurchaseVerificationRequest = z.infer<
+  typeof recommendationCreditPurchaseVerificationRequestSchema
+>;
+export type RecommendationCreditPurchaseVerificationResponse = z.infer<
+  typeof recommendationCreditPurchaseVerificationResponseSchema
+>;

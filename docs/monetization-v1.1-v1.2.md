@@ -35,6 +35,8 @@ BARCODE_REWARD_ROLLOUT_PERCENT=0
 BARCODE_REWARD_DAILY_LIMIT=3
 BARCODE_REWARD_BALANCE_LIMIT=10
 BARCODE_REWARD_TOKEN_SECRET=replace-with-a-long-random-secret
+PAID_RECOMMENDATION_CREDITS_ENABLED=false
+RECOMMENDATION_CREDIT_PRODUCTS=expirymate_recipe_credits_5:5,expirymate_recipe_credits_15:15
 REWARDED_ADS_ENABLED=false
 SUBSCRIPTIONS_ENABLED=false
 MINIMUM_MOBILE_APP_VERSION=
@@ -60,8 +62,34 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
   지급합니다. 하루 최대 3회, 보유 최대 10회이며 만료·양도·현금화는 없습니다.
 - 차감 순서는 구독 → 무료 → 광고 → 바코드 추천권입니다. 구독 중에는 적립만
   하고 추천권을 소비하지 않습니다.
+- 일회성 추천권을 활성화하면 차감 순서는 구독 → 무료 → 구매 추천권 → 광고 →
+  바코드 추천권입니다. 구매 추천권은 만료되지 않으며 AI 생성 실패 시 사용
+  예약이 해제됩니다.
 - `BARCODE_REWARD_TOKEN_SECRET`과 `MONETIZATION_EXPERIMENT_SALT`는 출시 후
   변경하지 않습니다. 원본 바코드는 퍼널 이벤트 속성에 저장하지 않습니다.
+
+## 일회성 AI 추천권
+
+- App Store와 Google Play에 `RECOMMENDATION_CREDIT_PRODUCTS`의 각 ID를
+  소모성 상품으로 생성합니다. 상품별 지급량은 `product_id:credits` 형식으로
+  서버에서만 결정하며 모바일 표시 가격은 스토어 응답을 사용합니다.
+- 서버가 Apple 거래 ID 또는 Google 구매 토큰을 검증하고 원장에 한 번만 기록한
+  뒤 모바일이 거래를 소비합니다. 같은 영수증 재전송은 추천권을 중복 지급하지
+  않습니다.
+- 계정 삭제 시 사용 가능한 추천권은 제거되지만, 처리한 소모성 영수증의
+  해시·거래 식별자는 중복 지급 방지를 위해 익명화된 계정 셸에 보존합니다.
+- Apple 환불·취소 알림과 Google 일회성 상품 취소 RTDN을 받으면 해당 구매를
+  `revoked`로 전환하고 남은 잔액 계산에서 제외합니다.
+- 마이그레이션과 양 스토어 샌드박스 QA가 끝날 때까지
+  `PAID_RECOMMENDATION_CREDITS_ENABLED=false`를 유지합니다.
+- 구독자는 추천권을 보유할 수 있지만 구독 중에는 플러스 사용량을 먼저
+  사용합니다. 하루 절대 추천 상한 30회는 구매 추천권에도 동일하게 적용됩니다.
+
+## 플러스 소비 리포트
+
+- 활성 구독자는 최근 30일간 소비·폐기 완료 수, 폐기 비율, 7일 내 만료 수와
+  주요 폐기 카테고리를 확인할 수 있습니다.
+- 리포트는 기존 재고 상태와 갱신 시각만 집계하며 별도 AI 호출을 만들지 않습니다.
 
 ## 모바일 EAS 환경변수
 
@@ -124,6 +152,9 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
 서버 이벤트에는 원본 광고 거래 ID나 구매 토큰을 싣지 않고 내부 세션 ID와
 집계값만 사용합니다. 무료 소진율, 광고 시작/완주/SSV 성공률, fill rate,
 추천당 AI 비용, paywall 노출/구매/복원, 월간·연간 전환과 해지를 확인합니다.
+관리자 `/monetization` 화면에서 7·30·90일 추천 출처, 추정 AI 비용, 실험군별
+퍼널, 추천권 판매량을 조회합니다. 실제 스토어 매출·수수료는 App Store Connect와
+Play Console의 재무 보고서를 기준으로 대조합니다.
 
 `MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT`는 사용자 ID를 안정적인 해시 버킷에
 배정합니다. 운영을 시작한 뒤에는 `MONETIZATION_EXPERIMENT_SALT`를 변경하지

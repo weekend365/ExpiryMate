@@ -39,6 +39,11 @@ describe("monetization schemas", () => {
           balanceLimit: 10,
           canEarn: true,
         },
+        paidCredits: {
+          enabled: true,
+          balance: 5,
+          products: [{ productId: "credits_5", credits: 5 }],
+        },
       }).experiment.variant,
     ).toBe("value_first");
   });

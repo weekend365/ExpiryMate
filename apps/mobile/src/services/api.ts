@@ -58,6 +58,8 @@ import type {
   RewardedAdSession,
   MonetizationPlatform,
   TrackMonetizationEventRequest,
+  RecommendationCreditPurchaseVerificationRequest,
+  RecommendationCreditPurchaseVerificationResponse,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -1050,6 +1052,18 @@ export const unregisterPushToken = (token: string) =>
 export const getSubscriptionEntitlement = () =>
   request<SubscriptionEntitlement>("/subscriptions/entitlement");
 
+export type PlusInsights = {
+  period: { from: string; to: string };
+  consumed: number;
+  discarded: number;
+  wasteRatePercent: number;
+  expiringSoon: number;
+  topDiscardedCategories: Array<{ category: string; count: number }>;
+};
+
+export const getPlusInsights = () =>
+  request<PlusInsights>("/subscriptions/plus-insights");
+
 export const getMonetizationStatus = () =>
   request<RecommendationAccess>("/monetization/status");
 
@@ -1081,6 +1095,17 @@ export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
     method: "POST",
     body: JSON.stringify(payload),
   });
+
+export const verifyRecommendationCreditPurchase = (
+  payload: RecommendationCreditPurchaseVerificationRequest,
+) =>
+  request<RecommendationCreditPurchaseVerificationResponse>(
+    "/monetization/credit-purchases/verify",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
 
 function createIdempotencyKey() {
   return `mobile-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()

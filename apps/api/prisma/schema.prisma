@@ -86,9 +86,15 @@ enum SubscriptionBillingPeriod {
 
 enum RecommendationUsageSource {
   free
+  paid_credit
   rewarded_ad
   barcode_contribution
   subscription
+}
+
+enum RecommendationCreditPurchaseStatus {
+  active
+  revoked
 }
 
 enum RecommendationUsageStatus {
@@ -141,42 +147,43 @@ enum SpaceInvitationMethod {
 }
 
 model User {
-  id                         String                     @id @default(cuid())
-  email                      String?                    @unique
-  displayName                String?
-  role                       UserRole                   @default(user)
-  accountType                AccountType                @default(anonymous)
-  emailVerifiedAt            DateTime?
-  aiDataNoticeAcceptedAt     DateTime?
-  aiDataNoticeVersion        String?
-  deletedAt                  DateTime?
-  mergedIntoUserId           String?
-  mergedIntoUser             User?                      @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
-  mergedAnonymousUsers       User[]                     @relation("UserMerge")
-  createdAt                  DateTime                   @default(now())
-  updatedAt                  DateTime                   @updatedAt
-  passwordCredential         PasswordCredential?
-  oauthAccounts              OAuthAccount[]
-  refreshSessions            RefreshSession[]
-  oneTimeAuthTokens          OneTimeAuthToken[]
-  inventoryItems             InventoryItem[]
-  notificationPreference     NotificationPreference?
-  userStorageLocations       UserStorageLocation[]
-  recipeRecommendations      RecipeRecommendation[]
-  recipeFavorites            RecipeFavorite[]
-  subscriptionEntitlements   SubscriptionEntitlement[]
-  recommendationUsageEvents  RecommendationUsageEvent[]
-  rewardedAdSessions         RewardedAdSession[]
-  barcodeRewardCredits       BarcodeRewardCredit[]
-  monetizationFunnelEvents   MonetizationFunnelEvent[]
-  pushTokens                 PushToken[]
-  pushNotificationDeliveries PushNotificationDelivery[]
-  supportInquiries           SupportInquiry[]
-  ownedInventorySpaces       InventorySpace[]           @relation("InventorySpaceOwner")
-  inventorySpaceMemberships  InventorySpaceMembership[]
-  sentSpaceInvitations       SpaceInvitation[]          @relation("SpaceInvitationSender")
-  createdInventoryItems      InventoryItem[]            @relation("InventoryItemCreator")
-  updatedInventoryItems      InventoryItem[]            @relation("InventoryItemUpdater")
+  id                            String                         @id @default(cuid())
+  email                         String?                        @unique
+  displayName                   String?
+  role                          UserRole                       @default(user)
+  accountType                   AccountType                    @default(anonymous)
+  emailVerifiedAt               DateTime?
+  aiDataNoticeAcceptedAt        DateTime?
+  aiDataNoticeVersion           String?
+  deletedAt                     DateTime?
+  mergedIntoUserId              String?
+  mergedIntoUser                User?                          @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
+  mergedAnonymousUsers          User[]                         @relation("UserMerge")
+  createdAt                     DateTime                       @default(now())
+  updatedAt                     DateTime                       @updatedAt
+  passwordCredential            PasswordCredential?
+  oauthAccounts                 OAuthAccount[]
+  refreshSessions               RefreshSession[]
+  oneTimeAuthTokens             OneTimeAuthToken[]
+  inventoryItems                InventoryItem[]
+  notificationPreference        NotificationPreference?
+  userStorageLocations          UserStorageLocation[]
+  recipeRecommendations         RecipeRecommendation[]
+  recipeFavorites               RecipeFavorite[]
+  subscriptionEntitlements      SubscriptionEntitlement[]
+  recommendationUsageEvents     RecommendationUsageEvent[]
+  rewardedAdSessions            RewardedAdSession[]
+  barcodeRewardCredits          BarcodeRewardCredit[]
+  recommendationCreditPurchases RecommendationCreditPurchase[]
+  monetizationFunnelEvents      MonetizationFunnelEvent[]
+  pushTokens                    PushToken[]
+  pushNotificationDeliveries    PushNotificationDelivery[]
+  supportInquiries              SupportInquiry[]
+  ownedInventorySpaces          InventorySpace[]               @relation("InventorySpaceOwner")
+  inventorySpaceMemberships     InventorySpaceMembership[]
+  sentSpaceInvitations          SpaceInvitation[]              @relation("SpaceInvitationSender")
+  createdInventoryItems         InventoryItem[]                @relation("InventoryItemCreator")
+  updatedInventoryItems         InventoryItem[]                @relation("InventoryItemUpdater")
 
   @@index([accountType])
   @@index([role])
@@ -324,16 +331,16 @@ model Product {
 }
 
 model ProductMaster {
-  id                  String   @id @default(cuid())
-  barcode             String   @unique
+  id                  String               @id @default(cuid())
+  barcode             String               @unique
   name                String
   brand               String
   category            String
   imageUrl            String?
-  source              String   @default("foodsafety_api")
+  source              String               @default("foodsafety_api")
   contributedByUserId String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
   rewardCredit        BarcodeRewardCredit?
 
   @@index([name])
@@ -454,42 +461,69 @@ model RewardedAdSession {
 }
 
 model BarcodeRewardCredit {
-  id              String   @id @default(cuid())
+  id              String                    @id @default(cuid())
   ownerKey        String
-  owner           User     @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  productMasterId String   @unique
-  productMaster   ProductMaster @relation(fields: [productMasterId], references: [id], onDelete: Restrict)
+  owner           User                      @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  productMasterId String                    @unique
+  productMaster   ProductMaster             @relation(fields: [productMasterId], references: [id], onDelete: Restrict)
   earnedDay       DateTime
-  createdAt       DateTime @default(now())
+  createdAt       DateTime                  @default(now())
   usageEvent      RecommendationUsageEvent?
 
   @@index([ownerKey, earnedDay])
   @@index([ownerKey, createdAt])
 }
 
+model RecommendationCreditPurchase {
+  id                String                             @id @default(cuid())
+  ownerKey          String
+  owner             User                               @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  store             SubscriptionStore
+  productId         String
+  transactionId     String?
+  purchaseTokenHash String?
+  orderId           String?
+  creditsGranted    Int
+  status            RecommendationCreditPurchaseStatus @default(active)
+  environment       String?
+  verifiedAt        DateTime                           @default(now())
+  rawVerification   Json?
+  createdAt         DateTime                           @default(now())
+  updatedAt         DateTime                           @updatedAt
+  usageEvents       RecommendationUsageEvent[]
+
+  @@unique([store, transactionId])
+  @@unique([store, purchaseTokenHash])
+  @@index([ownerKey, status, createdAt])
+  @@index([store, productId, createdAt])
+}
+
 model RecommendationUsageEvent {
-  id                  String                    @id @default(cuid())
-  ownerKey            String
-  owner               User                      @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  usageDay            DateTime
-  source              RecommendationUsageSource
-  status              RecommendationUsageStatus @default(reserved)
-  idempotencyKey      String
-  recommendationId    String?                   @unique
-  recommendation      RecipeRecommendation?     @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
-  rewardedAdSessionId String?                   @unique
-  rewardedAdSession   RewardedAdSession?        @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
-  barcodeRewardCreditId String?                 @unique
-  barcodeRewardCredit   BarcodeRewardCredit?    @relation(fields: [barcodeRewardCreditId], references: [id], onDelete: SetNull)
-  releaseReason       String?
-  completedAt         DateTime?
-  releasedAt          DateTime?
-  createdAt           DateTime                  @default(now())
-  updatedAt           DateTime                  @updatedAt
+  id                    String                        @id @default(cuid())
+  ownerKey              String
+  owner                 User                          @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  usageDay              DateTime
+  source                RecommendationUsageSource
+  status                RecommendationUsageStatus     @default(reserved)
+  idempotencyKey        String
+  recommendationId      String?                       @unique
+  recommendation        RecipeRecommendation?         @relation(fields: [recommendationId], references: [id], onDelete: SetNull)
+  rewardedAdSessionId   String?                       @unique
+  rewardedAdSession     RewardedAdSession?            @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  barcodeRewardCreditId String?                       @unique
+  barcodeRewardCredit   BarcodeRewardCredit?          @relation(fields: [barcodeRewardCreditId], references: [id], onDelete: SetNull)
+  paidCreditPurchaseId  String?
+  paidCreditPurchase    RecommendationCreditPurchase? @relation(fields: [paidCreditPurchaseId], references: [id], onDelete: SetNull)
+  releaseReason         String?
+  completedAt           DateTime?
+  releasedAt            DateTime?
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
 
   @@unique([ownerKey, idempotencyKey])
   @@index([ownerKey, usageDay, status])
   @@index([source, usageDay, status])
+  @@index([paidCreditPurchaseId, status])
 }
 
 model RecipeFavorite {

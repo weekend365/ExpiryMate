@@ -14,15 +14,25 @@ import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { SubscriptionsService } from "./subscriptions.service";
+import { CreditPurchasesService } from "../monetization/credit-purchases.service";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
-  constructor(private readonly subscriptionsService: SubscriptionsService) {}
+  constructor(
+    private readonly subscriptionsService: SubscriptionsService,
+    private readonly creditPurchasesService: CreditPurchasesService,
+  ) {}
 
   @Get("entitlement")
   @UseGuards(RegisteredGuard)
   getEntitlement(@CurrentOwnerKey() ownerKey: string) {
     return this.subscriptionsService.getEntitlement(ownerKey);
+  }
+
+  @Get("plus-insights")
+  @UseGuards(RegisteredGuard)
+  getPlusInsights(@CurrentOwnerKey() ownerKey: string) {
+    return this.subscriptionsService.getPlusInsights(ownerKey);
   }
 
   @Post("verify")
@@ -36,17 +46,23 @@ export class SubscriptionsController {
   }
 
   @Post("notifications/apple")
-  processAppleNotification(@Body() body: { signedPayload?: string }) {
-    return this.subscriptionsService.processAppleNotification(body.signedPayload);
+  async processAppleNotification(@Body() body: { signedPayload?: string }) {
+    await this.subscriptionsService.processAppleNotification(body.signedPayload);
+    return this.creditPurchasesService.processValidatedAppleNotification(
+      body.signedPayload,
+    );
   }
 
   @Post("notifications/google")
-  processGoogleNotification(
+  async processGoogleNotification(
     @Body() body: { message?: { data?: string; messageId?: string } },
     @Headers("authorization") authorization?: string,
   ) {
-    return this.subscriptionsService.processGoogleNotification(
+    await this.subscriptionsService.processGoogleNotification(
       authorization,
+      body.message?.data,
+    );
+    return this.creditPurchasesService.processValidatedGoogleNotification(
       body.message?.data,
     );
   }
