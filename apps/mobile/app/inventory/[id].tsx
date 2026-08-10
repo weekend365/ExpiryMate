@@ -254,9 +254,7 @@ export default function InventoryDetailScreen() {
         unitCode,
         unit: values.unit || unitCodeLabels[unitCode],
       });
-      setMode("view");
-      setEditStep("product");
-      setSuccessMessage("내용을 잘 바꿔 뒀어요. 장고도 안심했어요.");
+      router.back();
     } catch (error) {
       setErrorMessage(
         error instanceof Error
