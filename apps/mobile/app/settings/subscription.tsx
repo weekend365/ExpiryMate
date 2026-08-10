@@ -136,7 +136,9 @@ export default function SubscriptionSettingsScreen() {
       setBusyAction(null);
       Alert.alert(
         "장고 플러스가 시작됐어요",
-        `오늘 총 ${monetization.access?.subscriberDailyLimit ?? 30}회까지 광고 없이 추천받을 수 있어요.`,
+        selectedPlanCodeRef.current === "jango_household"
+          ? "가족 공간의 소비·폐기 흐름을 함께 보고, 광고 없이 요리를 추천받을 수 있어요."
+          : "내 냉장고의 소비·폐기 흐름을 보고, 광고 없이 요리를 추천받을 수 있어요.",
       );
       return true;
     } catch (error) {
@@ -349,8 +351,8 @@ export default function SubscriptionSettingsScreen() {
       title="장고 플러스"
       subtitle={
         entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
-          ? `가족 공간에서 하루 ${monetization.access?.householdDailyLimit ?? 60}회를 함께 써요.`
-          : `광고 없이 하루 총 ${monetization.access?.subscriberDailyLimit ?? 30}회 추천받아요.`
+          ? "가족의 소비와 폐기를 함께 줄이는 냉장고 관리"
+          : "임박 재료를 놓치지 않고 식탁까지 이어주는 관리"
       }
     >
       <View style={styles.section}>
@@ -382,20 +384,26 @@ export default function SubscriptionSettingsScreen() {
 
       <View style={styles.section}>
         <SectionHeader
-          title="플러스 혜택"
-          description="추천 횟수뿐 아니라 냉장고를 꾸준히 관리할수록 가치가 쌓여요."
+          title="냉장고를 덜 버리는 습관"
+          description="몇 번 추천받는지보다 무엇을 먹고 버렸는지 꾸준히 확인할 수 있어요."
         />
         <View style={styles.benefitCard}>
           <BenefitLine
             text={
               entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
-                ? `최대 5명이 하루 ${monetization.access?.householdDailyLimit ?? 60}회 AI 추천 공유`
-                : `광고 없이 하루 ${monetization.access?.subscriberDailyLimit ?? 30}회 AI 추천`
+                ? "가족 공간의 최근 30일 소비·폐기 흐름과 폐기 비율"
+                : "나의 최근 30일 소비·폐기 흐름과 폐기 비율"
             }
           />
-          <BenefitLine text="최근 30일 소비·폐기 리포트" />
+          <BenefitLine
+            text={
+              entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
+                ? `최대 5명이 광고 없이 AI 추천을 함께 사용해요 · 하루 최대 ${monetization.access?.householdDailyLimit ?? 60}회`
+                : `광고 없이 임박 재료로 요리를 충분히 골라요 · 하루 최대 ${monetization.access?.subscriberDailyLimit ?? 30}회`
+            }
+          />
           {(entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household") ? (
-            <BenefitLine text="가족 공간 구성원 모두 광고 없이 이용" />
+            <BenefitLine text="구성원이 함께 쓴 재료와 버린 재료를 한 리포트로 확인" />
           ) : null}
           <BenefitLine text="구독 중 바코드 추천권 적립 및 잔액 보존" />
         </View>
@@ -451,7 +459,9 @@ export default function SubscriptionSettingsScreen() {
                         {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
                       </Text>
                       <Text style={styles.planDescription}>
-                        {planCode === "jango_household" ? "최대 5명 · 하루 60회 공유" : "하루 30회 · 개인 전용"}
+                        {planCode === "jango_household"
+                          ? "가족 소비·폐기 리포트 · 최대 5명"
+                          : "나의 소비·폐기 리포트 · 광고 없음"}
                       </Text>
                     </View>
                   </Pressable>

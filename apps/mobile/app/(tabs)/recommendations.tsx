@@ -182,6 +182,14 @@ export default function RecommendationsScreen() {
     generationStatus === "success" &&
     Boolean(latestRecommendation) &&
     latestRecommendation?.id === latestGeneratedRecommendationId;
+  const showValueMomentOffer = Boolean(
+    justGenerated &&
+      !hasActiveEntitlement &&
+      monetization.access?.offer.personalized &&
+      monetization.access.offer.reason === "engaged" &&
+      (monetization.access.offer.kind === "jango_plus" ||
+        monetization.access.offer.kind === "jango_household"),
+  );
   const mealTypeLabel =
     mealTypeOptions.find((option) => option.value === mealType)?.label ??
     "상관없음";
@@ -221,7 +229,7 @@ export default function RecommendationsScreen() {
   useEffect(() => {
     const offer = monetization.access?.offer;
     if (
-      !isQuotaError ||
+      (!isQuotaError && !showValueMomentOffer) ||
       !offer?.personalized ||
       offer.kind === "none"
     ) return;
@@ -232,7 +240,12 @@ export default function RecommendationsScreen() {
       event: "offer_presented",
       properties: { kind: offer.kind, reason: offer.reason },
     }).catch(() => undefined);
-  }, [isQuotaError, monetization.access?.day, monetization.access?.offer]);
+  }, [
+    isQuotaError,
+    monetization.access?.day,
+    monetization.access?.offer,
+    showValueMomentOffer,
+  ]);
 
   const buildRecommendationPayload = useCallback(
     (): RecipeRecommendationPayload => ({
@@ -489,6 +502,30 @@ export default function RecommendationsScreen() {
               </Pressable>
             ) : null}
           </View>
+        </View>
+      ) : null}
+      {recipeView === "recommendations" && showValueMomentOffer ? (
+        <View style={styles.valueOfferCard}>
+          <View style={styles.valueOfferCopy}>
+            <Text style={styles.valueOfferTitle}>
+              {monetization.access?.offer.kind === "jango_household"
+                ? "가족 냉장고가 함께 움직이고 있어요"
+                : "냉장고 관리가 습관이 되고 있어요"}
+            </Text>
+            <Text style={styles.valueOfferDescription}>
+              {monetization.access?.offer.kind === "jango_household"
+                ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
+                : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
+            </Text>
+          </View>
+          <Button
+            onPress={() =>
+              handleMonetizationOffer(monetization.access!.offer.kind)
+            }
+            fullWidth
+          >
+            {offerLabel(monetization.access!.offer.kind)}
+          </Button>
         </View>
       ) : null}
       <View style={styles.recipeViewSwitch}>
@@ -1744,6 +1781,24 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     gap: spacing.sm,
+  },
+  valueOfferCard: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  valueOfferCopy: { gap: spacing.xxs },
+  valueOfferTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  valueOfferDescription: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
   },
   quotaTitle: {
     fontSize: typography.body.fontSize,

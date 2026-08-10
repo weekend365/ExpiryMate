@@ -204,6 +204,58 @@ describe("MonetizationService", () => {
     });
   });
 
+  it("offers Plus at an engaged value moment before the free quota is exhausted", async () => {
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED = "true";
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT = "100";
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.count.mockImplementation(async (args) =>
+      args?.where?.completedAt ? 3 : 0,
+    );
+    prisma.monetizationFunnelEvent.findMany.mockResolvedValue([
+      { createdAt: new Date("2026-08-09T03:00:00.000Z") },
+      { createdAt: new Date("2026-08-10T03:00:00.000Z") },
+    ]);
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus(
+      "owner-engaged",
+      new Date("2026-08-10T04:00:00.000Z"),
+    );
+
+    expect(status.free.remaining).toBe(1);
+    expect(status.offer).toMatchObject({
+      kind: "jango_plus",
+      reason: "engaged",
+      personalized: true,
+    });
+  });
+
+  it("offers Household after a second household member joins", async () => {
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED = "true";
+    process.env.PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT = "100";
+    const prisma = createPrismaMock();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-home",
+      type: "household",
+      ownerUserId: "owner-a",
+      _count: { memberships: 2 },
+    });
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatusForSpace(
+      "owner-a",
+      "space-home",
+      new Date("2026-08-10T04:00:00.000Z"),
+    );
+
+    expect(status.free.remaining).toBe(1);
+    expect(status.offer).toMatchObject({
+      kind: "jango_household",
+      reason: "engaged",
+      personalized: true,
+    });
+  });
+
   it("uses the active household space entitlement and shared daily limit", async () => {
     const prisma = createPrismaMock();
     prisma.inventorySpace.findFirst.mockResolvedValue({

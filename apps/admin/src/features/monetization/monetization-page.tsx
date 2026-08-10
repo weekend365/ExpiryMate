@@ -87,7 +87,7 @@ export function MonetizationPage() {
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="페이월 → 구독 구매"
           value={`${overview?.conversion.paywallToPurchasePercent ?? 0}%`}
@@ -99,6 +99,10 @@ export function MonetizationPage() {
         <MetricCard
           label="바코드 보상 승인률"
           value={`${overview?.conversion.barcodeRewardGrantPercent ?? 0}%`}
+        />
+        <MetricCard
+          label="추천권 노출 → 구매"
+          value={`${overview?.conversion.creditPackToPurchasePercent ?? 0}%`}
         />
       </div>
 
@@ -121,6 +125,7 @@ export function MonetizationPage() {
           />
           <MetricCard label="ARPPU" value={formatKrw(overview?.totals.arppuKrw)} />
           <MetricCard label="추정 MRR" value={formatKrw(overview?.totals.estimatedMrrKrw)} />
+          <MetricCard label="추천 1회 p95 AI 원가" value={formatKrw(overview?.totals.p95AiCostPerRecommendationKrw)} tone="warning" />
           <MetricCard label="갱신률" value={`${overview?.totals.renewalRatePercent ?? 0}%`} />
           <MetricCard label="해지·환불률" value={`${overview?.totals.churnRefundRatePercent ?? 0}%`} tone="warning" />
         </div>
@@ -136,6 +141,32 @@ export function MonetizationPage() {
               </p>
             </div>
           ))}
+        </div>
+      </Panel>
+
+      <Panel
+        title="단위경제 가드레일"
+        description="광고는 AI 원가 1배 이상, 구매 추천권은 3배 이상 회수하는지를 확인합니다."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          <GuardrailCard
+            title="보상 광고"
+            revenueLabel="검증 광고당 수익"
+            revenue={overview?.unitEconomics?.rewardedAd.estimatedRevenuePerVerifiedKrw}
+            aiCost={overview?.unitEconomics?.rewardedAd.estimatedAiCostPerRecommendationKrw}
+            multiple={overview?.unitEconomics?.rewardedAd.costCoverageMultiple}
+            target={overview?.unitEconomics?.rewardedAd.targetCoverageMultiple ?? 1}
+            status={overview?.unitEconomics?.rewardedAd.status}
+          />
+          <GuardrailCard
+            title="구매 추천권"
+            revenueLabel="추천권당 수익"
+            revenue={overview?.unitEconomics?.paidCredit.estimatedRevenuePerCreditKrw}
+            aiCost={overview?.unitEconomics?.paidCredit.estimatedAiCostPerRecommendationKrw}
+            multiple={overview?.unitEconomics?.paidCredit.costCoverageMultiple}
+            target={overview?.unitEconomics?.paidCredit.targetCoverageMultiple ?? 3}
+            status={overview?.unitEconomics?.paidCredit.status}
+          />
         </div>
       </Panel>
 
@@ -233,4 +264,45 @@ function formatKrw(value: number | null | undefined) {
 
 function formatPercent(value: number | null | undefined) {
   return value == null ? "설정되지 않음" : `${value}%`;
+}
+
+function GuardrailCard({
+  title,
+  revenueLabel,
+  revenue,
+  aiCost,
+  multiple,
+  target,
+  status,
+}: {
+  title: string;
+  revenueLabel: string;
+  revenue: number | null | undefined;
+  aiCost: number | null | undefined;
+  multiple: number | null | undefined;
+  target: number;
+  status: "healthy" | "review" | "insufficient_data" | "unconfigured" | undefined;
+}) {
+  const labels = {
+    healthy: "운영 가능",
+    review: "재검토 필요",
+    insufficient_data: "데이터 부족",
+    unconfigured: "추정값 미설정",
+  } as const;
+  return (
+    <div className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-4">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-black">{title}</span>
+        <span className={status === "healthy" ? "text-sm font-bold text-[var(--success)]" : "text-sm font-bold text-[var(--warning)]"}>
+          {status ? labels[status] : "확인 중"}
+        </span>
+      </div>
+      <p className="mt-2 text-sm">
+        {revenueLabel} {formatKrw(revenue)} · 추천 원가 {formatKrw(aiCost)}
+      </p>
+      <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+        원가 커버리지 {multiple == null ? "계산 불가" : `${multiple}배`} · 목표 {target}배
+      </p>
+    </div>
+  );
 }

@@ -901,19 +901,11 @@ export class MonetizationService {
         alternatives: [],
       };
     }
-    if (
+    const hasAvailableRecommendation =
       access.free.remaining > 0 ||
       access.rewardedAds.creditsAvailable > 0 ||
       access.paidCredits.balance > 0 ||
-      access.contributionRewards.balance > 0
-    ) {
-      return {
-        kind: "none",
-        reason: "unavailable",
-        personalized: isPersonalizedOffersEnabled(ownerKey),
-        alternatives: [],
-      };
-    }
+      access.contributionRewards.balance > 0;
 
     const householdEligible =
       access.subscriptionsEnabled &&
@@ -921,7 +913,7 @@ export class MonetizationService {
       space?.type === "household" &&
       space.ownerUserId === ownerKey &&
       space._count.memberships <= getLimit("HOUSEHOLD_SUBSCRIPTION_MEMBER_LIMIT", 5);
-    const alternatives = uniqueOfferKinds([
+    const legacyAlternatives = uniqueOfferKinds([
       access.rewardedAds.canWatch ? "rewarded_ad" : null,
       access.paidCredits.enabled ? "paid_credits" : null,
       householdEligible ? "jango_household" : null,
@@ -929,11 +921,19 @@ export class MonetizationService {
     ]);
     const personalized = isPersonalizedOffersEnabled(ownerKey);
     if (!personalized) {
+      if (hasAvailableRecommendation) {
+        return {
+          kind: "none",
+          reason: "unavailable",
+          personalized: false,
+          alternatives: [],
+        };
+      }
       return {
-        kind: alternatives[0] ?? "none",
-        reason: alternatives.length ? "casual" : "unavailable",
+        kind: legacyAlternatives[0] ?? "none",
+        reason: legacyAlternatives.length ? "casual" : "unavailable",
         personalized: false,
-        alternatives: alternatives.slice(1),
+        alternatives: legacyAlternatives.slice(1),
       };
     }
 
@@ -968,23 +968,41 @@ export class MonetizationService {
     ).size;
     let kind: RecommendationAccess["offer"]["kind"];
     let reason: RecommendationAccess["offer"]["reason"];
-    if (declines >= 2 && access.paidCredits.enabled) {
+    const householdValueMoment =
+      householdEligible && (space?._count.memberships ?? 0) >= 2;
+    const engaged = activeDays >= 2 && completedRecommendations >= 3;
+    if (declines < 2 && householdValueMoment) {
+      kind = "jango_household";
+      reason = "engaged";
+    } else if (declines < 2 && engaged && access.subscriptionsEnabled) {
+      kind = "jango_plus";
+      reason = "engaged";
+    } else if (hasAvailableRecommendation) {
+      kind = "none";
+      reason = "unavailable";
+    } else if (declines >= 2 && access.paidCredits.enabled) {
       kind = "paid_credits";
       reason = "subscription_declined";
-    } else if (activeDays >= 2 && completedRecommendations >= 3) {
-      kind = householdEligible ? "jango_household" : "jango_plus";
-      reason = "engaged";
     } else {
       kind = access.rewardedAds.canWatch
         ? "rewarded_ad"
-        : alternatives[0] ?? "none";
+        : legacyAlternatives[0] ?? "none";
       reason = kind === "none" ? "unavailable" : "casual";
     }
+    const contextualAlternatives = uniqueOfferKinds([
+      householdEligible ? "jango_household" : null,
+      access.subscriptionsEnabled ? "jango_plus" : null,
+      access.paidCredits.enabled ? "paid_credits" : null,
+      access.rewardedAds.canWatch ? "rewarded_ad" : null,
+    ]);
     return {
       kind,
       reason,
       personalized: true,
-      alternatives: alternatives.filter((candidate) => candidate !== kind),
+      alternatives:
+        kind === "none"
+          ? []
+          : contextualAlternatives.filter((candidate) => candidate !== kind),
     };
   }
 

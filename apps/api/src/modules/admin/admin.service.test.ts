@@ -1,9 +1,12 @@
 import { ItemStatus } from "@prisma/client";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { maskOwnerKey } from "../../common/serializers";
 import { AdminService } from "./admin.service";
 
 describe("AdminService", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
   it("paginates inventory and masks owner/notes fields", async () => {
     const row = {
       id: "item-1",
@@ -169,5 +172,121 @@ describe("AdminService", () => {
     expect(overview.conversion.paywallToPurchasePercent).toBe(20);
     expect(overview.conversion.rewardedAdVerificationPercent).toBe(75);
     expect(overview.usageBySource).toContainEqual({ source: "free", count: 5 });
+  });
+
+  it("uses core inventory activity for retention and evaluates unit economics", async () => {
+    vi.stubEnv(
+      "MONETIZATION_ESTIMATES_JSON",
+      JSON.stringify({
+        usdKrw: 1000,
+        rewardedAdEcpmKrw: 20000,
+        productNetProceedsKrw: { "apple_app_store:credits_5": 100 },
+      }),
+    );
+    const prisma = {
+      subscriptionEntitlement: { findMany: vi.fn().mockResolvedValue([]) },
+      recommendationUsageEvent: {
+        findMany: vi
+          .fn()
+          .mockResolvedValueOnce([])
+          .mockResolvedValueOnce([
+            {
+              ownerKey: "user-1",
+              completedAt: new Date("2026-08-09T01:00:00.000Z"),
+            },
+          ]),
+        groupBy: vi.fn().mockResolvedValue([
+          { source: "rewarded_ad", status: "completed", _count: { _all: 1 } },
+          { source: "paid_credit", status: "completed", _count: { _all: 1 } },
+        ]),
+      },
+      recipeRecommendation: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            createdAt: new Date("2026-08-09T01:00:00.000Z"),
+            estimatedCostUsd: 0.01,
+            totalTokens: 1000,
+            usageEvent: { source: "rewarded_ad", subscriptionEntitlement: null },
+          },
+          {
+            createdAt: new Date("2026-08-09T02:00:00.000Z"),
+            estimatedCostUsd: 0.01,
+            totalTokens: 1000,
+            usageEvent: { source: "paid_credit", subscriptionEntitlement: null },
+          },
+        ]),
+      },
+      monetizationFunnelEvent: {
+        groupBy: vi.fn().mockResolvedValue([]),
+        findMany: vi
+          .fn()
+          .mockResolvedValueOnce([
+            { ownerKey: "user-1", eventName: "credit_pack_viewed" },
+            { ownerKey: "user-1", eventName: "credit_purchase_verified" },
+          ])
+          .mockResolvedValueOnce([]),
+      },
+      recommendationCreditPurchase: {
+        aggregate: vi.fn().mockResolvedValue({
+          _count: { _all: 1 },
+          _sum: { creditsGranted: 5 },
+        }),
+      },
+      monetizationRevenueEvent: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            ownerKey: "user-1",
+            source: "rewarded_ad",
+            kind: "rewarded_ad_impression",
+            billingPeriod: null,
+            estimatedNetRevenueKrw: 20,
+            estimateConfigured: true,
+          },
+          {
+            ownerKey: "user-1",
+            source: "paid_credit",
+            kind: "credit_purchase",
+            billingPeriod: null,
+            estimatedNetRevenueKrw: 100,
+            estimateConfigured: true,
+          },
+        ]),
+      },
+      user: {
+        findMany: vi.fn().mockResolvedValue([
+          { id: "user-1", createdAt: new Date("2026-08-01T00:00:00.000Z") },
+        ]),
+      },
+      inventoryItem: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            ownerKey: "user-1",
+            createdByUserId: "user-1",
+            updatedByUserId: "user-1",
+            createdAt: new Date("2026-08-08T00:00:00.000Z"),
+            updatedAt: new Date("2026-08-08T00:00:00.000Z"),
+          },
+        ]),
+      },
+    };
+    const service = new AdminService(prisma as never);
+
+    const overview = await service.getMonetizationOverview(
+      30,
+      new Date("2026-08-10T03:00:00.000Z"),
+    );
+
+    expect(overview.totals.activeUsers).toBe(1);
+    expect(overview.retention.d7Percent).toBe(100);
+    expect(overview.totals.p95AiCostPerRecommendationKrw).toBe(10);
+    expect(overview.conversion.creditPackToPurchasePercent).toBe(100);
+    expect(overview.unitEconomics.rewardedAd).toMatchObject({
+      costCoverageMultiple: 2,
+      status: "healthy",
+    });
+    expect(overview.unitEconomics.paidCredit).toMatchObject({
+      costCoverageMultiple: 2,
+      status: "review",
+    });
   });
 });

@@ -202,6 +202,7 @@ export type AdminMonetizationOverview = {
     estimatedMrrKrw: number | null;
     renewalRatePercent: number;
     churnRefundRatePercent: number;
+    p95AiCostPerRecommendationKrw: number | null;
   };
   usageBySource: Array<{ source: string; count: number }>;
   funnel: Array<{
@@ -215,6 +216,7 @@ export type AdminMonetizationOverview = {
     paywallToPurchasePercent: number;
     rewardedAdVerificationPercent: number;
     barcodeRewardGrantPercent: number;
+    creditPackToPurchasePercent: number;
   };
   economicsConfigured: boolean;
   economicsBySource: Array<{
@@ -225,6 +227,14 @@ export type AdminMonetizationOverview = {
     estimatedContributionMarginPercent: number | null;
     events: number;
   }>;
+  unitEconomics: {
+    rewardedAd: UnitEconomicsGuardrail & {
+      estimatedRevenuePerVerifiedKrw: number | null;
+    };
+    paidCredit: UnitEconomicsGuardrail & {
+      estimatedRevenuePerCreditKrw: number | null;
+    };
+  };
   retention: {
     d7Percent: number;
     d30Percent: number;
@@ -236,6 +246,13 @@ export type AdminMonetizationOverview = {
     }>;
   };
   daily: Array<{ day: string; recommendations: number; aiCostUsd: number }>;
+};
+
+type UnitEconomicsGuardrail = {
+  estimatedAiCostPerRecommendationKrw: number | null;
+  costCoverageMultiple: number | null;
+  targetCoverageMultiple: number;
+  status: "healthy" | "review" | "insufficient_data" | "unconfigured";
 };
 
 export const getMonetizationOverview = (days: 7 | 30 | 90) =>

@@ -18,6 +18,14 @@ import {
 
 const DEFAULT_PAGE_SIZE = 50;
 const MAX_PAGE_SIZE = 100;
+const REWARDED_AD_COST_COVERAGE_TARGET = 1;
+const PAID_CREDIT_COST_COVERAGE_TARGET = 3;
+
+type MonetizationGuardrailStatus =
+  | "healthy"
+  | "review"
+  | "insufficient_data"
+  | "unconfigured";
 
 export interface AdminInventoryListParams {
   page?: number;
@@ -51,6 +59,7 @@ export interface AdminMonetizationOverview {
     estimatedMrrKrw: number | null;
     renewalRatePercent: number;
     churnRefundRatePercent: number;
+    p95AiCostPerRecommendationKrw: number | null;
   };
   usageBySource: Array<{ source: string; count: number }>;
   funnel: Array<{
@@ -64,6 +73,7 @@ export interface AdminMonetizationOverview {
     paywallToPurchasePercent: number;
     rewardedAdVerificationPercent: number;
     barcodeRewardGrantPercent: number;
+    creditPackToPurchasePercent: number;
   };
   economicsConfigured: boolean;
   economicsBySource: Array<{
@@ -74,6 +84,22 @@ export interface AdminMonetizationOverview {
     estimatedContributionMarginPercent: number | null;
     events: number;
   }>;
+  unitEconomics: {
+    rewardedAd: {
+      estimatedRevenuePerVerifiedKrw: number | null;
+      estimatedAiCostPerRecommendationKrw: number | null;
+      costCoverageMultiple: number | null;
+      targetCoverageMultiple: number;
+      status: MonetizationGuardrailStatus;
+    };
+    paidCredit: {
+      estimatedRevenuePerCreditKrw: number | null;
+      estimatedAiCostPerRecommendationKrw: number | null;
+      costCoverageMultiple: number | null;
+      targetCoverageMultiple: number;
+      status: MonetizationGuardrailStatus;
+    };
+  };
   retention: {
     d7Percent: number;
     d30Percent: number;
@@ -267,7 +293,9 @@ export class AdminService {
       revenueRows,
       uniqueFunnelRows,
       cohortUsers,
-      cohortActivity,
+      monetizationActivity,
+      inventoryActivity,
+      recommendationActivity,
     ] = await Promise.all([
       this.prisma.subscriptionEntitlement.findMany({
         where: {
@@ -350,6 +378,8 @@ export class AdminService {
                   "rewarded_ad_verified",
                   "barcode_reward_granted",
                   "barcode_reward_denied",
+                  "credit_pack_viewed",
+                  "credit_purchase_verified",
                 ],
               },
             },
@@ -370,6 +400,32 @@ export class AdminService {
         ? this.prisma.monetizationFunnelEvent.findMany({
             where: { createdAt: { gte: addUtcDays(today, -90), lte: to } },
             select: { ownerKey: true, createdAt: true },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.inventoryItem, "findMany")
+        ? this.prisma.inventoryItem.findMany({
+            where: {
+              OR: [
+                { createdAt: { gte: addUtcDays(today, -90), lte: to } },
+                { updatedAt: { gte: addUtcDays(today, -90), lte: to } },
+              ],
+            },
+            select: {
+              ownerKey: true,
+              createdByUserId: true,
+              updatedByUserId: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.recommendationUsageEvent, "findMany")
+        ? this.prisma.recommendationUsageEvent.findMany({
+            where: {
+              status: "completed",
+              completedAt: { gte: addUtcDays(today, -90), lte: to },
+            },
+            select: { ownerKey: true, completedAt: true },
           })
         : Promise.resolve([]),
     ]);
@@ -481,7 +537,8 @@ export class AdminService {
       "purchase_verified",
     )].filter((ownerKey) => paywallOwners.has(ownerKey)).length;
     const aiCostBySourceUsd = groupAiCostByRevenueSource(recommendationRows);
-    const economicsBySource = [...groupRevenueBySource(revenueRows).entries()]
+    const revenueBySource = groupRevenueBySource(revenueRows);
+    const economicsBySource = [...revenueBySource.entries()]
       .map(([source, row]) => {
         const sourceRevenue =
           row.events === 0
@@ -526,7 +583,66 @@ export class AdminService {
             ),
           )
         : null;
-    const retention = calculateRetention(cohortUsers, cohortActivity, now);
+    const coreActivity = buildCoreActivity({
+      monetizationActivity,
+      inventoryActivity,
+      recommendationActivity,
+    });
+    const retention = calculateRetention(cohortUsers, coreActivity, now);
+    const p95AiCostUsd = percentile(
+      recommendationRows.map((row) => Number(row.estimatedCostUsd)),
+      0.95,
+    );
+    const p95AiCostPerRecommendationKrw =
+      estimates.usdKrw && p95AiCostUsd !== null
+        ? roundKrw(p95AiCostUsd * estimates.usdKrw)
+        : null;
+    const rewardedAdGuardrail = buildUnitEconomicsGuardrail({
+      revenue: configuredRevenue(revenueBySource.get("rewarded_ad")),
+      revenueUnits: revenueBySource.get("rewarded_ad")?.events ?? 0,
+      aiCostKrw: sourceAiCostKrw(
+        aiCostBySourceUsd.get("rewarded_ad"),
+        estimates.usdKrw,
+      ),
+      recommendationUnits: usageBySource.get("rewarded_ad") ?? 0,
+      targetCoverageMultiple: REWARDED_AD_COST_COVERAGE_TARGET,
+    });
+    const paidCreditGuardrail = buildUnitEconomicsGuardrail({
+      revenue: configuredRevenue(revenueBySource.get("paid_credit")),
+      revenueUnits: creditPurchaseAggregate._sum.creditsGranted ?? 0,
+      aiCostKrw: sourceAiCostKrw(
+        aiCostBySourceUsd.get("paid_credit"),
+        estimates.usdKrw,
+      ),
+      recommendationUnits: usageBySource.get("paid_credit") ?? 0,
+      targetCoverageMultiple: PAID_CREDIT_COST_COVERAGE_TARGET,
+    });
+    const unitEconomics = {
+      rewardedAd: {
+        estimatedRevenuePerVerifiedKrw:
+          rewardedAdGuardrail.estimatedRevenuePerUnitKrw,
+        estimatedAiCostPerRecommendationKrw:
+          rewardedAdGuardrail.estimatedAiCostPerRecommendationKrw,
+        costCoverageMultiple: rewardedAdGuardrail.costCoverageMultiple,
+        targetCoverageMultiple: rewardedAdGuardrail.targetCoverageMultiple,
+        status: rewardedAdGuardrail.status,
+      },
+      paidCredit: {
+        estimatedRevenuePerCreditKrw:
+          paidCreditGuardrail.estimatedRevenuePerUnitKrw,
+        estimatedAiCostPerRecommendationKrw:
+          paidCreditGuardrail.estimatedAiCostPerRecommendationKrw,
+        costCoverageMultiple: paidCreditGuardrail.costCoverageMultiple,
+        targetCoverageMultiple: paidCreditGuardrail.targetCoverageMultiple,
+        status: paidCreditGuardrail.status,
+      },
+    };
+    const activeOwnerKeys = new Set(activeUserRows.map((row) => row.ownerKey));
+    for (const activity of coreActivity) {
+      if (activity.createdAt >= from && activity.createdAt <= to) {
+        activeOwnerKeys.add(activity.ownerKey);
+      }
+    }
 
     return {
       period: { days, from: from.toISOString(), to: to.toISOString() },
@@ -534,7 +650,7 @@ export class AdminService {
         activeSubscribers: new Set(
           activeSubscriberRows.map((row) => row.ownerKey),
         ).size,
-        activeUsers: activeUserRows.length,
+        activeUsers: activeOwnerKeys.size,
         completedRecommendations: recommendationRows.length,
         estimatedAiCostUsd:
           Math.round(totalAiCostUsd * 1_000_000) / 1_000_000,
@@ -564,6 +680,7 @@ export class AdminService {
           churnEvents,
           subscriptionRevenueEvents.length,
         ),
+        p95AiCostPerRecommendationKrw,
       },
       usageBySource: [...usageBySource.entries()]
         .map(([source, count]) => ({ source, count }))
@@ -605,9 +722,21 @@ export class AdminService {
               funnelTotal("barcode_reward_granted") +
                 funnelTotal("barcode_reward_denied"),
             ),
+        creditPackToPurchasePercent: uniqueFunnelRows.length
+          ? percent(
+              [...uniqueFunnelOwners("credit_purchase_verified")].filter(
+                (ownerKey) => uniqueFunnelOwners("credit_pack_viewed").has(ownerKey),
+              ).length,
+              uniqueFunnelCount("credit_pack_viewed"),
+            )
+          : percent(
+              funnelTotal("credit_purchase_verified"),
+              funnelTotal("credit_pack_viewed"),
+            ),
       },
       economicsConfigured,
       economicsBySource,
+      unitEconomics,
       retention,
       daily: [...dailyMap.entries()].map(([day, row]) => ({
         day,
@@ -773,4 +902,133 @@ function groupAiCostByRevenueSource(
     );
   }
   return grouped;
+}
+
+function buildCoreActivity({
+  monetizationActivity,
+  inventoryActivity,
+  recommendationActivity,
+}: {
+  monetizationActivity: Array<{ ownerKey: string; createdAt: Date }>;
+  inventoryActivity: Array<{
+    ownerKey: string;
+    createdByUserId: string | null;
+    updatedByUserId: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
+  recommendationActivity: Array<{
+    ownerKey: string;
+    completedAt: Date | null;
+  }>;
+}) {
+  const activity = [...monetizationActivity];
+  for (const item of inventoryActivity) {
+    activity.push({
+      ownerKey: item.createdByUserId ?? item.ownerKey,
+      createdAt: item.createdAt,
+    });
+    if (item.updatedAt.getTime() !== item.createdAt.getTime()) {
+      activity.push({
+        ownerKey: item.updatedByUserId ?? item.ownerKey,
+        createdAt: item.updatedAt,
+      });
+    }
+  }
+  for (const recommendation of recommendationActivity) {
+    if (recommendation.completedAt) {
+      activity.push({
+        ownerKey: recommendation.ownerKey,
+        createdAt: recommendation.completedAt,
+      });
+    }
+  }
+  return activity;
+}
+
+function configuredRevenue(
+  row:
+    | { amount: number; events: number; configured: boolean }
+    | undefined,
+) {
+  return row?.configured ? roundKrw(row.amount) : null;
+}
+
+function sourceAiCostKrw(
+  costUsd: number | undefined,
+  usdKrw: number | null,
+) {
+  return usdKrw === null ? null : roundKrw((costUsd ?? 0) * usdKrw);
+}
+
+function buildUnitEconomicsGuardrail({
+  revenue,
+  revenueUnits,
+  aiCostKrw,
+  recommendationUnits,
+  targetCoverageMultiple,
+}: {
+  revenue: number | null;
+  revenueUnits: number;
+  aiCostKrw: number | null;
+  recommendationUnits: number;
+  targetCoverageMultiple: number;
+}) {
+  if (revenue === null || aiCostKrw === null) {
+    return {
+      estimatedRevenuePerUnitKrw: null,
+      estimatedAiCostPerRecommendationKrw: null,
+      costCoverageMultiple: null,
+      targetCoverageMultiple,
+      status: "unconfigured" as const,
+    };
+  }
+  if (revenueUnits <= 0 || recommendationUnits <= 0 || aiCostKrw <= 0) {
+    return {
+      estimatedRevenuePerUnitKrw:
+        revenueUnits > 0 ? roundKrw(revenue / revenueUnits) : null,
+      estimatedAiCostPerRecommendationKrw:
+        recommendationUnits > 0
+          ? roundKrw(aiCostKrw / recommendationUnits)
+          : null,
+      costCoverageMultiple: null,
+      targetCoverageMultiple,
+      status: "insufficient_data" as const,
+    };
+  }
+  const estimatedRevenuePerUnitKrw = roundKrw(revenue / revenueUnits);
+  const estimatedAiCostPerRecommendationKrw = roundKrw(
+    aiCostKrw / recommendationUnits,
+  );
+  const costCoverageMultiple =
+    estimatedAiCostPerRecommendationKrw > 0
+      ? Math.round(
+          (estimatedRevenuePerUnitKrw /
+            estimatedAiCostPerRecommendationKrw) *
+            100,
+        ) / 100
+      : null;
+  return {
+    estimatedRevenuePerUnitKrw,
+    estimatedAiCostPerRecommendationKrw,
+    costCoverageMultiple,
+    targetCoverageMultiple,
+    status:
+      costCoverageMultiple !== null &&
+      costCoverageMultiple >= targetCoverageMultiple
+        ? ("healthy" as const)
+        : ("review" as const),
+  };
+}
+
+function percentile(values: number[], percentileValue: number) {
+  const sorted = values
+    .filter((value) => Number.isFinite(value) && value >= 0)
+    .sort((left, right) => left - right);
+  if (!sorted.length) return null;
+  const index = Math.max(
+    0,
+    Math.min(sorted.length - 1, Math.ceil(sorted.length * percentileValue) - 1),
+  );
+  return sorted[index] ?? null;
 }
