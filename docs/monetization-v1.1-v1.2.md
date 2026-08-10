@@ -35,6 +35,8 @@ BARCODE_REWARD_ROLLOUT_PERCENT=0
 BARCODE_REWARD_DAILY_LIMIT=3
 BARCODE_REWARD_BALANCE_LIMIT=10
 BARCODE_REWARD_TOKEN_SECRET=replace-with-a-long-random-secret
+BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS=
+BARCODE_CONTRIBUTION_ALLOWED_TERMS=
 PAID_RECOMMENDATION_CREDITS_ENABLED=false
 RECOMMENDATION_CREDIT_PRODUCTS=expirymate_recipe_credits_5:5,expirymate_recipe_credits_15:15
 REWARDED_ADS_ENABLED=false
@@ -67,6 +69,11 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
   예약이 해제됩니다.
 - `BARCODE_REWARD_TOKEN_SECRET`과 `MONETIZATION_EXPERIMENT_SALT`는 출시 후
   변경하지 않습니다. 원본 바코드는 퍼널 이벤트 속성에 저장하지 않습니다.
+- 기본 금지어 외에 운영 중 추가할 표현은
+  `BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS=금지어1,금지어2`처럼 쉼표로
+  구분합니다. 정상 상품명의 오탐 예외는
+  `BARCODE_CONTRIBUTION_ALLOWED_TERMS=정상 상품명,정상 브랜드명`에 정확한 전체
+  값을 넣고 API를 재시작해 반영합니다.
 
 ## 일회성 AI 추천권
 

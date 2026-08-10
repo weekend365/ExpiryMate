@@ -63,6 +63,11 @@ import {
   SCAN_LINE_INSET,
   SCAN_LINE_TRAVEL,
 } from "./scanGuide";
+import {
+  type BarcodeContributionField,
+  getBarcodeContributionModerationMessage,
+  getProhibitedBarcodeContributionFields,
+} from "./barcodeContributionModeration";
 import { useProductScanner } from "./useProductScanner";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
 
@@ -119,6 +124,10 @@ function ScannerCameraExperience() {
   );
   const [isContributing, setIsContributing] = useState(false);
   const [contributeError, setContributeError] = useState<string | null>(null);
+  const [prohibitedContribution, setProhibitedContribution] = useState<{
+    fields: BarcodeContributionField[];
+    message: string;
+  } | null>(null);
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [showBarcodeSuccess, setShowBarcodeSuccess] = useState(false);
   const previousModeRef = useRef(scanner.mode);
@@ -213,12 +222,32 @@ function ScannerCameraExperience() {
     }
   }, [scanner.confirmation]);
 
+  const completeRegistration = () => {
+    setPrefill({
+      displayName: resolvedProductName,
+      brand: resolvedBrand,
+      category: resolvedCategory,
+    });
+    setDraft({
+      displayName: resolvedProductName,
+      brand: resolvedBrand,
+      category: resolvedCategory,
+      expiryDate: resolvedExpiryDate,
+      expirySource: resolvedExpirySource,
+    });
+    // Clear confirmation so the Modal sheet dismisses; replace so scanner
+    // unmounts and cannot keep overlaying /register.
+    scanner.resetScanner();
+    router.replace("/register");
+  };
+
   const handleUseScanResult = async () => {
     if (!scanner.confirmation || !resolvedProductName || !resolvedExpiryDate) {
       return;
     }
 
     setContributeError(null);
+    setProhibitedContribution(null);
     setRewardNotice(null);
 
     if (needsManualName && scanner.confirmation.barcode) {
@@ -245,6 +274,14 @@ function ScannerCameraExperience() {
           await monetization.refresh().catch(() => undefined);
         }
       } catch (error) {
+        const prohibitedFields = getProhibitedBarcodeContributionFields(error);
+        if (prohibitedFields) {
+          setProhibitedContribution({
+            fields: prohibitedFields,
+            message: getBarcodeContributionModerationMessage(prohibitedFields),
+          });
+          return;
+        }
         setContributeError(
           error instanceof Error
             ? error.message
@@ -255,22 +292,12 @@ function ScannerCameraExperience() {
       }
     }
 
-    setPrefill({
-      displayName: resolvedProductName,
-      brand: resolvedBrand,
-      category: resolvedCategory,
-    });
-    setDraft({
-      displayName: resolvedProductName,
-      brand: resolvedBrand,
-      category: resolvedCategory,
-      expiryDate: resolvedExpiryDate,
-      expirySource: resolvedExpirySource,
-    });
-    // Clear confirmation so the Modal sheet dismisses; replace so scanner
-    // unmounts and cannot keep overlaying /register.
-    scanner.resetScanner();
-    router.replace("/register");
+    completeRegistration();
+  };
+
+  const handleContinueWithoutContribution = () => {
+    setRewardNotice(null);
+    completeRegistration();
   };
 
   const handleRescan = () => {
@@ -280,6 +307,7 @@ function ScannerCameraExperience() {
     setManualExpiryDate("");
     setManualExpirySource(ExpirySource.MANUAL);
     setContributeError(null);
+    setProhibitedContribution(null);
     setShowBarcodeSuccess(false);
     scanner.resetScanner();
   };
@@ -494,6 +522,16 @@ function ScannerCameraExperience() {
             >
               다시 스캔할게요
             </Button>
+            {prohibitedContribution ? (
+              <Button
+                variant="secondary"
+                onPress={handleContinueWithoutContribution}
+                disabled={isContributing}
+                fullWidth
+              >
+                기여 없이 계속 등록
+              </Button>
+            ) : null}
             <Button
               icon={CheckCircle2}
               iconPosition="right"
@@ -509,7 +547,7 @@ function ScannerCameraExperience() {
               loading={isContributing || scanner.productLookupStatus === "loading"}
               fullWidth
             >
-              넣으러 갈게요
+              {prohibitedContribution ? "수정 후 다시 시도" : "넣으러 갈게요"}
             </Button>
           </View>
         }
@@ -550,7 +588,11 @@ function ScannerCameraExperience() {
                   accessibilityLabel="재료 이름"
                   placeholder="예: 서울우유 1L"
                   placeholderTextColor={colors.mutedText}
-                  style={styles.manualNameInput}
+                  style={[
+                    styles.manualNameInput,
+                    prohibitedContribution?.fields.includes("name") &&
+                      styles.manualNameInputError,
+                  ]}
                   autoCorrect={false}
                   returnKeyType="done"
                 />
@@ -561,7 +603,11 @@ function ScannerCameraExperience() {
                   accessibilityLabel="브랜드"
                   placeholder="예: 서울우유"
                   placeholderTextColor={colors.mutedText}
-                  style={styles.manualNameInput}
+                  style={[
+                    styles.manualNameInput,
+                    prohibitedContribution?.fields.includes("brand") &&
+                      styles.manualNameInputError,
+                  ]}
                   autoCorrect={false}
                   returnKeyType="done"
                 />
@@ -611,7 +657,16 @@ function ScannerCameraExperience() {
               </Text>
             ) : null}
 
-            {contributeError ? (
+            {prohibitedContribution ? (
+              <View
+                style={styles.moderationErrorCard}
+                accessibilityRole="alert"
+              >
+                <Text style={styles.moderationErrorText}>
+                  {prohibitedContribution.message}
+                </Text>
+              </View>
+            ) : contributeError ? (
               <Text style={styles.sheetFootnote}>{contributeError}</Text>
             ) : null}
           </>
@@ -1282,6 +1337,9 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     fontFamily: typography.bodyStrong.fontFamily,
   },
+  manualNameInputError: {
+    borderColor: colors.danger,
+  },
   manualNameHint: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
@@ -1372,5 +1430,18 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
+  },
+  moderationErrorCard: {
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.danger,
+    backgroundColor: colors.dangerSoft,
+    padding: spacing.md,
+  },
+  moderationErrorText: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.danger,
   },
 });

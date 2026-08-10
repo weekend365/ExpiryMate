@@ -30,6 +30,8 @@ const REQUIRED_KEYS = [
   ...[...requiredBlock.matchAll(/"([A-Z0-9_]+)"/g)].map((match) => match[1]),
   "AUTH_LINK_BASE_URL",
   "AUTH_ALLOW_DEV_FALLBACK",
+  "BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS",
+  "BARCODE_CONTRIBUTION_ALLOWED_TERMS",
 ];
 
 const TARGET_FILES = [

@@ -1,5 +1,10 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import {
+  BadRequestException,
+  HttpStatus,
+  Injectable,
+  Logger,
+} from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import {
   BarcodeLookupSource,
@@ -11,11 +16,13 @@ import {
   ProductMasterSource,
 } from "@expirymate/shared";
 import { serializeProductMaster } from "../../common/serializers";
+import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 import {
   barcodeRewardsGloballyEnabled,
   resolveBarcodeRewardPolicy,
 } from "../monetization/barcode-reward-policy";
+import { findProhibitedBarcodeContributionFields } from "./barcode-contribution-moderation";
 
 type OpenFoodFactsResponse = {
   status?: number;
@@ -122,6 +129,20 @@ export class ProductMastersService {
     const category = providedCategory || "기타";
     if (!name) {
       throw new BadRequestException("재료명을 입력해 주세요.");
+    }
+
+    const prohibitedFields = findProhibitedBarcodeContributionFields({
+      name,
+      brand: providedBrand,
+      category: providedCategory,
+    });
+    if (prohibitedFields.length > 0) {
+      throw new CodedHttpException(
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        "BARCODE_CONTRIBUTION_PROHIBITED_CONTENT",
+        "상품 정보에 사용할 수 없는 표현이 있어요. 문구를 수정해 주세요.",
+        { fields: prohibitedFields },
+      );
     }
 
     for (let attempt = 0; attempt < 3; attempt += 1) {

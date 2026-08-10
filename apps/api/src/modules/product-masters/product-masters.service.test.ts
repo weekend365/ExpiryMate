@@ -5,6 +5,7 @@ import {
   type ContributeBarcodeProductRequest,
 } from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { CodedHttpException } from "../../common/coded-http.exception";
 import {
   isValidGtin,
   normalizeBarcode,
@@ -18,6 +19,8 @@ const managedEnvKeys = [
   "BARCODE_REWARD_BALANCE_LIMIT",
   "BARCODE_REWARD_TOKEN_SECRET",
   "MONETIZATION_EXPERIMENT_SALT",
+  "BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS",
+  "BARCODE_CONTRIBUTION_ALLOWED_TERMS",
 ] as const;
 const originalEnv = new Map(
   managedEnvKeys.map((key) => [key, process.env[key]]),
@@ -226,6 +229,48 @@ describe("ProductMastersService", () => {
 
     expect(result.reward.reason).toBe("existing_barcode");
     expect(prisma.productMaster.update).toHaveBeenCalled();
+  });
+
+  it("rejects prohibited contribution text before persistence or rewards", async () => {
+    const request = service.contribute(
+      contributeBody({
+        name: "정상 상품",
+        brand: "씨-발 브랜드",
+        category: "포르노카테고리",
+      }),
+      "owner-a",
+    );
+
+    await expect(request).rejects.toMatchObject({
+      errorCode: "BARCODE_CONTRIBUTION_PROHIBITED_CONTENT",
+      safeDetails: { fields: ["brand", "category"] },
+    } satisfies Partial<CodedHttpException>);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(prisma.productMaster.create).not.toHaveBeenCalled();
+    expect(prisma.productMaster.update).not.toHaveBeenCalled();
+    expect(prisma.barcodeRewardCredit.create).not.toHaveBeenCalled();
+  });
+
+  it("applies environment block and exact allow terms", async () => {
+    process.env.BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS = "운영금지어";
+    process.env.BARCODE_CONTRIBUTION_ALLOWED_TERMS = "운영금지어 우유";
+
+    await expect(
+      service.contribute(
+        contributeBody({ name: "운영금지어" }),
+        "owner-a",
+      ),
+    ).rejects.toMatchObject({
+      errorCode: "BARCODE_CONTRIBUTION_PROHIBITED_CONTENT",
+    });
+
+    prisma.productMaster.findUnique.mockResolvedValue(localProduct);
+    await expect(
+      service.contribute(
+        contributeBody({ name: "운영금지어 우유" }),
+        "owner-a",
+      ),
+    ).resolves.toMatchObject({ created: false });
   });
 
   it("denies a reward for a tampered token while keeping the new product", async () => {
