@@ -205,6 +205,33 @@ describe("AuthRateLimitService", () => {
     );
     expect(prisma.$executeRaw).toHaveBeenCalled();
   });
+
+  it("falls back to memory when the database store is unreachable", async () => {
+    process.env.AUTH_RATE_LIMIT_STORE = "database";
+    const prisma = {
+      $executeRaw: vi.fn(async () => {
+        throw new Error("Can't reach database server at postgres.example:5432");
+      }),
+      authRateLimitBucket: {
+        findUnique: vi.fn(),
+        deleteMany: vi.fn(async () => {
+          throw new Error("Can't reach database server at postgres.example:5432");
+        }),
+      },
+    };
+
+    const service = new AuthRateLimitService(prisma as never);
+    const policy = { name: "login", max: 2, windowSeconds: 60 };
+    const request = createRequest("203.0.113.10", {});
+
+    await service.assertAllowed(policy, request);
+    await service.assertAllowed(policy, request);
+
+    await expect(service.assertAllowed(policy, request)).rejects.toMatchObject({
+      status: HttpStatus.TOO_MANY_REQUESTS,
+    });
+    expect(prisma.$executeRaw).toHaveBeenCalled();
+  });
 });
 
 describe("readClientIp", () => {

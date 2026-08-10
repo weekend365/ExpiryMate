@@ -13,11 +13,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
+    const request = ctx.getRequest<{ url?: string; originalUrl?: string; path?: string }>();
     const includeDetails = process.env.NODE_ENV !== "production";
+    const shouldReportToSentry =
+      Boolean(process.env.SENTRY_DSN?.trim()) &&
+      !isOperationalProbeRequest(request);
 
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
-      if (status >= HttpStatus.INTERNAL_SERVER_ERROR && process.env.SENTRY_DSN?.trim()) {
+      if (status >= HttpStatus.INTERNAL_SERVER_ERROR && shouldReportToSentry) {
         Sentry.captureException(exception);
       }
       const payload = exception.getResponse();
@@ -60,7 +64,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         exception instanceof Error ? exception.message : "Unknown exception";
     }
 
-    if (process.env.SENTRY_DSN?.trim()) {
+    if (shouldReportToSentry) {
       Sentry.captureException(exception);
     }
 
@@ -69,4 +73,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
       error,
     });
   }
+}
+
+/** Liveness/readiness probes intentionally return 5xx when deps are down — not app bugs. */
+function isOperationalProbeRequest(request: {
+  url?: string;
+  originalUrl?: string;
+  path?: string;
+}) {
+  const rawPath = request.path ?? request.originalUrl ?? request.url ?? "";
+  const path = rawPath.split("?")[0] ?? "";
+  return path === "/ready" || path === "/health";
 }
