@@ -501,6 +501,19 @@ export default function RecommendationsScreen() {
                 </Text>
               </Pressable>
             ) : null}
+            {monetization.access.tier === "free" &&
+            monetization.access.paidCredits.balance > 0 &&
+            monetization.access.rewardedAds.canWatch ? (
+              <Pressable
+                onPress={() => setShowRewardedAdSheet(true)}
+                accessibilityRole="button"
+                accessibilityLabel="구매 추천권을 보존하고 광고로 추천권 받기"
+              >
+                <Text style={styles.usageCreditLink}>
+                  구매 추천권 아끼고 광고 보기
+                </Text>
+              </Pressable>
+            ) : null}
           </View>
         </View>
       ) : null}

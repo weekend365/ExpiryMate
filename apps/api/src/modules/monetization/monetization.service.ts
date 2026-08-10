@@ -375,14 +375,8 @@ export class MonetizationService {
             } else if (access.free.remaining > 0) {
               source = RecommendationUsageSource.free;
             } else {
-              const paidCreditPurchase = await findAvailablePaidCreditPurchase(
-                tx,
-                ownerKey,
-              );
               const { start, endExclusive } = getKstDayWindow(now);
-              const reward = paidCreditPurchase
-                ? null
-                : await tx.rewardedAdSession.findFirst({
+              const reward = await tx.rewardedAdSession.findFirst({
                 where: {
                   ownerKey,
                   status: RewardedAdSessionStatus.verified,
@@ -391,6 +385,9 @@ export class MonetizationService {
                 },
                 orderBy: { verifiedAt: "asc" },
               });
+              const paidCreditPurchase = reward
+                ? null
+                : await findAvailablePaidCreditPurchase(tx, ownerKey);
               const contributionReward = paidCreditPurchase || reward
                 ? null
                 : await tx.barcodeRewardCredit.findFirst({
@@ -407,12 +404,12 @@ export class MonetizationService {
                 );
               }
 
-              if (paidCreditPurchase) {
-                source = RecommendationUsageSource.paid_credit;
-                paidCreditPurchaseId = paidCreditPurchase.id;
-              } else if (reward) {
+              if (reward) {
                 source = RecommendationUsageSource.rewarded_ad;
                 rewardedAdSessionId = reward.id;
+              } else if (paidCreditPurchase) {
+                source = RecommendationUsageSource.paid_credit;
+                paidCreditPurchaseId = paidCreditPurchase.id;
               } else {
                 source = RecommendationUsageSource.barcode_contribution;
                 barcodeRewardCreditId = contributionReward!.id;
@@ -846,7 +843,6 @@ export class MonetizationService {
           rewardedAdsEnabled &&
           !isSubscriber &&
           freeRemaining === 0 &&
-          paidCreditBalance === 0 &&
           (absoluteLimit === 0 || scopedUsed < absoluteLimit) &&
           remainingToWatch > 0 &&
           pendingDisplaySessionCount === 0,

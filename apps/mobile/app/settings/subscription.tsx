@@ -33,6 +33,7 @@ import {
   getHouseholdInsights,
   getPlusInsights,
   trackMonetizationEvent,
+  type PlusInsights,
 } from "../../src/services/api";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
@@ -421,6 +422,9 @@ export default function SubscriptionSettingsScreen() {
             <InsightValue label="폐기 비율" value={insightsQuery.data?.wasteRatePercent ?? 0} suffix="%" />
             <InsightValue label="7일 내 만료" value={insightsQuery.data?.expiringSoon ?? 0} suffix="개" />
           </View>
+          {insightsQuery.data?.weekly ? (
+            <WeeklyTrendCard weekly={insightsQuery.data.weekly} />
+          ) : null}
           {insightsQuery.data?.topDiscardedCategories.length ? (
             <Text style={styles.insightFootnote}>
               자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
@@ -669,6 +673,40 @@ function InsightValue({ label, value, suffix }: { label: string; value: number; 
   );
 }
 
+function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
+  const change = weekly.wasteRateChangePercentagePoints;
+  const trendCopy =
+    weekly.trend === "improved"
+      ? `지난 7일보다 폐기 비율이 ${Math.abs(change ?? 0)}%p 줄었어요.`
+      : weekly.trend === "worse"
+        ? `지난 7일보다 폐기 비율이 ${Math.abs(change ?? 0)}%p 늘었어요.`
+        : weekly.trend === "steady"
+          ? "지난 7일과 비슷한 폐기 비율을 유지하고 있어요."
+          : "2주간 기록이 쌓이면 폐기 변화를 비교해 드릴게요.";
+  return (
+    <View style={styles.weeklyTrendCard}>
+      <View style={styles.weeklyTrendHeader}>
+        <Text style={styles.weeklyTrendTitle}>이번 주 습관 변화</Text>
+        <Text style={styles.weeklyTrendPeriod}>
+          {weekly.current.from.slice(5)}~{weekly.current.to.slice(5)}
+        </Text>
+      </View>
+      <Text style={styles.weeklyTrendSummary}>
+        소비 {weekly.current.consumed}개 · 폐기 {weekly.current.discarded}개 · 폐기 비율 {weekly.current.wasteRatePercent}%
+      </Text>
+      <Text
+        style={[
+          styles.weeklyTrendCopy,
+          weekly.trend === "improved" && styles.weeklyTrendCopyImproved,
+          weekly.trend === "worse" && styles.weeklyTrendCopyWorse,
+        ]}
+      >
+        {trendCopy}
+      </Text>
+    </View>
+  );
+}
+
 function trackFunnelEvent(
   event: Parameters<typeof trackMonetizationEvent>[0]["event"],
   properties?: Record<string, string>,
@@ -701,6 +739,19 @@ const styles = StyleSheet.create({
   insightNumber: { fontSize: typography.title.fontSize, fontWeight: "900", color: colors.text },
   insightLabel: { marginTop: spacing.xxs, fontSize: typography.caption.fontSize, color: colors.subtext },
   insightFootnote: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
+  weeklyTrendCard: {
+    gap: spacing.xxs,
+    padding: spacing.md,
+    borderRadius: radius.xl,
+    backgroundColor: colors.primarySoft,
+  },
+  weeklyTrendHeader: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
+  weeklyTrendTitle: { fontSize: typography.bodySmall.fontSize, fontWeight: "800", color: colors.text },
+  weeklyTrendPeriod: { fontSize: typography.caption.fontSize, color: colors.subtext },
+  weeklyTrendSummary: { fontSize: typography.bodySmall.fontSize, color: colors.text },
+  weeklyTrendCopy: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
+  weeklyTrendCopyImproved: { color: colors.success },
+  weeklyTrendCopyWorse: { color: colors.danger },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,

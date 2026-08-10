@@ -188,6 +188,11 @@ export type AdminMonetizationOverview = {
   period: { days: number; from: string; to: string };
   totals: {
     activeSubscribers: number;
+    periodStartSubscribers: number;
+    newSubscribers: number;
+    renewedSubscribers: number;
+    cancelledSubscribers: number;
+    refundTransactions: number;
     activeUsers: number;
     completedRecommendations: number;
     estimatedAiCostUsd: number;
@@ -200,8 +205,9 @@ export type AdminMonetizationOverview = {
     estimatedContributionMarginPercent: number | null;
     arppuKrw: number | null;
     estimatedMrrKrw: number | null;
-    renewalRatePercent: number;
-    churnRefundRatePercent: number;
+    renewalDecisionRatePercent: number;
+    subscriberChurnRatePercent: number;
+    refundEventSharePercent: number;
     p95AiCostPerRecommendationKrw: number | null;
   };
   usageBySource: Array<{ source: string; count: number }>;

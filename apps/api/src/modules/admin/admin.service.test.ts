@@ -111,12 +111,21 @@ describe("AdminService", () => {
   it("aggregates monetization usage, cost, and conversion rates", async () => {
     const prisma = {
       subscriptionEntitlement: {
-        findMany: vi.fn().mockResolvedValue([
-          { ownerKey: "subscriber-1" },
-          { ownerKey: "subscriber-2" },
-          { ownerKey: "subscriber-3" },
-          { ownerKey: "subscriber-4" },
-        ]),
+        findMany: vi
+          .fn()
+          .mockResolvedValueOnce([
+            { ownerKey: "subscriber-1" },
+            { ownerKey: "subscriber-2" },
+            { ownerKey: "subscriber-3" },
+            { ownerKey: "subscriber-4" },
+          ])
+          .mockResolvedValueOnce([
+            { ownerKey: "subscriber-1" },
+            { ownerKey: "subscriber-2" },
+            { ownerKey: "subscriber-3" },
+            { ownerKey: "subscriber-4" },
+            { ownerKey: "subscriber-5" },
+          ]),
       },
       recommendationUsageEvent: {
         findMany: vi.fn().mockResolvedValue([
@@ -156,6 +165,42 @@ describe("AdminService", () => {
           _sum: { creditsGranted: 20 },
         }),
       },
+      monetizationRevenueEvent: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            ownerKey: "new-subscriber",
+            source: "jango_plus",
+            kind: "subscription_purchase",
+            billingPeriod: "monthly",
+            estimatedNetRevenueKrw: 0,
+            estimateConfigured: false,
+          },
+          {
+            ownerKey: "subscriber-1",
+            source: "jango_plus",
+            kind: "subscription_renewal",
+            billingPeriod: "monthly",
+            estimatedNetRevenueKrw: 0,
+            estimateConfigured: false,
+          },
+          {
+            ownerKey: "subscriber-2",
+            source: "jango_plus",
+            kind: "subscription_cancelled",
+            billingPeriod: "monthly",
+            estimatedNetRevenueKrw: 0,
+            estimateConfigured: false,
+          },
+          {
+            ownerKey: "new-subscriber",
+            source: "jango_plus",
+            kind: "subscription_refund",
+            billingPeriod: "monthly",
+            estimatedNetRevenueKrw: 0,
+            estimateConfigured: false,
+          },
+        ]),
+      },
     };
 
     const service = new AdminService(prisma as never);
@@ -169,6 +214,16 @@ describe("AdminService", () => {
     expect(overview.totals.estimatedAiCostUsd).toBe(0.02);
     expect(overview.totals.totalTokens).toBe(1800);
     expect(overview.totals.paidCreditsSold).toBe(20);
+    expect(overview.totals).toMatchObject({
+      periodStartSubscribers: 5,
+      newSubscribers: 1,
+      renewedSubscribers: 1,
+      cancelledSubscribers: 1,
+      refundTransactions: 1,
+      renewalDecisionRatePercent: 50,
+      subscriberChurnRatePercent: 20,
+      refundEventSharePercent: 33.33,
+    });
     expect(overview.conversion.paywallToPurchasePercent).toBe(20);
     expect(overview.conversion.rewardedAdVerificationPercent).toBe(75);
     expect(overview.usageBySource).toContainEqual({ source: "free", count: 5 });

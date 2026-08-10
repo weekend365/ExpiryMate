@@ -176,66 +176,7 @@ export class SubscriptionsService {
     if (!entitlement) {
       throw new ForbiddenException("장고 플러스 구독자만 볼 수 있는 리포트입니다.");
     }
-
-    const to = dateOnlyToUtcDate(toKstDateOnly(now));
-    const from = new Date(to);
-    from.setUTCDate(from.getUTCDate() - 29);
-    const nextWeek = new Date(to);
-    nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
-
-    const [statusGroups, expiringSoon, discardedCategories] =
-      await Promise.all([
-        this.prisma.inventoryItem.groupBy({
-          by: ["status"],
-          where: {
-            ownerKey,
-            updatedAt: { gte: from },
-            status: { in: [ItemStatus.consumed, ItemStatus.discarded] },
-          },
-          _count: { _all: true },
-        }),
-        this.prisma.inventoryItem.count({
-          where: {
-            ownerKey,
-            status: ItemStatus.active,
-            expiryDate: { gte: to, lte: nextWeek },
-          },
-        }),
-        this.prisma.inventoryItem.groupBy({
-          by: ["category"],
-          where: {
-            ownerKey,
-            status: ItemStatus.discarded,
-            updatedAt: { gte: from },
-            category: { not: null },
-          },
-          _count: { _all: true },
-          orderBy: { _count: { category: "desc" } },
-          take: 3,
-        }),
-      ]);
-
-    const count = (status: ItemStatus) =>
-      statusGroups.find((group) => group.status === status)?._count._all ?? 0;
-    const consumed = count(ItemStatus.consumed);
-    const discarded = count(ItemStatus.discarded);
-    const resolved = consumed + discarded;
-
-    return {
-      period: {
-        from: from.toISOString().slice(0, 10),
-        to: to.toISOString().slice(0, 10),
-      },
-      consumed,
-      discarded,
-      wasteRatePercent:
-        resolved > 0 ? Math.round((discarded / resolved) * 1000) / 10 : 0,
-      expiringSoon,
-      topDiscardedCategories: discardedCategories.map((group) => ({
-        category: group.category,
-        count: group._count._all,
-      })),
-    };
+    return this.buildInsights({ ownerKey }, now);
   }
 
   async getHouseholdInsights(ownerKey: string, spaceId: string, now = new Date()) {
@@ -267,14 +208,44 @@ export class SubscriptionsService {
     const to = dateOnlyToUtcDate(toKstDateOnly(now));
     const from = new Date(to);
     from.setUTCDate(from.getUTCDate() - 29);
+    const periodEnd = new Date(to);
+    periodEnd.setUTCDate(periodEnd.getUTCDate() + 1);
+    const currentWeekFrom = new Date(to);
+    currentWeekFrom.setUTCDate(currentWeekFrom.getUTCDate() - 6);
+    const previousWeekFrom = new Date(currentWeekFrom);
+    previousWeekFrom.setUTCDate(previousWeekFrom.getUTCDate() - 7);
     const nextWeek = new Date(to);
     nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
-    const [statusGroups, expiringSoon, discardedCategories] = await Promise.all([
+    const [
+      statusGroups,
+      currentWeekGroups,
+      previousWeekGroups,
+      expiringSoon,
+      discardedCategories,
+    ] = await Promise.all([
       this.prisma.inventoryItem.groupBy({
         by: ["status"],
         where: {
           ...scope,
-          updatedAt: { gte: from },
+          updatedAt: { gte: from, lt: periodEnd },
+          status: { in: [ItemStatus.consumed, ItemStatus.discarded] },
+        },
+        _count: { _all: true },
+      }),
+      this.prisma.inventoryItem.groupBy({
+        by: ["status"],
+        where: {
+          ...scope,
+          updatedAt: { gte: currentWeekFrom, lt: periodEnd },
+          status: { in: [ItemStatus.consumed, ItemStatus.discarded] },
+        },
+        _count: { _all: true },
+      }),
+      this.prisma.inventoryItem.groupBy({
+        by: ["status"],
+        where: {
+          ...scope,
+          updatedAt: { gte: previousWeekFrom, lt: currentWeekFrom },
           status: { in: [ItemStatus.consumed, ItemStatus.discarded] },
         },
         _count: { _all: true },
@@ -291,7 +262,7 @@ export class SubscriptionsService {
         where: {
           ...scope,
           status: ItemStatus.discarded,
-          updatedAt: { gte: from },
+          updatedAt: { gte: from, lt: periodEnd },
           category: { not: null },
         },
         _count: { _all: true },
@@ -299,25 +270,48 @@ export class SubscriptionsService {
         take: 3,
       }),
     ]);
-    const count = (status: ItemStatus) =>
-      statusGroups.find((group) => group.status === status)?._count._all ?? 0;
-    const consumed = count(ItemStatus.consumed);
-    const discarded = count(ItemStatus.discarded);
-    const resolved = consumed + discarded;
+    const totals = resolveInsightTotals(statusGroups);
+    const currentWeek = resolveInsightTotals(currentWeekGroups);
+    const previousWeek = resolveInsightTotals(previousWeekGroups);
+    const wasteRateChangePercentagePoints =
+      currentWeek.resolved > 0 && previousWeek.resolved > 0
+        ? Math.round(
+            (currentWeek.wasteRatePercent - previousWeek.wasteRatePercent) * 10,
+          ) / 10
+        : null;
     return {
       period: {
         from: from.toISOString().slice(0, 10),
         to: to.toISOString().slice(0, 10),
       },
-      consumed,
-      discarded,
-      wasteRatePercent:
-        resolved > 0 ? Math.round((discarded / resolved) * 1000) / 10 : 0,
+      consumed: totals.consumed,
+      discarded: totals.discarded,
+      wasteRatePercent: totals.wasteRatePercent,
       expiringSoon,
       topDiscardedCategories: discardedCategories.map((group) => ({
         category: group.category,
         count: group._count._all,
       })),
+      weekly: {
+        current: {
+          from: currentWeekFrom.toISOString().slice(0, 10),
+          to: to.toISOString().slice(0, 10),
+          consumed: currentWeek.consumed,
+          discarded: currentWeek.discarded,
+          wasteRatePercent: currentWeek.wasteRatePercent,
+        },
+        previous: {
+          from: previousWeekFrom.toISOString().slice(0, 10),
+          to: new Date(currentWeekFrom.getTime() - 1)
+            .toISOString()
+            .slice(0, 10),
+          consumed: previousWeek.consumed,
+          discarded: previousWeek.discarded,
+          wasteRatePercent: previousWeek.wasteRatePercent,
+        },
+        wasteRateChangePercentagePoints,
+        trend: resolveWasteTrend(wasteRateChangePercentagePoints),
+      },
     };
   }
 
@@ -1258,6 +1252,30 @@ function normalizeEcdsaPart(part: Buffer, length: number) {
   }
 
   return output;
+}
+
+function resolveInsightTotals(
+  groups: Array<{ status: ItemStatus; _count: { _all: number } }>,
+) {
+  const count = (status: ItemStatus) =>
+    groups.find((group) => group.status === status)?._count._all ?? 0;
+  const consumed = count(ItemStatus.consumed);
+  const discarded = count(ItemStatus.discarded);
+  const resolved = consumed + discarded;
+  return {
+    consumed,
+    discarded,
+    resolved,
+    wasteRatePercent:
+      resolved > 0 ? Math.round((discarded / resolved) * 1000) / 10 : 0,
+  };
+}
+
+function resolveWasteTrend(change: number | null) {
+  if (change === null) return "insufficient_data" as const;
+  if (change <= -1) return "improved" as const;
+  if (change >= 1) return "worse" as const;
+  return "steady" as const;
 }
 
 function serializeEntitlement(

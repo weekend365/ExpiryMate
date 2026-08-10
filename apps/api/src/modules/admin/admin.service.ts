@@ -45,6 +45,11 @@ export interface AdminMonetizationOverview {
   period: { days: number; from: string; to: string };
   totals: {
     activeSubscribers: number;
+    periodStartSubscribers: number;
+    newSubscribers: number;
+    renewedSubscribers: number;
+    cancelledSubscribers: number;
+    refundTransactions: number;
     activeUsers: number;
     completedRecommendations: number;
     estimatedAiCostUsd: number;
@@ -57,8 +62,9 @@ export interface AdminMonetizationOverview {
     estimatedContributionMarginPercent: number | null;
     arppuKrw: number | null;
     estimatedMrrKrw: number | null;
-    renewalRatePercent: number;
-    churnRefundRatePercent: number;
+    renewalDecisionRatePercent: number;
+    subscriberChurnRatePercent: number;
+    refundEventSharePercent: number;
     p95AiCostPerRecommendationKrw: number | null;
   };
   usageBySource: Array<{ source: string; count: number }>;
@@ -285,6 +291,7 @@ export class AdminService {
 
     const [
       activeSubscriberRows,
+      periodStartSubscriberRows,
       activeUserRows,
       usageGroups,
       recommendationRows,
@@ -309,6 +316,14 @@ export class AdminService {
           billingPeriod: true,
           basePlanId: true,
         },
+      }),
+      this.prisma.subscriptionEntitlement.findMany({
+        where: {
+          verifiedAt: { lt: from },
+          status: { not: "revoked" },
+          OR: [{ expiresAt: null }, { expiresAt: { gt: from } }],
+        },
+        select: { ownerKey: true },
       }),
       this.prisma.recommendationUsageEvent.findMany({
         where: {
@@ -511,15 +526,33 @@ export class AdminService {
         .map((row) => row.ownerKey)
         .filter(Boolean),
     ).size;
-    const subscriptionRevenueEvents = revenueRows.filter((row) =>
-      ["subscription_purchase", "subscription_renewal"].includes(row.kind),
+    const subscriptionPurchaseEvents = revenueRows.filter(
+      (row) => row.kind === "subscription_purchase",
     );
     const renewalEvents = revenueRows.filter(
       (row) => row.kind === "subscription_renewal",
-    ).length;
-    const churnEvents = revenueRows.filter((row) =>
-      ["subscription_cancelled", "subscription_refund"].includes(row.kind),
-    ).length;
+    );
+    const cancellationEvents = revenueRows.filter(
+      (row) => row.kind === "subscription_cancelled",
+    );
+    const refundEvents = revenueRows.filter(
+      (row) => row.kind === "subscription_refund",
+    );
+    const periodStartSubscriberOwners = new Set(
+      periodStartSubscriberRows.map((row) => row.ownerKey),
+    );
+    const newSubscriberOwners = new Set(
+      subscriptionPurchaseEvents.map((row) => row.ownerKey).filter(Boolean),
+    );
+    const renewedSubscriberOwners = new Set(
+      renewalEvents.map((row) => row.ownerKey).filter(Boolean),
+    );
+    const cancelledSubscriberOwners = new Set(
+      cancellationEvents.map((row) => row.ownerKey).filter(Boolean),
+    );
+    const renewalDecisionEvents = renewalEvents.length + cancellationEvents.length;
+    const subscriptionPaymentEvents =
+      subscriptionPurchaseEvents.length + renewalEvents.length;
     const uniqueFunnelCount = (eventName: string) =>
       new Set(
         uniqueFunnelRows
@@ -650,6 +683,11 @@ export class AdminService {
         activeSubscribers: new Set(
           activeSubscriberRows.map((row) => row.ownerKey),
         ).size,
+        periodStartSubscribers: periodStartSubscriberOwners.size,
+        newSubscribers: newSubscriberOwners.size,
+        renewedSubscribers: renewedSubscriberOwners.size,
+        cancelledSubscribers: cancelledSubscriberOwners.size,
+        refundTransactions: refundEvents.length,
         activeUsers: activeOwnerKeys.size,
         completedRecommendations: recommendationRows.length,
         estimatedAiCostUsd:
@@ -672,13 +710,17 @@ export class AdminService {
             ? roundKrw(estimatedNetRevenueKrw / payingUsers)
             : null,
         estimatedMrrKrw,
-        renewalRatePercent: percent(
-          renewalEvents,
-          subscriptionRevenueEvents.length,
+        renewalDecisionRatePercent: percent(
+          renewalEvents.length,
+          renewalDecisionEvents,
         ),
-        churnRefundRatePercent: percent(
-          churnEvents,
-          subscriptionRevenueEvents.length,
+        subscriberChurnRatePercent: percent(
+          cancelledSubscriberOwners.size,
+          periodStartSubscriberOwners.size,
+        ),
+        refundEventSharePercent: percent(
+          refundEvents.length,
+          subscriptionPaymentEvents + refundEvents.length,
         ),
         p95AiCostPerRecommendationKrw,
       },

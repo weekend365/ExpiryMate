@@ -1061,6 +1061,20 @@ export type PlusInsights = {
   wasteRatePercent: number;
   expiringSoon: number;
   topDiscardedCategories: Array<{ category: string; count: number }>;
+  weekly: {
+    current: InsightPeriod;
+    previous: InsightPeriod;
+    wasteRateChangePercentagePoints: number | null;
+    trend: "improved" | "steady" | "worse" | "insufficient_data";
+  };
+};
+
+type InsightPeriod = {
+  from: string;
+  to: string;
+  consumed: number;
+  discarded: number;
+  wasteRatePercent: number;
 };
 
 export const getPlusInsights = () =>

@@ -126,9 +126,20 @@ export function MonetizationPage() {
           <MetricCard label="ARPPU" value={formatKrw(overview?.totals.arppuKrw)} />
           <MetricCard label="추정 MRR" value={formatKrw(overview?.totals.estimatedMrrKrw)} />
           <MetricCard label="추천 1회 p95 AI 원가" value={formatKrw(overview?.totals.p95AiCostPerRecommendationKrw)} tone="warning" />
-          <MetricCard label="갱신률" value={`${overview?.totals.renewalRatePercent ?? 0}%`} />
-          <MetricCard label="해지·환불률" value={`${overview?.totals.churnRefundRatePercent ?? 0}%`} tone="warning" />
+          <MetricCard label="갱신 결정 성공률" value={`${overview?.totals.renewalDecisionRatePercent ?? 0}%`} />
+          <MetricCard label="구독자 해지율" value={`${overview?.totals.subscriberChurnRatePercent ?? 0}%`} tone="warning" />
+          <MetricCard label="환불 이벤트 비중" value={`${overview?.totals.refundEventSharePercent ?? 0}%`} tone="warning" />
         </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <MetricCard label="기간 시작 구독자" value={overview?.totals.periodStartSubscribers ?? 0} />
+          <MetricCard label="신규 구독자" value={overview?.totals.newSubscribers ?? 0} />
+          <MetricCard label="갱신 구독자" value={overview?.totals.renewedSubscribers ?? 0} />
+          <MetricCard label="해지 구독자" value={overview?.totals.cancelledSubscribers ?? 0} tone="warning" />
+          <MetricCard label="환불 거래" value={overview?.totals.refundTransactions ?? 0} tone="warning" />
+        </div>
+        <p className="mt-3 text-xs text-[var(--foreground-muted)]">
+          갱신 결정 성공률은 갱신·해지 이벤트 중 갱신 비중, 구독자 해지율은 기간 시작 구독자 중 해지 사용자 비중입니다.
+        </p>
         <div className="mt-4 grid gap-3 md:grid-cols-2">
           {overview?.economicsBySource.map((row) => (
             <div key={row.source} className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3">

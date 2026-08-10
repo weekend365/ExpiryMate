@@ -126,6 +126,22 @@ describe("MonetizationService", () => {
     expect(status.rewardedAds.canWatch).toBe(false);
   });
 
+  it("lets free users choose a rewarded ad while preserving purchased credits", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      { source: RecommendationUsageSource.free, _count: { _all: 1 } },
+    ]);
+    prisma.recommendationCreditPurchase.findMany.mockResolvedValue([
+      { creditsGranted: 5 },
+    ]);
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus("owner-a");
+
+    expect(status.paidCredits.balance).toBe(5);
+    expect(status.rewardedAds.canWatch).toBe(true);
+  });
+
   it("isolates personal Plus usage from Household usage when switching spaces", async () => {
     const prisma = createPrismaMock();
     prisma.inventorySpace.findFirst.mockResolvedValue({
@@ -495,7 +511,36 @@ describe("MonetizationService", () => {
     expect(prisma.barcodeRewardCredit.findFirst).not.toHaveBeenCalled();
   });
 
-  it("uses a purchased credit before ad and barcode credits", async () => {
+  it("uses an earned ad credit before a purchased credit", async () => {
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      {
+        source: RecommendationUsageSource.free,
+        _count: { _all: 1 },
+      },
+    ]);
+    prisma.recommendationCreditPurchase.findMany.mockResolvedValueOnce([
+      { creditsGranted: 5 },
+    ]);
+    prisma.rewardedAdSession.findFirst.mockResolvedValue({ id: "ad-1" });
+    prisma.barcodeRewardCredit.count.mockResolvedValue(1);
+    prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
+    const service = new MonetizationService(prisma as never);
+
+    await service.reserveRecommendation("owner-a", "paid-key");
+
+    expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: RecommendationUsageSource.rewarded_ad,
+        paidCreditPurchaseId: null,
+        rewardedAdSessionId: "ad-1",
+        barcodeRewardCreditId: null,
+      }),
+    });
+    expect(prisma.recommendationCreditPurchase.findMany).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses a purchased credit when no earned ad credit is available", async () => {
     const prisma = createPrismaMock();
     prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
       {
@@ -512,8 +557,6 @@ describe("MonetizationService", () => {
           _count: { usageEvents: 0 },
         },
       ]);
-    prisma.rewardedAdSession.findFirst.mockResolvedValue({ id: "ad-1" });
-    prisma.barcodeRewardCredit.count.mockResolvedValue(1);
     prisma.recommendationUsageEvent.create.mockResolvedValue({ id: "usage-1" });
     const service = new MonetizationService(prisma as never);
 
@@ -524,10 +567,8 @@ describe("MonetizationService", () => {
         source: RecommendationUsageSource.paid_credit,
         paidCreditPurchaseId: "purchase-1",
         rewardedAdSessionId: null,
-        barcodeRewardCreditId: null,
       }),
     });
-    expect(prisma.rewardedAdSession.findFirst).not.toHaveBeenCalled();
     expect(prisma.monetizationFunnelEvent.create).toHaveBeenCalledWith({
       data: expect.objectContaining({ eventName: "paid_credit_used" }),
     });

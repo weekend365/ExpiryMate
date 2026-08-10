@@ -462,6 +462,14 @@ describe("SubscriptionsService", () => {
             { status: "discarded", _count: { _all: 2 } },
           ])
           .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 4 } },
+            { status: "discarded", _count: { _all: 1 } },
+          ])
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 3 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
             { category: "dairy", _count: { _all: 2 } },
           ]),
         count: vi.fn().mockResolvedValue(3),
@@ -480,6 +488,20 @@ describe("SubscriptionsService", () => {
       wasteRatePercent: 20,
       expiringSoon: 3,
       topDiscardedCategories: [{ category: "dairy", count: 2 }],
+      weekly: {
+        current: expect.objectContaining({
+          consumed: 4,
+          discarded: 1,
+          wasteRatePercent: 20,
+        }),
+        previous: expect.objectContaining({
+          consumed: 3,
+          discarded: 2,
+          wasteRatePercent: 40,
+        }),
+        wasteRateChangePercentagePoints: -20,
+        trend: "improved",
+      },
     });
   });
 });

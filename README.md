@@ -642,7 +642,7 @@ See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지�
 1. Deploy `20260724133000_add_inventory_spaces` and `20260724150000_add_space_invitation_codes` on Railway, then verify personal-space backfill
 2. Build new iOS/Android release candidates and run two-account invitation/role/inventory regression QA
 3. Finalize privacy declarations, shared-space screenshots, review notes, and submit iOS then Android
-4. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, realtime collaboration
+4. Post-launch: custom API/Admin domains, monetization rollout/price experiments, catalog UX, analytics, realtime collaboration
 
 ## Notes On Running
 
