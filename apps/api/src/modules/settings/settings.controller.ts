@@ -10,8 +10,10 @@ import {
 } from "@nestjs/common";
 import {
   createUserStorageLocationBodySchema,
+  updateRecipePreferenceSchema,
   updateUserStorageLocationBodySchema,
   type CreateUserStorageLocationBody,
+  type UpdateRecipePreference,
   type UpdateUserStorageLocationBody,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
@@ -24,6 +26,20 @@ import { UpdateNotificationPreferenceDto } from "./dto/update-notification-prefe
 @Controller("settings")
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
+
+  @Get("recipe-preferences")
+  getRecipePreferences(@CurrentOwnerKey() ownerKey: string) {
+    return this.settingsService.getRecipePreferences(ownerKey);
+  }
+
+  @Patch("recipe-preferences")
+  updateRecipePreferences(
+    @Body(new ZodValidationPipe(updateRecipePreferenceSchema))
+    dto: UpdateRecipePreference,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.settingsService.updateRecipePreferences(ownerKey, dto);
+  }
 
   @Get("notification-preferences")
   getNotificationPreferences(@CurrentOwnerKey() ownerKey: string) {

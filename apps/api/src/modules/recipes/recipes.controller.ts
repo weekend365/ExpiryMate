@@ -12,7 +12,9 @@ import {
 } from "@nestjs/common";
 import {
   recipeRecommendationRequestSchema,
+  updateRecipeEngagementSchema,
   type RecipeRecommendationRequest,
+  type UpdateRecipeEngagement,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
@@ -73,6 +75,23 @@ export class RecipesController {
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.recipesService.deleteFavorite(id, dishIndex, ownerKey);
+  }
+
+  @Put("recommendations/:id/dishes/:dishIndex/engagement")
+  recordEngagement(
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @Body(new ZodValidationPipe(updateRecipeEngagementSchema))
+    body: UpdateRecipeEngagement,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.recipesService.recordEngagement(
+      id,
+      dishIndex,
+      body.action,
+      ownerKey,
+      `personal_${ownerKey}`,
+    );
   }
 
   @Get("recommendations/:id")

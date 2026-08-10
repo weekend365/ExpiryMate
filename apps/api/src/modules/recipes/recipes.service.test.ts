@@ -175,7 +175,7 @@ describe("RecipesService recommendation guards", () => {
     await expectTooManyRequests(
       service.createRecommendation("owner-a", request, undefined, "key-2"),
     );
-    expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(1);
+    expect(prisma.inventoryItem.findMany).toHaveBeenCalledTimes(2);
   });
 
   it("releases a reserved recommendation when generation fails", async () => {
@@ -277,7 +277,7 @@ describe("RecipesService recommendation guards", () => {
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
     expect(createPayload?.data).toMatchObject({
-      promptVersion: "recipe-recommendation-v3",
+      promptVersion: "recipe-recommendation-v4",
       inputTokens: 1000,
       cachedInputTokens: 100,
       outputTokens: 500,
@@ -327,6 +327,7 @@ describe("RecipesService favorites", () => {
         },
       }),
     );
+    expect(prisma.recipeDishEngagement.upsert).toHaveBeenCalled();
   });
 
   it("rejects an out-of-range dish index", async () => {
@@ -362,6 +363,39 @@ describe("RecipesService favorites", () => {
         sourceDishIndex: 2,
       },
     });
+    expect(prisma.recipeDishEngagement.updateMany).toHaveBeenCalledWith({
+      where: {
+        ownerKey: "owner-a",
+        recommendationId: "recommendation-1",
+        dishIndex: 2,
+      },
+      data: { favoritedAt: null },
+    });
+  });
+
+  it("records and undoes a dish dismissal idempotently", async () => {
+    const { prisma, service } = createService();
+    prisma.recipeRecommendation.findUnique.mockResolvedValue(cachedRecord);
+    const updatedAt = new Date("2099-06-08T00:00:00.000Z");
+    prisma.recipeDishEngagement.findUnique.mockResolvedValue({
+      recommendationId: cachedRecord.id,
+      dishIndex: 1,
+      viewedAt: null,
+      cookingStartedAt: null,
+      cookingCompletedAt: null,
+      dismissedAt: null,
+      favoritedAt: null,
+      updatedAt,
+    });
+
+    await service.recordEngagement(
+      cachedRecord.id,
+      1,
+      "undo_dismiss",
+      "owner-a",
+    );
+
+    expect(prisma.recipeDishEngagement.upsert).not.toHaveBeenCalled();
   });
 });
 
@@ -372,7 +406,7 @@ function createService() {
     },
     recipeRecommendation: {
       findFirst: vi.fn().mockResolvedValue(null),
-      findMany: vi.fn(),
+      findMany: vi.fn().mockResolvedValue([]),
       findUnique: vi.fn(),
       count: vi.fn().mockResolvedValue(0),
       aggregate: vi.fn().mockResolvedValue({
@@ -387,9 +421,29 @@ function createService() {
       upsert: vi.fn(),
       deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     },
+    recipeDishEngagement: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findUnique: vi.fn().mockResolvedValue(null),
+      upsert: vi.fn(),
+      updateMany: vi.fn().mockResolvedValue({ count: 0 }),
+    },
+    $transaction: vi.fn(),
   };
+  prisma.$transaction.mockImplementation(
+    async (run: (tx: typeof prisma) => Promise<unknown>) => run(prisma),
+  );
   const privacyService = {
     ensureAiDataNoticeAccepted: vi.fn().mockResolvedValue(undefined),
+  };
+  const settingsService = {
+    getRecipePreferences: vi.fn().mockResolvedValue({
+      allergens: [],
+      excludedIngredients: [],
+      dietaryStyle: "any",
+      maxSpiceLevel: "any",
+      availableEquipment: ["stovetop"],
+      updatedAt: "2099-06-01T00:00:00.000Z",
+    }),
   };
   const monetizationService = {
     getCompletedRecommendationId: vi.fn().mockResolvedValue(null),
@@ -409,6 +463,7 @@ function createService() {
       privacyService as never,
       new RecipePolicyService(prisma as never),
       monetizationService as never,
+      settingsService as never,
     ),
   };
 }

@@ -23,6 +23,7 @@ export const sessionQueryKeys = {
   inventoryItem: ["inventory-item"] as const,
   recipes: ["recipe-recommendations"] as const,
   recipeFavorites: ["recipe-favorites"] as const,
+  recipePreferences: ["recipe-preferences"] as const,
   notificationPreferences: ["notification-preferences"] as const,
   storageLocations: ["storage-locations"] as const,
   subscription: ["subscription-entitlement"] as const,

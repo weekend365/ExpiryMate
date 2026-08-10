@@ -155,7 +155,7 @@ ADMIN_BASE_URL="http://localhost:3000"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-AI_DATA_NOTICE_VERSION="ai-data-notice-v2"
+AI_DATA_NOTICE_VERSION="ai-data-notice-v3"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5.4-mini"
 PUSH_REMINDER_SCHEDULER_ENABLED="false"
@@ -391,7 +391,7 @@ domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
 
 Mobile users can manage privacy controls in `설정` → `개인정보와 추천 안내`.
 The first AI recipe recommendation requires AI data notice consent for the
-current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v2`).
+current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v3`).
 Users can revoke that consent, delete recommendation history only, or wipe the
 account from the same privacy hub. Public copy covers retention periods,
 processors / cross-border transfer (including OpenAI in the US), and withdrawal
@@ -400,9 +400,10 @@ Label / Play Data Safety so declarations match the live product.
 
 Account/data deletion immediately removes owned ingredients, recommendation
 history, notification preferences, auth sessions, password credentials, and
-social login links. AI recipe recommendation sends an inventory snapshot and
-recommendation conditions from the API server to OpenAI; the mobile app never
-receives or stores the OpenAI API key.
+social login links. AI recipe recommendation sends an inventory snapshot,
+recommendation conditions, recipe preferences, and a recent engagement summary
+from the API server to OpenAI; the mobile app never receives or stores the
+OpenAI API key.
 
 Recipe generation is protected by configurable server-side limits:
 `RECIPE_RATE_LIMIT_MAX`, `RECIPE_RATE_LIMIT_WINDOW_SECONDS`,
@@ -585,8 +586,11 @@ Inventory, dashboard, recipe, and settings endpoints require a **registered** ac
 - `POST /recipes/recommendations`
 - `GET /recipes/recommendations`
 - `GET /recipes/recommendations/:id`
+- `PUT /recipes/recommendations/:id/dishes/:dishIndex/engagement`
 - `GET /subscriptions/entitlement`
 - `POST /subscriptions/verify`
+- `GET /settings/recipe-preferences`
+- `PATCH /settings/recipe-preferences`
 - `GET /settings/notification-preferences`
 - `PATCH /settings/notification-preferences`
 - `GET /auth/placeholder`

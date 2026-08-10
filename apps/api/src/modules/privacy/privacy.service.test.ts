@@ -98,6 +98,7 @@ describe("PrivacyService", () => {
       }),
     });
     expect(operations).toContain("recipeFavorite.deleteMany");
+    expect(operations).toContain("recipeDishEngagement.deleteMany");
     expect(operations).toContain("recipeRecommendation.deleteMany");
   });
 
@@ -137,6 +138,7 @@ describe("PrivacyService", () => {
       "pushToken.deleteMany",
       "inventoryItem.updateMany",
       "recipeFavorite.deleteMany",
+      "recipeDishEngagement.deleteMany",
       "recommendationUsageEvent.deleteMany",
       "rewardedAdSession.deleteMany",
       "barcodeRewardCredit.deleteMany",
@@ -147,6 +149,7 @@ describe("PrivacyService", () => {
       "inventorySpace.deleteMany",
       "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
+      "recipePreference.deleteMany",
       "supportInquiry.deleteMany",
       "refreshSession.deleteMany",
       "oneTimeAuthToken.deleteMany",
@@ -230,6 +233,10 @@ function createPrismaMock(
       },
     },
     recipeFavorite: createDeleteManyMock("recipeFavorite.deleteMany", operations),
+    recipeDishEngagement: createDeleteManyMock(
+      "recipeDishEngagement.deleteMany",
+      operations,
+    ),
     recommendationUsageEvent: createDeleteManyMock(
       "recommendationUsageEvent.deleteMany",
       operations,
@@ -261,6 +268,10 @@ function createPrismaMock(
     ),
     notificationPreference: createDeleteManyMock(
       "notificationPreference.deleteMany",
+      operations,
+    ),
+    recipePreference: createDeleteManyMock(
+      "recipePreference.deleteMany",
       operations,
     ),
     supportInquiry: createDeleteManyMock(

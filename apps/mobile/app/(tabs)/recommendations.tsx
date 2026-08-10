@@ -9,6 +9,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Clock3,
+  EyeOff,
   Heart,
   SlidersHorizontal,
   Sparkles,
@@ -46,6 +47,7 @@ import { useRecipeGeneration } from "../../src/features/recipes/recipe-generatio
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
+  useRecipeEngagement,
   useRecipeRecommendations,
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
@@ -101,6 +103,18 @@ const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
     medium: "보통",
     hard: "어려움",
   };
+const spiceLevelLabels = {
+  none: "안 매움",
+  mild: "순한맛",
+  medium: "보통맛",
+  hot: "매운맛",
+} as const;
+const equipmentLabels = {
+  stovetop: "가스/인덕션",
+  microwave: "전자레인지",
+  oven: "오븐",
+  air_fryer: "에어프라이어",
+} as const;
 
 export default function RecommendationsScreen() {
   const { shouldStack } = useResponsiveLayout();
@@ -108,6 +122,7 @@ export default function RecommendationsScreen() {
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
   const setFavoriteMutation = useSetRecipeFavorite();
+  const engagementMutation = useRecipeEngagement();
   const {
     status: generationStatus,
     latestGeneratedRecommendation,
@@ -135,6 +150,12 @@ export default function RecommendationsScreen() {
     useState<RecipeDetailSelection | null>(null);
   const [pendingPayload, setPendingPayload] =
     useState<RecipeRecommendationPayload | null>(null);
+  const [hiddenDishKeys, setHiddenDishKeys] = useState<string[]>([]);
+  const [lastDismissedDish, setLastDismissedDish] = useState<{
+    recommendationId: string;
+    dishIndex: number;
+    title: string;
+  } | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
   const trackedQuotaEventRef = useRef<string | null>(null);
   const trackedScreenDayRef = useRef<string | null>(null);
@@ -366,6 +387,59 @@ export default function RecommendationsScreen() {
         dishIndex: String(dishIndex),
       },
     });
+  };
+
+  const handleOpenDetails = (selection: RecipeDetailSelection) => {
+    engagementMutation.mutate({
+      recommendationId: selection.recommendationId,
+      dishIndex: selection.dishIndex,
+      action: "view",
+    });
+    setRecipeDetail(selection);
+  };
+
+  const handleDismissDish = (
+    recommendationId: string,
+    dishIndex: number,
+    title: string,
+  ) => {
+    const key = getRecipeFavoriteKey(recommendationId, dishIndex);
+    setHiddenDishKeys((current) => [...new Set([...current, key])]);
+    setLastDismissedDish({ recommendationId, dishIndex, title });
+    engagementMutation.mutate(
+      { recommendationId, dishIndex, action: "dismiss" },
+      {
+        onError: () => {
+          setHiddenDishKeys((current) => current.filter((item) => item !== key));
+          setLastDismissedDish(null);
+          Alert.alert("관심없음을 저장하지 못했어요", "잠시 뒤 다시 부탁해 주세요.");
+        },
+      },
+    );
+  };
+
+  const handleUndoDismiss = () => {
+    if (!lastDismissedDish) return;
+    const dismissed = lastDismissedDish;
+    const key = getRecipeFavoriteKey(
+      dismissed.recommendationId,
+      dismissed.dishIndex,
+    );
+    setHiddenDishKeys((current) => current.filter((item) => item !== key));
+    setLastDismissedDish(null);
+    engagementMutation.mutate(
+      {
+        recommendationId: dismissed.recommendationId,
+        dishIndex: dismissed.dishIndex,
+        action: "undo_dismiss",
+      },
+      {
+        onError: () => {
+          setHiddenDishKeys((current) => [...new Set([...current, key])]);
+          setLastDismissedDish(dismissed);
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -795,6 +869,16 @@ export default function RecommendationsScreen() {
       latestRecommendation &&
       !isGenerating ? (
         <View style={styles.resultSection}>
+          {lastDismissedDish ? (
+            <FeedbackBanner
+              tone="info"
+              title={`${lastDismissedDish.title}을(를) 숨겼어요.`}
+              description="다음 추천에서는 비슷한 요리를 덜 보여드릴게요."
+              actionLabel="실행취소"
+              onAction={handleUndoDismiss}
+              showMascot={false}
+            />
+          ) : null}
           <SectionHeader
             title="이번에 골라본 요리"
             surface
@@ -802,19 +886,25 @@ export default function RecommendationsScreen() {
           />
 
           {latestRecommendation.recommendations.length ? (
-            latestRecommendation.recommendations.map((dish, index) => (
-              <RecipeCard
+            latestRecommendation.recommendations.map((dish, index) =>
+              hiddenDishKeys.includes(
+                getRecipeFavoriteKey(latestRecommendation.id, index),
+              ) ? null : (
+                <RecipeCard
                 key={`${latestRecommendation.id}-${dish.title}-${index}`}
                 dish={dish}
                 badgeLabel={String(index + 1)}
                 inventorySnapshot={latestRecommendation.inventorySnapshot}
                 onOpenDetails={() =>
-                  setRecipeDetail({
+                  handleOpenDetails({
                     recommendationId: latestRecommendation.id,
                     dishIndex: index,
                     dish,
                     inventorySnapshot: latestRecommendation.inventorySnapshot,
                   })
+                }
+                onDismiss={() =>
+                  handleDismissDish(latestRecommendation.id, index, dish.title)
                 }
                 isFavorite={favoriteKeys.has(
                   getRecipeFavoriteKey(latestRecommendation.id, index),
@@ -834,8 +924,9 @@ export default function RecommendationsScreen() {
                     favorite,
                   })
                 }
-              />
-            ))
+                />
+              ),
+            )
           ) : (
             <EmptyState
               mood="empty"
@@ -1151,9 +1242,10 @@ export default function RecommendationsScreen() {
       >
         <Text style={styles.noticeBody}>
           요리 추천을 만들 때 재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한,
-          만료까지 남은 일수, 고른 조건이 장고 서버를 거쳐 외부 요리
-          도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록은 기록과 더
-          나은 추천을 위해 내 계정에 남겨 둬요.
+          만료까지 남은 일수, 고른 조건과 저장한 알레르기·식단·조리도구 설정,
+          최근 즐겨찾기·조리·관심없음 요약이 장고 서버를 거쳐 외부 요리
+          도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록, 추천 행동은
+          기록과 더 나은 추천을 위해 내 계정에 남겨 둬요.
         </Text>
         <Text style={styles.noticeFootnote}>
           외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지 않아요.
@@ -1198,6 +1290,11 @@ export default function RecommendationsScreen() {
                   };
 
                   setHistoryRecommendation(null);
+                  engagementMutation.mutate({
+                    recommendationId: historyRecommendation.id,
+                    dishIndex: index,
+                    action: "view",
+                  });
                   setTimeout(
                     () => setRecipeDetail(detail),
                     SHEET_TRANSITION_DELAY_MS,
@@ -1271,6 +1368,7 @@ function RecipeCard({
   badgeLabel,
   inventorySnapshot,
   onOpenDetails,
+  onDismiss,
   isFavorite = false,
   isFavoritePending = false,
   onToggleFavorite,
@@ -1279,6 +1377,7 @@ function RecipeCard({
   badgeLabel?: string;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   onOpenDetails: () => void;
+  onDismiss?: () => void;
   isFavorite?: boolean;
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
@@ -1348,6 +1447,25 @@ function RecipeCard({
           <Heart
             color={isFavorite ? colors.primary : colors.subtext}
             fill={isFavorite ? colors.primary : "none"}
+            size={spacing.md}
+            strokeWidth={2.4}
+          />
+        </Pressable>
+      ) : null}
+      {onDismiss ? (
+        <Pressable
+          onPress={onDismiss}
+          accessibilityRole="button"
+          accessibilityLabel={`${dish.title} 관심없음`}
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.favoriteButton,
+            shouldStack && styles.favoriteButtonStacked,
+            pressed && styles.favoriteButtonPressed,
+          ]}
+        >
+          <EyeOff
+            color={colors.subtext}
             size={spacing.md}
             strokeWidth={2.4}
           />
@@ -1555,9 +1673,18 @@ function formatRecommendationContext(recommendation: RecipeRecommendation) {
 }
 
 function formatDishMeta(dish: RecipeRecommendationDish) {
-  return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${
-    difficultyLabels[dish.difficulty]
-  }`;
+  const values = [
+    `${dish.servings}인분`,
+    `${dish.cookingTimeMinutes}분`,
+    difficultyLabels[dish.difficulty],
+  ];
+  if (dish.spiceLevel) values.push(spiceLevelLabels[dish.spiceLevel]);
+  if (dish.requiredEquipment?.length) {
+    values.push(
+      dish.requiredEquipment.map((item) => equipmentLabels[item]).join("/"),
+    );
+  }
+  return values.join(" · ");
 }
 
 function formatIngredientPreview(ingredients: HighlightIngredient[]) {

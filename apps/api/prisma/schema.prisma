@@ -42,6 +42,50 @@ enum ProductCategory {
   household
 }
 
+enum RecipeAllergen {
+  egg
+  milk
+  buckwheat
+  peanut
+  soybean
+  wheat
+  mackerel
+  crab
+  shrimp
+  pork
+  peach
+  tomato
+  sulfites
+  walnut
+  chicken
+  beef
+  squid
+  shellfish
+  pine_nut
+}
+
+enum RecipeDietaryStyle {
+  any
+  vegetarian
+  vegan
+  pescatarian
+}
+
+enum RecipeSpiceLevel {
+  any
+  none
+  mild
+  medium
+  hot
+}
+
+enum RecipeEquipment {
+  stovetop
+  microwave
+  oven
+  air_fryer
+}
+
 enum UserRole {
   user
   admin
@@ -177,9 +221,11 @@ model User {
   oneTimeAuthTokens             OneTimeAuthToken[]
   inventoryItems                InventoryItem[]
   notificationPreference        NotificationPreference?
+  recipePreference              RecipePreference?
   userStorageLocations          UserStorageLocation[]
   recipeRecommendations         RecipeRecommendation[]
   recipeFavorites               RecipeFavorite[]
+  recipeDishEngagements         RecipeDishEngagement[]
   subscriptionEntitlements      SubscriptionEntitlement[]
   recommendationUsageEvents     RecommendationUsageEvent[]
   rewardedAdSessions            RewardedAdSession[]
@@ -428,30 +474,67 @@ model UserStorageLocation {
 }
 
 model RecipeRecommendation {
-  id                String                    @id @default(cuid())
-  ownerKey          String                    @default("demo-user")
-  owner             User                      @relation(fields: [ownerKey], references: [id])
-  spaceId           String?
-  space             InventorySpace?           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  requestCacheKey   String?
-  request           Json
-  inventorySnapshot Json
-  recommendations   Json
-  aiProvider        String
-  aiModel           String
-  promptVersion     String
-  inputTokens       Int                       @default(0)
-  cachedInputTokens Int                       @default(0)
-  outputTokens      Int                       @default(0)
-  totalTokens       Int                       @default(0)
-  estimatedCostUsd  Decimal                   @default(0) @db.Decimal(10, 6)
-  createdAt         DateTime                  @default(now())
-  usageEvent        RecommendationUsageEvent?
+  id                 String                    @id @default(cuid())
+  ownerKey           String                    @default("demo-user")
+  owner              User                      @relation(fields: [ownerKey], references: [id])
+  spaceId            String?
+  space              InventorySpace?           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  requestCacheKey    String?
+  request            Json
+  inventorySnapshot  Json
+  recommendations    Json
+  aiProvider         String
+  aiModel            String
+  promptVersion      String
+  inputTokens        Int                       @default(0)
+  cachedInputTokens  Int                       @default(0)
+  outputTokens       Int                       @default(0)
+  totalTokens        Int                       @default(0)
+  estimatedCostUsd   Decimal                   @default(0) @db.Decimal(10, 6)
+  generationAttempts Int                       @default(1)
+  repairApplied      Boolean                   @default(false)
+  selectionVersion   String                    @default("recipe-selection-v1")
+  createdAt          DateTime                  @default(now())
+  usageEvent         RecommendationUsageEvent?
+  dishEngagements    RecipeDishEngagement[]
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
   @@index([spaceId, createdAt])
   @@index([spaceId, requestCacheKey, createdAt])
+}
+
+model RecipePreference {
+  ownerKey            String             @id
+  owner               User               @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  allergens           RecipeAllergen[]   @default([])
+  excludedIngredients String[]           @default([])
+  dietaryStyle        RecipeDietaryStyle @default(any)
+  maxSpiceLevel       RecipeSpiceLevel   @default(any)
+  availableEquipment  RecipeEquipment[]  @default([stovetop])
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+model RecipeDishEngagement {
+  id                 String               @id @default(cuid())
+  ownerKey           String
+  owner              User                 @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  recommendationId   String
+  recommendation     RecipeRecommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  dishIndex          Int
+  viewedAt           DateTime?
+  cookingStartedAt   DateTime?
+  cookingCompletedAt DateTime?
+  dismissedAt        DateTime?
+  favoritedAt        DateTime?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  @@unique([ownerKey, recommendationId, dishIndex])
+  @@index([ownerKey, updatedAt])
+  @@index([ownerKey, cookingCompletedAt])
+  @@index([ownerKey, dismissedAt])
 }
 
 model RewardedAdSession {

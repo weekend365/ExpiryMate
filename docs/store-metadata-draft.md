@@ -128,7 +128,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 【AI 추천】
 - 클라이언트에 OpenAI API 키 없음. 서버만 호출합니다.
 - 첫 추천 전 AI 데이터 고지 동의가 필요합니다.
-- 전송: 재료명·카테고리·수량/단위·보관위치·유통기한·잔여일·추천 조건.
+- 전송: 재료명·카테고리·수량/단위·보관위치·유통기한·잔여일·추천 조건·맞춤 설정·최근 추천 행동 요약.
 - 동의 철회·추천 기록 삭제·계정 삭제는 설정 → 개인정보와 추천 안내에서 가능합니다.
 - Privacy: https://admin-production-da74.up.railway.app/privacy
 - Choices / 삭제 안내: https://admin-production-da74.up.railway.app/privacy/choices

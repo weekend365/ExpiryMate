@@ -1,4 +1,9 @@
-import type { AuthSession, AuthUser, DashboardSummary } from "@expirymate/shared";
+import type {
+  AuthSession,
+  AuthUser,
+  DashboardSummary,
+  RecipePreference,
+} from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const stores = vi.hoisted(() => ({
@@ -374,6 +379,68 @@ describe("mobile API client core flow", () => {
 
     await expect(listAllInventory("personal_user-1")).rejects.toThrow(
       /보관함 정보를 읽지 못했어요/,
+    );
+  });
+
+  it("loads and saves recipe preferences and sends engagement actions", async () => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    const preferences: RecipePreference = {
+      allergens: ["egg"],
+      excludedIngredients: ["고수"],
+      dietaryStyle: "vegetarian",
+      maxSpiceLevel: "mild",
+      availableEquipment: ["stovetop"],
+      updatedAt: "2026-08-10T00:00:00.000Z",
+    };
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(successResponse(preferences))
+      .mockResolvedValueOnce(successResponse(preferences))
+      .mockResolvedValueOnce(
+        successResponse({
+          recommendationId: "recommendation-1",
+          dishIndex: 0,
+          viewedAt: null,
+          cookingStartedAt: null,
+          cookingCompletedAt: null,
+          dismissedAt: "2026-08-10T00:00:00.000Z",
+          favoritedAt: null,
+          updatedAt: "2026-08-10T00:00:00.000Z",
+        }),
+      );
+    const {
+      getRecipePreferences,
+      updateRecipeEngagement,
+      updateRecipePreferences,
+    } = await import("./api");
+
+    await expect(getRecipePreferences()).resolves.toEqual(preferences);
+    await expect(updateRecipePreferences(preferences)).resolves.toEqual(
+      preferences,
+    );
+    await updateRecipeEngagement(
+      "recommendation-1",
+      0,
+      "dismiss",
+      "personal_user-1",
+    );
+
+    expect(stores.fetch).toHaveBeenNthCalledWith(
+      3,
+      "http://localhost:4000/settings/recipe-preferences",
+      expect.objectContaining({
+        method: "PATCH",
+        body: JSON.stringify(preferences),
+      }),
+    );
+    expect(stores.fetch).toHaveBeenNthCalledWith(
+      4,
+      "http://localhost:4000/spaces/personal_user-1/recipes/recommendations/recommendation-1/dishes/0/engagement",
+      expect.objectContaining({
+        method: "PUT",
+        body: JSON.stringify({ action: "dismiss" }),
+      }),
     );
   });
 });

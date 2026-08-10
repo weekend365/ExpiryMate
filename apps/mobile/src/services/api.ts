@@ -26,7 +26,11 @@ import type {
   RevokeAiDataNoticeResponse,
   RecipeRecommendation,
   RecipeFavorite,
+  RecipeDishEngagement,
+  RecipeEngagementAction,
+  RecipePreference,
   RecipeRecommendationRequestInput,
+  UpdateRecipePreference,
   RegisterPendingResponse,
   RegisterRequest,
   RegisterResponse,
@@ -861,6 +865,32 @@ export const deleteRecipeFavorite = (
         `/recipes/recommendations/${recommendationId}/dishes/${dishIndex}/favorite`,
         { method: "DELETE" },
       );
+
+export const updateRecipeEngagement = (
+  recommendationId: string,
+  dishIndex: number,
+  action: RecipeEngagementAction,
+  spaceId: string,
+) =>
+  request<RecipeDishEngagement>(
+    `${spaceResourcePath(
+      spaceId,
+      "recipes",
+    )}/recommendations/${recommendationId}/dishes/${dishIndex}/engagement`,
+    {
+      method: "PUT",
+      body: JSON.stringify({ action }),
+    },
+  );
+
+export const getRecipePreferences = () =>
+  request<RecipePreference>("/settings/recipe-preferences");
+
+export const updateRecipePreferences = (payload: UpdateRecipePreference) =>
+  request<RecipePreference>("/settings/recipe-preferences", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 
 export const getNotificationPreferences = () =>
   request<NotificationPreference>("/settings/notification-preferences");

@@ -19,12 +19,14 @@ import {
   createUserStorageLocationBodySchema,
   ItemStatus,
   recipeRecommendationRequestSchema,
+  updateRecipeEngagementSchema,
   updateInventoryItemBodySchema,
   updateUserStorageLocationBodySchema,
   type BatchConsumeInventoryItemsBody,
   type CreateInventoryItemBody,
   type CreateUserStorageLocationBody,
   type RecipeRecommendationRequest,
+  type UpdateRecipeEngagement,
   type UpdateInventoryItemBody,
   type UpdateUserStorageLocationBody,
 } from "@expirymate/shared";
@@ -290,6 +292,25 @@ export class SpaceRecipesController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.recipesService.saveFavorite(id, dishIndex, userId, spaceId);
+  }
+
+  @Put("recommendations/:id/dishes/:dishIndex/engagement")
+  async recordEngagement(
+    @Param("spaceId") spaceId: string,
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(updateRecipeEngagementSchema))
+    body: UpdateRecipeEngagement,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.recipesService.recordEngagement(
+      id,
+      dishIndex,
+      body.action,
+      userId,
+      spaceId,
+    );
   }
 
   @Delete("recommendations/:id/dishes/:dishIndex/favorite")

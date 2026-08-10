@@ -2,6 +2,7 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import {
   Bell,
+  ChefHat,
   CreditCard,
   MapPin,
   MessageCircleHeart,
@@ -46,6 +47,12 @@ export default function SettingsScreen() {
             description="유통기한 알림 시점과 켜고 끄기를 맞춰요."
             icon={Bell}
             onPress={() => router.push("/settings/notifications")}
+          />
+          <ListRow
+            title="요리 추천 맞춤 설정"
+            description="알레르기, 식단, 매운맛과 조리도구를 기억해요."
+            icon={ChefHat}
+            onPress={() => router.push("/settings/recipe-preferences")}
           />
           <ListRow
             title="보관 위치"
