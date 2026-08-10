@@ -101,17 +101,10 @@ export function InventoryGroupCard({
           ]}
         >
           {!showLots ? (
-            <View style={styles.heroColumn}>
-              <ExpiryBadge
-                expiryDate={group.nearestExpiryDate}
-                size="hero"
-              />
-              {isExpandable ? (
-                <View style={styles.lotCountChip}>
-                  <Text style={styles.lotCountChipLabel}>{lotCount}건</Text>
-                </View>
-              ) : null}
-            </View>
+            <ExpiryBadge
+              expiryDate={group.nearestExpiryDate}
+              size="hero"
+            />
           ) : null}
 
           <View style={styles.summaryCopy}>
@@ -124,9 +117,6 @@ export function InventoryGroupCard({
             <Text style={styles.groupMeta}>
               {locationLabel} · {quantityLabel}
             </Text>
-            {!showLots && isExpandable ? (
-              <Text style={styles.imminentHint}>가장 임박한 기록으로 가요</Text>
-            ) : null}
           </View>
         </Pressable>
 
@@ -143,7 +133,9 @@ export function InventoryGroupCard({
               onPress={handleToggleExpand}
               hitSlop={spacing.xs}
               accessibilityRole="button"
-              accessibilityLabel={showLots ? "접을게요" : "더 보기"}
+              accessibilityLabel={
+                showLots ? "접을게요" : `${lotCount}건 더 보기`
+              }
               accessibilityHint={
                 showLots
                   ? "유통기한별 목록을 접어요."
@@ -155,6 +147,9 @@ export function InventoryGroupCard({
                 pressed && styles.summaryPressed,
               ]}
             >
+                            <Text style={styles.moreButtonLabel}>
+                {showLots ? "접기" : `${lotCount}건 더`}
+              </Text>
               {showLots ? (
                 <ChevronUp
                   color={colors.primary}
@@ -168,9 +163,7 @@ export function InventoryGroupCard({
                   strokeWidth={2.4}
                 />
               )}
-              <Text style={styles.moreButtonLabel}>
-                {showLots ? "접기" : "더 보기"}
-              </Text>
+
             </Pressable>
           ) : null}
         </View>
@@ -402,25 +395,6 @@ const styles = StyleSheet.create({
   summaryPressed: {
     backgroundColor: colors.surfacePressed,
   },
-  heroColumn: {
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
-  lotCountChip: {
-    minHeight: spacing.md,
-    paddingHorizontal: spacing.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  lotCountChipLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.subtext,
-    fontVariant: ["tabular-nums"],
-  },
   summaryCopy: {
     flex: 1,
     minWidth: 0,
@@ -446,12 +420,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  imminentHint: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
   summaryActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -468,6 +436,7 @@ const styles = StyleSheet.create({
     minWidth: touchTarget.icon,
     minHeight: touchTarget.cta,
     paddingHorizontal: spacing.xs,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xxs,

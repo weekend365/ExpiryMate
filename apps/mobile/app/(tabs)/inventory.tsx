@@ -1,5 +1,6 @@
 import {
   formatDateKoreanCompact,
+  getExpiryTrafficBucket,
   isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
@@ -75,7 +76,7 @@ const urgencySectionAccentColors: Record<InventoryUrgencySection, string> = {
 };
 
 export default function InventoryScreen() {
-  const { shouldStack, shouldStackDense } = useResponsiveLayout();
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -142,9 +143,17 @@ export default function InventoryScreen() {
     [filtered],
   );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
+  const expiredVisibleIds = useMemo(
+    () =>
+      filtered
+        .filter((item) => getExpiryTrafficBucket(item.expiryDate) === "expired")
+        .map((item) => item.id),
+    [filtered],
+  );
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-  const allVisibleSelected =
-    visibleIds.length > 0 && visibleIds.every((id) => selectedIdSet.has(id));
+  const allExpiredVisibleSelected =
+    expiredVisibleIds.length > 0 &&
+    expiredVisibleIds.every((id) => selectedIdSet.has(id));
   const facetCounts = useMemo(
     () => buildInventoryFacetCounts(trackedItems, filter, location, searchQuery),
     [trackedItems, filter, location, searchQuery],
@@ -239,15 +248,17 @@ export default function InventoryScreen() {
     );
   };
 
-  const handleToggleAllVisible = () => {
-    if (allVisibleSelected) {
+  const handleToggleAllExpiredVisible = () => {
+    if (allExpiredVisibleSelected) {
       setSelectedIds((current) =>
-        current.filter((id) => !visibleIds.includes(id)),
+        current.filter((id) => !expiredVisibleIds.includes(id)),
       );
       return;
     }
 
-    setSelectedIds((current) => [...new Set([...current, ...visibleIds])]);
+    setSelectedIds((current) => [
+      ...new Set([...current, ...expiredVisibleIds]),
+    ]);
   };
 
   const handleCardPress = (id: string) => {
@@ -589,47 +600,42 @@ export default function InventoryScreen() {
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
-                  style={[
-                    styles.selectionRow,
-                    shouldStackDense && styles.selectionRowStacked,
-                  ]}
+                  style={styles.selectionRow}
                   accessibilityLiveRegion="polite"
                   accessibilityLabel={
                     selectedIds.length
                       ? `${selectedIds.length}개 골랐어요`
-                      : "여러 개 고르는 중이에요. 정리할 재료를 골라 주세요."
+                      : "재료를 고르는 중이에요"
                   }
                 >
                   <View style={styles.selectionSummary}>
-                    <Text style={styles.selectionTitle}>
+                    <Text style={styles.selectionTitle} numberOfLines={1}>
                       {selectedIds.length
-                        ? `${selectedIds.length}개 골랐어요`
-                        : "정리할 재료를 골라 주세요"}
+                        ? `${selectedIds.length}개`
+                        : "고를게요"}
                     </Text>
                   </View>
-                  <View
-                    style={[
-                      styles.headerActions,
-                      shouldStackDense && styles.headerActionsStacked,
-                    ]}
-                  >
-                    <Pressable
-                      onPress={handleToggleAllVisible}
-                      disabled={!visibleIds.length}
-                      hitSlop={spacing.xs}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        allVisibleSelected ? "선택 풀게요" : "전부 고를게요"
-                      }
-                      style={({ pressed }) => [
-                        styles.headerFilterButton,
-                        pressed && styles.headerFilterButtonPressed,
-                      ]}
-                    >
-                      <Text style={styles.headerFilterLabel}>
-                        {allVisibleSelected ? "선택 풀게요" : "전부 고를게요"}
-                      </Text>
-                    </Pressable>
+                  <View style={styles.headerActions}>
+                    {expiredVisibleIds.length > 0 ? (
+                      <Pressable
+                        onPress={handleToggleAllExpiredVisible}
+                        hitSlop={spacing.xs}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          allExpiredVisibleSelected
+                            ? "만료된 재료 선택 풀게요"
+                            : "만료된 재료 전부 고를게요"
+                        }
+                        style={({ pressed }) => [
+                          styles.headerFilterButton,
+                          pressed && styles.headerFilterButtonPressed,
+                        ]}
+                      >
+                        <Text style={styles.headerFilterLabel}>
+                          {allExpiredVisibleSelected ? "만료 풀기" : "만료 전부"}
+                        </Text>
+                      </Pressable>
+                    ) : null}
                     <Pressable
                       onPress={cancelSelectionMode}
                       hitSlop={spacing.xs}
@@ -640,7 +646,7 @@ export default function InventoryScreen() {
                       accessibilityRole="button"
                       accessibilityLabel="선택 닫기"
                     >
-                      <Text style={styles.headerFilterLabel}>선택 닫기</Text>
+                      <Text style={styles.headerFilterLabel}>닫기</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -1489,10 +1495,6 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     gap: spacing.xxs,
   },
-  headerActionsStacked: {
-    width: "100%",
-    justifyContent: "space-between",
-  },
   headerFilterButton: {
     minHeight: touchTarget.min,
     minWidth: touchTarget.icon,
@@ -1517,15 +1519,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-  },
-  selectionRowStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
   },
   selectionSummary: {
     flex: 1,
