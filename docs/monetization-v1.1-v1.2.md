@@ -79,6 +79,10 @@ GOOGLE_RTDN_AUDIENCE=https://API_HOST/subscriptions/notifications/google
 가족 플러스 권리는 모드 전환 뒤에도 유지됩니다. 충분한 전환 표본을 확보한 뒤
 `expanded`로 바꿉니다.
 
+`SUBSCRIPTIONS_ENABLED`는 **신규 구독 판매**만 제어합니다. 플래그를 꺼도 이미
+검증된 개인·가족 플러스 entitlement는 할당량·광고 제거·리포트에 계속 적용되고,
+같은 구매의 복원·갱신 동기화도 허용합니다. 신규 결제 검증만 거절합니다.
+
 단위경제 자동 가드레일은 수익 원장 rollout 100%, 검토된
 `MONETIZATION_ESTIMATES_JSON`, 개인·가족 일일 AI 예산을 설정한 뒤에만 켭니다.
 최근 표본이 `MONETIZATION_GUARDRAIL_MIN_SAMPLES`에 도달하면 광고는 원가 1배,

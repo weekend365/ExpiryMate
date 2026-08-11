@@ -87,7 +87,9 @@ export const recommendationAccessSchema = z.object({
     spaceId: z.string().nullable(),
   }),
   rewardedAdsEnabled: z.boolean(),
+  /** Whether new personal Plus checkouts are offered (sales switch). */
   subscriptionsEnabled: z.boolean(),
+  /** Whether household Plus sales (or an active household entitlement) are available. */
   householdSubscriptionsEnabled: z.boolean(),
   experiment: z.object({
     key: z.literal("monetization-v1"),

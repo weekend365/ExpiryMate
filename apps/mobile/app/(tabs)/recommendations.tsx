@@ -543,13 +543,15 @@ export default function RecommendationsScreen() {
         <View style={styles.usageCard}>
           <View style={styles.usageCopy}>
             <Text style={styles.usageTitle}>
-              {monetization.access.tier === "jango_plus"
+              {monetization.access.tier !== "free"
                 ? `오늘 추천 ${monetization.access.used}/${monetization.access.dailyLimit}`
                 : `오늘 무료 추천 ${monetization.access.free.used}/${monetization.access.free.limit}`}
             </Text>
             <Text style={styles.usageDescription}>
-              {monetization.access.tier === "jango_plus"
-                ? `장고 플러스 · ${monetization.access.remaining}회 남았어요`
+              {monetization.access.tier === "jango_household"
+                ? `가족 플러스 · ${monetization.access.remaining}회 남았어요`
+                : monetization.access.tier === "jango_plus"
+                  ? `장고 플러스 · ${monetization.access.remaining}회 남았어요`
                 : monetization.access.rewardedAdsEnabled
                   ? `광고 추천권 ${monetization.access.rewardedAds.creditsAvailable}회 · 오늘 광고 ${monetization.access.rewardedAds.remainingToWatch}편 남음`
                   : `임시 무료 추천 ${monetization.access.remaining}회 남았어요`}
