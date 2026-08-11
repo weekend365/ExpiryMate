@@ -130,6 +130,75 @@ export function isGoogleSubscriptionAcknowledged(
   return acknowledgementState === "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED";
 }
 
+export type GoogleVoidedPurchase = {
+  purchaseToken?: string;
+  orderId?: string;
+  voidedTimeMillis?: string;
+  voidedReason?: number;
+  voidedSource?: number;
+  kind?: string;
+};
+
+/**
+ * Lists Play Billing voided (refunded/charged-back) purchases in a time window.
+ * Used to revoke entitlements when RTDN was missed — no purchase token stored in DB.
+ */
+export async function listGoogleVoidedPurchases(input: {
+  packageName: string;
+  startTimeMillis: number;
+  endTimeMillis?: number;
+  accessToken?: string;
+  maxResults?: number;
+  /** 0 = one-time products, 1 = subscriptions */
+  purchaseType?: 0 | 1;
+}): Promise<GoogleVoidedPurchase[]> {
+  const accessToken =
+    input.accessToken ?? (await getGooglePlayAccessToken());
+  const params = new URLSearchParams({
+    startTime: String(input.startTimeMillis),
+  });
+  if (input.endTimeMillis !== undefined) {
+    params.set("endTime", String(input.endTimeMillis));
+  }
+  if (input.maxResults !== undefined) {
+    params.set("maxResults", String(input.maxResults));
+  }
+  if (input.purchaseType !== undefined) {
+    params.set("type", String(input.purchaseType));
+  }
+
+  const results: GoogleVoidedPurchase[] = [];
+  let pageToken: string | undefined;
+  do {
+    if (pageToken) params.set("token", pageToken);
+    const response = await fetch(
+      `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${encodeURIComponent(
+        input.packageName,
+      )}/purchases/voidedpurchases?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        },
+      },
+    );
+    if (!response.ok) {
+      throw new BadGatewayException(
+        `Google Play 환불 목록 조회에 실패했습니다. (${response.status})`,
+      );
+    }
+    const payload = (await response.json()) as {
+      voidedPurchases?: GoogleVoidedPurchase[];
+      tokenPagination?: { nextPageToken?: string };
+    };
+    results.push(...(payload.voidedPurchases ?? []));
+    pageToken = payload.tokenPagination?.nextPageToken;
+    params.delete("token");
+  } while (pageToken);
+
+  return results;
+}
+
 function getRequiredEnv(name: string, message: string) {
   const value = process.env[name];
   if (!value) {

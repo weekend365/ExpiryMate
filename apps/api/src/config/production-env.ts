@@ -45,6 +45,8 @@ export const PRODUCTION_MONETIZATION_DEFAULTS = {
   REWARDED_ADS_ENABLED: "false",
   // Sales switch only — existing entitlements stay active when false.
   SUBSCRIPTIONS_ENABLED: "false",
+  IAP_ALLOW_SANDBOX_PURCHASES: "false",
+  SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED: "false",
 } as const;
 
 const HTTPS_URL_VALUES = [
@@ -315,6 +317,8 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
   validateBooleanFlag(env, "PAID_RECOMMENDATION_CREDITS_ENABLED", errors);
+  validateBooleanFlag(env, "IAP_ALLOW_SANDBOX_PURCHASES", errors);
+  validateBooleanFlag(env, "SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED", errors);
 
   for (const key of [
     "RECIPE_FREE_DAILY_LIMIT",

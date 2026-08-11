@@ -60,6 +60,12 @@ REWARDED_ADS_ENABLED=false
 SUBSCRIPTIONS_ENABLED=false
 MINIMUM_MOBILE_APP_VERSION=
 
+SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=false
+SUBSCRIPTION_RESYNC_INTERVAL_MINUTES=360
+SUBSCRIPTION_RESYNC_BATCH_SIZE=50
+SUBSCRIPTION_RESYNC_STALE_HOURS=6
+SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS=7
+
 ADMOB_IOS_REWARDED_AD_UNIT_ID=
 ADMOB_ANDROID_REWARDED_AD_UNIT_ID=
 ADMOB_SSV_USER_ID_SECRET=
@@ -213,17 +219,104 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   서버 승인에 의존합니다. `linkedPurchaseToken`으로 토큰이 바뀌면 기존
   entitlement 행을 찾아 `purchaseTokenHash`를 갱신합니다.
 
-## 실기기 QA
+## 실기기 QA · 스토어 E2E
 
-- KST 23:59/00:00 경계, 무료 1회, 광고 최대 3편, 구독 총 30회.
-- 같은 `Idempotency-Key` 재전송, 동시 탭, AI 실패 시 예약 해제.
-- 광고 로드 실패·닫기·완주·10초 지연·백그라운드 복귀.
-- 구독 계정에서 Google Mobile Ads 네트워크 요청이 없는지 프록시로 확인.
-- 월간·연간 구매, Android pending, 복원, 관리, 취소 후 만료, 유예·환불.
-- 활성 구독 계정 삭제 화면의 별도 스토어 해지 경고.
-- 바코드 토큰 만료·위조·OFF 장애, 하루 3회·잔액 10회, 동시 최초 등록.
-- 바코드 추천권 추천 실패 복구와 구독 중 잔액 보존.
-- iPhone, iPad, Android 내부 테스트 production-like 빌드.
+아래는 유료 플래그를 켜기 전에 production-like 빌드(TestFlight · Play 내부 테스트)에서
+통과해야 하는 시나리오입니다. 각 항목은 **앱 UI 결과**와 **서버 entitlement /
+추천권 원장**이 일치해야 합니다.
+
+### 공통
+
+- [ ] KST 23:59/00:00 경계, 무료 1회, 광고 최대 3편, 구독 총 30회.
+- [ ] 같은 `Idempotency-Key` 재전송, 동시 탭, AI 실패 시 예약 해제.
+- [ ] 광고 로드 실패·닫기·완주·10초 지연·백그라운드 복귀.
+- [ ] 구독 계정에서 Google Mobile Ads 네트워크 요청이 없는지 프록시로 확인.
+- [ ] 활성 구독 계정 삭제 화면의 별도 스토어 해지 경고.
+- [ ] 바코드 토큰 만료·위조·OFF 장애, 하루 3회·잔액 10회, 동시 최초 등록.
+- [ ] 바코드 추천권 추천 실패 복구와 구독 중 잔액 보존.
+- [ ] iPhone, iPad, Android 내부 테스트 production-like 빌드.
+
+### Apple (TestFlight · App Review)
+
+- [ ] 월간·연간 구매 후 서버 `hasActiveEntitlement=true`, 광고 제거.
+- [ ] 복원(restore)으로 다른 테스트 계정에 동일 거래가 붙지 않음(충돌 거절).
+- [ ] 구독 취소 후 만료일까지 유지, 만료 뒤 무료 등급.
+- [ ] 환불/REVOKE ASSN 수신 시 entitlement `revoked` · 추천권 회수.
+- [ ] 일회성 추천권 구매·REFUND가 구독 웹훅과 독립적으로 처리됨.
+- [ ] App Review 샌드박스: 아래 「App Review 샌드박스 운영」 절차로 임시 허용 후
+      심사 결제 검증 성공, 심사 종료 후 플래그 OFF.
+
+### Google Play (라이선스 테스터)
+
+- [ ] 월간·연간 구매 후 서버 acknowledge 호출(Play Console / API 로그).
+- [ ] Android pending 결제 → 완료 시 자동 반영.
+- [ ] 앱 강제 종료 직후 재실행해도 3일 내 미승인 환불이 나지 않음(서버 acknowledge).
+- [ ] 플랜 변경·재구독으로 `linkedPurchaseToken`이 바뀌어도 동일 계정 entitlement 유지.
+- [ ] 추천권 consume 후 재구매 가능, RTDN/voided 목록으로 환불 회수.
+- [ ] 복원으로 purchaseToken이 서버에 다시 검증됨(Google은 토큰 원문을 DB에 두지 않음).
+
+## App Review 샌드박스 운영
+
+프로덕션 API는 항상 `APPLE_APP_STORE_ENVIRONMENT=production`을 유지합니다.
+StoreKit 조회는 production → `4040010` 시 sandbox 폴백이지만, **샌드박스
+entitlement 부여**는 `IAP_ALLOW_SANDBOX_PURCHASES=true`일 때만 허용됩니다.
+
+1. 심사 제출 직전에 API에 `IAP_ALLOW_SANDBOX_PURCHASES=true`를 배포합니다.
+2. 심사·TestFlight 결제 검증이 끝나는 즉시 `false`로 되돌립니다.
+3. 스테이징/로컬만 `APPLE_APP_STORE_ENVIRONMENT=sandbox`를 사용합니다.
+4. 프로덕션에서 Apple 환경을 sandbox로 바꾸지 마세요(부트 검증이 거절합니다).
+
+## 구독 재동기화(웹훅 유실 대비)
+
+`SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=true`이면 API가 주기적으로:
+
+- Apple: `verifiedAt`이 오래된 entitlement를 StoreKit으로 재검증해 상태를 맞춥니다.
+- Google: Voided Purchases API로 환불·차지백을 조회해 entitlement·추천권을
+  회수합니다. (토큰 원문을 저장하지 않으므로 갱신 동기화는 RTDN + 앱 복원에
+  의존합니다.)
+
+```text
+SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=false
+SUBSCRIPTION_RESYNC_INTERVAL_MINUTES=360
+SUBSCRIPTION_RESYNC_BATCH_SIZE=50
+SUBSCRIPTION_RESYNC_STALE_HOURS=6
+SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS=7
+```
+
+유료 판매를 연 뒤에는 스케줄러를 켜고, 실패 로그·revoked 급증을 경보하세요.
+
+## 단위경제 가드레일 켜기 전 체크리스트
+
+1. `MONETIZATION_REVENUE_LEDGER_ENABLED=true` 및 rollout 100%.
+2. 재무 검토된 `MONETIZATION_ESTIMATES_JSON` 예:
+
+```json
+{
+  "usdKrw": 1350,
+  "rewardedAdEcpmKrw": 12000,
+  "productNetProceedsKrw": {
+    "apple_app_store:expirymate_premium_monthly": 2730,
+    "apple_app_store:expirymate_premium_yearly": 20300,
+    "google_play:jango_plus:monthly": 2730,
+    "google_play:jango_plus:yearly": 20300
+  }
+}
+```
+
+3. 구독 판매 시 `MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW`,
+   `MONETIZATION_HOUSEHOLD_DAILY_AI_BUDGET_KRW` 설정.
+4. 표본이 `MONETIZATION_GUARDRAIL_MIN_SAMPLES` 이상일 때
+   `MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED=true`.
+
+## 스토어 콘솔 · 롤아웃 대조
+
+- [ ] AdMob production 앱 ID·보상 단위·SSV 콜백·`ADMOB_SSV_USER_ID_SECRET`.
+- [ ] App Store: 구독·추천권 상품, ASSN V2 URL
+      `https://API_HOST/subscriptions/notifications/apple`.
+- [ ] Play Console: `jango_plus` base plan, 추천권 상품, RTDN →
+      `GOOGLE_RTDN_AUDIENCE` 일치.
+- [ ] 관문 통과 후 `REWARDED_ADS_ENABLED` → `SUBSCRIPTIONS_ENABLED` →
+      (`expanded`) 추천권·가족. 10% → 50% → 100%.
 
 ## 운영 지표
 

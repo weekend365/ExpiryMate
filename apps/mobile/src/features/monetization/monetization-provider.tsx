@@ -125,10 +125,19 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       if (state === "active") {
         void refresh();
         void reconcilePendingReward();
+        // Pick up server-side entitlement resync / ASSN updates without opening Settings.
+        void queryClient
+          .invalidateQueries({
+            queryKey: withSessionUser(
+              sessionQueryKeys.subscription,
+              sessionUserId,
+            ),
+          })
+          .catch(() => undefined);
       }
     });
     return () => subscription.remove();
-  }, [reconcilePendingReward, refresh]);
+  }, [queryClient, reconcilePendingReward, refresh, sessionUserId]);
 
   const watchRewardedAd = useCallback(async () => {
     if (!sessionUserId) {

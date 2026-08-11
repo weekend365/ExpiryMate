@@ -12,6 +12,7 @@ import {
   InventorySpaceType,
   ItemStatus,
   MonetizationRevenueEventKind,
+  RecommendationCreditPurchaseStatus,
   SubscriptionEntitlementStatus,
   SubscriptionStore,
   type SubscriptionEntitlement as PrismaSubscriptionEntitlement,
@@ -36,6 +37,7 @@ import {
   acknowledgeGoogleSubscription,
   getGooglePlayAccessToken,
   isGoogleSubscriptionAcknowledged,
+  listGoogleVoidedPurchases,
 } from "../../common/store-billing/google-play-publisher";
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
 import {
@@ -510,6 +512,240 @@ export class SubscriptionsService {
 
     await this.saveEntitlement(existing.ownerKey, verification, existing.spaceId);
     return { ok: true as const };
+  }
+
+  /**
+   * Re-verify Apple entitlements whose StoreKit state may have drifted
+   * (missed ASSN). Google renewals still need RTDN or a client restore —
+   * we only store purchaseToken hashes.
+   */
+  async resyncAppleEntitlements(input?: {
+    limit?: number;
+    staleBefore?: Date;
+    now?: Date;
+  }) {
+    const now = input?.now ?? new Date();
+    const limit = Math.min(Math.max(input?.limit ?? 50, 1), 200);
+    const staleBefore =
+      input?.staleBefore ??
+      new Date(now.getTime() - getResyncStaleHours() * 60 * 60 * 1000);
+    const recentExpiryFloor = new Date(
+      now.getTime() - 14 * 24 * 60 * 60 * 1000,
+    );
+
+    const candidates = await this.prisma.subscriptionEntitlement.findMany({
+      where: {
+        store: SubscriptionStore.apple_app_store,
+        verifiedAt: { lt: staleBefore },
+        AND: [
+          {
+            OR: [
+              { transactionId: { not: null } },
+              { originalTransactionId: { not: null } },
+            ],
+          },
+          {
+            OR: [
+              { isActive: true },
+              { expiresAt: { gt: recentExpiryFloor } },
+            ],
+          },
+        ],
+      },
+      orderBy: { verifiedAt: "asc" },
+      take: limit,
+    });
+
+    let updated = 0;
+    let failed = 0;
+    for (const row of candidates) {
+      const transactionId = row.transactionId ?? row.originalTransactionId;
+      if (!transactionId) continue;
+      try {
+        const verification = await this.verifyAppleSubscription({
+          store: "apple_app_store",
+          transactionId,
+          productId: row.productId,
+        });
+        this.assertAllowedProduct(verification.productId);
+        await this.saveEntitlement(row.ownerKey, verification, row.spaceId);
+        updated += 1;
+      } catch {
+        failed += 1;
+      }
+    }
+
+    return {
+      scanned: candidates.length,
+      updated,
+      failed,
+    };
+  }
+
+  /**
+   * Apply Play voided-purchase rows to stored entitlements and credit packs
+   * when RTDN was missed. Matches by purchaseToken hash or orderId.
+   */
+  async applyGoogleVoidedPurchases(input?: {
+    lookbackDays?: number;
+    now?: Date;
+  }) {
+    const now = input?.now ?? new Date();
+    const lookbackDays = Math.min(
+      Math.max(input?.lookbackDays ?? getVoidedLookbackDays(), 1),
+      30,
+    );
+    const packageName = getRequiredEnv(
+      "GOOGLE_PLAY_PACKAGE_NAME",
+      "Google Play package name이 설정되지 않았습니다.",
+    );
+    const startTimeMillis = now.getTime() - lookbackDays * 24 * 60 * 60 * 1000;
+    const accessToken = await getGooglePlayAccessToken();
+
+    const [subscriptionVoids, productVoids] = await Promise.all([
+      listGoogleVoidedPurchases({
+        packageName,
+        startTimeMillis,
+        endTimeMillis: now.getTime(),
+        accessToken,
+        maxResults: 1000,
+        purchaseType: 1,
+      }),
+      listGoogleVoidedPurchases({
+        packageName,
+        startTimeMillis,
+        endTimeMillis: now.getTime(),
+        accessToken,
+        maxResults: 1000,
+        purchaseType: 0,
+      }),
+    ]);
+
+    let entitlementsRevoked = 0;
+    for (const voided of subscriptionVoids) {
+      const revoked = await this.revokeGoogleEntitlementFromVoided(voided);
+      if (revoked) entitlementsRevoked += 1;
+    }
+
+    let creditsRevoked = 0;
+    for (const voided of productVoids) {
+      const revoked = await this.revokeGoogleCreditFromVoided(voided);
+      if (revoked) creditsRevoked += 1;
+    }
+
+    return {
+      subscriptionVoids: subscriptionVoids.length,
+      productVoids: productVoids.length,
+      entitlementsRevoked,
+      creditsRevoked,
+    };
+  }
+
+  private async revokeGoogleEntitlementFromVoided(voided: {
+    purchaseToken?: string;
+    orderId?: string;
+  }) {
+    const existing = await this.findGoogleEntitlementForVoided(voided);
+    if (!existing || !existing.isActive) {
+      return false;
+    }
+
+    const verification: VerifiedStoreSubscription = {
+      store: SubscriptionStore.google_play,
+      productId: existing.productId,
+      planCode: resolvePlanCode(existing.productId),
+      billingPeriod:
+        existing.billingPeriod === "yearly" ? "yearly" : "monthly",
+      basePlanId: existing.basePlanId ?? undefined,
+      transactionId: existing.transactionId ?? voided.orderId ?? undefined,
+      purchaseTokenHash: existing.purchaseTokenHash ?? undefined,
+      status: SubscriptionEntitlementStatus.revoked,
+      isActive: false,
+      willRenew: false,
+      expiresAt: existing.expiresAt,
+      environment: existing.environment,
+      rawVerification: toJson({
+        voidedPurchase: true,
+        orderId: voided.orderId ?? null,
+        purchaseTokenHash: voided.purchaseToken
+          ? hashToken(voided.purchaseToken)
+          : null,
+      }),
+    };
+    await this.saveEntitlement(existing.ownerKey, verification, existing.spaceId);
+    return true;
+  }
+
+  private async findGoogleEntitlementForVoided(voided: {
+    purchaseToken?: string;
+    orderId?: string;
+  }) {
+    if (voided.purchaseToken) {
+      const byToken = await this.prisma.subscriptionEntitlement.findUnique({
+        where: {
+          store_purchaseTokenHash: {
+            store: SubscriptionStore.google_play,
+            purchaseTokenHash: hashToken(voided.purchaseToken),
+          },
+        },
+      });
+      if (byToken) return byToken;
+    }
+    if (voided.orderId) {
+      return this.prisma.subscriptionEntitlement.findFirst({
+        where: {
+          store: SubscriptionStore.google_play,
+          transactionId: voided.orderId,
+        },
+      });
+    }
+    return null;
+  }
+
+  private async revokeGoogleCreditFromVoided(voided: {
+    purchaseToken?: string;
+    orderId?: string;
+  }) {
+    const purchase = voided.purchaseToken
+      ? await this.prisma.recommendationCreditPurchase.findUnique({
+          where: {
+            store_purchaseTokenHash: {
+              store: SubscriptionStore.google_play,
+              purchaseTokenHash: hashToken(voided.purchaseToken),
+            },
+          },
+        })
+      : voided.orderId
+        ? await this.prisma.recommendationCreditPurchase.findFirst({
+            where: {
+              store: SubscriptionStore.google_play,
+              orderId: voided.orderId,
+            },
+          })
+        : null;
+    if (
+      !purchase ||
+      purchase.status === RecommendationCreditPurchaseStatus.revoked
+    ) {
+      return false;
+    }
+
+    await this.prisma.recommendationCreditPurchase.update({
+      where: { id: purchase.id },
+      data: { status: RecommendationCreditPurchaseStatus.revoked },
+    });
+    if (hasRevenueLedger(this.prisma)) {
+      await recordRevenueEvent(this.prisma, {
+        ownerKey: purchase.ownerKey,
+        kind: MonetizationRevenueEventKind.credit_refund,
+        source: "paid_credit",
+        store: purchase.store,
+        productId: purchase.productId,
+        externalKey: `credit-refund-voided:${purchase.id}`,
+        multiplier: -1,
+      });
+    }
+    return true;
   }
 
   private async verifyAppleSubscription(
@@ -1316,6 +1552,14 @@ function areSandboxPurchasesAllowed() {
   }
 
   return false;
+}
+
+function getResyncStaleHours() {
+  return readPositiveInt("SUBSCRIPTION_RESYNC_STALE_HOURS", 6);
+}
+
+function getVoidedLookbackDays() {
+  return readPositiveInt("SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS", 7);
 }
 
 function isSandboxLikeEnvironment(environment: string | null | undefined) {
