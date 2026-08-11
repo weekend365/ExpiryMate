@@ -37,7 +37,10 @@ import {
 } from "./paid-credit-policy";
 import { recordRevenueEvent } from "./revenue-ledger";
 import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
-import { expandedMonetizationOffersEnabled } from "./monetization-offer-mode";
+import {
+  householdSubscriptionSalesEnabled,
+  subscriptionSalesEnabled,
+} from "./subscription-sales-policy";
 import { getUnitEconomicsAvailability } from "./unit-economics-guardrail";
 
 const KST_TIMEZONE = "Asia/Seoul" as const;
@@ -617,7 +620,9 @@ export class MonetizationService {
     spaceId?: string,
   ): Promise<RecommendationAccess> {
     const { start, endExclusive } = getKstDayWindow(now);
-    const subscriptionsEnabled = isEnabled("SUBSCRIPTIONS_ENABLED");
+    // Sales flag only gates new checkouts / paywall CTAs. Active entitlements
+    // always apply so pausing sales never strips benefits users already paid for.
+    const subscriptionsEnabled = subscriptionSalesEnabled();
     const economicsAvailability = await getUnitEconomicsAvailability(db, now);
     const rewardedAdsEnabled =
       isEnabled("REWARDED_ADS_ENABLED") &&
@@ -641,15 +646,13 @@ export class MonetizationService {
     if (spaceId && !space) {
       throw new ForbiddenException("이 공간의 수익화 정보를 볼 수 없어요.");
     }
-    const personalEntitlement = subscriptionsEnabled
-      ? await findActiveEntitlement(db, now, {
-          ownerKey,
-          spaceId: null,
-          planCode: "jango_plus",
-        })
-      : null;
+    const personalEntitlement = await findActiveEntitlement(db, now, {
+      ownerKey,
+      spaceId: null,
+      planCode: "jango_plus",
+    });
     const householdEntitlement =
-      subscriptionsEnabled && space?.type === "household"
+      space?.type === "household"
         ? await findActiveEntitlement(db, now, {
             spaceId: space.id,
             planCode: "jango_household",
@@ -770,13 +773,7 @@ export class MonetizationService {
     );
     const householdSubscriptionsEnabled =
       Boolean(householdEntitlement) ||
-      (expandedMonetizationOffersEnabled() &&
-        isStableMonetizationRolloutEnabled({
-          subjectKey: ownerKey,
-          enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
-          rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
-          experimentKey: "household-subscriptions",
-        }));
+      householdSubscriptionSalesEnabled(ownerKey);
     const isSubscriber = tier !== "free";
     const freeRemaining = Math.max(0, freeLimit - freeUsed);
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);

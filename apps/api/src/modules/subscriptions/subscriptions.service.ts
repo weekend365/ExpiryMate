@@ -29,8 +29,10 @@ import {
 import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
-import { isStableMonetizationRolloutEnabled } from "../monetization/monetization-rollout";
-import { expandedMonetizationOffersEnabled } from "../monetization/monetization-offer-mode";
+import {
+  householdSubscriptionSalesEnabled,
+  subscriptionSalesEnabled,
+} from "../monetization/subscription-sales-policy";
 
 const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
 const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
@@ -337,15 +339,7 @@ export class SubscriptionsService {
     ownerKey: string,
     spaceId?: string,
   ) {
-    if (
-      !expandedMonetizationOffersEnabled() ||
-      !isStableMonetizationRolloutEnabled({
-        subjectKey: ownerKey,
-        enabledFlag: "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
-        rolloutFlag: "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
-        experimentKey: "household-subscriptions",
-      })
-    ) {
+    if (!householdSubscriptionSalesEnabled(ownerKey)) {
       throw new ForbiddenException("가족 플러스는 아직 이 계정에서 이용할 수 없어요.");
     }
     if (!spaceId) {
@@ -400,6 +394,7 @@ export class SubscriptionsService {
     await this.ensurePurchaseIsAvailableForOwner(ownerKey, verification);
 
     const existingPurchase = await this.findExistingPurchase(verification);
+    this.assertSubscriptionSalesAllowed(ownerKey, verification, existingPurchase);
     const spaceId =
       verification.planCode === "jango_household"
         ? existingPurchase?.ownerKey === ownerKey && existingPurchase.spaceId
@@ -688,6 +683,31 @@ export class SubscriptionsService {
       !allowedProductIds.includes(productId)
     ) {
       throw new BadRequestException("허용되지 않은 구독 상품입니다.");
+    }
+  }
+
+  private assertSubscriptionSalesAllowed(
+    ownerKey: string,
+    verification: VerifiedStoreSubscription,
+    existing: PrismaSubscriptionEntitlement | null,
+  ) {
+    // Renewals, restores, and webhook-driven updates of a purchase already
+    // linked to this account must keep working while new sales are paused.
+    if (existing?.ownerKey === ownerKey) {
+      return;
+    }
+
+    const salesOpen =
+      verification.planCode === "jango_household"
+        ? householdSubscriptionSalesEnabled(ownerKey)
+        : subscriptionSalesEnabled();
+
+    if (!salesOpen) {
+      throw new ServiceUnavailableException(
+        verification.planCode === "jango_household"
+          ? "가족 플러스 신규 가입은 잠시 쉬고 있어요. 이미 이용 중인 혜택은 그대로 유지돼요."
+          : "장고 플러스 신규 가입은 잠시 쉬고 있어요. 이미 이용 중인 혜택은 그대로 유지돼요.",
+      );
     }
   }
 

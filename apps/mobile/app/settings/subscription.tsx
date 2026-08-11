@@ -451,7 +451,7 @@ export default function SubscriptionSettingsScreen() {
         </View>
       ) : null}
 
-      {!hasActiveEntitlement ? (
+      {!hasActiveEntitlement && monetization.access?.subscriptionsEnabled ? (
         <View style={styles.section}>
           {householdEligible ? (
             <>
@@ -543,6 +543,13 @@ export default function SubscriptionSettingsScreen() {
           >
             {selectedPeriod === "yearly" ? "연간으로 시작하기" : "월간으로 시작하기"}
           </Button>
+        </View>
+      ) : !hasActiveEntitlement ? (
+        <View style={styles.section}>
+          <SectionHeader
+            title="지금은 신규 가입을 쉬고 있어요"
+            description="이미 결제하신 구독은 복원으로 다시 연결할 수 있고, 이용 중인 혜택은 그대로 유지돼요."
+          />
         </View>
       ) : null}
 

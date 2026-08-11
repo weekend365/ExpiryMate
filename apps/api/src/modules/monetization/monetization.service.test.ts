@@ -126,6 +126,23 @@ describe("MonetizationService", () => {
     expect(status.rewardedAds.canWatch).toBe(false);
   });
 
+  it("keeps existing Plus entitlements while subscription sales are paused", async () => {
+    process.env.SUBSCRIPTIONS_ENABLED = "false";
+    const prisma = createPrismaMock();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "subscription-1",
+      isActive: true,
+    });
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus("owner-a");
+
+    expect(status.subscriptionsEnabled).toBe(false);
+    expect(status.tier).toBe("jango_plus");
+    expect(status.remaining).toBe(30);
+    expect(status.rewardedAds.canWatch).toBe(false);
+  });
+
   it("lets free users choose a rewarded ad while preserving purchased credits", async () => {
     const prisma = createPrismaMock();
     prisma.recommendationUsageEvent.groupBy.mockResolvedValue([

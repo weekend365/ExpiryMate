@@ -72,10 +72,18 @@ export default function SettingsScreen() {
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />
-          {monetization.access?.subscriptionsEnabled ? (
+          {monetization.access?.subscriptionsEnabled ||
+          monetization.access?.tier === "jango_plus" ||
+          monetization.access?.tier === "jango_household" ? (
             <ListRow
               title="장고 플러스"
-              description={`광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`}
+              description={
+                monetization.access.tier === "jango_household"
+                  ? `가족 플러스 · 하루 최대 ${monetization.access.householdDailyLimit}회 추천을 함께 써요.`
+                  : monetization.access.tier === "jango_plus"
+                    ? `이용 중 · 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 확인해요.`
+                    : `광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`
+              }
               icon={CreditCard}
               onPress={() => router.push("/settings/subscription")}
             />

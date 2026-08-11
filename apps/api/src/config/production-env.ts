@@ -43,6 +43,7 @@ export const PRODUCTION_MONETIZATION_DEFAULTS = {
   BARCODE_REWARD_BALANCE_LIMIT: "10",
   PAID_RECOMMENDATION_CREDITS_ENABLED: "false",
   REWARDED_ADS_ENABLED: "false",
+  // Sales switch only — existing entitlements stay active when false.
   SUBSCRIPTIONS_ENABLED: "false",
 } as const;
 
