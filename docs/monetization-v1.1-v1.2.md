@@ -189,6 +189,11 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   `expirymate_premium_yearly` 연 29,000원.
 - App Store Server Notifications V2 URL:
   `https://API_HOST/subscriptions/notifications/apple`.
+- 거래 조회는 production StoreKit API를 먼저 호출하고, `4040010`(또는 404)이면
+  sandbox로 한 번 더 조회합니다(TestFlight·App Review). 샌드박스 환경의
+  entitlement 부여는 `IAP_ALLOW_SANDBOX_PURCHASES` 정책으로 별도 통제합니다.
+- Apple 알림은 구독·추천권 핸들러를 독립적으로 처리해, 한쪽 실패가 다른 쪽
+  환불 처리를 막지 않습니다.
 - 첫 자동 갱신 구독은 v1.2 앱 버전의 In-App Purchases 섹션에 함께 추가합니다.
 - 심사 노트에는 바코드 추천권이 기존 무료 AI 추천의 비구매 보너스 사용량이며
   구매·양도·현금화되지 않고 구독의 광고 제거 기능을 열지 않는다고 설명합니다.
@@ -201,6 +206,12 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   `https://API_HOST/subscriptions/notifications/google`.
 - Push OIDC service account와 audience를 API의 `GOOGLE_RTDN_AUDIENCE`와
   정확히 맞춥니다.
+- **구매 승인·소비의 SSOT는 API**입니다. 구독은 권한 부여 직후
+  `purchases.subscriptions.acknowledge`를, 일회성 추천권은 지급 직후
+  `purchases.products.consume`을 서버에서 호출합니다. 모바일
+  `finishTransaction`은 스토어 큐 정리용으로 유지하되, 3일 자동 환불 방지는
+  서버 승인에 의존합니다. `linkedPurchaseToken`으로 토큰이 바뀌면 기존
+  entitlement 행을 찾아 `purchaseTokenHash`를 갱신합니다.
 
 ## 실기기 QA
 

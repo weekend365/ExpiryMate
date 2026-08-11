@@ -75,4 +75,89 @@ describe("CreditPurchasesService", () => {
       data: expect.objectContaining({ eventName: "credit_purchase_revoked" }),
     });
   });
+
+  it("consumes a Google Play credit purchase after granting credits", async () => {
+    const previous = process.env.PAID_RECOMMENDATION_CREDITS_ENABLED;
+    const previousProducts = process.env.RECOMMENDATION_CREDIT_PRODUCTS;
+    process.env.PAID_RECOMMENDATION_CREDITS_ENABLED = "true";
+    process.env.RECOMMENDATION_CREDIT_PRODUCTS = "credits_5:5";
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    const { generateKeyPairSync } = await import("node:crypto");
+    const { privateKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey
+      .export({ type: "pkcs8", format: "pem" })
+      .toString();
+    process.env.IAP_ALLOW_SANDBOX_PURCHASES = "true";
+
+    const prisma = {
+      recommendationCreditPurchase: {
+        findUnique: vi.fn().mockResolvedValue(null),
+        create: vi.fn().mockResolvedValue({ id: "purchase-1" }),
+        aggregate: vi.fn().mockResolvedValue({ _sum: { creditsGranted: 5 } }),
+      },
+      recommendationUsageEvent: {
+        count: vi.fn().mockResolvedValue(0),
+      },
+      monetizationFunnelEvent: {
+        create: vi.fn().mockResolvedValue({ id: "event-1" }),
+      },
+      $transaction: vi.fn(async (fn: (tx: unknown) => Promise<unknown>) =>
+        fn(prisma),
+      ),
+    };
+    const fetchMock = vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ access_token: "token" }),
+        };
+      }
+      if (String(url).includes(":consume")) {
+        return { ok: true, status: 200, json: async () => ({}) };
+      }
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          purchaseState: 0,
+          consumptionState: 0,
+          acknowledgementState: 0,
+          orderId: "GPA.credit-1",
+          purchaseType: 0,
+        }),
+      };
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const service = new CreditPurchasesService(prisma as never);
+
+    const result = await service.verifyPurchase("owner-1", {
+      store: "google_play",
+      productId: "credits_5",
+      purchaseToken: "credit-token",
+    });
+
+    expect(result.creditsGranted).toBe(5);
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes(
+          "/purchases/products/credits_5/tokens/credit-token:consume",
+        ),
+      ),
+    ).toBe(true);
+
+    vi.unstubAllGlobals();
+    if (previous === undefined) {
+      delete process.env.PAID_RECOMMENDATION_CREDITS_ENABLED;
+    } else {
+      process.env.PAID_RECOMMENDATION_CREDITS_ENABLED = previous;
+    }
+    if (previousProducts === undefined) {
+      delete process.env.RECOMMENDATION_CREDIT_PRODUCTS;
+    } else {
+      process.env.RECOMMENDATION_CREDIT_PRODUCTS = previousProducts;
+    }
+  });
 });

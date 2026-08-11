@@ -51,10 +51,13 @@ export class SubscriptionsController {
 
   @Post("notifications/apple")
   async processAppleNotification(@Body() body: { signedPayload?: string }) {
-    await this.subscriptionsService.processAppleNotification(body.signedPayload);
-    return this.creditPurchasesService.processValidatedAppleNotification(
-      body.signedPayload,
-    );
+    const results = await Promise.allSettled([
+      this.subscriptionsService.processAppleNotification(body.signedPayload),
+      this.creditPurchasesService.processValidatedAppleNotification(
+        body.signedPayload,
+      ),
+    ]);
+    return settleStoreNotificationResults(results);
   }
 
   @Post("notifications/google")
@@ -62,6 +65,8 @@ export class SubscriptionsController {
     @Body() body: { message?: { data?: string; messageId?: string } },
     @Headers("authorization") authorization?: string,
   ) {
+    // OIDC verification lives in the subscription handler — run it first so
+    // unauthenticated callers cannot revoke one-time credit purchases.
     await this.subscriptionsService.processGoogleNotification(
       authorization,
       body.message?.data,
@@ -70,4 +75,20 @@ export class SubscriptionsController {
       body.message?.data,
     );
   }
+}
+
+function settleStoreNotificationResults(
+  results: PromiseSettledResult<{ ok: true }>[],
+) {
+  const failures = results.filter(
+    (result): result is PromiseRejectedResult => result.status === "rejected",
+  );
+  if (failures.length === results.length) {
+    throw failures[0]?.reason;
+  }
+  const success = results.find(
+    (result): result is PromiseFulfilledResult<{ ok: true }> =>
+      result.status === "fulfilled",
+  );
+  return success?.value ?? { ok: true as const };
 }

@@ -1,4 +1,4 @@
-import { createHash, createSign } from "node:crypto";
+import { createHash } from "node:crypto";
 import {
   BadGatewayException,
   BadRequestException,
@@ -24,21 +24,24 @@ import type {
 import { dateOnlyToUtcDate, toKstDateOnly } from "@expirymate/shared";
 import {
   Environment as AppleEnvironment,
-  SignedDataVerifier,
 } from "@apple/app-store-server-library";
 import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
+import {
+  createAppleSignedDataVerifier,
+  fetchAppleStoreJsonWithFallback,
+  getPreferredAppleEnvironment,
+} from "../../common/store-billing/apple-store-api";
+import {
+  acknowledgeGoogleSubscription,
+  getGooglePlayAccessToken,
+  isGoogleSubscriptionAcknowledged,
+} from "../../common/store-billing/google-play-publisher";
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
 import {
   householdSubscriptionSalesEnabled,
   subscriptionSalesEnabled,
 } from "../monetization/subscription-sales-policy";
-
-const APPLE_PRODUCTION_BASE_URL = "https://api.storekit.apple.com";
-const APPLE_SANDBOX_BASE_URL = "https://api.storekit-sandbox.apple.com";
-const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
-const GOOGLE_ANDROID_PUBLISHER_SCOPE =
-  "https://www.googleapis.com/auth/androidpublisher";
 
 interface VerifiedStoreSubscription {
   store: SubscriptionStore;
@@ -48,7 +51,11 @@ interface VerifiedStoreSubscription {
   basePlanId?: string;
   originalTransactionId?: string;
   transactionId?: string;
+  /** Ephemeral Play Billing token — never persist the raw value. */
+  purchaseToken?: string;
   purchaseTokenHash?: string;
+  linkedPurchaseTokenHash?: string;
+  acknowledgementState?: string | null;
   status: SubscriptionEntitlementStatus;
   isActive: boolean;
   willRenew: boolean | null;
@@ -89,14 +96,6 @@ interface AppleRenewalPayload {
   autoRenewProductId?: string;
   productId?: string;
   gracePeriodExpiresDate?: number;
-}
-
-interface GoogleTokenResponse {
-  access_token?: string;
-  token_type?: string;
-  expires_in?: number;
-  error?: string;
-  error_description?: string;
 }
 
 interface GoogleSubscriptionResponse {
@@ -436,6 +435,13 @@ export class SubscriptionsService {
     if (!transaction.originalTransactionId || !transaction.transactionId) {
       throw new BadRequestException("Apple 구독 거래를 확인하지 못했습니다.");
     }
+    // One-time products are handled by CreditPurchasesService on the same webhook.
+    if (
+      transaction.type &&
+      transaction.type !== "Auto-Renewable Subscription"
+    ) {
+      return { ok: true as const };
+    }
     const existing = await this.prisma.subscriptionEntitlement.findUnique({
       where: {
         store_originalTransactionId: {
@@ -492,23 +498,16 @@ export class SubscriptionsService {
     if (!purchaseToken) {
       return { ok: true as const };
     }
-    const existing = await this.prisma.subscriptionEntitlement.findUnique({
-      where: {
-        store_purchaseTokenHash: {
-          store: SubscriptionStore.google_play,
-          purchaseTokenHash: hashToken(purchaseToken),
-        },
-      },
-    });
-    if (!existing) {
-      return { ok: true as const };
-    }
-
     const verification = await this.verifyGoogleSubscription({
       store: "google_play",
       purchaseToken,
     });
     this.assertAllowedProduct(verification.productId);
+    const existing = await this.findExistingPurchase(verification);
+    if (!existing) {
+      return { ok: true as const };
+    }
+
     await this.saveEntitlement(existing.ownerKey, verification, existing.spaceId);
     return { ok: true as const };
   }
@@ -520,20 +519,22 @@ export class SubscriptionsService {
       throw new BadRequestException("Apple transactionId가 필요합니다.");
     }
 
-    const environment = getAppleEnvironment(dto.environment);
-    const statusResponse = await fetchAppleJson<AppleStatusResponse>(
-      `/inApps/v1/subscriptions/${encodeURIComponent(dto.transactionId)}`,
-      environment,
-    );
+    const preferred = getPreferredAppleEnvironment(dto.environment);
+    const { payload: statusResponse, environment } =
+      await fetchAppleStoreJsonWithFallback<AppleStatusResponse>(
+        `/inApps/v1/subscriptions/${encodeURIComponent(dto.transactionId)}`,
+        preferred,
+      );
     const candidate = pickAppleTransaction(statusResponse, dto.productId);
 
     if (!candidate) {
-      const transactionResponse = await fetchAppleJson<{
-        signedTransactionInfo?: string;
-      }>(
-        `/inApps/v1/transactions/${encodeURIComponent(dto.transactionId)}`,
-        environment,
-      );
+      const { payload: transactionResponse } =
+        await fetchAppleStoreJsonWithFallback<{
+          signedTransactionInfo?: string;
+        }>(
+          `/inApps/v1/transactions/${encodeURIComponent(dto.transactionId)}`,
+          environment,
+        );
       const transaction = decodeJwsPayload<AppleTransactionPayload>(
         transactionResponse.signedTransactionInfo,
       );
@@ -580,7 +581,7 @@ export class SubscriptionsService {
       "GOOGLE_PLAY_PACKAGE_NAME",
       "Google Play package name이 설정되지 않았습니다.",
     );
-    const accessToken = await getGoogleAccessToken();
+    const accessToken = await getGooglePlayAccessToken();
     const response = await fetch(
       `https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${encodeURIComponent(
         packageName,
@@ -636,7 +637,12 @@ export class SubscriptionsService {
       ),
       basePlanId: verifiedBasePlanId,
       transactionId: payload.latestOrderId,
+      purchaseToken: dto.purchaseToken,
       purchaseTokenHash: hashToken(dto.purchaseToken),
+      linkedPurchaseTokenHash: payload.linkedPurchaseToken
+        ? hashToken(payload.linkedPurchaseToken)
+        : undefined,
+      acknowledgementState: payload.acknowledgementState ?? null,
       status,
       isActive,
       willRenew: lineItem.autoRenewingPlan?.autoRenewEnabled ?? null,
@@ -646,7 +652,9 @@ export class SubscriptionsService {
         subscriptionState: payload.subscriptionState,
         latestOrderId: payload.latestOrderId,
         acknowledgementState: payload.acknowledgementState,
-        linkedPurchaseToken: payload.linkedPurchaseToken,
+        linkedPurchaseTokenHash: payload.linkedPurchaseToken
+          ? hashToken(payload.linkedPurchaseToken)
+          : null,
         testPurchase: Boolean(payload.testPurchase),
         lineItem,
       }),
@@ -757,7 +765,31 @@ export class SubscriptionsService {
     if (hasRevenueLedger(this.prisma)) {
       await this.recordSubscriptionRevenue(existing, record, verification);
     }
+    await this.acknowledgeGooglePurchaseIfNeeded(verification);
     return record;
+  }
+
+  private async acknowledgeGooglePurchaseIfNeeded(
+    verification: VerifiedStoreSubscription,
+  ) {
+    if (
+      verification.store !== SubscriptionStore.google_play ||
+      !verification.purchaseToken ||
+      !verification.isActive ||
+      isGoogleSubscriptionAcknowledged(verification.acknowledgementState)
+    ) {
+      return;
+    }
+
+    const packageName = getRequiredEnv(
+      "GOOGLE_PLAY_PACKAGE_NAME",
+      "Google Play package name이 설정되지 않았습니다.",
+    );
+    await acknowledgeGoogleSubscription({
+      packageName,
+      productId: verification.productId,
+      purchaseToken: verification.purchaseToken,
+    });
   }
 
   private async recordSubscriptionRevenue(
@@ -833,11 +865,28 @@ export class SubscriptionsService {
     }
 
     if (verification.purchaseTokenHash) {
+      const byCurrentToken =
+        await this.prisma.subscriptionEntitlement.findUnique({
+          where: {
+            store_purchaseTokenHash: {
+              store: verification.store,
+              purchaseTokenHash: verification.purchaseTokenHash,
+            },
+          },
+        });
+      if (byCurrentToken) {
+        return byCurrentToken;
+      }
+    }
+
+    // Play Billing may rotate purchaseToken and set linkedPurchaseToken to the
+    // previous value — look up the prior hash so renewals stay on one row.
+    if (verification.linkedPurchaseTokenHash) {
       return this.prisma.subscriptionEntitlement.findUnique({
         where: {
           store_purchaseTokenHash: {
             store: verification.store,
-            purchaseTokenHash: verification.purchaseTokenHash,
+            purchaseTokenHash: verification.linkedPurchaseTokenHash,
           },
         },
       });
@@ -1076,119 +1125,6 @@ function isActiveGoogleStatus(state: string | undefined, expiresAt: Date | null)
   );
 }
 
-async function fetchAppleJson<T>(
-  path: string,
-  environment: "sandbox" | "production",
-): Promise<T> {
-  const baseUrl =
-    environment === "sandbox" ? APPLE_SANDBOX_BASE_URL : APPLE_PRODUCTION_BASE_URL;
-  const token = signAppleServerApiJwt();
-  const response = await fetch(`${baseUrl}${path}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throwStoreVerificationError("Apple", response.status);
-  }
-
-  return (await response.json()) as T;
-}
-
-function signAppleServerApiJwt() {
-  const issuerId = getRequiredEnv(
-    "APPLE_APP_STORE_ISSUER_ID",
-    "Apple App Store issuer ID가 설정되지 않았습니다.",
-  );
-  const keyId = getRequiredEnv(
-    "APPLE_APP_STORE_KEY_ID",
-    "Apple App Store key ID가 설정되지 않았습니다.",
-  );
-  const bundleId = getRequiredEnv(
-    "APPLE_BUNDLE_ID",
-    "Apple bundle ID가 설정되지 않았습니다.",
-  );
-  const privateKey = getPrivateKeyEnv(
-    "APPLE_APP_STORE_PRIVATE_KEY",
-    "Apple App Store private key가 설정되지 않았습니다.",
-  );
-  const now = Math.floor(Date.now() / 1000);
-
-  return signJwt(
-    { alg: "ES256", kid: keyId, typ: "JWT" },
-    {
-      iss: issuerId,
-      iat: now,
-      exp: now + 5 * 60,
-      aud: "appstoreconnect-v1",
-      bid: bundleId,
-    },
-    privateKey,
-    "ES256",
-  );
-}
-
-async function getGoogleAccessToken() {
-  const serviceAccountEmail = getRequiredEnv(
-    "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
-    "Google Play service account email이 설정되지 않았습니다.",
-  );
-  const privateKey = getPrivateKeyEnv(
-    "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
-    "Google Play service account private key가 설정되지 않았습니다.",
-  );
-  const now = Math.floor(Date.now() / 1000);
-  const assertion = signJwt(
-    { alg: "RS256", typ: "JWT" },
-    {
-      iss: serviceAccountEmail,
-      scope: GOOGLE_ANDROID_PUBLISHER_SCOPE,
-      aud: GOOGLE_TOKEN_URL,
-      iat: now,
-      exp: now + 60 * 60,
-    },
-    privateKey,
-    "RS256",
-  );
-  const response = await fetch(GOOGLE_TOKEN_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-    },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion,
-    }),
-  });
-  const payload = (await response.json()) as GoogleTokenResponse;
-
-  if (!response.ok || !payload.access_token) {
-    throw new BadGatewayException("Google Play 인증 토큰을 발급받지 못했습니다.");
-  }
-
-  return payload.access_token;
-}
-
-function signJwt(
-  header: Record<string, unknown>,
-  payload: Record<string, unknown>,
-  privateKey: string,
-  algorithm: "ES256" | "RS256",
-) {
-  const input = `${base64UrlJson(header)}.${base64UrlJson(payload)}`;
-  const signer = createSign(algorithm === "ES256" ? "SHA256" : "RSA-SHA256");
-  signer.update(input);
-  signer.end();
-  const signature = signer.sign(privateKey);
-  const joseSignature =
-    algorithm === "ES256" ? derToJoseSignature(signature, 32) : signature;
-
-  return `${input}.${joseSignature.toString("base64url")}`;
-}
-
 function decodeJwsPayload<T>(jws: string | undefined): T {
   if (!jws) {
     throw new BadRequestException("스토어 서명 페이로드가 비어 있습니다.");
@@ -1205,92 +1141,6 @@ function decodeJwsPayload<T>(jws: string | undefined): T {
   } catch {
     throw new BadRequestException("스토어 서명 페이로드를 해석하지 못했습니다.");
   }
-}
-
-function derToJoseSignature(signature: Buffer, partLength: number) {
-  let offset = 0;
-
-  if (signature[offset++] !== 0x30) {
-    throw new ServiceUnavailableException("Apple JWT 서명 형식이 올바르지 않습니다.");
-  }
-
-  offset += readDerLength(signature, offset).bytesRead;
-
-  if (signature[offset++] !== 0x02) {
-    throw new ServiceUnavailableException("Apple JWT 서명 형식이 올바르지 않습니다.");
-  }
-
-  const rLength = readDerLength(signature, offset);
-  offset += rLength.bytesRead;
-  const r = signature.subarray(offset, offset + rLength.length);
-  offset += rLength.length;
-
-  if (signature[offset++] !== 0x02) {
-    throw new ServiceUnavailableException("Apple JWT 서명 형식이 올바르지 않습니다.");
-  }
-
-  const sLength = readDerLength(signature, offset);
-  offset += sLength.bytesRead;
-  const s = signature.subarray(offset, offset + sLength.length);
-
-  const output = Buffer.alloc(partLength * 2);
-  const rPart = normalizeEcdsaPart(r, partLength);
-  const sPart = normalizeEcdsaPart(s, partLength);
-
-  for (let index = 0; index < partLength; index += 1) {
-    output[index] = rPart[index] ?? 0;
-    output[index + partLength] = sPart[index] ?? 0;
-  }
-
-  return output;
-}
-
-function readDerLength(buffer: Buffer, offset: number) {
-  const first = buffer[offset];
-
-  if (first === undefined) {
-    throw new ServiceUnavailableException("JWT 서명 길이를 확인하지 못했습니다.");
-  }
-
-  if (first < 0x80) {
-    return { length: first, bytesRead: 1 };
-  }
-
-  const lengthBytes = first & 0x7f;
-  let length = 0;
-
-  for (let index = 0; index < lengthBytes; index += 1) {
-    const byte = buffer[offset + 1 + index];
-
-    if (byte === undefined) {
-      throw new ServiceUnavailableException("JWT 서명 길이를 확인하지 못했습니다.");
-    }
-
-    length = (length << 8) + byte;
-  }
-
-  return { length, bytesRead: 1 + lengthBytes };
-}
-
-function normalizeEcdsaPart(part: Buffer, length: number) {
-  let normalized = part;
-
-  while (normalized.length > length && normalized[0] === 0) {
-    normalized = normalized.subarray(1);
-  }
-
-  if (normalized.length > length) {
-    throw new ServiceUnavailableException("JWT 서명 길이가 올바르지 않습니다.");
-  }
-
-  const output = Buffer.alloc(length);
-  const start = length - normalized.length;
-
-  for (let index = 0; index < normalized.length; index += 1) {
-    output[start + index] = normalized[index] ?? 0;
-  }
-
-  return output;
 }
 
 function resolveInsightTotals(
@@ -1455,57 +1305,6 @@ function resolvePlanCode(productId: string): "jango_plus" | "jango_household" {
   return productId.includes("household") ? "jango_household" : "jango_plus";
 }
 
-function createAppleSignedDataVerifier(environment: AppleEnvironment) {
-  const roots = (process.env.APPLE_ROOT_CERTIFICATES_BASE64 ?? "")
-    .split(",")
-    .map((value) => value.trim())
-    .filter(Boolean)
-    .map((value) => Buffer.from(value, "base64"));
-  if (roots.length === 0) {
-    throw new ServiceUnavailableException(
-      "Apple Root 인증서가 설정되지 않았습니다.",
-    );
-  }
-  const bundleId = getRequiredEnv(
-    "APPLE_BUNDLE_ID",
-    "Apple bundle ID가 설정되지 않았습니다.",
-  );
-  const appAppleId =
-    environment === AppleEnvironment.PRODUCTION
-      ? Number(
-          getRequiredEnv(
-            "APPLE_APP_ID",
-            "Apple app ID가 설정되지 않았습니다.",
-          ),
-        )
-      : undefined;
-  if (appAppleId !== undefined && !Number.isInteger(appAppleId)) {
-    throw new ServiceUnavailableException("Apple app ID가 올바르지 않습니다.");
-  }
-
-  return new SignedDataVerifier(
-    roots,
-    true,
-    environment,
-    bundleId,
-    appAppleId,
-  );
-}
-
-function getAppleEnvironment(requested?: "sandbox" | "production") {
-  const configured =
-    process.env.APPLE_APP_STORE_ENVIRONMENT === "sandbox"
-      ? "sandbox"
-      : "production";
-
-  // Production deploys must never honor a client-requested sandbox override.
-  if (process.env.NODE_ENV === "production" || configured === "production") {
-    return "production";
-  }
-
-  return requested ?? configured;
-}
-
 function areSandboxPurchasesAllowed() {
   if (process.env.IAP_ALLOW_SANDBOX_PURCHASES === "true") {
     return true;
@@ -1536,10 +1335,6 @@ function getRequiredEnv(name: string, message: string) {
   return value;
 }
 
-function getPrivateKeyEnv(name: string, message: string) {
-  return getRequiredEnv(name, message).replace(/\\n/g, "\n");
-}
-
 function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
 }
@@ -1558,10 +1353,6 @@ function hasRevenueLedger(db: PrismaService) {
 
 function millisToDate(value: number | undefined) {
   return typeof value === "number" ? new Date(value) : null;
-}
-
-function base64UrlJson(value: Record<string, unknown>) {
-  return Buffer.from(JSON.stringify(value), "utf8").toString("base64url");
 }
 
 function throwStoreVerificationError(store: string, status: number): never {
