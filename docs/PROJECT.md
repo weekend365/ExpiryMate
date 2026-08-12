@@ -594,6 +594,7 @@ Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 �
 - **개발 시크릿 (Doppler · Cursor Cloud):** [`docs/dev-secrets.md`](./dev-secrets.md)
 - **장고 캐릭터 비주얼 기준:** [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](./JANGO_CHARACTER_STYLE_GUIDE.md)
 - **iOS capability / EAS production:** [`docs/ios-eas-production.md`](./ios-eas-production.md)
+  (§0 = 집에서 Mac으로 URL 반영용 `1.1.0` 빌드·Connect·AdMob 이어서 하기)
 - **README:** 로컬 온보딩 + 진척 요약만. 상세·우선순위는 여기로 링크
 - Phase 완료·블로커 발견 시 이 파일의 §1·§2·체크리스트를 갱신
 

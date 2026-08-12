@@ -17,6 +17,9 @@
    `SUBSCRIPTIONS_ENABLED=true`로 바꿉니다.
 7. 바코드 추천권 migration과 API를 플래그가 꺼진 상태로 먼저 배포한 뒤
    스테이징 100%, 프로덕션 10% → 50% → 100% 순으로 확대합니다.
+8. (이후) 광고·구독 관문이 안정된 뒤 「쿠팡 파트너스 · 재료 구매 연동」
+   Phase A(검색 딥링크) → Phase B(파트너스 API) 순으로 켭니다. 상세는 아래
+   동명 절을 따릅니다.
 
 ## API 환경변수
 
@@ -187,6 +190,11 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
 - 보상 항목 `recipe_generation`, 수량 `1`, 콘텐츠 등급 `G`, 아동 대상 `false`.
 - 관리자 서비스에 `ADMOB_PUBLISHER_ID=pub-…`를 넣고 스토어 개발자 웹사이트
   루트의 `/app-ads.txt`가 200으로 열리는지 확인합니다.
+- App Store **마케팅 URL**(개발자 웹사이트)은 AdMob 크롤 기준입니다. Railway
+  `*.up.railway.app` 다단계 호스트는 인증이 자주 실패하므로
+  `https://jango.devnamu.com` 같은 1단 서브도메인을 권장합니다.
+- 마케팅 URL 반영용 iOS `1.1.0` 빌드·Connect 절차는 집 Mac에서
+  [`docs/ios-eas-production.md`](./ios-eas-production.md) **§0** 을 따릅니다.
 
 ### Apple
 
@@ -218,6 +226,78 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   `finishTransaction`은 스토어 큐 정리용으로 유지하되, 3일 자동 환불 방지는
   서버 승인에 의존합니다. `linkedPurchaseToken`으로 토큰이 바뀌면 기존
   entitlement 행을 찾아 `purchaseTokenHash`를 갱신합니다.
+
+## 쿠팡 파트너스 · 재료 구매 연동 (계획)
+
+IAP(구독·추천권)·보상 광고와 **겹치지 않는 제3 수익**으로, 요리/재료 맥락에서
+「부족한 재료를 사기」로 자연스럽게 이어지게 합니다. **코어 수익화(광고·구독)
+출시 관문을 통과한 뒤** 단계적으로 붙입니다. 코드·플래그는 아직 없으며 아래는
+제품·기술 계획입니다.
+
+### 원칙
+
+- **신뢰 우선:** 홈·임박 알림에 상시 쇼핑 배너를 두지 않습니다. 노출은
+  「부족한 재료」「레시피 재료 목록」 등 **구매 의가 분명한 곳**만.
+- **구독과 분리:** 장고 플러스는 광고 제거·추천 한도. 제휴 쇼핑은 선택 편의이며
+  구독 혜택과 묶지 않습니다.
+- **고지:** 제휴 링크는 앱·웹에서 광고·제휴임을 짧게 안내합니다.
+- **외부 결제:** 결제는 쿠팡(또는 이후 몰)에서 이뤄지며 App Store/Play IAP가
+  아닙니다. 딥링크/브라우저로 엽니다.
+
+### 단계
+
+#### Phase A — API 없이 MVP (먼저)
+
+1. 재료명·정규화된 검색어로 쿠팡 검색/딥링크 URL 생성 (+ 파트너스 추적 파라미터).
+2. CTA 카피 예: 「쿠팡에서 찾아보기」(대화형·강요하지 않는 톤).
+3. 서버/퍼널에 `affiliate_offer_shown` / `affiliate_offer_tapped` 만 기록
+   (상품 ID·영수증·개인 식별 구매 내역은 저장하지 않음).
+4. 플래그 예: `AFFILIATE_OFFERS_ENABLED=false`,
+   `AFFILIATE_OFFERS_ROLLOUT_PERCENT=0`,
+   `AFFILIATE_PROVIDER=coupang_partners` (구현 시).
+
+관문: 노출 대비 클릭률·이탈·부정 피드백을 보고 Phase B 진행 여부 결정.
+
+#### Phase B — 쿠팡 파트너스 API
+
+1. 파트너스 승인·API 키는 서버만 보유 (`COUPANG_PARTNERS_*`). 모바일에 비밀키 금지.
+2. 재료 쿼리 → 상품 검색 → **상위 1~2개** (가격·썸네일·제휴 URL) 서버 응답.
+3. 품절·매칭 실패 시 Phase A 검색 링크로 폴백.
+4. 캐시·레이트 리밋·금칙어(비식품·성인 등) 필터.
+5. 관리자에서 클릭·추정 수익(파트너스 리포트 대조) 조회.
+
+#### Phase C — 확장 (선택)
+
+- 네이버 쇼핑 등 **검색 링크 병행**으로 특정 몰 종속·불신 완화.
+- 가격 비교·장보기 리스트 공유는 제휴보다 UX 우선 과제로 둘 수 있음.
+
+### 노출 UX (초안)
+
+| 위치 | 동작 |
+| --- | --- |
+| 레시피 재료 중 재고에 없거나 부족한 항목 | 「쿠팡에서 찾아보기」 |
+| 추천 결과 하단 (옵션) | 부족 재료만 묶은 장보기 CTA |
+| 임박 D-day 카드 | **구매 CTA 금지** (소비·레시피 유도 유지) |
+
+### 예정 환경변수 (미구현)
+
+```text
+AFFILIATE_OFFERS_ENABLED=false
+AFFILIATE_OFFERS_ROLLOUT_PERCENT=0
+AFFILIATE_PROVIDER=coupang_partners
+COUPANG_PARTNERS_ACCESS_KEY=
+COUPANG_PARTNERS_SECRET_KEY=
+COUPANG_PARTNERS_TRACKING_CODE=
+AFFILIATE_OFFER_CACHE_SECONDS=300
+AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT=2
+```
+
+### 출시 전제
+
+- [ ] `REWARDED_ADS` / `SUBSCRIPTIONS` 등 코어 관문이 안정적일 것.
+- [ ] Phase A 클릭·신뢰 지표가 기준을 넘길 것.
+- [ ] 제휴 고지 카피·스토어 심사 노트(외부 구매·제휴) 준비.
+- [ ] 파트너스 약관·상품 카테고리 화이트리스트 확정.
 
 ## 실기기 QA · 스토어 E2E
 
@@ -317,6 +397,7 @@ SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS=7
       `GOOGLE_RTDN_AUDIENCE` 일치.
 - [ ] 관문 통과 후 `REWARDED_ADS_ENABLED` → `SUBSCRIPTIONS_ENABLED` →
       (`expanded`) 추천권·가족. 10% → 50% → 100%.
+- [ ] (이후) 쿠팡 파트너스 Phase A 딥링크 → 지표 통과 시 Phase B API.
 
 ## 운영 지표
 
