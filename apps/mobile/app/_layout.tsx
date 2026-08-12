@@ -15,6 +15,7 @@ import {
 } from "../src/features/auth/auth-gate";
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
+import { MonetizationProvider } from "../src/features/monetization/monetization-provider";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { SpaceProvider } from "../src/features/spaces/space-provider";
 import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
@@ -55,13 +56,14 @@ export default function RootLayout() {
         >
           <QueryCacheRestoreBoundary>
             <SpaceProvider>
-              <RecipeGenerationProvider>
-                <PushTokenSync />
-                <PendingSpaceInvitationBridge />
-                <NotificationNavigationBridge />
-                <AuthRedirectGate />
-                <StatusBar style="dark" />
-                <Stack
+              <MonetizationProvider>
+                <RecipeGenerationProvider>
+                  <PushTokenSync />
+                  <PendingSpaceInvitationBridge />
+                  <NotificationNavigationBridge />
+                  <AuthRedirectGate />
+                  <StatusBar style="dark" />
+                  <Stack
               screenOptions={({ navigation }) => ({
                 contentStyle: {
                   backgroundColor: colors.background,
@@ -156,11 +158,16 @@ export default function RootLayout() {
               />
               <Stack.Screen name="settings/account" options={{ title: "계정" }} />
               <Stack.Screen
+                name="settings/subscription"
+                options={{ title: "구독" }}
+              />
+              <Stack.Screen
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />
-                </Stack>
-              </RecipeGenerationProvider>
+                  </Stack>
+                </RecipeGenerationProvider>
+              </MonetizationProvider>
             </SpaceProvider>
           </QueryCacheRestoreBoundary>
         </PersistQueryClientProvider>

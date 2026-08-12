@@ -184,6 +184,88 @@ export const getMe = () => request<AuthUser>("/auth/me");
 export const getDashboardSummary = () =>
   request<DashboardSummary>("/admin/dashboard/summary");
 
+export type AdminMonetizationOverview = {
+  period: { days: number; from: string; to: string };
+  totals: {
+    activeSubscribers: number;
+    periodStartSubscribers: number;
+    newSubscribers: number;
+    renewedSubscribers: number;
+    cancelledSubscribers: number;
+    refundTransactions: number;
+    activeUsers: number;
+    completedRecommendations: number;
+    estimatedAiCostUsd: number;
+    totalTokens: number;
+    paidCreditsSold: number;
+    paidCreditPurchases: number;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    arppuKrw: number | null;
+    estimatedMrrKrw: number | null;
+    renewalDecisionRatePercent: number;
+    subscriberChurnRatePercent: number;
+    refundEventSharePercent: number;
+    p95AiCostPerRecommendationKrw: number | null;
+  };
+  usageBySource: Array<{ source: string; count: number }>;
+  funnel: Array<{
+    event: string;
+    control: number;
+    valueFirst: number;
+    other: number;
+    total: number;
+  }>;
+  conversion: {
+    paywallToPurchasePercent: number;
+    rewardedAdVerificationPercent: number;
+    barcodeRewardGrantPercent: number;
+    creditPackToPurchasePercent: number;
+  };
+  economicsConfigured: boolean;
+  economicsBySource: Array<{
+    source: string;
+    estimatedNetRevenueKrw: number | null;
+    estimatedAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    events: number;
+  }>;
+  unitEconomics: {
+    rewardedAd: UnitEconomicsGuardrail & {
+      estimatedRevenuePerVerifiedKrw: number | null;
+    };
+    paidCredit: UnitEconomicsGuardrail & {
+      estimatedRevenuePerCreditKrw: number | null;
+    };
+  };
+  retention: {
+    d7Percent: number;
+    d30Percent: number;
+    cohorts: Array<{
+      cohort: string;
+      users: number;
+      d7Percent: number | null;
+      d30Percent: number | null;
+    }>;
+  };
+  daily: Array<{ day: string; recommendations: number; aiCostUsd: number }>;
+};
+
+type UnitEconomicsGuardrail = {
+  estimatedAiCostPerRecommendationKrw: number | null;
+  costCoverageMultiple: number | null;
+  targetCoverageMultiple: number;
+  status: "healthy" | "review" | "insufficient_data" | "unconfigured";
+};
+
+export const getMonetizationOverview = (days: 7 | 30 | 90) =>
+  request<AdminMonetizationOverview>(
+    `/admin/monetization/overview?days=${days}`,
+  );
+
 export const listProducts = (query?: string) => {
   const search = query ? `?q=${encodeURIComponent(query)}` : "";
   return request<Product[]>(`/products${search}`);

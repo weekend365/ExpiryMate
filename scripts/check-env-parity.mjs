@@ -1,5 +1,5 @@
 /**
- * Ensures production-critical API env KEYS appear in example/staging templates.
+ * Ensures production-critical API and mobile env KEYS appear in templates.
  * Does not validate placeholder VALUES (those are intentionally incomplete).
  *
  * Source of truth: apps/api/src/config/production-env.ts
@@ -26,11 +26,46 @@ if (!requiredBlock) {
   process.exit(1);
 }
 
+const monetizationDefaultsBlock = productionEnvSource.match(
+  /export const PRODUCTION_MONETIZATION_DEFAULTS = \{([\s\S]*?)\} as const/,
+)?.[1];
+
+if (!monetizationDefaultsBlock) {
+  console.error(
+    "[env-parity] Could not parse PRODUCTION_MONETIZATION_DEFAULTS from production-env.ts",
+  );
+  process.exit(1);
+}
+
 const REQUIRED_KEYS = [
   ...[...requiredBlock.matchAll(/"([A-Z0-9_]+)"/g)].map((match) => match[1]),
+  ...[...monetizationDefaultsBlock.matchAll(/^\s*([A-Z0-9_]+):/gm)].map(
+    (match) => match[1],
+  ),
   "AUTH_LINK_BASE_URL",
   "AUTH_ALLOW_DEV_FALLBACK",
+  "BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS",
+  "BARCODE_CONTRIBUTION_ALLOWED_TERMS",
 ];
+
+const mobileEnvSource = readFileSync(
+  join(root, "apps/mobile/scripts/validate-public-env.cjs"),
+  "utf8",
+);
+const mobileRequiredBlock = mobileEnvSource.match(
+  /const REQUIRED_PRODUCTION_VALUES = \[([\s\S]*?)\];/,
+)?.[1];
+
+if (!mobileRequiredBlock) {
+  console.error(
+    "[env-parity] Could not parse mobile REQUIRED_PRODUCTION_VALUES",
+  );
+  process.exit(1);
+}
+
+const MOBILE_REQUIRED_KEYS = [
+  ...mobileRequiredBlock.matchAll(/"([A-Z0-9_]+)"/g),
+].map((match) => match[1]);
 
 const TARGET_FILES = [
   "apps/api/.env.production.example",
@@ -70,6 +105,23 @@ for (const file of TARGET_FILES) {
   } else {
     console.log(`[env-parity] ${file} OK (${REQUIRED_KEYS.length} keys present)`);
   }
+}
+
+const mobileProductionExample = "apps/mobile/.env.production.example";
+const mobilePresent = keysInEnvFile(mobileProductionExample);
+const mobileMissing = MOBILE_REQUIRED_KEYS.filter(
+  (key) => !mobilePresent.has(key),
+);
+if (mobileMissing.length > 0) {
+  failed = true;
+  console.error(
+    `[env-parity] ${mobileProductionExample} is missing required production keys:\n` +
+      mobileMissing.map((key) => `  - ${key}`).join("\n"),
+  );
+} else {
+  console.log(
+    `[env-parity] ${mobileProductionExample} OK (${MOBILE_REQUIRED_KEYS.length} keys present)`,
+  );
 }
 
 const staging = readFileSync(join(root, "docs/env.staging.example"), "utf8");

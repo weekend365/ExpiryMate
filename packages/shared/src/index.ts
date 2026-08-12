@@ -5,6 +5,7 @@ export * from "./constants/labels";
 export * from "./design";
 export * from "./enums/app-enums";
 export * from "./schemas/inventory";
+export * from "./schemas/monetization";
 export * from "./schemas/auth";
 export * from "./schemas/product";
 export * from "./schemas/product-master";

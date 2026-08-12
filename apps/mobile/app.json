@@ -5,7 +5,7 @@
     "description": "Jango (장고야 부탁해) — Korean-first ingredient inventory, expiry reminder, and recipe recommendation app.",
     "platforms": ["ios", "android"],
     "scheme": "expirymate",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#F1F3F5",
@@ -58,6 +58,9 @@
         {
           "ios": {
             "deploymentTarget": "16.4"
+          },
+          "android": {
+            "kotlinVersion": "2.1.20"
           }
         }
       ],
@@ -111,7 +114,8 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.SYSTEM_ALERT_WINDOW"
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "com.google.android.gms.permission.AD_ID"
       ],
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {

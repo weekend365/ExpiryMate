@@ -7,6 +7,7 @@ import type {
   UnitCode,
 } from "../enums/app-enums";
 import type { PushTokenPlatform } from "../schemas/notifications";
+import type { BarcodeRewardReason } from "../schemas/product-master";
 
 export interface Product {
   id: string;
@@ -39,11 +40,21 @@ export interface BarcodeLookupResult {
   imageUrl: string | null;
   source: BarcodeLookupSource;
   productMasterId: string | null;
+  contributionToken?: string;
 }
 
 export interface ContributeBarcodeProductResponse {
   product: ProductMaster;
   created: boolean;
+  reward: {
+    granted: boolean;
+    creditsGranted: number;
+    balance: number;
+    earnedToday: number;
+    dailyLimit: number;
+    balanceLimit: number;
+    reason: BarcodeRewardReason;
+  };
 }
 
 export type AuthUserRole = "user" | "admin";

@@ -10,6 +10,7 @@ import {
 import type { RecipeRecommendation } from "@expirymate/shared";
 import { useQueryClient } from "@tanstack/react-query";
 import {
+  ApiError,
   createRecipeRecommendation,
   type RecipeRecommendationPayload,
 } from "../../services/api";
@@ -36,6 +37,7 @@ interface RecipeGenerationContextValue {
   latestGeneratedRecommendation: RecipeRecommendation | null;
   latestGeneratedRecommendationId: string | null;
   errorMessage: string | null;
+  errorCode: string | null;
   generateRecipeRecommendation: (
     payload: RecipeRecommendationPayload,
   ) => Promise<RecipeRecommendation | null>;
@@ -56,11 +58,13 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
   const [latestGeneratedRecommendationId, setLatestGeneratedRecommendationId] =
     useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const generateRecipeRecommendation = useCallback(
     async (payload: RecipeRecommendationPayload) => {
       setStatus("pending");
       setErrorMessage(null);
+      setErrorCode(null);
 
       try {
         if (!activeSpaceId) {
@@ -96,6 +100,9 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
             activeSpaceId,
           ),
         });
+        queryClient.invalidateQueries({
+          queryKey: sessionQueryKeys.monetization,
+        });
 
         scheduleLocalNotification(
           "요리 추천이 준비됐어요",
@@ -110,6 +117,10 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
       } catch (error) {
         setStatus("error");
         setErrorMessage(getErrorMessage(error));
+        setErrorCode(error instanceof ApiError ? error.code : null);
+        queryClient.invalidateQueries({
+          queryKey: sessionQueryKeys.monetization,
+        });
         return null;
       }
     },
@@ -119,11 +130,13 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
   const acknowledgeRecipeGeneration = useCallback(() => {
     setStatus("idle");
     setErrorMessage(null);
+    setErrorCode(null);
   }, []);
 
   const resetRecipeGeneration = useCallback(() => {
     setStatus("idle");
     setErrorMessage(null);
+    setErrorCode(null);
     setLatestGeneratedRecommendation(null);
     setLatestGeneratedRecommendationId(null);
   }, []);
@@ -148,6 +161,7 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
       latestGeneratedRecommendation,
       latestGeneratedRecommendationId,
       errorMessage,
+      errorCode,
       generateRecipeRecommendation,
       acknowledgeRecipeGeneration,
       resetRecipeGeneration,
@@ -155,6 +169,7 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
     [
       acknowledgeRecipeGeneration,
       errorMessage,
+      errorCode,
       generateRecipeRecommendation,
       latestGeneratedRecommendation,
       latestGeneratedRecommendationId,

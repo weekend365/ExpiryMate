@@ -1,5 +1,6 @@
 import {
   formatBaseQuantity,
+  type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
   type RecipeRecommendation,
@@ -8,6 +9,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Clock3,
+  EyeOff,
   Heart,
   SlidersHorizontal,
   Sparkles,
@@ -39,14 +41,19 @@ import {
   useAcceptAiDataNotice,
   usePrivacyStatus,
 } from "../../src/features/privacy/use-privacy";
+import { useMonetization } from "../../src/features/monetization/monetization-provider";
+import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
+  useRecipeEngagement,
   useRecipeRecommendations,
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
+import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import type { RecipeRecommendationPayload } from "../../src/services/api";
+import { trackMonetizationEvent } from "../../src/services/api";
 import {
   colors,
   radius,
@@ -96,6 +103,18 @@ const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
     medium: "보통",
     hard: "어려움",
   };
+const spiceLevelLabels = {
+  none: "안 매움",
+  mild: "순한맛",
+  medium: "보통맛",
+  hot: "매운맛",
+} as const;
+const equipmentLabels = {
+  stovetop: "가스/인덕션",
+  microwave: "전자레인지",
+  oven: "오븐",
+  air_fryer: "에어프라이어",
+} as const;
 
 export default function RecommendationsScreen() {
   const { shouldStack } = useResponsiveLayout();
@@ -103,15 +122,19 @@ export default function RecommendationsScreen() {
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
   const setFavoriteMutation = useSetRecipeFavorite();
+  const engagementMutation = useRecipeEngagement();
   const {
     status: generationStatus,
     latestGeneratedRecommendation,
     latestGeneratedRecommendationId,
     errorMessage: generationErrorMessage,
+    errorCode: generationErrorCode,
     generateRecipeRecommendation,
   } = useRecipeGeneration();
   const privacyStatusQuery = usePrivacyStatus();
   const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
+  const subscription = useSubscriptionEntitlement();
+  const monetization = useMonetization();
   const [servings, setServings] = useState(2);
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
@@ -119,13 +142,24 @@ export default function RecommendationsScreen() {
   const [recipeView, setRecipeView] = useState<RecipeView>("recommendations");
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
+  const [showRewardedAdSheet, setShowRewardedAdSheet] = useState(false);
+  const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
     useState<RecipeRecommendation | null>(null);
   const [recipeDetail, setRecipeDetail] =
     useState<RecipeDetailSelection | null>(null);
   const [pendingPayload, setPendingPayload] =
     useState<RecipeRecommendationPayload | null>(null);
+  const [hiddenDishKeys, setHiddenDishKeys] = useState<string[]>([]);
+  const [lastDismissedDish, setLastDismissedDish] = useState<{
+    recommendationId: string;
+    dishIndex: number;
+    title: string;
+  } | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
+  const trackedQuotaEventRef = useRef<string | null>(null);
+  const trackedScreenDayRef = useRef<string | null>(null);
+  const trackedOfferRef = useRef<string | null>(null);
   const isGenerating = generationStatus === "pending";
 
   const latestRecommendation = useMemo(
@@ -157,13 +191,26 @@ export default function RecommendationsScreen() {
   const isHistoryLoadError = Boolean(
     historyQuery.error && !generationErrorMessage,
   );
+  const isQuotaError =
+    generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED" ||
+    isRecommendationQuotaError(errorMessage);
+  const hasActiveEntitlement = Boolean(
+    subscription.query.data?.hasActiveEntitlement,
+  );
   const isHistoryInitialLoading =
     historyQuery.isPending && historyQuery.data === undefined;
-  const isQuotaError = isRecommendationQuotaError(errorMessage);
   const justGenerated =
     generationStatus === "success" &&
     Boolean(latestRecommendation) &&
     latestRecommendation?.id === latestGeneratedRecommendationId;
+  const showValueMomentOffer = Boolean(
+    justGenerated &&
+      !hasActiveEntitlement &&
+      monetization.access?.offer.personalized &&
+      monetization.access.offer.reason === "engaged" &&
+      (monetization.access.offer.kind === "jango_plus" ||
+        monetization.access.offer.kind === "jango_household"),
+  );
   const mealTypeLabel =
     mealTypeOptions.find((option) => option.value === mealType)?.label ??
     "상관없음";
@@ -175,6 +222,51 @@ export default function RecommendationsScreen() {
     : hasRecommendationResult
       ? "다시 골라볼게요"
       : "추천 받을게요";
+
+  useEffect(() => {
+    if (!isQuotaError || !monetization.access) return;
+    const eventKey = `${monetization.access.day}:${generationErrorCode ?? "quota"}`;
+    if (trackedQuotaEventRef.current === eventKey) return;
+    trackedQuotaEventRef.current = eventKey;
+    void trackMonetizationEvent({
+      event: "quota_exhausted",
+      properties: {
+        tier: monetization.access.tier,
+        error_code: generationErrorCode ?? "unknown",
+      },
+    }).catch(() => undefined);
+  }, [generationErrorCode, isQuotaError, monetization.access]);
+
+  useEffect(() => {
+    const day = monetization.access?.day;
+    if (!day || trackedScreenDayRef.current === day) return;
+    trackedScreenDayRef.current = day;
+    void trackMonetizationEvent({
+      event: "recommendation_screen_viewed",
+      properties: { day },
+    }).catch(() => undefined);
+  }, [monetization.access?.day]);
+
+  useEffect(() => {
+    const offer = monetization.access?.offer;
+    if (
+      (!isQuotaError && !showValueMomentOffer) ||
+      !offer?.personalized ||
+      offer.kind === "none"
+    ) return;
+    const key = `${monetization.access?.day}:${offer.kind}:${offer.reason}`;
+    if (trackedOfferRef.current === key) return;
+    trackedOfferRef.current = key;
+    void trackMonetizationEvent({
+      event: "offer_presented",
+      properties: { kind: offer.kind, reason: offer.reason },
+    }).catch(() => undefined);
+  }, [
+    isQuotaError,
+    monetization.access?.day,
+    monetization.access?.offer,
+    showValueMomentOffer,
+  ]);
 
   const buildRecommendationPayload = useCallback(
     (): RecipeRecommendationPayload => ({
@@ -243,6 +335,44 @@ export default function RecommendationsScreen() {
     pendingPayload,
   ]);
 
+  const handleWatchRewardedAd = useCallback(async () => {
+    try {
+      const result = await monetization.watchRewardedAd();
+      setShowRewardedAdSheet(false);
+      Alert.alert(
+        result === "verified" ? "추천 1회를 받았어요" : "광고 보상을 확인 중이에요",
+        result === "verified"
+          ? "오늘 안에 추천할 때 사용할 수 있어요."
+          : "확인이 끝나면 자동으로 반영돼요. 다른 화면을 다녀와도 괜찮아요.",
+      );
+    } catch (error) {
+      Alert.alert(
+        "광고를 완료하지 못했어요",
+        getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",
+      );
+    }
+  }, [monetization]);
+
+  const handleMonetizationOffer = useCallback(
+    (kind: RecommendationAccess["offer"]["kind"]) => {
+      if (kind === "none") return;
+      const offer = resolveMonetizationOffer(kind);
+      void trackMonetizationEvent({
+        event: "offer_selected",
+        properties: { kind },
+      }).catch(() => undefined);
+      setShowOfferAlternatives(false);
+      if (offer.action === "rewarded_ad") {
+        setShowRewardedAdSheet(true);
+      } else if (offer.action === "paid_credits") {
+        router.push("/settings/recommendation-credits");
+      } else {
+        router.push("/settings/subscription");
+      }
+    },
+    [],
+  );
+
   const handleStartCooking = () => {
     if (!recipeDetail) {
       return;
@@ -257,6 +387,59 @@ export default function RecommendationsScreen() {
         dishIndex: String(dishIndex),
       },
     });
+  };
+
+  const handleOpenDetails = (selection: RecipeDetailSelection) => {
+    engagementMutation.mutate({
+      recommendationId: selection.recommendationId,
+      dishIndex: selection.dishIndex,
+      action: "view",
+    });
+    setRecipeDetail(selection);
+  };
+
+  const handleDismissDish = (
+    recommendationId: string,
+    dishIndex: number,
+    title: string,
+  ) => {
+    const key = getRecipeFavoriteKey(recommendationId, dishIndex);
+    setHiddenDishKeys((current) => [...new Set([...current, key])]);
+    setLastDismissedDish({ recommendationId, dishIndex, title });
+    engagementMutation.mutate(
+      { recommendationId, dishIndex, action: "dismiss" },
+      {
+        onError: () => {
+          setHiddenDishKeys((current) => current.filter((item) => item !== key));
+          setLastDismissedDish(null);
+          Alert.alert("관심없음을 저장하지 못했어요", "잠시 뒤 다시 부탁해 주세요.");
+        },
+      },
+    );
+  };
+
+  const handleUndoDismiss = () => {
+    if (!lastDismissedDish) return;
+    const dismissed = lastDismissedDish;
+    const key = getRecipeFavoriteKey(
+      dismissed.recommendationId,
+      dismissed.dishIndex,
+    );
+    setHiddenDishKeys((current) => current.filter((item) => item !== key));
+    setLastDismissedDish(null);
+    engagementMutation.mutate(
+      {
+        recommendationId: dismissed.recommendationId,
+        dishIndex: dismissed.dishIndex,
+        action: "undo_dismiss",
+      },
+      {
+        onError: () => {
+          setHiddenDishKeys((current) => [...new Set([...current, key])]);
+          setLastDismissedDish(dismissed);
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -346,6 +529,99 @@ export default function RecommendationsScreen() {
           }
         >
       <SpaceSwitcher />
+      {monetization.rewardNotice === "verified" ? (
+        <FeedbackBanner
+          tone="success"
+          title="광고 추천권 1회가 지급됐어요"
+          description="오늘 추천을 만들 때 바로 사용할 수 있어요."
+          actionLabel="확인"
+          onAction={monetization.dismissRewardNotice}
+          showMascot={false}
+        />
+      ) : null}
+      {recipeView === "recommendations" && monetization.access ? (
+        <View style={styles.usageCard}>
+          <View style={styles.usageCopy}>
+            <Text style={styles.usageTitle}>
+              {monetization.access.tier !== "free"
+                ? `오늘 추천 ${monetization.access.used}/${monetization.access.dailyLimit}`
+                : `오늘 무료 추천 ${monetization.access.free.used}/${monetization.access.free.limit}`}
+            </Text>
+            <Text style={styles.usageDescription}>
+              {monetization.access.tier === "jango_household"
+                ? `가족 플러스 · ${monetization.access.remaining}회 남았어요`
+                : monetization.access.tier === "jango_plus"
+                  ? `장고 플러스 · ${monetization.access.remaining}회 남았어요`
+                : monetization.access.rewardedAdsEnabled
+                  ? `광고 추천권 ${monetization.access.rewardedAds.creditsAvailable}회 · 오늘 광고 ${monetization.access.rewardedAds.remainingToWatch}편 남음`
+                  : `임시 무료 추천 ${monetization.access.remaining}회 남았어요`}
+            </Text>
+            {monetization.access.tier === "free" &&
+            monetization.access.contributionRewards.enabled ? (
+              <Text style={styles.usageDescription}>
+                바코드 추천권 {monetization.access.contributionRewards.balance}회
+                {monetization.access.contributionRewards.canEarn
+                  ? ` · 오늘 ${monetization.access.contributionRewards.dailyLimit - monetization.access.contributionRewards.earnedToday}회 더 적립 가능`
+                  : ""}
+              </Text>
+            ) : null}
+            {monetization.access.tier === "free" &&
+            monetization.access.paidCredits.salesEnabled ? (
+              <Pressable
+                onPress={() => router.push("/settings/recommendation-credits")}
+                accessibilityRole="button"
+                accessibilityLabel="AI 추천권 충전하기"
+              >
+                <Text style={styles.usageCreditLink}>
+                  구매 추천권 {monetization.access.paidCredits.balance}회 · 충전하기
+                </Text>
+              </Pressable>
+            ) : monetization.access.tier === "free" &&
+              monetization.access.paidCredits.balance > 0 ? (
+              <Text style={styles.usageDescription}>
+                보유 추천권 {monetization.access.paidCredits.balance}회 · 추천할 때 자동 사용돼요
+              </Text>
+            ) : null}
+            {monetization.access.tier === "free" &&
+            monetization.access.paidCredits.balance > 0 &&
+            monetization.access.rewardedAds.canWatch ? (
+              <Pressable
+                onPress={() => setShowRewardedAdSheet(true)}
+                accessibilityRole="button"
+                accessibilityLabel="구매 추천권을 보존하고 광고로 추천권 받기"
+              >
+                <Text style={styles.usageCreditLink}>
+                  구매 추천권 아끼고 광고 보기
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
+        </View>
+      ) : null}
+      {recipeView === "recommendations" && showValueMomentOffer ? (
+        <View style={styles.valueOfferCard}>
+          <View style={styles.valueOfferCopy}>
+            <Text style={styles.valueOfferTitle}>
+              {monetization.access?.offer.kind === "jango_household"
+                ? "가족 냉장고가 함께 움직이고 있어요"
+                : "냉장고 관리가 습관이 되고 있어요"}
+            </Text>
+            <Text style={styles.valueOfferDescription}>
+              {monetization.access?.offer.kind === "jango_household"
+                ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
+                : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
+            </Text>
+          </View>
+          <Button
+            onPress={() =>
+              handleMonetizationOffer(monetization.access!.offer.kind)
+            }
+            fullWidth
+          >
+            {offerLabel(monetization.access!.offer.kind)}
+          </Button>
+        </View>
+      ) : null}
       <View style={styles.recipeViewSwitch}>
         <Pressable
           onPress={() => setRecipeView("recommendations")}
@@ -484,6 +760,71 @@ export default function RecommendationsScreen() {
               mood="worry"
               size="small"
             />
+            {!hasActiveEntitlement &&
+            monetization.access?.offer.personalized &&
+            monetization.access?.offer.kind !== "none" ? (
+              <Button
+                onPress={() =>
+                  handleMonetizationOffer(monetization.access!.offer.kind)
+                }
+                loading={monetization.adState === "loading"}
+                fullWidth
+              >
+                {offerLabel(monetization.access!.offer.kind)}
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            monetization.access?.offer.personalized &&
+            monetization.access?.offer.alternatives.length ? (
+              <Pressable
+                onPress={() => setShowOfferAlternatives(true)}
+                accessibilityRole="button"
+                accessibilityLabel="다른 이용 방법 보기"
+                style={({ pressed }) => [
+                  styles.quotaLink,
+                  pressed && styles.optionsSummaryPressed,
+                ]}
+              >
+                <Text style={styles.quotaLinkText}>다른 방법</Text>
+              </Pressable>
+            ) : null}
+            {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
+            monetization.access?.rewardedAds.canWatch ? (
+              <Button
+                onPress={() => setShowRewardedAdSheet(true)}
+                loading={monetization.adState === "loading"}
+                fullWidth
+              >
+                광고 보고 추천 1회 받기
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
+            monetization.access?.paidCredits.salesEnabled ? (
+              <Button
+                onPress={() => router.push("/settings/recommendation-credits")}
+                variant="secondary"
+                fullWidth
+              >
+                AI 추천권 충전하기
+              </Button>
+            ) : null}
+            {!hasActiveEntitlement &&
+            !monetization.access?.offer.personalized &&
+            monetization.access?.subscriptionsEnabled ? (
+              <Pressable
+                onPress={() => router.push("/settings/subscription")}
+                accessibilityRole="button"
+                accessibilityLabel="장고 플러스 살펴보기"
+                style={({ pressed }) => [
+                  styles.quotaLink,
+                  pressed && styles.optionsSummaryPressed,
+                ]}
+              >
+                <Text style={styles.quotaLinkText}>장고 플러스 살펴보기</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : (
           <View style={styles.errorCard}>
@@ -530,6 +871,16 @@ export default function RecommendationsScreen() {
       latestRecommendation &&
       !isGenerating ? (
         <View style={styles.resultSection}>
+          {lastDismissedDish ? (
+            <FeedbackBanner
+              tone="info"
+              title={`${lastDismissedDish.title}을(를) 숨겼어요.`}
+              description="다음 추천에서는 비슷한 요리를 덜 보여드릴게요."
+              actionLabel="실행취소"
+              onAction={handleUndoDismiss}
+              showMascot={false}
+            />
+          ) : null}
           <SectionHeader
             title="이번에 골라본 요리"
             surface
@@ -537,19 +888,25 @@ export default function RecommendationsScreen() {
           />
 
           {latestRecommendation.recommendations.length ? (
-            latestRecommendation.recommendations.map((dish, index) => (
-              <RecipeCard
+            latestRecommendation.recommendations.map((dish, index) =>
+              hiddenDishKeys.includes(
+                getRecipeFavoriteKey(latestRecommendation.id, index),
+              ) ? null : (
+                <RecipeCard
                 key={`${latestRecommendation.id}-${dish.title}-${index}`}
                 dish={dish}
                 badgeLabel={String(index + 1)}
                 inventorySnapshot={latestRecommendation.inventorySnapshot}
                 onOpenDetails={() =>
-                  setRecipeDetail({
+                  handleOpenDetails({
                     recommendationId: latestRecommendation.id,
                     dishIndex: index,
                     dish,
                     inventorySnapshot: latestRecommendation.inventorySnapshot,
                   })
+                }
+                onDismiss={() =>
+                  handleDismissDish(latestRecommendation.id, index, dish.title)
                 }
                 isFavorite={favoriteKeys.has(
                   getRecipeFavoriteKey(latestRecommendation.id, index),
@@ -569,8 +926,9 @@ export default function RecommendationsScreen() {
                     favorite,
                   })
                 }
-              />
-            ))
+                />
+              ),
+            )
           ) : (
             <EmptyState
               mood="empty"
@@ -801,6 +1159,59 @@ export default function RecommendationsScreen() {
       </BottomSheet>
 
       <BottomSheet
+        visible={showOfferAlternatives}
+        onClose={() => setShowOfferAlternatives(false)}
+        mascotMood="idle"
+        title="다른 이용 방법"
+        description="지금 사용할 수 있는 방법만 모았어요."
+      >
+        <View style={styles.sheetFooter}>
+          {monetization.access?.offer.alternatives.map((kind) => (
+            <Button
+              key={kind}
+              variant="secondary"
+              onPress={() => handleMonetizationOffer(kind)}
+              fullWidth
+            >
+              {offerLabel(kind)}
+            </Button>
+          ))}
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        visible={showRewardedAdSheet}
+        onClose={() => setShowRewardedAdSheet(false)}
+        mascotMood="idle"
+        title="광고 보고 추천 1회 받기"
+        description="보상형 광고 한 편을 끝까지 보면 오늘 사용할 추천 1회를 드려요."
+        footer={
+          <View style={styles.sheetFooter}>
+            <Button
+              variant="secondary"
+              onPress={() => setShowRewardedAdSheet(false)}
+              disabled={monetization.adState === "loading"}
+              fullWidth
+            >
+              다음에 볼게요
+            </Button>
+            <Button
+              onPress={() => void handleWatchRewardedAd()}
+              loading={monetization.adState === "loading"}
+              fullWidth
+            >
+              광고 볼게요
+            </Button>
+          </View>
+        }
+      >
+        <Text style={styles.noticeBody}>
+          광고를 닫거나 불러오지 못하면 추천권은 지급되지 않아요. 광고를 다 본
+          뒤에는 서버 확인에 최대 몇 초가 걸릴 수 있어요.
+        </Text>
+      </BottomSheet>
+
+      <BottomSheet
         visible={showAiNotice}
         onClose={() => {
           setShowAiNotice(false);
@@ -833,9 +1244,10 @@ export default function RecommendationsScreen() {
       >
         <Text style={styles.noticeBody}>
           요리 추천을 만들 때 재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한,
-          만료까지 남은 일수, 고른 조건이 장고 서버를 거쳐 외부 요리
-          도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록은 기록과 더
-          나은 추천을 위해 내 계정에 남겨 둬요.
+          만료까지 남은 일수, 고른 조건과 저장한 알레르기·식단·조리도구 설정,
+          최근 즐겨찾기·조리·관심없음 요약이 장고 서버를 거쳐 외부 요리
+          도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록, 추천 행동은
+          기록과 더 나은 추천을 위해 내 계정에 남겨 둬요.
         </Text>
         <Text style={styles.noticeFootnote}>
           외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지 않아요.
@@ -880,6 +1292,11 @@ export default function RecommendationsScreen() {
                   };
 
                   setHistoryRecommendation(null);
+                  engagementMutation.mutate({
+                    recommendationId: historyRecommendation.id,
+                    dishIndex: index,
+                    action: "view",
+                  });
                   setTimeout(
                     () => setRecipeDetail(detail),
                     SHEET_TRANSITION_DELAY_MS,
@@ -953,6 +1370,7 @@ function RecipeCard({
   badgeLabel,
   inventorySnapshot,
   onOpenDetails,
+  onDismiss,
   isFavorite = false,
   isFavoritePending = false,
   onToggleFavorite,
@@ -961,6 +1379,7 @@ function RecipeCard({
   badgeLabel?: string;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   onOpenDetails: () => void;
+  onDismiss?: () => void;
   isFavorite?: boolean;
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
@@ -1030,6 +1449,25 @@ function RecipeCard({
           <Heart
             color={isFavorite ? colors.primary : colors.subtext}
             fill={isFavorite ? colors.primary : "none"}
+            size={spacing.md}
+            strokeWidth={2.4}
+          />
+        </Pressable>
+      ) : null}
+      {onDismiss ? (
+        <Pressable
+          onPress={onDismiss}
+          accessibilityRole="button"
+          accessibilityLabel={`${dish.title} 관심없음`}
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.favoriteButton,
+            shouldStack && styles.favoriteButtonStacked,
+            pressed && styles.favoriteButtonPressed,
+          ]}
+        >
+          <EyeOff
+            color={colors.subtext}
             size={spacing.md}
             strokeWidth={2.4}
           />
@@ -1237,9 +1675,18 @@ function formatRecommendationContext(recommendation: RecipeRecommendation) {
 }
 
 function formatDishMeta(dish: RecipeRecommendationDish) {
-  return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${
-    difficultyLabels[dish.difficulty]
-  }`;
+  const values = [
+    `${dish.servings}인분`,
+    `${dish.cookingTimeMinutes}분`,
+    difficultyLabels[dish.difficulty],
+  ];
+  if (dish.spiceLevel) values.push(spiceLevelLabels[dish.spiceLevel]);
+  if (dish.requiredEquipment?.length) {
+    values.push(
+      dish.requiredEquipment.map((item) => equipmentLabels[item]).join("/"),
+    );
+  }
+  return values.join(" · ");
 }
 
 function formatIngredientPreview(ingredients: HighlightIngredient[]) {
@@ -1323,6 +1770,10 @@ function formatCreatedAt(value: string) {
   });
 }
 
+function offerLabel(kind: RecommendationAccess["offer"]["kind"]) {
+  return resolveMonetizationOffer(kind).label;
+}
+
 const styles = StyleSheet.create({
   screenContent: {
     flex: 1,
@@ -1395,6 +1846,35 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.md,
   },
+  usageCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  usageCopy: {
+    gap: spacing.xxs,
+  },
+  usageTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  usageDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
+  },
+  usageCreditLink: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontWeight: "700",
+    color: colors.primary,
+  },
   optionsSummary: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
@@ -1448,6 +1928,24 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     gap: spacing.sm,
+  },
+  valueOfferCard: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  valueOfferCopy: { gap: spacing.xxs },
+  valueOfferTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    color: colors.text,
+  },
+  valueOfferDescription: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    color: colors.subtext,
   },
   quotaTitle: {
     fontSize: typography.body.fontSize,

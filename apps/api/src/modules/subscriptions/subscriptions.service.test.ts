@@ -15,6 +15,11 @@ const managedEnvKeys = [
   "GOOGLE_PLAY_PACKAGE_NAME",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+  "MONETIZATION_EXPERIMENT_SALT",
+  "MONETIZATION_OFFER_MODE",
+  "SUBSCRIPTIONS_ENABLED",
+  "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
+  "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
 ] as const;
 
 const originalEnv = new Map(
@@ -29,6 +34,11 @@ describe("SubscriptionsService", () => {
     vi.setSystemTime(now);
     restoreManagedEnv();
     process.env.IAP_ALLOWED_PRODUCT_IDS = "expirymate_premium_monthly";
+    process.env.MONETIZATION_EXPERIMENT_SALT = "subscription-test";
+    process.env.MONETIZATION_OFFER_MODE = "expanded";
+    process.env.SUBSCRIPTIONS_ENABLED = "true";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
+    process.env.HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT = "100";
   });
 
   afterEach(() => {
@@ -48,6 +58,11 @@ describe("SubscriptionsService", () => {
       hasActiveEntitlement: false,
       store: null,
       productId: null,
+      planCode: null,
+      scope: "user",
+      spaceId: null,
+      billingPeriod: null,
+      basePlanId: null,
       status: "unknown",
       expiresAt: null,
       willRenew: null,
@@ -165,6 +180,177 @@ describe("SubscriptionsService", () => {
     expect(createPayload?.rawVerification).not.toMatchObject({
       purchaseToken: "raw-google-token",
     });
+  });
+
+  it("acknowledges a Google Play subscription after granting entitlement", async () => {
+    const privateKey = createRsaPrivateKey();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey;
+    const { service } = createService();
+    const fetchMock = vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") {
+        return jsonResponse({ access_token: "google-access-token" });
+      }
+      if (String(url).includes(":acknowledge")) {
+        return jsonResponse({});
+      }
+      return jsonResponse({
+        subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+        acknowledgementState: "ACKNOWLEDGEMENT_STATE_PENDING",
+        latestOrderId: "GPA.ack-1",
+        lineItems: [
+          {
+            productId: "expirymate_premium_monthly",
+            expiryTime: "2099-07-07T00:00:00Z",
+            autoRenewingPlan: { autoRenewEnabled: true },
+          },
+        ],
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await service.verifySubscription("owner-a", {
+      store: "google_play",
+      purchaseToken: "pending-ack-token",
+    });
+
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes(
+          "/purchases/subscriptions/expirymate_premium_monthly/tokens/pending-ack-token:acknowledge",
+        ),
+      ),
+    ).toBe(true);
+  });
+
+  it("migrates Google entitlements when Play rotates the purchase token", async () => {
+    const privateKey = createRsaPrivateKey();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    const { createHash } = await import("node:crypto");
+    const oldHash = createHash("sha256").update("old-token").digest("hex");
+    const newHash = createHash("sha256").update("new-token").digest("hex");
+    const existing = {
+      id: "entitlement-linked",
+      ownerKey: "owner-a",
+      spaceId: null,
+      purchaseTokenHash: oldHash,
+      transactionId: "GPA.old",
+      willRenew: true,
+    };
+    prisma.subscriptionEntitlement.findUnique.mockImplementation(
+      async ({ where }: { where: Record<string, { purchaseTokenHash?: string }> }) => {
+        const hash = where.store_purchaseTokenHash?.purchaseTokenHash;
+        if (hash === newHash) return null;
+        if (hash === oldHash) return existing;
+        return null;
+      },
+    );
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async (url: string) => {
+        if (url === "https://oauth2.googleapis.com/token") {
+          return jsonResponse({ access_token: "google-access-token" });
+        }
+        if (String(url).includes(":acknowledge")) {
+          return jsonResponse({});
+        }
+        return jsonResponse({
+          subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+          acknowledgementState: "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+          latestOrderId: "GPA.new",
+          linkedPurchaseToken: "old-token",
+          lineItems: [
+            {
+              productId: "expirymate_premium_monthly",
+              expiryTime: "2099-07-07T00:00:00Z",
+              autoRenewingPlan: { autoRenewEnabled: true },
+            },
+          ],
+        });
+      }),
+    );
+
+    await service.verifySubscription("owner-a", {
+      store: "google_play",
+      purchaseToken: "new-token",
+    });
+
+    expect(prisma.subscriptionEntitlement.update).toHaveBeenCalledWith({
+      where: { id: "entitlement-linked" },
+      data: expect.objectContaining({
+        purchaseTokenHash: newHash,
+        transactionId: "GPA.new",
+      }),
+    });
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+  });
+
+  it("falls back to Apple sandbox when production returns 4040010", async () => {
+    process.env.NODE_ENV = "production";
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
+    process.env.IAP_ALLOW_SANDBOX_PURCHASES = "true";
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    const sandboxPayload = {
+      environment: "Sandbox",
+      bundleId: "com.expirymate.mobile",
+      data: [
+        {
+          lastTransactions: [
+            {
+              originalTransactionId: "original-transaction-sandbox",
+              status: 1,
+              signedTransactionInfo: jws({
+                transactionId: "transaction-sandbox",
+                originalTransactionId: "original-transaction-sandbox",
+                productId: "expirymate_premium_monthly",
+                bundleId: "com.expirymate.mobile",
+                environment: "Sandbox",
+                expiresDate,
+              }),
+              signedRenewalInfo: jws({
+                autoRenewStatus: 1,
+                autoRenewProductId: "expirymate_premium_monthly",
+              }),
+            },
+          ],
+        },
+      ],
+    };
+    const fetchMock = vi.fn().mockImplementation(async (url: string) => {
+      if (String(url).includes("api.storekit.apple.com")) {
+        return jsonResponse({ errorCode: 4040010 }, false, 404);
+      }
+      return jsonResponse(sandboxPayload);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "apple_app_store",
+      transactionId: "transaction-sandbox",
+    });
+
+    expect(response.entitlement.hasActiveEntitlement).toBe(true);
+    expect(String(response.entitlement.environment).toLowerCase()).toBe(
+      "sandbox",
+    );
+    expect(prisma.subscriptionEntitlement.create).toHaveBeenCalled();
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes("api.storekit-sandbox.apple.com"),
+      ),
+    ).toBe(true);
   });
 
   it("rejects store products that are not in the allowed product list", async () => {
@@ -378,10 +564,276 @@ describe("SubscriptionsService", () => {
     expect(response.entitlement.hasActiveEntitlement).toBe(true);
     expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledOnce();
   });
+
+  it("attaches a Household purchase only to an eligible owned space", async () => {
+    const privateKey = createEcPrivateKey();
+    process.env.IAP_ALLOWED_PRODUCT_IDS = "expirymate_household_monthly";
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    prisma.inventorySpace.findFirst.mockResolvedValue({
+      id: "space-home",
+      _count: { memberships: 3 },
+    });
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          data: [{
+            lastTransactions: [{
+              originalTransactionId: "household-original",
+              status: 1,
+              signedTransactionInfo: jws({
+                transactionId: "household-transaction",
+                originalTransactionId: "household-original",
+                productId: "expirymate_household_monthly",
+                bundleId: "com.expirymate.mobile",
+                environment: "Sandbox",
+                expiresDate,
+              }),
+              signedRenewalInfo: jws({ autoRenewStatus: 1 }),
+            }],
+          }],
+        }),
+      ),
+    );
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "apple_app_store",
+      productId: "expirymate_household_monthly",
+      transactionId: "household-transaction",
+      environment: "sandbox",
+      spaceId: "space-home",
+    });
+
+    expect(response.entitlement).toMatchObject({
+      planCode: "jango_household",
+      scope: "space",
+      spaceId: "space-home",
+    });
+    expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        ownerKey: "owner-a",
+        spaceId: "space-home",
+        planCode: "jango_household",
+      }),
+    });
+  });
+
+  it("rejects new Plus purchases while subscription sales are paused", async () => {
+    process.env.SUBSCRIPTIONS_ENABLED = "false";
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          environment: "Sandbox",
+          data: [
+            {
+              lastTransactions: [
+                {
+                  originalTransactionId: "original-transaction-sales-off",
+                  status: 1,
+                  signedTransactionInfo: jws({
+                    transactionId: "transaction-sales-off",
+                    originalTransactionId: "original-transaction-sales-off",
+                    productId: "expirymate_premium_monthly",
+                    bundleId: "com.expirymate.mobile",
+                    environment: "Sandbox",
+                    expiresDate,
+                  }),
+                  signedRenewalInfo: jws({
+                    autoRenewStatus: 1,
+                    autoRenewProductId: "expirymate_premium_monthly",
+                  }),
+                },
+              ],
+            },
+          ],
+        }),
+      ),
+    );
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "apple_app_store",
+        transactionId: "transaction-sales-off",
+        environment: "sandbox",
+      }),
+    ).rejects.toThrow(/신규 가입은 잠시 쉬고/);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+  });
+
+  it("still restores an existing entitlement while subscription sales are paused", async () => {
+    process.env.SUBSCRIPTIONS_ENABLED = "false";
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    const expiresDate = now.getTime() + 30 * 24 * 60 * 60 * 1000;
+    prisma.subscriptionEntitlement.findUnique.mockResolvedValue({
+      id: "entitlement-existing",
+      ownerKey: "owner-a",
+      spaceId: null,
+      originalTransactionId: "original-transaction-restore",
+    });
+    prisma.subscriptionEntitlement.update.mockResolvedValue({
+      id: "entitlement-existing",
+      ownerKey: "owner-a",
+      spaceId: null,
+      store: "apple_app_store",
+      productId: "expirymate_premium_monthly",
+      planCode: "jango_plus",
+      billingPeriod: "monthly",
+      basePlanId: null,
+      status: "active",
+      isActive: true,
+      willRenew: true,
+      expiresAt: new Date(expiresDate),
+      environment: "Sandbox",
+      verifiedAt: now,
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          environment: "Sandbox",
+          data: [
+            {
+              lastTransactions: [
+                {
+                  originalTransactionId: "original-transaction-restore",
+                  status: 1,
+                  signedTransactionInfo: jws({
+                    transactionId: "transaction-restore",
+                    originalTransactionId: "original-transaction-restore",
+                    productId: "expirymate_premium_monthly",
+                    bundleId: "com.expirymate.mobile",
+                    environment: "Sandbox",
+                    expiresDate,
+                  }),
+                  signedRenewalInfo: jws({
+                    autoRenewStatus: 1,
+                    autoRenewProductId: "expirymate_premium_monthly",
+                  }),
+                },
+              ],
+            },
+          ],
+        }),
+      ),
+    );
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "apple_app_store",
+      transactionId: "transaction-restore",
+      environment: "sandbox",
+    });
+
+    expect(response.entitlement.hasActiveEntitlement).toBe(true);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).toHaveBeenCalledOnce();
+  });
+
+  it("builds a 30-day plus consumption report for active subscribers", async () => {
+    const prisma = {
+      subscriptionEntitlement: {
+        findFirst: vi.fn().mockResolvedValue({ id: "entitlement-1" }),
+      },
+      inventoryItem: {
+        findMany: vi.fn().mockResolvedValue([
+          {
+            displayName: "?곗쑀",
+            expiryDate: new Date("2026-08-12T00:00:00.000Z"),
+          },
+          {
+            displayName: "?먮몢遺",
+            expiryDate: new Date("2026-08-13T00:00:00.000Z"),
+          },
+        ]),
+        groupBy: vi
+          .fn()
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 8 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 4 } },
+            { status: "discarded", _count: { _all: 1 } },
+          ])
+          .mockResolvedValueOnce([
+            { status: "consumed", _count: { _all: 3 } },
+            { status: "discarded", _count: { _all: 2 } },
+          ])
+          .mockResolvedValueOnce([
+            { category: "dairy", _count: { _all: 2 } },
+          ]),
+        count: vi.fn().mockResolvedValue(3),
+      },
+    };
+    const service = new SubscriptionsService(prisma as never);
+
+    const insights = await service.getPlusInsights(
+      "owner-a",
+      new Date("2026-08-10T03:00:00.000Z"),
+    );
+
+    expect(insights).toMatchObject({
+      consumed: 8,
+      discarded: 2,
+      wasteRatePercent: 20,
+      expiringSoon: 3,
+      topDiscardedCategories: [{ category: "dairy", count: 2 }],
+      actions: [
+        expect.objectContaining({
+          kind: "use_expiring",
+          priority: "high",
+          count: 3,
+          nearestExpiryDate: "2026-08-12",
+        }),
+        expect.objectContaining({
+          kind: "reduce_category_waste",
+          category: "dairy",
+        }),
+        expect.objectContaining({ kind: "keep_momentum" }),
+      ],
+      weekly: {
+        current: expect.objectContaining({
+          consumed: 4,
+          discarded: 1,
+          wasteRatePercent: 20,
+        }),
+        previous: expect.objectContaining({
+          consumed: 3,
+          discarded: 2,
+          wasteRatePercent: 40,
+        }),
+        wasteRateChangePercentagePoints: -20,
+        trend: "improved",
+      },
+    });
+  });
 });
 
 function createService() {
   const prisma = {
+    inventorySpace: {
+      findFirst: vi.fn(),
+    },
     subscriptionEntitlement: {
       findFirst: vi.fn(),
       findUnique: vi.fn().mockResolvedValue(null),

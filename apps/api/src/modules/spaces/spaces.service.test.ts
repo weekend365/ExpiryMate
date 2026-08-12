@@ -490,6 +490,25 @@ describe("SpacesService", () => {
     });
   });
 
+  it("blocks a sixth Household member while the space subscription is active", async () => {
+    prisma.spaceInvitation.findUnique.mockResolvedValue(
+      validCodeInvitation({ spaceId: "space-house" }),
+    );
+    prisma.inventorySpaceMembership.findUnique.mockResolvedValue(null);
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "household-subscription",
+    });
+    prisma.inventorySpaceMembership.count.mockResolvedValue(5);
+
+    await expect(
+      service.acceptInvitationCode("user-six", {
+        code: "ABCDEFGH",
+        notificationsEnabled: false,
+      }),
+    ).rejects.toBeInstanceOf(ConflictException);
+    expect(prisma.spaceInvitation.updateMany).not.toHaveBeenCalled();
+  });
+
   it("rejects an already claimed code before creating membership", async () => {
     prisma.spaceInvitation.findUnique.mockResolvedValue(validCodeInvitation());
     prisma.inventorySpaceMembership.findUnique.mockResolvedValue(null);
@@ -606,6 +625,7 @@ function createPrismaMock() {
       upsert: vi.fn(),
     },
     inventorySpaceMembership: {
+      count: vi.fn().mockResolvedValue(1),
       create: vi.fn(),
       findUnique: vi.fn(),
       findMany: vi.fn(),
@@ -621,6 +641,9 @@ function createPrismaMock() {
     },
     user: {
       findUnique: vi.fn(),
+    },
+    subscriptionEntitlement: {
+      findFirst: vi.fn().mockResolvedValue(null),
     },
     $transaction: vi.fn(
       async (

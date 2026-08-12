@@ -2,9 +2,12 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import {
   Bell,
+  ChefHat,
+  CreditCard,
   MapPin,
   MessageCircleHeart,
   ShieldCheck,
+  Ticket,
   UserRound,
   Users,
 } from "lucide-react-native";
@@ -13,11 +16,14 @@ import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
+import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function SettingsScreen() {
+  const monetization = useMonetization();
   const { shouldStack } = useResponsiveLayout();
+
   return (
     <Screen bottomInsetMode="navigator" testID="settings-screen">
       <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
@@ -43,6 +49,12 @@ export default function SettingsScreen() {
             onPress={() => router.push("/settings/notifications")}
           />
           <ListRow
+            title="요리 추천 맞춤 설정"
+            description="알레르기, 식단, 매운맛과 조리도구를 기억해요."
+            icon={ChefHat}
+            onPress={() => router.push("/settings/recipe-preferences")}
+          />
+          <ListRow
             title="보관 위치"
             description="냉장·냉동 외에 나만의 자리를 추가해요."
             icon={MapPin}
@@ -60,6 +72,38 @@ export default function SettingsScreen() {
             icon={UserRound}
             onPress={() => router.push("/settings/account")}
           />
+          {monetization.access?.subscriptionsEnabled ||
+          monetization.access?.tier === "jango_plus" ||
+          monetization.access?.tier === "jango_household" ? (
+            <ListRow
+              title="장고 플러스"
+              description={
+                monetization.access.tier === "jango_household"
+                  ? `가족 플러스 · 하루 최대 ${monetization.access.householdDailyLimit}회 추천을 함께 써요.`
+                  : monetization.access.tier === "jango_plus"
+                    ? `이용 중 · 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 확인해요.`
+                    : `광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`
+              }
+              icon={CreditCard}
+              onPress={() => router.push("/settings/subscription")}
+            />
+          ) : null}
+          {monetization.access?.paidCredits.enabled ? (
+            <ListRow
+              title="AI 추천권"
+              description={
+                monetization.access.paidCredits.salesEnabled
+                  ? `보유 ${monetization.access.paidCredits.balance}회 · 필요한 만큼만 충전해요.`
+                  : `보유 ${monetization.access.paidCredits.balance}회 · 추천할 때 자동 사용돼요.`
+              }
+              icon={Ticket}
+              onPress={
+                monetization.access.paidCredits.salesEnabled
+                  ? () => router.push("/settings/recommendation-credits")
+                  : undefined
+              }
+            />
+          ) : null}
           <ListRow
             title="장고에게 물어보기"
             description="불편한 점이나 궁금한 점을 남겨 주세요."

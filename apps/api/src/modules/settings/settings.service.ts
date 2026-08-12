@@ -13,7 +13,9 @@ import {
   storageLocationLabels,
   SYSTEM_STORAGE_LOCATION_KEYS,
   type CreateUserStorageLocationBody,
+  type RecipePreference,
   type StorageLocationsResponse,
+  type UpdateRecipePreference,
   type UpdateUserStorageLocationBody,
 } from "@expirymate/shared";
 import {
@@ -26,6 +28,29 @@ import { UpdateNotificationPreferenceDto } from "./dto/update-notification-prefe
 @Injectable()
 export class SettingsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getRecipePreferences(ownerKey: string): Promise<RecipePreference> {
+    const preference = await this.prisma.recipePreference.upsert({
+      where: { ownerKey },
+      update: {},
+      create: { ownerKey },
+    });
+
+    return serializeRecipePreference(preference);
+  }
+
+  async updateRecipePreferences(
+    ownerKey: string,
+    dto: UpdateRecipePreference,
+  ): Promise<RecipePreference> {
+    const preference = await this.prisma.recipePreference.upsert({
+      where: { ownerKey },
+      update: dto,
+      create: { ownerKey, ...dto },
+    });
+
+    return serializeRecipePreference(preference);
+  }
 
   async getNotificationPreferences(ownerKey: string) {
     const preference = await this.prisma.notificationPreference.upsert({
@@ -248,6 +273,25 @@ export class SettingsService {
 
     return location;
   }
+}
+
+function serializeRecipePreference(preference: {
+  allergens: string[];
+  excludedIngredients: string[];
+  dietaryStyle: string;
+  maxSpiceLevel: string;
+  availableEquipment: string[];
+  updatedAt: Date;
+}): RecipePreference {
+  return {
+    allergens: preference.allergens as RecipePreference["allergens"],
+    excludedIngredients: preference.excludedIngredients,
+    dietaryStyle: preference.dietaryStyle as RecipePreference["dietaryStyle"],
+    maxSpiceLevel: preference.maxSpiceLevel as RecipePreference["maxSpiceLevel"],
+    availableEquipment:
+      preference.availableEquipment as RecipePreference["availableEquipment"],
+    updatedAt: preference.updatedAt.toISOString(),
+  };
 }
 
 function storageLocationScope(ownerKey: string, spaceId?: string) {

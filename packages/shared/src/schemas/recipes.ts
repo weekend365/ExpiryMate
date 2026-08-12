@@ -12,6 +12,105 @@ export const recipeMealTypeSchema = z.enum([
   "snack",
 ]);
 
+export const recipeAllergenSchema = z.enum([
+  "egg",
+  "milk",
+  "buckwheat",
+  "peanut",
+  "soybean",
+  "wheat",
+  "mackerel",
+  "crab",
+  "shrimp",
+  "pork",
+  "peach",
+  "tomato",
+  "sulfites",
+  "walnut",
+  "chicken",
+  "beef",
+  "squid",
+  "shellfish",
+  "pine_nut",
+]);
+
+export const recipeDietaryStyleSchema = z.enum([
+  "any",
+  "vegetarian",
+  "vegan",
+  "pescatarian",
+]);
+
+export const recipeSpiceLevelSchema = z.enum([
+  "any",
+  "none",
+  "mild",
+  "medium",
+  "hot",
+]);
+
+export const recipeGeneratedSpiceLevelSchema = recipeSpiceLevelSchema.exclude([
+  "any",
+]);
+
+export const recipeEquipmentSchema = z.enum([
+  "stovetop",
+  "microwave",
+  "oven",
+  "air_fryer",
+]);
+
+const excludedIngredientSchema = z.string().trim().min(1).max(40);
+
+const recipePreferenceShape = {
+  allergens: z.array(recipeAllergenSchema).max(19),
+  excludedIngredients: z.array(excludedIngredientSchema).max(20),
+  dietaryStyle: recipeDietaryStyleSchema,
+  maxSpiceLevel: recipeSpiceLevelSchema,
+  availableEquipment: z.array(recipeEquipmentSchema).min(1).max(4),
+};
+
+export const updateRecipePreferenceSchema = z
+  .object(recipePreferenceShape)
+  .transform((value) => ({
+    ...value,
+    allergens: [...new Set(value.allergens)],
+    excludedIngredients: Array.from(
+      new Map(
+        value.excludedIngredients.map((item) => [item.toLocaleLowerCase("ko-KR"), item]),
+      ).values(),
+    ),
+    availableEquipment: [...new Set(value.availableEquipment)],
+  }));
+
+export const recipePreferenceSchema = z.object({
+  ...recipePreferenceShape,
+  updatedAt: z.string(),
+});
+
+export const recipeEngagementActionSchema = z.enum([
+  "view",
+  "cooking_started",
+  "cooking_completed",
+  "dismiss",
+  "undo_dismiss",
+]);
+
+export const updateRecipeEngagementSchema = z.object({
+  action: recipeEngagementActionSchema,
+});
+
+export const recipeDishEngagementSchema = z.object({
+  recommendationId: z.string(),
+  dishIndex: z.number().int().nonnegative(),
+  viewedAt: z.string().nullable(),
+  cookingStartedAt: z.string().nullable(),
+  cookingCompletedAt: z.string().nullable(),
+  dismissedAt: z.string().nullable(),
+  favoritedAt: z.string().nullable(),
+  updatedAt: z.string(),
+});
+
 export const recipeRecommendationRequestSchema = z.object({
   servings: z.coerce.number().int().min(1).max(6).default(2),
   maxCookingMinutes: z.coerce.number().int().min(5).max(120).default(30),
@@ -68,6 +167,8 @@ export const recipeRecommendationDishSchema = z.object({
   steps: z.array(z.string().min(1).max(fieldLimits.recipeText)).min(1),
   tips: z.array(z.string().max(fieldLimits.recipeText)),
   safetyNote: z.string().max(fieldLimits.recipeText),
+  spiceLevel: recipeGeneratedSpiceLevelSchema.optional(),
+  requiredEquipment: z.array(recipeEquipmentSchema).optional(),
 });
 
 export const recipeRecommendationsPayloadSchema = z.object({
@@ -79,6 +180,8 @@ export const generatedRecipeRecommendationsPayloadSchema = z.object({
     .array(
       recipeRecommendationDishSchema.extend({
         usedIngredients: z.array(generatedRecipeUsedIngredientSchema),
+        spiceLevel: recipeGeneratedSpiceLevelSchema,
+        requiredEquipment: z.array(recipeEquipmentSchema),
       }),
     )
     .length(3),
@@ -109,6 +212,26 @@ export const deleteRecipeFavoriteResponseSchema = z.object({
 });
 
 export type RecipeMealType = z.infer<typeof recipeMealTypeSchema>;
+export type RecipeAllergen = z.infer<typeof recipeAllergenSchema>;
+export type RecipeDietaryStyle = z.infer<typeof recipeDietaryStyleSchema>;
+export type RecipeSpiceLevel = z.infer<typeof recipeSpiceLevelSchema>;
+export type RecipeGeneratedSpiceLevel = z.infer<
+  typeof recipeGeneratedSpiceLevelSchema
+>;
+export type RecipeEquipment = z.infer<typeof recipeEquipmentSchema>;
+export type RecipePreference = z.infer<typeof recipePreferenceSchema>;
+export type UpdateRecipePreference = z.infer<
+  typeof updateRecipePreferenceSchema
+>;
+export type RecipeEngagementAction = z.infer<
+  typeof recipeEngagementActionSchema
+>;
+export type UpdateRecipeEngagement = z.infer<
+  typeof updateRecipeEngagementSchema
+>;
+export type RecipeDishEngagement = z.infer<
+  typeof recipeDishEngagementSchema
+>;
 export type RecipeRecommendationRequest = z.infer<
   typeof recipeRecommendationRequestSchema
 >;

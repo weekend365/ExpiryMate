@@ -98,6 +98,7 @@ describe("PrivacyService", () => {
       }),
     });
     expect(operations).toContain("recipeFavorite.deleteMany");
+    expect(operations).toContain("recipeDishEngagement.deleteMany");
     expect(operations).toContain("recipeRecommendation.deleteMany");
   });
 
@@ -137,12 +138,18 @@ describe("PrivacyService", () => {
       "pushToken.deleteMany",
       "inventoryItem.updateMany",
       "recipeFavorite.deleteMany",
+      "recipeDishEngagement.deleteMany",
+      "recommendationUsageEvent.deleteMany",
+      "rewardedAdSession.deleteMany",
+      "barcodeRewardCredit.deleteMany",
+      "monetizationFunnelEvent.deleteMany",
       "recipeRecommendation.deleteMany",
       "spaceInvitation.deleteMany",
       "inventorySpaceMembership.deleteMany",
       "inventorySpace.deleteMany",
       "subscriptionEntitlement.deleteMany",
       "notificationPreference.deleteMany",
+      "recipePreference.deleteMany",
       "supportInquiry.deleteMany",
       "refreshSession.deleteMany",
       "oneTimeAuthToken.deleteMany",
@@ -226,6 +233,26 @@ function createPrismaMock(
       },
     },
     recipeFavorite: createDeleteManyMock("recipeFavorite.deleteMany", operations),
+    recipeDishEngagement: createDeleteManyMock(
+      "recipeDishEngagement.deleteMany",
+      operations,
+    ),
+    recommendationUsageEvent: createDeleteManyMock(
+      "recommendationUsageEvent.deleteMany",
+      operations,
+    ),
+    rewardedAdSession: createDeleteManyMock(
+      "rewardedAdSession.deleteMany",
+      operations,
+    ),
+    barcodeRewardCredit: createDeleteManyMock(
+      "barcodeRewardCredit.deleteMany",
+      operations,
+    ),
+    monetizationFunnelEvent: createDeleteManyMock(
+      "monetizationFunnelEvent.deleteMany",
+      operations,
+    ),
     recipeRecommendation: createDeleteManyMock(
       "recipeRecommendation.deleteMany",
       operations,
@@ -241,6 +268,10 @@ function createPrismaMock(
     ),
     notificationPreference: createDeleteManyMock(
       "notificationPreference.deleteMany",
+      operations,
+    ),
+    recipePreference: createDeleteManyMock(
+      "recipePreference.deleteMany",
       operations,
     ),
     supportInquiry: createDeleteManyMock(

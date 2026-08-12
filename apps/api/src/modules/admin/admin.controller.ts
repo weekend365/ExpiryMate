@@ -24,4 +24,11 @@ export class AdminController {
   getDashboardSummary() {
     return this.adminService.getDashboardSummary();
   }
+
+  @Get("monetization/overview")
+  getMonetizationOverview(@Query("days") days?: string) {
+    return this.adminService.getMonetizationOverview(
+      days ? Number(days) : undefined,
+    );
+  }
 }

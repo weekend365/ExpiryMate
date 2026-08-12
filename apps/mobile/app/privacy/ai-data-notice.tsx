@@ -102,17 +102,20 @@ export default function AiDataNoticeScreen() {
             <Text style={styles.cardTitle}>추천할 때 전달되는 정보</Text>
             <Text style={styles.bodyText}>
               재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한, 만료까지 남은
-              일수, 인원·조리 시간·식사 유형 같은 조건이 장고 서버를 거쳐 외부
-              요리 도우미(OpenAI, 미국)로 전달돼요. 앱에는 OpenAI 키가 없어요.
+              일수, 인원·조리 시간·식사 유형 같은 조건과 저장한 알레르기·제외
+              재료·식단·매운맛·조리도구 설정, 최근 즐겨찾기·조리 완료·관심없음
+              요약이 장고 서버를 거쳐 외부 요리 도우미(OpenAI, 미국)로 전달돼요.
+              앱에는 OpenAI 키가 없어요.
             </Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.cardTitle}>장고가 기억해 두는 것</Text>
             <Text style={styles.bodyText}>
               추천할 때 고른 조건, 그때의 재료 목록, 나온 요리 추천은 나중에 다시
-              볼 수 있도록 내 계정에 남겨 둬요. 즐겨찾기에 저장한 요리도 같은
-              계정에 남으며, 원하시면 「추천 기록과 즐겨찾기 정리」에서 언제든
-              지울 수 있어요.
+              볼 수 있도록 내 계정에 남겨 둬요. 즐겨찾기와 상세 보기·조리 시작·완료·
+              관심없음 기록도 다음 추천을 맞추기 위해 남겨요. 추천 행동과 결과는
+              「추천 기록과 즐겨찾기 정리」에서 지울 수 있고, 맞춤 설정은 설정에서
+              바꾸거나 계정을 정리할 때 삭제할 수 있어요.
             </Text>
           </View>
           <View style={styles.card}>

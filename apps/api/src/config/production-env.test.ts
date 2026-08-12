@@ -63,6 +63,87 @@ describe("validateProductionEnvironment", () => {
 
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
+
+  it("requires reward secrets when barcode rewards are enabled", () => {
+    const env = validProductionEnv();
+    env.BARCODE_REWARDS_ENABLED = "true";
+    env.BARCODE_REWARD_ROLLOUT_PERCENT = "10";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /BARCODE_REWARD_TOKEN_SECRET.*MONETIZATION_EXPERIMENT_SALT/s,
+    );
+
+    env.BARCODE_REWARD_TOKEN_SECRET =
+      "1234567890abcdef1234567890abcdef";
+    env.MONETIZATION_EXPERIMENT_SALT =
+      "abcdef1234567890abcdef1234567890";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("requires a valid catalog when paid recommendation credits are enabled", () => {
+    const env = validProductionEnv();
+    env.PAID_RECOMMENDATION_CREDITS_ENABLED = "true";
+    delete env.RECOMMENDATION_CREDIT_PRODUCTS;
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /RECOMMENDATION_CREDIT_PRODUCTS/,
+    );
+
+    env.RECOMMENDATION_CREDIT_PRODUCTS = "credits_5:5,credits_15:15";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("requires complete revenue data before enabling automatic economics guardrails", () => {
+    const env = validProductionEnv();
+    env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED = "true";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /MONETIZATION_REVENUE_LEDGER_ENABLED.*MONETIZATION_ESTIMATES_JSON/s,
+    );
+
+    env.MONETIZATION_REVENUE_LEDGER_ENABLED = "true";
+    env.MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT = "100";
+    env.MONETIZATION_EXPERIMENT_SALT =
+      "abcdef1234567890abcdef1234567890";
+    env.MONETIZATION_ESTIMATES_JSON = JSON.stringify({
+      usdKrw: 1300,
+      rewardedAdEcpmKrw: 5000,
+      productNetProceedsKrw: { expirymate_premium_monthly: 3000 },
+    });
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("applies safe monetization defaults when production omits those keys", () => {
+    const env = validProductionEnv();
+    delete env.RECIPE_FREE_DAILY_LIMIT;
+    delete env.RECIPE_REWARDED_DAILY_LIMIT;
+    delete env.RECIPE_SUBSCRIBER_DAILY_LIMIT;
+    delete env.RECIPE_ABSOLUTE_DAILY_LIMIT;
+    delete env.MONETIZATION_OFFER_MODE;
+    delete env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED;
+    delete env.BARCODE_REWARDS_ENABLED;
+    delete env.BARCODE_REWARD_ROLLOUT_PERCENT;
+    delete env.BARCODE_REWARD_DAILY_LIMIT;
+    delete env.BARCODE_REWARD_BALANCE_LIMIT;
+    delete env.PAID_RECOMMENDATION_CREDITS_ENABLED;
+    delete env.REWARDED_ADS_ENABLED;
+    delete env.SUBSCRIPTIONS_ENABLED;
+
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+    expect(env.MONETIZATION_OFFER_MODE).toBe("core");
+    expect(env.REWARDED_ADS_ENABLED).toBe("false");
+    expect(env.SUBSCRIPTIONS_ENABLED).toBe("false");
+    expect(env.RECIPE_FREE_DAILY_LIMIT).toBe("1");
+  });
+
+  it("still rejects invalid monetization values when they are set", () => {
+    const env = validProductionEnv();
+    env.MONETIZATION_OFFER_MODE = "legacy";
+    env.RECIPE_FREE_DAILY_LIMIT = "-1";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /MONETIZATION_OFFER_MODE.*RECIPE_FREE_DAILY_LIMIT/s,
+    );
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {
@@ -87,6 +168,21 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     PRIVACY_CHOICES_URL: "https://admin.expirymate.app/privacy/choices",
     PRIVACY_CONTACT_EMAIL: "privacy@expirymate.app",
     OPENAI_API_KEY: "sk-live-test-key-not-a-placeholder",
+    RECIPE_FREE_DAILY_LIMIT: "1",
+    RECIPE_REWARDED_DAILY_LIMIT: "3",
+    RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
+    RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
+    MONETIZATION_OFFER_MODE: "core",
+    MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "false",
+    BARCODE_REWARDS_ENABLED: "false",
+    BARCODE_REWARD_ROLLOUT_PERCENT: "0",
+    BARCODE_REWARD_DAILY_LIMIT: "3",
+    BARCODE_REWARD_BALANCE_LIMIT: "10",
+    PAID_RECOMMENDATION_CREDITS_ENABLED: "false",
+    RECOMMENDATION_CREDIT_PRODUCTS:
+      "expirymate_recipe_credits_5:5,expirymate_recipe_credits_15:15",
+    REWARDED_ADS_ENABLED: "false",
+    SUBSCRIPTIONS_ENABLED: "false",
     IAP_ALLOWED_PRODUCT_IDS:
       "expirymate_premium_monthly,expirymate_premium_yearly",
     APPLE_BUNDLE_ID: "com.expirymate.mobile",

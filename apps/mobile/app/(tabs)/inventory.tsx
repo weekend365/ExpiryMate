@@ -1,22 +1,25 @@
 import {
+  formatDateKoreanCompact,
+  getExpiryTrafficBucket,
   isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  Archive,
   Barcode,
   Check,
-  ChevronDown,
   ListChecks,
   MapPin,
+  MoreHorizontal,
   PenLine,
   Plus,
   Search,
   Trash2,
+  Utensils,
   X,
 } from "lucide-react-native";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ImageBackground,
   Platform,
@@ -50,7 +53,10 @@ import {
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
-import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
+import {
+  useDeferredInventoryItemRemoval,
+  type InventoryRemovalAction,
+} from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import {
@@ -63,21 +69,14 @@ import {
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
-const SWIPE_DELETE_HINT_KEY = "inventory-swipe-delete-hint-seen";
 const urgencySectionAccentColors: Record<InventoryUrgencySection, string> = {
   expired: colors.danger,
   within7: colors.warning,
   safe: colors.success,
 };
-const inventoryFilterLabels: Record<InventoryViewFilter, string> = {
-  all: "전체",
-  expired: "만료됨",
-  within7: "7일 이내",
-  safe: "여유",
-};
 
 export default function InventoryScreen() {
-  const { shouldStack, shouldStackDense } = useResponsiveLayout();
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -92,44 +91,16 @@ export default function InventoryScreen() {
   const [location, setLocation] = useState<string | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
+  const [moreSheetVisible, setMoreSheetVisible] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [showSwipeHint, setShowSwipeHint] = useState(false);
+  const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
-  const openSwipeableCloseRef = useRef<(() => void) | null>(null);
-
-  useEffect(() => {
-    let active = true;
-
-    void AsyncStorage.getItem(SWIPE_DELETE_HINT_KEY)
-      .then((seen) => {
-        if (active && !seen) {
-          setShowSwipeHint(true);
-        }
-      })
-      .catch(() => undefined);
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const markSwipeHintSeen = useCallback(() => {
-    setShowSwipeHint(false);
-    void AsyncStorage.setItem(SWIPE_DELETE_HINT_KEY, "true").catch(
-      () => undefined,
-    );
-  }, []);
-
-  const handleSwipeableOpen = useCallback((closeSwipeable: () => void) => {
-    openSwipeableCloseRef.current?.();
-    openSwipeableCloseRef.current = closeSwipeable;
-  }, []);
 
   useEffect(() => {
     if (filterParam) {
@@ -171,14 +142,18 @@ export default function InventoryScreen() {
     () => buildInventoryUrgencySections(filtered),
     [filtered],
   );
-  const flatGroups = useMemo(
-    () => urgencySections.flatMap((section) => section.data),
-    [urgencySections],
-  );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
+  const expiredVisibleIds = useMemo(
+    () =>
+      filtered
+        .filter((item) => getExpiryTrafficBucket(item.expiryDate) === "expired")
+        .map((item) => item.id),
+    [filtered],
+  );
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-  const allVisibleSelected =
-    visibleIds.length > 0 && visibleIds.every((id) => selectedIdSet.has(id));
+  const allExpiredVisibleSelected =
+    expiredVisibleIds.length > 0 &&
+    expiredVisibleIds.every((id) => selectedIdSet.has(id));
   const facetCounts = useMemo(
     () => buildInventoryFacetCounts(trackedItems, filter, location, searchQuery),
     [trackedItems, filter, location, searchQuery],
@@ -187,21 +162,17 @@ export default function InventoryScreen() {
   const hasLocationFilter = location !== "all";
   const hasSearchQuery = searchQuery.trim().length > 0;
   const hasStatusFilter = filter !== "all";
-  const hasActiveListFilters =
-    hasStatusFilter || hasLocationFilter || hasSearchQuery;
   const selectedLocationLabel =
     location === "all" ? "모든 위치" : resolveLabel(location);
-  const activeFilterSummary = [
-    hasLocationFilter ? selectedLocationLabel : null,
-    hasStatusFilter ? inventoryFilterLabels[filter] : null,
-    hasSearchQuery ? `"${searchQuery.trim()}"` : null,
-  ]
-    .filter((value): value is string => Boolean(value))
-    .join(" · ");
 
   const selectLocationFilter = (next: string | "all") => {
     setLocation(next);
     setFilterSheetVisible(false);
+  };
+
+  const openLocationFilterSheet = () => {
+    setMoreSheetVisible(false);
+    setFilterSheetVisible(true);
   };
 
   // Only treat as empty after a successful load — never during loading/error.
@@ -209,8 +180,6 @@ export default function InventoryScreen() {
     hasLoadedInventory && !isError && trackedItems.length === 0;
   const isFilteredEmpty = !isEmptyInventory && filtered.length === 0;
   const showListChrome = hasLoadedInventory && !isError && !isEmptyInventory;
-  const soloGroupId =
-    flatGroups.length === 1 ? (flatGroups[0]?.id ?? null) : null;
 
   useEffect(() => {
     const visibleIdSet = new Set(visibleIds);
@@ -221,17 +190,6 @@ export default function InventoryScreen() {
       return nextIds.length === current.length ? current : nextIds;
     });
   }, [visibleIds]);
-
-  // Single matching group: open lots by default so the next action is obvious.
-  useEffect(() => {
-    if (!soloGroupId) {
-      return;
-    }
-
-    setExpandedGroupIds((current) =>
-      current.includes(soloGroupId) ? current : [...current, soloGroupId],
-    );
-  }, [soloGroupId, filter, location, searchQuery]);
 
   const openEntryMethodSheet = () => {
     setEntryMethodVisible(true);
@@ -263,11 +221,17 @@ export default function InventoryScreen() {
 
   const enterSelectionMode = (initialId?: string) => {
     setFilterSheetVisible(false);
+    setMoreSheetVisible(false);
     setIsSelectionMode(true);
     setSuccessMessage(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setSelectedIds(initialId ? [initialId] : []);
+  };
+
+  const openSelectionFromMore = () => {
+    setMoreSheetVisible(false);
+    enterSelectionMode();
   };
 
   const cancelSelectionMode = () => {
@@ -284,15 +248,17 @@ export default function InventoryScreen() {
     );
   };
 
-  const handleToggleAllVisible = () => {
-    if (allVisibleSelected) {
+  const handleToggleAllExpiredVisible = () => {
+    if (allExpiredVisibleSelected) {
       setSelectedIds((current) =>
-        current.filter((id) => !visibleIds.includes(id)),
+        current.filter((id) => !expiredVisibleIds.includes(id)),
       );
       return;
     }
 
-    setSelectedIds((current) => [...new Set([...current, ...visibleIds])]);
+    setSelectedIds((current) => [
+      ...new Set([...current, ...expiredVisibleIds]),
+    ]);
   };
 
   const handleCardPress = (id: string) => {
@@ -346,9 +312,37 @@ export default function InventoryScreen() {
   };
 
   const handleDiscard = (item: InventoryItem) => {
+    setCleanupItem(null);
     setSuccessMessage(null);
     setActionErrorMessage(null);
     deferredRemoval.scheduleRemoval(item, "discard");
+  };
+
+  const handleConsume = (item: InventoryItem) => {
+    setCleanupItem(null);
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    deferredRemoval.scheduleRemoval(item, "consume");
+  };
+
+  const openCleanupSheet = (item: InventoryItem) => {
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    deferredRemoval.clearError();
+    setCleanupItem(item);
+  };
+
+  const applyCleanupAction = (action: InventoryRemovalAction) => {
+    if (!cleanupItem) {
+      return;
+    }
+
+    if (action === "consume") {
+      handleConsume(cleanupItem);
+      return;
+    }
+
+    handleDiscard(cleanupItem);
   };
 
   const primaryFooter =
@@ -377,33 +371,31 @@ export default function InventoryScreen() {
       </Button>
     );
 
+  // Undo temporarily owns the footer — one bottom action at a time.
   const footer = deferredRemoval.undoLabel ? (
-    <View style={styles.footerStack}>
-      <View
-        style={[
-          styles.undoSnackbar,
-          shouldStack && styles.undoSnackbarStacked,
+    <View
+      style={[
+        styles.undoSnackbar,
+        shouldStack && styles.undoSnackbarStacked,
+      ]}
+      accessibilityLiveRegion="assertive"
+      accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌릴게요`}
+    >
+      <Text style={styles.undoSnackbarLabel} numberOfLines={2}>
+        {deferredRemoval.undoLabel}
+      </Text>
+      <Pressable
+        onPress={deferredRemoval.undoRemoval}
+        accessibilityRole="button"
+        accessibilityLabel="되돌릴게요"
+        hitSlop={spacing.xs}
+        style={({ pressed }) => [
+          styles.undoSnackbarAction,
+          pressed && styles.undoSnackbarActionPressed,
         ]}
-        accessibilityLiveRegion="assertive"
-        accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌리기`}
       >
-        <Text style={styles.undoSnackbarLabel} numberOfLines={2}>
-          {deferredRemoval.undoLabel}
-        </Text>
-        <Pressable
-          onPress={deferredRemoval.undoRemoval}
-          accessibilityRole="button"
-          accessibilityLabel="삭제 되돌리기"
-          hitSlop={spacing.xs}
-          style={({ pressed }) => [
-            styles.undoSnackbarAction,
-            pressed && styles.undoSnackbarActionPressed,
-          ]}
-        >
-          <Text style={styles.undoSnackbarActionLabel}>되돌리기</Text>
-        </Pressable>
-      </View>
-      {primaryFooter}
+        <Text style={styles.undoSnackbarActionLabel}>되돌릴게요</Text>
+      </Pressable>
     </View>
   ) : (
     primaryFooter
@@ -504,143 +496,146 @@ export default function InventoryScreen() {
                       ) : null}
                     </View>
                     <Pressable
-                      onPress={() => enterSelectionMode()}
+                      onPress={() => setMoreSheetVisible(true)}
                       style={({ pressed }) => [
-                        styles.selectionModeButton,
+                        styles.moreMenuButton,
+                        hasLocationFilter && styles.moreMenuButtonActive,
                         pressed && styles.headerFilterButtonPressed,
                       ]}
                       accessibilityRole="button"
-                      accessibilityLabel="여러 재료 선택"
-                      accessibilityHint="여러 재료를 골라 한 번에 정리할 수 있어요."
+                      accessibilityLabel="더 보기"
+                      accessibilityHint="위치 필터나 여러 개 정리를 고를 수 있어요."
                     >
-                      <ListChecks
-                        color={colors.primary}
+                      <MoreHorizontal
+                        color={
+                          hasLocationFilter ? colors.primary : colors.subtext
+                        }
                         size={spacing.md}
                         strokeWidth={2.4}
                       />
+                      {hasLocationFilter ? (
+                        <View style={styles.moreMenuBadge} />
+                      ) : null}
                     </Pressable>
                   </View>
 
-                  <View style={styles.filterStack}>
-                    <ScrollView
-                      horizontal
-                      style={styles.expiryFilterScroll}
-                      showsHorizontalScrollIndicator={false}
-                      keyboardShouldPersistTaps="handled"
-                      contentContainerStyle={styles.expiryFilterChipRow}
-                    >
-                      <ExpirySignalChip
-                        label="전체"
-                        count={facetCounts.status.all}
-                        selected={filter === "all"}
-                        onPress={() => applyFilter("all")}
-                      />
-                      <ExpirySignalChip
-                        label="만료됨"
-                        count={facetCounts.status.expired}
-                        tone="danger"
-                        selected={filter === "expired"}
-                        onPress={() => applyFilter("expired")}
-                      />
-                      <ExpirySignalChip
-                        label="7일 이내"
-                        count={facetCounts.status.within7}
-                        tone="warning"
-                        selected={filter === "within7"}
-                        onPress={() => applyFilter("within7")}
-                      />
-                      <ExpirySignalChip
-                        label="여유"
-                        count={facetCounts.status.safe}
-                        tone="success"
-                        selected={filter === "safe"}
-                        onPress={() => applyFilter("safe")}
-                      />
-                    </ScrollView>
-                    <FixedLocationFilter
-                      label={selectedLocationLabel}
-                      count={
-                        location === "all"
-                          ? facetCounts.locationTotal
-                          : (facetCounts.location[location] ?? 0)
-                      }
-                      selected={hasLocationFilter}
-                      onPress={() => setFilterSheetVisible(true)}
+                  <ScrollView
+                    horizontal
+                    style={styles.expiryFilterScroll}
+                    showsHorizontalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={styles.expiryFilterChipRow}
+                  >
+                    <ExpirySignalChip
+                      label="전체"
+                      count={facetCounts.status.all}
+                      selected={filter === "all"}
+                      emphasize={facetCounts.status.all > 0}
+                      onPress={() => applyFilter("all")}
                     />
-                  </View>
+                    <ExpirySignalChip
+                      label="만료됨"
+                      count={facetCounts.status.expired}
+                      tone="danger"
+                      selected={filter === "expired"}
+                      emphasize={facetCounts.status.expired > 0}
+                      onPress={() => applyFilter("expired")}
+                    />
+                    <ExpirySignalChip
+                      label="7일 이내"
+                      count={facetCounts.status.within7}
+                      tone="warning"
+                      selected={filter === "within7"}
+                      emphasize={facetCounts.status.within7 > 0}
+                      onPress={() => applyFilter("within7")}
+                    />
+                    <ExpirySignalChip
+                      label="여유"
+                      count={facetCounts.status.safe}
+                      tone="success"
+                      selected={filter === "safe"}
+                      emphasize={facetCounts.status.safe > 0}
+                      onPress={() => applyFilter("safe")}
+                    />
+                  </ScrollView>
 
-                  {hasActiveListFilters ? (
-                    <View
-                      style={[
-                        styles.activeFilterSummary,
-                        shouldStackDense && styles.activeFilterSummaryStacked,
-                      ]}
-                      accessibilityLiveRegion="polite"
-                    >
-                      <Text
-                        style={styles.activeFilterSummaryText}
-                      >
-                        {activeFilterSummary} · {filtered.length}개
-                      </Text>
+                  {hasLocationFilter ? (
+                    <View style={styles.activeLocationChip}>
                       <Pressable
-                        onPress={clearListFilters}
+                        onPress={openLocationFilterSheet}
                         accessibilityRole="button"
-                        accessibilityLabel="필터 모두 해제"
+                        accessibilityLabel={`${selectedLocationLabel} 위치 필터, 바꿀게요`}
                         style={({ pressed }) => [
-                          styles.clearFiltersButton,
+                          styles.activeLocationChipMain,
+                          pressed && styles.filterControlPressed,
+                        ]}
+                      >
+                        <MapPin
+                          color={colors.primary}
+                          size={spacing.sm}
+                          strokeWidth={2.4}
+                        />
+                        <Text style={styles.activeLocationChipLabel}>
+                          {selectedLocationLabel}
+                        </Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => setLocation("all")}
+                        hitSlop={spacing.xs}
+                        accessibilityRole="button"
+                        accessibilityLabel="위치 필터 풀게요"
+                        style={({ pressed }) => [
+                          styles.activeLocationClear,
                           pressed && styles.headerFilterButtonPressed,
                         ]}
                       >
-                        <Text style={styles.clearFiltersButtonLabel}>
-                          모두 해제
-                        </Text>
+                        <X
+                          color={colors.primary}
+                          size={spacing.sm}
+                          strokeWidth={2.4}
+                        />
                       </Pressable>
                     </View>
                   ) : null}
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
-                  style={[
-                    styles.selectionRow,
-                    shouldStackDense && styles.selectionRowStacked,
-                  ]}
+                  style={styles.selectionRow}
                   accessibilityLiveRegion="polite"
                   accessibilityLabel={
                     selectedIds.length
-                      ? `${selectedIds.length}개 선택됨`
-                      : "여러 개 선택 모드예요. 정리할 재료를 선택해 주세요."
+                      ? `${selectedIds.length}개 골랐어요`
+                      : "재료를 고르는 중이에요"
                   }
                 >
                   <View style={styles.selectionSummary}>
-                    <Text style={styles.selectionTitle}>
+                    <Text style={styles.selectionTitle} numberOfLines={1}>
                       {selectedIds.length
-                        ? `${selectedIds.length}개 선택됨`
-                        : "정리할 재료를 선택해 주세요"}
+                        ? `${selectedIds.length}개`
+                        : "고를게요"}
                     </Text>
                   </View>
-                  <View
-                    style={[
-                      styles.headerActions,
-                      shouldStackDense && styles.headerActionsStacked,
-                    ]}
-                  >
-                    <Pressable
-                      onPress={handleToggleAllVisible}
-                      disabled={!visibleIds.length}
-                      hitSlop={spacing.xs}
-                      accessibilityRole="button"
-                      accessibilityLabel={
-                        allVisibleSelected ? "선택 해제" : "전체 선택"
-                      }
-                      style={({ pressed }) => [
-                        styles.headerFilterButton,
-                        pressed && styles.headerFilterButtonPressed,
-                      ]}
-                    >
-                      <Text style={styles.headerFilterLabel}>
-                        {allVisibleSelected ? "선택 해제" : "전체 선택"}
-                      </Text>
-                    </Pressable>
+                  <View style={styles.headerActions}>
+                    {expiredVisibleIds.length > 0 ? (
+                      <Pressable
+                        onPress={handleToggleAllExpiredVisible}
+                        hitSlop={spacing.xs}
+                        accessibilityRole="button"
+                        accessibilityLabel={
+                          allExpiredVisibleSelected
+                            ? "만료된 재료 선택 풀게요"
+                            : "만료된 재료 전부 고를게요"
+                        }
+                        style={({ pressed }) => [
+                          styles.headerFilterButton,
+                          pressed && styles.headerFilterButtonPressed,
+                        ]}
+                      >
+                        <Text style={styles.headerFilterLabel}>
+                          {allExpiredVisibleSelected ? "만료 풀기" : "만료 전부"}
+                        </Text>
+                      </Pressable>
+                    ) : null}
                     <Pressable
                       onPress={cancelSelectionMode}
                       hitSlop={spacing.xs}
@@ -649,9 +644,9 @@ export default function InventoryScreen() {
                         pressed && styles.headerFilterButtonPressed,
                       ]}
                       accessibilityRole="button"
-                      accessibilityLabel="여러 개 선택 취소"
+                      accessibilityLabel="선택 닫기"
                     >
-                      <Text style={styles.headerFilterLabel}>취소</Text>
+                      <Text style={styles.headerFilterLabel}>닫기</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -721,21 +716,12 @@ export default function InventoryScreen() {
                     ? "검색어 지울게요"
                     : filter === "all" && hasLocationFilter && !hasSearchQuery
                       ? "모든 위치 볼게요"
-                      : "전체 보관함 볼게요"
+                      : "필터 풀게요"
                 }
                 onAction={
                   hasSearchQuery && !hasStatusFilter && !hasLocationFilter
                     ? () => setSearchQuery("")
                     : clearListFilters
-                }
-                accessory={
-                  <Button
-                    variant="secondary"
-                    onPress={openEntryMethodSheet}
-                    fullWidth
-                  >
-                    재료 넣으러 가기
-                  </Button>
                 }
               />
             ) : null
@@ -749,16 +735,10 @@ export default function InventoryScreen() {
               }
               selectionMode={isSelectionMode}
               selectedIds={selectedIdSet}
-              isDiscarding={deferredRemoval.isPending}
               resolveLocationLabel={resolveLabel}
               onItemPress={(item) => handleCardPress(item.id)}
               onItemLongPress={(item) => handleCardLongPress(item.id)}
-              onItemDiscard={handleDiscard}
-              onSwipeableOpen={handleSwipeableOpen}
-              showSwipeHint={
-                showSwipeHint && flatGroups[0]?.id === group.id
-              }
-              onSwipeHintSeen={markSwipeHintSeen}
+              onItemCleanup={openCleanupSheet}
             />
           )}
           renderSectionHeader={({ section }) => (
@@ -785,6 +765,131 @@ export default function InventoryScreen() {
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
+
+      <BottomSheet
+        visible={cleanupItem !== null}
+        onClose={() => setCleanupItem(null)}
+        title="어떻게 정리할까요?"
+        description={
+          cleanupItem
+            ? `${cleanupItem.displayName} · ${formatDateKoreanCompact(cleanupItem.expiryDate)}까지`
+            : undefined
+        }
+      >
+        <View style={styles.cleanupSheetActions}>
+          <Pressable
+            onPress={() => applyCleanupAction("consume")}
+            accessibilityRole="button"
+            accessibilityLabel="다 먹었어요"
+            style={({ pressed }) => [
+              styles.cleanupSheetOption,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <View style={styles.cleanupSheetOptionIcon}>
+              <Utensils
+                color={colors.primary}
+                size={spacing.md}
+                strokeWidth={2.4}
+              />
+            </View>
+            <View style={styles.cleanupSheetOptionCopy}>
+              <Text style={styles.cleanupSheetOptionTitle}>다 먹었어요</Text>
+              <Text style={styles.cleanupSheetOptionDescription}>
+                잘 드셨군요. 보관함에서 슬쩍 빼 둘게요
+              </Text>
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => applyCleanupAction("discard")}
+            accessibilityRole="button"
+            accessibilityLabel="보관함에서 빼둘게요"
+            style={({ pressed }) => [
+              styles.cleanupSheetOption,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <View
+              style={[
+                styles.cleanupSheetOptionIcon,
+                styles.cleanupSheetOptionIconSoftDanger,
+              ]}
+            >
+              <Archive
+                color={colors.danger}
+                size={spacing.md}
+                strokeWidth={2.4}
+              />
+            </View>
+            <View style={styles.cleanupSheetOptionCopy}>
+              <Text style={styles.cleanupSheetOptionTitle}>
+                보관함에서 빼둘게요
+              </Text>
+              <Text style={styles.cleanupSheetOptionDescription}>
+                버리거나 비운 재료라면 여기서 정리해요
+              </Text>
+            </View>
+          </Pressable>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        visible={moreSheetVisible}
+        onClose={() => setMoreSheetVisible(false)}
+        title="무엇을 할까요?"
+        description="위치만 보거나, 여러 재료를 한 번에 정리할 수 있어요."
+      >
+        <View style={styles.moreSheetActions}>
+          <Pressable
+            onPress={openLocationFilterSheet}
+            accessibilityRole="button"
+            accessibilityLabel="위치별로 볼게요"
+            style={({ pressed }) => [
+              styles.moreSheetOption,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <View style={styles.moreSheetOptionIcon}>
+              <MapPin
+                color={colors.primary}
+                size={spacing.md}
+                strokeWidth={2.4}
+              />
+            </View>
+            <View style={styles.moreSheetOptionCopy}>
+              <Text style={styles.moreSheetOptionTitle}>위치별로 볼게요</Text>
+              <Text style={styles.moreSheetOptionDescription}>
+                {hasLocationFilter
+                  ? `지금 ${selectedLocationLabel}만 보고 있어요`
+                  : "냉장고·냉동실처럼 위치만 골라 볼 수 있어요"}
+              </Text>
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={openSelectionFromMore}
+            accessibilityRole="button"
+            accessibilityLabel="여러 개 정리할게요"
+            style={({ pressed }) => [
+              styles.moreSheetOption,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
+          >
+            <View style={styles.moreSheetOptionIcon}>
+              <ListChecks
+                color={colors.primary}
+                size={spacing.md}
+                strokeWidth={2.4}
+              />
+            </View>
+            <View style={styles.moreSheetOptionCopy}>
+              <Text style={styles.moreSheetOptionTitle}>여러 개 정리할게요</Text>
+              <Text style={styles.moreSheetOptionDescription}>
+                정리할 재료를 골라 한 번에 빼 둘 수 있어요
+              </Text>
+            </View>
+          </Pressable>
+        </View>
+      </BottomSheet>
 
       <BottomSheet
         visible={filterSheetVisible}
@@ -1023,15 +1128,18 @@ function ExpirySignalChip({
   count,
   tone = "default",
   selected,
+  emphasize = true,
   onPress,
 }: {
   label: string;
   count: number;
   tone?: ExpirySignalTone;
   selected: boolean;
+  emphasize?: boolean;
   onPress: () => void;
 }) {
   const palette = expirySignalPalettes[tone];
+  const muted = !selected && !emphasize;
 
   return (
     <Pressable
@@ -1046,6 +1154,7 @@ function ExpirySignalChip({
           backgroundColor: selected
             ? palette.selectedBackground
             : "transparent",
+          opacity: muted ? 0.42 : 1,
         },
         pressed && styles.filterControlPressed,
       ]}
@@ -1058,7 +1167,7 @@ function ExpirySignalChip({
               backgroundColor: selected
                 ? palette.selectedSignal
                 : palette.signal,
-              opacity: selected ? 1 : 0.36,
+              opacity: selected ? 1 : emphasize ? 0.72 : 0.28,
             },
             selected && {
               shadowColor: palette.signal,
@@ -1070,7 +1179,12 @@ function ExpirySignalChip({
       <Text
         style={[
           styles.expiryFilterChipLabel,
-          { color: selected ? palette.selectedText : colors.text },
+          {
+            color: selected ? palette.selectedText : colors.text,
+            fontFamily: emphasize || selected
+              ? typography.bodyStrong.fontFamily
+              : typography.label.fontFamily,
+          },
         ]}
       >
         {label}
@@ -1079,67 +1193,16 @@ function ExpirySignalChip({
         style={[
           styles.expiryFilterChipCount,
           {
-            color: selected ? palette.signal : colors.subtext,
+            color: selected
+              ? palette.signal
+              : emphasize
+                ? colors.subtext
+                : colors.mutedText,
           },
         ]}
       >
         {count}
       </Text>
-    </Pressable>
-  );
-}
-
-function FixedLocationFilter({
-  label,
-  count,
-  selected,
-  onPress,
-}: {
-  label: string;
-  count: number;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  const foregroundColor = selected ? colors.primary : colors.text;
-
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${label}, ${count}개, 보관 위치 선택`}
-      accessibilityState={{ selected }}
-      style={({ pressed }) => [
-        styles.fixedLocationFilter,
-        selected && styles.fixedLocationFilterSelected,
-        pressed && styles.filterControlPressed,
-      ]}
-    >
-      <MapPin
-        color={foregroundColor}
-        size={spacing.sm}
-        strokeWidth={2.4}
-      />
-      <Text
-        style={[
-          styles.fixedLocationFilterLabel,
-          selected && styles.fixedLocationFilterLabelSelected,
-        ]}
-      >
-        {label}
-      </Text>
-      <Text
-        style={[
-          styles.fixedLocationFilterCount,
-          selected && styles.fixedLocationFilterCountSelected,
-        ]}
-      >
-        {count}개
-      </Text>
-      <ChevronDown
-        color={foregroundColor}
-        size={spacing.sm}
-        strokeWidth={2.4}
-      />
     </Pressable>
   );
 }
@@ -1167,7 +1230,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: radius.lg,
   },
-  selectionModeButton: {
+  moreMenuButton: {
     minWidth: touchTarget.min,
     minHeight: touchTarget.min,
     flexShrink: 0,
@@ -1175,8 +1238,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: radius.lg,
   },
-  filterStack: {
-    gap: spacing.sm,
+  moreMenuButtonActive: {
+    backgroundColor: colors.primarySoft,
+  },
+  moreMenuBadge: {
+    position: "absolute",
+    top: spacing.xs,
+    right: spacing.xs,
+    width: spacing.xs,
+    height: spacing.xs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
   },
   expiryFilterScroll: {
     alignSelf: "stretch",
@@ -1218,7 +1290,6 @@ const styles = StyleSheet.create({
   expiryFilterChipLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.label.fontFamily,
   },
   expiryFilterChipCount: {
     minWidth: spacing.sm,
@@ -1228,79 +1299,121 @@ const styles = StyleSheet.create({
     fontFamily: typography.title.fontFamily,
     fontVariant: ["tabular-nums"],
   },
-  fixedLocationFilter: {
+  activeLocationChip: {
     minHeight: touchTarget.min,
-    alignSelf: "stretch",
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.xs,
+    borderRadius: radius.md,
+    backgroundColor: colors.primarySoft,
+  },
+  activeLocationChipMain: {
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    paddingRight: spacing.xs,
   },
-  fixedLocationFilterSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  fixedLocationFilterLabel: {
-    flex: 1,
-    minWidth: 0,
+  activeLocationChipLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.text,
-  },
-  fixedLocationFilterLabelSelected: {
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
-  fixedLocationFilterCount: {
-    flexShrink: 0,
-    textAlign: "center",
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.subtext,
-    fontVariant: ["tabular-nums"],
-  },
-  fixedLocationFilterCountSelected: {
-    color: colors.primary,
+  activeLocationClear: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
   },
   filterControlPressed: {
     opacity: 0.82,
   },
-  activeFilterSummary: {
-    minHeight: touchTarget.min,
+  moreSheetActions: {
+    gap: spacing.xs,
+  },
+  moreSheetOption: {
+    minHeight: touchTarget.cta,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
-    paddingLeft: spacing.xs,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.background,
   },
-  activeFilterSummaryStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
-    paddingLeft: spacing.none,
+  moreSheetOptionIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.primarySoft,
   },
-  activeFilterSummaryText: {
+  moreSheetOptionCopy: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
+    gap: spacing.xxs,
+  },
+  moreSheetOptionTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  moreSheetOptionDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  clearFiltersButton: {
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingHorizontal: spacing.xs,
-    borderRadius: radius.lg,
+  cleanupSheetActions: {
+    gap: spacing.xs,
   },
-  clearFiltersButtonLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
+  cleanupSheetOption: {
+    minHeight: touchTarget.cta,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.background,
+  },
+  cleanupSheetOptionIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.primarySoft,
+  },
+  cleanupSheetOptionIconSoftDanger: {
+    backgroundColor: colors.dangerSoft,
+  },
+  cleanupSheetOptionCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  cleanupSheetOptionTitle: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
+    color: colors.text,
+  },
+  cleanupSheetOptionDescription: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
   },
   locationOptionGrid: {
     gap: spacing.xs,
@@ -1382,10 +1495,6 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     gap: spacing.xxs,
   },
-  headerActionsStacked: {
-    width: "100%",
-    justifyContent: "space-between",
-  },
   headerFilterButton: {
     minHeight: touchTarget.min,
     minWidth: touchTarget.icon,
@@ -1410,15 +1519,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-  },
-  selectionRowStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
   },
   selectionSummary: {
     flex: 1,
@@ -1431,9 +1536,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
-  },
-  footerStack: {
-    gap: spacing.sm,
   },
   undoSnackbar: {
     minHeight: touchTarget.min,

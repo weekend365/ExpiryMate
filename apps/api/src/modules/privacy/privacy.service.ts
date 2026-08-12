@@ -14,8 +14,8 @@ import type {
 import { PrismaService } from "../../database/prisma.service";
 
 const DEFAULT_CONTACT_EMAIL = "privacy@expirymate.local";
-/** Bumped in P1-12 when retention / transfer / withdrawal disclosures changed. */
-const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v2";
+/** Bumped for recipe preferences and recent engagement summaries sent to AI. */
+const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v3";
 
 @Injectable()
 export class PrivacyService {
@@ -89,6 +89,9 @@ export class PrivacyService {
       await tx.recipeFavorite.deleteMany({
         where: { ownerKey: userId },
       });
+      await tx.recipeDishEngagement.deleteMany({
+        where: { ownerKey: userId },
+      });
 
       return tx.recipeRecommendation.deleteMany({
         where: { ownerKey: userId },
@@ -143,6 +146,11 @@ export class PrivacyService {
         data: { createdByUserId: null, updatedByUserId: null },
       });
       await tx.recipeFavorite.deleteMany({ where: { ownerKey: userId } });
+      await tx.recipeDishEngagement.deleteMany({ where: { ownerKey: userId } });
+      await tx.recommendationUsageEvent.deleteMany({ where: { ownerKey: userId } });
+      await tx.rewardedAdSession.deleteMany({ where: { ownerKey: userId } });
+      await tx.barcodeRewardCredit.deleteMany({ where: { ownerKey: userId } });
+      await tx.monetizationFunnelEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
         where: {
@@ -156,6 +164,7 @@ export class PrivacyService {
       await tx.inventorySpace.deleteMany({ where: { ownerUserId: userId } });
       await tx.subscriptionEntitlement.deleteMany({ where: { ownerKey: userId } });
       await tx.notificationPreference.deleteMany({ where: { ownerKey: userId } });
+      await tx.recipePreference.deleteMany({ where: { ownerKey: userId } });
       await tx.supportInquiry.deleteMany({ where: { userId } });
       await tx.refreshSession.deleteMany({ where: { userId } });
       await tx.oneTimeAuthToken.deleteMany({ where: { userId } });

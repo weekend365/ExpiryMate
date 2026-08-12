@@ -155,7 +155,7 @@ ADMIN_BASE_URL="http://localhost:3000"
 PRIVACY_POLICY_URL="http://localhost:3000/privacy"
 PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
 PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-AI_DATA_NOTICE_VERSION="ai-data-notice-v2"
+AI_DATA_NOTICE_VERSION="ai-data-notice-v3"
 OPENAI_API_KEY="sk-..."
 RECIPE_AI_MODEL="gpt-5.4-mini"
 PUSH_REMINDER_SCHEDULER_ENABLED="false"
@@ -164,7 +164,7 @@ PUSH_REMINDER_DELIVERY_HOUR=9
 PUSH_REMINDER_MAX_ATTEMPTS=3
 PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES=540
 EXPO_PUSH_ACCESS_TOKEN=""
-IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly"
+IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly,jango_plus,expirymate_household_monthly,expirymate_household_yearly,jango_household"
 APPLE_BUNDLE_ID="com.expirymate.mobile"
 APPLE_APP_STORE_ENVIRONMENT="sandbox"
 APPLE_APP_STORE_ISSUER_ID=""
@@ -363,6 +363,10 @@ pnpm --filter @expirymate/mobile exec expo run:ios --device "남우현의 iPhone
 
 In separate terminals:
 
+# 윈도우 PC에서 Expo Go 실행
+
+pnpm.cmd dev:mobile
+
 ```bash
 pnpm dev:api
 pnpm dev:admin
@@ -387,7 +391,7 @@ domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
 
 Mobile users can manage privacy controls in `설정` → `개인정보와 추천 안내`.
 The first AI recipe recommendation requires AI data notice consent for the
-current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v2`).
+current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v3`).
 Users can revoke that consent, delete recommendation history only, or wipe the
 account from the same privacy hub. Public copy covers retention periods,
 processors / cross-border transfer (including OpenAI in the US), and withdrawal
@@ -396,17 +400,29 @@ Label / Play Data Safety so declarations match the live product.
 
 Account/data deletion immediately removes owned ingredients, recommendation
 history, notification preferences, auth sessions, password credentials, and
-social login links. AI recipe recommendation sends an inventory snapshot and
-recommendation conditions from the API server to OpenAI; the mobile app never
-receives or stores the OpenAI API key.
+social login links. AI recipe recommendation sends an inventory snapshot,
+recommendation conditions, recipe preferences, and a recent engagement summary
+from the API server to OpenAI; the mobile app never receives or stores the
+OpenAI API key.
 
 Recipe generation is protected by configurable server-side limits:
 `RECIPE_RATE_LIMIT_MAX`, `RECIPE_RATE_LIMIT_WINDOW_SECONDS`,
-`RECIPE_DAILY_QUOTA`, `RECIPE_CACHE_TTL_SECONDS`,
-`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Cost
+`RECIPE_FREE_DAILY_LIMIT`, `RECIPE_REWARDED_DAILY_LIMIT`,
+`RECIPE_SUBSCRIBER_DAILY_LIMIT`, `RECIPE_ABSOLUTE_DAILY_LIMIT`,
+`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Repeated
+network attempts are deduplicated with `Idempotency-Key`; recommendation
+content is no longer reused by a time-based cache. Cost
 estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
 `RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
 `RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.
+
+Initial monetization launches should set `MONETIZATION_OFFER_MODE=core`, which
+allows rewarded ads and personal Plus while preventing new paid-credit and
+Household sales. Existing credit balances and active Household entitlements
+remain usable. After finance-reviewed estimates and the revenue ledger are in
+place, `MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED=true` automatically
+pauses unprofitable ad/credit supply and caps subscription daily limits from
+recent p95 AI cost and the configured daily AI budgets.
 
 You can also run everything at once:
 
@@ -570,8 +586,11 @@ Inventory, dashboard, recipe, and settings endpoints require a **registered** ac
 - `POST /recipes/recommendations`
 - `GET /recipes/recommendations`
 - `GET /recipes/recommendations/:id`
+- `PUT /recipes/recommendations/:id/dishes/:dishIndex/engagement`
 - `GET /subscriptions/entitlement`
 - `POST /subscriptions/verify`
+- `GET /settings/recipe-preferences`
+- `PATCH /settings/recipe-preferences`
 - `GET /settings/notification-preferences`
 - `PATCH /settings/notification-preferences`
 - `GET /auth/placeholder`
@@ -626,7 +645,7 @@ Inventory seed also includes mixed states:
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
 - shared inventory is refresh/focus based; no realtime WebSocket/SSE or change ledger in v1
 - API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
-- no native IAP purchase sheet yet (entitlement status only)
+- native IAP purchase, restore, server verification, paid recommendation credits, and Household subscription UI are implemented; store product approval and production-like QA remain required
 
 ## Recommended next work
 
@@ -635,7 +654,7 @@ See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지�
 1. Deploy `20260724133000_add_inventory_spaces` and `20260724150000_add_space_invitation_codes` on Railway, then verify personal-space backfill
 2. Build new iOS/Android release candidates and run two-account invitation/role/inventory regression QA
 3. Finalize privacy declarations, shared-space screenshots, review notes, and submit iOS then Android
-4. Post-launch: custom API/Admin domains, IAP UI, catalog UX, analytics, realtime collaboration
+4. Post-launch: custom API/Admin domains, monetization rollout/price experiments, catalog UX, analytics, realtime collaboration
 
 ## Notes On Running
 

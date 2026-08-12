@@ -7,24 +7,19 @@ import {
   type InventoryItem,
   type InventoryItemGroup,
 } from "@expirymate/shared";
-import * as Haptics from "expo-haptics";
 import {
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  Trash2,
+  MoreVertical,
 } from "lucide-react-native";
-import { createRef, useEffect, useRef, type RefObject } from "react";
 import { LayoutAnimation, Pressable, StyleSheet, Text, View } from "react-native";
-import ReanimatedSwipeable, {
-  type SwipeableMethods,
-} from "react-native-gesture-handler/ReanimatedSwipeable";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 
-/** Wider than icon-only so "삭제" stays readable under capped large text. */
-const SWIPE_ACTION_WIDTH = spacing.xxxl + spacing.sm;
+/** Visual hero size — card press owns the touch target, so this can be under 48. */
+const HERO_LAMP_SIZE = spacing.xl;
 
 interface InventoryGroupCardProps {
   group: InventoryItemGroup;
@@ -32,11 +27,8 @@ interface InventoryGroupCardProps {
   onExpandedChange: (expanded: boolean) => void;
   onItemPress: (item: InventoryItem) => void;
   onItemLongPress?: (item: InventoryItem) => void;
-  onItemDiscard?: (item: InventoryItem) => void;
-  isDiscarding?: boolean;
-  onSwipeableOpen?: (closeSwipeable: () => void) => void;
-  showSwipeHint?: boolean;
-  onSwipeHintSeen?: () => void;
+  /** Opens the cleanup sheet (consume / discard) for one lot. */
+  onItemCleanup?: (item: InventoryItem) => void;
   selectionMode?: boolean;
   selectedIds?: ReadonlySet<string>;
   resolveLocationLabel?: (key: string) => string;
@@ -48,11 +40,7 @@ export function InventoryGroupCard({
   onExpandedChange,
   onItemPress,
   onItemLongPress,
-  onItemDiscard,
-  isDiscarding = false,
-  onSwipeableOpen,
-  showSwipeHint = false,
-  onSwipeHintSeen,
+  onItemCleanup,
   selectionMode = false,
   selectedIds,
   resolveLocationLabel = resolveStorageLocationLabel,
@@ -61,125 +49,51 @@ export function InventoryGroupCard({
   const isExpandable = group.items.length > 1;
   const showLots = selectionMode || expanded;
   const nearestItem = group.items[0]!;
-
+  const lotCount = group.items.length;
 
   const quantityLabel = group.hasMixedUnits
-    ? `보관 기록 ${group.items.length}건`
+    ? `보관 기록 ${lotCount}건`
     : `총 ${group.totalQuantity}${group.unit ?? "개"}`;
   const locationLabel = getGroupLocationLabel(group.items, resolveLocationLabel);
-  const singleSwipeableRef = useRef<SwipeableMethods | null>(null);
-  const lotSwipeableRefs = useRef(
-    new Map<string, RefObject<SwipeableMethods | null>>(),
-  );
-  const isHintAnimationRef = useRef(false);
-
-  const getLotSwipeableRef = (itemId: string) => {
-    const existing = lotSwipeableRefs.current.get(itemId);
-
-    if (existing) {
-      return existing;
-    }
-
-    const created = createRef<SwipeableMethods>();
-    lotSwipeableRefs.current.set(itemId, created);
-    return created;
-  };
-
-  const handleSwipeableWillOpen = (swipeable: SwipeableMethods) => {
-    onSwipeableOpen?.(() => swipeable.close());
-
-    if (!isHintAnimationRef.current) {
-      void Haptics.selectionAsync().catch(() => undefined);
-      onSwipeHintSeen?.();
-    }
-  };
-
-  useEffect(() => {
-    if (!showSwipeHint || selectionMode) {
-      return;
-    }
-
-    const target = isExpandable
-      ? showLots
-        ? lotSwipeableRefs.current.get(nearestItem.id)?.current
-        : null
-      : singleSwipeableRef.current;
-
-    if (!target) {
-      return;
-    }
-
-    let closeTimer: ReturnType<typeof setTimeout> | undefined;
-    let seenTimer: ReturnType<typeof setTimeout> | undefined;
-    const openTimer = setTimeout(() => {
-      isHintAnimationRef.current = true;
-      target.openRight();
-      closeTimer = setTimeout(() => {
-        target.close();
-        isHintAnimationRef.current = false;
-        seenTimer = setTimeout(() => onSwipeHintSeen?.(), 220);
-      }, 850);
-    }, 650);
-
-    return () => {
-      clearTimeout(openTimer);
-      if (closeTimer) {
-        clearTimeout(closeTimer);
-      }
-      if (seenTimer) {
-        clearTimeout(seenTimer);
-      }
-      isHintAnimationRef.current = false;
-    };
-  }, [
-    isExpandable,
-    nearestItem.id,
-    onSwipeHintSeen,
-    selectionMode,
-    showLots,
-    showSwipeHint,
-  ]);
 
   const handleSummaryPress = () => {
     if (selectionMode) {
       return;
     }
 
-    if (!isExpandable) {
-      onItemPress(nearestItem);
-      return;
-    }
+    // One tap → imminent lot detail (do not expand).
+    onItemPress(nearestItem);
+  };
 
+  const handleToggleExpand = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     onExpandedChange(!expanded);
   };
 
-  const card = (
+  const nearestPresentation = getExpiryLampPresentation(
+    group.nearestExpiryDate,
+  );
+
+  return (
     <View style={styles.card}>
       <View style={styles.summaryRow}>
         <Pressable
           onPress={handleSummaryPress}
+          onLongPress={
+            selectionMode
+              ? undefined
+              : () => onItemLongPress?.(nearestItem)
+          }
           disabled={selectionMode}
           accessibilityRole={selectionMode ? undefined : "button"}
-          accessibilityLabel={`${group.displayName}, ${locationLabel}, ${quantityLabel}`}
+          accessibilityLabel={`${group.displayName}, ${nearestPresentation.ddayLabel}${isExpandable ? `, ${lotCount}건` : ""}, ${locationLabel}, ${quantityLabel}`}
           accessibilityHint={
-            isExpandable
-              ? showLots
-                ? "유통기한별 목록을 접어요."
-                : "유통기한별 목록을 펼쳐 편집하거나 삭제할 기록을 골라요."
-              : "누르면 바로 편집하고, 왼쪽으로 밀면 삭제할 수 있어요."
+            selectionMode
+              ? undefined
+              : isExpandable
+                ? "누르면 가장 임박한 기록으로 바로 가요. 더 보기로 다른 유통기한도 볼 수 있어요."
+                : "누르면 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
           }
-          accessibilityState={isExpandable ? { expanded: showLots } : undefined}
-          accessibilityActions={
-            !selectionMode && !isExpandable && onItemDiscard
-              ? [{ name: "delete", label: "삭제" }]
-              : undefined
-          }
-          onAccessibilityAction={(event) => {
-            if (event.nativeEvent.actionName === "delete") {
-              onItemDiscard?.(nearestItem);
-            }
-          }}
           style={({ pressed }) => [
             styles.summaryMain,
             shouldStack && styles.summaryMainStacked,
@@ -187,7 +101,10 @@ export function InventoryGroupCard({
           ]}
         >
           {!showLots ? (
-            <ExpiryBadge expiryDate={group.nearestExpiryDate} />
+            <ExpiryBadge
+              expiryDate={group.nearestExpiryDate}
+              size="hero"
+            />
           ) : null}
 
           <View style={styles.summaryCopy}>
@@ -199,32 +116,57 @@ export function InventoryGroupCard({
             </Text>
             <Text style={styles.groupMeta}>
               {locationLabel} · {quantityLabel}
-
             </Text>
           </View>
+        </Pressable>
 
-          <View style={styles.summaryAside}>
-            {isExpandable ? (
-              showLots ? (
+        <View style={styles.summaryActions}>
+          {!selectionMode && onItemCleanup && !isExpandable ? (
+            <CleanupMenuButton
+              label={`${group.displayName} 정리할게요`}
+              onPress={() => onItemCleanup(nearestItem)}
+            />
+          ) : null}
+
+          {isExpandable && !selectionMode ? (
+            <Pressable
+              onPress={handleToggleExpand}
+              hitSlop={spacing.xs}
+              accessibilityRole="button"
+              accessibilityLabel={
+                showLots ? "접을게요" : `${lotCount}건 더 보기`
+              }
+              accessibilityHint={
+                showLots
+                  ? "유통기한별 목록을 접어요."
+                  : "다른 유통기한 기록을 펼쳐 볼 수 있어요."
+              }
+              accessibilityState={{ expanded: showLots }}
+              style={({ pressed }) => [
+                styles.moreButton,
+                pressed && styles.summaryPressed,
+              ]}
+            >
+                            <Text style={styles.moreButtonLabel}>
+                {showLots ? "접기" : `${lotCount}건 더`}
+              </Text>
+              {showLots ? (
                 <ChevronUp
                   color={colors.primary}
                   size={spacing.sm + spacing.xxs}
                   strokeWidth={2.4}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
                 />
               ) : (
                 <ChevronDown
                   color={colors.primary}
                   size={spacing.sm + spacing.xxs}
                   strokeWidth={2.4}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
                 />
-              )
-            ) : null}
-          </View>
-        </Pressable>
+              )}
+
+            </Pressable>
+          ) : null}
+        </View>
       </View>
 
       {showLots ? (
@@ -232,213 +174,129 @@ export function InventoryGroupCard({
           <View style={styles.divider} />
           {group.items.map((item, index) => {
             const selected = selectedIds?.has(item.id) ?? false;
-            const swipeableRef = getLotSwipeableRef(item.id);
-            const row = (
-              <Pressable
-                onPress={() => onItemPress(item)}
-                onLongPress={() => onItemLongPress?.(item)}
-                accessibilityRole="button"
-                accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${resolveLocationLabel(item.storageLocation)}, ${formatInventoryQuantity(item)}`}
-                accessibilityHint={
-                  selectionMode
-                    ? selected
-                      ? "선택됨. 다시 누르면 선택을 해제해요."
-                      : "누르면 정리할 재료로 골라요."
-                    : "누르면 바로 편집하고, 왼쪽으로 밀면 삭제할 수 있어요."
-                }
-                accessibilityState={
-                  selectionMode ? { selected } : undefined
-                }
-                accessibilityActions={
-                  !selectionMode && onItemDiscard
-                    ? [{ name: "delete", label: "삭제" }]
-                    : undefined
-                }
-                onAccessibilityAction={(event) => {
-                  if (event.nativeEvent.actionName === "delete") {
-                    onItemDiscard?.(item);
-                  }
-                }}
-                style={({ pressed }) => [
+            const isNearest = index === 0;
+            const lotExpiry = getExpiryLampPresentation(item.expiryDate);
+
+            return (
+              <View
+                key={item.id}
+                style={[
                   styles.lotRow,
                   shouldStack && styles.lotRowAccessible,
                   index > 0 && styles.lotRowBorder,
                   selected && styles.lotRowSelected,
-                  pressed && styles.lotRowPressed,
                 ]}
               >
-                <ExpiryBadge expiryDate={item.expiryDate} />
-
-                <View style={styles.lotCopy}>
-                  <Text style={styles.lotDate}>
-                    {formatDateKoreanCompact(item.expiryDate)}
-                  </Text>
-                  <Text style={styles.lotMeta}>
-                    {resolveLocationLabel(item.storageLocation)} ·{" "}
-                    {formatInventoryQuantity(item)}
-                  </Text>
-                </View>
+                <Pressable
+                  onPress={() => onItemPress(item)}
+                  onLongPress={() => onItemLongPress?.(item)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${lotExpiry.ddayLabel}, ${resolveLocationLabel(item.storageLocation)}, ${formatInventoryQuantity(item)}${isNearest && isExpandable ? ", 가장 임박" : ""}`}
+                  accessibilityHint={
+                    selectionMode
+                      ? selected
+                        ? "선택됨. 다시 누르면 선택을 해제해요."
+                        : "누르면 정리할 재료로 골라요."
+                      : "누르면 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
+                  }
+                  accessibilityState={
+                    selectionMode ? { selected } : undefined
+                  }
+                  style={({ pressed }) => [
+                    styles.lotMain,
+                    pressed && styles.lotRowPressed,
+                  ]}
+                >
+                  <View style={styles.lotCopy}>
+                    <View style={styles.lotDateRow}>
+                      <Text style={styles.lotDate}>
+                        {formatDateKoreanCompact(item.expiryDate)}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.lotDdayLabel,
+                          { color: lotExpiry.lampColor },
+                        ]}
+                      >
+                        {lotExpiry.ddayLabel}
+                      </Text>
+                      {isNearest && isExpandable ? (
+                        <View style={styles.nearestPill}>
+                          <Text style={styles.nearestPillLabel}>가장 임박</Text>
+                        </View>
+                      ) : null}
+                    </View>
+                    <Text style={styles.lotMeta}>
+                      {resolveLocationLabel(item.storageLocation)} ·{" "}
+                      {formatInventoryQuantity(item)}
+                    </Text>
+                  </View>
+                </Pressable>
 
                 {selectionMode ? (
-                  <View
-                    style={[
-                      styles.selectionIndicator,
-                      selected && styles.selectionIndicatorSelected,
-                    ]}
+                  <Pressable
+                    onPress={() => onItemPress(item)}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      selected ? "선택 해제" : "이 재료 고르기"
+                    }
+                    style={styles.selectionHit}
                   >
-                    {selected ? (
-                      <CheckCircle2
-                        color={colors.surface}
-                        size={spacing.sm}
-                        strokeWidth={2.4}
-                      />
-                    ) : null}
-                  </View>
-                ) : null}
-              </Pressable>
-            );
-
-            if (selectionMode || !onItemDiscard) {
-              return <View key={item.id}>{row}</View>;
-            }
-
-            return (
-              <ReanimatedSwipeable
-                key={item.id}
-                ref={swipeableRef}
-                friction={1.2}
-                rightThreshold={spacing.md}
-                dragOffsetFromRightEdge={spacing.xs}
-                overshootRight={false}
-                onSwipeableWillOpen={() => {
-                  const swipeable = swipeableRef.current;
-
-                  if (swipeable) {
-                    handleSwipeableWillOpen(swipeable);
-                  }
-                }}
-                renderRightActions={(_, __, swipeable) => (
-                  <ListSwipeDeleteAction
-                    disabled={isDiscarding}
-                    accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)} 재료 삭제`}
-                    onPress={() => {
-                      swipeable.close();
-                      onItemDiscard(item);
-                    }}
+                    <View
+                      style={[
+                        styles.selectionIndicator,
+                        selected && styles.selectionIndicatorSelected,
+                      ]}
+                    >
+                      {selected ? (
+                        <CheckCircle2
+                          color={colors.surface}
+                          size={spacing.sm}
+                          strokeWidth={2.4}
+                        />
+                      ) : null}
+                    </View>
+                  </Pressable>
+                ) : onItemCleanup ? (
+                  <CleanupMenuButton
+                    label={`${formatDateKoreanCompact(item.expiryDate)} 재료 정리할게요`}
+                    onPress={() => onItemCleanup(item)}
                   />
-                )}
-              >
-                {row}
-              </ReanimatedSwipeable>
+                ) : null}
+              </View>
             );
           })}
-
         </View>
       ) : null}
     </View>
   );
-
-  if (isExpandable || selectionMode || !onItemDiscard) {
-    return card;
-  }
-
-  return (
-    <ReanimatedSwipeable
-      ref={singleSwipeableRef}
-      friction={1.2}
-      rightThreshold={spacing.md}
-      dragOffsetFromRightEdge={spacing.xs}
-      overshootRight={false}
-      onSwipeableWillOpen={() => {
-        if (singleSwipeableRef.current) {
-          handleSwipeableWillOpen(singleSwipeableRef.current);
-        }
-      }}
-      renderRightActions={(_, __, swipeable) => (
-        <SingleSwipeDeleteAction
-          disabled={isDiscarding}
-          accessibilityLabel={`${group.displayName} 삭제`}
-          onPress={() => {
-            swipeable.close();
-            onItemDiscard(nearestItem);
-          }}
-        />
-      )}
-    >
-      {card}
-    </ReanimatedSwipeable>
-  );
 }
 
-function ListSwipeDeleteAction({
-  accessibilityLabel,
-  disabled,
+function CleanupMenuButton({
+  label,
   onPress,
 }: {
-  accessibilityLabel: string;
-  disabled: boolean;
+  label: string;
   onPress: () => void;
 }) {
   return (
     <Pressable
-      disabled={disabled}
       onPress={onPress}
+      hitSlop={spacing.xs}
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
+      accessibilityLabel={label}
+      accessibilityHint="다 먹었는지, 보관함에서 빼둘지 고를 수 있어요."
       style={({ pressed }) => [
-        styles.listSwipeAction,
-        pressed && styles.swipeActionPressed,
-        disabled && styles.swipeActionDisabled,
+        styles.cleanupMenuButton,
+        pressed && styles.summaryPressed,
       ]}
     >
-      <DeleteActionContent />
+      <MoreVertical
+        color={colors.subtext}
+        size={spacing.sm + spacing.xxs}
+        strokeWidth={2.4}
+      />
     </Pressable>
-  );
-}
-
-function SingleSwipeDeleteAction({
-  accessibilityLabel,
-  disabled,
-  onPress,
-}: {
-  accessibilityLabel: string;
-  disabled: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <View style={styles.singleSwipeActionSlot}>
-      <Pressable
-        disabled={disabled}
-        onPress={onPress}
-        accessibilityRole="button"
-        accessibilityLabel={accessibilityLabel}
-        style={({ pressed }) => [
-          styles.singleSwipeActionTrack,
-          pressed && styles.swipeActionPressed,
-          disabled && styles.swipeActionDisabled,
-        ]}
-      >
-        <View style={styles.singleSwipeActionContent}>
-          <DeleteActionContent />
-        </View>
-      </Pressable>
-    </View>
-  );
-}
-
-function DeleteActionContent() {
-  return (
-    <>
-      <Trash2 color={colors.surface} size={spacing.md} strokeWidth={2.4} />
-      <AppText
-        variant="caption"
-        scaleRole="chrome"
-        densityAware={false}
-        style={styles.swipeActionLabel}
-      >
-        삭제
-      </AppText>
-    </>
   );
 }
 
@@ -457,13 +315,21 @@ function getGroupLocationLabel(
   return "여러 위치";
 }
 
-function ExpiryBadge({ expiryDate }: { expiryDate: string }) {
+function ExpiryBadge({
+  expiryDate,
+  size = "default",
+}: {
+  expiryDate: string;
+  size?: "default" | "hero";
+}) {
   const presentation = getExpiryLampPresentation(expiryDate);
+  const isHero = size === "hero";
 
   return (
     <View
       style={[
         styles.expiryLamp,
+        isHero && styles.expiryLampHero,
         { backgroundColor: presentation.lampColor },
       ]}
       accessibilityLabel={presentation.ddayLabel}
@@ -508,14 +374,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   summaryRow: {
-    minHeight: touchTarget.min,
+    minHeight: touchTarget.cta,
     flexDirection: "row",
     alignItems: "center",
   },
   summaryMain: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: touchTarget.cta,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     flexDirection: "row",
@@ -554,10 +420,32 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
-  summaryAside: {
-    alignItems: "center",
+  summaryActions: {
     flexDirection: "row",
-    gap: spacing.xs,
+    alignItems: "center",
+    flexShrink: 0,
+  },
+  cleanupMenuButton: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.cta,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+  },
+  moreButton: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.cta,
+    paddingHorizontal: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+  },
+  moreButtonLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
   },
   divider: {
     height: 1,
@@ -566,17 +454,12 @@ const styles = StyleSheet.create({
   lotList: {
     paddingBottom: spacing.none,
   },
-
-
-
-
   lotRow: {
     minHeight: touchTarget.cta + spacing.xxs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xxs,
+    paddingRight: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   lotRowAccessible: {
     alignItems: "flex-start",
@@ -592,16 +475,54 @@ const styles = StyleSheet.create({
   lotRowPressed: {
     backgroundColor: colors.surfacePressed,
   },
-  lotCopy: {
+  lotMain: {
     flex: 1,
     minWidth: 0,
+    minHeight: touchTarget.cta + spacing.xxs,
+    paddingLeft: spacing.sm,
+    paddingVertical: spacing.xxs,
+    justifyContent: "center",
+  },
+  lotCopy: {
+    flexShrink: 1,
     gap: spacing.xxs,
+  },
+  selectionHit: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.cta,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingRight: spacing.xs,
+  },
+  lotDateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: spacing.xs,
   },
   lotDate: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
+  },
+  lotDdayLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.title.fontFamily,
+    fontVariant: ["tabular-nums"],
+  },
+  nearestPill: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.warningSoft,
+  },
+  nearestPillLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.warning,
   },
   lotMeta: {
     flexShrink: 1,
@@ -616,6 +537,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
+  },
+  expiryLampHero: {
+    width: HERO_LAMP_SIZE,
+    height: HERO_LAMP_SIZE,
   },
   expiryLampText: {
     fontFamily: typography.title.fontFamily,
@@ -634,53 +559,5 @@ const styles = StyleSheet.create({
   selectionIndicatorSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primary,
-  },
-  listSwipeAction: {
-    width: SWIPE_ACTION_WIDTH,
-    minHeight: touchTarget.cta + spacing.xxs,
-    height: "100%",
-    alignSelf: "stretch",
-    borderRadius: radius.none,
-    backgroundColor: colors.danger,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-  },
-  singleSwipeActionSlot: {
-    width: SWIPE_ACTION_WIDTH,
-    height: "100%",
-    alignSelf: "stretch",
-    overflow: "visible",
-  },
-  singleSwipeActionTrack: {
-    position: "absolute",
-    top: spacing.none,
-    right: spacing.none,
-    bottom: spacing.none,
-    width: SWIPE_ACTION_WIDTH + spacing.md,
-    borderTopRightRadius: radius.xxl,
-    borderBottomRightRadius: radius.xxl,
-    backgroundColor: colors.danger,
-  },
-  singleSwipeActionContent: {
-    width: SWIPE_ACTION_WIDTH,
-    height: "100%",
-    alignSelf: "flex-end",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-  },
-  swipeActionPressed: {
-    backgroundColor: colors.dangerPressed,
-  },
-  swipeActionDisabled: {
-    opacity: 0.55,
-  },
-  swipeActionLabel: {
-    fontFamily: typography.label.fontFamily,
-    color: colors.surface,
-    textAlign: "center",
   },
 });
