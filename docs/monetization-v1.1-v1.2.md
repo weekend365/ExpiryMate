@@ -195,6 +195,18 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   `https://jango.devnamu.com` 같은 1단 서브도메인을 권장합니다.
 - 마케팅 URL 반영용 iOS `1.1.0` 빌드·Connect 절차는 집 Mac에서
   [`docs/ios-eas-production.md`](./ios-eas-production.md) **§0** 을 따릅니다.
+- **모바일 빌드(지금):** EAS production에만
+  `EXPO_PUBLIC_ADMOB_*` 앱 ID·보상형 유닛 ID 4개를 넣습니다. 광고 미노출은
+  Railway `REWARDED_ADS_ENABLED=false`로 유지합니다.
+- **Railway API (광고 ON 직전 · 나중에):**
+
+  - [ ] `ADMOB_IOS_REWARDED_AD_UNIT_ID` / `ADMOB_ANDROID_REWARDED_AD_UNIT_ID`
+        (EAS와 동일한 유닛 ID)
+  - [ ] AdMob SSV 콜백 URL → `https://API_HOST/monetization/admob/ssv`
+  - [ ] `ADMOB_SSV_USER_ID_SECRET` 설정
+  - [ ] 스모크 후 `REWARDED_ADS_ENABLED=true` (그 전까지는 `false` 유지)
+
+  덤프/마케팅 URL 빌드 단계에서는 Railway AdMob 변수를 넣지 않아도 됩니다.
 
 ### Apple
 
@@ -390,7 +402,11 @@ SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS=7
 
 ## 스토어 콘솔 · 롤아웃 대조
 
-- [ ] AdMob production 앱 ID·보상 단위·SSV 콜백·`ADMOB_SSV_USER_ID_SECRET`.
+- [ ] AdMob iOS·Android 앱 ID·보상형 유닛 생성 (콘솔).
+- [ ] EAS production `EXPO_PUBLIC_ADMOB_*` 4개 (마케팅 URL용 `1.1.0` 빌드 전).
+- [ ] **(나중 · 광고 ON 직전)** Railway API:
+      `ADMOB_IOS_REWARDED_AD_UNIT_ID`, `ADMOB_ANDROID_REWARDED_AD_UNIT_ID`,
+      SSV 콜백, `ADMOB_SSV_USER_ID_SECRET` → 그다음 `REWARDED_ADS_ENABLED=true`.
 - [ ] App Store: 구독·추천권 상품, ASSN V2 URL
       `https://API_HOST/subscriptions/notifications/apple`.
 - [ ] Play Console: `jango_plus` base plan, 추천권 상품, RTDN →

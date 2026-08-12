@@ -331,6 +331,14 @@ Mobile typecheck / 64 tests ✅
 개발용 `apps/api/.env` · `apps/admin/.env.local` · `apps/mobile/.env`는 **git에 올리지 않습니다.**  
 소스 오브 트루스는 Doppler(`expirymate-api|admin|mobile` · `dev`)입니다. Cursor Cloud는 Secrets 또는 `DOPPLER_TOKEN`으로 동일 파일을 만듭니다.
 
+**환경별 정본 (섞지 말 것)**
+
+| 환경 | 정본 |
+|------|------|
+| 로컬 · Cursor Cloud | Doppler `dev` → 디스크 `.env` |
+| 모바일 EAS 빌드 | Expo **Environment variables** (`production` / `preview`) |
+| API · Admin 운영 | Railway Variables |
+
 빠른 사용:
 
 ```bash
@@ -347,7 +355,8 @@ doppler secrets download -p expirymate-admin -c dev --no-file --format env > app
 doppler secrets download -p expirymate-mobile -c dev --no-file --format env > apps/mobile/.env
 ```
 
-전체 절차·Cloud Secrets 키 맵·금지 사항: [`docs/dev-secrets.md`](./dev-secrets.md)  
+전체 절차(환경 매트릭스 · `.env.example`↔Doppler diff · EAS/Railway 설정 · 빈 download로 실값 유실 방지):  
+[`docs/dev-secrets.md`](./dev-secrets.md)  
 설정 파일: [`doppler.yaml`](../doppler.yaml) · [`.cursor/environment.json`](../.cursor/environment.json) · [`AGENTS.md`](../AGENTS.md)
 
 ### 로컬 Docker
@@ -426,16 +435,24 @@ GOOGLE_OAUTH_CLIENT_SECRET=
 # Apple: APPLE_OAUTH_CLIENT_ID — 유료 개발자 계정 이후
 ```
 
-**Mobile (EAS secrets):**
+**Mobile (EAS Environment variables · production):**
 
 ```env
+EXPO_PUBLIC_APP_ENV=production
 EXPO_PUBLIC_API_BASE_URL=https://api-production-1504.up.railway.app
 EXPO_PUBLIC_OAUTH_REDIRECT_URI=https://api-production-1504.up.railway.app/oauth/callback
+EXPO_PUBLIC_WEB_BASE_URL=https://jango.devnamu.com
+EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=
 EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID=
 EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID=
-EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=
-EXPO_PUBLIC_SENTRY_DSN=   # 권장
+EXPO_PUBLIC_SENTRY_DSN=
+EXPO_PUBLIC_ADMOB_IOS_APP_ID=
+EXPO_PUBLIC_ADMOB_ANDROID_APP_ID=
+EXPO_PUBLIC_ADMOB_IOS_REWARDED_AD_UNIT_ID=
+EXPO_PUBLIC_ADMOB_ANDROID_REWARDED_AD_UNIT_ID=
 ```
+
+설정 UI/CLI·환경 분리: [`docs/dev-secrets.md`](./dev-secrets.md) §3.
 
 전체 맵: 루트 [`.env.example`](../.env.example), [`apps/api/.env.production.example`](../apps/api/.env.production.example)
 
@@ -445,9 +462,12 @@ seed 의존 금지. 사용자 가입 후 DB에서 `role = 'admin'` 승격. 기�
 
 ### EAS
 
+환경변수는 로컬 `.env`가 아니라 **Expo Environment variables**에 둡니다
+([`docs/dev-secrets.md`](./dev-secrets.md) §3).
+
 ```bash
 cd apps/mobile
-eas secret:create --name EXPO_PUBLIC_API_BASE_URL --value https://api-production-1504.up.railway.app
+# 예: eas env:create --name EXPO_PUBLIC_WEB_BASE_URL --value https://jango.devnamu.com --environment production --visibility plaintext
 eas build --platform android --profile preview
 eas build --platform ios --profile preview
 # production 제출 시

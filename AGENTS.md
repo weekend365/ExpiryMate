@@ -2,7 +2,8 @@
 
 ## Cursor Cloud specific instructions
 
-Secrets & Doppler: [`docs/dev-secrets.md`](docs/dev-secrets.md).
+Secrets & env by environment (Doppler `dev` · EAS · Railway · Cursor Cloud):
+[`docs/dev-secrets.md`](docs/dev-secrets.md).
 
 Boot flow (see `.cursor/environment.json`):
 
