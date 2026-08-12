@@ -1,0 +1,7 @@
+# Keep iOS / shell scripts LF so EAS/Xcode bash phases don't fail on Windows checkouts.
+*.sh text eol=lf
+*.bash text eol=lf
+*.command text eol=lf
+apps/mobile/ios/.xcode.env text eol=lf
+**/.xcode.env text eol=lf
+**/.xcode.env.local text eol=lf
