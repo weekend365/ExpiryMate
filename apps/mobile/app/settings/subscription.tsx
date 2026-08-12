@@ -34,6 +34,7 @@ import {
   formatSubscriptionStore,
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
+import { publicWebUrl } from "../../src/shared/public-web-url";
 import {
   getHouseholdInsights,
   getPlusInsights,
@@ -535,6 +536,14 @@ export default function SubscriptionSettingsScreen() {
               );
             })}
           </View>
+          <View style={styles.renewalNotice}>
+            <Text style={styles.renewalNoticeTitle}>결제 전에 알아두세요</Text>
+            <Text style={styles.renewalNoticeText}>
+              무료 체험은 없고, 선택한 기간(월간 또는 연간)이 끝나면 같은 금액으로
+              자동 갱신돼요. 가격은 위 스토어 표시 금액이며, 갱신 전에 App Store나
+              Google Play의 구독 관리에서 해지할 수 있어요.
+            </Text>
+          </View>
           <Button
             onPress={() => void startPurchase()}
             loading={busyAction === "purchase"}
@@ -578,12 +587,12 @@ export default function SubscriptionSettingsScreen() {
           <ListRow
             title="이용약관"
             icon={ShieldCheck}
-            onPress={() => void Linking.openURL(webUrl("/terms"))}
+            onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
           />
           <ListRow
             title="개인정보처리방침"
             icon={ShieldCheck}
-            onPress={() => void Linking.openURL(webUrl("/privacy"))}
+            onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
             last
           />
         </View>
@@ -659,13 +668,6 @@ function getAnnualSavings(plans: StorePlan[]) {
   const yearly = plans.find((plan) => plan.period === "yearly")?.price;
   if (!monthly || !yearly || monthly <= 0) return null;
   return Math.max(0, Math.round((1 - yearly / (monthly * 12)) * 100));
-}
-
-function webUrl(path: string) {
-  const configured = process.env.EXPO_PUBLIC_WEB_BASE_URL?.replace(/\/+$/, "");
-  if (configured) return `${configured}${path}`;
-  const apiBase = process.env.EXPO_PUBLIC_API_BASE_URL?.replace(/\/api\/?$/, "");
-  return `${apiBase || "https://jango-app.kr"}${path}`;
 }
 
 function getErrorMessage(error: unknown) {
@@ -902,5 +904,23 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.primary,
+  },
+  renewalNotice: {
+    backgroundColor: colors.mutedSurface,
+    borderRadius: radius.lg,
+    padding: spacing.md,
+    gap: spacing.xs,
+  },
+  renewalNoticeTitle: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  renewalNoticeText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
   },
 });

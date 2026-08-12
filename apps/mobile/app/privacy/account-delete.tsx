@@ -45,7 +45,18 @@ export default function AccountDeleteScreen() {
         },
         onError: (error) => {
           setConfirmSheetOpen(false);
-          Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+          const message = getErrorMessage(error);
+          if (message.includes("소유권")) {
+            Alert.alert("먼저 소유권을 넘겨 주세요", message, [
+              {
+                text: "공간 관리로 갈게요",
+                onPress: () => router.push("/settings/spaces"),
+              },
+              { text: "나중에 할게요", style: "cancel" },
+            ]);
+            return;
+          }
+          Alert.alert("앗, 잠시 문제가 생겼어요", message);
         },
       },
     );
@@ -88,6 +99,21 @@ export default function AccountDeleteScreen() {
             함께 쓰는 냉장고의 공동 재고는 다른 구성원을 위해 남고, 내
             생성·수정자 연결만 제거돼요.
           </Text>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>함께 쓰는 냉장고가 있다면</Text>
+          <Text style={styles.bodyText}>
+            다른 구성원이 있는 공간을 소유 중이면, 먼저 소유권을 넘기거나 공간을
+            정리해야 계정을 지울 수 있어요.
+          </Text>
+          <Button
+            variant="secondary"
+            onPress={() => router.push("/settings/spaces")}
+            fullWidth
+          >
+            공간 관리 살펴보기
+          </Button>
         </View>
 
         {hasActiveSubscription ? (

@@ -51,7 +51,12 @@
           "recordAudioAndroid": false
         }
       ],
-      "expo-secure-store",
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "로그인 정보를 안전하게 지키기 위해 Face ID를 쓸 수 있어요."
+        }
+      ],
       "expo-web-browser",
       [
         "expo-build-properties",

@@ -1,7 +1,7 @@
 import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -14,6 +14,7 @@ import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
+import { publicWebUrl } from "../../src/shared/public-web-url";
 import {
   colors,
   radius,
@@ -208,6 +209,41 @@ export default function RegisterScreen() {
             onSubmitEditing={handlePrimary}
           />
         ) : null}
+
+        {isLastStep ? (
+          <View style={styles.legalLinks}>
+            <Text style={styles.legalLead}>
+              가입하면 이용약관과 개인정보 안내에 동의하는 걸로 볼게요.
+            </Text>
+            <View style={styles.legalRow}>
+              <Pressable
+                onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
+                hitSlop={spacing.xs}
+                accessibilityRole="link"
+                accessibilityLabel="이용약관 살펴보기"
+                style={({ pressed }) => [
+                  styles.legalLink,
+                  pressed && styles.legalLinkPressed,
+                ]}
+              >
+                <Text style={styles.legalLinkText}>이용약관</Text>
+              </Pressable>
+              <Text style={styles.legalDot}>·</Text>
+              <Pressable
+                onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
+                hitSlop={spacing.xs}
+                accessibilityRole="link"
+                accessibilityLabel="개인정보 안내 살펴보기"
+                style={({ pressed }) => [
+                  styles.legalLink,
+                  pressed && styles.legalLinkPressed,
+                ]}
+              >
+                <Text style={styles.legalLinkText}>개인정보 안내</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : null}
       </Animated.View>
     </Screen>
   );
@@ -286,5 +322,44 @@ const styles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     fontFamily: typography.body.fontFamily,
     marginTop: spacing.xs,
+  },
+  legalLinks: {
+    alignItems: "center",
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  legalLead: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.mutedText,
+    textAlign: "center",
+  },
+  legalRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xs,
+  },
+  legalLink: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.xs,
+  },
+  legalLinkPressed: {
+    opacity: 0.7,
+  },
+  legalLinkText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
+  },
+  legalDot: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.mutedText,
   },
 });

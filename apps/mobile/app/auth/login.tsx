@@ -9,6 +9,7 @@ import {
   Alert,
   ImageBackground,
   LayoutAnimation,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -26,6 +27,7 @@ import { useAuth } from "../../src/features/auth/use-auth";
 import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
 import { startOAuth } from "../../src/services/api";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
+import { publicWebUrl } from "../../src/shared/public-web-url";
 import {
   colors,
   radius,
@@ -564,6 +566,47 @@ export default function LoginScreen() {
               </AppText>
             </Pressable>
           </View>
+
+          <View style={styles.legalLinks} accessibilityRole="text">
+            <AppText variant="caption" tone="muted" style={styles.legalLead}>
+              들어가면 이용약관과 개인정보 안내에 동의하는 걸로 볼게요.
+            </AppText>
+            <View style={styles.legalRow}>
+              <Pressable
+                onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
+                disabled={isBusy}
+                hitSlop={spacing.xs}
+                accessibilityRole="link"
+                accessibilityLabel="이용약관 살펴보기"
+                style={({ pressed }) => [
+                  styles.legalLink,
+                  pressed && styles.linkPressed,
+                ]}
+              >
+                <AppText variant="caption" tone="primary" style={styles.legalLinkText}>
+                  이용약관
+                </AppText>
+              </Pressable>
+              <AppText variant="caption" tone="muted">
+                ·
+              </AppText>
+              <Pressable
+                onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
+                disabled={isBusy}
+                hitSlop={spacing.xs}
+                accessibilityRole="link"
+                accessibilityLabel="개인정보 안내 살펴보기"
+                style={({ pressed }) => [
+                  styles.legalLink,
+                  pressed && styles.linkPressed,
+                ]}
+              >
+                <AppText variant="caption" tone="primary" style={styles.legalLinkText}>
+                  개인정보 안내
+                </AppText>
+              </Pressable>
+            </View>
+          </View>
         </ScrollView>
       </View>
     </Screen>
@@ -738,6 +781,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xs,
   },
   secondaryLinkText: {
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
+  legalLinks: {
+    alignItems: "center",
+    gap: spacing.xs,
+    paddingTop: spacing.xs,
+  },
+  legalLead: {
+    textAlign: "center",
+  },
+  legalRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xs,
+  },
+  legalLink: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.xs,
+  },
+  legalLinkText: {
     fontFamily: typography.bodyStrong.fontFamily,
   },
   linkPressed: {
