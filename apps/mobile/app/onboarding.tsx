@@ -1,12 +1,20 @@
 import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
+import jangoWelcomeHero from "../assets/store/jango-appstore-space-copy-ko-1242x2688.png";
 import { Button } from "../src/components/Button";
 import { type MascotMood } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
@@ -27,8 +35,8 @@ const STEPS: OnboardingStep[] = [
   {
     key: "welcome",
     eyebrow: appBrand.appNameKo,
-    title: "장고에게 냉장고를 맡겨볼까요?",
-    description: `${appBrand.characterNameKo}가 유통기한과 남은 재료를 함께 챙겨 드릴게요.`,
+    title: "이제부터 지구에 버려지는 식재료는 없다!",
+    description: "남은 재료도 알뜰하게, 장고가 맛있는 한 끼로 이어드릴게요.",
     mood: "happy",
     cta: "다음으로 갈게요",
   },
@@ -52,7 +60,8 @@ const STEPS: OnboardingStep[] = [
     key: "start",
     eyebrow: `${appBrand.appNameEn}`,
     title: "로그인하면 바로 시작할 수 있어요",
-    description: "카카오·네이버 또는 이메일로 로그인하면, 장고가 재료를 안전하게 챙겨 드릴게요.",
+    description:
+      "카카오·네이버 또는 이메일로 로그인하면, 장고가 재료를 안전하게 챙겨 드릴게요.",
     mood: "happy",
     cta: "로그인",
   },
@@ -63,6 +72,29 @@ const SPRING = {
   stiffness: 200,
   mass: 0.85,
 };
+
+function ProgressTrack({
+  stepIndex,
+  dark,
+}: {
+  stepIndex: number;
+  dark?: boolean;
+}) {
+  return (
+    <View style={styles.progressTrack}>
+      {STEPS.map((item, index) => (
+        <View
+          key={item.key}
+          style={[
+            styles.progressSegment,
+            dark && styles.progressSegmentDark,
+            index <= stepIndex && styles.progressSegmentActive,
+          ]}
+        />
+      ))}
+    </View>
+  );
+}
 
 export default function OnboardingScreen() {
   const completeOnboarding = useAppStore((state) => state.completeOnboarding);
@@ -76,14 +108,11 @@ export default function OnboardingScreen() {
   const isLastStep = stepIndex === STEPS.length - 1;
 
   useEffect(() => {
-    if (!isFirstStep) {
-      setHeroMood(step.mood);
+    if (isFirstStep) {
       return;
     }
 
-    setHeroMood("idle");
-    const timer = setTimeout(() => setHeroMood("happy"), 700);
-    return () => clearTimeout(timer);
+    setHeroMood(step.mood);
   }, [isFirstStep, step.mood, stepIndex]);
 
   useEffect(() => {
@@ -116,6 +145,38 @@ export default function OnboardingScreen() {
     setStepIndex((current) => Math.max(current - 1, 0));
   };
 
+  if (isFirstStep) {
+    return (
+      <View style={styles.welcomeRoot} testID="onboarding-screen">
+        <Image
+          source={jangoWelcomeHero}
+          style={styles.welcomeImage}
+          resizeMode="contain"
+          accessibilityRole="image"
+          accessibilityLabel={`${step.title} ${step.description}`}
+        />
+        <SafeAreaView style={styles.welcomeSafe} edges={["top", "right", "left"]}>
+          <View style={styles.topBar}>
+            <ProgressTrack stepIndex={stepIndex} dark />
+            <View style={styles.backLinkSpacer} />
+          </View>
+
+          <Animated.View style={[styles.welcomeHeroSpacer, contentStyle]} />
+
+          <View style={styles.welcomeFooter}>
+            <Button
+              onPress={handlePrimary}
+              fullWidth
+              testID="onboarding-next-button"
+            >
+              {step.cta}
+            </Button>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
+
   return (
     <Screen
       contentWidth="form"
@@ -131,33 +192,19 @@ export default function OnboardingScreen() {
       }
     >
       <View style={styles.topBar}>
-        <View style={styles.progressTrack}>
-          {STEPS.map((item, index) => (
-            <View
-              key={item.key}
-              style={[
-                styles.progressSegment,
-                index <= stepIndex && styles.progressSegmentActive,
-              ]}
-            />
-          ))}
-        </View>
-        {!isFirstStep ? (
-          <Pressable
-            onPress={handleBack}
-            hitSlop={spacing.xs}
-            style={({ pressed }) => [
-              styles.backLink,
-              pressed && styles.backLinkPressed,
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="뒤로가기"
-          >
-            <Text style={styles.backLinkText}>뒤로가기</Text>
-          </Pressable>
-        ) : (
-          <View style={styles.backLinkSpacer} />
-        )}
+        <ProgressTrack stepIndex={stepIndex} />
+        <Pressable
+          onPress={handleBack}
+          hitSlop={spacing.xs}
+          style={({ pressed }) => [
+            styles.backLink,
+            pressed && styles.backLinkPressed,
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel="뒤로가기"
+        >
+          <Text style={styles.backLinkText}>뒤로가기</Text>
+        </Pressable>
       </View>
 
       <Animated.View style={[styles.hero, contentStyle]}>
@@ -171,7 +218,7 @@ export default function OnboardingScreen() {
 
         <MascotSpeechBubble
           message={step.description}
-          mood={isFirstStep ? heroMood : step.mood}
+          mood={heroMood}
           size="medium"
           style={styles.guideBubble}
         />
@@ -181,8 +228,34 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
+  welcomeRoot: {
+    flex: 1,
+    // Near-black chrome so contain letterboxing matches the space art.
+    backgroundColor: colors.text,
+  },
+  welcomeImage: {
+    ...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: "100%",
+  },
+  welcomeSafe: {
+    flex: 1,
+  },
+  welcomeHeroSpacer: {
+    flex: 1,
+  },
+  welcomeFooter: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: radius.xxl,
+    borderTopRightRadius: radius.xxl,
+  },
   topBar: {
     gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
   },
   progressTrack: {
     flexDirection: "row",
@@ -193,6 +266,9 @@ const styles = StyleSheet.create({
     height: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.mutedSurface,
+  },
+  progressSegmentDark: {
+    backgroundColor: colors.cameraControl,
   },
   progressSegmentActive: {
     backgroundColor: colors.primary,
