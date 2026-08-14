@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useIsRestoring } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react-native";
 import { useEffect, type ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -33,7 +34,7 @@ initMobileSentry();
 
 SplashScreen.preventAutoHideAsync().catch(() => null);
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(pretendardFonts);
 
   useEffect(() => {
@@ -175,6 +176,8 @@ export default function RootLayout() {
     </GestureHandlerRootView>
   );
 }
+
+export default Sentry.wrap(RootLayout);
 
 function QueryCacheRestoreBoundary({ children }: { children: ReactNode }) {
   const isRestoring = useIsRestoring();

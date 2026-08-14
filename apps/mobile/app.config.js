@@ -44,6 +44,8 @@ const plugins = appJson.expo.plugins.filter((plugin) => {
 });
 
 plugins.push("expo-iap");
+// Config plugins do not rewrite the committed ios/ folder. EAS still injects
+// GADApplicationIdentifier via scripts/sync-admob-ios-plist.cjs.
 plugins.push([
   "react-native-google-mobile-ads",
   {

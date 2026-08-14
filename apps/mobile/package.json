@@ -18,7 +18,7 @@
     "eas:submit:ios": "pnpm dlx eas-cli@21.2.0 submit --platform ios --profile production",
     "eas:submit:android": "pnpm dlx eas-cli@21.2.0 submit --platform android --profile production",
     "eas-build-pre-install": "corepack enable && corepack prepare pnpm@9.15.0 --activate",
-    "eas-build-post-install": "cd ../.. && pnpm --filter @expirymate/shared build && node apps/mobile/scripts/validate-public-env.cjs && node -e \"require('./apps/mobile/scripts/ios-team-env.cjs').assertIosTeamCompatibleWithAppEnv()\"",
+    "eas-build-post-install": "cd ../.. && pnpm --filter @expirymate/shared build && node apps/mobile/scripts/validate-public-env.cjs && node -e \"require('./apps/mobile/scripts/ios-team-env.cjs').assertIosTeamCompatibleWithAppEnv()\" && node apps/mobile/scripts/sync-admob-ios-plist.cjs",
     "validate:env": "node ./scripts/validate-public-env.cjs",
     "validate:ios-team": "node ./scripts/ios-team-env.cjs",
     "lint": "eslint .",

@@ -11,6 +11,13 @@ const REQUIRED_PRODUCTION_VALUES = [
 
 const OPTIONAL_PROVIDER_CLIENT_IDS = ["EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID"];
 
+const GOOGLE_SAMPLE_ADMOB_IDS = new Set([
+  "ca-app-pub-3940256099942544~1458002511",
+  "ca-app-pub-3940256099942544~3347511713",
+  "ca-app-pub-3940256099942544/1712485313",
+  "ca-app-pub-3940256099942544/5224354917",
+]);
+
 function validateExpoPublicEnv(env = process.env) {
   if (env.EXPO_PUBLIC_APP_ENV !== "production") {
     return;
@@ -28,6 +35,10 @@ function validateExpoPublicEnv(env = process.env) {
 
     if (looksLikePlaceholder(value)) {
       errors.push(`${key} must not use a placeholder value.`);
+    }
+
+    if (GOOGLE_SAMPLE_ADMOB_IDS.has(value)) {
+      errors.push(`${key} must not use Google's sample AdMob ID in production.`);
     }
   }
 
