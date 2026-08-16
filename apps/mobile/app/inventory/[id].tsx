@@ -2,7 +2,6 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
-  UnitCode,
   formatDateKorean,
   formatInventoryQuantity,
   getExpiryBucket,
@@ -11,7 +10,10 @@ import {
   itemStatusLabels,
   productCategoryLabels,
   productCategoryOptions,
-  unitCodeLabels,
+  quantityInputLabel,
+  quantityInputStep,
+  quantityValuesForInputUnit,
+  toBaseQuantity,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -39,6 +41,7 @@ import { QuantityStepper } from "../../src/components/QuantityStepper";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { StepFlow } from "../../src/components/StepFlow";
+import { QuantityUnitPills } from "../../src/features/inventory/QuantityUnitPills";
 import {
   consumeInventoryItem,
   discardInventoryItem,
@@ -74,8 +77,8 @@ const EDIT_STEPS: Array<{
   {
     key: "storage",
     label: "보관",
-    title: "어디에, 몇 개 있나요?",
-    guideMessage: "보관 위치와 수량을 맞춰 주세요.",
+    title: "어디에, 얼마나 있나요?",
+    guideMessage: "보관 위치와 남은 양을 맞춰 주세요.",
   },
   {
     key: "expiry",
@@ -198,6 +201,11 @@ export default function InventoryDetailScreen() {
   }, [form, itemQuery.data]);
 
   const quantity = Number(form.watch("quantity")) || 1;
+  const watchedUnit = form.watch("unit");
+  const unit =
+    typeof watchedUnit === "string" && watchedUnit.trim().length > 0
+      ? watchedUnit
+      : "개";
   const displayName = form.watch("displayName")?.trim() ?? "";
   const expiryDate = form.watch("expiryDate");
   const storageLocation = form.watch("storageLocation");
@@ -247,12 +255,12 @@ export default function InventoryDetailScreen() {
   const handleSave = form.handleSubmit(async (values) => {
     try {
       setErrorMessage(null);
-      const unitCode = values.unitCode ?? item?.unitCode ?? UnitCode.EA;
+      const canonical = toBaseQuantity(values.quantity, values.unit);
       await updateMutation.mutateAsync({
         ...values,
-        quantityBase: values.quantityBase ?? values.quantity,
-        unitCode,
-        unit: values.unit || unitCodeLabels[unitCode],
+        quantityBase: canonical.quantityBase,
+        unitCode: canonical.unitCode,
+        unit: values.unit || "개",
       });
       router.back();
     } catch (error) {
@@ -393,34 +401,48 @@ export default function InventoryDetailScreen() {
               </View>
 
               <View style={styles.formCard}>
+                <View>
+                  <Text style={styles.quantityUnitLabel}>어떤 단위인가요?</Text>
+                  <QuantityUnitPills
+                    unit={unit}
+                    onChange={(nextUnit) => {
+                      const next = quantityValuesForInputUnit({
+                        quantity,
+                        fromUnit: unit,
+                        toUnit: nextUnit,
+                      });
+                      form.setValue("unit", next.unit, {
+                        shouldValidate: true,
+                      });
+                      form.setValue("quantity", next.quantity, {
+                        shouldValidate: true,
+                      });
+                      form.setValue("quantityBase", next.quantityBase, {
+                        shouldValidate: true,
+                      });
+                      form.setValue("unitCode", next.unitCode, {
+                        shouldValidate: true,
+                      });
+                    }}
+                  />
+                </View>
                 <QuantityStepper
-                  label={
-                    item?.unitCode === UnitCode.ML ||
-                    item?.unitCode === UnitCode.G
-                      ? "얼마나 남았나요?"
-                      : "몇 개인가요?"
-                  }
+                  label={quantityInputLabel(unit, { remaining: true })}
                   value={quantity}
+                  step={quantityInputStep(unit)}
                   onChange={(nextQuantity) => {
+                    const canonical = toBaseQuantity(nextQuantity, unit);
                     form.setValue("quantity", nextQuantity, {
                       shouldValidate: true,
                     });
-                    form.setValue("quantityBase", nextQuantity, {
+                    form.setValue("quantityBase", canonical.quantityBase, {
                       shouldValidate: true,
                     });
-                    if (item?.unitCode) {
-                      form.setValue("unitCode", item.unitCode, {
-                        shouldValidate: true,
-                      });
-                    }
+                    form.setValue("unitCode", canonical.unitCode, {
+                      shouldValidate: true,
+                    });
                   }}
                   error={form.formState.errors.quantity?.message}
-                />
-                <FormField
-                  control={form.control}
-                  name="unit"
-                  label="단위"
-                  placeholder="개 / ml / g"
                 />
               </View>
             </>
@@ -884,6 +906,13 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.lg,
     gap: spacing.md,
+  },
+  quantityUnitLabel: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.text,
+    marginBottom: spacing.xs,
   },
   card: {
     backgroundColor: colors.surface,

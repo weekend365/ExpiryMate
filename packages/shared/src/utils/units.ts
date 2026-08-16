@@ -1,5 +1,5 @@
 import { unitCodeLabels } from "../constants/labels";
-import { UnitCode } from "../enums/app-enums";
+import { ProductCategory, UnitCode } from "../enums/app-enums";
 import type { InventoryItem } from "../types/models";
 
 export const formatBaseQuantity = (
@@ -170,3 +170,142 @@ export const formatInventoryQuantity = (
     ? formatBaseQuantity(item.quantityBase, item.unitCode)
     : `${item.quantity}${item.unit ?? "개"}`;
 };
+
+export const QUANTITY_INPUT_UNITS = [
+  { label: "개", unit: "개" },
+  { label: "ml", unit: "ml" },
+  { label: "L", unit: "L" },
+  { label: "g", unit: "g" },
+  { label: "kg", unit: "kg" },
+] as const;
+
+export type QuantityInputUnit = (typeof QUANTITY_INPUT_UNITS)[number]["unit"];
+
+export function resolveQuantityInputUnit(
+  unit?: string | null,
+): QuantityInputUnit {
+  const normalized = unit?.trim() ?? "개";
+  const exact = QUANTITY_INPUT_UNITS.find(
+    (option) => option.unit.toLowerCase() === normalized.toLowerCase(),
+  );
+  if (exact) {
+    return exact.unit;
+  }
+
+  const unitCode = inferUnitCode(normalized);
+  if (unitCode === UnitCode.ML) {
+    return "ml";
+  }
+  if (unitCode === UnitCode.G) {
+    return "g";
+  }
+  return "개";
+}
+
+export function quantityInputLabel(
+  unit?: string | null,
+  options?: { remaining?: boolean },
+) {
+  const remaining = Boolean(options?.remaining);
+  if (resolveQuantityInputUnit(unit) === "개") {
+    return remaining ? "몇 개 남았나요?" : "몇 개인가요?";
+  }
+  return remaining ? "얼마나 남았나요?" : "얼마나 있어요?";
+}
+
+export function quantityInputStep(unit?: string | null) {
+  const resolved = resolveQuantityInputUnit(unit);
+  return resolved === "ml" || resolved === "g" ? 50 : 1;
+}
+
+export function defaultQuantityForInputUnit(unit?: string | null) {
+  const resolved = resolveQuantityInputUnit(unit);
+  if (resolved === "ml") {
+    return 200;
+  }
+  if (resolved === "g") {
+    return 100;
+  }
+  return 1;
+}
+
+export function suggestQuantityInputUnit(
+  displayName?: string | null,
+  category?: ProductCategory | null,
+): QuantityInputUnit {
+  if (
+    category === ProductCategory.DAIRY ||
+    category === ProductCategory.BEVERAGE
+  ) {
+    return "ml";
+  }
+
+  const name = displayName?.trim() ?? "";
+  if (/우유|두유|주스|식초|소스|국물/.test(name)) {
+    return "ml";
+  }
+  if (/소고기|돼지고기|닭고기|닭가슴|다진고기|분말/.test(name)) {
+    return "g";
+  }
+  return "개";
+}
+
+export function convertQuantityForInputUnit(
+  quantity: number,
+  fromUnit?: string | null,
+  toUnit?: string | null,
+): number {
+  const from = resolveQuantityInputUnit(fromUnit);
+  const to = resolveQuantityInputUnit(toUnit);
+  const safeQuantity =
+    Number.isFinite(quantity) && quantity > 0 ? Math.round(quantity) : 1;
+
+  if (from === to) {
+    return Math.max(1, safeQuantity);
+  }
+
+  const fromBase = toBaseQuantity(safeQuantity, from);
+  const toCode = inferUnitCode(to);
+
+  if (fromBase.unitCode === toCode) {
+    if (to === "L" || to === "kg") {
+      const scaled = fromBase.quantityBase / 1000;
+      if (scaled >= 1) {
+        return Math.max(1, Math.round(scaled));
+      }
+      return defaultQuantityForInputUnit(to);
+    }
+
+    return Math.max(1, fromBase.quantityBase);
+  }
+
+  return defaultQuantityForInputUnit(to);
+}
+
+export function quantityValuesForInputUnit(params: {
+  quantity: number;
+  fromUnit?: string | null;
+  toUnit: string;
+}) {
+  const quantity = convertQuantityForInputUnit(
+    params.quantity,
+    params.fromUnit,
+    params.toUnit,
+  );
+  const canonical = toBaseQuantity(quantity, params.toUnit);
+
+  return {
+    quantity,
+    unit: params.toUnit,
+    quantityBase: canonical.quantityBase,
+    unitCode: canonical.unitCode,
+  };
+}
+
+export function formatEnteredQuantity(
+  quantity: number,
+  unit?: string | null,
+): string {
+  const canonical = toBaseQuantity(quantity, unit);
+  return formatBaseQuantity(canonical.quantityBase, canonical.unitCode);
+}

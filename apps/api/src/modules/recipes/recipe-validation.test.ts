@@ -6,7 +6,7 @@ import type {
 } from "@expirymate/shared";
 import { ProductCategory, UnitCode } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
-import { validateGeneratedRecommendations } from "./recipe-validation";
+import { validateAlignedRecommendations, validateGeneratedRecommendations } from "./recipe-validation";
 
 const request: RecipeRecommendationRequest = {
   servings: 2,
@@ -163,5 +163,34 @@ describe("recipe semantic validation", () => {
         "DISH_1_EQUIPMENT_REQUIRED",
       ]),
     );
+  });
+
+  it("aligns unit and clamps amount to inventory before validation", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      usedIngredients: [
+        {
+          inventoryItemId: "egg-1",
+          name: "계란",
+          amount: 8,
+          unitCode: UnitCode.G,
+        },
+      ],
+    };
+
+    const result = validateAlignedRecommendations(
+      invalid,
+      request,
+      inventory,
+      preference,
+    );
+
+    expect(result.valid).toBe(true);
+    expect(result.recommendations[0]?.usedIngredients[0]).toMatchObject({
+      name: "달걀",
+      amount: 3,
+      unitCode: UnitCode.EA,
+    });
   });
 });

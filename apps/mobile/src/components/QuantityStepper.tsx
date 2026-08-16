@@ -9,6 +9,8 @@ interface QuantityStepperProps {
   onChange: (value: number) => void;
   /** Inclusive upper bound for cooking / partial-use flows. */
   max?: number;
+  /** Amount added or subtracted by the +/− buttons. Defaults to 1. */
+  step?: number;
   error?: string;
 }
 
@@ -17,12 +19,15 @@ export function QuantityStepper({
   value,
   onChange,
   max,
+  step = 1,
   error,
 }: QuantityStepperProps) {
   const upperBound =
     typeof max === "number" && Number.isFinite(max) && max >= 1
       ? Math.floor(max)
       : undefined;
+  const safeStep =
+    Number.isFinite(step) && step >= 1 ? Math.floor(step) : 1;
   const safeValue = Number.isFinite(value) && value > 0 ? Math.floor(value) : 1;
   const clampedValue =
     upperBound === undefined ? safeValue : Math.min(safeValue, upperBound);
@@ -34,10 +39,16 @@ export function QuantityStepper({
       </AppText>
       <View style={[styles.container, error ? styles.errorContainer : null]}>
         <Pressable
-          onPress={() => onChange(Math.max(1, clampedValue - 1))}
+          onPress={() => {
+            if (clampedValue <= safeStep) {
+              onChange(1);
+              return;
+            }
+            onChange(clampedValue - safeStep);
+          }}
           hitSlop={spacing.xxs}
           accessibilityRole="button"
-          accessibilityLabel={`${label} 하나 줄이기`}
+          accessibilityLabel={`${label} 줄이기`}
           style={({ pressed }) => [
             styles.iconButton,
             pressed && styles.iconButtonPressed,
@@ -69,16 +80,16 @@ export function QuantityStepper({
           style={styles.input}
         />
         <Pressable
-          onPress={() =>
+          onPress={() => {
+            const next =
+              clampedValue < safeStep ? safeStep : clampedValue + safeStep;
             onChange(
-              upperBound === undefined
-                ? clampedValue + 1
-                : Math.min(clampedValue + 1, upperBound),
-            )
-          }
+              upperBound === undefined ? next : Math.min(next, upperBound),
+            );
+          }}
           hitSlop={spacing.xxs}
           accessibilityRole="button"
-          accessibilityLabel={`${label} 하나 늘리기`}
+          accessibilityLabel={`${label} 늘리기`}
           disabled={upperBound !== undefined && clampedValue >= upperBound}
           style={({ pressed }) => [
             styles.iconButton,

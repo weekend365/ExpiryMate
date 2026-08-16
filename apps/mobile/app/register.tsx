@@ -3,13 +3,23 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
+  UnitCode,
   addDays,
+  defaultQuantityForInputUnit,
   fieldLimits,
   formatDateKorean,
+  formatEnteredQuantity,
+  formatInventoryQuantity,
   groupInventoryItems,
   inventoryFormSchema,
   productCategoryLabels,
   productCategoryOptions,
+  quantityInputLabel,
+  quantityInputStep,
+  quantityValuesForInputUnit,
+  resolveQuantityInputUnit,
+  suggestQuantityInputUnit,
+  toBaseQuantity,
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +33,7 @@ import {
   MapPin,
   Plus,
 } from "lucide-react-native";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Alert,
@@ -45,6 +55,7 @@ import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
 import { StepFlow } from "../src/components/StepFlow";
+import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
@@ -85,6 +96,8 @@ type RegisteredSessionItem = {
   displayName: string;
   quantity: number;
   unit?: string | null;
+  quantityBase: number;
+  unitCode: UnitCode;
   storageLocation: string;
   expiryDate: string;
 };
@@ -104,8 +117,8 @@ const REGISTRATION_STEPS: Array<{
   {
     key: "storage",
     label: "보관",
-    title: "어디에, 몇 개 두나요?",
-    guideMessage: "브랜드·메모는 필요할 때만 적어도 괜찮아요.",
+    title: "어디에, 얼마나 두나요?",
+    guideMessage: "개수나 용량을 알려 주시면 요리할 때 맞춰 쓸게요.",
   },
   {
     key: "expiry",
@@ -216,6 +229,7 @@ export default function RegisterScreen() {
   );
   const initializedRef = useRef(false);
   const appliedPrefillKeyRef = useRef("");
+  const userChoseQuantityUnitRef = useRef(false);
 
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(inventoryFormSchema) as never,
@@ -234,6 +248,7 @@ export default function RegisterScreen() {
       form.reset(nextValues);
       initializedRef.current = true;
       appliedPrefillKeyRef.current = nextPrefillKey;
+      userChoseQuantityUnitRef.current = false;
       return;
     }
 
@@ -244,6 +259,7 @@ export default function RegisterScreen() {
     if (prefill && nextPrefillKey !== appliedPrefillKeyRef.current) {
       form.reset(nextValues);
       appliedPrefillKeyRef.current = nextPrefillKey;
+      userChoseQuantityUnitRef.current = false;
     }
   }, [draft, form, hasHydrated, prefill]);
 
@@ -290,6 +306,48 @@ export default function RegisterScreen() {
   const unit = form.watch("unit") || "개";
   const brand = form.watch("brand")?.trim() ?? "";
   const category = form.watch("category");
+  const quantityLabel = quantityInputLabel(unit);
+  const enteredQuantityLabel = formatEnteredQuantity(quantity, unit);
+
+  const applyQuantityUnit = useCallback(
+    (nextUnit: string, options?: { userChosen?: boolean }) => {
+      if (options?.userChosen) {
+        userChoseQuantityUnitRef.current = true;
+      }
+
+      const next = quantityValuesForInputUnit({
+        quantity: Number(form.getValues("quantity")) || 1,
+        fromUnit: form.getValues("unit"),
+        toUnit: nextUnit,
+      });
+      form.setValue("unit", next.unit, { shouldValidate: true });
+      form.setValue("quantity", next.quantity, { shouldValidate: true });
+    },
+    [form],
+  );
+
+  useEffect(() => {
+    if (step !== "storage" || userChoseQuantityUnitRef.current) {
+      return;
+    }
+
+    const currentUnit = form.getValues("unit");
+    const currentQuantity = Number(form.getValues("quantity")) || 1;
+    if (resolveQuantityInputUnit(currentUnit) !== "개" || currentQuantity !== 1) {
+      return;
+    }
+
+    const suggested = suggestQuantityInputUnit(displayName, category);
+    if (suggested === "개") {
+      return;
+    }
+
+    form.setValue("unit", suggested, { shouldValidate: true });
+    form.setValue("quantity", defaultQuantityForInputUnit(suggested), {
+      shouldValidate: true,
+    });
+  }, [category, displayName, form, step]);
+
   const isInputStep = step !== "done";
   const stepIndex = isInputStep
     ? REGISTRATION_STEPS.findIndex((item) => item.key === step)
@@ -379,7 +437,20 @@ export default function RegisterScreen() {
     form.setValue("displayName", item.displayName, { shouldValidate: true });
     form.setValue("brand", item.brand ?? "");
     form.setValue("category", item.category ?? undefined);
-    form.setValue("unit", item.unit ?? "개");
+    const nextUnit =
+      item.unitCode === UnitCode.ML
+        ? "ml"
+        : item.unitCode === UnitCode.G
+          ? "g"
+          : (item.unit ?? "개");
+    form.setValue("unit", nextUnit);
+    form.setValue(
+      "quantity",
+      nextUnit === "ml" || nextUnit === "g"
+        ? defaultQuantityForInputUnit(nextUnit)
+        : 1,
+      { shouldValidate: true },
+    );
     form.setValue("storageLocation", item.storageLocation, {
       shouldValidate: true,
     });
@@ -419,6 +490,7 @@ export default function RegisterScreen() {
   const continueWithManual = () => {
     setRewardNotice(null);
     setSubmitErrorMessage(null);
+    userChoseQuantityUnitRef.current = false;
     setStep("product");
   };
 
@@ -432,6 +504,7 @@ export default function RegisterScreen() {
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       setSubmitErrorMessage(null);
+      const canonical = toBaseQuantity(values.quantity, values.unit);
       const created = await mutation.mutateAsync({
         productId: values.productId,
         displayName: values.displayName,
@@ -439,6 +512,8 @@ export default function RegisterScreen() {
         category: values.category,
         quantity: values.quantity,
         unit: values.unit,
+        quantityBase: canonical.quantityBase,
+        unitCode: canonical.unitCode,
         storageLocation: values.storageLocation,
         expiryDate: values.expiryDate,
         expirySource: values.expirySource,
@@ -455,6 +530,8 @@ export default function RegisterScreen() {
           displayName: created.displayName,
           quantity: created.quantity,
           unit: created.unit,
+          quantityBase: created.quantityBase,
+          unitCode: created.unitCode,
           storageLocation: created.storageLocation,
           expiryDate: created.expiryDate,
         },
@@ -469,6 +546,7 @@ export default function RegisterScreen() {
       };
 
       form.reset(nextDefaults);
+      userChoseQuantityUnitRef.current = false;
       setShowAdditionalInfo(false);
       setStep("done");
     } catch (error) {
@@ -570,8 +648,9 @@ export default function RegisterScreen() {
                 <View key={item.id} style={styles.sessionRow}>
                   <Text style={styles.sessionName}>{item.displayName}</Text>
                   <Text style={styles.sessionMeta}>
-                    {resolveLabel(item.storageLocation)} · {item.quantity}
-                    {item.unit ?? "개"} · {formatDateKorean(item.expiryDate)}
+                    {resolveLabel(item.storageLocation)} ·{" "}
+                    {formatInventoryQuantity(item)} ·{" "}
+                    {formatDateKorean(item.expiryDate)}
                   </Text>
                 </View>
               ))}
@@ -699,7 +778,7 @@ export default function RegisterScreen() {
                     .slice(0, 2)
                     .map(
                       (item) =>
-                        `${resolveLabel(item.storageLocation)} · ${item.quantity}${item.unit ?? "개"}`,
+                        `${resolveLabel(item.storageLocation)} · ${formatInventoryQuantity(item)}`,
                     )
                     .join(" / ")}
                 </Text>
@@ -741,9 +820,20 @@ export default function RegisterScreen() {
                 </View>
               </View>
 
+              <View style={styles.storageBlock}>
+                <Text style={styles.storageBlockLabel}>어떤 단위인가요?</Text>
+                <QuantityUnitPills
+                  unit={unit}
+                  onChange={(nextUnit) =>
+                    applyQuantityUnit(nextUnit, { userChosen: true })
+                  }
+                />
+              </View>
+
               <QuantityStepper
-                label="몇 개인가요?"
+                label={quantityLabel}
                 value={quantity}
+                step={quantityInputStep(unit)}
                 onChange={(nextQuantity) =>
                   form.setValue("quantity", nextQuantity, {
                     shouldValidate: true,
@@ -855,8 +945,7 @@ export default function RegisterScreen() {
                   shouldStackDense && styles.summaryValueStacked,
                 ]}
               >
-                {resolveLabel(storageLocation)} · {quantity}
-                {unit}
+                {resolveLabel(storageLocation)} · {enteredQuantityLabel}
               </Text>
             </View>
             <View
@@ -922,7 +1011,7 @@ export default function RegisterScreen() {
         onClose={() => setShowAdditionalInfo(false)}
         mascotMood="idle"
         title="조금만 더 알려주세요"
-        description="브랜드, 카테고리, 단위, 메모는 필요할 때만 적어도 돼요."
+        description="브랜드, 카테고리, 메모는 필요할 때만 적어도 돼요."
         footer={
           <Button onPress={() => setShowAdditionalInfo(false)} fullWidth>
             여기까지 할게요
@@ -934,12 +1023,6 @@ export default function RegisterScreen() {
           name="brand"
           label="브랜드"
           placeholder="예: 서울우유"
-        />
-        <FormField
-          control={form.control}
-          name="unit"
-          label="단위"
-          placeholder="개 / 통 / 봉"
         />
         <View style={styles.extraSection}>
           <Text style={styles.extraSectionTitle}>카테고리</Text>

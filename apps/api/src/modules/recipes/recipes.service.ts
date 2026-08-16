@@ -50,7 +50,7 @@ import {
   RECIPE_SELECTION_VERSION,
   type RecipeRankingCandidate,
 } from "./recipe-ranking";
-import { validateGeneratedRecommendations } from "./recipe-validation";
+import { validateAlignedRecommendations } from "./recipe-validation";
 
 const PROMPT_VERSION = "recipe-recommendation-v4";
 const DEFAULT_MODEL = "gpt-5-mini";
@@ -629,7 +629,7 @@ export class RecipesService {
       };
 
       const first = await run(input, 1);
-      const firstValidation = validateGeneratedRecommendations(
+      const firstValidation = validateAlignedRecommendations(
         first.recommendations,
         request,
         inventorySnapshot,
@@ -657,7 +657,7 @@ export class RecipesService {
         firstValidation.violations,
       );
       const second = await run(repairInput, 2);
-      const secondValidation = validateGeneratedRecommendations(
+      const secondValidation = validateAlignedRecommendations(
         second.recommendations,
         request,
         inventorySnapshot,
@@ -771,6 +771,7 @@ function buildInstructions() {
     "usedIngredients의 각 항목에는 이 요리에 실제로 사용할 정수 amount와 unitCode를 반드시 넣으세요.",
     "unitCode는 ea, ml, g 중 하나만 쓰고, ml와 g는 최소 단위 정수로 적으세요. 예: 우유 0.5L는 amount 500, unitCode ml입니다.",
     "inventoryItemId가 있는 재료는 입력 inventory의 unitCode와 같은 단위를 쓰고 amount가 quantityBase를 넘지 않게 하세요.",
+    "단위를 바꾸거나 재고보다 많이 쓰면 서버가 재고 단위·수량으로 맞추므로, 처음부터 재고 한도 안에서 쓰세요.",
     "면·밥·고기·계란처럼 익힘 시간이 중요한 재료는 분 단위로 안내하세요. 패키지 표기가 있으면 '표기 시간의 약 1분 전'처럼 표현해도 됩니다.",
     "'적당히', '잘', '살짝', '충분히'만으로 끝내거나 '끓인다', '섞는다', '익힌다'처럼 한 단어에 가까운 뭉뚱그린 단계는 금지합니다.",
     "나쁜 예: '면을 삶는다.' / 좋은 예: '소금 1작은술을 넣은 끓는 물에 면을 넣고 7~8분 삶아 알덴테로 익힌 뒤, 면수는 종이컵 반 컵(약 100ml)만 남기고 건집니다.'",
@@ -808,6 +809,11 @@ function buildInput(
         requireUsedIngredientAmount: true,
         requireSpiceLevel: true,
         requireRequiredEquipment: true,
+        inventoryUseLimits: inventorySnapshot.map((item) => ({
+          inventoryItemId: item.inventoryItemId,
+          unitCode: item.unitCode,
+          maxAmount: item.quantityBase,
+        })),
       },
     },
     null,
@@ -829,6 +835,7 @@ function buildRepairInput(
       rules: [
         "위반되지 않은 내용도 구조화 출력 스키마에 맞춰 함께 반환합니다.",
         "재고 ID, 단위, 수량, 안전 설정을 임의로 바꾸거나 추측하지 않습니다.",
+        "UNIT_MISMATCH와 QUANTITY_EXCEEDED는 해당 재료의 inventory unitCode와 quantityBase에 맞춰 고칩니다.",
       ],
     },
     null,

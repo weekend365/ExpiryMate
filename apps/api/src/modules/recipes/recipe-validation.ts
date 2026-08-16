@@ -17,6 +17,54 @@ export interface RecipeValidationResult {
 
 const spiceRank = { none: 0, mild: 1, medium: 2, hot: 3 } as const;
 
+export function alignUsedIngredientsToInventory(
+  recommendations: RecipeRecommendationDish[],
+  inventorySnapshot: RecipeInventorySnapshotItem[],
+): RecipeRecommendationDish[] {
+  const inventoryById = new Map(
+    inventorySnapshot.map((item) => [item.inventoryItemId, item]),
+  );
+
+  return recommendations.map((dish) => ({
+    ...dish,
+    usedIngredients: dish.usedIngredients.map((ingredient) => {
+      const inventoryItem = inventoryById.get(ingredient.inventoryItemId);
+      if (!inventoryItem) {
+        return ingredient;
+      }
+
+      const maxAmount = inventoryItem.quantityBase;
+      const nextAmount =
+        typeof ingredient.amount === "number" &&
+        Number.isFinite(ingredient.amount) &&
+        maxAmount !== undefined
+          ? Math.min(Math.max(1, Math.floor(ingredient.amount)), maxAmount)
+          : ingredient.amount;
+
+      return {
+        ...ingredient,
+        name: inventoryItem.name,
+        unitCode: inventoryItem.unitCode,
+        amount: nextAmount,
+      };
+    }),
+  }));
+}
+
+export function validateAlignedRecommendations(
+  recommendations: RecipeRecommendationDish[],
+  request: RecipeRecommendationRequest,
+  inventorySnapshot: RecipeInventorySnapshotItem[],
+  preference: RecipePreference,
+): RecipeValidationResult {
+  return validateGeneratedRecommendations(
+    alignUsedIngredientsToInventory(recommendations, inventorySnapshot),
+    request,
+    inventorySnapshot,
+    preference,
+  );
+}
+
 export function validateGeneratedRecommendations(
   recommendations: RecipeRecommendationDish[],
   request: RecipeRecommendationRequest,

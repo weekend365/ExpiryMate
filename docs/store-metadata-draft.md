@@ -1,6 +1,6 @@
 # App Store · 스토어 메타 초안 (장고야 부탁해)
 
-App Store Connect **앱 정보 / 1.0 버전 / App Privacy / 심사 노트**에 그대로 옮기기 위한 초안입니다.  
+App Store Connect **앱 정보 / 1.2.0 버전 / App Privacy / 심사 노트**에 그대로 옮기기 위한 초안입니다.  
 Privacy Label 데이터 유형 근거: [`store-privacy-declarations.md`](./store-privacy-declarations.md)
 
 > 법률 자문 아님. 제출 전 최신 제품 동작과 문구를 한 번 더 확인하세요.
@@ -59,7 +59,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 유통기한,냉장고,재고,재료,요리추천,식재료,알림,바코드,팬트리,장고
 ```
 
-### 새로운 기능 (1.0)
+### 새로운 기능 (1.2.0)
 ```
 첫 버전이에요. 재료·유통기한 관리, 알림, 요리 추천을 한곳에서 시작해 보세요.
 ```

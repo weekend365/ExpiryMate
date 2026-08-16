@@ -105,6 +105,33 @@ describe("RecipesService semantic repair", () => {
     expect(parseMock).toHaveBeenCalledTimes(2);
   });
 
+  it("accepts over-quantity unit mismatches by aligning to inventory", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const dishes = recommendations(2).map((dish) => ({
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: "egg-1",
+          name: "계란",
+          amount: 9,
+          unitCode: UnitCode.G,
+        },
+      ],
+    }));
+    parseMock.mockResolvedValueOnce(response(dishes, 10, 20));
+
+    const result = await generate(createService());
+
+    expect(result.generationAttempts).toBe(1);
+    expect(result.repairApplied).toBe(false);
+    expect(result.recommendations[0]?.usedIngredients[0]).toMatchObject({
+      name: "달걀",
+      amount: 3,
+      unitCode: UnitCode.EA,
+    });
+    expect(parseMock).toHaveBeenCalledTimes(1);
+  });
+
   it("returns a gateway failure after an invalid repair", async () => {
     process.env.OPENAI_API_KEY = "test-key";
     parseMock.mockResolvedValue(response(recommendations(1)));

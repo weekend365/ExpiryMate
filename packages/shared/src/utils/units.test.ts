@@ -1,11 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { ExpirySource, UnitCode } from "../enums/app-enums";
+import { ExpirySource, ProductCategory, UnitCode } from "../enums/app-enums";
 import {
+  convertQuantityForInputUnit,
+  defaultQuantityForInputUnit,
   formatBaseQuantity,
+  formatEnteredQuantity,
   formatInventoryQuantity,
   inferUnitCode,
   inventoryItemToFormValues,
+  quantityInputStep,
+  quantityValuesForInputUnit,
+  quantityInputLabel,
   resolveCanonicalQuantityUpdate,
+  resolveQuantityInputUnit,
+  suggestQuantityInputUnit,
   toBaseQuantity,
 } from "./units";
 
@@ -100,5 +108,36 @@ describe("canonical inventory quantities", () => {
       quantityBase: 300,
       unitCode: UnitCode.ML,
     });
+  });
+
+  it("maps registration chips to canonical stock units", () => {
+    expect(resolveQuantityInputUnit("팩")).toBe("개");
+    expect(resolveQuantityInputUnit("리터")).toBe("ml");
+    expect(suggestQuantityInputUnit("서울우유", ProductCategory.DAIRY)).toBe(
+      "ml",
+    );
+    expect(suggestQuantityInputUnit("소고기")).toBe("g");
+    expect(toBaseQuantity(1, "L")).toEqual({
+      quantityBase: 1000,
+      unitCode: UnitCode.ML,
+    });
+    expect(quantityInputStep("ml")).toBe(50);
+    expect(defaultQuantityForInputUnit("g")).toBe(100);
+    expect(convertQuantityForInputUnit(1, "L", "ml")).toBe(1000);
+    expect(convertQuantityForInputUnit(1000, "ml", "L")).toBe(1);
+    expect(convertQuantityForInputUnit(2, "개", "ml")).toBe(200);
+    expect(quantityValuesForInputUnit({
+      quantity: 1,
+      fromUnit: "개",
+      toUnit: "g",
+    })).toEqual({
+      quantity: 100,
+      unit: "g",
+      quantityBase: 100,
+      unitCode: UnitCode.G,
+    });
+    expect(formatEnteredQuantity(1, "L")).toBe("1L");
+    expect(quantityInputLabel("ml")).toBe("얼마나 있어요?");
+    expect(quantityInputLabel("개", { remaining: true })).toBe("몇 개 남았나요?");
   });
 });
