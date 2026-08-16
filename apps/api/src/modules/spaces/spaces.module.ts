@@ -3,6 +3,7 @@ import { AuthModule } from "../auth/auth.module";
 import { DashboardModule } from "../dashboard/dashboard.module";
 import { InventoryModule } from "../inventory/inventory.module";
 import { RecipesModule } from "../recipes/recipes.module";
+import { AffiliateModule } from "../affiliate/affiliate.module";
 import { SettingsModule } from "../settings/settings.module";
 import { SubscriptionsModule } from "../subscriptions/subscriptions.module";
 import {
@@ -26,6 +27,7 @@ import { SpacesService } from "./spaces.service";
     DashboardModule,
     InventoryModule,
     RecipesModule,
+    AffiliateModule,
     SettingsModule,
     SubscriptionsModule,
   ],

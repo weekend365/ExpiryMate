@@ -52,6 +52,7 @@ import {
   parseRecommendationAccess,
 } from "../../src/features/monetization/recommendation-access";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
@@ -1370,6 +1371,8 @@ export default function RecommendationsScreen() {
           <RecipeDetailContent
             dish={recipeDetail.dish}
             inventorySnapshot={recipeDetail.inventorySnapshot}
+            recommendationId={recipeDetail.recommendationId}
+            dishIndex={recipeDetail.dishIndex}
           />
         ) : null}
       </BottomSheet>
@@ -1558,9 +1561,13 @@ function RecipeCard({
 function RecipeDetailContent({
   dish,
   inventorySnapshot,
+  recommendationId,
+  dishIndex,
 }: {
   dish: RecipeRecommendationDish;
   inventorySnapshot: RecipeInventorySnapshotItem[];
+  recommendationId: string;
+  dishIndex: number;
 }) {
   const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
@@ -1640,18 +1647,11 @@ function RecipeDetailContent({
         )}
       </View>
 
-      {dish.optionalMissingIngredients.length > 0 ? (
-        <View style={styles.softNoteCard}>
-          <Text style={styles.softNoteTitle}>있으면 좋은 재료</Text>
-          <Text style={styles.softNoteBody}>
-            {dish.optionalMissingIngredients
-              .map(
-                (ingredient) => `${ingredient.name} (${ingredient.reason})`,
-              )
-              .join(", ")}
-          </Text>
-        </View>
-      ) : null}
+      <OptionalMissingIngredientsCard
+        dish={dish}
+        recommendationId={recommendationId}
+        dishIndex={dishIndex}
+      />
 
       <View style={styles.recipeBlock}>
         <Text style={styles.blockTitle}>조리 순서</Text>

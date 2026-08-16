@@ -127,11 +127,13 @@ describe("validateProductionEnvironment", () => {
     delete env.PAID_RECOMMENDATION_CREDITS_ENABLED;
     delete env.REWARDED_ADS_ENABLED;
     delete env.SUBSCRIPTIONS_ENABLED;
+    delete env.AFFILIATE_OFFERS_ENABLED;
 
     expect(() => validateProductionEnvironment(env)).not.toThrow();
     expect(env.MONETIZATION_OFFER_MODE).toBe("core");
     expect(env.REWARDED_ADS_ENABLED).toBe("false");
     expect(env.SUBSCRIPTIONS_ENABLED).toBe("false");
+    expect(env.AFFILIATE_OFFERS_ENABLED).toBe("false");
     expect(env.RECIPE_FREE_DAILY_LIMIT).toBe("1");
   });
 

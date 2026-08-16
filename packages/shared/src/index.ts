@@ -4,6 +4,7 @@ export * from "./constants/field-limits";
 export * from "./constants/labels";
 export * from "./design";
 export * from "./enums/app-enums";
+export * from "./schemas/affiliate";
 export * from "./schemas/inventory";
 export * from "./schemas/monetization";
 export * from "./schemas/auth";

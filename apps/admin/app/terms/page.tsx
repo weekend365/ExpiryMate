@@ -59,11 +59,9 @@ export default function TermsPage() {
             요리 추천에서 냉장고에 없는 선택 재료를 안내할 때 쿠팡 파트너스
             링크를 제공할 수 있습니다. 결제는 쿠팡에서 이루어지며 App Store
             또는 Google Play 인앱결제가 아닙니다. 제휴 안내는 선택 사항이며
-            구독 혜택과 무관합니다. 자세한 고지는{" "}
-            <Link className="font-bold text-[var(--primary)]" href="/partners">
-              쿠팡 파트너스 안내
-            </Link>
-            를 참고해 주세요.
+            구독 혜택과 무관합니다. 앱에서 링크를 보여줄 때 「이 포스팅은 쿠팡
+            파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.」
+            문구를 함께 표시합니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">서비스 변경과 제한</h2>
@@ -90,12 +88,6 @@ export default function TermsPage() {
             className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
           >
             개인정보처리방침
-          </Link>
-          <Link
-            href="/partners"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
-            쿠팡 파트너스 안내
           </Link>
           <Link
             href="/privacy/choices"

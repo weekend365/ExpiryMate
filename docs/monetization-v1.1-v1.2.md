@@ -252,21 +252,26 @@ IAP(구독·추천권)·보상 광고와 **겹치지 않는 제3 수익**으로,
   「부족한 재료」「레시피 재료 목록」 등 **구매 의가 분명한 곳**만.
 - **구독과 분리:** 장고 플러스는 광고 제거·추천 한도. 제휴 쇼핑은 선택 편의이며
   구독 혜택과 묶지 않습니다.
-- **고지:** 제휴 링크는 앱·웹에서 광고·제휴임을 짧게 안내합니다.
+- **고지:** 제휴 링크는 앱에서 광고·제휴임을 짧게 안내하고, 이용약관에도
+  같은 취지를 둡니다.
 - **외부 결제:** 결제는 쿠팡(또는 이후 몰)에서 이뤄지며 App Store/Play IAP가
   아닙니다. 딥링크/브라우저로 엽니다.
 
 ### 단계
 
-#### Phase A — API 없이 MVP (먼저)
+#### Phase A — 파트너스 단축 URL MVP (Open API 키 없이)
 
-1. 재료명·정규화된 검색어로 쿠팡 검색/딥링크 URL 생성 (+ 파트너스 추적 파라미터).
-2. CTA 카피 예: 「쿠팡에서 찾아보기」(대화형·강요하지 않는 톤).
-3. 서버/퍼널에 `affiliate_offer_shown` / `affiliate_offer_tapped` 만 기록
-   (상품 ID·영수증·개인 식별 구매 내역은 저장하지 않음).
-4. 플래그 예: `AFFILIATE_OFFERS_ENABLED=false`,
-   `AFFILIATE_OFFERS_ROLLOUT_PERCENT=0`,
-   `AFFILIATE_PROVIDER=coupang_partners` (구현 시).
+쿠팡 Open API Access/Secret은 **최종 승인 뒤에** 발급되는 경우가 많습니다.
+Phase A는 파트너스 사이트 **링크 생성**으로 만든 추적 단축 URL을 앱 CTA에
+씁니다. 일반 `coupang.com` 검색 주소는 실적이 잡히지 않아 사용하지 않습니다.
+
+1. 파트너스 → 링크 생성에서 「식재료」 검색 단축 URL을 하나 만든다.
+2. API `COUPANG_PARTNERS_TRACKING_LINK`에 넣는다. 앱 「쿠팡에서 찾아보기」가
+   이 추적 링크로 열린다.
+3. `COUPANG_PARTNERS_ACCESS_KEY` / `SECRET_KEY`가 생기면 재료별 딥링크로 전환.
+4. 서버/퍼널에 `affiliate_offer_shown` / `affiliate_offer_tapped` 만 기록.
+5. 플래그: `AFFILIATE_OFFERS_ENABLED=false`,
+   `AFFILIATE_OFFERS_ROLLOUT_PERCENT=0`.
 
 관문: 노출 대비 클릭률·이탈·부정 피드백을 보고 Phase B 진행 여부 결정.
 
@@ -291,16 +296,15 @@ IAP(구독·추천권)·보상 광고와 **겹치지 않는 제3 수익**으로,
 | 추천 결과 하단 (옵션) | 부족 재료만 묶은 장보기 CTA |
 | 임박 D-day 카드 | **구매 CTA 금지** (소비·레시피 유도 유지) |
 
-### 예정 환경변수 (미구현)
+### 예정 환경변수
 
 ```text
 AFFILIATE_OFFERS_ENABLED=false
 AFFILIATE_OFFERS_ROLLOUT_PERCENT=0
-AFFILIATE_PROVIDER=coupang_partners
+COUPANG_PARTNERS_TRACKING_LINK=
 COUPANG_PARTNERS_ACCESS_KEY=
 COUPANG_PARTNERS_SECRET_KEY=
-COUPANG_PARTNERS_TRACKING_CODE=
-AFFILIATE_OFFER_CACHE_SECONDS=300
+AFFILIATE_OFFER_CACHE_SECONDS=86400
 AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT=2
 ```
 

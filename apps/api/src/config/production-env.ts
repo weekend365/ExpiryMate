@@ -45,6 +45,9 @@ export const PRODUCTION_MONETIZATION_DEFAULTS = {
   REWARDED_ADS_ENABLED: "false",
   // Sales switch only — existing entitlements stay active when false.
   SUBSCRIPTIONS_ENABLED: "false",
+  AFFILIATE_OFFERS_ENABLED: "false",
+  AFFILIATE_OFFERS_ROLLOUT_PERCENT: "0",
+  AFFILIATE_OFFER_CACHE_SECONDS: "86400",
   IAP_ALLOW_SANDBOX_PURCHASES: "false",
   SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED: "false",
 } as const;
@@ -317,6 +320,7 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
   validateBooleanFlag(env, "PAID_RECOMMENDATION_CREDITS_ENABLED", errors);
+  validateBooleanFlag(env, "AFFILIATE_OFFERS_ENABLED", errors);
   validateBooleanFlag(env, "IAP_ALLOW_SANDBOX_PURCHASES", errors);
   validateBooleanFlag(env, "SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED", errors);
 
@@ -339,6 +343,8 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     "BARCODE_REWARD_ROLLOUT_PERCENT",
     "BARCODE_REWARD_DAILY_LIMIT",
     "BARCODE_REWARD_BALANCE_LIMIT",
+    "AFFILIATE_OFFERS_ROLLOUT_PERCENT",
+    "AFFILIATE_OFFER_CACHE_SECONDS",
   ]) {
     if (env[key] === undefined || env[key] === "") continue;
     const value = Number(env[key]);
@@ -373,6 +379,16 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     barcodeRolloutPercent > 100
   ) {
     errors.push("BARCODE_REWARD_ROLLOUT_PERCENT must be between 0 and 100.");
+  }
+
+  const affiliateRolloutPercent = Number(
+    env.AFFILIATE_OFFERS_ROLLOUT_PERCENT ?? 0,
+  );
+  if (
+    Number.isFinite(affiliateRolloutPercent) &&
+    affiliateRolloutPercent > 100
+  ) {
+    errors.push("AFFILIATE_OFFERS_ROLLOUT_PERCENT must be between 0 and 100.");
   }
   if (isEnabled(env.BARCODE_REWARDS_ENABLED)) {
     requireFeatureValue(

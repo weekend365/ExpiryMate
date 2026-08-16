@@ -66,6 +66,12 @@ describe("monetization schemas", () => {
     ).toBe(false);
     expect(
       trackMonetizationEventRequestSchema.safeParse({
+        event: "affiliate_offer_shown",
+        properties: { count: "2", mode: "partner_link" },
+      }).success,
+    ).toBe(true);
+    expect(
+      trackMonetizationEventRequestSchema.safeParse({
         event: "paywall_viewed",
         properties: Object.fromEntries(
           Array.from({ length: 13 }, (_, index) => [`key_${index}`, "value"]),

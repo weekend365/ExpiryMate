@@ -37,6 +37,7 @@ import { DashboardService } from "../dashboard/dashboard.service";
 import { BatchDiscardInventoryItemsDto } from "../inventory/dto/batch-discard-inventory-items.dto";
 import { InventoryService } from "../inventory/inventory.service";
 import { RecipesService } from "../recipes/recipes.service";
+import { AffiliateOfferService } from "../affiliate/affiliate-offer.service";
 import { SettingsService } from "../settings/settings.service";
 import { SubscriptionsService } from "../subscriptions/subscriptions.service";
 import { SpacesService } from "./spaces.service";
@@ -245,6 +246,7 @@ export class SpaceRecipesController {
   constructor(
     private readonly spacesService: SpacesService,
     private readonly recipesService: RecipesService,
+    private readonly affiliateOffers: AffiliateOfferService,
   ) {}
 
   @Post("recommendations")
@@ -281,6 +283,22 @@ export class SpaceRecipesController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.recipesService.getRecommendation(id, userId, spaceId);
+  }
+
+  @Get("recommendations/:id/dishes/:dishIndex/affiliate-offers")
+  async getAffiliateOffers(
+    @Param("spaceId") spaceId: string,
+    @Param("id") id: string,
+    @Param("dishIndex", ParseIntPipe) dishIndex: number,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.affiliateOffers.getOffersForDish({
+      ownerKey: userId,
+      recommendationId: id,
+      dishIndex,
+      spaceId,
+    });
   }
 
   @Put("recommendations/:id/dishes/:dishIndex/favorite")
