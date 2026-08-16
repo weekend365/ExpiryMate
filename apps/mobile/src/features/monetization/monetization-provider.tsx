@@ -146,7 +146,13 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     if (query.data?.tier !== "free") {
       throw new Error("장고 플러스 이용자는 광고 없이 추천할 수 있어요.");
     }
-    if (!query.data?.rewardedAds.canWatch) {
+    if (!query.data?.rewardedAdsEnabled) {
+      throw new Error("지금은 광고로 추천권을 받을 수 없어요.");
+    }
+    if (
+      !query.data.rewardedAds.canWatch &&
+      query.data.rewardedAds.remainingToWatch <= 0
+    ) {
       throw new Error("오늘 받을 수 있는 광고 추천권을 모두 받았어요.");
     }
 
@@ -192,6 +198,8 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     }
   }, [
     query.data?.rewardedAds.canWatch,
+    query.data?.rewardedAds.remainingToWatch,
+    query.data?.rewardedAdsEnabled,
     query.data?.tier,
     activeSpaceId,
     refresh,

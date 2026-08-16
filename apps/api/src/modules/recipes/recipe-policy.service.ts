@@ -96,8 +96,8 @@ export class RecipePolicyService {
     if (spentToday + projectedCostUsd > dailyCostLimitUsd) {
       throw new CodedHttpException(
         HttpStatus.TOO_MANY_REQUESTS,
-        "RECOMMENDATION_QUOTA_EXHAUSTED",
-        "오늘의 추천 생성 예산을 모두 사용했습니다.",
+        "RECIPE_DAILY_BUDGET_EXHAUSTED",
+        "오늘은 추천을 조금 쉬어갈까요? 내일 다시 부탁해도 괜찮아요.",
         { reason: "owner_daily_cost_limit" },
       );
     }

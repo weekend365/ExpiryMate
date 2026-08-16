@@ -22,6 +22,7 @@ import {
   sessionQueryKeys,
   withInventorySpace,
 } from "../auth/session-boundary";
+import { parseRecommendationAccess } from "../monetization/recommendation-access";
 import { useAuth } from "../auth/use-auth";
 import { useActiveSpace } from "../spaces/space-provider";
 import {
@@ -118,6 +119,15 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
         setStatus("error");
         setErrorMessage(getErrorMessage(error));
         setErrorCode(error instanceof ApiError ? error.code : null);
+        if (error instanceof ApiError) {
+          const access = parseRecommendationAccess(error.details);
+          if (access) {
+            queryClient.setQueriesData(
+              { queryKey: sessionQueryKeys.monetization },
+              access,
+            );
+          }
+        }
         queryClient.invalidateQueries({
           queryKey: sessionQueryKeys.monetization,
         });

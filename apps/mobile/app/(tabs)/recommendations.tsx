@@ -9,7 +9,6 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Clock3,
-  EyeOff,
   Heart,
   SlidersHorizontal,
   Sparkles,
@@ -43,6 +42,10 @@ import {
 } from "../../src/features/privacy/use-privacy";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
+import {
+  canContinueWithRewardedAd,
+  needsRewardedAdToRecommend,
+} from "../../src/features/monetization/recommendation-access";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import {
   getRecipeFavoriteKey,
@@ -149,12 +152,6 @@ export default function RecommendationsScreen() {
     useState<RecipeDetailSelection | null>(null);
   const [pendingPayload, setPendingPayload] =
     useState<RecipeRecommendationPayload | null>(null);
-  const [hiddenDishKeys, setHiddenDishKeys] = useState<string[]>([]);
-  const [lastDismissedDish, setLastDismissedDish] = useState<{
-    recommendationId: string;
-    dishIndex: number;
-    title: string;
-  } | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
   const pendingGenerateAfterRewardRef =
     useRef<RecipeRecommendationPayload | null>(null);
@@ -192,9 +189,11 @@ export default function RecommendationsScreen() {
   const isHistoryLoadError = Boolean(
     historyQuery.error && !generationErrorMessage,
   );
-  const isQuotaError =
-    generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED" ||
-    isRecommendationQuotaError(errorMessage);
+  const isQuotaError = generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED";
+  const isCapacityError =
+    generationErrorCode === "RECIPE_DAILY_BUDGET_EXHAUSTED" ||
+    generationErrorCode === "RECIPE_SERVICE_CAPACITY_REACHED" ||
+    Boolean(errorMessage?.includes("너무 많"));
   const hasActiveEntitlement = Boolean(
     subscription.query.data?.hasActiveEntitlement,
   );
@@ -219,6 +218,13 @@ export default function RecommendationsScreen() {
     latestRecommendation?.recommendations.length,
   );
   const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
+  const canOfferRewardedAd = canContinueWithRewardedAd(monetization.access);
+  const personalizedOffer = monetization.access?.offer;
+  const showPersonalizedOffer =
+    !hasActiveEntitlement &&
+    Boolean(personalizedOffer?.personalized) &&
+    personalizedOffer?.kind !== "none" &&
+    personalizedOffer?.kind !== "rewarded_ad";
   const isAdBusy = monetization.adState !== "idle";
   const primaryCtaLabel = isGenerating
     ? "요리 조합을 찾는 중이에요"
@@ -437,50 +443,6 @@ export default function RecommendationsScreen() {
       action: "view",
     });
     setRecipeDetail(selection);
-  };
-
-  const handleDismissDish = (
-    recommendationId: string,
-    dishIndex: number,
-    title: string,
-  ) => {
-    const key = getRecipeFavoriteKey(recommendationId, dishIndex);
-    setHiddenDishKeys((current) => [...new Set([...current, key])]);
-    setLastDismissedDish({ recommendationId, dishIndex, title });
-    engagementMutation.mutate(
-      { recommendationId, dishIndex, action: "dismiss" },
-      {
-        onError: () => {
-          setHiddenDishKeys((current) => current.filter((item) => item !== key));
-          setLastDismissedDish(null);
-          Alert.alert("관심없음을 저장하지 못했어요", "잠시 뒤 다시 부탁해 주세요.");
-        },
-      },
-    );
-  };
-
-  const handleUndoDismiss = () => {
-    if (!lastDismissedDish) return;
-    const dismissed = lastDismissedDish;
-    const key = getRecipeFavoriteKey(
-      dismissed.recommendationId,
-      dismissed.dishIndex,
-    );
-    setHiddenDishKeys((current) => current.filter((item) => item !== key));
-    setLastDismissedDish(null);
-    engagementMutation.mutate(
-      {
-        recommendationId: dismissed.recommendationId,
-        dishIndex: dismissed.dishIndex,
-        action: "undo_dismiss",
-      },
-      {
-        onError: () => {
-          setHiddenDishKeys((current) => [...new Set([...current, key])]);
-          setLastDismissedDish(dismissed);
-        },
-      },
-    );
   };
 
   useEffect(() => {
@@ -812,29 +774,35 @@ export default function RecommendationsScreen() {
         isQuotaError ? (
           <View style={styles.quotaCard}>
             <Text style={styles.quotaTitle}>
-              {monetization.access?.rewardedAds.canWatch
+              {canOfferRewardedAd
                 ? "광고 한 편이면 추천을 이어갈 수 있어요"
                 : "오늘은 추천을 조금 쉬어갈까요?"}
             </Text>
             <MascotSpeechBubble
               message={
-                errorMessage.includes("너무 많")
-                  ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
-                  : monetization.access?.rewardedAds.canWatch
-                    ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
-                    : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
+                canOfferRewardedAd
+                  ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
+                  : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
               }
               mood="worry"
               size="small"
             />
-            {!hasActiveEntitlement &&
-            monetization.access?.offer.personalized &&
-            monetization.access?.offer.kind !== "none" ? (
+            {!hasActiveEntitlement && canOfferRewardedAd ? (
+              <Button
+                onPress={() => void handleCreateRecommendation()}
+                loading={monetization.adState === "loading"}
+                disabled={isAdBusy}
+                fullWidth
+              >
+                광고 보고 추천 받을게요
+              </Button>
+            ) : null}
+            {showPersonalizedOffer ? (
               <Button
                 onPress={() =>
                   handleMonetizationOffer(monetization.access!.offer.kind)
                 }
-                loading={monetization.adState === "loading"}
+                variant={canOfferRewardedAd ? "secondary" : undefined}
                 fullWidth
               >
                 {offerLabel(monetization.access!.offer.kind)}
@@ -854,18 +822,6 @@ export default function RecommendationsScreen() {
               >
                 <Text style={styles.quotaLinkText}>다른 방법</Text>
               </Pressable>
-            ) : null}
-            {!hasActiveEntitlement &&
-            !monetization.access?.offer.personalized &&
-            monetization.access?.rewardedAds.canWatch ? (
-              <Button
-                onPress={() => void handleCreateRecommendation()}
-                loading={monetization.adState === "loading"}
-                disabled={isAdBusy}
-                fullWidth
-              >
-                광고 보고 추천 받을게요
-              </Button>
             ) : null}
             {!hasActiveEntitlement &&
             !monetization.access?.offer.personalized &&
@@ -893,6 +849,19 @@ export default function RecommendationsScreen() {
                 <Text style={styles.quotaLinkText}>장고 플러스 살펴보기</Text>
               </Pressable>
             ) : null}
+          </View>
+        ) : isCapacityError ? (
+          <View style={styles.quotaCard}>
+            <Text style={styles.quotaTitle}>오늘은 추천을 조금 쉬어갈까요?</Text>
+            <MascotSpeechBubble
+              message={
+                errorMessage.includes("너무 많")
+                  ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
+                  : "지금은 추천을 잠시 멈춰 두었어요. 내일 다시 부탁해도 괜찮아요."
+              }
+              mood="worry"
+              size="small"
+            />
           </View>
         ) : (
           <View style={styles.errorCard}>
@@ -939,16 +908,6 @@ export default function RecommendationsScreen() {
       latestRecommendation &&
       !isGenerating ? (
         <View style={styles.resultSection}>
-          {lastDismissedDish ? (
-            <FeedbackBanner
-              tone="info"
-              title={`${lastDismissedDish.title}을(를) 숨겼어요.`}
-              description="다음 추천에서는 비슷한 요리를 덜 보여드릴게요."
-              actionLabel="실행취소"
-              onAction={handleUndoDismiss}
-              showMascot={false}
-            />
-          ) : null}
           <SectionHeader
             title="이번에 골라본 요리"
             surface
@@ -956,11 +915,8 @@ export default function RecommendationsScreen() {
           />
 
           {latestRecommendation.recommendations.length ? (
-            latestRecommendation.recommendations.map((dish, index) =>
-              hiddenDishKeys.includes(
-                getRecipeFavoriteKey(latestRecommendation.id, index),
-              ) ? null : (
-                <RecipeCard
+            latestRecommendation.recommendations.map((dish, index) => (
+              <RecipeCard
                 key={`${latestRecommendation.id}-${dish.title}-${index}`}
                 dish={dish}
                 badgeLabel={String(index + 1)}
@@ -972,9 +928,6 @@ export default function RecommendationsScreen() {
                     dish,
                     inventorySnapshot: latestRecommendation.inventorySnapshot,
                   })
-                }
-                onDismiss={() =>
-                  handleDismissDish(latestRecommendation.id, index, dish.title)
                 }
                 isFavorite={favoriteKeys.has(
                   getRecipeFavoriteKey(latestRecommendation.id, index),
@@ -994,9 +947,8 @@ export default function RecommendationsScreen() {
                     favorite,
                   })
                 }
-                />
-              ),
-            )
+              />
+            ))
           ) : (
             <EmptyState
               mood="empty"
@@ -1406,7 +1358,6 @@ function RecipeCard({
   badgeLabel,
   inventorySnapshot,
   onOpenDetails,
-  onDismiss,
   isFavorite = false,
   isFavoritePending = false,
   onToggleFavorite,
@@ -1415,7 +1366,6 @@ function RecipeCard({
   badgeLabel?: string;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   onOpenDetails: () => void;
-  onDismiss?: () => void;
   isFavorite?: boolean;
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
@@ -1489,25 +1439,6 @@ function RecipeCard({
           <Heart
             color={isFavorite ? colors.primary : colors.subtext}
             fill={isFavorite ? colors.primary : "none"}
-            size={spacing.md}
-            strokeWidth={2.4}
-          />
-        </Pressable>
-      ) : null}
-      {onDismiss ? (
-        <Pressable
-          onPress={onDismiss}
-          accessibilityRole="button"
-          accessibilityLabel={`${dish.title} 관심없음`}
-          hitSlop={spacing.xs}
-          style={({ pressed }) => [
-            styles.favoriteButton,
-            shouldStack && styles.favoriteButtonStacked,
-            pressed && styles.favoriteButtonPressed,
-          ]}
-        >
-          <EyeOff
-            color={colors.subtext}
             size={spacing.md}
             strokeWidth={2.4}
           />
@@ -1789,18 +1720,6 @@ function getErrorMessage(error: unknown) {
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
-function isRecommendationQuotaError(message: string | null) {
-  if (!message) {
-    return false;
-  }
-
-  return (
-    message.includes("한도") ||
-    message.includes("예산") ||
-    message.includes("너무 많")
-  );
-}
-
 function formatCreatedAt(value: string) {
   return new Date(value).toLocaleString("ko-KR", {
     month: "long",
@@ -1808,22 +1727,6 @@ function formatCreatedAt(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
-function needsRewardedAdToRecommend(access: RecommendationAccess | undefined) {
-  if (!access || access.tier !== "free" || !access.rewardedAdsEnabled) {
-    return false;
-  }
-  if (!access.rewardedAds.canWatch) {
-    return false;
-  }
-
-  return (
-    access.free.remaining <= 0 &&
-    access.rewardedAds.creditsAvailable <= 0 &&
-    access.paidCredits.balance <= 0 &&
-    access.contributionRewards.balance <= 0
-  );
 }
 
 function offerLabel(kind: RecommendationAccess["offer"]["kind"]) {

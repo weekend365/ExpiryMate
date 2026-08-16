@@ -199,7 +199,11 @@ describe("RecipesService recommendation guards", () => {
     process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
     const { prisma, service } = createService();
 
-    await expectTooManyRequests(service.createRecommendation("owner-a", request));
+    await expect(
+      service.createRecommendation("owner-a", request),
+    ).rejects.toMatchObject({
+      errorCode: "RECIPE_DAILY_BUDGET_EXHAUSTED",
+    });
     expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
