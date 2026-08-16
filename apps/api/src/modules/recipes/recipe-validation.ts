@@ -28,6 +28,10 @@ export function alignUsedIngredientsToInventory(
   return recommendations.map((dish) => ({
     ...dish,
     usedIngredients: dish.usedIngredients.map((ingredient) => {
+      if (!ingredient.inventoryItemId) {
+        return ingredient;
+      }
+
       const inventoryItem = inventoryById.get(ingredient.inventoryItemId);
       if (!inventoryItem) {
         return ingredient;

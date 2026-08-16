@@ -193,4 +193,28 @@ describe("recipe semantic validation", () => {
       unitCode: UnitCode.EA,
     });
   });
+
+  it("leaves ingredients without an inventory id unchanged", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      usedIngredients: [{ inventoryItemId: null, name: "우유", amount: 200 }],
+    };
+
+    const result = validateAlignedRecommendations(
+      invalid,
+      request,
+      inventory,
+      preference,
+    );
+
+    expect(result.recommendations[0]?.usedIngredients[0]).toMatchObject({
+      inventoryItemId: null,
+      name: "우유",
+      amount: 200,
+    });
+    expect(result.violations).toEqual(
+      expect.arrayContaining(["DISH_1_INGREDIENT_1_INVENTORY_ID_REQUIRED"]),
+    );
+  });
 });
