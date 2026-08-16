@@ -6,7 +6,11 @@ import type {
 } from "@expirymate/shared";
 import { ProductCategory, UnitCode } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
-import { validateAlignedRecommendations, validateGeneratedRecommendations } from "./recipe-validation";
+import {
+  stripRecipeStrategyLabel,
+  validateAlignedRecommendations,
+  validateGeneratedRecommendations,
+} from "./recipe-validation";
 
 const request: RecipeRecommendationRequest = {
   servings: 2,
@@ -216,5 +220,32 @@ describe("recipe semantic validation", () => {
     expect(result.violations).toEqual(
       expect.arrayContaining(["DISH_1_INGREDIENT_1_INVENTORY_ID_REQUIRED"]),
     );
+  });
+
+  it("strips strategy labels from dish titles and leftover ingredient names", () => {
+    expect(stripRecipeStrategyLabel("임박 재료 우선: 계란볶음밥")).toBe(
+      "계란볶음밥",
+    );
+    expect(stripRecipeStrategyLabel("추가 재료 최소형: 두부조림")).toBe(
+      "두부조림",
+    );
+    expect(
+      stripRecipeStrategyLabel("빠르고 새로운 탐색형: 토마토 파스타"),
+    ).toBe("토마토 파스타");
+
+    const labeled = dishes();
+    labeled[0] = {
+      ...labeled[0]!,
+      title: "임박 재료 우선: 달걀볶음",
+    };
+
+    const result = validateAlignedRecommendations(
+      labeled,
+      request,
+      inventory,
+      preference,
+    );
+
+    expect(result.recommendations[0]?.title).toBe("달걀볶음");
   });
 });

@@ -17,6 +17,32 @@ export interface RecipeValidationResult {
 
 const spiceRank = { none: 0, mild: 1, medium: 2, hot: 3 } as const;
 
+const RECIPE_STRATEGY_LABEL_PATTERN =
+  /^(임박\s*재료\s*(우선|활용형)|추가\s*재료\s*최소형|빠르고\s*새로운\s*탐색형)(?:\s*[:：\-–]\s*|\s+)/u;
+
+export function stripRecipeStrategyLabel(value: string) {
+  const trimmed = value.trim();
+  const stripped = trimmed.replace(RECIPE_STRATEGY_LABEL_PATTERN, "").trim();
+  return stripped.length > 0 ? stripped : trimmed;
+}
+
+export function sanitizeRecipeRecommendationCopy(
+  recommendations: RecipeRecommendationDish[],
+): RecipeRecommendationDish[] {
+  return recommendations.map((dish) => ({
+    ...dish,
+    title: stripRecipeStrategyLabel(dish.title),
+    usedIngredients: dish.usedIngredients.map((ingredient) => ({
+      ...ingredient,
+      name: stripRecipeStrategyLabel(ingredient.name),
+    })),
+    optionalMissingIngredients: dish.optionalMissingIngredients.map((item) => ({
+      ...item,
+      name: stripRecipeStrategyLabel(item.name),
+    })),
+  }));
+}
+
 export function alignUsedIngredientsToInventory(
   recommendations: RecipeRecommendationDish[],
   inventorySnapshot: RecipeInventorySnapshotItem[],
@@ -62,7 +88,10 @@ export function validateAlignedRecommendations(
   preference: RecipePreference,
 ): RecipeValidationResult {
   return validateGeneratedRecommendations(
-    alignUsedIngredientsToInventory(recommendations, inventorySnapshot),
+    alignUsedIngredientsToInventory(
+      sanitizeRecipeRecommendationCopy(recommendations),
+      inventorySnapshot,
+    ),
     request,
     inventorySnapshot,
     preference,

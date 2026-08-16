@@ -281,7 +281,7 @@ describe("RecipesService recommendation guards", () => {
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
     expect(createPayload?.data).toMatchObject({
-      promptVersion: "recipe-recommendation-v4",
+      promptVersion: "recipe-recommendation-v5",
       inputTokens: 1000,
       cachedInputTokens: 100,
       outputTokens: 500,

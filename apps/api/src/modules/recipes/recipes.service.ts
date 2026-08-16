@@ -50,9 +50,13 @@ import {
   RECIPE_SELECTION_VERSION,
   type RecipeRankingCandidate,
 } from "./recipe-ranking";
-import { validateAlignedRecommendations } from "./recipe-validation";
+import {
+  sanitizeRecipeRecommendationCopy,
+  stripRecipeStrategyLabel,
+  validateAlignedRecommendations,
+} from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v4";
+const PROMPT_VERSION = "recipe-recommendation-v5";
 const DEFAULT_MODEL = "gpt-5-mini";
 
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
@@ -709,8 +713,10 @@ export class RecipesService {
     const inventorySnapshot = recipeInventorySnapshotItemSchema
       .array()
       .parse(record.inventorySnapshot);
-    const recommendations = recipeRecommendationsPayloadSchema
-      .shape.recommendations.parse(record.recommendations);
+    const recommendations = sanitizeRecipeRecommendationCopy(
+      recipeRecommendationsPayloadSchema
+        .shape.recommendations.parse(record.recommendations),
+    );
 
     return {
       id: record.id,
@@ -729,9 +735,11 @@ export class RecipesService {
       ownerKey: record.ownerKey,
       sourceRecommendationId: record.sourceRecommendationId,
       sourceDishIndex: record.sourceDishIndex,
-      dish: recipeRecommendationsPayloadSchema.shape.recommendations.element.parse(
-        record.dishSnapshot,
-      ),
+      dish: sanitizeRecipeRecommendationCopy([
+        recipeRecommendationsPayloadSchema.shape.recommendations.element.parse(
+          record.dishSnapshot,
+        ),
+      ])[0]!,
       inventorySnapshot: recipeInventorySnapshotItemSchema
         .array()
         .parse(record.inventorySnapshot),
@@ -752,7 +760,8 @@ function buildInstructions() {
   return [
     "당신은 한국어로 답하는 실용적인 가정식 요리 추천 엔진입니다.",
     "사용자의 보관 재료만 주요 재료로 사용해 추천 요리 3개를 만드세요.",
-    "첫 번째는 임박 재료 활용형, 두 번째는 추가 재료 최소형, 세 번째는 빠르고 새로운 탐색형 메뉴로 만드세요.",
+    "세 요리는 서로 다른 방향으로 만드세요. 하나는 유통기한이 가까운 재료를 살리고, 하나는 추가 재료를 거의 쓰지 않으며, 하나는 짧고 새로운 조합으로 하세요.",
+    "title에는 요리 이름만 적으세요. '임박 재료 우선:', '추가 재료 최소형:', '빠르고 새로운 탐색형:' 같은 전략 라벨을 제목이나 재료 이름에 붙이지 마세요.",
     "만료된 재료는 입력되지 않으며, 유통기한이 가까운 재료를 우선 활용하세요.",
     "카테고리가 없는 재료는 실제 식재료로 확실할 때만 사용하세요.",
     "부족한 재료는 선택 재료로만 제안하고, 없어도 조리가 가능한 방향을 선호하세요.",
@@ -1101,7 +1110,9 @@ function getDishTitles(value: Prisma.JsonValue) {
     recommendations: value,
   });
   return parsed.success
-    ? parsed.data.recommendations.map((dish) => dish.title)
+    ? parsed.data.recommendations.map((dish) =>
+        stripRecipeStrategyLabel(dish.title),
+      )
     : [];
 }
 
