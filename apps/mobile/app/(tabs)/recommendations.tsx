@@ -235,13 +235,11 @@ export default function RecommendationsScreen() {
     Boolean(personalizedOffer?.personalized) &&
     personalizedOffer?.kind !== "none" &&
     personalizedOffer?.kind !== "rewarded_ad";
-  const isAdBusy = monetization.adState !== "idle";
+  const isAdBusy = monetization.adState === "loading";
   const primaryCtaLabel = isGenerating
     ? "요리 조합을 찾는 중이에요"
     : monetization.adState === "loading"
       ? "광고를 불러오는 중이에요"
-      : monetization.adState === "verifying"
-        ? "광고 보상을 확인 중이에요"
       : needsRewardedAd
         ? "광고 보고 추천 받을게요"
         : hasRecommendationResult
@@ -306,7 +304,7 @@ export default function RecommendationsScreen() {
   const startRecommendation = useCallback(
     async (payload: RecipeRecommendationPayload) => {
       if (needsRewardedAdToRecommend(monetization.access)) {
-        if (monetization.adState !== "idle") {
+        if (monetization.adState === "loading") {
           return;
         }
         pendingGenerateAfterRewardRef.current = payload;
@@ -405,7 +403,7 @@ export default function RecommendationsScreen() {
   ]);
 
   const handleWatchRewardedAdOnly = useCallback(async () => {
-    if (monetization.adState !== "idle") {
+    if (monetization.adState === "loading") {
       return;
     }
     try {
@@ -587,6 +585,13 @@ export default function RecommendationsScreen() {
           description="오늘 추천을 만들 때 바로 사용할 수 있어요."
           actionLabel="확인"
           onAction={monetization.dismissRewardNotice}
+          showMascot={false}
+        />
+      ) : monetization.adState === "verifying" ? (
+        <FeedbackBanner
+          tone="info"
+          title="광고 보상을 확인하고 있어요"
+          description="확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요."
           showMascot={false}
         />
       ) : null}

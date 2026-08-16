@@ -1,3 +1,4 @@
+import type { RewardedAdSession } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const STORAGE_PREFIX = "expirymate.pendingRewardedAd.v1";
@@ -27,4 +28,39 @@ export async function clearPendingRewardedAdSession(
   }
 
   await AsyncStorage.removeItem(storageKey(userId));
+}
+
+export type PendingRewardedAdResolution = {
+  /** Only the live ad presentation should lock the watch CTA. */
+  lockWatchCta: boolean;
+  clearPending: boolean;
+  rewardVerified: boolean;
+};
+
+export function resolvePendingRewardedAdSession(
+  status: RewardedAdSession["status"] | null,
+): PendingRewardedAdResolution {
+  if (!status || status === "cancelled" || status === "expired") {
+    return {
+      lockWatchCta: false,
+      clearPending: true,
+      rewardVerified: false,
+    };
+  }
+
+  if (status === "verified") {
+    return {
+      lockWatchCta: false,
+      clearPending: true,
+      rewardVerified: true,
+    };
+  }
+
+  // SSV can lag after a completed ad. Keep the session for later reconcile,
+  // but do not freeze the "watch another ad" entry point.
+  return {
+    lockWatchCta: false,
+    clearPending: false,
+    rewardVerified: false,
+  };
 }

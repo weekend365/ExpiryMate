@@ -17,6 +17,7 @@ vi.mock("@react-native-async-storage/async-storage", () => ({
 import {
   clearPendingRewardedAdSession,
   getPendingRewardedAdSession,
+  resolvePendingRewardedAdSession,
   savePendingRewardedAdSession,
 } from "./pending-rewarded-ad";
 
@@ -42,5 +43,26 @@ describe("pending rewarded ad persistence", () => {
     await expect(getPendingRewardedAdSession("user-a")).resolves.toBe(
       "new-session",
     );
+  });
+
+  it("does not lock the watch CTA while a completed ad is still pending SSV", () => {
+    expect(resolvePendingRewardedAdSession("pending")).toEqual({
+      lockWatchCta: false,
+      clearPending: false,
+      rewardVerified: false,
+    });
+  });
+
+  it("unlocks the watch CTA after verification settles", () => {
+    expect(resolvePendingRewardedAdSession("verified")).toEqual({
+      lockWatchCta: false,
+      clearPending: true,
+      rewardVerified: true,
+    });
+    expect(resolvePendingRewardedAdSession("expired")).toEqual({
+      lockWatchCta: false,
+      clearPending: true,
+      rewardVerified: false,
+    });
   });
 });

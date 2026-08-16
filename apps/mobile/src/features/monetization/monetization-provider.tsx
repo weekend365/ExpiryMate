@@ -27,6 +27,7 @@ import { useActiveSpace } from "../spaces/space-provider";
 import {
   clearPendingRewardedAdSession,
   getPendingRewardedAdSession,
+  resolvePendingRewardedAdSession,
   savePendingRewardedAdSession,
 } from "./pending-rewarded-ad";
 import {
@@ -95,26 +96,28 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       return;
     }
 
-    setAdState("verifying");
     try {
       const session = await getRewardedAdSession(pendingSessionId);
-      if (session.status === "pending") return;
-
-      await clearPendingRewardedAdSession(
-        sessionUserId,
-        pendingSessionId,
-      ).catch(() => undefined);
-      setAdState("idle");
-      if (session.status === "verified") {
+      const resolution = resolvePendingRewardedAdSession(session.status);
+      if (resolution.clearPending) {
+        await clearPendingRewardedAdSession(
+          sessionUserId,
+          pendingSessionId,
+        ).catch(() => undefined);
+      }
+      if (resolution.rewardVerified) {
         setRewardNotice("verified");
         void trackMonetizationEvent({
           event: "rewarded_ad_verified",
           properties: { resolution: "app_resume" },
         }).catch(() => undefined);
+        await refresh();
       }
-      await refresh();
+      setAdState("idle");
     } catch {
       // Keep the session id and retry when the app becomes active again.
+      // Do not freeze the watch CTA on a network blip.
+      setAdState("idle");
     }
   }, [isRegistered, refresh, sessionUserId]);
 
@@ -172,12 +175,19 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       const result = await presentRewardedAd(session, (event) => {
         trackRewardedAdLifecycleEvent(event, session.id);
       });
-      setAdState(result === "verified" ? "idle" : "verifying");
       if (result === "verified") {
+        setAdState("idle");
         await clearPendingRewardedAdSession(
           sessionUserId,
           session.id,
         ).catch(() => undefined);
+      } else {
+        // SSV can arrive after the client poll. Keep a notice, but do not
+        // lock the remaining-ad entry point while waiting.
+        setAdState("verifying");
+        setTimeout(() => {
+          void reconcilePendingReward();
+        }, 8_000);
       }
       void trackMonetizationEvent({
         event:
@@ -205,6 +215,7 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     query.data?.rewardedAdsEnabled,
     query.data?.tier,
     activeSpaceId,
+    reconcilePendingReward,
     refresh,
     sessionUserId,
   ]);
