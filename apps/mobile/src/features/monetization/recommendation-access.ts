@@ -36,3 +36,21 @@ export function needsRewardedAdToRecommend(
     access.contributionRewards.balance <= 0
   );
 }
+
+export function canGenerateWithoutRewardedAd(
+  access: RecommendationAccess | undefined,
+) {
+  if (!access) {
+    return false;
+  }
+  if (access.tier !== "free") {
+    return access.remaining > 0;
+  }
+
+  return (
+    access.free.remaining > 0 ||
+    access.rewardedAds.creditsAvailable > 0 ||
+    access.paidCredits.balance > 0 ||
+    access.contributionRewards.balance > 0
+  );
+}

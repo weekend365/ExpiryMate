@@ -179,6 +179,7 @@ export class MonetizationService {
     const adUnitId = getAdUnitId(platform);
     return this.prisma.$transaction(
       async (tx) => {
+        await this.releaseOpenDisplaySessions(tx, ownerKey, now);
         const access = await this.buildStatus(tx, ownerKey, now, spaceId);
         if (!access.rewardedAdsEnabled || !access.rewardedAds.canWatch) {
           throw new CodedHttpException(
@@ -246,6 +247,26 @@ export class MonetizationService {
         : session;
 
     return this.serializeSession(updated, await this.getStatus(ownerKey));
+  }
+
+  private async releaseOpenDisplaySessions(
+    db: DbClient,
+    ownerKey: string,
+    now: Date,
+  ) {
+    const { start, endExclusive } = getKstDayWindow(now);
+    await db.rewardedAdSession.updateMany({
+      where: {
+        ownerKey,
+        status: RewardedAdSessionStatus.pending,
+        createdAt: { gte: start, lt: endExclusive },
+        showExpiresAt: { gt: now },
+      },
+      data: {
+        status: RewardedAdSessionStatus.cancelled,
+        cancelledAt: now,
+      },
+    });
   }
 
   async getCompletedRecommendationId(
@@ -719,14 +740,6 @@ export class MonetizationService {
         usageEvent: { is: null },
       },
     });
-    const pendingDisplaySessionCount = await db.rewardedAdSession.count({
-      where: {
-        ownerKey,
-        status: RewardedAdSessionStatus.pending,
-        createdAt: { gte: start, lt: endExclusive },
-        showExpiresAt: { gt: now },
-      },
-    });
     const barcodeRewardBalance = await db.barcodeRewardCredit.count({
       where: { ownerKey, usageEvent: { is: null } },
     });
@@ -861,10 +874,8 @@ export class MonetizationService {
         canWatch:
           rewardedAdsEnabled &&
           !isSubscriber &&
-          freeRemaining === 0 &&
           (absoluteLimit === 0 || scopedUsed < absoluteLimit) &&
-          remainingToWatch > 0 &&
-          pendingDisplaySessionCount === 0,
+          remainingToWatch > 0,
       },
       contributionRewards: {
         enabled: barcodePolicy.enabled || barcodeRewardBalance > 0,

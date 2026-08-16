@@ -665,6 +665,51 @@ describe("MonetizationService", () => {
     vi.useRealTimers();
   });
 
+  it("lets a free user watch an ad even if the daily free recommendation remains", async () => {
+    const prisma = createPrismaMock();
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus("owner-a");
+
+    expect(status.free.remaining).toBe(1);
+    expect(status.rewardedAds.remainingToWatch).toBe(3);
+    expect(status.rewardedAds.canWatch).toBe(true);
+  });
+
+  it("cancels a leftover pending session before starting a new ad", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-28T00:00:00.000Z"));
+    const prisma = createPrismaMock();
+    prisma.recommendationUsageEvent.groupBy.mockResolvedValue([
+      {
+        source: RecommendationUsageSource.free,
+        _count: { _all: 1 },
+      },
+    ]);
+    prisma.rewardedAdSession.updateMany.mockResolvedValue({ count: 1 });
+    prisma.rewardedAdSession.create.mockImplementation(
+      async ({ data }: { data: Record<string, unknown> }) => ({
+        id: "ad-session-2",
+        ...data,
+      }),
+    );
+    const service = new MonetizationService(prisma as never);
+
+    await service.createRewardedAdSession("owner-a", "ios");
+
+    expect(prisma.rewardedAdSession.updateMany).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        ownerKey: "owner-a",
+        status: RewardedAdSessionStatus.pending,
+      }),
+      data: expect.objectContaining({
+        status: RewardedAdSessionStatus.cancelled,
+      }),
+    });
+    expect(prisma.rewardedAdSession.create).toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
   it("verifies an AdMob ECDSA callback and stores the transaction once", async () => {
     const { privateKey, publicKey } = generateKeyPairSync("ec", {
       namedCurve: "prime256v1",

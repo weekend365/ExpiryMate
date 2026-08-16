@@ -44,7 +44,9 @@ import { useMonetization } from "../../src/features/monetization/monetization-pr
 import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
 import {
   canContinueWithRewardedAd,
+  canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
+  parseRecommendationAccess,
 } from "../../src/features/monetization/recommendation-access";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import {
@@ -56,7 +58,7 @@ import {
 } from "../../src/features/recipes/use-recipe-recommendations";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import type { RecipeRecommendationPayload } from "../../src/services/api";
-import { trackMonetizationEvent } from "../../src/services/api";
+import { ApiError, trackMonetizationEvent } from "../../src/services/api";
 import {
   colors,
   radius,
@@ -314,6 +316,14 @@ export default function RecommendationsScreen() {
           return;
         } catch (error) {
           pendingGenerateAfterRewardRef.current = null;
+          const accessFromError =
+            error instanceof ApiError
+              ? parseRecommendationAccess(error.details)
+              : null;
+          if (canGenerateWithoutRewardedAd(accessFromError ?? monetization.access)) {
+            await generateRecipeRecommendation(payload);
+            return;
+          }
           Alert.alert(
             "광고를 완료하지 못했어요",
             getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",

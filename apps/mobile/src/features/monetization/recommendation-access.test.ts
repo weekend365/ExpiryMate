@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { RecommendationAccess } from "@expirymate/shared";
 import {
   canContinueWithRewardedAd,
+  canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
   parseRecommendationAccess,
 } from "./recommendation-access";
@@ -97,6 +98,7 @@ describe("recommendation access helpers", () => {
 
     expect(canContinueWithRewardedAd(withCredit)).toBe(true);
     expect(needsRewardedAdToRecommend(withCredit)).toBe(false);
+    expect(canGenerateWithoutRewardedAd(withCredit)).toBe(true);
   });
 
   it("hydrates recommendation access from a quota-error payload", () => {

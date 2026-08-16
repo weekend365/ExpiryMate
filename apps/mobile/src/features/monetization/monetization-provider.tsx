@@ -11,6 +11,8 @@ import {
 } from "react";
 import { AppState, Platform } from "react-native";
 import {
+  ApiError,
+  cancelRewardedAdSession,
   createRewardedAdSession,
   getMonetizationStatus,
   getRewardedAdSession,
@@ -161,8 +163,9 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       void trackMonetizationEvent({ event: "rewarded_ad_requested" }).catch(
         () => undefined,
       );
-      const session = await createRewardedAdSession(
+      const session = await createRewardedAdSessionReplacingStuck(
         Platform.OS === "ios" ? "ios" : "android",
+        sessionUserId,
         activeSpaceId,
       );
       await savePendingRewardedAdSession(sessionUserId, session.id);
@@ -242,6 +245,31 @@ export function useMonetization() {
     throw new Error("useMonetization must be used within MonetizationProvider");
   }
   return value;
+}
+
+async function createRewardedAdSessionReplacingStuck(
+  platform: "ios" | "android",
+  sessionUserId: string,
+  spaceId?: string,
+) {
+  try {
+    return await createRewardedAdSession(platform, spaceId);
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.code !== "REWARDED_AD_NOT_AVAILABLE") {
+      throw error;
+    }
+    const pendingId = await getPendingRewardedAdSession(sessionUserId).catch(
+      () => null,
+    );
+    if (!pendingId) {
+      throw error;
+    }
+    await cancelRewardedAdSession(pendingId).catch(() => undefined);
+    await clearPendingRewardedAdSession(sessionUserId, pendingId).catch(
+      () => undefined,
+    );
+    return createRewardedAdSession(platform, spaceId);
+  }
 }
 
 function trackRewardedAdLifecycleEvent(
