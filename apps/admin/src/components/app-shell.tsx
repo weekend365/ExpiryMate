@@ -17,13 +17,21 @@ const navItems = [
   { href: "/seed-status", label: "시드 상태" },
 ];
 
+function isAdminRoute(pathname: string) {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  if (normalized === "/") {
+    return true;
+  }
+  return navItems.some(
+    (item) =>
+      normalized === item.href || normalized.startsWith(`${item.href}/`),
+  );
+}
+
 export function AppShell({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
-  const isPublicPage =
-    pathname === "/login" ||
-    pathname === "/terms" ||
-    pathname.startsWith("/privacy");
+  const isPublicPage = !isAdminRoute(pathname);
   const meQuery = useQuery({
     queryKey: ["admin", "me"],
     queryFn: getMe,

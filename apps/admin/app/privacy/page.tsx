@@ -108,6 +108,15 @@ export default function PrivacyPolicyPage() {
               Apple 및 Google: 인앱 구독 결제, 구매 복원, 영수증·구매 토큰 검증,
               갱신·취소·환불 상태 전달.
             </li>
+            <li>
+              쿠팡(쿠팡 파트너스): 사용자가 선택 재료 안내 링크를 직접 연
+              경우에만 쿠팡 웹·앱으로 이동합니다. 냉장고 재료 목록이나 계정
+              정보는 쿠팡에 전송하지 않습니다. 고지는{" "}
+              <Link className="font-bold text-[var(--primary)]" href="/partners">
+                쿠팡 파트너스 안내
+              </Link>
+              를 따릅니다.
+            </li>
           </ul>
           <p>
             국외 이전은 AI 추천 요청 시점 및 인프라·메일·푸시 서비스 이용 시
@@ -214,6 +223,12 @@ export default function PrivacyPolicyPage() {
             className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
           >
             이용약관
+          </Link>
+          <Link
+            href="/partners"
+            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
+          >
+            쿠팡 파트너스 안내
           </Link>
           <Link
             href="/login"
