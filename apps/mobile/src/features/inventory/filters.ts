@@ -24,6 +24,35 @@ export const inventoryUrgencySectionTitles: Record<
   safe: "여유 있어요",
 };
 
+export const inventoryUrgencySectionDescriptions: Record<
+  InventoryUrgencySection,
+  string
+> = {
+  expired: "유통기한이 지났어요",
+  within7: "일주일 안에 손보면 좋아요",
+  safe: "아직은 여유로워요",
+};
+
+/** Map a row index to connected-section card corners (header is a separate cell). */
+export const getInventoryGroupSectionSlot = (
+  index: number,
+  count: number,
+): "solo" | "first" | "middle" | "last" => {
+  if (count <= 1) {
+    return "solo";
+  }
+
+  if (index === 0) {
+    return "first";
+  }
+
+  if (index === count - 1) {
+    return "last";
+  }
+
+  return "middle";
+};
+
 const inventoryViewFilters = new Set<InventoryViewFilter>([
   "all",
   "within7",

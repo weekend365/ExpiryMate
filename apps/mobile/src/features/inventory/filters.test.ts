@@ -10,7 +10,9 @@ import {
   buildInventoryFacetCounts,
   buildInventoryUrgencySections,
   filterInventoryItems,
+  getInventoryGroupSectionSlot,
   getInventoryUrgencySection,
+  inventoryUrgencySectionDescriptions,
   parseInventoryViewFilter,
 } from "./filters";
 
@@ -189,6 +191,15 @@ describe("mobile inventory filters", () => {
     expect(sections[0]?.title).toBe("만료");
     expect(sections[1]?.title).toBe("곧 만료");
     expect(sections[2]?.title).toBe("여유 있어요");
+    expect(inventoryUrgencySectionDescriptions.expired).toBe(
+      "유통기한이 지났어요",
+    );
+    expect(inventoryUrgencySectionDescriptions.within7).toBe(
+      "일주일 안에 손보면 좋아요",
+    );
+    expect(inventoryUrgencySectionDescriptions.safe).toBe(
+      "아직은 여유로워요",
+    );
     expect(sections.map((section) => section.itemCount)).toEqual([1, 1, 1]);
     expect(sections[2]?.data[0]?.items.map((item) => item.id)).toEqual([
       "later",
@@ -210,6 +221,15 @@ describe("mobile inventory filters", () => {
     expect(sections[1]?.data[0]?.items.map((item) => item.id)).toEqual(["safe"]);
     expect(sections[0]?.data[0]?.id).not.toBe(sections[1]?.data[0]?.id);
     expect(sections.map((section) => section.itemCount)).toEqual([2, 1]);
+  });
+
+  it("maps row index to connected section slots", () => {
+    expect(getInventoryGroupSectionSlot(0, 0)).toBe("solo");
+    expect(getInventoryGroupSectionSlot(0, 1)).toBe("solo");
+    expect(getInventoryGroupSectionSlot(0, 2)).toBe("first");
+    expect(getInventoryGroupSectionSlot(1, 2)).toBe("last");
+    expect(getInventoryGroupSectionSlot(1, 3)).toBe("middle");
+    expect(getInventoryGroupSectionSlot(2, 3)).toBe("last");
   });
 });
 

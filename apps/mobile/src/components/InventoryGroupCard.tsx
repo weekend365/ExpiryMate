@@ -21,6 +21,8 @@ import { AppText } from "./AppText";
 /** Visual hero size — card press owns the touch target, so this can be under 48. */
 const HERO_LAMP_SIZE = spacing.xl;
 
+export type InventoryGroupSectionSlot = "solo" | "first" | "middle" | "last";
+
 interface InventoryGroupCardProps {
   group: InventoryItemGroup;
   expanded: boolean;
@@ -32,6 +34,8 @@ interface InventoryGroupCardProps {
   selectionMode?: boolean;
   selectedIds?: ReadonlySet<string>;
   resolveLocationLabel?: (key: string) => string;
+  /** When set, this row shares a section surface with the header above it. */
+  sectionSlot?: InventoryGroupSectionSlot;
 }
 
 export function InventoryGroupCard({
@@ -44,6 +48,7 @@ export function InventoryGroupCard({
   selectionMode = false,
   selectedIds,
   resolveLocationLabel = resolveStorageLocationLabel,
+  sectionSlot,
 }: InventoryGroupCardProps) {
   const { shouldStack } = useResponsiveLayout();
   const isExpandable = group.items.length > 1;
@@ -75,7 +80,12 @@ export function InventoryGroupCard({
   );
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        sectionSlot ? sectionSlotCardStyles[sectionSlot] : null,
+      ]}
+    >
       <View style={styles.summaryRow}>
         <Pressable
           onPress={handleSummaryPress}
@@ -377,6 +387,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
+  cardSectionFlush: {
+    borderTopWidth: 0,
+    borderRadius: 0,
+  },
+  cardSectionBottom: {
+    borderTopWidth: 0,
+    borderRadius: 0,
+    borderBottomLeftRadius: radius.xxl,
+    borderBottomRightRadius: radius.xxl,
+  },
   summaryRow: {
     minHeight: touchTarget.cta,
     flexDirection: "row",
@@ -566,3 +586,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
 });
+
+const sectionSlotCardStyles = {
+  solo: styles.cardSectionBottom,
+  first: styles.cardSectionFlush,
+  middle: styles.cardSectionFlush,
+  last: styles.cardSectionBottom,
+} as const;

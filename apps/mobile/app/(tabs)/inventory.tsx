@@ -9,6 +9,8 @@ import {
   Archive,
   Barcode,
   Check,
+  ChevronDown,
+  ChevronUp,
   ListChecks,
   MapPin,
   PenLine,
@@ -21,6 +23,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import {
   ImageBackground,
+  LayoutAnimation,
   Pressable,
   RefreshControl,
   SectionList,
@@ -29,6 +32,7 @@ import {
   View,
 } from "react-native";
 import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
+import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
@@ -46,6 +50,8 @@ import {
   buildInventoryFacetCounts,
   buildInventoryUrgencySections,
   filterInventoryItems,
+  getInventoryGroupSectionSlot,
+  inventoryUrgencySectionDescriptions,
   parseInventoryViewFilter,
   type InventoryUrgencySection,
   type InventoryViewFilter,
@@ -67,10 +73,13 @@ import {
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
-const urgencySectionAccentColors: Record<InventoryUrgencySection, string> = {
-  expired: colors.danger,
-  within7: colors.warning,
-  safe: colors.success,
+const urgencySectionTones: Record<
+  InventoryUrgencySection,
+  "danger" | "warning" | "success"
+> = {
+  expired: "danger",
+  within7: "warning",
+  safe: "success",
 };
 
 export default function InventoryScreen() {
@@ -93,6 +102,9 @@ export default function InventoryScreen() {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
+  const [collapsedSectionKeys, setCollapsedSectionKeys] = useState<
+    InventoryUrgencySection[]
+  >([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
@@ -144,6 +156,18 @@ export default function InventoryScreen() {
   const urgencySections = useMemo(
     () => buildInventoryUrgencySections(filtered),
     [filtered],
+  );
+  const collapsedSectionKeySet = useMemo(
+    () => new Set(collapsedSectionKeys),
+    [collapsedSectionKeys],
+  );
+  const listSections = useMemo(
+    () =>
+      urgencySections.map((section) => ({
+        ...section,
+        data: collapsedSectionKeySet.has(section.key) ? [] : section.data,
+      })),
+    [collapsedSectionKeySet, urgencySections],
   );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
   const expiredVisibleIds = useMemo(
@@ -776,9 +800,13 @@ export default function InventoryScreen() {
               />
             ) : null
           }
-          renderItem={({ item: group }) => (
+          renderItem={({ item: group, index, section }) => (
             <InventoryGroupCard
               group={group}
+              sectionSlot={getInventoryGroupSectionSlot(
+                index,
+                section.data.length,
+              )}
               expanded={expandedGroupIds.includes(group.id)}
               onExpandedChange={(expanded) =>
                 setGroupExpanded(group.id, expanded)
@@ -791,37 +819,12 @@ export default function InventoryScreen() {
               onItemCleanup={openCleanupSheet}
             />
           )}
-          renderSectionHeader={({ section }) =>
-            hasStatusFilter ? (
-              <View
-                style={styles.filteredSectionSpacer}
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-              />
-            ) : (
-              <View style={styles.urgencySectionHeader}>
-                <View
-                  style={styles.urgencySectionAccentSlot}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
-                >
-                  <View
-                    style={[
-                      styles.urgencySectionAccent,
-                      {
-                        backgroundColor:
-                          urgencySectionAccentColors[section.key],
-                      },
-                    ]}
-                  />
-                </View>
-                <Text style={styles.urgencySectionTitle}>
-                  {section.title} {section.itemCount}건
-                </Text>
-              </View>
-            )
-          }
-          ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+          renderSectionHeader={({ section }) => (
+            <UrgencySectionHeader
+              section={section}
+              isFirst={section.key === urgencySections[0]?.key}
+            />
+          )}
         />
       </View>
 
@@ -1098,6 +1101,59 @@ const EXPIRY_TRAFFIC_HIT_SLOP = {
   right: 0,
 } as const;
 
+function UrgencySectionHeader({
+  section,
+  isFirst,
+}: {
+  section: {
+    key: InventoryUrgencySection;
+    title: string;
+    itemCount: number;
+  };
+  isFirst: boolean;
+}) {
+  const description = inventoryUrgencySectionDescriptions[section.key];
+  const tone = urgencySectionTones[section.key];
+
+  return (
+    <View
+      style={[
+        styles.urgencySectionHeader,
+        !isFirst && styles.urgencySectionHeaderFollow,
+      ]}
+      accessibilityRole="header"
+      accessibilityLabel={`${section.title} ${section.itemCount}건. ${description}`}
+    >
+      <AppText
+        variant="bodyStrong"
+        tone={tone}
+        numberOfLines={1}
+        style={styles.urgencySectionTitle}
+      >
+        {section.title}
+      </AppText>
+      <View
+        style={[
+          styles.urgencySectionCountPill,
+          { backgroundColor: urgencySectionSoftColors[section.key] },
+        ]}
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
+        <AppText
+          variant="caption"
+          tone={tone}
+          scaleRole="chrome"
+          densityAware={false}
+          style={styles.urgencySectionCount}
+        >
+          {section.itemCount}건
+        </AppText>
+      </View>
+    </View>
+  );
+}
+
 function ExpiryTrafficLamp({
   label,
   count,
@@ -1258,9 +1314,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
-  },
-  filteredSectionSpacer: {
-    height: spacing.sm,
   },
   filterControlPressed: {
     opacity: 0.82,
@@ -1500,36 +1553,37 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   urgencySectionHeader: {
-    paddingLeft: spacing.md,
-    paddingRight: spacing.xs + spacing.xxs,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     marginTop: spacing.sm,
-    marginBottom: spacing.xs,
-    borderRadius: radius.md,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    borderTopLeftRadius: radius.xxl,
+    borderTopRightRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.surfaceTranslucent,
+    backgroundColor: colors.surface,
     overflow: "hidden",
   },
-  urgencySectionAccentSlot: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: spacing.xs,
-    width: spacing.xxs,
-    justifyContent: "center",
-  },
-  urgencySectionAccent: {
-    width: spacing.xxs,
-    height: spacing.md,
-    borderRadius: radius.pill,
+  urgencySectionHeaderFollow: {
+    marginTop: spacing.md,
   },
   urgencySectionTitle: {
-    ...typography.bodySmall,
-    color: colors.subtext,
-    fontWeight: "700",
+    flex: 1,
+    minWidth: 0,
   },
-  itemSeparator: {
-    height: spacing.xxs,
+  urgencySectionCountPill: {
+    flexShrink: 0,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs, // 4px so the count chip stays shorter than the 48px header
+    borderRadius: radius.pill,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  urgencySectionCount: {
+    fontFamily: typography.title.fontFamily,
+    fontVariant: ["tabular-nums"],
   },
 });
