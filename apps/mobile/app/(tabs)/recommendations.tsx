@@ -142,7 +142,6 @@ export default function RecommendationsScreen() {
   const [recipeView, setRecipeView] = useState<RecipeView>("recommendations");
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
-  const [showRewardedAdSheet, setShowRewardedAdSheet] = useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
     useState<RecipeRecommendation | null>(null);
@@ -157,6 +156,8 @@ export default function RecommendationsScreen() {
     title: string;
   } | null>(null);
   const handledAutoGenerateRef = useRef<string | null>(null);
+  const pendingGenerateAfterRewardRef =
+    useRef<RecipeRecommendationPayload | null>(null);
   const trackedQuotaEventRef = useRef<string | null>(null);
   const trackedScreenDayRef = useRef<string | null>(null);
   const trackedOfferRef = useRef<string | null>(null);
@@ -217,11 +218,19 @@ export default function RecommendationsScreen() {
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
+  const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
+  const isAdBusy = monetization.adState !== "idle";
   const primaryCtaLabel = isGenerating
     ? "요리 조합을 찾는 중이에요"
-    : hasRecommendationResult
-      ? "다시 골라볼게요"
-      : "추천 받을게요";
+    : monetization.adState === "loading"
+      ? "광고를 불러오는 중이에요"
+      : monetization.adState === "verifying"
+        ? "광고 보상을 확인 중이에요"
+      : needsRewardedAd
+        ? "광고 보고 추천 받을게요"
+        : hasRecommendationResult
+          ? "다시 골라볼게요"
+          : "추천 받을게요";
 
   useEffect(() => {
     if (!isQuotaError || !monetization.access) return;
@@ -278,6 +287,41 @@ export default function RecommendationsScreen() {
     [maxCookingMinutes, mealType, servings, useExpiringFirst],
   );
 
+  const startRecommendation = useCallback(
+    async (payload: RecipeRecommendationPayload) => {
+      if (needsRewardedAdToRecommend(monetization.access)) {
+        if (monetization.adState !== "idle") {
+          return;
+        }
+        pendingGenerateAfterRewardRef.current = payload;
+        try {
+          const result = await monetization.watchRewardedAd();
+          if (result !== "verified") {
+            return;
+          }
+          const queuedPayload = pendingGenerateAfterRewardRef.current;
+          pendingGenerateAfterRewardRef.current = null;
+          if (!queuedPayload) {
+            return;
+          }
+          await generateRecipeRecommendation(queuedPayload);
+          return;
+        } catch (error) {
+          pendingGenerateAfterRewardRef.current = null;
+          Alert.alert(
+            "광고를 완료하지 못했어요",
+            getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",
+          );
+          return;
+        }
+      }
+
+      pendingGenerateAfterRewardRef.current = null;
+      await generateRecipeRecommendation(payload);
+    },
+    [generateRecipeRecommendation, monetization],
+  );
+
   const handleCreateRecommendation = useCallback(async () => {
     const payload = buildRecommendationPayload();
     const privacyStatus =
@@ -289,19 +333,15 @@ export default function RecommendationsScreen() {
       return;
     }
 
-    await generateRecipeRecommendation(payload);
-  }, [
-    buildRecommendationPayload,
-    generateRecipeRecommendation,
-    privacyStatusQuery,
-  ]);
+    await startRecommendation(payload);
+  }, [buildRecommendationPayload, privacyStatusQuery, startRecommendation]);
 
   const handlePrimaryCta = useCallback(() => {
-    if (isGenerating) {
+    if (isGenerating || isAdBusy) {
       return;
     }
 
-    if (!hasRecommendationResult) {
+    if (!hasRecommendationResult || needsRewardedAd) {
       void handleCreateRecommendation();
       return;
     }
@@ -319,32 +359,33 @@ export default function RecommendationsScreen() {
         },
       ],
     );
-  }, [handleCreateRecommendation, hasRecommendationResult, isGenerating]);
+  }, [
+    handleCreateRecommendation,
+    hasRecommendationResult,
+    isAdBusy,
+    isGenerating,
+    needsRewardedAd,
+  ]);
 
   const handleAcceptAiNotice = useCallback(async () => {
+    const payload = pendingPayload ?? buildRecommendationPayload();
     await acceptAiDataNoticeMutation.mutateAsync();
     setShowAiNotice(false);
-    await generateRecipeRecommendation(
-      pendingPayload ?? buildRecommendationPayload(),
-    );
     setPendingPayload(null);
+    await startRecommendation(payload);
   }, [
     acceptAiDataNoticeMutation,
     buildRecommendationPayload,
-    generateRecipeRecommendation,
     pendingPayload,
+    startRecommendation,
   ]);
 
-  const handleWatchRewardedAd = useCallback(async () => {
+  const handleWatchRewardedAdOnly = useCallback(async () => {
+    if (monetization.adState !== "idle") {
+      return;
+    }
     try {
-      const result = await monetization.watchRewardedAd();
-      setShowRewardedAdSheet(false);
-      Alert.alert(
-        result === "verified" ? "추천 1회를 받았어요" : "광고 보상을 확인 중이에요",
-        result === "verified"
-          ? "오늘 안에 추천할 때 사용할 수 있어요."
-          : "확인이 끝나면 자동으로 반영돼요. 다른 화면을 다녀와도 괜찮아요.",
-      );
+      await monetization.watchRewardedAd();
     } catch (error) {
       Alert.alert(
         "광고를 완료하지 못했어요",
@@ -363,14 +404,14 @@ export default function RecommendationsScreen() {
       }).catch(() => undefined);
       setShowOfferAlternatives(false);
       if (offer.action === "rewarded_ad") {
-        setShowRewardedAdSheet(true);
+        void handleCreateRecommendation();
       } else if (offer.action === "paid_credits") {
         router.push("/settings/recommendation-credits");
       } else {
         router.push("/settings/subscription");
       }
     },
-    [],
+    [handleCreateRecommendation],
   );
 
   const handleStartCooking = () => {
@@ -460,6 +501,26 @@ export default function RecommendationsScreen() {
     void handleCreateRecommendation();
   }, [handleCreateRecommendation, isGenerating, params.autoGenerateAt]);
 
+  useEffect(() => {
+    const payload = pendingGenerateAfterRewardRef.current;
+    if (
+      !payload ||
+      isGenerating ||
+      monetization.adState === "loading" ||
+      (monetization.access?.rewardedAds.creditsAvailable ?? 0) < 1
+    ) {
+      return;
+    }
+
+    pendingGenerateAfterRewardRef.current = null;
+    void generateRecipeRecommendation(payload);
+  }, [
+    generateRecipeRecommendation,
+    isGenerating,
+    monetization.access?.rewardedAds.creditsAvailable,
+    monetization.adState,
+  ]);
+
   return (
     <Screen
       scroll={false}
@@ -481,11 +542,13 @@ export default function RecommendationsScreen() {
           <Button
             icon={Sparkles}
             onPress={handlePrimaryCta}
-            loading={isGenerating}
-            disabled={isGenerating}
+            loading={isGenerating || monetization.adState === "loading"}
+            disabled={isGenerating || isAdBusy}
             fullWidth
             variant={
-              hasRecommendationResult && !isGenerating ? "surface" : "primary"
+              hasRecommendationResult && !isGenerating && !needsRewardedAd
+                ? "surface"
+                : "primary"
             }
           >
             {primaryCtaLabel}
@@ -586,7 +649,7 @@ export default function RecommendationsScreen() {
             monetization.access.paidCredits.balance > 0 &&
             monetization.access.rewardedAds.canWatch ? (
               <Pressable
-                onPress={() => setShowRewardedAdSheet(true)}
+                onPress={() => void handleWatchRewardedAdOnly()}
                 accessibilityRole="button"
                 accessibilityLabel="구매 추천권을 보존하고 광고로 추천권 받기"
               >
@@ -749,13 +812,17 @@ export default function RecommendationsScreen() {
         isQuotaError ? (
           <View style={styles.quotaCard}>
             <Text style={styles.quotaTitle}>
-              오늘은 추천을 조금 쉬어갈까요?
+              {monetization.access?.rewardedAds.canWatch
+                ? "광고 한 편이면 추천을 이어갈 수 있어요"
+                : "오늘은 추천을 조금 쉬어갈까요?"}
             </Text>
             <MascotSpeechBubble
               message={
                 errorMessage.includes("너무 많")
                   ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
-                  : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
+                  : monetization.access?.rewardedAds.canWatch
+                    ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
+                    : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
               }
               mood="worry"
               size="small"
@@ -792,11 +859,12 @@ export default function RecommendationsScreen() {
             !monetization.access?.offer.personalized &&
             monetization.access?.rewardedAds.canWatch ? (
               <Button
-                onPress={() => setShowRewardedAdSheet(true)}
+                onPress={() => void handleCreateRecommendation()}
                 loading={monetization.adState === "loading"}
+                disabled={isAdBusy}
                 fullWidth
               >
-                광고 보고 추천 1회 받기
+                광고 보고 추천 받을게요
               </Button>
             ) : null}
             {!hasActiveEntitlement &&
@@ -1180,38 +1248,6 @@ export default function RecommendationsScreen() {
       </BottomSheet>
 
       <BottomSheet
-        visible={showRewardedAdSheet}
-        onClose={() => setShowRewardedAdSheet(false)}
-        mascotMood="idle"
-        title="광고 보고 추천 1회 받기"
-        description="보상형 광고 한 편을 끝까지 보면 오늘 사용할 추천 1회를 드려요."
-        footer={
-          <View style={styles.sheetFooter}>
-            <Button
-              variant="secondary"
-              onPress={() => setShowRewardedAdSheet(false)}
-              disabled={monetization.adState === "loading"}
-              fullWidth
-            >
-              다음에 볼게요
-            </Button>
-            <Button
-              onPress={() => void handleWatchRewardedAd()}
-              loading={monetization.adState === "loading"}
-              fullWidth
-            >
-              광고 볼게요
-            </Button>
-          </View>
-        }
-      >
-        <Text style={styles.noticeBody}>
-          광고를 닫거나 불러오지 못하면 추천권은 지급되지 않아요. 광고를 다 본
-          뒤에는 서버 확인에 최대 몇 초가 걸릴 수 있어요.
-        </Text>
-      </BottomSheet>
-
-      <BottomSheet
         visible={showAiNotice}
         onClose={() => {
           setShowAiNotice(false);
@@ -1409,7 +1445,11 @@ function RecipeCard({
               {badgeLabel ?? "1"}
             </Text>
           </View>
-          <Text style={styles.recipeTitle}>
+          <Text
+            style={styles.recipeTitle}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
             {dish.title}
           </Text>
         </View>
@@ -1770,6 +1810,22 @@ function formatCreatedAt(value: string) {
   });
 }
 
+function needsRewardedAdToRecommend(access: RecommendationAccess | undefined) {
+  if (!access || access.tier !== "free" || !access.rewardedAdsEnabled) {
+    return false;
+  }
+  if (!access.rewardedAds.canWatch) {
+    return false;
+  }
+
+  return (
+    access.free.remaining <= 0 &&
+    access.rewardedAds.creditsAvailable <= 0 &&
+    access.paidCredits.balance <= 0 &&
+    access.contributionRewards.balance <= 0
+  );
+}
+
 function offerLabel(kind: RecommendationAccess["offer"]["kind"]) {
   return resolveMonetizationOffer(kind).label;
 }
@@ -2093,6 +2149,7 @@ const styles = StyleSheet.create({
   },
   recipeTitle: {
     flex: 1,
+    minWidth: 0,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.subheading.fontFamily,

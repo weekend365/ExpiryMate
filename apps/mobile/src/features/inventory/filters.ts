@@ -19,8 +19,8 @@ export const inventoryUrgencySectionTitles: Record<
   InventoryUrgencySection,
   string
 > = {
-  expired: "만료됨",
-  within7: "7일 이내",
+  expired: "만료",
+  within7: "곧 만료",
   safe: "여유 있어요",
 };
 

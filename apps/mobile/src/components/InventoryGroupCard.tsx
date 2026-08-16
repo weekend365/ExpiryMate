@@ -108,7 +108,11 @@ export function InventoryGroupCard({
           ) : null}
 
           <View style={styles.summaryCopy}>
-            <Text style={styles.name}>
+            <Text
+              style={styles.name}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {group.displayName}
               {group.brand ? (
                 <Text style={styles.brandInline}> · {group.brand}</Text>
@@ -402,6 +406,7 @@ const styles = StyleSheet.create({
   },
   name: {
     flexShrink: 1,
+    minWidth: 0,
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.subheading.fontFamily,

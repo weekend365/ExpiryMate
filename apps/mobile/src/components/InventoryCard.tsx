@@ -100,7 +100,7 @@ export function InventoryCard({
 
       <View style={styles.content}>
         <View style={styles.titleRow}>
-          <Text style={styles.name}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
             {item.displayName}
           </Text>
           {!selectionMode && onMenuPress ? (

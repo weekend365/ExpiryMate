@@ -186,7 +186,9 @@ describe("mobile inventory filters", () => {
       "within7",
       "safe",
     ]);
-    expect(sections[0]?.title).toBe("만료됨");
+    expect(sections[0]?.title).toBe("만료");
+    expect(sections[1]?.title).toBe("곧 만료");
+    expect(sections[2]?.title).toBe("여유 있어요");
     expect(sections.map((section) => section.itemCount)).toEqual([1, 1, 1]);
     expect(sections[2]?.data[0]?.items.map((item) => item.id)).toEqual([
       "later",

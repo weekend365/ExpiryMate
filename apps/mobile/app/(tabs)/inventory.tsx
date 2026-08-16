@@ -11,7 +11,6 @@ import {
   Check,
   ListChecks,
   MapPin,
-  MoreHorizontal,
   PenLine,
   Plus,
   Search,
@@ -22,10 +21,8 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import {
   ImageBackground,
-  Platform,
   Pressable,
   RefreshControl,
-  ScrollView,
   SectionList,
   StyleSheet,
   Text,
@@ -44,6 +41,7 @@ import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
+import { StatCard } from "../../src/components/StatCard";
 import {
   buildInventoryFacetCounts,
   buildInventoryUrgencySections,
@@ -91,7 +89,6 @@ export default function InventoryScreen() {
   const [location, setLocation] = useState<string | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
-  const [moreSheetVisible, setMoreSheetVisible] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -121,6 +118,12 @@ export default function InventoryScreen() {
     router.setParams({
       filter: nextFilter === "all" ? undefined : nextFilter,
     });
+  };
+
+  const toggleExpiryFilter = (
+    nextFilter: Exclude<InventoryViewFilter, "all">,
+  ) => {
+    applyFilter(filter === nextFilter ? "all" : nextFilter);
   };
 
   const hasLoadedInventory = data !== undefined;
@@ -171,7 +174,6 @@ export default function InventoryScreen() {
   };
 
   const openLocationFilterSheet = () => {
-    setMoreSheetVisible(false);
     setFilterSheetVisible(true);
   };
 
@@ -221,17 +223,11 @@ export default function InventoryScreen() {
 
   const enterSelectionMode = (initialId?: string) => {
     setFilterSheetVisible(false);
-    setMoreSheetVisible(false);
     setIsSelectionMode(true);
     setSuccessMessage(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setSelectedIds(initialId ? [initialId] : []);
-  };
-
-  const openSelectionFromMore = () => {
-    setMoreSheetVisible(false);
-    enterSelectionMode();
   };
 
   const cancelSelectionMode = () => {
@@ -496,107 +492,161 @@ export default function InventoryScreen() {
                       ) : null}
                     </View>
                     <Pressable
-                      onPress={() => setMoreSheetVisible(true)}
+                      onPress={() => enterSelectionMode()}
                       style={({ pressed }) => [
                         styles.moreMenuButton,
-                        hasLocationFilter && styles.moreMenuButtonActive,
                         pressed && styles.headerFilterButtonPressed,
                       ]}
                       accessibilityRole="button"
-                      accessibilityLabel="더 보기"
-                      accessibilityHint="위치 필터나 여러 개 정리를 고를 수 있어요."
+                      accessibilityLabel="여러 개 정리할게요"
+                      accessibilityHint="정리할 재료를 골라 한 번에 빼 둘 수 있어요."
                     >
-                      <MoreHorizontal
-                        color={
-                          hasLocationFilter ? colors.primary : colors.subtext
-                        }
+                      <ListChecks
+                        color={colors.subtext}
                         size={spacing.md}
                         strokeWidth={2.4}
                       />
-                      {hasLocationFilter ? (
-                        <View style={styles.moreMenuBadge} />
-                      ) : null}
                     </Pressable>
                   </View>
 
-                  <ScrollView
-                    horizontal
-                    style={styles.expiryFilterScroll}
-                    showsHorizontalScrollIndicator={false}
-                    keyboardShouldPersistTaps="handled"
-                    contentContainerStyle={styles.expiryFilterChipRow}
-                  >
-                    <ExpirySignalChip
-                      label="전체"
-                      count={facetCounts.status.all}
-                      selected={filter === "all"}
-                      emphasize={facetCounts.status.all > 0}
-                      onPress={() => applyFilter("all")}
-                    />
-                    <ExpirySignalChip
-                      label="만료됨"
-                      count={facetCounts.status.expired}
-                      tone="danger"
-                      selected={filter === "expired"}
-                      emphasize={facetCounts.status.expired > 0}
-                      onPress={() => applyFilter("expired")}
-                    />
-                    <ExpirySignalChip
-                      label="7일 이내"
-                      count={facetCounts.status.within7}
-                      tone="warning"
-                      selected={filter === "within7"}
-                      emphasize={facetCounts.status.within7 > 0}
-                      onPress={() => applyFilter("within7")}
-                    />
-                    <ExpirySignalChip
-                      label="여유"
-                      count={facetCounts.status.safe}
-                      tone="success"
-                      selected={filter === "safe"}
-                      emphasize={facetCounts.status.safe > 0}
-                      onPress={() => applyFilter("safe")}
-                    />
-                  </ScrollView>
+                  <View style={styles.filterPairRow}>
+                    <View
+                      style={styles.expiryTrafficRow}
+                      testID="inventory-expiry-traffic"
+                    >
+                      <ExpiryTrafficLamp
+                        label="만료"
+                        count={facetCounts.status.expired}
+                        tone="danger"
+                        lampOn={
+                          filter === "all"
+                            ? facetCounts.status.expired > 0
+                            : filter === "expired"
+                        }
+                        selected={filter === "expired"}
+                        onPress={() => toggleExpiryFilter("expired")}
+                        testID="inventory-expiry-filter-expired"
+                        accessibilityLabel={`만료, ${facetCounts.status.expired}개`}
+                        accessibilityHint={
+                          filter === "expired"
+                            ? "다시 누르면 전체 보관함을 보여 드려요."
+                            : "기한이 지난 재료만 보여 드릴게요."
+                        }
+                      />
+                      <ExpiryTrafficLamp
+                        label="곧 만료"
+                        count={facetCounts.status.within7}
+                        tone="warning"
+                        lampOn={
+                          filter === "all"
+                            ? facetCounts.status.within7 > 0
+                            : filter === "within7"
+                        }
+                        selected={filter === "within7"}
+                        onPress={() => toggleExpiryFilter("within7")}
+                        testID="inventory-expiry-filter-within7"
+                        accessibilityLabel={`곧 만료, ${facetCounts.status.within7}개`}
+                        accessibilityHint={
+                          filter === "within7"
+                            ? "다시 누르면 전체 보관함을 보여 드려요."
+                            : "7일 안에 손볼 재료만 보여 드릴게요."
+                        }
+                      />
+                      <ExpiryTrafficLamp
+                        label="여유"
+                        count={facetCounts.status.safe}
+                        tone="success"
+                        lampOn={
+                          filter === "all"
+                            ? facetCounts.status.safe > 0
+                            : filter === "safe"
+                        }
+                        selected={filter === "safe"}
+                        onPress={() => toggleExpiryFilter("safe")}
+                        testID="inventory-expiry-filter-safe"
+                        accessibilityLabel={`여유, ${facetCounts.status.safe}개`}
+                        accessibilityHint={
+                          filter === "safe"
+                            ? "다시 누르면 전체 보관함을 보여 드려요."
+                            : "아직 여유 있는 재료만 보여 드릴게요."
+                        }
+                      />
+                    </View>
 
-                  {hasLocationFilter ? (
-                    <View style={styles.activeLocationChip}>
+                    <View
+                      style={[
+                        styles.locationFilterTile,
+                        hasLocationFilter && styles.locationFilterTileActive,
+                      ]}
+                    >
                       <Pressable
                         onPress={openLocationFilterSheet}
                         accessibilityRole="button"
-                        accessibilityLabel={`${selectedLocationLabel} 위치 필터, 바꿀게요`}
+                        accessibilityLabel={
+                          hasLocationFilter
+                            ? `${selectedLocationLabel} 위치 필터, 바꿀게요`
+                            : "위치별로 볼게요"
+                        }
+                        accessibilityHint="냉장고·냉동실처럼 위치만 골라 볼 수 있어요."
                         style={({ pressed }) => [
-                          styles.activeLocationChipMain,
+                          styles.locationFilterMain,
                           pressed && styles.filterControlPressed,
                         ]}
                       >
                         <MapPin
-                          color={colors.primary}
+                          color={
+                            hasLocationFilter ? colors.primary : colors.subtext
+                          }
                           size={spacing.sm}
                           strokeWidth={2.4}
                         />
-                        <Text style={styles.activeLocationChipLabel}>
+                        <Text
+                          style={[
+                            styles.locationFilterTitle,
+                            hasLocationFilter &&
+                              styles.locationFilterTitleActive,
+                          ]}
+                          numberOfLines={1}
+                        >
                           {selectedLocationLabel}
                         </Text>
                       </Pressable>
-                      <Pressable
-                        onPress={() => setLocation("all")}
-                        hitSlop={spacing.xs}
-                        accessibilityRole="button"
-                        accessibilityLabel="위치 필터 풀게요"
-                        style={({ pressed }) => [
-                          styles.activeLocationClear,
-                          pressed && styles.headerFilterButtonPressed,
-                        ]}
-                      >
-                        <X
-                          color={colors.primary}
-                          size={spacing.sm}
-                          strokeWidth={2.4}
-                        />
-                      </Pressable>
+                      {hasStatusFilter ? (
+                        <Pressable
+                          onPress={() => applyFilter("all")}
+                          accessibilityRole="button"
+                          accessibilityLabel="유통기한 필터 풀고 전체 볼게요"
+                          hitSlop={spacing.xxs}
+                          style={({ pressed }) => [
+                            styles.locationFilterClearStatus,
+                            pressed && styles.headerFilterButtonPressed,
+                          ]}
+                        >
+                          <Text style={styles.locationFilterClearStatusLabel}>
+                            전체 보기
+                          </Text>
+                        </Pressable>
+                      ) : null}
+                      {hasLocationFilter ? (
+                        <Pressable
+                          onPress={() => setLocation("all")}
+                          hitSlop={spacing.xs}
+                          accessibilityRole="button"
+                          accessibilityLabel="위치 필터 풀게요"
+                          style={({ pressed }) => [
+                            styles.locationFilterClear,
+                            pressed && styles.headerFilterButtonPressed,
+                          ]}
+                        >
+                          <X
+                            color={colors.primary}
+                            size={spacing.sm}
+                            strokeWidth={2.4}
+                          />
+                        </Pressable>
+                      ) : null}
                     </View>
-                  ) : null}
+                  </View>
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
@@ -741,27 +791,36 @@ export default function InventoryScreen() {
               onItemCleanup={openCleanupSheet}
             />
           )}
-          renderSectionHeader={({ section }) => (
-            <View style={styles.urgencySectionHeader}>
+          renderSectionHeader={({ section }) =>
+            hasStatusFilter ? (
               <View
-                style={styles.urgencySectionAccentSlot}
+                style={styles.filteredSectionSpacer}
                 accessibilityElementsHidden
                 importantForAccessibility="no"
-              >
+              />
+            ) : (
+              <View style={styles.urgencySectionHeader}>
                 <View
-                  style={[
-                    styles.urgencySectionAccent,
-                    {
-                      backgroundColor: urgencySectionAccentColors[section.key],
-                    },
-                  ]}
-                />
+                  style={styles.urgencySectionAccentSlot}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                >
+                  <View
+                    style={[
+                      styles.urgencySectionAccent,
+                      {
+                        backgroundColor:
+                          urgencySectionAccentColors[section.key],
+                      },
+                    ]}
+                  />
+                </View>
+                <Text style={styles.urgencySectionTitle}>
+                  {section.title} {section.itemCount}건
+                </Text>
               </View>
-              <Text style={styles.urgencySectionTitle}>
-                {section.title} {section.itemCount}건
-              </Text>
-            </View>
-          )}
+            )
+          }
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
@@ -827,64 +886,6 @@ export default function InventoryScreen() {
               </Text>
               <Text style={styles.cleanupSheetOptionDescription}>
                 버리거나 비운 재료라면 여기서 정리해요
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-      </BottomSheet>
-
-      <BottomSheet
-        visible={moreSheetVisible}
-        onClose={() => setMoreSheetVisible(false)}
-        title="무엇을 할까요?"
-        description="위치만 보거나, 여러 재료를 한 번에 정리할 수 있어요."
-      >
-        <View style={styles.moreSheetActions}>
-          <Pressable
-            onPress={openLocationFilterSheet}
-            accessibilityRole="button"
-            accessibilityLabel="위치별로 볼게요"
-            style={({ pressed }) => [
-              styles.moreSheetOption,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-          >
-            <View style={styles.moreSheetOptionIcon}>
-              <MapPin
-                color={colors.primary}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </View>
-            <View style={styles.moreSheetOptionCopy}>
-              <Text style={styles.moreSheetOptionTitle}>위치별로 볼게요</Text>
-              <Text style={styles.moreSheetOptionDescription}>
-                {hasLocationFilter
-                  ? `지금 ${selectedLocationLabel}만 보고 있어요`
-                  : "냉장고·냉동실처럼 위치만 골라 볼 수 있어요"}
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable
-            onPress={openSelectionFromMore}
-            accessibilityRole="button"
-            accessibilityLabel="여러 개 정리할게요"
-            style={({ pressed }) => [
-              styles.moreSheetOption,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-          >
-            <View style={styles.moreSheetOptionIcon}>
-              <ListChecks
-                color={colors.primary}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </View>
-            <View style={styles.moreSheetOptionCopy}>
-              <Text style={styles.moreSheetOptionTitle}>여러 개 정리할게요</Text>
-              <Text style={styles.moreSheetOptionDescription}>
-                정리할 재료를 골라 한 번에 빼 둘 수 있어요
               </Text>
             </View>
           </Pressable>
@@ -1047,7 +1048,7 @@ function getFilteredEmptyTitle(
   }
 
   if (filter === "expired") {
-    return "만료된 재료가 없어요";
+    return "기한 지난 재료가 없어요";
   }
 
   if (filter === "safe") {
@@ -1087,122 +1088,60 @@ function getFilteredEmptyDescription(
   return "조건을 조금 넓히거나, 새 재료를 넣어볼까요?";
 }
 
-type ExpirySignalTone = "default" | "danger" | "warning" | "success";
+type ExpiryTrafficTone = "danger" | "warning" | "success";
 
-const expirySignalPalettes = {
-  default: {
-    signal: colors.text,
-    selectedSignal: colors.text,
-    selectedBackground: colors.surface,
-    selectedText: colors.text,
-  },
-  danger: {
-    signal: colors.danger,
-    selectedSignal: colors.danger,
-    selectedBackground: colors.dangerSoft,
-    selectedText: colors.text,
-  },
-  warning: {
-    signal: colors.warning,
-    selectedSignal: colors.warning,
-    selectedBackground: colors.warningSoft,
-    selectedText: colors.text,
-  },
-  success: {
-    signal: colors.success,
-    selectedSignal: colors.success,
-    selectedBackground: colors.successSoft,
-    selectedText: colors.text,
-  },
-} as const;
-
-const FILTER_CHIP_HIT_SLOP = {
+/** Visual chip ~40px; vertical inset meets the 48px touch target. */
+const EXPIRY_TRAFFIC_HIT_SLOP = {
   top: spacing.xxs,
   bottom: spacing.xxs,
   left: 0,
   right: 0,
 } as const;
 
-function ExpirySignalChip({
+function ExpiryTrafficLamp({
   label,
   count,
-  tone = "default",
+  tone,
+  lampOn,
   selected,
-  emphasize = true,
   onPress,
+  testID,
+  accessibilityLabel,
+  accessibilityHint,
 }: {
   label: string;
   count: number;
-  tone?: ExpirySignalTone;
+  tone: ExpiryTrafficTone;
+  lampOn: boolean;
   selected: boolean;
-  emphasize?: boolean;
   onPress: () => void;
+  testID: string;
+  accessibilityLabel: string;
+  accessibilityHint: string;
 }) {
-  const palette = expirySignalPalettes[tone];
-  const muted = !selected && !emphasize;
-
   return (
     <Pressable
+      testID={testID}
       onPress={onPress}
-      hitSlop={FILTER_CHIP_HIT_SLOP}
+      hitSlop={EXPIRY_TRAFFIC_HIT_SLOP}
       accessibilityRole="button"
-      accessibilityLabel={`${label}, ${count}개`}
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       accessibilityState={{ selected }}
       style={({ pressed }) => [
-        styles.expiryFilterChip,
-        {
-          backgroundColor: selected
-            ? palette.selectedBackground
-            : "transparent",
-          opacity: muted ? 0.42 : 1,
-        },
-        pressed && styles.filterControlPressed,
+        styles.expiryTrafficLamp,
+        pressed && styles.headerFilterButtonPressed,
       ]}
     >
-      {tone !== "default" ? (
-        <View
-          style={[
-            styles.expiryFilterLamp,
-            {
-              backgroundColor: selected
-                ? palette.selectedSignal
-                : palette.signal,
-              opacity: selected ? 1 : emphasize ? 0.72 : 0.28,
-            },
-            selected && {
-              shadowColor: palette.signal,
-              ...styles.expiryFilterLampSelected,
-            },
-          ]}
-        />
-      ) : null}
-      <Text
-        style={[
-          styles.expiryFilterChipLabel,
-          {
-            color: selected ? palette.selectedText : colors.text,
-            fontFamily: emphasize || selected
-              ? typography.bodyStrong.fontFamily
-              : typography.label.fontFamily,
-          },
-        ]}
-      >
-        {label}
-      </Text>
-      <Text
-        style={[
-          styles.expiryFilterChipCount,
-          {
-            color: selected
-              ? palette.signal
-              : emphasize
-                ? colors.subtext
-                : colors.mutedText,
-          },
-        ]}
-      >
-        {count}
-      </Text>
+      <StatCard
+        variant="traffic"
+        mini
+        label={label}
+        value={count}
+        tone={tone}
+        selected={lampOn}
+        showGlow={selected}
+      />
     </Pressable>
   );
 }
@@ -1238,139 +1177,93 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: radius.lg,
   },
-  moreMenuButtonActive: {
-    backgroundColor: colors.primarySoft,
+  filterPairRow: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    gap: spacing.xs,
   },
-  moreMenuBadge: {
-    position: "absolute",
-    top: spacing.xs,
-    right: spacing.xs,
-    width: spacing.xs,
-    height: spacing.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primary,
-  },
-  expiryFilterScroll: {
-    alignSelf: "stretch",
+  expiryTrafficRow: {
+    flexGrow: 0,
+    flexShrink: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs, // 4px between mini lamps in the cluster
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs, // 4px compact housing vs home's 16
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.mutedSurface,
-    overflow: "hidden",
   },
-  expiryFilterChipRow: {
+  expiryTrafficLamp: {
+    width: spacing.xxxl,
+    minWidth: spacing.xl,
+    flexShrink: 1,
+    minHeight: touchTarget.min,
     alignItems: "center",
-    gap: spacing.xxs,
-    padding: spacing.xxs,
-  },
-  expiryFilterChip: {
-    minHeight: spacing.xl,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.xs + spacing.xxs,
-    paddingVertical: spacing.xs,
+    justifyContent: "center",
     borderRadius: radius.md,
   },
-  expiryFilterLamp: {
-    width: spacing.xs,
-    height: spacing.xs,
-    flexShrink: 0,
-    borderRadius: radius.pill,
-  },
-  expiryFilterLampSelected: {
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.62,
-    shadowRadius: spacing.xs,
-    ...Platform.select({
-      android: { elevation: 4 },
-      default: {},
-    }),
-  },
-  expiryFilterChipLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-  },
-  expiryFilterChipCount: {
-    minWidth: spacing.sm,
-    textAlign: "center",
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    fontVariant: ["tabular-nums"],
-  },
-  activeLocationChip: {
+  locationFilterTile: {
+    flex: 1,
+    minWidth: touchTarget.min,
     minHeight: touchTarget.min,
-    alignSelf: "flex-start",
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: spacing.sm,
     paddingRight: spacing.xs,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+  },
+  locationFilterTileActive: {
+    borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  activeLocationChipMain: {
+  locationFilterMain: {
+    flex: 1,
+    minWidth: 0,
     minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    paddingRight: spacing.xs,
   },
-  activeLocationChipLabel: {
+  locationFilterTitle: {
+    flex: 1,
+    minWidth: 0,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  locationFilterTitleActive: {
     color: colors.primary,
   },
-  activeLocationClear: {
+  locationFilterClearStatus: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.md,
+  },
+  locationFilterClearStatusLabel: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.primary,
+  },
+  locationFilterClear: {
     minWidth: touchTarget.icon,
     minHeight: touchTarget.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
   },
+  filteredSectionSpacer: {
+    height: spacing.sm,
+  },
   filterControlPressed: {
     opacity: 0.82,
-  },
-  moreSheetActions: {
-    gap: spacing.xs,
-  },
-  moreSheetOption: {
-    minHeight: touchTarget.cta,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
-  },
-  moreSheetOptionIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  moreSheetOptionCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  moreSheetOptionTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  moreSheetOptionDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
   },
   cleanupSheetActions: {
     gap: spacing.xs,

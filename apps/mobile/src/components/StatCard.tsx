@@ -17,6 +17,8 @@ interface StatCardProps {
   showLabel?: boolean;
   /** Reduces traffic lamp and spacing for dense dashboard summaries. */
   compact?: boolean;
+  /** Inventory-filter scale: 32px lamp, tighter padding than `compact`. */
+  mini?: boolean;
   /** Controls the active lamp glow independently from its on/off fill. */
   showGlow?: boolean;
   /**
@@ -28,6 +30,7 @@ interface StatCardProps {
 
 const LAMP_SIZE = spacing.xxl + spacing.sm;
 const LAMP_SIZE_COMPACT = spacing.xxl;
+const LAMP_SIZE_MINI = spacing.lg;
 /** Dimmed fill when off — keeps hue so the bulb role is still readable. */
 const OFF_FILL_OPACITY = 0.28;
 
@@ -38,6 +41,7 @@ export function StatCard({
   variant = "card",
   showLabel = true,
   compact = false,
+  mini = false,
   showGlow = true,
   selected,
 }: StatCardProps) {
@@ -47,11 +51,19 @@ export function StatCard({
     const isOn = selected ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
     const lampStyle = trafficLamps[lampTone];
-    const lampMin = compact ? LAMP_SIZE_COMPACT : LAMP_SIZE;
+    const lampMin = mini
+      ? LAMP_SIZE_MINI
+      : compact
+        ? LAMP_SIZE_COMPACT
+        : LAMP_SIZE;
 
     return (
       <View
-        style={[styles.traffic, compact && styles.trafficCompact]}
+        style={[
+          styles.traffic,
+          compact && styles.trafficCompact,
+          mini && styles.trafficMini,
+        ]}
         accessible={selected == null}
         accessibilityRole="text"
         accessibilityLabel={`${label} ${value}개`}
@@ -59,14 +71,19 @@ export function StatCard({
         <View
           style={[
             styles.lamp,
+            mini && styles.lampMini,
             {
               minWidth: lampMin,
               minHeight: lampMin,
             },
+            mini && {
+              width: lampMin,
+              height: lampMin,
+            },
             isOn &&
               showGlow && {
                 shadowColor: lampStyle.glow,
-                ...styles.lampGlow,
+                ...(mini ? styles.lampGlowMini : styles.lampGlow),
               },
           ]}
         >
@@ -83,10 +100,17 @@ export function StatCard({
           />
           <AppText
             variant={
-              isLargeText ? "bodySmall" : compact ? "subheading" : "heading"
+              mini
+                ? "caption"
+                : isLargeText
+                  ? "bodySmall"
+                  : compact
+                    ? "subheading"
+                    : "heading"
             }
             scaleRole="chrome"
             densityAware={false}
+            numberOfLines={1}
             style={{
               color: isOn ? lampStyle.onText : lampStyle.onBackground,
             }}
@@ -98,6 +122,7 @@ export function StatCard({
           <AppText
             variant="caption"
             scaleRole="chrome"
+            numberOfLines={1}
             style={styles.trafficLabel}
           >
             {label}
@@ -205,12 +230,19 @@ const styles = StyleSheet.create({
   trafficCompact: {
     gap: spacing.xxs,
   },
+  trafficMini: {
+    gap: spacing.xxs, // 4px between mini lamp and label
+  },
   lamp: {
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xxs,
+  },
+  lampMini: {
+    paddingHorizontal: spacing.xxs, // 4px so 32px circle still fits the count
+    paddingVertical: 0,
   },
   lampFill: {
     ...StyleSheet.absoluteFillObject,
@@ -222,6 +254,15 @@ const styles = StyleSheet.create({
     shadowRadius: spacing.sm,
     ...Platform.select({
       android: { elevation: 6 },
+      default: {},
+    }),
+  },
+  lampGlowMini: {
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: spacing.xs,
+    ...Platform.select({
+      android: { elevation: 2 },
       default: {},
     }),
   },
