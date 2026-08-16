@@ -13,7 +13,7 @@ interface StatCardProps {
    * `traffic` = circular lamp for signal-light strips (on when value > 0).
    */
   variant?: "card" | "inline" | "traffic";
-  /** When false, traffic variant renders lamp only (labels live outside the housing). */
+  /** When false, traffic variant renders lamp only (labels live in accessibility copy). */
   showLabel?: boolean;
   /** Reduces traffic lamp and spacing for dense dashboard summaries. */
   compact?: boolean;
@@ -63,6 +63,7 @@ export function StatCard({
           styles.traffic,
           compact && styles.trafficCompact,
           mini && styles.trafficMini,
+          !showLabel && styles.trafficWithoutLabel,
         ]}
         accessible={selected == null}
         accessibilityRole="text"
@@ -231,7 +232,12 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   trafficMini: {
+    flex: 0,
+    justifyContent: "center",
     gap: spacing.xxs, // 4px between mini lamp and label
+  },
+  trafficWithoutLabel: {
+    gap: 0,
   },
   lamp: {
     borderRadius: radius.pill,

@@ -15,6 +15,7 @@ import {
   MapPin,
   PenLine,
   Plus,
+  RefreshCw,
   Search,
   Trash2,
   Utensils,
@@ -181,6 +182,8 @@ export default function InventoryScreen() {
   const hasLocationFilter = location !== "all";
   const hasSearchQuery = searchQuery.trim().length > 0;
   const hasStatusFilter = filter !== "all";
+  const hasActiveFilters =
+    hasLocationFilter || hasSearchQuery || hasStatusFilter;
   const selectedLocationLabel =
     location === "all" ? "모든 위치" : resolveLabel(location);
 
@@ -546,142 +549,138 @@ export default function InventoryScreen() {
                   </View>
 
                   <View style={styles.filterPairRow}>
-                    <View
-                      style={styles.expiryTrafficRow}
-                      testID="inventory-expiry-traffic"
-                    >
-                      <ExpiryTrafficLamp
-                        label="만료"
-                        count={facetCounts.status.expired}
-                        tone="danger"
-                        lampOn={
-                          filter === "all"
-                            ? facetCounts.status.expired > 0
-                            : filter === "expired"
-                        }
-                        selected={filter === "expired"}
-                        onPress={() => toggleExpiryFilter("expired")}
-                        testID="inventory-expiry-filter-expired"
-                        accessibilityLabel={`만료, ${facetCounts.status.expired}개`}
-                        accessibilityHint={
-                          filter === "expired"
-                            ? "다시 누르면 전체 보관함을 보여 드려요."
-                            : "기한이 지난 재료만 보여 드릴게요."
-                        }
-                      />
-                      <ExpiryTrafficLamp
-                        label="곧 만료"
-                        count={facetCounts.status.within7}
-                        tone="warning"
-                        lampOn={
-                          filter === "all"
-                            ? facetCounts.status.within7 > 0
-                            : filter === "within7"
-                        }
-                        selected={filter === "within7"}
-                        onPress={() => toggleExpiryFilter("within7")}
-                        testID="inventory-expiry-filter-within7"
-                        accessibilityLabel={`곧 만료, ${facetCounts.status.within7}개`}
-                        accessibilityHint={
-                          filter === "within7"
-                            ? "다시 누르면 전체 보관함을 보여 드려요."
-                            : "7일 안에 손볼 재료만 보여 드릴게요."
-                        }
-                      />
-                      <ExpiryTrafficLamp
-                        label="여유"
-                        count={facetCounts.status.safe}
-                        tone="success"
-                        lampOn={
-                          filter === "all"
-                            ? facetCounts.status.safe > 0
-                            : filter === "safe"
-                        }
-                        selected={filter === "safe"}
-                        onPress={() => toggleExpiryFilter("safe")}
-                        testID="inventory-expiry-filter-safe"
-                        accessibilityLabel={`여유, ${facetCounts.status.safe}개`}
-                        accessibilityHint={
-                          filter === "safe"
-                            ? "다시 누르면 전체 보관함을 보여 드려요."
-                            : "아직 여유 있는 재료만 보여 드릴게요."
-                        }
-                      />
-                    </View>
+                    <View style={styles.filterControls}>
+                      <View
+                        style={styles.expiryTrafficRow}
+                        testID="inventory-expiry-traffic"
+                      >
+                        <ExpiryTrafficLamp
+                          label="만료"
+                          count={facetCounts.status.expired}
+                          tone="danger"
+                          lampOn={
+                            filter === "all"
+                              ? facetCounts.status.expired > 0
+                              : filter === "expired"
+                          }
+                          selected={filter === "expired"}
+                          onPress={() => toggleExpiryFilter("expired")}
+                          testID="inventory-expiry-filter-expired"
+                          accessibilityLabel={`만료, ${facetCounts.status.expired}개`}
+                          accessibilityHint={
+                            filter === "expired"
+                              ? "다시 누르면 전체 보관함을 보여 드려요."
+                              : "기한이 지난 재료만 보여 드릴게요."
+                          }
+                        />
+                        <ExpiryTrafficLamp
+                          label="곧"
+                          count={facetCounts.status.within7}
+                          tone="warning"
+                          lampOn={
+                            filter === "all"
+                              ? facetCounts.status.within7 > 0
+                              : filter === "within7"
+                          }
+                          selected={filter === "within7"}
+                          onPress={() => toggleExpiryFilter("within7")}
+                          testID="inventory-expiry-filter-within7"
+                          accessibilityLabel={`곧 만료, ${facetCounts.status.within7}개`}
+                          accessibilityHint={
+                            filter === "within7"
+                              ? "다시 누르면 전체 보관함을 보여 드려요."
+                              : "7일 안에 손볼 재료만 보여 드릴게요."
+                          }
+                        />
+                        <ExpiryTrafficLamp
+                          label="여유"
+                          count={facetCounts.status.safe}
+                          tone="success"
+                          lampOn={
+                            filter === "all"
+                              ? facetCounts.status.safe > 0
+                              : filter === "safe"
+                          }
+                          selected={filter === "safe"}
+                          onPress={() => toggleExpiryFilter("safe")}
+                          testID="inventory-expiry-filter-safe"
+                          accessibilityLabel={`여유, ${facetCounts.status.safe}개`}
+                          accessibilityHint={
+                            filter === "safe"
+                              ? "다시 누르면 전체 보관함을 보여 드려요."
+                              : "아직 여유 있는 재료만 보여 드릴게요."
+                          }
+                        />
+                      </View>
 
-                    <View
-                      style={[
-                        styles.locationFilterTile,
-                        hasLocationFilter && styles.locationFilterTileActive,
-                      ]}
-                    >
-                      <Pressable
-                        onPress={openLocationFilterSheet}
-                        accessibilityRole="button"
-                        accessibilityLabel={
-                          hasLocationFilter
-                            ? `${selectedLocationLabel} 위치 필터, 바꿀게요`
-                            : "위치별로 볼게요"
-                        }
-                        accessibilityHint="냉장고·냉동실처럼 위치만 골라 볼 수 있어요."
-                        style={({ pressed }) => [
-                          styles.locationFilterMain,
-                          pressed && styles.filterControlPressed,
+                      <View
+                        style={[
+                          styles.locationFilterTile,
+                          hasLocationFilter && styles.locationFilterTileActive,
                         ]}
                       >
-                        <MapPin
-                          color={
-                            hasLocationFilter ? colors.primary : colors.subtext
+                        <Pressable
+                          onPress={openLocationFilterSheet}
+                          accessibilityRole="button"
+                          accessibilityLabel={
+                            hasLocationFilter
+                              ? `${selectedLocationLabel} 위치 필터, 바꿀게요`
+                              : "위치별로 볼게요"
                           }
-                          size={spacing.sm}
-                          strokeWidth={2.4}
-                        />
-                        <Text
-                          style={[
-                            styles.locationFilterTitle,
-                            hasLocationFilter &&
-                              styles.locationFilterTitleActive,
-                          ]}
-                          numberOfLines={1}
-                        >
-                          {selectedLocationLabel}
-                        </Text>
-                      </Pressable>
-                      {hasStatusFilter ? (
-                        <Pressable
-                          onPress={() => applyFilter("all")}
-                          accessibilityRole="button"
-                          accessibilityLabel="유통기한 필터 풀고 전체 볼게요"
-                          hitSlop={spacing.xxs}
+                          accessibilityHint="냉장고·냉동실처럼 위치만 골라 볼 수 있어요."
                           style={({ pressed }) => [
-                            styles.locationFilterClearStatus,
-                            pressed && styles.headerFilterButtonPressed,
+                            styles.locationFilterMain,
+                            pressed && styles.filterControlPressed,
                           ]}
                         >
-                          <Text style={styles.locationFilterClearStatusLabel}>
-                            전체 보기
-                          </Text>
-                        </Pressable>
-                      ) : null}
-                      {hasLocationFilter ? (
-                        <Pressable
-                          onPress={() => setLocation("all")}
-                          hitSlop={spacing.xs}
-                          accessibilityRole="button"
-                          accessibilityLabel="위치 필터 풀게요"
-                          style={({ pressed }) => [
-                            styles.locationFilterClear,
-                            pressed && styles.headerFilterButtonPressed,
-                          ]}
-                        >
-                          <X
-                            color={colors.primary}
+                          <MapPin
+                            color={
+                              hasLocationFilter
+                                ? colors.primary
+                                : colors.subtext
+                            }
                             size={spacing.sm}
                             strokeWidth={2.4}
                           />
+                          <Text
+                            style={[
+                              styles.locationFilterTitle,
+                              hasLocationFilter &&
+                                styles.locationFilterTitleActive,
+                            ]}
+                            numberOfLines={1}
+                          >
+                            {selectedLocationLabel}
+                          </Text>
                         </Pressable>
-                      ) : null}
+                      </View>
                     </View>
+                    <Pressable
+                      onPress={clearListFilters}
+                      disabled={!hasActiveFilters}
+                      style={({ pressed }) => [
+                        styles.moreMenuButton,
+                        pressed &&
+                          hasActiveFilters &&
+                          styles.headerFilterButtonPressed,
+                      ]}
+                      accessibilityRole="button"
+                      accessibilityState={{ disabled: !hasActiveFilters }}
+                      accessibilityLabel={
+                        hasActiveFilters
+                          ? "골라둔 조건을 풀어 볼게요"
+                          : "이미 전체 보관함을 보고 있어요"
+                      }
+                      accessibilityHint="검색어와 유통기한·위치 조건을 모두 풀어요."
+                    >
+                      <RefreshCw
+                        color={
+                          hasActiveFilters ? colors.subtext : colors.mutedText
+                        }
+                        size={spacing.md}
+                        strokeWidth={2.4}
+                      />
+                    </Pressable>
                   </View>
                 </View>
               ) : showListChrome && isSelectionMode ? (
@@ -1105,14 +1104,6 @@ function getFilteredEmptyDescription(
 
 type ExpiryTrafficTone = "danger" | "warning" | "success";
 
-/** Visual chip ~40px; vertical inset meets the 48px touch target. */
-const EXPIRY_TRAFFIC_HIT_SLOP = {
-  top: spacing.xxs,
-  bottom: spacing.xxs,
-  left: 0,
-  right: 0,
-} as const;
-
 function UrgencySection({
   section,
   collapsed,
@@ -1227,7 +1218,6 @@ function ExpiryTrafficLamp({
     <Pressable
       testID={testID}
       onPress={onPress}
-      hitSlop={EXPIRY_TRAFFIC_HIT_SLOP}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
@@ -1240,12 +1230,24 @@ function ExpiryTrafficLamp({
       <StatCard
         variant="traffic"
         mini
+        showLabel={false}
         label={label}
         value={count}
         tone={tone}
         selected={lampOn}
         showGlow={selected}
       />
+      <AppText
+        variant="caption"
+        tone={selected ? "default" : "subtext"}
+        scaleRole="chrome"
+        densityAware={false}
+        numberOfLines={1}
+        accessible={false}
+        style={styles.expiryTrafficLampLabel}
+      >
+        {label}
+      </AppText>
     </Pressable>
   );
 }
@@ -1283,34 +1285,49 @@ const styles = StyleSheet.create({
   },
   filterPairRow: {
     flexDirection: "row",
-    alignItems: "stretch",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  filterControls: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
   },
   expiryTrafficRow: {
-    flexGrow: 0,
-    flexShrink: 1,
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs, // 4px between mini lamps in the cluster
     paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs, // 4px compact housing vs home's 16
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.mutedSurface,
   },
   expiryTrafficLamp: {
-    width: spacing.xxxl,
-    minWidth: spacing.xl,
-    flexShrink: 1,
+    flex: 1,
+    minWidth: 0,
     minHeight: touchTarget.min,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: spacing.xxs, // 4px between lamp and inline label
+    paddingHorizontal: spacing.xxs,
     borderRadius: radius.md,
   },
+  expiryTrafficLampLabel: {
+    flexShrink: 1,
+  },
   locationFilterTile: {
-    flex: 1,
-    minWidth: touchTarget.min,
+    flexGrow: 0,
+    flexShrink: 0,
+    // 128: default "모든 위치" width; stays put when a location is selected.
+    width: spacing.xxxl * 2,
     minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
@@ -1343,25 +1360,6 @@ const styles = StyleSheet.create({
   },
   locationFilterTitleActive: {
     color: colors.primary,
-  },
-  locationFilterClearStatus: {
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingHorizontal: spacing.xs,
-    borderRadius: radius.md,
-  },
-  locationFilterClearStatusLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
-  },
-  locationFilterClear: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.icon,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.lg,
   },
   filterControlPressed: {
     opacity: 0.82,
