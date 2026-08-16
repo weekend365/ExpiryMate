@@ -74,7 +74,8 @@ function enforceMinimumMobileVersion(
   const minimumVersion = process.env.MINIMUM_MOBILE_APP_VERSION?.trim();
   const guardedPath =
     req.path.startsWith("/recipes/recommendations") ||
-    req.path.startsWith("/monetization");
+    (req.path.startsWith("/monetization") &&
+      !req.path.startsWith("/monetization/admob/ssv"));
   if (!minimumVersion || !guardedPath) {
     next();
     return;

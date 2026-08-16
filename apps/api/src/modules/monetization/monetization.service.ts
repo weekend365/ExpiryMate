@@ -525,12 +525,19 @@ export class MonetizationService {
     originalUrl: string,
     query: Record<string, string>,
   ) {
+    // AdMob's console "Verify URL" pings this path without a reward session.
+    // Acknowledge with 200 so the callback can be saved; credits are granted
+    // only for signed callbacks that match a pending session.
+    if (!this.hasAdMobSignature(originalUrl, query)) {
+      return { ok: true as const };
+    }
+
     await this.verifyAdMobSignature(originalUrl, query);
 
     const sessionId = query.custom_data;
     const transactionId = query.transaction_id;
     if (!sessionId || !transactionId) {
-      throw new BadRequestException("광고 보상 식별자가 없습니다.");
+      return { ok: true as const };
     }
 
     return this.prisma.$transaction(
@@ -1053,14 +1060,25 @@ export class MonetizationService {
     return createHmac("sha256", secret).update(ownerKey).digest("hex");
   }
 
+  private hasAdMobSignature(
+    originalUrl: string,
+    query: Record<string, string>,
+  ) {
+    return (
+      originalUrl.includes("&signature=") &&
+      Boolean(query.signature?.trim()) &&
+      Boolean(query.key_id?.trim())
+    );
+  }
+
   private async verifyAdMobSignature(
     originalUrl: string,
     query: Record<string, string>,
   ) {
-    const signatureIndex = originalUrl.indexOf("&signature=");
-    if (signatureIndex < 0 || !query.signature || !query.key_id) {
+    if (!this.hasAdMobSignature(originalUrl, query)) {
       throw new BadRequestException("광고 보상 서명이 없습니다.");
     }
+    const signatureIndex = originalUrl.indexOf("&signature=");
     const questionIndex = originalUrl.indexOf("?");
     if (questionIndex < 0) {
       throw new BadRequestException("광고 보상 요청이 올바르지 않습니다.");

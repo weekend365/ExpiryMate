@@ -731,6 +731,53 @@ describe("MonetizationService", () => {
       }),
     });
   });
+
+  it("acknowledges AdMob console URL probes without granting a reward", async () => {
+    const { privateKey, publicKey } = generateKeyPairSync("ec", {
+      namedCurve: "prime256v1",
+    });
+    const publicDer = publicKey.export({ format: "der", type: "spki" });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          keys: [{ keyId: 7, base64: publicDer.toString("base64") }],
+        }),
+      }),
+    );
+
+    const prisma = createPrismaMock();
+    const service = new MonetizationService(prisma as never);
+
+    await expect(
+      service.verifyAdMobReward("/monetization/admob/ssv", {}),
+    ).resolves.toEqual({ ok: true });
+
+    const signedContent = [
+      "ad_network=google",
+      "ad_unit=1111111111",
+      "reward_amount=1",
+      "reward_item=recipe_generation",
+    ].join("&");
+    const signature = sign(
+      "sha256",
+      Buffer.from(signedContent),
+      privateKey,
+    ).toString("base64url");
+    const originalUrl =
+      `/monetization/admob/ssv?${signedContent}` +
+      `&signature=${signature}&key_id=7`;
+    const query = Object.fromEntries(
+      new URL(`https://example.com${originalUrl}`).searchParams,
+    );
+
+    await expect(service.verifyAdMobReward(originalUrl, query)).resolves.toEqual({
+      ok: true,
+    });
+    expect(prisma.rewardedAdSession.findUnique).not.toHaveBeenCalled();
+    expect(prisma.rewardedAdSession.update).not.toHaveBeenCalled();
+  });
 });
 
 function createPrismaMock() {
