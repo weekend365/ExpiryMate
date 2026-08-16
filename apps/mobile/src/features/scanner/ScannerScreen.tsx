@@ -155,17 +155,18 @@ function ScannerCameraExperience() {
     ? manualCategory ?? undefined
     : undefined;
   const contributionRewards = monetization.access?.contributionRewards;
-  const rewardEligibilityMessage = !contributionRewards?.enabled
-    ? "알려주시면 다음에도 바로 불러올 수 있어요."
-    : !scanner.product?.contributionToken
-      ? "상품 조회가 정상 확인된 새 바코드에만 추천권을 드려요."
-      : !contributionRewards.canEarn
-        ? contributionRewards.balance >= contributionRewards.balanceLimit
-          ? `추천권을 ${contributionRewards.balanceLimit}회 보유하고 있어 먼저 사용해야 해요.`
-          : "오늘 받을 수 있는 바코드 추천권을 모두 받았어요."
-        : resolvedBrand || resolvedCategory
-          ? "새 상품이면 추천권 1회를 바로 드려요."
-          : "브랜드 또는 카테고리를 더하면 추천권 1회를 받을 수 있어요.";
+  const canPromiseBarcodeReward = Boolean(
+    contributionRewards?.enabled &&
+      scanner.product?.contributionToken &&
+      contributionRewards.canEarn,
+  );
+  const showScanRewardHint =
+    scanner.mode === "ocr" && canPromiseBarcodeReward;
+  const manualNameHint = canPromiseBarcodeReward
+    ? resolvedBrand || resolvedCategory
+      ? null
+      : "브랜드나 카테고리를 함께 알려주세요."
+    : "알려주시면 다음에도 바로 불러올 수 있어요.";
 
   const resultMood: MascotMood =
     needsManualName || needsManualExpiry ? "worry" : "happy";
@@ -182,17 +183,21 @@ function ScannerCameraExperience() {
             : "상품 정보";
 
   const guideMood: Extract<MascotMood, "speak" | "think"> =
-    scanner.mode === "ocr" && scanner.isOcrProcessing && !showBarcodeSuccess
-      ? "think"
-      : "speak";
+    showScanRewardHint || showBarcodeSuccess
+      ? "speak"
+      : scanner.mode === "ocr" && scanner.isOcrProcessing
+        ? "think"
+        : "speak";
 
   const guideMessage = showBarcodeSuccess
     ? "바코드를 읽었어요. 이제 유통기한을 같은 곳에 비춰 주세요."
     : scanner.mode === "barcode"
       ? "바코드를 가운데에 맞춰 주세요. 인식되면 유통기한도 이어서 볼게요."
-      : scanner.isOcrProcessing
-        ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
-        : "유통기한이 잘 보이게 비춰 주세요. 또렷하면 장고가 읽어볼게요.";
+      : showScanRewardHint
+        ? "아직 없는 상품이에요. 정보를 알려주시면 추천권 1회를 드려요. 유통기한은 같은 곳에 이어서 비춰 주세요."
+        : scanner.isOcrProcessing
+          ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
+          : "유통기한이 잘 보이게 비춰 주세요. 또렷하면 장고가 읽어볼게요.";
 
   const hasInlineScanError = Boolean(
     scanner.cameraErrorMessage ||
@@ -629,9 +634,9 @@ function ScannerCameraExperience() {
                     선택: {productCategoryLabels[manualCategory]}
                   </Text>
                 ) : null}
-                <Text style={styles.manualNameHint}>
-                  {rewardEligibilityMessage}
-                </Text>
+                {manualNameHint ? (
+                  <Text style={styles.manualNameHint}>{manualNameHint}</Text>
+                ) : null}
               </View>
             ) : null}
 
