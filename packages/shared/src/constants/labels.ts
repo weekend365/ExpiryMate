@@ -2,6 +2,8 @@ import {
   ExpirySource,
   ItemStatus,
   ProductCategory,
+  ProductMasterCorrectionStatus,
+  ProductMasterSource,
   StorageLocation,
   SupportInquiryCategory,
   SupportInquiryStatus,
@@ -137,3 +139,18 @@ export const supportInquiryCategoryOptions = (
   value,
   label: supportInquiryCategoryLabels[value],
 }));
+
+export const productMasterSourceLabels: Record<ProductMasterSource, string> = {
+  [ProductMasterSource.FOODSAFETY_API]: "식품안전나라",
+  [ProductMasterSource.OPEN_FOOD_FACTS]: "Open Food Facts",
+  [ProductMasterSource.USER_CONTRIBUTED]: "사용자 기여",
+};
+
+export const productMasterCorrectionStatusLabels: Record<
+  ProductMasterCorrectionStatus,
+  string
+> = {
+  [ProductMasterCorrectionStatus.PENDING]: "살펴보는 중",
+  [ProductMasterCorrectionStatus.APPLIED]: "반영함",
+  [ProductMasterCorrectionStatus.DISMISSED]: "넘어감",
+};

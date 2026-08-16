@@ -158,6 +158,37 @@ describe("inventory utils", () => {
     expect(groups).toHaveLength(2);
   });
 
+  it("groups barcode lots by catalog id even when names differ", () => {
+    const baseItem = {
+      quantity: 1,
+      quantityBase: 1,
+      unitCode: UnitCode.EA,
+      storageLocation: StorageLocation.FRIDGE,
+      expiryDate: "2026-04-19",
+      expirySource: ExpirySource.MANUAL,
+      status: ItemStatus.ACTIVE,
+      createdAt: "2026-04-19",
+      updatedAt: "2026-04-19",
+    };
+    const groups = groupInventoryItems([
+      {
+        ...baseItem,
+        id: "1",
+        displayName: "우유",
+        productMasterId: "pm-milk",
+      },
+      {
+        ...baseItem,
+        id: "2",
+        displayName: "서울우유 1L",
+        productMasterId: "pm-milk",
+      },
+    ]);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.items).toHaveLength(2);
+  });
+
   it("uses canonical remaining quantities after partial consumption", () => {
     const groups = groupInventoryItems([
       {

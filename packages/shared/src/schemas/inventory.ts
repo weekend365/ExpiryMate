@@ -40,6 +40,7 @@ export const storageLocationKeySchema = z
 export const inventoryItemSchema = z.object({
   id: z.string(),
   productId: z.string().nullable().optional(),
+  productMasterId: z.string().nullable().optional(),
   ownerKey: z.string().optional(),
   spaceId: z.string().nullable().optional(),
   createdByUserId: z.string().nullable().optional(),
@@ -75,6 +76,7 @@ export const inventoryUpsertSchema = inventoryItemSchema.omit({
 /** Mobile form + API create body (without server-owned status default). */
 export const inventoryFormSchema = z.object({
   productId: optionalText(fieldLimits.productId),
+  productMasterId: optionalText(fieldLimits.productMasterId),
   displayName: z
     .string()
     .trim()

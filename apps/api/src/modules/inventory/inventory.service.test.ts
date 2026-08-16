@@ -22,6 +22,7 @@ const inventoryItem = {
   id: "item-1",
   ownerKey: "owner-a",
   productId: null,
+  productMasterId: null,
   displayName: "계란",
   brand: null,
   category: null,
@@ -39,7 +40,7 @@ const inventoryItem = {
 };
 
 describe("InventoryService owner isolation", () => {
-  let prisma: {
+  let     prisma: {
     $transaction: ReturnType<typeof vi.fn>;
     inventoryItem: {
       findUnique: ReturnType<typeof vi.fn>;
@@ -50,6 +51,13 @@ describe("InventoryService owner isolation", () => {
       update: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
+    };
+    productMaster: {
+      findUnique: ReturnType<typeof vi.fn>;
+    };
+    productMasterCorrection: {
+      upsert: ReturnType<typeof vi.fn>;
+      updateMany: ReturnType<typeof vi.fn>;
     };
   };
   let service: InventoryService;
@@ -73,6 +81,13 @@ describe("InventoryService owner isolation", () => {
         update: vi.fn(),
         updateMany: vi.fn(),
         create: vi.fn(),
+      },
+      productMaster: {
+        findUnique: vi.fn(),
+      },
+      productMasterCorrection: {
+        upsert: vi.fn(),
+        updateMany: vi.fn(),
       },
     };
     service = new InventoryService(prisma as never, {
@@ -392,5 +407,84 @@ describe("InventoryService owner isolation", () => {
         }),
       }),
     );
+  });
+
+  it("links a barcode catalog row without overwriting it", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      id: "pm-milk",
+      barcode: "8801234567890",
+      name: "서울우유 1L",
+      brand: "서울우유",
+      category: "dairy",
+    });
+    prisma.productMasterCorrection.updateMany.mockResolvedValue({ count: 0 });
+    prisma.inventoryItem.create.mockResolvedValue({
+      ...inventoryItem,
+      productMasterId: "pm-milk",
+      displayName: "서울우유 1L",
+    });
+
+    await service.create(
+      createBody({
+        displayName: "서울우유 1L",
+        productMasterId: "pm-milk",
+      }),
+      "owner-a",
+    );
+
+    expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        productMasterId: "pm-milk",
+        displayName: "서울우유 1L",
+      }),
+    });
+    expect(prisma.productMasterCorrection.upsert).not.toHaveBeenCalled();
+  });
+
+  it("records a catalog correction when the registered name differs", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      id: "pm-milk",
+      barcode: "8801234567890",
+      name: "우유",
+      brand: "서울우유",
+      category: "dairy",
+    });
+    prisma.productMasterCorrection.upsert.mockResolvedValue({ id: "corr-1" });
+    prisma.inventoryItem.create.mockResolvedValue({
+      ...inventoryItem,
+      productMasterId: "pm-milk",
+      displayName: "서울우유 1L",
+    });
+
+    await service.create(
+      createBody({
+        displayName: "서울우유 1L",
+        brand: "서울우유",
+        productMasterId: "pm-milk",
+      }),
+      "owner-a",
+    );
+
+    expect(prisma.productMasterCorrection.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: expect.objectContaining({
+          productMasterId: "pm-milk",
+          proposedName: "서울우유 1L",
+          catalogName: "우유",
+        }),
+      }),
+    );
+  });
+
+  it("rejects an unknown barcode catalog id", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue(null);
+
+    await expect(
+      service.create(
+        createBody({ productMasterId: "missing-pm" }),
+        "owner-a",
+      ),
+    ).rejects.toThrow(BadRequestException);
+    expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
   });
 });

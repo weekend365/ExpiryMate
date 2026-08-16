@@ -43,6 +43,15 @@ describe("inventory write contracts", () => {
     ).toBe("custom_pantry");
   });
 
+  it("accepts an optional barcode catalog id", () => {
+    expect(
+      createInventoryItemBodySchema.parse({
+        ...valid,
+        productMasterId: "pm-milk",
+      }).productMasterId,
+    ).toBe("pm-milk");
+  });
+
   it("accepts canonical quantity fields without requiring them from legacy clients", () => {
     expect(
       createInventoryItemBodySchema.parse({

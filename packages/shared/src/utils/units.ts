@@ -81,6 +81,7 @@ export const inventoryItemToFormValues = (
   item: Pick<
     InventoryItem,
     | "productId"
+    | "productMasterId"
     | "displayName"
     | "brand"
     | "category"
@@ -102,6 +103,7 @@ export const inventoryItemToFormValues = (
 
   return {
     productId: item.productId ?? undefined,
+    productMasterId: item.productMasterId ?? undefined,
     displayName: item.displayName,
     brand: item.brand ?? undefined,
     category: item.category ?? undefined,

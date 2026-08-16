@@ -27,6 +27,10 @@ import type {
   UpdateInventoryItemBody,
 } from "@expirymate/shared";
 import { SettingsService } from "../settings/settings.service";
+import {
+  loadProductMasterOrThrow,
+  syncCatalogCorrectionAfterCreate,
+} from "../product-masters/catalog-correction";
 
 const DEFAULT_PAGE_SIZE = 100;
 const MAX_PAGE_SIZE = 200;
@@ -139,6 +143,10 @@ export class InventoryService {
       spaceId,
     );
 
+    const catalog = await loadProductMasterOrThrow(
+      this.prisma,
+      dto.productMasterId,
+    );
     const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
     const item = await this.prisma.inventoryItem.create({
       data: {
@@ -147,6 +155,7 @@ export class InventoryService {
         createdByUserId: ownerKey,
         updatedByUserId: ownerKey,
         productId: dto.productId,
+        productMasterId: catalog?.id,
         displayName: dto.displayName,
         brand: dto.brand,
         category: dto.category as ProductCategory | undefined,
@@ -162,6 +171,14 @@ export class InventoryService {
         notes: dto.notes,
       },
     });
+
+    if (catalog) {
+      await syncCatalogCorrectionAfterCreate(this.prisma, {
+        catalog,
+        ownerKey,
+        proposed: dto,
+      });
+    }
 
     return serializeInventoryItem(item);
   }
@@ -198,6 +215,7 @@ export class InventoryService {
       },
       data: {
         productId: dto.productId,
+        productMasterId: dto.productMasterId,
         displayName: dto.displayName,
         brand: dto.brand,
         category: dto.category as ProductCategory | undefined,

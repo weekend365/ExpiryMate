@@ -91,7 +91,7 @@ const normalizeIdentityPart = (value?: string | null) =>
 
 /**
  * Groups expiry lots that belong to the same product while preserving each lot.
- * A stable product id wins; manually-entered items fall back to name + brand.
+ * A stable product or barcode catalog id wins; manually-entered items fall back to name + brand.
  */
 export const groupInventoryItems = (
   items: InventoryItem[],
@@ -107,7 +107,9 @@ export const groupInventoryItems = (
     ].join(":");
     const groupId = item.productId
       ? `product:${item.productId}`
-      : `manual:${fallbackIdentity}`;
+      : item.productMasterId
+        ? `master:${item.productMasterId}`
+        : `manual:${fallbackIdentity}`;
     const currentItems = groups.get(groupId);
 
     if (currentItems) {

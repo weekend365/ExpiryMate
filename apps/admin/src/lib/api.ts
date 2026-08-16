@@ -1,4 +1,6 @@
 import type {
+  AdminProductMasterDetail,
+  AdminProductMasterListResponse,
   AuthSession,
   AuthUser,
   DashboardSummary,
@@ -6,7 +8,9 @@ import type {
   NotificationPreference,
   Product,
   ProductCategory,
+  ProductMaster,
   SupportInquiry,
+  UpdateProductMasterBody,
 } from "@expirymate/shared";
 
 const API_BASE_URL = resolveApiBaseUrl();
@@ -284,6 +288,65 @@ export const updateProduct = (id: string, payload: Partial<ProductPayload>) =>
     method: "PATCH",
     body: JSON.stringify(payload),
   });
+
+export const listProductMasters = (params?: {
+  page?: number;
+  limit?: number;
+  q?: string;
+  source?: string;
+  hasPendingCorrections?: boolean;
+}) => {
+  const search = new URLSearchParams();
+  if (params?.page) {
+    search.set("page", String(params.page));
+  }
+  if (params?.limit) {
+    search.set("limit", String(params.limit));
+  }
+  if (params?.q?.trim()) {
+    search.set("q", params.q.trim());
+  }
+  if (params?.source?.trim()) {
+    search.set("source", params.source.trim());
+  }
+  if (params?.hasPendingCorrections) {
+    search.set("hasPendingCorrections", "true");
+  }
+  const query = search.toString();
+  return request<AdminProductMasterListResponse>(
+    `/admin/product-masters${query ? `?${query}` : ""}`,
+  );
+};
+
+export const getProductMaster = (id: string) =>
+  request<AdminProductMasterDetail>(`/admin/product-masters/${id}`);
+
+export const updateProductMaster = (
+  id: string,
+  payload: UpdateProductMasterBody,
+) =>
+  request<ProductMaster>(`/admin/product-masters/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const applyProductMasterCorrection = (
+  productMasterId: string,
+  correctionId: string,
+) =>
+  request<ProductMaster>(
+    `/admin/product-masters/${productMasterId}/corrections/${correctionId}/apply`,
+    { method: "POST" },
+  );
+
+export const dismissProductMasterCorrection = (
+  productMasterId: string,
+  correctionId: string,
+) =>
+  request<AdminProductMasterDetail>(
+    `/admin/product-masters/${productMasterId}/corrections/${correctionId}/dismiss`,
+    { method: "POST" },
+  );
 
 export const listInventory = (params?: {
   page?: number;

@@ -3,6 +3,7 @@ import {
   type NotificationPreference as PrismaNotificationPreference,
   type Product as PrismaProduct,
   type ProductMaster as PrismaProductMaster,
+  type ProductMasterCorrection as PrismaProductMasterCorrection,
   type PushToken as PrismaPushToken,
   type UserStorageLocation as PrismaUserStorageLocation,
 } from "@prisma/client";
@@ -16,6 +17,8 @@ import {
   type Product,
   ProductCategory,
   type ProductMaster,
+  ProductMasterCorrectionStatus,
+  type ProductMasterCorrection,
   ProductMasterSource,
   type PushToken,
   type PushTokenPlatform,
@@ -49,6 +52,32 @@ export const serializeProductMaster = (
   updatedAt: product.updatedAt.toISOString(),
 });
 
+export const serializeProductMasterCorrection = (
+  correction: PrismaProductMasterCorrection,
+  options: { maskSubmitter?: boolean } = {},
+): ProductMasterCorrection => ({
+  id: correction.id,
+  productMasterId: correction.productMasterId,
+  submittedByUserId:
+    options.maskSubmitter && correction.submittedByUserId
+      ? maskOwnerKey(correction.submittedByUserId)
+      : correction.submittedByUserId,
+  catalogName: correction.catalogName,
+  catalogBrand: correction.catalogBrand,
+  catalogCategory: correction.catalogCategory,
+  proposedName: correction.proposedName,
+  proposedBrand: correction.proposedBrand,
+  proposedCategory: correction.proposedCategory,
+  status: correction.status as ProductMasterCorrectionStatus,
+  reviewedByUserId:
+    options.maskSubmitter && correction.reviewedByUserId
+      ? maskOwnerKey(correction.reviewedByUserId)
+      : correction.reviewedByUserId,
+  reviewedAt: correction.reviewedAt?.toISOString() ?? null,
+  createdAt: correction.createdAt.toISOString(),
+  updatedAt: correction.updatedAt.toISOString(),
+});
+
 const resolveStatus = (item: PrismaInventoryItem) => {
   if (
     item.status === ItemStatus.ACTIVE &&
@@ -65,6 +94,7 @@ export const serializeInventoryItem = (
 ): InventoryItem => ({
   id: item.id,
   productId: item.productId,
+  productMasterId: item.productMasterId,
   ownerKey: item.ownerKey,
   spaceId: item.spaceId,
   createdByUserId: item.createdByUserId,

@@ -124,6 +124,7 @@ export interface StartOAuthResponse {
 export interface InventoryItem {
   id: string;
   productId?: string | null;
+  productMasterId?: string | null;
   ownerKey?: string;
   spaceId?: string | null;
   createdByUserId?: string | null;

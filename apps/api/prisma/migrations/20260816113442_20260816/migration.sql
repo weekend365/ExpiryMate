@@ -1,0 +1,8 @@
+-- RenameIndex
+ALTER INDEX "MonetizationFunnelEvent_experimentKey_experimentVariant_created" RENAME TO "MonetizationFunnelEvent_experimentKey_experimentVariant_cre_idx";
+
+-- RenameIndex
+ALTER INDEX "PushNotificationDelivery_pushTokenId_inventoryItemId_reminderDa" RENAME TO "PushNotificationDelivery_pushTokenId_inventoryItemId_remind_key";
+
+-- RenameIndex
+ALTER INDEX "RecipeFavorite_ownerKey_sourceRecommendationId_sourceDishIndex_" RENAME TO "RecipeFavorite_ownerKey_sourceRecommendationId_sourceDishIn_key";

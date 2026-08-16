@@ -155,6 +155,8 @@ describe("PrivacyService", () => {
       "oneTimeAuthToken.deleteMany",
       "oAuthAccount.deleteMany",
       "passwordCredential.deleteMany",
+      "productMasterCorrection.updateMany",
+      "productMasterCorrection.updateMany",
       "productMaster.updateMany",
       "user.update",
     ]);
@@ -309,6 +311,12 @@ function createPrismaMock(
       updateMany: async (payload: unknown) => {
         operations.push("productMaster.updateMany");
         productMasterUpdates.push(payload);
+        return { count: 1 };
+      },
+    },
+    productMasterCorrection: {
+      updateMany: async () => {
+        operations.push("productMasterCorrection.updateMany");
         return { count: 1 };
       },
     },

@@ -12,6 +12,7 @@ import {
   formatInventoryQuantity,
   groupInventoryItems,
   inventoryFormSchema,
+  catalogIdentityDiffers,
   productCategoryLabels,
   productCategoryOptions,
   quantityInputLabel,
@@ -75,6 +76,7 @@ import {
 
 type RegistrationFormValues = {
   productId?: string;
+  productMasterId?: string;
   displayName: string;
   brand: string;
   category?: ProductCategory;
@@ -142,6 +144,7 @@ const QUICK_EXPIRY_OPTIONS = [
 
 const createDefaultFormValues = (): RegistrationFormValues => ({
   productId: undefined,
+  productMasterId: undefined,
   displayName: "",
   brand: "",
   category: undefined,
@@ -176,6 +179,7 @@ const buildInitialValues = (
 
   if (prefill) {
     nextValues.productId = prefill.productId;
+    nextValues.productMasterId = prefill.productMasterId;
     nextValues.displayName = prefill.displayName ?? nextValues.displayName;
     nextValues.brand = prefill.brand ?? nextValues.brand;
     nextValues.category = prefill.category ?? nextValues.category;
@@ -199,7 +203,13 @@ function normalizeDraftExpiryDate(value?: string) {
 const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
 ) =>
-  prefill ? [prefill.productId ?? "", prefill.displayName ?? ""].join(":") : "";
+  prefill
+    ? [
+        prefill.productMasterId ?? "",
+        prefill.productId ?? "",
+        prefill.displayName ?? "",
+      ].join(":")
+    : "";
 
 export default function RegisterScreen() {
   const { shouldStack, shouldStackDense } = useResponsiveLayout();
@@ -271,6 +281,7 @@ export default function RegisterScreen() {
 
       setDraft({
         productId: value.productId,
+        productMasterId: value.productMasterId,
         displayName: value.displayName,
         brand: value.brand,
         category: value.category,
@@ -353,6 +364,17 @@ export default function RegisterScreen() {
     ? REGISTRATION_STEPS.findIndex((item) => item.key === step)
     : -1;
   const isLastStep = step === "confirm";
+  const catalogNameDiffers = Boolean(
+    prefill?.productMasterId &&
+      prefill.catalogName &&
+      catalogIdentityDiffers(
+        { name: prefill.catalogName, brand: prefill.catalogBrand },
+        { name: displayName, brand },
+      ),
+  );
+  const productGuideMessage = prefill?.productMasterId
+    ? "스캔한 이름이 다르면 고쳐 주세요. 내 냉장고에만 먼저 반영돼요."
+    : REGISTRATION_STEPS[0]?.guideMessage;
   const canGoNext =
     (step === "product" && Boolean(displayName)) ||
     (step === "storage" && Boolean(storageLocation) && quantity > 0) ||
@@ -434,6 +456,7 @@ export default function RegisterScreen() {
 
   const applyRecentTemplate = (item: (typeof recentTemplates)[number]) => {
     form.setValue("productId", item.productId ?? undefined);
+    form.setValue("productMasterId", item.productMasterId ?? undefined);
     form.setValue("displayName", item.displayName, { shouldValidate: true });
     form.setValue("brand", item.brand ?? "");
     form.setValue("category", item.category ?? undefined);
@@ -507,6 +530,7 @@ export default function RegisterScreen() {
       const canonical = toBaseQuantity(values.quantity, values.unit);
       const created = await mutation.mutateAsync({
         productId: values.productId,
+        productMasterId: values.productMasterId,
         displayName: values.displayName,
         brand: values.brand,
         category: values.category,
@@ -703,7 +727,11 @@ export default function RegisterScreen() {
         steps={REGISTRATION_STEPS}
         currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}
-        guideMessage={REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
+        guideMessage={
+          step === "product"
+            ? productGuideMessage
+            : REGISTRATION_STEPS[Math.max(stepIndex, 0)]?.guideMessage
+        }
         guideMood="speak"
       >
         {step === "product" && rewardNotice?.granted ? (
@@ -725,9 +753,16 @@ export default function RegisterScreen() {
           <>
             {prefill?.displayName ? (
               <View style={styles.noticeCard}>
-                <Text style={styles.noticeEyebrow}>불러온 재료</Text>
-                <Text style={styles.noticeTitle}>{prefill.displayName}</Text>
-                {prefill.brand ? (
+                <Text style={styles.noticeEyebrow}>
+                  {catalogNameDiffers ? "목록과 다른 이름" : "불러온 재료"}
+                </Text>
+                <Text style={styles.noticeTitle}>{displayName || prefill.displayName}</Text>
+                {catalogNameDiffers ? (
+                  <Text style={styles.noticeDescription}>
+                    목록 이름은 {prefill.catalogName}예요. 냉장고에는 지금
+                    이름으로 넣을게요.
+                  </Text>
+                ) : prefill.brand ? (
                   <Text style={styles.noticeDescription}>{prefill.brand}</Text>
                 ) : null}
               </View>

@@ -130,6 +130,7 @@ function ScannerCameraExperience() {
   } | null>(null);
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [showBarcodeSuccess, setShowBarcodeSuccess] = useState(false);
+  const [catalogNameAccepted, setCatalogNameAccepted] = useState(true);
   const previousModeRef = useRef(scanner.mode);
 
   const needsManualName =
@@ -147,10 +148,14 @@ function ScannerCameraExperience() {
 
   const resolvedProductName = needsManualName
     ? manualName.trim()
-    : scanner.product?.name?.trim() ?? "";
+    : catalogNameAccepted
+      ? scanner.product?.name?.trim() ?? ""
+      : manualName.trim();
   const resolvedBrand = needsManualName
     ? manualBrand.trim() || undefined
-    : scanner.product?.brand?.trim() || undefined;
+    : catalogNameAccepted
+      ? scanner.product?.brand?.trim() || undefined
+      : manualBrand.trim() || scanner.product?.brand?.trim() || undefined;
   const resolvedCategory = needsManualName
     ? manualCategory ?? undefined
     : undefined;
@@ -224,16 +229,30 @@ function ScannerCameraExperience() {
     if (!scanner.confirmation) {
       setManualExpiryDate("");
       setManualExpirySource(ExpirySource.MANUAL);
+      setCatalogNameAccepted(true);
+      return;
     }
-  }, [scanner.confirmation]);
 
-  const completeRegistration = () => {
+    setCatalogNameAccepted(true);
+    if (scanner.product?.name) {
+      setManualName(scanner.product.name);
+      setManualBrand(scanner.product.brand ?? "");
+    }
+  }, [scanner.confirmation, scanner.product?.brand, scanner.product?.name]);
+
+  const completeRegistration = (productMasterId?: string | null) => {
     setPrefill({
+      productMasterId: productMasterId ?? undefined,
+      catalogName: scanner.product?.name?.trim() || undefined,
+      catalogBrand: scanner.product?.brand?.trim() || undefined,
       displayName: resolvedProductName,
       brand: resolvedBrand,
       category: resolvedCategory,
     });
     setDraft({
+      productMasterId: productMasterId ?? undefined,
+      catalogName: scanner.product?.name?.trim() || undefined,
+      catalogBrand: scanner.product?.brand?.trim() || undefined,
       displayName: resolvedProductName,
       brand: resolvedBrand,
       category: resolvedCategory,
@@ -255,6 +274,8 @@ function ScannerCameraExperience() {
     setProhibitedContribution(null);
     setRewardNotice(null);
 
+    let productMasterId = scanner.product?.productMasterId ?? null;
+
     if (needsManualName && scanner.confirmation.barcode) {
       setIsContributing(true);
 
@@ -266,6 +287,7 @@ function ScannerCameraExperience() {
           category: resolvedCategory,
           contributionToken: scanner.product?.contributionToken,
         });
+        productMasterId = contribution.product.id;
         if (contribution.reward.reason !== "rewards_disabled") {
           setRewardNotice({
             granted: contribution.reward.granted,
@@ -297,12 +319,12 @@ function ScannerCameraExperience() {
       }
     }
 
-    completeRegistration();
+    completeRegistration(productMasterId);
   };
 
   const handleContinueWithoutContribution = () => {
     setRewardNotice(null);
-    completeRegistration();
+    completeRegistration(scanner.product?.productMasterId ?? null);
   };
 
   const handleRescan = () => {
@@ -314,6 +336,7 @@ function ScannerCameraExperience() {
     setContributeError(null);
     setProhibitedContribution(null);
     setShowBarcodeSuccess(false);
+    setCatalogNameAccepted(true);
     scanner.resetScanner();
   };
 
@@ -503,9 +526,11 @@ function ScannerCameraExperience() {
         title={
           needsManualName
             ? "이 재료 이름을 알려줄래요?"
-            : needsManualExpiry
-              ? "유통기한은 언제까지인가요?"
-              : "스캔 결과를 확인할까요?"
+            : !catalogNameAccepted
+              ? "우리 집에서는 뭐라고 부를까요?"
+              : needsManualExpiry
+                ? "유통기한은 언제까지인가요?"
+                : "이 이름이 맞나요?"
         }
         description={
           needsManualName && needsManualExpiry
@@ -514,7 +539,9 @@ function ScannerCameraExperience() {
               ? "날짜가 안 보여도 괜찮아요. 직접 골라 주시면 이어서 넣을게요."
               : needsManualName
                 ? "목록에서 못 찾았어요. 이름만 알려주시면 넣는 화면으로 이어갈게요."
-                : "상품명과 유통기한을 넣기 화면에 채워 드릴게요."
+                : catalogNameAccepted
+                  ? "맞으면 그대로 넣을게요. 다르면 우리 집에서 쓰는 이름으로 바꿔 주세요."
+                  : "목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요."
         }
         footer={
           <View style={styles.sheetFooter}>
@@ -583,6 +610,61 @@ function ScannerCameraExperience() {
                 </Text>
               </View>
             </View>
+
+            {!needsManualName ? (
+              <View style={styles.manualNameCard}>
+                <Text style={styles.manualNameLabel}>이 이름이 맞나요?</Text>
+                <View style={styles.pillRow}>
+                  <Pill
+                    label="맞아요"
+                    selected={catalogNameAccepted}
+                    onPress={() => setCatalogNameAccepted(true)}
+                  />
+                  <Pill
+                    label="다른 이름이에요"
+                    selected={!catalogNameAccepted}
+                    onPress={() => {
+                      setCatalogNameAccepted(false);
+                      if (!manualName.trim() && scanner.product?.name) {
+                        setManualName(scanner.product.name);
+                      }
+                      if (!manualBrand.trim() && scanner.product?.brand) {
+                        setManualBrand(scanner.product.brand);
+                      }
+                    }}
+                  />
+                </View>
+                {!catalogNameAccepted ? (
+                  <>
+                    <Text style={styles.manualNameLabel}>우리 집 이름</Text>
+                    <TextInput
+                      value={manualName}
+                      onChangeText={setManualName}
+                      accessibilityLabel="우리 집 재료 이름"
+                      placeholder="예: 서울우유 1L"
+                      placeholderTextColor={colors.mutedText}
+                      style={styles.manualNameInput}
+                      autoCorrect={false}
+                      returnKeyType="done"
+                    />
+                    <Text style={styles.manualNameLabel}>브랜드</Text>
+                    <TextInput
+                      value={manualBrand}
+                      onChangeText={setManualBrand}
+                      accessibilityLabel="브랜드"
+                      placeholder="예: 서울우유"
+                      placeholderTextColor={colors.mutedText}
+                      style={styles.manualNameInput}
+                      autoCorrect={false}
+                      returnKeyType="done"
+                    />
+                    <Text style={styles.manualNameHint}>
+                      목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요.
+                    </Text>
+                  </>
+                ) : null}
+              </View>
+            ) : null}
 
             {needsManualName ? (
               <View style={styles.manualNameCard}>

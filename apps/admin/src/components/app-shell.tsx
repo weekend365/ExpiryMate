@@ -12,6 +12,7 @@ const navItems = [
   { href: "/dashboard", label: "대시보드" },
   { href: "/monetization", label: "수익화" },
   { href: "/products", label: "상품 관리" },
+  { href: "/product-masters", label: "바코드 목록" },
   { href: "/inventory", label: "재고 조회" },
   { href: "/inquiries", label: "고객 문의" },
   { href: "/seed-status", label: "시드 상태" },

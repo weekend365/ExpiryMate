@@ -54,6 +54,12 @@ export enum BarcodeLookupSource {
   NOT_FOUND = "not_found",
 }
 
+export enum ProductMasterCorrectionStatus {
+  PENDING = "pending",
+  APPLIED = "applied",
+  DISMISSED = "dismissed",
+}
+
 export enum SupportInquiryCategory {
   BUG = "bug",
   ACCOUNT = "account",

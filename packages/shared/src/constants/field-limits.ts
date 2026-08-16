@@ -1,6 +1,7 @@
 /** Shared field length ceilings for API/mobile write contracts (P2-01). */
 export const fieldLimits = {
   productId: 64,
+  productMasterId: 64,
   displayName: 120,
   brand: 80,
   unit: 32,
