@@ -14,6 +14,9 @@ import {
   type ContributeBarcodeProductResponse,
   getKstDayWindow,
   ProductMasterSource,
+  catalogNeedsNameConfirmation,
+  initialCatalogConfidence,
+  resolveCatalogConfidence,
   resolveCatalogDisplayIdentity,
 } from "@expirymate/shared";
 import { serializeProductMaster } from "../../common/serializers";
@@ -75,6 +78,7 @@ export class ProductMastersService {
     });
     if (local) {
       const display = resolveCatalogDisplayIdentity(local);
+      const confidence = resolveCatalogConfidence(local);
       return {
         barcode: local.barcode,
         name: display.name,
@@ -83,6 +87,8 @@ export class ProductMastersService {
         imageUrl: local.imageUrl,
         source: BarcodeLookupSource.PRODUCT_MASTER,
         productMasterId: local.id,
+        confidence,
+        needsNameConfirmation: catalogNeedsNameConfirmation(confidence),
       };
     }
 
@@ -92,6 +98,9 @@ export class ProductMastersService {
         barcode,
         offLookup.product,
       );
+      const confidence = resolveCatalogConfidence(
+        cached ?? { source: ProductMasterSource.OPEN_FOOD_FACTS },
+      );
       return {
         barcode,
         name: offLookup.product.name,
@@ -100,6 +109,8 @@ export class ProductMastersService {
         imageUrl: offLookup.product.imageUrl,
         source: BarcodeLookupSource.OPEN_FOOD_FACTS,
         productMasterId: cached?.id ?? null,
+        confidence,
+        needsNameConfirmation: catalogNeedsNameConfirmation(confidence),
       };
     }
 
@@ -111,6 +122,7 @@ export class ProductMastersService {
       imageUrl: null,
       source: BarcodeLookupSource.NOT_FOUND,
       productMasterId: null,
+      needsNameConfirmation: false,
       contributionToken:
         offLookup.kind === "not_found" && isValidGtin(barcode)
           ? this.createContributionToken(barcode)
@@ -197,6 +209,9 @@ export class ProductMastersService {
                 category,
                 source: ProductMasterSource.USER_CONTRIBUTED,
                 contributedByUserId: ownerKey,
+                confidence: initialCatalogConfidence(
+                  ProductMasterSource.USER_CONTRIBUTED,
+                ),
               },
             });
             const reward = await this.grantBarcodeReward(tx, {
@@ -454,6 +469,9 @@ export class ProductMastersService {
           category: product.category,
           imageUrl: product.imageUrl,
           source: ProductMasterSource.OPEN_FOOD_FACTS,
+          confidence: initialCatalogConfidence(
+            ProductMasterSource.OPEN_FOOD_FACTS,
+          ),
         },
       });
     } catch (error) {

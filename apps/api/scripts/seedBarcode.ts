@@ -132,7 +132,10 @@ async function upsertProducts(products: NormalizedProduct[], page: number) {
       where: {
         barcode: product.barcode,
       },
-      create: product,
+      create: {
+        ...product,
+        confidence: 85,
+      },
       update: {
         name: product.name,
         category: product.category,

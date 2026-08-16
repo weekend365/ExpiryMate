@@ -22,3 +22,4 @@ export * from "./utils/date";
 export * from "./utils/inventory";
 export * from "./utils/units";
 export * from "./utils/catalog-text";
+export * from "./utils/catalog-confidence";

@@ -404,6 +404,8 @@ model ProductMaster {
   crowdName           String?
   crowdBrand          String?
   crowdCategory       String?
+  confidence          Int                        @default(40)
+  confirmCount        Int                        @default(0)
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
   rewardCredit        BarcodeRewardCredit?

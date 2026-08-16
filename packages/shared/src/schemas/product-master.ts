@@ -18,6 +18,8 @@ export const productMasterSchema = z.object({
   crowdName: z.string().nullable().optional(),
   crowdBrand: z.string().nullable().optional(),
   crowdCategory: z.string().nullable().optional(),
+  confidence: z.number().int().min(0).max(100),
+  confirmCount: z.number().int().min(0),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -31,6 +33,8 @@ export const barcodeLookupResultSchema = z.object({
   source: z.nativeEnum(BarcodeLookupSource),
   productMasterId: z.string().nullable(),
   contributionToken: z.string().optional(),
+  confidence: z.number().int().min(0).max(100).optional(),
+  needsNameConfirmation: z.boolean().optional(),
 });
 
 export const barcodeRewardReasonSchema = z.enum([

@@ -9,9 +9,12 @@ import {
   catalogCorrectionThresholdFor,
   catalogCorrectionVoteKey,
   catalogIdentityDiffers,
+  catalogConfidenceAfterApply,
+  bumpCatalogConfidence,
   getKstDayWindow,
   pickMostCommonCatalogText,
   ProductMasterSource,
+  resolveCatalogConfidence,
   resolveCatalogDisplayIdentity,
   type CreateInventoryItemBody,
 } from "@expirymate/shared";
@@ -23,6 +26,7 @@ type PrismaLike = Pick<
   PrismaClient,
   | "productMaster"
   | "productMasterCorrection"
+  | "inventoryItem"
   | "barcodeRewardCredit"
   | "monetizationFunnelEvent"
 >;
@@ -80,6 +84,10 @@ export async function syncCatalogCorrectionAfterCreate(
         reviewedAt: new Date(),
         reviewedByUserId: null,
       },
+    });
+    await maybeRecordCatalogConfirmation(prisma, {
+      catalog: params.catalog,
+      ownerKey: params.ownerKey,
     });
     return;
   }
@@ -237,11 +245,19 @@ async function promoteMatchingCatalogCorrections(
           name: winningName,
           brand: winningBrand ?? undefined,
           category: winningCategory ?? undefined,
+          confidence: catalogConfidenceAfterApply(
+            params.catalog.source,
+            params.catalog.confidence,
+          ),
         }
       : {
           crowdName: winningName,
           crowdBrand: winningBrand ?? undefined,
           crowdCategory: winningCategory ?? undefined,
+          confidence: catalogConfidenceAfterApply(
+            params.catalog.source,
+            params.catalog.confidence,
+          ),
         },
   });
 
@@ -258,6 +274,34 @@ async function promoteMatchingCatalogCorrections(
   });
 
   return updated;
+}
+
+async function maybeRecordCatalogConfirmation(
+  prisma: PrismaLike,
+  params: {
+    catalog: ProductMaster;
+    ownerKey: string;
+  },
+): Promise<void> {
+  const ownerLotCount = await prisma.inventoryItem.count({
+    where: {
+      productMasterId: params.catalog.id,
+      ownerKey: params.ownerKey,
+    },
+  });
+  if (ownerLotCount !== 1) {
+    return;
+  }
+
+  await prisma.productMaster.update({
+    where: { id: params.catalog.id },
+    data: {
+      confirmCount: { increment: 1 },
+      confidence: bumpCatalogConfidence(
+        resolveCatalogConfidence(params.catalog),
+      ),
+    },
+  });
 }
 
 async function maybeGrantCorrectionReward(

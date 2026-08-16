@@ -39,6 +39,8 @@ const localProduct = {
   crowdName: null,
   crowdBrand: null,
   crowdCategory: null,
+  confidence: 85,
+  confirmCount: 0,
   createdAt: new Date("2026-07-01T00:00:00.000Z"),
   updatedAt: new Date("2026-07-01T00:00:00.000Z"),
 };
@@ -101,8 +103,23 @@ describe("ProductMastersService", () => {
     await expect(service.lookupByBarcode(validBarcode)).resolves.toMatchObject({
       source: BarcodeLookupSource.PRODUCT_MASTER,
       productMasterId: "pm-1",
+      confidence: 85,
+      needsNameConfirmation: false,
     });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("asks for a name check when a user-contributed row is still untrusted", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      ...localProduct,
+      source: ProductMasterSource.USER_CONTRIBUTED,
+      confidence: 35,
+    });
+
+    await expect(service.lookupByBarcode(validBarcode)).resolves.toMatchObject({
+      confidence: 35,
+      needsNameConfirmation: true,
+    });
   });
 
   it("returns the crowd-facing name when an official row has an overlay", async () => {
@@ -125,6 +142,7 @@ describe("ProductMastersService", () => {
     prisma.productMaster.create.mockResolvedValue({
       ...localProduct,
       source: ProductMasterSource.OPEN_FOOD_FACTS,
+      confidence: 60,
     });
     fetchMock.mockResolvedValue({
       ok: true,
@@ -143,10 +161,12 @@ describe("ProductMastersService", () => {
 
     expect(result.source).toBe(BarcodeLookupSource.OPEN_FOOD_FACTS);
     expect(result.contributionToken).toBeUndefined();
+    expect(result.needsNameConfirmation).toBe(true);
     expect(prisma.productMaster.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         barcode: validBarcode,
         source: ProductMasterSource.OPEN_FOOD_FACTS,
+        confidence: 60,
       }),
     });
   });
@@ -165,6 +185,7 @@ describe("ProductMastersService", () => {
 
     expect(result.source).toBe(BarcodeLookupSource.NOT_FOUND);
     expect(result.contributionToken).toEqual(expect.any(String));
+    expect(result.needsNameConfirmation).toBe(false);
   });
 
   it("does not issue a token when Open Food Facts is unavailable", async () => {
@@ -199,6 +220,12 @@ describe("ProductMastersService", () => {
     );
 
     expect(result.created).toBe(true);
+    expect(prisma.productMaster.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        source: ProductMasterSource.USER_CONTRIBUTED,
+        confidence: 35,
+      }),
+    });
     expect(result.reward).toEqual({
       granted: true,
       creditsGranted: 1,

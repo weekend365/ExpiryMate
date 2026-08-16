@@ -137,6 +137,8 @@ function ScannerCameraExperience() {
     scanner.productLookupStatus === "not-found" ||
     scanner.productLookupStatus === "error" ||
     (scanner.productLookupStatus === "success" && !scanner.product?.name);
+  const needsNameConfirmation =
+    !needsManualName && (scanner.product?.needsNameConfirmation ?? true);
 
   const needsManualExpiry = scanner.confirmation?.expirationDate == null;
   const resolvedExpiryDate = needsManualExpiry
@@ -530,7 +532,9 @@ function ScannerCameraExperience() {
               ? "우리 집에서는 뭐라고 부를까요?"
               : needsManualExpiry
                 ? "유통기한은 언제까지인가요?"
-                : "이 이름이 맞나요?"
+                : needsNameConfirmation
+                  ? "한 번만 확인해 주세요"
+                  : "이걸로 넣을까요?"
         }
         description={
           needsManualName && needsManualExpiry
@@ -539,9 +543,11 @@ function ScannerCameraExperience() {
               ? "날짜가 안 보여도 괜찮아요. 직접 골라 주시면 이어서 넣을게요."
               : needsManualName
                 ? "목록에서 못 찾았어요. 이름만 알려주시면 넣는 화면으로 이어갈게요."
-                : catalogNameAccepted
-                  ? "맞으면 그대로 넣을게요. 다르면 우리 집에서 쓰는 이름으로 바꿔 주세요."
-                  : "목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요."
+                : !catalogNameAccepted
+                  ? "목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요."
+                  : needsNameConfirmation
+                    ? "이 이름은 아직 덜 확실해요. 맞으면 그대로, 다르면 우리 집 이름으로 바꿔 주세요."
+                    : "목록에서 찾은 이름이에요. 맞으면 이어서 넣을게요."
         }
         footer={
           <View style={styles.sheetFooter}>
@@ -608,12 +614,17 @@ function ScannerCameraExperience() {
                 <Text style={styles.productBarcode}>
                   바코드 {scanner.confirmation.barcode}
                 </Text>
+                {!needsManualName && !needsNameConfirmation ? (
+                  <Text style={styles.manualNameHint}>
+                    이름이 다르면 다음 화면에서 바꿔 주세요.
+                  </Text>
+                ) : null}
               </View>
             </View>
 
-            {!needsManualName ? (
+            {!needsManualName && needsNameConfirmation ? (
               <View style={styles.manualNameCard}>
-                <Text style={styles.manualNameLabel}>이 이름이 맞나요?</Text>
+                <Text style={styles.manualNameLabel}>한 번만 확인해 주세요</Text>
                 <View style={styles.pillRow}>
                   <Pill
                     label="맞아요"

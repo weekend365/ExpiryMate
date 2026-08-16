@@ -51,6 +51,8 @@ export const serializeProductMaster = (
   crowdName: product.crowdName,
   crowdBrand: product.crowdBrand,
   crowdCategory: product.crowdCategory,
+  confidence: product.confidence,
+  confirmCount: product.confirmCount,
   createdAt: product.createdAt.toISOString(),
   updatedAt: product.updatedAt.toISOString(),
 });

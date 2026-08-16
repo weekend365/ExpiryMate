@@ -31,6 +31,8 @@ export interface ProductMaster {
   crowdName?: string | null;
   crowdBrand?: string | null;
   crowdCategory?: string | null;
+  confidence: number;
+  confirmCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,6 +46,8 @@ export interface BarcodeLookupResult {
   source: BarcodeLookupSource;
   productMasterId: string | null;
   contributionToken?: string;
+  confidence?: number;
+  needsNameConfirmation?: boolean;
 }
 
 export interface ContributeBarcodeProductResponse {

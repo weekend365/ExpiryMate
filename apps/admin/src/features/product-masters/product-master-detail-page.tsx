@@ -3,6 +3,8 @@
 import {
   ProductMasterCorrectionStatus,
   ProductMasterSource,
+  catalogConfidenceLabel,
+  catalogNeedsNameConfirmation,
   fieldLimits,
   productMasterCorrectionStatusLabels,
   productMasterSourceLabels,
@@ -152,6 +154,23 @@ export function ProductMasterDetailPage({
             {product?.crowdName ? (
               <div className="text-sm text-[var(--muted)]">
                 원본 목록은 {product.name} 그대로 남겨 두었어요.
+              </div>
+            ) : null}
+            {typeof product?.confidence === "number" ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusPill
+                  tone={
+                    catalogNeedsNameConfirmation(product.confidence)
+                      ? "warning"
+                      : "success"
+                  }
+                  label={catalogConfidenceLabel(product.confidence)}
+                />
+                <div className="text-sm text-[var(--muted)]">
+                  {product.confirmCount > 0
+                    ? `${product.confirmCount}명이 이 이름이 맞다고 했어요.`
+                    : "아직 맞다고 확인해 준 사람이 없어요."}
+                </div>
               </div>
             ) : null}
           </div>

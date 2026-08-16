@@ -30,6 +30,8 @@ export type ProductInfo = {
   source: BarcodeLookupSource;
   productMasterId: string | null;
   contributionToken?: string;
+  confidence?: number;
+  needsNameConfirmation?: boolean;
 };
 
 export type ScannerConfirmation = {
@@ -114,6 +116,8 @@ export function useProductScanner() {
         source: result.source,
         productMasterId: result.productMasterId,
         contributionToken: result.contributionToken,
+        confidence: result.confidence,
+        needsNameConfirmation: result.needsNameConfirmation,
       });
       setProductLookupStatus(
         result.source === BarcodeLookupSource.NOT_FOUND ? "not-found" : "success",

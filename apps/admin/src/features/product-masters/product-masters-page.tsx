@@ -2,6 +2,8 @@
 
 import {
   ProductMasterSource,
+  catalogConfidenceLabel,
+  catalogNeedsNameConfirmation,
   productMasterSourceLabels,
 } from "@expirymate/shared";
 import { useQuery } from "@tanstack/react-query";
@@ -152,6 +154,16 @@ export function ProductMastersPage() {
                   />
                   {product.crowdName ? (
                     <StatusPill tone="success" label="스캔 이름" />
+                  ) : null}
+                  {typeof product.confidence === "number" ? (
+                    <StatusPill
+                      tone={
+                        catalogNeedsNameConfirmation(product.confidence)
+                          ? "warning"
+                          : "success"
+                      }
+                      label={catalogConfidenceLabel(product.confidence)}
+                    />
                   ) : null}
                   {product.pendingCorrectionCount > 0 ? (
                     <StatusPill

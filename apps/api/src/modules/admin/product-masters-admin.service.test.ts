@@ -16,6 +16,8 @@ const catalog = {
   crowdName: null,
   crowdBrand: null,
   crowdCategory: null,
+  confidence: 35,
+  confirmCount: 0,
   createdAt: new Date("2026-08-01T00:00:00.000Z"),
   updatedAt: new Date("2026-08-01T00:00:00.000Z"),
 };
@@ -87,6 +89,7 @@ describe("ProductMastersAdminService", () => {
       data: expect.objectContaining({
         name: "서울우유 1L",
         brand: "서울우유",
+        confidence: 70,
       }),
     });
     expect(adminAudit.record).toHaveBeenCalledWith(
@@ -101,6 +104,7 @@ describe("ProductMastersAdminService", () => {
     const official = {
       ...catalog,
       source: ProductMasterSource.FOODSAFETY_API,
+      confidence: 85,
     };
     prisma.productMasterCorrection.findFirst.mockResolvedValue(pendingCorrection);
     prisma.productMaster.findUnique.mockResolvedValue(official);
@@ -119,6 +123,7 @@ describe("ProductMastersAdminService", () => {
       data: expect.objectContaining({
         crowdName: "서울우유 1L",
         crowdBrand: "서울우유",
+        confidence: 85,
       }),
     });
   });

@@ -18,6 +18,8 @@ const catalog = {
   crowdName: null,
   crowdBrand: null,
   crowdCategory: null,
+  confidence: 35,
+  confirmCount: 0,
   createdAt: new Date("2026-08-01T00:00:00.000Z"),
   updatedAt: new Date("2026-08-01T00:00:00.000Z"),
 };
@@ -106,6 +108,7 @@ describe("catalog correction promotion", () => {
       data: expect.objectContaining({
         name: "서울우유 1L",
         brand: "서울우유",
+        confidence: 70,
       }),
     });
     expect(prisma.productMasterCorrection.updateMany).toHaveBeenCalledWith(
@@ -146,6 +149,7 @@ describe("catalog correction promotion", () => {
     const official = {
       ...catalog,
       source: ProductMasterSource.FOODSAFETY_API,
+      confidence: 85,
     };
     prisma.productMasterCorrection.findMany.mockResolvedValue([
       pending("corr-1", "owner-a"),
@@ -169,6 +173,7 @@ describe("catalog correction promotion", () => {
       data: expect.objectContaining({
         crowdName: "서울우유 1L",
         crowdBrand: "서울우유",
+        confidence: 85,
       }),
     });
     expect(prisma.productMaster.update).toHaveBeenCalledWith(
@@ -227,6 +232,36 @@ describe("catalog correction promotion", () => {
       }),
     );
   });
+
+  it("raises confidence the first time an account confirms the catalog name", async () => {
+    prisma.inventoryItem.count.mockResolvedValue(1);
+
+    await syncCatalogCorrectionAfterCreate(prisma as never, {
+      catalog,
+      ownerKey: "owner-b",
+      proposed: { displayName: "우유", brand: "서울우유" },
+    });
+
+    expect(prisma.productMaster.update).toHaveBeenCalledWith({
+      where: { id: "pm-milk" },
+      data: expect.objectContaining({
+        confirmCount: { increment: 1 },
+        confidence: 43,
+      }),
+    });
+  });
+
+  it("does not raise confidence again for the same account", async () => {
+    prisma.inventoryItem.count.mockResolvedValue(2);
+
+    await syncCatalogCorrectionAfterCreate(prisma as never, {
+      catalog,
+      ownerKey: "owner-b",
+      proposed: { displayName: "우유", brand: "서울우유" },
+    });
+
+    expect(prisma.productMaster.update).not.toHaveBeenCalled();
+  });
 });
 
 function createPrismaMock() {
@@ -239,6 +274,9 @@ function createPrismaMock() {
       upsert: vi.fn(),
       updateMany: vi.fn(),
       findMany: vi.fn(),
+    },
+    inventoryItem: {
+      count: vi.fn().mockResolvedValue(0),
     },
     barcodeRewardCredit: {
       findUnique: vi.fn(),
