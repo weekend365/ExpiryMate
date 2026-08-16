@@ -40,7 +40,7 @@ const inventoryItem = {
 };
 
 describe("InventoryService owner isolation", () => {
-  let     prisma: {
+  let prisma: {
     $transaction: ReturnType<typeof vi.fn>;
     inventoryItem: {
       findUnique: ReturnType<typeof vi.fn>;
@@ -54,10 +54,20 @@ describe("InventoryService owner isolation", () => {
     };
     productMaster: {
       findUnique: ReturnType<typeof vi.fn>;
+      update: ReturnType<typeof vi.fn>;
     };
     productMasterCorrection: {
       upsert: ReturnType<typeof vi.fn>;
       updateMany: ReturnType<typeof vi.fn>;
+      findMany: ReturnType<typeof vi.fn>;
+    };
+    barcodeRewardCredit: {
+      findUnique: ReturnType<typeof vi.fn>;
+      count: ReturnType<typeof vi.fn>;
+      create: ReturnType<typeof vi.fn>;
+    };
+    monetizationFunnelEvent: {
+      create: ReturnType<typeof vi.fn>;
     };
   };
   let service: InventoryService;
@@ -84,10 +94,20 @@ describe("InventoryService owner isolation", () => {
       },
       productMaster: {
         findUnique: vi.fn(),
+        update: vi.fn(),
       },
       productMasterCorrection: {
         upsert: vi.fn(),
         updateMany: vi.fn(),
+        findMany: vi.fn().mockResolvedValue([]),
+      },
+      barcodeRewardCredit: {
+        findUnique: vi.fn(),
+        count: vi.fn().mockResolvedValue(0),
+        create: vi.fn(),
+      },
+      monetizationFunnelEvent: {
+        create: vi.fn(),
       },
     };
     service = new InventoryService(prisma as never, {

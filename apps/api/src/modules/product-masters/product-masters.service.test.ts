@@ -36,6 +36,9 @@ const localProduct = {
   imageUrl: null,
   source: ProductMasterSource.FOODSAFETY_API,
   contributedByUserId: null,
+  crowdName: null,
+  crowdBrand: null,
+  crowdCategory: null,
   createdAt: new Date("2026-07-01T00:00:00.000Z"),
   updatedAt: new Date("2026-07-01T00:00:00.000Z"),
 };
@@ -100,6 +103,21 @@ describe("ProductMastersService", () => {
       productMasterId: "pm-1",
     });
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("returns the crowd-facing name when an official row has an overlay", async () => {
+    prisma.productMaster.findUnique.mockResolvedValue({
+      ...localProduct,
+      name: "우유",
+      crowdName: "서울우유 1L",
+      crowdBrand: "서울우유",
+    });
+
+    await expect(service.lookupByBarcode(validBarcode)).resolves.toMatchObject({
+      name: "서울우유 1L",
+      brand: "서울우유",
+      productMasterId: "pm-1",
+    });
   });
 
   it("caches a product found by Open Food Facts", async () => {

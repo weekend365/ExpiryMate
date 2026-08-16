@@ -13,6 +13,9 @@ const catalog = {
   imageUrl: null,
   source: ProductMasterSource.USER_CONTRIBUTED,
   contributedByUserId: "user-a",
+  crowdName: null,
+  crowdBrand: null,
+  crowdCategory: null,
   createdAt: new Date("2026-08-01T00:00:00.000Z"),
   updatedAt: new Date("2026-08-01T00:00:00.000Z"),
 };
@@ -68,14 +71,13 @@ describe("ProductMastersAdminService", () => {
 
   it("applies a pending correction onto the catalog without changing inventory", async () => {
     prisma.productMasterCorrection.findFirst.mockResolvedValue(pendingCorrection);
+    prisma.productMaster.findUnique.mockResolvedValue(catalog);
+    prisma.productMasterCorrection.findMany.mockResolvedValue([pendingCorrection]);
     prisma.productMaster.update.mockResolvedValue({
       ...catalog,
       name: "서울우유 1L",
     });
-    prisma.productMasterCorrection.update.mockResolvedValue({
-      ...pendingCorrection,
-      status: ProductMasterCorrectionStatus.applied,
-    });
+    prisma.productMasterCorrection.updateMany.mockResolvedValue({ count: 1 });
 
     const result = await service.applyCorrection("pm-1", "corr-1", "admin-1");
 
@@ -93,6 +95,32 @@ describe("ProductMastersAdminService", () => {
         resourceId: "corr-1",
       }),
     );
+  });
+
+  it("keeps official source names and writes a crowd overlay instead", async () => {
+    const official = {
+      ...catalog,
+      source: ProductMasterSource.FOODSAFETY_API,
+    };
+    prisma.productMasterCorrection.findFirst.mockResolvedValue(pendingCorrection);
+    prisma.productMaster.findUnique.mockResolvedValue(official);
+    prisma.productMasterCorrection.findMany.mockResolvedValue([pendingCorrection]);
+    prisma.productMaster.update.mockResolvedValue({
+      ...official,
+      crowdName: "서울우유 1L",
+      crowdBrand: "서울우유",
+    });
+    prisma.productMasterCorrection.updateMany.mockResolvedValue({ count: 1 });
+
+    await service.applyCorrection("pm-1", "corr-1", "admin-1");
+
+    expect(prisma.productMaster.update).toHaveBeenCalledWith({
+      where: { id: "pm-1" },
+      data: expect.objectContaining({
+        crowdName: "서울우유 1L",
+        crowdBrand: "서울우유",
+      }),
+    });
   });
 
   it("does not apply a correction that was already reviewed", async () => {
@@ -124,7 +152,9 @@ function createPrismaMock() {
     },
     productMasterCorrection: {
       findFirst: vi.fn(),
+      findMany: vi.fn(),
       update: vi.fn(),
+      updateMany: vi.fn(),
     },
     $transaction: vi.fn(),
   };

@@ -48,6 +48,9 @@ export const serializeProductMaster = (
   imageUrl: product.imageUrl,
   source: product.source as ProductMasterSource,
   contributedByUserId: product.contributedByUserId,
+  crowdName: product.crowdName,
+  crowdBrand: product.crowdBrand,
+  crowdCategory: product.crowdCategory,
   createdAt: product.createdAt.toISOString(),
   updatedAt: product.updatedAt.toISOString(),
 });

@@ -15,6 +15,9 @@ export const productMasterSchema = z.object({
   imageUrl: z.string().url().nullable().optional(),
   source: z.nativeEnum(ProductMasterSource),
   contributedByUserId: z.string().nullable().optional(),
+  crowdName: z.string().nullable().optional(),
+  crowdBrand: z.string().nullable().optional(),
+  crowdCategory: z.string().nullable().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

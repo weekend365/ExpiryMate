@@ -111,18 +111,23 @@ export function ProductMasterDetailPage({
   const pendingCorrections = corrections.filter(
     (correction) => correction.status === ProductMasterCorrectionStatus.PENDING,
   );
+  const scanName = product?.crowdName ?? product?.name;
+  const scanBrand = product?.crowdBrand ?? product?.brand;
+  const isOfficialSource =
+    product?.source === ProductMasterSource.FOODSAFETY_API ||
+    product?.source === ProductMasterSource.OPEN_FOOD_FACTS;
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow="Barcode Catalog"
-        title={product?.name ?? "바코드 상품"}
-        description="전역 목록 이름은 여기서만 바뀌어요. 사용자 냉장고 이름은 그대로 둡니다."
+        title={scanName ?? "바코드 상품"}
+        description="스캔에 보이는 이름과 원본 목록을 나눠 둬요. 사용자 냉장고 이름은 그대로 둡니다."
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <Panel
-          title="지금 목록에 있는 이름"
+          title="스캔에 보이는 이름"
           description={
             product
               ? `${product.barcode} · ${productMasterSourceLabels[product.source as ProductMasterSource] ?? product.source}`
@@ -132,22 +137,33 @@ export function ProductMasterDetailPage({
           <div className="space-y-3 rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-5">
             <div>
               <div className="text-sm text-[var(--muted)]">상품명</div>
-              <div className="text-xl font-black">{product?.name}</div>
+              <div className="text-xl font-black">{scanName}</div>
             </div>
             <div>
               <div className="text-sm text-[var(--muted)]">브랜드</div>
-              <div className="font-semibold">{product?.brand}</div>
+              <div className="font-semibold">{scanBrand}</div>
             </div>
             <div>
               <div className="text-sm text-[var(--muted)]">카테고리</div>
-              <div className="font-semibold">{product?.category}</div>
+              <div className="font-semibold">
+                {product?.crowdCategory ?? product?.category}
+              </div>
             </div>
+            {product?.crowdName ? (
+              <div className="text-sm text-[var(--muted)]">
+                원본 목록은 {product.name} 그대로 남겨 두었어요.
+              </div>
+            ) : null}
           </div>
         </Panel>
 
         <Panel
-          title="목록 이름 다듬기"
-          description="스캔할 때 다른 사용자에게 보여 줄 이름을 고쳐 둘 수 있어요."
+          title="원본 목록 다듬기"
+          description={
+            isOfficialSource
+              ? "공식 출처 원본이에요. 스캔 이름은 제안이 모이면 따로 바뀌어요."
+              : "스캔할 때 다른 사용자에게 보여 줄 이름을 고쳐 둘 수 있어요."
+          }
         >
           <form className="grid gap-4" onSubmit={onSubmit}>
             <label className="grid gap-2 text-sm font-semibold">
@@ -192,7 +208,7 @@ export function ProductMasterDetailPage({
         title="사용자 수정 제안"
         description={
           pendingCorrections.length > 0
-            ? `살펴볼 제안 ${pendingCorrections.length}건. 반영해도 이미 넣어 둔 냉장고 이름은 바뀌지 않아요.`
+            ? `살펴볼 제안 ${pendingCorrections.length}건. 공식 출처는 원본을 남기고 스캔 이름만 바뀌어요.`
             : "아직 살펴볼 제안이 없어요."
         }
       >

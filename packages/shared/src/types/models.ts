@@ -28,6 +28,9 @@ export interface ProductMaster {
   imageUrl?: string | null;
   source: ProductMasterSource;
   contributedByUserId?: string | null;
+  crowdName?: string | null;
+  crowdBrand?: string | null;
+  crowdCategory?: string | null;
   createdAt: string;
   updatedAt: string;
 }

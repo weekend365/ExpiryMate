@@ -401,6 +401,9 @@ model ProductMaster {
   imageUrl            String?
   source              String                     @default("foodsafety_api")
   contributedByUserId String?
+  crowdName           String?
+  crowdBrand          String?
+  crowdCategory       String?
   createdAt           DateTime                   @default(now())
   updatedAt           DateTime                   @updatedAt
   rewardCredit        BarcodeRewardCredit?

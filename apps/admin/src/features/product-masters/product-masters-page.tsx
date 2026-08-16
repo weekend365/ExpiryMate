@@ -130,10 +130,17 @@ export function ProductMastersPage() {
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-lg font-black">{product.name}</div>
-                  <div className="mt-1 text-sm text-[var(--muted)]">
-                    {product.brand} · {product.barcode}
+                  <div className="text-lg font-black">
+                    {product.crowdName ?? product.name}
                   </div>
+                  <div className="mt-1 text-sm text-[var(--muted)]">
+                    {product.crowdBrand ?? product.brand} · {product.barcode}
+                  </div>
+                  {product.crowdName ? (
+                    <div className="mt-1 text-sm text-[var(--muted)]">
+                      원본 목록: {product.name}
+                    </div>
+                  ) : null}
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <StatusPill
@@ -143,6 +150,9 @@ export function ProductMastersPage() {
                       ] ?? product.source
                     }
                   />
+                  {product.crowdName ? (
+                    <StatusPill tone="success" label="스캔 이름" />
+                  ) : null}
                   {product.pendingCorrectionCount > 0 ? (
                     <StatusPill
                       tone="warning"

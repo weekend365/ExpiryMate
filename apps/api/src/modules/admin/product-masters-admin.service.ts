@@ -15,6 +15,7 @@ import {
   serializeProductMasterCorrection,
 } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
+import { applyPendingCatalogCorrection } from "../product-masters/catalog-correction";
 import { AdminAuditService } from "./admin-audit.service";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -62,6 +63,18 @@ export class ProductMastersAdminService {
             },
             {
               brand: {
+                contains: params.q.trim(),
+                mode: "insensitive" as const,
+              },
+            },
+            {
+              crowdName: {
+                contains: params.q.trim(),
+                mode: "insensitive" as const,
+              },
+            },
+            {
+              crowdBrand: {
                 contains: params.q.trim(),
                 mode: "insensitive" as const,
               },
@@ -181,23 +194,18 @@ export class ProductMastersAdminService {
     );
 
     const product = await this.prisma.$transaction(async (tx) => {
-      const updated = await tx.productMaster.update({
+      const catalog = await tx.productMaster.findUnique({
         where: { id: productMasterId },
-        data: {
-          name: correction.proposedName,
-          brand: correction.proposedBrand || undefined,
-          category: correction.proposedCategory || undefined,
-        },
       });
-      await tx.productMasterCorrection.update({
-        where: { id: correctionId },
-        data: {
-          status: PrismaCorrectionStatus.applied,
-          reviewedByUserId: actorUserId,
-          reviewedAt: new Date(),
-        },
+      if (!catalog) {
+        throw new NotFoundException("바코드 상품을 찾지 못했어요.");
+      }
+
+      return applyPendingCatalogCorrection(tx, {
+        catalog,
+        correction,
+        actorUserId,
       });
-      return updated;
     });
 
     await this.adminAudit.record({
