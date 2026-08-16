@@ -1075,7 +1075,8 @@ export class MonetizationService {
     originalUrl: string,
     query: Record<string, string>,
   ) {
-    if (!this.hasAdMobSignature(originalUrl, query)) {
+    const signature = query.signature?.trim();
+    if (!this.hasAdMobSignature(originalUrl, query) || !signature) {
       throw new BadRequestException("광고 보상 서명이 없습니다.");
     }
     const signatureIndex = originalUrl.indexOf("&signature=");
@@ -1095,11 +1096,11 @@ export class MonetizationService {
       if (!refreshedKey) {
         throw new ForbiddenException("광고 보상 서명 키를 확인하지 못했습니다.");
       }
-      this.assertValidSignature(signedContent, query.signature, refreshedKey);
+      this.assertValidSignature(signedContent, signature, refreshedKey);
       return;
     }
 
-    this.assertValidSignature(signedContent, query.signature, key);
+    this.assertValidSignature(signedContent, signature, key);
   }
 
   private assertValidSignature(
