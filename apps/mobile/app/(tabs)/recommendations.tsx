@@ -8,6 +8,8 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  ChevronDown,
+  ChevronUp,
   Clock3,
   Heart,
   SlidersHorizontal,
@@ -15,10 +17,11 @@ import {
   Utensils,
   Users,
 } from "lucide-react-native";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   Alert,
   ImageBackground,
+  LayoutAnimation,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -27,6 +30,7 @@ import {
   View,
 } from "react-native";
 import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -34,7 +38,6 @@ import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
-import { SectionHeader } from "../../src/components/SectionHeader";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import {
   useAcceptAiDataNotice,
@@ -75,6 +78,7 @@ const EXPIRING_DAYS_THRESHOLD = 7;
 const PREVIOUS_RECOMMENDATION_LIMIT = 5;
 const SHEET_TRANSITION_DELAY_MS = 320;
 type RecipeView = "recommendations" | "favorites";
+type RecipeSectionKey = "latest" | "previous" | "favorites";
 
 type HighlightIngredient = {
   key: string;
@@ -145,6 +149,9 @@ export default function RecommendationsScreen() {
   const [mealType, setMealType] = useState<RecipeMealType>("any");
   const [useExpiringFirst, setUseExpiringFirst] = useState(true);
   const [recipeView, setRecipeView] = useState<RecipeView>("recommendations");
+  const [collapsedSections, setCollapsedSections] = useState<
+    Partial<Record<RecipeSectionKey, boolean>>
+  >({});
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
@@ -453,6 +460,14 @@ export default function RecommendationsScreen() {
       action: "view",
     });
     setRecipeDetail(selection);
+  };
+
+  const toggleRecipeSection = (key: RecipeSectionKey) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setCollapsedSections((current) => ({
+      ...current,
+      [key]: !current[key],
+    }));
   };
 
   useEffect(() => {
@@ -917,13 +932,12 @@ export default function RecommendationsScreen() {
       {recipeView === "recommendations" &&
       latestRecommendation &&
       !isGenerating ? (
-        <View style={styles.resultSection}>
-          <SectionHeader
-            title="이번에 골라본 요리"
-            surface
-            accentColor={colors.primary}
-          />
-
+        <RecipeSection
+          title="이번에 골라본 요리"
+          count={latestRecommendation.recommendations.length}
+          collapsed={Boolean(collapsedSections.latest)}
+          onToggle={() => toggleRecipeSection("latest")}
+        >
           {latestRecommendation.recommendations.length ? (
             latestRecommendation.recommendations.map((dish, index) => (
               <RecipeCard
@@ -966,18 +980,18 @@ export default function RecommendationsScreen() {
               description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
             />
           )}
-        </View>
+        </RecipeSection>
       ) : null}
 
       {recipeView === "recommendations" &&
       previousRecommendations.length > 0 &&
       !isGenerating ? (
-        <View style={styles.resultSection}>
-          <SectionHeader
-            title="이전 추천"
-            surface
-            accentColor={colors.primary}
-          />
+        <RecipeSection
+          title="이전 추천"
+          count={previousRecommendations.length}
+          collapsed={Boolean(collapsedSections.previous)}
+          onToggle={() => toggleRecipeSection("previous")}
+        >
           <View style={styles.historyList}>
             {previousRecommendations.map((recommendation) => (
               <Pressable
@@ -1011,7 +1025,7 @@ export default function RecommendationsScreen() {
               </Pressable>
             ))}
           </View>
-        </View>
+        </RecipeSection>
       ) : null}
 
       {recipeView === "recommendations" &&
@@ -1041,12 +1055,12 @@ export default function RecommendationsScreen() {
       ) : null}
 
       {recipeView === "favorites" ? (
-        <View style={styles.resultSection}>
-          <SectionHeader
-            title="즐겨찾는 요리"
-            surface
-            accentColor={colors.primary}
-          />
+        <RecipeSection
+          title="즐겨찾는 요리"
+          count={favoritesQuery.data?.length ?? 0}
+          collapsed={Boolean(collapsedSections.favorites)}
+          onToggle={() => toggleRecipeSection("favorites")}
+        >
           {favoritesQuery.isPending ? (
             <View
               style={styles.favoriteLoading}
@@ -1109,7 +1123,7 @@ export default function RecommendationsScreen() {
               onAction={() => setRecipeView("recommendations")}
             />
           )}
-        </View>
+        </RecipeSection>
       ) : null}
         </ScrollView>
       </View>
@@ -1360,6 +1374,89 @@ export default function RecommendationsScreen() {
         ) : null}
       </BottomSheet>
     </Screen>
+  );
+}
+
+function RecipeSection({
+  title,
+  count,
+  collapsed,
+  onToggle,
+  children,
+}: {
+  title: string;
+  count: number;
+  collapsed: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  const heading = `${title} ${count}건`;
+
+  return (
+    <View style={styles.recipeSection}>
+      <View
+        style={[
+          styles.recipeSectionHeader,
+          !collapsed && styles.recipeSectionHeaderExpanded,
+        ]}
+        accessibilityRole="header"
+        accessibilityLabel={heading}
+      >
+        <AppText
+          variant="bodySmall"
+          tone="primary"
+          scaleRole="chrome"
+          densityAware={false}
+          numberOfLines={1}
+          style={styles.recipeSectionTitle}
+        >
+          {heading}
+        </AppText>
+        <Pressable
+          onPress={onToggle}
+          hitSlop={spacing.xs}
+          accessibilityRole="button"
+          accessibilityLabel={
+            collapsed ? `${title} 펼쳐 볼게요` : `${title} 접을게요`
+          }
+          accessibilityHint={
+            collapsed
+              ? "이 분류의 요리를 펼쳐 볼 수 있어요."
+              : "이 분류의 요리를 접어요."
+          }
+          accessibilityState={{ expanded: !collapsed }}
+          style={({ pressed }) => [
+            styles.recipeSectionToggle,
+            pressed && styles.optionsSummaryPressed,
+          ]}
+        >
+          <AppText
+            variant="bodySmall"
+            scaleRole="chrome"
+            densityAware={false}
+            numberOfLines={1}
+          >
+            {collapsed ? "펼치기" : "접기"}
+          </AppText>
+          {collapsed ? (
+            <ChevronDown
+              color={colors.text}
+              size={typography.bodySmall.fontSize}
+              strokeWidth={2.4}
+            />
+          ) : (
+            <ChevronUp
+              color={colors.text}
+              size={typography.bodySmall.fontSize}
+              strokeWidth={2.4}
+            />
+          )}
+        </Pressable>
+      </View>
+      {collapsed ? null : (
+        <View style={styles.recipeSectionBody}>{children}</View>
+      )}
+    </View>
   );
 }
 
@@ -1768,7 +1865,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    gap: spacing.md,
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
@@ -1801,7 +1898,7 @@ const styles = StyleSheet.create({
   recipeViewLabel: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   recipeViewLabelSelected: {
@@ -1829,7 +1926,7 @@ const styles = StyleSheet.create({
   usageTitle: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   usageDescription: {
@@ -1839,9 +1936,9 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   usageCreditLink: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontWeight: "700",
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.primary,
   },
   optionsSummary: {
@@ -1870,13 +1967,13 @@ const styles = StyleSheet.create({
   optionsSummaryLabel: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontFamily: typography.caption.fontFamily,
     color: colors.mutedText,
   },
   optionsSummaryValue: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   optionsSummaryAction: {
@@ -1889,7 +1986,8 @@ const styles = StyleSheet.create({
   },
   optionsSummaryActionLabel: {
     fontSize: typography.bodySmall.fontSize,
-    fontFamily: typography.title.fontFamily,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.primary,
   },
   quotaCard: {
@@ -1930,7 +2028,8 @@ const styles = StyleSheet.create({
   },
   quotaLinkText: {
     fontSize: typography.bodySmall.fontSize,
-    fontFamily: typography.title.fontFamily,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.primary,
   },
   errorCard: {
@@ -1945,8 +2044,43 @@ const styles = StyleSheet.create({
     fontFamily: typography.title.fontFamily,
     color: colors.danger,
   },
-  resultSection: {
+  recipeSection: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
+  },
+  recipeSectionHeader: {
+    minHeight: touchTarget.min,
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
+  },
+  recipeSectionHeaderExpanded: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  recipeSectionTitle: {
+    flex: 1,
+    minWidth: 0,
+  },
+  recipeSectionToggle: {
+    minWidth: touchTarget.min,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    borderRadius: radius.lg,
+  },
+  recipeSectionBody: {
+    padding: spacing.xs,
+    gap: spacing.xs,
+    backgroundColor: colors.mutedSurface,
   },
   favoriteLoading: {
     minHeight: spacing.xxxl,
@@ -1961,7 +2095,7 @@ const styles = StyleSheet.create({
   favoriteLoadingText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.body.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
   historyList: {
@@ -1991,21 +2125,21 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   historyTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
+    fontSize: typography.bodyStrong.fontSize,
+    lineHeight: typography.bodyStrong.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   historyDescription: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   historyAction: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.primary,
   },
   historyActionStacked: {
@@ -2063,9 +2197,9 @@ const styles = StyleSheet.create({
   recipeTitle: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
+    fontSize: typography.bodyStrong.fontSize,
+    lineHeight: typography.bodyStrong.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   favoriteButton: {
@@ -2091,9 +2225,9 @@ const styles = StyleSheet.create({
     opacity: 0.55,
   },
   recipeMetaLine: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   recipeIngredientPreview: {

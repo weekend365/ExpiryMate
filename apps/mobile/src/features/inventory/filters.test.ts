@@ -10,7 +10,6 @@ import {
   buildInventoryFacetCounts,
   buildInventoryUrgencySections,
   filterInventoryItems,
-  getInventoryGroupSectionSlot,
   getInventoryUrgencySection,
   inventoryUrgencySectionDescriptions,
   parseInventoryViewFilter,
@@ -221,15 +220,6 @@ describe("mobile inventory filters", () => {
     expect(sections[1]?.data[0]?.items.map((item) => item.id)).toEqual(["safe"]);
     expect(sections[0]?.data[0]?.id).not.toBe(sections[1]?.data[0]?.id);
     expect(sections.map((section) => section.itemCount)).toEqual([2, 1]);
-  });
-
-  it("maps row index to connected section slots", () => {
-    expect(getInventoryGroupSectionSlot(0, 0)).toBe("solo");
-    expect(getInventoryGroupSectionSlot(0, 1)).toBe("solo");
-    expect(getInventoryGroupSectionSlot(0, 2)).toBe("first");
-    expect(getInventoryGroupSectionSlot(1, 2)).toBe("last");
-    expect(getInventoryGroupSectionSlot(1, 3)).toBe("middle");
-    expect(getInventoryGroupSectionSlot(2, 3)).toBe("last");
   });
 });
 

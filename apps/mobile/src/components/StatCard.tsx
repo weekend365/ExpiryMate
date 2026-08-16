@@ -105,7 +105,7 @@ export function StatCard({
                 : isLargeText
                   ? "bodySmall"
                   : compact
-                    ? "subheading"
+                    ? "bodySmall"
                     : "heading"
             }
             scaleRole="chrome"

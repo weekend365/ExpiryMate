@@ -20,8 +20,8 @@ import { AppText } from "./AppText";
 
 /** Visual hero size — card press owns the touch target, so this can be under 48. */
 const HERO_LAMP_SIZE = spacing.xl;
-
-export type InventoryGroupSectionSlot = "solo" | "first" | "middle" | "last";
+/** Nested lot lamp — smaller than the collapsed hero so lots stay secondary. */
+const LOT_LAMP_SIZE = spacing.lg;
 
 interface InventoryGroupCardProps {
   group: InventoryItemGroup;
@@ -34,8 +34,6 @@ interface InventoryGroupCardProps {
   selectionMode?: boolean;
   selectedIds?: ReadonlySet<string>;
   resolveLocationLabel?: (key: string) => string;
-  /** When set, this row shares a section surface with the header above it. */
-  sectionSlot?: InventoryGroupSectionSlot;
 }
 
 export function InventoryGroupCard({
@@ -48,7 +46,6 @@ export function InventoryGroupCard({
   selectionMode = false,
   selectedIds,
   resolveLocationLabel = resolveStorageLocationLabel,
-  sectionSlot,
 }: InventoryGroupCardProps) {
   const { shouldStack } = useResponsiveLayout();
   const isExpandable = group.items.length > 1;
@@ -79,60 +76,52 @@ export function InventoryGroupCard({
     group.nearestExpiryDate,
   );
 
-  return (
-    <View
-      style={[
-        styles.card,
-        sectionSlot ? sectionSlotCardStyles[sectionSlot] : null,
-      ]}
-    >
-      <View style={styles.summaryRow}>
-        <Pressable
-          onPress={handleSummaryPress}
-          onLongPress={
-            selectionMode
-              ? undefined
-              : () => onItemLongPress?.(nearestItem)
-          }
-          disabled={selectionMode}
-          accessibilityRole={selectionMode ? undefined : "button"}
-          accessibilityLabel={`${group.displayName}, ${nearestPresentation.ddayLabel}${isExpandable ? `, ${lotCount}건` : ""}, ${locationLabel}, ${quantityLabel}`}
-          accessibilityHint={
-            selectionMode
-              ? undefined
-              : isExpandable
-                ? "누르면 가장 임박한 기록으로 바로 가요. 더 보기로 다른 유통기한도 볼 수 있어요."
-                : "누르면 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
-          }
-          style={({ pressed }) => [
-            styles.summaryMain,
-            shouldStack && styles.summaryMainStacked,
-            pressed && styles.summaryPressed,
-          ]}
-        >
-          {!showLots ? (
-            <ExpiryBadge
-              expiryDate={group.nearestExpiryDate}
-              size="hero"
-            />
-          ) : null}
+  const summaryLabel = `${group.displayName}, ${nearestPresentation.ddayLabel}${isExpandable ? `, ${lotCount}건` : ""}, ${locationLabel}, ${quantityLabel}`;
+  const summaryCopy = (
+    <View style={styles.summaryCopy}>
+      <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
+        {group.displayName}
+        {group.brand ? (
+          <Text style={styles.brandInline}> · {group.brand}</Text>
+        ) : null}
+      </Text>
+      <Text style={styles.groupMeta}>
+        {locationLabel} · {quantityLabel}
+      </Text>
+    </View>
+  );
 
-          <View style={styles.summaryCopy}>
-            <Text
-              style={styles.name}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {group.displayName}
-              {group.brand ? (
-                <Text style={styles.brandInline}> · {group.brand}</Text>
-              ) : null}
-            </Text>
-            <Text style={styles.groupMeta}>
-              {locationLabel} · {quantityLabel}
-            </Text>
+  return (
+    <View style={styles.card}>
+      <View style={styles.summaryRow}>
+        {showLots ? (
+          <View
+            style={[
+              styles.summaryMain,
+              shouldStack && styles.summaryMainStacked,
+            ]}
+            accessibilityRole="header"
+            accessibilityLabel={summaryLabel}
+          >
+            {summaryCopy}
           </View>
-        </Pressable>
+        ) : (
+          <Pressable
+            onPress={handleSummaryPress}
+            onLongPress={() => onItemLongPress?.(nearestItem)}
+            accessibilityRole="button"
+            accessibilityLabel={summaryLabel}
+            accessibilityHint="누르면 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
+            style={({ pressed }) => [
+              styles.summaryMain,
+              shouldStack && styles.summaryMainStacked,
+              pressed && styles.summaryPressed,
+            ]}
+          >
+            <ExpiryBadge expiryDate={group.nearestExpiryDate} size="hero" />
+            {summaryCopy}
+          </Pressable>
+        )}
 
         <View style={styles.summaryActions}>
           {!selectionMode && onItemCleanup && !isExpandable ? (
@@ -161,19 +150,24 @@ export function InventoryGroupCard({
                 pressed && styles.summaryPressed,
               ]}
             >
-                            <Text style={styles.moreButtonLabel}>
+              <AppText
+                variant="caption"
+                scaleRole="chrome"
+                densityAware={false}
+                numberOfLines={1}
+              >
                 {showLots ? "접기" : `${lotCount}건 더`}
-              </Text>
+              </AppText>
               {showLots ? (
                 <ChevronUp
-                  color={colors.primary}
-                  size={spacing.sm + spacing.xxs}
+                  color={colors.text}
+                  size={typography.caption.fontSize}
                   strokeWidth={2.4}
                 />
               ) : (
                 <ChevronDown
-                  color={colors.primary}
-                  size={spacing.sm + spacing.xxs}
+                  color={colors.text}
+                  size={typography.caption.fontSize}
                   strokeWidth={2.4}
                 />
               )}
@@ -184,8 +178,7 @@ export function InventoryGroupCard({
       </View>
 
       {showLots ? (
-        <View style={styles.lotList}>
-          <View style={styles.divider} />
+        <View style={styles.lotWell}>
           {group.items.map((item, index) => {
             const selected = selectedIds?.has(item.id) ?? false;
             const isNearest = index === 0;
@@ -195,17 +188,16 @@ export function InventoryGroupCard({
               <View
                 key={item.id}
                 style={[
-                  styles.lotRow,
-                  shouldStack && styles.lotRowAccessible,
-                  index > 0 && styles.lotRowBorder,
-                  selected && styles.lotRowSelected,
+                  styles.lotCard,
+                  shouldStack && styles.lotCardStacked,
+                  selected && styles.lotCardSelected,
                 ]}
               >
                 <Pressable
                   onPress={() => onItemPress(item)}
                   onLongPress={() => onItemLongPress?.(item)}
                   accessibilityRole="button"
-                  accessibilityLabel={`${formatDateKoreanCompact(item.expiryDate)}, ${lotExpiry.ddayLabel}, ${resolveLocationLabel(item.storageLocation)}, ${formatInventoryQuantity(item)}${isNearest && isExpandable ? ", 가장 임박" : ""}`}
+                  accessibilityLabel={`${lotExpiry.ddayLabel}, ${formatDateKoreanCompact(item.expiryDate)}, ${resolveLocationLabel(item.storageLocation)}, ${formatInventoryQuantity(item)}${isNearest && isExpandable ? ", 가장 임박" : ""}`}
                   accessibilityHint={
                     selectionMode
                       ? selected
@@ -218,28 +210,14 @@ export function InventoryGroupCard({
                   }
                   style={({ pressed }) => [
                     styles.lotMain,
-                    pressed && styles.lotRowPressed,
+                    pressed && styles.lotCardPressed,
                   ]}
                 >
+                  <ExpiryBadge expiryDate={item.expiryDate} size="compact" />
                   <View style={styles.lotCopy}>
-                    <View style={styles.lotDateRow}>
-                      <Text style={styles.lotDate}>
-                        {formatDateKoreanCompact(item.expiryDate)}
-                      </Text>
-                      <Text
-                        style={[
-                          styles.lotDdayLabel,
-                          { color: lotExpiry.lampColor },
-                        ]}
-                      >
-                        {lotExpiry.ddayLabel}
-                      </Text>
-                      {isNearest && isExpandable ? (
-                        <View style={styles.nearestPill}>
-                          <Text style={styles.nearestPillLabel}>가장 임박</Text>
-                        </View>
-                      ) : null}
-                    </View>
+                    <Text style={styles.lotDate}>
+                      {formatDateKoreanCompact(item.expiryDate)}
+                    </Text>
                     <Text style={styles.lotMeta}>
                       {resolveLocationLabel(item.storageLocation)} ·{" "}
                       {formatInventoryQuantity(item)}
@@ -334,16 +312,21 @@ function ExpiryBadge({
   size = "default",
 }: {
   expiryDate: string;
-  size?: "default" | "hero";
+  size?: "default" | "hero" | "compact";
 }) {
   const presentation = getExpiryLampPresentation(expiryDate);
   const isHero = size === "hero";
+  const isCompact = size === "compact";
 
   return (
     <View
       style={[
         styles.expiryLamp,
-        isHero && styles.expiryLampHero,
+        isCompact
+          ? styles.expiryLampCompact
+          : isHero
+            ? styles.expiryLampHero
+            : styles.expiryLampDefault,
         { backgroundColor: presentation.lampColor },
       ]}
       accessibilityLabel={presentation.ddayLabel}
@@ -387,16 +370,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
-  cardSectionFlush: {
-    borderTopWidth: 0,
-    borderRadius: 0,
-  },
-  cardSectionBottom: {
-    borderTopWidth: 0,
-    borderRadius: 0,
-    borderBottomLeftRadius: radius.xxl,
-    borderBottomRightRadius: radius.xxl,
-  },
   summaryRow: {
     minHeight: touchTarget.cta,
     flexDirection: "row",
@@ -427,22 +400,22 @@ const styles = StyleSheet.create({
   name: {
     flexShrink: 1,
     minWidth: 0,
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
+    fontSize: typography.bodyStrong.fontSize,
+    lineHeight: typography.bodyStrong.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   brandInline: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontFamily: typography.caption.fontFamily,
     color: colors.mutedText,
   },
   groupMeta: {
     flexShrink: 1,
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   summaryActions: {
@@ -466,64 +439,52 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xxs,
   },
-  moreButtonLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
+  lotWell: {
+    padding: spacing.xs,
+    gap: spacing.xs,
+    backgroundColor: colors.background,
   },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  lotList: {
-    paddingBottom: spacing.none,
-  },
-  lotRow: {
-    minHeight: touchTarget.cta + spacing.xxs,
-    paddingRight: spacing.xs,
+  lotCard: {
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
   },
-  lotRowAccessible: {
+  lotCardStacked: {
     alignItems: "flex-start",
-    paddingVertical: spacing.xs,
   },
-  lotRowBorder: {
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  lotRowSelected: {
+  lotCardSelected: {
+    borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  lotRowPressed: {
+  lotCardPressed: {
     backgroundColor: colors.surfacePressed,
   },
   lotMain: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.cta + spacing.xxs,
+    minHeight: touchTarget.min,
     paddingLeft: spacing.sm,
-    paddingVertical: spacing.xxs,
-    justifyContent: "center",
+    paddingVertical: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
   },
   lotCopy: {
-    flexShrink: 1,
+    flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   selectionHit: {
     minWidth: touchTarget.icon,
-    minHeight: touchTarget.cta,
+    minHeight: touchTarget.min,
     alignItems: "center",
     justifyContent: "center",
     paddingRight: spacing.xs,
-  },
-  lotDateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: spacing.xs,
   },
   lotDate: {
     fontSize: typography.bodySmall.fontSize,
@@ -531,41 +492,30 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
-  lotDdayLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    fontVariant: ["tabular-nums"],
-  },
-  nearestPill: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.warningSoft,
-  },
-  nearestPillLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.warning,
-  },
   lotMeta: {
     flexShrink: 1,
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
+    fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
   expiryLamp: {
-    width: touchTarget.min,
-    height: touchTarget.min,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
   },
+  expiryLampDefault: {
+    width: touchTarget.min,
+    height: touchTarget.min,
+  },
   expiryLampHero: {
     width: HERO_LAMP_SIZE,
     height: HERO_LAMP_SIZE,
+  },
+  expiryLampCompact: {
+    minWidth: LOT_LAMP_SIZE,
+    height: LOT_LAMP_SIZE,
+    paddingHorizontal: spacing.xxs, // 4px so D-12 still fits the 32px lamp
   },
   expiryLampText: {
     fontFamily: typography.title.fontFamily,
@@ -586,10 +536,3 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },
 });
-
-const sectionSlotCardStyles = {
-  solo: styles.cardSectionBottom,
-  first: styles.cardSectionFlush,
-  middle: styles.cardSectionFlush,
-  last: styles.cardSectionBottom,
-} as const;

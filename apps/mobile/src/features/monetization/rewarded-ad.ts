@@ -1,9 +1,15 @@
 import type { RewardedAdSession } from "@expirymate/shared";
+import Constants from "expo-constants";
 import { Platform } from "react-native";
 import {
   cancelRewardedAdSession,
   getRewardedAdSession,
 } from "../../services/api";
+import {
+  isExpoGoClient,
+  resolveMobileAdsFactory,
+  REWARDED_AD_RUNTIME_UNAVAILABLE_MESSAGE,
+} from "./rewarded-ad-runtime";
 
 const POLL_INTERVAL_MS = 1_000;
 const POLL_TIMEOUT_MS = 10_000;
@@ -18,18 +24,42 @@ export async function presentRewardedAd(
   session: RewardedAdSession,
   onLifecycleEvent?: (event: RewardedAdLifecycleEvent) => void,
 ): Promise<RewardedAdResult> {
-  const ads = await import("react-native-google-mobile-ads");
+  if (isExpoGoClient(Constants)) {
+    await cancelRewardedAdSession(session.id).catch(() => null);
+    throw new Error(REWARDED_AD_RUNTIME_UNAVAILABLE_MESSAGE);
+  }
+
+  let ads: typeof import("react-native-google-mobile-ads");
+  try {
+    ads = await import("react-native-google-mobile-ads");
+  } catch {
+    await cancelRewardedAdSession(session.id).catch(() => null);
+    throw new Error(REWARDED_AD_RUNTIME_UNAVAILABLE_MESSAGE);
+  }
+
+  const mobileAds = resolveMobileAdsFactory(ads);
+  if (!mobileAds || !ads.RewardedAd) {
+    await cancelRewardedAdSession(session.id).catch(() => null);
+    throw new Error(REWARDED_AD_RUNTIME_UNAVAILABLE_MESSAGE);
+  }
 
   if (!mobileAdsInitialization) {
     mobileAdsInitialization = (async () => {
-      await ads.default().setRequestConfiguration({
+      await mobileAds().setRequestConfiguration({
         maxAdContentRating: ads.MaxAdContentRating.G,
         tagForChildDirectedTreatment: false,
       });
-      return ads.default().initialize();
+      return mobileAds().initialize();
     })();
   }
-  await mobileAdsInitialization;
+
+  try {
+    await mobileAdsInitialization;
+  } catch {
+    mobileAdsInitialization = null;
+    await cancelRewardedAdSession(session.id).catch(() => null);
+    throw new Error(REWARDED_AD_RUNTIME_UNAVAILABLE_MESSAGE);
+  }
 
   const production = process.env.EXPO_PUBLIC_APP_ENV === "production";
   const configuredUnitId =

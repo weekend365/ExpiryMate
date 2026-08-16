@@ -20,13 +20,13 @@ import {
   Utensils,
   X,
 } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
+  FlatList,
   ImageBackground,
   LayoutAnimation,
   Pressable,
   RefreshControl,
-  SectionList,
   StyleSheet,
   Text,
   View,
@@ -50,7 +50,6 @@ import {
   buildInventoryFacetCounts,
   buildInventoryUrgencySections,
   filterInventoryItems,
-  getInventoryGroupSectionSlot,
   inventoryUrgencySectionDescriptions,
   parseInventoryViewFilter,
   type InventoryUrgencySection,
@@ -161,14 +160,6 @@ export default function InventoryScreen() {
     () => new Set(collapsedSectionKeys),
     [collapsedSectionKeys],
   );
-  const listSections = useMemo(
-    () =>
-      urgencySections.map((section) => ({
-        ...section,
-        data: collapsedSectionKeySet.has(section.key) ? [] : section.data,
-      })),
-    [collapsedSectionKeySet, urgencySections],
-  );
   const visibleIds = useMemo(() => filtered.map((item) => item.id), [filtered]);
   const expiredVisibleIds = useMemo(
     () =>
@@ -182,7 +173,8 @@ export default function InventoryScreen() {
     expiredVisibleIds.length > 0 &&
     expiredVisibleIds.every((id) => selectedIdSet.has(id));
   const facetCounts = useMemo(
-    () => buildInventoryFacetCounts(trackedItems, filter, location, searchQuery),
+    () =>
+      buildInventoryFacetCounts(trackedItems, filter, location, searchQuery),
     [trackedItems, filter, location, searchQuery],
   );
 
@@ -216,6 +208,15 @@ export default function InventoryScreen() {
       return nextIds.length === current.length ? current : nextIds;
     });
   }, [visibleIds]);
+
+  useEffect(() => {
+    const visibleKeys = new Set(urgencySections.map((section) => section.key));
+
+    setCollapsedSectionKeys((current) => {
+      const next = current.filter((key) => visibleKeys.has(key));
+      return next.length === current.length ? current : next;
+    });
+  }, [urgencySections]);
 
   const openEntryMethodSheet = () => {
     setEntryMethodVisible(true);
@@ -302,6 +303,15 @@ export default function InventoryScreen() {
       expanded
         ? [...new Set([...current, groupId])]
         : current.filter((id) => id !== groupId),
+    );
+  };
+
+  const toggleSectionCollapsed = (key: InventoryUrgencySection) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setCollapsedSectionKeys((current) =>
+      current.includes(key)
+        ? current.filter((item) => item !== key)
+        : [...current, key],
     );
   };
 
@@ -394,10 +404,7 @@ export default function InventoryScreen() {
   // Undo temporarily owns the footer — one bottom action at a time.
   const footer = deferredRemoval.undoLabel ? (
     <View
-      style={[
-        styles.undoSnackbar,
-        shouldStack && styles.undoSnackbarStacked,
-      ]}
+      style={[styles.undoSnackbar, shouldStack && styles.undoSnackbarStacked]}
       accessibilityLiveRegion="assertive"
       accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌릴게요`}
     >
@@ -444,10 +451,10 @@ export default function InventoryScreen() {
           style={styles.fridgeSceneVeil}
           importantForAccessibility="no-hide-descendants"
         />
-        <SectionList
+        <FlatList
           style={styles.listFlex}
           testID="inventory-list"
-          sections={
+          data={
             isLoading && !hasLoadedInventory
               ? []
               : isError && !hasLoadedInventory
@@ -456,8 +463,13 @@ export default function InventoryScreen() {
                   ? []
                   : urgencySections
           }
-          keyExtractor={(group) => group.id}
-          stickySectionHeadersEnabled={false}
+          keyExtractor={(section) => section.key}
+          extraData={{
+            collapsedSectionKeys,
+            expandedGroupIds,
+            isSelectionMode,
+            selectedIds,
+          }}
           refreshControl={
             <RefreshControl
               tintColor={colors.primary}
@@ -706,7 +718,9 @@ export default function InventoryScreen() {
                         ]}
                       >
                         <Text style={styles.headerFilterLabel}>
-                          {allExpiredVisibleSelected ? "만료 풀기" : "만료 전부"}
+                          {allExpiredVisibleSelected
+                            ? "만료 풀기"
+                            : "만료 전부"}
                         </Text>
                       </Pressable>
                     ) : null}
@@ -800,30 +814,29 @@ export default function InventoryScreen() {
               />
             ) : null
           }
-          renderItem={({ item: group, index, section }) => (
-            <InventoryGroupCard
-              group={group}
-              sectionSlot={getInventoryGroupSectionSlot(
-                index,
-                section.data.length,
-              )}
-              expanded={expandedGroupIds.includes(group.id)}
-              onExpandedChange={(expanded) =>
-                setGroupExpanded(group.id, expanded)
-              }
-              selectionMode={isSelectionMode}
-              selectedIds={selectedIdSet}
-              resolveLocationLabel={resolveLabel}
-              onItemPress={(item) => handleCardPress(item.id)}
-              onItemLongPress={(item) => handleCardLongPress(item.id)}
-              onItemCleanup={openCleanupSheet}
-            />
-          )}
-          renderSectionHeader={({ section }) => (
-            <UrgencySectionHeader
+          renderItem={({ item: section }) => (
+            <UrgencySection
               section={section}
-              isFirst={section.key === urgencySections[0]?.key}
-            />
+              collapsed={collapsedSectionKeySet.has(section.key)}
+              onToggle={() => toggleSectionCollapsed(section.key)}
+            >
+              {section.data.map((group) => (
+                <InventoryGroupCard
+                  key={group.id}
+                  group={group}
+                  expanded={expandedGroupIds.includes(group.id)}
+                  onExpandedChange={(expanded) =>
+                    setGroupExpanded(group.id, expanded)
+                  }
+                  selectionMode={isSelectionMode}
+                  selectedIds={selectedIdSet}
+                  resolveLocationLabel={resolveLabel}
+                  onItemPress={(item) => handleCardPress(item.id)}
+                  onItemLongPress={(item) => handleCardLongPress(item.id)}
+                  onItemCleanup={openCleanupSheet}
+                />
+              ))}
+            </UrgencySection>
           )}
         />
       </View>
@@ -1025,7 +1038,6 @@ export default function InventoryScreen() {
           </Button>
         </View>
       </BottomSheet>
-
     </Screen>
   );
 }
@@ -1101,55 +1113,91 @@ const EXPIRY_TRAFFIC_HIT_SLOP = {
   right: 0,
 } as const;
 
-function UrgencySectionHeader({
+function UrgencySection({
   section,
-  isFirst,
+  collapsed,
+  onToggle,
+  children,
 }: {
   section: {
     key: InventoryUrgencySection;
     title: string;
     itemCount: number;
   };
-  isFirst: boolean;
+  collapsed: boolean;
+  onToggle: () => void;
+  children: ReactNode;
 }) {
   const description = inventoryUrgencySectionDescriptions[section.key];
   const tone = urgencySectionTones[section.key];
+  const title = `${section.title} ${section.itemCount}건`;
 
   return (
-    <View
-      style={[
-        styles.urgencySectionHeader,
-        !isFirst && styles.urgencySectionHeaderFollow,
-      ]}
-      accessibilityRole="header"
-      accessibilityLabel={`${section.title} ${section.itemCount}건. ${description}`}
-    >
-      <AppText
-        variant="bodyStrong"
-        tone={tone}
-        numberOfLines={1}
-        style={styles.urgencySectionTitle}
-      >
-        {section.title}
-      </AppText>
+    <View style={styles.urgencySection}>
       <View
         style={[
-          styles.urgencySectionCountPill,
-          { backgroundColor: urgencySectionSoftColors[section.key] },
+          styles.urgencySectionHeader,
+          !collapsed && styles.urgencySectionHeaderExpanded,
         ]}
-        accessibilityElementsHidden
-        importantForAccessibility="no"
+        accessibilityRole="header"
+        accessibilityLabel={`${title}. ${description}`}
       >
         <AppText
-          variant="caption"
+          variant="bodySmall"
           tone={tone}
           scaleRole="chrome"
           densityAware={false}
-          style={styles.urgencySectionCount}
+          numberOfLines={1}
+          style={styles.urgencySectionTitle}
         >
-          {section.itemCount}건
+          {title}
         </AppText>
+        <Pressable
+          onPress={onToggle}
+          hitSlop={spacing.xs}
+          accessibilityRole="button"
+          accessibilityLabel={
+            collapsed
+              ? `${section.title} 펼쳐 볼게요`
+              : `${section.title} 접을게요`
+          }
+          accessibilityHint={
+            collapsed
+              ? "이 분류의 재료를 펼쳐 볼 수 있어요."
+              : "이 분류의 재료를 접어요."
+          }
+          accessibilityState={{ expanded: !collapsed }}
+          style={({ pressed }) => [
+            styles.urgencySectionToggle,
+            pressed && styles.headerFilterButtonPressed,
+          ]}
+        >
+          <AppText
+            variant="bodySmall"
+            scaleRole="chrome"
+            densityAware={false}
+            numberOfLines={1}
+          >
+            {collapsed ? "펼치기" : "접기"}
+          </AppText>
+          {collapsed ? (
+            <ChevronDown
+              color={colors.text}
+              size={typography.bodySmall.fontSize}
+              strokeWidth={2.4}
+            />
+          ) : (
+            <ChevronUp
+              color={colors.text}
+              size={typography.bodySmall.fontSize}
+              strokeWidth={2.4}
+            />
+          )}
+        </Pressable>
       </View>
+      {collapsed ? null : (
+        <View style={styles.urgencySectionBody}>{children}</View>
+      )}
     </View>
   );
 }
@@ -1290,7 +1338,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
+    fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
   locationFilterTitleActive: {
@@ -1303,8 +1351,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
   },
   locationFilterClearStatusLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
   },
@@ -1430,9 +1478,9 @@ const styles = StyleSheet.create({
     minWidth: 0,
     minHeight: touchTarget.min,
     paddingVertical: spacing.xxs,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.body.fontFamily,
+    fontSize: typography.bodyStrong.fontSize,
+    lineHeight: typography.bodyStrong.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.text,
   },
   headerActions: {
@@ -1548,42 +1596,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
+    gap: spacing.sm,
   },
   listHeader: {
-    gap: spacing.xs,
+    gap: spacing.sm,
   },
-  urgencySectionHeader: {
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    marginTop: spacing.sm,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-    borderTopLeftRadius: radius.xxl,
-    borderTopRightRadius: radius.xxl,
+  urgencySection: {
+    borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
-  urgencySectionHeaderFollow: {
-    marginTop: spacing.md,
+  urgencySectionHeader: {
+    minHeight: touchTarget.min,
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  urgencySectionHeaderExpanded: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
   urgencySectionTitle: {
     flex: 1,
     minWidth: 0,
   },
-  urgencySectionCountPill: {
-    flexShrink: 0,
+  urgencySectionToggle: {
+    minWidth: touchTarget.min,
+    minHeight: touchTarget.min,
     paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs, // 4px so the count chip stays shorter than the 48px header
-    borderRadius: radius.pill,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: spacing.xxs,
+    borderRadius: radius.lg,
   },
-  urgencySectionCount: {
-    fontFamily: typography.title.fontFamily,
-    fontVariant: ["tabular-nums"],
+  urgencySectionBody: {
+    padding: spacing.xs,
+    gap: spacing.xs,
+    backgroundColor: colors.mutedSurface,
   },
 });

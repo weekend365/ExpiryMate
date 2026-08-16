@@ -33,26 +33,6 @@ export const inventoryUrgencySectionDescriptions: Record<
   safe: "아직은 여유로워요",
 };
 
-/** Map a row index to connected-section card corners (header is a separate cell). */
-export const getInventoryGroupSectionSlot = (
-  index: number,
-  count: number,
-): "solo" | "first" | "middle" | "last" => {
-  if (count <= 1) {
-    return "solo";
-  }
-
-  if (index === 0) {
-    return "first";
-  }
-
-  if (index === count - 1) {
-    return "last";
-  }
-
-  return "middle";
-};
-
 const inventoryViewFilters = new Set<InventoryViewFilter>([
   "all",
   "within7",

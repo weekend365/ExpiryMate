@@ -352,7 +352,7 @@ export default function HomeScreen() {
                   <AppText variant="bodyStrong">
                     추천을 불러오지 못했어요
                   </AppText>
-                  <AppText variant="bodySmall" tone="subtext">
+                  <AppText variant="caption" tone="subtext">
                     잠시 후 다시 불러오거나 추천 탭에서 확인해 주세요.
                   </AppText>
                   <Button
@@ -398,7 +398,7 @@ export default function HomeScreen() {
                   />
                 </View>
                 <View style={styles.recommendationCopy}>
-                  <AppText variant="subheading" numberOfLines={2}>
+                  <AppText variant="bodyStrong" numberOfLines={2}>
                     {recommendationPreview
                       ? recommendationPreview.title
                       : hasInventory
@@ -407,7 +407,7 @@ export default function HomeScreen() {
                   </AppText>
                   {recommendationPreview ? (
                     <AppText
-                      variant="bodySmall"
+                      variant="caption"
                       tone="subtext"
                       numberOfLines={2}
                     >
@@ -418,7 +418,7 @@ export default function HomeScreen() {
                       {difficultyLabels[recommendationPreview.difficulty]}
                     </AppText>
                   ) : (
-                    <AppText variant="bodySmall" tone="subtext">
+                    <AppText variant="caption" tone="subtext">
                       {hasInventory
                         ? "유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요."
                         : "첫 재료를 넣으면 장고가 바로 메뉴를 찾아드릴게요."}
@@ -547,7 +547,7 @@ export default function HomeScreen() {
               </View>
             )}
             <View style={styles.quickEntrySection}>
-              <AppText variant="label" tone="subtext">
+              <AppText variant="bodySmall" tone="subtext">
                 재료 추가
               </AppText>
               <View
@@ -614,7 +614,6 @@ function HomeSectionHeader({
         variant="bodySmall"
         tone="subtext"
         accessibilityRole="header"
-        style={styles.sectionTitle}
       >
         {title}
       </AppText>
@@ -633,7 +632,7 @@ function HomeSectionHeader({
             pressed && styles.sectionHeaderActionPressed,
           ]}
         >
-          <AppText variant="caption" tone="primary">
+          <AppText variant="bodySmall" tone="primary">
             {actionLabel}
           </AppText>
           <ChevronRight
@@ -776,7 +775,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    gap: spacing.md,
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
@@ -907,9 +906,6 @@ const styles = StyleSheet.create({
   sectionHeaderStacked: {
     flexDirection: "column",
     alignItems: "stretch",
-  },
-  sectionTitle: {
-    fontWeight: "700",
   },
   sectionHeaderAction: {
     minHeight: spacing.lg,
