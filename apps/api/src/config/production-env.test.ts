@@ -169,7 +169,7 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     PRIVACY_CONTACT_EMAIL: "privacy@expirymate.app",
     OPENAI_API_KEY: "sk-live-test-key-not-a-placeholder",
     RECIPE_FREE_DAILY_LIMIT: "1",
-    RECIPE_REWARDED_DAILY_LIMIT: "3",
+    RECIPE_REWARDED_DAILY_LIMIT: "10",
     RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
     RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
     MONETIZATION_OFFER_MODE: "core",

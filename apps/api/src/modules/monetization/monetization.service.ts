@@ -1205,7 +1205,7 @@ export function resolveMonetizationPolicy(ownerKey: string): MonetizationPolicy 
     rewardedDailyLimit:
       variant === "value_first"
         ? getLimit("RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT", 2)
-        : getLimit("RECIPE_REWARDED_DAILY_LIMIT", 3),
+        : getLimit("RECIPE_REWARDED_DAILY_LIMIT", 10),
     subscriberDailyLimit: getLimit("RECIPE_SUBSCRIBER_DAILY_LIMIT", 30),
   };
 }
