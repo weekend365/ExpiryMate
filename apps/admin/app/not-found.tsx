@@ -16,8 +16,14 @@ export default function NotFoundPage() {
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
-            href="/privacy"
+            href="/partners"
             className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
+          >
+            쿠팡 파트너스 안내
+          </Link>
+          <Link
+            href="/privacy"
+            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
           >
             개인정보처리방침
           </Link>

@@ -18,7 +18,7 @@ export default function PartnersPage() {
   const partnerLink = readCoupangPartnersPublicLink();
   const partnerLabel =
     process.env["COUPANG_PARTNERS_PUBLIC_LINK_LABEL"]?.trim() ||
-    "대파 쿠팡에서 찾아보기";
+    "식재료 쿠팡에서 찾아보기";
 
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
@@ -67,18 +67,18 @@ export default function PartnersPage() {
             {COUPANG_DISCLOSURE}
           </p>
 
-          <h2 className="pt-4 text-xl font-black">있으면 좋은 재료 예시</h2>
+          <h2 className="pt-4 text-xl font-black">식재료 찾아보기</h2>
           <p>
-            아래는 요리에 대파를 곁들이면 향이 살아난다는 안내의 예시입니다.
-            버튼을 누르면 쿠팡에서 해당 재료를 찾아볼 수 있습니다.
+            아래는 앱에서 「있으면 좋은 재료」를 안내할 때 쓰는 식재료 검색
+            링크입니다. 버튼을 누르면 쿠팡에서 식재료를 찾아볼 수 있습니다.
           </p>
           <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] p-5">
             <p className="text-xs font-bold tracking-wide text-[var(--primary)]">
               있으면 더 맛있어져요
             </p>
-            <p className="mt-2 text-lg font-black">대파</p>
+            <p className="mt-2 text-lg font-black">식재료</p>
             <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-              향을 살릴 때 곁들이면 좋아요.
+              요리에 필요한 재료를 쿠팡에서 둘러볼 수 있어요.
             </p>
             {partnerLink ? (
               <div className="mt-4 space-y-2">
@@ -142,7 +142,9 @@ export default function PartnersPage() {
 }
 
 function readCoupangPartnersPublicLink() {
-  const raw = process.env["COUPANG_PARTNERS_PUBLIC_LINK"]?.trim() ?? "";
+  const raw =
+    process.env["COUPANG_PARTNERS_PUBLIC_LINK"]?.trim() ||
+    "https://link.coupang.com/a/ggaBkYvlhQ";
   if (!raw) {
     return null;
   }
