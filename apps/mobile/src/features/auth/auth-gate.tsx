@@ -1,7 +1,8 @@
 import { Redirect, useRouter, useSegments } from "expo-router";
 import { useEffect, type ReactNode } from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { appBrand } from "@expirymate/shared";
+import { AppText } from "../../components/AppText";
 import { Mascot } from "../../components/Mascot";
 import { Button } from "../../components/Button";
 import { colors, spacing, typography } from "../../shared/theme";
@@ -112,9 +113,9 @@ export function AuthLoadingScreen() {
   return (
     <View style={styles.root}>
       <Mascot size="medium" mood="idle" />
-      <Text style={styles.brand}>{appBrand.appNameKo}</Text>
+      <AppText style={styles.brand}>{appBrand.appNameKo}</AppText>
       <ActivityIndicator color={colors.primary} />
-      <Text style={styles.caption}>장고가 준비하고 있어요</Text>
+      <AppText style={styles.caption}>장고가 준비하고 있어요</AppText>
     </View>
   );
 }
@@ -129,10 +130,10 @@ export function AuthSessionErrorScreen({
   return (
     <View style={styles.root}>
       <Mascot size="medium" mood="worry" />
-      <Text style={styles.brand}>로그인을 확인하지 못했어요</Text>
-      <Text style={styles.caption}>
+      <AppText style={styles.brand}>로그인을 확인하지 못했어요</AppText>
+      <AppText style={styles.caption}>
         {message ?? "인터넷 연결을 확인하고 다시 시도해 주세요."}
-      </Text>
+      </AppText>
       <Button onPress={onRetry}>다시 확인할게요</Button>
     </View>
   );

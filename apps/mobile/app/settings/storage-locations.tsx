@@ -3,10 +3,10 @@ import { useState } from "react";
 import {
   Alert,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -175,9 +175,9 @@ export default function StorageLocationsSettingsScreen() {
         <View style={styles.card}>
           {(query.data?.custom ?? []).length === 0 ? (
             <View style={styles.emptyCustom}>
-              <Text style={styles.emptyCustomText}>
+              <AppText style={styles.emptyCustomText}>
                 아직 만든 위치가 없어요. 아래에서 하나 만들어 볼까요?
-              </Text>
+              </AppText>
             </View>
           ) : (
             (query.data?.custom ?? []).map((location, index, list) => (
@@ -267,7 +267,7 @@ function LabelField({
 }) {
   return (
     <View style={styles.field}>
-      <Text style={styles.fieldLabel}>위치 이름</Text>
+      <AppText style={styles.fieldLabel}>위치 이름</AppText>
       <TextInput
         value={value}
         onChangeText={onChange}

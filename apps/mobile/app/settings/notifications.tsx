@@ -1,6 +1,7 @@
 import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Switch, Text, View } from "react-native";
+import { Alert, StyleSheet, Switch, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { Pill } from "../../src/components/Pill";
@@ -129,7 +130,7 @@ export default function NotificationSettingsScreen() {
         />
         <View style={styles.card}>
           <View style={styles.reminderBlock}>
-            <Text style={styles.reminderTitle}>알림 시점</Text>
+            <AppText style={styles.reminderTitle}>알림 시점</AppText>
             <View style={styles.pillRow}>
               {reminderOptions.map((value) => (
                 <Pill

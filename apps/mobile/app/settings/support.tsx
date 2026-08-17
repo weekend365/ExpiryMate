@@ -14,9 +14,9 @@ import {
   Alert,
   Platform,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { FormField } from "../../src/components/FormField";
 import { Mascot } from "../../src/components/Mascot";
@@ -77,9 +77,9 @@ export default function SupportSettingsScreen() {
     >
       <View style={styles.hero}>
         <Mascot size="small" mood="idle" />
-        <Text style={styles.heroText}>
+        <AppText style={styles.heroText}>
           한 가지만 골라 주시면, 장고가 운영팀에 잘 전해 줄게요.
-        </Text>
+        </AppText>
       </View>
 
       <View style={styles.section}>

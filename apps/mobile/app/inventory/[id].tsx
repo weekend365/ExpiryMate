@@ -28,8 +28,9 @@ import {
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { z } from "zod";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { DatePickerField } from "../../src/components/DatePickerField";
@@ -346,8 +347,8 @@ export default function InventoryDetailScreen() {
           <View style={styles.errorStrip}>
             <Mascot size="small" mood="worry" />
             <View style={styles.feedbackCopy}>
-              <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
-              <Text style={styles.errorDescription}>{errorMessage}</Text>
+              <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
+              <AppText style={styles.errorDescription}>{errorMessage}</AppText>
             </View>
           </View>
         ) : null}
@@ -402,7 +403,7 @@ export default function InventoryDetailScreen() {
 
               <View style={styles.formCard}>
                 <View>
-                  <Text style={styles.quantityUnitLabel}>어떤 단위인가요?</Text>
+                  <AppText style={styles.quantityUnitLabel}>어떤 단위인가요?</AppText>
                   <QuantityUnitPills
                     unit={unit}
                     onChange={(nextUnit) => {
@@ -525,7 +526,7 @@ export default function InventoryDetailScreen() {
       {successMessage ? (
         <View style={styles.successStrip}>
           <Mascot size="small" mood="happy" />
-          <Text style={styles.successTitle}>{successMessage}</Text>
+          <AppText style={styles.successTitle}>{successMessage}</AppText>
         </View>
       ) : null}
 
@@ -533,8 +534,8 @@ export default function InventoryDetailScreen() {
         <View style={styles.errorStrip}>
           <Mascot size="small" mood="worry" />
           <View style={styles.feedbackCopy}>
-            <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
-            <Text style={styles.errorDescription}>{errorMessage}</Text>
+            <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
+            <AppText style={styles.errorDescription}>{errorMessage}</AppText>
           </View>
         </View>
       ) : null}
@@ -547,7 +548,7 @@ export default function InventoryDetailScreen() {
       >
         <View style={styles.heroRow}>
           <View style={styles.heroCopy}>
-            <Text
+            <AppText
               style={[
                 styles.heroEyebrow,
                 viewMood === "worry"
@@ -556,12 +557,12 @@ export default function InventoryDetailScreen() {
               ]}
             >
               {itemStatusLabels[item.status]}
-            </Text>
-            <Text style={styles.heroTitle}>{item.displayName}</Text>
-            <Text style={styles.heroDescription}>
+            </AppText>
+            <AppText style={styles.heroTitle}>{item.displayName}</AppText>
+            <AppText style={styles.heroDescription}>
               {resolveLabel(item.storageLocation)} ·{" "}
               {formatInventoryQuantity(item)}
-            </Text>
+            </AppText>
           </View>
           <Mascot size="small" mood={viewMood} />
         </View>
@@ -595,8 +596,8 @@ export default function InventoryDetailScreen() {
         ) : null}
         {item.notes ? (
           <View style={styles.notesBlock}>
-            <Text style={styles.notesLabel}>메모</Text>
-            <Text style={styles.notesValue}>{item.notes}</Text>
+            <AppText style={styles.notesLabel}>메모</AppText>
+            <AppText style={styles.notesValue}>{item.notes}</AppText>
           </View>
         ) : null}
       </View>
@@ -616,10 +617,10 @@ export default function InventoryDetailScreen() {
               pressed && styles.softActionPressed,
             ]}
           >
-            <Text style={styles.softActionTitle}>다 먹었어요</Text>
-            <Text style={styles.softActionDescription}>
+            <AppText style={styles.softActionTitle}>다 먹었어요</AppText>
+            <AppText style={styles.softActionDescription}>
               다 쓰셨다면 장고에게 알려 주세요.
-            </Text>
+            </AppText>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -635,12 +636,12 @@ export default function InventoryDetailScreen() {
               pressed && styles.softActionPressed,
             ]}
           >
-            <Text style={[styles.softActionTitle, styles.softActionTitleDanger]}>
+            <AppText style={[styles.softActionTitle, styles.softActionTitleDanger]}>
               정리할게요
-            </Text>
-            <Text style={styles.softActionDescription}>
+            </AppText>
+            <AppText style={styles.softActionDescription}>
               버리거나 비울 재료라면 여기서 정리할 수 있어요.
-            </Text>
+            </AppText>
           </Pressable>
         </View>
       ) : (
@@ -682,8 +683,8 @@ export default function InventoryDetailScreen() {
         }
       >
         <View style={styles.confirmCard}>
-          <Text style={styles.confirmLabel}>정리할 재료</Text>
-          <Text style={styles.confirmValue}>{item.displayName}</Text>
+          <AppText style={styles.confirmLabel}>정리할 재료</AppText>
+          <AppText style={styles.confirmValue}>{item.displayName}</AppText>
         </View>
       </BottomSheet>
 
@@ -713,8 +714,8 @@ export default function InventoryDetailScreen() {
         }
       >
         <View style={styles.confirmCard}>
-          <Text style={styles.confirmLabel}>다 드신 재료</Text>
-          <Text style={styles.confirmValue}>{item.displayName}</Text>
+          <AppText style={styles.confirmLabel}>다 드신 재료</AppText>
+          <AppText style={styles.confirmValue}>{item.displayName}</AppText>
         </View>
       </BottomSheet>
     </Screen>
@@ -734,9 +735,9 @@ function SummaryRow({
     <View style={styles.summaryRow}>
       <View style={styles.summaryLabelRow}>
         <Icon color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
-        <Text style={styles.summaryLabel}>{label}</Text>
+        <AppText style={styles.summaryLabel}>{label}</AppText>
       </View>
-      <Text style={styles.summaryValue}>{value}</Text>
+      <AppText style={styles.summaryValue}>{value}</AppText>
     </View>
   );
 }

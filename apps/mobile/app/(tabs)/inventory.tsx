@@ -26,7 +26,6 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
@@ -431,9 +430,14 @@ export default function InventoryScreen() {
       accessibilityLiveRegion="assertive"
       accessibilityLabel={`${deferredRemoval.undoLabel}. 되돌릴게요`}
     >
-      <Text style={styles.undoSnackbarLabel} numberOfLines={2}>
+      <AppText
+        variant="bodySmall"
+        tone="inverse"
+        numberOfLines={2}
+        style={styles.undoSnackbarLabel}
+      >
         {deferredRemoval.undoLabel}
-      </Text>
+      </AppText>
       <Pressable
         onPress={deferredRemoval.undoRemoval}
         accessibilityRole="button"
@@ -444,7 +448,13 @@ export default function InventoryScreen() {
           pressed && styles.undoSnackbarActionPressed,
         ]}
       >
-        <Text style={styles.undoSnackbarActionLabel}>되돌릴게요</Text>
+        <AppText
+          variant="bodySmall"
+          scaleRole="chrome"
+          style={styles.undoSnackbarActionLabel}
+        >
+          되돌릴게요
+        </AppText>
       </Pressable>
     </View>
   ) : (
@@ -744,11 +754,11 @@ export default function InventoryScreen() {
                   }
                 >
                   <View style={styles.selectionSummary}>
-                    <Text style={styles.selectionTitle} numberOfLines={1}>
+                    <AppText style={styles.selectionTitle} numberOfLines={1}>
                       {selectedIds.length
                         ? `${selectedIds.length}개`
                         : "고를게요"}
-                    </Text>
+                    </AppText>
                   </View>
                   <View style={styles.headerActions}>
                     {expiredVisibleIds.length > 0 ? (
@@ -766,11 +776,11 @@ export default function InventoryScreen() {
                           pressed && styles.headerFilterButtonPressed,
                         ]}
                       >
-                        <Text style={styles.headerFilterLabel}>
+                        <AppText style={styles.headerFilterLabel}>
                           {allExpiredVisibleSelected
                             ? "만료 풀기"
                             : "만료 전부"}
-                        </Text>
+                        </AppText>
                       </Pressable>
                     ) : null}
                     <Pressable
@@ -783,7 +793,7 @@ export default function InventoryScreen() {
                       accessibilityRole="button"
                       accessibilityLabel="선택 닫기"
                     >
-                      <Text style={styles.headerFilterLabel}>닫기</Text>
+                      <AppText style={styles.headerFilterLabel}>닫기</AppText>
                     </Pressable>
                   </View>
                 </View>
@@ -937,18 +947,18 @@ export default function InventoryScreen() {
               pressed && styles.headerFilterButtonPressed,
             ]}
           >
-            <Text
+            <AppText
               style={[
                 styles.locationOptionLabel,
                 location === "all" && styles.locationOptionLabelSelected,
               ]}
             >
               전체 위치
-            </Text>
+            </AppText>
             <View style={styles.locationOptionMeta}>
-              <Text style={styles.locationOptionCount}>
+              <AppText style={styles.locationOptionCount}>
                 {facetCounts.locationTotal}
-              </Text>
+              </AppText>
               {location === "all" ? (
                 <Check
                   color={colors.primary}
@@ -976,16 +986,16 @@ export default function InventoryScreen() {
                   pressed && styles.headerFilterButtonPressed,
                 ]}
               >
-                <Text
+                <AppText
                   style={[
                     styles.locationOptionLabel,
                     selected && styles.locationOptionLabelSelected,
                   ]}
                 >
                   {option.label}
-                </Text>
+                </AppText>
                 <View style={styles.locationOptionMeta}>
-                  <Text style={styles.locationOptionCount}>{count}</Text>
+                  <AppText style={styles.locationOptionCount}>{count}</AppText>
                   {selected ? (
                     <Check
                       color={colors.primary}
@@ -1515,10 +1525,6 @@ const styles = StyleSheet.create({
   undoSnackbarLabel: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.surface,
   },
   undoSnackbarAction: {
     minHeight: touchTarget.min,
@@ -1530,9 +1536,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.subtext,
   },
   undoSnackbarActionLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
     color: colors.warningSoft,
   },
   screenContent: {

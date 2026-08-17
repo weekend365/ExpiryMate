@@ -1,12 +1,13 @@
 import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
@@ -163,19 +164,19 @@ export default function RegisterScreen() {
             pressed && styles.backLinkPressed,
           ]}
         >
-          <Text style={styles.backLinkText}>
+          <AppText style={styles.backLinkText}>
             {isFirstStep ? "나중에 할게요" : "뒤로가기"}
-          </Text>
+          </AppText>
         </Pressable>
       </View>
 
       <Animated.View style={[styles.stepBody, contentStyle]}>
         <Mascot size="small" mood="idle" style={styles.mascot} />
-        <Text style={styles.stepEyebrow}>
+        <AppText style={styles.stepEyebrow}>
           {appBrand.characterNameKo}랑 회원가입할까요?
-        </Text>
-        <Text style={styles.stepTitle}>{step.title}</Text>
-        <Text style={styles.stepDescription}>{step.description}</Text>
+        </AppText>
+        <AppText style={styles.stepTitle}>{step.title}</AppText>
+        <AppText style={styles.stepDescription}>{step.description}</AppText>
 
         {step.key === "name" ? (
           <AppTextInput
@@ -212,9 +213,9 @@ export default function RegisterScreen() {
 
         {isLastStep ? (
           <View style={styles.legalLinks}>
-            <Text style={styles.legalLead}>
+            <AppText style={styles.legalLead}>
               가입하면 이용약관과 개인정보 안내에 동의하는 걸로 볼게요.
-            </Text>
+            </AppText>
             <View style={styles.legalRow}>
               <Pressable
                 onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
@@ -226,9 +227,9 @@ export default function RegisterScreen() {
                   pressed && styles.legalLinkPressed,
                 ]}
               >
-                <Text style={styles.legalLinkText}>이용약관</Text>
+                <AppText style={styles.legalLinkText}>이용약관</AppText>
               </Pressable>
-              <Text style={styles.legalDot}>·</Text>
+              <AppText style={styles.legalDot}>·</AppText>
               <Pressable
                 onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
                 hitSlop={spacing.xs}
@@ -239,7 +240,7 @@ export default function RegisterScreen() {
                   pressed && styles.legalLinkPressed,
                 ]}
               >
-                <Text style={styles.legalLinkText}>개인정보 안내</Text>
+                <AppText style={styles.legalLinkText}>개인정보 안내</AppText>
               </Pressable>
             </View>
           </View>

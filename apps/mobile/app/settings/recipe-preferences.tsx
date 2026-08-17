@@ -7,7 +7,8 @@ import {
   type RecipeSpiceLevel,
 } from "@expirymate/shared";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { Pill } from "../../src/components/Pill";
@@ -132,7 +133,7 @@ export default function RecipePreferenceSettingsScreen() {
       </PreferenceSection>
 
       <View style={styles.notice}>
-        <Text style={styles.noticeText}>AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</Text>
+        <AppText style={styles.noticeText}>AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
       </View>
     </Screen>
   );

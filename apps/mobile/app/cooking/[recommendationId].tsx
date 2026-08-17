@@ -52,7 +52,7 @@ import {
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function CookingScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, isRegular } = useResponsiveLayout();
   const params = useLocalSearchParams<{
     recommendationId?: string | string[];
     dishIndex?: string | string[];
@@ -138,7 +138,7 @@ export default function CookingScreen() {
 
   if (recommendationQuery.isPending) {
     return (
-      <Screen>
+      <Screen contentWidth="wide">
         <EmptyState
           mood="think"
           title="레시피를 펼치고 있어요"
@@ -151,6 +151,7 @@ export default function CookingScreen() {
   if (!recommendationId || recommendationQuery.isError || !dish) {
     return (
       <Screen
+        contentWidth="wide"
         footer={
           <Button
             onPress={() => router.replace("/(tabs)/recommendations")}
@@ -172,6 +173,7 @@ export default function CookingScreen() {
   if (updatedItems) {
     return (
       <Screen
+        contentWidth="wide"
         title="요리를 다 마쳤어요"
         subtitle="사용한 만큼 냉장고에도 바로 알려뒀어요."
         footer={
@@ -342,7 +344,7 @@ export default function CookingScreen() {
     );
 
   return (
-    <Screen footer={footer}>
+    <Screen contentWidth="wide" footer={footer}>
       <StepFlow
         steps={steps}
         currentIndex={currentIndex}
@@ -355,7 +357,7 @@ export default function CookingScreen() {
             <AppText variant="body" tone="subtext">
               하나씩 눌러 준비한 재료를 표시해 주세요.
             </AppText>
-            <View style={styles.list}>
+            <View style={[styles.list, isRegular && styles.listRegular]}>
               {prepRows.map((ingredient) => {
                 const checked = checkedPrepKeySet.has(ingredient.key);
                 return (
@@ -377,6 +379,7 @@ export default function CookingScreen() {
                     }`}
                     style={({ pressed }) => [
                       styles.checkRow,
+                      isRegular && styles.checkRowRegular,
                       checked && styles.checkRowSelected,
                       pressed && styles.pressed,
                     ]}
@@ -545,7 +548,7 @@ export default function CookingScreen() {
                 </AppText>
               </View>
             ) : null}
-            <View style={styles.list}>
+            <View style={[styles.list, isRegular && styles.listRegular]}>
               {consumableIngredients.map((ingredient) => (
                 <ConsumptionCard
                   key={ingredient.inventoryItemId}
@@ -597,6 +600,7 @@ function ConsumptionCard({
   choice: ConsumptionChoice;
   onChange: (choice: ConsumptionChoice) => void;
 }) {
+  const { isRegular } = useResponsiveLayout();
   const available = ingredient.item.quantityBase;
   const selectMode = (mode: ConsumptionMode) => {
     onChange({
@@ -610,7 +614,12 @@ function ConsumptionCard({
   };
 
   return (
-    <View style={styles.consumptionCard}>
+    <View
+      style={[
+        styles.consumptionCard,
+        isRegular && styles.consumptionCardRegular,
+      ]}
+    >
       <View style={styles.consumptionHeader}>
         <View style={styles.rowCopy}>
           <AppText variant="bodyStrong">{ingredient.name}</AppText>
@@ -685,6 +694,11 @@ const styles = StyleSheet.create({
   list: {
     gap: spacing.sm,
   },
+  listRegular: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+  },
   checkRow: {
     minHeight: touchTarget.ctaLarge,
     borderRadius: radius.lg,
@@ -696,6 +710,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
+  },
+  checkRowRegular: {
+    flexGrow: 1,
+    flexBasis: "40%",
+    maxWidth: "48%",
   },
   checkRowSelected: {
     borderColor: colors.primary,
@@ -789,6 +808,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.md,
     gap: spacing.md,
+  },
+  consumptionCardRegular: {
+    flexGrow: 1,
+    flexBasis: "40%",
+    maxWidth: "48%",
   },
   consumptionHeader: {
     flexDirection: "row",

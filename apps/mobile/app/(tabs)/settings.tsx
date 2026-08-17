@@ -11,7 +11,8 @@ import {
   UserRound,
   Users,
 } from "lucide-react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -29,10 +30,12 @@ export default function SettingsScreen() {
       <View style={[styles.brandCard, shouldStack && styles.brandCardStacked]}>
         <Mascot size="small" mood="idle" />
         <View style={styles.brandCopy}>
-          <Text style={styles.brandName}>{appBrand.appNameKo}</Text>
-          <Text style={styles.brandMeta}>
+          <AppText variant="heading" style={styles.brandName}>
+            {appBrand.appNameKo}
+          </AppText>
+          <AppText variant="caption" tone="subtext">
             {appBrand.appNameEn} · {appBrand.productLineKo}
-          </Text>
+          </AppText>
         </View>
       </View>
 

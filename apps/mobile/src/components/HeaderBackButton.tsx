@@ -1,7 +1,8 @@
 import { ChevronLeft } from "lucide-react-native";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
+import { AppText } from "./AppText";
 
 interface HeaderBackButtonProps {
   onPress: () => void;
@@ -29,7 +30,17 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
           strokeWidth={2.4}
         />
       </View>
-      {!isLargeText ? <Text style={styles.label}>뒤로가기</Text> : null}
+      {!isLargeText ? (
+        <AppText
+          variant="bodySmall"
+          tone="primary"
+          scaleRole="chrome"
+          densityAware={false}
+          style={styles.label}
+        >
+          뒤로가기
+        </AppText>
+      ) : null}
     </Pressable>
   );
 }
@@ -37,9 +48,9 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
 /** Native-stack title with the same Pretendard metrics as the back control. */
 export function HeaderTitle({ children }: { children: string }) {
   return (
-    <Text numberOfLines={1} style={styles.title}>
+    <AppText numberOfLines={1} variant="bodyStrong" style={styles.title}>
       {children}
-    </Text>
+    </AppText>
   );
 }
 

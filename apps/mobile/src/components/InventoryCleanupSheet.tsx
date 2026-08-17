@@ -10,8 +10,9 @@ import {
 } from "@expirymate/shared";
 import { CheckCircle2, Minus } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 import { QuantityStepper } from "./QuantityStepper";
@@ -105,11 +106,11 @@ export function InventoryCleanupSheet({
             step={quantityInputStep(unitLabel)}
             onChange={setAmountBase}
           />
-          <Text style={styles.remainingHint}>
+          <AppText style={styles.remainingHint}>
             {consumesAll
               ? "쓴 양만큼이면 보관함에서 빼 둘게요"
               : `빼면 ${formatBaseQuantity(remainingAfter, item.unitCode)} 남아요`}
-          </Text>
+          </AppText>
         </View>
       ) : (
         <View style={styles.actions}>
@@ -132,10 +133,10 @@ export function InventoryCleanupSheet({
               />
             </View>
             <View style={styles.optionCopy}>
-              <Text style={styles.optionTitle}>모두 정리</Text>
-              <Text style={styles.optionDescription}>
+              <AppText style={styles.optionTitle}>모두 정리</AppText>
+              <AppText style={styles.optionDescription}>
                 남은 걸 전부 빼 둘게요
-              </Text>
+              </AppText>
             </View>
           </Pressable>
           {canPartial ? (
@@ -158,10 +159,10 @@ export function InventoryCleanupSheet({
                 />
               </View>
               <View style={styles.optionCopy}>
-                <Text style={styles.optionTitle}>부분 정리</Text>
-                <Text style={styles.optionDescription}>
+                <AppText style={styles.optionTitle}>부분 정리</AppText>
+                <AppText style={styles.optionDescription}>
                   쓴 만큼만 빼 둘게요
-                </Text>
+                </AppText>
               </View>
             </Pressable>
           ) : null}

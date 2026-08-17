@@ -9,7 +9,8 @@ import {
   Trash2,
 } from "lucide-react-native";
 import { useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
@@ -77,10 +78,10 @@ export default function PrivacyScreen() {
       >
         <View style={styles.hero}>
           <Mascot size="small" mood="idle" />
-          <Text style={styles.heroText}>
+          <AppText style={styles.heroText}>
             궁금한 것만 골라 보시면 돼요. {appBrand.characterNameKo}가 옆에서
             도와드릴게요.
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.section}>
@@ -161,7 +162,7 @@ export default function PrivacyScreen() {
         </View>
 
         {status?.contactEmail ? (
-          <Text style={styles.footerText}>문의: {status.contactEmail}</Text>
+          <AppText style={styles.footerText}>문의: {status.contactEmail}</AppText>
         ) : null}
       </Screen>
 
@@ -233,15 +234,15 @@ function PrivacyRow({
         <Icon color={iconColor} size={spacing.sm} strokeWidth={2.4} />
       </View>
       <View style={styles.rowCopy}>
-        <Text
+        <AppText
           style={[
             styles.rowTitle,
             tone === "danger" ? styles.rowTitleDanger : null,
           ]}
         >
           {title}
-        </Text>
-        <Text style={styles.rowDescription}>{description}</Text>
+        </AppText>
+        <AppText style={styles.rowDescription}>{description}</AppText>
       </View>
       <ChevronRight color={colors.mutedText} size={20} strokeWidth={2.2} />
     </Pressable>

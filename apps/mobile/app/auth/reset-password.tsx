@@ -1,6 +1,7 @@
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, TextInput, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -57,12 +58,12 @@ export default function ResetPasswordScreen() {
     >
       <View style={styles.hero}>
         <Mascot size="small" mood="idle" />
-        <Text style={styles.heroText}>
+        <AppText style={styles.heroText}>
           8자 이상으로 정해주시면, 장고가 안전하게 기억해 둘게요.
-        </Text>
+        </AppText>
       </View>
 
-      <Text style={styles.label}>새 비밀번호</Text>
+      <AppText style={styles.label}>새 비밀번호</AppText>
       <TextInput
         value={password}
         onChangeText={setPassword}

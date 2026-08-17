@@ -3,11 +3,11 @@ import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { oauthBrand, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { AppText } from "./AppText";
 
 type OAuthButtonProps = {
   provider: OauthBrandProvider;
@@ -69,7 +69,14 @@ export function OAuthButton({
               <ProviderMark provider={provider} color={brand.text} />
             </View>
           </View>
-          <Text style={[styles.label, { color: brand.text }]}>{label}</Text>
+          <AppText
+            variant="bodyStrong"
+            scaleRole="chrome"
+            densityAware={false}
+            style={[styles.label, { color: brand.text }]}
+          >
+            {label}
+          </AppText>
         </>
       )}
     </Pressable>

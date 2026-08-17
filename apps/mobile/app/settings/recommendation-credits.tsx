@@ -2,7 +2,8 @@ import type { Product, Purchase } from "expo-iap";
 import { useIAP } from "expo-iap";
 import { ShieldCheck, Sparkles } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Alert, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
@@ -177,10 +178,10 @@ export default function RecommendationCreditsScreen() {
       <View style={styles.guideCard}>
         <ShieldCheck color={colors.primary} size={22} />
         <View style={styles.guideCopy}>
-          <Text style={styles.guideTitle}>서버에서 구매를 확인해요</Text>
-          <Text style={styles.guideDescription}>
+          <AppText style={styles.guideTitle}>서버에서 구매를 확인해요</AppText>
+          <AppText style={styles.guideDescription}>
             무료 추천을 먼저 사용하고, 이후 구매 추천권이 자동으로 차감돼요. 추천 생성에 실패하면 차감되지 않아요.
-          </Text>
+          </AppText>
         </View>
       </View>
     </Screen>
@@ -202,9 +203,9 @@ function CreditProductCard({ configured, product, selected, onSelect }: {
     >
       <View style={styles.productTitleRow}>
         <Sparkles color={selected ? colors.primary : colors.subtext} size={20} />
-        <Text style={styles.productTitle}>AI 추천 {configured.credits}회</Text>
+        <AppText style={styles.productTitle}>AI 추천 {configured.credits}회</AppText>
       </View>
-      <Text style={styles.productPrice}>{product?.displayPrice ?? "가격 확인 중"}</Text>
+      <AppText style={styles.productPrice}>{product?.displayPrice ?? "가격 확인 중"}</AppText>
     </Pressable>
   );
 }

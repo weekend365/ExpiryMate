@@ -5,7 +5,6 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import Animated, {
@@ -16,6 +15,7 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import jangoWelcomeHero from "../assets/store/jango-appstore-space-copy-ko-1242x2688.png";
 import { Button } from "../src/components/Button";
+import { AppText } from "../src/components/AppText";
 import { type MascotMood } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Screen } from "../src/components/Screen";
@@ -203,17 +203,17 @@ export default function OnboardingScreen() {
           accessibilityRole="button"
           accessibilityLabel="뒤로가기"
         >
-          <Text style={styles.backLinkText}>뒤로가기</Text>
+          <AppText style={styles.backLinkText}>뒤로가기</AppText>
         </Pressable>
       </View>
 
       <Animated.View style={[styles.hero, contentStyle]}>
-        <Text style={styles.brand}>{appBrand.appNameKo}</Text>
-        <Text style={styles.brandEn}>{appBrand.appNameEn}</Text>
+        <AppText style={styles.brand}>{appBrand.appNameKo}</AppText>
+        <AppText style={styles.brandEn}>{appBrand.appNameEn}</AppText>
 
         <View style={styles.copy}>
-          <Text style={styles.eyebrow}>{step.eyebrow}</Text>
-          <Text style={styles.title}>{step.title}</Text>
+          <AppText style={styles.eyebrow}>{step.eyebrow}</AppText>
+          <AppText style={styles.title}>{step.title}</AppText>
         </View>
 
         <MascotSpeechBubble

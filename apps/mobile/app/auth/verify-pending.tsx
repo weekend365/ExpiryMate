@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -129,27 +130,27 @@ export default function VerifyPendingScreen() {
             accessibilityRole="button"
             accessibilityLabel="로그인 화면으로"
           >
-            <Text style={styles.secondaryLinkText}>로그인 화면으로</Text>
+            <AppText style={styles.secondaryLinkText}>로그인 화면으로</AppText>
           </Pressable>
         </View>
       }
     >
       <View style={styles.content}>
         <Mascot size="large" mood={verified ? "happy" : "idle"} />
-        <Text style={styles.headline}>
+        <AppText style={styles.headline}>
           {verified ? "확인됐어요!" : "메일함을 열어볼까요?"}
-        </Text>
-        <Text style={styles.body}>
+        </AppText>
+        <AppText style={styles.body}>
           {email
             ? `${email} 으로 확인 메일을 보내 뒀어요.`
             : "확인 메일을 보내 뒀어요."}
           {verified
             ? " 이제 로그인하면 바로 시작할 수 있어요."
             : " 휴대폰에서 링크를 누르면 앱으로 이어지고, 컴퓨터에서 열면 확인 후 여기서 로그인해 주세요."}
-        </Text>
-        <Text style={styles.hint}>
+        </AppText>
+        <AppText style={styles.hint}>
           메일이 안 보이면 스팸함도 한번 살펴봐 주세요.
-        </Text>
+        </AppText>
       </View>
     </Screen>
   );

@@ -1,6 +1,7 @@
 import { appBrand } from "@expirymate/shared";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
@@ -82,57 +83,57 @@ export default function AiDataNoticeScreen() {
         <View style={styles.statusCard}>
           <Mascot size="small" mood={accepted ? "happy" : "idle"} />
           <View style={styles.statusCopy}>
-            <Text style={styles.statusTitle}>
+            <AppText style={styles.statusTitle}>
               {accepted
                 ? "안내를 살펴보시고 동의해 주셨어요"
                 : "첫 추천 전에 한 번만 살펴봐 주세요"}
-            </Text>
-            <Text style={styles.statusDescription}>
+            </AppText>
+            <AppText style={styles.statusDescription}>
               안내 버전 {status?.aiDataNoticeVersion ?? "불러오는 중"}
               {status?.aiDataNoticeAcceptedAt
                 ? ` · ${formatDate(status.aiDataNoticeAcceptedAt)}에 동의`
                 : ""}
-            </Text>
+            </AppText>
           </View>
         </View>
 
         <View style={styles.section}>
           <SectionHeader title="자세히 알아보기" />
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>추천할 때 전달되는 정보</Text>
-            <Text style={styles.bodyText}>
+            <AppText style={styles.cardTitle}>추천할 때 전달되는 정보</AppText>
+            <AppText style={styles.bodyText}>
               재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한, 만료까지 남은
               일수, 인원·조리 시간·식사 유형 같은 조건과 저장한 알레르기·제외
               재료·식단·매운맛·조리도구 설정, 최근 즐겨찾기·조리 완료·관심없음
               요약이 장고 서버를 거쳐 외부 요리 도우미(OpenAI, 미국)로 전달돼요.
               앱에는 OpenAI 키가 없어요.
-            </Text>
+            </AppText>
           </View>
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>장고가 기억해 두는 것</Text>
-            <Text style={styles.bodyText}>
+            <AppText style={styles.cardTitle}>장고가 기억해 두는 것</AppText>
+            <AppText style={styles.bodyText}>
               추천할 때 고른 조건, 그때의 재료 목록, 나온 요리 추천은 나중에 다시
               볼 수 있도록 내 계정에 남겨 둬요. 즐겨찾기와 상세 보기·조리 시작·완료·
               관심없음 기록도 다음 추천을 맞추기 위해 남겨요. 추천 행동과 결과는
               「추천 기록과 즐겨찾기 정리」에서 지울 수 있고, 맞춤 설정은 설정에서
               바꾸거나 계정을 정리할 때 삭제할 수 있어요.
-            </Text>
+            </AppText>
           </View>
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>얼마나 오래 두나요?</Text>
-            <Text style={styles.bodyText}>
+            <AppText style={styles.cardTitle}>얼마나 오래 두나요?</AppText>
+            <AppText style={styles.bodyText}>
               장고 서버의 추천 기록은 직접 지우거나 계정을 정리할 때까지 보관해요.
               외부 도우미로 보낸 정보는 모델 학습에는 쓰이지 않고, 안전 확인을
               위해 그쪽 정책에 따라 최대 약 30일 보관될 수 있어요.
-            </Text>
+            </AppText>
           </View>
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>동의를 거두면요?</Text>
-            <Text style={styles.bodyText}>
+            <AppText style={styles.cardTitle}>동의를 거두면요?</AppText>
+            <AppText style={styles.bodyText}>
               아래 버튼으로 동의를 거두면 새 추천 요청은 멈출 수 있어요. 이미 받아
               두신 추천은 그대로 남을 수 있으니, 필요하면 개인정보 화면에서 기록만
               따로 정리해 주세요.
-            </Text>
+            </AppText>
           </View>
         </View>
       </Screen>

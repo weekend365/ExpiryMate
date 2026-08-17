@@ -2,7 +2,8 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { deepLinkToSubscriptions } from "expo-iap";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, TextInput, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
@@ -81,32 +82,32 @@ export default function AccountDeleteScreen() {
         <View style={styles.hero}>
           <Mascot size="medium" mood="worry" />
           <View style={styles.heroCopy}>
-            <Text style={styles.heroTitle}>
+            <AppText style={styles.heroTitle}>
               {appBrand.characterNameKo}가 조금 걱정돼요
-            </Text>
-            <Text style={styles.heroText}>
+            </AppText>
+            <AppText style={styles.heroText}>
               떠나셔도 괜찮아요. 다만 아래 정보는 바로 지워지니, 한 번만 더
               살펴봐 주세요.
-            </Text>
+            </AppText>
           </View>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>바로 지워지는 것들</Text>
-          <Text style={styles.bodyText}>
+          <AppText style={styles.cardTitle}>바로 지워지는 것들</AppText>
+          <AppText style={styles.bodyText}>
             개인 냉장고의 재료와 유통기한, 그동안 받은 요리 추천, 알림 설정,
             로그인 기록, 이메일·비밀번호 또는 소셜 로그인 연결 정보가 지워져요.
             함께 쓰는 냉장고의 공동 재고는 다른 구성원을 위해 남고, 내
             생성·수정자 연결만 제거돼요.
-          </Text>
+          </AppText>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>함께 쓰는 냉장고가 있다면</Text>
-          <Text style={styles.bodyText}>
+          <AppText style={styles.cardTitle}>함께 쓰는 냉장고가 있다면</AppText>
+          <AppText style={styles.bodyText}>
             다른 구성원이 있는 공간을 소유 중이면, 먼저 소유권을 넘기거나 공간을
             정리해야 계정을 지울 수 있어요.
-          </Text>
+          </AppText>
           <Button
             variant="secondary"
             onPress={() => router.push("/settings/spaces")}
@@ -118,11 +119,11 @@ export default function AccountDeleteScreen() {
 
         {hasActiveSubscription ? (
           <View style={styles.subscriptionWarning}>
-            <Text style={styles.cardTitle}>스토어 구독은 따로 해지해 주세요</Text>
-            <Text style={styles.bodyText}>
+            <AppText style={styles.cardTitle}>스토어 구독은 따로 해지해 주세요</AppText>
+            <AppText style={styles.bodyText}>
               계정을 삭제해도 App Store나 Google Play의 자동 갱신 구독은
               해지되지 않아요. 먼저 스토어에서 구독을 관리해 주세요.
-            </Text>
+            </AppText>
             <Button
               variant="secondary"
               onPress={() =>
@@ -139,11 +140,11 @@ export default function AccountDeleteScreen() {
         ) : null}
 
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>실수하지 않게 한 번 더</Text>
-          <Text style={styles.bodyText}>
+          <AppText style={styles.cardTitle}>실수하지 않게 한 번 더</AppText>
+          <AppText style={styles.bodyText}>
             계속하시려면 아래 칸에{" "}
-            <Text style={styles.emphasis}>삭제</Text>를 입력해 주세요.
-          </Text>
+            <AppText style={styles.emphasis}>삭제</AppText>를 입력해 주세요.
+          </AppText>
           <TextInput
             value={confirmation}
             onChangeText={setConfirmation}
@@ -183,10 +184,10 @@ export default function AccountDeleteScreen() {
         }
       >
         <View style={styles.confirmCard}>
-          <Text style={styles.confirmLabel}>정리 대상</Text>
-          <Text style={styles.confirmValue}>
+          <AppText style={styles.confirmLabel}>정리 대상</AppText>
+          <AppText style={styles.confirmValue}>
             계정 · 개인 재료 · 추천 · 알림 · 로그인
-          </Text>
+          </AppText>
         </View>
       </BottomSheet>
     </>

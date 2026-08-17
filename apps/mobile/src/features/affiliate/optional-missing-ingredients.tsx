@@ -4,7 +4,8 @@ import type {
   RecipeRecommendationDish,
 } from "@expirymate/shared";
 import { useEffect, useRef } from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "../../components/AppText";
 import { trackMonetizationEvent } from "../../services/api";
 import {
   colors,
@@ -68,15 +69,15 @@ export function OptionalMissingIngredientsCard({
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>있으면 더 맛있어져요</Text>
+      <AppText style={styles.title}>있으면 더 맛있어져요</AppText>
       <View style={styles.list}>
         {dish.optionalMissingIngredients.map((ingredient) => {
           const offer = offerByName.get(ingredient.name);
           return (
             <View key={`${ingredient.name}-${ingredient.reason}`} style={styles.row}>
               <View style={styles.copy}>
-                <Text style={styles.name}>{ingredient.name}</Text>
-                <Text style={styles.reason}>{ingredient.reason}</Text>
+                <AppText style={styles.name}>{ingredient.name}</AppText>
+                <AppText style={styles.reason}>{ingredient.reason}</AppText>
               </View>
               {offer ? (
                 <Pressable
@@ -88,7 +89,7 @@ export function OptionalMissingIngredientsCard({
                     pressed && styles.ctaPressed,
                   ]}
                 >
-                  <Text style={styles.ctaLabel}>쿠팡에서 찾아보기</Text>
+                  <AppText style={styles.ctaLabel}>쿠팡에서 찾아보기</AppText>
                 </Pressable>
               ) : null}
             </View>
@@ -103,11 +104,11 @@ export function OptionalMissingIngredientsCard({
           accessibilityHint="특정 한 품목이 아니라 식재료를 둘러보는 페이지로 이동해요."
           style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
         >
-          <Text style={styles.ctaLabel}>이 재료들, 쿠팡에서 둘러볼까요?</Text>
+          <AppText style={styles.ctaLabel}>이 재료들, 쿠팡에서 둘러볼까요?</AppText>
         </Pressable>
       ) : null}
       {offers.length > 0 && offersQuery.data?.disclosure ? (
-        <Text style={styles.disclosure}>{offersQuery.data.disclosure}</Text>
+        <AppText style={styles.disclosure}>{offersQuery.data.disclosure}</AppText>
       ) : null}
     </View>
   );

@@ -7,7 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { Bell, BellOff, KeyRound, LogIn } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
+import { AppText } from "../../../src/components/AppText";
 import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
 import { Screen } from "../../../src/components/Screen";
@@ -119,7 +120,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
       {!previewData ? (
         <View style={styles.card}>
           <View style={styles.field}>
-            <Text style={styles.label}>초대 코드</Text>
+            <AppText style={styles.label}>초대 코드</AppText>
             <TextInput
               value={codeInput}
               onChangeText={updateCode}
@@ -131,16 +132,16 @@ export default function AcceptSpaceInvitationCodeScreen() {
               style={styles.codeInput}
               accessibilityLabel="8자리 초대 코드"
             />
-            <Text style={styles.hint}>
+            <AppText style={styles.hint}>
               영문 대문자와 숫자 8자리를 입력해 주세요.
-            </Text>
+            </AppText>
           </View>
           {previewMutation.error || acceptMutation.error ? (
-            <Text style={styles.errorText}>
+            <AppText style={styles.errorText}>
               {(previewMutation.error ?? acceptMutation.error) instanceof Error
                 ? (previewMutation.error ?? acceptMutation.error)?.message
                 : "초대 코드를 확인하지 못했어요."}
-            </Text>
+            </AppText>
           ) : null}
         </View>
       ) : (

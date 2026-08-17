@@ -3,8 +3,9 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
 import { forwardRef, useCallback, useImperativeHandle, useState, type PropsWithChildren } from "react";
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 
@@ -90,7 +91,9 @@ export const DatePickerField = forwardRef<
   return (
     <View style={[styles.wrapper, isHero && styles.wrapperHero]}>
       {label && !isHero && !isHidden ? (
-        <Text style={styles.label}>{label}</Text>
+        <AppText variant="bodySmall" scaleRole="body">
+          {label}
+        </AppText>
       ) : null}
 
       {isHidden ? (
@@ -109,16 +112,17 @@ export const DatePickerField = forwardRef<
             ]}
           >
             {heroEyebrow ? (
-              <Text style={styles.heroEyebrow}>{heroEyebrow}</Text>
+              <AppText variant="caption" tone="primary">
+                {heroEyebrow}
+              </AppText>
             ) : null}
-            <Text
-              style={[
-                styles.heroValue,
-                !value && styles.heroValuePlaceholder,
-              ]}
+            <AppText
+              variant="heading"
+              tone={value ? "default" : "muted"}
+              style={!value ? styles.heroValuePlaceholder : undefined}
             >
               {displayValue}
-            </Text>
+            </AppText>
           </Pressable>
 
           {children}
@@ -133,7 +137,9 @@ export const DatePickerField = forwardRef<
               pressed && styles.heroActionPressed,
             ]}
           >
-            <Text style={styles.heroActionLabel}>{resolvedActionLabel}</Text>
+            <AppText variant="bodySmall" tone="primary" scaleRole="chrome">
+              {resolvedActionLabel}
+            </AppText>
           </Pressable>
         </>
       ) : (
@@ -148,14 +154,23 @@ export const DatePickerField = forwardRef<
             error ? styles.errorTrigger : null,
           ]}
         >
-          <Text style={value ? styles.valueText : styles.placeholderText}>
+          <AppText
+            variant={value ? "bodyStrong" : "body"}
+            tone={value ? "default" : "muted"}
+          >
             {displayValue}
-          </Text>
-          <Text style={styles.triggerAction}>{resolvedActionLabel}</Text>
+          </AppText>
+          <AppText variant="label" tone="primary">
+            {resolvedActionLabel}
+          </AppText>
         </Pressable>
       )}
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? (
+        <AppText variant="label" tone="danger">
+          {error}
+        </AppText>
+      ) : null}
 
       {Platform.OS === "ios" ? (
         <BottomSheet
@@ -229,12 +244,6 @@ const styles = StyleSheet.create({
   wrapperHero: {
     gap: spacing.xs,
   },
-  label: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.text,
-  },
   trigger: {
     minHeight: touchTarget.ctaLarge,
     borderRadius: radius.lg,
@@ -252,24 +261,6 @@ const styles = StyleSheet.create({
   errorTrigger: {
     borderColor: colors.danger,
   },
-  valueText: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  placeholderText: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.mutedText,
-  },
-  triggerAction: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    color: colors.primary,
-    fontFamily: typography.label.fontFamily,
-  },
   heroValueBlock: {
     minHeight: touchTarget.cta,
     borderRadius: radius.lg,
@@ -282,20 +273,7 @@ const styles = StyleSheet.create({
   heroValueBlockPressed: {
     opacity: 0.88,
   },
-  heroEyebrow: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.primary,
-  },
-  heroValue: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
-    color: colors.text,
-  },
   heroValuePlaceholder: {
-    color: colors.mutedText,
     fontFamily: typography.body.fontFamily,
   },
   heroAction: {
@@ -310,18 +288,6 @@ const styles = StyleSheet.create({
   },
   heroActionPressed: {
     backgroundColor: colors.surfacePressed,
-  },
-  heroActionLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
-  },
-  errorText: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
   },
   buttonRow: {
     flexDirection: "row",

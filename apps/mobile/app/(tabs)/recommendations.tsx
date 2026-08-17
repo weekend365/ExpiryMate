@@ -36,7 +36,6 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
@@ -647,16 +646,16 @@ export default function RecommendationsScreen() {
           {recipeView === "recommendations" && showValueMomentOffer ? (
             <View style={styles.valueOfferCard}>
               <View style={styles.valueOfferCopy}>
-                <Text style={styles.valueOfferTitle}>
+                <AppText style={styles.valueOfferTitle}>
                   {monetization.access?.offer.kind === "jango_household"
                     ? "가족 냉장고가 함께 움직이고 있어요"
                     : "냉장고 관리가 습관이 되고 있어요"}
-                </Text>
-                <Text style={styles.valueOfferDescription}>
+                </AppText>
+                <AppText style={styles.valueOfferDescription}>
                   {monetization.access?.offer.kind === "jango_household"
                     ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
                     : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
-                </Text>
+                </AppText>
               </View>
               <Button
                 onPress={() =>
@@ -691,7 +690,7 @@ export default function RecommendationsScreen() {
                 size={spacing.sm}
                 strokeWidth={2.4}
               />
-              <Text
+              <AppText
                 style={[
                   styles.recipeViewLabel,
                   recipeView === "recommendations" &&
@@ -699,7 +698,7 @@ export default function RecommendationsScreen() {
                 ]}
               >
                 추천받기
-              </Text>
+              </AppText>
             </Pressable>
             <Pressable
               onPress={() => setRecipeView("favorites")}
@@ -719,14 +718,14 @@ export default function RecommendationsScreen() {
                 size={spacing.sm}
                 strokeWidth={2.4}
               />
-              <Text
+              <AppText
                 style={[
                   styles.recipeViewLabel,
                   recipeView === "favorites" && styles.recipeViewLabelSelected,
                 ]}
               >
                 즐겨찾기 {favoritesQuery.data?.length ?? 0}
-              </Text>
+              </AppText>
             </Pressable>
           </View>
 
@@ -801,15 +800,15 @@ export default function RecommendationsScreen() {
                     ]}
                   >
                     <View style={styles.optionsSummaryCopy}>
-                      <Text style={styles.optionsSummaryLabel}>
+                      <AppText style={styles.optionsSummaryLabel}>
                         {quotaCopy.label}
-                      </Text>
-                      <Text
+                      </AppText>
+                      <AppText
                         style={styles.optionsSummaryValue}
                         numberOfLines={1}
                       >
                         {quotaCopy.value}
-                      </Text>
+                      </AppText>
                     </View>
                     {canOfferRewardedAd ? (
                       <View
@@ -823,9 +822,9 @@ export default function RecommendationsScreen() {
                           size={spacing.sm + spacing.xxs}
                           strokeWidth={2.4}
                         />
-                        <Text style={styles.optionsSummaryActionLabel}>
+                        <AppText style={styles.optionsSummaryActionLabel}>
                           {isAdBusy ? "광고 준비 중" : "광고 보기"}
-                        </Text>
+                        </AppText>
                       </View>
                     ) : null}
                   </Pressable>
@@ -843,11 +842,11 @@ export default function RecommendationsScreen() {
                   ]}
                 >
                   <View style={styles.optionsSummaryCopy}>
-                    <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
-                    <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+                    <AppText style={styles.optionsSummaryLabel}>추천 조건</AppText>
+                    <AppText style={styles.optionsSummaryValue} numberOfLines={1}>
                       {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
                       {useExpiringFirst ? " · 임박 먼저" : ""}
-                    </Text>
+                    </AppText>
                   </View>
                   <View
                     style={[
@@ -860,7 +859,7 @@ export default function RecommendationsScreen() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.optionsSummaryActionLabel}>바꾸기</Text>
+                    <AppText style={styles.optionsSummaryActionLabel}>바꾸기</AppText>
                   </View>
                 </Pressable>
                 <Pressable
@@ -876,12 +875,12 @@ export default function RecommendationsScreen() {
                   ]}
                 >
                   <View style={styles.optionsSummaryCopy}>
-                    <Text style={styles.optionsSummaryLabel}>
+                    <AppText style={styles.optionsSummaryLabel}>
                       알레르기·식단
-                    </Text>
-                    <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+                    </AppText>
+                    <AppText style={styles.optionsSummaryValue} numberOfLines={1}>
                       {preferenceSummary.text}
-                    </Text>
+                    </AppText>
                   </View>
                   <View
                     style={[
@@ -894,9 +893,9 @@ export default function RecommendationsScreen() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.optionsSummaryActionLabel}>
+                    <AppText style={styles.optionsSummaryActionLabel}>
                       {preferenceSummary.applied ? "바꾸기" : "맞춰요"}
-                    </Text>
+                    </AppText>
                   </View>
                 </Pressable>
               </View>
@@ -906,11 +905,11 @@ export default function RecommendationsScreen() {
           {recipeView === "recommendations" && errorMessage && !isGenerating ? (
             isQuotaError ? (
               <View style={styles.quotaCard}>
-                <Text style={styles.quotaTitle}>
+                <AppText style={styles.quotaTitle}>
                   {canOfferRewardedAd
                     ? "광고 한 편이면 추천을 이어갈 수 있어요"
                     : "오늘은 추천을 조금 쉬어갈까요?"}
-                </Text>
+                </AppText>
                 <MascotSpeechBubble
                   message={
                     canOfferRewardedAd
@@ -953,7 +952,7 @@ export default function RecommendationsScreen() {
                       pressed && styles.optionsSummaryPressed,
                     ]}
                   >
-                    <Text style={styles.quotaLinkText}>다른 방법</Text>
+                    <AppText style={styles.quotaLinkText}>다른 방법</AppText>
                   </Pressable>
                 ) : null}
                 {!hasActiveEntitlement &&
@@ -981,17 +980,17 @@ export default function RecommendationsScreen() {
                       pressed && styles.optionsSummaryPressed,
                     ]}
                   >
-                    <Text style={styles.quotaLinkText}>
+                    <AppText style={styles.quotaLinkText}>
                       장고 플러스 살펴보기
-                    </Text>
+                    </AppText>
                   </Pressable>
                 ) : null}
               </View>
             ) : isCapacityError ? (
               <View style={styles.quotaCard}>
-                <Text style={styles.quotaTitle}>
+                <AppText style={styles.quotaTitle}>
                   오늘은 추천을 조금 쉬어갈까요?
-                </Text>
+                </AppText>
                 <MascotSpeechBubble
                   message={
                     errorMessage.includes("너무 많")
@@ -1004,11 +1003,11 @@ export default function RecommendationsScreen() {
               </View>
             ) : (
               <View style={styles.errorCard}>
-                <Text style={styles.errorTitle}>
+                <AppText style={styles.errorTitle}>
                   {isHistoryLoadError
                     ? "앗, 추천을 불러오지 못했어요"
                     : "앗, 추천을 만들지 못했어요"}
-                </Text>
+                </AppText>
                 <MascotSpeechBubble
                   message={errorMessage}
                   mood="worry"
@@ -1033,11 +1032,11 @@ export default function RecommendationsScreen() {
                     pressed && styles.optionsSummaryPressed,
                   ]}
                 >
-                  <Text style={styles.quotaLinkText}>
+                  <AppText style={styles.quotaLinkText}>
                     {isHistoryLoadError
                       ? "다시 불러올게요"
                       : "재료부터 넣어볼까요?"}
-                  </Text>
+                  </AppText>
                 </Pressable>
               </View>
             )
@@ -1125,25 +1124,25 @@ export default function RecommendationsScreen() {
                     ]}
                   >
                     <View style={styles.historyCopy}>
-                      <Text style={styles.historyTitle}>
+                      <AppText style={styles.historyTitle}>
                         {formatCreatedAt(recommendation.createdAt)} 추천
-                      </Text>
-                      <Text
+                      </AppText>
+                      <AppText
                         style={styles.historyDescription}
                         numberOfLines={1}
                         ellipsizeMode="tail"
                       >
                         {formatHistoryPreview(recommendation)}
-                      </Text>
+                      </AppText>
                     </View>
-                    <Text
+                    <AppText
                       style={[
                         styles.historyAction,
                         shouldStack && styles.historyActionStacked,
                       ]}
                     >
                       불러오기
-                    </Text>
+                    </AppText>
                   </Pressable>
                 ))}
               </View>
@@ -1158,9 +1157,9 @@ export default function RecommendationsScreen() {
               style={styles.favoriteLoading}
               accessibilityLabel="추천을 불러오고 있어요"
             >
-              <Text style={styles.favoriteLoadingText}>
+              <AppText style={styles.favoriteLoadingText}>
                 추천을 불러오고 있어요…
-              </Text>
+              </AppText>
             </View>
           ) : null}
 
@@ -1188,9 +1187,9 @@ export default function RecommendationsScreen() {
                   style={styles.favoriteLoading}
                   accessibilityLabel="즐겨찾기를 불러오고 있어요"
                 >
-                  <Text style={styles.favoriteLoadingText}>
+                  <AppText style={styles.favoriteLoadingText}>
                     즐겨찾기를 불러오고 있어요…
-                  </Text>
+                  </AppText>
                 </View>
               ) : favoritesQuery.error ? (
                 <FeedbackBanner
@@ -1269,7 +1268,7 @@ export default function RecommendationsScreen() {
         <View style={styles.optionGroup}>
           <View style={styles.optionHeader}>
             <Users color={colors.subtext} size={spacing.sm} strokeWidth={2.4} />
-            <Text style={styles.optionTitle}>몇 명이서 먹나요?</Text>
+            <AppText style={styles.optionTitle}>몇 명이서 먹나요?</AppText>
           </View>
           <View style={styles.pillRow}>
             {servingOptions.map((value) => (
@@ -1290,7 +1289,7 @@ export default function RecommendationsScreen() {
               size={spacing.sm}
               strokeWidth={2.4}
             />
-            <Text style={styles.optionTitle}>얼마나 걸려도 괜찮나요?</Text>
+            <AppText style={styles.optionTitle}>얼마나 걸려도 괜찮나요?</AppText>
           </View>
           <View style={styles.pillRow}>
             {timeOptions.map((value) => (
@@ -1305,7 +1304,7 @@ export default function RecommendationsScreen() {
         </View>
 
         <View style={styles.optionGroup}>
-          <Text style={styles.optionTitle}>어떤 식사인가요?</Text>
+          <AppText style={styles.optionTitle}>어떤 식사인가요?</AppText>
           <View style={styles.pillRow}>
             {mealTypeOptions.map((option) => (
               <Pill
@@ -1380,17 +1379,17 @@ export default function RecommendationsScreen() {
           </View>
         }
       >
-        <Text style={styles.noticeBody}>
+        <AppText style={styles.noticeBody}>
           요리 추천을 만들 때 재료 이름, 종류, 수량과 단위, 보관 위치, 유통기한,
           만료까지 남은 일수, 고른 조건과 저장한 알레르기·식단·조리도구 설정,
           최근 즐겨찾기·조리·관심없음 요약이 장고 서버를 거쳐 외부 요리
           도우미(OpenAI)로 전달돼요. 나온 추천과 그때의 재료 목록, 추천 행동은
           기록과 더 나은 추천을 위해 내 계정에 남겨 둬요.
-        </Text>
-        <Text style={styles.noticeFootnote}>
+        </AppText>
+        <AppText style={styles.noticeFootnote}>
           외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지 않아요.
           다만 서비스 안전과 이상 이용 확인을 위해 잠깐 보관될 수 있어요.
-        </Text>
+        </AppText>
       </BottomSheet>
 
       <BottomSheet
@@ -1736,10 +1735,10 @@ function RecipeDetailContent({
 
   return (
     <>
-      <Text style={styles.recipeDetailSummary}>{dish.summary}</Text>
+      <AppText style={styles.recipeDetailSummary}>{dish.summary}</AppText>
 
       <View style={styles.recipeBlock}>
-        <Text style={styles.blockTitle}>사용할 재료</Text>
+        <AppText style={styles.blockTitle}>사용할 재료</AppText>
         {usedIngredientRows.length > 0 ? (
           <View style={styles.ingredientInfoList}>
             {usedIngredientRows.map((ingredient) => (
@@ -1756,13 +1755,13 @@ function RecipeDetailContent({
                     shouldStack && styles.ingredientInfoCopyStacked,
                   ]}
                 >
-                  <Text style={styles.ingredientInfoName}>
+                  <AppText style={styles.ingredientInfoName}>
                     {ingredient.name}
-                  </Text>
+                  </AppText>
                   {ingredient.amountLabel ? (
-                    <Text style={styles.ingredientInfoAmount}>
+                    <AppText style={styles.ingredientInfoAmount}>
                       추천 {ingredient.amountLabel}
-                    </Text>
+                    </AppText>
                   ) : null}
                 </View>
                 {ingredient.daysUntilExpiry !== null ? (
@@ -1785,7 +1784,7 @@ function RecipeDetailContent({
                       size={spacing.sm}
                       strokeWidth={2.4}
                     />
-                    <Text
+                    <AppText
                       style={[
                         styles.ingredientExpiryBadgeText,
                         ingredient.isExpiring
@@ -1795,14 +1794,14 @@ function RecipeDetailContent({
                     >
                       {formatIngredientDdayLabel(ingredient.daysUntilExpiry) ??
                         "임박"}
-                    </Text>
+                    </AppText>
                   </View>
                 ) : null}
               </View>
             ))}
           </View>
         ) : (
-          <Text style={styles.blockHint}>표시할 재료 정보가 없어요.</Text>
+          <AppText style={styles.blockHint}>표시할 재료 정보가 없어요.</AppText>
         )}
       </View>
 
@@ -1813,7 +1812,7 @@ function RecipeDetailContent({
       />
 
       <View style={styles.recipeBlock}>
-        <Text style={styles.blockTitle}>조리 순서</Text>
+        <AppText style={styles.blockTitle}>조리 순서</AppText>
         <View style={styles.stepList}>
           {dish.steps.map((step, stepIndex) => (
             <View
@@ -1821,9 +1820,9 @@ function RecipeDetailContent({
               style={styles.stepCard}
             >
               <View style={styles.stepBadge}>
-                <Text style={styles.stepBadgeText}>{stepIndex + 1}</Text>
+                <AppText style={styles.stepBadgeText}>{stepIndex + 1}</AppText>
               </View>
-              <Text style={styles.stepText}>{step}</Text>
+              <AppText style={styles.stepText}>{step}</AppText>
             </View>
           ))}
         </View>
@@ -1831,15 +1830,15 @@ function RecipeDetailContent({
 
       {dish.tips.length > 0 ? (
         <View style={styles.softNoteCard}>
-          <Text style={styles.softNoteTitle}>팁</Text>
-          <Text style={styles.softNoteBody}>{dish.tips.join(" ")}</Text>
+          <AppText style={styles.softNoteTitle}>팁</AppText>
+          <AppText style={styles.softNoteBody}>{dish.tips.join(" ")}</AppText>
         </View>
       ) : null}
 
       {dish.safetyNote ? (
         <View style={styles.safetyCard}>
-          <Text style={styles.safetyCardTitle}>안전하게 챙기기</Text>
-          <Text style={styles.safetyCardBody}>{dish.safetyNote}</Text>
+          <AppText style={styles.safetyCardTitle}>안전하게 챙기기</AppText>
+          <AppText style={styles.safetyCardBody}>{dish.safetyNote}</AppText>
         </View>
       ) : null}
     </>
