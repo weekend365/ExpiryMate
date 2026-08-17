@@ -1,7 +1,9 @@
-import { spacing } from "../../shared/theme";
+import { spacing } from "@expirymate/shared";
 
-/** Vertical size of the scan cutout in the overlay. */
+/** Compact-phone baseline for the scan cutout. Taller windows scale up from this. */
 export const SCAN_FRAME_HEIGHT = spacing.xxxl + spacing.xxxl + spacing.xl;
+export const SCAN_FRAME_HEIGHT_RATIO = 0.22;
+export const SCAN_FRAME_HEIGHT_MAX = Math.round(SCAN_FRAME_HEIGHT * 1.75);
 
 /** Horizontal inset of the cutout from overlay edges. */
 export const SCAN_FRAME_SIDE_INSET = spacing.lg;
@@ -12,9 +14,20 @@ export const SCAN_LINE_INSET = spacing.md;
 /** Scan line thickness. */
 export const SCAN_LINE_HEIGHT = spacing.xxs;
 
-/** Distance the scan line travels inside the frame. */
-export const SCAN_LINE_TRAVEL =
-  SCAN_FRAME_HEIGHT - SCAN_LINE_INSET * 2 - SCAN_LINE_HEIGHT;
+export function getScanFrameHeight(windowHeight: number): number {
+  const ratioHeight = Math.round(windowHeight * SCAN_FRAME_HEIGHT_RATIO);
+  return Math.min(
+    Math.max(ratioHeight, SCAN_FRAME_HEIGHT),
+    SCAN_FRAME_HEIGHT_MAX,
+  );
+}
+
+export function getScanLineTravel(frameHeight: number = SCAN_FRAME_HEIGHT): number {
+  return Math.max(frameHeight - SCAN_LINE_INSET * 2 - SCAN_LINE_HEIGHT, 0);
+}
+
+/** Distance the scan line travels inside the compact baseline frame. */
+export const SCAN_LINE_TRAVEL = getScanLineTravel(SCAN_FRAME_HEIGHT);
 
 export type GuideFrameLayout = {
   x: number;

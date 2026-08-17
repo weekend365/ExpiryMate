@@ -39,7 +39,10 @@ import {
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
-import { useResponsiveLayout } from "../../src/shared/responsive-layout";
+import {
+  getContentMaxWidth,
+  useResponsiveLayout,
+} from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 const difficultyLabels = {
@@ -49,7 +52,8 @@ const difficultyLabels = {
 } as const;
 
 export default function HomeScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense, width } = useResponsiveLayout();
+  const contentMaxWidth = getContentMaxWidth("wide", width);
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useDashboardSummary();
   const {
@@ -215,7 +219,14 @@ export default function HomeScreen() {
         />
         <ScrollView
           style={styles.scrollFlex}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            contentMaxWidth != null && {
+              maxWidth: contentMaxWidth,
+              width: "100%",
+              alignSelf: "center",
+            },
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
@@ -459,11 +470,20 @@ export default function HomeScreen() {
             />
             {isInitialLoading ? (
               <View
-                style={styles.trafficStrip}
+                style={[
+                  styles.trafficStrip,
+                  shouldStackDense && styles.trafficStripDense,
+                ]}
                 accessibilityLabel="유통기한 현황을 불러오고 있어요"
               >
                 {[0, 1, 2].map((index) => (
-                  <View key={index} style={styles.trafficLampPressable}>
+                  <View
+                    key={index}
+                    style={[
+                      styles.trafficLampPressable,
+                      shouldStackDense && styles.trafficLampPressableDense,
+                    ]}
+                  >
                     <SkeletonBlock
                       width={spacing.xxl}
                       height={spacing.xxl}
@@ -479,10 +499,16 @@ export default function HomeScreen() {
                 </AppText>
               </View>
             ) : hasInventory ? (
-              <View style={styles.trafficStrip}>
+              <View
+                style={[
+                  styles.trafficStrip,
+                  shouldStackDense && styles.trafficStripDense,
+                ]}
+              >
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
+                    shouldStackDense && styles.trafficLampPressableDense,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("expired")}
@@ -501,6 +527,7 @@ export default function HomeScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
+                    shouldStackDense && styles.trafficLampPressableDense,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("within7")}
@@ -519,6 +546,7 @@ export default function HomeScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
+                    shouldStackDense && styles.trafficLampPressableDense,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("safe")}
@@ -930,6 +958,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.mutedSurface,
   },
+  trafficStripDense: {
+    flexWrap: "wrap",
+  },
   trafficLampPressable: {
     flex: 1,
     alignItems: "center",
@@ -937,6 +968,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: spacing.xxs,
     borderRadius: radius.md,
+  },
+  trafficLampPressableDense: {
+    flexBasis: spacing.xxxl + spacing.xl,
+    minWidth: spacing.xxxl + spacing.lg,
+    flexGrow: 1,
   },
   trafficLampPressablePressed: {
     backgroundColor: colors.surfacePressed,

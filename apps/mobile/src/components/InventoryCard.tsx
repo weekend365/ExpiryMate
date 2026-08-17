@@ -7,7 +7,7 @@ import {
   type InventoryItem,
 } from "@expirymate/shared";
 import { CheckCircle2, PenLine } from "lucide-react-native";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
@@ -67,15 +67,23 @@ export function InventoryCard({
           lampColor={presentation.lampColor}
         />
         <View style={styles.copy}>
-          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
+          <AppText
+            variant="bodyStrong"
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={styles.name}
+          >
             {item.displayName}
             {item.brand ? (
-              <Text style={styles.brandInline}> · {item.brand}</Text>
+              <AppText variant="caption" tone="muted">
+                {" "}
+                · {item.brand}
+              </AppText>
             ) : null}
-          </Text>
-          <Text style={styles.meta} numberOfLines={1}>
+          </AppText>
+          <AppText variant="caption" tone="subtext" numberOfLines={1} style={styles.meta}>
             {locationLabel} · {quantityLabel} · {dateLabel}
-          </Text>
+          </AppText>
         </View>
       </Pressable>
 
@@ -207,23 +215,9 @@ const styles = StyleSheet.create({
   name: {
     flexShrink: 1,
     minWidth: 0,
-    fontSize: typography.bodyStrong.fontSize,
-    lineHeight: typography.bodyStrong.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  brandInline: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
   },
   meta: {
     flexShrink: 1,
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
   },
   trailingHit: {
     minWidth: touchTarget.icon,

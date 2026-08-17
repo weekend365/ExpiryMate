@@ -1,8 +1,9 @@
 import { ChevronRight, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { Pressable, StyleSheet, View } from "react-native";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
+import { AppText } from "./AppText";
 
 interface ListRowProps {
   title: string;
@@ -45,11 +46,17 @@ export function ListRow({
           </View>
         ) : null}
         <View style={styles.listCopy}>
-          <Text style={[styles.listTitle, destructive && styles.listTitleDanger]}>
+          <AppText
+            variant="bodyStrong"
+            tone={destructive ? "danger" : "default"}
+            style={styles.listTitle}
+          >
             {title}
-          </Text>
+          </AppText>
           {description ? (
-            <Text style={styles.listDescription}>{description}</Text>
+            <AppText variant="label" tone="subtext" style={styles.listDescription}>
+              {description}
+            </AppText>
           ) : null}
         </View>
       </View>
@@ -146,19 +153,8 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     flexShrink: 1,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  listTitleDanger: {
-    color: colors.danger,
   },
   listDescription: {
     flexShrink: 1,
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
   },
 });

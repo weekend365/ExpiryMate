@@ -3,12 +3,12 @@ import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
-  Text,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { AppText } from "./AppText";
 
 interface ButtonProps extends PropsWithChildren {
   onPress: () => void;
@@ -41,15 +41,14 @@ export function Button({
   const iconSize = size === "small" ? spacing.sm : spacing.sm + spacing.xxs;
   const textColor = isDisabled ? palette.disabledTextColor : palette.textColor;
   const label = (
-    <Text
-      style={[
-        styles.label,
-        size === "small" ? styles.smallLabel : styles.mediumLabel,
-        { color: textColor },
-      ]}
+    <AppText
+      variant={size === "small" ? "bodySmall" : "bodyStrong"}
+      scaleRole="chrome"
+      densityAware={false}
+      style={[styles.label, { color: textColor }]}
     >
       {children}
-    </Text>
+    </AppText>
   );
   const icon = Icon ? (
     <Icon
@@ -158,15 +157,5 @@ const styles = StyleSheet.create({
   label: {
     flexShrink: 1,
     textAlign: "center",
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  mediumLabel: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-  },
-  smallLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
   },
 });

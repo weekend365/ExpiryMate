@@ -82,7 +82,10 @@ import {
   touchTarget,
   typography,
 } from "../../src/shared/theme";
-import { useResponsiveLayout } from "../../src/shared/responsive-layout";
+import {
+  getContentMaxWidth,
+  useResponsiveLayout,
+} from "../../src/shared/responsive-layout";
 
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
@@ -139,7 +142,8 @@ const equipmentLabels = {
 } as const;
 
 export default function RecommendationsScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, width } = useResponsiveLayout();
+  const contentMaxWidth = getContentMaxWidth("wide", width);
   const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
@@ -595,7 +599,14 @@ export default function RecommendationsScreen() {
         />
         <ScrollView
           style={styles.scrollFlex}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            contentMaxWidth != null && {
+              maxWidth: contentMaxWidth,
+              width: "100%",
+              alignSelf: "center",
+            },
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
@@ -1042,42 +1053,44 @@ export default function RecommendationsScreen() {
               onToggle={() => toggleRecipeSection("latest")}
             >
               {latestRecommendation.recommendations.length ? (
-                latestRecommendation.recommendations.map((dish, index) => (
-                  <RecipeCard
-                    key={`${latestRecommendation.id}-${dish.title}-${index}`}
-                    dish={dish}
-                    badgeLabel={String(index + 1)}
-                    inventorySnapshot={latestRecommendation.inventorySnapshot}
-                    onOpenDetails={() =>
-                      handleOpenDetails({
-                        recommendationId: latestRecommendation.id,
-                        dishIndex: index,
-                        dish,
-                        inventorySnapshot:
-                          latestRecommendation.inventorySnapshot,
-                      })
-                    }
-                    isFavorite={favoriteKeys.has(
-                      getRecipeFavoriteKey(latestRecommendation.id, index),
-                    )}
-                    isFavoritePending={
-                      setFavoriteMutation.isPending &&
-                      setFavoriteMutation.variables?.recommendationId ===
-                        latestRecommendation.id &&
-                      setFavoriteMutation.variables.dishIndex === index
-                    }
-                    onToggleFavorite={(favorite) =>
-                      setFavoriteMutation.mutate({
-                        recommendationId: latestRecommendation.id,
-                        dishIndex: index,
-                        dish,
-                        inventorySnapshot:
-                          latestRecommendation.inventorySnapshot,
-                        favorite,
-                      })
-                    }
-                  />
-                ))
+                <RecipeCardGrid>
+                  {latestRecommendation.recommendations.map((dish, index) => (
+                    <RecipeCard
+                      key={`${latestRecommendation.id}-${dish.title}-${index}`}
+                      dish={dish}
+                      badgeLabel={String(index + 1)}
+                      inventorySnapshot={latestRecommendation.inventorySnapshot}
+                      onOpenDetails={() =>
+                        handleOpenDetails({
+                          recommendationId: latestRecommendation.id,
+                          dishIndex: index,
+                          dish,
+                          inventorySnapshot:
+                            latestRecommendation.inventorySnapshot,
+                        })
+                      }
+                      isFavorite={favoriteKeys.has(
+                        getRecipeFavoriteKey(latestRecommendation.id, index),
+                      )}
+                      isFavoritePending={
+                        setFavoriteMutation.isPending &&
+                        setFavoriteMutation.variables?.recommendationId ===
+                          latestRecommendation.id &&
+                        setFavoriteMutation.variables.dishIndex === index
+                      }
+                      onToggleFavorite={(favorite) =>
+                        setFavoriteMutation.mutate({
+                          recommendationId: latestRecommendation.id,
+                          dishIndex: index,
+                          dish,
+                          inventorySnapshot:
+                            latestRecommendation.inventorySnapshot,
+                          favorite,
+                        })
+                      }
+                    />
+                  ))}
+                </RecipeCardGrid>
               ) : (
                 <EmptyState
                   mood="empty"
@@ -1192,39 +1205,41 @@ export default function RecommendationsScreen() {
                   }}
                 />
               ) : favoritesQuery.data?.length ? (
-                favoritesQuery.data.map((favorite, favoriteIndex) => (
-                  <RecipeCard
-                    key={favorite.id}
-                    dish={favorite.dish}
-                    badgeLabel={String(favoriteIndex + 1)}
-                    inventorySnapshot={favorite.inventorySnapshot}
-                    onOpenDetails={() =>
-                      setRecipeDetail({
-                        recommendationId: favorite.sourceRecommendationId,
-                        dishIndex: favorite.sourceDishIndex,
-                        dish: favorite.dish,
-                        inventorySnapshot: favorite.inventorySnapshot,
-                      })
-                    }
-                    isFavorite
-                    isFavoritePending={
-                      setFavoriteMutation.isPending &&
-                      setFavoriteMutation.variables?.recommendationId ===
-                        favorite.sourceRecommendationId &&
-                      setFavoriteMutation.variables.dishIndex ===
-                        favorite.sourceDishIndex
-                    }
-                    onToggleFavorite={(isFavorite) =>
-                      setFavoriteMutation.mutate({
-                        recommendationId: favorite.sourceRecommendationId,
-                        dishIndex: favorite.sourceDishIndex,
-                        dish: favorite.dish,
-                        inventorySnapshot: favorite.inventorySnapshot,
-                        favorite: isFavorite,
-                      })
-                    }
-                  />
-                ))
+                <RecipeCardGrid>
+                  {favoritesQuery.data.map((favorite, favoriteIndex) => (
+                    <RecipeCard
+                      key={favorite.id}
+                      dish={favorite.dish}
+                      badgeLabel={String(favoriteIndex + 1)}
+                      inventorySnapshot={favorite.inventorySnapshot}
+                      onOpenDetails={() =>
+                        setRecipeDetail({
+                          recommendationId: favorite.sourceRecommendationId,
+                          dishIndex: favorite.sourceDishIndex,
+                          dish: favorite.dish,
+                          inventorySnapshot: favorite.inventorySnapshot,
+                        })
+                      }
+                      isFavorite
+                      isFavoritePending={
+                        setFavoriteMutation.isPending &&
+                        setFavoriteMutation.variables?.recommendationId ===
+                          favorite.sourceRecommendationId &&
+                        setFavoriteMutation.variables.dishIndex ===
+                          favorite.sourceDishIndex
+                      }
+                      onToggleFavorite={(isFavorite) =>
+                        setFavoriteMutation.mutate({
+                          recommendationId: favorite.sourceRecommendationId,
+                          dishIndex: favorite.sourceDishIndex,
+                          dish: favorite.dish,
+                          inventorySnapshot: favorite.inventorySnapshot,
+                          favorite: isFavorite,
+                        })
+                      }
+                    />
+                  ))}
+                </RecipeCardGrid>
               ) : (
                 <EmptyState
                   icon={Heart}
@@ -1399,7 +1414,7 @@ export default function RecommendationsScreen() {
         }
       >
         {historyRecommendation?.recommendations.length ? (
-          <View style={styles.historySheetList}>
+          <RecipeCardGrid>
             {historyRecommendation.recommendations.map((dish, index) => (
               <RecipeCard
                 key={`${historyRecommendation.id}-${dish.title}-${index}`}
@@ -1445,7 +1460,7 @@ export default function RecommendationsScreen() {
                 }
               />
             ))}
-          </View>
+          </RecipeCardGrid>
         ) : (
           <EmptyState
             variant="plain"
@@ -1573,6 +1588,20 @@ function RecipeSection({
   );
 }
 
+function RecipeCardGrid({ children }: { children: ReactNode }) {
+  const { isRegular } = useResponsiveLayout();
+  return (
+    <View
+      style={[
+        styles.recipeCardGrid,
+        isRegular && styles.recipeCardGridRegular,
+      ]}
+    >
+      {children}
+    </View>
+  );
+}
+
 function RecipeCard({
   dish,
   badgeLabel,
@@ -1590,7 +1619,7 @@ function RecipeCard({
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
 }) {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, isRegular } = useResponsiveLayout();
   const highlightIngredients = getHighlightedIngredients(
     dish,
     inventorySnapshot,
@@ -1598,7 +1627,13 @@ function RecipeCard({
   const ingredientPreview = formatIngredientPreview(highlightIngredients);
 
   return (
-    <View style={[styles.recipeCard, shouldStack && styles.recipeCardStacked]}>
+    <View
+      style={[
+        styles.recipeCard,
+        shouldStack && styles.recipeCardStacked,
+        isRegular && styles.recipeCardRegular,
+      ]}
+    >
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
@@ -1611,34 +1646,43 @@ function RecipeCard({
       >
         <View style={styles.recipeCompactTitleRow}>
           <View style={styles.recipeNumberBadge}>
-            <Text style={styles.recipeNumberBadgeText}>
+            <AppText
+              variant="caption"
+              tone="primary"
+              scaleRole="chrome"
+              densityAware={false}
+              style={styles.recipeNumberBadgeText}
+            >
               {badgeLabel ?? "1"}
-            </Text>
+            </AppText>
           </View>
-          <Text
-            style={styles.recipeTitle}
+          <AppText
+            variant="bodyStrong"
             numberOfLines={1}
             ellipsizeMode="tail"
+            style={styles.recipeTitle}
           >
             {dish.title}
-          </Text>
+          </AppText>
         </View>
 
-        <Text
-          style={styles.recipeMetaLine}
+        <AppText
+          variant="caption"
+          tone="subtext"
           numberOfLines={1}
           ellipsizeMode="tail"
         >
           {formatDishMeta(dish)}
-        </Text>
+        </AppText>
 
-        <Text
-          style={styles.recipeIngredientPreview}
+        <AppText
+          variant="caption"
+          tone="subtext"
           numberOfLines={1}
           ellipsizeMode="tail"
         >
           {ingredientPreview}
-        </Text>
+        </AppText>
       </Pressable>
 
       {onToggleFavorite ? (
@@ -2235,7 +2279,12 @@ const styles = StyleSheet.create({
   historyActionStacked: {
     alignSelf: "flex-end",
   },
-  historySheetList: {
+  recipeCardGrid: {
+    gap: spacing.xxs,
+  },
+  recipeCardGridRegular: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: spacing.sm,
   },
   recipeCard: {
@@ -2250,6 +2299,11 @@ const styles = StyleSheet.create({
   },
   recipeCardStacked: {
     flexDirection: "column",
+  },
+  recipeCardRegular: {
+    flexGrow: 1,
+    flexBasis: "40%",
+    maxWidth: "48%",
   },
   recipeCardMain: {
     flex: 1,
@@ -2279,18 +2333,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   recipeNumberBadgeText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
   recipeTitle: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.bodyStrong.fontSize,
-    lineHeight: typography.bodyStrong.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
   },
   favoriteButton: {
     width: touchTarget.icon,
@@ -2313,18 +2360,6 @@ const styles = StyleSheet.create({
   },
   favoriteButtonPending: {
     opacity: 0.55,
-  },
-  recipeMetaLine: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
-  },
-  recipeIngredientPreview: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
   },
   recipeDetailSummary: {
     fontSize: typography.body.fontSize,

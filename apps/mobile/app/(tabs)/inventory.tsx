@@ -87,7 +87,7 @@ const inventoryHeroToolbarFills = {
 } as const;
 
 export default function InventoryScreen() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -588,8 +588,18 @@ export default function InventoryScreen() {
                     </Pressable>
                   </View>
 
-                  <View style={styles.filterPairRow}>
-                    <View style={styles.filterControls}>
+                  <View
+                    style={[
+                      styles.filterPairRow,
+                      shouldStackDense && styles.filterPairRowDense,
+                    ]}
+                  >
+                    <View
+                      style={[
+                        styles.filterControls,
+                        shouldStackDense && styles.filterControlsDense,
+                      ]}
+                    >
                       <View
                         style={styles.expiryTrafficRow}
                         testID="inventory-expiry-traffic"
@@ -656,6 +666,7 @@ export default function InventoryScreen() {
                       <View
                         style={[
                           styles.locationFilterTile,
+                          shouldStackDense && styles.locationFilterTileDense,
                           hasLocationFilter && styles.locationFilterTileActive,
                         ]}
                       >
@@ -682,16 +693,14 @@ export default function InventoryScreen() {
                             size={spacing.sm}
                             strokeWidth={2.4}
                           />
-                          <Text
-                            style={[
-                              styles.locationFilterTitle,
-                              hasLocationFilter &&
-                                styles.locationFilterTitleActive,
-                            ]}
+                          <AppText
+                            variant="bodySmall"
+                            tone={hasLocationFilter ? "primary" : "default"}
                             numberOfLines={1}
+                            style={styles.locationFilterTitle}
                           >
                             {selectedLocationLabel}
-                          </Text>
+                          </AppText>
                         </Pressable>
                       </View>
                     </View>
@@ -1277,6 +1286,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  filterPairRowDense: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   filterControls: {
     flex: 1,
     minWidth: 0,
@@ -1284,6 +1297,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
+  },
+  filterControlsDense: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    flexGrow: 0,
   },
   expiryTrafficRow: {
     flex: 1,
@@ -1327,6 +1345,11 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  locationFilterTileDense: {
+    width: "100%",
+    flexGrow: 1,
+    flexShrink: 1,
+  },
   locationFilterTileActive: {
     borderColor: colors.primary,
   },
@@ -1341,13 +1364,6 @@ const styles = StyleSheet.create({
   locationFilterTitle: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
-  locationFilterTitleActive: {
-    color: colors.primary,
   },
   filterControlPressed: {
     opacity: 0.82,

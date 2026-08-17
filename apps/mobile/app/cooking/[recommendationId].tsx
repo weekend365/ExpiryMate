@@ -13,7 +13,8 @@ import {
   Refrigerator,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { Pill } from "../../src/components/Pill";
@@ -47,10 +48,11 @@ import {
   radius,
   spacing,
   touchTarget,
-  typography,
 } from "../../src/shared/theme";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function CookingScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{
     recommendationId?: string | string[];
     dishIndex?: string | string[];
@@ -193,16 +195,24 @@ export default function CookingScreen() {
         />
         {updatedItems.length ? (
           <View style={styles.remainingCard}>
-            <Text style={styles.cardTitle}>냉장고에 남은 양</Text>
+            <AppText variant="subheading">냉장고에 남은 양</AppText>
             {updatedItems.map((item) => (
-              <View key={item.id} style={styles.remainingRow}>
-                <Text style={styles.remainingName}>{item.displayName}</Text>
-                <Text style={styles.remainingAmount}>
+              <View
+                key={item.id}
+                style={[
+                  styles.remainingRow,
+                  shouldStack && styles.remainingRowStacked,
+                ]}
+              >
+                <AppText variant="body" style={styles.remainingName}>
+                  {item.displayName}
+                </AppText>
+                <AppText variant="bodySmall" tone="subtext">
                   {item.status === ItemStatus.CONSUMED ||
                   item.quantityBase === 0
                     ? "다 사용했어요"
                     : `${formatBaseQuantity(item.quantityBase, item.unitCode)} 남았어요`}
-                </Text>
+                </AppText>
               </View>
             ))}
           </View>
@@ -342,9 +352,9 @@ export default function CookingScreen() {
       >
         {currentIndex === 0 ? (
           <View style={styles.section}>
-            <Text style={styles.sectionHint}>
+            <AppText variant="body" tone="subtext">
               하나씩 눌러 준비한 재료를 표시해 주세요.
-            </Text>
+            </AppText>
             <View style={styles.list}>
               {prepRows.map((ingredient) => {
                 const checked = checkedPrepKeySet.has(ingredient.key);
@@ -385,11 +395,11 @@ export default function CookingScreen() {
                       />
                     )}
                     <View style={styles.rowCopy}>
-                      <Text style={styles.rowTitle}>{ingredient.name}</Text>
+                      <AppText variant="bodyStrong">{ingredient.name}</AppText>
                       {ingredient.amountLabel ? (
-                        <Text style={styles.rowDescription}>
+                        <AppText variant="bodySmall" tone="subtext">
                           추천 사용량 {ingredient.amountLabel}
-                        </Text>
+                        </AppText>
                       ) : null}
                     </View>
                   </Pressable>
@@ -398,8 +408,10 @@ export default function CookingScreen() {
             </View>
             {dish.safetyNote ? (
               <View style={styles.safetyCard}>
-                <Text style={styles.safetyTitle}>먼저 살펴볼까요?</Text>
-                <Text style={styles.safetyBody}>{dish.safetyNote}</Text>
+                <AppText variant="bodyStrong">먼저 살펴볼까요?</AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  {dish.safetyNote}
+                </AppText>
               </View>
             ) : null}
           </View>
@@ -421,13 +433,18 @@ export default function CookingScreen() {
               ]}
             >
               <View style={styles.stepNumber}>
-                <Text style={styles.stepNumberText}>
+                <AppText
+                  variant="label"
+                  tone="inverse"
+                  scaleRole="chrome"
+                  densityAware={false}
+                >
                   {cookingStepIndex + 1}
-                </Text>
+                </AppText>
               </View>
-              <Text style={styles.cookingText}>
+              <AppText variant="body" style={styles.cookingText}>
                 {dish.steps[cookingStepIndex]}
-              </Text>
+              </AppText>
               {cookingStepCompleted ? (
                 <CheckCircle2
                   color={colors.primary}
@@ -442,14 +459,16 @@ export default function CookingScreen() {
                 />
               )}
             </Pressable>
-            <Text style={styles.tapHint}>
+            <AppText variant="bodySmall" tone="muted" style={styles.tapHint}>
               마쳤다면 카드를 눌러 체크하거나, 아래에서 바로 다음으로 갈 수
               있어요.
-            </Text>
+            </AppText>
             {dish.tips.length ? (
               <View style={styles.tipCard}>
-                <Text style={styles.tipTitle}>장고의 조리 팁</Text>
-                <Text style={styles.tipBody}>{dish.tips.join(" ")}</Text>
+                <AppText variant="bodyStrong">장고의 조리 팁</AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  {dish.tips.join(" ")}
+                </AppText>
               </View>
             ) : null}
           </View>
@@ -457,9 +476,9 @@ export default function CookingScreen() {
 
         {currentIndex === consumptionStepIndex ? (
           <View style={styles.section}>
-            <Text style={styles.sectionHint}>
+            <AppText variant="body" tone="subtext">
               실제로 쓴 양과 다르면 재료별로 바로 바꿀 수 있어요.
-            </Text>
+            </AppText>
             <Pressable
               onPress={handleToggleFavorite}
               disabled={setFavoriteMutation.isPending}
@@ -494,38 +513,36 @@ export default function CookingScreen() {
                 />
               </View>
               <View style={styles.rowCopy}>
-                <Text style={styles.rowTitle}>
+                <AppText variant="bodyStrong">
                   {isFavorite
                     ? "즐겨찾기에 담아뒀어요"
                     : "이 요리, 다음에도 쉽게 찾을까요?"}
-                </Text>
-                <Text style={styles.rowDescription}>
+                </AppText>
+                <AppText variant="bodySmall" tone="subtext">
                   {isFavorite
                     ? "추천 탭에서 언제든 다시 볼 수 있어요."
                     : "하트를 눌러 즐겨찾기에 담아두세요."}
-                </Text>
+                </AppText>
               </View>
-              <Text
-                style={[
-                  styles.favoriteAction,
-                  isFavorite && styles.favoriteActionSelected,
-                ]}
+              <AppText
+                variant="label"
+                tone={isFavorite ? "primary" : "subtext"}
               >
                 {isFavorite ? "담았어요" : "담기"}
-              </Text>
+              </AppText>
             </Pressable>
             {favoriteMutationError ? (
               <View style={styles.errorCard}>
-                <Text style={styles.errorText}>
+                <AppText variant="bodySmall" tone="danger">
                   즐겨찾기를 바꾸지 못했어요. 잠시 뒤 다시 눌러주세요.
-                </Text>
+                </AppText>
               </View>
             ) : null}
             {inventoryQuery.isError ? (
               <View style={styles.errorCard}>
-                <Text style={styles.errorText}>
+                <AppText variant="bodySmall" tone="danger">
                   앗, 냉장고의 최신 상태를 불러오지 못했어요.
-                </Text>
+                </AppText>
               </View>
             ) : null}
             <View style={styles.list}>
@@ -550,16 +567,18 @@ export default function CookingScreen() {
             </View>
             {!inventoryQuery.isPending && !consumableIngredients.length ? (
               <View style={styles.tipCard}>
-                <Text style={styles.tipTitle}>이번에는 직접 정리해 주세요</Text>
-                <Text style={styles.tipBody}>
+                <AppText variant="bodyStrong">이번에는 직접 정리해 주세요</AppText>
+                <AppText variant="bodySmall" tone="subtext">
                   추천을 받은 뒤 재고 상태가 달라져 자동으로 연결할 재료가
                   없어요.
-                </Text>
+                </AppText>
               </View>
             ) : null}
             {mutationError ? (
               <View style={styles.errorCard}>
-                <Text style={styles.errorText}>{mutationError}</Text>
+                <AppText variant="bodySmall" tone="danger">
+                  {mutationError}
+                </AppText>
               </View>
             ) : null}
           </View>
@@ -594,16 +613,16 @@ function ConsumptionCard({
     <View style={styles.consumptionCard}>
       <View style={styles.consumptionHeader}>
         <View style={styles.rowCopy}>
-          <Text style={styles.rowTitle}>{ingredient.name}</Text>
-          <Text style={styles.rowDescription}>
+          <AppText variant="bodyStrong">{ingredient.name}</AppText>
+          <AppText variant="bodySmall" tone="subtext">
             지금 {formatBaseQuantity(available, ingredient.item.unitCode)}{" "}
             있어요
-          </Text>
+          </AppText>
         </View>
         {choice.amountBase > 0 ? (
-          <Text style={styles.selectedAmount}>
+          <AppText variant="bodySmall" tone="primary">
             {formatBaseQuantity(choice.amountBase, ingredient.item.unitCode)}
-          </Text>
+          </AppText>
         ) : null}
       </View>
       <View style={styles.pillRow}>
@@ -663,12 +682,6 @@ const styles = StyleSheet.create({
   section: {
     gap: spacing.md,
   },
-  sectionHint: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.subtext,
-  },
   list: {
     gap: spacing.sm,
   },
@@ -696,35 +709,11 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: spacing.xxs,
   },
-  rowTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  rowDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
   safetyCard: {
     borderRadius: radius.lg,
     backgroundColor: colors.warningSoft,
     padding: spacing.md,
     gap: spacing.xs,
-  },
-  safetyTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  safetyBody: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   cookingCard: {
     minHeight: touchTarget.ctaLarge,
@@ -750,25 +739,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  stepNumberText: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.surface,
-  },
   cookingText: {
     flex: 1,
     minWidth: 0,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.text,
   },
   tapHint: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.mutedText,
     textAlign: "center",
   },
   tipCard: {
@@ -776,18 +751,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
     gap: spacing.xs,
-  },
-  tipTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  tipBody: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   favoriteCard: {
     minHeight: touchTarget.ctaLarge,
@@ -819,15 +782,6 @@ const styles = StyleSheet.create({
   favoriteIconSelected: {
     backgroundColor: colors.surface,
   },
-  favoriteAction: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  favoriteActionSelected: {
-    color: colors.primary,
-  },
   consumptionCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
@@ -842,12 +796,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: spacing.sm,
   },
-  selectedAmount: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
-  },
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -858,12 +806,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.dangerSoft,
     padding: spacing.md,
   },
-  errorText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
-  },
   remainingCard: {
     borderRadius: radius.xxl,
     backgroundColor: colors.surface,
@@ -871,12 +813,6 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.sm,
-  },
-  cardTitle: {
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
-    color: colors.text,
   },
   remainingRow: {
     minHeight: touchTarget.min,
@@ -886,19 +822,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: spacing.sm,
   },
+  remainingRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   remainingName: {
     flex: 1,
     minWidth: 0,
     flexShrink: 1,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.text,
-  },
-  remainingAmount: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
 });

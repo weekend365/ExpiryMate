@@ -57,11 +57,11 @@ import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { useRegistrationStore } from "../../store/registration-store";
 import {
-  SCAN_FRAME_HEIGHT,
+  getScanFrameHeight,
+  getScanLineTravel,
   SCAN_FRAME_SIDE_INSET,
   SCAN_LINE_HEIGHT,
   SCAN_LINE_INSET,
-  SCAN_LINE_TRAVEL,
 } from "./scanGuide";
 import {
   type BarcodeContributionField,
@@ -797,8 +797,13 @@ function ScannerGuide({
     height: number;
   } | null) => void;
 }) {
+  const { height: windowHeight } = useResponsiveLayout();
+  const frameHeight = getScanFrameHeight(windowHeight);
+  const scanLineTravel = getScanLineTravel(frameHeight);
   const reduceMotion = useReducedMotion();
   const scanLineProgress = useSharedValue(0);
+  const scanLineTravelSV = useSharedValue(scanLineTravel);
+  scanLineTravelSV.value = scanLineTravel;
   const frameRef = useRef<View>(null);
 
   useEffect(() => {
@@ -826,7 +831,7 @@ function ScannerGuide({
     const translateY = interpolate(
       scanLineProgress.value,
       [0, 1],
-      [0, SCAN_LINE_TRAVEL],
+      [0, scanLineTravelSV.value],
     );
     const opacity = interpolate(
       scanLineProgress.value,
@@ -866,7 +871,7 @@ function ScannerGuide({
         <View style={styles.guideArea} pointerEvents="none">
           <View
             ref={frameRef}
-            style={styles.scanFrame}
+            style={[styles.scanFrame, { height: frameHeight }]}
             onLayout={handleFrameLayout}
           >
             <View style={[styles.corner, styles.cornerTopLeft]} />
@@ -882,7 +887,12 @@ function ScannerGuide({
                 />
               </View>
             ) : reduceMotion ? (
-              <View style={[styles.scanLine, styles.scanLineStatic]} />
+              <View
+                style={[
+                  styles.scanLine,
+                  { top: frameHeight / 2 - SCAN_LINE_HEIGHT },
+                ]}
+              />
             ) : (
               <Animated.View style={[styles.scanLine, scanLineStyle]}>
                 <View style={styles.scanLineCore} />
@@ -1192,7 +1202,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: SCAN_FRAME_SIDE_INSET - spacing.md,
   },
   scanFrame: {
-    height: SCAN_FRAME_HEIGHT,
     borderRadius: radius.xxl,
     overflow: "hidden",
   },
@@ -1204,9 +1213,6 @@ const styles = StyleSheet.create({
     height: SCAN_LINE_HEIGHT + spacing.xxs,
     alignItems: "center",
     justifyContent: "center",
-  },
-  scanLineStatic: {
-    top: SCAN_FRAME_HEIGHT / 2 - SCAN_LINE_HEIGHT,
   },
   scanLineCore: {
     width: "100%",
