@@ -41,8 +41,8 @@ export default function SettingsScreen() {
 
       <View style={styles.section}>
         <SectionHeader
-          title="맞춰볼까요?"
-          description="한 번에 하나만, 장고랑 같이 정리해 볼게요."
+          title="내 장고 설정"
+          description="알림, 추천, 냉장고, 계정을 여기서 바꿔요."
         />
         <View style={styles.card}>
           <ListRow
