@@ -2,55 +2,155 @@ import {
   calculateDaysLeftUntilExpiry,
   formatDateKoreanCompact,
   formatInventoryQuantity,
-  getExpiryBucket,
-  itemStatusLabels,
+  getExpiryTrafficBucket,
   resolveStorageLocationLabel,
   type InventoryItem,
 } from "@expirymate/shared";
-import {
-  CalendarDays,
-  CheckCircle2,
-  CircleAlert,
-  Clock3,
-  MapPin,
-  MoreVertical,
-  ShieldCheck,
-} from "lucide-react-native";
+import { CheckCircle2, PenLine } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useResponsiveLayout } from "../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
+import { AppText } from "./AppText";
+
+/** Visual lamp size — card press owns the touch target, so this can be under 48. */
+const HERO_LAMP_SIZE = spacing.xl;
 
 interface InventoryCardProps {
   item: InventoryItem;
-  onPress?: () => void;
-  onLongPress?: () => void;
-  /** Opens an accessible action sheet (자세히 / 고르기 / 정리). */
-  onMenuPress?: () => void;
-  selected?: boolean;
+  onPress: (item: InventoryItem) => void;
+  onLongPress?: (item: InventoryItem) => void;
+  onEdit?: (item: InventoryItem) => void;
   selectionMode?: boolean;
+  selected?: boolean;
+  resolveLocationLabel?: (key: string) => string;
 }
-
-const expiryLabelMap = {
-  expired: "만료됨",
-  today: "오늘 만료",
-  within_3_days: "임박",
-  within_7_days: "곧 만료",
-  safe: "안전",
-};
 
 export function InventoryCard({
   item,
   onPress,
   onLongPress,
-  onMenuPress,
-  selected,
-  selectionMode,
+  onEdit,
+  selectionMode = false,
+  selected = false,
+  resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryCardProps) {
   const { shouldStack } = useResponsiveLayout();
-  const bucket = getExpiryBucket(item.expiryDate);
-  const bucketStyle = bucketStyles[bucket];
-  const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate);
-  const DDayIcon = bucketStyle.icon;
+  const presentation = getExpiryLampPresentation(item.expiryDate);
+  const locationLabel = resolveLocationLabel(item.storageLocation);
+  const quantityLabel = formatInventoryQuantity(item);
+  const dateLabel = `${formatDateKoreanCompact(item.expiryDate)}까지`;
+  const accessibilityLabel = `${item.displayName}, ${presentation.ddayLabel}, ${locationLabel}, ${quantityLabel}, ${dateLabel}`;
+
+  return (
+    <View style={[styles.card, selected && styles.cardSelected]}>
+      <Pressable
+        onPress={() => onPress(item)}
+        onLongPress={() => onLongPress?.(item)}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={
+          selectionMode
+            ? selected
+              ? "선택됨. 다시 누르면 선택을 해제해요."
+              : "누르면 정리할 재료로 골라요."
+            : "누르면 모두 정리할지, 일부만 뺄지 고를 수 있어요."
+        }
+        accessibilityState={selectionMode ? { selected } : undefined}
+        style={({ pressed }) => [
+          styles.main,
+          shouldStack && styles.mainStacked,
+          pressed && styles.pressed,
+        ]}
+      >
+        <ExpiryBadge
+          ddayLabel={presentation.ddayLabel}
+          lampColor={presentation.lampColor}
+        />
+        <View style={styles.copy}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
+            {item.displayName}
+            {item.brand ? (
+              <Text style={styles.brandInline}> · {item.brand}</Text>
+            ) : null}
+          </Text>
+          <Text style={styles.meta} numberOfLines={1}>
+            {locationLabel} · {quantityLabel} · {dateLabel}
+          </Text>
+        </View>
+      </Pressable>
+
+      {selectionMode ? (
+        <Pressable
+          onPress={() => onPress(item)}
+          accessibilityRole="button"
+          accessibilityLabel={selected ? "선택 해제" : "이 재료 고르기"}
+          style={styles.trailingHit}
+        >
+          <View
+            style={[
+              styles.selectionIndicator,
+              selected && styles.selectionIndicatorSelected,
+            ]}
+          >
+            {selected ? (
+              <CheckCircle2
+                color={colors.surface}
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+            ) : null}
+          </View>
+        </Pressable>
+      ) : onEdit ? (
+        <Pressable
+          onPress={() => onEdit(item)}
+          hitSlop={spacing.xs}
+          accessibilityRole="button"
+          accessibilityLabel={`${item.displayName} 내용을 고칠게요`}
+          accessibilityHint="이름, 수량, 유통기한을 다시 맞춰 둘 수 있어요."
+          style={({ pressed }) => [
+            styles.trailingHit,
+            pressed && styles.pressed,
+          ]}
+        >
+          <PenLine
+            color={colors.subtext}
+            size={spacing.sm + spacing.xxs}
+            strokeWidth={2.4}
+          />
+        </Pressable>
+      ) : null}
+    </View>
+  );
+}
+
+function ExpiryBadge({
+  ddayLabel,
+  lampColor,
+}: {
+  ddayLabel: string;
+  lampColor: string;
+}) {
+  return (
+    <View
+      style={[styles.expiryLamp, { backgroundColor: lampColor }]}
+      accessibilityLabel={ddayLabel}
+    >
+      <AppText
+        variant="caption"
+        scaleRole="chrome"
+        densityAware={false}
+        style={styles.expiryLampText}
+      >
+        {ddayLabel}
+      </AppText>
+    </View>
+  );
+}
+
+function getExpiryLampPresentation(expiryDate: string) {
+  const bucket = getExpiryTrafficBucket(expiryDate);
+  const daysLeft = calculateDaysLeftUntilExpiry(expiryDate);
   const ddayLabel =
     daysLeft < 0
       ? `D+${Math.abs(daysLeft)}`
@@ -58,146 +158,90 @@ export function InventoryCard({
         ? "오늘"
         : `D-${daysLeft}`;
 
-  return (
-    <Pressable
-      onPress={onPress}
-      onLongPress={onLongPress}
-      disabled={!onPress}
-      accessibilityRole={onPress ? "button" : undefined}
-      accessibilityLabel={item.displayName}
-      accessibilityHint={
-        selectionMode
-          ? selected
-            ? "선택됨. 다시 누르면 선택을 해제해요."
-            : "누르면 선택해요. 헤더의 고르기로도 시작할 수 있어요."
-          : onPress
-            ? "눌러서 자세히 살펴볼 수 있어요. 더보기로 정리할 수도 있어요."
-            : undefined
-      }
-      accessibilityState={
-        selectionMode ? { selected: Boolean(selected) } : undefined
-      }
-      style={({ pressed }) => [
-        styles.card,
-        shouldStack && styles.cardCompact,
-        selectionMode && styles.selectableCard,
-        selected && styles.selectedCard,
-        pressed && styles.cardPressed,
-      ]}
-    >
-      {selectionMode ? (
-        <View
-          style={[
-            styles.selectionIndicator,
-            selected && styles.selectionIndicatorSelected,
-          ]}
-        >
-          {selected ? (
-            <CheckCircle2 color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
-          ) : null}
-        </View>
-      ) : null}
+  const lampColor = {
+    expired: colors.danger,
+    within_7_days: colors.warning,
+    safe: colors.success,
+  }[bucket];
 
-      <View style={styles.content}>
-        <View style={styles.titleRow}>
-          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">
-            {item.displayName}
-          </Text>
-          {!selectionMode && onMenuPress ? (
-            <Pressable
-              onPress={onMenuPress}
-              hitSlop={spacing.xs}
-              accessibilityRole="button"
-              accessibilityLabel={`${item.displayName} 더보기`}
-              accessibilityHint="자세히 보기, 고르기, 정리하기를 고를 수 있어요."
-              style={({ pressed }) => [
-                styles.menuButton,
-                pressed && styles.menuButtonPressed,
-              ]}
-            >
-              <MoreVertical
-                color={colors.subtext}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-              />
-            </Pressable>
-          ) : null}
-        </View>
-        <View style={styles.metaRow}>
-          <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
-          <Text style={styles.meta}>
-            {resolveStorageLocationLabel(item.storageLocation)} ·{" "}
-            {formatInventoryQuantity(item)} · {itemStatusLabels[item.status]}
-          </Text>
-        </View>
-        <View style={styles.dateRow}>
-          <CalendarDays color={colors.mutedText} size={spacing.sm} strokeWidth={2.3} />
-          <Text style={styles.dateLabel}>
-            유통기한 {formatDateKoreanCompact(item.expiryDate)}
-          </Text>
-        </View>
-      </View>
-
-      <View
-        style={[
-          styles.badgeColumn,
-          shouldStack && styles.badgeColumnCompact,
-        ]}
-      >
-        <View
-          style={[
-            styles.badge,
-            {
-              backgroundColor: bucketStyle.backgroundColor,
-            },
-          ]}
-        >
-          <DDayIcon color={bucketStyle.color} size={spacing.sm} strokeWidth={2.5} />
-          <Text style={[styles.badgeText, { color: bucketStyle.color }]}>
-            {ddayLabel}
-          </Text>
-        </View>
-        <Text style={[styles.bucketLabel, { color: bucketStyle.color }]}>
-          {expiryLabelMap[bucket]}
-        </Text>
-      </View>
-    </Pressable>
-  );
+  return { lampColor, ddayLabel };
 }
-
-const bucketStyles = {
-  expired: { backgroundColor: colors.dangerSoft, color: colors.danger, icon: CircleAlert },
-  today: { backgroundColor: colors.warningSoft, color: colors.warning, icon: Clock3 },
-  within_3_days: { backgroundColor: colors.warningSoft, color: colors.warning, icon: Clock3 },
-  within_7_days: { backgroundColor: colors.warningSoft, color: colors.warning, icon: CalendarDays },
-  safe: { backgroundColor: colors.successSoft, color: colors.success, icon: ShieldCheck },
-};
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
+    minHeight: touchTarget.cta,
+    flexDirection: "row",
+    alignItems: "center",
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
   },
-  cardCompact: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  cardPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  selectableCard: {
-    paddingLeft: spacing.sm,
-  },
-  selectedCard: {
+  cardSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
+  },
+  main: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.cta,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  mainStacked: {
+    alignItems: "flex-start",
+    flexWrap: "wrap",
+  },
+  pressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  copy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  name: {
+    flexShrink: 1,
+    minWidth: 0,
+    fontSize: typography.bodyStrong.fontSize,
+    lineHeight: typography.bodyStrong.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  brandInline: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.mutedText,
+  },
+  meta: {
+    flexShrink: 1,
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
+  },
+  trailingHit: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.cta,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+  },
+  expiryLamp: {
+    width: HERO_LAMP_SIZE,
+    height: HERO_LAMP_SIZE,
+    borderRadius: radius.pill,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  expiryLampText: {
+    fontFamily: typography.title.fontFamily,
+    color: colors.surface,
   },
   selectionIndicator: {
     width: spacing.lg,
@@ -212,94 +256,5 @@ const styles = StyleSheet.create({
   selectionIndicatorSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primary,
-  },
-  content: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xs,
-  },
-  titleRow: {
-    minWidth: 0,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  name: {
-    flex: 1,
-    minWidth: 0,
-    flexShrink: 1,
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
-    color: colors.text,
-  },
-  menuButton: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuButtonPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
-  meta: {
-    flex: 1,
-    minWidth: 0,
-    flexShrink: 1,
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
-  dateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
-  dateLabel: {
-    flex: 1,
-    minWidth: 0,
-    flexShrink: 1,
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
-  badgeColumn: {
-    alignItems: "flex-end",
-    gap: spacing.xs,
-  },
-  badgeColumnCompact: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  badge: {
-    minWidth: spacing.xl + spacing.lg,
-    minHeight: spacing.lg,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-  },
-  badgeText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  bucketLabel: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
   },
 });

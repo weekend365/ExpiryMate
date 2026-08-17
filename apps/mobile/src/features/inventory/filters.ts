@@ -1,6 +1,5 @@
 import {
   getExpiryTrafficBucket,
-  groupInventoryItems,
   sortInventoryByNearestExpiry,
   type InventoryItem,
 } from "@expirymate/shared";
@@ -157,11 +156,11 @@ export const filterInventoryItems = (
   return sortInventoryByNearestExpiry(filtered);
 };
 
-/** Map a group's nearest expiry into a list section bucket. */
+/** Map an item expiry date into a list section bucket. */
 export const getInventoryUrgencySection = (
-  nearestExpiryDate: string,
+  expiryDate: string,
 ): InventoryUrgencySection => {
-  const bucket = getExpiryTrafficBucket(nearestExpiryDate);
+  const bucket = getExpiryTrafficBucket(expiryDate);
 
   if (bucket === "within_7_days") {
     return "within7";
@@ -179,7 +178,7 @@ export const buildInventoryUrgencySections = (
     safe: [],
   };
 
-  items.forEach((item) => {
+  sortInventoryByNearestExpiry(items).forEach((item) => {
     buckets[getInventoryUrgencySection(item.expiryDate)].push(item);
   });
 
@@ -189,9 +188,6 @@ export const buildInventoryUrgencySections = (
       key,
       title: inventoryUrgencySectionTitles[key],
       itemCount: buckets[key].length,
-      data: groupInventoryItems(buckets[key]).map((group) => ({
-        ...group,
-        id: `${key}:${group.id}`,
-      })),
+      data: buckets[key],
     }));
 };

@@ -41,7 +41,7 @@ import {
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
-import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
+import { InventoryCard } from "../../src/components/InventoryCard";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { StatCard } from "../../src/components/StatCard";
@@ -96,7 +96,6 @@ export default function InventoryScreen() {
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [expandedGroupIds, setExpandedGroupIds] = useState<string[]>([]);
   const [collapsedSectionKeys, setCollapsedSectionKeys] = useState<
     InventoryUrgencySection[]
   >([]);
@@ -280,28 +279,31 @@ export default function InventoryScreen() {
     ]);
   };
 
-  const handleCardPress = (id: string) => {
+  const openCleanupSheet = (item: InventoryItem) => {
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    deferredRemoval.clearError();
+    setCleanupItem(item);
+  };
+
+  const handleCardPress = (item: InventoryItem) => {
     if (isSelectionMode) {
-      toggleSelectedId(id);
+      toggleSelectedId(item.id);
       return;
     }
 
+    openCleanupSheet(item);
+  };
+
+  const handleEditItem = (item: InventoryItem) => {
     router.push({
       pathname: "/inventory/[id]",
-      params: { id, mode: "edit" },
+      params: { id: item.id, mode: "edit" },
     });
   };
 
   const handleCardLongPress = (id: string) => {
     enterSelectionMode(id);
-  };
-
-  const setGroupExpanded = (groupId: string, expanded: boolean) => {
-    setExpandedGroupIds((current) =>
-      expanded
-        ? [...new Set([...current, groupId])]
-        : current.filter((id) => id !== groupId),
-    );
   };
 
   const toggleSectionCollapsed = (key: InventoryUrgencySection) => {
@@ -351,13 +353,6 @@ export default function InventoryScreen() {
     setSuccessMessage(null);
     setActionErrorMessage(null);
     deferredRemoval.scheduleRemoval(item, "consume", amountBase);
-  };
-
-  const openCleanupSheet = (item: InventoryItem) => {
-    setSuccessMessage(null);
-    setActionErrorMessage(null);
-    deferredRemoval.clearError();
-    setCleanupItem(item);
   };
 
   const primaryFooter =
@@ -451,7 +446,6 @@ export default function InventoryScreen() {
           keyExtractor={(section) => section.key}
           extraData={{
             collapsedSectionKeys,
-            expandedGroupIds,
             isSelectionMode,
             selectedIds,
           }}
@@ -801,20 +795,18 @@ export default function InventoryScreen() {
               collapsed={collapsedSectionKeySet.has(section.key)}
               onToggle={() => toggleSectionCollapsed(section.key)}
             >
-              {section.data.map((group) => (
-                <InventoryGroupCard
-                  key={group.id}
-                  group={group}
-                  expanded={expandedGroupIds.includes(group.id)}
-                  onExpandedChange={(expanded) =>
-                    setGroupExpanded(group.id, expanded)
-                  }
+              {section.data.map((item) => (
+                <InventoryCard
+                  key={item.id}
+                  item={item}
                   selectionMode={isSelectionMode}
-                  selectedIds={selectedIdSet}
+                  selected={selectedIdSet.has(item.id)}
                   resolveLocationLabel={resolveLabel}
-                  onItemPress={(item) => handleCardPress(item.id)}
-                  onItemLongPress={(item) => handleCardLongPress(item.id)}
-                  onItemCleanup={openCleanupSheet}
+                  onPress={handleCardPress}
+                  onLongPress={(pressedItem) =>
+                    handleCardLongPress(pressedItem.id)
+                  }
+                  onEdit={handleEditItem}
                 />
               ))}
             </UrgencySection>
