@@ -287,9 +287,9 @@ const recapRowStyles = StyleSheet.create({
     alignItems: "center",
     borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    gap: spacing.xs,
   },
   rowPressed: {
     backgroundColor: colors.surfacePressed,
@@ -936,7 +936,8 @@ export default function RegisterScreen() {
               }
               mood="happy"
               size="small"
-              textVariant="heading"
+              density="compact"
+              textVariant="bodyStrong"
               style={styles.doneBubble}
             />
           </View>
@@ -1159,7 +1160,7 @@ export default function RegisterScreen() {
               </View>
             ) : null}
 
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
+            <View style={[styles.sectionCard, styles.sectionCardTight]}>
               <Text style={styles.sectionTitle}>재료 이름</Text>
               <FormField
                 control={form.control}
@@ -1196,7 +1197,7 @@ export default function RegisterScreen() {
 
         {step === "quantity" ? (
           <View style={styles.stepSections}>
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
+            <View style={[styles.sectionCard, styles.sectionCardTight]}>
               <Text style={styles.sectionTitle}>{quantityLabel}</Text>
               <QuantityStepper
                 presentation="hero"
@@ -1211,12 +1212,15 @@ export default function RegisterScreen() {
                 }
                 error={form.formState.errors.quantity?.message}
               />
-              <QuantityUnitPills
-                unit={unit}
-                onChange={(nextUnit) =>
-                  applyQuantityUnit(nextUnit, { userChosen: true })
-                }
-              />
+              <View style={styles.unitChipBlock}>
+                <Text style={styles.sectionCaption}>단위</Text>
+                <QuantityUnitPills
+                  unit={unit}
+                  onChange={(nextUnit) =>
+                    applyQuantityUnit(nextUnit, { userChosen: true })
+                  }
+                />
+              </View>
             </View>
 
             {showLocationPicker ? (
@@ -1299,7 +1303,7 @@ export default function RegisterScreen() {
 
         {step === "expiry" ? (
           <View style={styles.stepSections}>
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
+            <View style={[styles.sectionCard, styles.sectionCardTight]}>
               <Text style={styles.sectionTitle}>유통기한</Text>
               <DatePickerField
                 ref={expiryPickerRef}
@@ -1341,7 +1345,7 @@ export default function RegisterScreen() {
               </DatePickerField>
             </View>
 
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
+            <View style={[styles.sectionCard, styles.sectionCardTight]}>
               <View style={styles.sectionHeading}>
                 <Text style={styles.sectionTitle}>넣은 내용</Text>
                 <Text style={styles.sectionCaption}>
@@ -1571,6 +1575,10 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
     gap: spacing.sm,
   },
+  sectionCardTight: {
+    padding: spacing.sm,
+    gap: spacing.xs,
+  },
   sectionCardRow: {
     minHeight: touchTarget.min,
     flexDirection: "row",
@@ -1635,6 +1643,9 @@ const styles = StyleSheet.create({
   expiryPresetBlock: {
     gap: spacing.xs,
   },
+  unitChipBlock: {
+    gap: spacing.xs,
+  },
   templateCardPressed: {
     backgroundColor: colors.surfacePressed,
   },
@@ -1652,7 +1663,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   recapList: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   footerStack: {
     gap: spacing.sm,

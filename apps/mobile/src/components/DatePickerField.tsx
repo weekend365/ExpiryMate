@@ -88,7 +88,7 @@ export const DatePickerField = forwardRef<
   const isHidden = presentation === "none";
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, isHero && styles.wrapperHero]}>
       {label && !isHero && !isHidden ? (
         <Text style={styles.label}>{label}</Text>
       ) : null}
@@ -226,6 +226,9 @@ const styles = StyleSheet.create({
   wrapper: {
     gap: spacing.sm,
   },
+  wrapperHero: {
+    gap: spacing.xs,
+  },
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
@@ -269,11 +272,12 @@ const styles = StyleSheet.create({
   },
   heroValueBlock: {
     minHeight: touchTarget.cta,
-    borderRadius: radius.xxl,
+    borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    justifyContent: "center",
+    gap: spacing.xxs, // 날짜와 캡션을 한 덩어리로 붙이기 위한 4px 시각 보정
   },
   heroValueBlockPressed: {
     opacity: 0.88,
@@ -302,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.sm,
   },
   heroActionPressed: {
     backgroundColor: colors.surfacePressed,

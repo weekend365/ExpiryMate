@@ -114,7 +114,8 @@ export function StepFlow({
           supportingMessage={resolvedGuide}
           mood={guideMood}
           size="small"
-          textVariant="heading"
+          density="compact"
+          textVariant="bodyStrong"
           style={styles.compactBubble}
         />
       </View>

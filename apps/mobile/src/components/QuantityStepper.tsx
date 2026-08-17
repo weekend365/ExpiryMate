@@ -40,7 +40,7 @@ export function QuantityStepper({
 
   const isHero = presentation === "hero";
   const valueText = String(clampedValue);
-  const valueVariant = isHero ? "title" : "subheading";
+  const valueVariant = isHero ? "heading" : "subheading";
 
   const commitQuantity = (text: string) => {
     const nextValue = Number(text.replace(/[^0-9]/g, ""));
@@ -77,11 +77,12 @@ export function QuantityStepper({
           accessibilityLabel={`${label} 줄이기`}
           style={({ pressed }) => [
             styles.iconButton,
+            isHero && styles.iconButtonHero,
             pressed && styles.iconButtonPressed,
           ]}
         >
           <AppText
-            variant="heading"
+            variant={isHero ? "subheading" : "heading"}
             scaleRole="chrome"
             densityAware={false}
             style={styles.iconButtonLabel}
@@ -158,6 +159,7 @@ export function QuantityStepper({
           disabled={upperBound !== undefined && clampedValue >= upperBound}
           style={({ pressed }) => [
             styles.iconButton,
+            isHero && styles.iconButtonHero,
             pressed && styles.iconButtonPressed,
             upperBound !== undefined &&
               clampedValue >= upperBound &&
@@ -165,7 +167,7 @@ export function QuantityStepper({
           ]}
         >
           <AppText
-            variant="heading"
+            variant={isHero ? "subheading" : "heading"}
             scaleRole="chrome"
             densityAware={false}
             style={styles.iconButtonLabel}
@@ -201,11 +203,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   containerHero: {
-    minHeight: touchTarget.ctaLarge + spacing.xs,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    minHeight: touchTarget.cta,
   },
   errorContainer: {
     borderColor: colors.danger,
@@ -218,6 +216,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: spacing.xs,
     backgroundColor: colors.primarySoft,
+  },
+  iconButtonHero: {
+    minWidth: touchTarget.cta,
+    minHeight: touchTarget.cta,
   },
   iconButtonPressed: {
     backgroundColor: colors.primarySoftPressed,
@@ -272,8 +274,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   inputHero: {
-    fontSize: typography.title.fontSize,
-    lineHeight: typography.title.lineHeight,
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
     fontFamily: typography.title.fontFamily,
   },
   unitSuffix: {

@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     minHeight: spacing.xl,
     borderRadius: radius.lg,
+    gap: spacing.xxs, // 4px: keep the question and guide as one thought
   },
   tail: {
     position: "absolute",
