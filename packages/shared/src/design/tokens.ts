@@ -26,6 +26,8 @@ export const semanticColors = {
   surfaceTranslucent: "rgba(255, 255, 255, 0.94)",
   surfacePressed: neutral[100],
   mutedSurface: neutral[100],
+  /** Recessed well inside a card — one step deeper than section fills. */
+  insetSurface: neutral[200],
 
   // Brand / primary
   primary: brand[500],

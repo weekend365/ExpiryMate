@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { ExpirySource, ProductCategory, UnitCode } from "../enums/app-enums";
 import {
+  applyConsumedAmountToInventoryItem,
+  canPartiallyConsumeInventoryItem,
   convertQuantityForInputUnit,
+  defaultPartialConsumeAmount,
   defaultQuantityForInputUnit,
   formatBaseQuantity,
   formatEnteredQuantity,
@@ -139,5 +142,70 @@ describe("canonical inventory quantities", () => {
     expect(formatEnteredQuantity(1, "L")).toBe("1L");
     expect(quantityInputLabel("ml")).toBe("얼마나 있어요?");
     expect(quantityInputLabel("개", { remaining: true })).toBe("몇 개 남았나요?");
+  });
+});
+
+describe("partial inventory consume", () => {
+  it("allows partial consume only when more than one unit remains", () => {
+    expect(canPartiallyConsumeInventoryItem({ quantityBase: 1 })).toBe(false);
+    expect(canPartiallyConsumeInventoryItem({ quantityBase: 2 })).toBe(true);
+    expect(canPartiallyConsumeInventoryItem({ quantityBase: 500 })).toBe(true);
+  });
+
+  it("suggests a leftover-friendly default amount", () => {
+    expect(
+      defaultPartialConsumeAmount({
+        quantityBase: 1000,
+        unitCode: UnitCode.ML,
+      }),
+    ).toBe(200);
+    expect(
+      defaultPartialConsumeAmount({
+        quantityBase: 10,
+        unitCode: UnitCode.EA,
+      }),
+    ).toBe(1);
+    expect(
+      defaultPartialConsumeAmount({
+        quantityBase: 80,
+        unitCode: UnitCode.G,
+      }),
+    ).toBe(40);
+  });
+
+  it("decrements canonical stock and keeps pack count for measure lots", () => {
+    expect(
+      applyConsumedAmountToInventoryItem(
+        {
+          quantity: 1,
+          unit: "팩",
+          quantityBase: 500,
+          unitCode: UnitCode.ML,
+        },
+        200,
+      ),
+    ).toEqual({
+      quantity: 1,
+      unit: "팩",
+      quantityBase: 300,
+      unitCode: UnitCode.ML,
+    });
+  });
+
+  it("keeps count quantity in sync for individual EA lots", () => {
+    expect(
+      applyConsumedAmountToInventoryItem(
+        {
+          quantity: 10,
+          quantityBase: 10,
+          unitCode: UnitCode.EA,
+        },
+        3,
+      ),
+    ).toEqual({
+      quantity: 7,
+      quantityBase: 7,
+      unitCode: UnitCode.EA,
+    });
   });
 });

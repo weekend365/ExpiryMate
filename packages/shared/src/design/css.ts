@@ -16,6 +16,7 @@ export const cssVariables: Record<string, string> = {
   "--background": semanticColors.background,
   "--surface": semanticColors.surface,
   "--surface-muted": semanticColors.mutedSurface,
+  "--surface-inset": semanticColors.insetSurface,
   "--surface-pressed": semanticColors.surfacePressed,
   "--foreground": semanticColors.text,
   "--muted": semanticColors.subtext,

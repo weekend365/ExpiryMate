@@ -29,7 +29,7 @@ interface InventoryGroupCardProps {
   onExpandedChange: (expanded: boolean) => void;
   onItemPress: (item: InventoryItem) => void;
   onItemLongPress?: (item: InventoryItem) => void;
-  /** Opens the cleanup sheet (consume / discard) for one lot. */
+  /** Opens the cleanup sheet (all / partial) for one lot. */
   onItemCleanup?: (item: InventoryItem) => void;
   selectionMode?: boolean;
   selectedIds?: ReadonlySet<string>;
@@ -85,9 +85,11 @@ export function InventoryGroupCard({
           <Text style={styles.brandInline}> · {group.brand}</Text>
         ) : null}
       </Text>
-      <Text style={styles.groupMeta}>
-        {locationLabel} · {quantityLabel}
-      </Text>
+      {showLots ? null : (
+        <Text style={styles.groupMeta}>
+          {locationLabel} · {quantityLabel}
+        </Text>
+      )}
     </View>
   );
 
@@ -277,7 +279,7 @@ function CleanupMenuButton({
       hitSlop={spacing.xs}
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityHint="다 먹었는지, 보관함에서 빼둘지 고를 수 있어요."
+      accessibilityHint="전부 정리할지, 일부만 뺄지 고를 수 있어요."
       style={({ pressed }) => [
         styles.cleanupMenuButton,
         pressed && styles.summaryPressed,
@@ -442,7 +444,7 @@ const styles = StyleSheet.create({
   lotWell: {
     padding: spacing.xs,
     gap: spacing.xs,
-    backgroundColor: colors.background,
+    backgroundColor: colors.insetSurface,
   },
   lotCard: {
     minHeight: touchTarget.min,

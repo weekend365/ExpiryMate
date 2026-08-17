@@ -1,4 +1,6 @@
 import {
+  applyConsumedAmountToInventoryItem,
+  formatBaseQuantity,
   formatDateKoreanCompact,
   type InventoryItem,
 } from "@expirymate/shared";
@@ -24,6 +26,7 @@ export type InventoryRemovalAction = "consume" | "discard";
 type PendingRemovalEntry = {
   action: InventoryRemovalAction;
   item: InventoryItem;
+  amountBase: number;
 };
 
 type PendingRemoval = {
@@ -35,23 +38,26 @@ async function submitRemovals(
   entries: PendingRemovalEntry[],
   activeSpaceId: string,
 ) {
-  const consumedItems = entries.flatMap((entry) =>
-    entry.action === "consume" ? [entry.item] : [],
-  );
+  const consumedEntries = entries.filter((entry) => entry.action === "consume");
   const discardedItems = entries.flatMap((entry) =>
     entry.action === "discard" ? [entry.item] : [],
   );
   const requests: Promise<unknown>[] = [];
+  const hasPartialConsume = consumedEntries.some(
+    (entry) => entry.amountBase < entry.item.quantityBase,
+  );
 
-  if (consumedItems.length === 1) {
-    requests.push(consumeInventoryItem(consumedItems[0]!.id, activeSpaceId));
-  } else if (consumedItems.length > 1) {
+  if (consumedEntries.length === 1 && !hasPartialConsume) {
+    requests.push(
+      consumeInventoryItem(consumedEntries[0]!.item.id, activeSpaceId),
+    );
+  } else if (consumedEntries.length > 0) {
     requests.push(
       batchConsumeInventoryItems(
         {
-          items: consumedItems.map((item) => ({
-            inventoryItemId: item.id,
-            amountBase: item.quantityBase,
+          items: consumedEntries.map((entry) => ({
+            inventoryItemId: entry.item.id,
+            amountBase: entry.amountBase,
           })),
         },
         activeSpaceId,
@@ -74,8 +80,9 @@ async function submitRemovals(
 }
 
 /**
- * Soft-remove items from the inventory list for a short undo window, then
- * commit the selected outcomes to the server. Quick actions share one window.
+ * Soft-remove or reduce items in the inventory list for a short undo window,
+ * then commit consume / discard outcomes to the server. Quick actions share
+ * one window.
  */
 export function useDeferredInventoryItemRemoval() {
   const queryClient = useQueryClient();
@@ -121,14 +128,28 @@ export function useDeferredInventoryItemRemoval() {
   const restoreToCache = useCallback(
     (items: InventoryItem[]) => {
       queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
-        const existingIds = new Set((current ?? []).map((entry) => entry.id));
+        const originals = new Map(items.map((item) => [item.id, item]));
+        const list = current ?? [];
+        const existingIds = new Set(list.map((entry) => entry.id));
         const missing = items.filter((item) => !existingIds.has(item.id));
+        const restored = list.map((item) => originals.get(item.id) ?? item);
 
-        if (!missing.length) {
-          return current ?? [];
+        return [...missing, ...restored];
+      });
+    },
+    [inventoryKey, queryClient],
+  );
+
+  const patchInCache = useCallback(
+    (nextItem: InventoryItem) => {
+      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
+        if (!current) {
+          return current;
         }
 
-        return [...missing, ...(current ?? [])];
+        return current.map((item) =>
+          item.id === nextItem.id ? nextItem : item,
+        );
       });
     },
     [inventoryKey, queryClient],
@@ -187,23 +208,25 @@ export function useDeferredInventoryItemRemoval() {
 
   const buildUndoLabel = (entries: PendingRemovalEntry[]) => {
     if (entries.length === 1) {
-      const [{ action, item }] = entries;
+      const [{ action, item, amountBase }] = entries;
+      if (action === "consume" && amountBase < item.quantityBase) {
+        return `${item.displayName} ${formatBaseQuantity(amountBase, item.unitCode)}를 빼 뒀어요`;
+      }
+
       const itemLabel = `${formatDateKoreanCompact(item.expiryDate)}까지인 ${item.displayName}`;
 
-      return action === "consume"
-        ? `${itemLabel}을(를) 다 먹음으로 표시했어요`
-        : `${itemLabel}을(를) 보관함에서 뺐어요`;
+      return `${itemLabel}을(를) 보관함에서 빼 뒀어요`;
     }
 
-    const allConsumed = entries.every((entry) => entry.action === "consume");
-
-    return allConsumed
-      ? `${entries.length}개 재료를 다 먹음으로 표시했어요`
-      : `${entries.length}개 재료를 보관함에서 뺐어요`;
+    return `${entries.length}개 재료를 정리했어요`;
   };
 
   const scheduleRemoval = useCallback(
-    (item: InventoryItem, action: InventoryRemovalAction) => {
+    (
+      item: InventoryItem,
+      action: InventoryRemovalAction,
+      amountBase?: number,
+    ) => {
       setErrorMessage(null);
 
       const previous = pendingRef.current;
@@ -215,11 +238,24 @@ export function useDeferredInventoryItemRemoval() {
         return;
       }
 
-      removeFromCache([item.id]);
+      const consumedAmount =
+        action === "consume" && typeof amountBase === "number"
+          ? Math.min(Math.max(1, Math.floor(amountBase)), item.quantityBase)
+          : item.quantityBase;
+      const isPartialConsume =
+        action === "consume" && consumedAmount < item.quantityBase;
+
+      if (isPartialConsume) {
+        patchInCache(
+          applyConsumedAmountToInventoryItem(item, consumedAmount),
+        );
+      } else {
+        removeFromCache([item.id]);
+      }
 
       const nextEntries = previous
-        ? [...previous.entries, { action, item }]
-        : [{ action, item }];
+        ? [...previous.entries, { action, item, amountBase: consumedAmount }]
+        : [{ action, item, amountBase: consumedAmount }];
 
       if (previous) {
         clearTimeout(previous.timeoutId);
@@ -233,7 +269,7 @@ export function useDeferredInventoryItemRemoval() {
 
       pendingRef.current = { entries: nextEntries, timeoutId };
     },
-    [commitPending, removeFromCache],
+    [commitPending, patchInCache, removeFromCache],
   );
 
   const undoRemoval = useCallback(() => {

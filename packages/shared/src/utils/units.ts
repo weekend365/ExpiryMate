@@ -173,6 +173,50 @@ export const formatInventoryQuantity = (
     : `${item.quantity}${item.unit ?? "개"}`;
 };
 
+export const canPartiallyConsumeInventoryItem = (
+  item: Pick<InventoryItem, "quantityBase">,
+) => item.quantityBase > 1;
+
+export const defaultPartialConsumeAmount = (
+  item: Pick<InventoryItem, "quantityBase" | "unitCode">,
+) => {
+  const remaining = Math.max(1, Math.floor(item.quantityBase));
+  const suggested = defaultQuantityForInputUnit(unitCodeLabels[item.unitCode]);
+
+  if (suggested < remaining) {
+    return suggested;
+  }
+
+  return Math.max(1, Math.floor(remaining / 2));
+};
+
+/**
+ * Optimistic leftover after consuming `amountBase`.
+ * Mirrors API `batchConsume` count-sync for individual EA lots.
+ */
+export const applyConsumedAmountToInventoryItem = <
+  T extends Pick<InventoryItem, "quantity" | "quantityBase" | "unitCode">,
+>(
+  item: T,
+  amountBase: number,
+): T => {
+  const consumed = Math.min(
+    Math.max(0, Math.floor(amountBase)),
+    item.quantityBase,
+  );
+  const nextQuantityBase = item.quantityBase - consumed;
+  const syncCountQuantity =
+    item.unitCode === UnitCode.EA &&
+    item.quantity === item.quantityBase &&
+    nextQuantityBase > 0;
+
+  return {
+    ...item,
+    quantityBase: nextQuantityBase,
+    quantity: syncCountQuantity ? nextQuantityBase : item.quantity,
+  };
+};
+
 export const QUANTITY_INPUT_UNITS = [
   { label: "개", unit: "개" },
   { label: "ml", unit: "ml" },

@@ -1,12 +1,10 @@
 import {
-  formatDateKoreanCompact,
   getExpiryTrafficBucket,
   isTrackedItem,
   type InventoryItem,
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
-  Archive,
   Barcode,
   Check,
   ChevronDown,
@@ -18,7 +16,6 @@ import {
   RefreshCw,
   Search,
   Trash2,
-  Utensils,
   X,
 } from "lucide-react-native";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
@@ -43,6 +40,7 @@ import {
 } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
+import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
 import { InventoryGroupCard } from "../../src/components/InventoryGroupCard";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
@@ -57,10 +55,7 @@ import {
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
-import {
-  useDeferredInventoryItemRemoval,
-  type InventoryRemovalAction,
-} from "../../src/features/inventory/use-deferred-inventory-item-removal";
+import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import {
@@ -344,18 +339,18 @@ export default function InventoryScreen() {
     });
   };
 
-  const handleDiscard = (item: InventoryItem) => {
-    setCleanupItem(null);
-    setSuccessMessage(null);
-    setActionErrorMessage(null);
-    deferredRemoval.scheduleRemoval(item, "discard");
-  };
-
-  const handleConsume = (item: InventoryItem) => {
+  const handleConsumeAll = (item: InventoryItem) => {
     setCleanupItem(null);
     setSuccessMessage(null);
     setActionErrorMessage(null);
     deferredRemoval.scheduleRemoval(item, "consume");
+  };
+
+  const handleConsumePartial = (item: InventoryItem, amountBase: number) => {
+    setCleanupItem(null);
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    deferredRemoval.scheduleRemoval(item, "consume", amountBase);
   };
 
   const openCleanupSheet = (item: InventoryItem) => {
@@ -363,19 +358,6 @@ export default function InventoryScreen() {
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setCleanupItem(item);
-  };
-
-  const applyCleanupAction = (action: InventoryRemovalAction) => {
-    if (!cleanupItem) {
-      return;
-    }
-
-    if (action === "consume") {
-      handleConsume(cleanupItem);
-      return;
-    }
-
-    handleDiscard(cleanupItem);
   };
 
   const primaryFooter =
@@ -840,72 +822,12 @@ export default function InventoryScreen() {
         />
       </View>
 
-      <BottomSheet
-        visible={cleanupItem !== null}
+      <InventoryCleanupSheet
+        item={cleanupItem}
         onClose={() => setCleanupItem(null)}
-        title="어떻게 정리할까요?"
-        description={
-          cleanupItem
-            ? `${cleanupItem.displayName} · ${formatDateKoreanCompact(cleanupItem.expiryDate)}까지`
-            : undefined
-        }
-      >
-        <View style={styles.cleanupSheetActions}>
-          <Pressable
-            onPress={() => applyCleanupAction("consume")}
-            accessibilityRole="button"
-            accessibilityLabel="다 먹었어요"
-            style={({ pressed }) => [
-              styles.cleanupSheetOption,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-          >
-            <View style={styles.cleanupSheetOptionIcon}>
-              <Utensils
-                color={colors.primary}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </View>
-            <View style={styles.cleanupSheetOptionCopy}>
-              <Text style={styles.cleanupSheetOptionTitle}>다 먹었어요</Text>
-              <Text style={styles.cleanupSheetOptionDescription}>
-                잘 드셨군요. 보관함에서 슬쩍 빼 둘게요
-              </Text>
-            </View>
-          </Pressable>
-          <Pressable
-            onPress={() => applyCleanupAction("discard")}
-            accessibilityRole="button"
-            accessibilityLabel="보관함에서 빼둘게요"
-            style={({ pressed }) => [
-              styles.cleanupSheetOption,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-          >
-            <View
-              style={[
-                styles.cleanupSheetOptionIcon,
-                styles.cleanupSheetOptionIconSoftDanger,
-              ]}
-            >
-              <Archive
-                color={colors.danger}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </View>
-            <View style={styles.cleanupSheetOptionCopy}>
-              <Text style={styles.cleanupSheetOptionTitle}>
-                보관함에서 빼둘게요
-              </Text>
-              <Text style={styles.cleanupSheetOptionDescription}>
-                버리거나 비운 재료라면 여기서 정리해요
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-      </BottomSheet>
+        onConsumeAll={handleConsumeAll}
+        onConsumePartial={handleConsumePartial}
+      />
 
       <BottomSheet
         visible={filterSheetVisible}
@@ -1363,49 +1285,6 @@ const styles = StyleSheet.create({
   },
   filterControlPressed: {
     opacity: 0.82,
-  },
-  cleanupSheetActions: {
-    gap: spacing.xs,
-  },
-  cleanupSheetOption: {
-    minHeight: touchTarget.cta,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
-  },
-  cleanupSheetOptionIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    borderRadius: radius.lg,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  cleanupSheetOptionIconSoftDanger: {
-    backgroundColor: colors.dangerSoft,
-  },
-  cleanupSheetOptionCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  cleanupSheetOptionTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  cleanupSheetOptionDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
   },
   locationOptionGrid: {
     gap: spacing.xs,
