@@ -12,13 +12,19 @@ import {
   ChevronDown,
   ChevronUp,
   Clock3,
+  Coffee,
+  Cookie,
   Heart,
+  Moon,
   Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
+  Sun,
+  Timer,
   Utensils,
   Users,
+  type LucideIcon,
 } from "lucide-react-native";
 import {
   useCallback,
@@ -36,6 +42,7 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
+  Switch,
   View,
 } from "react-native";
 import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
@@ -113,12 +120,13 @@ type RecipeDetailSelection = {
 const mealTypeOptions: Array<{
   value: RecipeMealType;
   label: string;
+  icon: LucideIcon;
 }> = [
-  { value: "any", label: "상관없음" },
-  { value: "breakfast", label: "아침" },
-  { value: "lunch", label: "점심" },
-  { value: "dinner", label: "저녁" },
-  { value: "snack", label: "간식" },
+  { value: "any", label: "상관없음", icon: Utensils },
+  { value: "breakfast", label: "아침", icon: Coffee },
+  { value: "lunch", label: "점심", icon: Sun },
+  { value: "dinner", label: "저녁", icon: Moon },
+  { value: "snack", label: "간식", icon: Cookie },
 ];
 
 const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
@@ -1257,19 +1265,15 @@ export default function RecommendationsScreen() {
         visible={showOptionsSheet}
         onClose={() => setShowOptionsSheet(false)}
         mascotMood="idle"
-        title="추천 조건을 고를까요?"
-        description="인원과 시간만 정해도 충분해요."
+        title="오늘은 어떤 요리로 할까요?"
+        description="인원·시간만 바꿔도 장고가 다시 골라 드려요."
         footer={
           <Button onPress={() => setShowOptionsSheet(false)} fullWidth>
             이걸로 할게요
           </Button>
         }
       >
-        <View style={styles.optionGroup}>
-          <View style={styles.optionHeader}>
-            <Users color={colors.subtext} size={spacing.sm} strokeWidth={2.4} />
-            <AppText style={styles.optionTitle}>몇 명이서 먹나요?</AppText>
-          </View>
+        <OptionGroup icon={Users} title="몇 명이서 먹나요?">
           <View style={styles.pillRow}>
             {servingOptions.map((value) => (
               <Pill
@@ -1280,17 +1284,9 @@ export default function RecommendationsScreen() {
               />
             ))}
           </View>
-        </View>
+        </OptionGroup>
 
-        <View style={styles.optionGroup}>
-          <View style={styles.optionHeader}>
-            <Clock3
-              color={colors.subtext}
-              size={spacing.sm}
-              strokeWidth={2.4}
-            />
-            <AppText style={styles.optionTitle}>얼마나 걸려도 괜찮나요?</AppText>
-          </View>
+        <OptionGroup icon={Clock3} title="얼마나 걸려도 괜찮나요?">
           <View style={styles.pillRow}>
             {timeOptions.map((value) => (
               <Pill
@@ -1301,30 +1297,26 @@ export default function RecommendationsScreen() {
               />
             ))}
           </View>
-        </View>
+        </OptionGroup>
 
-        <View style={styles.optionGroup}>
-          <AppText style={styles.optionTitle}>어떤 식사인가요?</AppText>
+        <OptionGroup icon={Utensils} title="어떤 식사인가요?">
           <View style={styles.pillRow}>
             {mealTypeOptions.map((option) => (
               <Pill
                 key={option.value}
                 label={option.label}
+                icon={option.icon}
                 selected={mealType === option.value}
                 onPress={() => setMealType(option.value)}
               />
             ))}
           </View>
-        </View>
+        </OptionGroup>
 
-        <View style={styles.pillRow}>
-          <Pill
-            label="임박 재료 먼저"
-            tone="warning"
-            selected={useExpiringFirst}
-            onPress={() => setUseExpiringFirst((value) => !value)}
-          />
-        </View>
+        <ExpiringFirstToggle
+          selected={useExpiringFirst}
+          onToggle={() => setUseExpiringFirst((value) => !value)}
+        />
       </BottomSheet>
 
       <BottomSheet
@@ -1583,6 +1575,83 @@ function RecipeSection({
       {collapsed ? null : (
         <View style={styles.recipeSectionBody}>{children}</View>
       )}
+    </View>
+  );
+}
+
+function OptionGroup({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: LucideIcon;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <View style={styles.optionGroup}>
+      <View style={styles.optionHeader}>
+        <Icon color={colors.subtext} size={spacing.sm} strokeWidth={2.4} />
+        <AppText style={styles.optionTitle}>{title}</AppText>
+      </View>
+      {children}
+    </View>
+  );
+}
+
+function ExpiringFirstToggle({
+  selected,
+  onToggle,
+}: {
+  selected: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <View
+      style={[
+        styles.expiringToggle,
+        selected && styles.expiringToggleSelected,
+      ]}
+    >
+      <Pressable
+        onPress={onToggle}
+        accessibilityRole="switch"
+        accessibilityState={{ checked: selected }}
+        accessibilityLabel="임박 재료를 먼저 쓸까요?"
+        accessibilityHint="켜 두면 유통기한이 가까운 재료로 요리를 먼저 골라 드려요."
+        style={({ pressed }) => [
+          styles.expiringToggleMain,
+          pressed && !selected && styles.expiringTogglePressed,
+        ]}
+      >
+        <Timer
+          color={selected ? colors.warning : colors.subtext}
+          size={spacing.sm}
+          strokeWidth={2.4}
+          style={styles.expiringToggleIcon}
+        />
+        <View style={styles.expiringToggleCopy}>
+          <AppText variant="bodySmall" style={styles.optionTitle}>
+            임박 재료를 먼저 쓸까요?
+          </AppText>
+          <AppText variant="label" tone="subtext">
+            유통기한이 가까운 재료로 요리를 먼저 골라 드려요.
+          </AppText>
+        </View>
+      </Pressable>
+      <View style={styles.expiringToggleIcon}>
+        <Switch
+          value={selected}
+          onValueChange={onToggle}
+          accessible={false}
+          importantForAccessibility="no"
+          trackColor={{
+            false: colors.border,
+            true: colors.warningSoft,
+          }}
+          thumbColor={selected ? colors.warning : colors.mutedSurface}
+        />
+      </View>
     </View>
   );
 }
@@ -2535,6 +2604,39 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: spacing.sm,
+  },
+  expiringToggle: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  expiringToggleSelected: {
+    borderColor: colors.warningSoft,
+    backgroundColor: colors.warningSoft,
+  },
+  expiringToggleMain: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    borderRadius: radius.md,
+  },
+  expiringTogglePressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  expiringToggleCopy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  expiringToggleIcon: {
+    flexShrink: 0,
   },
   sheetFooter: {
     gap: spacing.sm,

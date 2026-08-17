@@ -106,7 +106,7 @@ name: Responsive layout smoke
 - takeScreenshot: ${SCREENSHOT_DIR}/recommendations
 - tapOn:
     id: recommendation-options-button
-- assertVisible: "추천 조건을 고를까요?"
+- assertVisible: "오늘은 어떤 요리로 할까요?"
 - takeScreenshot: ${SCREENSHOT_DIR}/recommendation-options
 - back
 - tapOn:
