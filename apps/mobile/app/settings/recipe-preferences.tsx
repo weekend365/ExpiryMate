@@ -1,8 +1,10 @@
-import type {
-  RecipeAllergen,
-  RecipeDietaryStyle,
-  RecipeEquipment,
-  RecipeSpiceLevel,
+import {
+  recipeAllergenOptions,
+  recipeDietaryStyleOptions,
+  type RecipeAllergen,
+  type RecipeDietaryStyle,
+  type RecipeEquipment,
+  type RecipeSpiceLevel,
 } from "@expirymate/shared";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
@@ -15,22 +17,6 @@ import { getSettingsErrorMessage } from "../../src/features/settings/settings-fo
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
-const allergenOptions: Array<{ value: RecipeAllergen; label: string }> = [
-  ["egg", "난류"], ["milk", "우유"], ["buckwheat", "메밀"],
-  ["peanut", "땅콩"], ["soybean", "대두"], ["wheat", "밀"],
-  ["mackerel", "고등어"], ["crab", "게"], ["shrimp", "새우"],
-  ["pork", "돼지고기"], ["peach", "복숭아"], ["tomato", "토마토"],
-  ["sulfites", "아황산류"], ["walnut", "호두"], ["chicken", "닭고기"],
-  ["beef", "쇠고기"], ["squid", "오징어"],
-  ["shellfish", "조개류(굴·전복·홍합 포함)"], ["pine_nut", "잣"],
-].map(([value, label]) => ({ value: value as RecipeAllergen, label }));
-
-const dietaryOptions: Array<{ value: RecipeDietaryStyle; label: string }> = [
-  { value: "any", label: "제한 없음" },
-  { value: "vegetarian", label: "채식" },
-  { value: "vegan", label: "비건" },
-  { value: "pescatarian", label: "페스코" },
-];
 const spiceOptions: Array<{ value: RecipeSpiceLevel; label: string }> = [
   { value: "any", label: "제한 없음" },
   { value: "none", label: "안 매운맛" },
@@ -113,7 +99,7 @@ export default function RecipePreferenceSettingsScreen() {
     >
       <PreferenceSection title="알레르기" description="해당 재료와 명백히 관련된 재고·추천을 제외해요.">
         <PillGrid>
-          {allergenOptions.map((option) => (
+          {recipeAllergenOptions.map((option) => (
             <Pill key={option.value} label={option.label} tone="danger" selected={allergens.includes(option.value)} onPress={() => toggle(option.value, allergens, setAllergens)} />
           ))}
         </PillGrid>
@@ -134,7 +120,7 @@ export default function RecipePreferenceSettingsScreen() {
       </PreferenceSection>
 
       <PreferenceSection title="식단" description="한 가지 식단 기준을 모든 추천에 적용해요.">
-        <PillGrid>{dietaryOptions.map((option) => <Pill key={option.value} label={option.label} selected={dietaryStyle === option.value} onPress={() => setDietaryStyle(option.value)} />)}</PillGrid>
+        <PillGrid>{recipeDietaryStyleOptions.map((option) => <Pill key={option.value} label={option.label} selected={dietaryStyle === option.value} onPress={() => setDietaryStyle(option.value)} />)}</PillGrid>
       </PreferenceSection>
 
       <PreferenceSection title="최대 매운맛" description="이 단계보다 맵지 않은 요리만 추천해요.">

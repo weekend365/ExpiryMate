@@ -1,5 +1,6 @@
 import {
   formatBaseQuantity,
+  summarizeRecipePreference,
   type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
@@ -12,6 +13,7 @@ import {
   ChevronUp,
   Clock3,
   Heart,
+  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Utensils,
@@ -52,6 +54,7 @@ import {
   parseRecommendationAccess,
 } from "../../src/features/monetization/recommendation-access";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
 import {
   getRecipeFavoriteKey,
@@ -145,6 +148,7 @@ export default function RecommendationsScreen() {
   const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
+  const { query: recipePreferencesQuery } = useRecipePreferences();
   const [servings, setServings] = useState(2);
   const [maxCookingMinutes, setMaxCookingMinutes] = useState(30);
   const [mealType, setMealType] = useState<RecipeMealType>("any");
@@ -224,6 +228,25 @@ export default function RecommendationsScreen() {
   const mealTypeLabel =
     mealTypeOptions.find((option) => option.value === mealType)?.label ??
     "상관없음";
+  const preferenceSummary = useMemo(() => {
+    if (recipePreferencesQuery.data) {
+      return summarizeRecipePreference(recipePreferencesQuery.data);
+    }
+    if (recipePreferencesQuery.isError) {
+      return {
+        applied: false,
+        text: "맞춤 설정을 확인하러 갈까요?",
+      };
+    }
+    if (recipePreferencesQuery.isLoading) {
+      return { applied: false, text: "살펴보는 중이에요" };
+    }
+    return summarizeRecipePreference(undefined);
+  }, [
+    recipePreferencesQuery.data,
+    recipePreferencesQuery.isError,
+    recipePreferencesQuery.isLoading,
+  ]);
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
@@ -765,39 +788,75 @@ export default function RecommendationsScreen() {
           size="small"
         />
 
-        <Pressable
-          testID="recommendation-options-button"
-          onPress={() => setShowOptionsSheet(true)}
-          accessibilityRole="button"
-          accessibilityLabel="추천 조건 고르기"
-          accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
-          style={({ pressed }) => [
-            styles.optionsSummary,
-            shouldStack && styles.optionsSummaryStacked,
-            pressed && styles.optionsSummaryPressed,
-          ]}
-        >
-          <View style={styles.optionsSummaryCopy}>
-            <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
-            <Text style={styles.optionsSummaryValue}>
-              {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
-              {useExpiringFirst ? " · 임박 먼저" : ""}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.optionsSummaryAction,
-              shouldStack && styles.optionsSummaryActionStacked,
+        <View style={styles.optionsSummaryGroup}>
+          <Pressable
+            testID="recommendation-options-button"
+            onPress={() => setShowOptionsSheet(true)}
+            accessibilityRole="button"
+            accessibilityLabel="추천 조건 고르기"
+            accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
+            style={({ pressed }) => [
+              styles.optionsSummary,
+              shouldStack && styles.optionsSummaryStacked,
+              pressed && styles.optionsSummaryPressed,
             ]}
           >
-            <SlidersHorizontal
-              color={colors.primary}
-              size={spacing.sm + spacing.xxs}
-              strokeWidth={2.4}
-            />
-            <Text style={styles.optionsSummaryActionLabel}>바꾸기</Text>
-          </View>
-        </Pressable>
+            <View style={styles.optionsSummaryCopy}>
+              <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
+              <Text style={styles.optionsSummaryValue}>
+                {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
+                {useExpiringFirst ? " · 임박 먼저" : ""}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.optionsSummaryAction,
+                shouldStack && styles.optionsSummaryActionStacked,
+              ]}
+            >
+              <SlidersHorizontal
+                color={colors.primary}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+              />
+              <Text style={styles.optionsSummaryActionLabel}>바꾸기</Text>
+            </View>
+          </Pressable>
+          <Pressable
+            testID="recommendation-preference-summary-button"
+            onPress={() => router.push("/settings/recipe-preferences")}
+            accessibilityRole="button"
+            accessibilityLabel="알레르기·식단 맞추기"
+            accessibilityHint="설정에서 알레르기와 식단을 바꿀 수 있어요."
+            style={({ pressed }) => [
+              styles.optionsSummary,
+              shouldStack && styles.optionsSummaryStacked,
+              pressed && styles.optionsSummaryPressed,
+            ]}
+          >
+            <View style={styles.optionsSummaryCopy}>
+              <Text style={styles.optionsSummaryLabel}>알레르기·식단</Text>
+              <Text style={styles.optionsSummaryValue}>
+                {preferenceSummary.text}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.optionsSummaryAction,
+                shouldStack && styles.optionsSummaryActionStacked,
+              ]}
+            >
+              <ShieldCheck
+                color={colors.primary}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+              />
+              <Text style={styles.optionsSummaryActionLabel}>
+                {preferenceSummary.applied ? "바꾸기" : "맞춰요"}
+              </Text>
+            </View>
+          </Pressable>
+        </View>
       </View>
       ) : null}
 
@@ -1956,6 +2015,9 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
+    gap: spacing.sm,
+  },
+  optionsSummaryGroup: {
     gap: spacing.sm,
   },
   optionsSummaryStacked: {

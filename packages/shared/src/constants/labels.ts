@@ -9,6 +9,7 @@ import {
   SupportInquiryStatus,
   UnitCode,
 } from "../enums/app-enums";
+import type { RecipeAllergen, RecipeDietaryStyle } from "../schemas/recipes";
 
 export const storageLocationLabels: Record<StorageLocation, string> = {
   [StorageLocation.FRIDGE]: "냉장",
@@ -154,3 +155,40 @@ export const productMasterCorrectionStatusLabels: Record<
   [ProductMasterCorrectionStatus.APPLIED]: "반영함",
   [ProductMasterCorrectionStatus.DISMISSED]: "넘어감",
 };
+
+export const recipeAllergenLabels: Record<RecipeAllergen, string> = {
+  egg: "난류",
+  milk: "우유",
+  buckwheat: "메밀",
+  peanut: "땅콩",
+  soybean: "대두",
+  wheat: "밀",
+  mackerel: "고등어",
+  crab: "게",
+  shrimp: "새우",
+  pork: "돼지고기",
+  peach: "복숭아",
+  tomato: "토마토",
+  sulfites: "아황산류",
+  walnut: "호두",
+  chicken: "닭고기",
+  beef: "쇠고기",
+  squid: "오징어",
+  shellfish: "조개류(굴·전복·홍합 포함)",
+  pine_nut: "잣",
+};
+
+export const recipeDietaryStyleLabels: Record<RecipeDietaryStyle, string> = {
+  any: "제한 없음",
+  vegetarian: "채식",
+  vegan: "비건",
+  pescatarian: "페스코",
+};
+
+export const recipeAllergenOptions = (
+  Object.entries(recipeAllergenLabels) as Array<[RecipeAllergen, string]>
+).map(([value, label]) => ({ value, label }));
+
+export const recipeDietaryStyleOptions = (
+  Object.entries(recipeDietaryStyleLabels) as Array<[RecipeDietaryStyle, string]>
+).map(([value, label]) => ({ value, label }));

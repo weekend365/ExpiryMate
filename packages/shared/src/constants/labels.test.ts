@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { StorageLocation } from "../enums/app-enums";
 import {
+  recipeAllergenOptions,
+  recipeDietaryStyleOptions,
   resolveStorageLocationLabel,
   SYSTEM_STORAGE_LOCATION_KEYS,
 } from "./labels";
@@ -45,5 +47,18 @@ describe("user storage location contracts", () => {
         label: "가".repeat(21),
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("recipe preference labels", () => {
+  it("covers every allergen and dietary style option", () => {
+    expect(recipeAllergenOptions.map((option) => option.value)).toContain("egg");
+    expect(recipeAllergenOptions).toHaveLength(19);
+    expect(recipeDietaryStyleOptions.map((option) => option.label)).toEqual([
+      "제한 없음",
+      "채식",
+      "비건",
+      "페스코",
+    ]);
   });
 });
