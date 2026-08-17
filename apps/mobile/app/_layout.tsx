@@ -9,7 +9,7 @@ import { useEffect, type ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { HeaderBackButton } from "../src/components/HeaderBackButton";
+import { HeaderBackButton, HeaderTitle } from "../src/components/HeaderBackButton";
 import {
   AuthLoadingScreen,
   AuthRedirectGate,
@@ -70,10 +70,20 @@ function RootLayout() {
                   backgroundColor: colors.background,
                 },
                 headerTintColor: colors.text,
+                headerTitleAlign: "center",
+                headerLeftContainerStyle: {
+                  justifyContent: "center",
+                },
+                headerTitleContainerStyle: {
+                  justifyContent: "center",
+                },
                 headerTitleStyle: {
                   fontFamily: fontFamily.bold,
                   fontSize: typography.heading.fontSize,
                 },
+                headerTitle: ({ children }) => (
+                  <HeaderTitle>{children}</HeaderTitle>
+                ),
                 headerBackTitleStyle: {
                   fontFamily: fontFamily.medium,
                 },

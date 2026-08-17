@@ -2,50 +2,61 @@ import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
-import type { PropsWithChildren } from "react";
-import { useState } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useState, type PropsWithChildren } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
+
+export type DatePickerFieldHandle = {
+  open: () => void;
+};
 
 interface DatePickerFieldProps extends PropsWithChildren {
   label?: string;
   value?: string;
   onChange: (value: string) => void;
   error?: string;
-  /** field = labeled row (default); hero = large date + secondary action */
-  presentation?: "field" | "hero";
+  /** field = labeled row; hero = large date; none = parent trigger opens the sheet */
+  presentation?: "field" | "hero" | "none";
   actionLabel?: string;
   emptyLabel?: string;
   /** Hero eyebrow above the large date. Pass null to hide when a parent already guides. */
   heroEyebrow?: string | null;
 }
 
-export function DatePickerField({
-  label,
-  value,
-  onChange,
-  error,
-  presentation = "field",
-  actionLabel,
-  emptyLabel = "날짜를 골라 주세요",
-  heroEyebrow = "이 날짜로 넣을게요",
-  children,
-}: DatePickerFieldProps) {
+export const DatePickerField = forwardRef<
+  DatePickerFieldHandle,
+  DatePickerFieldProps
+>(function DatePickerField(
+  {
+    label,
+    value,
+    onChange,
+    error,
+    presentation = "field",
+    actionLabel,
+    emptyLabel = "날짜를 골라 주세요",
+    heroEyebrow = "이 날짜로 넣을게요",
+    children,
+  },
+  ref,
+) {
   const [isVisible, setIsVisible] = useState(false);
   const [draftDate, setDraftDate] = useState<Date>(
     value ? toDatePickerDate(value) : new Date(),
   );
 
-  const openPicker = () => {
+  const openPicker = useCallback(() => {
     setDraftDate(value ? toDatePickerDate(value) : new Date());
     setIsVisible(true);
-  };
+  }, [value]);
 
   const closePicker = () => {
     setIsVisible(false);
   };
+
+  useImperativeHandle(ref, () => ({ open: openPicker }), [openPicker]);
 
   const handleChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (Platform.OS === "android") {
@@ -74,12 +85,17 @@ export function DatePickerField({
     actionLabel ??
     (presentation === "hero" ? "다른 날짜 고르기" : "직접 고르기");
   const isHero = presentation === "hero";
+  const isHidden = presentation === "none";
 
   return (
     <View style={styles.wrapper}>
-      {label && !isHero ? <Text style={styles.label}>{label}</Text> : null}
+      {label && !isHero && !isHidden ? (
+        <Text style={styles.label}>{label}</Text>
+      ) : null}
 
-      {isHero ? (
+      {isHidden ? (
+        children
+      ) : isHero ? (
         <>
           <Pressable
             onPress={openPicker}
@@ -187,7 +203,7 @@ export function DatePickerField({
       ) : null}
     </View>
   );
-}
+});
 
 function toDatePickerDate(value: string) {
   if (!isDateOnlyString(value)) {
@@ -252,11 +268,11 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
   },
   heroValueBlock: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: touchTarget.cta,
     borderRadius: radius.xxl,
     backgroundColor: colors.primarySoft,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.sm,
     gap: spacing.xxs,
   },
   heroValueBlockPressed: {
@@ -269,9 +285,9 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   heroValue: {
-    fontSize: typography.title.fontSize,
-    lineHeight: typography.title.lineHeight,
-    fontFamily: typography.title.fontFamily,
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
+    fontFamily: typography.heading.fontFamily,
     color: colors.text,
   },
   heroValuePlaceholder: {

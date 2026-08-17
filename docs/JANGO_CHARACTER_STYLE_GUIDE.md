@@ -215,7 +215,7 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 - 테두리 카드 프레임 안에 가두지 말고, 화면/시트 배경 위에 앉힌다
 - 사이즈: 온보딩·풀 empty → `large` / 카드 히어로 → `medium` / 인라인·시트 → `small`
 - 장고 아래(또는 옆) **주 CTA 1개**
-- 사용자 문구는 대화형 한국어. 시스템 언어(“저장”, “오류”) 금지 → `.cursorrules` UX 라이팅 따름
+- 사용자 문구는 대화형 한국어. 시스템 언어(“저장”, “오류”) 금지 → `.cursor/rules/mobile-ux.mdc` UX 라이팅 따름
 
 ---
 
@@ -254,5 +254,5 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 | 마스코트 컴포넌트 | `apps/mobile/src/components/Mascot.tsx` |
 | 브랜드 표시명 | `packages/shared/src/constants/brand.ts` → `appBrand` |
 | 색 토큰 | `packages/shared/src/design/tokens.ts` → `semanticColors` |
-| 모바일 UX 규칙 | `.cursorrules` |
+| 모바일 UX 규칙 | `.cursor/rules/mobile-ux.mdc` |
 | 프로젝트 현황 | [`PROJECT.md`](./PROJECT.md) |

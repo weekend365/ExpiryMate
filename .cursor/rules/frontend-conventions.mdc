@@ -12,7 +12,6 @@ alwaysApply: false
 - Parse the API envelope in one place and surface friendly Korean error messages to users.
 - Use TanStack Query for server state; keep stable query keys and invalidate related queries after mutations.
 - Use React Hook Form with zod schemas from `@expirymate/shared` for forms when a shared schema exists.
-- Keep user-facing labels, empty states, errors, and navigation titles in natural Korean.
-- For admin styling, follow existing Tailwind and CSS variable patterns; for mobile styling, use `colors`, `spacing`, and shared components before adding new tokens.
+- For admin styling, follow existing Tailwind and CSS variable patterns; for mobile styling, use shared tokens and components before adding new ones.
 - Avoid browser-only APIs in mobile code; guard browser storage and `window` access inside client-only admin code.
 - Keep app-specific state in the established stores and avoid duplicating server state outside TanStack Query.

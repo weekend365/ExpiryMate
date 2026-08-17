@@ -1,6 +1,6 @@
 # 장고야 부탁해 (Jango) · 모바일 UI/UX 리디자인 지시 템플릿
 
-`.cursorrules`와 `@expirymate/shared` 디자인 토큰을 기준으로 화면별 리디자인을 진행할 때 Cursor에 붙여 넣는 프롬프트 모음이다.
+`.cursor/rules/mobile-ux.mdc`와 `@expirymate/shared` 디자인 토큰을 기준으로 화면별 리디자인을 진행할 때 Cursor에 붙여 넣는 프롬프트 모음이다.
 
 브랜드 표시명: **장고야 부탁해** (EN: **Jango**)  
 캐릭터: **장고** (EN: **Jango**) — `@expirymate/shared`의 `appBrand`와 `apps/mobile/src/components/Mascot.tsx`를 단일 기준으로 쓴다.
@@ -80,7 +80,7 @@
 ## 0. 공통 프롬프트 머리말 (매번 붙이기)
 
 ```text
-반드시 .cursorrules를 따를 것.
+반드시 .cursor/rules/mobile-ux.mdc를 따를 것.
 색상/간격/라운드/타이포는 @expirymate/shared 디자인 토큰만 사용할 것.
 raw hex, off-grid spacing, 48px 미만 터치 타깃 금지.
 버튼 radius 16, 카드/시트 radius 24.
@@ -98,7 +98,7 @@ empty·성공·경고·추천 상태에는 장고 mood를 녹여 낼 것 (한 �
 ## 1. 공통 컴포넌트 기반 정리 ✅
 
 ```text
-장고야 부탁해 모바일 공통 UI 기반을 .cursorrules와 @expirymate/shared 디자인 토큰 기준으로 정리해줘.
+장고야 부탁해 모바일 공통 UI 기반을 .cursor/rules/mobile-ux.mdc와 @expirymate/shared 디자인 토큰 기준으로 정리해줘.
 
 범위:
 - apps/mobile/src/components/Screen.tsx
@@ -145,7 +145,7 @@ empty·성공·경고·추천 상태에는 장고 mood를 녹여 낼 것 (한 �
 ## 2. BottomSheet + Step 시스템 추가 ✅
 
 ```text
-.cursorrules의 One Thing Per Page 원칙에 맞는 BottomSheet + Step 컨테이너를 mobile 공통 컴포넌트로 추가해줘.
+.cursor/rules/mobile-ux.mdc의 One Thing Per Page 원칙에 맞는 BottomSheet + Step 컨테이너를 mobile 공통 컴포넌트로 추가해줘.
 
 범위:
 - apps/mobile/src/components/ 아래에 새 컴포넌트 추가
@@ -175,7 +175,7 @@ empty·성공·경고·추천 상태에는 장고 mood를 녹여 낼 것 (한 �
 ## 3. 재료 등록 표준 화면 (`register.tsx`) ✅
 
 ```text
-apps/mobile/app/register.tsx 를 .cursorrules 기준의 표준 입력 플로우로 리디자인해줘.
+apps/mobile/app/register.tsx 를 .cursor/rules/mobile-ux.mdc 기준의 표준 입력 플로우로 리디자인해줘.
 
 범위:
 - apps/mobile/app/register.tsx
@@ -206,7 +206,7 @@ apps/mobile/app/register.tsx 를 .cursorrules 기준의 표준 입력 플로우�
 ## 4. 홈 탭 ✅
 
 ```text
-apps/mobile/app/(tabs)/home.tsx 를 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+apps/mobile/app/(tabs)/home.tsx 를 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/(tabs)/home.tsx
@@ -240,7 +240,7 @@ apps/mobile/app/(tabs)/home.tsx 를 .cursorrules 기준으로 UI/UX만 리디자
 ## 5. 재고 목록 탭 ✅
 
 ```text
-apps/mobile/app/(tabs)/inventory.tsx 를 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+apps/mobile/app/(tabs)/inventory.tsx 를 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/(tabs)/inventory.tsx
@@ -300,7 +300,7 @@ apps/mobile/app/inventory/[id].tsx 를 register.tsx와 같은 Step/BottomSheet �
 ## 7. 스캐너 ✅
 
 ```text
-스캐너 화면을 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+스캐너 화면을 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/scanner.tsx
@@ -327,7 +327,7 @@ apps/mobile/app/inventory/[id].tsx 를 register.tsx와 같은 Step/BottomSheet �
 ## 8. 레시피 추천 탭 ✅
 
 ```text
-apps/mobile/app/(tabs)/recommendations.tsx 를 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+apps/mobile/app/(tabs)/recommendations.tsx 를 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/(tabs)/recommendations.tsx
@@ -358,7 +358,7 @@ apps/mobile/app/(tabs)/recommendations.tsx 를 .cursorrules 기준으로 UI/UX�
 ## 9. 설정 탭 ✅
 
 ```text
-apps/mobile/app/(tabs)/settings.tsx 를 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+apps/mobile/app/(tabs)/settings.tsx 를 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/(tabs)/settings.tsx
@@ -386,7 +386,7 @@ apps/mobile/app/(tabs)/settings.tsx 를 .cursorrules 기준으로 UI/UX만 리�
 ## 10. 온보딩 + 진입 화면 ✅
 
 ```text
-온보딩/진입 화면을 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+온보딩/진입 화면을 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/index.tsx
@@ -414,7 +414,7 @@ apps/mobile/app/(tabs)/settings.tsx 를 .cursorrules 기준으로 UI/UX만 리�
 ## 11. 인증 화면군 ✅
 
 ```text
-인증 화면군을 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+인증 화면군을 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/auth/login.tsx
@@ -443,7 +443,7 @@ apps/mobile/app/(tabs)/settings.tsx 를 .cursorrules 기준으로 UI/UX만 리�
 ## 12. 개인정보/계정 삭제 ✅
 
 ```text
-개인정보 관련 화면을 .cursorrules 기준으로 UI/UX만 리디자인해줘.
+개인정보 관련 화면을 .cursor/rules/mobile-ux.mdc 기준으로 UI/UX만 리디자인해줘.
 
 범위:
 - apps/mobile/app/privacy/index.tsx
@@ -470,7 +470,7 @@ apps/mobile/app/(tabs)/settings.tsx 를 .cursorrules 기준으로 UI/UX만 리�
 ## 13. UX 라이팅 전수 정리 ✅
 
 ```text
-mobile 앱의 사용자 노출 문구를 .cursorrules UX 라이팅 규칙과 장고 톤에 맞게 전수 점검해줘.
+mobile 앱의 사용자 노출 문구를 .cursor/rules/mobile-ux.mdc UX 라이팅 규칙과 장고 톤에 맞게 전수 점검해줘.
 
 범위:
 - apps/mobile/app/**/*.tsx

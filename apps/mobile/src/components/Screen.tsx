@@ -43,6 +43,11 @@ export interface ScreenProps extends PropsWithChildren {
    */
   bottomInsetMode?: BottomInsetMode;
   /**
+   * `safe`: apply the status-bar inset.
+   * `none`: skip it when a stack header already sits in the safe area.
+   */
+  topInsetMode?: "safe" | "none";
+  /**
    * When true, show a back control if the stack can go back.
    * Opt-in only — home/tabs must not inherit a back chevron.
    * Pair with stack `headerShown: false` so Screen owns the intro chrome.
@@ -62,6 +67,7 @@ export function Screen({
   contentStyle,
   contentWidth = "content",
   bottomInsetMode = "system",
+  topInsetMode = "safe",
   showBack = false,
   testID,
 }: ScreenProps) {
@@ -138,7 +144,11 @@ export function Screen({
   return (
     <SafeAreaView
       style={styles.safeArea}
-      edges={["top", "right", "left"]}
+      edges={
+        topInsetMode === "none"
+          ? ["right", "left"]
+          : ["top", "right", "left"]
+      }
       testID={testID}
     >
       <KeyboardAvoidingView

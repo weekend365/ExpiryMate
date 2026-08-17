@@ -12,6 +12,8 @@ interface QuantityStepperProps {
   /** Amount added or subtracted by the +/− buttons. Defaults to 1. */
   step?: number;
   error?: string;
+  /** Shown beside the number so the hero reads as a complete value (e.g. 2개). */
+  unitSuffix?: string;
   /** `hero` enlarges the number and hides the field label when the page title already asks. */
   presentation?: "field" | "hero";
 }
@@ -23,6 +25,7 @@ export function QuantityStepper({
   max,
   step = 1,
   error,
+  unitSuffix,
   presentation = "field",
 }: QuantityStepperProps) {
   const upperBound =
@@ -36,6 +39,16 @@ export function QuantityStepper({
     upperBound === undefined ? safeValue : Math.min(safeValue, upperBound);
 
   const isHero = presentation === "hero";
+  const valueText = String(clampedValue);
+  const valueVariant = isHero ? "title" : "subheading";
+
+  const commitQuantity = (text: string) => {
+    const nextValue = Number(text.replace(/[^0-9]/g, ""));
+    const normalized = nextValue > 0 ? nextValue : 1;
+    onChange(
+      upperBound === undefined ? normalized : Math.min(normalized, upperBound),
+    );
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -76,22 +89,61 @@ export function QuantityStepper({
             -
           </AppText>
         </Pressable>
-        <AppTextInput
-          value={String(clampedValue)}
-          onChangeText={(text) => {
-            const nextValue = Number(text.replace(/[^0-9]/g, ""));
-            const normalized = nextValue > 0 ? nextValue : 1;
-            onChange(
-              upperBound === undefined
-                ? normalized
-                : Math.min(normalized, upperBound),
-            );
-          }}
-          keyboardType="number-pad"
-          accessibilityLabel={`${label} 수량`}
-          scaleRole="chrome"
-          style={[styles.input, isHero && styles.inputHero]}
-        />
+        <View style={styles.valueCluster}>
+          {unitSuffix ? (
+            <View style={styles.valuePair}>
+              <View style={styles.valueMeasureWrap}>
+                <AppText
+                  variant={valueVariant}
+                  scaleRole="chrome"
+                  densityAware={false}
+                  accessible={false}
+                  importantForAccessibility="no"
+                  style={styles.valueMeasure}
+                >
+                  {valueText}
+                </AppText>
+                <AppTextInput
+                  value={valueText}
+                  onChangeText={commitQuantity}
+                  keyboardType="number-pad"
+                  accessibilityLabel={`${label} 수량 ${unitSuffix}`}
+                  scaleRole="chrome"
+                  caretHidden={false}
+                  underlineColorAndroid="transparent"
+                  selectionColor={colors.primary}
+                  textAlignVertical="center"
+                  style={[
+                    styles.input,
+                    styles.inputOverlay,
+                    isHero && styles.inputHero,
+                  ]}
+                />
+              </View>
+              <AppText
+                variant={valueVariant}
+                scaleRole="chrome"
+                densityAware={false}
+                style={styles.unitSuffix}
+              >
+                {unitSuffix}
+              </AppText>
+            </View>
+          ) : (
+            <AppTextInput
+              value={valueText}
+              onChangeText={commitQuantity}
+              keyboardType="number-pad"
+              accessibilityLabel={`${label} 수량`}
+              scaleRole="chrome"
+              style={[
+                styles.input,
+                styles.inputFill,
+                isHero && styles.inputHero,
+              ]}
+            />
+          )}
+        </View>
         <Pressable
           onPress={() => {
             const next =
@@ -151,6 +203,9 @@ const styles = StyleSheet.create({
   containerHero: {
     minHeight: touchTarget.ctaLarge + spacing.xs,
     borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
   },
   errorContainer: {
     borderColor: colors.danger,
@@ -173,19 +228,56 @@ const styles = StyleSheet.create({
   iconButtonLabel: {
     color: colors.primary,
   },
-  input: {
+  valueCluster: {
     flex: 1,
     minWidth: 0,
-    alignSelf: "stretch",
-    minHeight: touchTarget.ctaLarge,
-    textAlign: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  valuePair: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs, // 숫자와 단위를 한 값으로 붙여 읽기 위한 4px 시각 보정
+  },
+  valueMeasureWrap: {
+    justifyContent: "center",
+  },
+  valueMeasure: {
+    includeFontPadding: false,
+  },
+  input: {
+    margin: 0,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    backgroundColor: "transparent",
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
+  },
+  inputOverlay: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    color: "transparent",
+    textAlign: "right",
+  },
+  inputFill: {
+    flex: 1,
+    alignSelf: "stretch",
+    minHeight: touchTarget.ctaLarge,
+    textAlign: "center",
   },
   inputHero: {
     fontSize: typography.title.fontSize,
     lineHeight: typography.title.lineHeight,
     fontFamily: typography.title.fontFamily,
+  },
+  unitSuffix: {
+    color: colors.text,
+    includeFontPadding: false,
   },
 });

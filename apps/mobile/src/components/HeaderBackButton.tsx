@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react-native";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 
@@ -22,18 +22,30 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
       onPress={onPress}
       style={styles.button}
     >
-      <ChevronLeft
-        color={colors.primary}
-        size={spacing.sm + spacing.xxs}
-        strokeWidth={2.4}
-      />
+      <View style={styles.iconSlot} pointerEvents="none">
+        <ChevronLeft
+          color={colors.primary}
+          size={spacing.sm + spacing.xxs}
+          strokeWidth={2.4}
+        />
+      </View>
       {!isLargeText ? <Text style={styles.label}>뒤로가기</Text> : null}
     </Pressable>
   );
 }
 
+/** Native-stack title with the same Pretendard metrics as the back control. */
+export function HeaderTitle({ children }: { children: string }) {
+  return (
+    <Text numberOfLines={1} style={styles.title}>
+      {children}
+    </Text>
+  );
+}
+
 const styles = StyleSheet.create({
   button: {
+    alignSelf: "center",
     minHeight: touchTarget.icon,
     marginLeft: -spacing.xs,
     paddingHorizontal: spacing.xs,
@@ -43,12 +55,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xxs,
   },
+  iconSlot: {
+    width: spacing.sm + spacing.xxs,
+    height: spacing.sm + spacing.xxs,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   label: {
     color: colors.primary,
     fontSize: typography.bodySmall.fontSize,
-    lineHeight: spacing.sm + spacing.xxs,
+    lineHeight: typography.bodySmall.fontSize,
     fontFamily: typography.bodyStrong.fontFamily,
     includeFontPadding: false,
     textAlignVertical: "center",
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  title: {
+    color: colors.text,
+    fontSize: typography.heading.fontSize,
+    lineHeight: typography.heading.fontSize,
+    fontFamily: typography.heading.fontFamily,
+    includeFontPadding: false,
+    textAlignVertical: "center",
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
   },
 });

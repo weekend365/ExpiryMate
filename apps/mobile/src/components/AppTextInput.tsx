@@ -44,10 +44,14 @@ export const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
           {
             color: colors.text,
             fontSize: typography.body.fontSize,
-            lineHeight: typography.body.lineHeight,
             fontFamily: typography.body.fontFamily,
-            // Extra Android font padding clips custom faces at large scale.
-            ...(Platform.OS === "android" ? { includeFontPadding: false } : null),
+            // lineHeight on iOS TextInput sits the glyph low in the box.
+            ...(Platform.OS === "android"
+              ? {
+                  includeFontPadding: false,
+                  textAlignVertical: "center",
+                }
+              : null),
           },
           style,
         ]}

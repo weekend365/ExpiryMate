@@ -30,7 +30,7 @@ export const spacing = designSpacing;
 export const radius = designRadius;
 
 /**
- * Touch-target heights from .cursorrules (not a visual spacing token).
+ * Touch-target heights from mobile-ux rules (not a visual spacing token).
  * Interactive controls must be at least `min`; primary CTAs use `cta`–`ctaLarge`.
  */
 export const touchTarget = {

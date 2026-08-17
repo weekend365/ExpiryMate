@@ -11,6 +11,8 @@ interface FormFieldProps {
   placeholder?: string;
   keyboardType?: KeyboardTypeOptions;
   multiline?: boolean;
+  /** Hide the visible label when a parent already asks the same question. */
+  hideLabel?: boolean;
 }
 
 export function FormField({
@@ -20,6 +22,7 @@ export function FormField({
   placeholder,
   keyboardType,
   multiline,
+  hideLabel = false,
 }: FormFieldProps) {
   return (
     <Controller
@@ -27,9 +30,11 @@ export function FormField({
       name={name}
       render={({ field, fieldState }) => (
         <View style={styles.wrapper}>
-          <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
-            {label}
-          </AppText>
+          {hideLabel ? null : (
+            <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
+              {label}
+            </AppText>
+          )}
           <AppTextInput
             testID={`form-field-${name}`}
             value={field.value ? String(field.value) : ""}
@@ -38,7 +43,9 @@ export function FormField({
             keyboardType={keyboardType}
             multiline={multiline}
             numberOfLines={multiline ? 4 : 1}
+            accessibilityLabel={label}
             scaleRole="body"
+            textAlignVertical={multiline ? "top" : "center"}
             style={[
               styles.input,
               multiline && styles.multiline,
@@ -70,6 +77,8 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.none,
+    includeFontPadding: false,
   },
   multiline: {
     minHeight: spacing.xxxl + spacing.xl,

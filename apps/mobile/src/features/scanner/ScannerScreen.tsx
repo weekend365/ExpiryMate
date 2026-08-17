@@ -76,6 +76,8 @@ const QUICK_EXPIRY_OPTIONS = [
   { label: "내일", days: 1 },
   { label: "3일 뒤", days: 3 },
   { label: "일주일", days: 7 },
+  { label: "2주", days: 14 },
+  { label: "한달", days: 30 },
 ];
 
 export function ScannerScreen() {
@@ -1483,7 +1485,7 @@ const styles = StyleSheet.create({
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   inlinePickerWrap: {
     alignItems: "center",

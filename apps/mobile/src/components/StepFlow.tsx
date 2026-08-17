@@ -108,14 +108,16 @@ export function StepFlow({
 
   const stepCopy = isCompact ? (
     <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
-      <MascotSpeechBubble
-        message={compactMessage}
-        supportingMessage={resolvedGuide}
-        mood={guideMood}
-        size="medium"
-        textVariant="title"
-        style={styles.compactBubble}
-      />
+      <View style={styles.guideCard}>
+        <MascotSpeechBubble
+          message={compactMessage}
+          supportingMessage={resolvedGuide}
+          mood={guideMood}
+          size="small"
+          textVariant="heading"
+          style={styles.compactBubble}
+        />
+      </View>
       {headerAccessory ? (
         <View
           style={[
@@ -150,40 +152,60 @@ export function StepFlow({
   );
 
   return (
-    <View style={styles.root}>
+    <View style={[styles.root, isCompact && styles.rootCompact]}>
       {isCompact ? (
         <View style={styles.plainHeader}>
-          {showBack || showProgress ? (
-            <View style={styles.progressMeta}>
-              {showBack ? (
-                <Pressable
-                  onPress={onBack}
-                  hitSlop={spacing.xs}
-                  style={({ pressed }) => [
-                    styles.backButton,
-                    pressed && styles.backButtonPressed,
-                  ]}
-                  accessibilityRole="button"
-                  accessibilityLabel="뒤로가기"
-                >
-                  <ChevronLeft
-                    color={colors.text}
-                    size={spacing.sm + spacing.xxs}
-                    strokeWidth={2.4}
-                  />
-                  <Text style={styles.backLabel}>뒤로가기</Text>
-                </Pressable>
-              ) : (
-                <View />
-              )}
-              {showProgress ? (
+          {showProgress ? (
+            <View style={styles.progressStepper}>
+              <View style={styles.progressMeta}>
+                {showBack ? (
+                  <Pressable
+                    onPress={onBack}
+                    hitSlop={spacing.xs}
+                    style={({ pressed }) => [
+                      styles.backButton,
+                      pressed && styles.backButtonPressed,
+                    ]}
+                    accessibilityRole="button"
+                    accessibilityLabel="뒤로가기"
+                  >
+                    <ChevronLeft
+                      color={colors.text}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <Text style={styles.backLabel}>뒤로가기</Text>
+                  </Pressable>
+                ) : (
+                  <Text style={styles.progressCaption}>
+                    {activeStep.label}
+                  </Text>
+                )}
                 <Text style={styles.progressLabel}>
                   {safeIndex + 1}/{steps.length}
                 </Text>
-              ) : null}
+              </View>
+              {progressTrack}
             </View>
+          ) : showBack ? (
+            <Pressable
+              onPress={onBack}
+              hitSlop={spacing.xs}
+              style={({ pressed }) => [
+                styles.backButton,
+                pressed && styles.backButtonPressed,
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="뒤로가기"
+            >
+              <ChevronLeft
+                color={colors.text}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+              />
+              <Text style={styles.backLabel}>뒤로가기</Text>
+            </Pressable>
           ) : null}
-          {progressTrack}
           {stepCopy}
         </View>
       ) : (
@@ -226,7 +248,11 @@ export function StepFlow({
         </View>
       )}
 
-      <Animated.View style={[styles.content, contentStyle]}>{children}</Animated.View>
+      <Animated.View
+        style={[styles.content, isCompact && styles.contentCompact, contentStyle]}
+      >
+        {children}
+      </Animated.View>
 
       {footer ? <View style={styles.footer}>{footer}</View> : null}
     </View>
@@ -235,7 +261,10 @@ export function StepFlow({
 
 const styles = StyleSheet.create({
   root: {
-    gap: spacing.lg,
+    gap: spacing.xxl,
+  },
+  rootCompact: {
+    gap: spacing.sm,
   },
   progressCard: {
     backgroundColor: colors.surface,
@@ -244,6 +273,14 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.md,
+  },
+  progressStepper: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+    gap: spacing.sm,
   },
   plainHeader: {
     gap: spacing.sm,
@@ -277,6 +314,12 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.primary,
+  },
+  progressCaption: {
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
   },
   progressTrack: {
     flexDirection: "row",
@@ -327,6 +370,15 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
   },
+  guideCard: {
+    flex: 1,
+    minWidth: 0,
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+  },
   headerAccessory: {
     flexShrink: 1,
     paddingTop: spacing.xxs,
@@ -337,6 +389,9 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: spacing.lg,
+  },
+  contentCompact: {
+    gap: spacing.sm,
   },
   footer: {
     gap: spacing.md,
