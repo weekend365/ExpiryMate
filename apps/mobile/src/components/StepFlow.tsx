@@ -32,6 +32,13 @@ interface StepFlowProps extends PropsWithChildren {
   /** When set, replaces the step description with a speaking-mascot bubble. */
   guideMessage?: string;
   guideMood?: MascotMood;
+  /**
+   * `compact` drops the chrome card and eyebrow so 장고's bubble carries
+   * the step question. Use when the stack header already owns Back.
+   */
+  density?: "default" | "compact";
+  /** Hide the in-flow back control when the screen header already provides one. */
+  hideBack?: boolean;
 }
 
 const SPRING = {
@@ -48,6 +55,8 @@ export function StepFlow({
   headerAccessory,
   guideMessage,
   guideMood = "speak",
+  density = "default",
+  hideBack = false,
   children,
 }: StepFlowProps) {
   const { shouldStack } = useResponsiveLayout();
@@ -56,6 +65,9 @@ export function StepFlow({
   const contentOpacity = useSharedValue(1);
   const contentOffset = useSharedValue(0);
   const resolvedGuide = guideMessage?.trim() || undefined;
+  const isCompact = density === "compact";
+  const showProgress = steps.length > 1;
+  const showBack = !hideBack;
 
   useEffect(() => {
     contentOpacity.value = 0;
@@ -73,73 +85,146 @@ export function StepFlow({
     return null;
   }
 
-  return (
-    <View style={styles.root}>
-      <View style={styles.progressCard}>
-        <View style={styles.progressMeta}>
-          <Pressable
-            onPress={onBack}
-            hitSlop={spacing.xs}
-            style={({ pressed }) => [
-              styles.backButton,
-              pressed && styles.backButtonPressed,
+  const progressTrack = showProgress ? (
+    <View style={styles.progressTrack}>
+      {steps.map((step, index) => {
+        const isActive = index === safeIndex;
+        const isCompleted = index < safeIndex;
+
+        return (
+          <View
+            key={step.key}
+            style={[
+              styles.progressSegment,
+              (isActive || isCompleted) && styles.progressSegmentActive,
             ]}
-            accessibilityRole="button"
-            accessibilityLabel="뒤로가기"
-          >
-            <ChevronLeft color={colors.text} size={spacing.sm + spacing.xxs} strokeWidth={2.4} />
-            <Text style={styles.backLabel}>뒤로가기</Text>
-          </Pressable>
-          <Text style={styles.progressLabel}>
-            {safeIndex + 1}/{steps.length}
-          </Text>
-        </View>
-
-        <View style={styles.progressTrack}>
-          {steps.map((step, index) => {
-            const isActive = index === safeIndex;
-            const isCompleted = index < safeIndex;
-
-            return (
-              <View
-                key={step.key}
-                style={[
-                  styles.progressSegment,
-                  (isActive || isCompleted) && styles.progressSegmentActive,
-                ]}
-              />
-            );
-          })}
-        </View>
-
-        <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
-          <View style={styles.stepCopy}>
-            <Text style={styles.stepEyebrow}>{activeStep.label}</Text>
-            <Text style={styles.stepTitle}>{activeStep.title}</Text>
-            {!resolvedGuide && activeStep.description ? (
-              <Text style={styles.stepDescription}>{activeStep.description}</Text>
-            ) : null}
-          </View>
-          {headerAccessory ? (
-            <View
-              style={[
-                styles.headerAccessory,
-                shouldStack && styles.headerAccessoryStacked,
-              ]}
-            >
-              {headerAccessory}
-            </View>
-          ) : null}
-        </View>
-
-        {resolvedGuide ? (
-          <MascotSpeechBubble
-            message={resolvedGuide}
-            mood={guideMood}
-            size="small"
           />
+        );
+      })}
+    </View>
+  ) : null;
+
+  const compactMessage = activeStep.title;
+
+  const stepCopy = isCompact ? (
+    <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
+      <MascotSpeechBubble
+        message={compactMessage}
+        supportingMessage={resolvedGuide}
+        mood={guideMood}
+        size="medium"
+        textVariant="title"
+        style={styles.compactBubble}
+      />
+      {headerAccessory ? (
+        <View
+          style={[
+            styles.headerAccessory,
+            shouldStack && styles.headerAccessoryStacked,
+          ]}
+        >
+          {headerAccessory}
+        </View>
+      ) : null}
+    </View>
+  ) : (
+    <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
+      <View style={styles.stepCopy}>
+        <Text style={styles.stepEyebrow}>{activeStep.label}</Text>
+        <Text style={styles.stepTitle}>{activeStep.title}</Text>
+        {!resolvedGuide && activeStep.description ? (
+          <Text style={styles.stepDescription}>{activeStep.description}</Text>
         ) : null}
       </View>
+      {headerAccessory ? (
+        <View
+          style={[
+            styles.headerAccessory,
+            shouldStack && styles.headerAccessoryStacked,
+          ]}
+        >
+          {headerAccessory}
+        </View>
+      ) : null}
+    </View>
+  );
+
+  return (
+    <View style={styles.root}>
+      {isCompact ? (
+        <View style={styles.plainHeader}>
+          {showBack || showProgress ? (
+            <View style={styles.progressMeta}>
+              {showBack ? (
+                <Pressable
+                  onPress={onBack}
+                  hitSlop={spacing.xs}
+                  style={({ pressed }) => [
+                    styles.backButton,
+                    pressed && styles.backButtonPressed,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel="뒤로가기"
+                >
+                  <ChevronLeft
+                    color={colors.text}
+                    size={spacing.sm + spacing.xxs}
+                    strokeWidth={2.4}
+                  />
+                  <Text style={styles.backLabel}>뒤로가기</Text>
+                </Pressable>
+              ) : (
+                <View />
+              )}
+              {showProgress ? (
+                <Text style={styles.progressLabel}>
+                  {safeIndex + 1}/{steps.length}
+                </Text>
+              ) : null}
+            </View>
+          ) : null}
+          {progressTrack}
+          {stepCopy}
+        </View>
+      ) : (
+        <View style={styles.progressCard}>
+          <View style={styles.progressMeta}>
+            {showBack ? (
+              <Pressable
+                onPress={onBack}
+                hitSlop={spacing.xs}
+                style={({ pressed }) => [
+                  styles.backButton,
+                  pressed && styles.backButtonPressed,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel="뒤로가기"
+              >
+                <ChevronLeft
+                  color={colors.text}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.4}
+                />
+                <Text style={styles.backLabel}>뒤로가기</Text>
+              </Pressable>
+            ) : (
+              <View />
+            )}
+            <Text style={styles.progressLabel}>
+              {safeIndex + 1}/{steps.length}
+            </Text>
+          </View>
+          {progressTrack}
+          {stepCopy}
+          {resolvedGuide ? (
+            <MascotSpeechBubble
+              message={resolvedGuide}
+              mood={guideMood}
+              size="small"
+            />
+          ) : null}
+        </View>
+      )}
 
       <Animated.View style={[styles.content, contentStyle]}>{children}</Animated.View>
 
@@ -159,6 +244,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.md,
+  },
+  plainHeader: {
+    gap: spacing.sm,
   },
   progressMeta: {
     flexDirection: "row",
@@ -234,6 +322,10 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
+  },
+  compactBubble: {
+    flex: 1,
+    minWidth: 0,
   },
   headerAccessory: {
     flexShrink: 1,

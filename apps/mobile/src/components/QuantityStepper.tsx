@@ -12,6 +12,8 @@ interface QuantityStepperProps {
   /** Amount added or subtracted by the +/− buttons. Defaults to 1. */
   step?: number;
   error?: string;
+  /** `hero` enlarges the number and hides the field label when the page title already asks. */
+  presentation?: "field" | "hero";
 }
 
 export function QuantityStepper({
@@ -21,6 +23,7 @@ export function QuantityStepper({
   max,
   step = 1,
   error,
+  presentation = "field",
 }: QuantityStepperProps) {
   const upperBound =
     typeof max === "number" && Number.isFinite(max) && max >= 1
@@ -32,12 +35,22 @@ export function QuantityStepper({
   const clampedValue =
     upperBound === undefined ? safeValue : Math.min(safeValue, upperBound);
 
+  const isHero = presentation === "hero";
+
   return (
     <View style={styles.wrapper}>
-      <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
-        {label}
-      </AppText>
-      <View style={[styles.container, error ? styles.errorContainer : null]}>
+      {isHero ? null : (
+        <AppText variant="bodySmall" scaleRole="body" style={styles.label}>
+          {label}
+        </AppText>
+      )}
+      <View
+        style={[
+          styles.container,
+          isHero && styles.containerHero,
+          error ? styles.errorContainer : null,
+        ]}
+      >
         <Pressable
           onPress={() => {
             if (clampedValue <= safeStep) {
@@ -77,7 +90,7 @@ export function QuantityStepper({
           keyboardType="number-pad"
           accessibilityLabel={`${label} 수량`}
           scaleRole="chrome"
-          style={styles.input}
+          style={[styles.input, isHero && styles.inputHero]}
         />
         <Pressable
           onPress={() => {
@@ -135,6 +148,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
   },
+  containerHero: {
+    minHeight: touchTarget.ctaLarge + spacing.xs,
+    borderRadius: radius.xxl,
+  },
   errorContainer: {
     borderColor: colors.danger,
   },
@@ -165,5 +182,10 @@ const styles = StyleSheet.create({
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
+  },
+  inputHero: {
+    fontSize: typography.title.fontSize,
+    lineHeight: typography.title.lineHeight,
+    fontFamily: typography.title.fontFamily,
   },
 });

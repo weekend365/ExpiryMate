@@ -7,7 +7,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { appBrand } from "@expirymate/shared";
 import { colors, radius, spacing } from "../shared/theme";
-import { AppText } from "./AppText";
+import { AppText, type AppTextVariant } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
 
 interface MascotSpeechBubbleProps {
@@ -16,6 +16,10 @@ interface MascotSpeechBubbleProps {
   size?: "small" | "medium";
   numberOfLines?: number;
   style?: StyleProp<ViewStyle>;
+  /** Headline lines (step questions, success) should read as the main copy. */
+  textVariant?: AppTextVariant;
+  /** Quieter follow-up under the main line. */
+  supportingMessage?: string;
 }
 
 const SPRING = {
@@ -34,6 +38,8 @@ export function MascotSpeechBubble({
   size = "small",
   numberOfLines,
   style,
+  textVariant = "bodySmall",
+  supportingMessage,
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
@@ -54,14 +60,21 @@ export function MascotSpeechBubble({
     <Animated.View
       style={[styles.root, animatedStyle, style]}
       accessibilityRole="summary"
-      accessibilityLabel={`${appBrand.characterNameKo}가 말해요. ${message}`}
+      accessibilityLabel={`${appBrand.characterNameKo}가 말해요. ${message}${
+        supportingMessage?.trim() ? ` ${supportingMessage.trim()}` : ""
+      }`}
     >
       <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
         <View style={styles.bubble}>
-          <AppText variant="bodySmall" numberOfLines={numberOfLines}>
+          <AppText variant={textVariant} numberOfLines={numberOfLines}>
             {message}
           </AppText>
+          {supportingMessage?.trim() ? (
+            <AppText variant="bodySmall" tone="subtext">
+              {supportingMessage.trim()}
+            </AppText>
+          ) : null}
         </View>
         {/* Tail points toward the mascot (left). */}
         <View style={styles.tail} />
@@ -95,6 +108,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     minHeight: spacing.xxl,
     justifyContent: "center",
+    gap: spacing.xs,
   },
   tail: {
     position: "absolute",
