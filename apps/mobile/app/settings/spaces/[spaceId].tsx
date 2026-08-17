@@ -1,7 +1,7 @@
 import type { InventorySpaceMember } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Clipboard from "expo-clipboard";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
   Bell,
   Copy,
@@ -19,7 +19,8 @@ import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
 import { ListRow } from "../../../src/components/ListRow";
 import { Pill } from "../../../src/components/Pill";
-import { Screen } from "../../../src/components/Screen";
+import { SettingsGroup } from "../../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../../src/components/SettingsScreen";
 import { useAuth } from "../../../src/features/auth/use-auth";
 import { useActiveSpace } from "../../../src/features/spaces/space-provider";
 import { useSpaceManagement } from "../../../src/features/spaces/use-space-management";
@@ -103,7 +104,7 @@ export default function SpaceDetailScreen() {
 
   if (!spaceId || (!space && !spaces.length)) {
     return (
-      <Screen>
+      <SettingsScreen>
         <EmptyState
           mood="worry"
           title="이 냉장고를 다시 찾지 못했어요"
@@ -111,7 +112,7 @@ export default function SpaceDetailScreen() {
           actionLabel="목록으로 돌아갈게요"
           onAction={() => router.replace("/settings/spaces")}
         />
-      </Screen>
+      </SettingsScreen>
     );
   }
 
@@ -177,139 +178,124 @@ export default function SpaceDetailScreen() {
   };
 
   return (
-    <Screen
-      title={space?.name ?? "함께 쓰는 냉장고"}
-      subtitle={`${roleLabel(space?.myRole)}로 함께 쓰고 있어요.`}
-      footer={
-        canManage ? (
-          <Button
-            icon={MailPlus}
-            onPress={() => setInviteVisible(true)}
-            fullWidth
-          >
-            구성원을 초대할게요
-          </Button>
-        ) : undefined
-      }
-    >
-      <View style={styles.section}>
-        <AppText style={styles.sectionTitle}>구성원</AppText>
-        {management.membersQuery.isError ? (
-          <EmptyState
-            mood="worry"
-            title="구성원을 불러오지 못했어요"
-            actionLabel="불러오기"
-            onAction={() => {
-              void management.membersQuery.refetch();
-            }}
-          />
-        ) : (
-          <View style={styles.card}>
-            {members.map((member, index) => (
-              <ListRow
-                key={member.userId}
-                title={
-                  member.displayName?.trim() ||
-                  member.email ||
-                  "이름을 정하지 않은 구성원"
-                }
-                description={`${roleLabel(member.role)}${
-                  member.userId === sessionUserId ? " · 나" : ""
-                }`}
-                icon={UserRound}
-                trailing={
-                  <AppText style={styles.roleText}>{roleLabel(member.role)}</AppText>
-                }
-                last={index === members.length - 1}
-                onPress={
-                  member.role !== "owner" &&
-                  member.userId !== sessionUserId &&
-                  (isOwner ||
-                    (space?.myRole === "manager" && member.role === "member"))
-                    ? () => setSelectedMember(member)
-                    : undefined
-                }
-              />
-            ))}
-          </View>
-        )}
-      </View>
+    <>
+      <Stack.Screen options={{ title: space?.name ?? "함께 쓰는 냉장고" }} />
+      <SettingsScreen
+        footer={
+          canManage ? (
+            <Button
+              icon={MailPlus}
+              onPress={() => setInviteVisible(true)}
+              fullWidth
+            >
+              구성원을 초대할게요
+            </Button>
+          ) : undefined
+        }
+      >
+      {management.membersQuery.isError ? (
+        <EmptyState
+          mood="worry"
+          title="구성원을 불러오지 못했어요"
+          actionLabel="불러오기"
+          onAction={() => {
+            void management.membersQuery.refetch();
+          }}
+        />
+      ) : (
+        <SettingsGroup title="구성원">
+          {members.map((member, index) => (
+            <ListRow
+              key={member.userId}
+              title={
+                member.displayName?.trim() ||
+                member.email ||
+                "이름을 정하지 않은 구성원"
+              }
+              description={`${roleLabel(member.role)}${
+                member.userId === sessionUserId ? " · 나" : ""
+              }`}
+              icon={UserRound}
+              trailing={
+                <AppText style={styles.roleText}>{roleLabel(member.role)}</AppText>
+              }
+              last={index === members.length - 1}
+              onPress={
+                member.role !== "owner" &&
+                member.userId !== sessionUserId &&
+                (isOwner ||
+                  (space?.myRole === "manager" && member.role === "member"))
+                  ? () => setSelectedMember(member)
+                  : undefined
+              }
+            />
+          ))}
+        </SettingsGroup>
+      )}
 
       {canManage && invitations.length ? (
-        <View style={styles.section}>
-          <AppText style={styles.sectionTitle}>초대를 기다리고 있어요</AppText>
-          <View style={styles.card}>
-            {invitations.map((invitation, index) => (
-              <ListRow
-                key={invitation.id}
-                title={invitation.email}
-                description={`${roleLabel(invitation.role)}로 초대했어요`}
-                icon={MailPlus}
-                destructive
-                last={index === invitations.length - 1}
-                onPress={() => management.revokeMutation.mutate(invitation.id)}
-              />
-            ))}
-          </View>
-        </View>
+        <SettingsGroup title="초대를 기다리고 있어요">
+          {invitations.map((invitation, index) => (
+            <ListRow
+              key={invitation.id}
+              title={invitation.email}
+              description={`${roleLabel(invitation.role)}로 초대했어요`}
+              icon={MailPlus}
+              destructive
+              last={index === invitations.length - 1}
+              onPress={() => management.revokeMutation.mutate(invitation.id)}
+            />
+          ))}
+        </SettingsGroup>
       ) : null}
 
       {canManage && invitationCodes.length ? (
-        <View style={styles.section}>
-          <AppText style={styles.sectionTitle}>사용을 기다리는 초대 코드</AppText>
-          <View style={styles.card}>
-            {invitationCodes.map((invitation, index) => (
-              <ListRow
-                key={invitation.id}
-                title="1회용 초대 코드"
-                description={`${formatExpiry(invitation.expiresAt)}까지 · 구성원으로 참여`}
-                icon={KeyRound}
-                destructive
-                last={index === invitationCodes.length - 1}
-                onPress={() =>
-                  management.revokeCodeMutation.mutate(invitation.id)
-                }
-              />
-            ))}
-          </View>
-        </View>
+        <SettingsGroup title="사용을 기다리는 초대 코드">
+          {invitationCodes.map((invitation, index) => (
+            <ListRow
+              key={invitation.id}
+              title="1회용 초대 코드"
+              description={`${formatExpiry(invitation.expiresAt)}까지 · 구성원으로 참여`}
+              icon={KeyRound}
+              destructive
+              last={index === invitationCodes.length - 1}
+              onPress={() =>
+                management.revokeCodeMutation.mutate(invitation.id)
+              }
+            />
+          ))}
+        </SettingsGroup>
       ) : null}
 
-      <View style={styles.section}>
-        <AppText style={styles.sectionTitle}>이 냉장고 알림</AppText>
-        <View style={styles.card}>
-          <ListRow
-            title={
-              space?.notificationsEnabled
-                ? "유통기한 알림을 받고 있어요"
-                : "유통기한 알림은 쉬고 있어요"
-            }
-            description="내 기기에서 받을지 공간마다 고를 수 있어요."
-            icon={Bell}
-            last
-            onPress={() =>
-              notificationsMutation.mutate(!space?.notificationsEnabled)
-            }
-          />
-        </View>
-      </View>
+      <SettingsGroup title="이 냉장고 알림">
+        <ListRow
+          title={
+            space?.notificationsEnabled
+              ? "유통기한 알림을 받고 있어요"
+              : "유통기한 알림은 쉬고 있어요"
+          }
+          description="내 기기에서 받을지 공간마다 고를 수 있어요."
+          icon={Bell}
+          last
+          onPress={() =>
+            notificationsMutation.mutate(!space?.notificationsEnabled)
+          }
+        />
+      </SettingsGroup>
 
       {canManage ? (
-        <View style={styles.section}>
-          <AppText style={styles.sectionTitle}>냉장고 설정</AppText>
-          <View style={styles.card}>
-            <ListRow
-              title="이름을 바꿀게요"
-              description={space?.name}
-              icon={Pencil}
-              last
-              onPress={() => {
-                setSpaceName(space?.name ?? "");
-                setRenameVisible(true);
-              }}
-            />
-          </View>
-        </View>
+        <SettingsGroup title="냉장고 설정">
+          <ListRow
+            title="이름을 바꿀게요"
+            description={space?.name}
+            icon={Pencil}
+            last
+            onPress={() => {
+              setSpaceName(space?.name ?? "");
+              setRenameVisible(true);
+            }}
+          />
+        </SettingsGroup>
       ) : null}
 
       {isOwner && space?.type !== "personal" ? (
@@ -593,7 +579,8 @@ export default function SpaceDetailScreen() {
           이 구성원과 함께 쓰기를 마칠게요
         </Button>
       </BottomSheet>
-    </Screen>
+    </SettingsScreen>
+    </>
   );
 }
 
@@ -615,22 +602,6 @@ function formatExpiry(value: string) {
 }
 
 const styles = StyleSheet.create({
-  section: {
-    gap: spacing.sm,
-  },
-  sectionTitle: {
-    fontSize: typography.subheading.fontSize,
-    lineHeight: typography.subheading.lineHeight,
-    fontFamily: typography.subheading.fontFamily,
-    color: colors.text,
-  },
-  card: {
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    overflow: "hidden",
-  },
   roleText: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,

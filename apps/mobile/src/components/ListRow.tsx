@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
+import { useSettingsDensity } from "./settings-density";
 
 interface ListRowProps {
   title: string;
@@ -13,6 +14,10 @@ interface ListRowProps {
   onPress?: () => void;
   destructive?: boolean;
   last?: boolean;
+  /**
+   * `compact`: preference-list density. Keeps the 48px touch target.
+   */
+  density?: "default" | "compact";
 }
 
 export function ListRow({
@@ -23,8 +28,11 @@ export function ListRow({
   onPress,
   destructive = false,
   last = false,
+  density,
 }: ListRowProps) {
   const { shouldStack } = useResponsiveLayout();
+  const inheritedDensity = useSettingsDensity();
+  const compact = (density ?? inheritedDensity) === "compact";
   const endAdornment =
     trailing ??
     (onPress ? (
@@ -37,7 +45,13 @@ export function ListRow({
     <>
       <View style={[styles.listMain, shouldStack && styles.listMainStacked]}>
         {Icon ? (
-          <View style={[styles.listIcon, destructive && styles.listIconDanger]}>
+          <View
+            style={[
+              styles.listIcon,
+              compact && styles.listIconCompact,
+              destructive && styles.listIconDanger,
+            ]}
+          >
             <Icon
               color={destructive ? colors.danger : colors.primary}
               size={spacing.sm + spacing.xxs}
@@ -69,6 +83,7 @@ export function ListRow({
   );
   const rowStyles = [
     styles.listRow,
+    compact && styles.listRowCompact,
     shouldStack && styles.listRowStacked,
     last && styles.listRowLast,
   ];
@@ -106,6 +121,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
+  listRowCompact: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
   listRowStacked: {
     alignItems: "stretch",
     flexDirection: "column",
@@ -136,6 +155,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+  },
+  listIconCompact: {
+    width: spacing.lg,
+    height: spacing.lg,
+    borderRadius: radius.md,
   },
   listIconDanger: {
     backgroundColor: colors.dangerSoft,

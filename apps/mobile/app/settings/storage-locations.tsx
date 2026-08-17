@@ -12,8 +12,8 @@ import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { ListRow } from "../../src/components/ListRow";
-import { Screen } from "../../src/components/Screen";
-import { SectionHeader } from "../../src/components/SectionHeader";
+import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
@@ -106,13 +106,7 @@ export default function StorageLocationsSettingsScreen() {
   };
 
   return (
-    <Screen
-      title="보관 위치"
-      subtitle={
-        canManage
-          ? "기본 위치는 그대로 두고, 함께 쓸 자리를 더 만들 수 있어요."
-          : "이 냉장고에서 함께 쓰는 보관 위치예요."
-      }
+    <SettingsScreen
       footer={
         canManage && hasLoadedLocations ? (
           <Button onPress={openAdd} fullWidth>
@@ -150,54 +144,42 @@ export default function StorageLocationsSettingsScreen() {
               }}
             />
           ) : null}
-      <View style={styles.section}>
-        <SectionHeader
-          title="기본 위치"
-          description="냉장·냉동·실온·주방은 장고가 기본으로 챙겨 둬요."
-        />
-        <View style={styles.card}>
-          {(query.data?.system ?? []).map((location, index, list) => (
-            <ListRow
-              key={location.key}
-              title={location.label}
-              description="기본 위치 · 이름 바꾸기·정리는 안 돼요"
-              last={index === list.length - 1}
-            />
-          ))}
-        </View>
-      </View>
+      <SettingsGroup
+        title="기본 위치"
+        description="냉장·냉동·실온·주방은 장고가 기본으로 챙겨 둬요."
+      >
+        {(query.data?.system ?? []).map((location, index, list) => (
+          <ListRow
+            key={location.key}
+            title={location.label}
+            last={index === list.length - 1}
+          />
+        ))}
+      </SettingsGroup>
 
-      <View style={styles.section}>
-        <SectionHeader
-          title="나만의 위치"
-          description="팬트리, 베란다처럼 집 안 자리를 더해 보세요."
-        />
-        <View style={styles.card}>
-          {(query.data?.custom ?? []).length === 0 ? (
-            <View style={styles.emptyCustom}>
-              <AppText style={styles.emptyCustomText}>
-                아직 만든 위치가 없어요. 아래에서 하나 만들어 볼까요?
-              </AppText>
-            </View>
-          ) : (
-            (query.data?.custom ?? []).map((location, index, list) => (
-              <ListRow
-                key={location.id}
-                title={location.label}
-                description={
-                  canManage ? "이름 바꾸기 · 정리하기" : "함께 쓰는 위치"
-                }
-                last={index === list.length - 1}
-                onPress={
-                  canManage
-                    ? () => openEdit(location.id, location.label)
-                    : undefined
-                }
-              />
-            ))
-          )}
-        </View>
-      </View>
+      <SettingsGroup title="나만의 위치">
+        {(query.data?.custom ?? []).length === 0 ? (
+          <View style={styles.emptyCustom}>
+            <AppText style={styles.emptyCustomText}>
+              아직 만든 위치가 없어요. 아래에서 하나 만들어 볼까요?
+            </AppText>
+          </View>
+        ) : (
+          (query.data?.custom ?? []).map((location, index, list) => (
+            <ListRow
+              key={location.id}
+              title={location.label}
+              description={canManage ? undefined : "함께 쓰는 위치"}
+              last={index === list.length - 1}
+              onPress={
+                canManage
+                  ? () => openEdit(location.id, location.label)
+                  : undefined
+              }
+            />
+          ))
+        )}
+      </SettingsGroup>
 
       <BottomSheet
         visible={addVisible}
@@ -254,7 +236,7 @@ export default function StorageLocationsSettingsScreen() {
       </BottomSheet>
         </>
       )}
-    </Screen>
+    </SettingsScreen>
   );
 }
 
@@ -282,18 +264,8 @@ function LabelField({
 }
 
 const styles = StyleSheet.create({
-  section: {
-    gap: spacing.sm,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    overflow: "hidden",
-  },
   emptyCustom: {
-    padding: spacing.md,
+    padding: spacing.sm,
     minHeight: touchTarget.min,
     justifyContent: "center",
   },

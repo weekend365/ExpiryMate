@@ -5,14 +5,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
-import { Screen } from "../../src/components/Screen";
-import { SectionHeader } from "../../src/components/SectionHeader";
+import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   trackMonetizationEvent,
   verifyRecommendationCreditPurchase,
 } from "../../src/services/api";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 
 export default function RecommendationCreditsScreen() {
   const monetization = useMonetization();
@@ -139,15 +139,12 @@ export default function RecommendationCreditsScreen() {
   };
 
   return (
-    <Screen
-      title="AI 추천권"
-      subtitle={`현재 ${monetization.access?.paidCredits.balance ?? 0}회 보유하고 있어요.`}
-    >
-      <View style={styles.section}>
-        <SectionHeader
-          title="필요한 만큼 충전하기"
-          description="자동 갱신되지 않으며 사용하지 않은 추천권은 그대로 남아요."
-        />
+    <SettingsScreen>
+      <SettingsGroup
+        title="필요한 만큼 충전하기"
+        description={`현재 ${monetization.access?.paidCredits.balance ?? 0}회 보유 · 자동 갱신되지 않아요.`}
+        content="plain"
+      >
         <View style={styles.list}>
           {configuredProducts.map((configured) => (
             <CreditProductCard
@@ -165,15 +162,15 @@ export default function RecommendationCreditsScreen() {
             />
           ))}
         </View>
-        <Button
-          onPress={() => void startPurchase()}
-          loading={purchasing}
-          disabled={!connected || purchasing || !selectedProduct}
-          fullWidth
-        >
-          추천권 충전하기
-        </Button>
-      </View>
+      </SettingsGroup>
+      <Button
+        onPress={() => void startPurchase()}
+        loading={purchasing}
+        disabled={!connected || purchasing || !selectedProduct}
+        fullWidth
+      >
+        추천권 충전하기
+      </Button>
 
       <View style={styles.guideCard}>
         <ShieldCheck color={colors.primary} size={22} />
@@ -184,7 +181,7 @@ export default function RecommendationCreditsScreen() {
           </AppText>
         </View>
       </View>
-    </Screen>
+    </SettingsScreen>
   );
 }
 
@@ -218,13 +215,14 @@ function track(
 }
 
 const styles = StyleSheet.create({
-  section: { gap: spacing.md },
   list: { gap: spacing.sm },
   productCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: spacing.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    minHeight: touchTarget.min,
     borderRadius: radius.xl,
     borderWidth: 1,
     borderColor: colors.border,

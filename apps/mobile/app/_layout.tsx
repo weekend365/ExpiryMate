@@ -165,16 +165,24 @@ function RootLayout() {
               />
               <Stack.Screen
                 name="settings/spaces/[spaceId]"
-                options={{ title: "냉장고 구성원" }}
+                options={{ title: "함께 쓰는 냉장고" }}
               />
               <Stack.Screen name="settings/account" options={{ title: "계정" }} />
               <Stack.Screen
                 name="settings/subscription"
-                options={{ title: "구독" }}
+                options={{ title: "장고 플러스" }}
               />
               <Stack.Screen
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
+              />
+              <Stack.Screen
+                name="settings/recipe-preferences"
+                options={{ title: "요리 추천 맞춤 설정" }}
+              />
+              <Stack.Screen
+                name="settings/recommendation-credits"
+                options={{ title: "AI 추천권" }}
               />
                   </Stack>
                 </RecipeGenerationProvider>

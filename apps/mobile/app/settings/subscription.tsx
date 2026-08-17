@@ -24,7 +24,8 @@ import {
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
-import { Screen } from "../../src/components/Screen";
+import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -354,46 +355,33 @@ export default function SubscriptionSettingsScreen() {
     );
 
   return (
-    <Screen
-      title="장고 플러스"
-      subtitle={
-        entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
-          ? "가족의 소비와 폐기를 함께 줄이는 냉장고 관리"
-          : "임박 재료를 놓치지 않고 식탁까지 이어주는 관리"
-      }
-    >
-      <View style={styles.section}>
-        <SectionHeader
-          title="지금 상태"
-          description="구독 혜택은 결제 기간이 끝날 때까지 유지돼요."
+    <SettingsScreen>
+      <SettingsGroup title="지금 상태">
+        <ListRow
+          title={
+            hasActiveEntitlement
+              ? entitlement?.planCode === "jango_household"
+                ? "가족 플러스를 이용 중이에요"
+                : "장고 플러스를 이용 중이에요"
+              : "무료 이용 중이에요"
+          }
+          description={
+            subscription.query.isLoading
+              ? "구독 상태를 불러오고 있어요."
+              : hasActiveEntitlement
+                ? `${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`
+                : "무료 추천과 선택형 보상 광고를 이용할 수 있어요."
+          }
+          icon={CreditCard}
+          last
         />
-        <View style={styles.card}>
-          <ListRow
-            title={
-              hasActiveEntitlement
-                ? entitlement?.planCode === "jango_household"
-                  ? "가족 플러스를 이용 중이에요"
-                  : "장고 플러스를 이용 중이에요"
-                : "무료 이용 중이에요"
-            }
-            description={
-              subscription.query.isLoading
-                ? "구독 상태를 불러오고 있어요."
-                : hasActiveEntitlement
-                  ? `${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`
-                  : "무료 추천과 선택형 보상 광고를 이용할 수 있어요."
-            }
-            icon={CreditCard}
-            last
-          />
-        </View>
-      </View>
+      </SettingsGroup>
 
-      <View style={styles.section}>
-        <SectionHeader
-          title="냉장고를 덜 버리는 습관"
-          description="몇 번 추천받는지보다 무엇을 먹고 버렸는지 꾸준히 확인할 수 있어요."
-        />
+      <SettingsGroup
+        title="냉장고를 덜 버리는 습관"
+        description="몇 번 추천받는지보다 무엇을 먹고 버렸는지 꾸준히 확인할 수 있어요."
+        content="plain"
+      >
         <View style={styles.benefitCard}>
           <BenefitLine
             text={
@@ -414,14 +402,14 @@ export default function SubscriptionSettingsScreen() {
           ) : null}
           <BenefitLine text="구독 중 바코드 추천권 적립 및 잔액 보존" />
         </View>
-      </View>
+      </SettingsGroup>
 
       {hasActiveEntitlement ? (
-        <View style={styles.section}>
-          <SectionHeader
-            title="나의 30일 소비 리포트"
-            description="소비·폐기로 상태를 바꾼 재료를 기준으로 계산해요."
-          />
+        <SettingsGroup
+          title="나의 30일 소비 리포트"
+          description="소비·폐기로 상태를 바꾼 재료를 기준으로 계산해요."
+          content="plain"
+        >
           <View style={styles.insightGrid}>
             <InsightValue label="소비 완료" value={insightsQuery.data?.consumed ?? 0} suffix="개" />
             <InsightValue label="폐기" value={insightsQuery.data?.discarded ?? 0} suffix="개" />
@@ -449,55 +437,49 @@ export default function SubscriptionSettingsScreen() {
                 .join(" · ")}
             </AppText>
           ) : null}
-        </View>
+        </SettingsGroup>
       ) : null}
 
       {!hasActiveEntitlement && monetization.access?.subscriptionsEnabled ? (
-        <View style={styles.section}>
+        <SettingsGroup
+          title="이용권 고르기"
+          description={
+            monetization.access?.experiment.variant === "value_first"
+              ? "부담이 적은 월간부터 시작하거나 연간으로 절약할 수 있어요."
+              : "무료 체험 없이 선택한 기간마다 자동 갱신돼요."
+          }
+          content="plain"
+        >
           {householdEligible ? (
-            <>
-              <SectionHeader
-                title="플러스 종류"
-                description="나만 쓰거나 가족 공간 전체가 함께 쓸 수 있어요."
-              />
-              <View style={styles.planList}>
-                {(["jango_plus", "jango_household"] as const).map((planCode) => (
-                  <Pressable
-                    key={planCode}
-                    onPress={() => {
-                      setSelectedPlanCode(planCode);
-                      trackFunnelEvent("plan_selected", { plan_code: planCode });
-                    }}
-                    accessibilityRole="radio"
-                    accessibilityState={{ selected: selectedPlanCode === planCode }}
-                    style={[
-                      styles.planCard,
-                      selectedPlanCode === planCode && styles.planCardSelected,
-                    ]}
-                  >
-                    <View style={styles.planCopy}>
-                      <AppText style={styles.planTitle}>
-                        {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
-                      </AppText>
-                      <AppText style={styles.planDescription}>
-                        {planCode === "jango_household"
-                          ? "가족 소비·폐기 리포트 · 최대 5명"
-                          : "나의 소비·폐기 리포트 · 광고 없음"}
-                      </AppText>
-                    </View>
-                  </Pressable>
-                ))}
-              </View>
-            </>
+            <View style={styles.planList}>
+              {(["jango_plus", "jango_household"] as const).map((planCode) => (
+                <Pressable
+                  key={planCode}
+                  onPress={() => {
+                    setSelectedPlanCode(planCode);
+                    trackFunnelEvent("plan_selected", { plan_code: planCode });
+                  }}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: selectedPlanCode === planCode }}
+                  style={[
+                    styles.planCard,
+                    selectedPlanCode === planCode && styles.planCardSelected,
+                  ]}
+                >
+                  <View style={styles.planCopy}>
+                    <AppText style={styles.planTitle}>
+                      {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
+                    </AppText>
+                    <AppText style={styles.planDescription}>
+                      {planCode === "jango_household"
+                        ? "가족 소비·폐기 리포트 · 최대 5명"
+                        : "나의 소비·폐기 리포트 · 광고 없음"}
+                    </AppText>
+                  </View>
+                </Pressable>
+              ))}
+            </View>
           ) : null}
-          <SectionHeader
-            title="이용권 고르기"
-            description={
-              monetization.access?.experiment.variant === "value_first"
-                ? "부담이 적은 월간부터 시작하거나 연간으로 절약할 수 있어요."
-                : "무료 체험 없이 선택한 기간마다 자동 갱신돼요."
-            }
-          />
           <View style={styles.planList}>
             {(["yearly", "monthly"] as const).map((period) => {
               const plan = plans.find((item) => item.period === period);
@@ -552,52 +534,45 @@ export default function SubscriptionSettingsScreen() {
           >
             {selectedPeriod === "yearly" ? "연간으로 시작하기" : "월간으로 시작하기"}
           </Button>
-        </View>
+        </SettingsGroup>
       ) : !hasActiveEntitlement ? (
-        <View style={styles.section}>
-          <SectionHeader
-            title="지금은 신규 가입을 쉬고 있어요"
-            description="이미 결제하신 구독은 복원으로 다시 연결할 수 있고, 이용 중인 혜택은 그대로 유지돼요."
-          />
-        </View>
+        <SettingsGroup
+          title="지금은 신규 가입을 쉬고 있어요"
+          description="이미 결제하신 구독은 복원으로 다시 연결할 수 있고, 이용 중인 혜택은 그대로 유지돼요."
+          content="plain"
+        />
       ) : null}
 
-      <View style={styles.section}>
-        <SectionHeader title="스토어에서 관리하기" />
-        <View style={styles.card}>
-          <ListRow
-            title="구매 복원"
-            description="같은 스토어 계정으로 결제한 구독을 다시 연결해요."
-            icon={RefreshCw}
-            onPress={() => void restore()}
-          />
-          <ListRow
-            title="구독 관리"
-            description="갱신, 해지, 결제 수단은 스토어에서 관리해요."
-            icon={CreditCard}
-            onPress={() => void manage()}
-            last
-          />
-        </View>
-      </View>
+      <SettingsGroup title="스토어에서 관리하기">
+        <ListRow
+          title="구매 복원"
+          description="같은 스토어 계정으로 결제한 구독을 다시 연결해요."
+          icon={RefreshCw}
+          onPress={() => void restore()}
+        />
+        <ListRow
+          title="구독 관리"
+          description="갱신, 해지, 결제 수단은 스토어에서 관리해요."
+          icon={CreditCard}
+          onPress={() => void manage()}
+          last
+        />
+      </SettingsGroup>
 
-      <View style={styles.section}>
-        <SectionHeader title="약관과 개인정보" />
-        <View style={styles.card}>
-          <ListRow
-            title="이용약관"
-            icon={ShieldCheck}
-            onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
-          />
-          <ListRow
-            title="개인정보처리방침"
-            icon={ShieldCheck}
-            onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
-            last
-          />
-        </View>
-      </View>
-    </Screen>
+      <SettingsGroup title="약관과 개인정보">
+        <ListRow
+          title="이용약관"
+          icon={ShieldCheck}
+          onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
+        />
+        <ListRow
+          title="개인정보처리방침"
+          icon={ShieldCheck}
+          onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
+          last
+        />
+      </SettingsGroup>
+    </SettingsScreen>
   );
 }
 
@@ -792,9 +767,6 @@ function trackFunnelEvent(
 }
 
 const styles = StyleSheet.create({
-  section: {
-    gap: spacing.sm,
-  },
   benefitCard: {
     gap: spacing.sm,
     padding: spacing.md,
@@ -858,13 +830,6 @@ const styles = StyleSheet.create({
   weeklyTrendCopy: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
   weeklyTrendCopyImproved: { color: colors.success },
   weeklyTrendCopyWorse: { color: colors.danger },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    overflow: "hidden",
-  },
   planList: {
     gap: spacing.sm,
   },

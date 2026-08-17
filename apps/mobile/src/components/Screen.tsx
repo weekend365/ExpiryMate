@@ -48,6 +48,12 @@ export interface ScreenProps extends PropsWithChildren {
    */
   topInsetMode?: "safe" | "none";
   /**
+   * `default`: home/onboarding rhythm (`gap.lg`, `paddingTop.md`).
+   * `compact`: preference screens under a native stack header
+   * (`gap.md`, `paddingTop.sm`).
+   */
+  density?: "default" | "compact";
+  /**
    * When true, show a back control if the stack can go back.
    * Opt-in only — home/tabs must not inherit a back chevron.
    * Pair with stack `headerShown: false` so Screen owns the intro chrome.
@@ -68,6 +74,7 @@ export function Screen({
   contentWidth = "content",
   bottomInsetMode = "system",
   topInsetMode = "safe",
+  density = "default",
   showBack = false,
   testID,
 }: ScreenProps) {
@@ -165,6 +172,7 @@ export function Screen({
           <ScrollView
             contentContainerStyle={[
               styles.content,
+              density === "compact" && styles.contentCompact,
               constrainedContentStyle,
               { paddingBottom: contentBottomPadding },
               contentStyle,
@@ -180,6 +188,7 @@ export function Screen({
           <View
             style={[
               styles.content,
+              density === "compact" && styles.contentCompact,
               styles.staticContent,
               constrainedContentStyle,
               { paddingBottom: contentBottomPadding },
@@ -220,6 +229,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     gap: spacing.lg,
+  },
+  contentCompact: {
+    paddingTop: spacing.sm,
+    gap: spacing.md,
   },
   staticContent: {
     flex: 1,

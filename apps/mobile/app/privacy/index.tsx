@@ -13,7 +13,6 @@ import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
-import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import {
@@ -72,18 +71,7 @@ export default function PrivacyScreen() {
 
   return (
     <>
-      <Screen
-        title="개인정보와 추천 안내"
-        subtitle={`${appBrand.appNameKo}가 어떤 정보를 쓰는지, 어떻게 지울 수 있는지 같이 볼게요.`}
-      >
-        <View style={styles.hero}>
-          <Mascot size="small" mood="idle" />
-          <AppText style={styles.heroText}>
-            궁금한 것만 골라 보시면 돼요. {appBrand.characterNameKo}가 옆에서
-            도와드릴게요.
-          </AppText>
-        </View>
-
+      <Screen topInsetMode="none">
         <View style={styles.section}>
           <SectionHeader
             title="살펴보기"
@@ -256,23 +244,6 @@ function getErrorMessage(error: unknown) {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-  },
-  heroText: {
-    flex: 1,
-    minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
   section: {
     gap: spacing.sm,
   },

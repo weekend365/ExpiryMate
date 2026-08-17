@@ -10,7 +10,8 @@ import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { ListRow } from "../../src/components/ListRow";
 import { Pill } from "../../src/components/Pill";
-import { Screen } from "../../src/components/Screen";
+import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { createInventorySpace } from "../../src/services/api";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import {
@@ -55,9 +56,7 @@ export default function SpacesSettingsScreen() {
   };
 
   return (
-    <Screen
-      title="함께 쓰는 냉장고"
-      subtitle="가족이나 동료를 초대해 같은 재고를 볼 수 있어요."
+    <SettingsScreen
       footer={
         <Button
           icon={Plus}
@@ -68,7 +67,7 @@ export default function SpacesSettingsScreen() {
         </Button>
       }
     >
-      <View style={styles.card}>
+      <SettingsGroup title="참여하기">
         <ListRow
           title="초대 코드로 참여할게요"
           description="가족이나 매장 동료에게 받은 8자리 코드를 입력해요."
@@ -76,7 +75,7 @@ export default function SpacesSettingsScreen() {
           last
           onPress={() => router.push("/spaces/invitations/code")}
         />
-      </View>
+      </SettingsGroup>
 
       {error ? (
         <EmptyState
@@ -90,7 +89,7 @@ export default function SpacesSettingsScreen() {
         />
       ) : null}
       {!error && !isLoading ? (
-        <View style={styles.card}>
+        <SettingsGroup title="내 냉장고">
           {spaces.map((space, index) => {
             const Icon =
               space.type === "store"
@@ -116,7 +115,7 @@ export default function SpacesSettingsScreen() {
               />
             );
           })}
-        </View>
+        </SettingsGroup>
       ) : null}
 
       <BottomSheet
@@ -169,7 +168,7 @@ export default function SpacesSettingsScreen() {
           </AppText>
         ) : null}
       </BottomSheet>
-    </Screen>
+    </SettingsScreen>
   );
 }
 
@@ -178,13 +177,6 @@ function roleLabel(role: "owner" | "manager" | "member") {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    overflow: "hidden",
-  },
   field: {
     gap: spacing.xs,
   },

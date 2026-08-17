@@ -12,8 +12,8 @@ import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { Pill } from "../../src/components/Pill";
-import { Screen } from "../../src/components/Screen";
-import { SectionHeader } from "../../src/components/SectionHeader";
+import { SettingsGroup } from "../../src/components/SettingsGroup";
+import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
@@ -93,9 +93,7 @@ export default function RecipePreferenceSettingsScreen() {
   };
 
   return (
-    <Screen
-      title="요리 추천 맞춤 설정"
-      subtitle="내가 먹을 수 있고 만들 수 있는 요리를 장고가 먼저 살펴볼게요."
+    <SettingsScreen
       footer={<Button onPress={handleSave} loading={mutation.isPending} fullWidth>추천 설정 저장할게요</Button>}
     >
       <PreferenceSection title="알레르기" description="해당 재료와 명백히 관련된 재고·추천을 제외해요.">
@@ -135,12 +133,16 @@ export default function RecipePreferenceSettingsScreen() {
       <View style={styles.notice}>
         <AppText style={styles.noticeText}>AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
       </View>
-    </Screen>
+    </SettingsScreen>
   );
 }
 
 function PreferenceSection({ title, description, children }: { title: string; description: string; children: React.ReactNode }) {
-  return <View style={styles.section}><SectionHeader title={title} description={description} /><View style={styles.card}>{children}</View></View>;
+  return (
+    <SettingsGroup title={title} description={description} content="padded">
+      {children}
+    </SettingsGroup>
+  );
 }
 
 function PillGrid({ children }: { children: React.ReactNode }) {
@@ -148,11 +150,9 @@ function PillGrid({ children }: { children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  section: { gap: spacing.sm },
-  card: { backgroundColor: colors.surface, borderRadius: radius.xxl, borderWidth: 1, borderColor: colors.border, padding: spacing.md, gap: spacing.sm },
-  pillGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
+  pillGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xs },
   inputRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
   input: { flex: 1, minHeight: spacing.xl, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: spacing.sm, backgroundColor: colors.background },
-  notice: { padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.warningSoft },
+  notice: { padding: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.warningSoft },
   noticeText: { fontSize: typography.bodySmall.fontSize, lineHeight: typography.bodySmall.lineHeight, fontFamily: typography.body.fontFamily, color: colors.text },
 });

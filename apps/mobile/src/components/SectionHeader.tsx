@@ -3,12 +3,18 @@ import { StyleSheet, View } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
+import { useSettingsDensity } from "./settings-density";
 
 interface SectionHeaderProps {
   title: string;
   description?: string;
   action?: ReactNode;
   surface?: boolean;
+  /**
+   * `compact`: group label for preference screens (13px, tight gap).
+   * Ignored when `surface` is set — surface already uses a dense label.
+   */
+  density?: "default" | "compact";
   accentColor?: string;
 }
 
@@ -17,14 +23,18 @@ export function SectionHeader({
   description,
   action,
   surface = false,
+  density,
   accentColor,
 }: SectionHeaderProps) {
   const { shouldStack } = useResponsiveLayout();
+  const inheritedDensity = useSettingsDensity();
+  const compact = (density ?? inheritedDensity) === "compact" && !surface;
   return (
     <View
       style={[
         styles.root,
         shouldStack && styles.rootStacked,
+        compact && styles.rootCompact,
         surface && styles.surface,
       ]}
     >
@@ -39,16 +49,23 @@ export function SectionHeader({
           />
         </View>
       ) : null}
-      <View style={[styles.copy, surface && styles.surfaceCopy]}>
+      <View
+        style={[
+          styles.copy,
+          (surface || compact) && styles.denseCopy,
+        ]}
+      >
         <AppText
-          variant={surface ? "bodySmall" : "subheading"}
-          tone={surface ? "subtext" : "default"}
-          style={surface && styles.surfaceTitle}
+          variant={
+            compact ? "label" : surface ? "bodySmall" : "subheading"
+          }
+          tone={surface || compact ? "subtext" : "default"}
+          style={(surface || compact) && styles.denseTitle}
         >
           {title}
         </AppText>
         {description ? (
-          <AppText variant="bodySmall" tone="subtext">
+          <AppText variant={compact ? "caption" : "bodySmall"} tone="subtext">
             {description}
           </AppText>
         ) : null}
@@ -102,11 +119,14 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: spacing.xs,
   },
-  surfaceCopy: {
+  denseCopy: {
     gap: spacing.xxs,
   },
-  surfaceTitle: {
+  denseTitle: {
     fontWeight: "700",
+  },
+  rootCompact: {
+    gap: spacing.sm,
   },
   action: {
     flexShrink: 1,
