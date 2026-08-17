@@ -197,7 +197,7 @@ export default function SpaceDetailScreen() {
           <EmptyState
             mood="worry"
             title="구성원을 불러오지 못했어요"
-            actionLabel="다시 볼게요"
+            actionLabel="불러오기"
             onAction={() => {
               void management.membersQuery.refetch();
             }}
@@ -246,9 +246,7 @@ export default function SpaceDetailScreen() {
                 icon={MailPlus}
                 destructive
                 last={index === invitations.length - 1}
-                onPress={() =>
-                  management.revokeMutation.mutate(invitation.id)
-                }
+                onPress={() => management.revokeMutation.mutate(invitation.id)}
               />
             ))}
           </View>
@@ -439,8 +437,8 @@ export default function SpaceDetailScreen() {
               {generatedCode}
             </Text>
             <Text style={styles.codeDescription}>
-              7일 안에 먼저 입력한 한 명이 구성원으로 참여해요. 닫으면 이
-              코드는 다시 볼 수 없어요.
+              7일 안에 먼저 입력한 한 명이 구성원으로 참여해요. 닫으면 이 코드는
+              다시 볼 수 없어요.
             </Text>
             <View style={styles.codeActions}>
               <Button

@@ -42,6 +42,7 @@ import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
 import { InventoryCard } from "../../src/components/InventoryCard";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { StatCard } from "../../src/components/StatCard";
@@ -54,6 +55,7 @@ import {
   type InventoryUrgencySection,
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
+import { getInventoryHeroNotice } from "../../src/features/inventory/inventory-hero";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
@@ -76,6 +78,13 @@ const urgencySectionTones: Record<
   within7: "warning",
   safe: "success",
 };
+
+const inventoryHeroToolbarFills = {
+  danger: colors.dangerSoft,
+  warning: colors.warningSoft,
+  success: colors.successSoft,
+  neutral: colors.mutedSurface,
+} as const;
 
 export default function InventoryScreen() {
   const { shouldStack } = useResponsiveLayout();
@@ -195,6 +204,40 @@ export default function InventoryScreen() {
     hasLoadedInventory && !isError && trackedItems.length === 0;
   const isFilteredEmpty = !isEmptyInventory && filtered.length === 0;
   const showListChrome = hasLoadedInventory && !isError && !isEmptyInventory;
+  const heroNotice = useMemo(
+    () =>
+      getInventoryHeroNotice({
+        isInitialLoading: isLoading && !hasLoadedInventory,
+        isInitialError: isError && !hasLoadedInventory,
+        isSelectionMode,
+        totalCount: trackedItems.length,
+        visibleCount: filtered.length,
+        expiredCount: facetCounts.status.expired,
+        within7Count: facetCounts.status.within7,
+        statusFilter: filter,
+      }),
+    [
+      facetCounts.status.expired,
+      facetCounts.status.within7,
+      filter,
+      filtered.length,
+      hasLoadedInventory,
+      isError,
+      isLoading,
+      isSelectionMode,
+      trackedItems.length,
+    ],
+  );
+  const inventoryHeroBubble = heroNotice.show ? (
+    <MascotSpeechBubble
+      message={heroNotice.message}
+      supportingMessage={heroNotice.supportingMessage}
+      mood={heroNotice.mood}
+      size="small"
+      density="compact"
+      style={styles.heroBubble}
+    />
+  ) : null;
 
   useEffect(() => {
     const visibleIdSet = new Set(visibleIds);
@@ -468,9 +511,30 @@ export default function InventoryScreen() {
             <View style={styles.listHeader}>
               <SpaceSwitcher />
               {isLoading && !hasLoadedInventory ? (
-                <HomeStatsSkeleton />
+                <View
+                  style={[
+                    styles.filterToolbar,
+                    heroNotice.show && {
+                      backgroundColor:
+                        inventoryHeroToolbarFills[heroNotice.tone],
+                    },
+                  ]}
+                >
+                  {inventoryHeroBubble}
+                  <HomeStatsSkeleton />
+                </View>
               ) : showListChrome && !isSelectionMode ? (
-                <View style={styles.filterToolbar}>
+                <View
+                  style={[
+                    styles.filterToolbar,
+                    heroNotice.show && {
+                      backgroundColor:
+                        inventoryHeroToolbarFills[heroNotice.tone],
+                    },
+                  ]}
+                >
+                  {inventoryHeroBubble}
+                  <View style={styles.filterCluster}>
                   <View style={styles.searchToolbar}>
                     <View style={styles.searchField}>
                       <Search
@@ -658,6 +722,7 @@ export default function InventoryScreen() {
                       />
                     </Pressable>
                   </View>
+                  </View>
                 </View>
               ) : showListChrome && isSelectionMode ? (
                 <View
@@ -768,6 +833,7 @@ export default function InventoryScreen() {
             ) : isFilteredEmpty ? (
               <EmptyState
                 mood={hasSearchQuery ? "idle" : getFilteredEmptyMood(filter)}
+                showMascot={false}
                 title={getFilteredEmptyTitle(filter, hasSearchQuery)}
                 description={getFilteredEmptyDescription(
                   filter,
@@ -1168,12 +1234,18 @@ function ExpiryTrafficLamp({
 
 const styles = StyleSheet.create({
   filterToolbar: {
-    gap: spacing.xs,
-    padding: spacing.xs,
+    gap: spacing.sm,
+    padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
+  },
+  heroBubble: {
+    gap: spacing.sm,
+  },
+  filterCluster: {
+    gap: spacing.xs,
   },
   searchToolbar: {
     minHeight: touchTarget.min,
@@ -1196,6 +1268,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
   },
   filterPairRow: {
     flexDirection: "row",
@@ -1221,7 +1296,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.surface,
   },
   expiryTrafficLamp: {
     flex: 1,
@@ -1250,11 +1325,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.surface,
   },
   locationFilterTileActive: {
     borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
   },
   locationFilterMain: {
     flex: 1,
@@ -1340,7 +1414,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
   },
   searchInput: {
     flex: 1,
@@ -1504,8 +1578,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
   },
   urgencySectionBody: {
-    padding: spacing.xs,
-    gap: spacing.xs,
+    padding: spacing.xxs, // 4px: keep expiry groups compact around stacked cards
+    gap: spacing.xxs,
     backgroundColor: colors.mutedSurface,
   },
 });

@@ -13,13 +13,21 @@ import {
   ChevronUp,
   Clock3,
   Heart,
+  Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Utensils,
   Users,
 } from "lucide-react-native";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   Alert,
   ImageBackground,
@@ -52,6 +60,7 @@ import {
   canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
   parseRecommendationAccess,
+  recommendationQuotaCopy,
 } from "../../src/features/monetization/recommendation-access";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
@@ -219,11 +228,11 @@ export default function RecommendationsScreen() {
     latestRecommendation?.id === latestGeneratedRecommendationId;
   const showValueMomentOffer = Boolean(
     justGenerated &&
-      !hasActiveEntitlement &&
-      monetization.access?.offer.personalized &&
-      monetization.access.offer.reason === "engaged" &&
-      (monetization.access.offer.kind === "jango_plus" ||
-        monetization.access.offer.kind === "jango_household"),
+    !hasActiveEntitlement &&
+    monetization.access?.offer.personalized &&
+    monetization.access.offer.reason === "engaged" &&
+    (monetization.access.offer.kind === "jango_plus" ||
+      monetization.access.offer.kind === "jango_household"),
   );
   const mealTypeLabel =
     mealTypeOptions.find((option) => option.value === mealType)?.label ??
@@ -252,6 +261,9 @@ export default function RecommendationsScreen() {
   );
   const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
   const canOfferRewardedAd = canContinueWithRewardedAd(monetization.access);
+  const quotaCopy = monetization.access
+    ? recommendationQuotaCopy(monetization.access)
+    : null;
   const personalizedOffer = monetization.access?.offer;
   const showPersonalizedOffer =
     !hasActiveEntitlement &&
@@ -299,7 +311,8 @@ export default function RecommendationsScreen() {
       (!isQuotaError && !showValueMomentOffer) ||
       !offer?.personalized ||
       offer.kind === "none"
-    ) return;
+    )
+      return;
     const key = `${monetization.access?.day}:${offer.kind}:${offer.reason}`;
     if (trackedOfferRef.current === key) return;
     trackedOfferRef.current = key;
@@ -349,7 +362,9 @@ export default function RecommendationsScreen() {
             error instanceof ApiError
               ? parseRecommendationAccess(error.details)
               : null;
-          if (canGenerateWithoutRewardedAd(accessFromError ?? monetization.access)) {
+          if (
+            canGenerateWithoutRewardedAd(accessFromError ?? monetization.access)
+          ) {
             await generateRecipeRecommendation(payload);
             return;
           }
@@ -600,596 +615,627 @@ export default function RecommendationsScreen() {
             />
           }
         >
-      <SpaceSwitcher />
-      {monetization.rewardNotice === "verified" ? (
-        <FeedbackBanner
-          tone="success"
-          title="광고 추천권 1회가 지급됐어요"
-          description="오늘 추천을 만들 때 바로 사용할 수 있어요."
-          actionLabel="확인"
-          onAction={monetization.dismissRewardNotice}
-          showMascot={false}
-        />
-      ) : monetization.adState === "verifying" ? (
-        <FeedbackBanner
-          tone="info"
-          title="광고 보상을 확인하고 있어요"
-          description="확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요."
-          showMascot={false}
-        />
-      ) : null}
-      {recipeView === "recommendations" && monetization.access ? (
-        <View style={styles.usageCard}>
-          <View style={styles.usageCopy}>
-            <Text style={styles.usageTitle}>
-              {monetization.access.tier !== "free"
-                ? `오늘 추천 ${monetization.access.used}/${monetization.access.dailyLimit}`
-                : `오늘 무료 추천 ${monetization.access.free.used}/${monetization.access.free.limit}`}
-            </Text>
-            <Text style={styles.usageDescription}>
-              {monetization.access.tier === "jango_household"
-                ? `가족 플러스 · ${monetization.access.remaining}회 남았어요`
-                : monetization.access.tier === "jango_plus"
-                  ? `장고 플러스 · ${monetization.access.remaining}회 남았어요`
-                : monetization.access.rewardedAdsEnabled
-                  ? `광고 추천권 ${monetization.access.rewardedAds.creditsAvailable}회 · 오늘 광고 ${monetization.access.rewardedAds.remainingToWatch}편 남음`
-                  : `임시 무료 추천 ${monetization.access.remaining}회 남았어요`}
-            </Text>
-            {monetization.access.tier === "free" &&
-            monetization.access.contributionRewards.enabled ? (
-              <Text style={styles.usageDescription}>
-                바코드 추천권 {monetization.access.contributionRewards.balance}회
-                {monetization.access.contributionRewards.canEarn
-                  ? ` · 오늘 ${monetization.access.contributionRewards.dailyLimit - monetization.access.contributionRewards.earnedToday}회 더 적립 가능`
-                  : ""}
-              </Text>
-            ) : null}
-            {monetization.access.tier === "free" &&
-            monetization.access.paidCredits.salesEnabled ? (
-              <Pressable
-                onPress={() => router.push("/settings/recommendation-credits")}
-                accessibilityRole="button"
-                accessibilityLabel="AI 추천권 충전하기"
-              >
-                <Text style={styles.usageCreditLink}>
-                  구매 추천권 {monetization.access.paidCredits.balance}회 · 충전하기
-                </Text>
-              </Pressable>
-            ) : monetization.access.tier === "free" &&
-              monetization.access.paidCredits.balance > 0 ? (
-              <Text style={styles.usageDescription}>
-                보유 추천권 {monetization.access.paidCredits.balance}회 · 추천할 때 자동 사용돼요
-              </Text>
-            ) : null}
-            {monetization.access.tier === "free" &&
-            monetization.access.paidCredits.balance > 0 &&
-            monetization.access.rewardedAds.canWatch ? (
-              <Pressable
-                onPress={() => void handleWatchRewardedAdOnly()}
-                accessibilityRole="button"
-                accessibilityLabel="구매 추천권을 보존하고 광고로 추천권 받기"
-              >
-                <Text style={styles.usageCreditLink}>
-                  구매 추천권 아끼고 광고 보기
-                </Text>
-              </Pressable>
-            ) : null}
-          </View>
-        </View>
-      ) : null}
-      {recipeView === "recommendations" && showValueMomentOffer ? (
-        <View style={styles.valueOfferCard}>
-          <View style={styles.valueOfferCopy}>
-            <Text style={styles.valueOfferTitle}>
-              {monetization.access?.offer.kind === "jango_household"
-                ? "가족 냉장고가 함께 움직이고 있어요"
-                : "냉장고 관리가 습관이 되고 있어요"}
-            </Text>
-            <Text style={styles.valueOfferDescription}>
-              {monetization.access?.offer.kind === "jango_household"
-                ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
-                : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
-            </Text>
-          </View>
-          <Button
-            onPress={() =>
-              handleMonetizationOffer(monetization.access!.offer.kind)
-            }
-            fullWidth
-          >
-            {offerLabel(monetization.access!.offer.kind)}
-          </Button>
-        </View>
-      ) : null}
-      <View style={styles.recipeViewSwitch}>
-        <Pressable
-          onPress={() => setRecipeView("recommendations")}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: recipeView === "recommendations" }}
-          style={({ pressed }) => [
-            styles.recipeViewOption,
-            recipeView === "recommendations" && styles.recipeViewOptionSelected,
-            pressed && styles.recipeViewOptionPressed,
-          ]}
-        >
-          <Sparkles
-            color={
-              recipeView === "recommendations" ? colors.primary : colors.subtext
-            }
-            size={spacing.sm}
-            strokeWidth={2.4}
-          />
-          <Text
-            style={[
-              styles.recipeViewLabel,
-              recipeView === "recommendations" &&
-                styles.recipeViewLabelSelected,
-            ]}
-          >
-            추천받기
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setRecipeView("favorites")}
-          accessibilityRole="tab"
-          accessibilityState={{ selected: recipeView === "favorites" }}
-          style={({ pressed }) => [
-            styles.recipeViewOption,
-            recipeView === "favorites" && styles.recipeViewOptionSelected,
-            pressed && styles.recipeViewOptionPressed,
-          ]}
-        >
-          <Heart
-            color={recipeView === "favorites" ? colors.primary : colors.subtext}
-            fill={recipeView === "favorites" ? colors.primary : "none"}
-            size={spacing.sm}
-            strokeWidth={2.4}
-          />
-          <Text
-            style={[
-              styles.recipeViewLabel,
-              recipeView === "favorites" && styles.recipeViewLabelSelected,
-            ]}
-          >
-            즐겨찾기 {favoritesQuery.data?.length ?? 0}
-          </Text>
-        </Pressable>
-      </View>
-
-      {setFavoriteMutation.error ? (
-        <FeedbackBanner
-          showMascot={false}
-          title="즐겨찾기를 바꾸지 못했어요"
-          description={getErrorMessage(setFavoriteMutation.error) ?? undefined}
-        />
-      ) : null}
-
-      {recipeView === "recommendations" ? (
-      <View style={styles.heroCard}>
-        <MascotSpeechBubble
-          message={
-            isGenerating
-              ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
-              : justGenerated
-                ? "추천이 준비됐어요. 같이 살펴볼까요?"
-                : hasRecommendationResult
-                  ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
-                  : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요."
-          }
-          mood={
-            isGenerating
-              ? "think"
-              : justGenerated
-                ? "happy"
-                : hasRecommendationResult
-                  ? "cooking"
-                  : "speak"
-          }
-          size="small"
-        />
-
-        <View style={styles.optionsSummaryGroup}>
-          <Pressable
-            testID="recommendation-options-button"
-            onPress={() => setShowOptionsSheet(true)}
-            accessibilityRole="button"
-            accessibilityLabel="추천 조건 고르기"
-            accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
-            style={({ pressed }) => [
-              styles.optionsSummary,
-              shouldStack && styles.optionsSummaryStacked,
-              pressed && styles.optionsSummaryPressed,
-            ]}
-          >
-            <View style={styles.optionsSummaryCopy}>
-              <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
-              <Text style={styles.optionsSummaryValue}>
-                {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
-                {useExpiringFirst ? " · 임박 먼저" : ""}
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.optionsSummaryAction,
-                shouldStack && styles.optionsSummaryActionStacked,
-              ]}
-            >
-              <SlidersHorizontal
-                color={colors.primary}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-              />
-              <Text style={styles.optionsSummaryActionLabel}>바꾸기</Text>
-            </View>
-          </Pressable>
-          <Pressable
-            testID="recommendation-preference-summary-button"
-            onPress={() => router.push("/settings/recipe-preferences")}
-            accessibilityRole="button"
-            accessibilityLabel="알레르기·식단 맞추기"
-            accessibilityHint="설정에서 알레르기와 식단을 바꿀 수 있어요."
-            style={({ pressed }) => [
-              styles.optionsSummary,
-              shouldStack && styles.optionsSummaryStacked,
-              pressed && styles.optionsSummaryPressed,
-            ]}
-          >
-            <View style={styles.optionsSummaryCopy}>
-              <Text style={styles.optionsSummaryLabel}>알레르기·식단</Text>
-              <Text style={styles.optionsSummaryValue}>
-                {preferenceSummary.text}
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.optionsSummaryAction,
-                shouldStack && styles.optionsSummaryActionStacked,
-              ]}
-            >
-              <ShieldCheck
-                color={colors.primary}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-              />
-              <Text style={styles.optionsSummaryActionLabel}>
-                {preferenceSummary.applied ? "바꾸기" : "맞춰요"}
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-      </View>
-      ) : null}
-
-      {recipeView === "recommendations" && errorMessage && !isGenerating ? (
-        isQuotaError ? (
-          <View style={styles.quotaCard}>
-            <Text style={styles.quotaTitle}>
-              {canOfferRewardedAd
-                ? "광고 한 편이면 추천을 이어갈 수 있어요"
-                : "오늘은 추천을 조금 쉬어갈까요?"}
-            </Text>
-            <MascotSpeechBubble
-              message={
-                canOfferRewardedAd
-                  ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
-                  : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
-              }
-              mood="worry"
-              size="small"
+          <SpaceSwitcher />
+          {monetization.rewardNotice === "verified" ? (
+            <FeedbackBanner
+              tone="success"
+              title="광고 추천권 1회가 지급됐어요"
+              description="오늘 추천을 만들 때 바로 사용할 수 있어요."
+              actionLabel="확인"
+              onAction={monetization.dismissRewardNotice}
+              showMascot={false}
             />
-            {!hasActiveEntitlement && canOfferRewardedAd ? (
-              <Button
-                onPress={() => void handleCreateRecommendation()}
-                loading={monetization.adState === "loading"}
-                disabled={isAdBusy}
-                fullWidth
-              >
-                광고 보고 추천 받을게요
-              </Button>
-            ) : null}
-            {showPersonalizedOffer ? (
+          ) : monetization.adState === "verifying" ? (
+            <FeedbackBanner
+              tone="info"
+              title="광고 보상을 확인하고 있어요"
+              description="확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요."
+              showMascot={false}
+            />
+          ) : null}
+          {recipeView === "recommendations" && showValueMomentOffer ? (
+            <View style={styles.valueOfferCard}>
+              <View style={styles.valueOfferCopy}>
+                <Text style={styles.valueOfferTitle}>
+                  {monetization.access?.offer.kind === "jango_household"
+                    ? "가족 냉장고가 함께 움직이고 있어요"
+                    : "냉장고 관리가 습관이 되고 있어요"}
+                </Text>
+                <Text style={styles.valueOfferDescription}>
+                  {monetization.access?.offer.kind === "jango_household"
+                    ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
+                    : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
+                </Text>
+              </View>
               <Button
                 onPress={() =>
                   handleMonetizationOffer(monetization.access!.offer.kind)
                 }
-                variant={canOfferRewardedAd ? "secondary" : undefined}
                 fullWidth
               >
                 {offerLabel(monetization.access!.offer.kind)}
               </Button>
-            ) : null}
-            {!hasActiveEntitlement &&
-            monetization.access?.offer.personalized &&
-            monetization.access?.offer.alternatives.length ? (
-              <Pressable
-                onPress={() => setShowOfferAlternatives(true)}
-                accessibilityRole="button"
-                accessibilityLabel="다른 이용 방법 보기"
-                style={({ pressed }) => [
-                  styles.quotaLink,
-                  pressed && styles.optionsSummaryPressed,
-                ]}
-              >
-                <Text style={styles.quotaLinkText}>다른 방법</Text>
-              </Pressable>
-            ) : null}
-            {!hasActiveEntitlement &&
-            !monetization.access?.offer.personalized &&
-            monetization.access?.paidCredits.salesEnabled ? (
-              <Button
-                onPress={() => router.push("/settings/recommendation-credits")}
-                variant="secondary"
-                fullWidth
-              >
-                AI 추천권 충전하기
-              </Button>
-            ) : null}
-            {!hasActiveEntitlement &&
-            !monetization.access?.offer.personalized &&
-            monetization.access?.subscriptionsEnabled ? (
-              <Pressable
-                onPress={() => router.push("/settings/subscription")}
-                accessibilityRole="button"
-                accessibilityLabel="장고 플러스 살펴보기"
-                style={({ pressed }) => [
-                  styles.quotaLink,
-                  pressed && styles.optionsSummaryPressed,
-                ]}
-              >
-                <Text style={styles.quotaLinkText}>장고 플러스 살펴보기</Text>
-              </Pressable>
-            ) : null}
-          </View>
-        ) : isCapacityError ? (
-          <View style={styles.quotaCard}>
-            <Text style={styles.quotaTitle}>오늘은 추천을 조금 쉬어갈까요?</Text>
-            <MascotSpeechBubble
-              message={
-                errorMessage.includes("너무 많")
-                  ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
-                  : "지금은 추천을 잠시 멈춰 두었어요. 내일 다시 부탁해도 괜찮아요."
-              }
-              mood="worry"
-              size="small"
-            />
-          </View>
-        ) : (
-          <View style={styles.errorCard}>
-            <Text style={styles.errorTitle}>
-              {isHistoryLoadError
-                ? "앗, 추천을 불러오지 못했어요"
-                : "앗, 추천을 만들지 못했어요"}
-            </Text>
-            <MascotSpeechBubble
-              message={errorMessage}
-              mood="worry"
-              size="small"
-            />
+            </View>
+          ) : null}
+          <View style={styles.recipeViewSwitch}>
             <Pressable
-              onPress={() => {
-                if (isHistoryLoadError) {
-                  void historyQuery.refetch();
-                  return;
-                }
-                router.push("/register");
+              onPress={() => setRecipeView("recommendations")}
+              accessibilityRole="tab"
+              accessibilityState={{
+                selected: recipeView === "recommendations",
               }}
-              accessibilityRole="button"
-              accessibilityLabel={
-                isHistoryLoadError
-                  ? "추천 다시 불러오기"
-                  : "재료부터 넣어볼까요?"
-              }
               style={({ pressed }) => [
-                styles.quotaLink,
-                pressed && styles.optionsSummaryPressed,
+                styles.recipeViewOption,
+                recipeView === "recommendations" &&
+                  styles.recipeViewOptionSelected,
+                pressed && styles.recipeViewOptionPressed,
               ]}
             >
-              <Text style={styles.quotaLinkText}>
-                {isHistoryLoadError
-                  ? "다시 불러올게요"
-                  : "재료부터 넣어볼까요?"}
+              <Sparkles
+                color={
+                  recipeView === "recommendations"
+                    ? colors.primary
+                    : colors.subtext
+                }
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+              <Text
+                style={[
+                  styles.recipeViewLabel,
+                  recipeView === "recommendations" &&
+                    styles.recipeViewLabelSelected,
+                ]}
+              >
+                추천받기
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setRecipeView("favorites")}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: recipeView === "favorites" }}
+              style={({ pressed }) => [
+                styles.recipeViewOption,
+                recipeView === "favorites" && styles.recipeViewOptionSelected,
+                pressed && styles.recipeViewOptionPressed,
+              ]}
+            >
+              <Heart
+                color={
+                  recipeView === "favorites" ? colors.primary : colors.subtext
+                }
+                fill={recipeView === "favorites" ? colors.primary : "none"}
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+              <Text
+                style={[
+                  styles.recipeViewLabel,
+                  recipeView === "favorites" && styles.recipeViewLabelSelected,
+                ]}
+              >
+                즐겨찾기 {favoritesQuery.data?.length ?? 0}
               </Text>
             </Pressable>
           </View>
-        )
-      ) : null}
 
-      {recipeView === "recommendations" &&
-      latestRecommendation &&
-      !isGenerating ? (
-        <RecipeSection
-          title="이번에 골라본 요리"
-          count={latestRecommendation.recommendations.length}
-          collapsed={Boolean(collapsedSections.latest)}
-          onToggle={() => toggleRecipeSection("latest")}
-        >
-          {latestRecommendation.recommendations.length ? (
-            latestRecommendation.recommendations.map((dish, index) => (
-              <RecipeCard
-                key={`${latestRecommendation.id}-${dish.title}-${index}`}
-                dish={dish}
-                badgeLabel={String(index + 1)}
-                inventorySnapshot={latestRecommendation.inventorySnapshot}
-                onOpenDetails={() =>
-                  handleOpenDetails({
-                    recommendationId: latestRecommendation.id,
-                    dishIndex: index,
-                    dish,
-                    inventorySnapshot: latestRecommendation.inventorySnapshot,
-                  })
-                }
-                isFavorite={favoriteKeys.has(
-                  getRecipeFavoriteKey(latestRecommendation.id, index),
-                )}
-                isFavoritePending={
-                  setFavoriteMutation.isPending &&
-                  setFavoriteMutation.variables?.recommendationId ===
-                    latestRecommendation.id &&
-                  setFavoriteMutation.variables.dishIndex === index
-                }
-                onToggleFavorite={(favorite) =>
-                  setFavoriteMutation.mutate({
-                    recommendationId: latestRecommendation.id,
-                    dishIndex: index,
-                    dish,
-                    inventorySnapshot: latestRecommendation.inventorySnapshot,
-                    favorite,
-                  })
-                }
-              />
-            ))
-          ) : (
-            <EmptyState
-              mood="empty"
-              title="이번에는 딱 맞는 요리가 없어요"
-              description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
-            />
-          )}
-        </RecipeSection>
-      ) : null}
-
-      {recipeView === "recommendations" &&
-      previousRecommendations.length > 0 &&
-      !isGenerating ? (
-        <RecipeSection
-          title="이전 추천"
-          count={previousRecommendations.length}
-          collapsed={Boolean(collapsedSections.previous)}
-          onToggle={() => toggleRecipeSection("previous")}
-        >
-          <View style={styles.historyList}>
-            {previousRecommendations.map((recommendation) => (
-              <Pressable
-                key={recommendation.id}
-                onPress={() => setHistoryRecommendation(recommendation)}
-                accessibilityRole="button"
-                accessibilityLabel={`${formatCreatedAt(recommendation.createdAt)} 추천 다시 볼게요`}
-                accessibilityHint="그때 받아 둔 요리를 다시 열어 볼 수 있어요."
-                style={({ pressed }) => [
-                  styles.historyRow,
-                  shouldStack && styles.historyRowStacked,
-                  pressed && styles.historyRowPressed,
-                ]}
-              >
-                <View style={styles.historyCopy}>
-                  <Text style={styles.historyTitle}>
-                    {formatCreatedAt(recommendation.createdAt)} 추천
-                  </Text>
-                  <Text style={styles.historyDescription} numberOfLines={2}>
-                    {formatHistoryPreview(recommendation)}
-                  </Text>
-                </View>
-                <Text
-                  style={[
-                    styles.historyAction,
-                    shouldStack && styles.historyActionStacked,
-                  ]}
-                >
-                  다시 볼게요
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </RecipeSection>
-      ) : null}
-
-      {recipeView === "recommendations" &&
-      isHistoryInitialLoading &&
-      !isGenerating &&
-      !errorMessage ? (
-        <View
-          style={styles.favoriteLoading}
-          accessibilityLabel="추천을 불러오고 있어요"
-        >
-          <Text style={styles.favoriteLoadingText}>
-            추천을 불러오고 있어요…
-          </Text>
-        </View>
-      ) : null}
-
-      {recipeView === "recommendations" &&
-      !isHistoryInitialLoading &&
-      !latestRecommendation &&
-      !isGenerating &&
-      !errorMessage ? (
-        <EmptyState
-          mood="empty"
-          title="아직 추천이 없어요"
-          description="아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
-        />
-      ) : null}
-
-      {recipeView === "favorites" ? (
-        <RecipeSection
-          title="즐겨찾는 요리"
-          count={favoritesQuery.data?.length ?? 0}
-          collapsed={Boolean(collapsedSections.favorites)}
-          onToggle={() => toggleRecipeSection("favorites")}
-        >
-          {favoritesQuery.isPending ? (
-            <View
-              style={styles.favoriteLoading}
-              accessibilityLabel="즐겨찾기를 불러오고 있어요"
-            >
-              <Text style={styles.favoriteLoadingText}>
-                즐겨찾기를 불러오고 있어요…
-              </Text>
-            </View>
-          ) : favoritesQuery.error ? (
+          {setFavoriteMutation.error ? (
             <FeedbackBanner
               showMascot={false}
-              title="즐겨찾기를 불러오지 못했어요"
-              description={getErrorMessage(favoritesQuery.error) ?? undefined}
-              actionLabel="다시 불러오기"
-              onAction={() => {
-                void favoritesQuery.refetch();
-              }}
+              title="즐겨찾기를 바꾸지 못했어요"
+              description={
+                getErrorMessage(setFavoriteMutation.error) ?? undefined
+              }
             />
-          ) : favoritesQuery.data?.length ? (
-            favoritesQuery.data.map((favorite, favoriteIndex) => (
-              <RecipeCard
-                key={favorite.id}
-                dish={favorite.dish}
-                badgeLabel={String(favoriteIndex + 1)}
-                inventorySnapshot={favorite.inventorySnapshot}
-                onOpenDetails={() =>
-                  setRecipeDetail({
-                    recommendationId: favorite.sourceRecommendationId,
-                    dishIndex: favorite.sourceDishIndex,
-                    dish: favorite.dish,
-                    inventorySnapshot: favorite.inventorySnapshot,
-                  })
+          ) : null}
+
+          {recipeView === "recommendations" ? (
+            <View style={styles.heroCard}>
+              <MascotSpeechBubble
+                message={
+                  isGenerating
+                    ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
+                    : justGenerated
+                      ? "추천이 준비됐어요. 같이 살펴볼까요?"
+                      : hasRecommendationResult
+                        ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
+                        : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요."
                 }
-                isFavorite
-                isFavoritePending={
-                  setFavoriteMutation.isPending &&
-                  setFavoriteMutation.variables?.recommendationId ===
-                    favorite.sourceRecommendationId &&
-                  setFavoriteMutation.variables.dishIndex ===
-                    favorite.sourceDishIndex
+                mood={
+                  isGenerating
+                    ? "think"
+                    : justGenerated
+                      ? "happy"
+                      : hasRecommendationResult
+                        ? "cooking"
+                        : "speak"
                 }
-                onToggleFavorite={(isFavorite) =>
-                  setFavoriteMutation.mutate({
-                    recommendationId: favorite.sourceRecommendationId,
-                    dishIndex: favorite.sourceDishIndex,
-                    dish: favorite.dish,
-                    inventorySnapshot: favorite.inventorySnapshot,
-                    favorite: isFavorite,
-                  })
-                }
+                size="small"
               />
-            ))
-          ) : (
+
+              <View style={styles.optionsSummaryGroup}>
+                {quotaCopy ? (
+                  <Pressable
+                    testID="recommendation-quota-button"
+                    onPress={
+                      canOfferRewardedAd
+                        ? () => {
+                            void handleWatchRewardedAdOnly();
+                          }
+                        : undefined
+                    }
+                    disabled={canOfferRewardedAd && isAdBusy}
+                    accessibilityRole={
+                      canOfferRewardedAd ? "button" : "summary"
+                    }
+                    accessibilityLabel={
+                      canOfferRewardedAd
+                        ? `광고 보고 추천권 받기. ${quotaCopy.value}`
+                        : `${quotaCopy.label} ${quotaCopy.value}`
+                    }
+                    accessibilityHint={
+                      canOfferRewardedAd
+                        ? "광고를 보면 추천권 1회를 받을 수 있어요."
+                        : undefined
+                    }
+                    accessibilityState={
+                      canOfferRewardedAd ? { disabled: isAdBusy } : undefined
+                    }
+                    style={({ pressed }) => [
+                      styles.optionsSummary,
+                      shouldStack && styles.optionsSummaryStacked,
+                      canOfferRewardedAd &&
+                        pressed &&
+                        styles.optionsSummaryPressed,
+                    ]}
+                  >
+                    <View style={styles.optionsSummaryCopy}>
+                      <Text style={styles.optionsSummaryLabel}>
+                        {quotaCopy.label}
+                      </Text>
+                      <Text
+                        style={styles.optionsSummaryValue}
+                        numberOfLines={1}
+                      >
+                        {quotaCopy.value}
+                      </Text>
+                    </View>
+                    {canOfferRewardedAd ? (
+                      <View
+                        style={[
+                          styles.optionsSummaryAction,
+                          shouldStack && styles.optionsSummaryActionStacked,
+                        ]}
+                      >
+                        <Play
+                          color={colors.primary}
+                          size={spacing.sm + spacing.xxs}
+                          strokeWidth={2.4}
+                        />
+                        <Text style={styles.optionsSummaryActionLabel}>
+                          {isAdBusy ? "광고 준비 중" : "광고 보기"}
+                        </Text>
+                      </View>
+                    ) : null}
+                  </Pressable>
+                ) : null}
+                <Pressable
+                  testID="recommendation-options-button"
+                  onPress={() => setShowOptionsSheet(true)}
+                  accessibilityRole="button"
+                  accessibilityLabel="추천 조건 고르기"
+                  accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
+                  style={({ pressed }) => [
+                    styles.optionsSummary,
+                    shouldStack && styles.optionsSummaryStacked,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <View style={styles.optionsSummaryCopy}>
+                    <Text style={styles.optionsSummaryLabel}>추천 조건</Text>
+                    <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+                      {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
+                      {useExpiringFirst ? " · 임박 먼저" : ""}
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.optionsSummaryAction,
+                      shouldStack && styles.optionsSummaryActionStacked,
+                    ]}
+                  >
+                    <SlidersHorizontal
+                      color={colors.primary}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <Text style={styles.optionsSummaryActionLabel}>바꾸기</Text>
+                  </View>
+                </Pressable>
+                <Pressable
+                  testID="recommendation-preference-summary-button"
+                  onPress={() => router.push("/settings/recipe-preferences")}
+                  accessibilityRole="button"
+                  accessibilityLabel="알레르기·식단 맞추기"
+                  accessibilityHint="설정에서 알레르기와 식단을 바꿀 수 있어요."
+                  style={({ pressed }) => [
+                    styles.optionsSummary,
+                    shouldStack && styles.optionsSummaryStacked,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <View style={styles.optionsSummaryCopy}>
+                    <Text style={styles.optionsSummaryLabel}>
+                      알레르기·식단
+                    </Text>
+                    <Text style={styles.optionsSummaryValue} numberOfLines={1}>
+                      {preferenceSummary.text}
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.optionsSummaryAction,
+                      shouldStack && styles.optionsSummaryActionStacked,
+                    ]}
+                  >
+                    <ShieldCheck
+                      color={colors.primary}
+                      size={spacing.sm + spacing.xxs}
+                      strokeWidth={2.4}
+                    />
+                    <Text style={styles.optionsSummaryActionLabel}>
+                      {preferenceSummary.applied ? "바꾸기" : "맞춰요"}
+                    </Text>
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+          ) : null}
+
+          {recipeView === "recommendations" && errorMessage && !isGenerating ? (
+            isQuotaError ? (
+              <View style={styles.quotaCard}>
+                <Text style={styles.quotaTitle}>
+                  {canOfferRewardedAd
+                    ? "광고 한 편이면 추천을 이어갈 수 있어요"
+                    : "오늘은 추천을 조금 쉬어갈까요?"}
+                </Text>
+                <MascotSpeechBubble
+                  message={
+                    canOfferRewardedAd
+                      ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
+                      : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
+                  }
+                  mood="worry"
+                  size="small"
+                />
+                {!hasActiveEntitlement && canOfferRewardedAd ? (
+                  <Button
+                    onPress={() => void handleCreateRecommendation()}
+                    loading={monetization.adState === "loading"}
+                    disabled={isAdBusy}
+                    fullWidth
+                  >
+                    광고 보고 추천 받을게요
+                  </Button>
+                ) : null}
+                {showPersonalizedOffer ? (
+                  <Button
+                    onPress={() =>
+                      handleMonetizationOffer(monetization.access!.offer.kind)
+                    }
+                    variant={canOfferRewardedAd ? "secondary" : undefined}
+                    fullWidth
+                  >
+                    {offerLabel(monetization.access!.offer.kind)}
+                  </Button>
+                ) : null}
+                {!hasActiveEntitlement &&
+                monetization.access?.offer.personalized &&
+                monetization.access?.offer.alternatives.length ? (
+                  <Pressable
+                    onPress={() => setShowOfferAlternatives(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="다른 이용 방법 보기"
+                    style={({ pressed }) => [
+                      styles.quotaLink,
+                      pressed && styles.optionsSummaryPressed,
+                    ]}
+                  >
+                    <Text style={styles.quotaLinkText}>다른 방법</Text>
+                  </Pressable>
+                ) : null}
+                {!hasActiveEntitlement &&
+                !monetization.access?.offer.personalized &&
+                monetization.access?.paidCredits.salesEnabled ? (
+                  <Button
+                    onPress={() =>
+                      router.push("/settings/recommendation-credits")
+                    }
+                    variant="secondary"
+                    fullWidth
+                  >
+                    AI 추천권 충전하기
+                  </Button>
+                ) : null}
+                {!hasActiveEntitlement &&
+                !monetization.access?.offer.personalized &&
+                monetization.access?.subscriptionsEnabled ? (
+                  <Pressable
+                    onPress={() => router.push("/settings/subscription")}
+                    accessibilityRole="button"
+                    accessibilityLabel="장고 플러스 살펴보기"
+                    style={({ pressed }) => [
+                      styles.quotaLink,
+                      pressed && styles.optionsSummaryPressed,
+                    ]}
+                  >
+                    <Text style={styles.quotaLinkText}>
+                      장고 플러스 살펴보기
+                    </Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            ) : isCapacityError ? (
+              <View style={styles.quotaCard}>
+                <Text style={styles.quotaTitle}>
+                  오늘은 추천을 조금 쉬어갈까요?
+                </Text>
+                <MascotSpeechBubble
+                  message={
+                    errorMessage.includes("너무 많")
+                      ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
+                      : "지금은 추천을 잠시 멈춰 두었어요. 내일 다시 부탁해도 괜찮아요."
+                  }
+                  mood="worry"
+                  size="small"
+                />
+              </View>
+            ) : (
+              <View style={styles.errorCard}>
+                <Text style={styles.errorTitle}>
+                  {isHistoryLoadError
+                    ? "앗, 추천을 불러오지 못했어요"
+                    : "앗, 추천을 만들지 못했어요"}
+                </Text>
+                <MascotSpeechBubble
+                  message={errorMessage}
+                  mood="worry"
+                  size="small"
+                />
+                <Pressable
+                  onPress={() => {
+                    if (isHistoryLoadError) {
+                      void historyQuery.refetch();
+                      return;
+                    }
+                    router.push("/register");
+                  }}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isHistoryLoadError
+                      ? "추천 다시 불러오기"
+                      : "재료부터 넣어볼까요?"
+                  }
+                  style={({ pressed }) => [
+                    styles.quotaLink,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <Text style={styles.quotaLinkText}>
+                    {isHistoryLoadError
+                      ? "다시 불러올게요"
+                      : "재료부터 넣어볼까요?"}
+                  </Text>
+                </Pressable>
+              </View>
+            )
+          ) : null}
+
+          {recipeView === "recommendations" &&
+          latestRecommendation &&
+          !isGenerating ? (
+            <RecipeSection
+              title="이번에 골라본 요리"
+              count={latestRecommendation.recommendations.length}
+              collapsed={Boolean(collapsedSections.latest)}
+              onToggle={() => toggleRecipeSection("latest")}
+            >
+              {latestRecommendation.recommendations.length ? (
+                latestRecommendation.recommendations.map((dish, index) => (
+                  <RecipeCard
+                    key={`${latestRecommendation.id}-${dish.title}-${index}`}
+                    dish={dish}
+                    badgeLabel={String(index + 1)}
+                    inventorySnapshot={latestRecommendation.inventorySnapshot}
+                    onOpenDetails={() =>
+                      handleOpenDetails({
+                        recommendationId: latestRecommendation.id,
+                        dishIndex: index,
+                        dish,
+                        inventorySnapshot:
+                          latestRecommendation.inventorySnapshot,
+                      })
+                    }
+                    isFavorite={favoriteKeys.has(
+                      getRecipeFavoriteKey(latestRecommendation.id, index),
+                    )}
+                    isFavoritePending={
+                      setFavoriteMutation.isPending &&
+                      setFavoriteMutation.variables?.recommendationId ===
+                        latestRecommendation.id &&
+                      setFavoriteMutation.variables.dishIndex === index
+                    }
+                    onToggleFavorite={(favorite) =>
+                      setFavoriteMutation.mutate({
+                        recommendationId: latestRecommendation.id,
+                        dishIndex: index,
+                        dish,
+                        inventorySnapshot:
+                          latestRecommendation.inventorySnapshot,
+                        favorite,
+                      })
+                    }
+                  />
+                ))
+              ) : (
+                <EmptyState
+                  mood="empty"
+                  title="이번에는 딱 맞는 요리가 없어요"
+                  description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
+                />
+              )}
+            </RecipeSection>
+          ) : null}
+
+          {recipeView === "recommendations" &&
+          previousRecommendations.length > 0 &&
+          !isGenerating ? (
+            <RecipeSection
+              title="이전 추천"
+              count={previousRecommendations.length}
+              collapsed={Boolean(collapsedSections.previous)}
+              onToggle={() => toggleRecipeSection("previous")}
+            >
+              <View style={styles.historyList}>
+                {previousRecommendations.map((recommendation) => (
+                  <Pressable
+                    key={recommendation.id}
+                    onPress={() => setHistoryRecommendation(recommendation)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${formatCreatedAt(recommendation.createdAt)} 추천 다시 볼게요`}
+                    accessibilityHint="그때 받아 둔 요리를 다시 열어 볼 수 있어요."
+                    style={({ pressed }) => [
+                      styles.historyRow,
+                      shouldStack && styles.historyRowStacked,
+                      pressed && styles.historyRowPressed,
+                    ]}
+                  >
+                    <View style={styles.historyCopy}>
+                      <Text style={styles.historyTitle}>
+                        {formatCreatedAt(recommendation.createdAt)} 추천
+                      </Text>
+                      <Text
+                        style={styles.historyDescription}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {formatHistoryPreview(recommendation)}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.historyAction,
+                        shouldStack && styles.historyActionStacked,
+                      ]}
+                    >
+                      불러오기
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </RecipeSection>
+          ) : null}
+
+          {recipeView === "recommendations" &&
+          isHistoryInitialLoading &&
+          !isGenerating &&
+          !errorMessage ? (
+            <View
+              style={styles.favoriteLoading}
+              accessibilityLabel="추천을 불러오고 있어요"
+            >
+              <Text style={styles.favoriteLoadingText}>
+                추천을 불러오고 있어요…
+              </Text>
+            </View>
+          ) : null}
+
+          {recipeView === "recommendations" &&
+          !isHistoryInitialLoading &&
+          !latestRecommendation &&
+          !isGenerating &&
+          !errorMessage ? (
             <EmptyState
-              icon={Heart}
-              title="아직 즐겨찾는 요리가 없어요"
-              description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
-              actionLabel="추천 보러 가기"
-              onAction={() => setRecipeView("recommendations")}
+              mood="empty"
+              title="아직 추천이 없어요"
+              description="아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
             />
-          )}
-        </RecipeSection>
-      ) : null}
+          ) : null}
+
+          {recipeView === "favorites" ? (
+            <RecipeSection
+              title="즐겨찾는 요리"
+              count={favoritesQuery.data?.length ?? 0}
+              collapsed={Boolean(collapsedSections.favorites)}
+              onToggle={() => toggleRecipeSection("favorites")}
+            >
+              {favoritesQuery.isPending ? (
+                <View
+                  style={styles.favoriteLoading}
+                  accessibilityLabel="즐겨찾기를 불러오고 있어요"
+                >
+                  <Text style={styles.favoriteLoadingText}>
+                    즐겨찾기를 불러오고 있어요…
+                  </Text>
+                </View>
+              ) : favoritesQuery.error ? (
+                <FeedbackBanner
+                  showMascot={false}
+                  title="즐겨찾기를 불러오지 못했어요"
+                  description={
+                    getErrorMessage(favoritesQuery.error) ?? undefined
+                  }
+                  actionLabel="다시 불러오기"
+                  onAction={() => {
+                    void favoritesQuery.refetch();
+                  }}
+                />
+              ) : favoritesQuery.data?.length ? (
+                favoritesQuery.data.map((favorite, favoriteIndex) => (
+                  <RecipeCard
+                    key={favorite.id}
+                    dish={favorite.dish}
+                    badgeLabel={String(favoriteIndex + 1)}
+                    inventorySnapshot={favorite.inventorySnapshot}
+                    onOpenDetails={() =>
+                      setRecipeDetail({
+                        recommendationId: favorite.sourceRecommendationId,
+                        dishIndex: favorite.sourceDishIndex,
+                        dish: favorite.dish,
+                        inventorySnapshot: favorite.inventorySnapshot,
+                      })
+                    }
+                    isFavorite
+                    isFavoritePending={
+                      setFavoriteMutation.isPending &&
+                      setFavoriteMutation.variables?.recommendationId ===
+                        favorite.sourceRecommendationId &&
+                      setFavoriteMutation.variables.dishIndex ===
+                        favorite.sourceDishIndex
+                    }
+                    onToggleFavorite={(isFavorite) =>
+                      setFavoriteMutation.mutate({
+                        recommendationId: favorite.sourceRecommendationId,
+                        dishIndex: favorite.sourceDishIndex,
+                        dish: favorite.dish,
+                        inventorySnapshot: favorite.inventorySnapshot,
+                        favorite: isFavorite,
+                      })
+                    }
+                  />
+                ))
+              ) : (
+                <EmptyState
+                  icon={Heart}
+                  title="아직 즐겨찾는 요리가 없어요"
+                  description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
+                  actionLabel="추천 보러 가기"
+                  onAction={() => setRecipeView("recommendations")}
+                />
+              )}
+            </RecipeSection>
+          ) : null}
         </ScrollView>
       </View>
 
@@ -1578,11 +1624,19 @@ function RecipeCard({
           </Text>
         </View>
 
-        <Text style={styles.recipeMetaLine}>
+        <Text
+          style={styles.recipeMetaLine}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
           {formatDishMeta(dish)}
         </Text>
 
-        <Text style={styles.recipeIngredientPreview} numberOfLines={2}>
+        <Text
+          style={styles.recipeIngredientPreview}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
           {ingredientPreview}
         </Text>
       </Pressable>
@@ -1676,16 +1730,13 @@ function RecipeDetailContent({
                         : styles.ingredientExpiryBadgeSafe,
                     ]}
                     accessibilityLabel={`유통기한 ${
-                      formatIngredientDdayLabel(
-                        ingredient.daysUntilExpiry,
-                      ) ?? "임박"
+                      formatIngredientDdayLabel(ingredient.daysUntilExpiry) ??
+                      "임박"
                     }`}
                   >
                     <Clock3
                       color={
-                        ingredient.isExpiring
-                          ? colors.warning
-                          : colors.success
+                        ingredient.isExpiring ? colors.warning : colors.success
                       }
                       size={spacing.sm}
                       strokeWidth={2.4}
@@ -1973,37 +2024,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.primarySoft,
-    padding: spacing.md,
-    gap: spacing.md,
-  },
-  usageCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  usageCopy: {
-    gap: spacing.xxs,
-  },
-  usageTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
-  usageDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
-  },
-  usageCreditLink: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.primary,
+    padding: spacing.sm,
+    gap: spacing.sm,
   },
   optionsSummary: {
     backgroundColor: colors.surface,
@@ -2011,14 +2033,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
   },
   optionsSummaryGroup: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   optionsSummaryStacked: {
     flexDirection: "column",
@@ -2145,8 +2167,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
   },
   recipeSectionBody: {
-    padding: spacing.xs,
-    gap: spacing.xs,
+    padding: spacing.xxs, // 4px: keep recipe groups compact around stacked cards
+    gap: spacing.xxs,
     backgroundColor: colors.mutedSurface,
   },
   favoriteLoading: {
@@ -2189,6 +2211,7 @@ const styles = StyleSheet.create({
   },
   historyCopy: {
     flex: 1,
+    minWidth: 0,
     gap: spacing.xxs,
   },
   historyTitle: {

@@ -54,3 +54,54 @@ export function canGenerateWithoutRewardedAd(
     access.contributionRewards.balance > 0
   );
 }
+
+/** Ad, barcode, and paid credits shown as one "추천권" balance. */
+export function unifiedRecommendationCredits(access: RecommendationAccess) {
+  const barcodeCredits = access.contributionRewards.enabled
+    ? access.contributionRewards.balance
+    : 0;
+
+  return (
+    access.rewardedAds.creditsAvailable +
+    barcodeCredits +
+    access.paidCredits.balance
+  );
+}
+
+export function recommendationQuotaCopy(access: RecommendationAccess) {
+  if (access.tier !== "free") {
+    return {
+      label: "추천 횟수",
+      value: `오늘 ${access.remaining}회 남음`,
+    };
+  }
+
+  const bonus = unifiedRecommendationCredits(access);
+  const freeRemaining = access.free.remaining;
+
+  if (freeRemaining > 0 && bonus > 0) {
+    return {
+      label: "추천 횟수",
+      value: `무료 ${freeRemaining}회 · 추천권 ${bonus}회`,
+    };
+  }
+
+  if (bonus > 0) {
+    return {
+      label: "추천 횟수",
+      value: `추천권 ${bonus}회`,
+    };
+  }
+
+  if (freeRemaining > 0) {
+    return {
+      label: "추천 횟수",
+      value: `오늘 ${freeRemaining}회 남음`,
+    };
+  }
+
+  return {
+    label: "추천 횟수",
+    value: "오늘 횟수를 다 썼어요",
+  };
+}

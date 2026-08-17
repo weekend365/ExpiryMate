@@ -20,6 +20,11 @@ interface MascotSpeechBubbleProps {
   textVariant?: AppTextVariant;
   /** Quieter follow-up under the main line. */
   supportingMessage?: string;
+  /**
+   * `compact` tightens bubble padding and copy for status heroes
+   * that sit above a list, not as the page title.
+   */
+  density?: "default" | "compact";
 }
 
 const SPRING = {
@@ -40,9 +45,11 @@ export function MascotSpeechBubble({
   style,
   textVariant = "bodySmall",
   supportingMessage,
+  density = "default",
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
+  const isCompact = density === "compact";
 
   useEffect(() => {
     opacity.value = 0;
@@ -58,7 +65,12 @@ export function MascotSpeechBubble({
 
   return (
     <Animated.View
-      style={[styles.root, animatedStyle, style]}
+      style={[
+        styles.root,
+        isCompact && styles.rootCompact,
+        animatedStyle,
+        style,
+      ]}
       accessibilityRole="summary"
       accessibilityLabel={`${appBrand.characterNameKo}가 말해요. ${message}${
         supportingMessage?.trim() ? ` ${supportingMessage.trim()}` : ""
@@ -66,18 +78,28 @@ export function MascotSpeechBubble({
     >
       <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
-        <View style={styles.bubble}>
-          <AppText variant={textVariant} numberOfLines={numberOfLines}>
+        <View style={[styles.bubble, isCompact && styles.bubbleCompact]}>
+          <AppText
+            variant={textVariant}
+            scaleRole={isCompact ? "chrome" : undefined}
+            densityAware={!isCompact}
+            numberOfLines={numberOfLines}
+          >
             {message}
           </AppText>
           {supportingMessage?.trim() ? (
-            <AppText variant="bodySmall" tone="subtext">
+            <AppText
+              variant="bodySmall"
+              tone="subtext"
+              scaleRole={isCompact ? "chrome" : undefined}
+              densityAware={!isCompact}
+            >
               {supportingMessage.trim()}
             </AppText>
           ) : null}
         </View>
         {/* Tail points toward the mascot (left). */}
-        <View style={styles.tail} />
+        <View style={[styles.tail, isCompact && styles.tailCompact]} />
       </View>
     </Animated.View>
   );
@@ -88,6 +110,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     gap: spacing.sm,
+  },
+  rootCompact: {
+    alignItems: "center",
+    gap: spacing.xs,
   },
   mascot: {
     flexShrink: 0,
@@ -110,6 +136,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xs,
   },
+  bubbleCompact: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    minHeight: spacing.xl,
+    borderRadius: radius.lg,
+  },
   tail: {
     position: "absolute",
     left: 0,
@@ -121,5 +153,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.border,
     transform: [{ rotate: "45deg" }],
+  },
+  tailCompact: {
+    bottom: spacing.xs,
   },
 });

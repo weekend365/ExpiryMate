@@ -5,20 +5,26 @@ import {
   canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
   parseRecommendationAccess,
+  recommendationQuotaCopy,
+  unifiedRecommendationCredits,
 } from "./recommendation-access";
 
 function access(
   overrides: {
     rewardedAdsEnabled?: boolean;
+    tier?: RecommendationAccess["tier"];
+    remaining?: number;
     free?: Partial<RecommendationAccess["free"]>;
     rewardedAds?: Partial<RecommendationAccess["rewardedAds"]>;
+    contributionRewards?: Partial<RecommendationAccess["contributionRewards"]>;
+    paidCredits?: Partial<RecommendationAccess["paidCredits"]>;
   } = {},
 ): RecommendationAccess {
   return {
     day: "2026-08-16",
     timezone: "Asia/Seoul",
     resetsAt: "2026-08-16T15:00:00.000Z",
-    tier: "free",
+    tier: overrides.tier ?? "free",
     usageScope: { type: "user", spaceId: null },
     rewardedAdsEnabled: overrides.rewardedAdsEnabled ?? true,
     subscriptionsEnabled: false,
@@ -32,7 +38,7 @@ function access(
     subscriberDailyLimit: 30,
     householdDailyLimit: 60,
     used: 1,
-    remaining: 10,
+    remaining: overrides.remaining ?? 10,
     free: { limit: 1, used: 1, remaining: 0, ...overrides.free },
     rewardedAds: {
       dailyLimit: 10,
@@ -49,12 +55,14 @@ function access(
       dailyLimit: 3,
       balanceLimit: 10,
       canEarn: false,
+      ...overrides.contributionRewards,
     },
     paidCredits: {
       enabled: false,
       salesEnabled: false,
       balance: 0,
       products: [],
+      ...overrides.paidCredits,
     },
     offer: {
       kind: "none",
@@ -104,5 +112,44 @@ describe("recommendation access helpers", () => {
   it("hydrates recommendation access from a quota-error payload", () => {
     expect(parseRecommendationAccess(access())).not.toBeNull();
     expect(parseRecommendationAccess({ reason: "owner_daily_cost_limit" })).toBeNull();
+  });
+
+  it("unifies ad, barcode, and paid balances as one 추천권 count", () => {
+    const mixed = access({
+      rewardedAds: { creditsAvailable: 1 },
+      contributionRewards: { enabled: true, balance: 2 },
+      paidCredits: { balance: 3 },
+    });
+
+    expect(unifiedRecommendationCredits(mixed)).toBe(6);
+    expect(recommendationQuotaCopy(mixed)).toEqual({
+      label: "추천 횟수",
+      value: "추천권 6회",
+    });
+  });
+
+  it("ignores barcode credits when contribution rewards are off", () => {
+    const disabledBarcode = access({
+      free: { remaining: 1 },
+      rewardedAds: { creditsAvailable: 2 },
+      contributionRewards: { enabled: false, balance: 4 },
+    });
+
+    expect(unifiedRecommendationCredits(disabledBarcode)).toBe(2);
+    expect(recommendationQuotaCopy(disabledBarcode)).toEqual({
+      label: "추천 횟수",
+      value: "무료 1회 · 추천권 2회",
+    });
+  });
+
+  it("summarizes plus remaining without a credit ledger", () => {
+    expect(
+      recommendationQuotaCopy(
+        access({ tier: "jango_plus", remaining: 8 }),
+      ),
+    ).toEqual({
+      label: "추천 횟수",
+      value: "오늘 8회 남음",
+    });
   });
 });
