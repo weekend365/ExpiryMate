@@ -340,7 +340,7 @@ export default function InventoryScreen() {
   const handleEditItem = (item: InventoryItem) => {
     router.push({
       pathname: "/inventory/[id]",
-      params: { id: item.id, mode: "edit" },
+      params: { id: item.id },
     });
   };
 

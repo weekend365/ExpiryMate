@@ -70,15 +70,7 @@ import {
 } from "./barcodeContributionModeration";
 import { useProductScanner } from "./useProductScanner";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
-
-const QUICK_EXPIRY_OPTIONS = [
-  { label: "오늘", days: 0 },
-  { label: "내일", days: 1 },
-  { label: "3일 뒤", days: 3 },
-  { label: "일주일", days: 7 },
-  { label: "2주", days: 14 },
-  { label: "한달", days: 30 },
-];
+import { QUICK_EXPIRY_OPTIONS } from "../inventory/inventory-form-copy";
 
 export function ScannerScreen() {
   const { shouldStack } = useResponsiveLayout();

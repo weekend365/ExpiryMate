@@ -44,10 +44,10 @@ name: Responsive layout smoke
       id: inventory-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/inventory
-- tapOn: "서울우유 1L.*"
+- tapOn: "서울우유 1L 내용을 고칠게요"
 - extendedWaitUntil:
     visible:
-      id: inventory-detail-screen
+      id: inventory-edit-screen
     timeout: 10000
 - back
 - extendedWaitUntil:

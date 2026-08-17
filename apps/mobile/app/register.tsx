@@ -3,17 +3,13 @@ import {
   ExpirySource,
   ProductCategory,
   UnitCode,
-  addDays,
   defaultQuantityForInputUnit,
-  fieldLimits,
   formatDateKorean,
   formatEnteredQuantity,
   formatInventoryQuantity,
   groupInventoryItems,
   inventoryFormSchema,
   catalogIdentityDiffers,
-  productCategoryLabels,
-  productCategoryOptions,
   quantityInputLabel,
   quantityInputStep,
   quantityValuesForInputUnit,
@@ -27,10 +23,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { router, useNavigation } from "expo-router";
 import {
   Barcode,
-  CalendarDays,
   CheckCircle2,
   ChevronRight,
-  MapPin,
   Plus,
 } from "lucide-react-native";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
@@ -43,7 +37,6 @@ import {
   View,
 } from "react-native";
 import { AppText } from "../src/components/AppText";
-import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
@@ -55,6 +48,18 @@ import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
 import { StepFlow } from "../src/components/StepFlow";
+import {
+  AddLocationSheet,
+  AdditionalInfoSheet,
+  ExtraDetailsRow,
+  QuickExpiryPills,
+  RecapCard,
+  RecapRow,
+  StorageLocationField,
+  extraDetailsRowLabel,
+  formatPutAwayMessage,
+  inventoryFormStyles,
+} from "../src/features/inventory/inventory-form-ui";
 import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
@@ -107,22 +112,6 @@ type SessionEditDraft = {
   expiryDate: string;
 };
 
-function koreanObjectParticle(word: string): "을" | "를" {
-  const last = word.trim().slice(-1);
-  const code = last.charCodeAt(0);
-
-  if (code < 0xac00 || code > 0xd7a3) {
-    return "를";
-  }
-
-  return (code - 0xac00) % 28 === 0 ? "를" : "을";
-}
-
-function formatPutAwayMessage(name: string) {
-  const trimmed = name.trim();
-  return `${trimmed}${koreanObjectParticle(trimmed)} 넣었어요`;
-}
-
 type RegisteredSessionItem = {
   id: string;
   displayName: string;
@@ -158,14 +147,6 @@ const REGISTRATION_STEPS: Array<{
     title: "언제까지인가요?",
     guideMessage: "빠른 기간을 고르거나, 날짜를 직접 바꿔도 돼요.",
   },
-];
-const QUICK_EXPIRY_OPTIONS = [
-  { label: "오늘", days: 0 },
-  { label: "내일", days: 1 },
-  { label: "3일 뒤", days: 3 },
-  { label: "일주일", days: 7 },
-  { label: "2주", days: 14 },
-  { label: "한달", days: 30 },
 ];
 
 const createDefaultFormValues = (): RegistrationFormValues => ({
@@ -242,76 +223,6 @@ function getVisibleRegistrationSteps(includeProduct: boolean) {
     return true;
   });
 }
-
-function RecapRow({
-  label,
-  value,
-  onPress,
-  hint = "이 내용을 다시 고치러 갈게요.",
-}: {
-  label: string;
-  value: string;
-  onPress: () => void;
-  hint?: string;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${label} ${value}`}
-      accessibilityHint={hint}
-      style={({ pressed }) => [
-        recapRowStyles.row,
-        pressed && recapRowStyles.rowPressed,
-      ]}
-    >
-      <View style={recapRowStyles.copy}>
-        <AppText style={recapRowStyles.label}>{label}</AppText>
-        <AppText style={recapRowStyles.value} numberOfLines={1}>
-          {value}
-        </AppText>
-      </View>
-      <ChevronRight
-        color={colors.mutedText}
-        size={spacing.md}
-        strokeWidth={2.4}
-      />
-    </Pressable>
-  );
-}
-
-const recapRowStyles = StyleSheet.create({
-  row: {
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    gap: spacing.xs,
-  },
-  rowPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  copy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  label: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
-  },
-  value: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-});
 
 const getPrefillKey = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
@@ -442,8 +353,8 @@ export default function RegisterScreen() {
     return () => subscription.unsubscribe();
   }, [form, hasHydrated, setDraft]);
 
-  const handlePreset = (days: number) => {
-    form.setValue("expiryDate", toIsoDate(addDays(new Date(), days)), {
+  const handlePresetDate = (presetDate: string) => {
+    form.setValue("expiryDate", presetDate, {
       shouldValidate: true,
     });
     form.setValue("expirySource", ExpirySource.PRESET, {
@@ -463,10 +374,7 @@ export default function RegisterScreen() {
   const quantityLabel = quantityInputLabel(unit);
   const enteredQuantityLabel = formatEnteredQuantity(quantity, unit);
   const quantityUnitSuffix = resolveQuantityInputUnit(unit);
-  const extraDetailsLabel =
-    brand || category || notes
-      ? "브랜드·메모 확인하기"
-      : "브랜드·메모 더 적을게요";
+  const extraDetailsLabel = extraDetailsRowLabel({ brand, category, notes });
 
   const applyQuantityUnit = useCallback(
     (nextUnit: string, options?: { userChosen?: boolean }) => {
@@ -1046,27 +954,15 @@ export default function RegisterScreen() {
             </View>
             <View style={[styles.sectionCard, styles.sectionCardPadded]}>
               <AppText style={styles.sectionTitle}>유통기한</AppText>
-              <View style={styles.pillRow}>
-                {QUICK_EXPIRY_OPTIONS.map((option) => {
-                  const presetDate = toIsoDate(addDays(new Date(), option.days));
-
-                  return (
-                    <Pill
-                      key={option.days}
-                      label={option.label}
-                      icon={CalendarDays}
-                      selected={sessionEdit.expiryDate === presetDate}
-                      onPress={() =>
-                        setSessionEdit((current) =>
-                          current
-                            ? { ...current, expiryDate: presetDate }
-                            : current,
-                        )
-                      }
-                    />
-                  );
-                })}
-              </View>
+              <QuickExpiryPills
+                showCaption={false}
+                isSelected={(isoDate) => sessionEdit.expiryDate === isoDate}
+                onSelect={(presetDate) =>
+                  setSessionEdit((current) =>
+                    current ? { ...current, expiryDate: presetDate } : current,
+                  )
+                }
+              />
               <DatePickerField
                 presentation="field"
                 value={sessionEdit.expiryDate}
@@ -1223,81 +1119,28 @@ export default function RegisterScreen() {
               </View>
             </View>
 
-            {showLocationPicker ? (
-              <View style={[styles.sectionCard, styles.sectionCardCompact]}>
-                <AppText style={styles.sectionTitle}>어디에 두나요?</AppText>
-                <View style={styles.pillRow}>
-                  {selectableOptions.map((option) => (
-                    <Pill
-                      key={option.key}
-                      label={option.label}
-                      icon={MapPin}
-                      selected={storageLocation === option.key}
-                      onPress={() => {
-                        form.setValue("storageLocation", option.key, {
-                          shouldValidate: true,
-                        });
-                        setShowLocationPicker(false);
-                      }}
-                    />
-                  ))}
-                  <Pill
-                    label="위치 추가"
-                    icon={Plus}
-                    selected={false}
-                    onPress={() => {
-                      setNewLocationLabel("");
-                      setAddLocationVisible(true);
-                    }}
-                  />
-                </View>
-              </View>
-            ) : (
-              <Pressable
-                onPress={() => setShowLocationPicker(true)}
-                accessibilityRole="button"
-                accessibilityLabel={`${selectedLocationLabel}에 둘게요`}
-                accessibilityHint="자리를 다른 곳으로 바꿀 수 있어요."
-                style={({ pressed }) => [
-                  styles.sectionCard,
-                  styles.sectionCardRow,
-                  pressed && styles.sectionCardPressed,
-                ]}
-              >
-                <AppText style={styles.sectionTitle}>보관 자리</AppText>
-                <MapPin
-                  color={colors.mutedText}
-                  size={spacing.sm}
-                  strokeWidth={2.4}
-                />
-                <AppText style={styles.locationRowLabel} numberOfLines={1}>
-                  {selectedLocationLabel}
-                </AppText>
-                <AppText style={styles.locationRowAction}>바꿀게요</AppText>
-              </Pressable>
-            )}
+            <StorageLocationField
+              expanded={showLocationPicker}
+              selectedKey={storageLocation}
+              selectedLabel={selectedLocationLabel}
+              options={selectableOptions}
+              onExpand={() => setShowLocationPicker(true)}
+              onSelect={(key) => {
+                form.setValue("storageLocation", key, {
+                  shouldValidate: true,
+                });
+                setShowLocationPicker(false);
+              }}
+              onAddLocation={() => {
+                setNewLocationLabel("");
+                setAddLocationVisible(true);
+              }}
+            />
 
-            <Pressable
+            <ExtraDetailsRow
+              label={extraDetailsLabel}
               onPress={() => setShowAdditionalInfo(true)}
-              accessibilityRole="button"
-              accessibilityLabel={extraDetailsLabel}
-              accessibilityHint="브랜드, 카테고리, 메모는 필요할 때만 적어도 돼요."
-              style={({ pressed }) => [
-                styles.sectionCard,
-                styles.sectionCardRow,
-                pressed && styles.sectionCardPressed,
-              ]}
-            >
-              <AppText style={styles.sectionTitle}>브랜드·메모</AppText>
-              <AppText style={styles.locationRowLabel} numberOfLines={1}>
-                {extraDetailsLabel}
-              </AppText>
-              <ChevronRight
-                color={colors.mutedText}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </Pressable>
+            />
           </View>
         ) : null}
 
@@ -1319,190 +1162,84 @@ export default function RegisterScreen() {
                 }}
                 error={form.formState.errors.expiryDate?.message}
               >
-                <View style={styles.expiryPresetBlock}>
-                  <AppText style={styles.sectionCaption}>빠른 기간</AppText>
-                  <View style={styles.pillRow}>
-                    {QUICK_EXPIRY_OPTIONS.map((option) => {
-                      const presetDate = toIsoDate(
-                        addDays(new Date(), option.days),
-                      );
-
-                      return (
-                        <Pill
-                          key={option.days}
-                          label={option.label}
-                          icon={CalendarDays}
-                          selected={
-                            expiryDate === presetDate &&
-                            expirySource === ExpirySource.PRESET
-                          }
-                          onPress={() => handlePreset(option.days)}
-                        />
-                      );
-                    })}
-                  </View>
-                </View>
+                <QuickExpiryPills
+                  isSelected={(isoDate) =>
+                    expiryDate === isoDate && expirySource === ExpirySource.PRESET
+                  }
+                  onSelect={handlePresetDate}
+                />
               </DatePickerField>
             </View>
 
-            <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <View style={styles.sectionHeading}>
-                <AppText style={styles.sectionTitle}>넣은 내용</AppText>
-                <AppText style={styles.sectionCaption}>
-                  이름·양·자리는 눌러서 고쳐요
-                </AppText>
-              </View>
-              <View style={styles.recapList}>
-                <RecapRow
-                  label="재료"
-                  value={displayName}
-                  onPress={() => goToRegistrationStep("product")}
-                />
-                <RecapRow
-                  label="양"
-                  value={enteredQuantityLabel}
-                  onPress={() => goToRegistrationStep("quantity")}
-                />
-                <RecapRow
-                  label="자리"
-                  value={selectedLocationLabel}
-                  onPress={() =>
-                    goToRegistrationStep("quantity", { openLocation: true })
-                  }
-                />
-              </View>
-            </View>
+            <RecapCard>
+              <RecapRow
+                label="재료"
+                value={displayName}
+                onPress={() => goToRegistrationStep("product")}
+              />
+              <RecapRow
+                label="양"
+                value={enteredQuantityLabel}
+                onPress={() => goToRegistrationStep("quantity")}
+              />
+              <RecapRow
+                label="자리"
+                value={selectedLocationLabel}
+                onPress={() =>
+                  goToRegistrationStep("quantity", { openLocation: true })
+                }
+              />
+            </RecapCard>
           </View>
         ) : null}
       </StepFlow>
 
-      <BottomSheet
+      <AdditionalInfoSheet
         visible={showAdditionalInfo && step === "quantity"}
         onClose={() => setShowAdditionalInfo(false)}
-        mascotMood="idle"
-        title="조금만 더 알려주세요"
-        description="브랜드와 메모는 필요할 때만 적어도 돼요."
-        footer={
-          <Button onPress={() => setShowAdditionalInfo(false)} fullWidth>
-            여기까지 할게요
-          </Button>
+        control={form.control}
+        category={category}
+        onSelectCategory={(value) =>
+          form.setValue("category", value, { shouldValidate: true })
         }
-      >
-        <FormField
-          control={form.control}
-          name="brand"
-          label="브랜드"
-          placeholder="예: 서울우유"
-        />
-        <View style={styles.extraSection}>
-          <AppText style={styles.extraSectionTitle}>카테고리</AppText>
-          <View style={styles.pillRow}>
-            {productCategoryOptions.map((option) => (
-              <Pill
-                key={option.value}
-                label={option.label}
-                selected={category === option.value}
-                onPress={() =>
-                  form.setValue("category", option.value as ProductCategory, {
-                    shouldValidate: true,
-                  })
-                }
-              />
-            ))}
-          </View>
-          {category ? (
-            <AppText style={styles.inlineMetaValue}>
-              지금 선택: {productCategoryLabels[category]}
-            </AppText>
-          ) : null}
-        </View>
-        <FormField
-          control={form.control}
-          name="notes"
-          label="메모"
-          placeholder="기억해 둘 말이 있으면 적어 주세요"
-          multiline
-        />
-      </BottomSheet>
+      />
 
-      <BottomSheet
+      <AddLocationSheet
         visible={addLocationVisible}
         onClose={() => setAddLocationVisible(false)}
-        title="어디에 둘까요?"
-        description="위치 이름을 알려 주시면 목록에 넣어 둘게요."
-        mascotMood="idle"
-        footer={
-          <Button
-            onPress={() => {
-              createMutation.mutate(
-                { label: newLocationLabel },
-                {
-                  onSuccess: (created) => {
-                    setAddLocationVisible(false);
-                    setNewLocationLabel("");
-                    form.setValue("storageLocation", created.key, {
-                      shouldValidate: true,
-                    });
-                    setShowLocationPicker(false);
-                    Alert.alert(
-                      "위치를 만들었어요",
-                      "방금 만든 위치를 골라 뒀어요.",
-                    );
-                  },
-                  onError: (error) =>
-                    Alert.alert(
-                      "앗, 잠시 문제가 생겼어요",
-                      getSettingsErrorMessage(error),
-                    ),
-                },
-              );
-            }}
-            loading={createMutation.isPending}
-            disabled={newLocationLabel.trim().length === 0}
-            fullWidth
-          >
-            여기에 보관할까요?
-          </Button>
-        }
-      >
-        <View style={styles.addLocationField}>
-          <AppText style={styles.addLocationLabel}>위치 이름</AppText>
-          <AppTextInput
-            value={newLocationLabel}
-            onChangeText={setNewLocationLabel}
-            placeholder="예: 팬트리"
-            maxLength={fieldLimits.storageLocationLabel}
-            autoFocus
-            style={styles.addLocationInput}
-          />
-        </View>
-      </BottomSheet>
+        label={newLocationLabel}
+        onChangeLabel={setNewLocationLabel}
+        loading={createMutation.isPending}
+        onSubmit={() => {
+          createMutation.mutate(
+            { label: newLocationLabel },
+            {
+              onSuccess: (created) => {
+                setAddLocationVisible(false);
+                setNewLocationLabel("");
+                form.setValue("storageLocation", created.key, {
+                  shouldValidate: true,
+                });
+                setShowLocationPicker(false);
+                Alert.alert(
+                  "위치를 만들었어요",
+                  "방금 만든 위치를 골라 뒀어요.",
+                );
+              },
+              onError: (error) =>
+                Alert.alert(
+                  "앗, 잠시 문제가 생겼어요",
+                  getSettingsErrorMessage(error),
+                ),
+            },
+          );
+        }}
+      />
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  addLocationField: {
-    gap: spacing.xs,
-  },
-  addLocationLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.text,
-  },
-  addLocationInput: {
-    minHeight: touchTarget.cta,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    color: colors.text,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-  },
+const localStyles = StyleSheet.create({
   doneHero: {
     alignItems: "stretch",
     gap: spacing.sm,
@@ -1550,61 +1287,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
   },
-  // 섹션 카드: 흰 면 + 테두리. 섹션 사이는 md(24), 카드 안은 sm(16).
-  stepSections: {
-    gap: spacing.sm,
-  },
-  screenSections: {
-    gap: spacing.sm,
-    paddingTop: spacing.xs,
-  },
-  sectionCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  sectionCardSoft: {
-    backgroundColor: colors.primarySoft,
-  },
-  sectionCardPadded: {
-    padding: spacing.md,
-    gap: spacing.sm,
-  },
-  sectionCardCompact: {
-    padding: spacing.sm,
-    gap: spacing.sm,
-  },
-  sectionCardTight: {
-    padding: spacing.sm,
-    gap: spacing.xs,
-  },
-  sectionCardRow: {
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    gap: spacing.xs,
-  },
-  sectionCardPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  sectionTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  sectionHeading: {
-    gap: spacing.xxs,
-  },
-  sectionCaption: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
-  },
   noticeBlock: {
     gap: spacing.xs,
   },
@@ -1626,62 +1308,11 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
-  pillRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.xs,
-  },
-  inlineMetaValue: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
   recentTemplateBlock: {
-    gap: spacing.xs,
-  },
-  expiryPresetBlock: {
-    gap: spacing.xs,
-  },
-  unitChipBlock: {
     gap: spacing.xs,
   },
   templateCardPressed: {
     backgroundColor: colors.surfacePressed,
-  },
-  locationRowLabel: {
-    flex: 1,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
-  locationRowAction: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
-  recapList: {
-    gap: spacing.xs,
-  },
-  footerStack: {
-    gap: spacing.sm,
-  },
-  ctaHint: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.mutedText,
-    textAlign: "center",
-  },
-  extraSection: {
-    gap: spacing.sm,
-  },
-  extraSectionTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
   },
   sessionList: {
     gap: spacing.sm,
@@ -1712,3 +1343,5 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
 });
+
+const styles = { ...inventoryFormStyles, ...localStyles };
