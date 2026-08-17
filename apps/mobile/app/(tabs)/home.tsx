@@ -52,7 +52,7 @@ const difficultyLabels = {
 } as const;
 
 export default function HomeScreen() {
-  const { shouldStack, shouldStackDense, width } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense, isRegular, width } = useResponsiveLayout();
   const contentMaxWidth = getContentMaxWidth("wide", width);
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useDashboardSummary();
@@ -473,6 +473,7 @@ export default function HomeScreen() {
                 style={[
                   styles.trafficStrip,
                   shouldStackDense && styles.trafficStripDense,
+                  isRegular && styles.trafficStripRegular,
                 ]}
                 accessibilityLabel="유통기한 현황을 불러오고 있어요"
               >
@@ -482,6 +483,7 @@ export default function HomeScreen() {
                     style={[
                       styles.trafficLampPressable,
                       shouldStackDense && styles.trafficLampPressableDense,
+                      isRegular && styles.trafficLampPressableRegular,
                     ]}
                   >
                     <SkeletonBlock
@@ -503,12 +505,14 @@ export default function HomeScreen() {
                 style={[
                   styles.trafficStrip,
                   shouldStackDense && styles.trafficStripDense,
+                  isRegular && styles.trafficStripRegular,
                 ]}
               >
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     shouldStackDense && styles.trafficLampPressableDense,
+                    isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("expired")}
@@ -521,13 +525,14 @@ export default function HomeScreen() {
                     label="만료"
                     value={expiredCount}
                     tone="danger"
-                    compact
+                    compact={!isRegular}
                   />
                 </Pressable>
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     shouldStackDense && styles.trafficLampPressableDense,
+                    isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("within7")}
@@ -540,13 +545,14 @@ export default function HomeScreen() {
                     label="7일 이내"
                     value={within7DaysCount}
                     tone="warning"
-                    compact
+                    compact={!isRegular}
                   />
                 </Pressable>
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     shouldStackDense && styles.trafficLampPressableDense,
+                    isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("safe")}
@@ -559,7 +565,7 @@ export default function HomeScreen() {
                     label="여유"
                     value={safeCount}
                     tone="success"
-                    compact
+                    compact={!isRegular}
                     showGlow={false}
                   />
                 </Pressable>
@@ -961,6 +967,12 @@ const styles = StyleSheet.create({
   trafficStripDense: {
     flexWrap: "wrap",
   },
+  trafficStripRegular: {
+    gap: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    justifyContent: "space-evenly",
+  },
   trafficLampPressable: {
     flex: 1,
     alignItems: "center",
@@ -973,6 +985,10 @@ const styles = StyleSheet.create({
     flexBasis: spacing.xxxl + spacing.xl,
     minWidth: spacing.xxxl + spacing.lg,
     flexGrow: 1,
+  },
+  trafficLampPressableRegular: {
+    minHeight: touchTarget.cta,
+    paddingVertical: spacing.xs,
   },
   trafficLampPressablePressed: {
     backgroundColor: colors.surfacePressed,

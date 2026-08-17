@@ -1108,6 +1108,7 @@ function UrgencySection({
   onToggle: () => void;
   children: ReactNode;
 }) {
+  const { isRegular } = useResponsiveLayout();
   const description = inventoryUrgencySectionDescriptions[section.key];
   const tone = urgencySectionTones[section.key];
   const title = `${section.title} ${section.itemCount}건`;
@@ -1176,7 +1177,14 @@ function UrgencySection({
         </Pressable>
       </View>
       {collapsed ? null : (
-        <View style={styles.urgencySectionBody}>{children}</View>
+        <View
+          style={[
+            styles.urgencySectionBody,
+            isRegular && styles.urgencySectionBodyRegular,
+          ]}
+        >
+          {children}
+        </View>
       )}
     </View>
   );
@@ -1597,5 +1605,11 @@ const styles = StyleSheet.create({
     padding: spacing.xxs, // 4px: keep expiry groups compact around stacked cards
     gap: spacing.xxs,
     backgroundColor: colors.mutedSurface,
+  },
+  urgencySectionBodyRegular: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+    padding: spacing.sm,
   },
 });

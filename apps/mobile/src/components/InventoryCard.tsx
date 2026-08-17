@@ -34,7 +34,7 @@ export function InventoryCard({
   selected = false,
   resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryCardProps) {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, isRegular } = useResponsiveLayout();
   const presentation = getExpiryLampPresentation(item.expiryDate);
   const locationLabel = resolveLocationLabel(item.storageLocation);
   const quantityLabel = formatInventoryQuantity(item);
@@ -42,7 +42,13 @@ export function InventoryCard({
   const accessibilityLabel = `${item.displayName}, ${presentation.ddayLabel}, ${locationLabel}, ${quantityLabel}, ${dateLabel}`;
 
   return (
-    <View style={[styles.card, selected && styles.cardSelected]}>
+    <View
+      style={[
+        styles.card,
+        selected && styles.cardSelected,
+        isRegular && styles.cardRegular,
+      ]}
+    >
       <Pressable
         onPress={() => onPress(item)}
         onLongPress={() => onLongPress?.(item)}
@@ -189,6 +195,11 @@ const styles = StyleSheet.create({
   cardSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
+  },
+  cardRegular: {
+    flexGrow: 1,
+    flexBasis: "40%",
+    maxWidth: "48%",
   },
   main: {
     flex: 1,

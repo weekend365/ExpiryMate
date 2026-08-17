@@ -19,9 +19,9 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { Screen } from "../../src/components/Screen";
@@ -443,11 +443,11 @@ export default function SubscriptionSettingsScreen() {
             </View>
           ) : null}
           {insightsQuery.data?.topDiscardedCategories.length ? (
-            <Text style={styles.insightFootnote}>
+            <AppText style={styles.insightFootnote}>
               자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
                 .map((item) => `${productCategoryLabels[item.category as ProductCategory] ?? item.category} ${item.count}개`)
                 .join(" · ")}
-            </Text>
+            </AppText>
           ) : null}
         </View>
       ) : null}
@@ -476,14 +476,14 @@ export default function SubscriptionSettingsScreen() {
                     ]}
                   >
                     <View style={styles.planCopy}>
-                      <Text style={styles.planTitle}>
+                      <AppText style={styles.planTitle}>
                         {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
-                      </Text>
-                      <Text style={styles.planDescription}>
+                      </AppText>
+                      <AppText style={styles.planDescription}>
                         {planCode === "jango_household"
                           ? "가족 소비·폐기 리포트 · 최대 5명"
                           : "나의 소비·폐기 리포트 · 광고 없음"}
-                      </Text>
+                      </AppText>
                     </View>
                   </Pressable>
                 ))}
@@ -520,29 +520,29 @@ export default function SubscriptionSettingsScreen() {
                   ]}
                 >
                   <View style={styles.planCopy}>
-                    <Text style={styles.planTitle}>
+                    <AppText style={styles.planTitle}>
                       {period === "yearly" ? "연간" : "월간"}
-                    </Text>
-                    <Text style={styles.planDescription}>
+                    </AppText>
+                    <AppText style={styles.planDescription}>
                       {period === "yearly" && annualSavings
                         ? `월간 결제 대비 약 ${annualSavings}% 절약`
                         : "매월 자동 갱신"}
-                    </Text>
+                    </AppText>
                   </View>
-                  <Text style={styles.planPrice}>
+                  <AppText style={styles.planPrice}>
                     {plan?.displayPrice ?? "가격 확인 중"}
-                  </Text>
+                  </AppText>
                 </Pressable>
               );
             })}
           </View>
           <View style={styles.renewalNotice}>
-            <Text style={styles.renewalNoticeTitle}>결제 전에 알아두세요</Text>
-            <Text style={styles.renewalNoticeText}>
+            <AppText style={styles.renewalNoticeTitle}>결제 전에 알아두세요</AppText>
+            <AppText style={styles.renewalNoticeText}>
               무료 체험은 없고, 선택한 기간(월간 또는 연간)이 끝나면 같은 금액으로
               자동 갱신돼요. 가격은 위 스토어 표시 금액이며, 갱신 전에 App Store나
               Google Play의 구독 관리에서 해지할 수 있어요.
-            </Text>
+            </AppText>
           </View>
           <Button
             onPress={() => void startPurchase()}
@@ -683,8 +683,8 @@ function isHouseholdProduct(productId: string) {
 function BenefitLine({ text }: { text: string }) {
   return (
     <View style={styles.benefitLine}>
-      <Text style={styles.benefitCheck}>✓</Text>
-      <Text style={styles.benefitText}>{text}</Text>
+      <AppText style={styles.benefitCheck}>✓</AppText>
+      <AppText style={styles.benefitText}>{text}</AppText>
     </View>
   );
 }
@@ -692,8 +692,8 @@ function BenefitLine({ text }: { text: string }) {
 function InsightValue({ label, value, suffix }: { label: string; value: number; suffix: string }) {
   return (
     <View style={styles.insightValue}>
-      <Text style={styles.insightNumber}>{value}{suffix}</Text>
-      <Text style={styles.insightLabel}>{label}</Text>
+      <AppText style={styles.insightNumber}>{value}{suffix}</AppText>
+      <AppText style={styles.insightLabel}>{label}</AppText>
     </View>
   );
 }
@@ -711,15 +711,15 @@ function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
   return (
     <View style={styles.weeklyTrendCard}>
       <View style={styles.weeklyTrendHeader}>
-        <Text style={styles.weeklyTrendTitle}>이번 주 습관 변화</Text>
-        <Text style={styles.weeklyTrendPeriod}>
+        <AppText style={styles.weeklyTrendTitle}>이번 주 습관 변화</AppText>
+        <AppText style={styles.weeklyTrendPeriod}>
           {weekly.current.from.slice(5)}~{weekly.current.to.slice(5)}
-        </Text>
+        </AppText>
       </View>
-      <Text style={styles.weeklyTrendSummary}>
+      <AppText style={styles.weeklyTrendSummary}>
         소비 {weekly.current.consumed}개 · 폐기 {weekly.current.discarded}개 · 폐기 비율 {weekly.current.wasteRatePercent}%
-      </Text>
-      <Text
+      </AppText>
+      <AppText
         style={[
           styles.weeklyTrendCopy,
           weekly.trend === "improved" && styles.weeklyTrendCopyImproved,
@@ -727,7 +727,7 @@ function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
         ]}
       >
         {trendCopy}
-      </Text>
+      </AppText>
     </View>
   );
 }
@@ -744,8 +744,8 @@ function InsightActionCard({
         <Lightbulb color={colors.primary} size={20} />
       </View>
       <View style={styles.insightActionCopy}>
-        <Text style={styles.insightActionTitle}>{copy.title}</Text>
-        <Text style={styles.insightActionDescription}>{copy.description}</Text>
+        <AppText style={styles.insightActionTitle}>{copy.title}</AppText>
+        <AppText style={styles.insightActionDescription}>{copy.description}</AppText>
       </View>
     </View>
   );

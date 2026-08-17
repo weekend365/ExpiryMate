@@ -1,14 +1,15 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
 import { ChevronLeft } from "lucide-react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
+import { AppText } from "./AppText";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
 import type { MascotMood } from "./Mascot";
 
@@ -133,10 +134,14 @@ export function StepFlow({
   ) : (
     <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
       <View style={styles.stepCopy}>
-        <Text style={styles.stepEyebrow}>{activeStep.label}</Text>
-        <Text style={styles.stepTitle}>{activeStep.title}</Text>
+        <AppText variant="label" tone="primary">
+          {activeStep.label}
+        </AppText>
+        <AppText variant="heading">{activeStep.title}</AppText>
         {!resolvedGuide && activeStep.description ? (
-          <Text style={styles.stepDescription}>{activeStep.description}</Text>
+          <AppText variant="bodySmall" tone="subtext">
+            {activeStep.description}
+          </AppText>
         ) : null}
       </View>
       {headerAccessory ? (
@@ -175,16 +180,18 @@ export function StepFlow({
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.backLabel}>뒤로가기</Text>
+                    <AppText variant="bodySmall" scaleRole="chrome">
+                      뒤로가기
+                    </AppText>
                   </Pressable>
                 ) : (
-                  <Text style={styles.progressCaption}>
+                  <AppText variant="label" tone="subtext" scaleRole="chrome">
                     {activeStep.label}
-                  </Text>
+                  </AppText>
                 )}
-                <Text style={styles.progressLabel}>
+                <AppText variant="label" tone="primary" scaleRole="chrome">
                   {safeIndex + 1}/{steps.length}
-                </Text>
+                </AppText>
               </View>
               {progressTrack}
             </View>
@@ -204,7 +211,9 @@ export function StepFlow({
                 size={spacing.sm + spacing.xxs}
                 strokeWidth={2.4}
               />
-              <Text style={styles.backLabel}>뒤로가기</Text>
+              <AppText variant="bodySmall" scaleRole="chrome">
+                뒤로가기
+              </AppText>
             </Pressable>
           ) : null}
           {stepCopy}
@@ -228,14 +237,16 @@ export function StepFlow({
                   size={spacing.sm + spacing.xxs}
                   strokeWidth={2.4}
                 />
-                <Text style={styles.backLabel}>뒤로가기</Text>
+                <AppText variant="bodySmall" scaleRole="chrome">
+                  뒤로가기
+                </AppText>
               </Pressable>
             ) : (
               <View />
             )}
-            <Text style={styles.progressLabel}>
+            <AppText variant="label" tone="primary" scaleRole="chrome">
               {safeIndex + 1}/{steps.length}
-            </Text>
+            </AppText>
           </View>
           {progressTrack}
           {stepCopy}
@@ -304,24 +315,6 @@ const styles = StyleSheet.create({
   backButtonPressed: {
     backgroundColor: colors.surfacePressed,
   },
-  backLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  progressLabel: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
-  progressCaption: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
   progressTrack: {
     flexDirection: "row",
     gap: spacing.xs,
@@ -348,24 +341,6 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: spacing.xs,
-  },
-  stepEyebrow: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
-  stepTitle: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
-    color: colors.text,
-  },
-  stepDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
   compactBubble: {
     flex: 1,

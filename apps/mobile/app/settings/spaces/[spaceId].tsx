@@ -12,7 +12,8 @@ import {
   UserRound,
 } from "lucide-react-native";
 import { useState } from "react";
-import { Share, StyleSheet, Text, TextInput, View } from "react-native";
+import { Share, StyleSheet, TextInput, View } from "react-native";
+import { AppText } from "../../../src/components/AppText";
 import { BottomSheet } from "../../../src/components/BottomSheet";
 import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
@@ -192,7 +193,7 @@ export default function SpaceDetailScreen() {
       }
     >
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>구성원</Text>
+        <AppText style={styles.sectionTitle}>구성원</AppText>
         {management.membersQuery.isError ? (
           <EmptyState
             mood="worry"
@@ -217,7 +218,7 @@ export default function SpaceDetailScreen() {
                 }`}
                 icon={UserRound}
                 trailing={
-                  <Text style={styles.roleText}>{roleLabel(member.role)}</Text>
+                  <AppText style={styles.roleText}>{roleLabel(member.role)}</AppText>
                 }
                 last={index === members.length - 1}
                 onPress={
@@ -236,7 +237,7 @@ export default function SpaceDetailScreen() {
 
       {canManage && invitations.length ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>초대를 기다리고 있어요</Text>
+          <AppText style={styles.sectionTitle}>초대를 기다리고 있어요</AppText>
           <View style={styles.card}>
             {invitations.map((invitation, index) => (
               <ListRow
@@ -255,7 +256,7 @@ export default function SpaceDetailScreen() {
 
       {canManage && invitationCodes.length ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>사용을 기다리는 초대 코드</Text>
+          <AppText style={styles.sectionTitle}>사용을 기다리는 초대 코드</AppText>
           <View style={styles.card}>
             {invitationCodes.map((invitation, index) => (
               <ListRow
@@ -275,7 +276,7 @@ export default function SpaceDetailScreen() {
       ) : null}
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>이 냉장고 알림</Text>
+        <AppText style={styles.sectionTitle}>이 냉장고 알림</AppText>
         <View style={styles.card}>
           <ListRow
             title={
@@ -295,7 +296,7 @@ export default function SpaceDetailScreen() {
 
       {canManage ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>냉장고 설정</Text>
+          <AppText style={styles.sectionTitle}>냉장고 설정</AppText>
           <View style={styles.card}>
             <ListRow
               title="이름을 바꿀게요"
@@ -393,7 +394,7 @@ export default function SpaceDetailScreen() {
         {inviteMethod === "email" ? (
           <>
             <View style={styles.field}>
-              <Text style={styles.label}>이메일</Text>
+              <AppText style={styles.label}>이메일</AppText>
               <TextInput
                 value={inviteEmail}
                 onChangeText={setInviteEmail}
@@ -406,7 +407,7 @@ export default function SpaceDetailScreen() {
               />
             </View>
             <View style={styles.field}>
-              <Text style={styles.label}>역할</Text>
+              <AppText style={styles.label}>역할</AppText>
               <View style={styles.pillRow}>
                 <Pill
                   label="구성원"
@@ -423,23 +424,23 @@ export default function SpaceDetailScreen() {
               </View>
             </View>
             {management.inviteMutation.error ? (
-              <Text style={styles.errorText}>
+              <AppText style={styles.errorText}>
                 {management.inviteMutation.error instanceof Error
                   ? management.inviteMutation.error.message
                   : "앗, 초대 메일을 보내지 못했어요."}
-              </Text>
+              </AppText>
             ) : null}
           </>
         ) : generatedCode ? (
           <View style={styles.codeCard}>
-            <Text style={styles.codeEyebrow}>지금만 확인할 수 있어요</Text>
-            <Text style={styles.generatedCode} selectable>
+            <AppText style={styles.codeEyebrow}>지금만 확인할 수 있어요</AppText>
+            <AppText style={styles.generatedCode} selectable>
               {generatedCode}
-            </Text>
-            <Text style={styles.codeDescription}>
+            </AppText>
+            <AppText style={styles.codeDescription}>
               7일 안에 먼저 입력한 한 명이 구성원으로 참여해요. 닫으면 이 코드는
               다시 볼 수 없어요.
-            </Text>
+            </AppText>
             <View style={styles.codeActions}>
               <Button
                 icon={Copy}
@@ -452,17 +453,17 @@ export default function SpaceDetailScreen() {
               >
                 복사
               </Button>
-              <Text style={styles.copyStatus}>
+              <AppText style={styles.copyStatus}>
                 {copyStatus || "공유하거나 닫기 전에 복사해 두세요."}
-              </Text>
+              </AppText>
             </View>
           </View>
         ) : management.createCodeMutation.error ? (
-          <Text style={styles.errorText}>
+          <AppText style={styles.errorText}>
             {management.createCodeMutation.error instanceof Error
               ? management.createCodeMutation.error.message
               : "앗, 초대 코드를 만들지 못했어요."}
-          </Text>
+          </AppText>
         ) : null}
       </BottomSheet>
 
@@ -483,7 +484,7 @@ export default function SpaceDetailScreen() {
         }
       >
         <View style={styles.field}>
-          <Text style={styles.label}>냉장고 이름</Text>
+          <AppText style={styles.label}>냉장고 이름</AppText>
           <TextInput
             value={spaceName}
             onChangeText={setSpaceName}

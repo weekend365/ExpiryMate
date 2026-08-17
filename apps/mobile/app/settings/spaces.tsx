@@ -3,7 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Building2, House, KeyRound, Plus, Users } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
+import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -135,7 +136,7 @@ export default function SpacesSettingsScreen() {
         }
       >
         <View style={styles.field}>
-          <Text style={styles.label}>냉장고 이름</Text>
+          <AppText style={styles.label}>냉장고 이름</AppText>
           <TextInput
             value={name}
             onChangeText={setName}
@@ -146,7 +147,7 @@ export default function SpacesSettingsScreen() {
           />
         </View>
         <View style={styles.field}>
-          <Text style={styles.label}>누구와 쓰나요?</Text>
+          <AppText style={styles.label}>누구와 쓰나요?</AppText>
           <View style={styles.pillRow}>
             <Pill
               label="가족과 함께"
@@ -161,11 +162,11 @@ export default function SpacesSettingsScreen() {
           </View>
         </View>
         {createMutation.error ? (
-          <Text style={styles.errorText}>
+          <AppText style={styles.errorText}>
             {createMutation.error instanceof Error
               ? createMutation.error.message
               : "앗, 냉장고를 만들지 못했어요."}
-          </Text>
+          </AppText>
         ) : null}
       </BottomSheet>
     </Screen>

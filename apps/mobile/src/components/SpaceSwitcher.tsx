@@ -9,7 +9,7 @@ import {
   Users,
 } from "lucide-react-native";
 import { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useActiveSpace } from "../features/spaces/space-provider";
 import { useAuth } from "../features/auth/use-auth";
 import {
@@ -21,8 +21,8 @@ import {
   radius,
   spacing,
   touchTarget,
-  typography,
 } from "../shared/theme";
+import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 import { FeedbackBanner } from "./FeedbackBanner";
@@ -103,8 +103,12 @@ export function SpaceSwitcher() {
           <House color={colors.primary} size={spacing.md} strokeWidth={2.3} />
         </View>
         <View style={styles.triggerCopy}>
-          <Text style={styles.eyebrow}>지금 보고 있는 냉장고</Text>
-          <Text style={styles.triggerTitle}>냉장고를 펼치고 있어요</Text>
+          <AppText variant="caption" tone="muted" scaleRole="chrome">
+            지금 보고 있는 냉장고
+          </AppText>
+          <AppText variant="bodyStrong" style={styles.triggerTitle}>
+            냉장고를 펼치고 있어요
+          </AppText>
         </View>
       </View>
     );
@@ -135,8 +139,12 @@ export function SpaceSwitcher() {
           <ActiveIcon color={colors.primary} size={spacing.md} strokeWidth={2.3} />
         </View>
         <View style={styles.triggerCopy}>
-          <Text style={styles.eyebrow}>지금 보고 있는 냉장고</Text>
-          <Text style={styles.triggerTitle}>{activeSpace.name}</Text>
+          <AppText variant="caption" tone="muted" scaleRole="chrome">
+            지금 보고 있는 냉장고
+          </AppText>
+          <AppText variant="bodyStrong" style={styles.triggerTitle}>
+            {activeSpace.name}
+          </AppText>
         </View>
         <ChevronDown color={colors.subtext} size={spacing.md} strokeWidth={2.2} />
       </Pressable>
@@ -202,12 +210,12 @@ export function SpaceSwitcher() {
                   strokeWidth={2.3}
                 />
                 <View style={styles.spaceCopy}>
-                  <Text style={styles.spaceName}>{space.name}</Text>
-                  <Text style={styles.spaceMeta}>
+                  <AppText variant="bodyStrong">{space.name}</AppText>
+                  <AppText variant="caption" tone="subtext">
                     {space.memberCount > 1
                       ? `${space.memberCount}명이 함께 써요`
                       : "나만 쓰고 있어요"}
-                  </Text>
+                  </AppText>
                 </View>
                 {selected ? (
                   <Check
@@ -250,18 +258,8 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: spacing.xxs,
   },
-  eyebrow: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
-  },
   triggerTitle: {
     flexShrink: 1,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
   },
   pressed: {
     opacity: 0.72,
@@ -291,17 +289,5 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: spacing.xxs,
-  },
-  spaceName: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  spaceMeta: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
   },
 });

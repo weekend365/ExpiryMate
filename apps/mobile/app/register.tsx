@@ -40,9 +40,9 @@ import {
   BackHandler,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { AppText } from "../src/components/AppText";
 import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
@@ -266,10 +266,10 @@ function RecapRow({
       ]}
     >
       <View style={recapRowStyles.copy}>
-        <Text style={recapRowStyles.label}>{label}</Text>
-        <Text style={recapRowStyles.value} numberOfLines={1}>
+        <AppText style={recapRowStyles.label}>{label}</AppText>
+        <AppText style={recapRowStyles.value} numberOfLines={1}>
           {value}
-        </Text>
+        </AppText>
       </View>
       <ChevronRight
         color={colors.mutedText}
@@ -915,7 +915,7 @@ export default function RegisterScreen() {
                 pressed && styles.doneTextLinkPressed,
               ]}
             >
-              <Text style={styles.doneMutedLinkLabel}>그만 추가할래요</Text>
+              <AppText style={styles.doneMutedLinkLabel}>그만 추가할래요</AppText>
             </Pressable>
           </View>
         }
@@ -953,7 +953,7 @@ export default function RegisterScreen() {
 
         {registeredSessionItems.length ? (
           <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-            <Text style={styles.sectionTitle}>오늘 넣은 재료</Text>
+            <AppText style={styles.sectionTitle}>오늘 넣은 재료</AppText>
             <View style={styles.sessionList}>
               {registeredSessionItems.slice(0, 3).map((item) => (
                 <Pressable
@@ -968,12 +968,12 @@ export default function RegisterScreen() {
                   ]}
                 >
                   <View style={styles.sessionRowCopy}>
-                    <Text style={styles.sessionName}>{item.displayName}</Text>
-                    <Text style={styles.sessionMeta}>
+                    <AppText style={styles.sessionName}>{item.displayName}</AppText>
+                    <AppText style={styles.sessionMeta}>
                       {resolveLabel(item.storageLocation)} ·{" "}
                       {formatInventoryQuantity(item)} ·{" "}
                       {formatDateKorean(item.expiryDate)}
-                    </Text>
+                    </AppText>
                   </View>
                   <ChevronRight
                     color={colors.mutedText}
@@ -1024,14 +1024,14 @@ export default function RegisterScreen() {
           <>
             {sessionEditError ? (
               <View style={styles.errorStrip}>
-                <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
-                <Text style={styles.errorDescription}>{sessionEditError}</Text>
+                <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
+                <AppText style={styles.errorDescription}>{sessionEditError}</AppText>
               </View>
             ) : null}
             <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-              <Text style={styles.sectionTitle}>
+              <AppText style={styles.sectionTitle}>
                 {quantityInputLabel(sessionEdit.unit)}
-              </Text>
+              </AppText>
               <QuantityStepper
                 label={quantityInputLabel(sessionEdit.unit)}
                 value={sessionEdit.quantity}
@@ -1045,7 +1045,7 @@ export default function RegisterScreen() {
               />
             </View>
             <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-              <Text style={styles.sectionTitle}>유통기한</Text>
+              <AppText style={styles.sectionTitle}>유통기한</AppText>
               <View style={styles.pillRow}>
                 {QUICK_EXPIRY_OPTIONS.map((option) => {
                   const presetDate = toIsoDate(addDays(new Date(), option.days));
@@ -1093,9 +1093,9 @@ export default function RegisterScreen() {
       footer={
         <View style={styles.footerStack}>
           {isLastStep && !expiryDate ? (
-            <Text style={styles.ctaHint} accessibilityLiveRegion="polite">
+            <AppText style={styles.ctaHint} accessibilityLiveRegion="polite">
               날짜만 골라 주시면 넣을게요
-            </Text>
+            </AppText>
           ) : null}
           <Button
             icon={isLastStep ? CheckCircle2 : ChevronRight}
@@ -1134,8 +1134,8 @@ export default function RegisterScreen() {
         ) : null}
         {submitErrorMessage ? (
           <View style={styles.errorStrip}>
-            <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
-            <Text style={styles.errorDescription}>{submitErrorMessage}</Text>
+            <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
+            <AppText style={styles.errorDescription}>{submitErrorMessage}</AppText>
           </View>
         ) : null}
 
@@ -1144,24 +1144,24 @@ export default function RegisterScreen() {
             {prefill?.displayName ? (
               <View style={[styles.sectionCard, styles.sectionCardPadded]}>
                 <View style={styles.noticeBlock}>
-                  <Text style={styles.noticeEyebrow}>
+                  <AppText style={styles.noticeEyebrow}>
                     {catalogNameDiffers ? "목록과 다른 이름" : "불러온 재료"}
-                  </Text>
-                  <Text style={styles.noticeTitle}>{displayName || prefill.displayName}</Text>
+                  </AppText>
+                  <AppText style={styles.noticeTitle}>{displayName || prefill.displayName}</AppText>
                   {catalogNameDiffers ? (
-                    <Text style={styles.noticeDescription}>
+                    <AppText style={styles.noticeDescription}>
                       목록 이름은 {prefill.catalogName}예요. 냉장고에는 지금
                       이름으로 넣을게요.
-                    </Text>
+                    </AppText>
                   ) : prefill.brand ? (
-                    <Text style={styles.noticeDescription}>{prefill.brand}</Text>
+                    <AppText style={styles.noticeDescription}>{prefill.brand}</AppText>
                   ) : null}
                 </View>
               </View>
             ) : null}
 
             <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <Text style={styles.sectionTitle}>재료 이름</Text>
+              <AppText style={styles.sectionTitle}>재료 이름</AppText>
               <FormField
                 control={form.control}
                 name="displayName"
@@ -1171,7 +1171,7 @@ export default function RegisterScreen() {
               />
               {recentTemplates.length ? (
                 <View style={styles.recentTemplateBlock}>
-                  <Text style={styles.sectionCaption}>최근에 넣었어요</Text>
+                  <AppText style={styles.sectionCaption}>최근에 넣었어요</AppText>
                   <View style={styles.pillRow}>
                     {recentTemplates.map((item) => {
                       const selected =
@@ -1198,7 +1198,7 @@ export default function RegisterScreen() {
         {step === "quantity" ? (
           <View style={styles.stepSections}>
             <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <Text style={styles.sectionTitle}>{quantityLabel}</Text>
+              <AppText style={styles.sectionTitle}>{quantityLabel}</AppText>
               <QuantityStepper
                 presentation="hero"
                 label={quantityLabel}
@@ -1213,7 +1213,7 @@ export default function RegisterScreen() {
                 error={form.formState.errors.quantity?.message}
               />
               <View style={styles.unitChipBlock}>
-                <Text style={styles.sectionCaption}>단위</Text>
+                <AppText style={styles.sectionCaption}>단위</AppText>
                 <QuantityUnitPills
                   unit={unit}
                   onChange={(nextUnit) =>
@@ -1225,7 +1225,7 @@ export default function RegisterScreen() {
 
             {showLocationPicker ? (
               <View style={[styles.sectionCard, styles.sectionCardCompact]}>
-                <Text style={styles.sectionTitle}>어디에 두나요?</Text>
+                <AppText style={styles.sectionTitle}>어디에 두나요?</AppText>
                 <View style={styles.pillRow}>
                   {selectableOptions.map((option) => (
                     <Pill
@@ -1264,16 +1264,16 @@ export default function RegisterScreen() {
                   pressed && styles.sectionCardPressed,
                 ]}
               >
-                <Text style={styles.sectionTitle}>보관 자리</Text>
+                <AppText style={styles.sectionTitle}>보관 자리</AppText>
                 <MapPin
                   color={colors.mutedText}
                   size={spacing.sm}
                   strokeWidth={2.4}
                 />
-                <Text style={styles.locationRowLabel} numberOfLines={1}>
+                <AppText style={styles.locationRowLabel} numberOfLines={1}>
                   {selectedLocationLabel}
-                </Text>
-                <Text style={styles.locationRowAction}>바꿀게요</Text>
+                </AppText>
+                <AppText style={styles.locationRowAction}>바꿀게요</AppText>
               </Pressable>
             )}
 
@@ -1288,10 +1288,10 @@ export default function RegisterScreen() {
                 pressed && styles.sectionCardPressed,
               ]}
             >
-              <Text style={styles.sectionTitle}>브랜드·메모</Text>
-              <Text style={styles.locationRowLabel} numberOfLines={1}>
+              <AppText style={styles.sectionTitle}>브랜드·메모</AppText>
+              <AppText style={styles.locationRowLabel} numberOfLines={1}>
                 {extraDetailsLabel}
-              </Text>
+              </AppText>
               <ChevronRight
                 color={colors.mutedText}
                 size={spacing.md}
@@ -1304,7 +1304,7 @@ export default function RegisterScreen() {
         {step === "expiry" ? (
           <View style={styles.stepSections}>
             <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <Text style={styles.sectionTitle}>유통기한</Text>
+              <AppText style={styles.sectionTitle}>유통기한</AppText>
               <DatePickerField
                 ref={expiryPickerRef}
                 presentation="hero"
@@ -1320,7 +1320,7 @@ export default function RegisterScreen() {
                 error={form.formState.errors.expiryDate?.message}
               >
                 <View style={styles.expiryPresetBlock}>
-                  <Text style={styles.sectionCaption}>빠른 기간</Text>
+                  <AppText style={styles.sectionCaption}>빠른 기간</AppText>
                   <View style={styles.pillRow}>
                     {QUICK_EXPIRY_OPTIONS.map((option) => {
                       const presetDate = toIsoDate(
@@ -1347,10 +1347,10 @@ export default function RegisterScreen() {
 
             <View style={[styles.sectionCard, styles.sectionCardTight]}>
               <View style={styles.sectionHeading}>
-                <Text style={styles.sectionTitle}>넣은 내용</Text>
-                <Text style={styles.sectionCaption}>
+                <AppText style={styles.sectionTitle}>넣은 내용</AppText>
+                <AppText style={styles.sectionCaption}>
                   이름·양·자리는 눌러서 고쳐요
-                </Text>
+                </AppText>
               </View>
               <View style={styles.recapList}>
                 <RecapRow
@@ -1395,7 +1395,7 @@ export default function RegisterScreen() {
           placeholder="예: 서울우유"
         />
         <View style={styles.extraSection}>
-          <Text style={styles.extraSectionTitle}>카테고리</Text>
+          <AppText style={styles.extraSectionTitle}>카테고리</AppText>
           <View style={styles.pillRow}>
             {productCategoryOptions.map((option) => (
               <Pill
@@ -1411,9 +1411,9 @@ export default function RegisterScreen() {
             ))}
           </View>
           {category ? (
-            <Text style={styles.inlineMetaValue}>
+            <AppText style={styles.inlineMetaValue}>
               지금 선택: {productCategoryLabels[category]}
-            </Text>
+            </AppText>
           ) : null}
         </View>
         <FormField
@@ -1466,7 +1466,7 @@ export default function RegisterScreen() {
         }
       >
         <View style={styles.addLocationField}>
-          <Text style={styles.addLocationLabel}>위치 이름</Text>
+          <AppText style={styles.addLocationLabel}>위치 이름</AppText>
           <AppTextInput
             value={newLocationLabel}
             onChangeText={setNewLocationLabel}

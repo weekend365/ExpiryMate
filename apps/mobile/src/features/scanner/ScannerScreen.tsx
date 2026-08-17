@@ -32,7 +32,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
@@ -49,6 +48,7 @@ import Animated, {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
+import { AppText } from "../../components/AppText";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Pill } from "../../components/Pill";
@@ -412,16 +412,23 @@ function ScannerCameraExperience() {
             ) : (
               <CalendarDays color={colors.surface} size={spacing.sm} strokeWidth={2.4} />
             )}
-            <Text style={styles.stepPillText}>
+            <AppText
+              variant="bodySmall"
+              scaleRole="chrome"
+              densityAware={false}
+              style={styles.stepPillText}
+            >
               {scanner.mode === "barcode" ? "1/2 바코드" : "2/2 유통기한"}
-            </Text>
+            </AppText>
           </View>
         </View>
 
         {!scanner.isCameraReady ? (
           <View style={styles.centerStage}>
             <View style={styles.centerCard}>
-              <Text style={styles.centerTitle}>카메라를 준비하고 있어요</Text>
+              <AppText variant="heading" style={styles.centerTitle}>
+                카메라를 준비하고 있어요
+              </AppText>
               <MascotSpeechBubble
                 message="장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요."
                 mood="idle"
@@ -443,7 +450,9 @@ function ScannerCameraExperience() {
               {scanner.productLookupStatus === "loading" ? (
                 <View style={styles.loadingStrip}>
                   <ActivityIndicator color={colors.primary} />
-                  <Text style={styles.loadingText}>상품을 찾아보고 있어요</Text>
+                  <AppText variant="bodySmall" tone="subtext">
+                    상품을 찾아보고 있어요
+                  </AppText>
                 </View>
               ) : null}
 
@@ -499,9 +508,9 @@ function ScannerCameraExperience() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.manualActionLabel}>
+                    <AppText style={styles.manualActionLabel}>
                       유통기한이 안 보여요
-                    </Text>
+                    </AppText>
                   </Pressable>
                 ) : (
                   <Pressable
@@ -519,7 +528,7 @@ function ScannerCameraExperience() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <Text style={styles.manualActionLabel}>직접 입력할게요</Text>
+                    <AppText style={styles.manualActionLabel}>직접 입력할게요</AppText>
                   </Pressable>
                 )}
               </View>
@@ -612,26 +621,26 @@ function ScannerCameraExperience() {
                 </View>
               )}
               <View style={styles.productCopy}>
-                <Text style={styles.productEyebrow}>{productSourceLabel}</Text>
-                <Text style={styles.productName}>
+                <AppText style={styles.productEyebrow}>{productSourceLabel}</AppText>
+                <AppText style={styles.productName}>
                   {needsManualName
                     ? "아직 이름이 없어요"
                     : scanner.product?.name ?? "상품명을 찾고 있어요"}
-                </Text>
-                <Text style={styles.productBarcode}>
+                </AppText>
+                <AppText style={styles.productBarcode}>
                   바코드 {scanner.confirmation.barcode}
-                </Text>
+                </AppText>
                 {!needsManualName && !needsNameConfirmation ? (
-                  <Text style={styles.manualNameHint}>
+                  <AppText style={styles.manualNameHint}>
                     이름이 다르면 다음 화면에서 바꿔 주세요.
-                  </Text>
+                  </AppText>
                 ) : null}
               </View>
             </View>
 
             {!needsManualName && needsNameConfirmation ? (
               <View style={styles.manualNameCard}>
-                <Text style={styles.manualNameLabel}>한 번만 확인해 주세요</Text>
+                <AppText style={styles.manualNameLabel}>한 번만 확인해 주세요</AppText>
                 <View style={styles.pillRow}>
                   <Pill
                     label="맞아요"
@@ -654,7 +663,7 @@ function ScannerCameraExperience() {
                 </View>
                 {!catalogNameAccepted ? (
                   <>
-                    <Text style={styles.manualNameLabel}>냉장고에 넣을 이름</Text>
+                    <AppText style={styles.manualNameLabel}>냉장고에 넣을 이름</AppText>
                     <TextInput
                       value={manualName}
                       onChangeText={setManualName}
@@ -665,7 +674,7 @@ function ScannerCameraExperience() {
                       autoCorrect={false}
                       returnKeyType="done"
                     />
-                    <Text style={styles.manualNameLabel}>브랜드</Text>
+                    <AppText style={styles.manualNameLabel}>브랜드</AppText>
                     <TextInput
                       value={manualBrand}
                       onChangeText={setManualBrand}
@@ -676,9 +685,9 @@ function ScannerCameraExperience() {
                       autoCorrect={false}
                       returnKeyType="done"
                     />
-                    <Text style={styles.manualNameHint}>
+                    <AppText style={styles.manualNameHint}>
                       목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요.
-                    </Text>
+                    </AppText>
                   </>
                 ) : null}
               </View>
@@ -686,7 +695,7 @@ function ScannerCameraExperience() {
 
             {needsManualName ? (
               <View style={styles.manualNameCard}>
-                <Text style={styles.manualNameLabel}>이 재료 이름이 뭐예요?</Text>
+                <AppText style={styles.manualNameLabel}>이 재료 이름이 뭐예요?</AppText>
                 <TextInput
                   value={manualName}
                   onChangeText={setManualName}
@@ -701,7 +710,7 @@ function ScannerCameraExperience() {
                   autoCorrect={false}
                   returnKeyType="done"
                 />
-                <Text style={styles.manualNameLabel}>브랜드</Text>
+                <AppText style={styles.manualNameLabel}>브랜드</AppText>
                 <TextInput
                   value={manualBrand}
                   onChangeText={setManualBrand}
@@ -716,7 +725,7 @@ function ScannerCameraExperience() {
                   autoCorrect={false}
                   returnKeyType="done"
                 />
-                <Text style={styles.manualNameLabel}>카테고리</Text>
+                <AppText style={styles.manualNameLabel}>카테고리</AppText>
                 <View style={styles.pillRow}>
                   {productCategoryOptions.map((option) => (
                     <Pill
@@ -730,12 +739,12 @@ function ScannerCameraExperience() {
                   ))}
                 </View>
                 {manualCategory ? (
-                  <Text style={styles.manualNameHint}>
+                  <AppText style={styles.manualNameHint}>
                     선택: {productCategoryLabels[manualCategory]}
-                  </Text>
+                  </AppText>
                 ) : null}
                 {manualNameHint ? (
-                  <Text style={styles.manualNameHint}>{manualNameHint}</Text>
+                  <AppText style={styles.manualNameHint}>{manualNameHint}</AppText>
                 ) : null}
               </View>
             ) : null}
@@ -749,17 +758,17 @@ function ScannerCameraExperience() {
               />
             ) : (
               <View style={styles.expiryCard}>
-                <Text style={styles.expiryLabel}>읽은 유통기한</Text>
-                <Text style={styles.expiryValue}>
+                <AppText style={styles.expiryLabel}>읽은 유통기한</AppText>
+                <AppText style={styles.expiryValue}>
                   {scanner.confirmation.expirationDate}
-                </Text>
+                </AppText>
               </View>
             )}
 
             {scanner.productErrorMessage ? (
-              <Text style={styles.sheetFootnote}>
+              <AppText style={styles.sheetFootnote}>
                 상품 조회는 잠시 막혔지만, 이름을 직접 적으면 넣을 수 있어요.
-              </Text>
+              </AppText>
             ) : null}
 
             {prohibitedContribution ? (
@@ -767,12 +776,12 @@ function ScannerCameraExperience() {
                 style={styles.moderationErrorCard}
                 accessibilityRole="alert"
               >
-                <Text style={styles.moderationErrorText}>
+                <AppText style={styles.moderationErrorText}>
                   {prohibitedContribution.message}
-                </Text>
+                </AppText>
               </View>
             ) : contributeError ? (
-              <Text style={styles.sheetFootnote}>{contributeError}</Text>
+              <AppText style={styles.sheetFootnote}>{contributeError}</AppText>
             ) : null}
           </>
         ) : null}
@@ -934,7 +943,7 @@ function PermissionCard({
   return (
     <View style={styles.centerStage}>
       <View style={styles.centerCard}>
-        <Text style={styles.centerTitle}>카메라가 필요해요</Text>
+        <AppText style={styles.centerTitle}>카메라가 필요해요</AppText>
         <MascotSpeechBubble
           message="바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요."
           mood="worry"
@@ -963,7 +972,7 @@ function PermissionCard({
 function InlineError({ message }: { message: string }) {
   return (
     <View style={styles.errorStrip} accessibilityLiveRegion="polite">
-      <Text style={styles.errorText}>{message}</Text>
+      <AppText style={styles.errorText}>{message}</AppText>
     </View>
   );
 }
@@ -1030,7 +1039,7 @@ function ManualExpirySection({
 
   return (
     <View style={styles.manualExpiryCard}>
-      <Text style={styles.manualExpiryLabel}>유통기한은 언제까지인가요?</Text>
+      <AppText style={styles.manualExpiryLabel}>유통기한은 언제까지인가요?</AppText>
       <View style={styles.pillRow}>
         {QUICK_EXPIRY_OPTIONS.map((option) => {
           const presetDate = toIsoDate(addDays(new Date(), option.days));
@@ -1074,7 +1083,8 @@ function ManualExpirySection({
               pressed && styles.androidDateTriggerPressed,
             ]}
           >
-            <Text
+            <AppText
+              variant="bodySmall"
               style={
                 expiryDate
                   ? styles.androidDateValue
@@ -1082,8 +1092,8 @@ function ManualExpirySection({
               }
             >
               {displayValue}
-            </Text>
-            <Text style={styles.androidDateAction}>직접 고르기</Text>
+            </AppText>
+            <AppText style={styles.androidDateAction}>직접 고르기</AppText>
           </Pressable>
           {showAndroidPicker ? (
             <DateTimePicker
