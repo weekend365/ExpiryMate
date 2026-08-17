@@ -38,13 +38,16 @@ interface RegistrationState {
   hasHydrated: boolean;
   prefill: RegistrationPrefill | null;
   draft: RegistrationDraft | null;
+  lastStorageLocation: string | null;
   rewardNotice: RegistrationRewardNotice | null;
   finishHydration: () => void;
   setPrefill: (prefill: RegistrationPrefill | null) => void;
   setDraft: (draft: RegistrationDraft | null) => void;
+  setLastStorageLocation: (storageLocation: string) => void;
   setRewardNotice: (notice: RegistrationRewardNotice | null) => void;
   clearPrefill: () => void;
   clearDraft: () => void;
+  clearLastStorageLocation: () => void;
 }
 
 export const useRegistrationStore = create<RegistrationState>()(
@@ -53,13 +56,17 @@ export const useRegistrationStore = create<RegistrationState>()(
       hasHydrated: false,
       prefill: null,
       draft: null,
+      lastStorageLocation: null,
       rewardNotice: null,
       finishHydration: () => set({ hasHydrated: true }),
       setPrefill: (prefill) => set({ prefill }),
       setDraft: (draft) => set({ draft }),
+      setLastStorageLocation: (lastStorageLocation) =>
+        set({ lastStorageLocation }),
       setRewardNotice: (rewardNotice) => set({ rewardNotice }),
       clearPrefill: () => set({ prefill: null }),
       clearDraft: () => set({ draft: null }),
+      clearLastStorageLocation: () => set({ lastStorageLocation: null }),
     }),
     {
       name: "expirymate-registration-store",
@@ -67,6 +74,7 @@ export const useRegistrationStore = create<RegistrationState>()(
       partialize: (state) => ({
         prefill: state.prefill,
         draft: state.draft,
+        lastStorageLocation: state.lastStorageLocation,
       }),
       onRehydrateStorage: () => (state) => {
         state?.finishHydration();

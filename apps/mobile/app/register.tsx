@@ -13,6 +13,7 @@ import {
   groupInventoryItems,
   inventoryFormSchema,
   catalogIdentityDiffers,
+  dateOnlyToUtcDate,
   productCategoryLabels,
   productCategoryOptions,
   quantityInputLabel,
@@ -24,6 +25,10 @@ import {
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
+import DateTimePicker, {
+  type DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { useQueryClient } from "@tanstack/react-query";
 import { router, useNavigation } from "expo-router";
 import {
   Barcode,
@@ -39,6 +44,7 @@ import { useForm } from "react-hook-form";
 import {
   Alert,
   BackHandler,
+  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -61,6 +67,13 @@ import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
+import { updateInventoryItem } from "../src/services/api";
+import { useAuth } from "../src/features/auth/use-auth";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../src/features/auth/session-boundary";
+import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
   colors,
   radius,
@@ -92,6 +105,31 @@ type RegistrationFormValues = {
 type RegistrationStep = "product" | "quantity" | "expiry" | "done";
 
 type InputRegistrationStep = Exclude<RegistrationStep, "done">;
+
+type SessionEditDraft = {
+  id: string;
+  displayName: string;
+  quantity: number;
+  unit: string;
+  storageLocation: string;
+  expiryDate: string;
+};
+
+function koreanObjectParticle(word: string): "을" | "를" {
+  const last = word.trim().slice(-1);
+  const code = last.charCodeAt(0);
+
+  if (code < 0xac00 || code > 0xd7a3) {
+    return "를";
+  }
+
+  return (code - 0xac00) % 28 === 0 ? "를" : "을";
+}
+
+function formatPutAwayMessage(name: string) {
+  const trimmed = name.trim();
+  return `${trimmed}${koreanObjectParticle(trimmed)} 넣었어요`;
+}
 
 type RegisteredSessionItem = {
   id: string;
@@ -153,17 +191,24 @@ const createDefaultFormValues = (): RegistrationFormValues => ({
 const buildInitialValues = (
   prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
   draft: RegistrationDraft | null,
+  lastStorageLocation?: string | null,
 ): RegistrationFormValues => {
   const nextValues = {
     ...createDefaultFormValues(),
     ...draft,
     quantity:
-      typeof draft?.quantity === "number" && draft.quantity > 0
+      typeof draft?.quantity === "number" &&
+      draft.quantity > 0 &&
+      !prefill?.displayName
         ? draft.quantity
         : DEFAULT_INVENTORY_FORM.quantity,
-    unit: draft?.unit ?? DEFAULT_INVENTORY_FORM.unit ?? "개",
+    unit: prefill?.displayName
+      ? (DEFAULT_INVENTORY_FORM.unit ?? "개")
+      : (draft?.unit ?? DEFAULT_INVENTORY_FORM.unit ?? "개"),
     storageLocation:
-      draft?.storageLocation ?? DEFAULT_INVENTORY_FORM.storageLocation,
+      draft?.storageLocation ??
+      lastStorageLocation ??
+      DEFAULT_INVENTORY_FORM.storageLocation,
     expiryDate: normalizeDraftExpiryDate(draft?.expiryDate),
     expirySource: draft?.expirySource ?? DEFAULT_INVENTORY_FORM.expirySource,
     notes: draft?.notes ?? DEFAULT_INVENTORY_FORM.notes ?? "",
@@ -228,12 +273,21 @@ export default function RegisterScreen() {
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) => state.prefill);
   const draft = useRegistrationStore((state) => state.draft);
+  const lastStorageLocation = useRegistrationStore(
+    (state) => state.lastStorageLocation,
+  );
   const rewardNotice = useRegistrationStore((state) => state.rewardNotice);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const setLastStorageLocation = useRegistrationStore(
+    (state) => state.setLastStorageLocation,
+  );
   const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const clearDraft = useRegistrationStore((state) => state.clearDraft);
   const mutation = useSaveInventoryItem();
+  const queryClient = useQueryClient();
+  const { activeSpaceId } = useActiveSpace();
+  const { sessionUserId } = useAuth();
   const { data: inventory = [] } = useInventoryList();
   const [step, setStep] = useState<RegistrationStep>("product");
   const [entryMethod, setEntryMethod] = useState<"scan" | "manual">("manual");
@@ -249,6 +303,10 @@ export default function RegisterScreen() {
   const [registeredSessionItems, setRegisteredSessionItems] = useState<
     RegisteredSessionItem[]
   >([]);
+  const [sessionEdit, setSessionEdit] = useState<SessionEditDraft | null>(null);
+  const [sessionEditError, setSessionEditError] = useState<string | null>(null);
+  const [isSavingSessionEdit, setIsSavingSessionEdit] = useState(false);
+  const [showAndroidExpiryPicker, setShowAndroidExpiryPicker] = useState(false);
   const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
     null,
   );
@@ -266,7 +324,11 @@ export default function RegisterScreen() {
       return;
     }
 
-    const nextValues = buildInitialValues(prefill, draft);
+    const nextValues = buildInitialValues(
+      prefill,
+      draft,
+      lastStorageLocation,
+    );
     const nextPrefillKey = getPrefillKey(prefill);
 
     if (!initializedRef.current) {
@@ -300,7 +362,7 @@ export default function RegisterScreen() {
         setShowUnitPicker(false);
       }
     }
-  }, [draft, form, hasHydrated, prefill]);
+  }, [draft, form, hasHydrated, lastStorageLocation, prefill]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
@@ -413,6 +475,7 @@ export default function RegisterScreen() {
     : (step === "product" && Boolean(displayName)) ||
       (step === "quantity" && Boolean(storageLocation) && quantity > 0) ||
       (step === "expiry" && Boolean(expiryDate));
+  const showRecap = isLastStep && step === "expiry";
   const latestRegisteredItem = registeredSessionItems[0] ?? null;
 
   useLayoutEffect(() => {
@@ -569,6 +632,138 @@ export default function RegisterScreen() {
     });
   };
 
+  const openSessionEdit = (item: RegisteredSessionItem) => {
+    setSessionEditError(null);
+    setShowAndroidExpiryPicker(false);
+    setSessionEdit({
+      id: item.id,
+      displayName: item.displayName,
+      quantity: item.quantity,
+      unit: item.unit ?? "개",
+      storageLocation: item.storageLocation,
+      expiryDate: item.expiryDate,
+    });
+  };
+
+  const closeSessionEdit = () => {
+    setSessionEdit(null);
+    setSessionEditError(null);
+    setShowAndroidExpiryPicker(false);
+  };
+
+  const handleSessionEditExpiry = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date,
+  ) => {
+    if (Platform.OS === "android" && event.type === "dismissed") {
+      return;
+    }
+
+    if (!selectedDate) {
+      return;
+    }
+
+    setSessionEdit((current) =>
+      current
+        ? { ...current, expiryDate: toIsoDate(selectedDate) }
+        : current,
+    );
+    setShowAndroidExpiryPicker(false);
+  };
+
+  const saveSessionEdit = async () => {
+    if (!sessionEdit) {
+      return;
+    }
+
+    if (!activeSpaceId) {
+      setSessionEditError("함께 쓸 냉장고를 먼저 골라 주세요.");
+      return;
+    }
+
+    const nextName = sessionEdit.displayName.trim();
+    if (
+      !nextName ||
+      sessionEdit.quantity <= 0 ||
+      !sessionEdit.storageLocation ||
+      !sessionEdit.expiryDate
+    ) {
+      setSessionEditError("이름, 양, 자리, 날짜를 알려 주세요.");
+      return;
+    }
+
+    try {
+      setIsSavingSessionEdit(true);
+      setSessionEditError(null);
+      const canonical = toBaseQuantity(sessionEdit.quantity, sessionEdit.unit);
+      const updated = await updateInventoryItem(
+        sessionEdit.id,
+        {
+          displayName: nextName,
+          quantity: sessionEdit.quantity,
+          unit: sessionEdit.unit,
+          quantityBase: canonical.quantityBase,
+          unitCode: canonical.unitCode,
+          storageLocation: sessionEdit.storageLocation,
+          expiryDate: sessionEdit.expiryDate,
+          expirySource: ExpirySource.MANUAL,
+        },
+        activeSpaceId,
+      );
+
+      setRegisteredSessionItems((current) =>
+        current.map((item) =>
+          item.id === updated.id
+            ? {
+                ...item,
+                displayName: updated.displayName,
+                quantity: updated.quantity,
+                unit: updated.unit,
+                quantityBase: updated.quantityBase,
+                unitCode: updated.unitCode,
+                storageLocation: updated.storageLocation,
+                expiryDate: updated.expiryDate,
+              }
+            : item,
+        ),
+      );
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: withInventorySpace(
+            sessionQueryKeys.dashboard,
+            sessionUserId,
+            activeSpaceId,
+          ),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: withInventorySpace(
+            sessionQueryKeys.inventory,
+            sessionUserId,
+            activeSpaceId,
+          ),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: withInventorySpace(
+            sessionQueryKeys.inventoryItem,
+            sessionUserId,
+            activeSpaceId,
+          ),
+        }),
+      ]);
+
+      closeSessionEdit();
+    } catch (error) {
+      setSessionEditError(
+        error instanceof Error
+          ? error.message
+          : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+      );
+    } finally {
+      setIsSavingSessionEdit(false);
+    }
+  };
+
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       setSubmitErrorMessage(null);
@@ -610,10 +805,9 @@ export default function RegisterScreen() {
       const nextDefaults = {
         ...createDefaultFormValues(),
         storageLocation: values.storageLocation,
-        quantity: values.quantity,
-        unit: values.unit,
       };
 
+      setLastStorageLocation(values.storageLocation);
       form.reset(nextDefaults);
       userChoseQuantityUnitRef.current = false;
       setShowAdditionalInfo(false);
@@ -636,10 +830,25 @@ export default function RegisterScreen() {
         : "이만큼 둘게요";
 
   if (step === "done") {
+    let sessionEditPickerDate = new Date();
+    if (sessionEdit?.expiryDate) {
+      try {
+        sessionEditPickerDate = dateOnlyToUtcDate(sessionEdit.expiryDate);
+      } catch {
+        sessionEditPickerDate = new Date();
+      }
+    }
+    const canSaveSessionEdit = Boolean(
+      sessionEdit?.displayName.trim() &&
+        sessionEdit.storageLocation &&
+        sessionEdit.expiryDate &&
+        sessionEdit.quantity > 0,
+    );
+
     return (
+      <>
       <Screen
         contentWidth="form"
-        title="잘 넣어뒀어요"
         footer={
           <View style={styles.doneFooter}>
             <Button
@@ -650,15 +859,6 @@ export default function RegisterScreen() {
               fullWidth
             >
               다음 재료 넣을게요
-            </Button>
-            <Button
-              variant="secondary"
-              icon={CheckCircle2}
-              iconPosition="right"
-              onPress={finishRegistration}
-              fullWidth
-            >
-              그만 추가할래요
             </Button>
             <Pressable
               onPress={
@@ -682,14 +882,26 @@ export default function RegisterScreen() {
                   : "바코드로 더 넣을게요"}
               </Text>
             </Pressable>
+            <Pressable
+              onPress={finishRegistration}
+              accessibilityRole="button"
+              accessibilityLabel="그만 추가할래요"
+              hitSlop={spacing.xs}
+              style={({ pressed }) => [
+                styles.doneTextLink,
+                pressed && styles.doneTextLinkPressed,
+              ]}
+            >
+              <Text style={styles.doneMutedLinkLabel}>그만 추가할래요</Text>
+            </Pressable>
           </View>
         }
       >
         <View style={styles.doneHero}>
           <Text style={styles.doneTitle}>
             {latestRegisteredItem
-              ? `${latestRegisteredItem.displayName}을(를) 냉장고에 잘 넣어뒀어요`
-              : "냉장고에 잘 넣어뒀어요"}
+              ? formatPutAwayMessage(latestRegisteredItem.displayName)
+              : "잘 넣어뒀어요"}
           </Text>
           {rewardNotice?.granted ? (
             <FeedbackBanner
@@ -726,15 +938,10 @@ export default function RegisterScreen() {
               {registeredSessionItems.slice(0, 3).map((item) => (
                 <Pressable
                   key={item.id}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/inventory/[id]",
-                      params: { id: item.id, mode: "edit" },
-                    })
-                  }
+                  onPress={() => openSessionEdit(item)}
                   accessibilityRole="button"
                   accessibilityLabel={`${item.displayName} 내용을 고칠게요`}
-                  accessibilityHint="방금 넣은 이름, 수량, 유통기한을 다시 맞춰 둘 수 있어요."
+                  accessibilityHint="방금 넣은 이름, 수량, 유통기한을 이 자리에서 다시 맞춰 둘 수 있어요."
                   style={({ pressed }) => [
                     styles.sessionRow,
                     pressed && styles.templateCardPressed,
@@ -779,6 +986,138 @@ export default function RegisterScreen() {
           </Pressable>
         ) : null}
       </Screen>
+      <BottomSheet
+        visible={Boolean(sessionEdit)}
+        onClose={closeSessionEdit}
+        mascotMood="idle"
+        title="조금만 고칠게요"
+        description="이름, 양, 자리, 날짜만 다시 맞춰 둘게요."
+        footer={
+          <Button
+            onPress={() => {
+              void saveSessionEdit();
+            }}
+            loading={isSavingSessionEdit}
+            disabled={!canSaveSessionEdit || isSavingSessionEdit}
+            fullWidth
+          >
+            이 내용으로 둘게요
+          </Button>
+        }
+      >
+        {sessionEdit ? (
+          <>
+            {sessionEditError ? (
+              <View style={styles.errorStrip}>
+                <Text style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</Text>
+                <Text style={styles.errorDescription}>{sessionEditError}</Text>
+              </View>
+            ) : null}
+            <View style={styles.storageBlock}>
+              <Text style={styles.storageBlockLabel}>어떤 이름인가요?</Text>
+              <AppTextInput
+                value={sessionEdit.displayName}
+                onChangeText={(displayName) =>
+                  setSessionEdit((current) =>
+                    current ? { ...current, displayName } : current,
+                  )
+                }
+                placeholder="예: 서울우유 1L"
+                maxLength={fieldLimits.displayName}
+                style={styles.addLocationInput}
+              />
+            </View>
+            <QuantityStepper
+              label={quantityInputLabel(sessionEdit.unit)}
+              value={sessionEdit.quantity}
+              step={quantityInputStep(sessionEdit.unit)}
+              onChange={(quantity) =>
+                setSessionEdit((current) =>
+                  current ? { ...current, quantity } : current,
+                )
+              }
+            />
+            <View style={styles.storageBlock}>
+              <Text style={styles.storageBlockLabel}>어디에 두나요?</Text>
+              <View style={styles.pillRow}>
+                {selectableOptions.map((option) => (
+                  <Pill
+                    key={option.key}
+                    label={option.label}
+                    icon={MapPin}
+                    selected={sessionEdit.storageLocation === option.key}
+                    onPress={() =>
+                      setSessionEdit((current) =>
+                        current
+                          ? { ...current, storageLocation: option.key }
+                          : current,
+                      )
+                    }
+                  />
+                ))}
+              </View>
+            </View>
+            <View style={styles.storageBlock}>
+              <Text style={styles.storageBlockLabel}>언제까지인가요?</Text>
+              <View style={styles.pillRow}>
+                {QUICK_EXPIRY_OPTIONS.map((option) => {
+                  const presetDate = toIsoDate(addDays(new Date(), option.days));
+
+                  return (
+                    <Pill
+                      key={option.days}
+                      label={option.label}
+                      icon={CalendarDays}
+                      selected={sessionEdit.expiryDate === presetDate}
+                      onPress={() =>
+                        setSessionEdit((current) =>
+                          current
+                            ? { ...current, expiryDate: presetDate }
+                            : current,
+                        )
+                      }
+                    />
+                  );
+                })}
+              </View>
+              {Platform.OS === "ios" ? (
+                <DateTimePicker
+                  value={sessionEditPickerDate}
+                  mode="date"
+                  display="compact"
+                  onChange={handleSessionEditExpiry}
+                />
+              ) : (
+                <>
+                  <Pressable
+                    onPress={() => setShowAndroidExpiryPicker(true)}
+                    accessibilityRole="button"
+                    accessibilityLabel="다른 날짜 고르기"
+                    style={({ pressed }) => [
+                      styles.extraTextLink,
+                      pressed && styles.extraTextLinkPressed,
+                    ]}
+                  >
+                    <Text style={styles.extraTextLinkLabel}>
+                      {formatDateKorean(sessionEdit.expiryDate)}까지 · 다른 날짜
+                      고르기
+                    </Text>
+                  </Pressable>
+                  {showAndroidExpiryPicker ? (
+                    <DateTimePicker
+                      value={sessionEditPickerDate}
+                      mode="date"
+                      display="default"
+                      onChange={handleSessionEditExpiry}
+                    />
+                  ) : null}
+                </>
+              )}
+            </View>
+          </>
+        ) : null}
+      </BottomSheet>
+      </>
     );
   }
 
@@ -826,7 +1165,7 @@ export default function RegisterScreen() {
           </View>
         ) : null}
 
-        {isLastStep ? (
+        {showRecap ? (
           <View style={styles.recapCard}>
             <Text style={styles.recapTitle}>이렇게 넣을게요</Text>
             <Text style={styles.recapBody}>
@@ -839,23 +1178,6 @@ export default function RegisterScreen() {
                 .filter(Boolean)
                 .join(" · ")}
             </Text>
-            {skipExpiry && expiryDate ? (
-              <Pressable
-                onPress={() => {
-                  setSkipExpiry(false);
-                  setStep("expiry");
-                }}
-                accessibilityRole="button"
-                accessibilityLabel="날짜 바꿀게요"
-                hitSlop={spacing.xs}
-                style={({ pressed }) => [
-                  styles.extraTextLink,
-                  pressed && styles.extraTextLinkPressed,
-                ]}
-              >
-                <Text style={styles.extraTextLinkLabel}>날짜 바꿀게요</Text>
-              </Pressable>
-            ) : null}
           </View>
         ) : null}
 
@@ -1021,6 +1343,25 @@ export default function RegisterScreen() {
                   : "브랜드·메모 적기"}
               </Text>
             </Pressable>
+            {skipExpiry && expiryDate ? (
+              <Pressable
+                onPress={() => {
+                  setSkipExpiry(false);
+                  setStep("expiry");
+                }}
+                accessibilityRole="button"
+                accessibilityLabel="날짜 바꿀게요"
+                hitSlop={spacing.xs}
+                style={({ pressed }) => [
+                  styles.extraTextLink,
+                  pressed && styles.extraTextLinkPressed,
+                ]}
+              >
+                <Text style={styles.extraTextLinkLabel}>
+                  날짜 바꿀게요 · {formatDateKorean(expiryDate)}까지
+                </Text>
+              </Pressable>
+            ) : null}
           </>
         ) : null}
 
@@ -1225,6 +1566,12 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
+  },
+  doneMutedLinkLabel: {
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.mutedText,
   },
   recipeHint: {
     minHeight: touchTarget.min,

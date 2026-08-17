@@ -12,6 +12,7 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
   void Promise.resolve(clearPersistedQueryCache()).catch(() => undefined);
   useRegistrationStore.getState().clearDraft();
   useRegistrationStore.getState().clearPrefill();
+  useRegistrationStore.getState().clearLastStorageLocation();
   clearRecipeGenerationState();
 }
 

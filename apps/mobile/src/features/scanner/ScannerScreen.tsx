@@ -251,6 +251,10 @@ function ScannerCameraExperience() {
       brand: resolvedBrand,
       category: resolvedCategory,
     });
+    const lastStorageLocation =
+      useRegistrationStore.getState().draft?.storageLocation ??
+      useRegistrationStore.getState().lastStorageLocation ??
+      undefined;
     setDraft({
       productMasterId: productMasterId ?? undefined,
       catalogName: scanner.product?.name?.trim() || undefined,
@@ -260,6 +264,7 @@ function ScannerCameraExperience() {
       category: resolvedCategory,
       expiryDate: resolvedExpiryDate,
       expirySource: resolvedExpirySource,
+      ...(lastStorageLocation ? { storageLocation: lastStorageLocation } : {}),
     });
     // Clear confirmation so the Modal sheet dismisses; replace so scanner
     // unmounts and cannot keep overlaying /register.
