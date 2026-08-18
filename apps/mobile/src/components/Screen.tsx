@@ -100,48 +100,50 @@ export function Screen({
     <>
       {shouldShowBack || title ? (
         <View style={styles.headerBlock}>
-          {shouldShowBack ? (
-            <Pressable
-              onPress={() => router.back()}
-              accessibilityRole="button"
-              accessibilityLabel="뒤로가기"
-              hitSlop={spacing.xs}
-              style={({ pressed }) => [
-                styles.backButton,
-                pressed && styles.backButtonPressed,
-              ]}
-            >
-              <ChevronLeft
-                color={colors.text}
-                size={spacing.md}
-                strokeWidth={2.4}
-              />
-            </Pressable>
-          ) : null}
-          {title ? (
-            <View style={[styles.header, shouldStack && styles.headerStacked]}>
-              <View style={styles.headerCopy}>
-                <AppText variant="title" style={styles.title}>
-                  {title}
-                </AppText>
-                {subtitle ? (
-                  <AppText variant="bodySmall" tone="subtext">
-                    {subtitle}
-                  </AppText>
-                ) : null}
-              </View>
-              {headerAction ? (
-                <View
-                  style={[
-                    styles.headerAction,
-                    shouldStack && styles.headerActionStacked,
+          <View style={[styles.header, shouldStack && styles.headerStacked]}>
+            <View style={styles.headerIntro}>
+              {shouldShowBack ? (
+                <Pressable
+                  onPress={() => router.back()}
+                  accessibilityRole="button"
+                  accessibilityLabel="뒤로가기"
+                  hitSlop={spacing.xs}
+                  style={({ pressed }) => [
+                    styles.backButton,
+                    pressed && styles.backButtonPressed,
                   ]}
                 >
-                  {headerAction}
+                  <ChevronLeft
+                    color={colors.text}
+                    size={spacing.md}
+                    strokeWidth={2.4}
+                  />
+                </Pressable>
+              ) : null}
+              {title ? (
+                <View style={styles.headerCopy}>
+                  <AppText variant="title" style={styles.title}>
+                    {title}
+                  </AppText>
+                  {subtitle ? (
+                    <AppText variant="bodySmall" tone="subtext">
+                      {subtitle}
+                    </AppText>
+                  ) : null}
                 </View>
               ) : null}
             </View>
-          ) : null}
+            {headerAction ? (
+              <View
+                style={[
+                  styles.headerAction,
+                  shouldStack && styles.headerActionStacked,
+                ]}
+              >
+                {headerAction}
+              </View>
+            ) : null}
+          </View>
         </View>
       ) : null}
       {children}
@@ -241,7 +243,15 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     marginBottom: spacing.xs,
   },
+  headerIntro: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.xxs,
+  },
   backButton: {
+    alignSelf: "flex-start",
     minWidth: touchTarget.icon,
     minHeight: touchTarget.icon,
     borderRadius: radius.lg,

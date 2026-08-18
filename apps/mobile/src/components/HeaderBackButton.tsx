@@ -48,15 +48,23 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
 /** Native-stack title with the same Pretendard metrics as the back control. */
 export function HeaderTitle({ children }: { children: string }) {
   return (
-    <AppText numberOfLines={1} variant="bodyStrong" style={styles.title}>
-      {children}
-    </AppText>
+    <View style={styles.titleWrap} pointerEvents="none">
+      <AppText
+        numberOfLines={1}
+        variant="bodyStrong"
+        scaleRole="chrome"
+        densityAware={false}
+        style={styles.title}
+      >
+        {children}
+      </AppText>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    alignSelf: "center",
+    height: touchTarget.icon,
     minHeight: touchTarget.icon,
     marginLeft: -spacing.xs,
     paddingHorizontal: spacing.xs,
@@ -75,17 +83,22 @@ const styles = StyleSheet.create({
   label: {
     color: colors.primary,
     fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     includeFontPadding: false,
     textAlignVertical: "center",
     paddingTop: spacing.none,
     paddingBottom: spacing.none,
   },
+  titleWrap: {
+    height: touchTarget.icon,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
     color: colors.text,
     fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.fontSize,
+    lineHeight: typography.heading.lineHeight,
     fontFamily: typography.heading.fontFamily,
     includeFontPadding: false,
     textAlignVertical: "center",

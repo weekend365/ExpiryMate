@@ -183,6 +183,27 @@ describe("AffiliateOfferService Phase A", () => {
     expect(result.offers[0]?.landingUrl).toBe("https://link.coupang.com/a/1");
   });
 
+  it("drops duplicate Coupang product ids in a group", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockResolvedValue([
+      product("1", "국산 대파 1단"),
+      product("1", "국산 대파 묶음"),
+      product("2", "손질 대파 500g"),
+    ]);
+    const service = createService();
+
+    const result = await service.getOffersForDish({
+      ownerKey: "owner-a",
+      recommendationId: "rec-1",
+      dishIndex: 0,
+    });
+
+    expect(result.productGroups[0]?.products.map((item) => item.productId)).toEqual([
+      "1",
+      "2",
+    ]);
+  });
+
   it("rate-limits manual product searches per user", async () => {
     const service = createService();
     for (let index = 0; index < 10; index += 1) {
@@ -195,6 +216,16 @@ describe("AffiliateOfferService Phase A", () => {
   });
 
   it("builds recent repurchase groups from fully consumed items only", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockImplementation(async (query: string) => {
+      if (String(query).includes("달걀") || String(query).includes("계란")) {
+        return [product("egg-1", "신선한 계란 30구")];
+      }
+      if (String(query).includes("우유")) {
+        return [product("milk-1", "서울우유 1L")];
+      }
+      return [];
+    });
     prisma.inventoryItem.findMany.mockResolvedValue([
       { displayName: "달걀", brand: null, category: "egg" },
       { displayName: "달걀", brand: null, category: "egg" },
@@ -212,6 +243,7 @@ describe("AffiliateOfferService Phase A", () => {
       "달걀",
       "우유",
     ]);
+    expect(result.productGroups.every((group) => group.products.length > 0)).toBe(true);
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
@@ -221,6 +253,30 @@ describe("AffiliateOfferService Phase A", () => {
         }),
       }),
     );
+  });
+
+  it("hides recently consumed ingredients that have no Coupang products", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockImplementation(async (query: string) => {
+      if (String(query).includes("우유")) {
+        return [product("milk-1", "서울우유 1L")];
+      }
+      return [];
+    });
+    prisma.inventoryItem.findMany.mockResolvedValue([
+      { displayName: "수제청", brand: null, category: "beverage" },
+      { displayName: "말보로 비스타", brand: null, category: "household" },
+      { displayName: "우유", brand: "서울우유", category: "dairy" },
+    ]);
+    const service = createService();
+
+    const result = await service.getShopping({
+      ownerKey: "owner-a",
+      spaceId: "space-a",
+    });
+
+    expect(result.productGroups.map((group) => group.ingredientName)).toEqual(["우유"]);
+    expect(result.productGroups[0]?.products).toHaveLength(1);
   });
 
   it("skips excluded ingredients and unknown dishes", async () => {

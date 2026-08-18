@@ -4,20 +4,22 @@ import type {
   AffiliateProductGroup,
 } from "@expirymate/shared";
 import { ExternalLink } from "lucide-react-native";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
-  FlatList,
   Image,
   Linking,
   Pressable,
   StyleSheet,
-  type ViewToken,
   View,
 } from "react-native";
 import { AppText } from "../../components/AppText";
 import { trackMonetizationEvent } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
+import { visibleIngredientReason } from "./affiliate-group-reason";
+import { uniqueProductsById } from "./unique-affiliate-products";
+
+const PRODUCT_IMAGE_SIZE = spacing.xxl * 2;
 
 export function AffiliateProductGroupView({
   group,
@@ -27,55 +29,47 @@ export function AffiliateProductGroupView({
   const trackedProducts = useRef(new Set<string>());
   const groupRef = useRef(group);
   groupRef.current = group;
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 60,
-    minimumViewTime: 250,
-  });
-  const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: Array<ViewToken<AffiliateProduct>> }) => {
-      for (const viewable of viewableItems) {
-        const product = viewable.item;
-        if (!viewable.isViewable || trackedProducts.current.has(product.productId)) {
-          continue;
-        }
-        trackedProducts.current.add(product.productId);
-        void trackMonetizationEvent({
-          event: "affiliate_product_shown",
-          properties: {
-            placement: groupRef.current.placement,
-            productId: product.productId,
-            source: "product_search",
-          },
-        }).catch(() => undefined);
-      }
-    },
-  );
+
+  const handleShown = useCallback((product: AffiliateProduct) => {
+    if (trackedProducts.current.has(product.productId)) return;
+    trackedProducts.current.add(product.productId);
+    void trackMonetizationEvent({
+      event: "affiliate_product_shown",
+      properties: {
+        placement: groupRef.current.placement,
+        productId: product.productId,
+        source: "product_search",
+      },
+    }).catch(() => undefined);
+  }, []);
+
+  if (group.products.length === 0 && group.placement === "shopping_recently_consumed") {
+    return null;
+  }
+
+  const ingredientReason = visibleIngredientReason(group.reason);
+  const products = uniqueProductsById(group.products);
 
   return (
     <View style={styles.group}>
       <View style={styles.heading}>
         <AppText variant="bodyStrong">{group.ingredientName}</AppText>
-        {group.reason ? (
-          <AppText variant="caption" tone="subtext">{group.reason}</AppText>
+        {ingredientReason ? (
+          <AppText variant="caption" tone="subtext">{ingredientReason}</AppText>
         ) : null}
       </View>
-      {group.products.length > 0 ? (
-        <FlatList
-          data={group.products}
-          horizontal
-          nestedScrollEnabled
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.productList}
-          keyExtractor={(product) => product.productId}
-          renderItem={({ item: product }) => (
+      {products.length > 0 ? (
+        <View style={styles.productList}>
+          {products.map((product, index) => (
             <ProductCard
+              key={`${product.productId}:${index}`}
               product={product}
               placement={group.placement}
+              last={index === products.length - 1}
+              onShown={handleShown}
             />
-          )}
-          viewabilityConfig={viewabilityConfig.current}
-          onViewableItemsChanged={onViewableItemsChanged.current}
-        />
+          ))}
+        </View>
       ) : group.fallbackUrl ? (
         <Pressable
           onPress={() => void openFallback(group.fallbackUrl!, group.placement)}
@@ -97,17 +91,31 @@ export function AffiliateProductGroupView({
 function ProductCard({
   product,
   placement,
+  last,
+  onShown,
 }: {
   product: AffiliateProduct;
   placement: AffiliatePlacement;
+  last: boolean;
+  onShown: (product: AffiliateProduct) => void;
 }) {
   const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => onShown(product), 250);
+    return () => clearTimeout(timer);
+  }, [onShown, product]);
+
   return (
     <Pressable
       onPress={() => void openProduct(product, placement)}
       accessibilityRole="link"
       accessibilityLabel={`${product.productName}, ${formatProductPrice(product)}, 쿠팡에서 보기`}
-      style={({ pressed }) => [styles.productCard, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.productCard,
+        !last && styles.productCardDivider,
+        pressed && styles.pressed,
+      ]}
     >
       {imageFailed ? (
         <View style={[styles.productImage, styles.imageFallback]}>
@@ -126,12 +134,21 @@ function ProductCard({
         <AppText variant="bodySmall" numberOfLines={2} style={styles.productName}>
           {product.productName}
         </AppText>
-        <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
-        <View style={styles.badges}>
+        <View style={styles.productMeta}>
+          <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
           {product.isRocket ? <AppText style={styles.badge}>로켓배송</AppText> : null}
           {product.isFreeShipping ? <AppText style={styles.badge}>무료배송</AppText> : null}
         </View>
-        <AppText variant="caption" tone="primary">쿠팡에서 보기</AppText>
+        <View style={styles.ctaRow}>
+          <AppText variant="caption" tone="primary">쿠팡에서 보기</AppText>
+          <ExternalLink
+            color={colors.primary}
+            size={spacing.sm}
+            strokeWidth={2.4}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
+          />
+        </View>
       </View>
     </Pressable>
   );
@@ -176,29 +193,65 @@ async function openUrl(url: string) {
 
 const styles = StyleSheet.create({
   group: { gap: spacing.xs },
-  heading: { gap: spacing.xxs },
-  productList: { gap: spacing.xs, paddingRight: spacing.sm },
-  productCard: {
-    width: 184,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
+  heading: {
+    gap: spacing.xxs,
+    paddingBottom: spacing.xs,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
-  productImage: { width: "100%", height: 124, backgroundColor: colors.mutedSurface },
+  productList: {
+    paddingTop: spacing.xxs,
+  },
+  productCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    minHeight: touchTarget.min,
+    paddingVertical: spacing.sm,
+  },
+  productCardDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+  },
+  productImage: {
+    width: PRODUCT_IMAGE_SIZE,
+    height: PRODUCT_IMAGE_SIZE,
+    borderRadius: radius.md,
+    backgroundColor: colors.mutedSurface,
+  },
   imageFallback: { alignItems: "center", justifyContent: "center" },
-  productCopy: { minHeight: 144, padding: spacing.sm, gap: spacing.xs },
+  productCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
   productName: {
-    minHeight: typography.bodySmall.lineHeight * 2,
     color: colors.text,
   },
-  badges: { minHeight: typography.caption.lineHeight, flexDirection: "row", gap: spacing.xs },
+  productMeta: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
   badge: {
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.primary,
+  },
+  ctaRow: {
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
   },
   fallback: {
     minHeight: touchTarget.min,

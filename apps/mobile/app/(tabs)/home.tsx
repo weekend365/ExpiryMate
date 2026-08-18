@@ -589,21 +589,12 @@ export default function HomeScreen() {
               <AppText variant="bodySmall" tone="subtext">
                 빠른 동작
               </AppText>
-              <View
-                style={[
-                  styles.quickEntryActions,
-                  shouldStack && styles.quickEntryActionsStacked,
-                ]}
-              >
+              <View style={styles.quickEntryActions}>
                 <Button
                   icon={Barcode}
                   onPress={handleOpenScanner}
                   size={emphasizeEntryActions ? "medium" : "small"}
                   fullWidth
-                  style={[
-                    styles.quickEntryAction,
-                    shouldStack && styles.quickEntryActionStacked,
-                  ]}
                   testID="home-scan-button"
                 >
                   바코드 스캔
@@ -614,10 +605,6 @@ export default function HomeScreen() {
                   variant="surface"
                   size={emphasizeEntryActions ? "medium" : "small"}
                   fullWidth
-                  style={[
-                    styles.quickEntryAction,
-                    shouldStack && styles.quickEntryActionStacked,
-                  ]}
                   testID="home-manual-register-button"
                 >
                   직접 입력
@@ -628,10 +615,6 @@ export default function HomeScreen() {
                   variant="surface"
                   size={emphasizeEntryActions ? "medium" : "small"}
                   fullWidth
-                  style={[
-                    styles.quickEntryAction,
-                    shouldStack && styles.quickEntryActionStacked,
-                  ]}
                   testID="home-shopping-button"
                 >
                   장보기
@@ -929,17 +912,8 @@ const styles = StyleSheet.create({
     borderTopColor: colors.border,
   },
   quickEntryActions: {
-    flexDirection: "row",
-    gap: spacing.xs,
-  },
-  quickEntryActionsStacked: {
     flexDirection: "column",
-  },
-  quickEntryAction: {
-    flex: 1,
-  },
-  quickEntryActionStacked: {
-    flex: 0,
+    gap: spacing.xs,
   },
   trafficGroup: {
     gap: spacing.sm,

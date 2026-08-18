@@ -19,6 +19,7 @@ describe("Coupang search URLs", () => {
 
   it("drops blocked non-food shopping queries", () => {
     expect(resolveCoupangSearchQuery("성인용품")).toBeNull();
+    expect(resolveCoupangSearchQuery("말보로 비스타")).toBeNull();
     expect(resolveCoupangSearchQuery("   ")).toBeNull();
   });
 

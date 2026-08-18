@@ -32,6 +32,7 @@ import {
 
 const MAX_RECIPE_GROUPS = 2;
 const MAX_RECENT_GROUPS = 3;
+const MAX_RECENT_CANDIDATES = 8;
 const RECENT_CONSUMED_DAYS = 30;
 const SEARCH_RATE_LIMIT = 10;
 const SEARCH_RATE_WINDOW_MS = 60_000;
@@ -123,20 +124,25 @@ export class AffiliateOfferService {
       if (!name) continue;
       const key = `${name}:${normalizeRecipeTerm(item.brand ?? "")}`;
       if (!unique.has(key)) unique.set(key, item);
-      if (unique.size >= MAX_RECENT_GROUPS) break;
+      if (unique.size >= MAX_RECENT_CANDIDATES) break;
     }
     const productGroups = (
       await Promise.all(
         [...unique.values()].map((item) =>
           this.buildProductGroup({
             ingredientName: item.displayName,
-            reason: "최근에 모두 사용한 재료예요.",
+            reason: "",
             placement: "shopping_recently_consumed",
             brand: item.brand,
           }),
         ),
       )
-    ).filter((group): group is AffiliateProductGroup => group !== null);
+    )
+      .filter(
+        (group): group is AffiliateProductGroup =>
+          group !== null && group.products.length > 0,
+      )
+      .slice(0, MAX_RECENT_GROUPS);
     return {
       enabled: true,
       provider: "coupang_partners",
@@ -194,11 +200,16 @@ export class AffiliateOfferService {
       .join(" ")
       .slice(0, fieldLimits.recipeIngredientName);
     const products = this.coupang.hasCredentials()
-      ? filterRelevantProducts(
-          (await this.coupang.searchProducts(query)) ?? [],
-          baseQuery,
+      ? uniqueByProductId(
+          filterRelevantProducts(
+            (await this.coupang.searchProducts(query)) ?? [],
+            baseQuery,
+          ),
         ).slice(0, readMaxProducts())
       : [];
+    if (input.placement === "shopping_recently_consumed" && products.length === 0) {
+      return null;
+    }
     let fallbackUrl = products[0]?.productUrl ?? null;
     if (!fallbackUrl && this.coupang.hasCredentials()) {
       fallbackUrl = await this.coupang.createDeeplink(buildCoupangSearchUrl(query));
@@ -214,6 +225,15 @@ export class AffiliateOfferService {
       fallbackUrl,
     };
   }
+}
+
+function uniqueByProductId(products: AffiliateProduct[]) {
+  const seen = new Set<string>();
+  return products.filter((product) => {
+    if (seen.has(product.productId)) return false;
+    seen.add(product.productId);
+    return true;
+  });
 }
 
 function filterRelevantProducts(products: AffiliateProduct[], query: string) {

@@ -501,6 +501,11 @@ export default function RecommendationsScreen() {
     });
   };
 
+  const handleOpenShopping = () => {
+    setRecipeDetail(null);
+    router.push("/shopping");
+  };
+
   const handleOpenDetails = (selection: RecipeDetailSelection) => {
     engagementMutation.mutate({
       recommendationId: selection.recommendationId,
@@ -1489,6 +1494,7 @@ export default function RecommendationsScreen() {
             inventorySnapshot={recipeDetail.inventorySnapshot}
             recommendationId={recipeDetail.recommendationId}
             dishIndex={recipeDetail.dishIndex}
+            onOpenShopping={handleOpenShopping}
           />
         ) : null}
       </BottomSheet>
@@ -1793,11 +1799,13 @@ function RecipeDetailContent({
   inventorySnapshot,
   recommendationId,
   dishIndex,
+  onOpenShopping,
 }: {
   dish: RecipeRecommendationDish;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   recommendationId: string;
   dishIndex: number;
+  onOpenShopping: () => void;
 }) {
   const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
@@ -1878,6 +1886,7 @@ function RecipeDetailContent({
         dish={dish}
         recommendationId={recommendationId}
         dishIndex={dishIndex}
+        onOpenShopping={onOpenShopping}
       />
 
       <View style={styles.recipeBlock}>

@@ -18,15 +18,18 @@ import {
 } from "../../shared/theme";
 import { useAffiliateOffers } from "./use-affiliate-offers";
 import { AffiliateProductGroupView } from "./affiliate-product-group";
+import { ingredientsWithoutProductGroups } from "./optional-missing-visibility";
 
 export function OptionalMissingIngredientsCard({
   dish,
   recommendationId,
   dishIndex,
+  onOpenShopping,
 }: {
   dish: RecipeRecommendationDish;
   recommendationId: string;
   dishIndex: number;
+  onOpenShopping?: () => void;
 }) {
   const offersQuery = useAffiliateOffers(recommendationId, dishIndex);
   const trackedShownKey = useRef<string | null>(null);
@@ -38,6 +41,16 @@ export function OptionalMissingIngredientsCard({
   const productGroups = useMemo(
     () => (offersQuery.data?.enabled ? offersQuery.data.productGroups : []),
     [offersQuery.data],
+  );
+  const listedIngredients = useMemo(
+    () =>
+      offersQuery.isLoading
+        ? []
+        : ingredientsWithoutProductGroups(
+            dish.optionalMissingIngredients,
+            productGroups,
+          ),
+    [dish.optionalMissingIngredients, offersQuery.isLoading, productGroups],
   );
   const sharedLanding =
     productGroups.length === 0 && trackingMode === "partner_link"
@@ -88,36 +101,41 @@ export function OptionalMissingIngredientsCard({
   return (
     <View style={styles.card}>
       <AppText style={styles.title}>있으면 더 맛있어져요</AppText>
-      <View style={styles.list}>
-        {dish.optionalMissingIngredients.map((ingredient) => {
-          const offer = offerByName.get(ingredient.name);
-          return (
-            <View key={`${ingredient.name}-${ingredient.reason}`} style={styles.row}>
-              <View style={styles.copy}>
-                <AppText style={styles.name}>{ingredient.name}</AppText>
-                <AppText style={styles.reason}>{ingredient.reason}</AppText>
+      {listedIngredients.length > 0 ? (
+        <View style={styles.list}>
+          {listedIngredients.map((ingredient) => {
+            const offer = offerByName.get(ingredient.name);
+            return (
+              <View key={`${ingredient.name}-${ingredient.reason}`} style={styles.row}>
+                <View style={styles.copy}>
+                  <AppText style={styles.name}>{ingredient.name}</AppText>
+                  <AppText style={styles.reason}>{ingredient.reason}</AppText>
+                </View>
+                {offer ? (
+                  <Pressable
+                    onPress={() => void openOffer(offer, trackingMode)}
+                    accessibilityRole="link"
+                    accessibilityLabel={`${ingredient.name} 쿠팡에서 찾아보기`}
+                    style={({ pressed }) => [
+                      styles.cta,
+                      pressed && styles.ctaPressed,
+                    ]}
+                  >
+                    <AppText style={styles.ctaLabel}>쿠팡에서 찾아보기</AppText>
+                  </Pressable>
+                ) : null}
               </View>
-              {offer ? (
-                <Pressable
-                  onPress={() => void openOffer(offer, trackingMode)}
-                  accessibilityRole="link"
-                  accessibilityLabel={`${ingredient.name} 쿠팡에서 찾아보기`}
-                  style={({ pressed }) => [
-                    styles.cta,
-                    pressed && styles.ctaPressed,
-                  ]}
-                >
-                  <AppText style={styles.ctaLabel}>쿠팡에서 찾아보기</AppText>
-                </Pressable>
-              ) : null}
-            </View>
-          );
-        })}
-      </View>
+            );
+          })}
+        </View>
+      ) : null}
       {offersQuery.isLoading ? (
         <View style={styles.productSkeleton} accessibilityLabel="관련 상품을 불러오고 있어요">
-          <SkeletonBlock height={124} width={184} />
-          <SkeletonBlock height={124} width={184} />
+          <SkeletonBlock height={spacing.xxl * 2} width={spacing.xxl * 2} radiusToken="md" />
+          <View style={styles.productSkeletonCopy}>
+            <SkeletonBlock height={spacing.sm} width="88%" />
+            <SkeletonBlock height={spacing.sm} width="42%" />
+          </View>
         </View>
       ) : null}
       {offersQuery.isError ? (
@@ -148,7 +166,7 @@ export function OptionalMissingIngredientsCard({
       ) : null}
       {productGroups.length > 0 ? (
         <Pressable
-          onPress={() => router.push("/shopping")}
+          onPress={() => (onOpenShopping ? onOpenShopping() : router.push("/shopping"))}
           accessibilityRole="button"
           accessibilityLabel="장보기에서 더 찾아보기"
           style={({ pressed }) => [styles.shoppingLink, pressed && styles.ctaPressed]}
@@ -209,8 +227,13 @@ const styles = StyleSheet.create({
   },
   productSkeleton: {
     flexDirection: "row",
-    gap: spacing.xs,
+    alignItems: "center",
+    gap: spacing.sm,
     overflow: "hidden",
+  },
+  productSkeletonCopy: {
+    flex: 1,
+    gap: spacing.xs,
   },
   row: {
     gap: spacing.xs,
