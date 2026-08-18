@@ -82,27 +82,15 @@ export function getShoppingHeroNotices(input: {
   isShoppingError: boolean;
   isShoppingEnabled: boolean;
   hasRecentGroups: boolean;
-  rotationNotice?: string | null;
 }): JangoHeroNoticeItem[] {
-  const notices: JangoHeroNoticeItem[] = [];
-  const rotationNotice = input.rotationNotice?.trim();
-
-  if (rotationNotice) {
-    notices.push({
-      id: "rotation",
-      mood: "idle",
-      message: rotationNotice,
-    });
-  }
-
   const status = getShoppingHeroNotice(input);
-  notices.push({
-    id: "status",
-    mood: status.mood,
-    message: status.message,
-  });
-
-  return notices;
+  return [
+    {
+      id: "status",
+      mood: status.mood,
+      message: status.message,
+    },
+  ];
 }
 
 /** Recent items stay visible unless a search is in flight or already has products. */

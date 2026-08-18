@@ -1,10 +1,9 @@
 import { COUPANG_PARTNERS_DISCLOSURE } from "@expirymate/shared";
 import { useMutation } from "@tanstack/react-query";
-import { RefreshCw, Search, X } from "lucide-react-native";
+import { ChevronDown, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import {
-  AccessibilityInfo,
   ActivityIndicator,
   Pressable,
   RefreshControl,
@@ -23,10 +22,11 @@ import {
   isShoppingSearchActive,
 } from "../src/features/affiliate/shopping-hero";
 import {
-  advanceRecentShoppingOffset,
-  canRotateRecentShoppingGroups,
-  pickRecentShoppingGroups,
-  recentShoppingRotationNotice,
+  SHOPPING_RECENT_PAGE_SIZE,
+  canLoadMoreRecentShopping,
+  nextRecentShoppingVisibleCount,
+  resolveRecentConsumedCount,
+  takeRecentShoppingGroups,
 } from "../src/features/affiliate/shopping-recent-rotation";
 import { useAffiliateShopping } from "../src/features/affiliate/use-affiliate-shopping";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
@@ -35,15 +35,15 @@ import {
   trackMonetizationEvent,
 } from "../src/services/api";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
 
 export default function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
   const shoppingQuery = useAffiliateShopping();
   const [query, setQuery] = useState("");
-  const [recentOffset, setRecentOffset] = useState(0);
-  const [rotationNotice, setRotationNotice] = useState<string | null>(null);
-  const [rotationNoticeTick, setRotationNoticeTick] = useState(0);
+  const [recentVisibleCount, setRecentVisibleCount] = useState(
+    SHOPPING_RECENT_PAGE_SIZE,
+  );
   const trackedOpened = useRef(false);
   const searchMutation = useMutation({
     mutationFn: async (value: string) => {
@@ -74,7 +74,10 @@ export default function ShoppingScreen() {
   const allRecentGroups = (shopping?.productGroups ?? []).filter(
     (group) => group.products.length > 0,
   );
-  const recentGroups = pickRecentShoppingGroups(allRecentGroups, recentOffset);
+  const recentGroups = takeRecentShoppingGroups(
+    allRecentGroups,
+    recentVisibleCount,
+  );
   const searchGroup =
     searchMutation.data?.group && searchMutation.data.group.products.length > 0
       ? searchMutation.data.group
@@ -87,6 +90,14 @@ export default function ShoppingScreen() {
   });
   const canClearSearch =
     query.length > 0 || searchMutation.status !== "idle";
+  const canLoadMoreRecent = canLoadMoreRecentShopping(
+    recentGroups.length,
+    allRecentGroups.length,
+  );
+  const recentConsumedCount = resolveRecentConsumedCount(
+    shopping?.recentConsumedCount,
+    allRecentGroups.length,
+  );
   const heroNotices = getShoppingHeroNotices({
     isSearching: searchMutation.isPending,
     hasSearchError: searchMutation.isError,
@@ -96,35 +107,18 @@ export default function ShoppingScreen() {
     isShoppingError: shoppingQuery.isError && !isRefreshingRecent,
     isShoppingEnabled: shopping?.enabled !== false,
     hasRecentGroups: recentGroups.length > 0,
-    rotationNotice: searchActive ? null : rotationNotice,
   });
   useEffect(() => {
-    setRecentOffset(0);
-    setRotationNotice(null);
+    setRecentVisibleCount(SHOPPING_RECENT_PAGE_SIZE);
   }, [activeSpaceId, shoppingQuery.dataUpdatedAt]);
 
-  useEffect(() => {
-    if (!rotationNotice) return;
-    const timer = setTimeout(() => setRotationNotice(null), 4000);
-    return () => clearTimeout(timer);
-  }, [rotationNotice, rotationNoticeTick]);
-
   const refreshRecentItems = () => {
-    setRecentOffset(0);
-    setRotationNotice(null);
+    setRecentVisibleCount(SHOPPING_RECENT_PAGE_SIZE);
     void shoppingQuery.refetch();
   };
-  const rotateRecentItems = () => {
-    if (!canRotateRecentShoppingGroups(allRecentGroups.length)) {
-      const notice = recentShoppingRotationNotice(allRecentGroups.length);
-      setRotationNotice(notice);
-      setRotationNoticeTick((tick) => tick + 1);
-      AccessibilityInfo.announceForAccessibility(notice);
-      return;
-    }
-    setRotationNotice(null);
-    setRecentOffset((offset) =>
-      advanceRecentShoppingOffset(offset, allRecentGroups.length),
+  const loadMoreRecentItems = () => {
+    setRecentVisibleCount((visibleCount) =>
+      nextRecentShoppingVisibleCount(visibleCount, allRecentGroups.length),
     );
   };
   const clearSearch = () => {
@@ -245,38 +239,10 @@ export default function ShoppingScreen() {
           count={
             !shoppingQuery.isLoading &&
             !shoppingQuery.isError &&
-            shopping?.enabled !== false &&
-            recentGroups.length > 0
-              ? recentGroups.length
+            shopping &&
+            shopping.enabled !== false
+              ? recentConsumedCount
               : undefined
-          }
-          headerAction={
-            <Pressable
-              onPress={rotateRecentItems}
-              accessibilityRole="button"
-              accessibilityLabel="새로고침"
-              accessibilityHint="지금 보이는 재료를 빼고 다른 최근 재료를 보여 줘요."
-              testID="affiliate-shopping-refresh-button"
-              hitSlop={spacing.xs}
-              style={({ pressed }) => [
-                styles.sectionAction,
-                pressed && styles.sectionActionPressed,
-              ]}
-            >
-              <AppText
-                variant="bodySmall"
-                scaleRole="chrome"
-                densityAware={false}
-                numberOfLines={1}
-              >
-                새로고침
-              </AppText>
-              <RefreshCw
-                color={colors.text}
-                size={typography.bodySmall.fontSize}
-                strokeWidth={2.4}
-              />
-            </Pressable>
           }
           testID="affiliate-shopping-recent"
         >
@@ -304,13 +270,42 @@ export default function ShoppingScreen() {
               </AppText>
             </View>
           ) : (
-            recentGroups.map((group) => (
-              <ShoppingIngredientCard
-                key={`${group.placement}:${group.query}:${group.ingredientName}`}
-              >
-                <AffiliateProductGroupView group={group} />
-              </ShoppingIngredientCard>
-            ))
+            <>
+              {recentGroups.map((group) => (
+                <ShoppingIngredientCard
+                  key={`${group.placement}:${group.query}:${group.ingredientName}`}
+                >
+                  <AffiliateProductGroupView group={group} />
+                </ShoppingIngredientCard>
+              ))}
+              {canLoadMoreRecent ? (
+                <Pressable
+                  onPress={loadMoreRecentItems}
+                  accessibilityRole="button"
+                  accessibilityLabel="더 보기"
+                  accessibilityHint="최근 다 쓴 재료를 3건 더 보여 줘요."
+                  testID="affiliate-shopping-load-more"
+                  style={({ pressed }) => [
+                    styles.loadMore,
+                    pressed && styles.loadMorePressed,
+                  ]}
+                >
+                  <AppText
+                    variant="bodySmall"
+                    tone="subtext"
+                    scaleRole="chrome"
+                    densityAware={false}
+                  >
+                    더 보기
+                  </AppText>
+                  <ChevronDown
+                    color={colors.subtext}
+                    size={spacing.sm}
+                    strokeWidth={2.4}
+                  />
+                </Pressable>
+              ) : null}
+            </>
           )}
         </ShoppingCatalogSection>
       )}
@@ -330,13 +325,11 @@ export default function ShoppingScreen() {
 function ShoppingCatalogSection({
   title,
   count,
-  headerAction,
   children,
   testID,
 }: {
   title: string;
   count?: number;
-  headerAction?: ReactNode;
   children: ReactNode;
   testID?: string;
 }) {
@@ -349,16 +342,27 @@ function ShoppingCatalogSection({
         accessibilityRole="header"
         accessibilityLabel={heading}
       >
-        <AppText
-          variant="bodySmall"
-          scaleRole="chrome"
-          densityAware={false}
-          numberOfLines={1}
-          style={styles.sectionTitle}
-        >
-          {heading}
-        </AppText>
-        {headerAction}
+        <View style={styles.sectionHeading}>
+          <AppText
+            variant="bodySmall"
+            scaleRole="chrome"
+            densityAware={false}
+            numberOfLines={1}
+            style={styles.sectionTitle}
+          >
+            {title}
+          </AppText>
+          {count == null ? null : (
+            <AppText
+              variant="bodySmall"
+              scaleRole="chrome"
+              densityAware={false}
+              style={styles.sectionCount}
+            >
+              {count}건
+            </AppText>
+          )}
+        </View>
       </View>
       <View
         style={[styles.sectionBody, isRegular && styles.sectionBodyRegular]}
@@ -491,22 +495,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  sectionTitle: {
+  sectionHeading: {
     flex: 1,
     minWidth: 0,
-  },
-  sectionAction: {
-    minWidth: touchTarget.min,
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
     gap: spacing.xxs,
-    borderRadius: radius.lg,
   },
-  sectionActionPressed: {
-    backgroundColor: colors.surfacePressed,
+  sectionTitle: {
+    flexShrink: 1,
+  },
+  sectionCount: {
+    flexShrink: 0,
   },
   sectionBody: {
     padding: spacing.xs,
@@ -532,6 +532,22 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexBasis: "40%",
     maxWidth: "48%",
+  },
+  loadMore: {
+    width: "100%",
+    flexBasis: "100%",
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  loadMorePressed: {
+    backgroundColor: colors.surfacePressed,
   },
   legal: {
     gap: spacing.xxs,

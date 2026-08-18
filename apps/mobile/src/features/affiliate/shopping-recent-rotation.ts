@@ -1,37 +1,36 @@
 export const SHOPPING_RECENT_PAGE_SIZE = 3;
 
-export function pickRecentShoppingGroups<T>(
+export function takeRecentShoppingGroups<T>(
   groups: T[],
-  offset: number,
-  pageSize = SHOPPING_RECENT_PAGE_SIZE,
+  visibleCount: number,
 ): T[] {
-  if (groups.length <= pageSize) return groups;
-  const start = ((offset % groups.length) + groups.length) % groups.length;
-  return Array.from(
-    { length: pageSize },
-    (_, index) => groups[(start + index) % groups.length]!,
-  );
+  return groups.slice(0, Math.max(visibleCount, 0));
 }
 
-export function advanceRecentShoppingOffset(
-  offset: number,
+export function nextRecentShoppingVisibleCount(
+  visibleCount: number,
   total: number,
   pageSize = SHOPPING_RECENT_PAGE_SIZE,
 ) {
-  if (total <= pageSize) return 0;
-  return (offset + pageSize) % total;
+  return Math.min(Math.max(visibleCount, 0) + pageSize, Math.max(total, 0));
 }
 
-export function canRotateRecentShoppingGroups(
+export function canLoadMoreRecentShopping(
+  visibleCount: number,
   total: number,
-  pageSize = SHOPPING_RECENT_PAGE_SIZE,
 ) {
-  return total > pageSize;
+  return visibleCount < total;
 }
 
-export function recentShoppingRotationNotice(total: number) {
-  if (total <= 0) {
-    return "아직 바꿔 줄 최근 재료가 없어요.";
+export function resolveRecentConsumedCount(
+  recentConsumedCount: number | undefined,
+  groupCount: number,
+) {
+  if (
+    typeof recentConsumedCount === "number" &&
+    Number.isFinite(recentConsumedCount)
+  ) {
+    return Math.max(Math.trunc(recentConsumedCount), 0);
   }
-  return "지금은 이 재료들이 전부예요. 다 쓴 재료가 더 생기면 바꿔 볼게요.";
+  return Math.max(groupCount, 0);
 }

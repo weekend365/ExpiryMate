@@ -111,23 +111,12 @@ export class AffiliateOfferService {
         updatedAt: { gte: since },
       },
       orderBy: { updatedAt: "desc" },
-      take: 30,
       select: { displayName: true, brand: true, category: true },
     });
-    const unique = new Map<string, { displayName: string; brand: string | null }>();
-    for (const item of consumed) {
-      if (item.category && !REPURCHASE_ALLOWED_CATEGORIES.has(item.category)) {
-        continue;
-      }
-      const name = normalizeRecipeTerm(item.displayName);
-      if (!name) continue;
-      const key = `${name}:${normalizeRecipeTerm(item.brand ?? "")}`;
-      if (!unique.has(key)) unique.set(key, item);
-      if (unique.size >= MAX_RECENT_CANDIDATES) break;
-    }
+    const unique = uniqueRecentConsumedItems(consumed);
     const productGroups = (
       await Promise.all(
-        [...unique.values()].map((item) =>
+        [...unique.values()].slice(0, MAX_RECENT_CANDIDATES).map((item) =>
           this.buildProductGroup({
             ingredientName: item.displayName,
             reason: "",
@@ -145,6 +134,7 @@ export class AffiliateOfferService {
       enabled: true,
       provider: "coupang_partners",
       disclosure: COUPANG_PARTNERS_DISCLOSURE,
+      recentConsumedCount: unique.size,
       productGroups,
     };
   }
@@ -223,6 +213,26 @@ export class AffiliateOfferService {
       fallbackUrl,
     };
   }
+}
+
+function uniqueRecentConsumedItems(
+  items: Array<{
+    displayName: string;
+    brand: string | null;
+    category: ProductCategory | null;
+  }>,
+) {
+  const unique = new Map<string, { displayName: string; brand: string | null }>();
+  for (const item of items) {
+    if (item.category && !REPURCHASE_ALLOWED_CATEGORIES.has(item.category)) {
+      continue;
+    }
+    const name = normalizeRecipeTerm(item.displayName);
+    if (!name) continue;
+    const key = `${name}:${normalizeRecipeTerm(item.brand ?? "")}`;
+    if (!unique.has(key)) unique.set(key, item);
+  }
+  return unique;
 }
 
 function uniqueByProductId(products: AffiliateProduct[]) {
@@ -332,6 +342,7 @@ function disabledShoppingResponse(): AffiliateShoppingResponse {
     enabled: false,
     provider: "coupang_partners",
     disclosure: COUPANG_PARTNERS_DISCLOSURE,
+    recentConsumedCount: 0,
     productGroups: [],
   };
 }

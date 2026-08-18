@@ -244,6 +244,7 @@ describe("AffiliateOfferService Phase A", () => {
       "우유",
     ]);
     expect(result.productGroups.every((group) => group.products.length > 0)).toBe(true);
+    expect(result.recentConsumedCount).toBe(2);
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
@@ -277,9 +278,10 @@ describe("AffiliateOfferService Phase A", () => {
 
     expect(result.productGroups.map((group) => group.ingredientName)).toEqual(["우유"]);
     expect(result.productGroups[0]?.products).toHaveLength(1);
+    expect(result.recentConsumedCount).toBe(3);
   });
 
-  it("keeps more than three recent groups so the client can rotate pages", async () => {
+  it("keeps more than three recent groups so the client can load more", async () => {
     deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
     coupangClient.searchProducts.mockImplementation(async (query: string) => {
       const name = String(query);
@@ -304,6 +306,42 @@ describe("AffiliateOfferService Phase A", () => {
       "두부",
       "양파",
     ]);
+    expect(result.recentConsumedCount).toBe(4);
+  });
+
+  it("counts every unique 30-day consumed ingredient even beyond product pages", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockImplementation(async (query: string) => {
+      const name = String(query);
+      return [product(name, `${name} 상품`)];
+    });
+    prisma.inventoryItem.findMany.mockResolvedValue(
+      [
+        "달걀",
+        "우유",
+        "두부",
+        "양파",
+        "당근",
+        "대파",
+        "감자",
+        "오이",
+        "사과",
+        "배추",
+      ].map((displayName) => ({
+        displayName,
+        brand: null,
+        category: displayName === "달걀" ? "egg" : displayName === "우유" ? "dairy" : displayName === "두부" ? "tofu" : "produce",
+      })),
+    );
+    const service = createService();
+
+    const result = await service.getShopping({
+      ownerKey: "owner-a",
+      spaceId: "space-a",
+    });
+
+    expect(result.recentConsumedCount).toBe(10);
+    expect(result.productGroups).toHaveLength(9);
   });
 
   it("skips excluded ingredients and unknown dishes", async () => {

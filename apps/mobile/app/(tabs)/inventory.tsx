@@ -72,15 +72,6 @@ import {
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
-const urgencySectionTones: Record<
-  InventoryUrgencySection,
-  "danger" | "warning" | "success"
-> = {
-  expired: "danger",
-  within7: "warning",
-  safe: "success",
-};
-
 const inventoryHeroToolbarFills = {
   danger: colors.dangerSoft,
   warning: colors.warningSoft,
@@ -1139,7 +1130,6 @@ function UrgencySection({
 }) {
   const { isRegular } = useResponsiveLayout();
   const description = inventoryUrgencySectionDescriptions[section.key];
-  const tone = urgencySectionTones[section.key];
   const title = `${section.title} ${section.itemCount}건`;
 
   return (
@@ -1154,7 +1144,6 @@ function UrgencySection({
       >
         <AppText
           variant="bodySmall"
-          tone={tone}
           scaleRole="chrome"
           densityAware={false}
           numberOfLines={1}

@@ -1561,7 +1561,6 @@ function RecipeSection({
       >
         <AppText
           variant="bodySmall"
-          tone="primary"
           scaleRole="chrome"
           densityAware={false}
           numberOfLines={1}

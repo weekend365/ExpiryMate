@@ -62,15 +62,4 @@ describe("getShoppingHeroNotices", () => {
       }),
     ]);
   });
-
-  it("puts a rotation notice in front so Jango can say it in the hero", () => {
-    expect(
-      getShoppingHeroNotices({
-        ...idle,
-        hasRecentGroups: true,
-        rotationNotice:
-          "지금은 이 재료들이 전부예요. 다 쓴 재료가 더 생기면 바꿔 볼게요.",
-      }).map((notice) => notice.id),
-    ).toEqual(["rotation", "status"]);
-  });
 });
