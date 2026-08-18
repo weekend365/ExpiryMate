@@ -29,6 +29,17 @@ const eventLabels: Record<string, string> = {
   credit_checkout_started: "추천권 결제 시작",
   credit_purchase_verified: "추천권 구매 확인",
   paid_credit_used: "구매 추천권 사용",
+  affiliate_shopping_opened: "장보기 화면 진입",
+  affiliate_product_shown: "쿠팡 상품 노출",
+  affiliate_product_tapped: "쿠팡 상품 탭",
+  affiliate_fallback_tapped: "쿠팡 검색 링크 탭",
+};
+
+const affiliatePlacementLabels: Record<string, string> = {
+  recipe_missing_ingredient: "레시피 부족 재료",
+  shopping_recently_consumed: "최근 소비 재구매",
+  shopping_search: "장보기 직접 검색",
+  unknown: "구분 없음",
 };
 
 export function MonetizationPage() {
@@ -86,6 +97,39 @@ export function MonetizationPage() {
           tone="warning"
         />
       </div>
+
+      <Panel
+        title="쿠팡 파트너스"
+        description="앱의 노출·탭은 내부 이벤트, 클릭·주문·수수료는 쿠팡의 일별 집계입니다. 사용자 구매와 연결하지 않습니다."
+      >
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <MetricCard label="앱 상품 노출" value={overview?.affiliate.appImpressions ?? 0} />
+          <MetricCard label="앱 상품 탭" value={overview?.affiliate.appTaps ?? 0} />
+          <MetricCard label="앱 CTR" value={`${overview?.affiliate.appCtrPercent ?? 0}%`} />
+          <MetricCard label="쿠팡 집계 클릭" value={overview?.affiliate.coupangClicks ?? 0} />
+          <MetricCard label="주문" value={overview?.affiliate.orders ?? 0} />
+          <MetricCard label="취소" value={overview?.affiliate.cancels ?? 0} tone="warning" />
+          <MetricCard label="거래액" value={formatKrw(overview?.affiliate.gmvKrw)} />
+          <MetricCard label="실제 수수료" value={formatKrw(overview?.affiliate.commissionKrw)} />
+          <MetricCard label="클릭 → 주문" value={`${overview?.affiliate.orderConversionPercent ?? 0}%`} />
+          <MetricCard label="클릭당 수익" value={formatKrw(overview?.affiliate.earningsPerClickKrw)} />
+        </div>
+        <p className="mt-3 text-xs text-[var(--foreground-muted)]">
+          마지막 리포트 동기화: {formatDateTime(overview?.affiliate.lastSyncedAt)}
+        </p>
+        {overview?.affiliate.placements.length ? (
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            {overview.affiliate.placements.map((row) => (
+              <div key={row.placement} className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3">
+                <p className="text-sm font-bold">{affiliatePlacementLabels[row.placement] ?? row.placement}</p>
+                <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                  노출 {row.impressions.toLocaleString("ko-KR")} · 탭 {row.taps.toLocaleString("ko-KR")} · CTR {row.ctrPercent}%
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </Panel>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
@@ -275,6 +319,12 @@ function formatKrw(value: number | null | undefined) {
 
 function formatPercent(value: number | null | undefined) {
   return value == null ? "설정되지 않음" : `${value}%`;
+}
+
+function formatDateTime(value: string | null | undefined) {
+  return value
+    ? new Intl.DateTimeFormat("ko-KR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value))
+    : "동기화 전";
 }
 
 function GuardrailCard({

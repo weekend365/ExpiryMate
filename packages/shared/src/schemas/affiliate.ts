@@ -12,6 +12,19 @@ export const affiliateTrackingModeSchema = z.enum([
   "deeplink",
 ]);
 
+export const affiliatePresentationSchema = z.enum([
+  "product_search",
+  "deeplink_fallback",
+  "partner_link",
+  "none",
+]);
+
+export const affiliatePlacementSchema = z.enum([
+  "recipe_missing_ingredient",
+  "shopping_recently_consumed",
+  "shopping_search",
+]);
+
 export const affiliateOfferSchema = z.object({
   ingredientName: z.string().min(1).max(fieldLimits.recipeIngredientName),
   reason: z.string().min(1).max(fieldLimits.recipeText),
@@ -20,17 +33,73 @@ export const affiliateOfferSchema = z.object({
   tracked: z.boolean(),
 });
 
+export const affiliateProductSchema = z.object({
+  productId: z.string().min(1).max(64),
+  productName: z.string().min(1).max(300),
+  productImage: z.string().url(),
+  productUrl: z.string().url(),
+  productPrice: z.number().int().nonnegative().nullable(),
+  isRocket: z.boolean(),
+  isFreeShipping: z.boolean(),
+  observedAt: z.string().datetime(),
+  stale: z.boolean(),
+});
+
+export const affiliateProductGroupSchema = z.object({
+  ingredientName: z.string().min(1).max(fieldLimits.recipeIngredientName),
+  reason: z.string().max(fieldLimits.recipeText),
+  query: z.string().min(1).max(fieldLimits.recipeIngredientName),
+  placement: affiliatePlacementSchema,
+  products: z.array(affiliateProductSchema).max(3),
+  fallbackUrl: z.string().url().nullable(),
+});
+
 export const affiliateOffersResponseSchema = z.object({
   enabled: z.boolean(),
   provider: affiliateProviderSchema,
   trackingMode: affiliateTrackingModeSchema,
+  presentation: affiliatePresentationSchema.default("none"),
   disclosure: z.string().min(1),
   offers: z.array(affiliateOfferSchema).max(2),
+  productGroups: z.array(affiliateProductGroupSchema).max(2).default([]),
+});
+
+export const affiliateProductSearchRequestSchema = z.object({
+  query: z.string().trim().min(1).max(fieldLimits.recipeIngredientName),
+  placement: z.literal("shopping_search"),
+});
+
+export const affiliateProductSearchResponseSchema = z.object({
+  enabled: z.boolean(),
+  provider: affiliateProviderSchema,
+  presentation: affiliatePresentationSchema,
+  disclosure: z.string().min(1),
+  group: affiliateProductGroupSchema.nullable(),
+});
+
+export const affiliateShoppingResponseSchema = z.object({
+  enabled: z.boolean(),
+  provider: affiliateProviderSchema,
+  disclosure: z.string().min(1),
+  productGroups: z.array(affiliateProductGroupSchema).max(3),
 });
 
 export type AffiliateProvider = z.infer<typeof affiliateProviderSchema>;
 export type AffiliateTrackingMode = z.infer<typeof affiliateTrackingModeSchema>;
+export type AffiliatePresentation = z.infer<typeof affiliatePresentationSchema>;
+export type AffiliatePlacement = z.infer<typeof affiliatePlacementSchema>;
 export type AffiliateOffer = z.infer<typeof affiliateOfferSchema>;
+export type AffiliateProduct = z.infer<typeof affiliateProductSchema>;
+export type AffiliateProductGroup = z.infer<typeof affiliateProductGroupSchema>;
 export type AffiliateOffersResponse = z.infer<
   typeof affiliateOffersResponseSchema
+>;
+export type AffiliateProductSearchRequest = z.infer<
+  typeof affiliateProductSearchRequestSchema
+>;
+export type AffiliateProductSearchResponse = z.infer<
+  typeof affiliateProductSearchResponseSchema
+>;
+export type AffiliateShoppingResponse = z.infer<
+  typeof affiliateShoppingResponseSchema
 >;

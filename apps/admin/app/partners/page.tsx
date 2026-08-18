@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: `쿠팡 파트너스 안내 · ${appBrand.appNameKo}`,
-  description: `${appBrand.appNameKo} 요리 추천에서 있으면 좋은 재료를 쿠팡 파트너스 링크로 안내합니다.`,
+  description: `${appBrand.appNameKo}의 레시피와 장보기에서 제공하는 쿠팡 파트너스 상품 안내입니다.`,
 };
 
 export default function PartnersPage() {
@@ -30,25 +30,24 @@ export default function PartnersPage() {
           쿠팡 파트너스 안내
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 8월 16일
+          시행일: 2026년 8월 18일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
           <h2 className="text-xl font-black">이 페이지의 역할</h2>
           <p>
             {appBrand.appNameKo}({appBrand.appNameEn})는 식재료·유통기한 관리와
-            AI 요리 추천을 제공합니다. 요리에 있으면 더 좋은 선택 재료를 안내할
-            때 쿠팡 파트너스 링크를 사용할 수 있습니다. 이 페이지는 그 제휴
-            안내와 경제적 이해관계를 공개합니다.
+            AI 요리 추천을 제공합니다. 레시피의 부족 재료와 별도 장보기 화면에서
+            관련 상품 또는 쿠팡 검색 링크를 안내할 수 있습니다. 이 페이지는 그
+            제휴 안내와 경제적 이해관계를 공개합니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">앱에서 어떻게 쓰이나</h2>
           <p>
-            추천 요리는 냉장고에 있는 재료만으로도 만들 수 있게 구성합니다.
-            없어도 조리는 가능하지만 맛·향을 살릴 수 있는 재료가 있으면, 앱의
-            레시피 상세에서 「있으면 좋은 재료」로 보여 주고 쿠팡에서 찾아볼 수
-            있는 링크를 함께 둡니다. 홈 화면이나 유통기한 알림에는 쇼핑 배너를
-            두지 않습니다.
+            레시피 상세에서는 부족한 선택 재료별 관련 상품을, 장보기 화면에서는
+            사용자가 직접 검색한 재료와 최근 30일 안에 모두 소비한 재료의 관련
+            상품을 보여 줄 수 있습니다. 홈에는 장보기 화면으로 이동하는 빠른
+            동작만 두며, 유통기한 알림에 상품 배너를 넣지 않습니다.
           </p>
           <p>
             링크를 여는 것은 선택입니다. 장고 플러스 구독 혜택과 무관하며,
@@ -69,8 +68,10 @@ export default function PartnersPage() {
 
           <h2 className="pt-4 text-xl font-black">식재료 찾아보기</h2>
           <p>
-            아래는 앱에서 「있으면 좋은 재료」를 안내할 때 쓰는 식재료 검색
-            링크입니다. 버튼을 누르면 쿠팡에서 식재료를 찾아볼 수 있습니다.
+            앱은 쿠팡 파트너스 API에서 받은 상품명·이미지·현재 표시 가격·배송
+            정보와 제휴 URL을 최대 3개까지 표시할 수 있습니다. 검색 결과가 없거나
+            API를 사용할 수 없으면 아래와 같은 제휴 검색 링크로 전환합니다.
+            가격과 재고는 조회 뒤 바뀔 수 있으므로 쿠팡에서 최종 확인해 주세요.
           </p>
           <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] p-5">
             <p className="text-xs font-bold tracking-wide text-[var(--primary)]">
@@ -105,8 +106,10 @@ export default function PartnersPage() {
           <p>
             상품 결제와 배송은 쿠팡에서 이루어집니다. App Store 또는 Google Play
             인앱결제가 아니며, {appBrand.appNameKo}가 대금을 받지 않습니다.
-            링크를 직접 연 경우에만 쿠팡 웹 또는 앱으로 이동합니다. 냉장고 재료
-            목록, 계정 정보, 기기 광고 식별자는 쿠팡에 보내지 않습니다.
+            상품을 누른 경우에만 쿠팡 웹 또는 앱으로 이동합니다. 상품 영역을
+            불러올 때 정규화한 재료명 또는 사용자가 직접 입력한 검색어 한 건이
+            서버에서 쿠팡으로 전달될 수 있습니다. 계정 ID, 전체 냉장고 목록,
+            유통기한, 수량, 공간 정보, 기기 광고 식별자는 쿠팡에 보내지 않습니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">문의</h2>

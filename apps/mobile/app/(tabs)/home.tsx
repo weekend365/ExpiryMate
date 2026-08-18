@@ -8,6 +8,7 @@ import {
   Barcode,
   ChevronRight,
   PenLine,
+  ShoppingBasket,
   Sparkles,
 } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -157,6 +158,10 @@ export default function HomeScreen() {
   const handleOpenRecommendations = () => {
     acknowledgeRecipeGeneration();
     router.push("/(tabs)/recommendations");
+  };
+
+  const handleOpenShopping = () => {
+    router.push("/shopping");
   };
 
   const handleNoticeAction = (action: HomeNoticeAction) => {
@@ -582,7 +587,7 @@ export default function HomeScreen() {
             )}
             <View style={styles.quickEntrySection}>
               <AppText variant="bodySmall" tone="subtext">
-                재료 추가
+                빠른 동작
               </AppText>
               <View
                 style={[
@@ -616,6 +621,20 @@ export default function HomeScreen() {
                   testID="home-manual-register-button"
                 >
                   직접 입력
+                </Button>
+                <Button
+                  icon={ShoppingBasket}
+                  onPress={handleOpenShopping}
+                  variant="surface"
+                  size={emphasizeEntryActions ? "medium" : "small"}
+                  fullWidth
+                  style={[
+                    styles.quickEntryAction,
+                    shouldStack && styles.quickEntryActionStacked,
+                  ]}
+                  testID="home-shopping-button"
+                >
+                  장보기
                 </Button>
               </View>
             </View>

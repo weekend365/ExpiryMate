@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
           개인정보처리방침
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 6월 3일 · 최종 개정: 2026년 7월 28일
+          시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 18일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -109,9 +109,11 @@ export default function PrivacyPolicyPage() {
               갱신·취소·환불 상태 전달.
             </li>
             <li>
-              쿠팡(쿠팡 파트너스): 사용자가 선택 재료 안내 링크를 직접 연
-              경우에만 쿠팡 웹·앱으로 이동합니다. 냉장고 재료 목록이나 계정
-              정보는 쿠팡에 전송하지 않습니다. 고지는{" "}
+              쿠팡(쿠팡 파트너스): 레시피 또는 장보기 상품 영역을 불러올 때
+              정규화한 재료명이나 사용자가 직접 입력한 검색어 한 건이 서버에서
+              쿠팡으로 전달될 수 있고, 상품을 선택하면 쿠팡 웹·앱으로 이동합니다.
+              계정 ID, 전체 냉장고 목록, 유통기한, 수량, 공간 정보는 쿠팡에
+              전송하지 않습니다. 고지는{" "}
               <Link className="font-bold text-[var(--primary)]" href="/partners">
                 쿠팡 파트너스 안내
               </Link>

@@ -17,9 +17,8 @@
    `SUBSCRIPTIONS_ENABLED=true`로 바꿉니다.
 7. 바코드 추천권 migration과 API를 플래그가 꺼진 상태로 먼저 배포한 뒤
    스테이징 100%, 프로덕션 10% → 50% → 100% 순으로 확대합니다.
-8. (이후) 광고·구독 관문이 안정된 뒤 「쿠팡 파트너스 · 재료 구매 연동」
-   Phase A(검색 딥링크) → Phase B(파트너스 API) 순으로 켭니다. 상세는 아래
-   동명 절을 따릅니다.
+8. 쿠팡 파트너스 키·정책 고지·smoke test를 확인한 뒤 검색 딥링크 5%, 상품
+   검색 5% → 25% → 100% 순으로 켭니다. 상세는 아래 동명 절을 따릅니다.
 
 ## API 환경변수
 
@@ -239,12 +238,12 @@ development/preview는 코드에서 Google 테스트 광고 단위를 사용합�
   서버 승인에 의존합니다. `linkedPurchaseToken`으로 토큰이 바뀌면 기존
   entitlement 행을 찾아 `purchaseTokenHash`를 갱신합니다.
 
-## 쿠팡 파트너스 · 재료 구매 연동 (계획)
+## 쿠팡 파트너스 · 재료 구매 연동 (구현됨, 플래그 출시)
 
 IAP(구독·추천권)·보상 광고와 **겹치지 않는 제3 수익**으로, 요리/재료 맥락에서
-「부족한 재료를 사기」로 자연스럽게 이어지게 합니다. **코어 수익화(광고·구독)
-출시 관문을 통과한 뒤** 단계적으로 붙입니다. 코드·플래그는 아직 없으며 아래는
-제품·기술 계획입니다.
+「부족한 재료를 사기」와 최근 소비 재료의 재구매로 자연스럽게 이어지게 합니다.
+서버 상품 검색, 딥링크 폴백, 장보기 화면, 집계 리포트까지 구현되어 있으며 운영
+키와 기능 플래그로 단계적으로 출시합니다.
 
 ### 원칙
 
@@ -278,10 +277,11 @@ Phase A는 파트너스 사이트 **링크 생성**으로 만든 추적 단축 U
 #### Phase B — 쿠팡 파트너스 API
 
 1. 파트너스 승인·API 키는 서버만 보유 (`COUPANG_PARTNERS_*`). 모바일에 비밀키 금지.
-2. 재료 쿼리 → 상품 검색 → **상위 1~2개** (가격·썸네일·제휴 URL) 서버 응답.
+2. 재료 쿼리 → 상품 검색 → 관련성이 확인된 **상위 최대 3개** (가격·썸네일·제휴 URL) 서버 응답.
 3. 품절·매칭 실패 시 Phase A 검색 링크로 폴백.
 4. 캐시·레이트 리밋·금칙어(비식품·성인 등) 필터.
-5. 관리자에서 클릭·추정 수익(파트너스 리포트 대조) 조회.
+5. 관리자에서 앱 노출·탭·CTR과 쿠팡 집계 클릭·주문·GMV·실제 수수료를 분리 조회.
+6. 별도 장보기 화면에서 최근 30일 내 모두 소비한 재료 최대 3개와 직접 검색 지원.
 
 #### Phase C — 확장 (선택)
 
@@ -304,8 +304,11 @@ AFFILIATE_OFFERS_ROLLOUT_PERCENT=0
 COUPANG_PARTNERS_TRACKING_LINK=
 COUPANG_PARTNERS_ACCESS_KEY=
 COUPANG_PARTNERS_SECRET_KEY=
-AFFILIATE_OFFER_CACHE_SECONDS=86400
-AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT=2
+COUPANG_PARTNERS_SUB_ID=
+COUPANG_REPORT_SYNC_ENABLED=false
+AFFILIATE_OFFER_CACHE_SECONDS=1800
+AFFILIATE_OFFER_STALE_SECONDS=21600
+AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT=3
 ```
 
 ### 출시 전제
@@ -417,7 +420,8 @@ SUBSCRIPTION_RESYNC_VOIDED_LOOKBACK_DAYS=7
       `GOOGLE_RTDN_AUDIENCE` 일치.
 - [ ] 관문 통과 후 `REWARDED_ADS_ENABLED` → `SUBSCRIPTIONS_ENABLED` →
       (`expanded`) 추천권·가족. 10% → 50% → 100%.
-- [ ] (이후) 쿠팡 파트너스 Phase A 딥링크 → 지표 통과 시 Phase B API.
+- [ ] 쿠팡 API 상품 검색·딥링크 smoke test와 다음 집계 주기 리포트 반영 확인.
+- [ ] 쿠팡 검색 딥링크 5% → 상품 검색 5% → 25% → 100% 롤아웃.
 
 ## 운영 지표
 

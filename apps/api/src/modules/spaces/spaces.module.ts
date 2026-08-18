@@ -8,6 +8,7 @@ import { SettingsModule } from "../settings/settings.module";
 import { SubscriptionsModule } from "../subscriptions/subscriptions.module";
 import {
   SpaceDashboardController,
+  SpaceAffiliateController,
   SpaceInventoryController,
   SpaceRecipesController,
   SpaceStorageLocationsController,
@@ -37,6 +38,7 @@ import { SpacesService } from "./spaces.service";
     SpaceInvitationLinksController,
     SpaceInventoryController,
     SpaceDashboardController,
+    SpaceAffiliateController,
     SpaceStorageLocationsController,
     SpaceRecipesController,
     SpaceSubscriptionsController,

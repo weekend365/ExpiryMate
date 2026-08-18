@@ -228,6 +228,25 @@ export type AdminMonetizationOverview = {
     barcodeRewardGrantPercent: number;
     creditPackToPurchasePercent: number;
   };
+  affiliate: {
+    appImpressions: number;
+    appTaps: number;
+    appCtrPercent: number;
+    coupangClicks: number;
+    orders: number;
+    cancels: number;
+    gmvKrw: number;
+    commissionKrw: number;
+    orderConversionPercent: number;
+    earningsPerClickKrw: number | null;
+    lastSyncedAt: string | null;
+    placements: Array<{
+      placement: string;
+      impressions: number;
+      taps: number;
+      ctrPercent: number;
+    }>;
+  };
   economicsConfigured: boolean;
   economicsBySource: Array<{
     source: string;

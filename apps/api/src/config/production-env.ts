@@ -47,7 +47,10 @@ export const PRODUCTION_MONETIZATION_DEFAULTS = {
   SUBSCRIPTIONS_ENABLED: "false",
   AFFILIATE_OFFERS_ENABLED: "false",
   AFFILIATE_OFFERS_ROLLOUT_PERCENT: "0",
-  AFFILIATE_OFFER_CACHE_SECONDS: "86400",
+  AFFILIATE_OFFER_CACHE_SECONDS: "1800",
+  AFFILIATE_OFFER_STALE_SECONDS: "21600",
+  AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT: "3",
+  COUPANG_REPORT_SYNC_ENABLED: "false",
   IAP_ALLOW_SANDBOX_PURCHASES: "false",
   SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED: "false",
 } as const;
@@ -321,6 +324,7 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
   validateBooleanFlag(env, "PAID_RECOMMENDATION_CREDITS_ENABLED", errors);
   validateBooleanFlag(env, "AFFILIATE_OFFERS_ENABLED", errors);
+  validateBooleanFlag(env, "COUPANG_REPORT_SYNC_ENABLED", errors);
   validateBooleanFlag(env, "IAP_ALLOW_SANDBOX_PURCHASES", errors);
   validateBooleanFlag(env, "SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED", errors);
 
@@ -345,6 +349,8 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     "BARCODE_REWARD_BALANCE_LIMIT",
     "AFFILIATE_OFFERS_ROLLOUT_PERCENT",
     "AFFILIATE_OFFER_CACHE_SECONDS",
+    "AFFILIATE_OFFER_STALE_SECONDS",
+    "AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT",
   ]) {
     if (env[key] === undefined || env[key] === "") continue;
     const value = Number(env[key]);
@@ -389,6 +395,39 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     affiliateRolloutPercent > 100
   ) {
     errors.push("AFFILIATE_OFFERS_ROLLOUT_PERCENT must be between 0 and 100.");
+  }
+  const coupangAccessKey = env.COUPANG_PARTNERS_ACCESS_KEY?.trim();
+  const coupangSecretKey = env.COUPANG_PARTNERS_SECRET_KEY?.trim();
+  if (Boolean(coupangAccessKey) !== Boolean(coupangSecretKey)) {
+    errors.push(
+      "COUPANG_PARTNERS_ACCESS_KEY and COUPANG_PARTNERS_SECRET_KEY must be configured together.",
+    );
+  }
+  if (
+    isEnabled(env.COUPANG_REPORT_SYNC_ENABLED) &&
+    (!coupangAccessKey || !coupangSecretKey)
+  ) {
+    errors.push(
+      "Coupang Partners credentials are required when COUPANG_REPORT_SYNC_ENABLED is enabled.",
+    );
+  }
+  if (
+    isEnabled(env.AFFILIATE_OFFERS_ENABLED) &&
+    (!coupangAccessKey || !coupangSecretKey) &&
+    !env.COUPANG_PARTNERS_TRACKING_LINK?.trim()
+  ) {
+    errors.push(
+      "Coupang credentials or COUPANG_PARTNERS_TRACKING_LINK are required when AFFILIATE_OFFERS_ENABLED is enabled.",
+    );
+  }
+  const affiliateMaxProducts = Number(
+    env.AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT ?? 3,
+  );
+  if (
+    Number.isFinite(affiliateMaxProducts) &&
+    (affiliateMaxProducts < 1 || affiliateMaxProducts > 3)
+  ) {
+    errors.push("AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT must be between 1 and 3.");
   }
   if (isEnabled(env.BARCODE_REWARDS_ENABLED)) {
     requireFeatureValue(

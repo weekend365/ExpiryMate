@@ -12,10 +12,31 @@ const BLOCKED_SHOPPING_TERMS = [
   "성인",
   "담배",
   "전자담배",
-  "주류도매",
+  "주류",
+  "소주",
+  "맥주",
+  "와인",
+  "의약품",
+  "비아그라",
   "화약",
   "총기",
+  "노트북",
+  "스마트폰",
+  "휴대폰",
+  "태블릿",
+  "텔레비전",
+  "화장품",
+  "의류",
+  "신발",
+  "가방",
 ];
+
+export function isBlockedShoppingText(value: string) {
+  const normalized = normalizeRecipeTerm(value);
+  return BLOCKED_SHOPPING_TERMS.some((term) =>
+    normalized.includes(normalizeRecipeTerm(term)),
+  );
+}
 
 export function resolveCoupangSearchQuery(ingredientName: string) {
   const trimmed = ingredientName.trim();
@@ -28,11 +49,7 @@ export function resolveCoupangSearchQuery(ingredientName: string) {
     return null;
   }
 
-  if (
-    BLOCKED_SHOPPING_TERMS.some((term) =>
-      normalized.includes(normalizeRecipeTerm(term)),
-    )
-  ) {
+  if (isBlockedShoppingText(normalized)) {
     return null;
   }
 
@@ -71,7 +88,8 @@ export function parseCoupangPartnerTrackingUrl(raw: string) {
     host === "www.coupang.com" ||
     host === "coupang.com" ||
     host === "coupa.ng" ||
-    host.endsWith(".coupang.com");
+    host.endsWith(".coupang.com") ||
+    host.endsWith(".coupa.ng");
 
   return allowed ? url.toString() : null;
 }

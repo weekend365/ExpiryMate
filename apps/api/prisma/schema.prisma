@@ -750,6 +750,25 @@ model MonetizationRevenueEvent {
   @@index([spaceId, occurredAt])
 }
 
+model AffiliateReportDaily {
+  id           String   @id @default(cuid())
+  date         DateTime @db.Date
+  trackingCode String   @default("")
+  subId        String   @default("")
+  clicks       Int      @default(0)
+  orders       Int      @default(0)
+  cancels      Int      @default(0)
+  gmvKrw       Decimal  @default(0) @db.Decimal(16, 2)
+  commissionKrw Decimal @default(0) @db.Decimal(14, 2)
+  lastSyncedAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([date, trackingCode, subId])
+  @@index([date])
+  @@index([lastSyncedAt])
+}
+
 model PushToken {
   id         String                     @id @default(cuid())
   ownerKey   String

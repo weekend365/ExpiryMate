@@ -146,6 +146,51 @@ describe("validateProductionEnvironment", () => {
       /MONETIZATION_OFFER_MODE.*RECIPE_FREE_DAILY_LIMIT/s,
     );
   });
+
+  it("requires Coupang Partners credentials as a complete pair", () => {
+    const env = validProductionEnv();
+    env.COUPANG_PARTNERS_ACCESS_KEY = "access-key";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /COUPANG_PARTNERS_ACCESS_KEY.*COUPANG_PARTNERS_SECRET_KEY/s,
+    );
+  });
+
+  it("requires credentials when Coupang report sync is enabled", () => {
+    const env = validProductionEnv();
+    env.COUPANG_REPORT_SYNC_ENABLED = "true";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /credentials are required when COUPANG_REPORT_SYNC_ENABLED/i,
+    );
+
+    env.COUPANG_PARTNERS_ACCESS_KEY = "access-key";
+    env.COUPANG_PARTNERS_SECRET_KEY = "secret-key";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("requires an API key pair or tracking fallback when affiliate offers are enabled", () => {
+    const env = validProductionEnv();
+    env.AFFILIATE_OFFERS_ENABLED = "true";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /COUPANG_PARTNERS_TRACKING_LINK/,
+    );
+
+    env.COUPANG_PARTNERS_TRACKING_LINK = "https://link.coupang.com/a/example";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("limits Coupang products per ingredient to one through three", () => {
+    const env = validProductionEnv();
+    env.AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT = "0";
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT/,
+    );
+
+    env.AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT = "3";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
 });
 
 function validProductionEnv(): NodeJS.ProcessEnv {

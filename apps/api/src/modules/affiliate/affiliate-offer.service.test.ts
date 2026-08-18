@@ -38,6 +38,14 @@ describe("AffiliateOfferService Phase A", () => {
   const settingsService = {
     getRecipePreferences: vi.fn(),
   };
+  const prisma = {
+    inventoryItem: { findMany: vi.fn().mockResolvedValue([]) },
+  };
+  const coupangClient = {
+    hasCredentials: () => Boolean(deeplinkMocks.readCredentials()),
+    searchProducts: vi.fn().mockResolvedValue([]),
+    createDeeplink: (...args: unknown[]) => deeplinkMocks.convert(...args),
+  };
 
   beforeEach(() => {
     resetAffiliateLandingCache();
@@ -47,6 +55,8 @@ describe("AffiliateOfferService Phase A", () => {
     process.env.MONETIZATION_EXPERIMENT_SALT = "affiliate-test";
     deeplinkMocks.readCredentials.mockReturnValue(null);
     deeplinkMocks.convert.mockResolvedValue(null);
+    coupangClient.searchProducts.mockResolvedValue([]);
+    prisma.inventoryItem.findMany.mockResolvedValue([]);
     process.env.COUPANG_PARTNERS_TRACKING_LINK =
       "https://link.coupang.com/a/food";
     recipesService.getRecommendation.mockResolvedValue({
@@ -147,6 +157,72 @@ describe("AffiliateOfferService Phase A", () => {
     });
   });
 
+  it("returns up to three relevant product cards while preserving legacy offers", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockResolvedValue([
+      product("blocked", "성인용 대파 코스튬"),
+      product("1", "국산 대파 1단"),
+      product("2", "손질 대파 500g"),
+      product("3", "냉동 대파"),
+      product("4", "관련 없는 양파"),
+    ]);
+    const service = createService();
+
+    const result = await service.getOffersForDish({
+      ownerKey: "owner-a",
+      recommendationId: "rec-1",
+      dishIndex: 0,
+    });
+
+    expect(result.presentation).toBe("product_search");
+    expect(result.productGroups[0]?.products.map((item) => item.productId)).toEqual([
+      "1",
+      "2",
+      "3",
+    ]);
+    expect(result.offers[0]?.landingUrl).toBe("https://link.coupang.com/a/1");
+  });
+
+  it("rate-limits manual product searches per user", async () => {
+    const service = createService();
+    for (let index = 0; index < 10; index += 1) {
+      await service.searchProducts({ ownerKey: "owner-a", query: "대파" });
+    }
+
+    await expect(
+      service.searchProducts({ ownerKey: "owner-a", query: "대파" }),
+    ).rejects.toMatchObject({ status: 429 });
+  });
+
+  it("builds recent repurchase groups from fully consumed items only", async () => {
+    prisma.inventoryItem.findMany.mockResolvedValue([
+      { displayName: "달걀", brand: null, category: "egg" },
+      { displayName: "달걀", brand: null, category: "egg" },
+      { displayName: "샴푸", brand: null, category: "personal_care" },
+      { displayName: "우유", brand: "서울우유", category: "dairy" },
+    ]);
+    const service = createService();
+
+    const result = await service.getShopping({
+      ownerKey: "owner-a",
+      spaceId: "space-a",
+    });
+
+    expect(result.productGroups.map((group) => group.ingredientName)).toEqual([
+      "달걀",
+      "우유",
+    ]);
+    expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          spaceId: "space-a",
+          status: "consumed",
+          quantityBase: 0,
+        }),
+      }),
+    );
+  });
+
   it("skips excluded ingredients and unknown dishes", async () => {
     settingsService.getRecipePreferences.mockResolvedValue({
       allergens: [],
@@ -181,6 +257,22 @@ describe("AffiliateOfferService Phase A", () => {
     return new AffiliateOfferService(
       recipesService as never,
       settingsService as never,
+      prisma as never,
+      coupangClient as never,
     );
+  }
+
+  function product(productId: string, productName: string) {
+    return {
+      productId,
+      productName,
+      productImage: "https://thumbnail.coupangcdn.com/product.jpg",
+      productUrl: `https://link.coupang.com/a/${productId}`,
+      productPrice: 3000,
+      isRocket: true,
+      isFreeShipping: true,
+      observedAt: "2026-08-18T00:00:00.000Z",
+      stale: false,
+    };
   }
 });

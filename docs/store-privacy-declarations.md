@@ -27,6 +27,7 @@
 | AI 추천 요청·결과·재료 snapshot·맞춤 설정·추천 행동 | 예 (추천 사용 시) | 추천 제공·히스토리·개인화 | **OpenAI(미국, 행동은 최근 요약만 전송)** | 동의 철회·기록 삭제·설정 변경·계정 정리 | User Content | App activity |
 | 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
 | 결제/구독 영수증 검증 | 예 (IAP 사용 시) | 구독 확인 | Apple/Google | 스토어 구독 관리 | Purchases | Financial info |
+| 쿠팡 상품 검색어 | 예 (레시피·장보기 상품 영역 사용 시) | 관련 실물 상품 조회·외부 구매 연결 | **쿠팡 파트너스**: 정규화한 재료명 또는 직접 입력 검색어 한 건. 계정 ID·전체 재고·유통기한·수량·공간 정보는 전송하지 않음 | 상품 영역 사용·제휴 기능 플래그로 중단 가능 | User Content → Other User Content / App Functionality | App activity → Other user-generated content / App functionality (제3자 공유 여부는 최신 콘솔 정의로 재검토) |
 | 비맞춤형 보상 광고 | 예 (사용자가 광고 선택 시) | 광고 제공·보상 검증·부정 이용 방지 | **Google Mobile Ads(국외)** | 광고는 매회 선택, 기능 플래그로 중단 가능, 계정 정리 시 서버 세션 삭제 | Coarse Location / Identifiers / Usage Data / Diagnostics · Third-Party Advertising · Tracking=No | Approximate location / Device or other IDs / App interactions / Diagnostics · Advertising |
 | 추적(ATT·다른 회사 앱/웹 간 연결) | **아니오** | — | — | ATT 요청 없음, Android 광고 ID 권한 제거 | Tracking=No | 앱 간 추적 목적으로 광고 ID를 수집하지 않음 |
 | 기기 연락처·사진 라이브러리(일반) | 아니오* | — | — | — | Not collected | Not collected |
@@ -69,9 +70,11 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 - 사용자 데이터를 수집하거나 공유하는가: **예**
 - 수집 데이터가 전송 중 암호화되는가: **예**
 - 데이터 삭제 요청 방법을 제공하는가: **예**
-- 제3자와 공유하는가: **아니오**
+- 제3자와 공유하는가: **쿠팡 상품 검색 활성 빌드는 예**
   - 호스팅·메일·AI·푸시 제공자는 개발자 지시에 따라 처리하는 서비스 제공자
   - 공유 냉장고 구성원 공개는 사용자가 시작하고 기대하는 기능
+  - 쿠팡 상품 검색에서는 검색어 한 건이 쿠팡으로 전달되므로
+    `App activity → Other user-generated content`를 App functionality 목적으로 공유한다고 신고
 
 | 데이터 유형 | 수집 | 필수 여부 | 목적 |
 | --- | --- | --- | --- |
@@ -117,3 +120,5 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 - [ ] AdMob 콘텐츠 등급 `G`, 아동 대상 = 아니오, 광고 단위 보상 `recipe_generation` / `1`
 - [ ] 개발자 웹사이트 루트 `/app-ads.txt`에 실제 `pub-…` 값 공개
 - [ ] iOS ATT 문구·요청 없음, Android merged manifest에 `AD_ID` 권한 없음
+- [ ] 쿠팡 상품 영역에서 검색어 한 건만 전송되고 계정 ID·전체 재고·유통기한·수량·공간 정보가 전송되지 않는지 확인
+- [ ] 쿠팡 검색어의 App Privacy / Play Data Safety 제3자 공유 분류를 최신 콘솔 문구로 확정

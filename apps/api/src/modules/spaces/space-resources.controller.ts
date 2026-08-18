@@ -15,6 +15,7 @@ import {
 import { InventorySpaceRole } from "@prisma/client";
 import {
   batchConsumeInventoryItemsBodySchema,
+  affiliateProductSearchRequestSchema,
   createInventoryItemBodySchema,
   createUserStorageLocationBodySchema,
   ItemStatus,
@@ -23,6 +24,7 @@ import {
   updateInventoryItemBodySchema,
   updateUserStorageLocationBodySchema,
   type BatchConsumeInventoryItemsBody,
+  type AffiliateProductSearchRequest,
   type CreateInventoryItemBody,
   type CreateUserStorageLocationBody,
   type RecipeRecommendationRequest,
@@ -340,6 +342,38 @@ export class SpaceRecipesController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.recipesService.deleteFavorite(id, dishIndex, userId);
+  }
+}
+
+@UseGuards(RegisteredGuard)
+@Controller("spaces/:spaceId/affiliate")
+export class SpaceAffiliateController {
+  constructor(
+    private readonly spacesService: SpacesService,
+    private readonly affiliateOffers: AffiliateOfferService,
+  ) {}
+
+  @Get("shopping")
+  async getShopping(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.affiliateOffers.getShopping({ ownerKey: userId, spaceId });
+  }
+
+  @Post("product-search")
+  async searchProducts(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(affiliateProductSearchRequestSchema))
+    body: AffiliateProductSearchRequest,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.affiliateOffers.searchProducts({
+      ownerKey: userId,
+      query: body.query,
+    });
   }
 }
 

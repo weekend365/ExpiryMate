@@ -3,9 +3,11 @@ import type {
   AffiliateTrackingMode,
   RecipeRecommendationDish,
 } from "@expirymate/shared";
-import { useEffect, useRef } from "react";
-import { Linking, Pressable, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
+import { router } from "expo-router";
+import { Alert, Linking, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../components/AppText";
+import { SkeletonBlock } from "../../components/ContentSkeleton";
 import { trackMonetizationEvent } from "../../services/api";
 import {
   colors,
@@ -15,6 +17,7 @@ import {
   typography,
 } from "../../shared/theme";
 import { useAffiliateOffers } from "./use-affiliate-offers";
+import { AffiliateProductGroupView } from "./affiliate-product-group";
 
 export function OptionalMissingIngredientsCard({
   dish,
@@ -28,16 +31,30 @@ export function OptionalMissingIngredientsCard({
   const offersQuery = useAffiliateOffers(recommendationId, dishIndex);
   const trackedShownKey = useRef<string | null>(null);
   const trackingMode = offersQuery.data?.trackingMode ?? "none";
-  const offers = offersQuery.data?.enabled ? offersQuery.data.offers : [];
-  const sharedLanding = trackingMode === "partner_link" ? offers[0] : undefined;
+  const offers = useMemo(
+    () => (offersQuery.data?.enabled ? offersQuery.data.offers : []),
+    [offersQuery.data],
+  );
+  const productGroups = useMemo(
+    () => (offersQuery.data?.enabled ? offersQuery.data.productGroups : []),
+    [offersQuery.data],
+  );
+  const sharedLanding =
+    productGroups.length === 0 && trackingMode === "partner_link"
+      ? offers[0]
+      : undefined;
   const offerByName = new Map(
-    trackingMode === "deeplink"
+    productGroups.length === 0 && trackingMode === "deeplink"
       ? offers.map((offer) => [offer.ingredientName, offer])
       : [],
   );
 
   useEffect(() => {
-    if (!offersQuery.data?.enabled || offers.length === 0) {
+    if (
+      !offersQuery.data?.enabled ||
+      offers.length === 0 ||
+      productGroups.length > 0
+    ) {
       return;
     }
 
@@ -61,6 +78,7 @@ export function OptionalMissingIngredientsCard({
     offersQuery.data?.enabled,
     offersQuery.data?.trackingMode,
     recommendationId,
+    productGroups.length,
   ]);
 
   if (dish.optionalMissingIngredients.length === 0) {
@@ -96,6 +114,27 @@ export function OptionalMissingIngredientsCard({
           );
         })}
       </View>
+      {offersQuery.isLoading ? (
+        <View style={styles.productSkeleton} accessibilityLabel="관련 상품을 불러오고 있어요">
+          <SkeletonBlock height={124} width={184} />
+          <SkeletonBlock height={124} width={184} />
+        </View>
+      ) : null}
+      {offersQuery.isError ? (
+        <AppText variant="caption" tone="subtext">
+          상품을 불러오지 못했어요. 레시피는 그대로 이용할 수 있어요.
+        </AppText>
+      ) : null}
+      {productGroups.length > 0 ? (
+        <View style={styles.productGroups}>
+          {productGroups.map((group) => (
+            <AffiliateProductGroupView
+              key={`${group.placement}:${group.query}`}
+              group={group}
+            />
+          ))}
+        </View>
+      ) : null}
       {sharedLanding ? (
         <Pressable
           onPress={() => void openOffer(sharedLanding, trackingMode)}
@@ -107,7 +146,17 @@ export function OptionalMissingIngredientsCard({
           <AppText style={styles.ctaLabel}>이 재료들, 쿠팡에서 둘러볼까요?</AppText>
         </Pressable>
       ) : null}
-      {offers.length > 0 && offersQuery.data?.disclosure ? (
+      {productGroups.length > 0 ? (
+        <Pressable
+          onPress={() => router.push("/shopping")}
+          accessibilityRole="button"
+          accessibilityLabel="장보기에서 더 찾아보기"
+          style={({ pressed }) => [styles.shoppingLink, pressed && styles.ctaPressed]}
+        >
+          <AppText variant="bodySmall" tone="primary">장보기에서 더 찾아보기</AppText>
+        </Pressable>
+      ) : null}
+      {(offers.length > 0 || productGroups.length > 0) && offersQuery.data?.disclosure ? (
         <AppText style={styles.disclosure}>{offersQuery.data.disclosure}</AppText>
       ) : null}
     </View>
@@ -119,19 +168,23 @@ async function openOffer(
   trackingMode: AffiliateTrackingMode,
 ) {
   void trackMonetizationEvent({
-    event: "affiliate_offer_tapped",
+    event: "affiliate_fallback_tapped",
     properties: {
-      query: offer.query.slice(0, 40),
-      tracked: offer.tracked ? "true" : "false",
-      mode: trackingMode,
+      placement: "recipe_missing_ingredient",
+      source: trackingMode === "deeplink" ? "deeplink_fallback" : "partner_link",
     },
   }).catch(() => undefined);
 
-  const canOpen = await Linking.canOpenURL(offer.landingUrl);
-  if (!canOpen) {
-    return;
+  try {
+    const canOpen = await Linking.canOpenURL(offer.landingUrl);
+    if (canOpen) {
+      await Linking.openURL(offer.landingUrl);
+      return;
+    }
+  } catch {
+    // Fall through to the user-facing error below.
   }
-  await Linking.openURL(offer.landingUrl);
+  Alert.alert("링크를 열 수 없어요", "잠시 후 다시 시도해 주세요.");
 }
 
 const styles = StyleSheet.create({
@@ -149,6 +202,15 @@ const styles = StyleSheet.create({
   },
   list: {
     gap: spacing.sm,
+  },
+  productGroups: {
+    gap: spacing.md,
+    paddingTop: spacing.xs,
+  },
+  productSkeleton: {
+    flexDirection: "row",
+    gap: spacing.xs,
+    overflow: "hidden",
   },
   row: {
     gap: spacing.xs,
@@ -184,6 +246,14 @@ const styles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.primary,
+  },
+  shoppingLink: {
+    minHeight: touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.sm,
   },
   disclosure: {
     fontSize: typography.caption.fontSize,

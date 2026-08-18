@@ -81,6 +81,25 @@ export interface AdminMonetizationOverview {
     barcodeRewardGrantPercent: number;
     creditPackToPurchasePercent: number;
   };
+  affiliate: {
+    appImpressions: number;
+    appTaps: number;
+    appCtrPercent: number;
+    coupangClicks: number;
+    orders: number;
+    cancels: number;
+    gmvKrw: number;
+    commissionKrw: number;
+    orderConversionPercent: number;
+    earningsPerClickKrw: number | null;
+    lastSyncedAt: string | null;
+    placements: Array<{
+      placement: string;
+      impressions: number;
+      taps: number;
+      ctrPercent: number;
+    }>;
+  };
   economicsConfigured: boolean;
   economicsBySource: Array<{
     source: string;
@@ -303,6 +322,8 @@ export class AdminService {
       monetizationActivity,
       inventoryActivity,
       recommendationActivity,
+      affiliateReportRows,
+      affiliateFunnelRows,
     ] = await Promise.all([
       this.prisma.subscriptionEntitlement.findMany({
         where: {
@@ -443,6 +464,30 @@ export class AdminService {
             select: { ownerKey: true, completedAt: true },
           })
         : Promise.resolve([]),
+      hasDelegate(this.prisma, "affiliateReportDaily")
+        ? this.prisma.affiliateReportDaily.findMany({
+            where: { date: { gte: from, lte: to } },
+            select: {
+              clicks: true,
+              orders: true,
+              cancels: true,
+              gmvKrw: true,
+              commissionKrw: true,
+              lastSyncedAt: true,
+            },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.monetizationFunnelEvent, "findMany")
+        ? this.prisma.monetizationFunnelEvent.findMany({
+            where: {
+              createdAt: { gte: from, lte: to },
+              eventName: {
+                in: ["affiliate_product_shown", "affiliate_product_tapped"],
+              },
+            },
+            select: { eventName: true, properties: true },
+          })
+        : Promise.resolve([]),
     ]);
 
     const usageBySource = new Map<string, number>();
@@ -495,6 +540,24 @@ export class AdminService {
       const row = funnel.get(event);
       return row ? row.control + row.valueFirst + row.other : 0;
     };
+    const affiliateImpressions = funnelTotal("affiliate_product_shown");
+    const affiliateTaps = funnelTotal("affiliate_product_tapped");
+    const affiliateTotals = affiliateReportRows.reduce(
+      (sum, row) => ({
+        clicks: sum.clicks + row.clicks,
+        orders: sum.orders + row.orders,
+        cancels: sum.cancels + row.cancels,
+        gmvKrw: sum.gmvKrw + Number(row.gmvKrw),
+        commissionKrw: sum.commissionKrw + Number(row.commissionKrw),
+      }),
+      { clicks: 0, orders: 0, cancels: 0, gmvKrw: 0, commissionKrw: 0 },
+    );
+    const placementMetrics = buildAffiliatePlacementMetrics(affiliateFunnelRows);
+    const affiliateLastSyncedAt = affiliateReportRows.reduce<Date | null>(
+      (latest, row) =>
+        !latest || row.lastSyncedAt > latest ? row.lastSyncedAt : latest,
+      null,
+    );
     const percent = (numerator: number, denominator: number) =>
       denominator > 0 ? Math.round((numerator / denominator) * 10_000) / 100 : 0;
     const totalAiCostUsd = recommendationRows.reduce(
@@ -776,6 +839,26 @@ export class AdminService {
               funnelTotal("credit_pack_viewed"),
             ),
       },
+      affiliate: {
+        appImpressions: affiliateImpressions,
+        appTaps: affiliateTaps,
+        appCtrPercent: percent(affiliateTaps, affiliateImpressions),
+        coupangClicks: affiliateTotals.clicks,
+        orders: affiliateTotals.orders,
+        cancels: affiliateTotals.cancels,
+        gmvKrw: roundKrw(affiliateTotals.gmvKrw),
+        commissionKrw: roundKrw(affiliateTotals.commissionKrw),
+        orderConversionPercent: percent(
+          affiliateTotals.orders,
+          affiliateTotals.clicks,
+        ),
+        earningsPerClickKrw:
+          affiliateTotals.clicks > 0
+            ? roundKrw(affiliateTotals.commissionKrw / affiliateTotals.clicks)
+            : null,
+        lastSyncedAt: affiliateLastSyncedAt?.toISOString() ?? null,
+        placements: placementMetrics,
+      },
       economicsConfigured,
       economicsBySource,
       unitEconomics,
@@ -797,6 +880,36 @@ function addUtcDays(date: Date, days: number) {
 
 function roundKrw(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function buildAffiliatePlacementMetrics(
+  rows: Array<{ eventName: string; properties: Prisma.JsonValue }>,
+) {
+  const metrics = new Map<string, { impressions: number; taps: number }>();
+  for (const row of rows) {
+    const properties =
+      row.properties &&
+      typeof row.properties === "object" &&
+      !Array.isArray(row.properties)
+        ? row.properties
+        : {};
+    const placement =
+      typeof properties.placement === "string" ? properties.placement : "unknown";
+    const current = metrics.get(placement) ?? { impressions: 0, taps: 0 };
+    if (row.eventName === "affiliate_product_shown") current.impressions += 1;
+    if (row.eventName === "affiliate_product_tapped") current.taps += 1;
+    metrics.set(placement, current);
+  }
+  return [...metrics.entries()]
+    .map(([placement, counts]) => ({
+      placement,
+      ...counts,
+      ctrPercent:
+        counts.impressions > 0
+          ? Math.round((counts.taps / counts.impressions) * 10_000) / 100
+          : 0,
+    }))
+    .sort((left, right) => right.impressions - left.impressions);
 }
 
 function hasDelegate(value: unknown, key: string) {

@@ -1,17 +1,14 @@
 import { createCoupangAuthorization } from "./coupang-hmac";
+import {
+  isAllowedCoupangUrl,
+  readCoupangPartnersCredentials,
+} from "./coupang-partners.client";
 
 const DEEPLINK_PATH =
   "/v2/providers/affiliate_open_api/apis/openapi/v1/deeplink";
 const DEEPLINK_URL = `https://api-gateway.coupang.com${DEEPLINK_PATH}`;
 
-export function readCoupangPartnersCredentials() {
-  const accessKey = process.env.COUPANG_PARTNERS_ACCESS_KEY?.trim() ?? "";
-  const secretKey = process.env.COUPANG_PARTNERS_SECRET_KEY?.trim() ?? "";
-  if (!accessKey || !secretKey) {
-    return null;
-  }
-  return { accessKey, secretKey };
-}
+export { readCoupangPartnersCredentials };
 
 export async function convertCoupangSearchUrlToDeeplink(
   searchUrl: string,
@@ -54,16 +51,5 @@ export async function convertCoupangSearchUrlToDeeplink(
 
   const converted = payload.data?.[0];
   const landingUrl = converted?.landingUrl?.trim() || converted?.shortenUrl?.trim();
-  return isHttpsUrl(landingUrl) ? landingUrl : null;
-}
-
-function isHttpsUrl(value: string | undefined) {
-  if (!value) {
-    return false;
-  }
-  try {
-    return new URL(value).protocol === "https:";
-  } catch {
-    return false;
-  }
+  return isAllowedCoupangUrl(landingUrl) ? landingUrl : null;
 }

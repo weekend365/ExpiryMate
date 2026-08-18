@@ -65,6 +65,9 @@ import type {
   RecommendationCreditPurchaseVerificationRequest,
   RecommendationCreditPurchaseVerificationResponse,
   AffiliateOffersResponse,
+  AffiliateShoppingResponse,
+  AffiliateProductSearchRequest,
+  AffiliateProductSearchResponse,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -843,6 +846,20 @@ export const getAffiliateOffers = (
       spaceId,
       "recipes",
     )}/recommendations/${recommendationId}/dishes/${dishIndex}/affiliate-offers`,
+  );
+
+export const getAffiliateShopping = (spaceId: string) =>
+  request<AffiliateShoppingResponse>(
+    `${spaceResourcePath(spaceId, "affiliate")}/shopping`,
+  );
+
+export const searchAffiliateProducts = (
+  payload: AffiliateProductSearchRequest,
+  spaceId: string,
+) =>
+  request<AffiliateProductSearchResponse>(
+    `${spaceResourcePath(spaceId, "affiliate")}/product-search`,
+    { method: "POST", body: JSON.stringify(payload) },
   );
 
 export const listRecipeFavorites = () =>

@@ -49,6 +49,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 • 가족이나 매장 동료를 이메일 또는 1회용 코드로 초대해 같은 냉장고 재고를 함께 관리해요
 • 알림으로 유통기한 전에 부드럽게 알려 드려요
 • 보관 재료를 바탕으로 장고가 요리 추천을 만들어 드려요 (동의 후 · 서버를 통해 AI 처리)
+• 레시피의 부족 재료와 최근 모두 소비한 재료를 장보기에서 다시 찾아볼 수 있어요 (쿠팡 파트너스 제휴)
 • 카카오, 네이버, 구글, Apple, 이메일로 로그인할 수 있어요
 
 계정과 추천 기록은 설정에서 정리할 수 있어요. 개인정보 안내와 데이터 삭제 방법은 앱 안과 웹 방침에서 확인할 수 있어요.
@@ -105,7 +106,8 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 | Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
 | Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
 
-제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push.  
+제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push ·
+**쿠팡 파트너스(상품 조회 시 정규화한 재료명 또는 직접 입력 검색어 한 건)**.
 상세는 `store-privacy-declarations.md` 표와 `/privacy` 본문을 따릅니다.
 
 카메라: 바코드/OCR용 — Privacy Label의 “Photos” 라이브러리와 혼동하지 말 것. 카메라 사용은 권한 문구로 설명.

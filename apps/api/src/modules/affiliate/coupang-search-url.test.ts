@@ -22,6 +22,12 @@ describe("Coupang search URLs", () => {
     expect(resolveCoupangSearchQuery("   ")).toBeNull();
   });
 
+  it("drops out-of-scope electronics and fashion searches", () => {
+    expect(resolveCoupangSearchQuery("노트북")).toBeNull();
+    expect(resolveCoupangSearchQuery("여성 신발")).toBeNull();
+    expect(resolveCoupangSearchQuery("밀폐용기")).toBe("밀폐용기");
+  });
+
   it("accepts Coupang Partners short URLs only", () => {
     expect(
       parseCoupangPartnerTrackingUrl("https://link.coupang.com/a/food"),

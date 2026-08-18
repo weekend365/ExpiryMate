@@ -67,6 +67,10 @@ export const monetizationFunnelEventNameSchema = z.enum([
   "paywall_dismissed",
   "affiliate_offer_shown",
   "affiliate_offer_tapped",
+  "affiliate_shopping_opened",
+  "affiliate_product_shown",
+  "affiliate_product_tapped",
+  "affiliate_fallback_tapped",
 ]);
 
 export const trackMonetizationEventRequestSchema = z.object({
