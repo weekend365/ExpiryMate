@@ -1,4 +1,7 @@
-import { ProductCategory } from "@expirymate/shared";
+import {
+  ProductCategory,
+  calculateDaysLeftUntilExpiry,
+} from "@expirymate/shared";
 
 export const QUICK_EXPIRY_OPTIONS = [
   { label: "오늘", days: 0 },
@@ -23,6 +26,44 @@ export function koreanObjectParticle(word: string): "을" | "를" {
 export function formatPutAwayMessage(name: string) {
   const trimmed = name.trim();
   return `${trimmed}${koreanObjectParticle(trimmed)} 넣었어요`;
+}
+
+export function formatPutAwaySupportingMessage({
+  expiryDate,
+  sessionCount = 1,
+  now,
+}: {
+  expiryDate?: string | null;
+  sessionCount?: number;
+  now?: Date;
+} = {}) {
+  const trimmed = expiryDate?.trim();
+  if (!trimmed) {
+    return "다음 재료도 이어서 넣을까요?";
+  }
+
+  const daysLeft = calculateDaysLeftUntilExpiry(trimmed, now);
+
+  if (daysLeft < 0) {
+    return "기한이 이미 지났어요. 바로 손보면 좋아요.";
+  }
+  if (daysLeft === 0) {
+    return "오늘까지예요. 저녁에 쓰면 딱이에요.";
+  }
+  if (daysLeft === 1) {
+    return "내일이 기한이에요. 곧 손보면 든든해요.";
+  }
+  if (daysLeft <= 3) {
+    return `${daysLeft}일 남았어요. 여유 있을 때 써 볼까요?`;
+  }
+  if (daysLeft <= 7) {
+    return "일주일 안에 챙기면 든든해요.";
+  }
+  if (sessionCount >= 2) {
+    return "하나 더 챙겼어요. 냉장고가 든든해졌어요.";
+  }
+
+  return "냉장고에 잘 넣어뒀어요. 다음 재료도 이어서 넣을까요?";
 }
 
 export function formatUpdatedMessage(name: string) {

@@ -39,8 +39,8 @@ import Animated, {
   cancelAnimation,
   Easing,
   interpolate,
+  ReduceMotion,
   useAnimatedStyle,
-  useReducedMotion,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -378,7 +378,11 @@ function ScannerCameraExperience() {
         onMountError={scanner.handleMountError}
       />
 
-      <SafeAreaView style={styles.overlay} pointerEvents="box-none">
+      <SafeAreaView
+        style={styles.overlay}
+        pointerEvents="box-none"
+        collapsable={false}
+      >
         <View style={[styles.topBar, shouldStack && styles.topBarStacked]}>
           <CloseButton onPress={() => router.back()} />
           <View
@@ -532,6 +536,7 @@ function ScannerCameraExperience() {
       <BottomSheet
         visible={Boolean(scanner.confirmation)}
         onClose={handleRescan}
+        dismissible={false}
         mascotMood={resultMood}
         title={
           needsManualName
@@ -559,6 +564,11 @@ function ScannerCameraExperience() {
         }
         footer={
           <View style={styles.sheetFooter}>
+            {needsManualExpiry && !resolvedExpiryDate ? (
+              <AppText style={styles.ctaHint} accessibilityLiveRegion="polite">
+                날짜만 골라 주시면 넣을게요
+              </AppText>
+            ) : null}
             <Button
               variant="secondary"
               icon={RotateCcw}
@@ -801,7 +811,6 @@ function ScannerGuide({
   const { height: windowHeight } = useResponsiveLayout();
   const frameHeight = getScanFrameHeight(windowHeight);
   const scanLineTravel = getScanLineTravel(frameHeight);
-  const reduceMotion = useReducedMotion();
   const scanLineProgress = useSharedValue(0);
   const scanLineTravelSV = useSharedValue(scanLineTravel);
   scanLineTravelSV.value = scanLineTravel;
@@ -810,7 +819,7 @@ function ScannerGuide({
   useEffect(() => {
     cancelAnimation(scanLineProgress);
 
-    if (reduceMotion || showSuccess) {
+    if (showSuccess) {
       scanLineProgress.value = 0;
       return undefined;
     }
@@ -820,13 +829,16 @@ function ScannerGuide({
       withTiming(1, {
         duration: 1800,
         easing: Easing.inOut(Easing.quad),
+        reduceMotion: ReduceMotion.Never,
       }),
       -1,
       true,
+      undefined,
+      ReduceMotion.Never,
     );
 
     return () => cancelAnimation(scanLineProgress);
-  }, [reduceMotion, scanLineProgress, showSuccess]);
+  }, [scanLineProgress, showSuccess]);
 
   const scanLineStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
@@ -836,8 +848,8 @@ function ScannerGuide({
     );
     const opacity = interpolate(
       scanLineProgress.value,
-      [0, 0.15, 0.85, 1],
-      [0.35, 1, 1, 0.35],
+      [0, 0.12, 0.88, 1],
+      [0.7, 1, 1, 0.7],
     );
 
     return {
@@ -872,6 +884,7 @@ function ScannerGuide({
         <View style={styles.guideArea} pointerEvents="none">
           <View
             ref={frameRef}
+            collapsable={false}
             style={[styles.scanFrame, { height: frameHeight }]}
             onLayout={handleFrameLayout}
           >
@@ -887,17 +900,11 @@ function ScannerGuide({
                   strokeWidth={2.5}
                 />
               </View>
-            ) : reduceMotion ? (
-              <View
-                style={[
-                  styles.scanLine,
-                  { top: frameHeight / 2 - SCAN_LINE_HEIGHT },
-                ]}
-              />
             ) : (
-              <Animated.View style={[styles.scanLine, scanLineStyle]}>
-                <View style={styles.scanLineCore} />
-              </Animated.View>
+              <Animated.View
+                collapsable={false}
+                style={[styles.scanLine, scanLineStyle]}
+              />
             )}
           </View>
         </View>
@@ -984,21 +991,10 @@ function ManualExpirySection({
   const [draftDate, setDraftDate] = useState<Date>(
     expiryDate ? toDatePickerDate(expiryDate) : new Date(),
   );
-  const didSeedDefaultRef = useRef(false);
 
   useEffect(() => {
     setDraftDate(expiryDate ? toDatePickerDate(expiryDate) : new Date());
   }, [expiryDate]);
-
-  // iOS spinner shows today visually; seed the same value so CTA stays in sync.
-  useEffect(() => {
-    if (Platform.OS !== "ios" || expiryDate || didSeedDefaultRef.current) {
-      return;
-    }
-
-    didSeedDefaultRef.current = true;
-    onManualChange(toDatePickerDateOnly(new Date()));
-  }, [expiryDate, onManualChange]);
 
   const handleInlineChange = (
     _event: DateTimePickerEvent,
@@ -1009,7 +1005,13 @@ function ManualExpirySection({
     }
 
     setDraftDate(selectedDate);
-    onManualChange(toDatePickerDateOnly(selectedDate));
+    const nextDate = toDatePickerDateOnly(selectedDate);
+    // The iOS spinner mounts on today. Don't treat that visual default as a pick.
+    if (!expiryDate && nextDate === toDatePickerDateOnly(new Date())) {
+      return;
+    }
+
+    onManualChange(nextDate);
   };
 
   const handleAndroidChange = (
@@ -1052,6 +1054,11 @@ function ManualExpirySection({
 
       {Platform.OS === "ios" ? (
         <View style={styles.inlinePickerWrap}>
+          {!expiryDate ? (
+            <AppText style={styles.manualExpiryHint}>
+              오늘로 넣으려면 ‘오늘’을 눌러 주세요.
+            </AppText>
+          ) : null}
           <DateTimePicker
             value={draftDate}
             mode="date"
@@ -1128,6 +1135,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
+    zIndex: 1,
+    elevation: 1,
   },
   topBar: {
     flexDirection: "row",
@@ -1206,25 +1215,18 @@ const styles = StyleSheet.create({
   scanFrame: {
     borderRadius: radius.xxl,
     overflow: "hidden",
+    backgroundColor: "transparent",
   },
   scanLine: {
     position: "absolute",
     top: SCAN_LINE_INSET,
     left: spacing.md,
     right: spacing.md,
-    height: SCAN_LINE_HEIGHT + spacing.xxs,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  scanLineCore: {
-    width: "100%",
     height: SCAN_LINE_HEIGHT,
     borderRadius: radius.pill,
     backgroundColor: colors.primary,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.9,
-    shadowRadius: spacing.xs,
+    zIndex: 2,
+    elevation: 2,
   },
   scanSuccess: {
     ...StyleSheet.absoluteFillObject,
@@ -1383,6 +1385,13 @@ const styles = StyleSheet.create({
   sheetFooter: {
     gap: spacing.sm,
   },
+  ctaHint: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodySmall.fontFamily,
+    color: colors.mutedText,
+    textAlign: "center",
+  },
   productRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -1489,6 +1498,13 @@ const styles = StyleSheet.create({
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
     color: colors.text,
+  },
+  manualExpiryHint: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
+    textAlign: "center",
   },
   pillRow: {
     flexDirection: "row",

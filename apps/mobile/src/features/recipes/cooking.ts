@@ -149,11 +149,31 @@ export function hasSelectedConsumption(
   );
 }
 
+export function remainingPrepCount(checkedCount: number, totalCount: number) {
+  return Math.max(0, totalCount - checkedCount);
+}
+
+export function getPrepContinueCta(uncheckedCount: number) {
+  if (uncheckedCount <= 0) {
+    return "재료가 준비됐어요";
+  }
+  if (uncheckedCount === 1) {
+    return "이 재료 빼고 시작할게요";
+  }
+  return `${uncheckedCount}개는 빼고 시작할게요`;
+}
+
 export function getCookingGuideMessage(
   currentIndex: number,
   cookingStepCount: number,
+  uncheckedPrepCount = 0,
 ) {
   if (currentIndex === 0) {
+    if (uncheckedPrepCount > 0) {
+      return uncheckedPrepCount === 1
+        ? "1개가 아직이에요. 없어도 조리를 이어갈 수 있어요."
+        : `${uncheckedPrepCount}개가 아직이에요. 없어도 조리를 이어갈 수 있어요.`;
+    }
     return "준비한 재료를 하나씩 눌러 주세요.";
   }
   if (currentIndex > cookingStepCount) {

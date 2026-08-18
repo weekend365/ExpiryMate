@@ -296,7 +296,6 @@ export default function LoginScreen() {
             accessibilityRole="summary"
             accessibilityLabel={`${appBrand.characterNameKo}예요. 냉장고, 같이 챙길까요?`}
           >
-            <View style={styles.brandBadge}></View>
             <AppText variant="title" style={styles.welcomeTitle}>
               장고야 부탁해
             </AppText>
@@ -353,12 +352,7 @@ export default function LoginScreen() {
           </View>
 
           {emailExpanded ? (
-            <View
-              style={[
-                styles.emailCard,
-                shouldStackDense && styles.emailCardCompact,
-              ]}
-            >
+            <View style={styles.emailCard}>
               <Pressable
                 onPress={toggleEmailExpanded}
                 disabled={isBusy}
@@ -366,8 +360,8 @@ export default function LoginScreen() {
                 accessibilityLabel="이메일 입력 접기"
                 accessibilityState={{ expanded: true }}
                 hitSlop={{
-                  top: spacing.xs,
-                  bottom: spacing.xs,
+                  top: spacing.sm,
+                  bottom: spacing.sm,
                   left: spacing.xs,
                   right: spacing.xs,
                 }}
@@ -386,7 +380,7 @@ export default function LoginScreen() {
                 />
               </Pressable>
 
-              <View style={styles.fieldBlock}>
+              <View style={styles.formFields}>
                 <EmailDomainInput
                   testID="login-email"
                   value={email}
@@ -394,63 +388,105 @@ export default function LoginScreen() {
                   autoCorrect={false}
                   placeholder="이메일"
                   editable={!isBusy}
+                  style={styles.fieldWell}
                 />
-              </View>
-
-              <View style={styles.fieldBlock}>
-                <View
-                  style={[
-                    styles.passwordField,
-                    passwordFocused && styles.passwordFieldFocused,
-                  ]}
-                >
-                  <AppTextInput
-                    testID="login-password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry={!passwordVisible}
-                    textContentType="password"
-                    placeholder="비밀번호"
-                    editable={!isBusy}
-                    onFocus={() => setPasswordFocused(true)}
-                    onBlur={() => setPasswordFocused(false)}
-                    style={styles.passwordInput}
-                  />
+                <View style={styles.passwordBlock}>
+                  <View
+                    style={[
+                      styles.passwordField,
+                      passwordFocused && styles.passwordFieldFocused,
+                    ]}
+                  >
+                    <AppTextInput
+                      testID="login-password"
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry={!passwordVisible}
+                      textContentType="password"
+                      placeholder="비밀번호"
+                      editable={!isBusy}
+                      onFocus={() => setPasswordFocused(true)}
+                      onBlur={() => setPasswordFocused(false)}
+                      style={styles.passwordInput}
+                    />
+                    <Pressable
+                      onPress={() => setPasswordVisible((current) => !current)}
+                      disabled={isBusy}
+                      accessibilityRole="button"
+                      accessibilityLabel={
+                        passwordVisible ? "비밀번호 숨기기" : "비밀번호 보기"
+                      }
+                      hitSlop={{
+                        top: spacing.xs,
+                        bottom: spacing.xs,
+                        left: spacing.xs,
+                        right: spacing.xs,
+                      }}
+                      style={({ pressed }) => [
+                        styles.passwordToggle,
+                        pressed && styles.linkPressed,
+                      ]}
+                    >
+                      {passwordVisible ? (
+                        <EyeOff
+                          color={colors.subtext}
+                          size={spacing.sm + spacing.xxs}
+                          strokeWidth={2.2}
+                        />
+                      ) : (
+                        <Eye
+                          color={colors.subtext}
+                          size={spacing.sm + spacing.xxs}
+                          strokeWidth={2.2}
+                        />
+                      )}
+                    </Pressable>
+                  </View>
                   <Pressable
-                    onPress={() => setPasswordVisible((current) => !current)}
+                    onPress={() => router.push("/auth/forgot-password")}
                     disabled={isBusy}
-                    accessibilityRole="button"
-                    accessibilityLabel={
-                      passwordVisible ? "비밀번호 숨기기" : "비밀번호 보기"
-                    }
                     hitSlop={{
-                      top: spacing.xs,
-                      bottom: spacing.xs,
+                      top: spacing.sm,
+                      bottom: spacing.sm,
                       left: spacing.xs,
                       right: spacing.xs,
                     }}
+                    accessibilityRole="button"
+                    accessibilityLabel="비밀번호를 잊으셨나요?"
                     style={({ pressed }) => [
-                      styles.passwordToggle,
+                      styles.textLink,
+                      styles.forgotLink,
                       pressed && styles.linkPressed,
                     ]}
                   >
-                    {passwordVisible ? (
-                      <EyeOff
-                        color={colors.subtext}
-                        size={spacing.sm + spacing.xxs}
-                        strokeWidth={2.2}
-                      />
-                    ) : (
-                      <Eye
-                        color={colors.subtext}
-                        size={spacing.sm + spacing.xxs}
-                        strokeWidth={2.2}
-                      />
-                    )}
+                    <AppText
+                      variant="bodySmall"
+                      tone="primary"
+                      numberOfLines={1}
+                      style={styles.textLinkLabel}
+                    >
+                      비밀번호를 잊으셨나요?
+                    </AppText>
                   </Pressable>
                 </View>
+              </View>
+
+              <View style={styles.formActions}>
+                <Button
+                  testID="login-submit-button"
+                  onPress={() => {
+                    void handleEmailLogin();
+                  }}
+                  loading={loginMutation.isPending}
+                  disabled={
+                    !canEmailLogin || (isBusy && !loginMutation.isPending)
+                  }
+                  fullWidth
+                >
+                  들어가 볼까요?
+                </Button>
                 <Pressable
-                  onPress={() => router.push("/auth/forgot-password")}
+                  onPress={() => router.push("/auth/register")}
                   disabled={isBusy}
                   hitSlop={{
                     top: spacing.sm,
@@ -459,9 +495,10 @@ export default function LoginScreen() {
                     right: spacing.xs,
                   }}
                   accessibilityRole="button"
-                  accessibilityLabel="비밀번호를 잊으셨나요?"
+                  accessibilityLabel="처음이에요"
                   style={({ pressed }) => [
-                    styles.forgotLink,
+                    styles.textLink,
+                    styles.registerLink,
                     pressed && styles.linkPressed,
                   ]}
                 >
@@ -469,26 +506,12 @@ export default function LoginScreen() {
                     variant="bodySmall"
                     tone="primary"
                     numberOfLines={1}
-                    style={styles.forgotLinkText}
+                    style={styles.textLinkLabel}
                   >
-                    비밀번호를 잊으셨나요?
+                    처음이에요
                   </AppText>
                 </Pressable>
               </View>
-
-              <Button
-                testID="login-submit-button"
-                onPress={() => {
-                  void handleEmailLogin();
-                }}
-                loading={loginMutation.isPending}
-                disabled={
-                  !canEmailLogin || (isBusy && !loginMutation.isPending)
-                }
-                fullWidth
-              >
-                들어가 볼까요?
-              </Button>
             </View>
           ) : (
             <Button
@@ -504,109 +527,48 @@ export default function LoginScreen() {
             </Button>
           )}
 
-          <View
-            style={[
-              styles.secondaryLinks,
-              shouldStackDense && styles.secondaryLinksStacked,
-            ]}
+          <AppText
+            variant="caption"
+            tone="muted"
+            style={styles.legalCopy}
+            accessibilityRole="text"
           >
-            <Pressable
-              onPress={() => router.push("/auth/register")}
-              disabled={isBusy}
-              hitSlop={{
-                top: spacing.sm,
-                bottom: spacing.sm,
-                left: spacing.xs,
-                right: spacing.xs,
-              }}
-              accessibilityRole="button"
-              accessibilityLabel="처음이에요"
-              style={({ pressed }) => [
-                styles.secondaryLink,
-                pressed && styles.linkPressed,
-              ]}
+            계속하면{" "}
+            <AppText
+              variant="caption"
+              tone="primary"
+              accessibilityRole="link"
+              accessibilityLabel="이용약관 살펴보기"
+              onPress={
+                isBusy
+                  ? undefined
+                  : () => {
+                      void Linking.openURL(publicWebUrl("/terms"));
+                    }
+              }
+              style={styles.legalInlineLink}
             >
-              <AppText
-                variant="bodySmall"
-                tone="primary"
-                numberOfLines={1}
-                style={styles.secondaryLinkText}
-              >
-                처음이에요
-              </AppText>
-            </Pressable>
-            {shouldStackDense ? null : (
-              <AppText variant="caption" tone="muted">
-                ·
-              </AppText>
-            )}
-            <Pressable
-              onPress={() => router.push("/spaces/invitations/code")}
-              disabled={isBusy}
-              hitSlop={{
-                top: spacing.sm,
-                bottom: spacing.sm,
-                left: spacing.xs,
-                right: spacing.xs,
-              }}
-              accessibilityRole="button"
-              accessibilityLabel="초대 코드로 올래요"
-              style={({ pressed }) => [
-                styles.secondaryLink,
-                pressed && styles.linkPressed,
-              ]}
-            >
-              <AppText
-                variant="bodySmall"
-                tone="primary"
-                numberOfLines={1}
-                style={styles.secondaryLinkText}
-              >
-                초대 코드로 올래요
-              </AppText>
-            </Pressable>
-          </View>
-
-          <View style={styles.legalLinks} accessibilityRole="text">
-            <AppText variant="caption" tone="muted" style={styles.legalLead}>
-              들어가면 이용약관과 개인정보 안내에 동의하는 걸로 볼게요.
+              이용약관
             </AppText>
-            <View style={styles.legalRow}>
-              <Pressable
-                onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
-                disabled={isBusy}
-                hitSlop={spacing.xs}
-                accessibilityRole="link"
-                accessibilityLabel="이용약관 살펴보기"
-                style={({ pressed }) => [
-                  styles.legalLink,
-                  pressed && styles.linkPressed,
-                ]}
-              >
-                <AppText variant="caption" tone="primary" style={styles.legalLinkText}>
-                  이용약관
-                </AppText>
-              </Pressable>
-              <AppText variant="caption" tone="muted">
-                ·
-              </AppText>
-              <Pressable
-                onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
-                disabled={isBusy}
-                hitSlop={spacing.xs}
-                accessibilityRole="link"
-                accessibilityLabel="개인정보 안내 살펴보기"
-                style={({ pressed }) => [
-                  styles.legalLink,
-                  pressed && styles.linkPressed,
-                ]}
-              >
-                <AppText variant="caption" tone="primary" style={styles.legalLinkText}>
-                  개인정보 안내
-                </AppText>
-              </Pressable>
-            </View>
-          </View>
+            과{" "}
+            <AppText
+              variant="caption"
+              tone="primary"
+              accessibilityRole="link"
+              accessibilityLabel="개인정보 안내 살펴보기"
+              onPress={
+                isBusy
+                  ? undefined
+                  : () => {
+                      void Linking.openURL(publicWebUrl("/privacy"));
+                    }
+              }
+              style={styles.legalInlineLink}
+            >
+              개인정보 안내
+            </AppText>
+            에 동의하는 걸로 볼게요.
+          </AppText>
         </ScrollView>
       </View>
     </Screen>
@@ -671,13 +633,6 @@ const styles = StyleSheet.create({
   welcomeHeroCompact: {
     gap: spacing.xxs,
   },
-  brandBadge: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    maxWidth: "100%",
-  },
   welcomeTitle: {
     textAlign: "center",
   },
@@ -703,7 +658,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.sm,
-    gap: spacing.sm,
     // Soft depth so the form reads as the foreground over the hero art.
     shadowColor: colors.text,
     shadowOpacity: 0.06,
@@ -711,24 +665,29 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: spacing.xxs },
     elevation: 2,
   },
-  emailCardCompact: {
-    padding: spacing.sm,
-    gap: spacing.sm,
-  },
   emailToggleRow: {
-    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: spacing.xs,
+    // Compact header; hitSlop keeps the 48px touch target.
+    paddingVertical: spacing.xxs,
   },
-  fieldBlock: {
-    gap: spacing.xs,
+  formFields: {
+    marginTop: spacing.xs,
+    gap: spacing.sm,
+  },
+  fieldWell: {
+    backgroundColor: colors.background,
+  },
+  passwordBlock: {
+    // Optical: keep the forgot-password link attached to the field.
+    gap: spacing.xxs,
   },
   passwordField: {
     minHeight: touchTarget.cta,
     borderRadius: radius.lg,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     borderWidth: 1,
     borderColor: colors.border,
     flexDirection: "row",
@@ -752,58 +711,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  formActions: {
+    marginTop: spacing.md,
+    gap: spacing.xs,
+  },
+  textLink: {
+    justifyContent: "center",
+    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.xs,
+  },
+  textLinkLabel: {
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
   forgotLink: {
-    // Visual height stays compact; hitSlop keeps the 48px touch target.
     alignSelf: "flex-end",
-    justifyContent: "center",
-    paddingVertical: spacing.xxs,
-    paddingHorizontal: spacing.xxs,
   },
-  forgotLinkText: {
-    fontFamily: typography.bodyStrong.fontFamily,
+  registerLink: {
+    alignSelf: "center",
   },
-  secondaryLinks: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xs,
-  },
-  secondaryLinksStacked: {
-    flexDirection: "column",
-    gap: spacing.xxs,
-  },
-  secondaryLink: {
-    // Compact row; hitSlop on Pressable keeps the touch target.
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingVertical: spacing.xxs,
-    paddingHorizontal: spacing.xs,
-  },
-  secondaryLinkText: {
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  legalLinks: {
-    alignItems: "center",
-    gap: spacing.xs,
-    paddingTop: spacing.xs,
-  },
-  legalLead: {
+  legalCopy: {
     textAlign: "center",
+    paddingHorizontal: spacing.sm,
   },
-  legalRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xs,
-  },
-  legalLink: {
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingHorizontal: spacing.xs,
-  },
-  legalLinkText: {
+  legalInlineLink: {
     fontFamily: typography.bodyStrong.fontFamily,
   },
   linkPressed: {

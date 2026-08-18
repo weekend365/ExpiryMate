@@ -19,7 +19,6 @@ import {
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { router, useNavigation } from "expo-router";
 import {
   Barcode,
@@ -37,7 +36,6 @@ import {
   View,
 } from "react-native";
 import { AppText } from "../src/components/AppText";
-import { BottomSheet } from "../src/components/BottomSheet";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
 import { DatePickerField, type DatePickerFieldHandle } from "../src/components/DatePickerField";
@@ -58,6 +56,7 @@ import {
   StorageLocationField,
   extraDetailsRowLabel,
   formatPutAwayMessage,
+  formatPutAwaySupportingMessage,
   inventoryFormStyles,
 } from "../src/features/inventory/inventory-form-ui";
 import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
@@ -65,13 +64,6 @@ import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
-import { updateInventoryItem } from "../src/services/api";
-import { useAuth } from "../src/features/auth/use-auth";
-import {
-  sessionQueryKeys,
-  withInventorySpace,
-} from "../src/features/auth/session-boundary";
-import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
   colors,
   radius,
@@ -102,15 +94,6 @@ type RegistrationFormValues = {
 type RegistrationStep = "product" | "quantity" | "expiry" | "done";
 
 type InputRegistrationStep = Exclude<RegistrationStep, "done">;
-
-type SessionEditDraft = {
-  id: string;
-  displayName: string;
-  quantity: number;
-  unit: string;
-  storageLocation: string;
-  expiryDate: string;
-};
 
 type RegisteredSessionItem = {
   id: string;
@@ -252,9 +235,6 @@ export default function RegisterScreen() {
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const clearDraft = useRegistrationStore((state) => state.clearDraft);
   const mutation = useSaveInventoryItem();
-  const queryClient = useQueryClient();
-  const { activeSpaceId } = useActiveSpace();
-  const { sessionUserId } = useAuth();
   const { data: inventory = [] } = useInventoryList();
   const [step, setStep] = useState<RegistrationStep>("product");
   const [entryMethod, setEntryMethod] = useState<"scan" | "manual">("manual");
@@ -269,9 +249,6 @@ export default function RegisterScreen() {
   const [registeredSessionItems, setRegisteredSessionItems] = useState<
     RegisteredSessionItem[]
   >([]);
-  const [sessionEdit, setSessionEdit] = useState<SessionEditDraft | null>(null);
-  const [sessionEditError, setSessionEditError] = useState<string | null>(null);
-  const [isSavingSessionEdit, setIsSavingSessionEdit] = useState(false);
   const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
     null,
   );
@@ -352,6 +329,45 @@ export default function RegisterScreen() {
 
     return () => subscription.unsubscribe();
   }, [form, hasHydrated, setDraft]);
+
+  useEffect(() => {
+    setRegisteredSessionItems((current) => {
+      if (!current.length) {
+        return current;
+      }
+
+      let changed = false;
+      const next = current.map((item) => {
+        const updated = inventory.find((entry) => entry.id === item.id);
+        if (
+          !updated ||
+          (updated.displayName === item.displayName &&
+            updated.quantity === item.quantity &&
+            updated.unit === item.unit &&
+            updated.quantityBase === item.quantityBase &&
+            updated.unitCode === item.unitCode &&
+            updated.storageLocation === item.storageLocation &&
+            updated.expiryDate === item.expiryDate)
+        ) {
+          return item;
+        }
+
+        changed = true;
+        return {
+          ...item,
+          displayName: updated.displayName,
+          quantity: updated.quantity,
+          unit: updated.unit,
+          quantityBase: updated.quantityBase,
+          unitCode: updated.unitCode,
+          storageLocation: updated.storageLocation,
+          expiryDate: updated.expiryDate,
+        };
+      });
+
+      return changed ? next : current;
+    });
+  }, [inventory]);
 
   const handlePresetDate = (presetDate: string) => {
     form.setValue("expiryDate", presetDate, {
@@ -594,113 +610,10 @@ export default function RegisterScreen() {
   };
 
   const openSessionEdit = (item: RegisteredSessionItem) => {
-    setSessionEditError(null);
-    setSessionEdit({
-      id: item.id,
-      displayName: item.displayName,
-      quantity: item.quantity,
-      unit: item.unit ?? "개",
-      storageLocation: item.storageLocation,
-      expiryDate: item.expiryDate,
+    router.push({
+      pathname: "/inventory/[id]",
+      params: { id: item.id },
     });
-  };
-
-  const closeSessionEdit = () => {
-    setSessionEdit(null);
-    setSessionEditError(null);
-  };
-
-  const saveSessionEdit = async () => {
-    if (!sessionEdit) {
-      return;
-    }
-
-    if (!activeSpaceId) {
-      setSessionEditError("함께 쓸 냉장고를 먼저 골라 주세요.");
-      return;
-    }
-
-    const nextName = sessionEdit.displayName.trim();
-    if (
-      !nextName ||
-      sessionEdit.quantity <= 0 ||
-      !sessionEdit.storageLocation ||
-      !sessionEdit.expiryDate
-    ) {
-      setSessionEditError("양과 날짜를 알려 주세요.");
-      return;
-    }
-
-    try {
-      setIsSavingSessionEdit(true);
-      setSessionEditError(null);
-      const canonical = toBaseQuantity(sessionEdit.quantity, sessionEdit.unit);
-      const updated = await updateInventoryItem(
-        sessionEdit.id,
-        {
-          displayName: nextName,
-          quantity: sessionEdit.quantity,
-          unit: sessionEdit.unit,
-          quantityBase: canonical.quantityBase,
-          unitCode: canonical.unitCode,
-          storageLocation: sessionEdit.storageLocation,
-          expiryDate: sessionEdit.expiryDate,
-          expirySource: ExpirySource.MANUAL,
-        },
-        activeSpaceId,
-      );
-
-      setRegisteredSessionItems((current) =>
-        current.map((item) =>
-          item.id === updated.id
-            ? {
-                ...item,
-                displayName: updated.displayName,
-                quantity: updated.quantity,
-                unit: updated.unit,
-                quantityBase: updated.quantityBase,
-                unitCode: updated.unitCode,
-                storageLocation: updated.storageLocation,
-                expiryDate: updated.expiryDate,
-              }
-            : item,
-        ),
-      );
-
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: withInventorySpace(
-            sessionQueryKeys.dashboard,
-            sessionUserId,
-            activeSpaceId,
-          ),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: withInventorySpace(
-            sessionQueryKeys.inventory,
-            sessionUserId,
-            activeSpaceId,
-          ),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: withInventorySpace(
-            sessionQueryKeys.inventoryItem,
-            sessionUserId,
-            activeSpaceId,
-          ),
-        }),
-      ]);
-
-      closeSessionEdit();
-    } catch (error) {
-      setSessionEditError(
-        error instanceof Error
-          ? error.message
-          : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-      );
-    } finally {
-      setIsSavingSessionEdit(false);
-    }
   };
 
   const onSubmit = form.handleSubmit(async (values) => {
@@ -769,19 +682,48 @@ export default function RegisterScreen() {
         : "이만큼 둘게요";
 
   if (step === "done") {
-    const canSaveSessionEdit = Boolean(
-      sessionEdit?.displayName.trim() &&
-        sessionEdit.storageLocation &&
-        sessionEdit.expiryDate &&
-        sessionEdit.quantity > 0,
-    );
+    const doneHeroNotices = [
+      ...(registeredSessionItems.length >= 2
+        ? [
+            {
+              id: "recipe-recommend",
+              mood: "cooking" as const,
+              message: "요리 추천 받아볼까요?",
+              supportingMessage: "방금 넣은 재료로 메뉴를 찾아볼게요.",
+              onPress: openRecipeRecommendations,
+              accessibilityHint: "추천 받을게요",
+            },
+          ]
+        : []),
+      ...(rewardNotice?.granted
+        ? [
+            {
+              id: "barcode-reward",
+              mood: "happy" as const,
+              message: "바코드 추천권 1회를 받았어요",
+              supportingMessage: `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`,
+            },
+          ]
+        : []),
+      {
+        id: "put-away",
+        mood: "happy" as const,
+        message: latestRegisteredItem
+          ? formatPutAwayMessage(latestRegisteredItem.displayName)
+          : "잘 넣어뒀어요",
+        supportingMessage: formatPutAwaySupportingMessage({
+          expiryDate: latestRegisteredItem?.expiryDate,
+          sessionCount: registeredSessionItems.length,
+        }),
+      },
+    ];
 
     return (
-      <>
       <Screen
         contentWidth="form"
         contentStyle={styles.screenSections}
         topInsetMode="none"
+        footerStyle={styles.doneFooterSection}
         footer={
           <View style={styles.doneFooter}>
             <Button
@@ -793,38 +735,19 @@ export default function RegisterScreen() {
             >
               다음 재료 넣을게요
             </Button>
-            <View style={styles.doneMethodRow}>
-              <Pill
-                label={
-                  entryMethod === "scan"
-                    ? "손으로 넣을게요"
-                    : "바코드로 넣을게요"
-                }
-                icon={entryMethod === "scan" ? Plus : Barcode}
-                onPress={
-                  entryMethod === "scan"
-                    ? continueWithManual
-                    : continueWithBarcode
-                }
-                accessibilityLabel={
-                  entryMethod === "scan"
-                    ? "손으로 더 넣을게요"
-                    : "바코드로 더 넣을게요"
-                }
-              />
-            </View>
-            <Pressable
-              onPress={finishRegistration}
-              accessibilityRole="button"
-              accessibilityLabel="그만 추가할래요"
-              hitSlop={spacing.xs}
-              style={({ pressed }) => [
-                styles.doneTextLink,
-                pressed && styles.doneTextLinkPressed,
-              ]}
+            <Button
+              icon={entryMethod === "scan" ? Plus : Barcode}
+              variant="secondary"
+              onPress={
+                entryMethod === "scan" ? continueWithManual : continueWithBarcode
+              }
+              fullWidth
             >
-              <AppText style={styles.doneMutedLinkLabel}>그만 추가할래요</AppText>
-            </Pressable>
+              {entryMethod === "scan" ? "손으로 넣을게요" : "바코드로 넣을게요"}
+            </Button>
+            <Button variant="surface" onPress={finishRegistration} fullWidth>
+              그만 추가할래요
+            </Button>
           </View>
         }
       >
@@ -837,25 +760,7 @@ export default function RegisterScreen() {
             ]}
           >
             <JangoHeroNoticeCarousel
-              notices={[
-                ...(rewardNotice?.granted
-                  ? [
-                      {
-                        id: "barcode-reward",
-                        mood: "happy" as const,
-                        message: "바코드 추천권 1회를 받았어요",
-                        supportingMessage: `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`,
-                      },
-                    ]
-                  : []),
-                {
-                  id: "put-away",
-                  mood: "happy" as const,
-                  message: latestRegisteredItem
-                    ? formatPutAwayMessage(latestRegisteredItem.displayName)
-                    : "잘 넣어뒀어요",
-                },
-              ]}
+              notices={doneHeroNotices}
               density="compact"
               textVariant="bodyStrong"
               bubbleStyle={styles.doneBubble}
@@ -873,7 +778,7 @@ export default function RegisterScreen() {
                   onPress={() => openSessionEdit(item)}
                   accessibilityRole="button"
                   accessibilityLabel={`${item.displayName} 내용을 고칠게요`}
-                  accessibilityHint="방금 넣은 양과 유통기한을 이 자리에서 다시 맞춰 둘 수 있어요."
+                  accessibilityHint="이름, 수량, 유통기한을 다시 맞춰 둘 수 있어요."
                   style={({ pressed }) => [
                     styles.sessionRow,
                     pressed && styles.templateCardPressed,
@@ -897,90 +802,7 @@ export default function RegisterScreen() {
             </View>
           </View>
         ) : null}
-
-        {registeredSessionItems.length >= 2 ? (
-          <FeedbackBanner
-            tone="info"
-            title="요리 추천 받아볼까요?"
-            description="방금 넣은 재료로 메뉴를 찾아볼게요."
-            actionLabel="추천 받을게요"
-            onAction={openRecipeRecommendations}
-            showMascot={false}
-          />
-        ) : null}
       </Screen>
-      <BottomSheet
-        visible={Boolean(sessionEdit)}
-        onClose={closeSessionEdit}
-        mascotMood="idle"
-        title="조금만 고칠게요"
-        description={
-          sessionEdit
-            ? `${sessionEdit.displayName} 양과 날짜만 다시 맞춰 둘게요.`
-            : "양과 날짜만 다시 맞춰 둘게요."
-        }
-        footer={
-          <Button
-            onPress={() => {
-              void saveSessionEdit();
-            }}
-            loading={isSavingSessionEdit}
-            disabled={!canSaveSessionEdit || isSavingSessionEdit}
-            fullWidth
-          >
-            이 내용으로 둘게요
-          </Button>
-        }
-      >
-        {sessionEdit ? (
-          <>
-            {sessionEditError ? (
-              <View style={styles.errorStrip}>
-                <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
-                <AppText style={styles.errorDescription}>{sessionEditError}</AppText>
-              </View>
-            ) : null}
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-              <AppText style={styles.sectionTitle}>
-                {quantityInputLabel(sessionEdit.unit)}
-              </AppText>
-              <QuantityStepper
-                label={quantityInputLabel(sessionEdit.unit)}
-                value={sessionEdit.quantity}
-                step={quantityInputStep(sessionEdit.unit)}
-                unitSuffix={resolveQuantityInputUnit(sessionEdit.unit)}
-                onChange={(quantity) =>
-                  setSessionEdit((current) =>
-                    current ? { ...current, quantity } : current,
-                  )
-                }
-              />
-            </View>
-            <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-              <AppText style={styles.sectionTitle}>유통기한</AppText>
-              <QuickExpiryPills
-                showCaption={false}
-                isSelected={(isoDate) => sessionEdit.expiryDate === isoDate}
-                onSelect={(presetDate) =>
-                  setSessionEdit((current) =>
-                    current ? { ...current, expiryDate: presetDate } : current,
-                  )
-                }
-              />
-              <DatePickerField
-                presentation="field"
-                value={sessionEdit.expiryDate}
-                onChange={(nextDate) =>
-                  setSessionEdit((current) =>
-                    current ? { ...current, expiryDate: nextDate } : current,
-                  )
-                }
-              />
-            </View>
-          </>
-        ) : null}
-      </BottomSheet>
-      </>
     );
   }
 
@@ -1253,25 +1075,10 @@ const localStyles = StyleSheet.create({
     alignSelf: "stretch",
   },
   doneFooter: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
-  doneMethodRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  doneTextLink: {
-    minHeight: touchTarget.min,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  doneTextLinkPressed: {
-    opacity: 0.7,
-  },
-  doneMutedLinkLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.mutedText,
+  doneFooterSection: {
+    paddingTop: spacing.sm,
   },
   errorStrip: {
     backgroundColor: colors.dangerSoft,

@@ -31,6 +31,7 @@ export interface ScreenProps extends PropsWithChildren {
   headerAction?: ReactNode;
   footer?: ReactNode;
   contentStyle?: StyleProp<ViewStyle>;
+  footerStyle?: StyleProp<ViewStyle>;
   /**
    * Constrains content on regular-width windows while compact windows remain fluid.
    * Use `fluid` for full-bleed experiences such as camera previews.
@@ -71,6 +72,7 @@ export function Screen({
   headerAction,
   footer,
   contentStyle,
+  footerStyle,
   contentWidth = "content",
   bottomInsetMode = "system",
   topInsetMode = "safe",
@@ -204,6 +206,7 @@ export function Screen({
           <View
             style={[
               styles.footer,
+              footerStyle,
               { paddingBottom: footerBottomPadding },
             ]}
           >

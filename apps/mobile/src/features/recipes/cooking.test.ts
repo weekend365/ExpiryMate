@@ -10,6 +10,9 @@ import {
   buildBatchConsumeItems,
   buildCookingSteps,
   buildDefaultConsumptionChoices,
+  getCookingGuideMessage,
+  getPrepContinueCta,
+  remainingPrepCount,
   resolveConsumableIngredients,
   resolveConsumptionAmount,
 } from "./cooking";
@@ -120,5 +123,18 @@ describe("cooking flow helpers", () => {
     });
 
     expect(items).toEqual([{ inventoryItemId: "milk-1", amountBase: 500 }]);
+  });
+
+  it("lets cooking start without every prep item checked", () => {
+    expect(remainingPrepCount(1, 3)).toBe(2);
+    expect(getPrepContinueCta(0)).toBe("재료가 준비됐어요");
+    expect(getPrepContinueCta(1)).toBe("이 재료 빼고 시작할게요");
+    expect(getPrepContinueCta(2)).toBe("2개는 빼고 시작할게요");
+    expect(getCookingGuideMessage(0, 2, 2)).toBe(
+      "2개가 아직이에요. 없어도 조리를 이어갈 수 있어요.",
+    );
+    expect(getCookingGuideMessage(0, 2, 0)).toBe(
+      "준비한 재료를 하나씩 눌러 주세요.",
+    );
   });
 });

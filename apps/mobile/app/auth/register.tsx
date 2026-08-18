@@ -1,12 +1,7 @@
-import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { Eye, EyeOff } from "lucide-react-native";
+import { useState } from "react";
 import { Alert, Linking, Pressable, StyleSheet, View } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
 import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
@@ -24,71 +19,36 @@ import {
   typography,
 } from "../../src/shared/theme";
 
-type RegisterStep = "name" | "email" | "password";
-
-const STEPS: Array<{
-  key: RegisterStep;
-  title: string;
-  description: string;
-}> = [
-  {
-    key: "name",
-    title: "어떻게 불러드릴까요?",
-    description: "닉네임은 나중에 바꿔도 괜찮아요.",
-  },
-  {
-    key: "email",
-    title: "이메일을 알려주세요",
-    description: "나중에 다시 만날 때 쓸 이메일이에요.",
-  },
-  {
-    key: "password",
-    title: "비밀번호를 정해 주세요",
-    description: "8자 이상으로 안전하게 만들어 주세요.",
-  },
-];
-
-const SPRING = {
-  damping: 18,
-  stiffness: 200,
-  mass: 0.85,
-};
-
 export default function RegisterScreen() {
   const { registerMutation } = useAuth();
-  const [stepIndex, setStepIndex] = useState(0);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const opacity = useSharedValue(1);
-  const offset = useSharedValue(0);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const step = STEPS[stepIndex];
-  const isFirstStep = stepIndex === 0;
-  const isLastStep = stepIndex === STEPS.length - 1;
-  const canContinue =
-    step.key === "name" ||
-    (step.key === "email" && Boolean(email.trim())) ||
-    (step.key === "password" && password.length >= 8);
+  const isBusy = registerMutation.isPending;
+  const canSubmit = Boolean(email.trim() && password.length >= 8);
 
-  useEffect(() => {
-    opacity.value = 0;
-    offset.value = spacing.sm;
-    opacity.value = withSpring(1, SPRING);
-    offset.value = withSpring(0, SPRING);
-  }, [offset, opacity, stepIndex]);
-
-  const contentStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-    transform: [{ translateY: offset.value }],
-  }));
+  const goToLogin = () => {
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+    router.replace("/auth/login");
+  };
 
   const handleRegister = async () => {
+    if (!canSubmit || isBusy) {
+      return;
+    }
+
     try {
+      const trimmedName = displayName.trim();
       const result = await registerMutation.mutateAsync({
-        email,
+        email: email.trim(),
         password,
-        displayName: displayName || undefined,
+        displayName: trimmedName || undefined,
       });
 
       if (
@@ -110,142 +70,181 @@ export default function RegisterScreen() {
     }
   };
 
-  const handlePrimary = () => {
-    if (isLastStep) {
-      void handleRegister();
-      return;
-    }
-
-    setStepIndex((current) => Math.min(current + 1, STEPS.length - 1));
-  };
-
-  const handleBack = () => {
-    if (isFirstStep) {
-      router.back();
-      return;
-    }
-
-    setStepIndex((current) => Math.max(current - 1, 0));
-  };
-
   return (
     <Screen
       contentWidth="form"
+      density="compact"
       footer={
         <Button
-          onPress={handlePrimary}
-          loading={registerMutation.isPending}
-          disabled={!canContinue}
+          onPress={() => {
+            void handleRegister();
+          }}
+          loading={isBusy}
+          disabled={!canSubmit}
           fullWidth
         >
-          {isLastStep ? "회원가입" : "다음"}
+          이걸로 시작할까요?
         </Button>
       }
     >
-      <View style={styles.topBar}>
-        <View style={styles.progressTrack}>
-          {STEPS.map((item, index) => (
-            <View
-              key={item.key}
-              style={[
-                styles.progressSegment,
-                index <= stepIndex && styles.progressSegmentActive,
-              ]}
-            />
-          ))}
-        </View>
+      <View style={styles.page}>
         <Pressable
-          onPress={handleBack}
-          hitSlop={spacing.xs}
+          onPress={goToLogin}
+          disabled={isBusy}
+          hitSlop={{
+            top: spacing.sm,
+            bottom: spacing.sm,
+            left: spacing.xs,
+            right: spacing.xs,
+          }}
           accessibilityRole="button"
-          accessibilityLabel={isFirstStep ? "나중에 할게요" : "뒤로가기"}
+          accessibilityLabel="로그인으로"
           style={({ pressed }) => [
-            styles.backLink,
-            pressed && styles.backLinkPressed,
+            styles.textLink,
+            pressed && styles.linkPressed,
           ]}
         >
-          <AppText style={styles.backLinkText}>
-            {isFirstStep ? "나중에 할게요" : "뒤로가기"}
+          <AppText
+            variant="bodySmall"
+            tone="subtext"
+            style={styles.textLinkLabel}
+          >
+            로그인으로
           </AppText>
         </Pressable>
-      </View>
 
-      <Animated.View style={[styles.stepBody, contentStyle]}>
-        <Mascot size="small" mood="idle" style={styles.mascot} />
-        <AppText style={styles.stepEyebrow}>
-          {appBrand.characterNameKo}랑 회원가입할까요?
-        </AppText>
-        <AppText style={styles.stepTitle}>{step.title}</AppText>
-        <AppText style={styles.stepDescription}>{step.description}</AppText>
+        <View style={styles.hero}>
+          <Mascot size="small" mood="idle" style={styles.mascot} />
+          <View style={styles.heroCopy}>
+            <AppText variant="heading" style={styles.title}>
+              이메일로 시작해요
+            </AppText>
+            <AppText variant="bodySmall" tone="subtext">
+              필요한 것만 적을게요. 이름은 나중에 적어도 괜찮아요.
+            </AppText>
+          </View>
+        </View>
 
-        {step.key === "name" ? (
-          <AppTextInput
-            value={displayName}
-            onChangeText={setDisplayName}
-            placeholder="이름 또는 닉네임"
-            style={styles.input}
-            returnKeyType="next"
-            onSubmitEditing={handlePrimary}
-          />
-        ) : null}
-
-        {step.key === "email" ? (
+        <View style={styles.formFields}>
           <EmailDomainInput
             value={email}
             onChangeText={setEmail}
             placeholder="이메일"
+            editable={!isBusy}
             returnKeyType="next"
-            onSubmitEditing={handlePrimary}
           />
-        ) : null}
-
-        {step.key === "password" ? (
-          <AppTextInput
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholder="비밀번호 8자 이상"
-            style={styles.input}
-            returnKeyType="done"
-            onSubmitEditing={handlePrimary}
-          />
-        ) : null}
-
-        {isLastStep ? (
-          <View style={styles.legalLinks}>
-            <AppText style={styles.legalLead}>
-              가입하면 이용약관과 개인정보 안내에 동의하는 걸로 볼게요.
-            </AppText>
-            <View style={styles.legalRow}>
-              <Pressable
-                onPress={() => void Linking.openURL(publicWebUrl("/terms"))}
-                hitSlop={spacing.xs}
-                accessibilityRole="link"
-                accessibilityLabel="이용약관 살펴보기"
-                style={({ pressed }) => [
-                  styles.legalLink,
-                  pressed && styles.legalLinkPressed,
-                ]}
-              >
-                <AppText style={styles.legalLinkText}>이용약관</AppText>
-              </Pressable>
-              <AppText style={styles.legalDot}>·</AppText>
-              <Pressable
-                onPress={() => void Linking.openURL(publicWebUrl("/privacy"))}
-                hitSlop={spacing.xs}
-                accessibilityRole="link"
-                accessibilityLabel="개인정보 안내 살펴보기"
-                style={({ pressed }) => [
-                  styles.legalLink,
-                  pressed && styles.legalLinkPressed,
-                ]}
-              >
-                <AppText style={styles.legalLinkText}>개인정보 안내</AppText>
-              </Pressable>
-            </View>
+          <View
+            style={[
+              styles.passwordField,
+              passwordFocused && styles.passwordFieldFocused,
+            ]}
+          >
+            <AppTextInput
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!passwordVisible}
+              textContentType="newPassword"
+              placeholder="비밀번호 8자 이상"
+              editable={!isBusy}
+              returnKeyType="next"
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+              style={styles.passwordInput}
+            />
+            <Pressable
+              onPress={() => setPasswordVisible((current) => !current)}
+              disabled={isBusy}
+              accessibilityRole="button"
+              accessibilityLabel={
+                passwordVisible ? "비밀번호 숨기기" : "비밀번호 보기"
+              }
+              hitSlop={{
+                top: spacing.xs,
+                bottom: spacing.xs,
+                left: spacing.xs,
+                right: spacing.xs,
+              }}
+              style={({ pressed }) => [
+                styles.passwordToggle,
+                pressed && styles.linkPressed,
+              ]}
+            >
+              {passwordVisible ? (
+                <EyeOff
+                  color={colors.subtext}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.2}
+                />
+              ) : (
+                <Eye
+                  color={colors.subtext}
+                  size={spacing.sm + spacing.xxs}
+                  strokeWidth={2.2}
+                />
+              )}
+            </Pressable>
           </View>
-        ) : null}
-      </Animated.View>
+          <View style={styles.nameBlock}>
+            <AppTextInput
+              value={displayName}
+              onChangeText={setDisplayName}
+              placeholder="이름 또는 닉네임 (선택)"
+              editable={!isBusy}
+              autoCorrect={false}
+              returnKeyType="done"
+              onSubmitEditing={() => {
+                void handleRegister();
+              }}
+              style={styles.nameInput}
+            />
+            <AppText variant="caption" tone="muted">
+              비워 두셔도 되고, 나중에 바꿔도 괜찮아요.
+            </AppText>
+          </View>
+          <AppText
+            variant="caption"
+            tone="muted"
+            style={styles.legalCopy}
+            accessibilityRole="text"
+          >
+            가입하면{" "}
+            <AppText
+              variant="caption"
+              tone="primary"
+              accessibilityRole="link"
+              accessibilityLabel="이용약관 살펴보기"
+              onPress={
+                isBusy
+                  ? undefined
+                  : () => {
+                      void Linking.openURL(publicWebUrl("/terms"));
+                    }
+              }
+              style={styles.legalInlineLink}
+            >
+              이용약관
+            </AppText>
+            과{" "}
+            <AppText
+              variant="caption"
+              tone="primary"
+              accessibilityRole="link"
+              accessibilityLabel="개인정보 안내 살펴보기"
+              onPress={
+                isBusy
+                  ? undefined
+                  : () => {
+                      void Linking.openURL(publicWebUrl("/privacy"));
+                    }
+              }
+              style={styles.legalInlineLink}
+            >
+              개인정보 안내
+            </AppText>
+            에 동의하는 걸로 볼게요.
+          </AppText>
+        </View>
+      </View>
     </Screen>
   );
 }
@@ -257,110 +256,79 @@ function getErrorMessage(error: unknown) {
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    gap: spacing.sm,
+  page: {
+    gap: spacing.md,
   },
-  progressTrack: {
-    flexDirection: "row",
-    gap: spacing.xs,
-  },
-  progressSegment: {
-    flex: 1,
-    height: spacing.xxs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-  },
-  progressSegmentActive: {
-    backgroundColor: colors.primary,
-  },
-  backLink: {
+  textLink: {
     alignSelf: "flex-start",
-    minHeight: touchTarget.min,
     justifyContent: "center",
+    paddingVertical: spacing.xxs,
     paddingHorizontal: spacing.xs,
   },
-  backLinkPressed: {
-    opacity: 0.7,
-  },
-  backLinkText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
+  textLinkLabel: {
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.subtext,
   },
-  stepBody: {
-    gap: spacing.sm,
+  hero: {
+    gap: spacing.xs,
   },
   mascot: {
     alignSelf: "flex-start",
   },
-  stepEyebrow: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.subtext,
+  heroCopy: {
+    gap: spacing.xs,
   },
-  stepTitle: {
-    fontSize: typography.heading.fontSize,
-    lineHeight: typography.heading.lineHeight,
-    fontFamily: typography.heading.fontFamily,
+  title: {
     color: colors.text,
   },
-  stepDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
+  formFields: {
+    gap: spacing.sm,
   },
-  input: {
+  passwordField: {
+    minHeight: touchTarget.cta,
+    borderRadius: radius.lg,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: spacing.md,
+    paddingRight: spacing.xxs,
+  },
+  passwordFieldFocused: {
+    borderColor: colors.primary,
+  },
+  passwordInput: {
+    flex: 1,
+    minHeight: touchTarget.cta,
+    paddingVertical: spacing.xs,
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
+  passwordToggle: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  nameBlock: {
+    // Optical: keep the optional-name hint attached to the field.
+    gap: spacing.xxs,
+  },
+  nameInput: {
     minHeight: touchTarget.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
-    color: colors.text,
-    fontSize: typography.body.fontSize,
-    fontFamily: typography.body.fontFamily,
-    marginTop: spacing.xs,
   },
-  legalLinks: {
-    alignItems: "center",
-    gap: spacing.xs,
-    marginTop: spacing.sm,
-  },
-  legalLead: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
+  legalCopy: {
     textAlign: "center",
+    paddingHorizontal: spacing.sm,
   },
-  legalRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xs,
-  },
-  legalLink: {
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingHorizontal: spacing.xs,
-  },
-  legalLinkPressed: {
-    opacity: 0.7,
-  },
-  legalLinkText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
+  legalInlineLink: {
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
   },
-  legalDot: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
+  linkPressed: {
+    opacity: 0.7,
   },
 });

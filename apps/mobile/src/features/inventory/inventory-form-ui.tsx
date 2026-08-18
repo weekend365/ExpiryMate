@@ -28,6 +28,7 @@ export {
   QUICK_EXPIRY_OPTIONS,
   extraDetailsRowLabel,
   formatPutAwayMessage,
+  formatPutAwaySupportingMessage,
   formatUpdatedMessage,
   koreanObjectParticle,
 } from "./inventory-form-copy";

@@ -52,7 +52,6 @@ import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCarousel";
-import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
@@ -69,6 +68,7 @@ import {
   parseRecommendationAccess,
   recommendationQuotaCopy,
 } from "../../src/features/monetization/recommendation-access";
+import { getRecommendationHeroStatus } from "../../src/features/recipes/recommendation-hero";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
@@ -221,9 +221,6 @@ export default function RecommendationsScreen() {
   );
   const historyErrorMessage = getErrorMessage(historyQuery.error);
   const errorMessage = generationErrorMessage ?? historyErrorMessage;
-  const isHistoryLoadError = Boolean(
-    historyQuery.error && !generationErrorMessage,
-  );
   const isQuotaError = generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED";
   const isCapacityError =
     generationErrorCode === "RECIPE_DAILY_BUDGET_EXHAUSTED" ||
@@ -271,24 +268,21 @@ export default function RecommendationsScreen() {
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
+  const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
+  const canOfferRewardedAd = canContinueWithRewardedAd(monetization.access);
   const recommendationHeroNotices = useMemo(() => {
     const notices = [];
     const statusNotice = {
       id: "status",
-      message: isGenerating
-        ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
-        : justGenerated
-          ? "추천이 준비됐어요. 같이 살펴볼까요?"
-          : hasRecommendationResult
-            ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
-            : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요.",
-      mood: isGenerating
-        ? ("think" as const)
-        : justGenerated
-          ? ("happy" as const)
-          : hasRecommendationResult
-            ? ("cooking" as const)
-            : ("speak" as const),
+      ...getRecommendationHeroStatus({
+        isGenerating,
+        justGenerated,
+        hasRecommendationResult,
+        errorMessage,
+        isQuotaError,
+        isCapacityError,
+        canOfferRewardedAd,
+      }),
     };
 
     if (monetization.rewardNotice === "verified") {
@@ -313,15 +307,17 @@ export default function RecommendationsScreen() {
     notices.push(statusNotice);
     return notices;
   }, [
+    canOfferRewardedAd,
+    errorMessage,
     hasRecommendationResult,
+    isCapacityError,
     isGenerating,
+    isQuotaError,
     justGenerated,
     monetization.adState,
     monetization.dismissRewardNotice,
     monetization.rewardNotice,
   ]);
-  const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
-  const canOfferRewardedAd = canContinueWithRewardedAd(monetization.access);
   const quotaCopy = monetization.access
     ? recommendationQuotaCopy(monetization.access)
     : null;
@@ -947,23 +943,16 @@ export default function RecommendationsScreen() {
             </View>
           ) : null}
 
-          {recipeView === "recommendations" && errorMessage && !isGenerating ? (
-            isQuotaError ? (
+          {recipeView === "recommendations" &&
+          errorMessage &&
+          !isGenerating &&
+          isQuotaError ? (
               <View style={styles.quotaCard}>
                 <AppText style={styles.quotaTitle}>
                   {canOfferRewardedAd
                     ? "광고 한 편이면 추천을 이어갈 수 있어요"
                     : "오늘은 추천을 조금 쉬어갈까요?"}
                 </AppText>
-                <MascotSpeechBubble
-                  message={
-                    canOfferRewardedAd
-                      ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
-                      : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요."
-                  }
-                  mood="worry"
-                  size="small"
-                />
                 {!hasActiveEntitlement && canOfferRewardedAd ? (
                   <Button
                     onPress={() => void handleCreateRecommendation()}
@@ -1031,60 +1020,6 @@ export default function RecommendationsScreen() {
                   </Pressable>
                 ) : null}
               </View>
-            ) : isCapacityError ? (
-              <View style={styles.quotaCard}>
-                <AppText style={styles.quotaTitle}>
-                  오늘은 추천을 조금 쉬어갈까요?
-                </AppText>
-                <MascotSpeechBubble
-                  message={
-                    errorMessage.includes("너무 많")
-                      ? "요청이 몰렸어요. 조금만 뒤에 다시 눌러 주세요."
-                      : "지금은 추천을 잠시 멈춰 두었어요. 내일 다시 부탁해도 괜찮아요."
-                  }
-                  mood="worry"
-                  size="small"
-                />
-              </View>
-            ) : (
-              <View style={styles.errorCard}>
-                <AppText style={styles.errorTitle}>
-                  {isHistoryLoadError
-                    ? "앗, 추천을 불러오지 못했어요"
-                    : "앗, 추천을 만들지 못했어요"}
-                </AppText>
-                <MascotSpeechBubble
-                  message={errorMessage}
-                  mood="worry"
-                  size="small"
-                />
-                <Pressable
-                  onPress={() => {
-                    if (isHistoryLoadError) {
-                      void historyQuery.refetch();
-                      return;
-                    }
-                    router.push("/register");
-                  }}
-                  accessibilityRole="button"
-                  accessibilityLabel={
-                    isHistoryLoadError
-                      ? "추천 다시 불러오기"
-                      : "재료부터 넣어볼까요?"
-                  }
-                  style={({ pressed }) => [
-                    styles.quotaLink,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <AppText style={styles.quotaLinkText}>
-                    {isHistoryLoadError
-                      ? "다시 불러올게요"
-                      : "재료부터 넣어볼까요?"}
-                  </AppText>
-                </Pressable>
-              </View>
-            )
           ) : null}
 
           {recipeView === "recommendations" &&
@@ -2272,18 +2207,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.primary,
-  },
-  errorCard: {
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    gap: spacing.sm,
-  },
-  errorTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.danger,
   },
   recipeSection: {
     borderRadius: radius.xxl,

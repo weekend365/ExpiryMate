@@ -3,7 +3,7 @@ import {
   ItemStatus,
   type InventoryItem,
 } from "@expirymate/shared";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import {
   CheckCircle2,
   ChevronRight,
@@ -12,11 +12,12 @@ import {
   Heart,
   Refrigerator,
 } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
+import { HeaderBackButton } from "../../src/components/HeaderBackButton";
 import { Pill } from "../../src/components/Pill";
 import { QuantityStepper } from "../../src/components/QuantityStepper";
 import { Screen } from "../../src/components/Screen";
@@ -28,7 +29,9 @@ import {
   buildCookingSteps,
   buildDefaultConsumptionChoices,
   getCookingGuideMessage,
+  getPrepContinueCta,
   hasSelectedConsumption,
+  remainingPrepCount,
   resolveConsumableIngredients,
   resolveConsumptionAmount,
   unitLabel,
@@ -43,15 +46,11 @@ import {
   useRecipeEngagement,
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
-import {
-  colors,
-  radius,
-  spacing,
-  touchTarget,
-} from "../../src/shared/theme";
+import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function CookingScreen() {
+  const navigation = useNavigation();
   const { shouldStack, isRegular } = useResponsiveLayout();
   const params = useLocalSearchParams<{
     recommendationId?: string | string[];
@@ -107,20 +106,18 @@ export default function CookingScreen() {
   );
   const consumableIngredients = useMemo(
     () =>
-      dish
-        ? resolveConsumableIngredients(dish, inventoryQuery.data ?? [])
-        : [],
+      dish ? resolveConsumableIngredients(dish, inventoryQuery.data ?? []) : [],
     [dish, inventoryQuery.data],
   );
   const isFavorite = Boolean(
     recommendationId &&
-      favoritesQuery.data?.some(
-        (favorite) =>
-          getRecipeFavoriteKey(
-            favorite.sourceRecommendationId,
-            favorite.sourceDishIndex,
-          ) === getRecipeFavoriteKey(recommendationId, requestedDishIndex),
-      ),
+    favoritesQuery.data?.some(
+      (favorite) =>
+        getRecipeFavoriteKey(
+          favorite.sourceRecommendationId,
+          favorite.sourceDishIndex,
+        ) === getRecipeFavoriteKey(recommendationId, requestedDishIndex),
+    ),
   );
 
   useEffect(() => {
@@ -136,9 +133,46 @@ export default function CookingScreen() {
     });
   }, [consumableIngredients]);
 
+  const leaveCooking = useCallback(() => {
+    if (updatedItems || !router.canGoBack()) {
+      router.replace("/(tabs)/recommendations");
+      return;
+    }
+
+    router.back();
+  }, [updatedItems]);
+
+  const goToPreviousStep = useCallback(() => {
+    if (updatedItems || currentIndex === 0) {
+      leaveCooking();
+      return;
+    }
+
+    setCurrentIndex((index) => Math.max(0, index - 1));
+  }, [currentIndex, leaveCooking, updatedItems]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <HeaderBackButton onPress={goToPreviousStep} />,
+      gestureEnabled: currentIndex === 0 || updatedItems !== null,
+    });
+  }, [currentIndex, goToPreviousStep, navigation, updatedItems]);
+
+  useEffect(() => {
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        goToPreviousStep();
+        return true;
+      },
+    );
+
+    return () => subscription.remove();
+  }, [goToPreviousStep]);
+
   if (recommendationQuery.isPending) {
     return (
-      <Screen contentWidth="wide">
+      <Screen contentWidth="wide" density="compact" topInsetMode="none">
         <EmptyState
           mood="think"
           title="레시피를 펼치고 있어요"
@@ -152,6 +186,8 @@ export default function CookingScreen() {
     return (
       <Screen
         contentWidth="wide"
+        density="compact"
+        topInsetMode="none"
         footer={
           <Button
             onPress={() => router.replace("/(tabs)/recommendations")}
@@ -174,6 +210,8 @@ export default function CookingScreen() {
     return (
       <Screen
         contentWidth="wide"
+        density="compact"
+        topInsetMode="none"
         title="요리를 다 마쳤어요"
         subtitle="사용한 만큼 냉장고에도 바로 알려뒀어요."
         footer={
@@ -224,8 +262,10 @@ export default function CookingScreen() {
   }
 
   const checkedPrepKeySet = new Set(checkedPrepKeys);
-  const allPrepared =
-    prepRows.length === 0 || checkedPrepKeys.length === prepRows.length;
+  const uncheckedPrepCount = remainingPrepCount(
+    checkedPrepKeys.length,
+    prepRows.length,
+  );
   const cookingStepCompleted =
     cookingStepIndex !== null &&
     completedCookingSteps.includes(cookingStepIndex);
@@ -238,16 +278,12 @@ export default function CookingScreen() {
       ? setFavoriteMutation.error.message
       : null;
 
-  const goBack = () => {
-    if (currentIndex === 0) {
-      router.back();
-      return;
-    }
-    setCurrentIndex((index) => Math.max(0, index - 1));
-  };
-
   const goForward = () => {
-    if (currentIndex === 0 && recommendationId && Number.isInteger(requestedDishIndex)) {
+    if (
+      currentIndex === 0 &&
+      recommendationId &&
+      Number.isInteger(requestedDishIndex)
+    ) {
       engagementMutation.mutate({
         recommendationId,
         dishIndex: requestedDishIndex,
@@ -311,15 +347,26 @@ export default function CookingScreen() {
 
   const footer =
     currentIndex === 0 ? (
-      <Button
-        icon={ChevronRight}
-        iconPosition="right"
-        onPress={goForward}
-        disabled={!allPrepared}
-        fullWidth
-      >
-        재료가 준비됐어요
-      </Button>
+      <View style={styles.footerStack}>
+        {uncheckedPrepCount > 0 ? (
+          <AppText
+            variant="bodySmall"
+            tone="muted"
+            style={styles.ctaHint}
+            accessibilityLiveRegion="polite"
+          >
+            없어도 조리를 이어갈 수 있어요.
+          </AppText>
+        ) : null}
+        <Button
+          icon={ChevronRight}
+          iconPosition="right"
+          onPress={goForward}
+          fullWidth
+        >
+          {getPrepContinueCta(uncheckedPrepCount)}
+        </Button>
+      </View>
     ) : cookingStepIndex !== null ? (
       <Button
         icon={ChevronRight}
@@ -344,12 +391,23 @@ export default function CookingScreen() {
     );
 
   return (
-    <Screen contentWidth="wide" footer={footer}>
+    <Screen
+      contentWidth="wide"
+      density="compact"
+      topInsetMode="none"
+      footer={footer}
+    >
       <StepFlow
         steps={steps}
         currentIndex={currentIndex}
-        onBack={goBack}
-        guideMessage={getCookingGuideMessage(currentIndex, dish.steps.length)}
+        onBack={goToPreviousStep}
+        density="compact"
+        hideBack
+        guideMessage={getCookingGuideMessage(
+          currentIndex,
+          dish.steps.length,
+          uncheckedPrepCount,
+        )}
         guideMood={currentIndex === consumptionStepIndex ? "happy" : "cooking"}
       >
         {currentIndex === 0 ? (
@@ -357,7 +415,9 @@ export default function CookingScreen() {
             <AppText variant="body" tone="subtext">
               하나씩 눌러 준비한 재료를 표시해 주세요.
             </AppText>
-            <View style={[styles.list, isRegular && styles.listRegular]}>
+            <View
+              style={[styles.prepList, isRegular && styles.prepListRegular]}
+            >
               {prepRows.map((ingredient) => {
                 const checked = checkedPrepKeySet.has(ingredient.key);
                 return (
@@ -373,9 +433,7 @@ export default function CookingScreen() {
                     accessibilityRole="checkbox"
                     accessibilityState={{ checked }}
                     accessibilityLabel={`${ingredient.name}${
-                      ingredient.amountLabel
-                        ? ` ${ingredient.amountLabel}`
-                        : ""
+                      ingredient.amountLabel ? ` ${ingredient.amountLabel}` : ""
                     }`}
                     style={({ pressed }) => [
                       styles.checkRow,
@@ -387,13 +445,13 @@ export default function CookingScreen() {
                     {checked ? (
                       <CheckCircle2
                         color={colors.primary}
-                        size={spacing.md}
+                        size={spacing.sm + spacing.xxs}
                         strokeWidth={2.4}
                       />
                     ) : (
                       <Circle
                         color={colors.mutedText}
-                        size={spacing.md}
+                        size={spacing.sm + spacing.xxs}
                         strokeWidth={2.2}
                       />
                     )}
@@ -462,10 +520,6 @@ export default function CookingScreen() {
                 />
               )}
             </Pressable>
-            <AppText variant="bodySmall" tone="muted" style={styles.tapHint}>
-              마쳤다면 카드를 눌러 체크하거나, 아래에서 바로 다음으로 갈 수
-              있어요.
-            </AppText>
             {dish.tips.length ? (
               <View style={styles.tipCard}>
                 <AppText variant="bodyStrong">장고의 조리 팁</AppText>
@@ -570,7 +624,9 @@ export default function CookingScreen() {
             </View>
             {!inventoryQuery.isPending && !consumableIngredients.length ? (
               <View style={styles.tipCard}>
-                <AppText variant="bodyStrong">이번에는 직접 정리해 주세요</AppText>
+                <AppText variant="bodyStrong">
+                  이번에는 직접 정리해 주세요
+                </AppText>
                 <AppText variant="bodySmall" tone="subtext">
                   추천을 받은 뒤 재고 상태가 달라져 자동으로 연결할 재료가
                   없어요.
@@ -689,7 +745,13 @@ function firstParam(value: string | string[] | undefined) {
 
 const styles = StyleSheet.create({
   section: {
-    gap: spacing.md,
+    gap: spacing.sm,
+  },
+  footerStack: {
+    gap: spacing.sm,
+  },
+  ctaHint: {
+    textAlign: "center",
   },
   list: {
     gap: spacing.sm,
@@ -699,17 +761,25 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: spacing.sm,
   },
+  prepList: {
+    gap: spacing.xs,
+  },
+  prepListRegular: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
   checkRow: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: touchTarget.min,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    padding: spacing.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
     flexDirection: "row",
-    flexWrap: "wrap",
     alignItems: "center",
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   checkRowRegular: {
     flexGrow: 1,
@@ -807,7 +877,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
     padding: spacing.md,
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   consumptionCardRegular: {
     flexGrow: 1,

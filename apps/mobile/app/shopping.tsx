@@ -9,6 +9,7 @@ import {
   RefreshControl,
   StyleSheet,
   View,
+  type TextInput,
 } from "react-native";
 import { AppText } from "../src/components/AppText";
 import { AppTextInput } from "../src/components/AppTextInput";
@@ -35,7 +36,7 @@ import {
   trackMonetizationEvent,
 } from "../src/services/api";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
+import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
 
 export default function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
@@ -45,6 +46,7 @@ export default function ShoppingScreen() {
     SHOPPING_RECENT_PAGE_SIZE,
   );
   const trackedOpened = useRef(false);
+  const searchInputRef = useRef<TextInput>(null);
   const searchMutation = useMutation({
     mutationFn: async (value: string) => {
       if (!activeSpaceId) throw new Error("냉장고를 먼저 골라 주세요.");
@@ -149,7 +151,14 @@ export default function ShoppingScreen() {
             shouldStackDense && styles.searchBarStacked,
           ]}
         >
-          <View style={styles.searchField}>
+          <Pressable
+            accessible={false}
+            onPress={() => searchInputRef.current?.focus()}
+            style={[
+              styles.searchField,
+              shouldStackDense && styles.searchFieldStacked,
+            ]}
+          >
             <Search
               color={colors.mutedText}
               size={spacing.sm}
@@ -158,6 +167,7 @@ export default function ShoppingScreen() {
               importantForAccessibility="no"
             />
             <AppTextInput
+              ref={searchInputRef}
               value={query}
               onChangeText={setQuery}
               onSubmitEditing={submitSearch}
@@ -165,6 +175,8 @@ export default function ShoppingScreen() {
               placeholder="예: 대파, 달걀, 밀폐용기"
               accessibilityLabel="식재료 검색"
               scaleRole="chrome"
+              textAlignVertical="center"
+              underlineColorAndroid="transparent"
               style={styles.searchInput}
             />
             {canClearSearch ? (
@@ -186,7 +198,7 @@ export default function ShoppingScreen() {
                 />
               </Pressable>
             ) : null}
-          </View>
+          </Pressable>
           <Pressable
             onPress={submitSearch}
             disabled={!query.trim() || searchMutation.isPending}
@@ -448,17 +460,26 @@ const styles = StyleSheet.create({
   searchField: {
     flex: 1,
     minWidth: 0,
+    minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
   },
+  searchFieldStacked: {
+    flexGrow: 0,
+    alignSelf: "stretch",
+  },
   searchInput: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
-    // iOS TextInput 기본 패딩이 placeholder를 아이콘·검색 버튼과 어긋나게 만듦.
+    margin: 0,
+    // Keep the field intrinsic-height so the row centers it with the icon
+    // and 검색 label. A 48px-tall TextInput leaves iOS placeholder off-center.
     paddingVertical: 0,
     paddingHorizontal: 0,
+    fontSize: typography.bodyStrong.fontSize,
+    fontFamily: typography.bodyStrong.fontFamily,
+    textAlignVertical: "center",
   },
   searchSubmit: {
     minWidth: touchTarget.icon,

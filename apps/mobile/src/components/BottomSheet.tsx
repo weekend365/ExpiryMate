@@ -37,6 +37,11 @@ interface BottomSheetProps extends PropsWithChildren {
   footer?: ReactNode;
   /** When false, body content is not wrapped in a ScrollView (e.g. native date picker). */
   scrollEnabled?: boolean;
+  /**
+   * Backdrop tap, drag-to-dismiss, and Android back close the sheet.
+   * Set false for confirmations that must be kept or cancelled with an explicit action.
+   */
+  dismissible?: boolean;
 }
 
 const SPRING = {
@@ -57,6 +62,7 @@ export function BottomSheet({
   mascotMood,
   footer,
   scrollEnabled = true,
+  dismissible = true,
   children,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
@@ -92,7 +98,7 @@ export function BottomSheet({
   const dragGesture = useMemo(
     () =>
       Gesture.Pan()
-        .enabled(visible)
+        .enabled(visible && dismissible)
         .activeOffsetY([-spacing.xs, spacing.xs])
         .onStart(() => {
           dragStartY.value = translateY.value;
@@ -128,6 +134,7 @@ export function BottomSheet({
         }),
     [
       backdropOpacity,
+      dismissible,
       dragStartY,
       onClose,
       translateY,
@@ -147,7 +154,7 @@ export function BottomSheet({
       transparent
       visible
       animationType="none"
-      onRequestClose={onClose}
+      onRequestClose={dismissible ? onClose : () => undefined}
       statusBarTranslucent
       navigationBarTranslucent
     >
@@ -155,9 +162,11 @@ export function BottomSheet({
         <Animated.View style={[styles.backdrop, backdropStyle]}>
           <Pressable
             style={StyleSheet.absoluteFill}
-            onPress={onClose}
-            accessibilityRole="button"
-            accessibilityLabel="이 창을 닫을게요"
+            onPress={dismissible ? onClose : undefined}
+            disabled={!dismissible}
+            accessibilityRole={dismissible ? "button" : undefined}
+            accessibilityLabel={dismissible ? "이 창을 닫을게요" : undefined}
+            importantForAccessibility={dismissible ? "yes" : "no"}
           />
         </Animated.View>
 
@@ -187,9 +196,11 @@ export function BottomSheet({
                 accessibilityLabel={
                   [title, description].filter(Boolean).join(". ") || "바텀시트"
                 }
-                accessibilityHint="아래로 끌어 닫을 수 있어요"
+                accessibilityHint={
+                  dismissible ? "아래로 끌어 닫을 수 있어요" : undefined
+                }
               >
-                <View style={styles.handle} />
+                {dismissible ? <View style={styles.handle} /> : null}
                 {mascotMood ? (
                   <View style={styles.mascotWrap}>
                     <Mascot size="small" mood={mascotMood} />
