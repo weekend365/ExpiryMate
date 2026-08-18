@@ -11,11 +11,9 @@ import {
   ShoppingBasket,
   Sparkles,
 } from "lucide-react-native";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   ImageBackground,
-  type NativeScrollEvent,
-  type NativeSyntheticEvent,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -26,7 +24,7 @@ import homeWelcomeBg from "../../assets/backgrounds/home-welcome-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { SkeletonBlock } from "../../src/components/ContentSkeleton";
-import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
+import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCarousel";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
@@ -64,8 +62,6 @@ export default function HomeScreen() {
   } = useRecipeGeneration();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [noticeIndex, setNoticeIndex] = useState(0);
-  const [carouselWidth, setCarouselWidth] = useState(0);
-  const noticeCarouselRef = useRef<ScrollView>(null);
 
   const hasLoaded = data !== undefined;
   const isInitialLoading = isLoading && !hasLoaded;
@@ -112,8 +108,6 @@ export default function HomeScreen() {
     ],
   );
 
-  const noticeIds = notices.map((notice) => notice.id).join("|");
-  const hasMultipleNotices = notices.length > 1;
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
   const heroTone = getHeroTone(activeNotice);
   const recommendationPreview = data?.latestRecommendationPreview ?? null;
@@ -126,17 +120,6 @@ export default function HomeScreen() {
         ingredient.daysUntilExpiry != null && ingredient.daysUntilExpiry <= 7,
     ) ?? false;
   const emphasizeEntryActions = hasLoaded && !isInitialError && !hasInventory;
-
-  useEffect(() => {
-    setNoticeIndex((current) => {
-      if (notices.length === 0) {
-        return 0;
-      }
-
-      return Math.min(current, notices.length - 1);
-    });
-    noticeCarouselRef.current?.scrollTo({ x: 0, animated: false });
-  }, [noticeIds, notices.length]);
 
   const openInventoryFilter = (nextFilter: InventoryViewFilter) => {
     router.push({
@@ -186,21 +169,6 @@ export default function HomeScreen() {
     }
   };
 
-  const handleNoticeScrollEnd = (
-    event: NativeSyntheticEvent<NativeScrollEvent>,
-  ) => {
-    if (carouselWidth <= 0) {
-      return;
-    }
-
-    const nextIndex = Math.round(
-      event.nativeEvent.contentOffset.x / carouselWidth,
-    );
-    setNoticeIndex(
-      Math.max(0, Math.min(nextIndex, Math.max(notices.length - 1, 0))),
-    );
-  };
-
   return (
     <Screen
       scroll={false}
@@ -247,75 +215,19 @@ export default function HomeScreen() {
         >
           <SpaceSwitcher />
           <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
-            {notices.length > 0 ? (
-              <View
-                style={styles.noticeBlock}
-                onLayout={(event) => {
-                  const width = event.nativeEvent.layout.width;
-                  if (width > 0 && width !== carouselWidth) {
-                    setCarouselWidth(width);
-                  }
-                }}
-              >
-                {hasMultipleNotices ? (
-                  <View
-                    style={styles.noticeGuide}
-                    accessibilityRole="text"
-                    accessibilityLabel={`${notices.length}개 소식 중 ${noticeIndex + 1}번째. 옆으로 밀면 다음 소식을 볼 수 있어요.`}
-                  >
-                    <View style={styles.noticeDots}>
-                      {notices.map((notice, index) => (
-                        <View
-                          key={notice.id}
-                          style={[
-                            styles.noticeDot,
-                            index === noticeIndex && styles.noticeDotActive,
-                          ]}
-                        />
-                      ))}
-                    </View>
-                  </View>
-                ) : null}
-
-                {carouselWidth > 0 && hasMultipleNotices ? (
-                  <ScrollView
-                    ref={noticeCarouselRef}
-                    horizontal
-                    pagingEnabled
-                    nestedScrollEnabled
-                    showsHorizontalScrollIndicator={false}
-                    onMomentumScrollEnd={handleNoticeScrollEnd}
-                    decelerationRate="fast"
-                    style={{ width: carouselWidth }}
-                  >
-                    {notices.map((notice) => (
-                      <View
-                        key={notice.id}
-                        style={[styles.noticePage, { width: carouselWidth }]}
-                      >
-                        <HomeJangoNotice
-                          notice={notice}
-                          onPress={
-                            notice.action
-                              ? () => handleNoticeAction(notice.action!)
-                              : undefined
-                          }
-                        />
-                      </View>
-                    ))}
-                  </ScrollView>
-                ) : activeNotice ? (
-                  <HomeJangoNotice
-                    notice={activeNotice}
-                    onPress={
-                      activeNotice.action
-                        ? () => handleNoticeAction(activeNotice.action!)
-                        : undefined
-                    }
-                  />
-                ) : null}
-              </View>
-            ) : null}
+            <JangoHeroNoticeCarousel
+              notices={notices.map((notice) => ({
+                id: notice.id,
+                message: notice.message,
+                mood: notice.mood,
+                onPress: notice.action
+                  ? () => handleNoticeAction(notice.action!)
+                  : undefined,
+                accessibilityHint: notice.actionHint,
+              }))}
+              bubbleStyle={styles.heroNotice}
+              onIndexChange={setNoticeIndex}
+            />
           </SurfaceCard>
 
           <View style={styles.previewCard}>
@@ -684,42 +596,6 @@ function HomeSectionHeader({
   );
 }
 
-function HomeJangoNotice({
-  notice,
-  onPress,
-}: {
-  notice: HomeNotice;
-  onPress?: () => void;
-}) {
-  if (!onPress) {
-    return (
-      <MascotSpeechBubble
-        message={notice.message}
-        mood={notice.mood}
-        size="small"
-        style={styles.heroNotice}
-      />
-    );
-  }
-
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={notice.message}
-      accessibilityHint={notice.actionHint}
-      style={({ pressed }) => [pressed && styles.noticePressed]}
-    >
-      <MascotSpeechBubble
-        message={notice.message}
-        mood={notice.mood}
-        size="small"
-        style={styles.heroNotice}
-      />
-    </Pressable>
-  );
-}
-
 function getHeroTone(
   notice: HomeNotice | null,
 ): "primary" | "warning" | "danger" {
@@ -822,37 +698,6 @@ const styles = StyleSheet.create({
   },
   heroNotice: {
     minHeight: spacing.xxxl + spacing.xs,
-  },
-  noticeBlock: {
-    gap: spacing.xs,
-    minHeight: spacing.xxxl + spacing.md,
-    justifyContent: "center",
-  },
-  noticeGuide: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noticeDots: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xs,
-  },
-  noticeDot: {
-    width: spacing.xs,
-    height: spacing.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.border,
-  },
-  noticeDotActive: {
-    backgroundColor: colors.primary,
-    width: spacing.sm,
-  },
-  noticePage: {
-    justifyContent: "center",
-  },
-  noticePressed: {
-    opacity: 0.88,
   },
   previewCard: {
     gap: spacing.sm,

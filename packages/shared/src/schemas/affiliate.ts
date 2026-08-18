@@ -81,7 +81,7 @@ export const affiliateShoppingResponseSchema = z.object({
   enabled: z.boolean(),
   provider: affiliateProviderSchema,
   disclosure: z.string().min(1),
-  productGroups: z.array(affiliateProductGroupSchema).max(3),
+  productGroups: z.array(affiliateProductGroupSchema).max(9),
 });
 
 export type AffiliateProvider = z.infer<typeof affiliateProviderSchema>;

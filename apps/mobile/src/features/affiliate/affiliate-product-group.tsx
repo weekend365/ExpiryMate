@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { AppText } from "../../components/AppText";
 import { trackMonetizationEvent } from "../../services/api";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
 import { visibleIngredientReason } from "./affiliate-group-reason";
 import { uniqueProductsById } from "./unique-affiliate-products";
@@ -77,7 +78,7 @@ export function AffiliateProductGroupView({
           accessibilityLabel={`${group.ingredientName} 쿠팡에서 검색하기`}
           style={({ pressed }) => [
             styles.fallback,
-            pressed && styles.pressed,
+            pressed && styles.ctaRowPressed,
           ]}
         >
           <AppText variant="bodyStrong" tone="primary">쿠팡에서 검색하기</AppText>
@@ -100,6 +101,7 @@ function ProductCard({
   onShown: (product: AffiliateProduct) => void;
 }) {
   const [imageFailed, setImageFailed] = useState(false);
+  const { shouldStack } = useResponsiveLayout();
 
   useEffect(() => {
     const timer = setTimeout(() => onShown(product), 250);
@@ -113,43 +115,57 @@ function ProductCard({
       accessibilityLabel={`${product.productName}, ${formatProductPrice(product)}, 쿠팡에서 보기`}
       style={({ pressed }) => [
         styles.productCard,
+        shouldStack && styles.productCardStacked,
         !last && styles.productCardDivider,
-        pressed && styles.pressed,
+        pressed && styles.productCardPressed,
       ]}
     >
-      {imageFailed ? (
-        <View style={[styles.productImage, styles.imageFallback]}>
-          <AppText variant="caption" tone="subtext">이미지 없음</AppText>
-        </View>
-      ) : (
-        <Image
-          source={{ uri: product.productImage }}
-          style={styles.productImage}
-          resizeMode="cover"
-          accessibilityIgnoresInvertColors
-          onError={() => setImageFailed(true)}
-        />
+      {({ pressed }) => (
+        <>
+          {imageFailed ? (
+            <View style={[styles.productImage, styles.imageFallback]}>
+              <AppText variant="caption" tone="subtext">이미지 없음</AppText>
+            </View>
+          ) : (
+            <Image
+              source={{ uri: product.productImage }}
+              style={styles.productImage}
+              resizeMode="cover"
+              accessibilityIgnoresInvertColors
+              onError={() => setImageFailed(true)}
+            />
+          )}
+          <View style={styles.productCopy}>
+            <AppText variant="bodySmall" numberOfLines={2} style={styles.productName}>
+              {product.productName}
+            </AppText>
+            <View style={styles.productMeta}>
+              <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
+              {product.isRocket ? <AppText style={styles.badge}>로켓배송</AppText> : null}
+              {product.isFreeShipping ? (
+                <AppText style={styles.badge}>무료배송</AppText>
+              ) : null}
+            </View>
+            <View style={[styles.ctaRow, pressed && styles.ctaRowPressed]}>
+              <AppText
+                variant="caption"
+                tone="primary"
+                scaleRole="chrome"
+                densityAware={false}
+              >
+                쿠팡에서 보기
+              </AppText>
+              <ExternalLink
+                color={colors.primary}
+                size={typography.caption.fontSize}
+                strokeWidth={2.4}
+                accessibilityElementsHidden
+                importantForAccessibility="no"
+              />
+            </View>
+          </View>
+        </>
       )}
-      <View style={styles.productCopy}>
-        <AppText variant="bodySmall" numberOfLines={2} style={styles.productName}>
-          {product.productName}
-        </AppText>
-        <View style={styles.productMeta}>
-          <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
-          {product.isRocket ? <AppText style={styles.badge}>로켓배송</AppText> : null}
-          {product.isFreeShipping ? <AppText style={styles.badge}>무료배송</AppText> : null}
-        </View>
-        <View style={styles.ctaRow}>
-          <AppText variant="caption" tone="primary">쿠팡에서 보기</AppText>
-          <ExternalLink
-            color={colors.primary}
-            size={spacing.sm}
-            strokeWidth={2.4}
-            accessibilityElementsHidden
-            importantForAccessibility="no"
-          />
-        </View>
-      </View>
     </Pressable>
   );
 }
@@ -209,6 +225,10 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.min,
     paddingVertical: spacing.sm,
   },
+  productCardStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   productCardDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
@@ -246,15 +266,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xxs,
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.primarySoft,
-    paddingHorizontal: spacing.sm,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.xs,
     paddingVertical: spacing.xxs,
   },
+  ctaRowPressed: {
+    backgroundColor: colors.primarySoftPressed,
+  },
   fallback: {
-    minHeight: touchTarget.min,
+    minHeight: spacing.xl,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -265,5 +288,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: spacing.sm,
   },
-  pressed: { opacity: 0.72 },
+  productCardPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
 });

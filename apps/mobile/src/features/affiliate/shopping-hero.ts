@@ -1,3 +1,4 @@
+import type { JangoHeroNoticeItem } from "../../components/JangoHeroNoticeCarousel";
 import type { MascotMood } from "../../components/Mascot";
 
 export function getShoppingHeroNotice(input: {
@@ -70,6 +71,38 @@ export function getShoppingHeroNotice(input: {
     mood: "speak",
     message: "필요한 식재료, 쿠팡에서 바로 찾아드릴게요. 이름만 알려 주세요.",
   };
+}
+
+export function getShoppingHeroNotices(input: {
+  isSearching: boolean;
+  hasSearchError: boolean;
+  hasSearchResults: boolean;
+  searchWasEmpty: boolean;
+  isShoppingLoading: boolean;
+  isShoppingError: boolean;
+  isShoppingEnabled: boolean;
+  hasRecentGroups: boolean;
+  rotationNotice?: string | null;
+}): JangoHeroNoticeItem[] {
+  const notices: JangoHeroNoticeItem[] = [];
+  const rotationNotice = input.rotationNotice?.trim();
+
+  if (rotationNotice) {
+    notices.push({
+      id: "rotation",
+      mood: "idle",
+      message: rotationNotice,
+    });
+  }
+
+  const status = getShoppingHeroNotice(input);
+  notices.push({
+    id: "status",
+    mood: status.mood,
+    message: status.message,
+  });
+
+  return notices;
 }
 
 /** Recent items stay visible unless a search is in flight or already has products. */

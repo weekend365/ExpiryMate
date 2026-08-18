@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getInventoryHeroNotice } from "./inventory-hero";
+import { getInventoryHeroNotice, getInventoryHeroNotices } from "./inventory-hero";
 
 const populated = {
   isInitialLoading: false,
@@ -152,5 +152,30 @@ describe("getInventoryHeroNotice", () => {
       tone: "success",
       message: "지금은 급한 재료가 없어요.",
     });
+  });
+});
+
+describe("getInventoryHeroNotices", () => {
+  it("hides the carousel when the status hero is off", () => {
+    expect(
+      getInventoryHeroNotices({
+        hero: { show: false },
+        successMessage: "4개 재료를 정리했어요. 장고도 한숨 돌렸어요.",
+      }),
+    ).toEqual([]);
+  });
+
+  it("puts a cleanup success line in front of the fridge status", () => {
+    expect(
+      getInventoryHeroNotices({
+        hero: {
+          show: true,
+          mood: "speak",
+          tone: "warning",
+          message: "일주일 안에 손볼 재료가 6개 있어요.",
+        },
+        successMessage: "4개 재료를 정리했어요. 장고도 한숨 돌렸어요.",
+      }).map((notice) => notice.id),
+    ).toEqual(["success", "status"]);
   });
 });

@@ -41,7 +41,7 @@ import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
 import { InventoryCard } from "../../src/components/InventoryCard";
-import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
+import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCarousel";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { StatCard } from "../../src/components/StatCard";
@@ -54,7 +54,10 @@ import {
   type InventoryUrgencySection,
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
-import { getInventoryHeroNotice } from "../../src/features/inventory/inventory-hero";
+import {
+  getInventoryHeroNotice,
+  getInventoryHeroNotices,
+} from "../../src/features/inventory/inventory-hero";
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
@@ -108,6 +111,7 @@ export default function InventoryScreen() {
     InventoryUrgencySection[]
   >([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
@@ -227,16 +231,31 @@ export default function InventoryScreen() {
       trackedItems.length,
     ],
   );
-  const inventoryHeroBubble = heroNotice.show ? (
-    <MascotSpeechBubble
-      message={heroNotice.message}
-      supportingMessage={heroNotice.supportingMessage}
-      mood={heroNotice.mood}
-      size="small"
-      density="compact"
-      style={styles.heroBubble}
-    />
-  ) : null;
+  const inventoryHeroNotices = useMemo(
+    () =>
+      getInventoryHeroNotices({
+        hero: heroNotice,
+        successMessage,
+      }),
+    [heroNotice, successMessage],
+  );
+  const activeHeroSlide =
+    inventoryHeroNotices[heroSlideIndex] ?? inventoryHeroNotices[0] ?? null;
+  const inventoryHeroTone =
+    activeHeroSlide?.id === "success"
+      ? "success"
+      : heroNotice.show
+        ? heroNotice.tone
+        : "neutral";
+  const inventoryHeroBubble =
+    inventoryHeroNotices.length > 0 ? (
+      <JangoHeroNoticeCarousel
+        notices={inventoryHeroNotices}
+        density="compact"
+        bubbleStyle={styles.heroBubble}
+        onIndexChange={setHeroSlideIndex}
+      />
+    ) : null;
 
   useEffect(() => {
     const visibleIdSet = new Set(visibleIds);
@@ -526,7 +545,7 @@ export default function InventoryScreen() {
                     styles.filterToolbar,
                     heroNotice.show && {
                       backgroundColor:
-                        inventoryHeroToolbarFills[heroNotice.tone],
+                        inventoryHeroToolbarFills[inventoryHeroTone],
                     },
                   ]}
                 >
@@ -539,7 +558,7 @@ export default function InventoryScreen() {
                     styles.filterToolbar,
                     heroNotice.show && {
                       backgroundColor:
-                        inventoryHeroToolbarFills[heroNotice.tone],
+                        inventoryHeroToolbarFills[inventoryHeroTone],
                     },
                   ]}
                 >
@@ -799,7 +818,7 @@ export default function InventoryScreen() {
                 </View>
               ) : null}
 
-              {successMessage ? (
+              {successMessage && !heroNotice.show ? (
                 <FeedbackBanner tone="success" title={successMessage} />
               ) : null}
 

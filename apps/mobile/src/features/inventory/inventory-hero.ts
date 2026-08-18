@@ -1,3 +1,4 @@
+import type { JangoHeroNoticeItem } from "../../components/JangoHeroNoticeCarousel";
 import type { MascotMood } from "../../components/Mascot";
 import type { InventoryViewFilter } from "./filters";
 
@@ -104,4 +105,33 @@ export function getInventoryHeroNotice(input: {
     tone: "success",
     message: "지금은 급한 재료가 없어요.",
   };
+}
+
+export function getInventoryHeroNotices(input: {
+  hero: InventoryHeroNotice;
+  successMessage?: string | null;
+}): JangoHeroNoticeItem[] {
+  if (!input.hero.show) {
+    return [];
+  }
+
+  const notices: JangoHeroNoticeItem[] = [];
+  const successMessage = input.successMessage?.trim();
+
+  if (successMessage) {
+    notices.push({
+      id: "success",
+      mood: "happy",
+      message: successMessage,
+    });
+  }
+
+  notices.push({
+    id: "status",
+    mood: input.hero.mood,
+    message: input.hero.message,
+    supportingMessage: input.hero.supportingMessage,
+  });
+
+  return notices;
 }

@@ -43,7 +43,7 @@ import { Button } from "../src/components/Button";
 import { DatePickerField, type DatePickerFieldHandle } from "../src/components/DatePickerField";
 import { FormField } from "../src/components/FormField";
 import { FeedbackBanner } from "../src/components/FeedbackBanner";
-import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
+import { JangoHeroNoticeCarousel } from "../src/components/JangoHeroNoticeCarousel";
 import { Pill } from "../src/components/Pill";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
@@ -836,27 +836,31 @@ export default function RegisterScreen() {
               styles.sectionCardPadded,
             ]}
           >
-            <MascotSpeechBubble
-              message={
-                latestRegisteredItem
-                  ? formatPutAwayMessage(latestRegisteredItem.displayName)
-                  : "잘 넣어뒀어요"
-              }
-              mood="happy"
-              size="small"
+            <JangoHeroNoticeCarousel
+              notices={[
+                ...(rewardNotice?.granted
+                  ? [
+                      {
+                        id: "barcode-reward",
+                        mood: "happy" as const,
+                        message: "바코드 추천권 1회를 받았어요",
+                        supportingMessage: `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`,
+                      },
+                    ]
+                  : []),
+                {
+                  id: "put-away",
+                  mood: "happy" as const,
+                  message: latestRegisteredItem
+                    ? formatPutAwayMessage(latestRegisteredItem.displayName)
+                    : "잘 넣어뒀어요",
+                },
+              ]}
               density="compact"
               textVariant="bodyStrong"
-              style={styles.doneBubble}
+              bubbleStyle={styles.doneBubble}
             />
           </View>
-          {rewardNotice?.granted ? (
-            <FeedbackBanner
-              tone="success"
-              title="바코드 추천권 1회를 받았어요"
-              description={`현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`}
-              showMascot={false}
-            />
-          ) : null}
         </View>
 
         {registeredSessionItems.length ? (

@@ -51,6 +51,7 @@ import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
+import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCarousel";
 import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
@@ -270,6 +271,55 @@ export default function RecommendationsScreen() {
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
+  const recommendationHeroNotices = useMemo(() => {
+    const notices = [];
+    const statusNotice = {
+      id: "status",
+      message: isGenerating
+        ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
+        : justGenerated
+          ? "추천이 준비됐어요. 같이 살펴볼까요?"
+          : hasRecommendationResult
+            ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
+            : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요.",
+      mood: isGenerating
+        ? ("think" as const)
+        : justGenerated
+          ? ("happy" as const)
+          : hasRecommendationResult
+            ? ("cooking" as const)
+            : ("speak" as const),
+    };
+
+    if (monetization.rewardNotice === "verified") {
+      notices.push({
+        id: "ad-reward",
+        mood: "happy" as const,
+        message: "광고 추천권 1회가 지급됐어요",
+        supportingMessage: "오늘 추천을 만들 때 바로 사용할 수 있어요.",
+        onPress: monetization.dismissRewardNotice,
+        accessibilityHint: "확인",
+      });
+    } else if (monetization.adState === "verifying") {
+      notices.push({
+        id: "ad-verifying",
+        mood: "think" as const,
+        message: "광고 보상을 확인하고 있어요",
+        supportingMessage:
+          "확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요.",
+      });
+    }
+
+    notices.push(statusNotice);
+    return notices;
+  }, [
+    hasRecommendationResult,
+    isGenerating,
+    justGenerated,
+    monetization.adState,
+    monetization.dismissRewardNotice,
+    monetization.rewardNotice,
+  ]);
   const needsRewardedAd = needsRewardedAdToRecommend(monetization.access);
   const canOfferRewardedAd = canContinueWithRewardedAd(monetization.access);
   const quotaCopy = monetization.access
@@ -639,7 +689,8 @@ export default function RecommendationsScreen() {
           }
         >
           <SpaceSwitcher />
-          {monetization.rewardNotice === "verified" ? (
+          {recipeView === "favorites" &&
+          monetization.rewardNotice === "verified" ? (
             <FeedbackBanner
               tone="success"
               title="광고 추천권 1회가 지급됐어요"
@@ -648,7 +699,8 @@ export default function RecommendationsScreen() {
               onAction={monetization.dismissRewardNotice}
               showMascot={false}
             />
-          ) : monetization.adState === "verifying" ? (
+          ) : recipeView === "favorites" &&
+            monetization.adState === "verifying" ? (
             <FeedbackBanner
               tone="info"
               title="광고 보상을 확인하고 있어요"
@@ -754,27 +806,7 @@ export default function RecommendationsScreen() {
 
           {recipeView === "recommendations" ? (
             <View style={styles.heroCard}>
-              <MascotSpeechBubble
-                message={
-                  isGenerating
-                    ? "냉장고를 들여다보는 중이에요. 다른 화면을 봐도 괜찮아요."
-                    : justGenerated
-                      ? "추천이 준비됐어요. 같이 살펴볼까요?"
-                      : hasRecommendationResult
-                        ? "이 요리들로 오늘을 채워볼까요? 조건만 바꿔도 다시 골라 드릴게요."
-                        : "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요."
-                }
-                mood={
-                  isGenerating
-                    ? "think"
-                    : justGenerated
-                      ? "happy"
-                      : hasRecommendationResult
-                        ? "cooking"
-                        : "speak"
-                }
-                size="small"
-              />
+              <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
 
               <View style={styles.optionsSummaryGroup}>
                 {quotaCopy ? (

@@ -279,6 +279,33 @@ describe("AffiliateOfferService Phase A", () => {
     expect(result.productGroups[0]?.products).toHaveLength(1);
   });
 
+  it("keeps more than three recent groups so the client can rotate pages", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
+    coupangClient.searchProducts.mockImplementation(async (query: string) => {
+      const name = String(query);
+      return [product(name, `${name} 상품`)];
+    });
+    prisma.inventoryItem.findMany.mockResolvedValue([
+      { displayName: "달걀", brand: null, category: "egg" },
+      { displayName: "우유", brand: null, category: "dairy" },
+      { displayName: "두부", brand: null, category: "tofu" },
+      { displayName: "양파", brand: null, category: "produce" },
+    ]);
+    const service = createService();
+
+    const result = await service.getShopping({
+      ownerKey: "owner-a",
+      spaceId: "space-a",
+    });
+
+    expect(result.productGroups.map((group) => group.ingredientName)).toEqual([
+      "달걀",
+      "우유",
+      "두부",
+      "양파",
+    ]);
+  });
+
   it("skips excluded ingredients and unknown dishes", async () => {
     settingsService.getRecipePreferences.mockResolvedValue({
       allergens: [],

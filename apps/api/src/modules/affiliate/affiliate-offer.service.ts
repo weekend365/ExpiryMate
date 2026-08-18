@@ -31,8 +31,7 @@ import {
 } from "./coupang-search-url";
 
 const MAX_RECIPE_GROUPS = 2;
-const MAX_RECENT_GROUPS = 3;
-const MAX_RECENT_CANDIDATES = 8;
+const MAX_RECENT_CANDIDATES = 9;
 const RECENT_CONSUMED_DAYS = 30;
 const SEARCH_RATE_LIMIT = 10;
 const SEARCH_RATE_WINDOW_MS = 60_000;
@@ -141,8 +140,7 @@ export class AffiliateOfferService {
       .filter(
         (group): group is AffiliateProductGroup =>
           group !== null && group.products.length > 0,
-      )
-      .slice(0, MAX_RECENT_GROUPS);
+      );
     return {
       enabled: true,
       provider: "coupang_partners",
