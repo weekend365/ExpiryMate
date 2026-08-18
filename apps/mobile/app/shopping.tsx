@@ -164,6 +164,7 @@ export default function ShoppingScreen() {
               returnKeyType="search"
               placeholder="예: 대파, 달걀, 밀폐용기"
               accessibilityLabel="식재료 검색"
+              scaleRole="chrome"
               style={styles.searchInput}
             />
             {canClearSearch ? (
@@ -453,7 +454,11 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
+    minWidth: 0,
     minHeight: touchTarget.min,
+    // iOS TextInput 기본 패딩이 placeholder를 아이콘·검색 버튼과 어긋나게 만듦.
+    paddingVertical: 0,
+    paddingHorizontal: 0,
   },
   searchSubmit: {
     minWidth: touchTarget.icon,
