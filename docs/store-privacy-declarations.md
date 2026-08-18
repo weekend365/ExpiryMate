@@ -26,7 +26,7 @@
 | 알림·푸시 토큰 | 예 | 유통기한 알림 | Expo Push 등 | 알림 끄기·계정 정리 | Identifiers | Device or other IDs |
 | AI 추천 요청·결과·재료 snapshot·맞춤 설정·추천 행동 | 예 (추천 사용 시) | 추천 제공·히스토리·개인화 | **OpenAI(미국, 행동은 최근 요약만 전송)** | 동의 철회·기록 삭제·설정 변경·계정 정리 | User Content | App activity |
 | 고객 문의 본문·주제 | 예 (인앱 문의 시) | 고객 지원 | 운영 메일 수신함·호스팅 DB | 계정 정리 시 삭제 | User Content | App activity / Personal info |
-| 결제/구독 영수증 검증 | 예 (IAP 사용 시) | 구독 확인 | Apple/Google | 스토어 구독 관리 | Purchases | Financial info |
+| 결제/구독 영수증 검증 | 현재 아니오 (추후 IAP 판매 활성화 시 재신고) | — | — | 현재 구독·추천권 판매 비활성 | 현재 미수집 | 현재 미수집 |
 | 쿠팡 상품 검색어 | 예 (레시피·장보기 상품 영역 사용 시) | 관련 실물 상품 조회·외부 구매 연결 | **쿠팡 파트너스**: 정규화한 재료명 또는 직접 입력 검색어 한 건. 계정 ID·전체 재고·유통기한·수량·공간 정보는 전송하지 않음 | 상품 영역 사용·제휴 기능 플래그로 중단 가능 | User Content → Other User Content / App Functionality | App activity → Other user-generated content / App functionality (제3자 공유 여부는 최신 콘솔 정의로 재검토) |
 | 비맞춤형 보상 광고 | 예 (사용자가 광고 선택 시) | 광고 제공·보상 검증·부정 이용 방지 | **Google Mobile Ads(국외)** | 광고는 매회 선택, 기능 플래그로 중단 가능, 계정 정리 시 서버 세션 삭제 | Coarse Location / Identifiers / Usage Data / Diagnostics · Third-Party Advertising · Tracking=No | Approximate location / Device or other IDs / App interactions / Diagnostics · Advertising |
 | 추적(ATT·다른 회사 앱/웹 간 연결) | **아니오** | — | — | ATT 요청 없음, Android 광고 ID 권한 제거 | Tracking=No | 앱 간 추적 목적으로 광고 ID를 수집하지 않음 |

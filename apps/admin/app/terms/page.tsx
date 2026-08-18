@@ -13,7 +13,7 @@ export default function TermsPage() {
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">이용약관</h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 8월 1일
+          시행일: 2026년 8월 1일 · 최종 개정: 2026년 8월 18일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -27,7 +27,7 @@ export default function TermsPage() {
           <h2 className="pt-4 text-xl font-black">추천과 이용 한도</h2>
           <p>
             요리 추천은 참고 정보이며 식품의 실제 상태, 알레르기, 조리 안전을
-            사용자가 직접 확인해야 합니다. 무료·광고 보상·구독 추천 횟수는
+            사용자가 직접 확인해야 합니다. 무료·광고 보상 추천 횟수는
             한국 시간 기준으로 초기화되며, 정상적으로 요리 3개가 생성된 경우에만
             1회로 계산합니다. 생성 실패나 서버 오류는 사용량에서 제외합니다.
           </p>
@@ -40,18 +40,11 @@ export default function TermsPage() {
             다음 날로 이월할 수 없습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">장고 플러스 구독</h2>
+          <h2 className="pt-4 text-xl font-black">현재 판매 범위</h2>
           <p>
-            장고 플러스는 광고 제거와 하루 총 30회 추천 혜택을 제공하는 자동
-            갱신 구독입니다. 결제 금액과 통화는 구매 화면에 표시된 App Store 또는
-            Google Play의 현지화 가격을 따릅니다. 무료 체험은 제공하지 않습니다.
-            갱신·해지·환불은 각 스토어의 정책과 계정 설정을 따르며, 현재 결제
-            기간이 끝나기 전에 해지해도 만료일까지 혜택이 유지됩니다.
-          </p>
-          <p>
-            계정을 삭제해도 스토어 구독이 자동 해지되지 않습니다. 계정 삭제 전에
-            App Store 또는 Google Play의 구독 관리 화면에서 별도로 해지해야
-            합니다.
+            현재 수익화 기능은 사용자가 선택하는 보상형 광고와 쿠팡 파트너스
+            제휴 링크입니다. 장고 플러스 구독과 일회성 추천권은 현재 신규 판매하지
+            않으며 추후 별도 안내와 스토어 심사를 거쳐 제공할 수 있습니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">쿠팡 파트너스</h2>
@@ -59,7 +52,7 @@ export default function TermsPage() {
             요리 추천에서 냉장고에 없는 선택 재료를 안내할 때 쿠팡 파트너스
             링크를 제공할 수 있습니다. 결제는 쿠팡에서 이루어지며 App Store
             또는 Google Play 인앱결제가 아닙니다. 제휴 안내는 선택 사항이며
-            구독 혜택과 무관합니다. 자세한 고지는{" "}
+            광고 보상이나 추천 이용량과 무관합니다. 자세한 고지는{" "}
             <Link className="font-bold text-[var(--primary)]" href="/partners">
               쿠팡 파트너스 안내
             </Link>
@@ -76,7 +69,7 @@ export default function TermsPage() {
 
           <h2 className="pt-4 text-xl font-black">문의</h2>
           <p>
-            서비스와 결제 관련 문의는{" "}
+            서비스와 제휴 관련 문의는{" "}
             <a className="font-bold text-[var(--primary)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>

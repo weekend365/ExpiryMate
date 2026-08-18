@@ -416,13 +416,11 @@ estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
 `RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
 `RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.
 
-Initial monetization launches should set `MONETIZATION_OFFER_MODE=core`, which
-allows rewarded ads and personal Plus while preventing new paid-credit and
-Household sales. Existing credit balances and active Household entitlements
-remain usable. After finance-reviewed estimates and the revenue ledger are in
-place, `MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED=true` automatically
-pauses unprofitable ad/credit supply and caps subscription daily limits from
-recent p95 AI cost and the configured daily AI budgets.
+Current monetization is limited to opt-in AdMob rewarded ads and contextual
+Coupang Partners product links. Subscription and paid recommendation-credit
+code is retained for future evaluation, but new sales stay disabled. See
+[`docs/monetization.md`](./docs/monetization.md) for the active configuration,
+rollout, fallback, reporting, and QA rules.
 
 You can also run everything at once:
 
@@ -635,7 +633,7 @@ Inventory seed also includes mixed states:
 - AI recipe recommendation API and mobile recommendation tab
 - personal/household/store inventory spaces, email/one-time-code invitations, and three-level roles
 - space-scoped inventory/storage/dashboard/recommendations with personal favorites/settings
-- subscription entitlement API with App Store and Google Play server verification
+- subscription entitlement API with App Store and Google Play server verification (future use; sales disabled)
 - admin product and inventory tooling
 - recipe-oriented mascot asset (장고)
 - Resend mail via `mail.devnamu.com` (domain verified)
@@ -645,7 +643,7 @@ Inventory seed also includes mixed states:
 - OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
 - shared inventory is refresh/focus based; no realtime WebSocket/SSE or change ledger in v1
 - API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
-- native IAP purchase, restore, server verification, paid recommendation credits, and Household subscription UI are implemented; store product approval and production-like QA remain required
+- native IAP purchase, restore, server verification, paid recommendation credits, and Household subscription UI are retained for future evaluation; they are not in the current launch or sales scope
 
 ## Recommended next work
 
@@ -654,7 +652,7 @@ See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지�
 1. Deploy `20260724133000_add_inventory_spaces` and `20260724150000_add_space_invitation_codes` on Railway, then verify personal-space backfill
 2. Build new iOS/Android release candidates and run two-account invitation/role/inventory regression QA
 3. Finalize privacy declarations, shared-space screenshots, review notes, and submit iOS then Android
-4. Post-launch: custom API/Admin domains, monetization rollout/price experiments, catalog UX, analytics, realtime collaboration
+4. Post-launch: custom API/Admin domains, rewarded-ad and Coupang rollout analysis, catalog UX, analytics, realtime collaboration
 
 ## Notes On Running
 

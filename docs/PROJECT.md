@@ -89,7 +89,7 @@
 
 ### 의도적으로 미룸 (v1.1+ / Phase 4)
 
-- 네이티브 IAP·보상 광고 코드는 구현 완료. 스토어 상품 승인·production-like 결제/복원/환불 QA 후 단계 공개
+- 보상형 광고와 쿠팡 파트너스를 현재 수익화 범위로 운영. 구독·추천권 판매는 추후 별도 검토
 - 실시간 동기화(WebSocket/SSE)와 공간 변경 이력 원장
 - 초대 QR·전화번호·공개 재사용 링크
 - E2E 자동화 (Detox/Maestro)
@@ -604,7 +604,8 @@ Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 �
 | AI 레시피 | ✅ | |
 | 개인 즐겨찾기 | ✅ | |
 | 가족/매장 공유 공간 | ✅ 이메일·1회용 코드 초대·3단계 역할 | 실시간 동기화·변경 이력·QR/전화번호 |
-| IAP 구매 UI | ✅ 코드·서버 검증 | 스토어 상품 승인·production-like QA |
+| 수익화 | ✅ 보상형 광고·쿠팡 파트너스 구현 | 운영 rollout·실적 관측 |
+| IAP 구매 UI | ✅ 코드·서버 검증 | 구독·추천권 판매는 추후 검토 |
 
 ---
 
@@ -615,6 +616,7 @@ Railway **트래픽/배포 Healthcheck Path**는 `/ready`로 둔다 (DB 연결 �
 - **장고 캐릭터 비주얼 기준:** [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](./JANGO_CHARACTER_STYLE_GUIDE.md)
 - **iOS capability / EAS production:** [`docs/ios-eas-production.md`](./ios-eas-production.md)
   (§0 = 집에서 Mac으로 URL 반영용 `1.1.0` 빌드·Connect·AdMob 이어서 하기)
+- **현재 수익화 운영 기준:** [`docs/monetization.md`](./monetization.md)
 - **README:** 로컬 온보딩 + 진척 요약만. 상세·우선순위는 여기로 링크
 - Phase 완료·블로커 발견 시 이 파일의 §1·§2·체크리스트를 갱신
 

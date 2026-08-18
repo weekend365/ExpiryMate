@@ -52,7 +52,8 @@ export default function PrivacyChoicesPage() {
               받은 대기 중 초대도 함께 삭제됩니다. 개인 공간 데이터는 삭제되지만
               다른 구성원과 함께 쓰는 공간의 공동 재고는 유지되고, 탈퇴자의
               생성·수정자 연결은 제거됩니다. 개인 추천 사용 원장, 광고 보상
-              세션과 저장된 구독 권한도 함께 삭제됩니다.
+              세션도 함께 삭제됩니다. 추후 구독 판매가 활성화되어 저장된 구독
+              권한이 있는 경우 해당 권한도 함께 삭제됩니다.
             </li>
           </ul>
 
@@ -66,11 +67,11 @@ export default function PrivacyChoicesPage() {
             서버에서 삭제됩니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">활성 구독이 있다면</h2>
+          <h2 className="pt-4 text-xl font-black">구독 판매가 활성화된 이후</h2>
           <p>
-            계정을 삭제해도 App Store 또는 Google Play의 자동 갱신 구독은
-            해지되지 않습니다. 앱의 계정 삭제 화면에서 구독 관리 버튼을 먼저
-            열어 스토어 구독을 해지한 뒤 계정을 정리해 주세요.
+            현재 앱은 자동 갱신 구독을 판매하지 않습니다. 추후 판매가 시작되면
+            계정 삭제만으로 App Store 또는 Google Play 구독이 해지되지 않을 수
+            있으므로 앱에서 안내하는 스토어 구독 관리 절차를 먼저 따라야 합니다.
           </p>
 
           <h2 className="pt-4 text-xl font-black">삭제되지 않는 데이터</h2>

@@ -195,4 +195,4 @@ pnpm --filter @expirymate/mobile eas:submit:ios
 - `apps/mobile/ios/ExpiryMate/ExpiryMate.entitlements` — 커밋된 native 프로젝트 동기화
 - `apps/mobile/scripts/validate-public-env.cjs` — production EAS 공개 env 검사
 - `docs/store-privacy-declarations.md` — 스토어 Privacy 선언 (다음 단계)
-- `docs/monetization-v1.1-v1.2.md` — AdMob / `app-ads.txt` / 개발자 웹사이트
+- `docs/monetization.md` — 현재 AdMob·쿠팡 파트너스 운영 기준
