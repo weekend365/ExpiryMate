@@ -13,6 +13,7 @@ export function getRecommendationHeroStatus(input: {
   isQuotaError: boolean;
   isCapacityError: boolean;
   canOfferRewardedAd: boolean;
+  needsIngredients?: boolean;
 }): RecommendationHeroStatus {
   if (input.isGenerating) {
     return {
@@ -25,6 +26,13 @@ export function getRecommendationHeroStatus(input: {
     return {
       message: getRecommendationErrorHeroMessage(input),
       mood: "worry",
+    };
+  }
+
+  if (input.needsIngredients && !input.hasRecommendationResult) {
+    return {
+      message: "재료를 넣으면 오늘 요리를 골라 드릴게요.",
+      mood: "speak",
     };
   }
 
@@ -69,5 +77,11 @@ export function getRecommendationErrorHeroMessage(input: {
   }
 
   const trimmed = input.errorMessage?.trim();
+  if (
+    trimmed === "추천 가능한 재료가 없습니다." ||
+    trimmed?.includes("고를 재료가 없어요")
+  ) {
+    return "지금은 고를 재료가 없어요. 재료를 넣은 뒤 다시 부탁해 주세요.";
+  }
   return trimmed || "앗, 추천을 만들지 못했어요.";
 }

@@ -1,5 +1,6 @@
 import {
   formatBaseQuantity,
+  isTrackedItem,
   summarizeRecipePreference,
   type RecommendationAccess,
   type RecipeInventorySnapshotItem,
@@ -9,6 +10,7 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  Barcode,
   ChevronDown,
   ChevronUp,
   Clock3,
@@ -16,6 +18,7 @@ import {
   Cookie,
   Heart,
   Moon,
+  PenLine,
   Play,
   ShieldCheck,
   SlidersHorizontal,
@@ -70,7 +73,9 @@ import {
 } from "../../src/features/monetization/recommendation-access";
 import { getRecommendationHeroStatus } from "../../src/features/recipes/recommendation-hero";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
+import { useRegistrationStore } from "../../src/store/registration-store";
 import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
 import {
   getRecipeFavoriteKey,
@@ -155,6 +160,7 @@ export default function RecommendationsScreen() {
   const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
+  const inventoryQuery = useInventoryList();
   const setFavoriteMutation = useSetRecipeFavorite();
   const engagementMutation = useRecipeEngagement();
   const {
@@ -181,6 +187,7 @@ export default function RecommendationsScreen() {
   const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
+  const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
     useState<RecipeRecommendation | null>(null);
   const [recipeDetail, setRecipeDetail] =
@@ -193,6 +200,14 @@ export default function RecommendationsScreen() {
   const trackedQuotaEventRef = useRef<string | null>(null);
   const trackedScreenDayRef = useRef<string | null>(null);
   const trackedOfferRef = useRef<string | null>(null);
+  const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
+  const hasRecommendableInventory = useMemo(
+    () => (inventoryQuery.data ?? []).some(isTrackedItem),
+    [inventoryQuery.data],
+  );
+  const inventoryReady =
+    inventoryQuery.isSuccess || Boolean(inventoryQuery.isError);
+  const needsIngredients = inventoryReady && !hasRecommendableInventory;
   const isGenerating = generationStatus === "pending";
 
   const latestRecommendation = useMemo(
@@ -282,6 +297,7 @@ export default function RecommendationsScreen() {
         isQuotaError,
         isCapacityError,
         canOfferRewardedAd,
+        needsIngredients,
       }),
     };
 
@@ -314,6 +330,7 @@ export default function RecommendationsScreen() {
     isGenerating,
     isQuotaError,
     justGenerated,
+    needsIngredients,
     monetization.adState,
     monetization.dismissRewardNotice,
     monetization.rewardNotice,
@@ -332,11 +349,13 @@ export default function RecommendationsScreen() {
     ? "요리 조합을 찾는 중이에요"
     : monetization.adState === "loading"
       ? "광고를 불러오는 중이에요"
-      : needsRewardedAd
-        ? "광고 보고 추천 받을게요"
-        : hasRecommendationResult
-          ? "다시 골라볼게요"
-          : "추천 받을게요";
+      : needsIngredients
+        ? "재료 넣으러 갈게요"
+        : needsRewardedAd
+          ? "광고 보고 추천 받을게요"
+          : hasRecommendationResult
+            ? "다시 골라볼게요"
+            : "추천 받을게요";
 
   useEffect(() => {
     if (!isQuotaError || !monetization.access) return;
@@ -440,6 +459,15 @@ export default function RecommendationsScreen() {
   );
 
   const handleCreateRecommendation = useCallback(async () => {
+    if (!inventoryReady) {
+      return;
+    }
+
+    if (needsIngredients) {
+      setEntryMethodVisible(true);
+      return;
+    }
+
     const payload = buildRecommendationPayload();
     const privacyStatus =
       privacyStatusQuery.data ?? (await privacyStatusQuery.refetch()).data;
@@ -451,10 +479,21 @@ export default function RecommendationsScreen() {
     }
 
     await startRecommendation(payload);
-  }, [buildRecommendationPayload, privacyStatusQuery, startRecommendation]);
+  }, [
+    buildRecommendationPayload,
+    inventoryReady,
+    needsIngredients,
+    privacyStatusQuery,
+    startRecommendation,
+  ]);
 
   const handlePrimaryCta = useCallback(() => {
-    if (isGenerating || isAdBusy) {
+    if (isGenerating || isAdBusy || !inventoryReady) {
+      return;
+    }
+
+    if (needsIngredients) {
+      setEntryMethodVisible(true);
       return;
     }
 
@@ -479,8 +518,10 @@ export default function RecommendationsScreen() {
   }, [
     handleCreateRecommendation,
     hasRecommendationResult,
+    inventoryReady,
     isAdBusy,
     isGenerating,
+    needsIngredients,
     needsRewardedAd,
   ]);
 
@@ -578,14 +619,24 @@ export default function RecommendationsScreen() {
       return;
     }
 
+    if (!inventoryReady) {
+      return;
+    }
+
     handledAutoGenerateRef.current = autoGenerateAt;
 
-    if (isGenerating) {
+    if (isGenerating || needsIngredients) {
       return;
     }
 
     void handleCreateRecommendation();
-  }, [handleCreateRecommendation, isGenerating, params.autoGenerateAt]);
+  }, [
+    handleCreateRecommendation,
+    inventoryReady,
+    isGenerating,
+    needsIngredients,
+    params.autoGenerateAt,
+  ]);
 
   useEffect(() => {
     const payload = pendingGenerateAfterRewardRef.current;
@@ -626,13 +677,18 @@ export default function RecommendationsScreen() {
           </Button>
         ) : (
           <Button
-            icon={Sparkles}
+            icon={needsIngredients ? PenLine : Sparkles}
             onPress={handlePrimaryCta}
             loading={isGenerating || monetization.adState === "loading"}
-            disabled={isGenerating || isAdBusy}
+            disabled={
+              isGenerating || isAdBusy || (!inventoryReady && !hasRecommendationResult)
+            }
             fullWidth
             variant={
-              hasRecommendationResult && !isGenerating && !needsRewardedAd
+              hasRecommendationResult &&
+              !isGenerating &&
+              !needsRewardedAd &&
+              !needsIngredients
                 ? "surface"
                 : "primary"
             }
@@ -1150,8 +1206,16 @@ export default function RecommendationsScreen() {
           !errorMessage ? (
             <EmptyState
               mood="empty"
-              title="아직 추천이 없어요"
-              description="아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
+              title={
+                needsIngredients
+                  ? "아직 냉장고가 비어 있어요"
+                  : "아직 추천이 없어요"
+              }
+              description={
+                needsIngredients
+                  ? "재료를 넣으면 장고가 오늘 요리를 골라 드릴게요."
+                  : "아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
+              }
             />
           ) : null}
 
@@ -1232,6 +1296,40 @@ export default function RecommendationsScreen() {
           ) : null}
         </ScrollView>
       </View>
+
+      <BottomSheet
+        visible={entryMethodVisible}
+        onClose={() => setEntryMethodVisible(false)}
+        title="어떻게 넣을까요?"
+        description="바코드를 비추거나, 직접 입력해서 냉장고에 넣을 수 있어요."
+        mascotMood="idle"
+      >
+        <View style={styles.entryMethodActions}>
+          <Button
+            icon={Barcode}
+            onPress={() => {
+              setEntryMethodVisible(false);
+              clearPrefill();
+              router.push("/scanner");
+            }}
+            fullWidth
+          >
+            바코드로 넣을래요
+          </Button>
+          <Button
+            icon={PenLine}
+            onPress={() => {
+              setEntryMethodVisible(false);
+              clearPrefill();
+              router.push("/register");
+            }}
+            fullWidth
+            variant="surface"
+          >
+            직접 입력할게요
+          </Button>
+        </View>
+      </BottomSheet>
 
       <BottomSheet
         visible={showOptionsSheet}
@@ -2603,6 +2701,9 @@ const styles = StyleSheet.create({
   },
   sheetFooter: {
     gap: spacing.sm,
+  },
+  entryMethodActions: {
+    gap: spacing.xs,
   },
   noticeBody: {
     fontSize: typography.body.fontSize,

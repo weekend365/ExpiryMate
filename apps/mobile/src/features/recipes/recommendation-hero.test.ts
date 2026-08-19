@@ -80,4 +80,28 @@ describe("getRecommendationHeroStatus", () => {
       mood: "speak",
     });
   });
+
+  it("asks to add ingredients when the fridge is empty", () => {
+    expect(
+      getRecommendationHeroStatus({
+        ...idle,
+        needsIngredients: true,
+      }),
+    ).toEqual({
+      message: "재료를 넣으면 오늘 요리를 골라 드릴게요.",
+      mood: "speak",
+    });
+  });
+
+  it("rewrites the empty-inventory API error into product copy", () => {
+    expect(
+      getRecommendationHeroStatus({
+        ...idle,
+        errorMessage: "추천 가능한 재료가 없습니다.",
+      }),
+    ).toEqual({
+      message: "지금은 고를 재료가 없어요. 재료를 넣은 뒤 다시 부탁해 주세요.",
+      mood: "worry",
+    });
+  });
 });

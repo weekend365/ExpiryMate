@@ -167,9 +167,6 @@ export default function InventoryScreen() {
     [filtered],
   );
   const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-  const allExpiredVisibleSelected =
-    expiredVisibleIds.length > 0 &&
-    expiredVisibleIds.every((id) => selectedIdSet.has(id));
   const facetCounts = useMemo(
     () =>
       buildInventoryFacetCounts(trackedItems, filter, location, searchQuery),
@@ -318,17 +315,15 @@ export default function InventoryScreen() {
     );
   };
 
-  const handleToggleAllExpiredVisible = () => {
-    if (allExpiredVisibleSelected) {
-      setSelectedIds((current) =>
-        current.filter((id) => !expiredVisibleIds.includes(id)),
-      );
+  const handleSelectAllVisible = () => {
+    setSelectedIds(visibleIds);
+  };
+
+  const handleSelectExpiredOnly = () => {
+    if (!expiredVisibleIds.length) {
       return;
     }
-
-    setSelectedIds((current) => [
-      ...new Set([...current, ...expiredVisibleIds]),
-    ]);
+    setSelectedIds(expiredVisibleIds);
   };
 
   const openCleanupSheet = (item: InventoryItem) => {
@@ -771,28 +766,55 @@ export default function InventoryScreen() {
                     </AppText>
                   </View>
                   <View style={styles.headerActions}>
-                    {expiredVisibleIds.length > 0 ? (
-                      <Pressable
-                        onPress={handleToggleAllExpiredVisible}
-                        hitSlop={spacing.xs}
-                        accessibilityRole="button"
-                        accessibilityLabel={
-                          allExpiredVisibleSelected
-                            ? "만료된 재료 선택 풀게요"
-                            : "만료된 재료 전부 고를게요"
-                        }
-                        style={({ pressed }) => [
-                          styles.headerFilterButton,
-                          pressed && styles.headerFilterButtonPressed,
+                    <Pressable
+                      onPress={handleSelectAllVisible}
+                      disabled={!visibleIds.length}
+                      hitSlop={spacing.xs}
+                      accessibilityRole="button"
+                      accessibilityLabel="보이는 재료 전부 고를게요"
+                      accessibilityState={{ disabled: !visibleIds.length }}
+                      style={({ pressed }) => [
+                        styles.headerFilterButton,
+                        pressed &&
+                          visibleIds.length > 0 &&
+                          styles.headerFilterButtonPressed,
+                      ]}
+                    >
+                      <AppText
+                        style={[
+                          styles.headerFilterLabel,
+                          !visibleIds.length && styles.headerFilterLabelMuted,
                         ]}
                       >
-                        <AppText style={styles.headerFilterLabel}>
-                          {allExpiredVisibleSelected
-                            ? "만료 풀기"
-                            : "만료 전부"}
-                        </AppText>
-                      </Pressable>
-                    ) : null}
+                        전부
+                      </AppText>
+                    </Pressable>
+                    <Pressable
+                      onPress={handleSelectExpiredOnly}
+                      disabled={!expiredVisibleIds.length}
+                      hitSlop={spacing.xs}
+                      accessibilityRole="button"
+                      accessibilityLabel="만료된 재료만 고를게요"
+                      accessibilityState={{
+                        disabled: !expiredVisibleIds.length,
+                      }}
+                      style={({ pressed }) => [
+                        styles.headerFilterButton,
+                        pressed &&
+                          expiredVisibleIds.length > 0 &&
+                          styles.headerFilterButtonPressed,
+                      ]}
+                    >
+                      <AppText
+                        style={[
+                          styles.headerFilterLabel,
+                          !expiredVisibleIds.length &&
+                            styles.headerFilterLabelMuted,
+                        ]}
+                      >
+                        만료만
+                      </AppText>
+                    </Pressable>
                     <Pressable
                       onPress={cancelSelectionMode}
                       hitSlop={spacing.xs}
@@ -1089,26 +1111,26 @@ function getFilteredEmptyDescription(
   if (hasSearchQuery) {
     return hasLocationFilter || filter !== "all"
       ? "검색어를 지우거나 필터를 넓혀 볼까요?"
-      : "다른 이름으로 찾아보거나, 새 재료를 넣어볼까요?";
+      : "다른 이름으로 찾아볼까요?";
   }
 
   if (filter === "within7") {
     return hasLocationFilter
-      ? "위치를 바꾸거나 전체 보관함을 둘러볼까요?"
-      : "급한 재료가 없어요. 전체 목록을 보거나 재료를 더 넣어볼까요?";
+      ? "위치를 바꾸거나 필터를 풀고 전체를 볼까요?"
+      : "급한 재료가 없어요. 필터를 풀고 전체 목록을 볼까요?";
   }
 
   if (filter === "expired" || filter === "safe") {
     return hasLocationFilter
-      ? "위치를 바꾸거나 전체 보관함을 둘러볼까요?"
-      : "전체 목록을 둘러보거나 새 재료를 넣어볼까요?";
+      ? "위치를 바꾸거나 필터를 풀고 전체를 볼까요?"
+      : "이 조건에는 재료가 없어요. 필터를 풀고 전체를 볼까요?";
   }
 
   if (hasLocationFilter) {
-    return "다른 위치를 고르거나, 새 재료를 넣어볼까요?";
+    return "다른 위치를 고르거나, 필터를 풀고 전체를 볼까요?";
   }
 
-  return "조건을 조금 넓히거나, 새 재료를 넣어볼까요?";
+  return "조건을 조금 넓히거나, 필터를 풀고 전체를 볼까요?";
 }
 
 type ExpiryTrafficTone = "danger" | "warning" | "success";
@@ -1491,6 +1513,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.primary,
+  },
+  headerFilterLabelMuted: {
+    color: colors.mutedText,
   },
   selectionRow: {
     minHeight: touchTarget.min,

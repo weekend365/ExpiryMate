@@ -1,3 +1,4 @@
+import { registerRequestSchema } from "@expirymate/shared";
 import { router } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
@@ -28,7 +29,12 @@ export default function RegisterScreen() {
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   const isBusy = registerMutation.isPending;
-  const canSubmit = Boolean(email.trim() && password.length >= 8);
+  const canSubmit = registerRequestSchema
+    .pick({ email: true, password: true })
+    .safeParse({
+      email: email.trim(),
+      password,
+    }).success;
 
   const goToLogin = () => {
     if (router.canGoBack()) {

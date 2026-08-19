@@ -6,7 +6,7 @@ import {
   resolveStorageLocationLabel,
   type InventoryItem,
 } from "@expirymate/shared";
-import { CheckCircle2, PenLine } from "lucide-react-native";
+import { Check, PenLine } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
@@ -107,10 +107,10 @@ export function InventoryCard({
             ]}
           >
             {selected ? (
-              <CheckCircle2
-                color={colors.surface}
-                size={spacing.sm}
-                strokeWidth={2.4}
+              <Check
+                color={colors.primary}
+                size={spacing.md}
+                strokeWidth={2.6}
               />
             ) : null}
           </View>
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   selectionIndicatorSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
+    borderWidth: 0,
+    backgroundColor: "transparent",
   },
 });

@@ -1,4 +1,4 @@
-import { appBrand } from "@expirymate/shared";
+import { appBrand, loginRequestSchema } from "@expirymate/shared";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as AuthSession from "expo-auth-session";
 import { router, useLocalSearchParams } from "expo-router";
@@ -259,7 +259,9 @@ export default function LoginScreen() {
     oauthMutation.isPending ||
     loginMutation.isPending;
   const naverClientId = process.env.EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID?.trim();
-  const canEmailLogin = Boolean(email.trim() && password);
+  const canEmailLogin =
+    loginRequestSchema.shape.email.safeParse(email.trim()).success &&
+    Boolean(password);
 
   return (
     <Screen
@@ -495,7 +497,7 @@ export default function LoginScreen() {
                     right: spacing.xs,
                   }}
                   accessibilityRole="button"
-                  accessibilityLabel="처음이에요"
+                  accessibilityLabel="아직 계정이 없으면 가입할게요"
                   style={({ pressed }) => [
                     styles.textLink,
                     styles.registerLink,
@@ -508,7 +510,7 @@ export default function LoginScreen() {
                     numberOfLines={1}
                     style={styles.textLinkLabel}
                   >
-                    처음이에요
+                    아직 계정이 없으면 가입할게요
                   </AppText>
                 </Pressable>
               </View>

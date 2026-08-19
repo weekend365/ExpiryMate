@@ -157,7 +157,9 @@ export class RecipesService {
     );
 
     if (inventorySnapshot.length === 0) {
-      throw new BadRequestException("추천 가능한 재료가 없습니다.");
+      throw new BadRequestException(
+        "지금은 고를 재료가 없어요. 재료를 넣은 뒤 다시 부탁해 주세요.",
+      );
     }
 
     const model = this.getModel();

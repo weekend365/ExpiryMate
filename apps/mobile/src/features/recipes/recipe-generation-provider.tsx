@@ -210,7 +210,14 @@ function getErrorMessage(error: unknown) {
     return "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
   }
 
-  return error instanceof Error
-    ? error.message
-    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
+  const message =
+    error instanceof Error
+      ? error.message
+      : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
+
+  if (message === "추천 가능한 재료가 없습니다.") {
+    return "지금은 고를 재료가 없어요. 재료를 넣은 뒤 다시 부탁해 주세요.";
+  }
+
+  return message;
 }

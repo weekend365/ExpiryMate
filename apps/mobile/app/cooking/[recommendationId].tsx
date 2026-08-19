@@ -11,6 +11,7 @@ import {
   CookingPot,
   Heart,
   Refrigerator,
+  ShoppingBasket,
 } from "lucide-react-native";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { BackHandler, Pressable, StyleSheet, View } from "react-native";
@@ -215,13 +216,22 @@ export default function CookingScreen() {
         title="요리를 다 마쳤어요"
         subtitle="사용한 만큼 냉장고에도 바로 알려뒀어요."
         footer={
-          <Button
-            icon={CheckCircle2}
-            onPress={() => router.replace("/(tabs)/recommendations")}
-            fullWidth
-          >
-            추천으로 돌아갈게요
-          </Button>
+          <View style={styles.footerStack}>
+            <Button
+              icon={Refrigerator}
+              onPress={() => router.replace("/(tabs)/home")}
+              fullWidth
+            >
+              냉장고 볼게요
+            </Button>
+            <Button
+              variant="surface"
+              onPress={() => router.replace("/(tabs)/recommendations")}
+              fullWidth
+            >
+              다른 요리도 볼까요?
+            </Button>
+          </View>
         }
       >
         <EmptyState
@@ -349,14 +359,24 @@ export default function CookingScreen() {
     currentIndex === 0 ? (
       <View style={styles.footerStack}>
         {uncheckedPrepCount > 0 ? (
-          <AppText
-            variant="bodySmall"
-            tone="muted"
-            style={styles.ctaHint}
-            accessibilityLiveRegion="polite"
-          >
-            없어도 조리를 이어갈 수 있어요.
-          </AppText>
+          <>
+            <AppText
+              variant="bodySmall"
+              tone="muted"
+              style={styles.ctaHint}
+              accessibilityLiveRegion="polite"
+            >
+              없어도 조리를 이어갈 수 있어요.
+            </AppText>
+            <Button
+              icon={ShoppingBasket}
+              variant="surface"
+              onPress={() => router.push("/shopping")}
+              fullWidth
+            >
+              없는 재료 장보러 갈게요
+            </Button>
+          </>
         ) : null}
         <Button
           icon={ChevronRight}

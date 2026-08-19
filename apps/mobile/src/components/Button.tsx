@@ -70,8 +70,9 @@ export function Button({
         styles.base,
         size === "small" ? styles.smallButton : styles.mediumButton,
         fullWidth && styles.fullWidth,
-        (variant === "surface" || variant === "danger") && styles.outlined,
-        variant === "danger" && styles.dangerOutline,
+        (variant === "surface" || (variant === "danger" && !isDisabled)) &&
+          styles.outlined,
+        variant === "danger" && !isDisabled && styles.dangerOutline,
         { backgroundColor: pressed ? palette.pressedBackgroundColor : palette.backgroundColor },
         isDisabled && {
           backgroundColor: palette.disabledBackgroundColor,

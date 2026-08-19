@@ -1,3 +1,5 @@
+import { loginRequestSchema } from "@expirymate/shared";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
@@ -17,13 +19,32 @@ import {
 export default function ForgotPasswordScreen() {
   const { forgotPasswordMutation } = useAuth();
   const [email, setEmail] = useState("");
+  const canSubmit = loginRequestSchema.shape.email.safeParse(
+    email.trim(),
+  ).success;
 
   const handleSubmit = async () => {
+    if (!canSubmit) {
+      return;
+    }
+
     try {
-      await forgotPasswordMutation.mutateAsync(email);
+      await forgotPasswordMutation.mutateAsync(email.trim());
       Alert.alert(
         "메일 보냈어요",
         "가입된 이메일이라면 비밀번호 재설정 메일을 보내드렸어요.",
+        [
+          {
+            text: "로그인으로",
+            onPress: () => {
+              if (router.canGoBack()) {
+                router.back();
+                return;
+              }
+              router.replace("/auth/login");
+            },
+          },
+        ],
       );
     } catch (error) {
       Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
@@ -40,7 +61,7 @@ export default function ForgotPasswordScreen() {
         <Button
           onPress={handleSubmit}
           loading={forgotPasswordMutation.isPending}
-          disabled={!email}
+          disabled={!canSubmit}
           fullWidth
         >
           재설정 메일 받을게요
