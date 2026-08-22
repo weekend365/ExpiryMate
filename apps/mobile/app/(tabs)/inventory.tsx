@@ -631,7 +631,7 @@ export default function InventoryScreen() {
                           selected={filter === "expired"}
                           onPress={() => toggleExpiryFilter("expired")}
                           testID="inventory-expiry-filter-expired"
-                          accessibilityLabel={`만료, ${facetCounts.status.expired}개`}
+                          accessibilityLabel={`만료 ${facetCounts.status.expired}건`}
                           accessibilityHint={
                             filter === "expired"
                               ? "다시 누르면 전체 보관함을 보여 드려요."
@@ -650,7 +650,7 @@ export default function InventoryScreen() {
                           selected={filter === "within7"}
                           onPress={() => toggleExpiryFilter("within7")}
                           testID="inventory-expiry-filter-within7"
-                          accessibilityLabel={`곧 만료, ${facetCounts.status.within7}개`}
+                          accessibilityLabel={`곧 ${facetCounts.status.within7}건`}
                           accessibilityHint={
                             filter === "within7"
                               ? "다시 누르면 전체 보관함을 보여 드려요."
@@ -669,7 +669,7 @@ export default function InventoryScreen() {
                           selected={filter === "safe"}
                           onPress={() => toggleExpiryFilter("safe")}
                           testID="inventory-expiry-filter-safe"
-                          accessibilityLabel={`여유, ${facetCounts.status.safe}개`}
+                          accessibilityLabel={`여유 ${facetCounts.status.safe}건`}
                           accessibilityHint={
                             filter === "safe"
                               ? "다시 누르면 전체 보관함을 보여 드려요."
@@ -912,10 +912,12 @@ export default function InventoryScreen() {
               collapsed={collapsedSectionKeySet.has(section.key)}
               onToggle={() => toggleSectionCollapsed(section.key)}
             >
-              {section.data.map((item) => (
+              {section.data.map((item, index) => (
                 <InventoryCard
                   key={item.id}
                   item={item}
+                  embedded
+                  showDivider={index < section.data.length - 1}
                   selectionMode={isSelectionMode}
                   selected={selectedIdSet.has(item.id)}
                   resolveLocationLabel={resolveLabel}
@@ -1159,7 +1161,7 @@ function UrgencySection({
       <View
         style={[
           styles.urgencySectionHeader,
-          !collapsed && styles.urgencySectionHeaderExpanded,
+          collapsed ? null : styles.urgencySectionHeaderExpanded,
         ]}
         accessibilityRole="header"
         accessibilityLabel={`${title}. ${description}`}
@@ -1217,14 +1219,7 @@ function UrgencySection({
         </Pressable>
       </View>
       {collapsed ? null : (
-        <View
-          style={[
-            styles.urgencySectionBody,
-            isRegular && styles.urgencySectionBodyRegular,
-          ]}
-        >
-          {children}
-        </View>
+        <View style={styles.urgencySectionBody}>{children}</View>
       )}
     </View>
   );
@@ -1274,17 +1269,6 @@ function ExpiryTrafficLamp({
         selected={lampOn}
         showGlow={selected}
       />
-      <AppText
-        variant="caption"
-        tone={selected ? "default" : "subtext"}
-        scaleRole="chrome"
-        densityAware={false}
-        numberOfLines={1}
-        accessible={false}
-        style={styles.expiryTrafficLampLabel}
-      >
-        {label}
-      </AppText>
     </Pressable>
   );
 }
@@ -1368,15 +1352,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     minHeight: touchTarget.min,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.xxs, // 4px between lamp and inline label
     paddingHorizontal: spacing.xxs,
+    paddingVertical: spacing.xxs,
     borderRadius: radius.md,
-  },
-  expiryTrafficLampLabel: {
-    flexShrink: 1,
   },
   locationFilterTile: {
     flexGrow: 0,
@@ -1620,7 +1600,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   urgencySectionHeaderExpanded: {
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
   urgencySectionTitle: {
@@ -1638,14 +1618,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
   },
   urgencySectionBody: {
-    padding: spacing.xxs, // 4px: keep expiry groups compact around stacked cards
-    gap: spacing.xxs,
-    backgroundColor: colors.mutedSurface,
-  },
-  urgencySectionBodyRegular: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.sm,
-    padding: spacing.sm,
+    backgroundColor: colors.surface,
   },
 });

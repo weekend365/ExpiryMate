@@ -681,7 +681,9 @@ export default function RecommendationsScreen() {
             onPress={handlePrimaryCta}
             loading={isGenerating || monetization.adState === "loading"}
             disabled={
-              isGenerating || isAdBusy || (!inventoryReady && !hasRecommendationResult)
+              isGenerating ||
+              isAdBusy ||
+              (!inventoryReady && !hasRecommendationResult)
             }
             fullWidth
             variant={
@@ -939,8 +941,13 @@ export default function RecommendationsScreen() {
                   ]}
                 >
                   <View style={styles.optionsSummaryCopy}>
-                    <AppText style={styles.optionsSummaryLabel}>추천 조건</AppText>
-                    <AppText style={styles.optionsSummaryValue} numberOfLines={1}>
+                    <AppText style={styles.optionsSummaryLabel}>
+                      추천 조건
+                    </AppText>
+                    <AppText
+                      style={styles.optionsSummaryValue}
+                      numberOfLines={1}
+                    >
                       {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
                       {useExpiringFirst ? " · 임박 먼저" : ""}
                     </AppText>
@@ -956,7 +963,9 @@ export default function RecommendationsScreen() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <AppText style={styles.optionsSummaryActionLabel}>바꾸기</AppText>
+                    <AppText style={styles.optionsSummaryActionLabel}>
+                      바꾸기
+                    </AppText>
                   </View>
                 </Pressable>
                 <Pressable
@@ -975,7 +984,10 @@ export default function RecommendationsScreen() {
                     <AppText style={styles.optionsSummaryLabel}>
                       알레르기·식단
                     </AppText>
-                    <AppText style={styles.optionsSummaryValue} numberOfLines={1}>
+                    <AppText
+                      style={styles.optionsSummaryValue}
+                      numberOfLines={1}
+                    >
                       {preferenceSummary.text}
                     </AppText>
                   </View>
@@ -1003,79 +1015,79 @@ export default function RecommendationsScreen() {
           errorMessage &&
           !isGenerating &&
           isQuotaError ? (
-              <View style={styles.quotaCard}>
-                <AppText style={styles.quotaTitle}>
-                  {canOfferRewardedAd
-                    ? "광고 한 편이면 추천을 이어갈 수 있어요"
-                    : "오늘은 추천을 조금 쉬어갈까요?"}
-                </AppText>
-                {!hasActiveEntitlement && canOfferRewardedAd ? (
-                  <Button
-                    onPress={() => void handleCreateRecommendation()}
-                    loading={monetization.adState === "loading"}
-                    disabled={isAdBusy}
-                    fullWidth
-                  >
-                    광고 보고 추천 받을게요
-                  </Button>
-                ) : null}
-                {showPersonalizedOffer ? (
-                  <Button
-                    onPress={() =>
-                      handleMonetizationOffer(monetization.access!.offer.kind)
-                    }
-                    variant={canOfferRewardedAd ? "secondary" : undefined}
-                    fullWidth
-                  >
-                    {offerLabel(monetization.access!.offer.kind)}
-                  </Button>
-                ) : null}
-                {!hasActiveEntitlement &&
-                monetization.access?.offer.personalized &&
-                monetization.access?.offer.alternatives.length ? (
-                  <Pressable
-                    onPress={() => setShowOfferAlternatives(true)}
-                    accessibilityRole="button"
-                    accessibilityLabel="다른 이용 방법 보기"
-                    style={({ pressed }) => [
-                      styles.quotaLink,
-                      pressed && styles.optionsSummaryPressed,
-                    ]}
-                  >
-                    <AppText style={styles.quotaLinkText}>다른 방법</AppText>
-                  </Pressable>
-                ) : null}
-                {!hasActiveEntitlement &&
-                !monetization.access?.offer.personalized &&
-                monetization.access?.paidCredits.salesEnabled ? (
-                  <Button
-                    onPress={() =>
-                      router.push("/settings/recommendation-credits")
-                    }
-                    variant="secondary"
-                    fullWidth
-                  >
-                    AI 추천권 충전하기
-                  </Button>
-                ) : null}
-                {!hasActiveEntitlement &&
-                !monetization.access?.offer.personalized &&
-                monetization.access?.subscriptionsEnabled ? (
-                  <Pressable
-                    onPress={() => router.push("/settings/subscription")}
-                    accessibilityRole="button"
-                    accessibilityLabel="장고 플러스 살펴보기"
-                    style={({ pressed }) => [
-                      styles.quotaLink,
-                      pressed && styles.optionsSummaryPressed,
-                    ]}
-                  >
-                    <AppText style={styles.quotaLinkText}>
-                      장고 플러스 살펴보기
-                    </AppText>
-                  </Pressable>
-                ) : null}
-              </View>
+            <View style={styles.quotaCard}>
+              <AppText style={styles.quotaTitle}>
+                {canOfferRewardedAd
+                  ? "광고 한 편이면 추천을 이어갈 수 있어요"
+                  : "오늘은 추천을 조금 쉬어갈까요?"}
+              </AppText>
+              {!hasActiveEntitlement && canOfferRewardedAd ? (
+                <Button
+                  onPress={() => void handleCreateRecommendation()}
+                  loading={monetization.adState === "loading"}
+                  disabled={isAdBusy}
+                  fullWidth
+                >
+                  광고 보고 추천 받을게요
+                </Button>
+              ) : null}
+              {showPersonalizedOffer ? (
+                <Button
+                  onPress={() =>
+                    handleMonetizationOffer(monetization.access!.offer.kind)
+                  }
+                  variant={canOfferRewardedAd ? "secondary" : undefined}
+                  fullWidth
+                >
+                  {offerLabel(monetization.access!.offer.kind)}
+                </Button>
+              ) : null}
+              {!hasActiveEntitlement &&
+              monetization.access?.offer.personalized &&
+              monetization.access?.offer.alternatives.length ? (
+                <Pressable
+                  onPress={() => setShowOfferAlternatives(true)}
+                  accessibilityRole="button"
+                  accessibilityLabel="다른 이용 방법 보기"
+                  style={({ pressed }) => [
+                    styles.quotaLink,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <AppText style={styles.quotaLinkText}>다른 방법</AppText>
+                </Pressable>
+              ) : null}
+              {!hasActiveEntitlement &&
+              !monetization.access?.offer.personalized &&
+              monetization.access?.paidCredits.salesEnabled ? (
+                <Button
+                  onPress={() =>
+                    router.push("/settings/recommendation-credits")
+                  }
+                  variant="secondary"
+                  fullWidth
+                >
+                  AI 추천권 충전하기
+                </Button>
+              ) : null}
+              {!hasActiveEntitlement &&
+              !monetization.access?.offer.personalized &&
+              monetization.access?.subscriptionsEnabled ? (
+                <Pressable
+                  onPress={() => router.push("/settings/subscription")}
+                  accessibilityRole="button"
+                  accessibilityLabel="장고 플러스 살펴보기"
+                  style={({ pressed }) => [
+                    styles.quotaLink,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <AppText style={styles.quotaLinkText}>
+                    장고 플러스 살펴보기
+                  </AppText>
+                </Pressable>
+              ) : null}
+            </View>
           ) : null}
 
           {recipeView === "recommendations" &&
@@ -1088,10 +1100,14 @@ export default function RecommendationsScreen() {
               onToggle={() => toggleRecipeSection("latest")}
             >
               {latestRecommendation.recommendations.length ? (
-                <RecipeCardGrid>
+                <RecipeCardGrid embedded>
                   {latestRecommendation.recommendations.map((dish, index) => (
                     <RecipeCard
                       key={`${latestRecommendation.id}-${dish.title}-${index}`}
+                      embedded
+                      showDivider={
+                        index < latestRecommendation.recommendations.length - 1
+                      }
                       dish={dish}
                       badgeLabel={String(index + 1)}
                       inventorySnapshot={latestRecommendation.inventorySnapshot}
@@ -1127,11 +1143,14 @@ export default function RecommendationsScreen() {
                   ))}
                 </RecipeCardGrid>
               ) : (
-                <EmptyState
-                  mood="empty"
-                  title="이번에는 딱 맞는 요리가 없어요"
-                  description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
-                />
+                <View style={styles.recipeSectionInset}>
+                  <EmptyState
+                    variant="plain"
+                    mood="empty"
+                    title="이번에는 딱 맞는 요리가 없어요"
+                    description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
+                  />
+                </View>
               )}
             </RecipeSection>
           ) : null}
@@ -1145,8 +1164,8 @@ export default function RecommendationsScreen() {
               collapsed={Boolean(collapsedSections.previous)}
               onToggle={() => toggleRecipeSection("previous")}
             >
-              <View style={styles.historyList}>
-                {previousRecommendations.map((recommendation) => (
+              <View>
+                {previousRecommendations.map((recommendation, index) => (
                   <Pressable
                     key={recommendation.id}
                     onPress={() => setHistoryRecommendation(recommendation)}
@@ -1156,6 +1175,8 @@ export default function RecommendationsScreen() {
                     style={({ pressed }) => [
                       styles.historyRow,
                       shouldStack && styles.historyRowStacked,
+                      index < previousRecommendations.length - 1 &&
+                        styles.historyRowDivider,
                       pressed && styles.historyRowPressed,
                     ]}
                   >
@@ -1228,7 +1249,10 @@ export default function RecommendationsScreen() {
             >
               {favoritesQuery.isPending ? (
                 <View
-                  style={styles.favoriteLoading}
+                  style={[
+                    styles.favoriteLoading,
+                    styles.favoriteLoadingEmbedded,
+                  ]}
                   accessibilityLabel="즐겨찾기를 불러오고 있어요"
                 >
                   <AppText style={styles.favoriteLoadingText}>
@@ -1236,22 +1260,28 @@ export default function RecommendationsScreen() {
                   </AppText>
                 </View>
               ) : favoritesQuery.error ? (
-                <FeedbackBanner
-                  showMascot={false}
-                  title="즐겨찾기를 불러오지 못했어요"
-                  description={
-                    getErrorMessage(favoritesQuery.error) ?? undefined
-                  }
-                  actionLabel="다시 불러오기"
-                  onAction={() => {
-                    void favoritesQuery.refetch();
-                  }}
-                />
+                <View style={styles.recipeSectionInset}>
+                  <FeedbackBanner
+                    showMascot={false}
+                    title="즐겨찾기를 불러오지 못했어요"
+                    description={
+                      getErrorMessage(favoritesQuery.error) ?? undefined
+                    }
+                    actionLabel="다시 불러오기"
+                    onAction={() => {
+                      void favoritesQuery.refetch();
+                    }}
+                  />
+                </View>
               ) : favoritesQuery.data?.length ? (
-                <RecipeCardGrid>
+                <RecipeCardGrid embedded>
                   {favoritesQuery.data.map((favorite, favoriteIndex) => (
                     <RecipeCard
                       key={favorite.id}
+                      embedded
+                      showDivider={
+                        favoriteIndex < favoritesQuery.data.length - 1
+                      }
                       dish={favorite.dish}
                       badgeLabel={String(favoriteIndex + 1)}
                       inventorySnapshot={favorite.inventorySnapshot}
@@ -1284,13 +1314,16 @@ export default function RecommendationsScreen() {
                   ))}
                 </RecipeCardGrid>
               ) : (
-                <EmptyState
-                  icon={Heart}
-                  title="아직 즐겨찾는 요리가 없어요"
-                  description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
-                  actionLabel="추천 보러 가기"
-                  onAction={() => setRecipeView("recommendations")}
-                />
+                <View style={styles.recipeSectionInset}>
+                  <EmptyState
+                    variant="plain"
+                    icon={Heart}
+                    title="아직 즐겨찾는 요리가 없어요"
+                    description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
+                    actionLabel="추천 보러 가기"
+                    onAction={() => setRecipeView("recommendations")}
+                  />
+                </View>
               )}
             </RecipeSection>
           ) : null}
@@ -1678,10 +1711,7 @@ function ExpiringFirstToggle({
 }) {
   return (
     <View
-      style={[
-        styles.expiringToggle,
-        selected && styles.expiringToggleSelected,
-      ]}
+      style={[styles.expiringToggle, selected && styles.expiringToggleSelected]}
     >
       <Pressable
         onPress={onToggle}
@@ -1726,13 +1756,20 @@ function ExpiringFirstToggle({
   );
 }
 
-function RecipeCardGrid({ children }: { children: ReactNode }) {
+function RecipeCardGrid({
+  children,
+  embedded = false,
+}: {
+  children: ReactNode;
+  embedded?: boolean;
+}) {
   const { isRegular } = useResponsiveLayout();
   return (
     <View
       style={[
         styles.recipeCardGrid,
-        isRegular && styles.recipeCardGridRegular,
+        embedded && styles.recipeCardGridEmbedded,
+        !embedded && isRegular && styles.recipeCardGridRegular,
       ]}
     >
       {children}
@@ -1748,6 +1785,8 @@ function RecipeCard({
   isFavorite = false,
   isFavoritePending = false,
   onToggleFavorite,
+  embedded = false,
+  showDivider = false,
 }: {
   dish: RecipeRecommendationDish;
   badgeLabel?: string;
@@ -1756,6 +1795,8 @@ function RecipeCard({
   isFavorite?: boolean;
   isFavoritePending?: boolean;
   onToggleFavorite?: (favorite: boolean) => void;
+  embedded?: boolean;
+  showDivider?: boolean;
 }) {
   const { shouldStack, isRegular } = useResponsiveLayout();
   const highlightIngredients = getHighlightedIngredients(
@@ -1769,7 +1810,9 @@ function RecipeCard({
       style={[
         styles.recipeCard,
         shouldStack && styles.recipeCardStacked,
-        isRegular && styles.recipeCardRegular,
+        !embedded && isRegular && styles.recipeCardRegular,
+        embedded && styles.recipeCardEmbedded,
+        showDivider && styles.recipeCardDivider,
       ]}
     >
       <Pressable
@@ -2322,7 +2365,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   recipeSectionHeaderExpanded: {
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
   recipeSectionTitle: {
@@ -2340,9 +2383,11 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
   },
   recipeSectionBody: {
-    padding: spacing.xxs, // 4px: keep recipe groups compact around stacked cards
-    gap: spacing.xxs,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.surface,
+  },
+  recipeSectionInset: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   favoriteLoading: {
     minHeight: spacing.xxxl,
@@ -2354,26 +2399,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: spacing.md,
   },
+  favoriteLoadingEmbedded: {
+    borderWidth: 0,
+    borderRadius: radius.none,
+    backgroundColor: colors.surface,
+  },
   favoriteLoadingText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.subtext,
   },
-  historyList: {
-    gap: spacing.xs,
-  },
   historyRow: {
     minHeight: touchTarget.min,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.md,
+  },
+  historyRowDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   historyRowStacked: {
     flexDirection: "column",
@@ -2411,6 +2459,9 @@ const styles = StyleSheet.create({
   recipeCardGrid: {
     gap: spacing.xxs,
   },
+  recipeCardGridEmbedded: {
+    gap: spacing.none,
+  },
   recipeCardGridRegular: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -2425,6 +2476,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     overflow: "hidden",
+  },
+  recipeCardEmbedded: {
+    borderWidth: 0,
+    borderRadius: radius.none,
+    backgroundColor: colors.surface,
+  },
+  recipeCardDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   recipeCardStacked: {
     flexDirection: "column",

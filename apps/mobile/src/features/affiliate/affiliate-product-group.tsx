@@ -24,8 +24,11 @@ const PRODUCT_IMAGE_SIZE = spacing.xxl * 2;
 
 export function AffiliateProductGroupView({
   group,
+  headingBand = false,
 }: {
   group: AffiliateProductGroup;
+  /** Full-bleed header bar so stacked ingredients read as separate groups. */
+  headingBand?: boolean;
 }) {
   const trackedProducts = useRef(new Set<string>());
   const groupRef = useRef(group);
@@ -52,15 +55,23 @@ export function AffiliateProductGroupView({
   const products = uniqueProductsById(group.products);
 
   return (
-    <View style={styles.group}>
-      <View style={styles.heading}>
+    <View style={[styles.group, headingBand && styles.groupBanded]}>
+      <View
+        style={[styles.heading, headingBand && styles.headingBand]}
+        accessibilityRole="header"
+        accessibilityLabel={
+          ingredientReason
+            ? `${group.ingredientName}. ${ingredientReason}`
+            : group.ingredientName
+        }
+      >
         <AppText variant="bodyStrong">{group.ingredientName}</AppText>
         {ingredientReason ? (
           <AppText variant="caption" tone="subtext">{ingredientReason}</AppText>
         ) : null}
       </View>
       {products.length > 0 ? (
-        <View style={styles.productList}>
+        <View style={[styles.productList, headingBand && styles.groupBody]}>
           {products.map((product, index) => (
             <ProductCard
               key={`${product.productId}:${index}`}
@@ -72,18 +83,20 @@ export function AffiliateProductGroupView({
           ))}
         </View>
       ) : group.fallbackUrl ? (
-        <Pressable
-          onPress={() => void openFallback(group.fallbackUrl!, group.placement)}
-          accessibilityRole="link"
-          accessibilityLabel={`${group.ingredientName} 쿠팡에서 검색하기`}
-          style={({ pressed }) => [
-            styles.fallback,
-            pressed && styles.ctaRowPressed,
-          ]}
-        >
-          <AppText variant="bodyStrong" tone="primary">쿠팡에서 검색하기</AppText>
-          <ExternalLink color={colors.primary} size={spacing.sm} strokeWidth={2.4} />
-        </Pressable>
+        <View style={headingBand ? styles.groupBody : undefined}>
+          <Pressable
+            onPress={() => void openFallback(group.fallbackUrl!, group.placement)}
+            accessibilityRole="link"
+            accessibilityLabel={`${group.ingredientName} 쿠팡에서 검색하기`}
+            style={({ pressed }) => [
+              styles.fallback,
+              pressed && styles.ctaRowPressed,
+            ]}
+          >
+            <AppText variant="bodyStrong" tone="primary">쿠팡에서 검색하기</AppText>
+            <ExternalLink color={colors.primary} size={spacing.sm} strokeWidth={2.4} />
+          </Pressable>
+        </View>
       ) : null}
     </View>
   );
@@ -209,11 +222,24 @@ async function openUrl(url: string) {
 
 const styles = StyleSheet.create({
   group: { gap: spacing.xs },
+  groupBanded: {
+    gap: spacing.none,
+  },
   heading: {
     gap: spacing.xxs,
     paddingBottom: spacing.xs,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
+  },
+  headingBand: {
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    backgroundColor: colors.mutedSurface,
+  },
+  groupBody: {
+    paddingHorizontal: spacing.sm,
   },
   productList: {
     paddingTop: spacing.xxs,

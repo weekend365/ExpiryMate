@@ -242,7 +242,7 @@ export default function ShoppingScreen() {
             <ShoppingCatalogSkeleton label="상품을 찾아보고 있어요" />
           ) : searchGroup ? (
             <ShoppingIngredientCard>
-              <AffiliateProductGroupView group={searchGroup} />
+              <AffiliateProductGroupView headingBand group={searchGroup} />
             </ShoppingIngredientCard>
           ) : null}
         </ShoppingCatalogSection>
@@ -284,11 +284,14 @@ export default function ShoppingScreen() {
             </View>
           ) : (
             <>
-              {recentGroups.map((group) => (
+              {recentGroups.map((group, index) => (
                 <ShoppingIngredientCard
                   key={`${group.placement}:${group.query}:${group.ingredientName}`}
+                  showDivider={
+                    index < recentGroups.length - 1 || canLoadMoreRecent
+                  }
                 >
-                  <AffiliateProductGroupView group={group} />
+                  <AffiliateProductGroupView headingBand group={group} />
                 </ShoppingIngredientCard>
               ))}
               {canLoadMoreRecent ? (
@@ -346,7 +349,6 @@ function ShoppingCatalogSection({
   children: ReactNode;
   testID?: string;
 }) {
-  const { isRegular } = useResponsiveLayout();
   const heading = count == null ? title : `${title} ${count}건`;
   return (
     <View style={styles.section} testID={testID}>
@@ -377,39 +379,29 @@ function ShoppingCatalogSection({
           )}
         </View>
       </View>
-      <View
-        style={[styles.sectionBody, isRegular && styles.sectionBodyRegular]}
-      >
-        {children}
-      </View>
+      <View style={styles.sectionBody}>{children}</View>
     </View>
   );
 }
 
 function ShoppingIngredientCard({
   children,
+  showDivider = false,
 }: {
   children: ReactNode;
+  showDivider?: boolean;
 }) {
-  const { isRegular } = useResponsiveLayout();
   return (
-    <View style={[styles.itemCard, isRegular && styles.itemCardRegular]}>
+    <View style={[styles.itemCard, showDivider && styles.itemCardDivider]}>
       {children}
     </View>
   );
 }
 
 function ShoppingCatalogSkeleton({ label }: { label: string }) {
-  const { isRegular } = useResponsiveLayout();
   return (
-    <View
-      style={[
-        styles.loadingSkeleton,
-        isRegular && styles.loadingSkeletonRegular,
-      ]}
-      accessibilityLabel={label}
-    >
-      <ShoppingIngredientCard>
+    <View style={styles.loadingSkeleton} accessibilityLabel={label}>
+      <ShoppingIngredientCard showDivider>
         <View style={styles.skeletonRow}>
           <SkeletonBlock height={spacing.xxl * 2} width={spacing.xxl * 2} radiusToken="md" />
           <View style={styles.skeletonCopy}>
@@ -518,7 +510,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   sectionHeaderExpanded: {
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
   sectionHeading: {
@@ -535,42 +527,24 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   sectionBody: {
-    padding: spacing.xs,
-    gap: spacing.xs,
-    backgroundColor: colors.mutedSurface,
-  },
-  sectionBodyRegular: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.sm,
-    padding: spacing.sm,
+    backgroundColor: colors.surface,
   },
   itemCard: {
     backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
     overflow: "hidden",
   },
-  itemCardRegular: {
-    flexGrow: 1,
-    flexBasis: "40%",
-    maxWidth: "48%",
+  itemCardDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   loadMore: {
     width: "100%",
-    flexBasis: "100%",
     minHeight: touchTarget.min,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xxs,
     backgroundColor: colors.surface,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
   },
   loadMorePressed: {
     backgroundColor: colors.surfacePressed,
@@ -585,13 +559,6 @@ const styles = StyleSheet.create({
   },
   loadingSkeleton: {
     width: "100%",
-    flexBasis: "100%",
-    gap: spacing.xs,
-  },
-  loadingSkeletonRegular: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.sm,
   },
   skeletonRow: {
     flexDirection: "row",
@@ -605,9 +572,9 @@ const styles = StyleSheet.create({
   },
   empty: {
     width: "100%",
-    flexBasis: "100%",
     alignItems: "flex-start",
     gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
   },
 });

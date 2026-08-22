@@ -434,7 +434,7 @@ export default function HomeScreen() {
                   ]}
                   onPress={() => openInventoryFilter("expired")}
                   accessibilityRole="button"
-                  accessibilityLabel={`만료됨 ${expiredCount}개`}
+                  accessibilityLabel={`만료 ${expiredCount}건`}
                   accessibilityHint="유통기한이 지난 재료만 보관함에서 보여 드릴게요."
                 >
                   <StatCard
@@ -454,7 +454,7 @@ export default function HomeScreen() {
                   ]}
                   onPress={() => openInventoryFilter("within7")}
                   accessibilityRole="button"
-                  accessibilityLabel={`7일 이내 ${within7DaysCount}개`}
+                  accessibilityLabel={`7일 이내 ${within7DaysCount}건`}
                   accessibilityHint="7일 안에 손볼 재료만 보관함에서 보여 드릴게요."
                 >
                   <StatCard
@@ -474,7 +474,7 @@ export default function HomeScreen() {
                   ]}
                   onPress={() => openInventoryFilter("safe")}
                   accessibilityRole="button"
-                  accessibilityLabel={`여유 ${safeCount}개`}
+                  accessibilityLabel={`여유 ${safeCount}건`}
                   accessibilityHint="유통기한이 8일 이상 남은 재료만 보관함에서 보여 드릴게요."
                 >
                   <StatCard

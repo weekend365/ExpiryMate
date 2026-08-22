@@ -22,6 +22,9 @@ interface InventoryCardProps {
   onEdit?: (item: InventoryItem) => void;
   selectionMode?: boolean;
   selected?: boolean;
+  /** Flush row inside a section surface — no own card chrome. */
+  embedded?: boolean;
+  showDivider?: boolean;
   resolveLocationLabel?: (key: string) => string;
 }
 
@@ -32,6 +35,8 @@ export function InventoryCard({
   onEdit,
   selectionMode = false,
   selected = false,
+  embedded = false,
+  showDivider = false,
   resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryCardProps) {
   const { shouldStack, isRegular } = useResponsiveLayout();
@@ -45,8 +50,9 @@ export function InventoryCard({
     <View
       style={[
         styles.card,
-        selected && styles.cardSelected,
-        isRegular && styles.cardRegular,
+        embedded && styles.cardEmbedded,
+        selected && (embedded ? styles.cardEmbeddedSelected : styles.cardSelected),
+        showDivider && styles.cardDivider,
       ]}
     >
       <Pressable
@@ -192,14 +198,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
+  cardEmbedded: {
+    borderWidth: 0,
+    borderRadius: radius.none,
+    backgroundColor: colors.surface,
+  },
   cardSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  cardRegular: {
-    flexGrow: 1,
-    flexBasis: "40%",
-    maxWidth: "48%",
+  cardEmbeddedSelected: {
+    backgroundColor: colors.primarySoft,
+  },
+  cardDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
   },
   main: {
     flex: 1,

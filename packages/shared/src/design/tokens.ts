@@ -66,6 +66,11 @@ export const semanticColors = {
   success: green[500],
   successSoft: green[50],
 
+  // Citrus traffic lamps (expired / soon / safe)
+  citrusGrapefruit: "#F2786D",
+  citrusLemon: "#FFD15C",
+  citrusLime: "#8FC63D",
+
   // Status: info
   info: blue[500],
   infoSoft: blue[50],

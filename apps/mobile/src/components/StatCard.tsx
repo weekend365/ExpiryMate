@@ -1,7 +1,7 @@
 import { Platform, StyleSheet, View } from "react-native";
-import { useResponsiveLayout } from "../shared/responsive-layout";
 import { colors, radius, spacing } from "../shared/theme";
 import { AppText } from "./AppText";
+import { LemonIcon } from "./LemonIcon";
 
 interface StatCardProps {
   label: string;
@@ -10,10 +10,10 @@ interface StatCardProps {
   /**
    * `inline` = open metric strip.
    * `card` = bordered tile.
-   * `traffic` = circular lamp for signal-light strips (on when value > 0).
+   * `traffic` = citrus lamp for expiry strips (on when value > 0).
    */
   variant?: "card" | "inline" | "traffic";
-  /** When false, traffic variant renders lamp only (labels live in accessibility copy). */
+  /** When false, traffic variant renders the lemon only. */
   showLabel?: boolean;
   /** Reduces traffic lamp and spacing for dense dashboard summaries. */
   compact?: boolean;
@@ -31,7 +31,7 @@ interface StatCardProps {
 const LAMP_SIZE = spacing.xxl + spacing.sm;
 const LAMP_SIZE_COMPACT = spacing.xxl;
 const LAMP_SIZE_MINI = spacing.lg;
-/** Dimmed fill when off — keeps hue so the bulb role is still readable. */
+/** Dimmed fill when off — keeps hue so the fruit role is still readable. */
 const OFF_FILL_OPACITY = 0.28;
 
 export function StatCard({
@@ -45,8 +45,6 @@ export function StatCard({
   showGlow = true,
   selected,
 }: StatCardProps) {
-  const { isLargeText } = useResponsiveLayout();
-
   if (variant === "traffic") {
     const isOn = selected ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
@@ -56,6 +54,7 @@ export function StatCard({
       : compact
         ? LAMP_SIZE_COMPACT
         : LAMP_SIZE;
+    const countLabel = `${label} ${value}건`;
 
     return (
       <View
@@ -67,17 +66,12 @@ export function StatCard({
         ]}
         accessible={selected == null}
         accessibilityRole="text"
-        accessibilityLabel={`${label} ${value}개`}
+        accessibilityLabel={countLabel}
       >
         <View
           style={[
             styles.lamp,
-            mini && styles.lampMini,
             {
-              minWidth: lampMin,
-              minHeight: lampMin,
-            },
-            mini && {
               width: lampMin,
               height: lampMin,
             },
@@ -88,45 +82,22 @@ export function StatCard({
               },
           ]}
         >
-          {/* Color disc: full when on, same hue dimmed when off */}
           <View
             pointerEvents="none"
-            style={[
-              styles.lampFill,
-              {
-                backgroundColor: lampStyle.onBackground,
-                opacity: isOn ? 1 : OFF_FILL_OPACITY,
-              },
-            ]}
-          />
-          <AppText
-            variant={
-              mini
-                ? "caption"
-                : isLargeText
-                  ? "bodySmall"
-                  : compact
-                    ? "bodySmall"
-                    : "heading"
-            }
-            scaleRole="chrome"
-            densityAware={false}
-            numberOfLines={1}
-            style={{
-              color: isOn ? lampStyle.onText : lampStyle.onBackground,
-            }}
+            style={{ opacity: isOn ? 1 : OFF_FILL_OPACITY }}
           >
-            {value}
-          </AppText>
+            <LemonIcon size={lampMin} color={lampStyle.fill} />
+          </View>
         </View>
         {showLabel ? (
           <AppText
             variant="caption"
             scaleRole="chrome"
+            densityAware={false}
             numberOfLines={1}
             style={styles.trafficLabel}
           >
-            {label}
+            {countLabel}
           </AppText>
         ) : null}
       </View>
@@ -192,19 +163,16 @@ const tones = {
 
 const trafficLamps = {
   danger: {
-    onBackground: colors.danger,
-    onText: colors.surface,
-    glow: colors.danger,
+    fill: colors.citrusGrapefruit,
+    glow: colors.citrusGrapefruit,
   },
   warning: {
-    onBackground: colors.warning,
-    onText: colors.surface,
-    glow: colors.warning,
+    fill: colors.citrusLemon,
+    glow: colors.citrusLemon,
   },
   success: {
-    onBackground: colors.success,
-    onText: colors.surface,
-    glow: colors.success,
+    fill: colors.citrusLime,
+    glow: colors.citrusLime,
   },
 };
 
@@ -234,25 +202,14 @@ const styles = StyleSheet.create({
   trafficMini: {
     flex: 0,
     justifyContent: "center",
-    gap: spacing.xxs, // 4px between mini lamp and label
+    gap: spacing.xxs,
   },
   trafficWithoutLabel: {
     gap: 0,
   },
   lamp: {
-    borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-  },
-  lampMini: {
-    paddingHorizontal: spacing.xxs, // 4px so 32px circle still fits the count
-    paddingVertical: 0,
-  },
-  lampFill: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: radius.pill,
   },
   lampGlow: {
     shadowOffset: { width: 0, height: 0 },
