@@ -10,6 +10,7 @@ import {
 } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  Archive,
   Barcode,
   ChevronDown,
   ChevronUp,
@@ -1192,14 +1193,17 @@ export default function RecommendationsScreen() {
                         {formatHistoryPreview(recommendation)}
                       </AppText>
                     </View>
-                    <AppText
-                      style={[
-                        styles.historyAction,
-                        shouldStack && styles.historyActionStacked,
-                      ]}
+                    <View
+                      style={shouldStack ? styles.historyActionStacked : undefined}
+                      accessibilityElementsHidden
+                      importantForAccessibility="no"
                     >
-                      불러오기
-                    </AppText>
+                      <Archive
+                        color={colors.primary}
+                        size={spacing.md}
+                        strokeWidth={2.4}
+                      />
+                    </View>
                   </Pressable>
                 ))}
               </View>
@@ -2446,12 +2450,6 @@ const styles = StyleSheet.create({
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
-  },
-  historyAction: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.primary,
   },
   historyActionStacked: {
     alignSelf: "flex-end",
