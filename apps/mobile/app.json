@@ -69,11 +69,12 @@
           }
         }
       ],
-      [
+        [
         "@sentry/react-native",
         {
           "organization": "expirymate",
-          "project": "mobile"
+          "project": "mobile",
+          "disableAutoUpload": true
         }
       ]
     ],
