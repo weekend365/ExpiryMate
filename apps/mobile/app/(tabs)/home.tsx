@@ -51,7 +51,7 @@ const difficultyLabels = {
 } as const;
 
 export default function HomeScreen() {
-  const { shouldStack, shouldStackDense, isRegular, width } = useResponsiveLayout();
+  const { shouldStack, isRegular, width } = useResponsiveLayout();
   const contentMaxWidth = getContentMaxWidth("wide", width);
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useDashboardSummary();
@@ -334,15 +334,10 @@ export default function HomeScreen() {
                         : "재료를 등록하면 맞춤 요리를 추천해 드려요"}
                   </AppText>
                   {recommendationPreview ? (
-                    <AppText
-                      variant="caption"
-                      tone="subtext"
-                      numberOfLines={2}
-                    >
+                    <AppText variant="caption" tone="subtext" numberOfLines={2}>
                       {recommendationPreview.servings}인분
                       {"  ·  "}
-                      {recommendationPreview.cookingTimeMinutes}분
-                      {"  ·  "}
+                      {recommendationPreview.cookingTimeMinutes}분{"  ·  "}
                       {difficultyLabels[recommendationPreview.difficulty]}
                     </AppText>
                   ) : (
@@ -389,7 +384,6 @@ export default function HomeScreen() {
               <View
                 style={[
                   styles.trafficStrip,
-                  shouldStackDense && styles.trafficStripDense,
                   isRegular && styles.trafficStripRegular,
                 ]}
                 accessibilityLabel="유통기한 현황을 불러오고 있어요"
@@ -399,7 +393,6 @@ export default function HomeScreen() {
                     key={index}
                     style={[
                       styles.trafficLampPressable,
-                      shouldStackDense && styles.trafficLampPressableDense,
                       isRegular && styles.trafficLampPressableRegular,
                     ]}
                   >
@@ -421,14 +414,12 @@ export default function HomeScreen() {
               <View
                 style={[
                   styles.trafficStrip,
-                  shouldStackDense && styles.trafficStripDense,
                   isRegular && styles.trafficStripRegular,
                 ]}
               >
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
-                    shouldStackDense && styles.trafficLampPressableDense,
                     isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
@@ -448,7 +439,6 @@ export default function HomeScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
-                    shouldStackDense && styles.trafficLampPressableDense,
                     isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
@@ -468,7 +458,6 @@ export default function HomeScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
-                    shouldStackDense && styles.trafficLampPressableDense,
                     isRegular && styles.trafficLampPressableRegular,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
@@ -558,11 +547,7 @@ function HomeSectionHeader({
     <View
       style={[styles.sectionHeader, shouldStack && styles.sectionHeaderStacked]}
     >
-      <AppText
-        variant="bodySmall"
-        tone="subtext"
-        accessibilityRole="header"
-      >
+      <AppText variant="bodySmall" tone="subtext" accessibilityRole="header">
         {title}
       </AppText>
       {metaLabel ? (
@@ -793,7 +778,7 @@ const styles = StyleSheet.create({
   },
   trafficStrip: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: spacing.xs,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
@@ -802,27 +787,19 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.mutedSurface,
   },
-  trafficStripDense: {
-    flexWrap: "wrap",
-  },
   trafficStripRegular: {
     gap: spacing.md,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
-    justifyContent: "space-evenly",
   },
   trafficLampPressable: {
     flex: 1,
+    minWidth: 0,
     alignItems: "center",
     minHeight: touchTarget.min,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingVertical: spacing.xxs,
     borderRadius: radius.md,
-  },
-  trafficLampPressableDense: {
-    flexBasis: spacing.xxxl + spacing.xl,
-    minWidth: spacing.xxxl + spacing.lg,
-    flexGrow: 1,
   },
   trafficLampPressableRegular: {
     minHeight: touchTarget.cta,

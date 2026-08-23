@@ -65,7 +65,7 @@
             "deploymentTarget": "16.4"
           },
           "android": {
-            "kotlinVersion": "2.1.20"
+            "kotlinVersion": "2.2.20"
           }
         }
       ],

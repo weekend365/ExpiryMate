@@ -60,7 +60,8 @@
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "production",
-        "EXPO_IOS_PERSONAL_TEAM": "0"
+        "EXPO_IOS_PERSONAL_TEAM": "0",
+        "SENTRY_ALLOW_FAILURE": "true"
       }
     }
   },

@@ -94,7 +94,7 @@ export function StatCard({
             variant="caption"
             scaleRole="chrome"
             densityAware={false}
-            numberOfLines={1}
+            numberOfLines={2}
             style={styles.trafficLabel}
           >
             {countLabel}
@@ -193,7 +193,9 @@ const styles = StyleSheet.create({
   },
   traffic: {
     flex: 1,
+    alignSelf: "stretch",
     alignItems: "center",
+    minWidth: 0,
     gap: spacing.xs,
   },
   trafficCompact: {
@@ -232,6 +234,7 @@ const styles = StyleSheet.create({
   trafficLabel: {
     color: colors.subtext,
     textAlign: "center",
+    alignSelf: "stretch",
     flexShrink: 1,
   },
 });
