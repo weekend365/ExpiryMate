@@ -39,7 +39,7 @@ export function InventoryCard({
   showDivider = false,
   resolveLocationLabel = resolveStorageLocationLabel,
 }: InventoryCardProps) {
-  const { shouldStack, isRegular } = useResponsiveLayout();
+  const { shouldStack } = useResponsiveLayout();
   const presentation = getExpiryLampPresentation(item.expiryDate);
   const locationLabel = resolveLocationLabel(item.storageLocation);
   const quantityLabel = formatInventoryQuantity(item);
@@ -53,6 +53,7 @@ export function InventoryCard({
         embedded && styles.cardEmbedded,
         selected && (embedded ? styles.cardEmbeddedSelected : styles.cardSelected),
         showDivider && styles.cardDivider,
+        shouldStack && styles.cardStacked,
       ]}
     >
       <Pressable
@@ -81,7 +82,7 @@ export function InventoryCard({
         <View style={styles.copy}>
           <AppText
             variant="bodyStrong"
-            numberOfLines={1}
+            numberOfLines={shouldStack ? undefined : 1}
             ellipsizeMode="tail"
             style={styles.name}
           >
@@ -93,7 +94,12 @@ export function InventoryCard({
               </AppText>
             ) : null}
           </AppText>
-          <AppText variant="caption" tone="subtext" numberOfLines={1} style={styles.meta}>
+          <AppText
+            variant="caption"
+            tone="subtext"
+            numberOfLines={shouldStack ? undefined : 1}
+            style={styles.meta}
+          >
             {locationLabel} · {quantityLabel} · {dateLabel}
           </AppText>
         </View>
@@ -104,7 +110,7 @@ export function InventoryCard({
           onPress={() => onPress(item)}
           accessibilityRole="button"
           accessibilityLabel={selected ? "선택 해제" : "이 재료 고르기"}
-          style={styles.trailingHit}
+          style={[styles.trailingHit, shouldStack && styles.trailingHitStacked]}
         >
           <View
             style={[
@@ -130,6 +136,7 @@ export function InventoryCard({
           accessibilityHint="이름, 수량, 유통기한을 다시 맞춰 둘 수 있어요."
           style={({ pressed }) => [
             styles.trailingHit,
+            shouldStack && styles.trailingHitStacked,
             pressed && styles.pressed,
           ]}
         >
@@ -203,6 +210,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.none,
     backgroundColor: colors.surface,
   },
+  cardStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
   cardSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
@@ -225,8 +236,9 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   mainStacked: {
+    flexDirection: "column",
     alignItems: "flex-start",
-    flexWrap: "wrap",
+    gap: spacing.xs,
   },
   pressed: {
     backgroundColor: colors.surfacePressed,
@@ -249,6 +261,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
+  },
+  trailingHitStacked: {
+    alignSelf: "flex-end",
   },
   expiryLamp: {
     width: HERO_LAMP_SIZE,

@@ -3,10 +3,10 @@ import { useState } from "react";
 import {
   Alert,
   StyleSheet,
-  TextInput,
   View,
 } from "react-native";
 import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -250,7 +250,7 @@ function LabelField({
   return (
     <View style={styles.field}>
       <AppText style={styles.fieldLabel}>위치 이름</AppText>
-      <TextInput
+      <AppTextInput
         value={value}
         onChangeText={onChange}
         placeholder="예: 팬트리"

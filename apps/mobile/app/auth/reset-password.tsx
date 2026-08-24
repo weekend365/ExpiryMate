@@ -1,7 +1,8 @@
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, TextInput, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
@@ -64,7 +65,7 @@ export default function ResetPasswordScreen() {
       </View>
 
       <AppText style={styles.label}>새 비밀번호</AppText>
-      <TextInput
+      <AppTextInput
         value={password}
         onChangeText={setPassword}
         secureTextEntry

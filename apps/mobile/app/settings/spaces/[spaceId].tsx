@@ -12,8 +12,9 @@ import {
   UserRound,
 } from "lucide-react-native";
 import { useState } from "react";
-import { Share, StyleSheet, TextInput, View } from "react-native";
+import { Share, StyleSheet, View } from "react-native";
 import { AppText } from "../../../src/components/AppText";
+import { AppTextInput } from "../../../src/components/AppTextInput";
 import { BottomSheet } from "../../../src/components/BottomSheet";
 import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
@@ -381,7 +382,7 @@ export default function SpaceDetailScreen() {
           <>
             <View style={styles.field}>
               <AppText style={styles.label}>이메일</AppText>
-              <TextInput
+              <AppTextInput
                 value={inviteEmail}
                 onChangeText={setInviteEmail}
                 keyboardType="email-address"
@@ -471,7 +472,7 @@ export default function SpaceDetailScreen() {
       >
         <View style={styles.field}>
           <AppText style={styles.label}>냉장고 이름</AppText>
-          <TextInput
+          <AppTextInput
             value={spaceName}
             onChangeText={setSpaceName}
             maxLength={40}

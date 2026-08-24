@@ -12,9 +12,11 @@ import {
   trackMonetizationEvent,
   verifyRecommendationCreditPurchase,
 } from "../../src/services/api";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
 
 export default function RecommendationCreditsScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const monetization = useMonetization();
   const configuredProducts = useMemo(
     () => monetization.access?.paidCredits.products ?? [],
@@ -172,7 +174,7 @@ export default function RecommendationCreditsScreen() {
         추천권 충전하기
       </Button>
 
-      <View style={styles.guideCard}>
+      <View style={[styles.guideCard, shouldStack && styles.guideCardStacked]}>
         <ShieldCheck color={colors.primary} size={22} />
         <View style={styles.guideCopy}>
           <AppText style={styles.guideTitle}>서버에서 구매를 확인해요</AppText>
@@ -191,12 +193,17 @@ function CreditProductCard({ configured, product, selected, onSelect }: {
   selected: boolean;
   onSelect: () => void;
 }) {
+  const { shouldStack } = useResponsiveLayout();
   return (
     <Pressable
       onPress={onSelect}
       accessibilityRole="radio"
       accessibilityState={{ selected }}
-      style={[styles.productCard, selected && styles.productCardSelected]}
+      style={[
+        styles.productCard,
+        shouldStack && styles.productCardStacked,
+        selected && styles.productCardSelected,
+      ]}
     >
       <View style={styles.productTitleRow}>
         <Sparkles color={selected ? colors.primary : colors.subtext} size={20} />
@@ -229,7 +236,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   productCardSelected: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
-  productTitleRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+  productCardStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: spacing.xs,
+  },
+  productTitleRow: { minWidth: 0, flexDirection: "row", alignItems: "center", gap: spacing.sm },
   productTitle: { fontSize: typography.body.fontSize, fontWeight: "700", color: colors.text },
   productPrice: { fontSize: typography.body.fontSize, fontWeight: "800", color: colors.text },
   guideCard: {
@@ -239,6 +251,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
     backgroundColor: colors.primarySoft,
   },
+  guideCardStacked: { flexDirection: "column" },
   guideCopy: { flex: 1, gap: spacing.xxs },
   guideTitle: { fontSize: typography.bodySmall.fontSize, fontWeight: "800", color: colors.text },
   guideDescription: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },

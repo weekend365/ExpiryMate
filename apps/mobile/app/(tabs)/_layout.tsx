@@ -49,7 +49,7 @@ export default function TabsLayout() {
           headerShown: false,
           tabBarActiveTintColor: colors.primary,
           tabBarInactiveTintColor: colors.subtext,
-          tabBarShowLabel: !isLargeText,
+          tabBarShowLabel: true,
           tabBarLabel: ({ color, children }) => (
             <Text
               numberOfLines={1}

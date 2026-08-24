@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from "react";
 import {
+  StyleSheet,
   Text,
   type StyleProp,
   type TextProps,
@@ -8,6 +9,7 @@ import {
 import {
   fontScaleRoleForVariant,
   getMaxFontSizeMultiplier,
+  inferTypographyVariant,
   resolveTypographyVariant,
   type AppTextVariant,
   type FontScaleRole,
@@ -64,7 +66,7 @@ export function textStyle(variant: AppTextVariant): AppTextStyle {
 
 export function AppText({
   children,
-  variant = "body",
+  variant,
   tone = "default",
   numberOfLines,
   style,
@@ -74,10 +76,18 @@ export function AppText({
   ...textProps
 }: AppTextProps) {
   const { textDensity } = useResponsiveLayout();
+  const flattenedStyle = StyleSheet.flatten(style);
+  const inferredVariant = inferTypographyVariant(
+    flattenedStyle?.fontSize,
+    flattenedStyle?.lineHeight,
+  );
+  const requestedVariant = variant ?? inferredVariant ?? "body";
   const resolvedVariant = densityAware
-    ? resolveTypographyVariant(variant, textDensity)
-    : variant;
+    ? resolveTypographyVariant(requestedVariant, textDensity)
+    : requestedVariant;
   const role = scaleRole ?? fontScaleRoleForVariant(resolvedVariant);
+  const visualStyle =
+    !variant && inferredVariant ? omitTypographyMetrics(flattenedStyle) : style;
 
   return (
     <Text
@@ -86,9 +96,24 @@ export function AppText({
       maxFontSizeMultiplier={
         maxFontSizeMultiplier ?? getMaxFontSizeMultiplier(role)
       }
-      style={[textStyle(resolvedVariant), { color: toneColors[tone] }, style]}
+      style={[
+        textStyle(resolvedVariant),
+        { color: toneColors[tone] },
+        visualStyle,
+      ]}
     >
       {children}
     </Text>
   );
+}
+
+function omitTypographyMetrics(style?: TextStyle): TextStyle | undefined {
+  if (!style) {
+    return undefined;
+  }
+
+  const visualStyle = { ...style };
+  delete visualStyle.fontSize;
+  delete visualStyle.lineHeight;
+  return visualStyle;
 }

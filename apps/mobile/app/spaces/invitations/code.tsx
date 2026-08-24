@@ -7,8 +7,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { Bell, BellOff, KeyRound, LogIn } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AppText } from "../../../src/components/AppText";
+import { AppTextInput } from "../../../src/components/AppTextInput";
 import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
 import { Screen } from "../../../src/components/Screen";
@@ -121,7 +122,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
         <View style={styles.card}>
           <View style={styles.field}>
             <AppText style={styles.label}>초대 코드</AppText>
-            <TextInput
+            <AppTextInput
               value={codeInput}
               onChangeText={updateCode}
               autoCapitalize="characters"

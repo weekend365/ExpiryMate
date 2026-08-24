@@ -5,6 +5,7 @@ import {
   FONT_SCALE_HEADING_MAX,
   fontScaleRoleForVariant,
   getMaxFontSizeMultiplier,
+  inferTypographyVariant,
   resolveTypographyVariant,
 } from "./font-scale";
 
@@ -13,9 +14,15 @@ describe("font scale policy", () => {
     expect(getMaxFontSizeMultiplier("body")).toBe(FONT_SCALE_BODY_MAX);
     expect(getMaxFontSizeMultiplier("heading")).toBe(FONT_SCALE_HEADING_MAX);
     expect(getMaxFontSizeMultiplier("chrome")).toBe(FONT_SCALE_CHROME_MAX);
-    expect(FONT_SCALE_BODY_MAX).toBe(1.5);
-    expect(FONT_SCALE_HEADING_MAX).toBe(1.35);
+    expect(FONT_SCALE_BODY_MAX).toBe(2);
+    expect(FONT_SCALE_HEADING_MAX).toBe(2);
     expect(FONT_SCALE_CHROME_MAX).toBe(1.3);
+  });
+
+  it("infers legacy typography-token metrics for the correct scale role", () => {
+    expect(inferTypographyVariant(20, 28)).toBe("heading");
+    expect(inferTypographyVariant(14)).toBe("bodySmall");
+    expect(inferTypographyVariant(15, 22)).toBeUndefined();
   });
 
   it("maps typography variants to scale roles", () => {

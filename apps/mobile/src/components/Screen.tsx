@@ -178,8 +178,8 @@ export function Screen({
               styles.content,
               density === "compact" && styles.contentCompact,
               constrainedContentStyle,
-              { paddingBottom: contentBottomPadding },
               contentStyle,
+              { paddingBottom: contentBottomPadding },
             ]}
             showsVerticalScrollIndicator={false}
             refreshControl={refreshControl}
@@ -195,8 +195,8 @@ export function Screen({
               density === "compact" && styles.contentCompact,
               styles.staticContent,
               constrainedContentStyle,
-              { paddingBottom: contentBottomPadding },
               contentStyle,
+              { paddingBottom: contentBottomPadding },
             ]}
           >
             {content}

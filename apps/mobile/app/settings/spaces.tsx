@@ -3,8 +3,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Building2, House, KeyRound, Plus, Users } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -136,7 +137,7 @@ export default function SpacesSettingsScreen() {
       >
         <View style={styles.field}>
           <AppText style={styles.label}>냉장고 이름</AppText>
-          <TextInput
+          <AppTextInput
             value={name}
             onChangeText={setName}
             placeholder="예: 우리 집 냉장고"

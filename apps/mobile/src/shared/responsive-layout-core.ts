@@ -81,10 +81,11 @@ export const TAB_BAR_PADDING_TOP = spacing.xxs;
 
 /**
  * Tab bar content height before safe-area inset.
- * Large text hides labels so the bar can stay compact.
+ * Large text keeps labels visible and grows the chrome instead of removing a
+ * visual navigation cue.
  */
 export function getTabBarContentMinHeight(isLargeText: boolean): number {
-  return isLargeText ? 48 : 56;
+  return isLargeText ? 64 : 56;
 }
 
 /**

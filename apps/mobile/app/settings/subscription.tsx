@@ -36,6 +36,7 @@ import {
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { publicWebUrl } from "../../src/shared/public-web-url";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import {
   getHouseholdInsights,
   getPlusInsights,
@@ -65,6 +66,7 @@ type StorePlan = {
 };
 
 export default function SubscriptionSettingsScreen() {
+  const { shouldStack } = useResponsiveLayout();
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
   const { sessionUserId } = useAuth();
@@ -410,7 +412,7 @@ export default function SubscriptionSettingsScreen() {
           description="소비·폐기로 상태를 바꾼 재료를 기준으로 계산해요."
           content="plain"
         >
-          <View style={styles.insightGrid}>
+          <View style={[styles.insightGrid, shouldStack && styles.insightGridStacked]}>
             <InsightValue label="소비 완료" value={insightsQuery.data?.consumed ?? 0} suffix="개" />
             <InsightValue label="폐기" value={insightsQuery.data?.discarded ?? 0} suffix="개" />
             <InsightValue label="폐기 비율" value={insightsQuery.data?.wasteRatePercent ?? 0} suffix="%" />
@@ -463,6 +465,7 @@ export default function SubscriptionSettingsScreen() {
                   accessibilityState={{ selected: selectedPlanCode === planCode }}
                   style={[
                     styles.planCard,
+                    shouldStack && styles.planCardStacked,
                     selectedPlanCode === planCode && styles.planCardSelected,
                   ]}
                 >
@@ -498,6 +501,7 @@ export default function SubscriptionSettingsScreen() {
                   accessibilityState={{ selected }}
                   style={[
                     styles.planCard,
+                    shouldStack && styles.planCardStacked,
                     selected && styles.planCardSelected,
                   ]}
                 >
@@ -665,8 +669,9 @@ function BenefitLine({ text }: { text: string }) {
 }
 
 function InsightValue({ label, value, suffix }: { label: string; value: number; suffix: string }) {
+  const { shouldStack } = useResponsiveLayout();
   return (
-    <View style={styles.insightValue}>
+    <View style={[styles.insightValue, shouldStack && styles.insightValueStacked]}>
       <AppText style={styles.insightNumber}>{value}{suffix}</AppText>
       <AppText style={styles.insightLabel}>{label}</AppText>
     </View>
@@ -674,6 +679,7 @@ function InsightValue({ label, value, suffix }: { label: string; value: number; 
 }
 
 function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
+  const { shouldStack } = useResponsiveLayout();
   const change = weekly.wasteRateChangePercentagePoints;
   const trendCopy =
     weekly.trend === "improved"
@@ -685,7 +691,12 @@ function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
           : "2주간 기록이 쌓이면 폐기 변화를 비교해 드릴게요.";
   return (
     <View style={styles.weeklyTrendCard}>
-      <View style={styles.weeklyTrendHeader}>
+      <View
+        style={[
+          styles.weeklyTrendHeader,
+          shouldStack && styles.weeklyTrendHeaderStacked,
+        ]}
+      >
         <AppText style={styles.weeklyTrendTitle}>이번 주 습관 변화</AppText>
         <AppText style={styles.weeklyTrendPeriod}>
           {weekly.current.from.slice(5)}~{weekly.current.to.slice(5)}
@@ -712,9 +723,15 @@ function InsightActionCard({
 }: {
   action: PlusInsights["actions"][number];
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const copy = getInsightActionCopy(action);
   return (
-    <View style={styles.insightActionCard}>
+    <View
+      style={[
+        styles.insightActionCard,
+        shouldStack && styles.insightActionCardStacked,
+      ]}
+    >
       <View style={styles.insightActionIcon}>
         <Lightbulb color={colors.primary} size={20} />
       </View>
@@ -777,6 +794,7 @@ const styles = StyleSheet.create({
   benefitCheck: { fontSize: typography.body.fontSize, fontWeight: "900", color: colors.primary },
   benefitText: { flex: 1, fontSize: typography.bodySmall.fontSize, color: colors.text },
   insightGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
+  insightGridStacked: { flexDirection: "column" },
   insightValue: {
     width: "48%",
     padding: spacing.md,
@@ -785,6 +803,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
+  insightValueStacked: { width: "100%" },
   insightNumber: { fontSize: typography.title.fontSize, fontWeight: "900", color: colors.text },
   insightLabel: { marginTop: spacing.xxs, fontSize: typography.caption.fontSize, color: colors.subtext },
   insightFootnote: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
@@ -798,6 +817,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  insightActionCardStacked: { flexDirection: "column" },
   insightActionIcon: {
     width: 36,
     height: 36,
@@ -824,6 +844,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   weeklyTrendHeader: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
+  weeklyTrendHeaderStacked: { flexDirection: "column", alignItems: "stretch" },
   weeklyTrendTitle: { fontSize: typography.bodySmall.fontSize, fontWeight: "800", color: colors.text },
   weeklyTrendPeriod: { fontSize: typography.caption.fontSize, color: colors.subtext },
   weeklyTrendSummary: { fontSize: typography.bodySmall.fontSize, color: colors.text },
@@ -847,6 +868,10 @@ const styles = StyleSheet.create({
   planCardSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
+  },
+  planCardStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   planCopy: {
     flex: 1,

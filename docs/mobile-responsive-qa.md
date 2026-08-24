@@ -8,7 +8,7 @@ Use an Android emulator or device. Settings path: **설정 → 디스플레이 �
 | --- | --- |
 | Default | Font size default, display size default |
 | Font 1.3 | Font size one step above default (≈ `fontScale` 1.3) |
-| Font max | Largest system font (expect capped at body 1.5× / chrome 1.3×) |
+| Font max | Largest system font (expect capped at body / heading 2×, chrome 1.3×) |
 | Display large | Display size enlarged (effective width shrinks; stacking should kick in ≤ 400pt) |
 
 ## Checklist
@@ -17,7 +17,7 @@ Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA r
 
 | Screen / surface | Default | Font 1.3 | Font max | Display large |
 | --- | --- | --- | --- | --- |
-| Tab bar (labels hide at large text; `minHeight`) | | | | |
+| Tab bar (labels remain visible; `minHeight` expands) | | | | |
 | Home traffic lamps (`StatCard` traffic) | | | | |
 | Inventory filters / search / swipe delete | | | | |
 | Register StepFlow + summary rows | | | | |
@@ -27,8 +27,8 @@ Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA r
 
 ## Expected policy
 
-- Body / inputs scale up to **1.5×**
-- Headings up to **1.35×**
+- Body / inputs scale up to **2×**
+- Headings scale up to **2×** and downshift one type-ramp step at large text
 - Chrome (tabs, badges, stepper ±, D-day) up to **1.3×**
 - `fontScale ≥ 1.15` stacks dense toolbars/summary rows (`shouldStackDense`)
 - `fontScale ≥ 1.3` or width `< 400` stacks general rows (`shouldStack`) and downshifts title variants
@@ -38,5 +38,6 @@ Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA r
 ```bash
 pnpm --filter @expirymate/mobile exec vitest run \
   src/shared/responsive-layout.test.ts \
-  src/shared/font-scale.test.ts
+  src/shared/font-scale.test.ts \
+  src/shared/dynamic-type-contract.test.ts
 ```

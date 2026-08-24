@@ -2,8 +2,9 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  Image,
+  ImageBackground,
   Pressable,
+  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
@@ -13,7 +14,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import jangoWelcomeHero from "../assets/store/jango-appstore-space-copy-ko-1242x2688.png";
+import welcomeBackground from "../assets/backgrounds/home-welcome-bg.png";
 import { Button } from "../src/components/Button";
 import { AppText } from "../src/components/AppText";
 import { type MascotMood } from "../src/components/Mascot";
@@ -147,23 +148,42 @@ export default function OnboardingScreen() {
 
   if (isFirstStep) {
     return (
-      <View style={styles.welcomeRoot} testID="onboarding-screen">
-        <Image
-          source={jangoWelcomeHero}
-          style={styles.welcomeImage}
-          resizeMode="contain"
-          accessibilityRole="image"
-          accessibilityLabel={`${step.title} ${step.description}`}
-        />
-        <SafeAreaView style={styles.welcomeSafe} edges={["top", "right", "left"]}>
-          <View style={styles.topBar}>
-            <ProgressTrack stepIndex={stepIndex} dark />
-            <View style={styles.backLinkSpacer} />
-          </View>
+      <ImageBackground
+        source={welcomeBackground}
+        style={styles.welcomeRoot}
+        resizeMode="cover"
+        accessible={false}
+        testID="onboarding-screen"
+      >
+        <SafeAreaView
+          style={styles.welcomeSafe}
+          edges={["top", "right", "left"]}
+        >
+          <ScrollView
+            style={styles.welcomeScroll}
+            contentContainerStyle={styles.welcomeContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.topBar}>
+              <ProgressTrack stepIndex={stepIndex} dark />
+              <View style={styles.backLinkSpacer} />
+            </View>
 
-          <Animated.View style={[styles.welcomeHeroSpacer, contentStyle]} />
+            <Animated.View style={[styles.welcomeCopyCard, contentStyle]}>
+              <AppText variant="label" tone="primary" style={styles.welcomeEyebrow}>
+                {step.eyebrow}
+              </AppText>
+              <AppText variant="heading" style={styles.welcomeTitle}>
+                {step.title}
+              </AppText>
+              <AppText variant="body" tone="subtext" style={styles.welcomeDescription}>
+                {step.description}
+              </AppText>
+            </Animated.View>
 
-          <View style={styles.welcomeFooter}>
+            <View style={styles.welcomeHeroSpacer} />
+          </ScrollView>
+          <SafeAreaView style={styles.welcomeFooter} edges={["bottom"]}>
             <Button
               onPress={handlePrimary}
               fullWidth
@@ -171,9 +191,9 @@ export default function OnboardingScreen() {
             >
               {step.cta}
             </Button>
-          </View>
+          </SafeAreaView>
         </SafeAreaView>
-      </View>
+      </ImageBackground>
     );
   }
 
@@ -230,24 +250,43 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   welcomeRoot: {
     flex: 1,
-    // Near-black chrome so contain letterboxing matches the space art.
-    backgroundColor: colors.text,
-  },
-  welcomeImage: {
-    ...StyleSheet.absoluteFillObject,
-    width: "100%",
-    height: "100%",
+    backgroundColor: colors.background,
   },
   welcomeSafe: {
     flex: 1,
   },
+  welcomeScroll: {
+    flex: 1,
+  },
+  welcomeContent: {
+    flexGrow: 1,
+    gap: spacing.md,
+  },
+  welcomeCopyCard: {
+    marginHorizontal: spacing.md,
+    padding: spacing.md,
+    gap: spacing.sm,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  welcomeEyebrow: {
+    textAlign: "center",
+  },
+  welcomeTitle: {
+    textAlign: "center",
+  },
+  welcomeDescription: {
+    textAlign: "center",
+  },
   welcomeHeroSpacer: {
     flex: 1,
+    minHeight: spacing.xxxl * 3,
   },
   welcomeFooter: {
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
-    paddingBottom: spacing.md,
     backgroundColor: colors.surface,
     borderTopLeftRadius: radius.xxl,
     borderTopRightRadius: radius.xxl,

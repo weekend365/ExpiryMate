@@ -1829,7 +1829,12 @@ function RecipeCard({
           pressed && styles.recipeCardMainPressed,
         ]}
       >
-        <View style={styles.recipeCompactTitleRow}>
+        <View
+          style={[
+            styles.recipeCompactTitleRow,
+            shouldStack && styles.recipeCompactTitleRowStacked,
+          ]}
+        >
           <View style={styles.recipeNumberBadge}>
             <AppText
               variant="caption"
@@ -1843,7 +1848,7 @@ function RecipeCard({
           </View>
           <AppText
             variant="bodyStrong"
-            numberOfLines={1}
+            numberOfLines={shouldStack ? undefined : 1}
             ellipsizeMode="tail"
             style={styles.recipeTitle}
           >
@@ -1854,7 +1859,7 @@ function RecipeCard({
         <AppText
           variant="caption"
           tone="subtext"
-          numberOfLines={1}
+          numberOfLines={shouldStack ? undefined : 1}
           ellipsizeMode="tail"
         >
           {formatDishMeta(dish)}
@@ -1863,7 +1868,7 @@ function RecipeCard({
         <AppText
           variant="caption"
           tone="subtext"
-          numberOfLines={1}
+          numberOfLines={shouldStack ? undefined : 1}
           ellipsizeMode="tail"
         >
           {ingredientPreview}
@@ -2509,6 +2514,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
+  },
+  recipeCompactTitleRowStacked: {
+    alignItems: "flex-start",
   },
   recipeNumberBadge: {
     minWidth: spacing.md,

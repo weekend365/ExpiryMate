@@ -1,19 +1,20 @@
 /**
  * Font-scale policy for Android/iOS system text size.
  *
- * Caps keep chrome (tabs, badges, steppers) readable without unbounded growth,
- * while body copy still respects accessibility up to ~1.5×.
+ * Essential copy and form values follow the system setting up to 2×. Only
+ * dense navigation chrome is capped more aggressively; layout must reflow
+ * instead of shrinking or clipping user-facing content.
  */
-import { typography } from "./theme";
+import { typography as sharedTypography } from "@expirymate/shared";
 
-export type AppTextVariant = keyof typeof typography;
+export type AppTextVariant = keyof typeof sharedTypography;
 export type FontScaleRole = "body" | "heading" | "chrome";
 export type TextDensity = "regular" | "comfortable" | "large";
 
 /** Body / caption / form labels and TextInput content. */
-export const FONT_SCALE_BODY_MAX = 1.5;
-/** Screen titles and section headings. */
-export const FONT_SCALE_HEADING_MAX = 1.35;
+export const FONT_SCALE_BODY_MAX = 2;
+/** Screen titles and section headings. Titles downshift one ramp at large text. */
+export const FONT_SCALE_HEADING_MAX = 2;
 /** Tabs, badges, D-day pills, stepper +/- and other dense chrome. */
 export const FONT_SCALE_CHROME_MAX = 1.3;
 
@@ -41,6 +42,29 @@ export function fontScaleRoleForVariant(variant: AppTextVariant): FontScaleRole 
     default:
       return "body";
   }
+}
+
+/**
+ * Legacy styles sometimes applied a token's font metrics without declaring an
+ * `AppText` variant. Infer the matching variant so those call sites still get
+ * the correct scale role and large-text downshift while they migrate.
+ */
+export function inferTypographyVariant(
+  fontSize?: number,
+  lineHeight?: number,
+): AppTextVariant | undefined {
+  if (fontSize == null) {
+    return undefined;
+  }
+
+  const variants = Object.keys(sharedTypography) as AppTextVariant[];
+  return variants.find((variant) => {
+    const token = sharedTypography[variant];
+    return (
+      token.fontSize === fontSize &&
+      (lineHeight == null || token.lineHeight === lineHeight)
+    );
+  });
 }
 
 /**

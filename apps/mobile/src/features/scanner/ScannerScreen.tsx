@@ -32,7 +32,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  TextInput,
   View,
 } from "react-native";
 import Animated, {
@@ -49,6 +48,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { AppText } from "../../components/AppText";
+import { AppTextInput } from "../../components/AppTextInput";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Pill } from "../../components/Pill";
@@ -666,7 +666,7 @@ function ScannerCameraExperience() {
                 {!catalogNameAccepted ? (
                   <>
                     <AppText style={styles.manualNameLabel}>냉장고에 넣을 이름</AppText>
-                    <TextInput
+                    <AppTextInput
                       value={manualName}
                       onChangeText={setManualName}
                       accessibilityLabel="냉장고에 넣을 이름"
@@ -677,7 +677,7 @@ function ScannerCameraExperience() {
                       returnKeyType="done"
                     />
                     <AppText style={styles.manualNameLabel}>브랜드</AppText>
-                    <TextInput
+                    <AppTextInput
                       value={manualBrand}
                       onChangeText={setManualBrand}
                       accessibilityLabel="브랜드"
@@ -698,7 +698,7 @@ function ScannerCameraExperience() {
             {needsManualName ? (
               <View style={styles.manualNameCard}>
                 <AppText style={styles.manualNameLabel}>이 재료 이름이 뭐예요?</AppText>
-                <TextInput
+                <AppTextInput
                   value={manualName}
                   onChangeText={setManualName}
                   accessibilityLabel="재료 이름"
@@ -713,7 +713,7 @@ function ScannerCameraExperience() {
                   returnKeyType="done"
                 />
                 <AppText style={styles.manualNameLabel}>브랜드</AppText>
-                <TextInput
+                <AppTextInput
                   value={manualBrand}
                   onChangeText={setManualBrand}
                   accessibilityLabel="브랜드"

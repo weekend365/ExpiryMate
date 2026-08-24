@@ -2,8 +2,9 @@ import { appBrand } from "@expirymate/shared";
 import { router } from "expo-router";
 import { deepLinkToSubscriptions } from "expo-iap";
 import { useState } from "react";
-import { Alert, StyleSheet, TextInput, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
@@ -145,7 +146,7 @@ export default function AccountDeleteScreen() {
             계속하시려면 아래 칸에{" "}
             <AppText style={styles.emphasis}>삭제</AppText>를 입력해 주세요.
           </AppText>
-          <TextInput
+          <AppTextInput
             value={confirmation}
             onChangeText={setConfirmation}
             placeholder="삭제"

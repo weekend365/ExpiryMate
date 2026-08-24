@@ -89,9 +89,9 @@ describe("responsive layout", () => {
     expect(getResponsiveFlags(400, 1).isNarrow).toBe(false);
   });
 
-  it("keeps tab bar content height compact when labels are hidden", () => {
+  it("grows tab bar content when large-text labels remain visible", () => {
     expect(getTabBarContentMinHeight(false)).toBe(56);
-    expect(getTabBarContentMinHeight(true)).toBe(48);
+    expect(getTabBarContentMinHeight(true)).toBe(64);
   });
 
   it("reserves system bottom inset below tab content so bars do not overlap", () => {
@@ -102,7 +102,7 @@ describe("responsive layout", () => {
     expect(withNavBar.height).toBe(56 + TAB_BAR_PADDING_TOP + 48);
 
     const gestureOnly = getTabBarMetrics(true, 16);
-    expect(gestureOnly.height).toBe(48 + TAB_BAR_PADDING_TOP + 16);
+    expect(gestureOnly.height).toBe(64 + TAB_BAR_PADDING_TOP + 16);
     expect(getTabBarMetrics(false, -1).paddingBottom).toBe(0);
   });
 
