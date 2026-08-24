@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   clearPersistedQueryCache: vi.fn(() => Promise.resolve()),
   clearDraft: vi.fn(),
   clearPrefill: vi.fn(),
+  clearLastStorageLocation: vi.fn(),
 }));
 
 vi.mock("../recipes/recipe-generation-reset", () => ({
@@ -17,6 +18,7 @@ vi.mock("../../store/registration-store", () => ({
     getState: () => ({
       clearDraft: mocks.clearDraft,
       clearPrefill: mocks.clearPrefill,
+      clearLastStorageLocation: mocks.clearLastStorageLocation,
     }),
   },
 }));
@@ -57,6 +59,7 @@ describe("session boundary cleanup", () => {
     ).toBeUndefined();
     expect(mocks.clearDraft).toHaveBeenCalledOnce();
     expect(mocks.clearPrefill).toHaveBeenCalledOnce();
+    expect(mocks.clearLastStorageLocation).toHaveBeenCalledOnce();
     expect(mocks.clearRecipeGenerationState).toHaveBeenCalledOnce();
     expect(mocks.clearPersistedQueryCache).toHaveBeenCalledOnce();
   });

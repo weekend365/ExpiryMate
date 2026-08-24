@@ -16,4 +16,5 @@ apps/mobile/android/
 apps/mobile/e2e/results/
 apps/mobile/e2e/screenshots/current/
 apps/mobile/e2e/screenshots/diff/
+apps/mobile/e2e/screenshots/baseline/**/*.png
 .env

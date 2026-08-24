@@ -7,6 +7,11 @@ mobile_dir="$(cd "$script_dir/.." && pwd)"
 screenshot_dir="$mobile_dir/e2e/screenshots/current/$profile"
 result_dir="$mobile_dir/e2e/results/$profile"
 
+cleanup() {
+  "$script_dir/configure-android-layout-profile.sh" reset >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+
 command -v adb >/dev/null || {
   echo "adb is required for layout E2E." >&2
   exit 1

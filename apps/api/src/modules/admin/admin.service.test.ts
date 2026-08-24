@@ -279,6 +279,7 @@ describe("AdminService", () => {
             { ownerKey: "user-1", eventName: "credit_pack_viewed" },
             { ownerKey: "user-1", eventName: "credit_purchase_verified" },
           ])
+          .mockResolvedValueOnce([])
           .mockResolvedValueOnce([]),
       },
       recommendationCreditPurchase: {

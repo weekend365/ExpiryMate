@@ -1152,7 +1152,6 @@ function UrgencySection({
   onToggle: () => void;
   children: ReactNode;
 }) {
-  const { isRegular } = useResponsiveLayout();
   const description = inventoryUrgencySectionDescriptions[section.key];
   const title = `${section.title} ${section.itemCount}건`;
 

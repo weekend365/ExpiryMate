@@ -11,6 +11,15 @@ Use an Android emulator or device. Settings path: **설정 → 디스플레이 �
 | Font max | Largest system font (expect capped at body / heading 2×, chrome 1.3×) |
 | Display large | Display size enlarged (effective width shrinks; stacking should kick in ≤ 400pt) |
 
+Automated Android profiles pair these presets as follows:
+
+| Profile | Window / density | Font scale | Navigation |
+| --- | --- | --- | --- |
+| `small-three-button` | 720×1280 / 320 dpi | 1.0 | Three button |
+| `modern-gesture` | 824×1830 / 320 dpi | 1.0 | Gesture |
+| `small-large-text` | 720×1280 / 320 dpi | 2.0 | Three button |
+| `large-display-large-text` | 824×1830 / 420 dpi | 2.0 | Gesture |
+
 ## Checklist
 
 Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA reachable, keyboard does not cover sticky footer).
@@ -48,3 +57,7 @@ pnpm --filter @expirymate/mobile exec vitest run \
   src/shared/dynamic-type-contract.test.ts \
   src/shared/design-token-contract.test.ts
 ```
+
+The `mobile-layout` CI matrix captures eight critical states for each profile.
+Pull requests compare them with the latest successful `main` artifacts and
+upload current, baseline, diff, JUnit, and JSON comparison evidence.

@@ -22,6 +22,12 @@ case "$profile" in
     font_scale="2.0"
     navigation_overlay="com.android.internal.systemui.navbar.threebutton"
     ;;
+  large-display-large-text)
+    size="824x1830"
+    density="420"
+    font_scale="2.0"
+    navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    ;;
   reset)
     adb shell wm size reset
     adb shell wm density reset
