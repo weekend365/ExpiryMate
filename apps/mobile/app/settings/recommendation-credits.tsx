@@ -13,7 +13,7 @@ import {
   verifyRecommendationCreditPurchase,
 } from "../../src/services/api";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
+import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 
 export default function RecommendationCreditsScreen() {
   const { shouldStack } = useResponsiveLayout();
@@ -175,10 +175,10 @@ export default function RecommendationCreditsScreen() {
       </Button>
 
       <View style={[styles.guideCard, shouldStack && styles.guideCardStacked]}>
-        <ShieldCheck color={colors.primary} size={22} />
+        <ShieldCheck color={colors.primary} size={spacing.md} />
         <View style={styles.guideCopy}>
-          <AppText style={styles.guideTitle}>서버에서 구매를 확인해요</AppText>
-          <AppText style={styles.guideDescription}>
+          <AppText variant="bodySmallStrong">서버에서 구매를 확인해요</AppText>
+          <AppText variant="caption" tone="subtext">
             무료 추천을 먼저 사용하고, 이후 구매 추천권이 자동으로 차감돼요. 추천 생성에 실패하면 차감되지 않아요.
           </AppText>
         </View>
@@ -206,10 +206,15 @@ function CreditProductCard({ configured, product, selected, onSelect }: {
       ]}
     >
       <View style={styles.productTitleRow}>
-        <Sparkles color={selected ? colors.primary : colors.subtext} size={20} />
-        <AppText style={styles.productTitle}>AI 추천 {configured.credits}회</AppText>
+        <Sparkles
+          color={selected ? colors.primary : colors.subtext}
+          size={spacing.sm + spacing.xxs}
+        />
+        <AppText variant="bodyStrong">AI 추천 {configured.credits}회</AppText>
       </View>
-      <AppText style={styles.productPrice}>{product?.displayPrice ?? "가격 확인 중"}</AppText>
+      <AppText variant="bodyStrong">
+        {product?.displayPrice ?? "가격 확인 중"}
+      </AppText>
     </Pressable>
   );
 }
@@ -242,8 +247,6 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   productTitleRow: { minWidth: 0, flexDirection: "row", alignItems: "center", gap: spacing.sm },
-  productTitle: { fontSize: typography.body.fontSize, fontWeight: "700", color: colors.text },
-  productPrice: { fontSize: typography.body.fontSize, fontWeight: "800", color: colors.text },
   guideCard: {
     flexDirection: "row",
     gap: spacing.sm,
@@ -253,6 +256,4 @@ const styles = StyleSheet.create({
   },
   guideCardStacked: { flexDirection: "column" },
   guideCopy: { flex: 1, gap: spacing.xxs },
-  guideTitle: { fontSize: typography.bodySmall.fontSize, fontWeight: "800", color: colors.text },
-  guideDescription: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
 });

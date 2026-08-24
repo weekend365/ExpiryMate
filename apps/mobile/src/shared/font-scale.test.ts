@@ -27,6 +27,7 @@ describe("font scale policy", () => {
 
   it("maps typography variants to scale roles", () => {
     expect(fontScaleRoleForVariant("body")).toBe("body");
+    expect(fontScaleRoleForVariant("bodySmallStrong")).toBe("body");
     expect(fontScaleRoleForVariant("title")).toBe("heading");
     expect(fontScaleRoleForVariant("caption")).toBe("chrome");
     expect(fontScaleRoleForVariant("label")).toBe("chrome");

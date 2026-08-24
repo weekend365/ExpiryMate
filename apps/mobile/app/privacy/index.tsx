@@ -232,7 +232,11 @@ function PrivacyRow({
         </AppText>
         <AppText style={styles.rowDescription}>{description}</AppText>
       </View>
-      <ChevronRight color={colors.mutedText} size={20} strokeWidth={2.2} />
+      <ChevronRight
+        color={colors.mutedText}
+        size={spacing.sm + spacing.xxs}
+        strokeWidth={2.2}
+      />
     </Pressable>
   );
 }

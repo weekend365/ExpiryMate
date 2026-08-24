@@ -16,7 +16,7 @@ import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { colors, radius, spacing } from "../../src/shared/theme";
 
 const spiceOptions: Array<{ value: RecipeSpiceLevel; label: string }> = [
   { value: "any", label: "제한 없음" },
@@ -131,7 +131,7 @@ export default function RecipePreferenceSettingsScreen() {
       </PreferenceSection>
 
       <View style={styles.notice}>
-        <AppText style={styles.noticeText}>AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
+        <AppText variant="bodySmall">AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
       </View>
     </SettingsScreen>
   );
@@ -154,5 +154,4 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
   input: { flex: 1, minHeight: spacing.xl, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: spacing.sm, backgroundColor: colors.background },
   notice: { padding: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.warningSoft },
-  noticeText: { fontSize: typography.bodySmall.fontSize, lineHeight: typography.bodySmall.lineHeight, fontFamily: typography.body.fontFamily, color: colors.text },
 });

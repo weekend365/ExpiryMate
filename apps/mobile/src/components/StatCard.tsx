@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   trafficWithoutLabel: {
-    gap: 0,
+    gap: spacing.none,
   },
   lamp: {
     alignItems: "center",

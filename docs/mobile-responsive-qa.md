@@ -33,11 +33,18 @@ Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA r
 - `fontScale ≥ 1.15` stacks dense toolbars/summary rows (`shouldStackDense`)
 - `fontScale ≥ 1.3` or width `< 400` stacks general rows (`shouldStack`) and downshifts title variants
 
+## Design token policy
+
+- Product colors use semantic `colors` tokens; provider branding uses `oauthBrand` tokens.
+- Text hierarchy uses `AppText` `variant` / `tone` instead of local numeric metrics or weights.
+- Layout spacing and corner radii use `spacing` / `radius` tokens.
+
 ## Automated coverage
 
 ```bash
 pnpm --filter @expirymate/mobile exec vitest run \
   src/shared/responsive-layout.test.ts \
   src/shared/font-scale.test.ts \
-  src/shared/dynamic-type-contract.test.ts
+  src/shared/dynamic-type-contract.test.ts \
+  src/shared/design-token-contract.test.ts
 ```

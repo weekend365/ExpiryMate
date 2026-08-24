@@ -250,9 +250,9 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
   input: {
-    margin: 0,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
+    margin: spacing.none,
+    paddingHorizontal: spacing.none,
+    paddingVertical: spacing.none,
     backgroundColor: "transparent",
     fontSize: typography.subheading.fontSize,
     lineHeight: typography.subheading.lineHeight,

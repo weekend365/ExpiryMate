@@ -131,8 +131,8 @@ export type FontWeight = typeof fontWeight;
 
 /**
  * Type ramp. Each entry carries fontSize / lineHeight (px) and a weight.
- * Apps can adopt these gradually; mobile screens are not required to migrate
- * all at once.
+ * Product UI should express hierarchy with these named roles instead of
+ * overriding individual font metrics or weights at each call site.
  */
 export const typography = {
   display: { fontSize: 30, lineHeight: 38, fontWeight: fontWeight.black },
@@ -142,6 +142,7 @@ export const typography = {
   body: { fontSize: 16, lineHeight: 24, fontWeight: fontWeight.medium },
   bodyStrong: { fontSize: 16, lineHeight: 24, fontWeight: fontWeight.semibold },
   bodySmall: { fontSize: 14, lineHeight: 20, fontWeight: fontWeight.medium },
+  bodySmallStrong: { fontSize: 14, lineHeight: 20, fontWeight: fontWeight.semibold },
   caption: { fontSize: 12, lineHeight: 16, fontWeight: fontWeight.medium },
   label: { fontSize: 13, lineHeight: 18, fontWeight: fontWeight.bold },
 } as const;
@@ -163,14 +164,20 @@ export type FontFamily = typeof fontFamily;
  * Use only for provider buttons so Kakao/Naver/Google/Apple stay recognizable.
  */
 export const oauthBrand = {
-  kakao: { background: "#FEE500", text: "#1A1F27" },
-  naver: { background: "#03C75A", text: "#FFFFFF" },
+  kakao: { background: "#FEE500", text: "#1A1F27", mark: "#191919" },
+  naver: { background: "#03C75A", text: "#FFFFFF", mark: "#FFFFFF" },
   google: {
     background: "#FFFFFF",
     text: "#1A1F27",
     border: neutral[200],
+    mark: {
+      blue: "#4285F4",
+      green: "#34A853",
+      yellow: "#FBBC05",
+      red: "#EA4335",
+    },
   },
-  apple: { background: "#000000", text: "#FFFFFF" },
+  apple: { background: "#000000", text: "#FFFFFF", mark: "#FFFFFF" },
 } as const;
 
 export type OauthBrand = typeof oauthBrand;

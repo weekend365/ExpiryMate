@@ -464,11 +464,11 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     minWidth: 0,
-    margin: 0,
+    margin: spacing.none,
     // Keep the field intrinsic-height so the row centers it with the icon
     // and 검색 label. A 48px-tall TextInput leaves iOS placeholder off-center.
-    paddingVertical: 0,
-    paddingHorizontal: 0,
+    paddingVertical: spacing.none,
+    paddingHorizontal: spacing.none,
     fontSize: typography.bodyStrong.fontSize,
     fontFamily: typography.bodyStrong.fontFamily,
     textAlignVertical: "center",

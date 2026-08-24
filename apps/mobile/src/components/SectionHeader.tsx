@@ -57,10 +57,9 @@ export function SectionHeader({
       >
         <AppText
           variant={
-            compact ? "label" : surface ? "bodySmall" : "subheading"
+            compact ? "label" : surface ? "bodySmallStrong" : "subheading"
           }
           tone={surface || compact ? "subtext" : "default"}
-          style={(surface || compact) && styles.denseTitle}
         >
           {title}
         </AppText>
@@ -121,9 +120,6 @@ const styles = StyleSheet.create({
   },
   denseCopy: {
     gap: spacing.xxs,
-  },
-  denseTitle: {
-    fontWeight: "700",
   },
   rootCompact: {
     gap: spacing.sm,

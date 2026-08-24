@@ -43,7 +43,7 @@ import {
   trackMonetizationEvent,
   type PlusInsights,
 } from "../../src/services/api";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { colors, radius, spacing } from "../../src/shared/theme";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 
 const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
@@ -433,7 +433,7 @@ export default function SubscriptionSettingsScreen() {
             </View>
           ) : null}
           {insightsQuery.data?.topDiscardedCategories.length ? (
-            <AppText style={styles.insightFootnote}>
+            <AppText variant="caption" tone="subtext">
               자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
                 .map((item) => `${productCategoryLabels[item.category as ProductCategory] ?? item.category} ${item.count}개`)
                 .join(" · ")}
@@ -470,10 +470,10 @@ export default function SubscriptionSettingsScreen() {
                   ]}
                 >
                   <View style={styles.planCopy}>
-                    <AppText style={styles.planTitle}>
+                    <AppText variant="bodyStrong">
                       {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
                     </AppText>
-                    <AppText style={styles.planDescription}>
+                    <AppText variant="caption" tone="subtext">
                       {planCode === "jango_household"
                         ? "가족 소비·폐기 리포트 · 최대 5명"
                         : "나의 소비·폐기 리포트 · 광고 없음"}
@@ -506,16 +506,16 @@ export default function SubscriptionSettingsScreen() {
                   ]}
                 >
                   <View style={styles.planCopy}>
-                    <AppText style={styles.planTitle}>
+                    <AppText variant="bodyStrong">
                       {period === "yearly" ? "연간" : "월간"}
                     </AppText>
-                    <AppText style={styles.planDescription}>
+                    <AppText variant="caption" tone="subtext">
                       {period === "yearly" && annualSavings
                         ? `월간 결제 대비 약 ${annualSavings}% 절약`
                         : "매월 자동 갱신"}
                     </AppText>
                   </View>
-                  <AppText style={styles.planPrice}>
+                  <AppText variant="bodyStrong" tone="primary">
                     {plan?.displayPrice ?? "가격 확인 중"}
                   </AppText>
                 </Pressable>
@@ -523,8 +523,8 @@ export default function SubscriptionSettingsScreen() {
             })}
           </View>
           <View style={styles.renewalNotice}>
-            <AppText style={styles.renewalNoticeTitle}>결제 전에 알아두세요</AppText>
-            <AppText style={styles.renewalNoticeText}>
+            <AppText variant="bodySmallStrong">결제 전에 알아두세요</AppText>
+            <AppText variant="caption" tone="subtext">
               무료 체험은 없고, 선택한 기간(월간 또는 연간)이 끝나면 같은 금액으로
               자동 갱신돼요. 가격은 위 스토어 표시 금액이며, 갱신 전에 App Store나
               Google Play의 구독 관리에서 해지할 수 있어요.
@@ -662,8 +662,8 @@ function isHouseholdProduct(productId: string) {
 function BenefitLine({ text }: { text: string }) {
   return (
     <View style={styles.benefitLine}>
-      <AppText style={styles.benefitCheck}>✓</AppText>
-      <AppText style={styles.benefitText}>{text}</AppText>
+      <AppText variant="bodyStrong" tone="primary">✓</AppText>
+      <AppText variant="bodySmall" style={styles.benefitText}>{text}</AppText>
     </View>
   );
 }
@@ -672,8 +672,8 @@ function InsightValue({ label, value, suffix }: { label: string; value: number; 
   const { shouldStack } = useResponsiveLayout();
   return (
     <View style={[styles.insightValue, shouldStack && styles.insightValueStacked]}>
-      <AppText style={styles.insightNumber}>{value}{suffix}</AppText>
-      <AppText style={styles.insightLabel}>{label}</AppText>
+      <AppText variant="title">{value}{suffix}</AppText>
+      <AppText variant="caption" tone="subtext">{label}</AppText>
     </View>
   );
 }
@@ -697,20 +697,23 @@ function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
           shouldStack && styles.weeklyTrendHeaderStacked,
         ]}
       >
-        <AppText style={styles.weeklyTrendTitle}>이번 주 습관 변화</AppText>
-        <AppText style={styles.weeklyTrendPeriod}>
+        <AppText variant="bodySmallStrong">이번 주 습관 변화</AppText>
+        <AppText variant="caption" tone="subtext">
           {weekly.current.from.slice(5)}~{weekly.current.to.slice(5)}
         </AppText>
       </View>
-      <AppText style={styles.weeklyTrendSummary}>
+      <AppText variant="bodySmall">
         소비 {weekly.current.consumed}개 · 폐기 {weekly.current.discarded}개 · 폐기 비율 {weekly.current.wasteRatePercent}%
       </AppText>
       <AppText
-        style={[
-          styles.weeklyTrendCopy,
-          weekly.trend === "improved" && styles.weeklyTrendCopyImproved,
-          weekly.trend === "worse" && styles.weeklyTrendCopyWorse,
-        ]}
+        variant="caption"
+        tone={
+          weekly.trend === "improved"
+            ? "success"
+            : weekly.trend === "worse"
+              ? "danger"
+              : "subtext"
+        }
       >
         {trendCopy}
       </AppText>
@@ -733,11 +736,11 @@ function InsightActionCard({
       ]}
     >
       <View style={styles.insightActionIcon}>
-        <Lightbulb color={colors.primary} size={20} />
+        <Lightbulb color={colors.primary} size={spacing.sm + spacing.xxs} />
       </View>
       <View style={styles.insightActionCopy}>
-        <AppText style={styles.insightActionTitle}>{copy.title}</AppText>
-        <AppText style={styles.insightActionDescription}>{copy.description}</AppText>
+        <AppText variant="bodySmallStrong">{copy.title}</AppText>
+        <AppText variant="caption" tone="subtext">{copy.description}</AppText>
       </View>
     </View>
   );
@@ -791,22 +794,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   benefitLine: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
-  benefitCheck: { fontSize: typography.body.fontSize, fontWeight: "900", color: colors.primary },
-  benefitText: { flex: 1, fontSize: typography.bodySmall.fontSize, color: colors.text },
+  benefitText: { flex: 1 },
   insightGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
   insightGridStacked: { flexDirection: "column" },
   insightValue: {
     width: "48%",
     padding: spacing.md,
+    gap: spacing.xxs,
     borderRadius: radius.xl,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
   },
   insightValueStacked: { width: "100%" },
-  insightNumber: { fontSize: typography.title.fontSize, fontWeight: "900", color: colors.text },
-  insightLabel: { marginTop: spacing.xxs, fontSize: typography.caption.fontSize, color: colors.subtext },
-  insightFootnote: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
   insightActions: { gap: spacing.sm },
   insightActionCard: {
     flexDirection: "row",
@@ -819,24 +819,14 @@ const styles = StyleSheet.create({
   },
   insightActionCardStacked: { flexDirection: "column" },
   insightActionIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: spacing.xl,
+    height: spacing.xl,
+    borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: colors.primarySoft,
   },
   insightActionCopy: { flex: 1, gap: spacing.xxs },
-  insightActionTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    fontWeight: "800",
-    color: colors.text,
-  },
-  insightActionDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    color: colors.subtext,
-  },
   weeklyTrendCard: {
     gap: spacing.xxs,
     padding: spacing.md,
@@ -845,17 +835,11 @@ const styles = StyleSheet.create({
   },
   weeklyTrendHeader: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
   weeklyTrendHeaderStacked: { flexDirection: "column", alignItems: "stretch" },
-  weeklyTrendTitle: { fontSize: typography.bodySmall.fontSize, fontWeight: "800", color: colors.text },
-  weeklyTrendPeriod: { fontSize: typography.caption.fontSize, color: colors.subtext },
-  weeklyTrendSummary: { fontSize: typography.bodySmall.fontSize, color: colors.text },
-  weeklyTrendCopy: { fontSize: typography.caption.fontSize, lineHeight: typography.caption.lineHeight, color: colors.subtext },
-  weeklyTrendCopyImproved: { color: colors.success },
-  weeklyTrendCopyWorse: { color: colors.danger },
   planList: {
     gap: spacing.sm,
   },
   planCard: {
-    minHeight: 80,
+    minHeight: spacing.xxxl + spacing.sm,
     borderRadius: radius.xl,
     borderWidth: 1,
     borderColor: colors.border,
@@ -877,40 +861,10 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xxs,
   },
-  planTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  planDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
-  },
-  planPrice: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.primary,
-  },
   renewalNotice: {
     backgroundColor: colors.mutedSurface,
     borderRadius: radius.lg,
     padding: spacing.md,
     gap: spacing.xs,
-  },
-  renewalNoticeTitle: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  renewalNoticeText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
   },
 });
