@@ -1,3 +1,10 @@
+---
+status: active
+owner: mobile-design
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # Mobile responsive QA matrix (Android font / display size)
 
 Use an Android emulator or device. Settings path: **설정 → 디스플레이 → 글자 크기 / 표시 크기** (wording varies by OEM).

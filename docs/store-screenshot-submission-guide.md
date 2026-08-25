@@ -1,3 +1,11 @@
+---
+status: active
+owner: product-release
+last_reviewed: 2026-08-25
+source_of_truth: true
+data_as_of: 2026-07-24
+---
+
 # 장고야 부탁해 · 스토어 스크린샷 촬영·제출 가이드
 
 > 기준일: 2026-07-24  

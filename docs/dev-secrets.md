@@ -1,3 +1,10 @@
+---
+status: active
+owner: platform
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # 환경변수 · 시크릿 설정 가이드
 
 로컬·Cloud·EAS·Railway에서 **어디에 무엇을 넣는지**를 한곳에 정리합니다.  

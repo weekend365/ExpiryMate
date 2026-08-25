@@ -1,3 +1,10 @@
+---
+status: active
+owner: mobile-release
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # iOS · EAS production (P0-06)
 
 Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight/App Store** 를 켜기 위한 체크리스트입니다.  

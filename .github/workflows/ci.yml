@@ -35,6 +35,9 @@ jobs:
       - name: Env key parity
         run: pnpm validate:env-parity
 
+      - name: Documentation
+        run: pnpm docs:check
+
       - name: Lint
         run: pnpm lint
 

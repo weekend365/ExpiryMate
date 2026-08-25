@@ -1,3 +1,10 @@
+---
+status: active
+owner: privacy-release
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # Store Privacy Declarations · Contrast Matrix
 
 출시 전 App Store Privacy Nutrition Label / Google Play Data Safety 작성 시,

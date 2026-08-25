@@ -1,3 +1,10 @@
+---
+status: active
+owner: design
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # 장고(Jango) 캐릭터 스타일 가이드
 
 > **상태:** 최종 기준 (v1)  

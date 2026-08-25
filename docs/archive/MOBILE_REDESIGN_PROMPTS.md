@@ -1,3 +1,10 @@
+---
+status: archived
+owner: design
+last_reviewed: 2026-08-25
+source_of_truth: false
+---
+
 # 장고야 부탁해 (Jango) · 모바일 UI/UX 리디자인 지시 템플릿
 
 `.cursor/rules/mobile-ux.mdc`와 `@expirymate/shared` 디자인 토큰을 기준으로 화면별 리디자인을 진행할 때 Cursor에 붙여 넣는 프롬프트 모음이다.

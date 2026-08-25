@@ -1,323 +1,42 @@
-# 장고야 부탁해 (Jango) MVP Monorepo
+# 장고야 부탁해 (Jango)
 
-**장고야 부탁해** (영문: **Jango**) is a Korean-first ingredient inventory, expiry reminder, and AI recipe recommendation MVP. The mascot character is **장고** (Jango).
+유통기한 기반 재고 관리, 만료 알림, AI 레시피 추천을 제공하는 한국어 우선 앱입니다.
+모바일 사용자 화면, 운영 Admin, 단일 REST API를 pnpm monorepo로 관리합니다.
 
-> Technical package names and bundle IDs still use the legacy `expirymate` namespace (`@expirymate/*`, `com.expirymate.mobile`). User-facing brand strings live in `@expirymate/shared` → `appBrand`.
+> 사용자 표시명은 **장고야 부탁해**, 마스코트는 **장고**입니다. 패키지와 bundle ID의
+> `@expirymate/*`, `com.expirymate.mobile`은 호환성을 위해 유지합니다.
 
-The current product assumption for this MVP is explicit:
+현재 출시 단계와 다음 작업은 [프로젝트 현황](./docs/STATUS.md), 전체 문서 탐색은
+[문서 인덱스](./docs/README.md)를 확인하세요.
 
-- users must log in (Kakao → Naver → Google → Apple, or email)
-- users register ingredients and household goods manually (or via barcode/OCR scanner on native builds)
-- expiry date is entered separately (or OCR-assisted)
-- registered inventory data is used for AI recipe recommendation
+## 저장소 구성
 
-## Why This Monorepo Shape
+| 경로 | 역할 | 주요 기술 |
+|---|---|---|
+| `apps/mobile` | 사용자 모바일 앱 | Expo, React Native, Expo Router |
+| `apps/admin` | 내부 운영 도구 | Next.js App Router |
+| `apps/api` | Mobile·Admin 공용 API | NestJS, Prisma, PostgreSQL |
+| `packages/shared` | 공유 타입·스키마·유틸리티 | TypeScript, Zod |
+| `docs` | 제품·디자인·운영 문서 | [문서 인덱스](./docs/README.md) |
 
-This repository uses `pnpm` workspaces only.
+## 요구사항
 
-- `apps/mobile` is the Korean user-facing product
-- `apps/admin` is the internal operations tool for product and inventory data
-- `apps/api` is the single REST backend for both clients
-- `packages/shared` holds safe-to-share contracts and inventory/expiry utilities
+- Node.js 22
+- pnpm 9.15
+- PostgreSQL 16 또는 Docker
+- 네이티브 스캐너 개발 시 Android Studio 또는 Xcode
 
-This keeps the MVP simple while leaving a clean path for:
+## 처음 실행
 
-- improving recipe recommendation from registered inventory
-- shipping barcode + OCR scanner in EAS/store builds (already verified on iOS dev builds)
-- subscriptions, shared-space collaboration, and analytics without a rewrite
-
-## Project status & launch priorities
-
-출시 진척도·우선순위·배포 런북은 **단일 기준 문서**를 보세요:
-
-**[docs/PROJECT.md](./docs/PROJECT.md)**
-
-### Current status (2026-07-24)
-
-| Area                 | Status                                    | Notes                                                                                   |
-| -------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
-| **Phase**            | 1 mostly done → **2 (store)**             | [docs/PROJECT.md](./docs/PROJECT.md)                                                    |
-| **Auth**             | Kakao · Naver · Google · Apple · Email ✅ | Login required · mail domain `mail.devnamu.com` · invitation resumes after signup/login |
-| **API / Admin**      | Live on Railway                           | `api-production-1504` · `admin-production-da74` · `/health` uptime ✅                   |
-| **Shared inventory** | Implemented · deploy/2-user QA pending    | personal/household/store spaces · email/one-time-code invites · owner/manager/member    |
-| **QA**               | 269 automated checks ✅                   | Existing device QA ✅ · shared-space release E2E pending                                |
-| **Next (P0)**        |                                           | Railway migration → new production build → 2-user QA → store submission                 |
-
-## Folder Structure
-
-```text
-.
-├── apps
-│   ├── admin
-│   │   ├── app
-│   │   └── src
-│   ├── api
-│   │   ├── prisma
-│   │   └── src
-│   └── mobile
-│       ├── app
-│       │   └── scanner.tsx          # 바코드·유통기한 스캐너 라우트
-│       ├── assets
-│       └── src
-│           └── features/scanner/    # ScannerScreen, useProductScanner, parseExpirationDate
-├── packages
-│   └── shared
-│       └── src
-├── package.json
-├── pnpm-workspace.yaml
-└── tsconfig.base.json
-```
-
-## Stack
-
-### Mobile
-
-- Expo + React Native + TypeScript
-- Expo Router
-- Zustand
-- TanStack Query
-- React Hook Form + Zod
-- AsyncStorage
-- `expo-notifications` ready structure
-
-### Admin
-
-- Next.js App Router
-- Tailwind CSS
-- TanStack Query
-- simple form-based internal tooling UX
-
-### API
-
-- Nest.js
-- Prisma
-- PostgreSQL
-- OpenAI Responses API for recipe recommendations
-- DTO validation
-- REST API
-
-### Shared
-
-- shared enums
-- shared types
-- shared zod schemas
-- expiry and dashboard utilities
-
-## Root Scripts
-
-- `pnpm dev:mobile`
-- `pnpm dev:admin`
-- `pnpm dev:api`
-- `pnpm dev`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm test`
-- `pnpm db:generate`
-- `pnpm db:migrate`
-- `pnpm db:migrate:deploy`
-- `pnpm db:seed`
-
-`pnpm dev` runs:
-
-- shared package watch build
-- Nest API
-- Next admin
-- Expo mobile
-
-Each individual app `dev` script also prebuilds `packages/shared` so the app can run independently.
-
-## Environment Layout
-
-### Root reference
-
-Use the root `.env.example` as a reference map only.
-Production examples live next to each app:
-
-- `apps/api/.env.production.example`
-- `apps/admin/.env.production.example`
-- `apps/mobile/.env.production.example`
-
-### API
-
-Copy `apps/api/.env.example` to `apps/api/.env`
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/expirymate?schema=public"
-PORT=4000
-CORS_ORIGIN_ADMIN="http://localhost:3000"
-CORS_ORIGIN_MOBILE="http://localhost:8081"
-DEFAULT_OWNER_KEY="demo-user"
-AUTH_TOKEN_SECRET="replace-with-a-long-random-secret"
-AUTH_ALLOW_DEV_FALLBACK="false"
-APP_BASE_URL="expirymate://"
-AUTH_LINK_BASE_URL="http://localhost:4000"
-ADMIN_BASE_URL="http://localhost:3000"
-PRIVACY_POLICY_URL="http://localhost:3000/privacy"
-PRIVACY_CHOICES_URL="http://localhost:3000/privacy/choices"
-PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-AI_DATA_NOTICE_VERSION="ai-data-notice-v3"
-OPENAI_API_KEY="sk-..."
-RECIPE_AI_MODEL="gpt-5.4-mini"
-PUSH_REMINDER_SCHEDULER_ENABLED="false"
-PUSH_REMINDER_SCHEDULER_INTERVAL_MINUTES=30
-PUSH_REMINDER_DELIVERY_HOUR=9
-PUSH_REMINDER_MAX_ATTEMPTS=3
-PUSH_REMINDER_TIMEZONE_OFFSET_MINUTES=540
-EXPO_PUSH_ACCESS_TOKEN=""
-IAP_ALLOWED_PRODUCT_IDS="expirymate_premium_monthly,expirymate_premium_yearly,jango_plus,expirymate_household_monthly,expirymate_household_yearly,jango_household"
-APPLE_BUNDLE_ID="com.expirymate.mobile"
-APPLE_APP_STORE_ENVIRONMENT="sandbox"
-APPLE_APP_STORE_ISSUER_ID=""
-APPLE_APP_STORE_KEY_ID=""
-APPLE_APP_STORE_PRIVATE_KEY=""
-GOOGLE_PLAY_PACKAGE_NAME="com.expirymate.mobile"
-GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL=""
-GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY=""
-```
-
-`AUTH_TOKEN_SECRET` is required in production. `AUTH_ALLOW_DEV_FALLBACK` defaults to disabled; set it to `true` only for local admin/dev fallback without a bearer token.
-Set `PUSH_REMINDER_SCHEDULER_ENABLED=true` on API instances that should run remote expiry reminders. A DB `SchedulerLease` prevents duplicate sends across replicas; still prefer enabling it on one primary worker when possible. The worker also retries stale `pending` deliveries and polls Expo push receipts. `EXPO_PUSH_ACCESS_TOKEN` is optional unless Expo push security is enabled for the EAS project.
-Auth endpoints have built-in rate limits (DB-backed by default via `AUTH_RATE_LIMIT_STORE=database`, shared across replicas). Set `TRUST_PROXY` so Express `request.ip` reflects the client behind your reverse proxy — do not trust raw `X-Forwarded-For` in app code. Override a policy with `AUTH_RATE_LIMIT_<POLICY>_MAX` and `AUTH_RATE_LIMIT_<POLICY>_WINDOW_SECONDS` only when traffic patterns require it.
-
-When `NODE_ENV=production`, the API fails fast if production-critical values are missing, unsafe, or still local:
-
-- public HTTPS URLs: `CORS_ORIGIN_ADMIN`, `CORS_ORIGIN_MOBILE`, `ADMIN_BASE_URL`, `PRIVACY_POLICY_URL`, `PRIVACY_CHOICES_URL`, `AUTH_LINK_BASE_URL`
-- auth: `AUTH_TOKEN_SECRET` with at least 32 characters and `AUTH_ALLOW_DEV_FALLBACK=false`
-- OAuth: `APPLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `KAKAO_OAUTH_CLIENT_ID` (optional: `KAKAO_OAUTH_CLIENT_SECRET`, `NAVER_OAUTH_CLIENT_ID`, `NAVER_OAUTH_CLIENT_SECRET`)
-- SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
-- AI: `OPENAI_API_KEY` when `RECIPE_AI_ENABLED` is on (default); omit only if AI is explicitly disabled
-- IAP: `IAP_ALLOWED_PRODUCT_IDS`, Apple App Store server API keys, Google Play service account keys
-- privacy contact: `PRIVACY_CONTACT_EMAIL`
-
-Docker/`docker-compose` healthchecks and Railway traffic probes should hit **`GET /ready`** (DB readiness), not `/health` (process liveness only). In Railway → API service → Settings → Healthcheck Path, set `/ready`.
-
-### Admin
-
-Copy `apps/admin/.env.example` to `apps/admin/.env.local`
-
-```env
-NEXT_PUBLIC_APP_ENV="development"
-NEXT_PUBLIC_API_BASE_URL="http://localhost:4000"
-PRIVACY_CONTACT_EMAIL="privacy@expirymate.local"
-```
-
-For production builds, set `NEXT_PUBLIC_APP_ENV=production`,
-`NEXT_PUBLIC_API_BASE_URL` to the public HTTPS API URL, and
-`PRIVACY_CONTACT_EMAIL` to the real support/privacy email. The Admin build
-fails if production values still point to localhost or `.local`.
-
-Docker image builds (`apps/admin/Dockerfile`) take the same three values as
-**required build-args** — there are no localhost defaults. Pass them explicitly
-in `docker-compose` (development) or Railway Build Variables (production):
-
-```bash
-docker build -f apps/admin/Dockerfile \
-  --build-arg NEXT_PUBLIC_APP_ENV=production \
-  --build-arg NEXT_PUBLIC_API_BASE_URL=https://api.example.com \
-  --build-arg PRIVACY_CONTACT_EMAIL=privacy@example.com \
-  .
-```
-
-### Mobile
-
-Copy `apps/mobile/.env.example` to `apps/mobile/.env`
-
-```env
-EXPO_PUBLIC_API_BASE_URL="http://localhost:4000"
-EXPO_PUBLIC_APP_ENV="development"
-```
-
-For production EAS builds, configure the values from
-`apps/mobile/.env.production.example` in EAS environment variables or secrets.
-`EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_OAUTH_REDIRECT_URI` must be public
-`https://` URLs on the same origin (redirect ending in `/oauth/callback`), and
-Google and Kakao public identifiers must be present. `app.config.js` and
-`eas-build-post-install` call `scripts/validate-public-env.cjs`, so production
-builds fail fast when these values are missing, local, or placeholders.
-Until the custom API domain is configured, both production URLs use
-`https://api-production-1504.up.railway.app`.
-
-For Expo Go on a real device, `localhost` points to the phone, not your Mac.
-Use your Mac's current LAN IP instead:
-
-```bash
-ifconfig | rg "inet "
-```
-
-Example:
-
-```env
-EXPO_PUBLIC_API_BASE_URL="http://172.29.58.200:4000"
-EXPO_PUBLIC_APP_ENV="development"
-```
-
-Restart Expo after changing `.env`:
-
-```bash
-pnpm --filter @expirymate/mobile exec expo start -c
-```
-
-**Barcode / expiry scanner (camera, ML Kit):** not available in Expo Go. Use a native dev build:
-
-```bash
-# Terminal 1
-pnpm --filter @expirymate/mobile dev
-
-# Terminal 2 (first time or after native dep changes)
-pnpm --filter @expirymate/mobile exec expo run:ios --device "Your iPhone"
-# or: expo run:android
-```
-
-See [docs/PROJECT.md](./docs/PROJECT.md) (scanner + Personal Team notes) for iOS signing and troubleshooting.
-
-## App Store Build
-
-Mobile App Store configuration lives in `apps/mobile/app.json`,
-`apps/mobile/app.config.js`, and `apps/mobile/eas.json`. Sign in with Apple +
-Push entitlements are declared for paid-team preview/production profiles;
-Personal Team device builds use `development-device` (`EXPO_IOS_PERSONAL_TEAM=1`).
-Full checklist: [`docs/ios-eas-production.md`](./docs/ios-eas-production.md).
-
-App icon / adaptive icon come from `jango-icon-crop.png` (face + hat + pineapple).
-Splash and notification silhouette come from `jango-idle.png`. Regenerate with
-`pnpm --filter @expirymate/mobile branding:sync` (writes
-`notification-icon-192.png` then downscales to `notification-icon.png`).
-Mood variants: `jango-{idle,happy,worry,cooking,empty}.png`. Character rules:
-[`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](./docs/JANGO_CHARACTER_STYLE_GUIDE.md).
-
-Install and authenticate EAS CLI before building:
-
-```bash
-npm install --global eas-cli
-eas login
-```
-
-Run App Store / TestFlight builds from the Expo project directory:
-
-```bash
-cd apps/mobile
-eas credentials
-eas build --platform ios --profile production
-eas submit --platform ios --profile production
-```
-
-## Running Locally
-
-### 1. Install dependencies
+### 1. 의존성 설치
 
 ```bash
 pnpm install
 ```
 
-If `pnpm` reports an unexpected store location, use the same store used by the existing `node_modules`:
+### 2. 환경변수 준비
 
-```bash
-pnpm --store-dir /Users/namu/Library/pnpm/store/v3 install
-```
-
-### 2. Prepare environment files
-
-**Recommended (Doppler):** pull the shared `dev` secrets after `doppler login` and `doppler setup --no-interactive` at the repo root. Full guide: [`docs/dev-secrets.md`](docs/dev-secrets.md) (also covers Cursor Cloud Agents).
+Doppler를 사용할 수 있다면 공유 `dev` 설정을 내려받습니다.
 
 ```bash
 doppler secrets download -p expirymate-api -c dev --no-file --format env > apps/api/.env
@@ -325,22 +44,10 @@ doppler secrets download -p expirymate-admin -c dev --no-file --format env > app
 doppler secrets download -p expirymate-mobile -c dev --no-file --format env > apps/mobile/.env
 ```
 
-**Without Doppler:** copy examples and fill values by hand.
+Doppler 없이 실행할 때는 각 앱의 `.env.example`을 복사하고 필요한 값을 채웁니다.
+환경별 정본과 안전 규칙은 [시크릿 설정 가이드](./docs/dev-secrets.md)를 따릅니다.
 
-```bash
-cp apps/api/.env.example apps/api/.env
-cp apps/admin/.env.example apps/admin/.env.local
-cp apps/mobile/.env.example apps/mobile/.env
-```
-
-Then fill in at least:
-
-- `apps/api/.env`: `DATABASE_URL`, `OPENAI_API_KEY`, `AUTH_TOKEN_SECRET`
-- `apps/mobile/.env`: `EXPO_PUBLIC_API_BASE_URL`
-
-### 3. Start PostgreSQL and migrate
-
-PostgreSQL must be running and the `DATABASE_URL` user needs `CREATEDB` permission because Prisma `migrate dev` creates a shadow database.
+### 3. DB 준비
 
 ```bash
 pnpm db:generate
@@ -348,24 +55,18 @@ pnpm db:migrate
 pnpm db:seed
 ```
 
-### 4. Run the apps
+`prisma migrate dev`는 shadow database를 사용하므로 로컬 DB 사용자는 `CREATEDB` 권한이
+필요합니다. 운영 DB에서는 `pnpm db:seed`를 실행하지 않습니다.
 
-# 터미널 1 — Metro (항상 켜 두기)
+### 4. 앱 실행
 
-pnpm --filter @expirymate/mobile exec expo start -c
+모든 서비스를 함께 실행합니다.
 
-같은 Wi‑Fi가 아니면:
-pnpm --filter @expirymate/mobile exec expo start -c --tunnel
+```bash
+pnpm dev
+```
 
-# 터미널 2 — 네이티브 설치/실행 (최초·네이티브 변경 시)
-
-pnpm --filter @expirymate/mobile exec expo run:ios --device "남우현의 iPhone"
-
-In separate terminals:
-
-# 윈도우 PC에서 Expo Go 실행
-
-pnpm.cmd dev:mobile
+필요한 서비스만 실행할 수도 있습니다.
 
 ```bash
 pnpm dev:api
@@ -373,309 +74,57 @@ pnpm dev:admin
 pnpm dev:mobile
 ```
 
-URLs:
+| 서비스 | 로컬 주소 |
+|---|---|
+| API | `http://localhost:4000` |
+| API readiness | `http://localhost:4000/ready` |
+| Admin | `http://localhost:3000` |
+| Mobile | Expo가 출력하는 QR 또는 emulator |
 
-- API: `http://localhost:4000`
-- Admin: `http://localhost:3000`
-- Mobile: Expo QR from `pnpm dev:mobile`
+실기기에서 Mobile을 실행할 때 `localhost`는 개발 PC가 아니라 휴대폰 자신을 가리킵니다.
+`EXPO_PUBLIC_API_BASE_URL`에 같은 네트워크의 개발 PC 주소를 사용하고 Expo를 재시작하세요.
 
-## Privacy, Data Deletion, and AI Notice
+## 네이티브 스캐너
 
-Public pages for App Store review:
-
-- Privacy Policy: `http://localhost:3000/privacy`
-- Data Deletion Choices: `http://localhost:3000/privacy/choices`
-
-Before submitting to the App Store, replace localhost URLs with the production
-domain in `PRIVACY_POLICY_URL` and `PRIVACY_CHOICES_URL`.
-
-Mobile users can manage privacy controls in `설정` → `개인정보와 추천 안내`.
-The first AI recipe recommendation requires AI data notice consent for the
-current notice version (`AI_DATA_NOTICE_VERSION`, default `ai-data-notice-v3`).
-Users can revoke that consent, delete recommendation history only, or wipe the
-account from the same privacy hub. Public copy covers retention periods,
-processors / cross-border transfer (including OpenAI in the US), and withdrawal
-paths. Use `docs/store-privacy-declarations.md` when filling App Store Privacy
-Label / Play Data Safety so declarations match the live product.
-
-Account/data deletion immediately removes owned ingredients, recommendation
-history, notification preferences, auth sessions, password credentials, and
-social login links. AI recipe recommendation sends an inventory snapshot,
-recommendation conditions, recipe preferences, and a recent engagement summary
-from the API server to OpenAI; the mobile app never receives or stores the
-OpenAI API key.
-
-Recipe generation is protected by configurable server-side limits:
-`RECIPE_RATE_LIMIT_MAX`, `RECIPE_RATE_LIMIT_WINDOW_SECONDS`,
-`RECIPE_FREE_DAILY_LIMIT`, `RECIPE_REWARDED_DAILY_LIMIT`,
-`RECIPE_SUBSCRIBER_DAILY_LIMIT`, `RECIPE_ABSOLUTE_DAILY_LIMIT`,
-`RECIPE_DAILY_COST_LIMIT_USD`, and `RECIPE_AI_MAX_OUTPUT_TOKENS`. Repeated
-network attempts are deduplicated with `Idempotency-Key`; recommendation
-content is no longer reused by a time-based cache. Cost
-estimates use the model token rates in `RECIPE_AI_INPUT_COST_PER_1M_TOKENS`,
-`RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS`, and
-`RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS`.
-
-Current monetization is limited to opt-in AdMob rewarded ads and contextual
-Coupang Partners product links. Subscription and paid recommendation-credit
-code is retained for future evaluation, but new sales stay disabled. See
-[`docs/monetization.md`](./docs/monetization.md) for the active configuration,
-rollout, fallback, reporting, and QA rules.
-
-You can also run everything at once:
+바코드와 OCR 스캐너는 Expo Go에서 동작하지 않습니다. development build 또는 EAS
+빌드를 사용합니다.
 
 ```bash
-pnpm dev
+pnpm --filter @expirymate/mobile exec expo run:android
+pnpm --filter @expirymate/mobile exec expo run:ios --device
 ```
 
-### 5. Quick health checks
+iOS 서명과 production 제출은 [iOS·EAS production 런북](./docs/ios-eas-production.md)을
+확인하세요.
 
-```bash
-curl http://localhost:4000/dashboard/summary
-curl http://localhost:4000/recipes/recommendations
-```
+## 주요 명령
 
-To test AI recommendation generation, register at least one non-expired ingredient first, then call:
+| 명령 | 용도 |
+|---|---|
+| `pnpm lint` | 전체 ESLint 검사 |
+| `pnpm typecheck` | Prisma·shared를 포함한 전체 타입 검사 |
+| `pnpm test` | 패키지별 테스트 |
+| `pnpm docs:check` | 문서 메타데이터와 내부 링크 검사 |
+| `pnpm validate:env-parity` | 환경변수 예시 간 키 정합성 검사 |
+| `pnpm db:migrate:deploy` | 대상 DB에 production migration 적용 |
+| `pnpm docker:up` | 로컬 Docker 서비스 시작 |
+| `pnpm docker:down` | 로컬 Docker 서비스 종료 |
 
-```bash
-curl -X POST http://localhost:4000/recipes/recommendations \
-  -H "Content-Type: application/json" \
-  -d '{"servings":2,"maxCookingMinutes":30,"mealType":"any","useExpiringFirst":true}'
-```
+## 개발 원칙
 
-## Recommended Local Development Order
+- 인증된 사용자만 앱 기능에 접근합니다.
+- 재고, 추천, 설정 API는 서버가 토큰과 공간 권한을 검증합니다.
+- 날짜-only 유통기한은 사용자 달력 날짜로 다루며 임의의 UTC 변환을 피합니다.
+- 실제 시크릿과 서비스 계정 파일은 커밋하지 않습니다.
+- 배포와 migration은 [운영 런북](./docs/operations/deployment.md)을 따릅니다.
+- 기능 범위가 바뀌면 [출시 범위](./docs/product/release-scope.md)와
+  [프로젝트 현황](./docs/STATUS.md)을 함께 갱신합니다.
 
-1. Start PostgreSQL
-2. `pnpm install`
-3. `cp apps/api/.env.example apps/api/.env`
-4. `cp apps/admin/.env.example apps/admin/.env.local`
-5. `cp apps/mobile/.env.example apps/mobile/.env`
-6. `pnpm db:generate`
-7. `pnpm db:migrate`
-8. `pnpm db:seed`
-9. `pnpm dev:api`
-10. `pnpm dev:admin`
-11. `pnpm dev:mobile`
+## 문서 바로가기
 
-For daily work after the first setup, `pnpm dev` is the simplest option.
-
-## MVP Coverage
-
-### Mobile
-
-- onboarding
-- home dashboard
-- manual ingredient registration
-- inventory list
-- inventory detail and edit
-- AI recipe recommendation tab
-- consume/discard actions
-- notification settings UI
-- mascot **장고** (Jango) for recipe-oriented empty and success states
-
-### Admin
-
-- dashboard
-- product list and quick create
-- product detail/edit
-- inventory list
-- seed status page
-
-### API
-
-- registered auth (email + Kakao/Naver/Google/Apple OAuth) — login required on mobile
-- products / inventory / dashboard
-- recipe recommendations
-- privacy & account deletion
-- product-masters lookup (barcode waterfall)
-- settings/preferences
-
-## Initial Database Design
-
-### `Product`
-
-- `id`
-- `name`
-- `brand`
-- `category`
-- `imageUrl`
-- `createdAt`
-- `updatedAt`
-
-### `InventoryItem`
-
-- `id`
-- `ownerKey`
-- `productId`
-- `displayName`
-- `brand`
-- `category`
-- `quantity`
-- `unit`
-- `storageLocation`
-- `expiryDate` (`YYYY-MM-DD` date-only, KST calendar date)
-- `expirySource`
-- `status`
-- `notes`
-- `createdAt`
-- `updatedAt`
-
-### `NotificationPreference`
-
-- `id`
-- `ownerKey`
-- `enabled`
-- `reminderDaysBefore`
-- `remindOnDayOf`
-- `quietHoursStart`
-- `quietHoursEnd`
-- `createdAt`
-- `updatedAt`
-
-## API Response Convention
-
-Successful responses are wrapped in:
-
-```json
-{
-  "success": true,
-  "data": {}
-}
-```
-
-Errors are wrapped in:
-
-```json
-{
-  "success": false,
-  "error": {
-    "code": "HTTP_400",
-    "message": "Validation failed",
-    "details": {}
-  }
-}
-```
-
-This is intentionally simple and easy for both mobile and admin clients.
-
-## Main API Endpoints
-
-### Products
-
-- `GET /products`
-- `GET /products/:id`
-- `POST /products`
-- `PATCH /products/:id`
-
-### Inventory
-
-- `GET /inventory`
-- `GET /inventory/:id`
-- `POST /inventory`
-- `PATCH /inventory/:id`
-- `POST /inventory/:id/consume`
-- `POST /inventory/:id/discard`
-
-Inventory, dashboard, recipe, and settings endpoints require a **registered** account bearer token (`Authorization: Bearer <token>`). Anonymous sessions are not supported — there is no `/auth/anonymous` minting path. Client-supplied `ownerKey` query/body values are not trusted.
-
-### Other
-
-- `GET /dashboard/summary`
-- `POST /recipes/recommendations`
-- `GET /recipes/recommendations`
-- `GET /recipes/recommendations/:id`
-- `PUT /recipes/recommendations/:id/dishes/:dishIndex/engagement`
-- `GET /subscriptions/entitlement`
-- `POST /subscriptions/verify`
-- `GET /settings/recipe-preferences`
-- `PATCH /settings/recipe-preferences`
-- `GET /settings/notification-preferences`
-- `PATCH /settings/notification-preferences`
-- `GET /auth/placeholder`
-
-## Seed Data
-
-The API seed includes at least 10 Korea-relevant example products:
-
-- 서울우유 1L
-- 계란 10구
-- 두부
-- 플레인 요거트
-- 오렌지 주스
-- 컵라면
-- 샴푸
-- 휴지
-- 세제
-- 냉동 만두
-
-Inventory seed also includes mixed states:
-
-- expired
-- expiring today
-- within 3 days
-- within 7 days
-- safe
-- consumed
-
-## What Is Real vs Mocked
-
-> Authoritative launch status: [docs/PROJECT.md](./docs/PROJECT.md).
-
-### Real in this starter
-
-- monorepo wiring
-- shared contracts and expiry utilities
-- Nest REST modules
-- Prisma schema and seed
-- mobile onboarding, register, inventory, settings flows
-- **login required** · Kakao → Naver → Google → Apple iOS, plus email register/login/verify
-- **product scanner:** barcode → ProductMaster/OFF → expiry OCR → register prefill
-- AI recipe recommendation API and mobile recommendation tab
-- personal/household/store inventory spaces, email/one-time-code invitations, and three-level roles
-- space-scoped inventory/storage/dashboard/recommendations with personal favorites/settings
-- subscription entitlement API with App Store and Google Play server verification (future use; sales disabled)
-- admin product and inventory tooling
-- recipe-oriented mascot asset (장고)
-- Resend mail via `mail.devnamu.com` (domain verified)
-
-### Mocked or intentionally limited
-
-- OCR/scanner: **dev/native builds only** (not Expo Go); Android + EAS production QA pending
-- shared inventory is refresh/focus based; no realtime WebSocket/SSE or change ledger in v1
-- API/Admin custom hostnames still on `*.up.railway.app` (mail subdomain only on `devnamu.com`)
-- native IAP purchase, restore, server verification, paid recommendation credits, and Household subscription UI are retained for future evaluation; they are not in the current launch or sales scope
-
-## Recommended next work
-
-See **[docs/PROJECT.md §2](./docs/PROJECT.md#2-서비스-전-우선순위-지금-당장)** for the live priority list.
-
-1. Deploy `20260724133000_add_inventory_spaces` and `20260724150000_add_space_invitation_codes` on Railway, then verify personal-space backfill
-2. Build new iOS/Android release candidates and run two-account invitation/role/inventory regression QA
-3. Finalize privacy declarations, shared-space screenshots, review notes, and submit iOS then Android
-4. Post-launch: custom API/Admin domains, rewarded-ad and Coupang rollout analysis, catalog UX, analytics, realtime collaboration
-
-## Notes On Running
-
-- `packages/shared` is built to `dist` and consumed as a workspace package
-- root `dev` watches `packages/shared` so changes propagate during local development
-- remote push delivery requires an EAS project with push credentials and
-  `PUSH_REMINDER_SCHEDULER_ENABLED=true` (DB lease guards multi-replica; prefer one worker)
-- recipe recommendation requires `OPENAI_API_KEY` in `apps/api/.env`
-- recommendation rate limit, quota, cache TTL, output token cap, and daily cost
-  cap are controlled with the `RECIPE_*` environment variables
-- subscription server verification requires App Store Server API or Google Play
-  Developer API credentials in `apps/api/.env`
-- App Store/EAS build config is in `apps/mobile/app.json` and
-  `apps/mobile/eas.json`; EAS CLI is not bundled with this repo
-
-## Versioning Notes
-
-This repo was shaped around current official docs for the main framework assumptions used here:
-
-- Expo SDK reference and package docs: https://docs.expo.dev/versions/latest/
-- Expo app config reference: https://docs.expo.dev/versions/latest/config/app/
-- EAS Build config: https://docs.expo.dev/build/eas-json/
-- Expo Notifications: https://docs.expo.dev/versions/latest/sdk/notifications/
-- Expo Push Service sending API: https://docs.expo.dev/push-notifications/sending-notifications/
-- Next.js App Router installation: https://nextjs.org/docs/app/getting-started/installation
-- Next.js dynamic segments: https://nextjs.org/docs/15/app/api-reference/file-conventions/dynamic-routes
+- [프로젝트 현황과 우선순위](./docs/STATUS.md)
+- [출시 로드맵과 인수 기준](./docs/ROADMAP.md)
+- [반응형 QA 기준](./docs/mobile-responsive-qa.md)
+- [장고 캐릭터 스타일](./docs/JANGO_CHARACTER_STYLE_GUIDE.md)
+- [수익화 운영 기준](./docs/monetization.md)
+- [스토어 제출 문서](./docs/README.md#스토어-출시)

@@ -1,3 +1,10 @@
+---
+status: active
+owner: product
+last_reviewed: 2026-08-25
+source_of_truth: true
+---
+
 # 장고 수익화 운영 기준
 
 기준일: 2026년 8월 18일
@@ -269,4 +276,4 @@ MONETIZATION_OFFER_MODE=core
 - iOS/EAS production: [`ios-eas-production.md`](./ios-eas-production.md)
 - 개발·운영 시크릿: [`dev-secrets.md`](./dev-secrets.md)
 - 공개 쿠팡 안내 페이지: `apps/admin/app/partners/page.tsx`
-- 과거 수익화 설계: [`monetization-v1.1-v1.2.md`](./monetization-v1.1-v1.2.md)
+- 과거 수익화 설계: [`archive/monetization-v1.1-v1.2.md`](./archive/monetization-v1.1-v1.2.md)

@@ -11,6 +11,7 @@
     "typecheck": "pnpm db:generate && pnpm --filter @expirymate/shared build && pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",
     "validate:env-parity": "node scripts/check-env-parity.mjs",
+    "docs:check": "node scripts/check-docs.mjs",
     "db:generate": "pnpm --filter @expirymate/api db:generate",
     "db:migrate": "pnpm --filter @expirymate/api db:migrate",
     "db:migrate:deploy": "pnpm --filter @expirymate/api db:migrate:deploy",

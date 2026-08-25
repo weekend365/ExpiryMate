@@ -1,3 +1,11 @@
+---
+status: draft
+owner: product-release
+last_reviewed: 2026-08-25
+source_of_truth: true
+data_as_of: 2026-08-18
+---
+
 # App Store · 스토어 메타 초안 (장고야 부탁해)
 
 App Store Connect **앱 정보 / 1.3.0 버전 / App Privacy / 심사 노트**에 그대로 옮기기 위한 초안입니다.  
