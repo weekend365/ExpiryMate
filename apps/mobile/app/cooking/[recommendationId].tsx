@@ -21,15 +21,23 @@ import { Screen } from "../../src/components/Screen";
 import { StepFlow } from "../../src/components/StepFlow";
 import {
   getCookingGuideMessage,
+  getCookingStepCta,
+  getInventoryApplyCta,
   getPrepContinueCta,
   hasSelectedConsumption,
+  listDepletedShoppingTargets,
+  recommendedAmountForInventoryItem,
+  remainingQuantityBase,
   resolveConsumptionAmount,
+  resolveSelectedInventoryItem,
   unitLabel,
   type ConsumableIngredient,
   type ConsumptionChoice,
   type ConsumptionMode,
 } from "../../src/features/recipes/cooking";
 import { useCookingSession } from "../../src/features/recipes/use-cooking-session";
+import { useAffiliateShopping } from "../../src/features/affiliate/use-affiliate-shopping";
+import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
@@ -47,6 +55,10 @@ export default function CookingScreen() {
     consumptionChoices,
     setConsumptionChoices,
     updatedItems,
+    undoLabel,
+    handleUndoInventory,
+    openedShoppingKeys,
+    markShoppingOpened,
     dish,
     steps,
     consumptionStepIndex,
@@ -63,9 +75,11 @@ export default function CookingScreen() {
     checkedPrepKeySet,
     uncheckedPrepCount,
     cookingStepCompleted,
+    isLastCookingStep,
     mutationError,
     favoriteMutationError,
   } = useCookingSession();
+  const shoppingQuery = useAffiliateShopping();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -123,15 +137,35 @@ export default function CookingScreen() {
   }
 
   if (updatedItems) {
+    const depletedTargets = listDepletedShoppingTargets(
+      updatedItems,
+      consumableIngredients,
+      (shoppingQuery.data?.productGroups ?? []).map(
+        (group) => group.ingredientName,
+      ),
+      openedShoppingKeys,
+    );
+
     return (
       <Screen
         contentWidth="wide"
         density="compact"
         topInsetMode="none"
         title="요리를 다 마쳤어요"
-        subtitle="사용한 만큼 냉장고에도 바로 알려뒀어요."
+        subtitle={
+          updatedItems.length
+            ? `재료 ${updatedItems.length}개의 재고를 업데이트했어요.`
+            : "이번에는 재고를 그대로 두었어요."
+        }
         footer={
           <View style={styles.footerStack}>
+            {undoLabel ? (
+              <InventoryUndoSnackbar
+                label={undoLabel}
+                stacked={shouldStack}
+                onUndo={handleUndoInventory}
+              />
+            ) : null}
             <Button
               icon={Refrigerator}
               onPress={() => router.replace("/(tabs)/home")}
@@ -155,7 +189,7 @@ export default function CookingScreen() {
           description={
             updatedItems.length
               ? "남은 재료도 다음 요리에 알뜰하게 이어서 쓸게요."
-              : "이번에는 재고를 그대로 두었어요."
+              : "재고는 바꾸지 않고 요리만 마쳤어요."
           }
         />
         {updatedItems.length ? (
@@ -178,6 +212,38 @@ export default function CookingScreen() {
                     ? "다 사용했어요"
                     : `${formatBaseQuantity(item.quantityBase, item.unitCode)} 남았어요`}
                 </AppText>
+              </View>
+            ))}
+          </View>
+        ) : null}
+        {depletedTargets.length ? (
+          <View style={styles.remainingCard}>
+            {depletedTargets.map((target) => (
+              <View
+                key={target.itemId}
+                style={[
+                  styles.remainingRow,
+                  shouldStack && styles.remainingRowStacked,
+                ]}
+              >
+                <AppText variant="body" style={styles.remainingName}>
+                  {target.label}, 모두 사용했어요.
+                </AppText>
+                <Button
+                  variant="surface"
+                  size="small"
+                  icon={ShoppingBasket}
+                  onPress={() => {
+                    markShoppingOpened(target.key);
+                    router.push({
+                      pathname: "/shopping",
+                      params: { q: target.searchName },
+                    });
+                  }}
+                  fullWidth
+                >
+                  장보기에서 찾아볼게요
+                </Button>
               </View>
             ))}
           </View>
@@ -225,19 +291,17 @@ export default function CookingScreen() {
         onPress={completeCookingStepAndAdvance}
         fullWidth
       >
-        이 단계까지 했어요
+        {getCookingStepCta(isLastCookingStep)}
       </Button>
     ) : (
       <Button
         icon={Refrigerator}
         onPress={handleApplyInventory}
         loading={consumeMutation.isPending}
-        disabled={inventoryQuery.isPending}
+        disabled={inventoryQuery.isPending || consumeMutation.isPending}
         fullWidth
       >
-        {hasSelectedConsumption(consumptionChoices)
-          ? "냉장고에도 반영할게요"
-          : "재고는 그대로 둘게요"}
+        {getInventoryApplyCta(hasSelectedConsumption(consumptionChoices))}
       </Button>
     );
 
@@ -385,7 +449,7 @@ export default function CookingScreen() {
         {currentIndex === consumptionStepIndex ? (
           <View style={styles.section}>
             <AppText variant="body" tone="subtext">
-              실제로 쓴 양과 다르면 재료별로 바로 바꿀 수 있어요.
+              실제로 사용한 양이 다르면 수정할 수 있어요.
             </AppText>
             <Pressable
               onPress={handleToggleFavorite}
@@ -456,18 +520,19 @@ export default function CookingScreen() {
             <View style={[styles.list, isRegular && styles.listRegular]}>
               {consumableIngredients.map((ingredient) => (
                 <ConsumptionCard
-                  key={ingredient.inventoryItemId}
+                  key={ingredient.key}
                   ingredient={ingredient}
                   choice={
-                    consumptionChoices[ingredient.inventoryItemId] ?? {
+                    consumptionChoices[ingredient.key] ?? {
                       mode: "skip",
                       amountBase: 0,
+                      selectedInventoryItemId: null,
                     }
                   }
                   onChange={(choice) =>
                     setConsumptionChoices((current) => ({
                       ...current,
-                      [ingredient.inventoryItemId]: choice,
+                      [ingredient.key]: choice,
                     }))
                   }
                 />
@@ -508,17 +573,51 @@ function ConsumptionCard({
   onChange: (choice: ConsumptionChoice) => void;
 }) {
   const { isRegular } = useResponsiveLayout();
-  const available = ingredient.item.quantityBase;
+  const selectedItem = resolveSelectedInventoryItem(ingredient, choice);
+
+  const selectCandidate = (item: (typeof ingredient.candidates)[number]) => {
+    const recommended = recommendedAmountForInventoryItem(
+      ingredient.recipeAmount,
+      ingredient.recipeUnitCode,
+      item,
+    );
+    onChange({
+      mode: recommended ? "recommended" : "skip",
+      amountBase: recommended ?? 0,
+      selectedInventoryItemId: item.id,
+    });
+  };
+
   const selectMode = (mode: ConsumptionMode) => {
+    if (!selectedItem) {
+      return;
+    }
+    const recommended = recommendedAmountForInventoryItem(
+      ingredient.recipeAmount,
+      ingredient.recipeUnitCode,
+      selectedItem,
+    );
     onChange({
       mode,
       amountBase: resolveConsumptionAmount(
         mode,
-        available,
-        ingredient.recommendedAmountBase,
+        selectedItem.quantityBase,
+        recommended,
       ),
+      selectedInventoryItemId: selectedItem.id,
     });
   };
+
+  const remaining = selectedItem
+    ? remainingQuantityBase(selectedItem.quantityBase, choice.amountBase)
+    : 0;
+  const recommended = selectedItem
+    ? recommendedAmountForInventoryItem(
+        ingredient.recipeAmount,
+        ingredient.recipeUnitCode,
+        selectedItem,
+      )
+    : null;
 
   return (
     <View
@@ -530,62 +629,103 @@ function ConsumptionCard({
       <View style={styles.consumptionHeader}>
         <View style={styles.rowCopy}>
           <AppText variant="bodyStrong">{ingredient.name}</AppText>
-          <AppText variant="bodySmall" tone="subtext">
-            지금 {formatBaseQuantity(available, ingredient.item.unitCode)}{" "}
-            있어요
-          </AppText>
+          {ingredient.matchStatus === "unmatched" ? (
+            <AppText variant="bodySmall" tone="subtext">
+              보관함에 없는 재료
+            </AppText>
+          ) : selectedItem ? (
+            <>
+              {selectedItem.displayName !== ingredient.name ? (
+                <AppText variant="bodySmall" tone="subtext">
+                  {selectedItem.displayName}
+                </AppText>
+              ) : null}
+              <AppText variant="bodySmall" tone="subtext">
+                {formatBaseQuantity(
+                  selectedItem.quantityBase,
+                  selectedItem.unitCode,
+                )}{" "}
+                → {formatBaseQuantity(remaining, selectedItem.unitCode)}
+              </AppText>
+            </>
+          ) : (
+            <AppText variant="bodySmall" tone="subtext">
+              사용할 재료를 골라 주세요
+            </AppText>
+          )}
         </View>
-        {choice.amountBase > 0 ? (
+        {selectedItem && choice.amountBase > 0 ? (
           <AppText variant="bodySmall" tone="primary">
-            {formatBaseQuantity(choice.amountBase, ingredient.item.unitCode)}
+            {formatBaseQuantity(choice.amountBase, selectedItem.unitCode)}
           </AppText>
         ) : null}
       </View>
-      <View style={styles.pillRow}>
-        {ingredient.recommendedAmountBase ? (
-          <Pill
-            label={`추천량 ${formatBaseQuantity(
-              ingredient.recommendedAmountBase,
-              ingredient.item.unitCode,
-            )}`}
-            selected={choice.mode === "recommended"}
-            onPress={() => selectMode("recommended")}
-          />
-        ) : null}
-        <Pill
-          label="전부 사용"
-          selected={choice.mode === "full"}
-          onPress={() => selectMode("full")}
-        />
-        <Pill
-          label="절반 사용"
-          selected={choice.mode === "half"}
-          onPress={() => selectMode("half")}
-        />
-        <Pill
-          label="직접 조절"
-          selected={choice.mode === "custom"}
-          onPress={() => selectMode("custom")}
-        />
-        <Pill
-          label="반영 안 함"
-          selected={choice.mode === "skip"}
-          onPress={() => selectMode("skip")}
-        />
-      </View>
-      {choice.mode === "custom" ? (
-        <QuantityStepper
-          label={`사용할 양 (${unitLabel(ingredient.item.unitCode)})`}
-          value={choice.amountBase}
-          max={available}
-          onChange={(amountBase) =>
-            onChange({
-              mode: "custom",
-              amountBase: Math.min(amountBase, available),
-            })
-          }
-        />
-      ) : null}
+      {ingredient.matchStatus === "unmatched" ? null : (
+        <>
+          {ingredient.matchStatus === "multiple" ? (
+            <View style={styles.pillRow}>
+              {ingredient.candidates.map((item) => (
+                <Pill
+                  key={item.id}
+                  label={item.displayName}
+                  selected={choice.selectedInventoryItemId === item.id}
+                  onPress={() => selectCandidate(item)}
+                />
+              ))}
+            </View>
+          ) : null}
+          {selectedItem ? (
+            <>
+              <View style={styles.pillRow}>
+                {recommended ? (
+                  <Pill
+                    label={`추천량 ${formatBaseQuantity(
+                      recommended,
+                      selectedItem.unitCode,
+                    )}`}
+                    selected={choice.mode === "recommended"}
+                    onPress={() => selectMode("recommended")}
+                  />
+                ) : null}
+                <Pill
+                  label="전부 사용"
+                  selected={choice.mode === "full"}
+                  onPress={() => selectMode("full")}
+                />
+                <Pill
+                  label="절반 사용"
+                  selected={choice.mode === "half"}
+                  onPress={() => selectMode("half")}
+                />
+                <Pill
+                  label="직접 조절"
+                  selected={choice.mode === "custom"}
+                  onPress={() => selectMode("custom")}
+                />
+                <Pill
+                  label="반영 안 함"
+                  selected={choice.mode === "skip"}
+                  onPress={() => selectMode("skip")}
+                />
+              </View>
+              {choice.mode === "custom" ? (
+                <QuantityStepper
+                  label={`사용할 양 (${unitLabel(selectedItem.unitCode)})`}
+                  value={choice.amountBase}
+                  max={selectedItem.quantityBase}
+                  onChange={(amountBase) =>
+                    onChange({
+                      mode: "custom",
+                      amountBase: Math.min(amountBase, selectedItem.quantityBase),
+                      selectedInventoryItemId: selectedItem.id,
+                    })
+                  }
+                />
+              ) : null}
+            </>
+          ) : null}
+        </>
+      )}
     </View>
   );
 }

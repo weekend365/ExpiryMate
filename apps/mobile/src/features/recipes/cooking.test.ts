@@ -11,10 +11,17 @@ import {
   buildCookingSteps,
   buildDefaultConsumptionChoices,
   getCookingGuideMessage,
+  getCookingStepCta,
+  getInventoryApplyCta,
   getPrepContinueCta,
   remainingPrepCount,
+  remainingQuantityBase,
   resolveConsumableIngredients,
   resolveConsumptionAmount,
+  cookingNamesMatch,
+  convertRecipeAmountToInventoryBase,
+  buildOptimisticConsumedItems,
+  listDepletedShoppingTargets,
 } from "./cooking";
 
 const dish: RecipeRecommendationDish = {
@@ -72,6 +79,19 @@ const egg: InventoryItem = {
   unitCode: UnitCode.EA,
 };
 
+function item(
+  overrides: Partial<InventoryItem> & Pick<InventoryItem, "id" | "displayName">,
+): InventoryItem {
+  return {
+    ...milk,
+    quantity: 1,
+    unit: "개",
+    quantityBase: 1,
+    unitCode: UnitCode.EA,
+    ...overrides,
+  };
+}
+
 describe("cooking flow helpers", () => {
   it("builds prep, cook, and inventory steps", () => {
     const steps = buildCookingSteps(dish);
@@ -81,15 +101,21 @@ describe("cooking flow helpers", () => {
       "cook-1",
       "inventory",
     ]);
+    expect(steps[2]?.title).toBe("요리가 거의 완성됐어요");
+    expect(steps[3]?.title).toBe("사용한 재료를 보관함에 반영할까요?");
   });
 
-  it("resolves only active inventory-linked ingredients", () => {
+  it("keeps active inventory links and shows unmatched recipe ingredients", () => {
     const ingredients = resolveConsumableIngredients(dish, [
       milk,
       { ...egg, status: ItemStatus.CONSUMED },
     ]);
 
-    expect(ingredients).toHaveLength(1);
+    expect(ingredients.map((entry) => [entry.name, entry.matchStatus])).toEqual([
+      ["우유", "matched"],
+      ["계란", "unmatched"],
+      ["소금", "unmatched"],
+    ]);
     expect(ingredients[0]?.inventoryItemId).toBe("milk-1");
     expect(ingredients[0]?.recommendedAmountBase).toBe(500);
   });
@@ -101,11 +127,14 @@ describe("cooking flow helpers", () => {
     expect(choices["milk-1"]).toEqual({
       mode: "recommended",
       amountBase: 500,
+      selectedInventoryItemId: "milk-1",
     });
     expect(choices["egg-1"]).toEqual({
       mode: "recommended",
       amountBase: 2,
+      selectedInventoryItemId: "egg-1",
     });
+    expect(choices["recipe:2:소금"]?.mode).toBe("skip");
   });
 
   it("supports full and half consumption amounts", () => {
@@ -118,8 +147,12 @@ describe("cooking flow helpers", () => {
   it("builds batch consume payloads from selected choices", () => {
     const ingredients = resolveConsumableIngredients(dish, [milk, egg]);
     const items = buildBatchConsumeItems(ingredients, {
-      "milk-1": { mode: "half", amountBase: 500 },
-      "egg-1": { mode: "skip", amountBase: 0 },
+      "milk-1": {
+        mode: "half",
+        amountBase: 500,
+        selectedInventoryItemId: "milk-1",
+      },
+      "egg-1": { mode: "skip", amountBase: 0, selectedInventoryItemId: "egg-1" },
     });
 
     expect(items).toEqual([{ inventoryItemId: "milk-1", amountBase: 500 }]);
@@ -136,5 +169,273 @@ describe("cooking flow helpers", () => {
     expect(getCookingGuideMessage(0, 2, 0)).toBe(
       "준비한 재료를 하나씩 눌러 주세요.",
     );
+  });
+
+  it("shows 요리했어요 only on the last cooking step", () => {
+    expect(getCookingStepCta(false)).toBe("이 단계까지 했어요");
+    expect(getCookingStepCta(true)).toBe("요리했어요");
+    expect(getCookingGuideMessage(1, 2)).toBe(
+      "카드를 누르면 이 단계를 마친 것으로 표시할게요.",
+    );
+    expect(getCookingGuideMessage(2, 2)).toBe("요리가 거의 완성됐어요.");
+    expect(getCookingGuideMessage(3, 2)).toBe(
+      "실제로 사용한 양이 다르면 수정할 수 있어요.",
+    );
+    expect(getInventoryApplyCta(true)).toBe("재고에 반영");
+    expect(getInventoryApplyCta(false)).toBe("재고는 그대로 둘게요");
+  });
+
+  it("previews remaining egg and milk quantities", () => {
+    const ingredients = resolveConsumableIngredients(dish, [milk, egg]);
+    const eggRow = ingredients.find((entry) => entry.key === "egg-1");
+    const milkRow = ingredients.find((entry) => entry.key === "milk-1");
+
+    expect(eggRow?.item?.quantityBase).toBe(10);
+    expect(eggRow?.recommendedAmountBase).toBe(2);
+    expect(remainingQuantityBase(10, 2)).toBe(8);
+    expect(remainingQuantityBase(1000, 200)).toBe(800);
+    expect(milkRow?.recommendedAmountBase).toBe(500);
+  });
+
+  it("consumes the last piece of tofu down to zero", () => {
+    const tofuDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: "tofu-1",
+          name: "두부",
+          amount: 1,
+          unitCode: UnitCode.EA,
+        },
+      ],
+    };
+    const tofu = item({
+      id: "tofu-1",
+      displayName: "두부",
+      quantityBase: 1,
+    });
+    const ingredients = resolveConsumableIngredients(tofuDish, [tofu]);
+    const choices = buildDefaultConsumptionChoices(ingredients);
+
+    expect(choices["tofu-1"]?.amountBase).toBe(1);
+    expect(remainingQuantityBase(1, 1)).toBe(0);
+    expect(buildBatchConsumeItems(ingredients, choices)).toEqual([
+      { inventoryItemId: "tofu-1", amountBase: 1 },
+    ]);
+  });
+
+  it("clamps recommended usage when stock is lower than the recipe", () => {
+    const shortEgg: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: "egg-1",
+          name: "계란",
+          amount: 2,
+          unitCode: UnitCode.EA,
+        },
+      ],
+    };
+    const ingredients = resolveConsumableIngredients(shortEgg, [
+      { ...egg, quantityBase: 1 },
+    ]);
+    const choices = buildDefaultConsumptionChoices(ingredients);
+
+    expect(ingredients[0]?.recommendedAmountBase).toBe(1);
+    expect(choices["egg-1"]?.amountBase).toBe(1);
+    expect(buildBatchConsumeItems(ingredients, choices)).toEqual([
+      { inventoryItemId: "egg-1", amountBase: 1 },
+    ]);
+  });
+
+  it("marks missing recipe ingredients as unmatched", () => {
+    const avocadoDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: null,
+          name: "아보카도",
+          amount: 1,
+          unitCode: UnitCode.EA,
+        },
+      ],
+    };
+    const ingredients = resolveConsumableIngredients(avocadoDish, [milk, egg]);
+
+    expect(ingredients).toHaveLength(1);
+    expect(ingredients[0]?.matchStatus).toBe("unmatched");
+    expect(buildBatchConsumeItems(ingredients, buildDefaultConsumptionChoices(ingredients))).toEqual(
+      [],
+    );
+  });
+
+  it("does not auto-select when two inventory items share the same name", () => {
+    const milkDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: null,
+          name: "우유",
+          amount: 200,
+          unitCode: UnitCode.ML,
+        },
+      ],
+    };
+    const ingredients = resolveConsumableIngredients(milkDish, [
+      item({
+        id: "milk-plain",
+        displayName: "우유",
+        quantityBase: 1000,
+        unitCode: UnitCode.ML,
+      }),
+      item({
+        id: "milk-light",
+        displayName: "우유",
+        quantityBase: 500,
+        unitCode: UnitCode.ML,
+      }),
+    ]);
+
+    expect(ingredients[0]?.matchStatus).toBe("multiple");
+    expect(ingredients[0]?.inventoryItemId).toBeNull();
+    expect(ingredients[0]?.candidates).toHaveLength(2);
+    expect(buildDefaultConsumptionChoices(ingredients)[ingredients[0]?.key ?? ""]?.mode).toBe(
+      "skip",
+    );
+  });
+
+  it("matches a unique alias when the linked inventory id is gone", () => {
+    const eggDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: null,
+          name: "계란",
+          amount: 2,
+          unitCode: UnitCode.EA,
+        },
+      ],
+    };
+    const ingredients = resolveConsumableIngredients(eggDish, [
+      item({
+        id: "egg-alias",
+        displayName: "달걀",
+        quantityBase: 10,
+      }),
+    ]);
+
+    expect(ingredients[0]?.matchStatus).toBe("matched");
+    expect(ingredients[0]?.inventoryItemId).toBe("egg-alias");
+    expect(ingredients[0]?.recommendedAmountBase).toBe(2);
+    expect(remainingQuantityBase(10, 2)).toBe(8);
+  });
+
+  it("does not auto-calculate recommended amounts when units differ", () => {
+    const ingredients = resolveConsumableIngredients(
+      {
+        ...dish,
+        usedIngredients: [
+          {
+            inventoryItemId: "milk-1",
+            name: "우유",
+            amount: 2,
+            unitCode: UnitCode.EA,
+          },
+        ],
+      },
+      [milk],
+    );
+
+    expect(ingredients[0]?.matchStatus).toBe("matched");
+    expect(ingredients[0]?.recommendedAmountBase).toBeNull();
+    expect(buildDefaultConsumptionChoices(ingredients)["milk-1"]?.mode).toBe(
+      "skip",
+    );
+  });
+
+  it("matches a unique spaced inventory name by token, not short substrings", () => {
+    expect(cookingNamesMatch("양파", "국내산 양파")).toBe("token");
+    expect(cookingNamesMatch("파", "대파")).toBeNull();
+    expect(cookingNamesMatch("대파", "쪽파")).toBeNull();
+    expect(convertRecipeAmountToInventoryBase(200, UnitCode.ML, UnitCode.ML)).toBe(
+      200,
+    );
+    expect(convertRecipeAmountToInventoryBase(200, UnitCode.ML, UnitCode.EA)).toBeNull();
+
+    const onionDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: null,
+          name: "양파",
+          amount: 1,
+          unitCode: UnitCode.EA,
+        },
+      ],
+    };
+    const ingredients = resolveConsumableIngredients(onionDish, [
+      item({ id: "onion-1", displayName: "국내산 양파", quantityBase: 3 }),
+    ]);
+
+    expect(ingredients[0]?.matchStatus).toBe("matched");
+    expect(ingredients[0]?.inventoryItemId).toBe("onion-1");
+  });
+
+  it("builds optimistic leftovers and shopping targets for depleted items", () => {
+    const tofuDish: RecipeRecommendationDish = {
+      ...dish,
+      usedIngredients: [
+        {
+          inventoryItemId: "tofu-1",
+          name: "두부",
+          amount: 1,
+          unitCode: UnitCode.EA,
+        },
+        {
+          inventoryItemId: "milk-1",
+          name: "우유",
+          amount: 200,
+          unitCode: UnitCode.ML,
+        },
+      ],
+    };
+    const tofu = item({ id: "tofu-1", displayName: "두부", quantityBase: 1 });
+    const ingredients = resolveConsumableIngredients(tofuDish, [tofu, milk]);
+    const choices = buildDefaultConsumptionChoices(ingredients);
+    const updated = buildOptimisticConsumedItems(ingredients, choices);
+
+    expect(updated).toEqual([
+      expect.objectContaining({
+        id: "tofu-1",
+        quantityBase: 0,
+        status: ItemStatus.CONSUMED,
+      }),
+      expect.objectContaining({
+        id: "milk-1",
+        quantityBase: 800,
+        status: ItemStatus.ACTIVE,
+      }),
+    ]);
+    expect(
+      listDepletedShoppingTargets(updated, ingredients, [], []),
+    ).toEqual([
+      expect.objectContaining({
+        itemId: "tofu-1",
+        searchName: "두부",
+      }),
+    ]);
+    expect(
+      listDepletedShoppingTargets(updated, ingredients, ["두부"], []),
+    ).toEqual([]);
+
+    const afterCacheRemoval = resolveConsumableIngredients(tofuDish, []);
+    expect(
+      listDepletedShoppingTargets(updated, afterCacheRemoval, [], []),
+    ).toEqual([
+      expect.objectContaining({
+        itemId: "tofu-1",
+        searchName: "두부",
+      }),
+    ]);
   });
 });

@@ -100,3 +100,8 @@ export function isShoppingSearchActive(input: {
 }) {
   return input.isSearching || input.hasSearchResults;
 }
+
+export function initialShoppingQuery(value: string | string[] | undefined) {
+  const raw = Array.isArray(value) ? value[0] : value;
+  return raw?.trim() ?? "";
+}

@@ -1,23 +1,38 @@
 import {
   ItemStatus,
   UnitCode,
+  applyConsumedAmountToInventoryItem,
   type InventoryItem,
   type RecipeRecommendationDish,
 } from "@expirymate/shared";
 import type { StepFlowStep } from "../../components/StepFlow";
 
+type RecipeUsedIngredient = RecipeRecommendationDish["usedIngredients"][number];
+
 export type ConsumptionMode = "skip" | "recommended" | "full" | "half" | "custom";
+export type IngredientMatchStatus = "matched" | "multiple" | "unmatched";
 
 export type ConsumptionChoice = {
   mode: ConsumptionMode;
   amountBase: number;
+  selectedInventoryItemId: string | null;
 };
 
 export type ConsumableIngredient = {
-  inventoryItemId: string;
+  key: string;
   name: string;
-  item: InventoryItem;
+  recipeAmount: number | null;
+  recipeUnitCode: UnitCode | null;
+  inventoryItemId: string | null;
+  item: InventoryItem | null;
+  candidates: InventoryItem[];
+  matchStatus: IngredientMatchStatus;
   recommendedAmountBase: number | null;
+};
+
+const COOKING_NAME_ALIASES: Record<string, string> = {
+  계란: "계란",
+  달걀: "계란",
 };
 
 export function buildCookingSteps(dish: RecipeRecommendationDish): StepFlowStep[] {
@@ -30,14 +45,152 @@ export function buildCookingSteps(dish: RecipeRecommendationDish): StepFlowStep[
     ...dish.steps.map((_, index) => ({
       key: `cook-${index}`,
       label: `조리 ${index + 1}단계`,
-      title: "한 단계씩 같이 해볼게요",
+      title:
+        index === dish.steps.length - 1
+          ? "요리가 거의 완성됐어요"
+          : "한 단계씩 같이 해볼게요",
     })),
     {
       key: "inventory",
       label: "재고 반영",
-      title: "얼마나 사용했나요?",
+      title: "사용한 재료를 보관함에 반영할까요?",
     },
   ];
+}
+
+const MIN_TOKEN_MATCH_LENGTH = 2;
+
+export function normalizeCookingName(value: string) {
+  const normalized = value.toLocaleLowerCase("ko-KR").replace(/[^0-9a-z가-힣]/g, "");
+  return COOKING_NAME_ALIASES[normalized] ?? normalized;
+}
+
+export function cookingNameTokens(value: string) {
+  return value
+    .split(/[\s,/·]+/)
+    .map((part) => normalizeCookingName(part))
+    .filter((part) => part.length > 0);
+}
+
+export function cookingNamesMatch(
+  recipeName: string,
+  displayName: string,
+): "exact" | "token" | null {
+  const recipe = normalizeCookingName(recipeName);
+  if (!recipe) {
+    return null;
+  }
+  if (normalizeCookingName(displayName) === recipe) {
+    return "exact";
+  }
+  if (
+    recipe.length >= MIN_TOKEN_MATCH_LENGTH &&
+    cookingNameTokens(displayName).includes(recipe)
+  ) {
+    return "token";
+  }
+  return null;
+}
+
+export function convertRecipeAmountToInventoryBase(
+  recipeAmount: number,
+  recipeUnitCode: UnitCode,
+  itemUnitCode: UnitCode,
+) {
+  if (!Number.isFinite(recipeAmount) || recipeAmount <= 0) {
+    return null;
+  }
+  if (recipeUnitCode !== itemUnitCode) {
+    return null;
+  }
+  return Math.floor(recipeAmount);
+}
+
+export function remainingQuantityBase(available: number, consumeAmount: number) {
+  return Math.max(0, available - Math.min(Math.max(0, consumeAmount), available));
+}
+
+export function getCookingStepCta(isLastCookingStep: boolean) {
+  return isLastCookingStep ? "요리했어요" : "이 단계까지 했어요";
+}
+
+export function getInventoryApplyCta(hasSelection: boolean) {
+  return hasSelection ? "재고에 반영" : "재고는 그대로 둘게요";
+}
+
+function isActiveInventoryItem(item: InventoryItem | undefined): item is InventoryItem {
+  return Boolean(item && item.status === ItemStatus.ACTIVE && item.quantityBase > 0);
+}
+
+function collectNameCandidates(items: InventoryItem[], recipeName: string) {
+  const exact: InventoryItem[] = [];
+  const token: InventoryItem[] = [];
+
+  for (const item of items) {
+    const kind = cookingNamesMatch(recipeName, item.displayName);
+    if (kind === "exact") {
+      exact.push(item);
+    } else if (kind === "token") {
+      token.push(item);
+    }
+  }
+
+  return exact.length > 0 ? exact : token;
+}
+
+function ingredientKey(ingredient: RecipeUsedIngredient, index: number) {
+  return ingredient.inventoryItemId ?? `recipe:${index}:${ingredient.name}`;
+}
+
+export function recommendedAmountForInventoryItem(
+  recipeAmount: number | null | undefined,
+  recipeUnitCode: UnitCode | null | undefined,
+  item: InventoryItem,
+) {
+  if (!recipeAmount || !recipeUnitCode) {
+    return null;
+  }
+
+  const converted = convertRecipeAmountToInventoryBase(
+    recipeAmount,
+    recipeUnitCode,
+    item.unitCode,
+  );
+  if (converted == null) {
+    return null;
+  }
+
+  return Math.min(converted, item.quantityBase);
+}
+
+function recipeAmountOf(ingredient: RecipeUsedIngredient) {
+  return ingredient.amount ?? null;
+}
+
+function recipeUnitOf(ingredient: RecipeUsedIngredient) {
+  return ingredient.unitCode ?? null;
+}
+
+function withMatchedItem(
+  ingredient: RecipeUsedIngredient,
+  index: number,
+  item: InventoryItem,
+): ConsumableIngredient {
+  return {
+    key: ingredientKey(ingredient, index),
+    name: ingredient.name,
+    recipeAmount: recipeAmountOf(ingredient),
+    recipeUnitCode: recipeUnitOf(ingredient),
+    inventoryItemId: item.id,
+    item,
+    candidates: [item],
+    matchStatus: "matched",
+    recommendedAmountBase: recommendedAmountForInventoryItem(
+      ingredient.amount,
+      ingredient.unitCode,
+      item,
+    ),
+  };
 }
 
 export function resolveConsumableIngredients(
@@ -45,58 +198,117 @@ export function resolveConsumableIngredients(
   inventory: InventoryItem[],
 ): ConsumableIngredient[] {
   const inventoryById = new Map(inventory.map((item) => [item.id, item]));
-  const seen = new Set<string>();
+  const usedIds = new Set<string>();
 
-  return dish.usedIngredients.flatMap((ingredient) => {
-    const id = ingredient.inventoryItemId;
-    if (!id || seen.has(id)) {
-      return [];
+  const idMatched = dish.usedIngredients.map((ingredient, index) => {
+    const linked = ingredient.inventoryItemId
+      ? inventoryById.get(ingredient.inventoryItemId)
+      : undefined;
+    if (!isActiveInventoryItem(linked) || usedIds.has(linked.id)) {
+      return null;
     }
 
-    const item = inventoryById.get(id);
-    if (!item || item.status !== ItemStatus.ACTIVE || item.quantityBase <= 0) {
-      return [];
-    }
-
-    seen.add(id);
-    const recommendedAmountBase =
-      ingredient.amount &&
-      ingredient.unitCode === item.unitCode &&
-      ingredient.amount <= item.quantityBase
-        ? ingredient.amount
-        : null;
-
-    return [
-      {
-        inventoryItemId: id,
-        name: ingredient.name,
-        item,
-        recommendedAmountBase,
-      },
-    ];
+    usedIds.add(linked.id);
+    return withMatchedItem(ingredient, index, linked);
   });
+
+  const unusedActive = inventory.filter(
+    (item) => isActiveInventoryItem(item) && !usedIds.has(item.id),
+  );
+
+  return dish.usedIngredients.map((ingredient, index) => {
+    const matched = idMatched[index];
+    if (matched) {
+      return matched;
+    }
+
+    const candidates = collectNameCandidates(
+      unusedActive.filter((item) => !usedIds.has(item.id)),
+      ingredient.name,
+    );
+
+    if (candidates.length === 1) {
+      const item = candidates[0];
+      if (item) {
+        usedIds.add(item.id);
+        return withMatchedItem(ingredient, index, item);
+      }
+    }
+
+    if (candidates.length > 1) {
+      return {
+        key: ingredientKey(ingredient, index),
+        name: ingredient.name,
+        recipeAmount: recipeAmountOf(ingredient),
+        recipeUnitCode: recipeUnitOf(ingredient),
+        inventoryItemId: null,
+        item: null,
+        candidates,
+        matchStatus: "multiple" as const,
+        recommendedAmountBase: null,
+      };
+    }
+
+    return {
+      key: ingredientKey(ingredient, index),
+      name: ingredient.name,
+      recipeAmount: recipeAmountOf(ingredient),
+      recipeUnitCode: recipeUnitOf(ingredient),
+      inventoryItemId: null,
+      item: null,
+      candidates: [],
+      matchStatus: "unmatched" as const,
+      recommendedAmountBase: null,
+    };
+  });
+}
+
+export function defaultConsumptionChoice(
+  ingredient: ConsumableIngredient,
+): ConsumptionChoice {
+  const recommended = ingredient.recommendedAmountBase;
+  const selectedInventoryItemId = ingredient.inventoryItemId;
+
+  if (ingredient.matchStatus === "matched" && recommended) {
+    return {
+      mode: "recommended",
+      amountBase: recommended,
+      selectedInventoryItemId,
+    };
+  }
+
+  return {
+    mode: "skip",
+    amountBase: 0,
+    selectedInventoryItemId:
+      ingredient.matchStatus === "matched" ? selectedInventoryItemId : null,
+  };
 }
 
 export function buildDefaultConsumptionChoices(
   ingredients: ConsumableIngredient[],
 ): Record<string, ConsumptionChoice> {
   return Object.fromEntries(
-    ingredients.map((ingredient) => {
-      const recommended = ingredient.recommendedAmountBase;
-      return [
-        ingredient.inventoryItemId,
-        recommended
-          ? {
-              mode: "recommended" as const,
-              amountBase: recommended,
-            }
-          : {
-              mode: "skip" as const,
-              amountBase: 0,
-            },
-      ];
-    }),
+    ingredients.map((ingredient) => [
+      ingredient.key,
+      defaultConsumptionChoice(ingredient),
+    ]),
   );
+}
+
+export function resolveSelectedInventoryItem(
+  ingredient: ConsumableIngredient,
+  choice: ConsumptionChoice | undefined,
+) {
+  const selectedId =
+    choice?.selectedInventoryItemId ?? ingredient.inventoryItemId;
+  if (!selectedId) {
+    return null;
+  }
+  if (ingredient.item?.id === selectedId) {
+    return ingredient.item;
+  }
+  return ingredient.candidates.find((item) => item.id === selectedId) ?? null;
 }
 
 export function resolveConsumptionAmount(
@@ -126,16 +338,97 @@ export function buildBatchConsumeItems(
   ingredients: ConsumableIngredient[],
   choices: Record<string, ConsumptionChoice>,
 ) {
+  const seen = new Set<string>();
+
   return ingredients.flatMap((ingredient) => {
-    const choice = choices[ingredient.inventoryItemId];
-    if (!choice || choice.mode === "skip" || choice.amountBase <= 0) {
+    const choice = choices[ingredient.key];
+    const item = resolveSelectedInventoryItem(ingredient, choice);
+    if (!choice || !item || choice.mode === "skip" || choice.amountBase <= 0) {
+      return [];
+    }
+    if (seen.has(item.id)) {
       return [];
     }
 
+    seen.add(item.id);
     return [
       {
-        inventoryItemId: ingredient.inventoryItemId,
-        amountBase: Math.min(choice.amountBase, ingredient.item.quantityBase),
+        inventoryItemId: item.id,
+        amountBase: Math.min(choice.amountBase, item.quantityBase),
+      },
+    ];
+  });
+}
+
+export function buildOptimisticConsumedItems(
+  ingredients: ConsumableIngredient[],
+  choices: Record<string, ConsumptionChoice>,
+): InventoryItem[] {
+  const payload = buildBatchConsumeItems(ingredients, choices);
+
+  return payload.flatMap((entry) => {
+    const ingredient = ingredients.find((candidate) => {
+      const selected = resolveSelectedInventoryItem(
+        candidate,
+        choices[candidate.key],
+      );
+      return selected?.id === entry.inventoryItemId;
+    });
+    const original = ingredient
+      ? resolveSelectedInventoryItem(ingredient, choices[ingredient.key])
+      : null;
+    if (!original) {
+      return [];
+    }
+
+    const next = applyConsumedAmountToInventoryItem(original, entry.amountBase);
+    return [
+      {
+        ...next,
+        status:
+          next.quantityBase <= 0 ? ItemStatus.CONSUMED : original.status,
+      },
+    ];
+  });
+}
+
+export function listDepletedShoppingTargets(
+  updatedItems: InventoryItem[],
+  ingredients: ConsumableIngredient[],
+  alreadyListedNames: string[],
+  alreadyOpenedKeys: string[],
+) {
+  const listedKeys = new Set(
+    alreadyListedNames.map((name) => normalizeCookingName(name)).filter(Boolean),
+  );
+  const openedKeys = new Set(alreadyOpenedKeys);
+  const seen = new Set<string>();
+
+  return updatedItems.flatMap((item) => {
+    if (item.status !== ItemStatus.CONSUMED && item.quantityBase > 0) {
+      return [];
+    }
+
+    const ingredient = ingredients.find(
+      (candidate) =>
+        candidate.key === item.id ||
+        candidate.inventoryItemId === item.id ||
+        candidate.item?.id === item.id ||
+        candidate.candidates.some((entry) => entry.id === item.id),
+    );
+    const searchName = ingredient?.name ?? item.displayName;
+    const key = normalizeCookingName(searchName);
+    if (!key || seen.has(key) || listedKeys.has(key) || openedKeys.has(key)) {
+      return [];
+    }
+
+    seen.add(key);
+    return [
+      {
+        itemId: item.id,
+        label: searchName,
+        searchName,
+        key,
       },
     ];
   });
@@ -177,7 +470,10 @@ export function getCookingGuideMessage(
     return "준비한 재료를 하나씩 눌러 주세요.";
   }
   if (currentIndex > cookingStepCount) {
-    return "실제로 쓴 양만큼 냉장고에서 정리해 둘게요.";
+    return "실제로 사용한 양이 다르면 수정할 수 있어요.";
+  }
+  if (currentIndex === cookingStepCount) {
+    return "요리가 거의 완성됐어요.";
   }
   return "카드를 누르면 이 단계를 마친 것으로 표시할게요.";
 }

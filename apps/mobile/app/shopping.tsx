@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import { ChevronDown, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -20,6 +21,7 @@ import { AffiliateProductGroupView } from "../src/features/affiliate/affiliate-p
 import { AffiliateDisclosure } from "../src/features/affiliate/affiliate-disclosure";
 import {
   getShoppingHeroNotices,
+  initialShoppingQuery,
   isShoppingSearchActive,
 } from "../src/features/affiliate/shopping-hero";
 import {
@@ -41,11 +43,14 @@ import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
 export default function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
   const shoppingQuery = useAffiliateShopping();
-  const [query, setQuery] = useState("");
+  const params = useLocalSearchParams<{ q?: string | string[] }>();
+  const incomingQuery = initialShoppingQuery(params.q);
+  const [query, setQuery] = useState(incomingQuery);
   const [recentVisibleCount, setRecentVisibleCount] = useState(
     SHOPPING_RECENT_PAGE_SIZE,
   );
   const trackedOpened = useRef(false);
+  const appliedIncomingQuery = useRef<string | null>(null);
   const searchInputRef = useRef<TextInput>(null);
   const searchMutation = useMutation({
     mutationFn: async (value: string) => {
@@ -65,6 +70,19 @@ export default function ShoppingScreen() {
       properties: { source: "home_or_context" },
     }).catch(() => undefined);
   }, []);
+
+  useEffect(() => {
+    if (!incomingQuery || !activeSpaceId) {
+      return;
+    }
+    if (appliedIncomingQuery.current === incomingQuery) {
+      return;
+    }
+    appliedIncomingQuery.current = incomingQuery;
+    setQuery(incomingQuery);
+    searchMutation.reset();
+    searchMutation.mutate(incomingQuery);
+  }, [activeSpaceId, incomingQuery, searchMutation]);
 
   const submitSearch = () => {
     const trimmed = query.trim();

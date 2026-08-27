@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getShoppingHeroNotice,
   getShoppingHeroNotices,
+  initialShoppingQuery,
   isShoppingSearchActive,
 } from "./shopping-hero";
 
@@ -61,5 +62,13 @@ describe("getShoppingHeroNotices", () => {
         message: "아래 목록에서 골라 보거나, 다른 재료 이름을 알려 주세요.",
       }),
     ]);
+  });
+});
+
+describe("initialShoppingQuery", () => {
+  it("reads a trimmed incoming search from cooking leftovers", () => {
+    expect(initialShoppingQuery(" 두부 ")).toBe("두부");
+    expect(initialShoppingQuery(["계란", "무시"])).toBe("계란");
+    expect(initialShoppingQuery(undefined)).toBe("");
   });
 });

@@ -1,14 +1,17 @@
 import { formatBaseQuantity, type InventoryItem } from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useBatchConsumeInventoryItems } from "../inventory/use-batch-consume-inventory-items";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useDeferredInventoryItemRemoval } from "../inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../inventory/use-inventory-list";
+import { useActiveSpace } from "../spaces/space-provider";
 import {
   buildBatchConsumeItems,
   buildCookingSteps,
-  buildDefaultConsumptionChoices,
+  buildOptimisticConsumedItems,
+  defaultConsumptionChoice,
   remainingPrepCount,
   resolveConsumableIngredients,
+  resolveSelectedInventoryItem,
   type ConsumptionChoice,
 } from "./cooking";
 import { useRecipeRecommendation } from "./use-recipe-recommendation";
@@ -35,7 +38,15 @@ export function useCookingSession() {
   );
   const recommendationQuery = useRecipeRecommendation(recommendationId);
   const inventoryQuery = useInventoryList();
-  const consumeMutation = useBatchConsumeInventoryItems();
+  const { activeSpaceId } = useActiveSpace();
+  const {
+    scheduleRemoval,
+    undoRemoval,
+    undoLabel,
+    errorMessage,
+    isPending: inventoryApplyPending,
+    clearError,
+  } = useDeferredInventoryItemRemoval();
   const favoritesQuery = useRecipeFavorites();
   const setFavoriteMutation = useSetRecipeFavorite();
   const engagementMutation = useRecipeEngagement();
@@ -50,6 +61,8 @@ export function useCookingSession() {
   const [updatedItems, setUpdatedItems] = useState<InventoryItem[] | null>(
     null,
   );
+  const [openedShoppingKeys, setOpenedShoppingKeys] = useState<string[]>([]);
+  const cookingCompletedRecorded = useRef(false);
 
   const recommendation = recommendationQuery.data;
   const dish =
@@ -93,17 +106,35 @@ export function useCookingSession() {
   );
 
   useEffect(() => {
-    if (!consumableIngredients.length) {
+    if (inventoryQuery.isPending) {
       return;
     }
 
     setConsumptionChoices((current) => {
-      if (Object.keys(current).length > 0) {
-        return current;
+      let changed = false;
+      const next = { ...current };
+
+      for (const ingredient of consumableIngredients) {
+        const existing = next[ingredient.key];
+        if (!existing) {
+          next[ingredient.key] = defaultConsumptionChoice(ingredient);
+          changed = true;
+          continue;
+        }
+
+        if (
+          ingredient.matchStatus === "matched" &&
+          !existing.selectedInventoryItemId &&
+          ingredient.inventoryItemId
+        ) {
+          next[ingredient.key] = defaultConsumptionChoice(ingredient);
+          changed = true;
+        }
       }
-      return buildDefaultConsumptionChoices(consumableIngredients);
+
+      return changed ? next : current;
     });
-  }, [consumableIngredients]);
+  }, [consumableIngredients, inventoryQuery.isPending]);
 
   const leaveCooking = useCallback(() => {
     if (updatedItems || !router.canGoBack()) {
@@ -161,7 +192,12 @@ export function useCookingSession() {
         ? current
         : [...current, cookingStepIndex],
     );
-    if (cookingStepIndex === dish.steps.length - 1 && recommendationId) {
+    if (
+      cookingStepIndex === dish.steps.length - 1 &&
+      recommendationId &&
+      !cookingCompletedRecorded.current
+    ) {
+      cookingCompletedRecorded.current = true;
       engagementMutation.mutate({
         recommendationId,
         dishIndex: requestedDishIndex,
@@ -178,7 +214,11 @@ export function useCookingSession() {
     requestedDishIndex,
   ]);
 
-  const handleApplyInventory = useCallback(async () => {
+  const handleApplyInventory = useCallback(() => {
+    if (inventoryApplyPending || updatedItems !== null) {
+      return;
+    }
+
     const items = buildBatchConsumeItems(
       consumableIngredients,
       consumptionChoices,
@@ -189,9 +229,55 @@ export function useCookingSession() {
       return;
     }
 
-    const result = await consumeMutation.mutateAsync({ items });
-    setUpdatedItems(result.items);
-  }, [consumableIngredients, consumeMutation, consumptionChoices]);
+    if (!activeSpaceId) {
+      return;
+    }
+
+    clearError();
+
+    for (const entry of items) {
+      const ingredient = consumableIngredients.find((candidate) => {
+        const selected = resolveSelectedInventoryItem(
+          candidate,
+          consumptionChoices[candidate.key],
+        );
+        return selected?.id === entry.inventoryItemId;
+      });
+      const original = ingredient
+        ? resolveSelectedInventoryItem(
+            ingredient,
+            consumptionChoices[ingredient.key],
+          )
+        : null;
+      if (!original) {
+        continue;
+      }
+      scheduleRemoval(original, "consume", entry.amountBase);
+    }
+
+    setUpdatedItems(
+      buildOptimisticConsumedItems(consumableIngredients, consumptionChoices),
+    );
+  }, [
+    activeSpaceId,
+    clearError,
+    consumableIngredients,
+    consumptionChoices,
+    inventoryApplyPending,
+    scheduleRemoval,
+    updatedItems,
+  ]);
+
+  const handleUndoInventory = useCallback(() => {
+    undoRemoval();
+    setUpdatedItems(null);
+  }, [undoRemoval]);
+
+  const markShoppingOpened = useCallback((key: string) => {
+    setOpenedShoppingKeys((current) =>
+      current.includes(key) ? current : [...current, key],
+    );
+  }, []);
 
   const handleToggleFavorite = useCallback(() => {
     if (!recommendationId || !dish) {
@@ -222,21 +308,28 @@ export function useCookingSession() {
   const cookingStepCompleted =
     cookingStepIndex !== null &&
     completedCookingSteps.includes(cookingStepIndex);
-  const mutationError =
-    consumeMutation.error instanceof Error
-      ? consumeMutation.error.message
-      : null;
+  const isLastCookingStep =
+    cookingStepIndex !== null &&
+    dish != null &&
+    cookingStepIndex === dish.steps.length - 1;
+  const mutationError = errorMessage;
   const favoriteMutationError =
     setFavoriteMutation.error instanceof Error
       ? setFavoriteMutation.error.message
       : null;
+
+  useEffect(() => {
+    if (errorMessage) {
+      setUpdatedItems(null);
+    }
+  }, [errorMessage]);
 
   return {
     recommendationId,
     requestedDishIndex,
     recommendationQuery,
     inventoryQuery,
-    consumeMutation,
+    consumeMutation: { isPending: inventoryApplyPending },
     setFavoriteMutation,
     currentIndex,
     checkedPrepKeys,
@@ -244,6 +337,10 @@ export function useCookingSession() {
     consumptionChoices,
     setConsumptionChoices,
     updatedItems,
+    undoLabel,
+    handleUndoInventory,
+    openedShoppingKeys,
+    markShoppingOpened,
     dish,
     steps,
     consumptionStepIndex,
@@ -260,6 +357,7 @@ export function useCookingSession() {
     checkedPrepKeySet,
     uncheckedPrepCount,
     cookingStepCompleted,
+    isLastCookingStep,
     mutationError,
     favoriteMutationError,
   };
