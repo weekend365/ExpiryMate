@@ -1,9 +1,5 @@
-import {
-  formatBaseQuantity,
-  ItemStatus,
-  type InventoryItem,
-} from "@expirymate/shared";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { formatBaseQuantity, ItemStatus } from "@expirymate/shared";
+import { router, useNavigation } from "expo-router";
 import {
   CheckCircle2,
   ChevronRight,
@@ -13,7 +9,7 @@ import {
   Refrigerator,
   ShoppingBasket,
 } from "lucide-react-native";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
@@ -23,134 +19,53 @@ import { Pill } from "../../src/components/Pill";
 import { QuantityStepper } from "../../src/components/QuantityStepper";
 import { Screen } from "../../src/components/Screen";
 import { StepFlow } from "../../src/components/StepFlow";
-import { useBatchConsumeInventoryItems } from "../../src/features/inventory/use-batch-consume-inventory-items";
-import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import {
-  buildBatchConsumeItems,
-  buildCookingSteps,
-  buildDefaultConsumptionChoices,
   getCookingGuideMessage,
   getPrepContinueCta,
   hasSelectedConsumption,
-  remainingPrepCount,
-  resolveConsumableIngredients,
   resolveConsumptionAmount,
   unitLabel,
   type ConsumableIngredient,
   type ConsumptionChoice,
   type ConsumptionMode,
 } from "../../src/features/recipes/cooking";
-import { useRecipeRecommendation } from "../../src/features/recipes/use-recipe-recommendation";
-import {
-  getRecipeFavoriteKey,
-  useRecipeFavorites,
-  useRecipeEngagement,
-  useSetRecipeFavorite,
-} from "../../src/features/recipes/use-recipe-recommendations";
+import { useCookingSession } from "../../src/features/recipes/use-cooking-session";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 
 export default function CookingScreen() {
   const navigation = useNavigation();
   const { shouldStack, isRegular } = useResponsiveLayout();
-  const params = useLocalSearchParams<{
-    recommendationId?: string | string[];
-    dishIndex?: string | string[];
-  }>();
-  const recommendationId = firstParam(params.recommendationId);
-  const requestedDishIndex = Number.parseInt(
-    firstParam(params.dishIndex) ?? "0",
-    10,
-  );
-  const recommendationQuery = useRecipeRecommendation(recommendationId);
-  const inventoryQuery = useInventoryList();
-  const consumeMutation = useBatchConsumeInventoryItems();
-  const favoritesQuery = useRecipeFavorites();
-  const setFavoriteMutation = useSetRecipeFavorite();
-  const engagementMutation = useRecipeEngagement();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [checkedPrepKeys, setCheckedPrepKeys] = useState<string[]>([]);
-  const [completedCookingSteps, setCompletedCookingSteps] = useState<number[]>(
-    [],
-  );
-  const [consumptionChoices, setConsumptionChoices] = useState<
-    Record<string, ConsumptionChoice>
-  >({});
-  const [updatedItems, setUpdatedItems] = useState<InventoryItem[] | null>(
-    null,
-  );
-
-  const recommendation = recommendationQuery.data;
-  const dish =
-    Number.isInteger(requestedDishIndex) && requestedDishIndex >= 0
-      ? recommendation?.recommendations[requestedDishIndex]
-      : undefined;
-  const steps = useMemo(() => (dish ? buildCookingSteps(dish) : []), [dish]);
-  const consumptionStepIndex = dish ? dish.steps.length + 1 : -1;
-  const cookingStepIndex =
-    currentIndex > 0 && currentIndex < consumptionStepIndex
-      ? currentIndex - 1
-      : null;
-  const prepRows = useMemo(
-    () =>
-      dish?.usedIngredients.map((ingredient, index) => ({
-        key:
-          ingredient.inventoryItemId ??
-          `${ingredient.name}-${requestedDishIndex}-${index}`,
-        name: ingredient.name,
-        amountLabel:
-          ingredient.amount && ingredient.unitCode
-            ? formatBaseQuantity(ingredient.amount, ingredient.unitCode)
-            : null,
-      })) ?? [],
-    [dish, requestedDishIndex],
-  );
-  const consumableIngredients = useMemo(
-    () =>
-      dish ? resolveConsumableIngredients(dish, inventoryQuery.data ?? []) : [],
-    [dish, inventoryQuery.data],
-  );
-  const isFavorite = Boolean(
-    recommendationId &&
-    favoritesQuery.data?.some(
-      (favorite) =>
-        getRecipeFavoriteKey(
-          favorite.sourceRecommendationId,
-          favorite.sourceDishIndex,
-        ) === getRecipeFavoriteKey(recommendationId, requestedDishIndex),
-    ),
-  );
-
-  useEffect(() => {
-    if (!consumableIngredients.length) {
-      return;
-    }
-
-    setConsumptionChoices((current) => {
-      if (Object.keys(current).length > 0) {
-        return current;
-      }
-      return buildDefaultConsumptionChoices(consumableIngredients);
-    });
-  }, [consumableIngredients]);
-
-  const leaveCooking = useCallback(() => {
-    if (updatedItems || !router.canGoBack()) {
-      router.replace("/(tabs)/recommendations");
-      return;
-    }
-
-    router.back();
-  }, [updatedItems]);
-
-  const goToPreviousStep = useCallback(() => {
-    if (updatedItems || currentIndex === 0) {
-      leaveCooking();
-      return;
-    }
-
-    setCurrentIndex((index) => Math.max(0, index - 1));
-  }, [currentIndex, leaveCooking, updatedItems]);
+  const {
+    recommendationId,
+    recommendationQuery,
+    inventoryQuery,
+    consumeMutation,
+    setFavoriteMutation,
+    currentIndex,
+    setCheckedPrepKeys,
+    consumptionChoices,
+    setConsumptionChoices,
+    updatedItems,
+    dish,
+    steps,
+    consumptionStepIndex,
+    cookingStepIndex,
+    prepRows,
+    consumableIngredients,
+    isFavorite,
+    goToPreviousStep,
+    goForward,
+    toggleCookingStep,
+    completeCookingStepAndAdvance,
+    handleApplyInventory,
+    handleToggleFavorite,
+    checkedPrepKeySet,
+    uncheckedPrepCount,
+    cookingStepCompleted,
+    mutationError,
+    favoriteMutationError,
+  } = useCookingSession();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -270,90 +185,6 @@ export default function CookingScreen() {
       </Screen>
     );
   }
-
-  const checkedPrepKeySet = new Set(checkedPrepKeys);
-  const uncheckedPrepCount = remainingPrepCount(
-    checkedPrepKeys.length,
-    prepRows.length,
-  );
-  const cookingStepCompleted =
-    cookingStepIndex !== null &&
-    completedCookingSteps.includes(cookingStepIndex);
-  const mutationError =
-    consumeMutation.error instanceof Error
-      ? consumeMutation.error.message
-      : null;
-  const favoriteMutationError =
-    setFavoriteMutation.error instanceof Error
-      ? setFavoriteMutation.error.message
-      : null;
-
-  const goForward = () => {
-    if (
-      currentIndex === 0 &&
-      recommendationId &&
-      Number.isInteger(requestedDishIndex)
-    ) {
-      engagementMutation.mutate({
-        recommendationId,
-        dishIndex: requestedDishIndex,
-        action: "cooking_started",
-      });
-    }
-    setCurrentIndex((index) => Math.min(consumptionStepIndex, index + 1));
-  };
-
-  const toggleCookingStep = (stepIndex: number) => {
-    setCompletedCookingSteps((current) =>
-      current.includes(stepIndex)
-        ? current.filter((index) => index !== stepIndex)
-        : [...current, stepIndex],
-    );
-  };
-
-  const completeCookingStepAndAdvance = () => {
-    if (cookingStepIndex === null) {
-      return;
-    }
-    setCompletedCookingSteps((current) =>
-      current.includes(cookingStepIndex)
-        ? current
-        : [...current, cookingStepIndex],
-    );
-    if (cookingStepIndex === dish.steps.length - 1) {
-      engagementMutation.mutate({
-        recommendationId,
-        dishIndex: requestedDishIndex,
-        action: "cooking_completed",
-      });
-    }
-    goForward();
-  };
-
-  const handleApplyInventory = async () => {
-    const items = buildBatchConsumeItems(
-      consumableIngredients,
-      consumptionChoices,
-    );
-
-    if (!items.length) {
-      setUpdatedItems([]);
-      return;
-    }
-
-    const result = await consumeMutation.mutateAsync({ items });
-    setUpdatedItems(result.items);
-  };
-
-  const handleToggleFavorite = () => {
-    setFavoriteMutation.mutate({
-      recommendationId,
-      dishIndex: requestedDishIndex,
-      dish,
-      inventorySnapshot: recommendation?.inventorySnapshot ?? [],
-      favorite: !isFavorite,
-    });
-  };
 
   const footer =
     currentIndex === 0 ? (
@@ -757,10 +588,6 @@ function ConsumptionCard({
       ) : null}
     </View>
   );
-}
-
-function firstParam(value: string | string[] | undefined) {
-  return Array.isArray(value) ? value[0] : value;
 }
 
 const styles = StyleSheet.create({
