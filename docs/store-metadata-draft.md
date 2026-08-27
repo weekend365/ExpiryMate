@@ -1,7 +1,7 @@
 ---
 status: draft
 owner: product-release
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-27
 source_of_truth: true
 data_as_of: 2026-08-18
 ---
@@ -113,12 +113,16 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 | Coarse Location / Identifiers / Usage Data / Diagnostics | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 기기 식별자, 광고·앱 상호작용, 진단 | Third-Party Advertising / Analytics | SDK 실제 설정대로 신고 / Tracking=No |
 | Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
 | Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
+| Photos or Videos | 영수증·냉장고 일괄 등록용으로 사용자가 고른 사진 | App Functionality | 연결됨 / 추적 아님. 원본은 파싱 후 폐기 |
 
-제3자: 호스팅·메일 수탁·**OpenAI(미국, 추천 시)** · OAuth 제공자 · Expo Push ·
+제3자: 호스팅·메일 수탁·**OpenAI(미국, 요리 추천·사진 재료 인식)** · OAuth 제공자 · Expo Push ·
 **쿠팡 파트너스(상품 조회 시 정규화한 재료명 또는 직접 입력 검색어 한 건)**.
 상세는 `store-privacy-declarations.md` 표와 `/privacy` 본문을 따릅니다.
 
-카메라: 바코드/OCR용 — Privacy Label의 “Photos” 라이브러리와 혼동하지 말 것. 카메라 사용은 권한 문구로 설명.
+카메라(실시간 프레임)와 사진 라이브러리는 스토어 Label에서 구분합니다.
+바코드/OCR용 실시간 촬영은 Privacy Label의 “Photos”가 아닙니다.
+영수증·냉장고 사진 일괄 등록은 사진 라이브러리 또는 카메라로 찍은 정지 사진을
+서버로 보내므로 Photos or Videos를 App Functionality로 신고합니다. 원본은 파싱 후 폐기합니다.
 
 ---
 
@@ -157,7 +161,14 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 다른 구성원이 있는 공유 공간의 소유자는 먼저 소유권을 이전하거나 공간을 삭제해야 합니다.
 
 【카메라】
-바코드·유통기한 스캔(OCR)에만 사용합니다. Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
+바코드·유통기한 스캔(OCR)과, 사용자가 선택한 영수증·냉장고 사진 촬영에
+사용합니다. OCR 프레임은 기기에만 두고 서버에 올리지 않습니다.
+Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
+
+【사진 라이브러리】
+영수증·냉장고 사진으로 재료를 한꺼번에 넣을 때만 사용합니다(플래그 on).
+고른 사진은 동의 후 서버·OpenAI Vision으로 보내 후보를 만들고 원본은 파싱 후
+폐기합니다. 바코드 OCR 경로와 섞이지 않습니다.
 
 【보상형 광고】
 - 무료 추천 소진 후 사용자가 “광고 보고 추천 1회 받기”를 명시적으로 선택합니다.

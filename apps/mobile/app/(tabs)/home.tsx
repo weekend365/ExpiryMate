@@ -31,9 +31,11 @@ import { homeScreenStyles as styles } from "../../src/features/home/home-screen-
 import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import {
+  photoParseRoute,
   registerRoute,
   scannerRoute,
 } from "../../src/features/registration/registration-return";
+import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors, spacing } from "../../src/shared/theme";
@@ -146,6 +148,13 @@ export default function HomeScreen() {
 
   const handleOpenShopping = () => {
     router.push("/shopping");
+  };
+
+  const handleOpenPhotoParse = () => {
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
+    router.push(photoParseRoute("home"));
   };
 
   const handleNoticeAction = (action: HomeNoticeAction) => {
@@ -478,6 +487,9 @@ export default function HomeScreen() {
               onOpenScanner={handleOpenScanner}
               onManualRegister={handleManualRegister}
               onOpenShopping={handleOpenShopping}
+              onOpenPhotoParse={
+                isInventoryPhotoParseEnabled() ? handleOpenPhotoParse : undefined
+              }
             />
           </View>
         </ScrollView>

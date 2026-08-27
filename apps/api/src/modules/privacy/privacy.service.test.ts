@@ -143,6 +143,7 @@ describe("PrivacyService", () => {
       "rewardedAdSession.deleteMany",
       "barcodeRewardCredit.deleteMany",
       "monetizationFunnelEvent.deleteMany",
+      "inventoryPhotoParseEvent.deleteMany",
       "recipeRecommendation.deleteMany",
       "spaceInvitation.deleteMany",
       "inventorySpaceMembership.deleteMany",
@@ -253,6 +254,10 @@ function createPrismaMock(
     ),
     monetizationFunnelEvent: createDeleteManyMock(
       "monetizationFunnelEvent.deleteMany",
+      operations,
+    ),
+    inventoryPhotoParseEvent: createDeleteManyMock(
+      "inventoryPhotoParseEvent.deleteMany",
       operations,
     ),
     recipeRecommendation: createDeleteManyMock(

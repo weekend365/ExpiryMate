@@ -1,7 +1,7 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-27
 source_of_truth: true
 data_as_of: 2026-07-24
 ---
@@ -59,11 +59,14 @@ data_as_of: 2026-07-24
 - WebSocket/SSE 실시간 동기화와 공간 변경 이력
 - 초대 QR·전화번호·공개 재사용 링크
 - OCR·카탈로그 UX 고도화
+- 영수증·냉장고 사진 일괄 등록: 2026-08-27 코드 완료, 플래그 기본 off.
+  Doppler와 Railway API 변수는 반영됨. 운영 재배포·migration은 다음 API 배포 때.
+  상세 [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md)
 
 ## 갱신 규칙
 
 - Phase, P0, 블로커가 바뀌면 이 문서를 같은 변경에서 갱신합니다.
 - 외부 서비스 상태를 확인한 날 `data_as_of`를 갱신합니다.
-- 완료된 상세 기록은 [`archive/project-history-2026-07.md`](./archive/project-history-2026-07.md)처럼
+- 완료된 상세 기록은 [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md)처럼
   월별 아카이브로 이동합니다.
 

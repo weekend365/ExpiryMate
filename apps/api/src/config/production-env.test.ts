@@ -64,6 +64,15 @@ describe("validateProductionEnvironment", () => {
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
 
+  it("requires OPENAI_API_KEY when photo parse is enabled", () => {
+    const env = validProductionEnv();
+    delete env.OPENAI_API_KEY;
+    env.RECIPE_AI_ENABLED = "false";
+    env.INVENTORY_PHOTO_PARSE_ENABLED = "true";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(/OPENAI_API_KEY/);
+  });
+
   it("requires reward secrets when barcode rewards are enabled", () => {
     const env = validProductionEnv();
     env.BARCODE_REWARDS_ENABLED = "true";

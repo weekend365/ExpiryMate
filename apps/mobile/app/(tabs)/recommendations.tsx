@@ -17,6 +17,7 @@ import {
   Coffee,
   Cookie,
   Heart,
+  ImageIcon,
   Moon,
   PenLine,
   Play,
@@ -89,6 +90,8 @@ import { useInventoryList } from "../../src/features/inventory/use-inventory-lis
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
+import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
+import { photoParseRoute } from "../../src/features/registration/registration-return";
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
@@ -1138,8 +1141,24 @@ export default function RecommendationsScreen() {
             fullWidth
             variant="surface"
           >
-            직접 입력할게요
+              직접 입력할게요
           </Button>
+          {isInventoryPhotoParseEnabled() ? (
+            <Button
+              icon={ImageIcon}
+              onPress={() => {
+                setEntryMethodVisible(false);
+                if (activeSpaceId) {
+                  clearPrefill(activeSpaceId);
+                }
+                router.push(photoParseRoute("home"));
+              }}
+              fullWidth
+              variant="surface"
+            >
+              사진으로 넣을게요
+            </Button>
+          ) : null}
         </View>
       </BottomSheet>
 

@@ -1,7 +1,7 @@
 ---
 status: active
 owner: project
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-27
 source_of_truth: false
 ---
 
@@ -17,7 +17,7 @@ source_of_truth: false
 | v1 기능 범위 | [`product/release-scope.md`](./product/release-scope.md) |
 | 배포, migration, 장애 대응 | [`operations/deployment.md`](./operations/deployment.md) |
 | 시크릿과 환경별 설정 | [`dev-secrets.md`](./dev-secrets.md) |
-| 과거 완료 기록 | [`archive/project-history-2026-07.md`](./archive/project-history-2026-07.md) |
+| 과거 완료 기록 | [`archive/README.md`](./archive/README.md) · [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md) |
 | 전체 문서 탐색 | [`README.md`](./README.md) |
 
 제품 표시명은 **장고야 부탁해(Jango)**이며, 패키지와 bundle ID의 `expirymate`

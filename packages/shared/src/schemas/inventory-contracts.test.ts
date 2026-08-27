@@ -4,8 +4,13 @@ import { fieldLimits } from "../constants/field-limits";
 import {
   createInventoryItemBodySchema,
   batchConsumeInventoryItemsBodySchema,
+  batchCreateInventoryItemsBodySchema,
   inventoryFormSchema,
+  inventoryPhotoParseCandidateSchema,
+  inventoryPhotoParseResponseSchema,
+  inventoryPhotoParseVisionPayloadSchema,
 } from "./inventory";
+import { PHOTO_PARSE_MAX_ITEMS } from "../constants/field-limits";
 import { registerPushTokenSchema } from "./notifications";
 import { contributeBarcodeProductSchema } from "./product-master";
 
@@ -80,6 +85,92 @@ describe("inventory write contracts", () => {
       batchConsumeInventoryItemsBodySchema.safeParse({
         items: [{ inventoryItemId: "milk-1", amountBase: 0.5 }],
       }).success,
+    ).toBe(false);
+  });
+});
+
+describe("photo parse contracts", () => {
+  it("accepts a receipt candidate without expiry", () => {
+    expect(
+      inventoryPhotoParseCandidateSchema.parse({
+        displayName: "서울우유",
+        quantity: 2,
+        unitCode: UnitCode.EA,
+        confidence: 0.9,
+        needsReview: false,
+      }),
+    ).toMatchObject({
+      displayName: "서울우유",
+      quantity: 2,
+    });
+  });
+
+  it("rejects empty names and more than 30 items", () => {
+    expect(
+      inventoryPhotoParseCandidateSchema.safeParse({
+        displayName: "  ",
+        confidence: 0.5,
+        needsReview: true,
+      }).success,
+    ).toBe(false);
+    expect(
+      inventoryPhotoParseResponseSchema.safeParse({
+        scene: "receipt",
+        items: Array.from({ length: PHOTO_PARSE_MAX_ITEMS + 1 }, (_, index) => ({
+          displayName: `재료 ${index + 1}`,
+          confidence: 0.4,
+          needsReview: true,
+        })),
+      }).success,
+    ).toBe(false);
+  });
+
+  it("rejects an invalid suggested expiry date", () => {
+    expect(
+      inventoryPhotoParseCandidateSchema.safeParse({
+        displayName: "우유",
+        suggestedExpiryDate: "2026/08/01",
+        confidence: 0.8,
+        needsReview: false,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("accepts a vision payload and a batch-create body", () => {
+    expect(
+      inventoryPhotoParseVisionPayloadSchema.parse({
+        items: [
+          {
+            displayName: "우유",
+            brand: null,
+            category: null,
+            quantity: 2,
+            unit: "개",
+            unitCode: UnitCode.EA,
+            suggestedStorageLocation: "fridge",
+            suggestedExpiryDate: null,
+            confidence: 0.86,
+            needsReview: false,
+            reason: null,
+          },
+        ],
+      }).items,
+    ).toHaveLength(1);
+    expect(
+      batchCreateInventoryItemsBodySchema.parse({
+        items: [
+          {
+            displayName: "서울우유",
+            quantity: 1,
+            storageLocation: StorageLocation.FRIDGE,
+            expiryDate: "2026-07-30",
+            expirySource: ExpirySource.MANUAL,
+          },
+        ],
+      }).items,
+    ).toHaveLength(1);
+    expect(
+      batchCreateInventoryItemsBodySchema.safeParse({ items: [] }).success,
     ).toBe(false);
   });
 });

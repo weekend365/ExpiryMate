@@ -10,11 +10,16 @@ import {
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
 import { InventorySpaceRole } from "@prisma/client";
 import {
   batchConsumeInventoryItemsBodySchema,
+  batchCreateInventoryItemsBodySchema,
   affiliateProductSearchRequestSchema,
   createInventoryItemBodySchema,
   createUserStorageLocationBodySchema,
@@ -24,6 +29,7 @@ import {
   updateInventoryItemBodySchema,
   updateUserStorageLocationBodySchema,
   type BatchConsumeInventoryItemsBody,
+  type BatchCreateInventoryItemsBody,
   type AffiliateProductSearchRequest,
   type CreateInventoryItemBody,
   type CreateUserStorageLocationBody,
@@ -38,6 +44,7 @@ import { RegisteredGuard } from "../auth/registered.guard";
 import { DashboardService } from "../dashboard/dashboard.service";
 import { BatchDiscardInventoryItemsDto } from "../inventory/dto/batch-discard-inventory-items.dto";
 import { InventoryService } from "../inventory/inventory.service";
+import { InventoryPhotoParseService } from "../inventory/inventory-photo-parse.service";
 import { RecipesService } from "../recipes/recipes.service";
 import { AffiliateOfferService } from "../affiliate/affiliate-offer.service";
 import { SettingsService } from "../settings/settings.service";
@@ -50,6 +57,7 @@ export class SpaceInventoryController {
   constructor(
     private readonly spacesService: SpacesService,
     private readonly inventoryService: InventoryService,
+    private readonly photoParseService: InventoryPhotoParseService,
   ) {}
 
   @Get()
@@ -95,6 +103,39 @@ export class SpaceInventoryController {
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.inventoryService.create(body, userId, spaceId);
+  }
+
+  @Post("parse-photo")
+  @UseInterceptors(
+    FileInterceptor("image", {
+      storage: memoryStorage(),
+      limits: { fileSize: 4 * 1024 * 1024 },
+    }),
+  )
+  async parsePhoto(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body("scene") scene: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.photoParseService.parsePhoto({
+      ownerKey: userId,
+      spaceId,
+      scene,
+      file,
+    });
+  }
+
+  @Post("batch-create")
+  async batchCreate(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+    @Body(new ZodValidationPipe(batchCreateInventoryItemsBodySchema))
+    body: BatchCreateInventoryItemsBody,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.inventoryService.createMany(body.items, userId, spaceId);
   }
 
   @Patch(":id")

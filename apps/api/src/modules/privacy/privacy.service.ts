@@ -14,8 +14,8 @@ import type {
 import { PrismaService } from "../../database/prisma.service";
 
 const DEFAULT_CONTACT_EMAIL = "privacy@expirymate.local";
-/** Bumped for recipe preferences and recent engagement summaries sent to AI. */
-const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v3";
+/** Bumped for recipe preferences, engagement summaries, and photo inventory parse. */
+const DEFAULT_AI_DATA_NOTICE_VERSION = "ai-data-notice-v4";
 
 @Injectable()
 export class PrivacyService {
@@ -110,7 +110,7 @@ export class PrivacyService {
 
     if (!status.hasAcceptedCurrentAiDataNotice) {
       throw new PreconditionFailedException(
-        "AI 추천을 받으려면 AI 데이터 고지 동의가 필요합니다.",
+        "먼저 안내를 살펴봐 주셔야 해요.",
       );
     }
   }
@@ -151,6 +151,7 @@ export class PrivacyService {
       await tx.rewardedAdSession.deleteMany({ where: { ownerKey: userId } });
       await tx.barcodeRewardCredit.deleteMany({ where: { ownerKey: userId } });
       await tx.monetizationFunnelEvent.deleteMany({ where: { ownerKey: userId } });
+      await tx.inventoryPhotoParseEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
         where: {

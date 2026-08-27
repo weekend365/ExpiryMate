@@ -47,8 +47,15 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다.",
+          "cameraPermission": "바코드·유통기한을 스캔하거나, 영수증·냉장고 사진으로 재료를 넣으려면 카메라 접근이 필요해요.",
           "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.",
+          "cameraPermission": "영수증이나 냉장고 사진을 찍으려면 카메라 접근이 필요해요."
         }
       ],
       [
@@ -98,7 +105,8 @@
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleDisplayName": "장고야 부탁해",
         "LSMinimumSystemVersion": "12.0",
-        "NSCameraUsageDescription": "바코드와 유통기한을 스캔해 식재료를 등록하려면 카메라 접근이 필요합니다.",
+        "NSCameraUsageDescription": "바코드·유통기한을 스캔하거나, 영수증·냉장고 사진으로 재료를 넣으려면 카메라 접근이 필요해요.",
+        "NSPhotoLibraryUsageDescription": "영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.",
         "UIRequiresFullScreen": false,
         "UISupportedInterfaceOrientations": [
           "UIInterfaceOrientationPortrait",
@@ -116,10 +124,9 @@
       "package": "com.expirymate.mobile",
       "versionCode": 1,
       "softwareKeyboardLayoutMode": "resize",
-      "permissions": ["CAMERA"],
+      "permissions": ["CAMERA", "READ_MEDIA_IMAGES", "READ_MEDIA_VISUAL_USER_SELECTED"],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
-        "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.SYSTEM_ALERT_WINDOW",
         "com.google.android.gms.permission.AD_ID"

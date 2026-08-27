@@ -19,7 +19,11 @@ export const fieldLimits = {
   recipeIngredientName: 120,
   recipeText: 2000,
   supportInquiryBody: { min: 10, max: 2000 },
+  photoParseReason: 160,
 } as const;
+
+/** Max inventory candidates or batch-create items from one photo. */
+export const PHOTO_PARSE_MAX_ITEMS = 30;
 
 /** Max custom storage locations per owner. */
 export const MAX_CUSTOM_STORAGE_LOCATIONS = 10;

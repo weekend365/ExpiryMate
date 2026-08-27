@@ -15,8 +15,8 @@ export default function PrivacyChoicesPage() {
           데이터 삭제·동의 철회 안내
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          사용자는 {appBrand.appNameKo} 앱 안에서 계정 데이터 삭제, AI 추천 동의
-          철회, 추천 기록 삭제를 직접 할 수 있습니다.
+              사용자는 {appBrand.appNameKo} 앱 안에서 계정 데이터 삭제, AI 안내
+              동의 철회, 추천 기록 삭제를 직접 할 수 있습니다.
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -38,8 +38,9 @@ export default function PrivacyChoicesPage() {
           <h2 className="pt-4 text-xl font-black">항목별 삭제·철회 범위</h2>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              <strong>AI 동의 철회:</strong> 이후 새 요리 추천 시 외부 AI로
-              재료·조건이 전송되지 않습니다. 계정과 재료는 유지됩니다.
+              <strong>AI 동의 철회:</strong> 이후 새 요리 추천과 사진으로 재료
+              읽기 시 외부 AI로 재료·조건·사진이 전송되지 않습니다. 계정과 재료는
+              유지됩니다.
             </li>
             <li>
               <strong>추천 기록 정리:</strong> 서버에 저장된 나의 AI 추천

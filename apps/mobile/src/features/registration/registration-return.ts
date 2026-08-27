@@ -27,3 +27,10 @@ export function scannerRoute(returnTo: RegistrationReturnTo) {
     params: { from: returnTo },
   };
 }
+
+export function photoParseRoute(returnTo: RegistrationReturnTo) {
+  return {
+    pathname: "/register-photo" as const,
+    params: { from: returnTo },
+  };
+}

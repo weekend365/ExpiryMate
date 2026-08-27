@@ -244,7 +244,7 @@ function validateAuthLinkBaseUrl(env: EnvMap, errors: string[]) {
  * Recipe AI is on unless explicitly disabled — require a real OpenAI key then.
  */
 function validateOpenAi(env: EnvMap, errors: string[]) {
-  if (!isRecipeAiEnabled(env)) {
+  if (!isRecipeAiEnabled(env) && !isInventoryPhotoParseEnabled(env)) {
     return;
   }
 
@@ -252,7 +252,7 @@ function validateOpenAi(env: EnvMap, errors: string[]) {
 
   if (!value) {
     errors.push(
-      "OPENAI_API_KEY is required when RECIPE_AI_ENABLED is on (default).",
+      "OPENAI_API_KEY is required when RECIPE_AI_ENABLED or INVENTORY_PHOTO_PARSE_ENABLED is on.",
     );
     return;
   }
@@ -265,6 +265,11 @@ function validateOpenAi(env: EnvMap, errors: string[]) {
 function isRecipeAiEnabled(env: EnvMap) {
   const raw = env.RECIPE_AI_ENABLED?.trim().toLowerCase();
   return !(raw === "false" || raw === "0" || raw === "off");
+}
+
+function isInventoryPhotoParseEnabled(env: EnvMap) {
+  const raw = env.INVENTORY_PHOTO_PARSE_ENABLED?.trim().toLowerCase();
+  return raw === "true" || raw === "1" || raw === "on";
 }
 
 function validateEmail(env: EnvMap, key: string, errors: string[]) {

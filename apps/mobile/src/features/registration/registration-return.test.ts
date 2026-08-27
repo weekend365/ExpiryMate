@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   parseRegistrationReturnTo,
+  photoParseRoute,
   registerRoute,
   registrationReturnHref,
   scannerRoute,
@@ -28,6 +29,10 @@ describe("registration return-to", () => {
     expect(scannerRoute("home")).toEqual({
       pathname: "/scanner",
       params: { from: "home" },
+    });
+    expect(photoParseRoute("inventory")).toEqual({
+      pathname: "/register-photo",
+      params: { from: "inventory" },
     });
   });
 });

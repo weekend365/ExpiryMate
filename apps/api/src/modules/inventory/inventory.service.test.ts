@@ -507,4 +507,24 @@ describe("InventoryService owner isolation", () => {
     ).rejects.toThrow(BadRequestException);
     expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
   });
+
+  it("creates several items in one transaction", async () => {
+    prisma.inventoryItem.create
+      .mockResolvedValueOnce({ ...inventoryItem, id: "item-1" })
+      .mockResolvedValueOnce({
+        ...inventoryItem,
+        id: "item-2",
+        displayName: "우유",
+      });
+
+    const result = await service.createMany(
+      [createBody(), createBody({ displayName: "우유" })],
+      "owner-a",
+      "space-1",
+    );
+
+    expect(result.count).toBe(2);
+    expect(prisma.$transaction).toHaveBeenCalled();
+    expect(prisma.inventoryItem.create).toHaveBeenCalledTimes(2);
+  });
 });

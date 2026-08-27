@@ -13,10 +13,12 @@ import {
 import {
   addDaysToDateOnly,
   type BatchConsumeInventoryItemsBody,
+  type BatchCreateInventoryItemsBody,
   dateOnlyToUtcDate,
   isDateOnlyString,
   ItemStatus as SharedItemStatus,
   type InventoryListResponse,
+  PHOTO_PARSE_MAX_ITEMS,
   toBaseQuantity,
   resolveCanonicalQuantityUpdate,
 } from "@expirymate/shared";
@@ -181,6 +183,83 @@ export class InventoryService {
     }
 
     return serializeInventoryItem(item);
+  }
+
+  async createMany(
+    items: BatchCreateInventoryItemsBody["items"],
+    ownerKey: string,
+    spaceId?: string,
+  ) {
+    if (items.length > PHOTO_PARSE_MAX_ITEMS) {
+      throw new BadRequestException(
+        `한 번에 최대 ${PHOTO_PARSE_MAX_ITEMS}개까지 넣을 수 있어요.`,
+      );
+    }
+
+    const uniqueLocations = [...new Set(items.map((item) => item.storageLocation))];
+    for (const location of uniqueLocations) {
+      await this.settingsService.assertValidStorageLocation(
+        ownerKey,
+        location,
+        spaceId,
+      );
+    }
+
+    const catalogs = await Promise.all(
+      items.map((item) =>
+        loadProductMasterOrThrow(this.prisma, item.productMasterId),
+      ),
+    );
+
+    const created = await this.prisma.$transaction(async (tx) => {
+      const records = [];
+      for (const [index, dto] of items.entries()) {
+        const catalog = catalogs[index];
+        const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
+        records.push(
+          await tx.inventoryItem.create({
+            data: {
+              ownerKey,
+              spaceId,
+              createdByUserId: ownerKey,
+              updatedByUserId: ownerKey,
+              productId: dto.productId,
+              productMasterId: catalog?.id,
+              displayName: dto.displayName,
+              brand: dto.brand,
+              category: dto.category as ProductCategory | undefined,
+              quantity: dto.quantity,
+              unit: dto.unit ?? "개",
+              quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
+              unitCode: (dto.unitCode ??
+                derivedQuantity.unitCode) as InventoryUnitCode,
+              storageLocation: dto.storageLocation,
+              expiryDate: parseExpiryDate(dto.expiryDate),
+              expirySource: dto.expirySource as ExpirySource,
+              status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
+              notes: dto.notes,
+            },
+          }),
+        );
+      }
+      return records;
+    });
+
+    for (const [index, dto] of items.entries()) {
+      const catalog = catalogs[index];
+      if (catalog) {
+        await syncCatalogCorrectionAfterCreate(this.prisma, {
+          catalog,
+          ownerKey,
+          proposed: dto,
+        });
+      }
+    }
+
+    return {
+      count: created.length,
+      items: created.map(serializeInventoryItem),
+    };
   }
 
   async update(

@@ -1,4 +1,4 @@
-import { Barcode, PenLine, ShoppingBasket } from "lucide-react-native";
+import { Barcode, ImageIcon, PenLine, ShoppingBasket } from "lucide-react-native";
 import { View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { Button } from "../../components/Button";
@@ -9,11 +9,13 @@ export function HomeQuickEntry({
   onOpenScanner,
   onManualRegister,
   onOpenShopping,
+  onOpenPhotoParse,
 }: {
   emphasizeEntryActions: boolean;
   onOpenScanner: () => void;
   onManualRegister: () => void;
   onOpenShopping: () => void;
+  onOpenPhotoParse?: () => void;
 }) {
   return (
     <View style={styles.quickEntrySection}>
@@ -40,6 +42,18 @@ export function HomeQuickEntry({
         >
           직접 입력
         </Button>
+        {onOpenPhotoParse ? (
+          <Button
+            icon={ImageIcon}
+            onPress={onOpenPhotoParse}
+            variant="surface"
+            size={emphasizeEntryActions ? "medium" : "small"}
+            fullWidth
+            testID="home-photo-parse-button"
+          >
+            사진으로 넣기
+          </Button>
+        ) : null}
         <Button
           icon={ShoppingBasket}
           onPress={onOpenShopping}

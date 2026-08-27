@@ -122,8 +122,10 @@ function normalizeJsonContentType(req: Request, _res: Response, next: NextFuncti
 
   const hasBody = Number(req.headers["content-length"] ?? 0) > 0;
   const contentType = req.headers["content-type"]?.toLowerCase() ?? "";
+  const isMultipart = contentType.includes("multipart/");
+  const isOctetStream = contentType.includes("octet-stream");
 
-  if (hasBody && !contentType.includes("json")) {
+  if (hasBody && !contentType.includes("json") && !isMultipart && !isOctetStream) {
     req.headers["content-type"] = "application/json";
   }
 

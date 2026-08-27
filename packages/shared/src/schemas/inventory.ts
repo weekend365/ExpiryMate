@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fieldLimits } from "../constants/field-limits";
+import { fieldLimits, PHOTO_PARSE_MAX_ITEMS } from "../constants/field-limits";
 import {
   ExpirySource,
   ItemStatus,
@@ -144,6 +144,88 @@ export const batchConsumeInventoryItemsResponseSchema = z.object({
   items: z.array(inventoryItemSchema),
 });
 
+export const inventoryPhotoParseSceneSchema = z.enum(["receipt", "fridge"]);
+
+const optionalDateOnlySchema = z.preprocess((value) => {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  if (typeof value === "string" && value.trim().length === 0) {
+    return undefined;
+  }
+  return value;
+}, dateOnlySchema.optional());
+
+export const inventoryPhotoParseCandidateSchema = z.object({
+  displayName: z
+    .string()
+    .trim()
+    .min(1, "상품명을 입력해주세요")
+    .max(fieldLimits.displayName, `상품명은 ${fieldLimits.displayName}자까지예요`),
+  brand: optionalText(
+    fieldLimits.brand,
+    `브랜드는 ${fieldLimits.brand}자까지예요`,
+  ),
+  category: z.nativeEnum(ProductCategory).optional(),
+  quantity: z.coerce.number().int().min(1, "수량은 1 이상이어야 해요").optional(),
+  unit: optionalText(fieldLimits.unit),
+  quantityBase: z.coerce.number().int().min(1).optional(),
+  unitCode: z.nativeEnum(UnitCode).optional(),
+  suggestedStorageLocation: storageLocationKeySchema.optional(),
+  suggestedExpiryDate: optionalDateOnlySchema,
+  expirySource: z.nativeEnum(ExpirySource).optional(),
+  confidence: z.coerce.number().min(0).max(1),
+  needsReview: z.boolean(),
+  reason: optionalText(
+    fieldLimits.photoParseReason,
+    `메모는 ${fieldLimits.photoParseReason}자까지예요`,
+  ),
+});
+
+export const inventoryPhotoParseResponseSchema = z.object({
+  scene: inventoryPhotoParseSceneSchema,
+  items: z
+    .array(inventoryPhotoParseCandidateSchema)
+    .max(
+      PHOTO_PARSE_MAX_ITEMS,
+      `한 사진에서 최대 ${PHOTO_PARSE_MAX_ITEMS}개까지 읽을 수 있어요`,
+    ),
+});
+
+/** Strict JSON schema for OpenAI structured vision output (no preprocess). */
+export const inventoryPhotoParseVisionItemSchema = z.object({
+  displayName: z.string(),
+  brand: z.string().nullable(),
+  category: z.nativeEnum(ProductCategory).nullable(),
+  quantity: z.number().int().positive().nullable(),
+  unit: z.string().nullable(),
+  unitCode: z.nativeEnum(UnitCode).nullable(),
+  suggestedStorageLocation: z.string().nullable(),
+  suggestedExpiryDate: z.string().nullable(),
+  confidence: z.number().min(0).max(1),
+  needsReview: z.boolean(),
+  reason: z.string().nullable(),
+});
+
+export const inventoryPhotoParseVisionPayloadSchema = z.object({
+  items: z.array(inventoryPhotoParseVisionItemSchema).max(PHOTO_PARSE_MAX_ITEMS),
+});
+
+export const batchCreateInventoryItemsBodySchema = z.object({
+  items: z
+    .array(createInventoryItemBodySchema)
+    .min(1, "넣을 재료를 하나 이상 골라 주세요")
+    .max(
+      PHOTO_PARSE_MAX_ITEMS,
+      `한 번에 최대 ${PHOTO_PARSE_MAX_ITEMS}개까지 넣을 수 있어요`,
+    ),
+});
+
+export const batchCreateInventoryItemsResponseSchema = z.object({
+  count: z.number().int().min(0),
+  items: z.array(inventoryItemSchema),
+});
+
 export type InventoryFormValues = z.output<typeof inventoryFormSchema>;
 export type InventoryFormInput = z.input<typeof inventoryFormSchema>;
 export type CreateInventoryItemBody = z.output<typeof createInventoryItemBodySchema>;
@@ -156,4 +238,25 @@ export type BatchConsumeInventoryItemsBody = z.output<
 >;
 export type BatchConsumeInventoryItemsResponse = z.output<
   typeof batchConsumeInventoryItemsResponseSchema
+>;
+export type InventoryPhotoParseScene = z.output<
+  typeof inventoryPhotoParseSceneSchema
+>;
+export type InventoryPhotoParseCandidate = z.output<
+  typeof inventoryPhotoParseCandidateSchema
+>;
+export type InventoryPhotoParseResponse = z.output<
+  typeof inventoryPhotoParseResponseSchema
+>;
+export type InventoryPhotoParseVisionItem = z.output<
+  typeof inventoryPhotoParseVisionItemSchema
+>;
+export type InventoryPhotoParseVisionPayload = z.output<
+  typeof inventoryPhotoParseVisionPayloadSchema
+>;
+export type BatchCreateInventoryItemsBody = z.output<
+  typeof batchCreateInventoryItemsBodySchema
+>;
+export type BatchCreateInventoryItemsResponse = z.output<
+  typeof batchCreateInventoryItemsResponseSchema
 >;

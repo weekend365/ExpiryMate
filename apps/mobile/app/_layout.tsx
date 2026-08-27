@@ -114,6 +114,10 @@ function RootLayout() {
               />
               <Stack.Screen name="scanner" options={{ headerShown: false }} />
               <Stack.Screen name="register" options={{ title: "재료 넣기" }} />
+              <Stack.Screen
+                name="register-photo"
+                options={{ title: "사진으로 넣기" }}
+              />
               <Stack.Screen name="inventory/[id]" options={{ title: "내용 바꾸기" }} />
               <Stack.Screen name="shopping" options={{ title: "장보기" }} />
               <Stack.Screen
@@ -152,7 +156,7 @@ function RootLayout() {
               />
               <Stack.Screen
                 name="privacy/ai-data-notice"
-                options={{ title: "요리 추천 안내" }}
+                options={{ title: "요리 추천과 사진 안내" }}
               />
               <Stack.Screen
                 name="privacy/account-delete"

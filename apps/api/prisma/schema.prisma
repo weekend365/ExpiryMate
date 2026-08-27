@@ -241,6 +241,7 @@ model User {
   sentSpaceInvitations          SpaceInvitation[]              @relation("SpaceInvitationSender")
   createdInventoryItems            InventoryItem[]             @relation("InventoryItemCreator")
   updatedInventoryItems            InventoryItem[]             @relation("InventoryItemUpdater")
+  inventoryPhotoParseEvents        InventoryPhotoParseEvent[]
   productMasterCorrections         ProductMasterCorrection[]   @relation("ProductMasterCorrectionSubmitter")
   reviewedProductMasterCorrections ProductMasterCorrection[]   @relation("ProductMasterCorrectionReviewer")
 
@@ -265,6 +266,7 @@ model InventorySpace {
   recommendationUsageEvents RecommendationUsageEvent[]
   subscriptionEntitlements  SubscriptionEntitlement[]
   monetizationRevenueEvents MonetizationRevenueEvent[]
+  photoParseEvents          InventoryPhotoParseEvent[]
 
   @@index([ownerUserId])
   @@index([type])
@@ -507,6 +509,28 @@ model UserStorageLocation {
   @@unique([spaceId, key])
   @@index([ownerKey])
   @@index([spaceId])
+}
+
+model InventoryPhotoParseEvent {
+  id                String          @id @default(cuid())
+  ownerKey          String
+  owner             User            @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId           String?
+  space             InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  scene             String
+  itemCount         Int             @default(0)
+  aiProvider        String          @default("openai")
+  aiModel           String
+  promptVersion     String
+  inputTokens       Int             @default(0)
+  cachedInputTokens Int             @default(0)
+  outputTokens      Int             @default(0)
+  totalTokens       Int             @default(0)
+  estimatedCostUsd  Decimal         @default(0) @db.Decimal(10, 6)
+  createdAt         DateTime        @default(now())
+
+  @@index([ownerKey, createdAt])
+  @@index([createdAt])
 }
 
 model RecipeRecommendation {

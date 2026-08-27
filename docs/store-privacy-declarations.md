@@ -1,7 +1,7 @@
 ---
 status: active
 owner: privacy-release
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-27
 source_of_truth: true
 ---
 
@@ -37,11 +37,18 @@ source_of_truth: true
 | 쿠팡 상품 검색어 | 예 (레시피·장보기 상품 영역 사용 시) | 관련 실물 상품 조회·외부 구매 연결 | **쿠팡 파트너스**: 정규화한 재료명 또는 직접 입력 검색어 한 건. 계정 ID·전체 재고·유통기한·수량·공간 정보는 전송하지 않음 | 상품 영역 사용·제휴 기능 플래그로 중단 가능 | User Content → Other User Content / App Functionality | App activity → Other user-generated content / App functionality (제3자 공유 여부는 최신 콘솔 정의로 재검토) |
 | 비맞춤형 보상 광고 | 예 (사용자가 광고 선택 시) | 광고 제공·보상 검증·부정 이용 방지 | **Google Mobile Ads(국외)** | 광고는 매회 선택, 기능 플래그로 중단 가능, 계정 정리 시 서버 세션 삭제 | Coarse Location / Identifiers / Usage Data / Diagnostics · Third-Party Advertising · Tracking=No | Approximate location / Device or other IDs / App interactions / Diagnostics · Advertising |
 | 추적(ATT·다른 회사 앱/웹 간 연결) | **아니오** | — | — | ATT 요청 없음, Android 광고 ID 권한 제거 | Tracking=No | 앱 간 추적 목적으로 광고 ID를 수집하지 않음 |
-| 기기 연락처·사진 라이브러리(일반) | 아니오* | — | — | — | Not collected | Not collected |
+| 기기 연락처 | 아니오 | — | — | — | Not collected | Not collected |
+| 사진 라이브러리·촬영 이미지(영수증/냉장고 일괄 등록) | 기능 사용 시 예. 기본 플래그 off. 바코드/유통기한 OCR 경로와 분리 | 재료 후보 추출 | 서버를 거쳐 **OpenAI Vision**(미국). 원본은 파싱 후 폐기, DB 미보관 | AI 고지 동의·철회, 기능 플래그 | Photos or Videos (기능 켤 때 신고) | Photos and videos (기능 켤 때 신고) |
+| 바코드/유통기한 OCR 카메라 프레임 | 기기 내만. 서버 미업로드 | 바코드·유통기한 인식 | 없음 | 카메라 권한 | Photos 아님 (카메라 권한 문구) | Photos 아님 |
 
-\* 바코드/OCR은 카메라 권한을 사용하지만 사진 라이브러리를 읽지 않습니다.
-OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 서버에 업로드하지 않습니다.
-스토어 권한 문구와 `PrivacyInfo.xcprivacy`는 이 실제 동작과 일치시킵니다.
+\* 바코드/유통기한 OCR은 카메라 권한을 사용하지만 사진 라이브러리를 읽지 않으며
+촬영 이미지는 기기 내 ML Kit에만 쓰고 서버에 올리지 않습니다.
+영수증·냉장고 사진 일괄 등록(`INVENTORY_PHOTO_PARSE_ENABLED`)은 별도 경로입니다.
+사용자가 고른 사진을 서버로 보내 OpenAI Vision으로 후보를 만들고, 원본은 파싱 후
+폐기합니다. v1 출시 빌드에서는 이 경로를 기본 off로 두고, 켤 때 App Store
+Photos or Videos / Play Photos and videos 신고와 권한 문구를 다시 대조합니다.
+
+스토어 권한 문구와 `PrivacyInfo.xcprivacy`는 실제 켜진 경로와 일치시킵니다.
 
 ---
 
@@ -68,7 +75,9 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 | Diagnostics → Performance Data | Analytics |
 
 - Tracking: **No**
-- Photos or Videos: **선언하지 않음**
+- Photos or Videos: **이 코드가 들어간 빌드**는 App Functionality, 사용자 시작,
+  필수 아님으로 신고. 원본은 서버에 보관하지 않고 OpenAI Vision 파싱 후 폐기.
+  바코드/OCR 카메라 프레임은 Photos가 아님.
 - `apps/mobile/ios/ExpiryMate/PrivacyInfo.xcprivacy`의
   `NSPrivacyCollectedDataTypes`와 같은 범위를 유지
 
@@ -89,6 +98,7 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 | Personal info → Email address | 예 | 필수 | App functionality · Account management |
 | Personal info → User IDs | 예 | 필수 | App functionality · Account management |
 | App activity → Other user-generated content | 예 | 선택 | App functionality · Personalization |
+| Photos and videos | 예 (사진 일괄 등록 사용 시) | 선택 | App functionality |
 | Device or other IDs → Device or other IDs | 예 | 선택 | App functionality |
 
 외부 계정 삭제 URL:
@@ -100,15 +110,16 @@ OCR 촬영 이미지는 기기 내 ML Kit 텍스트 인식에만 사용하고 �
 
 1. 모바일은 OpenAI API 키를 갖지 않으며, 서버만 호출합니다.
 2. 전송 항목: 재료명·카테고리·수량/단위·보관 위치·유통기한·잔여 일수·추천 조건·알레르기·제외 재료·식단·매운맛·조리도구·최근 추천 행동 요약.
-3. 서버 보관: 사용자가 추천 기록을 지우거나 계정을 정리할 때까지.
-4. OpenAI: 기본 API는 모델 학습에 쓰지 않으며, abuse 모니터링 정책상 최대 약 30일
+3. 사진 일괄 등록(플래그 on일 때만): 사용자가 고른 영수증/냉장고 사진을 서버가 OpenAI Vision으로 보내고 원본은 파싱 후 폐기. 메타(장면, 후보 수, 토큰·추정 비용)만 비용 한도용으로 보관.
+4. 서버 보관: 사용자가 추천 기록을 지우거나 계정을 정리할 때까지(추천). 사진 원본은 보관하지 않음.
+5. OpenAI: 기본 API는 모델 학습에 쓰지 않으며, abuse 모니터링 정책상 최대 약 30일
    보관될 수 있음(OpenAI 정책 변경 가능).
-5. 동의: 첫 추천 전 고지 수락. 철회 후 신규 추천 차단. 기록 삭제는 별도.
+6. 동의: 첫 추천 또는 첫 사진 파싱 전 고지 수락. 철회 후 신규 추천·사진 파싱 차단. 기록 삭제는 별도.
 
 공유 공간의 추천은 해당 공간 구성원에게 보이지만, AI 고지 동의·사용 한도·비용은
 추천을 실행한 사용자에게 적용됩니다. 즐겨찾기는 개인 데이터로 유지됩니다.
 
-고지 버전 환경변수: `AI_DATA_NOTICE_VERSION` (기본 `ai-data-notice-v3`).
+고지 버전 환경변수: `AI_DATA_NOTICE_VERSION` (기본 `ai-data-notice-v4`).
 문구·보관·이전 고지가 바뀌면 버전을 올리고 재동의를 받습니다.
 
 ---

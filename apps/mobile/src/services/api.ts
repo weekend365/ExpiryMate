@@ -21,6 +21,10 @@ import type {
   AcceptAiDataNoticeResponse,
   BatchConsumeInventoryItemsBody,
   BatchConsumeInventoryItemsResponse,
+  BatchCreateInventoryItemsBody,
+  BatchCreateInventoryItemsResponse,
+  InventoryPhotoParseResponse,
+  InventoryPhotoParseScene,
   DeleteRecommendationHistoryResponse,
   DeleteRecipeFavoriteResponse,
   RevokeAiDataNoticeResponse,
@@ -229,6 +233,63 @@ async function request<T>(
   return body.data;
 }
 
+async function requestMultipart<T>(
+  path: string,
+  formData: FormData,
+  options: {
+    retryOnUnauthorized?: boolean;
+    timeoutMs?: number;
+  } = { retryOnUnauthorized: true, timeoutMs: PHOTO_PARSE_TIMEOUT_MS },
+): Promise<T> {
+  const session = await requireRegisteredSession();
+  const response = await fetchWithNetworkError(
+    path,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.accessToken}`,
+        ...clientHeaders,
+      },
+      body: formData,
+    },
+    options.timeoutMs,
+  );
+  const body = await parseEnvelope<T>(response);
+
+  if (!response.ok || !body.success) {
+    if (response.status === 401 && options.retryOnUnauthorized !== false) {
+      const refreshed = await tryRefreshRegisteredSession();
+      if (refreshed) {
+        return requestMultipart<T>(path, formData, {
+          ...options,
+          retryOnUnauthorized: false,
+        });
+      }
+
+      await clearAuthSession();
+      throw new Error("로그인이 만료됐어요. 다시 이어가 주세요.");
+    }
+
+    const serverMessage = body.error?.message?.trim();
+    if (serverMessage) {
+      throw new ApiError(
+        serverMessage,
+        body.error?.code ?? `HTTP_${response.status}`,
+        response.status,
+        body.error?.details,
+      );
+    }
+
+    if (response.status >= 500) {
+      throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
+    }
+
+    throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
+  }
+
+  return body.data;
+}
+
 async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetchWithNetworkError(path, {
     ...init,
@@ -255,6 +316,7 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
 
 const DEFAULT_FETCH_TIMEOUT_MS = 25_000;
 const RECIPE_GENERATION_TIMEOUT_MS = 90_000;
+const PHOTO_PARSE_TIMEOUT_MS = 90_000;
 
 async function fetchWithNetworkError(
   path: string,
@@ -804,6 +866,43 @@ export const batchConsumeInventoryItems = (
 ) =>
   request<BatchConsumeInventoryItemsResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/batch-consume`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
+
+export const parseInventoryPhoto = (
+  payload: {
+    scene: InventoryPhotoParseScene;
+    uri: string;
+    mimeType?: string;
+    fileName?: string;
+  },
+  spaceId: string,
+) => {
+  const formData = new FormData();
+  formData.append("scene", payload.scene);
+  formData.append(
+    "image",
+    {
+      uri: payload.uri,
+      name: payload.fileName ?? "photo.jpg",
+      type: payload.mimeType ?? "image/jpeg",
+    } as unknown as Blob,
+  );
+  return requestMultipart<InventoryPhotoParseResponse>(
+    `${spaceResourcePath(spaceId, "inventory")}/parse-photo`,
+    formData,
+  );
+};
+
+export const batchCreateInventoryItems = (
+  payload: BatchCreateInventoryItemsBody,
+  spaceId: string,
+) =>
+  request<BatchCreateInventoryItemsResponse>(
+    `${spaceResourcePath(spaceId, "inventory")}/batch-create`,
     {
       method: "POST",
       body: JSON.stringify(payload),

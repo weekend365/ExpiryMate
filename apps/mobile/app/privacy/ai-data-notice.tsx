@@ -32,7 +32,7 @@ export default function AiDataNoticeScreen() {
       onSuccess: () =>
         Alert.alert(
           "동의해 주셔서 감사해요",
-          "이제 요리 추천을 부탁하실 수 있어요.",
+          "이제 요리 추천과 사진으로 재료 넣기를 부탁하실 수 있어요.",
         ),
       onError: (error) =>
         Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error)),
@@ -45,7 +45,7 @@ export default function AiDataNoticeScreen() {
         setRevokeSheetOpen(false);
         Alert.alert(
           "동의를 거뒀어요",
-          "이제 새 추천을 부탁하면 다시 안내를 살펴보게 돼요. 이미 받아 두신 추천은 「받은 추천 기록 정리」에서 지울 수 있어요.",
+          "이제 새 추천이나 사진으로 재료 넣기를 부탁하면 다시 안내를 살펴보게 돼요. 이미 받아 두신 추천은 「받은 추천 기록 정리」에서 지울 수 있어요.",
         );
       },
       onError: (error) => {
@@ -58,8 +58,8 @@ export default function AiDataNoticeScreen() {
   return (
     <>
       <Screen
-        title="요리 추천 안내"
-        subtitle={`${appBrand.characterNameKo}가 요리를 추천할 때 어떤 정보가 쓰이는지 알려드릴게요.`}
+        title="요리 추천과 사진 안내"
+        subtitle={`${appBrand.characterNameKo}가 요리를 추천하거나 사진으로 재료를 읽을 때 어떤 정보가 쓰이는지 알려드릴게요.`}
         footer={
           accepted ? (
             <Button
@@ -86,7 +86,7 @@ export default function AiDataNoticeScreen() {
             <AppText style={styles.statusTitle}>
               {accepted
                 ? "안내를 살펴보시고 동의해 주셨어요"
-                : "첫 추천 전에 한 번만 살펴봐 주세요"}
+                : "첫 추천이나 사진 넣기 전에 한 번만 살펴봐 주세요"}
             </AppText>
             <AppText style={styles.statusDescription}>
               안내 버전 {status?.aiDataNoticeVersion ?? "불러오는 중"}
@@ -110,6 +110,15 @@ export default function AiDataNoticeScreen() {
             </AppText>
           </View>
           <View style={styles.card}>
+            <AppText style={styles.cardTitle}>사진으로 재료를 넣을 때</AppText>
+            <AppText style={styles.bodyText}>
+              영수증이나 냉장고 사진을 고르시면 그 사진이 장고 서버를 거쳐 같은
+              외부 도우미로 전달되어 재료 후보를 만들어요. 원본 사진은 읽고 나서
+              바로 버리고, 장고 냉장고에는 남기지 않아요. 바코드와 유통기한을
+              스캔하는 사진은 휴대폰 안에서만 읽고 서버로 보내지 않아요.
+            </AppText>
+          </View>
+          <View style={styles.card}>
             <AppText style={styles.cardTitle}>장고가 기억해 두는 것</AppText>
             <AppText style={styles.bodyText}>
               추천할 때 고른 조건, 그때의 재료 목록, 나온 요리 추천은 나중에 다시
@@ -130,9 +139,9 @@ export default function AiDataNoticeScreen() {
           <View style={styles.card}>
             <AppText style={styles.cardTitle}>동의를 거두면요?</AppText>
             <AppText style={styles.bodyText}>
-              아래 버튼으로 동의를 거두면 새 추천 요청은 멈출 수 있어요. 이미 받아
-              두신 추천은 그대로 남을 수 있으니, 필요하면 개인정보 화면에서 기록만
-              따로 정리해 주세요.
+              아래 버튼으로 동의를 거두면 새 추천 요청과 사진으로 재료 읽기는
+              멈출 수 있어요. 이미 받아 두신 추천은 그대로 남을 수 있으니, 필요하면
+              개인정보 화면에서 기록만 따로 정리해 주세요.
             </AppText>
           </View>
         </View>
@@ -143,7 +152,7 @@ export default function AiDataNoticeScreen() {
         onClose={() => setRevokeSheetOpen(false)}
         mascotMood="worry"
         title="추천 동의를 거둘까요?"
-        description="거두면 새 요리 추천을 부탁할 때 다시 안내를 살펴보게 돼요. 이미 받아 두신 추천은 그대로 둘 수 있어요."
+        description="거두면 새 요리 추천이나 사진으로 재료 읽기를 부탁할 때 다시 안내를 살펴보게 돼요. 이미 받아 두신 추천은 그대로 둘 수 있어요."
         footer={
           <View style={styles.sheetFooter}>
             <Button

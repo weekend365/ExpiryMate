@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
           개인정보처리방침
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 18일
+          시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 27일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -60,7 +60,7 @@ export default function PrivacyPolicyPage() {
             또는 코드 해시)은 목적 달성 후 최대 30일 이내에 삭제합니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">AI 추천 데이터 처리</h2>
+          <h2 className="pt-4 text-xl font-black">AI 추천·사진 인식 데이터 처리</h2>
           <p>
             사용자가 요리 추천을 요청하면 재료명, 카테고리, 수량과 단위, 보관
             위치, 유통기한, 만료까지 남은 일수, 추천 조건, 사용자가 저장한 알레르기·
@@ -69,6 +69,14 @@ export default function PrivacyPolicyPage() {
             snapshot, 추천 결과와 상세 보기·조리·관심없음 행동은 추천 히스토리와
             맞춤 추천 제공을 위해 서버에 저장됩니다. 모바일 앱은 OpenAI API 키를
             저장하거나 직접 호출하지 않습니다.
+          </p>
+          <p>
+            사용자가 영수증 또는 냉장고 사진으로 재료를 한꺼번에 넣으면, 고른
+            사진이 서버를 거쳐 OpenAI Vision API로 전달되어 재료 후보를 만듭니다.
+            원본 사진은 파싱이 끝나면 폐기하며 장고 서버나 데이터베이스에 보관하지
+            않습니다. 비용 한도를 위해 장면 종류, 후보 수, 토큰·추정 비용만
+            남길 수 있습니다. 바코드와 유통기한 스캔(OCR) 사진은 기기 안에서만
+            처리하고 서버로 보내지 않습니다.
           </p>
           <p>
             OpenAI API로 전송된 데이터는 기본적으로 모델 학습에 사용되지 않습니다.
@@ -84,8 +92,9 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              OpenAI, LLC(미국): AI 요리 추천 생성. 전송 항목은 위 AI 추천 데이터
-              처리 절과 같습니다.
+              OpenAI, LLC(미국): AI 요리 추천 생성과, 사용자가 요청한 영수증·냉장고
+              사진 재료 인식. 추천 전송 항목은 위 AI 추천 데이터 처리 절과 같고,
+              사진 인식 시에는 사용자가 고른 이미지가 전달됩니다.
             </li>
             <li>
               클라우드 호스팅·데이터베이스 사업자(서비스 인프라 운영 지역에 따라
@@ -162,7 +171,12 @@ export default function PrivacyPolicyPage() {
             </li>
             <li>
               OpenAI API 측 보관: 위 AI 추천 데이터 처리 절(최대 약 30일, 정책
-              변경 가능)을 따릅니다.
+              변경 가능)을 따릅니다. 사진 일괄 등록에 보낸 이미지도 같은 처리자
+              정책을 따릅니다.
+            </li>
+            <li>
+              사진 파싱 메타: 장면 종류, 후보 수, 토큰·추정 비용. 원본 사진은
+              파싱 후 폐기하며 계정 정리 시 메타도 삭제합니다.
             </li>
             <li>
               법령상 보관이 필요한 최소 기록(해당하는 경우): 관련 법령에서 정한
@@ -176,9 +190,9 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              요리 추천 안내 동의 철회: 이후 새 추천 요청 시 OpenAI로 데이터가
-              전송되지 않습니다. 이미 저장된 추천 기록은 별도 삭제 전까지 남을 수
-              있습니다.
+              요리 추천 안내 동의 철회: 이후 새 추천 요청과 사진으로 재료 읽기가
+              멈춥니다. OpenAI로 데이터가 전송되지 않습니다. 이미 저장된 추천 기록은
+              별도 삭제 전까지 남을 수 있습니다.
             </li>
             <li>
               추천 기록만 삭제: 서버에 저장된 나의 AI 추천 히스토리만 지웁니다.

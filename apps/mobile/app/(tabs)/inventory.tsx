@@ -61,9 +61,11 @@ import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import {
+  photoParseRoute,
   registerRoute,
   scannerRoute,
 } from "../../src/features/registration/registration-return";
+import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors } from "../../src/shared/theme";
@@ -274,6 +276,14 @@ export default function InventoryScreen() {
       clearPrefill(activeSpaceId);
     }
     router.push(scannerRoute("inventory"));
+  };
+
+  const goToPhotoParse = () => {
+    setEntryMethodVisible(false);
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
+    router.push(photoParseRoute("inventory"));
   };
 
   const clearListFilters = () => {
@@ -661,6 +671,9 @@ export default function InventoryScreen() {
         onClose={() => setEntryMethodVisible(false)}
         onScan={goToScanner}
         onManual={goToManualRegister}
+        onPhoto={
+          isInventoryPhotoParseEnabled() ? goToPhotoParse : undefined
+        }
       />
     </Screen>
   );

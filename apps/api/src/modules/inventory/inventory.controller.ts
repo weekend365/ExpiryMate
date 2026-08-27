@@ -6,14 +6,20 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
 import {
   batchConsumeInventoryItemsBodySchema,
+  batchCreateInventoryItemsBodySchema,
   createInventoryItemBodySchema,
   ItemStatus,
   updateInventoryItemBodySchema,
   type BatchConsumeInventoryItemsBody,
+  type BatchCreateInventoryItemsBody,
   type CreateInventoryItemBody,
   type UpdateInventoryItemBody,
 } from "@expirymate/shared";
@@ -21,12 +27,16 @@ import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { BatchDiscardInventoryItemsDto } from "./dto/batch-discard-inventory-items.dto";
+import { InventoryPhotoParseService } from "./inventory-photo-parse.service";
 import { InventoryService } from "./inventory.service";
 
 @UseGuards(RegisteredGuard)
 @Controller("inventory")
 export class InventoryController {
-  constructor(private readonly inventoryService: InventoryService) {}
+  constructor(
+    private readonly inventoryService: InventoryService,
+    private readonly photoParseService: InventoryPhotoParseService,
+  ) {}
 
   @Get()
   findAll(
@@ -62,6 +72,39 @@ export class InventoryController {
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.inventoryService.create(dto, ownerKey, personalSpaceId(ownerKey));
+  }
+
+  @Post("parse-photo")
+  @UseInterceptors(
+    FileInterceptor("image", {
+      storage: memoryStorage(),
+      limits: { fileSize: 4 * 1024 * 1024 },
+    }),
+  )
+  parsePhoto(
+    @CurrentOwnerKey() ownerKey: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body("scene") scene: string,
+  ) {
+    return this.photoParseService.parsePhoto({
+      ownerKey,
+      spaceId: personalSpaceId(ownerKey),
+      scene,
+      file,
+    });
+  }
+
+  @Post("batch-create")
+  batchCreate(
+    @Body(new ZodValidationPipe(batchCreateInventoryItemsBodySchema))
+    dto: BatchCreateInventoryItemsBody,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.inventoryService.createMany(
+      dto.items,
+      ownerKey,
+      personalSpaceId(ownerKey),
+    );
   }
 
   @Post("batch-discard")
