@@ -53,9 +53,14 @@ import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Pill } from "../../components/Pill";
 import { useMonetization } from "../monetization/monetization-provider";
+import { useActiveSpace } from "../spaces/space-provider";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
-import { useRegistrationStore } from "../../store/registration-store";
+import {
+  draftForSpace,
+  lastStorageLocationForSpace,
+  useRegistrationStore,
+} from "../../store/registration-store";
 import {
   getScanFrameHeight,
   getScanLineTravel,
@@ -102,6 +107,7 @@ export function ScannerScreen() {
 
 function ScannerCameraExperience() {
   const { shouldStack } = useResponsiveLayout();
+  const { activeSpaceId } = useActiveSpace();
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
@@ -237,7 +243,11 @@ function ScannerCameraExperience() {
   }, [scanner.confirmation, scanner.product?.brand, scanner.product?.name]);
 
   const completeRegistration = (productMasterId?: string | null) => {
-    setPrefill({
+    if (!activeSpaceId) {
+      return;
+    }
+
+    setPrefill(activeSpaceId, {
       productMasterId: productMasterId ?? undefined,
       catalogName: scanner.product?.name?.trim() || undefined,
       catalogBrand: scanner.product?.brand?.trim() || undefined,
@@ -245,11 +255,12 @@ function ScannerCameraExperience() {
       brand: resolvedBrand,
       category: resolvedCategory,
     });
+    const storeState = useRegistrationStore.getState();
     const lastStorageLocation =
-      useRegistrationStore.getState().draft?.storageLocation ??
-      useRegistrationStore.getState().lastStorageLocation ??
+      draftForSpace(storeState, activeSpaceId)?.storageLocation ??
+      lastStorageLocationForSpace(storeState, activeSpaceId) ??
       undefined;
-    setDraft({
+    setDraft(activeSpaceId, {
       productMasterId: productMasterId ?? undefined,
       catalogName: scanner.product?.name?.trim() || undefined,
       catalogBrand: scanner.product?.brand?.trim() || undefined,
@@ -342,8 +353,10 @@ function ScannerCameraExperience() {
   };
 
   const handleManualRegistration = () => {
-    setPrefill(null);
-    setDraft(null);
+    if (activeSpaceId) {
+      setPrefill(activeSpaceId, null);
+      setDraft(activeSpaceId, null);
+    }
     scanner.resetScanner();
     router.replace("/register");
   };

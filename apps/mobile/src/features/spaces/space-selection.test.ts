@@ -1,6 +1,9 @@
 import type { InventorySpaceSummary } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
-import { chooseActiveInventorySpace } from "./space-selection";
+import {
+  canInviteToSpace,
+  chooseActiveInventorySpace,
+} from "./space-selection";
 
 const personal = makeSpace({
   id: "personal_user-a",
@@ -11,6 +14,27 @@ const household = makeSpace({
   id: "space-house",
   type: "household",
   name: "우리 집",
+});
+
+describe("canInviteToSpace", () => {
+  it("hides invites on a personal fridge even for the owner", () => {
+    expect(canInviteToSpace(personal)).toBe(false);
+    expect(
+      canInviteToSpace({ ...personal, myRole: "owner" }),
+    ).toBe(false);
+  });
+
+  it("allows owner and manager invites on shared fridges", () => {
+    expect(
+      canInviteToSpace({ ...household, myRole: "owner" }),
+    ).toBe(true);
+    expect(
+      canInviteToSpace({ ...household, myRole: "manager" }),
+    ).toBe(true);
+    expect(
+      canInviteToSpace({ ...household, myRole: "member" }),
+    ).toBe(false);
+  });
 });
 
 describe("chooseActiveInventorySpace", () => {

@@ -37,6 +37,7 @@ import {
 } from "../../src/features/home/home-notices";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import {
   getContentMaxWidth,
@@ -60,6 +61,7 @@ export default function HomeScreen() {
     errorMessage: recipeGenerationError,
     acknowledgeRecipeGeneration,
   } = useRecipeGeneration();
+  const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const [noticeIndex, setNoticeIndex] = useState(0);
 
@@ -129,12 +131,16 @@ export default function HomeScreen() {
   };
 
   const handleManualRegister = () => {
-    clearPrefill();
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
     router.push("/register");
   };
 
   const handleOpenScanner = () => {
-    clearPrefill();
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
     router.push("/scanner");
   };
 

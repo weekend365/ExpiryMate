@@ -62,6 +62,7 @@ import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import {
   colors,
   radius,
@@ -87,6 +88,7 @@ export default function InventoryScreen() {
     useInventoryList();
   const batchDiscardMutation = useBatchDiscardInventoryItems();
   const deferredRemoval = useDeferredInventoryItemRemoval();
+  const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const { selectableOptions, resolveLabel } = useStorageLocations();
   const [filter, setFilter] = useState<InventoryViewFilter>(
@@ -270,13 +272,17 @@ export default function InventoryScreen() {
 
   const goToManualRegister = () => {
     setEntryMethodVisible(false);
-    clearPrefill();
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
     router.push("/register");
   };
 
   const goToScanner = () => {
     setEntryMethodVisible(false);
-    clearPrefill();
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
     router.push("/scanner");
   };
 

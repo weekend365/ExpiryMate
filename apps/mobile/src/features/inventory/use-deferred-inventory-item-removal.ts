@@ -4,8 +4,8 @@ import {
   formatDateKoreanCompact,
   type InventoryItem,
 } from "@expirymate/shared";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useQueryClient, type QueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   batchConsumeInventoryItems,
   batchDiscardInventoryItems,
@@ -18,6 +18,7 @@ import {
   withInventorySpace,
 } from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
+import { isPendingForDifferentSpace } from "./deferred-inventory-removal";
 
 const UNDO_WINDOW_MS = 5000;
 
@@ -32,11 +33,72 @@ type PendingRemovalEntry = {
 type PendingRemoval = {
   entries: PendingRemovalEntry[];
   timeoutId: ReturnType<typeof setTimeout>;
+  spaceId: string;
 };
+
+function listKeys(sessionUserId: string | undefined, spaceId: string) {
+  return {
+    inventory: withInventorySpace(
+      sessionQueryKeys.inventory,
+      sessionUserId,
+      spaceId,
+    ),
+    dashboard: withInventorySpace(
+      sessionQueryKeys.dashboard,
+      sessionUserId,
+      spaceId,
+    ),
+  };
+}
+
+function removeItemsFromCache(
+  queryClient: QueryClient,
+  inventoryKey: readonly unknown[],
+  ids: string[],
+) {
+  const idSet = new Set(ids);
+  queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
+    if (!current) {
+      return current;
+    }
+
+    return current.filter((item) => !idSet.has(item.id));
+  });
+}
+
+function restoreItemsToCache(
+  queryClient: QueryClient,
+  inventoryKey: readonly unknown[],
+  items: InventoryItem[],
+) {
+  queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
+    const originals = new Map(items.map((item) => [item.id, item]));
+    const list = current ?? [];
+    const existingIds = new Set(list.map((entry) => entry.id));
+    const missing = items.filter((item) => !existingIds.has(item.id));
+    const restored = list.map((item) => originals.get(item.id) ?? item);
+
+    return [...missing, ...restored];
+  });
+}
+
+function patchItemInCache(
+  queryClient: QueryClient,
+  inventoryKey: readonly unknown[],
+  nextItem: InventoryItem,
+) {
+  queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
+    if (!current) {
+      return current;
+    }
+
+    return current.map((item) => (item.id === nextItem.id ? nextItem : item));
+  });
+}
 
 async function submitRemovals(
   entries: PendingRemovalEntry[],
-  activeSpaceId: string,
+  spaceId: string,
 ) {
   const consumedEntries = entries.filter((entry) => entry.action === "consume");
   const discardedItems = entries.flatMap((entry) =>
@@ -49,7 +111,7 @@ async function submitRemovals(
 
   if (consumedEntries.length === 1 && !hasPartialConsume) {
     requests.push(
-      consumeInventoryItem(consumedEntries[0]!.item.id, activeSpaceId),
+      consumeInventoryItem(consumedEntries[0]!.item.id, spaceId),
     );
   } else if (consumedEntries.length > 0) {
     requests.push(
@@ -60,18 +122,18 @@ async function submitRemovals(
             amountBase: entry.amountBase,
           })),
         },
-        activeSpaceId,
+        spaceId,
       ),
     );
   }
 
   if (discardedItems.length === 1) {
-    requests.push(discardInventoryItem(discardedItems[0]!.id, activeSpaceId));
+    requests.push(discardInventoryItem(discardedItems[0]!.id, spaceId));
   } else if (discardedItems.length > 1) {
     requests.push(
       batchDiscardInventoryItems(
         discardedItems.map((item) => item.id),
-        activeSpaceId,
+        spaceId,
       ),
     );
   }
@@ -82,129 +144,94 @@ async function submitRemovals(
 /**
  * Soft-remove or reduce items in the inventory list for a short undo window,
  * then commit consume / discard outcomes to the server. Quick actions share
- * one window.
+ * one window. Pending work is pinned to the space it started in so a fridge
+ * switch cannot undo or commit against the wrong cache.
  */
 export function useDeferredInventoryItemRemoval() {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
-  const inventoryKey = useMemo(
-    () =>
-      withInventorySpace(
-        sessionQueryKeys.inventory,
-        sessionUserId,
-        activeSpaceId,
-      ),
-    [activeSpaceId, sessionUserId],
-  );
-  const dashboardKey = useMemo(
-    () =>
-      withInventorySpace(
-        sessionQueryKeys.dashboard,
-        sessionUserId,
-        activeSpaceId,
-      ),
-    [activeSpaceId, sessionUserId],
-  );
   const pendingRef = useRef<PendingRemoval | null>(null);
+  const sessionUserIdRef = useRef(sessionUserId);
+  sessionUserIdRef.current = sessionUserId;
   const [undoLabel, setUndoLabel] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCommitting, setIsCommitting] = useState(false);
 
-  const removeFromCache = useCallback(
-    (ids: string[]) => {
-      const idSet = new Set(ids);
-      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
-        if (!current) {
-          return current;
-        }
+  const commitPinned = useCallback(
+    async (pending: PendingRemoval, options: { silent: boolean }) => {
+      const keys = listKeys(sessionUserIdRef.current, pending.spaceId);
+      const originals = pending.entries.map((entry) => entry.item);
 
-        return current.filter((item) => !idSet.has(item.id));
-      });
-    },
-    [inventoryKey, queryClient],
-  );
-
-  const restoreToCache = useCallback(
-    (items: InventoryItem[]) => {
-      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
-        const originals = new Map(items.map((item) => [item.id, item]));
-        const list = current ?? [];
-        const existingIds = new Set(list.map((entry) => entry.id));
-        const missing = items.filter((item) => !existingIds.has(item.id));
-        const restored = list.map((item) => originals.get(item.id) ?? item);
-
-        return [...missing, ...restored];
-      });
-    },
-    [inventoryKey, queryClient],
-  );
-
-  const patchInCache = useCallback(
-    (nextItem: InventoryItem) => {
-      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) => {
-        if (!current) {
-          return current;
-        }
-
-        return current.map((item) =>
-          item.id === nextItem.id ? nextItem : item,
-        );
-      });
-    },
-    [inventoryKey, queryClient],
-  );
-
-  const invalidateLists = useCallback(async () => {
-    await Promise.all([
-      queryClient.invalidateQueries({ queryKey: inventoryKey }),
-      queryClient.invalidateQueries({ queryKey: dashboardKey }),
-    ]);
-  }, [dashboardKey, inventoryKey, queryClient]);
-
-  const commitItems = useCallback(
-    async (entries: PendingRemovalEntry[]) => {
-      if (!entries.length) {
-        return;
+      if (!options.silent) {
+        setIsCommitting(true);
       }
-      if (!activeSpaceId) {
-        restoreToCache(entries.map((entry) => entry.item));
-        setErrorMessage("함께 쓸 냉장고를 먼저 골라 주세요.");
-        return;
-      }
-
-      setIsCommitting(true);
 
       try {
-        await submitRemovals(entries, activeSpaceId);
-        await invalidateLists();
+        await submitRemovals(pending.entries, pending.spaceId);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: keys.inventory }),
+          queryClient.invalidateQueries({ queryKey: keys.dashboard }),
+        ]);
       } catch (error) {
-        restoreToCache(entries.map((entry) => entry.item));
-        await invalidateLists().catch(() => undefined);
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-        );
+        restoreItemsToCache(queryClient, keys.inventory, originals);
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: keys.inventory }),
+          queryClient.invalidateQueries({ queryKey: keys.dashboard }),
+        ]).catch(() => undefined);
+        if (!options.silent) {
+          setErrorMessage(
+            error instanceof Error
+              ? error.message
+              : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
+          );
+        }
       } finally {
-        setIsCommitting(false);
+        if (!options.silent) {
+          setIsCommitting(false);
+        }
       }
     },
-    [activeSpaceId, invalidateLists, restoreToCache],
+    [queryClient],
   );
 
-  const commitPending = useCallback(async () => {
+  const takePending = useCallback(() => {
     const pending = pendingRef.current;
-
     if (!pending) {
-      return;
+      return null;
     }
 
     clearTimeout(pending.timeoutId);
     pendingRef.current = null;
     setUndoLabel(null);
-    await commitItems(pending.entries);
-  }, [commitItems]);
+    return pending;
+  }, []);
+
+  const commitPending = useCallback(async () => {
+    const pending = takePending();
+    if (!pending) {
+      return;
+    }
+
+    await commitPinned(pending, { silent: false });
+  }, [commitPinned, takePending]);
+
+  const flushPendingIfSpaceChanged = useCallback(
+    (nextSpaceId: string | undefined) => {
+      const pending = pendingRef.current;
+      if (!isPendingForDifferentSpace(pending?.spaceId, nextSpaceId)) {
+        return;
+      }
+
+      const flushed = takePending();
+      if (!flushed) {
+        return;
+      }
+
+      void commitPinned(flushed, { silent: true });
+    },
+    [commitPinned, takePending],
+  );
 
   const buildUndoLabel = (entries: PendingRemovalEntry[]) => {
     if (entries.length === 1) {
@@ -227,6 +254,12 @@ export function useDeferredInventoryItemRemoval() {
       action: InventoryRemovalAction,
       amountBase?: number,
     ) => {
+      if (!activeSpaceId) {
+        setErrorMessage("함께 쓸 냉장고를 먼저 골라 주세요.");
+        return;
+      }
+
+      flushPendingIfSpaceChanged(activeSpaceId);
       setErrorMessage(null);
 
       const previous = pendingRef.current;
@@ -238,6 +271,7 @@ export function useDeferredInventoryItemRemoval() {
         return;
       }
 
+      const keys = listKeys(sessionUserId, activeSpaceId);
       const consumedAmount =
         action === "consume" && typeof amountBase === "number"
           ? Math.min(Math.max(1, Math.floor(amountBase)), item.quantityBase)
@@ -246,11 +280,13 @@ export function useDeferredInventoryItemRemoval() {
         action === "consume" && consumedAmount < item.quantityBase;
 
       if (isPartialConsume) {
-        patchInCache(
+        patchItemInCache(
+          queryClient,
+          keys.inventory,
           applyConsumedAmountToInventoryItem(item, consumedAmount),
         );
       } else {
-        removeFromCache([item.id]);
+        removeItemsFromCache(queryClient, keys.inventory, [item.id]);
       }
 
       const nextEntries = previous
@@ -267,48 +303,54 @@ export function useDeferredInventoryItemRemoval() {
         void commitPending();
       }, UNDO_WINDOW_MS);
 
-      pendingRef.current = { entries: nextEntries, timeoutId };
+      pendingRef.current = {
+        entries: nextEntries,
+        timeoutId,
+        spaceId: activeSpaceId,
+      };
     },
-    [commitPending, patchInCache, removeFromCache],
+    [
+      activeSpaceId,
+      commitPending,
+      flushPendingIfSpaceChanged,
+      queryClient,
+      sessionUserId,
+    ],
   );
 
   const undoRemoval = useCallback(() => {
-    const pending = pendingRef.current;
-
+    const pending = takePending();
     if (!pending) {
       return;
     }
 
-    clearTimeout(pending.timeoutId);
-    pendingRef.current = null;
-    setUndoLabel(null);
-    restoreToCache(pending.entries.map((entry) => entry.item));
-  }, [restoreToCache]);
+    restoreItemsToCache(
+      queryClient,
+      listKeys(sessionUserIdRef.current, pending.spaceId).inventory,
+      pending.entries.map((entry) => entry.item),
+    );
+  }, [queryClient, takePending]);
 
   const clearError = useCallback(() => {
     setErrorMessage(null);
   }, []);
 
+  useEffect(() => {
+    flushPendingIfSpaceChanged(activeSpaceId);
+  }, [activeSpaceId, flushPendingIfSpaceChanged]);
+
   useEffect(
     () => () => {
       const pending = pendingRef.current;
-
       if (!pending) {
         return;
       }
 
       clearTimeout(pending.timeoutId);
       pendingRef.current = null;
-
-      // Unmount path — commit without toggling React state.
-      if (!activeSpaceId) {
-        return;
-      }
-      void submitRemovals(pending.entries, activeSpaceId).catch(() => {
-        // Best effort; list refreshes on the next visit.
-      });
+      void commitPinned(pending, { silent: true });
     },
-    [activeSpaceId],
+    [commitPinned],
   );
 
   return {

@@ -64,6 +64,7 @@ import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
+import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
   colors,
   radius,
@@ -72,7 +73,11 @@ import {
   typography,
 } from "../src/shared/theme";
 import {
+  draftForSpace,
+  lastStorageLocationForSpace,
+  prefillForSpace,
   type RegistrationDraft,
+  type RegistrationPrefill,
   useRegistrationStore,
 } from "../src/store/registration-store";
 
@@ -147,7 +152,7 @@ const createDefaultFormValues = (): RegistrationFormValues => ({
 });
 
 const buildInitialValues = (
-  prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
+  prefill: RegistrationPrefill | null,
   draft: RegistrationDraft | null,
   lastStorageLocation?: string | null,
 ): RegistrationFormValues => {
@@ -207,9 +212,7 @@ function getVisibleRegistrationSteps(includeProduct: boolean) {
   });
 }
 
-const getPrefillKey = (
-  prefill: ReturnType<typeof useRegistrationStore.getState>["prefill"],
-) =>
+const getPrefillKey = (prefill: RegistrationPrefill | null) =>
   prefill
     ? [
         prefill.productMasterId ?? "",
@@ -220,11 +223,16 @@ const getPrefillKey = (
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
+  const { activeSpaceId } = useActiveSpace();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
-  const prefill = useRegistrationStore((state) => state.prefill);
-  const draft = useRegistrationStore((state) => state.draft);
-  const lastStorageLocation = useRegistrationStore(
-    (state) => state.lastStorageLocation,
+  const prefill = useRegistrationStore((state) =>
+    prefillForSpace(state, activeSpaceId),
+  );
+  const draft = useRegistrationStore((state) =>
+    draftForSpace(state, activeSpaceId),
+  );
+  const lastStorageLocation = useRegistrationStore((state) =>
+    lastStorageLocationForSpace(state, activeSpaceId),
   );
   const rewardNotice = useRegistrationStore((state) => state.rewardNotice);
   const setDraft = useRegistrationStore((state) => state.setDraft);
@@ -261,6 +269,11 @@ export default function RegisterScreen() {
     resolver: zodResolver(inventoryFormSchema) as never,
     defaultValues: createDefaultFormValues(),
   });
+
+  useEffect(() => {
+    initializedRef.current = false;
+    appliedPrefillKeyRef.current = "";
+  }, [activeSpaceId]);
 
   useEffect(() => {
     if (!hasHydrated) {
@@ -301,15 +314,15 @@ export default function RegisterScreen() {
         setStep("quantity");
       }
     }
-  }, [draft, form, hasHydrated, lastStorageLocation, prefill]);
+  }, [activeSpaceId, draft, form, hasHydrated, lastStorageLocation, prefill]);
 
   useEffect(() => {
     const subscription = form.watch((value) => {
-      if (!hasHydrated || !initializedRef.current) {
+      if (!hasHydrated || !initializedRef.current || !activeSpaceId) {
         return;
       }
 
-      setDraft({
+      setDraft(activeSpaceId, {
         productId: value.productId,
         productMasterId: value.productMasterId,
         displayName: value.displayName,
@@ -328,7 +341,7 @@ export default function RegisterScreen() {
     });
 
     return () => subscription.unsubscribe();
-  }, [form, hasHydrated, setDraft]);
+  }, [activeSpaceId, form, hasHydrated, setDraft]);
 
   useEffect(() => {
     setRegisteredSessionItems((current) => {
@@ -587,7 +600,9 @@ export default function RegisterScreen() {
   };
 
   const continueWithBarcode = () => {
-    clearPrefill();
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
     setRewardNotice(null);
     router.replace("/scanner");
   };
@@ -636,8 +651,10 @@ export default function RegisterScreen() {
         notes: values.notes,
       });
 
-      clearPrefill();
-      clearDraft();
+      if (activeSpaceId) {
+        clearPrefill(activeSpaceId);
+        clearDraft(activeSpaceId);
+      }
       appliedPrefillKeyRef.current = "";
 
       setRegisteredSessionItems((current) => [
@@ -659,7 +676,9 @@ export default function RegisterScreen() {
         storageLocation: values.storageLocation,
       };
 
-      setLastStorageLocation(values.storageLocation);
+      if (activeSpaceId) {
+        setLastStorageLocation(activeSpaceId, values.storageLocation);
+      }
       form.reset(nextDefaults);
       userChoseQuantityUnitRef.current = false;
       setShowAdditionalInfo(false);

@@ -8,6 +8,7 @@ import { Button } from "../../components/Button";
 import { colors, spacing, typography } from "../../shared/theme";
 import { useAppStore } from "../../store/app-store";
 import { useAuth } from "./use-auth";
+import { resolveRegisteredLandingHref } from "./auth-routing";
 
 const PUBLIC_ROOT_SEGMENTS = new Set([
   "index",
@@ -170,16 +171,7 @@ export function RequireRegisteredAuth({
 
   if (needsEmailVerification) {
     return (
-      <Redirect
-        href={
-          query.data?.email
-            ? {
-                pathname: "/auth/verify-pending",
-                params: { email: query.data.email },
-              }
-            : "/auth/verify-pending"
-        }
-      />
+      <Redirect href={resolveRegisteredLandingHref(query.data ?? {})} />
     );
   }
 

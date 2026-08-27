@@ -3,6 +3,7 @@ import {
   AuthLoadingScreen,
   AuthSessionErrorScreen,
 } from "../src/features/auth/auth-gate";
+import { resolveRegisteredLandingHref } from "../src/features/auth/auth-routing";
 import { useAuth } from "../src/features/auth/use-auth";
 import { useAppStore } from "../src/store/app-store";
 
@@ -12,7 +13,6 @@ export default function IndexScreen() {
     (state) => state.hasCompletedOnboarding,
   );
   const { query } = useAuth();
-  const isRegistered = query.data?.accountType === "registered";
 
   if (!hasHydrated || query.isLoading) {
     return <AuthLoadingScreen />;
@@ -33,9 +33,5 @@ export default function IndexScreen() {
     return <Redirect href="/onboarding" />;
   }
 
-  if (!isRegistered) {
-    return <Redirect href="/auth/login" />;
-  }
-
-  return <Redirect href="/(tabs)/home" />;
+  return <Redirect href={resolveRegisteredLandingHref(query.data ?? {})} />;
 }

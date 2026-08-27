@@ -24,6 +24,7 @@ import { SettingsGroup } from "../../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../../src/components/SettingsScreen";
 import { useAuth } from "../../../src/features/auth/use-auth";
 import { useActiveSpace } from "../../../src/features/spaces/space-provider";
+import { canInviteToSpace } from "../../../src/features/spaces/space-selection";
 import { useSpaceManagement } from "../../../src/features/spaces/use-space-management";
 import {
   deleteInventorySpace,
@@ -43,9 +44,11 @@ export default function SpaceDetailScreen() {
   const spaceId = firstParam(params.spaceId);
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
-  const { spaces, refetchSpaces, setActiveSpaceId } = useActiveSpace();
+  const { spaces, isLoading, refetchSpaces, setActiveSpaceId } =
+    useActiveSpace();
   const space = spaces.find((item) => item.id === spaceId);
   const canManage = space?.myRole === "owner" || space?.myRole === "manager";
+  const canInvite = canInviteToSpace(space);
   const isOwner = space?.myRole === "owner";
   const management = useSpaceManagement(spaceId, canManage);
   const [inviteVisible, setInviteVisible] = useState(false);
@@ -103,7 +106,19 @@ export default function SpaceDetailScreen() {
     router.replace("/settings/spaces");
   };
 
-  if (!spaceId || (!space && !spaces.length)) {
+  if (!spaceId || !space) {
+    if (spaceId && isLoading) {
+      return (
+        <SettingsScreen>
+          <EmptyState
+            mood="idle"
+            title="냉장고를 펼치고 있어요"
+            description="함께 쓰는 냉장고를 확인하고 있어요."
+          />
+        </SettingsScreen>
+      );
+    }
+
     return (
       <SettingsScreen>
         <EmptyState
@@ -183,7 +198,7 @@ export default function SpaceDetailScreen() {
       <Stack.Screen options={{ title: space?.name ?? "함께 쓰는 냉장고" }} />
       <SettingsScreen
         footer={
-          canManage ? (
+          canInvite ? (
             <Button
               icon={MailPlus}
               onPress={() => setInviteVisible(true)}
@@ -234,7 +249,7 @@ export default function SpaceDetailScreen() {
         </SettingsGroup>
       )}
 
-      {canManage && invitations.length ? (
+      {canInvite && invitations.length ? (
         <SettingsGroup title="초대를 기다리고 있어요">
           {invitations.map((invitation, index) => (
             <ListRow
@@ -250,7 +265,7 @@ export default function SpaceDetailScreen() {
         </SettingsGroup>
       ) : null}
 
-      {canManage && invitationCodes.length ? (
+      {canInvite && invitationCodes.length ? (
         <SettingsGroup title="사용을 기다리는 초대 코드">
           {invitationCodes.map((invitation, index) => (
             <ListRow
@@ -299,20 +314,28 @@ export default function SpaceDetailScreen() {
         </SettingsGroup>
       ) : null}
 
-      {isOwner && space?.type !== "personal" ? (
+      {isOwner && space.type !== "personal" ? (
         <Button
           variant="danger"
-          onPress={() => setExitAction("delete")}
+          onPress={() => {
+            deleteMutation.reset();
+            management.removeMutation.reset();
+            setExitAction("delete");
+          }}
           loading={deleteMutation.isPending}
           fullWidth
         >
           이 냉장고를 정리할게요
         </Button>
       ) : null}
-      {!isOwner && space?.type !== "personal" && sessionUserId ? (
+      {!isOwner && space.type !== "personal" && sessionUserId ? (
         <Button
           variant="danger"
-          onPress={() => setExitAction("leave")}
+          onPress={() => {
+            deleteMutation.reset();
+            management.removeMutation.reset();
+            setExitAction("leave");
+          }}
           loading={management.removeMutation.isPending}
           fullWidth
         >
@@ -370,13 +393,11 @@ export default function SpaceDetailScreen() {
               setGeneratedCode(null);
             }}
           />
-          {space?.type !== "personal" ? (
-            <Pill
-              label="초대 코드"
-              selected={inviteMethod === "code"}
-              onPress={() => setInviteMethod("code")}
-            />
-          ) : null}
+          <Pill
+            label="초대 코드"
+            selected={inviteMethod === "code"}
+            onPress={() => setInviteMethod("code")}
+          />
         </View>
         {inviteMethod === "email" ? (
           <>
@@ -485,7 +506,11 @@ export default function SpaceDetailScreen() {
 
       <BottomSheet
         visible={Boolean(exitAction)}
-        onClose={() => setExitAction(null)}
+        onClose={() => {
+          setExitAction(null);
+          deleteMutation.reset();
+          management.removeMutation.reset();
+        }}
         title={
           exitAction === "delete"
             ? "이 냉장고를 정말 정리할까요?"
@@ -523,7 +548,22 @@ export default function SpaceDetailScreen() {
               : "함께 쓰기를 마칠게요"}
           </Button>
         }
-      />
+      >
+        {exitAction === "delete" && deleteMutation.error ? (
+          <AppText style={styles.errorText}>
+            {deleteMutation.error instanceof Error
+              ? deleteMutation.error.message
+              : "앗, 지금 이 냉장고를 정리하지 못했어요."}
+          </AppText>
+        ) : null}
+        {exitAction === "leave" && management.removeMutation.error ? (
+          <AppText style={styles.errorText}>
+            {management.removeMutation.error instanceof Error
+              ? management.removeMutation.error.message
+              : "앗, 지금 이 냉장고에서 나가지 못했어요."}
+          </AppText>
+        ) : null}
+      </BottomSheet>
 
       <BottomSheet
         visible={Boolean(selectedMember)}

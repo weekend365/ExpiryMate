@@ -9,6 +9,20 @@ export type ChooseActiveSpaceOptions = {
   allowFallbackWhenMissing?: boolean;
 };
 
+/** Personal fridges reject invites on the API — hide that CTA for owners too. */
+export function canInviteToSpace(
+  space:
+    | Pick<InventorySpaceSummary, "type" | "myRole">
+    | null
+    | undefined,
+) {
+  if (!space || space.type === "personal") {
+    return false;
+  }
+
+  return space.myRole === "owner" || space.myRole === "manager";
+}
+
 export function chooseActiveInventorySpace(
   spaces: InventorySpaceSummary[],
   requestedSpaceId: string | null | undefined,

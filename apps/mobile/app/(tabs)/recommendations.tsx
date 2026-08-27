@@ -76,6 +76,7 @@ import { getRecommendationHeroStatus } from "../../src/features/recipes/recommen
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
 import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
 import {
@@ -201,6 +202,7 @@ export default function RecommendationsScreen() {
   const trackedQuotaEventRef = useRef<string | null>(null);
   const trackedScreenDayRef = useRef<string | null>(null);
   const trackedOfferRef = useRef<string | null>(null);
+  const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const hasRecommendableInventory = useMemo(
     () => (inventoryQuery.data ?? []).some(isTrackedItem),
@@ -1346,7 +1348,9 @@ export default function RecommendationsScreen() {
             icon={Barcode}
             onPress={() => {
               setEntryMethodVisible(false);
-              clearPrefill();
+              if (activeSpaceId) {
+                clearPrefill(activeSpaceId);
+              }
               router.push("/scanner");
             }}
             fullWidth
@@ -1357,7 +1361,9 @@ export default function RecommendationsScreen() {
             icon={PenLine}
             onPress={() => {
               setEntryMethodVisible(false);
-              clearPrefill();
+              if (activeSpaceId) {
+                clearPrefill(activeSpaceId);
+              }
               router.push("/register");
             }}
             fullWidth
