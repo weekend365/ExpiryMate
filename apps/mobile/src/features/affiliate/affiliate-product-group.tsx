@@ -3,7 +3,7 @@ import type {
   AffiliateProduct,
   AffiliateProductGroup,
 } from "@expirymate/shared";
-import { ExternalLink } from "lucide-react-native";
+import { COUPANG_PARTNERS_CTA_LABEL } from "@expirymate/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -16,7 +16,8 @@ import {
 import { AppText } from "../../components/AppText";
 import { trackMonetizationEvent } from "../../services/api";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+import { AffiliateCta } from "./affiliate-cta";
 import { visibleIngredientReason } from "./affiliate-group-reason";
 import { uniqueProductsById } from "./unique-affiliate-products";
 
@@ -84,18 +85,10 @@ export function AffiliateProductGroupView({
         </View>
       ) : group.fallbackUrl ? (
         <View style={headingBand ? styles.groupBody : undefined}>
-          <Pressable
+          <AffiliateCta
+            contextLabel={group.ingredientName}
             onPress={() => void openFallback(group.fallbackUrl!, group.placement)}
-            accessibilityRole="link"
-            accessibilityLabel={`${group.ingredientName} 쿠팡에서 검색하기`}
-            style={({ pressed }) => [
-              styles.fallback,
-              pressed && styles.ctaRowPressed,
-            ]}
-          >
-            <AppText variant="bodyStrong" tone="primary">쿠팡에서 검색하기</AppText>
-            <ExternalLink color={colors.primary} size={spacing.sm} strokeWidth={2.4} />
-          </Pressable>
+          />
         </View>
       ) : null}
     </View>
@@ -125,7 +118,7 @@ function ProductCard({
     <Pressable
       onPress={() => void openProduct(product, placement)}
       accessibilityRole="link"
-      accessibilityLabel={`${product.productName}, ${formatProductPrice(product)}, 쿠팡에서 보기`}
+      accessibilityLabel={`${product.productName}, ${formatProductPrice(product)}, ${COUPANG_PARTNERS_CTA_LABEL}`}
       style={({ pressed }) => [
         styles.productCard,
         shouldStack && styles.productCardStacked,
@@ -149,33 +142,23 @@ function ProductCard({
             />
           )}
           <View style={styles.productCopy}>
-            <AppText variant="bodySmall" numberOfLines={2} style={styles.productName}>
+            <AppText variant="bodySmall" numberOfLines={2}>
               {product.productName}
             </AppText>
             <View style={styles.productMeta}>
               <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
-              {product.isRocket ? <AppText style={styles.badge}>로켓배송</AppText> : null}
+              {product.isRocket ? (
+                <AppText variant="captionStrong" tone="link">로켓배송</AppText>
+              ) : null}
               {product.isFreeShipping ? (
-                <AppText style={styles.badge}>무료배송</AppText>
+                <AppText variant="captionStrong" tone="link">무료배송</AppText>
               ) : null}
             </View>
-            <View style={[styles.ctaRow, pressed && styles.ctaRowPressed]}>
-              <AppText
-                variant="caption"
-                tone="primary"
-                scaleRole="chrome"
-                densityAware={false}
-              >
-                쿠팡에서 보기
-              </AppText>
-              <ExternalLink
-                color={colors.primary}
-                size={typography.caption.fontSize}
-                strokeWidth={2.4}
-                accessibilityElementsHidden
-                importantForAccessibility="no"
-              />
-            </View>
+            <AffiliateCta
+              contextLabel={product.productName}
+              mode="inline"
+              pressed={pressed}
+            />
           </View>
         </>
       )}
@@ -271,48 +254,11 @@ const styles = StyleSheet.create({
     minWidth: 0,
     gap: spacing.xxs,
   },
-  productName: {
-    color: colors.text,
-  },
   productMeta: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.xs,
-  },
-  badge: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
-  },
-  ctaRow: {
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-  },
-  ctaRowPressed: {
-    backgroundColor: colors.primarySoftPressed,
-  },
-  fallback: {
-    minHeight: spacing.xl,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xs,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.sm,
   },
   productCardPressed: {
     backgroundColor: colors.surfacePressed,

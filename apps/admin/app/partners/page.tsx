@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { appBrand } from "@expirymate/shared";
+import { AffiliateCta } from "../../src/components/affiliate-cta";
+import { AffiliateDisclosure } from "../../src/components/affiliate-disclosure";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
-
-const COUPANG_DISCLOSURE =
-  "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.";
 
 export const dynamic = "force-dynamic";
 
@@ -16,25 +15,22 @@ export const metadata = {
 
 export default function PartnersPage() {
   const partnerLink = readCoupangPartnersPublicLink();
-  const partnerLabel =
-    process.env["COUPANG_PARTNERS_PUBLIC_LINK_LABEL"]?.trim() ||
-    "식재료 쿠팡에서 찾아보기";
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
-      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
+    <main className="mx-auto min-h-screen max-w-3xl px-[var(--space-md)] py-[var(--space-xl)]">
+      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-[var(--space-md)] shadow-[var(--shadow-lift)]">
+        <div className="type-label inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] text-[var(--link-text)]">
           {appBrand.appNameKo} Partners
         </div>
-        <h1 className="mt-5 text-3xl font-black tracking-tight">
+        <h1 className="type-display mt-[var(--space-md)] tracking-tight">
           쿠팡 파트너스 안내
         </h1>
-        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+        <p className="type-body-small mt-[var(--space-sm)] text-[var(--muted)]">
           시행일: 2026년 8월 18일
         </p>
 
-        <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
-          <h2 className="text-xl font-black">이 페이지의 역할</h2>
+        <section className="type-body mt-[var(--space-lg)] space-y-[var(--space-sm)] text-[var(--foreground)]">
+          <h2 className="type-heading">이 페이지의 역할</h2>
           <p>
             {appBrand.appNameKo}({appBrand.appNameEn})는 식재료·유통기한 관리와
             AI 요리 추천을 제공합니다. 레시피의 부족 재료와 별도 장보기 화면에서
@@ -42,7 +38,7 @@ export default function PartnersPage() {
             제휴 안내와 경제적 이해관계를 공개합니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">앱에서 어떻게 쓰이나</h2>
+          <h2 className="type-heading pt-[var(--space-sm)]">앱에서 어떻게 쓰이나</h2>
           <p>
             레시피 상세에서는 부족한 선택 재료별 관련 상품을, 장보기 화면에서는
             사용자가 직접 검색한 재료와 최근 30일 안에 모두 소비한 재료의 관련
@@ -54,55 +50,43 @@ export default function PartnersPage() {
             광고 보상이나 추천 이용량을 받기 위해 쿠팡에서 구매할 필요도 없습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">경제적 이해관계 표시</h2>
+          <h2 className="type-heading pt-[var(--space-sm)]">경제적 이해관계 표시</h2>
           <p>
             쿠팡 파트너스 활동으로 게재된 안내는 추천 내용과 같은 언어로, 본문과
             구별되게 표시합니다.
           </p>
-          <p
-            className="rounded-[var(--radius-lg)] bg-[var(--primary-soft)] px-4 py-4 text-base font-black leading-7 text-[var(--foreground)]"
-            role="note"
-          >
-            {COUPANG_DISCLOSURE}
-          </p>
+          <AffiliateDisclosure />
 
-          <h2 className="pt-4 text-xl font-black">식재료 찾아보기</h2>
+          <h2 className="type-heading pt-[var(--space-sm)]">식재료 찾아보기</h2>
           <p>
             앱은 쿠팡 파트너스 API에서 받은 상품명·이미지·현재 표시 가격·배송
             정보와 제휴 URL을 최대 3개까지 표시할 수 있습니다. 검색 결과가 없거나
             API를 사용할 수 없으면 아래와 같은 제휴 검색 링크로 전환합니다.
             가격과 재고는 조회 뒤 바뀔 수 있으므로 쿠팡에서 최종 확인해 주세요.
           </p>
-          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] p-5">
-            <p className="text-xs font-bold tracking-wide text-[var(--primary)]">
+          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-md)]">
+            <p className="type-caption-strong tracking-wide text-[var(--link-text)]">
               있으면 더 맛있어져요
             </p>
-            <p className="mt-2 text-lg font-black">식재료</p>
-            <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+            <p className="type-subheading mt-[var(--space-xs)]">식재료</p>
+            <p className="type-body-small mt-[var(--space-xxs)] text-[var(--muted)]">
               요리에 필요한 재료를 쿠팡에서 둘러볼 수 있어요.
             </p>
             {partnerLink ? (
-              <div className="mt-4 space-y-2">
-                <a
-                  className="inline-flex min-h-12 items-center rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
-                  href={partnerLink}
-                  rel="noopener noreferrer sponsored"
-                  target="_blank"
-                >
-                  {partnerLabel}
-                </a>
-                <p className="break-all text-xs leading-5 text-[var(--muted)]">
+              <div className="mt-[var(--space-sm)] space-y-[var(--space-xs)]">
+                <AffiliateCta href={partnerLink} contextLabel="식재료" />
+                <p className="type-caption break-all text-[var(--muted)]">
                   {partnerLink}
                 </p>
               </div>
             ) : (
-              <p className="mt-4 text-sm leading-6 text-[var(--muted)]">
+              <p className="type-body-small mt-[var(--space-sm)] text-[var(--muted)]">
                 파트너스 상품 링크는 운영 설정 후 이 자리에 표시됩니다.
               </p>
             )}
           </div>
 
-          <h2 className="pt-4 text-xl font-black">결제와 개인정보</h2>
+          <h2 className="type-heading pt-[var(--space-sm)]">결제와 개인정보</h2>
           <p>
             상품 결제와 배송은 쿠팡에서 이루어집니다. App Store 또는 Google Play
             인앱결제가 아니며, {appBrand.appNameKo}가 대금을 받지 않습니다.
@@ -112,11 +96,11 @@ export default function PartnersPage() {
             유통기한, 수량, 공간 정보, 기기 광고 식별자는 쿠팡에 보내지 않습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">문의</h2>
+          <h2 className="type-heading pt-[var(--space-sm)]">문의</h2>
           <p>
             제휴 안내와 서비스 관련 문의는{" "}
             <a
-              className="font-bold text-[var(--primary)]"
+              className="type-body-strong text-[var(--link-text)]"
               href={`mailto:${contactEmail}`}
             >
               {contactEmail}
@@ -125,16 +109,16 @@ export default function PartnersPage() {
           </p>
         </section>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-[var(--space-lg)] flex flex-wrap gap-[var(--space-xs)]">
           <Link
             href="/terms"
-            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
+            className="type-body-small-strong rounded-[var(--radius-lg)] bg-[var(--action-primary-background)] px-[var(--space-md)] py-[var(--space-xs)] text-[var(--surface)] hover:bg-[var(--action-primary-pressed)]"
           >
             이용약관
           </Link>
           <Link
             href="/privacy"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
+            className="type-body-small-strong rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-[var(--space-md)] py-[var(--space-xs)] text-[var(--foreground)]"
           >
             개인정보처리방침
           </Link>

@@ -14,8 +14,9 @@ import {
   radius,
   spacing,
   touchTarget,
-  typography,
 } from "../../shared/theme";
+import { AffiliateCta } from "./affiliate-cta";
+import { AffiliateDisclosure } from "./affiliate-disclosure";
 import { useAffiliateOffers } from "./use-affiliate-offers";
 import { AffiliateProductGroupView } from "./affiliate-product-group";
 import { ingredientsWithoutProductGroups } from "./optional-missing-visibility";
@@ -100,7 +101,7 @@ export function OptionalMissingIngredientsCard({
 
   return (
     <View style={styles.card}>
-      <AppText style={styles.title}>있으면 더 맛있어져요</AppText>
+      <AppText variant="label" tone="subtext">있으면 더 맛있어져요</AppText>
       {listedIngredients.length > 0 ? (
         <View style={styles.list}>
           {listedIngredients.map((ingredient) => {
@@ -108,21 +109,14 @@ export function OptionalMissingIngredientsCard({
             return (
               <View key={`${ingredient.name}-${ingredient.reason}`} style={styles.row}>
                 <View style={styles.copy}>
-                  <AppText style={styles.name}>{ingredient.name}</AppText>
-                  <AppText style={styles.reason}>{ingredient.reason}</AppText>
+                  <AppText variant="bodySmallStrong">{ingredient.name}</AppText>
+                  <AppText variant="caption" tone="subtext">{ingredient.reason}</AppText>
                 </View>
                 {offer ? (
-                  <Pressable
+                  <AffiliateCta
                     onPress={() => void openOffer(offer, trackingMode)}
-                    accessibilityRole="link"
-                    accessibilityLabel={`${ingredient.name} 쿠팡에서 찾아보기`}
-                    style={({ pressed }) => [
-                      styles.cta,
-                      pressed && styles.ctaPressed,
-                    ]}
-                  >
-                    <AppText style={styles.ctaLabel}>쿠팡에서 찾아보기</AppText>
-                  </Pressable>
+                    contextLabel={ingredient.name}
+                  />
                 ) : null}
               </View>
             );
@@ -143,6 +137,9 @@ export function OptionalMissingIngredientsCard({
           상품을 불러오지 못했어요. 레시피는 그대로 이용할 수 있어요.
         </AppText>
       ) : null}
+      {(offers.length > 0 || productGroups.length > 0) && offersQuery.data?.disclosure ? (
+        <AffiliateDisclosure disclosure={offersQuery.data.disclosure} />
+      ) : null}
       {productGroups.length > 0 ? (
         <View style={styles.productGroups}>
           {productGroups.map((group) => (
@@ -154,15 +151,11 @@ export function OptionalMissingIngredientsCard({
         </View>
       ) : null}
       {sharedLanding ? (
-        <Pressable
+        <AffiliateCta
           onPress={() => void openOffer(sharedLanding, trackingMode)}
-          accessibilityRole="link"
-          accessibilityLabel="있으면 좋은 재료를 쿠팡에서 둘러보기"
+          contextLabel="있으면 좋은 재료"
           accessibilityHint="특정 한 품목이 아니라 식재료를 둘러보는 페이지로 이동해요."
-          style={({ pressed }) => [styles.cta, pressed && styles.ctaPressed]}
-        >
-          <AppText style={styles.ctaLabel}>이 재료들, 쿠팡에서 둘러볼까요?</AppText>
-        </Pressable>
+        />
       ) : null}
       {productGroups.length > 0 ? (
         <Pressable
@@ -171,11 +164,8 @@ export function OptionalMissingIngredientsCard({
           accessibilityLabel="장보기에서 더 찾아보기"
           style={({ pressed }) => [styles.shoppingLink, pressed && styles.ctaPressed]}
         >
-          <AppText variant="bodySmall" tone="primary">장보기에서 더 찾아보기</AppText>
+          <AppText variant="bodySmall" tone="link">장보기에서 더 찾아보기</AppText>
         </Pressable>
-      ) : null}
-      {(offers.length > 0 || productGroups.length > 0) && offersQuery.data?.disclosure ? (
-        <AppText style={styles.disclosure}>{offersQuery.data.disclosure}</AppText>
       ) : null}
     </View>
   );
@@ -212,12 +202,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.sm,
   },
-  title: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
   list: {
     gap: spacing.sm,
   },
@@ -241,34 +225,8 @@ const styles = StyleSheet.create({
   copy: {
     gap: spacing.xxs,
   },
-  name: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  reason: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
-  },
-  cta: {
-    minHeight: touchTarget.min,
-    borderRadius: radius.lg,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacing.sm,
-  },
   ctaPressed: {
     backgroundColor: colors.surfacePressed,
-  },
-  ctaLabel: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.primary,
   },
   shoppingLink: {
     minHeight: touchTarget.min,
@@ -277,11 +235,5 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
     paddingHorizontal: spacing.sm,
-  },
-  disclosure: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.mutedText,
   },
 });

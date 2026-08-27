@@ -46,4 +46,10 @@ describe("mobile design token contract", () => {
 
     expect(rawLayout).toEqual([]);
   });
+
+  it("does not bypass the centralized Coupang CTA copy", () => {
+    expect(
+      filesMatching(/쿠팡에서 (?:보기|검색하기|찾아보기|둘러보기)/),
+    ).toEqual([]);
+  });
 });

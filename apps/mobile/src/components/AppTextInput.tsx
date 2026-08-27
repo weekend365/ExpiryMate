@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import {
   getMaxFontSizeMultiplier,
+  type AppTextVariant,
   type FontScaleRole,
 } from "../shared/font-scale";
 import { colors, typography } from "../shared/theme";
@@ -15,6 +16,8 @@ import { colors, typography } from "../shared/theme";
 export interface AppTextInputProps extends TextInputProps {
   /** Font-scale cap role. Defaults to body (forms / search). */
   scaleRole?: FontScaleRole;
+  /** Complete typography role. TextInput intentionally omits lineHeight on iOS. */
+  variant?: AppTextVariant;
   style?: StyleProp<TextStyle>;
 }
 
@@ -25,6 +28,7 @@ export const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
   function AppTextInput(
     {
       scaleRole = "body",
+      variant = "body",
       maxFontSizeMultiplier,
       placeholderTextColor = colors.mutedText,
       style,
@@ -43,8 +47,8 @@ export const AppTextInput = forwardRef<TextInput, AppTextInputProps>(
         style={[
           {
             color: colors.text,
-            fontSize: typography.body.fontSize,
-            fontFamily: typography.body.fontFamily,
+            fontSize: typography[variant].fontSize,
+            fontFamily: typography[variant].fontFamily,
             // lineHeight on iOS TextInput sits the glyph low in the box.
             ...(Platform.OS === "android"
               ? {

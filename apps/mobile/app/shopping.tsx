@@ -1,4 +1,3 @@
-import { COUPANG_PARTNERS_DISCLOSURE } from "@expirymate/shared";
 import { useMutation } from "@tanstack/react-query";
 import { ChevronDown, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
@@ -18,6 +17,7 @@ import { SkeletonBlock } from "../src/components/ContentSkeleton";
 import { JangoHeroNoticeCarousel } from "../src/components/JangoHeroNoticeCarousel";
 import { Screen } from "../src/components/Screen";
 import { AffiliateProductGroupView } from "../src/features/affiliate/affiliate-product-group";
+import { AffiliateDisclosure } from "../src/features/affiliate/affiliate-disclosure";
 import {
   getShoppingHeroNotices,
   isShoppingSearchActive,
@@ -36,7 +36,7 @@ import {
   trackMonetizationEvent,
 } from "../src/services/api";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
 
 export default function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
@@ -137,7 +137,7 @@ export default function ShoppingScreen() {
       testID="affiliate-shopping-screen"
       refreshControl={
         <RefreshControl
-          tintColor={colors.primary}
+          tintColor={colors.linkText}
           refreshing={isRefreshingRecent}
           onRefresh={refreshRecentItems}
         />
@@ -174,6 +174,7 @@ export default function ShoppingScreen() {
               returnKeyType="search"
               placeholder="예: 대파, 달걀, 밀폐용기"
               accessibilityLabel="식재료 검색"
+              variant="bodyStrong"
               scaleRole="chrome"
               textAlignVertical="center"
               underlineColorAndroid="transparent"
@@ -217,11 +218,11 @@ export default function ShoppingScreen() {
             ]}
           >
             {searchMutation.isPending ? (
-              <ActivityIndicator color={colors.primary} />
+              <ActivityIndicator color={colors.linkText} />
             ) : (
               <AppText
                 variant="bodyStrong"
-                tone={query.trim() ? "primary" : "muted"}
+                tone={query.trim() ? "link" : "muted"}
                 scaleRole="chrome"
                 densityAware={false}
               >
@@ -231,6 +232,11 @@ export default function ShoppingScreen() {
           </Pressable>
         </View>
       </View>
+
+      <AffiliateDisclosure
+        disclosure={shopping?.disclosure}
+        supportingText="상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다."
+      />
 
       {searchActive ? (
         <ShoppingCatalogSection
@@ -326,14 +332,6 @@ export default function ShoppingScreen() {
         </ShoppingCatalogSection>
       )}
 
-      <View style={styles.legal}>
-        <AppText variant="caption" tone="muted" style={styles.legalText}>
-          {shopping?.disclosure ?? COUPANG_PARTNERS_DISCLOSURE}
-        </AppText>
-        <AppText variant="caption" tone="muted" style={styles.legalText}>
-          상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다.
-        </AppText>
-      </View>
     </Screen>
   );
 }
@@ -469,8 +467,6 @@ const styles = StyleSheet.create({
     // and 검색 label. A 48px-tall TextInput leaves iOS placeholder off-center.
     paddingVertical: spacing.none,
     paddingHorizontal: spacing.none,
-    fontSize: typography.bodyStrong.fontSize,
-    fontFamily: typography.bodyStrong.fontFamily,
     textAlignVertical: "center",
   },
   searchSubmit: {
@@ -548,14 +544,6 @@ const styles = StyleSheet.create({
   },
   loadMorePressed: {
     backgroundColor: colors.surfacePressed,
-  },
-  legal: {
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.sm,
-    paddingTop: spacing.xs,
-  },
-  legalText: {
-    textAlign: "center",
   },
   loadingSkeleton: {
     width: "100%",

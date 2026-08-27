@@ -30,6 +30,7 @@ describe("font scale policy", () => {
     expect(fontScaleRoleForVariant("bodySmallStrong")).toBe("body");
     expect(fontScaleRoleForVariant("title")).toBe("heading");
     expect(fontScaleRoleForVariant("caption")).toBe("chrome");
+    expect(fontScaleRoleForVariant("captionStrong")).toBe("chrome");
     expect(fontScaleRoleForVariant("label")).toBe("chrome");
   });
 

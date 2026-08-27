@@ -24,6 +24,9 @@ type AppTextTone =
   | "subtext"
   | "muted"
   | "primary"
+  | "link"
+  | "disclosure"
+  | "disabled"
   | "danger"
   | "warning"
   | "success"
@@ -50,6 +53,9 @@ const toneColors: Record<AppTextTone, string> = {
   subtext: colors.subtext,
   muted: colors.mutedText,
   primary: colors.primary,
+  link: colors.linkText,
+  disclosure: colors.disclosureText,
+  disabled: colors.disabledText,
   danger: colors.danger,
   warning: colors.warning,
   success: colors.success,

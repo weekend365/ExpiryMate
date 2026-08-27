@@ -35,6 +35,14 @@ export const semanticColors = {
   primarySoft: brand[50],
   primarySoftPressed: brand[100],
 
+  // Accessible foreground/action roles. `primary` remains the bright brand
+  // accent; small text and white-on-green controls need the darker 700 step
+  // to meet WCAG AA contrast on light surfaces.
+  actionPrimaryBackground: brand[700],
+  actionPrimaryPressed: brand[800],
+  linkText: brand[700],
+  disclosureText: neutral[600],
+
   // Secondary accent (neutral slate)
   accent: neutral[600],
   accentSoft: neutral[100],
@@ -144,6 +152,7 @@ export const typography = {
   bodySmall: { fontSize: 14, lineHeight: 20, fontWeight: fontWeight.medium },
   bodySmallStrong: { fontSize: 14, lineHeight: 20, fontWeight: fontWeight.semibold },
   caption: { fontSize: 12, lineHeight: 16, fontWeight: fontWeight.medium },
+  captionStrong: { fontSize: 12, lineHeight: 16, fontWeight: fontWeight.bold },
   label: { fontSize: 13, lineHeight: 18, fontWeight: fontWeight.bold },
 } as const;
 

@@ -1,10 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
+  COUPANG_PARTNERS_CTA_LABEL,
   COUPANG_PARTNERS_DISCLOSURE,
   affiliateOffersResponseSchema,
 } from "./affiliate";
 
 describe("affiliate offer contract", () => {
+  it("keeps the outbound Coupang CTA copy centralized", () => {
+    expect(COUPANG_PARTNERS_CTA_LABEL).toBe("쿠팡에서 보기");
+  });
+
   it("accepts a Phase A partner-link offer payload", () => {
     const parsed = affiliateOffersResponseSchema.parse({
       enabled: true,

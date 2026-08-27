@@ -37,6 +37,7 @@ export function fontScaleRoleForVariant(variant: AppTextVariant): FontScaleRole 
     case "subheading":
       return "heading";
     case "caption":
+    case "captionStrong":
     case "label":
       return "chrome";
     default:

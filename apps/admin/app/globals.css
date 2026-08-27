@@ -40,6 +40,73 @@ a {
   box-sizing: border-box;
 }
 
+/* Semantic typography roles backed by the shared mobile/web type ramp. */
+.type-display {
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-line-height);
+  font-weight: var(--type-display-weight);
+}
+
+.type-title {
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line-height);
+  font-weight: var(--type-title-weight);
+}
+
+.type-heading {
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line-height);
+  font-weight: var(--type-heading-weight);
+}
+
+.type-subheading {
+  font-size: var(--type-subheading-size);
+  line-height: var(--type-subheading-line-height);
+  font-weight: var(--type-subheading-weight);
+}
+
+.type-body {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line-height);
+  font-weight: var(--type-body-weight);
+}
+
+.type-body-strong {
+  font-size: var(--type-body-strong-size);
+  line-height: var(--type-body-strong-line-height);
+  font-weight: var(--type-body-strong-weight);
+}
+
+.type-body-small {
+  font-size: var(--type-body-small-size);
+  line-height: var(--type-body-small-line-height);
+  font-weight: var(--type-body-small-weight);
+}
+
+.type-body-small-strong {
+  font-size: var(--type-body-small-strong-size);
+  line-height: var(--type-body-small-strong-line-height);
+  font-weight: var(--type-body-small-strong-weight);
+}
+
+.type-caption {
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line-height);
+  font-weight: var(--type-caption-weight);
+}
+
+.type-caption-strong {
+  font-size: var(--type-caption-strong-size);
+  line-height: var(--type-caption-strong-line-height);
+  font-weight: var(--type-caption-strong-weight);
+}
+
+.type-label {
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line-height);
+  font-weight: var(--type-label-weight);
+}
+
 :is(a, button, input, select, textarea):focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 2px;
