@@ -119,6 +119,24 @@ export function getHomeNotices(input: {
   return notices;
 }
 
+export function getHeroTone(
+  notice: HomeNotice | null,
+): "primary" | "warning" | "danger" {
+  if (!notice) {
+    return "primary";
+  }
+
+  if (notice.mood === "worry") {
+    return notice.action === "expiring" ? "warning" : "danger";
+  }
+
+  if (notice.id === "expiring") {
+    return "warning";
+  }
+
+  return "primary";
+}
+
 function getExpiringNoticeMessage(groups: InventoryItemGroup[]) {
   const firstName = groups[0]?.displayName?.trim() || "재료";
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getHomeNotices } from "./home-notices";
+import { getHeroTone, getHomeNotices } from "./home-notices";
 
 const base = {
   isInitialLoading: false,
@@ -105,5 +105,33 @@ describe("getHomeNotices", () => {
         mood: "empty",
       }),
     ]);
+  });
+});
+
+describe("getHeroTone", () => {
+  it("uses warning for an expiring notice even when the mood is speak", () => {
+    expect(
+      getHeroTone({
+        id: "expiring",
+        message: "우유, 먼저 살펴볼까요?",
+        mood: "speak",
+        action: "expiring",
+      }),
+    ).toBe("warning");
+  });
+
+  it("uses danger for a worry notice that is not an expiring action", () => {
+    expect(
+      getHeroTone({
+        id: "initial-error",
+        message: "앗, 오늘 할 일을 불러오지 못했어요.",
+        mood: "worry",
+        action: "retry",
+      }),
+    ).toBe("danger");
+  });
+
+  it("falls back to primary when there is no notice", () => {
+    expect(getHeroTone(null)).toBe("primary");
   });
 });

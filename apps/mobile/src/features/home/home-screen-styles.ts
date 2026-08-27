@@ -1,0 +1,176 @@
+import { StyleSheet } from "react-native";
+import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+
+export const homeScreenStyles = StyleSheet.create({
+  screenContent: {
+    flex: 1,
+    gap: spacing.none,
+    paddingHorizontal: spacing.none,
+    paddingTop: spacing.none,
+    paddingBottom: spacing.none,
+  },
+  homeScene: {
+    flex: 1,
+    overflow: "hidden",
+  },
+  homeSceneBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  homeSceneVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.background,
+    opacity: 0.24,
+  },
+  scrollFlex: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xxxl + spacing.sm,
+  },
+  heroCard: {
+    gap: spacing.xs,
+    padding: spacing.sm,
+  },
+  heroNotice: {
+    minHeight: spacing.xxxl + spacing.xs,
+  },
+  previewCard: {
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+  },
+  recommendationPreview: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    padding: spacing.sm,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+  },
+  recommendationPreviewStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  previewBodyPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  recommendationError: {
+    minHeight: 0,
+  },
+  recommendationIcon: {
+    width: spacing.xl,
+    height: spacing.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+  },
+  recommendationCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  recommendationSkeletonCopy: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  recommendationReasonText: {
+    flexShrink: 1,
+  },
+  recommendationRetry: {
+    alignSelf: "flex-start",
+  },
+  quickEntrySection: {
+    gap: spacing.xs,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  quickEntryActions: {
+    flexDirection: "column",
+    gap: spacing.xs,
+  },
+  trafficGroup: {
+    gap: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.sm,
+  },
+  sectionHeader: {
+    minHeight: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.xs,
+  },
+  sectionHeaderStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  sectionHeaderAction: {
+    minHeight: spacing.lg,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    paddingLeft: spacing.xs,
+    borderRadius: radius.md,
+  },
+  sectionHeaderActionPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  trafficStrip: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+  },
+  trafficStripRegular: {
+    gap: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  trafficLampPressable: {
+    flex: 1,
+    minWidth: 0,
+    alignItems: "center",
+    minHeight: touchTarget.min,
+    justifyContent: "flex-start",
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.md,
+  },
+  trafficLampPressableRegular: {
+    minHeight: touchTarget.cta,
+    paddingVertical: spacing.xs,
+  },
+  trafficLampPressablePressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  inventoryEmpty: {
+    minHeight: touchTarget.ctaLarge,
+    justifyContent: "center",
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+  },
+});

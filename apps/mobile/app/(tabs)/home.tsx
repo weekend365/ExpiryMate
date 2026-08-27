@@ -4,41 +4,35 @@ import {
   type DashboardRecommendationPreview,
 } from "@expirymate/shared";
 import { router } from "expo-router";
-import {
-  Barcode,
-  ChevronRight,
-  PenLine,
-  ShoppingBasket,
-  Sparkles,
-} from "lucide-react-native";
-import { useMemo, useState } from "react";
+import { ChevronRight, Sparkles } from "lucide-react-native";
+import { useMemo } from "react";
 import {
   ImageBackground,
   Pressable,
   RefreshControl,
   ScrollView,
-  StyleSheet,
   View,
 } from "react-native";
 import homeWelcomeBg from "../../assets/backgrounds/home-welcome-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { SkeletonBlock } from "../../src/components/ContentSkeleton";
-import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCarousel";
 import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
-import { SurfaceCard } from "../../src/components/SurfaceCard";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
+import { HomeHero } from "../../src/features/home/home-hero";
 import {
   getHomeNotices,
-  type HomeNotice,
   type HomeNoticeAction,
 } from "../../src/features/home/home-notices";
+import { HomeQuickEntry } from "../../src/features/home/home-quick-entry";
+import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
+import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
-import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
+import { colors, spacing } from "../../src/shared/theme";
 import {
   getContentMaxWidth,
   useResponsiveLayout,
@@ -63,7 +57,6 @@ export default function HomeScreen() {
   } = useRecipeGeneration();
   const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
-  const [noticeIndex, setNoticeIndex] = useState(0);
 
   const hasLoaded = data !== undefined;
   const isInitialLoading = isLoading && !hasLoaded;
@@ -110,8 +103,6 @@ export default function HomeScreen() {
     ],
   );
 
-  const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
-  const heroTone = getHeroTone(activeNotice);
   const recommendationPreview = data?.latestRecommendationPreview ?? null;
   const recommendationReason = recommendationPreview
     ? formatRecommendationReason(recommendationPreview.reasonIngredients ?? [])
@@ -220,21 +211,7 @@ export default function HomeScreen() {
           }
         >
           <SpaceSwitcher />
-          <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
-            <JangoHeroNoticeCarousel
-              notices={notices.map((notice) => ({
-                id: notice.id,
-                message: notice.message,
-                mood: notice.mood,
-                onPress: notice.action
-                  ? () => handleNoticeAction(notice.action!)
-                  : undefined,
-                accessibilityHint: notice.actionHint,
-              }))}
-              bubbleStyle={styles.heroNotice}
-              onIndexChange={setNoticeIndex}
-            />
-          </SurfaceCard>
+          <HomeHero notices={notices} onNoticeAction={handleNoticeAction} />
 
           <View style={styles.previewCard}>
             <HomeSectionHeader
@@ -492,117 +469,17 @@ export default function HomeScreen() {
                 </AppText>
               </View>
             )}
-            <View style={styles.quickEntrySection}>
-              <AppText variant="bodySmall" tone="subtext">
-                빠른 동작
-              </AppText>
-              <View style={styles.quickEntryActions}>
-                <Button
-                  icon={Barcode}
-                  onPress={handleOpenScanner}
-                  size={emphasizeEntryActions ? "medium" : "small"}
-                  fullWidth
-                  testID="home-scan-button"
-                >
-                  바코드 스캔
-                </Button>
-                <Button
-                  icon={PenLine}
-                  onPress={handleManualRegister}
-                  variant="surface"
-                  size={emphasizeEntryActions ? "medium" : "small"}
-                  fullWidth
-                  testID="home-manual-register-button"
-                >
-                  직접 입력
-                </Button>
-                <Button
-                  icon={ShoppingBasket}
-                  onPress={handleOpenShopping}
-                  variant="surface"
-                  size={emphasizeEntryActions ? "medium" : "small"}
-                  fullWidth
-                  testID="home-shopping-button"
-                >
-                  장보기
-                </Button>
-              </View>
-            </View>
+            <HomeQuickEntry
+              emphasizeEntryActions={emphasizeEntryActions}
+              onOpenScanner={handleOpenScanner}
+              onManualRegister={handleManualRegister}
+              onOpenShopping={handleOpenShopping}
+            />
           </View>
         </ScrollView>
       </View>
     </Screen>
   );
-}
-
-function HomeSectionHeader({
-  title,
-  metaLabel,
-  actionLabel,
-  accessibilityLabel,
-  onPress,
-}: {
-  title: string;
-  metaLabel?: string;
-  actionLabel?: string;
-  accessibilityLabel?: string;
-  onPress?: () => void;
-}) {
-  const { shouldStack } = useResponsiveLayout();
-  return (
-    <View
-      style={[styles.sectionHeader, shouldStack && styles.sectionHeaderStacked]}
-    >
-      <AppText variant="bodySmall" tone="subtext" accessibilityRole="header">
-        {title}
-      </AppText>
-      {metaLabel ? (
-        <AppText variant="caption" tone="muted">
-          {metaLabel}
-        </AppText>
-      ) : actionLabel && accessibilityLabel && onPress ? (
-        <Pressable
-          onPress={onPress}
-          accessibilityRole="button"
-          accessibilityLabel={accessibilityLabel}
-          hitSlop={spacing.xs}
-          style={({ pressed }) => [
-            styles.sectionHeaderAction,
-            pressed && styles.sectionHeaderActionPressed,
-          ]}
-        >
-          <AppText variant="bodySmall" tone="primary">
-            {actionLabel}
-          </AppText>
-          <ChevronRight
-            color={colors.primary}
-            size={spacing.sm}
-            strokeWidth={2.4}
-            accessibilityElementsHidden
-            importantForAccessibility="no"
-          />
-        </Pressable>
-      ) : null}
-    </View>
-  );
-}
-
-function getHeroTone(
-  notice: HomeNotice | null,
-): "primary" | "warning" | "danger" {
-  if (!notice) {
-    return "primary";
-  }
-
-  if (notice.mood === "worry") {
-    return notice.action === "expiring" ? "warning" : "danger";
-  }
-
-  if (notice.id === "expiring") {
-    return "warning";
-  }
-
-  return "primary";
 }
 
 function formatRecommendationReason(
@@ -653,176 +530,3 @@ function formatRecommendationCreatedAt(createdAt: string) {
   }
 }
 
-const styles = StyleSheet.create({
-  screenContent: {
-    flex: 1,
-    gap: spacing.none,
-    paddingHorizontal: spacing.none,
-    paddingTop: spacing.none,
-    paddingBottom: spacing.none,
-  },
-  homeScene: {
-    flex: 1,
-    overflow: "hidden",
-  },
-  homeSceneBackground: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  homeSceneVeil: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: colors.background,
-    opacity: 0.24,
-  },
-  scrollFlex: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xxxl + spacing.sm,
-  },
-  heroCard: {
-    gap: spacing.xs,
-    padding: spacing.sm,
-  },
-  heroNotice: {
-    minHeight: spacing.xxxl + spacing.xs,
-  },
-  previewCard: {
-    gap: spacing.sm,
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.sm,
-  },
-  recommendationPreview: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    padding: spacing.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
-  },
-  recommendationPreviewStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
-  },
-  previewBodyPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  recommendationError: {
-    minHeight: 0,
-  },
-  recommendationIcon: {
-    width: spacing.xl,
-    height: spacing.xl,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.md,
-    backgroundColor: colors.surface,
-  },
-  recommendationCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  recommendationSkeletonCopy: {
-    flex: 1,
-    gap: spacing.xs,
-  },
-  recommendationReasonText: {
-    flexShrink: 1,
-  },
-  recommendationRetry: {
-    alignSelf: "flex-start",
-  },
-  quickEntrySection: {
-    gap: spacing.xs,
-    paddingTop: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  quickEntryActions: {
-    flexDirection: "column",
-    gap: spacing.xs,
-  },
-  trafficGroup: {
-    gap: spacing.sm,
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.sm,
-  },
-  sectionHeader: {
-    minHeight: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.xs,
-  },
-  sectionHeaderStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
-  },
-  sectionHeaderAction: {
-    minHeight: spacing.lg,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    paddingLeft: spacing.xs,
-    borderRadius: radius.md,
-  },
-  sectionHeaderActionPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  trafficStrip: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
-  },
-  trafficStripRegular: {
-    gap: spacing.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-  },
-  trafficLampPressable: {
-    flex: 1,
-    minWidth: 0,
-    alignItems: "center",
-    minHeight: touchTarget.min,
-    justifyContent: "flex-start",
-    paddingVertical: spacing.xxs,
-    borderRadius: radius.md,
-  },
-  trafficLampPressableRegular: {
-    minHeight: touchTarget.cta,
-    paddingVertical: spacing.xs,
-  },
-  trafficLampPressablePressed: {
-    backgroundColor: colors.surfacePressed,
-  },
-  inventoryEmpty: {
-    minHeight: touchTarget.ctaLarge,
-    justifyContent: "center",
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
-  },
-});
