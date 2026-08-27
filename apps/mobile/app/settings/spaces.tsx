@@ -14,6 +14,8 @@ import { Pill } from "../../src/components/Pill";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { createInventorySpace } from "../../src/services/api";
+import { spacesListQueryKey } from "../../src/features/auth/session-boundary";
+import { useAuth } from "../../src/features/auth/use-auth";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import {
   colors,
@@ -25,6 +27,7 @@ import {
 
 export default function SpacesSettingsScreen() {
   const queryClient = useQueryClient();
+  const { sessionUserId } = useAuth();
   const {
     spaces,
     activeSpaceId,
@@ -40,7 +43,9 @@ export default function SpacesSettingsScreen() {
   const createMutation = useMutation({
     mutationFn: createInventorySpace,
     onSuccess: async (space) => {
-      await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      await queryClient.invalidateQueries({
+        queryKey: spacesListQueryKey(sessionUserId),
+      });
       await refetchSpaces();
       setActiveSpaceId(space.id);
       setCreateVisible(false);

@@ -16,6 +16,7 @@ import {
   updateSpaceMember,
 } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
+import { spacesListQueryKey } from "../auth/session-boundary";
 
 export const spaceMembersQueryKey = (userId: string, spaceId: string) =>
   ["inventory-space-members", userId, spaceId] as const;
@@ -60,7 +61,9 @@ export function useSpaceManagement(
       queryClient.invalidateQueries({
         queryKey: spaceInvitationCodesQueryKey(userKey, spaceId ?? ""),
       }),
-      queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] }),
+      queryClient.invalidateQueries({
+        queryKey: spacesListQueryKey(sessionUserId),
+      }),
     ]);
 
   const inviteMutation = useMutation({

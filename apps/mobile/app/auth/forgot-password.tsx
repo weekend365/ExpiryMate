@@ -7,6 +7,7 @@ import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
+import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
 import { useAuth } from "../../src/features/auth/use-auth";
 import {
   colors,
@@ -47,7 +48,7 @@ export default function ForgotPasswordScreen() {
         ],
       );
     } catch (error) {
-      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getAuthErrorMessage(error));
     }
   };
 
@@ -83,12 +84,6 @@ export default function ForgotPasswordScreen() {
       />
     </Screen>
   );
-}
-
-function getErrorMessage(error: unknown) {
-  return error instanceof Error
-    ? error.message
-    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 const styles = StyleSheet.create({

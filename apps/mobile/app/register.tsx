@@ -11,7 +11,6 @@ import {
   inventoryFormSchema,
   catalogIdentityDiffers,
   quantityInputLabel,
-  quantityInputStep,
   quantityValuesForInputUnit,
   resolveQuantityInputUnit,
   suggestQuantityInputUnit,
@@ -38,28 +37,27 @@ import {
 import { AppText } from "../src/components/AppText";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
-import { DatePickerField, type DatePickerFieldHandle } from "../src/components/DatePickerField";
-import { FormField } from "../src/components/FormField";
+import { type DatePickerFieldHandle } from "../src/components/DatePickerField";
 import { FeedbackBanner } from "../src/components/FeedbackBanner";
 import { JangoHeroNoticeCarousel } from "../src/components/JangoHeroNoticeCarousel";
 import { Pill } from "../src/components/Pill";
-import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
 import { StepFlow } from "../src/components/StepFlow";
 import {
   AddLocationSheet,
   AdditionalInfoSheet,
-  ExtraDetailsRow,
-  QuickExpiryPills,
   RecapCard,
   RecapRow,
-  StorageLocationField,
   extraDetailsRowLabel,
   formatPutAwayMessage,
   formatPutAwaySupportingMessage,
   inventoryFormStyles,
 } from "../src/features/inventory/inventory-form-ui";
-import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
+import {
+  InventoryExpiryStep,
+  InventoryProductNameStep,
+  InventoryQuantityStep,
+} from "../src/features/inventory/inventory-step-fields";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
@@ -881,141 +879,103 @@ export default function RegisterScreen() {
         ) : null}
 
         {step === "product" ? (
-          <View style={styles.stepSections}>
-            {prefill?.displayName ? (
-              <View style={[styles.sectionCard, styles.sectionCardPadded]}>
-                <View style={styles.noticeBlock}>
-                  <AppText style={styles.noticeEyebrow}>
-                    {catalogNameDiffers ? "목록과 다른 이름" : "불러온 재료"}
-                  </AppText>
-                  <AppText style={styles.noticeTitle}>{displayName || prefill.displayName}</AppText>
-                  {catalogNameDiffers ? (
-                    <AppText style={styles.noticeDescription}>
-                      목록 이름은 {prefill.catalogName}예요. 냉장고에는 지금
-                      이름으로 넣을게요.
+          <InventoryProductNameStep
+            control={form.control}
+            header={
+              prefill?.displayName ? (
+                <View style={[styles.sectionCard, styles.sectionCardPadded]}>
+                  <View style={styles.noticeBlock}>
+                    <AppText style={styles.noticeEyebrow}>
+                      {catalogNameDiffers ? "목록과 다른 이름" : "불러온 재료"}
                     </AppText>
-                  ) : prefill.brand ? (
-                    <AppText style={styles.noticeDescription}>{prefill.brand}</AppText>
-                  ) : null}
+                    <AppText style={styles.noticeTitle}>{displayName || prefill.displayName}</AppText>
+                    {catalogNameDiffers ? (
+                      <AppText style={styles.noticeDescription}>
+                        목록 이름은 {prefill.catalogName}예요. 냉장고에는 지금
+                        이름으로 넣을게요.
+                      </AppText>
+                    ) : prefill.brand ? (
+                      <AppText style={styles.noticeDescription}>{prefill.brand}</AppText>
+                    ) : null}
+                  </View>
+                </View>
+              ) : null
+            }
+          >
+            {recentTemplates.length ? (
+              <View style={styles.recentTemplateBlock}>
+                <AppText style={styles.sectionCaption}>최근에 넣었어요</AppText>
+                <View style={styles.pillRow}>
+                  {recentTemplates.map((item) => {
+                    const selected =
+                      displayName.trim().toLowerCase() ===
+                      item.displayName.trim().toLowerCase();
+
+                    return (
+                      <Pill
+                        key={item.id}
+                        label={item.displayName}
+                        selected={selected}
+                        onPress={() => applyRecentTemplate(item)}
+                        accessibilityLabel={`${item.displayName} 불러오기`}
+                      />
+                    );
+                  })}
                 </View>
               </View>
             ) : null}
-
-            <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <AppText style={styles.sectionTitle}>재료 이름</AppText>
-              <FormField
-                control={form.control}
-                name="displayName"
-                label="재료 이름"
-                hideLabel
-                placeholder="예: 서울우유 1L"
-              />
-              {recentTemplates.length ? (
-                <View style={styles.recentTemplateBlock}>
-                  <AppText style={styles.sectionCaption}>최근에 넣었어요</AppText>
-                  <View style={styles.pillRow}>
-                    {recentTemplates.map((item) => {
-                      const selected =
-                        displayName.trim().toLowerCase() ===
-                        item.displayName.trim().toLowerCase();
-
-                      return (
-                        <Pill
-                          key={item.id}
-                          label={item.displayName}
-                          selected={selected}
-                          onPress={() => applyRecentTemplate(item)}
-                          accessibilityLabel={`${item.displayName} 불러오기`}
-                        />
-                      );
-                    })}
-                  </View>
-                </View>
-              ) : null}
-            </View>
-          </View>
+          </InventoryProductNameStep>
         ) : null}
 
         {step === "quantity" ? (
-          <View style={styles.stepSections}>
-            <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <AppText style={styles.sectionTitle}>{quantityLabel}</AppText>
-              <QuantityStepper
-                presentation="hero"
-                label={quantityLabel}
-                unitSuffix={quantityUnitSuffix}
-                value={quantity}
-                step={quantityInputStep(unit)}
-                onChange={(nextQuantity) =>
-                  form.setValue("quantity", nextQuantity, {
-                    shouldValidate: true,
-                  })
-                }
-                error={form.formState.errors.quantity?.message}
-              />
-              <View style={styles.unitChipBlock}>
-                <AppText style={styles.sectionCaption}>단위</AppText>
-                <QuantityUnitPills
-                  unit={unit}
-                  onChange={(nextUnit) =>
-                    applyQuantityUnit(nextUnit, { userChosen: true })
-                  }
-                />
-              </View>
-            </View>
-
-            <StorageLocationField
-              expanded={showLocationPicker}
-              selectedKey={storageLocation}
-              selectedLabel={selectedLocationLabel}
-              options={selectableOptions}
-              onExpand={() => setShowLocationPicker(true)}
-              onSelect={(key) => {
-                form.setValue("storageLocation", key, {
-                  shouldValidate: true,
-                });
-                setShowLocationPicker(false);
-              }}
-              onAddLocation={() => {
-                setNewLocationLabel("");
-                setAddLocationVisible(true);
-              }}
-            />
-
-            <ExtraDetailsRow
-              label={extraDetailsLabel}
-              onPress={() => setShowAdditionalInfo(true)}
-            />
-          </View>
+          <InventoryQuantityStep
+            quantityLabel={quantityLabel}
+            quantityUnitSuffix={quantityUnitSuffix}
+            quantity={quantity}
+            unit={unit}
+            quantityError={form.formState.errors.quantity?.message}
+            onChangeQuantity={(nextQuantity) =>
+              form.setValue("quantity", nextQuantity, {
+                shouldValidate: true,
+              })
+            }
+            onChangeUnit={(nextUnit) =>
+              applyQuantityUnit(nextUnit, { userChosen: true })
+            }
+            showLocationPicker={showLocationPicker}
+            selectedLocationKey={storageLocation}
+            selectedLocationLabel={selectedLocationLabel}
+            locationOptions={selectableOptions}
+            onExpandLocation={() => setShowLocationPicker(true)}
+            onSelectLocation={(key) => {
+              form.setValue("storageLocation", key, {
+                shouldValidate: true,
+              });
+              setShowLocationPicker(false);
+            }}
+            onAddLocation={() => {
+              setNewLocationLabel("");
+              setAddLocationVisible(true);
+            }}
+            extraDetailsLabel={extraDetailsLabel}
+            onOpenExtraDetails={() => setShowAdditionalInfo(true)}
+          />
         ) : null}
 
         {step === "expiry" ? (
-          <View style={styles.stepSections}>
-            <View style={[styles.sectionCard, styles.sectionCardTight]}>
-              <AppText style={styles.sectionTitle}>유통기한</AppText>
-              <DatePickerField
-                ref={expiryPickerRef}
-                presentation="hero"
-                heroEyebrow={null}
-                actionLabel={expiryDate ? "다른 날짜 고르기" : "달력에서 고르기"}
-                value={expiryDate}
-                onChange={(nextDate) => {
-                  form.setValue("expiryDate", nextDate, { shouldValidate: true });
-                  form.setValue("expirySource", ExpirySource.MANUAL, {
-                    shouldValidate: true,
-                  });
-                }}
-                error={form.formState.errors.expiryDate?.message}
-              >
-                <QuickExpiryPills
-                  isSelected={(isoDate) =>
-                    expiryDate === isoDate && expirySource === ExpirySource.PRESET
-                  }
-                  onSelect={handlePresetDate}
-                />
-              </DatePickerField>
-            </View>
-
+          <InventoryExpiryStep
+            expiryDate={expiryDate}
+            expirySource={expirySource}
+            expiryError={form.formState.errors.expiryDate?.message}
+            pickerRef={expiryPickerRef}
+            onChangeDate={(nextDate) => {
+              form.setValue("expiryDate", nextDate, { shouldValidate: true });
+              form.setValue("expirySource", ExpirySource.MANUAL, {
+                shouldValidate: true,
+              });
+            }}
+            onSelectPreset={handlePresetDate}
+          >
             <RecapCard>
               <RecapRow
                 label="재료"
@@ -1035,7 +995,7 @@ export default function RegisterScreen() {
                 }
               />
             </RecapCard>
-          </View>
+          </InventoryExpiryStep>
         ) : null}
       </StepFlow>
 

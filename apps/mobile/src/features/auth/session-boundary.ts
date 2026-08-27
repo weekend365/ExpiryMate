@@ -51,3 +51,7 @@ export function withInventorySpace(
     spaceId ?? "no-space",
   ] as const;
 }
+
+export function spacesListQueryKey(userId: string | undefined) {
+  return withSessionUser(sessionQueryKeys.spaces, userId);
+}

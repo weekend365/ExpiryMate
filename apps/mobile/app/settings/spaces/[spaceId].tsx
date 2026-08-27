@@ -23,6 +23,7 @@ import { Pill } from "../../../src/components/Pill";
 import { SettingsGroup } from "../../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../../src/components/SettingsScreen";
 import { useAuth } from "../../../src/features/auth/use-auth";
+import { spacesListQueryKey } from "../../../src/features/auth/session-boundary";
 import { useActiveSpace } from "../../../src/features/spaces/space-provider";
 import { canInviteToSpace } from "../../../src/features/spaces/space-selection";
 import { useSpaceManagement } from "../../../src/features/spaces/use-space-management";
@@ -70,14 +71,16 @@ export default function SpaceDetailScreen() {
     mutationFn: (enabled: boolean) =>
       updateSpaceNotifications(spaceId as string, enabled),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      void queryClient.invalidateQueries({
+        queryKey: spacesListQueryKey(sessionUserId),
+      });
       void refetchSpaces();
     },
   });
   const deleteMutation = useMutation({
     mutationFn: () => deleteInventorySpace(spaceId as string),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      await queryClient.invalidateQueries({ queryKey: spacesListQueryKey(sessionUserId) });
       const result = await refetchSpaces();
       const personal = result.data?.find((item) => item.type === "personal");
       if (personal) {
@@ -90,14 +93,14 @@ export default function SpaceDetailScreen() {
     mutationFn: () =>
       updateInventorySpace(spaceId as string, { name: spaceName.trim() }),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      await queryClient.invalidateQueries({ queryKey: spacesListQueryKey(sessionUserId) });
       await refetchSpaces();
       setRenameVisible(false);
     },
   });
 
   const returnToPersonalSpace = async () => {
-    await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+    await queryClient.invalidateQueries({ queryKey: spacesListQueryKey(sessionUserId) });
     const result = await refetchSpaces();
     const personal = result.data?.find((item) => item.type === "personal");
     if (personal) {

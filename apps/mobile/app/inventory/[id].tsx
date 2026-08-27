@@ -6,7 +6,6 @@ import {
   inventoryFormSchema,
   inventoryItemToFormValues,
   quantityInputLabel,
-  quantityInputStep,
   quantityValuesForInputUnit,
   resolveQuantityInputUnit,
   toBaseQuantity,
@@ -21,26 +20,24 @@ import { Alert, BackHandler, StyleSheet, View } from "react-native";
 import { z } from "zod";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
-import { DatePickerField } from "../../src/components/DatePickerField";
 import { EmptyState } from "../../src/components/EmptyState";
-import { FormField } from "../../src/components/FormField";
 import { HeaderBackButton } from "../../src/components/HeaderBackButton";
 import { Mascot } from "../../src/components/Mascot";
-import { QuantityStepper } from "../../src/components/QuantityStepper";
 import { Screen } from "../../src/components/Screen";
 import { StepFlow } from "../../src/components/StepFlow";
 import {
   AddLocationSheet,
   AdditionalInfoSheet,
-  ExtraDetailsRow,
-  QuickExpiryPills,
   RecapCard,
   RecapRow,
-  StorageLocationField,
   extraDetailsRowLabel,
   inventoryFormStyles,
 } from "../../src/features/inventory/inventory-form-ui";
-import { QuantityUnitPills } from "../../src/features/inventory/QuantityUnitPills";
+import {
+  InventoryExpiryStep,
+  InventoryProductNameStep,
+  InventoryQuantityStep,
+} from "../../src/features/inventory/inventory-step-fields";
 import { getInventoryItem, updateInventoryItem } from "../../src/services/api";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
@@ -395,114 +392,57 @@ export default function InventoryEditScreen() {
         guideMood="speak"
       >
         {editStep === "product" ? (
-          <View style={inventoryFormStyles.stepSections}>
-            <View
-              style={[
-                inventoryFormStyles.sectionCard,
-                inventoryFormStyles.sectionCardTight,
-              ]}
-            >
-              <AppText style={inventoryFormStyles.sectionTitle}>재료 이름</AppText>
-              <FormField
-                control={form.control}
-                name="displayName"
-                label="재료 이름"
-                hideLabel
-                placeholder="예: 서울우유 1L"
-              />
-            </View>
-          </View>
+          <InventoryProductNameStep control={form.control} />
         ) : null}
 
         {editStep === "quantity" ? (
-          <View style={inventoryFormStyles.stepSections}>
-            <View
-              style={[
-                inventoryFormStyles.sectionCard,
-                inventoryFormStyles.sectionCardTight,
-              ]}
-            >
-              <AppText style={inventoryFormStyles.sectionTitle}>
-                {quantityLabel}
-              </AppText>
-              <QuantityStepper
-                presentation="hero"
-                label={quantityLabel}
-                unitSuffix={quantityUnitSuffix}
-                value={quantity}
-                step={quantityInputStep(unit)}
-                onChange={(nextQuantity) =>
-                  form.setValue("quantity", nextQuantity, {
-                    shouldValidate: true,
-                  })
-                }
-                error={form.formState.errors.quantity?.message}
-              />
-              <View style={inventoryFormStyles.unitChipBlock}>
-                <AppText style={inventoryFormStyles.sectionCaption}>단위</AppText>
-                <QuantityUnitPills unit={unit} onChange={applyQuantityUnit} />
-              </View>
-            </View>
-
-            <StorageLocationField
-              expanded={showLocationPicker}
-              selectedKey={storageLocation}
-              selectedLabel={selectedLocationLabel}
-              options={selectableOptions}
-              onExpand={() => setShowLocationPicker(true)}
-              onSelect={(key) => {
-                form.setValue("storageLocation", key, {
-                  shouldValidate: true,
-                });
-                setShowLocationPicker(false);
-              }}
-              onAddLocation={() => {
-                setNewLocationLabel("");
-                setAddLocationVisible(true);
-              }}
-            />
-
-            <ExtraDetailsRow
-              label={extraDetailsLabel}
-              onPress={() => setShowAdditionalInfo(true)}
-            />
-          </View>
+          <InventoryQuantityStep
+            quantityLabel={quantityLabel}
+            quantityUnitSuffix={quantityUnitSuffix}
+            quantity={quantity}
+            unit={unit}
+            quantityError={form.formState.errors.quantity?.message}
+            onChangeQuantity={(nextQuantity) =>
+              form.setValue("quantity", nextQuantity, {
+                shouldValidate: true,
+              })
+            }
+            onChangeUnit={applyQuantityUnit}
+            showLocationPicker={showLocationPicker}
+            selectedLocationKey={storageLocation}
+            selectedLocationLabel={selectedLocationLabel}
+            locationOptions={selectableOptions}
+            onExpandLocation={() => setShowLocationPicker(true)}
+            onSelectLocation={(key) => {
+              form.setValue("storageLocation", key, {
+                shouldValidate: true,
+              });
+              setShowLocationPicker(false);
+            }}
+            onAddLocation={() => {
+              setNewLocationLabel("");
+              setAddLocationVisible(true);
+            }}
+            extraDetailsLabel={extraDetailsLabel}
+            onOpenExtraDetails={() => setShowAdditionalInfo(true)}
+          />
         ) : null}
 
         {editStep === "expiry" ? (
-          <View style={inventoryFormStyles.stepSections}>
-            <View
-              style={[
-                inventoryFormStyles.sectionCard,
-                inventoryFormStyles.sectionCardTight,
-              ]}
-            >
-              <AppText style={inventoryFormStyles.sectionTitle}>유통기한</AppText>
-              <DatePickerField
-                presentation="hero"
-                heroEyebrow={null}
-                actionLabel={expiryDate ? "다른 날짜 고르기" : "달력에서 고르기"}
-                value={expiryDate}
-                onChange={(nextDate) => {
-                  form.setValue("expiryDate", nextDate, {
-                    shouldValidate: true,
-                  });
-                  form.setValue("expirySource", ExpirySource.MANUAL, {
-                    shouldValidate: true,
-                  });
-                }}
-                error={form.formState.errors.expiryDate?.message}
-              >
-                <QuickExpiryPills
-                  isSelected={(isoDate) =>
-                    expiryDate === isoDate &&
-                    expirySource === ExpirySource.PRESET
-                  }
-                  onSelect={handlePresetDate}
-                />
-              </DatePickerField>
-            </View>
-
+          <InventoryExpiryStep
+            expiryDate={expiryDate}
+            expirySource={expirySource}
+            expiryError={form.formState.errors.expiryDate?.message}
+            onChangeDate={(nextDate) => {
+              form.setValue("expiryDate", nextDate, {
+                shouldValidate: true,
+              });
+              form.setValue("expirySource", ExpirySource.MANUAL, {
+                shouldValidate: true,
+              });
+            }}
+            onSelectPreset={handlePresetDate}
+          >
             <RecapCard>
               <RecapRow
                 label="재료"
@@ -522,7 +462,7 @@ export default function InventoryEditScreen() {
                 }
               />
             </RecapCard>
-          </View>
+          </InventoryExpiryStep>
         ) : null}
       </StepFlow>
 

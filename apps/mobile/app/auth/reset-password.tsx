@@ -6,6 +6,7 @@ import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
+import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
 import { resetPassword } from "../../src/services/api";
 import {
   colors,
@@ -35,7 +36,7 @@ export default function ResetPasswordScreen() {
       Alert.alert("비밀번호를 바꿨어요", "새 비밀번호로 다시 들어와 주세요.");
       router.replace("/auth/login");
     } catch (error) {
-      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getAuthErrorMessage(error));
     } finally {
       setIsSubmitting(false);
     }
@@ -75,12 +76,6 @@ export default function ResetPasswordScreen() {
       />
     </Screen>
   );
-}
-
-function getErrorMessage(error: unknown) {
-  return error instanceof Error
-    ? error.message
-    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
 const styles = StyleSheet.create({

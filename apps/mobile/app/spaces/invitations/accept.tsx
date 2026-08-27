@@ -7,6 +7,9 @@ import { EmptyState } from "../../../src/components/EmptyState";
 import { Screen } from "../../../src/components/Screen";
 import { useAuth } from "../../../src/features/auth/use-auth";
 import {
+  spacesListQueryKey,
+} from "../../../src/features/auth/session-boundary";
+import {
   clearPendingSpaceInvitation,
   rememberPendingSpaceInvitation,
 } from "../../../src/features/spaces/pending-invitation";
@@ -17,7 +20,7 @@ export default function AcceptSpaceInvitationScreen() {
   const params = useLocalSearchParams<{ token?: string | string[] }>();
   const token = firstParam(params.token);
   const queryClient = useQueryClient();
-  const { isRegistered } = useAuth();
+  const { isRegistered, sessionUserId } = useAuth();
   const { setActiveSpaceId, refetchSpaces } = useActiveSpace();
   const mutation = useMutation({
     mutationFn: (notificationsEnabled: boolean) =>
@@ -27,7 +30,9 @@ export default function AcceptSpaceInvitationScreen() {
       }),
     onSuccess: async (result) => {
       await clearPendingSpaceInvitation();
-      await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      await queryClient.invalidateQueries({
+        queryKey: spacesListQueryKey(sessionUserId),
+      });
       await refetchSpaces();
       setActiveSpaceId(result.spaceId);
       router.replace("/(tabs)/inventory");

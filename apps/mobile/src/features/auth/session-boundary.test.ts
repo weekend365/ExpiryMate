@@ -110,4 +110,15 @@ describe("session boundary cleanup", () => {
     ]);
     expect(personalKey).not.toEqual(householdKey);
   });
+
+  it("scopes the spaces list key with the session user", async () => {
+    const { spacesListQueryKey, sessionQueryKeys } = await import(
+      "./session-boundary"
+    );
+
+    expect(spacesListQueryKey("user-a")).toEqual([
+      ...sessionQueryKeys.spaces,
+      "user-a",
+    ]);
+  });
 });

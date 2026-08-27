@@ -1,8 +1,6 @@
 import { appBrand, loginRequestSchema } from "@expirymate/shared";
 import * as AppleAuthentication from "expo-apple-authentication";
-import * as AuthSession from "expo-auth-session";
 import { router, useLocalSearchParams } from "expo-router";
-import * as WebBrowser from "expo-web-browser";
 import { ChevronDown, ChevronUp, Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import {
@@ -23,9 +21,13 @@ import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
+import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
+import {
+  useWebOAuth,
+  type WebOAuthProvider,
+} from "../../src/features/auth/use-web-oauth";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { continuePendingSpaceInvitation } from "../../src/features/spaces/pending-invitation";
-import { startOAuth } from "../../src/services/api";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { publicWebUrl } from "../../src/shared/public-web-url";
 import {
@@ -35,19 +37,6 @@ import {
   touchTarget,
   typography,
 } from "../../src/shared/theme";
-
-WebBrowser.maybeCompleteAuthSession();
-
-/**
- * URI WebBrowser waits for. Must be an app / Expo scheme — not https.
- * Expo Go → exp://…/--/oauth, standalone → expirymate://oauth
- */
-const appReturnUri = AuthSession.makeRedirectUri({
-  scheme: "expirymate",
-  path: "oauth",
-});
-
-type WebOAuthProvider = "google" | "kakao" | "naver";
 
 function resolveEmailParam(emailParam?: string | string[]) {
   return (typeof emailParam === "string" ? emailParam : emailParam?.[0]) ?? "";
@@ -65,7 +54,14 @@ export default function LoginScreen() {
   const [emailExpanded, setEmailExpanded] = useState(() =>
     Boolean(initialEmail),
   );
-  const [pendingProvider, setPendingProvider] = useState<string | null>(null);
+  const { pendingProvider, setPendingProvider, startWebOAuth } = useWebOAuth({
+    completeSession: async (input) => {
+      await oauthMutation.mutateAsync(input);
+      if (!(await continuePendingSpaceInvitation())) {
+        router.replace("/(tabs)/home");
+      }
+    },
+  });
 
   const handleEmailLogin = async () => {
     try {
@@ -77,7 +73,7 @@ export default function LoginScreen() {
         router.replace("/(tabs)/home");
       }
     } catch (error) {
-      const message = getErrorMessage(error);
+      const message = getAuthErrorMessage(error);
       if (message.includes("메일 확인")) {
         Alert.alert("메일 확인이 필요해요", message, [
           {
@@ -128,126 +124,21 @@ export default function LoginScreen() {
       if ((error as { code?: string }).code === "ERR_REQUEST_CANCELED") {
         return;
       }
-      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
+      Alert.alert("앗, 잠시 문제가 생겼어요", getAuthErrorMessage(error));
     } finally {
       setPendingProvider(null);
     }
   };
 
-  const handleKakaoLogin = () =>
-    handleWebOAuth({
-      provider: "kakao",
-      clientId: process.env.EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID,
-      url: "https://kauth.kakao.com/oauth/authorize",
-      tokenParam: "code",
-      params: {
-        response_type: "code",
-      },
-      includePkce: true,
+  const handleWebOAuth = (provider: WebOAuthProvider) => {
+    void startWebOAuth(provider).catch((error) => {
+      Alert.alert("앗, 잠시 문제가 생겼어요", getAuthErrorMessage(error));
     });
-
-  const handleNaverLogin = () =>
-    handleWebOAuth({
-      provider: "naver",
-      clientId: process.env.EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID,
-      url: "https://nid.naver.com/oauth2.0/authorize",
-      tokenParam: "code",
-      params: {
-        response_type: "code",
-      },
-      includePkce: false,
-    });
-
-  const handleGoogleLogin = () =>
-    handleWebOAuth({
-      provider: "google",
-      clientId: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID,
-      url: "https://accounts.google.com/o/oauth2/v2/auth",
-      tokenParam: "code",
-      params: {
-        response_type: "code",
-        scope: "openid email profile",
-        access_type: "online",
-        prompt: "select_account",
-      },
-      includePkce: true,
-    });
-
-  const handleWebOAuth = async ({
-    provider,
-    clientId,
-    url,
-    tokenParam,
-    params,
-    includePkce,
-  }: {
-    provider: WebOAuthProvider;
-    clientId?: string;
-    url: string;
-    tokenParam: string;
-    params: Record<string, string>;
-    includePkce: boolean;
-  }) => {
-    try {
-      setPendingProvider(provider);
-      if (!clientId?.trim()) {
-        throw new Error("소셜 로그인 설정을 아직 준비 중이에요.");
-      }
-
-      const oauthStart = await startOAuth({
-        provider,
-        returnUri: appReturnUri,
-      });
-
-      const authUrl = `${url}?${new URLSearchParams({
-        client_id: clientId.trim(),
-        redirect_uri: oauthStart.redirectUri,
-        state: oauthStart.state,
-        ...(includePkce
-          ? {
-              code_challenge: oauthStart.codeChallenge,
-              code_challenge_method: oauthStart.codeChallengeMethod,
-            }
-          : {}),
-        ...params,
-      }).toString()}`;
-
-      // Wait for the app scheme deep link (not the https provider redirect).
-      const result = await WebBrowser.openAuthSessionAsync(
-        authUrl,
-        appReturnUri,
-      );
-
-      if (result.type === "cancel" || result.type === "dismiss") {
-        return;
-      }
-
-      if (result.type !== "success" || !("url" in result) || !result.url) {
-        throw new Error("소셜 로그인을 끝까지 마치지 못했어요.");
-      }
-
-      const parsed = parseOAuthReturnUrl(result.url);
-      const providerToken = parsed[tokenParam];
-      const state = parsed.state || oauthStart.state;
-
-      if (!providerToken) {
-        throw new Error("소셜 로그인 토큰을 받지 못했어요.");
-      }
-
-      await oauthMutation.mutateAsync({
-        provider,
-        providerToken,
-        state,
-      });
-      if (!(await continuePendingSpaceInvitation())) {
-        router.replace("/(tabs)/home");
-      }
-    } catch (error) {
-      Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error));
-    } finally {
-      setPendingProvider(null);
-    }
   };
+
+  const handleKakaoLogin = () => handleWebOAuth("kakao");
+  const handleNaverLogin = () => handleWebOAuth("naver");
+  const handleGoogleLogin = () => handleWebOAuth("google");
 
   const toggleEmailExpanded = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
@@ -575,25 +466,6 @@ export default function LoginScreen() {
       </View>
     </Screen>
   );
-}
-
-function getErrorMessage(error: unknown) {
-  return error instanceof Error
-    ? error.message
-    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
-}
-
-function parseOAuthReturnUrl(url: string): Record<string, string> {
-  const [, fragment = ""] = url.split("#");
-  const [baseUrl, query = ""] = url.split("?");
-  const params = new URLSearchParams(query.split("#")[0]);
-  const fragmentParams = new URLSearchParams(fragment);
-
-  return {
-    ...Object.fromEntries(params.entries()),
-    ...Object.fromEntries(fragmentParams.entries()),
-    url: baseUrl,
-  };
 }
 
 const styles = StyleSheet.create({

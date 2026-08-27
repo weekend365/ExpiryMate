@@ -1,5 +1,4 @@
 import {
-  formatBaseQuantity,
   isTrackedItem,
   summarizeRecipePreference,
   type RecommendationAccess,
@@ -8,7 +7,7 @@ import {
   type RecipeRecommendation,
   type RecipeRecommendationDish,
 } from "@expirymate/shared";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import {
   Archive,
   Barcode,
@@ -59,26 +58,34 @@ import { JangoHeroNoticeCarousel } from "../../src/components/JangoHeroNoticeCar
 import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
-import {
-  useAcceptAiDataNotice,
-  usePrivacyStatus,
-} from "../../src/features/privacy/use-privacy";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
 import {
   canContinueWithRewardedAd,
-  canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
-  parseRecommendationAccess,
   recommendationQuotaCopy,
 } from "../../src/features/monetization/recommendation-access";
 import { getRecommendationHeroStatus } from "../../src/features/recipes/recommendation-hero";
+import { getRecommendationErrorMessage } from "../../src/features/recipes/recommendation-errors";
+import {
+  RecommendationOfferAlternativesSheet,
+  RecommendationQuotaCard,
+  RecommendationValueOfferCard,
+} from "../../src/features/recipes/recommendation-quota-panel";
+import {
+  EXPIRING_DAYS_THRESHOLD,
+  formatDishMeta,
+  formatIngredientPreview,
+  getHighlightedIngredients,
+  type RecipeDetailSelection,
+} from "../../src/features/recipes/recipe-detail";
+import { RecipeDetailSheet } from "../../src/features/recipes/recipe-detail-sheet";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { useRecommendationGenerateFlow } from "../../src/features/recipes/use-recommendation-generate-flow";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
-import { OptionalMissingIngredientsCard } from "../../src/features/affiliate/optional-missing-ingredients";
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
@@ -87,8 +94,7 @@ import {
   useSetRecipeFavorite,
 } from "../../src/features/recipes/use-recipe-recommendations";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
-import type { RecipeRecommendationPayload } from "../../src/services/api";
-import { ApiError, trackMonetizationEvent } from "../../src/services/api";
+import { trackMonetizationEvent } from "../../src/services/api";
 import {
   colors,
   radius,
@@ -103,27 +109,10 @@ import {
 
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
-const COLLAPSED_INGREDIENT_PREVIEW_COUNT = 2;
-const EXPIRING_DAYS_THRESHOLD = 7;
 const PREVIOUS_RECOMMENDATION_LIMIT = 5;
 const SHEET_TRANSITION_DELAY_MS = 320;
 type RecipeView = "recommendations" | "favorites";
 type RecipeSectionKey = "latest" | "previous" | "favorites";
-
-type HighlightIngredient = {
-  key: string;
-  name: string;
-  amountLabel: string | null;
-  daysUntilExpiry: number | null;
-  isExpiring: boolean;
-};
-
-type RecipeDetailSelection = {
-  recommendationId: string;
-  dishIndex: number;
-  dish: RecipeRecommendationDish;
-  inventorySnapshot: RecipeInventorySnapshotItem[];
-};
 
 const mealTypeOptions: Array<{
   value: RecipeMealType;
@@ -137,29 +126,9 @@ const mealTypeOptions: Array<{
   { value: "snack", label: "간식", icon: Cookie },
 ];
 
-const difficultyLabels: Record<RecipeRecommendationDish["difficulty"], string> =
-  {
-    easy: "쉬움",
-    medium: "보통",
-    hard: "어려움",
-  };
-const spiceLevelLabels = {
-  none: "안 매움",
-  mild: "순한맛",
-  medium: "보통맛",
-  hot: "매운맛",
-} as const;
-const equipmentLabels = {
-  stovetop: "가스/인덕션",
-  microwave: "전자레인지",
-  oven: "오븐",
-  air_fryer: "에어프라이어",
-} as const;
-
 export default function RecommendationsScreen() {
   const { shouldStack, width } = useResponsiveLayout();
   const contentMaxWidth = getContentMaxWidth("wide", width);
-  const params = useLocalSearchParams<{ autoGenerateAt?: string }>();
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
   const inventoryQuery = useInventoryList();
@@ -171,10 +140,7 @@ export default function RecommendationsScreen() {
     latestGeneratedRecommendationId,
     errorMessage: generationErrorMessage,
     errorCode: generationErrorCode,
-    generateRecipeRecommendation,
   } = useRecipeGeneration();
-  const privacyStatusQuery = usePrivacyStatus();
-  const acceptAiDataNoticeMutation = useAcceptAiDataNotice();
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
   const { query: recipePreferencesQuery } = useRecipePreferences();
@@ -186,7 +152,6 @@ export default function RecommendationsScreen() {
   const [collapsedSections, setCollapsedSections] = useState<
     Partial<Record<RecipeSectionKey, boolean>>
   >({});
-  const [showAiNotice, setShowAiNotice] = useState(false);
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
@@ -194,11 +159,6 @@ export default function RecommendationsScreen() {
     useState<RecipeRecommendation | null>(null);
   const [recipeDetail, setRecipeDetail] =
     useState<RecipeDetailSelection | null>(null);
-  const [pendingPayload, setPendingPayload] =
-    useState<RecipeRecommendationPayload | null>(null);
-  const handledAutoGenerateRef = useRef<string | null>(null);
-  const pendingGenerateAfterRewardRef =
-    useRef<RecipeRecommendationPayload | null>(null);
   const trackedQuotaEventRef = useRef<string | null>(null);
   const trackedScreenDayRef = useRef<string | null>(null);
   const trackedOfferRef = useRef<string | null>(null);
@@ -212,6 +172,29 @@ export default function RecommendationsScreen() {
     inventoryQuery.isSuccess || Boolean(inventoryQuery.isError);
   const needsIngredients = inventoryReady && !hasRecommendableInventory;
   const isGenerating = generationStatus === "pending";
+  const buildRecommendationPayload = useCallback(
+    () => ({
+      servings,
+      maxCookingMinutes,
+      mealType,
+      useExpiringFirst,
+    }),
+    [maxCookingMinutes, mealType, servings, useExpiringFirst],
+  );
+  const {
+    showAiNotice,
+    closeAiNotice,
+    handleCreateRecommendation,
+    handleAcceptAiNotice,
+    handleWatchRewardedAdOnly,
+    isAcceptingAiNotice,
+  } = useRecommendationGenerateFlow({
+    inventoryReady,
+    needsIngredients,
+    isGenerating,
+    buildPayload: buildRecommendationPayload,
+    onNeedsIngredients: () => setEntryMethodVisible(true),
+  });
 
   const latestRecommendation = useMemo(
     () => latestGeneratedRecommendation ?? historyQuery.data?.[0] ?? null,
@@ -237,7 +220,7 @@ export default function RecommendationsScreen() {
       ),
     [favoritesQuery.data],
   );
-  const historyErrorMessage = getErrorMessage(historyQuery.error);
+  const historyErrorMessage = getRecommendationErrorMessage(historyQuery.error);
   const errorMessage = generationErrorMessage ?? historyErrorMessage;
   const isQuotaError = generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED";
   const isCapacityError =
@@ -406,90 +389,6 @@ export default function RecommendationsScreen() {
     showValueMomentOffer,
   ]);
 
-  const buildRecommendationPayload = useCallback(
-    (): RecipeRecommendationPayload => ({
-      servings,
-      maxCookingMinutes,
-      mealType,
-      useExpiringFirst,
-    }),
-    [maxCookingMinutes, mealType, servings, useExpiringFirst],
-  );
-
-  const startRecommendation = useCallback(
-    async (payload: RecipeRecommendationPayload) => {
-      if (needsRewardedAdToRecommend(monetization.access)) {
-        if (monetization.adState === "loading") {
-          return;
-        }
-        pendingGenerateAfterRewardRef.current = payload;
-        try {
-          const result = await monetization.watchRewardedAd();
-          if (result !== "verified") {
-            return;
-          }
-          const queuedPayload = pendingGenerateAfterRewardRef.current;
-          pendingGenerateAfterRewardRef.current = null;
-          if (!queuedPayload) {
-            return;
-          }
-          await generateRecipeRecommendation(queuedPayload);
-          return;
-        } catch (error) {
-          pendingGenerateAfterRewardRef.current = null;
-          const accessFromError =
-            error instanceof ApiError
-              ? parseRecommendationAccess(error.details)
-              : null;
-          if (
-            canGenerateWithoutRewardedAd(accessFromError ?? monetization.access)
-          ) {
-            await generateRecipeRecommendation(payload);
-            return;
-          }
-          Alert.alert(
-            "광고를 완료하지 못했어요",
-            getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",
-          );
-          return;
-        }
-      }
-
-      pendingGenerateAfterRewardRef.current = null;
-      await generateRecipeRecommendation(payload);
-    },
-    [generateRecipeRecommendation, monetization],
-  );
-
-  const handleCreateRecommendation = useCallback(async () => {
-    if (!inventoryReady) {
-      return;
-    }
-
-    if (needsIngredients) {
-      setEntryMethodVisible(true);
-      return;
-    }
-
-    const payload = buildRecommendationPayload();
-    const privacyStatus =
-      privacyStatusQuery.data ?? (await privacyStatusQuery.refetch()).data;
-
-    if (!privacyStatus?.hasAcceptedCurrentAiDataNotice) {
-      setPendingPayload(payload);
-      setShowAiNotice(true);
-      return;
-    }
-
-    await startRecommendation(payload);
-  }, [
-    buildRecommendationPayload,
-    inventoryReady,
-    needsIngredients,
-    privacyStatusQuery,
-    startRecommendation,
-  ]);
-
   const handlePrimaryCta = useCallback(() => {
     if (isGenerating || isAdBusy || !inventoryReady) {
       return;
@@ -527,33 +426,6 @@ export default function RecommendationsScreen() {
     needsIngredients,
     needsRewardedAd,
   ]);
-
-  const handleAcceptAiNotice = useCallback(async () => {
-    const payload = pendingPayload ?? buildRecommendationPayload();
-    await acceptAiDataNoticeMutation.mutateAsync();
-    setShowAiNotice(false);
-    setPendingPayload(null);
-    await startRecommendation(payload);
-  }, [
-    acceptAiDataNoticeMutation,
-    buildRecommendationPayload,
-    pendingPayload,
-    startRecommendation,
-  ]);
-
-  const handleWatchRewardedAdOnly = useCallback(async () => {
-    if (monetization.adState === "loading") {
-      return;
-    }
-    try {
-      await monetization.watchRewardedAd();
-    } catch (error) {
-      Alert.alert(
-        "광고를 완료하지 못했어요",
-        getErrorMessage(error) ?? "잠시 뒤에 다시 시도해 주세요.",
-      );
-    }
-  }, [monetization]);
 
   const handleMonetizationOffer = useCallback(
     (kind: RecommendationAccess["offer"]["kind"]) => {
@@ -612,54 +484,6 @@ export default function RecommendationsScreen() {
       [key]: !current[key],
     }));
   };
-
-  useEffect(() => {
-    const autoGenerateAt = Array.isArray(params.autoGenerateAt)
-      ? params.autoGenerateAt[0]
-      : params.autoGenerateAt;
-
-    if (!autoGenerateAt || handledAutoGenerateRef.current === autoGenerateAt) {
-      return;
-    }
-
-    if (!inventoryReady) {
-      return;
-    }
-
-    handledAutoGenerateRef.current = autoGenerateAt;
-
-    if (isGenerating || needsIngredients) {
-      return;
-    }
-
-    void handleCreateRecommendation();
-  }, [
-    handleCreateRecommendation,
-    inventoryReady,
-    isGenerating,
-    needsIngredients,
-    params.autoGenerateAt,
-  ]);
-
-  useEffect(() => {
-    const payload = pendingGenerateAfterRewardRef.current;
-    if (
-      !payload ||
-      isGenerating ||
-      monetization.adState === "loading" ||
-      (monetization.access?.rewardedAds.creditsAvailable ?? 0) < 1
-    ) {
-      return;
-    }
-
-    pendingGenerateAfterRewardRef.current = null;
-    void generateRecipeRecommendation(payload);
-  }, [
-    generateRecipeRecommendation,
-    isGenerating,
-    monetization.access?.rewardedAds.creditsAvailable,
-    monetization.adState,
-  ]);
 
   return (
     <Screen
@@ -766,28 +590,10 @@ export default function RecommendationsScreen() {
             />
           ) : null}
           {recipeView === "recommendations" && showValueMomentOffer ? (
-            <View style={styles.valueOfferCard}>
-              <View style={styles.valueOfferCopy}>
-                <AppText style={styles.valueOfferTitle}>
-                  {monetization.access?.offer.kind === "jango_household"
-                    ? "가족 냉장고가 함께 움직이고 있어요"
-                    : "냉장고 관리가 습관이 되고 있어요"}
-                </AppText>
-                <AppText style={styles.valueOfferDescription}>
-                  {monetization.access?.offer.kind === "jango_household"
-                    ? "가족이 먹고 버린 재료를 한 리포트로 보고, 모두 광고 없이 추천받을 수 있어요."
-                    : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
-                </AppText>
-              </View>
-              <Button
-                onPress={() =>
-                  handleMonetizationOffer(monetization.access!.offer.kind)
-                }
-                fullWidth
-              >
-                {offerLabel(monetization.access!.offer.kind)}
-              </Button>
-            </View>
+            <RecommendationValueOfferCard
+              offerKind={monetization.access!.offer.kind}
+              onSelect={handleMonetizationOffer}
+            />
           ) : null}
           <View style={styles.recipeViewSwitch}>
             <Pressable
@@ -856,7 +662,7 @@ export default function RecommendationsScreen() {
               showMascot={false}
               title="즐겨찾기를 바꾸지 못했어요"
               description={
-                getErrorMessage(setFavoriteMutation.error) ?? undefined
+                getRecommendationErrorMessage(setFavoriteMutation.error) ?? undefined
               }
             />
           ) : null}
@@ -1018,79 +824,27 @@ export default function RecommendationsScreen() {
           errorMessage &&
           !isGenerating &&
           isQuotaError ? (
-            <View style={styles.quotaCard}>
-              <AppText style={styles.quotaTitle}>
-                {canOfferRewardedAd
-                  ? "광고 한 편이면 추천을 이어갈 수 있어요"
-                  : "오늘은 추천을 조금 쉬어갈까요?"}
-              </AppText>
-              {!hasActiveEntitlement && canOfferRewardedAd ? (
-                <Button
-                  onPress={() => void handleCreateRecommendation()}
-                  loading={monetization.adState === "loading"}
-                  disabled={isAdBusy}
-                  fullWidth
-                >
-                  광고 보고 추천 받을게요
-                </Button>
-              ) : null}
-              {showPersonalizedOffer ? (
-                <Button
-                  onPress={() =>
-                    handleMonetizationOffer(monetization.access!.offer.kind)
-                  }
-                  variant={canOfferRewardedAd ? "secondary" : undefined}
-                  fullWidth
-                >
-                  {offerLabel(monetization.access!.offer.kind)}
-                </Button>
-              ) : null}
-              {!hasActiveEntitlement &&
-              monetization.access?.offer.personalized &&
-              monetization.access?.offer.alternatives.length ? (
-                <Pressable
-                  onPress={() => setShowOfferAlternatives(true)}
-                  accessibilityRole="button"
-                  accessibilityLabel="다른 이용 방법 보기"
-                  style={({ pressed }) => [
-                    styles.quotaLink,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <AppText style={styles.quotaLinkText}>다른 방법</AppText>
-                </Pressable>
-              ) : null}
-              {!hasActiveEntitlement &&
-              !monetization.access?.offer.personalized &&
-              monetization.access?.paidCredits.salesEnabled ? (
-                <Button
-                  onPress={() =>
-                    router.push("/settings/recommendation-credits")
-                  }
-                  variant="secondary"
-                  fullWidth
-                >
-                  AI 추천권 충전하기
-                </Button>
-              ) : null}
-              {!hasActiveEntitlement &&
-              !monetization.access?.offer.personalized &&
-              monetization.access?.subscriptionsEnabled ? (
-                <Pressable
-                  onPress={() => router.push("/settings/subscription")}
-                  accessibilityRole="button"
-                  accessibilityLabel="장고 플러스 살펴보기"
-                  style={({ pressed }) => [
-                    styles.quotaLink,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <AppText style={styles.quotaLinkText}>
-                    장고 플러스 살펴보기
-                  </AppText>
-                </Pressable>
-              ) : null}
-            </View>
+            <RecommendationQuotaCard
+              canOfferRewardedAd={canOfferRewardedAd}
+              hasActiveEntitlement={hasActiveEntitlement}
+              showPersonalizedOffer={showPersonalizedOffer}
+              offerKind={monetization.access?.offer.kind}
+              offerPersonalized={monetization.access?.offer.personalized}
+              alternativesLength={
+                monetization.access?.offer.alternatives.length ?? 0
+              }
+              paidCreditsSalesEnabled={Boolean(
+                monetization.access?.paidCredits.salesEnabled,
+              )}
+              subscriptionsEnabled={Boolean(
+                monetization.access?.subscriptionsEnabled,
+              )}
+              isAdBusy={isAdBusy}
+              adLoading={monetization.adState === "loading"}
+              onCreateRecommendation={handleCreateRecommendation}
+              onSelectOffer={handleMonetizationOffer}
+              onOpenAlternatives={() => setShowOfferAlternatives(true)}
+            />
           ) : null}
 
           {recipeView === "recommendations" &&
@@ -1271,7 +1025,7 @@ export default function RecommendationsScreen() {
                     showMascot={false}
                     title="즐겨찾기를 불러오지 못했어요"
                     description={
-                      getErrorMessage(favoritesQuery.error) ?? undefined
+                      getRecommendationErrorMessage(favoritesQuery.error) ?? undefined
                     }
                     actionLabel="다시 불러오기"
                     onAction={() => {
@@ -1432,33 +1186,16 @@ export default function RecommendationsScreen() {
         />
       </BottomSheet>
 
-      <BottomSheet
+      <RecommendationOfferAlternativesSheet
         visible={showOfferAlternatives}
+        alternatives={monetization.access?.offer.alternatives ?? []}
         onClose={() => setShowOfferAlternatives(false)}
-        mascotMood="idle"
-        title="다른 이용 방법"
-        description="지금 사용할 수 있는 방법만 모았어요."
-      >
-        <View style={styles.sheetFooter}>
-          {monetization.access?.offer.alternatives.map((kind) => (
-            <Button
-              key={kind}
-              variant="secondary"
-              onPress={() => handleMonetizationOffer(kind)}
-              fullWidth
-            >
-              {offerLabel(kind)}
-            </Button>
-          ))}
-        </View>
-      </BottomSheet>
+        onSelectOffer={handleMonetizationOffer}
+      />
 
       <BottomSheet
         visible={showAiNotice}
-        onClose={() => {
-          setShowAiNotice(false);
-          setPendingPayload(null);
-        }}
+        onClose={closeAiNotice}
         mascotMood="idle"
         title="추천에 쓸 정보를 확인할까요?"
         description="장고가 요리를 고를 때 어떤 정보가 쓰이는지 짧게 알려드릴게요."
@@ -1466,17 +1203,14 @@ export default function RecommendationsScreen() {
           <View style={styles.sheetFooter}>
             <Button
               variant="secondary"
-              onPress={() => {
-                setShowAiNotice(false);
-                setPendingPayload(null);
-              }}
+              onPress={closeAiNotice}
               fullWidth
             >
               다음에 할게요
             </Button>
             <Button
               onPress={handleAcceptAiNotice}
-              loading={acceptAiDataNoticeMutation.isPending}
+              loading={isAcceptingAiNotice}
               fullWidth
             >
               동의하고 추천 받을게요
@@ -1576,36 +1310,12 @@ export default function RecommendationsScreen() {
         )}
       </BottomSheet>
 
-      <BottomSheet
-        visible={Boolean(recipeDetail)}
+      <RecipeDetailSheet
+        selection={recipeDetail}
         onClose={() => setRecipeDetail(null)}
-        title={recipeDetail?.dish.title ?? "요리 자세히 보기"}
-        description={
-          recipeDetail
-            ? formatDishMeta(recipeDetail.dish)
-            : "요리 방법을 함께 살펴볼까요?"
-        }
-        footer={
-          <Button
-            icon={Utensils}
-            onPress={handleStartCooking}
-            disabled={!recipeDetail}
-            fullWidth
-          >
-            이 요리로 해볼게요
-          </Button>
-        }
-      >
-        {recipeDetail ? (
-          <RecipeDetailContent
-            dish={recipeDetail.dish}
-            inventorySnapshot={recipeDetail.inventorySnapshot}
-            recommendationId={recipeDetail.recommendationId}
-            dishIndex={recipeDetail.dishIndex}
-            onOpenShopping={handleOpenShopping}
-          />
-        ) : null}
-      </BottomSheet>
+        onStartCooking={handleStartCooking}
+        onOpenShopping={handleOpenShopping}
+      />
     </Screen>
   );
 }
@@ -1916,187 +1626,6 @@ function RecipeCard({
   );
 }
 
-function RecipeDetailContent({
-  dish,
-  inventorySnapshot,
-  recommendationId,
-  dishIndex,
-  onOpenShopping,
-}: {
-  dish: RecipeRecommendationDish;
-  inventorySnapshot: RecipeInventorySnapshotItem[];
-  recommendationId: string;
-  dishIndex: number;
-  onOpenShopping: () => void;
-}) {
-  const { shouldStack } = useResponsiveLayout();
-  const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
-
-  return (
-    <>
-      <AppText style={styles.recipeDetailSummary}>{dish.summary}</AppText>
-
-      <View style={styles.recipeBlock}>
-        <AppText style={styles.blockTitle}>사용할 재료</AppText>
-        {usedIngredientRows.length > 0 ? (
-          <View style={styles.ingredientInfoList}>
-            {usedIngredientRows.map((ingredient) => (
-              <View
-                key={ingredient.key}
-                style={[
-                  styles.ingredientInfoRow,
-                  shouldStack && styles.ingredientInfoRowStacked,
-                ]}
-              >
-                <View
-                  style={[
-                    styles.ingredientInfoCopy,
-                    shouldStack && styles.ingredientInfoCopyStacked,
-                  ]}
-                >
-                  <AppText style={styles.ingredientInfoName}>
-                    {ingredient.name}
-                  </AppText>
-                  {ingredient.amountLabel ? (
-                    <AppText style={styles.ingredientInfoAmount}>
-                      추천 {ingredient.amountLabel}
-                    </AppText>
-                  ) : null}
-                </View>
-                {ingredient.daysUntilExpiry !== null ? (
-                  <View
-                    style={[
-                      styles.ingredientExpiryBadge,
-                      ingredient.isExpiring
-                        ? styles.ingredientExpiryBadgeExpiring
-                        : styles.ingredientExpiryBadgeSafe,
-                    ]}
-                    accessibilityLabel={`유통기한 ${
-                      formatIngredientDdayLabel(ingredient.daysUntilExpiry) ??
-                      "임박"
-                    }`}
-                  >
-                    <Clock3
-                      color={
-                        ingredient.isExpiring ? colors.warning : colors.success
-                      }
-                      size={spacing.sm}
-                      strokeWidth={2.4}
-                    />
-                    <AppText
-                      style={[
-                        styles.ingredientExpiryBadgeText,
-                        ingredient.isExpiring
-                          ? styles.ingredientExpiryBadgeTextExpiring
-                          : styles.ingredientExpiryBadgeTextSafe,
-                      ]}
-                    >
-                      {formatIngredientDdayLabel(ingredient.daysUntilExpiry) ??
-                        "임박"}
-                    </AppText>
-                  </View>
-                ) : null}
-              </View>
-            ))}
-          </View>
-        ) : (
-          <AppText style={styles.blockHint}>표시할 재료 정보가 없어요.</AppText>
-        )}
-      </View>
-
-      <OptionalMissingIngredientsCard
-        dish={dish}
-        recommendationId={recommendationId}
-        dishIndex={dishIndex}
-        onOpenShopping={onOpenShopping}
-      />
-
-      <View style={styles.recipeBlock}>
-        <AppText style={styles.blockTitle}>조리 순서</AppText>
-        <View style={styles.stepList}>
-          {dish.steps.map((step, stepIndex) => (
-            <View
-              key={`${dish.title}-step-${stepIndex}`}
-              style={styles.stepCard}
-            >
-              <View style={styles.stepBadge}>
-                <AppText style={styles.stepBadgeText}>{stepIndex + 1}</AppText>
-              </View>
-              <AppText style={styles.stepText}>{step}</AppText>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      {dish.tips.length > 0 ? (
-        <View style={styles.softNoteCard}>
-          <AppText style={styles.softNoteTitle}>팁</AppText>
-          <AppText style={styles.softNoteBody}>{dish.tips.join(" ")}</AppText>
-        </View>
-      ) : null}
-
-      {dish.safetyNote ? (
-        <View style={styles.safetyCard}>
-          <AppText style={styles.safetyCardTitle}>안전하게 챙기기</AppText>
-          <AppText style={styles.safetyCardBody}>{dish.safetyNote}</AppText>
-        </View>
-      ) : null}
-    </>
-  );
-}
-
-function getUsedIngredientRows(
-  dish: RecipeRecommendationDish,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
-): HighlightIngredient[] {
-  const snapshotById = new Map(
-    inventorySnapshot.map((item) => [item.inventoryItemId, item]),
-  );
-
-  return dish.usedIngredients.map((ingredient, index) => {
-    const snapshot = ingredient.inventoryItemId
-      ? snapshotById.get(ingredient.inventoryItemId)
-      : undefined;
-    const daysUntilExpiry = snapshot?.daysUntilExpiry ?? null;
-    const isExpiring =
-      typeof daysUntilExpiry === "number" &&
-      daysUntilExpiry <= EXPIRING_DAYS_THRESHOLD;
-
-    return {
-      key: ingredient.inventoryItemId ?? `${ingredient.name}-${index}`,
-      name: ingredient.name,
-      amountLabel:
-        ingredient.amount && ingredient.unitCode
-          ? formatBaseQuantity(ingredient.amount, ingredient.unitCode)
-          : null,
-      daysUntilExpiry,
-      isExpiring,
-    } satisfies HighlightIngredient;
-  });
-}
-
-function getHighlightedIngredients(
-  dish: RecipeRecommendationDish,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
-): HighlightIngredient[] {
-  const resolved = getUsedIngredientRows(dish, inventorySnapshot);
-
-  const expiring = resolved
-    .filter((ingredient) => ingredient.isExpiring)
-    .sort(
-      (left, right) =>
-        (left.daysUntilExpiry ?? Number.POSITIVE_INFINITY) -
-        (right.daysUntilExpiry ?? Number.POSITIVE_INFINITY),
-    );
-
-  if (expiring.length > 0) {
-    const nonExpiring = resolved.filter((ingredient) => !ingredient.isExpiring);
-    return [...expiring, ...nonExpiring];
-  }
-
-  return resolved;
-}
-
 function formatRecommendationContext(recommendation: RecipeRecommendation) {
   const inventoryCount = recommendation.inventorySnapshot.length;
   const expiringCount = recommendation.inventorySnapshot.filter(
@@ -2108,36 +1637,6 @@ function formatRecommendationContext(recommendation: RecipeRecommendation) {
   }
 
   return `보관 재료 ${inventoryCount}개 기준`;
-}
-
-function formatDishMeta(dish: RecipeRecommendationDish) {
-  const values = [
-    `${dish.servings}인분`,
-    `${dish.cookingTimeMinutes}분`,
-    difficultyLabels[dish.difficulty],
-  ];
-  if (dish.spiceLevel) values.push(spiceLevelLabels[dish.spiceLevel]);
-  if (dish.requiredEquipment?.length) {
-    values.push(
-      dish.requiredEquipment.map((item) => equipmentLabels[item]).join("/"),
-    );
-  }
-  return values.join(" · ");
-}
-
-function formatIngredientPreview(ingredients: HighlightIngredient[]) {
-  if (ingredients.length === 0) {
-    return "재료 정보 없음";
-  }
-
-  const visibleNames = ingredients
-    .slice(0, COLLAPSED_INGREDIENT_PREVIEW_COUNT)
-    .map((ingredient) => ingredient.name);
-  const remainingCount = ingredients.length - visibleNames.length;
-
-  return `재료 ${visibleNames.join(" · ")}${
-    remainingCount > 0 ? ` +${remainingCount}` : ""
-  }`;
 }
 
 function formatHistoryPreview(recommendation: RecipeRecommendation) {
@@ -2159,32 +1658,6 @@ function formatHistoryPreview(recommendation: RecipeRecommendation) {
   return previewTitles;
 }
 
-function formatIngredientDdayLabel(daysUntilExpiry: number | null) {
-  if (daysUntilExpiry == null) {
-    return null;
-  }
-
-  if (daysUntilExpiry < 0) {
-    return `D+${Math.abs(daysUntilExpiry)}`;
-  }
-
-  if (daysUntilExpiry === 0) {
-    return "오늘";
-  }
-
-  return `D-${daysUntilExpiry}`;
-}
-
-function getErrorMessage(error: unknown) {
-  if (!error) {
-    return null;
-  }
-
-  return error instanceof Error
-    ? error.message
-    : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
-}
-
 function formatCreatedAt(value: string) {
   return new Date(value).toLocaleString("ko-KR", {
     month: "long",
@@ -2192,10 +1665,6 @@ function formatCreatedAt(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
-}
-
-function offerLabel(kind: RecommendationAccess["offer"]["kind"]) {
-  return resolveMonetizationOffer(kind).label;
 }
 
 const styles = StyleSheet.create({
@@ -2317,48 +1786,6 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   optionsSummaryActionLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.primary,
-  },
-  quotaCard: {
-    backgroundColor: colors.warningSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    gap: spacing.sm,
-  },
-  valueOfferCard: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    gap: spacing.sm,
-  },
-  valueOfferCopy: { gap: spacing.xxs },
-  valueOfferTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  valueOfferDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    color: colors.subtext,
-  },
-  quotaTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  quotaLink: {
-    alignSelf: "flex-start",
-    minHeight: touchTarget.min,
-    justifyContent: "center",
-    paddingRight: spacing.sm,
-  },
-  quotaLinkText: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
@@ -2561,163 +1988,6 @@ const styles = StyleSheet.create({
   },
   favoriteButtonPending: {
     opacity: 0.55,
-  },
-  recipeDetailSummary: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.subtext,
-  },
-  recipeBlock: {
-    gap: spacing.xs,
-  },
-  blockTitle: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  blockHint: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.mutedText,
-  },
-  ingredientInfoList: {
-    gap: spacing.xs,
-  },
-  ingredientInfoRow: {
-    minHeight: touchTarget.min,
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  ingredientInfoRowStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
-  },
-  ingredientInfoCopy: {
-    flex: 1,
-    minWidth: 0,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  ingredientInfoCopyStacked: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-  },
-  ingredientInfoName: {
-    flexShrink: 1,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
-  },
-  ingredientInfoAmount: {
-    flexShrink: 0,
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  ingredientExpiryBadge: {
-    flexShrink: 0,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-  },
-  ingredientExpiryBadgeSafe: {
-    backgroundColor: colors.successSoft,
-  },
-  ingredientExpiryBadgeExpiring: {
-    backgroundColor: colors.warningSoft,
-  },
-  ingredientExpiryBadgeText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  ingredientExpiryBadgeTextSafe: {
-    color: colors.success,
-  },
-  ingredientExpiryBadgeTextExpiring: {
-    color: colors.warning,
-  },
-  softNoteCard: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-    padding: spacing.md,
-    gap: spacing.xxs,
-  },
-  softNoteTitle: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  softNoteBody: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
-  stepList: {
-    gap: spacing.sm,
-  },
-  stepCard: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-    padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: spacing.sm,
-  },
-  stepBadge: {
-    width: spacing.lg,
-    height: spacing.lg,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  stepBadgeText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.surface,
-  },
-  stepText: {
-    flex: 1,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
-  safetyCard: {
-    borderRadius: radius.lg,
-    backgroundColor: colors.warningSoft,
-    padding: spacing.md,
-    gap: spacing.xxs,
-  },
-  safetyCardTitle: {
-    fontSize: typography.label.fontSize,
-    lineHeight: typography.label.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.warning,
-  },
-  safetyCardBody: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
   },
   optionGroup: {
     gap: spacing.sm,

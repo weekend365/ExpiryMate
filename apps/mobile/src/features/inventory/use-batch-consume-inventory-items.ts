@@ -36,9 +36,11 @@ export const useBatchConsumeInventoryItems = () => {
       result.items.forEach((item) => {
         queryClient.invalidateQueries({
           queryKey: [
-            "inventory-item",
-            sessionUserId,
-            activeSpaceId,
+            ...withInventorySpace(
+              sessionQueryKeys.inventoryItem,
+              sessionUserId,
+              activeSpaceId,
+            ),
             item.id,
           ],
         });

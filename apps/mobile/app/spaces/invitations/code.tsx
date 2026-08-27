@@ -14,6 +14,7 @@ import { Button } from "../../../src/components/Button";
 import { EmptyState } from "../../../src/components/EmptyState";
 import { Screen } from "../../../src/components/Screen";
 import { useAuth } from "../../../src/features/auth/use-auth";
+import { spacesListQueryKey } from "../../../src/features/auth/session-boundary";
 import {
   clearPendingSpaceInvitation,
   rememberPendingCodeInvitation,
@@ -35,7 +36,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
   const params = useLocalSearchParams<{ code?: string | string[] }>();
   const paramCode = firstParam(params.code);
   const queryClient = useQueryClient();
-  const { isRegistered } = useAuth();
+  const { isRegistered, sessionUserId } = useAuth();
   const { setActiveSpaceId, refetchSpaces } = useActiveSpace();
   const [codeInput, setCodeInput] = useState(() =>
     formatSpaceInvitationCode(paramCode ?? ""),
@@ -54,7 +55,9 @@ export default function AcceptSpaceInvitationCodeScreen() {
       }),
     onSuccess: async (result) => {
       await clearPendingSpaceInvitation();
-      await queryClient.invalidateQueries({ queryKey: ["inventory-spaces"] });
+      await queryClient.invalidateQueries({
+        queryKey: spacesListQueryKey(sessionUserId),
+      });
       await refetchSpaces();
       setActiveSpaceId(result.spaceId);
       router.replace("/(tabs)/inventory");
