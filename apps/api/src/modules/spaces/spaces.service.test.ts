@@ -316,6 +316,7 @@ describe("SpacesService", () => {
       }),
     ).rejects.toThrow(BadRequestException);
     expect(prisma.inventorySpaceMembership.upsert).not.toHaveBeenCalled();
+    expect(prisma.inventorySpaceMembership.create).not.toHaveBeenCalled();
   });
 
   it("revokes only a still-pending invitation in the selected space", async () => {
@@ -364,12 +365,33 @@ describe("SpacesService", () => {
     ).rejects.toThrow(ForbiddenException);
   });
 
+  it("does not consume an email invite when the user is already a member", async () => {
+    prisma.user.findUnique.mockResolvedValue({
+      email: "family@example.com",
+      emailVerifiedAt: new Date(),
+    });
+    prisma.spaceInvitation.findUnique.mockResolvedValue(validInvitation());
+    prisma.inventorySpaceMembership.findUnique.mockResolvedValue({
+      userId: "user-family",
+    });
+
+    await expect(
+      service.acceptInvitation("user-family", {
+        token: "a".repeat(43),
+        notificationsEnabled: true,
+      }),
+    ).rejects.toThrow(ConflictException);
+    expect(prisma.spaceInvitation.updateMany).not.toHaveBeenCalled();
+    expect(prisma.inventorySpaceMembership.create).not.toHaveBeenCalled();
+  });
+
   it("claims an invitation once before creating membership", async () => {
     prisma.user.findUnique.mockResolvedValue({
       email: "family@example.com",
       emailVerifiedAt: new Date(),
     });
     prisma.spaceInvitation.findUnique.mockResolvedValue(validInvitation());
+    prisma.inventorySpaceMembership.findUnique.mockResolvedValue(null);
     prisma.spaceInvitation.updateMany.mockResolvedValue({ count: 0 });
 
     await expect(
@@ -378,7 +400,7 @@ describe("SpacesService", () => {
         notificationsEnabled: false,
       }),
     ).rejects.toThrow(ConflictException);
-    expect(prisma.inventorySpaceMembership.upsert).not.toHaveBeenCalled();
+    expect(prisma.inventorySpaceMembership.create).not.toHaveBeenCalled();
   });
 
   it("joins with notifications disabled by default choice", async () => {
@@ -387,8 +409,9 @@ describe("SpacesService", () => {
       emailVerifiedAt: new Date(),
     });
     prisma.spaceInvitation.findUnique.mockResolvedValue(validInvitation());
+    prisma.inventorySpaceMembership.findUnique.mockResolvedValue(null);
     prisma.spaceInvitation.updateMany.mockResolvedValue({ count: 1 });
-    prisma.inventorySpaceMembership.upsert.mockResolvedValue({});
+    prisma.inventorySpaceMembership.create.mockResolvedValue({});
 
     const result = await service.acceptInvitation("user-family", {
       token: "a".repeat(43),
@@ -408,20 +431,13 @@ describe("SpacesService", () => {
       }),
       data: { acceptedAt: expect.any(Date), email: null },
     });
-    expect(prisma.inventorySpaceMembership.upsert).toHaveBeenCalledWith({
-      where: {
-        spaceId_userId: {
-          spaceId: "space-house",
-          userId: "user-family",
-        },
-      },
-      create: expect.objectContaining({
+    expect(prisma.inventorySpaceMembership.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        spaceId: "space-house",
+        userId: "user-family",
         role: InventorySpaceRole.member,
         notificationsEnabled: false,
       }),
-      update: {
-        notificationsEnabled: false,
-      },
     });
   });
 

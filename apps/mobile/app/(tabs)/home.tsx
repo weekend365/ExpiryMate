@@ -30,6 +30,10 @@ import { HomeQuickEntry } from "../../src/features/home/home-quick-entry";
 import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
 import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
+import {
+  registerRoute,
+  scannerRoute,
+} from "../../src/features/registration/registration-return";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors, spacing } from "../../src/shared/theme";
@@ -125,14 +129,14 @@ export default function HomeScreen() {
     if (activeSpaceId) {
       clearPrefill(activeSpaceId);
     }
-    router.push("/register");
+    router.push(registerRoute("home"));
   };
 
   const handleOpenScanner = () => {
     if (activeSpaceId) {
       clearPrefill(activeSpaceId);
     }
-    router.push("/scanner");
+    router.push(scannerRoute("home"));
   };
 
   const handleOpenRecommendations = () => {

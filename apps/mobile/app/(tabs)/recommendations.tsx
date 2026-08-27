@@ -221,7 +221,7 @@ export default function RecommendationsScreen() {
     [favoritesQuery.data],
   );
   const historyErrorMessage = getRecommendationErrorMessage(historyQuery.error);
-  const errorMessage = generationErrorMessage ?? historyErrorMessage;
+  const errorMessage = generationErrorMessage;
   const isQuotaError = generationErrorCode === "RECOMMENDATION_QUOTA_EXHAUSTED";
   const isCapacityError =
     generationErrorCode === "RECIPE_DAILY_BUDGET_EXHAUSTED" ||
@@ -664,6 +664,18 @@ export default function RecommendationsScreen() {
               description={
                 getRecommendationErrorMessage(setFavoriteMutation.error) ?? undefined
               }
+            />
+          ) : null}
+
+          {recipeView === "recommendations" && historyQuery.isError ? (
+            <FeedbackBanner
+              showMascot={false}
+              title="이전 추천을 불러오지 못했어요"
+              description={historyErrorMessage ?? undefined}
+              actionLabel="다시 불러오기"
+              onAction={() => {
+                void historyQuery.refetch();
+              }}
             />
           ) : null}
 

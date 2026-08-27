@@ -14,6 +14,7 @@ import { type MascotMood } from "../../components/Mascot";
 import { Pill } from "../../components/Pill";
 import { colors, spacing } from "../../shared/theme";
 import type { BarcodeContributionField } from "./barcodeContributionModeration";
+import { getScannerConfirmDescription } from "./scanner-confirm-copy";
 import { ManualExpirySection } from "./scanner-manual-expiry";
 import { scannerScreenStyles as styles } from "./scanner-screen-styles";
 import type { ProductInfo, ScannerConfirmation } from "./useProductScanner";
@@ -103,19 +104,13 @@ export function ScannerConfirmSheet({
                 ? "한 번만 확인해 주세요"
                 : "이걸로 넣을까요?"
       }
-      description={
-        needsManualName && needsManualExpiry
-          ? "목록에서 못 찾았어요. 이름과 유통기한을 알려주시면 양만 맞춰 넣을게요."
-          : needsManualExpiry
-            ? "날짜가 안 보여도 괜찮아요. 직접 골라 주시면 양만 맞춰 넣을게요."
-            : needsManualName
-              ? "목록에서 못 찾았어요. 이름만 알려주시면 양 맞추는 화면으로 이어갈게요."
-              : !catalogNameAccepted
-                ? "목록 이름은 그대로 두고, 냉장고에는 지금 이름으로 넣을게요."
-                : needsNameConfirmation
-                  ? "이 이름은 아직 덜 확실해요. 맞으면 그대로, 다르면 냉장고에 넣을 이름으로 바꿔 주세요."
-                  : "목록에서 찾은 이름이에요. 맞으면 양만 맞춰 넣을게요."
-      }
+      description={getScannerConfirmDescription({
+        needsManualName,
+        needsManualExpiry,
+        catalogNameAccepted,
+        needsNameConfirmation,
+        productLookupStatus,
+      })}
       footer={
         <View style={styles.sheetFooter}>
           {needsManualExpiry && !resolvedExpiryDate ? (

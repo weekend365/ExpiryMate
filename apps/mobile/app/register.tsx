@@ -18,7 +18,7 @@ import {
   toIsoDate,
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import {
   Barcode,
   CheckCircle2,
@@ -60,6 +60,11 @@ import {
 } from "../src/features/inventory/inventory-step-fields";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
+import {
+  parseRegistrationReturnTo,
+  registrationReturnHref,
+  scannerRoute,
+} from "../src/features/registration/registration-return";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
@@ -221,6 +226,11 @@ const getPrefillKey = (prefill: RegistrationPrefill | null) =>
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
+  const params = useLocalSearchParams<{ from?: string | string[] }>();
+  const returnTo = parseRegistrationReturnTo(params.from);
+  const leaveRegistration = useCallback(() => {
+    router.replace(registrationReturnHref(returnTo));
+  }, [returnTo]);
   const { activeSpaceId } = useActiveSpace();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
   const prefill = useRegistrationStore((state) =>
@@ -511,17 +521,17 @@ export default function RegisterScreen() {
     navigation.setOptions({
       title: "",
       headerLeft: () => (
-        <HeaderBackButton onPress={() => router.replace("/(tabs)/home")} />
+        <HeaderBackButton onPress={leaveRegistration} />
       ),
     });
-  }, [goToPreviousStep, navigation, step]);
+  }, [goToPreviousStep, leaveRegistration, navigation, step]);
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
         if (step === "done") {
-          router.replace("/(tabs)/home");
+          leaveRegistration();
           return true;
         }
 
@@ -531,7 +541,7 @@ export default function RegisterScreen() {
     );
 
     return () => subscription.remove();
-  }, [goToPreviousStep, step]);
+  }, [goToPreviousStep, leaveRegistration, step]);
 
   const recentTemplates = useMemo(() => {
     // Same product identity as the inventory list: productId, or name + brand.
@@ -594,7 +604,7 @@ export default function RegisterScreen() {
 
   const finishRegistration = () => {
     setRewardNotice(null);
-    router.replace("/(tabs)/home");
+    leaveRegistration();
   };
 
   const continueWithBarcode = () => {
@@ -602,7 +612,7 @@ export default function RegisterScreen() {
       clearPrefill(activeSpaceId);
     }
     setRewardNotice(null);
-    router.replace("/scanner");
+    router.replace(scannerRoute(returnTo));
   };
 
   const continueWithManual = () => {

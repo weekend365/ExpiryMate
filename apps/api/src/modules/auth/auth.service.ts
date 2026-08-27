@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  HttpStatus,
   Injectable,
   ServiceUnavailableException,
   UnauthorizedException,
@@ -18,6 +19,7 @@ import type {
   AuthUser,
   RegisterPendingResponse,
 } from "@expirymate/shared";
+import { EMAIL_NOT_VERIFIED_ERROR_CODE } from "@expirymate/shared";
 import argon2 from "argon2";
 import {
   createHash,
@@ -30,6 +32,7 @@ import {
   type JsonWebKey,
 } from "node:crypto";
 import { PrismaService } from "../../database/prisma.service";
+import { CodedHttpException } from "../../common/coded-http.exception";
 import {
   ForgotPasswordDto,
   LoginDto,
@@ -155,7 +158,9 @@ export class AuthService {
     }
 
     if (!user.emailVerifiedAt) {
-      throw new ForbiddenException(
+      throw new CodedHttpException(
+        HttpStatus.FORBIDDEN,
+        EMAIL_NOT_VERIFIED_ERROR_CODE,
         "메일 확인이 아직이에요. 받은편지함을 살펴봐 주세요.",
       );
     }

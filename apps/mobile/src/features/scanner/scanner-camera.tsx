@@ -1,12 +1,11 @@
 import {
   addDays,
-  BarcodeLookupSource,
   ExpirySource,
   ProductCategory,
   toIsoDate,
 } from "@expirymate/shared";
 import { CameraView } from "expo-camera";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   Barcode,
   CalendarDays,
@@ -40,12 +39,22 @@ import {
 } from "./barcodeContributionModeration";
 import { CloseButton, InlineError, ScannerGuide } from "./scanner-chrome";
 import { ScannerConfirmSheet } from "./scanner-confirm-sheet";
+import {
+  getScannerProductSourceLabel,
+  shouldContributeScannedBarcode,
+} from "./scanner-confirm-copy";
 import { scannerScreenStyles as styles } from "./scanner-screen-styles";
 import { useProductScanner } from "./useProductScanner";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
+import {
+  parseRegistrationReturnTo,
+  registerRoute,
+} from "../registration/registration-return";
 
 export function ScannerCameraExperience() {
   const { shouldStack } = useResponsiveLayout();
+  const params = useLocalSearchParams<{ from?: string | string[] }>();
+  const returnTo = parseRegistrationReturnTo(params.from);
   const { activeSpaceId } = useActiveSpace();
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
@@ -108,7 +117,9 @@ export function ScannerCameraExperience() {
   );
   const showScanRewardHint =
     scanner.mode === "ocr" && canPromiseBarcodeReward;
-  const manualNameHint = canPromiseBarcodeReward
+  const manualNameHint = scanner.productLookupStatus === "error"
+    ? null
+    : canPromiseBarcodeReward
     ? resolvedBrand || resolvedCategory
       ? null
       : "브랜드나 카테고리를 함께 알려주세요."
@@ -117,16 +128,11 @@ export function ScannerCameraExperience() {
   const resultMood: MascotMood =
     needsManualName || needsManualExpiry ? "worry" : "happy";
 
-  const productSourceLabel =
-    scanner.productLookupStatus === "loading"
-      ? "상품 정보를 찾고 있어요"
-      : scanner.product?.source === BarcodeLookupSource.PRODUCT_MASTER
-        ? "우리 목록에서 찾았어요"
-        : scanner.product?.source === BarcodeLookupSource.OPEN_FOOD_FACTS
-          ? "공개 상품 정보에서 찾았어요"
-          : needsManualName
-            ? "이름을 직접 알려주세요"
-            : "상품 정보";
+  const productSourceLabel = getScannerProductSourceLabel({
+    productLookupStatus: scanner.productLookupStatus,
+    needsManualName,
+    productSource: scanner.product?.source,
+  });
 
   const guideMood: Extract<MascotMood, "speak" | "think"> =
     showScanRewardHint || showBarcodeSuccess
@@ -213,7 +219,7 @@ export function ScannerCameraExperience() {
     // Clear confirmation so the Modal sheet dismisses; replace so scanner
     // unmounts and cannot keep overlaying /register.
     scanner.resetScanner();
-    router.replace("/register");
+    router.replace(registerRoute(returnTo));
   };
 
   const handleUseScanResult = async () => {
@@ -227,7 +233,11 @@ export function ScannerCameraExperience() {
 
     let productMasterId = scanner.product?.productMasterId ?? null;
 
-    if (needsManualName && scanner.confirmation.barcode) {
+    if (
+      needsManualName &&
+      scanner.confirmation.barcode &&
+      shouldContributeScannedBarcode(scanner.productLookupStatus)
+    ) {
       setIsContributing(true);
 
       try {
@@ -297,7 +307,7 @@ export function ScannerCameraExperience() {
       setDraft(activeSpaceId, null);
     }
     scanner.resetScanner();
-    router.replace("/register");
+    router.replace(registerRoute(returnTo));
   };
 
   const handlePresetExpiry = (days: number) => {

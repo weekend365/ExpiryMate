@@ -60,6 +60,10 @@ import { UrgencySection } from "../../src/features/inventory/inventory-urgency-s
 import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
+import {
+  registerRoute,
+  scannerRoute,
+} from "../../src/features/registration/registration-return";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { colors } from "../../src/shared/theme";
@@ -261,7 +265,7 @@ export default function InventoryScreen() {
     if (activeSpaceId) {
       clearPrefill(activeSpaceId);
     }
-    router.push("/register");
+    router.push(registerRoute("inventory"));
   };
 
   const goToScanner = () => {
@@ -269,7 +273,7 @@ export default function InventoryScreen() {
     if (activeSpaceId) {
       clearPrefill(activeSpaceId);
     }
-    router.push("/scanner");
+    router.push(scannerRoute("inventory"));
   };
 
   const clearListFilters = () => {

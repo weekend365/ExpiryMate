@@ -81,6 +81,9 @@ export const oauthLoginRequestSchema = z.object({
   state: z.string().min(1).optional(),
 });
 
+/** 403 when a registered account signs in before verifying email. */
+export const EMAIL_NOT_VERIFIED_ERROR_CODE = "EMAIL_NOT_VERIFIED" as const;
+
 export const startOAuthRequestSchema = z.object({
   provider: z.enum(["google", "kakao", "naver"]),
   returnUri: z.string().min(1),

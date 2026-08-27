@@ -362,36 +362,47 @@ export class SpacesService {
       );
     }
 
-    await this.prisma.$transaction(async (tx) => {
-      await assertHouseholdSeatAvailable(tx, invitation.spaceId, userId);
-      const claimed = await tx.spaceInvitation.updateMany({
-        where: {
-          id: invitation.id,
-          method: SpaceInvitationMethod.email,
-          acceptedAt: null,
-          revokedAt: null,
-          expiresAt: { gt: new Date() },
-        },
-        data: { acceptedAt: new Date(), email: null },
-      });
-      if (claimed.count !== 1) {
-        throw new ConflictException("이미 사용된 초대 링크예요.");
-      }
-      await tx.inventorySpaceMembership.upsert({
+    const existingMembership =
+      await this.prisma.inventorySpaceMembership.findUnique({
         where: {
           spaceId_userId: { spaceId: invitation.spaceId, userId },
         },
-        create: {
-          spaceId: invitation.spaceId,
-          userId,
-          role: invitation.role,
-          notificationsEnabled: body.notificationsEnabled,
-        },
-        update: {
-          notificationsEnabled: body.notificationsEnabled,
-        },
       });
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    if (existingMembership) {
+      throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
+    }
+
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        await assertHouseholdSeatAvailable(tx, invitation.spaceId, userId);
+        const claimed = await tx.spaceInvitation.updateMany({
+          where: {
+            id: invitation.id,
+            method: SpaceInvitationMethod.email,
+            acceptedAt: null,
+            revokedAt: null,
+            expiresAt: { gt: new Date() },
+          },
+          data: { acceptedAt: new Date(), email: null },
+        });
+        if (claimed.count !== 1) {
+          throw new ConflictException("이미 사용된 초대 링크예요.");
+        }
+        await tx.inventorySpaceMembership.create({
+          data: {
+            spaceId: invitation.spaceId,
+            userId,
+            role: invitation.role,
+            notificationsEnabled: body.notificationsEnabled,
+          },
+        });
+      }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        throw new ConflictException("이미 함께 쓰고 있는 냉장고예요.");
+      }
+      throw error;
+    }
 
     return {
       spaceId: invitation.spaceId,

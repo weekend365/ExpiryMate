@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   authSessionSchema,
+  EMAIL_NOT_VERIFIED_ERROR_CODE,
   registerPendingResponseSchema,
   registerResponseSchema,
 } from "./auth";
@@ -36,5 +37,9 @@ describe("auth response schemas", () => {
       true,
     );
     expect(authSessionSchema.safeParse(session).success).toBe(true);
+  });
+
+  it("exports a stable unverified-login error code", () => {
+    expect(EMAIL_NOT_VERIFIED_ERROR_CODE).toBe("EMAIL_NOT_VERIFIED");
   });
 });

@@ -21,7 +21,7 @@ import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
 import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
-import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
+import { getAuthErrorMessage, isEmailNotVerifiedAuthError } from "../../src/features/auth/auth-errors";
 import {
   useWebOAuth,
   type WebOAuthProvider,
@@ -74,7 +74,7 @@ export default function LoginScreen() {
       }
     } catch (error) {
       const message = getAuthErrorMessage(error);
-      if (message.includes("메일 확인")) {
+      if (isEmailNotVerifiedAuthError(error)) {
         Alert.alert("메일 확인이 필요해요", message, [
           {
             text: "메일함 확인으로",

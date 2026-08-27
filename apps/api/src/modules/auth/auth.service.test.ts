@@ -11,6 +11,7 @@ import {
 } from "@prisma/client";
 import { createSign, generateKeyPairSync, type KeyObject } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { CodedHttpException } from "../../common/coded-http.exception";
 import { AuthService } from "./auth.service";
 
 describe("AuthService", () => {
@@ -625,12 +626,15 @@ describe("AuthService", () => {
       },
     });
 
-    await expect(
-      service.login({
+    const error = await service
+      .login({
         email: "pending@example.com",
         password: "password123",
-      }),
-    ).rejects.toThrow(ForbiddenException);
+      })
+      .catch((caught) => caught);
+
+    expect(error).toBeInstanceOf(CodedHttpException);
+    expect(error).toMatchObject({ errorCode: "EMAIL_NOT_VERIFIED" });
   });
 
   it("reports email verification status without revealing missing accounts", async () => {
