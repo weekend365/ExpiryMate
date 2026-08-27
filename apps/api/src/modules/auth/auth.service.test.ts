@@ -663,46 +663,6 @@ describe("AuthService", () => {
     ).resolves.toEqual({ verified: false });
   });
 
-  it("confirms email on desktop without issuing a session", async () => {
-    const user = makeUser({
-      id: "user_desktop",
-      email: "desktop@example.com",
-      emailVerifiedAt: null,
-    });
-    const tokenRecord = {
-      id: "ott_desktop",
-      userId: user.id,
-      tokenHash: "hash",
-      purpose: OneTimeAuthTokenPurpose.email_verification,
-      expiresAt: new Date(Date.now() + 60_000),
-      consumedAt: null,
-    };
-    const prisma = {
-      user: {
-        update: vi.fn(async () => ({
-          ...user,
-          emailVerifiedAt: new Date(),
-        })),
-      },
-      oneTimeAuthToken: {
-        findUnique: vi.fn(async () => tokenRecord),
-        update: vi.fn(async () => ({ ...tokenRecord, consumedAt: new Date() })),
-      },
-      refreshSession: {
-        create: vi.fn(async () => ({})),
-      },
-    };
-    const service = new AuthService(withPersonalSpacePrisma(prisma) as never, {
-      sendEmailVerification: vi.fn(),
-      sendPasswordReset: vi.fn(),
-    } as never);
-
-    await expect(service.confirmEmailVerification("raw-token")).resolves.toEqual(
-      { ok: true },
-    );
-    expect(prisma.refreshSession.create).not.toHaveBeenCalled();
-  });
-
   it("issues a session after email verification", async () => {
     const user = makeUser({
       id: "user_verify",

@@ -278,7 +278,7 @@ export default function HomeScreen() {
                     size="small"
                     style={styles.recommendationRetry}
                   >
-                    다시 불러오기
+                    다시 불러올게요
                   </Button>
                 </View>
               </View>

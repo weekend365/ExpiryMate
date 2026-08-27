@@ -1,9 +1,11 @@
 import type { MonetizationOfferKind } from "@expirymate/shared";
 
+export const REWARDED_AD_CTA_LABEL = "광고 보고 추천 받을게요";
+
 export function resolveMonetizationOffer(kind: MonetizationOfferKind) {
   switch (kind) {
     case "rewarded_ad":
-      return { action: "rewarded_ad" as const, label: "광고 보고 추천 1회 받기" };
+      return { action: "rewarded_ad" as const, label: REWARDED_AD_CTA_LABEL };
     case "paid_credits":
       return { action: "paid_credits" as const, label: "AI 추천권 충전하기" };
     case "jango_household":

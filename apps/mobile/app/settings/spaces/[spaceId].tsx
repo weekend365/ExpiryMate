@@ -24,13 +24,14 @@ import { SettingsGroup } from "../../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../../src/components/SettingsScreen";
 import { useAuth } from "../../../src/features/auth/use-auth";
 import { spacesListQueryKey } from "../../../src/features/auth/session-boundary";
+import { spaceNotificationStatusCopy } from "../../../src/features/spaces/space-notification-copy";
 import { useActiveSpace } from "../../../src/features/spaces/space-provider";
 import { canInviteToSpace } from "../../../src/features/spaces/space-selection";
 import { useSpaceManagement } from "../../../src/features/spaces/use-space-management";
+import { useUpdateSpaceNotifications } from "../../../src/features/spaces/use-space-notifications";
 import {
   deleteInventorySpace,
   updateInventorySpace,
-  updateSpaceNotifications,
 } from "../../../src/services/api";
 import {
   colors,
@@ -67,16 +68,7 @@ export default function SpaceDetailScreen() {
   const invitations = management.invitationsQuery.data ?? [];
   const invitationCodes = management.invitationCodesQuery.data ?? [];
 
-  const notificationsMutation = useMutation({
-    mutationFn: (enabled: boolean) =>
-      updateSpaceNotifications(spaceId as string, enabled),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: spacesListQueryKey(sessionUserId),
-      });
-      void refetchSpaces();
-    },
-  });
+  const notificationsMutation = useUpdateSpaceNotifications();
   const deleteMutation = useMutation({
     mutationFn: () => deleteInventorySpace(spaceId as string),
     onSuccess: async () => {
@@ -216,7 +208,7 @@ export default function SpaceDetailScreen() {
         <EmptyState
           mood="worry"
           title="구성원을 불러오지 못했어요"
-          actionLabel="불러오기"
+          actionLabel="다시 불러올게요"
           onAction={() => {
             void management.membersQuery.refetch();
           }}
@@ -288,16 +280,18 @@ export default function SpaceDetailScreen() {
 
       <SettingsGroup title="이 냉장고 알림">
         <ListRow
-          title={
-            space?.notificationsEnabled
-              ? "유통기한 알림을 받고 있어요"
-              : "유통기한 알림은 쉬고 있어요"
-          }
+          title={spaceNotificationStatusCopy(
+            Boolean(space?.notificationsEnabled),
+          )}
           description="내 기기에서 받을지 공간마다 고를 수 있어요."
           icon={Bell}
           last
           onPress={() =>
-            notificationsMutation.mutate(!space?.notificationsEnabled)
+            spaceId &&
+            notificationsMutation.mutate({
+              spaceId,
+              enabled: !space?.notificationsEnabled,
+            })
           }
         />
       </SettingsGroup>

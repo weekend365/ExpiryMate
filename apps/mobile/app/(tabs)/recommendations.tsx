@@ -59,7 +59,10 @@ import { Pill } from "../../src/components/Pill";
 import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
-import { resolveMonetizationOffer } from "../../src/features/monetization/monetization-offer";
+import {
+  REWARDED_AD_CTA_LABEL,
+  resolveMonetizationOffer,
+} from "../../src/features/monetization/monetization-offer";
 import {
   canContinueWithRewardedAd,
   needsRewardedAdToRecommend,
@@ -294,7 +297,7 @@ export default function RecommendationsScreen() {
         message: "광고 추천권 1회가 지급됐어요",
         supportingMessage: "오늘 추천을 만들 때 바로 사용할 수 있어요.",
         onPress: monetization.dismissRewardNotice,
-        accessibilityHint: "확인",
+        accessibilityHint: "알겠어요",
       });
     } else if (monetization.adState === "verifying") {
       notices.push({
@@ -338,7 +341,7 @@ export default function RecommendationsScreen() {
       : needsIngredients
         ? "재료 넣으러 갈게요"
         : needsRewardedAd
-          ? "광고 보고 추천 받을게요"
+          ? REWARDED_AD_CTA_LABEL
           : hasRecommendationResult
             ? "다시 골라볼게요"
             : "추천 받을게요";
@@ -576,7 +579,7 @@ export default function RecommendationsScreen() {
               tone="success"
               title="광고 추천권 1회가 지급됐어요"
               description="오늘 추천을 만들 때 바로 사용할 수 있어요."
-              actionLabel="확인"
+              actionLabel="알겠어요"
               onAction={monetization.dismissRewardNotice}
               showMascot={false}
             />
@@ -672,7 +675,7 @@ export default function RecommendationsScreen() {
               showMascot={false}
               title="이전 추천을 불러오지 못했어요"
               description={historyErrorMessage ?? undefined}
-              actionLabel="다시 불러오기"
+              actionLabel="다시 불러올게요"
               onAction={() => {
                 void historyQuery.refetch();
               }}
@@ -700,12 +703,12 @@ export default function RecommendationsScreen() {
                     }
                     accessibilityLabel={
                       canOfferRewardedAd
-                        ? `광고 보고 추천권 받기. ${quotaCopy.value}`
+                        ? `${REWARDED_AD_CTA_LABEL}. ${quotaCopy.value}`
                         : `${quotaCopy.label} ${quotaCopy.value}`
                     }
                     accessibilityHint={
                       canOfferRewardedAd
-                        ? "광고를 보면 추천권 1회를 받을 수 있어요."
+                        ? "광고를 보면 추천을 받을 수 있어요."
                         : undefined
                     }
                     accessibilityState={
@@ -1039,7 +1042,7 @@ export default function RecommendationsScreen() {
                     description={
                       getRecommendationErrorMessage(favoritesQuery.error) ?? undefined
                     }
-                    actionLabel="다시 불러오기"
+                    actionLabel="다시 불러올게요"
                     onAction={() => {
                       void favoritesQuery.refetch();
                     }}

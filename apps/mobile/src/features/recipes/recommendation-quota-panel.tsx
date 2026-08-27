@@ -4,7 +4,10 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
-import { resolveMonetizationOffer } from "../monetization/monetization-offer";
+import {
+  REWARDED_AD_CTA_LABEL,
+  resolveMonetizationOffer,
+} from "../monetization/monetization-offer";
 import {
   colors,
   radius,
@@ -88,7 +91,7 @@ export function RecommendationQuotaCard({
           disabled={isAdBusy}
           fullWidth
         >
-          광고 보고 추천 받을게요
+          {REWARDED_AD_CTA_LABEL}
         </Button>
       ) : null}
       {showPersonalizedOffer && offerKind ? (

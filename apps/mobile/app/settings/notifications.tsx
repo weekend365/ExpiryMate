@@ -1,13 +1,18 @@
 import { DEFAULT_NOTIFICATION_DAYS } from "@expirymate/shared";
+import { Building2, House, Users } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Switch, View } from "react-native";
 import { Button } from "../../src/components/Button";
+import { EmptyState } from "../../src/components/EmptyState";
 import { ListRow } from "../../src/components/ListRow";
 import { Pill } from "../../src/components/Pill";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useNotificationPreferences } from "../../src/features/settings/use-notification-preferences";
+import { spaceNotificationStatusCopy } from "../../src/features/spaces/space-notification-copy";
+import { useActiveSpace } from "../../src/features/spaces/space-provider";
+import { useUpdateSpaceNotifications } from "../../src/features/spaces/use-space-notifications";
 import { registerDevicePushToken } from "../../src/services/notifications";
 import { colors, spacing } from "../../src/shared/theme";
 
@@ -15,6 +20,13 @@ const reminderOptions = [0, 1, 3, 7, 14];
 
 export default function NotificationSettingsScreen() {
   const { query, mutation } = useNotificationPreferences();
+  const {
+    spaces,
+    error: spacesError,
+    isLoading: spacesLoading,
+    refetchSpaces,
+  } = useActiveSpace();
+  const spaceNotificationsMutation = useUpdateSpaceNotifications();
   const [enabled, setEnabled] = useState(true);
   const [remindOnDayOf, setRemindOnDayOf] = useState(true);
   const [days, setDays] = useState<number[]>(DEFAULT_NOTIFICATION_DAYS);
@@ -113,6 +125,71 @@ export default function NotificationSettingsScreen() {
           }
         />
       </SettingsGroup>
+
+      {spacesError ? (
+        <EmptyState
+          mood="worry"
+          title="냉장고 알림을 불러오지 못했어요"
+          description={spacesError.message}
+          actionLabel="다시 불러올게요"
+          onAction={() => {
+            void refetchSpaces();
+          }}
+        />
+      ) : !spacesLoading && spaces.length ? (
+        <SettingsGroup
+          title="냉장고별 알림"
+          description="알림이 안 오면 이 냉장고만 쉬고 있는지 확인해 보세요."
+        >
+          {spaces.map((space, index) => {
+            const Icon =
+              space.type === "store"
+                ? Building2
+                : space.type === "household"
+                  ? Users
+                  : House;
+            return (
+              <ListRow
+                key={space.id}
+                title={space.name}
+                description={spaceNotificationStatusCopy(
+                  space.notificationsEnabled,
+                )}
+                icon={Icon}
+                last={index === spaces.length - 1}
+                trailing={
+                  <Switch
+                    value={space.notificationsEnabled}
+                    disabled={spaceNotificationsMutation.isPending}
+                    onValueChange={(value) =>
+                      spaceNotificationsMutation.mutate(
+                        { spaceId: space.id, enabled: value },
+                        {
+                          onError: (error) =>
+                            Alert.alert(
+                              "앗, 잠시 문제가 생겼어요",
+                              getSettingsErrorMessage(error),
+                            ),
+                        },
+                      )
+                    }
+                    accessibilityLabel={`${space.name} 유통기한 알림`}
+                    trackColor={{
+                      false: colors.border,
+                      true: colors.primarySoft,
+                    }}
+                    thumbColor={
+                      space.notificationsEnabled
+                        ? colors.primary
+                        : colors.mutedSurface
+                    }
+                  />
+                }
+              />
+            );
+          })}
+        </SettingsGroup>
+      ) : null}
 
       <SettingsGroup
         title="알림 시점"

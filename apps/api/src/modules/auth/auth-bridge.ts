@@ -40,25 +40,42 @@ export function buildMobileVerifyEmailBridgeHtml(token: string): string {
 </html>`;
 }
 
-/** Desktop: verification already done server-side — tell the user to log in on the app. */
-export function buildDesktopVerifyEmailResultHtml(input: {
-  ok: boolean;
-  message?: string;
-}): string {
-  if (input.ok) {
-    return renderStaticPage({
-      title: "메일 확인이 끝났어요",
-      status:
-        "이제 앱으로 돌아와 들어와 주세요. 가입이 끝난 상태예요.",
-    });
-  }
+/** Desktop: token stays unused until the phone app verifies. */
+export function buildDesktopVerifyEmailBridgeHtml(token: string): string {
+  const deepLink = buildAppDeepLink("auth/verify-email", { token });
+  const safeHref = escapeHtmlAttr(deepLink);
 
-  return renderStaticPage({
-    title: "앗, 확인하지 못했어요",
-    status:
-      input.message ??
-      "인증 링크가 만료됐거나 이미 쓰였어요. 앱에서 메일을 다시 받아 주세요.",
-  });
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>휴대폰에서 메일을 확인해 주세요</title>
+  <style>${BRIDGE_STYLES}</style>
+</head>
+<body>
+  <div>
+    <h1>휴대폰에서 메일을 확인해 주세요</h1>
+    <p id="status">컴퓨터에서는 확인이 끝나지 않아요.</p>
+    <a id="openApp" href="${safeHref}">앱으로 이어갈게요</a>
+    <p class="hint">
+      컴퓨터에서는 앱이 열리지 않아요. 휴대폰에서 이 링크를 다시 열어 주세요.
+    </p>
+  </div>
+  <script>
+    (function () {
+      var deepLink = ${JSON.stringify(deepLink)};
+      var link = document.getElementById("openApp");
+      link.setAttribute("href", deepLink);
+      window.location.replace(deepLink);
+      setTimeout(function () {
+        document.getElementById("status").textContent =
+          "앱이 열리지 않으면 휴대폰에서 이 링크를 다시 열어 주세요.";
+      }, 1500);
+    })();
+  </script>
+</body>
+</html>`;
 }
 
 export function buildInvalidAuthLinkHtml(): string {

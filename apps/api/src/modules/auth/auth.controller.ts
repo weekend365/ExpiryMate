@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -18,7 +17,7 @@ import type { Response } from "express";
 import { AuthRateLimit } from "./auth-rate-limit.decorator";
 import { AuthRateLimitGuard } from "./auth-rate-limit.guard";
 import {
-  buildDesktopVerifyEmailResultHtml,
+  buildDesktopVerifyEmailBridgeHtml,
   buildInvalidAuthLinkHtml,
   buildMobileVerifyEmailBridgeHtml,
   buildResetPasswordBridgeHtml,
@@ -71,11 +70,11 @@ export class AuthController {
   /**
    * HTTPS bridge for email clients.
    * Mobile UA → deep-link into the app (token unused until the app verifies).
-   * Desktop UA → confirm verification server-side, then ask the user to log in on the app.
+   * Desktop UA → do not consume the token; ask the user to open the link on their phone.
    */
   @Get("verify-email")
   @Header("Cache-Control", "no-store")
-  async bridgeVerifyEmail(
+  bridgeVerifyEmail(
     @Query("token") token: string | undefined,
     @Headers("user-agent") userAgent: string | undefined,
     @Res() response: Response,
@@ -96,23 +95,10 @@ export class AuthController {
         .send(buildMobileVerifyEmailBridgeHtml(trimmed));
     }
 
-    try {
-      await this.authService.confirmEmailVerification(trimmed);
-      return response
-        .status(HttpStatus.OK)
-        .type("html")
-        .send(buildDesktopVerifyEmailResultHtml({ ok: true }));
-    } catch (error) {
-      const message =
-        error instanceof BadRequestException
-          ? readExceptionMessage(error)
-          : undefined;
-
-      return response
-        .status(HttpStatus.OK)
-        .type("html")
-        .send(buildDesktopVerifyEmailResultHtml({ ok: false, message }));
-    }
+    return response
+      .status(HttpStatus.OK)
+      .type("html")
+      .send(buildDesktopVerifyEmailBridgeHtml(trimmed));
   }
 
   @Get("reset-password")
@@ -395,30 +381,6 @@ function formatSessionForClient(
   }
 
   return session;
-}
-
-function readExceptionMessage(error: BadRequestException) {
-  const payload = error.getResponse();
-
-  if (typeof payload === "string") {
-    return payload;
-  }
-
-  if (
-    typeof payload === "object" &&
-    payload !== null &&
-    "message" in payload
-  ) {
-    const message = (payload as { message?: string | string[] }).message;
-    if (Array.isArray(message)) {
-      return message[0];
-    }
-    if (typeof message === "string") {
-      return message;
-    }
-  }
-
-  return error.message;
 }
 
 function readAuthorization(request: AuthenticatedRequest) {

@@ -283,12 +283,6 @@ export class AuthService {
     return this.createSession(user, true);
   }
 
-  /** Desktop bridge: mark verified without issuing an app session. */
-  async confirmEmailVerification(token: string): Promise<{ ok: true }> {
-    await this.markEmailVerifiedFromToken(token);
-    return { ok: true };
-  }
-
   async getEmailVerificationStatus(email: string): Promise<{ verified: boolean }> {
     const user = await this.prisma.user.findUnique({
       where: { email: normalizeEmail(email) },

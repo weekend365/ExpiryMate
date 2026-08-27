@@ -2,7 +2,7 @@ import { semanticColors, spacing } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
 import {
   buildAuthBridgeDeepLink,
-  buildDesktopVerifyEmailResultHtml,
+  buildDesktopVerifyEmailBridgeHtml,
   buildMobileVerifyEmailBridgeHtml,
   buildResetPasswordBridgeHtml,
   isMobileUserAgent,
@@ -24,18 +24,16 @@ describe("auth-bridge", () => {
     expect(html).toContain(`padding: ${spacing.md}px`);
   });
 
-  it("renders desktop success and failure without client fetch", () => {
-    const ok = buildDesktopVerifyEmailResultHtml({ ok: true });
-    expect(ok).toContain("메일 확인이 끝났어요");
-    expect(ok).toContain("앱으로 돌아와 들어와 주세요");
-    expect(ok).not.toContain("fetch(");
+  it("keeps the desktop verify token unused and asks to open on the phone", () => {
+    process.env.APP_BASE_URL = "expirymate://";
+    const html = buildDesktopVerifyEmailBridgeHtml("tok123");
 
-    const fail = buildDesktopVerifyEmailResultHtml({
-      ok: false,
-      message: "토큰이 만료되었거나 올바르지 않습니다.",
-    });
-    expect(fail).toContain("앗, 확인하지 못했어요");
-    expect(fail).toContain("토큰이 만료되었거나 올바르지 않습니다.");
+    expect(html).toContain("expirymate://auth/verify-email?token=tok123");
+    expect(html).toContain("휴대폰에서 이 링크를 다시 열어 주세요");
+    expect(html).toContain("앱으로 이어갈게요");
+    expect(html).not.toContain("메일 확인이 끝났어요");
+    expect(html).not.toContain("가입이 끝난 상태예요");
+    expect(html).not.toContain("/auth/email/verify");
   });
 
   it("detects mobile user agents", () => {

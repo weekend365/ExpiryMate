@@ -88,7 +88,7 @@ export default function SpacesSettingsScreen() {
           mood="worry"
           title="냉장고 목록을 펼치지 못했어요"
           description={error.message}
-          actionLabel="다시 불러볼게요"
+          actionLabel="다시 불러올게요"
           onAction={() => {
             void refetchSpaces();
           }}
