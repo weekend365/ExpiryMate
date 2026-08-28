@@ -23,24 +23,26 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
       onPress={onPress}
       style={styles.button}
     >
-      <View style={styles.iconSlot} pointerEvents="none">
-        <ChevronLeft
-          color={colors.primary}
-          size={spacing.sm + spacing.xxs}
-          strokeWidth={2.4}
-        />
+      <View style={styles.content} pointerEvents="none">
+        <View style={styles.iconSlot}>
+          <ChevronLeft
+            color={colors.primary}
+            size={spacing.sm + spacing.xxs}
+            strokeWidth={2.4}
+          />
+        </View>
+        {!isLargeText ? (
+          <AppText
+            variant="bodySmall"
+            tone="primary"
+            scaleRole="chrome"
+            densityAware={false}
+            style={styles.label}
+          >
+            뒤로가기
+          </AppText>
+        ) : null}
       </View>
-      {!isLargeText ? (
-        <AppText
-          variant="bodySmall"
-          tone="primary"
-          scaleRole="chrome"
-          densityAware={false}
-          style={styles.label}
-        >
-          뒤로가기
-        </AppText>
-      ) : null}
     </Pressable>
   );
 }
@@ -69,10 +71,17 @@ const styles = StyleSheet.create({
     marginLeft: -spacing.xs,
     paddingHorizontal: spacing.xs,
     borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xxs,
+    // Flex centers the font/SVG layout boxes, not their visible shapes.
+    // Pretendard's baseline metrics leave this pair optically low in the header.
+    transform: [{ translateY: -1 }],
   },
   iconSlot: {
     width: spacing.sm + spacing.xxs,

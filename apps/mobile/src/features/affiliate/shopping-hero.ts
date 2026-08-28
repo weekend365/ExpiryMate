@@ -93,12 +93,11 @@ export function getShoppingHeroNotices(input: {
   ];
 }
 
-/** Recent items stay visible unless a search is in flight or already has products. */
-export function isShoppingSearchActive(input: {
-  isSearching: boolean;
-  hasSearchResults: boolean;
-}) {
-  return input.isSearching || input.hasSearchResults;
+/** Once submitted, search owns the catalog until the user explicitly clears it. */
+export function isShoppingSearchActive(
+  status: "idle" | "pending" | "error" | "success",
+) {
+  return status !== "idle";
 }
 
 export function initialShoppingQuery(value: string | string[] | undefined) {

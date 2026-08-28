@@ -7,7 +7,7 @@ export function AffiliateDisclosure({
 }) {
   return (
     <aside
-      className="type-body-small-strong rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--info-soft)] p-[var(--space-sm)] text-[var(--disclosure-text)]"
+      className="type-body-small text-[var(--disclosure-text)]"
       aria-label="쿠팡 파트너스 제휴 고지"
     >
       {disclosure}

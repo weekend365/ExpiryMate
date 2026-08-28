@@ -145,20 +145,27 @@ function ProductCard({
             <AppText variant="bodySmall" numberOfLines={2}>
               {product.productName}
             </AppText>
-            <View style={styles.productMeta}>
-              <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
-              {product.isRocket ? (
-                <AppText variant="captionStrong" tone="link">로켓배송</AppText>
-              ) : null}
-              {product.isFreeShipping ? (
-                <AppText variant="captionStrong" tone="link">무료배송</AppText>
-              ) : null}
+            <View
+              style={[
+                styles.productPurchaseRow,
+                shouldStack && styles.productPurchaseRowStacked,
+              ]}
+            >
+              <View style={styles.productMeta}>
+                <AppText variant="bodyStrong">{formatProductPrice(product)}</AppText>
+                {product.isRocket ? (
+                  <AppText variant="captionStrong" tone="link">로켓배송</AppText>
+                ) : null}
+                {product.isFreeShipping ? (
+                  <AppText variant="captionStrong" tone="link">무료배송</AppText>
+                ) : null}
+              </View>
+              <AffiliateCta
+                contextLabel={product.productName}
+                mode="inline"
+                pressed={pressed}
+              />
             </View>
-            <AffiliateCta
-              contextLabel={product.productName}
-              mode="inline"
-              pressed={pressed}
-            />
           </View>
         </>
       )}
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.surface,
   },
   groupBody: {
     paddingHorizontal: spacing.sm,
@@ -232,7 +239,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
     minHeight: touchTarget.min,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   productCardStacked: {
     flexDirection: "column",
@@ -255,10 +262,21 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   productMeta: {
+    flex: 1,
+    minWidth: 0,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
+    gap: spacing.xxs,
+  },
+  productPurchaseRow: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
+  },
+  productPurchaseRowStacked: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   productCardPressed: {
     backgroundColor: colors.surfacePressed,

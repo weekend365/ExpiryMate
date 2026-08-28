@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
-import { ChevronDown, Search, X } from "lucide-react-native";
+import { ChevronDown, History, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -104,16 +104,18 @@ export default function ShoppingScreen() {
       : null;
   const isRefreshingRecent =
     shoppingQuery.isRefetching && !shoppingQuery.isLoading;
-  const searchActive = isShoppingSearchActive({
-    isSearching: searchMutation.isPending,
-    hasSearchResults: Boolean(searchGroup),
-  });
+  const searchActive = isShoppingSearchActive(searchMutation.status);
   const canClearSearch =
     query.length > 0 || searchMutation.status !== "idle";
   const canLoadMoreRecent = canLoadMoreRecentShopping(
     recentGroups.length,
     allRecentGroups.length,
   );
+  const nextRecentBatchSize =
+    nextRecentShoppingVisibleCount(
+      recentGroups.length,
+      allRecentGroups.length,
+    ) - recentGroups.length;
   const recentConsumedCount = resolveRecentConsumedCount(
     shopping?.recentConsumedCount,
     allRecentGroups.length,
@@ -145,6 +147,9 @@ export default function ShoppingScreen() {
     setQuery("");
     searchMutation.reset();
   };
+  const searchSectionTitle = searchMutation.variables
+    ? `‘${searchMutation.variables}’ 검색 결과`
+    : "검색 결과";
   const { shouldStackDense } = useResponsiveLayout();
 
   return (
@@ -251,15 +256,11 @@ export default function ShoppingScreen() {
         </View>
       </View>
 
-      <AffiliateDisclosure
-        disclosure={shopping?.disclosure}
-        supportingText="상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다."
-      />
-
       {searchActive ? (
         <ShoppingCatalogSection
-          title="검색 결과"
-          count={searchGroup ? 1 : undefined}
+          title={searchSectionTitle}
+          count={searchGroup?.products.length}
+          onBackToRecent={clearSearch}
           testID="affiliate-shopping-search-results"
         >
           {searchMutation.isPending ? (
@@ -268,7 +269,29 @@ export default function ShoppingScreen() {
             <ShoppingIngredientCard>
               <AffiliateProductGroupView headingBand group={searchGroup} />
             </ShoppingIngredientCard>
-          ) : null}
+          ) : searchMutation.isError ? (
+            <View style={styles.empty}>
+              <AppText variant="bodySmall" tone="subtext">
+                상품을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
+              </AppText>
+              <Button variant="secondary" size="small" onPress={submitSearch}>
+                다시 검색
+              </Button>
+            </View>
+          ) : (
+            <View style={styles.empty}>
+              <AppText variant="bodySmall" tone="subtext">
+                일치하는 상품이 없어요. 다른 재료 이름으로 찾아보세요.
+              </AppText>
+              <Button
+                variant="secondary"
+                size="small"
+                onPress={() => searchInputRef.current?.focus()}
+              >
+                검색어 바꾸기
+              </Button>
+            </View>
+          )}
         </ShoppingCatalogSection>
       ) : (
         <ShoppingCatalogSection
@@ -323,7 +346,7 @@ export default function ShoppingScreen() {
                   onPress={loadMoreRecentItems}
                   accessibilityRole="button"
                   accessibilityLabel="더 보기"
-                  accessibilityHint="최근 다 쓴 재료를 3건 더 보여 줘요."
+                  accessibilityHint={`최근 다 쓴 재료를 ${nextRecentBatchSize}건 더 보여 줘요.`}
                   testID="affiliate-shopping-load-more"
                   style={({ pressed }) => [
                     styles.loadMore,
@@ -350,6 +373,11 @@ export default function ShoppingScreen() {
         </ShoppingCatalogSection>
       )}
 
+      <AffiliateDisclosure
+        disclosure={shopping?.disclosure}
+        supportingText="상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다."
+      />
+
     </Screen>
   );
 }
@@ -358,11 +386,13 @@ function ShoppingCatalogSection({
   title,
   count,
   children,
+  onBackToRecent,
   testID,
 }: {
   title: string;
   count?: number;
   children: ReactNode;
+  onBackToRecent?: () => void;
   testID?: string;
 }) {
   const heading = count == null ? title : `${title} ${count}건`;
@@ -394,6 +424,32 @@ function ShoppingCatalogSection({
             </AppText>
           )}
         </View>
+        {onBackToRecent ? (
+          <Pressable
+            onPress={onBackToRecent}
+            accessibilityRole="button"
+            accessibilityLabel="최근 재료로 돌아가기"
+            style={({ pressed }) => [
+              styles.recentReturn,
+              pressed && styles.searchSubmitPressed,
+            ]}
+          >
+            <History
+              color={colors.linkText}
+              size={spacing.sm}
+              strokeWidth={2.4}
+            />
+            <AppText
+              variant="captionStrong"
+              tone="link"
+              scaleRole="chrome"
+              densityAware={false}
+              numberOfLines={1}
+            >
+              최근 재료
+            </AppText>
+          </Pressable>
+        ) : null}
       </View>
       <View style={styles.sectionBody}>{children}</View>
     </View>
@@ -539,6 +595,16 @@ const styles = StyleSheet.create({
   },
   sectionCount: {
     flexShrink: 0,
+  },
+  recentReturn: {
+    minHeight: touchTarget.icon,
+    flexShrink: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.xxs,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.xs,
   },
   sectionBody: {
     backgroundColor: colors.surface,

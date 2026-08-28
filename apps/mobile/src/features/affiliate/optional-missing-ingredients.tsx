@@ -102,9 +102,6 @@ export function OptionalMissingIngredientsCard({
   return (
     <View style={styles.card}>
       <AppText variant="label" tone="subtext">있으면 더 맛있어져요</AppText>
-      {(offers.length > 0 || productGroups.length > 0) && offersQuery.data?.disclosure ? (
-        <AffiliateDisclosure disclosure={offersQuery.data.disclosure} />
-      ) : null}
       {listedIngredients.length > 0 ? (
         <View style={styles.list}>
           {listedIngredients.map((ingredient) => {
@@ -166,6 +163,9 @@ export function OptionalMissingIngredientsCard({
         >
           <AppText variant="bodySmall" tone="link">장보기에서 더 찾아보기</AppText>
         </Pressable>
+      ) : null}
+      {(offers.length > 0 || productGroups.length > 0) && offersQuery.data?.disclosure ? (
+        <AffiliateDisclosure disclosure={offersQuery.data.disclosure} />
       ) : null}
     </View>
   );

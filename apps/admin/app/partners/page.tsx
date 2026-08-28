@@ -55,8 +55,6 @@ export default function PartnersPage() {
             쿠팡 파트너스 활동으로 게재된 안내는 추천 내용과 같은 언어로, 본문과
             구별되게 표시합니다.
           </p>
-          <AffiliateDisclosure />
-
           <h2 className="type-heading pt-[var(--space-sm)]">식재료 찾아보기</h2>
           <p>
             앱은 쿠팡 파트너스 API에서 받은 상품명·이미지·현재 표시 가격·배송
@@ -122,6 +120,9 @@ export default function PartnersPage() {
           >
             개인정보처리방침
           </Link>
+        </div>
+        <div className="mt-[var(--space-lg)]">
+          <AffiliateDisclosure />
         </div>
       </div>
     </main>

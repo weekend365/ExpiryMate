@@ -41,16 +41,11 @@ describe("getShoppingHeroNotice", () => {
 });
 
 describe("isShoppingSearchActive", () => {
-  it("hides recent items while searching or when results are on screen", () => {
-    expect(isShoppingSearchActive({ isSearching: false, hasSearchResults: false })).toBe(
-      false,
-    );
-    expect(isShoppingSearchActive({ isSearching: true, hasSearchResults: false })).toBe(
-      true,
-    );
-    expect(isShoppingSearchActive({ isSearching: false, hasSearchResults: true })).toBe(
-      true,
-    );
+  it("keeps search mode active for loading, errors, and empty results", () => {
+    expect(isShoppingSearchActive("idle")).toBe(false);
+    expect(isShoppingSearchActive("pending")).toBe(true);
+    expect(isShoppingSearchActive("error")).toBe(true);
+    expect(isShoppingSearchActive("success")).toBe(true);
   });
 });
 

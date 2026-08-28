@@ -1,4 +1,4 @@
-export const SHOPPING_RECENT_PAGE_SIZE = 3;
+export const SHOPPING_RECENT_PAGE_SIZE = 6;
 
 export function takeRecentShoppingGroups<T>(
   groups: T[],
