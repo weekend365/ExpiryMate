@@ -6,7 +6,7 @@ import {
   type RecipeRecommendationRequest,
 } from "@expirymate/shared";
 
-export const RECIPE_SELECTION_VERSION = "recipe-selection-v2";
+export const RECIPE_SELECTION_VERSION = "recipe-selection-v3";
 export const MAX_RECIPE_INGREDIENTS = 30;
 
 export interface RecipeRankingCandidate {
@@ -23,30 +23,68 @@ const allergenTerms: Record<RecipeAllergen, string[]> = {
   milk: ["우유", "유제품", "치즈", "버터", "요거트", "크림", "milk", "cheese"],
   buckwheat: ["메밀", "buckwheat"],
   peanut: ["땅콩", "peanut"],
-  soybean: ["대두", "콩", "두부", "두유", "된장", "간장", "soy"],
-  wheat: ["밀", "밀가루", "빵", "면", "파스타", "wheat", "flour"],
+  soybean: [
+    "대두",
+    "콩",
+    "콩나물",
+    "콩가루",
+    "콩국",
+    "콩기름",
+    "두부",
+    "두유",
+    "된장",
+    "간장",
+    "soy",
+  ],
+  wheat: ["밀", "밀가루", "통밀", "빵", "면", "파스타", "wheat", "flour"],
   mackerel: ["고등어", "mackerel"],
-  crab: ["게", "꽃게", "대게", "crab"],
+  crab: ["게", "게살", "꽃게", "대게", "킹크랩", "크랩", "crab"],
   shrimp: ["새우", "shrimp", "prawn"],
   pork: ["돼지고기", "돼지", "삼겹살", "베이컨", "햄", "소시지", "pork"],
   peach: ["복숭아", "peach"],
   tomato: ["토마토", "tomato"],
   sulfites: ["아황산", "sulfite"],
   walnut: ["호두", "walnut"],
-  chicken: ["닭고기", "닭", "치킨", "chicken"],
+  chicken: ["닭고기", "닭", "닭가슴살", "치킨", "chicken"],
   beef: ["쇠고기", "소고기", "beef"],
   squid: ["오징어", "squid"],
-  shellfish: ["조개", "굴", "전복", "홍합", "shellfish", "oyster", "mussel"],
-  pine_nut: ["잣", "pine nut"],
+  shellfish: [
+    "조개",
+    "굴",
+    "생굴",
+    "굴소스",
+    "전복",
+    "홍합",
+    "shellfish",
+    "oyster",
+    "mussel",
+  ],
+  pine_nut: ["잣", "잣죽", "pine nut"],
 };
 
 const meatTerms = [
-  "돼지", "삼겹살", "베이컨", "햄", "소시지", "소고기", "쇠고기", "닭", "치킨",
-  "오리", "양고기", "육수", "pork", "beef", "chicken", "duck", "lamb",
+  ...allergenTerms.pork,
+  ...allergenTerms.chicken,
+  ...allergenTerms.beef,
+  "오리",
+  "양고기",
+  "육수",
+  "duck",
+  "lamb",
 ];
 const seafoodTerms = [
-  "생선", "고등어", "연어", "참치", "멸치", "새우", "게", "오징어", "조개", "굴",
-  "전복", "홍합", "fish", "salmon", "tuna", "shrimp", "crab", "squid", "shellfish",
+  ...allergenTerms.mackerel,
+  ...allergenTerms.crab,
+  ...allergenTerms.shrimp,
+  ...allergenTerms.squid,
+  ...allergenTerms.shellfish,
+  "생선",
+  "연어",
+  "참치",
+  "멸치",
+  "fish",
+  "salmon",
+  "tuna",
 ];
 const animalProductTerms = [
   ...meatTerms,
@@ -76,7 +114,35 @@ export function isRecipeTextBlocked(
   preference: Pick<RecipePreference, "allergens" | "excludedIngredients" | "dietaryStyle">,
 ) {
   const normalized = normalizeRecipeTerm(value);
-  return getBlockedRecipeTerms(preference).some((term) => normalized.includes(term));
+  const tokens = value
+    .toLocaleLowerCase("ko-KR")
+    .match(/[0-9a-z가-힣]+/gu)
+    ?.map(normalizeRecipeTerm) ?? [];
+  return getBlockedRecipeTerms(preference).some((term) =>
+    term.length === 1 ? tokens.includes(term) : normalized.includes(term),
+  );
+}
+
+export function inferRecipeAllergenTags(
+  candidate: Pick<RecipeRankingCandidate, "displayName" | "category">,
+): RecipeAllergen[] {
+  const tags = new Set<RecipeAllergen>();
+
+  if (candidate.category === ProductCategory.EGG) tags.add("egg");
+  if (candidate.category === ProductCategory.DAIRY) tags.add("milk");
+  if (candidate.category === ProductCategory.TOFU) tags.add("soybean");
+
+  for (const allergen of Object.keys(allergenTerms) as RecipeAllergen[]) {
+    if (isRecipeTextBlocked(candidate.displayName, {
+      allergens: [allergen],
+      excludedIngredients: [],
+      dietaryStyle: "any",
+    })) {
+      tags.add(allergen);
+    }
+  }
+
+  return [...tags];
 }
 
 export function isCandidateBlocked(
@@ -87,13 +153,18 @@ export function isCandidateBlocked(
     return true;
   }
 
-  if (candidate.category === ProductCategory.EGG && preference.allergens.includes("egg")) {
+  if (
+    inferRecipeAllergenTags(candidate).some((allergen) =>
+      preference.allergens.includes(allergen),
+    )
+  ) {
     return true;
   }
-  if (candidate.category === ProductCategory.DAIRY && preference.allergens.includes("milk")) {
-    return true;
-  }
-  if (candidate.category === ProductCategory.TOFU && preference.allergens.includes("soybean")) {
+
+  if (
+    (preference.allergens.length > 0 || preference.dietaryStyle !== "any") &&
+    isCompositionAmbiguousCategory(candidate.category)
+  ) {
     return true;
   }
 
@@ -102,6 +173,16 @@ export function isCandidateBlocked(
   }
 
   return false;
+}
+
+function isCompositionAmbiguousCategory(category: ProductCategory | null) {
+  return (
+    category === ProductCategory.BEVERAGE ||
+    category === ProductCategory.FROZEN_FOOD ||
+    category === ProductCategory.INSTANT_FOOD ||
+    category === ProductCategory.SEASONING ||
+    category === ProductCategory.SNACK
+  );
 }
 
 export function rankRecipeCandidates<T extends RecipeRankingCandidate>(

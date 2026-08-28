@@ -12,6 +12,12 @@ export const recipeMealTypeSchema = z.enum([
   "snack",
 ]);
 
+export const recipeStrategySchema = z.enum([
+  "expiring_first",
+  "minimal_extra",
+  "quick_novel",
+]);
+
 export const recipeAllergenSchema = z.enum([
   "egg",
   "milk",
@@ -126,6 +132,7 @@ export const recipeInventorySnapshotItemSchema = z.object({
   unit: z.string().max(fieldLimits.unit).nullable().optional(),
   quantityBase: z.number().int().min(0).optional(),
   unitCode: z.nativeEnum(UnitCode).optional(),
+  inferredAllergens: z.array(recipeAllergenSchema).optional(),
   storageLocation: storageLocationKeySchema,
   expiryDate: z
     .string()
@@ -169,6 +176,9 @@ export const recipeRecommendationDishSchema = z.object({
   safetyNote: z.string().max(fieldLimits.recipeText),
   spiceLevel: recipeGeneratedSpiceLevelSchema.optional(),
   requiredEquipment: z.array(recipeEquipmentSchema).optional(),
+  /** Optional for stored legacy recommendations; required for new generations. */
+  mealType: recipeMealTypeSchema.exclude(["any"]).optional(),
+  strategy: recipeStrategySchema.optional(),
 });
 
 export const recipeRecommendationsPayloadSchema = z.object({
@@ -180,8 +190,22 @@ export const generatedRecipeRecommendationsPayloadSchema = z.object({
     .array(
       recipeRecommendationDishSchema.extend({
         usedIngredients: z.array(generatedRecipeUsedIngredientSchema),
+        optionalMissingIngredients: z
+          .array(recipeOptionalMissingIngredientSchema)
+          .max(2),
+        steps: z
+          .array(z.string().trim().min(1).max(fieldLimits.recipeText))
+          .min(4)
+          .max(8),
+        tips: z
+          .array(z.string().trim().min(1).max(fieldLimits.recipeText))
+          .min(1)
+          .max(3),
+        safetyNote: z.string().trim().min(6).max(fieldLimits.recipeText),
         spiceLevel: recipeGeneratedSpiceLevelSchema,
-        requiredEquipment: z.array(recipeEquipmentSchema),
+        requiredEquipment: z.array(recipeEquipmentSchema).min(1),
+        mealType: recipeMealTypeSchema.exclude(["any"]),
+        strategy: recipeStrategySchema,
       }),
     )
     .length(3),
@@ -212,6 +236,7 @@ export const deleteRecipeFavoriteResponseSchema = z.object({
 });
 
 export type RecipeMealType = z.infer<typeof recipeMealTypeSchema>;
+export type RecipeStrategy = z.infer<typeof recipeStrategySchema>;
 export type RecipeAllergen = z.infer<typeof recipeAllergenSchema>;
 export type RecipeDietaryStyle = z.infer<typeof recipeDietaryStyleSchema>;
 export type RecipeSpiceLevel = z.infer<typeof recipeSpiceLevelSchema>;

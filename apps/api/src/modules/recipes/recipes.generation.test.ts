@@ -59,11 +59,21 @@ function recommendations(servings = 2): RecipeRecommendationDish[] {
       { inventoryItemId: "egg-1", name: "계란", amount: 2, unitCode: UnitCode.EA },
     ],
     optionalMissingIngredients: [],
-    steps: ["준비해요", "섞어요", "익혀요", "담아요"],
+    steps: [
+      "달걀의 상태를 먼저 확인해요.",
+      "달걀을 그릇에 넣고 30초 저어요.",
+      "팬에서 중불로 3분 익혀요.",
+      "가장자리가 익으면 그릇에 담아요.",
+    ],
     tips: ["약불을 유지해요"],
     safetyNote: "상태를 확인해요",
     spiceLevel: "none",
     requiredEquipment: ["stovetop"],
+    mealType: "dinner",
+    strategy: ["expiring_first", "minimal_extra", "quick_novel"][index - 1] as
+      | "expiring_first"
+      | "minimal_extra"
+      | "quick_novel",
   }));
 }
 
@@ -125,7 +135,7 @@ describe("RecipesService semantic repair", () => {
     expect(parseMock).toHaveBeenCalledTimes(2);
   });
 
-  it("accepts over-quantity unit mismatches by aligning to inventory", async () => {
+  it("repairs unit and quantity mismatches instead of silently clamping them", async () => {
     process.env.OPENAI_API_KEY = "test-key";
     const dishes = recommendations(2).map((dish) => ({
       ...dish,
@@ -138,18 +148,23 @@ describe("RecipesService semantic repair", () => {
         },
       ],
     }));
-    parseMock.mockResolvedValueOnce(response(dishes, 10, 20));
+    parseMock
+      .mockResolvedValueOnce(response(dishes, 10, 20))
+      .mockResolvedValueOnce(response(recommendations(2), 12, 22));
 
     const result = await generate(createService());
 
-    expect(result.generationAttempts).toBe(1);
-    expect(result.repairApplied).toBe(false);
+    expect(result.generationAttempts).toBe(2);
+    expect(result.repairApplied).toBe(true);
     expect(result.recommendations[0]?.usedIngredients[0]).toMatchObject({
       name: "달걀",
-      amount: 3,
+      amount: 2,
       unitCode: UnitCode.EA,
     });
-    expect(parseMock).toHaveBeenCalledTimes(1);
+    expect(parseMock).toHaveBeenCalledTimes(2);
+    expect(parseMock.mock.calls[1]?.[0]?.input).toContain(
+      "DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED",
+    );
   });
 
   it("returns a gateway failure after an invalid repair", async () => {

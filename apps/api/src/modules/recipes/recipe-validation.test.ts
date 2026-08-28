@@ -51,11 +51,21 @@ function dishes(): RecipeRecommendationDish[] {
       { inventoryItemId: "egg-1", name: "계란", amount: 2, unitCode: UnitCode.EA },
     ],
     optionalMissingIngredients: [],
-    steps: ["준비해요", "섞어요", "익혀요", "담아요"],
+    steps: [
+      "달걀의 냄새와 상태를 확인해요.",
+      "달걀을 그릇에서 30초 동안 저어요.",
+      "팬에서 중불로 3분 동안 익혀요.",
+      "가장자리가 익으면 그릇에 담아요.",
+    ],
     tips: ["약불을 유지해요"],
     safetyNote: "상태를 확인해요",
     spiceLevel: "none",
     requiredEquipment: ["stovetop"],
+    mealType: "dinner",
+    strategy: ["expiring_first", "minimal_extra", "quick_novel"][index - 1] as
+      | "expiring_first"
+      | "minimal_extra"
+      | "quick_novel",
   }));
 }
 
@@ -169,7 +179,58 @@ describe("recipe semantic validation", () => {
     );
   });
 
-  it("aligns unit and clamps amount to inventory before validation", () => {
+  it("rejects missing strategy, meal-type, safety, and empty equipment rules", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      strategy: undefined,
+      mealType: "breakfast",
+      safetyNote: "",
+      requiredEquipment: [],
+    };
+
+    expect(
+      validateGeneratedRecommendations(invalid, request, inventory, preference)
+        .violations,
+    ).toEqual(
+      expect.arrayContaining([
+        "DISH_1_STRATEGY_REQUIRED",
+        "DISH_1_MEAL_TYPE_MISMATCH",
+        "DISH_1_SAFETY_NOTE_REQUIRED",
+        "DISH_1_EQUIPMENT_REQUIRED",
+        "RECOMMENDATION_STRATEGIES_MUST_BE_UNIQUE",
+      ]),
+    );
+  });
+
+  it("rejects ingredients used in instructions without a structured declaration", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      steps: ["버터 10g을 팬에서 약불로 1분 녹여요.", ...invalid[0]!.steps.slice(1)],
+    };
+
+    expect(
+      validateGeneratedRecommendations(invalid, request, inventory, preference)
+        .violations,
+    ).toContain("DISH_1_UNDECLARED_INGREDIENT:버터");
+  });
+
+  it("disables optional ingredient suggestions when safety restrictions apply", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      optionalMissingIngredients: [{ name: "대파", reason: "향을 더해요" }],
+    };
+    const restricted = { ...preference, allergens: ["milk" as const] };
+
+    expect(
+      validateGeneratedRecommendations(invalid, request, inventory, restricted)
+        .violations,
+    ).toContain("DISH_1_OPTIONAL_INGREDIENTS_DISABLED_FOR_SAFETY");
+  });
+
+  it("keeps invalid units and amounts so repair can correct the whole recipe", () => {
     const invalid = dishes();
     invalid[0] = {
       ...invalid[0]!,
@@ -190,12 +251,18 @@ describe("recipe semantic validation", () => {
       preference,
     );
 
-    expect(result.valid).toBe(true);
+    expect(result.valid).toBe(false);
     expect(result.recommendations[0]?.usedIngredients[0]).toMatchObject({
       name: "달걀",
-      amount: 3,
-      unitCode: UnitCode.EA,
+      amount: 8,
+      unitCode: UnitCode.G,
     });
+    expect(result.violations).toEqual(
+      expect.arrayContaining([
+        "DISH_1_INGREDIENT_1_UNIT_MISMATCH",
+        "DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED",
+      ]),
+    );
   });
 
   it("leaves ingredients without an inventory id unchanged", () => {

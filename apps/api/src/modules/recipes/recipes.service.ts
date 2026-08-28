@@ -51,6 +51,7 @@ import {
   type RecipeModelSelection,
 } from "./recipe-model-rollout";
 import {
+  inferRecipeAllergenTags,
   isCandidateBlocked,
   MAX_RECIPE_INGREDIENTS,
   normalizeRecipeTerm,
@@ -64,7 +65,7 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v5";
+const PROMPT_VERSION = "recipe-recommendation-v6";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -527,6 +528,7 @@ export class RecipesService {
       unit: item.unit,
       quantityBase: item.quantityBase,
       unitCode: item.unitCode as RecipeInventorySnapshotItem["unitCode"],
+      inferredAllergens: inferRecipeAllergenTags(item),
       storageLocation: item.storageLocation,
       expiryDate: toKstDateOnly(item.expiryDate),
       daysUntilExpiry: item.daysUntilExpiry,
@@ -875,11 +877,15 @@ function buildInstructions() {
     "당신은 한국어로 답하는 실용적인 가정식 요리 추천 엔진입니다.",
     "사용자의 보관 재료만 주요 재료로 사용해 추천 요리 3개를 만드세요.",
     "세 요리는 서로 다른 방향으로 만드세요. 하나는 유통기한이 가까운 재료를 살리고, 하나는 추가 재료를 거의 쓰지 않으며, 하나는 짧고 새로운 조합으로 하세요.",
+    "각 요리에 strategy를 지정하세요. expiring_first, minimal_extra, quick_novel을 각각 정확히 한 번씩 사용하세요.",
+    "각 요리의 mealType은 breakfast, lunch, dinner, snack 중 하나로 적고, 요청 mealType이 any가 아니면 반드시 그 값과 일치시키세요.",
     "title에는 요리 이름만 적으세요. '임박 재료 우선:', '추가 재료 최소형:', '빠르고 새로운 탐색형:' 같은 전략 라벨을 제목이나 재료 이름에 붙이지 마세요.",
     "만료된 재료는 입력되지 않으며, 유통기한이 가까운 재료를 우선 활용하세요.",
     "카테고리가 없는 재료는 실제 식재료로 확실할 때만 사용하세요.",
     "부족한 재료는 선택 재료로만 제안하고, 없어도 조리가 가능한 방향을 선호하세요.",
     "optionalMissingIngredients는 0~2개만 넣으세요. 맛이나 향이 분명하게 살아날 때만 제안하고, 소금·후추처럼 기본 양념은 넣지 마세요.",
+    "알레르기 또는 제한 식단이 설정된 경우 optionalMissingIngredients는 빈 배열로 두세요.",
+    "steps와 tips에서 사용하는 모든 식재료는 usedIngredients 또는 optionalMissingIngredients에 먼저 선언하세요. 물·소금·후추·식용유·기름·올리브유만 선언 없이 사용할 수 있습니다.",
     "의학적 효능, 치료, 다이어트 효과를 주장하지 마세요.",
     "각 추천에는 재료 상태와 냄새를 확인하라는 짧은 안전 문구를 포함하세요.",
     "preferences의 알레르기, 제외 재료, 식단, 최대 매운맛, 사용 가능한 조리도구는 절대 위반하지 마세요.",
@@ -894,7 +900,7 @@ function buildInstructions() {
     "usedIngredients의 각 항목에는 이 요리에 실제로 사용할 정수 amount와 unitCode를 반드시 넣으세요.",
     "unitCode는 ea, ml, g 중 하나만 쓰고, ml와 g는 최소 단위 정수로 적으세요. 예: 우유 0.5L는 amount 500, unitCode ml입니다.",
     "inventoryItemId가 있는 재료는 입력 inventory의 unitCode와 같은 단위를 쓰고 amount가 quantityBase를 넘지 않게 하세요.",
-    "단위를 바꾸거나 재고보다 많이 쓰면 서버가 재고 단위·수량으로 맞추므로, 처음부터 재고 한도 안에서 쓰세요.",
+    "단위가 다르거나 재고보다 많이 쓰면 결과가 거부되므로, 반드시 처음부터 재고 단위와 한도에 맞추세요.",
     "면·밥·고기·계란처럼 익힘 시간이 중요한 재료는 분 단위로 안내하세요. 패키지 표기가 있으면 '표기 시간의 약 1분 전'처럼 표현해도 됩니다.",
     "'적당히', '잘', '살짝', '충분히'만으로 끝내거나 '끓인다', '섞는다', '익힌다'처럼 한 단어에 가까운 뭉뚱그린 단계는 금지합니다.",
     "나쁜 예: '면을 삶는다.' / 좋은 예: '소금 1작은술을 넣은 끓는 물에 면을 넣고 7~8분 삶아 알덴테로 익힌 뒤, 면수는 종이컵 반 컵(약 100ml)만 남기고 건집니다.'",
@@ -928,10 +934,24 @@ function buildInput(
         maxCookingMinutes: request.maxCookingMinutes,
         servings: request.servings,
         mealType: request.mealType,
+        strategies: ["expiring_first", "minimal_extra", "quick_novel"],
+        requireUniqueStrategies: true,
         usedIngredientUnits: ["ea", "ml", "g"],
         requireUsedIngredientAmount: true,
         requireSpiceLevel: true,
         requireRequiredEquipment: true,
+        maxOptionalMissingIngredients:
+          preference.allergens.length > 0 || preference.dietaryStyle !== "any"
+            ? 0
+            : 2,
+        allowedUndeclaredIngredients: [
+          "물",
+          "소금",
+          "후추",
+          "식용유",
+          "기름",
+          "올리브유",
+        ],
         inventoryUseLimits: inventorySnapshot.map((item) => ({
           inventoryItemId: item.inventoryItemId,
           unitCode: item.unitCode,
@@ -958,7 +978,8 @@ function buildRepairInput(
       rules: [
         "위반되지 않은 내용도 구조화 출력 스키마에 맞춰 함께 반환합니다.",
         "재고 ID, 단위, 수량, 안전 설정을 임의로 바꾸거나 추측하지 않습니다.",
-        "UNIT_MISMATCH와 QUANTITY_EXCEEDED는 해당 재료의 inventory unitCode와 quantityBase에 맞춰 고칩니다.",
+        "UNIT_MISMATCH와 QUANTITY_EXCEEDED는 해당 재료의 inventory unitCode와 quantityBase를 확인해 결과 전체에서 일관되게 고칩니다.",
+        "수량이나 단위를 고칠 때 usedIngredients뿐 아니라 steps와 tips의 수량 표현도 함께 고칩니다.",
       ],
     },
     null,

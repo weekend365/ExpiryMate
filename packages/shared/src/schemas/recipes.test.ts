@@ -20,6 +20,35 @@ const dish = {
   safetyNote: "우유의 냄새와 상태를 먼저 살펴보세요.",
 };
 
+function generatedDishes() {
+  return [0, 1, 2].map((index) => ({
+    ...dish,
+    optionalMissingIngredients: [] as Array<{ name: string; reason: string }>,
+    mealType: "breakfast" as const,
+    strategy: ["expiring_first", "minimal_extra", "quick_novel"][index] as
+      | "expiring_first"
+      | "minimal_extra"
+      | "quick_novel",
+    spiceLevel: "mild" as const,
+    requiredEquipment: ["stovetop" as const],
+    steps: [
+      "우유를 약불에서 2분 데워요.",
+      "달걀을 넣고 1분 저어요.",
+      "약불에서 5분 천천히 끓여요.",
+      "상태를 확인한 뒤 그릇에 담아요.",
+    ],
+    tips: ["너무 되직하면 물을 조금 넣어요."],
+    usedIngredients: [
+      {
+        inventoryItemId: "milk-1",
+        name: "우유",
+        amount: 500,
+        unitCode: UnitCode.ML,
+      },
+    ],
+  }));
+}
+
 describe("recipe ingredient quantity contracts", () => {
   it("keeps stored legacy recommendations readable", () => {
     expect(recipeRecommendationDishSchema.safeParse(dish).success).toBe(true);
@@ -27,19 +56,7 @@ describe("recipe ingredient quantity contracts", () => {
 
   it("requires canonical amounts for newly generated recommendations", () => {
     const result = generatedRecipeRecommendationsPayloadSchema.safeParse({
-      recommendations: [0, 1, 2].map(() => ({
-        ...dish,
-        spiceLevel: "mild",
-        requiredEquipment: ["stovetop"],
-        usedIngredients: [
-          {
-            inventoryItemId: "milk-1",
-            name: "우유",
-            amount: 500,
-            unitCode: UnitCode.ML,
-          },
-        ],
-      })),
+      recommendations: generatedDishes(),
     });
 
     expect(result.success).toBe(true);
@@ -47,6 +64,26 @@ describe("recipe ingredient quantity contracts", () => {
       generatedRecipeRecommendationsPayloadSchema.safeParse({
         recommendations: [dish, dish, dish],
       }).success,
+    ).toBe(false);
+  });
+
+  it("enforces generated-only safety and structure limits", () => {
+    const recommendations = generatedDishes();
+    recommendations[0] = {
+      ...recommendations[0]!,
+      optionalMissingIngredients: [
+        { name: "대파", reason: "향을 더해요" },
+        { name: "마늘", reason: "풍미를 더해요" },
+        { name: "버터", reason: "고소하게 해요" },
+      ],
+      safetyNote: "",
+      tips: [""],
+      requiredEquipment: [],
+    };
+
+    expect(
+      generatedRecipeRecommendationsPayloadSchema.safeParse({ recommendations })
+        .success,
     ).toBe(false);
   });
 });

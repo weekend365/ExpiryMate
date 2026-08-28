@@ -1,7 +1,9 @@
 import { ProductCategory } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
 import {
+  inferRecipeAllergenTags,
   isCandidateBlocked,
+  isRecipeTextBlocked,
   normalizeRecipeTerm,
   rankRecipeCandidates,
   type RecipeRankingCandidate,
@@ -65,6 +67,45 @@ describe("recipe inventory ranking", () => {
       isCandidateBlocked(
         candidate("herb", "고수 한 단", ProductCategory.PRODUCE, 3),
         preference,
+      ),
+    ).toBe(true);
+  });
+
+  it("does not treat Korean sentence endings as the one-letter crab term", () => {
+    const preference = {
+      allergens: ["crab" as const],
+      excludedIngredients: [],
+      dietaryStyle: "any" as const,
+    };
+
+    expect(isRecipeTextBlocked("가장자리가 노릇하게 익으면 담아요", preference)).toBe(
+      false,
+    );
+    expect(isRecipeTextBlocked("꽃게살을 넣어요", preference)).toBe(true);
+    expect(isRecipeTextBlocked("게", preference)).toBe(true);
+    expect(
+      isRecipeTextBlocked("꽃게살을 넣어요", {
+        allergens: [],
+        excludedIngredients: [],
+        dietaryStyle: "vegetarian",
+      }),
+    ).toBe(true);
+  });
+
+  it("infers structured allergen tags and blocks ambiguous packaged foods", () => {
+    expect(
+      inferRecipeAllergenTags(
+        candidate("tofu", "부침용 두부", ProductCategory.TOFU, 3),
+      ),
+    ).toContain("soybean");
+    expect(
+      isCandidateBlocked(
+        candidate("snack", "브랜드 스낵", ProductCategory.SNACK, 3),
+        {
+          allergens: ["peanut"],
+          excludedIngredients: [],
+          dietaryStyle: "any",
+        },
       ),
     ).toBe(true);
   });
