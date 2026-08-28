@@ -7,6 +7,7 @@ import {
   batchCreateInventoryItemsBodySchema,
   inventoryFormSchema,
   inventoryPhotoParseCandidateSchema,
+  inventoryPhotoParseAccessSchema,
   inventoryPhotoParseResponseSchema,
   inventoryPhotoParseVisionPayloadSchema,
 } from "./inventory";
@@ -86,6 +87,29 @@ describe("inventory write contracts", () => {
         items: [{ inventoryItemId: "milk-1", amountBase: 0.5 }],
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("inventory photo parse access contract", () => {
+  it("accepts the free plus rewarded daily quota response", () => {
+    expect(
+      inventoryPhotoParseAccessSchema.parse({
+        day: "2026-08-28",
+        timezone: "Asia/Seoul",
+        resetsAt: "2026-08-28T15:00:00.000Z",
+        canParse: false,
+        requiredAction: "watch_ad",
+        free: { limit: 1, used: 1, remaining: 0 },
+        rewardedAds: {
+          enabled: true,
+          dailyLimit: 3,
+          verified: 0,
+          creditsAvailable: 0,
+          remainingToWatch: 3,
+          canWatch: true,
+        },
+      }).requiredAction,
+    ).toBe("watch_ad");
   });
 });
 

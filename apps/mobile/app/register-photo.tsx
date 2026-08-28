@@ -39,8 +39,11 @@ import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-
 import { usePrivacyStatus } from "../src/features/privacy/use-privacy";
 import {
   parseRegistrationReturnTo,
+  registerRoute,
   registrationReturnHref,
 } from "../src/features/registration/registration-return";
+import { usePhotoParseAccess } from "../src/features/photo-intake/use-photo-parse-access";
+import { resolvePhotoParseAccessUi } from "../src/features/photo-intake/photo-parse-access-ui";
 import { QuickExpiryPills } from "../src/features/inventory/inventory-form-ui";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
@@ -61,6 +64,7 @@ export default function RegisterPhotoScreen() {
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
   const privacyStatusQuery = usePrivacyStatus();
+  const photoAccess = usePhotoParseAccess();
   const { selectableOptions, resolveLabel } = useStorageLocations();
   const defaultLocation =
     selectableOptions[0]?.key ?? StorageLocation.FRIDGE;
@@ -85,9 +89,11 @@ export default function RegisterPhotoScreen() {
     onSuccess: (result) => {
       setItems(candidatesToDrafts(result.items, defaultLocation));
       setStep("review");
+      void photoAccess.refresh();
     },
     onError: (error) => {
       setStep("source");
+      void photoAccess.refresh();
       if (error instanceof ApiError && error.status === 412) {
         Alert.alert("안내를 먼저 살펴봐 주세요", "사진을 읽기 전에 안내를 확인해 주세요.", [
           {
@@ -190,6 +196,9 @@ export default function RegisterPhotoScreen() {
   };
 
   const startParse = async (source: "camera" | "library") => {
+    if (!photoAccess.access?.canParse) {
+      return;
+    }
     if (!ensureConsent()) {
       return;
     }
@@ -200,6 +209,41 @@ export default function RegisterPhotoScreen() {
     setStep("loading");
     parseMutation.mutate(photo);
   };
+
+  const watchPhotoAd = async () => {
+    try {
+      const result = await photoAccess.watchRewardedAd();
+      if (result === "verified") {
+        Alert.alert("사진 분석 1회가 준비됐어요", "이제 사진을 선택해 주세요.");
+      } else {
+        Alert.alert(
+          "광고 보상 확인 중",
+          "서버 확인이 끝나면 사진 선택 버튼이 자동으로 활성화돼요.",
+        );
+      }
+    } catch (error) {
+      Alert.alert(
+        "광고를 완료하지 못했어요",
+        error instanceof Error
+          ? error.message
+          : "잠시 후 다시 시도해 주세요.",
+        [
+          { text: "나중에 다시 시도", style: "cancel" },
+          {
+            text: "직접 등록",
+            onPress: () => router.replace(registerRoute(returnTo)),
+          },
+        ],
+      );
+    }
+  };
+
+  const accessUi = resolvePhotoParseAccessUi(
+    photoAccess.access,
+    photoAccess.adState,
+    photoAccess.isLoading,
+  );
+  const canSelectPhoto = accessUi.canSelectPhoto;
 
   const footer =
     step === "review" ? (
@@ -253,17 +297,78 @@ export default function RegisterPhotoScreen() {
 
         {step === "source" ? (
           <View style={styles.choiceStack}>
-            <Button icon={Camera} onPress={() => void startParse("camera")} fullWidth>
+            <View style={styles.accessCard} accessibilityLiveRegion="polite">
+              <AppText style={styles.sectionTitle}>오늘 사진 분석 사용량</AppText>
+              <AppText variant="bodySmall" tone="subtext">
+                오늘 무료 {photoAccess.access?.free.used ?? 0}/
+                {photoAccess.access?.free.limit ?? 1}회
+              </AppText>
+              <AppText variant="bodySmall" tone="subtext">
+                광고 추가 사용 {photoAccess.access?.rewardedAds.verified ?? 0}/
+                {photoAccess.access?.rewardedAds.dailyLimit ?? 3}회
+              </AppText>
+              {photoAccess.access?.rewardedAds.creditsAvailable ? (
+                <AppText variant="bodySmall" tone="subtext">
+                  사용 가능한 사진 분석권 {photoAccess.access.rewardedAds.creditsAvailable}회
+                </AppText>
+              ) : null}
+            </View>
+
+            {accessUi.showVerifying ? (
+              <Button onPress={() => undefined} disabled fullWidth>
+                광고 보상 확인 중
+              </Button>
+            ) : accessUi.showWatchAd ? (
+              <Button
+                onPress={() => void watchPhotoAd()}
+                loading={photoAccess.adState === "loading"}
+                fullWidth
+              >
+                광고 보고 사진 분석 1회 받기
+              </Button>
+            ) : null}
+
+            {accessUi.dailyLimitReached ? (
+              <View style={styles.limitCard} accessibilityLiveRegion="polite">
+                <AppText variant="bodyStrong">오늘 분석 4회를 모두 사용했어요</AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  {formatResetTime(photoAccess.access?.resetsAt)}에 다시 사용할 수 있어요.
+                </AppText>
+              </View>
+            ) : null}
+
+            {accessUi.serviceUnavailable ? (
+              <AppText variant="bodySmall" tone="subtext">
+                지금은 추가 광고 분석을 사용할 수 없어요. 직접 등록하거나 나중에 다시 시도해 주세요.
+              </AppText>
+            ) : null}
+
+            <Button
+              icon={Camera}
+              onPress={() => void startParse("camera")}
+              disabled={!canSelectPhoto || photoAccess.isLoading}
+              fullWidth
+            >
               지금 찍을게요
             </Button>
             <Button
               icon={ImageIcon}
               onPress={() => void startParse("library")}
               variant="surface"
+              disabled={!canSelectPhoto || photoAccess.isLoading}
               fullWidth
             >
               앨범에서 고를게요
             </Button>
+            {!canSelectPhoto ? (
+              <Button
+                variant="surface"
+                onPress={() => router.replace(registerRoute(returnTo))}
+                fullWidth
+              >
+                직접 등록하기
+              </Button>
+            ) : null}
             <Button
               variant="secondary"
               onPress={() => setStep("scene")}
@@ -461,9 +566,32 @@ export default function RegisterPhotoScreen() {
   }
 }
 
+function formatResetTime(value?: string) {
+  if (!value) return "다음 KST 자정";
+  return new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(value));
+}
+
 const styles = StyleSheet.create({
   choiceStack: {
     gap: spacing.sm,
+  },
+  accessCard: {
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+    gap: spacing.xxs,
+  },
+  limitCard: {
+    backgroundColor: colors.mutedSurface,
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+    gap: spacing.xxs,
   },
   loadingCard: {
     alignItems: "center",

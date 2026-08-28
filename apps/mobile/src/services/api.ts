@@ -25,6 +25,7 @@ import type {
   BatchCreateInventoryItemsResponse,
   InventoryPhotoParseResponse,
   InventoryPhotoParseScene,
+  InventoryPhotoParseAccess,
   DeleteRecommendationHistoryResponse,
   DeleteRecipeFavoriteResponse,
   RevokeAiDataNoticeResponse,
@@ -65,6 +66,7 @@ import type {
   RecommendationAccess,
   RewardedAdSession,
   MonetizationPlatform,
+  RewardedAdPurpose,
   TrackMonetizationEventRequest,
   RecommendationCreditPurchaseVerificationRequest,
   RecommendationCreditPurchaseVerificationResponse,
@@ -239,6 +241,7 @@ async function requestMultipart<T>(
   options: {
     retryOnUnauthorized?: boolean;
     timeoutMs?: number;
+    headers?: Record<string, string>;
   } = { retryOnUnauthorized: true, timeoutMs: PHOTO_PARSE_TIMEOUT_MS },
 ): Promise<T> {
   const session = await requireRegisteredSession();
@@ -249,6 +252,7 @@ async function requestMultipart<T>(
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
         ...clientHeaders,
+        ...options.headers,
       },
       body: formData,
     },
@@ -894,8 +898,18 @@ export const parseInventoryPhoto = (
   return requestMultipart<InventoryPhotoParseResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/parse-photo`,
     formData,
+    {
+      retryOnUnauthorized: true,
+      timeoutMs: PHOTO_PARSE_TIMEOUT_MS,
+      headers: { "Idempotency-Key": createIdempotencyKey() },
+    },
   );
 };
+
+export const getInventoryPhotoParseAccess = (spaceId: string) =>
+  request<InventoryPhotoParseAccess>(
+    `${spaceResourcePath(spaceId, "inventory")}/photo-parse-access`,
+  );
 
 export const batchCreateInventoryItems = (
   payload: BatchCreateInventoryItemsBody,
@@ -1262,10 +1276,11 @@ export const getMonetizationStatus = (spaceId?: string) =>
 export const createRewardedAdSession = (
   platform: MonetizationPlatform,
   spaceId?: string,
+  purpose?: RewardedAdPurpose,
 ) =>
   request<RewardedAdSession>("/monetization/rewarded-ad-sessions", {
     method: "POST",
-    body: JSON.stringify({ platform, spaceId }),
+    body: JSON.stringify({ platform, spaceId, purpose }),
   });
 
 export const getRewardedAdSession = (id: string) =>

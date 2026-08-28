@@ -28,6 +28,7 @@ export type RevenueLedgerInput = {
   externalKey: string;
   occurredAt?: Date;
   multiplier?: 1 | -1;
+  properties?: Record<string, string>;
 };
 
 export async function recordRevenueEvent(
@@ -63,6 +64,7 @@ export async function recordRevenueEvent(
       properties: {
         estimate_version: "env-v1",
         ...(input.basePlanId ? { base_plan_id: input.basePlanId } : {}),
+        ...(input.properties ?? {}),
       },
       occurredAt: input.occurredAt ?? new Date(),
     },

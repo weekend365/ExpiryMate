@@ -17,6 +17,7 @@ import {
   type RecommendationCreditPurchaseVerificationRequest,
 } from "@expirymate/shared";
 import type { Request } from "express";
+import { RewardedAdPurpose } from "@prisma/client";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
@@ -50,6 +51,7 @@ export class MonetizationController {
       ownerKey,
       body.platform,
       body.spaceId,
+      body.purpose as RewardedAdPurpose | undefined,
     );
   }
 

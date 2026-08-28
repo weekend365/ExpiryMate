@@ -1,10 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
+  createRewardedAdSessionRequestSchema,
   recommendationAccessSchema,
+  rewardedAdPurposeSchema,
   trackMonetizationEventRequestSchema,
 } from "./monetization";
 
 describe("monetization schemas", () => {
+  it("defaults old clients to a missing purpose and accepts photo purpose", () => {
+    expect(
+      createRewardedAdSessionRequestSchema.parse({ platform: "android" })
+        .purpose,
+    ).toBeUndefined();
+    expect(rewardedAdPurposeSchema.parse("inventory_photo_parse")).toBe(
+      "inventory_photo_parse",
+    );
+  });
+
   it("accepts server-assigned experiment metadata in recommendation access", () => {
     expect(
       recommendationAccessSchema.parse({

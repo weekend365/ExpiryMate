@@ -97,6 +97,9 @@ pnpm --filter @expirymate/mobile exec expo run:android
 pnpm --filter @expirymate/mobile exec expo run:ios --device
 ```
 
+사진 일괄 등록의 무료 1회·보상형 광고 3회 정책과 배포 절차는
+[`docs/inventory-photo-parse-reward-policy.md`](./docs/inventory-photo-parse-reward-policy.md)를 참고하세요.
+
 iOS 서명과 production 제출은 [iOS·EAS production 런북](./docs/ios-eas-production.md)을
 확인하세요.
 

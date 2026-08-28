@@ -29,6 +29,7 @@ export const sessionQueryKeys = {
   storageLocations: ["storage-locations"] as const,
   subscription: ["subscription-entitlement"] as const,
   monetization: ["monetization-status"] as const,
+  photoParseAccess: ["inventory-photo-parse-access"] as const,
   privacy: ["privacy-status"] as const,
   spaces: ["inventory-spaces"] as const,
 };

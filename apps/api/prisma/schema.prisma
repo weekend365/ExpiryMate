@@ -159,6 +159,16 @@ enum RewardedAdSessionStatus {
   expired
 }
 
+enum RewardedAdPurpose {
+  recipe_generation
+  inventory_photo_parse
+}
+
+enum InventoryPhotoParseUsageSource {
+  free
+  rewarded_ad
+}
+
 enum MonetizationRevenueEventKind {
   subscription_purchase
   subscription_renewal
@@ -534,8 +544,20 @@ model InventoryPhotoParseEvent {
   outputTokens      Int             @default(0)
   totalTokens       Int             @default(0)
   estimatedCostUsd  Decimal         @default(0) @db.Decimal(10, 6)
+  reservedCostUsd   Decimal         @default(0) @db.Decimal(10, 6)
+  usageDay          DateTime?       @db.Date
+  usageSource       InventoryPhotoParseUsageSource?
+  idempotencyKey    String?
+  rewardedAdSessionId String?       @unique
+  rewardedAdSession RewardedAdSession? @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  resultPayload     Json?
+  resultExpiresAt   DateTime?
   createdAt         DateTime        @default(now())
 
+  @@unique([ownerKey, idempotencyKey])
+  @@index([ownerKey, usageDay, status])
+  @@index([usageSource, usageDay, status])
+  @@index([resultExpiresAt])
   @@index([ownerKey, createdAt])
   @@index([aiModel, status, createdAt])
   @@index([createdAt])
@@ -642,6 +664,7 @@ model RewardedAdSession {
   owner                 User                      @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
   platform              RewardedAdPlatform
   status                RewardedAdSessionStatus   @default(pending)
+  purpose               RewardedAdPurpose         @default(recipe_generation)
   adUnitId              String
   transactionId         String?                   @unique
   showExpiresAt         DateTime
@@ -651,8 +674,9 @@ model RewardedAdSession {
   createdAt             DateTime                  @default(now())
   updatedAt             DateTime                  @updatedAt
   usageEvent            RecommendationUsageEvent?
+  photoParseEvent       InventoryPhotoParseEvent?
 
-  @@index([ownerKey, status, createdAt])
+  @@index([ownerKey, purpose, status, createdAt])
   @@index([status, verificationExpiresAt])
 }
 

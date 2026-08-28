@@ -18,7 +18,6 @@ import {
 import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
-import { PrismaService } from "../../database/prisma.service";
 import {
   calculateOpenAiCostUsd,
   getOpenAiModelPricing,
@@ -48,7 +47,6 @@ export class InventoryPhotoParseService {
   private readonly logger = new Logger(InventoryPhotoParseService.name);
 
   constructor(
-    private readonly prisma: PrismaService,
     private readonly privacyService: PrivacyService,
     private readonly policy: InventoryPhotoParsePolicyService,
   ) {}
@@ -58,6 +56,7 @@ export class InventoryPhotoParseService {
     spaceId?: string;
     scene: string;
     file?: PhotoParseUpload | null;
+    idempotencyKey?: string;
   }): Promise<InventoryPhotoParseResponse> {
     this.policy.ensureEnabled();
     await this.privacyService.ensureAiDataNoticeAccepted(params.ownerKey);
@@ -77,6 +76,20 @@ export class InventoryPhotoParseService {
     );
     await this.policy.enforceGlobalDailyCostLimit(PROJECTED_PARSE_COST_USD, now);
 
+    const reservation = await this.policy.reserveParse({
+      ownerKey: params.ownerKey,
+      spaceId: params.spaceId,
+      scene,
+      aiModel: model,
+      promptVersion: PROMPT_VERSION,
+      projectedCostUsd: PROJECTED_PARSE_COST_USD,
+      idempotencyKey: params.idempotencyKey,
+      now,
+    });
+    if (reservation.kind === "existing") {
+      return reservation.result;
+    }
+
     let generation: Awaited<ReturnType<InventoryPhotoParseService["recognizeItems"]>>;
     try {
       generation = await this.policy.withInflightLimit(() =>
@@ -84,49 +97,49 @@ export class InventoryPhotoParseService {
       );
     } catch (error) {
       if (error instanceof PhotoParseGenerationError) {
-        await this.recordFailedParse({
-          ownerKey: params.ownerKey,
-          spaceId: params.spaceId,
-          scene,
-          model,
+        await this.policy.failParse(reservation.eventId, {
           failureCode: error.failureCode,
-          usage: error.usage,
-          estimatedCostUsd: calculateOpenAiCostUsd(error.usage, model),
+          inputTokens: error.usage.inputTokens,
+          cachedInputTokens: error.usage.cachedInputTokens,
+          outputTokens: error.usage.outputTokens,
+          totalTokens: error.usage.totalTokens,
+          estimatedCostUsd: toCostDecimal(
+            calculateOpenAiCostUsd(error.usage, model),
+          ),
           durationMs: Date.now() - startedAt,
         });
         throw error.userError;
       }
+      await this.policy.failParse(reservation.eventId, {
+        failureCode: "provider_error",
+        durationMs: Date.now() - startedAt,
+        ...emptyUsage(),
+        estimatedCostUsd: new Prisma.Decimal(0),
+      });
       throw error;
     }
 
     const items = normalizePhotoParseItems(scene, generation.items);
     const averageConfidence = getAverageConfidence(items);
 
-    await this.prisma.inventoryPhotoParseEvent.create({
-      data: {
-        ownerKey: params.ownerKey,
-        spaceId: params.spaceId,
-        scene,
-        itemCount: items.length,
-        reviewItemCount: items.filter((item) => item.needsReview).length,
-        averageConfidence:
-          averageConfidence === null
-            ? null
-            : new Prisma.Decimal(averageConfidence.toFixed(4)),
-        aiProvider: "openai",
-        aiModel: generation.model,
-        promptVersion: PROMPT_VERSION,
-        status: "succeeded",
-        durationMs: Date.now() - startedAt,
-        inputTokens: generation.usage.inputTokens,
-        cachedInputTokens: generation.usage.cachedInputTokens,
-        outputTokens: generation.usage.outputTokens,
-        totalTokens: generation.usage.totalTokens,
-        estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
-      },
+    const result = { scene, items };
+    await this.policy.completeParse(reservation.eventId, result, {
+      itemCount: items.length,
+      reviewItemCount: items.filter((item) => item.needsReview).length,
+      averageConfidence:
+        averageConfidence === null
+          ? null
+          : new Prisma.Decimal(averageConfidence.toFixed(4)),
+      aiModel: generation.model,
+      durationMs: Date.now() - startedAt,
+      inputTokens: generation.usage.inputTokens,
+      cachedInputTokens: generation.usage.cachedInputTokens,
+      outputTokens: generation.usage.outputTokens,
+      totalTokens: generation.usage.totalTokens,
+      estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
     });
 
-    return { scene, items };
+    return result;
   }
 
   private async recognizeItems(
@@ -255,45 +268,9 @@ export class InventoryPhotoParseService {
     }
   }
 
-  private async recordFailedParse(input: {
-    ownerKey: string;
-    spaceId?: string;
-    scene: InventoryPhotoParseScene;
-    model: string;
-    failureCode: PhotoParseFailureCode;
-    usage: OpenAiTokenUsage & { totalTokens: number };
-    estimatedCostUsd: number;
-    durationMs: number;
-  }) {
-    try {
-      await this.prisma.inventoryPhotoParseEvent.create({
-        data: {
-          ownerKey: input.ownerKey,
-          spaceId: input.spaceId,
-          scene: input.scene,
-          itemCount: 0,
-          reviewItemCount: 0,
-          aiProvider: "openai",
-          aiModel: input.model,
-          promptVersion: PROMPT_VERSION,
-          status: "failed",
-          failureCode: input.failureCode,
-          durationMs: input.durationMs,
-          inputTokens: input.usage.inputTokens,
-          cachedInputTokens: input.usage.cachedInputTokens,
-          outputTokens: input.usage.outputTokens,
-          totalTokens: input.usage.totalTokens,
-          estimatedCostUsd: toCostDecimal(input.estimatedCostUsd),
-        },
-      });
-    } catch (observabilityError) {
-      this.logger.error(
-        "Failed to persist inventory photo parse telemetry",
-        observabilityError instanceof Error
-          ? observabilityError.stack
-          : String(observabilityError),
-      );
-    }
+  getAccess(ownerKey: string) {
+    this.policy.ensureEnabled();
+    return this.policy.getAccess(ownerKey);
   }
 }
 

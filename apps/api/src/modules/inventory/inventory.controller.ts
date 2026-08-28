@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -60,6 +61,11 @@ export class InventoryController {
     });
   }
 
+  @Get("photo-parse-access")
+  getPhotoParseAccess(@CurrentOwnerKey() ownerKey: string) {
+    return this.photoParseService.getAccess(ownerKey);
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string, @CurrentOwnerKey() ownerKey: string) {
     return this.inventoryService.findOne(id, ownerKey, personalSpaceId(ownerKey));
@@ -85,12 +91,14 @@ export class InventoryController {
     @CurrentOwnerKey() ownerKey: string,
     @UploadedFile() file: Express.Multer.File,
     @Body("scene") scene: string,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     return this.photoParseService.parsePhoto({
       ownerKey,
       spaceId: personalSpaceId(ownerKey),
       scene,
       file,
+      idempotencyKey,
     });
   }
 

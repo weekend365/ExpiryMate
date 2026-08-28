@@ -17,6 +17,7 @@ import {
   RecommendationUsageSource,
   RecommendationUsageStatus,
   RewardedAdPlatform,
+  RewardedAdPurpose,
   RewardedAdSessionStatus,
 } from "@prisma/client";
 import {
@@ -30,6 +31,7 @@ import {
 } from "@expirymate/shared";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
+import { InventoryPhotoParsePolicyService } from "../inventory/inventory-photo-parse.policy";
 import { resolveBarcodeRewardPolicy } from "./barcode-reward-policy";
 import {
   getRecommendationCreditProducts,
@@ -73,7 +75,10 @@ export class MonetizationService {
     | { expiresAt: number; values: Map<number, ReturnType<typeof createPublicKey>> }
     | undefined;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly photoParsePolicy?: InventoryPhotoParsePolicyService,
+  ) {}
 
   async getStatus(ownerKey: string, now = new Date()) {
     await this.prisma.rewardedAdSession.updateMany({
@@ -174,14 +179,21 @@ export class MonetizationService {
     ownerKey: string,
     platform: MonetizationPlatform,
     spaceId?: string,
+    purpose: RewardedAdPurpose = RewardedAdPurpose.recipe_generation,
   ): Promise<RewardedAdSession> {
     const now = new Date();
     const adUnitId = getAdUnitId(platform);
     return this.prisma.$transaction(
       async (tx) => {
-        await this.releaseOpenDisplaySessions(tx, ownerKey, now);
+        await this.releaseOpenDisplaySessions(tx, ownerKey, purpose, now);
         const access = await this.buildStatus(tx, ownerKey, now, spaceId);
-        if (!access.rewardedAdsEnabled || !access.rewardedAds.canWatch) {
+        if (purpose === RewardedAdPurpose.inventory_photo_parse) {
+          await this.getPhotoParsePolicy().ensurePhotoRewardedAdAvailable(
+            ownerKey,
+            now,
+            tx,
+          );
+        } else if (!access.rewardedAdsEnabled || !access.rewardedAds.canWatch) {
           throw new CodedHttpException(
             409,
             "REWARDED_AD_NOT_AVAILABLE",
@@ -198,6 +210,7 @@ export class MonetizationService {
                 ? RewardedAdPlatform.ios
                 : RewardedAdPlatform.android,
             adUnitId: normalizeAdUnitId(adUnitId),
+            purpose,
             showExpiresAt: new Date(now.getTime() + SHOW_WINDOW_MS),
             verificationExpiresAt: new Date(
               now.getTime() + VERIFICATION_WINDOW_MS,
@@ -252,12 +265,14 @@ export class MonetizationService {
   private async releaseOpenDisplaySessions(
     db: DbClient,
     ownerKey: string,
+    purpose: RewardedAdPurpose,
     now: Date,
   ) {
     const { start, endExclusive } = getKstDayWindow(now);
     await db.rewardedAdSession.updateMany({
       where: {
         ownerKey,
+        purpose,
         status: RewardedAdSessionStatus.pending,
         createdAt: { gte: start, lt: endExclusive },
         showExpiresAt: { gt: now },
@@ -405,6 +420,7 @@ export class MonetizationService {
               const reward = await tx.rewardedAdSession.findFirst({
                 where: {
                   ownerKey,
+                  purpose: RewardedAdPurpose.recipe_generation,
                   status: RewardedAdSessionStatus.verified,
                   createdAt: { gte: start, lt: endExclusive },
                   usageEvent: { is: null },
@@ -596,18 +612,22 @@ export class MonetizationService {
         }
 
         const { start, endExclusive } = getKstDayWindow(session.createdAt);
+        const sessionPurpose =
+          session.purpose ?? RewardedAdPurpose.recipe_generation;
         const alreadyVerified = await tx.rewardedAdSession.count({
           where: {
             ownerKey: session.ownerKey,
+            purpose: sessionPurpose,
             id: { not: session.id },
             status: RewardedAdSessionStatus.verified,
             createdAt: { gte: start, lt: endExclusive },
           },
         });
-        if (
-          alreadyVerified >=
-            resolveMonetizationPolicy(session.ownerKey).rewardedDailyLimit
-        ) {
+        const rewardedDailyLimit =
+          sessionPurpose === RewardedAdPurpose.inventory_photo_parse
+            ? this.getPhotoParsePolicy().getRewardedDailyLimit()
+            : resolveMonetizationPolicy(session.ownerKey).rewardedDailyLimit;
+        if (alreadyVerified >= rewardedDailyLimit) {
           await tx.rewardedAdSession.update({
             where: { id: session.id },
             data: {
@@ -633,6 +653,7 @@ export class MonetizationService {
             source: "rewarded_ad",
             externalKey: `admob:${transactionId}`,
             occurredAt: new Date(),
+            properties: { purpose: sessionPurpose },
           });
         }
         return { ok: true as const };
@@ -728,6 +749,7 @@ export class MonetizationService {
     const verifiedRewards = await db.rewardedAdSession.count({
       where: {
         ownerKey,
+        purpose: RewardedAdPurpose.recipe_generation,
         status: RewardedAdSessionStatus.verified,
         createdAt: { gte: start, lt: endExclusive },
       },
@@ -735,6 +757,7 @@ export class MonetizationService {
     const availableRewards = await db.rewardedAdSession.count({
       where: {
         ownerKey,
+        purpose: RewardedAdPurpose.recipe_generation,
         status: RewardedAdSessionStatus.verified,
         createdAt: { gte: start, lt: endExclusive },
         usageEvent: { is: null },
@@ -1046,6 +1069,7 @@ export class MonetizationService {
     session: {
       id: string;
       ownerKey: string;
+      purpose?: RewardedAdPurpose;
       status: RewardedAdSessionStatus;
       showExpiresAt: Date;
       verificationExpiresAt: Date;
@@ -1055,12 +1079,19 @@ export class MonetizationService {
     return {
       id: session.id,
       status: session.status,
+      purpose: session.purpose ?? RewardedAdPurpose.recipe_generation,
       userIdentifier: this.userIdentifier(session.ownerKey),
       customData: session.id,
       showExpiresAt: session.showExpiresAt.toISOString(),
       verificationExpiresAt: session.verificationExpiresAt.toISOString(),
       access,
     };
+  }
+
+  private getPhotoParsePolicy() {
+    return (
+      this.photoParsePolicy ?? new InventoryPhotoParsePolicyService(this.prisma)
+    );
   }
 
   private userIdentifier(ownerKey: string) {

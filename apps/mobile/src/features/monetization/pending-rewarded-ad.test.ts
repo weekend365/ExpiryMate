@@ -36,6 +36,22 @@ describe("pending rewarded ad persistence", () => {
     );
   });
 
+  it("keeps recipe and photo reward sessions isolated by purpose", async () => {
+    await savePendingRewardedAdSession("user-a", "recipe-session");
+    await savePendingRewardedAdSession(
+      "user-a",
+      "photo-session",
+      "inventory_photo_parse",
+    );
+
+    await expect(getPendingRewardedAdSession("user-a")).resolves.toBe(
+      "recipe-session",
+    );
+    await expect(
+      getPendingRewardedAdSession("user-a", "inventory_photo_parse"),
+    ).resolves.toBe("photo-session");
+  });
+
   it("does not clear a newer session while reconciling an older one", async () => {
     await savePendingRewardedAdSession("user-a", "new-session");
     await clearPendingRewardedAdSession("user-a", "old-session");

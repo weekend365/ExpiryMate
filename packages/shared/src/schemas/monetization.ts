@@ -72,6 +72,10 @@ export const monetizationFunnelEventNameSchema = z.enum([
   "affiliate_product_tapped",
   "affiliate_fallback_tapped",
 ]);
+export const rewardedAdPurposeSchema = z.enum([
+  "recipe_generation",
+  "inventory_photo_parse",
+]);
 
 export const trackMonetizationEventRequestSchema = z.object({
   event: monetizationFunnelEventNameSchema,
@@ -164,11 +168,13 @@ export const recommendationCreditPurchaseVerificationResponseSchema = z.object({
 export const createRewardedAdSessionRequestSchema = z.object({
   platform: monetizationPlatformSchema,
   spaceId: z.string().min(1).max(128).optional(),
+  purpose: rewardedAdPurposeSchema.optional(),
 });
 
 export const rewardedAdSessionSchema = z.object({
   id: z.string(),
   status: rewardedAdSessionStatusSchema,
+  purpose: rewardedAdPurposeSchema,
   userIdentifier: z.string(),
   customData: z.string(),
   showExpiresAt: z.string(),
@@ -185,6 +191,7 @@ export type MonetizationOfferReason = z.infer<
 export type RewardedAdSessionStatus = z.infer<
   typeof rewardedAdSessionStatusSchema
 >;
+export type RewardedAdPurpose = z.infer<typeof rewardedAdPurposeSchema>;
 export type MonetizationExperimentVariant = z.infer<
   typeof monetizationExperimentVariantSchema
 >;

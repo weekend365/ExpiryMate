@@ -192,6 +192,34 @@ export const inventoryPhotoParseResponseSchema = z.object({
     ),
 });
 
+export const inventoryPhotoParseRequiredActionSchema = z.enum([
+  "none",
+  "watch_ad",
+  "daily_limit_reached",
+  "service_unavailable",
+]);
+
+export const inventoryPhotoParseAccessSchema = z.object({
+  day: z.string(),
+  timezone: z.literal("Asia/Seoul"),
+  resetsAt: z.string(),
+  canParse: z.boolean(),
+  requiredAction: inventoryPhotoParseRequiredActionSchema,
+  free: z.object({
+    limit: z.number().int().nonnegative(),
+    used: z.number().int().nonnegative(),
+    remaining: z.number().int().nonnegative(),
+  }),
+  rewardedAds: z.object({
+    enabled: z.boolean(),
+    dailyLimit: z.number().int().nonnegative(),
+    verified: z.number().int().nonnegative(),
+    creditsAvailable: z.number().int().nonnegative(),
+    remainingToWatch: z.number().int().nonnegative(),
+    canWatch: z.boolean(),
+  }),
+});
+
 /** Strict JSON schema for OpenAI structured vision output (no preprocess). */
 export const inventoryPhotoParseVisionItemSchema = z.object({
   displayName: z.string(),
@@ -247,6 +275,12 @@ export type InventoryPhotoParseCandidate = z.output<
 >;
 export type InventoryPhotoParseResponse = z.output<
   typeof inventoryPhotoParseResponseSchema
+>;
+export type InventoryPhotoParseAccess = z.output<
+  typeof inventoryPhotoParseAccessSchema
+>;
+export type InventoryPhotoParseRequiredAction = z.output<
+  typeof inventoryPhotoParseRequiredActionSchema
 >;
 export type InventoryPhotoParseVisionItem = z.output<
   typeof inventoryPhotoParseVisionItemSchema

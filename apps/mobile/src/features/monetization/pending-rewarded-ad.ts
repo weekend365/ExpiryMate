@@ -1,33 +1,46 @@
-import type { RewardedAdSession } from "@expirymate/shared";
+import type {
+  RewardedAdPurpose,
+  RewardedAdSession,
+} from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const STORAGE_PREFIX = "expirymate.pendingRewardedAd.v1";
 
-function storageKey(userId: string) {
-  return `${STORAGE_PREFIX}:${userId}`;
+function storageKey(
+  userId: string,
+  purpose: RewardedAdPurpose = "recipe_generation",
+) {
+  return purpose === "recipe_generation"
+    ? `${STORAGE_PREFIX}:${userId}`
+    : `${STORAGE_PREFIX}:${userId}:${purpose}`;
 }
 
 export async function savePendingRewardedAdSession(
   userId: string,
   sessionId: string,
+  purpose: RewardedAdPurpose = "recipe_generation",
 ) {
-  await AsyncStorage.setItem(storageKey(userId), sessionId);
+  await AsyncStorage.setItem(storageKey(userId, purpose), sessionId);
 }
 
-export async function getPendingRewardedAdSession(userId: string) {
-  return AsyncStorage.getItem(storageKey(userId));
+export async function getPendingRewardedAdSession(
+  userId: string,
+  purpose: RewardedAdPurpose = "recipe_generation",
+) {
+  return AsyncStorage.getItem(storageKey(userId, purpose));
 }
 
 export async function clearPendingRewardedAdSession(
   userId: string,
   expectedSessionId?: string,
+  purpose: RewardedAdPurpose = "recipe_generation",
 ) {
   if (expectedSessionId) {
-    const storedSessionId = await getPendingRewardedAdSession(userId);
+    const storedSessionId = await getPendingRewardedAdSession(userId, purpose);
     if (storedSessionId !== expectedSessionId) return;
   }
 
-  await AsyncStorage.removeItem(storageKey(userId));
+  await AsyncStorage.removeItem(storageKey(userId, purpose));
 }
 
 export type PendingRewardedAdResolution = {

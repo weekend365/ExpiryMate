@@ -53,12 +53,6 @@ describe("InventoryPhotoParseService", () => {
   const originalEnabled = process.env.INVENTORY_PHOTO_PARSE_ENABLED;
   const originalKey = process.env.OPENAI_API_KEY;
   const originalModel = process.env.INVENTORY_PHOTO_PARSE_MODEL;
-  let prisma: {
-    inventoryPhotoParseEvent: {
-      create: ReturnType<typeof vi.fn>;
-      aggregate: ReturnType<typeof vi.fn>;
-    };
-  };
   let privacyService: { ensureAiDataNoticeAccepted: ReturnType<typeof vi.fn> };
   let policy: {
     ensureEnabled: ReturnType<typeof vi.fn>;
@@ -66,6 +60,9 @@ describe("InventoryPhotoParseService", () => {
     enforceDailyCostLimit: ReturnType<typeof vi.fn>;
     enforceGlobalDailyCostLimit: ReturnType<typeof vi.fn>;
     withInflightLimit: ReturnType<typeof vi.fn>;
+    reserveParse: ReturnType<typeof vi.fn>;
+    completeParse: ReturnType<typeof vi.fn>;
+    failParse: ReturnType<typeof vi.fn>;
   };
   let service: InventoryPhotoParseService;
 
@@ -74,12 +71,6 @@ describe("InventoryPhotoParseService", () => {
     process.env.OPENAI_API_KEY = "test-key";
     delete process.env.INVENTORY_PHOTO_PARSE_MODEL;
     parseMock.mockReset();
-    prisma = {
-      inventoryPhotoParseEvent: {
-        create: vi.fn().mockResolvedValue({ id: "evt-1" }),
-        aggregate: vi.fn().mockResolvedValue({ _sum: { estimatedCostUsd: 0 } }),
-      },
-    };
     privacyService = {
       ensureAiDataNoticeAccepted: vi.fn().mockResolvedValue(undefined),
     };
@@ -89,9 +80,14 @@ describe("InventoryPhotoParseService", () => {
       enforceDailyCostLimit: vi.fn().mockResolvedValue(undefined),
       enforceGlobalDailyCostLimit: vi.fn().mockResolvedValue(undefined),
       withInflightLimit: vi.fn(async (run: () => Promise<unknown>) => run()),
+      reserveParse: vi.fn().mockResolvedValue({
+        kind: "reserved",
+        eventId: "evt-1",
+      }),
+      completeParse: vi.fn().mockResolvedValue(undefined),
+      failParse: vi.fn().mockResolvedValue(undefined),
     };
     service = new InventoryPhotoParseService(
-      prisma as never,
       privacyService as never,
       policy as never,
     );
@@ -179,19 +175,15 @@ describe("InventoryPhotoParseService", () => {
         safety_identifier: expect.stringMatching(/^[a-f0-9]{64}$/),
       }),
     );
-    expect(prisma.inventoryPhotoParseEvent.create).toHaveBeenCalledWith(
+    expect(policy.completeParse).toHaveBeenCalledWith(
+      "evt-1",
+      result,
       expect.objectContaining({
-        data: expect.objectContaining({
-          ownerKey: "user-1",
-          scene: "receipt",
-          itemCount: 1,
-          reviewItemCount: 1,
-          status: "succeeded",
-        }),
+        itemCount: 1,
+        reviewItemCount: 1,
       }),
     );
-    const eventData = prisma.inventoryPhotoParseEvent.create.mock.calls[0]?.[0]
-      ?.data as {
+    const eventData = policy.completeParse.mock.calls[0]?.[2] as {
       averageConfidence: { toString(): string };
       estimatedCostUsd: { toString(): string };
     };
@@ -245,16 +237,29 @@ describe("InventoryPhotoParseService", () => {
       }),
     ).rejects.toBeInstanceOf(Error);
 
-    expect(prisma.inventoryPhotoParseEvent.create).toHaveBeenCalledWith(
+    expect(policy.failParse).toHaveBeenCalledWith(
+      "evt-1",
       expect.objectContaining({
-        data: expect.objectContaining({
-          aiModel: "gpt-5.6-luna",
-          status: "failed",
-          failureCode: "refusal",
-          inputTokens: 700,
-          outputTokens: 10,
-        }),
+        failureCode: "refusal",
+        inputTokens: 700,
+        outputTokens: 10,
       }),
     );
+  });
+
+  it("replays a stored idempotent result without calling OpenAI", async () => {
+    const stored = { scene: "receipt" as const, items: [] };
+    policy.reserveParse.mockResolvedValue({ kind: "existing", result: stored });
+
+    await expect(
+      service.parsePhoto({
+        ownerKey: "user-1",
+        scene: "receipt",
+        idempotencyKey: "same-request",
+        file: { buffer: jpeg, mimetype: "image/jpeg" },
+      }),
+    ).resolves.toEqual(stored);
+    expect(parseMock).not.toHaveBeenCalled();
+    expect(policy.completeParse).not.toHaveBeenCalled();
   });
 });

@@ -84,6 +84,15 @@ export class SpaceInventoryController {
     });
   }
 
+  @Get("photo-parse-access")
+  async getPhotoParseAccess(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.photoParseService.getAccess(userId);
+  }
+
   @Get(":id")
   async get(
     @Param("spaceId") spaceId: string,
@@ -117,6 +126,7 @@ export class SpaceInventoryController {
     @CurrentOwnerKey() userId: string,
     @UploadedFile() file: Express.Multer.File,
     @Body("scene") scene: string,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
     return this.photoParseService.parsePhoto({
@@ -124,6 +134,7 @@ export class SpaceInventoryController {
       spaceId,
       scene,
       file,
+      idempotencyKey,
     });
   }
 

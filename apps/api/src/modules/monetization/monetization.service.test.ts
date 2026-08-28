@@ -6,6 +6,7 @@ import {
 import {
   RecommendationUsageSource,
   RecommendationUsageStatus,
+  RewardedAdPurpose,
   RewardedAdSessionStatus,
 } from "@prisma/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -35,6 +36,8 @@ const managedEnvKeys = [
   "BARCODE_REWARD_ROLLOUT_PERCENT",
   "BARCODE_REWARD_DAILY_LIMIT",
   "BARCODE_REWARD_BALANCE_LIMIT",
+  "INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED",
+  "INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT",
 ] as const;
 
 const originalEnv = new Map(
@@ -62,6 +65,8 @@ describe("MonetizationService", () => {
     process.env.BARCODE_REWARD_ROLLOUT_PERCENT = "100";
     process.env.BARCODE_REWARD_DAILY_LIMIT = "3";
     process.env.BARCODE_REWARD_BALANCE_LIMIT = "10";
+    process.env.INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED = "true";
+    process.env.INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT = "3";
     process.env.ADMOB_IOS_REWARDED_AD_UNIT_ID =
       "ca-app-pub-1234567890123456/1111111111";
     process.env.ADMOB_ANDROID_REWARDED_AD_UNIT_ID =
@@ -662,7 +667,48 @@ describe("MonetizationService", () => {
     expect(session.showExpiresAt).toBe("2026-07-28T00:15:00.000Z");
     expect(session.verificationExpiresAt).toBe("2026-07-29T00:00:00.000Z");
     expect(session.customData).toBe("ad-session-1");
+    expect(session.purpose).toBe(RewardedAdPurpose.recipe_generation);
     vi.useRealTimers();
+  });
+
+  it("creates and replaces pending photo rewards independently", async () => {
+    const prisma = createPrismaMock();
+    prisma.rewardedAdSession.create.mockImplementation(
+      async ({ data }: { data: Record<string, unknown> }) => ({
+        id: "photo-ad-1",
+        ...data,
+      }),
+    );
+    const photoPolicy = {
+      ensurePhotoRewardedAdAvailable: vi.fn().mockResolvedValue({}),
+      getRewardedDailyLimit: vi.fn().mockReturnValue(3),
+    };
+    const service = new MonetizationService(
+      prisma as never,
+      photoPolicy as never,
+    );
+
+    const session = await service.createRewardedAdSession(
+      "owner-a",
+      "android",
+      undefined,
+      RewardedAdPurpose.inventory_photo_parse,
+    );
+
+    expect(session.purpose).toBe(RewardedAdPurpose.inventory_photo_parse);
+    expect(prisma.rewardedAdSession.updateMany).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        ownerKey: "owner-a",
+        purpose: RewardedAdPurpose.inventory_photo_parse,
+      }),
+      data: expect.any(Object),
+    });
+    expect(prisma.rewardedAdSession.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        purpose: RewardedAdPurpose.inventory_photo_parse,
+      }),
+    });
+    expect(photoPolicy.ensurePhotoRewardedAdAvailable).toHaveBeenCalled();
   });
 
   it("lets a free user watch an ad even if the daily free recommendation remains", async () => {
