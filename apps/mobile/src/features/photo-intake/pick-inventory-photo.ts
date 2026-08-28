@@ -11,6 +11,10 @@ const pickerOptions: ImagePicker.ImagePickerOptions = {
   mediaTypes: ["images"],
   quality: 0.7,
   exif: false,
+  // Keep iOS from returning the original HEIC/AVIF container. The API accepts
+  // JPEG, PNG, and WebP, so ask the system for its compatible representation.
+  preferredAssetRepresentationMode:
+    ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
 };
 
 export async function pickInventoryPhoto(
