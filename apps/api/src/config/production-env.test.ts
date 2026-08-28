@@ -73,6 +73,36 @@ describe("validateProductionEnvironment", () => {
     expect(() => validateProductionEnvironment(env)).toThrow(/OPENAI_API_KEY/);
   });
 
+  it("validates the recipe model canary configuration", () => {
+    const env = validProductionEnv();
+    env.RECIPE_AI_CANDIDATE_PERCENT = "5.5";
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /RECIPE_AI_CANDIDATE_PERCENT/,
+    );
+
+    env.RECIPE_AI_CANDIDATE_PERCENT = "5";
+    delete env.RECIPE_AI_CANDIDATE_MODEL;
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /RECIPE_AI_CANDIDATE_MODEL/,
+    );
+
+    env.RECIPE_AI_CANDIDATE_MODEL = "gpt-5.6-terra";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("rejects OpenAI models without registered pricing", () => {
+    const env = validProductionEnv();
+    env.RECIPE_AI_MODEL = "unknown-recipe-model";
+    expect(() => validateProductionEnvironment(env)).toThrow(/RECIPE_AI_MODEL/);
+
+    env.RECIPE_AI_MODEL = "gpt-5.4-mini";
+    env.INVENTORY_PHOTO_PARSE_ENABLED = "true";
+    env.INVENTORY_PHOTO_PARSE_MODEL = "unknown-photo-model";
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /INVENTORY_PHOTO_PARSE_MODEL/,
+    );
+  });
+
   it("requires reward secrets when barcode rewards are enabled", () => {
     const env = validProductionEnv();
     env.BARCODE_REWARDS_ENABLED = "true";

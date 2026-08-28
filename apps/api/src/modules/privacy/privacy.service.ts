@@ -92,6 +92,9 @@ export class PrivacyService {
       await tx.recipeDishEngagement.deleteMany({
         where: { ownerKey: userId },
       });
+      await tx.recipeAiGenerationEvent.deleteMany({
+        where: { ownerKey: userId },
+      });
 
       return tx.recipeRecommendation.deleteMany({
         where: { ownerKey: userId },
@@ -152,6 +155,7 @@ export class PrivacyService {
       await tx.barcodeRewardCredit.deleteMany({ where: { ownerKey: userId } });
       await tx.monetizationFunnelEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.inventoryPhotoParseEvent.deleteMany({ where: { ownerKey: userId } });
+      await tx.recipeAiGenerationEvent.deleteMany({ where: { ownerKey: userId } });
       await tx.recipeRecommendation.deleteMany({ where: { ownerKey: userId } });
       await tx.spaceInvitation.deleteMany({
         where: {

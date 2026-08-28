@@ -10,6 +10,8 @@ import { RecipesService } from "./recipes.service";
 const managedEnvKeys = [
   "OPENAI_API_KEY",
   "RECIPE_AI_MODEL",
+  "RECIPE_AI_CANDIDATE_MODEL",
+  "RECIPE_AI_CANDIDATE_PERCENT",
   "RECIPE_AI_ENABLED",
   "RECIPE_RATE_LIMIT_MAX",
   "RECIPE_RATE_LIMIT_WINDOW_SECONDS",
@@ -17,9 +19,6 @@ const managedEnvKeys = [
   "RECIPE_GLOBAL_DAILY_COST_LIMIT_USD",
   "RECIPE_MAX_INFLIGHT",
   "RECIPE_AI_MAX_OUTPUT_TOKENS",
-  "RECIPE_AI_INPUT_COST_PER_1M_TOKENS",
-  "RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS",
-  "RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS",
 ] as const;
 
 const originalEnv = new Map(
@@ -204,7 +203,7 @@ describe("RecipesService recommendation guards", () => {
     ).rejects.toMatchObject({
       errorCode: "RECIPE_DAILY_BUDGET_EXHAUSTED",
     });
-    expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalled();
+    expect(prisma.recipeAiGenerationEvent.aggregate).toHaveBeenCalled();
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
 
@@ -213,16 +212,14 @@ describe("RecipesService recommendation guards", () => {
     process.env.RECIPE_GLOBAL_DAILY_COST_LIMIT_USD = "0.001";
     process.env.RECIPE_AI_MAX_OUTPUT_TOKENS = "2500";
     const { prisma, service } = createService();
-    prisma.recipeRecommendation.aggregate.mockResolvedValue({
+    prisma.recipeAiGenerationEvent.aggregate.mockResolvedValue({
       _sum: { estimatedCostUsd: "0.001" },
     });
 
     await expectTooManyRequests(service.createRecommendation("owner-a", request));
-    expect(prisma.recipeRecommendation.aggregate).toHaveBeenCalledWith(
+    expect(prisma.recipeAiGenerationEvent.aggregate).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({
-          aiProvider: "openai",
-        }),
+        where: expect.any(Object),
       }),
     );
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
@@ -239,8 +236,10 @@ describe("RecipesService recommendation guards", () => {
     expect(prisma.recipeRecommendation.create).not.toHaveBeenCalled();
   });
 
-  it("stores usage and estimated cost metadata for new generations", async () => {
+  it("uses one candidate selection for generation, cost, and transactional persistence", async () => {
     process.env.RECIPE_DAILY_COST_LIMIT_USD = "0";
+    process.env.RECIPE_AI_CANDIDATE_MODEL = "gpt-5.6-terra";
+    process.env.RECIPE_AI_CANDIDATE_PERCENT = "100";
     const { prisma, service } = createService();
     const generation: RecipeRecommendationGeneration = {
       recommendations,
@@ -250,9 +249,9 @@ describe("RecipesService recommendation guards", () => {
         outputTokens: 500,
         totalTokens: 1500,
       },
-      estimatedCostUsd: 0.001225,
+      estimatedCostUsd: 0.00782,
     };
-    vi.spyOn(
+    const generateSpy = vi.spyOn(
       service as TestableRecipesService,
       "generateRecommendations",
     ).mockResolvedValue(generation);
@@ -280,15 +279,36 @@ describe("RecipesService recommendation guards", () => {
 
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
+    expect(generateSpy).toHaveBeenCalledWith(
+      "owner-a",
+      request,
+      expect.any(Array),
+      expect.any(Object),
+      expect.any(Object),
+      { model: "gpt-5.6-terra", variant: "candidate" },
+      undefined,
+    );
     expect(createPayload?.data).toMatchObject({
       promptVersion: "recipe-recommendation-v5",
+      aiModel: "gpt-5.6-terra",
       inputTokens: 1000,
       cachedInputTokens: 100,
       outputTokens: 500,
       totalTokens: 1500,
     });
-    expect(String(createPayload?.data.estimatedCostUsd)).toBe("0.001225");
+    expect(String(createPayload?.data.estimatedCostUsd)).toBe("0.00782");
     expect(createPayload?.data.requestCacheKey).toBeNull();
+    expect(prisma.$transaction).toHaveBeenCalledOnce();
+    expect(prisma.recipeAiGenerationEvent.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          recommendationId: "generated-recommendation",
+          aiModel: "gpt-5.6-terra",
+          variant: "candidate",
+          status: "succeeded",
+        }),
+      }),
+    );
   });
 });
 
@@ -419,6 +439,12 @@ function createService() {
         },
       }),
       create: vi.fn(),
+    },
+    recipeAiGenerationEvent: {
+      aggregate: vi.fn().mockResolvedValue({
+        _sum: { estimatedCostUsd: "0" },
+      }),
+      create: vi.fn().mockResolvedValue({ id: "generation-event" }),
     },
     recipeFavorite: {
       findMany: vi.fn().mockResolvedValue([]),

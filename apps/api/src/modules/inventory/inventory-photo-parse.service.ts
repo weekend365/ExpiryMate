@@ -19,21 +19,22 @@ import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
+import {
+  calculateOpenAiCostUsd,
+  getOpenAiModelPricing,
+  getOpenAiReasoning,
+  type OpenAiTokenUsage,
+} from "../../common/openai-model-config";
 import { PrivacyService } from "../privacy/privacy.service";
 import { prepareVisionImage } from "./inventory-photo-parse.image";
 import { normalizePhotoParseItems } from "./inventory-photo-parse.normalize";
 import { InventoryPhotoParsePolicyService } from "./inventory-photo-parse.policy";
 
 const PROMPT_VERSION = "inventory-photo-parse-v1";
-const DEFAULT_MODEL = "gpt-4.1-mini";
+const DEFAULT_MODEL = "gpt-5.6-luna";
 const DEFAULT_MAX_OUTPUT_TOKENS = 1800;
 const DEFAULT_MAX_BYTES = 4 * 1024 * 1024;
 const PROJECTED_PARSE_COST_USD = 0.04;
-const FALLBACK_PRICING = {
-  inputUsdPerMillion: 0.4,
-  cachedInputUsdPerMillion: 0.1,
-  outputUsdPerMillion: 1.6,
-};
 
 export interface PhotoParseUpload {
   buffer: Buffer;
@@ -64,6 +65,9 @@ export class InventoryPhotoParseService {
     const scene = parseScene(params.scene);
     const prepared = prepareUpload(params.file);
     const now = new Date();
+    const startedAt = Date.now();
+    const model = process.env.INVENTORY_PHOTO_PARSE_MODEL?.trim() || DEFAULT_MODEL;
+    getOpenAiModelPricing(model);
 
     this.policy.enforceRateLimit(params.ownerKey, now);
     await this.policy.enforceDailyCostLimit(
@@ -73,11 +77,30 @@ export class InventoryPhotoParseService {
     );
     await this.policy.enforceGlobalDailyCostLimit(PROJECTED_PARSE_COST_USD, now);
 
-    const generation = await this.policy.withInflightLimit(() =>
-      this.recognizeItems(scene, prepared),
-    );
+    let generation: Awaited<ReturnType<InventoryPhotoParseService["recognizeItems"]>>;
+    try {
+      generation = await this.policy.withInflightLimit(() =>
+        this.recognizeItems(scene, prepared, model, params.ownerKey),
+      );
+    } catch (error) {
+      if (error instanceof PhotoParseGenerationError) {
+        await this.recordFailedParse({
+          ownerKey: params.ownerKey,
+          spaceId: params.spaceId,
+          scene,
+          model,
+          failureCode: error.failureCode,
+          usage: error.usage,
+          estimatedCostUsd: calculateOpenAiCostUsd(error.usage, model),
+          durationMs: Date.now() - startedAt,
+        });
+        throw error.userError;
+      }
+      throw error;
+    }
 
     const items = normalizePhotoParseItems(scene, generation.items);
+    const averageConfidence = getAverageConfidence(items);
 
     await this.prisma.inventoryPhotoParseEvent.create({
       data: {
@@ -85,9 +108,16 @@ export class InventoryPhotoParseService {
         spaceId: params.spaceId,
         scene,
         itemCount: items.length,
+        reviewItemCount: items.filter((item) => item.needsReview).length,
+        averageConfidence:
+          averageConfidence === null
+            ? null
+            : new Prisma.Decimal(averageConfidence.toFixed(4)),
         aiProvider: "openai",
         aiModel: generation.model,
         promptVersion: PROMPT_VERSION,
+        status: "succeeded",
+        durationMs: Date.now() - startedAt,
         inputTokens: generation.usage.inputTokens,
         cachedInputTokens: generation.usage.cachedInputTokens,
         outputTokens: generation.usage.outputTokens,
@@ -102,22 +132,30 @@ export class InventoryPhotoParseService {
   private async recognizeItems(
     scene: InventoryPhotoParseScene,
     image: { buffer: Buffer; mimeType: string },
+    model: string,
+    ownerKey: string,
   ) {
     const apiKey = process.env.OPENAI_API_KEY?.trim();
     if (!apiKey) {
-      throw new ServiceUnavailableException(
-        "지금은 사진을 읽기 어려워요. 조금 뒤에 다시 시도해 주세요.",
+      throw new PhotoParseGenerationError(
+        "provider_config",
+        emptyUsage(),
+        new ServiceUnavailableException(
+          "지금은 사진을 읽기 어려워요. 조금 뒤에 다시 시도해 주세요.",
+        ),
       );
     }
 
-    const model = process.env.INVENTORY_PHOTO_PARSE_MODEL?.trim() || DEFAULT_MODEL;
     const client = new OpenAI({ apiKey });
     const dataUrl = `data:${image.mimeType};base64,${image.buffer.toString("base64")}`;
 
     try {
+      const reasoning = getOpenAiReasoning(model);
       const response = await client.responses.parse({
         model,
         instructions: buildInstructions(scene),
+        ...(reasoning ? { reasoning } : {}),
+        safety_identifier: hashValue(ownerKey),
         max_output_tokens: getNonNegativeIntegerEnv(
           "INVENTORY_PHOTO_PARSE_MAX_OUTPUT_TOKENS",
           DEFAULT_MAX_OUTPUT_TOKENS,
@@ -155,42 +193,137 @@ export class InventoryPhotoParseService {
         },
       });
 
+      const usage = normalizeUsage(response.usage);
+
       if (hasOpenAiRefusal(response.output)) {
-        throw new Error("OpenAI refused the photo parse request.");
+        throw new PhotoParseAttemptError(
+          "refusal",
+          usage,
+          "OpenAI refused the photo parse request.",
+        );
       }
       if (response.status === "incomplete") {
-        throw new Error(
+        throw new PhotoParseAttemptError(
+          "incomplete",
+          usage,
           `OpenAI returned an incomplete photo parse: ${response.incomplete_details?.reason ?? "unknown_reason"}`,
         );
       }
       const parsed = response.output_parsed;
       if (!parsed) {
-        throw new Error("OpenAI response did not include parsed output.");
+        throw new PhotoParseAttemptError(
+          "missing_output",
+          usage,
+          "OpenAI response did not include parsed output.",
+        );
       }
 
-      const payload = inventoryPhotoParseVisionPayloadSchema.parse(parsed);
-      const usage = normalizeUsage(response.usage);
+      const payload = inventoryPhotoParseVisionPayloadSchema.safeParse(parsed);
+      if (!payload.success) {
+        throw new PhotoParseAttemptError(
+          "schema_validation",
+          usage,
+          "OpenAI photo parse output failed schema validation.",
+        );
+      }
       return {
-        items: payload.items,
+        items: payload.data.items,
         model,
         usage,
-        estimatedCostUsd: calculateCostUsd(usage),
+        estimatedCostUsd: calculateOpenAiCostUsd(usage, model),
       };
     } catch (error) {
       this.logger.warn(
         `Photo parse failed for scene=${scene} bytes=${image.buffer.length} hash=${hashBuffer(image.buffer)}`,
       );
-      if (
-        error instanceof BadRequestException ||
-        error instanceof ServiceUnavailableException ||
-        error instanceof PayloadTooLargeException
-      ) {
-        throw error;
-      }
-      throw new BadGatewayException(
-        "사진을 읽지 못했어요. 조금 뒤에 다시 찍어 볼까요?",
+      const detail = error instanceof Error ? error.message : "";
+      const failureCode =
+        error instanceof PhotoParseAttemptError
+          ? error.failureCode
+          : /api key|invalid_api_key|model|does not exist|404|401|429/i.test(
+                detail,
+              )
+            ? "provider_config"
+            : "provider_error";
+      throw new PhotoParseGenerationError(
+        failureCode,
+        error instanceof PhotoParseAttemptError ? error.usage : emptyUsage(),
+        new BadGatewayException(
+          "사진을 읽지 못했어요. 조금 뒤에 다시 찍어 볼까요?",
+        ),
       );
     }
+  }
+
+  private async recordFailedParse(input: {
+    ownerKey: string;
+    spaceId?: string;
+    scene: InventoryPhotoParseScene;
+    model: string;
+    failureCode: PhotoParseFailureCode;
+    usage: OpenAiTokenUsage & { totalTokens: number };
+    estimatedCostUsd: number;
+    durationMs: number;
+  }) {
+    try {
+      await this.prisma.inventoryPhotoParseEvent.create({
+        data: {
+          ownerKey: input.ownerKey,
+          spaceId: input.spaceId,
+          scene: input.scene,
+          itemCount: 0,
+          reviewItemCount: 0,
+          aiProvider: "openai",
+          aiModel: input.model,
+          promptVersion: PROMPT_VERSION,
+          status: "failed",
+          failureCode: input.failureCode,
+          durationMs: input.durationMs,
+          inputTokens: input.usage.inputTokens,
+          cachedInputTokens: input.usage.cachedInputTokens,
+          outputTokens: input.usage.outputTokens,
+          totalTokens: input.usage.totalTokens,
+          estimatedCostUsd: toCostDecimal(input.estimatedCostUsd),
+        },
+      });
+    } catch (observabilityError) {
+      this.logger.error(
+        "Failed to persist inventory photo parse telemetry",
+        observabilityError instanceof Error
+          ? observabilityError.stack
+          : String(observabilityError),
+      );
+    }
+  }
+}
+
+type PhotoParseFailureCode =
+  | "refusal"
+  | "incomplete"
+  | "missing_output"
+  | "schema_validation"
+  | "provider_config"
+  | "provider_error";
+
+class PhotoParseAttemptError extends Error {
+  constructor(
+    readonly failureCode: PhotoParseFailureCode,
+    readonly usage: OpenAiTokenUsage & { totalTokens: number },
+    message: string,
+  ) {
+    super(message);
+    this.name = "PhotoParseAttemptError";
+  }
+}
+
+class PhotoParseGenerationError extends Error {
+  constructor(
+    readonly failureCode: PhotoParseFailureCode,
+    readonly usage: OpenAiTokenUsage & { totalTokens: number },
+    readonly userError: BadGatewayException | ServiceUnavailableException,
+  ) {
+    super(userError.message);
+    this.name = "PhotoParseGenerationError";
   }
 }
 
@@ -266,18 +399,22 @@ function normalizeUsage(usage: ResponseUsage | undefined) {
   };
 }
 
-function calculateCostUsd(usage: {
-  inputTokens: number;
-  cachedInputTokens: number;
-  outputTokens: number;
-}) {
-  const uncached = Math.max(usage.inputTokens - usage.cachedInputTokens, 0);
-  const cost =
-    (uncached * FALLBACK_PRICING.inputUsdPerMillion +
-      usage.cachedInputTokens * FALLBACK_PRICING.cachedInputUsdPerMillion +
-      usage.outputTokens * FALLBACK_PRICING.outputUsdPerMillion) /
-    1_000_000;
-  return Math.round(cost * 1_000_000) / 1_000_000;
+function emptyUsage() {
+  return {
+    inputTokens: 0,
+    cachedInputTokens: 0,
+    outputTokens: 0,
+    totalTokens: 0,
+  };
+}
+
+function getAverageConfidence(items: Array<{ confidence: number }>) {
+  if (items.length === 0) {
+    return null;
+  }
+  return (
+    items.reduce((sum, item) => sum + item.confidence, 0) / items.length
+  );
 }
 
 function toCostDecimal(value: number) {
@@ -310,6 +447,10 @@ function hashBuffer(buffer: Buffer) {
     .update(Uint8Array.from(buffer.subarray(0, 64)))
     .digest("hex")
     .slice(0, 12);
+}
+
+function hashValue(value: string) {
+  return createHash("sha256").update(value).digest("hex");
 }
 
 function getNonNegativeIntegerEnv(name: string, fallback: number) {

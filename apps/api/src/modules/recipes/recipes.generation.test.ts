@@ -9,6 +9,7 @@ import { BadGatewayException } from "@nestjs/common";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const parseMock = vi.hoisted(() => vi.fn());
+const eventCreateMock = vi.hoisted(() => vi.fn());
 vi.mock("openai", () => ({
   default: class OpenAiMock {
     responses = { parse: parseMock };
@@ -82,7 +83,26 @@ function response(dishes: RecipeRecommendationDish[], input = 10, output = 20) {
 describe("RecipesService semantic repair", () => {
   afterEach(() => {
     parseMock.mockReset();
+    eventCreateMock.mockReset();
     delete process.env.OPENAI_API_KEY;
+  });
+
+  it("sends the Terra candidate with explicit none reasoning", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    parseMock.mockResolvedValueOnce(response(recommendations(2), 10, 20));
+
+    await generate(createService(), {
+      model: "gpt-5.6-terra",
+      variant: "candidate",
+    });
+
+    expect(parseMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: "gpt-5.6-terra",
+        reasoning: { effort: "none" },
+        metadata: expect.objectContaining({ variant: "candidate" }),
+      }),
+    );
   });
 
   it("repairs once and aggregates both attempts", async () => {
@@ -139,6 +159,20 @@ describe("RecipesService semantic repair", () => {
       BadGatewayException,
     );
     expect(parseMock).toHaveBeenCalledTimes(2);
+    expect(eventCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          status: "failed",
+          failureCode: "semantic_validation",
+          inputTokens: 20,
+          cachedInputTokens: 4,
+          outputTokens: 40,
+          generationAttempts: 2,
+          repairApplied: true,
+          durationMs: expect.any(Number),
+        }),
+      }),
+    );
   });
 
   it("handles an explicit refusal", async () => {
@@ -146,9 +180,26 @@ describe("RecipesService semantic repair", () => {
     parseMock.mockResolvedValue({
       output: [{ type: "message", content: [{ type: "refusal", refusal: "no" }] }],
       output_parsed: null,
+      usage: {
+        input_tokens: 30,
+        input_tokens_details: { cached_tokens: 5 },
+        output_tokens: 4,
+        total_tokens: 34,
+      },
     });
     await expect(generate(createService())).rejects.toBeInstanceOf(
       BadGatewayException,
+    );
+    expect(eventCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          status: "failed",
+          failureCode: "refusal",
+          inputTokens: 30,
+          cachedInputTokens: 5,
+          outputTokens: 4,
+        }),
+      }),
     );
   });
 
@@ -164,11 +215,23 @@ describe("RecipesService semantic repair", () => {
       BadGatewayException,
     );
     expect(parseMock).toHaveBeenCalledTimes(1);
+    expect(eventCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          status: "failed",
+          failureCode: "incomplete",
+          durationMs: expect.any(Number),
+        }),
+      }),
+    );
   });
 });
 
 function createService() {
-  const prisma = { recipeRecommendation: { aggregate: vi.fn() } };
+  const prisma = {
+    recipeRecommendation: { aggregate: vi.fn() },
+    recipeAiGenerationEvent: { create: eventCreateMock.mockResolvedValue({}) },
+  };
   return new RecipesService(
     prisma as never,
     {} as never,
@@ -178,7 +241,13 @@ function createService() {
   );
 }
 
-function generate(service: RecipesService) {
+function generate(
+  service: RecipesService,
+  modelSelection: {
+    model: string;
+    variant: "control" | "candidate";
+  } = { model: "gpt-5.4-mini", variant: "control" },
+) {
   return (
     service as unknown as {
       generateRecommendations: (
@@ -191,6 +260,11 @@ function generate(service: RecipesService) {
           dismissedDishTitles: string[];
           recentDishTitles: string[];
         },
+        modelSelection: {
+          model: string;
+          variant: "control" | "candidate";
+        },
+        spaceId?: string,
       ) => Promise<{
         recommendations: RecipeRecommendationDish[];
         usage: {
@@ -202,11 +276,19 @@ function generate(service: RecipesService) {
         estimatedCostUsd: number;
         generationAttempts: number;
         repairApplied: boolean;
+        durationMs: number;
       }>;
     }
-  ).generateRecommendations("owner-a", request, inventory, preference, {
-    positiveDishTitles: [],
-    dismissedDishTitles: [],
-    recentDishTitles: [],
-  });
+  ).generateRecommendations(
+    "owner-a",
+    request,
+    inventory,
+    preference,
+    {
+      positiveDishTitles: [],
+      dismissedDishTitles: [],
+      recentDishTitles: [],
+    },
+    modelSelection,
+  );
 }

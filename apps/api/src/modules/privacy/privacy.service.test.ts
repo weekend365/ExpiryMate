@@ -99,6 +99,7 @@ describe("PrivacyService", () => {
     });
     expect(operations).toContain("recipeFavorite.deleteMany");
     expect(operations).toContain("recipeDishEngagement.deleteMany");
+    expect(operations).toContain("recipeAiGenerationEvent.deleteMany");
     expect(operations).toContain("recipeRecommendation.deleteMany");
   });
 
@@ -144,6 +145,7 @@ describe("PrivacyService", () => {
       "barcodeRewardCredit.deleteMany",
       "monetizationFunnelEvent.deleteMany",
       "inventoryPhotoParseEvent.deleteMany",
+      "recipeAiGenerationEvent.deleteMany",
       "recipeRecommendation.deleteMany",
       "spaceInvitation.deleteMany",
       "inventorySpaceMembership.deleteMany",
@@ -258,6 +260,10 @@ function createPrismaMock(
     ),
     inventoryPhotoParseEvent: createDeleteManyMock(
       "inventoryPhotoParseEvent.deleteMany",
+      operations,
+    ),
+    recipeAiGenerationEvent: createDeleteManyMock(
+      "recipeAiGenerationEvent.deleteMany",
       operations,
     ),
     recipeRecommendation: createDeleteManyMock(

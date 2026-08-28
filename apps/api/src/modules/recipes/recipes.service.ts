@@ -38,10 +38,18 @@ import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import { PrismaService } from "../../database/prisma.service";
 import { CodedHttpException } from "../../common/coded-http.exception";
+import {
+  calculateOpenAiCostUsd,
+  getOpenAiReasoning,
+} from "../../common/openai-model-config";
 import { MonetizationService } from "../monetization/monetization.service";
 import { PrivacyService } from "../privacy/privacy.service";
 import { SettingsService } from "../settings/settings.service";
 import { RecipePolicyService } from "./recipe-policy.service";
+import {
+  selectRecipeModel,
+  type RecipeModelSelection,
+} from "./recipe-model-rollout";
 import {
   isCandidateBlocked,
   MAX_RECIPE_INGREDIENTS,
@@ -57,8 +65,6 @@ import {
 } from "./recipe-validation";
 
 const PROMPT_VERSION = "recipe-recommendation-v5";
-const DEFAULT_MODEL = "gpt-5-mini";
-
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -74,6 +80,7 @@ interface RecipeRecommendationGeneration {
   estimatedCostUsd: number;
   generationAttempts: number;
   repairApplied: boolean;
+  durationMs: number;
 }
 
 interface RecipePersonalizationContext {
@@ -82,31 +89,24 @@ interface RecipePersonalizationContext {
   recentDishTitles: string[];
 }
 
-interface ModelPricing {
-  inputUsdPerMillion: number;
-  cachedInputUsdPerMillion: number;
-  outputUsdPerMillion: number;
+type RecipeGenerationFailureCode =
+  | "refusal"
+  | "incomplete"
+  | "missing_output"
+  | "schema_validation"
+  | "semantic_validation"
+  | "provider_config"
+  | "provider_error";
+
+class RecipeGenerationFailure extends Error {
+  constructor(
+    readonly failureCode: RecipeGenerationFailureCode,
+    message: string,
+  ) {
+    super(message);
+    this.name = "RecipeGenerationFailure";
+  }
 }
-
-const FALLBACK_MODEL_PRICING: ModelPricing = {
-  inputUsdPerMillion: 0.25,
-  cachedInputUsdPerMillion: 0.025,
-  outputUsdPerMillion: 2,
-};
-
-const MODEL_PRICING_BY_PREFIX: Array<[string, ModelPricing]> = [
-  ["gpt-5.4-mini", { inputUsdPerMillion: 0.75, cachedInputUsdPerMillion: 0.075, outputUsdPerMillion: 4.5 }],
-  ["gpt-5.4-nano", { inputUsdPerMillion: 0.2, cachedInputUsdPerMillion: 0.02, outputUsdPerMillion: 1.2 }],
-  ["gpt-5.4", { inputUsdPerMillion: 2.5, cachedInputUsdPerMillion: 0.25, outputUsdPerMillion: 20 }],
-  ["gpt-5-mini", FALLBACK_MODEL_PRICING],
-  ["gpt-5-nano", { inputUsdPerMillion: 0.05, cachedInputUsdPerMillion: 0.005, outputUsdPerMillion: 0.4 }],
-  ["gpt-5", { inputUsdPerMillion: 1.25, cachedInputUsdPerMillion: 0.125, outputUsdPerMillion: 10 }],
-  ["gpt-4.1-mini", { inputUsdPerMillion: 0.4, cachedInputUsdPerMillion: 0.1, outputUsdPerMillion: 1.6 }],
-  ["gpt-4.1-nano", { inputUsdPerMillion: 0.1, cachedInputUsdPerMillion: 0.025, outputUsdPerMillion: 0.4 }],
-  ["gpt-4.1", { inputUsdPerMillion: 2, cachedInputUsdPerMillion: 0.5, outputUsdPerMillion: 8 }],
-  ["gpt-4o-mini", { inputUsdPerMillion: 0.15, cachedInputUsdPerMillion: 0.075, outputUsdPerMillion: 0.6 }],
-  ["gpt-4o", { inputUsdPerMillion: 2.5, cachedInputUsdPerMillion: 1.25, outputUsdPerMillion: 10 }],
-];
 
 const nonFoodCategories = new Set<ProductCategory>([
   ProductCategory.personal_care,
@@ -162,9 +162,13 @@ export class RecipesService {
       );
     }
 
-    const model = this.getModel();
+    const modelSelection = selectRecipeModel(ownerKey);
     const projectedCostUsd = roundCost(
-      estimateGenerationCostUsd(request, inventorySnapshot, model) * 2.2,
+      estimateGenerationCostUsd(
+        request,
+        inventorySnapshot,
+        modelSelection.model,
+      ) * 2.2,
     );
     await this.recipePolicy.enforceDailyCostLimit(
       ownerKey,
@@ -195,28 +199,54 @@ export class RecipesService {
           inventorySnapshot,
           preference,
           personalization,
+          modelSelection,
+          spaceId,
         ),
       );
-      const record = await this.prisma.recipeRecommendation.create({
-        data: {
-          ownerKey,
-          spaceId,
-          requestCacheKey: null,
-          request: toJson(request),
-          inventorySnapshot: toJson(inventorySnapshot),
-          recommendations: toJson(generation.recommendations),
-          aiProvider: "openai",
-          aiModel: model,
-          promptVersion: PROMPT_VERSION,
-          inputTokens: generation.usage.inputTokens,
-          cachedInputTokens: generation.usage.cachedInputTokens,
-          outputTokens: generation.usage.outputTokens,
-          totalTokens: generation.usage.totalTokens,
-          estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
-          generationAttempts: generation.generationAttempts,
-          repairApplied: generation.repairApplied,
-          selectionVersion: RECIPE_SELECTION_VERSION,
-        },
+      const record = await this.prisma.$transaction(async (tx) => {
+        const created = await tx.recipeRecommendation.create({
+          data: {
+            ownerKey,
+            spaceId,
+            requestCacheKey: null,
+            request: toJson(request),
+            inventorySnapshot: toJson(inventorySnapshot),
+            recommendations: toJson(generation.recommendations),
+            aiProvider: "openai",
+            aiModel: modelSelection.model,
+            promptVersion: PROMPT_VERSION,
+            inputTokens: generation.usage.inputTokens,
+            cachedInputTokens: generation.usage.cachedInputTokens,
+            outputTokens: generation.usage.outputTokens,
+            totalTokens: generation.usage.totalTokens,
+            estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
+            generationAttempts: generation.generationAttempts,
+            repairApplied: generation.repairApplied,
+            selectionVersion: RECIPE_SELECTION_VERSION,
+          },
+        });
+        await tx.recipeAiGenerationEvent.create({
+          data: {
+            ownerKey,
+            spaceId,
+            recommendationId: created.id,
+            variant: modelSelection.variant,
+            aiProvider: "openai",
+            aiModel: modelSelection.model,
+            reasoningEffort: getOpenAiReasoning(modelSelection.model)?.effort ?? "none",
+            promptVersion: PROMPT_VERSION,
+            status: "succeeded",
+            inputTokens: generation.usage.inputTokens,
+            cachedInputTokens: generation.usage.cachedInputTokens,
+            outputTokens: generation.usage.outputTokens,
+            totalTokens: generation.usage.totalTokens,
+            estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
+            generationAttempts: generation.generationAttempts,
+            repairApplied: generation.repairApplied,
+            durationMs: generation.durationMs,
+          },
+        });
+        return created;
       });
       await this.monetization.completeRecommendation(
         reservation.usageEventId,
@@ -566,14 +596,13 @@ export class RecipesService {
     inventorySnapshot: RecipeInventorySnapshotItem[],
     preference: RecipePreference,
     personalization: RecipePersonalizationContext,
+    modelSelection: RecipeModelSelection,
+    spaceId?: string,
   ): Promise<RecipeRecommendationGeneration> {
-    const apiKey = process.env.OPENAI_API_KEY;
-
-    if (!apiKey) {
-      throw new ServiceUnavailableException("OpenAI API 키가 설정되지 않았습니다.");
-    }
-
-    const model = this.getModel();
+    const startedAt = Date.now();
+    let usage = emptyUsage();
+    let generationAttempts = 0;
+    let repairApplied = false;
     const instructions = buildInstructions();
     const input = buildInput(
       request,
@@ -581,14 +610,20 @@ export class RecipesService {
       preference,
       personalization,
     );
-    const client = new OpenAI({ apiKey });
-
     try {
+      const apiKey = process.env.OPENAI_API_KEY;
+      if (!apiKey) {
+        throw new ServiceUnavailableException("OpenAI API 키가 설정되지 않았습니다.");
+      }
+      const client = new OpenAI({ apiKey });
       const run = async (requestInput: string, attempt: number) => {
+        generationAttempts = Math.max(generationAttempts, attempt);
+        const reasoning = getOpenAiReasoning(modelSelection.model);
         const response = await client.responses.parse({
-          model,
+          model: modelSelection.model,
           instructions,
           input: requestInput,
+          ...(reasoning ? { reasoning } : {}),
           max_output_tokens: getNonNegativeIntegerEnv(
             "RECIPE_AI_MAX_OUTPUT_TOKENS",
             DEFAULT_MAX_OUTPUT_TOKENS,
@@ -599,6 +634,7 @@ export class RecipesService {
             feature: "recipe_recommendation",
             promptVersion: PROMPT_VERSION,
             attempt: String(attempt),
+            variant: modelSelection.variant,
           },
           text: {
             format: zodTextFormat(
@@ -609,34 +645,47 @@ export class RecipesService {
           },
         });
 
+        const attemptUsage = normalizeUsage(
+          response.usage,
+          instructions,
+          requestInput,
+          response.output_parsed,
+        );
+        usage = combineUsage(usage, attemptUsage);
+
         if (hasOpenAiRefusal(response.output)) {
-          throw new Error("OpenAI refused the recipe generation request.");
+          throw new RecipeGenerationFailure(
+            "refusal",
+            "OpenAI refused the recipe generation request.",
+          );
         }
         if (response.status === "incomplete") {
-          throw new Error(
+          throw new RecipeGenerationFailure(
+            "incomplete",
             `OpenAI returned an incomplete recipe response: ${response.incomplete_details?.reason ?? "unknown_reason"}`,
           );
         }
         const parsed = response.output_parsed;
         if (!parsed) {
-          throw new Error("OpenAI response did not include parsed output.");
+          throw new RecipeGenerationFailure(
+            "missing_output",
+            "OpenAI response did not include parsed output.",
+          );
         }
-        const recommendations =
-          generatedRecipeRecommendationsPayloadSchema.parse(parsed).recommendations;
-        return {
-          recommendations,
-          usage: normalizeUsage(
-            response.usage,
-            instructions,
-            requestInput,
-            parsed,
-          ),
-        };
+        const parsedRecommendations =
+          generatedRecipeRecommendationsPayloadSchema.safeParse(parsed);
+        if (!parsedRecommendations.success) {
+          throw new RecipeGenerationFailure(
+            "schema_validation",
+            "OpenAI recipe output failed schema validation.",
+          );
+        }
+        return parsedRecommendations.data.recommendations;
       };
 
       const first = await run(input, 1);
       const firstValidation = validateAlignedRecommendations(
-        first.recommendations,
+        first,
         request,
         inventorySnapshot,
         preference,
@@ -644,50 +693,49 @@ export class RecipesService {
       if (firstValidation.valid) {
         return {
           recommendations: firstValidation.recommendations,
-          usage: first.usage,
-          estimatedCostUsd: calculateCostUsd(
-            first.usage,
-            getModelPricing(model),
+          usage,
+          estimatedCostUsd: calculateOpenAiCostUsd(
+            usage,
+            modelSelection.model,
           ),
-          generationAttempts: 1,
-          repairApplied: false,
+          generationAttempts,
+          repairApplied,
+          durationMs: Date.now() - startedAt,
         };
       }
 
+      repairApplied = true;
       this.logger.warn(
         `Recipe semantic validation requested repair: ${firstValidation.violations.join(",")}`,
       );
       const repairInput = buildRepairInput(
         input,
-        first.recommendations,
+        first,
         firstValidation.violations,
       );
       const second = await run(repairInput, 2);
       const secondValidation = validateAlignedRecommendations(
-        second.recommendations,
+        second,
         request,
         inventorySnapshot,
         preference,
       );
       if (!secondValidation.valid) {
-        throw new Error(
+        throw new RecipeGenerationFailure(
+          "semantic_validation",
           `Recipe semantic validation failed after repair: ${secondValidation.violations.join(",")}`,
         );
       }
 
-      const usage = combineUsage(first.usage, second.usage);
       return {
         recommendations: secondValidation.recommendations,
         usage,
-        estimatedCostUsd: calculateCostUsd(usage, getModelPricing(model)),
-        generationAttempts: 2,
-        repairApplied: true,
+        estimatedCostUsd: calculateOpenAiCostUsd(usage, modelSelection.model),
+        generationAttempts,
+        repairApplied,
+        durationMs: Date.now() - startedAt,
       };
     } catch (error) {
-      if (error instanceof ServiceUnavailableException) {
-        throw error;
-      }
-
       this.logger.error(
         "Recipe generation failed",
         error instanceof Error ? error.stack : String(error),
@@ -699,11 +747,78 @@ export class RecipesService {
         error instanceof Error ? error.message.trim().slice(0, 160) : "";
       const looksLikeConfigIssue =
         /api key|invalid_api_key|model|does not exist|404|401|429/i.test(detail);
+      await this.recordFailedGeneration({
+        ownerKey,
+        spaceId,
+        modelSelection,
+        failureCode:
+          error instanceof RecipeGenerationFailure
+            ? error.failureCode
+            : looksLikeConfigIssue || error instanceof ServiceUnavailableException
+              ? "provider_config"
+              : "provider_error",
+        usage,
+        estimatedCostUsd: calculateOpenAiCostUsd(
+          usage,
+          modelSelection.model,
+        ),
+        generationAttempts,
+        repairApplied,
+        durationMs: Date.now() - startedAt,
+      });
+
+      if (error instanceof ServiceUnavailableException) {
+        throw error;
+      }
 
       throw new BadGatewayException(
         looksLikeConfigIssue
           ? "요리 추천 설정에 문제가 있어요. 잠시 후 다시 부탁하거나, 관리자에게 알려 주세요."
           : "요리 추천을 생성하지 못했습니다.",
+      );
+    }
+  }
+
+  private async recordFailedGeneration(input: {
+    ownerKey: string;
+    spaceId?: string;
+    modelSelection: RecipeModelSelection;
+    failureCode: RecipeGenerationFailureCode;
+    usage: RecipeRecommendationUsage;
+    estimatedCostUsd: number;
+    generationAttempts: number;
+    repairApplied: boolean;
+    durationMs: number;
+  }) {
+    try {
+      await this.prisma.recipeAiGenerationEvent.create({
+        data: {
+          ownerKey: input.ownerKey,
+          spaceId: input.spaceId,
+          variant: input.modelSelection.variant,
+          aiProvider: "openai",
+          aiModel: input.modelSelection.model,
+          reasoningEffort:
+            getOpenAiReasoning(input.modelSelection.model)?.effort ?? "none",
+          promptVersion: PROMPT_VERSION,
+          status: "failed",
+          failureCode: input.failureCode,
+          inputTokens: input.usage.inputTokens,
+          cachedInputTokens: input.usage.cachedInputTokens,
+          outputTokens: input.usage.outputTokens,
+          totalTokens: input.usage.totalTokens,
+          estimatedCostUsd: toCostDecimal(input.estimatedCostUsd),
+          generationAttempts: input.generationAttempts,
+          repairApplied: input.repairApplied,
+          durationMs: input.durationMs,
+        },
+      });
+    } catch (observabilityError) {
+      this.logger.error(
+        "Failed to persist recipe AI generation telemetry",
+        observabilityError instanceof Error
+          ? observabilityError.stack
+          : String(observabilityError),
       );
     }
   }
@@ -749,9 +864,6 @@ export class RecipesService {
     };
   }
 
-  private getModel() {
-    return process.env.RECIPE_AI_MODEL ?? DEFAULT_MODEL;
-  }
 }
 
 function recipeScope(ownerKey: string, spaceId?: string) {
@@ -876,7 +988,7 @@ function estimateGenerationCostUsd(
   };
   usage.totalTokens = usage.inputTokens + usage.outputTokens;
 
-  return calculateCostUsd(usage, getModelPricing(model));
+  return calculateOpenAiCostUsd(usage, model);
 }
 
 function normalizeUsage(
@@ -912,6 +1024,15 @@ function combineUsage(
     cachedInputTokens: first.cachedInputTokens + second.cachedInputTokens,
     outputTokens: first.outputTokens + second.outputTokens,
     totalTokens: first.totalTokens + second.totalTokens,
+  };
+}
+
+function emptyUsage(): RecipeRecommendationUsage {
+  return {
+    inputTokens: 0,
+    cachedInputTokens: 0,
+    outputTokens: 0,
+    totalTokens: 0,
   };
 }
 
@@ -967,50 +1088,6 @@ function serializeDishEngagement(engagement: EngagementRecord) {
     favoritedAt: engagement.favoritedAt?.toISOString() ?? null,
     updatedAt: engagement.updatedAt.toISOString(),
   });
-}
-
-function calculateCostUsd(
-  usage: RecipeRecommendationUsage,
-  pricing: ModelPricing,
-) {
-  const uncachedInputTokens = Math.max(
-    usage.inputTokens - usage.cachedInputTokens,
-    0,
-  );
-  const cost =
-    (uncachedInputTokens * pricing.inputUsdPerMillion +
-      usage.cachedInputTokens * pricing.cachedInputUsdPerMillion +
-      usage.outputTokens * pricing.outputUsdPerMillion) /
-    1_000_000;
-
-  return roundCost(cost);
-}
-
-function getModelPricing(model: string): ModelPricing {
-  const basePricing = resolveModelPricing(model);
-
-  return {
-    inputUsdPerMillion: getNonNegativeNumberEnv(
-      "RECIPE_AI_INPUT_COST_PER_1M_TOKENS",
-      basePricing.inputUsdPerMillion,
-    ),
-    cachedInputUsdPerMillion: getNonNegativeNumberEnv(
-      "RECIPE_AI_CACHED_INPUT_COST_PER_1M_TOKENS",
-      basePricing.cachedInputUsdPerMillion,
-    ),
-    outputUsdPerMillion: getNonNegativeNumberEnv(
-      "RECIPE_AI_OUTPUT_COST_PER_1M_TOKENS",
-      basePricing.outputUsdPerMillion,
-    ),
-  };
-}
-
-function resolveModelPricing(model: string) {
-  const match = MODEL_PRICING_BY_PREFIX.find(
-    ([prefix]) => model === prefix || model.startsWith(`${prefix}-`),
-  );
-
-  return match ? match[1] : FALLBACK_MODEL_PRICING;
 }
 
 function estimateTokenCount(text: string) {

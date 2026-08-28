@@ -1,3 +1,5 @@
+import { isKnownOpenAiModel } from "../common/openai-model-config";
+
 type EnvMap = NodeJS.ProcessEnv;
 
 const PLACEHOLDER_VALUES = new Set([
@@ -259,6 +261,38 @@ function validateOpenAi(env: EnvMap, errors: string[]) {
 
   if (looksLikePlaceholder(value) || value === "sk-...") {
     errors.push("OPENAI_API_KEY must not use a placeholder value.");
+  }
+
+  const recipeModel = env.RECIPE_AI_MODEL?.trim() || "gpt-5.4-mini";
+  const photoModel =
+    env.INVENTORY_PHOTO_PARSE_MODEL?.trim() || "gpt-5.6-luna";
+  const candidateModel = env.RECIPE_AI_CANDIDATE_MODEL?.trim();
+  const candidatePercentRaw = env.RECIPE_AI_CANDIDATE_PERCENT?.trim() || "0";
+  const candidatePercent = Number(candidatePercentRaw);
+
+  if (isRecipeAiEnabled(env) && !isKnownOpenAiModel(recipeModel)) {
+    errors.push(`RECIPE_AI_MODEL has unsupported pricing: ${recipeModel}.`);
+  }
+  if (isInventoryPhotoParseEnabled(env) && !isKnownOpenAiModel(photoModel)) {
+    errors.push(
+      `INVENTORY_PHOTO_PARSE_MODEL has unsupported pricing: ${photoModel}.`,
+    );
+  }
+  if (
+    !Number.isInteger(candidatePercent) ||
+    candidatePercent < 0 ||
+    candidatePercent > 100
+  ) {
+    errors.push("RECIPE_AI_CANDIDATE_PERCENT must be an integer from 0 to 100.");
+  } else if (candidatePercent > 0 && !candidateModel) {
+    errors.push(
+      "RECIPE_AI_CANDIDATE_MODEL is required when RECIPE_AI_CANDIDATE_PERCENT is greater than 0.",
+    );
+  }
+  if (candidateModel && !isKnownOpenAiModel(candidateModel)) {
+    errors.push(
+      `RECIPE_AI_CANDIDATE_MODEL has unsupported pricing: ${candidateModel}.`,
+    );
   }
 }
 

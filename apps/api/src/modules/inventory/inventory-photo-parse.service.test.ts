@@ -52,6 +52,7 @@ function visionItems() {
 describe("InventoryPhotoParseService", () => {
   const originalEnabled = process.env.INVENTORY_PHOTO_PARSE_ENABLED;
   const originalKey = process.env.OPENAI_API_KEY;
+  const originalModel = process.env.INVENTORY_PHOTO_PARSE_MODEL;
   let prisma: {
     inventoryPhotoParseEvent: {
       create: ReturnType<typeof vi.fn>;
@@ -71,6 +72,7 @@ describe("InventoryPhotoParseService", () => {
   beforeEach(() => {
     process.env.INVENTORY_PHOTO_PARSE_ENABLED = "true";
     process.env.OPENAI_API_KEY = "test-key";
+    delete process.env.INVENTORY_PHOTO_PARSE_MODEL;
     parseMock.mockReset();
     prisma = {
       inventoryPhotoParseEvent: {
@@ -98,6 +100,7 @@ describe("InventoryPhotoParseService", () => {
   afterEach(() => {
     process.env.INVENTORY_PHOTO_PARSE_ENABLED = originalEnabled;
     process.env.OPENAI_API_KEY = originalKey;
+    process.env.INVENTORY_PHOTO_PARSE_MODEL = originalModel;
   });
 
   it("rejects when the feature flag is off", async () => {
@@ -169,12 +172,87 @@ describe("InventoryPhotoParseService", () => {
     expect(result.scene).toBe("receipt");
     expect(result.items.map((item) => item.displayName)).toEqual(["서울우유"]);
     expect(result.items[0]?.quantity).toBe(2);
+    expect(parseMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: "gpt-5.6-luna",
+        reasoning: { effort: "none" },
+        safety_identifier: expect.stringMatching(/^[a-f0-9]{64}$/),
+      }),
+    );
     expect(prisma.inventoryPhotoParseEvent.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           ownerKey: "user-1",
           scene: "receipt",
           itemCount: 1,
+          reviewItemCount: 1,
+          status: "succeeded",
+        }),
+      }),
+    );
+    const eventData = prisma.inventoryPhotoParseEvent.create.mock.calls[0]?.[0]
+      ?.data as {
+      averageConfidence: { toString(): string };
+      estimatedCostUsd: { toString(): string };
+    };
+    expect(eventData.averageConfidence.toString()).toBe("0.92");
+    expect(eventData.estimatedCostUsd.toString()).toBe("0.000304");
+  });
+
+  it("omits reasoning when rolling photo parsing back to GPT-4.1", async () => {
+    process.env.INVENTORY_PHOTO_PARSE_MODEL = "gpt-4.1-mini";
+    parseMock.mockResolvedValue({
+      output: [],
+      status: "completed",
+      output_parsed: { items: visionItems().slice(0, 1) },
+      usage: {
+        input_tokens: 800,
+        input_tokens_details: { cached_tokens: 0 },
+        output_tokens: 120,
+        total_tokens: 920,
+      },
+    });
+
+    await service.parsePhoto({
+      ownerKey: "user-1",
+      scene: "receipt",
+      file: { buffer: jpeg, mimetype: "image/jpeg" },
+    });
+
+    const request = parseMock.mock.calls[0]?.[0] as Record<string, unknown>;
+    expect(request.model).toBe("gpt-4.1-mini");
+    expect(request).not.toHaveProperty("reasoning");
+  });
+
+  it("records failed Luna parses with partial usage", async () => {
+    parseMock.mockResolvedValue({
+      output: [{ type: "message", content: [{ type: "refusal" }] }],
+      status: "completed",
+      output_parsed: null,
+      usage: {
+        input_tokens: 700,
+        input_tokens_details: { cached_tokens: 0 },
+        output_tokens: 10,
+        total_tokens: 710,
+      },
+    });
+
+    await expect(
+      service.parsePhoto({
+        ownerKey: "user-1",
+        scene: "receipt",
+        file: { buffer: jpeg, mimetype: "image/jpeg" },
+      }),
+    ).rejects.toBeInstanceOf(Error);
+
+    expect(prisma.inventoryPhotoParseEvent.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          aiModel: "gpt-5.6-luna",
+          status: "failed",
+          failureCode: "refusal",
+          inputTokens: 700,
+          outputTokens: 10,
         }),
       }),
     );

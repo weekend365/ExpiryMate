@@ -79,13 +79,12 @@ export class RecipePolicyService {
       return;
     }
 
-    const aggregate = await this.prisma.recipeRecommendation.aggregate({
+    const aggregate = await this.prisma.recipeAiGenerationEvent.aggregate({
       _sum: {
         estimatedCostUsd: true,
       },
       where: {
         ownerKey,
-        aiProvider: "openai",
         createdAt: {
           gte: getKstDayStart(now),
         },
@@ -113,12 +112,11 @@ export class RecipePolicyService {
       return;
     }
 
-    const aggregate = await this.prisma.recipeRecommendation.aggregate({
+    const aggregate = await this.prisma.recipeAiGenerationEvent.aggregate({
       _sum: {
         estimatedCostUsd: true,
       },
       where: {
-        aiProvider: "openai",
         createdAt: {
           gte: getKstDayStart(now),
         },

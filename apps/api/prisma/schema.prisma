@@ -224,6 +224,7 @@ model User {
   recipePreference              RecipePreference?
   userStorageLocations          UserStorageLocation[]
   recipeRecommendations         RecipeRecommendation[]
+  recipeAiGenerationEvents      RecipeAiGenerationEvent[]
   recipeFavorites               RecipeFavorite[]
   recipeDishEngagements         RecipeDishEngagement[]
   subscriptionEntitlements      SubscriptionEntitlement[]
@@ -263,6 +264,7 @@ model InventorySpace {
   inventoryItems            InventoryItem[]
   storageLocations          UserStorageLocation[]
   recommendations           RecipeRecommendation[]
+  recipeAiGenerationEvents  RecipeAiGenerationEvent[]
   recommendationUsageEvents RecommendationUsageEvent[]
   subscriptionEntitlements  SubscriptionEntitlement[]
   monetizationRevenueEvents MonetizationRevenueEvent[]
@@ -519,9 +521,14 @@ model InventoryPhotoParseEvent {
   space             InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   scene             String
   itemCount         Int             @default(0)
+  reviewItemCount   Int             @default(0)
+  averageConfidence Decimal?        @db.Decimal(5, 4)
   aiProvider        String          @default("openai")
   aiModel           String
   promptVersion     String
+  status            String          @default("succeeded")
+  failureCode       String?
+  durationMs        Int?
   inputTokens       Int             @default(0)
   cachedInputTokens Int             @default(0)
   outputTokens      Int             @default(0)
@@ -530,6 +537,7 @@ model InventoryPhotoParseEvent {
   createdAt         DateTime        @default(now())
 
   @@index([ownerKey, createdAt])
+  @@index([aiModel, status, createdAt])
   @@index([createdAt])
 }
 
@@ -557,11 +565,42 @@ model RecipeRecommendation {
   createdAt          DateTime                  @default(now())
   usageEvent         RecommendationUsageEvent?
   dishEngagements    RecipeDishEngagement[]
+  aiGenerationEvent  RecipeAiGenerationEvent?
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
   @@index([spaceId, createdAt])
   @@index([spaceId, requestCacheKey, createdAt])
+}
+
+model RecipeAiGenerationEvent {
+  id                 String                @id @default(cuid())
+  ownerKey           String
+  owner              User                  @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId            String?
+  space              InventorySpace?       @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  recommendationId   String?               @unique
+  recommendation     RecipeRecommendation? @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  variant            String
+  aiProvider         String                @default("openai")
+  aiModel            String
+  reasoningEffort    String
+  promptVersion      String
+  status             String
+  failureCode        String?
+  inputTokens        Int                   @default(0)
+  cachedInputTokens  Int                   @default(0)
+  outputTokens       Int                   @default(0)
+  totalTokens        Int                   @default(0)
+  estimatedCostUsd   Decimal               @default(0) @db.Decimal(10, 6)
+  generationAttempts Int                   @default(0)
+  repairApplied      Boolean               @default(false)
+  durationMs         Int?
+  createdAt          DateTime              @default(now())
+
+  @@index([ownerKey, createdAt])
+  @@index([aiModel, status, createdAt])
+  @@index([createdAt])
 }
 
 model RecipePreference {
