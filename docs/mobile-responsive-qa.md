@@ -26,6 +26,8 @@ Automated Android profiles pair these presets as follows:
 | `modern-gesture` | 824×1830 / 320 dpi | 1.0 | Gesture |
 | `small-large-text` | 720×1280 / 320 dpi | 2.0 | Three button |
 | `large-display-large-text` | 824×1830 / 420 dpi | 2.0 | Gesture |
+| `tablet-landscape` | 1600×1200 / 240 dpi | 1.0 | Gesture, sw600dp landscape |
+| `foldable-portrait` | 1600×2560 / 240 dpi | 1.0 | Gesture, unfolded sw600dp portrait |
 
 ## Checklist
 
@@ -68,3 +70,11 @@ pnpm --filter @expirymate/mobile exec vitest run \
 The `mobile-layout` CI matrix captures eight critical states for each profile.
 Pull requests compare them with the latest successful `main` artifacts and
 upload current, baseline, diff, JUnit, and JSON comparison evidence.
+
+## Google Scanner manifest note
+
+`expo-camera` currently packages Google Code Scanner's delegate activity. The
+delegate's portrait declaration is vendor-owned, so this project intentionally
+does not override it with a manifest merge rule. Revisit it after an upstream
+`expo-camera` or Google Code Scanner update, while keeping the large-screen
+profiles above as the compatibility check.

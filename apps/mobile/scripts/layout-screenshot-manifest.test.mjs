@@ -17,10 +17,20 @@ describe("layout screenshot manifest", () => {
       "modern-gesture",
       "small-large-text",
       "large-display-large-text",
+      "tablet-landscape",
+      "foldable-portrait",
     ]);
     expect(getLayoutProfile("large-display-large-text")).toMatchObject({
       width: 824,
       height: 1830,
+    });
+    expect(getLayoutProfile("tablet-landscape")).toMatchObject({
+      width: 1600,
+      height: 1200,
+    });
+    expect(getLayoutProfile("foldable-portrait")).toMatchObject({
+      width: 1600,
+      height: 2560,
     });
   });
 

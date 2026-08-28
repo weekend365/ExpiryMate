@@ -9,29 +9,51 @@ case "$profile" in
     density="320"
     font_scale="1.0"
     navigation_overlay="com.android.internal.systemui.navbar.threebutton"
+    rotation="0"
     ;;
   modern-gesture)
     size="824x1830"
     density="320"
     font_scale="1.0"
     navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="0"
     ;;
   small-large-text)
     size="720x1280"
     density="320"
     font_scale="2.0"
     navigation_overlay="com.android.internal.systemui.navbar.threebutton"
+    rotation="0"
     ;;
   large-display-large-text)
     size="824x1830"
     density="420"
     font_scale="2.0"
     navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="0"
+    ;;
+  tablet-landscape)
+    # wm size is expressed in the emulator's natural (portrait) orientation;
+    # rotation=1 makes the captured frame 1600x1200 landscape.
+    size="1200x1600"
+    density="240"
+    font_scale="1.0"
+    navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="1"
+    ;;
+  foldable-portrait)
+    size="1600x2560"
+    density="240"
+    font_scale="1.0"
+    navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="0"
     ;;
   reset)
     adb shell wm size reset
     adb shell wm density reset
     adb shell settings delete system font_scale
+    adb shell settings delete system accelerometer_rotation
+    adb shell settings delete system user_rotation
     exit 0
     ;;
   *)
@@ -44,6 +66,8 @@ adb wait-for-device
 adb shell wm size "$size"
 adb shell wm density "$density"
 adb shell settings put system font_scale "$font_scale"
+adb shell settings put system accelerometer_rotation 0
+adb shell settings put system user_rotation "$rotation"
 adb shell cmd overlay enable-exclusive --category --user 0 "$navigation_overlay"
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0

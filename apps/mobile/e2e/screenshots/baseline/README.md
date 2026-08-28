@@ -32,5 +32,6 @@ pnpm --filter @expirymate/mobile screenshots:update -- small-three-button
 pnpm --filter @expirymate/mobile e2e:layout -- small-three-button
 ```
 
-Repeat for `modern-gesture`, `small-large-text`, and
-`large-display-large-text`. Local baseline PNGs remain untracked.
+Repeat for `modern-gesture`, `small-large-text`, `large-display-large-text`,
+`tablet-landscape`, and `foldable-portrait`. Local baseline PNGs remain
+untracked.

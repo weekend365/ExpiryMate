@@ -30,6 +30,16 @@ export const layoutProfiles = {
     height: 1830,
     description: "large display density and Android font scale 2.0",
   },
+  "tablet-landscape": {
+    width: 1600,
+    height: 1200,
+    description: "tablet-sized sw600dp landscape window",
+  },
+  "foldable-portrait": {
+    width: 1600,
+    height: 2560,
+    description: "unfolded foldable-sized sw600dp portrait window",
+  },
 };
 
 export function getLayoutProfile(profile) {
