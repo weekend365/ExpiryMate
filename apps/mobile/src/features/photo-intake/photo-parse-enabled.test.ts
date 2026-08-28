@@ -12,13 +12,22 @@ describe("isInventoryPhotoParseEnabled", () => {
     }
   });
 
-  it("is off by default", () => {
+  it("is on by default", () => {
     delete process.env.EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED;
-    expect(isInventoryPhotoParseEnabled()).toBe(false);
+    expect(isInventoryPhotoParseEnabled()).toBe(true);
   });
 
-  it("turns on only for explicit truthy values", () => {
-    process.env.EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED = "true";
-    expect(isInventoryPhotoParseEnabled()).toBe(true);
+  it("turns off only for explicit kill-switch values", () => {
+    for (const value of ["false", "0", "off", " OFF "]) {
+      process.env.EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED = value;
+      expect(isInventoryPhotoParseEnabled()).toBe(false);
+    }
+  });
+
+  it("stays on for explicit truthy values and unknown values", () => {
+    for (const value of ["true", "1", "on", "yes"]) {
+      process.env.EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED = value;
+      expect(isInventoryPhotoParseEnabled()).toBe(true);
+    }
   });
 });

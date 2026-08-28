@@ -89,7 +89,8 @@ pnpm dev:mobile
 바코드와 OCR 스캐너는 Expo Go에서 동작하지 않습니다. development build 또는 EAS
 빌드를 사용합니다. 영수증·냉장고 사진 일괄 등록도 카메라/앨범을 쓰므로 같은
 네이티브 빌드가 필요합니다. API 플래그 `INVENTORY_PHOTO_PARSE_ENABLED`와 모바일
-`EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED`는 기본 off입니다.
+`EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED`는 기본 on이며, `false`/`0`/`off`를
+명시하면 API와 모바일 진입점을 끌 수 있습니다. 두 환경의 값을 함께 맞추세요.
 
 ```bash
 pnpm --filter @expirymate/mobile exec expo run:android

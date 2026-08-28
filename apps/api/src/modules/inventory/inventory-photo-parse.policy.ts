@@ -155,7 +155,9 @@ export class InventoryPhotoParsePolicyService {
 
 export function isInventoryPhotoParseEnabled() {
   const raw = process.env.INVENTORY_PHOTO_PARSE_ENABLED?.trim().toLowerCase();
-  return raw === "true" || raw === "1" || raw === "on";
+  // Enabled by default; an explicit false/0/off value remains an operational
+  // kill switch for API deployments.
+  return raw !== "false" && raw !== "0" && raw !== "off";
 }
 
 function getNonNegativeIntegerEnv(name: string, fallback: number) {

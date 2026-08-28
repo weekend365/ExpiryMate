@@ -1,7 +1,7 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-08-27
+last_reviewed: 2026-08-28
 source_of_truth: true
 data_as_of: 2026-07-24
 ---
@@ -59,8 +59,9 @@ data_as_of: 2026-07-24
 - WebSocket/SSE 실시간 동기화와 공간 변경 이력
 - 초대 QR·전화번호·공개 재사용 링크
 - OCR·카탈로그 UX 고도화
-- 영수증·냉장고 사진 일괄 등록: 2026-08-27 코드 완료, 플래그 기본 off.
-  Doppler와 Railway API 변수는 반영됨. 운영 재배포·migration은 다음 API 배포 때.
+- 영수증·냉장고 사진 일괄 등록: 2026-08-27 코드 완료, 플래그 기본 on
+  (필요하면 API·모바일에 `false`/`0`/`off`를 함께 설정해 중단).
+  운영 API migration과 환경값 반영은 다음 API/모바일 배포 때 확인.
   상세 [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md)
 
 ## 갱신 규칙

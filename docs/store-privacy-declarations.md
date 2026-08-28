@@ -1,7 +1,7 @@
 ---
 status: active
 owner: privacy-release
-last_reviewed: 2026-08-27
+last_reviewed: 2026-08-28
 source_of_truth: true
 ---
 
@@ -38,15 +38,16 @@ source_of_truth: true
 | 비맞춤형 보상 광고 | 예 (사용자가 광고 선택 시) | 광고 제공·보상 검증·부정 이용 방지 | **Google Mobile Ads(국외)** | 광고는 매회 선택, 기능 플래그로 중단 가능, 계정 정리 시 서버 세션 삭제 | Coarse Location / Identifiers / Usage Data / Diagnostics · Third-Party Advertising · Tracking=No | Approximate location / Device or other IDs / App interactions / Diagnostics · Advertising |
 | 추적(ATT·다른 회사 앱/웹 간 연결) | **아니오** | — | — | ATT 요청 없음, Android 광고 ID 권한 제거 | Tracking=No | 앱 간 추적 목적으로 광고 ID를 수집하지 않음 |
 | 기기 연락처 | 아니오 | — | — | — | Not collected | Not collected |
-| 사진 라이브러리·촬영 이미지(영수증/냉장고 일괄 등록) | 기능 사용 시 예. 기본 플래그 off. 바코드/유통기한 OCR 경로와 분리 | 재료 후보 추출 | 서버를 거쳐 **OpenAI Vision**(미국). 원본은 파싱 후 폐기, DB 미보관 | AI 고지 동의·철회, 기능 플래그 | Photos or Videos (기능 켤 때 신고) | Photos and videos (기능 켤 때 신고) |
+| 사진 라이브러리·촬영 이미지(영수증/냉장고 일괄 등록) | 기능 사용 시 예. 기본 플래그 on(명시적 off 가능). 바코드/유통기한 OCR 경로와 분리 | 재료 후보 추출 | 서버를 거쳐 **OpenAI Vision**(미국). 원본은 파싱 후 폐기, DB 미보관 | AI 고지 동의·철회, 기능 플래그 | Photos or Videos | Photos and videos |
 | 바코드/유통기한 OCR 카메라 프레임 | 기기 내만. 서버 미업로드 | 바코드·유통기한 인식 | 없음 | 카메라 권한 | Photos 아님 (카메라 권한 문구) | Photos 아님 |
 
 \* 바코드/유통기한 OCR은 카메라 권한을 사용하지만 사진 라이브러리를 읽지 않으며
 촬영 이미지는 기기 내 ML Kit에만 쓰고 서버에 올리지 않습니다.
 영수증·냉장고 사진 일괄 등록(`INVENTORY_PHOTO_PARSE_ENABLED`)은 별도 경로입니다.
 사용자가 고른 사진을 서버로 보내 OpenAI Vision으로 후보를 만들고, 원본은 파싱 후
-폐기합니다. v1 출시 빌드에서는 이 경로를 기본 off로 두고, 켤 때 App Store
-Photos or Videos / Play Photos and videos 신고와 권한 문구를 다시 대조합니다.
+폐기합니다. 이 경로는 기본 on이며, 명시적으로 끈 배포를 만들 때만 해당
+스토어 신고 범위를 다시 대조합니다. 현재 기본 on 배포에서는 App Store
+Photos or Videos / Play Photos and videos 신고와 권한 문구가 필요합니다.
 
 스토어 권한 문구와 `PrivacyInfo.xcprivacy`는 실제 켜진 경로와 일치시킵니다.
 

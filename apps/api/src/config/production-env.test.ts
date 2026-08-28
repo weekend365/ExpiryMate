@@ -56,11 +56,26 @@ describe("validateProductionEnvironment", () => {
     expect(() => validateProductionEnvironment(env)).toThrow(/OPENAI_API_KEY/);
   });
 
-  it("allows missing OPENAI_API_KEY when recipe AI is disabled", () => {
+  it("allows missing OPENAI_API_KEY when both AI features are disabled", () => {
     const env = validProductionEnv();
     delete env.OPENAI_API_KEY;
     env.RECIPE_AI_ENABLED = "false";
+    env.INVENTORY_PHOTO_PARSE_ENABLED = "false";
 
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
+
+  it("treats photo parsing as enabled unless explicitly disabled", () => {
+    const env = validProductionEnv();
+    env.RECIPE_AI_ENABLED = "false";
+    env.INVENTORY_PHOTO_PARSE_MODEL = "unknown-photo-model";
+    delete env.INVENTORY_PHOTO_PARSE_ENABLED;
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /INVENTORY_PHOTO_PARSE_MODEL/,
+    );
+
+    env.INVENTORY_PHOTO_PARSE_ENABLED = "false";
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
 

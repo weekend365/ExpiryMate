@@ -303,7 +303,8 @@ function isRecipeAiEnabled(env: EnvMap) {
 
 function isInventoryPhotoParseEnabled(env: EnvMap) {
   const raw = env.INVENTORY_PHOTO_PARSE_ENABLED?.trim().toLowerCase();
-  return raw === "true" || raw === "1" || raw === "on";
+  // Enabled by default; false/0/off is the operational kill switch.
+  return raw !== "false" && raw !== "0" && raw !== "off";
 }
 
 function validateEmail(env: EnvMap, key: string, errors: string[]) {

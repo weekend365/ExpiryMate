@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-08-27
+last_reviewed: 2026-08-28
 source_of_truth: true
 ---
 
@@ -213,6 +213,7 @@ eas env:list --environment production
 | `EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID` | 실클라이언트 ID |
 | `EXPO_PUBLIC_WEB_BASE_URL` | `https://jango.devnamu.com` |
 | `EXPO_PUBLIC_SENTRY_DSN` | `jango-mobile` DSN |
+| `EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED` | 기본 `true`; `false`/`0`/`off`로 진입점 비활성화 |
 | `EXPO_PUBLIC_ADMOB_IOS_APP_ID` | AdMob 앱 ID (빌드 검증 필수) |
 | `EXPO_PUBLIC_ADMOB_ANDROID_APP_ID` | 〃 |
 | `EXPO_PUBLIC_ADMOB_IOS_REWARDED_AD_UNIT_ID` | 리워드 유닛 |
@@ -246,11 +247,12 @@ iOS 마케팅 버전·native 정렬: [`ios-eas-production.md`](./ios-eas-product
 - Privacy/마케팅 URL을 `jango.devnamu.com`으로 쓸 때 API의 `PRIVACY_POLICY_URL` / `PRIVACY_CHOICES_URL` / `ADMIN_BASE_URL` / CORS도 맞출 것.  
 - 전체 키 맵: [`apps/api/.env.production.example`](../apps/api/.env.production.example), [`PROJECT.md` §5](./PROJECT.md#5-배포--운영-런북).
 - 영수증·냉장고 사진 파싱(`INVENTORY_PHOTO_PARSE_*`, 모바일
-  `EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED`)은 기본 off. 2026-08-27 Doppler
-  `dev`/`stg`/`prd`와 Railway API production에 키를 넣었고, Railway는 재배포
-  없이 변수만 반영했습니다. `AI_DATA_NOTICE_VERSION=ai-data-notice-v4`도 같이
-  올렸습니다. 켜려면 API·모바일 플래그를 함께 바꾸고, 스토어 빌드는 EAS에도
-  넣은 뒤 재빌드합니다. 기록:
+  `EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED`)은 코드상 기본 on이며,
+  `false`/`0`/`off`를 명시하면 끌 수 있습니다. 2026-08-27 Doppler
+  `dev`/`stg`/`prd`와 Railway API production에 넣어 둔 기존 명시값이
+  `false`라면 새 기본값을 덮으므로, 실제 활성화 시 API·모바일 값을 함께
+  `true`로 바꿔야 합니다. API migration 배포 후 스토어 빌드를 EAS에서
+  재빌드합니다. 기록:
   [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md).
 
 로컬에서 Railway DB를 건드릴 때는 **Public TCP** `DATABASE_URL`을 쓰고, 그 값을 Doppler `dev` 기본값으로 고정하지 마세요.
