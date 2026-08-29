@@ -83,10 +83,17 @@ export const scannerScreenStyles = StyleSheet.create({
   guideStage: {
     flex: 1,
     justifyContent: "center",
+    minHeight: 0,
+  },
+  guideStageCompact: {
+    paddingVertical: spacing.xxs,
   },
   guideCluster: {
     position: "relative",
     width: "100%",
+  },
+  guideClusterCompact: {
+    gap: spacing.xs,
   },
   guideBubbleWrap: {
     position: "absolute",
@@ -95,6 +102,17 @@ export const scannerScreenStyles = StyleSheet.create({
     bottom: "100%",
     marginBottom: spacing.md,
     paddingHorizontal: spacing.xxs,
+  },
+  guideMessageCompact: {
+    alignSelf: "center",
+    maxWidth: "92%",
+    borderRadius: radius.lg,
+    backgroundColor: colors.cameraControl,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  guideMessageCompactText: {
+    textAlign: "center",
   },
   guideArea: {
     paddingHorizontal: SCAN_FRAME_SIDE_INSET - spacing.md,

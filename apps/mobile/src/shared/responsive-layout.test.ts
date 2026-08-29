@@ -4,6 +4,7 @@ import {
   LARGE_TEXT_MIN_FONT_SCALE,
   NARROW_WINDOW_MAX_WIDTH,
   REGULAR_WINDOW_MIN_WIDTH,
+  SHORT_WINDOW_MAX_HEIGHT,
   contentMaxWidths,
   getBottomInsetPadding,
   getContentMaxWidth,
@@ -87,6 +88,22 @@ describe("responsive layout", () => {
     expect(NARROW_WINDOW_MAX_WIDTH).toBe(400);
     expect(getResponsiveFlags(399, 1).isNarrow).toBe(true);
     expect(getResponsiveFlags(400, 1).isNarrow).toBe(false);
+  });
+
+  it("detects short phone-landscape windows without forcing vertical stacking", () => {
+    expect(
+      getResponsiveFlags(844, 1, SHORT_WINDOW_MAX_HEIGHT - 1),
+    ).toMatchObject({
+      isLandscape: true,
+      isShort: true,
+      isPhoneLandscape: true,
+      shouldStack: false,
+    });
+    expect(getResponsiveFlags(800, 1, 600)).toMatchObject({
+      isLandscape: true,
+      isShort: false,
+      isPhoneLandscape: false,
+    });
   });
 
   it("grows tab bar content when large-text labels remain visible", () => {

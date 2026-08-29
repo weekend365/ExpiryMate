@@ -10,12 +10,44 @@ name: Responsive layout smoke
     visible:
       id: onboarding-screen
     timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/onboarding
 - repeat:
     times: 4
     commands:
       - tapOn:
           id: onboarding-next-button
       - waitForAnimationToEnd
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/login
+- openLink: expirymate://auth/forgot-password
+- extendedWaitUntil:
+    visible: "비밀번호를 잊었어요"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/forgot-password
+- openLink: expirymate://auth/register
+- extendedWaitUntil:
+    visible: "이메일로 시작해요"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/auth-register
+- openLink: expirymate://auth/reset-password?token=layout-e2e-token
+- extendedWaitUntil:
+    visible: "비밀번호 다시 정하기"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/reset-password
+- openLink: expirymate://auth/verify-pending?email=layout-pending@example.com
+- extendedWaitUntil:
+    visible: "메일함을 열어볼까요?"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/verify-pending
+- openLink: expirymate://auth/verify-email?token=layout-invalid-token
+- extendedWaitUntil:
+    visible: "앗, 잠시 문제가 생겼어요"
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/verify-email
+- openLink: expirymate://auth/login
 - extendedWaitUntil:
     visible:
       id: login-screen
@@ -49,6 +81,7 @@ name: Responsive layout smoke
     visible:
       id: inventory-edit-screen
     timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/inventory-edit
 - back
 - extendedWaitUntil:
     visible:
@@ -139,3 +172,73 @@ name: Responsive layout smoke
       id: photo-capture-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/register-photo
+- openLink: expirymate://cooking/layout-e2e-recommendation?dishIndex=0
+- extendedWaitUntil:
+    visible: "재료 준비"
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/cooking
+- openLink: expirymate://privacy
+- extendedWaitUntil:
+    visible: "살펴보기"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/privacy
+- openLink: expirymate://privacy/ai-data-notice
+- extendedWaitUntil:
+    visible: "추천할 때 전달되는 정보"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/ai-data-notice
+- openLink: expirymate://privacy/account-delete
+- extendedWaitUntil:
+    visible: "바로 지워지는 것들"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/account-delete
+- openLink: expirymate://settings/account
+- extendedWaitUntil:
+    visible: "내 정보"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-account
+- openLink: expirymate://settings/notifications
+- extendedWaitUntil:
+    visible: "알림 받기"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-notifications
+- openLink: expirymate://settings/recipe-preferences
+- extendedWaitUntil:
+    visible: "알레르기"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-recipe-preferences
+- openLink: expirymate://settings/recommendation-credits
+- extendedWaitUntil:
+    visible: "필요한 만큼 충전하기"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-recommendation-credits
+- openLink: expirymate://settings/spaces
+- extendedWaitUntil:
+    visible: "초대 코드로 참여할게요"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-spaces
+- openLink: expirymate://settings/spaces/personal_layout-e2e-user
+- extendedWaitUntil:
+    visible: "구성원"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-space-detail
+- openLink: expirymate://settings/storage-locations
+- extendedWaitUntil:
+    visible: "기본 위치"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-storage-locations
+- openLink: expirymate://settings/support
+- extendedWaitUntil:
+    visible: "어떤 이야기인가요?"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/settings-support
+- openLink: expirymate://spaces/invitations/code
+- extendedWaitUntil:
+    visible: "초대 코드로 참여"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/invitation-code
+- openLink: expirymate://spaces/invitations/accept?token=layout-invitation-token
+- extendedWaitUntil:
+    visible: "함께 쓸 준비가 됐어요"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/invitation-accept

@@ -214,7 +214,7 @@ export function InventoryFilterToolbar({
                 <AppText
                   variant="bodySmall"
                   tone={hasLocationFilter ? "primary" : "default"}
-                  numberOfLines={1}
+                  numberOfLines={shouldStackDense ? undefined : 1}
                   style={styles.locationFilterTitle}
                 >
                   {selectedLocationLabel}

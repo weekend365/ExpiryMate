@@ -142,7 +142,10 @@ function ProductCard({
             />
           )}
           <View style={styles.productCopy}>
-            <AppText variant="bodySmall" numberOfLines={2}>
+            <AppText
+              variant="bodySmall"
+              numberOfLines={shouldStack ? undefined : 2}
+            >
               {product.productName}
             </AppText>
             <View

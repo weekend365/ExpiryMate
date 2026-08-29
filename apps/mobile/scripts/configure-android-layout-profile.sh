@@ -32,6 +32,20 @@ case "$profile" in
     navigation_overlay="com.android.internal.systemui.navbar.gestural"
     rotation="0"
     ;;
+  phone-landscape)
+    size="720x1280"
+    density="320"
+    font_scale="1.0"
+    navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="1"
+    ;;
+  phone-landscape-large-text)
+    size="720x1280"
+    density="320"
+    font_scale="2.0"
+    navigation_overlay="com.android.internal.systemui.navbar.gestural"
+    rotation="1"
+    ;;
   tablet-landscape)
     # wm size is expressed in the emulator's natural (portrait) orientation;
     # rotation=1 makes the captured frame 1600x1200 landscape.

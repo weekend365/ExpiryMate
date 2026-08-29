@@ -3,6 +3,8 @@ import { spacing } from "@expirymate/shared";
 export const REGULAR_WINDOW_MIN_WIDTH = 700;
 /** Raised from 380 so small phones + Android display-size scaling stack earlier. */
 export const NARROW_WINDOW_MAX_WIDTH = 400;
+/** Short windows need a horizontal/condensed full-screen camera composition. */
+export const SHORT_WINDOW_MAX_HEIGHT = 520;
 /** Mid-range system text — stack dense horizontal rows early. */
 export const COMFORTABLE_TEXT_MIN_FONT_SCALE = 1.15;
 export const LARGE_TEXT_MIN_FONT_SCALE = 1.3;
@@ -33,14 +35,24 @@ export function getTextDensity(fontScale: number): TextDensity {
   return "regular";
 }
 
-export function getResponsiveFlags(width: number, fontScale: number) {
+export function getResponsiveFlags(
+  width: number,
+  fontScale: number,
+  height = Number.POSITIVE_INFINITY,
+) {
   const isNarrow = width < NARROW_WINDOW_MAX_WIDTH;
+  const isLandscape = width > height;
+  const isShort = height < SHORT_WINDOW_MAX_HEIGHT;
+  const isPhoneLandscape = isLandscape && isShort;
   const textDensity = getTextDensity(fontScale);
   const isLargeText = textDensity === "large";
   const isComfortableText = textDensity !== "regular";
 
   return {
     isNarrow,
+    isLandscape,
+    isShort,
+    isPhoneLandscape,
     isLargeText,
     isComfortableText,
     textDensity,

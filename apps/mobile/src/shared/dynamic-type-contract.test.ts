@@ -35,4 +35,57 @@ describe("dynamic type component contract", () => {
     expect(onboarding).not.toContain("jango-appstore-space-copy");
     expect(onboarding).toContain('variant="heading"');
   });
+
+  it("lets semantic small copy and primary actions follow the user text size", () => {
+    const fontScale = readFileSync(
+      join(MOBILE_ROOT, "src", "shared", "font-scale.ts"),
+      "utf8",
+    );
+    const button = readFileSync(
+      join(MOBILE_ROOT, "src", "components", "Button.tsx"),
+      "utf8",
+    );
+    const disclosure = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "affiliate",
+        "affiliate-disclosure.tsx",
+      ),
+      "utf8",
+    );
+
+    expect(fontScale).not.toMatch(/case "caption"[\s\S]*?return "chrome"/);
+    expect(button).toContain('scaleRole="body"');
+    expect(disclosure).not.toContain('scaleRole="chrome"');
+  });
+
+  it("keeps height-aware camera layouts for phone landscape", () => {
+    const scanner = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "scanner",
+        "scanner-camera.tsx",
+      ),
+      "utf8",
+    );
+    const photoCapture = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "photo-intake",
+        "photo-capture-screen.tsx",
+      ),
+      "utf8",
+    );
+
+    expect(scanner).toContain("isPhoneLandscape");
+    expect(scanner).toContain("compactHeight={isPhoneLandscape}");
+    expect(photoCapture).toContain("captureBodyLandscape");
+    expect(photoCapture).toContain("bottomScrollLandscape");
+  });
 });

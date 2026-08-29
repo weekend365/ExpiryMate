@@ -57,7 +57,7 @@ export function RecapRow({
     >
       <View style={recapRowStyles.copy}>
         <AppText style={recapRowStyles.label}>{label}</AppText>
-        <AppText style={recapRowStyles.value} numberOfLines={1}>
+        <AppText style={recapRowStyles.value}>
           {value}
         </AppText>
       </View>
@@ -186,7 +186,7 @@ export function StorageLocationField({
     >
       <AppText style={inventoryFormStyles.sectionTitle}>보관 자리</AppText>
       <MapPin color={colors.mutedText} size={spacing.sm} strokeWidth={2.4} />
-      <AppText style={inventoryFormStyles.locationRowLabel} numberOfLines={1}>
+      <AppText style={inventoryFormStyles.locationRowLabel}>
         {selectedLabel}
       </AppText>
       <AppText style={inventoryFormStyles.locationRowAction}>바꿀게요</AppText>
@@ -214,7 +214,7 @@ export function ExtraDetailsRow({
       ]}
     >
       <AppText style={inventoryFormStyles.sectionTitle}>브랜드·메모</AppText>
-      <AppText style={inventoryFormStyles.locationRowLabel} numberOfLines={1}>
+      <AppText style={inventoryFormStyles.locationRowLabel}>
         {label}
       </AppText>
       <ChevronRight
@@ -421,6 +421,7 @@ export const inventoryFormStyles = StyleSheet.create({
   sectionCardRow: {
     minHeight: touchTarget.min,
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,

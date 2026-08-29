@@ -25,6 +25,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "e2e:layout": "bash scripts/run-layout-maestro.sh",
+    "e2e:layout:ios": "bash scripts/run-layout-maestro-ios.sh",
     "screenshots:compare": "node scripts/compare-layout-screenshots.mjs",
     "screenshots:update": "node scripts/compare-layout-screenshots.mjs --update",
     "branding:sync": "python3 scripts/sync-branding-from-jango.py",

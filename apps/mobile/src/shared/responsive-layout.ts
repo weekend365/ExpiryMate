@@ -9,7 +9,7 @@ export * from "./responsive-layout-core";
 export function useResponsiveLayout() {
   const { width, height, fontScale } = useWindowDimensions();
   const sizeClass = getWindowSizeClass(width);
-  const responsiveFlags = getResponsiveFlags(width, fontScale);
+  const responsiveFlags = getResponsiveFlags(width, fontScale, height);
 
   return {
     width,

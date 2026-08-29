@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Linking,
   Pressable,
+  ScrollView,
   StyleSheet,
   View,
 } from "react-native";
@@ -66,7 +67,9 @@ export function PhotoCaptureScreen({
   onShowAccessDetails: () => void;
 }) {
   const [permission, requestPermission] = useCameraPermissions();
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, isPhoneLandscape } = useResponsiveLayout();
+  const shouldStackTopBar = shouldStack && !isPhoneLandscape;
+  const shouldUseCompactGuide = shouldStack || isPhoneLandscape;
   const hasPermission = permission?.granted ?? false;
   const canRequestPermission = permission?.canAskAgain ?? true;
 
@@ -88,7 +91,7 @@ export function PhotoCaptureScreen({
         <View
           style={[
             scannerScreenStyles.topBar,
-            shouldStack && scannerScreenStyles.topBarStacked,
+            shouldStackTopBar && scannerScreenStyles.topBarStacked,
           ]}
         >
           <CloseButton
@@ -159,9 +162,25 @@ export function PhotoCaptureScreen({
             </View>
           </View>
         ) : (
-          <>
-            <View style={styles.guideStage} pointerEvents="none">
-              <View style={styles.guideCopy}>
+          <View
+            style={[
+              styles.captureBody,
+              isPhoneLandscape && styles.captureBodyLandscape,
+            ]}
+          >
+            <View
+              style={[
+                styles.guideStage,
+                isPhoneLandscape && styles.guideStageLandscape,
+              ]}
+              pointerEvents="none"
+            >
+              <View
+                style={[
+                  styles.guideCopy,
+                  isPhoneLandscape && styles.guideCopyLandscape,
+                ]}
+              >
                 <AppText
                   variant="bodyStrong"
                   tone="inverse"
@@ -171,7 +190,7 @@ export function PhotoCaptureScreen({
                     ? "영수증 전체가 보이게 맞춰 주세요"
                     : "재료가 겹치지 않게 보여 주세요"}
                 </AppText>
-                {!shouldStack ? (
+                {!shouldUseCompactGuide ? (
                   <AppText
                     variant="caption"
                     tone="inverse"
@@ -186,7 +205,8 @@ export function PhotoCaptureScreen({
               <View
                 style={[
                   styles.guideFrame,
-                  shouldStack && styles.guideFrameCompact,
+                  shouldUseCompactGuide && styles.guideFrameCompact,
+                  isPhoneLandscape && styles.guideFrameLandscape,
                 ]}
               >
                 <View style={[styles.corner, styles.cornerTopLeft]} />
@@ -196,7 +216,18 @@ export function PhotoCaptureScreen({
               </View>
             </View>
 
-            <View style={styles.bottomStack}>
+            <ScrollView
+              style={[
+                styles.bottomScroll,
+                isPhoneLandscape && styles.bottomScrollLandscape,
+              ]}
+              contentContainerStyle={[
+                styles.bottomStack,
+                isPhoneLandscape && styles.bottomStackLandscape,
+              ]}
+              showsVerticalScrollIndicator={false}
+              bounces={false}
+            >
               {issue ? (
                 <View style={styles.issueCard} accessibilityLiveRegion="polite">
                   <AppText variant="bodyStrong">{issue.title}</AppText>
@@ -277,14 +308,14 @@ export function PhotoCaptureScreen({
                   </Pressable>
                   <View style={styles.actionSpacer} />
                 </View>
-                {!shouldStack ? (
+                {!shouldUseCompactGuide ? (
                   <AppText variant="caption" tone="subtext" style={styles.sourceHint}>
                     앨범을 누르면 같은 종류의 저장된 사진을 가져와요.
                   </AppText>
                 ) : null}
               </View>
-            </View>
-          </>
+            </ScrollView>
+          </View>
         )}
       </SafeAreaView>
     </View>
@@ -334,11 +365,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.text,
   },
+  captureBody: {
+    flex: 1,
+    minHeight: 0,
+  },
+  captureBodyLandscape: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    gap: spacing.sm,
+  },
   guideStage: {
     flex: 1,
+    minHeight: 0,
     justifyContent: "center",
     gap: spacing.sm,
     paddingVertical: spacing.sm,
+  },
+  guideStageLandscape: {
+    minWidth: 0,
+    paddingVertical: spacing.xxs,
   },
   guideCopy: {
     alignSelf: "center",
@@ -348,6 +393,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     gap: spacing.xxs,
+  },
+  guideCopyLandscape: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   guideTitle: {
     textAlign: "center",
@@ -366,6 +415,10 @@ const styles = StyleSheet.create({
   guideFrameCompact: {
     minHeight: 120,
     maxHeight: 240,
+  },
+  guideFrameLandscape: {
+    minHeight: spacing.xxxl + spacing.lg,
+    maxHeight: spacing.xxxl + spacing.xxl,
   },
   corner: {
     position: "absolute",
@@ -403,6 +456,19 @@ const styles = StyleSheet.create({
   },
   bottomStack: {
     gap: spacing.xs,
+  },
+  bottomScroll: {
+    flexGrow: 0,
+    flexShrink: 1,
+  },
+  bottomScrollLandscape: {
+    flex: 1,
+    maxWidth: 360,
+  },
+  bottomStackLandscape: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingBottom: spacing.xs,
   },
   issueCard: {
     borderRadius: radius.xxl,

@@ -376,7 +376,10 @@ export default function HomeScreen() {
                   />
                 </View>
                 <View style={styles.recommendationCopy}>
-                  <AppText variant="bodyStrong" numberOfLines={2}>
+                  <AppText
+                    variant="bodyStrong"
+                    numberOfLines={shouldStack ? undefined : 2}
+                  >
                     {recommendationPreview
                       ? recommendationPreview.title
                       : hasInventory
@@ -384,7 +387,11 @@ export default function HomeScreen() {
                         : "재료를 등록하면 맞춤 요리를 추천해 드려요"}
                   </AppText>
                   {recommendationPreview ? (
-                    <AppText variant="caption" tone="subtext" numberOfLines={2}>
+                    <AppText
+                      variant="caption"
+                      tone="subtext"
+                      numberOfLines={shouldStack ? undefined : 2}
+                    >
                       {recommendationPreview.servings}인분
                       {"  ·  "}
                       {recommendationPreview.cookingTimeMinutes}분{"  ·  "}
@@ -405,7 +412,7 @@ export default function HomeScreen() {
                           ? "warning"
                           : "primary"
                       }
-                      numberOfLines={2}
+                      numberOfLines={shouldStack ? undefined : 2}
                       style={styles.recommendationReasonText}
                     >
                       {recommendationReason}

@@ -361,7 +361,6 @@ export default function LoginScreen() {
                     <AppText
                       variant="bodySmall"
                       tone="primary"
-                      numberOfLines={1}
                       style={styles.textLinkLabel}
                     >
                       비밀번호를 잊으셨나요?
@@ -404,7 +403,6 @@ export default function LoginScreen() {
                   <AppText
                     variant="bodySmall"
                     tone="primary"
-                    numberOfLines={1}
                     style={styles.textLinkLabel}
                   >
                     아직 계정이 없으면 가입할게요

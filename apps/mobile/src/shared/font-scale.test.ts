@@ -29,9 +29,9 @@ describe("font scale policy", () => {
     expect(fontScaleRoleForVariant("body")).toBe("body");
     expect(fontScaleRoleForVariant("bodySmallStrong")).toBe("body");
     expect(fontScaleRoleForVariant("title")).toBe("heading");
-    expect(fontScaleRoleForVariant("caption")).toBe("chrome");
-    expect(fontScaleRoleForVariant("captionStrong")).toBe("chrome");
-    expect(fontScaleRoleForVariant("label")).toBe("chrome");
+    expect(fontScaleRoleForVariant("caption")).toBe("body");
+    expect(fontScaleRoleForVariant("captionStrong")).toBe("body");
+    expect(fontScaleRoleForVariant("label")).toBe("body");
   });
 
   it("downshifts display and title variants only for large text density", () => {

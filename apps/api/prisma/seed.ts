@@ -7,7 +7,12 @@ import {
   ProductCategory,
   UserRole,
 } from "@prisma/client";
-import { addDays } from "@expirymate/shared";
+import {
+  addDays,
+  recipeInventorySnapshotItemSchema,
+  recipeRecommendationRequestSchema,
+  recipeRecommendationsPayloadSchema,
+} from "@expirymate/shared";
 import argon2 from "argon2";
 
 if (process.env.NODE_ENV === "production") {
@@ -317,6 +322,124 @@ async function main() {
         notes: "리필 구매 예정",
       },
     ]),
+  });
+
+  const layoutMilk = await prisma.inventoryItem.findFirstOrThrow({
+    where: {
+      ownerKey: e2eUserId,
+      displayName: "서울우유 1L",
+    },
+  });
+
+  await prisma.recipeRecommendation.create({
+    data: {
+      id: "layout-e2e-recommendation",
+      ownerKey: e2eUserId,
+      request: recipeRecommendationRequestSchema.parse({
+        servings: 2,
+        maxCookingMinutes: 30,
+        mealType: "any",
+        useExpiringFirst: true,
+      }),
+      inventorySnapshot: recipeInventorySnapshotItemSchema.array().parse([
+        {
+          inventoryItemId: layoutMilk.id,
+          name: layoutMilk.displayName,
+          category: layoutMilk.category,
+          quantity: layoutMilk.quantity,
+          unit: layoutMilk.unit,
+          quantityBase: layoutMilk.quantityBase,
+          unitCode: layoutMilk.unitCode,
+          storageLocation: layoutMilk.storageLocation,
+          expiryDate: layoutMilk.expiryDate.toISOString().slice(0, 10),
+          daysUntilExpiry: 0,
+        },
+      ]),
+      recommendations:
+        recipeRecommendationsPayloadSchema.shape.recommendations.parse([
+        {
+          title: "우유 달걀 프렌치토스트",
+          summary: "기한이 가까운 우유를 먼저 쓰는 든든한 한 끼예요.",
+          cookingTimeMinutes: 20,
+          difficulty: "easy",
+          servings: 2,
+          usedIngredients: [
+            {
+              inventoryItemId: layoutMilk.id,
+              name: layoutMilk.displayName,
+              amount: 300,
+              unitCode: "ml",
+            },
+          ],
+          optionalMissingIngredients: [
+            { name: "식빵", reason: "우유와 달걀물을 머금어 부드러워져요." },
+          ],
+          steps: [
+            "우유와 달걀을 고르게 섞어 주세요.",
+            "식빵을 달걀물에 충분히 적셔 주세요.",
+            "팬을 달군 뒤 앞뒤로 노릇하게 익혀 주세요.",
+            "속까지 익었는지 확인하고 접시에 담아 주세요.",
+          ],
+          tips: ["약한 불에서 천천히 익히면 속까지 부드러워요."],
+          safetyNote: "우유의 냄새와 상태를 먼저 확인하고 달걀은 완전히 익혀 주세요.",
+          spiceLevel: "none",
+          requiredEquipment: ["stovetop"],
+          mealType: "breakfast",
+          strategy: "expiring_first",
+        },
+        {
+          title: "따뜻한 우유 오트밀",
+          summary: "추가 재료를 최소화한 간단한 아침 식사예요.",
+          cookingTimeMinutes: 10,
+          difficulty: "easy",
+          servings: 2,
+          usedIngredients: [
+            {
+              inventoryItemId: layoutMilk.id,
+              name: layoutMilk.displayName,
+              amount: 300,
+              unitCode: "ml",
+            },
+          ],
+          optionalMissingIngredients: [],
+          steps: ["우유를 냄비에 부어 주세요.", "오트밀을 넣어 주세요.", "약한 불에서 저어가며 끓여 주세요.", "알맞게 걸쭉해지면 불을 꺼 주세요."],
+          tips: ["바닥이 눌어붙지 않게 계속 저어 주세요."],
+          safetyNote: "우유의 상태를 먼저 확인하고 끓어넘치지 않게 지켜봐 주세요.",
+          spiceLevel: "none",
+          requiredEquipment: ["stovetop"],
+          mealType: "breakfast",
+          strategy: "minimal_extra",
+        },
+        {
+          title: "우유 바나나 쉐이크",
+          summary: "짧은 시간에 만드는 새로운 간식 조합이에요.",
+          cookingTimeMinutes: 5,
+          difficulty: "easy",
+          servings: 2,
+          usedIngredients: [
+            {
+              inventoryItemId: layoutMilk.id,
+              name: layoutMilk.displayName,
+              amount: 300,
+              unitCode: "ml",
+            },
+          ],
+          optionalMissingIngredients: [
+            { name: "바나나", reason: "자연스러운 단맛과 농도를 더해 줘요." },
+          ],
+          steps: ["우유 상태를 확인해 주세요.", "바나나를 작게 잘라 주세요.", "재료를 믹서에 넣어 주세요.", "부드러워질 때까지 갈아 주세요."],
+          tips: ["차가운 우유를 쓰면 더 산뜻해요."],
+          safetyNote: "우유의 냄새와 상태를 먼저 확인해 주세요.",
+          spiceLevel: "none",
+          requiredEquipment: ["microwave"],
+          mealType: "snack",
+          strategy: "quick_novel",
+        },
+        ]),
+      aiProvider: "seed",
+      aiModel: "layout-fixture",
+      promptVersion: "layout-e2e-v1",
+    },
   });
 
   await prisma.notificationPreference.createMany({

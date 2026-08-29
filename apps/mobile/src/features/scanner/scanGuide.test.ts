@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   SCAN_FRAME_HEIGHT,
+  SCAN_FRAME_HEIGHT_COMPACT,
   SCAN_FRAME_HEIGHT_MAX,
   getScanFrameHeight,
   getScanLineTravel,
@@ -17,6 +18,11 @@ describe("scan guide frame height", () => {
     expect(proHeight).toBeGreaterThan(SCAN_FRAME_HEIGHT);
     expect(proHeight).toBeLessThanOrEqual(SCAN_FRAME_HEIGHT_MAX);
     expect(getScanFrameHeight(1400)).toBe(SCAN_FRAME_HEIGHT_MAX);
+  });
+
+  it("uses a shorter cutout for phone-landscape camera layouts", () => {
+    expect(getScanFrameHeight(390, true)).toBe(SCAN_FRAME_HEIGHT_COMPACT);
+    expect(SCAN_FRAME_HEIGHT_COMPACT).toBeLessThan(SCAN_FRAME_HEIGHT);
   });
 
   it("keeps scan-line travel inside the frame", () => {

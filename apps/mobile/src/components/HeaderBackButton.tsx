@@ -2,6 +2,7 @@ import { ChevronLeft } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
+import { resolveCompactHeaderTitle } from "../features/navigation/header-back-title";
 import { AppText } from "./AppText";
 
 interface HeaderBackButtonProps {
@@ -49,8 +50,20 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
 
 /** Native-stack title with the same Pretendard metrics as the back control. */
 export function HeaderTitle({ children }: { children: string }) {
+  const { isLargeText, isNarrow } = useResponsiveLayout();
+  const visibleTitle = resolveCompactHeaderTitle(
+    children,
+    isLargeText || isNarrow,
+  );
+
   return (
-    <View style={styles.titleWrap} pointerEvents="none">
+    <View
+      style={styles.titleWrap}
+      pointerEvents="none"
+      accessible
+      accessibilityRole="header"
+      accessibilityLabel={children}
+    >
       <AppText
         numberOfLines={1}
         variant="bodyStrong"
@@ -58,7 +71,7 @@ export function HeaderTitle({ children }: { children: string }) {
         densityAware={false}
         style={styles.title}
       >
-        {children}
+        {visibleTitle}
       </AppText>
     </View>
   );

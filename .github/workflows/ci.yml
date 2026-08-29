@@ -174,6 +174,8 @@ jobs:
           - modern-gesture
           - small-large-text
           - large-display-large-text
+          - phone-landscape
+          - phone-landscape-large-text
           - tablet-landscape
           - foldable-portrait
     services:
@@ -334,6 +336,194 @@ jobs:
             pnpm --filter @expirymate/mobile e2e:layout -- ${{ matrix.profile }}
 
       - name: Upload layout evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-layout-${{ matrix.profile }}
+          path: |
+            apps/mobile/e2e/results/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/current/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/baseline/${{ matrix.profile }}
+            apps/mobile/e2e/screenshots/diff/${{ matrix.profile }}
+            /tmp/expirymate-layout-api.log
+          if-no-files-found: warn
+
+  mobile-layout-ios:
+    runs-on: macos-15
+    needs: quality
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        profile:
+          - ios-small
+          - ios-small-large-text
+    env:
+      DATABASE_URL: postgresql://postgres@127.0.0.1:5432/expirymate_layout?schema=public
+      NODE_ENV: development
+      PORT: 4000
+      AUTH_TOKEN_SECRET: layout-e2e-auth-token-secret-at-least-32-characters
+      AUTH_ALLOW_DEV_FALLBACK: "false"
+      EXPO_PUBLIC_APP_ENV: development
+      EXPO_PUBLIC_API_BASE_URL: http://127.0.0.1:4000
+      EXPO_PUBLIC_OAUTH_REDIRECT_URI: http://127.0.0.1:4000/auth/oauth/callback
+      ALLOW_MISSING_SCREENSHOT_BASELINES: ${{ github.event_name == 'push' && '1' || '0' }}
+      SCREENSHOT_MAX_DIFF_RATIO: ${{ github.event_name == 'push' && '1' || (contains(github.event.pull_request.labels.*.name, 'approve-mobile-layout-change') && '1' || '0.005') }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Locate latest main iOS layout evidence
+        id: main-ios-layout-run
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let baseSupportsProfile = false;
+            const profile = "${{ matrix.profile }}";
+            try {
+              const manifest = await github.rest.repos.getContent({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                path: "apps/mobile/scripts/layout-screenshot-manifest.mjs",
+                ref: context.payload.pull_request.base.sha,
+              });
+              const source = Buffer.from(manifest.data.content, "base64").toString("utf8");
+              baseSupportsProfile = source.includes(`\"${profile}\"`);
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+            core.setOutput("profile-on-main", String(baseSupportsProfile));
+            const response = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: "ci.yml",
+              branch: context.payload.pull_request.base.ref,
+              event: "push",
+              status: "success",
+              per_page: 20,
+            });
+            const run = response.data.workflow_runs[0];
+            if (!run) {
+              core.setFailed("No successful main CI run is available as an iOS layout baseline.");
+              return;
+            }
+            core.setOutput("run-id", String(run.id));
+
+      - name: Download main iOS layout evidence
+        id: download-main-ios-layout
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: mobile-layout-${{ matrix.profile }}
+          path: /tmp/mobile-layout-main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ steps.main-ios-layout-run.outputs.run-id }}
+
+      - name: Stage main iOS captures as strict baselines
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          if [ "${{ steps.download-main-ios-layout.outcome }}" != "success" ]; then
+            if [ "${{ steps.main-ios-layout-run.outputs.profile-on-main }}" != "true" ]; then
+              echo "Bootstrapping the new ${{ matrix.profile }} baseline from this run."
+              echo "ALLOW_MISSING_SCREENSHOT_BASELINES=1" >> "$GITHUB_ENV"
+              exit 0
+            fi
+            echo "Could not download the main layout baseline for ${{ matrix.profile }}." >&2
+            exit 1
+          fi
+          capture_file="$(find /tmp/mobile-layout-main -type f -name home.png -path "*/current/${{ matrix.profile }}/home.png" | head -n 1)"
+          if [ -z "$capture_file" ]; then
+            echo "The main artifact does not contain captures for ${{ matrix.profile }}." >&2
+            exit 1
+          fi
+          capture_dir="$(dirname "$capture_file")"
+          baseline_dir="apps/mobile/e2e/screenshots/baseline/${{ matrix.profile }}"
+          mkdir -p "$baseline_dir"
+          cp "$capture_dir"/*.png "$baseline_dir"/
+
+      - name: Install Maestro
+        run: |
+          curl -Ls https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Start PostgreSQL
+        run: |
+          brew install postgresql@16
+          pg_prefix="$(brew --prefix postgresql@16)"
+          echo "$pg_prefix/bin" >> "$GITHUB_PATH"
+          brew services start postgresql@16
+          for attempt in {1..60}; do
+            "$pg_prefix/bin/pg_isready" && break
+            if [ "$attempt" -eq 60 ]; then
+              exit 1
+            fi
+            sleep 1
+          done
+          "$pg_prefix/bin/createuser" --superuser postgres || true
+          "$pg_prefix/bin/createdb" --owner postgres expirymate_layout || true
+
+      - name: Prepare deterministic API data
+        run: |
+          pnpm --filter @expirymate/api exec prisma migrate deploy
+          E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
+          nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &
+          for attempt in {1..60}; do
+            curl --fail --silent http://127.0.0.1:4000/ready && break
+            if [ "$attempt" -eq 60 ]; then
+              cat /tmp/expirymate-layout-api.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+      - name: Boot iPhone simulator
+        run: |
+          device_id="$(xcrun simctl list devices available -j | jq -r '.devices[][] | select(.name == "iPhone SE (3rd generation)") | .udid' | head -n 1)"
+          if [ -z "$device_id" ]; then
+            runtime_id="$(xcrun simctl list runtimes available -j | jq -r '[.runtimes[] | select(.identifier | contains("iOS"))][-1].identifier')"
+            device_id="$(xcrun simctl create 'ExpiryMate Layout SE' 'com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation' "$runtime_id")"
+          fi
+          xcrun simctl boot "$device_id"
+          xcrun simctl bootstatus "$device_id" -b
+          echo "IOS_SIMULATOR_UDID=$device_id" >> "$GITHUB_ENV"
+
+      - name: Build and install iOS layout app
+        run: |
+          pnpm --filter @expirymate/mobile exec expo prebuild --platform ios --clean --no-install
+          info_plist="$(find apps/mobile/ios -maxdepth 3 -name Info.plist -not -path '*/Pods/*' | head -n 1)"
+          /usr/libexec/PlistBuddy -c 'Add :NSAppTransportSecurity dict' "$info_plist" || true
+          /usr/libexec/PlistBuddy -c 'Add :NSAppTransportSecurity:NSAllowsLocalNetworking bool true' "$info_plist" || true
+          (cd apps/mobile/ios && pod install)
+          pnpm --filter @expirymate/mobile exec expo run:ios --device "$IOS_SIMULATOR_UDID" --configuration Release --no-bundler
+
+      - name: Run and compare iOS layout
+        run: pnpm --filter @expirymate/mobile e2e:layout:ios -- ${{ matrix.profile }}
+
+      - name: Upload iOS layout evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:

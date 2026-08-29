@@ -71,8 +71,7 @@ export function OAuthButton({
           </View>
           <AppText
             variant="bodyStrong"
-            scaleRole="chrome"
-            densityAware={false}
+            scaleRole="body"
             style={[styles.label, { color: brand.text }]}
           >
             {label}

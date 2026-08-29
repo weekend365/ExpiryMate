@@ -62,7 +62,9 @@ import {
 } from "../registration/registration-return";
 
 export function ScannerCameraExperience() {
-  const { shouldStack } = useResponsiveLayout();
+  const { shouldStack, isPhoneLandscape } = useResponsiveLayout();
+  const shouldStackTopBar = shouldStack && !isPhoneLandscape;
+  const shouldStackCameraActions = shouldStack && !isPhoneLandscape;
   const params = useLocalSearchParams<{ from?: string | string[] }>();
   const returnTo = parseRegistrationReturnTo(params.from);
   const { activeSpaceId } = useActiveSpace();
@@ -184,6 +186,13 @@ export function ScannerCameraExperience() {
         : scanner.isOcrProcessing
           ? "날짜를 읽고 있어요. 조금만 기다려 주세요."
           : "유통기한이 잘 보이게 비춰 주세요. 또렷하면 장고가 읽어볼게요.";
+  const compactGuideMessage = showBarcodeSuccess
+    ? "바코드를 읽었어요. 이제 유통기한을 비춰 주세요."
+    : scanner.mode === "barcode"
+      ? "바코드를 가운데에 맞춰 주세요."
+      : scanner.isOcrProcessing
+        ? "유통기한을 읽고 있어요."
+        : "유통기한이 잘 보이게 비춰 주세요.";
 
   const hasInlineScanError = Boolean(
     scanner.cameraErrorMessage ||
@@ -480,7 +489,7 @@ export function ScannerCameraExperience() {
         pointerEvents="box-none"
         collapsable={false}
       >
-        <View style={[styles.topBar, shouldStack && styles.topBarStacked]}>
+        <View style={[styles.topBar, shouldStackTopBar && styles.topBarStacked]}>
           <CloseButton onPress={() => router.back()} />
           <View
             style={styles.stepPill}
@@ -534,8 +543,15 @@ export function ScannerCameraExperience() {
           <>
             <ScannerGuide
               showSuccess={showBarcodeSuccess}
-              guideMessage={hasInlineScanError ? null : guideMessage}
+              guideMessage={
+                hasInlineScanError
+                  ? null
+                  : isPhoneLandscape
+                    ? compactGuideMessage
+                    : guideMessage
+              }
               guideMood={guideMood}
+              compactHeight={isPhoneLandscape}
               onGuideFrameChange={scanner.setGuideFrame}
             />
 
@@ -560,7 +576,7 @@ export function ScannerCameraExperience() {
               <View
                 style={[
                   styles.cameraActions,
-                  shouldStack && styles.cameraActionsStacked,
+                  shouldStackCameraActions && styles.cameraActionsStacked,
                 ]}
               >
                 <Pressable
@@ -592,7 +608,7 @@ export function ScannerCameraExperience() {
                     accessibilityLabel="유통기한이 안 보여서 직접 고를게요"
                   style={({ pressed }) => [
                     styles.manualAction,
-                    shouldStack && styles.manualActionStacked,
+                    shouldStackCameraActions && styles.manualActionStacked,
                     pressed && styles.manualActionPressed,
                   ]}
                   >
@@ -612,7 +628,7 @@ export function ScannerCameraExperience() {
                     accessibilityLabel="바코드 없이 직접 입력할게요"
                   style={({ pressed }) => [
                     styles.manualAction,
-                    shouldStack && styles.manualActionStacked,
+                    shouldStackCameraActions && styles.manualActionStacked,
                     pressed && styles.manualActionPressed,
                   ]}
                   >

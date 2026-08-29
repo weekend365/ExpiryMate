@@ -11,7 +11,7 @@ export type AppTextVariant = keyof typeof sharedTypography;
 export type FontScaleRole = "body" | "heading" | "chrome";
 export type TextDensity = "regular" | "comfortable" | "large";
 
-/** Body / caption / form labels and TextInput content. */
+/** Body, supporting copy, form labels, and TextInput content. */
 export const FONT_SCALE_BODY_MAX = 2;
 /** Screen titles and section headings. Titles downshift one ramp at large text. */
 export const FONT_SCALE_HEADING_MAX = 2;
@@ -28,7 +28,14 @@ export function getMaxFontSizeMultiplier(role: FontScaleRole = "body"): number {
   return ROLE_MAX[role];
 }
 
-/** Map typography variants to a scale role. */
+/**
+ * Map typography variants to their semantic scale role.
+ *
+ * A small visual size does not automatically make copy navigation chrome.
+ * Captions and labels frequently carry help, legal, error, or disclosure copy,
+ * so they follow the user's text setting by default. Dense controls opt into
+ * `chrome` explicitly at their call site.
+ */
 export function fontScaleRoleForVariant(variant: AppTextVariant): FontScaleRole {
   switch (variant) {
     case "display":
@@ -36,10 +43,6 @@ export function fontScaleRoleForVariant(variant: AppTextVariant): FontScaleRole 
     case "heading":
     case "subheading":
       return "heading";
-    case "caption":
-    case "captionStrong":
-    case "label":
-      return "chrome";
     default:
       return "body";
   }

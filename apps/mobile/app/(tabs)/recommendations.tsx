@@ -731,7 +731,7 @@ export default function RecommendationsScreen() {
                       </AppText>
                       <AppText
                         style={styles.optionsSummaryValue}
-                        numberOfLines={1}
+                        numberOfLines={shouldStack ? undefined : 1}
                       >
                         {quotaCopy.value}
                       </AppText>
@@ -773,7 +773,7 @@ export default function RecommendationsScreen() {
                     </AppText>
                     <AppText
                       style={styles.optionsSummaryValue}
-                      numberOfLines={1}
+                      numberOfLines={shouldStack ? undefined : 1}
                     >
                       {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
                       {useExpiringFirst ? " · 임박 먼저" : ""}
@@ -813,7 +813,7 @@ export default function RecommendationsScreen() {
                     </AppText>
                     <AppText
                       style={styles.optionsSummaryValue}
-                      numberOfLines={1}
+                      numberOfLines={shouldStack ? undefined : 1}
                     >
                       {preferenceSummary.text}
                     </AppText>
@@ -961,7 +961,7 @@ export default function RecommendationsScreen() {
                       </AppText>
                       <AppText
                         style={styles.historyDescription}
-                        numberOfLines={1}
+                        numberOfLines={shouldStack ? undefined : 1}
                         ellipsizeMode="tail"
                       >
                         {formatHistoryPreview(recommendation)}

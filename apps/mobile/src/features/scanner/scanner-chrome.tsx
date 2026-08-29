@@ -24,11 +24,13 @@ export function ScannerGuide({
   showSuccess,
   guideMessage,
   guideMood = "speak",
+  compactHeight = false,
   onGuideFrameChange,
 }: {
   showSuccess: boolean;
   guideMessage: string | null;
   guideMood?: Extract<MascotMood, "speak" | "think">;
+  compactHeight?: boolean;
   onGuideFrameChange: (frame: {
     x: number;
     y: number;
@@ -37,7 +39,7 @@ export function ScannerGuide({
   } | null) => void;
 }) {
   const { height: windowHeight } = useResponsiveLayout();
-  const frameHeight = getScanFrameHeight(windowHeight);
+  const frameHeight = getScanFrameHeight(windowHeight, compactHeight);
   const scanLineTravel = getScanLineTravel(frameHeight);
   const scanLineProgress = useSharedValue(0);
   const scanLineTravelSV = useSharedValue(scanLineTravel);
@@ -98,16 +100,34 @@ export function ScannerGuide({
   };
 
   return (
-    <View style={styles.guideStage} pointerEvents="box-none">
-      <View style={styles.guideCluster} pointerEvents="box-none">
+    <View
+      style={[styles.guideStage, compactHeight && styles.guideStageCompact]}
+      pointerEvents="box-none"
+    >
+      <View
+        style={[styles.guideCluster, compactHeight && styles.guideClusterCompact]}
+        pointerEvents="box-none"
+      >
         {guideMessage ? (
-          <View style={styles.guideBubbleWrap} pointerEvents="none">
-            <MascotSpeechBubble
-              message={guideMessage}
-              mood={guideMood}
-              size="small"
-            />
-          </View>
+          compactHeight ? (
+            <View style={styles.guideMessageCompact} pointerEvents="none">
+              <AppText
+                variant="bodySmall"
+                tone="inverse"
+                style={styles.guideMessageCompactText}
+              >
+                {guideMessage}
+              </AppText>
+            </View>
+          ) : (
+            <View style={styles.guideBubbleWrap} pointerEvents="none">
+              <MascotSpeechBubble
+                message={guideMessage}
+                mood={guideMood}
+                size="small"
+              />
+            </View>
+          )
         ) : null}
         <View style={styles.guideArea} pointerEvents="none">
           <View

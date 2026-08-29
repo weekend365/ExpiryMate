@@ -2,6 +2,8 @@ import { spacing } from "@expirymate/shared";
 
 /** Compact-phone baseline for the scan cutout. Taller windows scale up from this. */
 export const SCAN_FRAME_HEIGHT = spacing.xxxl + spacing.xxxl + spacing.xl;
+/** Short-window cutout used on phone landscape so controls remain reachable. */
+export const SCAN_FRAME_HEIGHT_COMPACT = spacing.xxxl + spacing.lg;
 export const SCAN_FRAME_HEIGHT_RATIO = 0.22;
 export const SCAN_FRAME_HEIGHT_MAX = Math.round(SCAN_FRAME_HEIGHT * 1.75);
 
@@ -14,7 +16,14 @@ export const SCAN_LINE_INSET = spacing.md;
 /** Scan line thickness. */
 export const SCAN_LINE_HEIGHT = spacing.xxs;
 
-export function getScanFrameHeight(windowHeight: number): number {
+export function getScanFrameHeight(
+  windowHeight: number,
+  compactHeight = false,
+): number {
+  if (compactHeight) {
+    return SCAN_FRAME_HEIGHT_COMPACT;
+  }
+
   const ratioHeight = Math.round(windowHeight * SCAN_FRAME_HEIGHT_RATIO);
   return Math.min(
     Math.max(ratioHeight, SCAN_FRAME_HEIGHT),

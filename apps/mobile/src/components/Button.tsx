@@ -45,8 +45,7 @@ export function Button({
   const label = (
     <AppText
       variant={size === "small" ? "bodySmall" : "bodyStrong"}
-      scaleRole="chrome"
-      densityAware={false}
+      scaleRole="body"
       style={[styles.label, { color: textColor }]}
     >
       {children}
