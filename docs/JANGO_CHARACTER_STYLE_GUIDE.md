@@ -180,6 +180,17 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 과거 3D 원본은 `apps/mobile/assets/characters/legacy/`에 보존하며 공식 캐릭터 에셋으로 배포하지 않는다.
 
+### 소형 UI 전용 에셋
+
+`Mascot size="small"`은 `assets/characters/small/jango-{mood}-small.png`를 자동 선택한다.
+
+- 캔버스: 1024×1024 RGBA 원본 (후속 밀도 최적화 전 소스)
+- 구도: 모자부터 앞치마 상단까지의 상반신 크롭
+- 표정: 전신 에셋보다 눈·입·눈썹을 약 18% 크게
+- 선: 외곽선을 조금 굵게 하고 모자 주름·스티치·퀼팅은 최소화
+- 제스처: 각 mood의 장갑 동작과 `cooking`의 거품기는 프레임 안에서 크게 유지
+- 사용 범위: 72px 인라인·배너·시트 전용. `medium`과 `large`는 기존 전신 에셋 유지
+
 ### 브랜딩 / 스토어 / 알림
 
 재생성: `pnpm --filter @expirymate/mobile branding:sync`
@@ -224,6 +235,8 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 2. 아웃라인 안쪽 흰색(몸·모자·앞치마)은 불투명 유지
 3. 납품 전 `hasAlpha: yes`, 모서리 알파 `0` 확인
 
+체크무늬가 실제 픽셀로 생성된 경우 이미지 생성 도구의 `background-extraction` 단계로 외곽만 다시 제거한다. 비정사각형 투명 결과는 리사이즈 후 `scripts/pad-transparent-square.mjs`로 중앙 정렬한다.
+
 ---
 
 ## 8. 앱 사용 규칙
@@ -232,7 +245,7 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 - **한 화면(또는 한 카드/시트) = mood 1개**
 - empty / 성공 / 경고 상태에서는 가능하면 Lucide만 두지 말고 `Mascot`를 주 비주얼로
 - 테두리 카드 프레임 안에 가두지 말고, 화면/시트 배경 위에 앉힌다
-- 사이즈: 온보딩·풀 empty → `large` / 카드 히어로 → `medium` / 인라인·시트 → `small`
+- 사이즈: 온보딩·풀 empty → `large` / 카드 히어로 → `medium` / 인라인·시트 → `small` (소형 상반신 에셋 자동 적용)
 - 장고 아래(또는 옆) **주 CTA 1개**
 - 사용자 문구는 대화형 한국어. 시스템 언어(“저장”, “오류”) 금지 → `.cursor/rules/mobile-ux.mdc` UX 라이팅 따름
 

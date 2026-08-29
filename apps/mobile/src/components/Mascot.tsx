@@ -15,6 +15,14 @@ import jangoPoint from "../../assets/characters/jango-point.png";
 import jangoSpeak from "../../assets/characters/jango-speak.png";
 import jangoThink from "../../assets/characters/jango-think.png";
 import jangoWorry from "../../assets/characters/jango-worry.png";
+import jangoCookingSmall from "../../assets/characters/small/jango-cooking-small.png";
+import jangoEmptySmall from "../../assets/characters/small/jango-empty-small.png";
+import jangoHappySmall from "../../assets/characters/small/jango-happy-small.png";
+import jangoIdleSmall from "../../assets/characters/small/jango-idle-small.png";
+import jangoPointSmall from "../../assets/characters/small/jango-point-small.png";
+import jangoSpeakSmall from "../../assets/characters/small/jango-speak-small.png";
+import jangoThinkSmall from "../../assets/characters/small/jango-think-small.png";
+import jangoWorrySmall from "../../assets/characters/small/jango-worry-small.png";
 import { spacing } from "../shared/theme";
 
 export type MascotMood =
@@ -44,6 +52,17 @@ const mascotSources: Record<MascotMood, ImageSourcePropType> = {
   point: jangoPoint,
 };
 
+const smallMascotSources: Record<MascotMood, ImageSourcePropType> = {
+  idle: jangoIdleSmall,
+  happy: jangoHappySmall,
+  worry: jangoWorrySmall,
+  cooking: jangoCookingSmall,
+  empty: jangoEmptySmall,
+  speak: jangoSpeakSmall,
+  think: jangoThinkSmall,
+  point: jangoPointSmall,
+};
+
 const moodLabels: Record<MascotMood, string> = {
   idle: "기본",
   happy: "기쁜",
@@ -56,13 +75,15 @@ const moodLabels: Record<MascotMood, string> = {
 };
 
 export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
+  const source = size === "small" ? smallMascotSources[mood] : mascotSources[mood];
+
   return (
     <View
       pointerEvents="none"
       style={[styles.frame, sizeStyles[size], style]}
     >
       <Image
-        source={mascotSources[mood]}
+        source={source}
         style={styles.image}
         resizeMode="contain"
         accessibilityIgnoresInvertColors
