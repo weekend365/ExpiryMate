@@ -112,9 +112,10 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 | Label 유형 | 예시 | 목적 | 사용자에게 연결 / 추적 |
 |------------|------|------|------------------------|
 | Contact Info | 계정·공유 초대 이메일 | App Functionality | 연결됨 / 추적 아님 |
-| Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
+| Identifiers | 사용자 ID, 기기(푸시 토큰), SDK 기기 식별자 | App Functionality · Third-Party Advertising · Analytics | 사용자 ID는 연결됨, 기기 ID는 연결됨·연결되지 않음 / 추적 아님 |
 | Purchases | 개인 플러스 구매·갱신·복원·환불 이력 | App Functionality | 연결됨 / 추적 아님 |
-| Coarse Location / Identifiers / Usage Data / Diagnostics | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 기기 식별자, 광고·앱 상호작용, 진단 | Third-Party Advertising / Analytics | SDK 실제 설정대로 신고 / Tracking=No |
+| Coarse Location / Usage Data | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 광고·앱 상호작용 | App Functionality · Third-Party Advertising · Analytics | 연결됨·연결되지 않음 / Tracking=No |
+| Diagnostics / Other Data | Mobile Ads·UMP·ML Kit·Sentry가 처리하는 충돌·성능·기타 진단·기타 SDK 데이터 | App Functionality · Third-Party Advertising · Analytics | 연결되지 않음 / Tracking=No |
 | Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
 | Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
 | Photos or Videos | 영수증·냉장고 일괄 등록용으로 사용자가 고른 사진 | App Functionality | 연결됨 / 추적 아님. 원본은 파싱 후 폐기 |

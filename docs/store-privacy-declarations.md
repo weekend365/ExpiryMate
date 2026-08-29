@@ -57,27 +57,33 @@ Photos or Videos / Play Photos and videos 신고와 권한 문구가 필요합�
 
 ### App Store Connect · App Privacy
 
-모든 항목은 **사용자에게 연결됨 = 예**, **추적에 사용 = 아니오**입니다.
+아래 표는 App Store Connect에 게시한 값과 iOS 빌드에 포함된 Google Mobile Ads,
+Google UMP, ML Kit, Sentry 개인정보 매니페스트를 합친 정본입니다. 계정·구매·앱
+콘텐츠는 사용자에게 연결되며, SDK 진단·기타 데이터는 연결되지 않습니다. 광고
+데이터와 기기 ID는 앱/SDK 처리 경로에 따라 연결됨과 연결되지 않음 양쪽에 표시될
+수 있습니다. 모든 경로의 **추적에 사용 = 아니오**입니다.
 
-| 데이터 유형 | 목적 |
-| --- | --- |
-| Contact Info → Name | App Functionality |
-| Contact Info → Email Address | App Functionality |
-| Identifiers → User ID | App Functionality |
-| Identifiers → Device ID | App Functionality |
-| User Content → Customer Support | App Functionality |
-| User Content → Other User Content | App Functionality · Product Personalization |
-| Purchases → Purchase History | App Functionality |
-| Location → Coarse Location | Third-Party Advertising |
-| Identifiers → Device ID | Third-Party Advertising · Analytics |
-| Usage Data → Advertising Data | Third-Party Advertising |
-| Usage Data → Product Interaction | Analytics |
-| Diagnostics → Crash Data | Analytics |
-| Diagnostics → Performance Data | Analytics |
+| 데이터 유형 | 목적 | 사용자 연결 |
+| --- | --- | --- |
+| Contact Info → Name | App Functionality | 연결됨 |
+| Contact Info → Email Address | App Functionality | 연결됨 |
+| Identifiers → User ID | App Functionality | 연결됨 |
+| Identifiers → Device ID | App Functionality · Third-Party Advertising · Analytics | 연결됨 · 연결되지 않음 |
+| User Content → Photos or Videos | App Functionality | 연결됨 |
+| User Content → Customer Support | App Functionality | 연결됨 |
+| User Content → Other User Content | App Functionality · Product Personalization | 연결됨 |
+| Purchases → Purchase History | App Functionality | 연결됨 |
+| Location → Coarse Location | Third-Party Advertising | 연결됨 |
+| Usage Data → Advertising Data | Third-Party Advertising · Analytics | 연결됨 · 연결되지 않음 |
+| Usage Data → Product Interaction | Analytics · Third-Party Advertising | 연결됨 |
+| Diagnostics → Crash Data | App Functionality · Analytics | 연결되지 않음 |
+| Diagnostics → Performance Data | App Functionality · Third-Party Advertising · Analytics | 연결되지 않음 |
+| Diagnostics → Other Diagnostic Data | App Functionality · Third-Party Advertising · Analytics | 연결되지 않음 |
+| Other Data → Other Data Types | App Functionality · Analytics | 연결되지 않음 |
 
 - Tracking: **No**
-- Photos or Videos: **이 코드가 들어간 빌드**는 App Functionality, 사용자 시작,
-  필수 아님으로 신고. 원본은 서버에 보관하지 않고 OpenAI Vision 파싱 후 폐기.
+- Photos or Videos는 App Functionality, 사용자 시작, 필수 아님으로 신고. 원본은
+  서버에 보관하지 않고 OpenAI Vision 파싱 후 폐기.
   바코드/OCR 카메라 프레임은 Photos가 아님.
 - `apps/mobile/ios/ExpiryMate/PrivacyInfo.xcprivacy`의
   `NSPrivacyCollectedDataTypes`와 같은 범위를 유지

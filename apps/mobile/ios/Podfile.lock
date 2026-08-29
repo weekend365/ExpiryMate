@@ -3,6 +3,9 @@ PODS:
     - ExpoModulesCore
   - EXConstants (18.0.13):
     - ExpoModulesCore
+  - EXImageLoader (6.0.0):
+    - ExpoModulesCore
+    - React-Core
   - EXNotifications (0.32.17):
     - ExpoModulesCore
   - Expo (54.0.36):
@@ -46,9 +49,16 @@ PODS:
     - ExpoModulesCore
   - ExpoFont (14.0.12):
     - ExpoModulesCore
+  - ExpoHaptics (15.0.8):
+    - ExpoModulesCore
   - ExpoHead (6.0.24):
     - ExpoModulesCore
     - RNScreens
+  - ExpoIap (4.7.2):
+    - ExpoModulesCore
+    - openiap (= 2.4.4)
+  - ExpoImagePicker (17.0.11):
+    - ExpoModulesCore
   - ExpoKeepAwake (15.0.8):
     - ExpoModulesCore
   - ExpoLinking (8.0.12):
@@ -83,6 +93,8 @@ PODS:
   - ExpoWebBrowser (15.0.11):
     - ExpoModulesCore
   - FBLazyVector (0.81.5)
+  - Google-Mobile-Ads-SDK (13.1.0):
+    - GoogleUserMessagingPlatform (>= 1.1)
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
@@ -111,6 +123,7 @@ PODS:
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - "GoogleToolboxForMac/NSData+zlib (4.2.1)":
     - GoogleToolboxForMac/Defines (= 4.2.1)
+  - GoogleUserMessagingPlatform (3.1.0)
   - GoogleUtilities/Environment (8.1.2):
     - GoogleUtilities/Privacy
   - GoogleUtilities/Logger (8.1.2):
@@ -169,6 +182,7 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - openiap (2.4.4)
   - PromisesObjC (2.4.1)
   - RCTDeprecation (0.81.5)
   - RCTRequired (0.81.5)
@@ -1934,6 +1948,30 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - RNGoogleMobileAds (16.3.4):
+    - Google-Mobile-Ads-SDK (= 13.1.0)
+    - GoogleUserMessagingPlatform (= 3.1.0)
+    - hermes-engine
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - RNMLKitBarcodeScanning (2.0.0):
     - GoogleMLKit/BarcodeScanning (= 8.0.0)
     - React
@@ -2216,6 +2254,7 @@ PODS:
 DEPENDENCIES:
   - "EXApplication (from `../../../node_modules/.pnpm/expo-application@7.0.8_expo@54.0.36/node_modules/expo-application/ios`)"
   - "EXConstants (from `../../../node_modules/.pnpm/expo-constants@18.0.13_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metr_w2mip5nyn4nsur6z3sixr55j4u/node_modules/expo-constants/ios`)"
+  - "EXImageLoader (from `../../../node_modules/.pnpm/expo-image-loader@6.0.0_expo@54.0.36/node_modules/expo-image-loader/ios`)"
   - "EXNotifications (from `../../../node_modules/.pnpm/expo-notifications@0.32.17_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+_q772oowrpt2mmaxxmbep7xqaxe/node_modules/expo-notifications/ios`)"
   - "Expo (from `../../../node_modules/.pnpm/expo@54.0.36_@babel+core@7.29.0_@expo+metro-runtime@6.1.2_expo-router@6.0.24_react-native@0.8_q3thmzrhs4rd762oa6o64v4vda/node_modules/expo`)"
   - "ExpoAppleAuthentication (from `../../../node_modules/.pnpm/expo-apple-authentication@8.0.8_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-na_35vsy5op3gn7jd2sd5tob67fnq/node_modules/expo-apple-authentication/ios`)"
@@ -2225,7 +2264,10 @@ DEPENDENCIES:
   - "ExpoCrypto (from `../../../node_modules/.pnpm/expo-crypto@15.0.9_expo@54.0.36/node_modules/expo-crypto/ios`)"
   - "ExpoFileSystem (from `../../../node_modules/.pnpm/expo-file-system@19.0.23_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+me_bi46iihvjiuowigi2dssjl7wky/node_modules/expo-file-system/ios`)"
   - "ExpoFont (from `../../../node_modules/.pnpm/expo-font@14.0.12_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-con_fevgriw57cq5656kalbsztfhvy/node_modules/expo-font/ios`)"
+  - "ExpoHaptics (from `../../../node_modules/.pnpm/expo-haptics@15.0.8_expo@54.0.36/node_modules/expo-haptics/ios`)"
   - "ExpoHead (from `../../../node_modules/.pnpm/expo-router@6.0.24_6vmbeogdoviexde33dptx7nqf4/node_modules/expo-router/ios`)"
+  - "ExpoIap (from `../../../node_modules/.pnpm/expo-iap@4.7.2_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-config_4qgfh7bdebwyzxnxnqf277jwae/node_modules/expo-iap/ios`)"
+  - "ExpoImagePicker (from `../../../node_modules/.pnpm/expo-image-picker@17.0.11_expo@54.0.36/node_modules/expo-image-picker/ios`)"
   - "ExpoKeepAwake (from `../../../node_modules/.pnpm/expo-keep-awake@15.0.8_expo@54.0.36_react@19.1.0/node_modules/expo-keep-awake/ios`)"
   - "ExpoLinking (from `../../../node_modules/.pnpm/expo-linking@8.0.12_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-c_dckwm5o6mqnucnbhu3vfglchma/node_modules/expo-linking/ios`)"
   - "ExpoModulesCore (from `../../../node_modules/.pnpm/expo-modules-core@3.0.30_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-config@0._hyys4sefstqfbo7g32k23ui7lq/node_modules/expo-modules-core`)"
@@ -2303,6 +2345,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../../../node_modules/.pnpm/@react-native-async-storage+async-storage@2.2.0_react-native@0.81.5_@babel+core@7.29.0_@react_fu4lsl4aisuyotmjoz3t66oaau/node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../../../node_modules/.pnpm/@react-native-community+datetimepicker@8.4.4_expo@54.0.36_react-native@0.81.5_@babel+core@7.2_vilq3scfp7j5yve6ciamiulwxy/node_modules/@react-native-community/datetimepicker`)"
   - "RNGestureHandler (from `../../../node_modules/.pnpm/react-native-gesture-handler@2.28.0_react-native@0.81.5_@babel+core@7.29.0_@react-native+metr_2ekx4kc6xkzisuf7qgpn3gqyni/node_modules/react-native-gesture-handler`)"
+  - "RNGoogleMobileAds (from `../../../node_modules/.pnpm/react-native-google-mobile-ads@16.3.4_expo@54.0.36_react@19.1.0/node_modules/react-native-google-mobile-ads`)"
   - "RNMLKitBarcodeScanning (from `../../../node_modules/.pnpm/@react-native-ml-kit+barcode-scanning@2.0.0_react-native@0.81.5_@babel+core@7.29.0_@react-nat_rhxcfp4sd3k5yq4emitw5msqoi/node_modules/@react-native-ml-kit/barcode-scanning`)"
   - "RNMLKitTextRecognition (from `../../../node_modules/.pnpm/@react-native-ml-kit+text-recognition@2.0.0_react-native@0.81.5_@babel+core@7.29.0_@react-nat_6plxdom4zhnjk3aw73xds67zju/node_modules/@react-native-ml-kit/text-recognition`)"
   - "RNReanimated (from `../../../node_modules/.pnpm/react-native-reanimated@4.1.7_react-native-worklets@0.5.1_@babel+core@7.29.0_react-native@0.8_uhqo3n5euo5fiyx5tawtrmlbw4/node_modules/react-native-reanimated`)"
@@ -2314,9 +2357,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Google-Mobile-Ads-SDK
     - GoogleDataTransport
     - GoogleMLKit
     - GoogleToolboxForMac
+    - GoogleUserMessagingPlatform
     - GoogleUtilities
     - GTMSessionFetcher
     - MLImage
@@ -2330,6 +2375,7 @@ SPEC REPOS:
     - MLKitTextRecognitionKorean
     - MLKitVision
     - nanopb
+    - openiap
     - PromisesObjC
     - Sentry
     - ZXingObjC
@@ -2339,6 +2385,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/expo-application@7.0.8_expo@54.0.36/node_modules/expo-application/ios"
   EXConstants:
     :path: "../../../node_modules/.pnpm/expo-constants@18.0.13_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metr_w2mip5nyn4nsur6z3sixr55j4u/node_modules/expo-constants/ios"
+  EXImageLoader:
+    :path: "../../../node_modules/.pnpm/expo-image-loader@6.0.0_expo@54.0.36/node_modules/expo-image-loader/ios"
   EXNotifications:
     :path: "../../../node_modules/.pnpm/expo-notifications@0.32.17_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+_q772oowrpt2mmaxxmbep7xqaxe/node_modules/expo-notifications/ios"
   Expo:
@@ -2357,8 +2405,14 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/expo-file-system@19.0.23_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+me_bi46iihvjiuowigi2dssjl7wky/node_modules/expo-file-system/ios"
   ExpoFont:
     :path: "../../../node_modules/.pnpm/expo-font@14.0.12_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-con_fevgriw57cq5656kalbsztfhvy/node_modules/expo-font/ios"
+  ExpoHaptics:
+    :path: "../../../node_modules/.pnpm/expo-haptics@15.0.8_expo@54.0.36/node_modules/expo-haptics/ios"
   ExpoHead:
     :path: "../../../node_modules/.pnpm/expo-router@6.0.24_6vmbeogdoviexde33dptx7nqf4/node_modules/expo-router/ios"
+  ExpoIap:
+    :path: "../../../node_modules/.pnpm/expo-iap@4.7.2_expo@54.0.36_react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-config_4qgfh7bdebwyzxnxnqf277jwae/node_modules/expo-iap/ios"
+  ExpoImagePicker:
+    :path: "../../../node_modules/.pnpm/expo-image-picker@17.0.11_expo@54.0.36/node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
     :path: "../../../node_modules/.pnpm/expo-keep-awake@15.0.8_expo@54.0.36_react@19.1.0/node_modules/expo-keep-awake/ios"
   ExpoLinking:
@@ -2512,6 +2566,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.pnpm/@react-native-community+datetimepicker@8.4.4_expo@54.0.36_react-native@0.81.5_@babel+core@7.2_vilq3scfp7j5yve6ciamiulwxy/node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
     :path: "../../../node_modules/.pnpm/react-native-gesture-handler@2.28.0_react-native@0.81.5_@babel+core@7.29.0_@react-native+metr_2ekx4kc6xkzisuf7qgpn3gqyni/node_modules/react-native-gesture-handler"
+  RNGoogleMobileAds:
+    :path: "../../../node_modules/.pnpm/react-native-google-mobile-ads@16.3.4_expo@54.0.36_react@19.1.0/node_modules/react-native-google-mobile-ads"
   RNMLKitBarcodeScanning:
     :path: "../../../node_modules/.pnpm/@react-native-ml-kit+barcode-scanning@2.0.0_react-native@0.81.5_@babel+core@7.29.0_@react-nat_rhxcfp4sd3k5yq4emitw5msqoi/node_modules/@react-native-ml-kit/barcode-scanning"
   RNMLKitTextRecognition:
@@ -2532,6 +2588,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   EXApplication: 1e98d4b1dccdf30627f92917f4b2c5a53c330e5f
   EXConstants: fce59a631a06c4151602843667f7cfe35f81e271
+  EXImageLoader: 189e3476581efe3ad4d1d3fb4735b7179eb26f05
   EXNotifications: c67e92b9fdfe785ff9dbdc5f4c0ff935de357da7
   Expo: 38ef0f0082a53f9604a48cbab2ab55289c658eaf
   ExpoAppleAuthentication: 9413ae9a5e631a424cc04c1b13b0694dbab7d594
@@ -2541,7 +2598,10 @@ SPEC CHECKSUMS:
   ExpoCrypto: e2a2c4c748aac8485e5675f027b7901f511d43ff
   ExpoFileSystem: a8e7fb1e958471764fb48d281cf9fa81a9e4d77c
   ExpoFont: dfb7c572372b610da45b41e3b436321fd6a97215
+  ExpoHaptics: d3a6375d8dcc3a1083d003bc2298ff654fafb536
   ExpoHead: 33924c5829f9a3f98a5bd432d23c0e02ef64afcc
+  ExpoIap: ab93e70b11695f5a1ba5b0fae0f0fc1b1cc9bb91
+  ExpoImagePicker: ade85e148f735fc7e6f27dfe3eef28eb3887e90a
   ExpoKeepAwake: 55f75eca6499bb9e4231ebad6f3e9cb8f99c0296
   ExpoLinking: 2ef632ad5013e3f1568fae9408d56ab9af5efc55
   ExpoModulesCore: 9e6a5514828e7dd5ded9e99d33557be2d284e660
@@ -2549,9 +2609,11 @@ SPEC CHECKSUMS:
   ExpoSplashScreen: bc3cffefca2716e5f22350ca109badd7e50ec14d
   ExpoWebBrowser: 970dd4c64c29c955c3af664c8058ba768a4c9187
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
+  Google-Mobile-Ads-SDK: 8429bef6ee1a4e322b0a5571b64217ed8317a3d5
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleMLKit: ddd51d7dff36ff28defa69afedd9cdce684fd857
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
+  GoogleUserMessagingPlatform: befe603da6501006420c206222acd449bba45a9c
   GoogleUtilities: 766ace00c6b10d8148408f329d10c4f051931850
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
@@ -2566,6 +2628,7 @@ SPEC CHECKSUMS:
   MLKitTextRecognitionKorean: dc1273aa2ef41f363b585d3dde1cf2de68c7c6d8
   MLKitVision: fa8dea9012ac59497c79ddbe9ebf32051047ac4c
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  openiap: 15b2c855d1c670d1d7afb765bee781f6d638c18c
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   RCTDeprecation: 943572d4be82d480a48f4884f670135ae30bf990
   RCTRequired: 8f3cfc90cc25cf6e420ddb3e7caaaabc57df6043
@@ -2635,6 +2698,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 3a4f5e2777dae1688b781a487923a08569e27fe4
   RNDateTimePicker: be0e44bcb9ed0607c7c5f47dbedd88cf091f6791
   RNGestureHandler: 2914750df066d89bf9d8f48a10ad5f0051108ac3
+  RNGoogleMobileAds: 7cbcc4e127540900df5ebeb9650ffb63811b4bbf
   RNMLKitBarcodeScanning: a1a23bcc83fea2a94e6b6ceeb3a0ff80d773392f
   RNMLKitTextRecognition: 2d7c3481b9dabc72f7e31c67025c28b2c8d653b0
   RNReanimated: 902403d7bd8e841eb6db4e316e6d6d95459115db
