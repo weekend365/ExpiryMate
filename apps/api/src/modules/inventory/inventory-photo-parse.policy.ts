@@ -9,6 +9,7 @@ import {
 import {
   getKstDayStart,
   getKstDayWindow,
+  getKstMonthWindow,
   dateOnlyToUtcDate,
   inventoryPhotoParseResponseSchema,
   toKstDateOnly,
@@ -31,6 +32,8 @@ const DEFAULT_GLOBAL_DAILY_COST_LIMIT_USD = 10;
 const DEFAULT_MAX_INFLIGHT = 3;
 const DEFAULT_FREE_DAILY_LIMIT = 1;
 const DEFAULT_REWARDED_DAILY_LIMIT = 3;
+const DEFAULT_SUBSCRIBER_DAILY_LIMIT = 3;
+const DEFAULT_SUBSCRIBER_MONTHLY_LIMIT = 30;
 const RESULT_RETENTION_MS = 24 * 60 * 60 * 1000;
 
 type DbClient = PrismaService | Prisma.TransactionClient;
@@ -91,6 +94,7 @@ export class InventoryPhotoParsePolicyService {
     db: DbClient = this.prisma,
   ): Promise<InventoryPhotoParseAccess> {
     const { start, endExclusive } = getKstDayWindow(now);
+    const monthWindow = getKstMonthWindow(now);
     const usageDay = dateOnlyToUtcDate(toKstDateOnly(now));
     const freeLimit = getNonNegativeIntegerEnv(
       "INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT",
@@ -99,7 +103,33 @@ export class InventoryPhotoParsePolicyService {
     const rewardedLimit = this.getRewardedDailyLimit();
     const rewardedAdsEnabled = isPhotoParseRewardedAdsEnabled();
 
-    const [freeUsed, verifiedRewards, availableRewards] = await Promise.all([
+    const entitlement = await db.subscriptionEntitlement.findFirst({
+      where: {
+        ownerKey,
+        spaceId: null,
+        planCode: "jango_plus",
+        isActive: true,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      },
+      orderBy: [{ expiresAt: "desc" }, { verifiedAt: "desc" }],
+      select: { id: true },
+    });
+    const subscriberDailyLimit = getNonNegativeIntegerEnv(
+      "INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT",
+      DEFAULT_SUBSCRIBER_DAILY_LIMIT,
+    );
+    const subscriberMonthlyLimit = getNonNegativeIntegerEnv(
+      "INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT",
+      DEFAULT_SUBSCRIBER_MONTHLY_LIMIT,
+    );
+
+    const [
+      freeUsed,
+      verifiedRewards,
+      availableRewards,
+      subscriptionDailyUsed,
+      subscriptionMonthlyUsed,
+    ] = await Promise.all([
       db.inventoryPhotoParseEvent.count({
         where: {
           ownerKey,
@@ -125,7 +155,79 @@ export class InventoryPhotoParsePolicyService {
           photoParseEvent: { is: null },
         },
       }),
+      entitlement
+        ? db.inventoryPhotoParseEvent.count({
+            where: {
+              subscriptionEntitlementId: entitlement.id,
+              usageDay,
+              usageSource: InventoryPhotoParseUsageSource.subscription,
+              status: { in: ["reserved", "succeeded"] },
+            },
+          })
+        : 0,
+      entitlement
+        ? db.inventoryPhotoParseEvent.count({
+            where: {
+              subscriptionEntitlementId: entitlement.id,
+              usageDay: {
+                gte: monthWindow.start,
+                lt: monthWindow.endExclusive,
+              },
+              usageSource: InventoryPhotoParseUsageSource.subscription,
+              status: { in: ["reserved", "succeeded"] },
+            },
+          })
+        : 0,
     ]);
+
+    if (entitlement) {
+      const dailyRemaining = Math.max(
+        0,
+        subscriberDailyLimit - subscriptionDailyUsed,
+      );
+      const monthlyRemaining = Math.max(
+        0,
+        subscriberMonthlyLimit - subscriptionMonthlyUsed,
+      );
+      const canParse = dailyRemaining > 0 && monthlyRemaining > 0;
+      return {
+        day: toKstDateOnly(now),
+        timezone: "Asia/Seoul",
+        resetsAt: endExclusive.toISOString(),
+        canParse,
+        requiredAction: canParse ? "none" : "daily_limit_reached",
+        tier: "jango_plus",
+        usageSource: canParse
+          ? InventoryPhotoParseUsageSource.subscription
+          : null,
+        subscriptionQuota: {
+          timezone: "Asia/Seoul",
+          period: "calendar_month",
+          startsAt: monthWindow.start.toISOString(),
+          resetsAt: monthWindow.endExclusive.toISOString(),
+          monthly: {
+            limit: subscriberMonthlyLimit,
+            used: subscriptionMonthlyUsed,
+            remaining: monthlyRemaining,
+          },
+          daily: {
+            limit: subscriberDailyLimit,
+            used: subscriptionDailyUsed,
+            remaining: dailyRemaining,
+            resetsAt: endExclusive.toISOString(),
+          },
+        },
+        free: { limit: 0, used: 0, remaining: 0 },
+        rewardedAds: {
+          enabled: false,
+          dailyLimit: 0,
+          verified: 0,
+          creditsAvailable: 0,
+          remainingToWatch: 0,
+          canWatch: false,
+        },
+      };
+    }
 
     const freeRemaining = Math.max(0, freeLimit - freeUsed);
     const remainingToWatch = Math.max(0, rewardedLimit - verifiedRewards);
@@ -149,6 +251,13 @@ export class InventoryPhotoParsePolicyService {
       resetsAt: endExclusive.toISOString(),
       canParse,
       requiredAction,
+      tier: "free",
+      usageSource: freeRemaining > 0
+        ? InventoryPhotoParseUsageSource.free
+        : availableRewards > 0
+          ? InventoryPhotoParseUsageSource.rewarded_ad
+          : null,
+      subscriptionQuota: null,
       free: {
         limit: freeLimit,
         used: Math.min(freeUsed, freeLimit),
@@ -245,7 +354,32 @@ export class InventoryPhotoParsePolicyService {
             const access = await this.getAccess(input.ownerKey, input.now, tx);
             let usageSource: InventoryPhotoParseUsageSource;
             let rewardedAdSessionId: string | null = null;
-            if (access.free.remaining > 0) {
+            let subscriptionEntitlementId: string | null = null;
+            if (access.tier === "jango_plus" && access.canParse) {
+              usageSource = InventoryPhotoParseUsageSource.subscription;
+              const entitlement = await tx.subscriptionEntitlement.findFirst({
+                where: {
+                  ownerKey: input.ownerKey,
+                  spaceId: null,
+                  planCode: "jango_plus",
+                  isActive: true,
+                  OR: [
+                    { expiresAt: null },
+                    { expiresAt: { gt: input.now } },
+                  ],
+                },
+                select: { id: true },
+              });
+              subscriptionEntitlementId = entitlement?.id ?? null;
+              if (!subscriptionEntitlementId) {
+                throw new CodedHttpException(
+                  HttpStatus.CONFLICT,
+                  "SUBSCRIPTION_REFRESH_REQUIRED",
+                  "구독 상태를 새로 확인한 뒤 다시 시도해 주세요.",
+                  access,
+                );
+              }
+            } else if (access.free.remaining > 0) {
               usageSource = InventoryPhotoParseUsageSource.free;
             } else {
               const { start, endExclusive } = getKstDayWindow(input.now);
@@ -289,6 +423,7 @@ export class InventoryPhotoParsePolicyService {
                 status: "reserved",
                 usageDay,
                 usageSource,
+                subscriptionEntitlementId,
                 idempotencyKey,
                 rewardedAdSessionId,
                 reservedCostUsd: new Prisma.Decimal(
@@ -366,6 +501,22 @@ export class InventoryPhotoParsePolicyService {
     projectedCostUsd: number,
     now: Date,
   ) {
+    const activePlus = await this.prisma.subscriptionEntitlement.findFirst({
+      where: {
+        ownerKey,
+        spaceId: null,
+        planCode: "jango_plus",
+        isActive: true,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      },
+      select: { id: true },
+    });
+    // Per-user cost controls protect free/ad usage. Paid usage is governed by
+    // the fixed daily and monthly subscription quotas promised at purchase.
+    if (activePlus) {
+      return;
+    }
+
     const dailyCostLimitUsd = getNonNegativeNumberEnv(
       "INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD",
       DEFAULT_DAILY_COST_LIMIT_USD,

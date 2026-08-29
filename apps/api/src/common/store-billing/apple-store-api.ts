@@ -196,10 +196,13 @@ function signJwt(
   signer.update(input);
   signer.end();
   const signature = signer.sign(privateKey);
-  return `${input}.${derToJoseSignature(signature, 32).toString("base64url")}`;
+  return `${input}.${derToJoseSignature(Uint8Array.from(signature), 32).toString("base64url")}`;
 }
 
-function derToJoseSignature(signature: Buffer, partLength: number) {
+function derToJoseSignature(
+  signature: Uint8Array<ArrayBufferLike>,
+  partLength: number,
+) {
   let offset = 0;
   if (signature[offset++] !== 0x30) {
     throw new ServiceUnavailableException("Apple JWT 서명 형식이 올바르지 않습니다.");
@@ -218,13 +221,13 @@ function derToJoseSignature(signature: Buffer, partLength: number) {
   const sLength = readDerLength(signature, offset);
   offset += sLength.bytesRead;
   const s = signature.subarray(offset, offset + sLength.length);
-  return Buffer.concat([
-    normalizeEcdsaPart(r, partLength),
-    normalizeEcdsaPart(s, partLength),
-  ]);
+  const output = new Uint8Array(partLength * 2);
+  output.set(normalizeEcdsaPart(r, partLength), 0);
+  output.set(normalizeEcdsaPart(s, partLength), partLength);
+  return Buffer.from(output);
 }
 
-function readDerLength(buffer: Buffer, offset: number) {
+function readDerLength(buffer: Uint8Array<ArrayBufferLike>, offset: number) {
   const first = buffer[offset];
   if (first === undefined) {
     throw new ServiceUnavailableException("JWT 서명 길이를 확인하지 못했습니다.");
@@ -242,7 +245,10 @@ function readDerLength(buffer: Buffer, offset: number) {
   return { length, bytesRead: 1 + lengthBytes };
 }
 
-function normalizeEcdsaPart(part: Buffer, length: number) {
+function normalizeEcdsaPart(
+  part: Uint8Array<ArrayBufferLike>,
+  length: number,
+) {
   let normalized = part;
   while (normalized.length > length && normalized[0] === 0) {
     normalized = normalized.subarray(1);
@@ -250,8 +256,8 @@ function normalizeEcdsaPart(part: Buffer, length: number) {
   if (normalized.length > length) {
     throw new ServiceUnavailableException("JWT 서명 길이가 올바르지 않습니다.");
   }
-  const output = Buffer.alloc(length);
-  normalized.copy(output, length - normalized.length);
+  const output = new Uint8Array(length);
+  output.set(normalized, length - normalized.length);
   return output;
 }
 

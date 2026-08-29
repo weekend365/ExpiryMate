@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 import {
   BadGatewayException,
   BadRequestException,
@@ -19,6 +19,8 @@ import {
 } from "@prisma/client";
 import type {
   SubscriptionEntitlement,
+  SubscriptionPurchaseIntent,
+  SubscriptionPurchaseIntentRequest,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
 } from "@expirymate/shared";
@@ -44,6 +46,7 @@ import {
   householdSubscriptionSalesEnabled,
   subscriptionSalesEnabled,
 } from "../monetization/subscription-sales-policy";
+import { getUnitEconomicsAvailability } from "../monetization/unit-economics-guardrail";
 
 interface VerifiedStoreSubscription {
   store: SubscriptionStore;
@@ -64,6 +67,7 @@ interface VerifiedStoreSubscription {
   expiresAt: Date | null;
   environment: string | null;
   rawVerification: Prisma.InputJsonValue;
+  accountIdentifier?: string;
 }
 
 interface AppleStatusResponse {
@@ -91,6 +95,7 @@ interface AppleTransactionPayload {
   expiresDate?: number;
   revocationDate?: number;
   type?: string;
+  appAccountToken?: string;
 }
 
 interface AppleRenewalPayload {
@@ -107,6 +112,9 @@ interface GoogleSubscriptionResponse {
   acknowledgementState?: string;
   linkedPurchaseToken?: string;
   lineItems?: GoogleSubscriptionLineItem[];
+  externalAccountIdentifiers?: {
+    obfuscatedExternalAccountId?: string;
+  };
 }
 
 interface GoogleSubscriptionLineItem {
@@ -124,6 +132,70 @@ interface GoogleSubscriptionLineItem {
 @Injectable()
 export class SubscriptionsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async createPurchaseIntent(
+    ownerKey: string,
+    dto: SubscriptionPurchaseIntentRequest,
+    now = new Date(),
+  ): Promise<SubscriptionPurchaseIntent> {
+    this.assertAllowedProduct(dto.productId);
+    if (resolvePlanCode(dto.productId) !== "jango_plus") {
+      throw new ForbiddenException("첫 출시에서는 개인 플러스만 구매할 수 있습니다.");
+    }
+    if (!subscriptionSalesEnabled()) {
+      throw new ServiceUnavailableException(
+        "장고 플러스 신규 가입은 잠시 쉬고 있어요. 이미 이용 중인 혜택은 그대로 유지돼요.",
+      );
+    }
+    const economics = await getUnitEconomicsAvailability(this.prisma, now);
+    if (!economics.subscriptions.allowed) {
+      throw new ServiceUnavailableException(
+        "원가 검증이 끝날 때까지 장고 플러스 신규 가입을 잠시 쉬고 있어요.",
+      );
+    }
+    const active = await this.prisma.subscriptionEntitlement.findFirst({
+      where: {
+        ownerKey,
+        spaceId: null,
+        planCode: "jango_plus",
+        isActive: true,
+        OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
+      },
+      select: { id: true },
+    });
+    if (active) {
+      throw new ConflictException("이미 사용 중인 개인 플러스 구독이 있습니다.");
+    }
+
+    const id = randomUUID();
+    const appleAppAccountToken = randomUUID();
+    const googleObfuscatedAccountId = createHmac(
+      "sha256",
+      getPurchaseIntentSecret(),
+    )
+      .update(`${ownerKey}:${id}`)
+      .digest("hex");
+    const expiresAt = new Date(now.getTime() + 10 * 60 * 1000);
+    const record = await this.prisma.subscriptionPurchaseIntent.create({
+      data: {
+        id,
+        ownerKey,
+        store: dto.store,
+        productId: dto.productId,
+        appleAppAccountToken,
+        googleObfuscatedAccountId,
+        expiresAt,
+      },
+    });
+    return {
+      id: record.id,
+      store: record.store,
+      productId: record.productId,
+      appleAppAccountToken: record.appleAppAccountToken,
+      googleObfuscatedAccountId: record.googleObfuscatedAccountId,
+      expiresAt: record.expiresAt.toISOString(),
+    };
+  }
 
   async getEntitlement(
     ownerKey: string,
@@ -395,7 +467,17 @@ export class SubscriptionsService {
     await this.ensurePurchaseIsAvailableForOwner(ownerKey, verification);
 
     const existingPurchase = await this.findExistingPurchase(verification);
-    this.assertSubscriptionSalesAllowed(ownerKey, verification, existingPurchase);
+    await this.assertSubscriptionSalesAllowed(
+      ownerKey,
+      verification,
+      existingPurchase,
+    );
+    const purchaseIntent = await this.verifyPurchaseIntent(
+      ownerKey,
+      dto,
+      verification,
+      existingPurchase,
+    );
     const spaceId =
       verification.planCode === "jango_household"
         ? existingPurchase?.ownerKey === ownerKey && existingPurchase.spaceId
@@ -406,6 +488,12 @@ export class SubscriptionsService {
       throw new BadRequestException("개인 플러스는 공간에 연결할 수 없습니다.");
     }
     const record = await this.saveEntitlement(ownerKey, verification, spaceId);
+    if (purchaseIntent) {
+      await this.prisma.subscriptionPurchaseIntent.update({
+        where: { id: purchaseIntent.id },
+        data: { consumedAt: new Date() },
+      });
+    }
 
     return {
       ok: true,
@@ -884,6 +972,8 @@ export class SubscriptionsService {
       willRenew: lineItem.autoRenewingPlan?.autoRenewEnabled ?? null,
       expiresAt,
       environment: payload.testPurchase ? "sandbox" : "production",
+      accountIdentifier:
+        payload.externalAccountIdentifiers?.obfuscatedExternalAccountId,
       rawVerification: toJson({
         subscriptionState: payload.subscriptionState,
         latestOrderId: payload.latestOrderId,
@@ -892,6 +982,7 @@ export class SubscriptionsService {
           ? hashToken(payload.linkedPurchaseToken)
           : null,
         testPurchase: Boolean(payload.testPurchase),
+        externalAccountIdentifiers: payload.externalAccountIdentifiers ?? null,
         lineItem,
       }),
     };
@@ -930,7 +1021,7 @@ export class SubscriptionsService {
     }
   }
 
-  private assertSubscriptionSalesAllowed(
+  private async assertSubscriptionSalesAllowed(
     ownerKey: string,
     verification: VerifiedStoreSubscription,
     existing: PrismaSubscriptionEntitlement | null,
@@ -953,6 +1044,83 @@ export class SubscriptionsService {
           : "장고 플러스 신규 가입은 잠시 쉬고 있어요. 이미 이용 중인 혜택은 그대로 유지돼요.",
       );
     }
+    if (verification.planCode === "jango_plus") {
+      const economics = await getUnitEconomicsAvailability(this.prisma);
+      if (!economics.subscriptions.allowed) {
+        throw new ServiceUnavailableException(
+          "원가 검증이 끝날 때까지 장고 플러스 신규 가입을 잠시 쉬고 있어요.",
+        );
+      }
+    }
+  }
+
+  private async verifyPurchaseIntent(
+    ownerKey: string,
+    dto: SubscriptionVerificationRequest,
+    verification: VerifiedStoreSubscription,
+    existing: PrismaSubscriptionEntitlement | null,
+  ) {
+    if (!dto.purchaseIntentId) {
+      if (existing || !purchaseIntentsRequired()) {
+        return null;
+      }
+      if (!verification.accountIdentifier) {
+        throw new BadRequestException("결제 의도를 다시 만든 뒤 구매해 주세요.");
+      }
+      const recoveredIntent =
+        await this.prisma.subscriptionPurchaseIntent.findFirst({
+          where: {
+            ownerKey,
+            store: verification.store,
+            productId: verification.productId,
+            consumedAt: null,
+            ...(verification.store === SubscriptionStore.apple_app_store
+              ? { appleAppAccountToken: verification.accountIdentifier }
+              : { googleObfuscatedAccountId: verification.accountIdentifier }),
+          },
+          orderBy: { createdAt: "desc" },
+        });
+      if (!recoveredIntent) {
+        throw new BadRequestException("결제 의도를 다시 만든 뒤 구매해 주세요.");
+      }
+      return recoveredIntent;
+    }
+    const intent = await this.prisma.subscriptionPurchaseIntent.findUnique({
+      where: { id: dto.purchaseIntentId },
+    });
+    if (
+      !intent ||
+      intent.ownerKey !== ownerKey ||
+      intent.store !== verification.store ||
+      intent.productId !== verification.productId ||
+      intent.consumedAt
+    ) {
+      throw new BadRequestException("유효하지 않거나 만료된 결제 의도입니다.");
+    }
+    const expectedIdentifier =
+      verification.store === SubscriptionStore.apple_app_store
+        ? intent.appleAppAccountToken
+        : intent.googleObfuscatedAccountId;
+    if (
+      intent.expiresAt <= new Date() &&
+      verification.accountIdentifier !== expectedIdentifier
+    ) {
+      throw new BadRequestException("만료된 결제 의도입니다.");
+    }
+    if (
+      verification.accountIdentifier &&
+      verification.accountIdentifier !== expectedIdentifier
+    ) {
+      throw new ConflictException(
+        "스토어 구매 계정과 현재 로그인 계정이 일치하지 않습니다.",
+      );
+    }
+    if (purchaseIntentsRequired() && !verification.accountIdentifier) {
+      throw new ConflictException(
+        "스토어 구매에서 로그인 계정 연결 정보를 확인하지 못했습니다.",
+      );
+    }
+    return intent;
   }
 
   private async ensurePurchaseIsAvailableForOwner(
@@ -1215,6 +1383,7 @@ function normalizeAppleTransaction({
         : null,
     expiresAt,
     environment: transaction.environment ?? environment,
+    accountIdentifier: transaction.appAccountToken,
     rawVerification: toJson({
       raw,
       transaction,
@@ -1581,6 +1750,25 @@ function getRequiredEnv(name: string, message: string) {
 
 function hashToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
+}
+
+function purchaseIntentsRequired() {
+  const configured = process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED;
+  if (configured) {
+    return configured.trim().toLowerCase() === "true";
+  }
+  return process.env.NODE_ENV === "production";
+}
+
+function getPurchaseIntentSecret() {
+  const configured = process.env.SUBSCRIPTION_ACCOUNT_LINK_SECRET?.trim();
+  if (configured) return configured;
+  if (process.env.NODE_ENV === "production") {
+    throw new ServiceUnavailableException(
+      "구독 계정 연결 보안 설정이 필요합니다.",
+    );
+  }
+  return process.env.MONETIZATION_EXPERIMENT_SALT?.trim() || "local-plus-intent";
 }
 
 function readPositiveInt(name: string, fallback: number) {

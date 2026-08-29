@@ -9,6 +9,8 @@ import {
 } from "@nestjs/common";
 import {
   subscriptionVerificationRequestSchema,
+  subscriptionPurchaseIntentRequestSchema,
+  type SubscriptionPurchaseIntentRequest,
   type SubscriptionVerificationRequest,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
@@ -16,12 +18,14 @@ import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { SubscriptionsService } from "./subscriptions.service";
 import { CreditPurchasesService } from "../monetization/credit-purchases.service";
+import { InsightsService } from "../insights/insights.service";
 
 @Controller("subscriptions")
 export class SubscriptionsController {
   constructor(
     private readonly subscriptionsService: SubscriptionsService,
     private readonly creditPurchasesService: CreditPurchasesService,
+    private readonly insightsService: InsightsService,
   ) {}
 
   @Get("entitlement")
@@ -35,8 +39,15 @@ export class SubscriptionsController {
 
   @Get("plus-insights")
   @UseGuards(RegisteredGuard)
-  getPlusInsights(@CurrentOwnerKey() ownerKey: string) {
-    return this.subscriptionsService.getPlusInsights(ownerKey);
+  getPlusInsights(
+    @CurrentOwnerKey() ownerKey: string,
+    @Query("spaceId") spaceId?: string,
+  ) {
+    return this.insightsService.getOverview(
+      ownerKey,
+      spaceId ?? `personal_${ownerKey}`,
+      30,
+    );
   }
 
   @Post("verify")
@@ -47,6 +58,16 @@ export class SubscriptionsController {
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.subscriptionsService.verifySubscription(ownerKey, dto);
+  }
+
+  @Post("purchase-intents")
+  @UseGuards(RegisteredGuard)
+  createPurchaseIntent(
+    @Body(new ZodValidationPipe(subscriptionPurchaseIntentRequestSchema))
+    dto: SubscriptionPurchaseIntentRequest,
+    @CurrentOwnerKey() ownerKey: string,
+  ) {
+    return this.subscriptionsService.createPurchaseIntent(ownerKey, dto);
   }
 
   @Post("notifications/apple")

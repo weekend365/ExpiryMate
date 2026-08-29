@@ -11,13 +11,11 @@ type BarcodeContributionText = Partial<
   Record<BarcodeContributionTextField, string | undefined>
 >;
 
-type ModerationEnvironment = Partial<
-  Pick<
-    NodeJS.ProcessEnv,
-    | "BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS"
-    | "BARCODE_CONTRIBUTION_ALLOWED_TERMS"
-  >
->;
+type ModerationEnvironment = {
+  [key: string]: string | undefined;
+  BARCODE_CONTRIBUTION_EXTRA_BLOCKED_TERMS?: string;
+  BARCODE_CONTRIBUTION_ALLOWED_TERMS?: string;
+};
 
 // Ambiguous words are matched as complete tokens only. This keeps legitimate
 // compounds from being rejected while still catching punctuation/space-based

@@ -1,14 +1,14 @@
 ---
 status: draft
 owner: product-release
-last_reviewed: 2026-08-27
+last_reviewed: 2026-08-29
 source_of_truth: true
-data_as_of: 2026-08-18
+data_as_of: 2026-08-29
 ---
 
-# App Store · 스토어 메타 초안 (장고야 부탁해)
+# App Store · 구독 업데이트 메타 초안 (장고야 부탁해)
 
-App Store Connect **앱 정보 / 1.3.0 버전 / App Privacy / 심사 노트**에 그대로 옮기기 위한 초안입니다.  
+이미 출시된 앱의 App Store Connect **개인 플러스 업데이트 버전 / App Privacy / 심사 노트**에 옮기기 위한 초안입니다.
 Privacy Label 데이터 유형 근거: [`store-privacy-declarations.md`](./store-privacy-declarations.md)
 
 > 법률 자문 아님. 제출 전 최신 제품 동작과 문구를 한 번 더 확인하세요.
@@ -17,14 +17,14 @@ Privacy Label 데이터 유형 근거: [`store-privacy-declarations.md`](./store
 
 ## 1. URL (지금 바로 등록)
 
-커스텀 도메인 전까지 Railway Admin HTTPS 사용.
+출시 앱과 동일한 공개 웹 도메인을 사용합니다.
 
 | 용도 | URL |
 |------|-----|
-| Privacy Policy | `https://admin-production-da74.up.railway.app/privacy` |
-| 데이터 삭제 / 선택 | `https://admin-production-da74.up.railway.app/privacy/choices` |
-| 이용약관 | `https://admin-production-da74.up.railway.app/terms` |
-| Support (임시) | `https://admin-production-da74.up.railway.app/privacy/choices` |
+| Privacy Policy | `https://jango.devnamu.com/privacy` |
+| 데이터 삭제 / 선택 | `https://jango.devnamu.com/privacy/choices` |
+| 이용약관 | `https://jango.devnamu.com/terms` |
+| Support | `https://jango.devnamu.com/privacy/choices` |
 | Marketing (없으면 비움 또는 Support와 동일) | 비워 두거나 Support와 동일 |
 
 문의 메일(방침에 노출): `PRIVACY_CONTACT_EMAIL` / 운영 연락처와 동일하게 맞출 것.
@@ -57,6 +57,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 • 가족이나 매장 동료를 이메일 또는 1회용 코드로 초대해 같은 냉장고 재고를 함께 관리해요
 • 알림으로 유통기한 전에 부드럽게 알려 드려요
 • 보관 재료를 바탕으로 장고가 요리 추천을 만들어 드려요 (동의 후 · 서버를 통해 AI 처리)
+• 개인 플러스로 광고 없이 더 넉넉한 요리·사진 AI와 30/90일 소비·폐기 추세, 폐기 예방 제안을 이용할 수 있어요
 • 레시피의 부족 재료와 최근 모두 소비한 재료를 장보기에서 다시 찾아볼 수 있어요 (쿠팡 파트너스 제휴)
 • 카카오, 네이버, 구글, Apple, 이메일로 로그인할 수 있어요
 
@@ -70,7 +71,10 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 
 ### 새로운 기능 (1.3.0)
 ```
-첫 버전이에요. 재료·유통기한 관리, 알림, 요리 추천을 한곳에서 시작해 보세요.
+개인 플러스가 새로 생겼어요.
+• 광고 없이 더 넉넉하게 요리 추천과 사진 일괄 등록을 이용해요
+• 30/90일 소비·폐기 추세와 폐기 예방 제안을 확인해요
+• 기존 재고·유통기한·공유·기본 알림은 무료로 그대로 이용할 수 있어요
 ```
 
 ---
@@ -109,7 +113,7 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 |------------|------|------|------------------------|
 | Contact Info | 계정·공유 초대 이메일 | App Functionality | 연결됨 / 추적 아님 |
 | Identifiers | 사용자 ID, 기기(푸시 토큰) | App Functionality | 연결됨 / 추적 아님 |
-| Purchases | (IAP 검증 시) 구매 이력 | App Functionality | 연결됨 / 추적 아님 |
+| Purchases | 개인 플러스 구매·갱신·복원·환불 이력 | App Functionality | 연결됨 / 추적 아님 |
 | Coarse Location / Identifiers / Usage Data / Diagnostics | Google 보상 광고 SDK가 자동 처리할 수 있는 IP 기반 대략적 위치, 기기 식별자, 광고·앱 상호작용, 진단 | Third-Party Advertising / Analytics | SDK 실제 설정대로 신고 / Tracking=No |
 | Customer Support | 인앱 문의 본문·주제 | App Functionality | 연결됨 / 추적 아님 |
 | Other User Content | 재료·유통기한·추천 관련 내용 | App Functionality · Product Personalization | 연결됨 / 추적 아님 |
@@ -144,8 +148,8 @@ App Store Connect → **앱 정보**에 Privacy · Support URL을 위와 같이 
 - 첫 추천 전 AI 데이터 고지 동의가 필요합니다.
 - 전송: 재료명·카테고리·수량/단위·보관위치·유통기한·잔여일·추천 조건·맞춤 설정·최근 추천 행동 요약.
 - 동의 철회·추천 기록 삭제·계정 삭제는 설정 → 개인정보와 추천 안내에서 가능합니다.
-- Privacy: https://admin-production-da74.up.railway.app/privacy
-- Choices / 삭제 안내: https://admin-production-da74.up.railway.app/privacy/choices
+- Privacy: https://jango.devnamu.com/privacy
+- Choices / 삭제 안내: https://jango.devnamu.com/privacy/choices
 
 【공유 냉장고】
 - 사용자가 가족/매장 공간을 만들고 가입 이메일 또는 8자리 1회용 코드로 구성원을 초대할 수 있습니다.
@@ -175,13 +179,26 @@ Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
 - 광고 닫기·실패는 보상하지 않으며 Google SSV 검증 성공 후에만 당일 추천권 1회를 지급합니다.
 - 비맞춤형 보상 광고만 사용하며 배너·강제 전면 광고·ATT 추적은 없습니다.
 
+【장고 개인 플러스 자동 갱신 구독】
+- 이번 업데이트에서는 개인 플러스만 판매합니다. 가족 플러스와 일회성 추천권은 판매하지 않습니다.
+- 월간 4,900원, 연간 39,000원이며 무료 체험은 없습니다. 페이월 기본 선택은 월간입니다.
+- 결제 화면에 스토어가 반환한 실제 지역화 가격, 결제 주기, 자동 갱신, 해지 위치,
+  이용약관·개인정보처리방침과 무료 앱을 계속 쓸 수 있다는 안내를 함께 표시합니다.
+- 혜택: 광고 없는 요리 추천 60회/월(최대 5회/일), 사진 일괄 등록 30회/월
+  (최대 3회/일), 30/90일 소비·폐기 추세와 폐기 예방 제안.
+- 결제 전에 서버가 구매 의도를 발급하고 Apple appAccountToken 또는 Google 난독화
+  계정 ID로 로그인 계정과 구매를 결합합니다. 구매·갱신·복원·취소·환불은 서버 검증 후 반영합니다.
+- 설정 → 개인 플러스에서 구매 복원과 구독 관리 안내를 제공합니다. 다른 장고 계정에
+  연결된 구매는 자동 이전하지 않고 고객 지원을 안내합니다.
+- 계정 삭제는 스토어 구독 해지와 별개임을 삭제 화면과 공개 방침에 안내합니다.
+
 【쿠팡 파트너스】
 - 레시피의 부족 재료와 장보기 화면에서 관련 상품 또는 제휴 검색 링크를 보여 줄 수 있습니다.
 - 상품 영역에는 경제적 이해관계 표시 문구를 인접하게 노출합니다.
 - 결제·배송·환불은 쿠팡에서 이뤄지며 앱 내 결제나 추천 보상과 연결하지 않습니다.
 
 【현재 판매하지 않는 항목】
-- 구독과 일회성 추천권 판매는 추후 검토 대상이며 이번 버전의 판매·심사 범위에 포함하지 않습니다.
+- 가족 플러스와 일회성 추천권은 추후 검토 대상이며 이번 버전의 판매·심사 범위에 포함하지 않습니다.
 ```
 
 ---
@@ -190,9 +207,10 @@ Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
 
 1. **앱 정보** — Privacy / Support URL
 2. **App Privacy** — 위 요지로 질문 응답 저장
-3. **1.0 준비 중** — 한국어 설명·키워드·스크린샷·빌드 선택(TestFlight 통과 빌드)
-4. **심사 정보** — 연락처, 데모 계정, 위 심사 노트
-5. **심사에 추가** → 제출
+3. **구독** — 개인 플러스 월간 4,900원·연간 39,000원 상품과 구독 그룹·심사 정보 등록
+4. **제출할 새 앱 버전** — 한국어 설명·키워드·스크린샷·빌드 선택(TestFlight 통과 빌드)
+5. **심사 정보** — 연락처, 데모 계정, 위 심사 노트
+6. **심사에 추가** → 제출
 
 ---
 
@@ -203,5 +221,7 @@ Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
 - [ ] 공유 냉장고가 준비된 심사 계정 2개 또는 재현 가능한 초대 절차 준비
 - [ ] 6.9형 스크린샷 3장 이상(공유 공간 화면 1장 포함 권장)
 - [ ] App Privacy 질문 저장
+- [ ] 개인 플러스 월간·연간 IAP 가격, 지역, 구독 그룹, 약관 URL과 심사 스크린샷 등록
+- [ ] iOS Sandbox·Android License 계정으로 구매·pending·복원·갱신·취소·환불 확인
 - [ ] 연령 등급·수출 규정(암호화: 앱은 `usesNonExemptEncryption: false` 설정됨)
 - [ ] (병행) Play Data Safety는 같은 표로 Android 때 작성

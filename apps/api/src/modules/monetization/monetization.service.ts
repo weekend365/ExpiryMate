@@ -22,6 +22,7 @@ import {
 } from "@prisma/client";
 import {
   getKstDayWindow,
+  getKstMonthWindow,
   toKstDateOnly,
   type MonetizationOfferKind,
   type MonetizationPlatform,
@@ -67,6 +68,7 @@ type MonetizationPolicy = {
   freeDailyLimit: number;
   rewardedDailyLimit: number;
   subscriberDailyLimit: number;
+  subscriberMonthlyLimit: number;
 };
 
 @Injectable()
@@ -123,7 +125,7 @@ export class MonetizationService {
       return { ok: true as const };
     }
 
-    const policy = resolveMonetizationPolicy(ownerKey);
+    const policy = resolveMonetizationPolicy();
     await this.prisma.monetizationFunnelEvent.create({
       data: {
         ownerKey,
@@ -153,7 +155,7 @@ export class MonetizationService {
               },
             });
             if (alreadyTracked > 0) return { ok: true as const };
-            const policy = resolveMonetizationPolicy(ownerKey);
+            const policy = resolveMonetizationPolicy();
             await tx.monetizationFunnelEvent.create({
               data: {
                 ownerKey,
@@ -391,9 +393,18 @@ export class MonetizationService {
                 const personalUsed = personalEntitlement
                   ? await countEntitlementUsage(tx, personalEntitlement.id, now)
                   : 0;
+                const personalUsedThisMonth = personalEntitlement
+                  ? await countEntitlementUsageThisMonth(
+                      tx,
+                      personalEntitlement.id,
+                      now,
+                    )
+                  : 0;
                 if (
                   !personalEntitlement ||
-                  personalUsed >= access.subscriberDailyLimit
+                  personalUsed >= access.subscriberDailyLimit ||
+                  personalUsedThisMonth >=
+                    resolveMonetizationPolicy().subscriberMonthlyLimit
                 ) {
                   throw new CodedHttpException(
                     429,
@@ -626,7 +637,7 @@ export class MonetizationService {
         const rewardedDailyLimit =
           sessionPurpose === RewardedAdPurpose.inventory_photo_parse
             ? this.getPhotoParsePolicy().getRewardedDailyLimit()
-            : resolveMonetizationPolicy(session.ownerKey).rewardedDailyLimit;
+            : resolveMonetizationPolicy().rewardedDailyLimit;
         if (alreadyVerified >= rewardedDailyLimit) {
           await tx.rewardedAdSession.update({
             where: { id: session.id },
@@ -671,12 +682,13 @@ export class MonetizationService {
     const { start, endExclusive } = getKstDayWindow(now);
     // Sales flag only gates new checkouts / paywall CTAs. Active entitlements
     // always apply so pausing sales never strips benefits users already paid for.
-    const subscriptionsEnabled = subscriptionSalesEnabled();
     const economicsAvailability = await getUnitEconomicsAvailability(db, now);
+    const subscriptionsEnabled =
+      subscriptionSalesEnabled() && economicsAvailability.subscriptions.allowed;
     const rewardedAdsEnabled =
       isEnabled("REWARDED_ADS_ENABLED") &&
       economicsAvailability.rewardedAds.allowed;
-    const policy = resolveMonetizationPolicy(ownerKey);
+    const policy = resolveMonetizationPolicy();
     const barcodePolicy = resolveBarcodeRewardPolicy(ownerKey);
     const space = spaceId
       ? await db.inventorySpace.findFirst({
@@ -796,24 +808,17 @@ export class MonetizationService {
       ) - paidCreditsUsedTotal,
     );
 
-    const freeLimit = householdEntitlement
-      ? 0
-      : rewardedAdsEnabled
-      ? policy.freeDailyLimit
-      : getLimit("RECIPE_ADS_DISABLED_FREE_DAILY_LIMIT", 4);
+    const freeLimit = householdEntitlement ? 0 : policy.freeDailyLimit;
     const rewardedLimit = householdEntitlement
       ? 0
       : rewardedAdsEnabled
       ? policy.rewardedDailyLimit
       : 0;
-    const subscriberLimit = applyLimitCap(
-      policy.subscriberDailyLimit,
-      economicsAvailability.subscriptionDailyLimitCaps.subscriber,
-    );
-    const householdLimit = applyLimitCap(
-      getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60),
-      economicsAvailability.subscriptionDailyLimitCaps.household,
-    );
+    // Guardrails may pause new sales, but must never reduce paid benefits in
+    // the middle of a billing period.
+    const subscriberLimit = policy.subscriberDailyLimit;
+    const subscriberMonthlyLimit = policy.subscriberMonthlyLimit;
+    const householdLimit = getLimit("RECIPE_HOUSEHOLD_DAILY_LIMIT", 60);
     const householdSubscriptionsEnabled =
       Boolean(householdEntitlement) ||
       householdSubscriptionSalesEnabled(ownerKey);
@@ -823,19 +828,34 @@ export class MonetizationService {
     const personalSubscriptionUsed = personalEntitlement
       ? await countEntitlementUsage(db, personalEntitlement.id, now)
       : 0;
+    const personalSubscriptionUsedThisMonth = personalEntitlement
+      ? await countEntitlementUsageThisMonth(db, personalEntitlement.id, now)
+      : 0;
     const householdSubscriptionUsed = householdEntitlement
       ? await countEntitlementUsage(db, householdEntitlement.id, now)
       : 0;
     const householdRemaining = householdEntitlement
       ? Math.max(0, householdLimit - householdSubscriptionUsed)
       : 0;
-    const personalSubscriptionRemaining = personalEntitlement
+    const personalSubscriptionDailyRemaining = personalEntitlement
       ? Math.max(0, subscriberLimit - personalSubscriptionUsed)
+      : 0;
+    const personalSubscriptionMonthlyRemaining = personalEntitlement
+      ? Math.max(
+          0,
+          subscriberMonthlyLimit - personalSubscriptionUsedThisMonth,
+        )
+      : 0;
+    const personalSubscriptionRemaining = personalEntitlement
+      ? Math.min(
+          personalSubscriptionDailyRemaining,
+          personalSubscriptionMonthlyRemaining,
+        )
       : 0;
     const uncappedRemaining = householdEntitlement
       ? householdRemaining + personalSubscriptionRemaining
       : personalEntitlement
-        ? Math.max(0, subscriberLimit - scopedUsed)
+        ? personalSubscriptionRemaining
         : freeRemaining + paidCreditBalance + availableRewards + barcodeRewardBalance;
     const absoluteLimit = getLimit("RECIPE_ABSOLUTE_DAILY_LIMIT", 30);
     const remaining =
@@ -880,9 +900,30 @@ export class MonetizationService {
           : effectiveFreeTierLimit,
       subscriberDailyLimit: subscriberLimit,
       householdDailyLimit: householdLimit,
+      subscriptionQuota: personalEntitlement
+        ? {
+            timezone: KST_TIMEZONE,
+            period: "calendar_month",
+            startsAt: getKstMonthWindow(now).start.toISOString(),
+            resetsAt: getKstMonthWindow(now).endExclusive.toISOString(),
+            monthly: {
+              limit: subscriberMonthlyLimit,
+              used: personalSubscriptionUsedThisMonth,
+              remaining: personalSubscriptionMonthlyRemaining,
+            },
+            daily: {
+              limit: subscriberLimit,
+              used: personalSubscriptionUsed,
+              remaining: personalSubscriptionDailyRemaining,
+              resetsAt: endExclusive.toISOString(),
+            },
+          }
+        : null,
       used: householdEntitlement
         ? householdSubscriptionUsed + personalSubscriptionUsed
-        : scopedUsed,
+        : personalEntitlement
+          ? personalSubscriptionUsed
+          : scopedUsed,
       remaining,
       free: {
         limit: freeLimit,
@@ -1152,9 +1193,9 @@ export class MonetizationService {
   ) {
     const valid = verifySignature(
       "sha256",
-      Buffer.from(content, "utf8"),
+      new TextEncoder().encode(content),
       key,
-      decodeUrlSafeBase64(signature),
+      Uint8Array.from(decodeUrlSafeBase64(signature)),
     );
     if (!valid) {
       throw new ForbiddenException("광고 보상 서명이 올바르지 않습니다.");
@@ -1219,36 +1260,17 @@ function getLimit(name: string, fallback: number) {
   return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
-function applyLimitCap(configuredLimit: number, cap: number | null) {
-  return cap === null ? configuredLimit : Math.min(configuredLimit, cap);
-}
-
-export function resolveMonetizationPolicy(ownerKey: string): MonetizationPolicy {
-  const rolloutPercent = Math.min(
-    100,
-    getLimit("MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT", 0),
-  );
-  const salt =
-    process.env.MONETIZATION_EXPERIMENT_SALT?.trim() || "monetization-v1";
-  const bucket =
-    createHmac("sha256", salt).update(ownerKey).digest().readUInt32BE(0) % 100;
-  const variant = bucket < rolloutPercent ? "value_first" : "control";
-
+export function resolveMonetizationPolicy(): MonetizationPolicy {
   return {
     experiment: {
       key: "monetization-v1",
-      variant,
-      defaultBillingPeriod: variant === "value_first" ? "monthly" : "yearly",
+      variant: "control",
+      defaultBillingPeriod: "monthly",
     },
-    freeDailyLimit:
-      variant === "value_first"
-        ? getLimit("RECIPE_VALUE_FIRST_FREE_DAILY_LIMIT", 2)
-        : getLimit("RECIPE_FREE_DAILY_LIMIT", 1),
-    rewardedDailyLimit:
-      variant === "value_first"
-        ? getLimit("RECIPE_VALUE_FIRST_REWARDED_DAILY_LIMIT", 2)
-        : getLimit("RECIPE_REWARDED_DAILY_LIMIT", 10),
-    subscriberDailyLimit: getLimit("RECIPE_SUBSCRIBER_DAILY_LIMIT", 30),
+    freeDailyLimit: getLimit("RECIPE_FREE_DAILY_LIMIT", 1),
+    rewardedDailyLimit: getLimit("RECIPE_REWARDED_DAILY_LIMIT", 10),
+    subscriberDailyLimit: getLimit("RECIPE_SUBSCRIBER_DAILY_LIMIT", 5),
+    subscriberMonthlyLimit: getLimit("RECIPE_SUBSCRIBER_MONTHLY_LIMIT", 60),
   };
 }
 
@@ -1356,6 +1378,26 @@ async function countEntitlementUsage(
     where: {
       subscriptionEntitlementId: entitlementId,
       usageDay: start,
+      status: {
+        in: [
+          RecommendationUsageStatus.reserved,
+          RecommendationUsageStatus.completed,
+        ],
+      },
+    },
+  });
+}
+
+async function countEntitlementUsageThisMonth(
+  db: DbClient,
+  entitlementId: string,
+  now: Date,
+) {
+  const { start, endExclusive } = getKstMonthWindow(now);
+  return db.recommendationUsageEvent.count({
+    where: {
+      subscriptionEntitlementId: entitlementId,
+      usageDay: { gte: start, lt: endExclusive },
       status: {
         in: [
           RecommendationUsageStatus.reserved,

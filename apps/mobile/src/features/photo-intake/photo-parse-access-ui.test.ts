@@ -51,6 +51,9 @@ function access(
     resetsAt: "2026-08-28T15:00:00.000Z",
     canParse,
     requiredAction,
+    tier: "free",
+    usageSource: canParse ? "free" : null,
+    subscriptionQuota: null,
     free: { limit: 1, used: canParse ? 0 : 1, remaining: canParse ? 1 : 0 },
     rewardedAds: {
       enabled: true,

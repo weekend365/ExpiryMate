@@ -4,7 +4,7 @@ import {
   type DashboardRecommendationPreview,
 } from "@expirymate/shared";
 import { router } from "expo-router";
-import { ChevronRight, Sparkles } from "lucide-react-native";
+import { ChevronRight, Sparkles, TrendingDown } from "lucide-react-native";
 import { useMemo } from "react";
 import {
   ImageBackground,
@@ -32,6 +32,7 @@ import {
 } from "../../src/features/home/home-quick-entry";
 import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
 import { HomeSectionHeader } from "../../src/features/home/home-section-header";
+import { useInsightsPreview } from "../../src/features/insights/use-insights";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import {
   photoParseRoute,
@@ -41,6 +42,7 @@ import {
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
+import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { colors, spacing } from "../../src/shared/theme";
 import {
   getContentMaxWidth,
@@ -65,6 +67,12 @@ export default function HomeScreen() {
     acknowledgeRecipeGeneration,
   } = useRecipeGeneration();
   const { activeSpaceId } = useActiveSpace();
+  const insightsPreview = useInsightsPreview();
+  const subscription = useSubscriptionEntitlement();
+  const hasPlus = Boolean(
+    subscription.query.data?.hasActiveEntitlement &&
+      subscription.query.data.planCode === "jango_plus",
+  );
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
 
   const hasLoaded = data !== undefined;
@@ -228,13 +236,49 @@ export default function HomeScreen() {
               tintColor={colors.primary}
               refreshing={isRefetching}
               onRefresh={() => {
-                void refetch();
+                void Promise.all([refetch(), insightsPreview.refetch()]);
               }}
             />
           }
         >
           <SpaceSwitcher />
           <HomeHero notices={notices} onNoticeAction={handleNoticeAction} />
+
+          {insightsPreview.data?.ready ? (
+            <Pressable
+              onPress={() => router.push("/insights")}
+              accessibilityRole="button"
+              accessibilityLabel={`이번 주 장고 브리핑, 최근 30일 소비 ${insightsPreview.data.consumed}개, 폐기 ${insightsPreview.data.discarded}개`}
+              style={({ pressed }) => [
+                styles.briefingCard,
+                pressed && styles.previewBodyPressed,
+              ]}
+            >
+              <View style={styles.briefingIcon}>
+                <TrendingDown
+                  color={colors.primary}
+                  size={spacing.md}
+                  strokeWidth={2.2}
+                />
+              </View>
+              <View style={styles.briefingCopy}>
+                <AppText variant="bodyStrong">이번 주 장고 브리핑</AppText>
+                <AppText variant="caption" tone="subtext">
+                  최근 30일 소비 {insightsPreview.data.consumed}개 · 폐기 {insightsPreview.data.discarded}개
+                </AppText>
+                <AppText variant="caption" tone="primary">
+                  {hasPlus
+                    ? "이번 주 실천 제안과 90일 추세를 확인해 보세요."
+                    : "기록이 준비됐어요. 무료 미리보기를 확인해 보세요."}
+                </AppText>
+              </View>
+              <ChevronRight
+                color={colors.primary}
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+            </Pressable>
+          ) : null}
 
           <View style={styles.previewCard}>
             <HomeSectionHeader

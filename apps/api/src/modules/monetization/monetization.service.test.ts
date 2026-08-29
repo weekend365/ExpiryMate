@@ -19,9 +19,11 @@ const managedEnvKeys = [
   "ADMOB_ANDROID_REWARDED_AD_UNIT_ID",
   "REWARDED_ADS_ENABLED",
   "SUBSCRIPTIONS_ENABLED",
+  "MONETIZATION_OFFER_MODE",
   "RECIPE_FREE_DAILY_LIMIT",
   "RECIPE_REWARDED_DAILY_LIMIT",
   "RECIPE_SUBSCRIBER_DAILY_LIMIT",
+  "RECIPE_SUBSCRIBER_MONTHLY_LIMIT",
   "RECIPE_ABSOLUTE_DAILY_LIMIT",
   "MONETIZATION_EXPERIMENT_SALT",
   "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT",
@@ -48,9 +50,11 @@ describe("MonetizationService", () => {
   beforeEach(() => {
     process.env.REWARDED_ADS_ENABLED = "true";
     process.env.SUBSCRIPTIONS_ENABLED = "true";
+    process.env.MONETIZATION_OFFER_MODE = "core";
     process.env.RECIPE_FREE_DAILY_LIMIT = "1";
     process.env.RECIPE_REWARDED_DAILY_LIMIT = "3";
-    process.env.RECIPE_SUBSCRIBER_DAILY_LIMIT = "30";
+    process.env.RECIPE_SUBSCRIBER_DAILY_LIMIT = "5";
+    process.env.RECIPE_SUBSCRIBER_MONTHLY_LIMIT = "60";
     process.env.RECIPE_ABSOLUTE_DAILY_LIMIT = "30";
     process.env.MONETIZATION_EXPERIMENT_SALT = "test-experiment-salt";
     process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "0";
@@ -105,7 +109,7 @@ describe("MonetizationService", () => {
     expect(status.rewardedAds.canWatch).toBe(true);
   });
 
-  it("counts free and ad uses already made before a subscription starts", async () => {
+  it("grants the full paid quota when a subscription starts mid-day", async () => {
     const prisma = createPrismaMock();
     prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
       id: "subscription-1",
@@ -126,8 +130,12 @@ describe("MonetizationService", () => {
     const status = await service.getStatus("owner-a");
 
     expect(status.tier).toBe("jango_plus");
-    expect(status.used).toBe(4);
-    expect(status.remaining).toBe(26);
+    expect(status.used).toBe(0);
+    expect(status.remaining).toBe(5);
+    expect(status.subscriptionQuota).toMatchObject({
+      monthly: { limit: 60, used: 0, remaining: 60 },
+      daily: { limit: 5, used: 0, remaining: 5 },
+    });
     expect(status.rewardedAds.canWatch).toBe(false);
   });
 
@@ -144,8 +152,34 @@ describe("MonetizationService", () => {
 
     expect(status.subscriptionsEnabled).toBe(false);
     expect(status.tier).toBe("jango_plus");
-    expect(status.remaining).toBe(30);
+    expect(status.remaining).toBe(5);
     expect(status.rewardedAds.canWatch).toBe(false);
+  });
+
+  it("enforces the smaller remaining value across KST daily and monthly quotas", async () => {
+    const prisma = createPrismaMock();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "subscription-1",
+      isActive: true,
+    });
+    prisma.recommendationUsageEvent.count.mockImplementation(async (args) => {
+      if (args?.where?.subscriptionEntitlementId !== "subscription-1") return 0;
+      return args.where.usageDay instanceof Date ? 4 : 59;
+    });
+    const service = new MonetizationService(prisma as never);
+
+    const status = await service.getStatus(
+      "owner-a",
+      new Date("2026-08-31T14:59:59.000Z"),
+    );
+
+    expect(status.remaining).toBe(1);
+    expect(status.subscriptionQuota).toMatchObject({
+      startsAt: "2026-07-31T15:00:00.000Z",
+      resetsAt: "2026-08-31T15:00:00.000Z",
+      monthly: { used: 59, remaining: 1 },
+      daily: { used: 4, remaining: 1 },
+    });
   });
 
   it("lets free users choose a rewarded ad while preserving purchased credits", async () => {
@@ -196,7 +230,7 @@ describe("MonetizationService", () => {
     });
   });
 
-  it("assigns a stable value-first policy from the server rollout", async () => {
+  it("keeps the launch policy fixed even when a legacy rollout flag is set", async () => {
     process.env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "100";
     const prisma = createPrismaMock();
     const service = new MonetizationService(prisma as never);
@@ -206,11 +240,11 @@ describe("MonetizationService", () => {
 
     expect(first.experiment).toEqual({
       key: "monetization-v1",
-      variant: "value_first",
+      variant: "control",
       defaultBillingPeriod: "monthly",
     });
-    expect(first.free.limit).toBe(2);
-    expect(first.rewardedAds.dailyLimit).toBe(2);
+    expect(first.free.limit).toBe(1);
+    expect(first.rewardedAds.dailyLimit).toBe(3);
     expect(second.experiment).toEqual(first.experiment);
   });
 
@@ -268,7 +302,7 @@ describe("MonetizationService", () => {
     });
   });
 
-  it("offers Household after a second household member joins", async () => {
+  it("does not offer Household while the launch offer mode is core", async () => {
     process.env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED = "true";
     process.env.PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT = "100";
     const prisma = createPrismaMock();
@@ -287,11 +321,8 @@ describe("MonetizationService", () => {
     );
 
     expect(status.free.remaining).toBe(1);
-    expect(status.offer).toMatchObject({
-      kind: "jango_household",
-      reason: "engaged",
-      personalized: true,
-    });
+    expect(status.householdSubscriptionsEnabled).toBe(false);
+    expect(status.offer).toMatchObject({ kind: "none", personalized: true });
   });
 
   it("uses the active household space entitlement and shared daily limit", async () => {
@@ -786,7 +817,7 @@ describe("MonetizationService", () => {
     ].join("&");
     const signature = sign(
       "sha256",
-      Buffer.from(signedContent),
+      new TextEncoder().encode(signedContent),
       privateKey,
     ).toString("base64url");
     const originalUrl =
@@ -853,7 +884,7 @@ describe("MonetizationService", () => {
     ].join("&");
     const signature = sign(
       "sha256",
-      Buffer.from(signedContent),
+      new TextEncoder().encode(signedContent),
       privateKey,
     ).toString("base64url");
     const originalUrl =

@@ -7,7 +7,12 @@ const docsRoot = path.join(root, "docs");
 const allowedStatuses = new Set(["draft", "active", "deprecated", "archived"]);
 const requiredMetadata = ["status", "owner", "last_reviewed", "source_of_truth"];
 const freshnessDays = 90;
-const ignoredDirectories = new Set([".git", ".pnpm-store", "node_modules"]);
+const ignoredDirectories = new Set([
+  ".git",
+  ".pnpm-store",
+  "node_modules",
+  "Pods",
+]);
 const errors = [];
 
 async function walk(directory) {
@@ -136,4 +141,3 @@ if (errors.length > 0) {
 } else {
   console.log(`문서 검사 통과: metadata ${docsMarkdown.length}개, links ${allMarkdown.length}개`);
 }
-

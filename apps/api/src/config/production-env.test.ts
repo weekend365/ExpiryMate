@@ -171,6 +171,9 @@ describe("validateProductionEnvironment", () => {
     delete env.RECIPE_FREE_DAILY_LIMIT;
     delete env.RECIPE_REWARDED_DAILY_LIMIT;
     delete env.RECIPE_SUBSCRIBER_DAILY_LIMIT;
+    delete env.RECIPE_SUBSCRIBER_MONTHLY_LIMIT;
+    delete env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT;
+    delete env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT;
     delete env.RECIPE_ABSOLUTE_DAILY_LIMIT;
     delete env.MONETIZATION_OFFER_MODE;
     delete env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED;
@@ -189,6 +192,37 @@ describe("validateProductionEnvironment", () => {
     expect(env.SUBSCRIPTIONS_ENABLED).toBe("false");
     expect(env.AFFILIATE_OFFERS_ENABLED).toBe("false");
     expect(env.RECIPE_FREE_DAILY_LIMIT).toBe("1");
+    expect(env.RECIPE_SUBSCRIBER_DAILY_LIMIT).toBe("5");
+    expect(env.RECIPE_SUBSCRIBER_MONTHLY_LIMIT).toBe("60");
+    expect(env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT).toBe("3");
+    expect(env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT).toBe("30");
+  });
+
+  it("requires the fixed personal Plus launch controls when sales are enabled", () => {
+    const env = validSubscriptionProductionEnv();
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+
+    env.IAP_ALLOWED_PRODUCT_IDS += ",expirymate_household_monthly";
+    env.MONETIZATION_OFFER_MODE = "expanded";
+    env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
+    env.PAID_RECOMMENDATION_CREDITS_ENABLED = "true";
+    env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT = "10";
+    env.SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED = "false";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /three personal Plus launch products.*MONETIZATION_OFFER_MODE.*HOUSEHOLD_SUBSCRIPTIONS_ENABLED.*PAID_RECOMMENDATION_CREDITS_ENABLED.*MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT.*SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED/s,
+    );
+  });
+
+  it("rejects launch quota drift while personal Plus is on sale", () => {
+    const env = validSubscriptionProductionEnv();
+    env.RECIPE_FREE_DAILY_LIMIT = "2";
+    env.RECIPE_SUBSCRIBER_MONTHLY_LIMIT = "59";
+    env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT = "2";
+
+    expect(() => validateProductionEnvironment(env)).toThrow(
+      /RECIPE_FREE_DAILY_LIMIT must be 1.*RECIPE_SUBSCRIBER_MONTHLY_LIMIT must be 60.*INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT must be 3/s,
+    );
   });
 
   it("still rejects invalid monetization values when they are set", () => {
@@ -271,7 +305,10 @@ function validProductionEnv(): NodeJS.ProcessEnv {
     OPENAI_API_KEY: "sk-live-test-key-not-a-placeholder",
     RECIPE_FREE_DAILY_LIMIT: "1",
     RECIPE_REWARDED_DAILY_LIMIT: "10",
-    RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
+    RECIPE_SUBSCRIBER_DAILY_LIMIT: "5",
+    RECIPE_SUBSCRIBER_MONTHLY_LIMIT: "60",
+    INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT: "3",
+    INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT: "30",
     RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
     MONETIZATION_OFFER_MODE: "core",
     MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "false",
@@ -297,5 +334,41 @@ function validProductionEnv(): NodeJS.ProcessEnv {
       "iap-verifier@expirymate-prod.iam.gserviceaccount.com",
     GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY:
       "-----BEGIN PRIVATE KEY-----\\nkey\\n-----END PRIVATE KEY-----",
+  };
+}
+
+function validSubscriptionProductionEnv(): NodeJS.ProcessEnv {
+  return {
+    ...validProductionEnv(),
+    IAP_ALLOWED_PRODUCT_IDS:
+      "expirymate_premium_monthly,expirymate_premium_yearly,jango_plus",
+    SUBSCRIPTIONS_ENABLED: "true",
+    SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED: "true",
+    SUBSCRIPTION_ACCOUNT_LINK_SECRET:
+      "abcdef1234567890abcdef1234567890",
+    SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED: "true",
+    MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "true",
+    MONETIZATION_REVENUE_LEDGER_ENABLED: "true",
+    MONETIZATION_REVENUE_LEDGER_ROLLOUT_PERCENT: "100",
+    MONETIZATION_EXPERIMENT_SALT:
+      "abcdef1234567890abcdef1234567890",
+    MONETIZATION_GUARDRAIL_MIN_SAMPLES: "50",
+    MONETIZATION_GUARDRAIL_MIN_PHOTO_SAMPLES: "30",
+    MONETIZATION_SUBSCRIPTION_MONTHLY_AI_BUDGET_KRW: "858",
+    MONETIZATION_ESTIMATES_JSON: JSON.stringify({
+      usdKrw: 1300,
+      rewardedAdEcpmKrw: 5000,
+      productNetProceedsKrw: {
+        expirymate_premium_monthly: 3430,
+        expirymate_premium_yearly: 27300,
+        jango_plus: 3430,
+      },
+    }),
+    HOUSEHOLD_SUBSCRIPTIONS_ENABLED: "false",
+    PAID_RECOMMENDATION_CREDITS_ENABLED: "false",
+    MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT: "0",
+    APPLE_ROOT_CERTIFICATES_BASE64: "base64-root-certificate",
+    APPLE_APP_ID: "1234567890",
+    GOOGLE_RTDN_AUDIENCE: "https://api.expirymate.app/subscriptions/google/rtdn",
   };
 }

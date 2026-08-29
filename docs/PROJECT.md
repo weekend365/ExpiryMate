@@ -1,7 +1,7 @@
 ---
 status: active
 owner: project
-last_reviewed: 2026-08-27
+last_reviewed: 2026-08-29
 source_of_truth: false
 ---
 
@@ -15,6 +15,7 @@ source_of_truth: false
 | 현재 단계, P0/P1, 블로커 | [`STATUS.md`](./STATUS.md) |
 | Phase와 출시 인수 기준 | [`ROADMAP.md`](./ROADMAP.md) |
 | v1 기능 범위 | [`product/release-scope.md`](./product/release-scope.md) |
+| 무료·개인 플러스 정책과 원가·출시 기준 | [`monetization.md`](./monetization.md) |
 | 배포, migration, 장애 대응 | [`operations/deployment.md`](./operations/deployment.md) |
 | 시크릿과 환경별 설정 | [`dev-secrets.md`](./dev-secrets.md) |
 | 과거 완료 기록 | [`archive/README.md`](./archive/README.md) · [`archive/project-history-2026-08.md`](./archive/project-history-2026-08.md) |

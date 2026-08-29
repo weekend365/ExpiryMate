@@ -82,10 +82,13 @@ function relativeLuminance(hex: string) {
   if (!channels || channels.length !== 3) {
     throw new Error(`Expected a six-digit hex color, received ${hex}`);
   }
-  const [red, green, blue] = channels.map((channel) =>
+  const normalized = channels.map((channel) =>
     channel <= 0.04045
       ? channel / 12.92
       : ((channel + 0.055) / 1.055) ** 2.4,
   );
+  const red = normalized[0]!;
+  const green = normalized[1]!;
+  const blue = normalized[2]!;
   return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
 }

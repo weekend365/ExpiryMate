@@ -1,16 +1,20 @@
-import { productCategoryLabels, type ProductCategory } from "@expirymate/shared";
-import { useQuery } from "@tanstack/react-query";
+import type {
+  SubscriptionPurchaseIntent,
+  SubscriptionVerificationRequest,
+} from "@expirymate/shared";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Purchase, ProductSubscription } from "expo-iap";
 import {
   deepLinkToSubscriptions,
   getAvailablePurchases,
   useIAP,
 } from "expo-iap";
+import { router } from "expo-router";
 import {
   CreditCard,
-  Lightbulb,
   RefreshCw,
   ShieldCheck,
+  TrendingDown,
 } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -26,10 +30,7 @@ import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
-import { SectionHeader } from "../../src/components/SectionHeader";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
-import { useAuth } from "../../src/features/auth/use-auth";
-import { withSessionUser } from "../../src/features/auth/session-boundary";
 import {
   formatSubscriptionExpiry,
   formatSubscriptionStore,
@@ -37,106 +38,96 @@ import {
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { publicWebUrl } from "../../src/shared/public-web-url";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
-import {
-  getHouseholdInsights,
-  getPlusInsights,
-  trackMonetizationEvent,
-  type PlusInsights,
-} from "../../src/services/api";
 import { colors, radius, spacing } from "../../src/shared/theme";
-import { useActiveSpace } from "../../src/features/spaces/space-provider";
+import {
+  createSubscriptionPurchaseIntent,
+  trackMonetizationEvent,
+} from "../../src/services/api";
 
 const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
 const APPLE_YEARLY_ID = "expirymate_premium_yearly";
 const GOOGLE_PRODUCT_ID = "jango_plus";
-const APPLE_HOUSEHOLD_MONTHLY_ID = "expirymate_household_monthly";
-const APPLE_HOUSEHOLD_YEARLY_ID = "expirymate_household_yearly";
-const GOOGLE_HOUSEHOLD_PRODUCT_ID = "jango_household";
 const PACKAGE_NAME = "com.expirymate.mobile";
+const PENDING_INTENT_STORAGE_KEY = "expirymate.pendingPlusPurchaseIntent.v1";
 
 type BillingPeriod = "monthly" | "yearly";
-type PlanCode = "jango_plus" | "jango_household";
 type StorePlan = {
   period: BillingPeriod;
   displayPrice: string;
   price: number | null;
   productId: string;
   offerToken?: string;
-  planCode: PlanCode;
 };
 
 export default function SubscriptionSettingsScreen() {
   const { shouldStack } = useResponsiveLayout();
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();
-  const { sessionUserId } = useAuth();
-  const { activeSpaceId, spaces } = useActiveSpace();
-  const activeSpace = spaces.find((space) => space.id === activeSpaceId);
-  const householdEligible = Boolean(
-    monetization.access?.householdSubscriptionsEnabled &&
-    activeSpace?.type === "household" &&
-      activeSpace.myRole === "owner" &&
-      activeSpace.memberCount <= 5,
-  );
   const entitlement = subscription.query.data;
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
-  const insightsQuery = useQuery({
-    queryKey: withSessionUser(
-      ["subscriptions", "plus-insights", entitlement?.planCode ?? "none", activeSpaceId ?? "no-space"],
-      sessionUserId,
-    ),
-    queryFn: () =>
-      entitlement?.planCode === "jango_household" && activeSpaceId
-        ? getHouseholdInsights(activeSpaceId)
-        : getPlusInsights(),
-    enabled: hasActiveEntitlement,
-  });
   const [selectedPeriod, setSelectedPeriod] =
-    useState<BillingPeriod>("yearly");
-  const [selectedPlanCode, setSelectedPlanCode] = useState<PlanCode>(
-    householdEligible ? "jango_household" : "jango_plus",
+    useState<BillingPeriod>("monthly");
+  const [busyAction, setBusyAction] = useState<"purchase" | "restore" | null>(
+    null,
   );
-  const [busyAction, setBusyAction] = useState<
-    "purchase" | "restore" | null
-  >(null);
-  const appliedExperimentRef = useRef(false);
   const trackedPaywallRef = useRef(false);
   const purchaseCompletedRef = useRef(false);
-  const selectedPlanCodeRef = useRef<PlanCode>(selectedPlanCode);
-  selectedPlanCodeRef.current = selectedPlanCode;
+  const purchaseIntentRef = useRef<SubscriptionPurchaseIntent | null>(null);
 
-  async function handleStorePurchase(purchase: Purchase) {
+  async function readPurchaseIntent(productId: string) {
+    if (purchaseIntentRef.current?.productId === productId) {
+      return purchaseIntentRef.current;
+    }
+    const stored = await AsyncStorage.getItem(PENDING_INTENT_STORAGE_KEY);
+    if (!stored) return null;
+    try {
+      const parsed = JSON.parse(stored) as SubscriptionPurchaseIntent;
+      return parsed.productId === productId ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function clearPurchaseIntent() {
+    purchaseIntentRef.current = null;
+    await AsyncStorage.removeItem(PENDING_INTENT_STORAGE_KEY);
+  }
+
+  async function handleStorePurchase(
+    purchase: Purchase,
+    options?: { restore?: boolean },
+  ) {
     if (purchase.purchaseState === "pending") {
       setBusyAction(null);
       Alert.alert(
         "결제가 확인 중이에요",
-        "스토어에서 결제가 완료되면 장고 플러스가 자동으로 반영돼요.",
+        "스토어 승인이 끝나면 앱을 다시 열었을 때 장고 플러스가 반영돼요.",
       );
-      return;
+      return false;
     }
 
     try {
-      const verification =
+      const purchaseIntent = options?.restore
+        ? null
+        : await readPurchaseIntent(purchase.productId);
+      const verification: SubscriptionVerificationRequest =
         Platform.OS === "ios"
           ? {
-              store: "apple_app_store" as const,
-            productId: purchase.productId,
-            transactionId: purchase.transactionId ?? undefined,
-            spaceId: isHouseholdProduct(purchase.productId)
-              ? activeSpaceId
-              : undefined,
+              store: "apple_app_store",
+              productId: purchase.productId,
+              transactionId: purchase.transactionId ?? undefined,
+              purchaseIntentId: purchaseIntent?.id,
             }
           : {
-              store: "google_play" as const,
+              store: "google_play",
               productId: purchase.productId,
               purchaseToken: purchase.purchaseToken ?? undefined,
               basePlanId: purchase.currentPlanId ?? selectedPeriod,
-              spaceId: isHouseholdProduct(purchase.productId)
-                ? activeSpaceId
-                : undefined,
+              purchaseIntentId: purchaseIntent?.id,
             };
       await subscription.verifyMutation.mutateAsync(verification);
       await finishTransaction({ purchase, isConsumable: false });
+      await clearPurchaseIntent();
       purchaseCompletedRef.current = true;
       trackFunnelEvent("purchase_verified", {
         store: Platform.OS,
@@ -146,9 +137,7 @@ export default function SubscriptionSettingsScreen() {
       setBusyAction(null);
       Alert.alert(
         "장고 플러스가 시작됐어요",
-        selectedPlanCodeRef.current === "jango_household"
-          ? "가족 공간의 소비·폐기 흐름을 함께 보고, 광고 없이 요리를 추천받을 수 있어요."
-          : "내 냉장고의 소비·폐기 흐름을 보고, 광고 없이 요리를 추천받을 수 있어요.",
+        "주간 브리핑과 30·90일 리포트를 보고, 광고 없이 요리와 사진 기능을 이용할 수 있어요.",
       );
       return true;
     } catch (error) {
@@ -157,10 +146,7 @@ export default function SubscriptionSettingsScreen() {
         stage: "verification",
         reason: error instanceof Error ? error.name : "unknown",
       });
-      Alert.alert(
-        "구독을 확인하지 못했어요",
-        getErrorMessage(error),
-      );
+      Alert.alert("구독을 확인하지 못했어요", getErrorMessage(error));
       return false;
     }
   }
@@ -173,15 +159,16 @@ export default function SubscriptionSettingsScreen() {
     finishTransaction,
   } = useIAP({
     onPurchaseSuccess: (purchase) => {
-      void handleStorePurchase(purchase);
+      if (isPersonalSubscriptionProduct(purchase.productId)) {
+        void handleStorePurchase(purchase);
+      }
     },
     onPurchaseError: (error) => {
       setBusyAction(null);
       const cancelled = String(error.code).toLowerCase().includes("cancel");
-      trackFunnelEvent(
-        cancelled ? "checkout_cancelled" : "checkout_failed",
-        { reason: String(error.code) },
-      );
+      trackFunnelEvent(cancelled ? "checkout_cancelled" : "checkout_failed", {
+        reason: String(error.code),
+      });
       if (cancelled) return;
       Alert.alert("결제를 완료하지 못했어요", error.message);
     },
@@ -200,37 +187,11 @@ export default function SubscriptionSettingsScreen() {
     void fetchProducts({
       skus:
         Platform.OS === "ios"
-          ? [
-              APPLE_MONTHLY_ID,
-              APPLE_YEARLY_ID,
-              APPLE_HOUSEHOLD_MONTHLY_ID,
-              APPLE_HOUSEHOLD_YEARLY_ID,
-            ]
-          : [GOOGLE_PRODUCT_ID, GOOGLE_HOUSEHOLD_PRODUCT_ID],
+          ? [APPLE_MONTHLY_ID, APPLE_YEARLY_ID]
+          : [GOOGLE_PRODUCT_ID],
       type: "subs",
     });
   }, [connected, fetchProducts]);
-
-  useEffect(() => {
-    if (!householdEligible && selectedPlanCode === "jango_household") {
-      setSelectedPlanCode("jango_plus");
-    } else if (
-      householdEligible &&
-      monetization.access?.offer.kind === "jango_household"
-    ) {
-      setSelectedPlanCode("jango_household");
-    }
-  }, [
-    householdEligible,
-    monetization.access?.offer.kind,
-    selectedPlanCode,
-  ]);
-
-  useEffect(() => {
-    if (appliedExperimentRef.current || !monetization.access) return;
-    appliedExperimentRef.current = true;
-    setSelectedPeriod(monetization.access.experiment.defaultBillingPeriod);
-  }, [monetization.access]);
 
   useEffect(() => {
     if (
@@ -242,30 +203,19 @@ export default function SubscriptionSettingsScreen() {
       return;
     }
     trackedPaywallRef.current = true;
-    trackFunnelEvent("paywall_viewed", {
-      variant: monetization.access.experiment.variant,
-    });
-  }, [
-    hasActiveEntitlement,
-    monetization.access,
-    subscription.query.isLoading,
-  ]);
+    trackFunnelEvent("paywall_viewed", { variant: "personal-plus-launch" });
+  }, [hasActiveEntitlement, monetization.access, subscription.query.isLoading]);
 
   useEffect(
     () => () => {
       if (trackedPaywallRef.current && !purchaseCompletedRef.current) {
-        trackFunnelEvent("paywall_dismissed", {
-          plan_code: selectedPlanCodeRef.current,
-        });
+        trackFunnelEvent("paywall_dismissed", { plan_code: "jango_plus" });
       }
     },
     [],
   );
 
-  const plans = useMemo(
-    () => resolvePlans(subscriptions, selectedPlanCode),
-    [selectedPlanCode, subscriptions],
-  );
+  const plans = useMemo(() => resolvePlans(subscriptions), [subscriptions]);
   const selectedPlan = plans.find((plan) => plan.period === selectedPeriod);
   const annualSavings = getAnnualSavings(plans);
 
@@ -277,22 +227,36 @@ export default function SubscriptionSettingsScreen() {
       );
       return;
     }
-
     setBusyAction("purchase");
     trackFunnelEvent("checkout_started", {
       billing_period: selectedPlan.period,
       product_id: selectedPlan.productId,
-      plan_code: selectedPlan.planCode,
+      plan_code: "jango_plus",
     });
     try {
+      const intent = await createSubscriptionPurchaseIntent({
+        store: Platform.OS === "ios" ? "apple_app_store" : "google_play",
+        productId: selectedPlan.productId,
+      });
+      purchaseIntentRef.current = intent;
+      await AsyncStorage.setItem(
+        PENDING_INTENT_STORAGE_KEY,
+        JSON.stringify(intent),
+      );
       await requestPurchase({
         type: "subs",
         request:
           Platform.OS === "ios"
-            ? { apple: { sku: selectedPlan.productId } }
+            ? {
+                apple: {
+                  sku: selectedPlan.productId,
+                  appAccountToken: intent.appleAppAccountToken,
+                },
+              }
             : {
                 google: {
                   skus: [selectedPlan.productId],
+                  obfuscatedAccountId: intent.googleObfuscatedAccountId,
                   subscriptionOffers: selectedPlan.offerToken
                     ? [
                         {
@@ -318,15 +282,20 @@ export default function SubscriptionSettingsScreen() {
     setBusyAction("restore");
     trackFunnelEvent("restore_started");
     try {
-      const purchases = await getAvailablePurchases();
+      const purchases = (await getAvailablePurchases()).filter((purchase) =>
+        isPersonalSubscriptionProduct(purchase.productId),
+      );
       if (!purchases.length) {
         setBusyAction(null);
-        Alert.alert("복원할 구독이 없어요", "현재 스토어 계정을 확인해 주세요.");
+        Alert.alert(
+          "복원할 개인 구독이 없어요",
+          "현재 스토어 계정을 확인해 주세요.",
+        );
         return;
       }
       let restoredCount = 0;
       for (const purchase of purchases) {
-        if (await handleStorePurchase(purchase)) {
+        if (await handleStorePurchase(purchase, { restore: true })) {
           restoredCount += 1;
         }
       }
@@ -336,6 +305,12 @@ export default function SubscriptionSettingsScreen() {
           ? { purchase_count: String(restoredCount) }
           : { reason: "no_verified_purchase" },
       );
+      if (restoredCount === 0) {
+        Alert.alert(
+          "구독을 연결하지 못했어요",
+          "다른 장고 계정에 연결된 구매는 자동으로 옮기지 않아요. 도움이 필요하면 설정의 고객지원으로 문의해 주세요.",
+        );
+      }
     } catch (error) {
       setBusyAction(null);
       trackFunnelEvent("restore_failed", {
@@ -347,10 +322,7 @@ export default function SubscriptionSettingsScreen() {
 
   const manage = () =>
     deepLinkToSubscriptions({
-      skuAndroid:
-        entitlement?.planCode === "jango_household"
-          ? GOOGLE_HOUSEHOLD_PRODUCT_ID
-          : GOOGLE_PRODUCT_ID,
+      skuAndroid: GOOGLE_PRODUCT_ID,
       packageNameAndroid: PACKAGE_NAME,
     }).catch((error) =>
       Alert.alert("구독 관리를 열지 못했어요", getErrorMessage(error)),
@@ -362,9 +334,7 @@ export default function SubscriptionSettingsScreen() {
         <ListRow
           title={
             hasActiveEntitlement
-              ? entitlement?.planCode === "jango_household"
-                ? "가족 플러스를 이용 중이에요"
-                : "장고 플러스를 이용 중이에요"
+              ? "장고 플러스를 이용 중이에요"
               : "무료 이용 중이에요"
           }
           description={
@@ -372,119 +342,44 @@ export default function SubscriptionSettingsScreen() {
               ? "구독 상태를 불러오고 있어요."
               : hasActiveEntitlement
                 ? `${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`
-                : "무료 추천과 선택형 보상 광고를 이용할 수 있어요."
+                : "재고·공유·기본 알림은 계속 무료로 이용할 수 있어요."
           }
           icon={CreditCard}
-          last
+          last={!hasActiveEntitlement}
         />
+        {hasActiveEntitlement ? (
+          <ListRow
+            title="폐기 예방 리포트 보기"
+            description="30·90일 추세와 이번 주 실천 제안을 확인해요."
+            icon={TrendingDown}
+            onPress={() => router.push("/insights")}
+            last
+          />
+        ) : null}
       </SettingsGroup>
 
       <SettingsGroup
         title="냉장고를 덜 버리는 습관"
-        description="몇 번 추천받는지보다 무엇을 먹고 버렸는지 꾸준히 확인할 수 있어요."
+        description="AI 횟수만 늘리는 대신, 매주 실제로 덜 버릴 수 있는 흐름을 만들어요."
         content="plain"
       >
         <View style={styles.benefitCard}>
-          <BenefitLine
-            text={
-              entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
-                ? "가족 공간의 최근 30일 소비·폐기 흐름과 폐기 비율"
-                : "나의 최근 30일 소비·폐기 흐름과 폐기 비율"
-            }
-          />
-          <BenefitLine
-            text={
-              entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household"
-                ? `최대 5명이 광고 없이 AI 추천을 함께 사용해요 · 하루 최대 ${monetization.access?.householdDailyLimit ?? 60}회`
-                : `광고 없이 임박 재료로 요리를 충분히 골라요 · 하루 최대 ${monetization.access?.subscriberDailyLimit ?? 30}회`
-            }
-          />
-          {(entitlement?.planCode === "jango_household" || selectedPlanCode === "jango_household") ? (
-            <BenefitLine text="구성원이 함께 쓴 재료와 버린 재료를 한 리포트로 확인" />
-          ) : null}
-          <BenefitLine text="구독 중 바코드 추천권 적립 및 잔액 보존" />
+          <BenefitLine text="30·90일 소비·폐기 추세, 폐기율, 주간 비교" />
+          <BenefitLine text="임박 재료와 자주 버린 분류를 바탕으로 한 실천 제안" />
+          <BenefitLine text="요리 추천 월 60회 · 하루 최대 5회" />
+          <BenefitLine text="사진 일괄 등록 월 30회 · 하루 최대 3회" />
+          <BenefitLine text="요리와 사진 흐름에서 보상 광고 없이 사용" />
         </View>
       </SettingsGroup>
-
-      {hasActiveEntitlement ? (
-        <SettingsGroup
-          title="나의 30일 소비 리포트"
-          description="소비·폐기로 상태를 바꾼 재료를 기준으로 계산해요."
-          content="plain"
-        >
-          <View style={[styles.insightGrid, shouldStack && styles.insightGridStacked]}>
-            <InsightValue label="소비 완료" value={insightsQuery.data?.consumed ?? 0} suffix="개" />
-            <InsightValue label="폐기" value={insightsQuery.data?.discarded ?? 0} suffix="개" />
-            <InsightValue label="폐기 비율" value={insightsQuery.data?.wasteRatePercent ?? 0} suffix="%" />
-            <InsightValue label="7일 내 만료" value={insightsQuery.data?.expiringSoon ?? 0} suffix="개" />
-          </View>
-          {insightsQuery.data?.weekly ? (
-            <WeeklyTrendCard weekly={insightsQuery.data.weekly} />
-          ) : null}
-          {insightsQuery.data?.actions.length ? (
-            <View style={styles.insightActions}>
-              <SectionHeader
-                title="이번 주 실천 제안"
-                description="실제 재고와 소비·폐기 기록을 기준으로 골랐어요."
-              />
-              {insightsQuery.data.actions.map((action) => (
-                <InsightActionCard key={action.kind} action={action} />
-              ))}
-            </View>
-          ) : null}
-          {insightsQuery.data?.topDiscardedCategories.length ? (
-            <AppText variant="caption" tone="subtext">
-              자주 버린 분류 · {insightsQuery.data.topDiscardedCategories
-                .map((item) => `${productCategoryLabels[item.category as ProductCategory] ?? item.category} ${item.count}개`)
-                .join(" · ")}
-            </AppText>
-          ) : null}
-        </SettingsGroup>
-      ) : null}
 
       {!hasActiveEntitlement && monetization.access?.subscriptionsEnabled ? (
         <SettingsGroup
           title="이용권 고르기"
-          description={
-            monetization.access?.experiment.variant === "value_first"
-              ? "부담이 적은 월간부터 시작하거나 연간으로 절약할 수 있어요."
-              : "무료 체험 없이 선택한 기간마다 자동 갱신돼요."
-          }
+          description="무료 체험 없이 선택한 기간마다 자동 갱신돼요."
           content="plain"
         >
-          {householdEligible ? (
-            <View style={styles.planList}>
-              {(["jango_plus", "jango_household"] as const).map((planCode) => (
-                <Pressable
-                  key={planCode}
-                  onPress={() => {
-                    setSelectedPlanCode(planCode);
-                    trackFunnelEvent("plan_selected", { plan_code: planCode });
-                  }}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: selectedPlanCode === planCode }}
-                  style={[
-                    styles.planCard,
-                    shouldStack && styles.planCardStacked,
-                    selectedPlanCode === planCode && styles.planCardSelected,
-                  ]}
-                >
-                  <View style={styles.planCopy}>
-                    <AppText variant="bodyStrong">
-                      {planCode === "jango_household" ? "가족 플러스" : "개인 플러스"}
-                    </AppText>
-                    <AppText variant="caption" tone="subtext">
-                      {planCode === "jango_household"
-                        ? "가족 소비·폐기 리포트 · 최대 5명"
-                        : "나의 소비·폐기 리포트 · 광고 없음"}
-                    </AppText>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
-          ) : null}
           <View style={styles.planList}>
-            {(["yearly", "monthly"] as const).map((period) => {
+            {(["monthly", "yearly"] as const).map((period) => {
               const plan = plans.find((item) => item.period === period);
               const selected = selectedPeriod === period;
               return (
@@ -494,7 +389,7 @@ export default function SubscriptionSettingsScreen() {
                     setSelectedPeriod(period);
                     trackFunnelEvent("plan_selected", {
                       billing_period: period,
-                      plan_code: selectedPlanCode,
+                      plan_code: "jango_plus",
                     });
                   }}
                   accessibilityRole="radio"
@@ -507,7 +402,7 @@ export default function SubscriptionSettingsScreen() {
                 >
                   <View style={styles.planCopy}>
                     <AppText variant="bodyStrong">
-                      {period === "yearly" ? "연간" : "월간"}
+                      {period === "monthly" ? "월간" : "연간"}
                     </AppText>
                     <AppText variant="caption" tone="subtext">
                       {period === "yearly" && annualSavings
@@ -525,9 +420,11 @@ export default function SubscriptionSettingsScreen() {
           <View style={styles.renewalNotice}>
             <AppText variant="bodySmallStrong">결제 전에 알아두세요</AppText>
             <AppText variant="caption" tone="subtext">
-              무료 체험은 없고, 선택한 기간(월간 또는 연간)이 끝나면 같은 금액으로
-              자동 갱신돼요. 가격은 위 스토어 표시 금액이며, 갱신 전에 App Store나
-              Google Play의 구독 관리에서 해지할 수 있어요.
+              무료 체험은 없습니다. 선택한 월간 또는 연간 기간이 끝나면 위에 표시된
+              스토어 가격으로 자동 갱신됩니다. 갱신 전 App Store 또는 Google Play의
+              구독 관리에서 언제든 해지할 수 있고, 해지해도 만료일까지 혜택이
+              유지됩니다. 구독하지 않아도 무료 기능과 기존 데이터는 계속 이용할 수
+              있습니다.
             </AppText>
           </View>
           <Button
@@ -536,13 +433,15 @@ export default function SubscriptionSettingsScreen() {
             disabled={!connected || busyAction !== null}
             fullWidth
           >
-            {selectedPeriod === "yearly" ? "연간으로 시작하기" : "월간으로 시작하기"}
+            {selectedPeriod === "monthly"
+              ? "월간으로 시작하기"
+              : "연간으로 시작하기"}
           </Button>
         </SettingsGroup>
       ) : !hasActiveEntitlement ? (
         <SettingsGroup
           title="지금은 신규 가입을 쉬고 있어요"
-          description="이미 결제하신 구독은 복원으로 다시 연결할 수 있고, 이용 중인 혜택은 그대로 유지돼요."
+          description="원가 검증 또는 운영 점검 중에는 신규 판매만 닫고, 이미 결제한 혜택은 그대로 유지해요."
           content="plain"
         />
       ) : null}
@@ -550,7 +449,7 @@ export default function SubscriptionSettingsScreen() {
       <SettingsGroup title="스토어에서 관리하기">
         <ListRow
           title="구매 복원"
-          description="같은 스토어 계정으로 결제한 구독을 다시 연결해요."
+          description="같은 스토어 계정의 개인 플러스 구독만 다시 연결해요."
           icon={RefreshCw}
           onPress={() => void restore()}
         />
@@ -580,48 +479,33 @@ export default function SubscriptionSettingsScreen() {
   );
 }
 
-function resolvePlans(
-  products: ProductSubscription[],
-  planCode: PlanCode,
-): StorePlan[] {
+function resolvePlans(products: ProductSubscription[]): StorePlan[] {
   if (Platform.OS === "ios") {
-    const monthlyId =
-      planCode === "jango_household"
-        ? APPLE_HOUSEHOLD_MONTHLY_ID
-        : APPLE_MONTHLY_ID;
-    const yearlyId =
-      planCode === "jango_household"
-        ? APPLE_HOUSEHOLD_YEARLY_ID
-        : APPLE_YEARLY_ID;
     return products.flatMap((product) => {
       if (product.platform !== "ios") return [];
       const period =
-        product.id === yearlyId
+        product.id === APPLE_YEARLY_ID
           ? "yearly"
-          : product.id === monthlyId
+          : product.id === APPLE_MONTHLY_ID
             ? "monthly"
             : null;
       return period
-        ? [{
-            period,
-            displayPrice: product.displayPrice,
-            price: product.price ?? null,
-            productId: product.id,
-            planCode,
-          }]
+        ? [
+            {
+              period,
+              displayPrice: product.displayPrice,
+              price: product.price ?? null,
+              productId: product.id,
+            },
+          ]
         : [];
     });
   }
 
-  const googleProductId =
-    planCode === "jango_household"
-      ? GOOGLE_HOUSEHOLD_PRODUCT_ID
-      : GOOGLE_PRODUCT_ID;
   const product = products.find(
-    (item) => item.platform === "android" && item.id === googleProductId,
+    (item) => item.platform === "android" && item.id === GOOGLE_PRODUCT_ID,
   );
   if (!product || product.platform !== "android") return [];
-
   return product.subscriptionOffers.flatMap((offer) => {
     const period =
       offer.basePlanIdAndroid === "yearly"
@@ -630,14 +514,15 @@ function resolvePlans(
           ? "monthly"
           : null;
     return period
-      ? [{
-          period,
-          displayPrice: offer.displayPrice,
-          price: offer.price,
-          productId: product.id,
-          offerToken: offer.offerTokenAndroid ?? undefined,
-          planCode,
-        }]
+      ? [
+          {
+            period,
+            displayPrice: offer.displayPrice,
+            price: offer.price,
+            productId: product.id,
+            offerToken: offer.offerTokenAndroid ?? undefined,
+          },
+        ]
       : [];
   });
 }
@@ -649,134 +534,29 @@ function getAnnualSavings(plans: StorePlan[]) {
   return Math.max(0, Math.round((1 - yearly / (monthly * 12)) * 100));
 }
 
+function isPersonalSubscriptionProduct(productId: string) {
+  return [APPLE_MONTHLY_ID, APPLE_YEARLY_ID, GOOGLE_PRODUCT_ID].includes(
+    productId,
+  );
+}
+
 function getErrorMessage(error: unknown) {
   return error instanceof Error
     ? error.message
     : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?";
 }
 
-function isHouseholdProduct(productId: string) {
-  return productId.includes("household");
-}
-
 function BenefitLine({ text }: { text: string }) {
   return (
     <View style={styles.benefitLine}>
-      <AppText variant="bodyStrong" tone="primary">✓</AppText>
-      <AppText variant="bodySmall" style={styles.benefitText}>{text}</AppText>
-    </View>
-  );
-}
-
-function InsightValue({ label, value, suffix }: { label: string; value: number; suffix: string }) {
-  const { shouldStack } = useResponsiveLayout();
-  return (
-    <View style={[styles.insightValue, shouldStack && styles.insightValueStacked]}>
-      <AppText variant="title">{value}{suffix}</AppText>
-      <AppText variant="caption" tone="subtext">{label}</AppText>
-    </View>
-  );
-}
-
-function WeeklyTrendCard({ weekly }: { weekly: PlusInsights["weekly"] }) {
-  const { shouldStack } = useResponsiveLayout();
-  const change = weekly.wasteRateChangePercentagePoints;
-  const trendCopy =
-    weekly.trend === "improved"
-      ? `지난 7일보다 폐기 비율이 ${Math.abs(change ?? 0)}%p 줄었어요.`
-      : weekly.trend === "worse"
-        ? `지난 7일보다 폐기 비율이 ${Math.abs(change ?? 0)}%p 늘었어요.`
-        : weekly.trend === "steady"
-          ? "지난 7일과 비슷한 폐기 비율을 유지하고 있어요."
-          : "2주간 기록이 쌓이면 폐기 변화를 비교해 드릴게요.";
-  return (
-    <View style={styles.weeklyTrendCard}>
-      <View
-        style={[
-          styles.weeklyTrendHeader,
-          shouldStack && styles.weeklyTrendHeaderStacked,
-        ]}
-      >
-        <AppText variant="bodySmallStrong">이번 주 습관 변화</AppText>
-        <AppText variant="caption" tone="subtext">
-          {weekly.current.from.slice(5)}~{weekly.current.to.slice(5)}
-        </AppText>
-      </View>
-      <AppText variant="bodySmall">
-        소비 {weekly.current.consumed}개 · 폐기 {weekly.current.discarded}개 · 폐기 비율 {weekly.current.wasteRatePercent}%
+      <AppText variant="bodyStrong" tone="primary">
+        ✓
       </AppText>
-      <AppText
-        variant="caption"
-        tone={
-          weekly.trend === "improved"
-            ? "success"
-            : weekly.trend === "worse"
-              ? "danger"
-              : "subtext"
-        }
-      >
-        {trendCopy}
+      <AppText variant="bodySmall" style={styles.benefitText}>
+        {text}
       </AppText>
     </View>
   );
-}
-
-function InsightActionCard({
-  action,
-}: {
-  action: PlusInsights["actions"][number];
-}) {
-  const { shouldStack } = useResponsiveLayout();
-  const copy = getInsightActionCopy(action);
-  return (
-    <View
-      style={[
-        styles.insightActionCard,
-        shouldStack && styles.insightActionCardStacked,
-      ]}
-    >
-      <View style={styles.insightActionIcon}>
-        <Lightbulb color={colors.primary} size={spacing.sm + spacing.xxs} />
-      </View>
-      <View style={styles.insightActionCopy}>
-        <AppText variant="bodySmallStrong">{copy.title}</AppText>
-        <AppText variant="caption" tone="subtext">{copy.description}</AppText>
-      </View>
-    </View>
-  );
-}
-
-function getInsightActionCopy(action: PlusInsights["actions"][number]) {
-  if (action.kind === "use_expiring") {
-    const names = action.itemNames.length
-      ? action.itemNames.join(", ")
-      : "임박 재료";
-    const date = action.nearestExpiryDate?.slice(5).replace("-", "/");
-    return {
-      title: `만료 임박 ${action.count}개 먼저 사용하기`,
-      description: `${names}${date ? ` · 가장 가까운 기한 ${date}` : ""}`,
-    };
-  }
-  if (action.kind === "reduce_category_waste") {
-    const category = action.category
-      ? productCategoryLabels[action.category as ProductCategory] ??
-        action.category
-      : "자주 버린 분류";
-    return {
-      title: `${category} 구매량 한 번 점검하기`,
-      description: `최근 30일 동안 ${action.count}개를 폐기했어요. 다음 구매량을 조금 줄여보세요.`,
-    };
-  }
-  if (action.kind === "review_waste_trend") {
-    return {
-      title: "이번 주 폐기 원인 돌아보기",
-      description: "지난주보다 폐기 비율이 높아졌어요. 보관 위치와 구매량을 확인해보세요.",
-    };
-  }
-  return {
-    title: "좋아진 소비 흐름 이어가기",
-    description: "지난주보다 폐기 비율이 낮아졌어요. 지금의 구매량과 소비 순서를 유지해보세요.",
-  };
 }
 
 function trackFunnelEvent(
@@ -795,49 +575,7 @@ const styles = StyleSheet.create({
   },
   benefitLine: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
   benefitText: { flex: 1 },
-  insightGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.sm },
-  insightGridStacked: { flexDirection: "column" },
-  insightValue: {
-    width: "48%",
-    padding: spacing.md,
-    gap: spacing.xxs,
-    borderRadius: radius.xl,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  insightValueStacked: { width: "100%" },
-  insightActions: { gap: spacing.sm },
-  insightActionCard: {
-    flexDirection: "row",
-    gap: spacing.sm,
-    padding: spacing.md,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  insightActionCardStacked: { flexDirection: "column" },
-  insightActionIcon: {
-    width: spacing.xl,
-    height: spacing.xl,
-    borderRadius: radius.pill,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.primarySoft,
-  },
-  insightActionCopy: { flex: 1, gap: spacing.xxs },
-  weeklyTrendCard: {
-    gap: spacing.xxs,
-    padding: spacing.md,
-    borderRadius: radius.xl,
-    backgroundColor: colors.primarySoft,
-  },
-  weeklyTrendHeader: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm },
-  weeklyTrendHeaderStacked: { flexDirection: "column", alignItems: "stretch" },
-  planList: {
-    gap: spacing.sm,
-  },
+  planList: { gap: spacing.sm },
   planCard: {
     minHeight: spacing.xxxl + spacing.sm,
     borderRadius: radius.xl,
@@ -853,14 +591,8 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  planCardStacked: {
-    flexDirection: "column",
-    alignItems: "stretch",
-  },
-  planCopy: {
-    flex: 1,
-    gap: spacing.xxs,
-  },
+  planCardStacked: { flexDirection: "column", alignItems: "stretch" },
+  planCopy: { flex: 1, gap: spacing.xxs },
   renewalNotice: {
     backgroundColor: colors.mutedSurface,
     borderRadius: radius.lg,

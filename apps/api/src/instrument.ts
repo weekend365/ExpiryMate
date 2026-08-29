@@ -3,19 +3,20 @@ import * as Sentry from "@sentry/nestjs";
 const dsn = process.env.SENTRY_DSN?.trim();
 
 if (dsn) {
-  Sentry.init({
+  const options = {
     dsn,
     environment: process.env.NODE_ENV ?? "development",
     release: process.env.GIT_SHA,
     tracesSampleRate: 0.1,
-    beforeSend(event) {
+    beforeSend(event: Sentry.ErrorEvent) {
       if (isOperationalProbeEvent(event)) {
         return null;
       }
 
       return event;
     },
-  });
+  } as Parameters<typeof Sentry.init>[0] & { dsn: string };
+  Sentry.init(options);
 }
 
 function isOperationalProbeEvent(event: Sentry.ErrorEvent) {

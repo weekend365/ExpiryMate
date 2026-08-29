@@ -3,6 +3,7 @@ import { ItemStatus, Prisma } from "@prisma/client";
 import {
   dateOnlyToUtcDate,
   getKstDayWindow,
+  getKstMonthWindow,
   sortInventoryByNearestExpiry,
   StorageLocation,
   toKstDateOnly,
@@ -125,6 +126,17 @@ export interface AdminMonetizationOverview {
       status: MonetizationGuardrailStatus;
     };
   };
+  plusPlans: Array<{
+    planCode: "jango_plus" | "jango_household";
+    activeSubscribers: number;
+    estimatedNetRevenueKrw: number | null;
+    recipeAiCostKrw: number | null;
+    photoAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    recipeMonthlyQuotaReachPercent: number;
+    photoMonthlyQuotaReachPercent: number;
+  }>;
   retention: {
     d7Percent: number;
     d30Percent: number;
@@ -324,6 +336,9 @@ export class AdminService {
       recommendationActivity,
       affiliateReportRows,
       affiliateFunnelRows,
+      photoParseRows,
+      recipeMonthlyQuotaGroups,
+      photoMonthlyQuotaGroups,
     ] = await Promise.all([
       this.prisma.subscriptionEntitlement.findMany({
         where: {
@@ -331,11 +346,13 @@ export class AdminService {
           OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
         },
         select: {
+          id: true,
           ownerKey: true,
           store: true,
           productId: true,
           billingPeriod: true,
           basePlanId: true,
+          planCode: true,
         },
       }),
       this.prisma.subscriptionEntitlement.findMany({
@@ -486,6 +503,50 @@ export class AdminService {
               },
             },
             select: { eventName: true, properties: true },
+          })
+        : Promise.resolve([]),
+      hasDelegate(this.prisma, "inventoryPhotoParseEvent")
+        ? this.prisma.inventoryPhotoParseEvent.findMany({
+            where: {
+              status: "succeeded",
+              createdAt: { gte: from, lte: to },
+              subscriptionEntitlementId: { not: null },
+            },
+            select: {
+              ownerKey: true,
+              estimatedCostUsd: true,
+              subscriptionEntitlement: { select: { planCode: true } },
+            },
+          })
+        : Promise.resolve([]),
+      hasMethod(this.prisma.recommendationUsageEvent, "groupBy")
+        ? this.prisma.recommendationUsageEvent.groupBy({
+            by: ["subscriptionEntitlementId"],
+            where: {
+              source: "subscription",
+              subscriptionEntitlementId: { not: null },
+              usageDay: {
+                gte: getKstMonthWindow(now).start,
+                lt: getKstMonthWindow(now).endExclusive,
+              },
+              status: { in: [...activeUsageStatuses] },
+            },
+            _count: { _all: true },
+          })
+        : Promise.resolve([]),
+      hasDelegate(this.prisma, "inventoryPhotoParseEvent")
+        ? this.prisma.inventoryPhotoParseEvent.groupBy({
+            by: ["subscriptionEntitlementId"],
+            where: {
+              usageSource: "subscription",
+              subscriptionEntitlementId: { not: null },
+              usageDay: {
+                gte: getKstMonthWindow(now).start,
+                lt: getKstMonthWindow(now).endExclusive,
+              },
+              status: { in: ["reserved", "succeeded"] },
+            },
+            _count: { _all: true },
           })
         : Promise.resolve([]),
     ]);
@@ -733,6 +794,81 @@ export class AdminService {
         status: paidCreditGuardrail.status,
       },
     };
+    const entitlementPlanById = new Map(
+      activeSubscriberRows.map((row) => [row.id, row.planCode] as const),
+    );
+    const plusPlans = (["jango_plus", "jango_household"] as const).map(
+      (planCode) => {
+        const subscribers = activeSubscriberRows.filter(
+          (row) => row.planCode === planCode,
+        );
+        const revenue = revenueRows.filter((row) => row.source === planCode);
+        const planRevenue = economicsConfigured
+          ? roundKrw(
+              revenue.reduce(
+                (sum, row) => sum + Number(row.estimatedNetRevenueKrw),
+                0,
+              ),
+            )
+          : null;
+        const recipeCostUsd = recommendationRows.reduce((sum, row) => {
+          return row.usageEvent?.subscriptionEntitlement?.planCode === planCode
+            ? sum + Number(row.estimatedCostUsd)
+            : sum;
+        }, 0);
+        const photoCostUsd = photoParseRows.reduce((sum, row) => {
+          return row.subscriptionEntitlement?.planCode === planCode
+            ? sum + Number(row.estimatedCostUsd)
+            : sum;
+        }, 0);
+        const recipeAiCostKrw = estimates.usdKrw
+          ? roundKrw(recipeCostUsd * estimates.usdKrw)
+          : null;
+        const photoAiCostKrw = estimates.usdKrw
+          ? roundKrw(photoCostUsd * estimates.usdKrw)
+          : null;
+        const contribution =
+          planRevenue !== null &&
+          recipeAiCostKrw !== null &&
+          photoAiCostKrw !== null
+            ? roundKrw(planRevenue - recipeAiCostKrw - photoAiCostKrw)
+            : null;
+        const recipeQuotaReached = recipeMonthlyQuotaGroups.filter(
+          (group) =>
+            group.subscriptionEntitlementId &&
+            entitlementPlanById.get(group.subscriptionEntitlementId) ===
+              planCode &&
+            group._count._all >= 60,
+        ).length;
+        const photoQuotaReached = photoMonthlyQuotaGroups.filter(
+          (group) =>
+            group.subscriptionEntitlementId &&
+            entitlementPlanById.get(group.subscriptionEntitlementId) ===
+              planCode &&
+            group._count._all >= 30,
+        ).length;
+        return {
+          planCode,
+          activeSubscribers: subscribers.length,
+          estimatedNetRevenueKrw: planRevenue,
+          recipeAiCostKrw,
+          photoAiCostKrw,
+          estimatedContributionKrw: contribution,
+          estimatedContributionMarginPercent:
+            planRevenue && contribution !== null
+              ? percent(contribution, planRevenue)
+              : null,
+          recipeMonthlyQuotaReachPercent: percent(
+            recipeQuotaReached,
+            subscribers.length,
+          ),
+          photoMonthlyQuotaReachPercent: percent(
+            photoQuotaReached,
+            subscribers.length,
+          ),
+        };
+      },
+    );
     const activeOwnerKeys = new Set(activeUserRows.map((row) => row.ownerKey));
     for (const activity of coreActivity) {
       if (activity.createdAt >= from && activity.createdAt <= to) {
@@ -862,6 +998,7 @@ export class AdminService {
       economicsConfigured,
       economicsBySource,
       unitEconomics,
+      plusPlans,
       retention,
       daily: [...dailyMap.entries()].map(([day, row]) => ({
         day,

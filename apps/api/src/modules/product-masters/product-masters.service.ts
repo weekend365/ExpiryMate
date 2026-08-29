@@ -379,8 +379,8 @@ export class ProductMastersService {
     const expected = createHmac("sha256", secret)
       .update(payload)
       .digest("base64url");
-    const actualBuffer = Buffer.from(signature);
-    const expectedBuffer = Buffer.from(expected);
+    const actualBuffer = new TextEncoder().encode(signature);
+    const expectedBuffer = new TextEncoder().encode(expected);
     if (
       actualBuffer.length !== expectedBuffer.length ||
       !timingSafeEqual(actualBuffer, expectedBuffer)

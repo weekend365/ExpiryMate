@@ -69,6 +69,25 @@ export const getKstDayWindow = (now: Date | string = new Date()) => {
   return { start, endExclusive };
 };
 
+/**
+ * Half-open KST calendar-month window: `[start, endExclusive)`.
+ * The window is independent of the subscription purchase date.
+ */
+export const getKstMonthWindow = (now: Date | string = new Date()) => {
+  const [yearText, monthText] = toKstDateOnly(now).split("-");
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const startDateOnly = `${yearText}-${monthText}-01`;
+  const nextMonthUtc = new Date(Date.UTC(year, month, 1));
+  const nextYear = nextMonthUtc.getUTCFullYear();
+  const nextMonth = String(nextMonthUtc.getUTCMonth() + 1).padStart(2, "0");
+
+  return {
+    start: dateOnlyToKstStartDate(startDateOnly),
+    endExclusive: dateOnlyToKstStartDate(`${nextYear}-${nextMonth}-01`),
+  };
+};
+
 export const addDaysToDateOnly = (value: Date | string, days: number) => {
   const base = dateOnlyToUtcDate(toKstDateOnly(value));
   base.setUTCDate(base.getUTCDate() + days);

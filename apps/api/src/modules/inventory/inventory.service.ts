@@ -6,8 +6,11 @@ import {
 } from "@nestjs/common";
 import {
   ExpirySource,
+  InventoryDispositionOutcome,
+  InventoryDispositionSource,
   InventoryUnitCode,
   ItemStatus,
+  Prisma,
   ProductCategory,
 } from "@prisma/client";
 import {
@@ -286,78 +289,117 @@ export class InventoryService {
       unitCode: dto.unitCode,
     });
 
-    const updated = await this.prisma.inventoryItem.updateMany({
-      where: {
-        id,
-        ...inventoryScope(ownerKey, spaceId),
-        version: dto.expectedVersion,
-      },
-      data: {
-        productId: dto.productId,
-        productMasterId: dto.productMasterId,
-        displayName: dto.displayName,
-        brand: dto.brand,
-        category: dto.category as ProductCategory | undefined,
-        quantity: dto.quantity,
-        unit: dto.unit,
-        quantityBase: canonicalUpdate?.quantityBase,
-        unitCode: canonicalUpdate
-          ? (canonicalUpdate.unitCode as InventoryUnitCode)
-          : undefined,
-        storageLocation: dto.storageLocation,
-        expiryDate:
-          dto.expiryDate === undefined ? undefined : parseExpiryDate(dto.expiryDate),
-        expirySource: dto.expirySource as ExpirySource | undefined,
-        status: dto.status as ItemStatus | undefined,
-        notes: dto.notes,
-        updatedByUserId: ownerKey,
-        version: { increment: 1 },
-      },
-    });
+    const item = await this.prisma.$transaction(async (tx) => {
+      const updated = await tx.inventoryItem.updateMany({
+        where: {
+          id,
+          ...inventoryScope(ownerKey, spaceId),
+          version: dto.expectedVersion,
+        },
+        data: {
+          productId: dto.productId,
+          productMasterId: dto.productMasterId,
+          displayName: dto.displayName,
+          brand: dto.brand,
+          category: dto.category as ProductCategory | undefined,
+          quantity: dto.quantity,
+          unit: dto.unit,
+          quantityBase: canonicalUpdate?.quantityBase,
+          unitCode: canonicalUpdate
+            ? (canonicalUpdate.unitCode as InventoryUnitCode)
+            : undefined,
+          storageLocation: dto.storageLocation,
+          expiryDate:
+            dto.expiryDate === undefined
+              ? undefined
+              : parseExpiryDate(dto.expiryDate),
+          expirySource: dto.expirySource as ExpirySource | undefined,
+          status: dto.status as ItemStatus | undefined,
+          notes: dto.notes,
+          updatedByUserId: ownerKey,
+          version: { increment: 1 },
+        },
+      });
 
-    if (updated.count !== 1) {
-      throw new ConflictException(
-        "다른 구성원이 먼저 바꿨어요. 최신 내용을 불러온 뒤 다시 해볼까요?",
-      );
-    }
+      if (updated.count !== 1) {
+        throw new ConflictException(
+          "다른 구성원이 먼저 바꿨어요. 최신 내용을 불러온 뒤 다시 해볼까요?",
+        );
+      }
 
-    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
-      where: { id },
+      const next = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
+      const disposition = toDispositionOutcome(dto.status);
+      if (current.status === SharedItemStatus.ACTIVE && disposition) {
+        await createDispositionEvent(tx, next, ownerKey, disposition);
+      }
+      return next;
     });
     return serializeInventoryItem(item);
   }
 
   async consume(id: string, ownerKey: string, spaceId?: string) {
-    await this.findOne(id, ownerKey, spaceId);
-    await this.prisma.inventoryItem.updateMany({
-      where: { id, ...inventoryScope(ownerKey, spaceId) },
-      data: {
-        status: ItemStatus.consumed,
-        quantityBase: 0,
-        updatedByUserId: ownerKey,
-        version: { increment: 1 },
-      },
-    });
+    const item = await this.prisma.$transaction(async (tx) => {
+      const current = await tx.inventoryItem.findFirst({
+        where: {
+          id,
+          ...inventoryScope(ownerKey, spaceId),
+          status: ItemStatus.active,
+        },
+      });
+      if (!current) {
+        throw new NotFoundException("소비할 수 있는 재고 항목을 찾을 수 없습니다.");
+      }
 
-    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
-      where: { id },
+      await tx.inventoryItem.update({
+        where: { id },
+        data: {
+          status: ItemStatus.consumed,
+          quantityBase: 0,
+          updatedByUserId: ownerKey,
+          version: { increment: 1 },
+        },
+      });
+      const next = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
+      await createDispositionEvent(
+        tx,
+        current,
+        ownerKey,
+        InventoryDispositionOutcome.consumed,
+      );
+      return next;
     });
     return serializeInventoryItem(item);
   }
 
   async discard(id: string, ownerKey: string, spaceId?: string) {
-    await this.findOne(id, ownerKey, spaceId);
-    await this.prisma.inventoryItem.updateMany({
-      where: { id, ...inventoryScope(ownerKey, spaceId) },
-      data: {
-        status: ItemStatus.discarded,
-        updatedByUserId: ownerKey,
-        version: { increment: 1 },
-      },
-    });
+    const item = await this.prisma.$transaction(async (tx) => {
+      const current = await tx.inventoryItem.findFirst({
+        where: {
+          id,
+          ...inventoryScope(ownerKey, spaceId),
+          status: ItemStatus.active,
+        },
+      });
+      if (!current) {
+        throw new NotFoundException("폐기할 수 있는 재고 항목을 찾을 수 없습니다.");
+      }
 
-    const item = await this.prisma.inventoryItem.findUniqueOrThrow({
-      where: { id },
+      await tx.inventoryItem.update({
+        where: { id },
+        data: {
+          status: ItemStatus.discarded,
+          updatedByUserId: ownerKey,
+          version: { increment: 1 },
+        },
+      });
+      const next = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
+      await createDispositionEvent(
+        tx,
+        current,
+        ownerKey,
+        InventoryDispositionOutcome.discarded,
+      );
+      return next;
     });
     return serializeInventoryItem(item);
   }
@@ -369,40 +411,47 @@ export class InventoryService {
       throw new BadRequestException("한 번에 최대 100개까지 폐기할 수 있어요.");
     }
 
-    const items = await this.prisma.inventoryItem.findMany({
-      where: {
-        id: { in: ids },
-        ...inventoryScope(params.ownerKey, params.spaceId),
-      },
-    });
+    const discardedItems = await this.prisma.$transaction(async (tx) => {
+      const items = await tx.inventoryItem.findMany({
+        where: {
+          id: { in: ids },
+          ...inventoryScope(params.ownerKey, params.spaceId),
+          status: ItemStatus.active,
+        },
+      });
 
-    const canDiscardAll =
-      items.length === ids.length &&
-      items.every((item) => item.status === ItemStatus.active);
+      if (items.length !== ids.length) {
+        throw new BadRequestException("폐기할 수 없는 항목이 포함되어 있어요.");
+      }
 
-    if (!canDiscardAll) {
-      throw new BadRequestException("폐기할 수 없는 항목이 포함되어 있어요.");
-    }
+      await tx.inventoryItem.updateMany({
+        where: {
+          id: { in: ids },
+          ...inventoryScope(params.ownerKey, params.spaceId),
+          status: ItemStatus.active,
+        },
+        data: {
+          status: ItemStatus.discarded,
+          updatedByUserId: params.ownerKey,
+          version: { increment: 1 },
+        },
+      });
 
-    await this.prisma.inventoryItem.updateMany({
-      where: {
-        id: { in: ids },
-        ...inventoryScope(params.ownerKey, params.spaceId),
-        status: ItemStatus.active,
-      },
-      data: {
-        status: ItemStatus.discarded,
-        updatedByUserId: params.ownerKey,
-        version: { increment: 1 },
-      },
-    });
+      await tx.inventoryDispositionEvent.createMany({
+        data: items.map((item) => dispositionEventData(
+          item,
+          params.ownerKey,
+          InventoryDispositionOutcome.discarded,
+        )),
+      });
 
-    const discardedItems = await this.prisma.inventoryItem.findMany({
-      where: {
-        id: { in: ids },
-        ...inventoryScope(params.ownerKey, params.spaceId),
-      },
-      orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+      return tx.inventoryItem.findMany({
+        where: {
+          id: { in: ids },
+          ...inventoryScope(params.ownerKey, params.spaceId),
+        },
+        orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
+      });
     });
 
     return {
@@ -493,12 +542,100 @@ export class InventoryService {
         orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
       });
 
+      const newlyConsumed = consumedItems.filter(
+        (item) => item.status === ItemStatus.consumed,
+      );
+      if (newlyConsumed.length > 0) {
+        await tx.inventoryDispositionEvent.createMany({
+          data: newlyConsumed.map((item) =>
+            dispositionEventData(
+              storedById.get(item.id) ?? item,
+              params.ownerKey,
+              InventoryDispositionOutcome.consumed,
+            ),
+          ),
+        });
+      }
+
       return {
         count: consumedItems.length,
         items: consumedItems.map(serializeInventoryItem),
       };
     });
   }
+}
+
+type DispositionItem = {
+  id: string;
+  ownerKey: string;
+  spaceId: string | null;
+  productId: string | null;
+  productMasterId: string | null;
+  displayName: string;
+  brand: string | null;
+  category: ProductCategory | null;
+  quantity: number;
+  unit: string | null;
+  quantityBase: number;
+  unitCode: InventoryUnitCode;
+  storageLocation: string;
+  expiryDate: Date;
+};
+
+function dispositionEventData(
+  item: DispositionItem,
+  actorUserId: string,
+  outcome: InventoryDispositionOutcome,
+) {
+  if (!item.spaceId) {
+    throw new BadRequestException("재고 공간을 확인할 수 없어 상태를 바꿀 수 없습니다.");
+  }
+
+  return {
+    inventoryItemId: item.id,
+    ownerKey: item.ownerKey,
+    spaceId: item.spaceId,
+    actorUserId,
+    displayName: item.displayName,
+    category: item.category,
+    itemSnapshot: {
+      productId: item.productId,
+      productMasterId: item.productMasterId,
+      displayName: item.displayName,
+      brand: item.brand,
+      category: item.category,
+      quantity: item.quantity,
+      unit: item.unit,
+      quantityBase: item.quantityBase,
+      unitCode: item.unitCode,
+      storageLocation: item.storageLocation,
+      expiryDate: item.expiryDate.toISOString().slice(0, 10),
+    },
+    outcome,
+    source: InventoryDispositionSource.live,
+    occurredAt: new Date(),
+  };
+}
+
+async function createDispositionEvent(
+  tx: Prisma.TransactionClient,
+  item: DispositionItem,
+  actorUserId: string,
+  outcome: InventoryDispositionOutcome,
+) {
+  await tx.inventoryDispositionEvent.create({
+    data: dispositionEventData(item, actorUserId, outcome),
+  });
+}
+
+function toDispositionOutcome(status?: string) {
+  if (status === SharedItemStatus.CONSUMED) {
+    return InventoryDispositionOutcome.consumed;
+  }
+  if (status === SharedItemStatus.DISCARDED) {
+    return InventoryDispositionOutcome.discarded;
+  }
+  return null;
 }
 
 function inventoryScope(ownerKey: string, spaceId?: string) {

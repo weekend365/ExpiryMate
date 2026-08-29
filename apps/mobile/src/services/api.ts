@@ -46,8 +46,13 @@ import type {
   SupportInquiry,
   SupportInquiryCreateInput,
   SubscriptionEntitlement,
+  SubscriptionPurchaseIntent,
+  SubscriptionPurchaseIntentRequest,
   SubscriptionVerificationRequest,
   SubscriptionVerificationResponse,
+  InsightPreview,
+  InsightWindowDays,
+  PlusInsights,
   UpdateInventoryItemBody,
   InventorySpaceSummary,
   InventorySpaceMember,
@@ -1227,46 +1232,24 @@ export const getSubscriptionEntitlement = (spaceId?: string) =>
     `/subscriptions/entitlement${spaceId ? `?spaceId=${encodeURIComponent(spaceId)}` : ""}`,
   );
 
-export type PlusInsights = {
-  period: { from: string; to: string };
-  consumed: number;
-  discarded: number;
-  wasteRatePercent: number;
-  expiringSoon: number;
-  topDiscardedCategories: Array<{ category: string; count: number }>;
-  actions: Array<{
-    kind:
-      | "use_expiring"
-      | "reduce_category_waste"
-      | "review_waste_trend"
-      | "keep_momentum";
-    priority: "high" | "medium" | "low";
-    count: number;
-    itemNames: string[];
-    category: string | null;
-    nearestExpiryDate: string | null;
-  }>;
-  weekly: {
-    current: InsightPeriod;
-    previous: InsightPeriod;
-    wasteRateChangePercentagePoints: number | null;
-    trend: "improved" | "steady" | "worse" | "insufficient_data";
-  };
-};
-
-type InsightPeriod = {
-  from: string;
-  to: string;
-  consumed: number;
-  discarded: number;
-  wasteRatePercent: number;
-};
-
 export const getPlusInsights = () =>
   request<PlusInsights>("/subscriptions/plus-insights");
 
 export const getHouseholdInsights = (spaceId: string) =>
   request<PlusInsights>(spaceResourcePath(spaceId, "subscriptions/insights"));
+
+export const getInsightsPreview = (spaceId: string) =>
+  request<InsightPreview>(
+    `/insights/preview?spaceId=${encodeURIComponent(spaceId)}`,
+  );
+
+export const getInsightsOverview = (
+  spaceId: string,
+  windowDays: InsightWindowDays,
+) =>
+  request<PlusInsights>(
+    `/insights/overview?spaceId=${encodeURIComponent(spaceId)}&windowDays=${windowDays}`,
+  );
 
 export const getMonetizationStatus = (spaceId?: string) =>
   request<RecommendationAccess>(
@@ -1302,6 +1285,14 @@ export const trackMonetizationEvent = (
 
 export const verifySubscription = (payload: SubscriptionVerificationRequest) =>
   request<SubscriptionVerificationResponse>("/subscriptions/verify", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const createSubscriptionPurchaseIntent = (
+  payload: SubscriptionPurchaseIntentRequest,
+) =>
+  request<SubscriptionPurchaseIntent>("/subscriptions/purchase-intents", {
     method: "POST",
     body: JSON.stringify(payload),
   });

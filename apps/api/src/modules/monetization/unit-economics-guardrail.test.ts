@@ -42,6 +42,7 @@ describe("getUnitEconomicsAvailability", () => {
     await expect(getUnitEconomicsAvailability(prisma as never)).resolves.toMatchObject({
       rewardedAds: { allowed: true, status: "learning" },
       paidCredits: { allowed: true, status: "learning" },
+      subscriptions: { allowed: false, status: "learning" },
     });
   });
 
@@ -65,7 +66,7 @@ describe("getUnitEconomicsAvailability", () => {
       creditsGranted: 2,
     });
 
-    await expect(getUnitEconomicsAvailability(prisma as never)).resolves.toEqual({
+    await expect(getUnitEconomicsAvailability(prisma as never)).resolves.toMatchObject({
       rewardedAds: {
         allowed: false,
         status: "blocked",
@@ -75,6 +76,10 @@ describe("getUnitEconomicsAvailability", () => {
         allowed: true,
         status: "healthy",
         coverageMultiple: 5,
+      },
+      subscriptions: {
+        allowed: false,
+        status: "learning",
       },
       subscriptionDailyLimitCaps: {
         subscriber: 3,
@@ -109,6 +114,9 @@ function createPrisma(input?: {
   return {
     recipeRecommendation: {
       findMany: vi.fn().mockResolvedValue(input?.recommendations ?? []),
+    },
+    inventoryPhotoParseEvent: {
+      findMany: vi.fn().mockResolvedValue([]),
     },
     monetizationRevenueEvent: {
       findMany: vi.fn().mockResolvedValue(input?.revenueEvents ?? []),

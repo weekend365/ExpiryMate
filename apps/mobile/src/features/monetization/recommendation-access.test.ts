@@ -37,6 +37,7 @@ function access(
     dailyLimit: 11,
     subscriberDailyLimit: 30,
     householdDailyLimit: 60,
+    subscriptionQuota: null,
     used: 1,
     remaining: overrides.remaining ?? 10,
     free: { limit: 1, used: 1, remaining: 0, ...overrides.free },

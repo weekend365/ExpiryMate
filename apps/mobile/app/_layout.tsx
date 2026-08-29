@@ -184,6 +184,10 @@ function RootLayout() {
                 options={{ title: "장고 플러스" }}
               />
               <Stack.Screen
+                name="insights"
+                options={{ title: "폐기 예방 리포트" }}
+              />
+              <Stack.Screen
                 name="settings/support"
                 options={{ title: "장고에게 물어보기" }}
               />

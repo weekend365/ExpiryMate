@@ -32,6 +32,24 @@ export const monetizationExperimentVariantSchema = z.enum([
   "value_first",
 ]);
 
+export const calendarQuotaSchema = z.object({
+  timezone: z.literal("Asia/Seoul"),
+  period: z.literal("calendar_month"),
+  startsAt: z.string(),
+  resetsAt: z.string(),
+  monthly: z.object({
+    limit: z.number().int().nonnegative(),
+    used: z.number().int().nonnegative(),
+    remaining: z.number().int().nonnegative(),
+  }),
+  daily: z.object({
+    limit: z.number().int().nonnegative(),
+    used: z.number().int().nonnegative(),
+    remaining: z.number().int().nonnegative(),
+    resetsAt: z.string(),
+  }),
+});
+
 export const monetizationFunnelEventNameSchema = z.enum([
   "quota_exhausted",
   "rewarded_ad_requested",
@@ -109,6 +127,7 @@ export const recommendationAccessSchema = z.object({
   dailyLimit: z.number().int().nonnegative(),
   subscriberDailyLimit: z.number().int().nonnegative(),
   householdDailyLimit: z.number().int().nonnegative(),
+  subscriptionQuota: calendarQuotaSchema.nullable().default(null),
   used: z.number().int().nonnegative(),
   remaining: z.number().int().nonnegative(),
   free: z.object({
@@ -195,6 +214,7 @@ export type RewardedAdPurpose = z.infer<typeof rewardedAdPurposeSchema>;
 export type MonetizationExperimentVariant = z.infer<
   typeof monetizationExperimentVariantSchema
 >;
+export type CalendarQuota = z.infer<typeof calendarQuotaSchema>;
 export type MonetizationFunnelEventName = z.infer<
   typeof monetizationFunnelEventNameSchema
 >;

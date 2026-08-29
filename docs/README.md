@@ -1,7 +1,7 @@
 ---
 status: active
 owner: project
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 source_of_truth: true
 ---
 
@@ -18,7 +18,7 @@ source_of_truth: true
 | [프로젝트 현황](./STATUS.md) | 현재 Phase, P0/P1, 블로커 | product-release | Yes |
 | [출시 로드맵](./ROADMAP.md) | 단계와 출시 인수 기준 | product-release | Yes |
 | [프로젝트 안내](./PROJECT.md) | 기존 링크 호환용 허브 | project | No |
-| [v1 출시 범위](./product/release-scope.md) | 현재와 이후 기능 경계 | product | Yes |
+| [출시·업데이트 범위](./product/release-scope.md) | 현재와 이후 기능 경계 | product | Yes |
 
 ## 개발·운영
 
@@ -37,13 +37,14 @@ source_of_truth: true
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |
 | [수익화 운영 기준](./monetization.md) | 광고·파트너스 정책과 QA | product | Yes |
 
-## 스토어 출시
+## 스토어 운영·업데이트
 
 | 문서 | 상태 | 용도 |
 |---|---|---|
 | [메타데이터 초안](./store-metadata-draft.md) | Draft | 설명, 키워드, 심사 노트 |
 | [개인정보 선언 대조표](./store-privacy-declarations.md) | Active | App Privacy·Data Safety 대조 |
 | [스크린샷 제출 가이드](./store-screenshot-submission-guide.md) | Active | 촬영, 후가공, 제출 규격 |
+| [개인 플러스 스토어 설정](./subscription-store-rollout.md) | Active | Apple·Google 상품, 알림, QA, rollout |
 
 ## 아카이브
 

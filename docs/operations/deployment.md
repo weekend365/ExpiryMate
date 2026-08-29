@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 source_of_truth: true
 ---
 
@@ -68,6 +68,27 @@ SELECT COUNT(*) FROM "UserStorageLocation" WHERE "spaceId" IS NULL;
 SELECT COUNT(*) FROM "RecipeRecommendation" WHERE "spaceId" IS NULL;
 ```
 
+### 개인 플러스 출시 migration
+
+`20260829120000_add_personal_plus_launch`는 처분 이벤트·사진 구독 사용 출처·구매
+의도를 추가하고 기존 소비/폐기 항목을 `backfill` 출처로 기록합니다. 적용 뒤 아래를
+확인합니다.
+
+```sql
+SELECT "source", "outcome", COUNT(*)
+FROM "InventoryDispositionEvent"
+GROUP BY "source", "outcome";
+
+SELECT COUNT(*) FROM "InventoryItem"
+WHERE "status" IN ('consumed', 'discarded') AND "spaceId" IS NOT NULL;
+
+SELECT COUNT(*) FROM "SubscriptionPurchaseIntent";
+```
+
+첫 두 집계의 차이는 migration 이후 생성된 이벤트와 과거 데이터 누락 여부를 고려해
+조사합니다. 운영에서는 migration을 되돌려 이벤트 원장을 삭제하지 않고 forward fix를
+사용합니다.
+
 ## Mobile EAS
 
 ```bash
@@ -81,6 +102,23 @@ eas submit --platform ios --profile production
 production 빌드 전에 공개 API URL, OAuth callback, 웹 URL, OAuth client ID, Sentry,
 AdMob 값이 Expo의 production 환경에 들어 있는지 확인합니다. 로컬 `.env`를 production
 설정의 정본으로 사용하지 않습니다.
+
+## 개인 플러스 출시 순서
+
+1. DB migration → API·Admin·약관/개인정보 페이지를 `SUBSCRIPTIONS_ENABLED=false`로 배포
+2. App Store와 Play Console에 개인 플러스 상품만 등록하고 Apple Server Notification,
+   Google RTDN을 API webhook에 연결
+3. `MONETIZATION_OFFER_MODE=core`, `HOUSEHOLD_SUBSCRIPTIONS_ENABLED=false`,
+   `PAID_RECOMMENDATION_CREDITS_ENABLED=false`를 확인
+4. 요리 50건·사진 30건 실호출 원가에서
+   `60 × 요리 p95 + 30 × 사진 p95 ≤ 858원` 확인
+5. iOS Sandbox·Android License QA에서 구매·pending·복원·타 계정 충돌·갱신·취소·
+   grace·pause/hold·만료·환불·revocation 확인
+6. production 앱 공개와 동시에 `SUBSCRIPTIONS_ENABLED=true`,
+   `SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=true`, 수익 원장 활성화
+
+장애 시 `SUBSCRIPTIONS_ENABLED=false`로 신규 판매만 중단합니다. 기존 권한 검증,
+스토어 알림, 재동기화는 유지해 결제 기간 중 활성 사용자의 혜택을 보존합니다.
 
 ## Sentry
 
@@ -103,6 +141,7 @@ Mobile development 환경은 Sentry 전송을 건너뜁니다. 배포 후 각 �
 | 인증 메일 미도착 | Resend 로그, DNS, 발신 주소, `AUTH_LINK_BASE_URL` |
 | OAuth 복귀 실패 | provider callback URL, client secret, `/oauth/callback`, 앱 스킴 |
 | Push 중복 | `SchedulerLease`, scheduler 활성 replica 수, Expo receipt |
+| 구매·복원 실패 | purchase intent → Apple/Google 검증 응답 → 계정 결합 ID → entitlement → 서버 알림/재동기화 |
 
 ## 배포 완료 조건
 
@@ -111,4 +150,5 @@ Mobile development 환경은 Sentry 전송을 건너뜁니다. 배포 후 각 �
 - API/Admin/Mobile release 식별 가능
 - 핵심 스모크와 두 계정 공유 QA 통과
 - 스토어 개인정보 선언과 실제 수집·전송 동작 일치
-
+- 개인 플러스 실제 가격·자동 갱신·해지·약관 고지와 상품 설정 일치
+- 구매 검증·복원 성공률 98% 이상, 중복 권한·미승인 Google 구매 0건

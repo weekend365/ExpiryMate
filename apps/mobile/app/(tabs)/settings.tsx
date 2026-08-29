@@ -84,8 +84,8 @@ export default function SettingsScreen() {
                 monetization.access.tier === "jango_household"
                   ? `가족 플러스 · 하루 최대 ${monetization.access.householdDailyLimit}회 추천을 함께 써요.`
                   : monetization.access.tier === "jango_plus"
-                    ? `이용 중 · 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 확인해요.`
-                    : `광고 제거와 하루 ${monetization.access.subscriberDailyLimit}회 추천 혜택을 살펴봐요.`
+                    ? "이용 중 · 30·90일 폐기 예방 리포트와 광고 없는 AI를 확인해요."
+                    : "30·90일 폐기 예방 리포트와 광고 없는 AI를 살펴봐요."
               }
               icon={CreditCard}
               onPress={() => router.push("/settings/subscription")}

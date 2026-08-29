@@ -25,6 +25,14 @@ export type UnitEconomicsAvailability = {
     status: GuardrailStatus;
     coverageMultiple: number | null;
   };
+  subscriptions: {
+    allowed: boolean;
+    status: GuardrailStatus;
+    projectedMonthlyCostKrw: number | null;
+    budgetKrw: number;
+    recipeSamples: number;
+    photoSamples: number;
+  };
   subscriptionDailyLimitCaps: {
     subscriber: number | null;
     household: number | null;
@@ -34,6 +42,14 @@ export type UnitEconomicsAvailability = {
 const ALLOWED: UnitEconomicsAvailability = {
   rewardedAds: { allowed: true, status: "disabled", coverageMultiple: null },
   paidCredits: { allowed: true, status: "disabled", coverageMultiple: null },
+  subscriptions: {
+    allowed: true,
+    status: "disabled",
+    projectedMonthlyCostKrw: null,
+    budgetKrw: 858,
+    recipeSamples: 0,
+    photoSamples: 0,
+  },
   subscriptionDailyLimitCaps: { subscriber: null, household: null },
 };
 
@@ -64,7 +80,8 @@ export async function getUnitEconomicsAvailability(
     50,
   );
   const from = new Date(now.getTime() - lookbackDays * 86_400_000);
-  const [recommendations, revenueEvents, creditPurchases] = await Promise.all([
+  const [recommendations, photoParses, revenueEvents, creditPurchases] =
+    await Promise.all([
     db.recipeRecommendation.findMany({
       where: {
         createdAt: { gte: from, lte: now },
@@ -78,6 +95,13 @@ export async function getUnitEconomicsAvailability(
         estimatedCostUsd: true,
         usageEvent: { select: { source: true } },
       },
+    }),
+    db.inventoryPhotoParseEvent.findMany({
+      where: {
+        createdAt: { gte: from, lte: now },
+        status: "succeeded",
+      },
+      select: { estimatedCostUsd: true, usageSource: true },
     }),
     db.monetizationRevenueEvent.findMany({
       where: {
@@ -110,6 +134,22 @@ export async function getUnitEconomicsAvailability(
       allRecommendationCostsKrw.push(amountKrw);
     }
   }
+  const photoCostsKrw: number[] = [];
+  for (const row of photoParses) {
+    const amountKrw = Number(row.estimatedCostUsd) * estimates.usdKrw;
+    if (Number.isFinite(amountKrw) && amountKrw >= 0) {
+      photoCostsKrw.push(amountKrw);
+    }
+    if (row.usageSource === "rewarded_ad") {
+      const current = costs.get(RecommendationUsageSource.rewarded_ad) ?? {
+        amountKrw: 0,
+        units: 0,
+      };
+      current.amountKrw += amountKrw;
+      current.units += 1;
+      costs.set(RecommendationUsageSource.rewarded_ad, current);
+    }
+  }
 
   const revenues = new Map<string, { amountKrw: number; events: number }>();
   for (const row of revenueEvents) {
@@ -136,6 +176,37 @@ export async function getUnitEconomicsAvailability(
     target: readPositiveNumber("PAID_CREDIT_COST_COVERAGE_TARGET", 3),
   });
   const p95AiCostKrw = percentile(allRecommendationCostsKrw, 0.95);
+  const p95PhotoCostKrw = percentile(photoCostsKrw, 0.95);
+  const subscriptionBudgetKrw = readPositiveNumber(
+    "MONETIZATION_SUBSCRIPTION_MONTHLY_AI_BUDGET_KRW",
+    858,
+  );
+  const hasSubscriptionSamples =
+    allRecommendationCostsKrw.length >= minimumSamples &&
+    photoCostsKrw.length >= readPositiveInteger(
+      "MONETIZATION_GUARDRAIL_MIN_PHOTO_SAMPLES",
+      30,
+    );
+  const projectedMonthlyCostKrw =
+    p95AiCostKrw !== null && p95PhotoCostKrw !== null
+      ? Math.round((60 * p95AiCostKrw + 30 * p95PhotoCostKrw) * 100) / 100
+      : null;
+  const subscriptions = {
+    allowed:
+      hasSubscriptionSamples &&
+      projectedMonthlyCostKrw !== null &&
+      projectedMonthlyCostKrw <= subscriptionBudgetKrw,
+    status: !hasSubscriptionSamples
+      ? ("learning" as const)
+      : projectedMonthlyCostKrw !== null &&
+          projectedMonthlyCostKrw <= subscriptionBudgetKrw
+        ? ("healthy" as const)
+        : ("blocked" as const),
+    projectedMonthlyCostKrw,
+    budgetKrw: subscriptionBudgetKrw,
+    recipeSamples: allRecommendationCostsKrw.length,
+    photoSamples: photoCostsKrw.length,
+  };
   const subscriptionDailyLimitCaps =
     allRecommendationCostsKrw.length >= minimumSamples && p95AiCostKrw !== null
       ? {
@@ -152,6 +223,7 @@ export async function getUnitEconomicsAvailability(
   const value = {
     rewardedAds: rewarded,
     paidCredits,
+    subscriptions,
     subscriptionDailyLimitCaps,
   };
   const cacheSeconds = readPositiveInteger(
@@ -198,6 +270,14 @@ function allowWithStatus(status: GuardrailStatus): UnitEconomicsAvailability {
   return {
     rewardedAds: { allowed: true, status, coverageMultiple: null },
     paidCredits: { allowed: true, status, coverageMultiple: null },
+    subscriptions: {
+      allowed: true,
+      status,
+      projectedMonthlyCostKrw: null,
+      budgetKrw: 858,
+      recipeSamples: 0,
+      photoSamples: 0,
+    },
     subscriptionDailyLimitCaps: { subscriber: null, household: null },
   };
 }

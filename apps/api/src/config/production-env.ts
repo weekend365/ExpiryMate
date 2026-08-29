@@ -35,13 +35,19 @@ const REQUIRED_PRODUCTION_VALUES = [
 export const PRODUCTION_MONETIZATION_DEFAULTS = {
   INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT: "1",
   INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT: "3",
+  INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT: "3",
+  INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT: "30",
   INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED: "true",
   RECIPE_FREE_DAILY_LIMIT: "1",
   RECIPE_REWARDED_DAILY_LIMIT: "10",
-  RECIPE_SUBSCRIBER_DAILY_LIMIT: "30",
+  RECIPE_SUBSCRIBER_DAILY_LIMIT: "5",
+  RECIPE_SUBSCRIBER_MONTHLY_LIMIT: "60",
   RECIPE_ABSOLUTE_DAILY_LIMIT: "30",
   MONETIZATION_OFFER_MODE: "core",
   MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED: "false",
+  PERSONALIZED_MONETIZATION_OFFERS_ENABLED: "false",
+  MONETIZATION_REVENUE_LEDGER_ENABLED: "false",
+  HOUSEHOLD_SUBSCRIPTIONS_ENABLED: "false",
   BARCODE_REWARDS_ENABLED: "false",
   BARCODE_REWARD_ROLLOUT_PERCENT: "0",
   BARCODE_REWARD_DAILY_LIMIT: "3",
@@ -50,6 +56,7 @@ export const PRODUCTION_MONETIZATION_DEFAULTS = {
   REWARDED_ADS_ENABLED: "false",
   // Sales switch only — existing entitlements stay active when false.
   SUBSCRIPTIONS_ENABLED: "false",
+  SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED: "true",
   AFFILIATE_OFFERS_ENABLED: "false",
   AFFILIATE_OFFERS_ROLLOUT_PERCENT: "0",
   AFFILIATE_OFFER_CACHE_SECONDS: "1800",
@@ -364,8 +371,12 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   );
   validateBooleanFlag(env, "REWARDED_ADS_ENABLED", errors);
   validateBooleanFlag(env, "SUBSCRIPTIONS_ENABLED", errors);
+  validateBooleanFlag(env, "SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED", errors);
   validateBooleanFlag(env, "BARCODE_REWARDS_ENABLED", errors);
   validateBooleanFlag(env, "PAID_RECOMMENDATION_CREDITS_ENABLED", errors);
+  validateBooleanFlag(env, "PERSONALIZED_MONETIZATION_OFFERS_ENABLED", errors);
+  validateBooleanFlag(env, "MONETIZATION_REVENUE_LEDGER_ENABLED", errors);
+  validateBooleanFlag(env, "HOUSEHOLD_SUBSCRIPTIONS_ENABLED", errors);
   validateBooleanFlag(env, "AFFILIATE_OFFERS_ENABLED", errors);
   validateBooleanFlag(env, "COUPANG_REPORT_SYNC_ENABLED", errors);
   validateBooleanFlag(env, "IAP_ALLOW_SANDBOX_PURCHASES", errors);
@@ -375,7 +386,12 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     "RECIPE_FREE_DAILY_LIMIT",
     "RECIPE_REWARDED_DAILY_LIMIT",
     "RECIPE_SUBSCRIBER_DAILY_LIMIT",
+    "RECIPE_SUBSCRIBER_MONTHLY_LIMIT",
     "RECIPE_ABSOLUTE_DAILY_LIMIT",
+    "INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT",
+    "INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT",
+    "INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT",
+    "INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT",
   ]) {
     const value = Number(env[key]);
     if (!Number.isInteger(value) || value < 0) {
@@ -510,10 +526,100 @@ function validateMonetization(env: EnvMap, errors: string[]) {
       "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
       "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
       "GOOGLE_RTDN_AUDIENCE",
+      "SUBSCRIPTION_ACCOUNT_LINK_SECRET",
     ]) {
       requireFeatureValue(env, key, "SUBSCRIPTIONS_ENABLED", errors);
     }
     validateCommaList(env, "IAP_ALLOWED_PRODUCT_IDS", errors);
+    const allowedProductIds = env.IAP_ALLOWED_PRODUCT_IDS?.split(",")
+      .map((value) => value.trim())
+      .filter(Boolean) ?? [];
+    const personalLaunchProductIds = new Set([
+      "expirymate_premium_monthly",
+      "expirymate_premium_yearly",
+      "jango_plus",
+    ]);
+    if (
+      allowedProductIds.some(
+        (productId) => !personalLaunchProductIds.has(productId),
+      ) ||
+      [...personalLaunchProductIds].some(
+        (productId) => !allowedProductIds.includes(productId),
+      )
+    ) {
+      errors.push(
+        "IAP_ALLOWED_PRODUCT_IDS must contain exactly the three personal Plus launch products.",
+      );
+    }
+    if ((env.MONETIZATION_OFFER_MODE ?? "").trim().toLowerCase() !== "core") {
+      errors.push(
+        "MONETIZATION_OFFER_MODE must be core when personal Plus subscriptions are sold.",
+      );
+    }
+    if (isEnabled(env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED)) {
+      errors.push(
+        "HOUSEHOLD_SUBSCRIPTIONS_ENABLED must be false for the initial personal Plus launch.",
+      );
+    }
+    if (isEnabled(env.PAID_RECOMMENDATION_CREDITS_ENABLED)) {
+      errors.push(
+        "PAID_RECOMMENDATION_CREDITS_ENABLED must be false for the initial personal Plus launch.",
+      );
+    }
+    if (isEnabled(env.BARCODE_REWARDS_ENABLED)) {
+      errors.push(
+        "BARCODE_REWARDS_ENABLED must be false for the initial personal Plus launch.",
+      );
+    }
+    if (isEnabled(env.PERSONALIZED_MONETIZATION_OFFERS_ENABLED)) {
+      errors.push(
+        "PERSONALIZED_MONETIZATION_OFFERS_ENABLED must be false for the fixed launch offer.",
+      );
+    }
+    if (Number(env.MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT ?? 0) !== 0) {
+      errors.push(
+        "MONETIZATION_VALUE_FIRST_ROLLOUT_PERCENT must be 0 for the fixed launch offer.",
+      );
+    }
+    for (const key of [
+      "PERSONALIZED_MONETIZATION_OFFERS_ROLLOUT_PERCENT",
+      "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+      "BARCODE_REWARD_ROLLOUT_PERCENT",
+    ]) {
+      if (Number(env[key] ?? 0) !== 0) {
+        errors.push(`${key} must be 0 for the initial personal Plus launch.`);
+      }
+    }
+    const launchLimits = {
+      RECIPE_FREE_DAILY_LIMIT: 1,
+      RECIPE_REWARDED_DAILY_LIMIT: 10,
+      RECIPE_SUBSCRIBER_DAILY_LIMIT: 5,
+      RECIPE_SUBSCRIBER_MONTHLY_LIMIT: 60,
+      INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT: 1,
+      INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT: 3,
+      INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT: 3,
+      INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT: 30,
+    } as const;
+    for (const [key, expected] of Object.entries(launchLimits)) {
+      if (Number(env[key]) !== expected) {
+        errors.push(`${key} must be ${expected} for the fixed launch policy.`);
+      }
+    }
+    if (!isEnabled(env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED)) {
+      errors.push(
+        "SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED must be enabled when subscriptions are sold.",
+      );
+    }
+    if (!isEnabled(env.MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED)) {
+      errors.push(
+        "MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED must be enabled when subscriptions are sold.",
+      );
+    }
+    if (!isEnabled(env.SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED)) {
+      errors.push(
+        "SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED must be enabled when subscriptions are sold.",
+      );
+    }
   }
 
   for (const [enabledKey, rolloutKey] of [
@@ -585,7 +691,9 @@ function validateMonetization(env: EnvMap, errors: string[]) {
   for (const key of [
     "MONETIZATION_GUARDRAIL_LOOKBACK_DAYS",
     "MONETIZATION_GUARDRAIL_MIN_SAMPLES",
+    "MONETIZATION_GUARDRAIL_MIN_PHOTO_SAMPLES",
     "MONETIZATION_GUARDRAIL_CACHE_SECONDS",
+    "MONETIZATION_SUBSCRIPTION_MONTHLY_AI_BUDGET_KRW",
     "REWARDED_AD_COST_COVERAGE_TARGET",
     "PAID_CREDIT_COST_COVERAGE_TARGET",
     "MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW",
@@ -615,12 +723,13 @@ function validateMonetization(env: EnvMap, errors: string[]) {
     }
     if (isEnabled(env.SUBSCRIPTIONS_ENABLED)) {
       for (const key of [
-        "MONETIZATION_SUBSCRIBER_DAILY_AI_BUDGET_KRW",
-        "MONETIZATION_HOUSEHOLD_DAILY_AI_BUDGET_KRW",
+        "MONETIZATION_GUARDRAIL_MIN_SAMPLES",
+        "MONETIZATION_GUARDRAIL_MIN_PHOTO_SAMPLES",
+        "MONETIZATION_SUBSCRIPTION_MONTHLY_AI_BUDGET_KRW",
       ]) {
         if (!env[key]?.trim()) {
           errors.push(
-            `${key} is required when subscriptions and unit-economics guardrails are enabled.`,
+            `${key} is required for the subscription sales No-Go check.`,
           );
         }
       }

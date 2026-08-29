@@ -21,6 +21,7 @@ const createBody = (
 const inventoryItem = {
   id: "item-1",
   ownerKey: "owner-a",
+  spaceId: "personal_owner-a",
   productId: null,
   productMasterId: null,
   displayName: "계란",
@@ -69,6 +70,10 @@ describe("InventoryService owner isolation", () => {
     monetizationFunnelEvent: {
       create: ReturnType<typeof vi.fn>;
     };
+    inventoryDispositionEvent: {
+      create: ReturnType<typeof vi.fn>;
+      createMany: ReturnType<typeof vi.fn>;
+    };
   };
   let service: InventoryService;
 
@@ -109,6 +114,10 @@ describe("InventoryService owner isolation", () => {
       monetizationFunnelEvent: {
         create: vi.fn(),
       },
+      inventoryDispositionEvent: {
+        create: vi.fn().mockResolvedValue({}),
+        createMany: vi.fn().mockResolvedValue({ count: 1 }),
+      },
     };
     service = new InventoryService(prisma as never, {
       assertValidStorageLocation: vi.fn().mockResolvedValue(undefined),
@@ -140,8 +149,8 @@ describe("InventoryService owner isolation", () => {
   });
 
   it("checks item ownership before discarding", async () => {
-    prisma.inventoryItem.findUnique.mockResolvedValue(inventoryItem);
-    prisma.inventoryItem.updateMany.mockResolvedValue({ count: 1 });
+    prisma.inventoryItem.findFirst.mockResolvedValue(inventoryItem);
+    prisma.inventoryItem.update.mockResolvedValue({});
     prisma.inventoryItem.findUniqueOrThrow.mockResolvedValue({
       ...inventoryItem,
       status: "discarded",
@@ -149,16 +158,11 @@ describe("InventoryService owner isolation", () => {
 
     await service.discard("item-1", "owner-a");
 
-    expect(prisma.inventoryItem.findUnique).toHaveBeenCalledWith({
-      where: {
-        id: "item-1",
-      },
+    expect(prisma.inventoryItem.findFirst).toHaveBeenCalledWith({
+      where: expect.objectContaining({ id: "item-1", ownerKey: "owner-a" }),
     });
-    expect(prisma.inventoryItem.updateMany).toHaveBeenCalledWith({
-      where: expect.objectContaining({
-        id: "item-1",
-        ownerKey: "owner-a",
-      }),
+    expect(prisma.inventoryItem.update).toHaveBeenCalledWith({
+      where: { id: "item-1" },
       data: expect.objectContaining({
         status: "discarded",
         version: { increment: 1 },
@@ -167,12 +171,12 @@ describe("InventoryService owner isolation", () => {
   });
 
   it("does not discard another owner's item", async () => {
-    prisma.inventoryItem.findUnique.mockResolvedValue(inventoryItem);
+    prisma.inventoryItem.findFirst.mockResolvedValue(null);
 
     await expect(service.discard("item-1", "owner-b")).rejects.toThrow(
       NotFoundException,
     );
-    expect(prisma.inventoryItem.updateMany).not.toHaveBeenCalled();
+    expect(prisma.inventoryItem.update).not.toHaveBeenCalled();
   });
 
   it("rejects batch discard when any requested item is outside the owner scope", async () => {
@@ -390,6 +394,23 @@ describe("InventoryService owner isolation", () => {
     });
 
     expect(result.items[0]?.status).toBe("consumed");
+    expect(prisma.inventoryDispositionEvent.createMany).toHaveBeenCalledWith({
+      data: [
+        expect.objectContaining({
+          inventoryItemId: "item-1",
+          spaceId: "personal_owner-a",
+          actorUserId: "owner-a",
+          outcome: "consumed",
+          source: "live",
+          itemSnapshot: expect.objectContaining({
+            displayName: inventoryItem.displayName,
+            quantityBase: inventoryItem.quantityBase,
+            storageLocation: inventoryItem.storageLocation,
+            expiryDate: "2026-06-10",
+          }),
+        }),
+      ],
+    });
     expect(prisma.inventoryItem.updateMany).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({

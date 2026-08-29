@@ -400,9 +400,9 @@ export default function RegisterPhotoScreen() {
               </AppText>
               {photoAccess.access ? (
                 <AppText variant="bodySmall" tone="subtext">
-                  무료 {photoAccess.access.free.used}/
-                  {photoAccess.access.free.limit}회 사용 · 광고 추가 {photoAccess.access.rewardedAds.verified}/
-                  {photoAccess.access.rewardedAds.dailyLimit}회 사용
+                  {photoAccess.access.subscriptionQuota
+                    ? `이번 달 ${photoAccess.access.subscriptionQuota.monthly.used}/${photoAccess.access.subscriptionQuota.monthly.limit}회 · 오늘 ${photoAccess.access.subscriptionQuota.daily.used}/${photoAccess.access.subscriptionQuota.daily.limit}회 사용`
+                    : `무료 ${photoAccess.access.free.used}/${photoAccess.access.free.limit}회 사용 · 광고 추가 ${photoAccess.access.rewardedAds.verified}/${photoAccess.access.rewardedAds.dailyLimit}회 사용`}
                 </AppText>
               ) : null}
               <AppText variant="bodySmall" tone="subtext">
@@ -851,6 +851,9 @@ function photoAccessSummary(
       : "이용 조건을 불러오지 못했어요";
   }
   if (access.canParse) {
+    if (access.subscriptionQuota) {
+      return `이번 달 ${access.subscriptionQuota.monthly.remaining}회 · 오늘 ${access.subscriptionQuota.daily.remaining}회 남았어요`;
+    }
     if (access.rewardedAds.creditsAvailable > 0) {
       return `사진 분석권 ${access.rewardedAds.creditsAvailable}회 사용 가능`;
     }
@@ -892,10 +895,18 @@ function photoAccessIssue(
     };
   }
   if (access.requiredAction === "daily_limit_reached") {
+    const monthlyExhausted =
+      access.subscriptionQuota?.monthly.remaining === 0;
     return {
       tone: "warning",
-      title: "오늘 사진 분석 횟수를 모두 사용했어요",
-      description: `${formatResetTime(access.resetsAt)}에 다시 시도하거나 직접 등록해 주세요.`,
+      title: monthlyExhausted
+        ? "이번 달 사진 분석 횟수를 모두 사용했어요"
+        : "오늘 사진 분석 횟수를 모두 사용했어요",
+      description: `${formatResetTime(
+        monthlyExhausted
+          ? access.subscriptionQuota?.resetsAt
+          : access.resetsAt,
+      )}에 다시 시도하거나 직접 등록해 주세요.`,
     };
   }
   return {

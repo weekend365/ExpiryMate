@@ -4,6 +4,7 @@ import {
   calculateDaysLeftUntilExpiry,
   getKstDayStart,
   getKstDayWindow,
+  getKstMonthWindow,
   isDateOnlyString,
   toIsoDate,
   toKstDateOnly,
@@ -44,5 +45,16 @@ describe("date-only utilities", () => {
     const window = getKstDayWindow(justAfterKstMidnight);
     expect(window.start.toISOString()).toBe("2026-06-09T15:00:00.000Z");
     expect(window.endExclusive.toISOString()).toBe("2026-06-10T15:00:00.000Z");
+  });
+
+  it("resets calendar-month quotas at KST midnight on the first day", () => {
+    expect(
+      getKstMonthWindow("2026-08-31T14:59:59.000Z").start.toISOString(),
+    ).toBe("2026-07-31T15:00:00.000Z");
+    const september = getKstMonthWindow("2026-08-31T15:00:00.000Z");
+    expect(september.start.toISOString()).toBe("2026-08-31T15:00:00.000Z");
+    expect(september.endExclusive.toISOString()).toBe(
+      "2026-09-30T15:00:00.000Z",
+    );
   });
 });

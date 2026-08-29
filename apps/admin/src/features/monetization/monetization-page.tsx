@@ -200,6 +200,36 @@ export function MonetizationPage() {
       </Panel>
 
       <Panel
+        title="플러스 플랜 원가와 한도"
+        description="플랜별 순매출에서 요리·사진 AI 원가를 각각 차감하고, KST 달력월 한도 도달률을 확인합니다."
+      >
+        <div className="grid gap-4 lg:grid-cols-2">
+          {overview?.plusPlans.map((plan) => (
+            <div
+              key={plan.planCode}
+              className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-4"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="font-semibold">
+                  {plan.planCode === "jango_plus" ? "개인 플러스" : "가족 플러스"}
+                </span>
+                <span className="text-sm">활성 {plan.activeSubscribers}명</span>
+              </div>
+              <p className="mt-2 text-sm">
+                순매출 {formatKrw(plan.estimatedNetRevenueKrw)} · 공헌이익 {formatKrw(plan.estimatedContributionKrw)} · 마진 {formatPercent(plan.estimatedContributionMarginPercent)}
+              </p>
+              <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                요리 원가 {formatKrw(plan.recipeAiCostKrw)} · 사진 원가 {formatKrw(plan.photoAiCostKrw)}
+              </p>
+              <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                월 한도 도달률 · 요리 {plan.recipeMonthlyQuotaReachPercent}% · 사진 {plan.photoMonthlyQuotaReachPercent}%
+              </p>
+            </div>
+          ))}
+        </div>
+      </Panel>
+
+      <Panel
         title="단위경제 가드레일"
         description="광고는 AI 원가 1배 이상, 구매 추천권은 3배 이상 회수하는지를 확인합니다."
       >

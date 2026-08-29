@@ -20,6 +20,8 @@ const managedEnvKeys = [
   "SUBSCRIPTIONS_ENABLED",
   "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
   "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
+  "SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED",
+  "SUBSCRIPTION_ACCOUNT_LINK_SECRET",
 ] as const;
 
 const originalEnv = new Map(
@@ -39,6 +41,8 @@ describe("SubscriptionsService", () => {
     process.env.SUBSCRIPTIONS_ENABLED = "true";
     process.env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
     process.env.HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT = "100";
+    process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "false";
+    process.env.SUBSCRIPTION_ACCOUNT_LINK_SECRET = "purchase-link-test-secret";
   });
 
   afterEach(() => {
@@ -68,6 +72,38 @@ describe("SubscriptionsService", () => {
       willRenew: null,
       environment: null,
       verifiedAt: null,
+    });
+  });
+
+  it("creates a short-lived personal purchase intent with store account bindings", async () => {
+    const { prisma, service } = createService();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue(null);
+    prisma.subscriptionPurchaseIntent.create.mockImplementation(
+      async ({ data }) => data,
+    );
+
+    const intent = await service.createPurchaseIntent(
+      "owner-a",
+      {
+        store: "apple_app_store",
+        productId: "expirymate_premium_monthly",
+      },
+      now,
+    );
+
+    expect(intent.appleAppAccountToken).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
+    expect(intent.googleObfuscatedAccountId).toMatch(/^[0-9a-f]{64}$/);
+    expect(intent.expiresAt).toBe(
+      new Date(now.getTime() + 10 * 60 * 1000).toISOString(),
+    );
+    expect(prisma.subscriptionPurchaseIntent.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        ownerKey: "owner-a",
+        store: "apple_app_store",
+        productId: "expirymate_premium_monthly",
+      }),
     });
   });
 
@@ -138,6 +174,145 @@ describe("SubscriptionsService", () => {
     });
   });
 
+  it("rejects an Apple purchase whose app account token does not match the intent", async () => {
+    process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    prisma.subscriptionPurchaseIntent.findUnique.mockResolvedValue({
+      id: "intent-1",
+      ownerKey: "owner-a",
+      store: "apple_app_store",
+      productId: "expirymate_premium_monthly",
+      appleAppAccountToken: "expected-app-account-token",
+      googleObfuscatedAccountId: "expected-google-account-id",
+      expiresAt: new Date(now.getTime() + 60_000),
+      consumedAt: null,
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          environment: "Sandbox",
+          bundleId: "com.expirymate.mobile",
+          data: [
+            {
+              lastTransactions: [
+                {
+                  originalTransactionId: "original-transaction-mismatch",
+                  status: 1,
+                  signedTransactionInfo: jws({
+                    transactionId: "transaction-mismatch",
+                    originalTransactionId: "original-transaction-mismatch",
+                    productId: "expirymate_premium_monthly",
+                    bundleId: "com.expirymate.mobile",
+                    environment: "Sandbox",
+                    appAccountToken: "different-app-account-token",
+                    expiresDate: now.getTime() + 30 * 24 * 60 * 60 * 1000,
+                  }),
+                  signedRenewalInfo: jws({
+                    autoRenewStatus: 1,
+                    autoRenewProductId: "expirymate_premium_monthly",
+                  }),
+                },
+              ],
+            },
+          ],
+        }),
+      ),
+    );
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "apple_app_store",
+        transactionId: "transaction-mismatch",
+        purchaseIntentId: "intent-1",
+        environment: "sandbox",
+      }),
+    ).rejects.toThrow(/로그인 계정이 일치하지 않습니다/);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+  });
+
+  it("recovers a missing purchaseIntentId from the signed Apple account token", async () => {
+    process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";
+    const privateKey = createEcPrivateKey();
+    process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
+    process.env.APPLE_APP_STORE_KEY_ID = "key-id";
+    process.env.APPLE_BUNDLE_ID = "com.expirymate.mobile";
+    process.env.APPLE_APP_STORE_PRIVATE_KEY = privateKey;
+    process.env.APPLE_APP_STORE_ENVIRONMENT = "sandbox";
+    const { prisma, service } = createService();
+    const intent = {
+      id: "intent-recovered",
+      ownerKey: "owner-a",
+      store: "apple_app_store",
+      productId: "expirymate_premium_monthly",
+      appleAppAccountToken: "recoverable-app-account-token",
+      googleObfuscatedAccountId: "recoverable-google-account-id",
+      expiresAt: new Date(now.getTime() - 60_000),
+      consumedAt: null,
+      createdAt: new Date(now.getTime() - 10 * 60_000),
+    };
+    prisma.subscriptionPurchaseIntent.findFirst.mockResolvedValue(intent);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          environment: "Sandbox",
+          data: [
+            {
+              lastTransactions: [
+                {
+                  originalTransactionId: "original-transaction-recovered",
+                  status: 1,
+                  signedTransactionInfo: jws({
+                    transactionId: "transaction-recovered",
+                    originalTransactionId: "original-transaction-recovered",
+                    productId: "expirymate_premium_monthly",
+                    bundleId: "com.expirymate.mobile",
+                    environment: "Sandbox",
+                    appAccountToken: "recoverable-app-account-token",
+                    expiresDate: now.getTime() + 30 * 24 * 60 * 60 * 1000,
+                  }),
+                  signedRenewalInfo: jws({
+                    autoRenewStatus: 1,
+                    autoRenewProductId: "expirymate_premium_monthly",
+                  }),
+                },
+              ],
+            },
+          ],
+        }),
+      ),
+    );
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "apple_app_store",
+        transactionId: "transaction-recovered",
+        environment: "sandbox",
+      }),
+    ).resolves.toMatchObject({
+      entitlement: { hasActiveEntitlement: true },
+    });
+    expect(prisma.subscriptionPurchaseIntent.findFirst).toHaveBeenCalledWith({
+      where: expect.objectContaining({
+        ownerKey: "owner-a",
+        appleAppAccountToken: "recoverable-app-account-token",
+        consumedAt: null,
+      }),
+      orderBy: { createdAt: "desc" },
+    });
+    expect(prisma.subscriptionPurchaseIntent.update).toHaveBeenCalledWith({
+      where: { id: "intent-recovered" },
+      data: { consumedAt: now },
+    });
+  });
+
   it("verifies a Google Play subscription and stores only the token hash", async () => {
     const privateKey = createRsaPrivateKey();
     process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
@@ -180,6 +355,58 @@ describe("SubscriptionsService", () => {
     expect(createPayload?.rawVerification).not.toMatchObject({
       purchaseToken: "raw-google-token",
     });
+  });
+
+  it("rejects a Google purchase whose obfuscated account id does not match the intent", async () => {
+    process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";
+    const privateKey = createRsaPrivateKey();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = privateKey;
+    const { prisma, service } = createService();
+    prisma.subscriptionPurchaseIntent.findUnique.mockResolvedValue({
+      id: "intent-google-1",
+      ownerKey: "owner-a",
+      store: "google_play",
+      productId: "expirymate_premium_monthly",
+      appleAppAccountToken: "expected-app-account-token",
+      googleObfuscatedAccountId: "expected-google-account-id",
+      expiresAt: new Date(now.getTime() + 60_000),
+      consumedAt: null,
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(async (url: string) => {
+        if (url === "https://oauth2.googleapis.com/token") {
+          return jsonResponse({ access_token: "google-access-token" });
+        }
+        return jsonResponse({
+          subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+          latestOrderId: "GPA.account-mismatch",
+          externalAccountIdentifiers: {
+            obfuscatedExternalAccountId: "different-google-account-id",
+          },
+          lineItems: [
+            {
+              productId: "expirymate_premium_monthly",
+              expiryTime: "2099-07-07T00:00:00Z",
+              autoRenewingPlan: { autoRenewEnabled: true },
+            },
+          ],
+        });
+      }),
+    );
+
+    await expect(
+      service.verifySubscription("owner-a", {
+        store: "google_play",
+        productId: "expirymate_premium_monthly",
+        purchaseToken: "google-account-mismatch-token",
+        purchaseIntentId: "intent-google-1",
+      }),
+    ).rejects.toThrow(/로그인 계정이 일치하지 않습니다/);
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
   });
 
   it("acknowledges a Google Play subscription after granting entitlement", async () => {
@@ -849,6 +1076,12 @@ function createService() {
         updatedAt: now,
         ...data,
       })),
+    },
+    subscriptionPurchaseIntent: {
+      findUnique: vi.fn().mockResolvedValue(null),
+      findFirst: vi.fn().mockResolvedValue(null),
+      create: vi.fn(),
+      update: vi.fn(),
     },
   };
 

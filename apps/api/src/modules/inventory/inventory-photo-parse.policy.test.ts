@@ -13,6 +13,9 @@ const envKeys = [
   "INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED",
   "INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT",
   "INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT",
+  "INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT",
+  "INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT",
+  "INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD",
 ] as const;
 
 describe("InventoryPhotoParsePolicyService", () => {
@@ -115,6 +118,53 @@ describe("InventoryPhotoParsePolicyService", () => {
     });
   });
 
+  it("uses a user-scoped monthly and daily quota for active Plus", async () => {
+    process.env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT = "3";
+    process.env.INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT = "30";
+    const prisma = createPrismaMock();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({
+      id: "plus-1",
+    });
+    prisma.inventoryPhotoParseEvent.count
+      .mockResolvedValueOnce(1)
+      .mockResolvedValueOnce(2)
+      .mockResolvedValueOnce(12);
+    prisma.rewardedAdSession.count.mockResolvedValue(0);
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+
+    const access = await policy.getAccess(
+      "owner-a",
+      new Date("2026-08-28T05:00:00Z"),
+    );
+
+    expect(access).toMatchObject({
+      tier: "jango_plus",
+      usageSource: "subscription",
+      canParse: true,
+      subscriptionQuota: {
+        monthly: { limit: 30, used: 12, remaining: 18 },
+        daily: { limit: 3, used: 2, remaining: 1 },
+      },
+      rewardedAds: { enabled: false, canWatch: false },
+    });
+  });
+
+  it("does not lower an active Plus allowance with the free-user cost cap", async () => {
+    process.env.INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD = "0.01";
+    const prisma = createPrismaMock();
+    prisma.subscriptionEntitlement.findFirst.mockResolvedValue({ id: "plus-1" });
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+
+    await expect(
+      policy.enforceDailyCostLimit(
+        "owner-a",
+        0.04,
+        new Date("2026-08-28T05:00:00Z"),
+      ),
+    ).resolves.toBeUndefined();
+    expect(prisma.inventoryPhotoParseEvent.aggregate).not.toHaveBeenCalled();
+  });
+
   it("replays an unexpired result for the same idempotency key", async () => {
     const prisma = createPrismaMock();
     prisma.inventoryPhotoParseEvent.findUnique.mockResolvedValue({
@@ -173,6 +223,9 @@ function reservationInput(now: Date) {
 
 function createPrismaMock() {
   const prisma = {
+    subscriptionEntitlement: {
+      findFirst: vi.fn().mockResolvedValue(null),
+    },
     inventoryPhotoParseEvent: {
       count: vi.fn(),
       findUnique: vi.fn().mockResolvedValue(null),

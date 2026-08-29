@@ -6,6 +6,7 @@ export * from "./design";
 export * from "./enums/app-enums";
 export * from "./schemas/affiliate";
 export * from "./schemas/inventory";
+export * from "./schemas/insights";
 export * from "./schemas/monetization";
 export * from "./schemas/auth";
 export * from "./schemas/product";

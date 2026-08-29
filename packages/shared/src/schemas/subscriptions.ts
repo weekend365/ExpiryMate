@@ -52,6 +52,21 @@ export const subscriptionVerificationRequestSchema = z.object({
   basePlanId: z.string().min(1).max(128).optional(),
   environment: z.enum(["sandbox", "production"]).optional(),
   spaceId: z.string().min(1).max(128).optional(),
+  purchaseIntentId: z.string().min(1).max(128).optional(),
+});
+
+export const subscriptionPurchaseIntentRequestSchema = z.object({
+  store: subscriptionStoreSchema,
+  productId: z.string().min(1).max(fieldLimits.subscriptionProductId),
+});
+
+export const subscriptionPurchaseIntentSchema = z.object({
+  id: z.string(),
+  store: subscriptionStoreSchema,
+  productId: z.string(),
+  appleAppAccountToken: z.string().uuid(),
+  googleObfuscatedAccountId: z.string().min(1).max(64),
+  expiresAt: z.string(),
 });
 
 export const subscriptionVerificationResponseSchema = z.object({
@@ -69,4 +84,10 @@ export type SubscriptionVerificationRequest = z.infer<
 >;
 export type SubscriptionVerificationResponse = z.infer<
   typeof subscriptionVerificationResponseSchema
+>;
+export type SubscriptionPurchaseIntentRequest = z.infer<
+  typeof subscriptionPurchaseIntentRequestSchema
+>;
+export type SubscriptionPurchaseIntent = z.infer<
+  typeof subscriptionPurchaseIntentSchema
 >;

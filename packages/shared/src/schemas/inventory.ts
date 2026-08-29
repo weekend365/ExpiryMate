@@ -205,6 +205,31 @@ export const inventoryPhotoParseAccessSchema = z.object({
   resetsAt: z.string(),
   canParse: z.boolean(),
   requiredAction: inventoryPhotoParseRequiredActionSchema,
+  tier: z.enum(["free", "jango_plus", "jango_household"]).default("free"),
+  usageSource: z
+    .enum(["free", "rewarded_ad", "subscription"])
+    .nullable()
+    .default(null),
+  subscriptionQuota: z
+    .object({
+      timezone: z.literal("Asia/Seoul"),
+      period: z.literal("calendar_month"),
+      startsAt: z.string(),
+      resetsAt: z.string(),
+      monthly: z.object({
+        limit: z.number().int().nonnegative(),
+        used: z.number().int().nonnegative(),
+        remaining: z.number().int().nonnegative(),
+      }),
+      daily: z.object({
+        limit: z.number().int().nonnegative(),
+        used: z.number().int().nonnegative(),
+        remaining: z.number().int().nonnegative(),
+        resetsAt: z.string(),
+      }),
+    })
+    .nullable()
+    .default(null),
   free: z.object({
     limit: z.number().int().nonnegative(),
     used: z.number().int().nonnegative(),

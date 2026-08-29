@@ -264,6 +264,17 @@ export type AdminMonetizationOverview = {
       estimatedRevenuePerCreditKrw: number | null;
     };
   };
+  plusPlans: Array<{
+    planCode: "jango_plus" | "jango_household";
+    activeSubscribers: number;
+    estimatedNetRevenueKrw: number | null;
+    recipeAiCostKrw: number | null;
+    photoAiCostKrw: number | null;
+    estimatedContributionKrw: number | null;
+    estimatedContributionMarginPercent: number | null;
+    recipeMonthlyQuotaReachPercent: number;
+    photoMonthlyQuotaReachPercent: number;
+  }>;
   retention: {
     d7Percent: number;
     d30Percent: number;

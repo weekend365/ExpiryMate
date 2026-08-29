@@ -167,6 +167,17 @@ enum RewardedAdPurpose {
 enum InventoryPhotoParseUsageSource {
   free
   rewarded_ad
+  subscription
+}
+
+enum InventoryDispositionOutcome {
+  consumed
+  discarded
+}
+
+enum InventoryDispositionSource {
+  live
+  backfill
 }
 
 enum MonetizationRevenueEventKind {
@@ -211,50 +222,53 @@ enum SpaceInvitationMethod {
 }
 
 model User {
-  id                            String                         @id @default(cuid())
-  email                         String?                        @unique
-  displayName                   String?
-  role                          UserRole                       @default(user)
-  accountType                   AccountType                    @default(anonymous)
-  emailVerifiedAt               DateTime?
-  aiDataNoticeAcceptedAt        DateTime?
-  aiDataNoticeVersion           String?
-  deletedAt                     DateTime?
-  mergedIntoUserId              String?
-  mergedIntoUser                User?                          @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
-  mergedAnonymousUsers          User[]                         @relation("UserMerge")
-  createdAt                     DateTime                       @default(now())
-  updatedAt                     DateTime                       @updatedAt
-  passwordCredential            PasswordCredential?
-  oauthAccounts                 OAuthAccount[]
-  refreshSessions               RefreshSession[]
-  oneTimeAuthTokens             OneTimeAuthToken[]
-  inventoryItems                InventoryItem[]
-  notificationPreference        NotificationPreference?
-  recipePreference              RecipePreference?
-  userStorageLocations          UserStorageLocation[]
-  recipeRecommendations         RecipeRecommendation[]
-  recipeAiGenerationEvents      RecipeAiGenerationEvent[]
-  recipeFavorites               RecipeFavorite[]
-  recipeDishEngagements         RecipeDishEngagement[]
-  subscriptionEntitlements      SubscriptionEntitlement[]
-  recommendationUsageEvents     RecommendationUsageEvent[]
-  rewardedAdSessions            RewardedAdSession[]
-  barcodeRewardCredits          BarcodeRewardCredit[]
-  recommendationCreditPurchases RecommendationCreditPurchase[]
-  monetizationFunnelEvents      MonetizationFunnelEvent[]
-  monetizationRevenueEvents     MonetizationRevenueEvent[]
-  pushTokens                    PushToken[]
-  pushNotificationDeliveries    PushNotificationDelivery[]
-  supportInquiries              SupportInquiry[]
-  ownedInventorySpaces          InventorySpace[]               @relation("InventorySpaceOwner")
-  inventorySpaceMemberships     InventorySpaceMembership[]
-  sentSpaceInvitations          SpaceInvitation[]              @relation("SpaceInvitationSender")
-  createdInventoryItems            InventoryItem[]             @relation("InventoryItemCreator")
-  updatedInventoryItems            InventoryItem[]             @relation("InventoryItemUpdater")
+  id                               String                         @id @default(cuid())
+  email                            String?                        @unique
+  displayName                      String?
+  role                             UserRole                       @default(user)
+  accountType                      AccountType                    @default(anonymous)
+  emailVerifiedAt                  DateTime?
+  aiDataNoticeAcceptedAt           DateTime?
+  aiDataNoticeVersion              String?
+  deletedAt                        DateTime?
+  mergedIntoUserId                 String?
+  mergedIntoUser                   User?                          @relation("UserMerge", fields: [mergedIntoUserId], references: [id])
+  mergedAnonymousUsers             User[]                         @relation("UserMerge")
+  createdAt                        DateTime                       @default(now())
+  updatedAt                        DateTime                       @updatedAt
+  passwordCredential               PasswordCredential?
+  oauthAccounts                    OAuthAccount[]
+  refreshSessions                  RefreshSession[]
+  oneTimeAuthTokens                OneTimeAuthToken[]
+  inventoryItems                   InventoryItem[]
+  notificationPreference           NotificationPreference?
+  recipePreference                 RecipePreference?
+  userStorageLocations             UserStorageLocation[]
+  recipeRecommendations            RecipeRecommendation[]
+  recipeAiGenerationEvents         RecipeAiGenerationEvent[]
+  recipeFavorites                  RecipeFavorite[]
+  recipeDishEngagements            RecipeDishEngagement[]
+  subscriptionEntitlements         SubscriptionEntitlement[]
+  subscriptionPurchaseIntents      SubscriptionPurchaseIntent[]
+  recommendationUsageEvents        RecommendationUsageEvent[]
+  rewardedAdSessions               RewardedAdSession[]
+  barcodeRewardCredits             BarcodeRewardCredit[]
+  recommendationCreditPurchases    RecommendationCreditPurchase[]
+  monetizationFunnelEvents         MonetizationFunnelEvent[]
+  monetizationRevenueEvents        MonetizationRevenueEvent[]
+  pushTokens                       PushToken[]
+  pushNotificationDeliveries       PushNotificationDelivery[]
+  supportInquiries                 SupportInquiry[]
+  ownedInventorySpaces             InventorySpace[]               @relation("InventorySpaceOwner")
+  inventorySpaceMemberships        InventorySpaceMembership[]
+  sentSpaceInvitations             SpaceInvitation[]              @relation("SpaceInvitationSender")
+  createdInventoryItems            InventoryItem[]                @relation("InventoryItemCreator")
+  updatedInventoryItems            InventoryItem[]                @relation("InventoryItemUpdater")
   inventoryPhotoParseEvents        InventoryPhotoParseEvent[]
-  productMasterCorrections         ProductMasterCorrection[]   @relation("ProductMasterCorrectionSubmitter")
-  reviewedProductMasterCorrections ProductMasterCorrection[]   @relation("ProductMasterCorrectionReviewer")
+  ownedDispositionEvents           InventoryDispositionEvent[]    @relation("InventoryDispositionOwner")
+  actedDispositionEvents           InventoryDispositionEvent[]    @relation("InventoryDispositionActor")
+  productMasterCorrections         ProductMasterCorrection[]      @relation("ProductMasterCorrectionSubmitter")
+  reviewedProductMasterCorrections ProductMasterCorrection[]      @relation("ProductMasterCorrectionReviewer")
 
   @@index([accountType])
   @@index([role])
@@ -262,13 +276,13 @@ model User {
 }
 
 model InventorySpace {
-  id                        String                     @id @default(cuid())
+  id                        String                      @id @default(cuid())
   name                      String
   type                      InventorySpaceType
   ownerUserId               String
-  owner                     User                       @relation("InventorySpaceOwner", fields: [ownerUserId], references: [id])
-  createdAt                 DateTime                   @default(now())
-  updatedAt                 DateTime                   @updatedAt
+  owner                     User                        @relation("InventorySpaceOwner", fields: [ownerUserId], references: [id])
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @updatedAt
   memberships               InventorySpaceMembership[]
   invitations               SpaceInvitation[]
   inventoryItems            InventoryItem[]
@@ -279,6 +293,7 @@ model InventorySpace {
   subscriptionEntitlements  SubscriptionEntitlement[]
   monetizationRevenueEvents MonetizationRevenueEvent[]
   photoParseEvents          InventoryPhotoParseEvent[]
+  dispositionEvents         InventoryDispositionEvent[]
 
   @@index([ownerUserId])
   @@index([type])
@@ -407,21 +422,21 @@ model Product {
 }
 
 model ProductMaster {
-  id                  String                     @id @default(cuid())
-  barcode             String                     @unique
+  id                  String                    @id @default(cuid())
+  barcode             String                    @unique
   name                String
   brand               String
   category            String
   imageUrl            String?
-  source              String                     @default("foodsafety_api")
+  source              String                    @default("foodsafety_api")
   contributedByUserId String?
   crowdName           String?
   crowdBrand          String?
   crowdCategory       String?
-  confidence          Int                        @default(40)
-  confirmCount        Int                        @default(0)
-  createdAt           DateTime                   @default(now())
-  updatedAt           DateTime                   @updatedAt
+  confidence          Int                       @default(40)
+  confirmCount        Int                       @default(0)
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
   rewardCredit        BarcodeRewardCredit?
   inventoryItems      InventoryItem[]
   corrections         ProductMasterCorrection[]
@@ -432,23 +447,23 @@ model ProductMaster {
 }
 
 model ProductMasterCorrection {
-  id                String                         @id @default(cuid())
+  id                String                        @id @default(cuid())
   productMasterId   String
-  productMaster     ProductMaster                  @relation(fields: [productMasterId], references: [id], onDelete: Cascade)
+  productMaster     ProductMaster                 @relation(fields: [productMasterId], references: [id], onDelete: Cascade)
   submittedByUserId String?
-  submittedBy       User?                          @relation("ProductMasterCorrectionSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
+  submittedBy       User?                         @relation("ProductMasterCorrectionSubmitter", fields: [submittedByUserId], references: [id], onDelete: SetNull)
   catalogName       String
   catalogBrand      String
   catalogCategory   String
   proposedName      String
   proposedBrand     String?
   proposedCategory  String?
-  status            ProductMasterCorrectionStatus  @default(pending)
+  status            ProductMasterCorrectionStatus @default(pending)
   reviewedByUserId  String?
-  reviewedBy        User?                          @relation("ProductMasterCorrectionReviewer", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  reviewedBy        User?                         @relation("ProductMasterCorrectionReviewer", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
   reviewedAt        DateTime?
-  createdAt         DateTime                       @default(now())
-  updatedAt         DateTime                       @updatedAt
+  createdAt         DateTime                      @default(now())
+  updatedAt         DateTime                      @updatedAt
 
   @@unique([productMasterId, submittedByUserId])
   @@index([status, createdAt])
@@ -485,12 +500,37 @@ model InventoryItem {
   createdAt                  DateTime                   @default(now())
   updatedAt                  DateTime                   @updatedAt
   pushNotificationDeliveries PushNotificationDelivery[]
+  dispositionEvent           InventoryDispositionEvent?
 
   @@index([ownerKey, status])
   @@index([ownerKey, expiryDate])
   @@index([spaceId, status])
   @@index([spaceId, expiryDate])
   @@index([productMasterId])
+}
+
+/// Append-only record of an item leaving active inventory. Application code never updates it.
+model InventoryDispositionEvent {
+  id              String                      @id @default(cuid())
+  inventoryItemId String?                     @unique
+  inventoryItem   InventoryItem?              @relation(fields: [inventoryItemId], references: [id], onDelete: SetNull)
+  ownerKey        String
+  owner           User                        @relation("InventoryDispositionOwner", fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId         String
+  space           InventorySpace              @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  actorUserId     String?
+  actor           User?                       @relation("InventoryDispositionActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+  displayName     String
+  category        ProductCategory?
+  itemSnapshot    Json
+  outcome         InventoryDispositionOutcome
+  source          InventoryDispositionSource  @default(live)
+  occurredAt      DateTime
+  createdAt       DateTime                    @default(now())
+
+  @@index([spaceId, occurredAt])
+  @@index([ownerKey, occurredAt])
+  @@index([outcome, occurredAt])
 }
 
 model NotificationPreference {
@@ -524,39 +564,42 @@ model UserStorageLocation {
 }
 
 model InventoryPhotoParseEvent {
-  id                String          @id @default(cuid())
-  ownerKey          String
-  owner             User            @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  spaceId           String?
-  space             InventorySpace? @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  scene             String
-  itemCount         Int             @default(0)
-  reviewItemCount   Int             @default(0)
-  averageConfidence Decimal?        @db.Decimal(5, 4)
-  aiProvider        String          @default("openai")
-  aiModel           String
-  promptVersion     String
-  status            String          @default("succeeded")
-  failureCode       String?
-  durationMs        Int?
-  inputTokens       Int             @default(0)
-  cachedInputTokens Int             @default(0)
-  outputTokens      Int             @default(0)
-  totalTokens       Int             @default(0)
-  estimatedCostUsd  Decimal         @default(0) @db.Decimal(10, 6)
-  reservedCostUsd   Decimal         @default(0) @db.Decimal(10, 6)
-  usageDay          DateTime?       @db.Date
-  usageSource       InventoryPhotoParseUsageSource?
-  idempotencyKey    String?
-  rewardedAdSessionId String?       @unique
-  rewardedAdSession RewardedAdSession? @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
-  resultPayload     Json?
-  resultExpiresAt   DateTime?
-  createdAt         DateTime        @default(now())
+  id                        String                          @id @default(cuid())
+  ownerKey                  String
+  owner                     User                            @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId                   String?
+  space                     InventorySpace?                 @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  scene                     String
+  itemCount                 Int                             @default(0)
+  reviewItemCount           Int                             @default(0)
+  averageConfidence         Decimal?                        @db.Decimal(5, 4)
+  aiProvider                String                          @default("openai")
+  aiModel                   String
+  promptVersion             String
+  status                    String                          @default("succeeded")
+  failureCode               String?
+  durationMs                Int?
+  inputTokens               Int                             @default(0)
+  cachedInputTokens         Int                             @default(0)
+  outputTokens              Int                             @default(0)
+  totalTokens               Int                             @default(0)
+  estimatedCostUsd          Decimal                         @default(0) @db.Decimal(10, 6)
+  reservedCostUsd           Decimal                         @default(0) @db.Decimal(10, 6)
+  usageDay                  DateTime?                       @db.Date
+  usageSource               InventoryPhotoParseUsageSource?
+  subscriptionEntitlementId String?
+  subscriptionEntitlement   SubscriptionEntitlement?        @relation(fields: [subscriptionEntitlementId], references: [id], onDelete: SetNull)
+  idempotencyKey            String?
+  rewardedAdSessionId       String?                         @unique
+  rewardedAdSession         RewardedAdSession?              @relation(fields: [rewardedAdSessionId], references: [id], onDelete: SetNull)
+  resultPayload             Json?
+  resultExpiresAt           DateTime?
+  createdAt                 DateTime                        @default(now())
 
   @@unique([ownerKey, idempotencyKey])
   @@index([ownerKey, usageDay, status])
   @@index([usageSource, usageDay, status])
+  @@index([subscriptionEntitlementId, status])
   @@index([resultExpiresAt])
   @@index([ownerKey, createdAt])
   @@index([aiModel, status, createdAt])
@@ -790,12 +833,29 @@ model SubscriptionEntitlement {
   createdAt             DateTime                      @default(now())
   updatedAt             DateTime                      @updatedAt
   usageEvents           RecommendationUsageEvent[]
+  photoParseEvents      InventoryPhotoParseEvent[]
 
   @@unique([store, originalTransactionId])
   @@unique([store, purchaseTokenHash])
   @@index([ownerKey, isActive, expiresAt])
   @@index([spaceId, isActive, expiresAt])
   @@index([store, productId])
+}
+
+model SubscriptionPurchaseIntent {
+  id                        String            @id @default(cuid())
+  ownerKey                  String
+  owner                     User              @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  store                     SubscriptionStore
+  productId                 String
+  appleAppAccountToken      String
+  googleObfuscatedAccountId String
+  expiresAt                 DateTime
+  consumedAt                DateTime?
+  createdAt                 DateTime          @default(now())
+
+  @@index([ownerKey, expiresAt])
+  @@index([store, productId, createdAt])
 }
 
 model MonetizationFunnelEvent {
@@ -838,18 +898,18 @@ model MonetizationRevenueEvent {
 }
 
 model AffiliateReportDaily {
-  id           String   @id @default(cuid())
-  date         DateTime @db.Date
-  trackingCode String   @default("")
-  subId        String   @default("")
-  clicks       Int      @default(0)
-  orders       Int      @default(0)
-  cancels      Int      @default(0)
-  gmvKrw       Decimal  @default(0) @db.Decimal(16, 2)
-  commissionKrw Decimal @default(0) @db.Decimal(14, 2)
-  lastSyncedAt DateTime @default(now())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String   @id @default(cuid())
+  date          DateTime @db.Date
+  trackingCode  String   @default("")
+  subId         String   @default("")
+  clicks        Int      @default(0)
+  orders        Int      @default(0)
+  cancels       Int      @default(0)
+  gmvKrw        Decimal  @default(0) @db.Decimal(16, 2)
+  commissionKrw Decimal  @default(0) @db.Decimal(14, 2)
+  lastSyncedAt  DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@unique([date, trackingCode, subId])
   @@index([date])

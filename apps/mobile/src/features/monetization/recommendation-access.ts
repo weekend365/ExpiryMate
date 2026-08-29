@@ -70,9 +70,12 @@ export function unifiedRecommendationCredits(access: RecommendationAccess) {
 
 export function recommendationQuotaCopy(access: RecommendationAccess) {
   if (access.tier !== "free") {
+    const quota = access.subscriptionQuota;
     return {
       label: "추천 횟수",
-      value: `오늘 ${access.remaining}회 남음`,
+      value: quota
+        ? `이번 달 ${quota.monthly.remaining}회 · 오늘 ${quota.daily.remaining}회 남음`
+        : `오늘 ${access.remaining}회 남음`,
     };
   }
 
