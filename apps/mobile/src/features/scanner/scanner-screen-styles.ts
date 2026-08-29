@@ -355,6 +355,20 @@ export const scannerScreenStyles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
     color: colors.subtext,
   },
+  quickAdjustmentCard: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.md,
+    gap: spacing.md,
+  },
+  quickAdjustmentHeader: {
+    gap: spacing.xxs,
+  },
+  quickLocationBlock: {
+    gap: spacing.xs,
+  },
   expiryCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
@@ -459,5 +473,36 @@ export const scannerScreenStyles = StyleSheet.create({
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
     color: colors.danger,
+  },
+  quickSavedCard: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+  },
+  quickSummaryRow: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.md,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+  },
+  quickSummaryLabel: {
+    flexShrink: 0,
+    fontSize: typography.label.fontSize,
+    lineHeight: typography.label.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
+  },
+  quickSummaryValue: {
+    flex: 1,
+    textAlign: "right",
+    fontSize: typography.body.fontSize,
+    lineHeight: typography.body.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
   },
 });

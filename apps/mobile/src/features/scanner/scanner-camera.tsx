@@ -1,6 +1,8 @@
 import {
   addDays,
+  DEFAULT_INVENTORY_FORM,
   ExpirySource,
+  type InventoryItem,
   ProductCategory,
   toIsoDate,
 } from "@expirymate/shared";
@@ -24,6 +26,8 @@ import { AppText } from "../../components/AppText";
 import { type MascotMood } from "../../components/Mascot";
 import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { useMonetization } from "../monetization/monetization-provider";
+import { useSaveInventoryItem } from "../registration/use-save-inventory-item";
+import { useStorageLocations } from "../settings/use-storage-locations";
 import { useActiveSpace } from "../spaces/space-provider";
 import { contributeBarcodeProduct } from "../../services/api";
 import { colors, spacing } from "../../shared/theme";
@@ -32,6 +36,11 @@ import {
   lastStorageLocationForSpace,
   useRegistrationStore,
 } from "../../store/registration-store";
+import {
+  buildScannerQuickAddPayload,
+  canQuickAddScannedProduct,
+  resolveScannerQuickStorageLocation,
+} from "./scanner-quick-add";
 import {
   getBarcodeContributionModerationMessage,
   getProhibitedBarcodeContributionFields,
@@ -49,6 +58,7 @@ import { useResponsiveLayout } from "../../shared/responsive-layout";
 import {
   parseRegistrationReturnTo,
   registerRoute,
+  registrationReturnHref,
 } from "../registration/registration-return";
 
 export function ScannerCameraExperience() {
@@ -59,7 +69,15 @@ export function ScannerCameraExperience() {
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
   const setDraft = useRegistrationStore((state) => state.setDraft);
+  const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
+  const clearDraft = useRegistrationStore((state) => state.clearDraft);
+  const setLastStorageLocation = useRegistrationStore(
+    (state) => state.setLastStorageLocation,
+  );
   const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
+  const saveInventoryItem = useSaveInventoryItem();
+  const { selectableOptions, resolveLabel: resolveStorageLocationLabel } =
+    useStorageLocations();
   const monetization = useMonetization();
   const [manualName, setManualName] = useState("");
   const [manualBrand, setManualBrand] = useState("");
@@ -79,6 +97,16 @@ export function ScannerCameraExperience() {
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [showBarcodeSuccess, setShowBarcodeSuccess] = useState(false);
   const [catalogNameAccepted, setCatalogNameAccepted] = useState(true);
+  const [quickQuantity, setQuickQuantity] = useState(
+    DEFAULT_INVENTORY_FORM.quantity,
+  );
+  const [quickStorageLocation, setQuickStorageLocation] = useState<string>(
+    DEFAULT_INVENTORY_FORM.storageLocation,
+  );
+  const [quickSaveError, setQuickSaveError] = useState<string | null>(null);
+  const [quickSavedItem, setQuickSavedItem] = useState<InventoryItem | null>(
+    null,
+  );
   const previousModeRef = useRef(scanner.mode);
 
   const needsManualName =
@@ -109,6 +137,12 @@ export function ScannerCameraExperience() {
   const resolvedCategory = needsManualName
     ? manualCategory ?? undefined
     : undefined;
+  const canQuickSave = canQuickAddScannedProduct({
+    productLookupStatus: scanner.productLookupStatus,
+    productName: scanner.product?.name,
+    needsNameConfirmation,
+    expirationDate: scanner.confirmation?.expirationDate,
+  });
   const contributionRewards = monetization.access?.contributionRewards;
   const canPromiseBarcodeReward = Boolean(
     contributionRewards?.enabled &&
@@ -187,6 +221,46 @@ export function ScannerCameraExperience() {
     }
   }, [scanner.confirmation, scanner.product?.brand, scanner.product?.name]);
 
+  const confirmationBarcode = scanner.confirmation?.barcode ?? null;
+
+  useEffect(() => {
+    if (!confirmationBarcode) {
+      setQuickSaveError(null);
+      return;
+    }
+
+    const storeState = useRegistrationStore.getState();
+    setQuickQuantity(DEFAULT_INVENTORY_FORM.quantity);
+    setQuickStorageLocation(
+      resolveScannerQuickStorageLocation({
+        draftStorageLocation: draftForSpace(storeState, activeSpaceId)
+          ?.storageLocation,
+        lastStorageLocation: lastStorageLocationForSpace(
+          storeState,
+          activeSpaceId,
+        ),
+      }),
+    );
+    setQuickSaveError(null);
+    setQuickSavedItem(null);
+  }, [activeSpaceId, confirmationBarcode]);
+
+  useEffect(() => {
+    const availableLocationKeys = selectableOptions.map(
+      (option) => option.key,
+    );
+
+    if (!confirmationBarcode || availableLocationKeys.length === 0) {
+      return;
+    }
+
+    setQuickStorageLocation((current) =>
+      availableLocationKeys.includes(current)
+        ? current
+        : resolveScannerQuickStorageLocation({ availableLocationKeys }),
+    );
+  }, [confirmationBarcode, selectableOptions]);
+
   const completeRegistration = (productMasterId?: string | null) => {
     if (!activeSpaceId) {
       return;
@@ -200,11 +274,6 @@ export function ScannerCameraExperience() {
       brand: resolvedBrand,
       category: resolvedCategory,
     });
-    const storeState = useRegistrationStore.getState();
-    const lastStorageLocation =
-      draftForSpace(storeState, activeSpaceId)?.storageLocation ??
-      lastStorageLocationForSpace(storeState, activeSpaceId) ??
-      undefined;
     setDraft(activeSpaceId, {
       productMasterId: productMasterId ?? undefined,
       catalogName: scanner.product?.name?.trim() || undefined,
@@ -212,9 +281,11 @@ export function ScannerCameraExperience() {
       displayName: resolvedProductName,
       brand: resolvedBrand,
       category: resolvedCategory,
+      quantity: quickQuantity,
+      unit: DEFAULT_INVENTORY_FORM.unit,
       expiryDate: resolvedExpiryDate,
       expirySource: resolvedExpirySource,
-      ...(lastStorageLocation ? { storageLocation: lastStorageLocation } : {}),
+      storageLocation: quickStorageLocation,
     });
     // Clear confirmation so the Modal sheet dismisses; replace so scanner
     // unmounts and cannot keep overlaying /register.
@@ -288,6 +359,45 @@ export function ScannerCameraExperience() {
     completeRegistration(scanner.product?.productMasterId ?? null);
   };
 
+  const handleQuickSave = async () => {
+    if (
+      !canQuickSave ||
+      !scanner.product?.name ||
+      !scanner.confirmation?.expirationDate
+    ) {
+      return;
+    }
+
+    setQuickSaveError(null);
+    setRewardNotice(null);
+
+    try {
+      const created = await saveInventoryItem.mutateAsync(
+        buildScannerQuickAddPayload({
+          productMasterId: scanner.product.productMasterId,
+          displayName: scanner.product.name,
+          brand: scanner.product.brand,
+          quantity: quickQuantity,
+          storageLocation: quickStorageLocation,
+          expiryDate: scanner.confirmation.expirationDate,
+        }),
+      );
+
+      if (activeSpaceId) {
+        clearPrefill(activeSpaceId);
+        clearDraft(activeSpaceId);
+        setLastStorageLocation(activeSpaceId, quickStorageLocation);
+      }
+      setQuickSavedItem(created);
+    } catch (error) {
+      setQuickSaveError(
+        error instanceof Error
+          ? error.message
+          : "냉장고에 넣지 못했어요. 다시 해볼까요?",
+      );
+    }
+  };
+
   const handleRescan = () => {
     setManualName("");
     setManualBrand("");
@@ -298,7 +408,32 @@ export function ScannerCameraExperience() {
     setProhibitedContribution(null);
     setShowBarcodeSuccess(false);
     setCatalogNameAccepted(true);
+    setQuickQuantity(DEFAULT_INVENTORY_FORM.quantity);
+    setQuickSaveError(null);
+    setQuickSavedItem(null);
+    saveInventoryItem.reset();
     scanner.resetScanner();
+  };
+
+  const handleFinishQuickAdd = () => {
+    setQuickSavedItem(null);
+    scanner.resetScanner();
+    router.replace(registrationReturnHref(returnTo));
+  };
+
+  const handleEditQuickSavedItem = () => {
+    const savedItemId = quickSavedItem?.id;
+
+    if (!savedItemId) {
+      return;
+    }
+
+    setQuickSavedItem(null);
+    scanner.resetScanner();
+    router.replace({
+      pathname: "/inventory/[id]",
+      params: { id: savedItemId },
+    });
   };
 
   const handleManualRegistration = () => {
@@ -514,6 +649,16 @@ export function ScannerCameraExperience() {
         manualNameHint={manualNameHint}
         resolvedProductName={resolvedProductName}
         resolvedExpiryDate={resolvedExpiryDate}
+        canQuickSave={canQuickSave}
+        quickQuantity={quickQuantity}
+        quickStorageLocation={quickStorageLocation}
+        quickStorageLocationLabel={resolveStorageLocationLabel(
+          quickStorageLocation,
+        )}
+        quickStorageLocationOptions={selectableOptions}
+        quickSavedItem={quickSavedItem}
+        isQuickSaving={saveInventoryItem.isPending}
+        quickSaveError={quickSaveError}
         isContributing={isContributing}
         contributeError={contributeError}
         prohibitedContribution={prohibitedContribution}
@@ -522,6 +667,20 @@ export function ScannerCameraExperience() {
         onUseScanResult={() => {
           void handleUseScanResult();
         }}
+        onQuickSave={() => {
+          void handleQuickSave();
+        }}
+        onQuickQuantityChange={(quantity) => {
+          setQuickQuantity(quantity);
+          setQuickSaveError(null);
+        }}
+        onQuickStorageLocationChange={(location) => {
+          setQuickStorageLocation(location);
+          setQuickSaveError(null);
+        }}
+        onScanNext={handleRescan}
+        onFinishQuickAdd={handleFinishQuickAdd}
+        onEditQuickSavedItem={handleEditQuickSavedItem}
         onContinueWithoutContribution={handleContinueWithoutContribution}
         onCatalogNameAccepted={setCatalogNameAccepted}
         onManualNameChange={setManualName}

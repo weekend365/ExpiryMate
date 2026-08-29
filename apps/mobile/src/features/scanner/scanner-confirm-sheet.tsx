@@ -1,10 +1,19 @@
 import {
   type ExpirySource,
+  formatDateKorean,
+  formatInventoryQuantity,
+  type InventoryItem,
   ProductCategory,
   productCategoryLabels,
   productCategoryOptions,
 } from "@expirymate/shared";
-import { CheckCircle2, Package, RotateCcw } from "lucide-react-native";
+import {
+  Barcode,
+  CheckCircle2,
+  Package,
+  PenLine,
+  RotateCcw,
+} from "lucide-react-native";
 import { Image, View } from "react-native";
 import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
@@ -12,6 +21,7 @@ import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
 import { type MascotMood } from "../../components/Mascot";
 import { Pill } from "../../components/Pill";
+import { QuantityStepper } from "../../components/QuantityStepper";
 import { colors, spacing } from "../../shared/theme";
 import type { BarcodeContributionField } from "./barcodeContributionModeration";
 import { getScannerConfirmDescription } from "./scanner-confirm-copy";
@@ -38,12 +48,26 @@ export function ScannerConfirmSheet({
   manualNameHint,
   resolvedProductName,
   resolvedExpiryDate,
+  canQuickSave,
+  quickQuantity,
+  quickStorageLocation,
+  quickStorageLocationLabel,
+  quickStorageLocationOptions,
+  quickSavedItem,
+  isQuickSaving,
+  quickSaveError,
   isContributing,
   contributeError,
   prohibitedContribution,
   onClose,
   onRescan,
   onUseScanResult,
+  onQuickSave,
+  onQuickQuantityChange,
+  onQuickStorageLocationChange,
+  onScanNext,
+  onFinishQuickAdd,
+  onEditQuickSavedItem,
   onContinueWithoutContribution,
   onCatalogNameAccepted,
   onManualNameChange,
@@ -70,6 +94,14 @@ export function ScannerConfirmSheet({
   manualNameHint: string | null;
   resolvedProductName: string;
   resolvedExpiryDate: string;
+  canQuickSave: boolean;
+  quickQuantity: number;
+  quickStorageLocation: string;
+  quickStorageLocationLabel: string;
+  quickStorageLocationOptions: Array<{ key: string; label: string }>;
+  quickSavedItem: InventoryItem | null;
+  isQuickSaving: boolean;
+  quickSaveError: string | null;
   isContributing: boolean;
   contributeError: string | null;
   prohibitedContribution: {
@@ -79,6 +111,12 @@ export function ScannerConfirmSheet({
   onClose: () => void;
   onRescan: () => void;
   onUseScanResult: () => void;
+  onQuickSave: () => void;
+  onQuickQuantityChange: (quantity: number) => void;
+  onQuickStorageLocationChange: (location: string) => void;
+  onScanNext: () => void;
+  onFinishQuickAdd: () => void;
+  onEditQuickSavedItem: () => void;
   onContinueWithoutContribution: () => void;
   onCatalogNameAccepted: (accepted: boolean) => void;
   onManualNameChange: (value: string) => void;
@@ -87,75 +125,154 @@ export function ScannerConfirmSheet({
   onPresetExpiry: (days: number) => void;
   onManualExpiryChange: (value: string) => void;
 }) {
+  const isBusy = isContributing || isQuickSaving;
+  const quickLocationOptions = quickStorageLocationOptions.some(
+    (option) => option.key === quickStorageLocation,
+  )
+    ? quickStorageLocationOptions
+    : [
+        {
+          key: quickStorageLocation,
+          label: quickStorageLocationLabel,
+        },
+        ...quickStorageLocationOptions,
+      ];
+  const sheetDescription = quickSavedItem
+    ? "수량과 보관 위치까지 바로 반영했어요."
+    : canQuickSave
+      ? "넣을 내용을 확인하고 바로 냉장고에 반영할 수 있어요."
+      : getScannerConfirmDescription({
+          needsManualName,
+          needsManualExpiry,
+          catalogNameAccepted,
+          needsNameConfirmation,
+          productLookupStatus,
+        });
+  const sheetTitle = quickSavedItem
+    ? "냉장고에 넣어 뒀어요"
+    : needsManualName
+      ? "이 재료 이름을 알려줄래요?"
+      : !catalogNameAccepted
+        ? "우리 집에서는 뭐라고 부를까요?"
+        : needsManualExpiry
+          ? "유통기한은 언제까지인가요?"
+          : needsNameConfirmation
+            ? "한 번만 확인해 주세요"
+            : "이걸로 넣을까요?";
+
   return (
     <BottomSheet
-      visible={Boolean(confirmation)}
+      visible={Boolean(confirmation || quickSavedItem)}
       onClose={onClose}
       dismissible={false}
-      mascotMood={resultMood}
-      title={
-        needsManualName
-          ? "이 재료 이름을 알려줄래요?"
-          : !catalogNameAccepted
-            ? "우리 집에서는 뭐라고 부를까요?"
-            : needsManualExpiry
-              ? "유통기한은 언제까지인가요?"
-              : needsNameConfirmation
-                ? "한 번만 확인해 주세요"
-                : "이걸로 넣을까요?"
-      }
-      description={getScannerConfirmDescription({
-        needsManualName,
-        needsManualExpiry,
-        catalogNameAccepted,
-        needsNameConfirmation,
-        productLookupStatus,
-      })}
+      mascotMood={quickSavedItem ? "happy" : resultMood}
+      title={sheetTitle}
+      description={sheetDescription}
       footer={
         <View style={styles.sheetFooter}>
-          {needsManualExpiry && !resolvedExpiryDate ? (
+          {quickSavedItem ? (
+            <>
+              <Button
+                icon={Barcode}
+                onPress={onScanNext}
+                fullWidth
+                testID="scanner-scan-next-button"
+              >
+                다음 재료도 스캔할게요
+              </Button>
+              <Button
+                icon={PenLine}
+                variant="secondary"
+                onPress={onEditQuickSavedItem}
+                fullWidth
+                testID="scanner-edit-saved-button"
+              >
+                방금 넣은 내용 고칠게요
+              </Button>
+              <Button
+                variant="surface"
+                onPress={onFinishQuickAdd}
+                fullWidth
+                testID="scanner-finish-button"
+              >
+                그만 추가할래요
+              </Button>
+            </>
+          ) : null}
+          {!quickSavedItem && needsManualExpiry && !resolvedExpiryDate ? (
             <AppText style={styles.ctaHint} accessibilityLiveRegion="polite">
               날짜만 골라 주시면 넣을게요
             </AppText>
           ) : null}
-          <Button
-            variant="secondary"
-            icon={RotateCcw}
-            onPress={onRescan}
-            disabled={isContributing}
-            fullWidth
-          >
-            다시 스캔할게요
-          </Button>
-          {prohibitedContribution ? (
+          {!quickSavedItem ? (
+            <Button
+              variant="secondary"
+              icon={RotateCcw}
+              onPress={onRescan}
+              disabled={isBusy}
+              fullWidth
+            >
+              다시 스캔할게요
+            </Button>
+          ) : null}
+          {!quickSavedItem && canQuickSave ? (
+            <Button
+              variant="surface"
+              onPress={onUseScanResult}
+              disabled={isBusy}
+              fullWidth
+              testID="scanner-detailed-edit-button"
+            >
+              자세히 고칠게요
+            </Button>
+          ) : null}
+          {!quickSavedItem && prohibitedContribution ? (
             <Button
               variant="secondary"
               onPress={onContinueWithoutContribution}
-              disabled={isContributing}
+              disabled={isBusy}
               fullWidth
             >
               기여 없이 계속 등록
             </Button>
           ) : null}
-          <Button
-            icon={CheckCircle2}
-            iconPosition="right"
-            onPress={onUseScanResult}
-            disabled={
-              !resolvedProductName ||
-              !resolvedExpiryDate ||
-              isContributing ||
-              productLookupStatus === "loading"
-            }
-            loading={isContributing || productLookupStatus === "loading"}
-            fullWidth
-          >
-            {prohibitedContribution ? "수정 후 다시 시도" : "양만 맞출게요"}
-          </Button>
+          {!quickSavedItem ? (
+            <Button
+              icon={CheckCircle2}
+              iconPosition="right"
+              onPress={canQuickSave ? onQuickSave : onUseScanResult}
+              disabled={
+                !resolvedProductName ||
+                !resolvedExpiryDate ||
+                isBusy ||
+                productLookupStatus === "loading"
+              }
+              loading={
+                isQuickSaving ||
+                isContributing ||
+                productLookupStatus === "loading"
+              }
+              fullWidth
+              testID="scanner-quick-save-button"
+            >
+              {canQuickSave
+                ? quickSaveError
+                  ? "다시 넣어볼게요"
+                  : "냉장고에 넣을게요"
+                : prohibitedContribution
+                  ? "수정 후 다시 시도"
+                  : "양과 위치 맞출게요"}
+            </Button>
+          ) : null}
         </View>
       }
     >
-      {confirmation ? (
+      {quickSavedItem ? (
+        <QuickSavedSummary
+          item={quickSavedItem}
+          storageLocationLabel={quickStorageLocationLabel}
+        />
+      ) : confirmation ? (
         <>
           <View style={styles.productRow}>
             {product?.imageUrl ? (
@@ -181,7 +298,7 @@ export function ScannerConfirmSheet({
               </AppText>
               {!needsManualName && !needsNameConfirmation ? (
                 <AppText style={styles.manualNameHint}>
-                  이름이 다르면 다음 화면에서 바꿔 주세요.
+                  이름이 다르면 ‘자세히 고칠게요’에서 바꿀 수 있어요.
                 </AppText>
               ) : null}
             </View>
@@ -298,6 +415,38 @@ export function ScannerConfirmSheet({
             </View>
           ) : null}
 
+          {canQuickSave ? (
+            <View style={styles.quickAdjustmentCard}>
+              <View style={styles.quickAdjustmentHeader}>
+                <AppText style={styles.manualNameLabel}>넣을 내용</AppText>
+                <AppText style={styles.manualNameHint}>
+                  기본값이 다를 때만 바꿔 주세요.
+                </AppText>
+              </View>
+              <QuantityStepper
+                label="수량"
+                value={quickQuantity}
+                unitSuffix="개"
+                onChange={onQuickQuantityChange}
+              />
+              <View style={styles.quickLocationBlock}>
+                <AppText style={styles.expiryLabel}>보관 위치</AppText>
+                <View style={styles.pillRow}>
+                  {quickLocationOptions.map((option) => (
+                    <Pill
+                      key={option.key}
+                      label={option.label}
+                      selected={quickStorageLocation === option.key}
+                      onPress={() =>
+                        onQuickStorageLocationChange(option.key)
+                      }
+                    />
+                  ))}
+                </View>
+              </View>
+            </View>
+          ) : null}
+
           {needsManualExpiry ? (
             <ManualExpirySection
               expiryDate={manualExpiryDate}
@@ -313,6 +462,14 @@ export function ScannerConfirmSheet({
               </AppText>
             </View>
           )}
+
+          {quickSaveError ? (
+            <View style={styles.moderationErrorCard} accessibilityRole="alert">
+              <AppText style={styles.moderationErrorText}>
+                {quickSaveError}
+              </AppText>
+            </View>
+          ) : null}
 
           {productErrorMessage ? (
             <AppText style={styles.sheetFootnote}>
@@ -332,5 +489,37 @@ export function ScannerConfirmSheet({
         </>
       ) : null}
     </BottomSheet>
+  );
+}
+
+function QuickSavedSummary({
+  item,
+  storageLocationLabel,
+}: {
+  item: InventoryItem;
+  storageLocationLabel: string;
+}) {
+  const rows = [
+    { label: "재료", value: item.displayName },
+    { label: "수량", value: formatInventoryQuantity(item) },
+    { label: "보관 위치", value: storageLocationLabel },
+    { label: "유통기한", value: formatDateKorean(item.expiryDate) },
+  ];
+
+  return (
+    <View
+      style={styles.quickSavedCard}
+      accessible
+      accessibilityLabel={rows
+        .map((row) => `${row.label} ${row.value}`)
+        .join(", ")}
+    >
+      {rows.map((row) => (
+        <View key={row.label} style={styles.quickSummaryRow}>
+          <AppText style={styles.quickSummaryLabel}>{row.label}</AppText>
+          <AppText style={styles.quickSummaryValue}>{row.value}</AppText>
+        </View>
+      ))}
+    </View>
   );
 }

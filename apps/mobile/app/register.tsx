@@ -163,14 +163,10 @@ const buildInitialValues = (
     ...createDefaultFormValues(),
     ...draft,
     quantity:
-      typeof draft?.quantity === "number" &&
-      draft.quantity > 0 &&
-      !prefill?.displayName
+      typeof draft?.quantity === "number" && draft.quantity > 0
         ? draft.quantity
         : DEFAULT_INVENTORY_FORM.quantity,
-    unit: prefill?.displayName
-      ? (DEFAULT_INVENTORY_FORM.unit ?? "개")
-      : (draft?.unit ?? DEFAULT_INVENTORY_FORM.unit ?? "개"),
+    unit: draft?.unit ?? DEFAULT_INVENTORY_FORM.unit ?? "개",
     storageLocation:
       draft?.storageLocation ??
       lastStorageLocation ??
