@@ -1,7 +1,7 @@
 ---
 status: active
 owner: design
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 source_of_truth: true
 ---
 
@@ -43,11 +43,11 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 | 용도 | 파일 |
 | --- | --- |
-| 비례·파츠 마스터 (원형) | `apps/mobile/assets/characters/mate-fridge-chef.png` |
+| 비례·파츠·렌더 마스터 | `apps/mobile/assets/characters/jango-idle.png` |
 | 앱 사용 에셋 (mood) | `apps/mobile/assets/characters/jango-{mood}.png` |
-| 기본 포즈 기준 | `jango-idle.png` (= `jango.png`) |
+| 아이콘 포즈 기준 | `apps/mobile/assets/characters/jango-icon-crop.png` |
 
-원형(`mate-fridge-chef`)의 **통통한 싱글도어 비율·파츠 구성**을 유지하고, 렌더는 플랫 2D로 통일한다.
+`jango-idle`을 **유일한 캐릭터 마스터**로 사용한다. 신규 mood·브랜딩·스토어 이미지는 모두 이 파일의 통통한 싱글도어 비율, 파츠 구성, 선과 면의 표현을 함께 유지한다. 3D 원형을 별도의 비례 기준으로 사용하지 않는다.
 
 ### 의도적으로 버린 것
 
@@ -174,9 +174,11 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `jango-point.png` | 가리키기 (CTA 유도) |
 | `jango.png` | idle과 동일 마스터 카피 |
 | `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+엄지척, 투명 PNG). `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
-| `mate-fridge-chef.png` | 비례 레퍼런스 (앱 mood로 직접 쓰지 않음) |
+| `mate-fridge-chef.png` | 레거시 호환용 2D 중립 포즈 (앱 mood·신규 제작 기준으로 직접 쓰지 않음) |
 
 경로: `apps/mobile/assets/characters/`
+
+과거 3D 원본은 `apps/mobile/assets/characters/legacy/`에 보존하며 공식 캐릭터 에셋으로 배포하지 않는다.
 
 ### 브랜딩 / 스토어 / 알림
 
@@ -191,6 +193,16 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `assets/branding/notification-icon.png` | 192→96 다운스케일 | Android 알림 아이콘 |
 | `ios/.../AppIcon.appiconset/` | icon 동기화 | native App Icon |
 | `ios/.../SplashScreenLogo.imageset/` | splash 동기화 | native splash |
+
+스토어 대표 이미지 역시 `jango-idle`의 플랫 2D 언어를 따른다.
+
+| 파일 | 역할 |
+| --- | --- |
+| `assets/store/google-play-feature-graphic.png` | Google Play 공식 2D 피처 그래픽 |
+| `assets/store/jango-appstore-space-copy-ko-1242x2688.png` | App Store 공식 2D 세로 캠페인 이미지 |
+| `assets/store/legacy/` | 과거 3D·실사 합성본 보관. 배포 금지 |
+
+스토어 이미지에서도 장고만 2D로 두고 배경을 3D 또는 실사로 합성하지 않는다. 배경은 캐릭터와 같은 차콜 외곽선, 제한된 면색, 1단 이하의 그림자를 사용한다.
 
 `app.json`의 `expo-notifications.icon` / `color`(`#10B981`)가 `notification-icon.png`를 가리킨다.  
 mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EAS 빌드로 확인.
@@ -243,7 +255,7 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 
 ## 10. 신규 에셋 제작 체크리스트
 
-- [ ] `mate-fridge-chef` 비례와 같은 통통한 싱글도어인가?
+- [ ] `jango-idle`과 같은 통통한 싱글도어 비례인가?
 - [ ] 파인애플 자석 + 손잡이 왼쪽 + 경첩 2개 오른쪽인가?
 - [ ] 플랫 2D + 손맛 선인가? (3D 토이 룩 아닌가?)
 - [ ] 팔레트가 White / Mint / Charcoal 위주인가?

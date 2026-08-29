@@ -56,6 +56,18 @@ export function applyExpiryToAll(
   return items.map((item) => ({ ...item, expiryDate, expirySource }));
 }
 
+export function prioritizePhotoIntakeDrafts(
+  items: PhotoIntakeDraftItem[],
+): PhotoIntakeDraftItem[] {
+  return [...items].sort(
+    (left, right) => attentionScore(right) - attentionScore(left),
+  );
+}
+
+function attentionScore(item: PhotoIntakeDraftItem) {
+  return (item.expiryDate ? 0 : 2) + (item.needsReview ? 1 : 0);
+}
+
 export function photoIntakeItemIsComplete(item: PhotoIntakeDraftItem) {
   return (
     item.displayName.trim().length > 0 &&

@@ -1,4 +1,5 @@
 import { appBrand } from "@expirymate/shared";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
@@ -20,6 +21,10 @@ import {
 } from "../../src/shared/theme";
 
 export default function AiDataNoticeScreen() {
+  const params = useLocalSearchParams<{ from?: string | string[] }>();
+  const returnsToPhotoRegistration =
+    (Array.isArray(params.from) ? params.from[0] : params.from) ===
+    "register-photo";
   const privacyStatusQuery = usePrivacyStatus();
   const acceptMutation = useAcceptAiDataNotice();
   const revokeMutation = useRevokeAiDataNotice();
@@ -32,7 +37,17 @@ export default function AiDataNoticeScreen() {
       onSuccess: () =>
         Alert.alert(
           "동의해 주셔서 감사해요",
-          "이제 요리 추천과 사진으로 재료 넣기를 부탁하실 수 있어요.",
+          returnsToPhotoRegistration
+            ? "고르신 사진 등록 방법으로 이어서 진행할게요."
+            : "이제 요리 추천과 사진으로 재료 넣기를 부탁하실 수 있어요.",
+          returnsToPhotoRegistration
+            ? [
+                {
+                  text: "사진 등록 계속하기",
+                  onPress: () => router.back(),
+                },
+              ]
+            : undefined,
         ),
       onError: (error) =>
         Alert.alert("앗, 잠시 문제가 생겼어요", getErrorMessage(error)),

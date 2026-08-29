@@ -10,11 +10,9 @@ const mocks = vi.hoisted(() => ({
     launchCameraAsync: vi.fn(),
     launchImageLibraryAsync: vi.fn(),
   },
-  alert: vi.fn(),
 }));
 
 vi.mock("expo-image-picker", () => mocks.imagePicker);
-vi.mock("react-native", () => ({ Alert: { alert: mocks.alert } }));
 
 describe("pickInventoryPhoto", () => {
   beforeEach(() => {
@@ -38,7 +36,14 @@ describe("pickInventoryPhoto", () => {
     });
 
     const { pickInventoryPhoto } = await import("./pick-inventory-photo");
-    await pickInventoryPhoto("library");
+    await expect(pickInventoryPhoto("library")).resolves.toEqual({
+      status: "picked",
+      photo: {
+        uri: "file:///cache/photo.jpg",
+        mimeType: "image/jpeg",
+        fileName: "photo.jpg",
+      },
+    });
 
     expect(mocks.imagePicker.launchImageLibraryAsync).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -46,5 +51,18 @@ describe("pickInventoryPhoto", () => {
         preferredAssetRepresentationMode: "compatible",
       }),
     );
+  });
+
+  it("returns a recoverable state when permission is denied", async () => {
+    mocks.imagePicker.requestCameraPermissionsAsync.mockResolvedValue({
+      granted: false,
+    });
+
+    const { pickInventoryPhoto } = await import("./pick-inventory-photo");
+
+    await expect(pickInventoryPhoto("camera")).resolves.toEqual({
+      status: "permission-denied",
+    });
+    expect(mocks.imagePicker.launchCameraAsync).not.toHaveBeenCalled();
   });
 });

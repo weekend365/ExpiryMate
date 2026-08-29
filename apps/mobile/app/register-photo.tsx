@@ -2,19 +2,29 @@ import {
   ExpirySource,
   StorageLocation,
   formatDateKorean,
+  type InventoryPhotoParseAccess,
   type InventoryPhotoParseScene,
 } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { router, useLocalSearchParams } from "expo-router";
-import { Camera, ImageIcon, Refrigerator, ReceiptText, Trash2 } from "lucide-react-native";
-import { useMemo, useState } from "react";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import {
+  Check,
+  ImageIcon,
+  Refrigerator,
+  ReceiptText,
+  Trash2,
+  type LucideIcon,
+} from "lucide-react-native";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../src/components/AppText";
 import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
+import { FeedbackBanner } from "../src/components/FeedbackBanner";
 import { Mascot } from "../src/components/Mascot";
+import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
 import {
   ApiError,
@@ -33,9 +43,16 @@ import {
   candidatesToDrafts,
   draftsToCreateBody,
   photoIntakeReadyCount,
+  prioritizePhotoIntakeDrafts,
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
 import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-photo";
+import {
+  isSamePhotoIntakeSelection,
+  loadRecentPhotoIntakeSelection,
+  saveRecentPhotoIntakeSelection,
+  type PhotoIntakeSelection,
+} from "../src/features/photo-intake/photo-intake-selection";
 import { usePrivacyStatus } from "../src/features/privacy/use-privacy";
 import {
   parseRegistrationReturnTo,
@@ -55,7 +72,13 @@ import {
   typography,
 } from "../src/shared/theme";
 
-type PhotoIntakeStep = "scene" | "source" | "loading" | "review" | "done";
+type PhotoIntakeStep = "choose" | "loading" | "review" | "done";
+
+type FlowIssue = {
+  title: string;
+  description?: string;
+  tone?: "danger" | "warning" | "info" | "success";
+};
 
 export default function RegisterPhotoScreen() {
   const params = useLocalSearchParams<{ from?: string | string[] }>();
@@ -69,17 +92,26 @@ export default function RegisterPhotoScreen() {
   const defaultLocation =
     selectableOptions[0]?.key ?? StorageLocation.FRIDGE;
 
-  const [step, setStep] = useState<PhotoIntakeStep>("scene");
-  const [scene, setScene] = useState<InventoryPhotoParseScene>("receipt");
+  const [step, setStep] = useState<PhotoIntakeStep>("choose");
+  const [selectedSelection, setSelectedSelection] =
+    useState<PhotoIntakeSelection | null>(null);
+  const [recentSelection, setRecentSelection] =
+    useState<PhotoIntakeSelection | null>(null);
+  const [albumScene, setAlbumScene] =
+    useState<InventoryPhotoParseScene>("receipt");
+  const [awaitingConsent, setAwaitingConsent] = useState(false);
+  const [flowIssue, setFlowIssue] = useState<FlowIssue | null>(null);
   const [items, setItems] = useState<PhotoIntakeDraftItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [savedCount, setSavedCount] = useState(0);
 
   const parseMutation = useMutation({
-    mutationFn: async (photo: {
-      uri: string;
-      mimeType?: string;
-      fileName?: string;
+    mutationFn: async ({
+      photo,
+      scene,
+    }: {
+      photo: { uri: string; mimeType?: string; fileName?: string };
+      scene: InventoryPhotoParseScene;
     }) => {
       if (!activeSpaceId) {
         throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
@@ -87,28 +119,29 @@ export default function RegisterPhotoScreen() {
       return parseInventoryPhoto({ scene, ...photo }, activeSpaceId);
     },
     onSuccess: (result) => {
-      setItems(candidatesToDrafts(result.items, defaultLocation));
+      setItems(
+        prioritizePhotoIntakeDrafts(
+          candidatesToDrafts(result.items, defaultLocation),
+        ),
+      );
       setStep("review");
+      setFlowIssue(null);
       void photoAccess.refresh();
     },
     onError: (error) => {
-      setStep("source");
+      setStep("choose");
       void photoAccess.refresh();
       if (error instanceof ApiError && error.status === 412) {
-        Alert.alert("안내를 먼저 살펴봐 주세요", "사진을 읽기 전에 안내를 확인해 주세요.", [
-          {
-            text: "안내 보러 갈게요",
-            onPress: () => router.push("/privacy/ai-data-notice"),
-          },
-        ]);
+        setAwaitingConsent(true);
+        router.push("/privacy/ai-data-notice?from=register-photo");
         return;
       }
-      Alert.alert(
-        "앗, 잠시 문제가 생겼어요",
-        error instanceof Error
+      setFlowIssue({
+        title: "사진을 읽지 못했어요",
+        description: error instanceof Error
           ? error.message
           : "사진을 읽지 못했어요. 다시 찍어 볼까요?",
-      );
+      });
     },
   });
 
@@ -149,27 +182,44 @@ export default function RegisterPhotoScreen() {
       );
     },
   });
+  const parsePhoto = parseMutation.mutate;
+  const refetchPrivacyStatus = privacyStatusQuery.refetch;
 
   const readyCount = photoIntakeReadyCount(items);
   const canSubmit = canSubmitPhotoIntake(items);
   const editingItem = items.find((item) => item.localId === editingId) ?? null;
+  const scene = selectedSelection?.scene ?? albumScene;
+  const accessUi = resolvePhotoParseAccessUi(
+    photoAccess.access,
+    photoAccess.adState,
+    photoAccess.isLoading,
+  );
+
+  useEffect(() => {
+    if (!sessionUserId) return;
+    let active = true;
+    void loadRecentPhotoIntakeSelection(sessionUserId)
+      .then((selection) => {
+        if (!active || !selection) return;
+        setRecentSelection(selection);
+        setAlbumScene(selection.scene);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [sessionUserId]);
 
   const title = useMemo(() => {
-    if (step === "scene") return "어떤 사진인가요?";
-    if (step === "source") return "사진을 어떻게 넣을까요?";
+    if (step === "choose") return "어떤 사진으로 넣을까요?";
     if (step === "loading") return "읽고 있어요";
     if (step === "review") return "이 재료들이 맞나요?";
     return "냉장고에 넣어 뒀어요";
   }, [step]);
 
   const subtitle = useMemo(() => {
-    if (step === "scene") {
-      return "영수증이면 산 목록을, 냉장고 사진이면 보이는 재료를 골라 드릴게요.";
-    }
-    if (step === "source") {
-      return scene === "receipt"
-        ? "글자가 잘 보이게 영수증을 찍어 주세요."
-        : "조명이 밝은 쪽에서 냉장고를 찍어 주세요. 가려진 재료는 빠질 수 있어요.";
+    if (step === "choose") {
+      return "사진 종류와 가져올 곳을 한 번에 고르면 바로 여러 재료를 찾아 드릴게요.";
     }
     if (step === "loading") {
       return "장고가 사진을 살펴보는 중이에요. 잠깐만 기다려 주세요.";
@@ -180,70 +230,137 @@ export default function RegisterPhotoScreen() {
         : "이번에는 넣을 재료를 찾지 못했어요. 다른 사진으로 다시 해볼까요?";
     }
     return `${savedCount}가지를 냉장고에 잘 넣어 뒀어요.`;
-  }, [items.length, savedCount, scene, step]);
+  }, [items.length, savedCount, step]);
 
-  const ensureConsent = () => {
-    if (privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice) {
-      return true;
+  const openPhotoSelection = useCallback(
+    async (selection: PhotoIntakeSelection, skipAccessCheck = false) => {
+      if (!skipAccessCheck && !accessUi.canSelectPhoto) {
+        setFlowIssue(photoAccessIssue(photoAccess.access, photoAccess.adState));
+        return;
+      }
+
+      setFlowIssue(null);
+      try {
+        const result = await pickInventoryPhoto(selection.source);
+        if (result.status === "cancelled") return;
+        if (result.status === "permission-denied") {
+          setFlowIssue({
+            title:
+              selection.source === "camera"
+                ? "카메라 권한이 필요해요"
+                : "사진 접근 권한이 필요해요",
+            description:
+              selection.source === "camera"
+                ? "권한을 허용한 뒤 같은 영수증 또는 냉장고 촬영을 다시 눌러 주세요."
+                : "권한을 허용한 뒤 선택해 둔 앨범 사진 종류로 다시 시도해 주세요.",
+          });
+          return;
+        }
+
+        setRecentSelection(selection);
+        if (sessionUserId) {
+          void saveRecentPhotoIntakeSelection(sessionUserId, selection).catch(
+            () => undefined,
+          );
+        }
+        setStep("loading");
+        parsePhoto({ photo: result.photo, scene: selection.scene });
+      } catch (error) {
+        setFlowIssue({
+          title: "사진 선택기를 열지 못했어요",
+          description:
+            error instanceof Error
+              ? error.message
+              : "잠시 후 같은 방법으로 다시 시도해 주세요.",
+        });
+      }
+    },
+    [
+      accessUi.canSelectPhoto,
+      parsePhoto,
+      photoAccess.access,
+      photoAccess.adState,
+      sessionUserId,
+    ],
+  );
+
+  const choosePhoto = async (selection: PhotoIntakeSelection) => {
+    setSelectedSelection(selection);
+    setFlowIssue(null);
+    const privacyStatus =
+      privacyStatusQuery.data ?? (await refetchPrivacyStatus()).data;
+    if (!privacyStatus?.hasAcceptedCurrentAiDataNotice) {
+      setAwaitingConsent(true);
+      router.push("/privacy/ai-data-notice?from=register-photo");
+      return;
     }
-    Alert.alert("안내를 먼저 살펴봐 주세요", "사진을 서버로 보내 재료를 읽기 전에 안내가 필요해요.", [
-      {
-        text: "안내 보러 갈게요",
-        onPress: () => router.push("/privacy/ai-data-notice"),
-      },
-    ]);
-    return false;
+    void openPhotoSelection(selection);
   };
 
-  const startParse = async (source: "camera" | "library") => {
-    if (!photoAccess.access?.canParse) {
-      return;
-    }
-    if (!ensureConsent()) {
-      return;
-    }
-    const photo = await pickInventoryPhoto(source);
-    if (!photo) {
-      return;
-    }
-    setStep("loading");
-    parseMutation.mutate(photo);
-  };
+  useFocusEffect(
+    useCallback(() => {
+      if (!awaitingConsent || !selectedSelection) return undefined;
+      let active = true;
+      void refetchPrivacyStatus().then((result) => {
+        if (!active) return;
+        if (!result.data?.hasAcceptedCurrentAiDataNotice) {
+          setFlowIssue({
+            tone: "warning",
+            title: "AI 데이터 안내 동의가 필요해요",
+            description:
+              "선택한 사진 방법은 그대로 두었어요. 다시 눌러 안내를 확인하거나 직접 등록해 주세요.",
+          });
+          return;
+        }
+        setAwaitingConsent(false);
+        void openPhotoSelection(selectedSelection);
+      });
+      return () => {
+        active = false;
+      };
+    }, [
+      awaitingConsent,
+      openPhotoSelection,
+      refetchPrivacyStatus,
+      selectedSelection,
+    ]),
+  );
 
   const watchPhotoAd = async () => {
     try {
       const result = await photoAccess.watchRewardedAd();
       if (result === "verified") {
-        Alert.alert("사진 분석 1회가 준비됐어요", "이제 사진을 선택해 주세요.");
+        if (selectedSelection) {
+          if (!privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice) {
+            setAwaitingConsent(true);
+            router.push("/privacy/ai-data-notice?from=register-photo");
+            return;
+          }
+          await openPhotoSelection(selectedSelection, true);
+        } else {
+          setFlowIssue({
+            tone: "success",
+            title: "사진 분석 1회가 준비됐어요",
+            description: "아래에서 사용할 사진을 골라 주세요.",
+          });
+        }
       } else {
-        Alert.alert(
-          "광고 보상 확인 중",
-          "서버 확인이 끝나면 사진 선택 버튼이 자동으로 활성화돼요.",
-        );
+        setFlowIssue({
+          tone: "info",
+          title: "광고 보상을 확인하고 있어요",
+          description:
+            "확인이 끝나면 선택해 둔 방법을 그대로 다시 시도할 수 있어요.",
+        });
       }
     } catch (error) {
-      Alert.alert(
-        "광고를 완료하지 못했어요",
-        error instanceof Error
+      setFlowIssue({
+        title: "광고를 완료하지 못했어요",
+        description: error instanceof Error
           ? error.message
           : "잠시 후 다시 시도해 주세요.",
-        [
-          { text: "나중에 다시 시도", style: "cancel" },
-          {
-            text: "직접 등록",
-            onPress: () => router.replace(registerRoute(returnTo)),
-          },
-        ],
-      );
+      });
     }
   };
-
-  const accessUi = resolvePhotoParseAccessUi(
-    photoAccess.access,
-    photoAccess.adState,
-    photoAccess.isLoading,
-  );
-  const canSelectPhoto = accessUi.canSelectPhoto;
 
   const footer =
     step === "review" ? (
@@ -269,49 +386,123 @@ export default function RegisterPhotoScreen() {
   return (
     <>
       <Screen title={title} subtitle={subtitle} footer={footer}>
-        {step === "scene" ? (
-          <View style={styles.choiceStack}>
-            <Button
-              icon={ReceiptText}
-              onPress={() => {
-                setScene("receipt");
-                setStep("source");
-              }}
-              fullWidth
-            >
-              장보기 영수증이에요
-            </Button>
-            <Button
-              icon={Refrigerator}
-              onPress={() => {
-                setScene("fridge");
-                setStep("source");
-              }}
-              variant="surface"
-              fullWidth
-            >
-              냉장고 사진이에요
-            </Button>
-          </View>
-        ) : null}
-
-        {step === "source" ? (
+        {step === "choose" ? (
           <View style={styles.choiceStack}>
             <View style={styles.accessCard} accessibilityLiveRegion="polite">
-              <AppText style={styles.sectionTitle}>오늘 사진 분석 사용량</AppText>
-              <AppText variant="bodySmall" tone="subtext">
-                오늘 무료 {photoAccess.access?.free.used ?? 0}/
-                {photoAccess.access?.free.limit ?? 1}회
+              <View style={styles.accessHeadingRow}>
+                <AppText style={styles.sectionTitle}>사진 분석 이용 조건</AppText>
+                <AppText variant="caption" tone="primary">
+                  선택 전에 확인
+                </AppText>
+              </View>
+              <AppText variant="bodyStrong">
+                {photoAccessSummary(photoAccess.access, photoAccess.isLoading)}
               </AppText>
-              <AppText variant="bodySmall" tone="subtext">
-                광고 추가 사용 {photoAccess.access?.rewardedAds.verified ?? 0}/
-                {photoAccess.access?.rewardedAds.dailyLimit ?? 3}회
-              </AppText>
-              {photoAccess.access?.rewardedAds.creditsAvailable ? (
+              {photoAccess.access ? (
                 <AppText variant="bodySmall" tone="subtext">
-                  사용 가능한 사진 분석권 {photoAccess.access.rewardedAds.creditsAvailable}회
+                  무료 {photoAccess.access.free.used}/
+                  {photoAccess.access.free.limit}회 사용 · 광고 추가 {photoAccess.access.rewardedAds.verified}/
+                  {photoAccess.access.rewardedAds.dailyLimit}회 사용
                 </AppText>
               ) : null}
+              <AppText variant="bodySmall" tone="subtext">
+                {privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice
+                  ? "AI 데이터 안내 동의 완료"
+                  : "첫 이용 시 선택 후 AI 데이터 안내 동의가 필요해요."}
+              </AppText>
+            </View>
+
+            {flowIssue ? (
+              <FeedbackBanner
+                tone={flowIssue.tone}
+                title={flowIssue.title}
+                description={flowIssue.description}
+                showMascot={false}
+              />
+            ) : null}
+
+            <AppText style={styles.sectionTitle}>사진과 가져올 곳을 골라 주세요</AppText>
+            <PhotoChoiceCard
+              icon={ReceiptText}
+              title="영수증 촬영"
+              description="구매 목록을 한 번에 찾아요"
+              detail="글자가 잘 보이도록 펼쳐서 찍어 주세요."
+              recommended={isSamePhotoIntakeSelection(recentSelection, {
+                scene: "receipt",
+                source: "camera",
+              })}
+              selected={isSamePhotoIntakeSelection(selectedSelection, {
+                scene: "receipt",
+                source: "camera",
+              })}
+              onPress={() =>
+                void choosePhoto({ scene: "receipt", source: "camera" })
+              }
+            />
+            <PhotoChoiceCard
+              icon={Refrigerator}
+              title="냉장고 촬영"
+              description="보이는 재료를 여러 개 찾아요"
+              detail="밝은 곳에서 문 안쪽까지 보이게 찍어 주세요."
+              recommended={isSamePhotoIntakeSelection(recentSelection, {
+                scene: "fridge",
+                source: "camera",
+              })}
+              selected={isSamePhotoIntakeSelection(selectedSelection, {
+                scene: "fridge",
+                source: "camera",
+              })}
+              onPress={() =>
+                void choosePhoto({ scene: "fridge", source: "camera" })
+              }
+            />
+            <PhotoChoiceCard
+              icon={ImageIcon}
+              title="앨범에서 가져오기"
+              description={
+                albumScene === "receipt"
+                  ? "저장한 영수증에서 구매 목록을 찾아요"
+                  : "저장한 냉장고 사진에서 여러 재료를 찾아요"
+              }
+              detail="아래 사진 종류를 확인한 뒤 앨범을 열어 주세요."
+              recommended={isSamePhotoIntakeSelection(recentSelection, {
+                scene: albumScene,
+                source: "library",
+              })}
+              selected={isSamePhotoIntakeSelection(selectedSelection, {
+                scene: albumScene,
+                source: "library",
+              })}
+              onPress={() =>
+                void choosePhoto({ scene: albumScene, source: "library" })
+              }
+            />
+            <View style={styles.albumSceneCard}>
+              <AppText variant="bodySmall" tone="subtext">
+                앨범에서 가져올 사진 종류
+              </AppText>
+              <View style={styles.pillRow}>
+                <ScenePill
+                  label="영수증 사진"
+                  selected={albumScene === "receipt"}
+                  onPress={() => {
+                    setAlbumScene("receipt");
+                    if (selectedSelection?.source === "library") {
+                      setSelectedSelection(null);
+                    }
+                  }}
+                />
+                <ScenePill
+                  label="냉장고 사진"
+                  selected={albumScene === "fridge"}
+                  onPress={() => {
+                    setAlbumScene("fridge");
+                    if (selectedSelection?.source === "library") {
+                      setSelectedSelection(null);
+                    }
+                  }}
+                />
+              </View>
             </View>
 
             {accessUi.showVerifying ? (
@@ -337,44 +528,12 @@ export default function RegisterPhotoScreen() {
               </View>
             ) : null}
 
-            {accessUi.serviceUnavailable ? (
-              <AppText variant="bodySmall" tone="subtext">
-                지금은 추가 광고 분석을 사용할 수 없어요. 직접 등록하거나 나중에 다시 시도해 주세요.
-              </AppText>
-            ) : null}
-
             <Button
-              icon={Camera}
-              onPress={() => void startParse("camera")}
-              disabled={!canSelectPhoto || photoAccess.isLoading}
-              fullWidth
-            >
-              지금 찍을게요
-            </Button>
-            <Button
-              icon={ImageIcon}
-              onPress={() => void startParse("library")}
               variant="surface"
-              disabled={!canSelectPhoto || photoAccess.isLoading}
+              onPress={() => router.replace(registerRoute(returnTo))}
               fullWidth
             >
-              앨범에서 고를게요
-            </Button>
-            {!canSelectPhoto ? (
-              <Button
-                variant="surface"
-                onPress={() => router.replace(registerRoute(returnTo))}
-                fullWidth
-              >
-                직접 등록하기
-              </Button>
-            ) : null}
-            <Button
-              variant="secondary"
-              onPress={() => setStep("scene")}
-              fullWidth
-            >
-              다른 사진 종류로 바꿀게요
+              사진 없이 직접 등록하기
             </Button>
           </View>
         ) : null}
@@ -436,21 +595,32 @@ export default function RegisterPhotoScreen() {
                 accessibilityLabel={`${item.displayName} 고치기`}
                 style={({ pressed }) => [
                   styles.itemCard,
+                  (item.needsReview || !item.expiryDate) &&
+                    styles.itemCardNeedsAttention,
                   pressed && styles.itemCardPressed,
                 ]}
               >
                 <View style={styles.itemCopy}>
-                  <AppText style={styles.itemName}>{item.displayName}</AppText>
+                  <View style={styles.itemTitleRow}>
+                    <AppText style={styles.itemName}>{item.displayName}</AppText>
+                    {item.needsReview || !item.expiryDate ? (
+                      <View style={styles.attentionBadge}>
+                        <AppText variant="caption" tone="warning">
+                          확인 필요
+                        </AppText>
+                      </View>
+                    ) : null}
+                  </View>
                   <AppText variant="bodySmall" tone="subtext">
                     {item.quantity}
-                    {item.unit ?? "개"} · {resolveLabel(item.storageLocation)} ·{" "}
+                    {item.unit || "개"} · {resolveLabel(item.storageLocation)} ·{" "}
                     {item.expiryDate
                       ? formatDateKorean(item.expiryDate)
                       : "기한 없음"}
                   </AppText>
-                  {item.needsReview && item.reason ? (
-                    <AppText variant="caption" tone="muted">
-                      {item.reason}
+                  {item.needsReview || !item.expiryDate ? (
+                    <AppText variant="caption" tone="warning">
+                      {item.reason ?? "유통기한을 확인해 주세요."}
                     </AppText>
                   ) : null}
                 </View>
@@ -476,9 +646,24 @@ export default function RegisterPhotoScreen() {
         ) : null}
 
         {step === "review" && !items.length ? (
-          <Button onPress={() => setStep("source")} fullWidth>
-            다른 사진으로 다시 볼게요
-          </Button>
+          <View style={styles.choiceStack}>
+            <Button
+              onPress={() => {
+                setFlowIssue(null);
+                setStep("choose");
+              }}
+              fullWidth
+            >
+              다른 사진으로 다시 볼게요
+            </Button>
+            <Button
+              variant="surface"
+              onPress={() => router.replace(registerRoute(returnTo))}
+              fullWidth
+            >
+              사진 없이 직접 등록하기
+            </Button>
+          </View>
         ) : null}
 
         {step === "done" ? (
@@ -506,6 +691,14 @@ export default function RegisterPhotoScreen() {
                 updateItem(editingItem.localId, { displayName })
               }
               placeholder="재료 이름"
+            />
+            <QuantityStepper
+              label="수량"
+              value={editingItem.quantity}
+              unitSuffix={editingItem.unit || "개"}
+              onChange={(quantity) =>
+                updateItem(editingItem.localId, { quantity })
+              }
             />
             <DatePickerField
               label="유통기한"
@@ -566,6 +759,151 @@ export default function RegisterPhotoScreen() {
   }
 }
 
+function PhotoChoiceCard({
+  icon: Icon,
+  title,
+  description,
+  detail,
+  recommended,
+  selected,
+  onPress,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  detail: string;
+  recommended: boolean;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${title}, ${description}${recommended ? ", 최근 사용한 추천 방법" : ""}`}
+      accessibilityState={{ selected }}
+      style={({ pressed }) => [
+        styles.photoChoiceCard,
+        selected && styles.photoChoiceCardSelected,
+        pressed && styles.photoChoiceCardPressed,
+      ]}
+    >
+      <View style={styles.photoChoiceIcon}>
+        <Icon color={colors.primary} size={spacing.md} strokeWidth={2.2} />
+      </View>
+      <View style={styles.photoChoiceCopy}>
+        <View style={styles.photoChoiceTitleRow}>
+          <AppText variant="bodyStrong">{title}</AppText>
+          {recommended ? (
+            <View style={styles.recommendBadge}>
+              <AppText variant="caption" tone="primary">
+                최근 사용 · 추천
+              </AppText>
+            </View>
+          ) : null}
+        </View>
+        <AppText variant="bodySmall">{description}</AppText>
+        <AppText variant="caption" tone="subtext">
+          {detail}
+        </AppText>
+      </View>
+      {selected ? <Check color={colors.primary} size={spacing.sm} /> : null}
+    </Pressable>
+  );
+}
+
+function ScenePill({
+  label,
+  selected,
+  onPress,
+}: {
+  label: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      style={({ pressed }) => [
+        styles.pill,
+        selected && styles.pillSelected,
+        pressed && styles.pillPressed,
+      ]}
+    >
+      <AppText
+        style={[styles.pillLabel, selected && styles.pillLabelSelected]}
+      >
+        {label}
+      </AppText>
+    </Pressable>
+  );
+}
+
+function photoAccessSummary(
+  access: InventoryPhotoParseAccess | undefined,
+  isLoading: boolean,
+) {
+  if (!access) {
+    return isLoading
+      ? "사용 가능한 횟수를 확인하고 있어요"
+      : "이용 조건을 불러오지 못했어요";
+  }
+  if (access.canParse) {
+    if (access.rewardedAds.creditsAvailable > 0) {
+      return `사진 분석권 ${access.rewardedAds.creditsAvailable}회 사용 가능`;
+    }
+    const remaining = Math.max(0, access.free.limit - access.free.used);
+    return `오늘 무료 분석 ${remaining}회 남았어요`;
+  }
+  if (access.requiredAction === "watch_ad") {
+    return "무료 분석 사용 완료 · 광고 시청 후 1회 가능";
+  }
+  if (access.requiredAction === "daily_limit_reached") {
+    return `오늘 사용 가능 횟수를 모두 썼어요 · ${formatResetTime(access.resetsAt)} 초기화`;
+  }
+  return "지금은 광고 사진 분석을 사용할 수 없어요";
+}
+
+function photoAccessIssue(
+  access: InventoryPhotoParseAccess | undefined,
+  adState: "idle" | "loading" | "verifying",
+): FlowIssue {
+  if (adState === "verifying") {
+    return {
+      tone: "info",
+      title: "광고 보상을 확인하고 있어요",
+      description: "확인이 끝나면 선택한 방법으로 다시 시도해 주세요.",
+    };
+  }
+  if (!access) {
+    return {
+      title: "사진 분석 이용 조건을 확인하지 못했어요",
+      description: "잠시 후 같은 선택을 다시 눌러 주세요.",
+    };
+  }
+  if (access.requiredAction === "watch_ad") {
+    return {
+      tone: "warning",
+      title: "사진 분석 1회가 더 필요해요",
+      description:
+        "아래 광고를 완료하면 지금 고른 사진 방법으로 바로 이어갈 수 있어요.",
+    };
+  }
+  if (access.requiredAction === "daily_limit_reached") {
+    return {
+      tone: "warning",
+      title: "오늘 사진 분석 횟수를 모두 사용했어요",
+      description: `${formatResetTime(access.resetsAt)}에 다시 시도하거나 직접 등록해 주세요.`,
+    };
+  }
+  return {
+    title: "지금은 사진 분석을 사용할 수 없어요",
+    description: "잠시 후 다시 시도하거나 사진 없이 직접 등록해 주세요.",
+  };
+}
+
 function formatResetTime(value?: string) {
   if (!value) return "다음 KST 자정";
   return new Intl.DateTimeFormat("ko-KR", {
@@ -586,6 +924,63 @@ const styles = StyleSheet.create({
     borderRadius: radius.xxl,
     padding: spacing.md,
     gap: spacing.xxs,
+  },
+  accessHeadingRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.xs,
+  },
+  photoChoiceCard: {
+    minHeight: touchTarget.ctaLarge,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    padding: spacing.md,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  photoChoiceCardSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+  },
+  photoChoiceCardPressed: {
+    opacity: 0.86,
+  },
+  photoChoiceIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+  },
+  photoChoiceCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  photoChoiceTitleRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  recommendBadge: {
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    backgroundColor: colors.primarySoftPressed,
+  },
+  albumSceneCard: {
+    marginTop: -spacing.xs,
+    padding: spacing.sm,
+    gap: spacing.xs,
+    borderRadius: radius.lg,
+    backgroundColor: colors.mutedSurface,
   },
   limitCard: {
     backgroundColor: colors.mutedSurface,
@@ -660,10 +1055,26 @@ const styles = StyleSheet.create({
   itemCardPressed: {
     opacity: 0.86,
   },
+  itemCardNeedsAttention: {
+    borderColor: colors.warning,
+    backgroundColor: colors.warningSoft,
+  },
   itemCopy: {
     flex: 1,
     minWidth: 0,
     gap: spacing.xxs,
+  },
+  itemTitleRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  attentionBadge: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
   },
   itemName: {
     fontSize: typography.body.fontSize,
