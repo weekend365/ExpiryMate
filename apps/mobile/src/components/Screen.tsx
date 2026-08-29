@@ -92,6 +92,13 @@ export function Screen({
     insets.bottom + spacing.md,
     spacing.xxxl + spacing.sm,
   );
+  // A sticky footer already owns the bottom safe area and its own spacing.
+  // Keeping the navigator's content minimum on static screens leaves a large
+  // dead band between the last visible content and the CTA (notably on the
+  // home, recommendations, and inventory tab screens).
+  const resolvedContentBottomPadding = footer && !scroll
+    ? spacing.none
+    : contentBottomPadding;
   const footerBottomPadding = getBottomInsetPadding(
     bottomInsetMode,
     insets.bottom,
@@ -179,7 +186,7 @@ export function Screen({
               density === "compact" && styles.contentCompact,
               constrainedContentStyle,
               contentStyle,
-              { paddingBottom: contentBottomPadding },
+              { paddingBottom: resolvedContentBottomPadding },
             ]}
             showsVerticalScrollIndicator={false}
             refreshControl={refreshControl}
@@ -196,7 +203,7 @@ export function Screen({
               styles.staticContent,
               constrainedContentStyle,
               contentStyle,
-              { paddingBottom: contentBottomPadding },
+              { paddingBottom: resolvedContentBottomPadding },
             ]}
           >
             {content}

@@ -19,6 +19,7 @@ interface ButtonProps extends PropsWithChildren {
   fullWidth?: boolean;
   disabled?: boolean;
   loading?: boolean;
+  accessibilityLabel?: string;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -33,6 +34,7 @@ export function Button({
   fullWidth,
   disabled,
   loading,
+  accessibilityLabel,
   style,
   testID,
 }: ButtonProps) {
@@ -63,7 +65,10 @@ export function Button({
       onPress={onPress}
       disabled={isDisabled}
       accessibilityRole="button"
-      accessibilityLabel={typeof children === "string" ? children : undefined}
+      accessibilityLabel={
+        accessibilityLabel ??
+        (typeof children === "string" ? children : undefined)
+      }
       accessibilityState={{ disabled: isDisabled, busy: Boolean(loading) }}
       testID={testID}
       style={({ pressed }) => [

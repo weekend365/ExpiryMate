@@ -26,7 +26,10 @@ import {
   getHomeNotices,
   type HomeNoticeAction,
 } from "../../src/features/home/home-notices";
-import { HomeQuickEntry } from "../../src/features/home/home-quick-entry";
+import {
+  HomeQuickEntry,
+  HomeShoppingCard,
+} from "../../src/features/home/home-quick-entry";
 import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
 import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
@@ -118,8 +121,6 @@ export default function HomeScreen() {
       (ingredient) =>
         ingredient.daysUntilExpiry != null && ingredient.daysUntilExpiry <= 7,
     ) ?? false;
-  const emphasizeEntryActions = hasLoaded && !isInitialError && !hasInventory;
-
   const openInventoryFilter = (nextFilter: InventoryViewFilter) => {
     router.push({
       pathname: "/(tabs)/inventory",
@@ -185,6 +186,15 @@ export default function HomeScreen() {
       contentWidth="wide"
       bottomInsetMode="navigator"
       testID="home-screen"
+      footer={
+        <HomeQuickEntry
+          onOpenScanner={handleOpenScanner}
+          onManualRegister={handleManualRegister}
+          onOpenPhotoParse={
+            isInventoryPhotoParseEnabled() ? handleOpenPhotoParse : undefined
+          }
+        />
+      }
       contentStyle={styles.screenContent}
     >
       <View style={styles.homeScene}>
@@ -482,16 +492,9 @@ export default function HomeScreen() {
                 </AppText>
               </View>
             )}
-            <HomeQuickEntry
-              emphasizeEntryActions={emphasizeEntryActions}
-              onOpenScanner={handleOpenScanner}
-              onManualRegister={handleManualRegister}
-              onOpenShopping={handleOpenShopping}
-              onOpenPhotoParse={
-                isInventoryPhotoParseEnabled() ? handleOpenPhotoParse : undefined
-              }
-            />
           </View>
+
+          <HomeShoppingCard onOpenShopping={handleOpenShopping} />
         </ScrollView>
       </View>
     </Screen>
@@ -545,4 +548,3 @@ function formatRecommendationCreatedAt(createdAt: string) {
     return "최근 추천";
   }
 }
-

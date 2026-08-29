@@ -89,15 +89,36 @@ export const homeScreenStyles = StyleSheet.create({
   recommendationRetry: {
     alignSelf: "flex-start",
   },
-  quickEntrySection: {
-    gap: spacing.xs,
-    paddingTop: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  quickEntryActions: {
+  entryMethodActions: {
     flexDirection: "column",
     gap: spacing.xs,
+  },
+  shoppingCard: {
+    minHeight: touchTarget.cta,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    padding: spacing.sm,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  shoppingCardPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  shoppingIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+  },
+  shoppingCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
   },
   trafficGroup: {
     gap: spacing.sm,
