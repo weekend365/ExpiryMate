@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-release
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-29
 source_of_truth: true
 ---
 
@@ -10,25 +10,20 @@ source_of_truth: true
 Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight/App Store** 를 켜기 위한 체크리스트입니다.  
 코드 쪽 설정은 `apps/mobile/app.json`, `app.config.js`, `eas.json`, `ios/ExpiryMate/ExpiryMate.entitlements`에 반영되어 있습니다.
 
-## 0. 집에서 Mac으로 이어서 할 일 — URL 반영용 `1.1.0` 빌드
+## 0. 개인 플러스 `1.4.0` 업데이트 빌드
 
-목적: App Store **마케팅/지원 URL**을 `https://jango.devnamu.com` 으로 반영해 AdMob
-`app-ads.txt` 인증을 통과하기 위한 **스토어용 iOS 빌드**만 올립니다. 기능 코드 변경은
-필요 없습니다.
+장고야 부탁해는 App Store에 `1.3.0`까지 공개되어 있습니다. 개인 플러스와 인사이트를
+추가하는 다음 업데이트는 `1.4.0`으로 제출합니다. 첫 자동 갱신 구독이므로 새 앱 버전,
+구독 그룹, 월간·연간 상품을 같은 App Review 제출에 포함합니다.
 
-### 이미 끝난 것 (다른 PC)
+### 버전 기준
 
-- EAS remote iOS `buildNumber` 확인: **24** → 실패 빌드 시도 시 **25**까지 증가됨
-- `apps/mobile/app.json` 의 `expo.version` 은 이미 **`1.1.0`**
-- production 빌드 시도 실패:
-  - 빌드 ID: `1f88a5f6-8037-43a4-97cb-0487a4fd94a6`
-  - 단계: **Read app config**
-  - 원인 후보: EAS **production** 환경에 AdMob용 `EXPO_PUBLIC_*` 가 비어
-    `validateExpoPublicEnv` 가 실패함 (로컬 셸에 production secrets 없이 돌린 환경)
-  - 참고: 커밋된 native `ios/` 는 아직 **마케팅 버전 `1.0.0`**
-    (`Info.plist` / `MARKETING_VERSION`). `eas.json` 의
-    `appVersionSource: "remote"` + native 디렉터리 때문에 바이너리 version이
-    `1.0.0` 으로 잡힐 수 있음 → Mac에서 **native도 `1.1.0`에 맞춘 뒤** 빌드
+- `apps/mobile/app.json`의 `expo.version`: `1.4.0`
+- `ios/ExpiryMate/Info.plist`의 `CFBundleShortVersionString`: `1.4.0`
+- Xcode Debug/Release `MARKETING_VERSION`: `1.4.0`
+- `eas.json`은 `appVersionSource: "remote"`, production `autoIncrement: true`이므로
+  iOS build number와 Android versionCode는 EAS의 현재 원격 값에서 증가시킵니다.
+- 로컬 `buildNumber: "1"`, `versionCode: 1`은 원격 버전 정본이 아닙니다.
 
 ### Mac에서 순서대로
 
@@ -65,8 +60,7 @@ EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID
 EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID
 ```
 
-3. **버전 문자열을 native와 맞춤** (Connect에는 **`1.1.0`** 버전 사용.
-   `1.0.1`로 내리지 말 것):
+3. **버전 문자열과 원격 빌드 번호 확인** (Connect에는 **`1.4.0`** 사용):
 
 ```bash
 # remote buildNumber만 확인 (다운그레이드 금지)
@@ -75,9 +69,9 @@ pnpm dlx eas-cli@21.2.0 build:version:get -p ios
 
 native 수정 (또는 `npx expo prebuild`로 동기화한 뒤 검수):
 
-- `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.1.0`
-- `ios/ExpiryMate.xcodeproj/project.pbxproj` → `MARKETING_VERSION = 1.1.0`
-- `app.json` → `"version": "1.1.0"` 유지
+- `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.4.0`
+- `ios/ExpiryMate.xcodeproj/project.pbxproj` → `MARKETING_VERSION = 1.4.0`
+- `app.json` → `"version": "1.4.0"` 유지
 - `CFBundleVersion` / `CURRENT_PROJECT_VERSION` 은 production
   `autoIncrement` 가 remote에서 올리므로 로컬 `"1"`에 집착하지 않아도 됨
 
@@ -93,8 +87,7 @@ pnpm dlx eas-cli@21.2.0 build --platform ios --profile production
 
 5. **App Store Connect (수동)**
 
-- 새 iOS 버전 **`1.1.0`** 생성 (이미 `1.0.1`만 만들어 둔 경우 → `1.1.0`으로 맞추거나
-  해당 초안 폐기 후 `1.1.0` 생성)
+- 기존 앱에 새 iOS 버전 **`1.4.0`** 생성
 - 방금 빌드 연결
 - **마케팅 URL:** `https://jango.devnamu.com`
 - **지원 URL:** `https://jango.devnamu.com/privacy/choices`

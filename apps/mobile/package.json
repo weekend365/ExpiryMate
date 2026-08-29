@@ -28,7 +28,9 @@
     "screenshots:compare": "node scripts/compare-layout-screenshots.mjs",
     "screenshots:update": "node scripts/compare-layout-screenshots.mjs --update",
     "branding:sync": "python3 scripts/sync-branding-from-jango.py",
-    "mascot:build": "node scripts/build-mascot-runtime-assets.mjs"
+    "mascot:small:build": "node scripts/derive-mascot-small-assets.mjs",
+    "mascot:audit": "node scripts/audit-mascot-proportions.mjs --check && node scripts/audit-mascot-small-fidelity.mjs --check",
+    "mascot:build": "node scripts/derive-mascot-small-assets.mjs && node scripts/build-mascot-runtime-assets.mjs"
   },
   "dependencies": {
     "@expirymate/shared": "workspace:*",

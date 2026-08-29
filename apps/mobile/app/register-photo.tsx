@@ -6,23 +6,16 @@ import {
   type InventoryPhotoParseScene,
 } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CameraView } from "expo-camera";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import {
-  Check,
-  ImageIcon,
-  Refrigerator,
-  ReceiptText,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react-native";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Trash2 } from "lucide-react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../src/components/AppText";
 import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
-import { FeedbackBanner } from "../src/components/FeedbackBanner";
 import { Mascot } from "../src/components/Mascot";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
@@ -47,8 +40,8 @@ import {
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
 import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-photo";
+import { PhotoCaptureScreen } from "../src/features/photo-intake/photo-capture-screen";
 import {
-  isSamePhotoIntakeSelection,
   loadRecentPhotoIntakeSelection,
   saveRecentPhotoIntakeSelection,
   type PhotoIntakeSelection,
@@ -89,18 +82,21 @@ export default function RegisterPhotoScreen() {
   const privacyStatusQuery = usePrivacyStatus();
   const photoAccess = usePhotoParseAccess();
   const { selectableOptions, resolveLabel } = useStorageLocations();
+  const cameraRef = useRef<CameraView>(null);
   const defaultLocation =
     selectableOptions[0]?.key ?? StorageLocation.FRIDGE;
 
   const [step, setStep] = useState<PhotoIntakeStep>("choose");
-  const [selectedSelection, setSelectedSelection] =
+  const [pendingSelection, setPendingSelection] =
     useState<PhotoIntakeSelection | null>(null);
-  const [recentSelection, setRecentSelection] =
-    useState<PhotoIntakeSelection | null>(null);
-  const [albumScene, setAlbumScene] =
+  const [selectedScene, setSelectedScene] =
     useState<InventoryPhotoParseScene>("receipt");
   const [awaitingConsent, setAwaitingConsent] = useState(false);
   const [flowIssue, setFlowIssue] = useState<FlowIssue | null>(null);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isAcquiringPhoto, setIsAcquiringPhoto] = useState(false);
+  const [accessDetailsVisible, setAccessDetailsVisible] = useState(false);
+  const [accessGateVisible, setAccessGateVisible] = useState(false);
   const [items, setItems] = useState<PhotoIntakeDraftItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [savedCount, setSavedCount] = useState(0);
@@ -129,6 +125,7 @@ export default function RegisterPhotoScreen() {
       void photoAccess.refresh();
     },
     onError: (error) => {
+      setIsCameraReady(false);
       setStep("choose");
       void photoAccess.refresh();
       if (error instanceof ApiError && error.status === 412) {
@@ -186,9 +183,12 @@ export default function RegisterPhotoScreen() {
   const refetchPrivacyStatus = privacyStatusQuery.refetch;
 
   const readyCount = photoIntakeReadyCount(items);
+  const attentionCount = items.filter(
+    (item) => item.needsReview || !item.expiryDate,
+  ).length;
   const canSubmit = canSubmitPhotoIntake(items);
   const editingItem = items.find((item) => item.localId === editingId) ?? null;
-  const scene = selectedSelection?.scene ?? albumScene;
+  const scene = selectedScene;
   const accessUi = resolvePhotoParseAccessUi(
     photoAccess.access,
     photoAccess.adState,
@@ -201,8 +201,7 @@ export default function RegisterPhotoScreen() {
     void loadRecentPhotoIntakeSelection(sessionUserId)
       .then((selection) => {
         if (!active || !selection) return;
-        setRecentSelection(selection);
-        setAlbumScene(selection.scene);
+        setSelectedScene(selection.scene);
       })
       .catch(() => undefined);
     return () => {
@@ -232,60 +231,81 @@ export default function RegisterPhotoScreen() {
     return `${savedCount}가지를 냉장고에 잘 넣어 뒀어요.`;
   }, [items.length, savedCount, step]);
 
-  const openPhotoSelection = useCallback(
-    async (selection: PhotoIntakeSelection, skipAccessCheck = false) => {
-      if (!skipAccessCheck && !accessUi.canSelectPhoto) {
-        setFlowIssue(photoAccessIssue(photoAccess.access, photoAccess.adState));
-        return;
-      }
-
+  const acquirePhoto = useCallback(
+    async (selection: PhotoIntakeSelection) => {
       setFlowIssue(null);
+      setIsAcquiringPhoto(true);
       try {
-        const result = await pickInventoryPhoto(selection.source);
-        if (result.status === "cancelled") return;
-        if (result.status === "permission-denied") {
-          setFlowIssue({
-            title:
-              selection.source === "camera"
-                ? "카메라 권한이 필요해요"
-                : "사진 접근 권한이 필요해요",
-            description:
-              selection.source === "camera"
-                ? "권한을 허용한 뒤 같은 영수증 또는 냉장고 촬영을 다시 눌러 주세요."
-                : "권한을 허용한 뒤 선택해 둔 앨범 사진 종류로 다시 시도해 주세요.",
+        const photo = selection.source === "camera"
+          ? await cameraRef.current?.takePictureAsync({
+              quality: 0.7,
+              exif: false,
+              shutterSound: true,
+            })
+          : null;
+
+        if (selection.source === "camera") {
+          if (!photo?.uri) {
+            throw new Error("카메라가 아직 준비되지 않았어요. 잠시 후 다시 찍어 주세요.");
+          }
+          if (sessionUserId) {
+            void saveRecentPhotoIntakeSelection(sessionUserId, selection).catch(
+              () => undefined,
+            );
+          }
+          setIsCameraReady(false);
+          setStep("loading");
+          parsePhoto({
+            photo: {
+              uri: photo.uri.startsWith("file://")
+                ? photo.uri
+                : `file://${photo.uri}`,
+              mimeType: "image/jpeg",
+              fileName: "inventory-photo.jpg",
+            },
+            scene: selection.scene,
           });
           return;
         }
 
-        setRecentSelection(selection);
+        const result = await pickInventoryPhoto("library");
+        if (result.status === "cancelled") return;
+        if (result.status === "permission-denied") {
+          setFlowIssue({
+            title: "사진 접근 권한이 필요해요",
+            description:
+              "권한을 허용한 뒤 현재 선택한 사진 종류로 다시 시도해 주세요.",
+          });
+          return;
+        }
         if (sessionUserId) {
           void saveRecentPhotoIntakeSelection(sessionUserId, selection).catch(
             () => undefined,
           );
         }
+        setIsCameraReady(false);
         setStep("loading");
         parsePhoto({ photo: result.photo, scene: selection.scene });
       } catch (error) {
         setFlowIssue({
-          title: "사진 선택기를 열지 못했어요",
+          title:
+            selection.source === "camera"
+              ? "사진을 찍지 못했어요"
+              : "앨범을 열지 못했어요",
           description:
             error instanceof Error
               ? error.message
               : "잠시 후 같은 방법으로 다시 시도해 주세요.",
         });
+      } finally {
+        setIsAcquiringPhoto(false);
       }
     },
-    [
-      accessUi.canSelectPhoto,
-      parsePhoto,
-      photoAccess.access,
-      photoAccess.adState,
-      sessionUserId,
-    ],
+    [parsePhoto, sessionUserId],
   );
 
   const choosePhoto = async (selection: PhotoIntakeSelection) => {
-    setSelectedSelection(selection);
+    setPendingSelection(selection);
     setFlowIssue(null);
     const privacyStatus =
       privacyStatusQuery.data ?? (await refetchPrivacyStatus()).data;
@@ -294,12 +314,16 @@ export default function RegisterPhotoScreen() {
       router.push("/privacy/ai-data-notice?from=register-photo");
       return;
     }
-    void openPhotoSelection(selection);
+    if (!accessUi.canSelectPhoto) {
+      setAccessGateVisible(true);
+      return;
+    }
+    void acquirePhoto(selection);
   };
 
   useFocusEffect(
     useCallback(() => {
-      if (!awaitingConsent || !selectedSelection) return undefined;
+      if (!awaitingConsent || !pendingSelection) return undefined;
       let active = true;
       void refetchPrivacyStatus().then((result) => {
         if (!active) return;
@@ -313,16 +337,22 @@ export default function RegisterPhotoScreen() {
           return;
         }
         setAwaitingConsent(false);
-        void openPhotoSelection(selectedSelection);
+        setFlowIssue({
+          tone: "success",
+          title: "AI 데이터 안내에 동의했어요",
+          description:
+            pendingSelection.source === "camera"
+              ? "촬영 버튼을 누르면 지금 고른 사진 종류로 이어갈게요."
+              : "앨범 버튼을 다시 누르면 지금 고른 사진 종류로 이어갈게요.",
+        });
       });
       return () => {
         active = false;
       };
     }, [
       awaitingConsent,
-      openPhotoSelection,
+      pendingSelection,
       refetchPrivacyStatus,
-      selectedSelection,
     ]),
   );
 
@@ -330,20 +360,16 @@ export default function RegisterPhotoScreen() {
     try {
       const result = await photoAccess.watchRewardedAd();
       if (result === "verified") {
-        if (selectedSelection) {
-          if (!privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice) {
-            setAwaitingConsent(true);
-            router.push("/privacy/ai-data-notice?from=register-photo");
-            return;
-          }
-          await openPhotoSelection(selectedSelection, true);
-        } else {
-          setFlowIssue({
-            tone: "success",
-            title: "사진 분석 1회가 준비됐어요",
-            description: "아래에서 사용할 사진을 골라 주세요.",
-          });
-        }
+        await photoAccess.refresh();
+        setAccessGateVisible(false);
+        setFlowIssue({
+          tone: "success",
+          title: "사진 분석 1회가 준비됐어요",
+          description:
+            pendingSelection?.source === "library"
+              ? "앨범 버튼을 다시 누르면 선택한 종류로 이어갈게요."
+              : "촬영 버튼을 누르면 선택한 종류로 이어갈게요.",
+        });
       } else {
         setFlowIssue({
           tone: "info",
@@ -382,173 +408,63 @@ export default function RegisterPhotoScreen() {
         냉장고로 돌아갈게요
       </Button>
     ) : null;
+  const gateIssue = photoAccessIssue(
+    photoAccess.access,
+    photoAccess.adState,
+  );
 
   return (
     <>
-      <Screen title={title} subtitle={subtitle} footer={footer}>
-        {step === "choose" ? (
-          <View style={styles.choiceStack}>
-            <View style={styles.accessCard} accessibilityLiveRegion="polite">
-              <View style={styles.accessHeadingRow}>
-                <AppText style={styles.sectionTitle}>사진 분석 이용 조건</AppText>
-                <AppText variant="caption" tone="primary">
-                  선택 전에 확인
-                </AppText>
-              </View>
-              <AppText variant="bodyStrong">
-                {photoAccessSummary(photoAccess.access, photoAccess.isLoading)}
-              </AppText>
-              {photoAccess.access ? (
-                <AppText variant="bodySmall" tone="subtext">
-                  {photoAccess.access.subscriptionQuota
-                    ? `이번 달 ${photoAccess.access.subscriptionQuota.monthly.used}/${photoAccess.access.subscriptionQuota.monthly.limit}회 · 오늘 ${photoAccess.access.subscriptionQuota.daily.used}/${photoAccess.access.subscriptionQuota.daily.limit}회 사용`
-                    : `무료 ${photoAccess.access.free.used}/${photoAccess.access.free.limit}회 사용 · 광고 추가 ${photoAccess.access.rewardedAds.verified}/${photoAccess.access.rewardedAds.dailyLimit}회 사용`}
-                </AppText>
-              ) : null}
-              <AppText variant="bodySmall" tone="subtext">
-                {privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice
-                  ? "AI 데이터 안내 동의 완료"
-                  : "첫 이용 시 선택 후 AI 데이터 안내 동의가 필요해요."}
+      {step === "choose" ? (
+        <PhotoCaptureScreen
+          cameraRef={cameraRef}
+          scene={selectedScene}
+          accessLabel={photoAccessSummary(
+            photoAccess.access,
+            photoAccess.isLoading,
+          )}
+          issue={flowIssue}
+          isBusy={isAcquiringPhoto}
+          isActive={!awaitingConsent}
+          isCameraReady={isCameraReady}
+          onCameraReady={() => setIsCameraReady(true)}
+          onClose={() => router.replace(registrationReturnHref(returnTo))}
+          onSceneChange={(nextScene) => {
+            setSelectedScene(nextScene);
+            setPendingSelection(null);
+            setFlowIssue(null);
+          }}
+          onCapture={() => {
+            void choosePhoto({ scene: selectedScene, source: "camera" });
+          }}
+          onOpenLibrary={() => {
+            void choosePhoto({ scene: selectedScene, source: "library" });
+          }}
+          onShowAccessDetails={() => setAccessDetailsVisible(true)}
+        />
+      ) : (
+        <Screen title={title} subtitle={subtitle} footer={footer}>
+          {step === "loading" ? (
+            <View style={styles.loadingCard}>
+              <PhotoFlowProgress current={1} />
+              <Mascot mood="think" size="large" />
+              <AppText variant="body" tone="subtext">
+                글자와 재료를 천천히 읽고 있어요.
               </AppText>
             </View>
-
-            {flowIssue ? (
-              <FeedbackBanner
-                tone={flowIssue.tone}
-                title={flowIssue.title}
-                description={flowIssue.description}
-                showMascot={false}
-              />
-            ) : null}
-
-            <AppText style={styles.sectionTitle}>사진과 가져올 곳을 골라 주세요</AppText>
-            <PhotoChoiceCard
-              icon={ReceiptText}
-              title="영수증 촬영"
-              description="구매 목록을 한 번에 찾아요"
-              detail="글자가 잘 보이도록 펼쳐서 찍어 주세요."
-              recommended={isSamePhotoIntakeSelection(recentSelection, {
-                scene: "receipt",
-                source: "camera",
-              })}
-              selected={isSamePhotoIntakeSelection(selectedSelection, {
-                scene: "receipt",
-                source: "camera",
-              })}
-              onPress={() =>
-                void choosePhoto({ scene: "receipt", source: "camera" })
-              }
-            />
-            <PhotoChoiceCard
-              icon={Refrigerator}
-              title="냉장고 촬영"
-              description="보이는 재료를 여러 개 찾아요"
-              detail="밝은 곳에서 문 안쪽까지 보이게 찍어 주세요."
-              recommended={isSamePhotoIntakeSelection(recentSelection, {
-                scene: "fridge",
-                source: "camera",
-              })}
-              selected={isSamePhotoIntakeSelection(selectedSelection, {
-                scene: "fridge",
-                source: "camera",
-              })}
-              onPress={() =>
-                void choosePhoto({ scene: "fridge", source: "camera" })
-              }
-            />
-            <PhotoChoiceCard
-              icon={ImageIcon}
-              title="앨범에서 가져오기"
-              description={
-                albumScene === "receipt"
-                  ? "저장한 영수증에서 구매 목록을 찾아요"
-                  : "저장한 냉장고 사진에서 여러 재료를 찾아요"
-              }
-              detail="아래 사진 종류를 확인한 뒤 앨범을 열어 주세요."
-              recommended={isSamePhotoIntakeSelection(recentSelection, {
-                scene: albumScene,
-                source: "library",
-              })}
-              selected={isSamePhotoIntakeSelection(selectedSelection, {
-                scene: albumScene,
-                source: "library",
-              })}
-              onPress={() =>
-                void choosePhoto({ scene: albumScene, source: "library" })
-              }
-            />
-            <View style={styles.albumSceneCard}>
-              <AppText variant="bodySmall" tone="subtext">
-                앨범에서 가져올 사진 종류
-              </AppText>
-              <View style={styles.pillRow}>
-                <ScenePill
-                  label="영수증 사진"
-                  selected={albumScene === "receipt"}
-                  onPress={() => {
-                    setAlbumScene("receipt");
-                    if (selectedSelection?.source === "library") {
-                      setSelectedSelection(null);
-                    }
-                  }}
-                />
-                <ScenePill
-                  label="냉장고 사진"
-                  selected={albumScene === "fridge"}
-                  onPress={() => {
-                    setAlbumScene("fridge");
-                    if (selectedSelection?.source === "library") {
-                      setSelectedSelection(null);
-                    }
-                  }}
-                />
-              </View>
-            </View>
-
-            {accessUi.showVerifying ? (
-              <Button onPress={() => undefined} disabled fullWidth>
-                광고 보상 확인 중
-              </Button>
-            ) : accessUi.showWatchAd ? (
-              <Button
-                onPress={() => void watchPhotoAd()}
-                loading={photoAccess.adState === "loading"}
-                fullWidth
-              >
-                광고 보고 사진 분석 1회 받기
-              </Button>
-            ) : null}
-
-            {accessUi.dailyLimitReached ? (
-              <View style={styles.limitCard} accessibilityLiveRegion="polite">
-                <AppText variant="bodyStrong">오늘 분석 4회를 모두 사용했어요</AppText>
-                <AppText variant="bodySmall" tone="subtext">
-                  {formatResetTime(photoAccess.access?.resetsAt)}에 다시 사용할 수 있어요.
-                </AppText>
-              </View>
-            ) : null}
-
-            <Button
-              variant="surface"
-              onPress={() => router.replace(registerRoute(returnTo))}
-              fullWidth
-            >
-              사진 없이 직접 등록하기
-            </Button>
-          </View>
-        ) : null}
-
-        {step === "loading" ? (
-          <View style={styles.loadingCard}>
-            <Mascot mood="think" size="large" />
-            <AppText variant="body" tone="subtext">
-              글자와 재료를 천천히 읽고 있어요.
-            </AppText>
-          </View>
-        ) : null}
+          ) : null}
 
         {step === "review" && items.length ? (
           <View style={styles.reviewStack}>
+            <PhotoFlowProgress current={2} />
+            <View style={styles.reviewSummary}>
+              <AppText variant="bodyStrong">
+                확인 필요 {attentionCount}개 · 바로 저장 {items.length - attentionCount}개
+              </AppText>
+              <AppText variant="bodySmall" tone="subtext">
+                확인이 필요한 재료를 먼저 모아 뒀어요.
+              </AppText>
+            </View>
             {scene === "fridge" ? (
               <AppText variant="bodySmall" tone="subtext">
                 냉장고 사진은 가려진 재료를 놓칠 수 있어요. 한번만 더 봐 주세요.
@@ -647,6 +563,7 @@ export default function RegisterPhotoScreen() {
 
         {step === "review" && !items.length ? (
           <View style={styles.choiceStack}>
+            <PhotoFlowProgress current={2} />
             <Button
               onPress={() => {
                 setFlowIssue(null);
@@ -671,14 +588,100 @@ export default function RegisterPhotoScreen() {
             <Mascot mood="happy" size="large" />
           </View>
         ) : null}
-      </Screen>
+        </Screen>
+      )}
+
+      <BottomSheet
+        visible={accessDetailsVisible}
+        onClose={() => setAccessDetailsVisible(false)}
+        title="사진 분석 안내"
+        description="촬영이나 앨범 선택 전에는 필요한 정보만 간단히 보여 드려요."
+        footer={
+          <Button onPress={() => setAccessDetailsVisible(false)} fullWidth>
+            확인했어요
+          </Button>
+        }
+      >
+        <View style={styles.sheetStack}>
+          <View style={styles.policyCard}>
+            <AppText variant="bodyStrong">
+              {photoAccessSummary(photoAccess.access, photoAccess.isLoading)}
+            </AppText>
+            {photoAccess.access ? (
+              <AppText variant="bodySmall" tone="subtext">
+                {photoAccess.access.subscriptionQuota
+                  ? `이번 달 ${photoAccess.access.subscriptionQuota.monthly.used}/${photoAccess.access.subscriptionQuota.monthly.limit}회 · 오늘 ${photoAccess.access.subscriptionQuota.daily.used}/${photoAccess.access.subscriptionQuota.daily.limit}회 사용`
+                  : `무료 ${photoAccess.access.free.used}/${photoAccess.access.free.limit}회 사용 · 광고 추가 ${photoAccess.access.rewardedAds.verified}/${photoAccess.access.rewardedAds.dailyLimit}회 사용`}
+              </AppText>
+            ) : null}
+          </View>
+          <View style={styles.policyCard}>
+            <AppText variant="bodyStrong">AI 데이터 안내</AppText>
+            <AppText variant="bodySmall" tone="subtext">
+              {privacyStatusQuery.data?.hasAcceptedCurrentAiDataNotice
+                ? "현재 안내에 동의했어요. 선택한 사진만 분석에 사용해요."
+                : "처음 분석할 때 안내를 확인하고 동의한 뒤 사진을 사용해요."}
+            </AppText>
+          </View>
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
+        visible={accessGateVisible}
+        onClose={() => setAccessGateVisible(false)}
+        title={gateIssue.title}
+        description={gateIssue.description}
+        footer={
+          <View style={styles.sheetStack}>
+            {accessUi.showVerifying ? (
+              <Button onPress={() => undefined} disabled fullWidth>
+                광고 보상 확인 중
+              </Button>
+            ) : accessUi.showWatchAd ? (
+              <Button
+                onPress={() => void watchPhotoAd()}
+                loading={photoAccess.adState === "loading"}
+                fullWidth
+              >
+                광고 보고 사진 분석 1회 받기
+              </Button>
+            ) : (
+              <Button onPress={() => setAccessGateVisible(false)} fullWidth>
+                확인했어요
+              </Button>
+            )}
+            <Button
+              variant="surface"
+              onPress={() => router.replace(registerRoute(returnTo))}
+              fullWidth
+            >
+              사진 없이 직접 등록하기
+            </Button>
+          </View>
+        }
+      >
+        <AppText variant="bodySmall" tone="subtext">
+          고른 사진 종류는 유지돼요. 준비가 끝나면 촬영 또는 앨범 버튼을 다시 눌러 주세요.
+        </AppText>
+      </BottomSheet>
 
       <BottomSheet
         visible={Boolean(editingItem)}
         onClose={() => setEditingId(null)}
         title="이 재료를 고칠까요?"
         footer={
-          <Button onPress={() => setEditingId(null)} fullWidth>
+          <Button
+            onPress={() => {
+              if (editingItem) {
+                updateItem(editingItem.localId, {
+                  needsReview: false,
+                  reason: undefined,
+                });
+              }
+              setEditingId(null);
+            }}
+            fullWidth
+          >
             이 내용으로 둘게요
           </Button>
         }
@@ -759,85 +762,31 @@ export default function RegisterPhotoScreen() {
   }
 }
 
-function PhotoChoiceCard({
-  icon: Icon,
-  title,
-  description,
-  detail,
-  recommended,
-  selected,
-  onPress,
-}: {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-  detail: string;
-  recommended: boolean;
-  selected: boolean;
-  onPress: () => void;
-}) {
+function PhotoFlowProgress({ current }: { current: 1 | 2 }) {
   return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${title}, ${description}${recommended ? ", 최근 사용한 추천 방법" : ""}`}
-      accessibilityState={{ selected }}
-      style={({ pressed }) => [
-        styles.photoChoiceCard,
-        selected && styles.photoChoiceCardSelected,
-        pressed && styles.photoChoiceCardPressed,
-      ]}
+    <View
+      style={styles.flowProgress}
+      accessible
+      accessibilityLabel={`2단계 중 ${current}단계, ${current === 1 ? "사진" : "결과 확인"}`}
     >
-      <View style={styles.photoChoiceIcon}>
-        <Icon color={colors.primary} size={spacing.md} strokeWidth={2.2} />
-      </View>
-      <View style={styles.photoChoiceCopy}>
-        <View style={styles.photoChoiceTitleRow}>
-          <AppText variant="bodyStrong">{title}</AppText>
-          {recommended ? (
-            <View style={styles.recommendBadge}>
-              <AppText variant="caption" tone="primary">
-                최근 사용 · 추천
-              </AppText>
-            </View>
-          ) : null}
-        </View>
-        <AppText variant="bodySmall">{description}</AppText>
-        <AppText variant="caption" tone="subtext">
-          {detail}
+      <View style={styles.flowProgressMeta}>
+        <AppText variant="label" tone="subtext" scaleRole="chrome">
+          {current === 1 ? "사진" : "결과 확인"}
+        </AppText>
+        <AppText variant="label" tone="primary" scaleRole="chrome">
+          {current}/2
         </AppText>
       </View>
-      {selected ? <Check color={colors.primary} size={spacing.sm} /> : null}
-    </Pressable>
-  );
-}
-
-function ScenePill({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityState={{ selected }}
-      style={({ pressed }) => [
-        styles.pill,
-        selected && styles.pillSelected,
-        pressed && styles.pillPressed,
-      ]}
-    >
-      <AppText
-        style={[styles.pillLabel, selected && styles.pillLabelSelected]}
-      >
-        {label}
-      </AppText>
-    </Pressable>
+      <View style={styles.flowProgressTrack}>
+        <View style={[styles.flowProgressSegment, styles.flowProgressActive]} />
+        <View
+          style={[
+            styles.flowProgressSegment,
+            current === 2 && styles.flowProgressActive,
+          ]}
+        />
+      </View>
+    </View>
   );
 }
 
@@ -930,82 +879,50 @@ const styles = StyleSheet.create({
   choiceStack: {
     gap: spacing.sm,
   },
-  accessCard: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    gap: spacing.xxs,
-  },
-  accessHeadingRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: spacing.xs,
-  },
-  photoChoiceCard: {
-    minHeight: touchTarget.ctaLarge,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    padding: spacing.md,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  photoChoiceCardSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  photoChoiceCardPressed: {
-    opacity: 0.86,
-  },
-  photoChoiceIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-  },
-  photoChoiceCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  photoChoiceTitleRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  recommendBadge: {
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-    backgroundColor: colors.primarySoftPressed,
-  },
-  albumSceneCard: {
-    marginTop: -spacing.xs,
-    padding: spacing.sm,
-    gap: spacing.xs,
-    borderRadius: radius.lg,
-    backgroundColor: colors.mutedSurface,
-  },
-  limitCard: {
-    backgroundColor: colors.mutedSurface,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    gap: spacing.xxs,
-  },
   loadingCard: {
     alignItems: "center",
     gap: spacing.md,
     paddingVertical: spacing.lg,
   },
+  flowProgress: {
+    width: "100%",
+    gap: spacing.xs,
+  },
+  flowProgressMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  flowProgressTrack: {
+    flexDirection: "row",
+    gap: spacing.xxs,
+  },
+  flowProgressSegment: {
+    flex: 1,
+    height: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.border,
+  },
+  flowProgressActive: {
+    backgroundColor: colors.primary,
+  },
   reviewStack: {
     gap: spacing.sm,
+  },
+  reviewSummary: {
+    borderRadius: radius.xxl,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+    gap: spacing.xxs,
+  },
+  sheetStack: {
+    gap: spacing.sm,
+  },
+  policyCard: {
+    borderRadius: radius.xxl,
+    backgroundColor: colors.mutedSurface,
+    padding: spacing.md,
+    gap: spacing.xxs,
   },
   bulkCard: {
     backgroundColor: colors.surface,

@@ -119,7 +119,7 @@ const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
 const REFRESH_TOKEN_STORAGE_KEY = "expirymate.refreshToken.v2";
 const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
 const clientHeaders = {
-  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.3.0",
+  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.4.0",
   "X-Client-Platform": "mobile",
 };
 

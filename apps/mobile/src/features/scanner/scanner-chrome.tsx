@@ -141,11 +141,17 @@ export function ScannerGuide({
   );
 }
 
-export function CloseButton({ onPress }: { onPress: () => void }) {
+export function CloseButton({
+  onPress,
+  accessibilityLabel = "스캐너를 닫을게요",
+}: {
+  onPress: () => void;
+  accessibilityLabel?: string;
+}) {
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="스캐너를 닫을게요"
+      accessibilityLabel={accessibilityLabel}
       onPress={onPress}
       hitSlop={spacing.xs}
       style={({ pressed }) => [

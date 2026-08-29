@@ -19,6 +19,7 @@ import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
+import { Mascot } from "../../src/components/Mascot";
 import { OAuthButton } from "../../src/components/OAuthButton";
 import { Screen } from "../../src/components/Screen";
 import { getAuthErrorMessage, isEmailNotVerifiedAuthError } from "../../src/features/auth/auth-errors";
@@ -199,6 +200,11 @@ export default function LoginScreen() {
             >
               냉장고, 저와 함께 챙겨볼까요?
             </AppText>
+            <Mascot
+              mood="idle"
+              size={shouldStackDense ? "small" : "medium"}
+              style={styles.welcomeMascot}
+            />
           </View>
 
           <View style={styles.primaryPath}>
@@ -486,8 +492,8 @@ const styles = StyleSheet.create({
   loginSceneVeil: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
-    // Keep light so the baked-in greeter on the mat stays readable.
-    opacity: 0.16,
+    // Keep the entryway quiet behind native title, mascot, and form controls.
+    opacity: 0.12,
   },
   scrollFlex: {
     flex: 1,
@@ -512,6 +518,9 @@ const styles = StyleSheet.create({
   },
   welcomeSubtitle: {
     textAlign: "center",
+  },
+  welcomeMascot: {
+    marginTop: spacing.xxs,
   },
   primaryPath: {
     gap: spacing.xs,

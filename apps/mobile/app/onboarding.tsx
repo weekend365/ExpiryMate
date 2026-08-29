@@ -17,7 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import welcomeBackground from "../assets/backgrounds/home-welcome-bg.png";
 import { Button } from "../src/components/Button";
 import { AppText } from "../src/components/AppText";
-import { type MascotMood } from "../src/components/Mascot";
+import { Mascot, type MascotMood } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Screen } from "../src/components/Screen";
 import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
@@ -181,7 +181,9 @@ export default function OnboardingScreen() {
               </AppText>
             </Animated.View>
 
-            <View style={styles.welcomeHeroSpacer} />
+            <View style={styles.welcomeHeroSpacer}>
+              <Mascot size="large" mood="idle" />
+            </View>
           </ScrollView>
           <SafeAreaView style={styles.welcomeFooter} edges={["bottom"]}>
             <Button
@@ -283,6 +285,9 @@ const styles = StyleSheet.create({
   welcomeHeroSpacer: {
     flex: 1,
     minHeight: spacing.xxxl * 3,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: spacing.sm,
   },
   welcomeFooter: {
     paddingHorizontal: spacing.md,

@@ -3,19 +3,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { describe, expect, it } from "vitest";
+import {
+  deriveSmallMaster,
+  fullAssetPath,
+  mascotMoods,
+  smallAssetPath,
+} from "./derive-mascot-small-assets.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const charactersDir = path.resolve(scriptDir, "../assets/characters");
-const moods = [
-  "idle",
-  "happy",
-  "worry",
-  "cooking",
-  "empty",
-  "speak",
-  "think",
-  "point",
-];
+const moods = mascotMoods;
 const variants = [
   { name: "full", logicalSize: 160 },
   { name: "small", logicalSize: 72 },
@@ -36,6 +33,27 @@ function cornerAlphas(png) {
 }
 
 describe("mascot runtime assets", () => {
+  it(
+    "derives every small master without outline, palette, or design drift",
+    () => {
+      for (const mood of moods) {
+        const full = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
+        const actual = PNG.sync.read(fs.readFileSync(smallAssetPath(mood)));
+        const expected = deriveSmallMaster(full);
+
+        expect([actual.width, actual.height], mood).toEqual([
+          expected.width,
+          expected.height,
+        ]);
+        expect(
+          Buffer.compare(Buffer.from(actual.data), Buffer.from(expected.data)),
+          `${mood} small master must be an exact crop of its full master`,
+        ).toBe(0);
+      }
+    },
+    15_000,
+  );
+
   it("provides valid RGBA images for every mood and display density", () => {
     let runtimeBytes = 0;
     const runtimeAssetCount = variants.reduce((total, variant) => {

@@ -15,6 +15,7 @@ data_as_of: 2026-08-29
 
 | 항목 | 값 |
 |---|---|
+| 업데이트 앱 버전 | `1.4.0` (기존 공개 버전 `1.3.0`) |
 | iOS Bundle ID | `com.expirymate.mobile` |
 | Android package | `com.expirymate.mobile` |
 | Apple 월간 Product ID | `expirymate_premium_monthly` |
