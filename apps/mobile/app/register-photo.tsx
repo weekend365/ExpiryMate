@@ -62,7 +62,6 @@ import {
   radius,
   spacing,
   touchTarget,
-  typography,
 } from "../src/shared/theme";
 
 type PhotoIntakeStep = "choose" | "loading" | "review" | "done";
@@ -183,9 +182,7 @@ export default function RegisterPhotoScreen() {
   const refetchPrivacyStatus = privacyStatusQuery.refetch;
 
   const readyCount = photoIntakeReadyCount(items);
-  const attentionCount = items.filter(
-    (item) => item.needsReview || !item.expiryDate,
-  ).length;
+  const attentionCount = items.length - readyCount;
   const canSubmit = canSubmitPhotoIntake(items);
   const editingItem = items.find((item) => item.localId === editingId) ?? null;
   const scene = selectedScene;
@@ -398,7 +395,7 @@ export default function RegisterPhotoScreen() {
       >
         {canSubmit
           ? `${items.length}가지 냉장고에 넣을게요`
-          : "기한을 채운 뒤 넣을게요"}
+          : `${attentionCount}가지 확인한 뒤 넣을게요`}
       </Button>
     ) : step === "done" ? (
       <Button
@@ -471,7 +468,7 @@ export default function RegisterPhotoScreen() {
               </AppText>
             ) : null}
             <View style={styles.bulkCard}>
-              <AppText style={styles.sectionTitle}>한 번에 자리 정하기</AppText>
+              <AppText variant="bodyStrong">한 번에 자리 정하기</AppText>
               <View style={styles.pillRow}>
                 {selectableOptions.map((option) => (
                   <Pressable
@@ -488,7 +485,7 @@ export default function RegisterPhotoScreen() {
                       pressed && styles.pillPressed,
                     ]}
                   >
-                    <AppText style={styles.pillLabel}>{option.label}</AppText>
+                    <AppText variant="bodySmall">{option.label}</AppText>
                   </Pressable>
                 ))}
               </View>
@@ -518,7 +515,7 @@ export default function RegisterPhotoScreen() {
               >
                 <View style={styles.itemCopy}>
                   <View style={styles.itemTitleRow}>
-                    <AppText style={styles.itemName}>{item.displayName}</AppText>
+                    <AppText variant="bodyStrong">{item.displayName}</AppText>
                     {item.needsReview || !item.expiryDate ? (
                       <View style={styles.attentionBadge}>
                         <AppText variant="caption" tone="warning">
@@ -548,7 +545,7 @@ export default function RegisterPhotoScreen() {
                   }
                   accessibilityRole="button"
                   accessibilityLabel={`${item.displayName} 빼기`}
-                  hitSlop={8}
+                  hitSlop={spacing.xs}
                   style={styles.iconButton}
                 >
                   <Trash2 color={colors.danger} size={spacing.md} />
@@ -733,11 +730,16 @@ export default function RegisterPhotoScreen() {
                   ]}
                 >
                   <AppText
-                    style={[
-                      styles.pillLabel,
-                      editingItem.storageLocation === option.key &&
-                        styles.pillLabelSelected,
-                    ]}
+                    variant={
+                      editingItem.storageLocation === option.key
+                        ? "bodySmallStrong"
+                        : "bodySmall"
+                    }
+                    tone={
+                      editingItem.storageLocation === option.key
+                        ? "primary"
+                        : "default"
+                    }
                   >
                     {option.label}
                   </AppText>
@@ -932,12 +934,6 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.sm,
   },
-  sectionTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
   pillRow: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -958,16 +954,6 @@ const styles = StyleSheet.create({
   pillSelected: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
-  },
-  pillLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.text,
-  },
-  pillLabelSelected: {
-    color: colors.primary,
-    fontFamily: typography.title.fontFamily,
   },
   itemCard: {
     minHeight: touchTarget.cta,
@@ -1003,12 +989,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.surface,
-  },
-  itemName: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
   },
   iconButton: {
     minWidth: touchTarget.icon,

@@ -27,7 +27,6 @@ import {
   radius,
   spacing,
   touchTarget,
-  typography,
 } from "../../shared/theme";
 import { CloseButton } from "../scanner/scanner-chrome";
 import { scannerScreenStyles } from "../scanner/scanner-screen-styles";
@@ -163,13 +162,21 @@ export function PhotoCaptureScreen({
           <>
             <View style={styles.guideStage} pointerEvents="none">
               <View style={styles.guideCopy}>
-                <AppText style={styles.guideTitle}>
+                <AppText
+                  variant="bodyStrong"
+                  tone="inverse"
+                  style={styles.guideTitle}
+                >
                   {scene === "receipt"
                     ? "영수증 전체가 보이게 맞춰 주세요"
                     : "재료가 겹치지 않게 보여 주세요"}
                 </AppText>
                 {!shouldStack ? (
-                  <AppText style={styles.guideDescription}>
+                  <AppText
+                    variant="caption"
+                    tone="inverse"
+                    style={styles.guideDescription}
+                  >
                     {scene === "receipt"
                       ? "글자가 선명할수록 구매 목록을 더 잘 찾을 수 있어요."
                       : "밝은 곳에서 문 안쪽까지 담으면 여러 재료를 찾기 쉬워요."}
@@ -211,7 +218,9 @@ export function PhotoCaptureScreen({
                 ]}
               >
                 <Sparkles color={colors.primary} size={spacing.sm} />
-                <AppText style={styles.accessBadgeLabel}>{accessLabel}</AppText>
+                <AppText variant="bodySmallStrong" style={styles.accessBadgeLabel}>
+                  {accessLabel}
+                </AppText>
                 <Info color={colors.subtext} size={spacing.sm} />
               </Pressable>
 
@@ -311,10 +320,8 @@ function SceneButton({
         strokeWidth={2.3}
       />
       <AppText
-        style={[
-          styles.sceneButtonLabel,
-          selected && styles.sceneButtonLabelSelected,
-        ]}
+        variant="bodySmallStrong"
+        tone={selected ? "primary" : "subtext"}
       >
         {label}
       </AppText>
@@ -344,17 +351,9 @@ const styles = StyleSheet.create({
   },
   guideTitle: {
     textAlign: "center",
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.surface,
   },
   guideDescription: {
     textAlign: "center",
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.surface,
   },
   guideFrame: {
     position: "relative",
@@ -424,10 +423,6 @@ const styles = StyleSheet.create({
   },
   accessBadgeLabel: {
     flexShrink: 1,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.text,
   },
   controlPanel: {
     borderRadius: radius.xxl,
@@ -453,15 +448,6 @@ const styles = StyleSheet.create({
   },
   sceneButtonSelected: {
     backgroundColor: colors.surface,
-  },
-  sceneButtonLabel: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.subtext,
-  },
-  sceneButtonLabelSelected: {
-    color: colors.primary,
   },
   sourceActions: {
     flexDirection: "row",

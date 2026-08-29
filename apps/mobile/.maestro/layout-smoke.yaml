@@ -116,3 +116,26 @@ name: Responsive layout smoke
       id: settings-screen
     timeout: 10000
 - takeScreenshot: ${SCREENSHOT_DIR}/settings
+- openLink: expirymate://settings/subscription
+- extendedWaitUntil:
+    visible: "냉장고를 덜 버리는 습관"
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/subscription
+- openLink: expirymate://insights
+- extendedWaitUntil:
+    visible:
+      id: insights-screen
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/insights
+- openLink: expirymate://shopping
+- extendedWaitUntil:
+    visible:
+      id: affiliate-shopping-screen
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/shopping
+- openLink: expirymate://register-photo?from=home
+- extendedWaitUntil:
+    visible:
+      id: photo-capture-screen
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/register-photo

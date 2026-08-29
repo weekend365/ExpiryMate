@@ -7,6 +7,10 @@ export const layoutScreenshotNames = [
   "recommendations.png",
   "recommendation-options.png",
   "settings.png",
+  "subscription.png",
+  "insights.png",
+  "shopping.png",
+  "register-photo.png",
 ];
 
 export const layoutProfiles = {

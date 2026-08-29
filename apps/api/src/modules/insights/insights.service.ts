@@ -69,6 +69,7 @@ export class InsightsService {
       periodGroups,
       currentWeekGroups,
       previousWeekGroups,
+      trendEvents,
       expiringSoon,
       expiringItems,
       discardedCategories,
@@ -76,6 +77,11 @@ export class InsightsService {
       this.countOutcomes(spaceId, from, endExclusive),
       this.countOutcomes(spaceId, currentWeekFrom, endExclusive),
       this.countOutcomes(spaceId, previousWeekFrom, currentWeekFrom),
+      this.prisma.inventoryDispositionEvent.findMany({
+        where: { spaceId, occurredAt: { gte: from, lt: endExclusive } },
+        select: { outcome: true, occurredAt: true },
+        orderBy: { occurredAt: "asc" },
+      }),
       this.prisma.inventoryItem.count({
         where: {
           spaceId,
@@ -133,6 +139,7 @@ export class InsightsService {
           category: group.category,
           count: group._count._all,
         })),
+      trend: buildWeeklyTrend(from, endExclusive, trendEvents),
       actions: buildInsightActions({
         expiringSoon,
         expiringItems,
@@ -223,6 +230,49 @@ function periodSummary(
     discarded: totals.discarded,
     wasteRatePercent: totals.wasteRatePercent,
   };
+}
+
+function buildWeeklyTrend(
+  from: Date,
+  endExclusive: Date,
+  events: Array<{
+    outcome: InventoryDispositionOutcome;
+    occurredAt: Date;
+  }>,
+): NonNullable<PlusInsights["trend"]> {
+  const ranges: Array<{ from: Date; endExclusive: Date }> = [];
+  let bucketEndExclusive = new Date(endExclusive);
+
+  while (bucketEndExclusive > from) {
+    const bucketFrom = new Date(
+      Math.max(from.getTime(), bucketEndExclusive.getTime() - 7 * DAY_MS),
+    );
+    ranges.unshift({ from: bucketFrom, endExclusive: bucketEndExclusive });
+    bucketEndExclusive = bucketFrom;
+  }
+
+  return ranges.map(({ from: bucketFrom, endExclusive: bucketEnd }) => {
+    const bucketEvents = events.filter(
+      (event) =>
+        event.occurredAt >= bucketFrom && event.occurredAt < bucketEnd,
+    );
+    const consumed = bucketEvents.filter(
+      (event) => event.outcome === InventoryDispositionOutcome.consumed,
+    ).length;
+    const discarded = bucketEvents.filter(
+      (event) => event.outcome === InventoryDispositionOutcome.discarded,
+    ).length;
+    const resolved = consumed + discarded;
+
+    return {
+      from: toKstDateOnly(bucketFrom),
+      to: toKstDateOnly(new Date(bucketEnd.getTime() - 1)),
+      consumed,
+      discarded,
+      wasteRatePercent:
+        resolved > 0 ? Math.round((discarded / resolved) * 1000) / 10 : 0,
+    };
+  });
 }
 
 function resolveWasteTrend(change: number | null) {

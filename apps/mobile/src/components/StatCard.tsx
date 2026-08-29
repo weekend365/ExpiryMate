@@ -1,4 +1,10 @@
-import { Platform, StyleSheet, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
 import { AppText } from "./AppText";
 import { LemonIcon } from "./LemonIcon";
@@ -6,6 +12,7 @@ import { LemonIcon } from "./LemonIcon";
 interface StatCardProps {
   label: string;
   value: number;
+  suffix?: string;
   tone?: "default" | "warning" | "danger" | "success";
   /**
    * `inline` = open metric strip.
@@ -21,6 +28,7 @@ interface StatCardProps {
   mini?: boolean;
   /** Controls the active lamp glow independently from its on/off fill. */
   showGlow?: boolean;
+  style?: StyleProp<ViewStyle>;
   /**
    * Traffic selection state. When set, overrides the default value>0 on/off look
    * so the lamp can act as a filter control.
@@ -37,12 +45,14 @@ const OFF_FILL_OPACITY = 0.28;
 export function StatCard({
   label,
   value,
+  suffix,
   tone = "default",
   variant = "card",
   showLabel = true,
   compact = false,
   mini = false,
   showGlow = true,
+  style,
   selected,
 }: StatCardProps) {
   if (variant === "traffic") {
@@ -63,6 +73,7 @@ export function StatCard({
           compact && styles.trafficCompact,
           mini && styles.trafficMini,
           !showLabel && styles.trafficWithoutLabel,
+          style,
         ]}
         accessible={selected == null}
         accessibilityRole="text"
@@ -115,6 +126,7 @@ export function StatCard({
           backgroundColor: toneStyle.backgroundColor,
           borderColor: toneStyle.borderColor,
         },
+        style,
       ]}
     >
       <AppText
@@ -122,6 +134,7 @@ export function StatCard({
         style={{ color: toneStyle.valueColor }}
       >
         {value}
+        {suffix}
       </AppText>
       <AppText
         variant={isInline ? "caption" : "bodySmall"}

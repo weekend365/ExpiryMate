@@ -76,18 +76,22 @@ export function photoIntakeItemIsComplete(item: PhotoIntakeDraftItem) {
   );
 }
 
+export function photoIntakeItemIsReadyToSave(item: PhotoIntakeDraftItem) {
+  return photoIntakeItemIsComplete(item) && !item.needsReview;
+}
+
 export function photoIntakeReadyCount(items: PhotoIntakeDraftItem[]) {
-  return items.filter(photoIntakeItemIsComplete).length;
+  return items.filter(photoIntakeItemIsReadyToSave).length;
 }
 
 export function canSubmitPhotoIntake(items: PhotoIntakeDraftItem[]) {
-  return items.length > 0 && items.every(photoIntakeItemIsComplete);
+  return items.length > 0 && items.every(photoIntakeItemIsReadyToSave);
 }
 
 export function draftsToCreateBody(
   items: PhotoIntakeDraftItem[],
 ): CreateInventoryItemBody[] {
-  return items.filter(photoIntakeItemIsComplete).map((item) => ({
+  return items.filter(photoIntakeItemIsReadyToSave).map((item) => ({
     displayName: item.displayName.trim(),
     brand: item.brand,
     category: item.category,

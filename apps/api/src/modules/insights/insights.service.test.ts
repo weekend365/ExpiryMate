@@ -61,6 +61,20 @@ describe("InsightsService", () => {
     prisma.inventoryItem.findMany.mockResolvedValue([
       { displayName: "우유", expiryDate: new Date("2026-08-30T00:00:00Z") },
     ]);
+    prisma.inventoryDispositionEvent.findMany.mockResolvedValue([
+      {
+        outcome: "consumed",
+        occurredAt: new Date("2026-06-02T00:00:00.000Z"),
+      },
+      {
+        outcome: "discarded",
+        occurredAt: new Date("2026-06-03T00:00:00.000Z"),
+      },
+      {
+        outcome: "consumed",
+        occurredAt: new Date("2026-08-28T00:00:00.000Z"),
+      },
+    ]);
     const service = new InsightsService(prisma as never);
 
     const overview = await service.getOverview(
@@ -77,6 +91,19 @@ describe("InsightsService", () => {
       wasteRatePercent: 10,
       expiringSoon: 2,
       topDiscardedCategories: [{ category: "dairy", count: 2 }],
+      trend: expect.arrayContaining([
+        expect.objectContaining({
+          from: "2026-06-01",
+          consumed: 1,
+          discarded: 1,
+          wasteRatePercent: 50,
+        }),
+        expect.objectContaining({
+          consumed: 1,
+          discarded: 0,
+          wasteRatePercent: 0,
+        }),
+      ]),
       weekly: {
         current: { consumed: 4, discarded: 1, wasteRatePercent: 20 },
         previous: { consumed: 3, discarded: 2, wasteRatePercent: 40 },
@@ -88,6 +115,7 @@ describe("InsightsService", () => {
       kind: "use_expiring",
       itemNames: ["우유"],
     });
+    expect(overview.trend).toHaveLength(13);
   });
 
   it("rejects a user who is not a member of the selected space", async () => {
@@ -105,7 +133,11 @@ function createPrisma() {
   return {
     inventorySpaceMembership: { findUnique: vi.fn() },
     subscriptionEntitlement: { findFirst: vi.fn() },
-    inventoryDispositionEvent: { groupBy: vi.fn(), count: vi.fn() },
+    inventoryDispositionEvent: {
+      groupBy: vi.fn(),
+      count: vi.fn(),
+      findMany: vi.fn(),
+    },
     inventoryItem: { count: vi.fn(), findMany: vi.fn() },
   };
 }

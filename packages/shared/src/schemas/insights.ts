@@ -28,6 +28,8 @@ export const plusInsightsSchema = z.object({
   topDiscardedCategories: z.array(
     z.object({ category: z.string(), count: z.number().int().nonnegative() }),
   ),
+  /** Weekly buckets across the selected 30/90-day window. */
+  trend: z.array(insightPeriodSchema).optional(),
   actions: z.array(
     z.object({
       kind: z.enum([

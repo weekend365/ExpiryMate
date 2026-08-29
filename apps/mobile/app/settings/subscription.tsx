@@ -430,10 +430,12 @@ export default function SubscriptionSettingsScreen() {
           <Button
             onPress={() => void startPurchase()}
             loading={busyAction === "purchase"}
-            disabled={!connected || busyAction !== null}
+            disabled={!connected || busyAction !== null || !selectedPlan}
             fullWidth
           >
-            {selectedPeriod === "monthly"
+            {!selectedPlan
+              ? "가격을 확인하고 있어요"
+              : selectedPeriod === "monthly"
               ? "월간으로 시작하기"
               : "연간으로 시작하기"}
           </Button>

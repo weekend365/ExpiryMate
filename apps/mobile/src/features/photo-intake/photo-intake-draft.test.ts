@@ -23,14 +23,20 @@ const milk: InventoryPhotoParseCandidate = {
 };
 
 describe("photo intake drafts", () => {
-  it("blocks submit while any row is missing an expiry date", () => {
+  it("blocks submit until a low-confidence row has a date and is reviewed", () => {
     const drafts = candidatesToDrafts([milk], StorageLocation.FRIDGE);
     expect(canSubmitPhotoIntake(drafts)).toBe(false);
     expect(photoIntakeReadyCount(drafts)).toBe(0);
 
     const dated = applyExpiryToAll(drafts, "2026-09-01", ExpirySource.PRESET);
-    expect(canSubmitPhotoIntake(dated)).toBe(true);
-    expect(draftsToCreateBody(dated)).toEqual([
+    expect(canSubmitPhotoIntake(dated)).toBe(false);
+    expect(photoIntakeReadyCount(dated)).toBe(0);
+    expect(draftsToCreateBody(dated)).toEqual([]);
+
+    const reviewed = dated.map((item) => ({ ...item, needsReview: false }));
+    expect(canSubmitPhotoIntake(reviewed)).toBe(true);
+    expect(photoIntakeReadyCount(reviewed)).toBe(1);
+    expect(draftsToCreateBody(reviewed)).toEqual([
       expect.objectContaining({
         displayName: "서울우유",
         quantity: 2,
