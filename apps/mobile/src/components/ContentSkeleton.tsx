@@ -70,15 +70,9 @@ export function HomeStatsSkeleton() {
               height={TRAFFIC_LAMP_SIZE}
               width={TRAFFIC_LAMP_SIZE}
               radiusToken="pill"
-              onDark
             />
-          </View>
-        ))}
-      </View>
-      <View style={styles.trafficLabels}>
-        {[0, 1, 2].map((index) => (
-          <View key={index} style={styles.trafficLabelSlot}>
-            <SkeletonBlock height={spacing.sm} width="72%" />
+            <SkeletonBlock height={spacing.md} width="48%" />
+            <SkeletonBlock height={spacing.sm} width="64%" />
           </View>
         ))}
       </View>
@@ -140,23 +134,20 @@ const styles = StyleSheet.create({
   },
   trafficStrip: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "stretch",
     gap: spacing.xs,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    backgroundColor: colors.text,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.insetSurface,
   },
   trafficLampSlot: {
     flex: 1,
     alignItems: "center",
-  },
-  trafficLabels: {
-    flexDirection: "row",
-    gap: spacing.xs,
-  },
-  trafficLabelSlot: {
-    flex: 1,
-    alignItems: "center",
+    gap: spacing.xxs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.lg,
   },
 });

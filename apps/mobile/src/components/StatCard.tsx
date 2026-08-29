@@ -7,7 +7,10 @@ import {
 } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
 import { AppText } from "./AppText";
-import { LemonIcon } from "./LemonIcon";
+import {
+  ExpiryTrafficIcon,
+  type ExpiryTrafficTone,
+} from "./ExpiryTrafficIcon";
 
 interface StatCardProps {
   label: string;
@@ -20,7 +23,7 @@ interface StatCardProps {
    * `traffic` = citrus lamp for expiry strips (on when value > 0).
    */
   variant?: "card" | "inline" | "traffic";
-  /** When false, traffic variant renders the lemon only. */
+  /** When false, traffic variant renders the lamp only. */
   showLabel?: boolean;
   /** Reduces traffic lamp and spacing for dense dashboard summaries. */
   compact?: boolean;
@@ -39,8 +42,6 @@ interface StatCardProps {
 const LAMP_SIZE = spacing.xxl + spacing.sm;
 const LAMP_SIZE_COMPACT = spacing.xxl;
 const LAMP_SIZE_MINI = spacing.lg;
-/** Dimmed fill when off — keeps hue so the fruit role is still readable. */
-const OFF_FILL_OPACITY = 0.28;
 
 export function StatCard({
   label,
@@ -93,23 +94,31 @@ export function StatCard({
               },
           ]}
         >
-          <View
-            pointerEvents="none"
-            style={{ opacity: isOn ? 1 : OFF_FILL_OPACITY }}
-          >
-            <LemonIcon size={lampMin} color={lampStyle.fill} />
-          </View>
+          <ExpiryTrafficIcon
+            size={lampMin}
+            tone={lampTone}
+            active={isOn}
+          />
         </View>
         {showLabel ? (
-          <AppText
-            variant="caption"
-            scaleRole="chrome"
-            densityAware={false}
-            numberOfLines={2}
-            style={styles.trafficLabel}
-          >
-            {countLabel}
-          </AppText>
+          <View style={styles.trafficCopy}>
+            <AppText
+              variant={compact ? "bodySmallStrong" : "heading"}
+              numberOfLines={1}
+              style={styles.trafficCount}
+            >
+              {value}건
+            </AppText>
+            <AppText
+              variant="caption"
+              scaleRole="chrome"
+              densityAware={false}
+              numberOfLines={2}
+              style={styles.trafficLabel}
+            >
+              {label}
+            </AppText>
+          </View>
         ) : null}
       </View>
     );
@@ -174,17 +183,14 @@ const tones = {
   },
 };
 
-const trafficLamps = {
+const trafficLamps: Record<ExpiryTrafficTone, { glow: string }> = {
   danger: {
-    fill: colors.citrusGrapefruit,
     glow: colors.citrusGrapefruit,
   },
   warning: {
-    fill: colors.citrusLemon,
     glow: colors.citrusLemon,
   },
   success: {
-    fill: colors.citrusLime,
     glow: colors.citrusLime,
   },
 };
@@ -210,6 +216,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     minWidth: 0,
     gap: spacing.xs,
+  },
+  trafficCopy: {
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
+  trafficCount: {
+    textAlign: "center",
   },
   trafficCompact: {
     gap: spacing.xxs,

@@ -172,14 +172,14 @@ export const homeScreenStyles = StyleSheet.create({
   },
   trafficStrip: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "stretch",
     gap: spacing.xs,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.insetSurface,
   },
   trafficStripRegular: {
     gap: spacing.md,
@@ -191,9 +191,18 @@ export const homeScreenStyles = StyleSheet.create({
     minWidth: 0,
     alignItems: "center",
     minHeight: touchTarget.min,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     paddingVertical: spacing.xxs,
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
+  },
+  trafficLampActiveDanger: {
+    backgroundColor: colors.dangerSoft,
+  },
+  trafficLampActiveWarning: {
+    backgroundColor: colors.warningSoft,
+  },
+  trafficLampActiveSuccess: {
+    backgroundColor: colors.successSoft,
   },
   trafficLampPressableRegular: {
     minHeight: touchTarget.cta,

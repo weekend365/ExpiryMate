@@ -478,6 +478,7 @@ export default function HomeScreen() {
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     isRegular && styles.trafficLampPressableRegular,
+                    expiredCount > 0 && styles.trafficLampActiveDanger,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("expired")}
@@ -497,6 +498,7 @@ export default function HomeScreen() {
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     isRegular && styles.trafficLampPressableRegular,
+                    within7DaysCount > 0 && styles.trafficLampActiveWarning,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("within7")}
@@ -506,7 +508,7 @@ export default function HomeScreen() {
                 >
                   <StatCard
                     variant="traffic"
-                    label="7일 이내"
+                    label="곧"
                     value={within7DaysCount}
                     tone="warning"
                     compact={!isRegular}
@@ -516,6 +518,7 @@ export default function HomeScreen() {
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     isRegular && styles.trafficLampPressableRegular,
+                    safeCount > 0 && styles.trafficLampActiveSuccess,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("safe")}
