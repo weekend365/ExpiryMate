@@ -35,11 +35,12 @@ data_as_of: 2026-08-29
 
 ### 2026-09-01 빌드 전에 남은 수동 조치
 
-- App Store Connect 저작권을 `2026 devnamu`로 수정
-- 외부에 노출된 기존 심사 계정 비밀번호를 교체하고 App Store Connect 로그인 정보 갱신
-- 심사 전용 계정으로 로그인·공유 공간·재고·설정 → 개인 플러스 진입을 재확인
-- 월간·연간 상품의 Review Information에 넣을 실제 페이월 스크린샷 준비
-- 심사 노트는 [`store-metadata-draft.md`](./store-metadata-draft.md)의 정본을 사용하되
+- [x] App Store Connect 저작권을 `2026 devnamu`로 수정
+- [x] 외부에 노출된 기존 심사 계정 비밀번호를 교체하고 App Store Connect 로그인 정보 갱신
+- [ ] 심사 전용 계정으로 로그인하고 공유 공간·재고 데이터를 준비
+- [ ] 9월 1일 빌드에서 설정 → 장고 플러스 진입과 실제 지역화 가격 재확인
+- [ ] 월간·연간 상품의 Review Information에 넣을 실제 페이월 스크린샷 준비
+- [ ] 심사 노트는 [`store-metadata-draft.md`](./store-metadata-draft.md)의 정본을 사용하되
   실제 심사 계정과 빌드 번호만 제출 직전에 채움
 
 ### 2026-09-01 이후 순서

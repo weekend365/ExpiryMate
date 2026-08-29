@@ -63,8 +63,9 @@ data_as_of: 2026-08-29
 - EAS production 설정이 필수 API·OAuth·AdMob·Sentry 공개 환경값을 모두 읽는 것을
   확인했습니다. 2026-08-29 원격 iOS buildNumber는 `35`이므로 auto-increment가 정상
   동작하면 9월 1일 production 빌드는 `36`이 됩니다.
-- 제출 전 수동 조치로 저작권을 `2026 devnamu`로 수정하고, 화면 공유 과정에서 노출된
-  심사 계정 비밀번호를 교체한 뒤 App Store Connect의 로그인 정보도 갱신해야 합니다.
+- **사용자 확인 완료:** App Store Connect 저작권을 `2026 devnamu`로 수정했고,
+  화면 공유 과정에서 노출된 심사 계정 비밀번호와 App Store Connect 로그인 정보를
+  갱신했습니다.
 - `SUBSCRIPTIONS_ENABLED=false`, `IAP_ALLOW_SANDBOX_PURCHASES=false`를 유지합니다.
   9월 1일 TestFlight/Sandbox QA 직전에만 Sandbox 구매 허용 범위를 다시 결정합니다.
 
