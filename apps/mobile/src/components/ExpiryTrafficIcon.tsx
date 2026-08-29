@@ -7,6 +7,7 @@ interface ExpiryTrafficIconProps {
   size: number;
   tone: ExpiryTrafficTone;
   active: boolean;
+  selected?: boolean;
 }
 
 const VIEWBOX_SIZE = 64;
@@ -33,13 +34,14 @@ const trafficLamps: Record<
 /**
  * Flat citrus status lamp used by the home summary and inventory filters.
  *
- * The dark outer ring makes the signal metaphor readable at small sizes,
- * while the state glyph keeps the UI understandable without color alone.
+ * The neutral outer ring stays visually quiet until a filter is selected.
+ * The state glyph keeps the UI understandable without color alone.
  */
 export function ExpiryTrafficIcon({
   size,
   tone,
   active,
+  selected = false,
 }: ExpiryTrafficIconProps) {
   const lamp = trafficLamps[tone];
   const glyphColor = active ? lamp.glyph : colors.subtext;
@@ -52,7 +54,12 @@ export function ExpiryTrafficIcon({
       accessibilityElementsHidden
       importantForAccessibility="no"
     >
-      <Circle cx="32" cy="32" r="30" fill={colors.text} />
+      <Circle
+        cx="32"
+        cy="32"
+        r="30"
+        fill={selected ? lamp.fill : colors.disabled}
+      />
       <Circle cx="32" cy="32" r="24" fill={colors.insetSurface} />
       <Circle
         cx="32"

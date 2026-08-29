@@ -85,6 +85,24 @@ data_as_of: 2026-08-29
 - `SUBSCRIPTIONS_ENABLED=false`, `IAP_ALLOW_SANDBOX_PURCHASES=false`를 유지합니다.
   9월 1일 TestFlight/Sandbox QA 직전에만 Sandbox 구매 허용 범위를 다시 결정합니다.
 
+### 2026-08-29 Google Play Console·RTDN 준비 현황
+
+- Google Cloud 프로젝트 `jango-plz`에 RTDN topic `jango-play-billing`을 만들고
+  `google-play-developer-notifications@system.gserviceaccount.com`에 `Pub/Sub Publisher`
+  권한을 부여했습니다.
+- Pub/Sub 서비스 에이전트 `service-634350291976@gcp-sa-pubsub.iam.gserviceaccount.com`에
+  Push 인증용 서비스 계정 `jango-rtdn-push@jango-plz.iam.gserviceaccount.com`의
+  `Service Account Token Creator` 권한을 부여했습니다.
+- `jango-play-rtdn-push` 인증 Push 구독을 생성했습니다. 엔드포인트와 Audience는
+  `https://api-production-1504.up.railway.app/subscriptions/notifications/google`이며,
+  페이로드 래핑 해제는 끕니다.
+- Play Console `Monetization setup`에서 RTDN을 켜고
+  `projects/jango-plz/topics/jango-play-billing`을 등록했습니다. 현재 알림 유형은
+  구독·무효화 구매 범위로 유지합니다.
+- Railway production에 `GOOGLE_RTDN_AUDIENCE`를 저장하고 API 재시작 후
+  `/subscriptions/notifications/google` 라우트 등록을 확인했습니다. 실제 테스트
+  메시지의 2xx 응답과 Pub/Sub 미승인 메시지 0은 구매 QA 기록에서 최종 확인합니다.
+
 ## P0 — 개인 플러스 업데이트 전 필수
 
 1. **완료:** Railway production DB에 개인 플러스 migration을 적용하고 처분 이벤트 백필

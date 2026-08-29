@@ -98,6 +98,7 @@ export function StatCard({
             size={lampMin}
             tone={lampTone}
             active={isOn}
+            selected={selected ?? false}
           />
         </View>
         {showLabel ? (
