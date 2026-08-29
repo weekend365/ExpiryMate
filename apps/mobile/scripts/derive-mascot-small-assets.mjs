@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
@@ -94,28 +93,3 @@ export function deriveSmallMaster(source) {
 export function fullAssetPath(mood) {
   return path.join(charactersDir, `jango-${mood}.png`);
 }
-
-export function smallAssetPath(mood) {
-  return path.join(charactersDir, "small", `jango-${mood}-small.png`);
-}
-
-export function writeSmallMasters() {
-  fs.mkdirSync(path.join(charactersDir, "small"), { recursive: true });
-
-  for (const mood of mascotMoods) {
-    const source = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
-    const output = deriveSmallMaster(source);
-    fs.writeFileSync(
-      smallAssetPath(mood),
-      PNG.sync.write(output, {
-        colorType: 6,
-        inputColorType: 6,
-        inputHasAlpha: true,
-      }),
-    );
-    console.log(`derived small mascot from full master: ${mood}`);
-  }
-}
-
-const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : null;
-if (invokedPath === fileURLToPath(import.meta.url)) writeSmallMasters();

@@ -17,6 +17,18 @@ const adaptivePath = path.join(
   mobileDir,
   "assets/branding/adaptive-icon.png",
 );
+const monochromePath = path.join(
+  mobileDir,
+  "assets/branding/monochrome-icon.png",
+);
+const notificationMasterPath = path.join(
+  mobileDir,
+  "assets/branding/notification-icon-192.png",
+);
+const notificationPath = path.join(
+  mobileDir,
+  "assets/branding/notification-icon.png",
+);
 const nativeIconPath = path.join(
   mobileDir,
   "ios/ExpiryMate/Images.xcassets/AppIcon.appiconset/App-Icon-1024x1024@1x.png",
@@ -121,6 +133,20 @@ function cornerAlphas(png) {
   ];
 }
 
+function isWhiteAlphaGlyph(png) {
+  for (let index = 0; index < png.data.length; index += 4) {
+    if (
+      png.data[index] !== 255 ||
+      png.data[index + 1] !== 255 ||
+      png.data[index + 2] !== 255 ||
+      (png.data[index + 3] !== 0 && png.data[index + 3] !== 255)
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 const checks = [];
 function check(name, passed, detail) {
   checks.push({ name, passed, detail });
@@ -130,9 +156,15 @@ function check(name, passed, detail) {
 const source = readPng(sourcePath);
 const icon = readPng(iconPath);
 const adaptive = readPng(adaptivePath);
+const monochrome = readPng(monochromePath);
+const notificationMaster = readPng(notificationMasterPath);
+const notification = readPng(notificationPath);
 const sourceBounds = alphaBounds(source);
 const iconBounds = nonBackgroundBounds(icon);
 const adaptiveBounds = alphaBounds(adaptive);
+const monochromeBounds = alphaBounds(monochrome);
+const notificationMasterBounds = alphaBounds(notificationMaster);
+const notificationBounds = alphaBounds(notification);
 const leftThumb = measureThumbMint(source, "left");
 const rightThumb = measureThumbMint(source, "right");
 const thumbAreaRatio = leftThumb.count / rightThumb.count;
@@ -191,6 +223,49 @@ check(
     adaptiveBounds.maxX <= expectedSize - 129 &&
     adaptiveBounds.maxY <= expectedSize - 129,
   `bbox=${adaptiveBounds.minX},${adaptiveBounds.minY}..${adaptiveBounds.maxX},${adaptiveBounds.maxY}`,
+);
+check(
+  "themed icon monochrome fidelity",
+  monochrome.width === expectedSize &&
+    monochrome.height === expectedSize &&
+    monochrome.alpha &&
+    isWhiteAlphaGlyph(monochrome) &&
+    cornerAlphas(monochrome).every((alpha) => alpha === 0) &&
+    monochromeBounds.minX === adaptiveBounds.minX &&
+    monochromeBounds.minY === adaptiveBounds.minY &&
+    monochromeBounds.maxX === adaptiveBounds.maxX &&
+    monochromeBounds.maxY === adaptiveBounds.maxY,
+  `bbox=${monochromeBounds.minX},${monochromeBounds.minY}..${monochromeBounds.maxX},${monochromeBounds.maxY}`,
+);
+check(
+  "notification master upper-body glyph",
+  notificationMaster.width === 192 &&
+    notificationMaster.height === 192 &&
+    notificationMaster.alpha &&
+    isWhiteAlphaGlyph(notificationMaster) &&
+    cornerAlphas(notificationMaster).every((alpha) => alpha === 0) &&
+    (notificationMasterBounds.maxX - notificationMasterBounds.minX + 1) / 192 >= 0.6 &&
+    (notificationMasterBounds.maxX - notificationMasterBounds.minX + 1) / 192 <= 0.7 &&
+    (notificationMasterBounds.maxY - notificationMasterBounds.minY + 1) / 192 >= 0.74 &&
+    (notificationMasterBounds.maxY - notificationMasterBounds.minY + 1) / 192 <= 0.82,
+  `bbox=${notificationMasterBounds.minX},${notificationMasterBounds.minY}..${notificationMasterBounds.maxX},${notificationMasterBounds.maxY}`,
+);
+check(
+  "notification 96px derivative",
+  notification.width === 96 &&
+    notification.height === 96 &&
+    notification.alpha &&
+    isWhiteAlphaGlyph(notification) &&
+    cornerAlphas(notification).every((alpha) => alpha === 0) &&
+    Math.abs(
+      (notificationBounds.maxX - notificationBounds.minX + 1) / 96 -
+        (notificationMasterBounds.maxX - notificationMasterBounds.minX + 1) / 192,
+    ) <= 0.03 &&
+    Math.abs(
+      (notificationBounds.maxY - notificationBounds.minY + 1) / 96 -
+        (notificationMasterBounds.maxY - notificationMasterBounds.minY + 1) / 192,
+    ) <= 0.03,
+  `bbox=${notificationBounds.minX},${notificationBounds.minY}..${notificationBounds.maxX},${notificationBounds.maxY}`,
 );
 
 if (fs.existsSync(nativeIconPath)) {

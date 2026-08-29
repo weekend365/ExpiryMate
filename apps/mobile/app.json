@@ -40,7 +40,7 @@
           "image": "./assets/branding/splash-icon.png",
           "imageWidth": 220,
           "resizeMode": "contain",
-          "backgroundColor": "#F1F3F5"
+          "backgroundColor": "#FCF4EA"
         }
       ],
       "@react-native-community/datetimepicker",
@@ -134,6 +134,7 @@
       "icon": "./assets/branding/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/branding/adaptive-icon.png",
+        "monochromeImage": "./assets/branding/monochrome-icon.png",
         "backgroundColor": "#F1F3F5"
       }
     },

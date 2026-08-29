@@ -7,8 +7,8 @@ import {
   deriveSmallMaster,
   fullAssetPath,
   mascotMoods,
-  smallAssetPath,
 } from "./derive-mascot-small-assets.mjs";
+import { resizePremultiplied } from "./build-mascot-runtime-assets.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const charactersDir = path.resolve(scriptDir, "../assets/characters");
@@ -34,12 +34,17 @@ function cornerAlphas(png) {
 
 describe("mascot runtime assets", () => {
   it(
-    "derives every small master without outline, palette, or design drift",
+    "derives every small runtime asset without outline, palette, or design drift",
     () => {
       for (const mood of moods) {
         const full = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
-        const actual = PNG.sync.read(fs.readFileSync(smallAssetPath(mood)));
-        const expected = deriveSmallMaster(full);
+        const actualPath = path.join(
+          charactersDir,
+          "runtime/small",
+          `jango-${mood}@3x.png`,
+        );
+        const actual = PNG.sync.read(fs.readFileSync(actualPath));
+        const expected = resizePremultiplied(deriveSmallMaster(full), 216, 216);
 
         expect([actual.width, actual.height], mood).toEqual([
           expected.width,
@@ -47,7 +52,7 @@ describe("mascot runtime assets", () => {
         ]);
         expect(
           Buffer.compare(Buffer.from(actual.data), Buffer.from(expected.data)),
-          `${mood} small master must be an exact crop of its full master`,
+          `${mood} small runtime must be an exact crop of its full master`,
         ).toBe(0);
       }
     },
@@ -100,13 +105,7 @@ describe("mascot runtime assets", () => {
     }
 
     const sourceBytes = moods.reduce((total, mood) => {
-      return (
-        total +
-        fs.statSync(path.join(charactersDir, `jango-${mood}.png`)).size +
-        fs.statSync(
-          path.join(charactersDir, "small", `jango-${mood}-small.png`),
-        ).size
-      );
+      return total + fs.statSync(fullAssetPath(mood)).size;
     }, 0);
 
     expect(runtimeBytes).toBeLessThan(sourceBytes);

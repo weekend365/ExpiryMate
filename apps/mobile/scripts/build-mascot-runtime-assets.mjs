@@ -4,33 +4,29 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import {
+  deriveSmallMaster,
+  fullAssetPath,
+  mascotMoods,
+} from "./derive-mascot-small-assets.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const charactersDir = path.resolve(scriptDir, "../assets/characters");
 const runtimeDir = path.join(charactersDir, "runtime");
 
-const moods = [
-  "idle",
-  "happy",
-  "worry",
-  "cooking",
-  "empty",
-  "speak",
-  "think",
-  "point",
-];
+const moods = mascotMoods;
 
 const variants = [
   {
     name: "full",
     logicalSize: 160,
-    sourcePath: (mood) => path.join(charactersDir, `jango-${mood}.png`),
+    sourcePath: fullAssetPath,
   },
   {
     name: "small",
     logicalSize: 72,
-    sourcePath: (mood) =>
-      path.join(charactersDir, "small", `jango-${mood}-small.png`),
+    sourcePath: fullAssetPath,
+    transform: deriveSmallMaster,
   },
 ];
 
@@ -44,7 +40,7 @@ function overlap(startA, endA, startB, endB) {
   return Math.max(0, Math.min(endA, endB) - Math.max(startA, startB));
 }
 
-function resizePremultiplied(source, width, height) {
+export function resizePremultiplied(source, width, height) {
   const output = new PNG({ width, height, colorType: 6 });
   const scaleX = source.width / width;
   const scaleY = source.height / height;
@@ -133,30 +129,39 @@ function writePng(outputPath, png) {
   );
 }
 
-let outputBytes = 0;
+export function buildRuntimeAssets() {
+  let outputBytes = 0;
 
-fs.rmSync(runtimeDir, { recursive: true, force: true });
+  fs.rmSync(runtimeDir, { recursive: true, force: true });
 
-for (const variant of variants) {
-  for (const mood of moods) {
-    const sourcePath = variant.sourcePath(mood);
-    const source = PNG.sync.read(fs.readFileSync(sourcePath));
-    assertSource(source, sourcePath);
+  for (const variant of variants) {
+    for (const mood of moods) {
+      const sourcePath = variant.sourcePath(mood);
+      const fullMaster = PNG.sync.read(fs.readFileSync(sourcePath));
+      assertSource(fullMaster, sourcePath);
+      const source = variant.transform
+        ? variant.transform(fullMaster)
+        : fullMaster;
+      assertSource(source, `${sourcePath} (${variant.name})`);
 
-    for (const density of densities) {
-      const size = variant.logicalSize * density.scale;
-      const outputPath = path.join(
-        runtimeDir,
-        variant.name,
-        `jango-${mood}${density.suffix}.png`,
-      );
-      const output = resizePremultiplied(source, size, size);
-      writePng(outputPath, output);
-      outputBytes += fs.statSync(outputPath).size;
+      for (const density of densities) {
+        const size = variant.logicalSize * density.scale;
+        const outputPath = path.join(
+          runtimeDir,
+          variant.name,
+          `jango-${mood}${density.suffix}.png`,
+        );
+        const output = resizePremultiplied(source, size, size);
+        writePng(outputPath, output);
+        outputBytes += fs.statSync(outputPath).size;
+      }
     }
   }
+
+  console.log(
+    `built ${moods.length * variants.length * densities.length} mascot runtime assets (${(outputBytes / 1024 / 1024).toFixed(2)} MB)`,
+  );
 }
 
-console.log(
-  `built ${moods.length * variants.length * densities.length} mascot runtime assets (${(outputBytes / 1024 / 1024).toFixed(2)} MB)`,
-);
+const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : null;
+if (invokedPath === fileURLToPath(import.meta.url)) buildRuntimeAssets();

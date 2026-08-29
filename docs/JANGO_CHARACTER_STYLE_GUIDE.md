@@ -197,28 +197,24 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `jango-speak.png` | 말하기 (안내·말풍선 UI와 함께). **에셋에 말풍선 금지** |
 | `jango-think.png` | 생각·로딩 |
 | `jango-point.png` | 가리키기 (CTA 유도) |
-| `jango.png` | idle과 동일 마스터 카피 |
 | `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+양손 엄지척, 투명 PNG). 양손은 같은 크기·높이로 맞추고 얼굴보다 시각적으로 무겁지 않게 유지. `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
-| `mate-fridge-chef.png` | 레거시 호환용 2D 중립 포즈 (앱 mood·신규 제작 기준으로 직접 쓰지 않음) |
 
 경로: `apps/mobile/assets/characters/`
-
-과거 3D 원본은 `apps/mobile/assets/characters/legacy/`에 보존하며 공식 캐릭터 에셋으로 배포하지 않는다.
 
 ### 소형 UI 전용 에셋
 
 `Mascot size="small"`은 해당 mood의 전신 마스터에서 결정적으로 파생한 상반신 에셋을 자동 선택한다. 소형을 독립적으로 생성·재디자인하지 않는다.
 
 - 파생 소스: `assets/characters/jango-{mood}.png` (1024×1024 RGBA 전신 마스터)
-- 파생 결과: `assets/characters/small/jango-{mood}-small.png` (1024×1024 RGBA)
+- 파생 결과: `assets/characters/runtime/small/jango-{mood}{,@2x,@3x}.png` (72/144/216px RGBA)
 - 고정 크롭: 전신 좌표 `(x: 97, y: 0, width: 830, height: 830)`을 1024×1024로 확대한다. mood별 임의 크롭·재구도 금지
 - 디자인: 얼굴·모자·문·손잡이·경첩·자석·의상·장갑·소품을 전신 마스터와 픽셀 수준으로 동일하게 유지한다.
 - 색: Mint·Charcoal·Body White·Soft Shadow를 전신 마스터에서 그대로 샘플링한다. 소형 전용 채도·명도 보정 금지
 - 선: 전신 마스터의 선화를 크롭과 함께 확대할 뿐 별도 외곽선 추가·굵기 보정 금지
 - 표정·제스처: 해당 mood 전신 마스터의 표정과 포즈를 그대로 유지한다. 소형 전용 재해석 금지
 - 사용 범위: 72px 인라인·배너·시트 전용. `medium`과 `large`는 기존 전신 에셋 유지
-- 재생성: `pnpm --filter @expirymate/mobile mascot:small:build`
-- 자동 검수: `pnpm --filter @expirymate/mobile mascot:audit` — 비율과 함께 outline·mint·alpha·전체 픽셀 불일치가 모두 `0`이어야 한다.
+- 재생성: `pnpm --filter @expirymate/mobile mascot:build` (`mascot:small:build`는 호환 명령)
+- 자동 검수: `pnpm --filter @expirymate/mobile mascot:audit` — 풀바디에서 메모리상으로 직접 파생한 기준과 비교해 outline·mint·alpha·전체 픽셀 불일치가 모두 `0`이어야 한다. 1024px 소형 중간 파일은 저장하지 않는다.
 
 ### 브랜딩 / 스토어 / 알림
 
@@ -228,21 +224,26 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | --- | --- | --- |
 | `assets/branding/icon.png` | `jango-icon-crop` | iOS/Android 앱 아이콘 (불투명 `#F1F3F5`) |
 | `assets/branding/adaptive-icon.png` | `jango-icon-crop` | Android adaptive foreground (투명) |
+| `assets/branding/monochrome-icon.png` | `adaptive-icon` 알파 | Android 13+ 테마 아이콘 (순백 단색·투명) |
 | `assets/branding/splash-icon.png` | `jango-idle` | Expo splash |
 | `assets/branding/notification-icon-192.png` | `jango-idle` 실루엣 마스터 | 알림용 고해상 실루엣 |
 | `assets/branding/notification-icon.png` | 192→96 다운스케일 | Android 알림 아이콘 |
 | `ios/.../AppIcon.appiconset/` | icon 동기화 | native App Icon |
 | `ios/.../SplashScreenLogo.imageset/` | splash 동기화 | native splash |
 
+알림 아이콘은 `jango-idle` 전신 알파 바운드의 상단 70%에서 **요리사 모자와 냉장고 머리 실루엣만** 결정적으로 파생한다. 192px 마스터에서 96px 배포본을 만들며, 흰색과 완전 투명 픽셀만 사용한다. 전체 실루엣은 캔버스 높이의 74~82%, 너비의 60~70%를 채워 24dp에서도 식별 가능해야 한다. 전신·다리·앞치마를 축소해 넣거나 생성형 모델로 윤곽을 다시 그리지 않는다.
+
+Android 테마 아이콘은 승인된 `adaptive-icon.png`의 알파 채널을 그대로 복사한다. RGB는 순백으로 고정하고 OS가 배경화면과 테마에 맞춰 색을 입히도록 하며, 포즈·비율·안전 영역을 별도로 재해석하지 않는다.
+
 스토어 대표 이미지 역시 `jango-idle`의 플랫 2D 언어를 따른다.
 
 | 파일 | 역할 |
 | --- | --- |
-| `assets/store/google-play-feature-graphic.png` | Google Play 공식 2D 피처 그래픽 |
+| `assets/store/google-play-feature-graphic.png` | Google Play 공식 2D 피처 그래픽. 실제 Pretendard와 `jango-idle` 원본을 합성한 1024×500 불투명 PNG |
 | `assets/store/jango-appstore-space-copy-ko-1242x2688.png` | App Store 공식 2D 세로 캠페인 이미지 |
-| `assets/store/legacy/` | 과거 3D·실사 합성본 보관. 배포 금지 |
 
 스토어 이미지에서도 장고만 2D로 두고 배경을 3D 또는 실사로 합성하지 않는다. 배경은 캐릭터와 같은 차콜 외곽선, 제한된 면색, 1단 이하의 그림자를 사용한다.
+Google Play 공식 파일 검수: `pnpm --filter @expirymate/mobile store:sync` / `store:audit`.
 
 `app.json`의 `expo-notifications.icon` / `color`(`#10B981`)가 `notification-icon.png`를 가리킨다.  
 mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EAS 빌드로 확인.

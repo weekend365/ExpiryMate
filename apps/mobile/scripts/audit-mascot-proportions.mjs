@@ -1,38 +1,30 @@
 #!/usr/bin/env node
 
 import fs from "node:fs";
-import path from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import {
+  deriveSmallMaster,
+  fullAssetPath,
+  mascotMoods,
+} from "./derive-mascot-small-assets.mjs";
 
-const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-const charactersDir = path.resolve(scriptDir, "../assets/characters");
 const shouldCheck = process.argv.includes("--check");
 const tolerance = 0.015;
-const moods = [
-  "idle",
-  "happy",
-  "worry",
-  "cooking",
-  "empty",
-  "speak",
-  "think",
-  "point",
-];
+const moods = mascotMoods;
 const variants = [
   {
     name: "full",
     targetWidth: 473,
     targetHeight: 365,
-    assetPath: (mood) => path.join(charactersDir, `jango-${mood}.png`),
+    asset: (mood) => PNG.sync.read(fs.readFileSync(fullAssetPath(mood))),
   },
   {
     name: "small",
     targetWidth: 583,
     targetHeight: 450,
-    assetPath: (mood) =>
-      path.join(charactersDir, "small", `jango-${mood}-small.png`),
+    asset: (mood) =>
+      deriveSmallMaster(PNG.sync.read(fs.readFileSync(fullAssetPath(mood)))),
   },
 ];
 
@@ -52,8 +44,7 @@ function isDoorInteriorPixel(png, pixelIndex) {
   );
 }
 
-function measureLargestWarmWhiteRegion(assetPath) {
-  const png = PNG.sync.read(fs.readFileSync(assetPath));
+function measureLargestWarmWhiteRegion(png) {
   const pixelCount = png.width * png.height;
   const visited = new Uint8Array(pixelCount);
   const queue = new Int32Array(pixelCount);
@@ -111,7 +102,7 @@ function measureLargestWarmWhiteRegion(assetPath) {
     }
   }
 
-  if (!largest) throw new Error(`Could not measure door interior in ${assetPath}`);
+  if (!largest) throw new Error("Could not measure door interior");
   return largest;
 }
 
@@ -125,7 +116,7 @@ for (const variant of variants) {
   console.log(`\n${variant.name} (${variant.targetWidth}x${variant.targetHeight})`);
 
   for (const mood of moods) {
-    const measurement = measureLargestWarmWhiteRegion(variant.assetPath(mood));
+    const measurement = measureLargestWarmWhiteRegion(variant.asset(mood));
     const widthDelta = measurement.width / variant.targetWidth - 1;
     const heightDelta = measurement.height / variant.targetHeight - 1;
     const passed =

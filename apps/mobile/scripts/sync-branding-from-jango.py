@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Derive branding + native iOS icons from Jango character masters.
+"""Derive branding + native iOS/Android icons from Jango character masters.
 
 Sources:
   - assets/characters/jango-icon-crop.png
@@ -36,6 +36,14 @@ APPICON = (
     / "ios/ExpiryMate/Images.xcassets/AppIcon.appiconset/App-Icon-1024x1024@1x.png"
 )
 SPLASH_DIR = ROOT / "ios/ExpiryMate/Images.xcassets/SplashScreenLogo.imageset"
+ANDROID_RES = ROOT / "android/app/src/main/res"
+ANDROID_MONOCHROME_SIZES = {
+    "mdpi": 108,
+    "hdpi": 162,
+    "xhdpi": 216,
+    "xxhdpi": 324,
+    "xxxhdpi": 432,
+}
 
 BG_RGB = (241, 243, 245)  # semanticColors.background
 
@@ -105,14 +113,26 @@ def to_opaque_rgb(im: Image.Image, bg: tuple[int, int, int] = BG_RGB) -> Image.I
     return base
 
 
+def to_white_alpha_glyph(im: Image.Image) -> Image.Image:
+    """Reuse an approved foreground alpha mask as a pure-white themed glyph."""
+    glyph = Image.new("RGBA", im.size, (255, 255, 255, 255))
+    glyph.putalpha(im.getchannel("A"))
+    return glyph
+
+
 def simplified_silhouette(
-    character: Image.Image, master: int = 192, final: int = 96
+    character: Image.Image,
+    master: int = 192,
+    final: int = 96,
+    upper_crop_ratio: float = 0.70,
 ) -> tuple[Image.Image, Image.Image]:
-    """White silhouette: simplify edges at high res, save 192 master, downscale to 96."""
+    """White notification glyph cropped to Jango's hat and refrigerator head."""
     bbox = character.getbbox()
     if not bbox:
         raise SystemExit("source has no opaque pixels")
-    cropped = character.crop(bbox)
+    content_height = bbox[3] - bbox[1]
+    crop_bottom = bbox[1] + int(content_height * upper_crop_ratio)
+    cropped = character.crop((bbox[0], bbox[1], bbox[2], crop_bottom))
 
     work_size = master * 2
     work = Image.new("RGBA", (work_size, work_size), (0, 0, 0, 0))
@@ -186,6 +206,23 @@ def main() -> None:
     adaptive = fit_on_canvas(crop, 1024, scale=0.72, background=None)
     adaptive = harden_rgba_alpha(adaptive)
     adaptive.save(BRAND / "adaptive-icon.png", optimize=True)
+
+    # Android 13+ themed icon: exact adaptive silhouette, tinted by the OS.
+    monochrome = to_white_alpha_glyph(adaptive)
+    monochrome.save(BRAND / "monochrome-icon.png", optimize=True)
+
+    if ANDROID_RES.exists():
+        for density, dim in ANDROID_MONOCHROME_SIZES.items():
+            destination = (
+                ANDROID_RES / f"mipmap-{density}" / "ic_launcher_monochrome.webp"
+            )
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            monochrome.resize((dim, dim), Image.Resampling.LANCZOS).save(
+                destination,
+                "WEBP",
+                lossless=True,
+                method=6,
+            )
 
     # Splash: full-body idle
     splash = fit_on_canvas(idle, 1024, scale=0.88, background=None)

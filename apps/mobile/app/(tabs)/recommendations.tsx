@@ -1719,7 +1719,7 @@ const styles = StyleSheet.create({
   kitchenSceneVeil: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
-    opacity: 0.24,
+    opacity: 0.16,
   },
   scrollFlex: {
     flex: 1,

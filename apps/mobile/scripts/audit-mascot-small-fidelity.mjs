@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 
 import fs from "node:fs";
+import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import {
   deriveSmallMaster,
   fullAssetPath,
   mascotMoods,
-  smallAssetPath,
   smallMasterCrop,
 } from "./derive-mascot-small-assets.mjs";
+import { resizePremultiplied } from "./build-mascot-runtime-assets.mjs";
 
 const shouldCheck = process.argv.includes("--check");
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const charactersDir = path.resolve(scriptDir, "../assets/characters");
 
 function isCharcoal(red, green, blue, alpha) {
   return alpha >= 128 && red <= 80 && green <= 85 && blue <= 90;
@@ -76,8 +80,12 @@ console.log(
 
 for (const mood of mascotMoods) {
   const full = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
-  const actual = PNG.sync.read(fs.readFileSync(smallAssetPath(mood)));
-  const expected = deriveSmallMaster(full);
+  const actual = PNG.sync.read(
+    fs.readFileSync(
+      path.join(charactersDir, "runtime/small", `jango-${mood}@3x.png`),
+    ),
+  );
+  const expected = resizePremultiplied(deriveSmallMaster(full), 216, 216);
   const result = compareSmallMaster(actual, expected);
   const passed =
     actual.width === expected.width &&

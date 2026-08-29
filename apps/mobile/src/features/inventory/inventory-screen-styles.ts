@@ -310,7 +310,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   fridgeSceneVeil: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
-    opacity: 0.24,
+    opacity: 0.16,
   },
   listFlex: {
     flex: 1,
