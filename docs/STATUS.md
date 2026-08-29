@@ -63,9 +63,11 @@ data_as_of: 2026-08-29
 - EAS production 설정이 필수 API·OAuth·AdMob·Sentry 공개 환경값을 모두 읽는 것을
   확인했습니다. 2026-08-29 원격 iOS buildNumber는 `35`이므로 auto-increment가 정상
   동작하면 9월 1일 production 빌드는 `36`이 됩니다.
-- **사용자 확인 완료:** App Store Connect 저작권을 `2026 devnamu`로 수정했고,
-  화면 공유 과정에서 노출된 심사 계정 비밀번호와 App Store Connect 로그인 정보를
-  갱신했습니다.
+- **사용자 확인 완료:** App Store Connect 저작권을 `2026 devnamu`로 수정했습니다.
+  심사 계정 비밀번호는 한 차례 교체했지만 2026-08-29 추가 캡처에서 다시 노출되어,
+  제출 전 재교체와 App Store Connect 로그인 정보 재갱신이 필요합니다.
+- **사용자 확인 완료:** App Store Connect 대한민국 연령 등급이 `4+`로 표시되는 것을
+  확인했습니다. 수출 규정 응답은 별도로 최종 확인해야 합니다.
 - **사용자 확인 완료:** 심사 전용 계정으로 production 앱에 로그인했으며 홈이 정상적으로
   열리고 설정에 `함께 쓰는 냉장고` 진입점이 표시됩니다.
 - **사용자 확인 완료:** 심사 계정이 소유자인 `Apple 심사 냉장고`를 만들었고
