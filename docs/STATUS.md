@@ -68,6 +68,8 @@ data_as_of: 2026-08-29
   갱신했습니다.
 - **사용자 확인 완료:** 심사 전용 계정으로 production 앱에 로그인했으며 홈이 정상적으로
   열리고 설정에 `함께 쓰는 냉장고` 진입점이 표시됩니다.
+- **사용자 확인 완료:** 심사 계정이 소유자인 `Apple 심사 냉장고`를 만들었고
+  `1명이 함께 써요 · 지금 보는 중` 상태를 확인했습니다.
 - `SUBSCRIPTIONS_ENABLED=false`, `IAP_ALLOW_SANDBOX_PURCHASES=false`를 유지합니다.
   9월 1일 TestFlight/Sandbox QA 직전에만 Sandbox 구매 허용 범위를 다시 결정합니다.
 
