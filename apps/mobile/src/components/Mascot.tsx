@@ -7,22 +7,22 @@ import {
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import jangoCooking from "../../assets/characters/jango-cooking.png";
-import jangoEmpty from "../../assets/characters/jango-empty.png";
-import jangoHappy from "../../assets/characters/jango-happy.png";
-import jangoIdle from "../../assets/characters/jango-idle.png";
-import jangoPoint from "../../assets/characters/jango-point.png";
-import jangoSpeak from "../../assets/characters/jango-speak.png";
-import jangoThink from "../../assets/characters/jango-think.png";
-import jangoWorry from "../../assets/characters/jango-worry.png";
-import jangoCookingSmall from "../../assets/characters/small/jango-cooking-small.png";
-import jangoEmptySmall from "../../assets/characters/small/jango-empty-small.png";
-import jangoHappySmall from "../../assets/characters/small/jango-happy-small.png";
-import jangoIdleSmall from "../../assets/characters/small/jango-idle-small.png";
-import jangoPointSmall from "../../assets/characters/small/jango-point-small.png";
-import jangoSpeakSmall from "../../assets/characters/small/jango-speak-small.png";
-import jangoThinkSmall from "../../assets/characters/small/jango-think-small.png";
-import jangoWorrySmall from "../../assets/characters/small/jango-worry-small.png";
+import jangoCooking from "../../assets/characters/runtime/full/jango-cooking.png";
+import jangoEmpty from "../../assets/characters/runtime/full/jango-empty.png";
+import jangoHappy from "../../assets/characters/runtime/full/jango-happy.png";
+import jangoIdle from "../../assets/characters/runtime/full/jango-idle.png";
+import jangoPoint from "../../assets/characters/runtime/full/jango-point.png";
+import jangoSpeak from "../../assets/characters/runtime/full/jango-speak.png";
+import jangoThink from "../../assets/characters/runtime/full/jango-think.png";
+import jangoWorry from "../../assets/characters/runtime/full/jango-worry.png";
+import jangoCookingSmall from "../../assets/characters/runtime/small/jango-cooking.png";
+import jangoEmptySmall from "../../assets/characters/runtime/small/jango-empty.png";
+import jangoHappySmall from "../../assets/characters/runtime/small/jango-happy.png";
+import jangoIdleSmall from "../../assets/characters/runtime/small/jango-idle.png";
+import jangoPointSmall from "../../assets/characters/runtime/small/jango-point.png";
+import jangoSpeakSmall from "../../assets/characters/runtime/small/jango-speak.png";
+import jangoThinkSmall from "../../assets/characters/runtime/small/jango-think.png";
+import jangoWorrySmall from "../../assets/characters/runtime/small/jango-worry.png";
 import { spacing } from "../shared/theme";
 
 export type MascotMood =

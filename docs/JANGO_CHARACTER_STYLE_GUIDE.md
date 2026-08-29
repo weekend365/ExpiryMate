@@ -182,9 +182,9 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 ### 소형 UI 전용 에셋
 
-`Mascot size="small"`은 `assets/characters/small/jango-{mood}-small.png`를 자동 선택한다.
+`Mascot size="small"`은 소형 UI용 상반신 마스터에서 생성한 런타임 에셋을 자동 선택한다.
 
-- 캔버스: 1024×1024 RGBA 원본 (후속 밀도 최적화 전 소스)
+- 소스: `assets/characters/small/jango-{mood}-small.png` (1024×1024 RGBA 마스터)
 - 구도: 모자부터 앞치마 상단까지의 상반신 크롭
 - 표정: 전신 에셋보다 눈·입·눈썹을 약 18% 크게
 - 선: 외곽선을 조금 굵게 하고 모자 주름·스티치·퀼팅은 최소화
@@ -221,9 +221,23 @@ mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EA
 ### 기술
 
 - 포맷: **PNG · RGBA · 투명 배경**
-- 권장 캔버스: **1024×1024**
+- 소스 마스터 캔버스: **1024×1024**
 - 앱 표시: `Mascot` → `Image` `resizeMode="contain"`
 - 검수 크기: **64px / 120px**에서도 실루엣·표정이 읽혀야 함
+
+### 런타임 밀도 에셋
+
+재생성: `pnpm --filter @expirymate/mobile mascot:build`
+
+| 구분 | 1x | 2x | 3x | 경로 |
+| --- | ---: | ---: | ---: | --- |
+| 전신 (`medium`·`large`) | 160px | 320px | 480px | `assets/characters/runtime/full/` |
+| 상반신 (`small`) | 72px | 144px | 216px | `assets/characters/runtime/small/` |
+
+- `runtime/` 파일은 직접 편집하지 않고 1024px 마스터를 수정한 뒤 재생성한다.
+- 기본 파일과 같은 폴더의 `@2x`·`@3x` 형식으로 두어 Metro가 기기 픽셀 밀도에 맞는 파일을 선택하게 한다.
+- 파생 시 캔버스 좌표를 유지해 mood 간 앵커·기준선이 흔들리지 않게 한다.
+- 프리멀티플라이드 알파 영역 필터를 사용해 투명 경계의 흰색/검은색 번짐과 계단 현상을 줄인다.
 
 ### 배경 처리 (필수)
 
