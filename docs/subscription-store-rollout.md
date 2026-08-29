@@ -11,6 +11,57 @@ data_as_of: 2026-08-29
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
 
+## 0. 진행 스냅샷 — 2026-08-29
+
+### 완료
+
+- 유료 앱 계약·세금·은행 상태 `Active`
+- `Jango Plus` 그룹과 월간 `expirymate_premium_monthly`, 연간
+  `expirymate_premium_yearly` 상품 생성
+- 월 4,900원·연 39,000원, 전체 판매 지역, 같은 구독 등급, 가족 공유 끔,
+  무료 체험·Offer 없음
+- 한국어 그룹·상품 현지화 등록
+- App Store Server Notifications V2 production·Sandbox URL 등록 및 테스트 알림
+  API `201` 성공
+- App Store Server API 인앱 구입 키와 Apple Root CA를 Railway production에 등록하고
+  신규 배포 `/ready` 200 확인
+- Billing Grace Period를 Sandbox only·16일·Paid to Paid로 설정
+- Privacy·Privacy Choices URL과 App Privacy 15개 데이터 유형 게시, Tracking `No`
+- iOS 1.4.0 메타데이터와 Support·Marketing URL 저장, 수동 출시 선택
+- 저장소 버전 1.4.0, EAS remote auto-increment 설정, iOS Pods 동기화 검증
+- 2026-08-29 기준 모바일 타입 검사, 테스트 255개, CocoaPods deployment 검증 통과
+- EAS production 환경에서 API·OAuth·AdMob·Sentry 공개 환경값 로드 확인
+- EAS remote iOS buildNumber `35` 확인. 9월 1일 auto-increment 예상 번호는 `36`
+
+### 2026-09-01 빌드 전에 남은 수동 조치
+
+- App Store Connect 저작권을 `2026 devnamu`로 수정
+- 외부에 노출된 기존 심사 계정 비밀번호를 교체하고 App Store Connect 로그인 정보 갱신
+- 심사 전용 계정으로 로그인·공유 공간·재고·설정 → 개인 플러스 진입을 재확인
+- 월간·연간 상품의 Review Information에 넣을 실제 페이월 스크린샷 준비
+- 심사 노트는 [`store-metadata-draft.md`](./store-metadata-draft.md)의 정본을 사용하되
+  실제 심사 계정과 빌드 번호만 제출 직전에 채움
+
+### 2026-09-01 이후 순서
+
+1. EAS remote iOS buildNumber가 여전히 `35`인지 확인하고 production 빌드를 생성합니다.
+   다른 빌드가 먼저 생성됐다면 해당 최신 번호에서 자동 증가하도록 두며 `36`을 강제로
+   덮어쓰지 않습니다.
+2. TestFlight 처리 완료 후 1.4.0 버전에 빌드를 연결합니다.
+3. 필요한 기간에만 `IAP_ALLOW_SANDBOX_PURCHASES=true`를 적용하고 월간·연간 구매,
+   취소, 갱신, grace, 만료, 복원, 타 계정 충돌을 검증합니다.
+4. 구독 상품 두 개의 Review Information과 심사 스크린샷을 완성합니다.
+5. 1.4.0 앱 버전과 첫 구독 두 개를 같은 심사 제출에 추가합니다.
+6. 원가 No-Go와 release QA가 통과하기 전에는 수동 출시하지 않고
+   `SUBSCRIPTIONS_ENABLED=false`를 유지합니다.
+
+### 별도 남은 범위
+
+- Railway production Volume 최신 백업
+- 요리 50건·사진 30건 실제 원가 표본과 p95 No-Go 판정
+- Google Play 판매자/API 권한, `jango_plus` base plan, RTDN, Data Safety 설정
+- Android internal AAB와 License Tester 결제 QA
+
 ## 1. 코드와 콘솔에서 반드시 일치할 값
 
 | 항목 | 값 |

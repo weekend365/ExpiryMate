@@ -22,12 +22,14 @@ source_of_truth: true
 
 ## 개인 플러스 업데이트 인수 기준
 
-- [ ] Railway 공유 공간 migration 적용과 기존 데이터 백필 확인
+- [x] Railway 공유 공간·개인 플러스 migration 적용과 기존 처분 데이터 백필 확인
 - [ ] 공유 기능 포함 iOS production 빌드와 TestFlight QA
 - [ ] Android production AAB internal QA와 Play Console 제출 준비
 - [ ] 두 계정 공유 시나리오와 로그인·스캔·추천·삭제 회귀 QA
-- [ ] App Store Privacy Label과 Play Data Safety의 Purchases 선언 대조
-- [ ] 개인 플러스 상품, 서버 알림, Support URL, 스크린샷, 설명, 심사 노트 확정
+- [x] App Store Privacy Label의 Purchases·SDK 데이터 선언 게시
+- [ ] Play Data Safety의 Purchases·SDK 데이터 선언 게시
+- [x] App Store 개인 플러스 상품, 가격, 서버 알림, Support URL, 설명 설정
+- [ ] App Store 상품 심사 스크린샷·심사 노트·1.4.0 빌드 연결
 - [x] 초대 개인정보 보관·삭제 정책과 공개 방침 일치
 - [x] Sign in with Apple TestFlight 검증
 

@@ -16,6 +16,13 @@ Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight
 추가하는 다음 업데이트는 `1.4.0`으로 제출합니다. 첫 자동 갱신 구독이므로 새 앱 버전,
 구독 그룹, 월간·연간 상품을 같은 App Review 제출에 포함합니다.
 
+> **일정:** production EAS 빌드는 2026-09-01에 생성합니다. 2026-08-29에는 버전·Pods·
+> 타입 검사·모바일 테스트까지만 완료했으며 App Store Connect의 빌드 연결과 구독 심사
+> 추가는 의도적으로 대기 중입니다. 최신 준비 상태는
+> [`subscription-store-rollout.md`](./subscription-store-rollout.md)의 진행 스냅샷을 따릅니다.
+> 2026-08-29에 확인한 EAS remote iOS buildNumber는 `35`입니다. 9월 1일 빌드 직전에
+> 다시 조회하고, 값이 그대로라면 production `autoIncrement` 결과는 `36`이어야 합니다.
+
 ### 버전 기준
 
 - `apps/mobile/app.json`의 `expo.version`: `1.4.0`

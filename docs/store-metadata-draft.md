@@ -217,12 +217,17 @@ Expo Go가 아닌 스토어/TestFlight 빌드에서 동작합니다.
 
 ## 7. 남은 준비물 체크
 
-- [ ] Support/Privacy URL이 브라우저에서 열리는지
+- [x] Support/Privacy URL이 브라우저에서 열리는지
 - [ ] 심사 전용 데모 이메일 계정 준비(또는 Apple 로그인만으로 가능한지 명시)
 - [ ] 공유 냉장고가 준비된 심사 계정 2개 또는 재현 가능한 초대 절차 준비
 - [ ] 6.9형 스크린샷 3장 이상(공유 공간 화면 1장 포함 권장)
-- [ ] App Privacy 질문 저장
-- [ ] 개인 플러스 월간·연간 IAP 가격, 지역, 구독 그룹, 약관 URL과 심사 스크린샷 등록
+- [x] App Privacy 질문 저장·게시
+- [x] 개인 플러스 월간·연간 IAP 가격, 지역, 구독 그룹, 약관 URL 등록
+- [ ] 개인 플러스 월간·연간 상품의 심사용 페이월 스크린샷 등록
+- [ ] 1.4.0 production 빌드 연결과 첫 구독 2개를 같은 심사에 추가
 - [ ] iOS Sandbox·Android License 계정으로 구매·pending·복원·갱신·취소·환불 확인
-- [ ] 연령 등급·수출 규정(암호화: 앱은 `usesNonExemptEncryption: false` 설정됨)
+- [ ] 연령 등급·수출 규정 최종 확인(암호화: 앱은 `usesNonExemptEncryption: false` 설정됨)
 - [ ] (병행) Play Data Safety는 같은 표로 Android 때 작성
+
+빌드 일정: **2026-09-01**. 제출 전 저작권을 `2026 devnamu`로 수정하고, 노출된 기존
+심사 계정 비밀번호를 교체한 뒤 App Store Connect 로그인 정보를 갱신합니다.

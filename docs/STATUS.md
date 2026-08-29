@@ -43,6 +43,31 @@ data_as_of: 2026-08-29
   `Not Authorized`가 반환되므로, 프로젝트 Owner 권한으로 최신 백업을 생성하기 전에는 추가
   운영 스키마 변경을 진행하지 않습니다.
 
+### 2026-08-29 App Store Connect 준비 현황
+
+- 유료 앱 계약, 대한민국 세금 양식, KRW 은행 계좌가 모두 `Active`인 것을 확인했습니다.
+- `Jango Plus` 구독 그룹에 개인 플러스 월간·연간 상품을 같은 등급으로 등록했습니다.
+  월간은 4,900원, 연간은 39,000원이며 전 지역 판매, 가족 공유 끔, 무료 체험·프로모션
+  없음으로 설정했습니다.
+- App Store Server Notifications V2의 production·Sandbox URL을 production API로
+  등록했고, Apple 테스트 알림이 API `201`로 성공했습니다.
+- App Store Server API용 인앱 구입 키와 Apple Root CA를 Railway production에 등록한 뒤
+  `/ready` 200을 확인했습니다. 비공개 `.p8` 파일은 저장소에 넣지 않았습니다.
+- Billing Grace Period는 `Sandbox only`, 16일, `Paid to Paid`로 설정했습니다.
+- Privacy·Privacy Choices URL과 App Privacy 15개 데이터 유형을 실제 SDK·앱 동작에 맞춰
+  게시했습니다. Tracking은 `No`입니다.
+- iOS 1.4.0 버전의 프로모션 문구, 설명, 업데이트 내용, Support·Marketing URL을 저장하고
+  출시 방식은 **수동 출시**로 선택했습니다.
+- iOS production 빌드 생성은 **2026-09-01**에 진행합니다. 그전에는 빌드 연결, 첫 구독
+  심사 추가, Sandbox 구매 QA, 심사 제출을 하지 않습니다.
+- EAS production 설정이 필수 API·OAuth·AdMob·Sentry 공개 환경값을 모두 읽는 것을
+  확인했습니다. 2026-08-29 원격 iOS buildNumber는 `35`이므로 auto-increment가 정상
+  동작하면 9월 1일 production 빌드는 `36`이 됩니다.
+- 제출 전 수동 조치로 저작권을 `2026 devnamu`로 수정하고, 화면 공유 과정에서 노출된
+  심사 계정 비밀번호를 교체한 뒤 App Store Connect의 로그인 정보도 갱신해야 합니다.
+- `SUBSCRIPTIONS_ENABLED=false`, `IAP_ALLOW_SANDBOX_PURCHASES=false`를 유지합니다.
+  9월 1일 TestFlight/Sandbox QA 직전에만 Sandbox 구매 허용 범위를 다시 결정합니다.
+
 ## P0 — 개인 플러스 업데이트 전 필수
 
 1. **완료:** Railway production DB에 개인 플러스 migration을 적용하고 처분 이벤트 백필
@@ -52,8 +77,9 @@ data_as_of: 2026-08-29
 4. 두 실계정으로 초대, 역할, 공간 전환, 재고 동기화, 알림, 계정 삭제를 검증합니다.
 5. 요리 50건·사진 30건의 실호출 p95 원가가 개인 플러스 월 원가 예산 858원을
    충족하는지 확인합니다. 충족하지 못하면 신규 판매를 열지 않습니다.
-6. App Store Connect와 Play Console에 개인 플러스 월간·연간 상품, 서버 알림,
-   가격, 약관·개인정보 선언을 실제 동작과 동일하게 설정합니다.
+6. **iOS 부분 완료:** App Store Connect의 개인 플러스 상품, 가격, 서버 알림,
+   약관·개인정보 선언을 설정했습니다. 상품 심사 스크린샷·빌드 연결·심사 추가와
+   Play Console 설정은 남아 있습니다.
 7. iOS Sandbox와 Android License 계정으로 구매·복원·갱신·취소·환불을 검증합니다.
 8. 기존 앱의 새 iOS 버전과 첫 자동 갱신 구독을 같은 심사에 넣고, Android는 internal
    검증 후 production 업데이트를 제출합니다.
