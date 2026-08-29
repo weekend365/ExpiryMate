@@ -198,7 +198,7 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `jango-think.png` | 생각·로딩 |
 | `jango-point.png` | 가리키기 (CTA 유도) |
 | `jango.png` | idle과 동일 마스터 카피 |
-| `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+엄지척, 투명 PNG). `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
+| `jango-icon-crop.png` | **아이콘 전용 포즈** (idle 마스터·윙크+양손 엄지척, 투명 PNG). 양손은 같은 크기·높이로 맞추고 얼굴보다 시각적으로 무겁지 않게 유지. `branding:sync`가 `#F1F3F5` 불투명 `icon.png`로 합성 |
 | `mate-fridge-chef.png` | 레거시 호환용 2D 중립 포즈 (앱 mood·신규 제작 기준으로 직접 쓰지 않음) |
 
 경로: `apps/mobile/assets/characters/`
@@ -246,6 +246,7 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 `app.json`의 `expo-notifications.icon` / `color`(`#10B981`)가 `notification-icon.png`를 가리킨다.  
 mood / icon-crop를 바꾼 뒤에는 **반드시 `branding:sync`** 후 native/EAS 빌드로 확인.
+아이콘 자동 검수: `pnpm --filter @expirymate/mobile branding:audit` — 1024px RGBA 소스, 투명 모서리, 양손 균형, iOS 인셋, Android adaptive safe zone, native iOS 동기화를 검사한다.
 
 ### 기술
 
