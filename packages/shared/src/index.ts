@@ -25,3 +25,4 @@ export * from "./utils/units";
 export * from "./utils/catalog-text";
 export * from "./utils/catalog-confidence";
 export * from "./utils/recipe-preference-summary";
+export * from "./utils/recipe-step-timer";

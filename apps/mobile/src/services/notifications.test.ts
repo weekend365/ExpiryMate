@@ -4,12 +4,17 @@ const mocks = vi.hoisted(() => ({
   notifications: {
     AndroidImportance: {
       DEFAULT: 3,
+      HIGH: 4,
+    },
+    SchedulableTriggerInputTypes: {
+      TIME_INTERVAL: "timeInterval",
     },
     setNotificationHandler: vi.fn(),
     getPermissionsAsync: vi.fn(),
     requestPermissionsAsync: vi.fn(),
     getExpoPushTokenAsync: vi.fn(),
     scheduleNotificationAsync: vi.fn(),
+    cancelScheduledNotificationAsync: vi.fn(),
     setNotificationChannelAsync: vi.fn(),
     addNotificationResponseReceivedListener: vi.fn(),
     getLastNotificationResponseAsync: vi.fn(),
@@ -175,6 +180,62 @@ describe("mobile notification service", () => {
     });
   });
 
+  it("schedules a sounding cooking timer on its Android channel", async () => {
+    mocks.platform.Platform.OS = "android";
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.scheduleNotificationAsync.mockResolvedValue("timer-1");
+    const { scheduleCookingTimerNotification } = await import("./notifications");
+
+    const result = await scheduleCookingTimerNotification({
+      seconds: 180,
+      dishTitle: "양파볶음",
+      recommendationId: "rec-1",
+      dishIndex: 1,
+      stepIndex: 2,
+    });
+
+    expect(result).toBe("timer-1");
+    expect(mocks.notifications.setNotificationChannelAsync).toHaveBeenCalledWith(
+      "cooking-timers",
+      { name: "조리 타이머", importance: 4, sound: "default" },
+    );
+    expect(mocks.notifications.scheduleNotificationAsync).toHaveBeenCalledWith({
+      content: {
+        title: "양파볶음 타이머가 끝났어요",
+        body: "3단계를 확인해 주세요.",
+        sound: "default",
+        data: {
+          type: "cooking_timer",
+          recommendationId: "rec-1",
+          dishIndex: 1,
+          stepIndex: 2,
+        },
+      },
+      trigger: {
+        type: "timeInterval",
+        seconds: 180,
+        channelId: "cooking-timers",
+      },
+    });
+  });
+
+  it("keeps the timer in-app when notification permission is denied", async () => {
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: false });
+    mocks.notifications.requestPermissionsAsync.mockResolvedValue({ granted: false });
+    const { scheduleCookingTimerNotification } = await import("./notifications");
+
+    await expect(
+      scheduleCookingTimerNotification({
+        seconds: 60,
+        dishTitle: "수프",
+        recommendationId: "rec-1",
+        dishIndex: 0,
+        stepIndex: 0,
+      }),
+    ).resolves.toBeNull();
+    expect(mocks.notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
+  });
+
   it("maps notification data to in-app paths", async () => {
     const {
       NOTIFICATION_TYPES,
@@ -198,6 +259,30 @@ describe("mobile notification service", () => {
         type: NOTIFICATION_TYPES.expiryReminder,
       }),
     ).toBe("/(tabs)/inventory");
+    expect(
+      getNotificationNavigationPath({
+        type: NOTIFICATION_TYPES.cookingTimer,
+        recommendationId: "rec/1",
+        dishIndex: 2,
+        stepIndex: 3,
+      }),
+    ).toBe("/cooking/rec%2F1?dishIndex=2&stepIndex=3");
     expect(getNotificationNavigationPath(undefined)).toBeNull();
+  });
+
+  it("plays sound only for foreground cooking timer notifications", async () => {
+    await import("./notifications");
+    const handler = mocks.notifications.setNotificationHandler.mock.calls[0]?.[0];
+
+    await expect(
+      handler.handleNotification({
+        request: { content: { data: { type: "cooking_timer" } } },
+      }),
+    ).resolves.toMatchObject({ shouldPlaySound: true });
+    await expect(
+      handler.handleNotification({
+        request: { content: { data: { type: "expiry_reminder" } } },
+      }),
+    ).resolves.toMatchObject({ shouldPlaySound: false });
   });
 });

@@ -1,4 +1,8 @@
-import { formatBaseQuantity, ItemStatus } from "@expirymate/shared";
+import {
+  extractRecipeStepTimerSeconds,
+  formatBaseQuantity,
+  ItemStatus,
+} from "@expirymate/shared";
 import { router, useNavigation } from "expo-router";
 import {
   CheckCircle2,
@@ -10,7 +14,7 @@ import {
   ShoppingBasket,
 } from "lucide-react-native";
 import { useEffect, useLayoutEffect } from "react";
-import { BackHandler, Pressable, StyleSheet, View } from "react-native";
+import { Alert, BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -36,6 +40,13 @@ import {
   type ConsumptionMode,
 } from "../../src/features/recipes/cooking";
 import { useCookingSession } from "../../src/features/recipes/use-cooking-session";
+import { CookingTimerCard } from "../../src/features/recipes/cooking-timer-card";
+import {
+  isCookingTimerForStep,
+  type StartCookingTimerInput,
+} from "../../src/features/recipes/cooking-timer";
+import { useCookingTimer } from "../../src/features/recipes/use-cooking-timer";
+import { useAuth } from "../../src/features/auth/use-auth";
 import { useAffiliateShopping } from "../../src/features/affiliate/use-affiliate-shopping";
 import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
@@ -44,8 +55,11 @@ import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 export default function CookingScreen() {
   const navigation = useNavigation();
   const { shouldStack, isRegular } = useResponsiveLayout();
+  const { sessionUserId } = useAuth();
+  const cookingTimer = useCookingTimer(sessionUserId);
   const {
     recommendationId,
+    requestedDishIndex,
     recommendationQuery,
     inventoryQuery,
     consumeMutation,
@@ -252,6 +266,58 @@ export default function CookingScreen() {
     );
   }
 
+  const stepTimerSeconds =
+    cookingStepIndex !== null
+      ? (dish.stepTimerSeconds?.[cookingStepIndex] ??
+        extractRecipeStepTimerSeconds(dish.steps[cookingStepIndex] ?? ""))
+      : null;
+  const timerInput: StartCookingTimerInput | null =
+    cookingStepIndex !== null && stepTimerSeconds && sessionUserId
+      ? {
+          ownerKey: sessionUserId,
+          recommendationId,
+          dishIndex: requestedDishIndex,
+          stepIndex: cookingStepIndex,
+          dishTitle: dish.title,
+          stepText: dish.steps[cookingStepIndex] ?? "",
+          durationSeconds: stepTimerSeconds,
+        }
+      : null;
+
+  const handleStartTimer = () => {
+    if (!timerInput) {
+      return;
+    }
+    const activeTimer = cookingTimer.timer;
+    const isAnotherActiveTimer =
+      activeTimer != null &&
+      (activeTimer.status === "running" || activeTimer.status === "paused") &&
+      !isCookingTimerForStep(
+        activeTimer,
+        timerInput.recommendationId,
+        timerInput.dishIndex,
+        timerInput.stepIndex,
+      );
+
+    if (isAnotherActiveTimer) {
+      Alert.alert(
+        "실행 중인 타이머를 바꿀까요?",
+        `${activeTimer.dishTitle} ${activeTimer.stepIndex + 1}단계 타이머가 취소돼요.`,
+        [
+          { text: "그대로 둘게요", style: "cancel" },
+          {
+            text: "새 타이머 시작",
+            style: "destructive",
+            onPress: () => void cookingTimer.start(timerInput, true),
+          },
+        ],
+      );
+      return;
+    }
+
+    void cookingTimer.start(timerInput);
+  };
+
   const footer =
     currentIndex === 0 ? (
       <View style={styles.footerStack}>
@@ -435,6 +501,13 @@ export default function CookingScreen() {
                 />
               )}
             </Pressable>
+            {timerInput ? (
+              <CookingTimerCard
+                input={timerInput}
+                controller={cookingTimer}
+                onStart={handleStartTimer}
+              />
+            ) : null}
             {dish.tips.length ? (
               <View style={styles.tipCard}>
                 <AppText variant="bodyStrong">장고의 조리 팁</AppText>

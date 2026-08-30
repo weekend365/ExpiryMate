@@ -65,7 +65,7 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v8";
+const PROMPT_VERSION = "recipe-recommendation-v9";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 const MAX_GENERATION_ATTEMPTS = 3;
 
@@ -915,6 +915,7 @@ function buildInstructions() {
     "[조리 단계 작성 규칙]",
     "steps는 초보도 바로 따라 할 수 있도록 구체적이고 디테일하게 작성하세요.",
     "각 추천의 steps는 4~8단계로 구성하고, 한 단계에는 핵심 행동 하나만 담으세요.",
+    "타이머로 잴 수 있는 조리 시간이 있다면 단계마다 하나의 독립된 시간만 적고, 시간이 다른 행동은 별도 단계로 나누세요.",
     "각 단계 문장에는 가능하면 다음을 포함하세요: 실제 사용량(ml/g/개/큰술), 불 세기(약불/중불/강불), 대략 시간(분/초), 완성 감각 기준(거품이 난다, 가장자리가 노릇해진다 등).",
     "재료 목록의 포장 단위(예: 우유 1L)를 그대로 쓰지 말고, 이 요리에 실제로 쓰는 분량을 단계와 tips에 명시하세요.",
     "usedIngredients의 각 항목에는 이 요리에 실제로 사용할 정수 amount와 unitCode를 반드시 넣으세요.",

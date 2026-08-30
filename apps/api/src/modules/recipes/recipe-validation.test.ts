@@ -7,6 +7,7 @@ import type {
 import { ProductCategory, UnitCode } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
 import {
+  sanitizeRecipeRecommendationCopy,
   stripRecipeStrategyLabel,
   validateAlignedRecommendations,
   validateGeneratedRecommendations,
@@ -81,6 +82,12 @@ function dishes(): RecipeRecommendationDish[] {
 }
 
 describe("recipe semantic validation", () => {
+  it("derives aligned step timers while keeping untimed steps nullable", () => {
+    const [sanitized] = sanitizeRecipeRecommendationCopy([dishes()[0]!]);
+
+    expect(sanitized?.stepTimerSeconds).toEqual([null, 30, 180, null]);
+  });
+
   it("canonicalizes valid inventory names", () => {
     const result = validateGeneratedRecommendations(dishes(), request, inventory, preference);
     expect(result.valid).toBe(true);

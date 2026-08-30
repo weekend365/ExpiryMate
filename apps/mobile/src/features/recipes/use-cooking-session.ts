@@ -30,10 +30,15 @@ export function useCookingSession() {
   const params = useLocalSearchParams<{
     recommendationId?: string | string[];
     dishIndex?: string | string[];
+    stepIndex?: string | string[];
   }>();
   const recommendationId = firstParam(params.recommendationId);
   const requestedDishIndex = Number.parseInt(
     firstParam(params.dishIndex) ?? "0",
+    10,
+  );
+  const requestedStepIndex = Number.parseInt(
+    firstParam(params.stepIndex) ?? "",
     10,
   );
   const recommendationQuery = useRecipeRecommendation(recommendationId);
@@ -63,6 +68,7 @@ export function useCookingSession() {
   );
   const [openedShoppingKeys, setOpenedShoppingKeys] = useState<string[]>([]);
   const cookingCompletedRecorded = useRef(false);
+  const appliedStepRouteRef = useRef<string | null>(null);
 
   const recommendation = recommendationQuery.data;
   const dish =
@@ -104,6 +110,23 @@ export function useCookingSession() {
           ) === getRecipeFavoriteKey(recommendationId, requestedDishIndex),
       ),
   );
+
+  useEffect(() => {
+    if (
+      !dish ||
+      !Number.isInteger(requestedStepIndex) ||
+      requestedStepIndex < 0 ||
+      requestedStepIndex >= dish.steps.length
+    ) {
+      return;
+    }
+    const routeKey = `${recommendationId}:${requestedDishIndex}:${requestedStepIndex}`;
+    if (appliedStepRouteRef.current === routeKey) {
+      return;
+    }
+    appliedStepRouteRef.current = routeKey;
+    setCurrentIndex(requestedStepIndex + 1);
+  }, [dish, recommendationId, requestedDishIndex, requestedStepIndex]);
 
   useEffect(() => {
     if (inventoryQuery.isPending) {

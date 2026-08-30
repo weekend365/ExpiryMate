@@ -14,6 +14,9 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
   useRegistrationStore.getState().clearPrefill();
   useRegistrationStore.getState().clearLastStorageLocation();
   clearRecipeGenerationState();
+  void import("../recipes/cooking-timer")
+    .then(({ clearPersistedCookingTimer }) => clearPersistedCookingTimer())
+    .catch(() => undefined);
 }
 
 /** Prefix-stable keys; append userId at the call site for session isolation. */

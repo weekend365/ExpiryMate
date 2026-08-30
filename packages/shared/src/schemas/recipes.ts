@@ -172,6 +172,10 @@ export const recipeRecommendationDishSchema = z.object({
   usedIngredients: z.array(recipeUsedIngredientSchema),
   optionalMissingIngredients: z.array(recipeOptionalMissingIngredientSchema),
   steps: z.array(z.string().min(1).max(fieldLimits.recipeText)).min(1),
+  /** Derived timer duration for each step; omitted by stored legacy recommendations. */
+  stepTimerSeconds: z
+    .array(z.number().int().min(1).max(120 * 60).nullable())
+    .optional(),
   tips: z.array(z.string().max(fieldLimits.recipeText)),
   safetyNote: z.string().max(fieldLimits.recipeText),
   spiceLevel: recipeGeneratedSpiceLevelSchema.optional(),
@@ -188,7 +192,7 @@ export const recipeRecommendationsPayloadSchema = z.object({
 export const generatedRecipeRecommendationsPayloadSchema = z.object({
   recommendations: z
     .array(
-      recipeRecommendationDishSchema.extend({
+      recipeRecommendationDishSchema.omit({ stepTimerSeconds: true }).extend({
         usedIngredients: z.array(generatedRecipeUsedIngredientSchema),
         optionalMissingIngredients: z
           .array(recipeOptionalMissingIngredientSchema)

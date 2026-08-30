@@ -4,6 +4,7 @@ import type {
   RecipeRecommendationDish,
   RecipeRecommendationRequest,
 } from "@expirymate/shared";
+import { deriveRecipeStepTimerSeconds } from "@expirymate/shared";
 import {
   isRecipeTextBlocked,
   normalizeRecipeTerm,
@@ -31,6 +32,7 @@ export function sanitizeRecipeRecommendationCopy(
 ): RecipeRecommendationDish[] {
   return recommendations.map((dish) => ({
     ...dish,
+    stepTimerSeconds: deriveRecipeStepTimerSeconds(dish.steps),
     title: stripRecipeStrategyLabel(dish.title),
     usedIngredients: dish.usedIngredients.map((ingredient) => ({
       ...ingredient,

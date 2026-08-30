@@ -6,6 +6,7 @@ import { registerPushToken, unregisterPushToken } from "./api";
 export const NOTIFICATION_TYPES = {
   recipeReady: "recipe_ready",
   expiryReminder: "expiry_reminder",
+  cookingTimer: "cooking_timer",
 } as const;
 
 export type NotificationType =
@@ -15,20 +16,28 @@ export type LocalNotificationData = {
   type: NotificationType | string;
   recommendationId?: string;
   inventoryItemId?: string;
+  dishIndex?: number;
+  stepIndex?: number;
 };
 
 export type NotificationNavigationPath =
   | "/(tabs)/recommendations"
   | "/(tabs)/inventory"
-  | `/inventory/${string}`;
+  | `/inventory/${string}`
+  | `/cooking/${string}?dishIndex=${number}&stepIndex=${number}`;
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
+  handleNotification: async (notification) => {
+    const shouldPlaySound =
+      notification.request.content.data?.type === NOTIFICATION_TYPES.cookingTimer;
+
+    return {
+      shouldPlaySound,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    };
+  },
 });
 
 export const requestNotificationPermissions = async () => {
@@ -102,6 +111,50 @@ export const scheduleLocalNotification = async (
 
 export const scheduleMockExpiryReminder = scheduleLocalNotification;
 
+export async function scheduleCookingTimerNotification(input: {
+  seconds: number;
+  dishTitle: string;
+  recommendationId: string;
+  dishIndex: number;
+  stepIndex: number;
+}) {
+  await ensureCookingTimerChannel();
+  const permissions = await Notifications.getPermissionsAsync();
+  const resolvedPermissions = permissions.granted
+    ? permissions
+    : await Notifications.requestPermissionsAsync();
+
+  if (!resolvedPermissions.granted) {
+    return null;
+  }
+
+  return Notifications.scheduleNotificationAsync({
+    content: {
+      title: `${input.dishTitle} 타이머가 끝났어요`,
+      body: `${input.stepIndex + 1}단계를 확인해 주세요.`,
+      sound: "default",
+      data: {
+        type: NOTIFICATION_TYPES.cookingTimer,
+        recommendationId: input.recommendationId,
+        dishIndex: input.dishIndex,
+        stepIndex: input.stepIndex,
+      } satisfies LocalNotificationData,
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: input.seconds,
+      ...(Platform.OS === "android" ? { channelId: "cooking-timers" } : {}),
+    },
+  });
+}
+
+export async function cancelScheduledNotification(identifier: string | null) {
+  if (!identifier) {
+    return;
+  }
+  await Notifications.cancelScheduledNotificationAsync(identifier);
+}
+
 export function getNotificationNavigationPath(
   data: unknown,
 ): NotificationNavigationPath | null {
@@ -126,6 +179,25 @@ export function getNotificationNavigationPath(
     }
 
     return "/(tabs)/inventory";
+  }
+
+  if (type === NOTIFICATION_TYPES.cookingTimer) {
+    const recommendationId =
+      "recommendationId" in data && typeof data.recommendationId === "string"
+        ? data.recommendationId.trim()
+        : "";
+    const dishIndex =
+      "dishIndex" in data && typeof data.dishIndex === "number"
+        ? data.dishIndex
+        : -1;
+    const stepIndex =
+      "stepIndex" in data && typeof data.stepIndex === "number"
+        ? data.stepIndex
+        : -1;
+
+    if (recommendationId && dishIndex >= 0 && stepIndex >= 0) {
+      return `/cooking/${encodeURIComponent(recommendationId)}?dishIndex=${dishIndex}&stepIndex=${stepIndex}`;
+    }
   }
 
   return null;
@@ -171,6 +243,18 @@ async function ensureAndroidNotificationChannel() {
   await Notifications.setNotificationChannelAsync("expiry-reminders", {
     name: "유통기한 알림",
     importance: Notifications.AndroidImportance.DEFAULT,
+  });
+}
+
+async function ensureCookingTimerChannel() {
+  if (Platform.OS !== "android") {
+    return;
+  }
+
+  await Notifications.setNotificationChannelAsync("cooking-timers", {
+    name: "조리 타이머",
+    importance: Notifications.AndroidImportance.HIGH,
+    sound: "default",
   });
 }
 

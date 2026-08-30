@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   clearRecipeGenerationState: vi.fn(),
+  clearPersistedCookingTimer: vi.fn(() => Promise.resolve()),
   clearPersistedQueryCache: vi.fn(() => Promise.resolve()),
   clearDraft: vi.fn(),
   clearPrefill: vi.fn(),
@@ -11,6 +12,10 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("../recipes/recipe-generation-reset", () => ({
   clearRecipeGenerationState: mocks.clearRecipeGenerationState,
+}));
+
+vi.mock("../recipes/cooking-timer", () => ({
+  clearPersistedCookingTimer: mocks.clearPersistedCookingTimer,
 }));
 
 vi.mock("../../store/registration-store", () => ({
@@ -61,6 +66,9 @@ describe("session boundary cleanup", () => {
     expect(mocks.clearPrefill).toHaveBeenCalledOnce();
     expect(mocks.clearLastStorageLocation).toHaveBeenCalledOnce();
     expect(mocks.clearRecipeGenerationState).toHaveBeenCalledOnce();
+    await vi.waitFor(() => {
+      expect(mocks.clearPersistedCookingTimer).toHaveBeenCalledOnce();
+    });
     expect(mocks.clearPersistedQueryCache).toHaveBeenCalledOnce();
   });
 

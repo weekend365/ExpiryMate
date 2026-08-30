@@ -54,6 +54,15 @@ describe("recipe ingredient quantity contracts", () => {
     expect(recipeRecommendationDishSchema.safeParse(dish).success).toBe(true);
   });
 
+  it("accepts additive step timer metadata without requiring it for legacy data", () => {
+    const result = recipeRecommendationDishSchema.parse({
+      ...dish,
+      stepTimerSeconds: [120],
+    });
+
+    expect(result.stepTimerSeconds).toEqual([120]);
+  });
+
   it("requires canonical amounts for newly generated recommendations", () => {
     const result = generatedRecipeRecommendationsPayloadSchema.safeParse({
       recommendations: generatedDishes(),
