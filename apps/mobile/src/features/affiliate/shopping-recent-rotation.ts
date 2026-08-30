@@ -1,4 +1,4 @@
-export const SHOPPING_RECENT_PAGE_SIZE = 6;
+export const SHOPPING_RECENT_PAGE_SIZE = 5;
 
 export function takeRecentShoppingGroups<T>(
   groups: T[],
@@ -8,11 +8,9 @@ export function takeRecentShoppingGroups<T>(
 }
 
 export function nextRecentShoppingVisibleCount(
-  visibleCount: number,
   total: number,
-  pageSize = SHOPPING_RECENT_PAGE_SIZE,
 ) {
-  return Math.min(Math.max(visibleCount, 0) + pageSize, Math.max(total, 0));
+  return Math.max(total, 0);
 }
 
 export function canLoadMoreRecentShopping(

@@ -66,6 +66,10 @@ import {
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
+import {
+  AffiliateEntryImpression,
+  trackAffiliateEntryTap,
+} from "../../src/features/affiliate/affiliate-entry-tracking";
 import { colors } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
@@ -95,6 +99,9 @@ export default function InventoryScreen() {
   >([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
+  const [shoppingTarget, setShoppingTarget] = useState<InventoryItem | null>(
+    null,
+  );
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
@@ -215,14 +222,42 @@ export default function InventoryScreen() {
       }}
     />
   ) : visibleRemovalNotice ? (
-    <FeedbackBanner
-      tone="success"
-      title={visibleRemovalNotice}
-      transient
-      speechDensity="default"
-      speechTextVariant="bodySmall"
-      onDismiss={() => setDismissedRemovalNotice(visibleRemovalNotice)}
-    />
+    shoppingTarget ? (
+      <AffiliateEntryImpression placement="inventory_consumed">
+        <FeedbackBanner
+          tone="success"
+          title={`${shoppingTarget.displayName} 다 썼어요.`}
+          actionLabel="장보기에서 찾아볼게요"
+          speechActionPlacement="inside"
+          onAction={() => {
+            trackAffiliateEntryTap("inventory_consumed");
+            router.push({
+              pathname: "/(tabs)/shop",
+              params: {
+                q: shoppingTarget.displayName,
+                source: "inventory_consumed",
+              },
+            });
+          }}
+          transient
+          speechDensity="default"
+          speechTextVariant="bodySmall"
+          onDismiss={() => {
+            setDismissedRemovalNotice(visibleRemovalNotice);
+            setShoppingTarget(null);
+          }}
+        />
+      </AffiliateEntryImpression>
+    ) : (
+      <FeedbackBanner
+        tone="success"
+        title={visibleRemovalNotice}
+        transient
+        speechDensity="default"
+        speechTextVariant="bodySmall"
+        onDismiss={() => setDismissedRemovalNotice(visibleRemovalNotice)}
+      />
+    )
   ) : successMessage ? (
     <FeedbackBanner
       tone="success"
@@ -447,6 +482,7 @@ export default function InventoryScreen() {
     setCleanupItem(null);
     setSuccessMessage(null);
     setActionErrorMessage(null);
+    setShoppingTarget(item);
     deferredRemoval.scheduleRemoval(item, "consume");
   };
 
@@ -454,6 +490,7 @@ export default function InventoryScreen() {
     setCleanupItem(null);
     setSuccessMessage(null);
     setActionErrorMessage(null);
+    setShoppingTarget(null);
     deferredRemoval.scheduleRemoval(item, "consume", amountBase);
   };
 

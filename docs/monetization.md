@@ -160,10 +160,14 @@ ADMOB_SSV_USER_ID_SECRET=
 
 ### 노출 위치
 
-- 레시피 상세: 부족한 선택 재료 최대 2개, 재료별 관련 상품 최대 3개
+- 레시피 상세: 있으면 좋은 선택 재료 최대 2개, 재료별 관련 상품 최대 3개
+- 레시피 상세 고정 하단: `있으면 좋은 재료 n개 장보기`로 내부 장보기 검색 진입
 - 장보기 `/shopping`: 상단 직접 검색
 - 장보기 `/shopping`: 최근 30일 내 수량을 모두 소비한 재료 중 최근 3개, 재료별 상품 최대 3개
-- 홈: 별도 장보기 화면으로 이동하는 빠른 동작
+- 보관함: `전부 사용` 직후 해당 재료가 채워진 내부 장보기 검색 진입
+- 조리 완료: 이번 요리에서 모두 사용한 재료 최대 3개 묶음 장보기
+- 홈: 최근 완전 소비 또는 반복 소비 주기가 도래한 재료의 상품 1개 미리보기
+- 하단 내비게이션: 장보기 탭 상시 진입
 
 폐기한 재료, 부분 소비 재료, 허용하지 않은 상품군, 사용자 레시피 제외 조건과 충돌하는
 재료는 자동 추천에서 제외합니다. 일반 골드박스, 무관한 베스트 상품, 다이나믹 배너는
@@ -201,8 +205,9 @@ ADMOB_SSV_USER_ID_SECRET=
 ```text
 GET  /recipes/recommendations/:id/dishes/:dishIndex/affiliate-offers
 GET  /spaces/:spaceId/affiliate/shopping
+GET  /spaces/:spaceId/affiliate/reorder-preview
 POST /spaces/:spaceId/affiliate/product-search
-     { "query": "두부", "placement": "shopping_search" }
+     { "query": "두부", "placement": "shopping_search|inventory_consumed|cooking_complete|recipe_optional_entry|home_reorder_preview" }
 ```
 
 모든 엔드포인트는 로그인이 필요합니다. 공간 단위 엔드포인트는 해당 공간 멤버십도
@@ -214,6 +219,20 @@ POST /spaces/:spaceId/affiliate/product-search
 ```text
 AFFILIATE_OFFERS_ENABLED=true
 AFFILIATE_OFFERS_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED=true
+AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED=true
+AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED=true
+AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED=true
+AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED=true
+AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED=true
+AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT=100
+AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED=true
+AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT=100
 COUPANG_PARTNERS_ACCESS_KEY=
 COUPANG_PARTNERS_SECRET_KEY=
 COUPANG_PARTNERS_TRACKING_LINK=
@@ -228,16 +247,20 @@ AFFILIATE_OFFER_STALE_SECONDS=21600
 - Access/Secret은 반드시 한 쌍으로 설정합니다. 한쪽만 있으면 production 시작 검증이 실패합니다.
 - `COUPANG_PARTNERS_TRACKING_LINK`는 본인 쿠팡 파트너스 콘솔에서 만든 고정 제휴 링크입니다. API·딥링크 장애 시 최종 폴백이므로 설정을 권장합니다.
 - `COUPANG_PARTNERS_SUB_ID`는 쿠팡 파트너스에 실제 등록된 채널/하위 ID가 있을 때만 정확한 값을 넣습니다. 별도 등록값이 없거나 확실하지 않으면 비워 둡니다.
+- placement별 `*_ENABLED`, `*_ROLLOUT_PERCENT`는 전체 제휴 기능을 끄지 않고 특정 노출 위치만 즉시 중단하거나 `5 → 25 → 100`으로 확대할 때 사용합니다.
 - 리포트 동기화는 Access/Secret이 있을 때만 켭니다. 계정 권한이 리포트 API를 지원하는지 smoke test로 확인합니다.
 
 ### 리포트와 분석
 
-앱은 실제로 화면에 들어온 상품마다 노출을 한 번 기록합니다. 상품 클릭 이벤트에는
+앱은 카드 면적의 절반 이상이 활성 화면에 300ms 이상 들어온 상품과 제휴 진입점만
+노출로 한 번 기록합니다. 상품 클릭 이벤트에는
 `placement`, `productId`, `source`만 기록하며 원문 검색어, 재고 ID, 공간 ID는 넣지
 않습니다. 주요 이벤트는 다음과 같습니다.
 
 ```text
 affiliate_shopping_opened
+affiliate_entry_shown
+affiliate_entry_tapped
 affiliate_product_shown
 affiliate_product_tapped
 affiliate_fallback_tapped
@@ -249,7 +272,7 @@ affiliate_fallback_tapped
 
 관리자 `/monetization`은 다음 두 종류를 분리해 보여 줍니다.
 
-- 앱 지표: 상품 노출, 탭, CTR, placement별 성과
+- 앱 지표: 진입점과 상품의 노출, 탭, CTR, placement별 성과
 - 쿠팡 집계: 클릭, 주문, 취소, GMV, 실제 수수료, 클릭→주문 전환율, 클릭당 수익, 마지막 동기화 시각
 
 앱 탭과 쿠팡 클릭은 집계 기준과 시차가 다르므로 같은 숫자로 가정하지 않습니다.

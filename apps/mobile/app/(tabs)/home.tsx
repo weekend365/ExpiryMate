@@ -27,8 +27,9 @@ import {
   type HomeNoticeAction,
 } from "../../src/features/home/home-notices";
 import {
-  HomeShoppingCard,
+  HomeReorderCard,
 } from "../../src/features/home/home-quick-entry";
+import { useAffiliateReorderPreview } from "../../src/features/affiliate/use-affiliate-reorder-preview";
 import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
 import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import { useInsightsPreview } from "../../src/features/insights/use-insights";
@@ -66,6 +67,7 @@ export default function HomeScreen() {
   const { activeSpaceId } = useActiveSpace();
   const insightsPreview = useInsightsPreview();
   const subscription = useSubscriptionEntitlement();
+  const reorderPreview = useAffiliateReorderPreview();
   const hasPlus = Boolean(
     subscription.query.data?.hasActiveEntitlement &&
       subscription.query.data.planCode === "jango_plus",
@@ -152,8 +154,15 @@ export default function HomeScreen() {
     router.push("/(tabs)/recommendations");
   };
 
-  const handleOpenShopping = () => {
-    router.push("/shopping");
+  const handleOpenShopping = (query?: string) => {
+    router.push(
+      query
+        ? {
+            pathname: "/(tabs)/shop",
+            params: { q: query, source: "home_reorder_preview" },
+          }
+        : "/(tabs)/shop",
+    );
   };
 
   const handleNoticeAction = (action: HomeNoticeAction) => {
@@ -411,6 +420,13 @@ export default function HomeScreen() {
             )}
           </View>
 
+          {reorderPreview.data?.group ? (
+            <HomeReorderCard
+              preview={reorderPreview.data}
+              onOpenShopping={handleOpenShopping}
+            />
+          ) : null}
+
           <View style={styles.trafficGroup}>
             <HomeSectionHeader
               title="유통기한 현황"
@@ -528,8 +544,6 @@ export default function HomeScreen() {
               </View>
             )}
           </View>
-
-          <HomeShoppingCard onOpenShopping={handleOpenShopping} />
         </ScrollView>
       </View>
     </Screen>

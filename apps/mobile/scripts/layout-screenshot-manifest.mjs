@@ -41,6 +41,7 @@ export const layoutRouteScreenshots = {
   "(tabs)/inventory": "inventory.png",
   "(tabs)/recommendations": "recommendations.png",
   "(tabs)/settings": "settings.png",
+  "(tabs)/shop": "shopping.png",
   "auth/forgot-password": "forgot-password.png",
   "auth/login": "login.png",
   "auth/register": "auth-register.png",

@@ -13,6 +13,8 @@ interface FeedbackBannerProps {
   description?: string;
   actionLabel?: string;
   onAction?: () => void;
+  /** Keeps the default link below the bubble, or highlights it inside. */
+  speechActionPlacement?: "below" | "inside";
   /** When false, mascot is hidden (compact inline strip). Default true. */
   showMascot?: boolean;
   /** Event feedback disappears automatically and can be closed immediately. */
@@ -63,6 +65,7 @@ export function FeedbackBanner({
   description,
   actionLabel,
   onAction,
+  speechActionPlacement = "below",
   showMascot = true,
   transient = false,
   speechDensity = "compact",
@@ -119,8 +122,14 @@ export function FeedbackBanner({
         density={speechDensity}
         textVariant={speechTextVariant}
         onDismiss={isTransientJangoNotice ? dismiss : undefined}
+        inlineActionLabel={
+          speechActionPlacement === "inside" ? actionLabel : undefined
+        }
+        onInlineAction={
+          speechActionPlacement === "inside" ? onAction : undefined
+        }
       />
-      {actionLabel && onAction ? (
+      {speechActionPlacement === "below" && actionLabel && onAction ? (
         <Pressable
           onPress={onAction}
           accessibilityRole="button"

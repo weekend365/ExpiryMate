@@ -12,6 +12,7 @@ function read(relativePath: string) {
 describe("inventory action notice contract", () => {
   it("keeps the Home-style Jango hero inside the filter section", () => {
     const screen = read("app/(tabs)/inventory.tsx");
+    const feedbackBanner = feedbackBannerContract();
     const filterHeader = read(
       "src/features/inventory/inventory-list-header.tsx",
     );
@@ -29,6 +30,25 @@ describe("inventory action notice contract", () => {
     expect(screen).toContain("heroContent={inventoryFilterHero}");
     expect(screen).toContain('speechDensity="default"');
     expect(screen).toContain('speechTextVariant="bodySmall"');
+    expect(screen).toContain(
+      'title={`${shoppingTarget.displayName} 다 썼어요.`}',
+    );
+    expect(screen).not.toContain('description="다시 채워둘까요?"');
+    expect(screen).toContain('actionLabel="장보기에서 찾아볼게요"');
+    expect(screen).toContain('speechActionPlacement="inside"');
+    expect(feedbackBanner).toContain('speechActionPlacement = "below"');
+    expect(feedbackBanner).toContain(
+      'speechActionPlacement === "inside"',
+    );
+    expect(feedbackBanner).toContain(
+      'speechActionPlacement === "below"',
+    );
+    expect(feedbackBanner).toContain("inlineActionLabel");
+    expect(feedbackBanner).not.toContain("textDecorationLine");
+    expect(feedbackBanner).not.toContain("<Button");
+    expect(screen).toContain('trackAffiliateEntryTap("inventory_consumed")');
+    expect(screen).toContain('pathname: "/(tabs)/shop"');
+    expect(screen).toContain('source: "inventory_consumed"');
     expect(filterHeader).toContain("styles.filterToolbarDangerNotice");
     expect(filterHeader).toContain("styles.filterToolbarWarningNotice");
     expect(filterHeader).toContain("styles.filterToolbarSuccessNotice");
@@ -45,3 +65,7 @@ describe("inventory action notice contract", () => {
     expect(screen).not.toContain("InventoryUndoSnackbar");
   });
 });
+
+function feedbackBannerContract() {
+  return read("src/components/FeedbackBanner.tsx");
+}

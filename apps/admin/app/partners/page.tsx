@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: `쿠팡 파트너스 안내 · ${appBrand.appNameKo}`,
-  description: `${appBrand.appNameKo}의 레시피와 장보기에서 제공하는 쿠팡 파트너스 상품 안내입니다.`,
+  description: `${appBrand.appNameKo}의 홈·레시피·보관함·조리 완료·장보기에서 제공하는 쿠팡 파트너스 상품 안내입니다.`,
 };
 
 export default function PartnersPage() {
@@ -26,24 +26,26 @@ export default function PartnersPage() {
           쿠팡 파트너스 안내
         </h1>
         <p className="type-body-small mt-[var(--space-sm)] text-[var(--muted)]">
-          시행일: 2026년 8월 18일
+          시행일: 2026년 8월 18일 · 최종 개정: 2026년 8월 30일
         </p>
 
         <section className="type-body mt-[var(--space-lg)] space-y-[var(--space-sm)] text-[var(--foreground)]">
           <h2 className="type-heading">이 페이지의 역할</h2>
           <p>
             {appBrand.appNameKo}({appBrand.appNameEn})는 식재료·유통기한 관리와
-            AI 요리 추천을 제공합니다. 레시피의 부족 재료와 별도 장보기 화면에서
-            관련 상품 또는 쿠팡 검색 링크를 안내할 수 있습니다. 이 페이지는 그
-            제휴 안내와 경제적 이해관계를 공개합니다.
+            AI 요리 추천을 제공합니다. 홈, 레시피, 보관함, 조리 완료와 장보기
+            화면에서 관련 상품 또는 쿠팡 검색 링크를 안내할 수 있습니다. 이
+            페이지는 그 제휴 안내와 경제적 이해관계를 공개합니다.
           </p>
 
           <h2 className="type-heading pt-[var(--space-sm)]">앱에서 어떻게 쓰이나</h2>
           <p>
-            레시피 상세에서는 부족한 선택 재료별 관련 상품을, 장보기 화면에서는
-            사용자가 직접 검색한 재료와 최근 30일 안에 모두 소비한 재료의 관련
-            상품을 보여 줄 수 있습니다. 홈에는 장보기 화면으로 이동하는 빠른
-            동작만 두며, 유통기한 알림에 상품 배너를 넣지 않습니다.
+            레시피 상세에서는 있으면 좋은 선택 재료를, 보관함과 조리 완료에서는
+            모두 사용한 재료를 장보기로 이어 줍니다. 장보기 화면에서는 사용자가
+            직접 검색한 재료와 최근 30일 안에 모두 소비한 재료의 관련 상품을
+            보여 줄 수 있습니다. 홈에는 최근 소비 또는 반복 소비 시점에 맞춘
+            상품 한 개를 미리 보여 줄 수 있습니다. 유통기한 알림에는 상품 배너를
+            넣지 않습니다.
           </p>
           <p>
             링크를 여는 것은 선택입니다. 개인 플러스 구독 여부, 광고 보상 또는

@@ -513,9 +513,16 @@ export default function RecommendationsScreen() {
     });
   };
 
-  const handleOpenShopping = () => {
+  const handleOpenShopping = (query?: string) => {
     setRecipeDetail(null);
-    router.push("/shopping");
+    router.push(
+      query
+        ? {
+            pathname: "/(tabs)/shop",
+            params: { q: query, source: "recipe_optional_entry" },
+          }
+        : "/(tabs)/shop",
+    );
   };
 
   const handleOpenDetails = (selection: RecipeDetailSelection) => {

@@ -246,6 +246,12 @@ export type AdminMonetizationOverview = {
       taps: number;
       ctrPercent: number;
     }>;
+    entryPlacements: Array<{
+      placement: string;
+      impressions: number;
+      taps: number;
+      ctrPercent: number;
+    }>;
   };
   economicsConfigured: boolean;
   economicsBySource: Array<{

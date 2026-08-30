@@ -160,6 +160,7 @@ export function useDeferredInventoryItemRemoval() {
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
           queryClient.invalidateQueries({ queryKey: keys.dashboard }),
           queryClient.invalidateQueries({ queryKey: keys.shopping }),
+          queryClient.invalidateQueries({ queryKey: keys.reorderPreview }),
         ]);
       } catch (error) {
         restoreItemsToCache(queryClient, keys.inventory, originals);
@@ -167,6 +168,7 @@ export function useDeferredInventoryItemRemoval() {
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
           queryClient.invalidateQueries({ queryKey: keys.dashboard }),
           queryClient.invalidateQueries({ queryKey: keys.shopping }),
+          queryClient.invalidateQueries({ queryKey: keys.reorderPreview }),
         ]).catch(() => undefined);
         if (!options.silent) {
           setErrorMessage(

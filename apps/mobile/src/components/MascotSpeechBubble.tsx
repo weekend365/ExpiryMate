@@ -34,6 +34,9 @@ interface MascotSpeechBubbleProps {
   density?: "default" | "compact";
   /** Adds a close affordance for transient, event-driven notices only. */
   onDismiss?: () => void;
+  /** Optional link appended to the message in the same text line. */
+  inlineActionLabel?: string;
+  onInlineAction?: () => void;
 }
 
 const SPRING = {
@@ -56,6 +59,8 @@ export function MascotSpeechBubble({
   supportingMessage,
   density = "default",
   onDismiss,
+  inlineActionLabel,
+  onInlineAction,
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
@@ -81,10 +86,10 @@ export function MascotSpeechBubble({
         animatedStyle,
         style,
       ]}
-      accessible={!onDismiss}
-      accessibilityRole={onDismiss ? undefined : "summary"}
+      accessible={!onDismiss && !onInlineAction}
+      accessibilityRole={onDismiss || onInlineAction ? undefined : "summary"}
       accessibilityLabel={
-        onDismiss
+        onDismiss || onInlineAction
           ? undefined
           : `${appBrand.characterNameKo}가 말해요. ${message}${
               supportingMessage?.trim()
@@ -109,6 +114,19 @@ export function MascotSpeechBubble({
             numberOfLines={numberOfLines}
           >
             {message}
+            {inlineActionLabel && onInlineAction ? (
+              <AppText
+                variant={textVariant}
+                tone="link"
+                scaleRole={isCompact ? "chrome" : undefined}
+                densityAware={!isCompact}
+                onPress={onInlineAction}
+                accessibilityRole="link"
+                accessibilityLabel={inlineActionLabel}
+              >
+                {` ${inlineActionLabel}`}
+              </AppText>
+            ) : null}
           </AppText>
           {supportingMessage?.trim() ? (
             <AppText

@@ -1,6 +1,11 @@
 import { NotFoundException } from "@nestjs/common";
+import type { ProductCategory } from "@prisma/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AffiliateOfferService, resetAffiliateLandingCache } from "./affiliate-offer.service";
+import {
+  AffiliateOfferService,
+  resetAffiliateLandingCache,
+  selectReorderPreviewCandidate,
+} from "./affiliate-offer.service";
 
 const deeplinkMocks = vi.hoisted(() => ({
   convert: vi.fn(),
@@ -40,6 +45,7 @@ describe("AffiliateOfferService Phase A", () => {
   };
   const prisma = {
     inventoryItem: { findMany: vi.fn().mockResolvedValue([]) },
+    inventoryDispositionEvent: { findMany: vi.fn().mockResolvedValue([]) },
   };
   const coupangClient = {
     hasCredentials: () => Boolean(deeplinkMocks.readCredentials()),
@@ -207,15 +213,23 @@ describe("AffiliateOfferService Phase A", () => {
   it("rate-limits manual product searches per user", async () => {
     const service = createService();
     for (let index = 0; index < 10; index += 1) {
-      await service.searchProducts({ ownerKey: "owner-a", query: "대파" });
+      await service.searchProducts({
+        ownerKey: "owner-a",
+        query: "대파",
+        placement: "shopping_search",
+      });
     }
 
     await expect(
-      service.searchProducts({ ownerKey: "owner-a", query: "대파" }),
+      service.searchProducts({
+        ownerKey: "owner-a",
+        query: "대파",
+        placement: "shopping_search",
+      }),
     ).rejects.toMatchObject({ status: 429 });
   });
 
-  it("builds recent repurchase groups from fully consumed and discarded items", async () => {
+  it("builds recent repurchase groups from fully consumed items only", async () => {
     deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
     coupangClient.searchProducts.mockImplementation(async (query: string) => {
       if (String(query).includes("달걀") || String(query).includes("계란")) {
@@ -250,10 +264,8 @@ describe("AffiliateOfferService Phase A", () => {
       expect.objectContaining({
         where: expect.objectContaining({
           spaceId: "space-a",
-          OR: [
-            { status: "consumed", quantityBase: 0 },
-            { status: "discarded" },
-          ],
+          status: "consumed",
+          quantityBase: 0,
         }),
       }),
     );
@@ -347,6 +359,53 @@ describe("AffiliateOfferService Phase A", () => {
     expect(result.productGroups).toHaveLength(9);
   });
 
+  it("selects a due repeated purchase before a merely recent item", () => {
+    const now = new Date("2026-08-30T00:00:00.000Z");
+    const candidate = selectReorderPreviewCandidate(
+      [
+        disposition("우유", "dairy", "2026-08-01T00:00:00.000Z"),
+        disposition("우유", "dairy", "2026-08-15T00:00:00.000Z"),
+        disposition("두부", "tofu", "2026-08-29T00:00:00.000Z"),
+      ],
+      now,
+    );
+
+    expect(candidate).toMatchObject({
+      displayName: "우유",
+      kind: "repeat_purchase_due",
+      cadenceDays: 14,
+    });
+  });
+
+  it("builds one lightweight home reorder preview", async () => {
+    deeplinkMocks.readCredentials.mockReturnValue({
+      accessKey: "access",
+      secretKey: "secret",
+    });
+    coupangClient.searchProducts.mockResolvedValue([
+      product("milk-1", "서울우유 1L"),
+    ]);
+    prisma.inventoryDispositionEvent.findMany.mockResolvedValue([
+      disposition("우유", "dairy", new Date().toISOString()),
+    ]);
+    const service = createService();
+
+    const result = await service.getReorderPreview({
+      ownerKey: "owner-a",
+      spaceId: "space-a",
+    });
+
+    expect(result).toMatchObject({
+      enabled: true,
+      kind: "recently_consumed",
+      group: {
+        ingredientName: "우유",
+        placement: "home_reorder_preview",
+      },
+    });
+    expect(coupangClient.searchProducts).toHaveBeenCalledTimes(1);
+  });
+
   it("skips excluded ingredients and unknown dishes", async () => {
     settingsService.getRecipePreferences.mockResolvedValue({
       allergens: [],
@@ -397,6 +456,19 @@ describe("AffiliateOfferService Phase A", () => {
       isFreeShipping: true,
       observedAt: "2026-08-18T00:00:00.000Z",
       stale: false,
+    };
+  }
+
+  function disposition(
+    displayName: string,
+    category: ProductCategory,
+    occurredAt: string,
+  ) {
+    return {
+      displayName,
+      category,
+      itemSnapshot: { brand: null },
+      occurredAt: new Date(occurredAt),
     };
   }
 });

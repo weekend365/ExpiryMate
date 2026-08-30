@@ -4,7 +4,7 @@ import type {
   AffiliateProductGroup,
 } from "@expirymate/shared";
 import { COUPANG_PARTNERS_CTA_LABEL } from "@expirymate/shared";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Alert,
   Image,
@@ -20,6 +20,7 @@ import { colors, radius, spacing, touchTarget } from "../../shared/theme";
 import { AffiliateCta } from "./affiliate-cta";
 import { visibleIngredientReason } from "./affiliate-group-reason";
 import { uniqueProductsById } from "./unique-affiliate-products";
+import { useVisibleImpression } from "./use-visible-impression";
 
 const PRODUCT_IMAGE_SIZE = spacing.xxl * 2;
 
@@ -109,13 +110,14 @@ function ProductCard({
   const [imageFailed, setImageFailed] = useState(false);
   const { shouldStack } = useResponsiveLayout();
 
-  useEffect(() => {
-    const timer = setTimeout(() => onShown(product), 250);
-    return () => clearTimeout(timer);
-  }, [onShown, product]);
+  const impressionRef = useVisibleImpression({
+    impressionKey: `${placement}:${product.productId}`,
+    onVisible: () => onShown(product),
+  });
 
   return (
     <Pressable
+      ref={impressionRef}
       onPress={() => void openProduct(product, placement)}
       accessibilityRole="link"
       accessibilityLabel={`${product.productName}, ${formatProductPrice(product)}, ${COUPANG_PARTNERS_CTA_LABEL}`}

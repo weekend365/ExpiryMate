@@ -86,6 +86,8 @@ export const monetizationFunnelEventNameSchema = z.enum([
   "affiliate_offer_shown",
   "affiliate_offer_tapped",
   "affiliate_shopping_opened",
+  "affiliate_entry_shown",
+  "affiliate_entry_tapped",
   "affiliate_product_shown",
   "affiliate_product_tapped",
   "affiliate_fallback_tapped",

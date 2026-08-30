@@ -26,6 +26,7 @@ describe("isPendingForDifferentSpace", () => {
       inventory: ["inventory-list", "user-a", "space-a"],
       dashboard: ["dashboard-summary", "user-a", "space-a"],
       shopping: ["affiliate-shopping", "user-a", "space-a"],
+      reorderPreview: ["affiliate-reorder-preview", "user-a", "space-a"],
     });
   });
 });

@@ -79,6 +79,7 @@ import type {
   AffiliateShoppingResponse,
   AffiliateProductSearchRequest,
   AffiliateProductSearchResponse,
+  AffiliateReorderPreviewResponse,
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
@@ -997,6 +998,11 @@ export const getAffiliateOffers = (
 export const getAffiliateShopping = (spaceId: string) =>
   request<AffiliateShoppingResponse>(
     `${spaceResourcePath(spaceId, "affiliate")}/shopping`,
+  );
+
+export const getAffiliateReorderPreview = (spaceId: string) =>
+  request<AffiliateReorderPreviewResponse>(
+    `${spaceResourcePath(spaceId, "affiliate")}/reorder-preview`,
   );
 
 export const searchAffiliateProducts = (

@@ -45,6 +45,7 @@ export const sessionQueryKeys = {
   subscription: ["subscription-entitlement"] as const,
   monetization: ["monetization-status"] as const,
   affiliateShopping: ["affiliate-shopping"] as const,
+  affiliateReorderPreview: ["affiliate-reorder-preview"] as const,
   photoParseAccess: ["inventory-photo-parse-access"] as const,
   privacy: ["privacy-status"] as const,
   spaces: ["inventory-spaces"] as const,

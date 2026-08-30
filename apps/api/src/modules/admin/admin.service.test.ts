@@ -1,11 +1,60 @@
 import { ItemStatus } from "@prisma/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { maskOwnerKey } from "../../common/serializers";
-import { AdminService } from "./admin.service";
+import {
+  AdminService,
+  buildAffiliatePlacementMetrics,
+} from "./admin.service";
 
 describe("AdminService", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
+  });
+
+  it("keeps affiliate product and entry placement funnels separate", () => {
+    const rows = [
+      {
+        eventName: "affiliate_product_shown",
+        properties: { placement: "shopping_search" },
+      },
+      {
+        eventName: "affiliate_product_tapped",
+        properties: { placement: "shopping_search" },
+      },
+      {
+        eventName: "affiliate_entry_shown",
+        properties: { placement: "shopping_tab" },
+      },
+    ];
+
+    expect(
+      buildAffiliatePlacementMetrics(
+        rows,
+        "affiliate_product_shown",
+        "affiliate_product_tapped",
+      ),
+    ).toEqual([
+      {
+        placement: "shopping_search",
+        impressions: 1,
+        taps: 1,
+        ctrPercent: 100,
+      },
+    ]);
+    expect(
+      buildAffiliatePlacementMetrics(
+        rows,
+        "affiliate_entry_shown",
+        "affiliate_entry_tapped",
+      ),
+    ).toEqual([
+      {
+        placement: "shopping_tab",
+        impressions: 1,
+        taps: 0,
+        ctrPercent: 0,
+      },
+    ]);
   });
   it("paginates inventory and masks owner/notes fields", async () => {
     const row = {

@@ -25,6 +25,18 @@ export const affiliatePlacementSchema = z.enum([
   "recipe_missing_ingredient",
   "shopping_recently_consumed",
   "shopping_search",
+  "inventory_consumed",
+  "cooking_complete",
+  "recipe_optional_entry",
+  "home_reorder_preview",
+]);
+
+export const affiliateContextualSearchPlacementSchema = z.enum([
+  "shopping_search",
+  "inventory_consumed",
+  "cooking_complete",
+  "recipe_optional_entry",
+  "home_reorder_preview",
 ]);
 
 export const affiliateOfferSchema = z.object({
@@ -68,7 +80,7 @@ export const affiliateOffersResponseSchema = z.object({
 
 export const affiliateProductSearchRequestSchema = z.object({
   query: z.string().trim().min(1).max(fieldLimits.recipeIngredientName),
-  placement: z.literal("shopping_search"),
+  placement: affiliateContextualSearchPlacementSchema,
 });
 
 export const affiliateProductSearchResponseSchema = z.object({
@@ -89,10 +101,28 @@ export const affiliateShoppingResponseSchema = z.object({
   productGroups: z.array(affiliateProductGroupSchema).max(9),
 });
 
+export const affiliateReorderPreviewKindSchema = z.enum([
+  "recently_consumed",
+  "repeat_purchase_due",
+]);
+
+export const affiliateReorderPreviewResponseSchema = z.object({
+  enabled: z.boolean(),
+  provider: affiliateProviderSchema,
+  disclosure: z.string().min(1),
+  kind: affiliateReorderPreviewKindSchema.nullable(),
+  cadenceDays: z.number().int().positive().nullable(),
+  lastConsumedAt: z.string().datetime().nullable(),
+  group: affiliateProductGroupSchema.nullable(),
+});
+
 export type AffiliateProvider = z.infer<typeof affiliateProviderSchema>;
 export type AffiliateTrackingMode = z.infer<typeof affiliateTrackingModeSchema>;
 export type AffiliatePresentation = z.infer<typeof affiliatePresentationSchema>;
 export type AffiliatePlacement = z.infer<typeof affiliatePlacementSchema>;
+export type AffiliateContextualSearchPlacement = z.infer<
+  typeof affiliateContextualSearchPlacementSchema
+>;
 export type AffiliateOffer = z.infer<typeof affiliateOfferSchema>;
 export type AffiliateProduct = z.infer<typeof affiliateProductSchema>;
 export type AffiliateProductGroup = z.infer<typeof affiliateProductGroupSchema>;
@@ -107,4 +137,10 @@ export type AffiliateProductSearchResponse = z.infer<
 >;
 export type AffiliateShoppingResponse = z.infer<
   typeof affiliateShoppingResponseSchema
+>;
+export type AffiliateReorderPreviewKind = z.infer<
+  typeof affiliateReorderPreviewKindSchema
+>;
+export type AffiliateReorderPreviewResponse = z.infer<
+  typeof affiliateReorderPreviewResponseSchema
 >;

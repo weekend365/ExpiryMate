@@ -30,7 +30,7 @@ export function OptionalMissingIngredientsCard({
   dish: RecipeRecommendationDish;
   recommendationId: string;
   dishIndex: number;
-  onOpenShopping?: () => void;
+  onOpenShopping?: (query?: string) => void;
 }) {
   const offersQuery = useAffiliateOffers(recommendationId, dishIndex);
   const trackedShownKey = useRef<string | null>(null);
@@ -156,7 +156,11 @@ export function OptionalMissingIngredientsCard({
       ) : null}
       {productGroups.length > 0 ? (
         <Pressable
-          onPress={() => (onOpenShopping ? onOpenShopping() : router.push("/shopping"))}
+          onPress={() =>
+            onOpenShopping
+              ? onOpenShopping(dish.optionalMissingIngredients[0]?.name)
+              : router.push("/(tabs)/shop")
+          }
           accessibilityRole="button"
           accessibilityLabel="장보기에서 더 찾아보기"
           style={({ pressed }) => [styles.shoppingLink, pressed && styles.ctaPressed]}

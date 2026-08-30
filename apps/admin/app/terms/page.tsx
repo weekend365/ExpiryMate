@@ -13,7 +13,7 @@ export default function TermsPage() {
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">이용약관</h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 8월 1일 · 최종 개정: 2026년 8월 29일
+          시행일: 2026년 8월 1일 · 최종 개정: 2026년 8월 30일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -67,9 +67,9 @@ export default function TermsPage() {
 
           <h2 className="pt-4 text-xl font-black">쿠팡 파트너스</h2>
           <p>
-            요리 추천에서 냉장고에 없는 선택 재료를 안내할 때 쿠팡 파트너스
-            링크를 제공할 수 있습니다. 결제는 쿠팡에서 이루어지며 App Store
-            또는 Google Play 인앱결제가 아닙니다. 제휴 안내는 선택 사항이며
+            홈·레시피·보관함·조리 완료·장보기에서 관련 재료를 안내할 때 쿠팡
+            파트너스 링크를 제공할 수 있습니다. 결제는 쿠팡에서 이루어지며 App
+            Store 또는 Google Play 인앱결제가 아닙니다. 제휴 안내는 선택 사항이며
             광고 보상이나 추천 이용량과 무관합니다. 자세한 고지는{" "}
             <Link className="font-bold text-[var(--primary)]" href="/partners">
               쿠팡 파트너스 안내

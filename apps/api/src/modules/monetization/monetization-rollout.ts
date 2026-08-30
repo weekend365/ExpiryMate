@@ -6,8 +6,22 @@ export function isStableMonetizationRolloutEnabled(input: {
   rolloutFlag: string;
   experimentKey: string;
 }) {
-  if (!isEnabled(process.env[input.enabledFlag])) return false;
-  const percent = readPercentage(process.env[input.rolloutFlag]);
+  return isSubjectInStableRollout({
+    subjectKey: input.subjectKey,
+    enabled: isEnabled(process.env[input.enabledFlag]),
+    percent: readPercentage(process.env[input.rolloutFlag]),
+    experimentKey: input.experimentKey,
+  });
+}
+
+export function isSubjectInStableRollout(input: {
+  subjectKey: string;
+  enabled: boolean;
+  percent: number;
+  experimentKey: string;
+}) {
+  if (!input.enabled) return false;
+  const percent = input.percent;
   if (percent <= 0) return false;
   if (percent >= 100) return true;
   const salt =

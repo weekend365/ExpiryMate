@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { ChevronDown, History, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -31,6 +31,7 @@ import {
   resolveRecentShoppingCount,
   takeRecentShoppingGroups,
 } from "../src/features/affiliate/shopping-recent-rotation";
+import { parseShoppingEntryContext } from "../src/features/affiliate/shopping-entry-context";
 import { useAffiliateShopping } from "../src/features/affiliate/use-affiliate-shopping";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
@@ -40,55 +41,97 @@ import {
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
 import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
 
-export default function ShoppingScreen() {
+export default function ShoppingScreen({
+  inTabs = false,
+}: {
+  inTabs?: boolean;
+}) {
   const { activeSpaceId } = useActiveSpace();
   const shoppingQuery = useAffiliateShopping();
-  const params = useLocalSearchParams<{ q?: string | string[] }>();
-  const incomingQuery = initialShoppingQuery(params.q);
+  const params = useLocalSearchParams<{
+    q?: string | string[];
+    items?: string | string[];
+    source?: string | string[];
+  }>();
+  const queryParam = params.q;
+  const itemsParam = params.items;
+  const sourceParam = params.source;
+  const entryContext = useMemo(
+    () =>
+      parseShoppingEntryContext({
+        q: queryParam,
+        items: itemsParam,
+        source: sourceParam,
+      }),
+    [itemsParam, queryParam, sourceParam],
+  );
+  const incomingKey = JSON.stringify(entryContext);
+  const incomingQuery =
+    entryContext.queries[0] ?? initialShoppingQuery(queryParam);
   const [query, setQuery] = useState(incomingQuery);
   const [recentVisibleCount, setRecentVisibleCount] = useState(
     SHOPPING_RECENT_PAGE_SIZE,
   );
-  const trackedOpened = useRef(false);
+  const trackedOpened = useRef<string | null>(null);
   const appliedIncomingQuery = useRef<string | null>(null);
   const searchInputRef = useRef<TextInput>(null);
   const searchMutation = useMutation({
-    mutationFn: async (value: string) => {
+    mutationFn: async (input: {
+      queries: string[];
+      placement: typeof entryContext.placement;
+    }) => {
       if (!activeSpaceId) throw new Error("냉장고를 먼저 골라 주세요.");
-      return searchAffiliateProducts(
-        { query: value, placement: "shopping_search" },
-        activeSpaceId,
+      return Promise.all(
+        input.queries.map((value) =>
+          searchAffiliateProducts(
+            { query: value, placement: input.placement },
+            activeSpaceId,
+          ),
+        ),
       );
     },
   });
 
   useEffect(() => {
-    if (trackedOpened.current) return;
-    trackedOpened.current = true;
+    if (trackedOpened.current === incomingKey) return;
+    trackedOpened.current = incomingKey;
     void trackMonetizationEvent({
       event: "affiliate_shopping_opened",
-      properties: { source: "home_or_context" },
+      properties: { source: entryContext.source.slice(0, 120) },
     }).catch(() => undefined);
-  }, []);
+  }, [entryContext.source, incomingKey]);
 
   useEffect(() => {
-    if (!incomingQuery || !activeSpaceId) {
+    if (!entryContext.queries.length || !activeSpaceId) {
       return;
     }
-    if (appliedIncomingQuery.current === incomingQuery) {
+    if (appliedIncomingQuery.current === incomingKey) {
       return;
     }
-    appliedIncomingQuery.current = incomingQuery;
+    appliedIncomingQuery.current = incomingKey;
     setQuery(incomingQuery);
     searchMutation.reset();
-    searchMutation.mutate(incomingQuery);
-  }, [activeSpaceId, incomingQuery, searchMutation]);
+    searchMutation.mutate({
+      queries: entryContext.queries,
+      placement: entryContext.placement,
+    });
+  }, [
+    activeSpaceId,
+    entryContext.placement,
+    entryContext.queries,
+    incomingKey,
+    incomingQuery,
+    searchMutation,
+  ]);
 
   const submitSearch = () => {
     const trimmed = query.trim();
     if (!trimmed || searchMutation.isPending) return;
     searchMutation.reset();
-    searchMutation.mutate(trimmed);
+    searchMutation.mutate({
+      queries: [trimmed],
+      placement: "shopping_search",
+    });
   };
   const shopping = shoppingQuery.data;
   const allRecentGroups = (shopping?.productGroups ?? []).filter(
@@ -98,10 +141,9 @@ export default function ShoppingScreen() {
     allRecentGroups,
     recentVisibleCount,
   );
-  const searchGroup =
-    searchMutation.data?.group && searchMutation.data.group.products.length > 0
-      ? searchMutation.data.group
-      : null;
+  const searchGroups = (searchMutation.data ?? []).flatMap((response) =>
+    response.group && response.group.products.length > 0 ? [response.group] : [],
+  );
   const isRefreshingRecent =
     shoppingQuery.isRefetching && !shoppingQuery.isLoading;
   const searchActive = isShoppingSearchActive(searchMutation.status);
@@ -113,7 +155,6 @@ export default function ShoppingScreen() {
   );
   const nextRecentBatchSize =
     nextRecentShoppingVisibleCount(
-      recentGroups.length,
       allRecentGroups.length,
     ) - recentGroups.length;
   const recentResolvedCount = resolveRecentShoppingCount(
@@ -123,8 +164,8 @@ export default function ShoppingScreen() {
   const heroNotices = getShoppingHeroNotices({
     isSearching: searchMutation.isPending,
     hasSearchError: searchMutation.isError,
-    hasSearchResults: Boolean(searchGroup),
-    searchWasEmpty: Boolean(searchMutation.isSuccess && !searchGroup),
+    hasSearchResults: searchGroups.length > 0,
+    searchWasEmpty: Boolean(searchMutation.isSuccess && !searchGroups.length),
     isShoppingLoading: shoppingQuery.isLoading || isRefreshingRecent,
     isShoppingError: shoppingQuery.isError && !isRefreshingRecent,
     isShoppingEnabled: shopping?.enabled !== false,
@@ -139,23 +180,26 @@ export default function ShoppingScreen() {
     void shoppingQuery.refetch();
   };
   const loadMoreRecentItems = () => {
-    setRecentVisibleCount((visibleCount) =>
-      nextRecentShoppingVisibleCount(visibleCount, allRecentGroups.length),
+    setRecentVisibleCount(
+      nextRecentShoppingVisibleCount(allRecentGroups.length),
     );
   };
   const clearSearch = () => {
     setQuery("");
     searchMutation.reset();
   };
-  const searchSectionTitle = searchMutation.variables
-    ? `‘${searchMutation.variables}’ 검색 결과`
+  const searchSectionTitle = searchMutation.variables?.queries.length
+    ? searchMutation.variables.queries.length > 1
+      ? `오늘 필요한 재료 ${searchMutation.variables.queries.length}개`
+      : `‘${searchMutation.variables.queries[0]}’ 검색 결과`
     : "검색 결과";
   const { shouldStackDense } = useResponsiveLayout();
 
   return (
     <Screen
       density="compact"
-      topInsetMode="none"
+      topInsetMode={inTabs ? "safe" : "none"}
+      bottomInsetMode={inTabs ? "navigator" : "system"}
       contentWidth="wide"
       testID="affiliate-shopping-screen"
       refreshControl={
@@ -259,16 +303,26 @@ export default function ShoppingScreen() {
       {searchActive ? (
         <ShoppingCatalogSection
           title={searchSectionTitle}
-          count={searchGroup?.products.length}
+          count={searchGroups.reduce(
+            (sum, group) => sum + group.products.length,
+            0,
+          )}
           onBackToRecent={clearSearch}
           testID="affiliate-shopping-search-results"
         >
           {searchMutation.isPending ? (
             <ShoppingCatalogSkeleton label="상품을 찾아보고 있어요" />
-          ) : searchGroup ? (
-            <ShoppingIngredientCard>
-              <AffiliateProductGroupView headingBand group={searchGroup} />
-            </ShoppingIngredientCard>
+          ) : searchGroups.length ? (
+            <>
+              {searchGroups.map((group, index) => (
+                <ShoppingIngredientCard
+                  key={`${group.placement}:${group.query}`}
+                  showDivider={index < searchGroups.length - 1}
+                >
+                  <AffiliateProductGroupView headingBand group={group} />
+                </ShoppingIngredientCard>
+              ))}
+            </>
           ) : searchMutation.isError ? (
             <View style={styles.empty}>
               <AppText variant="bodySmall" tone="subtext">

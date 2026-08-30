@@ -30,5 +30,10 @@ export function inventoryRemovalQueryKeys(
       sessionUserId,
       spaceId,
     ),
+    reorderPreview: withInventorySpace(
+      sessionQueryKeys.affiliateReorderPreview,
+      sessionUserId,
+      spaceId,
+    ),
   };
 }

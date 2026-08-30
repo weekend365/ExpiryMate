@@ -1,5 +1,5 @@
 import type { RecipeInventorySnapshotItem, RecipeRecommendationDish } from "@expirymate/shared";
-import { Clock3, Utensils } from "lucide-react-native";
+import { Clock3, ShoppingBasket, Utensils } from "lucide-react-native";
 import { StyleSheet, View } from "react-native";
 import { OptionalMissingIngredientsCard } from "../affiliate/optional-missing-ingredients";
 import { AppText } from "../../components/AppText";
@@ -19,6 +19,10 @@ import {
   getUsedIngredientRows,
   type RecipeDetailSelection,
 } from "./recipe-detail";
+import {
+  AffiliateEntryImpression,
+  trackAffiliateEntryTap,
+} from "../affiliate/affiliate-entry-tracking";
 
 export function RecipeDetailSheet({
   selection,
@@ -29,7 +33,7 @@ export function RecipeDetailSheet({
   selection: RecipeDetailSelection | null;
   onClose: () => void;
   onStartCooking: () => void;
-  onOpenShopping: () => void;
+  onOpenShopping: (query?: string) => void;
 }) {
   return (
     <BottomSheet
@@ -42,14 +46,34 @@ export function RecipeDetailSheet({
           : "요리 방법을 함께 살펴볼까요?"
       }
       footer={
-        <Button
-          icon={Utensils}
-          onPress={onStartCooking}
-          disabled={!selection}
-          fullWidth
-        >
-          이 요리로 해볼게요
-        </Button>
+        <View style={styles.footerStack}>
+          {selection?.dish.optionalMissingIngredients.length ? (
+            <AffiliateEntryImpression placement="recipe_optional_entry">
+              <Button
+                icon={ShoppingBasket}
+                variant="surface"
+                onPress={() => {
+                  trackAffiliateEntryTap("recipe_optional_entry");
+                  onOpenShopping(
+                    selection.dish.optionalMissingIngredients[0]?.name,
+                  );
+                }}
+                fullWidth
+              >
+                있으면 좋은 재료 {selection.dish.optionalMissingIngredients.length}개
+                장보기
+              </Button>
+            </AffiliateEntryImpression>
+          ) : null}
+          <Button
+            icon={Utensils}
+            onPress={onStartCooking}
+            disabled={!selection}
+            fullWidth
+          >
+            이 요리로 해볼게요
+          </Button>
+        </View>
       }
     >
       {selection ? (
@@ -76,7 +100,7 @@ function RecipeDetailContent({
   inventorySnapshot: RecipeInventorySnapshotItem[];
   recommendationId: string;
   dishIndex: number;
-  onOpenShopping: () => void;
+  onOpenShopping: (query?: string) => void;
 }) {
   const { shouldStack } = useResponsiveLayout();
   const usedIngredientRows = getUsedIngredientRows(dish, inventorySnapshot);
@@ -195,6 +219,9 @@ function RecipeDetailContent({
 }
 
 const styles = StyleSheet.create({
+  footerStack: {
+    gap: spacing.xs,
+  },
   recipeDetailSummary: {
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,

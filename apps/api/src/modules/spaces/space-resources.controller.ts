@@ -414,6 +414,18 @@ export class SpaceAffiliateController {
     return this.affiliateOffers.getShopping({ ownerKey: userId, spaceId });
   }
 
+  @Get("reorder-preview")
+  async getReorderPreview(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.affiliateOffers.getReorderPreview({
+      ownerKey: userId,
+      spaceId,
+    });
+  }
+
   @Post("product-search")
   async searchProducts(
     @Param("spaceId") spaceId: string,
@@ -425,6 +437,7 @@ export class SpaceAffiliateController {
     return this.affiliateOffers.searchProducts({
       ownerKey: userId,
       query: body.query,
+      placement: body.placement,
     });
   }
 }

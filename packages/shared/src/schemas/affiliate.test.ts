@@ -3,12 +3,37 @@ import {
   COUPANG_PARTNERS_CTA_LABEL,
   COUPANG_PARTNERS_DISCLOSURE,
   affiliateOffersResponseSchema,
+  affiliateProductSearchRequestSchema,
+  affiliateReorderPreviewResponseSchema,
   affiliateShoppingResponseSchema,
 } from "./affiliate";
 
 describe("affiliate offer contract", () => {
   it("keeps the outbound Coupang CTA copy centralized", () => {
     expect(COUPANG_PARTNERS_CTA_LABEL).toBe("쿠팡에서 보기");
+  });
+
+  it("accepts contextual shopping search placements", () => {
+    expect(
+      affiliateProductSearchRequestSchema.parse({
+        query: "달걀",
+        placement: "inventory_consumed",
+      }),
+    ).toEqual({ query: "달걀", placement: "inventory_consumed" });
+  });
+
+  it("parses a repeat-purchase home preview", () => {
+    const parsed = affiliateReorderPreviewResponseSchema.parse({
+      enabled: true,
+      provider: "coupang_partners",
+      disclosure: COUPANG_PARTNERS_DISCLOSURE,
+      kind: "repeat_purchase_due",
+      cadenceDays: 14,
+      lastConsumedAt: "2026-08-01T00:00:00.000Z",
+      group: null,
+    });
+
+    expect(parsed.kind).toBe("repeat_purchase_due");
   });
 
   it("accepts a Phase A partner-link offer payload", () => {

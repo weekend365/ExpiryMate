@@ -52,6 +52,10 @@ describe("Jango notice presentation contract", () => {
     expect(feedback).toContain("isTransientJangoNotice");
     expect(feedback).toContain("setTimeout");
     expect(bubble).toContain('accessibilityLabel="장고 알림 닫기"');
+    expect(bubble).toContain("accessible={!onDismiss && !onInlineAction}");
+    expect(bubble).toContain("inlineActionLabel");
+    expect(bubble).toContain('accessibilityRole="link"');
+    expect(bubble).not.toContain("textDecorationLine");
     expect(hero).not.toContain("transient");
     expect(hero).not.toContain("onDismiss");
   });

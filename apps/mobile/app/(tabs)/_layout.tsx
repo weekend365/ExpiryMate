@@ -1,5 +1,11 @@
 import { Tabs, useNavigation } from "expo-router";
-import { Archive, ChefHat, House, Settings } from "lucide-react-native";
+import {
+  Archive,
+  ChefHat,
+  House,
+  Settings,
+  ShoppingBasket,
+} from "lucide-react-native";
 import { useCallback, useEffect } from "react";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +21,7 @@ import {
   fontFamily,
   typography,
 } from "../../src/shared/theme";
+import { trackAffiliateEntryTap } from "../../src/features/affiliate/affiliate-entry-tracking";
 
 export default function TabsLayout() {
   const navigation = useNavigation();
@@ -113,6 +120,19 @@ export default function TabsLayout() {
             tabBarButtonTestID: "tab-inventory",
             tabBarIcon: ({ color, size }) => (
               <Archive color={color} size={size} strokeWidth={2.4} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="shop"
+          listeners={{
+            tabPress: () => trackAffiliateEntryTap("shopping_tab"),
+          }}
+          options={{
+            title: "장보기",
+            tabBarButtonTestID: "tab-shopping",
+            tabBarIcon: ({ color, size }) => (
+              <ShoppingBasket color={color} size={size} strokeWidth={2.4} />
             ),
           }}
         />

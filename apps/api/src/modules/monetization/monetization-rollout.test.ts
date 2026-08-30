@@ -1,7 +1,29 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
+import {
+  isStableMonetizationRolloutEnabled,
+  isSubjectInStableRollout,
+} from "./monetization-rollout";
 
 describe("stable monetization rollout", () => {
+  it("supports rollout values supplied by a feature-specific policy", () => {
+    expect(
+      isSubjectInStableRollout({
+        subjectKey: "owner-a",
+        enabled: true,
+        percent: 100,
+        experimentKey: "affiliate-placement-home",
+      }),
+    ).toBe(true);
+    expect(
+      isSubjectInStableRollout({
+        subjectKey: "owner-a",
+        enabled: false,
+        percent: 100,
+        experimentKey: "affiliate-placement-home",
+      }),
+    ).toBe(false);
+  });
+
   afterEach(() => {
     delete process.env.TEST_MONETIZATION_ENABLED;
     delete process.env.TEST_MONETIZATION_PERCENT;

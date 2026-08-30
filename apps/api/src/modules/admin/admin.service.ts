@@ -100,6 +100,12 @@ export interface AdminMonetizationOverview {
       taps: number;
       ctrPercent: number;
     }>;
+    entryPlacements: Array<{
+      placement: string;
+      impressions: number;
+      taps: number;
+      ctrPercent: number;
+    }>;
   };
   economicsConfigured: boolean;
   economicsBySource: Array<{
@@ -499,7 +505,12 @@ export class AdminService {
             where: {
               createdAt: { gte: from, lte: to },
               eventName: {
-                in: ["affiliate_product_shown", "affiliate_product_tapped"],
+                in: [
+                  "affiliate_product_shown",
+                  "affiliate_product_tapped",
+                  "affiliate_entry_shown",
+                  "affiliate_entry_tapped",
+                ],
               },
             },
             select: { eventName: true, properties: true },
@@ -613,7 +624,16 @@ export class AdminService {
       }),
       { clicks: 0, orders: 0, cancels: 0, gmvKrw: 0, commissionKrw: 0 },
     );
-    const placementMetrics = buildAffiliatePlacementMetrics(affiliateFunnelRows);
+    const placementMetrics = buildAffiliatePlacementMetrics(
+      affiliateFunnelRows,
+      "affiliate_product_shown",
+      "affiliate_product_tapped",
+    );
+    const entryPlacementMetrics = buildAffiliatePlacementMetrics(
+      affiliateFunnelRows,
+      "affiliate_entry_shown",
+      "affiliate_entry_tapped",
+    );
     const affiliateLastSyncedAt = affiliateReportRows.reduce<Date | null>(
       (latest, row) =>
         !latest || row.lastSyncedAt > latest ? row.lastSyncedAt : latest,
@@ -994,6 +1014,7 @@ export class AdminService {
             : null,
         lastSyncedAt: affiliateLastSyncedAt?.toISOString() ?? null,
         placements: placementMetrics,
+        entryPlacements: entryPlacementMetrics,
       },
       economicsConfigured,
       economicsBySource,
@@ -1019,11 +1040,16 @@ function roundKrw(value: number) {
   return Math.round(value * 100) / 100;
 }
 
-function buildAffiliatePlacementMetrics(
+export function buildAffiliatePlacementMetrics(
   rows: Array<{ eventName: string; properties: Prisma.JsonValue }>,
+  shownEvent: string,
+  tappedEvent: string,
 ) {
   const metrics = new Map<string, { impressions: number; taps: number }>();
   for (const row of rows) {
+    if (row.eventName !== shownEvent && row.eventName !== tappedEvent) {
+      continue;
+    }
     const properties =
       row.properties &&
       typeof row.properties === "object" &&
@@ -1033,8 +1059,8 @@ function buildAffiliatePlacementMetrics(
     const placement =
       typeof properties.placement === "string" ? properties.placement : "unknown";
     const current = metrics.get(placement) ?? { impressions: 0, taps: 0 };
-    if (row.eventName === "affiliate_product_shown") current.impressions += 1;
-    if (row.eventName === "affiliate_product_tapped") current.taps += 1;
+    if (row.eventName === shownEvent) current.impressions += 1;
+    if (row.eventName === tappedEvent) current.taps += 1;
     metrics.set(placement, current);
   }
   return [...metrics.entries()]

@@ -48,6 +48,10 @@ import {
 import { useCookingTimer } from "../../src/features/recipes/use-cooking-timer";
 import { useAuth } from "../../src/features/auth/use-auth";
 import { useAffiliateShopping } from "../../src/features/affiliate/use-affiliate-shopping";
+import {
+  AffiliateEntryImpression,
+  trackAffiliateEntryTap,
+} from "../../src/features/affiliate/affiliate-entry-tracking";
 import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
@@ -159,7 +163,7 @@ export default function CookingScreen() {
         (group) => group.ingredientName,
       ),
       openedShoppingKeys,
-    );
+    ).slice(0, 3);
 
     return (
       <Screen
@@ -207,6 +211,49 @@ export default function CookingScreen() {
               : "재고는 바꾸지 않고 요리만 마쳤어요."
           }
         />
+        {depletedTargets.length ? (
+          <AffiliateEntryImpression placement="cooking_complete">
+            <View style={styles.shoppingSummaryCard}>
+              <View style={styles.shoppingSummaryIcon}>
+                <ShoppingBasket
+                  color={colors.primary}
+                  size={spacing.md}
+                  strokeWidth={2.3}
+                />
+              </View>
+              <View style={styles.shoppingSummaryCopy}>
+                <AppText variant="subheading">
+                  오늘 다 쓴 재료 {depletedTargets.length}개 다시 채우기
+                </AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  {depletedTargets.map((target) => target.label).join(" · ")}
+                </AppText>
+              </View>
+              <Button
+                variant="surface"
+                icon={ShoppingBasket}
+                onPress={() => {
+                  trackAffiliateEntryTap("cooking_complete");
+                  depletedTargets.forEach((target) =>
+                    markShoppingOpened(target.key),
+                  );
+                  router.push({
+                    pathname: "/(tabs)/shop",
+                    params: {
+                      items: JSON.stringify(
+                        depletedTargets.map((target) => target.searchName),
+                      ),
+                      source: "cooking_complete",
+                    },
+                  });
+                }}
+                fullWidth
+              >
+                장보기에서 한 번에 볼게요
+              </Button>
+            </View>
+          </AffiliateEntryImpression>
+        ) : null}
         {updatedItems.length ? (
           <View style={styles.remainingCard}>
             <AppText variant="subheading">냉장고에 남은 양</AppText>
@@ -227,38 +274,6 @@ export default function CookingScreen() {
                     ? "다 사용했어요"
                     : `${formatBaseQuantity(item.quantityBase, item.unitCode)} 남았어요`}
                 </AppText>
-              </View>
-            ))}
-          </View>
-        ) : null}
-        {depletedTargets.length ? (
-          <View style={styles.remainingCard}>
-            {depletedTargets.map((target) => (
-              <View
-                key={target.itemId}
-                style={[
-                  styles.remainingRow,
-                  shouldStack && styles.remainingRowStacked,
-                ]}
-              >
-                <AppText variant="body" style={styles.remainingName}>
-                  {target.label}, 모두 사용했어요.
-                </AppText>
-                <Button
-                  variant="surface"
-                  size="small"
-                  icon={ShoppingBasket}
-                  onPress={() => {
-                    markShoppingOpened(target.key);
-                    router.push({
-                      pathname: "/shopping",
-                      params: { q: target.searchName },
-                    });
-                  }}
-                  fullWidth
-                >
-                  장보기에서 찾아볼게요
-                </Button>
               </View>
             ))}
           </View>
@@ -339,7 +354,7 @@ export default function CookingScreen() {
             <Button
               icon={ShoppingBasket}
               variant="surface"
-              onPress={() => router.push("/shopping")}
+              onPress={() => router.push("/(tabs)/shop")}
               fullWidth
             >
               없는 재료 장보러 갈게요
@@ -972,6 +987,25 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.sm,
+  },
+  shoppingSummaryCard: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  shoppingSummaryIcon: {
+    width: touchTarget.icon,
+    height: touchTarget.icon,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.surface,
+  },
+  shoppingSummaryCopy: {
+    gap: spacing.xxs,
   },
   remainingRow: {
     minHeight: touchTarget.min,

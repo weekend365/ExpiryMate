@@ -112,20 +112,6 @@ export const homeScreenStyles = StyleSheet.create({
     flexDirection: "column",
     gap: spacing.xs,
   },
-  shoppingCard: {
-    minHeight: touchTarget.cta,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
-    padding: spacing.sm,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  shoppingCardPressed: {
-    backgroundColor: colors.surfacePressed,
-  },
   shoppingIcon: {
     width: touchTarget.icon,
     height: touchTarget.icon,
@@ -138,6 +124,19 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: spacing.xxs,
+  },
+  reorderCard: {
+    gap: spacing.sm,
+    padding: spacing.sm,
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.surface,
+  },
+  reorderHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
   },
   trafficGroup: {
     gap: spacing.sm,

@@ -6,6 +6,7 @@ describe("SpaceAffiliateController", () => {
   const spacesService = { requireMembership: vi.fn() };
   const affiliateOffers = {
     getShopping: vi.fn(),
+    getReorderPreview: vi.fn(),
     searchProducts: vi.fn(),
   };
   const controller = new SpaceAffiliateController(
@@ -17,7 +18,21 @@ describe("SpaceAffiliateController", () => {
     vi.clearAllMocks();
     spacesService.requireMembership.mockResolvedValue({ role: "member" });
     affiliateOffers.getShopping.mockResolvedValue({ enabled: true });
+    affiliateOffers.getReorderPreview.mockResolvedValue({ enabled: true });
     affiliateOffers.searchProducts.mockResolvedValue({ enabled: true });
+  });
+
+  it("checks space membership before loading a reorder preview", async () => {
+    await controller.getReorderPreview("shared-space", "user-a");
+
+    expect(spacesService.requireMembership).toHaveBeenCalledWith(
+      "shared-space",
+      "user-a",
+    );
+    expect(affiliateOffers.getReorderPreview).toHaveBeenCalledWith({
+      ownerKey: "user-a",
+      spaceId: "shared-space",
+    });
   });
 
   it("checks space membership before loading recent shopping groups", async () => {

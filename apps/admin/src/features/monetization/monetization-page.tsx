@@ -30,6 +30,8 @@ const eventLabels: Record<string, string> = {
   credit_purchase_verified: "추천권 구매 확인",
   paid_credit_used: "구매 추천권 사용",
   affiliate_shopping_opened: "장보기 화면 진입",
+  affiliate_entry_shown: "쿠팡 진입점 노출",
+  affiliate_entry_tapped: "쿠팡 진입점 탭",
   affiliate_product_shown: "쿠팡 상품 노출",
   affiliate_product_tapped: "쿠팡 상품 탭",
   affiliate_fallback_tapped: "쿠팡 검색 링크 탭",
@@ -39,6 +41,11 @@ const affiliatePlacementLabels: Record<string, string> = {
   recipe_missing_ingredient: "레시피 부족 재료",
   shopping_recently_consumed: "최근 소비 재구매",
   shopping_search: "장보기 직접 검색",
+  inventory_consumed: "보관함 완전 소비",
+  cooking_complete: "요리 완료",
+  recipe_optional_entry: "레시피 선택 재료",
+  home_reorder_preview: "홈 재구매 예측",
+  shopping_tab: "장보기 탭",
   unknown: "구분 없음",
 };
 
@@ -127,6 +134,21 @@ export function MonetizationPage() {
                 </p>
               </div>
             ))}
+          </div>
+        ) : null}
+        {overview?.affiliate.entryPlacements?.length ? (
+          <div className="mt-4">
+            <p className="text-sm font-bold">진입점 성과</p>
+            <div className="mt-2 grid gap-3 md:grid-cols-3">
+              {overview.affiliate.entryPlacements.map((row) => (
+                <div key={row.placement} className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-3">
+                  <p className="text-sm font-bold">{affiliatePlacementLabels[row.placement] ?? row.placement}</p>
+                  <p className="mt-1 text-xs text-[var(--foreground-muted)]">
+                    노출 {row.impressions.toLocaleString("ko-KR")} · 탭 {row.taps.toLocaleString("ko-KR")} · CTR {row.ctrPercent}%
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
       </Panel>
