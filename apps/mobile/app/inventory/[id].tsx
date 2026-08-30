@@ -16,13 +16,13 @@ import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { CheckCircle2, ChevronRight } from "lucide-react-native";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, BackHandler, StyleSheet, View } from "react-native";
+import { Alert, BackHandler, View } from "react-native";
 import { z } from "zod";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { HeaderBackButton } from "../../src/components/HeaderBackButton";
-import { Mascot } from "../../src/components/Mascot";
 import { Screen } from "../../src/components/Screen";
 import { StepFlow } from "../../src/components/StepFlow";
 import {
@@ -47,7 +47,6 @@ import {
   withInventorySpace,
 } from "../../src/features/auth/session-boundary";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
 
 type InventoryFormInput = z.input<typeof inventoryFormSchema>;
 type InventoryFormValues = z.output<typeof inventoryFormSchema>;
@@ -373,13 +372,13 @@ export default function InventoryEditScreen() {
       }
     >
       {errorMessage ? (
-        <View style={styles.errorStrip}>
-          <Mascot size="small" mood="worry" />
-          <View style={styles.feedbackCopy}>
-            <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
-            <AppText style={styles.errorDescription}>{errorMessage}</AppText>
-          </View>
-        </View>
+        <FeedbackBanner
+          tone="danger"
+          title="앗, 잠시 문제가 생겼어요"
+          description={errorMessage}
+          transient
+          onDismiss={() => setErrorMessage(null)}
+        />
       ) : null}
 
       <StepFlow
@@ -510,32 +509,3 @@ export default function InventoryEditScreen() {
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  errorStrip: {
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  feedbackCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  errorTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.danger,
-  },
-  errorDescription: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
-});

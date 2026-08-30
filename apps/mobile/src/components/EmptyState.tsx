@@ -4,7 +4,8 @@ import type { LucideIcon } from "lucide-react-native";
 import { colors, radius, spacing } from "../shared/theme";
 import { AppText } from "./AppText";
 import { Button } from "./Button";
-import { Mascot, type MascotMood } from "./Mascot";
+import type { MascotMood } from "./Mascot";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
 
 interface EmptyStateProps {
   title: string;
@@ -40,24 +41,33 @@ export function EmptyState({
   return (
     <View style={[styles.root, variant === "card" ? styles.card : styles.plain]}>
       {shouldShowMascot ? (
-        <View style={styles.mascotWrap}>
-          <Mascot size={variant === "card" ? "medium" : "small"} mood={mood} />
-        </View>
-      ) : Icon ? (
-        <View style={styles.iconWrap}>
-          <Icon color={colors.primary} size={spacing.md} strokeWidth={2.4} />
-        </View>
-      ) : null}
-      <View style={styles.copy}>
-        <AppText variant="subheading" style={styles.centered}>
-          {title}
-        </AppText>
-        {description ? (
-          <AppText variant="bodySmall" tone="subtext" style={styles.centered}>
-            {description}
-          </AppText>
-        ) : null}
-      </View>
+        <MascotSpeechBubble
+          message={title}
+          supportingMessage={description}
+          size={variant === "card" ? "medium" : "small"}
+          mood={mood}
+          textVariant="bodyStrong"
+          density={variant === "plain" ? "compact" : "default"}
+        />
+      ) : (
+        <>
+          {Icon ? (
+            <View style={styles.iconWrap}>
+              <Icon color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+            </View>
+          ) : null}
+          <View style={styles.copy}>
+            <AppText variant="subheading" style={styles.centered}>
+              {title}
+            </AppText>
+            {description ? (
+              <AppText variant="bodySmall" tone="subtext" style={styles.centered}>
+                {description}
+              </AppText>
+            ) : null}
+          </View>
+        </>
+      )}
       {actionLabel && onAction ? (
         <Button onPress={onAction} fullWidth>
           {actionLabel}
@@ -83,10 +93,6 @@ const styles = StyleSheet.create({
   plain: {
     paddingVertical: spacing.sm,
     gap: spacing.sm,
-  },
-  mascotWrap: {
-    alignItems: "center",
-    paddingVertical: spacing.xs,
   },
   iconWrap: {
     width: spacing.xl,

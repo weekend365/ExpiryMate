@@ -17,6 +17,7 @@ import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
 import { Mascot } from "../src/components/Mascot";
+import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { QuantityStepper } from "../src/components/QuantityStepper";
 import { Screen } from "../src/components/Screen";
 import {
@@ -444,10 +445,12 @@ export default function RegisterPhotoScreen() {
           {step === "loading" ? (
             <View style={styles.loadingCard}>
               <PhotoFlowProgress current={1} />
-              <Mascot mood="think" size="large" />
-              <AppText variant="body" tone="subtext">
-                글자와 재료를 천천히 읽고 있어요.
-              </AppText>
+              <MascotSpeechBubble
+                message="글자와 재료를 천천히 읽고 있어요."
+                mood="think"
+                size="medium"
+                textVariant="body"
+              />
             </View>
           ) : null}
 

@@ -16,15 +16,14 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { FormField } from "../../src/components/FormField";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Pill } from "../../src/components/Pill";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { createSupportInquiry } from "../../src/services/api";
-import { colors, radius, spacing, typography } from "../../src/shared/theme";
+import { spacing } from "../../src/shared/theme";
 
 type SupportFormValues = SupportInquiryCreateInput;
 
@@ -72,12 +71,11 @@ export default function SupportSettingsScreen() {
 
   return (
     <SettingsScreen>
-      <View style={styles.hero}>
-        <Mascot size="small" mood="idle" />
-        <AppText style={styles.heroText}>
-          한 가지만 골라 주시면, 장고가 운영팀에 잘 전해 줄게요.
-        </AppText>
-      </View>
+      <MascotSpeechBubble
+        message="한 가지만 골라 주시면, 장고가 운영팀에 잘 전해 줄게요."
+        mood="idle"
+        density="compact"
+      />
 
       <SettingsGroup title="어떤 이야기인가요?" content="plain">
         <View style={styles.chips}>
@@ -117,23 +115,6 @@ export default function SupportSettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xl,
-    padding: spacing.sm,
-  },
-  heroText: {
-    flex: 1,
-    minWidth: 0,
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.body.fontFamily,
-    color: colors.subtext,
-  },
   chips: {
     flexDirection: "row",
     flexWrap: "wrap",

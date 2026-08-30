@@ -1,5 +1,12 @@
 import { useEffect } from "react";
-import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
+import { X } from "lucide-react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -25,6 +32,8 @@ interface MascotSpeechBubbleProps {
    * that sit above a list, not as the page title.
    */
   density?: "default" | "compact";
+  /** Adds a close affordance for transient, event-driven notices only. */
+  onDismiss?: () => void;
 }
 
 const SPRING = {
@@ -46,6 +55,7 @@ export function MascotSpeechBubble({
   textVariant = "bodySmall",
   supportingMessage,
   density = "default",
+  onDismiss,
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
@@ -71,14 +81,27 @@ export function MascotSpeechBubble({
         animatedStyle,
         style,
       ]}
-      accessibilityRole="summary"
-      accessibilityLabel={`${appBrand.characterNameKo}가 말해요. ${message}${
-        supportingMessage?.trim() ? ` ${supportingMessage.trim()}` : ""
-      }`}
+      accessible={!onDismiss}
+      accessibilityRole={onDismiss ? undefined : "summary"}
+      accessibilityLabel={
+        onDismiss
+          ? undefined
+          : `${appBrand.characterNameKo}가 말해요. ${message}${
+              supportingMessage?.trim()
+                ? ` ${supportingMessage.trim()}`
+                : ""
+            }`
+      }
     >
       <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
-        <View style={[styles.bubble, isCompact && styles.bubbleCompact]}>
+        <View
+          style={[
+            styles.bubble,
+            isCompact && styles.bubbleCompact,
+            onDismiss && styles.bubbleDismissible,
+          ]}
+        >
           <AppText
             variant={textVariant}
             scaleRole={isCompact ? "chrome" : undefined}
@@ -96,6 +119,20 @@ export function MascotSpeechBubble({
             >
               {supportingMessage.trim()}
             </AppText>
+          ) : null}
+          {onDismiss ? (
+            <Pressable
+              onPress={onDismiss}
+              accessibilityRole="button"
+              accessibilityLabel="장고 알림 닫기"
+              hitSlop={spacing.xs}
+              style={({ pressed }) => [
+                styles.dismissButton,
+                pressed && styles.dismissButtonPressed,
+              ]}
+            >
+              <X color={colors.subtext} size={spacing.sm} strokeWidth={2.4} />
+            </Pressable>
           ) : null}
         </View>
         {/* Tail points toward the mascot (left). */}
@@ -142,6 +179,22 @@ const styles = StyleSheet.create({
     minHeight: spacing.xl,
     borderRadius: radius.lg,
     gap: spacing.xxs, // 4px: keep the question and guide as one thought
+  },
+  bubbleDismissible: {
+    paddingRight: spacing.xl + spacing.sm,
+  },
+  dismissButton: {
+    position: "absolute",
+    top: spacing.xs,
+    right: spacing.xs,
+    width: spacing.lg,
+    height: spacing.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.pill,
+  },
+  dismissButtonPressed: {
+    backgroundColor: colors.surfacePressed,
   },
   tail: {
     position: "absolute",

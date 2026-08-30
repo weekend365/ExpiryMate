@@ -25,7 +25,8 @@ import {
 } from "../shared/responsive-layout";
 import { colors, radius, spacing, touchTarget } from "../shared/theme";
 import { AppText } from "./AppText";
-import { Mascot, type MascotMood } from "./Mascot";
+import type { MascotMood } from "./Mascot";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
 
 interface BottomSheetProps extends PropsWithChildren {
   visible: boolean;
@@ -201,12 +202,15 @@ export function BottomSheet({
                 }
               >
                 {dismissible ? <View style={styles.handle} /> : null}
-                {mascotMood ? (
-                  <View style={styles.mascotWrap}>
-                    <Mascot size="small" mood={mascotMood} />
-                  </View>
-                ) : null}
-                {title ? (
+                {mascotMood && title ? (
+                  <MascotSpeechBubble
+                    message={title}
+                    supportingMessage={description}
+                    mood={mascotMood}
+                    density="compact"
+                    textVariant="bodyStrong"
+                  />
+                ) : title ? (
                   <View style={styles.header}>
                     <AppText variant="heading">{title}</AppText>
                     {description ? (
@@ -281,10 +285,6 @@ const styles = StyleSheet.create({
     height: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.border,
-    flexShrink: 0,
-  },
-  mascotWrap: {
-    alignItems: "center",
     flexShrink: 0,
   },
   header: {

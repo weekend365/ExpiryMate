@@ -7,7 +7,7 @@ import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -120,17 +120,13 @@ export default function RegisterScreen() {
           </AppText>
         </Pressable>
 
-        <View style={styles.hero}>
-          <Mascot size="small" mood="idle" style={styles.mascot} />
-          <View style={styles.heroCopy}>
-            <AppText variant="heading" style={styles.title}>
-              이메일로 시작해요
-            </AppText>
-            <AppText variant="bodySmall" tone="subtext">
-              필요한 것만 적을게요. 이름은 나중에 적어도 괜찮아요.
-            </AppText>
-          </View>
-        </View>
+        <MascotSpeechBubble
+          message="이메일로 시작해요"
+          supportingMessage="필요한 것만 적을게요. 이름은 나중에 적어도 괜찮아요."
+          mood="idle"
+          density="compact"
+          textVariant="heading"
+        />
 
         <View style={styles.formFields}>
           <EmailDomainInput
@@ -268,18 +264,6 @@ const styles = StyleSheet.create({
   },
   textLinkLabel: {
     fontFamily: typography.bodyStrong.fontFamily,
-  },
-  hero: {
-    gap: spacing.xs,
-  },
-  mascot: {
-    alignSelf: "flex-start",
-  },
-  heroCopy: {
-    gap: spacing.xs,
-  },
-  title: {
-    color: colors.text,
   },
   formFields: {
     gap: spacing.sm,

@@ -2,12 +2,15 @@ import { ChevronDown, ChevronUp } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { Pressable, View } from "react-native";
 import { AppText } from "../../components/AppText";
+import { StatCard } from "../../components/StatCard";
 import { colors, spacing, typography } from "../../shared/theme";
 import {
   inventoryUrgencySectionDescriptions,
   type InventoryUrgencySection,
 } from "./filters";
 import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
+
+type ExpiryTrafficTone = "danger" | "warning" | "success";
 
 export function UrgencySection({
   section,
@@ -93,5 +96,53 @@ export function UrgencySection({
         <View style={styles.urgencySectionBody}>{children}</View>
       )}
     </View>
+  );
+}
+
+export function ExpiryTrafficLamp({
+  label,
+  count,
+  tone,
+  lampOn,
+  selected,
+  onPress,
+  testID,
+  accessibilityLabel,
+  accessibilityHint,
+}: {
+  label: string;
+  count: number;
+  tone: ExpiryTrafficTone;
+  lampOn: boolean;
+  selected: boolean;
+  onPress: () => void;
+  testID: string;
+  accessibilityLabel: string;
+  accessibilityHint: string;
+}) {
+  return (
+    <Pressable
+      testID={testID}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      accessibilityState={{ selected }}
+      style={({ pressed }) => [
+        styles.expiryTrafficLamp,
+        pressed && styles.headerFilterButtonPressed,
+      ]}
+    >
+      <StatCard
+        variant="traffic"
+        mini
+        showLabel={false}
+        label={label}
+        value={count}
+        tone={tone}
+        selected={lampOn}
+        showGlow={selected}
+      />
+    </Pressable>
   );
 }

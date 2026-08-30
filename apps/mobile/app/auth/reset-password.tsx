@@ -1,10 +1,10 @@
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
 import { resetPassword } from "../../src/services/api";
@@ -58,12 +58,11 @@ export default function ResetPasswordScreen() {
         </Button>
       }
     >
-      <View style={styles.hero}>
-        <Mascot size="small" mood="idle" />
-        <AppText style={styles.heroText}>
-          8자 이상으로 정해주시면, 장고가 안전하게 기억해 둘게요.
-        </AppText>
-      </View>
+      <MascotSpeechBubble
+        message="8자 이상으로 정해주시면, 장고가 안전하게 기억해 둘게요."
+        mood="idle"
+        density="compact"
+      />
 
       <AppText style={styles.label}>새 비밀번호</AppText>
       <AppTextInput
@@ -79,23 +78,6 @@ export default function ResetPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-  },
-  heroText: {
-    flex: 1,
-    minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,

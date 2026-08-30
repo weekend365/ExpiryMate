@@ -1,11 +1,11 @@
 import { loginRequestSchema } from "@expirymate/shared";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { EmailDomainInput } from "../../src/components/EmailDomainInput";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { getAuthErrorMessage } from "../../src/features/auth/auth-errors";
 import { useAuth } from "../../src/features/auth/use-auth";
@@ -69,12 +69,11 @@ export default function ForgotPasswordScreen() {
         </Button>
       }
     >
-      <View style={styles.hero}>
-        <Mascot size="small" mood="idle" />
-        <AppText style={styles.heroText}>
-          이메일만 알려주시면, 장고가 재설정 길을 안내할게요.
-        </AppText>
-      </View>
+      <MascotSpeechBubble
+        message="이메일만 알려주시면, 장고가 재설정 길을 안내할게요."
+        mood="idle"
+        density="compact"
+      />
 
       <AppText style={styles.label}>이메일</AppText>
       <EmailDomainInput
@@ -87,23 +86,6 @@ export default function ForgotPasswordScreen() {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-  },
-  heroText: {
-    flex: 1,
-    minWidth: 0,
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
-  },
   label: {
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,

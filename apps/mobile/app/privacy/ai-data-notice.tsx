@@ -8,7 +8,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { SectionHeader } from "../../src/components/SectionHeader";
 import {
@@ -98,22 +98,21 @@ export default function AiDataNoticeScreen() {
           )
         }
       >
-        <View style={styles.statusCard}>
-          <Mascot size="small" mood={accepted ? "happy" : "idle"} />
-          <View style={styles.statusCopy}>
-            <AppText style={styles.statusTitle}>
-              {accepted
-                ? "안내를 살펴보시고 동의해 주셨어요"
-                : "첫 추천이나 사진 넣기 전에 한 번만 살펴봐 주세요"}
-            </AppText>
-            <AppText style={styles.statusDescription}>
-              안내 버전 {status?.aiDataNoticeVersion ?? "불러오는 중"}
-              {status?.aiDataNoticeAcceptedAt
-                ? ` · ${formatDate(status.aiDataNoticeAcceptedAt)}에 동의`
-                : ""}
-            </AppText>
-          </View>
-        </View>
+        <MascotSpeechBubble
+          message={
+            accepted
+              ? "안내를 살펴보시고 동의해 주셨어요"
+              : "첫 추천이나 사진 넣기 전에 한 번만 살펴봐 주세요"
+          }
+          supportingMessage={`안내 버전 ${status?.aiDataNoticeVersion ?? "불러오는 중"}${
+            status?.aiDataNoticeAcceptedAt
+              ? ` · ${formatDate(status.aiDataNoticeAcceptedAt)}에 동의`
+              : ""
+          }`}
+          mood={accepted ? "happy" : "idle"}
+          density="compact"
+          textVariant="bodyStrong"
+        />
 
         <View style={styles.section}>
           <SectionHeader title="자세히 알아보기" />
@@ -213,34 +212,6 @@ function getErrorMessage(error: unknown) {
 }
 
 const styles = StyleSheet.create({
-  statusCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  statusCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  statusTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.text,
-  },
-  statusDescription: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.caption.fontFamily,
-    color: colors.subtext,
-  },
   section: {
     gap: spacing.sm,
   },

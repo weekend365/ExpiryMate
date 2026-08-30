@@ -7,7 +7,7 @@ import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
-import { Mascot } from "../../src/components/Mascot";
+import { MascotSpeechBubble } from "../../src/components/MascotSpeechBubble";
 import { Screen } from "../../src/components/Screen";
 import { useDeleteAccount } from "../../src/features/privacy/use-privacy";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
@@ -80,18 +80,13 @@ export default function AccountDeleteScreen() {
           </Button>
         }
       >
-        <View style={styles.hero}>
-          <Mascot size="medium" mood="worry" />
-          <View style={styles.heroCopy}>
-            <AppText style={styles.heroTitle}>
-              {appBrand.characterNameKo}가 조금 걱정돼요
-            </AppText>
-            <AppText style={styles.heroText}>
-              떠나셔도 괜찮아요. 다만 아래 정보는 바로 지워지니, 한 번만 더
-              살펴봐 주세요.
-            </AppText>
-          </View>
-        </View>
+        <MascotSpeechBubble
+          message={`${appBrand.characterNameKo}가 조금 걱정돼요`}
+          supportingMessage="떠나셔도 괜찮아요. 다만 아래 정보는 바로 지워지니, 한 번만 더 살펴봐 주세요."
+          mood="worry"
+          size="medium"
+          textVariant="bodyStrong"
+        />
 
         <View style={styles.card}>
           <AppText style={styles.cardTitle}>바로 지워지는 것들</AppText>
@@ -202,32 +197,6 @@ function getErrorMessage(error: unknown) {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: spacing.sm,
-  },
-  heroCopy: {
-    flex: 1,
-    minWidth: 0,
-    gap: spacing.xxs,
-  },
-  heroTitle: {
-    fontSize: typography.body.fontSize,
-    lineHeight: typography.body.lineHeight,
-    fontFamily: typography.title.fontFamily,
-    color: colors.danger,
-  },
-  heroText: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.text,
-  },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,

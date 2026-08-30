@@ -9,15 +9,27 @@ import {
 
 export const inventoryScreenStyles = StyleSheet.create({
   filterToolbar: {
-    gap: spacing.xs,
-    padding: spacing.xs,
+    gap: spacing.sm,
+    padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.surfaceTranslucent,
+    backgroundColor: colors.surface,
   },
-  heroBubble: {
-    gap: spacing.sm,
+  filterToolbarDangerNotice: {
+    backgroundColor: colors.dangerSoft,
+  },
+  filterToolbarWarningNotice: {
+    backgroundColor: colors.warningSoft,
+  },
+  filterToolbarSuccessNotice: {
+    backgroundColor: colors.successSoft,
+  },
+  filterToolbarNeutralNotice: {
+    backgroundColor: colors.primarySoft,
+  },
+  filterCluster: {
+    gap: spacing.xs,
   },
   searchToolbar: {
     minHeight: touchTarget.min,
@@ -44,60 +56,88 @@ export const inventoryScreenStyles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  moreMenuButtonActive: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  activeFilterDot: {
-    position: "absolute",
-    top: spacing.xs,
-    right: spacing.xs,
-    width: spacing.xs,
-    height: spacing.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.surface,
-  },
-  statusChipRow: {
-    minHeight: touchTarget.min,
-    alignItems: "center",
-    gap: spacing.xs,
-    paddingRight: spacing.xs,
-  },
-  statusChip: {
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.sm,
+  filterPairRow: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    borderRadius: radius.pill,
+    gap: spacing.xs,
+  },
+  filterPairRowDense: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  filterControls: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  filterControlsDense: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    flexGrow: 0,
+  },
+  expiryTrafficRow: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs, // 4px between mini lamps in the cluster
+    paddingHorizontal: spacing.xs,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  statusChipSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primarySoft,
-  },
-  statusChipLabelSelected: {
-    color: colors.primary,
-    fontFamily: typography.bodyStrong.fontFamily,
-  },
-  statusChipDot: {
-    width: spacing.xs,
-    height: spacing.xs,
-    borderRadius: radius.pill,
-  },
-  clearFiltersChip: {
+  expiryTrafficLamp: {
+    flex: 1,
+    minWidth: 0,
     minHeight: touchTarget.min,
-    paddingHorizontal: spacing.sm,
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.xxs,
-    borderRadius: radius.pill,
+    paddingHorizontal: spacing.xxs,
+    paddingVertical: spacing.xxs,
+    borderRadius: radius.md,
+  },
+  locationFilterTile: {
+    flexGrow: 0,
+    flexShrink: 0,
+    // 128: default "모든 위치" width; stays put when a location is selected.
+    width: spacing.xxxl * 2,
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: spacing.sm,
+    paddingRight: spacing.xs,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  locationFilterTileDense: {
+    width: "100%",
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  locationFilterTileActive: {
+    borderColor: colors.primary,
+  },
+  locationFilterMain: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  locationFilterTitle: {
+    flex: 1,
+    minWidth: 0,
+  },
+  filterControlPressed: {
+    opacity: 0.82,
   },
   locationOptionGrid: {
     gap: spacing.xs,
@@ -212,6 +252,13 @@ export const inventoryScreenStyles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
+  selectionRowEmbedded: {
+    paddingHorizontal: spacing.none,
+    paddingVertical: spacing.none,
+    borderWidth: 0,
+    borderRadius: radius.none,
+    backgroundColor: "transparent",
+  },
   selectionSummary: {
     flex: 1,
     minWidth: 0,
@@ -277,16 +324,10 @@ export const inventoryScreenStyles = StyleSheet.create({
   listFlex: {
     flex: 1,
   },
-  pinnedHeader: {
-    gap: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xs,
-  },
   listContent: {
     flexGrow: 1,
     paddingHorizontal: spacing.sm,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxxl + spacing.sm,
     gap: spacing.sm,
   },

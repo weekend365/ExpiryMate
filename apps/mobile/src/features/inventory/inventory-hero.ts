@@ -25,19 +25,59 @@ export function getInventoryHeroNotice(input: {
   statusFilter: InventoryViewFilter;
 }): InventoryHeroNotice {
   if (input.isSelectionMode) {
-    return { show: false };
+    return {
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: "정리할 재료를 골라 주세요.",
+      supportingMessage: "여러 재료를 한 번에 정리할 수 있어요.",
+    };
   }
 
-  if (input.isInitialLoading || input.isInitialError) {
-    return { show: false };
+  if (input.isInitialLoading) {
+    return {
+      show: true,
+      mood: "think",
+      tone: "neutral",
+      message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
+    };
   }
 
-  if (
-    input.totalCount === 0 ||
-    input.visibleCount === 0 ||
-    input.statusFilter !== "all"
-  ) {
-    return { show: false };
+  if (input.isInitialError) {
+    return {
+      show: true,
+      mood: "worry",
+      tone: "danger",
+      message: "앗, 보관함을 불러오지 못했어요. 다시 살펴볼까요?",
+    };
+  }
+
+  if (input.totalCount === 0) {
+    return {
+      show: true,
+      mood: "empty",
+      tone: "neutral",
+      message: "아직 넣어둔 재료가 없어요. 첫 재료를 넣어 볼까요?",
+    };
+  }
+
+  if (input.visibleCount === 0) {
+    return {
+      show: true,
+      mood: "idle",
+      tone: "neutral",
+      message: "지금 고른 조건에 맞는 재료가 없어요.",
+      supportingMessage: "검색어나 필터를 바꾸면 다시 찾아볼게요.",
+    };
+  }
+
+  if (input.statusFilter !== "all" || input.visibleCount < input.totalCount) {
+    return {
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: `조건에 맞는 재료 ${input.visibleCount}개를 모아 뒀어요.`,
+    };
   }
 
   if (input.expiredCount > 0) {
@@ -60,34 +100,27 @@ export function getInventoryHeroNotice(input: {
     };
   }
 
-  return { show: false };
+  return {
+    show: true,
+    mood: "happy",
+    tone: "success",
+    message: `재료 ${input.totalCount}개가 잘 정리되어 있어요.`,
+  };
 }
 
 export function getInventoryHeroNotices(input: {
   hero: InventoryHeroNotice;
-  successMessage?: string | null;
 }): JangoHeroNoticeItem[] {
   if (!input.hero.show) {
     return [];
   }
 
-  const notices: JangoHeroNoticeItem[] = [];
-  const successMessage = input.successMessage?.trim();
-
-  if (successMessage) {
-    notices.push({
-      id: "success",
-      mood: "happy",
-      message: successMessage,
-    });
-  }
-
-  notices.push({
-    id: "status",
-    mood: input.hero.mood,
-    message: input.hero.message,
-    supportingMessage: input.hero.supportingMessage,
-  });
-
-  return notices;
+  return [
+    {
+      id: "status",
+      mood: input.hero.mood,
+      message: input.hero.message,
+      supportingMessage: input.hero.supportingMessage,
+    },
+  ];
 }

@@ -4,7 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { appBrand } from "@expirymate/shared";
 import { AppText } from "../../components/AppText";
-import { Mascot } from "../../components/Mascot";
+import { MascotSpeechBubble } from "../../components/MascotSpeechBubble";
 import { Button } from "../../components/Button";
 import { colors, spacing, typography } from "../../shared/theme";
 import { useAppStore } from "../../store/app-store";
@@ -125,10 +125,13 @@ export function AuthRedirectGate() {
 export function AuthLoadingScreen() {
   return (
     <View style={styles.root}>
-      <Mascot size="medium" mood="idle" />
       <AppText style={styles.brand}>{appBrand.appNameKo}</AppText>
+      <MascotSpeechBubble
+        message="장고가 준비하고 있어요"
+        mood="idle"
+        size="medium"
+      />
       <ActivityIndicator color={colors.primary} />
-      <AppText style={styles.caption}>장고가 준비하고 있어요</AppText>
     </View>
   );
 }
@@ -142,11 +145,15 @@ export function AuthSessionErrorScreen({
 }) {
   return (
     <View style={styles.root}>
-      <Mascot size="medium" mood="worry" />
-      <AppText style={styles.brand}>로그인을 확인하지 못했어요</AppText>
-      <AppText style={styles.caption}>
-        {message ?? "인터넷 연결을 확인하고 다시 시도해 주세요."}
-      </AppText>
+      <MascotSpeechBubble
+        message="로그인을 확인하지 못했어요"
+        supportingMessage={
+          message ?? "인터넷 연결을 확인하고 다시 시도해 주세요."
+        }
+        mood="worry"
+        size="medium"
+        textVariant="bodyStrong"
+      />
       <Button onPress={onRetry}>다시 확인할게요</Button>
     </View>
   );
@@ -204,11 +211,5 @@ const styles = StyleSheet.create({
     lineHeight: typography.heading.lineHeight,
     fontFamily: typography.heading.fontFamily,
     color: colors.text,
-  },
-  caption: {
-    fontSize: typography.bodySmall.fontSize,
-    lineHeight: typography.bodySmall.lineHeight,
-    fontFamily: typography.bodySmall.fontFamily,
-    color: colors.subtext,
   },
 });

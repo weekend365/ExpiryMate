@@ -13,13 +13,19 @@ const populated = {
 };
 
 describe("getInventoryHeroNotice", () => {
-  it("hides the hero while selecting items to clean up", () => {
+  it("keeps the hero visible while selecting items to clean up", () => {
     expect(
       getInventoryHeroNotice({ ...populated, isSelectionMode: true }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: "정리할 재료를 골라 주세요.",
+      supportingMessage: "여러 재료를 한 번에 정리할 수 있어요.",
+    });
   });
 
-  it("lets the list skeleton own the first loading state", () => {
+  it("keeps Jango visible while the first load is in progress", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -27,10 +33,15 @@ describe("getInventoryHeroNotice", () => {
         totalCount: 0,
         visibleCount: 0,
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "think",
+      tone: "neutral",
+      message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
+    });
   });
 
-  it("lets the empty-error state own 장고", () => {
+  it("keeps Jango visible for an initial error", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -38,20 +49,30 @@ describe("getInventoryHeroNotice", () => {
         totalCount: 0,
         visibleCount: 0,
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "worry",
+      tone: "danger",
+      message: "앗, 보관함을 불러오지 못했어요. 다시 살펴볼까요?",
+    });
   });
 
-  it("lets the empty-inventory state own 장고", () => {
+  it("keeps Jango visible for an empty inventory", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
         totalCount: 0,
         visibleCount: 0,
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "empty",
+      tone: "neutral",
+      message: "아직 넣어둔 재료가 없어요. 첫 재료를 넣어 볼까요?",
+    });
   });
 
-  it("lets the filtered empty state explain an empty result", () => {
+  it("explains an empty filtered result in the persistent hero", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -59,10 +80,16 @@ describe("getInventoryHeroNotice", () => {
         statusFilter: "expired",
         expiredCount: 0,
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "idle",
+      tone: "neutral",
+      message: "지금 고른 조건에 맞는 재료가 없어요.",
+      supportingMessage: "검색어나 필터를 바꾸면 다시 찾아볼게요.",
+    });
   });
 
-  it("stays hidden when a status chip already explains the active view", () => {
+  it("summarizes the active filtered view", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -71,7 +98,12 @@ describe("getInventoryHeroNotice", () => {
         within7Count: 1,
         statusFilter: "expired",
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: "조건에 맞는 재료 2개를 모아 뒀어요.",
+    });
 
     expect(
       getInventoryHeroNotice({
@@ -79,7 +111,12 @@ describe("getInventoryHeroNotice", () => {
         visibleCount: 3,
         statusFilter: "within7",
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: "조건에 맞는 재료 3개를 모아 뒀어요.",
+    });
 
     expect(
       getInventoryHeroNotice({
@@ -87,7 +124,12 @@ describe("getInventoryHeroNotice", () => {
         visibleCount: 5,
         statusFilter: "safe",
       }),
-    ).toEqual({ show: false });
+    ).toEqual({
+      show: true,
+      mood: "speak",
+      tone: "neutral",
+      message: "조건에 맞는 재료 5개를 모아 뒀어요.",
+    });
   });
 
   it("warns about expired items first in the unfiltered view", () => {
@@ -121,22 +163,26 @@ describe("getInventoryHeroNotice", () => {
     });
   });
 
-  it("does not spend vertical space on a no-action success message", () => {
-    expect(getInventoryHeroNotice(populated)).toEqual({ show: false });
+  it("keeps a calm success message visible", () => {
+    expect(getInventoryHeroNotice(populated)).toEqual({
+      show: true,
+      mood: "happy",
+      tone: "success",
+      message: "재료 4개가 잘 정리되어 있어요.",
+    });
   });
 });
 
 describe("getInventoryHeroNotices", () => {
-  it("hides the carousel when the status hero is off", () => {
+  it("still supports an explicitly disabled hero", () => {
     expect(
       getInventoryHeroNotices({
         hero: { show: false },
-        successMessage: "4개 재료를 정리했어요. 장고도 한숨 돌렸어요.",
       }),
     ).toEqual([]);
   });
 
-  it("puts a cleanup success line in front of the fridge status", () => {
+  it("keeps the regular hero limited to the current fridge status", () => {
     expect(
       getInventoryHeroNotices({
         hero: {
@@ -145,8 +191,7 @@ describe("getInventoryHeroNotices", () => {
           tone: "warning",
           message: "일주일 안에 손볼 재료가 6개 있어요.",
         },
-        successMessage: "4개 재료를 정리했어요. 장고도 한숨 돌렸어요.",
       }).map((notice) => notice.id),
-    ).toEqual(["success", "status"]);
+    ).toEqual(["status"]);
   });
 });

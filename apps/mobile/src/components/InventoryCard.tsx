@@ -6,7 +6,7 @@ import {
   resolveStorageLocationLabel,
   type InventoryItem,
 } from "@expirymate/shared";
-import { Check, Ellipsis, Minus } from "lucide-react-native";
+import { Check, Trash2 } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
@@ -19,8 +19,7 @@ interface InventoryCardProps {
   item: InventoryItem;
   onPress: (item: InventoryItem) => void;
   onLongPress?: (item: InventoryItem) => void;
-  onQuickUse?: (item: InventoryItem) => void;
-  onOpenMore?: (item: InventoryItem) => void;
+  onCleanup?: (item: InventoryItem) => void;
   selectionMode?: boolean;
   selected?: boolean;
   /** Flush row inside a section surface — no own card chrome. */
@@ -33,8 +32,7 @@ export function InventoryCard({
   item,
   onPress,
   onLongPress,
-  onQuickUse,
-  onOpenMore,
+  onCleanup,
   selectionMode = false,
   selected = false,
   embedded = false,
@@ -68,7 +66,7 @@ export function InventoryCard({
             ? selected
               ? "선택됨. 다시 누르면 선택을 해제해요."
               : "누르면 정리할 재료로 골라요."
-            : "누르면 이 재료의 상세 내용과 수정 화면을 열어요."
+            : "누르면 이 재료의 내용을 수정할 수 있어요."
         }
         accessibilityState={selectionMode ? { selected } : undefined}
         style={({ pressed }) => [
@@ -102,7 +100,7 @@ export function InventoryCard({
             numberOfLines={shouldStack ? undefined : 1}
             style={styles.meta}
           >
-            {quantityLabel} · {locationLabel} · {dateLabel}
+            {locationLabel} · {quantityLabel} · {dateLabel}
           </AppText>
         </View>
       </Pressable>
@@ -129,60 +127,25 @@ export function InventoryCard({
             ) : null}
           </View>
         </Pressable>
-      ) : onQuickUse || onOpenMore ? (
-        <View
-          style={[
-            styles.trailingActions,
-            shouldStack && styles.trailingActionsStacked,
+      ) : onCleanup ? (
+        <Pressable
+          onPress={() => onCleanup(item)}
+          hitSlop={spacing.xs}
+          accessibilityRole="button"
+          accessibilityLabel={`${item.displayName} 정리할게요`}
+          accessibilityHint="전부 사용했는지 일부만 사용했는지 고를 수 있어요."
+          style={({ pressed }) => [
+            styles.trailingHit,
+            shouldStack && styles.trailingHitStacked,
+            pressed && styles.pressed,
           ]}
         >
-          {onQuickUse ? (
-            <Pressable
-              onPress={() => onQuickUse(item)}
-              accessibilityRole="button"
-              accessibilityLabel={`${item.displayName} 사용한 양 빼기`}
-              accessibilityHint="모두 썼는지 일부만 썼는지 고를 수 있어요."
-              style={({ pressed }) => [
-                styles.quickUseButton,
-                pressed && styles.pressed,
-              ]}
-              testID={`inventory-quick-use-${item.id}`}
-            >
-              <Minus
-                color={colors.primary}
-                size={spacing.sm}
-                strokeWidth={2.4}
-              />
-              <AppText
-                variant="bodySmallStrong"
-                scaleRole="chrome"
-                densityAware={false}
-                tone="primary"
-              >
-                사용
-              </AppText>
-            </Pressable>
-          ) : null}
-          {onOpenMore ? (
-            <Pressable
-              onPress={() => onOpenMore(item)}
-              accessibilityRole="button"
-              accessibilityLabel={`${item.displayName} 더보기`}
-              accessibilityHint="폐기하거나 여러 개 정리하는 메뉴를 열어요."
-              style={({ pressed }) => [
-                styles.moreButton,
-                pressed && styles.pressed,
-              ]}
-              testID={`inventory-more-${item.id}`}
-            >
-              <Ellipsis
-                color={colors.subtext}
-                size={spacing.sm + spacing.xxs}
-                strokeWidth={2.4}
-              />
-            </Pressable>
-          ) : null}
-        </View>
+          <Trash2
+            color={colors.danger}
+            size={spacing.sm + spacing.xxs}
+            strokeWidth={2.4}
+          />
+        </Pressable>
       ) : null}
     </View>
   );
@@ -301,35 +264,6 @@ const styles = StyleSheet.create({
   },
   trailingHitStacked: {
     alignSelf: "flex-end",
-  },
-  trailingActions: {
-    minHeight: touchTarget.cta,
-    marginRight: spacing.xs,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs,
-  },
-  trailingActionsStacked: {
-    alignSelf: "flex-end",
-    marginBottom: spacing.xs,
-  },
-  quickUseButton: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.min,
-    paddingHorizontal: spacing.xs,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: spacing.xxs,
-    borderRadius: radius.lg,
-    backgroundColor: colors.primarySoft,
-  },
-  moreButton: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.min,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: radius.lg,
   },
   expiryLamp: {
     width: HERO_LAMP_SIZE,

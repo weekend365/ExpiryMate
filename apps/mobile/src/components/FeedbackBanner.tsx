@@ -1,8 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget } from "../shared/theme";
-import { useResponsiveLayout } from "../shared/responsive-layout";
-import { AppText } from "./AppText";
-import { Mascot, type MascotMood } from "./Mascot";
+import { AppText, type AppTextVariant } from "./AppText";
+import type { MascotMood } from "./Mascot";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
 
 type FeedbackTone = "danger" | "success" | "warning" | "info";
 
@@ -14,7 +15,17 @@ interface FeedbackBannerProps {
   onAction?: () => void;
   /** When false, mascot is hidden (compact inline strip). Default true. */
   showMascot?: boolean;
+  /** Event feedback disappears automatically and can be closed immediately. */
+  transient?: boolean;
+  /** Lets hero placements use the same spacing as Home and Recommendations. */
+  speechDensity?: "default" | "compact";
+  speechTextVariant?: AppTextVariant;
+  /** Set to `null` to keep a transient notice until the user closes it. */
+  autoDismissMs?: number | null;
+  onDismiss?: () => void;
 }
+
+export const DEFAULT_FEEDBACK_AUTO_DISMISS_MS = 5_000;
 
 const toneConfig: Record<
   FeedbackTone,
@@ -53,60 +64,107 @@ export function FeedbackBanner({
   actionLabel,
   onAction,
   showMascot = true,
+  transient = false,
+  speechDensity = "compact",
+  speechTextVariant = "bodyStrong",
+  autoDismissMs = DEFAULT_FEEDBACK_AUTO_DISMISS_MS,
+  onDismiss,
 }: FeedbackBannerProps) {
-  const { shouldStack } = useResponsiveLayout();
   const palette = toneConfig[tone];
-  const isActionable = Boolean(actionLabel && onAction);
+  const [isVisible, setIsVisible] = useState(true);
+  const onDismissRef = useRef(onDismiss);
+  onDismissRef.current = onDismiss;
+  const isTransientJangoNotice = transient && showMascot;
+  const noticeKey = `${tone}\u0000${title}\u0000${description ?? ""}`;
 
-  const content = (
+  useEffect(() => {
+    setIsVisible(true);
+
+    if (!isTransientJangoNotice || autoDismissMs === null) {
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setIsVisible(false);
+      onDismissRef.current?.();
+    }, autoDismissMs);
+
+    return () => clearTimeout(timeout);
+  }, [autoDismissMs, isTransientJangoNotice, noticeKey]);
+
+  if (!isVisible) {
+    return null;
+  }
+
+  const dismiss = () => {
+    setIsVisible(false);
+    onDismissRef.current?.();
+  };
+
+  const copy = (
     <>
-      {showMascot ? <Mascot size="small" mood={palette.mascotMood} /> : null}
-      <View style={styles.copy}>
-        <AppText variant="bodyStrong" tone={palette.titleTone}>
-          {title}
-        </AppText>
-        {description ? (
-          <AppText variant="bodySmall">{description}</AppText>
-        ) : null}
-        {actionLabel && onAction ? (
-          <View style={styles.action}>
-            <AppText variant="bodyStrong" tone="primary">
-              {actionLabel}
-            </AppText>
-          </View>
-        ) : null}
-      </View>
+      <AppText variant="bodyStrong" tone={palette.titleTone}>
+        {title}
+      </AppText>
+      {description ? <AppText variant="bodySmall">{description}</AppText> : null}
     </>
   );
 
-  if (isActionable && onAction) {
-    return (
-      <Pressable
-        onPress={onAction}
-        accessibilityRole="button"
-        accessibilityLabel={actionLabel}
-        accessibilityLiveRegion="polite"
-        style={({ pressed }) => [
-          styles.root,
-          shouldStack && styles.rootStacked,
-          { backgroundColor: palette.backgroundColor },
-          pressed && styles.rootPressed,
-        ]}
-      >
-        {content}
-      </Pressable>
-    );
-  }
+  const content = showMascot ? (
+    <View style={styles.speechContent}>
+      <MascotSpeechBubble
+        message={title}
+        supportingMessage={description}
+        mood={palette.mascotMood}
+        density={speechDensity}
+        textVariant={speechTextVariant}
+        onDismiss={isTransientJangoNotice ? dismiss : undefined}
+      />
+      {actionLabel && onAction ? (
+        <Pressable
+          onPress={onAction}
+          accessibilityRole="button"
+          accessibilityLabel={actionLabel}
+          style={({ pressed }) => [
+            styles.speechAction,
+            pressed && styles.actionPressed,
+          ]}
+        >
+          <AppText variant="bodyStrong" tone="primary">
+            {actionLabel}
+          </AppText>
+        </Pressable>
+      ) : null}
+    </View>
+  ) : (
+    <View style={styles.copy}>
+      {copy}
+      {actionLabel && onAction ? (
+        <Pressable
+          onPress={onAction}
+          accessibilityRole="button"
+          accessibilityLabel={actionLabel}
+          style={({ pressed }) => [
+            styles.action,
+            pressed && styles.actionPressed,
+          ]}
+        >
+          <AppText variant="bodyStrong" tone="primary">
+            {actionLabel}
+          </AppText>
+        </Pressable>
+      ) : null}
+    </View>
+  );
+
+  const rootStyle = [
+    styles.root,
+    showMascot ? styles.speechRoot : styles.inlineRoot,
+    !showMascot && { backgroundColor: palette.backgroundColor },
+  ];
 
   return (
-    <View
-      style={[
-        styles.root,
-        shouldStack && styles.rootStacked,
-        { backgroundColor: palette.backgroundColor },
-      ]}
-      accessibilityLiveRegion="polite"
-    >
+    <View style={rootStyle} accessibilityLiveRegion="polite">
       {content}
     </View>
   );
@@ -114,22 +172,28 @@ export function FeedbackBanner({
 
 const styles = StyleSheet.create({
   root: {
-    borderRadius: radius.xxl,
-    padding: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.sm,
     minHeight: touchTarget.min,
   },
-  rootStacked: {
-    flexDirection: "column",
-    alignItems: "flex-start",
+  speechRoot: {
+    alignItems: "stretch",
   },
-  rootPressed: {
+  inlineRoot: {
+    borderRadius: radius.xxl,
+    padding: spacing.md,
+  },
+  speechContent: {
+    gap: spacing.xs,
+  },
+  speechAction: {
+    alignSelf: "flex-end",
+    minHeight: touchTarget.min,
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+  },
+  actionPressed: {
     opacity: 0.85,
   },
   copy: {
-    flex: 1,
     minWidth: 0,
     gap: spacing.xxs,
   },
