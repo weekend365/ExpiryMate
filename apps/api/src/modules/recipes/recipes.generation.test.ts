@@ -187,26 +187,79 @@ describe("RecipesService semantic repair", () => {
     expect(result.repairApplied).toBe(true);
     expect(repairInput).toContain("DISH_1_UNDECLARED_INGREDIENT:버터");
     expect(repairInput).toContain(
-      "UNDECLARED_INGREDIENT는 해당 재료를 실제로 사용할 때만",
+      "UNDECLARED_INGREDIENT는 표시된 요리의 steps와 tips만 수정합니다",
     );
   });
 
-  it("returns a gateway failure after an invalid repair", async () => {
+  it("retries undeclared ingredients against the latest repaired output", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const first = recommendations(2);
+    first[0] = {
+      ...first[0]!,
+      steps: [
+        "버터 10g을 팬에서 약불로 1분 녹여요.",
+        ...first[0]!.steps.slice(1),
+      ],
+    };
+    const second = recommendations(2);
+    second[0] = {
+      ...second[0]!,
+      steps: [
+        "고추장 10g을 넣고 약불에서 1분 저어요.",
+        ...second[0]!.steps.slice(1),
+      ],
+    };
+    parseMock
+      .mockResolvedValueOnce(response(first))
+      .mockResolvedValueOnce(response(second))
+      .mockResolvedValueOnce(response(recommendations(2)));
+
+    const result = await generate(createService());
+    const finalRepairInput = String(parseMock.mock.calls[2]?.[0]?.input);
+
+    expect(result.generationAttempts).toBe(3);
+    expect(finalRepairInput).toContain("DISH_1_UNDECLARED_INGREDIENT:고추장");
+    expect(finalRepairInput).not.toContain("DISH_1_UNDECLARED_INGREDIENT:버터");
+  });
+
+  it("retries a second repair using the latest violations", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const first = recommendations(1);
+    const second = recommendations(2);
+    second[2] = { ...second[2]!, cookingTimeMinutes: 20 };
+    parseMock
+      .mockResolvedValueOnce(response(first))
+      .mockResolvedValueOnce(response(second))
+      .mockResolvedValueOnce(response(recommendations(2)));
+
+    const result = await generate(createService());
+    const finalRepairInput = String(parseMock.mock.calls[2]?.[0]?.input);
+
+    expect(result.generationAttempts).toBe(3);
+    expect(result.repairApplied).toBe(true);
+    expect(parseMock).toHaveBeenCalledTimes(3);
+    expect(finalRepairInput).toContain("QUICK_NOVEL_STRATEGY_MUST_BE_FASTEST");
+    expect(finalRepairInput).toContain(
+      "quick_novel 요리의 cookingTimeMinutes를 다른 모든 요리 이하로 줄이고",
+    );
+  });
+
+  it("returns a gateway failure after two invalid repairs", async () => {
     process.env.OPENAI_API_KEY = "test-key";
     parseMock.mockResolvedValue(response(recommendations(1)));
     await expect(generate(createService())).rejects.toBeInstanceOf(
       BadGatewayException,
     );
-    expect(parseMock).toHaveBeenCalledTimes(2);
+    expect(parseMock).toHaveBeenCalledTimes(3);
     expect(eventCreateMock).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           status: "failed",
           failureCode: "semantic_validation",
-          inputTokens: 20,
-          cachedInputTokens: 4,
-          outputTokens: 40,
-          generationAttempts: 2,
+          inputTokens: 30,
+          cachedInputTokens: 6,
+          outputTokens: 60,
+          generationAttempts: 3,
           repairApplied: true,
           durationMs: expect.any(Number),
         }),

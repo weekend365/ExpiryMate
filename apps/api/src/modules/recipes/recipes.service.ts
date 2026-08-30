@@ -65,8 +65,9 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v7";
+const PROMPT_VERSION = "recipe-recommendation-v8";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
+const MAX_GENERATION_ATTEMPTS = 3;
 
 interface RecipeRecommendationUsage {
   inputTokens: number;
@@ -169,7 +170,7 @@ export class RecipesService {
         request,
         inventorySnapshot,
         modelSelection.model,
-      ) * 2.2,
+      ) * (MAX_GENERATION_ATTEMPTS + 0.2),
     );
     await this.recipePolicy.enforceDailyCostLimit(
       ownerKey,
@@ -715,22 +716,39 @@ export class RecipesService {
         first,
         firstValidation.violations,
       );
-      const second = await run(repairInput, 2);
-      const secondValidation = validateAlignedRecommendations(
-        second,
+      let repaired = await run(repairInput, 2);
+      let repairedValidation = validateAlignedRecommendations(
+        repaired,
         request,
         inventorySnapshot,
         preference,
       );
-      if (!secondValidation.valid) {
+
+      if (!repairedValidation.valid) {
+        this.logger.warn(
+          `Recipe semantic validation requested final repair: ${repairedValidation.violations.join(",")}`,
+        );
+        repaired = await run(
+          buildRepairInput(input, repaired, repairedValidation.violations),
+          MAX_GENERATION_ATTEMPTS,
+        );
+        repairedValidation = validateAlignedRecommendations(
+          repaired,
+          request,
+          inventorySnapshot,
+          preference,
+        );
+      }
+
+      if (!repairedValidation.valid) {
         throw new RecipeGenerationFailure(
           "semantic_validation",
-          `Recipe semantic validation failed after repair: ${secondValidation.violations.join(",")}`,
+          `Recipe semantic validation failed after ${MAX_GENERATION_ATTEMPTS} attempts: ${repairedValidation.violations.join(",")}`,
         );
       }
 
       return {
-        recommendations: secondValidation.recommendations,
+        recommendations: repairedValidation.recommendations,
         usage,
         estimatedCostUsd: calculateOpenAiCostUsd(usage, modelSelection.model),
         generationAttempts,
@@ -878,6 +896,8 @@ function buildInstructions() {
     "사용자의 보관 재료만 주요 재료로 사용해 추천 요리 3개를 만드세요.",
     "세 요리는 서로 다른 방향으로 만드세요. 하나는 유통기한이 가까운 재료를 살리고, 하나는 추가 재료를 거의 쓰지 않으며, 하나는 짧고 새로운 조합으로 하세요.",
     "각 요리에 strategy를 지정하세요. expiring_first, minimal_extra, quick_novel을 각각 정확히 한 번씩 사용하세요.",
+    "minimal_extra 요리의 optionalMissingIngredients 개수는 다른 두 요리보다 많지 않아야 하며, 가능하면 0개로 두세요.",
+    "quick_novel 요리의 cookingTimeMinutes는 다른 두 요리보다 크지 않아야 합니다. 최단 시간이 같은 요리가 여러 개여도 됩니다.",
     "각 요리의 mealType은 breakfast, lunch, dinner, snack 중 하나로 적고, 요청 mealType이 any가 아니면 반드시 그 값과 일치시키세요.",
     "title에는 요리 이름만 적으세요. '임박 재료 우선:', '추가 재료 최소형:', '빠르고 새로운 탐색형:' 같은 전략 라벨을 제목이나 재료 이름에 붙이지 마세요.",
     "만료된 재료는 입력되지 않으며, 유통기한이 가까운 재료를 우선 활용하세요.",
@@ -936,6 +956,8 @@ function buildInput(
         mealType: request.mealType,
         strategies: ["expiring_first", "minimal_extra", "quick_novel"],
         requireUniqueStrategies: true,
+        minimalExtraMustHaveFewestOptionalIngredients: true,
+        quickNovelMustHaveShortestCookingTime: true,
         usedIngredientUnits: ["ea", "ml", "g"],
         requireUsedIngredientAmount: true,
         requireSpiceLevel: true,
@@ -977,10 +999,15 @@ function buildRepairInput(
       invalidRecommendations: recommendations,
       rules: [
         "위반되지 않은 내용도 구조화 출력 스키마에 맞춰 함께 반환합니다.",
+        "violations에 적힌 문제를 모두 고친 뒤, 전체 추천을 스스로 다시 점검하고 새로운 위반을 만들지 않습니다.",
         "재고 ID, 단위, 수량, 안전 설정을 임의로 바꾸거나 추측하지 않습니다.",
-        "UNDECLARED_INGREDIENT는 해당 재료를 실제로 사용할 때만 originalContext.inventory의 올바른 inventoryItemId로 usedIngredients에 선언하거나 허용 범위 안에서 optionalMissingIngredients에 선언하고, 실제로 사용하지 않으면 steps와 tips에서 해당 재료 언급을 모두 제거합니다.",
+        "UNDECLARED_INGREDIENT는 표시된 요리의 steps와 tips만 수정합니다. 재료가 originalContext.inventory에 있으면 그 재고의 정확한 inventoryItemId와 unitCode, maxAmount 이하의 실제 사용량으로 usedIngredients에 선언합니다.",
+        "UNDECLARED_INGREDIENT가 재고에 없으면 안전 설정과 maxOptionalMissingIngredients가 허용할 때만 optionalMissingIngredients에 선언합니다. 그 외에는 steps와 tips에서 해당 재료를 제거하고, 조리법이 자연스럽도록 문장도 함께 고칩니다.",
+        "미선언 재료를 고치는 과정에서 violations에 없던 새 식재료를 steps나 tips에 추가하지 않습니다.",
         "UNIT_MISMATCH와 QUANTITY_EXCEEDED는 해당 재료의 inventory unitCode와 quantityBase를 확인해 결과 전체에서 일관되게 고칩니다.",
         "수량이나 단위를 고칠 때 usedIngredients뿐 아니라 steps와 tips의 수량 표현도 함께 고칩니다.",
+        "MINIMAL_EXTRA_STRATEGY_HAS_TOO_MANY_OPTIONAL_INGREDIENTS는 minimal_extra 요리의 optionalMissingIngredients를 다른 모든 요리 이하로 줄이며, 가능하면 0개로 만듭니다. 비교를 맞추려고 다른 요리에 선택 재료를 추가하지 않습니다.",
+        "QUICK_NOVEL_STRATEGY_MUST_BE_FASTEST는 quick_novel 요리의 cookingTimeMinutes를 다른 모든 요리 이하로 줄이고 steps의 시간 표현도 일관되게 고칩니다. 최단 시간 동률은 허용됩니다.",
       ],
     },
     null,
