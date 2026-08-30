@@ -39,6 +39,17 @@ const inventory: RecipeInventorySnapshotItem[] = [
     daysUntilExpiry: 1,
   },
 ];
+const radishInventoryItem: RecipeInventorySnapshotItem = {
+  inventoryItemId: "radish-1",
+  name: "무",
+  category: ProductCategory.PRODUCE,
+  quantity: 1,
+  quantityBase: 1,
+  unitCode: UnitCode.EA,
+  storageLocation: "fridge",
+  expiryDate: "2026-08-12",
+  daysUntilExpiry: 2,
+};
 
 function dishes(): RecipeRecommendationDish[] {
   return [1, 2, 3].map((index) => ({
@@ -214,6 +225,72 @@ describe("recipe semantic validation", () => {
       validateGeneratedRecommendations(invalid, request, inventory, preference)
         .violations,
     ).toContain("DISH_1_UNDECLARED_INGREDIENT:버터");
+  });
+
+  it("does not mistake a single-character ingredient inside unrelated words", () => {
+    const result = validateGeneratedRecommendations(
+      dishes().map((dish) => ({
+        ...dish,
+        tips: ["너무 오래 익히거나 무르게 만들지 마세요."],
+      })),
+      request,
+      [...inventory, radishInventoryItem],
+      preference,
+    );
+
+    expect(result.valid).toBe(true);
+    expect(result.violations).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("UNDECLARED_INGREDIENT:무"),
+      ]),
+    );
+  });
+
+  it("still rejects an actual single-character ingredient mention", () => {
+    const invalid = dishes();
+    invalid[0] = {
+      ...invalid[0]!,
+      steps: ["무를 1cm 크기로 썰어요.", ...invalid[0]!.steps.slice(1)],
+    };
+
+    expect(
+      validateGeneratedRecommendations(
+        invalid,
+        request,
+        [...inventory, radishInventoryItem],
+        preference,
+      ).violations,
+    ).toContain("DISH_1_UNDECLARED_INGREDIENT:무");
+  });
+
+  it("accepts a declared single-character ingredient mention", () => {
+    const declared = dishes();
+    declared[0] = {
+      ...declared[0]!,
+      usedIngredients: [
+        ...declared[0]!.usedIngredients,
+        {
+          inventoryItemId: radishInventoryItem.inventoryItemId,
+          name: radishInventoryItem.name,
+          amount: 1,
+          unitCode: UnitCode.EA,
+        },
+      ],
+      steps: ["무를 1cm 크기로 썰어요.", ...declared[0]!.steps.slice(1)],
+    };
+
+    expect(
+      validateGeneratedRecommendations(
+        declared,
+        request,
+        [...inventory, radishInventoryItem],
+        preference,
+      ).violations,
+    ).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("UNDECLARED_INGREDIENT:무"),
+      ]),
+    );
   });
 
   it("disables optional ingredient suggestions when safety restrictions apply", () => {

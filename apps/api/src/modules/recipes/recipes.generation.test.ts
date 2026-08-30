@@ -167,6 +167,30 @@ describe("RecipesService semantic repair", () => {
     );
   });
 
+  it("gives targeted repair guidance for undeclared ingredients", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const invalid = recommendations(2);
+    invalid[0] = {
+      ...invalid[0]!,
+      steps: [
+        "버터 10g을 팬에서 약불로 1분 녹여요.",
+        ...invalid[0]!.steps.slice(1),
+      ],
+    };
+    parseMock
+      .mockResolvedValueOnce(response(invalid, 10, 20))
+      .mockResolvedValueOnce(response(recommendations(2), 12, 22));
+
+    const result = await generate(createService());
+    const repairInput = String(parseMock.mock.calls[1]?.[0]?.input);
+
+    expect(result.repairApplied).toBe(true);
+    expect(repairInput).toContain("DISH_1_UNDECLARED_INGREDIENT:버터");
+    expect(repairInput).toContain(
+      "UNDECLARED_INGREDIENT는 해당 재료를 실제로 사용할 때만",
+    );
+  });
+
   it("returns a gateway failure after an invalid repair", async () => {
     process.env.OPENAI_API_KEY = "test-key";
     parseMock.mockResolvedValue(response(recommendations(1)));

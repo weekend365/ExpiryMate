@@ -65,7 +65,7 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v6";
+const PROMPT_VERSION = "recipe-recommendation-v7";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 
 interface RecipeRecommendationUsage {
@@ -978,6 +978,7 @@ function buildRepairInput(
       rules: [
         "위반되지 않은 내용도 구조화 출력 스키마에 맞춰 함께 반환합니다.",
         "재고 ID, 단위, 수량, 안전 설정을 임의로 바꾸거나 추측하지 않습니다.",
+        "UNDECLARED_INGREDIENT는 해당 재료를 실제로 사용할 때만 originalContext.inventory의 올바른 inventoryItemId로 usedIngredients에 선언하거나 허용 범위 안에서 optionalMissingIngredients에 선언하고, 실제로 사용하지 않으면 steps와 tips에서 해당 재료 언급을 모두 제거합니다.",
         "UNIT_MISMATCH와 QUANTITY_EXCEEDED는 해당 재료의 inventory unitCode와 quantityBase를 확인해 결과 전체에서 일관되게 고칩니다.",
         "수량이나 단위를 고칠 때 usedIngredients뿐 아니라 steps와 tips의 수량 표현도 함께 고칩니다.",
       ],

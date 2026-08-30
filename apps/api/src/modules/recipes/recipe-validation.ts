@@ -147,6 +147,31 @@ const ingredientAliasGroups = [
   ["대두", "콩"],
 ];
 
+const singleCharacterIngredientParticles = new Set([
+  "은",
+  "는",
+  "이",
+  "가",
+  "을",
+  "를",
+  "과",
+  "와",
+  "도",
+  "만",
+  "에",
+  "에서",
+  "에게",
+  "의",
+  "으로",
+  "로",
+  "부터",
+  "까지",
+  "처럼",
+  "보다",
+  "랑",
+  "하고",
+]);
+
 export function validateGeneratedRecommendations(
   recommendations: RecipeRecommendationDish[],
   request: RecipeRecommendationRequest,
@@ -356,9 +381,13 @@ function findUndeclaredIngredientTerms(
   dish: RecipeRecommendationDish,
   inventorySnapshot: RecipeInventorySnapshotItem[],
 ) {
-  const instructionText = normalizeRecipeTerm(
-    [...dish.steps, ...dish.tips].join(" "),
-  );
+  const instructionCopy = [...dish.steps, ...dish.tips].join(" ");
+  const normalizedInstructionText = normalizeRecipeTerm(instructionCopy);
+  const instructionTokens =
+    instructionCopy
+      .toLocaleLowerCase("ko-KR")
+      .match(/[0-9a-z가-힣]+/gu)
+      ?.map(normalizeRecipeTerm) ?? [];
   const declaredNames = [
     ...dish.usedIngredients.map((ingredient) => ingredient.name),
     ...dish.optionalMissingIngredients.map((ingredient) => ingredient.name),
@@ -369,19 +398,57 @@ function findUndeclaredIngredientTerms(
   ]);
 
   return [...candidateTerms].filter((term) => {
-    if (!term || basicSeasoningTerms.has(term) || !instructionText.includes(term)) {
+    if (
+      !term ||
+      basicSeasoningTerms.has(term) ||
+      !instructionMentionsIngredient(
+        term,
+        normalizedInstructionText,
+        instructionTokens,
+      )
+    ) {
       return false;
     }
     return !isDeclaredIngredientTerm(term, declaredNames);
   });
 }
 
+function instructionMentionsIngredient(
+  term: string,
+  normalizedInstructionText: string,
+  instructionTokens: string[],
+) {
+  if (term.length > 1) {
+    return normalizedInstructionText.includes(term);
+  }
+
+  // 한 글자 재료명은 일반 단어 안에도 자주 등장한다. 예를 들어 재고의
+  // "무"를 단순 부분 문자열로 찾으면 "너무", "무르게"까지 재료로 오인한다.
+  // 독립 표기, 조사 결합, 수량 결합만 실제 재료 언급으로 인정한다.
+  return instructionTokens.some((token) => {
+    if (token === term) return true;
+    if (!token.startsWith(term)) return false;
+
+    const suffix = token.slice(term.length);
+    if (/^\d/u.test(suffix) || singleCharacterIngredientParticles.has(suffix)) {
+      return true;
+    }
+    return [...singleCharacterIngredientParticles].some(
+      (particle) =>
+        suffix.startsWith(particle) && /^\d/u.test(suffix.slice(particle.length)),
+    );
+  });
+}
+
+function ingredientNamesOverlap(left: string, right: string) {
+  if (left.length === 1 || right.length === 1) {
+    return left === right;
+  }
+  return left.includes(right) || right.includes(left);
+}
+
 function isDeclaredIngredientTerm(term: string, declaredNames: string[]) {
-  if (
-    declaredNames.some(
-      (declared) => declared.includes(term) || term.includes(declared),
-    )
-  ) {
+  if (declaredNames.some((declared) => ingredientNamesOverlap(term, declared))) {
     return true;
   }
 
@@ -390,8 +457,8 @@ function isDeclaredIngredientTerm(term: string, declaredNames: string[]) {
     return (
       normalizedGroup.includes(term) &&
       declaredNames.some((declared) =>
-        normalizedGroup.some(
-          (alias) => declared.includes(alias) || alias.includes(declared),
+        normalizedGroup.some((alias) =>
+          ingredientNamesOverlap(alias, declared),
         ),
       )
     );
