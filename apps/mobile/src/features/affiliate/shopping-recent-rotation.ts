@@ -22,15 +22,15 @@ export function canLoadMoreRecentShopping(
   return visibleCount < total;
 }
 
-export function resolveRecentConsumedCount(
-  recentConsumedCount: number | undefined,
+export function resolveRecentShoppingCount(
+  recentResolvedCount: number | undefined,
   groupCount: number,
 ) {
   if (
-    typeof recentConsumedCount === "number" &&
-    Number.isFinite(recentConsumedCount)
+    typeof recentResolvedCount === "number" &&
+    Number.isFinite(recentResolvedCount)
   ) {
-    return Math.max(Math.trunc(recentConsumedCount), 0);
+    return Math.max(Math.trunc(recentResolvedCount), 0);
   }
   return Math.max(groupCount, 0);
 }

@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAffiliateShopping } from "../../services/api";
-import { withInventorySpace } from "../auth/session-boundary";
+import {
+  sessionQueryKeys,
+  withInventorySpace,
+} from "../auth/session-boundary";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 
-export const affiliateShoppingQueryKey = ["affiliate-shopping"] as const;
+export const affiliateShoppingQueryKey = sessionQueryKeys.affiliateShopping;
 
 export function useAffiliateShopping() {
   const gate = useSpaceScopedQueryGate();

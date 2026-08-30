@@ -83,6 +83,8 @@ export const affiliateShoppingResponseSchema = z.object({
   enabled: z.boolean(),
   provider: affiliateProviderSchema,
   disclosure: z.string().min(1),
+  recentResolvedCount: z.number().int().nonnegative().optional(),
+  /** @deprecated Use recentResolvedCount. Retained for older mobile clients. */
   recentConsumedCount: z.number().int().nonnegative().optional(),
   productGroups: z.array(affiliateProductGroupSchema).max(9),
 });

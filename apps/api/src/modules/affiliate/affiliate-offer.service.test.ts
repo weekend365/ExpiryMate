@@ -215,7 +215,7 @@ describe("AffiliateOfferService Phase A", () => {
     ).rejects.toMatchObject({ status: 429 });
   });
 
-  it("builds recent repurchase groups from fully consumed items only", async () => {
+  it("builds recent repurchase groups from fully consumed and discarded items", async () => {
     deeplinkMocks.readCredentials.mockReturnValue({ accessKey: "access", secretKey: "secret" });
     coupangClient.searchProducts.mockImplementation(async (query: string) => {
       if (String(query).includes("달걀") || String(query).includes("계란")) {
@@ -244,13 +244,16 @@ describe("AffiliateOfferService Phase A", () => {
       "우유",
     ]);
     expect(result.productGroups.every((group) => group.products.length > 0)).toBe(true);
+    expect(result.recentResolvedCount).toBe(2);
     expect(result.recentConsumedCount).toBe(2);
     expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
           spaceId: "space-a",
-          status: "consumed",
-          quantityBase: 0,
+          OR: [
+            { status: "consumed", quantityBase: 0 },
+            { status: "discarded" },
+          ],
         }),
       }),
     );

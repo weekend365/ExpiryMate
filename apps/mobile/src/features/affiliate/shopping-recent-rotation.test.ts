@@ -3,7 +3,7 @@ import {
   SHOPPING_RECENT_PAGE_SIZE,
   canLoadMoreRecentShopping,
   nextRecentShoppingVisibleCount,
-  resolveRecentConsumedCount,
+  resolveRecentShoppingCount,
   takeRecentShoppingGroups,
 } from "./shopping-recent-rotation";
 
@@ -53,8 +53,8 @@ describe("takeRecentShoppingGroups", () => {
   });
 
   it("prefers the 30-day unique count and falls back to loaded groups", () => {
-    expect(resolveRecentConsumedCount(12, 3)).toBe(12);
-    expect(resolveRecentConsumedCount(0, 3)).toBe(0);
-    expect(resolveRecentConsumedCount(undefined, 4)).toBe(4);
+    expect(resolveRecentShoppingCount(12, 3)).toBe(12);
+    expect(resolveRecentShoppingCount(0, 3)).toBe(0);
+    expect(resolveRecentShoppingCount(undefined, 4)).toBe(4);
   });
 });

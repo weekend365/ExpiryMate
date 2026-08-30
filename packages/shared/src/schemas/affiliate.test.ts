@@ -3,6 +3,7 @@ import {
   COUPANG_PARTNERS_CTA_LABEL,
   COUPANG_PARTNERS_DISCLOSURE,
   affiliateOffersResponseSchema,
+  affiliateShoppingResponseSchema,
 } from "./affiliate";
 
 describe("affiliate offer contract", () => {
@@ -95,5 +96,19 @@ describe("affiliate offer contract", () => {
         offers: [offer, offer, offer],
       }).success,
     ).toBe(false);
+  });
+
+  it("accepts resolved shopping counts while retaining the legacy count", () => {
+    const parsed = affiliateShoppingResponseSchema.parse({
+      enabled: true,
+      provider: "coupang_partners",
+      disclosure: COUPANG_PARTNERS_DISCLOSURE,
+      recentResolvedCount: 7,
+      recentConsumedCount: 7,
+      productGroups: [],
+    });
+
+    expect(parsed.recentResolvedCount).toBe(7);
+    expect(parsed.recentConsumedCount).toBe(7);
   });
 });

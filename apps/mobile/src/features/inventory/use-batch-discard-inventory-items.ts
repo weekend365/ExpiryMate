@@ -2,26 +2,14 @@ import type { InventoryItem } from "@expirymate/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { batchDiscardInventoryItems } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
-import {
-  sessionQueryKeys,
-  withInventorySpace,
-} from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
+import { inventoryRemovalQueryKeys } from "./deferred-inventory-removal";
 
 export const useBatchDiscardInventoryItems = () => {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
-  const inventoryKey = withInventorySpace(
-    sessionQueryKeys.inventory,
-    sessionUserId,
-    activeSpaceId,
-  );
-  const dashboardKey = withInventorySpace(
-    sessionQueryKeys.dashboard,
-    sessionUserId,
-    activeSpaceId,
-  );
+  const keys = inventoryRemovalQueryKeys(sessionUserId, activeSpaceId);
 
   return useMutation({
     mutationFn: (ids: string[]) => {
@@ -31,11 +19,11 @@ export const useBatchDiscardInventoryItems = () => {
       return batchDiscardInventoryItems(ids, activeSpaceId);
     },
     onMutate: async (ids) => {
-      await queryClient.cancelQueries({ queryKey: inventoryKey });
-      const previous = queryClient.getQueryData<InventoryItem[]>(inventoryKey);
+      await queryClient.cancelQueries({ queryKey: keys.inventory });
+      const previous = queryClient.getQueryData<InventoryItem[]>(keys.inventory);
       const idSet = new Set(ids);
 
-      queryClient.setQueryData<InventoryItem[]>(inventoryKey, (current) =>
+      queryClient.setQueryData<InventoryItem[]>(keys.inventory, (current) =>
         (current ?? []).filter((item) => !idSet.has(item.id)),
       );
 
@@ -43,12 +31,13 @@ export const useBatchDiscardInventoryItems = () => {
     },
     onError: (_error, _ids, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(inventoryKey, context.previous);
+        queryClient.setQueryData(keys.inventory, context.previous);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: inventoryKey });
-      queryClient.invalidateQueries({ queryKey: dashboardKey });
+      queryClient.invalidateQueries({ queryKey: keys.inventory });
+      queryClient.invalidateQueries({ queryKey: keys.dashboard });
+      queryClient.invalidateQueries({ queryKey: keys.shopping });
     },
   });
 };

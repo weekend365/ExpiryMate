@@ -28,7 +28,7 @@ import {
   SHOPPING_RECENT_PAGE_SIZE,
   canLoadMoreRecentShopping,
   nextRecentShoppingVisibleCount,
-  resolveRecentConsumedCount,
+  resolveRecentShoppingCount,
   takeRecentShoppingGroups,
 } from "../src/features/affiliate/shopping-recent-rotation";
 import { useAffiliateShopping } from "../src/features/affiliate/use-affiliate-shopping";
@@ -116,8 +116,8 @@ export default function ShoppingScreen() {
       recentGroups.length,
       allRecentGroups.length,
     ) - recentGroups.length;
-  const recentConsumedCount = resolveRecentConsumedCount(
-    shopping?.recentConsumedCount,
+  const recentResolvedCount = resolveRecentShoppingCount(
+    shopping?.recentResolvedCount ?? shopping?.recentConsumedCount,
     allRecentGroups.length,
   );
   const heroNotices = getShoppingHeroNotices({
@@ -301,7 +301,7 @@ export default function ShoppingScreen() {
             !shoppingQuery.isError &&
             shopping &&
             shopping.enabled !== false
-              ? recentConsumedCount
+              ? recentResolvedCount
               : undefined
           }
           testID="affiliate-shopping-recent"

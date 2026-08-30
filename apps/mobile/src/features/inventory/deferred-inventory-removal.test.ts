@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { isPendingForDifferentSpace } from "./deferred-inventory-removal";
+import {
+  inventoryRemovalQueryKeys,
+  isPendingForDifferentSpace,
+} from "./deferred-inventory-removal";
 
 describe("isPendingForDifferentSpace", () => {
   it("is false when nothing is pending", () => {
@@ -16,5 +19,13 @@ describe("isPendingForDifferentSpace", () => {
 
   it("is true when the session loses its active fridge", () => {
     expect(isPendingForDifferentSpace("space-a", undefined)).toBe(true);
+  });
+
+  it("invalidates inventory-derived shopping data for the same user and fridge", () => {
+    expect(inventoryRemovalQueryKeys("user-a", "space-a")).toEqual({
+      inventory: ["inventory-list", "user-a", "space-a"],
+      dashboard: ["dashboard-summary", "user-a", "space-a"],
+      shopping: ["affiliate-shopping", "user-a", "space-a"],
+    });
   });
 });

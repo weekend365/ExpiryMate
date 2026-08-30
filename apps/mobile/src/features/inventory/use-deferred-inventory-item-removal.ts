@@ -13,12 +13,11 @@ import {
   discardInventoryItem,
 } from "../../services/api";
 import { useAuth } from "../auth/use-auth";
-import {
-  sessionQueryKeys,
-  withInventorySpace,
-} from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
-import { isPendingForDifferentSpace } from "./deferred-inventory-removal";
+import {
+  inventoryRemovalQueryKeys,
+  isPendingForDifferentSpace,
+} from "./deferred-inventory-removal";
 
 const UNDO_WINDOW_MS = 5000;
 
@@ -35,21 +34,6 @@ type PendingRemoval = {
   timeoutId: ReturnType<typeof setTimeout>;
   spaceId: string;
 };
-
-function listKeys(sessionUserId: string | undefined, spaceId: string) {
-  return {
-    inventory: withInventorySpace(
-      sessionQueryKeys.inventory,
-      sessionUserId,
-      spaceId,
-    ),
-    dashboard: withInventorySpace(
-      sessionQueryKeys.dashboard,
-      sessionUserId,
-      spaceId,
-    ),
-  };
-}
 
 function removeItemsFromCache(
   queryClient: QueryClient,
@@ -160,7 +144,10 @@ export function useDeferredInventoryItemRemoval() {
 
   const commitPinned = useCallback(
     async (pending: PendingRemoval, options: { silent: boolean }) => {
-      const keys = listKeys(sessionUserIdRef.current, pending.spaceId);
+      const keys = inventoryRemovalQueryKeys(
+        sessionUserIdRef.current,
+        pending.spaceId,
+      );
       const originals = pending.entries.map((entry) => entry.item);
 
       if (!options.silent) {
@@ -172,12 +159,14 @@ export function useDeferredInventoryItemRemoval() {
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
           queryClient.invalidateQueries({ queryKey: keys.dashboard }),
+          queryClient.invalidateQueries({ queryKey: keys.shopping }),
         ]);
       } catch (error) {
         restoreItemsToCache(queryClient, keys.inventory, originals);
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
           queryClient.invalidateQueries({ queryKey: keys.dashboard }),
+          queryClient.invalidateQueries({ queryKey: keys.shopping }),
         ]).catch(() => undefined);
         if (!options.silent) {
           setErrorMessage(
@@ -271,7 +260,7 @@ export function useDeferredInventoryItemRemoval() {
         return;
       }
 
-      const keys = listKeys(sessionUserId, activeSpaceId);
+      const keys = inventoryRemovalQueryKeys(sessionUserId, activeSpaceId);
       const consumedAmount =
         action === "consume" && typeof amountBase === "number"
           ? Math.min(Math.max(1, Math.floor(amountBase)), item.quantityBase)
@@ -326,7 +315,8 @@ export function useDeferredInventoryItemRemoval() {
 
     restoreItemsToCache(
       queryClient,
-      listKeys(sessionUserIdRef.current, pending.spaceId).inventory,
+      inventoryRemovalQueryKeys(sessionUserIdRef.current, pending.spaceId)
+        .inventory,
       pending.entries.map((entry) => entry.item),
     );
   }, [queryClient, takePending]);

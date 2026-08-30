@@ -32,7 +32,7 @@ import {
 
 const MAX_RECIPE_GROUPS = 2;
 const MAX_RECENT_CANDIDATES = 9;
-const RECENT_CONSUMED_DAYS = 30;
+const RECENT_RESOLVED_DAYS = 30;
 const SEARCH_RATE_LIMIT = 10;
 const SEARCH_RATE_WINDOW_MS = 60_000;
 
@@ -102,18 +102,20 @@ export class AffiliateOfferService {
     spaceId: string;
   }): Promise<AffiliateShoppingResponse> {
     if (!this.isEnabled(input.ownerKey)) return disabledShoppingResponse();
-    const since = new Date(Date.now() - RECENT_CONSUMED_DAYS * 24 * 60 * 60 * 1000);
-    const consumed = await this.prisma.inventoryItem.findMany({
+    const since = new Date(Date.now() - RECENT_RESOLVED_DAYS * 24 * 60 * 60 * 1000);
+    const resolved = await this.prisma.inventoryItem.findMany({
       where: {
         spaceId: input.spaceId,
-        status: ItemStatus.consumed,
-        quantityBase: 0,
+        OR: [
+          { status: ItemStatus.consumed, quantityBase: 0 },
+          { status: ItemStatus.discarded },
+        ],
         updatedAt: { gte: since },
       },
       orderBy: { updatedAt: "desc" },
       select: { displayName: true, brand: true, category: true },
     });
-    const unique = uniqueRecentConsumedItems(consumed);
+    const unique = uniqueRecentResolvedItems(resolved);
     const productGroups = (
       await Promise.all(
         [...unique.values()].slice(0, MAX_RECENT_CANDIDATES).map((item) =>
@@ -134,6 +136,8 @@ export class AffiliateOfferService {
       enabled: true,
       provider: "coupang_partners",
       disclosure: COUPANG_PARTNERS_DISCLOSURE,
+      recentResolvedCount: unique.size,
+      // Keep the old field populated while released clients still read it.
       recentConsumedCount: unique.size,
       productGroups,
     };
@@ -215,7 +219,7 @@ export class AffiliateOfferService {
   }
 }
 
-function uniqueRecentConsumedItems(
+function uniqueRecentResolvedItems(
   items: Array<{
     displayName: string;
     brand: string | null;
@@ -342,6 +346,7 @@ function disabledShoppingResponse(): AffiliateShoppingResponse {
     enabled: false,
     provider: "coupang_partners",
     disclosure: COUPANG_PARTNERS_DISCLOSURE,
+    recentResolvedCount: 0,
     recentConsumedCount: 0,
     productGroups: [],
   };

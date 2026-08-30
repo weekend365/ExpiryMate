@@ -7,21 +7,13 @@ import {
   withInventorySpace,
 } from "../auth/session-boundary";
 import { useActiveSpace } from "../spaces/space-provider";
+import { inventoryRemovalQueryKeys } from "./deferred-inventory-removal";
 
 export const useBatchConsumeInventoryItems = () => {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
-  const inventoryKey = withInventorySpace(
-    sessionQueryKeys.inventory,
-    sessionUserId,
-    activeSpaceId,
-  );
-  const dashboardKey = withInventorySpace(
-    sessionQueryKeys.dashboard,
-    sessionUserId,
-    activeSpaceId,
-  );
+  const keys = inventoryRemovalQueryKeys(sessionUserId, activeSpaceId);
 
   return useMutation({
     mutationFn: (payload: BatchConsumeInventoryItemsBody) => {
@@ -31,8 +23,9 @@ export const useBatchConsumeInventoryItems = () => {
       return batchConsumeInventoryItems(payload, activeSpaceId);
     },
     onSuccess: (result) => {
-      queryClient.invalidateQueries({ queryKey: inventoryKey });
-      queryClient.invalidateQueries({ queryKey: dashboardKey });
+      queryClient.invalidateQueries({ queryKey: keys.inventory });
+      queryClient.invalidateQueries({ queryKey: keys.dashboard });
+      queryClient.invalidateQueries({ queryKey: keys.shopping });
       result.items.forEach((item) => {
         queryClient.invalidateQueries({
           queryKey: [
