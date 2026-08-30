@@ -5,7 +5,7 @@ import {
   canGenerateWithoutRewardedAd,
   needsRewardedAdToRecommend,
   parseRecommendationAccess,
-  recommendationQuotaCopy,
+  recommendationCtaQuotaLabel,
   unifiedRecommendationCredits,
 } from "./recommendation-access";
 
@@ -123,10 +123,7 @@ describe("recommendation access helpers", () => {
     });
 
     expect(unifiedRecommendationCredits(mixed)).toBe(6);
-    expect(recommendationQuotaCopy(mixed)).toEqual({
-      label: "추천 횟수",
-      value: "추천권 6회",
-    });
+    expect(recommendationCtaQuotaLabel(mixed)).toBe("추천권 6회");
   });
 
   it("ignores barcode credits when contribution rewards are off", () => {
@@ -137,20 +134,20 @@ describe("recommendation access helpers", () => {
     });
 
     expect(unifiedRecommendationCredits(disabledBarcode)).toBe(2);
-    expect(recommendationQuotaCopy(disabledBarcode)).toEqual({
-      label: "추천 횟수",
-      value: "무료 1회 · 추천권 2회",
-    });
+    expect(recommendationCtaQuotaLabel(disabledBarcode)).toBe(
+      "무료 1회 · 추천권 2회",
+    );
   });
 
   it("summarizes plus remaining without a credit ledger", () => {
     expect(
-      recommendationQuotaCopy(
+      recommendationCtaQuotaLabel(
         access({ tier: "jango_plus", remaining: 8 }),
       ),
-    ).toEqual({
-      label: "추천 횟수",
-      value: "오늘 8회 남음",
-    });
+    ).toBe("오늘 8회");
+  });
+
+  it("shows a compact CTA label when no recommendation remains", () => {
+    expect(recommendationCtaQuotaLabel(access())).toBe("오늘 소진");
   });
 });

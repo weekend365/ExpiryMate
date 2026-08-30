@@ -5,6 +5,23 @@ export type RecommendationHeroStatus = {
   mood: MascotMood;
 };
 
+export function selectRecommendationHeroIngredientNames(
+  items: Array<{ displayName: string; expiryDate: string }>,
+  limit = 2,
+) {
+  const seen = new Set<string>();
+  return [...items]
+    .sort((left, right) => left.expiryDate.localeCompare(right.expiryDate))
+    .flatMap((item) => {
+      const name = item.displayName.trim();
+      const key = name.toLocaleLowerCase("ko-KR");
+      if (!name || seen.has(key)) return [];
+      seen.add(key);
+      return [name];
+    })
+    .slice(0, Math.max(0, limit));
+}
+
 export function getRecommendationHeroStatus(input: {
   isGenerating: boolean;
   justGenerated: boolean;
@@ -14,6 +31,7 @@ export function getRecommendationHeroStatus(input: {
   isCapacityError: boolean;
   canOfferRewardedAd: boolean;
   needsIngredients?: boolean;
+  ingredientNames?: string[];
 }): RecommendationHeroStatus {
   if (input.isGenerating) {
     return {
@@ -51,6 +69,13 @@ export function getRecommendationHeroStatus(input: {
     };
   }
 
+  if (input.ingredientNames?.length) {
+    return {
+      message: `${input.ingredientNames.join(" · ")}부터 맛있게 쓸 방법을 찾아볼게요.`,
+      mood: "speak",
+    };
+  }
+
   return {
     message:
       "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요.",
@@ -67,7 +92,7 @@ export function getRecommendationErrorHeroMessage(input: {
   if (input.isQuotaError) {
     return input.canOfferRewardedAd
       ? "아래 버튼만 누르면 광고 뒤에 추천을 바로 만들어 드릴게요."
-      : "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요.";
+      : "오늘은 추천을 잠시 쉬어갈까요? 내일 다시 만나요.";
   }
 
   if (input.isCapacityError) {

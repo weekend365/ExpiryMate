@@ -20,7 +20,6 @@ import {
   ImageIcon,
   Moon,
   PenLine,
-  Play,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -39,7 +38,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  Alert,
   ImageBackground,
   LayoutAnimation,
   Pressable,
@@ -67,9 +65,12 @@ import {
 import {
   canContinueWithRewardedAd,
   needsRewardedAdToRecommend,
-  recommendationQuotaCopy,
+  recommendationCtaQuotaLabel,
 } from "../../src/features/monetization/recommendation-access";
-import { getRecommendationHeroStatus } from "../../src/features/recipes/recommendation-hero";
+import {
+  getRecommendationHeroStatus,
+  selectRecommendationHeroIngredientNames,
+} from "../../src/features/recipes/recommendation-hero";
 import { getRecommendationErrorMessage } from "../../src/features/recipes/recommendation-errors";
 import {
   RecommendationOfferAlternativesSheet,
@@ -177,6 +178,13 @@ export default function RecommendationsScreen() {
   const inventoryReady =
     inventoryQuery.isSuccess || Boolean(inventoryQuery.isError);
   const needsIngredients = inventoryReady && !hasRecommendableInventory;
+  const recommendationHeroIngredientNames = useMemo(
+    () =>
+      selectRecommendationHeroIngredientNames(
+        (inventoryQuery.data ?? []).filter(isTrackedItem),
+      ),
+    [inventoryQuery.data],
+  );
   const isGenerating = generationStatus === "pending";
   const buildRecommendationPayload = useCallback(
     () => ({
@@ -192,7 +200,6 @@ export default function RecommendationsScreen() {
     closeAiNotice,
     handleCreateRecommendation,
     handleAcceptAiNotice,
-    handleWatchRewardedAdOnly,
     isAcceptingAiNotice,
   } = useRecommendationGenerateFlow({
     inventoryReady,
@@ -290,6 +297,7 @@ export default function RecommendationsScreen() {
         isCapacityError,
         canOfferRewardedAd,
         needsIngredients,
+        ingredientNames: recommendationHeroIngredientNames,
       }),
     };
 
@@ -297,8 +305,8 @@ export default function RecommendationsScreen() {
       notices.push({
         id: "ad-reward",
         mood: "happy" as const,
-        message: "광고 추천권 1회가 지급됐어요",
-        supportingMessage: "오늘 추천을 만들 때 바로 사용할 수 있어요.",
+        message: "광고 추천권이 준비됐어요",
+        supportingMessage: "다음 추천을 만들 때 바로 사용할 수 있어요.",
         onPress: monetization.dismissRewardNotice,
         accessibilityHint: "알겠어요",
       });
@@ -323,12 +331,13 @@ export default function RecommendationsScreen() {
     isQuotaError,
     justGenerated,
     needsIngredients,
+    recommendationHeroIngredientNames,
     monetization.adState,
     monetization.dismissRewardNotice,
     monetization.rewardNotice,
   ]);
-  const quotaCopy = monetization.access
-    ? recommendationQuotaCopy(monetization.access)
+  const ctaQuotaLabel = monetization.access
+    ? recommendationCtaQuotaLabel(monetization.access)
     : null;
   const personalizedOffer = monetization.access?.offer;
   const showPersonalizedOffer =
@@ -337,6 +346,9 @@ export default function RecommendationsScreen() {
     personalizedOffer?.kind !== "none" &&
     personalizedOffer?.kind !== "rewarded_ad";
   const isAdBusy = monetization.adState === "loading";
+  const primaryCtaAction = hasRecommendationResult
+    ? "다시 추천받기"
+    : "추천 받기";
   const primaryCtaLabel = isGenerating
     ? "요리 조합을 찾는 중이에요"
     : monetization.adState === "loading"
@@ -345,9 +357,9 @@ export default function RecommendationsScreen() {
         ? "재료 넣으러 갈게요"
         : needsRewardedAd
           ? REWARDED_AD_CTA_LABEL
-          : hasRecommendationResult
-            ? "다시 골라볼게요"
-            : "추천 받을게요";
+          : ctaQuotaLabel
+            ? `${primaryCtaAction} · ${ctaQuotaLabel}`
+            : primaryCtaAction;
 
   useEffect(() => {
     if (!isQuotaError || !monetization.access) return;
@@ -405,32 +417,13 @@ export default function RecommendationsScreen() {
       return;
     }
 
-    if (!hasRecommendationResult || needsRewardedAd) {
-      void handleCreateRecommendation();
-      return;
-    }
-
-    Alert.alert(
-      "추천을 한 번 더 받아볼까요?",
-      "지금 보신 요리 대신 새로 골라 드릴게요. 오늘의 추천 횟수를 쓸 수 있어요.",
-      [
-        { text: "지금 요리로 할게요", style: "cancel" },
-        {
-          text: "다시 골라볼게요",
-          onPress: () => {
-            void handleCreateRecommendation();
-          },
-        },
-      ],
-    );
+    void handleCreateRecommendation();
   }, [
     handleCreateRecommendation,
-    hasRecommendationResult,
     inventoryReady,
     isAdBusy,
     isGenerating,
     needsIngredients,
-    needsRewardedAd,
   ]);
 
   const handleMonetizationOffer = useCallback(
@@ -580,8 +573,8 @@ export default function RecommendationsScreen() {
           monetization.rewardNotice === "verified" ? (
             <FeedbackBanner
               tone="success"
-              title="광고 추천권 1회가 지급됐어요"
-              description="오늘 추천을 만들 때 바로 사용할 수 있어요."
+              title="광고 추천권이 준비됐어요"
+              description="다음 추천을 만들 때 바로 사용할 수 있어요."
               actionLabel="알겠어요"
               onAction={monetization.dismissRewardNotice}
               showMascot={false}
@@ -690,71 +683,6 @@ export default function RecommendationsScreen() {
               <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
 
               <View style={styles.optionsSummaryGroup}>
-                {quotaCopy ? (
-                  <Pressable
-                    testID="recommendation-quota-button"
-                    onPress={
-                      canOfferRewardedAd
-                        ? () => {
-                            void handleWatchRewardedAdOnly();
-                          }
-                        : undefined
-                    }
-                    disabled={canOfferRewardedAd && isAdBusy}
-                    accessibilityRole={
-                      canOfferRewardedAd ? "button" : "summary"
-                    }
-                    accessibilityLabel={
-                      canOfferRewardedAd
-                        ? `${REWARDED_AD_CTA_LABEL}. ${quotaCopy.value}`
-                        : `${quotaCopy.label} ${quotaCopy.value}`
-                    }
-                    accessibilityHint={
-                      canOfferRewardedAd
-                        ? "광고를 보면 추천을 받을 수 있어요."
-                        : undefined
-                    }
-                    accessibilityState={
-                      canOfferRewardedAd ? { disabled: isAdBusy } : undefined
-                    }
-                    style={({ pressed }) => [
-                      styles.optionsSummary,
-                      shouldStack && styles.optionsSummaryStacked,
-                      canOfferRewardedAd &&
-                        pressed &&
-                        styles.optionsSummaryPressed,
-                    ]}
-                  >
-                    <View style={styles.optionsSummaryCopy}>
-                      <AppText style={styles.optionsSummaryLabel}>
-                        {quotaCopy.label}
-                      </AppText>
-                      <AppText
-                        style={styles.optionsSummaryValue}
-                        numberOfLines={shouldStack ? undefined : 1}
-                      >
-                        {quotaCopy.value}
-                      </AppText>
-                    </View>
-                    {canOfferRewardedAd ? (
-                      <View
-                        style={[
-                          styles.optionsSummaryAction,
-                          shouldStack && styles.optionsSummaryActionStacked,
-                        ]}
-                      >
-                        <Play
-                          color={colors.primary}
-                          size={spacing.sm + spacing.xxs}
-                          strokeWidth={2.4}
-                        />
-                        <AppText style={styles.optionsSummaryActionLabel}>
-                          {isAdBusy ? "광고 준비 중" : "광고 보기"}
-                        </AppText>
-                      </View>
-                    ) : null}
-                  </Pressable>
-                ) : null}
                 <Pressable
                   testID="recommendation-options-button"
                   onPress={() => setShowOptionsSheet(true)}

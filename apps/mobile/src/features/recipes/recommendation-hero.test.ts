@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getRecommendationHeroStatus } from "./recommendation-hero";
+import {
+  getRecommendationHeroStatus,
+  selectRecommendationHeroIngredientNames,
+} from "./recommendation-hero";
 
 const idle = {
   isGenerating: false,
@@ -32,7 +35,7 @@ describe("getRecommendationHeroStatus", () => {
         isQuotaError: true,
       }),
     ).toEqual({
-      message: "오늘의 추천 횟수를 다 썼어요. 내일 다시 부탁해도 괜찮아요.",
+      message: "오늘은 추천을 잠시 쉬어갈까요? 내일 다시 만나요.",
       mood: "worry",
     });
 
@@ -77,6 +80,27 @@ describe("getRecommendationHeroStatus", () => {
     expect(getRecommendationHeroStatus(idle)).toEqual({
       message:
         "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요.",
+      mood: "speak",
+    });
+  });
+
+  it("uses the nearest-expiry ingredients as the idle hero context", () => {
+    expect(
+      selectRecommendationHeroIngredientNames([
+        { displayName: "우유", expiryDate: "2026-09-03" },
+        { displayName: "두부", expiryDate: "2026-09-01" },
+        { displayName: " 두부 ", expiryDate: "2026-09-02" },
+        { displayName: "대파", expiryDate: "2026-09-02" },
+      ]),
+    ).toEqual(["두부", "대파"]);
+
+    expect(
+      getRecommendationHeroStatus({
+        ...idle,
+        ingredientNames: ["두부", "대파"],
+      }),
+    ).toEqual({
+      message: "두부 · 대파부터 맛있게 쓸 방법을 찾아볼게요.",
       mood: "speak",
     });
   });
