@@ -48,7 +48,13 @@ const preference: RecipePreference = {
   updatedAt: "2026-08-10T00:00:00.000Z",
 };
 
-function recommendations(servings = 2): RecipeRecommendationDish[] {
+function recommendations(
+  servings = 2,
+  useExpiringFirst = true,
+): RecipeRecommendationDish[] {
+  const strategies = useExpiringFirst
+    ? (["expiring_first", "minimal_extra", "quick_novel"] as const)
+    : (["balanced", "minimal_extra", "quick_novel"] as const);
   return [1, 2, 3].map((index) => ({
     title: `달걀 요리 ${index}`,
     summary: "간단한 요리",
@@ -70,10 +76,7 @@ function recommendations(servings = 2): RecipeRecommendationDish[] {
     spiceLevel: "none",
     requiredEquipment: ["stovetop"],
     mealType: "dinner",
-    strategy: ["expiring_first", "minimal_extra", "quick_novel"][index - 1] as
-      | "expiring_first"
-      | "minimal_extra"
-      | "quick_novel",
+    strategy: strategies[index - 1],
   }));
 }
 
@@ -113,6 +116,25 @@ describe("RecipesService semantic repair", () => {
         metadata: expect.objectContaining({ variant: "candidate" }),
       }),
     );
+  });
+
+  it("requests and accepts balanced strategies when expiry-first is off", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    parseMock.mockResolvedValueOnce(response(recommendations(2, false)));
+
+    await generate(
+      createService(),
+      { model: "gpt-5.4-mini", variant: "control" },
+      { ...request, useExpiringFirst: false },
+    );
+
+    const input = JSON.parse(String(parseMock.mock.calls[0]?.[0]?.input)) as {
+      outputRules: { strategies: string[]; prioritizeExpiring: boolean };
+    };
+    expect(input.outputRules).toMatchObject({
+      strategies: ["balanced", "minimal_extra", "quick_novel"],
+      prioritizeExpiring: false,
+    });
   });
 
   it("repairs once and aggregates both attempts", async () => {
@@ -339,6 +361,7 @@ function generate(
     model: string;
     variant: "control" | "candidate";
   } = { model: "gpt-5.4-mini", variant: "control" },
+  generationRequest: RecipeRecommendationRequest = request,
 ) {
   return (
     service as unknown as {
@@ -373,7 +396,7 @@ function generate(
     }
   ).generateRecommendations(
     "owner-a",
-    request,
+    generationRequest,
     inventory,
     preference,
     {

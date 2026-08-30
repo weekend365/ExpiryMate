@@ -1,17 +1,17 @@
 import {
   isTrackedItem,
-  summarizeRecipePreference,
   type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
   type RecipeRecommendation,
   type RecipeRecommendationDish,
 } from "@expirymate/shared";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import {
   Archive,
   Barcode,
   ChevronDown,
+  ChevronRight,
   ChevronUp,
   Clock3,
   Coffee,
@@ -89,6 +89,11 @@ import { useRecipeGeneration } from "../../src/features/recipes/recipe-generatio
 import { useRecommendationGenerateFlow } from "../../src/features/recipes/use-recommendation-generate-flow";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
+import {
+  consumeRecipePreferenceSavedFromRecommendations,
+  recipePreferenceRoute,
+} from "../../src/features/settings/recipe-preference-navigation";
+import { resolveRecipePreferenceSummary } from "../../src/features/settings/recipe-preference-display";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
@@ -160,6 +165,8 @@ export default function RecommendationsScreen() {
     Partial<Record<RecipeSectionKey, boolean>>
   >({});
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
+  const [showPreferenceSavedNotice, setShowPreferenceSavedNotice] =
+    useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [historyRecommendation, setHistoryRecommendation] =
@@ -178,12 +185,32 @@ export default function RecommendationsScreen() {
   const inventoryReady =
     inventoryQuery.isSuccess || Boolean(inventoryQuery.isError);
   const needsIngredients = inventoryReady && !hasRecommendableInventory;
+  const hasSafetyPreferences = Boolean(
+    recipePreferencesQuery.data &&
+      (recipePreferencesQuery.data.allergens.length > 0 ||
+        recipePreferencesQuery.data.excludedIngredients.length > 0 ||
+        recipePreferencesQuery.data.dietaryStyle !== "any"),
+  );
   const recommendationHeroIngredientNames = useMemo(
-    () =>
-      selectRecommendationHeroIngredientNames(
+    () => {
+      if (
+        !useExpiringFirst ||
+        !recipePreferencesQuery.isSuccess ||
+        hasSafetyPreferences
+      ) {
+        return [];
+      }
+
+      return selectRecommendationHeroIngredientNames(
         (inventoryQuery.data ?? []).filter(isTrackedItem),
-      ),
-    [inventoryQuery.data],
+      );
+    },
+    [
+      hasSafetyPreferences,
+      inventoryQuery.data,
+      recipePreferencesQuery.isSuccess,
+      useExpiringFirst,
+    ],
   );
   const isGenerating = generationStatus === "pending";
   const buildRecommendationPayload = useCallback(
@@ -208,6 +235,15 @@ export default function RecommendationsScreen() {
     buildPayload: buildRecommendationPayload,
     onNeedsIngredients: () => setEntryMethodVisible(true),
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      if (consumeRecipePreferenceSavedFromRecommendations()) {
+        setShowPreferenceSavedNotice(true);
+      }
+      return undefined;
+    }, []),
+  );
 
   const latestRecommendation = useMemo(
     () => latestGeneratedRecommendation ?? historyQuery.data?.[0] ?? null,
@@ -261,19 +297,11 @@ export default function RecommendationsScreen() {
     mealTypeOptions.find((option) => option.value === mealType)?.label ??
     "상관없음";
   const preferenceSummary = useMemo(() => {
-    if (recipePreferencesQuery.data) {
-      return summarizeRecipePreference(recipePreferencesQuery.data);
-    }
-    if (recipePreferencesQuery.isError) {
-      return {
-        applied: false,
-        text: "맞춤 설정을 확인하러 갈까요?",
-      };
-    }
-    if (recipePreferencesQuery.isLoading) {
-      return { applied: false, text: "살펴보는 중이에요" };
-    }
-    return summarizeRecipePreference(undefined);
+    return resolveRecipePreferenceSummary({
+      preference: recipePreferencesQuery.data,
+      isError: recipePreferencesQuery.isError,
+      isLoading: recipePreferencesQuery.isLoading,
+    });
   }, [
     recipePreferencesQuery.data,
     recipePreferencesQuery.isError,
@@ -296,6 +324,8 @@ export default function RecommendationsScreen() {
         isQuotaError,
         isCapacityError,
         canOfferRewardedAd,
+        useExpiringFirst,
+        hasSafetyPreferences,
         needsIngredients,
         ingredientNames: recommendationHeroIngredientNames,
       }),
@@ -326,12 +356,14 @@ export default function RecommendationsScreen() {
     canOfferRewardedAd,
     errorMessage,
     hasRecommendationResult,
+    hasSafetyPreferences,
     isCapacityError,
     isGenerating,
     isQuotaError,
     justGenerated,
     needsIngredients,
     recommendationHeroIngredientNames,
+    useExpiringFirst,
     monetization.adState,
     monetization.dismissRewardNotice,
     monetization.rewardNotice,
@@ -413,10 +445,12 @@ export default function RecommendationsScreen() {
     }
 
     if (needsIngredients) {
+      setShowPreferenceSavedNotice(false);
       setEntryMethodVisible(true);
       return;
     }
 
+    setShowPreferenceSavedNotice(false);
     void handleCreateRecommendation();
   }, [
     handleCreateRecommendation,
@@ -425,6 +459,22 @@ export default function RecommendationsScreen() {
     isGenerating,
     needsIngredients,
   ]);
+
+  const handleOpenRecipePreferences = useCallback(
+    (fromOptionsSheet = false) => {
+      const openSettings = () =>
+        router.push(recipePreferenceRoute("recommendations"));
+
+      if (!fromOptionsSheet) {
+        openSettings();
+        return;
+      }
+
+      setShowOptionsSheet(false);
+      setTimeout(openSettings, SHEET_TRANSITION_DELAY_MS);
+    },
+    [],
+  );
 
   const handleMonetizationOffer = useCallback(
     (kind: RecommendationAccess["offer"]["kind"]) => {
@@ -569,6 +619,16 @@ export default function RecommendationsScreen() {
           }
         >
           <SpaceSwitcher />
+          {recipeView === "recommendations" && showPreferenceSavedNotice ? (
+            <FeedbackBanner
+              tone="success"
+              title="새 맞춤 설정을 적용했어요"
+              description="이번 추천 조건은 그대로예요. 아래 버튼을 눌러 추천을 시작할 수 있어요."
+              actionLabel="알겠어요"
+              onAction={() => setShowPreferenceSavedNotice(false)}
+              showMascot={false}
+            />
+          ) : null}
           {recipeView === "favorites" &&
           monetization.rewardNotice === "verified" ? (
             <FeedbackBanner
@@ -683,85 +743,30 @@ export default function RecommendationsScreen() {
               <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
 
               <View style={styles.optionsSummaryGroup}>
-                <Pressable
+                <RecommendationSetupSummaryRow
                   testID="recommendation-options-button"
+                  title="이번 추천 조건"
+                  value={`${servings}인 · ${maxCookingMinutes}분 · ${mealTypeLabel}${
+                    useExpiringFirst ? " · 임박 먼저" : ""
+                  }`}
+                  scope="이번 추천에만 적용돼요"
+                  actionLabel="바꾸기"
+                  actionIcon={SlidersHorizontal}
                   onPress={() => setShowOptionsSheet(true)}
-                  accessibilityRole="button"
                   accessibilityLabel="추천 조건 고르기"
                   accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
-                  style={({ pressed }) => [
-                    styles.optionsSummary,
-                    shouldStack && styles.optionsSummaryStacked,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <View style={styles.optionsSummaryCopy}>
-                    <AppText style={styles.optionsSummaryLabel}>
-                      추천 조건
-                    </AppText>
-                    <AppText
-                      style={styles.optionsSummaryValue}
-                      numberOfLines={shouldStack ? undefined : 1}
-                    >
-                      {servings}인 · {maxCookingMinutes}분 · {mealTypeLabel}
-                      {useExpiringFirst ? " · 임박 먼저" : ""}
-                    </AppText>
-                  </View>
-                  <View
-                    style={[
-                      styles.optionsSummaryAction,
-                      shouldStack && styles.optionsSummaryActionStacked,
-                    ]}
-                  >
-                    <SlidersHorizontal
-                      color={colors.primary}
-                      size={spacing.sm + spacing.xxs}
-                      strokeWidth={2.4}
-                    />
-                    <AppText style={styles.optionsSummaryActionLabel}>
-                      바꾸기
-                    </AppText>
-                  </View>
-                </Pressable>
-                <Pressable
+                />
+                <RecommendationSetupSummaryRow
                   testID="recommendation-preference-summary-button"
-                  onPress={() => router.push("/settings/recipe-preferences")}
-                  accessibilityRole="button"
-                  accessibilityLabel="알레르기·식단 맞추기"
-                  accessibilityHint="설정에서 알레르기와 식단을 바꿀 수 있어요."
-                  style={({ pressed }) => [
-                    styles.optionsSummary,
-                    shouldStack && styles.optionsSummaryStacked,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <View style={styles.optionsSummaryCopy}>
-                    <AppText style={styles.optionsSummaryLabel}>
-                      알레르기·식단
-                    </AppText>
-                    <AppText
-                      style={styles.optionsSummaryValue}
-                      numberOfLines={shouldStack ? undefined : 1}
-                    >
-                      {preferenceSummary.text}
-                    </AppText>
-                  </View>
-                  <View
-                    style={[
-                      styles.optionsSummaryAction,
-                      shouldStack && styles.optionsSummaryActionStacked,
-                    ]}
-                  >
-                    <ShieldCheck
-                      color={colors.primary}
-                      size={spacing.sm + spacing.xxs}
-                      strokeWidth={2.4}
-                    />
-                    <AppText style={styles.optionsSummaryActionLabel}>
-                      {preferenceSummary.applied ? "바꾸기" : "맞춰요"}
-                    </AppText>
-                  </View>
-                </Pressable>
+                  title="항상 적용할 맞춤 설정"
+                  value={preferenceSummary.text}
+                  scope="저장 후 모든 추천에 적용돼요"
+                  actionLabel="전체 설정"
+                  actionIcon={ShieldCheck}
+                  onPress={() => handleOpenRecipePreferences()}
+                  accessibilityLabel="추천 맞춤 설정 바꾸기"
+                  accessibilityHint="알레르기, 제외 재료, 식단, 매운맛과 조리도구를 바꿀 수 있어요."
+                />
               </View>
             </View>
           ) : null}
@@ -1095,7 +1100,7 @@ export default function RecommendationsScreen() {
         onClose={() => setShowOptionsSheet(false)}
         mascotMood="idle"
         title="오늘은 어떤 요리로 할까요?"
-        description="인원·시간만 바꿔도 장고가 다시 골라 드려요."
+        description="인원·시간·끼니는 이번 추천에만 적용돼요."
         footer={
           <Button onPress={() => setShowOptionsSheet(false)} fullWidth>
             이걸로 할게요
@@ -1145,6 +1150,18 @@ export default function RecommendationsScreen() {
         <ExpiringFirstToggle
           selected={useExpiringFirst}
           onToggle={() => setUseExpiringFirst((value) => !value)}
+        />
+
+        <RecommendationSetupSummaryRow
+          testID="recommendation-options-preference-link"
+          title="항상 적용할 맞춤 설정"
+          value={preferenceSummary.text}
+          scope="저장 후 모든 추천에 적용돼요"
+          actionLabel="전체 설정 보기"
+          actionIcon={ShieldCheck}
+          onPress={() => handleOpenRecipePreferences(true)}
+          accessibilityLabel="항상 적용할 추천 맞춤 설정 보기"
+          accessibilityHint="이 바텀시트를 닫고 알레르기, 식단, 매운맛과 조리도구 설정 화면을 엽니다."
         />
       </BottomSheet>
 
@@ -1361,6 +1378,74 @@ function RecipeSection({
         <View style={styles.recipeSectionBody}>{children}</View>
       )}
     </View>
+  );
+}
+
+function RecommendationSetupSummaryRow({
+  testID,
+  title,
+  value,
+  scope,
+  actionLabel,
+  actionIcon: ActionIcon,
+  onPress,
+  accessibilityLabel,
+  accessibilityHint,
+}: {
+  testID?: string;
+  title: string;
+  value: string;
+  scope: string;
+  actionLabel: string;
+  actionIcon: LucideIcon;
+  onPress: () => void;
+  accessibilityLabel: string;
+  accessibilityHint: string;
+}) {
+  const { shouldStack } = useResponsiveLayout();
+
+  return (
+    <Pressable
+      testID={testID}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      style={({ pressed }) => [
+        styles.optionsSummary,
+        shouldStack && styles.optionsSummaryStacked,
+        pressed && styles.optionsSummaryPressed,
+      ]}
+    >
+      <View style={styles.optionsSummaryCopy}>
+        <AppText style={styles.optionsSummaryLabel}>{title}</AppText>
+        <AppText
+          style={styles.optionsSummaryValue}
+          numberOfLines={shouldStack ? undefined : 1}
+        >
+          {value}
+        </AppText>
+        <AppText style={styles.optionsSummaryScope}>{scope}</AppText>
+      </View>
+      <View
+        style={[
+          styles.optionsSummaryAction,
+          shouldStack && styles.optionsSummaryActionStacked,
+        ]}
+      >
+        <ActionIcon
+          color={colors.primary}
+          size={spacing.sm + spacing.xxs}
+          strokeWidth={2.4}
+        />
+        <AppText style={styles.optionsSummaryActionLabel}>{actionLabel}</AppText>
+        <ChevronRight
+          color={colors.primary}
+          size={spacing.sm}
+          strokeWidth={2.4}
+        />
+      </View>
+    </Pressable>
   );
 }
 
@@ -1738,6 +1823,12 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
+  },
+  optionsSummaryScope: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
   },
   optionsSummaryAction: {
     flexDirection: "row",

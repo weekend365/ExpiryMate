@@ -65,7 +65,7 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v9";
+const PROMPT_VERSION = "recipe-recommendation-v10";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 const MAX_GENERATION_ATTEMPTS = 3;
 
@@ -894,13 +894,13 @@ function buildInstructions() {
   return [
     "당신은 한국어로 답하는 실용적인 가정식 요리 추천 엔진입니다.",
     "사용자의 보관 재료만 주요 재료로 사용해 추천 요리 3개를 만드세요.",
-    "세 요리는 서로 다른 방향으로 만드세요. 하나는 유통기한이 가까운 재료를 살리고, 하나는 추가 재료를 거의 쓰지 않으며, 하나는 짧고 새로운 조합으로 하세요.",
-    "각 요리에 strategy를 지정하세요. expiring_first, minimal_extra, quick_novel을 각각 정확히 한 번씩 사용하세요.",
+    "세 요리는 서로 다른 방향으로 만드세요. request.useExpiringFirst가 true이면 하나는 유통기한이 가까운 재료를 살리고, false이면 하나는 유통기한과 무관하게 활용도와 최근 사용 이력을 균형 있게 반영하세요. 나머지는 추가 재료를 거의 쓰는 요리와 짧고 새로운 조합으로 만드세요.",
+    "각 요리에 strategy를 지정하세요. request.useExpiringFirst가 true이면 expiring_first, minimal_extra, quick_novel을, false이면 balanced, minimal_extra, quick_novel을 각각 정확히 한 번씩 사용하세요.",
     "minimal_extra 요리의 optionalMissingIngredients 개수는 다른 두 요리보다 많지 않아야 하며, 가능하면 0개로 두세요.",
     "quick_novel 요리의 cookingTimeMinutes는 다른 두 요리보다 크지 않아야 합니다. 최단 시간이 같은 요리가 여러 개여도 됩니다.",
     "각 요리의 mealType은 breakfast, lunch, dinner, snack 중 하나로 적고, 요청 mealType이 any가 아니면 반드시 그 값과 일치시키세요.",
-    "title에는 요리 이름만 적으세요. '임박 재료 우선:', '추가 재료 최소형:', '빠르고 새로운 탐색형:' 같은 전략 라벨을 제목이나 재료 이름에 붙이지 마세요.",
-    "만료된 재료는 입력되지 않으며, 유통기한이 가까운 재료를 우선 활용하세요.",
+    "title에는 요리 이름만 적으세요. '임박 재료 우선:', '균형 활용형:', '추가 재료 최소형:', '빠르고 새로운 탐색형:' 같은 전략 라벨을 제목이나 재료 이름에 붙이지 마세요.",
+    "만료된 재료는 입력되지 않습니다. request.useExpiringFirst가 true일 때만 유통기한이 가까운 재료를 우선 활용하고, false일 때는 임박 여부를 추천 우선순위나 요리 전략으로 사용하지 마세요.",
     "카테고리가 없는 재료는 실제 식재료로 확실할 때만 사용하세요.",
     "부족한 재료는 선택 재료로만 제안하고, 없어도 조리가 가능한 방향을 선호하세요.",
     "optionalMissingIngredients는 0~2개만 넣으세요. 맛이나 향이 분명하게 살아날 때만 제안하고, 소금·후추처럼 기본 양념은 넣지 마세요.",
@@ -955,7 +955,10 @@ function buildInput(
         maxCookingMinutes: request.maxCookingMinutes,
         servings: request.servings,
         mealType: request.mealType,
-        strategies: ["expiring_first", "minimal_extra", "quick_novel"],
+        strategies: request.useExpiringFirst
+          ? ["expiring_first", "minimal_extra", "quick_novel"]
+          : ["balanced", "minimal_extra", "quick_novel"],
+        prioritizeExpiring: request.useExpiringFirst,
         requireUniqueStrategies: true,
         minimalExtraMustHaveFewestOptionalIngredients: true,
         quickNovelMustHaveShortestCookingTime: true,

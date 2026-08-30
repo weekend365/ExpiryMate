@@ -58,7 +58,10 @@ describe("summarizeRecipePreference", () => {
         excludedIngredients: ["고수"],
         dietaryStyle: "vegan",
       }),
-    ).toEqual({ applied: true, text: "난류 제외 · 비건 적용 중" });
+    ).toEqual({
+      applied: true,
+      text: "난류 제외 · 고수 제외 · 비건 적용 중",
+    });
   });
 
   it("falls back to excluded ingredients when allergens are empty", () => {

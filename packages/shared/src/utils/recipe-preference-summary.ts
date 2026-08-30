@@ -30,10 +30,10 @@ export function summarizeRecipePreference(
   );
   if (allergenPart) {
     parts.push(allergenPart);
-  } else {
-    const excludedPart = formatExcludedTerms(preference.excludedIngredients);
-    if (excludedPart) parts.push(excludedPart);
   }
+
+  const excludedPart = formatExcludedTerms(preference.excludedIngredients);
+  if (excludedPart) parts.push(excludedPart);
 
   if (preference.dietaryStyle !== "any") {
     parts.push(`${recipeDietaryStyleLabels[preference.dietaryStyle]} 적용 중`);

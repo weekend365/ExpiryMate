@@ -6,15 +6,21 @@ import {
   type RecipeEquipment,
   type RecipeSpiceLevel,
 } from "@expirymate/shared";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { AppTextInput } from "../../src/components/AppTextInput";
 import { Button } from "../../src/components/Button";
+import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { Pill } from "../../src/components/Pill";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
+import {
+  markRecipePreferenceSavedFromRecommendations,
+  parseRecipePreferenceRouteSource,
+} from "../../src/features/settings/recipe-preference-navigation";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
 import { colors, radius, spacing } from "../../src/shared/theme";
 
@@ -34,6 +40,8 @@ const equipmentOptions: Array<{ value: RecipeEquipment; label: string }> = [
 
 export default function RecipePreferenceSettingsScreen() {
   const { query, mutation } = useRecipePreferences();
+  const params = useLocalSearchParams<{ from?: string | string[] }>();
+  const routeSource = parseRecipePreferenceRouteSource(params.from);
   const [allergens, setAllergens] = useState<RecipeAllergen[]>([]);
   const [excludedIngredients, setExcludedIngredients] = useState<string[]>([]);
   const [dietaryStyle, setDietaryStyle] = useState<RecipeDietaryStyle>("any");
@@ -42,15 +50,17 @@ export default function RecipePreferenceSettingsScreen() {
     "stovetop",
   ]);
   const [excludedDraft, setExcludedDraft] = useState("");
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (!query.data) return;
+    if (!query.data || isInitialized) return;
     setAllergens(query.data.allergens);
     setExcludedIngredients(query.data.excludedIngredients);
     setDietaryStyle(query.data.dietaryStyle);
     setMaxSpiceLevel(query.data.maxSpiceLevel);
     setAvailableEquipment(query.data.availableEquipment);
-  }, [query.data]);
+    setIsInitialized(true);
+  }, [isInitialized, query.data]);
 
   const toggle = <T extends string>(value: T, current: T[], set: (next: T[]) => void) =>
     set(current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
@@ -79,6 +89,7 @@ export default function RecipePreferenceSettingsScreen() {
   };
 
   const handleSave = () => {
+    if (!isInitialized) return;
     if (!availableEquipment.length) {
       Alert.alert("조리도구를 하나 이상 골라 주세요");
       return;
@@ -86,7 +97,19 @@ export default function RecipePreferenceSettingsScreen() {
     mutation.mutate(
       { allergens, excludedIngredients, dietaryStyle, maxSpiceLevel, availableEquipment },
       {
-        onSuccess: () => Alert.alert("기억해 뒀어요", "다음 요리 추천부터 적용할게요."),
+        onSuccess: () => {
+          if (routeSource === "recommendations") {
+            markRecipePreferenceSavedFromRecommendations();
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace("/(tabs)/recommendations");
+            }
+            return;
+          }
+
+          Alert.alert("기억해 뒀어요", "다음 요리 추천부터 적용할게요.");
+        },
         onError: (error) => Alert.alert("저장하지 못했어요", getSettingsErrorMessage(error)),
       },
     );
@@ -94,45 +117,75 @@ export default function RecipePreferenceSettingsScreen() {
 
   return (
     <SettingsScreen
-      footer={<Button onPress={handleSave} loading={mutation.isPending} fullWidth>추천 설정 저장할게요</Button>}
+      footer={
+        <Button
+          onPress={handleSave}
+          disabled={!isInitialized}
+          loading={mutation.isPending}
+          fullWidth
+        >
+          추천 설정 저장할게요
+        </Button>
+      }
     >
-      <PreferenceSection title="알레르기" description="해당 재료와 명백히 관련된 재고·추천을 제외해요.">
-        <PillGrid>
-          {recipeAllergenOptions.map((option) => (
-            <Pill key={option.value} label={option.label} tone="danger" selected={allergens.includes(option.value)} onPress={() => toggle(option.value, allergens, setAllergens)} />
-          ))}
-        </PillGrid>
-      </PreferenceSection>
+      {!isInitialized ? (
+        query.isError && !query.isFetching ? (
+          <FeedbackBanner
+            title="추천 설정을 불러오지 못했어요"
+            description={getSettingsErrorMessage(query.error)}
+            actionLabel="다시 불러올게요"
+            onAction={() => {
+              void query.refetch();
+            }}
+          />
+        ) : (
+          <FeedbackBanner
+            tone="info"
+            title="추천 설정을 불러오는 중이에요"
+            description="기존 설정을 안전하게 확인한 뒤 편집할 수 있어요."
+          />
+        )
+      ) : (
+        <>
+          <PreferenceSection title="알레르기" description="해당 재료와 명백히 관련된 재고·추천을 제외해요.">
+            <PillGrid>
+              {recipeAllergenOptions.map((option) => (
+                <Pill key={option.value} label={option.label} tone="danger" selected={allergens.includes(option.value)} onPress={() => toggle(option.value, allergens, setAllergens)} />
+              ))}
+            </PillGrid>
+          </PreferenceSection>
 
-      <PreferenceSection title="직접 제외할 재료" description="알레르기 외에 먹지 않거나 피하고 싶은 재료를 적어 주세요.">
-        <View style={styles.inputRow}>
-          <AppTextInput value={excludedDraft} onChangeText={setExcludedDraft} onSubmitEditing={addExcludedIngredient} placeholder="예: 고수" maxLength={40} returnKeyType="done" style={styles.input} />
-          <Button onPress={addExcludedIngredient} variant="secondary">추가</Button>
-        </View>
-        {excludedIngredients.length ? (
-          <PillGrid>
-            {excludedIngredients.map((item) => (
-              <Pill key={item} label={`${item} ×`} selected onPress={() => setExcludedIngredients((current) => current.filter((value) => value !== item))} />
-            ))}
-          </PillGrid>
-        ) : null}
-      </PreferenceSection>
+          <PreferenceSection title="직접 제외할 재료" description="알레르기 외에 먹지 않거나 피하고 싶은 재료를 적어 주세요.">
+            <View style={styles.inputRow}>
+              <AppTextInput value={excludedDraft} onChangeText={setExcludedDraft} onSubmitEditing={addExcludedIngredient} placeholder="예: 고수" maxLength={40} returnKeyType="done" style={styles.input} />
+              <Button onPress={addExcludedIngredient} variant="secondary">추가</Button>
+            </View>
+            {excludedIngredients.length ? (
+              <PillGrid>
+                {excludedIngredients.map((item) => (
+                  <Pill key={item} label={`${item} ×`} selected onPress={() => setExcludedIngredients((current) => current.filter((value) => value !== item))} />
+                ))}
+              </PillGrid>
+            ) : null}
+          </PreferenceSection>
 
-      <PreferenceSection title="식단" description="한 가지 식단 기준을 모든 추천에 적용해요.">
-        <PillGrid>{recipeDietaryStyleOptions.map((option) => <Pill key={option.value} label={option.label} selected={dietaryStyle === option.value} onPress={() => setDietaryStyle(option.value)} />)}</PillGrid>
-      </PreferenceSection>
+          <PreferenceSection title="식단" description="한 가지 식단 기준을 모든 추천에 적용해요.">
+            <PillGrid>{recipeDietaryStyleOptions.map((option) => <Pill key={option.value} label={option.label} selected={dietaryStyle === option.value} onPress={() => setDietaryStyle(option.value)} />)}</PillGrid>
+          </PreferenceSection>
 
-      <PreferenceSection title="최대 매운맛" description="이 단계보다 맵지 않은 요리만 추천해요.">
-        <PillGrid>{spiceOptions.map((option) => <Pill key={option.value} label={option.label} selected={maxSpiceLevel === option.value} onPress={() => setMaxSpiceLevel(option.value)} />)}</PillGrid>
-      </PreferenceSection>
+          <PreferenceSection title="최대 매운맛" description="이 단계보다 맵지 않은 요리만 추천해요.">
+            <PillGrid>{spiceOptions.map((option) => <Pill key={option.value} label={option.label} selected={maxSpiceLevel === option.value} onPress={() => setMaxSpiceLevel(option.value)} />)}</PillGrid>
+          </PreferenceSection>
 
-      <PreferenceSection title="사용 가능한 조리도구" description="하나 이상 골라 주세요. 선택한 도구 안에서만 추천해요.">
-        <PillGrid>{equipmentOptions.map((option) => <Pill key={option.value} label={option.label} selected={availableEquipment.includes(option.value)} onPress={() => toggle(option.value, availableEquipment, setAvailableEquipment)} />)}</PillGrid>
-      </PreferenceSection>
+          <PreferenceSection title="사용 가능한 조리도구" description="하나 이상 골라 주세요. 선택한 도구 안에서만 추천해요.">
+            <PillGrid>{equipmentOptions.map((option) => <Pill key={option.value} label={option.label} selected={availableEquipment.includes(option.value)} onPress={() => toggle(option.value, availableEquipment, setAvailableEquipment)} />)}</PillGrid>
+          </PreferenceSection>
 
-      <View style={styles.notice}>
-        <AppText variant="bodySmall">AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
-      </View>
+          <View style={styles.notice}>
+            <AppText variant="bodySmall">AI 추천은 알레르기 안전을 보장하지 않아요. 포장지의 원재료·알레르기 표시와 실제 식품 상태를 조리 전에 꼭 확인해 주세요.</AppText>
+          </View>
+        </>
+      )}
     </SettingsScreen>
   );
 }

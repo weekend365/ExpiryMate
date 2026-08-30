@@ -105,6 +105,32 @@ describe("getRecommendationHeroStatus", () => {
     });
   });
 
+  it("does not name raw inventory when safety preferences are active", () => {
+    expect(
+      getRecommendationHeroStatus({
+        ...idle,
+        hasSafetyPreferences: true,
+        ingredientNames: ["우유"],
+      }),
+    ).toEqual({
+      message: "맞춤 설정을 지키면서 임박 재료부터 요리를 골라 드릴게요.",
+      mood: "speak",
+    });
+  });
+
+  it("removes expiry-first copy when the option is off", () => {
+    expect(
+      getRecommendationHeroStatus({
+        ...idle,
+        useExpiringFirst: false,
+        ingredientNames: ["두부"],
+      }),
+    ).toEqual({
+      message: "오늘 뭐 해먹을까요? 보관 재료를 두루 살펴 요리를 골라 드릴게요.",
+      mood: "speak",
+    });
+  });
+
   it("asks to add ingredients when the fridge is empty", () => {
     expect(
       getRecommendationHeroStatus({

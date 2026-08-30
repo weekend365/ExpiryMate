@@ -30,6 +30,8 @@ export function getRecommendationHeroStatus(input: {
   isQuotaError: boolean;
   isCapacityError: boolean;
   canOfferRewardedAd: boolean;
+  useExpiringFirst?: boolean;
+  hasSafetyPreferences?: boolean;
   needsIngredients?: boolean;
   ingredientNames?: string[];
 }): RecommendationHeroStatus {
@@ -69,7 +71,18 @@ export function getRecommendationHeroStatus(input: {
     };
   }
 
-  if (input.ingredientNames?.length) {
+  const useExpiringFirst = input.useExpiringFirst ?? true;
+
+  if (input.hasSafetyPreferences) {
+    return {
+      message: useExpiringFirst
+        ? "맞춤 설정을 지키면서 임박 재료부터 요리를 골라 드릴게요."
+        : "맞춤 설정을 지키면서 보관 재료를 두루 살펴볼게요.",
+      mood: "speak",
+    };
+  }
+
+  if (useExpiringFirst && input.ingredientNames?.length) {
     return {
       message: `${input.ingredientNames.join(" · ")}부터 맛있게 쓸 방법을 찾아볼게요.`,
       mood: "speak",
@@ -77,8 +90,9 @@ export function getRecommendationHeroStatus(input: {
   }
 
   return {
-    message:
-      "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요.",
+    message: useExpiringFirst
+      ? "오늘 뭐 해먹을까요? 임박 재료를 먼저 살피고 요리를 골라 드릴게요."
+      : "오늘 뭐 해먹을까요? 보관 재료를 두루 살펴 요리를 골라 드릴게요.",
     mood: "speak",
   };
 }

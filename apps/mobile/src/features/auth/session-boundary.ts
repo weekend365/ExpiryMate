@@ -2,6 +2,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { clearRecipeGenerationState } from "../recipes/recipe-generation-reset";
 import { clearPersistedQueryCache } from "../../services/query-client";
 import { useRegistrationStore } from "../../store/registration-store";
+import { clearRecipePreferenceNavigationState } from "../settings/recipe-preference-navigation";
 
 /**
  * Wipe user-scoped client state so A→logout→B never paints A's cache/drafts.
@@ -14,6 +15,7 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
   useRegistrationStore.getState().clearPrefill();
   useRegistrationStore.getState().clearLastStorageLocation();
   clearRecipeGenerationState();
+  clearRecipePreferenceNavigationState();
   void import("../recipes/cooking-timer")
     .then(({ clearPersistedCookingTimer }) => clearPersistedCookingTimer())
     .catch(() => undefined);

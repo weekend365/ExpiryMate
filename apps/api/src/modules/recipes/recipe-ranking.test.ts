@@ -24,7 +24,7 @@ function candidate(
 }
 
 describe("recipe inventory ranking", () => {
-  it("changes urgency weight without falling back to creation order", () => {
+  it("removes urgency weight when expiry-first is off", () => {
     const items = [
       candidate("snack", "과자", ProductCategory.SNACK, 1),
       candidate("egg", "달걀", ProductCategory.EGG, 60),
@@ -36,6 +36,19 @@ describe("recipe inventory ranking", () => {
     expect(rankRecipeCandidates(items, { useExpiringFirst: false }, new Map())[0]?.id).toBe(
       "egg",
     );
+  });
+
+  it("does not use expiry as a tie-breaker when expiry-first is off", () => {
+    const items = [
+      candidate("z-near", "대파", ProductCategory.PRODUCE, 1),
+      candidate("a-far", "양파", ProductCategory.PRODUCE, 60),
+    ];
+
+    expect(
+      rankRecipeCandidates(items, { useExpiringFirst: false }, new Map()).map(
+        (item) => item.id,
+      ),
+    ).toEqual(["a-far", "z-near"]);
   });
 
   it("penalizes ingredients repeated in recent recommendations", () => {

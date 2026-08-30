@@ -14,6 +14,7 @@ export const recipeMealTypeSchema = z.enum([
 
 export const recipeStrategySchema = z.enum([
   "expiring_first",
+  "balanced",
   "minimal_extra",
   "quick_novel",
 ]);

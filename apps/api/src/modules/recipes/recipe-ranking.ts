@@ -194,7 +194,7 @@ export function rankRecipeCandidates<T extends RecipeRankingCandidate>(
     candidate,
     score:
       urgencyScore(candidate.daysUntilExpiry) *
-        (request.useExpiringFirst ? 1 : 0.25) +
+        (request.useExpiringFirst ? 1 : 0) +
       utilityScore(candidate.category) -
       Math.min(
         45,
@@ -208,7 +208,10 @@ export function rankRecipeCandidates<T extends RecipeRankingCandidate>(
 
   scored.sort((left, right) => {
     if (left.score !== right.score) return right.score - left.score;
-    if (left.candidate.daysUntilExpiry !== right.candidate.daysUntilExpiry) {
+    if (
+      request.useExpiringFirst &&
+      left.candidate.daysUntilExpiry !== right.candidate.daysUntilExpiry
+    ) {
       return left.candidate.daysUntilExpiry - right.candidate.daysUntilExpiry;
     }
     const updatedDifference =

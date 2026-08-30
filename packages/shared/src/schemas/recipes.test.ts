@@ -5,6 +5,7 @@ import {
   generatedRecipeRecommendationsPayloadSchema,
   updateRecipePreferenceSchema,
   recipeRecommendationDishSchema,
+  type RecipeStrategy,
 } from "./recipes";
 
 const dish = {
@@ -25,10 +26,9 @@ function generatedDishes() {
     ...dish,
     optionalMissingIngredients: [] as Array<{ name: string; reason: string }>,
     mealType: "breakfast" as const,
-    strategy: ["expiring_first", "minimal_extra", "quick_novel"][index] as
-      | "expiring_first"
-      | "minimal_extra"
-      | "quick_novel",
+    strategy: ["expiring_first", "minimal_extra", "quick_novel"][
+      index
+    ] as RecipeStrategy,
     spiceLevel: "mild" as const,
     requiredEquipment: ["stovetop" as const],
     steps: [
@@ -74,6 +74,16 @@ describe("recipe ingredient quantity contracts", () => {
         recommendations: [dish, dish, dish],
       }).success,
     ).toBe(false);
+  });
+
+  it("accepts the balanced strategy used when expiry-first is off", () => {
+    const recommendations = generatedDishes();
+    recommendations[0] = { ...recommendations[0]!, strategy: "balanced" };
+
+    expect(
+      generatedRecipeRecommendationsPayloadSchema.safeParse({ recommendations })
+        .success,
+    ).toBe(true);
   });
 
   it("enforces generated-only safety and structure limits", () => {

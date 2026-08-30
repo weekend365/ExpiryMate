@@ -40,6 +40,10 @@ describe("session boundary cleanup", () => {
   it("clears query cache, registration draft, and recipe generation state", async () => {
     const { clearUserScopedClientState, withSessionUser, sessionQueryKeys } =
       await import("./session-boundary");
+    const {
+      consumeRecipePreferenceSavedFromRecommendations,
+      markRecipePreferenceSavedFromRecommendations,
+    } = await import("../settings/recipe-preference-navigation");
     const queryClient = new QueryClient();
     queryClient.setQueryData(
       withSessionUser(sessionQueryKeys.inventory, "user-a"),
@@ -49,6 +53,7 @@ describe("session boundary cleanup", () => {
       withSessionUser(sessionQueryKeys.recipes, "user-a"),
       [{ id: "rec-a" }],
     );
+    markRecipePreferenceSavedFromRecommendations();
 
     clearUserScopedClientState(queryClient);
 
@@ -66,6 +71,7 @@ describe("session boundary cleanup", () => {
     expect(mocks.clearPrefill).toHaveBeenCalledOnce();
     expect(mocks.clearLastStorageLocation).toHaveBeenCalledOnce();
     expect(mocks.clearRecipeGenerationState).toHaveBeenCalledOnce();
+    expect(consumeRecipePreferenceSavedFromRecommendations()).toBe(false);
     await vi.waitFor(() => {
       expect(mocks.clearPersistedCookingTimer).toHaveBeenCalledOnce();
     });

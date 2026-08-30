@@ -19,7 +19,7 @@ export interface RecipeValidationResult {
 const spiceRank = { none: 0, mild: 1, medium: 2, hot: 3 } as const;
 
 const RECIPE_STRATEGY_LABEL_PATTERN =
-  /^(임박\s*재료\s*(우선|활용형)|추가\s*재료\s*최소형|빠르고\s*새로운\s*탐색형)(?:\s*[:：\-–]\s*|\s+)/u;
+  /^(임박\s*재료\s*(우선|활용형)|균형\s*활용형|추가\s*재료\s*최소형|빠르고\s*새로운\s*탐색형)(?:\s*[:：\-–]\s*|\s+)/u;
 
 export function stripRecipeStrategyLabel(value: string) {
   const trimmed = value.trim();
@@ -90,11 +90,13 @@ export function validateAlignedRecommendations(
   );
 }
 
-const recipeStrategies = new Set([
-  "expiring_first",
-  "minimal_extra",
-  "quick_novel",
-]);
+function expectedRecipeStrategies(request: RecipeRecommendationRequest) {
+  return new Set(
+    request.useExpiringFirst
+      ? (["expiring_first", "minimal_extra", "quick_novel"] as const)
+      : (["balanced", "minimal_extra", "quick_novel"] as const),
+  );
+}
 
 const basicSeasoningTerms = new Set([
   "물",
@@ -186,6 +188,7 @@ export function validateGeneratedRecommendations(
   );
   const seenTitles = new Set<string>();
   const seenStrategies = new Set<string>();
+  const expectedStrategies = expectedRecipeStrategies(request);
 
   if (recommendations.length !== 3) {
     violations.push("RECOMMENDATION_COUNT_MUST_BE_3");
@@ -199,7 +202,7 @@ export function validateGeneratedRecommendations(
     }
     seenTitles.add(normalizedTitle);
 
-    if (!dish.strategy || !recipeStrategies.has(dish.strategy)) {
+    if (!dish.strategy || !expectedStrategies.has(dish.strategy)) {
       violations.push(`${prefix}_STRATEGY_REQUIRED`);
     } else if (seenStrategies.has(dish.strategy)) {
       violations.push(`${prefix}_DUPLICATE_STRATEGY`);
@@ -318,7 +321,7 @@ export function validateGeneratedRecommendations(
       );
     }
 
-    if (dish.strategy === "expiring_first") {
+    if (request.useExpiringFirst && dish.strategy === "expiring_first") {
       const minimumDays = Math.min(
         ...inventorySnapshot.map((item) => item.daysUntilExpiry),
       );
@@ -340,7 +343,10 @@ export function validateGeneratedRecommendations(
     return { ...dish, usedIngredients };
   });
 
-  if (seenStrategies.size !== recipeStrategies.size) {
+  if (
+    seenStrategies.size !== expectedStrategies.size ||
+    [...expectedStrategies].some((strategy) => !seenStrategies.has(strategy))
+  ) {
     violations.push("RECOMMENDATION_STRATEGIES_MUST_BE_UNIQUE");
   }
 

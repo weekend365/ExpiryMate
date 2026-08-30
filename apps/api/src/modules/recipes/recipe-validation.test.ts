@@ -94,6 +94,34 @@ describe("recipe semantic validation", () => {
     expect(result.recommendations[0]?.usedIngredients[0]?.name).toBe("달걀");
   });
 
+  it("requires a balanced strategy instead of expiry-first when the option is off", () => {
+    const balanced = dishes();
+    balanced[0] = { ...balanced[0]!, strategy: "balanced" };
+    const balancedRequest = { ...request, useExpiringFirst: false };
+
+    expect(
+      validateGeneratedRecommendations(
+        balanced,
+        balancedRequest,
+        inventory,
+        preference,
+      ).valid,
+    ).toBe(true);
+    expect(
+      validateGeneratedRecommendations(
+        dishes(),
+        balancedRequest,
+        inventory,
+        preference,
+      ).violations,
+    ).toEqual(
+      expect.arrayContaining([
+        "DISH_1_STRATEGY_REQUIRED",
+        "RECOMMENDATION_STRATEGIES_MUST_BE_UNIQUE",
+      ]),
+    );
+  });
+
   it("reports inventory, quantity, request, and structure violations", () => {
     const invalid = dishes();
     invalid[0] = {
@@ -380,6 +408,7 @@ describe("recipe semantic validation", () => {
     expect(stripRecipeStrategyLabel("추가 재료 최소형: 두부조림")).toBe(
       "두부조림",
     );
+    expect(stripRecipeStrategyLabel("균형 활용형: 채소볶음")).toBe("채소볶음");
     expect(
       stripRecipeStrategyLabel("빠르고 새로운 탐색형: 토마토 파스타"),
     ).toBe("토마토 파스타");
