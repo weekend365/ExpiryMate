@@ -104,20 +104,20 @@ export function StatCard({
         {showLabel ? (
           <View style={styles.trafficCopy}>
             <AppText
+              variant="caption"
+              scaleRole="chrome"
+              densityAware={false}
+              numberOfLines={1}
+              style={styles.trafficLabel}
+            >
+              {label}
+            </AppText>
+            <AppText
               variant={compact ? "bodySmallStrong" : "heading"}
               numberOfLines={1}
               style={styles.trafficCount}
             >
               {value}건
-            </AppText>
-            <AppText
-              variant="caption"
-              scaleRole="chrome"
-              densityAware={false}
-              numberOfLines={2}
-              style={styles.trafficLabel}
-            >
-              {label}
             </AppText>
           </View>
         ) : null}
@@ -219,8 +219,11 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   trafficCopy: {
-    alignItems: "center",
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "center",
     gap: spacing.xxs,
+    minWidth: 0,
   },
   trafficCount: {
     textAlign: "center",
@@ -261,7 +264,6 @@ const styles = StyleSheet.create({
   trafficLabel: {
     color: colors.subtext,
     textAlign: "center",
-    alignSelf: "stretch",
     flexShrink: 1,
   },
 });

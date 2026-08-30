@@ -27,7 +27,6 @@ import {
   type HomeNoticeAction,
 } from "../../src/features/home/home-notices";
 import {
-  HomeQuickEntry,
   HomeShoppingCard,
 } from "../../src/features/home/home-quick-entry";
 import { homeScreenStyles as styles } from "../../src/features/home/home-screen-styles";
@@ -35,11 +34,9 @@ import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import { useInsightsPreview } from "../../src/features/insights/use-insights";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import {
-  photoParseRoute,
   registerRoute,
   scannerRoute,
 } from "../../src/features/registration/registration-return";
-import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
@@ -159,13 +156,6 @@ export default function HomeScreen() {
     router.push("/shopping");
   };
 
-  const handleOpenPhotoParse = () => {
-    if (activeSpaceId) {
-      clearPrefill(activeSpaceId);
-    }
-    router.push(photoParseRoute("home"));
-  };
-
   const handleNoticeAction = (action: HomeNoticeAction) => {
     switch (action) {
       case "retry":
@@ -194,15 +184,6 @@ export default function HomeScreen() {
       contentWidth="wide"
       bottomInsetMode="navigator"
       testID="home-screen"
-      footer={
-        <HomeQuickEntry
-          onOpenScanner={handleOpenScanner}
-          onManualRegister={handleManualRegister}
-          onOpenPhotoParse={
-            isInventoryPhotoParseEnabled() ? handleOpenPhotoParse : undefined
-          }
-        />
-      }
       contentStyle={styles.screenContent}
     >
       <View style={styles.homeScene}>
