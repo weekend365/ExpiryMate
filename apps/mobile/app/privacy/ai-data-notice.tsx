@@ -1,4 +1,7 @@
-import { appBrand } from "@expirymate/shared";
+import {
+  appBrand,
+  UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS,
+} from "@expirymate/shared";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
@@ -146,9 +149,12 @@ export default function AiDataNoticeScreen() {
           <View style={styles.card}>
             <AppText style={styles.cardTitle}>얼마나 오래 두나요?</AppText>
             <AppText style={styles.bodyText}>
-              장고 서버의 추천 기록은 직접 지우거나 계정을 정리할 때까지 보관해요.
-              외부 도우미로 보낸 정보는 모델 학습에는 쓰이지 않고, 안전 확인을
-              위해 그쪽 정책에 따라 최대 약 30일 보관될 수 있어요.
+              즐겨찾기하지 않은 추천 기록은 장고 서버에 만든 날부터 최대{" "}
+              {UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS}일간 보관한 뒤
+              자동으로 지워요. 요리 하나라도 즐겨찾기한 추천은 마지막 즐겨찾기를
+              해제하거나 추천 기록 또는 계정을 직접 정리할 때까지 보관해요. 외부
+              도우미로 보낸 정보는 모델 학습에는 쓰이지 않고, 안전 확인을 위해 그쪽
+              정책에 따라 최대 약 30일 보관될 수 있어요.
             </AppText>
           </View>
           <View style={styles.card}>

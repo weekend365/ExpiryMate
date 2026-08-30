@@ -1,5 +1,6 @@
 import {
   isTrackedItem,
+  UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS,
   type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
@@ -1205,6 +1206,8 @@ export default function RecommendationsScreen() {
           기록과 더 나은 추천을 위해 내 계정에 남겨 둬요.
         </AppText>
         <AppText style={styles.noticeFootnote}>
+          즐겨찾기하지 않은 추천 기록은 최대{" "}
+          {UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS}일 뒤 자동으로 지워져요.{" "}
           외부 요리 도우미로 보낸 정보는 기본적으로 모델 학습에 쓰이지 않아요.
           다만 서비스 안전과 이상 이용 확인을 위해 잠깐 보관될 수 있어요.
         </AppText>

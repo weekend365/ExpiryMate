@@ -4,6 +4,9 @@ import { ProductCategory, UnitCode } from "../enums/app-enums";
 import { DATE_ONLY_PATTERN, isDateOnlyString } from "../utils/date";
 import { storageLocationKeySchema } from "./inventory";
 
+/** Maximum server retention for a recommendation with no saved favorite dish. */
+export const UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS = 90;
+
 export const recipeMealTypeSchema = z.enum([
   "any",
   "breakfast",

@@ -807,6 +807,7 @@ model RecipeFavorite {
 
   @@unique([ownerKey, sourceRecommendationId, sourceDishIndex])
   @@index([ownerKey, createdAt])
+  @@index([sourceRecommendationId])
 }
 
 model SubscriptionEntitlement {

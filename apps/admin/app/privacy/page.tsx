@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { appBrand } from "@expirymate/shared";
+import {
+  appBrand,
+  UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS,
+} from "@expirymate/shared";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -15,7 +18,7 @@ export default function PrivacyPolicyPage() {
           개인정보처리방침
         </h1>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 29일
+          시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 30일
         </p>
 
         <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
@@ -161,9 +164,12 @@ export default function PrivacyPolicyPage() {
               초대와 내 이메일로 받은 대기 중 초대를 함께 삭제합니다.
             </li>
             <li>
-              AI 추천 히스토리(요청 조건·재료 snapshot·추천 결과): 사용자가 앱에서
-              추천 기록을 삭제하거나 계정을 정리할 때까지 보관합니다. 공유 공간에
-              표시된 추천도 이를 실행한 사용자가 기록을 정리하면 삭제됩니다.
+              AI 추천 히스토리(요청 조건·재료 snapshot·추천 결과): 즐겨찾기하지 않은
+              추천은 생성 후 최대{" "}
+              {UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS}일간 보관한 뒤 자동
+              삭제합니다. 요리 하나라도 즐겨찾기한 추천은 마지막 즐겨찾기를
+              해제하거나, 사용자가 앱에서 추천 기록을 삭제하거나, 계정을 정리할
+              때까지 보관합니다. 공유 공간에 표시된 추천에도 같은 기준을 적용합니다.
             </li>
             <li>
               AI 데이터 고지 동의 기록: 동의를 유지하는 동안 보관하며, 동의를
