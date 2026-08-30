@@ -19,7 +19,7 @@ describe("getInventoryHeroNotice", () => {
     ).toEqual({ show: false });
   });
 
-  it("shows a thinking hero while the first load is in flight", () => {
+  it("lets the list skeleton own the first loading state", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -27,12 +27,7 @@ describe("getInventoryHeroNotice", () => {
         totalCount: 0,
         visibleCount: 0,
       }),
-    ).toEqual({
-      show: true,
-      mood: "think",
-      tone: "neutral",
-      message: "보관함을 살펴보고 있어요.",
-    });
+    ).toEqual({ show: false });
   });
 
   it("lets the empty-error state own 장고", () => {
@@ -56,7 +51,7 @@ describe("getInventoryHeroNotice", () => {
     ).toEqual({ show: false });
   });
 
-  it("asks to clear filters when the current view is empty", () => {
+  it("lets the filtered empty state explain an empty result", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -64,15 +59,10 @@ describe("getInventoryHeroNotice", () => {
         statusFilter: "expired",
         expiredCount: 0,
       }),
-    ).toEqual({
-      show: true,
-      mood: "idle",
-      tone: "neutral",
-      message: "이 조건에는 재료가 없어요. 조건을 풀어 볼까요?",
-    });
+    ).toEqual({ show: false });
   });
 
-  it("describes the active expiry filter instead of the whole fridge", () => {
+  it("stays hidden when a status chip already explains the active view", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -81,12 +71,7 @@ describe("getInventoryHeroNotice", () => {
         within7Count: 1,
         statusFilter: "expired",
       }),
-    ).toEqual({
-      show: true,
-      mood: "worry",
-      tone: "danger",
-      message: "만료된 재료 2개를 보고 있어요.",
-    });
+    ).toEqual({ show: false });
 
     expect(
       getInventoryHeroNotice({
@@ -94,12 +79,7 @@ describe("getInventoryHeroNotice", () => {
         visibleCount: 3,
         statusFilter: "within7",
       }),
-    ).toEqual({
-      show: true,
-      mood: "speak",
-      tone: "warning",
-      message: "일주일 안에 손볼 재료 3개를 보고 있어요.",
-    });
+    ).toEqual({ show: false });
 
     expect(
       getInventoryHeroNotice({
@@ -107,12 +87,7 @@ describe("getInventoryHeroNotice", () => {
         visibleCount: 5,
         statusFilter: "safe",
       }),
-    ).toEqual({
-      show: true,
-      mood: "happy",
-      tone: "success",
-      message: "여유 있는 재료 5개를 보고 있어요.",
-    });
+    ).toEqual({ show: false });
   });
 
   it("warns about expired items first in the unfiltered view", () => {
@@ -126,8 +101,8 @@ describe("getInventoryHeroNotice", () => {
       show: true,
       mood: "worry",
       tone: "danger",
-      message:
-        "기한이 지난 재료가 1개 있어요. 위에서부터 손보면 좋아요.",
+      message: "기한이 지난 재료 1개부터 정리할까요?",
+      supportingMessage: "눌러서 만료된 재료만 모아 볼 수 있어요.",
     });
   });
 
@@ -141,17 +116,13 @@ describe("getInventoryHeroNotice", () => {
       show: true,
       mood: "speak",
       tone: "warning",
-      message: "일주일 안에 손볼 재료가 3개 있어요.",
+      message: "7일 안에 손볼 재료 3개를 확인할까요?",
+      supportingMessage: "눌러서 곧 만료되는 재료만 모아 볼 수 있어요.",
     });
   });
 
-  it("stays calm when every visible item still has time", () => {
-    expect(getInventoryHeroNotice(populated)).toEqual({
-      show: true,
-      mood: "happy",
-      tone: "success",
-      message: "지금은 급한 재료가 없어요.",
-    });
+  it("does not spend vertical space on a no-action success message", () => {
+    expect(getInventoryHeroNotice(populated)).toEqual({ show: false });
   });
 });
 

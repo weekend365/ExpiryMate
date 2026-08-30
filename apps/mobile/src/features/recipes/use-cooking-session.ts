@@ -348,6 +348,7 @@ export function useCookingSession() {
   }, [errorMessage]);
 
   return {
+    activeSpaceId,
     recommendationId,
     requestedDishIndex,
     recommendationQuery,

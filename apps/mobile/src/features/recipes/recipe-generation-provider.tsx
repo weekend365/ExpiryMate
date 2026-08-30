@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type { RecipeRecommendation } from "@expirymate/shared";
@@ -29,6 +30,7 @@ import {
   registerRecipeGenerationAcknowledge,
   registerRecipeGenerationReset,
 } from "./recipe-generation-reset";
+import { isCurrentRecipeGenerationRequest } from "./recipe-generation-request";
 import { recipeRecommendationsQueryKey } from "./use-recipe-recommendations";
 
 type RecipeGenerationStatus = "idle" | "pending" | "success" | "error";
@@ -60,45 +62,49 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
     useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
+  const latestRequestIdRef = useRef(0);
+  const activeSpaceIdRef = useRef(activeSpaceId);
+  const sessionUserIdRef = useRef(sessionUserId);
+  activeSpaceIdRef.current = activeSpaceId;
+  sessionUserIdRef.current = sessionUserId;
 
   const generateRecipeRecommendation = useCallback(
     async (payload: RecipeRecommendationPayload) => {
+      const requestId = ++latestRequestIdRef.current;
+      const requestSpaceId = activeSpaceId;
+      const requestUserId = sessionUserId;
       setStatus("pending");
       setErrorMessage(null);
       setErrorCode(null);
 
       try {
-        if (!activeSpaceId) {
+        if (!requestSpaceId) {
           throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
         }
         const recommendation = await createRecipeRecommendation(
           payload,
-          activeSpaceId,
+          requestSpaceId,
         );
-
-        setLatestGeneratedRecommendation(recommendation);
-        setLatestGeneratedRecommendationId(recommendation.id);
-        setStatus("success");
 
         queryClient.invalidateQueries({
           queryKey: withInventorySpace(
             recipeRecommendationsQueryKey,
-            sessionUserId,
-            activeSpaceId,
+            requestUserId,
+            requestSpaceId,
           ),
         });
         queryClient.invalidateQueries({
           queryKey: withInventorySpace(
             sessionQueryKeys.dashboard,
-            sessionUserId,
-            activeSpaceId,
+            requestUserId,
+            requestSpaceId,
           ),
         });
         queryClient.invalidateQueries({
           queryKey: withInventorySpace(
             sessionQueryKeys.inventory,
-            sessionUserId,
-            activeSpaceId,
+            requestUserId,
+            requestSpaceId,
           ),
         });
         queryClient.invalidateQueries({
@@ -111,11 +117,43 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
           {
             type: NOTIFICATION_TYPES.recipeReady,
             recommendationId: recommendation.id,
+            spaceId: requestSpaceId,
           },
         ).catch(() => null);
 
+        if (
+          !isCurrentRecipeGenerationRequest({
+            requestId,
+            latestRequestId: latestRequestIdRef.current,
+            requestSpaceId,
+            activeSpaceId: activeSpaceIdRef.current,
+            requestUserId,
+            activeUserId: sessionUserIdRef.current,
+          })
+        ) {
+          return null;
+        }
+
+        setLatestGeneratedRecommendation(recommendation);
+        setLatestGeneratedRecommendationId(recommendation.id);
+        setStatus("success");
+
         return recommendation;
       } catch (error) {
+        if (
+          requestSpaceId &&
+          !isCurrentRecipeGenerationRequest({
+            requestId,
+            latestRequestId: latestRequestIdRef.current,
+            requestSpaceId,
+            activeSpaceId: activeSpaceIdRef.current,
+            requestUserId,
+            activeUserId: sessionUserIdRef.current,
+          })
+        ) {
+          return null;
+        }
+
         setStatus("error");
         setErrorMessage(getErrorMessage(error));
         setErrorCode(error instanceof ApiError ? error.code : null);
@@ -144,6 +182,7 @@ export function RecipeGenerationProvider({ children }: PropsWithChildren) {
   }, []);
 
   const resetRecipeGeneration = useCallback(() => {
+    latestRequestIdRef.current += 1;
     setStatus("idle");
     setErrorMessage(null);
     setErrorCode(null);

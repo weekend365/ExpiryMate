@@ -414,6 +414,11 @@ export class NotificationsService
             token: true,
           },
         },
+        inventoryItem: {
+          select: {
+            spaceId: true,
+          },
+        },
       },
       orderBy: {
         updatedAt: "asc",
@@ -440,6 +445,20 @@ export class NotificationsService
       }
 
       stats.stalePendingRetried += 1;
+      const spaceId = delivery.inventoryItem.spaceId;
+      if (!spaceId) {
+        stats.notificationsFailed += 1;
+        await this.prisma.pushNotificationDelivery.update({
+          where: { id: delivery.id },
+          data: {
+            status: PushNotificationDeliveryStatus.failed,
+            errorCode: "MISSING_SPACE_CONTEXT",
+            errorMessage: "Inventory item has no space for notification routing.",
+          },
+        });
+        continue;
+      }
+
       stats.notificationsCreated += 1;
       await this.dispatchDelivery(
         {
@@ -453,6 +472,7 @@ export class NotificationsService
         },
         delivery.inventoryItemId,
         delivery.daysBefore,
+        spaceId,
         stats,
       );
     }
@@ -550,6 +570,7 @@ export class NotificationsService
     pushToken: { id: string; token: string },
     inventoryItemId: string,
     daysBefore: number,
+    spaceId: string,
     stats: ReminderStats,
   ) {
     const ticket = await this.expoPush.send({
@@ -560,6 +581,7 @@ export class NotificationsService
         type: "expiry_reminder",
         inventoryItemId,
         daysBefore,
+        spaceId,
       },
     });
     const update = toDeliveryUpdate(ticket);

@@ -128,6 +128,28 @@ let currentUser: AuthUser | null = null;
 let sessionPromise: Promise<AuthSession | null> | null = null;
 /** Single-flight mutex so parallel 401s share one refresh instead of racing. */
 let refreshInFlight: Promise<AuthSession | null> | null = null;
+const authSessionClearedListeners = new Set<() => void>();
+
+/**
+ * Lets the React session boundary invalidate cached user state when the API
+ * client discovers a terminal refresh failure outside the auth query itself.
+ */
+export function subscribeToAuthSessionCleared(listener: () => void) {
+  authSessionClearedListeners.add(listener);
+  return () => {
+    authSessionClearedListeners.delete(listener);
+  };
+}
+
+function notifyAuthSessionCleared() {
+  for (const listener of authSessionClearedListeners) {
+    try {
+      listener();
+    } catch {
+      // Session cleanup must not fail because a UI subscriber was unmounted.
+    }
+  }
+}
 
 function resolveApiBaseUrl() {
   const value = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -533,9 +555,15 @@ export async function clearAuthSession() {
   currentUser = null;
   sessionPromise = null;
   refreshInFlight = null;
-  await AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY);
-  await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
-  await SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+  try {
+    await Promise.all([
+      AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY),
+      AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
+      SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+    ]);
+  } finally {
+    notifyAuthSessionCleared();
+  }
 }
 
 export const getCurrentUser = async () => {

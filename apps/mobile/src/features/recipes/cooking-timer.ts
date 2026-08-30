@@ -9,8 +9,9 @@ const COOKING_TIMER_STORAGE_KEY = "expirymate:cooking-timer:v1";
 export type CookingTimerStatus = "running" | "paused" | "completed";
 
 export type CookingTimer = {
-  version: 1;
+  version: 2;
   ownerKey: string;
+  spaceId: string;
   recommendationId: string;
   dishIndex: number;
   stepIndex: number;
@@ -27,6 +28,7 @@ export type CookingTimer = {
 export type StartCookingTimerInput = Pick<
   CookingTimer,
   | "ownerKey"
+  | "spaceId"
   | "recommendationId"
   | "dishIndex"
   | "stepIndex"
@@ -41,8 +43,9 @@ function isCookingTimer(value: unknown): value is CookingTimer {
   }
   const candidate = value as Partial<CookingTimer>;
   return (
-    candidate.version === 1 &&
+    candidate.version === 2 &&
     typeof candidate.ownerKey === "string" &&
+    typeof candidate.spaceId === "string" &&
     typeof candidate.recommendationId === "string" &&
     typeof candidate.dishIndex === "number" &&
     typeof candidate.stepIndex === "number" &&
@@ -76,6 +79,7 @@ async function scheduleTimerNotification(
     return await scheduleCookingTimerNotification({
       seconds,
       dishTitle: input.dishTitle,
+      spaceId: input.spaceId,
       recommendationId: input.recommendationId,
       dishIndex: input.dishIndex,
       stepIndex: input.stepIndex,
@@ -140,8 +144,22 @@ export async function loadCookingTimer(ownerKey: string) {
 
   try {
     const parsed: unknown = JSON.parse(stored);
-    return isCookingTimer(parsed) && parsed.ownerKey === ownerKey ? parsed : null;
+    if (isCookingTimer(parsed)) {
+      return parsed.ownerKey === ownerKey ? parsed : null;
+    }
+
+    const legacyNotificationId =
+      parsed &&
+      typeof parsed === "object" &&
+      "notificationId" in parsed &&
+      typeof parsed.notificationId === "string"
+        ? parsed.notificationId
+        : null;
+    await cancelScheduledNotification(legacyNotificationId).catch(() => undefined);
+    await persistCookingTimer(null);
+    return null;
   } catch {
+    await persistCookingTimer(null);
     return null;
   }
 }
@@ -154,7 +172,7 @@ export async function startCookingTimer(
   const notificationId = await scheduleTimerNotification(input, durationSeconds);
   const timer: CookingTimer = {
     ...input,
-    version: 1,
+    version: 2,
     durationSeconds,
     remainingSeconds: durationSeconds,
     status: "running",

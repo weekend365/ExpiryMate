@@ -58,6 +58,7 @@ export default function CookingScreen() {
   const { sessionUserId } = useAuth();
   const cookingTimer = useCookingTimer(sessionUserId);
   const {
+    activeSpaceId,
     recommendationId,
     requestedDishIndex,
     recommendationQuery,
@@ -272,9 +273,13 @@ export default function CookingScreen() {
         extractRecipeStepTimerSeconds(dish.steps[cookingStepIndex] ?? ""))
       : null;
   const timerInput: StartCookingTimerInput | null =
-    cookingStepIndex !== null && stepTimerSeconds && sessionUserId
+    cookingStepIndex !== null &&
+    stepTimerSeconds &&
+    sessionUserId &&
+    activeSpaceId
       ? {
           ownerKey: sessionUserId,
+          spaceId: activeSpaceId,
           recommendationId,
           dishIndex: requestedDishIndex,
           stepIndex: cookingStepIndex,

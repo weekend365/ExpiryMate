@@ -38,6 +38,7 @@ import {
 
 const input: StartCookingTimerInput = {
   ownerKey: "user-1",
+  spaceId: "space-a",
   recommendationId: "rec-1",
   dishIndex: 0,
   stepIndex: 1,
@@ -58,10 +59,26 @@ describe("persisted cooking timer", () => {
     const timer = await startCookingTimer(input, 1_000);
 
     expect(timer.endsAt).toBe(121_000);
+    expect(timer.spaceId).toBe("space-a");
     expect(timer.notificationsAllowed).toBe(true);
     expect(getCookingTimerRemainingSeconds(timer, 31_000)).toBe(90);
     await expect(loadCookingTimer("user-1")).resolves.toEqual(timer);
     await expect(loadCookingTimer("user-2")).resolves.toBeNull();
+  });
+
+  it("removes and cancels a legacy timer that has no space context", async () => {
+    mocks.storage.set(
+      "expirymate:cooking-timer:v1",
+      JSON.stringify({
+        ...input,
+        version: 1,
+        notificationId: "legacy-notification",
+      }),
+    );
+
+    await expect(loadCookingTimer("user-1")).resolves.toBeNull();
+    expect(mocks.cancelNotification).toHaveBeenCalledWith("legacy-notification");
+    expect(mocks.storage.has("expirymate:cooking-timer:v1")).toBe(false);
   });
 
   it("pauses by canceling the notification and resumes from the remainder", async () => {
@@ -84,7 +101,11 @@ describe("persisted cooking timer", () => {
       notificationId: "notification-2",
     });
     expect(mocks.schedule).toHaveBeenLastCalledWith(
-      expect.objectContaining({ seconds: 90, stepIndex: 1 }),
+      expect.objectContaining({
+        seconds: 90,
+        spaceId: "space-a",
+        stepIndex: 1,
+      }),
     );
   });
 

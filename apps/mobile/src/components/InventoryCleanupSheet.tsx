@@ -62,7 +62,7 @@ export function InventoryCleanupSheet({
       visible={item !== null}
       onClose={closeSheet}
       title={
-        step === "partial" ? "얼마나 썼어요?" : "어떻게 정리할까요?"
+        step === "partial" ? "얼마나 썼어요?" : "얼마나 사용했나요?"
       }
       description={
         item
@@ -91,7 +91,7 @@ export function InventoryCleanupSheet({
               fullWidth
               testID="inventory-cleanup-partial-confirm-button"
             >
-              {consumesAll ? "전부 빼 둘게요" : "이만큼 빼 둘게요"}
+              {consumesAll ? "전부 사용했어요" : "이만큼 사용했어요"}
             </Button>
           </View>
         ) : undefined
@@ -117,8 +117,8 @@ export function InventoryCleanupSheet({
           <Pressable
             onPress={() => item && onConsumeAll(item)}
             accessibilityRole="button"
-            accessibilityLabel="모두 정리"
-            accessibilityHint="남은 양을 전부 보관함에서 빼 둬요."
+            accessibilityLabel="전부 사용"
+            accessibilityHint="남은 양을 전부 사용한 것으로 기록해요."
             testID="inventory-cleanup-all-button"
             style={({ pressed }) => [
               styles.option,
@@ -133,9 +133,9 @@ export function InventoryCleanupSheet({
               />
             </View>
             <View style={styles.optionCopy}>
-              <AppText style={styles.optionTitle}>모두 정리</AppText>
+              <AppText style={styles.optionTitle}>전부 사용</AppText>
               <AppText style={styles.optionDescription}>
-                남은 걸 전부 빼 둘게요
+                남은 양을 보관함에서 빼요
               </AppText>
             </View>
           </Pressable>
@@ -143,7 +143,7 @@ export function InventoryCleanupSheet({
             <Pressable
               onPress={() => setStep("partial")}
               accessibilityRole="button"
-              accessibilityLabel="부분 정리"
+              accessibilityLabel="일부 사용"
               accessibilityHint="쓴 만큼만 빼고 나머지는 그대로 둬요."
               testID="inventory-cleanup-partial-button"
               style={({ pressed }) => [
@@ -159,7 +159,7 @@ export function InventoryCleanupSheet({
                 />
               </View>
               <View style={styles.optionCopy}>
-                <AppText style={styles.optionTitle}>부분 정리</AppText>
+                <AppText style={styles.optionTitle}>일부 사용</AppText>
                 <AppText style={styles.optionDescription}>
                   쓴 만큼만 빼 둘게요
                 </AppText>

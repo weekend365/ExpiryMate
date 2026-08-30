@@ -1,4 +1,5 @@
 import { Redirect, useRouter, useSegments } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, type ReactNode } from "react";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { appBrand } from "@expirymate/shared";
@@ -7,6 +8,8 @@ import { Mascot } from "../../components/Mascot";
 import { Button } from "../../components/Button";
 import { colors, spacing, typography } from "../../shared/theme";
 import { useAppStore } from "../../store/app-store";
+import { subscribeToAuthSessionCleared } from "../../services/api";
+import { handleAuthSessionCleared } from "./session-boundary";
 import { useAuth } from "./use-auth";
 import { resolveRegisteredLandingHref } from "./auth-routing";
 
@@ -29,6 +32,7 @@ const EMAIL_VERIFY_AUTH_SCREENS = new Set([
 export function AuthRedirectGate() {
   const router = useRouter();
   const segments = useSegments();
+  const queryClient = useQueryClient();
   const hasHydrated = useAppStore((state) => state.hasHydrated);
   const hasCompletedOnboarding = useAppStore(
     (state) => state.hasCompletedOnboarding,
@@ -40,6 +44,14 @@ export function AuthRedirectGate() {
   const rootSegment = segments[0];
   const isPublicRoute =
     !rootSegment || PUBLIC_ROOT_SEGMENTS.has(String(rootSegment));
+
+  useEffect(
+    () =>
+      subscribeToAuthSessionCleared(() => {
+        handleAuthSessionCleared(queryClient);
+      }),
+    [queryClient],
+  );
 
   useEffect(() => {
     if (

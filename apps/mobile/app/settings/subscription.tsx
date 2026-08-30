@@ -30,6 +30,10 @@ import { Button } from "../../src/components/Button";
 import { ListRow } from "../../src/components/ListRow";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
+import { IapUnavailableState } from "../../src/features/monetization/IapUnavailableState";
+import {
+  isIapRuntimeAvailable,
+} from "../../src/features/monetization/iap-runtime";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   formatSubscriptionExpiry,
@@ -60,6 +64,14 @@ type StorePlan = {
 };
 
 export default function SubscriptionSettingsScreen() {
+  if (!isIapRuntimeAvailable()) {
+    return <IapUnavailableState feature="장고 플러스 구독" />;
+  }
+
+  return <SubscriptionStoreScreen />;
+}
+
+function SubscriptionStoreScreen() {
   const { shouldStack } = useResponsiveLayout();
   const subscription = useSubscriptionEntitlement();
   const monetization = useMonetization();

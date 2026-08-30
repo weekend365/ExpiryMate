@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
+  platform: {
+    Platform: {
+      OS: "ios",
+    },
+  },
   imagePicker: {
     UIImagePickerPreferredAssetRepresentationMode: {
       Compatible: "compatible",
@@ -13,11 +18,13 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("expo-image-picker", () => mocks.imagePicker);
+vi.mock("react-native", () => mocks.platform);
 
 describe("pickInventoryPhoto", () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
+    mocks.platform.Platform.OS = "ios";
   });
 
   it("asks iOS for a compatible representation when choosing from the library", async () => {
@@ -51,6 +58,24 @@ describe("pickInventoryPhoto", () => {
         preferredAssetRepresentationMode: "compatible",
       }),
     );
+  });
+
+  it("opens Android Photo Picker without requesting broad media permission", async () => {
+    mocks.platform.Platform.OS = "android";
+    mocks.imagePicker.launchImageLibraryAsync.mockResolvedValue({
+      canceled: true,
+      assets: [],
+    });
+
+    const { pickInventoryPhoto } = await import("./pick-inventory-photo");
+
+    await expect(pickInventoryPhoto("library")).resolves.toEqual({
+      status: "cancelled",
+    });
+    expect(
+      mocks.imagePicker.requestMediaLibraryPermissionsAsync,
+    ).not.toHaveBeenCalled();
+    expect(mocks.imagePicker.launchImageLibraryAsync).toHaveBeenCalledOnce();
   });
 
   it("returns a recoverable state when permission is denied", async () => {

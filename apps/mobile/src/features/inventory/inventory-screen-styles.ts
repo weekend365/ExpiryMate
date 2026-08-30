@@ -7,27 +7,17 @@ import {
   typography,
 } from "../../shared/theme";
 
-export const inventoryHeroToolbarFills = {
-  danger: colors.dangerSoft,
-  warning: colors.warningSoft,
-  success: colors.successSoft,
-  neutral: colors.mutedSurface,
-} as const;
-
 export const inventoryScreenStyles = StyleSheet.create({
   filterToolbar: {
-    gap: spacing.sm,
-    padding: spacing.sm,
+    gap: spacing.xs,
+    padding: spacing.xs,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceTranslucent,
   },
   heroBubble: {
     gap: spacing.sm,
-  },
-  filterCluster: {
-    gap: spacing.xs,
   },
   searchToolbar: {
     minHeight: touchTarget.min,
@@ -54,88 +44,60 @@ export const inventoryScreenStyles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  filterPairRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
+  moreMenuButtonActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
   },
-  filterPairRowDense: {
-    flexDirection: "column",
-    alignItems: "stretch",
-  },
-  filterControls: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xs,
-  },
-  filterControlsDense: {
-    flexDirection: "column",
-    alignItems: "stretch",
-    flexGrow: 0,
-  },
-  expiryTrafficRow: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.xxs, // 4px between mini lamps in the cluster
-    paddingHorizontal: spacing.xs,
-    borderRadius: radius.lg,
+  activeFilterDot: {
+    position: "absolute",
+    top: spacing.xs,
+    right: spacing.xs,
+    width: spacing.xs,
+    height: spacing.xs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    borderColor: colors.surface,
   },
-  expiryTrafficLamp: {
-    flex: 1,
-    minWidth: 0,
+  statusChipRow: {
     minHeight: touchTarget.min,
+    alignItems: "center",
+    gap: spacing.xs,
+    paddingRight: spacing.xs,
+  },
+  statusChip: {
+    minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.xxs,
-    paddingVertical: spacing.xxs,
-    borderRadius: radius.md,
-  },
-  locationFilterTile: {
-    flexGrow: 0,
-    flexShrink: 0,
-    // 128: default "모든 위치" width; stays put when a location is selected.
-    width: spacing.xxxl * 2,
-    minHeight: touchTarget.min,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingLeft: spacing.sm,
-    paddingRight: spacing.xs,
-    borderRadius: radius.lg,
+    gap: spacing.xxs,
+    borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  locationFilterTileDense: {
-    width: "100%",
-    flexGrow: 1,
-    flexShrink: 1,
-  },
-  locationFilterTileActive: {
+  statusChipSelected: {
     borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
   },
-  locationFilterMain: {
-    flex: 1,
-    minWidth: 0,
+  statusChipLabelSelected: {
+    color: colors.primary,
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
+  statusChipDot: {
+    width: spacing.xs,
+    height: spacing.xs,
+    borderRadius: radius.pill,
+  },
+  clearFiltersChip: {
     minHeight: touchTarget.min,
+    paddingHorizontal: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.xs,
-  },
-  locationFilterTitle: {
-    flex: 1,
-    minWidth: 0,
-  },
-  filterControlPressed: {
-    opacity: 0.82,
+    justifyContent: "center",
+    gap: spacing.xxs,
+    borderRadius: radius.pill,
   },
   locationOptionGrid: {
     gap: spacing.xs,
@@ -315,10 +277,16 @@ export const inventoryScreenStyles = StyleSheet.create({
   listFlex: {
     flex: 1,
   },
+  pinnedHeader: {
+    gap: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+  },
   listContent: {
     flexGrow: 1,
     paddingHorizontal: spacing.sm,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xs,
     paddingBottom: spacing.xxxl + spacing.sm,
     gap: spacing.sm,
   },

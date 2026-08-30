@@ -288,6 +288,9 @@ describe("NotificationsService", () => {
             id: "push-token-1",
             token: "ExpoPushToken[device-token]",
           },
+          inventoryItem: {
+            spaceId: "space-a",
+          },
         },
       ]);
     prisma.pushNotificationDelivery.updateMany.mockResolvedValue({ count: 1 });
@@ -302,14 +305,17 @@ describe("NotificationsService", () => {
 
     expect(stats.stalePendingRetried).toBe(1);
     expect(stats.notificationsSent).toBe(1);
-    expect(expoPush.send).toHaveBeenCalledWith(
-      expect.objectContaining({
-        to: "ExpoPushToken[device-token]",
-        data: expect.objectContaining({
-          inventoryItemId: "item-1",
-        }),
-      }),
-    );
+    expect(expoPush.send).toHaveBeenCalledWith({
+      to: "ExpoPushToken[device-token]",
+      title: "1일 뒤 유통기한이 끝나요",
+      body: "계란의 유통기한이 1일 남았어요.",
+      data: {
+        type: "expiry_reminder",
+        inventoryItemId: "item-1",
+        daysBefore: 1,
+        spaceId: "space-a",
+      },
+    });
   });
 
   it("marks sent deliveries failed when Expo receipts report DeviceNotRegistered", async () => {

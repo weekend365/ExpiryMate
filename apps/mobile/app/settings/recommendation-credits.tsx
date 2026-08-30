@@ -7,6 +7,10 @@ import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { SettingsGroup } from "../../src/components/SettingsGroup";
 import { SettingsScreen } from "../../src/components/SettingsScreen";
+import { IapUnavailableState } from "../../src/features/monetization/IapUnavailableState";
+import {
+  isIapRuntimeAvailable,
+} from "../../src/features/monetization/iap-runtime";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   trackMonetizationEvent,
@@ -16,6 +20,14 @@ import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 
 export default function RecommendationCreditsScreen() {
+  if (!isIapRuntimeAvailable()) {
+    return <IapUnavailableState feature="추천권 충전" />;
+  }
+
+  return <RecommendationCreditsStoreScreen />;
+}
+
+function RecommendationCreditsStoreScreen() {
   const { shouldStack } = useResponsiveLayout();
   const monetization = useMonetization();
   const configuredProducts = useMemo(

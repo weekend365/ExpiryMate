@@ -12,4 +12,15 @@ describe("Android adaptive-window app configuration", () => {
   it("does not request a global portrait lock", () => {
     expect(appConfig.expo.orientation).toBe("default");
   });
+
+  it("uses the system Photo Picker without broad media permissions", () => {
+    expect(appConfig.expo.android.permissions).toEqual(["CAMERA"]);
+    expect(appConfig.expo.android.blockedPermissions).toEqual(
+      expect.arrayContaining([
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+      ]),
+    );
+  });
 });

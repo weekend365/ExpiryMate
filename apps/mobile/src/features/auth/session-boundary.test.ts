@@ -78,6 +78,32 @@ describe("session boundary cleanup", () => {
     expect(mocks.clearPersistedQueryCache).toHaveBeenCalledOnce();
   });
 
+  it("seeds a signed-out auth result after a terminal session failure", async () => {
+    const {
+      handleAuthSessionCleared,
+      sessionQueryKeys,
+      withSessionUser,
+    } = await import("./session-boundary");
+    const queryClient = new QueryClient();
+    queryClient.setQueryData(sessionQueryKeys.auth, {
+      id: "user-a",
+      accountType: "registered",
+    });
+    queryClient.setQueryData(
+      withSessionUser(sessionQueryKeys.inventory, "user-a"),
+      [{ id: "item-a" }],
+    );
+
+    handleAuthSessionCleared(queryClient);
+
+    expect(queryClient.getQueryData(sessionQueryKeys.auth)).toBeNull();
+    expect(
+      queryClient.getQueryData(
+        withSessionUser(sessionQueryKeys.inventory, "user-a"),
+      ),
+    ).toBeUndefined();
+  });
+
   it("scopes query keys by session user id", async () => {
     const { withSessionUser, sessionQueryKeys } = await import(
       "./session-boundary"

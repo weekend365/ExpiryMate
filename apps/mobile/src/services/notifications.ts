@@ -14,6 +14,7 @@ export type NotificationType =
 
 export type LocalNotificationData = {
   type: NotificationType | string;
+  spaceId?: string;
   recommendationId?: string;
   inventoryItemId?: string;
   dishIndex?: number;
@@ -114,6 +115,7 @@ export const scheduleMockExpiryReminder = scheduleLocalNotification;
 export async function scheduleCookingTimerNotification(input: {
   seconds: number;
   dishTitle: string;
+  spaceId: string;
   recommendationId: string;
   dishIndex: number;
   stepIndex: number;
@@ -135,6 +137,7 @@ export async function scheduleCookingTimerNotification(input: {
       sound: "default",
       data: {
         type: NOTIFICATION_TYPES.cookingTimer,
+        spaceId: input.spaceId,
         recommendationId: input.recommendationId,
         dishIndex: input.dishIndex,
         stepIndex: input.stepIndex,

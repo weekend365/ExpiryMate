@@ -1,252 +1,209 @@
-import { ListChecks, MapPin, RefreshCw, Search, X } from "lucide-react-native";
-import type { ReactNode } from "react";
-import { Pressable, View } from "react-native";
+import { Check, SlidersHorizontal, Search, X } from "lucide-react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
 import { colors, spacing } from "../../shared/theme";
 import type { InventoryFacetCounts, InventoryViewFilter } from "./filters";
-import {
-  inventoryHeroToolbarFills,
-  inventoryScreenStyles as styles,
-} from "./inventory-screen-styles";
-import { ExpiryTrafficLamp } from "./inventory-urgency-section";
+import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
 
 export function InventoryFilterToolbar({
-  shouldStackDense,
-  heroTone,
-  showHeroFill,
-  heroBubble,
   searchQuery,
   onChangeSearchQuery,
   hasSearchQuery,
-  onEnterSelectionMode,
   facetCounts,
   filter,
-  onToggleExpiryFilter,
+  onSelectExpiryFilter,
   hasLocationFilter,
-  selectedLocationLabel,
-  onOpenLocationFilter,
+  onOpenTools,
   hasActiveFilters,
   onClearFilters,
 }: {
-  shouldStackDense: boolean;
-  heroTone: keyof typeof inventoryHeroToolbarFills;
-  showHeroFill: boolean;
-  heroBubble: ReactNode;
   searchQuery: string;
   onChangeSearchQuery: (value: string) => void;
   hasSearchQuery: boolean;
-  onEnterSelectionMode: () => void;
   facetCounts: InventoryFacetCounts;
   filter: InventoryViewFilter;
-  onToggleExpiryFilter: (next: Exclude<InventoryViewFilter, "all">) => void;
+  onSelectExpiryFilter: (next: InventoryViewFilter) => void;
   hasLocationFilter: boolean;
-  selectedLocationLabel: string;
-  onOpenLocationFilter: () => void;
+  onOpenTools: () => void;
   hasActiveFilters: boolean;
   onClearFilters: () => void;
 }) {
   return (
-    <View
-      style={[
-        styles.filterToolbar,
-        showHeroFill && {
-          backgroundColor: inventoryHeroToolbarFills[heroTone],
-        },
-      ]}
-    >
-      {heroBubble}
-      <View style={styles.filterCluster}>
-        <View style={styles.searchToolbar}>
-          <View style={styles.searchField}>
-            <Search
-              color={colors.mutedText}
-              size={spacing.sm + spacing.xxs}
-              strokeWidth={2.4}
-            />
-            <AppTextInput
-              value={searchQuery}
-              onChangeText={onChangeSearchQuery}
-              placeholder="재료 이름이나 브랜드 검색"
-              accessibilityLabel="재료 이름이나 브랜드 검색"
-              returnKeyType="search"
-              autoCorrect={false}
-              autoCapitalize="none"
-              style={styles.searchInput}
-            />
-            {hasSearchQuery ? (
-              <Pressable
-                onPress={() => onChangeSearchQuery("")}
-                accessibilityRole="button"
-                accessibilityLabel="검색어 지우기"
-                style={({ pressed }) => [
-                  styles.toolbarIconButton,
-                  pressed && styles.headerFilterButtonPressed,
-                ]}
-              >
-                <X
-                  color={colors.subtext}
-                  size={spacing.sm + spacing.xxs}
-                  strokeWidth={2.4}
-                />
-              </Pressable>
-            ) : null}
-          </View>
-          <Pressable
-            onPress={onEnterSelectionMode}
-            style={({ pressed }) => [
-              styles.moreMenuButton,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="여러 개 정리할게요"
-            accessibilityHint="정리할 재료를 골라 한 번에 빼 둘 수 있어요."
-          >
-            <ListChecks
-              color={colors.subtext}
-              size={spacing.md}
-              strokeWidth={2.4}
-            />
-          </Pressable>
-        </View>
-
-        <View
-          style={[
-            styles.filterPairRow,
-            shouldStackDense && styles.filterPairRowDense,
-          ]}
-        >
-          <View
-            style={[
-              styles.filterControls,
-              shouldStackDense && styles.filterControlsDense,
-            ]}
-          >
-            <View
-              style={styles.expiryTrafficRow}
-              testID="inventory-expiry-traffic"
-            >
-              <ExpiryTrafficLamp
-                label="만료"
-                count={facetCounts.status.expired}
-                tone="danger"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.expired > 0
-                    : filter === "expired"
-                }
-                selected={filter === "expired"}
-                onPress={() => onToggleExpiryFilter("expired")}
-                testID="inventory-expiry-filter-expired"
-                accessibilityLabel={`만료 ${facetCounts.status.expired}건`}
-                accessibilityHint={
-                  filter === "expired"
-                    ? "다시 누르면 전체 보관함을 보여 드려요."
-                    : "기한이 지난 재료만 보여 드릴게요."
-                }
-              />
-              <ExpiryTrafficLamp
-                label="곧"
-                count={facetCounts.status.within7}
-                tone="warning"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.within7 > 0
-                    : filter === "within7"
-                }
-                selected={filter === "within7"}
-                onPress={() => onToggleExpiryFilter("within7")}
-                testID="inventory-expiry-filter-within7"
-                accessibilityLabel={`곧 ${facetCounts.status.within7}건`}
-                accessibilityHint={
-                  filter === "within7"
-                    ? "다시 누르면 전체 보관함을 보여 드려요."
-                    : "7일 안에 손볼 재료만 보여 드릴게요."
-                }
-              />
-              <ExpiryTrafficLamp
-                label="여유"
-                count={facetCounts.status.safe}
-                tone="success"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.safe > 0
-                    : filter === "safe"
-                }
-                selected={filter === "safe"}
-                onPress={() => onToggleExpiryFilter("safe")}
-                testID="inventory-expiry-filter-safe"
-                accessibilityLabel={`여유 ${facetCounts.status.safe}건`}
-                accessibilityHint={
-                  filter === "safe"
-                    ? "다시 누르면 전체 보관함을 보여 드려요."
-                    : "아직 여유 있는 재료만 보여 드릴게요."
-                }
-              />
-            </View>
-
-            <View
-              style={[
-                styles.locationFilterTile,
-                shouldStackDense && styles.locationFilterTileDense,
-                hasLocationFilter && styles.locationFilterTileActive,
+    <View style={styles.filterToolbar}>
+      <View style={styles.searchToolbar}>
+        <View style={styles.searchField}>
+          <Search
+            color={colors.mutedText}
+            size={spacing.sm + spacing.xxs}
+            strokeWidth={2.4}
+          />
+          <AppTextInput
+            value={searchQuery}
+            onChangeText={onChangeSearchQuery}
+            placeholder="재료 이름이나 브랜드 검색"
+            accessibilityLabel="재료 이름이나 브랜드 검색"
+            returnKeyType="search"
+            autoCorrect={false}
+            autoCapitalize="none"
+            style={styles.searchInput}
+          />
+          {hasSearchQuery ? (
+            <Pressable
+              onPress={() => onChangeSearchQuery("")}
+              accessibilityRole="button"
+              accessibilityLabel="검색어 지우기"
+              style={({ pressed }) => [
+                styles.toolbarIconButton,
+                pressed && styles.headerFilterButtonPressed,
               ]}
             >
-              <Pressable
-                onPress={onOpenLocationFilter}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  hasLocationFilter
-                    ? `${selectedLocationLabel} 위치 필터, 바꿀게요`
-                    : "위치별로 볼게요"
-                }
-                accessibilityHint="냉장고·냉동실처럼 위치만 골라 볼 수 있어요."
-                style={({ pressed }) => [
-                  styles.locationFilterMain,
-                  pressed && styles.filterControlPressed,
-                ]}
-              >
-                <MapPin
-                  color={hasLocationFilter ? colors.primary : colors.subtext}
-                  size={spacing.sm}
-                  strokeWidth={2.4}
-                />
-                <AppText
-                  variant="bodySmall"
-                  tone={hasLocationFilter ? "primary" : "default"}
-                  numberOfLines={shouldStackDense ? undefined : 1}
-                  style={styles.locationFilterTitle}
-                >
-                  {selectedLocationLabel}
-                </AppText>
-              </Pressable>
-            </View>
-          </View>
+              <X
+                color={colors.subtext}
+                size={spacing.sm + spacing.xxs}
+                strokeWidth={2.4}
+              />
+            </Pressable>
+          ) : null}
+        </View>
+        <Pressable
+          onPress={onOpenTools}
+          style={({ pressed }) => [
+            styles.moreMenuButton,
+            hasLocationFilter && styles.moreMenuButtonActive,
+            pressed && styles.headerFilterButtonPressed,
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel={
+            hasLocationFilter
+              ? "위치 필터와 정리 메뉴, 위치 필터 사용 중"
+              : "위치 필터와 정리 메뉴"
+          }
+          accessibilityHint="보관 위치를 고르거나 여러 재료를 한 번에 정리할 수 있어요."
+          testID="inventory-tools-button"
+        >
+          <SlidersHorizontal
+            color={hasLocationFilter ? colors.primary : colors.subtext}
+            size={spacing.md}
+            strokeWidth={2.4}
+          />
+          {hasLocationFilter ? <View style={styles.activeFilterDot} /> : null}
+        </Pressable>
+      </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.statusChipRow}
+        testID="inventory-expiry-filters"
+      >
+        <InventoryStatusChip
+          label="전체"
+          count={facetCounts.status.all}
+          tone="neutral"
+          selected={filter === "all"}
+          onPress={() => onSelectExpiryFilter("all")}
+          testID="inventory-expiry-filter-all"
+        />
+        <InventoryStatusChip
+          label="만료"
+          count={facetCounts.status.expired}
+          tone="danger"
+          selected={filter === "expired"}
+          onPress={() => onSelectExpiryFilter("expired")}
+          testID="inventory-expiry-filter-expired"
+        />
+        <InventoryStatusChip
+          label="7일 이내"
+          count={facetCounts.status.within7}
+          tone="warning"
+          selected={filter === "within7"}
+          onPress={() => onSelectExpiryFilter("within7")}
+          testID="inventory-expiry-filter-within7"
+        />
+        <InventoryStatusChip
+          label="여유"
+          count={facetCounts.status.safe}
+          tone="success"
+          selected={filter === "safe"}
+          onPress={() => onSelectExpiryFilter("safe")}
+          testID="inventory-expiry-filter-safe"
+        />
+        {hasActiveFilters ? (
           <Pressable
             onPress={onClearFilters}
-            disabled={!hasActiveFilters}
-            style={({ pressed }) => [
-              styles.moreMenuButton,
-              pressed && hasActiveFilters && styles.headerFilterButtonPressed,
-            ]}
             accessibilityRole="button"
-            accessibilityState={{ disabled: !hasActiveFilters }}
-            accessibilityLabel={
-              hasActiveFilters
-                ? "골라둔 조건을 풀어 볼게요"
-                : "이미 전체 보관함을 보고 있어요"
-            }
-            accessibilityHint="검색어와 유통기한·위치 조건을 모두 풀어요."
+            accessibilityLabel="검색과 필터를 모두 풀고 전체 보기"
+            style={({ pressed }) => [
+              styles.clearFiltersChip,
+              pressed && styles.headerFilterButtonPressed,
+            ]}
           >
-            <RefreshCw
-              color={hasActiveFilters ? colors.subtext : colors.mutedText}
-              size={spacing.md}
-              strokeWidth={2.4}
-            />
+            <X color={colors.subtext} size={spacing.sm} strokeWidth={2.4} />
+            <AppText variant="bodySmall" tone="subtext">
+              전체 보기
+            </AppText>
           </Pressable>
-        </View>
-      </View>
+        ) : null}
+      </ScrollView>
     </View>
+  );
+}
+
+function InventoryStatusChip({
+  label,
+  count,
+  tone,
+  selected,
+  onPress,
+  testID,
+}: {
+  label: string;
+  count: number;
+  tone: "neutral" | "danger" | "warning" | "success";
+  selected: boolean;
+  onPress: () => void;
+  testID: string;
+}) {
+  const dotColor = {
+    neutral: colors.subtext,
+    danger: colors.citrusGrapefruit,
+    warning: colors.citrusLemon,
+    success: colors.citrusLime,
+  }[tone];
+
+  return (
+    <Pressable
+      onPress={onPress}
+      testID={testID}
+      accessibilityRole="button"
+      accessibilityLabel={`${label} ${count}개`}
+      accessibilityState={{ selected }}
+      accessibilityHint={`${label} 재료 목록을 보여 드릴게요.`}
+      style={({ pressed }) => [
+        styles.statusChip,
+        selected && styles.statusChipSelected,
+        pressed && styles.headerFilterButtonPressed,
+      ]}
+    >
+      {selected ? (
+        <Check color={colors.primary} size={spacing.sm} strokeWidth={2.8} />
+      ) : (
+        <View style={[styles.statusChipDot, { backgroundColor: dotColor }]} />
+      )}
+      <AppText
+        variant="bodySmall"
+        style={selected ? styles.statusChipLabelSelected : undefined}
+      >
+        {label}
+      </AppText>
+      <AppText
+        variant="bodySmallStrong"
+        tone={selected ? "primary" : "subtext"}
+      >
+        {count}
+      </AppText>
+    </Pressable>
   );
 }
 

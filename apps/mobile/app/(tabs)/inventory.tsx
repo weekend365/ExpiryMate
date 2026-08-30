@@ -15,10 +15,7 @@ import {
 } from "react-native";
 import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
 import { Button } from "../../src/components/Button";
-import {
-  HomeStatsSkeleton,
-  InventoryListSkeleton,
-} from "../../src/components/ContentSkeleton";
+import { InventoryListSkeleton } from "../../src/components/ContentSkeleton";
 import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
@@ -49,10 +46,11 @@ import {
 } from "../../src/features/inventory/inventory-list-header";
 import {
   InventoryEntryMethodSheet,
+  InventoryItemActionsSheet,
+  InventoryListToolsSheet,
   InventoryLocationFilterSheet,
 } from "../../src/features/inventory/inventory-list-sheets";
 import {
-  inventoryHeroToolbarFills,
   inventoryScreenStyles as styles,
 } from "../../src/features/inventory/inventory-screen-styles";
 import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
@@ -73,7 +71,7 @@ import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
 export default function InventoryScreen() {
-  const { shouldStack, shouldStackDense } = useResponsiveLayout();
+  const { shouldStack } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
@@ -89,6 +87,7 @@ export default function InventoryScreen() {
   const [location, setLocation] = useState<string | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
+  const [toolsSheetVisible, setToolsSheetVisible] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -96,8 +95,8 @@ export default function InventoryScreen() {
     InventoryUrgencySection[]
   >([]);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
+  const [actionItem, setActionItem] = useState<InventoryItem | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
@@ -121,12 +120,6 @@ export default function InventoryScreen() {
     router.setParams({
       filter: nextFilter === "all" ? undefined : nextFilter,
     });
-  };
-
-  const toggleExpiryFilter = (
-    nextFilter: Exclude<InventoryViewFilter, "all">,
-  ) => {
-    applyFilter(filter === nextFilter ? "all" : nextFilter);
   };
 
   const hasLoadedInventory = data !== undefined;
@@ -184,6 +177,11 @@ export default function InventoryScreen() {
     setFilterSheetVisible(true);
   };
 
+  const openLocationFilterFromTools = () => {
+    setToolsSheetVisible(false);
+    openLocationFilterSheet();
+  };
+
   // Only treat as empty after a successful load — never during loading/error.
   const isEmptyInventory =
     hasLoadedInventory && !isError && trackedItems.length === 0;
@@ -213,29 +211,30 @@ export default function InventoryScreen() {
       trackedItems.length,
     ],
   );
-  const inventoryHeroNotices = useMemo(
-    () =>
-      getInventoryHeroNotices({
-        hero: heroNotice,
-        successMessage,
-      }),
-    [heroNotice, successMessage],
+  const priorityFilter =
+    heroNotice.show && heroNotice.tone === "danger"
+      ? "expired"
+      : heroNotice.show && heroNotice.tone === "warning"
+        ? "within7"
+        : null;
+  const inventoryHeroNotices = getInventoryHeroNotices({
+    hero: heroNotice,
+    successMessage,
+  }).map((notice) =>
+    notice.id === "status" && priorityFilter
+      ? {
+          ...notice,
+          onPress: () => applyFilter(priorityFilter),
+          accessibilityHint: "해당 유통기한 상태의 재료만 보여 드릴게요.",
+        }
+      : notice,
   );
-  const activeHeroSlide =
-    inventoryHeroNotices[heroSlideIndex] ?? inventoryHeroNotices[0] ?? null;
-  const inventoryHeroTone =
-    activeHeroSlide?.id === "success"
-      ? "success"
-      : heroNotice.show
-        ? heroNotice.tone
-        : "neutral";
   const inventoryHeroBubble =
     inventoryHeroNotices.length > 0 ? (
       <JangoHeroNoticeCarousel
         notices={inventoryHeroNotices}
         density="compact"
         bubbleStyle={styles.heroBubble}
-        onIndexChange={setHeroSlideIndex}
       />
     ) : null;
 
@@ -300,6 +299,7 @@ export default function InventoryScreen() {
 
   const enterSelectionMode = (initialId?: string) => {
     setFilterSheetVisible(false);
+    setToolsSheetVisible(false);
     setIsSelectionMode(true);
     setSuccessMessage(null);
     setActionErrorMessage(null);
@@ -345,7 +345,7 @@ export default function InventoryScreen() {
       return;
     }
 
-    openCleanupSheet(item);
+    handleEditItem(item);
   };
 
   const handleEditItem = (item: InventoryItem) => {
@@ -353,6 +353,29 @@ export default function InventoryScreen() {
       pathname: "/inventory/[id]",
       params: { id: item.id },
     });
+  };
+
+  const handleUseFromActions = (item: InventoryItem) => {
+    setActionItem(null);
+    openCleanupSheet(item);
+  };
+
+  const handleEditFromActions = (item: InventoryItem) => {
+    setActionItem(null);
+    handleEditItem(item);
+  };
+
+  const handleSelectFromActions = (item: InventoryItem) => {
+    setActionItem(null);
+    enterSelectionMode(item.id);
+  };
+
+  const handleDiscardFromActions = (item: InventoryItem) => {
+    setActionItem(null);
+    setSuccessMessage(null);
+    setActionErrorMessage(null);
+    deferredRemoval.clearError();
+    deferredRemoval.scheduleRemoval(item, "discard");
   };
 
   const handleCardLongPress = (id: string) => {
@@ -468,6 +491,32 @@ export default function InventoryScreen() {
           style={styles.fridgeSceneVeil}
           importantForAccessibility="no-hide-descendants"
         />
+        <View style={styles.pinnedHeader}>
+          <SpaceSwitcher />
+          {showListChrome && !isSelectionMode ? (
+            <InventoryFilterToolbar
+              searchQuery={searchQuery}
+              onChangeSearchQuery={setSearchQuery}
+              hasSearchQuery={hasSearchQuery}
+              facetCounts={facetCounts}
+              filter={filter}
+              onSelectExpiryFilter={applyFilter}
+              hasLocationFilter={hasLocationFilter}
+              onOpenTools={() => setToolsSheetVisible(true)}
+              hasActiveFilters={hasActiveFilters}
+              onClearFilters={clearListFilters}
+            />
+          ) : showListChrome && isSelectionMode ? (
+            <InventorySelectionBar
+              selectedCount={selectedIds.length}
+              visibleCount={visibleIds.length}
+              expiredVisibleCount={expiredVisibleIds.length}
+              onSelectAll={handleSelectAllVisible}
+              onSelectExpired={handleSelectExpiredOnly}
+              onCancel={cancelSelectionMode}
+            />
+          ) : null}
+        </View>
         <FlatList
           style={styles.listFlex}
           testID="inventory-list"
@@ -503,49 +552,7 @@ export default function InventoryScreen() {
           removeClippedSubviews
           ListHeaderComponent={
             <View style={styles.listHeader}>
-              <SpaceSwitcher />
-              {isLoading && !hasLoadedInventory ? (
-                <View
-                  style={[
-                    styles.filterToolbar,
-                    heroNotice.show && {
-                      backgroundColor:
-                        inventoryHeroToolbarFills[inventoryHeroTone],
-                    },
-                  ]}
-                >
-                  {inventoryHeroBubble}
-                  <HomeStatsSkeleton />
-                </View>
-              ) : showListChrome && !isSelectionMode ? (
-                <InventoryFilterToolbar
-                  shouldStackDense={shouldStackDense}
-                  heroTone={inventoryHeroTone}
-                  showHeroFill={heroNotice.show}
-                  heroBubble={inventoryHeroBubble}
-                  searchQuery={searchQuery}
-                  onChangeSearchQuery={setSearchQuery}
-                  hasSearchQuery={hasSearchQuery}
-                  onEnterSelectionMode={() => enterSelectionMode()}
-                  facetCounts={facetCounts}
-                  filter={filter}
-                  onToggleExpiryFilter={toggleExpiryFilter}
-                  hasLocationFilter={hasLocationFilter}
-                  selectedLocationLabel={selectedLocationLabel}
-                  onOpenLocationFilter={openLocationFilterSheet}
-                  hasActiveFilters={hasActiveFilters}
-                  onClearFilters={clearListFilters}
-                />
-              ) : showListChrome && isSelectionMode ? (
-                <InventorySelectionBar
-                  selectedCount={selectedIds.length}
-                  visibleCount={visibleIds.length}
-                  expiredVisibleCount={expiredVisibleIds.length}
-                  onSelectAll={handleSelectAllVisible}
-                  onSelectExpired={handleSelectExpiredOnly}
-                  onCancel={cancelSelectionMode}
-                />
-              ) : null}
+              {inventoryHeroBubble}
 
               {successMessage && !heroNotice.show ? (
                 <FeedbackBanner tone="success" title={successMessage} />
@@ -641,7 +648,8 @@ export default function InventoryScreen() {
                   onLongPress={(pressedItem) =>
                     handleCardLongPress(pressedItem.id)
                   }
-                  onEdit={handleEditItem}
+                  onQuickUse={openCleanupSheet}
+                  onOpenMore={setActionItem}
                 />
               ))}
             </UrgencySection>
@@ -654,6 +662,24 @@ export default function InventoryScreen() {
         onClose={() => setCleanupItem(null)}
         onConsumeAll={handleConsumeAll}
         onConsumePartial={handleConsumePartial}
+      />
+
+      <InventoryItemActionsSheet
+        item={actionItem}
+        onClose={() => setActionItem(null)}
+        onUse={handleUseFromActions}
+        onEdit={handleEditFromActions}
+        onSelect={handleSelectFromActions}
+        onDiscard={handleDiscardFromActions}
+      />
+
+      <InventoryListToolsSheet
+        visible={toolsSheetVisible}
+        onClose={() => setToolsSheetVisible(false)}
+        selectedLocationLabel={selectedLocationLabel}
+        hasLocationFilter={hasLocationFilter}
+        onOpenLocation={openLocationFilterFromTools}
+        onEnterSelectionMode={() => enterSelectionMode()}
       />
 
       <InventoryLocationFilterSheet

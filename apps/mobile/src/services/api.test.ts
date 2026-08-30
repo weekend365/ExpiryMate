@@ -143,6 +143,32 @@ describe("mobile API client core flow", () => {
     expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
   });
 
+  it("notifies the mounted session boundary after a terminal refresh failure", async () => {
+    stores.fetch
+      .mockResolvedValueOnce(
+        successResponse(createSession("access-stale", "refresh-invalid")),
+      )
+      .mockResolvedValueOnce(errorResponse(401, "만료된 세션입니다."))
+      .mockResolvedValueOnce(errorResponse(401, "폐기된 refresh token입니다."));
+    const {
+      getDashboardSummary,
+      login,
+      subscribeToAuthSessionCleared,
+    } = await import("./api");
+    const listener = vi.fn();
+    const unsubscribe = subscribeToAuthSessionCleared(listener);
+
+    await login({ email: "test@example.com", password: "password123" });
+    await expect(
+      getDashboardSummary("personal_user-1"),
+    ).rejects.toThrow(/로그인이 만료/);
+
+    expect(listener).toHaveBeenCalled();
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+    unsubscribe();
+  });
+
   it("refreshes the session and retries once when an authenticated request expires", async () => {
     stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
     stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");

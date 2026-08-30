@@ -28,57 +28,16 @@ export function getInventoryHeroNotice(input: {
     return { show: false };
   }
 
-  if (input.isInitialLoading) {
-    return {
-      show: true,
-      mood: "think",
-      tone: "neutral",
-      message: "보관함을 살펴보고 있어요.",
-    };
-  }
-
-  if (input.isInitialError) {
+  if (input.isInitialLoading || input.isInitialError) {
     return { show: false };
   }
 
-  if (input.totalCount === 0) {
+  if (
+    input.totalCount === 0 ||
+    input.visibleCount === 0 ||
+    input.statusFilter !== "all"
+  ) {
     return { show: false };
-  }
-
-  if (input.visibleCount === 0) {
-    return {
-      show: true,
-      mood: "idle",
-      tone: "neutral",
-      message: "이 조건에는 재료가 없어요. 조건을 풀어 볼까요?",
-    };
-  }
-
-  if (input.statusFilter === "expired") {
-    return {
-      show: true,
-      mood: "worry",
-      tone: "danger",
-      message: `만료된 재료 ${input.visibleCount}개를 보고 있어요.`,
-    };
-  }
-
-  if (input.statusFilter === "within7") {
-    return {
-      show: true,
-      mood: "speak",
-      tone: "warning",
-      message: `일주일 안에 손볼 재료 ${input.visibleCount}개를 보고 있어요.`,
-    };
-  }
-
-  if (input.statusFilter === "safe") {
-    return {
-      show: true,
-      mood: "happy",
-      tone: "success",
-      message: `여유 있는 재료 ${input.visibleCount}개를 보고 있어요.`,
-    };
   }
 
   if (input.expiredCount > 0) {
@@ -86,7 +45,8 @@ export function getInventoryHeroNotice(input: {
       show: true,
       mood: "worry",
       tone: "danger",
-      message: `기한이 지난 재료가 ${input.expiredCount}개 있어요. 위에서부터 손보면 좋아요.`,
+      message: `기한이 지난 재료 ${input.expiredCount}개부터 정리할까요?`,
+      supportingMessage: "눌러서 만료된 재료만 모아 볼 수 있어요.",
     };
   }
 
@@ -95,16 +55,12 @@ export function getInventoryHeroNotice(input: {
       show: true,
       mood: "speak",
       tone: "warning",
-      message: `일주일 안에 손볼 재료가 ${input.within7Count}개 있어요.`,
+      message: `7일 안에 손볼 재료 ${input.within7Count}개를 확인할까요?`,
+      supportingMessage: "눌러서 곧 만료되는 재료만 모아 볼 수 있어요.",
     };
   }
 
-  return {
-    show: true,
-    mood: "happy",
-    tone: "success",
-    message: "지금은 급한 재료가 없어요.",
-  };
+  return { show: false };
 }
 
 export function getInventoryHeroNotices(input: {

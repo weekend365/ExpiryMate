@@ -164,6 +164,7 @@ describe("mobile notification service", () => {
       {
         type: NOTIFICATION_TYPES.recipeReady,
         recommendationId: "rec-1",
+        spaceId: "space-a",
       },
     );
 
@@ -174,6 +175,7 @@ describe("mobile notification service", () => {
         data: {
           type: "recipe_ready",
           recommendationId: "rec-1",
+          spaceId: "space-a",
         },
       },
       trigger: null,
@@ -189,6 +191,7 @@ describe("mobile notification service", () => {
     const result = await scheduleCookingTimerNotification({
       seconds: 180,
       dishTitle: "양파볶음",
+      spaceId: "space-a",
       recommendationId: "rec-1",
       dishIndex: 1,
       stepIndex: 2,
@@ -206,6 +209,7 @@ describe("mobile notification service", () => {
         sound: "default",
         data: {
           type: "cooking_timer",
+          spaceId: "space-a",
           recommendationId: "rec-1",
           dishIndex: 1,
           stepIndex: 2,
@@ -228,6 +232,7 @@ describe("mobile notification service", () => {
       scheduleCookingTimerNotification({
         seconds: 60,
         dishTitle: "수프",
+        spaceId: "space-a",
         recommendationId: "rec-1",
         dishIndex: 0,
         stepIndex: 0,

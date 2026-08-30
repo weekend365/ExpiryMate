@@ -21,6 +21,16 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
     .catch(() => undefined);
 }
 
+/**
+ * Terminal API refresh failures happen outside React Query's auth query. Clear
+ * every user-scoped cache and seed an explicit signed-out auth result so the
+ * mounted redirect gate moves to login without waiting for an app restart.
+ */
+export function handleAuthSessionCleared(queryClient: QueryClient) {
+  clearUserScopedClientState(queryClient);
+  queryClient.setQueryData(sessionQueryKeys.auth, null);
+}
+
 /** Prefix-stable keys; append userId at the call site for session isolation. */
 export const sessionQueryKeys = {
   auth: ["auth", "me"] as const,
