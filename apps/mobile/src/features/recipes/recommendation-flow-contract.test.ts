@@ -50,6 +50,18 @@ describe("recommendation screen flow contract", () => {
     expect(screen).toContain("dishIndex: String(dishIndex)");
   });
 
+  it("keeps recipe rows compact while adding useful comparison context", () => {
+    expect(screen).toContain('const decisionReason = decisionSignals');
+    expect(screen).toContain('{dish.summary}');
+    expect(screen).toContain('variant="bodyStrong"');
+    expect(screen).toContain('numberOfLines={2}');
+    expect(screen).toContain('style={styles.recipeMetaRow}');
+    expect(screen).toContain('style={styles.recipeReason}');
+    expect(screen).not.toContain('styles.recipeCardAccent');
+    expect(screen).not.toContain('styles.recipeStrategyBadge');
+    expect(screen).not.toContain('styles.recipeSignalChip');
+  });
+
   it("hides the sticky footer for results and keeps regeneration secondary", () => {
     expect(screen).toContain(") : hasRecommendationResult ? null : (");
     expect(screen).toContain("{regenerateCtaLabel}");

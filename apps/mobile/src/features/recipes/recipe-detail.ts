@@ -23,7 +23,7 @@ export type RecipeDecisionSignals = {
 
 export type RecipeCardSignal = {
   label: string;
-  tone: "primary" | "success" | "neutral";
+  tone: "primary" | "success" | "warning" | "neutral";
 };
 
 export type RecipeDetailSelection = {
@@ -131,7 +131,7 @@ export function formatDishMeta(dish: RecipeRecommendationDish) {
 }
 
 export function formatCompactDishMeta(dish: RecipeRecommendationDish) {
-  return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${difficultyLabels[dish.difficulty]}`;
+  return `${dish.cookingTimeMinutes}분 · ${dish.servings}인분 · ${difficultyLabels[dish.difficulty]}`;
 }
 
 export function formatRecipeStrategyLabel(
@@ -207,7 +207,7 @@ export function getRecipeCardSignals(
   dish: RecipeRecommendationDish,
   inventorySnapshot: RecipeInventorySnapshotItem[],
 ): RecipeCardSignal[] {
-  const { expiring, ownedCount, missingCount, totalCount } =
+  const { expiring, ownedCount, missingCount } =
     getRecipeDecisionContext(dish, inventorySnapshot);
   const firstExpiring = expiring[0];
   const signals: RecipeCardSignal[] = [];
@@ -216,23 +216,36 @@ export function getRecipeCardSignals(
     const expiryLabel =
       formatIngredientDdayLabel(firstExpiring.daysUntilExpiry) ?? "임박";
     signals.push({
-      label: `${expiryLabel} ${firstExpiring.name} 먼저`,
-      tone: "primary",
+      label: `${expiryLabel} ${withObjectParticle(firstExpiring.name)} 먼저`,
+      tone: "warning",
     });
   } else if (missingCount > 0) {
-    signals.push({ label: "보유 재료 중심", tone: "primary" });
+    signals.push({ label: `보유 재료 ${ownedCount}개`, tone: "primary" });
+  } else {
+    signals.push({ label: `보유 재료 ${ownedCount}개`, tone: "primary" });
   }
 
   if (missingCount === 0) {
-    signals.push({ label: "✓ 추가 구매 없음", tone: "success" });
-  } else if (totalCount > 0) {
+    signals.push({ label: "추가 재료 없음", tone: "success" });
+  } else {
     signals.push({
-      label: `재료 ${ownedCount}/${totalCount}`,
+      label: `추가 재료 ${missingCount}개`,
       tone: "neutral",
     });
   }
 
   return signals.slice(0, 2);
+}
+
+function withObjectParticle(value: string) {
+  const lastCharacter = value.at(-1);
+  if (!lastCharacter) return value;
+
+  const syllableIndex = lastCharacter.charCodeAt(0) - 0xac00;
+  const isHangulSyllable = syllableIndex >= 0 && syllableIndex <= 0x2ba3;
+  const hasFinalConsonant = isHangulSyllable && syllableIndex % 28 !== 0;
+
+  return `${value}${hasFinalConsonant ? "을" : "를"}`;
 }
 
 function getRecipeDecisionContext(

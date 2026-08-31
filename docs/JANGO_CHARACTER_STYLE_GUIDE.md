@@ -189,7 +189,7 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 
 | 파일 | 용도 |
 | --- | --- |
-| `jango-idle.png` | 기본 · **풀바디 마스터** (splash·알림 실루엣 원본) |
+| `jango-idle.png` | 기본 · **풀바디 마스터** (알림 실루엣 원본) |
 | `jango-happy.png` | 기쁨 (idle 파츠 고정, 얼굴·포즈만) |
 | `jango-worry.png` | 걱정 |
 | `jango-cooking.png` | 요리 |
@@ -225,13 +225,15 @@ UI 리디자인 당시 초안은 [`archive/MOBILE_REDESIGN_PROMPTS.md`](./archiv
 | `assets/branding/icon.png` | `jango-icon-crop` | iOS/Android 앱 아이콘 (불투명 `#F1F3F5`) |
 | `assets/branding/adaptive-icon.png` | `jango-icon-crop` | Android adaptive foreground (투명) |
 | `assets/branding/monochrome-icon.png` | `adaptive-icon` 알파 | Android 13+ 테마 아이콘 (순백 단색·투명) |
-| `assets/branding/splash-icon.png` | `jango-idle` | Expo splash |
+| `assets/branding/splash-icon.png` | `icon.png` 라운드 파생 | Expo splash용 88pt 소형 앱 아이콘 |
 | `assets/branding/notification-icon-192.png` | `jango-idle` 실루엣 마스터 | 알림용 고해상 실루엣 |
 | `assets/branding/notification-icon.png` | 192→96 다운스케일 | Android 알림 아이콘 |
 | `ios/.../AppIcon.appiconset/` | icon 동기화 | native App Icon |
 | `ios/.../SplashScreenLogo.imageset/` | splash 동기화 | native splash |
 
 알림 아이콘은 `jango-idle` 전신 알파 바운드의 상단 70%에서 **요리사 모자와 냉장고 머리 실루엣만** 결정적으로 파생한다. 192px 마스터에서 96px 배포본을 만들며, 흰색과 완전 투명 픽셀만 사용한다. 전체 실루엣은 캔버스 높이의 74~82%, 너비의 60~70%를 채워 24dp에서도 식별 가능해야 한다. 전신·다리·앞치마를 축소해 넣거나 생성형 모델로 윤곽을 다시 그리지 않는다.
+
+초기 로드는 캐릭터가 설명하는 제품 상태가 아니므로 장고 말풍선을 사용하지 않는다. 네이티브 splash는 `#F1F3F5` 배경 중앙에 88pt 소형 앱 아이콘만 표시하고, 앱 내부에서 로드가 이어지면 홈 구조 스켈레톤으로 전환한다.
 
 Android 테마 아이콘은 승인된 `adaptive-icon.png`의 알파 채널을 그대로 복사한다. RGB는 순백으로 고정하고 OS가 배경화면과 테마에 맞춰 색을 입히도록 하며, 포즈·비율·안전 영역을 별도로 재해석하지 않는다.
 

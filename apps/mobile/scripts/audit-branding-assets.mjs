@@ -13,6 +13,7 @@ const sourcePath = path.join(
   "assets/characters/jango-icon-crop.png",
 );
 const iconPath = path.join(mobileDir, "assets/branding/icon.png");
+const splashPath = path.join(mobileDir, "assets/branding/splash-icon.png");
 const adaptivePath = path.join(
   mobileDir,
   "assets/branding/adaptive-icon.png",
@@ -155,12 +156,14 @@ function check(name, passed, detail) {
 
 const source = readPng(sourcePath);
 const icon = readPng(iconPath);
+const splash = readPng(splashPath);
 const adaptive = readPng(adaptivePath);
 const monochrome = readPng(monochromePath);
 const notificationMaster = readPng(notificationMasterPath);
 const notification = readPng(notificationPath);
 const sourceBounds = alphaBounds(source);
 const iconBounds = nonBackgroundBounds(icon);
+const splashBounds = alphaBounds(splash);
 const adaptiveBounds = alphaBounds(adaptive);
 const monochromeBounds = alphaBounds(monochrome);
 const notificationMasterBounds = alphaBounds(notificationMaster);
@@ -211,6 +214,16 @@ check(
     iconBounds.maxX <= expectedSize - 41 &&
     iconBounds.maxY <= expectedSize - 41,
   `bbox=${iconBounds.minX},${iconBounds.minY}..${iconBounds.maxX},${iconBounds.maxY}`,
+);
+check(
+  "compact splash app icon",
+  splash.width === expectedSize &&
+    splash.height === expectedSize &&
+    splash.alpha &&
+    cornerAlphas(splash).every((alpha) => alpha === 0) &&
+    (splashBounds.maxX - splashBounds.minX + 1) / expectedSize >= 0.98 &&
+    (splashBounds.maxY - splashBounds.minY + 1) / expectedSize >= 0.98,
+  `bbox=${splashBounds.minX},${splashBounds.minY}..${splashBounds.maxX},${splashBounds.maxY}`,
 );
 check(
   "adaptive icon safe zone",

@@ -87,7 +87,6 @@ import {
 import {
   EXPIRING_DAYS_THRESHOLD,
   formatCompactDishMeta,
-  formatRecipeStrategyLabel,
   getRecipeCardSignals,
   type RecipeDetailSelection,
 } from "../../src/features/recipes/recipe-detail";
@@ -1889,8 +1888,20 @@ function RecipeCard({
   embedded?: boolean;
   showDivider?: boolean;
 }) {
-  const { shouldStack, isRegular } = useResponsiveLayout();
+  const { isRegular } = useResponsiveLayout();
   const decisionSignals = getRecipeCardSignals(dish, inventorySnapshot);
+  const decisionReason = decisionSignals
+    .map((signal) => signal.label)
+    .join(" · ");
+  const decisionReasonTone =
+    decisionSignals[0]?.tone === "warning"
+      ? "warning"
+      : decisionSignals[0]?.tone === "success"
+        ? "success"
+        : decisionSignals[0]?.tone === "primary"
+          ? "primary"
+          : "subtext";
+  const compactMeta = formatCompactDishMeta(dish);
 
   return (
     <View
@@ -1901,16 +1912,10 @@ function RecipeCard({
         showDivider && styles.recipeCardDivider,
       ]}
     >
-      <View
-        style={[
-          styles.recipeCardAccent,
-          { backgroundColor: getRecipeStrategyAccentColor(dish.strategy) },
-        ]}
-      />
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
-        accessibilityLabel={`${dish.title} 레시피 상세 보기`}
+        accessibilityLabel={`${dish.title}, ${dish.summary}, ${compactMeta}, ${decisionReason}, 레시피 상세 보기`}
         accessibilityHint="사용할 재료와 조리 순서를 확인합니다."
         style={({ pressed }) => [
           styles.recipeCardMain,
@@ -1920,62 +1925,49 @@ function RecipeCard({
         <View style={styles.recipeCardContent}>
           <View
             style={[
-              styles.recipeCompactTitleRow,
-              shouldStack && styles.recipeCompactTitleRowStacked,
+              styles.recipeIntro,
+              onToggleFavorite && styles.recipeIntroWithFavorite,
             ]}
           >
-            <View style={styles.recipeStrategyBadge}>
-              <AppText
-                variant="captionStrong"
-                tone="primary"
-                scaleRole="chrome"
-                densityAware={false}
-              >
-                {formatRecipeStrategyLabel(dish.strategy)}
-              </AppText>
-            </View>
             <AppText
-              variant="subheading"
-              numberOfLines={shouldStack ? undefined : 1}
+              variant="bodyStrong"
+              numberOfLines={2}
               ellipsizeMode="tail"
               style={styles.recipeTitle}
             >
               {dish.title}
             </AppText>
+            <AppText
+              variant="caption"
+              tone="subtext"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {dish.summary}
+            </AppText>
+          </View>
+
+          <View style={styles.recipeMetaRow}>
+            <AppText
+              variant="caption"
+              tone="subtext"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.recipeMeta}
+            >
+              {compactMeta}
+            </AppText>
           </View>
 
           <AppText
             variant="caption"
-            tone="subtext"
-            numberOfLines={shouldStack ? undefined : 1}
+            tone={decisionReasonTone}
+            numberOfLines={1}
             ellipsizeMode="tail"
+            style={styles.recipeReason}
           >
-            {formatCompactDishMeta(dish)}
+            {decisionReason}
           </AppText>
-
-          <View style={styles.recipeSignalRow}>
-            {decisionSignals.map((signal) => (
-              <View
-                key={signal.label}
-                style={[
-                  styles.recipeSignalChip,
-                  signal.tone === "primary" && styles.recipeSignalChipPrimary,
-                  signal.tone === "success" && styles.recipeSignalChipSuccess,
-                ]}
-              >
-                <AppText
-                  variant="captionStrong"
-                  tone={
-                    signal.tone === "neutral" ? "subtext" : signal.tone
-                  }
-                  scaleRole="chrome"
-                  numberOfLines={1}
-                >
-                  {signal.label}
-                </AppText>
-              </View>
-            ))}
-          </View>
         </View>
       </Pressable>
 
@@ -2011,23 +2003,6 @@ function RecipeCard({
       ) : null}
     </View>
   );
-}
-
-function getRecipeStrategyAccentColor(
-  strategy: RecipeRecommendationDish["strategy"],
-) {
-  switch (strategy) {
-    case "expiring_first":
-      return colors.warning;
-    case "minimal_extra":
-      return colors.success;
-    case "quick_novel":
-      return colors.primary;
-    case "balanced":
-      return colors.info;
-    default:
-      return colors.border;
-  }
 }
 
 function formatRecommendationContext(recommendation: RecipeRecommendation) {
@@ -2354,11 +2329,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
   },
-  recipeCardAccent: {
-    width: spacing.xxs,
-    alignSelf: "stretch",
-    flexShrink: 0,
-  },
   recipeCardEmbedded: {
     borderWidth: 0,
     borderRadius: radius.none,
@@ -2381,7 +2351,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    gap: spacing.xs,
   },
   recipeCardMainPressed: {
     backgroundColor: colors.surfacePressed,
@@ -2392,52 +2361,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xxs,
   },
-  recipeSignalRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+  recipeIntro: {
+    minWidth: 0,
     gap: spacing.xxs,
   },
-  recipeSignalChip: {
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
+  recipeIntroWithFavorite: {
+    paddingRight: touchTarget.icon + spacing.xs,
   },
-  recipeSignalChipPrimary: {
-    backgroundColor: colors.primarySoft,
+  recipeTitle: {
+    minWidth: 0,
   },
-  recipeSignalChipSuccess: {
-    backgroundColor: colors.successSoft,
-  },
-  recipeCompactTitleRow: {
+  recipeMetaRow: {
     minWidth: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
   },
-  recipeCompactTitleRowStacked: {
-    alignItems: "flex-start",
-  },
-  recipeStrategyBadge: {
-    height: spacing.md,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primarySoft,
-    paddingHorizontal: spacing.xs,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  recipeTitle: {
+  recipeMeta: {
     flex: 1,
     minWidth: 0,
   },
+  recipeReason: {
+    minWidth: 0,
+  },
   favoriteButton: {
+    position: "absolute",
+    top: spacing.xxs,
+    right: spacing.xs,
+    zIndex: 1,
     width: touchTarget.icon,
     height: touchTarget.icon,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: spacing.xs,
   },
   favoriteButtonSelected: {
     backgroundColor: colors.primarySoft,

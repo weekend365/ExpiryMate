@@ -5,8 +5,10 @@ Sources:
   - assets/characters/jango-icon-crop.png
       → app icon / adaptive (dedicated icon pose; transparent source)
       → final icon.png is opaque on #F1F3F5 (iOS-safe)
+  - generated app icon
+      → compact rounded splash icon
   - assets/characters/jango-idle.png
-      → splash, notification silhouette
+      → notification silhouette
 
 Does NOT overwrite jango-icon-crop.png (hand-authored icon pose).
 
@@ -22,7 +24,7 @@ import sys
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageFilter
+    from PIL import Image, ImageDraw, ImageFilter
 except ImportError:
     print("Pillow is required: python3 -m pip install pillow", file=sys.stderr)
     raise SystemExit(1)
@@ -46,6 +48,38 @@ ANDROID_MONOCHROME_SIZES = {
 }
 
 BG_RGB = (241, 243, 245)  # semanticColors.background
+ICON_BORDER_RGB = (219, 223, 228)  # semanticColors.border
+SPLASH_LOGICAL_SIZE = 88
+
+
+def build_splash_app_icon(icon: Image.Image, size: int = 1024) -> Image.Image:
+    """Derive a compact rounded launch mark from the shipped app icon."""
+    source = icon.convert("RGBA").resize((size, size), Image.Resampling.LANCZOS)
+    radius = int(size * 0.22)
+    border_width = max(1, int(size * 0.01))
+
+    mask = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, size - 1, size - 1),
+        radius=radius,
+        fill=255,
+    )
+    source.putalpha(mask)
+
+    border = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    ImageDraw.Draw(border).rounded_rectangle(
+        (
+            border_width // 2,
+            border_width // 2,
+            size - 1 - border_width // 2,
+            size - 1 - border_width // 2,
+        ),
+        radius=radius,
+        outline=(*ICON_BORDER_RGB, 255),
+        width=border_width,
+    )
+    source.alpha_composite(border)
+    return source
 
 
 def build_icon_crop_from_idle(idle: Image.Image, size: int = 1024) -> Image.Image:
@@ -224,8 +258,8 @@ def main() -> None:
                 method=6,
             )
 
-    # Splash: full-body idle
-    splash = fit_on_canvas(idle, 1024, scale=0.88, background=None)
+    # Splash: compact rounded derivative of the shipped app icon.
+    splash = build_splash_app_icon(icon, 1024)
     splash.save(BRAND / "splash-icon.png", optimize=True)
 
     # Notification: 192 master → 96
@@ -239,14 +273,18 @@ def main() -> None:
         print(f"skip AppIcon (missing {APPICON.parent})")
 
     if SPLASH_DIR.exists():
-        for name, dim in [("image.png", 220), ("image@2x.png", 440), ("image@3x.png", 660)]:
+        for name, dim in [
+            ("image.png", SPLASH_LOGICAL_SIZE),
+            ("image@2x.png", SPLASH_LOGICAL_SIZE * 2),
+            ("image@3x.png", SPLASH_LOGICAL_SIZE * 3),
+        ]:
             splash.resize((dim, dim), Image.Resampling.LANCZOS).save(
                 SPLASH_DIR / name, optimize=True
             )
     else:
         print(f"skip SplashScreenLogo (missing {SPLASH_DIR})")
 
-    print("synced branding from jango-idle + jango-icon-crop:")
+    print("synced branding from Jango sources + compact splash app icon:")
     for path in sorted(BRAND.glob("*.png")):
         im = Image.open(path)
         print(f"  {path.relative_to(ROOT)}  {im.mode} {im.size[0]}x{im.size[1]}")

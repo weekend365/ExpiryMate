@@ -48,7 +48,7 @@ const dish: RecipeRecommendationDish = {
 describe("recipe-detail", () => {
   it("formats dish meta with spice and equipment", () => {
     expect(formatDishMeta(dish)).toBe("2인분 · 15분 · 쉬움 · 안 매움 · 가스/인덕션");
-    expect(formatCompactDishMeta(dish)).toBe("2인분 · 15분 · 쉬움");
+    expect(formatCompactDishMeta(dish)).toBe("15분 · 2인분 · 쉬움");
     expect(formatRecipeStrategyLabel("expiring_first")).toBe("임박 우선");
     expect(formatRecipeStrategyLabel(undefined)).toBe("추천");
   });
@@ -147,8 +147,8 @@ describe("recipe-detail", () => {
         ],
       ),
     ).toEqual([
-      { label: "D-1 우유 먼저", tone: "primary" },
-      { label: "재료 2/3", tone: "neutral" },
+      { label: "D-1 우유를 먼저", tone: "warning" },
+      { label: "추가 재료 1개", tone: "neutral" },
     ]);
   });
 
@@ -180,6 +180,9 @@ describe("recipe-detail", () => {
           daysUntilExpiry: 20,
         },
       ]),
-    ).toEqual([{ label: "✓ 추가 구매 없음", tone: "success" }]);
+    ).toEqual([
+      { label: "보유 재료 3개", tone: "primary" },
+      { label: "추가 재료 없음", tone: "success" },
+    ]);
   });
 });
