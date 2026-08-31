@@ -2,6 +2,7 @@ import {
   formatBaseQuantity,
   type RecipeInventorySnapshotItem,
   type RecipeRecommendationDish,
+  type RecipeStrategy,
 } from "@expirymate/shared";
 
 export const COLLAPSED_INGREDIENT_PREVIEW_COUNT = 2;
@@ -18,6 +19,11 @@ export type HighlightIngredient = {
 export type RecipeDecisionSignals = {
   badges: string[];
   rationale: string;
+};
+
+export type RecipeCardSignal = {
+  label: string;
+  tone: "primary" | "success" | "neutral";
 };
 
 export type RecipeDetailSelection = {
@@ -49,6 +55,13 @@ export const equipmentLabels = {
   oven: "오븐",
   air_fryer: "에어프라이어",
 } as const;
+
+export const recipeStrategyLabels: Record<RecipeStrategy, string> = {
+  expiring_first: "임박 우선",
+  balanced: "고루 활용",
+  minimal_extra: "추가 최소",
+  quick_novel: "새로운 한 끼",
+};
 
 export function getUsedIngredientRows(
   dish: RecipeRecommendationDish,
@@ -117,6 +130,16 @@ export function formatDishMeta(dish: RecipeRecommendationDish) {
   return values.join(" · ");
 }
 
+export function formatCompactDishMeta(dish: RecipeRecommendationDish) {
+  return `${dish.servings}인분 · ${dish.cookingTimeMinutes}분 · ${difficultyLabels[dish.difficulty]}`;
+}
+
+export function formatRecipeStrategyLabel(
+  strategy: RecipeStrategy | undefined,
+) {
+  return strategy ? recipeStrategyLabels[strategy] : "추천";
+}
+
 export function formatIngredientPreview(ingredients: HighlightIngredient[]) {
   if (ingredients.length === 0) {
     return "재료 정보 없음";
@@ -152,23 +175,8 @@ export function getRecipeDecisionSignals(
   dish: RecipeRecommendationDish,
   inventorySnapshot: RecipeInventorySnapshotItem[],
 ): RecipeDecisionSignals {
-  const ingredients = getUsedIngredientRows(dish, inventorySnapshot);
-  const expiring = ingredients
-    .filter((ingredient) => ingredient.isExpiring)
-    .sort(
-      (left, right) =>
-        (left.daysUntilExpiry ?? Number.POSITIVE_INFINITY) -
-        (right.daysUntilExpiry ?? Number.POSITIVE_INFINITY),
-    );
-  const inventoryIds = new Set(
-    inventorySnapshot.map((item) => item.inventoryItemId),
-  );
-  const ownedCount = dish.usedIngredients.filter(
-    (ingredient) =>
-      ingredient.inventoryItemId && inventoryIds.has(ingredient.inventoryItemId),
-  ).length;
-  const missingCount = dish.optionalMissingIngredients.length;
-  const totalCount = ownedCount + missingCount;
+  const { expiring, ownedCount, missingCount, totalCount } =
+    getRecipeDecisionContext(dish, inventorySnapshot);
   const badges = [
     expiring.length > 0
       ? `${formatIngredientDdayLabel(expiring[0]?.daysUntilExpiry ?? null) ?? "임박"} 재료 ${expiring.length}개`
@@ -192,5 +200,66 @@ export function getRecipeDecisionSignals(
   return {
     badges,
     rationale: `보유 재료 ${ownedCount}개를 중심으로 만들어요.`,
+  };
+}
+
+export function getRecipeCardSignals(
+  dish: RecipeRecommendationDish,
+  inventorySnapshot: RecipeInventorySnapshotItem[],
+): RecipeCardSignal[] {
+  const { expiring, ownedCount, missingCount, totalCount } =
+    getRecipeDecisionContext(dish, inventorySnapshot);
+  const firstExpiring = expiring[0];
+  const signals: RecipeCardSignal[] = [];
+
+  if (firstExpiring) {
+    const expiryLabel =
+      formatIngredientDdayLabel(firstExpiring.daysUntilExpiry) ?? "임박";
+    signals.push({
+      label: `${expiryLabel} ${firstExpiring.name} 먼저`,
+      tone: "primary",
+    });
+  } else if (missingCount > 0) {
+    signals.push({ label: "보유 재료 중심", tone: "primary" });
+  }
+
+  if (missingCount === 0) {
+    signals.push({ label: "✓ 추가 구매 없음", tone: "success" });
+  } else if (totalCount > 0) {
+    signals.push({
+      label: `재료 ${ownedCount}/${totalCount}`,
+      tone: "neutral",
+    });
+  }
+
+  return signals.slice(0, 2);
+}
+
+function getRecipeDecisionContext(
+  dish: RecipeRecommendationDish,
+  inventorySnapshot: RecipeInventorySnapshotItem[],
+) {
+  const ingredients = getUsedIngredientRows(dish, inventorySnapshot);
+  const expiring = ingredients
+    .filter((ingredient) => ingredient.isExpiring)
+    .sort(
+      (left, right) =>
+        (left.daysUntilExpiry ?? Number.POSITIVE_INFINITY) -
+        (right.daysUntilExpiry ?? Number.POSITIVE_INFINITY),
+    );
+  const inventoryIds = new Set(
+    inventorySnapshot.map((item) => item.inventoryItemId),
+  );
+  const ownedCount = dish.usedIngredients.filter(
+    (ingredient) =>
+      ingredient.inventoryItemId && inventoryIds.has(ingredient.inventoryItemId),
+  ).length;
+  const missingCount = dish.optionalMissingIngredients.length;
+
+  return {
+    expiring,
+    ownedCount,
+    missingCount,
+    totalCount: ownedCount + missingCount,
   };
 }

@@ -86,10 +86,9 @@ import {
 } from "../../src/features/recipes/recommendation-quota-panel";
 import {
   EXPIRING_DAYS_THRESHOLD,
-  formatDishMeta,
-  formatIngredientPreview,
-  getRecipeDecisionSignals,
-  getHighlightedIngredients,
+  formatCompactDishMeta,
+  formatRecipeStrategyLabel,
+  getRecipeCardSignals,
   type RecipeDetailSelection,
 } from "../../src/features/recipes/recipe-detail";
 import { RecipeDetailSheet } from "../../src/features/recipes/recipe-detail-sheet";
@@ -971,7 +970,6 @@ export default function RecommendationsScreen() {
                           index < latestRecommendation.recommendations.length - 1
                         }
                         dish={dish}
-                        badgeLabel={String(index + 1)}
                         inventorySnapshot={latestRecommendation.inventorySnapshot}
                         onOpenDetails={() =>
                           handleOpenDetails({
@@ -1161,7 +1159,6 @@ export default function RecommendationsScreen() {
                         favoriteIndex < favoritesQuery.data.length - 1
                       }
                       dish={favorite.dish}
-                      badgeLabel={String(favoriteIndex + 1)}
                       inventorySnapshot={favorite.inventorySnapshot}
                       onOpenDetails={() =>
                         handleOpenDetails({
@@ -1552,7 +1549,6 @@ export default function RecommendationsScreen() {
               <RecipeCard
                 key={`${historyRecommendation.id}-${dish.title}-${index}`}
                 dish={dish}
-                badgeLabel={String(index + 1)}
                 inventorySnapshot={historyRecommendation.inventorySnapshot}
                 onOpenDetails={() => {
                   const detail = {
@@ -1876,7 +1872,6 @@ function RecipeCardGrid({
 
 function RecipeCard({
   dish,
-  badgeLabel,
   inventorySnapshot,
   onOpenDetails,
   isFavorite = false,
@@ -1886,7 +1881,6 @@ function RecipeCard({
   showDivider = false,
 }: {
   dish: RecipeRecommendationDish;
-  badgeLabel?: string;
   inventorySnapshot: RecipeInventorySnapshotItem[];
   onOpenDetails: () => void;
   isFavorite?: boolean;
@@ -1896,23 +1890,23 @@ function RecipeCard({
   showDivider?: boolean;
 }) {
   const { shouldStack, isRegular } = useResponsiveLayout();
-  const highlightIngredients = getHighlightedIngredients(
-    dish,
-    inventorySnapshot,
-  );
-  const ingredientPreview = formatIngredientPreview(highlightIngredients);
-  const decisionSignals = getRecipeDecisionSignals(dish, inventorySnapshot);
+  const decisionSignals = getRecipeCardSignals(dish, inventorySnapshot);
 
   return (
     <View
       style={[
         styles.recipeCard,
-        shouldStack && styles.recipeCardStacked,
         !embedded && isRegular && styles.recipeCardRegular,
         embedded && styles.recipeCardEmbedded,
         showDivider && styles.recipeCardDivider,
       ]}
     >
+      <View
+        style={[
+          styles.recipeCardAccent,
+          { backgroundColor: getRecipeStrategyAccentColor(dish.strategy) },
+        ]}
+      />
       <Pressable
         onPress={onOpenDetails}
         accessibilityRole="button"
@@ -1923,80 +1917,66 @@ function RecipeCard({
           pressed && styles.recipeCardMainPressed,
         ]}
       >
-        <View
-          style={[
-            styles.recipeCompactTitleRow,
-            shouldStack && styles.recipeCompactTitleRowStacked,
-          ]}
-        >
-          <View style={styles.recipeNumberBadge}>
-            <AppText
-              variant="caption"
-              tone="primary"
-              scaleRole="chrome"
-              densityAware={false}
-              style={styles.recipeNumberBadgeText}
-            >
-              {badgeLabel ?? "1"}
-            </AppText>
-          </View>
-          <AppText
-            variant="bodyStrong"
-            numberOfLines={shouldStack ? undefined : 1}
-            ellipsizeMode="tail"
-            style={styles.recipeTitle}
+        <View style={styles.recipeCardContent}>
+          <View
+            style={[
+              styles.recipeCompactTitleRow,
+              shouldStack && styles.recipeCompactTitleRowStacked,
+            ]}
           >
-            {dish.title}
-          </AppText>
-        </View>
-
-        <AppText
-          variant="caption"
-          tone="subtext"
-          numberOfLines={shouldStack ? undefined : 1}
-          ellipsizeMode="tail"
-        >
-          {formatDishMeta(dish)}
-        </AppText>
-
-        <View style={styles.recipeSignalRow}>
-          {decisionSignals.badges.map((signal, index) => (
-            <View
-              key={signal}
-              style={[
-                styles.recipeSignalBadge,
-                index === 0 && styles.recipeSignalBadgeEmphasis,
-              ]}
-            >
+            <View style={styles.recipeStrategyBadge}>
               <AppText
-                style={[
-                  styles.recipeSignalText,
-                  index === 0 && styles.recipeSignalTextEmphasis,
-                ]}
+                variant="captionStrong"
+                tone="primary"
+                scaleRole="chrome"
+                densityAware={false}
               >
-                {signal}
+                {formatRecipeStrategyLabel(dish.strategy)}
               </AppText>
             </View>
-          ))}
+            <AppText
+              variant="subheading"
+              numberOfLines={shouldStack ? undefined : 1}
+              ellipsizeMode="tail"
+              style={styles.recipeTitle}
+            >
+              {dish.title}
+            </AppText>
+          </View>
+
+          <AppText
+            variant="caption"
+            tone="subtext"
+            numberOfLines={shouldStack ? undefined : 1}
+            ellipsizeMode="tail"
+          >
+            {formatCompactDishMeta(dish)}
+          </AppText>
+
+          <View style={styles.recipeSignalRow}>
+            {decisionSignals.map((signal) => (
+              <View
+                key={signal.label}
+                style={[
+                  styles.recipeSignalChip,
+                  signal.tone === "primary" && styles.recipeSignalChipPrimary,
+                  signal.tone === "success" && styles.recipeSignalChipSuccess,
+                ]}
+              >
+                <AppText
+                  variant="captionStrong"
+                  tone={
+                    signal.tone === "neutral" ? "subtext" : signal.tone
+                  }
+                  scaleRole="chrome"
+                  numberOfLines={1}
+                >
+                  {signal.label}
+                </AppText>
+              </View>
+            ))}
+          </View>
         </View>
-
-        <AppText
-          variant="caption"
-          tone="subtext"
-          numberOfLines={shouldStack ? undefined : 1}
-          ellipsizeMode="tail"
-        >
-          {decisionSignals.rationale}
-        </AppText>
-
-        <AppText
-          variant="caption"
-          tone="subtext"
-          numberOfLines={shouldStack ? undefined : 1}
-          ellipsizeMode="tail"
-        >
-          {ingredientPreview}
-        </AppText>
       </Pressable>
 
       {onToggleFavorite ? (
@@ -2016,7 +1996,6 @@ function RecipeCard({
           hitSlop={spacing.xs}
           style={({ pressed }) => [
             styles.favoriteButton,
-            shouldStack && styles.favoriteButtonStacked,
             isFavorite && styles.favoriteButtonSelected,
             pressed && styles.favoriteButtonPressed,
             isFavoritePending && styles.favoriteButtonPending,
@@ -2032,6 +2011,23 @@ function RecipeCard({
       ) : null}
     </View>
   );
+}
+
+function getRecipeStrategyAccentColor(
+  strategy: RecipeRecommendationDish["strategy"],
+) {
+  switch (strategy) {
+    case "expiring_first":
+      return colors.warning;
+    case "minimal_extra":
+      return colors.success;
+    case "quick_novel":
+      return colors.primary;
+    case "balanced":
+      return colors.info;
+    default:
+      return colors.border;
+  }
 }
 
 function formatRecommendationContext(recommendation: RecipeRecommendation) {
@@ -2355,8 +2351,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     overflow: "hidden",
+  },
+  recipeCardAccent: {
+    width: spacing.xxs,
+    alignSelf: "stretch",
+    flexShrink: 0,
   },
   recipeCardEmbedded: {
     borderWidth: 0,
@@ -2367,9 +2368,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
-  recipeCardStacked: {
-    flexDirection: "column",
-  },
   recipeCardRegular: {
     flexGrow: 1,
     flexBasis: "40%",
@@ -2379,13 +2377,38 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     alignSelf: "stretch",
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    gap: spacing.xxs,
+    gap: spacing.xs,
   },
   recipeCardMainPressed: {
     backgroundColor: colors.surfacePressed,
+  },
+  recipeCardContent: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: "center",
+    gap: spacing.xxs,
+  },
+  recipeSignalRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
+  recipeSignalChip: {
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+  },
+  recipeSignalChipPrimary: {
+    backgroundColor: colors.primarySoft,
+  },
+  recipeSignalChipSuccess: {
+    backgroundColor: colors.successSoft,
   },
   recipeCompactTitleRow: {
     minWidth: 0,
@@ -2396,44 +2419,17 @@ const styles = StyleSheet.create({
   recipeCompactTitleRowStacked: {
     alignItems: "flex-start",
   },
-  recipeNumberBadge: {
-    minWidth: spacing.md,
+  recipeStrategyBadge: {
     height: spacing.md,
     borderRadius: radius.pill,
     backgroundColor: colors.primarySoft,
-    paddingHorizontal: spacing.xxs,
+    paddingHorizontal: spacing.xs,
     alignItems: "center",
     justifyContent: "center",
-  },
-  recipeNumberBadgeText: {
-    fontFamily: typography.bodyStrong.fontFamily,
   },
   recipeTitle: {
     flex: 1,
     minWidth: 0,
-  },
-  recipeSignalRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: spacing.xxs,
-  },
-  recipeSignalBadge: {
-    borderRadius: radius.pill,
-    backgroundColor: colors.mutedSurface,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
-  },
-  recipeSignalBadgeEmphasis: {
-    backgroundColor: colors.warningSoft,
-  },
-  recipeSignalText: {
-    fontSize: typography.caption.fontSize,
-    lineHeight: typography.caption.lineHeight,
-    fontFamily: typography.label.fontFamily,
-    color: colors.subtext,
-  },
-  recipeSignalTextEmphasis: {
-    color: colors.warning,
   },
   favoriteButton: {
     width: touchTarget.icon,
@@ -2441,12 +2437,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: spacing.xs,
     marginRight: spacing.xs,
-  },
-  favoriteButtonStacked: {
-    alignSelf: "flex-end",
-    marginBottom: spacing.xs,
   },
   favoriteButtonSelected: {
     backgroundColor: colors.primarySoft,
