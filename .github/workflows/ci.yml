@@ -244,6 +244,17 @@ jobs:
               });
               const source = Buffer.from(manifest.data.content, "base64").toString("utf8");
               baseSupportsProfile = source.includes(`\"${profile}\"`);
+              const currentSource = require("fs").readFileSync(
+                "apps/mobile/scripts/layout-screenshot-manifest.mjs",
+                "utf8",
+              );
+              const screenshotNames = (value) =>
+                new Set([...value.matchAll(/\"([^\"]+\.png)\"/g)].map((match) => match[1]));
+              const baseScreenshots = screenshotNames(source);
+              const newScreenshots = [...screenshotNames(currentSource)].filter(
+                (name) => !baseScreenshots.has(name),
+              );
+              core.setOutput("new-screenshots", newScreenshots.join(","));
             } catch (error) {
               if (error.status !== 404) throw error;
             }
@@ -300,6 +311,7 @@ jobs:
           baseline_dir="apps/mobile/e2e/screenshots/baseline/${{ matrix.profile }}"
           mkdir -p "$baseline_dir"
           cp "$capture_dir"/*.png "$baseline_dir"/
+          echo "ALLOW_MISSING_SCREENSHOT_BASELINE_NAMES=${{ steps.main-layout-run.outputs.new-screenshots }}" >> "$GITHUB_ENV"
 
       - name: Install Maestro
         run: |
@@ -308,6 +320,7 @@ jobs:
 
       - name: Prepare deterministic API data
         run: |
+          pnpm --filter @expirymate/shared build
           pnpm --filter @expirymate/api exec prisma migrate deploy
           E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
           nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &
@@ -410,6 +423,17 @@ jobs:
               });
               const source = Buffer.from(manifest.data.content, "base64").toString("utf8");
               baseSupportsProfile = source.includes(`\"${profile}\"`);
+              const currentSource = require("fs").readFileSync(
+                "apps/mobile/scripts/layout-screenshot-manifest.mjs",
+                "utf8",
+              );
+              const screenshotNames = (value) =>
+                new Set([...value.matchAll(/\"([^\"]+\.png)\"/g)].map((match) => match[1]));
+              const baseScreenshots = screenshotNames(source);
+              const newScreenshots = [...screenshotNames(currentSource)].filter(
+                (name) => !baseScreenshots.has(name),
+              );
+              core.setOutput("new-screenshots", newScreenshots.join(","));
             } catch (error) {
               if (error.status !== 404) throw error;
             }
@@ -464,6 +488,7 @@ jobs:
           baseline_dir="apps/mobile/e2e/screenshots/baseline/${{ matrix.profile }}"
           mkdir -p "$baseline_dir"
           cp "$capture_dir"/*.png "$baseline_dir"/
+          echo "ALLOW_MISSING_SCREENSHOT_BASELINE_NAMES=${{ steps.main-ios-layout-run.outputs.new-screenshots }}" >> "$GITHUB_ENV"
 
       - name: Install Maestro
         run: |
@@ -488,6 +513,7 @@ jobs:
 
       - name: Prepare deterministic API data
         run: |
+          pnpm --filter @expirymate/shared build
           pnpm --filter @expirymate/api exec prisma migrate deploy
           E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
           nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &

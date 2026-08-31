@@ -88,6 +88,17 @@ name: Responsive layout smoke
       id: inventory-screen
     timeout: 10000
 - tapOn:
+    id: inventory-item-cleanup-button
+- tapOn:
+    id: inventory-cleanup-all-button
+- extendedWaitUntil:
+    visible:
+      id: inventory-action-notice
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/inventory-action-notice
+- tapOn:
+    id: mascot-speech-dismiss-button
+- tapOn:
     id: inventory-add-button
 - assertVisible: "어떻게 넣을까요?"
 - tapOn: "직접 입력할게요"
@@ -166,6 +177,17 @@ name: Responsive layout smoke
       id: affiliate-shopping-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/shopping
+- tapOn:
+    id: affiliate-shopping-search-input
+- inputText: extra-long-responsive-ingredient-name
+- hideKeyboard
+- tapOn:
+    id: affiliate-shopping-search-button
+- extendedWaitUntil:
+    visible:
+      id: affiliate-shopping-search-results
+    timeout: 20000
+- takeScreenshot: ${SCREENSHOT_DIR}/shopping-search-results
 - openLink: expirymate://register-photo?from=home
 - extendedWaitUntil:
     visible:
@@ -177,6 +199,28 @@ name: Responsive layout smoke
     visible: "재료 준비"
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/cooking
+- setPermissions:
+    permissions:
+      notifications: deny
+- openLink: expirymate://cooking/layout-e2e-recommendation?dishIndex=0&stepIndex=2
+- extendedWaitUntil:
+    visible:
+      id: cooking-timer-card
+    timeout: 20000
+- tapOn:
+    id: cooking-timer-start-button
+- extendedWaitUntil:
+    visible:
+      id: cooking-timer-pause-button
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/cooking-timer-running
+- tapOn:
+    id: cooking-timer-pause-button
+- extendedWaitUntil:
+    visible:
+      id: cooking-timer-resume-button
+    timeout: 10000
+- takeScreenshot: ${SCREENSHOT_DIR}/cooking-timer-paused
 - openLink: expirymate://privacy
 - extendedWaitUntil:
     visible: "살펴보기"

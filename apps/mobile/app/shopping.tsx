@@ -235,6 +235,7 @@ export default function ShoppingScreen({
             />
             <AppTextInput
               ref={searchInputRef}
+              testID="affiliate-shopping-search-input"
               value={query}
               onChangeText={setQuery}
               onSubmitEditing={submitSearch}

@@ -210,6 +210,7 @@ export default function InventoryScreen() {
       : null;
   const inventoryActionNotice = actionError ? (
     <FeedbackBanner
+      testID="inventory-action-notice"
       tone="danger"
       title="앗, 잠시 문제가 생겼어요"
       description={actionError}
@@ -225,6 +226,7 @@ export default function InventoryScreen() {
     shoppingTarget ? (
       <AffiliateEntryImpression placement="inventory_consumed">
         <FeedbackBanner
+          testID="inventory-action-notice"
           tone="success"
           title={`${shoppingTarget.displayName} 다 썼어요.`}
           actionLabel="장보기에서 찾아볼게요"
@@ -250,6 +252,7 @@ export default function InventoryScreen() {
       </AffiliateEntryImpression>
     ) : (
       <FeedbackBanner
+        testID="inventory-action-notice"
         tone="success"
         title={visibleRemovalNotice}
         transient
@@ -260,6 +263,7 @@ export default function InventoryScreen() {
     )
   ) : successMessage ? (
     <FeedbackBanner
+      testID="inventory-action-notice"
       tone="success"
       title={successMessage}
       transient

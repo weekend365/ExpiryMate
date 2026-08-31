@@ -61,6 +61,51 @@ describe("dynamic type component contract", () => {
     expect(disclosure).not.toContain('scaleRole="chrome"');
   });
 
+  it("keeps compact mascot copy scalable and stacks traffic metrics", () => {
+    const bubble = readFileSync(
+      join(MOBILE_ROOT, "src", "components", "MascotSpeechBubble.tsx"),
+      "utf8",
+    );
+    const statCard = readFileSync(
+      join(MOBILE_ROOT, "src", "components", "StatCard.tsx"),
+      "utf8",
+    );
+
+    expect(bubble).not.toContain('scaleRole={isCompact ? "chrome" : undefined}');
+    expect(bubble).not.toContain("densityAware={!isCompact}");
+    expect(statCard).toContain("shouldStack && styles.trafficCopyStacked");
+    expect(statCard).toContain(
+      "numberOfLines={shouldStack ? undefined : 1}",
+    );
+  });
+
+  it("stacks dense settings inputs and timer headers before text collides", () => {
+    const preferences = readFileSync(
+      join(MOBILE_ROOT, "app", "settings", "recipe-preferences.tsx"),
+      "utf8",
+    );
+    const timer = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "recipes",
+        "cooking-timer-card.tsx",
+      ),
+      "utf8",
+    );
+
+    expect(preferences).toContain("shouldStackDense && styles.inputRowStacked");
+    expect(preferences).toContain("fullWidth={shouldStackDense}");
+    expect(timer).toContain("shouldStack && styles.headerStacked");
+    expect(timer).toContain("shouldStack && styles.copyStacked");
+    expect(timer).toContain("shouldStack && styles.progressTrackStacked");
+    expect(timer).toContain("shouldStack && styles.actionsStacked");
+    expect(timer).toContain('accessibilityRole="progressbar"');
+    expect(timer).toContain("ReduceMotion.System");
+    expect(timer).not.toContain("minWidth: 160");
+  });
+
   it("keeps height-aware camera layouts for phone landscape", () => {
     const scanner = readFileSync(
       join(

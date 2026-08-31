@@ -6,6 +6,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 import {
   ExpiryTrafficIcon,
@@ -56,6 +57,8 @@ export function StatCard({
   style,
   selected,
 }: StatCardProps) {
+  const { shouldStack } = useResponsiveLayout();
+
   if (variant === "traffic") {
     const isOn = selected ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
@@ -102,19 +105,24 @@ export function StatCard({
           />
         </View>
         {showLabel ? (
-          <View style={styles.trafficCopy}>
+          <View
+            style={[
+              styles.trafficCopy,
+              shouldStack && styles.trafficCopyStacked,
+            ]}
+          >
             <AppText
               variant="caption"
               scaleRole="chrome"
               densityAware={false}
-              numberOfLines={1}
+              numberOfLines={shouldStack ? undefined : 1}
               style={styles.trafficLabel}
             >
               {label}
             </AppText>
             <AppText
               variant={compact ? "bodySmallStrong" : "heading"}
-              numberOfLines={1}
+              numberOfLines={shouldStack ? undefined : 1}
               style={styles.trafficCount}
             >
               {value}건
@@ -224,6 +232,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: spacing.xxs,
     minWidth: 0,
+  },
+  trafficCopyStacked: {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: spacing.none,
   },
   trafficCount: {
     textAlign: "center",

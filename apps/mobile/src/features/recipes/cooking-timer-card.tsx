@@ -1,11 +1,20 @@
 import { Clock3, Pause, Play, RotateCcw, X } from "lucide-react-native";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, {
+  ReduceMotion,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { AppText } from "../../components/AppText";
 import { Button } from "../../components/Button";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
 import { colors, radius, spacing } from "../../shared/theme";
 import {
   formatCookingTimerClock,
   formatCookingTimerDuration,
+  getCookingTimerProgress,
   isCookingTimerForStep,
   type StartCookingTimerInput,
 } from "./cooking-timer";
@@ -22,6 +31,7 @@ export function CookingTimerCard({
   controller: CookingTimerController;
   onStart: () => void;
 }) {
+  const { shouldStack } = useResponsiveLayout();
   const { timer, remainingSeconds, isHydrated, isPending, errorMessage } =
     controller;
   const isCurrent = isCookingTimerForStep(
@@ -34,6 +44,21 @@ export function CookingTimerCard({
   const clockSeconds = isCurrent
     ? remainingSeconds
     : input.durationSeconds;
+  const durationSeconds = Math.max(1, Math.round(input.durationSeconds));
+  const progress = getCookingTimerProgress(durationSeconds, clockSeconds);
+  const elapsedSeconds = Math.round(durationSeconds * progress);
+  const animatedProgress = useSharedValue(progress);
+  const animatedProgressStyle = useAnimatedStyle(() => ({
+    width: `${animatedProgress.value * 100}%`,
+  }));
+
+  useEffect(() => {
+    animatedProgress.value = withTiming(progress, {
+      duration: 250,
+      reduceMotion: ReduceMotion.System,
+    });
+  }, [animatedProgress, progress]);
+
   const title =
     status === "completed"
       ? "시간이 다 됐어요"
@@ -44,12 +69,15 @@ export function CookingTimerCard({
           : `${formatCookingTimerDuration(input.durationSeconds)} 타이머`;
 
   return (
-    <View style={[styles.card, status === "completed" && styles.completedCard]}>
-      <View style={styles.header}>
+    <View
+      testID="cooking-timer-card"
+      style={[styles.card, status === "completed" && styles.completedCard]}
+    >
+      <View style={[styles.header, shouldStack && styles.headerStacked]}>
         <View style={styles.iconCircle}>
           <Clock3 color={colors.primary} size={spacing.md} strokeWidth={2.4} />
         </View>
-        <View style={styles.copy}>
+        <View style={[styles.copy, shouldStack && styles.copyStacked]}>
           <AppText variant="bodyStrong">{title}</AppText>
           <AppText variant="bodySmall" tone="subtext">
             {status === "running"
@@ -64,10 +92,35 @@ export function CookingTimerCard({
         <AppText
           variant="heading"
           tone={status === "completed" ? "primary" : "default"}
+          style={[styles.clock, shouldStack && styles.clockStacked]}
           accessibilityLabel={`남은 시간 ${formatCookingTimerDuration(clockSeconds)}`}
         >
           {formatCookingTimerClock(clockSeconds)}
         </AppText>
+      </View>
+
+      <View
+        testID="cooking-timer-progress"
+        accessible
+        accessibilityRole="progressbar"
+        accessibilityLabel="조리 타이머 진행률"
+        accessibilityValue={{
+          min: 0,
+          max: durationSeconds,
+          now: elapsedSeconds,
+          text:
+            status === "completed"
+              ? "완료"
+              : `${formatCookingTimerDuration(clockSeconds)} 남음`,
+        }}
+        style={[
+          styles.progressTrack,
+          shouldStack && styles.progressTrackStacked,
+        ]}
+      >
+        <Animated.View
+          style={[styles.progressFill, animatedProgressStyle]}
+        />
       </View>
 
       {isCurrent && status === "running" && !timer?.notificationsAllowed ? (
@@ -79,49 +132,53 @@ export function CookingTimerCard({
         </View>
       ) : null}
 
-      <View style={styles.actions}>
+      <View style={[styles.actions, shouldStack && styles.actionsStacked]}>
         {status === "running" ? (
           <Button
+            testID="cooking-timer-pause-button"
             variant="surface"
             size="small"
             icon={Pause}
             disabled={isPending || !isHydrated}
             onPress={() => void controller.pause()}
-            style={styles.action}
+            style={[styles.action, shouldStack && styles.actionStacked]}
           >
             일시정지
           </Button>
         ) : status === "paused" ? (
           <Button
+            testID="cooking-timer-resume-button"
             variant="surface"
             size="small"
             icon={Play}
             disabled={isPending || !isHydrated}
             onPress={() => void controller.resume()}
-            style={styles.action}
+            style={[styles.action, shouldStack && styles.actionStacked]}
           >
             다시 시작
           </Button>
         ) : (
           <Button
+            testID="cooking-timer-start-button"
             variant="surface"
             size="small"
             icon={status === "completed" ? RotateCcw : Play}
             disabled={isPending || !isHydrated}
             onPress={onStart}
-            style={styles.action}
+            style={[styles.action, shouldStack && styles.actionStacked]}
           >
             {status === "completed" ? "다시 시작" : "타이머 시작"}
           </Button>
         )}
         {isCurrent && status !== "completed" ? (
           <Button
+            testID="cooking-timer-cancel-button"
             variant="danger"
             size="small"
             icon={X}
             disabled={isPending || !isHydrated}
             onPress={() => void controller.cancel()}
-            style={styles.action}
+            style={[styles.action, shouldStack && styles.actionStacked]}
           >
             취소
           </Button>
@@ -150,9 +207,12 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
+  },
+  headerStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   iconCircle: {
     width: spacing.xl,
@@ -164,8 +224,34 @@ const styles = StyleSheet.create({
   },
   copy: {
     flex: 1,
-    minWidth: 160,
+    minWidth: 0,
     gap: spacing.xxs,
+  },
+  copyStacked: {
+    flex: 0,
+    width: "100%",
+  },
+  clock: {
+    flexShrink: 0,
+  },
+  clockStacked: {
+    alignSelf: "flex-end",
+  },
+  progressTrack: {
+    width: "100%",
+    minWidth: 0,
+    height: spacing.xxs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.border,
+    overflow: "hidden",
+  },
+  progressTrackStacked: {
+    height: spacing.xs,
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
   },
   warning: {
     borderRadius: radius.md,
@@ -177,7 +263,14 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: spacing.xs,
   },
+  actionsStacked: {
+    flexDirection: "column",
+  },
   action: {
     flexGrow: 1,
+  },
+  actionStacked: {
+    width: "100%",
+    flexGrow: 0,
   },
 });

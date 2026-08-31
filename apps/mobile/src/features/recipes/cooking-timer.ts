@@ -102,6 +102,20 @@ export function getCookingTimerRemainingSeconds(
   return Math.max(0, Math.ceil((timer.endsAt - now) / 1000));
 }
 
+export function getCookingTimerProgress(
+  durationSeconds: number,
+  remainingSeconds: number,
+) {
+  const duration = Number.isFinite(durationSeconds)
+    ? Math.max(1, durationSeconds)
+    : 1;
+  const remaining = Number.isFinite(remainingSeconds)
+    ? Math.min(duration, Math.max(0, remainingSeconds))
+    : duration;
+
+  return (duration - remaining) / duration;
+}
+
 export function isCookingTimerForStep(
   timer: CookingTimer | null,
   recommendationId: string,

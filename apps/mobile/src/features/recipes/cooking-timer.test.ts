@@ -28,6 +28,7 @@ import {
   completeCookingTimer,
   formatCookingTimerClock,
   formatCookingTimerDuration,
+  getCookingTimerProgress,
   getCookingTimerRemainingSeconds,
   loadCookingTimer,
   pauseCookingTimer,
@@ -134,5 +135,14 @@ describe("persisted cooking timer", () => {
     expect(formatCookingTimerClock(90)).toBe("01:30");
     expect(formatCookingTimerClock(3_661)).toBe("1:01:01");
     expect(formatCookingTimerDuration(90)).toBe("1분 30초");
+  });
+
+  it("clamps timer progress for idle, running, and completed states", () => {
+    expect(getCookingTimerProgress(120, 120)).toBe(0);
+    expect(getCookingTimerProgress(120, 90)).toBe(0.25);
+    expect(getCookingTimerProgress(120, 0)).toBe(1);
+    expect(getCookingTimerProgress(120, 150)).toBe(0);
+    expect(getCookingTimerProgress(120, -10)).toBe(1);
+    expect(getCookingTimerProgress(Number.NaN, Number.NaN)).toBe(0);
   });
 });

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import {
+  AccessibilityInfo,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText, type AppTextVariant } from "./AppText";
 import type { MascotMood } from "./Mascot";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
@@ -8,6 +14,7 @@ import { MascotSpeechBubble } from "./MascotSpeechBubble";
 type FeedbackTone = "danger" | "success" | "warning" | "info";
 
 interface FeedbackBannerProps {
+  testID?: string;
   tone?: FeedbackTone;
   title: string;
   description?: string;
@@ -60,6 +67,7 @@ const toneConfig: Record<
 };
 
 export function FeedbackBanner({
+  testID,
   tone = "danger",
   title,
   description,
@@ -75,15 +83,48 @@ export function FeedbackBanner({
 }: FeedbackBannerProps) {
   const palette = toneConfig[tone];
   const [isVisible, setIsVisible] = useState(true);
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState<
+    boolean | null
+  >(null);
   const onDismissRef = useRef(onDismiss);
   onDismissRef.current = onDismiss;
+  const { isComfortableText } = useResponsiveLayout();
   const isTransientJangoNotice = transient && showMascot;
+  const hasAction = Boolean(actionLabel && onAction);
+  const shouldAutoDismiss = Boolean(
+    isTransientJangoNotice &&
+      autoDismissMs !== null &&
+      !hasAction &&
+      tone !== "danger" &&
+      !isComfortableText &&
+      screenReaderEnabled === false,
+  );
   const noticeKey = `${tone}\u0000${title}\u0000${description ?? ""}`;
+
+  useEffect(() => {
+    let active = true;
+    void AccessibilityInfo.isScreenReaderEnabled()
+      .then((enabled) => {
+        if (active) setScreenReaderEnabled(enabled);
+      })
+      .catch(() => {
+        if (active) setScreenReaderEnabled(false);
+      });
+    const subscription = AccessibilityInfo.addEventListener(
+      "screenReaderChanged",
+      setScreenReaderEnabled,
+    );
+
+    return () => {
+      active = false;
+      subscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
 
-    if (!isTransientJangoNotice || autoDismissMs === null) {
+    if (!shouldAutoDismiss || autoDismissMs === null) {
       return;
     }
 
@@ -93,7 +134,7 @@ export function FeedbackBanner({
     }, autoDismissMs);
 
     return () => clearTimeout(timeout);
-  }, [autoDismissMs, isTransientJangoNotice, noticeKey]);
+  }, [autoDismissMs, noticeKey, shouldAutoDismiss]);
 
   if (!isVisible) {
     return null;
@@ -173,7 +214,11 @@ export function FeedbackBanner({
   ];
 
   return (
-    <View style={rootStyle} accessibilityLiveRegion="polite">
+    <View
+      testID={testID}
+      style={rootStyle}
+      accessibilityLiveRegion="polite"
+    >
       {content}
     </View>
   );

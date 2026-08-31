@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { appBrand } from "@expirymate/shared";
-import { colors, radius, spacing } from "../shared/theme";
+import { colors, radius, spacing, touchTarget } from "../shared/theme";
 import { AppText, type AppTextVariant } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
 
@@ -109,8 +109,6 @@ export function MascotSpeechBubble({
         >
           <AppText
             variant={textVariant}
-            scaleRole={isCompact ? "chrome" : undefined}
-            densityAware={!isCompact}
             numberOfLines={numberOfLines}
           >
             {message}
@@ -118,8 +116,6 @@ export function MascotSpeechBubble({
               <AppText
                 variant={textVariant}
                 tone="link"
-                scaleRole={isCompact ? "chrome" : undefined}
-                densityAware={!isCompact}
                 onPress={onInlineAction}
                 accessibilityRole="link"
                 accessibilityLabel={inlineActionLabel}
@@ -132,8 +128,6 @@ export function MascotSpeechBubble({
             <AppText
               variant="bodySmall"
               tone="subtext"
-              scaleRole={isCompact ? "chrome" : undefined}
-              densityAware={!isCompact}
             >
               {supportingMessage.trim()}
             </AppText>
@@ -141,6 +135,7 @@ export function MascotSpeechBubble({
           {onDismiss ? (
             <Pressable
               onPress={onDismiss}
+              testID="mascot-speech-dismiss-button"
               accessibilityRole="button"
               accessibilityLabel="장고 알림 닫기"
               hitSlop={spacing.xs}
@@ -199,14 +194,14 @@ const styles = StyleSheet.create({
     gap: spacing.xxs, // 4px: keep the question and guide as one thought
   },
   bubbleDismissible: {
-    paddingRight: spacing.xl + spacing.sm,
+    paddingRight: touchTarget.icon + spacing.xs,
   },
   dismissButton: {
     position: "absolute",
     top: spacing.xs,
     right: spacing.xs,
-    width: spacing.lg,
-    height: spacing.lg,
+    width: touchTarget.icon,
+    height: touchTarget.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.pill,

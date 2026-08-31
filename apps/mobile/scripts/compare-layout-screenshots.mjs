@@ -32,6 +32,12 @@ const maximumDiffRatio = Number(process.env.SCREENSHOT_MAX_DIFF_RATIO ?? "0.005"
 const writeDiffRatio = Number(process.env.SCREENSHOT_WRITE_DIFF_RATIO ?? "0.0001");
 const allowMissingBaselines =
   process.env.ALLOW_MISSING_SCREENSHOT_BASELINES === "1";
+const allowedMissingBaselineNames = new Set(
+  (process.env.ALLOW_MISSING_SCREENSHOT_BASELINE_NAMES ?? "")
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean),
+);
 
 const summary = {
   profile,
@@ -42,6 +48,7 @@ const summary = {
   },
   maximumDiffRatio,
   allowMissingBaselines,
+  allowedMissingBaselineNames: [...allowedMissingBaselineNames],
   updated: update,
   files: [],
 };
@@ -128,7 +135,7 @@ for (const [file, current] of readableCurrentImages) {
   if (!fs.existsSync(baselinePath)) {
     const message = `Missing baseline: ${baselinePath}`;
     summary.files.push({ file, status: "missing-baseline" });
-    if (allowMissingBaselines) {
+    if (allowMissingBaselines || allowedMissingBaselineNames.has(file)) {
       console.warn(`${message} (capture retained as a baseline candidate)`);
     } else {
       console.error(message);

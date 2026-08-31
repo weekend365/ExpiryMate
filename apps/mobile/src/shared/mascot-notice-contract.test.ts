@@ -50,8 +50,16 @@ describe("Jango notice presentation contract", () => {
 
     expect(feedback).toContain("DEFAULT_FEEDBACK_AUTO_DISMISS_MS = 5_000");
     expect(feedback).toContain("isTransientJangoNotice");
+    expect(feedback).toContain("AccessibilityInfo.isScreenReaderEnabled()");
+    expect(feedback).toContain('tone !== "danger"');
+    expect(feedback).toContain("!hasAction");
+    expect(feedback).toContain("!isComfortableText");
     expect(feedback).toContain("setTimeout");
     expect(bubble).toContain('accessibilityLabel="장고 알림 닫기"');
+    expect(bubble).toContain('testID="mascot-speech-dismiss-button"');
+    expect(bubble).toMatch(
+      /dismissButton:[\s\S]*?width: touchTarget\.icon[\s\S]*?height: touchTarget\.icon/,
+    );
     expect(bubble).toContain("accessible={!onDismiss && !onInlineAction}");
     expect(bubble).toContain("inlineActionLabel");
     expect(bubble).toContain('accessibilityRole="link"');
@@ -71,7 +79,7 @@ describe("Jango notice presentation contract", () => {
     const directMascotFiles = [join(MOBILE_ROOT, "app"), join(MOBILE_ROOT, "src")]
       .flatMap(findTsxFiles)
       .filter((path) => /<Mascot\b/.test(readFileSync(path, "utf8")))
-      .map((path) => relative(MOBILE_ROOT, path))
+      .map((path) => relative(MOBILE_ROOT, path).replaceAll("\\", "/"))
       .sort();
 
     expect(directMascotFiles).toEqual(allowedDirectMascotFiles.sort());

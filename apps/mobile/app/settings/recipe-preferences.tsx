@@ -22,6 +22,7 @@ import {
   parseRecipePreferenceRouteSource,
 } from "../../src/features/settings/recipe-preference-navigation";
 import { useRecipePreferences } from "../../src/features/settings/use-recipe-preferences";
+import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { colors, radius, spacing } from "../../src/shared/theme";
 
 const spiceOptions: Array<{ value: RecipeSpiceLevel; label: string }> = [
@@ -39,6 +40,7 @@ const equipmentOptions: Array<{ value: RecipeEquipment; label: string }> = [
 ];
 
 export default function RecipePreferenceSettingsScreen() {
+  const { shouldStackDense } = useResponsiveLayout();
   const { query, mutation } = useRecipePreferences();
   const params = useLocalSearchParams<{ from?: string | string[] }>();
   const routeSource = parseRecipePreferenceRouteSource(params.from);
@@ -156,9 +158,9 @@ export default function RecipePreferenceSettingsScreen() {
           </PreferenceSection>
 
           <PreferenceSection title="직접 제외할 재료" description="알레르기 외에 먹지 않거나 피하고 싶은 재료를 적어 주세요.">
-            <View style={styles.inputRow}>
-              <AppTextInput value={excludedDraft} onChangeText={setExcludedDraft} onSubmitEditing={addExcludedIngredient} placeholder="예: 고수" maxLength={40} returnKeyType="done" style={styles.input} />
-              <Button onPress={addExcludedIngredient} variant="secondary">추가</Button>
+            <View style={[styles.inputRow, shouldStackDense && styles.inputRowStacked]}>
+              <AppTextInput value={excludedDraft} onChangeText={setExcludedDraft} onSubmitEditing={addExcludedIngredient} placeholder="예: 고수" maxLength={40} returnKeyType="done" style={[styles.input, shouldStackDense && styles.inputStacked]} />
+              <Button onPress={addExcludedIngredient} variant="secondary" fullWidth={shouldStackDense}>추가</Button>
             </View>
             {excludedIngredients.length ? (
               <PillGrid>
@@ -205,6 +207,8 @@ function PillGrid({ children }: { children: React.ReactNode }) {
 const styles = StyleSheet.create({
   pillGrid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xs },
   inputRow: { flexDirection: "row", alignItems: "center", gap: spacing.sm },
+  inputRowStacked: { flexDirection: "column", alignItems: "stretch" },
   input: { flex: 1, minHeight: spacing.xl, borderWidth: 1, borderColor: colors.border, borderRadius: radius.md, paddingHorizontal: spacing.sm, backgroundColor: colors.background },
+  inputStacked: { flex: 0, alignSelf: "stretch", width: "100%" },
   notice: { padding: spacing.sm, borderRadius: radius.lg, backgroundColor: colors.warningSoft },
 });

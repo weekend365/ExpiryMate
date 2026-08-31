@@ -24,7 +24,10 @@ function findRouteFiles(directory) {
 }
 
 function routeName(path) {
-  const relativePath = path.slice(appDir.length + 1).replace(/\.tsx$/, "");
+  const relativePath = path
+    .slice(appDir.length + 1)
+    .replaceAll("\\", "/")
+    .replace(/\.tsx$/, "");
   return relativePath.endsWith("/index")
     ? relativePath.slice(0, -"/index".length)
     : relativePath;
@@ -79,6 +82,7 @@ describe("layout screenshot manifest", () => {
       "home.png",
       "inventory.png",
       "inventory-edit.png",
+      "inventory-action-notice.png",
       "register-keyboard.png",
       "scanner-permission-denied.png",
       "scanner.png",
@@ -88,8 +92,11 @@ describe("layout screenshot manifest", () => {
       "subscription.png",
       "insights.png",
       "shopping.png",
+      "shopping-search-results.png",
       "register-photo.png",
       "cooking.png",
+      "cooking-timer-running.png",
+      "cooking-timer-paused.png",
       "privacy.png",
       "ai-data-notice.png",
       "account-delete.png",
@@ -128,5 +135,42 @@ describe("layout screenshot manifest", () => {
 
   it("rejects unknown profiles", () => {
     expect(() => getLayoutProfile("unknown")).toThrow("Unknown layout profile");
+  });
+
+  it("builds shared code before seeding every layout API", () => {
+    const workflow = readFileSync(
+      resolve(scriptDir, "../../../.github/workflows/ci.yml"),
+      "utf8",
+    );
+    const preparationBlocks = workflow
+      .split("- name: Prepare deterministic API data")
+      .slice(1)
+      .map((block) => block.split("\n      - name:")[0]);
+
+    expect(preparationBlocks).toHaveLength(2);
+    for (const block of preparationBlocks) {
+      expect(block).toContain("pnpm --filter @expirymate/shared build");
+      expect(block.indexOf("@expirymate/shared build")).toBeLessThan(
+        block.indexOf("prisma migrate deploy"),
+      );
+    }
+  });
+
+  it("bootstraps only screenshots that are new relative to the base branch", () => {
+    const workflow = readFileSync(
+      resolve(scriptDir, "../../../.github/workflows/ci.yml"),
+      "utf8",
+    );
+    const comparison = readFileSync(
+      resolve(scriptDir, "./compare-layout-screenshots.mjs"),
+      "utf8",
+    );
+
+    expect(workflow.match(/core\.setOutput\("new-screenshots"/g)).toHaveLength(2);
+    expect(
+      workflow.match(/ALLOW_MISSING_SCREENSHOT_BASELINE_NAMES=.*new-screenshots/g),
+    ).toHaveLength(2);
+    expect(comparison).toContain("ALLOW_MISSING_SCREENSHOT_BASELINE_NAMES");
+    expect(comparison).toContain("allowedMissingBaselineNames.has(file)");
   });
 });

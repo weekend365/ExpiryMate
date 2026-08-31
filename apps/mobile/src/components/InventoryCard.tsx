@@ -130,6 +130,7 @@ export function InventoryCard({
       ) : onCleanup ? (
         <Pressable
           onPress={() => onCleanup(item)}
+          testID="inventory-item-cleanup-button"
           hitSlop={spacing.xs}
           accessibilityRole="button"
           accessibilityLabel={`${item.displayName} 정리할게요`}

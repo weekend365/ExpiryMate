@@ -385,6 +385,7 @@ async function main() {
           spiceLevel: "none",
           requiredEquipment: ["stovetop"],
           mealType: "breakfast",
+          stepTimerSeconds: [null, null, 60, null],
           strategy: "expiring_first",
         },
         {
