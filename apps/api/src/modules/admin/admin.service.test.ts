@@ -110,7 +110,8 @@ describe("AdminService", () => {
           .mockResolvedValueOnce(1)
           .mockResolvedValueOnce(3)
           .mockResolvedValueOnce(4)
-          .mockResolvedValueOnce(4),
+          .mockResolvedValueOnce(4)
+          .mockResolvedValueOnce(0),
         groupBy: vi.fn().mockResolvedValue([
           { storageLocation: "fridge", _count: { _all: 7 } },
         ]),
@@ -128,9 +129,11 @@ describe("AdminService", () => {
     expect(summary.todayExpiryCount).toBe(1);
     expect(summary.within7DaysCount).toBe(4);
     expect(summary.safeCount).toBe(4);
+    expect(summary.unknownExpiryCount).toBe(0);
     expect(
       summary.expiredCount +
         summary.within7DaysCount +
+        summary.unknownExpiryCount +
         summary.safeCount,
     ).toBe(summary.totalActiveCount);
     expect(prisma.inventoryItem.count).toHaveBeenNthCalledWith(

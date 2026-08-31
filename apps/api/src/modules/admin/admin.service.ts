@@ -228,6 +228,7 @@ export class AdminService {
       within3DaysCount,
       within7DaysCount,
       safeCount,
+      unknownExpiryCount,
       locationGroups,
       recentRows,
       expiringRows,
@@ -269,6 +270,12 @@ export class AdminService {
           expiryDate: { gt: in7Days },
         },
       }),
+      this.prisma.inventoryItem.count({
+        where: {
+          ...trackedWhere,
+          expiryDate: null,
+        },
+      }),
       this.prisma.inventoryItem.groupBy({
         by: ["storageLocation"],
         where: trackedWhere,
@@ -308,6 +315,7 @@ export class AdminService {
       within7DaysCount,
       expiredCount,
       safeCount,
+      unknownExpiryCount,
       totalActiveCount,
       recentItems,
       expiringItems,

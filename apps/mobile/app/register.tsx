@@ -93,7 +93,7 @@ type RegistrationFormValues = {
   quantity: number;
   unit: string;
   storageLocation: string;
-  expiryDate: string;
+  expiryDate: string | null;
   expirySource: ExpirySource;
   notes: string;
 };
@@ -111,7 +111,8 @@ type RegisteredSessionItem = {
   quantityBase: number;
   unitCode: UnitCode;
   storageLocation: string;
-  expiryDate: string;
+  expiryDate: string | null;
+  expirySource: ExpirySource;
 };
 
 const REGISTRATION_STEPS: Array<{
@@ -189,7 +190,7 @@ const buildInitialValues = (
   return nextValues;
 };
 
-function normalizeDraftExpiryDate(value?: string) {
+function normalizeDraftExpiryDate(value?: string | null) {
   if (!value) {
     return DEFAULT_INVENTORY_FORM.expiryDate;
   }
@@ -364,7 +365,8 @@ export default function RegisterScreen() {
             updated.quantityBase === item.quantityBase &&
             updated.unitCode === item.unitCode &&
             updated.storageLocation === item.storageLocation &&
-            updated.expiryDate === item.expiryDate)
+            updated.expiryDate === item.expiryDate &&
+            updated.expirySource === item.expirySource)
         ) {
           return item;
         }
@@ -379,6 +381,7 @@ export default function RegisterScreen() {
           unitCode: updated.unitCode,
           storageLocation: updated.storageLocation,
           expiryDate: updated.expiryDate,
+          expirySource: updated.expirySource,
         };
       });
 
@@ -472,10 +475,15 @@ export default function RegisterScreen() {
     ? "스캔한 이름이 다르면 고쳐 주세요. 내 냉장고에만 먼저 반영돼요."
     : REGISTRATION_STEPS[0]?.guideMessage;
   const canGoNext = isLastStep
-    ? Boolean(displayName && storageLocation && expiryDate) && quantity > 0
+    ? Boolean(
+        displayName &&
+          storageLocation &&
+          (expiryDate || expirySource === ExpirySource.UNKNOWN),
+      ) && quantity > 0
     : (step === "product" && Boolean(displayName)) ||
       (step === "quantity" && Boolean(storageLocation) && quantity > 0) ||
-      (step === "expiry" && Boolean(expiryDate));
+      (step === "expiry" &&
+        Boolean(expiryDate || expirySource === ExpirySource.UNKNOWN));
   const latestRegisteredItem = registeredSessionItems[0] ?? null;
   const selectedLocationLabel = resolveLabel(storageLocation);
 
@@ -671,6 +679,7 @@ export default function RegisterScreen() {
           unitCode: created.unitCode,
           storageLocation: created.storageLocation,
           expiryDate: created.expiryDate,
+          expirySource: created.expirySource,
         },
         ...current,
       ]);
@@ -736,6 +745,7 @@ export default function RegisterScreen() {
           : "잘 넣어뒀어요",
         supportingMessage: formatPutAwaySupportingMessage({
           expiryDate: latestRegisteredItem?.expiryDate,
+          expirySource: latestRegisteredItem?.expirySource,
           sessionCount: registeredSessionItems.length,
         }),
       },
@@ -812,7 +822,9 @@ export default function RegisterScreen() {
                     <AppText style={styles.sessionMeta}>
                       {resolveLabel(item.storageLocation)} ·{" "}
                       {formatInventoryQuantity(item)} ·{" "}
-                      {formatDateKorean(item.expiryDate)}
+                      {item.expiryDate
+                        ? formatDateKorean(item.expiryDate)
+                        : "기한 확인 필요"}
                     </AppText>
                   </View>
                   <ChevronRight
@@ -837,7 +849,9 @@ export default function RegisterScreen() {
         testID="register-screen"
       footer={
         <View style={styles.footerStack}>
-          {isLastStep && !expiryDate ? (
+          {isLastStep &&
+          !expiryDate &&
+          expirySource !== ExpirySource.UNKNOWN ? (
             <AppText style={styles.ctaHint} accessibilityLiveRegion="polite">
               날짜만 골라 주시면 넣을게요
             </AppText>
@@ -981,6 +995,12 @@ export default function RegisterScreen() {
               });
             }}
             onSelectPreset={handlePresetDate}
+            onSelectUnknown={() => {
+              form.setValue("expiryDate", null, { shouldValidate: true });
+              form.setValue("expirySource", ExpirySource.UNKNOWN, {
+                shouldValidate: true,
+              });
+            }}
           >
             <RecapCard>
               <RecapRow

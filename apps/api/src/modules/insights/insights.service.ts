@@ -284,7 +284,7 @@ function resolveWasteTrend(change: number | null) {
 
 function buildInsightActions(input: {
   expiringSoon: number;
-  expiringItems: Array<{ displayName: string; expiryDate: Date }>;
+  expiringItems: Array<{ displayName: string; expiryDate: Date | null }>;
   topDiscardedCategory: {
     category: ProductCategory | null;
     _count: { _all: number };
@@ -300,7 +300,7 @@ function buildInsightActions(input: {
       itemNames: input.expiringItems.map((item) => item.displayName),
       category: null,
       nearestExpiryDate:
-        input.expiringItems[0]?.expiryDate.toISOString().slice(0, 10) ?? null,
+        input.expiringItems[0]?.expiryDate?.toISOString().slice(0, 10) ?? null,
     });
   }
   if (input.topDiscardedCategory?.category) {

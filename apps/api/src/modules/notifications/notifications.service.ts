@@ -271,7 +271,7 @@ export class NotificationsService
 
     const itemsBySpaceAndDate = new Map<string, DueItem[]>();
     for (const item of dueItems) {
-      if (!item.spaceId) {
+      if (!item.spaceId || !item.expiryDate) {
         continue;
       }
       const key = `${item.spaceId}:${item.expiryDate.toISOString()}`;

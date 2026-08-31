@@ -15,7 +15,7 @@ export type DatePickerFieldHandle = {
 
 interface DatePickerFieldProps extends PropsWithChildren {
   label?: string;
-  value?: string;
+  value?: string | null;
   onChange: (value: string) => void;
   error?: string;
   /** field = labeled row; hero = large date; none = parent trigger opens the sheet */

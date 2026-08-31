@@ -322,15 +322,19 @@ export function validateGeneratedRecommendations(
     }
 
     if (request.useExpiringFirst && dish.strategy === "expiring_first") {
+      const knownExpiryItems = inventorySnapshot.filter(
+        (item) => item.daysUntilExpiry !== null,
+      );
       const minimumDays = Math.min(
-        ...inventorySnapshot.map((item) => item.daysUntilExpiry),
+        ...knownExpiryItems.map((item) => item.daysUntilExpiry!),
       );
       const urgentIds = new Set(
-        inventorySnapshot
+        knownExpiryItems
           .filter((item) => item.daysUntilExpiry === minimumDays)
           .map((item) => item.inventoryItemId),
       );
       if (
+        knownExpiryItems.length > 0 &&
         !usedIngredients.some(
           (ingredient) =>
             ingredient.inventoryItemId && urgentIds.has(ingredient.inventoryItemId),

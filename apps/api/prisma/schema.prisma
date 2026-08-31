@@ -24,6 +24,7 @@ enum ExpirySource {
   manual
   preset
   ocr_detected
+  unknown
 }
 
 enum ProductCategory {
@@ -493,7 +494,7 @@ model InventoryItem {
   quantityBase               Int                        @default(1)
   unitCode                   InventoryUnitCode          @default(ea)
   storageLocation            String
-  expiryDate                 DateTime                   @db.Date
+  expiryDate                 DateTime?                  @db.Date
   expirySource               ExpirySource
   status                     ItemStatus                 @default(active)
   notes                      String?
@@ -507,6 +508,18 @@ model InventoryItem {
   @@index([spaceId, status])
   @@index([spaceId, expiryDate])
   @@index([productMasterId])
+}
+
+model InventoryCreateRequest {
+  id             String   @id @default(cuid())
+  ownerKey       String
+  spaceId        String
+  idempotencyKey String
+  itemIds        String[]
+  createdAt      DateTime @default(now())
+
+  @@unique([spaceId, idempotencyKey])
+  @@index([createdAt])
 }
 
 /// Append-only record of an item leaving active inventory. Application code never updates it.

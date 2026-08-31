@@ -141,62 +141,43 @@ export class InventoryService {
     dto: CreateInventoryItemBody,
     ownerKey: string,
     spaceId?: string,
+    idempotencyKey?: string,
   ) {
-    await this.settingsService.assertValidStorageLocation(
+    const result = await this.createMany(
+      [dto],
       ownerKey,
-      dto.storageLocation,
       spaceId,
+      idempotencyKey,
     );
-
-    const catalog = await loadProductMasterOrThrow(
-      this.prisma,
-      dto.productMasterId,
-    );
-    const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
-    const item = await this.prisma.inventoryItem.create({
-      data: {
-        ownerKey,
-        spaceId,
-        createdByUserId: ownerKey,
-        updatedByUserId: ownerKey,
-        productId: dto.productId,
-        productMasterId: catalog?.id,
-        displayName: dto.displayName,
-        brand: dto.brand,
-        category: dto.category as ProductCategory | undefined,
-        quantity: dto.quantity,
-        unit: dto.unit ?? "개",
-        quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
-        unitCode: (dto.unitCode ??
-          derivedQuantity.unitCode) as InventoryUnitCode,
-        storageLocation: dto.storageLocation,
-        expiryDate: parseExpiryDate(dto.expiryDate),
-        expirySource: dto.expirySource as ExpirySource,
-        status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
-        notes: dto.notes,
-      },
-    });
-
-    if (catalog) {
-      await syncCatalogCorrectionAfterCreate(this.prisma, {
-        catalog,
-        ownerKey,
-        proposed: dto,
-      });
+    const item = result.items[0];
+    if (!item) {
+      throw new BadRequestException("등록할 재료를 찾지 못했어요.");
     }
-
-    return serializeInventoryItem(item);
+    return item;
   }
 
   async createMany(
     items: BatchCreateInventoryItemsBody["items"],
     ownerKey: string,
     spaceId?: string,
+    idempotencyKey?: string,
   ) {
     if (items.length > PHOTO_PARSE_MAX_ITEMS) {
       throw new BadRequestException(
         `한 번에 최대 ${PHOTO_PARSE_MAX_ITEMS}개까지 넣을 수 있어요.`,
       );
+    }
+
+    const requestSpaceId = spaceId ?? `personal_${ownerKey}`;
+    const normalizedIdempotencyKey = normalizeIdempotencyKey(idempotencyKey);
+    if (normalizedIdempotencyKey) {
+      const replay = await this.findCreateReplay(
+        requestSpaceId,
+        normalizedIdempotencyKey,
+      );
+      if (replay) {
+        return replay;
+      }
     }
 
     const uniqueLocations = [...new Set(items.map((item) => item.storageLocation))];
@@ -214,39 +195,67 @@ export class InventoryService {
       ),
     );
 
-    const created = await this.prisma.$transaction(async (tx) => {
-      const records = [];
-      for (const [index, dto] of items.entries()) {
-        const catalog = catalogs[index];
-        const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
-        records.push(
-          await tx.inventoryItem.create({
+    let created;
+    try {
+      created = await this.prisma.$transaction(async (tx) => {
+        const records = [];
+        for (const [index, dto] of items.entries()) {
+          const catalog = catalogs[index];
+          const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
+          records.push(
+            await tx.inventoryItem.create({
+              data: {
+                ownerKey,
+                spaceId,
+                createdByUserId: ownerKey,
+                updatedByUserId: ownerKey,
+                productId: dto.productId,
+                productMasterId: catalog?.id,
+                displayName: dto.displayName,
+                brand: dto.brand,
+                category: dto.category as ProductCategory | undefined,
+                quantity: dto.quantity,
+                unit: dto.unit ?? "개",
+                quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
+                unitCode: (dto.unitCode ??
+                  derivedQuantity.unitCode) as InventoryUnitCode,
+                storageLocation: dto.storageLocation,
+                expiryDate: parseExpiryDate(dto.expiryDate),
+                expirySource: dto.expirySource as ExpirySource,
+                status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
+                notes: dto.notes,
+              },
+            }),
+          );
+        }
+        if (normalizedIdempotencyKey) {
+          await tx.inventoryCreateRequest.create({
             data: {
               ownerKey,
-              spaceId,
-              createdByUserId: ownerKey,
-              updatedByUserId: ownerKey,
-              productId: dto.productId,
-              productMasterId: catalog?.id,
-              displayName: dto.displayName,
-              brand: dto.brand,
-              category: dto.category as ProductCategory | undefined,
-              quantity: dto.quantity,
-              unit: dto.unit ?? "개",
-              quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
-              unitCode: (dto.unitCode ??
-                derivedQuantity.unitCode) as InventoryUnitCode,
-              storageLocation: dto.storageLocation,
-              expiryDate: parseExpiryDate(dto.expiryDate),
-              expirySource: dto.expirySource as ExpirySource,
-              status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
-              notes: dto.notes,
+              spaceId: requestSpaceId,
+              idempotencyKey: normalizedIdempotencyKey,
+              itemIds: records.map((record) => record.id),
             },
-          }),
+          });
+        }
+        return records;
+      });
+    } catch (error) {
+      if (
+        normalizedIdempotencyKey &&
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        const replay = await this.findCreateReplay(
+          requestSpaceId,
+          normalizedIdempotencyKey,
         );
+        if (replay) {
+          return replay;
+        }
       }
-      return records;
-    });
+      throw error;
+    }
 
     for (const [index, dto] of items.entries()) {
       const catalog = catalogs[index];
@@ -265,6 +274,29 @@ export class InventoryService {
     };
   }
 
+  private async findCreateReplay(spaceId: string, idempotencyKey: string) {
+    const request = await this.prisma.inventoryCreateRequest.findUnique({
+      where: {
+        spaceId_idempotencyKey: { spaceId, idempotencyKey },
+      },
+    });
+    if (!request) {
+      return null;
+    }
+
+    const rows = await this.prisma.inventoryItem.findMany({
+      where: { id: { in: request.itemIds }, spaceId },
+    });
+    const byId = new Map(rows.map((item) => [item.id, item]));
+    const ordered = request.itemIds
+      .map((id) => byId.get(id))
+      .filter((item): item is NonNullable<typeof item> => Boolean(item));
+    return {
+      count: ordered.length,
+      items: ordered.map(serializeInventoryItem),
+    };
+  }
+
   async update(
     id: string,
     dto: UpdateInventoryItemBody,
@@ -272,6 +304,17 @@ export class InventoryService {
     spaceId?: string,
   ) {
     const current = await this.findOne(id, ownerKey, spaceId);
+    const nextExpiryDate =
+      dto.expiryDate === undefined ? current.expiryDate : dto.expiryDate;
+    const nextExpirySource = dto.expirySource ?? current.expirySource;
+    if (
+      (nextExpirySource === "unknown" && nextExpiryDate !== null) ||
+      (nextExpirySource !== "unknown" && nextExpiryDate === null)
+    ) {
+      throw new BadRequestException(
+        "유통기한을 고르거나 ‘기한 모름’을 선택해 주세요.",
+      );
+    }
 
     if (dto.storageLocation !== undefined) {
       await this.settingsService.assertValidStorageLocation(
@@ -579,7 +622,7 @@ type DispositionItem = {
   quantityBase: number;
   unitCode: InventoryUnitCode;
   storageLocation: string;
-  expiryDate: Date;
+  expiryDate: Date | null;
 };
 
 function dispositionEventData(
@@ -609,7 +652,7 @@ function dispositionEventData(
       quantityBase: item.quantityBase,
       unitCode: item.unitCode,
       storageLocation: item.storageLocation,
-      expiryDate: item.expiryDate.toISOString().slice(0, 10),
+      expiryDate: item.expiryDate?.toISOString().slice(0, 10) ?? null,
     },
     outcome,
     source: InventoryDispositionSource.live,
@@ -642,7 +685,22 @@ function inventoryScope(ownerKey: string, spaceId?: string) {
   return spaceId ? { spaceId } : { ownerKey };
 }
 
-function parseExpiryDate(value: string) {
+function normalizeIdempotencyKey(value?: string) {
+  const normalized = value?.trim();
+  if (!normalized) {
+    return null;
+  }
+  if (normalized.length > 128) {
+    throw new BadRequestException("Idempotency-Key가 너무 깁니다.");
+  }
+  return normalized;
+}
+
+function parseExpiryDate(value: string | null) {
+  if (value === null) {
+    return null;
+  }
+
   if (!isDateOnlyString(value)) {
     throw new BadRequestException("유통기한은 YYYY-MM-DD 형식이어야 합니다.");
   }

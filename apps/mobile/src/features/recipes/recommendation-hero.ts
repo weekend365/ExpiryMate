@@ -6,12 +6,16 @@ export type RecommendationHeroStatus = {
 };
 
 export function selectRecommendationHeroIngredientNames(
-  items: Array<{ displayName: string; expiryDate: string }>,
+  items: Array<{ displayName: string; expiryDate: string | null }>,
   limit = 2,
 ) {
   const seen = new Set<string>();
   return [...items]
-    .sort((left, right) => left.expiryDate.localeCompare(right.expiryDate))
+    .sort((left, right) => {
+      if (!left.expiryDate) return 1;
+      if (!right.expiryDate) return -1;
+      return left.expiryDate.localeCompare(right.expiryDate);
+    })
     .flatMap((item) => {
       const name = item.displayName.trim();
       const key = name.toLocaleLowerCase("ko-KR");

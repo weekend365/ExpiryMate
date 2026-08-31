@@ -21,7 +21,7 @@ export interface RegistrationDraft extends RegistrationPrefill {
   quantity?: number;
   unit?: string;
   storageLocation?: string;
-  expiryDate?: string;
+  expiryDate?: string | null;
   expirySource?: ExpirySource;
   notes?: string;
 }

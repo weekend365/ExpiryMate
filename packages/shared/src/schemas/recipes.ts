@@ -141,8 +141,9 @@ export const recipeInventorySnapshotItemSchema = z.object({
   expiryDate: z
     .string()
     .regex(DATE_ONLY_PATTERN)
-    .refine(isDateOnlyString, "올바른 날짜를 입력해주세요"),
-  daysUntilExpiry: z.number().int(),
+    .refine(isDateOnlyString, "올바른 날짜를 입력해주세요")
+    .nullable(),
+  daysUntilExpiry: z.number().int().nullable(),
 });
 
 const recipeUsedIngredientBaseSchema = z.object({

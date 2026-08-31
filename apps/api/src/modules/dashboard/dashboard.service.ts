@@ -40,6 +40,7 @@ export class DashboardService {
       within3DaysCount,
       within7DaysCount,
       safeCount,
+      unknownExpiryCount,
       locationGroups,
       recentRows,
       expiringRows,
@@ -80,6 +81,12 @@ export class DashboardService {
         where: {
           ...trackedWhere,
           expiryDate: { gt: in7Days },
+        },
+      }),
+      this.prisma.inventoryItem.count({
+        where: {
+          ...trackedWhere,
+          expiryDate: null,
         },
       }),
       this.prisma.inventoryItem.groupBy({
@@ -132,6 +139,7 @@ export class DashboardService {
       within7DaysCount,
       expiredCount,
       safeCount,
+      unknownExpiryCount,
       totalActiveCount,
       recentItems,
       expiringItems,
@@ -179,7 +187,7 @@ function toRecommendationPreview(
 
       return {
         name: ingredient.name,
-        daysUntilExpiry: snapshot
+        daysUntilExpiry: snapshot?.expiryDate
           ? calculateDaysLeftUntilExpiry(snapshot.expiryDate, now)
           : null,
         index,

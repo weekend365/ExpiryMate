@@ -32,7 +32,7 @@ describe("mobile inventory filters", () => {
     expect(parseInventoryViewFilter(["expired"])).toBe("expired");
     expect(parseInventoryViewFilter("safe")).toBe("safe");
     expect(parseInventoryViewFilter("all")).toBe("all");
-    expect(parseInventoryViewFilter("unknown")).toBeNull();
+    expect(parseInventoryViewFilter("unknown")).toBe("unknown");
     expect(parseInventoryViewFilter(undefined)).toBeNull();
   });
 
@@ -159,6 +159,7 @@ describe("mobile inventory filters", () => {
       all: 3,
       expired: 1,
       within7: 1,
+      unknown: 0,
       safe: 1,
     });
     expect(counts.locationTotal).toBe(2);
@@ -173,6 +174,7 @@ describe("mobile inventory filters", () => {
     expect(getInventoryUrgencySection("2026-06-07")).toBe("within7");
     expect(getInventoryUrgencySection("2026-06-10")).toBe("within7");
     expect(getInventoryUrgencySection("2026-06-20")).toBe("safe");
+    expect(getInventoryUrgencySection(null)).toBe("unknown");
   });
 
   it("builds exclusive urgency sections and hides empty buckets", () => {
@@ -223,7 +225,7 @@ describe("mobile inventory filters", () => {
 function createItem(
   id: string,
   displayName: string,
-  expiryDate: string,
+  expiryDate: string | null,
   storageLocation: StorageLocation = StorageLocation.FRIDGE,
   brand: string | null = null,
 ): InventoryItem {

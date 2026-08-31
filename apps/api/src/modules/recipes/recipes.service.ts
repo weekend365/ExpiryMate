@@ -448,10 +448,19 @@ export class RecipesService {
       ...(spaceId ? { spaceId } : { ownerKey }),
       status: "active" as const,
       quantityBase: { gt: 0 },
-      expiryDate: { gte: dateOnlyToUtcDate(today) },
-      OR: [
-        { category: null },
-        { category: { notIn: Array.from(nonFoodCategories) } },
+      AND: [
+        {
+          OR: [
+            { expiryDate: null },
+            { expiryDate: { gte: dateOnlyToUtcDate(today) } },
+          ],
+        },
+        {
+          OR: [
+            { category: null },
+            { category: { notIn: Array.from(nonFoodCategories) } },
+          ],
+        },
       ],
     };
     const [expiringItems, recentlyUpdatedItems, recentRecommendations] =
@@ -504,7 +513,9 @@ export class RecipesService {
         ...item,
         category: item.category as RecipeRankingCandidate["category"],
         unitCode: item.unitCode as string,
-        daysUntilExpiry: calculateDaysLeftUntilExpiry(item.expiryDate, today),
+        daysUntilExpiry: item.expiryDate
+          ? calculateDaysLeftUntilExpiry(item.expiryDate, today)
+          : Number.MAX_SAFE_INTEGER,
       }))
       .filter((item) => !isCandidateBlocked(item, preference));
 
@@ -531,8 +542,8 @@ export class RecipesService {
       unitCode: item.unitCode as RecipeInventorySnapshotItem["unitCode"],
       inferredAllergens: inferRecipeAllergenTags(item),
       storageLocation: item.storageLocation,
-      expiryDate: toKstDateOnly(item.expiryDate),
-      daysUntilExpiry: item.daysUntilExpiry,
+      expiryDate: item.expiryDate ? toKstDateOnly(item.expiryDate) : null,
+      daysUntilExpiry: item.expiryDate ? item.daysUntilExpiry : null,
     }));
   }
 

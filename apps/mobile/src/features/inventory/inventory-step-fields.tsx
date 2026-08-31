@@ -7,6 +7,7 @@ import {
   type DatePickerFieldHandle,
 } from "../../components/DatePickerField";
 import { FormField } from "../../components/FormField";
+import { Pill } from "../../components/Pill";
 import { QuantityStepper } from "../../components/QuantityStepper";
 import { QuantityUnitPills } from "./QuantityUnitPills";
 import {
@@ -133,14 +134,16 @@ export function InventoryExpiryStep({
   expiryError,
   onChangeDate,
   onSelectPreset,
+  onSelectUnknown,
   pickerRef,
   children,
 }: {
-  expiryDate?: string;
+  expiryDate?: string | null;
   expirySource?: ExpirySource;
   expiryError?: string;
   onChangeDate: (nextDate: string) => void;
   onSelectPreset: (isoDate: string) => void;
+  onSelectUnknown: () => void;
   pickerRef?: Ref<DatePickerFieldHandle>;
   children?: ReactNode;
 }) {
@@ -157,8 +160,19 @@ export function InventoryExpiryStep({
           ref={pickerRef}
           presentation="hero"
           heroEyebrow={null}
-          actionLabel={expiryDate ? "다른 날짜 고르기" : "달력에서 고르기"}
-          value={expiryDate}
+          actionLabel={
+            expirySource === ExpirySource.UNKNOWN
+              ? "날짜를 입력할게요"
+              : expiryDate
+                ? "다른 날짜 고르기"
+                : "달력에서 고르기"
+          }
+          value={expirySource === ExpirySource.UNKNOWN ? null : expiryDate}
+          emptyLabel={
+            expirySource === ExpirySource.UNKNOWN
+              ? "기한 확인 필요"
+              : undefined
+          }
           onChange={onChangeDate}
           error={expiryError}
         >
@@ -167,6 +181,12 @@ export function InventoryExpiryStep({
               expiryDate === isoDate && expirySource === ExpirySource.PRESET
             }
             onSelect={onSelectPreset}
+          />
+          <Pill
+            label="기한을 모르겠어요"
+            selected={expirySource === ExpirySource.UNKNOWN}
+            onPress={onSelectUnknown}
+            accessibilityLabel="유통기한을 모르겠어요"
           />
         </DatePickerField>
       </View>

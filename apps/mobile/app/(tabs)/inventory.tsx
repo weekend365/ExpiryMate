@@ -48,9 +48,9 @@ import {
   InventorySelectionBar,
 } from "../../src/features/inventory/inventory-list-header";
 import {
-  InventoryEntryMethodSheet,
   InventoryLocationFilterSheet,
 } from "../../src/features/inventory/inventory-list-sheets";
+import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
 import {
   inventoryScreenStyles as styles,
 } from "../../src/features/inventory/inventory-screen-styles";
@@ -758,7 +758,7 @@ export default function InventoryScreen() {
         onSelect={selectLocationFilter}
       />
 
-      <InventoryEntryMethodSheet
+      <IngredientEntryMethodSheet
         visible={entryMethodVisible}
         onClose={() => setEntryMethodVisible(false)}
         onScan={goToScanner}

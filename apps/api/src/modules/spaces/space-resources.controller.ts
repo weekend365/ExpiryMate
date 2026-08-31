@@ -109,9 +109,10 @@ export class SpaceInventoryController {
     @CurrentOwnerKey() userId: string,
     @Body(new ZodValidationPipe(createInventoryItemBodySchema))
     body: CreateInventoryItemBody,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
-    return this.inventoryService.create(body, userId, spaceId);
+    return this.inventoryService.create(body, userId, spaceId, idempotencyKey);
   }
 
   @Post("parse-photo")
@@ -144,9 +145,15 @@ export class SpaceInventoryController {
     @CurrentOwnerKey() userId: string,
     @Body(new ZodValidationPipe(batchCreateInventoryItemsBodySchema))
     body: BatchCreateInventoryItemsBody,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     await this.spacesService.requireMembership(spaceId, userId);
-    return this.inventoryService.createMany(body.items, userId, spaceId);
+    return this.inventoryService.createMany(
+      body.items,
+      userId,
+      spaceId,
+      idempotencyKey,
+    );
   }
 
   @Patch(":id")

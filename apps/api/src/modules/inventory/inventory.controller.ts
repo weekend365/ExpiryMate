@@ -76,8 +76,14 @@ export class InventoryController {
     @Body(new ZodValidationPipe(createInventoryItemBodySchema))
     dto: CreateInventoryItemBody,
     @CurrentOwnerKey() ownerKey: string,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
-    return this.inventoryService.create(dto, ownerKey, personalSpaceId(ownerKey));
+    return this.inventoryService.create(
+      dto,
+      ownerKey,
+      personalSpaceId(ownerKey),
+      idempotencyKey,
+    );
   }
 
   @Post("parse-photo")
@@ -107,11 +113,13 @@ export class InventoryController {
     @Body(new ZodValidationPipe(batchCreateInventoryItemsBodySchema))
     dto: BatchCreateInventoryItemsBody,
     @CurrentOwnerKey() ownerKey: string,
+    @Headers("idempotency-key") idempotencyKey?: string,
   ) {
     return this.inventoryService.createMany(
       dto.items,
       ownerKey,
       personalSpaceId(ownerKey),
+      idempotencyKey,
     );
   }
 

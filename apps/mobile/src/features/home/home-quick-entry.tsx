@@ -1,15 +1,7 @@
-import {
-  Barcode,
-  ImageIcon,
-  PenLine,
-  Plus,
-  ShoppingBasket,
-} from "lucide-react-native";
+import { ShoppingBasket } from "lucide-react-native";
 import type { AffiliateReorderPreviewResponse } from "@expirymate/shared";
-import { useState } from "react";
 import { View } from "react-native";
 import { AppText } from "../../components/AppText";
-import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { colors, spacing } from "../../shared/theme";
 import { homeScreenStyles as styles } from "./home-screen-styles";
@@ -19,80 +11,6 @@ import {
   AffiliateEntryImpression,
   trackAffiliateEntryTap,
 } from "../affiliate/affiliate-entry-tracking";
-
-export function HomeQuickEntry({
-  onOpenScanner,
-  onManualRegister,
-  onOpenPhotoParse,
-}: {
-  onOpenScanner: () => void;
-  onManualRegister: () => void;
-  onOpenPhotoParse?: () => void;
-}) {
-  const [entryMethodVisible, setEntryMethodVisible] = useState(false);
-
-  const selectEntryMethod = (action: () => void) => {
-    setEntryMethodVisible(false);
-    action();
-  };
-
-  return (
-    <>
-      <Button
-        icon={Plus}
-        onPress={() => setEntryMethodVisible(true)}
-        fullWidth
-        testID="home-add-ingredients-button"
-      >
-        재료 넣기
-      </Button>
-
-      <BottomSheet
-        visible={entryMethodVisible}
-        onClose={() => setEntryMethodVisible(false)}
-        title="어떻게 넣을까요?"
-        description={
-          onOpenPhotoParse
-            ? "바코드, 직접 입력, 사진 중 편한 방법을 골라 주세요."
-            : "바코드 또는 직접 입력 중 편한 방법을 골라 주세요."
-        }
-        mascotMood="idle"
-      >
-        <View style={styles.entryMethodActions}>
-          <Button
-            icon={Barcode}
-            onPress={() => selectEntryMethod(onOpenScanner)}
-            fullWidth
-            testID="home-scan-button"
-          >
-            바코드 스캔
-          </Button>
-          <Button
-            icon={PenLine}
-            onPress={() => selectEntryMethod(onManualRegister)}
-            variant="surface"
-            fullWidth
-            testID="home-manual-register-button"
-          >
-            직접 입력
-          </Button>
-          {onOpenPhotoParse ? (
-            <Button
-              icon={ImageIcon}
-              onPress={() => selectEntryMethod(onOpenPhotoParse)}
-              variant="surface"
-              fullWidth
-              accessibilityLabel="사진으로 넣기"
-              testID="home-photo-parse-button"
-            >
-              사진으로 여러 개
-            </Button>
-          ) : null}
-        </View>
-      </BottomSheet>
-    </>
-  );
-}
 
 export function HomeReorderCard({
   preview,

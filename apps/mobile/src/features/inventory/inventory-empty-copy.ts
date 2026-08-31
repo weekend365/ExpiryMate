@@ -28,6 +28,10 @@ export function getFilteredEmptyTitle(
     return "여유 있는 재료가 없어요";
   }
 
+  if (filter === "unknown") {
+    return "기한을 확인할 재료가 없어요";
+  }
+
   return "이 위치에는 재료가 없어요";
 }
 
@@ -48,7 +52,7 @@ export function getFilteredEmptyDescription(
       : "급한 재료가 없어요. 필터를 풀고 전체 목록을 볼까요?";
   }
 
-  if (filter === "expired" || filter === "safe") {
+  if (filter === "expired" || filter === "safe" || filter === "unknown") {
     return hasLocationFilter
       ? "위치를 바꾸거나 필터를 풀고 전체를 볼까요?"
       : "이 조건에는 재료가 없어요. 필터를 풀고 전체를 볼까요?";

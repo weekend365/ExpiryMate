@@ -4,8 +4,8 @@ import {
   type DashboardRecommendationPreview,
 } from "@expirymate/shared";
 import { router } from "expo-router";
-import { ChevronRight, Sparkles, TrendingDown } from "lucide-react-native";
-import { useMemo } from "react";
+import { ChevronRight, Plus, Sparkles, TrendingDown } from "lucide-react-native";
+import { useMemo, useState } from "react";
 import {
   ImageBackground,
   Pressable,
@@ -35,9 +35,12 @@ import { HomeSectionHeader } from "../../src/features/home/home-section-header";
 import { useInsightsPreview } from "../../src/features/insights/use-insights";
 import type { InventoryViewFilter } from "../../src/features/inventory/filters";
 import {
+  photoParseRoute,
   registerRoute,
   scannerRoute,
 } from "../../src/features/registration/registration-return";
+import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
+import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
@@ -73,6 +76,7 @@ export default function HomeScreen() {
       subscription.query.data.planCode === "jango_plus",
   );
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
+  const [entryMethodVisible, setEntryMethodVisible] = useState(false);
 
   const hasLoaded = data !== undefined;
   const isInitialLoading = isLoading && !hasLoaded;
@@ -87,10 +91,14 @@ export default function HomeScreen() {
   const expiringGroups = groupInventoryItems(expiringItems);
   const expiredCount = data?.expiredCount ?? 0;
   const within7DaysCount = data?.within7DaysCount ?? 0;
+  const unknownExpiryCount = data?.unknownExpiryCount ?? 0;
   const totalActiveCount = data?.totalActiveCount ?? 0;
   const safeCount =
     data?.safeCount ??
-    Math.max(totalActiveCount - expiredCount - within7DaysCount, 0);
+    Math.max(
+      totalActiveCount - expiredCount - within7DaysCount - unknownExpiryCount,
+      0,
+    );
   const hasInventory = hasLoaded && totalActiveCount > 0;
 
   const notices = useMemo(
@@ -147,6 +155,13 @@ export default function HomeScreen() {
       clearPrefill(activeSpaceId);
     }
     router.push(scannerRoute("home"));
+  };
+
+  const handleOpenPhotoParse = () => {
+    if (activeSpaceId) {
+      clearPrefill(activeSpaceId);
+    }
+    router.push(photoParseRoute("home"));
   };
 
   const handleOpenRecommendations = () => {
@@ -233,6 +248,14 @@ export default function HomeScreen() {
         >
           <SpaceSwitcher />
           <HomeHero notices={notices} onNoticeAction={handleNoticeAction} />
+          <Button
+            icon={Plus}
+            onPress={() => setEntryMethodVisible(true)}
+            fullWidth
+            testID="home-add-ingredients-button"
+          >
+            재료 넣기
+          </Button>
 
           {insightsPreview.data?.ready ? (
             <Pressable
@@ -442,7 +465,7 @@ export default function HomeScreen() {
                 ]}
                 accessibilityLabel="유통기한 현황을 불러오고 있어요"
               >
-                {[0, 1, 2].map((index) => (
+                {[0, 1, 2, 3].map((index) => (
                   <View
                     key={index}
                     style={[
@@ -471,6 +494,27 @@ export default function HomeScreen() {
                   isRegular && styles.trafficStripRegular,
                 ]}
               >
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.trafficLampPressable,
+                    isRegular && styles.trafficLampPressableRegular,
+                    unknownExpiryCount > 0 && styles.trafficLampActiveWarning,
+                    pressed && styles.trafficLampPressablePressed,
+                  ]}
+                  onPress={() => openInventoryFilter("unknown")}
+                  accessibilityRole="button"
+                  accessibilityLabel={`기한 확인 ${unknownExpiryCount}건`}
+                  accessibilityHint="유통기한을 모르는 재료만 보관함에서 보여 드릴게요."
+                >
+                  <StatCard
+                    variant="traffic"
+                    label="확인"
+                    value={unknownExpiryCount}
+                    tone="warning"
+                    compact={!isRegular}
+                    showGlow={false}
+                  />
+                </Pressable>
                 <Pressable
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
@@ -546,6 +590,26 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
       </View>
+      <IngredientEntryMethodSheet
+        visible={entryMethodVisible}
+        onClose={() => setEntryMethodVisible(false)}
+        onScan={() => {
+          setEntryMethodVisible(false);
+          handleOpenScanner();
+        }}
+        onPhoto={
+          isInventoryPhotoParseEnabled()
+            ? () => {
+                setEntryMethodVisible(false);
+                handleOpenPhotoParse();
+              }
+            : undefined
+        }
+        onManual={() => {
+          setEntryMethodVisible(false);
+          handleManualRegister();
+        }}
+      />
     </Screen>
   );
 }

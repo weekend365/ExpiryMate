@@ -4,13 +4,23 @@ import {
   type InventoryItem,
 } from "@expirymate/shared";
 
-export type InventoryViewFilter = "all" | "expired" | "within7" | "safe";
+export type InventoryViewFilter =
+  | "all"
+  | "unknown"
+  | "expired"
+  | "within7"
+  | "safe";
 
-export type InventoryUrgencySection = "expired" | "within7" | "safe";
+export type InventoryUrgencySection =
+  | "unknown"
+  | "expired"
+  | "within7"
+  | "safe";
 
 export const inventoryUrgencySectionOrder: InventoryUrgencySection[] = [
   "expired",
   "within7",
+  "unknown",
   "safe",
 ];
 
@@ -20,6 +30,7 @@ export const inventoryUrgencySectionTitles: Record<
 > = {
   expired: "만료",
   within7: "곧 만료",
+  unknown: "기한 확인",
   safe: "여유 있어요",
 };
 
@@ -29,6 +40,7 @@ export const inventoryUrgencySectionDescriptions: Record<
 > = {
   expired: "유통기한이 지났어요",
   within7: "일주일 안에 손보면 좋아요",
+  unknown: "날짜 대신 상태를 확인해 주세요",
   safe: "아직은 여유로워요",
 };
 
@@ -37,6 +49,7 @@ const inventoryViewFilters = new Set<InventoryViewFilter>([
   "within7",
   "safe",
   "expired",
+  "unknown",
 ]);
 
 /** Parse a route/search param into a known inventory view filter. */
@@ -104,6 +117,7 @@ export const buildInventoryFacetCounts = (
       all: 0,
       expired: 0,
       within7: 0,
+      unknown: 0,
       safe: 0,
     },
     location: {},
@@ -158,7 +172,7 @@ export const filterInventoryItems = (
 
 /** Map an item expiry date into a list section bucket. */
 export const getInventoryUrgencySection = (
-  expiryDate: string,
+  expiryDate: string | null,
 ): InventoryUrgencySection => {
   const bucket = getExpiryTrafficBucket(expiryDate);
 
@@ -175,6 +189,7 @@ export const buildInventoryUrgencySections = (
   const buckets: Record<InventoryUrgencySection, InventoryItem[]> = {
     expired: [],
     within7: [],
+    unknown: [],
     safe: [],
   };
 

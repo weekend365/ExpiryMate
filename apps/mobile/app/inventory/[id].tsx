@@ -152,7 +152,7 @@ export default function InventoryEditScreen() {
       displayName: "",
       quantity: 1,
       storageLocation: "fridge",
-      expiryDate: "",
+      expiryDate: null,
       expirySource: ExpirySource.MANUAL,
     },
   });
@@ -179,7 +179,9 @@ export default function InventoryEditScreen() {
       ? watchedUnit
       : "개";
   const displayName = form.watch("displayName")?.trim() ?? "";
-  const expiryDate = form.watch("expiryDate");
+  const watchedExpiryDate = form.watch("expiryDate");
+  const expiryDate =
+    typeof watchedExpiryDate === "string" ? watchedExpiryDate : null;
   const expirySource = form.watch("expirySource");
   const storageLocation = form.watch("storageLocation");
   const watchedBrand = form.watch("brand");
@@ -194,7 +196,11 @@ export default function InventoryEditScreen() {
   const stepIndex = EDIT_STEPS.findIndex((step) => step.key === editStep);
   const isLastEditStep = editStep === "expiry";
   const canGoNext = isLastEditStep
-    ? Boolean(displayName && storageLocation && expiryDate) && quantity > 0
+    ? Boolean(
+        displayName &&
+          storageLocation &&
+          (expiryDate || expirySource === ExpirySource.UNKNOWN),
+      ) && quantity > 0
     : (editStep === "product" && Boolean(displayName)) ||
       (editStep === "quantity" && Boolean(storageLocation) && quantity > 0);
   const primaryCtaLabel = isLastEditStep
@@ -350,7 +356,9 @@ export default function InventoryEditScreen() {
       testID="inventory-edit-screen"
       footer={
         <View style={inventoryFormStyles.footerStack}>
-          {isLastEditStep && !expiryDate ? (
+          {isLastEditStep &&
+          !expiryDate &&
+          expirySource !== ExpirySource.UNKNOWN ? (
             <AppText
               style={inventoryFormStyles.ctaHint}
               accessibilityLiveRegion="polite"
@@ -431,7 +439,11 @@ export default function InventoryEditScreen() {
           <InventoryExpiryStep
             expiryDate={expiryDate}
             expirySource={expirySource}
-            expiryError={form.formState.errors.expiryDate?.message}
+            expiryError={
+              typeof form.formState.errors.expiryDate?.message === "string"
+                ? form.formState.errors.expiryDate.message
+                : undefined
+            }
             onChangeDate={(nextDate) => {
               form.setValue("expiryDate", nextDate, {
                 shouldValidate: true,
@@ -441,6 +453,12 @@ export default function InventoryEditScreen() {
               });
             }}
             onSelectPreset={handlePresetDate}
+            onSelectUnknown={() => {
+              form.setValue("expiryDate", null, { shouldValidate: true });
+              form.setValue("expirySource", ExpirySource.UNKNOWN, {
+                shouldValidate: true,
+              });
+            }}
           >
             <RecapCard>
               <RecapRow

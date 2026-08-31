@@ -857,9 +857,11 @@ export const getInventoryItem = (id: string, spaceId: string) =>
 export const createInventoryItem = (
   payload: CreateInventoryItemBody,
   spaceId: string,
+  idempotencyKey = createIdempotencyKey(),
 ) =>
   request<InventoryItem>(spaceResourcePath(spaceId, "inventory"), {
     method: "POST",
+    headers: { "Idempotency-Key": idempotencyKey },
     body: JSON.stringify(payload),
   });
 
@@ -948,11 +950,13 @@ export const getInventoryPhotoParseAccess = (spaceId: string) =>
 export const batchCreateInventoryItems = (
   payload: BatchCreateInventoryItemsBody,
   spaceId: string,
+  idempotencyKey = createIdempotencyKey(),
 ) =>
   request<BatchCreateInventoryItemsResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/batch-create`,
     {
       method: "POST",
+      headers: { "Idempotency-Key": idempotencyKey },
       body: JSON.stringify(payload),
     },
   );
@@ -1342,7 +1346,7 @@ export const verifyRecommendationCreditPurchase = (
     },
   );
 
-function createIdempotencyKey() {
+export function createIdempotencyKey() {
   return `mobile-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()
     .toString(36)
     .slice(2)}`;

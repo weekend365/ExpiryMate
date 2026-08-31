@@ -86,6 +86,7 @@ export const serializeProductMasterCorrection = (
 const resolveStatus = (item: PrismaInventoryItem) => {
   if (
     item.status === ItemStatus.ACTIVE &&
+    item.expiryDate &&
     calculateDaysLeftUntilExpiry(item.expiryDate) < 0
   ) {
     return ItemStatus.EXPIRED;
@@ -113,7 +114,7 @@ export const serializeInventoryItem = (
   quantityBase: item.quantityBase,
   unitCode: item.unitCode as UnitCode,
   storageLocation: item.storageLocation,
-  expiryDate: toKstDateOnly(item.expiryDate),
+  expiryDate: item.expiryDate ? toKstDateOnly(item.expiryDate) : null,
   expirySource: item.expirySource as ExpirySource,
   status: resolveStatus(item),
   notes: item.notes,

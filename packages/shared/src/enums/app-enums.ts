@@ -24,6 +24,7 @@ export enum ExpirySource {
   MANUAL = "manual",
   PRESET = "preset",
   OCR_DETECTED = "ocr_detected",
+  UNKNOWN = "unknown",
 }
 
 export enum ProductCategory {

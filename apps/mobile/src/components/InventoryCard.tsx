@@ -43,7 +43,9 @@ export function InventoryCard({
   const presentation = getExpiryLampPresentation(item.expiryDate);
   const locationLabel = resolveLocationLabel(item.storageLocation);
   const quantityLabel = formatInventoryQuantity(item);
-  const dateLabel = `${formatDateKoreanCompact(item.expiryDate)}까지`;
+  const dateLabel = item.expiryDate
+    ? `${formatDateKoreanCompact(item.expiryDate)}까지`
+    : "기한 확인 필요";
   const accessibilityLabel = `${item.displayName}, ${presentation.ddayLabel}, ${locationLabel}, ${quantityLabel}, ${dateLabel}`;
 
   return (
@@ -176,7 +178,11 @@ function ExpiryBadge({
   );
 }
 
-function getExpiryLampPresentation(expiryDate: string) {
+function getExpiryLampPresentation(expiryDate: string | null) {
+  if (!expiryDate) {
+    return { lampColor: colors.mutedText, ddayLabel: "확인" };
+  }
+
   const bucket = getExpiryTrafficBucket(expiryDate);
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate);
   const ddayLabel =
@@ -187,6 +193,7 @@ function getExpiryLampPresentation(expiryDate: string) {
         : `D-${daysLeft}`;
 
   const lampColor = {
+    unknown: colors.mutedText,
     expired: colors.danger,
     within_7_days: colors.warning,
     safe: colors.success,

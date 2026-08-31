@@ -351,7 +351,7 @@ async function main() {
           quantityBase: layoutMilk.quantityBase,
           unitCode: layoutMilk.unitCode,
           storageLocation: layoutMilk.storageLocation,
-          expiryDate: layoutMilk.expiryDate.toISOString().slice(0, 10),
+          expiryDate: layoutMilk.expiryDate!.toISOString().slice(0, 10),
           daysUntilExpiry: 0,
         },
       ]),

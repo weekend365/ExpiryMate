@@ -8,28 +8,36 @@ export interface InventoryItemGroup {
   displayName: string;
   brand?: string | null;
   items: InventoryItem[];
-  nearestExpiryDate: string;
+  nearestExpiryDate: string | null;
   totalQuantity: number;
   unit?: string | null;
   hasMixedUnits: boolean;
 }
 
 export type ExpiryBucket =
+  | "unknown"
   | "expired"
   | "today"
   | "within_3_days"
   | "within_7_days"
   | "safe";
 
-export type ExpiryTrafficBucket = "expired" | "within_7_days" | "safe";
+export type ExpiryTrafficBucket =
+  | "unknown"
+  | "expired"
+  | "within_7_days"
+  | "safe";
 
 export const isTrackedItem = (item: InventoryItem) =>
   item.status === ItemStatus.ACTIVE || item.status === ItemStatus.EXPIRED;
 
 export const getExpiryBucket = (
-  expiryDate: string,
+  expiryDate: string | null | undefined,
   now: Date | string = new Date(),
 ): ExpiryBucket => {
+  if (!expiryDate) {
+    return "unknown";
+  }
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate, now);
 
   if (daysLeft < 0) {
@@ -53,9 +61,12 @@ export const getExpiryBucket = (
 
 /** Mutually exclusive buckets used by the home and inventory traffic lights. */
 export const getExpiryTrafficBucket = (
-  expiryDate: string,
+  expiryDate: string | null | undefined,
   now: Date | string = new Date(),
 ): ExpiryTrafficBucket => {
+  if (!expiryDate) {
+    return "unknown";
+  }
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate, now);
 
   if (daysLeft < 0) {
@@ -74,6 +85,15 @@ export const sortInventoryByNearestExpiry = (
   now: Date | string = new Date(),
 ) => {
   return [...items].sort((left, right) => {
+    if (!left.expiryDate && !right.expiryDate) {
+      return new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+    }
+    if (!left.expiryDate) {
+      return 1;
+    }
+    if (!right.expiryDate) {
+      return -1;
+    }
     const leftDays = calculateDaysLeftUntilExpiry(left.expiryDate, now);
     const rightDays = calculateDaysLeftUntilExpiry(right.expiryDate, now);
 
@@ -164,6 +184,9 @@ export const filterExpiringItems = (
       return false;
     }
 
+    if (!item.expiryDate) {
+      return false;
+    }
     const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate, now);
     return daysLeft <= maxDays;
   });
@@ -218,6 +241,9 @@ export const generateDashboardSummary = (
     ).length,
     safeCount: trackedItems.filter(
       (item) => getExpiryTrafficBucket(item.expiryDate, now) === "safe",
+    ).length,
+    unknownExpiryCount: trackedItems.filter(
+      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "unknown",
     ).length,
     totalActiveCount: trackedItems.length,
     recentItems: [...items]

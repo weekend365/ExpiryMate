@@ -78,6 +78,7 @@ export const expirySourceLabels: Record<ExpirySource, string> = {
   [ExpirySource.MANUAL]: "직접 입력",
   [ExpirySource.PRESET]: "빠른 선택",
   [ExpirySource.OCR_DETECTED]: "OCR 인식",
+  [ExpirySource.UNKNOWN]: "기한 모름",
 };
 
 export const productCategoryLabels: Record<ProductCategory, string> = {

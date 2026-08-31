@@ -69,8 +69,8 @@ export function InventoryCleanupSheet({
           ? step === "partial"
             ? `2단계 중 2단계 · 지금 ${formatInventoryQuantity(item)} 있어요`
             : canPartial
-              ? `2단계 중 1단계 · ${item.displayName} · ${formatDateKoreanCompact(item.expiryDate)}까지`
-              : `${item.displayName} · ${formatDateKoreanCompact(item.expiryDate)}까지`
+              ? `2단계 중 1단계 · ${item.displayName} · ${formatCleanupExpiry(item.expiryDate)}`
+              : `${item.displayName} · ${formatCleanupExpiry(item.expiryDate)}`
           : undefined
       }
       footer={
@@ -170,6 +170,12 @@ export function InventoryCleanupSheet({
       )}
     </BottomSheet>
   );
+}
+
+function formatCleanupExpiry(expiryDate: string | null) {
+  return expiryDate
+    ? `${formatDateKoreanCompact(expiryDate)}까지`
+    : "기한 확인 필요";
 }
 
 const styles = StyleSheet.create({

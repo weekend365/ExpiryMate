@@ -119,8 +119,10 @@ export function ScannerCameraExperience() {
     !needsManualName && (scanner.product?.needsNameConfirmation ?? true);
 
   const needsManualExpiry = scanner.confirmation?.expirationDate == null;
-  const resolvedExpiryDate = needsManualExpiry
-    ? manualExpiryDate
+  const resolvedExpiryDate: string | null = needsManualExpiry
+    ? manualExpirySource === ExpirySource.UNKNOWN
+      ? null
+      : manualExpiryDate
     : (scanner.confirmation?.expirationDate ?? "");
   const resolvedExpirySource = needsManualExpiry
     ? manualExpirySource
@@ -303,7 +305,11 @@ export function ScannerCameraExperience() {
   };
 
   const handleUseScanResult = async () => {
-    if (!scanner.confirmation || !resolvedProductName || !resolvedExpiryDate) {
+    if (
+      !scanner.confirmation ||
+      !resolvedProductName ||
+      (!resolvedExpiryDate && resolvedExpirySource !== ExpirySource.UNKNOWN)
+    ) {
       return;
     }
 
@@ -462,6 +468,11 @@ export function ScannerCameraExperience() {
   const handleManualExpiryChange = (nextDate: string) => {
     setManualExpiryDate(nextDate);
     setManualExpirySource(ExpirySource.MANUAL);
+  };
+
+  const handleUnknownExpiry = () => {
+    setManualExpiryDate("");
+    setManualExpirySource(ExpirySource.UNKNOWN);
   };
 
   return (
@@ -704,6 +715,7 @@ export function ScannerCameraExperience() {
         onManualCategoryChange={setManualCategory}
         onPresetExpiry={handlePresetExpiry}
         onManualExpiryChange={handleManualExpiryChange}
+        onUnknownExpiry={handleUnknownExpiry}
       />
     </>
   );

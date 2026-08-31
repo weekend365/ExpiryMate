@@ -31,10 +31,11 @@ export function DashboardPage() {
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <MetricCard label="오늘 만료" value={summary?.todayExpiryCount ?? 0} tone="danger" />
         <MetricCard label="3일 이내 만료" value={summary?.within3DaysCount ?? 0} tone="warning" />
         <MetricCard label="7일 이내 만료" value={summary?.within7DaysCount ?? 0} />
+        <MetricCard label="기한 확인 필요" value={summary?.unknownExpiryCount ?? 0} tone="warning" />
         <MetricCard label="보관 중" value={summary?.totalActiveCount ?? 0} />
       </div>
 

@@ -80,7 +80,9 @@ export function InventoryPage() {
                   {item.unit ?? "개"}
                 </div>
                 <div className="mt-2 text-sm text-[var(--muted)]">
-                  유통기한 {formatDateKoreanCompact(item.expiryDate)}
+                  {item.expiryDate
+                    ? `유통기한 ${formatDateKoreanCompact(item.expiryDate)}`
+                    : "유통기한 확인 필요"}
                 </div>
               </div>
               <div className="flex flex-wrap items-start justify-end gap-2">

@@ -53,6 +53,10 @@ describe("InventoryService owner isolation", () => {
       updateMany: ReturnType<typeof vi.fn>;
       create: ReturnType<typeof vi.fn>;
     };
+    inventoryCreateRequest: {
+      findUnique: ReturnType<typeof vi.fn>;
+      create: ReturnType<typeof vi.fn>;
+    };
     productMaster: {
       findUnique: ReturnType<typeof vi.fn>;
       update: ReturnType<typeof vi.fn>;
@@ -96,6 +100,10 @@ describe("InventoryService owner isolation", () => {
         update: vi.fn(),
         updateMany: vi.fn(),
         create: vi.fn(),
+      },
+      inventoryCreateRequest: {
+        findUnique: vi.fn().mockResolvedValue(null),
+        create: vi.fn().mockResolvedValue({}),
       },
       productMaster: {
         findUnique: vi.fn(),
@@ -547,5 +555,22 @@ describe("InventoryService owner isolation", () => {
     expect(result.count).toBe(2);
     expect(prisma.$transaction).toHaveBeenCalled();
     expect(prisma.inventoryItem.create).toHaveBeenCalledTimes(2);
+  });
+
+  it("replays an existing create result for the same idempotency key", async () => {
+    prisma.inventoryCreateRequest.findUnique.mockResolvedValue({
+      itemIds: ["item-1"],
+    });
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+
+    const result = await service.create(
+      createBody(),
+      "owner-a",
+      "personal_owner-a",
+      "create-request-1",
+    );
+
+    expect(result.id).toBe("item-1");
+    expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
   });
 });

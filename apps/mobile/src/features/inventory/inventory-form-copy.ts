@@ -1,4 +1,5 @@
 import {
+  ExpirySource,
   ProductCategory,
   calculateDaysLeftUntilExpiry,
 } from "@expirymate/shared";
@@ -30,13 +31,18 @@ export function formatPutAwayMessage(name: string) {
 
 export function formatPutAwaySupportingMessage({
   expiryDate,
+  expirySource,
   sessionCount = 1,
   now,
 }: {
   expiryDate?: string | null;
+  expirySource?: ExpirySource;
   sessionCount?: number;
   now?: Date;
 } = {}) {
+  if (expirySource === ExpirySource.UNKNOWN) {
+    return "기한은 모름으로 두었어요. 상태를 살펴보며 사용해 주세요.";
+  }
   const trimmed = expiryDate?.trim();
   if (!trimmed) {
     return "다음 재료도 이어서 넣을까요?";

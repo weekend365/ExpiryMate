@@ -2,6 +2,7 @@ import {
   ExpirySource,
   UnitCode,
   isDateOnlyString,
+  toBaseQuantity,
   type CreateInventoryItemBody,
   type InventoryPhotoParseCandidate,
 } from "@expirymate/shared";
@@ -15,7 +16,7 @@ export type PhotoIntakeDraftItem = {
   unit?: string;
   unitCode?: UnitCode;
   storageLocation: string;
-  expiryDate: string;
+  expiryDate: string | null;
   expirySource: ExpirySource;
   needsReview: boolean;
   reason?: string;
@@ -34,7 +35,7 @@ export function candidatesToDrafts(
     unit: candidate.unit,
     unitCode: candidate.unitCode ?? UnitCode.EA,
     storageLocation: candidate.suggestedStorageLocation ?? defaultStorageLocation,
-    expiryDate: candidate.suggestedExpiryDate ?? "",
+    expiryDate: candidate.suggestedExpiryDate ?? null,
     expirySource: candidate.expirySource ?? ExpirySource.MANUAL,
     needsReview: candidate.needsReview,
     reason: candidate.reason,
@@ -50,7 +51,7 @@ export function applyStorageLocationToAll(
 
 export function applyExpiryToAll(
   items: PhotoIntakeDraftItem[],
-  expiryDate: string,
+  expiryDate: string | null,
   expirySource: ExpirySource,
 ): PhotoIntakeDraftItem[] {
   return items.map((item) => ({ ...item, expiryDate, expirySource }));
@@ -65,14 +66,18 @@ export function prioritizePhotoIntakeDrafts(
 }
 
 function attentionScore(item: PhotoIntakeDraftItem) {
-  return (item.expiryDate ? 0 : 2) + (item.needsReview ? 1 : 0);
+  return (
+    (item.expiryDate || item.expirySource === ExpirySource.UNKNOWN ? 0 : 2) +
+    (item.needsReview ? 1 : 0)
+  );
 }
 
 export function photoIntakeItemIsComplete(item: PhotoIntakeDraftItem) {
   return (
     item.displayName.trim().length > 0 &&
     item.storageLocation.trim().length > 0 &&
-    isDateOnlyString(item.expiryDate)
+    (item.expirySource === ExpirySource.UNKNOWN ||
+      (item.expiryDate !== null && isDateOnlyString(item.expiryDate)))
   );
 }
 
@@ -85,21 +90,25 @@ export function photoIntakeReadyCount(items: PhotoIntakeDraftItem[]) {
 }
 
 export function canSubmitPhotoIntake(items: PhotoIntakeDraftItem[]) {
-  return items.length > 0 && items.every(photoIntakeItemIsReadyToSave);
+  return items.some(photoIntakeItemIsReadyToSave);
 }
 
 export function draftsToCreateBody(
   items: PhotoIntakeDraftItem[],
 ): CreateInventoryItemBody[] {
-  return items.filter(photoIntakeItemIsReadyToSave).map((item) => ({
-    displayName: item.displayName.trim(),
-    brand: item.brand,
-    category: item.category,
-    quantity: item.quantity,
-    unit: item.unit,
-    unitCode: item.unitCode,
-    storageLocation: item.storageLocation,
-    expiryDate: item.expiryDate,
-    expirySource: item.expirySource,
-  }));
+  return items.filter(photoIntakeItemIsReadyToSave).map((item) => {
+    const canonical = toBaseQuantity(item.quantity, item.unit);
+    return {
+      displayName: item.displayName.trim(),
+      brand: item.brand,
+      category: item.category,
+      quantity: item.quantity,
+      unit: item.unit,
+      quantityBase: canonical.quantityBase,
+      unitCode: canonical.unitCode,
+      storageLocation: item.storageLocation,
+      expiryDate: item.expiryDate,
+      expirySource: item.expirySource,
+    };
+  });
 }

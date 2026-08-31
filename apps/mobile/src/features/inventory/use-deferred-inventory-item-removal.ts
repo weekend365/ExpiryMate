@@ -231,7 +231,9 @@ export function useDeferredInventoryItemRemoval() {
         return `${item.displayName} ${formatBaseQuantity(amountBase, item.unitCode)}를 빼 뒀어요`;
       }
 
-      const itemLabel = `${formatDateKoreanCompact(item.expiryDate)}까지인 ${item.displayName}`;
+      const itemLabel = item.expiryDate
+        ? `${formatDateKoreanCompact(item.expiryDate)}까지인 ${item.displayName}`
+        : `기한을 확인할 ${item.displayName}`;
 
       return `${itemLabel}을(를) 보관함에서 빼 뒀어요`;
     }

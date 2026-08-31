@@ -111,6 +111,27 @@ describe("inventory photo parse access contract", () => {
       }).requiredAction,
     ).toBe("watch_ad");
   });
+
+  it("accepts an explicitly unknown expiry and rejects missing known dates", () => {
+    expect(
+      createInventoryItemBodySchema.parse({
+        displayName: "대파",
+        quantity: 1,
+        storageLocation: StorageLocation.FRIDGE,
+        expiryDate: null,
+        expirySource: ExpirySource.UNKNOWN,
+      }).expiryDate,
+    ).toBeNull();
+    expect(
+      createInventoryItemBodySchema.safeParse({
+        displayName: "대파",
+        quantity: 1,
+        storageLocation: StorageLocation.FRIDGE,
+        expiryDate: null,
+        expirySource: ExpirySource.MANUAL,
+      }).success,
+    ).toBe(false);
+  });
 });
 
 describe("photo parse contracts", () => {

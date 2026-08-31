@@ -16,7 +16,7 @@ export const DEFAULT_INVENTORY_FORM = {
   quantityBase: 1,
   unitCode: UnitCode.EA,
   storageLocation: StorageLocation.FRIDGE,
-  expiryDate: "",
+  expiryDate: null,
   expirySource: ExpirySource.MANUAL,
   status: ItemStatus.ACTIVE,
   notes: "",

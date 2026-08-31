@@ -22,6 +22,7 @@ describe("inventory utils", () => {
     expect(getExpiryBucket(toIsoDate(addDays(now, 2)), now)).toBe("within_3_days");
     expect(getExpiryBucket(toIsoDate(addDays(now, 6)), now)).toBe("within_7_days");
     expect(getExpiryBucket(toIsoDate(addDays(now, 10)), now)).toBe("safe");
+    expect(getExpiryBucket(null, now)).toBe("unknown");
   });
 
   it("classifies mutually exclusive traffic-light boundaries", () => {
@@ -94,6 +95,19 @@ describe("inventory utils", () => {
         createdAt: toIsoDate(now),
         updatedAt: toIsoDate(now),
       },
+      {
+        id: "5",
+        displayName: "대파",
+        quantity: 1,
+        quantityBase: 1,
+        unitCode: UnitCode.EA,
+        storageLocation: StorageLocation.FRIDGE,
+        expiryDate: null,
+        expirySource: ExpirySource.UNKNOWN,
+        status: ItemStatus.ACTIVE,
+        createdAt: toIsoDate(now),
+        updatedAt: toIsoDate(now),
+      },
     ];
 
     const summary = generateDashboardSummary(items, now);
@@ -103,10 +117,12 @@ describe("inventory utils", () => {
     expect(summary.within7DaysCount).toBe(2);
     expect(summary.expiredCount).toBe(1);
     expect(summary.safeCount).toBe(1);
-    expect(summary.totalActiveCount).toBe(4);
+    expect(summary.unknownExpiryCount).toBe(1);
+    expect(summary.totalActiveCount).toBe(5);
     expect(
       summary.expiredCount +
         summary.within7DaysCount +
+        summary.unknownExpiryCount +
         summary.safeCount,
     ).toBe(summary.totalActiveCount);
     expect(summary.latestRecommendationPreview).toBeNull();

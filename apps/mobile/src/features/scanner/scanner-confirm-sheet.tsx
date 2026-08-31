@@ -1,5 +1,5 @@
 import {
-  type ExpirySource,
+  ExpirySource,
   formatDateKorean,
   formatInventoryQuantity,
   type InventoryItem,
@@ -75,6 +75,7 @@ export function ScannerConfirmSheet({
   onManualCategoryChange,
   onPresetExpiry,
   onManualExpiryChange,
+  onUnknownExpiry,
 }: {
   confirmation: ScannerConfirmation | null;
   product: ProductInfo | null;
@@ -93,7 +94,7 @@ export function ScannerConfirmSheet({
   manualExpirySource: ExpirySource;
   manualNameHint: string | null;
   resolvedProductName: string;
-  resolvedExpiryDate: string;
+  resolvedExpiryDate: string | null;
   canQuickSave: boolean;
   quickQuantity: number;
   quickStorageLocation: string;
@@ -124,6 +125,7 @@ export function ScannerConfirmSheet({
   onManualCategoryChange: (value: ProductCategory) => void;
   onPresetExpiry: (days: number) => void;
   onManualExpiryChange: (value: string) => void;
+  onUnknownExpiry: () => void;
 }) {
   const isBusy = isContributing || isQuickSaving;
   const quickLocationOptions = quickStorageLocationOptions.some(
@@ -199,7 +201,10 @@ export function ScannerConfirmSheet({
               </Button>
             </>
           ) : null}
-          {!quickSavedItem && needsManualExpiry && !resolvedExpiryDate ? (
+          {!quickSavedItem &&
+          needsManualExpiry &&
+          !resolvedExpiryDate &&
+          manualExpirySource !== ExpirySource.UNKNOWN ? (
             <AppText style={styles.ctaHint} accessibilityLiveRegion="polite">
               날짜만 골라 주시면 넣을게요
             </AppText>
@@ -243,7 +248,8 @@ export function ScannerConfirmSheet({
               onPress={canQuickSave ? onQuickSave : onUseScanResult}
               disabled={
                 !resolvedProductName ||
-                !resolvedExpiryDate ||
+                (!resolvedExpiryDate &&
+                  manualExpirySource !== ExpirySource.UNKNOWN) ||
                 isBusy ||
                 productLookupStatus === "loading"
               }
@@ -453,6 +459,7 @@ export function ScannerConfirmSheet({
               expirySource={manualExpirySource}
               onPreset={onPresetExpiry}
               onManualChange={onManualExpiryChange}
+              onUnknown={onUnknownExpiry}
             />
           ) : (
             <View style={styles.expiryCard}>
@@ -503,7 +510,10 @@ function QuickSavedSummary({
     { label: "재료", value: item.displayName },
     { label: "수량", value: formatInventoryQuantity(item) },
     { label: "보관 위치", value: storageLocationLabel },
-    { label: "유통기한", value: formatDateKorean(item.expiryDate) },
+    {
+      label: "유통기한",
+      value: item.expiryDate ? formatDateKorean(item.expiryDate) : "기한 확인 필요",
+    },
   ];
 
   return (

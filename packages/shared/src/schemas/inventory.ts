@@ -14,6 +14,16 @@ const dateOnlySchema = z
   .regex(DATE_ONLY_PATTERN, "날짜는 YYYY-MM-DD 형식이어야 해요")
   .refine(isDateOnlyString, "올바른 날짜를 입력해주세요");
 
+const nullableDateOnlySchema = z.preprocess((value) => {
+  if (value === undefined || value === null) {
+    return null;
+  }
+  if (typeof value === "string" && value.trim().length === 0) {
+    return null;
+  }
+  return value;
+}, dateOnlySchema.nullable());
+
 /** Empty / whitespace-only strings become omitted optionals. */
 const optionalText = (max: number, message?: string) =>
   z.preprocess((value) => {
@@ -54,7 +64,7 @@ export const inventoryItemSchema = z.object({
   quantityBase: z.number().int().min(0),
   unitCode: z.nativeEnum(UnitCode),
   storageLocation: storageLocationKeySchema,
-  expiryDate: dateOnlySchema,
+  expiryDate: dateOnlySchema.nullable(),
   expirySource: z.nativeEnum(ExpirySource),
   status: z.nativeEnum(ItemStatus),
   notes: z.string().max(fieldLimits.notes).nullable().optional(),
@@ -74,7 +84,7 @@ export const inventoryUpsertSchema = inventoryItemSchema.omit({
 });
 
 /** Mobile form + API create body (without server-owned status default). */
-export const inventoryFormSchema = z.object({
+const inventoryFormFields = {
   productId: optionalText(fieldLimits.productId),
   productMasterId: optionalText(fieldLimits.productMasterId),
   displayName: z
@@ -92,21 +102,54 @@ export const inventoryFormSchema = z.object({
   quantityBase: z.coerce.number().int().min(1).optional(),
   unitCode: z.nativeEnum(UnitCode).optional(),
   storageLocation: storageLocationKeySchema,
-  expiryDate: dateOnlySchema,
+  expiryDate: nullableDateOnlySchema,
   expirySource: z.nativeEnum(ExpirySource),
   notes: optionalText(
     fieldLimits.notes,
     `메모는 ${fieldLimits.notes}자까지예요`,
   ),
-});
+};
+
+function validateExpirySelection(
+  value: { expiryDate: string | null; expirySource: ExpirySource },
+  context: z.RefinementCtx,
+) {
+  if (value.expirySource === ExpirySource.UNKNOWN && value.expiryDate !== null) {
+    context.addIssue({
+      code: "custom",
+      path: ["expiryDate"],
+      message: "기한을 모르는 재료는 날짜를 비워 주세요",
+    });
+  }
+
+  if (value.expirySource !== ExpirySource.UNKNOWN && value.expiryDate === null) {
+    context.addIssue({
+      code: "custom",
+      path: ["expiryDate"],
+      message: "유통기한을 고르거나 ‘기한을 모르겠어요’를 선택해 주세요",
+    });
+  }
+}
+
+export const inventoryFormSchema = z
+  .object(inventoryFormFields)
+  .superRefine(validateExpirySelection);
 
 /** API create body — same as form, plus optional status override. */
-export const createInventoryItemBodySchema = inventoryFormSchema.extend({
-  status: z.nativeEnum(ItemStatus).optional(),
-});
+export const createInventoryItemBodySchema = z
+  .object({
+    ...inventoryFormFields,
+    status: z.nativeEnum(ItemStatus).optional(),
+  })
+  .superRefine(validateExpirySelection);
 
-export const updateInventoryItemBodySchema =
-  createInventoryItemBodySchema.partial().extend({
+export const updateInventoryItemBodySchema = z
+  .object({
+    ...inventoryFormFields,
+    status: z.nativeEnum(ItemStatus).optional(),
+  })
+  .partial()
+  .extend({
     expectedVersion: z.number().int().positive().optional(),
   });
 

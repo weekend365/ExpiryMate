@@ -39,11 +39,13 @@ export function ManualExpirySection({
   expirySource,
   onPreset,
   onManualChange,
+  onUnknown,
 }: {
   expiryDate: string;
   expirySource: ExpirySource;
   onPreset: (days: number) => void;
   onManualChange: (value: string) => void;
+  onUnknown: () => void;
 }) {
   const [showAndroidPicker, setShowAndroidPicker] = useState(false);
   const [draftDate, setDraftDate] = useState<Date>(
@@ -84,9 +86,12 @@ export function ManualExpirySection({
     onManualChange(toDatePickerDateOnly(selectedDate));
   };
 
-  const displayValue = expiryDate
-    ? formatDateKorean(expiryDate)
-    : "날짜를 골라 주세요";
+  const displayValue =
+    expirySource === ExpirySource.UNKNOWN
+      ? "기한 확인 필요"
+      : expiryDate
+        ? formatDateKorean(expiryDate)
+        : "날짜를 골라 주세요";
 
   return (
     <View style={styles.manualExpiryCard}>
@@ -107,6 +112,12 @@ export function ManualExpirySection({
             />
           );
         })}
+        <Pill
+          label="기한을 모르겠어요"
+          selected={expirySource === ExpirySource.UNKNOWN}
+          onPress={onUnknown}
+          accessibilityLabel="유통기한을 모르겠어요"
+        />
       </View>
 
       {Platform.OS === "ios" ? (

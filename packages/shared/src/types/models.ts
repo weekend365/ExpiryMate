@@ -146,7 +146,7 @@ export interface InventoryItem {
   unitCode: UnitCode;
   /** System key (fridge/…) or owner custom key. */
   storageLocation: string;
-  expiryDate: string;
+  expiryDate: string | null;
   expirySource: ExpirySource;
   status: ItemStatus;
   notes?: string | null;
@@ -226,6 +226,7 @@ export interface DashboardSummary {
   within7DaysCount: number;
   expiredCount: number;
   safeCount: number;
+  unknownExpiryCount: number;
   totalActiveCount: number;
   recentItems: InventoryItem[];
   expiringItems: InventoryItem[];

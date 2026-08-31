@@ -1,9 +1,7 @@
 import type { InventoryItem } from "@expirymate/shared";
 import { router } from "expo-router";
 import {
-  Barcode,
   Check,
-  ImageIcon,
   ListChecks,
   MapPin,
   Minus,
@@ -80,7 +78,6 @@ export function InventoryItemActionsSheet({
     </BottomSheet>
   );
 }
-
 export function InventoryListToolsSheet({
   visible,
   onClose,
@@ -127,7 +124,6 @@ export function InventoryListToolsSheet({
     </BottomSheet>
   );
 }
-
 export function InventoryLocationFilterSheet({
   visible,
   onClose,
@@ -247,48 +243,6 @@ export function InventoryLocationFilterSheet({
             </Pressable>
           );
         })}
-      </View>
-    </BottomSheet>
-  );
-}
-
-export function InventoryEntryMethodSheet({
-  visible,
-  onClose,
-  onScan,
-  onManual,
-  onPhoto,
-}: {
-  visible: boolean;
-  onClose: () => void;
-  onScan: () => void;
-  onManual: () => void;
-  onPhoto?: () => void;
-}) {
-  return (
-    <BottomSheet
-      visible={visible}
-      onClose={onClose}
-      title="어떻게 넣을까요?"
-      description={
-        onPhoto
-          ? "바코드를 비추거나, 사진으로 여러 가지를 넣거나, 직접 입력할 수 있어요."
-          : "바코드를 비추거나, 직접 입력해서 냉장고에 넣을 수 있어요."
-      }
-      mascotMood="idle"
-    >
-      <View style={styles.entryMethodActions}>
-        <Button icon={Barcode} onPress={onScan} fullWidth variant="primary">
-          바코드로 넣을래요
-        </Button>
-        {onPhoto ? (
-          <Button icon={ImageIcon} onPress={onPhoto} fullWidth variant="surface">
-            사진으로 넣을게요
-          </Button>
-        ) : null}
-        <Button icon={PenLine} onPress={onManual} fullWidth variant="surface">
-          직접 입력할게요
-        </Button>
       </View>
     </BottomSheet>
   );

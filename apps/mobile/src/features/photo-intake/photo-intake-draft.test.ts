@@ -76,4 +76,32 @@ describe("photo intake drafts", () => {
       "두부",
     ]);
   });
+
+  it("allows unknown expiry and saves ready rows without blocking on unfinished rows", () => {
+    const drafts = candidatesToDrafts(
+      [
+        { displayName: "대파", confidence: 0.98, needsReview: false },
+        { displayName: "두부", confidence: 0.4, needsReview: true },
+      ],
+      StorageLocation.FRIDGE,
+    );
+    const withUnknown = [
+      {
+        ...drafts[0]!,
+        expiryDate: null,
+        expirySource: ExpirySource.UNKNOWN,
+      },
+      drafts[1]!,
+    ];
+
+    expect(canSubmitPhotoIntake(withUnknown)).toBe(true);
+    expect(photoIntakeReadyCount(withUnknown)).toBe(1);
+    expect(draftsToCreateBody(withUnknown)).toEqual([
+      expect.objectContaining({
+        displayName: "대파",
+        expiryDate: null,
+        expirySource: ExpirySource.UNKNOWN,
+      }),
+    ]);
+  });
 });

@@ -10,7 +10,6 @@ import {
 import { router, useFocusEffect } from "expo-router";
 import {
   Archive,
-  Barcode,
   ChevronDown,
   ChevronRight,
   ChevronUp,
@@ -18,7 +17,6 @@ import {
   Coffee,
   Cookie,
   Heart,
-  ImageIcon,
   Moon,
   PenLine,
   ShieldCheck,
@@ -99,6 +97,7 @@ import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { photoParseRoute } from "../../src/features/registration/registration-return";
+import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
 import {
   getRecipeFavoriteKey,
   useRecipeFavorites,
@@ -1049,59 +1048,29 @@ export default function RecommendationsScreen() {
         </ScrollView>
       </View>
 
-      <BottomSheet
+      <IngredientEntryMethodSheet
         visible={entryMethodVisible}
         onClose={() => setEntryMethodVisible(false)}
-        title="어떻게 넣을까요?"
-        description="바코드를 비추거나, 직접 입력해서 냉장고에 넣을 수 있어요."
-        mascotMood="idle"
-      >
-        <View style={styles.entryMethodActions}>
-          <Button
-            icon={Barcode}
-            onPress={() => {
-              setEntryMethodVisible(false);
-              if (activeSpaceId) {
-                clearPrefill(activeSpaceId);
-              }
-              router.push("/scanner");
-            }}
-            fullWidth
-          >
-            바코드로 넣을래요
-          </Button>
-          <Button
-            icon={PenLine}
-            onPress={() => {
-              setEntryMethodVisible(false);
-              if (activeSpaceId) {
-                clearPrefill(activeSpaceId);
-              }
-              router.push("/register");
-            }}
-            fullWidth
-            variant="surface"
-          >
-              직접 입력할게요
-          </Button>
-          {isInventoryPhotoParseEnabled() ? (
-            <Button
-              icon={ImageIcon}
-              onPress={() => {
+        onScan={() => {
+          setEntryMethodVisible(false);
+          if (activeSpaceId) clearPrefill(activeSpaceId);
+          router.push("/scanner");
+        }}
+        onPhoto={
+          isInventoryPhotoParseEnabled()
+            ? () => {
                 setEntryMethodVisible(false);
-                if (activeSpaceId) {
-                  clearPrefill(activeSpaceId);
-                }
+                if (activeSpaceId) clearPrefill(activeSpaceId);
                 router.push(photoParseRoute("home"));
-              }}
-              fullWidth
-              variant="surface"
-            >
-              사진으로 넣을게요
-            </Button>
-          ) : null}
-        </View>
-      </BottomSheet>
+              }
+            : undefined
+        }
+        onManual={() => {
+          setEntryMethodVisible(false);
+          if (activeSpaceId) clearPrefill(activeSpaceId);
+          router.push("/register");
+        }}
+      />
 
       <BottomSheet
         visible={showOptionsSheet}
@@ -1686,7 +1655,9 @@ function RecipeCard({
 function formatRecommendationContext(recommendation: RecipeRecommendation) {
   const inventoryCount = recommendation.inventorySnapshot.length;
   const expiringCount = recommendation.inventorySnapshot.filter(
-    (item) => item.daysUntilExpiry <= EXPIRING_DAYS_THRESHOLD,
+    (item) =>
+      item.daysUntilExpiry !== null &&
+      item.daysUntilExpiry <= EXPIRING_DAYS_THRESHOLD,
   ).length;
 
   if (recommendation.request.useExpiringFirst && expiringCount > 0) {

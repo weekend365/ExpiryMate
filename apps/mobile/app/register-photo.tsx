@@ -1,7 +1,10 @@
 import {
   ExpirySource,
+  ProductCategory,
   StorageLocation,
   formatDateKorean,
+  productCategoryOptions,
+  quantityValuesForInputUnit,
   type InventoryPhotoParseAccess,
   type InventoryPhotoParseScene,
 } from "@expirymate/shared";
@@ -16,6 +19,7 @@ import { AppTextInput } from "../src/components/AppTextInput";
 import { BottomSheet } from "../src/components/BottomSheet";
 import { Button } from "../src/components/Button";
 import { DatePickerField } from "../src/components/DatePickerField";
+import { FeedbackBanner } from "../src/components/FeedbackBanner";
 import { Mascot } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { QuantityStepper } from "../src/components/QuantityStepper";
@@ -23,6 +27,7 @@ import { Screen } from "../src/components/Screen";
 import {
   ApiError,
   batchCreateInventoryItems,
+  createIdempotencyKey,
   parseInventoryPhoto,
 } from "../src/services/api";
 import { useAuth } from "../src/features/auth/use-auth";
@@ -37,6 +42,7 @@ import {
   candidatesToDrafts,
   draftsToCreateBody,
   photoIntakeReadyCount,
+  photoIntakeItemIsReadyToSave,
   prioritizePhotoIntakeDrafts,
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
@@ -56,7 +62,9 @@ import {
 import { usePhotoParseAccess } from "../src/features/photo-intake/use-photo-parse-access";
 import { resolvePhotoParseAccessUi } from "../src/features/photo-intake/photo-parse-access-ui";
 import { QuickExpiryPills } from "../src/features/inventory/inventory-form-ui";
+import { QuantityUnitPills } from "../src/features/inventory/QuantityUnitPills";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
+import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
   colors,
@@ -82,7 +90,13 @@ export default function RegisterPhotoScreen() {
   const privacyStatusQuery = usePrivacyStatus();
   const photoAccess = usePhotoParseAccess();
   const { selectableOptions, resolveLabel } = useStorageLocations();
+  const { data: existingInventory = [] } = useInventoryList();
   const cameraRef = useRef<CameraView>(null);
+  const batchSubmissionRef = useRef<{
+    idempotencyKey: string;
+    itemIds: string[];
+    payload: ReturnType<typeof draftsToCreateBody>;
+  } | null>(null);
   const defaultLocation =
     selectableOptions[0]?.key ?? StorageLocation.FRIDGE;
 
@@ -100,6 +114,39 @@ export default function RegisterPhotoScreen() {
   const [items, setItems] = useState<PhotoIntakeDraftItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [savedCount, setSavedCount] = useState(0);
+  const [confirmedDuplicateIds, setConfirmedDuplicateIds] = useState<string[]>(
+    [],
+  );
+
+  const duplicateCandidateIds = useMemo(() => {
+    const seenKeys = new Set(
+      existingInventory.map((item) => inventoryDuplicateKey(item)),
+    );
+    const candidates = new Set<string>();
+    for (const item of items) {
+      const key = inventoryDuplicateKey(item);
+      if (seenKeys.has(key)) {
+        candidates.add(item.localId);
+      } else {
+        seenKeys.add(key);
+      }
+    }
+    return candidates;
+  }, [existingInventory, items]);
+  const confirmedDuplicateIdSet = useMemo(
+    () => new Set(confirmedDuplicateIds),
+    [confirmedDuplicateIds],
+  );
+  const reviewedItems = useMemo(
+    () =>
+      items.map((item) =>
+        duplicateCandidateIds.has(item.localId) &&
+        !confirmedDuplicateIdSet.has(item.localId)
+          ? { ...item, needsReview: true }
+          : item,
+      ),
+    [confirmedDuplicateIdSet, duplicateCandidateIds, items],
+  );
 
   const parseMutation = useMutation({
     mutationFn: async ({
@@ -115,6 +162,8 @@ export default function RegisterPhotoScreen() {
       return parseInventoryPhoto({ scene, ...photo }, activeSpaceId);
     },
     onSuccess: (result) => {
+      batchSubmissionRef.current = null;
+      setConfirmedDuplicateIds([]);
       setItems(
         prioritizePhotoIntakeDrafts(
           candidatesToDrafts(result.items, defaultLocation),
@@ -147,14 +196,37 @@ export default function RegisterPhotoScreen() {
       if (!activeSpaceId) {
         throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
       }
+      batchSubmissionRef.current ??= {
+        idempotencyKey: createIdempotencyKey(),
+        itemIds: reviewedItems
+          .filter(photoIntakeItemIsReadyToSave)
+          .map((item) => item.localId),
+        payload: draftsToCreateBody(reviewedItems),
+      };
       return batchCreateInventoryItems(
-        { items: draftsToCreateBody(items) },
+        { items: batchSubmissionRef.current.payload },
         activeSpaceId,
+        batchSubmissionRef.current.idempotencyKey,
       );
     },
     onSuccess: (result) => {
-      setSavedCount(result.count);
-      setStep("done");
+      const submittedIds = new Set(batchSubmissionRef.current?.itemIds ?? []);
+      batchSubmissionRef.current = null;
+      const remainingItems = items.filter(
+        (item) => !submittedIds.has(item.localId),
+      );
+      setSavedCount((current) => current + result.count);
+      setItems(remainingItems);
+      if (remainingItems.length > 0) {
+        setStep("review");
+        setFlowIssue({
+          tone: "success",
+          title: `${result.count}가지를 먼저 넣었어요`,
+          description: `확인이 필요한 ${remainingItems.length}가지는 이 화면에 남겨 뒀어요.`,
+        });
+      } else {
+        setStep("done");
+      }
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(
           sessionQueryKeys.dashboard,
@@ -171,6 +243,13 @@ export default function RegisterPhotoScreen() {
       });
     },
     onError: (error) => {
+      if (
+        error instanceof ApiError &&
+        error.status < 500 &&
+        error.status !== 408
+      ) {
+        batchSubmissionRef.current = null;
+      }
       Alert.alert(
         "앗, 잠시 문제가 생겼어요",
         error instanceof Error
@@ -182,9 +261,9 @@ export default function RegisterPhotoScreen() {
   const parsePhoto = parseMutation.mutate;
   const refetchPrivacyStatus = privacyStatusQuery.refetch;
 
-  const readyCount = photoIntakeReadyCount(items);
+  const readyCount = photoIntakeReadyCount(reviewedItems);
   const attentionCount = items.length - readyCount;
-  const canSubmit = canSubmitPhotoIntake(items);
+  const canSubmit = canSubmitPhotoIntake(reviewedItems);
   const editingItem = items.find((item) => item.localId === editingId) ?? null;
   const scene = selectedScene;
   const accessUi = resolvePhotoParseAccessUi(
@@ -395,7 +474,9 @@ export default function RegisterPhotoScreen() {
         fullWidth
       >
         {canSubmit
-          ? `${items.length}가지 냉장고에 넣을게요`
+          ? readyCount === items.length
+            ? `${readyCount}가지 냉장고에 넣을게요`
+            : `확인된 ${readyCount}가지 먼저 넣을게요`
           : `${attentionCount}가지 확인한 뒤 넣을게요`}
       </Button>
     ) : step === "done" ? (
@@ -457,6 +538,15 @@ export default function RegisterPhotoScreen() {
         {step === "review" && items.length ? (
           <View style={styles.reviewStack}>
             <PhotoFlowProgress current={2} />
+            {flowIssue ? (
+              <FeedbackBanner
+                tone={flowIssue.tone ?? "danger"}
+                title={flowIssue.title}
+                description={flowIssue.description}
+                showMascot={false}
+                onDismiss={() => setFlowIssue(null)}
+              />
+            ) : null}
             <View style={styles.reviewSummary}>
               <AppText variant="bodyStrong">
                 확인 필요 {attentionCount}개 · 바로 저장 {items.length - attentionCount}개
@@ -502,8 +592,40 @@ export default function RegisterPhotoScreen() {
                   )
                 }
               />
+              <Pressable
+                onPress={() =>
+                  setItems((current) =>
+                    applyExpiryToAll(current, null, ExpirySource.UNKNOWN),
+                  )
+                }
+                accessibilityRole="button"
+                accessibilityState={{
+                  selected:
+                    items.length > 0 &&
+                    items.every(
+                      (item) => item.expirySource === ExpirySource.UNKNOWN,
+                    ),
+                }}
+                style={({ pressed }) => [
+                  styles.pill,
+                  items.length > 0 &&
+                    items.every(
+                      (item) => item.expirySource === ExpirySource.UNKNOWN,
+                    ) &&
+                    styles.pillSelected,
+                  pressed && styles.pillPressed,
+                ]}
+              >
+                <AppText variant="bodySmall">기한 모름 전체 적용</AppText>
+              </Pressable>
             </View>
-            {items.map((item) => (
+            {items.map((item) => {
+              const isUnconfirmedDuplicate =
+                duplicateCandidateIds.has(item.localId) &&
+                !confirmedDuplicateIdSet.has(item.localId);
+              const needsAttention =
+                !photoIntakeItemIsReadyToSave(item) || isUnconfirmedDuplicate;
+              return (
               <Pressable
                 key={item.localId}
                 onPress={() => setEditingId(item.localId)}
@@ -511,15 +633,14 @@ export default function RegisterPhotoScreen() {
                 accessibilityLabel={`${item.displayName} 고치기`}
                 style={({ pressed }) => [
                   styles.itemCard,
-                  (item.needsReview || !item.expiryDate) &&
-                    styles.itemCardNeedsAttention,
+                  needsAttention && styles.itemCardNeedsAttention,
                   pressed && styles.itemCardPressed,
                 ]}
               >
                 <View style={styles.itemCopy}>
                   <View style={styles.itemTitleRow}>
                     <AppText variant="bodyStrong">{item.displayName}</AppText>
-                    {item.needsReview || !item.expiryDate ? (
+                    {needsAttention ? (
                       <View style={styles.attentionBadge}>
                         <AppText variant="caption" tone="warning">
                           확인 필요
@@ -530,13 +651,17 @@ export default function RegisterPhotoScreen() {
                   <AppText variant="bodySmall" tone="subtext">
                     {item.quantity}
                     {item.unit || "개"} · {resolveLabel(item.storageLocation)} ·{" "}
-                    {item.expiryDate
+                    {item.expirySource === ExpirySource.UNKNOWN
+                      ? "기한 확인 필요"
+                      : item.expiryDate
                       ? formatDateKorean(item.expiryDate)
                       : "기한 없음"}
                   </AppText>
-                  {item.needsReview || !item.expiryDate ? (
+                  {needsAttention ? (
                     <AppText variant="caption" tone="warning">
-                      {item.reason ?? "유통기한을 확인해 주세요."}
+                      {isUnconfirmedDuplicate
+                        ? "보관함에 같은 내용이 있어요. 추가할지 확인해 주세요."
+                        : item.reason ?? "유통기한을 확인해 주세요."}
                     </AppText>
                   ) : null}
                 </View>
@@ -554,9 +679,10 @@ export default function RegisterPhotoScreen() {
                   <Trash2 color={colors.danger} size={spacing.md} />
                 </Pressable>
               </Pressable>
-            ))}
+              );
+            })}
             <AppText variant="caption" tone="muted">
-              {readyCount}/{items.length}가지 기한을 채웠어요.
+              {readyCount}/{items.length}가지 저장 준비를 마쳤어요.
             </AppText>
           </View>
         ) : null}
@@ -677,23 +803,47 @@ export default function RegisterPhotoScreen() {
                   needsReview: false,
                   reason: undefined,
                 });
+                if (duplicateCandidateIds.has(editingItem.localId)) {
+                  setConfirmedDuplicateIds((current) =>
+                    current.includes(editingItem.localId)
+                      ? current
+                      : [...current, editingItem.localId],
+                  );
+                }
               }
               setEditingId(null);
             }}
             fullWidth
           >
-            이 내용으로 둘게요
+            {editingItem && duplicateCandidateIds.has(editingItem.localId)
+              ? "같은 내용이어도 추가할게요"
+              : "이 내용으로 둘게요"}
           </Button>
         }
       >
         {editingItem ? (
           <View style={styles.editStack}>
+            {duplicateCandidateIds.has(editingItem.localId) ? (
+              <FeedbackBanner
+                tone="warning"
+                title="같은 재료가 이미 있거나 겹쳐 보여요"
+                description="이름·양·자리·기한이 같아요. 별도 묶음이 맞는지 확인해 주세요."
+                showMascot={false}
+              />
+            ) : null}
             <AppTextInput
               value={editingItem.displayName}
               onChangeText={(displayName) =>
                 updateItem(editingItem.localId, { displayName })
               }
               placeholder="재료 이름"
+            />
+            <AppTextInput
+              value={editingItem.brand ?? ""}
+              onChangeText={(brand) =>
+                updateItem(editingItem.localId, { brand })
+              }
+              placeholder="브랜드 (선택)"
             />
             <QuantityStepper
               label="수량"
@@ -703,9 +853,30 @@ export default function RegisterPhotoScreen() {
                 updateItem(editingItem.localId, { quantity })
               }
             />
+            <View style={styles.editFieldGroup}>
+              <AppText variant="bodySmallStrong">단위</AppText>
+              <QuantityUnitPills
+                unit={editingItem.unit}
+                onChange={(nextUnit) => {
+                  const next = quantityValuesForInputUnit({
+                    quantity: editingItem.quantity,
+                    fromUnit: editingItem.unit,
+                    toUnit: nextUnit,
+                  });
+                  updateItem(editingItem.localId, {
+                    quantity: next.quantity,
+                    unit: next.unit,
+                  });
+                }}
+              />
+            </View>
             <DatePickerField
               label="유통기한"
-              value={editingItem.expiryDate}
+              value={
+                editingItem.expirySource === ExpirySource.UNKNOWN
+                  ? null
+                  : editingItem.expiryDate
+              }
               onChange={(expiryDate) =>
                 updateItem(editingItem.localId, {
                   expiryDate,
@@ -713,6 +884,51 @@ export default function RegisterPhotoScreen() {
                 })
               }
             />
+            <Pressable
+              onPress={() =>
+                updateItem(editingItem.localId, {
+                  expiryDate: null,
+                  expirySource: ExpirySource.UNKNOWN,
+                })
+              }
+              accessibilityRole="button"
+              accessibilityState={{
+                selected: editingItem.expirySource === ExpirySource.UNKNOWN,
+              }}
+              style={[
+                styles.pill,
+                editingItem.expirySource === ExpirySource.UNKNOWN &&
+                  styles.pillSelected,
+              ]}
+            >
+              <AppText variant="bodySmall">기한을 모르겠어요</AppText>
+            </Pressable>
+            <View style={styles.editFieldGroup}>
+              <AppText variant="bodySmallStrong">카테고리</AppText>
+              <View style={styles.pillRow}>
+                {productCategoryOptions.map((option) => (
+                  <Pressable
+                    key={option.value}
+                    onPress={() =>
+                      updateItem(editingItem.localId, {
+                        category: option.value as ProductCategory,
+                      })
+                    }
+                    accessibilityRole="button"
+                    accessibilityState={{
+                      selected: editingItem.category === option.value,
+                    }}
+                    style={[
+                      styles.pill,
+                      editingItem.category === option.value &&
+                        styles.pillSelected,
+                    ]}
+                  >
+                    <AppText variant="bodySmall">{option.label}</AppText>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
             <View style={styles.pillRow}>
               {selectableOptions.map((option) => (
                 <Pressable
@@ -759,6 +975,9 @@ export default function RegisterPhotoScreen() {
     localId: string,
     patch: Partial<PhotoIntakeDraftItem>,
   ) {
+    setConfirmedDuplicateIds((current) =>
+      current.filter((id) => id !== localId),
+    );
     setItems((current) =>
       current.map((item) =>
         item.localId === localId ? { ...item, ...patch } : item,
@@ -878,6 +1097,24 @@ function formatResetTime(value?: string) {
     hour: "numeric",
     minute: "2-digit",
   }).format(new Date(value));
+}
+
+function inventoryDuplicateKey(item: {
+  displayName: string;
+  quantity: number;
+  unit?: string | null;
+  storageLocation: string;
+  expiryDate: string | null;
+}) {
+  const normalize = (value?: string | null) =>
+    value?.normalize("NFKC").trim().replace(/\s+/g, "").toLowerCase() ?? "";
+  return [
+    normalize(item.displayName),
+    item.quantity,
+    normalize(item.unit ?? "개"),
+    item.storageLocation,
+    item.expiryDate ?? "unknown",
+  ].join(":");
 }
 
 const styles = StyleSheet.create({
@@ -1001,5 +1238,8 @@ const styles = StyleSheet.create({
   },
   editStack: {
     gap: spacing.sm,
+  },
+  editFieldGroup: {
+    gap: spacing.xs,
   },
 });
