@@ -26,16 +26,16 @@ const trafficLamps: Record<
     glyph: colors.surface,
   },
   danger: {
-    fill: colors.citrusGrapefruit,
-    glyph: colors.surface,
+    fill: colors.expiryExpiredAccent,
+    glyph: colors.expiryAccentForeground,
   },
   warning: {
-    fill: colors.citrusLemon,
-    glyph: colors.text,
+    fill: colors.expiryExpiringAccent,
+    glyph: colors.expiryAccentForeground,
   },
   success: {
-    fill: colors.citrusLime,
-    glyph: colors.surface,
+    fill: colors.expirySafeAccent,
+    glyph: colors.expiryAccentForeground,
   },
 };
 

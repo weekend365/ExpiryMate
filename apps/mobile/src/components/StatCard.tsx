@@ -203,13 +203,13 @@ const trafficLamps: Record<ExpiryTrafficTone, { glow: string }> = {
     glow: colors.mutedText,
   },
   danger: {
-    glow: colors.citrusGrapefruit,
+    glow: colors.expiryExpiredAccent,
   },
   warning: {
-    glow: colors.citrusLemon,
+    glow: colors.expiryExpiringAccent,
   },
   success: {
-    glow: colors.citrusLime,
+    glow: colors.expirySafeAccent,
   },
 };
 

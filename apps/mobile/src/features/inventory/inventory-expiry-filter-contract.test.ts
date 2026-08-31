@@ -48,4 +48,18 @@ describe("inventory expiry filter contract", () => {
       /trafficLampActiveUnknown:[\s\S]*?backgroundColor: colors\.mutedSurface/,
     );
   });
+
+  it("uses the shared expiry accents for traffic lamps and their glow", () => {
+    const icon = read("src/components/ExpiryTrafficIcon.tsx");
+    const statCard = read("src/components/StatCard.tsx");
+
+    expect(icon).toContain("fill: colors.expiryExpiredAccent");
+    expect(icon).toContain("fill: colors.expiryExpiringAccent");
+    expect(icon).toContain("fill: colors.expirySafeAccent");
+    expect(icon).toContain("glyph: colors.expiryAccentForeground");
+    expect(icon).not.toMatch(/colors\.citrus(?:Grapefruit|Lemon|Lime)/);
+    expect(statCard).toContain("glow: colors.expiryExpiredAccent");
+    expect(statCard).toContain("glow: colors.expiryExpiringAccent");
+    expect(statCard).toContain("glow: colors.expirySafeAccent");
+  });
 });

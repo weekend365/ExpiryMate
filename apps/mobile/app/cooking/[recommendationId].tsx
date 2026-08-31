@@ -737,7 +737,6 @@ export default function CookingScreen() {
                 <View style={styles.stepNumber}>
                   <AppText
                     variant="label"
-                    tone="inverse"
                     scaleRole="chrome"
                     densityAware={false}
                   >

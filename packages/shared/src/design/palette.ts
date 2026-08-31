@@ -41,60 +41,74 @@ export const neutral = {
   900: "#1A1F27",
 } as const;
 
+/** Fresh UI neutrals with a restrained green cast; character assets keep `neutral`. */
+export const sage: ColorScale = {
+  50: "#F7FAF8",
+  100: "#F0F4F1",
+  200: "#DCE4DF",
+  300: "#C7D1CA",
+  400: "#9CA89F",
+  500: "#68736C",
+  600: "#56615A",
+  700: "#3C4740",
+  800: "#29332D",
+  900: "#1A1F27",
+};
+
 /** Brand: fresh emerald / mint. Primary anchor of the product identity. */
 export const brand: ColorScale = {
-  50: "#ECFDF5",
-  100: "#D1FAE5",
+  50: "#E4F8EE",
+  100: "#C8F3DC",
   200: "#A7F3D0",
   300: "#6EE7B7",
   400: "#34D399",
   500: "#10B981",
-  600: "#059669",
-  700: "#047857",
-  800: "#065F46",
-  900: "#064E3B",
+  600: "#0C9F70",
+  700: "#07865F",
+  800: "#066F50",
+  900: "#04563F",
 };
 
-/** Danger / destructive (expiry imminent, delete). Anchor `500 = #EF4444`. */
+/** Danger / expired traffic-light red. Anchor `500 = #F2786D`. */
 export const red: ColorScale = {
-  50: "#FEF2F2",
-  100: "#FEE2E2",
-  200: "#FECACA",
-  300: "#FCA5A5",
-  400: "#F87171",
-  500: "#EF4444",
-  600: "#DC2626",
-  700: "#B91C1C",
-  800: "#991B1B",
-  900: "#7F1D1D",
+  50: "#FEF2F1",
+  100: "#FCDCDA",
+  200: "#F8BAB4",
+  300: "#F69F97",
+  400: "#F3867C",
+  500: "#F2786D",
+  600: "#EF5A4D",
+  700: "#D32313",
+  800: "#B21D10",
+  900: "#7A140B",
 };
 
-/** Warning / caution. */
+/** Warning / soon-to-expire traffic-light yellow. Anchor `500 = #FFD15C`. */
 export const amber: ColorScale = {
-  50: "#FFFBEB",
-  100: "#FEF3C7",
-  200: "#FDE68A",
-  300: "#FCD34D",
-  400: "#FBBF24",
-  500: "#F59E0B",
-  600: "#D97706",
-  700: "#B45309",
-  800: "#92400E",
-  900: "#78350F",
+  50: "#FFFBF0",
+  100: "#FFF3D6",
+  200: "#FFE8AD",
+  300: "#FFDF94",
+  400: "#FFD770",
+  500: "#FFD15C",
+  600: "#FFC83D",
+  700: "#A37500",
+  800: "#855F00",
+  900: "#664900",
 };
 
-/** Success / positive confirmation. Kept distinct from the brand emerald. */
+/** Success / safe traffic-light green. Kept distinct from the brand emerald. */
 export const green: ColorScale = {
-  50: "#F0FDF4",
-  100: "#DCFCE7",
-  200: "#BBF7D0",
-  300: "#86EFAC",
-  400: "#4ADE80",
-  500: "#22C55E",
-  600: "#16A34A",
-  700: "#15803D",
-  800: "#166534",
-  900: "#14532D",
+  50: "#F8FCF3",
+  100: "#EDF6DF",
+  200: "#DBECC0",
+  300: "#C9E3A2",
+  400: "#A9D369",
+  500: "#8FC63D",
+  600: "#6B962C",
+  700: "#5A7E25",
+  800: "#49661E",
+  900: "#384E17",
 };
 
 /** Informational accents (charts, links, admin highlights). Never the brand. */
@@ -127,6 +141,7 @@ export const clay: ColorScale = {
 
 export const palette = {
   neutral,
+  sage,
   brand,
   red,
   amber,

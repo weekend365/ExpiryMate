@@ -45,6 +45,24 @@ describe("design tokens", () => {
     expect(cssVariables["--primary-foreground"]).toBe(
       semanticColors.primaryForeground,
     );
+    expect(cssVariables["--action-primary-foreground"]).toBe(
+      semanticColors.actionPrimaryForeground,
+    );
+    expect(cssVariables["--action-danger-foreground"]).toBe(
+      semanticColors.actionDangerForeground,
+    );
+    expect(cssVariables["--action-warning-foreground"]).toBe(
+      semanticColors.actionWarningForeground,
+    );
+    expect(cssVariables["--action-success-foreground"]).toBe(
+      semanticColors.actionSuccessForeground,
+    );
+    expect(cssVariables["--action-info-foreground"]).toBe(
+      semanticColors.actionInfoForeground,
+    );
+    expect(cssVariables["--expiry-accent-foreground"]).toBe(
+      semanticColors.expiryAccentForeground,
+    );
     expect(cssVariables["--danger-foreground"]).toBe(
       semanticColors.dangerForeground,
     );
@@ -70,6 +88,55 @@ describe("design tokens", () => {
       "yellow",
       "red",
     ]);
+  });
+
+  it("separates bright Jango Mint accents from white-label solid actions", () => {
+    expect(semanticColors.brandAccent).toBe("#10B981");
+    expect(semanticColors.brandAccentPressed).toBe("#0C9F70");
+    expect(semanticColors.actionPrimaryBackground).toBe("#07865F");
+    expect(semanticColors.actionPrimaryPressed).toBe("#066F50");
+    expect(semanticColors.actionPrimaryForeground).toBe("#FFFFFF");
+    expect(semanticColors.primaryForeground).toBe("#066F50");
+    expect(semanticColors.linkText).toBe("#066F50");
+    expect(semanticColors.successAccent).toBe(semanticColors.brandAccent);
+    expect(semanticColors.successForeground).toBe(
+      semanticColors.primaryForeground,
+    );
+    expect(semanticColors.actionSuccessBackground).toBe(
+      semanticColors.actionPrimaryBackground,
+    );
+    expect(semanticColors.actionSuccessForeground).toBe(
+      semanticColors.actionPrimaryForeground,
+    );
+  });
+
+  it("keeps expiry traffic accents separate from general success", () => {
+    expect(semanticColors.expiryExpiredAccent).toBe("#F2786D");
+    expect(semanticColors.expiryExpiringAccent).toBe("#FFD15C");
+    expect(semanticColors.expirySafeAccent).toBe("#8FC63D");
+    expect(semanticColors.expiryAccentForeground).toBe("#1A1F27");
+    expect(semanticColors.citrusGrapefruit).toBe(
+      semanticColors.expiryExpiredAccent,
+    );
+    expect(semanticColors.citrusLemon).toBe(
+      semanticColors.expiryExpiringAccent,
+    );
+    expect(semanticColors.citrusLime).toBe(
+      semanticColors.expirySafeAccent,
+    );
+  });
+
+  it("keeps dark status-accent labels at AA contrast", () => {
+    const accentPairs = [
+      [semanticColors.text, semanticColors.successAccent],
+      [semanticColors.expiryAccentForeground, semanticColors.expiryExpiredAccent],
+      [semanticColors.expiryAccentForeground, semanticColors.expiryExpiringAccent],
+      [semanticColors.expiryAccentForeground, semanticColors.expirySafeAccent],
+    ] as const;
+
+    for (const [foreground, background] of accentPairs) {
+      expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
+    }
   });
 
   it("keeps every small-text foreground role at AA contrast", () => {
@@ -111,25 +178,44 @@ describe("design tokens", () => {
     }
   });
 
-  it("keeps white action labels at AA contrast in every state", () => {
-    const actionBackgrounds = [
+  it("keeps white primary action labels at AA contrast", () => {
+    const primaryActionBackgrounds = [
       semanticColors.actionPrimaryBackground,
       semanticColors.actionPrimaryPressed,
-      semanticColors.actionDangerBackground,
-      semanticColors.actionDangerPressed,
-      semanticColors.actionWarningBackground,
-      semanticColors.actionWarningPressed,
-      semanticColors.actionSuccessBackground,
-      semanticColors.actionSuccessPressed,
-      semanticColors.actionInfoBackground,
-      semanticColors.actionInfoPressed,
     ] as const;
 
-    for (const background of actionBackgrounds) {
+    for (const background of primaryActionBackgrounds) {
       expect(
-        contrastRatio(semanticColors.surface, background),
+        contrastRatio(semanticColors.actionPrimaryForeground, background),
       ).toBeGreaterThanOrEqual(4.5);
     }
+  });
+
+  it("keeps white labels on dark status actions at AA contrast", () => {
+    const actionPairs = [
+      [semanticColors.actionDangerForeground, semanticColors.actionDangerBackground],
+      [semanticColors.actionDangerForeground, semanticColors.actionDangerPressed],
+      [semanticColors.actionWarningForeground, semanticColors.actionWarningBackground],
+      [semanticColors.actionWarningForeground, semanticColors.actionWarningPressed],
+      [semanticColors.actionSuccessForeground, semanticColors.actionSuccessBackground],
+      [semanticColors.actionSuccessForeground, semanticColors.actionSuccessPressed],
+      [semanticColors.actionInfoForeground, semanticColors.actionInfoBackground],
+      [semanticColors.actionInfoForeground, semanticColors.actionInfoPressed],
+    ] as const;
+
+    for (const [foreground, background] of actionPairs) {
+      expect(
+        contrastRatio(foreground, background),
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("keeps disabled content readable without opacity-only treatment", () => {
+    expect(semanticColors.disabled).toBe("#DCE4DF");
+    expect(semanticColors.disabledText).toBe("#56615A");
+    expect(
+      contrastRatio(semanticColors.disabledText, semanticColors.disabled),
+    ).toBeGreaterThanOrEqual(4.5);
   });
 });
 

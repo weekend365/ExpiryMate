@@ -39,4 +39,15 @@ describe("inventory row interaction contract", () => {
     expect(card).toContain("onPress={() => onCleanup(item)}");
     expect(card).not.toContain("<PenLine");
   });
+
+  it("uses the shared traffic-light accents for D-day badges", () => {
+    const card = read("src/components/InventoryCard.tsx");
+
+    expect(card).toContain("expired: colors.expiryExpiredAccent");
+    expect(card).toContain("within_7_days: colors.expiryExpiringAccent");
+    expect(card).toContain("safe: colors.expirySafeAccent");
+    expect(card).toMatch(
+      /expiryLampText:[\s\S]*?color: colors\.expiryAccentForeground/,
+    );
+  });
 });

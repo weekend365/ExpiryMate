@@ -102,8 +102,8 @@ const buttonPalettes = {
     backgroundColor: colors.actionPrimaryBackground,
     pressedBackgroundColor: colors.actionPrimaryPressed,
     disabledBackgroundColor: colors.disabled,
-    textColor: colors.surface,
-    disabledTextColor: colors.surface,
+    textColor: colors.actionPrimaryForeground,
+    disabledTextColor: colors.disabledText,
   },
   secondary: {
     backgroundColor: colors.primarySoft,
