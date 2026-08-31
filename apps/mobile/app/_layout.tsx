@@ -30,7 +30,7 @@ import { initMobileSentry } from "../src/services/sentry";
 import { pretendardFonts } from "../src/shared/fonts";
 import { colors, fontFamily, typography } from "../src/shared/theme";
 
-initMobileSentry();
+const isSentryEnabled = initMobileSentry();
 
 SplashScreen.preventAutoHideAsync().catch(() => null);
 
@@ -210,7 +210,7 @@ function RootLayout() {
   );
 }
 
-export default Sentry.wrap(RootLayout);
+export default isSentryEnabled ? Sentry.wrap(RootLayout) : RootLayout;
 
 function QueryCacheRestoreBoundary({ children }: { children: ReactNode }) {
   const isRestoring = useIsRestoring();

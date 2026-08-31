@@ -5,6 +5,7 @@
   "main": "expo-router/entry",
   "scripts": {
     "predev": "pnpm --filter @expirymate/shared build",
+    "predev:tunnel": "pnpm --filter @expirymate/shared build",
     "pretypecheck": "pnpm --filter @expirymate/shared build",
     "dev": "node --max-old-space-size=8192 ./node_modules/expo/bin/cli start -c",
     "dev:tunnel": "node --max-old-space-size=8192 ./node_modules/expo/bin/cli start -c --tunnel",

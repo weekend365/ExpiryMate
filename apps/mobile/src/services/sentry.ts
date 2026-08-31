@@ -6,7 +6,7 @@ export function initMobileSentry() {
   const appEnv = process.env.EXPO_PUBLIC_APP_ENV ?? "development";
 
   if (!dsn || appEnv === "development") {
-    return;
+    return false;
   }
 
   const version = Constants.expoConfig?.version ?? "1.0.0";
@@ -25,6 +25,8 @@ export function initMobileSentry() {
     dist: gitSha,
     tracesSampleRate: 0.2,
   });
+
+  return true;
 }
 
 /** Lightweight breadcrumbs for space bootstrap diagnosis (no PII). */
