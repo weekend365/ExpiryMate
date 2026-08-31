@@ -1,6 +1,9 @@
 import {
-  isTrackedItem,
+  ItemStatus,
+  ProductCategory,
+  toKstDateOnly,
   UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS,
+  type InventoryItem,
   type RecommendationAccess,
   type RecipeInventorySnapshotItem,
   type RecipeMealType,
@@ -10,6 +13,7 @@ import {
 import { router, useFocusEffect } from "expo-router";
 import {
   Archive,
+  Check,
   ChevronDown,
   ChevronRight,
   ChevronUp,
@@ -18,7 +22,10 @@ import {
   Cookie,
   Heart,
   Moon,
+  PackageCheck,
   PenLine,
+  RotateCcw,
+  Search,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -48,6 +55,7 @@ import {
 } from "react-native";
 import kitchenCookingBg from "../../assets/backgrounds/kitchen-cooking-bg.png";
 import { AppText } from "../../src/components/AppText";
+import { AppTextInput } from "../../src/components/AppTextInput";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
@@ -80,10 +88,16 @@ import {
   EXPIRING_DAYS_THRESHOLD,
   formatDishMeta,
   formatIngredientPreview,
+  getRecipeDecisionSignals,
   getHighlightedIngredients,
   type RecipeDetailSelection,
 } from "../../src/features/recipes/recipe-detail";
 import { RecipeDetailSheet } from "../../src/features/recipes/recipe-detail-sheet";
+import {
+  filterRecommendationIngredientItems,
+  getExpiringRecommendationIngredientIds,
+  type RecommendationIngredientFilter,
+} from "../../src/features/recipes/recommendation-ingredient-selection";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
 import { useRecommendationGenerateFlow } from "../../src/features/recipes/use-recommendation-generate-flow";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
@@ -122,6 +136,7 @@ import {
 const servingOptions = [1, 2, 3, 4];
 const timeOptions = [15, 30, 60];
 const PREVIOUS_RECOMMENDATION_LIMIT = 5;
+const MAX_SELECTED_RECIPE_INGREDIENTS = 30;
 const SHEET_TRANSITION_DELAY_MS = 320;
 type RecipeView = "recommendations" | "favorites";
 type RecipeSectionKey = "latest" | "previous" | "favorites";
@@ -137,6 +152,32 @@ const mealTypeOptions: Array<{
   { value: "dinner", label: "저녁", icon: Moon },
   { value: "snack", label: "간식", icon: Cookie },
 ];
+
+const ingredientFilterOptions: Array<{
+  value: RecommendationIngredientFilter;
+  label: string;
+}> = [
+  { value: "all", label: "전체" },
+  { value: "expiring", label: "임박 재료만" },
+  { value: "fridge", label: "냉장" },
+  { value: "freezer", label: "냉동" },
+];
+
+const nonRecipeCategories = new Set<ProductCategory>([
+  ProductCategory.PERSONAL_CARE,
+  ProductCategory.PAPER_GOODS,
+  ProductCategory.CLEANING,
+  ProductCategory.HOUSEHOLD,
+]);
+
+function isRecipeCandidateInventoryItem(item: InventoryItem) {
+  return (
+    item.status === ItemStatus.ACTIVE &&
+    item.quantityBase > 0 &&
+    (!item.expiryDate || item.expiryDate >= toKstDateOnly(new Date())) &&
+    (!item.category || !nonRecipeCategories.has(item.category))
+  );
+}
 
 export default function RecommendationsScreen() {
   const { shouldStack, width } = useResponsiveLayout();
@@ -165,6 +206,18 @@ export default function RecommendationsScreen() {
     Partial<Record<RecipeSectionKey, boolean>>
   >({});
   const [showOptionsSheet, setShowOptionsSheet] = useState(false);
+  const [showIngredientSheet, setShowIngredientSheet] = useState(false);
+  const [selectedInventoryItemIds, setSelectedInventoryItemIds] = useState<
+    string[] | null
+  >(null);
+  const [ingredientSelectionDraft, setIngredientSelectionDraft] = useState<
+    string[]
+  >([]);
+  const [ingredientSearchQuery, setIngredientSearchQuery] = useState("");
+  const [ingredientSelectionFilter, setIngredientSelectionFilter] =
+    useState<RecommendationIngredientFilter>("all");
+  const [returnToOptionsAfterIngredientSelection, setReturnToOptionsAfterIngredientSelection] =
+    useState(false);
   const [showPreferenceSavedNotice, setShowPreferenceSavedNotice] =
     useState(false);
   const [showOfferAlternatives, setShowOfferAlternatives] = useState(false);
@@ -179,12 +232,40 @@ export default function RecommendationsScreen() {
   const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const hasRecommendableInventory = useMemo(
-    () => (inventoryQuery.data ?? []).some(isTrackedItem),
+    () => (inventoryQuery.data ?? []).some(isRecipeCandidateInventoryItem),
     [inventoryQuery.data],
   );
   const inventoryReady =
     inventoryQuery.isSuccess || Boolean(inventoryQuery.isError);
   const needsIngredients = inventoryReady && !hasRecommendableInventory;
+  const selectableInventoryItems = useMemo(
+    () =>
+      (inventoryQuery.data ?? [])
+        .filter(isRecipeCandidateInventoryItem)
+        .sort((left, right) => {
+          if (!left.expiryDate) return 1;
+          if (!right.expiryDate) return -1;
+          return left.expiryDate.localeCompare(right.expiryDate);
+        })
+        .slice(0, MAX_SELECTED_RECIPE_INGREDIENTS),
+    [inventoryQuery.data],
+  );
+  const filteredSelectableInventoryItems = useMemo(
+    () =>
+      filterRecommendationIngredientItems(selectableInventoryItems, {
+        filter: ingredientSelectionFilter,
+        query: ingredientSearchQuery,
+      }),
+    [
+      ingredientSearchQuery,
+      ingredientSelectionFilter,
+      selectableInventoryItems,
+    ],
+  );
+  const expiringSelectableInventoryItemIds = useMemo(
+    () => getExpiringRecommendationIngredientIds(selectableInventoryItems),
+    [selectableInventoryItems],
+  );
   const hasSafetyPreferences = Boolean(
     recipePreferencesQuery.data &&
       (recipePreferencesQuery.data.allergens.length > 0 ||
@@ -202,7 +283,7 @@ export default function RecommendationsScreen() {
       }
 
       return selectRecommendationHeroIngredientNames(
-        (inventoryQuery.data ?? []).filter(isTrackedItem),
+        (inventoryQuery.data ?? []).filter(isRecipeCandidateInventoryItem),
       );
     },
     [
@@ -219,9 +300,24 @@ export default function RecommendationsScreen() {
       maxCookingMinutes,
       mealType,
       useExpiringFirst,
+      selectedInventoryItemIds: selectedInventoryItemIds ?? undefined,
     }),
-    [maxCookingMinutes, mealType, servings, useExpiringFirst],
+    [
+      maxCookingMinutes,
+      mealType,
+      selectedInventoryItemIds,
+      servings,
+      useExpiringFirst,
+    ],
   );
+
+  useEffect(() => {
+    if (!selectedInventoryItemIds) return;
+    const availableIds = new Set(selectableInventoryItems.map((item) => item.id));
+    const nextIds = selectedInventoryItemIds.filter((id) => availableIds.has(id));
+    if (nextIds.length === selectedInventoryItemIds.length) return;
+    setSelectedInventoryItemIds(nextIds.length > 0 ? nextIds : null);
+  }, [selectableInventoryItems, selectedInventoryItemIds]);
   const {
     showAiNotice,
     closeAiNotice,
@@ -307,6 +403,24 @@ export default function RecommendationsScreen() {
     recipePreferencesQuery.isError,
     recipePreferencesQuery.isLoading,
   ]);
+  const ingredientSelectionSummary = useMemo(() => {
+    if (!selectedInventoryItemIds) {
+      return `자동 선택 · 최대 ${selectableInventoryItems.length}개 재료에서 선별`;
+    }
+    const selectedIds = new Set(selectedInventoryItemIds);
+    const names = selectableInventoryItems
+      .filter((item) => selectedIds.has(item.id))
+      .map((item) => item.displayName);
+    const preview = names.slice(0, 2).join(" · ");
+    return names.length > 2 ? `${preview} 외 ${names.length - 2}개` : preview;
+  }, [selectableInventoryItems, selectedInventoryItemIds]);
+  const recommendationSetupSummary = `${
+    selectedInventoryItemIds
+      ? `재료 ${selectedInventoryItemIds.length}개 선택`
+      : "재료 자동"
+  } · ${servings}인 · ${maxCookingMinutes}분 · ${mealTypeLabel}${
+    useExpiringFirst ? " · 임박 먼저" : ""
+  }`;
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
@@ -378,9 +492,7 @@ export default function RecommendationsScreen() {
     personalizedOffer?.kind !== "none" &&
     personalizedOffer?.kind !== "rewarded_ad";
   const isAdBusy = monetization.adState === "loading";
-  const primaryCtaAction = hasRecommendationResult
-    ? "다시 추천받기"
-    : "추천 받기";
+  const primaryCtaAction = "추천 받기";
   const primaryCtaLabel = isGenerating
     ? "요리 조합을 찾는 중이에요"
     : monetization.adState === "loading"
@@ -392,6 +504,11 @@ export default function RecommendationsScreen() {
           : ctaQuotaLabel
             ? `${primaryCtaAction} · ${ctaQuotaLabel}`
             : primaryCtaAction;
+  const regenerateCtaLabel = needsRewardedAd
+    ? "광고 보고 다시 추천받기"
+    : ctaQuotaLabel
+      ? `다시 추천받기 · ${ctaQuotaLabel}`
+      : "다시 추천받기";
 
   useEffect(() => {
     if (!isQuotaError || !monetization.access) return;
@@ -438,6 +555,56 @@ export default function RecommendationsScreen() {
     monetization.access?.offer,
     showValueMomentOffer,
   ]);
+
+  const handleOpenIngredientSelection = useCallback((fromOptionsSheet = false) => {
+    setIngredientSelectionDraft(
+      selectedInventoryItemIds ?? selectableInventoryItems.map((item) => item.id),
+    );
+    setIngredientSearchQuery("");
+    setIngredientSelectionFilter("all");
+    setReturnToOptionsAfterIngredientSelection(fromOptionsSheet);
+    if (fromOptionsSheet) {
+      setShowOptionsSheet(false);
+      setTimeout(() => setShowIngredientSheet(true), SHEET_TRANSITION_DELAY_MS);
+      return;
+    }
+    setShowIngredientSheet(true);
+  }, [selectableInventoryItems, selectedInventoryItemIds]);
+
+  const handleCloseIngredientSelection = useCallback(() => {
+    setShowIngredientSheet(false);
+    if (!returnToOptionsAfterIngredientSelection) return;
+    setReturnToOptionsAfterIngredientSelection(false);
+    setTimeout(() => setShowOptionsSheet(true), SHEET_TRANSITION_DELAY_MS);
+  }, [returnToOptionsAfterIngredientSelection]);
+
+  const handleToggleIngredient = useCallback((inventoryItemId: string) => {
+    setIngredientSelectionDraft((current) =>
+      current.includes(inventoryItemId)
+        ? current.filter((id) => id !== inventoryItemId)
+        : [...current, inventoryItemId],
+    );
+  }, []);
+
+  const handleApplyIngredientSelection = useCallback(() => {
+    if (ingredientSelectionDraft.length === 0) return;
+    setSelectedInventoryItemIds(ingredientSelectionDraft);
+    handleCloseIngredientSelection();
+  }, [handleCloseIngredientSelection, ingredientSelectionDraft]);
+
+  const handleResetIngredientSelection = useCallback(() => {
+    setSelectedInventoryItemIds(null);
+    handleCloseIngredientSelection();
+  }, [handleCloseIngredientSelection]);
+
+  const handleSelectAllIngredients = useCallback(() => {
+    setIngredientSelectionDraft(selectableInventoryItems.map((item) => item.id));
+  }, [selectableInventoryItems]);
+
+  const handleSelectExpiringIngredients = useCallback(() => {
+    setIngredientSelectionDraft(expiringSelectableInventoryItemIds);
+    setIngredientSelectionFilter("expiring");
+  }, [expiringSelectableInventoryItemIds]);
 
   const handlePrimaryCta = useCallback(() => {
     if (isGenerating || isAdBusy || !inventoryReady) {
@@ -558,25 +725,14 @@ export default function RecommendationsScreen() {
           >
             추천으로 돌아갈게요
           </Button>
-        ) : (
+        ) : hasRecommendationResult ? null : (
           <Button
             icon={needsIngredients ? PenLine : Sparkles}
             onPress={handlePrimaryCta}
             loading={isGenerating || monetization.adState === "loading"}
-            disabled={
-              isGenerating ||
-              isAdBusy ||
-              (!inventoryReady && !hasRecommendationResult)
-            }
+            disabled={isGenerating || isAdBusy || !inventoryReady}
             fullWidth
-            variant={
-              hasRecommendationResult &&
-              !isGenerating &&
-              !needsRewardedAd &&
-              !needsIngredients
-                ? "surface"
-                : "primary"
-            }
+            variant="primary"
           >
             {primaryCtaLabel}
           </Button>
@@ -752,27 +908,17 @@ export default function RecommendationsScreen() {
               <View style={styles.optionsSummaryGroup}>
                 <RecommendationSetupSummaryRow
                   testID="recommendation-options-button"
-                  title="이번 추천 조건"
-                  value={`${servings}인 · ${maxCookingMinutes}분 · ${mealTypeLabel}${
-                    useExpiringFirst ? " · 임박 먼저" : ""
-                  }`}
-                  scope="이번 추천에만 적용돼요"
-                  actionLabel="바꾸기"
+                  title="이번 추천 설정"
+                  value={recommendationSetupSummary}
+                  scope="눌러서 재료·인원·시간·끼니를 바꿀 수 있어요"
+                  badgeLabel={
+                    hasSafetyPreferences ? "안전 맞춤 설정 적용 중" : undefined
+                  }
+                  actionLabel="설정"
                   actionIcon={SlidersHorizontal}
                   onPress={() => setShowOptionsSheet(true)}
-                  accessibilityLabel="추천 조건 고르기"
-                  accessibilityHint="인원, 시간, 끼니를 바꿀 수 있어요."
-                />
-                <RecommendationSetupSummaryRow
-                  testID="recommendation-preference-summary-button"
-                  title="항상 적용할 맞춤 설정"
-                  value={preferenceSummary.text}
-                  scope="저장 후 모든 추천에 적용돼요"
-                  actionLabel="전체 설정"
-                  actionIcon={ShieldCheck}
-                  onPress={() => handleOpenRecipePreferences()}
-                  accessibilityLabel="추천 맞춤 설정 바꾸기"
-                  accessibilityHint="알레르기, 제외 재료, 식단, 매운맛과 조리도구를 바꿀 수 있어요."
+                  accessibilityLabel="이번 추천 설정 열기"
+                  accessibilityHint="재료, 인원, 시간, 끼니와 항상 적용할 맞춤 설정을 확인할 수 있어요."
                 />
               </View>
             </View>
@@ -815,48 +961,62 @@ export default function RecommendationsScreen() {
               onToggle={() => toggleRecipeSection("latest")}
             >
               {latestRecommendation.recommendations.length ? (
-                <RecipeCardGrid embedded>
-                  {latestRecommendation.recommendations.map((dish, index) => (
-                    <RecipeCard
-                      key={`${latestRecommendation.id}-${dish.title}-${index}`}
-                      embedded
-                      showDivider={
-                        index < latestRecommendation.recommendations.length - 1
-                      }
-                      dish={dish}
-                      badgeLabel={String(index + 1)}
-                      inventorySnapshot={latestRecommendation.inventorySnapshot}
-                      onOpenDetails={() =>
-                        handleOpenDetails({
-                          recommendationId: latestRecommendation.id,
-                          dishIndex: index,
-                          dish,
-                          inventorySnapshot:
-                            latestRecommendation.inventorySnapshot,
-                        })
-                      }
-                      isFavorite={favoriteKeys.has(
-                        getRecipeFavoriteKey(latestRecommendation.id, index),
-                      )}
-                      isFavoritePending={
-                        setFavoriteMutation.isPending &&
-                        setFavoriteMutation.variables?.recommendationId ===
-                          latestRecommendation.id &&
-                        setFavoriteMutation.variables.dishIndex === index
-                      }
-                      onToggleFavorite={(favorite) =>
-                        setFavoriteMutation.mutate({
-                          recommendationId: latestRecommendation.id,
-                          dishIndex: index,
-                          dish,
-                          inventorySnapshot:
-                            latestRecommendation.inventorySnapshot,
-                          favorite,
-                        })
-                      }
-                    />
-                  ))}
-                </RecipeCardGrid>
+                <View>
+                  <RecipeCardGrid embedded>
+                    {latestRecommendation.recommendations.map((dish, index) => (
+                      <RecipeCard
+                        key={`${latestRecommendation.id}-${dish.title}-${index}`}
+                        embedded
+                        showDivider={
+                          index < latestRecommendation.recommendations.length - 1
+                        }
+                        dish={dish}
+                        badgeLabel={String(index + 1)}
+                        inventorySnapshot={latestRecommendation.inventorySnapshot}
+                        onOpenDetails={() =>
+                          handleOpenDetails({
+                            recommendationId: latestRecommendation.id,
+                            dishIndex: index,
+                            dish,
+                            inventorySnapshot:
+                              latestRecommendation.inventorySnapshot,
+                          })
+                        }
+                        isFavorite={favoriteKeys.has(
+                          getRecipeFavoriteKey(latestRecommendation.id, index),
+                        )}
+                        isFavoritePending={
+                          setFavoriteMutation.isPending &&
+                          setFavoriteMutation.variables?.recommendationId ===
+                            latestRecommendation.id &&
+                          setFavoriteMutation.variables.dishIndex === index
+                        }
+                        onToggleFavorite={(favorite) =>
+                          setFavoriteMutation.mutate({
+                            recommendationId: latestRecommendation.id,
+                            dishIndex: index,
+                            dish,
+                            inventorySnapshot:
+                              latestRecommendation.inventorySnapshot,
+                            favorite,
+                          })
+                        }
+                      />
+                    ))}
+                  </RecipeCardGrid>
+                  <View style={styles.regenerateAction}>
+                    <Button
+                      icon={RotateCcw}
+                      variant="surface"
+                      onPress={handlePrimaryCta}
+                      disabled={isAdBusy}
+                      loading={monetization.adState === "loading"}
+                      fullWidth
+                    >
+                      {regenerateCtaLabel}
+                    </Button>
+                  </View>
+                </View>
               ) : (
                 <View style={styles.recipeSectionInset}>
                   <EmptyState
@@ -1004,7 +1164,7 @@ export default function RecommendationsScreen() {
                       badgeLabel={String(favoriteIndex + 1)}
                       inventorySnapshot={favorite.inventorySnapshot}
                       onOpenDetails={() =>
-                        setRecipeDetail({
+                        handleOpenDetails({
                           recommendationId: favorite.sourceRecommendationId,
                           dishIndex: favorite.sourceDishIndex,
                           dish: favorite.dish,
@@ -1073,6 +1233,167 @@ export default function RecommendationsScreen() {
       />
 
       <BottomSheet
+        visible={showIngredientSheet}
+        onClose={handleCloseIngredientSelection}
+        mascotMood="idle"
+        title="추천에 사용할 재료"
+        description={`이번 추천에 반영할 재료를 골라 주세요. 최대 ${MAX_SELECTED_RECIPE_INGREDIENTS}개까지 사용할 수 있어요.`}
+        footer={
+          <View style={styles.sheetFooter}>
+            <Button
+              variant="secondary"
+              onPress={handleResetIngredientSelection}
+              fullWidth
+            >
+              장고가 자동으로 골라줘
+            </Button>
+            <Button
+              onPress={handleApplyIngredientSelection}
+              disabled={ingredientSelectionDraft.length === 0}
+              fullWidth
+            >
+              선택한 재료 {ingredientSelectionDraft.length}개 적용
+            </Button>
+          </View>
+        }
+      >
+        <View style={styles.ingredientSelectionList}>
+          <View style={styles.ingredientSelectionToolbar}>
+            <View style={styles.ingredientSearchField}>
+              <Search
+                color={colors.subtext}
+                size={spacing.md}
+                strokeWidth={2.2}
+              />
+              <AppTextInput
+                value={ingredientSearchQuery}
+                onChangeText={setIngredientSearchQuery}
+                placeholder="재료 이름 검색"
+                accessibilityLabel="추천 재료 검색"
+                returnKeyType="search"
+                style={styles.ingredientSearchInput}
+              />
+            </View>
+
+            <View style={styles.ingredientFilterRow}>
+              {ingredientFilterOptions.map((option) => (
+                <Pill
+                  key={option.value}
+                  label={option.label}
+                  selected={ingredientSelectionFilter === option.value}
+                  onPress={() => setIngredientSelectionFilter(option.value)}
+                />
+              ))}
+            </View>
+
+            <View style={styles.ingredientBulkHeader}>
+              <AppText style={styles.ingredientSelectionCount}>
+                선택 {ingredientSelectionDraft.length}/
+                {selectableInventoryItems.length}
+              </AppText>
+              <View style={styles.ingredientBulkActions}>
+                <Pressable
+                  onPress={handleSelectExpiringIngredients}
+                  disabled={expiringSelectableInventoryItemIds.length === 0}
+                  accessibilityRole="button"
+                  accessibilityLabel="임박 재료만 선택"
+                  style={({ pressed }) => [
+                    styles.ingredientBulkAction,
+                    pressed && styles.optionsSummaryPressed,
+                    expiringSelectableInventoryItemIds.length === 0 &&
+                      styles.ingredientBulkActionDisabled,
+                  ]}
+                >
+                  <AppText style={styles.ingredientBulkActionText}>
+                    임박만 선택
+                  </AppText>
+                </Pressable>
+                <Pressable
+                  onPress={handleSelectAllIngredients}
+                  accessibilityRole="button"
+                  accessibilityLabel="추천 재료 전체 선택"
+                  style={({ pressed }) => [
+                    styles.ingredientBulkAction,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <AppText style={styles.ingredientBulkActionText}>
+                    전체 선택
+                  </AppText>
+                </Pressable>
+                <Pressable
+                  onPress={() => setIngredientSelectionDraft([])}
+                  accessibilityRole="button"
+                  accessibilityLabel="추천 재료 전체 선택 해제"
+                  style={({ pressed }) => [
+                    styles.ingredientBulkAction,
+                    pressed && styles.optionsSummaryPressed,
+                  ]}
+                >
+                  <AppText style={styles.ingredientBulkActionText}>
+                    전체 해제
+                  </AppText>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+
+          {filteredSelectableInventoryItems.map((item) => {
+            const selected = ingredientSelectionDraft.includes(item.id);
+            return (
+              <Pressable
+                key={item.id}
+                onPress={() => handleToggleIngredient(item.id)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: selected }}
+                accessibilityLabel={`${item.displayName} 추천 재료 ${
+                  selected ? "선택됨" : "선택 안 됨"
+                }`}
+                style={({ pressed }) => [
+                  styles.ingredientSelectionRow,
+                  selected && styles.ingredientSelectionRowSelected,
+                  pressed && styles.optionsSummaryPressed,
+                ]}
+              >
+                <View style={styles.ingredientSelectionCopy}>
+                  <AppText style={styles.ingredientSelectionName}>
+                    {item.displayName}
+                  </AppText>
+                  <AppText style={styles.ingredientSelectionMeta}>
+                    {formatInventorySelectionMeta(item.expiryDate)}
+                  </AppText>
+                </View>
+                <View
+                  style={[
+                    styles.ingredientSelectionCheck,
+                    selected && styles.ingredientSelectionCheckSelected,
+                  ]}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                >
+                  {selected ? (
+                    <Check
+                      color={colors.surface}
+                      size={spacing.sm}
+                      strokeWidth={3}
+                    />
+                  ) : null}
+                </View>
+              </Pressable>
+            );
+          })}
+          {filteredSelectableInventoryItems.length === 0 ? (
+            <EmptyState
+              variant="plain"
+              showMascot={false}
+              title="조건에 맞는 재료가 없어요"
+              description="검색어를 지우거나 다른 보관 위치를 골라 보세요."
+            />
+          ) : null}
+        </View>
+      </BottomSheet>
+
+      <BottomSheet
         visible={showOptionsSheet}
         onClose={() => setShowOptionsSheet(false)}
         mascotMood="idle"
@@ -1084,6 +1405,22 @@ export default function RecommendationsScreen() {
           </Button>
         }
       >
+        <RecommendationSetupSummaryRow
+          testID="recommendation-options-ingredient-link"
+          title="추천에 사용할 재료"
+          value={ingredientSelectionSummary}
+          scope={
+            selectedInventoryItemIds
+              ? "고른 재료만 이번 추천에 사용해요"
+              : "임박도와 최근 사용 이력을 보고 자동으로 골라요"
+          }
+          actionLabel="재료 고르기"
+          actionIcon={PackageCheck}
+          onPress={() => handleOpenIngredientSelection(true)}
+          accessibilityLabel="추천에 사용할 재료 고르기"
+          accessibilityHint="이 설정 화면을 닫고 추천에 포함할 보관 재료를 고릅니다."
+        />
+
         <OptionGroup icon={Users} title="몇 명이서 먹나요?">
           <View style={styles.pillRow}>
             {servingOptions.map((value) => (
@@ -1365,6 +1702,7 @@ function RecommendationSetupSummaryRow({
   title,
   value,
   scope,
+  badgeLabel,
   actionLabel,
   actionIcon: ActionIcon,
   onPress,
@@ -1375,6 +1713,7 @@ function RecommendationSetupSummaryRow({
   title: string;
   value: string;
   scope: string;
+  badgeLabel?: string;
   actionLabel: string;
   actionIcon: LucideIcon;
   onPress: () => void;
@@ -1405,6 +1744,18 @@ function RecommendationSetupSummaryRow({
           {value}
         </AppText>
         <AppText style={styles.optionsSummaryScope}>{scope}</AppText>
+        {badgeLabel ? (
+          <View style={styles.optionsSummarySafetyBadge}>
+            <ShieldCheck
+              color={colors.success}
+              size={spacing.sm}
+              strokeWidth={2.4}
+            />
+            <AppText style={styles.optionsSummarySafetyBadgeText}>
+              {badgeLabel}
+            </AppText>
+          </View>
+        ) : null}
       </View>
       <View
         style={[
@@ -1550,6 +1901,7 @@ function RecipeCard({
     inventorySnapshot,
   );
   const ingredientPreview = formatIngredientPreview(highlightIngredients);
+  const decisionSignals = getRecipeDecisionSignals(dish, inventorySnapshot);
 
   return (
     <View
@@ -1605,6 +1957,36 @@ function RecipeCard({
           ellipsizeMode="tail"
         >
           {formatDishMeta(dish)}
+        </AppText>
+
+        <View style={styles.recipeSignalRow}>
+          {decisionSignals.badges.map((signal, index) => (
+            <View
+              key={signal}
+              style={[
+                styles.recipeSignalBadge,
+                index === 0 && styles.recipeSignalBadgeEmphasis,
+              ]}
+            >
+              <AppText
+                style={[
+                  styles.recipeSignalText,
+                  index === 0 && styles.recipeSignalTextEmphasis,
+                ]}
+              >
+                {signal}
+              </AppText>
+            </View>
+          ))}
+        </View>
+
+        <AppText
+          variant="caption"
+          tone="subtext"
+          numberOfLines={shouldStack ? undefined : 1}
+          ellipsizeMode="tail"
+        >
+          {decisionSignals.rationale}
         </AppText>
 
         <AppText
@@ -1693,6 +2075,14 @@ function formatCreatedAt(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function formatInventorySelectionMeta(expiryDate: string | null) {
+  if (!expiryDate) return "유통기한 미등록";
+  return `${new Date(`${expiryDate}T00:00:00`).toLocaleDateString("ko-KR", {
+    month: "short",
+    day: "numeric",
+  })}까지`;
 }
 
 const styles = StyleSheet.create({
@@ -1811,6 +2201,22 @@ const styles = StyleSheet.create({
     fontFamily: typography.caption.fontFamily,
     color: colors.subtext,
   },
+  optionsSummarySafetyBadge: {
+    alignSelf: "flex-start",
+    borderRadius: radius.pill,
+    backgroundColor: colors.successSoft,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
+  optionsSummarySafetyBadgeText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.success,
+  },
   optionsSummaryAction: {
     flexDirection: "row",
     alignItems: "center",
@@ -1864,6 +2270,11 @@ const styles = StyleSheet.create({
   recipeSectionInset: {
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
+  },
+  regenerateAction: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    padding: spacing.sm,
   },
   favoriteLoading: {
     minHeight: spacing.xxxl,
@@ -2001,6 +2412,29 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
   },
+  recipeSignalRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xxs,
+  },
+  recipeSignalBadge: {
+    borderRadius: radius.pill,
+    backgroundColor: colors.mutedSurface,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+  },
+  recipeSignalBadgeEmphasis: {
+    backgroundColor: colors.warningSoft,
+  },
+  recipeSignalText: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.subtext,
+  },
+  recipeSignalTextEmphasis: {
+    color: colors.warning,
+  },
   favoriteButton: {
     width: touchTarget.icon,
     height: touchTarget.icon,
@@ -2025,6 +2459,110 @@ const styles = StyleSheet.create({
   },
   optionGroup: {
     gap: spacing.sm,
+  },
+  ingredientSelectionList: {
+    gap: spacing.xs,
+  },
+  ingredientSelectionToolbar: {
+    gap: spacing.sm,
+    paddingBottom: spacing.xs,
+  },
+  ingredientSearchField: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  ingredientSearchInput: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: touchTarget.min,
+    paddingVertical: spacing.xs,
+  },
+  ingredientFilterRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
+  ingredientBulkHeader: {
+    gap: spacing.xs,
+  },
+  ingredientSelectionCount: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  ingredientBulkActions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
+  ingredientBulkAction: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.sm,
+    justifyContent: "center",
+  },
+  ingredientBulkActionDisabled: {
+    opacity: 0.45,
+  },
+  ingredientBulkActionText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.primary,
+  },
+  ingredientSelectionRow: {
+    minHeight: touchTarget.min,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  ingredientSelectionRowSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+  },
+  ingredientSelectionCopy: {
+    flex: 1,
+    minWidth: 0,
+    gap: spacing.xxs,
+  },
+  ingredientSelectionName: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.bodyStrong.fontFamily,
+    color: colors.text,
+  },
+  ingredientSelectionMeta: {
+    fontSize: typography.caption.fontSize,
+    lineHeight: typography.caption.lineHeight,
+    fontFamily: typography.caption.fontFamily,
+    color: colors.subtext,
+  },
+  ingredientSelectionCheck: {
+    width: spacing.md,
+    height: spacing.md,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ingredientSelectionCheckSelected: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   optionHeader: {
     flexDirection: "row",

@@ -241,6 +241,10 @@ describe("RecipesService recommendation guards", () => {
     process.env.RECIPE_AI_CANDIDATE_MODEL = "gpt-5.6-terra";
     process.env.RECIPE_AI_CANDIDATE_PERCENT = "100";
     const { prisma, service } = createService();
+    const selectionRequest = {
+      ...request,
+      selectedInventoryItemIds: [inventoryItem.id],
+    };
     const generation: RecipeRecommendationGeneration = {
       recommendations,
       usage: {
@@ -275,13 +279,13 @@ describe("RecipesService recommendation guards", () => {
       }),
     );
 
-    const result = await service.createRecommendation("owner-a", request);
+    const result = await service.createRecommendation("owner-a", selectionRequest);
 
     const createPayload = prisma.recipeRecommendation.create.mock.calls[0]?.[0];
     expect(result.id).toBe("generated-recommendation");
     expect(generateSpy).toHaveBeenCalledWith(
       "owner-a",
-      request,
+      selectionRequest,
       expect.any(Array),
       expect.any(Object),
       expect.any(Object),
@@ -298,6 +302,13 @@ describe("RecipesService recommendation guards", () => {
     });
     expect(String(createPayload?.data.estimatedCostUsd)).toBe("0.00782");
     expect(createPayload?.data.requestCacheKey).toBeNull();
+    expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          id: { in: [inventoryItem.id] },
+        }),
+      }),
+    );
     expect(prisma.$transaction).toHaveBeenCalledOnce();
     expect(prisma.recipeAiGenerationEvent.create).toHaveBeenCalledWith(
       expect.objectContaining({

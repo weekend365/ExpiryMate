@@ -5,6 +5,7 @@ import {
   generatedRecipeRecommendationsPayloadSchema,
   updateRecipePreferenceSchema,
   recipeRecommendationDishSchema,
+  recipeRecommendationRequestSchema,
   type RecipeStrategy,
 } from "./recipes";
 
@@ -48,6 +49,21 @@ function generatedDishes() {
     ],
   }));
 }
+
+describe("recipe recommendation request contracts", () => {
+  it("accepts an optional bounded ingredient selection", () => {
+    expect(
+      recipeRecommendationRequestSchema.parse({
+        selectedInventoryItemIds: ["milk-1", "egg-1"],
+      }).selectedInventoryItemIds,
+    ).toEqual(["milk-1", "egg-1"]);
+    expect(
+      recipeRecommendationRequestSchema.safeParse({
+        selectedInventoryItemIds: [],
+      }).success,
+    ).toBe(false);
+  });
+});
 
 describe("recipe ingredient quantity contracts", () => {
   it("keeps stored legacy recommendations readable", () => {

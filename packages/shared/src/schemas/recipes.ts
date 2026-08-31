@@ -126,6 +126,11 @@ export const recipeRecommendationRequestSchema = z.object({
   maxCookingMinutes: z.coerce.number().int().min(5).max(120).default(30),
   mealType: recipeMealTypeSchema.default("any"),
   useExpiringFirst: z.coerce.boolean().default(true),
+  selectedInventoryItemIds: z
+    .array(z.string().min(1))
+    .min(1)
+    .max(30)
+    .optional(),
 });
 
 export const recipeInventorySnapshotItemSchema = z.object({

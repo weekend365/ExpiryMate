@@ -446,6 +446,9 @@ export class RecipesService {
     const today = toKstDateOnly(new Date());
     const where = {
       ...(spaceId ? { spaceId } : { ownerKey }),
+      ...(request.selectedInventoryItemIds
+        ? { id: { in: request.selectedInventoryItemIds } }
+        : {}),
       status: "active" as const,
       quantityBase: { gt: 0 },
       AND: [

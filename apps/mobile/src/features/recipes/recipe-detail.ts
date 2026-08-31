@@ -15,6 +15,11 @@ export type HighlightIngredient = {
   isExpiring: boolean;
 };
 
+export type RecipeDecisionSignals = {
+  badges: string[];
+  rationale: string;
+};
+
 export type RecipeDetailSelection = {
   recommendationId: string;
   dishIndex: number;
@@ -141,4 +146,51 @@ export function formatIngredientDdayLabel(daysUntilExpiry: number | null) {
   }
 
   return `D-${daysUntilExpiry}`;
+}
+
+export function getRecipeDecisionSignals(
+  dish: RecipeRecommendationDish,
+  inventorySnapshot: RecipeInventorySnapshotItem[],
+): RecipeDecisionSignals {
+  const ingredients = getUsedIngredientRows(dish, inventorySnapshot);
+  const expiring = ingredients
+    .filter((ingredient) => ingredient.isExpiring)
+    .sort(
+      (left, right) =>
+        (left.daysUntilExpiry ?? Number.POSITIVE_INFINITY) -
+        (right.daysUntilExpiry ?? Number.POSITIVE_INFINITY),
+    );
+  const inventoryIds = new Set(
+    inventorySnapshot.map((item) => item.inventoryItemId),
+  );
+  const ownedCount = dish.usedIngredients.filter(
+    (ingredient) =>
+      ingredient.inventoryItemId && inventoryIds.has(ingredient.inventoryItemId),
+  ).length;
+  const missingCount = dish.optionalMissingIngredients.length;
+  const totalCount = ownedCount + missingCount;
+  const badges = [
+    expiring.length > 0
+      ? `${formatIngredientDdayLabel(expiring[0]?.daysUntilExpiry ?? null) ?? "임박"} 재료 ${expiring.length}개`
+      : "임박 재료 없음",
+    `보유 ${ownedCount}/${Math.max(ownedCount, totalCount)}`,
+    missingCount > 0 ? `추가 ${missingCount}개` : "추가 구매 없음",
+  ];
+
+  if (expiring.length > 0) {
+    const names = expiring
+      .slice(0, 2)
+      .map((ingredient) => ingredient.name)
+      .join(" · ");
+    return { badges, rationale: `${names}부터 쓰기 좋은 요리예요.` };
+  }
+
+  if (missingCount === 0) {
+    return { badges, rationale: "보관 중인 재료만으로 만들 수 있어요." };
+  }
+
+  return {
+    badges,
+    rationale: `보유 재료 ${ownedCount}개를 중심으로 만들어요.`,
+  };
 }
