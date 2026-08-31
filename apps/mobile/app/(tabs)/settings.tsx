@@ -7,11 +7,12 @@ import {
   MapPin,
   MessageCircleHeart,
   ShieldCheck,
+  Sun,
   Ticket,
   UserRound,
   Users,
 } from "lucide-react-native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Switch, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
 import { ListRow } from "../../src/components/ListRow";
 import { Mascot } from "../../src/components/Mascot";
@@ -20,10 +21,17 @@ import { SectionHeader } from "../../src/components/SectionHeader";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import { colors, radius, spacing, typography } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
+import { useAppStore } from "../../src/store/app-store";
 
 export default function SettingsScreen() {
   const monetization = useMonetization();
   const { shouldStack } = useResponsiveLayout();
+  const keepCookingScreenAwake = useAppStore(
+    (state) => state.keepCookingScreenAwake,
+  );
+  const setKeepCookingScreenAwake = useAppStore(
+    (state) => state.setKeepCookingScreenAwake,
+  );
 
   return (
     <Screen bottomInsetMode="navigator" testID="settings-screen">
@@ -56,6 +64,27 @@ export default function SettingsScreen() {
             description="알레르기, 식단, 매운맛과 조리도구를 기억해요."
             icon={ChefHat}
             onPress={() => router.push("/settings/recipe-preferences")}
+          />
+          <ListRow
+            title="조리 중 화면 켜두기"
+            description="조리 단계를 보는 동안 화면이 자동으로 꺼지지 않아요."
+            icon={Sun}
+            trailing={
+              <Switch
+                value={keepCookingScreenAwake}
+                onValueChange={setKeepCookingScreenAwake}
+                accessibilityLabel="조리 중 화면 켜두기"
+                trackColor={{
+                  false: colors.border,
+                  true: colors.primarySoft,
+                }}
+                thumbColor={
+                  keepCookingScreenAwake
+                    ? colors.primary
+                    : colors.mutedSurface
+                }
+              />
+            }
           />
           <ListRow
             title="보관 위치"

@@ -114,8 +114,14 @@ export function getCookingStepCta(isLastCookingStep: boolean) {
   return isLastCookingStep ? "요리했어요" : "이 단계까지 했어요";
 }
 
-export function getInventoryApplyCta(hasSelection: boolean) {
-  return hasSelection ? "재고에 반영" : "재고는 그대로 둘게요";
+export function getInventoryApplyCta(
+  hasSelection: boolean,
+  isEditing = false,
+) {
+  if (!hasSelection) {
+    return "재고는 그대로 둘게요";
+  }
+  return isEditing ? "수정한 사용량으로 반영" : "추천 사용량으로 반영";
 }
 
 function isActiveInventoryItem(item: InventoryItem | undefined): item is InventoryItem {
@@ -309,6 +315,37 @@ export function resolveSelectedInventoryItem(
     return ingredient.item;
   }
   return ingredient.candidates.find((item) => item.id === selectedId) ?? null;
+}
+
+export function reconcileConsumptionChoices(
+  ingredients: ConsumableIngredient[],
+  storedChoices: Record<string, ConsumptionChoice>,
+) {
+  return Object.fromEntries(
+    ingredients.map((ingredient) => {
+      const fallback = defaultConsumptionChoice(ingredient);
+      const stored = storedChoices[ingredient.key];
+      if (!stored || ingredient.matchStatus === "unmatched") {
+        return [ingredient.key, fallback];
+      }
+
+      const selected = resolveSelectedInventoryItem(ingredient, stored);
+      if (!selected) {
+        return [ingredient.key, fallback];
+      }
+
+      return [
+        ingredient.key,
+        {
+          ...stored,
+          amountBase:
+            stored.mode === "skip"
+              ? 0
+              : Math.min(stored.amountBase, selected.quantityBase),
+        },
+      ];
+    }),
+  );
 }
 
 export function resolveConsumptionAmount(

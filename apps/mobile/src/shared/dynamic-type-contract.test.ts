@@ -104,6 +104,32 @@ describe("dynamic type component contract", () => {
     expect(timer).toContain('accessibilityRole="progressbar"');
     expect(timer).toContain("ReduceMotion.System");
     expect(timer).not.toContain("minWidth: 160");
+    const activeTimer = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "recipes",
+        "active-cooking-timer-bar.tsx",
+      ),
+      "utf8",
+    );
+    expect(activeTimer).toContain("shouldStack && styles.headerStacked");
+    expect(activeTimer).toContain("shouldStack && styles.progressTrackStacked");
+    expect(activeTimer).toContain('accessibilityRole="progressbar"');
+    expect(activeTimer).toContain("minWidth: 0");
+    const stepText = readFileSync(
+      join(
+        MOBILE_ROOT,
+        "src",
+        "features",
+        "recipes",
+        "CookingStepText.tsx",
+      ),
+      "utf8",
+    );
+    expect(stepText).toContain('tone="primary"');
+    expect(stepText).toContain("highlightTimes");
   });
 
   it("keeps height-aware camera layouts for phone landscape", () => {

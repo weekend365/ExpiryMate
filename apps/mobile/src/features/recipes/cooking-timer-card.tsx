@@ -93,7 +93,14 @@ export function CookingTimerCard({
           variant="heading"
           tone={status === "completed" ? "primary" : "default"}
           style={[styles.clock, shouldStack && styles.clockStacked]}
-          accessibilityLabel={`남은 시간 ${formatCookingTimerDuration(clockSeconds)}`}
+          accessibilityLabel={
+            status === "completed"
+              ? `${input.stepIndex + 1}단계 타이머 완료`
+              : `남은 시간 ${formatCookingTimerDuration(clockSeconds)}`
+          }
+          accessibilityLiveRegion={
+            status === "completed" ? "assertive" : undefined
+          }
         >
           {formatCookingTimerClock(clockSeconds)}
         </AppText>
@@ -170,17 +177,17 @@ export function CookingTimerCard({
             {status === "completed" ? "다시 시작" : "타이머 시작"}
           </Button>
         )}
-        {isCurrent && status !== "completed" ? (
+        {isCurrent ? (
           <Button
             testID="cooking-timer-cancel-button"
-            variant="danger"
+            variant={status === "completed" ? "surface" : "danger"}
             size="small"
             icon={X}
             disabled={isPending || !isHydrated}
             onPress={() => void controller.cancel()}
             style={[styles.action, shouldStack && styles.actionStacked]}
           >
-            취소
+            {status === "completed" ? "닫기" : "취소"}
           </Button>
         ) : null}
       </View>

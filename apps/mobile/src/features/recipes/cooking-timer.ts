@@ -150,6 +150,20 @@ export function formatCookingTimerDuration(seconds: number) {
   return `${minutes}분 ${remainingSeconds}초`;
 }
 
+export function getCookingTimerAccessibilityLabel(
+  stepIndex: number,
+  status: CookingTimerStatus,
+  remainingSeconds: number,
+) {
+  if (status === "completed") {
+    return `${stepIndex + 1}단계 타이머 완료`;
+  }
+  const state = status === "paused" ? "일시정지, " : "";
+  return `${stepIndex + 1}단계 타이머, ${state}${formatCookingTimerDuration(
+    remainingSeconds,
+  )} 남음`;
+}
+
 export async function loadCookingTimer(ownerKey: string) {
   const stored = await AsyncStorage.getItem(COOKING_TIMER_STORAGE_KEY);
   if (!stored) {

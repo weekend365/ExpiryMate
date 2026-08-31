@@ -16,6 +16,7 @@ import {
   getPrepContinueCta,
   remainingPrepCount,
   remainingQuantityBase,
+  reconcileConsumptionChoices,
   resolveConsumableIngredients,
   resolveConsumptionAmount,
   cookingNamesMatch,
@@ -137,6 +138,39 @@ describe("cooking flow helpers", () => {
     expect(choices["recipe:2:소금"]?.mode).toBe("skip");
   });
 
+  it("restores offline consumption choices after live inventory arrives", () => {
+    const ingredients = resolveConsumableIngredients(dish, [milk, egg]);
+    const choices = reconcileConsumptionChoices(ingredients, {
+      "milk-1": {
+        mode: "custom",
+        amountBase: 2_000,
+        selectedInventoryItemId: "milk-1",
+      },
+      "egg-1": {
+        mode: "half",
+        amountBase: 5,
+        selectedInventoryItemId: "removed-item",
+      },
+      removed: {
+        mode: "full",
+        amountBase: 1,
+        selectedInventoryItemId: "removed-item",
+      },
+    });
+
+    expect(choices["milk-1"]).toEqual({
+      mode: "custom",
+      amountBase: 1_000,
+      selectedInventoryItemId: "milk-1",
+    });
+    expect(choices["egg-1"]).toEqual({
+      mode: "recommended",
+      amountBase: 2,
+      selectedInventoryItemId: "egg-1",
+    });
+    expect(choices.removed).toBeUndefined();
+  });
+
   it("supports full and half consumption amounts", () => {
     expect(resolveConsumptionAmount("full", 1000, 500)).toBe(1000);
     expect(resolveConsumptionAmount("half", 1000, 500)).toBe(500);
@@ -181,7 +215,8 @@ describe("cooking flow helpers", () => {
     expect(getCookingGuideMessage(3, 2)).toBe(
       "실제로 사용한 양이 다르면 수정할 수 있어요.",
     );
-    expect(getInventoryApplyCta(true)).toBe("재고에 반영");
+    expect(getInventoryApplyCta(true)).toBe("추천 사용량으로 반영");
+    expect(getInventoryApplyCta(true, true)).toBe("수정한 사용량으로 반영");
     expect(getInventoryApplyCta(false)).toBe("재고는 그대로 둘게요");
   });
 

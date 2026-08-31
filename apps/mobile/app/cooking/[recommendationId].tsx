@@ -4,6 +4,7 @@ import {
   ItemStatus,
 } from "@expirymate/shared";
 import { router, useNavigation } from "expo-router";
+import { useKeepAwake } from "expo-keep-awake";
 import {
   CheckCircle2,
   ChevronRight,
@@ -12,10 +13,12 @@ import {
   Heart,
   Refrigerator,
   ShoppingBasket,
+  SlidersHorizontal,
 } from "lucide-react-native";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Alert, BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../src/components/AppText";
+import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
 import { EmptyState } from "../../src/components/EmptyState";
 import { HeaderBackButton } from "../../src/components/HeaderBackButton";
@@ -41,6 +44,8 @@ import {
 } from "../../src/features/recipes/cooking";
 import { useCookingSession } from "../../src/features/recipes/use-cooking-session";
 import { CookingTimerCard } from "../../src/features/recipes/cooking-timer-card";
+import { ActiveCookingTimerBar } from "../../src/features/recipes/active-cooking-timer-bar";
+import { CookingStepText } from "../../src/features/recipes/CookingStepText";
 import {
   isCookingTimerForStep,
   type StartCookingTimerInput,
@@ -55,6 +60,14 @@ import {
 import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
 import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
+import { useAppStore } from "../../src/store/app-store";
+
+const COOKING_KEEP_AWAKE_TAG = "expirymate-active-cooking";
+
+function CookingKeepAwake() {
+  useKeepAwake(COOKING_KEEP_AWAKE_TAG);
+  return null;
+}
 
 export default function CookingScreen() {
   const navigation = useNavigation();
@@ -74,6 +87,12 @@ export default function CookingScreen() {
     consumptionChoices,
     setConsumptionChoices,
     updatedItems,
+    pendingDraft,
+    isDraftHydrated,
+    draftSaveError,
+    retryCookingSessionSave,
+    resumeCookingSession,
+    restartCookingSession,
     undoLabel,
     handleUndoInventory,
     openedShoppingKeys,
@@ -87,6 +106,7 @@ export default function CookingScreen() {
     isFavorite,
     goToPreviousStep,
     goForward,
+    goToCookingStep,
     toggleCookingStep,
     completeCookingStepAndAdvance,
     handleApplyInventory,
@@ -99,6 +119,10 @@ export default function CookingScreen() {
     favoriteMutationError,
   } = useCookingSession();
   const shoppingQuery = useAffiliateShopping();
+  const [isInventoryEditing, setIsInventoryEditing] = useState(false);
+  const keepCookingScreenAwake = useAppStore(
+    (state) => state.keepCookingScreenAwake,
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -118,6 +142,12 @@ export default function CookingScreen() {
 
     return () => subscription.remove();
   }, [goToPreviousStep]);
+
+  useEffect(() => {
+    if (currentIndex !== consumptionStepIndex) {
+      setIsInventoryEditing(false);
+    }
+  }, [consumptionStepIndex, currentIndex]);
 
   if (recommendationQuery.isPending) {
     return (
@@ -150,6 +180,18 @@ export default function CookingScreen() {
           mood="worry"
           title="이 레시피를 다시 찾지 못했어요"
           description="추천 탭에서 요리를 다시 골라볼까요?"
+        />
+      </Screen>
+    );
+  }
+
+  if (!isDraftHydrated) {
+    return (
+      <Screen contentWidth="wide" density="compact" topInsetMode="none">
+        <EmptyState
+          mood="think"
+          title="하던 요리가 있는지 확인하고 있어요"
+          description="저장된 준비 체크와 조리 단계를 안전하게 불러올게요."
         />
       </Screen>
     );
@@ -338,7 +380,7 @@ export default function CookingScreen() {
     void cookingTimer.start(timerInput);
   };
 
-  const footer =
+  const primaryFooter =
     currentIndex === 0 ? (
       <View style={styles.footerStack}>
         {uncheckedPrepCount > 0 ? (
@@ -387,18 +429,52 @@ export default function CookingScreen() {
         disabled={inventoryQuery.isPending || consumeMutation.isPending}
         fullWidth
       >
-        {getInventoryApplyCta(hasSelectedConsumption(consumptionChoices))}
+        {getInventoryApplyCta(
+          hasSelectedConsumption(consumptionChoices),
+          isInventoryEditing,
+        )}
       </Button>
     );
 
+  const timer = cookingTimer.timer;
+  const showsActiveTimerBar = Boolean(
+    timer &&
+      timer.recommendationId === recommendationId &&
+      timer.dishIndex === requestedDishIndex &&
+      timer.stepIndex !== cookingStepIndex,
+  );
+  const footer = showsActiveTimerBar ? (
+    <View style={styles.screenFooter}>
+      <ActiveCookingTimerBar
+        controller={cookingTimer}
+        onOpenStep={goToCookingStep}
+      />
+      {primaryFooter}
+    </View>
+  ) : (
+    primaryFooter
+  );
+
+  const draftStepLabel = pendingDraft
+    ? pendingDraft.currentIndex === 0
+      ? "재료 준비"
+      : pendingDraft.currentIndex <= dish.steps.length
+        ? `조리 ${pendingDraft.currentIndex}단계`
+        : "재고 반영"
+    : null;
+
   return (
-    <Screen
-      contentWidth="wide"
-      density="compact"
-      topInsetMode="none"
-      footer={footer}
-    >
-      <StepFlow
+    <>
+      <Screen
+        contentWidth="wide"
+        density="compact"
+        topInsetMode="none"
+        footer={footer}
+      >
+        {keepCookingScreenAwake && cookingStepIndex !== null ? (
+          <CookingKeepAwake />
+        ) : null}
+        <StepFlow
         steps={steps}
         currentIndex={currentIndex}
         onBack={goToPreviousStep}
@@ -411,6 +487,27 @@ export default function CookingScreen() {
         )}
         guideMood={currentIndex === consumptionStepIndex ? "happy" : "cooking"}
       >
+        {draftSaveError ? (
+          <View
+            testID="cooking-session-save-error"
+            style={styles.errorCard}
+            accessible
+            accessibilityRole="alert"
+            accessibilityLiveRegion="polite"
+          >
+            <AppText variant="bodySmall" tone="danger">
+              {draftSaveError}
+            </AppText>
+            <Button
+              variant="surface"
+              size="small"
+              onPress={() => void retryCookingSessionSave()}
+              fullWidth
+            >
+              다시 저장
+            </Button>
+          </View>
+        ) : null}
         {currentIndex === 0 ? (
           <View style={styles.section}>
             <AppText variant="body" tone="subtext">
@@ -504,9 +601,11 @@ export default function CookingScreen() {
                   {cookingStepIndex + 1}
                 </AppText>
               </View>
-              <AppText variant="body" style={styles.cookingText}>
-                {dish.steps[cookingStepIndex]}
-              </AppText>
+              <CookingStepText
+                text={dish.steps[cookingStepIndex]}
+                highlightTimes={Boolean(timerInput)}
+                style={styles.cookingText}
+              />
               {cookingStepCompleted ? (
                 <CheckCircle2
                   color={colors.primary}
@@ -542,7 +641,7 @@ export default function CookingScreen() {
         {currentIndex === consumptionStepIndex ? (
           <View style={styles.section}>
             <AppText variant="body" tone="subtext">
-              실제로 사용한 양이 다르면 수정할 수 있어요.
+              추천 사용량을 먼저 확인하고, 다른 경우에만 수정해 주세요.
             </AppText>
             <Pressable
               onPress={handleToggleFavorite}
@@ -610,27 +709,39 @@ export default function CookingScreen() {
                 </AppText>
               </View>
             ) : null}
-            <View style={[styles.list, isRegular && styles.listRegular]}>
-              {consumableIngredients.map((ingredient) => (
-                <ConsumptionCard
-                  key={ingredient.key}
-                  ingredient={ingredient}
-                  choice={
-                    consumptionChoices[ingredient.key] ?? {
-                      mode: "skip",
-                      amountBase: 0,
-                      selectedInventoryItemId: null,
+            {consumableIngredients.length ? (
+              <ConsumptionSummary
+                ingredients={consumableIngredients}
+                choices={consumptionChoices}
+                isEditing={isInventoryEditing}
+                onToggleEditing={() =>
+                  setIsInventoryEditing((current) => !current)
+                }
+              />
+            ) : null}
+            {isInventoryEditing ? (
+              <View style={[styles.list, isRegular && styles.listRegular]}>
+                {consumableIngredients.map((ingredient) => (
+                  <ConsumptionCard
+                    key={ingredient.key}
+                    ingredient={ingredient}
+                    choice={
+                      consumptionChoices[ingredient.key] ?? {
+                        mode: "skip",
+                        amountBase: 0,
+                        selectedInventoryItemId: null,
+                      }
                     }
-                  }
-                  onChange={(choice) =>
-                    setConsumptionChoices((current) => ({
-                      ...current,
-                      [ingredient.key]: choice,
-                    }))
-                  }
-                />
-              ))}
-            </View>
+                    onChange={(choice) =>
+                      setConsumptionChoices((current) => ({
+                        ...current,
+                        [ingredient.key]: choice,
+                      }))
+                    }
+                  />
+                ))}
+              </View>
+            ) : null}
             {!inventoryQuery.isPending && !consumableIngredients.length ? (
               <View style={styles.tipCard}>
                 <AppText variant="bodyStrong">
@@ -651,8 +762,118 @@ export default function CookingScreen() {
             ) : null}
           </View>
         ) : null}
-      </StepFlow>
-    </Screen>
+        </StepFlow>
+      </Screen>
+      <BottomSheet
+        visible={pendingDraft !== null}
+        onClose={() => undefined}
+        dismissible={false}
+        mascotMood="cooking"
+        title="하던 요리를 이어갈까요?"
+        description={
+          draftStepLabel
+            ? `${draftStepLabel}까지 저장되어 있어요. 24시간 동안 이어서 볼 수 있어요.`
+            : undefined
+        }
+        footer={
+          <View style={styles.footerStack} testID="cooking-session-resume-sheet">
+            <Button onPress={resumeCookingSession} fullWidth>
+              이어서 조리할게요
+            </Button>
+            <Button
+              variant="surface"
+              onPress={restartCookingSession}
+              fullWidth
+            >
+              처음부터 시작
+            </Button>
+          </View>
+        }
+      >
+        <AppText variant="body" tone="subtext">
+          준비 체크, 완료한 단계, 재고 사용량을 그대로 복원해요.
+        </AppText>
+      </BottomSheet>
+    </>
+  );
+}
+
+function ConsumptionSummary({
+  ingredients,
+  choices,
+  isEditing,
+  onToggleEditing,
+}: {
+  ingredients: ConsumableIngredient[];
+  choices: Record<string, ConsumptionChoice>;
+  isEditing: boolean;
+  onToggleEditing: () => void;
+}) {
+  const { shouldStack } = useResponsiveLayout();
+  const rows = ingredients.flatMap((ingredient) => {
+    const choice = choices[ingredient.key];
+    const item = resolveSelectedInventoryItem(ingredient, choice);
+    if (!choice || !item || choice.amountBase <= 0) {
+      return [];
+    }
+    return [
+      {
+        key: ingredient.key,
+        name: ingredient.name,
+        used: formatBaseQuantity(choice.amountBase, item.unitCode),
+        remaining: formatBaseQuantity(
+          remainingQuantityBase(item.quantityBase, choice.amountBase),
+          item.unitCode,
+        ),
+      },
+    ];
+  });
+  const skippedCount = ingredients.length - rows.length;
+
+  return (
+    <View testID="cooking-inventory-summary" style={styles.summaryCard}>
+      <View style={styles.summaryHeader}>
+        <View style={styles.rowCopy}>
+          <AppText variant="subheading">추천 사용량 요약</AppText>
+          <AppText variant="bodySmall" tone="subtext">
+            {rows.length
+              ? `${rows.length}개 재료를 재고에 반영해요.`
+              : "이번에는 재고를 변경하지 않아요."}
+          </AppText>
+        </View>
+        <AppText variant="label" tone="primary">
+          {rows.length}개 선택
+        </AppText>
+      </View>
+      {rows.map((row) => (
+        <View
+          key={row.key}
+          style={[styles.summaryRow, shouldStack && styles.summaryRowStacked]}
+        >
+          <AppText variant="bodyStrong" style={styles.summaryName}>
+            {row.name}
+          </AppText>
+          <AppText variant="bodySmall" tone="subtext">
+            {row.used} 사용 · {row.remaining} 남음
+          </AppText>
+        </View>
+      ))}
+      {skippedCount > 0 ? (
+        <AppText variant="bodySmall" tone="muted">
+          연결되지 않았거나 반영하지 않는 재료 {skippedCount}개
+        </AppText>
+      ) : null}
+      <Button
+        testID="cooking-inventory-edit-button"
+        variant="surface"
+        size="small"
+        icon={SlidersHorizontal}
+        onPress={onToggleEditing}
+        fullWidth
+      >
+        {isEditing ? "사용량 수정 닫기" : "사용량 수정"}
+      </Button>
+    </View>
   );
 }
 
@@ -830,6 +1051,9 @@ const styles = StyleSheet.create({
   footerStack: {
     gap: spacing.sm,
   },
+  screenFooter: {
+    gap: spacing.sm,
+  },
   ctaHint: {
     textAlign: "center",
   },
@@ -963,6 +1187,39 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexBasis: "40%",
     maxWidth: "48%",
+  },
+  summaryCard: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  summaryHeader: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+    gap: spacing.sm,
+  },
+  summaryRow: {
+    minHeight: touchTarget.min,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.xs,
+  },
+  summaryRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  summaryName: {
+    flex: 1,
+    minWidth: 0,
   },
   consumptionHeader: {
     flexDirection: "row",

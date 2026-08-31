@@ -30,6 +30,7 @@ import {
   formatCookingTimerDuration,
   getCookingTimerProgress,
   getCookingTimerRemainingSeconds,
+  getCookingTimerAccessibilityLabel,
   loadCookingTimer,
   pauseCookingTimer,
   resumeCookingTimer,
@@ -135,6 +136,15 @@ describe("persisted cooking timer", () => {
     expect(formatCookingTimerClock(90)).toBe("01:30");
     expect(formatCookingTimerClock(3_661)).toBe("1:01:01");
     expect(formatCookingTimerDuration(90)).toBe("1분 30초");
+  });
+
+  it("announces paused and completed timers without saying zero seconds remain", () => {
+    expect(getCookingTimerAccessibilityLabel(1, "paused", 75)).toBe(
+      "2단계 타이머, 일시정지, 1분 15초 남음",
+    );
+    expect(getCookingTimerAccessibilityLabel(1, "completed", 0)).toBe(
+      "2단계 타이머 완료",
+    );
   });
 
   it("clamps timer progress for idle, running, and completed states", () => {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Alert, AppState } from "react-native";
+import * as Haptics from "expo-haptics";
+import { AccessibilityInfo, Alert, AppState } from "react-native";
 import {
   cancelCookingTimer,
   completeCookingTimer,
@@ -86,12 +87,23 @@ export function useCookingTimer(ownerKey: string | undefined) {
       notificationId: null,
     });
     void completeCookingTimer(timer).catch(() => undefined);
-    if (!timer.notificationsAllowed && completionAlertKeyRef.current !== completionKey) {
+    if (completionAlertKeyRef.current !== completionKey) {
       completionAlertKeyRef.current = completionKey;
-      Alert.alert(
-        `${timer.dishTitle} 타이머가 끝났어요`,
-        `${timer.stepIndex + 1}단계를 확인해 주세요.`,
-      );
+      if (AppState.currentState === "active") {
+        void Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Success,
+        ).catch(() => undefined);
+        if (timer.notificationsAllowed) {
+          AccessibilityInfo.announceForAccessibility(
+            `${timer.dishTitle} ${timer.stepIndex + 1}단계 타이머가 끝났어요.`,
+          );
+        } else {
+          Alert.alert(
+            `${timer.dishTitle} 타이머가 끝났어요`,
+            `${timer.stepIndex + 1}단계를 확인해 주세요.`,
+          );
+        }
+      }
     }
   }, [remainingSeconds, timer]);
 
