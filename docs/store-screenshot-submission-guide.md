@@ -45,22 +45,7 @@ data_as_of: 2026-07-24
 - 앱 추천 영역까지 고려하면 휴대전화용 **최소 4장, 1080px 이상, 세로 9:16** 권장
 - Play 제출에는 스크린샷과 별도로 `1024 × 500` Feature Graphic도 필요
 
-## 2. 최종 6장 구성
-
-처음 3장이 검색·스토어 미리보기에서 가장 중요합니다. App Store와 Play 모두 아래 순서를 유지합니다.
-
-| 순서 | 실제 화면 | 권장 캡션 | 촬영 상태 |
-|---:|---|---|---|
-| 1 | 홈 | **오늘 냉장고 상태를 한눈에** | 오늘 만료 1, 7일 이내 4, 보관 중 8~10개가 보이게 |
-| 2 | 보관함 | **재료와 유통기한을 편하게** | 전체 보기, 임박순 카드 4~6개, 오류·선택 모드 없음 |
-| 3 | 요리 추천 결과 | **임박 재료로 오늘 메뉴까지** | 실제 생성된 요리 카드 2개 이상, 생성 중·한도 오류 없음 |
-| 4 | 바코드/유통기한 스캔 | **비추면 등록 준비가 빠르게** | 카메라 권한 허용 후 1/2 또는 2/2 가이드가 선명하게 |
-| 5 | 공유 냉장고 상세 | **가족·동료와 같은 냉장고를 함께** | 가상 구성원 2~3명, 대기 중 이메일·초대 코드 노출 없음 |
-| 6 | 재료 등록의 유통기한 단계 | **세 단계로 재료 등록도 가볍게** | 재료명이 채워진 상태, 빠른 날짜 선택지가 보이게 |
-
-캡션 없는 원본 UI만 제출해도 됩니다. 캡션을 넣는다면 모든 이미지에서 위치, 크기, 배경색을 동일하게 하고 실제 앱 UI가 이미지 대부분을 차지하게 합니다.
-
-## 3. 촬영 계정과 데이터 준비
+## 2. 촬영 계정과 데이터 준비
 
 프로덕션 전체 DB에 개발 seed를 실행하지 않습니다. 촬영 전용 계정에서 앱 UI로 직접 데이터를 만들거나, 안전하게 범위가 제한된 별도 스크립트를 준비합니다.
 
@@ -88,7 +73,7 @@ data_as_of: 2026-07-24
 
 Apple 심사 지침도 실제 인물 정보 대신 가상 계정 정보를 사용하도록 요구합니다.
 
-## 4. 촬영 직전 P0 체크
+## 3. 촬영 직전 P0 체크
 
 - [ ] 제출할 Release Candidate와 같은 커밋·환경의 빌드를 사용
 - [ ] 홈과 설정에 임시 출시 안내·placeholder 기능이 남아 있지 않은지 확인
@@ -101,7 +86,7 @@ Apple 심사 지침도 실제 인물 정보 대신 가상 계정 정보를 사�
 
 Apple은 로그인·스플래시·타이틀 화면만 보여주는 스크린샷을 허용하지 않습니다. 이 앱은 로그인 화면을 스토어 이미지에 넣지 않습니다.
 
-## 5. iOS 촬영 방법
+## 4. iOS 촬영 방법
 
 ### 가장 안전한 방법: TestFlight 실기기
 
@@ -131,7 +116,7 @@ xcrun simctl status_bar booted override \
   --cellularBars 4
 
 xcrun simctl io booted screenshot --type=png \
-  store-assets/screenshots/raw/ios/ko/iphone-6.9/01-home.png
+  store-assets/screenshots/raw/ios/ko/iphone-6.9/01-screen-name.png
 ```
 
 촬영 후 상태바 override 해제:
@@ -140,7 +125,7 @@ xcrun simctl io booted screenshot --type=png \
 xcrun simctl status_bar booted clear
 ```
 
-## 6. Android 촬영 방법
+## 5. Android 촬영 방법
 
 가장 신뢰할 수 있는 원본은 Play 내부 테스트 트랙의 release 빌드입니다. 다만 대부분의 최신 실기기 원본은 9:16보다 길기 때문에, Google 추천 노출 규격까지 맞추려면 아래 중 하나를 사용합니다.
 
@@ -154,14 +139,14 @@ mkdir -p store-assets/screenshots/raw/android/ko/phone
 
 adb shell wm size 1080x1920
 adb exec-out screencap -p \
-  > store-assets/screenshots/raw/android/ko/phone/01-home.png
+  > store-assets/screenshots/raw/android/ko/phone/01-screen-name.png
 
 adb shell wm size reset
 ```
 
 해상도를 바꾼 뒤 앱을 완전히 종료·재실행하고, 하단 탭·safe area·키보드가 잘리지 않는지 확인합니다. iOS 캡처를 Play에 재사용하지 않습니다.
 
-## 7. 캡션·후가공 규칙
+## 6. 캡션·후가공 규칙
 
 권장 스타일은 **굵은 2줄 상단 캡션 + 얇은 아이폰 베젤 + 크게 보이는 실제 UI**입니다.
 
@@ -198,7 +183,7 @@ adb shell wm size reset
 - 다른 스토어 로고, 기기 제조사 로고, 타사 캐릭터·상품 로고 사용 금지
 - 한국어 외 스토어 등록정보를 만들 때는 캡션도 해당 언어로 별도 제작
 
-## 8. 파일 구조와 검수
+## 7. 파일 구조와 검수
 
 권장 보관 구조:
 
@@ -216,12 +201,7 @@ store-assets/
 파일명:
 
 ```text
-01-home.png
-02-inventory.png
-03-recommendations.png
-04-scanner.png
-05-shared-space.png
-06-register-expiry.png
+NN-screen-name.png
 ```
 
 macOS에서 픽셀과 alpha 확인:
@@ -239,7 +219,7 @@ sips -s format jpeg input.png --out output.jpg
 
 최종 육안 검수:
 
-- [ ] 6장의 순서와 캡션이 동일
+- [ ] 각 세트의 순서와 캡션 스타일이 일관됨
 - [ ] 앱 이름과 실제 UI가 현재 빌드와 일치
 - [ ] 개인정보·초대 코드·실제 이메일 없음
 - [ ] 오류·로딩·빈 화면 없음
@@ -249,7 +229,7 @@ sips -s format jpeg input.png --out output.jpg
 - [ ] App Store 파일은 허용 픽셀 크기와 정확히 일치
 - [ ] Play 파일은 9:16이며 최소 1080px
 
-## 9. 제출 순서
+## 8. 제출 순서
 
 ### App Store Connect
 
@@ -273,18 +253,7 @@ sips -s format jpeg input.png --out output.jpg
 6. 각 이미지에 140자 이내 대체 텍스트 입력
 7. 저장 후 휴대전화 미리보기에서 첫 3장 순서 확인
 
-## 10. Google Play 대체 텍스트 초안
-
-| 파일 | 대체 텍스트 |
-|---|---|
-| `01-home` | 오늘 만료, 7일 이내, 보관 중 재료 수를 보여주는 장고 홈 화면 |
-| `02-inventory` | 유통기한이 가까운 순서로 식재료와 보관 위치를 보여주는 보관함 |
-| `03-recommendations` | 냉장고의 임박 재료로 만든 요리 추천 카드와 추천 조건 |
-| `04-scanner` | 바코드와 유통기한을 두 단계로 읽는 카메라 스캔 화면 |
-| `05-shared-space` | 가족이나 동료 구성원과 함께 쓰는 냉장고 관리 화면 |
-| `06-register-expiry` | 빠른 날짜 선택으로 식재료 유통기한을 입력하는 등록 화면 |
-
-## 11. 공식 기준 링크
+## 9. 공식 기준 링크
 
 - [Apple · Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)
 - [Apple · Upload app previews and screenshots](https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/)

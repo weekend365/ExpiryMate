@@ -11,7 +11,6 @@ export type InventoryHeroNotice =
       mood: MascotMood;
       tone: InventoryHeroTone;
       message: string;
-      supportingMessage?: string;
     };
 
 export function getInventoryHeroNotice(input: {
@@ -30,7 +29,6 @@ export function getInventoryHeroNotice(input: {
       mood: "speak",
       tone: "neutral",
       message: "정리할 재료를 골라 주세요.",
-      supportingMessage: "여러 재료를 한 번에 정리할 수 있어요.",
     };
   }
 
@@ -67,7 +65,6 @@ export function getInventoryHeroNotice(input: {
       mood: "idle",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
-      supportingMessage: "검색어나 필터를 바꾸면 다시 찾아볼게요.",
     };
   }
 
@@ -86,7 +83,6 @@ export function getInventoryHeroNotice(input: {
       mood: "worry",
       tone: "danger",
       message: `기한이 지난 재료 ${input.expiredCount}개부터 정리할까요?`,
-      supportingMessage: "눌러서 만료된 재료만 모아 볼 수 있어요.",
     };
   }
 
@@ -96,7 +92,6 @@ export function getInventoryHeroNotice(input: {
       mood: "speak",
       tone: "warning",
       message: `7일 안에 손볼 재료 ${input.within7Count}개를 확인할까요?`,
-      supportingMessage: "눌러서 곧 만료되는 재료만 모아 볼 수 있어요.",
     };
   }
 
@@ -120,7 +115,6 @@ export function getInventoryHeroNotices(input: {
       id: "status",
       mood: input.hero.mood,
       message: input.hero.message,
-      supportingMessage: input.hero.supportingMessage,
     },
   ];
 }

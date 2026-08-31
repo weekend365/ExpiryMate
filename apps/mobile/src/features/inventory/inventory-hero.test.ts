@@ -21,7 +21,6 @@ describe("getInventoryHeroNotice", () => {
       mood: "speak",
       tone: "neutral",
       message: "정리할 재료를 골라 주세요.",
-      supportingMessage: "여러 재료를 한 번에 정리할 수 있어요.",
     });
   });
 
@@ -85,7 +84,6 @@ describe("getInventoryHeroNotice", () => {
       mood: "idle",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
-      supportingMessage: "검색어나 필터를 바꾸면 다시 찾아볼게요.",
     });
   });
 
@@ -144,7 +142,6 @@ describe("getInventoryHeroNotice", () => {
       mood: "worry",
       tone: "danger",
       message: "기한이 지난 재료 1개부터 정리할까요?",
-      supportingMessage: "눌러서 만료된 재료만 모아 볼 수 있어요.",
     });
   });
 
@@ -159,7 +156,6 @@ describe("getInventoryHeroNotice", () => {
       mood: "speak",
       tone: "warning",
       message: "7일 안에 손볼 재료 3개를 확인할까요?",
-      supportingMessage: "눌러서 곧 만료되는 재료만 모아 볼 수 있어요.",
     });
   });
 
@@ -191,7 +187,13 @@ describe("getInventoryHeroNotices", () => {
           tone: "warning",
           message: "일주일 안에 손볼 재료가 6개 있어요.",
         },
-      }).map((notice) => notice.id),
-    ).toEqual(["status"]);
+      }),
+    ).toEqual([
+      {
+        id: "status",
+        mood: "speak",
+        message: "일주일 안에 손볼 재료가 6개 있어요.",
+      },
+    ]);
   });
 });
