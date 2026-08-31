@@ -27,8 +27,7 @@ function filesMatching(pattern: RegExp): string[] {
     .map((path) => relative(MOBILE_ROOT, path));
 }
 
-const conversationalActionEnding =
-  /(?:할게요|볼게요|둘게요|갈게요|고를게요|넣을게요|맞출게요|줄게요|할래요|볼래요|할까요|볼까요|했어요)[.!?]?$/;
+const conversationalActionEnding = /(?:게요|래요|까요|했어요)[.!?]?$/;
 
 function actionCopyViolations(): string[] {
   const violations: string[] = [];
@@ -104,6 +103,26 @@ function actionCopyViolations(): string[] {
         }
       }
 
+      if (
+        ts.isCallExpression(node) &&
+        node.expression.getText(sourceFile) === "Alert.alert"
+      ) {
+        const actions = node.arguments[2];
+        if (actions && ts.isArrayLiteralExpression(actions)) {
+          for (const action of actions.elements) {
+            if (!ts.isObjectLiteralExpression(action)) continue;
+            for (const property of action.properties) {
+              if (
+                ts.isPropertyAssignment(property) &&
+                property.name.getText(sourceFile) === "text"
+              ) {
+                checkExpression(property.initializer);
+              }
+            }
+          }
+        }
+      }
+
       ts.forEachChild(node, visit);
     }
 
@@ -132,6 +151,16 @@ describe("mobile design token contract", () => {
     );
 
     expect(rawLayout).toEqual([]);
+  });
+
+  it("uses explicit color roles instead of legacy semantic aliases", () => {
+    expect(
+      filesMatching(/\bcolors\.(?:primary|danger|warning|success|info)\b/),
+    ).toEqual([]);
+  });
+
+  it("respects the system reduced-motion preference", () => {
+    expect(filesMatching(/\bReduceMotion\.Never\b/)).toEqual([]);
   });
 
   it("does not bypass the centralized Coupang CTA copy", () => {
@@ -197,5 +226,16 @@ describe("mobile design token contract", () => {
 
   it("keeps action labels concise while body copy stays conversational", () => {
     expect(actionCopyViolations()).toEqual([]);
+  });
+
+  it("announces form errors and returns focus to the invalid field", () => {
+    const formField = readFileSync(
+      join(MOBILE_ROOT, "src", "components", "FormField.tsx"),
+      "utf8",
+    );
+
+    expect(formField).toContain("ref={field.ref}");
+    expect(formField).toContain('accessibilityRole="alert"');
+    expect(formField).toContain('accessibilityLiveRegion="polite"');
   });
 });

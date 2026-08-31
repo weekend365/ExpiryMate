@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   planCardSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   planCardStacked: { flexDirection: "column", alignItems: "stretch" },

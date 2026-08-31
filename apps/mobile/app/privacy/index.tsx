@@ -199,7 +199,7 @@ function PrivacyRow({
   tone?: "default" | "danger";
   last?: boolean;
 }) {
-  const iconColor = tone === "danger" ? colors.danger : colors.primary;
+  const iconColor = tone === "danger" ? colors.dangerForeground : colors.primaryForeground;
 
   return (
     <Pressable
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   rowTitleDanger: {
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   rowDescription: {
     fontSize: typography.caption.fontSize,

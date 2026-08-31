@@ -16,14 +16,14 @@ export function SeedStatusPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Seed"
         title="개발 시드 상태"
         description="로컬 개발 데이터가 정상적으로 들어갔는지 확인하는 단순한 점검 화면입니다."
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-[var(--space-sm)] md:grid-cols-2 xl:grid-cols-4">
         <MetricCard label="시드 상품 수" value={productsQuery.data?.length ?? 0} />
         <MetricCard label="시드 재고 수" value={inventoryQuery.data?.totalCount ?? 0} />
         <MetricCard label="보관 중" value={summaryQuery.data?.totalActiveCount ?? 0} />
@@ -31,7 +31,7 @@ export function SeedStatusPage() {
       </div>
 
       <Panel title="초기 확인 포인트" description="MVP 기준에서 다음 값이면 정상입니다.">
-        <ul className="list-disc space-y-2 pl-5 text-sm leading-7 text-[var(--muted)]">
+        <ul className="list-disc space-y-[var(--space-xs)] pl-[var(--space-md)] type-body-small text-[var(--muted)]">
           <li>상품 10개 이상</li>
           <li>재고 8개 이상</li>
           <li>오늘 만료, 3일 이내 만료, 만료 상태가 모두 섞여 있음</li>

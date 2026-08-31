@@ -104,7 +104,7 @@ describe("cooking flow helpers", () => {
       "inventory",
     ]);
     expect(steps[2]?.title).toBe("요리가 거의 완성됐어요");
-    expect(steps[3]?.title).toBe("맛있게 완성됐어요");
+    expect(steps[3]?.title).toBe("우유 달걀죽, 맛있게 완성됐어요");
     expect(steps[4]?.title).toBe("사용한 재료를 보관함에 반영할까요?");
   });
 
@@ -215,7 +215,7 @@ describe("cooking flow helpers", () => {
     );
     expect(getCookingGuideMessage(2, 2)).toBe("요리가 거의 완성됐어요.");
     expect(getCookingGuideMessage(3, 2)).toBe(
-      "완성된 요리를 즐긴 뒤 재고 정리는 따로 이어갈 수 있어요.",
+      "완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요.",
     );
     expect(getCookingGuideMessage(4, 2)).toBe(
       "실제로 사용한 양이 다르면 수정할 수 있어요.",

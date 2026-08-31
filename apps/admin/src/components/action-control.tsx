@@ -52,7 +52,7 @@ function actionClassName({
 
 interface ActionButtonProps
   extends PropsWithChildren,
-    Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> {
   variant?: ActionVariant;
   size?: ActionSize;
   fullWidth?: boolean;
@@ -104,7 +104,7 @@ export function ActionLink({
 
 interface ActionAnchorProps
   extends PropsWithChildren,
-    Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
   variant?: Exclude<ActionVariant, "danger">;
   size?: ActionSize;
   fullWidth?: boolean;

@@ -6,28 +6,28 @@ const contactEmail =
 
 export default function PrivacyChoicesPage() {
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
-      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
+    <main className="mx-auto min-h-screen max-w-[var(--content-default)] px-[var(--space-md)] py-[var(--space-xl)]">
+      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-[var(--space-lg)] shadow-[var(--shadow-lift)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] type-body-small-strong text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Privacy Choices
         </div>
-        <h1 className="mt-5 text-3xl font-black tracking-tight">
+        <h1 className="mt-[var(--space-md)] type-display">
           데이터 삭제·동의 철회 안내
         </h1>
-        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-              사용자는 {appBrand.appNameKo} 앱 안에서 계정 데이터 삭제, AI 안내
-              동의 철회, 추천 기록 삭제를 직접 할 수 있습니다.
+        <p className="mt-[var(--space-sm)] type-body-small text-[var(--muted)]">
+          사용자는 {appBrand.appNameKo} 앱 안에서 계정 데이터 삭제, AI 안내
+          동의 철회, 추천 기록 삭제를 직접 할 수 있습니다.
         </p>
 
-        <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
-          <h2 className="text-xl font-black">앱에서 하는 방법</h2>
-          <ol className="list-decimal space-y-2 pl-5">
+        <section className="mt-[var(--space-lg)] space-y-[var(--space-sm)] type-body-small text-[var(--foreground)]">
+          <h2 className="type-heading">앱에서 하는 방법</h2>
+          <ol className="list-decimal space-y-[var(--space-xs)] pl-[var(--space-md)]">
             <li>{appBrand.appNameKo} 앱을 엽니다.</li>
             <li>설정 탭으로 이동합니다.</li>
             <li>「개인정보와 추천 안내」를 엽니다.</li>
             <li>
               원하는 항목을 선택합니다.
-              <ul className="mt-2 list-disc space-y-1 pl-5">
+              <ul className="mt-[var(--space-xs)] list-disc space-y-[var(--space-xxs)] pl-[var(--space-md)]">
                 <li>요리 추천 안내 → 동의 철회</li>
                 <li>받은 추천 기록 정리</li>
                 <li>계정과 데이터 정리</li>
@@ -35,8 +35,8 @@ export default function PrivacyChoicesPage() {
             </li>
           </ol>
 
-          <h2 className="pt-4 text-xl font-black">항목별 삭제·철회 범위</h2>
-          <ul className="list-disc space-y-2 pl-5">
+          <h2 className="pt-[var(--space-sm)] type-heading">항목별 삭제·철회 범위</h2>
+          <ul className="list-disc space-y-[var(--space-xs)] pl-[var(--space-md)]">
             <li>
               <strong>AI 동의 철회:</strong> 이후 새 요리 추천과 사진으로 재료
               읽기 시 외부 AI로 재료·조건·사진이 전송되지 않습니다. 계정과 재료는
@@ -59,7 +59,7 @@ export default function PrivacyChoicesPage() {
             </li>
           </ul>
 
-          <h2 className="pt-4 text-xl font-black">공유 냉장고를 이용 중이라면</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">공유 냉장고를 이용 중이라면</h2>
           <p>
             일반 구성원과 관리자는 계정을 정리하면 공유 냉장고 멤버십도 함께
             제거됩니다. 다른 구성원이 있는 공유 냉장고의 소유자는 설정 → 함께
@@ -69,7 +69,7 @@ export default function PrivacyChoicesPage() {
             서버에서 삭제됩니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">개인 플러스 구독을 이용 중이라면</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">개인 플러스 구독을 이용 중이라면</h2>
           <p>
             계정 삭제만으로 App Store 또는 Google Play의 자동 갱신 구독이
             해지되지 않을 수 있습니다. 먼저 해당 스토어의 구독 관리에서 장고
@@ -78,7 +78,7 @@ export default function PrivacyChoicesPage() {
             각 스토어 정책을 따릅니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">삭제되지 않는 데이터</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">삭제되지 않는 데이터</h2>
           <p>
             공통 상품 카탈로그처럼 특정 사용자 계정에 소유되지 않은 운영 데이터는
             삭제 대상이 아닙니다. 다른 구성원이 계속 사용하는 공유 냉장고의
@@ -90,19 +90,19 @@ export default function PrivacyChoicesPage() {
             약 30일)에 따릅니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">도움이 필요한 경우</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">도움이 필요한 경우</h2>
           <p>
             앱에 접근할 수 없으면 아래 이메일로 계정 삭제를 요청할 수 있습니다.
             본인 확인 후 계정과 연결 데이터를 정리합니다. 삭제·철회 과정에
             문제가 있는 경우에도{" "}
-            <a className="font-bold text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
+            <a className="type-body-strong text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>
             로 문의해 주세요.
           </p>
         </section>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-[var(--space-lg)] flex flex-wrap gap-[var(--space-sm)]">
           <ActionLink href="/privacy" size="medium">
             개인정보처리방침
           </ActionLink>

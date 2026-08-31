@@ -18,7 +18,7 @@ export function PendingCookingCleanupCard() {
     <View testID="pending-cooking-cleanup-card" style={styles.card}>
       <View style={[styles.header, shouldStack && styles.headerStacked]}>
         <View style={styles.iconCircle}>
-          <CookingPot color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+          <CookingPot color={colors.primaryForeground} size={spacing.md} strokeWidth={2.4} />
         </View>
         <View style={styles.copy}>
           <AppText variant="bodyStrong">{cleanup.dishTitle} 재고 정리가 남았어요</AppText>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.sm,
     gap: spacing.sm,

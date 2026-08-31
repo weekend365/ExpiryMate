@@ -53,7 +53,7 @@ export function ListRow({
             ]}
           >
             <Icon
-              color={destructive ? colors.danger : colors.primary}
+              color={destructive ? colors.dangerForeground : colors.primaryForeground}
               size={spacing.sm + spacing.xxs}
               strokeWidth={2.4}
             />

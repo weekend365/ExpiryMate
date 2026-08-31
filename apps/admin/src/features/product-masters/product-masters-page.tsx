@@ -58,14 +58,14 @@ export function ProductMastersPage() {
   const hasMore = catalogQuery.data?.hasMore ?? false;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Barcode Catalog"
         title="바코드 목록"
         description="스캔에 쓰는 전역 상품 이름이에요. 사용자 수정 제안은 여기서 살펴봐요."
         actions={
           <form
-            className="flex w-full min-w-72 flex-wrap gap-2"
+            className="flex w-full min-w-72 flex-wrap gap-[var(--space-xs)]"
             onSubmit={(event) => {
               event.preventDefault();
               setPage(1);
@@ -79,7 +79,7 @@ export function ProductMastersPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="바코드, 상품명 또는 브랜드…"
-              className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
+              className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-xs)] type-body-small outline-none"
             />
             <ActionButton type="submit" className="shrink-0">
               찾아보기
@@ -92,7 +92,7 @@ export function ProductMastersPage() {
         title="살펴볼 목록"
         description={`총 ${totalCount}건`}
         action={
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-[var(--space-xs)]">
             <select
               aria-label="출처 필터"
               value={source}
@@ -100,7 +100,7 @@ export function ProductMastersPage() {
                 setPage(1);
                 setSource(event.target.value);
               }}
-              className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
+              className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-xs)] type-body-small outline-none"
             >
               {sourceOptions.map((option) => (
                 <option key={option.value || "all"} value={option.value}>
@@ -120,32 +120,32 @@ export function ProductMastersPage() {
           </div>
         }
       >
-        <div className="space-y-3">
+        <div className="space-y-[var(--space-sm)]">
           {items.map((product) => (
             <Link
               key={product.id}
               href={`/product-masters/${product.id}`}
-              className="block rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4 transition hover:-translate-y-0.5"
+              className="block rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-sm)] transition hover:-translate-y-0.5"
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-[var(--space-sm)]">
                 <div>
-                  <div className="text-lg font-black">
+                  <div className="type-subheading">
                     {product.crowdName ?? product.name}
                   </div>
-                  <div className="mt-1 text-sm text-[var(--muted)]">
+                  <div className="mt-[var(--space-xxs)] type-body-small text-[var(--muted)]">
                     {product.crowdBrand ?? product.brand} · {product.barcode}
                   </div>
                   {product.crowdName ? (
-                    <div className="mt-1 text-sm text-[var(--muted)]">
+                    <div className="mt-[var(--space-xxs)] type-body-small text-[var(--muted)]">
                       원본 목록: {product.name}
                     </div>
                   ) : null}
                 </div>
-                <div className="flex flex-col items-end gap-2">
+                <div className="flex flex-col items-end gap-[var(--space-xs)]">
                   <StatusPill
                     label={
                       productMasterSourceLabels[
-                        product.source as ProductMasterSource
+                      product.source as ProductMasterSource
                       ] ?? product.source
                     }
                   />
@@ -173,7 +173,7 @@ export function ProductMastersPage() {
             </Link>
           ))}
           {items.length === 0 ? (
-            <div className="rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-5 text-sm text-[var(--muted)]">
+            <div className="rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-[var(--space-md)] type-body-small text-[var(--muted)]">
               {pendingOnly
                 ? "아직 살펴볼 수정 제안이 없어요."
                 : "조건에 맞는 바코드 상품이 없어요."}
@@ -181,7 +181,7 @@ export function ProductMastersPage() {
           ) : null}
         </div>
         {totalCount > PAGE_SIZE ? (
-          <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="mt-[var(--space-sm)] flex items-center justify-between gap-[var(--space-sm)]">
             <ActionButton
               disabled={page <= 1}
               onClick={() => setPage((current) => Math.max(1, current - 1))}
@@ -189,7 +189,7 @@ export function ProductMastersPage() {
             >
               이전
             </ActionButton>
-            <div className="text-sm text-[var(--muted)]">{page}페이지</div>
+            <div className="type-body-small text-[var(--muted)]">{page}페이지</div>
             <ActionButton
               disabled={!hasMore}
               onClick={() => setPage((current) => current + 1)}

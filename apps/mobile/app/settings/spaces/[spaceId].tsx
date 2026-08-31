@@ -487,7 +487,7 @@ export default function SpaceDetailScreen() {
             loading={renameMutation.isPending}
             fullWidth
           >
-            이 이름으로 바꿀게요
+            이름 변경
           </Button>
         }
       >
@@ -544,8 +544,8 @@ export default function SpaceDetailScreen() {
             fullWidth
           >
             {exitAction === "delete"
-              ? "냉장고와 공유 데이터를 지울게요"
-              : "함께 쓰기를 마칠게요"}
+              ? "냉장고와 공유 데이터 삭제"
+              : "공유 종료"}
           </Button>
         }
       >
@@ -584,8 +584,8 @@ export default function SpaceDetailScreen() {
               fullWidth
             >
               {selectedMember?.role === "manager"
-                ? "구성원으로 바꿀게요"
-                : "관리자로 맡길게요"}
+                ? "구성원으로 변경"
+                : "관리자로 변경"}
             </Button>
             <Button
               variant="surface"
@@ -600,7 +600,7 @@ export default function SpaceDetailScreen() {
               loading={management.transferMutation.isPending}
               fullWidth
             >
-              소유권을 넘길게요
+              소유권 이전
             </Button>
           </View>
         ) : null}
@@ -617,7 +617,7 @@ export default function SpaceDetailScreen() {
           loading={management.removeMutation.isPending}
           fullWidth
         >
-          이 구성원과 함께 쓰기를 마칠게요
+          구성원 내보내기
         </Button>
       </BottomSheet>
     </SettingsScreen>
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   field: {
     gap: spacing.xs,
@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   codeCard: {
     borderRadius: radius.xl,
@@ -695,7 +695,7 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   generatedCode: {
     fontSize: typography.title.fontSize,

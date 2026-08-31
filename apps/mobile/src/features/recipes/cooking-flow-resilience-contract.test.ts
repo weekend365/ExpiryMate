@@ -70,8 +70,21 @@ describe("cooking flow resilience contract", () => {
     const cleanupCard = read(
       "src/features/recipes/pending-cooking-cleanup-card.tsx",
     );
+    const completionStart = screen.indexOf(
+      'testID="cooking-completion-moment"',
+    );
+    const completionEnd = screen.indexOf(
+      "currentIndex === consumptionStepIndex",
+      completionStart,
+    );
+    const completionSection = screen.slice(completionStart, completionEnd);
 
     expect(screen).toContain('testID="cooking-completion-moment"');
+    expect(screen).toContain("guideMessage={getCookingGuideMessage(");
+    expect(completionStart).toBeGreaterThan(-1);
+    expect(completionEnd).toBeGreaterThan(completionStart);
+    expect(completionSection).not.toContain("<EmptyState");
+    expect(completionSection).toContain("styles.completionCard");
     expect(screen).toMatch(
       /onPress=\{handleCleanupLater\}[\s\S]*?>\s*나중에\s*<\/Button>/,
     );

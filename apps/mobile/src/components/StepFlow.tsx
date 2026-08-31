@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mutedSurface,
   },
   progressSegmentActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   stepHeader: {
     flexDirection: "row",

@@ -201,7 +201,7 @@ export const DatePickerField = forwardRef<
               display="inline"
               // Light sheet + dark-mode device → white labels on white (invisible).
               themeVariant="light"
-              accentColor={colors.primary}
+              accentColor={colors.actionPrimaryBackground}
               locale="ko-KR"
               onChange={handleChange}
               style={styles.picker}
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfacePressed,
   },
   errorTrigger: {
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
   },
   heroValueBlock: {
     minHeight: controlSize.cta,

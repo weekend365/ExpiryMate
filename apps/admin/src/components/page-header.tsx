@@ -14,19 +14,19 @@ export function PageHeader({
   actions,
 }: PageHeaderProps) {
   return (
-    <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div className="max-w-2xl">
+    <div className="mb-[var(--space-lg)] flex flex-col gap-[var(--space-sm)] lg:flex-row lg:items-end lg:justify-between">
+      <div className="max-w-[var(--content-default)]">
         {eyebrow ? (
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+          <p className="type-body-small-strong uppercase tracking-[0.18em] text-[var(--accent)]">
             {eyebrow}
           </p>
         ) : null}
-        <h2 className="mt-2 text-3xl font-black tracking-tight">{title}</h2>
+        <h2 className="mt-[var(--space-xs)] type-display">{title}</h2>
         {description ? (
-          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{description}</p>
+          <p className="mt-[var(--space-sm)] type-body-small text-[var(--muted)]">{description}</p>
         ) : null}
       </div>
-      {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap gap-[var(--space-sm)]">{actions}</div> : null}
     </div>
   );
 }

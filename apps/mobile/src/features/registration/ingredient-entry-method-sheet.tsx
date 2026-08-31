@@ -142,7 +142,7 @@ export function IngredientEntryMethodSheet({
                 ]}
               >
                 <Icon
-                  color={recommended ? colors.primary : colors.mutedText}
+                  color={recommended ? colors.primaryForeground : colors.mutedText}
                   size={spacing.lg}
                   strokeWidth={2.4}
                 />
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   optionRecommended: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   optionPressed: {

@@ -54,7 +54,7 @@ export function EmptyState({
         <>
           {Icon ? (
             <View style={styles.iconWrap}>
-              <Icon color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+              <Icon color={colors.primaryForeground} size={spacing.md} strokeWidth={2.4} />
             </View>
           ) : null}
           <View style={styles.copy}>

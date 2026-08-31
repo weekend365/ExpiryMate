@@ -104,3 +104,16 @@ a {
   outline: 3px solid var(--primary-foreground);
   outline-offset: 2px;
 }
+
+/*
+ * Text-entry controls share the same minimum interaction target as buttons.
+ * Checkbox/radio controls keep their native geometry and receive their target
+ * from the surrounding label instead.
+ */
+:is(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+  select,
+  textarea
+) {
+  min-height: var(--control-minimum);
+}

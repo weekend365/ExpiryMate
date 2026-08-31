@@ -10,20 +10,20 @@ const contactEmail =
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
-      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
+    <main className="mx-auto min-h-screen max-w-[var(--content-default)] px-[var(--space-md)] py-[var(--space-xl)]">
+      <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-[var(--space-lg)] shadow-[var(--shadow-lift)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] type-body-small-strong text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Privacy
         </div>
-        <h1 className="mt-5 text-3xl font-black tracking-tight">
+        <h1 className="mt-[var(--space-md)] type-display">
           개인정보처리방침
         </h1>
-        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+        <p className="mt-[var(--space-sm)] type-body-small text-[var(--muted)]">
           시행일: 2026년 6월 3일 · 최종 개정: 2026년 8월 30일
         </p>
 
-        <section className="mt-8 space-y-4 text-sm leading-7 text-[var(--foreground)]">
-          <h2 className="text-xl font-black">수집하는 정보</h2>
+        <section className="mt-[var(--space-lg)] space-y-[var(--space-sm)] type-body-small text-[var(--foreground)]">
+          <h2 className="type-heading">수집하는 정보</h2>
           <p>
             {appBrand.appNameKo}({appBrand.appNameEn})는 계정 식별 정보, 이메일, 표시 이름, 소셜 로그인 연결
             정보, 재료명, 수량, 보관 위치, 유통기한, 알림 설정, AI 요리 추천
@@ -45,14 +45,14 @@ export default function PrivacyPolicyPage() {
             추적은 사용하지 않습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">이용 목적</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">이용 목적</h2>
           <p>
             재료와 유통기한 관리, 알림 제공, 등록된 재료 기반 요리 추천, 계정
             인증과 복구, 가족·매장 구성원과의 재고 공유, 서비스 안정성 유지
             목적으로 사용합니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">공유 냉장고 데이터</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">공유 냉장고 데이터</h2>
           <p>
             사용자가 가족 또는 매장 공간을 만들거나 참여하면 해당 공간의
             구성원은 공간 이름, 구성원의 표시 이름·가입 이메일·역할과 함께
@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
             또는 코드 해시)은 목적 달성 후 최대 30일 이내에 삭제합니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">AI 추천·사진 인식 데이터 처리</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">AI 추천·사진 인식 데이터 처리</h2>
           <p>
             사용자가 요리 추천을 요청하면 재료명, 카테고리, 수량과 단위, 보관
             위치, 유통기한, 만료까지 남은 일수, 추천 조건, 사용자가 저장한 알레르기·
@@ -95,12 +95,12 @@ export default function PrivacyPolicyPage() {
             변경될 수 있습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">처리위탁·국외 이전</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">처리위탁·국외 이전</h2>
           <p>
             서비스 제공을 위해 아래 처리자(수탁자)에게 필요한 범위의 정보를
             이전·처리할 수 있습니다.
           </p>
-          <ul className="list-disc space-y-2 pl-5">
+          <ul className="list-disc space-y-[var(--space-xs)] pl-[var(--space-md)]">
             <li>
               OpenAI, LLC(미국): AI 요리 추천 생성과, 사용자가 요청한 영수증·냉장고
               사진 재료 인식. 추천 전송 항목은 위 AI 추천 데이터 처리 절과 같고,
@@ -135,7 +135,7 @@ export default function PrivacyPolicyPage() {
               서버에서 쿠팡으로 전달될 수 있고, 상품을 선택하면 쿠팡 웹·앱으로 이동합니다.
               계정 ID, 전체 냉장고 목록, 유통기한, 수량, 공간 정보는 쿠팡에
               전송하지 않습니다. 고지는{" "}
-              <Link className="font-bold text-[var(--link-text)]" href="/partners">
+              <Link className="type-body-strong text-[var(--link-text)]" href="/partners">
                 쿠팡 파트너스 안내
               </Link>
               를 따릅니다.
@@ -147,8 +147,8 @@ export default function PrivacyPolicyPage() {
             계정을 정리하는 방식으로 이전·처리를 제한할 수 있습니다.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">보관 기간</h2>
-          <ul className="list-disc space-y-2 pl-5">
+          <h2 className="pt-[var(--space-sm)] type-heading">보관 기간</h2>
+          <ul className="list-disc space-y-[var(--space-xs)] pl-[var(--space-md)]">
             <li>
               계정·개인 공간 재료·알림 설정: 회원 탈퇴(계정 정리) 시까지.
               탈퇴 시 즉시 삭제하거나 식별할 수 없도록 처리합니다.
@@ -202,11 +202,11 @@ export default function PrivacyPolicyPage() {
             </li>
           </ul>
 
-          <h2 className="pt-4 text-xl font-black">동의 철회·삭제 방법</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">동의 철회·삭제 방법</h2>
           <p>
             앱 설정 → 개인정보와 추천 안내에서 다음을 직접 실행할 수 있습니다.
           </p>
-          <ul className="list-disc space-y-2 pl-5">
+          <ul className="list-disc space-y-[var(--space-xs)] pl-[var(--space-md)]">
             <li>
               요리 추천 안내 동의 철회: 이후 새 추천 요청과 사진으로 재료 읽기가
               멈춥니다. OpenAI로 데이터가 전송되지 않습니다. 이미 저장된 추천 기록은
@@ -233,23 +233,23 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             자세한 삭제 절차는{" "}
-            <Link className="font-bold text-[var(--link-text)]" href="/privacy/choices">
+            <Link className="type-body-strong text-[var(--link-text)]" href="/privacy/choices">
               데이터 삭제 안내
             </Link>
             를 참고해 주세요.
           </p>
 
-          <h2 className="pt-4 text-xl font-black">문의</h2>
+          <h2 className="pt-[var(--space-sm)] type-heading">문의</h2>
           <p>
             개인정보 관련 문의는{" "}
-            <a className="font-bold text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
+            <a className="type-body-strong text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>
             로 연락해 주세요.
           </p>
         </section>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className="mt-[var(--space-lg)] flex flex-wrap gap-[var(--space-sm)]">
           <ActionLink href="/privacy/choices" size="medium">
             데이터 삭제 안내
           </ActionLink>

@@ -100,7 +100,7 @@ export function SpaceSwitcher() {
         accessibilityLabel="냉장고를 불러오는 중"
       >
         <View style={styles.triggerIcon}>
-          <House color={colors.primary} size={spacing.md} strokeWidth={2.3} />
+          <House color={colors.primaryForeground} size={spacing.md} strokeWidth={2.3} />
         </View>
         <View style={styles.triggerCopy}>
           <AppText variant="caption" tone="muted" scaleRole="chrome">
@@ -136,7 +136,7 @@ export function SpaceSwitcher() {
         ]}
       >
         <View style={styles.triggerIcon}>
-          <ActiveIcon color={colors.primary} size={spacing.md} strokeWidth={2.3} />
+          <ActiveIcon color={colors.primaryForeground} size={spacing.md} strokeWidth={2.3} />
         </View>
         <View style={styles.triggerCopy}>
           <AppText variant="caption" tone="muted" scaleRole="chrome">
@@ -204,7 +204,7 @@ export function SpaceSwitcher() {
                 ]}
               >
                 <Icon
-                  color={selected ? colors.primary : colors.subtext}
+                  color={selected ? colors.primaryForeground : colors.subtext}
                   size={spacing.md}
                   strokeWidth={2.3}
                 />
@@ -218,7 +218,7 @@ export function SpaceSwitcher() {
                 </View>
                 {selected ? (
                   <Check
-                    color={colors.primary}
+                    color={colors.primaryForeground}
                     size={spacing.md}
                     strokeWidth={2.5}
                   />
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   spaceRowSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   spaceCopy: {

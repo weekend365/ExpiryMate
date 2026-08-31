@@ -27,14 +27,14 @@ export default function OAuthCallbackPage() {
   }, [deepLink]);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-4 px-6 text-center">
-      <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
+    <main className="mx-auto flex min-h-screen max-w-[var(--content-form)] flex-col items-center justify-center gap-[var(--space-sm)] px-[var(--space-md)] text-center">
+      <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] type-body-small-strong text-[var(--primary-foreground)]">
         {appBrand.appNameKo}
       </div>
-      <h1 className="text-2xl font-black tracking-tight text-[var(--foreground)]">
+      <h1 className="type-title text-[var(--foreground)]">
         거의 다 됐어요
       </h1>
-      <p className="text-sm leading-6 text-[var(--muted)]">{status}</p>
+      <p className="type-body-small text-[var(--muted)]">{status}</p>
       {deepLink ? (
         <ActionAnchor href={deepLink} size="medium">
           앱으로 이동

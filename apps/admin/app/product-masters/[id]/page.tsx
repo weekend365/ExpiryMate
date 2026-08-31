@@ -3,7 +3,7 @@ import { ProductMasterDetailPage } from "../../../src/features/product-masters/p
 export default async function ProductMasterDetailRoute({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; }>;
 }) {
   const { id } = await params;
 

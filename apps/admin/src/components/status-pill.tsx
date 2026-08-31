@@ -19,13 +19,13 @@ export function StatusPill({
   };
 
   return (
-    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${toneClasses[tone]}`}>
+    <span className={`inline-flex rounded-full px-[var(--space-sm)] py-[var(--space-xxs)] type-caption-strong ${toneClasses[tone]}`}>
       {label}
     </span>
   );
 }
 
-export function InventoryStatusPill({ status }: { status: ItemStatus }) {
+export function InventoryStatusPill({ status }: { status: ItemStatus; }) {
   const tone =
     status === "expired" || status === "discarded"
       ? "danger"
@@ -36,6 +36,6 @@ export function InventoryStatusPill({ status }: { status: ItemStatus }) {
   return <StatusPill label={itemStatusLabels[status]} tone={tone} />;
 }
 
-export function StoragePill({ location }: { location: string }) {
+export function StoragePill({ location }: { location: string; }) {
   return <StatusPill label={resolveStorageLocationLabel(location)} />;
 }

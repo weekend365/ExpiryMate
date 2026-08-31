@@ -581,7 +581,7 @@ export default function InventoryScreen() {
           }}
           refreshControl={
             <RefreshControl
-              tintColor={colors.primary}
+              tintColor={colors.brandAccent}
               refreshing={isRefetching}
               onRefresh={() => {
                 void refetch();
@@ -720,7 +720,7 @@ export default function InventoryScreen() {
                     ? "검색어 지우기"
                     : filter === "all" && hasLocationFilter && !hasSearchQuery
                       ? "모든 위치 보기"
-                      : "필터 풀게요"
+                      : "필터 해제"
                 }
                 onAction={
                   hasSearchQuery && !hasStatusFilter && !hasLocationFilter

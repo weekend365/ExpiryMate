@@ -27,7 +27,7 @@ export function HeaderBackButton({ onPress }: HeaderBackButtonProps) {
       <View style={styles.content} pointerEvents="none">
         <View style={styles.iconSlot}>
           <ChevronLeft
-            color={colors.primary}
+            color={colors.primaryForeground}
             size={spacing.sm + spacing.xxs}
             strokeWidth={2.4}
           />
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   label: {
-    color: colors.primary,
+    color: colors.primaryForeground,
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,

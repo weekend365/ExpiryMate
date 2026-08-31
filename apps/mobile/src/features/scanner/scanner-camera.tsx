@@ -569,7 +569,7 @@ export function ScannerCameraExperience() {
             <View style={styles.bottomStack}>
               {scanner.productLookupStatus === "loading" ? (
                 <View style={styles.loadingStrip}>
-                  <ActivityIndicator color={colors.primary} />
+                  <ActivityIndicator color={colors.brandAccent} />
                   <AppText variant="bodySmall" tone="subtext">
                     상품을 찾아보고 있어요
                   </AppText>
@@ -595,7 +595,7 @@ export function ScannerCameraExperience() {
                   accessibilityRole="switch"
                   accessibilityState={{ checked: torchEnabled }}
                   accessibilityLabel={
-                    torchEnabled ? "플래시 끌게요" : "플래시 켤게요"
+                    torchEnabled ? "플래시 끄기" : "플래시 켜기"
                   }
                   style={({ pressed }) => [
                     styles.flashButton,

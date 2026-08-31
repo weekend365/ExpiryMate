@@ -45,7 +45,7 @@ export function HomeSectionHeader({
             {actionLabel}
           </AppText>
           <ChevronRight
-            color={colors.primary}
+            color={colors.primaryForeground}
             size={spacing.sm}
             strokeWidth={2.4}
             accessibilityElementsHidden

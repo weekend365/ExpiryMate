@@ -122,7 +122,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     flexShrink: 1,
   },
   locationFilterTileActive: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
   },
   locationFilterMain: {
     flex: 1,
@@ -155,7 +155,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   locationOptionSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   locationOptionLabel: {
@@ -167,7 +167,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     color: colors.text,
   },
   locationOptionLabelSelected: {
-    color: colors.primary,
+    color: colors.primaryForeground,
     fontFamily: typography.bodyStrong.fontFamily,
   },
   locationOptionMeta: {
@@ -235,7 +235,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   headerFilterLabelMuted: {
     color: colors.mutedText,

@@ -144,7 +144,7 @@ export function PhotoCaptureScreen({
                   disabled={permission == null}
                   fullWidth
                 >
-                  카메라 켤게요
+                  카메라 켜기
                 </Button>
               ) : (
                 <Button
@@ -248,7 +248,7 @@ export function PhotoCaptureScreen({
                   pressed && styles.controlPressed,
                 ]}
               >
-                <Sparkles color={colors.primary} size={spacing.sm} />
+                <Sparkles color={colors.primaryForeground} size={spacing.sm} />
                 <AppText variant="bodySmallStrong" style={styles.accessBadgeLabel}>
                   {accessLabel}
                 </AppText>
@@ -346,7 +346,7 @@ function SceneButton({
       ]}
     >
       <Icon
-        color={selected ? colors.primary : colors.subtext}
+        color={selected ? colors.primaryForeground : colors.subtext}
         size={spacing.sm}
         strokeWidth={2.3}
       />
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: spacing.xl,
     height: spacing.xl,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
   },
   cornerTopLeft: {
     top: 0,
@@ -537,10 +537,10 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     borderWidth: spacing.xxs,
     borderColor: colors.primarySoft,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.actionPrimaryBackground,
   },
   shutterButtonPressed: {
-    backgroundColor: colors.primaryPressed,
+    backgroundColor: colors.actionPrimaryPressed,
   },
   actionSpacer: {
     width: controlSize.ctaLarge,

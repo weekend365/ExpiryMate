@@ -865,7 +865,7 @@ export default function RegisterPhotoScreen() {
                       hitSlop={spacing.xs}
                       style={styles.iconButton}
                     >
-                      <Trash2 color={colors.danger} size={spacing.md} />
+                      <Trash2 color={colors.dangerForeground} size={spacing.md} />
                     </Pressable>
                   </View>
                   {needsAttention ? (
@@ -1525,7 +1525,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border,
   },
   flowProgressActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   reviewStack: {
     gap: spacing.sm,
@@ -1571,7 +1571,7 @@ const styles = StyleSheet.create({
     opacity: 0.86,
   },
   pillSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   itemCard: {
@@ -1592,7 +1592,7 @@ const styles = StyleSheet.create({
     opacity: 0.86,
   },
   itemCardNeedsAttention: {
-    borderColor: colors.warning,
+    borderColor: colors.warningForeground,
     backgroundColor: colors.warningSoft,
   },
   itemCopy: {
@@ -1641,7 +1641,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
   },
   actionChipPrimary: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   actionChipDisabled: {

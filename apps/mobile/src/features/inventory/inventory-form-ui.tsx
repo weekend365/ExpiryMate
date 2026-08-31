@@ -473,7 +473,7 @@ export const inventoryFormStyles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   recapList: {
     gap: spacing.xs,

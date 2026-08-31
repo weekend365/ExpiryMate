@@ -917,7 +917,7 @@ export default function RegisterScreen() {
               fullWidth
               testID="register-edit-quantity-location-button"
             >
-              수량·자리도 바꿀게요
+              수량·자리 수정
             </Button>
           ) : null}
         </View>
@@ -1154,7 +1154,7 @@ const localStyles = StyleSheet.create({
     fontSize: typography.body.fontSize,
     lineHeight: typography.body.lineHeight,
     fontFamily: typography.title.fontFamily,
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   errorDescription: {
     fontSize: typography.bodySmall.fontSize,
@@ -1169,7 +1169,7 @@ const localStyles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   noticeTitle: {
     fontSize: typography.body.fontSize,

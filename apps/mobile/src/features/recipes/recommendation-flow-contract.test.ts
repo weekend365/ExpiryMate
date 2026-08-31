@@ -67,4 +67,13 @@ describe("recommendation screen flow contract", () => {
     expect(screen).toContain("{regenerateCtaLabel}");
     expect(screen).toContain('variant="surface"');
   });
+
+  it("places a value-moment offer after the latest recommendation result", () => {
+    expect(screen.indexOf("latestRecommendation.recommendations.map")).toBeLessThan(
+      screen.indexOf("showValueMomentOffer ?"),
+    );
+    expect(
+      read("src/features/recipes/recommendation-quota-panel.tsx"),
+    ).toContain('<Button\n        variant="surface"');
+  });
 });

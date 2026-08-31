@@ -17,7 +17,7 @@ export default function PartnersPage() {
   const partnerLink = readCoupangPartnersPublicLink();
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-[var(--space-md)] py-[var(--space-xl)]">
+    <main className="mx-auto min-h-screen max-w-[var(--content-default)] px-[var(--space-md)] py-[var(--space-xl)]">
       <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-[var(--space-md)] shadow-[var(--shadow-lift)]">
         <div className="type-label inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] text-[var(--link-text)]">
           {appBrand.appNameKo} Partners

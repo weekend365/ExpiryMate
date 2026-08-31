@@ -348,7 +348,7 @@ export default function CookingScreen() {
             <View style={styles.shoppingSummaryCard}>
               <View style={styles.shoppingSummaryIcon}>
                 <ShoppingBasket
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.md}
                   strokeWidth={2.3}
                 />
@@ -456,7 +456,7 @@ export default function CookingScreen() {
         "실행 중인 타이머를 바꿀까요?",
         `${activeTimer.dishTitle} ${activeTimer.stepIndex + 1}단계 타이머가 취소돼요.`,
         [
-          { text: "그대로 둘게요", style: "cancel" },
+          { text: "기존 타이머 유지", style: "cancel" },
           {
             text: "새 타이머 시작",
             style: "destructive",
@@ -684,7 +684,7 @@ export default function CookingScreen() {
                   >
                     {checked ? (
                       <CheckCircle2
-                        color={colors.primary}
+                        color={colors.primaryForeground}
                         size={spacing.sm + spacing.xxs}
                         strokeWidth={2.4}
                       />
@@ -751,7 +751,7 @@ export default function CookingScreen() {
                 />
                 {cookingStepCompleted ? (
                   <CheckCircle2
-                    color={colors.primary}
+                    color={colors.primaryForeground}
                     size={spacing.md}
                     strokeWidth={2.4}
                   />
@@ -787,12 +787,6 @@ export default function CookingScreen() {
 
         {currentIndex === completionStepIndex ? (
           <View style={styles.section} testID="cooking-completion-moment">
-            <EmptyState
-              kind="success"
-              mood="happy"
-              title={`${dish.title}, 맛있게 완성됐어요`}
-              description="완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요."
-            />
             <View style={styles.completionCard}>
               <AppText variant="subheading">마지막으로 확인할까요?</AppText>
               <AppText variant="bodySmall" tone="subtext">
@@ -1050,19 +1044,19 @@ function CookingStepsOverview({
             <View style={styles.overviewIcon}>
               {isCompleted ? (
                 <CheckCircle2
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.md}
                   strokeWidth={2.4}
                 />
               ) : hasTimer ? (
                 <ListChecks
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.md}
                   strokeWidth={2.4}
                 />
               ) : (
                 <Circle
-                  color={isCurrent ? colors.primary : colors.mutedText}
+                  color={isCurrent ? colors.primaryForeground : colors.mutedText}
                   size={spacing.md}
                   strokeWidth={2.2}
                 />
@@ -1399,7 +1393,7 @@ const styles = StyleSheet.create({
     maxWidth: "48%",
   },
   checkRowSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   pressed: {
@@ -1429,14 +1423,14 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   cookingCardCompleted: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   stepNumber: {
     width: spacing.lg,
     height: spacing.lg,
     borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.actionPrimaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -1456,7 +1450,7 @@ const styles = StyleSheet.create({
   completionCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.md,
     gap: spacing.sm,
@@ -1482,11 +1476,11 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
   },
   overviewRowCurrent: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   overviewRowTimer: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
   },
   overviewRowDisabled: {
     opacity: 0.5,
@@ -1515,7 +1509,7 @@ const styles = StyleSheet.create({
   summaryCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.md,
     gap: spacing.sm,
@@ -1572,7 +1566,7 @@ const styles = StyleSheet.create({
   shoppingSummaryCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.md,
     gap: spacing.sm,

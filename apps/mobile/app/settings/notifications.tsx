@@ -104,7 +104,7 @@ export default function NotificationSettingsScreen() {
                 false: colors.border,
                 true: colors.primarySoft,
               }}
-              thumbColor={enabled ? colors.primary : colors.mutedSurface}
+              thumbColor={enabled ? colors.actionPrimaryBackground : colors.mutedSurface}
             />
           }
         />
@@ -120,7 +120,7 @@ export default function NotificationSettingsScreen() {
                 false: colors.border,
                 true: colors.primarySoft,
               }}
-              thumbColor={remindOnDayOf ? colors.primary : colors.mutedSurface}
+              thumbColor={remindOnDayOf ? colors.actionPrimaryBackground : colors.mutedSurface}
             />
           }
         />
@@ -181,7 +181,7 @@ export default function NotificationSettingsScreen() {
                     }}
                     thumbColor={
                       space.notificationsEnabled
-                        ? colors.primary
+                        ? colors.actionPrimaryBackground
                         : colors.mutedSurface
                     }
                   />

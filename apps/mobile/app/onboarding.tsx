@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cameraControl,
   },
   progressSegmentActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   backLink: {
     alignSelf: "flex-start",
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
     fontSize: typography.title.fontSize,
     lineHeight: typography.title.lineHeight,
     fontFamily: typography.title.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
     textAlign: "center",
   },
   brandEn: {
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
     textAlign: "center",
   },
   title: {

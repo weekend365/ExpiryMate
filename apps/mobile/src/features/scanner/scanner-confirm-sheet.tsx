@@ -289,7 +289,7 @@ export function ScannerConfirmSheet({
               />
             ) : (
               <View style={styles.productImageFallback}>
-                <Package color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+                <Package color={colors.primaryForeground} size={spacing.md} strokeWidth={2.4} />
               </View>
             )}
             <View style={styles.productCopy}>

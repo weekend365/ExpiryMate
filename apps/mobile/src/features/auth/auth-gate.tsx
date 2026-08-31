@@ -164,7 +164,7 @@ export function AuthLoadingScreen() {
               accessibilityLiveRegion="polite"
               testID="initial-loading-status"
             >
-              <ActivityIndicator color={colors.primary} size="small" />
+              <ActivityIndicator color={colors.brandAccent} size="small" />
               <AppText variant="bodySmall" tone="subtext">
                 냉장고 정보를 불러오는 중
               </AppText>
@@ -242,7 +242,7 @@ export function AuthSessionErrorScreen({
   return (
     <View style={styles.root}>
       <View style={styles.errorIcon}>
-        <CircleAlert color={colors.danger} size={spacing.lg} strokeWidth={2.2} />
+        <CircleAlert color={colors.dangerForeground} size={spacing.lg} strokeWidth={2.2} />
       </View>
       <View style={styles.errorCopy}>
         <AppText variant="heading" style={styles.errorTitle}>

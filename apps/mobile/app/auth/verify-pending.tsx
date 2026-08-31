@@ -68,7 +68,7 @@ export default function VerifyPendingScreen() {
       "이제 로그인해 가입을 마무리해 주세요.",
       [
         {
-          text: "로그인할게요",
+          text: "로그인",
           onPress: () =>
             router.replace({
               pathname: "/auth/login",
@@ -117,7 +117,7 @@ export default function VerifyPendingScreen() {
             fullWidth
             loading={requestVerificationMutation.isPending}
           >
-            {resent ? "인증 메일 한 번 더 보낼게요" : "인증 메일 다시 보내기"}
+            {resent ? "인증 메일 재전송" : "인증 메일 다시 보내기"}
           </Button>
           <Pressable
             onPress={() =>
@@ -185,6 +185,6 @@ const styles = StyleSheet.create({
   secondaryLinkText: {
     fontSize: typography.body.fontSize,
     fontFamily: fontFamily.semibold,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
 });

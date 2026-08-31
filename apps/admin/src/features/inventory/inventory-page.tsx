@@ -31,14 +31,14 @@ export function InventoryPage() {
   const hasMore = inventoryQuery.data?.hasMore ?? false;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Inventory"
         title="재고 조회"
         description="모바일 사용자 재고 상태를 내부에서 빠르게 확인하는 화면입니다."
         actions={
           <form
-            className="flex w-full min-w-72 gap-2"
+            className="flex w-full min-w-72 gap-[var(--space-xs)]"
             onSubmit={(event) => {
               event.preventDefault();
               setPage(1);
@@ -52,7 +52,7 @@ export function InventoryPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="상품명 또는 브랜드 검색…"
-              className="w-full rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
+              className="w-full rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-xs)] type-body-small outline-none"
             />
             <ActionButton type="submit" className="shrink-0">
               찾아보기
@@ -65,25 +65,25 @@ export function InventoryPage() {
         title="재고 목록"
         description={`읽기 중심의 운영 확인용 화면입니다. 총 ${totalCount}건`}
       >
-        <div className="space-y-3">
+        <div className="space-y-[var(--space-sm)]">
           {items.map((item) => (
             <div
               key={item.id}
-              className="grid gap-4 rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4 lg:grid-cols-[minmax(0,1fr)_auto]"
+              className="grid gap-[var(--space-sm)] rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-sm)] lg:grid-cols-[minmax(0,1fr)_auto]"
             >
               <div>
-                <div className="text-lg font-black">{item.displayName}</div>
-                <div className="mt-1 text-sm text-[var(--muted)]">
+                <div className="type-subheading">{item.displayName}</div>
+                <div className="mt-[var(--space-xxs)] type-body-small text-[var(--muted)]">
                   {item.brand ?? "브랜드 없음"} · 수량 {item.quantity}
                   {item.unit ?? "개"}
                 </div>
-                <div className="mt-2 text-sm text-[var(--muted)]">
+                <div className="mt-[var(--space-xs)] type-body-small text-[var(--muted)]">
                   {item.expiryDate
                     ? `유통기한 ${formatDateKoreanCompact(item.expiryDate)}`
                     : "유통기한 확인 필요"}
                 </div>
               </div>
-              <div className="flex flex-wrap items-start justify-end gap-2">
+              <div className="flex flex-wrap items-start justify-end gap-[var(--space-xs)]">
                 <StoragePill location={item.storageLocation} />
                 <InventoryStatusPill status={item.status} />
               </div>
@@ -91,7 +91,7 @@ export function InventoryPage() {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-3">
+        <div className="mt-[var(--space-md)] flex items-center justify-between gap-[var(--space-sm)]">
           <ActionButton
             disabled={page <= 1 || inventoryQuery.isFetching}
             onClick={() => setPage((current) => Math.max(1, current - 1))}
@@ -99,7 +99,7 @@ export function InventoryPage() {
           >
             이전
           </ActionButton>
-          <div className="text-sm text-[var(--muted)]">{page} 페이지</div>
+          <div className="type-body-small text-[var(--muted)]">{page} 페이지</div>
           <ActionButton
             disabled={!hasMore || inventoryQuery.isFetching}
             onClick={() => setPage((current) => current + 1)}

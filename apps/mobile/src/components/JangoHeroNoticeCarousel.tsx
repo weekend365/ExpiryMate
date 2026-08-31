@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border,
   },
   noticeDotActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
     width: spacing.sm,
   },
   noticePage: {

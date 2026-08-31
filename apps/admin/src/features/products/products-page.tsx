@@ -60,34 +60,34 @@ export function ProductsPage() {
   const products = useMemo(() => productsQuery.data ?? [], [productsQuery.data]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Products"
         title="상품 관리"
         description="요리 추천과 재료 안내에 쓸 기준 상품을 넣거나 다듬어요."
       />
 
-      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+      <div className="grid gap-[var(--space-md)] xl:grid-cols-[0.95fr_1.05fr]">
         <Panel title="새 기준 상품 넣기" description="자주 쓰는 재료와 생활용품 기준을 여기에 남겨 두어요.">
-          <form className="grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-semibold">
+          <form className="grid gap-[var(--space-sm)]" onSubmit={onSubmit}>
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               상품명
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("name")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               브랜드
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("brand")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               카테고리
               <select
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("category")}
               >
                 {productCategoryOptions.map((option) => (
@@ -97,10 +97,10 @@ export function ProductsPage() {
                 ))}
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               이미지 URL
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("imageUrl")}
               />
             </label>
@@ -121,25 +121,25 @@ export function ProductsPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="상품명 또는 브랜드 검색…"
-              className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
+              className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-xs)] type-body-small outline-none"
             />
           }
         >
-          <div className="space-y-3">
+          <div className="space-y-[var(--space-sm)]">
             {products.map((product) => (
               <Link
                 key={product.id}
                 href={`/products/${product.id}`}
-                className="block rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4 transition hover:-translate-y-0.5"
+                className="block rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-sm)] transition hover:-translate-y-0.5"
               >
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-[var(--space-sm)]">
                   <div>
-                    <div className="text-lg font-black">{product.name}</div>
-                    <div className="mt-1 text-sm text-[var(--muted)]">
+                    <div className="type-subheading">{product.name}</div>
+                    <div className="mt-[var(--space-xxs)] type-body-small text-[var(--muted)]">
                       {product.brand} · {productCategoryLabels[product.category]}
                     </div>
                   </div>
-                  <div className="rounded-full bg-[var(--primary-soft)] px-3 py-1 text-xs font-bold text-[var(--primary-foreground)]">
+                  <div className="rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] type-caption-strong text-[var(--primary-foreground)]">
                     {productCategoryLabels[product.category]}
                   </div>
                 </div>

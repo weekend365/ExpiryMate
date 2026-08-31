@@ -87,7 +87,7 @@ export function InquiriesPage() {
   }, [listQuery.isError, listQuery.isLoading]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Support"
         title="고객 문의"
@@ -95,11 +95,11 @@ export function InquiriesPage() {
       />
 
       <Panel title="필터">
-        <div className="flex flex-wrap gap-3">
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+        <div className="flex flex-wrap gap-[var(--space-sm)]">
+          <label className="flex flex-col gap-[var(--space-xxs)] type-body-small-strong">
             상태
             <select
-              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2"
+              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-[var(--space-sm)] py-[var(--space-xs)]"
               value={status}
               onChange={(event) => {
                 setPage(1);
@@ -114,10 +114,10 @@ export function InquiriesPage() {
               ))}
             </select>
           </label>
-          <label className="flex flex-col gap-1 text-sm font-semibold">
+          <label className="flex flex-col gap-[var(--space-xxs)] type-body-small-strong">
             주제
             <select
-              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-3 py-2"
+              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-[var(--space-sm)] py-[var(--space-xs)]"
               value={category}
               onChange={(event) => {
                 setPage(1);
@@ -137,30 +137,30 @@ export function InquiriesPage() {
 
       <Panel title={`목록 · ${totalCount}건`}>
         {items.length === 0 ? (
-          <p className="text-sm font-semibold text-[var(--muted)]">{emptyCopy}</p>
+          <p className="type-body-small-strong text-[var(--muted)]">{emptyCopy}</p>
         ) : (
-          <ul className="space-y-4">
+          <ul className="space-y-[var(--space-sm)]">
             {items.map((inquiry) => {
               const mailto = buildMailto(inquiry);
               return (
                 <li
                   key={inquiry.id}
-                  className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4"
+                  className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-sm)]"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="space-y-1">
-                      <div className="text-sm font-black text-[var(--foreground)]">
+                  <div className="flex flex-wrap items-start justify-between gap-[var(--space-sm)]">
+                    <div className="space-y-[var(--space-xxs)]">
+                      <div className="type-body-small-strong text-[var(--foreground)]">
                         {supportInquiryCategoryLabels[inquiry.category]} ·{" "}
                         {supportInquiryStatusLabels[inquiry.status]}
                       </div>
-                      <div className="text-xs font-semibold text-[var(--muted)]">
+                      <div className="type-caption-strong text-[var(--muted)]">
                         {formatDateKoreanCompact(inquiry.createdAt)} ·{" "}
                         {inquiry.userEmail ?? inquiry.userId}
                         {inquiry.platform ? ` · ${inquiry.platform}` : ""}
                         {inquiry.appVersion ? ` · v${inquiry.appVersion}` : ""}
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-[var(--space-xs)]">
                       {mailto ? (
                         <ActionAnchor href={mailto}>
                           메일로 답장
@@ -177,7 +177,7 @@ export function InquiriesPage() {
                       ) : null}
                     </div>
                   </div>
-                  <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-[var(--foreground)]">
+                  <p className="mt-[var(--space-sm)] whitespace-pre-wrap type-body-small text-[var(--foreground)]">
                     {inquiry.body}
                   </p>
                 </li>
@@ -186,7 +186,7 @@ export function InquiriesPage() {
           </ul>
         )}
 
-        <div className="mt-6 flex items-center justify-between gap-3">
+        <div className="mt-[var(--space-md)] flex items-center justify-between gap-[var(--space-sm)]">
           <ActionButton
             variant="surface"
             disabled={page <= 1}
@@ -194,7 +194,7 @@ export function InquiriesPage() {
           >
             이전
           </ActionButton>
-          <span className="text-sm font-semibold text-[var(--muted)]">
+          <span className="type-body-small-strong text-[var(--muted)]">
             {page}페이지
           </span>
           <ActionButton

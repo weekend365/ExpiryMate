@@ -121,14 +121,14 @@ export function ProductMasterDetailPage({
     product?.source === ProductMasterSource.OPEN_FOOD_FACTS;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Barcode Catalog"
         title={scanName ?? "바코드 상품"}
         description="스캔에 보이는 이름과 원본 목록을 나눠 둬요. 사용자 냉장고 이름은 그대로 둡니다."
       />
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid gap-[var(--space-md)] xl:grid-cols-[0.9fr_1.1fr]">
         <Panel
           title="스캔에 보이는 이름"
           description={
@@ -137,28 +137,28 @@ export function ProductMasterDetailPage({
               : "불러오는 중"
           }
         >
-          <div className="space-y-3 rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-5">
+          <div className="space-y-[var(--space-sm)] rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-[var(--space-md)]">
             <div>
-              <div className="text-sm text-[var(--muted)]">상품명</div>
-              <div className="text-xl font-black">{scanName}</div>
+              <div className="type-body-small text-[var(--muted)]">상품명</div>
+              <div className="type-heading">{scanName}</div>
             </div>
             <div>
-              <div className="text-sm text-[var(--muted)]">브랜드</div>
-              <div className="font-semibold">{scanBrand}</div>
+              <div className="type-body-small text-[var(--muted)]">브랜드</div>
+              <div className="type-body-strong">{scanBrand}</div>
             </div>
             <div>
-              <div className="text-sm text-[var(--muted)]">카테고리</div>
-              <div className="font-semibold">
+              <div className="type-body-small text-[var(--muted)]">카테고리</div>
+              <div className="type-body-strong">
                 {product?.crowdCategory ?? product?.category}
               </div>
             </div>
             {product?.crowdName ? (
-              <div className="text-sm text-[var(--muted)]">
+              <div className="type-body-small text-[var(--muted)]">
                 원본 목록은 {product.name} 그대로 남겨 두었어요.
               </div>
             ) : null}
             {typeof product?.confidence === "number" ? (
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-[var(--space-xs)]">
                 <StatusPill
                   tone={
                     catalogNeedsNameConfirmation(product.confidence)
@@ -167,7 +167,7 @@ export function ProductMasterDetailPage({
                   }
                   label={catalogConfidenceLabel(product.confidence)}
                 />
-                <div className="text-sm text-[var(--muted)]">
+                <div className="type-body-small text-[var(--muted)]">
                   {product.confirmCount > 0
                     ? `${product.confirmCount}명이 이 이름이 맞다고 했어요.`
                     : "아직 맞다고 확인해 준 사람이 없어요."}
@@ -185,32 +185,32 @@ export function ProductMasterDetailPage({
               : "스캔할 때 다른 사용자에게 보여 줄 이름을 고쳐 둘 수 있어요."
           }
         >
-          <form className="grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-semibold">
+          <form className="grid gap-[var(--space-sm)]" onSubmit={onSubmit}>
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               상품명
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("name")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               브랜드
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("brand")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               카테고리
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("category")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               이미지 URL
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("imageUrl")}
               />
             </label>
@@ -229,24 +229,24 @@ export function ProductMasterDetailPage({
             : "아직 살펴볼 제안이 없어요."
         }
       >
-        <div className="space-y-3">
+        <div className="space-y-[var(--space-sm)]">
           {corrections.map((correction) => (
             <div
               key={correction.id}
-              className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-4"
+              className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface-muted)] p-[var(--space-sm)]"
             >
-              <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-[var(--space-sm)]">
                 <div>
-                  <div className="text-lg font-black">
+                  <div className="type-subheading">
                     {correction.proposedName}
                   </div>
-                  <div className="mt-1 text-sm text-[var(--muted)]">
+                  <div className="mt-[var(--space-xxs)] type-body-small text-[var(--muted)]">
                     {correction.proposedBrand ?? "브랜드 없음"}
                     {correction.proposedCategory
                       ? ` · ${correction.proposedCategory}`
                       : ""}
                   </div>
-                  <div className="mt-2 text-sm text-[var(--muted)]">
+                  <div className="mt-[var(--space-xs)] type-body-small text-[var(--muted)]">
                     목록에 있던 이름: {correction.catalogName}
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export function ProductMasterDetailPage({
                     correction.status === ProductMasterCorrectionStatus.PENDING
                       ? "warning"
                       : correction.status ===
-                          ProductMasterCorrectionStatus.APPLIED
+                        ProductMasterCorrectionStatus.APPLIED
                         ? "success"
                         : "default"
                   }
@@ -263,7 +263,7 @@ export function ProductMasterDetailPage({
                 />
               </div>
               {correction.status === ProductMasterCorrectionStatus.PENDING ? (
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-[var(--space-sm)] flex flex-wrap gap-[var(--space-xs)]">
                   <ActionButton
                     disabled={applyMutation.isPending || dismissMutation.isPending}
                     onClick={() => applyMutation.mutate(correction.id)}

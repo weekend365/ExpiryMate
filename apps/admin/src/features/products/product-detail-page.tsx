@@ -18,7 +18,7 @@ import { getProduct, updateProduct } from "../../lib/api";
 
 type ProductFormValues = z.infer<typeof productUpsertSchema>;
 
-export function ProductDetailPage({ productId }: { productId: string }) {
+export function ProductDetailPage({ productId }: { productId: string; }) {
   const queryClient = useQueryClient();
   const productQuery = useQuery({
     queryKey: ["product", productId],
@@ -66,27 +66,27 @@ export function ProductDetailPage({ productId }: { productId: string }) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-[var(--space-md)]">
       <PageHeader
         eyebrow="Product Detail"
         title={productQuery.data?.name ?? "상품 상세"}
         description="상품명, 브랜드, 카테고리, 이미지 URL을 수정할 수 있습니다."
       />
 
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid gap-[var(--space-md)] xl:grid-cols-[0.9fr_1.1fr]">
         <Panel title="현재 정보" description="모바일 등록과 요리 추천에 사용되는 기준 데이터입니다.">
-          <div className="space-y-3 rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-5">
+          <div className="space-y-[var(--space-sm)] rounded-[var(--radius-2xl)] bg-[var(--surface-muted)] p-[var(--space-md)]">
             <div>
-              <div className="text-sm text-[var(--muted)]">상품명</div>
-              <div className="text-xl font-black">{productQuery.data?.name}</div>
+              <div className="type-body-small text-[var(--muted)]">상품명</div>
+              <div className="type-heading">{productQuery.data?.name}</div>
             </div>
             <div>
-              <div className="text-sm text-[var(--muted)]">브랜드</div>
-              <div className="font-semibold">{productQuery.data?.brand}</div>
+              <div className="type-body-small text-[var(--muted)]">브랜드</div>
+              <div className="type-body-strong">{productQuery.data?.brand}</div>
             </div>
             <div>
-              <div className="text-sm text-[var(--muted)]">카테고리</div>
-              <div className="font-semibold">
+              <div className="type-body-small text-[var(--muted)]">카테고리</div>
+              <div className="type-body-strong">
                 {productQuery.data ? productCategoryLabels[productQuery.data.category] : "-"}
               </div>
             </div>
@@ -94,25 +94,25 @@ export function ProductDetailPage({ productId }: { productId: string }) {
         </Panel>
 
         <Panel title="상품 정보 다듬기" description="기준 상품 내용을 가볍게 고쳐 둘 수 있어요.">
-          <form className="grid gap-4" onSubmit={onSubmit}>
-            <label className="grid gap-2 text-sm font-semibold">
+          <form className="grid gap-[var(--space-sm)]" onSubmit={onSubmit}>
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               상품명
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("name")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               브랜드
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("brand")}
               />
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               카테고리
               <select
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("category")}
               >
                 {productCategoryOptions.map((option) => (
@@ -122,10 +122,10 @@ export function ProductDetailPage({ productId }: { productId: string }) {
                 ))}
               </select>
             </label>
-            <label className="grid gap-2 text-sm font-semibold">
+            <label className="grid gap-[var(--space-xs)] type-body-small-strong">
               이미지 URL
               <input
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-3 outline-none"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] py-[var(--space-sm)] outline-none"
                 {...form.register("imageUrl")}
               />
             </label>

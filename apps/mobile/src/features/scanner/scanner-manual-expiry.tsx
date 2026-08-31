@@ -132,7 +132,7 @@ export function ManualExpirySection({
             mode="date"
             display="spinner"
             themeVariant="light"
-            accentColor={colors.primary}
+            accentColor={colors.actionPrimaryBackground}
             locale="ko-KR"
             onChange={handleInlineChange}
             style={styles.inlinePicker}

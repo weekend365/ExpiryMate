@@ -181,19 +181,19 @@ const tones = {
   warning: {
     backgroundColor: colors.warningSoft,
     borderColor: colors.warningSoft,
-    valueColor: colors.warning,
+    valueColor: colors.warningForeground,
     labelColor: colors.subtext,
   },
   danger: {
     backgroundColor: colors.dangerSoft,
     borderColor: colors.dangerSoft,
-    valueColor: colors.danger,
+    valueColor: colors.dangerForeground,
     labelColor: colors.subtext,
   },
   success: {
     backgroundColor: colors.successSoft,
     borderColor: colors.successSoft,
-    valueColor: colors.success,
+    valueColor: colors.successForeground,
     labelColor: colors.subtext,
   },
 };

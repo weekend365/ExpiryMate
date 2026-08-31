@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.warningSoft,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.warning,
+    borderColor: colors.warningForeground,
     padding: spacing.md,
     gap: spacing.sm,
   },

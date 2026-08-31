@@ -127,7 +127,7 @@ export function InventoryCleanupSheet({
           >
             <View style={styles.optionIcon}>
               <CheckCircle2
-                color={colors.primary}
+                color={colors.primaryForeground}
                 size={spacing.md}
                 strokeWidth={2.4}
               />
@@ -153,7 +153,7 @@ export function InventoryCleanupSheet({
             >
               <View style={styles.optionIcon}>
                 <Minus
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.md}
                   strokeWidth={2.4}
                 />

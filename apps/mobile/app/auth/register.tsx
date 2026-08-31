@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.xxs,
   },
   passwordFieldFocused: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
   },
   passwordInput: {
     flex: 1,

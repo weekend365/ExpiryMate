@@ -59,12 +59,12 @@ export function ScannerGuide({
       withTiming(1, {
         duration: 1800,
         easing: Easing.inOut(Easing.quad),
-        reduceMotion: ReduceMotion.Never,
+        reduceMotion: ReduceMotion.System,
       }),
       -1,
       true,
       undefined,
-      ReduceMotion.Never,
+      ReduceMotion.System,
     );
 
     return () => cancelAnimation(scanLineProgress);
@@ -214,7 +214,7 @@ export function PermissionCard({
             }}
             fullWidth
           >
-            설정에서 켤게요
+            설정 열기
           </Button>
         )}
       </View>

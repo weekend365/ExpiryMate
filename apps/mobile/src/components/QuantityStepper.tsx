@@ -112,7 +112,7 @@ export function QuantityStepper({
                   scaleRole="chrome"
                   caretHidden={false}
                   underlineColorAndroid="transparent"
-                  selectionColor={colors.primary}
+                  selectionColor={colors.brandAccent}
                   textAlignVertical="center"
                   style={[
                     styles.input,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     minHeight: controlSize.cta,
   },
   errorContainer: {
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
   },
   iconButton: {
     minWidth: controlSize.ctaLarge,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     opacity: 0.45,
   },
   iconButtonLabel: {
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   valueCluster: {
     flex: 1,

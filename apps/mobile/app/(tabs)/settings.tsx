@@ -80,7 +80,7 @@ export default function SettingsScreen() {
                 }}
                 thumbColor={
                   keepCookingScreenAwake
-                    ? colors.primary
+                    ? colors.primaryForeground
                     : colors.mutedSurface
                 }
               />
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   brandNote: {
     fontSize: typography.label.fontSize,

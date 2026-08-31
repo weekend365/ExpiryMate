@@ -36,6 +36,7 @@ export function FormField({
             </AppText>
           )}
           <AppTextInput
+            ref={field.ref}
             testID={`form-field-${name}`}
             value={field.value ? String(field.value) : ""}
             onChangeText={field.onChange}
@@ -43,7 +44,11 @@ export function FormField({
             keyboardType={keyboardType}
             multiline={multiline}
             numberOfLines={multiline ? 4 : 1}
-            accessibilityLabel={label}
+            accessibilityLabel={
+              fieldState.error?.message
+                ? `${label}, 오류, ${fieldState.error.message}`
+                : label
+            }
             scaleRole="body"
             textAlignVertical={multiline ? "top" : "center"}
             style={[
@@ -53,7 +58,13 @@ export function FormField({
             ]}
           />
           {fieldState.error ? (
-            <AppText variant="label" tone="danger" densityAware={false}>
+            <AppText
+              variant="label"
+              tone="danger"
+              densityAware={false}
+              accessibilityRole="alert"
+              accessibilityLiveRegion="polite"
+            >
               {fieldState.error.message}
             </AppText>
           ) : null}
@@ -86,6 +97,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   errorInput: {
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
   },
 });

@@ -239,7 +239,7 @@ export default function HomeScreen() {
           keyboardDismissMode="interactive"
           refreshControl={
             <RefreshControl
-              tintColor={colors.primary}
+              tintColor={colors.brandAccent}
               refreshing={isRefetching}
               onRefresh={() => {
                 void Promise.all([refetch(), insightsPreview.refetch()]);
@@ -271,7 +271,7 @@ export default function HomeScreen() {
             >
               <View style={styles.briefingIcon}>
                 <TrendingDown
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.md}
                   strokeWidth={2.2}
                 />
@@ -288,7 +288,7 @@ export default function HomeScreen() {
                 </AppText>
               </View>
               <ChevronRight
-                color={colors.primary}
+                color={colors.primaryForeground}
                 size={spacing.sm}
                 strokeWidth={2.4}
               />
@@ -334,7 +334,7 @@ export default function HomeScreen() {
               >
                 <View style={styles.recommendationIcon}>
                   <Sparkles
-                    color={colors.primary}
+                    color={colors.primaryForeground}
                     size={spacing.md}
                     strokeWidth={2.2}
                     accessibilityElementsHidden
@@ -356,7 +356,7 @@ export default function HomeScreen() {
                     size="small"
                     style={styles.recommendationRetry}
                   >
-                    다시 불러올게요
+                    다시 시도
                   </Button>
                 </View>
               </View>
@@ -383,7 +383,7 @@ export default function HomeScreen() {
               >
                 <View style={styles.recommendationIcon}>
                   <Sparkles
-                    color={colors.primary}
+                    color={colors.primaryForeground}
                     size={spacing.md}
                     strokeWidth={2.2}
                     accessibilityElementsHidden
@@ -435,7 +435,7 @@ export default function HomeScreen() {
                   ) : null}
                 </View>
                 <ChevronRight
-                  color={colors.primary}
+                  color={colors.primaryForeground}
                   size={spacing.sm}
                   strokeWidth={2.4}
                   accessibilityElementsHidden

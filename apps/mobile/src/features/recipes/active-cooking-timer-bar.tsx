@@ -50,7 +50,7 @@ export function ActiveCookingTimerBar({
         ]}
       >
         <View style={styles.iconCircle}>
-          <Clock3 color={colors.primary} size={spacing.sm} strokeWidth={2.4} />
+          <Clock3 color={colors.primaryForeground} size={spacing.sm} strokeWidth={2.4} />
         </View>
         <View style={styles.copy}>
           <AppText variant="bodyStrong" tone="primary">
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: radius.xl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.sm,
     gap: spacing.xs,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   progressFill: {
     height: "100%",
     borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   pressed: {
     opacity: 0.72,

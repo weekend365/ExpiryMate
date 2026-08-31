@@ -151,7 +151,7 @@ function RecipeDetailContent({
                   >
                     <Clock3
                       color={
-                        ingredient.isExpiring ? colors.warning : colors.success
+                        ingredient.isExpiring ? colors.warningForeground : colors.successForeground
                       }
                       size={spacing.sm}
                       strokeWidth={2.4}
@@ -306,10 +306,10 @@ const styles = StyleSheet.create({
     fontFamily: typography.bodyStrong.fontFamily,
   },
   ingredientExpiryBadgeTextSafe: {
-    color: colors.success,
+    color: colors.successForeground,
   },
   ingredientExpiryBadgeTextExpiring: {
-    color: colors.warning,
+    color: colors.warningForeground,
   },
   softNoteCard: {
     borderRadius: radius.lg,
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     width: spacing.lg,
     height: spacing.lg,
     borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.actionPrimaryBackground,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.warning,
+    color: colors.warningForeground,
   },
   safetyCardBody: {
     fontSize: typography.bodySmall.fontSize,

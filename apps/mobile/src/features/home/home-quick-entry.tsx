@@ -38,7 +38,7 @@ export function HomeReorderCard({
         <View style={styles.reorderHeader}>
           <View style={styles.shoppingIcon}>
             <ShoppingBasket
-              color={colors.primary}
+              color={colors.primaryForeground}
               size={spacing.md}
               strokeWidth={2.3}
             />

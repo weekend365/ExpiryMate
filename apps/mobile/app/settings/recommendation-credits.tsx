@@ -187,7 +187,7 @@ function RecommendationCreditsStoreScreen() {
       </Button>
 
       <View style={[styles.guideCard, shouldStack && styles.guideCardStacked]}>
-        <ShieldCheck color={colors.primary} size={spacing.md} />
+        <ShieldCheck color={colors.primaryForeground} size={spacing.md} />
         <View style={styles.guideCopy}>
           <AppText variant="bodySmallStrong">서버에서 구매를 확인해요</AppText>
           <AppText variant="caption" tone="subtext">
@@ -219,7 +219,7 @@ function CreditProductCard({ configured, product, selected, onSelect }: {
     >
       <View style={styles.productTitleRow}>
         <Sparkles
-          color={selected ? colors.primary : colors.subtext}
+          color={selected ? colors.primaryForeground : colors.subtext}
           size={spacing.sm + spacing.xxs}
         />
         <AppText variant="bodyStrong">AI 추천 {configured.credits}회</AppText>
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     backgroundColor: colors.surface,
   },
-  productCardSelected: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
+  productCardSelected: { borderColor: colors.primaryForeground, backgroundColor: colors.primarySoft },
   productCardStacked: {
     flexDirection: "column",
     alignItems: "stretch",

@@ -29,94 +29,93 @@ export function getHomeNotices(input: {
   hasInventory: boolean;
   hasLoaded: boolean;
 }): HomeNotice[] {
-  const notices: HomeNotice[] = [];
-
   if (input.isInitialLoading) {
-    notices.push({
+    return [{
       id: "loading",
       message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
       mood: "think",
-    });
-    return notices;
+    }];
   }
 
   if (input.isInitialError) {
-    notices.push({
+    return [{
       id: "initial-error",
       message: `앗, 오늘 할 일을 불러오지 못했어요. ${summarizeLoadError(input.loadErrorMessage)}`,
       mood: "worry",
       action: "retry",
       actionHint: "다시 시도",
-    });
-    return notices;
-  }
-
-  if (input.recipeStatus === "pending") {
-    notices.push({
-      id: "recipe-pending",
-      message: "요리 조합을 찾고 있어요. 다른 화면을 봐도 괜찮아요.",
-      mood: "think",
-    });
-  } else if (input.recipeStatus === "success") {
-    notices.push({
-      id: "recipe-success",
-      message: "추천이 준비됐어요. 같이 살펴볼까요?",
-      mood: "happy",
-      action: "recommendations",
-      actionHint: "추천 보기",
-    });
-  } else if (input.recipeStatus === "error") {
-    notices.push({
-      id: "recipe-error",
-      message:
-        input.recipeErrorMessage ??
-        "추천을 만들지 못했어요. 추천 탭에서 다시 해볼까요?",
-      mood: "worry",
-      action: "recommendations",
-      actionHint: "추천 탭으로 이동",
-    });
+    }];
   }
 
   if (input.isRefreshError) {
-    notices.push({
+    return [{
       id: "refresh-error",
       message: `앗, 최신 내용을 불러오지 못했어요. ${summarizeLoadError(input.loadErrorMessage)}`,
       mood: "worry",
       action: "retry",
       actionHint: "다시 시도",
-    });
+    }];
   }
 
   if (input.hasLoaded && input.expiringGroups.length > 0) {
-    notices.push({
+    return [{
       id: "expiring",
       message: getExpiringNoticeMessage(input.expiringGroups),
       mood: "speak",
       action: "expiring",
       actionHint: "보관함에 임박 재료 필터 적용",
-    });
-  } else if (input.hasLoaded && !input.hasInventory) {
-    notices.push({
+    }];
+  }
+
+  if (input.recipeStatus === "pending") {
+    return [{
+      id: "recipe-pending",
+      message: "요리 조합을 찾고 있어요. 다른 화면을 봐도 괜찮아요.",
+      mood: "think",
+    }];
+  }
+
+  if (input.recipeStatus === "error") {
+    return [{
+      id: "recipe-error",
+      message:
+        input.recipeErrorMessage ??
+        "추천을 만들지 못했어요. 추천 탭에서 다시 시도해 주세요.",
+      mood: "worry",
+      action: "recommendations",
+      actionHint: "추천 탭으로 이동",
+    }];
+  }
+
+  if (input.recipeStatus === "success") {
+    return [{
+      id: "recipe-success",
+      message: "추천이 준비됐어요. 같이 살펴볼까요?",
+      mood: "happy",
+      action: "recommendations",
+      actionHint: "추천 보기",
+    }];
+  }
+
+  if (input.hasLoaded && !input.hasInventory) {
+    return [{
       id: "empty",
       message: "냉장고가 비어 있어요. 바코드만 비춰도 첫 재료를 넣을 수 있어요.",
       mood: "empty",
       action: "scanner",
       actionHint: "바코드 스캔 시작",
-    });
-  } else if (
-    input.hasLoaded &&
-    input.hasInventory &&
-    input.expiringGroups.length === 0 &&
-    notices.length === 0
-  ) {
-    notices.push({
+    }];
+  }
+
+  if (input.hasLoaded && input.hasInventory) {
+    return [{
       id: "calm",
       message: "오늘은 급한 재료가 없어요. 여유 있을 때 재료를 더 넣어볼까요?",
       mood: "speak",
-    });
+    }];
   }
 
-  return notices;
+  return [];
 }
 
 export function getHeroTone(

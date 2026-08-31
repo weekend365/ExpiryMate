@@ -222,7 +222,7 @@ export function InventoryFilterToolbar({
                 ]}
               >
                 <MapPin
-                  color={hasLocationFilter ? colors.primary : colors.subtext}
+                  color={hasLocationFilter ? colors.primaryForeground : colors.subtext}
                   size={spacing.sm}
                   strokeWidth={2.4}
                 />

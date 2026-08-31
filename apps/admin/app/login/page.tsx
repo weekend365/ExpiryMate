@@ -46,21 +46,21 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <main className="grid min-h-screen place-items-center px-4">
+    <main className="grid min-h-screen place-items-center px-[var(--space-sm)]">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-lift)]"
+        className="w-full max-w-[var(--content-form)] rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-[var(--space-lg)] shadow-[var(--shadow-lift)]"
       >
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[var(--primary-foreground)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-[var(--space-sm)] py-[var(--space-xxs)] type-body-small-strong text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Admin
         </div>
-        <h1 className="mt-6 text-3xl font-black tracking-tight">관리자로 들어올게요</h1>
-        <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+        <h1 className="mt-[var(--space-md)] type-display">관리자로 들어올게요</h1>
+        <p className="mt-[var(--space-xs)] type-body-small text-[var(--muted)]">
           관리자 권한이 있는 이메일 계정으로 들어와 주세요.
         </p>
 
-        <div className="mt-8 space-y-4">
-          <label className="grid gap-2 text-sm font-semibold">
+        <div className="mt-[var(--space-lg)] space-y-[var(--space-sm)]">
+          <label className="grid gap-[var(--space-xs)] type-body-small-strong">
             이메일
             <input
               name="email"
@@ -71,10 +71,10 @@ export default function AdminLoginPage() {
               onChange={(event) => setEmail(event.target.value)}
               type="email"
               placeholder="admin@example.com"
-              className="min-h-[var(--control-minimum)] w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] text-sm outline-none"
+              className="min-h-[var(--control-minimum)] w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] type-body-small outline-none"
             />
           </label>
-          <label className="grid gap-2 text-sm font-semibold">
+          <label className="grid gap-[var(--space-xs)] type-body-small-strong">
             비밀번호
             <input
               name="password"
@@ -84,7 +84,7 @@ export default function AdminLoginPage() {
               onChange={(event) => setPassword(event.target.value)}
               type="password"
               placeholder="비밀번호"
-              className="min-h-[var(--control-minimum)] w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] text-sm outline-none"
+              className="min-h-[var(--control-minimum)] w-full rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-muted)] px-[var(--space-sm)] type-body-small outline-none"
             />
           </label>
         </div>
@@ -93,7 +93,7 @@ export default function AdminLoginPage() {
           <div
             role="alert"
             aria-live="polite"
-            className="mt-4 rounded-[var(--radius-lg)] bg-[var(--danger-soft)] px-4 py-3 text-sm font-semibold text-[var(--danger-foreground)]"
+            className="mt-[var(--space-sm)] rounded-[var(--radius-lg)] bg-[var(--danger-soft)] px-[var(--space-sm)] py-[var(--space-sm)] type-body-small-strong text-[var(--danger-foreground)]"
           >
             {errorMessage}
           </div>
@@ -102,7 +102,7 @@ export default function AdminLoginPage() {
         <ActionButton
           type="submit"
           disabled={!email || !password || isSubmitting}
-          className="mt-6"
+          className="mt-[var(--space-md)]"
           size="medium"
           fullWidth
         >

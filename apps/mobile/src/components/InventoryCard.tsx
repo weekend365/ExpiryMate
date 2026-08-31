@@ -122,7 +122,7 @@ export function InventoryCard({
           >
             {selected ? (
               <Check
-                color={colors.primary}
+                color={colors.primaryForeground}
                 size={spacing.md}
                 strokeWidth={2.6}
               />
@@ -144,7 +144,7 @@ export function InventoryCard({
           ]}
         >
           <CircleMinus
-            color={colors.primary}
+            color={colors.primaryForeground}
             size={spacing.sm + spacing.xxs}
             strokeWidth={2.4}
           />
@@ -194,9 +194,9 @@ function getExpiryLampPresentation(expiryDate: string | null) {
 
   const lampColor = {
     unknown: colors.mutedText,
-    expired: colors.danger,
-    within_7_days: colors.warning,
-    safe: colors.success,
+    expired: colors.dangerForeground,
+    within_7_days: colors.warningForeground,
+    safe: colors.successForeground,
   }[bucket];
 
   return { lampColor, ddayLabel };
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
   },
   cardSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   cardEmbeddedSelected: {

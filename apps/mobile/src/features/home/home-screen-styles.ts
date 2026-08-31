@@ -53,7 +53,7 @@ export const homeScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   briefingIcon: {
@@ -130,7 +130,7 @@ export const homeScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.surface,
   },
   reorderHeader: {

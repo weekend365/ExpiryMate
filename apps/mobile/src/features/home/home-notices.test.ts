@@ -41,7 +41,7 @@ describe("getHomeNotices", () => {
     ]);
   });
 
-  it("keeps loaded content notices alongside a background refresh error", () => {
+  it("shows only the background refresh error when loaded content is stale", () => {
     const notices = getHomeNotices({
       ...base,
       isRefreshError: true,
@@ -59,16 +59,13 @@ describe("getHomeNotices", () => {
       ],
     });
 
-    expect(notices.map((notice) => notice.id)).toEqual([
-      "refresh-error",
-      "expiring",
-    ]);
+    expect(notices.map((notice) => notice.id)).toEqual(["refresh-error"]);
     expect(notices[0]).toEqual(
       expect.objectContaining({ action: "retry" }),
     );
   });
 
-  it("prioritizes recipe success ahead of expiring items", () => {
+  it("prioritizes expiring inventory ahead of a completed recommendation", () => {
     const notices = getHomeNotices({
       ...base,
       recipeStatus: "success",
@@ -86,9 +83,20 @@ describe("getHomeNotices", () => {
       ],
     });
 
-    expect(notices.map((notice) => notice.id)).toEqual([
-      "recipe-success",
-      "expiring",
+    expect(notices.map((notice) => notice.id)).toEqual(["expiring"]);
+  });
+
+  it("shows a completed recommendation when no urgent inventory state exists", () => {
+    const notices = getHomeNotices({
+      ...base,
+      recipeStatus: "success",
+    });
+
+    expect(notices).toEqual([
+      expect.objectContaining({
+        id: "recipe-success",
+        action: "recommendations",
+      }),
     ]);
   });
 

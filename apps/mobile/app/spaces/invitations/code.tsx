@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   actionStack: {
     gap: spacing.sm,

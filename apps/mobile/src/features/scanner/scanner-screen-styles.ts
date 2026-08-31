@@ -68,7 +68,7 @@ export const scannerScreenStyles = StyleSheet.create({
     backgroundColor: colors.mutedText,
   },
   stepSegmentActive: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   stepPillText: {
     flexShrink: 1,
@@ -129,7 +129,7 @@ export const scannerScreenStyles = StyleSheet.create({
     right: spacing.md,
     height: SCAN_LINE_HEIGHT,
     borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
     zIndex: 2,
     elevation: 2,
   },
@@ -143,7 +143,7 @@ export const scannerScreenStyles = StyleSheet.create({
     position: "absolute",
     width: spacing.xl,
     height: spacing.xl,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     zIndex: 1,
   },
   cornerTopLeft: {
@@ -262,7 +262,7 @@ export const scannerScreenStyles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   centerStage: {
     flex: 1,
@@ -327,7 +327,7 @@ export const scannerScreenStyles = StyleSheet.create({
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   productName: {
     fontSize: typography.body.fontSize,
@@ -365,7 +365,7 @@ export const scannerScreenStyles = StyleSheet.create({
     fontFamily: typography.bodyStrong.fontFamily,
   },
   manualNameInputError: {
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
   },
   manualNameHint: {
     fontSize: typography.label.fontSize,
@@ -470,7 +470,7 @@ export const scannerScreenStyles = StyleSheet.create({
   androidDateAction: {
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
-    color: colors.primary,
+    color: colors.primaryForeground,
     fontFamily: typography.label.fontFamily,
   },
   sheetFootnote: {
@@ -482,7 +482,7 @@ export const scannerScreenStyles = StyleSheet.create({
   moderationErrorCard: {
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
     backgroundColor: colors.dangerSoft,
     padding: spacing.md,
   },
@@ -490,12 +490,12 @@ export const scannerScreenStyles = StyleSheet.create({
     fontSize: typography.label.fontSize,
     lineHeight: typography.label.lineHeight,
     fontFamily: typography.bodyStrong.fontFamily,
-    color: colors.danger,
+    color: colors.dangerForeground,
   },
   quickSavedCard: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
     padding: spacing.md,
   },

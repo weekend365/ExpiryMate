@@ -269,7 +269,7 @@ export function InventoryLocationFilterSheet({
             </AppText>
             {location === "all" ? (
               <Check
-                color={colors.primary}
+                color={colors.primaryForeground}
                 size={spacing.sm}
                 strokeWidth={2.8}
               />
@@ -306,7 +306,7 @@ export function InventoryLocationFilterSheet({
                 <AppText style={styles.locationOptionCount}>{count}</AppText>
                 {selected ? (
                   <Check
-                    color={colors.primary}
+                    color={colors.primaryForeground}
                     size={spacing.sm}
                     strokeWidth={2.8}
                   />

@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   chartBar: {
     width: "100%",
     borderRadius: radius.md,
-    backgroundColor: colors.danger,
+    backgroundColor: colors.dangerAccent,
   },
   chartAxis: {
     flexDirection: "row",
@@ -656,6 +656,6 @@ const styles = StyleSheet.create({
   categoryBar: {
     height: "100%",
     borderRadius: radius.pill,
-    backgroundColor: colors.danger,
+    backgroundColor: colors.dangerAccent,
   },
 });

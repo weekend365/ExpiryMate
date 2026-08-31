@@ -765,7 +765,7 @@ export default function RecommendationsScreen() {
           keyboardDismissMode="interactive"
           refreshControl={
             <RefreshControl
-              tintColor={colors.primary}
+              tintColor={colors.brandAccent}
               refreshing={
                 recipeView === "favorites"
                   ? favoritesQuery.isRefetching
@@ -806,12 +806,6 @@ export default function RecommendationsScreen() {
               description="확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요."
             />
           ) : null}
-          {recipeView === "recommendations" && showValueMomentOffer ? (
-            <RecommendationValueOfferCard
-              offerKind={monetization.access!.offer.kind}
-              onSelect={handleMonetizationOffer}
-            />
-          ) : null}
           <View style={styles.recipeViewSwitch}>
             <Pressable
               onPress={() => setRecipeView("recommendations")}
@@ -829,7 +823,7 @@ export default function RecommendationsScreen() {
               <Sparkles
                 color={
                   recipeView === "recommendations"
-                    ? colors.primary
+                    ? colors.primaryForeground
                     : colors.subtext
                 }
                 size={spacing.sm}
@@ -857,9 +851,9 @@ export default function RecommendationsScreen() {
             >
               <Heart
                 color={
-                  recipeView === "favorites" ? colors.primary : colors.subtext
+                  recipeView === "favorites" ? colors.primaryForeground : colors.subtext
                 }
-                fill={recipeView === "favorites" ? colors.primary : "none"}
+                fill={recipeView === "favorites" ? colors.primaryForeground : "none"}
                 size={spacing.sm}
                 strokeWidth={2.4}
               />
@@ -1023,6 +1017,13 @@ export default function RecommendationsScreen() {
             </RecipeSection>
           ) : null}
 
+          {recipeView === "recommendations" && showValueMomentOffer ? (
+            <RecommendationValueOfferCard
+              offerKind={monetization.access!.offer.kind}
+              onSelect={handleMonetizationOffer}
+            />
+          ) : null}
+
           {recipeView === "recommendations" &&
           previousRecommendations.length > 0 &&
           !isGenerating ? (
@@ -1066,7 +1067,7 @@ export default function RecommendationsScreen() {
                       importantForAccessibility="no"
                     >
                       <Archive
-                        color={colors.primary}
+                        color={colors.primaryForeground}
                         size={spacing.md}
                         strokeWidth={2.4}
                       />
@@ -1535,7 +1536,7 @@ export default function RecommendationsScreen() {
         }
         footer={
           <Button onPress={() => setHistoryRecommendation(null)} fullWidth>
-            닫을게요
+            닫기
           </Button>
         }
       >
@@ -1739,7 +1740,7 @@ function RecommendationSetupSummaryRow({
         {badgeLabel ? (
           <View style={styles.optionsSummarySafetyBadge}>
             <ShieldCheck
-              color={colors.success}
+              color={colors.successForeground}
               size={spacing.sm}
               strokeWidth={2.4}
             />
@@ -1756,13 +1757,13 @@ function RecommendationSetupSummaryRow({
         ]}
       >
         <ActionIcon
-          color={colors.primary}
+          color={colors.primaryForeground}
           size={spacing.sm + spacing.xxs}
           strokeWidth={2.4}
         />
         <AppText style={styles.optionsSummaryActionLabel}>{actionLabel}</AppText>
         <ChevronRight
-          color={colors.primary}
+          color={colors.primaryForeground}
           size={spacing.sm}
           strokeWidth={2.4}
         />
@@ -1814,7 +1815,7 @@ function ExpiringFirstToggle({
         ]}
       >
         <Timer
-          color={selected ? colors.warning : colors.subtext}
+          color={selected ? colors.warningForeground : colors.subtext}
           size={spacing.sm}
           strokeWidth={2.4}
           style={styles.expiringToggleIcon}
@@ -1838,7 +1839,7 @@ function ExpiringFirstToggle({
             false: colors.border,
             true: colors.warningSoft,
           }}
-          thumbColor={selected ? colors.warning : colors.mutedSurface}
+          thumbColor={selected ? colors.actionWarningBackground : colors.mutedSurface}
         />
       </View>
     </View>
@@ -1991,8 +1992,8 @@ function RecipeCard({
           ]}
         >
           <Heart
-            color={isFavorite ? colors.primary : colors.subtext}
-            fill={isFavorite ? colors.primary : "none"}
+            color={isFavorite ? colors.primaryForeground : colors.subtext}
+            fill={isFavorite ? colors.primaryForeground : "none"}
             size={spacing.md}
             strokeWidth={2.4}
           />
@@ -2115,7 +2116,7 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   recipeViewLabelSelected: {
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   heroCard: {
     backgroundColor: colors.primarySoft,
@@ -2183,7 +2184,7 @@ const styles = StyleSheet.create({
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.success,
+    color: colors.successForeground,
   },
   optionsSummaryAction: {
     flexDirection: "row",
@@ -2197,7 +2198,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   recipeSection: {
     borderRadius: radius.xxl,
@@ -2460,7 +2461,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.label.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   ingredientSelectionRow: {
     minHeight: controlSize.minimum,
@@ -2475,7 +2476,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   ingredientSelectionRowSelected: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
     backgroundColor: colors.primarySoft,
   },
   ingredientSelectionCopy: {
@@ -2505,8 +2506,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   ingredientSelectionCheckSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
+    borderColor: colors.primaryForeground,
+    backgroundColor: colors.actionPrimaryBackground,
   },
   optionHeader: {
     flexDirection: "row",

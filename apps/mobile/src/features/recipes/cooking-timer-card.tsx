@@ -75,7 +75,7 @@ export function CookingTimerCard({
     >
       <View style={[styles.header, shouldStack && styles.headerStacked]}>
         <View style={styles.iconCircle}>
-          <Clock3 color={colors.primary} size={spacing.md} strokeWidth={2.4} />
+          <Clock3 color={colors.primaryForeground} size={spacing.md} strokeWidth={2.4} />
         </View>
         <View style={[styles.copy, shouldStack && styles.copyStacked]}>
           <AppText variant="bodyStrong">{title}</AppText>
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   completedCard: {
-    borderColor: colors.primary,
+    borderColor: colors.primaryForeground,
   },
   header: {
     flexDirection: "row",
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   progressFill: {
     height: "100%",
     borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.brandAccent,
   },
   warning: {
     borderRadius: radius.md,

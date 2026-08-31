@@ -41,7 +41,11 @@ export function RecommendationValueOfferCard({
             : "최근 30일 소비·폐기 흐름을 확인하고, 광고 없이 임박 재료로 계속 골라보세요."}
         </AppText>
       </View>
-      <Button onPress={() => onSelect(offerKind)} fullWidth>
+      <Button
+        variant="surface"
+        onPress={() => onSelect(offerKind)}
+        fullWidth
+      >
         {offerLabel(offerKind)}
       </Button>
     </View>
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
     fontSize: typography.bodySmall.fontSize,
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
-    color: colors.primary,
+    color: colors.primaryForeground,
   },
   quotaLinkPressed: {
     backgroundColor: colors.surfacePressed,
