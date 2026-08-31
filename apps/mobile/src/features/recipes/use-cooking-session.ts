@@ -40,6 +40,7 @@ export function useCookingSession() {
     recommendationId?: string | string[];
     dishIndex?: string | string[];
     stepIndex?: string | string[];
+    cleanup?: string | string[];
   }>();
   const recommendationId = firstParam(params.recommendationId);
   const requestedDishIndex = Number.parseInt(
@@ -80,6 +81,7 @@ export function useCookingSession() {
   const [pendingDraft, setPendingDraft] = useState<CookingSessionDraft | null>(
     null,
   );
+  const requestedCleanup = firstParam(params.cleanup) === "1";
   const [isDraftHydrated, setIsDraftHydrated] = useState(false);
   const [isDraftResolved, setIsDraftResolved] = useState(false);
   const [draftSaveError, setDraftSaveError] = useState<string | null>(null);
@@ -104,9 +106,10 @@ export function useCookingSession() {
       : undefined;
   const steps = useMemo(() => (dish ? buildCookingSteps(dish) : []), [dish]);
   const dishStepCount = dish?.steps.length ?? null;
-  const consumptionStepIndex = dish ? dish.steps.length + 1 : -1;
+  const completionStepIndex = dish ? dish.steps.length + 1 : -1;
+  const consumptionStepIndex = dish ? dish.steps.length + 2 : -1;
   const cookingStepIndex =
-    currentIndex > 0 && currentIndex < consumptionStepIndex
+    currentIndex > 0 && currentIndex < completionStepIndex
       ? currentIndex - 1
       : null;
   const prepRows = useMemo(
@@ -152,12 +155,18 @@ export function useCookingSession() {
   );
 
   const applyDraft = useCallback(
-    (draft: CookingSessionDraft, routeStepIndex?: number) => {
+    (
+      draft: CookingSessionDraft,
+      routeStepIndex?: number,
+      routeCurrentIndex?: number,
+    ) => {
       const maxIndex = Math.max(0, steps.length - 1);
       setCurrentIndex(
-        routeStepIndex == null
-          ? Math.min(draft.currentIndex, maxIndex)
-          : Math.min(routeStepIndex + 1, maxIndex),
+        routeCurrentIndex != null
+          ? Math.min(routeCurrentIndex, maxIndex)
+          : routeStepIndex == null
+            ? Math.min(draft.currentIndex, maxIndex)
+            : Math.min(routeStepIndex + 1, maxIndex),
       );
       const prepKeys = new Set(prepRows.map((row) => row.key));
       setCheckedPrepKeys(
@@ -219,12 +228,19 @@ export function useCookingSession() {
           Number.isInteger(requestedStepIndex) &&
           requestedStepIndex >= 0 &&
           requestedStepIndex < dishStepCount;
-        if (draft && hasRequestedStep) {
-          applyDraftRef.current(draft, requestedStepIndex);
+        if (draft && (hasRequestedStep || requestedCleanup)) {
+          applyDraftRef.current(
+            draft,
+            hasRequestedStep ? requestedStepIndex : undefined,
+            requestedCleanup ? consumptionStepIndex : undefined,
+          );
           setIsDraftResolved(true);
         } else if (draft) {
           setPendingDraft(draft);
         } else {
+          if (requestedCleanup) {
+            setCurrentIndex(consumptionStepIndex);
+          }
           setIsDraftResolved(true);
         }
       })
@@ -242,7 +258,13 @@ export function useCookingSession() {
     return () => {
       active = false;
     };
-  }, [dishStepCount, draftKey, requestedStepIndex]);
+  }, [
+    consumptionStepIndex,
+    dishStepCount,
+    draftKey,
+    requestedCleanup,
+    requestedStepIndex,
+  ]);
 
   const persistCookingSession = useCallback(() => {
     if (!draftKey || !dish || !isDraftHydrated || !isDraftResolved) {
@@ -391,6 +413,16 @@ export function useCookingSession() {
       setCurrentIndex(stepIndex + 1);
     },
     [dish],
+  );
+
+  const goToFlowStep = useCallback(
+    (stepIndex: number) => {
+      if (stepIndex < 0 || stepIndex > consumptionStepIndex) {
+        return;
+      }
+      setCurrentIndex(stepIndex);
+    },
+    [consumptionStepIndex],
   );
 
   const toggleCookingStep = useCallback((stepIndex: number) => {
@@ -568,6 +600,8 @@ export function useCookingSession() {
     markShoppingOpened,
     dish,
     steps,
+    completedCookingSteps,
+    completionStepIndex,
     consumptionStepIndex,
     cookingStepIndex,
     prepRows,
@@ -576,6 +610,7 @@ export function useCookingSession() {
     goToPreviousStep,
     goForward,
     goToCookingStep,
+    goToFlowStep,
     toggleCookingStep,
     completeCookingStepAndAdvance,
     handleApplyInventory,

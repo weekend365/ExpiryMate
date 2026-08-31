@@ -4,6 +4,7 @@ import {
   ItemStatus,
 } from "@expirymate/shared";
 import { router, useNavigation } from "expo-router";
+import * as Haptics from "expo-haptics";
 import { useKeepAwake } from "expo-keep-awake";
 import {
   CheckCircle2,
@@ -11,12 +12,22 @@ import {
   Circle,
   CookingPot,
   Heart,
+  ListChecks,
   Refrigerator,
+  RotateCcw,
   ShoppingBasket,
   SlidersHorizontal,
 } from "lucide-react-native";
-import { useEffect, useLayoutEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Alert, BackHandler, Pressable, StyleSheet, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { runOnJS } from "react-native-reanimated";
 import { AppText } from "../../src/components/AppText";
 import { BottomSheet } from "../../src/components/BottomSheet";
 import { Button } from "../../src/components/Button";
@@ -48,6 +59,7 @@ import { ActiveCookingTimerBar } from "../../src/features/recipes/active-cooking
 import { CookingStepText } from "../../src/features/recipes/CookingStepText";
 import {
   isCookingTimerForStep,
+  type CookingTimer,
   type StartCookingTimerInput,
 } from "../../src/features/recipes/cooking-timer";
 import { useCookingTimer } from "../../src/features/recipes/use-cooking-timer";
@@ -99,6 +111,8 @@ export default function CookingScreen() {
     markShoppingOpened,
     dish,
     steps,
+    completedCookingSteps,
+    completionStepIndex,
     consumptionStepIndex,
     cookingStepIndex,
     prepRows,
@@ -107,6 +121,7 @@ export default function CookingScreen() {
     goToPreviousStep,
     goForward,
     goToCookingStep,
+    goToFlowStep,
     toggleCookingStep,
     completeCookingStepAndAdvance,
     handleApplyInventory,
@@ -120,34 +135,105 @@ export default function CookingScreen() {
   } = useCookingSession();
   const shoppingQuery = useAffiliateShopping();
   const [isInventoryEditing, setIsInventoryEditing] = useState(false);
+  const [stepsOverviewVisible, setStepsOverviewVisible] = useState(false);
   const keepCookingScreenAwake = useAppStore(
     (state) => state.keepCookingScreenAwake,
+  );
+  const setPendingCookingCleanup = useAppStore(
+    (state) => state.setPendingCookingCleanup,
+  );
+  const pulseStepTransition = useCallback(
+    () =>
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(
+        () => undefined,
+      ),
+    [],
+  );
+  const handlePreviousStep = useCallback(() => {
+    void pulseStepTransition();
+    goToPreviousStep();
+  }, [goToPreviousStep, pulseStepTransition]);
+  const handleForwardStep = useCallback(() => {
+    void pulseStepTransition();
+    goForward();
+  }, [goForward, pulseStepTransition]);
+  const handleCompleteCookingStep = useCallback(() => {
+    void Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success,
+    ).catch(() => undefined);
+    completeCookingStepAndAdvance();
+  }, [completeCookingStepAndAdvance]);
+  const cookingSwipeGesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .enabled(cookingStepIndex !== null)
+        .activeOffsetX([-24, 24])
+        .failOffsetY([-24, 24])
+        .onEnd((event) => {
+          if (event.translationX <= -72 || event.velocityX <= -650) {
+            runOnJS(handleCompleteCookingStep)();
+          } else if (event.translationX >= 72 || event.velocityX >= 650) {
+            runOnJS(handlePreviousStep)();
+          }
+        }),
+    [cookingStepIndex, handleCompleteCookingStep, handlePreviousStep],
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <HeaderBackButton onPress={goToPreviousStep} />,
+      headerLeft: () => <HeaderBackButton onPress={handlePreviousStep} />,
       gestureEnabled: currentIndex === 0 || updatedItems !== null,
     });
-  }, [currentIndex, goToPreviousStep, navigation, updatedItems]);
+  }, [currentIndex, handlePreviousStep, navigation, updatedItems]);
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
-        goToPreviousStep();
+        handlePreviousStep();
         return true;
       },
     );
 
     return () => subscription.remove();
-  }, [goToPreviousStep]);
+  }, [handlePreviousStep]);
 
   useEffect(() => {
     if (currentIndex !== consumptionStepIndex) {
       setIsInventoryEditing(false);
     }
   }, [consumptionStepIndex, currentIndex]);
+
+  useEffect(() => {
+    if (
+      currentIndex !== consumptionStepIndex ||
+      !dish ||
+      !recommendationId
+    ) {
+      return;
+    }
+    if (updatedItems !== null) {
+      setPendingCookingCleanup(null);
+      return;
+    }
+    if (mutationError) {
+      setPendingCookingCleanup({
+        recommendationId,
+        dishIndex: requestedDishIndex,
+        dishTitle: dish.title,
+        createdAt: Date.now(),
+      });
+    }
+  }, [
+    consumptionStepIndex,
+    currentIndex,
+    dish,
+    mutationError,
+    recommendationId,
+    requestedDishIndex,
+    setPendingCookingCleanup,
+    updatedItems,
+  ]);
 
   if (recommendationQuery.isPending) {
     return (
@@ -380,6 +466,37 @@ export default function CookingScreen() {
     void cookingTimer.start(timerInput);
   };
 
+  const timer = cookingTimer.timer;
+  const currentTimerCompleted = Boolean(
+    timer &&
+      timer.status === "completed" &&
+      cookingStepIndex !== null &&
+      isCookingTimerForStep(
+        timer,
+        recommendationId,
+        requestedDishIndex,
+        cookingStepIndex,
+      ),
+  );
+  const handleCleanupNow = () => {
+    setPendingCookingCleanup(null);
+    handleForwardStep();
+  };
+  const handleCleanupLater = () => {
+    setPendingCookingCleanup({
+      recommendationId,
+      dishIndex: requestedDishIndex,
+      dishTitle: dish.title,
+      createdAt: Date.now(),
+    });
+    void retryCookingSessionSave().finally(() => {
+      router.replace("/(tabs)/home");
+    });
+  };
+  const handleApplyInventoryAndClear = () => {
+    handleApplyInventory();
+  };
+
   const primaryFooter =
     currentIndex === 0 ? (
       <View style={styles.footerStack}>
@@ -406,7 +523,7 @@ export default function CookingScreen() {
         <Button
           icon={ChevronRight}
           iconPosition="right"
-          onPress={goForward}
+          onPress={handleForwardStep}
           fullWidth
         >
           {getPrepContinueCta(uncheckedPrepCount)}
@@ -416,15 +533,34 @@ export default function CookingScreen() {
       <Button
         icon={ChevronRight}
         iconPosition="right"
-        onPress={completeCookingStepAndAdvance}
+        onPress={handleCompleteCookingStep}
+        style={styles.handsBusyButton}
         fullWidth
       >
-        {getCookingStepCta(isLastCookingStep)}
+        {currentTimerCompleted
+          ? isLastCookingStep
+            ? "타이머가 끝났어요 · 요리 완성"
+            : "타이머가 끝났어요 · 다음 단계"
+          : getCookingStepCta(isLastCookingStep)}
       </Button>
+    ) : currentIndex === completionStepIndex ? (
+      <View style={styles.footerStack}>
+        <Button
+          icon={Refrigerator}
+          onPress={handleCleanupNow}
+          style={styles.handsBusyButton}
+          fullWidth
+        >
+          사용한 재료 정리
+        </Button>
+        <Button variant="surface" onPress={handleCleanupLater} fullWidth>
+          나중에 정리
+        </Button>
+      </View>
     ) : (
       <Button
         icon={Refrigerator}
-        onPress={handleApplyInventory}
+        onPress={handleApplyInventoryAndClear}
         loading={consumeMutation.isPending}
         disabled={inventoryQuery.isPending || consumeMutation.isPending}
         fullWidth
@@ -436,7 +572,6 @@ export default function CookingScreen() {
       </Button>
     );
 
-  const timer = cookingTimer.timer;
   const showsActiveTimerBar = Boolean(
     timer &&
       timer.recommendationId === recommendationId &&
@@ -460,7 +595,9 @@ export default function CookingScreen() {
       ? "재료 준비"
       : pendingDraft.currentIndex <= dish.steps.length
         ? `조리 ${pendingDraft.currentIndex}단계`
-        : "재고 반영"
+        : pendingDraft.currentIndex === completionStepIndex
+          ? "요리 완성"
+          : "재고 반영"
     : null;
 
   return (
@@ -475,18 +612,19 @@ export default function CookingScreen() {
           <CookingKeepAwake />
         ) : null}
         <StepFlow
-        steps={steps}
-        currentIndex={currentIndex}
-        onBack={goToPreviousStep}
-        density="compact"
-        hideBack
-        guideMessage={getCookingGuideMessage(
-          currentIndex,
-          dish.steps.length,
-          uncheckedPrepCount,
-        )}
-        guideMood={currentIndex === consumptionStepIndex ? "happy" : "cooking"}
-      >
+          steps={steps}
+          currentIndex={currentIndex}
+          onBack={handlePreviousStep}
+          onProgressPress={() => setStepsOverviewVisible(true)}
+          density="compact"
+          hideBack
+          guideMessage={getCookingGuideMessage(
+            currentIndex,
+            dish.steps.length,
+            uncheckedPrepCount,
+          )}
+          guideMood={currentIndex >= completionStepIndex ? "happy" : "cooking"}
+        >
         {draftSaveError ? (
           <View
             testID="cooking-session-save-error"
@@ -577,61 +715,111 @@ export default function CookingScreen() {
         ) : null}
 
         {cookingStepIndex !== null ? (
-          <View style={styles.section}>
-            <Pressable
-              onPress={() => toggleCookingStep(cookingStepIndex)}
-              accessibilityRole="checkbox"
-              accessibilityState={{ checked: cookingStepCompleted }}
-              accessibilityLabel={`${cookingStepIndex + 1}단계 ${
-                cookingStepCompleted ? "완료됨" : "완료로 표시"
-              }`}
-              style={({ pressed }) => [
-                styles.cookingCard,
-                cookingStepCompleted && styles.cookingCardCompleted,
-                pressed && styles.pressed,
-              ]}
-            >
-              <View style={styles.stepNumber}>
-                <AppText
-                  variant="label"
-                  tone="inverse"
-                  scaleRole="chrome"
-                  densityAware={false}
-                >
-                  {cookingStepIndex + 1}
-                </AppText>
-              </View>
-              <CookingStepText
-                text={dish.steps[cookingStepIndex]}
-                highlightTimes={Boolean(timerInput)}
-                style={styles.cookingText}
-              />
-              {cookingStepCompleted ? (
-                <CheckCircle2
-                  color={colors.primary}
-                  size={spacing.md}
-                  strokeWidth={2.4}
+          <GestureDetector gesture={cookingSwipeGesture}>
+            <View style={styles.section}>
+              <Pressable
+                onPress={() => toggleCookingStep(cookingStepIndex)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: cookingStepCompleted }}
+                accessibilityLabel={`${cookingStepIndex + 1}단계 ${
+                  cookingStepCompleted ? "완료됨" : "완료로 표시"
+                }`}
+                style={({ pressed }) => [
+                  styles.cookingCard,
+                  cookingStepCompleted && styles.cookingCardCompleted,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <View style={styles.stepNumber}>
+                  <AppText
+                    variant="label"
+                    tone="inverse"
+                    scaleRole="chrome"
+                    densityAware={false}
+                  >
+                    {cookingStepIndex + 1}
+                  </AppText>
+                </View>
+                <CookingStepText
+                  text={dish.steps[cookingStepIndex]}
+                  highlightTimes={Boolean(timerInput)}
+                  style={styles.cookingText}
                 />
-              ) : (
-                <CookingPot
-                  color={colors.mutedText}
-                  size={spacing.md}
-                  strokeWidth={2.2}
+                {cookingStepCompleted ? (
+                  <CheckCircle2
+                    color={colors.primary}
+                    size={spacing.md}
+                    strokeWidth={2.4}
+                  />
+                ) : (
+                  <CookingPot
+                    color={colors.mutedText}
+                    size={spacing.md}
+                    strokeWidth={2.2}
+                  />
+                )}
+              </Pressable>
+              {timerInput ? (
+                <CookingTimerCard
+                  input={timerInput}
+                  controller={cookingTimer}
+                  onStart={handleStartTimer}
                 />
-              )}
-            </Pressable>
-            {timerInput ? (
-              <CookingTimerCard
-                input={timerInput}
-                controller={cookingTimer}
-                onStart={handleStartTimer}
-              />
-            ) : null}
-            {dish.tips.length ? (
-              <View style={styles.tipCard}>
-                <AppText variant="bodyStrong">장고의 조리 팁</AppText>
-                <AppText variant="bodySmall" tone="subtext">
-                  {dish.tips.join(" ")}
+              ) : null}
+              {dish.tips.length ? (
+                <View style={styles.tipCard}>
+                  <AppText variant="bodyStrong">장고의 조리 팁</AppText>
+                  <AppText variant="bodySmall" tone="subtext">
+                    {dish.tips.join(" ")}
+                  </AppText>
+                </View>
+              ) : null}
+              <AppText variant="bodySmall" tone="muted" style={styles.swipeHint}>
+                왼쪽으로 밀면 다음 단계 · 오른쪽으로 밀면 이전 단계
+              </AppText>
+            </View>
+          </GestureDetector>
+        ) : null}
+
+        {currentIndex === completionStepIndex ? (
+          <View style={styles.section} testID="cooking-completion-moment">
+            <EmptyState
+              mood="happy"
+              title={`${dish.title}, 맛있게 완성됐어요`}
+              description="완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요."
+            />
+            <View style={styles.completionCard}>
+              <AppText variant="subheading">마지막으로 확인할까요?</AppText>
+              <AppText variant="bodySmall" tone="subtext">
+                {dish.tips[0] ??
+                  "불과 조리도구를 안전하게 정리하고 맛있게 담아 주세요."}
+              </AppText>
+              <Button
+                icon={Heart}
+                variant="surface"
+                onPress={handleToggleFavorite}
+                loading={setFavoriteMutation.isPending}
+                fullWidth
+              >
+                {isFavorite ? "즐겨찾기에 담았어요" : "다음에도 쉽게 찾기"}
+              </Button>
+              <Button
+                icon={RotateCcw}
+                variant="surface"
+                onPress={() => {
+                  void pulseStepTransition();
+                  setPendingCookingCleanup(null);
+                  restartCookingSession();
+                }}
+                fullWidth
+              >
+                처음부터 다시 보기
+              </Button>
+            </View>
+            {favoriteMutationError ? (
+              <View style={styles.errorCard}>
+                <AppText variant="bodySmall" tone="danger">
+                  즐겨찾기를 바꾸지 못했어요. 잠시 뒤 다시 눌러주세요.
                 </AppText>
               </View>
             ) : null}
@@ -643,65 +831,6 @@ export default function CookingScreen() {
             <AppText variant="body" tone="subtext">
               추천 사용량을 먼저 확인하고, 다른 경우에만 수정해 주세요.
             </AppText>
-            <Pressable
-              onPress={handleToggleFavorite}
-              disabled={setFavoriteMutation.isPending}
-              accessibilityRole="checkbox"
-              accessibilityState={{
-                checked: isFavorite,
-                disabled: setFavoriteMutation.isPending,
-              }}
-              accessibilityLabel={
-                isFavorite
-                  ? `${dish.title} 즐겨찾기에서 빼기`
-                  : `${dish.title} 즐겨찾기에 추가`
-              }
-              style={({ pressed }) => [
-                styles.favoriteCard,
-                isFavorite && styles.favoriteCardSelected,
-                pressed && styles.pressed,
-                setFavoriteMutation.isPending && styles.favoriteCardPending,
-              ]}
-            >
-              <View
-                style={[
-                  styles.favoriteIcon,
-                  isFavorite && styles.favoriteIconSelected,
-                ]}
-              >
-                <Heart
-                  color={isFavorite ? colors.primary : colors.subtext}
-                  fill={isFavorite ? colors.primary : "none"}
-                  size={spacing.md}
-                  strokeWidth={2.4}
-                />
-              </View>
-              <View style={styles.rowCopy}>
-                <AppText variant="bodyStrong">
-                  {isFavorite
-                    ? "즐겨찾기에 담아뒀어요"
-                    : "이 요리, 다음에도 쉽게 찾을까요?"}
-                </AppText>
-                <AppText variant="bodySmall" tone="subtext">
-                  {isFavorite
-                    ? "추천 탭에서 언제든 다시 볼 수 있어요."
-                    : "하트를 눌러 즐겨찾기에 담아두세요."}
-                </AppText>
-              </View>
-              <AppText
-                variant="label"
-                tone={isFavorite ? "primary" : "subtext"}
-              >
-                {isFavorite ? "담았어요" : "담기"}
-              </AppText>
-            </Pressable>
-            {favoriteMutationError ? (
-              <View style={styles.errorCard}>
-                <AppText variant="bodySmall" tone="danger">
-                  즐겨찾기를 바꾸지 못했어요. 잠시 뒤 다시 눌러주세요.
-                </AppText>
-              </View>
-            ) : null}
             {inventoryQuery.isError ? (
               <View style={styles.errorCard}>
                 <AppText variant="bodySmall" tone="danger">
@@ -794,7 +923,178 @@ export default function CookingScreen() {
           준비 체크, 완료한 단계, 재고 사용량을 그대로 복원해요.
         </AppText>
       </BottomSheet>
+      <BottomSheet
+        visible={stepsOverviewVisible}
+        onClose={() => setStepsOverviewVisible(false)}
+        title="전체 조리 단계"
+        description="앞뒤 단계를 미리 보고 원하는 단계로 바로 이동할 수 있어요."
+        footer={
+          <Button
+            variant="surface"
+            onPress={() => setStepsOverviewVisible(false)}
+            fullWidth
+          >
+            현재 단계로 돌아가기
+          </Button>
+        }
+      >
+        <CookingStepsOverview
+          steps={steps}
+          dishSteps={dish.steps}
+          currentIndex={currentIndex}
+          completionStepIndex={completionStepIndex}
+          consumptionStepIndex={consumptionStepIndex}
+          completedCookingSteps={completedCookingSteps}
+          timer={timer}
+          recommendationId={recommendationId}
+          dishIndex={requestedDishIndex}
+          onSelect={(index) => {
+            void pulseStepTransition();
+            goToFlowStep(index);
+            setStepsOverviewVisible(false);
+          }}
+        />
+      </BottomSheet>
     </>
+  );
+}
+
+function CookingStepsOverview({
+  steps,
+  dishSteps,
+  currentIndex,
+  completionStepIndex,
+  consumptionStepIndex,
+  completedCookingSteps,
+  timer,
+  recommendationId,
+  dishIndex,
+  onSelect,
+}: {
+  steps: Array<{ key: string; label: string; title: string }>;
+  dishSteps: string[];
+  currentIndex: number;
+  completionStepIndex: number;
+  consumptionStepIndex: number;
+  completedCookingSteps: number[];
+  timer: CookingTimer | null;
+  recommendationId: string;
+  dishIndex: number;
+  onSelect: (index: number) => void;
+}) {
+  const { shouldStack } = useResponsiveLayout();
+  const allCookingComplete =
+    completedCookingSteps.length >= dishSteps.length;
+
+  return (
+    <View style={styles.overviewList} testID="cooking-steps-overview">
+      {steps.map((step, index) => {
+        const cookingIndex =
+          index > 0 && index < completionStepIndex ? index - 1 : null;
+        const isCurrent = index === currentIndex;
+        const isCompleted =
+          index === 0
+            ? currentIndex > 0
+            : cookingIndex !== null
+              ? completedCookingSteps.includes(cookingIndex)
+              : index === completionStepIndex
+                ? currentIndex > completionStepIndex
+                : false;
+        const hasTimer = Boolean(
+          cookingIndex !== null &&
+            timer &&
+            timer.recommendationId === recommendationId &&
+            timer.dishIndex === dishIndex &&
+            timer.stepIndex === cookingIndex,
+        );
+        const disabled =
+          index === consumptionStepIndex && !allCookingComplete;
+        const description =
+          cookingIndex !== null
+            ? dishSteps[cookingIndex]
+            : index === 0
+              ? "재료와 추천 사용량을 확인해요."
+              : index === completionStepIndex
+                ? "완성된 요리를 즐기고 다음 행동을 골라요."
+                : "실제로 사용한 재료를 냉장고에 반영해요.";
+
+        return (
+          <Pressable
+            key={step.key}
+            onPress={() => onSelect(index)}
+            disabled={disabled}
+            accessibilityRole="button"
+            accessibilityState={{ selected: isCurrent, disabled }}
+            accessibilityLabel={`${step.label}, ${
+              isCurrent ? "현재 단계" : isCompleted ? "완료" : "미완료"
+            }${hasTimer ? ", 타이머 연결됨" : ""}`}
+            accessibilityHint={
+              disabled
+                ? "모든 조리 단계를 마치면 이동할 수 있어요"
+                : "이 단계로 이동해요"
+            }
+            style={({ pressed }) => [
+              styles.overviewRow,
+              shouldStack && styles.overviewRowStacked,
+              isCurrent && styles.overviewRowCurrent,
+              hasTimer && styles.overviewRowTimer,
+              disabled && styles.overviewRowDisabled,
+              pressed && styles.pressed,
+            ]}
+          >
+            <View style={styles.overviewIcon}>
+              {isCompleted ? (
+                <CheckCircle2
+                  color={colors.primary}
+                  size={spacing.md}
+                  strokeWidth={2.4}
+                />
+              ) : hasTimer ? (
+                <ListChecks
+                  color={colors.primary}
+                  size={spacing.md}
+                  strokeWidth={2.4}
+                />
+              ) : (
+                <Circle
+                  color={isCurrent ? colors.primary : colors.mutedText}
+                  size={spacing.md}
+                  strokeWidth={2.2}
+                />
+              )}
+            </View>
+            <View style={styles.rowCopy}>
+              <AppText
+                variant="bodyStrong"
+                tone={isCurrent || hasTimer ? "primary" : "default"}
+              >
+                {step.label}
+              </AppText>
+              <AppText
+                variant="bodySmall"
+                tone="subtext"
+                numberOfLines={shouldStack ? undefined : 2}
+              >
+                {description}
+              </AppText>
+            </View>
+            <AppText variant="label" tone={isCurrent ? "primary" : "muted"}>
+              {isCurrent
+                ? "현재"
+                : hasTimer
+                  ? timer?.status === "completed"
+                    ? "완료 알림"
+                    : "타이머"
+                  : isCompleted
+                    ? "완료"
+                    : disabled
+                      ? "조리 후"
+                      : "보기"}
+            </AppText>
+          </Pressable>
+        );
+      })}
+    </View>
   );
 }
 
@@ -1054,6 +1354,9 @@ const styles = StyleSheet.create({
   screenFooter: {
     gap: spacing.sm,
   },
+  handsBusyButton: {
+    minHeight: touchTarget.ctaLarge,
+  },
   ctaHint: {
     textAlign: "center",
   },
@@ -1136,7 +1439,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
   },
-  tapHint: {
+  swipeHint: {
     textAlign: "center",
   },
   tipCard: {
@@ -1145,35 +1448,51 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     gap: spacing.xs,
   },
-  favoriteCard: {
-    minHeight: touchTarget.ctaLarge,
+  completionCard: {
     borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  overviewList: {
+    gap: spacing.xs,
+  },
+  overviewRow: {
+    minHeight: touchTarget.ctaLarge,
+    borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
     backgroundColor: colors.surface,
-    padding: spacing.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.sm,
   },
-  favoriteCardSelected: {
+  overviewRowStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  overviewRowCurrent: {
     borderColor: colors.primary,
     backgroundColor: colors.primarySoft,
   },
-  favoriteCardPending: {
-    opacity: 0.55,
+  overviewRowTimer: {
+    borderColor: colors.primary,
   },
-  favoriteIcon: {
+  overviewRowDisabled: {
+    opacity: 0.5,
+  },
+  overviewIcon: {
     width: touchTarget.icon,
     height: touchTarget.icon,
     borderRadius: radius.pill,
     backgroundColor: colors.mutedSurface,
     alignItems: "center",
     justifyContent: "center",
-  },
-  favoriteIconSelected: {
-    backgroundColor: colors.surface,
   },
   consumptionCard: {
     borderRadius: radius.xxl,

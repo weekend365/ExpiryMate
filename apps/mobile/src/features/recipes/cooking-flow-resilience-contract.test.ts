@@ -43,4 +43,38 @@ describe("cooking flow resilience contract", () => {
     expect(screen).toContain('testID="cooking-session-save-error"');
     expect(screen).toContain("retryCookingSessionSave");
   });
+
+  it("supports hands-busy navigation with a large CTA, swipe, and haptics", () => {
+    const screen = read("app/cooking/[recommendationId].tsx");
+
+    expect(screen).toContain("Gesture.Pan()");
+    expect(screen).toContain("styles.handsBusyButton");
+    expect(screen).toContain("Haptics.NotificationFeedbackType.Success");
+    expect(screen).toContain("왼쪽으로 밀면 다음 단계");
+  });
+
+  it("opens a responsive overview from progress and exposes timer state", () => {
+    const screen = read("app/cooking/[recommendationId].tsx");
+    const stepFlow = read("src/components/StepFlow.tsx");
+
+    expect(stepFlow).toContain("onProgressPress");
+    expect(stepFlow).toContain("전체 단계 보기");
+    expect(screen).toContain('testID="cooking-steps-overview"');
+    expect(screen).toContain("shouldStack && styles.overviewRowStacked");
+    expect(screen).toContain("타이머 연결됨");
+  });
+
+  it("separates completion from cleanup and keeps cleanup recoverable on home", () => {
+    const screen = read("app/cooking/[recommendationId].tsx");
+    const home = read("app/(tabs)/home.tsx");
+    const cleanupCard = read(
+      "src/features/recipes/pending-cooking-cleanup-card.tsx",
+    );
+
+    expect(screen).toContain('testID="cooking-completion-moment"');
+    expect(screen).toContain("나중에 정리");
+    expect(screen).toContain("setPendingCookingCleanup");
+    expect(home).toContain("PendingCookingCleanupCard");
+    expect(cleanupCard).toContain('cleanup: "1"');
+  });
 });

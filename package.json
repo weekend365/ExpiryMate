@@ -4,9 +4,10 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev:mobile": "pnpm --filter @expirymate/mobile dev",
+    "dev:mobile:tunnel": "pnpm --filter @expirymate/mobile dev:tunnel",
     "dev:admin": "pnpm --filter @expirymate/admin dev",
     "dev:api": "pnpm --filter @expirymate/api dev",
-    "dev": "concurrently -n shared,api,admin,mobile -c yellow,blue,green,magenta \"pnpm --filter @expirymate/shared dev\" \"pnpm --filter @expirymate/api exec nest start --watch\" \"pnpm --filter @expirymate/admin exec next dev\" \"pnpm --filter @expirymate/mobile exec expo start -c\"",
+    "dev": "concurrently -n shared,api,admin,mobile -c yellow,blue,green,magenta \"pnpm --filter @expirymate/shared dev\" \"pnpm --filter @expirymate/api exec nest start --watch\" \"pnpm --filter @expirymate/admin exec next dev\" \"node --max-old-space-size=8192 apps/mobile/node_modules/expo/bin/cli start -c\"",
     "lint": "eslint .",
     "typecheck": "pnpm db:generate && pnpm --filter @expirymate/shared build && pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",

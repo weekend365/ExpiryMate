@@ -24,6 +24,7 @@ interface StepFlowProps extends PropsWithChildren {
   steps: StepFlowStep[];
   currentIndex: number;
   onBack: () => void;
+  onProgressPress?: () => void;
   /**
    * Prefer `Screen` `footer` for the primary CTA so it stays sticky above the
    * keyboard/safe area. Keep this only for rare in-flow secondary actions.
@@ -52,6 +53,7 @@ export function StepFlow({
   steps,
   currentIndex,
   onBack,
+  onProgressPress,
   footer,
   headerAccessory,
   guideMessage,
@@ -106,6 +108,27 @@ export function StepFlow({
   ) : null;
 
   const compactMessage = activeStep.title;
+  const progressCount = onProgressPress ? (
+    <Pressable
+      onPress={onProgressPress}
+      accessibilityRole="button"
+      accessibilityLabel={`전체 단계 보기, 현재 ${safeIndex + 1}/${steps.length}`}
+      accessibilityHint="조리 단계 목록을 열어요"
+      hitSlop={spacing.xs}
+      style={({ pressed }) => [
+        styles.progressCountButton,
+        pressed && styles.backButtonPressed,
+      ]}
+    >
+      <AppText variant="label" tone="primary" scaleRole="chrome">
+        {safeIndex + 1}/{steps.length}
+      </AppText>
+    </Pressable>
+  ) : (
+    <AppText variant="label" tone="primary" scaleRole="chrome">
+      {safeIndex + 1}/{steps.length}
+    </AppText>
+  );
 
   const stepCopy = isCompact ? (
     <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
@@ -189,9 +212,7 @@ export function StepFlow({
                     {activeStep.label}
                   </AppText>
                 )}
-                <AppText variant="label" tone="primary" scaleRole="chrome">
-                  {safeIndex + 1}/{steps.length}
-                </AppText>
+                {progressCount}
               </View>
               {progressTrack}
             </View>
@@ -244,9 +265,7 @@ export function StepFlow({
             ) : (
               <View />
             )}
-            <AppText variant="label" tone="primary" scaleRole="chrome">
-              {safeIndex + 1}/{steps.length}
-            </AppText>
+            {progressCount}
           </View>
           {progressTrack}
           {stepCopy}
@@ -318,6 +337,14 @@ const styles = StyleSheet.create({
   progressTrack: {
     flexDirection: "row",
     gap: spacing.xs,
+  },
+  progressCountButton: {
+    minWidth: touchTarget.icon,
+    minHeight: touchTarget.icon,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.xs,
   },
   progressSegment: {
     flex: 1,

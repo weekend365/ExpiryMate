@@ -7,6 +7,10 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const appConfig = JSON.parse(
   readFileSync(resolve(scriptDir, "../app.json"), "utf8"),
 );
+const dynamicAppConfig = readFileSync(
+  resolve(scriptDir, "../app.config.js"),
+  "utf8",
+);
 
 describe("Android adaptive-window app configuration", () => {
   it("does not request a global portrait lock", () => {
@@ -21,6 +25,15 @@ describe("Android adaptive-window app configuration", () => {
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO",
       ]),
+    );
+  });
+
+  it("falls back to the compiled Google Mobile Ads config plugin", () => {
+    expect(dynamicAppConfig).toContain(
+      'require.resolve("react-native-google-mobile-ads/app.plugin.js")',
+    );
+    expect(dynamicAppConfig).toContain(
+      'return "react-native-google-mobile-ads/plugin/build"',
     );
   });
 });

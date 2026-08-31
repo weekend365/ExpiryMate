@@ -42,6 +42,7 @@ import {
 import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
 import { useRecipeGeneration } from "../../src/features/recipes/recipe-generation-provider";
+import { PendingCookingCleanupCard } from "../../src/features/recipes/pending-cooking-cleanup-card";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { colors, spacing } from "../../src/shared/theme";
@@ -248,6 +249,7 @@ export default function HomeScreen() {
         >
           <SpaceSwitcher />
           <HomeHero notices={notices} onNoticeAction={handleNoticeAction} />
+          <PendingCookingCleanupCard />
           <Button
             icon={Plus}
             onPress={() => setEntryMethodVisible(true)}

@@ -28,6 +28,16 @@ const googleTestAppIds = {
   ios: "ca-app-pub-3940256099942544~1458002511",
   android: "ca-app-pub-3940256099942544~3347511713",
 };
+const googleMobileAdsPlugin = (() => {
+  try {
+    require.resolve("react-native-google-mobile-ads/app.plugin.js");
+    return "react-native-google-mobile-ads";
+  } catch {
+    // Some pnpm stores can retain the compiled plugin while losing the tiny
+    // package-root proxy. Point Expo at the same official implementation.
+    return "react-native-google-mobile-ads/plugin/build";
+  }
+})();
 
 const plugins = appJson.expo.plugins.filter((plugin) => {
   const pluginName = Array.isArray(plugin) ? plugin[0] : plugin;
@@ -47,7 +57,7 @@ plugins.push("expo-iap");
 // Config plugins do not rewrite the committed ios/ folder. EAS still injects
 // GADApplicationIdentifier via scripts/sync-admob-ios-plist.cjs.
 plugins.push([
-  "react-native-google-mobile-ads",
+  googleMobileAdsPlugin,
   {
     iosAppId:
       (isProduction && process.env.EXPO_PUBLIC_ADMOB_IOS_APP_ID?.trim()) ||

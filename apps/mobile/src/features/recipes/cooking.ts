@@ -51,6 +51,11 @@ export function buildCookingSteps(dish: RecipeRecommendationDish): StepFlowStep[
           : "한 단계씩 같이 해볼게요",
     })),
     {
+      key: "complete",
+      label: "요리 완성",
+      title: "맛있게 완성됐어요",
+    },
+    {
       key: "inventory",
       label: "재고 반영",
       title: "사용한 재료를 보관함에 반영할까요?",
@@ -506,7 +511,10 @@ export function getCookingGuideMessage(
     }
     return "준비한 재료를 하나씩 눌러 주세요.";
   }
-  if (currentIndex > cookingStepCount) {
+  if (currentIndex === cookingStepCount + 1) {
+    return "완성된 요리를 즐긴 뒤 재고 정리는 따로 이어갈 수 있어요.";
+  }
+  if (currentIndex > cookingStepCount + 1) {
     return "실제로 사용한 양이 다르면 수정할 수 있어요.";
   }
   if (currentIndex === cookingStepCount) {
