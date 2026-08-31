@@ -22,7 +22,8 @@ describe("inventory action notice contract", () => {
 
     expect(screen).toContain("const inventoryActionNotice = actionError");
     expect(screen).toContain("deferredRemoval.undoLabel");
-    expect(screen).not.toContain('actionLabel="되돌릴게요"');
+    expect(screen).toContain('actionLabel="되돌릴게요"');
+    expect(screen).toContain("deferredRemoval.undoRemoval()");
     expect(screen).toContain("<JangoHeroNoticeCarousel");
     expect(screen).toContain(
       "inventoryFilterHero = inventoryActionNotice ?? inventoryDefaultHero",
@@ -31,7 +32,7 @@ describe("inventory action notice contract", () => {
     expect(screen).toContain('speechDensity="default"');
     expect(screen).toContain('speechTextVariant="bodySmall"');
     expect(screen).toContain(
-      'title={`${shoppingTarget.displayName} 다 썼어요.`}',
+      'title={`${shoppingOfferTarget.displayName} 다 썼어요.`}',
     );
     expect(screen).not.toContain('description="다시 채워둘까요?"');
     expect(screen).toContain('actionLabel="장보기에서 찾아볼게요"');
@@ -49,6 +50,8 @@ describe("inventory action notice contract", () => {
     expect(screen).toContain('trackAffiliateEntryTap("inventory_consumed")');
     expect(screen).toContain('pathname: "/(tabs)/shop"');
     expect(screen).toContain('source: "inventory_consumed"');
+    expect(screen).toContain('scheduleRemoval(item, "discard")');
+    expect(screen).not.toContain("useBatchDiscardInventoryItems");
     expect(filterHeader).toContain("styles.filterToolbarDangerNotice");
     expect(filterHeader).toContain("styles.filterToolbarWarningNotice");
     expect(filterHeader).toContain("styles.filterToolbarSuccessNotice");

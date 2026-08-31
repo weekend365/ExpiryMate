@@ -123,6 +123,25 @@ export function InventoryFilterToolbar({
               testID="inventory-expiry-traffic"
             >
               <ExpiryTrafficLamp
+                label="확인"
+                count={facetCounts.status.unknown}
+                tone="unknown"
+                lampOn={
+                  filter === "all"
+                    ? facetCounts.status.unknown > 0
+                    : filter === "unknown"
+                }
+                selected={filter === "unknown"}
+                onPress={() => onToggleExpiryFilter("unknown")}
+                testID="inventory-expiry-filter-unknown"
+                accessibilityLabel={`기한 확인 ${facetCounts.status.unknown}건`}
+                accessibilityHint={
+                  filter === "unknown"
+                    ? "다시 누르면 전체 보관함을 보여 드려요."
+                    : "유통기한을 모르는 재료만 보여 드릴게요."
+                }
+              />
+              <ExpiryTrafficLamp
                 label="만료"
                 count={facetCounts.status.expired}
                 tone="danger"
@@ -158,25 +177,6 @@ export function InventoryFilterToolbar({
                   filter === "within7"
                     ? "다시 누르면 전체 보관함을 보여 드려요."
                     : "7일 안에 손볼 재료만 보여 드릴게요."
-                }
-              />
-              <ExpiryTrafficLamp
-                label="확인"
-                count={facetCounts.status.unknown}
-                tone="default"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.unknown > 0
-                    : filter === "unknown"
-                }
-                selected={filter === "unknown"}
-                onPress={() => onToggleExpiryFilter("unknown")}
-                testID="inventory-expiry-filter-unknown"
-                accessibilityLabel={`기한 확인 ${facetCounts.status.unknown}건`}
-                accessibilityHint={
-                  filter === "unknown"
-                    ? "다시 누르면 전체 보관함을 보여 드려요."
-                    : "유통기한을 모르는 재료만 보여 드릴게요."
                 }
               />
               <ExpiryTrafficLamp

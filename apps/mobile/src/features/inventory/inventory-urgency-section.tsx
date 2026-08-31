@@ -10,7 +10,12 @@ import {
 } from "./filters";
 import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
 
-type ExpiryTrafficTone = "default" | "danger" | "warning" | "success";
+type ExpiryTrafficTone =
+  | "default"
+  | "unknown"
+  | "danger"
+  | "warning"
+  | "success";
 
 export function UrgencySection({
   section,

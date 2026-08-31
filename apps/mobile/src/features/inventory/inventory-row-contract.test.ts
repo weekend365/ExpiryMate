@@ -10,15 +10,32 @@ function read(relativePath: string) {
 }
 
 describe("inventory row interaction contract", () => {
-  it("opens editing from the row and cleanup from the trailing trash action", () => {
+  it("opens quick editing from the row and usage cleanup from the trailing action", () => {
     const screen = read("app/(tabs)/inventory.tsx");
     const card = read("src/components/InventoryCard.tsx");
+    const sheets = read("src/features/inventory/inventory-list-sheets.tsx");
+    const editScreen = read("app/inventory/[id].tsx");
 
     expect(screen).toMatch(
-      /const handleCardPress[\s\S]*?handleEditItem\(item\);/,
+      /const handleCardPress[\s\S]*?setQuickEditItem\(item\);/,
     );
+    expect(screen).toContain("<InventoryQuickEditSheet");
+    expect(screen).toContain("params: { id: item.id, mode }");
     expect(screen).toContain("onCleanup={openCleanupSheet}");
-    expect(card).toContain("<Trash2");
+    expect(sheets).toContain("남은 양 바꾸기");
+    expect(sheets).toContain("유통기한 바꾸기");
+    expect(sheets).toContain("보관 위치 바꾸기");
+    expect(sheets).toContain("전체 내용 수정하기");
+    expect(editScreen).toContain('const isQuickEdit = editMode !== "product"');
+    expect(editScreen).toContain(
+      "onPress={isSaveAction ? handleSave : goToNextEditStep}",
+    );
+    expect(editScreen).toContain(
+      "const visibleEditSteps = isQuickEdit ? [activeEditStep] : EDIT_STEPS",
+    );
+    expect(editScreen).toContain("currentIndex={isQuickEdit ? 0");
+    expect(card).toContain("<CircleMinus");
+    expect(card).toContain("사용한 양 반영할게요");
     expect(card).toContain("onPress={() => onCleanup(item)}");
     expect(card).not.toContain("<PenLine");
   });

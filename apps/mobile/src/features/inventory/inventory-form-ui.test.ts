@@ -5,7 +5,9 @@ import {
   formatPutAwayMessage,
   formatPutAwaySupportingMessage,
   formatUpdatedMessage,
+  inventoryEditStepForMode,
   koreanObjectParticle,
+  parseInventoryEditMode,
 } from "./inventory-form-copy";
 
 describe("inventory form copy helpers", () => {
@@ -82,5 +84,14 @@ describe("inventory form copy helpers", () => {
     expect(extraDetailsRowLabel({ notes: "열어 둔 팩" })).toBe(
       "브랜드·메모 확인하기",
     );
+  });
+
+  it("routes quick-edit modes to the intended form step", () => {
+    expect(parseInventoryEditMode("quantity")).toBe("quantity");
+    expect(parseInventoryEditMode(["expiry", "quantity"])).toBe("expiry");
+    expect(parseInventoryEditMode("unknown")).toBe("product");
+    expect(parseInventoryEditMode(undefined)).toBe("product");
+    expect(inventoryEditStepForMode("location")).toBe("quantity");
+    expect(inventoryEditStepForMode("expiry")).toBe("expiry");
   });
 });

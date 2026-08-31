@@ -43,19 +43,21 @@ import {
   getInventoryHeroNotice,
   getInventoryHeroNotices,
 } from "../../src/features/inventory/inventory-hero";
+import { getCommittedFullConsumeTarget } from "../../src/features/inventory/deferred-inventory-removal";
 import {
   InventoryFilterToolbar,
   InventorySelectionBar,
 } from "../../src/features/inventory/inventory-list-header";
 import {
   InventoryLocationFilterSheet,
+  InventoryQuickEditSheet,
 } from "../../src/features/inventory/inventory-list-sheets";
+import type { InventoryEditMode } from "../../src/features/inventory/inventory-form-copy";
 import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
 import {
   inventoryScreenStyles as styles,
 } from "../../src/features/inventory/inventory-screen-styles";
 import { UrgencySection } from "../../src/features/inventory/inventory-urgency-section";
-import { useBatchDiscardInventoryItems } from "../../src/features/inventory/use-batch-discard-inventory-items";
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
 import {
@@ -80,8 +82,8 @@ export default function InventoryScreen() {
   const filterParam = parseInventoryViewFilter(params.filter);
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useInventoryList();
-  const batchDiscardMutation = useBatchDiscardInventoryItems();
   const deferredRemoval = useDeferredInventoryItemRemoval();
+  const { clearLastCommittedRemoval, lastCommittedRemoval } = deferredRemoval;
   const { activeSpaceId } = useActiveSpace();
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const { selectableOptions, resolveLabel } = useStorageLocations();
@@ -97,11 +99,12 @@ export default function InventoryScreen() {
   const [collapsedSectionKeys, setCollapsedSectionKeys] = useState<
     InventoryUrgencySection[]
   >([]);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [cleanupItem, setCleanupItem] = useState<InventoryItem | null>(null);
-  const [shoppingTarget, setShoppingTarget] = useState<InventoryItem | null>(
+  const [quickEditItem, setQuickEditItem] = useState<InventoryItem | null>(
     null,
   );
+  const [shoppingOfferTarget, setShoppingOfferTarget] =
+    useState<InventoryItem | null>(null);
   const [actionErrorMessage, setActionErrorMessage] = useState<string | null>(
     null,
   );
@@ -122,6 +125,25 @@ export default function InventoryScreen() {
       setLocation("all");
     }
   }, [location, selectableOptions]);
+
+  useEffect(() => {
+    const committedTarget = getCommittedFullConsumeTarget(
+      lastCommittedRemoval,
+    );
+
+    if (committedTarget) {
+      setShoppingOfferTarget(committedTarget);
+    }
+
+    if (lastCommittedRemoval) {
+      clearLastCommittedRemoval();
+    }
+  }, [clearLastCommittedRemoval, lastCommittedRemoval]);
+
+  useEffect(() => {
+    setShoppingOfferTarget(null);
+    setQuickEditItem(null);
+  }, [activeSpaceId]);
 
   const applyFilter = (nextFilter: InventoryViewFilter) => {
     setFilter(nextFilter);
@@ -205,7 +227,7 @@ export default function InventoryScreen() {
       : null;
   const inventoryActionNoticeTone = actionError
     ? "danger"
-    : visibleRemovalNotice || successMessage
+    : visibleRemovalNotice || shoppingOfferTarget
       ? "success"
       : null;
   const inventoryActionNotice = actionError ? (
@@ -223,54 +245,45 @@ export default function InventoryScreen() {
       }}
     />
   ) : visibleRemovalNotice ? (
-    shoppingTarget ? (
-      <AffiliateEntryImpression placement="inventory_consumed">
-        <FeedbackBanner
-          testID="inventory-action-notice"
-          tone="success"
-          title={`${shoppingTarget.displayName} 다 썼어요.`}
-          actionLabel="장보기에서 찾아볼게요"
-          speechActionPlacement="inside"
-          onAction={() => {
-            trackAffiliateEntryTap("inventory_consumed");
-            router.push({
-              pathname: "/(tabs)/shop",
-              params: {
-                q: shoppingTarget.displayName,
-                source: "inventory_consumed",
-              },
-            });
-          }}
-          transient
-          speechDensity="default"
-          speechTextVariant="bodySmall"
-          onDismiss={() => {
-            setDismissedRemovalNotice(visibleRemovalNotice);
-            setShoppingTarget(null);
-          }}
-        />
-      </AffiliateEntryImpression>
-    ) : (
-      <FeedbackBanner
-        testID="inventory-action-notice"
-        tone="success"
-        title={visibleRemovalNotice}
-        transient
-        speechDensity="default"
-        speechTextVariant="bodySmall"
-        onDismiss={() => setDismissedRemovalNotice(visibleRemovalNotice)}
-      />
-    )
-  ) : successMessage ? (
     <FeedbackBanner
       testID="inventory-action-notice"
       tone="success"
-      title={successMessage}
+      title={visibleRemovalNotice}
+      actionLabel="되돌릴게요"
+      speechActionPlacement="inside"
+      onAction={() => {
+        deferredRemoval.undoRemoval();
+        setShoppingOfferTarget(null);
+      }}
       transient
       speechDensity="default"
       speechTextVariant="bodySmall"
-      onDismiss={() => setSuccessMessage(null)}
+      onDismiss={() => setDismissedRemovalNotice(visibleRemovalNotice)}
     />
+  ) : shoppingOfferTarget ? (
+    <AffiliateEntryImpression placement="inventory_consumed">
+      <FeedbackBanner
+        testID="inventory-action-notice"
+        tone="success"
+        title={`${shoppingOfferTarget.displayName} 다 썼어요.`}
+        actionLabel="장보기에서 찾아볼게요"
+        speechActionPlacement="inside"
+        onAction={() => {
+          trackAffiliateEntryTap("inventory_consumed");
+          router.push({
+            pathname: "/(tabs)/shop",
+            params: {
+              q: shoppingOfferTarget.displayName,
+              source: "inventory_consumed",
+            },
+          });
+        }}
+        transient
+        speechDensity="default"
+        speechTextVariant="bodySmall"
+        onDismiss={() => setShoppingOfferTarget(null)}
+      />
+    </AffiliateEntryImpression>
   ) : null;
   const inventoryStatusHero = useMemo(
     () =>
@@ -388,8 +401,9 @@ export default function InventoryScreen() {
 
   const enterSelectionMode = (initialId?: string) => {
     setFilterSheetVisible(false);
+    setQuickEditItem(null);
     setIsSelectionMode(true);
-    setSuccessMessage(null);
+    setShoppingOfferTarget(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setSelectedIds(initialId ? [initialId] : []);
@@ -421,7 +435,7 @@ export default function InventoryScreen() {
   };
 
   const openCleanupSheet = (item: InventoryItem) => {
-    setSuccessMessage(null);
+    setShoppingOfferTarget(null);
     setActionErrorMessage(null);
     deferredRemoval.clearError();
     setCleanupItem(item);
@@ -433,13 +447,17 @@ export default function InventoryScreen() {
       return;
     }
 
-    handleEditItem(item);
+    setQuickEditItem(item);
   };
 
-  const handleEditItem = (item: InventoryItem) => {
+  const handleEditItem = (
+    item: InventoryItem,
+    mode: InventoryEditMode = "product",
+  ) => {
+    setQuickEditItem(null);
     router.push({
       pathname: "/inventory/[id]",
-      params: { id: item.id },
+      params: { id: item.id, mode },
     });
   };
 
@@ -457,44 +475,41 @@ export default function InventoryScreen() {
   };
 
   const handleConfirmBatchDiscard = () => {
-    if (!selectedIds.length || batchDiscardMutation.isPending) {
+    if (!selectedIds.length) {
       return;
     }
 
-    const idsToDiscard = [...selectedIds];
+    const itemsToDiscard = trackedItems.filter((item) =>
+      selectedIdSet.has(item.id),
+    );
+
+    if (!itemsToDiscard.length) {
+      return;
+    }
 
     // Optimistic: leave selection mode immediately so the next pick feels instant.
     setActionErrorMessage(null);
+    setShoppingOfferTarget(null);
     deferredRemoval.clearError();
     setSelectedIds([]);
     setIsSelectionMode(false);
-    setSuccessMessage(
-      `${idsToDiscard.length}개 재료를 정리했어요. 장고도 한숨 돌렸어요.`,
-    );
 
-    void batchDiscardMutation.mutateAsync(idsToDiscard).catch((error) => {
-      setSuccessMessage(null);
-      setActionErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-      );
+    itemsToDiscard.forEach((item) => {
+      deferredRemoval.scheduleRemoval(item, "discard");
     });
   };
 
   const handleConsumeAll = (item: InventoryItem) => {
     setCleanupItem(null);
-    setSuccessMessage(null);
     setActionErrorMessage(null);
-    setShoppingTarget(item);
+    setShoppingOfferTarget(null);
     deferredRemoval.scheduleRemoval(item, "consume");
   };
 
   const handleConsumePartial = (item: InventoryItem, amountBase: number) => {
     setCleanupItem(null);
-    setSuccessMessage(null);
     setActionErrorMessage(null);
-    setShoppingTarget(null);
+    setShoppingOfferTarget(null);
     deferredRemoval.scheduleRemoval(item, "consume", amountBase);
   };
 
@@ -504,14 +519,13 @@ export default function InventoryScreen() {
         variant="danger"
         icon={Trash2}
         onPress={handleConfirmBatchDiscard}
-        loading={batchDiscardMutation.isPending}
         disabled={!selectedIds.length}
         fullWidth
         testID="inventory-discard-selected-button"
       >
         {selectedIds.length
-          ? `${selectedIds.length}개 정리할게요`
-          : "정리할 재료를 골라 주세요"}
+          ? `${selectedIds.length}개 폐기할게요`
+          : "폐기할 재료를 골라 주세요"}
       </Button>
     ) : (
       <Button
@@ -746,6 +760,13 @@ export default function InventoryScreen() {
         onClose={() => setCleanupItem(null)}
         onConsumeAll={handleConsumeAll}
         onConsumePartial={handleConsumePartial}
+      />
+
+      <InventoryQuickEditSheet
+        item={quickEditItem}
+        resolveLocationLabel={resolveLabel}
+        onClose={() => setQuickEditItem(null)}
+        onEdit={handleEditItem}
       />
 
       <InventoryLocationFilterSheet

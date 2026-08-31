@@ -197,6 +197,9 @@ export const homeScreenStyles = StyleSheet.create({
   trafficLampActiveDanger: {
     backgroundColor: colors.dangerSoft,
   },
+  trafficLampActiveUnknown: {
+    backgroundColor: colors.mutedSurface,
+  },
   trafficLampActiveWarning: {
     backgroundColor: colors.warningSoft,
   },

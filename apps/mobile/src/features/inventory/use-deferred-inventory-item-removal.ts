@@ -1,7 +1,5 @@
 import {
   applyConsumedAmountToInventoryItem,
-  formatBaseQuantity,
-  formatDateKoreanCompact,
   type InventoryItem,
 } from "@expirymate/shared";
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
@@ -15,22 +13,18 @@ import {
 import { useAuth } from "../auth/use-auth";
 import { useActiveSpace } from "../spaces/space-provider";
 import {
+  buildInventoryUndoLabel,
+  type CommittedInventoryRemoval,
+  type InventoryRemovalAction,
+  type InventoryRemovalEntry,
   inventoryRemovalQueryKeys,
   isPendingForDifferentSpace,
 } from "./deferred-inventory-removal";
 
 const UNDO_WINDOW_MS = 5000;
 
-export type InventoryRemovalAction = "consume" | "discard";
-
-type PendingRemovalEntry = {
-  action: InventoryRemovalAction;
-  item: InventoryItem;
-  amountBase: number;
-};
-
 type PendingRemoval = {
-  entries: PendingRemovalEntry[];
+  entries: InventoryRemovalEntry[];
   timeoutId: ReturnType<typeof setTimeout>;
   spaceId: string;
 };
@@ -81,7 +75,7 @@ function patchItemInCache(
 }
 
 async function submitRemovals(
-  entries: PendingRemovalEntry[],
+  entries: InventoryRemovalEntry[],
   spaceId: string,
 ) {
   const consumedEntries = entries.filter((entry) => entry.action === "consume");
@@ -141,6 +135,8 @@ export function useDeferredInventoryItemRemoval() {
   const [undoLabel, setUndoLabel] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCommitting, setIsCommitting] = useState(false);
+  const [lastCommittedRemoval, setLastCommittedRemoval] =
+    useState<CommittedInventoryRemoval | null>(null);
 
   const commitPinned = useCallback(
     async (pending: PendingRemoval, options: { silent: boolean }) => {
@@ -162,7 +158,14 @@ export function useDeferredInventoryItemRemoval() {
           queryClient.invalidateQueries({ queryKey: keys.shopping }),
           queryClient.invalidateQueries({ queryKey: keys.reorderPreview }),
         ]);
+        if (!options.silent) {
+          setLastCommittedRemoval({
+            entries: pending.entries,
+            spaceId: pending.spaceId,
+          });
+        }
       } catch (error) {
+        setLastCommittedRemoval(null);
         restoreItemsToCache(queryClient, keys.inventory, originals);
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
@@ -224,23 +227,6 @@ export function useDeferredInventoryItemRemoval() {
     [commitPinned, takePending],
   );
 
-  const buildUndoLabel = (entries: PendingRemovalEntry[]) => {
-    if (entries.length === 1) {
-      const [{ action, item, amountBase }] = entries;
-      if (action === "consume" && amountBase < item.quantityBase) {
-        return `${item.displayName} ${formatBaseQuantity(amountBase, item.unitCode)}를 빼 뒀어요`;
-      }
-
-      const itemLabel = item.expiryDate
-        ? `${formatDateKoreanCompact(item.expiryDate)}까지인 ${item.displayName}`
-        : `기한을 확인할 ${item.displayName}`;
-
-      return `${itemLabel}을(를) 보관함에서 빼 뒀어요`;
-    }
-
-    return `${entries.length}개 재료를 정리했어요`;
-  };
-
   const scheduleRemoval = useCallback(
     (
       item: InventoryItem,
@@ -254,6 +240,7 @@ export function useDeferredInventoryItemRemoval() {
 
       flushPendingIfSpaceChanged(activeSpaceId);
       setErrorMessage(null);
+      setLastCommittedRemoval(null);
 
       const previous = pendingRef.current;
       const alreadyQueued = previous?.entries.some(
@@ -290,7 +277,7 @@ export function useDeferredInventoryItemRemoval() {
         clearTimeout(previous.timeoutId);
       }
 
-      setUndoLabel(buildUndoLabel(nextEntries));
+      setUndoLabel(buildInventoryUndoLabel(nextEntries));
 
       const timeoutId = setTimeout(() => {
         void commitPending();
@@ -317,6 +304,8 @@ export function useDeferredInventoryItemRemoval() {
       return;
     }
 
+    setLastCommittedRemoval(null);
+
     restoreItemsToCache(
       queryClient,
       inventoryRemovalQueryKeys(sessionUserIdRef.current, pending.spaceId)
@@ -327,6 +316,10 @@ export function useDeferredInventoryItemRemoval() {
 
   const clearError = useCallback(() => {
     setErrorMessage(null);
+  }, []);
+
+  const clearLastCommittedRemoval = useCallback(() => {
+    setLastCommittedRemoval(null);
   }, []);
 
   useEffect(() => {
@@ -350,9 +343,11 @@ export function useDeferredInventoryItemRemoval() {
   return {
     undoLabel,
     errorMessage,
+    lastCommittedRemoval,
     scheduleRemoval,
     undoRemoval,
     clearError,
+    clearLastCommittedRemoval,
     /** True only while the server commit is in flight — not during the undo window. */
     isPending: isCommitting,
   };

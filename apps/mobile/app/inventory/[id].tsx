@@ -38,6 +38,11 @@ import {
   InventoryProductNameStep,
   InventoryQuantityStep,
 } from "../../src/features/inventory/inventory-step-fields";
+import {
+  inventoryEditStepForMode,
+  parseInventoryEditMode,
+  type InventoryEditMode,
+} from "../../src/features/inventory/inventory-form-copy";
 import { getInventoryItem, updateInventoryItem } from "../../src/services/api";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
@@ -78,11 +83,20 @@ const EDIT_STEPS: Array<{
   },
 ];
 
+const EDIT_SCREEN_TITLES: Record<InventoryEditMode, string> = {
+  product: "내용 바꾸기",
+  quantity: "남은 양 바꾸기",
+  expiry: "유통기한 바꾸기",
+  location: "보관 위치 바꾸기",
+};
+
 export default function InventoryEditScreen() {
-  const { id } = useLocalSearchParams<{
+  const { id, mode } = useLocalSearchParams<{
     id: string;
-    mode?: string;
+    mode?: string | string[];
   }>();
+  const editMode = parseInventoryEditMode(mode);
+  const initialEditStep = inventoryEditStepForMode(editMode);
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
@@ -105,14 +119,23 @@ export default function InventoryEditScreen() {
     ),
     id,
   ] as const;
-  const [editStep, setEditStep] = useState<EditStep>("product");
-  const [showLocationPicker, setShowLocationPicker] = useState(false);
+  const [editStep, setEditStep] = useState<EditStep>(initialEditStep);
+  const [editStepHistory, setEditStepHistory] = useState<EditStep[]>([]);
+  const [showLocationPicker, setShowLocationPicker] = useState(
+    editMode === "location",
+  );
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
   const [addLocationVisible, setAddLocationVisible] = useState(false);
   const [newLocationLabel, setNewLocationLabel] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { selectableOptions, resolveLabel, createMutation } =
     useStorageLocations();
+
+  useEffect(() => {
+    setEditStep(initialEditStep);
+    setEditStepHistory([]);
+    setShowLocationPicker(editMode === "location");
+  }, [editMode, id, initialEditStep]);
 
   const itemQuery = useQuery({
     queryKey: itemKey,
@@ -195,6 +218,11 @@ export default function InventoryEditScreen() {
   const extraDetailsLabel = extraDetailsRowLabel({ brand, category, notes });
   const stepIndex = EDIT_STEPS.findIndex((step) => step.key === editStep);
   const isLastEditStep = editStep === "expiry";
+  const isQuickEdit = editMode !== "product";
+  const isSaveAction = isQuickEdit || isLastEditStep;
+  const activeEditStep =
+    EDIT_STEPS[Math.max(stepIndex, 0)] ?? EDIT_STEPS[0];
+  const visibleEditSteps = isQuickEdit ? [activeEditStep] : EDIT_STEPS;
   const canGoNext = isLastEditStep
     ? Boolean(
         displayName &&
@@ -203,11 +231,13 @@ export default function InventoryEditScreen() {
       ) && quantity > 0
     : (editStep === "product" && Boolean(displayName)) ||
       (editStep === "quantity" && Boolean(storageLocation) && quantity > 0);
-  const primaryCtaLabel = isLastEditStep
-    ? "이렇게 바꿔둘까요?"
-    : editStep === "product"
-      ? "이 재료로 할게요"
-      : "이만큼 둘게요";
+  const primaryCtaLabel = isQuickEdit
+    ? "바꿔둘게요"
+    : isLastEditStep
+      ? "이렇게 바꿔둘까요?"
+      : editStep === "product"
+        ? "이 재료로 할게요"
+        : "이만큼 둘게요";
 
   const item = itemQuery.data;
   const isFinalStatus =
@@ -225,33 +255,39 @@ export default function InventoryEditScreen() {
   }, []);
 
   const goToPreviousEditStep = useCallback(() => {
-    if (stepIndex <= 0) {
+    const previousStep = editStepHistory.at(-1);
+
+    if (!previousStep) {
       leaveScreen();
       return;
     }
 
-    setEditStep(EDIT_STEPS[stepIndex - 1].key);
-  }, [leaveScreen, stepIndex]);
+    setEditStepHistory((current) => current.slice(0, -1));
+    setEditStep(previousStep);
+  }, [editStepHistory, leaveScreen]);
 
   const goToEditStep = useCallback(
     (target: EditStep, options?: { openLocation?: boolean }) => {
       setShowLocationPicker(Boolean(options?.openLocation));
-      setEditStep(target);
+      if (editStep !== target) {
+        setEditStepHistory((history) => [...history, editStep]);
+        setEditStep(target);
+      }
     },
-    [],
+    [editStep],
   );
 
   const goToNextEditStep = () => {
     const nextStep = EDIT_STEPS[Math.min(EDIT_STEPS.length - 1, stepIndex + 1)];
-    setEditStep(nextStep.key);
+    goToEditStep(nextStep.key);
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "내용 바꾸기",
+      title: EDIT_SCREEN_TITLES[editMode],
       headerLeft: () => <HeaderBackButton onPress={goToPreviousEditStep} />,
     });
-  }, [goToPreviousEditStep, navigation]);
+  }, [editMode, goToPreviousEditStep, navigation]);
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener(
@@ -367,9 +403,9 @@ export default function InventoryEditScreen() {
             </AppText>
           ) : null}
           <Button
-            icon={isLastEditStep ? CheckCircle2 : ChevronRight}
+            icon={isSaveAction ? CheckCircle2 : ChevronRight}
             iconPosition="right"
-            onPress={isLastEditStep ? handleSave : goToNextEditStep}
+            onPress={isSaveAction ? handleSave : goToNextEditStep}
             loading={updateMutation.isPending}
             disabled={!canGoNext}
             fullWidth
@@ -390,12 +426,12 @@ export default function InventoryEditScreen() {
       ) : null}
 
       <StepFlow
-        steps={EDIT_STEPS}
-        currentIndex={Math.max(stepIndex, 0)}
+        steps={visibleEditSteps}
+        currentIndex={isQuickEdit ? 0 : Math.max(stepIndex, 0)}
         onBack={goToPreviousEditStep}
         density="compact"
         hideBack
-        guideMessage={EDIT_STEPS[Math.max(stepIndex, 0)]?.guideMessage}
+        guideMessage={activeEditStep.guideMessage}
         guideMood="speak"
       >
         {editStep === "product" ? (

@@ -17,7 +17,7 @@ interface StatCardProps {
   label: string;
   value: number;
   suffix?: string;
-  tone?: "default" | "warning" | "danger" | "success";
+  tone?: "default" | "unknown" | "warning" | "danger" | "success";
   /**
    * `inline` = open metric strip.
    * `card` = bordered tile.
@@ -172,6 +172,12 @@ const tones = {
     valueColor: colors.text,
     labelColor: colors.subtext,
   },
+  unknown: {
+    backgroundColor: colors.mutedSurface,
+    borderColor: colors.border,
+    valueColor: colors.mutedText,
+    labelColor: colors.subtext,
+  },
   warning: {
     backgroundColor: colors.warningSoft,
     borderColor: colors.warningSoft,
@@ -193,6 +199,9 @@ const tones = {
 };
 
 const trafficLamps: Record<ExpiryTrafficTone, { glow: string }> = {
+  unknown: {
+    glow: colors.mutedText,
+  },
   danger: {
     glow: colors.citrusGrapefruit,
   },

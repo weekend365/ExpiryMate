@@ -1,10 +1,16 @@
-import type { InventoryItem } from "@expirymate/shared";
+import {
+  formatDateKoreanCompact,
+  formatInventoryQuantity,
+  type InventoryItem,
+} from "@expirymate/shared";
 import { router } from "expo-router";
 import {
+  CalendarDays,
   Check,
   ListChecks,
   MapPin,
   Minus,
+  Package,
   PenLine,
   Trash2,
 } from "lucide-react-native";
@@ -14,7 +20,73 @@ import { BottomSheet } from "../../components/BottomSheet";
 import { Button } from "../../components/Button";
 import { colors, spacing } from "../../shared/theme";
 import type { InventoryFacetCounts } from "./filters";
+import type { InventoryEditMode } from "./inventory-form-copy";
 import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
+
+export function InventoryQuickEditSheet({
+  item,
+  resolveLocationLabel,
+  onClose,
+  onEdit,
+}: {
+  item: InventoryItem | null;
+  resolveLocationLabel: (key: string) => string;
+  onClose: () => void;
+  onEdit: (item: InventoryItem, mode: InventoryEditMode) => void;
+}) {
+  const expiryLabel = item?.expiryDate
+    ? `${formatDateKoreanCompact(item.expiryDate)}까지`
+    : "기한 확인 필요";
+  const summary = item
+    ? `${resolveLocationLabel(item.storageLocation)} · ${formatInventoryQuantity(item)} · ${expiryLabel}`
+    : undefined;
+
+  return (
+    <BottomSheet
+      visible={item !== null}
+      onClose={onClose}
+      title={item?.displayName ?? "재료 빠르게 바꾸기"}
+      description={summary}
+    >
+      {item ? (
+        <View style={styles.entryMethodActions}>
+          <Button
+            icon={Package}
+            onPress={() => onEdit(item, "quantity")}
+            fullWidth
+            variant="secondary"
+          >
+            남은 양 바꾸기
+          </Button>
+          <Button
+            icon={CalendarDays}
+            onPress={() => onEdit(item, "expiry")}
+            fullWidth
+            variant="surface"
+          >
+            유통기한 바꾸기
+          </Button>
+          <Button
+            icon={MapPin}
+            onPress={() => onEdit(item, "location")}
+            fullWidth
+            variant="surface"
+          >
+            보관 위치 바꾸기
+          </Button>
+          <Button
+            icon={PenLine}
+            onPress={() => onEdit(item, "product")}
+            fullWidth
+            variant="surface"
+          >
+            전체 내용 수정하기
+          </Button>
+        </View>
+      ) : null}
+    </BottomSheet>
+  );
+}
 
 export function InventoryItemActionsSheet({
   item,

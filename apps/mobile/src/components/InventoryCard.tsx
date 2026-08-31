@@ -6,7 +6,7 @@ import {
   resolveStorageLocationLabel,
   type InventoryItem,
 } from "@expirymate/shared";
-import { Check, Trash2 } from "lucide-react-native";
+import { Check, CircleMinus } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
@@ -68,7 +68,7 @@ export function InventoryCard({
             ? selected
               ? "선택됨. 다시 누르면 선택을 해제해요."
               : "누르면 정리할 재료로 골라요."
-            : "누르면 이 재료의 내용을 수정할 수 있어요."
+            : "누르면 바꿀 내용을 고를 수 있어요."
         }
         accessibilityState={selectionMode ? { selected } : undefined}
         style={({ pressed }) => [
@@ -135,7 +135,7 @@ export function InventoryCard({
           testID="inventory-item-cleanup-button"
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel={`${item.displayName} 정리할게요`}
+          accessibilityLabel={`${item.displayName} 사용한 양 반영할게요`}
           accessibilityHint="전부 사용했는지 일부만 사용했는지 고를 수 있어요."
           style={({ pressed }) => [
             styles.trailingHit,
@@ -143,8 +143,8 @@ export function InventoryCard({
             pressed && styles.pressed,
           ]}
         >
-          <Trash2
-            color={colors.danger}
+          <CircleMinus
+            color={colors.primary}
             size={spacing.sm + spacing.xxs}
             strokeWidth={2.4}
           />

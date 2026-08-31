@@ -500,7 +500,7 @@ export default function HomeScreen() {
                   style={({ pressed }) => [
                     styles.trafficLampPressable,
                     isRegular && styles.trafficLampPressableRegular,
-                    unknownExpiryCount > 0 && styles.trafficLampActiveWarning,
+                    unknownExpiryCount > 0 && styles.trafficLampActiveUnknown,
                     pressed && styles.trafficLampPressablePressed,
                   ]}
                   onPress={() => openInventoryFilter("unknown")}
@@ -512,7 +512,7 @@ export default function HomeScreen() {
                     variant="traffic"
                     label="확인"
                     value={unknownExpiryCount}
-                    tone="warning"
+                    tone="unknown"
                     compact={!isRegular}
                     showGlow={false}
                   />

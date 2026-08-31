@@ -4,6 +4,35 @@ import {
   calculateDaysLeftUntilExpiry,
 } from "@expirymate/shared";
 
+export type InventoryEditMode =
+  | "product"
+  | "quantity"
+  | "expiry"
+  | "location";
+
+const inventoryEditModes = new Set<InventoryEditMode>([
+  "product",
+  "quantity",
+  "expiry",
+  "location",
+]);
+
+export function parseInventoryEditMode(
+  value: string | string[] | undefined,
+): InventoryEditMode {
+  const raw = Array.isArray(value) ? value[0] : value;
+
+  return inventoryEditModes.has(raw as InventoryEditMode)
+    ? (raw as InventoryEditMode)
+    : "product";
+}
+
+export function inventoryEditStepForMode(
+  mode: InventoryEditMode,
+): Exclude<InventoryEditMode, "location"> {
+  return mode === "location" ? "quantity" : mode;
+}
+
 export const QUICK_EXPIRY_OPTIONS = [
   { label: "오늘", days: 0 },
   { label: "내일", days: 1 },
