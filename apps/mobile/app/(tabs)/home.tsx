@@ -445,13 +445,6 @@ export default function HomeScreen() {
             )}
           </View>
 
-          {reorderPreview.data?.group ? (
-            <HomeReorderCard
-              preview={reorderPreview.data}
-              onOpenShopping={handleOpenShopping}
-            />
-          ) : null}
-
           <View style={styles.trafficGroup}>
             <HomeSectionHeader
               title="유통기한 현황"
@@ -590,6 +583,13 @@ export default function HomeScreen() {
               </View>
             )}
           </View>
+
+          {reorderPreview.data?.group ? (
+            <HomeReorderCard
+              preview={reorderPreview.data}
+              onOpenShopping={handleOpenShopping}
+            />
+          ) : null}
         </ScrollView>
       </View>
       <IngredientEntryMethodSheet
