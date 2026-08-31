@@ -616,7 +616,7 @@ export function ScannerCameraExperience() {
                   <Pressable
                     onPress={scanner.confirmWithManualExpiry}
                     accessibilityRole="button"
-                    accessibilityLabel="유통기한이 안 보여서 직접 고를게요"
+                    accessibilityLabel="유통기한 직접 선택"
                   style={({ pressed }) => [
                     styles.manualAction,
                     shouldStackCameraActions && styles.manualActionStacked,
@@ -636,7 +636,7 @@ export function ScannerCameraExperience() {
                   <Pressable
                     onPress={handleManualRegistration}
                     accessibilityRole="button"
-                    accessibilityLabel="바코드 없이 직접 입력할게요"
+                    accessibilityLabel="바코드 없이 직접 입력"
                   style={({ pressed }) => [
                     styles.manualAction,
                     shouldStackCameraActions && styles.manualActionStacked,
@@ -648,7 +648,7 @@ export function ScannerCameraExperience() {
                       size={spacing.sm + spacing.xxs}
                       strokeWidth={2.4}
                     />
-                    <AppText style={styles.manualActionLabel}>직접 입력할게요</AppText>
+                    <AppText style={styles.manualActionLabel}>직접 입력</AppText>
                   </Pressable>
                 )}
               </View>

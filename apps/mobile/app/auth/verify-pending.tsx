@@ -11,7 +11,7 @@ import {
   colors,
   fontFamily,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   secondaryLink: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
   },

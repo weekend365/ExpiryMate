@@ -180,7 +180,7 @@ export function ScannerConfirmSheet({
                 fullWidth
                 testID="scanner-scan-next-button"
               >
-                다음 재료도 스캔할게요
+                다음 재료 스캔
               </Button>
               <Button
                 icon={PenLine}
@@ -189,7 +189,7 @@ export function ScannerConfirmSheet({
                 fullWidth
                 testID="scanner-edit-saved-button"
               >
-                방금 넣은 내용 고칠게요
+                방금 추가한 재료 수정
               </Button>
               <Button
                 variant="surface"
@@ -197,7 +197,7 @@ export function ScannerConfirmSheet({
                 fullWidth
                 testID="scanner-finish-button"
               >
-                그만 추가할래요
+                추가 완료
               </Button>
             </>
           ) : null}
@@ -217,7 +217,7 @@ export function ScannerConfirmSheet({
               disabled={isBusy}
               fullWidth
             >
-              다시 스캔할게요
+              다시 스캔
             </Button>
           ) : null}
           {!quickSavedItem && canQuickSave ? (
@@ -228,7 +228,7 @@ export function ScannerConfirmSheet({
               fullWidth
               testID="scanner-detailed-edit-button"
             >
-              자세히 고칠게요
+              상세 정보 수정
             </Button>
           ) : null}
           {!quickSavedItem && prohibitedContribution ? (
@@ -263,11 +263,11 @@ export function ScannerConfirmSheet({
             >
               {canQuickSave
                 ? quickSaveError
-                  ? "다시 넣어볼게요"
-                  : "냉장고에 넣을게요"
+                  ? "다시 추가"
+                  : "재료 추가"
                 : prohibitedContribution
                   ? "수정 후 다시 시도"
-                  : "양과 위치 맞출게요"}
+                  : "수량·위치 입력"}
             </Button>
           ) : null}
         </View>
@@ -304,7 +304,7 @@ export function ScannerConfirmSheet({
               </AppText>
               {!needsManualName && !needsNameConfirmation ? (
                 <AppText style={styles.manualNameHint}>
-                  이름이 다르면 ‘자세히 고칠게요’에서 바꿀 수 있어요.
+                  이름이 다르면 ‘상세 정보 수정’에서 바꿀 수 있어요.
                 </AppText>
               ) : null}
             </View>

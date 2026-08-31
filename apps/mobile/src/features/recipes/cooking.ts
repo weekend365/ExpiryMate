@@ -116,7 +116,7 @@ export function remainingQuantityBase(available: number, consumeAmount: number) 
 }
 
 export function getCookingStepCta(isLastCookingStep: boolean) {
-  return isLastCookingStep ? "요리했어요" : "이 단계까지 했어요";
+  return isLastCookingStep ? "요리 완료" : "단계 완료";
 }
 
 export function getInventoryApplyCta(
@@ -124,7 +124,7 @@ export function getInventoryApplyCta(
   isEditing = false,
 ) {
   if (!hasSelection) {
-    return "재고는 그대로 둘게요";
+    return "재고 반영 안 함";
   }
   return isEditing ? "수정한 사용량으로 반영" : "추천 사용량으로 반영";
 }
@@ -490,12 +490,12 @@ export function remainingPrepCount(checkedCount: number, totalCount: number) {
 
 export function getPrepContinueCta(uncheckedCount: number) {
   if (uncheckedCount <= 0) {
-    return "재료가 준비됐어요";
+    return "조리 시작";
   }
   if (uncheckedCount === 1) {
-    return "이 재료 빼고 시작할게요";
+    return "이 재료 제외하고 시작";
   }
-  return `${uncheckedCount}개는 빼고 시작할게요`;
+  return `${uncheckedCount}개 제외하고 시작`;
 }
 
 export function getCookingGuideMessage(

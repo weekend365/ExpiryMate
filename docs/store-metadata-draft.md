@@ -2,7 +2,7 @@
 status: draft
 owner: product-release
 last_reviewed: 2026-08-29
-source_of_truth: true
+source_of_truth: false
 data_as_of: 2026-08-29
 ---
 

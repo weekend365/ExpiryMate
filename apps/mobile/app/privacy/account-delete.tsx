@@ -15,7 +15,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -51,10 +51,10 @@ export default function AccountDeleteScreen() {
           if (message.includes("소유권")) {
             Alert.alert("먼저 소유권을 넘겨 주세요", message, [
               {
-                text: "공간 관리로 갈게요",
+                text: "공간 관리로 이동",
                 onPress: () => router.push("/settings/spaces"),
               },
-              { text: "나중에 할게요", style: "cancel" },
+              { text: "나중에", style: "cancel" },
             ]);
             return;
           }
@@ -76,7 +76,7 @@ export default function AccountDeleteScreen() {
             onPress={() => setConfirmSheetOpen(true)}
             fullWidth
           >
-            계정을 정리할게요
+          계정 삭제
           </Button>
         }
       >
@@ -166,7 +166,7 @@ export default function AccountDeleteScreen() {
               onPress={() => setConfirmSheetOpen(false)}
               fullWidth
             >
-              조금 더 생각해 볼게요
+              취소
             </Button>
             <Button
               variant="danger"
@@ -174,7 +174,7 @@ export default function AccountDeleteScreen() {
               loading={deleteAccountMutation.isPending}
               fullWidth
             >
-              네, 정리할게요
+              계정 영구 삭제
             </Button>
           </View>
         }
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

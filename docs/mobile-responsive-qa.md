@@ -67,9 +67,11 @@ pnpm --filter @expirymate/mobile exec vitest run \
   src/shared/design-token-contract.test.ts
 ```
 
-The `mobile-layout` CI matrix captures eight critical states for each profile.
-Pull requests compare them with the latest successful `main` artifacts and
-upload current, baseline, diff, JUnit, and JSON comparison evidence.
+The `mobile-layout` CI matrix captures one canonical state for every user-facing
+route plus the additional flow states declared in
+`apps/mobile/scripts/layout-screenshot-manifest.mjs`. Pull requests compare them
+with the latest successful `main` artifacts and upload current, baseline, diff,
+JUnit, and JSON comparison evidence.
 
 ## Google Scanner manifest note
 

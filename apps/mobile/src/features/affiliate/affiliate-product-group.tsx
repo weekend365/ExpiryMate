@@ -16,7 +16,7 @@ import {
 import { AppText } from "../../components/AppText";
 import { trackMonetizationEvent } from "../../services/api";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+import { colors, radius, spacing, controlSize } from "../../shared/theme";
 import { AffiliateCta } from "./affiliate-cta";
 import { visibleIngredientReason } from "./affiliate-group-reason";
 import { uniqueProductsById } from "./unique-affiliate-products";
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   headingBand: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingVertical: spacing.xs,
   },
   productCardStacked: {

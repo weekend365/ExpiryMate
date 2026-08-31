@@ -108,7 +108,7 @@ export default function SupportSettingsScreen() {
         icon={MessageCircleHeart}
         fullWidth
       >
-        이 내용으로 보낼까요?
+        문의 보내기
       </Button>
     </SettingsScreen>
   );

@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { BottomSheet } from "../../components/BottomSheet";
-import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+import { colors, radius, spacing, controlSize } from "../../shared/theme";
 import {
   photoDraftForSpace,
   preferredEntryMethodForSpace,
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   option: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
     opacity: 0.84,
   },
   iconWrap: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,

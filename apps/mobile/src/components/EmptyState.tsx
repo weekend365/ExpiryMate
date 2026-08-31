@@ -21,8 +21,8 @@ interface EmptyStateProps {
    * `card` = bordered surface for standalone empty screens.
    */
   variant?: "plain" | "card";
-  /** Hide mascot even when mood is set — use when another hero already shows 장고. */
-  showMascot?: boolean;
+  /** Determines the default presentation and communicates state intent. */
+  kind: "empty" | "no-results" | "error" | "success" | "loading";
 }
 
 export function EmptyState({
@@ -34,9 +34,10 @@ export function EmptyState({
   onAction,
   accessory,
   variant = "card",
-  showMascot = true,
+  kind,
 }: EmptyStateProps) {
-  const shouldShowMascot = Boolean(mood) && showMascot;
+  const mascotByDefault = kind === "empty" || kind === "success";
+  const shouldShowMascot = Boolean(mood) && mascotByDefault;
 
   return (
     <View style={[styles.root, variant === "card" ? styles.card : styles.plain]}>

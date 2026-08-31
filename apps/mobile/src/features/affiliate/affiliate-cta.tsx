@@ -6,7 +6,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   block: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     paddingHorizontal: spacing.sm,
   },

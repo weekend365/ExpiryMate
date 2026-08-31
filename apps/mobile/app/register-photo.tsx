@@ -82,7 +82,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
 } from "../src/shared/theme";
 
 type PhotoIntakeStep = "choose" | "loading" | "review" | "done";
@@ -655,16 +655,16 @@ export default function RegisterPhotoScreen() {
       >
         {canSubmit
           ? readyCount === items.length
-            ? `${readyCount}가지 냉장고에 넣을게요`
-            : `확인된 ${readyCount}가지 먼저 넣을게요`
-          : `${attentionCount}가지 확인한 뒤 넣을게요`}
+              ? `${readyCount}개 재료 추가`
+              : `확인된 ${readyCount}개 먼저 추가`
+            : `${attentionCount}개 확인 필요`}
       </Button>
     ) : step === "done" ? (
       <Button
         onPress={() => router.replace(registrationReturnHref(returnTo))}
         fullWidth
       >
-        냉장고로 돌아갈게요
+            보관함으로 이동
       </Button>
     ) : null;
   const gateIssue = photoAccessIssue(
@@ -723,7 +723,6 @@ export default function RegisterPhotoScreen() {
                 tone={flowIssue.tone ?? "danger"}
                 title={flowIssue.title}
                 description={flowIssue.description}
-                showMascot={false}
                 onDismiss={() => setFlowIssue(null)}
               />
             ) : null}
@@ -752,7 +751,7 @@ export default function RegisterPhotoScreen() {
                       )
                     }
                     accessibilityRole="button"
-                    accessibilityLabel={`${option.label}에 둘게요`}
+                    accessibilityLabel={`보관 위치 ${option.label} 선택`}
                     style={({ pressed }) => [
                       styles.pill,
                       pressed && styles.pillPressed,
@@ -1040,7 +1039,7 @@ export default function RegisterPhotoScreen() {
               }}
               fullWidth
             >
-              다른 사진으로 다시 볼게요
+              다른 사진 선택
             </Button>
             <Button
               variant="surface"
@@ -1067,7 +1066,7 @@ export default function RegisterPhotoScreen() {
         description="촬영이나 앨범 선택 전에는 필요한 정보만 간단히 보여 드려요."
         footer={
           <Button onPress={() => setAccessDetailsVisible(false)} fullWidth>
-            확인했어요
+            확인
           </Button>
         }
       >
@@ -1115,8 +1114,8 @@ export default function RegisterPhotoScreen() {
                 광고 보고 사진 분석 1회 받기
               </Button>
             ) : (
-              <Button onPress={() => setAccessGateVisible(false)} fullWidth>
-                확인했어요
+            <Button onPress={() => setAccessGateVisible(false)} fullWidth>
+              확인
               </Button>
             )}
             <Button
@@ -1159,8 +1158,8 @@ export default function RegisterPhotoScreen() {
             fullWidth
           >
             {editingItem && duplicateCandidateIds.has(editingItem.localId)
-              ? "같은 내용이어도 추가할게요"
-              : "이 내용으로 둘게요"}
+              ? "중복으로 추가"
+              : "내용 확인"}
           </Button>
         }
       >
@@ -1171,7 +1170,6 @@ export default function RegisterPhotoScreen() {
                 tone="warning"
                 title="같은 재료가 이미 있거나 겹쳐 보여요"
                 description="이름·단위·자리·기한이 같아요. 수량을 합치거나 별도 묶음으로 둘 수 있어요."
-                showMascot={false}
               />
             ) : null}
             <AppTextInput
@@ -1561,7 +1559,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   pill: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.sm,
     borderRadius: radius.md,
     borderWidth: 1,
@@ -1577,7 +1575,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   itemCard: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     gap: spacing.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
@@ -1615,8 +1613,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   iconButton: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.icon,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -1632,7 +1630,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   actionChip: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,

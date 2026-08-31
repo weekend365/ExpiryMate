@@ -5,7 +5,8 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { X } from "lucide-react-native";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText, type AppTextVariant } from "./AppText";
 import type { MascotMood } from "./Mascot";
@@ -22,8 +23,8 @@ interface FeedbackBannerProps {
   onAction?: () => void;
   /** Keeps the default link below the bubble, or highlights it inside. */
   speechActionPlacement?: "below" | "inside";
-  /** When false, mascot is hidden (compact inline strip). Default true. */
-  showMascot?: boolean;
+  /** `inline` is the default; reserve `mascot` for a screen-level hero notice. */
+  presentation?: "inline" | "mascot";
   /** Event feedback disappears automatically and can be closed immediately. */
   transient?: boolean;
   /** Lets hero placements use the same spacing as Home and Recommendations. */
@@ -74,7 +75,7 @@ export function FeedbackBanner({
   actionLabel,
   onAction,
   speechActionPlacement = "below",
-  showMascot = true,
+  presentation = "inline",
   transient = false,
   speechDensity = "compact",
   speechTextVariant = "bodyStrong",
@@ -82,6 +83,7 @@ export function FeedbackBanner({
   onDismiss,
 }: FeedbackBannerProps) {
   const palette = toneConfig[tone];
+  const showMascot = presentation === "mascot";
   const [isVisible, setIsVisible] = useState(true);
   const [screenReaderEnabled, setScreenReaderEnabled] = useState<
     boolean | null
@@ -89,10 +91,10 @@ export function FeedbackBanner({
   const onDismissRef = useRef(onDismiss);
   onDismissRef.current = onDismiss;
   const { isComfortableText } = useResponsiveLayout();
-  const isTransientJangoNotice = transient && showMascot;
+  const isTransientNotice = transient;
   const hasAction = Boolean(actionLabel && onAction);
   const shouldAutoDismiss = Boolean(
-    isTransientJangoNotice &&
+    isTransientNotice &&
       autoDismissMs !== null &&
       !hasAction &&
       tone !== "danger" &&
@@ -162,7 +164,7 @@ export function FeedbackBanner({
         mood={palette.mascotMood}
         density={speechDensity}
         textVariant={speechTextVariant}
-        onDismiss={isTransientJangoNotice ? dismiss : undefined}
+        onDismiss={isTransientNotice ? dismiss : undefined}
         inlineActionLabel={
           speechActionPlacement === "inside" ? actionLabel : undefined
         }
@@ -187,24 +189,40 @@ export function FeedbackBanner({
       ) : null}
     </View>
   ) : (
-    <View style={styles.copy}>
-      {copy}
-      {actionLabel && onAction ? (
+    <>
+      <View style={styles.copy}>
+        {copy}
+        {actionLabel && onAction ? (
+          <Pressable
+            onPress={onAction}
+            accessibilityRole="button"
+            accessibilityLabel={actionLabel}
+            style={({ pressed }) => [
+              styles.action,
+              pressed && styles.actionPressed,
+            ]}
+          >
+            <AppText variant="bodyStrong" tone="primary">
+              {actionLabel}
+            </AppText>
+          </Pressable>
+        ) : null}
+      </View>
+      {isTransientNotice ? (
         <Pressable
-          onPress={onAction}
+          onPress={dismiss}
           accessibilityRole="button"
-          accessibilityLabel={actionLabel}
+          accessibilityLabel="알림 닫기"
+          hitSlop={spacing.xs}
           style={({ pressed }) => [
-            styles.action,
+            styles.dismissButton,
             pressed && styles.actionPressed,
           ]}
         >
-          <AppText variant="bodyStrong" tone="primary">
-            {actionLabel}
-          </AppText>
+          <X color={colors.disclosureText} size={spacing.sm} strokeWidth={2.4} />
         </Pressable>
       ) : null}
-    </View>
+    </>
   );
 
   const rootStyle = [
@@ -226,7 +244,7 @@ export function FeedbackBanner({
 
 const styles = StyleSheet.create({
   root: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
   },
   speechRoot: {
     alignItems: "stretch",
@@ -234,13 +252,16 @@ const styles = StyleSheet.create({
   inlineRoot: {
     borderRadius: radius.xxl,
     padding: spacing.md,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: spacing.xs,
   },
   speechContent: {
     gap: spacing.xs,
   },
   speechAction: {
     alignSelf: "flex-end",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingHorizontal: spacing.sm,
   },
@@ -248,13 +269,24 @@ const styles = StyleSheet.create({
     opacity: 0.85,
   },
   copy: {
+    flex: 1,
     minWidth: 0,
     gap: spacing.xxs,
   },
   action: {
     alignSelf: "flex-start",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingRight: spacing.sm,
+  },
+  dismissButton: {
+    width: controlSize.icon,
+    height: controlSize.icon,
+    marginTop: -spacing.xs,
+    marginRight: -spacing.xs,
+    borderRadius: radius.lg,
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
   },
 });

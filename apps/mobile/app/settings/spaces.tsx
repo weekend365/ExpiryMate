@@ -21,7 +21,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -69,13 +69,13 @@ export default function SpacesSettingsScreen() {
           onPress={() => setCreateVisible(true)}
           fullWidth
         >
-          냉장고를 하나 더 만들게요
+          냉장고 만들기
         </Button>
       }
     >
       <SettingsGroup title="참여하기">
         <ListRow
-          title="초대 코드로 참여할게요"
+          title="초대 코드로 참여"
           description="가족이나 매장 동료에게 받은 8자리 코드를 입력해요."
           icon={KeyRound}
           last
@@ -85,10 +85,11 @@ export default function SpacesSettingsScreen() {
 
       {error ? (
         <EmptyState
+          kind="error"
           mood="worry"
           title="냉장고 목록을 펼치지 못했어요"
           description={error.message}
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void refetchSpaces();
           }}
@@ -136,7 +137,7 @@ export default function SpacesSettingsScreen() {
             loading={createMutation.isPending}
             fullWidth
           >
-            이 냉장고로 함께 쓸게요
+            냉장고 만들기
           </Button>
         }
       >
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

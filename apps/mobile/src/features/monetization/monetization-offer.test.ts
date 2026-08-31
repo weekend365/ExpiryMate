@@ -19,6 +19,6 @@ describe("personalized monetization offer", () => {
     expect(resolveMonetizationOffer("rewarded_ad").label).toBe(
       REWARDED_AD_CTA_LABEL,
     );
-    expect(REWARDED_AD_CTA_LABEL).toBe("광고 보고 추천 받을게요");
+    expect(REWARDED_AD_CTA_LABEL).toBe("광고 보고 추천받기");
   });
 });

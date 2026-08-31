@@ -74,15 +74,15 @@ describe("inventory form copy helpers", () => {
   });
 
   it("labels extra details as review when any optional field is set", () => {
-    expect(extraDetailsRowLabel({})).toBe("브랜드·메모 더 적을게요");
+    expect(extraDetailsRowLabel({})).toBe("브랜드·메모 추가");
     expect(extraDetailsRowLabel({ brand: "서울우유" })).toBe(
-      "브랜드·메모 확인하기",
+      "브랜드·메모 확인",
     );
     expect(
       extraDetailsRowLabel({ category: ProductCategory.DAIRY }),
-    ).toBe("브랜드·메모 확인하기");
+    ).toBe("브랜드·메모 확인");
     expect(extraDetailsRowLabel({ notes: "열어 둔 팩" })).toBe(
-      "브랜드·메모 확인하기",
+      "브랜드·메모 확인",
     );
   });
 

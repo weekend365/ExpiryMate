@@ -3,7 +3,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 
@@ -32,22 +32,22 @@ export const inventoryScreenStyles = StyleSheet.create({
     gap: spacing.xs,
   },
   searchToolbar: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
   },
   toolbarIconButton: {
-    minWidth: touchTarget.min,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.minimum,
+    minHeight: controlSize.minimum,
     flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
   },
   moreMenuButton: {
-    minWidth: touchTarget.min,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.minimum,
+    minHeight: controlSize.minimum,
     flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
@@ -68,7 +68,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   filterControls: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
@@ -81,7 +81,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   expiryTrafficRow: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs, // 4px between mini lamps in the cluster
@@ -94,7 +94,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   expiryTrafficLamp: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing.xxs,
@@ -106,7 +106,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     flexShrink: 0,
     // 128: default "모든 위치" width; stays put when a location is selected.
     width: spacing.xxxl * 2,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: spacing.sm,
@@ -127,7 +127,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   locationFilterMain: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
@@ -143,7 +143,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     gap: spacing.xs,
   },
   locationOption: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -171,7 +171,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     fontFamily: typography.bodyStrong.fontFamily,
   },
   locationOptionMeta: {
-    minWidth: touchTarget.min,
+    minWidth: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
@@ -192,7 +192,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   searchField: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xxs,
@@ -206,7 +206,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   searchInput: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingVertical: spacing.xxs,
     fontSize: typography.bodyStrong.fontSize,
     lineHeight: typography.bodyStrong.lineHeight,
@@ -220,8 +220,8 @@ export const inventoryScreenStyles = StyleSheet.create({
     gap: spacing.xxs,
   },
   headerFilterButton: {
-    minHeight: touchTarget.min,
-    minWidth: touchTarget.icon,
+    minHeight: controlSize.minimum,
+    minWidth: controlSize.icon,
     paddingHorizontal: spacing.sm,
     flexDirection: "row",
     alignItems: "center",
@@ -241,7 +241,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     color: colors.mutedText,
   },
   selectionRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
@@ -263,7 +263,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     justifyContent: "center",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
   },
   selectionTitle: {
     fontSize: typography.body.fontSize,
@@ -272,7 +272,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     color: colors.text,
   },
   undoSnackbar: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
@@ -290,7 +290,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     minWidth: 0,
   },
   undoSnackbarAction: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingHorizontal: spacing.xs,
     borderRadius: radius.md,
@@ -342,7 +342,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     overflow: "hidden",
   },
   urgencySectionHeader: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingLeft: spacing.sm,
     paddingRight: spacing.xs,
     flexDirection: "row",
@@ -358,8 +358,8 @@ export const inventoryScreenStyles = StyleSheet.create({
     minWidth: 0,
   },
   urgencySectionToggle: {
-    minWidth: touchTarget.min,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.minimum,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.xs,
     flexDirection: "row",
     alignItems: "center",

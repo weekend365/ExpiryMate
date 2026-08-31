@@ -60,8 +60,8 @@ export function UrgencySection({
           accessibilityRole="button"
           accessibilityLabel={
             collapsed
-              ? `${section.title} 펼쳐 볼게요`
-              : `${section.title} 접을게요`
+              ? `${section.title} 펼치기`
+              : `${section.title} 접기`
           }
           accessibilityHint={
             collapsed

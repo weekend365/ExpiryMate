@@ -39,7 +39,7 @@ import {
   trackMonetizationEvent,
 } from "../src/services/api";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
+import { colors, radius, spacing, controlSize } from "../src/shared/theme";
 
 export default function ShoppingScreen({
   inTabs = false,
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: radius.lg,
@@ -579,7 +579,7 @@ const styles = StyleSheet.create({
   searchField: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
@@ -599,8 +599,8 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   searchSubmit: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing.xs,
@@ -613,8 +613,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfacePressed,
   },
   searchClear: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   sectionHeader: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingLeft: spacing.sm,
     paddingRight: spacing.xs,
     flexDirection: "row",
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   recentReturn: {
-    minHeight: touchTarget.icon,
+    minHeight: controlSize.icon,
     flexShrink: 0,
     flexDirection: "row",
     alignItems: "center",
@@ -674,7 +674,7 @@ const styles = StyleSheet.create({
   },
   loadMore: {
     width: "100%",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

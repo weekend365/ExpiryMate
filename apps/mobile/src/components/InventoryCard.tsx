@@ -8,7 +8,7 @@ import {
 } from "@expirymate/shared";
 import { Check, CircleMinus } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 
@@ -135,7 +135,7 @@ export function InventoryCard({
           testID="inventory-item-cleanup-button"
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel={`${item.displayName} 사용한 양 반영할게요`}
+          accessibilityLabel={`${item.displayName} 사용량 반영`}
           accessibilityHint="전부 사용했는지 일부만 사용했는지 고를 수 있어요."
           style={({ pressed }) => [
             styles.trailingHit,
@@ -204,7 +204,7 @@ function getExpiryLampPresentation(expiryDate: string | null) {
 
 const styles = StyleSheet.create({
   card: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: radius.xxl,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     flexDirection: "row",
@@ -264,8 +264,8 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   trailingHit: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.cta,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.cta,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,

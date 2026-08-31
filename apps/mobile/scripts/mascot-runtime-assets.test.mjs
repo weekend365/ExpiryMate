@@ -3,11 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { describe, expect, it } from "vitest";
-import {
-  deriveSmallMaster,
-  fullAssetPath,
-  mascotMoods,
-} from "./derive-mascot-small-assets.mjs";
+import { deriveSmallMaster, fullAssetPath, mascotMoods } from "./derive-mascot-small-assets.mjs";
 import { resizePremultiplied } from "./build-mascot-runtime-assets.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));

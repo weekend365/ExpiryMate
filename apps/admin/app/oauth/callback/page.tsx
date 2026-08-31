@@ -2,6 +2,7 @@
 
 import { appBrand } from "@expirymate/shared";
 import { useEffect, useMemo, useState } from "react";
+import { ActionAnchor } from "../../../src/components/action-control";
 
 /**
  * Fallback mirror of API `/oauth/callback`.
@@ -27,7 +28,7 @@ export default function OAuthCallbackPage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center gap-4 px-6 text-center">
-      <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
+      <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
         {appBrand.appNameKo}
       </div>
       <h1 className="text-2xl font-black tracking-tight text-[var(--foreground)]">
@@ -35,12 +36,9 @@ export default function OAuthCallbackPage() {
       </h1>
       <p className="text-sm leading-6 text-[var(--muted)]">{status}</p>
       {deepLink ? (
-        <a
-          href={deepLink}
-          className="inline-flex min-h-[52px] items-center justify-center rounded-2xl bg-[var(--primary)] px-6 text-sm font-bold text-white"
-        >
-          앱으로 이어갈게요
-        </a>
+        <ActionAnchor href={deepLink} size="medium">
+          앱으로 이동
+        </ActionAnchor>
       ) : null}
     </main>
   );

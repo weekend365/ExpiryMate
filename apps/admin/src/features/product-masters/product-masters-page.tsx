@@ -9,6 +9,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { ActionButton } from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
 import { StatusPill } from "../../components/status-pill";
@@ -80,12 +81,9 @@ export function ProductMastersPage() {
               placeholder="바코드, 상품명 또는 브랜드…"
               className="w-full min-w-64 rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm outline-none"
             />
-            <button
-              type="submit"
-              className="shrink-0 rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--surface)]"
-            >
+            <ActionButton type="submit" className="shrink-0">
               찾아보기
-            </button>
+            </ActionButton>
           </form>
         }
       />
@@ -110,16 +108,15 @@ export function ProductMastersPage() {
                 </option>
               ))}
             </select>
-            <button
-              type="button"
+            <ActionButton
               onClick={() => {
                 setPage(1);
                 setPendingOnly((current) => !current);
               }}
-              className="rounded-full border border-[var(--border)] bg-[var(--surface-muted)] px-4 py-2 text-sm font-bold"
+              variant={pendingOnly ? "secondary" : "surface"}
             >
               {pendingOnly ? "전체 보기" : "수정 제안만 보기"}
-            </button>
+            </ActionButton>
           </div>
         }
       >
@@ -185,23 +182,21 @@ export function ProductMastersPage() {
         </div>
         {totalCount > PAGE_SIZE ? (
           <div className="mt-4 flex items-center justify-between gap-3">
-            <button
-              type="button"
+            <ActionButton
               disabled={page <= 1}
               onClick={() => setPage((current) => Math.max(1, current - 1))}
-              className="rounded-full border border-[var(--border)] px-4 py-2 text-sm font-bold disabled:opacity-40"
+              variant="surface"
             >
               이전
-            </button>
+            </ActionButton>
             <div className="text-sm text-[var(--muted)]">{page}페이지</div>
-            <button
-              type="button"
+            <ActionButton
               disabled={!hasMore}
               onClick={() => setPage((current) => current + 1)}
-              className="rounded-full border border-[var(--border)] px-4 py-2 text-sm font-bold disabled:opacity-40"
+              variant="surface"
             >
               다음
-            </button>
+            </ActionButton>
           </div>
         ) : null}
       </Panel>

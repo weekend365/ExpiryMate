@@ -11,6 +11,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { ActionButton } from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
 import { getProduct, updateProduct } from "../../lib/api";
@@ -128,12 +129,9 @@ export function ProductDetailPage({ productId }: { productId: string }) {
                 {...form.register("imageUrl")}
               />
             </label>
-            <button
-              type="submit"
-              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
-            >
-              이대로 반영할게요
-            </button>
+            <ActionButton type="submit" size="medium">
+              변경 저장
+            </ActionButton>
           </form>
         </Panel>
       </div>

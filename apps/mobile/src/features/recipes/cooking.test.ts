@@ -196,9 +196,9 @@ describe("cooking flow helpers", () => {
 
   it("lets cooking start without every prep item checked", () => {
     expect(remainingPrepCount(1, 3)).toBe(2);
-    expect(getPrepContinueCta(0)).toBe("재료가 준비됐어요");
-    expect(getPrepContinueCta(1)).toBe("이 재료 빼고 시작할게요");
-    expect(getPrepContinueCta(2)).toBe("2개는 빼고 시작할게요");
+    expect(getPrepContinueCta(0)).toBe("조리 시작");
+    expect(getPrepContinueCta(1)).toBe("이 재료 제외하고 시작");
+    expect(getPrepContinueCta(2)).toBe("2개 제외하고 시작");
     expect(getCookingGuideMessage(0, 2, 2)).toBe(
       "2개가 아직이에요. 없어도 조리를 이어갈 수 있어요.",
     );
@@ -207,9 +207,9 @@ describe("cooking flow helpers", () => {
     );
   });
 
-  it("shows 요리했어요 only on the last cooking step", () => {
-    expect(getCookingStepCta(false)).toBe("이 단계까지 했어요");
-    expect(getCookingStepCta(true)).toBe("요리했어요");
+  it("labels the final cooking action explicitly", () => {
+    expect(getCookingStepCta(false)).toBe("단계 완료");
+    expect(getCookingStepCta(true)).toBe("요리 완료");
     expect(getCookingGuideMessage(1, 2)).toBe(
       "카드를 누르면 이 단계를 마친 것으로 표시할게요.",
     );
@@ -222,7 +222,7 @@ describe("cooking flow helpers", () => {
     );
     expect(getInventoryApplyCta(true)).toBe("추천 사용량으로 반영");
     expect(getInventoryApplyCta(true, true)).toBe("수정한 사용량으로 반영");
-    expect(getInventoryApplyCta(false)).toBe("재고는 그대로 둘게요");
+    expect(getInventoryApplyCta(false)).toBe("재고 반영 안 함");
   });
 
   it("previews remaining egg and milk quantities", () => {

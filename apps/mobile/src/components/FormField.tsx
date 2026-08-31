@@ -1,6 +1,6 @@
 import { Controller } from "react-hook-form";
 import { KeyboardTypeOptions, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppText } from "./AppText";
 import { AppTextInput } from "./AppTextInput";
 
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

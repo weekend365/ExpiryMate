@@ -61,7 +61,7 @@ export function HomeReorderCard({
           }}
           fullWidth
         >
-          다른 상품도 볼게요
+          다른 상품 보기
         </Button>
         <AffiliateDisclosure disclosure={preview.disclosure} />
       </View>

@@ -13,9 +13,9 @@ export function StatusPill({
 }) {
   const toneClasses = {
     default: "bg-[var(--surface-muted)] text-[var(--foreground)]",
-    warning: "bg-[var(--warning-soft)] text-[var(--warning)]",
-    danger: "bg-[var(--danger-soft)] text-[var(--danger)]",
-    success: "bg-[var(--success-soft)] text-[var(--success)]",
+    warning: "bg-[var(--warning-soft)] text-[var(--warning-foreground)]",
+    danger: "bg-[var(--danger-soft)] text-[var(--danger-foreground)]",
+    success: "bg-[var(--success-soft)] text-[var(--success-foreground)]",
   };
 
   return (

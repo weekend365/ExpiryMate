@@ -95,7 +95,7 @@ export function InventoryFilterToolbar({
               pressed && styles.headerFilterButtonPressed,
             ]}
             accessibilityRole="button"
-            accessibilityLabel="여러 개 정리할게요"
+            accessibilityLabel="여러 재료 선택"
             accessibilityHint="정리할 재료를 골라 한 번에 빼 둘 수 있어요."
           >
             <ListChecks
@@ -212,8 +212,8 @@ export function InventoryFilterToolbar({
                 accessibilityRole="button"
                 accessibilityLabel={
                   hasLocationFilter
-                    ? `${selectedLocationLabel} 위치 필터, 바꿀게요`
-                    : "위치별로 볼게요"
+                    ? `${selectedLocationLabel} 위치 필터 변경`
+                    : "위치 필터 선택"
                 }
                 accessibilityHint="냉장고·냉동실처럼 위치만 골라 볼 수 있어요."
                 style={({ pressed }) => [
@@ -248,7 +248,7 @@ export function InventoryFilterToolbar({
             accessibilityState={{ disabled: !hasActiveFilters }}
             accessibilityLabel={
               hasActiveFilters
-                ? "골라둔 조건을 풀어 볼게요"
+                ? "모든 필터 해제"
                 : "이미 전체 보관함을 보고 있어요"
             }
             accessibilityHint="검색어와 유통기한·위치 조건을 모두 풀어요."
@@ -295,7 +295,7 @@ export function InventorySelectionBar({
     >
       <View style={styles.selectionSummary}>
         <AppText style={styles.selectionTitle} numberOfLines={1}>
-          {selectedCount ? `${selectedCount}개` : "고를게요"}
+          {selectedCount ? `${selectedCount}개` : "재료 선택"}
         </AppText>
       </View>
       <View style={styles.headerActions}>
@@ -304,7 +304,7 @@ export function InventorySelectionBar({
           disabled={!visibleCount}
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel="보이는 재료 전부 고를게요"
+          accessibilityLabel="보이는 재료 모두 선택"
           accessibilityState={{ disabled: !visibleCount }}
           style={({ pressed }) => [
             styles.headerFilterButton,
@@ -325,7 +325,7 @@ export function InventorySelectionBar({
           disabled={!expiredVisibleCount}
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel="만료된 재료만 고를게요"
+          accessibilityLabel="만료된 재료만 선택"
           accessibilityState={{ disabled: !expiredVisibleCount }}
           style={({ pressed }) => [
             styles.headerFilterButton,

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { ActionLink } from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { MetricCard } from "../../components/metric-card";
 import { Panel } from "../../components/panel";
@@ -22,12 +22,9 @@ export function DashboardPage() {
         title="운영 대시보드"
         description="오늘 만료 수, 임박 수, 최근 등록 재료와 보관 상태를 빠르게 확인합니다."
         actions={
-          <Link
-            href="/products"
-            className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--surface)]"
-          >
+          <ActionLink href="/products">
             상품 관리
-          </Link>
+          </ActionLink>
         }
       />
 

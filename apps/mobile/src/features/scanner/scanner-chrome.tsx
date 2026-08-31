@@ -163,7 +163,7 @@ export function ScannerGuide({
 
 export function CloseButton({
   onPress,
-  accessibilityLabel = "스캐너를 닫을게요",
+  accessibilityLabel = "스캐너 닫기",
 }: {
   onPress: () => void;
   accessibilityLabel?: string;
@@ -205,7 +205,7 @@ export function PermissionCard({
         />
         {canRequestPermission || isRequesting ? (
           <Button onPress={onRequestPermission} disabled={isRequesting} fullWidth>
-            카메라 켤게요
+            카메라 켜기
           </Button>
         ) : (
           <Button

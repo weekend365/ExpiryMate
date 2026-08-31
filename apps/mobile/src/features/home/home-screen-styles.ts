@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+import { colors, radius, spacing, controlSize } from "../../shared/theme";
 
 export const homeScreenStyles = StyleSheet.create({
   screenContent: {
@@ -113,8 +113,8 @@ export const homeScreenStyles = StyleSheet.create({
     gap: spacing.xs,
   },
   shoppingIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,
@@ -189,7 +189,7 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     alignItems: "center",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingVertical: spacing.xxs,
     borderRadius: radius.lg,
@@ -207,14 +207,14 @@ export const homeScreenStyles = StyleSheet.create({
     backgroundColor: colors.successSoft,
   },
   trafficLampPressableRegular: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     paddingVertical: spacing.xs,
   },
   trafficLampPressablePressed: {
     backgroundColor: colors.surfacePressed,
   },
   inventoryEmpty: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     justifyContent: "center",
     gap: spacing.xxs,
     paddingHorizontal: spacing.sm,

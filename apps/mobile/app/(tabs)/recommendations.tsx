@@ -123,7 +123,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 import {
@@ -496,7 +496,7 @@ export default function RecommendationsScreen() {
     : monetization.adState === "loading"
       ? "광고를 불러오는 중이에요"
       : needsIngredients
-        ? "재료 넣으러 갈게요"
+        ? "재료 추가"
         : needsRewardedAd
           ? REWARDED_AD_CTA_LABEL
           : ctaQuotaLabel
@@ -721,7 +721,7 @@ export default function RecommendationsScreen() {
             fullWidth
             variant="surface"
           >
-            추천으로 돌아갈게요
+            추천 보기
           </Button>
         ) : hasRecommendationResult ? null : (
           <Button
@@ -785,9 +785,8 @@ export default function RecommendationsScreen() {
               tone="success"
               title="새 맞춤 설정을 적용했어요"
               description="이번 추천 조건은 그대로예요. 아래 버튼을 눌러 추천을 시작할 수 있어요."
-              actionLabel="알겠어요"
+              actionLabel="닫기"
               onAction={() => setShowPreferenceSavedNotice(false)}
-              showMascot={false}
             />
           ) : null}
           {recipeView === "favorites" &&
@@ -796,9 +795,8 @@ export default function RecommendationsScreen() {
               tone="success"
               title="광고 추천권이 준비됐어요"
               description="다음 추천을 만들 때 바로 사용할 수 있어요."
-              actionLabel="알겠어요"
+              actionLabel="닫기"
               onAction={monetization.dismissRewardNotice}
-              showMascot={false}
             />
           ) : recipeView === "favorites" &&
             monetization.adState === "verifying" ? (
@@ -806,7 +804,6 @@ export default function RecommendationsScreen() {
               tone="info"
               title="광고 보상을 확인하고 있어요"
               description="확인되면 추천권에 바로 넣을게요. 남은 광고가 있으면 지금 이어서 볼 수 있어요."
-              showMascot={false}
             />
           ) : null}
           {recipeView === "recommendations" && showValueMomentOffer ? (
@@ -879,7 +876,6 @@ export default function RecommendationsScreen() {
 
           {setFavoriteMutation.error ? (
             <FeedbackBanner
-              showMascot={false}
               title="즐겨찾기를 바꾸지 못했어요"
               description={
                 getRecommendationErrorMessage(setFavoriteMutation.error) ?? undefined
@@ -889,10 +885,9 @@ export default function RecommendationsScreen() {
 
           {recipeView === "recommendations" && historyQuery.isError ? (
             <FeedbackBanner
-              showMascot={false}
               title="이전 추천을 불러오지 못했어요"
               description={historyErrorMessage ?? undefined}
-              actionLabel="다시 불러올게요"
+              actionLabel="다시 시도"
               onAction={() => {
                 void historyQuery.refetch();
               }}
@@ -1018,6 +1013,7 @@ export default function RecommendationsScreen() {
                 <View style={styles.recipeSectionInset}>
                   <EmptyState
                     variant="plain"
+                    kind="no-results"
                     mood="empty"
                     title="이번에는 딱 맞는 요리가 없어요"
                     description="조건을 조금 바꾸거나, 재료를 더 넣은 뒤 다시 부탁해 주세요."
@@ -1042,7 +1038,7 @@ export default function RecommendationsScreen() {
                     key={recommendation.id}
                     onPress={() => setHistoryRecommendation(recommendation)}
                     accessibilityRole="button"
-                    accessibilityLabel={`${formatCreatedAt(recommendation.createdAt)} 추천 다시 볼게요`}
+                    accessibilityLabel={`${formatCreatedAt(recommendation.createdAt)} 추천 다시 보기`}
                     accessibilityHint="그때 받아 둔 요리를 다시 열어 볼 수 있어요."
                     style={({ pressed }) => [
                       styles.historyRow,
@@ -1101,6 +1097,7 @@ export default function RecommendationsScreen() {
           !isGenerating &&
           !errorMessage ? (
             <EmptyState
+              kind="empty"
               mood="empty"
               title={
                 needsIngredients
@@ -1137,12 +1134,11 @@ export default function RecommendationsScreen() {
               ) : favoritesQuery.error ? (
                 <View style={styles.recipeSectionInset}>
                   <FeedbackBanner
-                    showMascot={false}
                     title="즐겨찾기를 불러오지 못했어요"
                     description={
                       getRecommendationErrorMessage(favoritesQuery.error) ?? undefined
                     }
-                    actionLabel="다시 불러올게요"
+                    actionLabel="다시 시도"
                     onAction={() => {
                       void favoritesQuery.refetch();
                     }}
@@ -1191,6 +1187,7 @@ export default function RecommendationsScreen() {
                 <View style={styles.recipeSectionInset}>
                   <EmptyState
                     variant="plain"
+                    kind="empty"
                     icon={Heart}
                     title="아직 즐겨찾는 요리가 없어요"
                     description="추천 요리의 하트를 누르면 이곳에 모아둘게요."
@@ -1241,7 +1238,7 @@ export default function RecommendationsScreen() {
               onPress={handleResetIngredientSelection}
               fullWidth
             >
-              장고가 자동으로 골라줘
+              자동 선택
             </Button>
             <Button
               onPress={handleApplyIngredientSelection}
@@ -1381,7 +1378,7 @@ export default function RecommendationsScreen() {
           {filteredSelectableInventoryItems.length === 0 ? (
             <EmptyState
               variant="plain"
-              showMascot={false}
+              kind="no-results"
               title="조건에 맞는 재료가 없어요"
               description="검색어를 지우거나 다른 보관 위치를 골라 보세요."
             />
@@ -1397,7 +1394,7 @@ export default function RecommendationsScreen() {
         description="인원·시간·끼니는 이번 추천에만 적용돼요."
         footer={
           <Button onPress={() => setShowOptionsSheet(false)} fullWidth>
-            이걸로 할게요
+            적용
           </Button>
         }
       >
@@ -1495,14 +1492,14 @@ export default function RecommendationsScreen() {
               onPress={closeAiNotice}
               fullWidth
             >
-              다음에 할게요
+              나중에
             </Button>
             <Button
               onPress={handleAcceptAiNotice}
               loading={isAcceptingAiNotice}
               fullWidth
             >
-              동의하고 추천 받을게요
+              동의하고 추천받기
             </Button>
           </View>
         }
@@ -1592,7 +1589,7 @@ export default function RecommendationsScreen() {
         ) : (
           <EmptyState
             variant="plain"
-            showMascot={false}
+            kind="no-results"
             mood="empty"
             title="그때는 딱 맞는 요리가 없었어요"
             description="조건을 조금 바꿔 다시 부탁해 볼 수 있어요."
@@ -1649,7 +1646,7 @@ function RecipeSection({
           hitSlop={spacing.xs}
           accessibilityRole="button"
           accessibilityLabel={
-            collapsed ? `${title} 펼쳐 볼게요` : `${title} 접을게요`
+            collapsed ? `${title} 펼치기` : `${title} 접기`
           }
           accessibilityHint={
             collapsed
@@ -1809,7 +1806,7 @@ function ExpiringFirstToggle({
         onPress={onToggle}
         accessibilityRole="switch"
         accessibilityState={{ checked: selected }}
-        accessibilityLabel="임박 재료를 먼저 쓸까요?"
+        accessibilityLabel="임박 재료 우선 사용"
         accessibilityHint="켜 두면 유통기한이 가까운 재료로 요리를 먼저 골라 드려요."
         style={({ pressed }) => [
           styles.expiringToggleMain,
@@ -2087,7 +2084,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   recipeViewSwitch: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.pill,
     backgroundColor: colors.mutedSurface,
     padding: spacing.xxs,
@@ -2096,7 +2093,7 @@ const styles = StyleSheet.create({
   },
   recipeViewOption: {
     flex: 1,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.pill,
     flexDirection: "row",
     alignItems: "center",
@@ -2135,7 +2132,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
@@ -2210,7 +2207,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   recipeSectionHeader: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingLeft: spacing.sm,
     paddingRight: spacing.xs,
     flexDirection: "row",
@@ -2226,8 +2223,8 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   recipeSectionToggle: {
-    minWidth: touchTarget.min,
-    minHeight: touchTarget.min,
+    minWidth: controlSize.minimum,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
@@ -2269,7 +2266,7 @@ const styles = StyleSheet.create({
     color: colors.subtext,
   },
   historyRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -2320,7 +2317,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   recipeCard: {
-    minHeight: touchTarget.min * 2,
+    minHeight: controlSize.minimum * 2,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
@@ -2366,7 +2363,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   recipeIntroWithFavorite: {
-    paddingRight: touchTarget.icon + spacing.xs,
+    paddingRight: controlSize.icon + spacing.xs,
   },
   recipeTitle: {
     minWidth: 0,
@@ -2389,8 +2386,8 @@ const styles = StyleSheet.create({
     top: spacing.xxs,
     right: spacing.xs,
     zIndex: 1,
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
@@ -2415,7 +2412,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xs,
   },
   ingredientSearchField: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -2428,7 +2425,7 @@ const styles = StyleSheet.create({
   ingredientSearchInput: {
     flex: 1,
     minWidth: 0,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingVertical: spacing.xs,
   },
   ingredientFilterRow: {
@@ -2451,7 +2448,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   ingredientBulkAction: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     paddingHorizontal: spacing.sm,
     justifyContent: "center",
@@ -2466,7 +2463,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   ingredientSelectionRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -2531,7 +2528,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
     borderRadius: radius.lg,

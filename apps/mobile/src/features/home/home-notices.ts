@@ -46,7 +46,7 @@ export function getHomeNotices(input: {
       message: `앗, 오늘 할 일을 불러오지 못했어요. ${summarizeLoadError(input.loadErrorMessage)}`,
       mood: "worry",
       action: "retry",
-      actionHint: "다시 불러올게요",
+      actionHint: "다시 시도",
     });
     return notices;
   }
@@ -63,7 +63,7 @@ export function getHomeNotices(input: {
       message: "추천이 준비됐어요. 같이 살펴볼까요?",
       mood: "happy",
       action: "recommendations",
-      actionHint: "추천 보러 갈게요",
+      actionHint: "추천 보기",
     });
   } else if (input.recipeStatus === "error") {
     notices.push({
@@ -73,7 +73,7 @@ export function getHomeNotices(input: {
         "추천을 만들지 못했어요. 추천 탭에서 다시 해볼까요?",
       mood: "worry",
       action: "recommendations",
-      actionHint: "추천 탭으로 갈게요",
+      actionHint: "추천 탭으로 이동",
     });
   }
 
@@ -83,7 +83,7 @@ export function getHomeNotices(input: {
       message: `앗, 최신 내용을 불러오지 못했어요. ${summarizeLoadError(input.loadErrorMessage)}`,
       mood: "worry",
       action: "retry",
-      actionHint: "다시 불러올게요",
+      actionHint: "다시 시도",
     });
   }
 
@@ -93,7 +93,7 @@ export function getHomeNotices(input: {
       message: getExpiringNoticeMessage(input.expiringGroups),
       mood: "speak",
       action: "expiring",
-      actionHint: "보관함에서 임박한 재료만 보여 드릴게요.",
+      actionHint: "보관함에 임박 재료 필터 적용",
     });
   } else if (input.hasLoaded && !input.hasInventory) {
     notices.push({
@@ -101,7 +101,7 @@ export function getHomeNotices(input: {
       message: "냉장고가 비어 있어요. 바코드만 비춰도 첫 재료를 넣을 수 있어요.",
       mood: "empty",
       action: "scanner",
-      actionHint: "바코드로 넣을래요",
+      actionHint: "바코드 스캔 시작",
     });
   } else if (
     input.hasLoaded &&

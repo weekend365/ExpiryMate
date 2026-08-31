@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { ActionButton } from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
 import { createProduct, listProducts } from "../../lib/api";
@@ -103,12 +104,9 @@ export function ProductsPage() {
                 {...form.register("imageUrl")}
               />
             </label>
-            <button
-              type="submit"
-              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
-            >
-              기준 상품으로 넣을게요
-            </button>
+            <ActionButton type="submit" size="medium">
+              기준 상품 추가
+            </ActionButton>
           </form>
         </Panel>
 
@@ -141,7 +139,7 @@ export function ProductsPage() {
                       {product.brand} · {productCategoryLabels[product.category]}
                     </div>
                   </div>
-                  <div className="rounded-full bg-[var(--primary-soft)] px-3 py-1 text-xs font-bold text-[var(--primary)]">
+                  <div className="rounded-full bg-[var(--primary-soft)] px-3 py-1 text-xs font-bold text-[var(--primary-foreground)]">
                     {productCategoryLabels[product.category]}
                   </div>
                 </div>

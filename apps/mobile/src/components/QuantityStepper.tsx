@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppText } from "./AppText";
 import { AppTextInput } from "./AppTextInput";
 
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.label.fontFamily,
   },
   container: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -203,14 +203,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   containerHero: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
   },
   errorContainer: {
     borderColor: colors.danger,
   },
   iconButton: {
-    minWidth: touchTarget.ctaLarge,
-    minHeight: touchTarget.ctaLarge,
+    minWidth: controlSize.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     alignSelf: "stretch",
     alignItems: "center",
     justifyContent: "center",
@@ -218,8 +218,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
   },
   iconButtonHero: {
-    minWidth: touchTarget.cta,
-    minHeight: touchTarget.cta,
+    minWidth: controlSize.cta,
+    minHeight: controlSize.cta,
   },
   iconButtonPressed: {
     backgroundColor: colors.primarySoftPressed,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   inputFill: {
     flex: 1,
     alignSelf: "stretch",
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     textAlign: "center",
   },
   inputHero: {

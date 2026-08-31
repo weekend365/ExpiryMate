@@ -12,7 +12,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -54,7 +54,7 @@ export default function ResetPasswordScreen() {
           disabled={password.length < 8}
           fullWidth
         >
-          이 비밀번호로 할게요
+          비밀번호 변경
         </Button>
       }
     >
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,

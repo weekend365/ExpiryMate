@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { appBrand } from "@expirymate/shared";
+import { ActionLink } from "../../src/components/action-control";
 import { AffiliateCta } from "../../src/components/affiliate-cta";
 import { AffiliateDisclosure } from "../../src/components/affiliate-disclosure";
 
@@ -110,18 +110,12 @@ export default function PartnersPage() {
         </section>
 
         <div className="mt-[var(--space-lg)] flex flex-wrap gap-[var(--space-xs)]">
-          <Link
-            href="/terms"
-            className="type-body-small-strong rounded-[var(--radius-lg)] bg-[var(--action-primary-background)] px-[var(--space-md)] py-[var(--space-xs)] text-[var(--surface)] hover:bg-[var(--action-primary-pressed)]"
-          >
+          <ActionLink href="/terms">
             이용약관
-          </Link>
-          <Link
-            href="/privacy"
-            className="type-body-small-strong rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-[var(--space-md)] py-[var(--space-xs)] text-[var(--foreground)]"
-          >
+          </ActionLink>
+          <ActionLink href="/privacy" variant="surface">
             개인정보처리방침
-          </Link>
+          </ActionLink>
         </div>
         <div className="mt-[var(--space-lg)]">
           <AffiliateDisclosure />

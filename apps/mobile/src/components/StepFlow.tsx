@@ -7,7 +7,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { ChevronLeft } from "lucide-react-native";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
@@ -323,8 +323,8 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   backButton: {
-    minHeight: touchTarget.min,
-    minWidth: touchTarget.icon,
+    minHeight: controlSize.minimum,
+    minWidth: controlSize.icon,
     paddingHorizontal: spacing.xs,
     flexDirection: "row",
     alignItems: "center",
@@ -339,8 +339,8 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   progressCountButton: {
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.icon,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,

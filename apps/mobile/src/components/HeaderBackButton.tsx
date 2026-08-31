@@ -1,6 +1,6 @@
 import { ChevronLeft } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { resolveCompactHeaderTitle } from "../features/navigation/header-back-title";
 import { AppText } from "./AppText";
@@ -79,8 +79,8 @@ export function HeaderTitle({ children }: { children: string }) {
 
 const styles = StyleSheet.create({
   button: {
-    height: touchTarget.icon,
-    minHeight: touchTarget.icon,
+    height: controlSize.icon,
+    minHeight: controlSize.icon,
     marginLeft: -spacing.xs,
     paddingHorizontal: spacing.xs,
     borderRadius: radius.lg,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.none,
   },
   titleWrap: {
-    height: touchTarget.icon,
+    height: controlSize.icon,
     justifyContent: "center",
     alignItems: "center",
   },

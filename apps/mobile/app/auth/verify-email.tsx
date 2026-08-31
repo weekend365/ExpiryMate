@@ -181,7 +181,7 @@ export default function VerifyEmailScreen() {
                 }}
                 fullWidth
               >
-                홈으로 갈게요
+                홈으로 이동
               </Button>
             ) : (
               <>
@@ -189,9 +189,7 @@ export default function VerifyEmailScreen() {
                   onPress={() => setRetryCount((count) => count + 1)}
                   fullWidth
                 >
-                  {isRateLimited
-                    ? "잠시 뒤 다시 확인할게요"
-                    : "다시 확인할게요"}
+                  {isRateLimited ? "잠시 후 다시 시도" : "다시 시도"}
                 </Button>
                 <Button
                   onPress={() => router.replace("/auth/verify-pending")}
@@ -206,7 +204,12 @@ export default function VerifyEmailScreen() {
         )
       }
     >
-      <EmptyState mood={mood} title={title} description={message} />
+      <EmptyState
+        kind={isLoading ? "loading" : succeeded ? "success" : "error"}
+        mood={mood}
+        title={title}
+        description={message}
+      />
     </Screen>
   );
 }

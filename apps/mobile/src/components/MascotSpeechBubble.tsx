@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { appBrand } from "@expirymate/shared";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText, type AppTextVariant } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
 
@@ -194,14 +194,14 @@ const styles = StyleSheet.create({
     gap: spacing.xxs, // 4px: keep the question and guide as one thought
   },
   bubbleDismissible: {
-    paddingRight: touchTarget.icon + spacing.xs,
+    paddingRight: controlSize.icon + spacing.xs,
   },
   dismissButton: {
     position: "absolute",
     top: spacing.xs,
     right: spacing.xs,
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.pill,

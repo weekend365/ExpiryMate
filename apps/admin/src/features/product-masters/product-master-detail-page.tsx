@@ -14,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { ActionButton } from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
 import { StatusPill } from "../../components/status-pill";
@@ -213,12 +214,9 @@ export function ProductMasterDetailPage({
                 {...form.register("imageUrl")}
               />
             </label>
-            <button
-              type="submit"
-              className="rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-bold text-[var(--surface)]"
-            >
-              이대로 반영할게요
-            </button>
+            <ActionButton type="submit" size="medium">
+              변경 저장
+            </ActionButton>
           </form>
         </Panel>
       </div>
@@ -266,22 +264,19 @@ export function ProductMasterDetailPage({
               </div>
               {correction.status === ProductMasterCorrectionStatus.PENDING ? (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <button
-                    type="button"
+                  <ActionButton
                     disabled={applyMutation.isPending || dismissMutation.isPending}
                     onClick={() => applyMutation.mutate(correction.id)}
-                    className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--surface)] disabled:opacity-40"
                   >
-                    이 이름으로 바꿀게요
-                  </button>
-                  <button
-                    type="button"
+                    제안 이름 적용
+                  </ActionButton>
+                  <ActionButton
                     disabled={applyMutation.isPending || dismissMutation.isPending}
                     onClick={() => dismissMutation.mutate(correction.id)}
-                    className="rounded-full border border-[var(--border)] px-4 py-2 text-sm font-bold disabled:opacity-40"
+                    variant="surface"
                   >
-                    이 제안은 넘어갈게요
-                  </button>
+                    제안 건너뛰기
+                  </ActionButton>
                 </div>
               ) : null}
             </div>

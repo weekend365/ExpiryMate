@@ -23,7 +23,14 @@ import {
   TABLET_SHEET_MAX_WIDTH,
   useResponsiveLayout,
 } from "../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import {
+  colors,
+  motion,
+  opacity,
+  radius,
+  spacing,
+  controlSize,
+} from "../shared/theme";
 import { AppText } from "./AppText";
 import type { MascotMood } from "./Mascot";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
@@ -51,7 +58,7 @@ const SPRING = {
   mass: 0.9,
 };
 
-const BACKDROP_OPACITY = 0.28;
+const BACKDROP_OPACITY = opacity.scrim;
 const DRAG_DISMISS_DISTANCE = 96;
 const DRAG_DISMISS_VELOCITY = 900;
 
@@ -83,7 +90,7 @@ export function BottomSheet({
     backdropOpacity.value = 0;
     translateY.value = withSpring(0, SPRING);
     backdropOpacity.value = withTiming(BACKDROP_OPACITY, {
-      duration: 220,
+      duration: motion.duration.standard,
       easing: Easing.out(Easing.cubic),
     });
   }, [backdropOpacity, translateY, visible, windowHeight]);
@@ -129,7 +136,7 @@ export function BottomSheet({
 
           translateY.value = withSpring(0, SPRING);
           backdropOpacity.value = withTiming(BACKDROP_OPACITY, {
-            duration: 180,
+            duration: motion.duration.fast,
             easing: Easing.out(Easing.cubic),
           });
         }),
@@ -166,7 +173,7 @@ export function BottomSheet({
             onPress={dismissible ? onClose : undefined}
             disabled={!dismissible}
             accessibilityRole={dismissible ? "button" : undefined}
-            accessibilityLabel={dismissible ? "이 창을 닫을게요" : undefined}
+            accessibilityLabel={dismissible ? "창 닫기" : undefined}
             importantForAccessibility={dismissible ? "yes" : "no"}
           />
         </Animated.View>
@@ -274,7 +281,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: radius.xxl,
   },
   dragHeader: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     gap: spacing.md,
     justifyContent: "center",
     flexShrink: 0,
@@ -305,7 +312,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     gap: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexShrink: 0,
   },
 });

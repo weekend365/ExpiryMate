@@ -20,7 +20,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
 } from "../shared/theme";
 import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
@@ -85,7 +85,7 @@ export function SpaceSwitcher() {
           tone="danger"
           title="냉장고를 불러오지 못했어요"
           description={error.message}
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void refetchSpaces();
           }}
@@ -154,11 +154,10 @@ export function SpaceSwitcher() {
           tone="warning"
           title="최신 냉장고 목록을 확인하지 못했어요"
           description="저장된 냉장고 데이터는 그대로 보여드리고 있어요."
-          actionLabel="다시 확인할게요"
+          actionLabel="새로고침"
           onAction={() => {
             void refetchSpaces();
           }}
-          showMascot={false}
         />
       ) : null}
 
@@ -235,7 +234,7 @@ export function SpaceSwitcher() {
 
 const styles = StyleSheet.create({
   trigger: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
@@ -246,8 +245,8 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   triggerIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.pill,
     backgroundColor: colors.primarySoft,
     alignItems: "center",
@@ -271,7 +270,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   spaceRow: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

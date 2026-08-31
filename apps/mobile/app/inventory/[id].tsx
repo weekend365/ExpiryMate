@@ -231,13 +231,8 @@ export default function InventoryEditScreen() {
       ) && quantity > 0
     : (editStep === "product" && Boolean(displayName)) ||
       (editStep === "quantity" && Boolean(storageLocation) && quantity > 0);
-  const primaryCtaLabel = isQuickEdit
-    ? "바꿔둘게요"
-    : isLastEditStep
-      ? "이렇게 바꿔둘까요?"
-      : editStep === "product"
-        ? "이 재료로 할게요"
-        : "이만큼 둘게요";
+  const primaryCtaLabel =
+    isQuickEdit || isLastEditStep ? "변경 저장" : "다음";
 
   const item = itemQuery.data;
   const isFinalStatus =
@@ -344,6 +339,7 @@ export default function InventoryEditScreen() {
     return (
       <Screen contentWidth="form" topInsetMode="none">
         <EmptyState
+          kind="loading"
           mood="idle"
           title="재료를 불러오고 있어요"
           description="조금만 기다려 주세요."
@@ -356,6 +352,7 @@ export default function InventoryEditScreen() {
     return (
       <Screen contentWidth="form" topInsetMode="none">
         <EmptyState
+          kind="error"
           mood="worry"
           title="이 재료를 찾지 못했어요"
           description="목록으로 돌아가서 다시 골라볼까요?"
@@ -370,6 +367,7 @@ export default function InventoryEditScreen() {
     return (
       <Screen contentWidth="form" topInsetMode="none">
         <EmptyState
+          kind="success"
           mood="happy"
           title={
             item.status === ItemStatus.CONSUMED

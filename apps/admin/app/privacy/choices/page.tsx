@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { appBrand } from "@expirymate/shared";
+import { ActionLink } from "../../../src/components/action-control";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -8,7 +8,7 @@ export default function PrivacyChoicesPage() {
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
       <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Privacy Choices
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">
@@ -95,7 +95,7 @@ export default function PrivacyChoicesPage() {
             앱에 접근할 수 없으면 아래 이메일로 계정 삭제를 요청할 수 있습니다.
             본인 확인 후 계정과 연결 데이터를 정리합니다. 삭제·철회 과정에
             문제가 있는 경우에도{" "}
-            <a className="font-bold text-[var(--primary)]" href={`mailto:${contactEmail}`}>
+            <a className="font-bold text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>
             로 문의해 주세요.
@@ -103,18 +103,12 @@ export default function PrivacyChoicesPage() {
         </section>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/privacy"
-            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
-          >
+          <ActionLink href="/privacy" size="medium">
             개인정보처리방침
-          </Link>
-          <Link
-            href="/login"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
-            관리자로 들어가기
-          </Link>
+          </ActionLink>
+          <ActionLink href="/login" size="medium" variant="surface">
+            관리자 로그인
+          </ActionLink>
         </div>
       </div>
     </main>

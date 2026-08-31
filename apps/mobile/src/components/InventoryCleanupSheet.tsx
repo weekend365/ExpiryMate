@@ -11,7 +11,7 @@ import {
 import { CheckCircle2, Minus } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
@@ -77,7 +77,7 @@ export function InventoryCleanupSheet({
         step === "partial" && item ? (
           <View style={styles.partialFooter}>
             <Button variant="secondary" onPress={() => setStep("choose")} fullWidth>
-              다시 고를게요
+          다시 선택
             </Button>
             <Button
               onPress={() => {
@@ -91,7 +91,7 @@ export function InventoryCleanupSheet({
               fullWidth
               testID="inventory-cleanup-partial-confirm-button"
             >
-              {consumesAll ? "전부 사용했어요" : "이만큼 사용했어요"}
+          {consumesAll ? "전부 사용" : "선택 수량 사용"}
             </Button>
           </View>
         ) : undefined
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   option: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfacePressed,
   },
   optionIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",

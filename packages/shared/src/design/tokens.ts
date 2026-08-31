@@ -2,7 +2,7 @@
  * Semantic design tokens for ExpiryMate.
  *
  * Primitive scales live in `palette.ts`; this file maps them to intent-based
- * names that apps consume (`primary`, `danger`, `textPrimary`, ...). Apps must
+ * names that apps consume (`brandAccent`, `dangerForeground`, `text`, ...). Apps must
  * reference these semantic tokens rather than raw hex so the brand can be
  * retuned in one place.
  *
@@ -29,15 +29,20 @@ export const semanticColors = {
   /** Recessed well inside a card — one step deeper than section fills. */
   insetSurface: neutral[200],
 
-  // Brand / primary
-  primary: brand[500],
-  primaryPressed: brand[600],
+  // Brand accent. Use for decorative emphasis, charts, progress, and large
+  // non-text marks. It is intentionally brighter than accessible foregrounds.
+  brandAccent: brand[500],
+  brandAccentPressed: brand[600],
+  /** @deprecated Safe legacy alias; prefer a specific brand/action/foreground role. */
+  primary: brand[700],
+  /** @deprecated Prefer `brandAccentPressed` or `actionPrimaryPressed`. */
+  primaryPressed: brand[800],
   primarySoft: brand[50],
   primarySoftPressed: brand[100],
 
-  // Accessible foreground/action roles. `primary` remains the bright brand
-  // accent; small text and white-on-green controls need the darker 700 step
-  // to meet WCAG AA contrast on light surfaces.
+  // Accessible foreground/action roles. Small text and white-on-color controls
+  // use darker palette steps that meet WCAG AA contrast on light surfaces.
+  primaryForeground: brand[700],
   actionPrimaryBackground: brand[700],
   actionPrimaryPressed: brand[800],
   linkText: brand[700],
@@ -61,18 +66,33 @@ export const semanticColors = {
   cameraControlPressed: "rgba(26, 31, 39, 0.9)",
 
   // Status: danger
-  danger: red[500],
-  dangerPressed: red[600],
+  dangerAccent: red[500],
+  /** @deprecated Safe legacy alias; prefer `dangerForeground` or an action role. */
+  danger: red[700],
+  dangerPressed: red[800],
   dangerSoft: red[50],
   dangerSoftPressed: red[100],
+  dangerForeground: red[700],
+  actionDangerBackground: red[700],
+  actionDangerPressed: red[800],
 
   // Status: warning
-  warning: amber[500],
+  warningAccent: amber[500],
+  /** @deprecated Safe legacy alias; prefer `warningForeground` or an action role. */
+  warning: amber[800],
   warningSoft: amber[50],
+  warningForeground: amber[800],
+  actionWarningBackground: amber[800],
+  actionWarningPressed: amber[900],
 
   // Status: success
-  success: green[500],
+  successAccent: green[500],
+  /** @deprecated Safe legacy alias; prefer `successForeground` or an action role. */
+  success: green[700],
   successSoft: green[50],
+  successForeground: green[700],
+  actionSuccessBackground: green[700],
+  actionSuccessPressed: green[800],
 
   // Citrus traffic lamps (expired / soon / safe)
   citrusGrapefruit: "#F2786D",
@@ -80,8 +100,13 @@ export const semanticColors = {
   citrusLime: "#8FC63D",
 
   // Status: info
-  info: blue[500],
+  infoAccent: blue[500],
+  /** @deprecated Safe legacy alias; prefer `infoForeground` or an action role. */
+  info: blue[700],
   infoSoft: blue[50],
+  infoForeground: blue[700],
+  actionInfoBackground: blue[700],
+  actionInfoPressed: blue[800],
 
   // Disabled
   disabled: neutral[300],
@@ -125,6 +150,79 @@ export const radius = {
 } as const;
 
 export type Radius = typeof radius;
+
+/**
+ * Interactive-control dimensions in px.
+ *
+ * `compact` is a visual chip height and must receive hit slop up to `minimum`.
+ * All other interactive controls use `minimum` or a larger named size.
+ */
+export const controlSize = {
+  compact: 40,
+  minimum: 48,
+  icon: 48,
+  cta: 52,
+  ctaLarge: 56,
+} as const;
+
+export type ControlSize = typeof controlSize;
+
+/** Framework-agnostic motion durations (milliseconds) and CSS easing curves. */
+export const motion = {
+  duration: {
+    instant: 0,
+    fast: 180,
+    standard: 220,
+    emphasized: 250,
+    slow: 400,
+  },
+  easing: {
+    standard: "cubic-bezier(0.2, 0, 0, 1)",
+    enter: "cubic-bezier(0, 0, 0, 1)",
+    exit: "cubic-bezier(0.3, 0, 1, 1)",
+  },
+} as const;
+
+export type Motion = typeof motion;
+
+/** Content constraints shared by mobile regular-width layouts and Admin. */
+export const contentWidth = {
+  form: 560,
+  sheet: 640,
+  content: 720,
+  wide: 960,
+  admin: 1280,
+} as const;
+
+export type ContentWidth = typeof contentWidth;
+
+/** Named opacity roles; do not use opacity to make required copy look disabled. */
+export const opacity = {
+  disabled: 0.5,
+  pressed: 0.84,
+  scrim: 0.28,
+  subtle: 0.72,
+} as const;
+
+export type Opacity = typeof opacity;
+
+/**
+ * Platform-neutral elevation intent. Web consumes `cssShadow`; mobile maps the
+ * numeric level to native shadow/elevation properties where needed.
+ */
+export const elevation = {
+  none: { level: 0, cssShadow: "none" },
+  soft: {
+    level: 2,
+    cssShadow: "0 24px 70px rgb(26 31 39 / 8%)",
+  },
+  lift: {
+    level: 6,
+    cssShadow: "0 30px 80px rgb(26 31 39 / 8%)",
+  },
+} as const;
+
+export type Elevation = typeof elevation;
 
 /** Font weights as string values usable by both RN and CSS. */
 export const fontWeight = {
@@ -198,6 +296,11 @@ export const designTokens = {
   colors: semanticColors,
   spacing,
   radius,
+  controlSize,
+  motion,
+  contentWidth,
+  opacity,
+  elevation,
   fontWeight,
   typography,
   fontFamily,

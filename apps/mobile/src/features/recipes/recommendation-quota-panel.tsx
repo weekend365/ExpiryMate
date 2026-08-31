@@ -12,7 +12,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   quotaLink: {
     alignSelf: "flex-start",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingRight: spacing.sm,
   },

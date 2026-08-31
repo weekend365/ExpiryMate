@@ -25,7 +25,7 @@ import {
 } from "../src/features/insights/use-insights";
 import { useSubscriptionEntitlement } from "../src/features/subscriptions/use-subscription-entitlement";
 import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../src/shared/theme";
+import { colors, radius, spacing, controlSize } from "../src/shared/theme";
 
 type InsightAction = PlusInsights["actions"][number];
 type InsightActionRoute =
@@ -129,7 +129,7 @@ function InsightsErrorScreen({
       <FeedbackBanner
         title={title}
         description="기록은 그대로 안전하게 보관되어 있어요. 연결을 확인한 뒤 다시 불러와 주세요."
-        actionLabel="다시 불러올게요"
+        actionLabel="다시 시도"
         onAction={onRetry}
       />
     </Screen>
@@ -161,7 +161,7 @@ function FreePreview({
       <FeedbackBanner
         title="최근 기록을 불러오지 못했어요"
         description="기록이 사라진 것은 아니에요. 잠시 후 다시 불러와 주세요."
-        actionLabel="다시 불러올게요"
+        actionLabel="다시 시도"
         onAction={onRetry}
       />
     );
@@ -173,9 +173,8 @@ function FreePreview({
         <FeedbackBanner
           title="새 기록을 확인하지 못했어요"
           description="아래에는 마지막으로 불러온 내용을 보여 드려요."
-          actionLabel="새로 불러올게요"
+          actionLabel="새로고침"
           onAction={onRetry}
-          showMascot={false}
         />
       ) : null}
       <SurfaceCard variant="hero" tone="primary">
@@ -268,11 +267,11 @@ function PlusReport({
               ? "아래에는 마지막으로 불러온 내용을 보여 드려요."
               : "기록은 그대로 안전하게 보관되어 있어요. 잠시 후 다시 불러와 주세요."
           }
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void overview.refetch();
           }}
-          showMascot={!overview.data}
+          presentation={overview.data ? "inline" : "mascot"}
         />
       ) : null}
 
@@ -568,7 +567,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   segment: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     padding: spacing.xxs,
     borderRadius: radius.pill,
@@ -576,7 +575,7 @@ const styles = StyleSheet.create({
   },
   segmentButton: {
     flex: 1,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.pill,

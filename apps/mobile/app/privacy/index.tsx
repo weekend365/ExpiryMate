@@ -23,7 +23,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -167,7 +167,7 @@ export default function PrivacyScreen() {
               onPress={() => setHistorySheetOpen(false)}
               fullWidth
             >
-              조금 더 생각해 볼게요
+              취소
             </Button>
             <Button
               variant="danger"
@@ -175,7 +175,7 @@ export default function PrivacyScreen() {
               loading={deleteHistoryMutation.isPending}
               fullWidth
             >
-              추천과 즐겨찾기를 정리할게요
+              추천 기록·즐겨찾기 삭제
             </Button>
           </View>
         }
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   row: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   rowIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",

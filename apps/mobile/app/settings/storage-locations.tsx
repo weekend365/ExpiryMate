@@ -17,7 +17,7 @@ import { SettingsScreen } from "../../src/components/SettingsScreen";
 import { getSettingsErrorMessage } from "../../src/features/settings/settings-format";
 import { useStorageLocations } from "../../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
-import { colors, radius, spacing, touchTarget, typography } from "../../src/shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../../src/shared/theme";
 
 export default function StorageLocationsSettingsScreen() {
   const { activeRole } = useActiveSpace();
@@ -87,7 +87,7 @@ export default function StorageLocationsSettingsScreen() {
       [
         { text: "잠시만요", style: "cancel" },
         {
-          text: "정리할게요",
+          text: "위치 삭제",
           style: "destructive",
           onPress: () => {
             deleteMutation.mutate(id, {
@@ -117,16 +117,18 @@ export default function StorageLocationsSettingsScreen() {
     >
       {query.isPending && !hasLoadedLocations ? (
         <EmptyState
+          kind="loading"
           mood="think"
           title="보관 위치를 펼치고 있어요"
           description="냉장고에서 사용하는 위치를 확인하고 있어요."
         />
       ) : query.isError && !hasLoadedLocations ? (
         <EmptyState
+          kind="error"
           mood="worry"
           title="보관 위치를 불러오지 못했어요"
           description={loadErrorMessage}
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void query.refetch();
           }}
@@ -135,10 +137,9 @@ export default function StorageLocationsSettingsScreen() {
         <>
           {query.isError ? (
             <FeedbackBanner
-              showMascot={false}
               title="최신 보관 위치를 확인하지 못했어요"
               description="저장된 위치는 그대로 보여드리고 있어요."
-              actionLabel="다시 확인할게요"
+              actionLabel="새로고침"
               onAction={() => {
                 void query.refetch();
               }}
@@ -194,7 +195,7 @@ export default function StorageLocationsSettingsScreen() {
             disabled={labelDraft.trim().length === 0}
             fullWidth
           >
-            여기에 보관할까요?
+            위치 추가
           </Button>
         }
       >
@@ -218,7 +219,7 @@ export default function StorageLocationsSettingsScreen() {
               disabled={labelDraft.trim().length === 0}
               fullWidth
             >
-              이렇게 부를게요
+              이름 변경
             </Button>
             {editing ? (
               <Button
@@ -226,7 +227,7 @@ export default function StorageLocationsSettingsScreen() {
                 onPress={() => handleDelete(editing.id, editing.label)}
                 fullWidth
               >
-                이 위치 정리할게요
+                위치 삭제
               </Button>
             ) : null}
           </View>
@@ -266,7 +267,7 @@ function LabelField({
 const styles = StyleSheet.create({
   emptyCustom: {
     padding: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
   },
   emptyCustomText: {
@@ -285,7 +286,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

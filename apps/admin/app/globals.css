@@ -5,15 +5,8 @@
  * injected in `app/layout.tsx`. That keeps admin in sync with mobile semantic
  * tokens — do not redeclare raw hex brand colors here.
  *
- * Elevation helpers below only compose existing CSS variables.
+ * Elevation, motion, and control metrics are injected from the same source.
  */
-
-:root {
-  --shadow-soft: 0 24px 70px
-    color-mix(in srgb, var(--foreground) 8%, transparent);
-  --shadow-lift: 0 30px 80px
-    color-mix(in srgb, var(--foreground) 8%, transparent);
-}
 
 body {
   background:
@@ -108,6 +101,6 @@ a {
 }
 
 :is(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid var(--primary);
+  outline: 3px solid var(--primary-foreground);
   outline-offset: 2px;
 }

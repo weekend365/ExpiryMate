@@ -82,14 +82,23 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     enabled: Boolean(sessionUserId),
     refetchOnMount: "always",
   });
+  const {
+    data: spacesData,
+    error: spacesQueryError,
+    fetchStatus: spacesFetchStatus,
+    isError: isSpacesError,
+    isFetching: isSpacesFetching,
+    isPending: isSpacesPending,
+    refetch: refetchSpacesQuery,
+  } = query;
 
   useEnsureEnabledQueryFetch({
     enabled: Boolean(sessionUserId),
-    data: query.data,
-    isPending: query.isPending,
-    isFetching: query.isFetching,
-    fetchStatus: query.fetchStatus,
-    refetch: query.refetch,
+    data: spacesData,
+    isPending: isSpacesPending,
+    isFetching: isSpacesFetching,
+    fetchStatus: spacesFetchStatus,
+    refetch: refetchSpacesQuery,
     fetchEpoch: sessionUserId,
   });
 
@@ -138,16 +147,16 @@ export function SpaceProvider({ children }: PropsWithChildren) {
   }, [sessionUserId, selectionHydrateEpoch]);
 
   const spaces = useMemo(
-    () => (Array.isArray(query.data) ? query.data : []),
-    [query.data],
+    () => (Array.isArray(spacesData) ? spacesData : []),
+    [spacesData],
   );
   const selectionHydrated =
     Boolean(sessionUserId) && hydratedSelection?.userId === sessionUserId;
   const spacesListSettled =
     Boolean(sessionUserId) &&
     selectionHydrated &&
-    !query.isPending &&
-    !query.isFetching;
+    !isSpacesPending &&
+    !isSpacesFetching;
   const requestedSpaceId = hydratedSelection?.spaceId ?? null;
   const requestedMissingFromList = Boolean(
     requestedSpaceId &&
@@ -155,8 +164,8 @@ export function SpaceProvider({ children }: PropsWithChildren) {
   );
   const waitingForRequestedSpace =
     requestedMissingFromList &&
-    (query.isPending ||
-      query.isFetching ||
+    (isSpacesPending ||
+      isSpacesFetching ||
       pendingExplicitSpaceIdRef.current === requestedSpaceId);
 
   const activeSpace = useMemo(() => {
@@ -185,7 +194,7 @@ export function SpaceProvider({ children }: PropsWithChildren) {
   const missingSpaces =
     spacesListSettled &&
     spaces.length === 0 &&
-    !query.isError &&
+    !isSpacesError &&
     !waitingForRequestedSpace;
 
   useEffect(() => {
@@ -205,11 +214,11 @@ export function SpaceProvider({ children }: PropsWithChildren) {
     const timer = setTimeout(() => {
       emptySpacesRetryCountRef.current = attempt;
       setEmptySpacesRetries(attempt);
-      void query.refetch();
+      void refetchSpacesQuery();
     }, 400 * attempt);
 
     return () => clearTimeout(timer);
-  }, [missingSpaces, emptySpacesRetries, query.refetch, spaces.length]);
+  }, [emptySpacesRetries, missingSpaces, refetchSpacesQuery, spaces.length]);
 
   useEffect(() => {
     if (
@@ -311,35 +320,38 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       setSelectionHydrateEpoch((epoch) => epoch + 1);
       captureSpaceBootstrapBreadcrumb("spaces_refetch", {
         userIdPresent: true,
-        fetchStatus: query.fetchStatus,
-        isPending: query.isPending,
+        fetchStatus: spacesFetchStatus,
+        isPending: isSpacesPending,
       });
     }
-    return query.refetch();
-  }, [query.fetchStatus, query.isPending, query.refetch, sessionUserId]);
+    return refetchSpacesQuery();
+  }, [isSpacesPending, refetchSpacesQuery, sessionUserId, spacesFetchStatus]);
 
-  const emptySpacesError =
-    missingSpaces && emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES
-      ? new Error(EMPTY_SPACES_MESSAGE)
-      : null;
+  const emptySpacesError = useMemo(
+    () =>
+      missingSpaces && emptySpacesRetries >= MAX_EMPTY_SPACES_RETRIES
+        ? new Error(EMPTY_SPACES_MESSAGE)
+        : null,
+    [emptySpacesRetries, missingSpaces],
+  );
 
   const isLoading =
     Boolean(sessionUserId) &&
     (!selectionHydrated ||
-      query.isPending ||
-      query.isFetching ||
+      isSpacesPending ||
+      isSpacesFetching ||
       waitingForRequestedSpace ||
       (missingSpaces && emptySpacesRetries < MAX_EMPTY_SPACES_RETRIES));
 
   const isReady =
     !sessionUserId ||
     (selectionHydrated &&
-      !query.isPending &&
+      !isSpacesPending &&
       !waitingForRequestedSpace &&
       Boolean(activeSpace));
 
   useEffect(() => {
-    if (!sessionUserId || isReady || query.isError || emptySpacesError) {
+    if (!sessionUserId || isReady || isSpacesError || emptySpacesError) {
       setBootstrapStalled(false);
       return;
     }
@@ -349,9 +361,9 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       captureSpaceBootstrapBreadcrumb("bootstrap_stalled", {
         userIdPresent: true,
         selectionHydrated,
-        fetchStatus: query.fetchStatus,
-        isPending: query.isPending,
-        isFetching: query.isFetching,
+        fetchStatus: spacesFetchStatus,
+        isPending: isSpacesPending,
+        isFetching: isSpacesFetching,
         spacesCount: spaces.length,
         waitingForRequestedSpace,
       });
@@ -361,19 +373,21 @@ export function SpaceProvider({ children }: PropsWithChildren) {
   }, [
     emptySpacesError,
     isReady,
-    query.fetchStatus,
-    query.isError,
-    query.isFetching,
-    query.isPending,
+    isSpacesError,
+    isSpacesFetching,
+    isSpacesPending,
     selectionHydrated,
     sessionUserId,
     spaces.length,
+    spacesFetchStatus,
     waitingForRequestedSpace,
   ]);
 
-  const stalledError = bootstrapStalled
-    ? new Error(STALLED_INITIAL_FETCH_MESSAGE)
-    : null;
+  const stalledError = useMemo(
+    () =>
+      bootstrapStalled ? new Error(STALLED_INITIAL_FETCH_MESSAGE) : null,
+    [bootstrapStalled],
+  );
 
   const value = useMemo<SpaceContextValue>(
     () => ({
@@ -382,10 +396,10 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       activeSpaceId: activeSpace?.id,
       activeRole: activeSpace?.myRole,
       isReady,
-      isLoading: isLoading && !bootstrapStalled && !query.isError && !emptySpacesError,
+      isLoading: isLoading && !bootstrapStalled && !isSpacesError && !emptySpacesError,
       error:
-        query.error instanceof Error
-          ? query.error
+        spacesQueryError instanceof Error
+          ? spacesQueryError
           : emptySpacesError ?? stalledError,
       setActiveSpaceId,
       refetchSpaces,
@@ -396,11 +410,11 @@ export function SpaceProvider({ children }: PropsWithChildren) {
       emptySpacesError,
       isLoading,
       isReady,
-      query.error,
-      query.isError,
+      isSpacesError,
       refetchSpaces,
       setActiveSpaceId,
       spaces,
+      spacesQueryError,
       stalledError,
     ],
   );

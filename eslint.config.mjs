@@ -20,18 +20,41 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   {
     files: ["**/*.{ts,tsx,js,jsx,mjs,cjs}"],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
     plugins: {
       "react-hooks": reactHooks,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
       "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+  {
+    files: [
+      "*.{js,mjs,cjs}",
+      "scripts/**/*.{js,mjs,cjs}",
+      "apps/api/**/*.{ts,js,mjs,cjs}",
+      "apps/mobile/**/*.{js,mjs,cjs}",
+      "packages/shared/**/*.test.ts",
+    ],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
+  {
+    files: ["apps/admin/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ["apps/mobile/**/*.{ts,tsx}"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+      },
     },
   },
   {

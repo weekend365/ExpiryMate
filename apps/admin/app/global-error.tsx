@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
+import { ActionButton } from "../src/components/action-control";
 
 export default function GlobalError({
   error,
@@ -23,13 +24,9 @@ export default function GlobalError({
             <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
               오류를 기록했습니다. 잠시 뒤 다시 시도해 주세요.
             </p>
-            <button
-              type="button"
-              className="mt-6 rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-bold text-[var(--surface)]"
-              onClick={reset}
-            >
+            <ActionButton className="mt-6" onClick={reset} size="medium">
               다시 시도
-            </button>
+            </ActionButton>
           </div>
         </main>
       </body>

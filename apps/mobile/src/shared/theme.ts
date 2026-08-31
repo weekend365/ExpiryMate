@@ -10,9 +10,14 @@
  * CSS-style `fontWeight`, which Android often mishandles with custom faces.
  */
 import {
+  controlSize as designControlSize,
+  contentWidth as designContentWidth,
+  elevation as designElevation,
   radius as designRadius,
   fontWeight as designFontWeight,
+  motion as designMotion,
   oauthBrand as designOauthBrand,
+  opacity as designOpacity,
   semanticColors,
   spacing as designSpacing,
   typography as sharedTypography,
@@ -29,16 +34,11 @@ export const spacing = designSpacing;
 
 export const radius = designRadius;
 
-/**
- * Touch-target heights from mobile-ux rules (not a visual spacing token).
- * Interactive controls must be at least `min`; primary CTAs use `cta`–`ctaLarge`.
- */
-export const touchTarget = {
-  min: 48,
-  cta: 52,
-  ctaLarge: 56,
-  icon: 44,
-} as const;
+export const controlSize = designControlSize;
+export const motion = designMotion;
+export const contentWidth = designContentWidth;
+export const opacity = designOpacity;
+export const elevation = designElevation;
 
 /** Kept for rare cases that still reference weight tokens; prefer `fontFamily`. */
 export const fontWeight = designFontWeight;

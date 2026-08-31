@@ -72,7 +72,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../src/shared/theme";
 import {
@@ -730,10 +730,10 @@ export default function RegisterScreen() {
 
   const primaryCtaLabel =
     isLastStep
-      ? "냉장고에 넣을게요"
+      ? "재료 추가"
       : step === "product"
-        ? "기한만 고르고 넣을게요"
-        : "이만큼 둘게요";
+        ? "기한 선택"
+        : "다음";
 
   const saveSummary = `${displayName} · ${enteredQuantityLabel} · ${selectedLocationLabel} · ${
     expirySource === ExpirySource.UNKNOWN
@@ -796,7 +796,7 @@ export default function RegisterScreen() {
               }
               fullWidth
             >
-              다음 재료 넣을게요
+              다음 재료 추가
             </Button>
             <Button
               icon={entryMethod === "scan" ? Plus : Barcode}
@@ -806,10 +806,10 @@ export default function RegisterScreen() {
               }
               fullWidth
             >
-              {entryMethod === "scan" ? "손으로 넣을게요" : "바코드로 넣을게요"}
+              {entryMethod === "scan" ? "직접 입력" : "바코드 스캔"}
             </Button>
             <Button variant="surface" onPress={finishRegistration} fullWidth>
-              그만 추가할래요
+              추가 완료
             </Button>
           </View>
         }
@@ -840,7 +840,7 @@ export default function RegisterScreen() {
                   key={item.id}
                   onPress={() => openSessionEdit(item)}
                   accessibilityRole="button"
-                  accessibilityLabel={`${item.displayName} 내용을 고칠게요`}
+                  accessibilityLabel={`${item.displayName} 내용 수정`}
                   accessibilityHint="이름, 수량, 유통기한을 다시 맞춰 둘 수 있어요."
                   style={({ pressed }) => [
                     styles.sessionRow,
@@ -941,7 +941,6 @@ export default function RegisterScreen() {
             tone="success"
             title="아직 없는 상품이에요"
             description="이 재료를 넣으면 추천권 1회를 드려요."
-            showMascot={false}
           />
         ) : null}
         {submitErrorMessage ? (
@@ -1194,7 +1193,7 @@ const localStyles = StyleSheet.create({
     gap: spacing.sm,
   },
   sessionRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: radius.lg,

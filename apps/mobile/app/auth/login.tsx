@@ -35,7 +35,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -85,7 +85,7 @@ export default function LoginScreen() {
                 params: { email: email.trim() },
               }),
           },
-          { text: "조금 뒤에 할게요", style: "cancel" },
+          { text: "나중에", style: "cancel" },
         ]);
         return;
       }
@@ -188,7 +188,7 @@ export default function LoginScreen() {
               shouldStackDense && styles.welcomeHeroCompact,
             ]}
             accessibilityRole="summary"
-            accessibilityLabel={`${appBrand.characterNameKo}예요. 냉장고, 같이 챙길까요?`}
+            accessibilityLabel={`${appBrand.characterNameKo} 캐릭터. 냉장고 관리를 도와줘요.`}
           >
             <AppText variant="title" style={styles.welcomeTitle}>
               장고야 부탁해
@@ -381,7 +381,7 @@ export default function LoginScreen() {
                   }
                   fullWidth
                 >
-                  들어가 볼까요?
+                로그인
                 </Button>
                 <Pressable
                   onPress={() => router.push("/auth/register")}
@@ -393,7 +393,7 @@ export default function LoginScreen() {
                     right: spacing.xs,
                   }}
                   accessibilityRole="button"
-                  accessibilityLabel="아직 계정이 없으면 가입할게요"
+                  accessibilityLabel="회원가입"
                   style={({ pressed }) => [
                     styles.textLink,
                     styles.registerLink,
@@ -405,7 +405,7 @@ export default function LoginScreen() {
                     tone="primary"
                     style={styles.textLinkLabel}
                   >
-                    아직 계정이 없으면 가입할게요
+                    아직 계정이 없나요? 회원가입
                   </AppText>
                 </Pressable>
               </View>
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   passwordField: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.background,
     borderWidth: 1,
@@ -582,13 +582,13 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     paddingVertical: spacing.xs,
     fontFamily: typography.bodyStrong.fontFamily,
   },
   passwordToggle: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
   },

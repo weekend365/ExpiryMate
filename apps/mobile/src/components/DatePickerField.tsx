@@ -4,7 +4,7 @@ import DateTimePicker, {
 import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
 import { forwardRef, useCallback, useImperativeHandle, useState, type PropsWithChildren } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
@@ -186,10 +186,10 @@ export const DatePickerField = forwardRef<
                 onPress={closePicker}
                 style={styles.button}
               >
-                그만둘래요
+                취소
               </Button>
               <Button onPress={confirmIOSDate} style={styles.button}>
-                이 날짜로 할게요
+                날짜 선택
               </Button>
             </View>
           }
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   trigger: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     borderColor: colors.danger,
   },
   heroValueBlock: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.primarySoft,
     paddingHorizontal: spacing.sm,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.body.fontFamily,
   },
   heroAction: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

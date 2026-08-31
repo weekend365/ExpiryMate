@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { oauthBrand, radius, spacing, touchTarget } from "../shared/theme";
+import { oauthBrand, radius, spacing, controlSize } from "../shared/theme";
 import { AppText } from "./AppText";
 
 type OAuthButtonProps = {
@@ -161,7 +161,7 @@ function AppleMark({ color }: { color: string }) {
 
 const styles = StyleSheet.create({
   row: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     borderWidth: 1,
     paddingHorizontal: spacing.md,

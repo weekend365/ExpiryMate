@@ -22,7 +22,7 @@ describe("inventory action notice contract", () => {
 
     expect(screen).toContain("const inventoryActionNotice = actionError");
     expect(screen).toContain("deferredRemoval.undoLabel");
-    expect(screen).toContain('actionLabel="되돌릴게요"');
+    expect(screen).toContain('actionLabel="되돌리기"');
     expect(screen).toContain("deferredRemoval.undoRemoval()");
     expect(screen).toContain("<JangoHeroNoticeCarousel");
     expect(screen).toContain(
@@ -35,7 +35,7 @@ describe("inventory action notice contract", () => {
       'title={`${shoppingOfferTarget.displayName} 다 썼어요.`}',
     );
     expect(screen).not.toContain('description="다시 채워둘까요?"');
-    expect(screen).toContain('actionLabel="장보기에서 찾아볼게요"');
+    expect(screen).toContain('actionLabel="장보기에서 찾기"');
     expect(screen).toContain('speechActionPlacement="inside"');
     expect(feedbackBanner).toContain('speechActionPlacement = "below"');
     expect(feedbackBanner).toContain(

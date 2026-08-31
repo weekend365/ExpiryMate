@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { ActionButton } from "../../components/action-control";
 import { MetricCard } from "../../components/metric-card";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
@@ -70,17 +71,14 @@ export function MonetizationPage() {
         actions={
           <div className="flex gap-2">
             {([7, 30, 90] as const).map((option) => (
-              <button
+              <ActionButton
                 key={option}
                 onClick={() => setDays(option)}
-                className={`rounded-full px-3 py-2 text-sm font-bold ${
-                  days === option
-                    ? "bg-[var(--primary)] text-[var(--surface)]"
-                    : "bg-[var(--surface-muted)]"
-                }`}
+                variant={days === option ? "primary" : "surface"}
+                aria-pressed={days === option}
               >
                 {option}일
-              </button>
+              </ActionButton>
             ))}
           </div>
         }
@@ -88,7 +86,7 @@ export function MonetizationPage() {
 
       {overviewQuery.isError ? (
         <Panel>
-          <p className="text-sm font-semibold text-[var(--danger)]">
+          <p className="text-sm font-semibold text-[var(--danger-foreground)]">
             수익화 지표를 불러오지 못했습니다.
           </p>
         </Panel>
@@ -177,7 +175,7 @@ export function MonetizationPage() {
         description="환경설정 기반 추정치이며 실제 정산액은 스토어·AdMob 재무 보고서와 대조해야 합니다."
       >
         {!overview?.economicsConfigured ? (
-          <p className="mb-4 text-sm font-semibold text-[var(--warning)]">
+          <p className="mb-4 text-sm font-semibold text-[var(--warning-foreground)]">
             수익 추정 설정이 없어 금액 지표를 계산하지 않았습니다.
           </p>
         ) : null}
@@ -303,7 +301,7 @@ export function MonetizationPage() {
                 <span className="text-[var(--muted)]">{row.day.slice(5)}</span>
                 <div className="h-3 overflow-hidden rounded-full bg-[var(--surface-muted)]">
                   <div
-                    className="h-full rounded-full bg-[var(--primary)]"
+                    className="h-full rounded-full bg-[var(--brand-accent)]"
                     style={{ width: `${(row.recommendations / maxRecommendations) * 100}%` }}
                   />
                 </div>
@@ -406,7 +404,7 @@ function GuardrailCard({
     <div className="rounded-[var(--radius-lg)] bg-[var(--surface-muted)] px-4 py-4">
       <div className="flex items-center justify-between gap-3">
         <span className="font-black">{title}</span>
-        <span className={status === "healthy" ? "text-sm font-bold text-[var(--success)]" : "text-sm font-bold text-[var(--warning)]"}>
+        <span className={status === "healthy" ? "text-sm font-bold text-[var(--success-foreground)]" : "text-sm font-bold text-[var(--warning-foreground)]"}>
           {status ? labels[status] : "확인 중"}
         </span>
       </div>

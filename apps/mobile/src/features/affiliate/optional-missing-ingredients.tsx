@@ -13,7 +13,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
 } from "../../shared/theme";
 import { AffiliateCta } from "./affiliate-cta";
 import { AffiliateDisclosure } from "./affiliate-disclosure";
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfacePressed,
   },
   shoppingLink: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.lg,

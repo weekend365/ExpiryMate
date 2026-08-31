@@ -17,7 +17,7 @@ import {
   verifyRecommendationCreditPurchase,
 } from "../../src/services/api";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
+import { colors, radius, spacing, controlSize } from "../../src/shared/theme";
 
 export default function RecommendationCreditsScreen() {
   if (!isIapRuntimeAvailable()) {
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.xl,
     borderWidth: 1,
     borderColor: colors.border,

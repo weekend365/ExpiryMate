@@ -49,6 +49,7 @@ export default function AcceptSpaceInvitationScreen() {
     return (
       <Screen contentWidth="form">
         <EmptyState
+          kind="error"
           mood="worry"
           title="초대 링크를 다시 확인해 주세요"
           description="링크가 잘렸다면 초대한 분에게 새 메일을 부탁해 주세요."
@@ -67,11 +68,12 @@ export default function AcceptSpaceInvitationScreen() {
             onPress={() => router.push("/auth/login")}
             fullWidth
           >
-            로그인하고 초대를 이어갈게요
+            로그인하고 계속
           </Button>
         }
       >
         <EmptyState
+          kind="success"
           mood="happy"
           title="함께 쓸 냉장고에 초대받았어요"
           description="초대받은 이메일 계정으로 로그인하면 바로 이어갈 수 있어요."
@@ -87,6 +89,15 @@ export default function AcceptSpaceInvitationScreen() {
       subtitle="유통기한 알림을 받을지도 지금 고를 수 있어요."
     >
       <EmptyState
+        kind={
+          mutation.isPending
+            ? "loading"
+            : mutation.isError
+              ? "error"
+              : mutation.isSuccess
+                ? "success"
+                : "empty"
+        }
         mood={mutation.isSuccess ? "happy" : "idle"}
         title={
           mutation.isPending
@@ -106,7 +117,7 @@ export default function AcceptSpaceInvitationScreen() {
               loading={mutation.isPending}
               fullWidth
             >
-              알림도 받고 함께할게요
+              알림 받고 참여
             </Button>
             <Button
               icon={BellOff}
@@ -115,7 +126,7 @@ export default function AcceptSpaceInvitationScreen() {
               disabled={mutation.isPending}
               fullWidth
             >
-              알림 없이 함께할게요
+              알림 없이 참여
             </Button>
           </>
         }

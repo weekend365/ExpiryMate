@@ -88,7 +88,7 @@ export default function NotificationSettingsScreen() {
     <SettingsScreen
       footer={
         <Button onPress={handleSave} loading={mutation.isPending} fullWidth>
-          알림 타이밍 맞춰둘게요
+          알림 설정 저장
         </Button>
       }
     >
@@ -128,10 +128,11 @@ export default function NotificationSettingsScreen() {
 
       {spacesError ? (
         <EmptyState
+          kind="error"
           mood="worry"
           title="냉장고 알림을 불러오지 못했어요"
           description={spacesError.message}
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void refetchSpaces();
           }}

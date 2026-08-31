@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { appBrand } from "@expirymate/shared";
+import { ActionLink } from "../../src/components/action-control";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -8,7 +9,7 @@ export default function TermsPage() {
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
       <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Terms
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">이용약관</h1>
@@ -71,7 +72,7 @@ export default function TermsPage() {
             파트너스 링크를 제공할 수 있습니다. 결제는 쿠팡에서 이루어지며 App
             Store 또는 Google Play 인앱결제가 아닙니다. 제휴 안내는 선택 사항이며
             광고 보상이나 추천 이용량과 무관합니다. 자세한 고지는{" "}
-            <Link className="font-bold text-[var(--primary)]" href="/partners">
+            <Link className="font-bold text-[var(--link-text)]" href="/partners">
               쿠팡 파트너스 안내
             </Link>
             를 참고해 주세요.
@@ -89,7 +90,7 @@ export default function TermsPage() {
           <h2 className="pt-4 text-xl font-black">문의</h2>
           <p>
             서비스와 제휴 관련 문의는{" "}
-            <a className="font-bold text-[var(--primary)]" href={`mailto:${contactEmail}`}>
+            <a className="font-bold text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>
             로 보내 주세요.
@@ -97,24 +98,15 @@ export default function TermsPage() {
         </section>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/privacy"
-            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
-          >
+          <ActionLink href="/privacy" size="medium">
             개인정보처리방침
-          </Link>
-          <Link
-            href="/partners"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
+          </ActionLink>
+          <ActionLink href="/partners" size="medium" variant="surface">
             쿠팡 파트너스 안내
-          </Link>
-          <Link
-            href="/privacy/choices"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
+          </ActionLink>
+          <ActionLink href="/privacy/choices" size="medium" variant="surface">
             데이터 삭제 안내
-          </Link>
+          </ActionLink>
         </div>
       </div>
     </main>

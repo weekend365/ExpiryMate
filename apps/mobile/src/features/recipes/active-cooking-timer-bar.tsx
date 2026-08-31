@@ -2,7 +2,7 @@ import { ChevronRight, Clock3 } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { useResponsiveLayout } from "../../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../../shared/theme";
+import { colors, radius, spacing, controlSize } from "../../shared/theme";
 import {
   formatCookingTimerClock,
   formatCookingTimerDuration,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   header: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.xs,
@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   iconCircle: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.pill,
     backgroundColor: colors.surface,
     alignItems: "center",

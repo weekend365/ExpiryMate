@@ -70,7 +70,7 @@ import {
   trackAffiliateEntryTap,
 } from "../../src/features/affiliate/affiliate-entry-tracking";
 import { InventoryUndoSnackbar } from "../../src/features/inventory/inventory-undo-snackbar";
-import { colors, radius, spacing, touchTarget } from "../../src/shared/theme";
+import { colors, radius, spacing, controlSize } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useAppStore } from "../../src/store/app-store";
 
@@ -239,6 +239,7 @@ export default function CookingScreen() {
     return (
       <Screen contentWidth="wide" density="compact" topInsetMode="none">
         <EmptyState
+          kind="loading"
           mood="think"
           title="레시피를 펼치고 있어요"
           description="조금만 기다리면 조리를 시작할 수 있어요."
@@ -258,11 +259,12 @@ export default function CookingScreen() {
             onPress={() => router.replace("/(tabs)/recommendations")}
             fullWidth
           >
-            추천으로 돌아갈게요
+            추천으로 이동
           </Button>
         }
       >
         <EmptyState
+          kind="error"
           mood="worry"
           title="이 레시피를 다시 찾지 못했어요"
           description="추천 탭에서 요리를 다시 골라볼까요?"
@@ -275,6 +277,7 @@ export default function CookingScreen() {
     return (
       <Screen contentWidth="wide" density="compact" topInsetMode="none">
         <EmptyState
+          kind="loading"
           mood="think"
           title="하던 요리가 있는지 확인하고 있어요"
           description="저장된 준비 체크와 조리 단계를 안전하게 불러올게요."
@@ -318,19 +321,20 @@ export default function CookingScreen() {
               onPress={() => router.replace("/(tabs)/home")}
               fullWidth
             >
-              냉장고 볼게요
+              보관함 보기
             </Button>
             <Button
               variant="surface"
               onPress={() => router.replace("/(tabs)/recommendations")}
               fullWidth
             >
-              다른 요리도 볼까요?
+              다른 요리 보기
             </Button>
           </View>
         }
       >
         <EmptyState
+          kind="success"
           mood="happy"
           title="맛있게 완성했어요"
           description={
@@ -377,7 +381,7 @@ export default function CookingScreen() {
                 }}
                 fullWidth
               >
-                장보기에서 한 번에 볼게요
+                장보기에서 모두 보기
               </Button>
             </View>
           </AffiliateEntryImpression>
@@ -516,7 +520,7 @@ export default function CookingScreen() {
               onPress={() => router.push("/(tabs)/shop")}
               fullWidth
             >
-              없는 재료 장보러 갈게요
+          없는 재료 장보기
             </Button>
           </>
         ) : null}
@@ -539,8 +543,8 @@ export default function CookingScreen() {
       >
         {currentTimerCompleted
           ? isLastCookingStep
-            ? "타이머가 끝났어요 · 요리 완성"
-            : "타이머가 끝났어요 · 다음 단계"
+            ? "타이머 완료 · 요리 완성"
+            : "타이머 완료 · 다음 단계"
           : getCookingStepCta(isLastCookingStep)}
       </Button>
     ) : currentIndex === completionStepIndex ? (
@@ -554,7 +558,7 @@ export default function CookingScreen() {
           사용한 재료 정리
         </Button>
         <Button variant="surface" onPress={handleCleanupLater} fullWidth>
-          나중에 정리
+          나중에
         </Button>
       </View>
     ) : (
@@ -784,6 +788,7 @@ export default function CookingScreen() {
         {currentIndex === completionStepIndex ? (
           <View style={styles.section} testID="cooking-completion-moment">
             <EmptyState
+              kind="success"
               mood="happy"
               title={`${dish.title}, 맛있게 완성됐어요`}
               description="완성된 요리를 먼저 즐겨 주세요. 사용한 재료 정리는 지금 하거나 홈에서 나중에 이어갈 수 있어요."
@@ -801,7 +806,7 @@ export default function CookingScreen() {
                 loading={setFavoriteMutation.isPending}
                 fullWidth
               >
-                {isFavorite ? "즐겨찾기에 담았어요" : "다음에도 쉽게 찾기"}
+                {isFavorite ? "즐겨찾기 해제" : "즐겨찾기에 추가"}
               </Button>
               <Button
                 icon={RotateCcw}
@@ -907,7 +912,7 @@ export default function CookingScreen() {
         footer={
           <View style={styles.footerStack} testID="cooking-session-resume-sheet">
             <Button onPress={resumeCookingSession} fullWidth>
-              이어서 조리할게요
+              이어서 조리
             </Button>
             <Button
               variant="surface"
@@ -1355,7 +1360,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   handsBusyButton: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
   },
   ctaHint: {
     textAlign: "center",
@@ -1377,7 +1382,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   checkRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -1412,7 +1417,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   cookingCard: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
@@ -1460,7 +1465,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   overviewRow: {
-    minHeight: touchTarget.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -1487,8 +1492,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   overviewIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.pill,
     backgroundColor: colors.mutedSurface,
     alignItems: "center",
@@ -1522,7 +1527,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   summaryRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
@@ -1573,8 +1578,8 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   shoppingSummaryIcon: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
@@ -1584,7 +1589,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   remainingRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",

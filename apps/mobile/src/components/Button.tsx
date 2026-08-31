@@ -7,7 +7,7 @@ import {
   type ViewStyle,
 } from "react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText } from "./AppText";
 
 interface ButtonProps extends PropsWithChildren {
@@ -99,8 +99,8 @@ export function Button({
 
 const buttonPalettes = {
   primary: {
-    backgroundColor: colors.primary,
-    pressedBackgroundColor: colors.primaryPressed,
+    backgroundColor: colors.actionPrimaryBackground,
+    pressedBackgroundColor: colors.actionPrimaryPressed,
     disabledBackgroundColor: colors.disabled,
     textColor: colors.surface,
     disabledTextColor: colors.surface,
@@ -109,7 +109,7 @@ const buttonPalettes = {
     backgroundColor: colors.primarySoft,
     pressedBackgroundColor: colors.primarySoftPressed,
     disabledBackgroundColor: colors.mutedSurface,
-    textColor: colors.primary,
+    textColor: colors.primaryForeground,
     disabledTextColor: colors.disabledText,
   },
   /** White fill + danger border — stays visible on soft-tinted hero cards. */
@@ -117,7 +117,7 @@ const buttonPalettes = {
     backgroundColor: colors.surface,
     pressedBackgroundColor: colors.dangerSoft,
     disabledBackgroundColor: colors.mutedSurface,
-    textColor: colors.danger,
+    textColor: colors.dangerForeground,
     disabledTextColor: colors.disabledText,
   },
   /** White surface — use on soft-tinted cards so the control doesn't blend in. */
@@ -125,7 +125,7 @@ const buttonPalettes = {
     backgroundColor: colors.surface,
     pressedBackgroundColor: colors.surfacePressed,
     disabledBackgroundColor: colors.mutedSurface,
-    textColor: colors.primary,
+    textColor: colors.primaryForeground,
     disabledTextColor: colors.disabledText,
   },
 };
@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   mediumButton: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
   },
   smallButton: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
   },
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   dangerOutline: {
-    borderColor: colors.danger,
+    borderColor: colors.dangerForeground,
   },
   label: {
     flexShrink: 1,

@@ -1,6 +1,6 @@
 import type { MonetizationOfferKind } from "@expirymate/shared";
 
-export const REWARDED_AD_CTA_LABEL = "광고 보고 추천 받을게요";
+export const REWARDED_AD_CTA_LABEL = "광고 보고 추천받기";
 
 export function resolveMonetizationOffer(kind: MonetizationOfferKind) {
   switch (kind) {

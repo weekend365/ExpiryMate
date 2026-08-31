@@ -116,6 +116,6 @@ export function extraDetailsRowLabel({
   notes?: string;
 }) {
   return brand || category || notes
-    ? "브랜드·메모 확인하기"
-    : "브랜드·메모 더 적을게요";
+    ? "브랜드·메모 확인"
+    : "브랜드·메모 추가";
 }

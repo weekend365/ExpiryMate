@@ -85,7 +85,7 @@ export default function AiDataNoticeScreen() {
               onPress={() => setRevokeSheetOpen(true)}
               fullWidth
             >
-              추천 동의를 거둘게요
+          동의 철회
             </Button>
           ) : (
             <Button
@@ -93,7 +93,7 @@ export default function AiDataNoticeScreen() {
               loading={acceptMutation.isPending}
               fullWidth
             >
-              내용을 살펴봤고 동의할게요
+              동의하고 계속
             </Button>
           )
         }
@@ -180,7 +180,7 @@ export default function AiDataNoticeScreen() {
               onPress={() => setRevokeSheetOpen(false)}
               fullWidth
             >
-              조금 더 생각해 볼게요
+              취소
             </Button>
             <Button
               variant="danger"
@@ -188,7 +188,7 @@ export default function AiDataNoticeScreen() {
               loading={revokeMutation.isPending}
               fullWidth
             >
-              동의를 거둘게요
+              동의 철회
             </Button>
           </View>
         }

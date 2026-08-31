@@ -126,7 +126,7 @@ export default function RecipePreferenceSettingsScreen() {
           loading={mutation.isPending}
           fullWidth
         >
-          추천 설정 저장할게요
+          추천 설정 저장
         </Button>
       }
     >
@@ -135,7 +135,7 @@ export default function RecipePreferenceSettingsScreen() {
           <FeedbackBanner
             title="추천 설정을 불러오지 못했어요"
             description={getSettingsErrorMessage(query.error)}
-            actionLabel="다시 불러올게요"
+            actionLabel="다시 시도"
             onAction={() => {
               void query.refetch();
             }}

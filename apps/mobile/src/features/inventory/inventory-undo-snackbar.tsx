@@ -16,7 +16,7 @@ export function InventoryUndoSnackbar({
     <View
       style={[styles.undoSnackbar, stacked && styles.undoSnackbarStacked]}
       accessibilityLiveRegion="assertive"
-      accessibilityLabel={`${label}. 되돌릴게요`}
+      accessibilityLabel={`${label}. 되돌리기 가능`}
     >
       <AppText
         variant="bodySmall"
@@ -29,7 +29,7 @@ export function InventoryUndoSnackbar({
       <Pressable
         onPress={onUndo}
         accessibilityRole="button"
-        accessibilityLabel="되돌릴게요"
+        accessibilityLabel="되돌리기"
         hitSlop={spacing.xs}
         style={({ pressed }) => [
           styles.undoSnackbarAction,
@@ -41,7 +41,7 @@ export function InventoryUndoSnackbar({
           scaleRole="chrome"
           style={styles.undoSnackbarActionLabel}
         >
-          되돌릴게요
+          되돌리기
         </AppText>
       </Pressable>
     </View>

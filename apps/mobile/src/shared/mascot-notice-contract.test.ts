@@ -49,7 +49,10 @@ describe("Jango notice presentation contract", () => {
     const hero = read("src/components/JangoHeroNoticeCarousel.tsx");
 
     expect(feedback).toContain("DEFAULT_FEEDBACK_AUTO_DISMISS_MS = 5_000");
-    expect(feedback).toContain("isTransientJangoNotice");
+    expect(feedback).toContain("isTransientNotice");
+    expect(feedback).toContain('presentation = "inline"');
+    expect(feedback).not.toContain("showMascot?");
+    expect(feedback).toContain('accessibilityLabel="알림 닫기"');
     expect(feedback).toContain("AccessibilityInfo.isScreenReaderEnabled()");
     expect(feedback).toContain('tone !== "danger"');
     expect(feedback).toContain("!hasAction");
@@ -58,7 +61,7 @@ describe("Jango notice presentation contract", () => {
     expect(bubble).toContain('accessibilityLabel="장고 알림 닫기"');
     expect(bubble).toContain('testID="mascot-speech-dismiss-button"');
     expect(bubble).toMatch(
-      /dismissButton:[\s\S]*?width: touchTarget\.icon[\s\S]*?height: touchTarget\.icon/,
+      /dismissButton:[\s\S]*?width: controlSize\.icon[\s\S]*?height: controlSize\.icon/,
     );
     expect(bubble).toContain("accessible={!onDismiss && !onInlineAction}");
     expect(bubble).toContain("inlineActionLabel");

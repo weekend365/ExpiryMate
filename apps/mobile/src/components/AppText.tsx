@@ -30,6 +30,7 @@ type AppTextTone =
   | "danger"
   | "warning"
   | "success"
+  | "info"
   | "inverse";
 
 export interface AppTextProps
@@ -52,13 +53,14 @@ const toneColors: Record<AppTextTone, string> = {
   default: colors.text,
   subtext: colors.subtext,
   muted: colors.mutedText,
-  primary: colors.primary,
+  primary: colors.primaryForeground,
   link: colors.linkText,
   disclosure: colors.disclosureText,
   disabled: colors.disabledText,
-  danger: colors.danger,
-  warning: colors.warning,
-  success: colors.success,
+  danger: colors.dangerForeground,
+  warning: colors.warningForeground,
+  success: colors.successForeground,
+  info: colors.infoForeground,
   inverse: colors.surface,
 };
 

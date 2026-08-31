@@ -72,7 +72,9 @@ describe("cooking flow resilience contract", () => {
     );
 
     expect(screen).toContain('testID="cooking-completion-moment"');
-    expect(screen).toContain("나중에 정리");
+    expect(screen).toMatch(
+      /onPress=\{handleCleanupLater\}[\s\S]*?>\s*나중에\s*<\/Button>/,
+    );
     expect(screen).toContain("setPendingCookingCleanup");
     expect(home).toContain("PendingCookingCleanupCard");
     expect(cleanupCard).toContain('cleanup: "1"');

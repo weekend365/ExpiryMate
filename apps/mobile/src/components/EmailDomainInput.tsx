@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { StyleProp, TextInput, TextInputProps, TextStyle } from "react-native";
 import { StyleSheet } from "react-native";
-import { colors, radius, spacing, touchTarget, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppTextInput } from "./AppTextInput";
 
 type EmailDomainInputProps = {
@@ -63,7 +63,7 @@ export const EmailDomainInput = forwardRef<TextInput, EmailDomainInputProps>(
 
 const styles = StyleSheet.create({
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,

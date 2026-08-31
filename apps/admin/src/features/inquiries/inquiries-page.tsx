@@ -10,6 +10,10 @@ import {
 } from "@expirymate/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import {
+  ActionAnchor,
+  ActionButton,
+} from "../../components/action-control";
 import { PageHeader } from "../../components/page-header";
 import { Panel } from "../../components/panel";
 import {
@@ -158,22 +162,18 @@ export function InquiriesPage() {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {mailto ? (
-                        <a
-                          className="rounded-full bg-[var(--primary)] px-4 py-2 text-sm font-bold text-[var(--surface)]"
-                          href={mailto}
-                        >
+                        <ActionAnchor href={mailto}>
                           메일로 답장
-                        </a>
+                        </ActionAnchor>
                       ) : null}
                       {inquiry.status === SupportInquiryStatus.OPEN ? (
-                        <button
-                          type="button"
-                          className="rounded-full bg-[var(--surface)] px-4 py-2 text-sm font-bold text-[var(--foreground)]"
+                        <ActionButton
+                          variant="surface"
                           disabled={closeMutation.isPending}
                           onClick={() => closeMutation.mutate(inquiry.id)}
                         >
-                          마무리할게요
-                        </button>
+                          문의 완료 처리
+                        </ActionButton>
                       ) : null}
                     </div>
                   </div>
@@ -187,25 +187,23 @@ export function InquiriesPage() {
         )}
 
         <div className="mt-6 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            className="rounded-full bg-[var(--surface)] px-4 py-2 text-sm font-bold disabled:opacity-40"
+          <ActionButton
+            variant="surface"
             disabled={page <= 1}
             onClick={() => setPage((current) => Math.max(1, current - 1))}
           >
             이전
-          </button>
+          </ActionButton>
           <span className="text-sm font-semibold text-[var(--muted)]">
             {page}페이지
           </span>
-          <button
-            type="button"
-            className="rounded-full bg-[var(--surface)] px-4 py-2 text-sm font-bold disabled:opacity-40"
+          <ActionButton
+            variant="surface"
             disabled={!hasMore}
             onClick={() => setPage((current) => current + 1)}
           >
             다음
-          </button>
+          </ActionButton>
         </div>
       </Panel>
     </div>

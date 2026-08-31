@@ -10,7 +10,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 import {
@@ -71,7 +71,7 @@ export function RecipeDetailSheet({
             disabled={!selection}
             fullWidth
           >
-            이 요리로 해볼게요
+            이 요리 시작
           </Button>
         </View>
       }
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   ingredientInfoRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
     paddingHorizontal: spacing.sm,

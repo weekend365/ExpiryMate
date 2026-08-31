@@ -162,7 +162,7 @@ export function InventoryExpiryStep({
           heroEyebrow={null}
           actionLabel={
             expirySource === ExpirySource.UNKNOWN
-              ? "날짜를 입력할게요"
+              ? "날짜 입력"
               : expiryDate
                 ? "다른 날짜 고르기"
                 : "달력에서 고르기"

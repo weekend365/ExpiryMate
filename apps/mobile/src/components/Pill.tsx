@@ -95,20 +95,20 @@ export function Pill({
 
 const tonePalettes = {
   default: {
-    selectedBackgroundColor: colors.primary,
+    selectedBackgroundColor: colors.actionPrimaryBackground,
     textColor: colors.text,
   },
   warning: {
-    selectedBackgroundColor: colors.warning,
-    textColor: colors.warning,
+    selectedBackgroundColor: colors.actionWarningBackground,
+    textColor: colors.warningForeground,
   },
   danger: {
-    selectedBackgroundColor: colors.danger,
-    textColor: colors.danger,
+    selectedBackgroundColor: colors.actionDangerBackground,
+    textColor: colors.dangerForeground,
   },
   success: {
-    selectedBackgroundColor: colors.success,
-    textColor: colors.success,
+    selectedBackgroundColor: colors.actionSuccessBackground,
+    textColor: colors.successForeground,
   },
 } as const;
 

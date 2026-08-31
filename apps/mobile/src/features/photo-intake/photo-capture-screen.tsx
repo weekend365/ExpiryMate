@@ -27,7 +27,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
 } from "../../shared/theme";
 import { CloseButton } from "../scanner/scanner-chrome";
 import { scannerScreenStyles } from "../scanner/scanner-screen-styles";
@@ -96,7 +96,7 @@ export function PhotoCaptureScreen({
         >
           <CloseButton
             onPress={onClose}
-            accessibilityLabel="사진 등록을 닫을게요"
+            accessibilityLabel="사진 등록 닫기"
           />
           <View
             style={scannerScreenStyles.stepPill}
@@ -153,11 +153,11 @@ export function PhotoCaptureScreen({
                   }}
                   fullWidth
                 >
-                  설정에서 켤게요
+                  설정 열기
                 </Button>
               )}
               <Button variant="surface" onPress={onOpenLibrary} fullWidth>
-                앨범에서 고를게요
+                앨범에서 선택
               </Button>
             </View>
           </View>
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   accessBadge: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   },
   sceneButton: {
     flex: 1,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.md,
     flexDirection: "row",
     alignItems: "center",
@@ -521,8 +521,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   sourceButton: {
-    width: touchTarget.ctaLarge,
-    minHeight: touchTarget.ctaLarge,
+    width: controlSize.ctaLarge,
+    minHeight: controlSize.ctaLarge,
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.xxs,
@@ -530,8 +530,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mutedSurface,
   },
   shutterButton: {
-    width: touchTarget.ctaLarge + spacing.sm,
-    height: touchTarget.ctaLarge + spacing.sm,
+    width: controlSize.ctaLarge + spacing.sm,
+    height: controlSize.ctaLarge + spacing.sm,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius.pill,
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryPressed,
   },
   actionSpacer: {
-    width: touchTarget.ctaLarge,
+    width: controlSize.ctaLarge,
   },
   sourceHint: {
     textAlign: "center",

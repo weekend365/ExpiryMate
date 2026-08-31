@@ -66,6 +66,15 @@ function checkMetadata(file, source) {
   if (metadata.source_of_truth && !["true", "false"].includes(metadata.source_of_truth)) {
     errors.push(`${relative(file)}: source_of_truth는 true 또는 false여야 합니다.`);
   }
+  if (
+    metadata.status &&
+    metadata.status !== "active" &&
+    metadata.source_of_truth === "true"
+  ) {
+    errors.push(
+      `${relative(file)}: status가 '${metadata.status}'인 문서는 source_of_truth가 될 수 없습니다.`,
+    );
+  }
 
   if (!metadata.last_reviewed) return;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(metadata.last_reviewed)) {

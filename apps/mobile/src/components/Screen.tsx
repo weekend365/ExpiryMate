@@ -20,7 +20,7 @@ import {
   getContentMaxWidth,
   useResponsiveLayout,
 } from "../shared/responsive-layout";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText } from "./AppText";
 
 export interface ScreenProps extends PropsWithChildren {
@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignSelf: "flex-start",
-    minWidth: touchTarget.icon,
-    minHeight: touchTarget.icon,
+    minWidth: controlSize.icon,
+    minHeight: controlSize.icon,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",

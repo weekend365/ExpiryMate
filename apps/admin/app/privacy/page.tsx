@@ -3,6 +3,7 @@ import {
   appBrand,
   UNFAVORITED_RECIPE_RECOMMENDATION_RETENTION_DAYS,
 } from "@expirymate/shared";
+import { ActionLink } from "../../src/components/action-control";
 
 const contactEmail =
   process.env.PRIVACY_CONTACT_EMAIL ?? "privacy@expirymate.local";
@@ -11,7 +12,7 @@ export default function PrivacyPolicyPage() {
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-5 py-10">
       <div className="rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[var(--surface)] p-7 shadow-[var(--shadow-lift)]">
-        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary)]">
+        <div className="inline-flex rounded-full bg-[var(--primary-soft)] px-3 py-1 text-sm font-bold text-[var(--primary-foreground)]">
           {appBrand.appNameKo} Privacy
         </div>
         <h1 className="mt-5 text-3xl font-black tracking-tight">
@@ -134,7 +135,7 @@ export default function PrivacyPolicyPage() {
               서버에서 쿠팡으로 전달될 수 있고, 상품을 선택하면 쿠팡 웹·앱으로 이동합니다.
               계정 ID, 전체 냉장고 목록, 유통기한, 수량, 공간 정보는 쿠팡에
               전송하지 않습니다. 고지는{" "}
-              <Link className="font-bold text-[var(--primary)]" href="/partners">
+              <Link className="font-bold text-[var(--link-text)]" href="/partners">
                 쿠팡 파트너스 안내
               </Link>
               를 따릅니다.
@@ -232,7 +233,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             자세한 삭제 절차는{" "}
-            <Link className="font-bold text-[var(--primary)]" href="/privacy/choices">
+            <Link className="font-bold text-[var(--link-text)]" href="/privacy/choices">
               데이터 삭제 안내
             </Link>
             를 참고해 주세요.
@@ -241,7 +242,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="pt-4 text-xl font-black">문의</h2>
           <p>
             개인정보 관련 문의는{" "}
-            <a className="font-bold text-[var(--primary)]" href={`mailto:${contactEmail}`}>
+            <a className="font-bold text-[var(--link-text)]" href={`mailto:${contactEmail}`}>
               {contactEmail}
             </a>
             로 연락해 주세요.
@@ -249,30 +250,18 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/privacy/choices"
-            className="rounded-full bg-[var(--primary)] px-5 py-3 text-sm font-black text-[var(--surface)]"
-          >
+          <ActionLink href="/privacy/choices" size="medium">
             데이터 삭제 안내
-          </Link>
-          <Link
-            href="/terms"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
+          </ActionLink>
+          <ActionLink href="/terms" size="medium" variant="surface">
             이용약관
-          </Link>
-          <Link
-            href="/partners"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
+          </ActionLink>
+          <ActionLink href="/partners" size="medium" variant="surface">
             쿠팡 파트너스 안내
-          </Link>
-          <Link
-            href="/login"
-            className="rounded-full bg-[var(--surface-muted)] px-5 py-3 text-sm font-black text-[var(--foreground)]"
-          >
-            관리자로 들어가기
-          </Link>
+          </ActionLink>
+          <ActionLink href="/login" size="medium" variant="surface">
+            관리자 로그인
+          </ActionLink>
         </div>
       </div>
     </main>

@@ -37,7 +37,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../../src/shared/theme";
 
@@ -106,6 +106,7 @@ export default function SpaceDetailScreen() {
       return (
         <SettingsScreen>
           <EmptyState
+            kind="loading"
             mood="idle"
             title="냉장고를 펼치고 있어요"
             description="함께 쓰는 냉장고를 확인하고 있어요."
@@ -117,10 +118,11 @@ export default function SpaceDetailScreen() {
     return (
       <SettingsScreen>
         <EmptyState
+          kind="error"
           mood="worry"
           title="이 냉장고를 다시 찾지 못했어요"
           description="함께 쓰는 냉장고 목록에서 다시 골라볼까요?"
-          actionLabel="목록으로 돌아갈게요"
+          actionLabel="목록으로 이동"
           onAction={() => router.replace("/settings/spaces")}
         />
       </SettingsScreen>
@@ -199,16 +201,17 @@ export default function SpaceDetailScreen() {
               onPress={() => setInviteVisible(true)}
               fullWidth
             >
-              구성원을 초대할게요
+              구성원 초대
             </Button>
           ) : undefined
         }
       >
       {management.membersQuery.isError ? (
         <EmptyState
+          kind="error"
           mood="worry"
           title="구성원을 불러오지 못했어요"
-          actionLabel="다시 불러올게요"
+          actionLabel="다시 시도"
           onAction={() => {
             void management.membersQuery.refetch();
           }}
@@ -322,7 +325,7 @@ export default function SpaceDetailScreen() {
           loading={deleteMutation.isPending}
           fullWidth
         >
-          이 냉장고를 정리할게요
+          냉장고 삭제
         </Button>
       ) : null}
       {!isOwner && space.type !== "personal" && sessionUserId ? (
@@ -336,7 +339,7 @@ export default function SpaceDetailScreen() {
           loading={management.removeMutation.isPending}
           fullWidth
         >
-          이 냉장고에서 나갈게요
+          냉장고 나가기
         </Button>
       ) : null}
 
@@ -357,7 +360,7 @@ export default function SpaceDetailScreen() {
               loading={management.inviteMutation.isPending}
               fullWidth
             >
-              초대 메일을 보낼게요
+              초대 메일 보내기
             </Button>
           ) : generatedCode ? (
             <Button
@@ -367,7 +370,7 @@ export default function SpaceDetailScreen() {
               }}
               fullWidth
             >
-              코드를 공유할게요
+              코드 공유
             </Button>
           ) : (
             <Button
@@ -376,7 +379,7 @@ export default function SpaceDetailScreen() {
               loading={management.createCodeMutation.isPending}
               fullWidth
             >
-              1회용 코드를 만들게요
+              1회용 코드 만들기
             </Button>
           )
         }
@@ -656,7 +659,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,

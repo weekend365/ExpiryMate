@@ -3,7 +3,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 import {
@@ -37,8 +37,8 @@ export const scannerScreenStyles = StyleSheet.create({
     gap: spacing.xs,
   },
   iconButton: {
-    width: touchTarget.min,
-    height: touchTarget.min,
+    width: controlSize.minimum,
+    height: controlSize.minimum,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
@@ -49,7 +49,7 @@ export const scannerScreenStyles = StyleSheet.create({
   },
   stepPill: {
     maxWidth: "80%",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.pill,
     paddingHorizontal: spacing.md,
     flexDirection: "row",
@@ -187,8 +187,8 @@ export const scannerScreenStyles = StyleSheet.create({
     alignItems: "stretch",
   },
   flashButton: {
-    width: touchTarget.min,
-    height: touchTarget.min,
+    width: controlSize.minimum,
+    height: controlSize.minimum,
     borderRadius: radius.pill,
     backgroundColor: colors.cameraControl,
     alignItems: "center",
@@ -205,7 +205,7 @@ export const scannerScreenStyles = StyleSheet.create({
   },
   manualAction: {
     flex: 1,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.pill,
     backgroundColor: colors.cameraControl,
     paddingHorizontal: spacing.md,
@@ -234,7 +234,7 @@ export const scannerScreenStyles = StyleSheet.create({
     textShadowRadius: 2,
   },
   loadingStrip: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     borderRadius: radius.xxl,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
@@ -255,7 +255,7 @@ export const scannerScreenStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacing.sm,
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
   },
   errorText: {
     flex: 1,
@@ -354,7 +354,7 @@ export const scannerScreenStyles = StyleSheet.create({
     color: colors.text,
   },
   manualNameInput: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -442,7 +442,7 @@ export const scannerScreenStyles = StyleSheet.create({
     width: "100%",
   },
   androidDateTrigger: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -500,7 +500,7 @@ export const scannerScreenStyles = StyleSheet.create({
     padding: spacing.md,
   },
   quickSummaryRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

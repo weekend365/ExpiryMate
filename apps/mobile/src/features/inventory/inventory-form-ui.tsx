@@ -19,7 +19,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../shared/theme";
 import { QUICK_EXPIRY_OPTIONS } from "./inventory-form-copy";
@@ -176,7 +176,7 @@ export function StorageLocationField({
     <Pressable
       onPress={onExpand}
       accessibilityRole="button"
-      accessibilityLabel={`${selectedLabel}에 둘게요`}
+      accessibilityLabel={`보관 위치 변경, 현재 ${selectedLabel}`}
       accessibilityHint="자리를 다른 곳으로 바꿀 수 있어요."
       style={({ pressed }) => [
         inventoryFormStyles.sectionCard,
@@ -189,7 +189,7 @@ export function StorageLocationField({
       <AppText style={inventoryFormStyles.locationRowLabel}>
         {selectedLabel}
       </AppText>
-      <AppText style={inventoryFormStyles.locationRowAction}>바꿀게요</AppText>
+      <AppText style={inventoryFormStyles.locationRowAction}>변경</AppText>
     </Pressable>
   );
 }
@@ -248,7 +248,7 @@ export function AdditionalInfoSheet({
       description="브랜드와 메모는 필요할 때만 적어도 돼요."
       footer={
         <Button onPress={onClose} fullWidth>
-          여기까지 할게요
+          완료
         </Button>
       }
     >
@@ -316,7 +316,7 @@ export function AddLocationSheet({
           disabled={label.trim().length === 0}
           fullWidth
         >
-          여기에 보관할까요?
+          위치 추가
         </Button>
       }
     >
@@ -337,7 +337,7 @@ export function AddLocationSheet({
 
 const recapRowStyles = StyleSheet.create({
   row: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     alignItems: "center",
     borderRadius: radius.lg,
@@ -379,7 +379,7 @@ export const inventoryFormStyles = StyleSheet.create({
     color: colors.text,
   },
   addLocationInput: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
@@ -419,7 +419,7 @@ export const inventoryFormStyles = StyleSheet.create({
     gap: spacing.xs,
   },
   sectionCardRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",

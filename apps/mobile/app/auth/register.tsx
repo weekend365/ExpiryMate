@@ -17,7 +17,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -90,7 +90,7 @@ export default function RegisterScreen() {
           disabled={!canSubmit}
           fullWidth
         >
-          이걸로 시작할까요?
+          가입
         </Button>
       }
     >
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   passwordField: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -284,13 +284,13 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     flex: 1,
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     paddingVertical: spacing.xs,
     fontFamily: typography.bodyStrong.fontFamily,
   },
   passwordToggle: {
-    width: touchTarget.icon,
-    height: touchTarget.icon,
+    width: controlSize.icon,
+    height: controlSize.icon,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   nameInput: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,

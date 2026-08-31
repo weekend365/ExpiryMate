@@ -13,7 +13,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../src/shared/theme";
 
@@ -65,7 +65,7 @@ export default function ForgotPasswordScreen() {
           disabled={!canSubmit}
           fullWidth
         >
-          재설정 메일 받을게요
+          재설정 메일 받기
         </Button>
       }
     >
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   input: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,

@@ -33,6 +33,7 @@ source_of_truth: true
 
 | 문서 | 용도 | 담당 | 정본 |
 |---|---|---|---|
+| [디자인 시스템](./design-system.md) | 토큰 역할, 정보 위계, 공통 UI·문구·접근성 규칙 | design-system | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | 캐릭터 제작과 사용 규칙 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |
 | [수익화 운영 기준](./monetization.md) | 광고·파트너스 정책과 QA | product | Yes |

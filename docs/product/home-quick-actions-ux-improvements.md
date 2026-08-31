@@ -2,7 +2,7 @@
 status: draft
 owner: mobile-design
 last_reviewed: 2026-08-28
-source_of_truth: true
+source_of_truth: false
 ---
 
 # 홈 빠른 동작 UX 개선안

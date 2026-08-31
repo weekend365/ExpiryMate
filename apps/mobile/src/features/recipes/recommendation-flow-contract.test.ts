@@ -41,7 +41,7 @@ describe("recommendation screen flow contract", () => {
     expect(screen).not.toContain("setSelectedRecipe");
     expect(screen).not.toContain("handleStartSelectedRecipe");
     expect(screen).not.toContain("<Eye");
-    expect(detailSheet).toContain("이 요리로 해볼게요");
+    expect(detailSheet).toContain("이 요리 시작");
     expect(detailSheet).toContain("onPress={onStartCooking}");
     expect(screen).toContain(
       "const { recommendationId, dishIndex } = recipeDetail;",

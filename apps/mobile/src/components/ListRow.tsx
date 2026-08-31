@@ -1,7 +1,7 @@
 import { ChevronRight, type LucideIcon } from "lucide-react-native";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, touchTarget } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
 import { useSettingsDensity } from "./settings-density";
@@ -112,7 +112,7 @@ export function ListRow({
 
 const styles = StyleSheet.create({
   listRow: {
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     flexDirection: "row",

@@ -249,7 +249,7 @@ export default function InventoryScreen() {
       testID="inventory-action-notice"
       tone="success"
       title={visibleRemovalNotice}
-      actionLabel="되돌릴게요"
+      actionLabel="되돌리기"
       speechActionPlacement="inside"
       onAction={() => {
         deferredRemoval.undoRemoval();
@@ -266,7 +266,7 @@ export default function InventoryScreen() {
         testID="inventory-action-notice"
         tone="success"
         title={`${shoppingOfferTarget.displayName} 다 썼어요.`}
-        actionLabel="장보기에서 찾아볼게요"
+        actionLabel="장보기에서 찾기"
         speechActionPlacement="inside"
         onAction={() => {
           trackAffiliateEntryTap("inventory_consumed");
@@ -523,9 +523,9 @@ export default function InventoryScreen() {
         fullWidth
         testID="inventory-discard-selected-button"
       >
-        {selectedIds.length
-          ? `${selectedIds.length}개 폐기할게요`
-          : "폐기할 재료를 골라 주세요"}
+          {selectedIds.length
+            ? `${selectedIds.length}개 폐기`
+            : "폐기할 재료를 골라 주세요"}
       </Button>
     ) : (
       <Button
@@ -674,7 +674,7 @@ export default function InventoryScreen() {
                   tone="danger"
                   title="앗, 보관함을 불러오지 못했어요"
                   description={loadErrorMessage}
-                  actionLabel="다시 불러올게요"
+                  actionLabel="다시 시도"
                   onAction={() => {
                     void refetch();
                   }}
@@ -687,16 +687,18 @@ export default function InventoryScreen() {
               <InventoryListSkeleton />
             ) : isError && !hasLoadedInventory ? (
               <EmptyState
+                kind="error"
                 mood="worry"
                 title="앗, 보관함을 불러오지 못했어요"
                 description={loadErrorMessage}
-                actionLabel="다시 불러올게요"
+                actionLabel="다시 시도"
                 onAction={() => {
                   void refetch();
                 }}
               />
             ) : isEmptyInventory ? (
               <EmptyState
+                kind="empty"
                 mood="empty"
                 title="아직 넣어둔 재료가 없어요"
                 description="장고가 빈 냉장고를 바라보고 있어요. 첫 재료를 넣으러 가볼까요?"
@@ -706,7 +708,7 @@ export default function InventoryScreen() {
             ) : isFilteredEmpty ? (
               <EmptyState
                 mood={hasSearchQuery ? "idle" : getFilteredEmptyMood(filter)}
-                showMascot={false}
+                kind="no-results"
                 title={getFilteredEmptyTitle(filter, hasSearchQuery)}
                 description={getFilteredEmptyDescription(
                   filter,
@@ -715,9 +717,9 @@ export default function InventoryScreen() {
                 )}
                 actionLabel={
                   hasSearchQuery && !hasStatusFilter && !hasLocationFilter
-                    ? "검색어 지울게요"
+                    ? "검색어 지우기"
                     : filter === "all" && hasLocationFilter && !hasSearchQuery
-                      ? "모든 위치 볼게요"
+                      ? "모든 위치 보기"
                       : "필터 풀게요"
                 }
                 onAction={

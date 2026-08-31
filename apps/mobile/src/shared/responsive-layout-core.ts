@@ -1,4 +1,4 @@
-import { spacing } from "@expirymate/shared";
+import { contentWidth, spacing } from "@expirymate/shared";
 
 export const REGULAR_WINDOW_MIN_WIDTH = 700;
 /** Raised from 380 so small phones + Android display-size scaling stack earlier. */
@@ -8,12 +8,12 @@ export const SHORT_WINDOW_MAX_HEIGHT = 520;
 /** Mid-range system text — stack dense horizontal rows early. */
 export const COMFORTABLE_TEXT_MIN_FONT_SCALE = 1.15;
 export const LARGE_TEXT_MIN_FONT_SCALE = 1.3;
-export const TABLET_SHEET_MAX_WIDTH = 640;
+export const TABLET_SHEET_MAX_WIDTH = contentWidth.sheet;
 
 export const contentMaxWidths = {
-  form: 560,
-  content: 720,
-  wide: 960,
+  form: contentWidth.form,
+  content: contentWidth.content,
+  wide: contentWidth.wide,
 } as const;
 
 export type ContentWidthPreset = keyof typeof contentMaxWidths | "fluid";

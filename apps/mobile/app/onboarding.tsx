@@ -20,7 +20,7 @@ import { AppText } from "../src/components/AppText";
 import { Mascot, type MascotMood } from "../src/components/Mascot";
 import { MascotSpeechBubble } from "../src/components/MascotSpeechBubble";
 import { Screen } from "../src/components/Screen";
-import { colors, radius, spacing, touchTarget, typography } from "../src/shared/theme";
+import { colors, radius, spacing, controlSize, typography } from "../src/shared/theme";
 import { useAppStore } from "../src/store/app-store";
 
 type OnboardingStep = {
@@ -39,7 +39,7 @@ const STEPS: OnboardingStep[] = [
     title: "이제부터 지구에 버려지는 식재료는 없다!",
     description: "남은 재료도 알뜰하게, 장고가 맛있는 한 끼로 이어드릴게요.",
     mood: "happy",
-    cta: "다음으로 갈게요",
+    cta: "다음",
   },
   {
     key: "expiry",
@@ -47,7 +47,7 @@ const STEPS: OnboardingStep[] = [
     title: "임박하면 장고가 살짝 알려줄게요",
     description: "재료만 넣어두면, 언제 써야 할지 놓치지 않게 도와드려요.",
     mood: "worry",
-    cta: "다음으로 갈게요",
+    cta: "다음",
   },
   {
     key: "recipe",
@@ -55,7 +55,7 @@ const STEPS: OnboardingStep[] = [
     title: "남은 재료로 요리를 같이 찾아볼게요",
     description: "냉장고 속 재료를 보고, 만들기 쉬운 요리를 골라 드릴게요.",
     mood: "cooking",
-    cta: "다음으로 갈게요",
+    cta: "다음",
   },
   {
     key: "start",
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
   backLink: {
     alignSelf: "flex-start",
-    minHeight: touchTarget.min,
+    minHeight: controlSize.minimum,
     justifyContent: "center",
     paddingHorizontal: spacing.xs,
   },
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   backLinkSpacer: {
-    height: touchTarget.min,
+    height: controlSize.minimum,
   },
   backLinkText: {
     fontSize: typography.bodySmall.fontSize,

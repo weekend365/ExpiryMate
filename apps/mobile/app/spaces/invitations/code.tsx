@@ -28,7 +28,7 @@ import {
   colors,
   radius,
   spacing,
-  touchTarget,
+  controlSize,
   typography,
 } from "../../../src/shared/theme";
 
@@ -114,9 +114,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
             loading={previewMutation.isPending}
             fullWidth
           >
-            {isRegistered
-              ? "어떤 냉장고인지 확인할게요"
-              : "로그인하고 초대를 이어갈게요"}
+            {isRegistered ? "초대 확인" : "로그인하고 계속"}
           </Button>
         )
       }
@@ -150,6 +148,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
         </View>
       ) : (
         <EmptyState
+          kind="success"
           mood="happy"
           title={`${previewData.spaceName}에 초대받았어요`}
           description={`${
@@ -165,7 +164,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
                 loading={acceptMutation.isPending}
                 fullWidth
               >
-                알림도 받고 함께할게요
+                알림 받고 참여
               </Button>
               <Button
                 icon={BellOff}
@@ -174,7 +173,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
                 disabled={acceptMutation.isPending}
                 fullWidth
               >
-                알림 없이 함께할게요
+                알림 없이 참여
               </Button>
               <Button
                 variant="secondary"
@@ -182,7 +181,7 @@ export default function AcceptSpaceInvitationCodeScreen() {
                 disabled={acceptMutation.isPending}
                 fullWidth
               >
-                다른 코드를 입력할게요
+              다른 코드 입력
               </Button>
             </View>
           }
@@ -224,7 +223,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   codeInput: {
-    minHeight: touchTarget.cta,
+    minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
     borderColor: colors.border,
