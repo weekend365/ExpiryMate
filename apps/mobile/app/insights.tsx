@@ -24,7 +24,6 @@ import {
   useInsightsPreview,
 } from "../src/features/insights/use-insights";
 import { useSubscriptionEntitlement } from "../src/features/subscriptions/use-subscription-entitlement";
-import { useResponsiveLayout } from "../src/shared/responsive-layout";
 import { colors, radius, spacing, controlSize } from "../src/shared/theme";
 
 type InsightAction = PlusInsights["actions"][number];
@@ -281,7 +280,6 @@ function PlusReport({
 }
 
 function ReportContent({ overview }: { overview: PlusInsights }) {
-  const { shouldStack } = useResponsiveLayout();
   const weeklyMessage = weeklyTrendMessage(overview.weekly);
   const heroTone =
     overview.weekly.trend === "improved"
@@ -292,7 +290,7 @@ function ReportContent({ overview }: { overview: PlusInsights }) {
 
   return (
     <>
-      <SurfaceCard variant="hero" tone={heroTone}>
+      <SurfaceCard variant="hero" tone={heroTone} style={styles.summaryCard}>
         <AppText variant="bodySmallStrong" tone="subtext">
           최근 {overview.windowDays}일 폐기율
         </AppText>
@@ -312,31 +310,30 @@ function ReportContent({ overview }: { overview: PlusInsights }) {
         <AppText variant="caption" tone="subtext">
           {formatDateKorean(overview.period.from)}부터 {formatDateKorean(overview.period.to)}까지
         </AppText>
+        <View style={styles.summaryMetrics}>
+          <StatCard
+            variant="inline"
+            label="소비 완료"
+            value={overview.consumed}
+            suffix="개"
+            tone="success"
+          />
+          <StatCard
+            variant="inline"
+            label="폐기"
+            value={overview.discarded}
+            suffix="개"
+            tone="danger"
+          />
+          <StatCard
+            variant="inline"
+            label="7일 내 임박"
+            value={overview.expiringSoon}
+            suffix="개"
+            tone="warning"
+          />
+        </View>
       </SurfaceCard>
-
-      <View style={styles.metricGrid}>
-        <StatCard
-          label="소비 완료"
-          value={overview.consumed}
-          suffix="개"
-          tone="success"
-          style={[styles.metricCard, shouldStack && styles.metricCardStacked]}
-        />
-        <StatCard
-          label="폐기"
-          value={overview.discarded}
-          suffix="개"
-          tone="danger"
-          style={[styles.metricCard, shouldStack && styles.metricCardStacked]}
-        />
-        <StatCard
-          label="7일 내 임박"
-          value={overview.expiringSoon}
-          suffix="개"
-          tone="warning"
-          style={[styles.metricCard, shouldStack && styles.metricCardStacked]}
-        />
-      </View>
 
       <TrendCard overview={overview} />
 
@@ -344,6 +341,7 @@ function ReportContent({ overview }: { overview: PlusInsights }) {
         <SectionHeader
           title="이번 주 장고 브리핑"
           description="지금 할 수 있는 행동부터 순서대로 보여 드려요."
+          density="compact"
         />
         {overview.actions.length ? (
           <SurfaceCard variant="card" style={styles.listCard}>
@@ -356,7 +354,7 @@ function ReportContent({ overview }: { overview: PlusInsights }) {
             ))}
           </SurfaceCard>
         ) : (
-          <SurfaceCard variant="card" tone="muted">
+          <SurfaceCard variant="card" tone="muted" style={styles.compactCard}>
             <AppText variant="bodySmall" tone="subtext">
               지금은 급한 행동이 없어요. 기록이 더 쌓이면 우선순위를 정해드릴게요.
             </AppText>
@@ -378,10 +376,11 @@ function TrendCard({ overview }: { overview: PlusInsights }) {
   );
 
   return (
-    <SurfaceCard variant="card">
+    <SurfaceCard variant="card" style={styles.compactCard}>
       <SectionHeader
         title="주별 폐기율 추세"
         description="막대가 낮을수록 소비로 마친 재료의 비중이 높아요."
+        density="compact"
       />
       {points.length && hasResolvedEvents ? (
         <>
@@ -441,6 +440,7 @@ function ActionRow({ action, last }: { action: InsightAction; last: boolean }) {
       title={presentation.title}
       description={presentation.description}
       icon={presentation.icon}
+      density="compact"
       onPress={
         route
           ? () => router.push(route)
@@ -502,10 +502,11 @@ function DiscardedCategories({
 }) {
   const maxCount = Math.max(...categories.map((item) => item.count), 1);
   return (
-    <SurfaceCard variant="card">
+    <SurfaceCard variant="card" style={styles.compactCard}>
       <SectionHeader
         title="자주 버린 분류"
         description="다음 장보기 전에 남은 양을 먼저 확인해 보세요."
+        density="compact"
       />
       <View style={styles.categoryList}>
         {categories.map((item) => {
@@ -557,11 +558,11 @@ function formatTrendDate(dateOnly: string) {
 
 const styles = StyleSheet.create({
   screen: {
-    gap: spacing.md,
+    gap: spacing.sm,
     paddingBottom: spacing.xxxl,
   },
   intro: {
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   sectionStack: {
     gap: spacing.xs,
@@ -590,18 +591,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.md,
   },
-  metricGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  summaryCard: {
+    padding: spacing.md,
     gap: spacing.sm,
   },
-  metricCard: {
-    flexBasis: "45%",
-    flexGrow: 1,
-    minWidth: 0,
+  summaryMetrics: {
+    flexDirection: "row",
+    gap: spacing.sm,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
-  metricCardStacked: {
-    flexBasis: "100%",
+  compactCard: {
+    padding: spacing.md,
+    gap: spacing.sm,
   },
   listCard: {
     padding: spacing.none,
@@ -609,7 +612,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   chart: {
-    height: spacing.xxxl + spacing.md,
+    height: spacing.xxxl,
     flexDirection: "row",
     alignItems: "flex-end",
     gap: spacing.xxs,
@@ -636,10 +639,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   categoryList: {
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   categoryRow: {
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   categoryLabelRow: {
     flexDirection: "row",
@@ -648,7 +651,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   categoryTrack: {
-    height: spacing.xs,
+    height: spacing.xxs,
     borderRadius: radius.pill,
     backgroundColor: colors.mutedSurface,
     overflow: "hidden",
