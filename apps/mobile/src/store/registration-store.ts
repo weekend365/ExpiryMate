@@ -6,6 +6,9 @@ import {
 } from "@expirymate/shared";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import type { PhotoIntakeDraftItem } from "../features/photo-intake/photo-intake-draft";
+
+export type IngredientEntryMethod = "scan" | "photo" | "manual";
 
 export interface RegistrationPrefill {
   productId?: string;
@@ -39,15 +42,24 @@ interface RegistrationState {
   prefills: Record<string, RegistrationPrefill>;
   drafts: Record<string, RegistrationDraft>;
   lastStorageLocations: Record<string, string>;
+  preferredEntryMethods: Record<string, IngredientEntryMethod>;
+  photoDrafts: Record<string, PhotoIntakeDraftItem[]>;
   rewardNotice: RegistrationRewardNotice | null;
   finishHydration: () => void;
   setPrefill: (spaceId: string, prefill: RegistrationPrefill | null) => void;
   setDraft: (spaceId: string, draft: RegistrationDraft | null) => void;
   setLastStorageLocation: (spaceId: string, storageLocation: string) => void;
+  setPreferredEntryMethod: (
+    spaceId: string,
+    method: IngredientEntryMethod,
+  ) => void;
+  setPhotoDraft: (spaceId: string, items: PhotoIntakeDraftItem[] | null) => void;
   setRewardNotice: (notice: RegistrationRewardNotice | null) => void;
   clearPrefill: (spaceId?: string) => void;
   clearDraft: (spaceId?: string) => void;
   clearLastStorageLocation: (spaceId?: string) => void;
+  clearPreferredEntryMethod: (spaceId?: string) => void;
+  clearPhotoDraft: (spaceId?: string) => void;
 }
 
 export function prefillForSpace(
@@ -69,6 +81,20 @@ export function lastStorageLocationForSpace(
   spaceId: string | undefined,
 ) {
   return spaceId ? (state.lastStorageLocations[spaceId] ?? null) : null;
+}
+
+export function preferredEntryMethodForSpace(
+  state: Pick<RegistrationState, "preferredEntryMethods">,
+  spaceId: string | undefined,
+) {
+  return spaceId ? (state.preferredEntryMethods[spaceId] ?? null) : null;
+}
+
+export function photoDraftForSpace(
+  state: Pick<RegistrationState, "photoDrafts">,
+  spaceId: string | undefined,
+) {
+  return spaceId ? (state.photoDrafts[spaceId] ?? null) : null;
 }
 
 function writeRecord<T>(
@@ -96,6 +122,8 @@ export const useRegistrationStore = create<RegistrationState>()(
       prefills: {},
       drafts: {},
       lastStorageLocations: {},
+      preferredEntryMethods: {},
+      photoDrafts: {},
       rewardNotice: null,
       finishHydration: () => set({ hasHydrated: true }),
       setPrefill: (spaceId, prefill) =>
@@ -112,6 +140,21 @@ export const useRegistrationStore = create<RegistrationState>()(
             ...state.lastStorageLocations,
             [spaceId]: lastStorageLocation,
           },
+        })),
+      setPreferredEntryMethod: (spaceId, method) =>
+        set((state) => ({
+          preferredEntryMethods: {
+            ...state.preferredEntryMethods,
+            [spaceId]: method,
+          },
+        })),
+      setPhotoDraft: (spaceId, items) =>
+        set((state) => ({
+          photoDrafts: writeRecord(
+            state.photoDrafts,
+            spaceId,
+            items?.length ? items : null,
+          ),
         })),
       setRewardNotice: (rewardNotice) => set({ rewardNotice }),
       clearPrefill: (spaceId) =>
@@ -130,6 +173,16 @@ export const useRegistrationStore = create<RegistrationState>()(
             ? omitRecordKey(state.lastStorageLocations, spaceId)
             : {},
         })),
+      clearPreferredEntryMethod: (spaceId) =>
+        set((state) => ({
+          preferredEntryMethods: spaceId
+            ? omitRecordKey(state.preferredEntryMethods, spaceId)
+            : {},
+        })),
+      clearPhotoDraft: (spaceId) =>
+        set((state) => ({
+          photoDrafts: spaceId ? omitRecordKey(state.photoDrafts, spaceId) : {},
+        })),
     }),
     {
       name: "expirymate-registration-store.v2",
@@ -138,6 +191,8 @@ export const useRegistrationStore = create<RegistrationState>()(
         prefills: state.prefills,
         drafts: state.drafts,
         lastStorageLocations: state.lastStorageLocations,
+        preferredEntryMethods: state.preferredEntryMethods,
+        photoDrafts: state.photoDrafts,
       }),
       onRehydrateStorage: () => (state) => {
         state?.finishHydration();

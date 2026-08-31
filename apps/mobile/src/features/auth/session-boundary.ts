@@ -14,6 +14,8 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
   useRegistrationStore.getState().clearDraft();
   useRegistrationStore.getState().clearPrefill();
   useRegistrationStore.getState().clearLastStorageLocation();
+  useRegistrationStore.getState().clearPreferredEntryMethod();
+  useRegistrationStore.getState().clearPhotoDraft();
   clearRecipeGenerationState();
   clearRecipePreferenceNavigationState();
   void import("../recipes/cooking-timer")

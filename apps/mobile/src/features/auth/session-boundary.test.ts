@@ -8,6 +8,8 @@ const mocks = vi.hoisted(() => ({
   clearDraft: vi.fn(),
   clearPrefill: vi.fn(),
   clearLastStorageLocation: vi.fn(),
+  clearPreferredEntryMethod: vi.fn(),
+  clearPhotoDraft: vi.fn(),
 }));
 
 vi.mock("../recipes/recipe-generation-reset", () => ({
@@ -24,6 +26,8 @@ vi.mock("../../store/registration-store", () => ({
       clearDraft: mocks.clearDraft,
       clearPrefill: mocks.clearPrefill,
       clearLastStorageLocation: mocks.clearLastStorageLocation,
+      clearPreferredEntryMethod: mocks.clearPreferredEntryMethod,
+      clearPhotoDraft: mocks.clearPhotoDraft,
     }),
   },
 }));
@@ -70,6 +74,8 @@ describe("session boundary cleanup", () => {
     expect(mocks.clearDraft).toHaveBeenCalledOnce();
     expect(mocks.clearPrefill).toHaveBeenCalledOnce();
     expect(mocks.clearLastStorageLocation).toHaveBeenCalledOnce();
+    expect(mocks.clearPreferredEntryMethod).toHaveBeenCalledOnce();
+    expect(mocks.clearPhotoDraft).toHaveBeenCalledOnce();
     expect(mocks.clearRecipeGenerationState).toHaveBeenCalledOnce();
     expect(consumeRecipePreferenceSavedFromRecommendations()).toBe(false);
     await vi.waitFor(() => {

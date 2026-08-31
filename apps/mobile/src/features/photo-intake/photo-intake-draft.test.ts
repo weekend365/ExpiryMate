@@ -10,6 +10,8 @@ import {
   canSubmitPhotoIntake,
   candidatesToDrafts,
   draftsToCreateBody,
+  findPhotoIntakeDuplicateMatches,
+  mergePhotoIntakeDraftItems,
   photoIntakeReadyCount,
   prioritizePhotoIntakeDrafts,
 } from "./photo-intake-draft";
@@ -103,5 +105,57 @@ describe("photo intake drafts", () => {
         expirySource: ExpirySource.UNKNOWN,
       }),
     ]);
+  });
+
+  it("merges a repeated photo result into the first draft", () => {
+    const drafts = candidatesToDrafts(
+      [
+        { displayName: "우유", quantity: 1, confidence: 0.9, needsReview: false },
+        { displayName: "우유", quantity: 1, confidence: 0.9, needsReview: false },
+      ],
+      StorageLocation.FRIDGE,
+    );
+
+    const merged = mergePhotoIntakeDraftItems(
+      drafts,
+      drafts[1]!.localId,
+      drafts[0]!.localId,
+    );
+
+    expect(merged).toHaveLength(1);
+    expect(merged[0]?.quantity).toBe(2);
+  });
+
+  it("distinguishes an existing duplicate from a repeated photo row", () => {
+    const drafts = candidatesToDrafts(
+      [
+        { displayName: " 우 유 ", quantity: 1, confidence: 0.9, needsReview: false },
+        { displayName: "우유", quantity: 2, confidence: 0.9, needsReview: false },
+      ],
+      StorageLocation.FRIDGE,
+    );
+
+    const repeated = findPhotoIntakeDuplicateMatches(drafts, []);
+    expect(repeated.get(drafts[0]!.localId)).toBeUndefined();
+    expect(repeated.get(drafts[1]!.localId)).toEqual(
+      expect.objectContaining({
+        kind: "draft",
+        targetLocalId: drafts[0]!.localId,
+      }),
+    );
+
+    const existing = findPhotoIntakeDuplicateMatches([drafts[0]!], [
+      {
+        id: "inventory-1",
+        displayName: "우유",
+        quantity: 1,
+        unit: undefined,
+        storageLocation: StorageLocation.FRIDGE,
+        expiryDate: null,
+      },
+    ]);
+    expect(existing.get(drafts[0]!.localId)).toEqual(
+      expect.objectContaining({ kind: "inventory" }),
+    );
   });
 });

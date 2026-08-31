@@ -98,7 +98,7 @@ type RegistrationFormValues = {
   notes: string;
 };
 
-/** 1) 재료명 → 2) 양(위치 칩) → 3) 기한 → done */
+/** 기본은 재료명 → 기한, 필요할 때만 양·위치를 중간에 펼친다. */
 type RegistrationStep = "product" | "quantity" | "expiry" | "done";
 
 type InputRegistrationStep = Exclude<RegistrationStep, "done">;
@@ -202,10 +202,17 @@ function normalizeDraftExpiryDate(value?: string | null) {
   }
 }
 
-function getVisibleRegistrationSteps(includeProduct: boolean) {
+function getVisibleRegistrationSteps(
+  includeProduct: boolean,
+  useQuickDefaults: boolean,
+) {
   return REGISTRATION_STEPS.filter((step) => {
     if (step.key === "product") {
       return includeProduct;
+    }
+
+    if (step.key === "quantity" && useQuickDefaults) {
+      return false;
     }
 
     return true;
@@ -252,6 +259,7 @@ export default function RegisterScreen() {
   const [step, setStep] = useState<RegistrationStep>("product");
   const [entryMethod, setEntryMethod] = useState<"scan" | "manual">("manual");
   const [skipProduct, setSkipProduct] = useState(false);
+  const [useQuickDefaults, setUseQuickDefaults] = useState(false);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
   // Only open when the user taps — prefill must not auto-pop the extra sheet.
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
@@ -300,7 +308,8 @@ export default function RegisterScreen() {
       if (prefill?.displayName?.trim()) {
         setEntryMethod("scan");
         setSkipProduct(true);
-        setStep("quantity");
+        setUseQuickDefaults(true);
+        setStep("expiry");
       }
       return;
     }
@@ -316,7 +325,8 @@ export default function RegisterScreen() {
       if (prefill.displayName?.trim()) {
         setEntryMethod("scan");
         setSkipProduct(true);
-        setStep("quantity");
+        setUseQuickDefaults(true);
+        setStep("expiry");
       }
     }
   }, [activeSpaceId, draft, form, hasHydrated, lastStorageLocation, prefill]);
@@ -452,8 +462,8 @@ export default function RegisterScreen() {
   }, [category, displayName, form, step]);
 
   const visibleSteps = useMemo(
-    () => getVisibleRegistrationSteps(!skipProduct),
-    [skipProduct],
+    () => getVisibleRegistrationSteps(!skipProduct, useQuickDefaults),
+    [skipProduct, useQuickDefaults],
   );
   const isInputStep = step !== "done";
   const stepIndex = isInputStep
@@ -494,8 +504,8 @@ export default function RegisterScreen() {
     }
 
     if (skipProduct && step === "quantity") {
-      setSkipProduct(false);
-      setStep("product");
+      setUseQuickDefaults(true);
+      setStep("expiry");
       return;
     }
 
@@ -506,6 +516,9 @@ export default function RegisterScreen() {
     (target: InputRegistrationStep, options?: { openLocation?: boolean }) => {
       if (target === "product") {
         setSkipProduct(false);
+      }
+      if (target === "quantity") {
+        setUseQuickDefaults(false);
       }
       setShowLocationPicker(Boolean(options?.openLocation));
       setStep(target);
@@ -597,6 +610,13 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (step === "product") {
+      setUseQuickDefaults(true);
+      setStep("expiry");
+      setSubmitErrorMessage(null);
+      return;
+    }
+
     const nextStep = visibleSteps[stepIndex + 1];
     if (!nextStep) {
       return;
@@ -625,6 +645,7 @@ export default function RegisterScreen() {
     userChoseQuantityUnitRef.current = false;
     setEntryMethod("manual");
     setSkipProduct(false);
+    setUseQuickDefaults(false);
     setShowLocationPicker(false);
     setStep("product");
   };
@@ -696,6 +717,7 @@ export default function RegisterScreen() {
       userChoseQuantityUnitRef.current = false;
       setShowAdditionalInfo(false);
       setShowLocationPicker(false);
+      setUseQuickDefaults(false);
       setStep("done");
     } catch (error) {
       setSubmitErrorMessage(
@@ -710,8 +732,16 @@ export default function RegisterScreen() {
     isLastStep
       ? "냉장고에 넣을게요"
       : step === "product"
-        ? "이 재료로 할게요"
+        ? "기한만 고르고 넣을게요"
         : "이만큼 둘게요";
+
+  const saveSummary = `${displayName} · ${enteredQuantityLabel} · ${selectedLocationLabel} · ${
+    expirySource === ExpirySource.UNKNOWN
+      ? "기한 확인 필요"
+      : expiryDate
+        ? `${formatDateKorean(expiryDate)}까지`
+        : "기한 미입력"
+  }`;
 
   if (step === "done") {
     const doneHeroNotices = [
@@ -849,6 +879,14 @@ export default function RegisterScreen() {
         testID="register-screen"
       footer={
         <View style={styles.footerStack}>
+          {isLastStep && canGoNext ? (
+            <View style={styles.saveSummary} accessibilityLiveRegion="polite">
+              <AppText variant="bodySmallStrong">저장할 내용</AppText>
+              <AppText variant="caption" tone="subtext">
+                {saveSummary}
+              </AppText>
+            </View>
+          ) : null}
           {isLastStep &&
           !expiryDate &&
           expirySource !== ExpirySource.UNKNOWN ? (
@@ -867,6 +905,21 @@ export default function RegisterScreen() {
           >
             {primaryCtaLabel}
           </Button>
+          {step === "product" ? (
+            <Button
+              variant="surface"
+              onPress={() => {
+                setUseQuickDefaults(false);
+                setStep("quantity");
+                setSubmitErrorMessage(null);
+              }}
+              disabled={!displayName}
+              fullWidth
+              testID="register-edit-quantity-location-button"
+            >
+              수량·자리도 바꿀게요
+            </Button>
+          ) : null}
         </View>
       }
     >
@@ -1089,6 +1142,13 @@ const localStyles = StyleSheet.create({
     backgroundColor: colors.dangerSoft,
     borderRadius: radius.xxl,
     padding: spacing.md,
+    gap: spacing.xxs,
+  },
+  saveSummary: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.primarySoft,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     gap: spacing.xxs,
   },
   errorTitle: {

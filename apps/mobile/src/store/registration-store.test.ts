@@ -1,3 +1,4 @@
+import { ExpirySource } from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@react-native-async-storage/async-storage", () => ({
@@ -15,8 +16,42 @@ describe("registration store space scoping", () => {
       prefills: {},
       drafts: {},
       lastStorageLocations: {},
+      preferredEntryMethods: {},
+      photoDrafts: {},
       rewardNotice: null,
     });
+  });
+
+  it("remembers the preferred method and photo draft per space", async () => {
+    const {
+      photoDraftForSpace,
+      preferredEntryMethodForSpace,
+      useRegistrationStore,
+    } = await import("./registration-store");
+    const spaceId = "space-house";
+    const store = useRegistrationStore.getState();
+
+    store.setPreferredEntryMethod(spaceId, "photo");
+    store.setPhotoDraft(spaceId, [
+      {
+        localId: "draft-1",
+        displayName: "우유",
+        quantity: 1,
+        unit: "개",
+        unitCode: undefined,
+        storageLocation: "fridge",
+        expiryDate: null,
+        expirySource: ExpirySource.UNKNOWN,
+        needsReview: false,
+      },
+    ]);
+
+    const state = useRegistrationStore.getState();
+    expect(preferredEntryMethodForSpace(state, spaceId)).toBe("photo");
+    expect(photoDraftForSpace(state, spaceId)?.[0]?.displayName).toBe("우유");
+
+    store.clearPhotoDraft(spaceId);
+    expect(photoDraftForSpace(useRegistrationStore.getState(), spaceId)).toBeNull();
   });
 
   it("keeps draft and last location isolated per space", async () => {

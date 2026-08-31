@@ -22,6 +22,60 @@ export type PhotoIntakeDraftItem = {
   reason?: string;
 };
 
+type DuplicateComparable = {
+  displayName: string;
+  quantity: number;
+  unit?: string | null;
+  storageLocation: string;
+  expiryDate: string | null;
+};
+
+export type PhotoIntakeDuplicateMatch<T> =
+  | { kind: "inventory"; target: T }
+  | { kind: "draft"; targetLocalId: string; targetName: string };
+
+export function photoIntakeDuplicateKey(item: DuplicateComparable) {
+  const normalize = (value?: string | null) =>
+    value?.normalize("NFKC").trim().replace(/\s+/g, "").toLowerCase() ?? "";
+  return [
+    normalize(item.displayName),
+    normalize(item.unit ?? "개"),
+    item.storageLocation,
+    item.expiryDate ?? "unknown",
+  ].join(":");
+}
+
+export function findPhotoIntakeDuplicateMatches<
+  T extends DuplicateComparable & { id: string },
+>(items: PhotoIntakeDraftItem[], existingItems: T[]) {
+  const existingByKey = new Map<string, T>();
+  for (const item of existingItems) {
+    const key = photoIntakeDuplicateKey(item);
+    if (!existingByKey.has(key)) existingByKey.set(key, item);
+  }
+  const firstDraftByKey = new Map<string, PhotoIntakeDraftItem>();
+  const matches = new Map<string, PhotoIntakeDuplicateMatch<T>>();
+  for (const item of items) {
+    const key = photoIntakeDuplicateKey(item);
+    const existing = existingByKey.get(key);
+    if (existing) {
+      matches.set(item.localId, { kind: "inventory", target: existing });
+      continue;
+    }
+    const firstDraft = firstDraftByKey.get(key);
+    if (firstDraft) {
+      matches.set(item.localId, {
+        kind: "draft",
+        targetLocalId: firstDraft.localId,
+        targetName: firstDraft.displayName,
+      });
+      continue;
+    }
+    firstDraftByKey.set(key, item);
+  }
+  return matches;
+}
+
 export function candidatesToDrafts(
   candidates: InventoryPhotoParseCandidate[],
   defaultStorageLocation: string,
@@ -91,6 +145,24 @@ export function photoIntakeReadyCount(items: PhotoIntakeDraftItem[]) {
 
 export function canSubmitPhotoIntake(items: PhotoIntakeDraftItem[]) {
   return items.some(photoIntakeItemIsReadyToSave);
+}
+
+export function mergePhotoIntakeDraftItems(
+  items: PhotoIntakeDraftItem[],
+  sourceLocalId: string,
+  targetLocalId: string,
+) {
+  const source = items.find((item) => item.localId === sourceLocalId);
+  const target = items.find((item) => item.localId === targetLocalId);
+  if (!source || !target || source.localId === target.localId) return items;
+
+  return items
+    .filter((item) => item.localId !== source.localId)
+    .map((item) =>
+      item.localId === target.localId
+        ? { ...item, quantity: item.quantity + source.quantity }
+        : item,
+    );
 }
 
 export function draftsToCreateBody(

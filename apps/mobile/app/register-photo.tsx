@@ -5,6 +5,8 @@ import {
   formatDateKorean,
   productCategoryOptions,
   quantityValuesForInputUnit,
+  toBaseQuantity,
+  type InventoryItem,
   type InventoryPhotoParseAccess,
   type InventoryPhotoParseScene,
 } from "@expirymate/shared";
@@ -28,7 +30,9 @@ import {
   ApiError,
   batchCreateInventoryItems,
   createIdempotencyKey,
+  listAllInventory,
   parseInventoryPhoto,
+  updateInventoryItem,
 } from "../src/services/api";
 import { useAuth } from "../src/features/auth/use-auth";
 import {
@@ -41,9 +45,12 @@ import {
   canSubmitPhotoIntake,
   candidatesToDrafts,
   draftsToCreateBody,
+  findPhotoIntakeDuplicateMatches,
+  mergePhotoIntakeDraftItems,
   photoIntakeReadyCount,
   photoIntakeItemIsReadyToSave,
   prioritizePhotoIntakeDrafts,
+  type PhotoIntakeDuplicateMatch,
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
 import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-photo";
@@ -67,6 +74,11 @@ import { useStorageLocations } from "../src/features/settings/use-storage-locati
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
 import {
+  lastStorageLocationForSpace,
+  photoDraftForSpace,
+  useRegistrationStore,
+} from "../src/store/registration-store";
+import {
   colors,
   radius,
   spacing,
@@ -81,12 +93,30 @@ type FlowIssue = {
   tone?: "danger" | "warning" | "info" | "success";
 };
 
+type DuplicateMatch = PhotoIntakeDuplicateMatch<InventoryItem>;
+
 export default function RegisterPhotoScreen() {
   const params = useLocalSearchParams<{ from?: string | string[] }>();
   const returnTo = parseRegistrationReturnTo(params.from);
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
+  const hasRegistrationStoreHydrated = useRegistrationStore(
+    (state) => state.hasHydrated,
+  );
+  const savedPhotoDraft = useRegistrationStore((state) =>
+    photoDraftForSpace(state, activeSpaceId),
+  );
+  const lastStorageLocation = useRegistrationStore((state) =>
+    lastStorageLocationForSpace(state, activeSpaceId),
+  );
+  const setPhotoDraft = useRegistrationStore((state) => state.setPhotoDraft);
+  const clearPhotoDraft = useRegistrationStore(
+    (state) => state.clearPhotoDraft,
+  );
+  const setLastStorageLocation = useRegistrationStore(
+    (state) => state.setLastStorageLocation,
+  );
   const privacyStatusQuery = usePrivacyStatus();
   const photoAccess = usePhotoParseAccess();
   const { selectableOptions, resolveLabel } = useStorageLocations();
@@ -97,8 +127,11 @@ export default function RegisterPhotoScreen() {
     itemIds: string[];
     payload: ReturnType<typeof draftsToCreateBody>;
   } | null>(null);
+  const restoredDraftSpaceRef = useRef<string | null>(null);
   const defaultLocation =
-    selectableOptions[0]?.key ?? StorageLocation.FRIDGE;
+    selectableOptions.find((option) => option.key === lastStorageLocation)?.key ??
+    selectableOptions[0]?.key ??
+    StorageLocation.FRIDGE;
 
   const [step, setStep] = useState<PhotoIntakeStep>("choose");
   const [pendingSelection, setPendingSelection] =
@@ -118,21 +151,13 @@ export default function RegisterPhotoScreen() {
     [],
   );
 
-  const duplicateCandidateIds = useMemo(() => {
-    const seenKeys = new Set(
-      existingInventory.map((item) => inventoryDuplicateKey(item)),
-    );
-    const candidates = new Set<string>();
-    for (const item of items) {
-      const key = inventoryDuplicateKey(item);
-      if (seenKeys.has(key)) {
-        candidates.add(item.localId);
-      } else {
-        seenKeys.add(key);
-      }
-    }
-    return candidates;
+  const duplicateMatches = useMemo(() => {
+    return findPhotoIntakeDuplicateMatches(items, existingInventory);
   }, [existingInventory, items]);
+  const duplicateCandidateIds = useMemo(
+    () => new Set(duplicateMatches.keys()),
+    [duplicateMatches],
+  );
   const confirmedDuplicateIdSet = useMemo(
     () => new Set(confirmedDuplicateIds),
     [confirmedDuplicateIds],
@@ -147,6 +172,62 @@ export default function RegisterPhotoScreen() {
       ),
     [confirmedDuplicateIdSet, duplicateCandidateIds, items],
   );
+
+  useEffect(() => {
+    if (
+      !hasRegistrationStoreHydrated ||
+      !activeSpaceId ||
+      restoredDraftSpaceRef.current === activeSpaceId
+    ) {
+      return;
+    }
+    restoredDraftSpaceRef.current = activeSpaceId;
+    batchSubmissionRef.current = null;
+    setConfirmedDuplicateIds([]);
+    setSavedCount(0);
+    if (!savedPhotoDraft?.length) {
+      setItems([]);
+      setStep("choose");
+      setFlowIssue(null);
+      return;
+    }
+
+    setItems(prioritizePhotoIntakeDrafts(savedPhotoDraft));
+    setStep("review");
+    setFlowIssue({
+      tone: "info",
+      title: "확인하던 사진 초안을 이어서 열었어요",
+      description: `남아 있던 ${savedPhotoDraft.length}가지만 확인하면 돼요.`,
+    });
+  }, [activeSpaceId, hasRegistrationStoreHydrated, savedPhotoDraft]);
+
+  useEffect(() => {
+    if (
+      !hasRegistrationStoreHydrated ||
+      !activeSpaceId ||
+      restoredDraftSpaceRef.current !== activeSpaceId
+    ) {
+      return;
+    }
+    if (step === "review") {
+      setPhotoDraft(activeSpaceId, items.length ? items : null);
+    } else if (step === "done") {
+      clearPhotoDraft(activeSpaceId);
+    }
+  }, [
+    activeSpaceId,
+    clearPhotoDraft,
+    hasRegistrationStoreHydrated,
+    items,
+    setPhotoDraft,
+    step,
+  ]);
+
+  useEffect(() => {
+    if (step === "review" && savedCount > 0 && items.length === 0) {
+      setStep("done");
+    }
+  }, [items.length, savedCount, step]);
 
   const parseMutation = useMutation({
     mutationFn: async ({
@@ -191,6 +272,102 @@ export default function RegisterPhotoScreen() {
     },
   });
 
+  const mergeIntoInventoryMutation = useMutation({
+    mutationFn: async ({
+      draft,
+      target,
+    }: {
+      draft: PhotoIntakeDraftItem;
+      target: InventoryItem;
+    }) => {
+      if (!activeSpaceId) {
+        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
+      }
+      const canonicalDraftQuantity = toBaseQuantity(draft.quantity, draft.unit);
+      if (canonicalDraftQuantity.unitCode !== target.unitCode) {
+        throw new Error("단위가 달라 수량을 자동으로 합칠 수 없어요.");
+      }
+      const expectedQuantity = target.quantity + draft.quantity;
+      try {
+        return await updateInventoryItem(
+          target.id,
+          {
+            quantity: expectedQuantity,
+            quantityBase:
+              target.quantityBase + canonicalDraftQuantity.quantityBase,
+            unitCode: target.unitCode,
+            expectedVersion: target.version,
+          },
+          activeSpaceId,
+        );
+      } catch (error) {
+        const definitelyRejected =
+          error instanceof ApiError &&
+          error.status < 500 &&
+          error.status !== 408;
+        if (definitelyRejected) throw error;
+
+        const latestItems = await listAllInventory(activeSpaceId);
+        const latest = latestItems.find((item) => item.id === target.id);
+        if (
+          latest &&
+          latest.quantity >= expectedQuantity &&
+          (latest.version !== target.version ||
+            latest.updatedAt !== target.updatedAt)
+        ) {
+          return latest;
+        }
+        throw error;
+      }
+    },
+    onSuccess: (updated, { draft }) => {
+      setItems((current) =>
+        current.filter((item) => item.localId !== draft.localId),
+      );
+      setConfirmedDuplicateIds((current) =>
+        current.filter((id) => id !== draft.localId),
+      );
+      setSavedCount((current) => current + 1);
+      if (activeSpaceId) {
+        setLastStorageLocation(activeSpaceId, updated.storageLocation);
+      }
+      setFlowIssue({
+        tone: "success",
+        title: `${updated.displayName} 수량을 합쳤어요`,
+        description: `보관함 수량을 ${updated.quantity}${updated.unit ?? "개"}로 바꿨어요.`,
+      });
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.dashboard,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.inventory,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
+    },
+    onError: (error) => {
+      Alert.alert(
+        "수량을 합치지 못했어요",
+        error instanceof Error
+          ? error.message
+          : "보관함을 새로 확인한 뒤 다시 시도해 주세요.",
+      );
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.inventory,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
+    },
+  });
+
   const saveMutation = useMutation({
     mutationFn: async () => {
       if (!activeSpaceId) {
@@ -217,6 +394,9 @@ export default function RegisterPhotoScreen() {
       );
       setSavedCount((current) => current + result.count);
       setItems(remainingItems);
+      if (activeSpaceId && result.items[0]) {
+        setLastStorageLocation(activeSpaceId, result.items[0].storageLocation);
+      }
       if (remainingItems.length > 0) {
         setStep("review");
         setFlowIssue({
@@ -620,70 +800,233 @@ export default function RegisterPhotoScreen() {
               </Pressable>
             </View>
             {items.map((item) => {
+              const duplicateMatch = duplicateMatches.get(item.localId);
               const isUnconfirmedDuplicate =
-                duplicateCandidateIds.has(item.localId) &&
+                Boolean(duplicateMatch) &&
                 !confirmedDuplicateIdSet.has(item.localId);
               const needsAttention =
                 !photoIntakeItemIsReadyToSave(item) || isUnconfirmedDuplicate;
+              const needsExpiry =
+                !item.expiryDate && item.expirySource !== ExpirySource.UNKNOWN;
               return (
-              <Pressable
-                key={item.localId}
-                onPress={() => setEditingId(item.localId)}
-                accessibilityRole="button"
-                accessibilityLabel={`${item.displayName} 고치기`}
-                style={({ pressed }) => [
+                <View
+                  key={item.localId}
+                  style={[
                   styles.itemCard,
                   needsAttention && styles.itemCardNeedsAttention,
-                  pressed && styles.itemCardPressed,
-                ]}
-              >
-                <View style={styles.itemCopy}>
-                  <View style={styles.itemTitleRow}>
-                    <AppText variant="bodyStrong">{item.displayName}</AppText>
-                    {needsAttention ? (
-                      <View style={styles.attentionBadge}>
-                        <AppText variant="caption" tone="warning">
-                          확인 필요
-                        </AppText>
+                  ]}
+                >
+                  <View style={styles.itemCardTop}>
+                    <Pressable
+                      onPress={() => setEditingId(item.localId)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${item.displayName} 상세 수정`}
+                      style={({ pressed }) => [
+                        styles.itemCopy,
+                        pressed && styles.itemCardPressed,
+                      ]}
+                    >
+                      <View style={styles.itemTitleRow}>
+                        <AppText variant="bodyStrong">{item.displayName}</AppText>
+                        {needsAttention ? (
+                          <View style={styles.attentionBadge}>
+                            <AppText variant="caption" tone="warning">
+                              {isUnconfirmedDuplicate
+                                ? "중복 확인"
+                                : needsExpiry
+                                  ? "기한 필요"
+                                  : "확인 필요"}
+                            </AppText>
+                          </View>
+                        ) : null}
                       </View>
-                    ) : null}
+                      <AppText variant="bodySmall" tone="subtext">
+                        {item.quantity}
+                        {item.unit || "개"} · {resolveLabel(item.storageLocation)} ·{" "}
+                        {item.expirySource === ExpirySource.UNKNOWN
+                          ? "기한 확인 필요"
+                          : item.expiryDate
+                            ? formatDateKorean(item.expiryDate)
+                            : "기한 없음"}
+                      </AppText>
+                      {needsAttention ? (
+                        <AppText variant="caption" tone="warning">
+                          {isUnconfirmedDuplicate
+                            ? duplicateMatch?.kind === "draft"
+                              ? "사진 결과 안에 같은 내용이 한 번 더 있어요."
+                              : "보관함에 같은 내용이 있어요."
+                            : item.reason ?? "필요한 정보만 바로 확인해 주세요."}
+                        </AppText>
+                      ) : null}
+                    </Pressable>
+                    <Pressable
+                      onPress={() => removeDraftItem(item.localId)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${item.displayName} 빼기`}
+                      hitSlop={spacing.xs}
+                      style={styles.iconButton}
+                    >
+                      <Trash2 color={colors.danger} size={spacing.md} />
+                    </Pressable>
                   </View>
-                  <AppText variant="bodySmall" tone="subtext">
-                    {item.quantity}
-                    {item.unit || "개"} · {resolveLabel(item.storageLocation)} ·{" "}
-                    {item.expirySource === ExpirySource.UNKNOWN
-                      ? "기한 확인 필요"
-                      : item.expiryDate
-                      ? formatDateKorean(item.expiryDate)
-                      : "기한 없음"}
-                  </AppText>
                   {needsAttention ? (
-                    <AppText variant="caption" tone="warning">
-                      {isUnconfirmedDuplicate
-                        ? "보관함에 같은 내용이 있어요. 추가할지 확인해 주세요."
-                        : item.reason ?? "유통기한을 확인해 주세요."}
-                    </AppText>
+                    <View style={styles.quickFixPanel}>
+                      <AppText variant="caption" tone="subtext">
+                        카드에서 바로 고치기
+                      </AppText>
+                      <QuantityStepper
+                        label="수량"
+                        value={item.quantity}
+                        unitSuffix={item.unit || "개"}
+                        onChange={(quantity) =>
+                          updateItem(item.localId, { quantity })
+                        }
+                      />
+                      <View style={styles.editFieldGroup}>
+                        <AppText variant="bodySmallStrong">자리</AppText>
+                        <View style={styles.pillRow}>
+                          {selectableOptions.map((option) => (
+                            <Pressable
+                              key={option.key}
+                              onPress={() =>
+                                updateItem(item.localId, {
+                                  storageLocation: option.key,
+                                })
+                              }
+                              accessibilityRole="button"
+                              accessibilityState={{
+                                selected: item.storageLocation === option.key,
+                              }}
+                              style={[
+                                styles.pill,
+                                item.storageLocation === option.key &&
+                                  styles.pillSelected,
+                              ]}
+                            >
+                              <AppText variant="bodySmall">{option.label}</AppText>
+                            </Pressable>
+                          ))}
+                        </View>
+                      </View>
+                      {needsExpiry ? (
+                        <View style={styles.editFieldGroup}>
+                          <AppText variant="bodySmallStrong">기한</AppText>
+                          <QuickExpiryPills
+                            isSelected={(isoDate) => item.expiryDate === isoDate}
+                            onSelect={(isoDate) =>
+                              updateItem(item.localId, {
+                                expiryDate: isoDate,
+                                expirySource: ExpirySource.PRESET,
+                                needsReview: false,
+                                reason: undefined,
+                              })
+                            }
+                          />
+                          <Pressable
+                            onPress={() =>
+                              updateItem(item.localId, {
+                                expiryDate: null,
+                                expirySource: ExpirySource.UNKNOWN,
+                                needsReview: false,
+                                reason: undefined,
+                              })
+                            }
+                            accessibilityRole="button"
+                            style={styles.actionChip}
+                          >
+                            <AppText variant="bodySmall">기한을 모르겠어요</AppText>
+                          </Pressable>
+                        </View>
+                      ) : null}
+                      {isUnconfirmedDuplicate && duplicateMatch ? (
+                        <View style={styles.duplicateActions}>
+                          <Pressable
+                            onPress={() =>
+                              handleMergeDuplicate(item, duplicateMatch)
+                            }
+                            disabled={mergeIntoInventoryMutation.isPending}
+                            accessibilityRole="button"
+                            style={[
+                              styles.actionChip,
+                              styles.actionChipPrimary,
+                              mergeIntoInventoryMutation.isPending &&
+                                styles.actionChipDisabled,
+                            ]}
+                          >
+                            <AppText variant="bodySmallStrong" tone="primary">
+                              수량 합치기
+                            </AppText>
+                          </Pressable>
+                          <Pressable
+                            onPress={() => confirmDuplicate(item.localId)}
+                            accessibilityRole="button"
+                            style={styles.actionChip}
+                          >
+                            <AppText variant="bodySmall">별도로 추가</AppText>
+                          </Pressable>
+                          <Pressable
+                            onPress={() => removeDraftItem(item.localId)}
+                            accessibilityRole="button"
+                            style={styles.actionChip}
+                          >
+                            <AppText variant="bodySmall" tone="danger">
+                              제외
+                            </AppText>
+                          </Pressable>
+                        </View>
+                      ) : (
+                        <View style={styles.duplicateActions}>
+                          <Pressable
+                            onPress={() =>
+                              updateItem(item.localId, {
+                                needsReview: false,
+                                reason: undefined,
+                              })
+                            }
+                            accessibilityRole="button"
+                            style={[styles.actionChip, styles.actionChipPrimary]}
+                          >
+                            <AppText variant="bodySmallStrong" tone="primary">
+                              이 내용이 맞아요
+                            </AppText>
+                          </Pressable>
+                          <Pressable
+                            onPress={() => setEditingId(item.localId)}
+                            accessibilityRole="button"
+                            style={styles.actionChip}
+                          >
+                            <AppText variant="bodySmall">상세 수정</AppText>
+                          </Pressable>
+                        </View>
+                      )}
+                    </View>
                   ) : null}
                 </View>
-                <Pressable
-                  onPress={() =>
-                    setItems((current) =>
-                      current.filter((row) => row.localId !== item.localId),
-                    )
-                  }
-                  accessibilityRole="button"
-                  accessibilityLabel={`${item.displayName} 빼기`}
-                  hitSlop={spacing.xs}
-                  style={styles.iconButton}
-                >
-                  <Trash2 color={colors.danger} size={spacing.md} />
-                </Pressable>
-              </Pressable>
               );
             })}
             <AppText variant="caption" tone="muted">
               {readyCount}/{items.length}가지 저장 준비를 마쳤어요.
             </AppText>
+            <Button
+              variant="surface"
+              onPress={() => {
+                Alert.alert(
+                  "사진 초안을 새로 시작할까요?",
+                  "지금 확인 중인 항목은 지워지고 새 사진을 선택할 수 있어요.",
+                  [
+                    { text: "계속 확인", style: "cancel" },
+                    {
+                      text: "새로 시작",
+                      style: "destructive",
+                      onPress: discardPhotoDraftAndRestart,
+                    },
+                  ],
+                );
+              }}
+              fullWidth
+            >
+              초안을 지우고 새 사진으로 시작
+            </Button>
           </View>
         ) : null}
 
@@ -827,7 +1170,7 @@ export default function RegisterPhotoScreen() {
               <FeedbackBanner
                 tone="warning"
                 title="같은 재료가 이미 있거나 겹쳐 보여요"
-                description="이름·양·자리·기한이 같아요. 별도 묶음이 맞는지 확인해 주세요."
+                description="이름·단위·자리·기한이 같아요. 수량을 합치거나 별도 묶음으로 둘 수 있어요."
                 showMascot={false}
               />
             ) : null}
@@ -984,6 +1327,62 @@ export default function RegisterPhotoScreen() {
       ),
     );
   }
+
+  function removeDraftItem(localId: string) {
+    setConfirmedDuplicateIds((current) =>
+      current.filter((id) => id !== localId),
+    );
+    setItems((current) => current.filter((item) => item.localId !== localId));
+  }
+
+  function confirmDuplicate(localId: string) {
+    setItems((current) =>
+      current.map((item) =>
+        item.localId === localId
+          ? { ...item, needsReview: false, reason: undefined }
+          : item,
+      ),
+    );
+    setConfirmedDuplicateIds((current) =>
+      current.includes(localId) ? current : [...current, localId],
+    );
+  }
+
+  function handleMergeDuplicate(
+    draft: PhotoIntakeDraftItem,
+    match: DuplicateMatch,
+  ) {
+    if (match.kind === "inventory") {
+      mergeIntoInventoryMutation.mutate({ draft, target: match.target });
+      return;
+    }
+
+    setItems((current) => {
+      return mergePhotoIntakeDraftItems(
+        current,
+        draft.localId,
+        match.targetLocalId,
+      );
+    });
+    setConfirmedDuplicateIds((current) =>
+      current.filter((id) => id !== draft.localId),
+    );
+    setFlowIssue({
+      tone: "success",
+      title: `${match.targetName} 수량을 하나로 합쳤어요`,
+      description: "사진 결과에는 한 항목으로 남겨 뒀어요.",
+    });
+  }
+
+  function discardPhotoDraftAndRestart() {
+    batchSubmissionRef.current = null;
+    setItems([]);
+    setConfirmedDuplicateIds([]);
+    setFlowIssue(null);
+    setEditingId(null);
+    setStep("choose");
+    if (activeSpaceId) clearPhotoDraft(activeSpaceId);
+  }
 }
 
 function PhotoFlowProgress({ current }: { current: 1 | 2 }) {
@@ -1099,24 +1498,6 @@ function formatResetTime(value?: string) {
   }).format(new Date(value));
 }
 
-function inventoryDuplicateKey(item: {
-  displayName: string;
-  quantity: number;
-  unit?: string | null;
-  storageLocation: string;
-  expiryDate: string | null;
-}) {
-  const normalize = (value?: string | null) =>
-    value?.normalize("NFKC").trim().replace(/\s+/g, "").toLowerCase() ?? "";
-  return [
-    normalize(item.displayName),
-    item.quantity,
-    normalize(item.unit ?? "개"),
-    item.storageLocation,
-    item.expiryDate ?? "unknown",
-  ].join(":");
-}
-
 const styles = StyleSheet.create({
   choiceStack: {
     gap: spacing.sm,
@@ -1197,14 +1578,17 @@ const styles = StyleSheet.create({
   },
   itemCard: {
     minHeight: touchTarget.cta,
-    flexDirection: "row",
-    alignItems: "center",
     gap: spacing.sm,
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
+  },
+  itemCardTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
   },
   itemCardPressed: {
     opacity: 0.86,
@@ -1235,6 +1619,35 @@ const styles = StyleSheet.create({
     minHeight: touchTarget.icon,
     alignItems: "center",
     justifyContent: "center",
+  },
+  quickFixPanel: {
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    paddingTop: spacing.sm,
+    gap: spacing.sm,
+  },
+  duplicateActions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
+  actionChip: {
+    minHeight: touchTarget.min,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  actionChipPrimary: {
+    borderColor: colors.primary,
+    backgroundColor: colors.primarySoft,
+  },
+  actionChipDisabled: {
+    opacity: 0.5,
   },
   editStack: {
     gap: spacing.sm,
