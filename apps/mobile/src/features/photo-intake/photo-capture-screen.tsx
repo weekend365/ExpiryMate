@@ -301,14 +301,9 @@ export function PhotoCaptureScreen({
                     ]}
                   >
                     {isBusy ? (
-                      <ActivityIndicator
-                        color={colors.actionPrimaryForeground}
-                      />
+                      <ActivityIndicator color={colors.surface} />
                     ) : (
-                      <Camera
-                        color={colors.actionPrimaryForeground}
-                        size={spacing.md}
-                      />
+                      <Camera color={colors.surface} size={spacing.md} />
                     )}
                   </Pressable>
                   <View style={styles.actionSpacer} />

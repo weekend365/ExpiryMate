@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
     fontSize: typography.caption.fontSize,
     lineHeight: typography.caption.lineHeight,
     fontFamily: typography.title.fontFamily,
-    color: colors.actionPrimaryForeground,
+    color: colors.surface,
   },
   stepText: {
     flex: 1,

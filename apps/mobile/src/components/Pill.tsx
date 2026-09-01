@@ -31,11 +31,9 @@ export function Pill({
   accessibilityLabel,
 }: PillProps) {
   const palette = tonePalettes[tone];
-  const foregroundColor = selected
-    ? palette.selectedTextColor
-    : palette.textColor;
+  const foregroundColor = selected ? colors.surface : palette.textColor;
   const countBackgroundColor = selected ? colors.surface : colors.mutedSurface;
-  const countTextColor = selected ? palette.textColor : foregroundColor;
+  const countTextColor = selected ? palette.selectedBackgroundColor : foregroundColor;
 
   return (
     <Pressable
@@ -98,22 +96,18 @@ export function Pill({
 const tonePalettes = {
   default: {
     selectedBackgroundColor: colors.actionPrimaryBackground,
-    selectedTextColor: colors.actionPrimaryForeground,
     textColor: colors.text,
   },
   warning: {
     selectedBackgroundColor: colors.actionWarningBackground,
-    selectedTextColor: colors.actionWarningForeground,
     textColor: colors.warningForeground,
   },
   danger: {
     selectedBackgroundColor: colors.actionDangerBackground,
-    selectedTextColor: colors.actionDangerForeground,
     textColor: colors.dangerForeground,
   },
   success: {
     selectedBackgroundColor: colors.actionSuccessBackground,
-    selectedTextColor: colors.actionSuccessForeground,
     textColor: colors.successForeground,
   },
 } as const;

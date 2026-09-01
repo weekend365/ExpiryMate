@@ -14,13 +14,13 @@ const baseClassName =
 
 const variantClassNames: Record<ActionVariant, string> = {
   primary:
-    "bg-[var(--action-primary-background)] text-[var(--action-primary-foreground)] hover:bg-[var(--action-primary-pressed)]",
+    "bg-[var(--action-primary-background)] text-[var(--surface)] hover:bg-[var(--action-primary-pressed)]",
   secondary:
     "bg-[var(--primary-soft)] text-[var(--primary-foreground)] hover:bg-[var(--surface-pressed)]",
   surface:
     "border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-pressed)]",
   danger:
-    "bg-[var(--action-danger-background)] text-[var(--action-danger-foreground)] hover:bg-[var(--action-danger-pressed)]",
+    "bg-[var(--action-danger-background)] text-[var(--surface)] hover:bg-[var(--action-danger-pressed)]",
 };
 
 const sizeClassNames: Record<ActionSize, string> = {

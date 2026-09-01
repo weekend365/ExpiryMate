@@ -194,9 +194,9 @@ function getExpiryLampPresentation(expiryDate: string | null) {
 
   const lampColor = {
     unknown: colors.mutedText,
-    expired: colors.expiryExpiredAccent,
-    within_7_days: colors.expiryExpiringAccent,
-    safe: colors.expirySafeAccent,
+    expired: colors.dangerForeground,
+    within_7_days: colors.warningForeground,
+    safe: colors.successForeground,
   }[bucket];
 
   return { lampColor, ddayLabel };
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   },
   expiryLampText: {
     fontFamily: typography.title.fontFamily,
-    color: colors.expiryAccentForeground,
+    color: colors.surface,
   },
   selectionIndicator: {
     width: spacing.lg,

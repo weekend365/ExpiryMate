@@ -9,7 +9,7 @@ export function AffiliateCta({
 }) {
   return (
     <a
-      className="type-body-small-strong inline-flex min-h-[var(--space-2xl)] items-center gap-[var(--space-xs)] rounded-[var(--radius-lg)] bg-[var(--action-primary-background)] px-[var(--space-md)] text-[var(--action-primary-foreground)] transition-colors hover:bg-[var(--action-primary-pressed)]"
+      className="type-body-small-strong inline-flex min-h-[var(--space-2xl)] items-center gap-[var(--space-xs)] rounded-[var(--radius-lg)] bg-[var(--action-primary-background)] px-[var(--space-md)] text-[var(--surface)] transition-colors hover:bg-[var(--action-primary-pressed)]"
       href={href}
       rel="noopener noreferrer sponsored"
       target="_blank"
