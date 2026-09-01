@@ -68,6 +68,12 @@ describe("recommendation screen flow contract", () => {
     expect(screen).toContain('variant="surface"');
   });
 
+  it("does not repeat the initial recommendation state below the hero", () => {
+    expect(screen).not.toContain("아직 냉장고가 비어 있어요");
+    expect(screen).not.toContain("아직 추천이 없어요");
+    expect(screen).toContain("{primaryCtaLabel}");
+  });
+
   it("places a value-moment offer after the latest recommendation result", () => {
     expect(screen.indexOf("latestRecommendation.recommendations.map")).toBeLessThan(
       screen.indexOf("showValueMomentOffer ?"),

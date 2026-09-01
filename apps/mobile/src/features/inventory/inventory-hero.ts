@@ -3,6 +3,12 @@ import type { MascotMood } from "../../components/Mascot";
 import type { InventoryViewFilter } from "./filters";
 
 export type InventoryHeroTone = "danger" | "warning" | "success" | "neutral";
+export type InventoryHeroAction =
+  | "retry"
+  | "add_ingredient"
+  | "clear_filters"
+  | "show_expired"
+  | "show_within7";
 
 export type InventoryHeroNotice =
   | { show: false }
@@ -11,6 +17,8 @@ export type InventoryHeroNotice =
       mood: MascotMood;
       tone: InventoryHeroTone;
       message: string;
+      action?: InventoryHeroAction;
+      actionLabel?: string;
     };
 
 export function getInventoryHeroNotice(input: {
@@ -33,12 +41,7 @@ export function getInventoryHeroNotice(input: {
   }
 
   if (input.isInitialLoading) {
-    return {
-      show: true,
-      mood: "think",
-      tone: "neutral",
-      message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
-    };
+    return { show: false };
   }
 
   if (input.isInitialError) {
@@ -47,6 +50,8 @@ export function getInventoryHeroNotice(input: {
       mood: "worry",
       tone: "danger",
       message: "앗, 보관함을 불러오지 못했어요. 다시 살펴볼까요?",
+      action: "retry",
+      actionLabel: "다시 시도",
     };
   }
 
@@ -56,6 +61,8 @@ export function getInventoryHeroNotice(input: {
       mood: "empty",
       tone: "neutral",
       message: "아직 넣어둔 재료가 없어요. 첫 재료를 넣어 볼까요?",
+      action: "add_ingredient",
+      actionLabel: "재료 넣기",
     };
   }
 
@@ -65,6 +72,8 @@ export function getInventoryHeroNotice(input: {
       mood: "idle",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
+      action: "clear_filters",
+      actionLabel: "필터 해제",
     };
   }
 
@@ -83,6 +92,7 @@ export function getInventoryHeroNotice(input: {
       mood: "worry",
       tone: "danger",
       message: `기한이 지난 재료 ${input.expiredCount}개부터 정리할까요?`,
+      action: "show_expired",
     };
   }
 
@@ -92,6 +102,7 @@ export function getInventoryHeroNotice(input: {
       mood: "speak",
       tone: "warning",
       message: `7일 안에 손볼 재료 ${input.within7Count}개를 확인할까요?`,
+      action: "show_within7",
     };
   }
 
@@ -115,6 +126,9 @@ export function getInventoryHeroNotices(input: {
       id: "status",
       mood: input.hero.mood,
       message: input.hero.message,
+      ...(input.hero.actionLabel
+        ? { actionLabel: input.hero.actionLabel }
+        : {}),
     },
   ];
 }

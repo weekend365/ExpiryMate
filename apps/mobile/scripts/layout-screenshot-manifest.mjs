@@ -71,7 +71,6 @@ export const layoutRouteScreenshots = {
   "settings/storage-locations": "settings-storage-locations.png",
   "settings/subscription": "subscription.png",
   "settings/support": "settings-support.png",
-  shopping: "shopping.png",
   "spaces/invitations/accept": "invitation-accept.png",
   "spaces/invitations/code": "invitation-code.png",
 };

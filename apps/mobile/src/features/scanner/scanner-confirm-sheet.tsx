@@ -11,7 +11,6 @@ import {
   Barcode,
   CheckCircle2,
   Package,
-  PenLine,
   RotateCcw,
 } from "lucide-react-native";
 import { Image, View } from "react-native";
@@ -26,6 +25,7 @@ import { colors, spacing } from "../../shared/theme";
 import type { BarcodeContributionField } from "./barcodeContributionModeration";
 import { getScannerConfirmDescription } from "./scanner-confirm-copy";
 import { ManualExpirySection } from "./scanner-manual-expiry";
+import { RegistrationCompletionActions } from "../registration/registration-completion-actions";
 import { scannerScreenStyles as styles } from "./scanner-screen-styles";
 import type { ProductInfo, ScannerConfirmation } from "./useProductScanner";
 
@@ -173,33 +173,17 @@ export function ScannerConfirmSheet({
       footer={
         <View style={styles.sheetFooter}>
           {quickSavedItem ? (
-            <>
-              <Button
-                icon={Barcode}
-                onPress={onScanNext}
-                fullWidth
-                testID="scanner-scan-next-button"
-              >
-                다음 재료 스캔
-              </Button>
-              <Button
-                icon={PenLine}
-                variant="secondary"
-                onPress={onEditQuickSavedItem}
-                fullWidth
-                testID="scanner-edit-saved-button"
-              >
-                방금 추가한 재료 수정
-              </Button>
-              <Button
-                variant="surface"
-                onPress={onFinishQuickAdd}
-                fullWidth
-                testID="scanner-finish-button"
-              >
-                추가 완료
-              </Button>
-            </>
+            <RegistrationCompletionActions
+              primaryIcon={Barcode}
+              primaryLabel="다음 재료 스캔"
+              onPrimary={onScanNext}
+              onDone={onFinishQuickAdd}
+              tertiaryLabel="방금 추가한 재료 수정"
+              onTertiary={onEditQuickSavedItem}
+              primaryTestID="scanner-scan-next-button"
+              doneTestID="scanner-finish-button"
+              tertiaryTestID="scanner-edit-saved-button"
+            />
           ) : null}
           {!quickSavedItem &&
           needsManualExpiry &&

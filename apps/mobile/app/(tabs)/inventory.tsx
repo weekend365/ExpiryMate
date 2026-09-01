@@ -19,7 +19,6 @@ import {
   HomeStatsSkeleton,
   InventoryListSkeleton,
 } from "../../src/components/ContentSkeleton";
-import { EmptyState } from "../../src/components/EmptyState";
 import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { InventoryCleanupSheet } from "../../src/components/InventoryCleanupSheet";
 import { InventoryCard } from "../../src/components/InventoryCard";
@@ -35,13 +34,9 @@ import {
   type InventoryViewFilter,
 } from "../../src/features/inventory/filters";
 import {
-  getFilteredEmptyDescription,
-  getFilteredEmptyMood,
-  getFilteredEmptyTitle,
-} from "../../src/features/inventory/inventory-empty-copy";
-import {
   getInventoryHeroNotice,
   getInventoryHeroNotices,
+  type InventoryHeroAction,
 } from "../../src/features/inventory/inventory-hero";
 import { getCommittedFullConsumeTarget } from "../../src/features/inventory/deferred-inventory-removal";
 import {
@@ -309,20 +304,33 @@ export default function InventoryScreen() {
       trackedItems.length,
     ],
   );
-  const priorityFilter =
-    inventoryStatusHero.show && inventoryStatusHero.tone === "danger"
-      ? "expired"
-      : inventoryStatusHero.show && inventoryStatusHero.tone === "warning"
-        ? "within7"
-        : null;
+  const handleInventoryHeroAction = (action: InventoryHeroAction) => {
+    if (action === "retry") {
+      void refetch();
+      return;
+    }
+    if (action === "add_ingredient") {
+      setEntryMethodVisible(true);
+      return;
+    }
+    if (action === "clear_filters") {
+      if (filter !== "all") applyFilter("all");
+      if (hasLocationFilter) setLocation("all");
+      if (hasSearchQuery) setSearchQuery("");
+      return;
+    }
+    applyFilter(action === "show_expired" ? "expired" : "within7");
+  };
   const inventoryStatusNotices = getInventoryHeroNotices({
     hero: inventoryStatusHero,
   }).map((notice) =>
-    priorityFilter
+    inventoryStatusHero.show && inventoryStatusHero.action
       ? {
           ...notice,
-          onPress: () => applyFilter(priorityFilter),
-          accessibilityHint: "해당 유통기한 상태의 재료만 보여 드릴게요.",
+          onPress: () => handleInventoryHeroAction(inventoryStatusHero.action!),
+          accessibilityHint:
+            notice.actionLabel ??
+            "해당 유통기한 상태의 재료만 보여 드릴게요.",
         }
       : notice,
   );
@@ -683,52 +691,7 @@ export default function InventoryScreen() {
             </View>
           }
           ListEmptyComponent={
-            isLoading && !hasLoadedInventory ? (
-              <InventoryListSkeleton />
-            ) : isError && !hasLoadedInventory ? (
-              <EmptyState
-                kind="error"
-                mood="worry"
-                title="앗, 보관함을 불러오지 못했어요"
-                description={loadErrorMessage}
-                actionLabel="다시 시도"
-                onAction={() => {
-                  void refetch();
-                }}
-              />
-            ) : isEmptyInventory ? (
-              <EmptyState
-                kind="empty"
-                mood="empty"
-                title="아직 넣어둔 재료가 없어요"
-                description="장고가 빈 냉장고를 바라보고 있어요. 첫 재료를 넣으러 가볼까요?"
-                actionLabel="재료 넣으러 가기"
-                onAction={openEntryMethodSheet}
-              />
-            ) : isFilteredEmpty ? (
-              <EmptyState
-                mood={hasSearchQuery ? "idle" : getFilteredEmptyMood(filter)}
-                kind="no-results"
-                title={getFilteredEmptyTitle(filter, hasSearchQuery)}
-                description={getFilteredEmptyDescription(
-                  filter,
-                  hasLocationFilter,
-                  hasSearchQuery,
-                )}
-                actionLabel={
-                  hasSearchQuery && !hasStatusFilter && !hasLocationFilter
-                    ? "검색어 지우기"
-                    : filter === "all" && hasLocationFilter && !hasSearchQuery
-                      ? "모든 위치 보기"
-                      : "필터 해제"
-                }
-                onAction={
-                  hasSearchQuery && !hasStatusFilter && !hasLocationFilter
-                    ? () => setSearchQuery("")
-                    : clearListFilters
-                }
-              />
-            ) : null
+            isLoading && !hasLoadedInventory ? <InventoryListSkeleton /> : null
           }
           renderItem={({ item: section }) => (
             <UrgencySection

@@ -1092,27 +1092,6 @@ export default function RecommendationsScreen() {
             </View>
           ) : null}
 
-          {recipeView === "recommendations" &&
-          !isHistoryInitialLoading &&
-          !latestRecommendation &&
-          !isGenerating &&
-          !errorMessage ? (
-            <EmptyState
-              kind="empty"
-              mood="empty"
-              title={
-                needsIngredients
-                  ? "아직 냉장고가 비어 있어요"
-                  : "아직 추천이 없어요"
-              }
-              description={
-                needsIngredients
-                  ? "재료를 넣으면 장고가 오늘 요리를 골라 드릴게요."
-                  : "아래 버튼을 누르면 장고가 냉장고 재료로 요리를 골라줄게요."
-              }
-            />
-          ) : null}
-
           {recipeView === "favorites" ? (
             <RecipeSection
               title="즐겨찾는 요리"

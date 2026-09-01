@@ -30,11 +30,7 @@ export function getHomeNotices(input: {
   hasLoaded: boolean;
 }): HomeNotice[] {
   if (input.isInitialLoading) {
-    return [{
-      id: "loading",
-      message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
-      mood: "think",
-    }];
+    return [];
   }
 
   if (input.isInitialError) {

@@ -468,7 +468,7 @@ export default function RegisterPhotoScreen() {
 
   const title = useMemo(() => {
     if (step === "choose") return "어떤 사진으로 넣을까요?";
-    if (step === "loading") return "읽고 있어요";
+    if (step === "loading") return "사진 분석";
     if (step === "review") return "이 재료들이 맞나요?";
     return "냉장고에 넣어 뒀어요";
   }, [step]);
@@ -478,7 +478,7 @@ export default function RegisterPhotoScreen() {
       return "사진 종류와 가져올 곳을 한 번에 고르면 바로 여러 재료를 찾아 드릴게요.";
     }
     if (step === "loading") {
-      return "장고가 사진을 살펴보는 중이에요. 잠깐만 기다려 주세요.";
+      return undefined;
     }
     if (step === "review") {
       return items.length
@@ -655,9 +655,9 @@ export default function RegisterPhotoScreen() {
       >
         {canSubmit
           ? readyCount === items.length
-              ? `${readyCount}개 재료 추가`
-              : `확인된 ${readyCount}개 먼저 추가`
-            : `${attentionCount}개 확인 필요`}
+            ? "재료 추가"
+            : "확인된 재료 먼저 추가"
+          : "확인이 필요한 재료가 있어요"}
       </Button>
     ) : step === "done" ? (
       <Button
@@ -1003,9 +1003,6 @@ export default function RegisterPhotoScreen() {
                 </View>
               );
             })}
-            <AppText variant="caption" tone="muted">
-              {readyCount}/{items.length}가지 저장 준비를 마쳤어요.
-            </AppText>
             <Button
               variant="surface"
               onPress={() => {

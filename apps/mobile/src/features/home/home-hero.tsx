@@ -19,6 +19,10 @@ export function HomeHero({
   const activeNotice = notices[noticeIndex] ?? notices[0] ?? null;
   const heroTone = getHeroTone(activeNotice);
 
+  if (!notices.length) {
+    return null;
+  }
+
   return (
     <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
       <JangoHeroNoticeCarousel

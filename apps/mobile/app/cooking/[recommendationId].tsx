@@ -333,16 +333,6 @@ export default function CookingScreen() {
           </View>
         }
       >
-        <EmptyState
-          kind="success"
-          mood="happy"
-          title="맛있게 완성했어요"
-          description={
-            updatedItems.length
-              ? "남은 재료도 다음 요리에 알뜰하게 이어서 쓸게요."
-              : "재고는 바꾸지 않고 요리만 마쳤어요."
-          }
-        />
         {depletedTargets.length ? (
           <AffiliateEntryImpression placement="cooking_complete">
             <View style={styles.shoppingSummaryCard}>

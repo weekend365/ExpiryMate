@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
 import type { AppTextVariant } from "./AppText";
+import { Button } from "./Button";
 import type { MascotMood } from "./Mascot";
 import { MascotSpeechBubble } from "./MascotSpeechBubble";
 
@@ -20,6 +21,7 @@ export type JangoHeroNoticeItem = {
   mood?: MascotMood;
   supportingMessage?: string;
   onPress?: () => void;
+  actionLabel?: string;
   accessibilityHint?: string;
 };
 
@@ -173,6 +175,21 @@ function JangoHeroNoticeBubble({
     />
   );
 
+  if (notice.onPress && notice.actionLabel) {
+    return (
+      <View style={styles.noticeActionBlock}>
+        {bubble}
+        <Button
+          size="small"
+          onPress={notice.onPress}
+          fullWidth
+        >
+          {notice.actionLabel}
+        </Button>
+      </View>
+    );
+  }
+
   if (!notice.onPress) {
     return bubble;
   }
@@ -223,5 +240,8 @@ const styles = StyleSheet.create({
   },
   noticePressed: {
     opacity: 0.88,
+  },
+  noticeActionBlock: {
+    gap: spacing.xs,
   },
 });

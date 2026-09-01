@@ -119,7 +119,6 @@ function RootLayout() {
                 options={{ title: "사진으로 넣기", headerShown: false }}
               />
               <Stack.Screen name="inventory/[id]" options={{ title: "내용 바꾸기" }} />
-              <Stack.Screen name="shopping" options={{ title: "장보기" }} />
               <Stack.Screen
                 name="cooking/[recommendationId]"
                 options={{ title: "요리하기" }}
