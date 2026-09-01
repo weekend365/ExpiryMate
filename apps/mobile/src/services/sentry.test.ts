@@ -2,11 +2,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   init: vi.fn(),
+  addBreadcrumb: vi.fn(),
+  captureException: vi.fn(),
 }));
 
 vi.mock("@sentry/react-native", () => ({
   init: mocks.init,
-  addBreadcrumb: vi.fn(),
+  addBreadcrumb: mocks.addBreadcrumb,
+  captureException: mocks.captureException,
 }));
 vi.mock("expo-constants", () => ({
   default: {
@@ -58,6 +61,28 @@ describe("mobile Sentry initialization", () => {
       expect.objectContaining({
         environment: "production",
         release: "expirymate-mobile@1.2.3+45",
+      }),
+    );
+  });
+
+  it("tags startup failures without attaching storage payloads", async () => {
+    const { captureStartupBootstrapIssue } = await import("./sentry");
+    const error = new Error("storage stalled");
+
+    captureStartupBootstrapIssue("secure-store.restore", error, {
+      timeout_ms: 8_000,
+    });
+
+    expect(mocks.addBreadcrumb).toHaveBeenCalledWith(
+      expect.objectContaining({
+        category: "app.bootstrap",
+        message: "secure-store.restore.failed",
+      }),
+    );
+    expect(mocks.captureException).toHaveBeenCalledWith(
+      error,
+      expect.objectContaining({
+        tags: { "app.bootstrap.stage": "secure-store.restore" },
       }),
     );
   });

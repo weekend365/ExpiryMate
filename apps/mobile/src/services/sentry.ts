@@ -45,3 +45,27 @@ export function captureSpaceBootstrapBreadcrumb(
     // Sentry may be uninitialized in development.
   }
 }
+
+/** Startup diagnostics only; never attach cached payloads, tokens, or PII. */
+export function captureStartupBootstrapIssue(
+  stage: string,
+  error: unknown,
+  data?: Record<string, string | number | boolean | undefined>,
+) {
+  try {
+    Sentry.addBreadcrumb({
+      category: "app.bootstrap",
+      message: `${stage}.failed`,
+      level: "error",
+      data,
+    });
+    Sentry.captureException(
+      error instanceof Error ? error : new Error(`${stage} failed`),
+      {
+        tags: { "app.bootstrap.stage": stage },
+      },
+    );
+  } catch {
+    // Sentry may be uninitialized while the root module is still evaluating.
+  }
+}

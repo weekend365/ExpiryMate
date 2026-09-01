@@ -83,8 +83,11 @@ import type {
 } from "@expirymate/shared";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
+import { withAsyncTimeout } from "../shared/async-timeout";
+import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
 
 const API_BASE_URL = resolveApiBaseUrl();
+export const AUTH_STORAGE_TIMEOUT_MS = 8_000;
 
 interface ApiEnvelope<T> {
   success: boolean;
@@ -424,10 +427,21 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
     return { user: currentUser, accessToken };
   }
 
-  await AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY);
+  await runAuthStorageOperation(
+    AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
+    "async-storage.remove-legacy-session",
+  ).catch(() => undefined);
 
-  const storedUser = await AsyncStorage.getItem(AUTH_USER_STORAGE_KEY);
-  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+  const [storedUser, refreshToken] = await Promise.all([
+    runAuthStorageOperation(
+      AsyncStorage.getItem(AUTH_USER_STORAGE_KEY),
+      "async-storage.read-user",
+    ),
+    runAuthStorageOperation(
+      SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+      "secure-store.read-refresh-token",
+    ),
+  ]);
 
   if (!storedUser || !refreshToken) {
     await clearAuthSession();
@@ -471,7 +485,10 @@ async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | nul
   }
 
   refreshInFlight = (async () => {
-    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+    const refreshToken = await runAuthStorageOperation(
+      SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+      "secure-store.read-refresh-token",
+    );
 
     if (!refreshToken) {
       return null;
@@ -542,10 +559,16 @@ async function persistAuthSession(session: AuthSession) {
   accessToken = session.accessToken;
   currentUser = session.user;
   sessionPromise = Promise.resolve(session);
-  await AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user));
+  await runAuthStorageOperation(
+    AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user)),
+    "async-storage.write-user",
+  );
 
   if (session.refreshToken) {
-    await SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, session.refreshToken);
+    await runAuthStorageOperation(
+      SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, session.refreshToken),
+      "secure-store.write-refresh-token",
+    );
   }
 
   return session;
@@ -557,10 +580,21 @@ export async function clearAuthSession() {
   sessionPromise = null;
   refreshInFlight = null;
   try {
-    await Promise.all([
-      AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY),
-      AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
-      SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+    // Local cleanup must never hold the signed-out transition hostage. Report
+    // individual failures, but let React move to the login screen.
+    await Promise.allSettled([
+      runAuthStorageOperation(
+        AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY),
+        "async-storage.remove-user",
+      ),
+      runAuthStorageOperation(
+        AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
+        "async-storage.remove-legacy-session",
+      ),
+      runAuthStorageOperation(
+        SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+        "secure-store.remove-refresh-token",
+      ),
     ]);
   } finally {
     notifyAuthSessionCleared();
@@ -658,7 +692,10 @@ export const logout = async () => {
   const { unregisterDevicePushToken } = await import("./notifications");
   await unregisterDevicePushToken().catch(() => null);
 
-  const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY);
+  const refreshToken = await runAuthStorageOperation(
+    SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
+    "secure-store.read-refresh-token-for-logout",
+  ).catch(() => null);
 
   if (refreshToken) {
     await publicRequest<{ ok: boolean }>("/auth/logout", {
@@ -669,6 +706,23 @@ export const logout = async () => {
 
   await clearAuthSession();
 };
+
+function runAuthStorageOperation<T>(
+  operation: PromiseLike<T>,
+  stage: string,
+): Promise<T> {
+  return withAsyncTimeout(
+    operation,
+    AUTH_STORAGE_TIMEOUT_MS,
+    stage,
+    "로그인 정보를 확인하는 데 시간이 오래 걸리고 있어요. 다시 시도해 주세요.",
+  ).catch((error: unknown) => {
+    captureStartupBootstrapIssue(`auth-storage.${stage}`, error, {
+      timeout_ms: AUTH_STORAGE_TIMEOUT_MS,
+    });
+    throw error;
+  });
+}
 
 export const requestEmailVerification = async (email?: string) => {
   const body = JSON.stringify({ email });

@@ -9,6 +9,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const stores = vi.hoisted(() => ({
   asyncStorage: new Map<string, string>(),
   secureStore: new Map<string, string>(),
+  secureStoreGet: vi.fn<(key: string) => Promise<string | null>>(),
+  secureStoreDelete: vi.fn<(key: string) => Promise<void>>(),
   fetch: vi.fn(),
   unregisterDevicePushToken: vi.fn(async () => ({ ok: true, skipped: false })),
 }));
@@ -26,17 +28,19 @@ vi.mock("@react-native-async-storage/async-storage", () => ({
 }));
 
 vi.mock("expo-secure-store", () => ({
-  getItemAsync: vi.fn(async (key: string) => stores.secureStore.get(key) ?? null),
+  getItemAsync: (key: string) => stores.secureStoreGet(key),
   setItemAsync: vi.fn(async (key: string, value: string) => {
     stores.secureStore.set(key, value);
   }),
-  deleteItemAsync: vi.fn(async (key: string) => {
-    stores.secureStore.delete(key);
-  }),
+  deleteItemAsync: (key: string) => stores.secureStoreDelete(key),
 }));
 
 vi.mock("./notifications", () => ({
   unregisterDevicePushToken: () => stores.unregisterDevicePushToken(),
+}));
+
+vi.mock("./bootstrap-diagnostics", () => ({
+  captureStartupBootstrapIssue: vi.fn(),
 }));
 
 const authUser: AuthUser = {
@@ -68,6 +72,14 @@ describe("mobile API client core flow", () => {
     vi.clearAllMocks();
     stores.asyncStorage.clear();
     stores.secureStore.clear();
+    stores.secureStoreGet.mockReset();
+    stores.secureStoreGet.mockImplementation(
+      async (key: string) => stores.secureStore.get(key) ?? null,
+    );
+    stores.secureStoreDelete.mockReset();
+    stores.secureStoreDelete.mockImplementation(async (key: string) => {
+      stores.secureStore.delete(key);
+    });
     stores.fetch = vi.fn();
     globalThis.fetch = stores.fetch as unknown as typeof fetch;
   });
@@ -142,6 +154,38 @@ describe("mobile API client core flow", () => {
     await expect(getMe()).resolves.toBeNull();
     expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
     expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+  });
+
+  it("surfaces a recoverable error when SecureStore never settles", async () => {
+    vi.useFakeTimers();
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStoreGet.mockImplementationOnce(
+      () => new Promise<string | null>(() => undefined),
+    );
+    const { AUTH_STORAGE_TIMEOUT_MS, getMe } = await import("./api");
+
+    const pending = getMe();
+    const rejection = expect(pending).rejects.toThrow(
+      /로그인 정보를 확인하는 데 시간이 오래/,
+    );
+    await vi.advanceTimersByTimeAsync(AUTH_STORAGE_TIMEOUT_MS);
+    await rejection;
+    vi.useRealTimers();
+  });
+
+  it("does not block session clearing when SecureStore deletion stalls", async () => {
+    vi.useFakeTimers();
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.secureStoreDelete.mockImplementationOnce(
+      () => new Promise<void>(() => undefined),
+    );
+    const { AUTH_STORAGE_TIMEOUT_MS, clearAuthSession } = await import("./api");
+
+    const pending = clearAuthSession();
+    const completion = expect(pending).resolves.toBeUndefined();
+    await vi.advanceTimersByTimeAsync(AUTH_STORAGE_TIMEOUT_MS);
+    await completion;
+    vi.useRealTimers();
   });
 
   it("notifies the mounted session boundary after a terminal refresh failure", async () => {

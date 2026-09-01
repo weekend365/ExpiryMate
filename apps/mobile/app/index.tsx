@@ -6,6 +6,7 @@ import {
 import { resolveRegisteredLandingHref } from "../src/features/auth/auth-routing";
 import { useAuth } from "../src/features/auth/use-auth";
 import { useAppStore } from "../src/store/app-store";
+import { clearAuthSession } from "../src/services/api";
 
 export default function IndexScreen() {
   const hasHydrated = useAppStore((state) => state.hasHydrated);
@@ -24,6 +25,10 @@ export default function IndexScreen() {
         message={query.error instanceof Error ? query.error.message : undefined}
         onRetry={() => {
           void query.refetch();
+        }}
+        onResetSession={async () => {
+          await clearAuthSession();
+          await query.refetch();
         }}
       />
     );

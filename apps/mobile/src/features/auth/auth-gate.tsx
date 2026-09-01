@@ -16,7 +16,10 @@ import { Button } from "../../components/Button";
 import { SkeletonBlock } from "../../components/ContentSkeleton";
 import { colors, radius, spacing } from "../../shared/theme";
 import { useAppStore } from "../../store/app-store";
-import { subscribeToAuthSessionCleared } from "../../services/api";
+import {
+  clearAuthSession,
+  subscribeToAuthSessionCleared,
+} from "../../services/api";
 import { handleAuthSessionCleared } from "./session-boundary";
 import { useAuth } from "./use-auth";
 import { resolveRegisteredLandingHref } from "./auth-routing";
@@ -235,10 +238,26 @@ export function AuthLoadingScreen() {
 export function AuthSessionErrorScreen({
   message,
   onRetry,
+  onResetSession,
 }: {
   message?: string;
   onRetry: () => void;
+  onResetSession?: () => Promise<void> | void;
 }) {
+  const [isResetting, setIsResetting] = useState(false);
+
+  const resetSession = async () => {
+    if (!onResetSession || isResetting) {
+      return;
+    }
+    setIsResetting(true);
+    try {
+      await onResetSession();
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
   return (
     <View style={styles.root}>
       <View style={styles.errorIcon}>
@@ -253,6 +272,17 @@ export function AuthSessionErrorScreen({
         </AppText>
       </View>
       <Button onPress={onRetry}>다시 시도</Button>
+      {onResetSession ? (
+        <Button
+          variant="surface"
+          onPress={() => {
+            void resetSession();
+          }}
+          loading={isResetting}
+        >
+          로그인 정보 초기화
+        </Button>
+      ) : null}
     </View>
   );
 }
@@ -302,6 +332,10 @@ export function RequireRegisteredAuth({
         message={query.error instanceof Error ? query.error.message : undefined}
         onRetry={() => {
           void query.refetch();
+        }}
+        onResetSession={async () => {
+          await clearAuthSession();
+          await query.refetch();
         }}
       />
     );
