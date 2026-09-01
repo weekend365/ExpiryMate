@@ -105,17 +105,13 @@ function StatusGlyph({
 }) {
   if (tone === "unknown") {
     return (
-      <>
-        <Path
-          d="M26.5 27c.9-3.4 3.3-5.2 6.7-5.2 4.1 0 6.9 2.5 6.9 5.9 0 2.9-1.7 4.4-4.2 5.8-2.2 1.3-3 2.4-3 4.5"
-          fill="none"
-          stroke={color}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="3.25"
-        />
-        <Circle cx="33.2" cy="43" r="1.8" fill={color} />
-      </>
+      <Path
+        d="M25 32h14"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
     );
   }
 

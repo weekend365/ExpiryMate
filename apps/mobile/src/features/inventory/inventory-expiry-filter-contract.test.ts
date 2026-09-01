@@ -10,7 +10,7 @@ function read(relativePath: string) {
 }
 
 describe("inventory expiry filter contract", () => {
-  it("renders the unknown-expiry lamp with a neutral question-mark glyph", () => {
+  it("renders the unknown-expiry lamp with a centered neutral dash", () => {
     const header = read("src/features/inventory/inventory-list-header.tsx");
     const icon = read("src/components/ExpiryTrafficIcon.tsx");
     const statCard = read("src/components/StatCard.tsx");
@@ -36,9 +36,9 @@ describe("inventory expiry filter contract", () => {
     expect(icon).toContain('if (tone === "unknown")');
     expect(icon).toContain('fill: colors.expiryUnknownAccent');
     expect(icon).toContain('soft: colors.expiryUnknownSoft');
-    expect(icon).toContain('strokeWidth="3.25"');
-    expect(icon).toContain('cy="43"');
-    expect(icon).toContain('r="1.8"');
+    expect(icon).toMatch(
+      /if \(tone === "unknown"\)[\s\S]*?d="M25 32h14"[\s\S]*?strokeLinecap="round"[\s\S]*?strokeWidth="4"/,
+    );
     expect(statCard).toContain("unknown: {");
     expect(statCard).toContain("glow: colors.expiryUnknownAccent");
     expect(home).toMatch(
