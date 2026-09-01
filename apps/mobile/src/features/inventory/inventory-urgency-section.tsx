@@ -34,12 +34,19 @@ export function UrgencySection({
 }) {
   const description = inventoryUrgencySectionDescriptions[section.key];
   const title = `${section.title} ${section.itemCount}건`;
+  const headerToneStyle = {
+    unknown: styles.urgencySectionHeaderUnknown,
+    expired: styles.urgencySectionHeaderExpired,
+    within7: styles.urgencySectionHeaderExpiring,
+    safe: styles.urgencySectionHeaderSafe,
+  }[section.key];
 
   return (
     <View style={styles.urgencySection}>
       <View
         style={[
           styles.urgencySectionHeader,
+          headerToneStyle,
           collapsed ? null : styles.urgencySectionHeaderExpanded,
         ]}
         accessibilityRole="header"
@@ -108,7 +115,7 @@ export function ExpiryTrafficLamp({
   label,
   count,
   tone,
-  lampOn,
+  hasData,
   selected,
   onPress,
   testID,
@@ -118,7 +125,7 @@ export function ExpiryTrafficLamp({
   label: string;
   count: number;
   tone: ExpiryTrafficTone;
-  lampOn: boolean;
+  hasData: boolean;
   selected: boolean;
   onPress: () => void;
   testID: string;
@@ -145,7 +152,8 @@ export function ExpiryTrafficLamp({
         label={label}
         value={count}
         tone={tone}
-        selected={lampOn}
+        active={hasData}
+        selected={selected}
         showGlow={selected}
       />
     </Pressable>

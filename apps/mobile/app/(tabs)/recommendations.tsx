@@ -1367,7 +1367,7 @@ export default function RecommendationsScreen() {
                 >
                   {selected ? (
                     <Check
-                      color={colors.surface}
+                      color={colors.actionPrimaryForeground}
                       size={spacing.sm}
                       strokeWidth={3}
                     />

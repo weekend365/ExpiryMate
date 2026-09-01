@@ -193,10 +193,10 @@ function getExpiryLampPresentation(expiryDate: string | null) {
         : `D-${daysLeft}`;
 
   const lampColor = {
-    unknown: colors.mutedText,
-    expired: colors.dangerForeground,
-    within_7_days: colors.warningForeground,
-    safe: colors.successForeground,
+    unknown: colors.expiryUnknownAccent,
+    expired: colors.expiryExpiredAccent,
+    within_7_days: colors.expiryExpiringAccent,
+    safe: colors.expirySafeAccent,
   }[bucket];
 
   return { lampColor, ddayLabel };
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   cardDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.borderSubtle,
   },
   main: {
     flex: 1,
@@ -282,14 +282,14 @@ const styles = StyleSheet.create({
   },
   expiryLampText: {
     fontFamily: typography.title.fontFamily,
-    color: colors.surface,
+    color: colors.expiryAccentForeground,
   },
   selectionIndicator: {
     width: spacing.lg,
     height: spacing.lg,
     borderRadius: radius.pill,
     borderWidth: 2,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",

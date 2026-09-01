@@ -181,9 +181,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.sm,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     borderRadius: radius.xxl,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceWarm,
     padding: spacing.md,
   },
   optionRecommended: {

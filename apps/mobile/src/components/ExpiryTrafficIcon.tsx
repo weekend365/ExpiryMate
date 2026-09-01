@@ -15,35 +15,40 @@ interface ExpiryTrafficIconProps {
 }
 
 const VIEWBOX_SIZE = 64;
-const INACTIVE_OPACITY = 0.3;
+const INACTIVE_OPACITY = 0.42;
 
 const trafficLamps: Record<
   ExpiryTrafficTone,
-  { fill: string; glyph: string }
+  { fill: string; soft: string; foreground: string }
 > = {
   unknown: {
-    fill: colors.mutedText,
-    glyph: colors.surface,
+    fill: colors.expiryUnknownAccent,
+    soft: colors.expiryUnknownSoft,
+    foreground: colors.expiryUnknownForeground,
   },
   danger: {
-    fill: colors.citrusGrapefruit,
-    glyph: colors.surface,
+    fill: colors.expiryExpiredAccent,
+    soft: colors.expiryExpiredSoft,
+    foreground: colors.expiryExpiredForeground,
   },
   warning: {
-    fill: colors.citrusLemon,
-    glyph: colors.text,
+    fill: colors.expiryExpiringAccent,
+    soft: colors.expiryExpiringSoft,
+    foreground: colors.expiryExpiringForeground,
   },
   success: {
-    fill: colors.citrusLime,
-    glyph: colors.surface,
+    fill: colors.expirySafeAccent,
+    soft: colors.expirySafeSoft,
+    foreground: colors.expirySafeForeground,
   },
 };
 
 /**
  * Flat citrus status lamp used by the home summary and inventory filters.
  *
- * The neutral outer ring stays visually quiet until a filter is selected.
- * The state glyph keeps the UI understandable without color alone.
+ * An unselected lamp keeps a soft version of its status hue; selection adds
+ * the full-color outer ring. The state glyph keeps the UI understandable
+ * without color alone.
  */
 export function ExpiryTrafficIcon({
   size,
@@ -52,7 +57,9 @@ export function ExpiryTrafficIcon({
   selected = false,
 }: ExpiryTrafficIconProps) {
   const lamp = trafficLamps[tone];
-  const glyphColor = active ? lamp.glyph : colors.subtext;
+  const glyphColor = active
+    ? colors.expiryAccentForeground
+    : lamp.foreground;
 
   return (
     <Svg
@@ -66,9 +73,9 @@ export function ExpiryTrafficIcon({
         cx="32"
         cy="32"
         r="30"
-        fill={selected ? lamp.fill : colors.disabled}
+        fill={selected ? lamp.fill : lamp.soft}
       />
-      <Circle cx="32" cy="32" r="24" fill={colors.insetSurface} />
+      <Circle cx="32" cy="32" r="24" fill={colors.surfaceWarm} />
       <Circle
         cx="32"
         cy="32"

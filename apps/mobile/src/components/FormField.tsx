@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.none,

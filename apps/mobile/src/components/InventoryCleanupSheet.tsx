@@ -191,8 +191,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.surfaceWarm,
   },
   optionPressed: {
     backgroundColor: colors.surfacePressed,

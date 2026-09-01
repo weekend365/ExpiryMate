@@ -31,9 +31,11 @@ export function Pill({
   accessibilityLabel,
 }: PillProps) {
   const palette = tonePalettes[tone];
-  const foregroundColor = selected ? colors.surface : palette.textColor;
+  const foregroundColor = selected
+    ? palette.selectedTextColor
+    : palette.textColor;
   const countBackgroundColor = selected ? colors.surface : colors.mutedSurface;
-  const countTextColor = selected ? palette.selectedBackgroundColor : foregroundColor;
+  const countTextColor = selected ? palette.selectedTextColor : foregroundColor;
 
   return (
     <Pressable
@@ -53,7 +55,9 @@ export function Pill({
             : pressed
               ? colors.surfacePressed
               : colors.surface,
-          borderColor: selected ? palette.selectedBackgroundColor : colors.border,
+          borderColor: selected
+            ? palette.selectedBorderColor
+            : colors.borderControl,
         },
       ]}
     >
@@ -95,19 +99,27 @@ export function Pill({
 
 const tonePalettes = {
   default: {
-    selectedBackgroundColor: colors.actionPrimaryBackground,
+    selectedBackgroundColor: colors.brandSoftStrong,
+    selectedBorderColor: colors.focusRing,
+    selectedTextColor: colors.primaryForeground,
     textColor: colors.text,
   },
   warning: {
-    selectedBackgroundColor: colors.actionWarningBackground,
+    selectedBackgroundColor: colors.warningSoft,
+    selectedBorderColor: colors.expiryExpiringAccent,
+    selectedTextColor: colors.warningForeground,
     textColor: colors.warningForeground,
   },
   danger: {
-    selectedBackgroundColor: colors.actionDangerBackground,
+    selectedBackgroundColor: colors.dangerSoft,
+    selectedBorderColor: colors.expiryExpiredAccent,
+    selectedTextColor: colors.dangerForeground,
     textColor: colors.dangerForeground,
   },
   success: {
-    selectedBackgroundColor: colors.actionSuccessBackground,
+    selectedBackgroundColor: colors.successSoft,
+    selectedBorderColor: colors.successAccent,
+    selectedTextColor: colors.successForeground,
     textColor: colors.successForeground,
   },
 } as const;

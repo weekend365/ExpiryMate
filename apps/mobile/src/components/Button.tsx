@@ -102,8 +102,8 @@ const buttonPalettes = {
     backgroundColor: colors.actionPrimaryBackground,
     pressedBackgroundColor: colors.actionPrimaryPressed,
     disabledBackgroundColor: colors.disabled,
-    textColor: colors.surface,
-    disabledTextColor: colors.surface,
+    textColor: colors.actionPrimaryForeground,
+    disabledTextColor: colors.disabledText,
   },
   secondary: {
     backgroundColor: colors.primarySoft,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   outlined: {
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
   },
   dangerOutline: {
     borderColor: colors.dangerForeground,

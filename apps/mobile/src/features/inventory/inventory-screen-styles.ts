@@ -13,20 +13,20 @@ export const inventoryScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    borderColor: colors.borderSubtle,
+    backgroundColor: colors.surfaceWarm,
   },
   filterToolbarDangerNotice: {
-    backgroundColor: colors.dangerSoft,
+    backgroundColor: colors.expiryExpiredSoft,
   },
   filterToolbarWarningNotice: {
-    backgroundColor: colors.warningSoft,
+    backgroundColor: colors.expiryExpiringSoft,
   },
   filterToolbarSuccessNotice: {
-    backgroundColor: colors.successSoft,
+    backgroundColor: colors.expirySafeSoft,
   },
   filterToolbarNeutralNotice: {
-    backgroundColor: colors.primarySoft,
+    backgroundColor: colors.expiryUnknownSoft,
   },
   filterCluster: {
     gap: spacing.xs,
@@ -53,7 +53,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
   },
   filterPairRow: {
@@ -88,8 +88,8 @@ export const inventoryScreenStyles = StyleSheet.create({
     paddingHorizontal: spacing.xs,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.surfaceWarm,
   },
   expiryTrafficLamp: {
     flex: 1,
@@ -113,7 +113,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     paddingRight: spacing.xs,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
   },
   locationFilterTileDense: {
@@ -122,7 +122,8 @@ export const inventoryScreenStyles = StyleSheet.create({
     flexShrink: 1,
   },
   locationFilterTileActive: {
-    borderColor: colors.primaryForeground,
+    borderColor: colors.focusRing,
+    backgroundColor: colors.primarySoft,
   },
   locationFilterMain: {
     flex: 1,
@@ -151,8 +152,8 @@ export const inventoryScreenStyles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.background,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.surfaceWarm,
   },
   locationOptionSelected: {
     borderColor: colors.primaryForeground,
@@ -200,7 +201,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     paddingRight: spacing.xxs,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
   },
   searchInput: {
@@ -249,7 +250,7 @@ export const inventoryScreenStyles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     backgroundColor: colors.surface,
   },
   selectionRowEmbedded: {
@@ -319,7 +320,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   fridgeSceneVeil: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
-    opacity: 0.16,
+    opacity: 0.08,
   },
   listFlex: {
     flex: 1,
@@ -337,7 +338,7 @@ export const inventoryScreenStyles = StyleSheet.create({
   urgencySection: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     backgroundColor: colors.surface,
     overflow: "hidden",
   },
@@ -349,9 +350,21 @@ export const inventoryScreenStyles = StyleSheet.create({
     alignItems: "center",
     gap: spacing.xs,
   },
+  urgencySectionHeaderUnknown: {
+    backgroundColor: colors.expiryUnknownSoft,
+  },
+  urgencySectionHeaderExpired: {
+    backgroundColor: colors.expiryExpiredSoft,
+  },
+  urgencySectionHeaderExpiring: {
+    backgroundColor: colors.expiryExpiringSoft,
+  },
+  urgencySectionHeaderSafe: {
+    backgroundColor: colors.expirySafeSoft,
+  },
   urgencySectionHeaderExpanded: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.borderSubtle,
   },
   urgencySectionTitle: {
     flex: 1,

@@ -126,11 +126,7 @@ export function InventoryFilterToolbar({
                 label="확인"
                 count={facetCounts.status.unknown}
                 tone="unknown"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.unknown > 0
-                    : filter === "unknown"
-                }
+                hasData={facetCounts.status.unknown > 0}
                 selected={filter === "unknown"}
                 onPress={() => onToggleExpiryFilter("unknown")}
                 testID="inventory-expiry-filter-unknown"
@@ -145,11 +141,7 @@ export function InventoryFilterToolbar({
                 label="만료"
                 count={facetCounts.status.expired}
                 tone="danger"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.expired > 0
-                    : filter === "expired"
-                }
+                hasData={facetCounts.status.expired > 0}
                 selected={filter === "expired"}
                 onPress={() => onToggleExpiryFilter("expired")}
                 testID="inventory-expiry-filter-expired"
@@ -164,11 +156,7 @@ export function InventoryFilterToolbar({
                 label="곧"
                 count={facetCounts.status.within7}
                 tone="warning"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.within7 > 0
-                    : filter === "within7"
-                }
+                hasData={facetCounts.status.within7 > 0}
                 selected={filter === "within7"}
                 onPress={() => onToggleExpiryFilter("within7")}
                 testID="inventory-expiry-filter-within7"
@@ -183,11 +171,7 @@ export function InventoryFilterToolbar({
                 label="여유"
                 count={facetCounts.status.safe}
                 tone="success"
-                lampOn={
-                  filter === "all"
-                    ? facetCounts.status.safe > 0
-                    : filter === "safe"
-                }
+                hasData={facetCounts.status.safe > 0}
                 selected={filter === "safe"}
                 onPress={() => onToggleExpiryFilter("safe")}
                 testID="inventory-expiry-filter-safe"

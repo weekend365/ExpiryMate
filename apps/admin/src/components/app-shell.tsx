@@ -108,7 +108,7 @@ export function AppShell({ children }: PropsWithChildren) {
                   key={item.href}
                   href={item.href}
                   className={`type-body-small-strong flex min-h-[var(--control-minimum)] items-center rounded-[var(--radius-lg)] px-[var(--space-sm)] transition-colors duration-[var(--motion-fast)] ${isActive
-                      ? "bg-[var(--action-primary-background)] text-[var(--surface)]"
+                      ? "bg-[var(--action-primary-background)] text-[var(--action-primary-foreground)]"
                       : "bg-[var(--surface-muted)] text-[var(--foreground)] hover:bg-[var(--primary-soft)]"
                     }`}
                 >

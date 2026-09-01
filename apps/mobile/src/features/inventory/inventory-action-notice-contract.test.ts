@@ -58,9 +58,15 @@ describe("inventory action notice contract", () => {
     expect(filterHeader).toMatch(
       /<View[\s\S]*?styles\.filterToolbar[\s\S]*?>\s*\{heroContent\}\s*<View style=\{styles\.filterCluster\}>/,
     );
-    expect(filterStyles).toContain("backgroundColor: colors.dangerSoft");
-    expect(filterStyles).toContain("backgroundColor: colors.warningSoft");
-    expect(filterStyles).toContain("backgroundColor: colors.successSoft");
+    expect(filterStyles).toContain(
+      "backgroundColor: colors.expiryExpiredSoft",
+    );
+    expect(filterStyles).toContain(
+      "backgroundColor: colors.expiryExpiringSoft",
+    );
+    expect(filterStyles).toContain(
+      "backgroundColor: colors.expirySafeSoft",
+    );
     expect(screen).not.toMatch(
       /<SpaceSwitcher \/>\s*\{inventoryActionNotice\}/,
     );

@@ -45,13 +45,18 @@ source_of_truth: true
 
 색은 모양이 아니라 **사용 목적**으로 선택한다.
 
+- `background`, `surfaceWarm`, `mutedSurface`, `insetSurface`: 장고 일러스트와 이어지는
+  크림 계열 화면 깊이. 흰 `surface`는 카드·시트·입력처럼 명확한 작업 면에만 사용
 - `brandAccent` 계열: 진행 표시, 큰 장식, 차트처럼 텍스트를 올리지 않는 브랜드 강조
 - `primaryForeground`, `linkText`: 밝은 표면 위 작은 글자·아이콘·링크
 - `actionPrimaryBackground`와 `actionPrimaryPressed`: 흰 글자가 올라가는 주요 행동
+- `action*Foreground`: 채워진 행동 위 콘텐츠. 흰색이더라도 `surface`로 대신하지 않음
 - `dangerForeground`, `warningForeground`, `successForeground`, `infoForeground`: 상태 글자와
   작은 아이콘
 - `action*Background`: 흰 글자가 올라가는 상태별 선택·행동
 - `*Soft`: 상태 컨테이너 배경. 같은 상태의 `*Foreground`와 함께 사용
+- `expiry*`: 유통기한 신호 전용. 일반 성공·오류·파괴 행동 토큰과 섞지 않음
+- `borderSubtle`: 카드와 구분선, `borderControl`: 입력·선택 경계, `focusRing`: 현재 초점
 
 밝은 500 단계 색을 작은 글자나 흰 글자 버튼 배경으로 사용하지 않는다. 기존
 `primary`, `danger`, `warning`, `success`, `info` 별칭은 호환을 위해 남겨 두되 안전한
@@ -59,6 +64,10 @@ source_of_truth: true
 
 일반 크기 텍스트는 배경과 4.5:1 이상, 큰 텍스트와 의미 있는 비텍스트 UI는 3:1 이상
 대비를 유지한다. 상태는 색 하나로만 전달하지 않고 텍스트·아이콘·형태 중 하나를 함께 쓴다.
+
+신호등과 상태 필터는 `hasData`, `selected`, `disabled`를 별도 상태로 취급한다. 비선택은
+고유 색의 soft 면과 낮은 강조로 표현하고, 무채색은 실제 비활성·사용 불가 상태에만 쓴다.
+유통기한 램프의 밝은 코랄·옐로·라임 위 glyph는 공통 차콜 전경을 사용한다.
 
 ## 4. 기초 토큰
 

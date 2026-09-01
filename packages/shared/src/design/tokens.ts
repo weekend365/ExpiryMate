@@ -11,7 +11,7 @@
 
 import { palette } from "./palette";
 
-const { neutral, brand, red, amber, green, blue } = palette;
+const { neutral, cream, sage, brand, red, amber, green, blue } = palette;
 
 /**
  * Semantic colors for the light theme.
@@ -21,13 +21,14 @@ const { neutral, brand, red, amber, green, blue } = palette;
  */
 export const semanticColors = {
   // Surfaces
-  background: neutral[50],
+  background: cream[100],
   surface: neutral[0],
-  surfaceTranslucent: "rgba(255, 255, 255, 0.94)",
-  surfacePressed: neutral[100],
-  mutedSurface: neutral[100],
+  surfaceWarm: cream[50],
+  surfaceTranslucent: "rgba(255, 252, 247, 0.94)",
+  surfacePressed: brand[50],
+  mutedSurface: cream[200],
   /** Recessed well inside a card — one step deeper than section fills. */
-  insetSurface: neutral[200],
+  insetSurface: cream[300],
 
   // Brand accent. Use for decorative emphasis, charts, progress, and large
   // non-text marks. It is intentionally brighter than accessible foregrounds.
@@ -39,26 +40,39 @@ export const semanticColors = {
   primaryPressed: brand[800],
   primarySoft: brand[50],
   primarySoftPressed: brand[100],
+  brandSoftStrong: brand[200],
 
   // Accessible foreground/action roles. Small text and white-on-color controls
   // use darker palette steps that meet WCAG AA contrast on light surfaces.
   primaryForeground: brand[700],
   actionPrimaryBackground: brand[700],
   actionPrimaryPressed: brand[800],
+  actionPrimaryForeground: neutral[0],
   linkText: brand[700],
-  disclosureText: neutral[600],
+  disclosureText: sage[600],
 
   // Secondary accent (neutral slate)
-  accent: neutral[600],
-  accentSoft: neutral[100],
+  accent: sage[600],
+  accentSoft: brand[50],
+
+  // Character accents. These are decorative, not action backgrounds.
+  pineappleAccent: amber[500],
+  pineappleSoft: amber[100],
+  pineappleForeground: amber[800],
+  waterBlueAccent: blue[200],
+  waterBlueSoft: blue[100],
+  waterBlueForeground: blue[700],
 
   // Text
   text: neutral[900],
-  subtext: neutral[600],
-  mutedText: neutral[500],
+  subtext: sage[600],
+  mutedText: sage[500],
 
   // Lines
-  border: neutral[200],
+  border: cream[400],
+  borderSubtle: cream[400],
+  borderControl: sage[400],
+  focusRing: brand[600],
 
   // Camera overlays
   cameraScrim: "rgba(26, 31, 39, 0.38)",
@@ -75,42 +89,61 @@ export const semanticColors = {
   dangerForeground: red[700],
   actionDangerBackground: red[700],
   actionDangerPressed: red[800],
+  actionDangerForeground: neutral[0],
 
   // Status: warning
   warningAccent: amber[500],
   /** @deprecated Safe legacy alias; prefer `warningForeground` or an action role. */
   warning: amber[800],
-  warningSoft: amber[50],
+  warningSoft: amber[100],
   warningForeground: amber[800],
   actionWarningBackground: amber[800],
   actionWarningPressed: amber[900],
+  actionWarningForeground: neutral[0],
 
-  // Status: success
-  successAccent: green[500],
+  // Status: success. General success follows Jango Mint; expiry-safe is lime.
+  successAccent: brand[500],
   /** @deprecated Safe legacy alias; prefer `successForeground` or an action role. */
-  success: green[700],
-  successSoft: green[50],
-  successForeground: green[700],
-  actionSuccessBackground: green[700],
-  actionSuccessPressed: green[800],
+  success: brand[700],
+  successSoft: brand[50],
+  successForeground: brand[700],
+  actionSuccessBackground: brand[700],
+  actionSuccessPressed: brand[800],
+  actionSuccessForeground: neutral[0],
 
-  // Citrus traffic lamps (expired / soon / safe)
-  citrusGrapefruit: "#F2786D",
-  citrusLemon: "#FFD15C",
-  citrusLime: "#8FC63D",
+  // Expiry traffic lamps. Selection and availability must remain separate states.
+  expiryExpiredAccent: red[500],
+  expiryExpiredSoft: red[50],
+  expiryExpiredForeground: red[700],
+  expiryExpiringAccent: amber[500],
+  expiryExpiringSoft: amber[100],
+  expiryExpiringForeground: amber[800],
+  expirySafeAccent: green[500],
+  expirySafeSoft: green[100],
+  expirySafeForeground: green[800],
+  expiryUnknownAccent: sage[400],
+  expiryUnknownSoft: sage[100],
+  expiryUnknownForeground: sage[600],
+  expiryAccentForeground: neutral[900],
+
+  // Compatibility aliases for existing expiry consumers.
+  citrusGrapefruit: red[500],
+  citrusLemon: amber[500],
+  citrusLime: green[500],
 
   // Status: info
-  infoAccent: blue[500],
+  infoAccent: blue[200],
   /** @deprecated Safe legacy alias; prefer `infoForeground` or an action role. */
   info: blue[700],
-  infoSoft: blue[50],
+  infoSoft: blue[100],
   infoForeground: blue[700],
   actionInfoBackground: blue[700],
   actionInfoPressed: blue[800],
+  actionInfoForeground: neutral[0],
 
   // Disabled
-  disabled: neutral[300],
-  disabledText: neutral[400],
+  disabled: sage[200],
+  disabledText: sage[600],
 } as const;
 
 export type SemanticColors = typeof semanticColors;

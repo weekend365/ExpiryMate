@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
     minHeight: spacing.xxl,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderLeftWidth: 1,
     borderBottomWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     transform: [{ rotate: "45deg" }],
   },
   tailCompact: {

@@ -33,9 +33,10 @@ interface StatCardProps {
   /** Controls the active lamp glow independently from its on/off fill. */
   showGlow?: boolean;
   style?: StyleProp<ViewStyle>;
+  /** Whether this status currently has data. Defaults to value > 0. */
+  active?: boolean;
   /**
-   * Traffic selection state. When set, overrides the default value>0 on/off look
-   * so the lamp can act as a filter control.
+   * Traffic filter selection state. This does not change whether data exists.
    */
   selected?: boolean;
 }
@@ -55,12 +56,13 @@ export function StatCard({
   mini = false,
   showGlow = true,
   style,
+  active,
   selected,
 }: StatCardProps) {
   const { shouldStack } = useResponsiveLayout();
 
   if (variant === "traffic") {
-    const isOn = selected ?? value > 0;
+    const isOn = active ?? value > 0;
     const lampTone = tone === "default" ? "success" : tone;
     const lampStyle = trafficLamps[lampTone];
     const lampMin = mini
@@ -101,7 +103,7 @@ export function StatCard({
             size={lampMin}
             tone={lampTone}
             active={isOn}
-            selected={selected ?? false}
+            selected={selected}
           />
         </View>
         {showLabel ? (
@@ -168,13 +170,13 @@ export function StatCard({
 const tones = {
   default: {
     backgroundColor: colors.surface,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     valueColor: colors.text,
     labelColor: colors.subtext,
   },
   unknown: {
     backgroundColor: colors.mutedSurface,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     valueColor: colors.mutedText,
     labelColor: colors.subtext,
   },
@@ -200,16 +202,16 @@ const tones = {
 
 const trafficLamps: Record<ExpiryTrafficTone, { glow: string }> = {
   unknown: {
-    glow: colors.mutedText,
+    glow: colors.expiryUnknownAccent,
   },
   danger: {
-    glow: colors.citrusGrapefruit,
+    glow: colors.expiryExpiredAccent,
   },
   warning: {
-    glow: colors.citrusLemon,
+    glow: colors.expiryExpiringAccent,
   },
   success: {
-    glow: colors.citrusLime,
+    glow: colors.expirySafeAccent,
   },
 };
 

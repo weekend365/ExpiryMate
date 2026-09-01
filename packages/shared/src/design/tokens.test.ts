@@ -45,6 +45,18 @@ describe("design tokens", () => {
     expect(cssVariables["--primary-foreground"]).toBe(
       semanticColors.primaryForeground,
     );
+    expect(cssVariables["--surface-warm"]).toBe(
+      semanticColors.surfaceWarm,
+    );
+    expect(cssVariables["--border-control"]).toBe(
+      semanticColors.borderControl,
+    );
+    expect(cssVariables["--action-primary-foreground"]).toBe(
+      semanticColors.actionPrimaryForeground,
+    );
+    expect(cssVariables["--expiry-safe-accent"]).toBe(
+      semanticColors.expirySafeAccent,
+    );
     expect(cssVariables["--danger-foreground"]).toBe(
       semanticColors.dangerForeground,
     );
@@ -88,6 +100,15 @@ describe("design tokens", () => {
       [semanticColors.successForeground, semanticColors.successSoft],
       [semanticColors.infoForeground, semanticColors.surface],
       [semanticColors.infoForeground, semanticColors.infoSoft],
+      [semanticColors.mutedText, semanticColors.background],
+      [semanticColors.mutedText, semanticColors.surface],
+      [semanticColors.disabledText, semanticColors.disabled],
+      [semanticColors.pineappleForeground, semanticColors.pineappleSoft],
+      [semanticColors.waterBlueForeground, semanticColors.waterBlueSoft],
+      [semanticColors.expiryExpiredForeground, semanticColors.expiryExpiredSoft],
+      [semanticColors.expiryExpiringForeground, semanticColors.expiryExpiringSoft],
+      [semanticColors.expirySafeForeground, semanticColors.expirySafeSoft],
+      [semanticColors.expiryUnknownForeground, semanticColors.expiryUnknownSoft],
     ] as const;
 
     for (const [foreground, background] of foregroundPairs) {
@@ -111,25 +132,59 @@ describe("design tokens", () => {
     }
   });
 
-  it("keeps white action labels at AA contrast in every state", () => {
-    const actionBackgrounds = [
-      semanticColors.actionPrimaryBackground,
-      semanticColors.actionPrimaryPressed,
-      semanticColors.actionDangerBackground,
-      semanticColors.actionDangerPressed,
-      semanticColors.actionWarningBackground,
-      semanticColors.actionWarningPressed,
-      semanticColors.actionSuccessBackground,
-      semanticColors.actionSuccessPressed,
-      semanticColors.actionInfoBackground,
-      semanticColors.actionInfoPressed,
+  it("keeps action labels at AA contrast in every state", () => {
+    const actionPairs = [
+      [semanticColors.actionPrimaryForeground, semanticColors.actionPrimaryBackground],
+      [semanticColors.actionPrimaryForeground, semanticColors.actionPrimaryPressed],
+      [semanticColors.actionDangerForeground, semanticColors.actionDangerBackground],
+      [semanticColors.actionDangerForeground, semanticColors.actionDangerPressed],
+      [semanticColors.actionWarningForeground, semanticColors.actionWarningBackground],
+      [semanticColors.actionWarningForeground, semanticColors.actionWarningPressed],
+      [semanticColors.actionSuccessForeground, semanticColors.actionSuccessBackground],
+      [semanticColors.actionSuccessForeground, semanticColors.actionSuccessPressed],
+      [semanticColors.actionInfoForeground, semanticColors.actionInfoBackground],
+      [semanticColors.actionInfoForeground, semanticColors.actionInfoPressed],
     ] as const;
 
-    for (const background of actionBackgrounds) {
+    for (const [foreground, background] of actionPairs) {
+      expect(contrastRatio(foreground, background)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("keeps expiry lamps colorful with one accessible dark glyph", () => {
+    const accents = [
+      semanticColors.expiryExpiredAccent,
+      semanticColors.expiryExpiringAccent,
+      semanticColors.expirySafeAccent,
+      semanticColors.expiryUnknownAccent,
+    ] as const;
+
+    for (const accent of accents) {
       expect(
-        contrastRatio(semanticColors.surface, background),
+        contrastRatio(semanticColors.expiryAccentForeground, accent),
       ).toBeGreaterThanOrEqual(4.5);
     }
+    expect(semanticColors.citrusGrapefruit).toBe(
+      semanticColors.expiryExpiredAccent,
+    );
+    expect(semanticColors.citrusLemon).toBe(
+      semanticColors.expiryExpiringAccent,
+    );
+    expect(semanticColors.citrusLime).toBe(
+      semanticColors.expirySafeAccent,
+    );
+  });
+
+  it("separates subtle dividers from visible control boundaries", () => {
+    expect(
+      contrastRatio(semanticColors.borderControl, semanticColors.surface),
+    ).toBeGreaterThanOrEqual(3);
+    expect(
+      contrastRatio(semanticColors.focusRing, semanticColors.surface),
+    ).toBeGreaterThanOrEqual(3);
+    expect(semanticColors.borderSubtle).not.toBe(
+      semanticColors.borderControl,
+    );
   });
 });
 

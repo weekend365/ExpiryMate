@@ -190,9 +190,19 @@ describe("mobile design token contract", () => {
     expect(button).toContain(
       "backgroundColor: colors.actionPrimaryBackground",
     );
+    expect(button).toContain(
+      "textColor: colors.actionPrimaryForeground",
+    );
+    expect(button).toContain("borderColor: colors.borderControl");
     expect(button).toContain("textColor: colors.dangerForeground");
     expect(pill).toContain(
-      "selectedBackgroundColor: colors.actionWarningBackground",
+      "selectedBackgroundColor: colors.brandSoftStrong",
+    );
+    expect(pill).toContain(
+      "selectedBorderColor: colors.focusRing",
+    );
+    expect(pill).toContain(
+      "selectedBackgroundColor: colors.warningSoft",
     );
   });
 
