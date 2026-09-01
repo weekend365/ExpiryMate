@@ -11,13 +11,19 @@ function read(relativePath: string) {
 
 describe("shopping screen layout contract", () => {
   it("uses safe top and navigator bottom insets inside the tab navigator", () => {
-    const shopping = read("app/shopping.tsx");
+    const shopping = read("src/features/affiliate/ShoppingScreen.tsx");
     const shoppingTab = read("app/(tabs)/shop.tsx");
 
-    expect(shoppingTab).toContain("<ShoppingScreen inTabs />");
-    expect(shopping).toContain('topInsetMode={inTabs ? "safe" : "none"}');
-    expect(shopping).toContain(
-      'bottomInsetMode={inTabs ? "navigator" : "system"}',
-    );
+    expect(shoppingTab).toContain("<ShoppingScreen />");
+    expect(shopping).toContain('topInsetMode="safe"');
+    expect(shopping).toContain('bottomInsetMode="navigator"');
+  });
+
+  it("keeps shopping available only through the tab route", () => {
+    const rootLayout = read("app/_layout.tsx");
+    const screenshotManifest = read("scripts/layout-screenshot-manifest.mjs");
+
+    expect(rootLayout).not.toContain('name="shopping"');
+    expect(screenshotManifest).not.toContain('shopping: "shopping.png"');
   });
 });

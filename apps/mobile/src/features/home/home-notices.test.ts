@@ -14,16 +14,14 @@ const base = {
 };
 
 describe("getHomeNotices", () => {
-  it("returns only loading notice while first load is in flight", () => {
+  it("leaves the first load to screen skeletons", () => {
     const notices = getHomeNotices({
       ...base,
       isInitialLoading: true,
       hasLoaded: false,
     });
 
-    expect(notices).toEqual([
-      expect.objectContaining({ id: "loading", mood: "think" }),
-    ]);
+    expect(notices).toEqual([]);
   });
 
   it("offers an explicit retry when the first load fails", () => {

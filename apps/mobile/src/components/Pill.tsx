@@ -35,7 +35,7 @@ export function Pill({
     ? palette.selectedTextColor
     : palette.textColor;
   const countBackgroundColor = selected ? colors.surface : colors.mutedSurface;
-  const countTextColor = selected ? palette.textColor : foregroundColor;
+  const countTextColor = selected ? palette.selectedTextColor : foregroundColor;
 
   return (
     <Pressable
@@ -55,7 +55,9 @@ export function Pill({
             : pressed
               ? colors.surfacePressed
               : colors.surface,
-          borderColor: selected ? palette.selectedBackgroundColor : colors.border,
+          borderColor: selected
+            ? palette.selectedBorderColor
+            : colors.borderControl,
         },
       ]}
     >
@@ -97,23 +99,27 @@ export function Pill({
 
 const tonePalettes = {
   default: {
-    selectedBackgroundColor: colors.actionPrimaryBackground,
-    selectedTextColor: colors.actionPrimaryForeground,
+    selectedBackgroundColor: colors.brandSoftStrong,
+    selectedBorderColor: colors.focusRing,
+    selectedTextColor: colors.primaryForeground,
     textColor: colors.text,
   },
   warning: {
-    selectedBackgroundColor: colors.actionWarningBackground,
-    selectedTextColor: colors.actionWarningForeground,
+    selectedBackgroundColor: colors.warningSoft,
+    selectedBorderColor: colors.expiryExpiringAccent,
+    selectedTextColor: colors.warningForeground,
     textColor: colors.warningForeground,
   },
   danger: {
-    selectedBackgroundColor: colors.actionDangerBackground,
-    selectedTextColor: colors.actionDangerForeground,
+    selectedBackgroundColor: colors.dangerSoft,
+    selectedBorderColor: colors.expiryExpiredAccent,
+    selectedTextColor: colors.dangerForeground,
     textColor: colors.dangerForeground,
   },
   success: {
-    selectedBackgroundColor: colors.actionSuccessBackground,
-    selectedTextColor: colors.actionSuccessForeground,
+    selectedBackgroundColor: colors.successSoft,
+    selectedBorderColor: colors.successAccent,
+    selectedTextColor: colors.successForeground,
     textColor: colors.successForeground,
   },
 } as const;

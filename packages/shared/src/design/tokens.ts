@@ -11,7 +11,7 @@
 
 import { palette } from "./palette";
 
-const { neutral, sage, brand, red, amber, green, blue } = palette;
+const { neutral, cream, sage, brand, red, amber, green, blue } = palette;
 
 /**
  * Semantic colors for the light theme.
@@ -21,13 +21,14 @@ const { neutral, sage, brand, red, amber, green, blue } = palette;
  */
 export const semanticColors = {
   // Surfaces
-  background: sage[50],
+  background: cream[100],
   surface: neutral[0],
-  surfaceTranslucent: "rgba(255, 255, 255, 0.94)",
-  surfacePressed: sage[100],
-  mutedSurface: sage[100],
+  surfaceWarm: cream[50],
+  surfaceTranslucent: "rgba(255, 252, 247, 0.94)",
+  surfacePressed: brand[50],
+  mutedSurface: cream[200],
   /** Recessed well inside a card — one step deeper than section fills. */
-  insetSurface: sage[200],
+  insetSurface: cream[300],
 
   // Brand accent. Use for decorative emphasis, charts, progress, and large
   // non-text marks. It is intentionally brighter than accessible foregrounds.
@@ -39,19 +40,28 @@ export const semanticColors = {
   primaryPressed: brand[800],
   primarySoft: brand[50],
   primarySoftPressed: brand[100],
+  brandSoftStrong: brand[200],
 
-  // Accessible foreground/action roles. Bright Jango Mint stays an accent;
-  // filled actions use a deeper mint so their white content remains AA-safe.
-  primaryForeground: brand[800],
+  // Accessible foreground/action roles. Small text and white-on-color controls
+  // use darker palette steps that meet WCAG AA contrast on light surfaces.
+  primaryForeground: brand[700],
   actionPrimaryBackground: brand[700],
   actionPrimaryPressed: brand[800],
   actionPrimaryForeground: neutral[0],
-  linkText: brand[800],
+  linkText: brand[700],
   disclosureText: sage[600],
 
-  // Secondary accent (fresh neutral)
+  // Secondary accent (neutral slate)
   accent: sage[600],
-  accentSoft: sage[100],
+  accentSoft: brand[50],
+
+  // Character accents. These are decorative, not action backgrounds.
+  pineappleAccent: amber[500],
+  pineappleSoft: amber[100],
+  pineappleForeground: amber[800],
+  waterBlueAccent: blue[200],
+  waterBlueSoft: blue[100],
+  waterBlueForeground: blue[700],
 
   // Text
   text: neutral[900],
@@ -59,7 +69,10 @@ export const semanticColors = {
   mutedText: sage[500],
 
   // Lines
-  border: sage[200],
+  border: cream[400],
+  borderSubtle: cream[400],
+  borderControl: sage[400],
+  focusRing: brand[600],
 
   // Camera overlays
   cameraScrim: "rgba(26, 31, 39, 0.38)",
@@ -82,40 +95,47 @@ export const semanticColors = {
   warningAccent: amber[500],
   /** @deprecated Safe legacy alias; prefer `warningForeground` or an action role. */
   warning: amber[800],
-  warningSoft: amber[50],
+  warningSoft: amber[100],
   warningForeground: amber[800],
   actionWarningBackground: amber[800],
   actionWarningPressed: amber[900],
   actionWarningForeground: neutral[0],
 
-  // Status: success. General product success follows Jango Mint; expiry-safe
-  // lime is intentionally separate below.
+  // Status: success. General success follows Jango Mint; expiry-safe is lime.
   successAccent: brand[500],
   /** @deprecated Safe legacy alias; prefer `successForeground` or an action role. */
   success: brand[700],
   successSoft: brand[50],
-  successForeground: brand[800],
+  successForeground: brand[700],
   actionSuccessBackground: brand[700],
   actionSuccessPressed: brand[800],
   actionSuccessForeground: neutral[0],
 
-  // Expiry traffic lamps (expired / soon / safe)
+  // Expiry traffic lamps. Selection and availability must remain separate states.
   expiryExpiredAccent: red[500],
+  expiryExpiredSoft: red[50],
+  expiryExpiredForeground: red[700],
   expiryExpiringAccent: amber[500],
+  expiryExpiringSoft: amber[100],
+  expiryExpiringForeground: amber[800],
   expirySafeAccent: green[500],
+  expirySafeSoft: green[100],
+  expirySafeForeground: green[800],
+  expiryUnknownAccent: sage[400],
+  expiryUnknownSoft: sage[100],
+  expiryUnknownForeground: sage[600],
   expiryAccentForeground: neutral[900],
 
-  // Compatibility aliases for the expiry traffic lamps. New code should use
-  // the matching expiry accent so every lamp shares one source.
+  // Compatibility aliases for existing expiry consumers.
   citrusGrapefruit: red[500],
   citrusLemon: amber[500],
   citrusLime: green[500],
 
   // Status: info
-  infoAccent: blue[500],
+  infoAccent: blue[200],
   /** @deprecated Safe legacy alias; prefer `infoForeground` or an action role. */
   info: blue[700],
-  infoSoft: blue[50],
+  infoSoft: blue[100],
   infoForeground: blue[700],
   actionInfoBackground: blue[700],
   actionInfoPressed: blue[800],

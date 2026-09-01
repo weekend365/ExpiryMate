@@ -272,7 +272,7 @@ source_of_truth: false
 
 핵심 파일:
 - apps/mobile/app/(tabs)/shop.tsx
-- apps/mobile/app/shopping.tsx
+- apps/mobile/src/features/affiliate/ShoppingScreen.tsx
 - apps/mobile/src/features/affiliate/*
 
 요구사항:

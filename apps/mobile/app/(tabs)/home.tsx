@@ -295,85 +295,25 @@ export default function HomeScreen() {
             </Pressable>
           ) : null}
 
-          <View style={styles.previewCard}>
-            <HomeSectionHeader
-              title="오늘의 요리 추천"
-              metaLabel={
-                recommendationPreview
-                  ? formatRecommendationCreatedAt(
-                      recommendationPreview.createdAt,
-                    )
-                  : undefined
-              }
-            />
-            {isInitialLoading ? (
-              <View
-                style={[
-                  styles.recommendationPreview,
-                  shouldStack && styles.recommendationPreviewStacked,
-                ]}
-                accessibilityLabel="오늘의 요리 추천을 불러오고 있어요"
-              >
-                <SkeletonBlock
-                  width={spacing.xl}
-                  height={spacing.xl}
-                  radiusToken="md"
-                />
-                <View style={styles.recommendationSkeletonCopy}>
-                  <SkeletonBlock height={spacing.sm} width="72%" />
-                  <SkeletonBlock height={spacing.sm} width="48%" />
-                </View>
-              </View>
-            ) : isInitialError ? (
-              <View
-                style={[
-                  styles.recommendationPreview,
-                  shouldStack && styles.recommendationPreviewStacked,
-                  styles.recommendationError,
-                ]}
-              >
-                <View style={styles.recommendationIcon}>
-                  <Sparkles
-                    color={colors.primaryForeground}
-                    size={spacing.md}
-                    strokeWidth={2.2}
-                    accessibilityElementsHidden
-                    importantForAccessibility="no"
-                  />
-                </View>
-                <View style={styles.recommendationCopy}>
-                  <AppText variant="bodyStrong">
-                    추천을 불러오지 못했어요
-                  </AppText>
-                  <AppText variant="caption" tone="subtext">
-                    잠시 후 다시 불러오거나 추천 탭에서 확인해 주세요.
-                  </AppText>
-                  <Button
-                    onPress={() => {
-                      void refetch();
-                    }}
-                    variant="secondary"
-                    size="small"
-                    style={styles.recommendationRetry}
-                  >
-                    다시 시도
-                  </Button>
-                </View>
-              </View>
-            ) : (
-              <Pressable
-                onPress={
-                  recommendationPreview || hasInventory
-                    ? handleOpenRecommendations
-                    : handleManualRegister
+          {!isInitialError && (hasInventory || recommendationPreview) ? (
+            <View style={styles.previewCard}>
+              <HomeSectionHeader
+                title="오늘의 요리 추천"
+                metaLabel={
+                  recommendationPreview
+                    ? formatRecommendationCreatedAt(
+                        recommendationPreview.createdAt,
+                      )
+                    : undefined
                 }
+              />
+              <Pressable
+                onPress={handleOpenRecommendations}
                 accessibilityRole="button"
                 accessibilityLabel={
                   recommendationPreview
                     ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}${recommendationReason ? `, ${recommendationReason}` : ""}`
-                    : hasInventory
-                      ? "보관 중인 재료로 오늘의 요리 추천받기"
-                      : "재료를 등록하고 맞춤 요리 추천받기"
+                    : "보관 중인 재료로 오늘의 요리 추천받기"
                 }
                 style={({ pressed }) => [
                   styles.recommendationPreview,
@@ -397,9 +337,7 @@ export default function HomeScreen() {
                   >
                     {recommendationPreview
                       ? recommendationPreview.title
-                      : hasInventory
-                        ? "보관 중인 재료로 오늘의 요리를 찾아볼까요?"
-                        : "재료를 등록하면 맞춤 요리를 추천해 드려요"}
+                      : "보관 중인 재료로 오늘의 요리를 찾아볼까요?"}
                   </AppText>
                   {recommendationPreview ? (
                     <AppText
@@ -414,9 +352,7 @@ export default function HomeScreen() {
                     </AppText>
                   ) : (
                     <AppText variant="caption" tone="subtext">
-                      {hasInventory
-                        ? "유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요."
-                        : "첫 재료를 넣으면 장고가 바로 메뉴를 찾아드릴게요."}
+                      유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요.
                     </AppText>
                   )}
                   {recommendationReason ? (
@@ -442,47 +378,42 @@ export default function HomeScreen() {
                   importantForAccessibility="no"
                 />
               </Pressable>
-            )}
-          </View>
+            </View>
+          ) : null}
 
-          <View style={styles.trafficGroup}>
-            <HomeSectionHeader
-              title="유통기한 현황"
-              actionLabel="보관함 보기"
-              accessibilityLabel="전체 보관함 보기"
-              onPress={() => openInventoryFilter("all")}
-            />
-            {isInitialLoading ? (
-              <View
-                style={[
-                  styles.trafficStrip,
-                  isRegular && styles.trafficStripRegular,
-                ]}
-                accessibilityLabel="유통기한 현황을 불러오고 있어요"
-              >
-                {[0, 1, 2, 3].map((index) => (
-                  <View
-                    key={index}
-                    style={[
-                      styles.trafficLampPressable,
-                      isRegular && styles.trafficLampPressableRegular,
-                    ]}
-                  >
-                    <SkeletonBlock
-                      width={spacing.xxl}
-                      height={spacing.xxl}
-                      radiusToken="pill"
-                    />
-                  </View>
-                ))}
-              </View>
-            ) : isInitialError ? (
-              <View style={styles.inventoryEmpty}>
-                <AppText variant="bodySmall" tone="subtext">
-                  현황을 불러오지 못했어요. 위에서 다시 시도해 주세요.
-                </AppText>
-              </View>
-            ) : hasInventory ? (
+          {!isInitialError && (isInitialLoading || hasInventory) ? (
+            <View style={styles.trafficGroup}>
+              <HomeSectionHeader
+                title="유통기한 현황"
+                actionLabel="보관함 보기"
+                accessibilityLabel="전체 보관함 보기"
+                onPress={() => openInventoryFilter("all")}
+              />
+              {isInitialLoading ? (
+                <View
+                  style={[
+                    styles.trafficStrip,
+                    isRegular && styles.trafficStripRegular,
+                  ]}
+                  accessibilityLabel="유통기한 현황을 불러오고 있어요"
+                >
+                  {[0, 1, 2, 3].map((index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.trafficLampPressable,
+                        isRegular && styles.trafficLampPressableRegular,
+                      ]}
+                    >
+                      <SkeletonBlock
+                        width={spacing.xxl}
+                        height={spacing.xxl}
+                        radiusToken="pill"
+                      />
+                    </View>
+                  ))}
+                </View>
+              ) : (
               <View
                 style={[
                   styles.trafficStrip,
@@ -572,17 +503,9 @@ export default function HomeScreen() {
                   />
                 </Pressable>
               </View>
-            ) : (
-              <View style={styles.inventoryEmpty}>
-                <AppText variant="bodySmall">
-                  아직 보관 중인 재료가 없어요
-                </AppText>
-                <AppText variant="caption" tone="subtext">
-                  아래 방법으로 첫 재료를 등록해 보세요.
-                </AppText>
-              </View>
-            )}
-          </View>
+              )}
+            </View>
+          ) : null}
 
           {reorderPreview.data?.group ? (
             <HomeReorderCard

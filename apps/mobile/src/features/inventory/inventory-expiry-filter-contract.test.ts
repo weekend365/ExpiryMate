@@ -10,7 +10,7 @@ function read(relativePath: string) {
 }
 
 describe("inventory expiry filter contract", () => {
-  it("renders the unknown-expiry lamp with a neutral question-mark glyph", () => {
+  it("renders the unknown-expiry lamp with a centered neutral dash", () => {
     const header = read("src/features/inventory/inventory-list-header.tsx");
     const icon = read("src/components/ExpiryTrafficIcon.tsx");
     const statCard = read("src/components/StatCard.tsx");
@@ -34,32 +34,40 @@ describe("inventory expiry filter contract", () => {
     );
     expect(icon).toContain('| "unknown"');
     expect(icon).toContain('if (tone === "unknown")');
-    expect(icon).toContain('fill: colors.mutedText');
-    expect(icon).toContain('strokeWidth="3.25"');
-    expect(icon).toContain('cy="43"');
-    expect(icon).toContain('r="1.8"');
+    expect(icon).toContain('fill: colors.expiryUnknownAccent');
+    expect(icon).toContain('soft: colors.expiryUnknownSoft');
+    expect(icon).toMatch(
+      /if \(tone === "unknown"\)[\s\S]*?d="M25 32h14"[\s\S]*?strokeLinecap="round"[\s\S]*?strokeWidth="4"/,
+    );
     expect(statCard).toContain("unknown: {");
-    expect(statCard).toContain("glow: colors.mutedText");
+    expect(statCard).toContain("glow: colors.expiryUnknownAccent");
     expect(home).toMatch(
       /label="확인"[\s\S]*?value=\{unknownExpiryCount\}[\s\S]*?tone="unknown"/,
     );
     expect(home).toContain("styles.trafficLampActiveUnknown");
     expect(homeStyles).toMatch(
-      /trafficLampActiveUnknown:[\s\S]*?backgroundColor: colors\.mutedSurface/,
+      /trafficLampActiveUnknown:[\s\S]*?backgroundColor: colors\.expiryUnknownSoft/,
     );
   });
 
-  it("uses the shared expiry accents for traffic lamps and their glow", () => {
+  it("keeps filter selection separate from whether a status has data", () => {
+    const header = read("src/features/inventory/inventory-list-header.tsx");
     const icon = read("src/components/ExpiryTrafficIcon.tsx");
     const statCard = read("src/components/StatCard.tsx");
+    const urgency = read(
+      "src/features/inventory/inventory-urgency-section.tsx",
+    );
 
+    expect(statCard).toContain("const isOn = active ?? value > 0");
+    expect(urgency).toContain("active={hasData}");
+    expect(urgency).toContain("selected={selected}");
+    expect(header).toContain(
+      "hasData={facetCounts.status.expired > 0}",
+    );
+    expect(icon).toContain("fill={selected ? lamp.fill : lamp.soft}");
     expect(icon).toContain("fill: colors.expiryExpiredAccent");
     expect(icon).toContain("fill: colors.expiryExpiringAccent");
     expect(icon).toContain("fill: colors.expirySafeAccent");
-    expect(icon).toContain("glyph: colors.expiryAccentForeground");
-    expect(icon).not.toMatch(/colors\.citrus(?:Grapefruit|Lemon|Lime)/);
-    expect(statCard).toContain("glow: colors.expiryExpiredAccent");
-    expect(statCard).toContain("glow: colors.expiryExpiringAccent");
-    expect(statCard).toContain("glow: colors.expirySafeAccent");
+    expect(icon).toContain("colors.expiryAccentForeground");
   });
 });

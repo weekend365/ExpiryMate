@@ -19,7 +19,7 @@ export const homeScreenStyles = StyleSheet.create({
   homeSceneVeil: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: colors.background,
-    opacity: 0.24,
+    opacity: 0.12,
   },
   scrollFlex: {
     flex: 1,
@@ -40,10 +40,10 @@ export const homeScreenStyles = StyleSheet.create({
   },
   previewCard: {
     gap: spacing.sm,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceWarm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     padding: spacing.sm,
   },
   briefingCard: {
@@ -53,7 +53,7 @@ export const homeScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primaryForeground,
+    borderColor: colors.focusRing,
     backgroundColor: colors.primarySoft,
   },
   briefingIcon: {
@@ -72,7 +72,7 @@ export const homeScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     backgroundColor: colors.mutedSurface,
   },
   recommendationPreviewStacked: {
@@ -130,8 +130,8 @@ export const homeScreenStyles = StyleSheet.create({
     padding: spacing.sm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.primaryForeground,
-    backgroundColor: colors.surface,
+    borderColor: colors.focusRing,
+    backgroundColor: colors.surfaceWarm,
   },
   reorderHeader: {
     flexDirection: "row",
@@ -140,10 +140,10 @@ export const homeScreenStyles = StyleSheet.create({
   },
   trafficGroup: {
     gap: spacing.sm,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceWarm,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     padding: spacing.sm,
   },
   sectionHeader: {
@@ -177,8 +177,8 @@ export const homeScreenStyles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.insetSurface,
+    borderColor: colors.borderSubtle,
+    backgroundColor: colors.background,
   },
   trafficStripRegular: {
     gap: spacing.md,
@@ -195,16 +195,16 @@ export const homeScreenStyles = StyleSheet.create({
     borderRadius: radius.lg,
   },
   trafficLampActiveDanger: {
-    backgroundColor: colors.dangerSoft,
+    backgroundColor: colors.expiryExpiredSoft,
   },
   trafficLampActiveUnknown: {
-    backgroundColor: colors.mutedSurface,
+    backgroundColor: colors.expiryUnknownSoft,
   },
   trafficLampActiveWarning: {
-    backgroundColor: colors.warningSoft,
+    backgroundColor: colors.expiryExpiringSoft,
   },
   trafficLampActiveSuccess: {
-    backgroundColor: colors.successSoft,
+    backgroundColor: colors.expirySafeSoft,
   },
   trafficLampPressableRegular: {
     minHeight: controlSize.cta,
@@ -221,7 +221,7 @@ export const homeScreenStyles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     backgroundColor: colors.mutedSurface,
   },
 });

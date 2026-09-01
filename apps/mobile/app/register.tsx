@@ -60,6 +60,7 @@ import {
 } from "../src/features/inventory/inventory-step-fields";
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
+import { RegistrationCompletionActions } from "../src/features/registration/registration-completion-actions";
 import {
   parseRegistrationReturnTo,
   registrationReturnHref,
@@ -788,30 +789,22 @@ export default function RegisterScreen() {
         topInsetMode="none"
         footerStyle={styles.doneFooterSection}
         footer={
-          <View style={styles.doneFooter}>
-            <Button
-              icon={entryMethod === "scan" ? Barcode : Plus}
-              onPress={
-                entryMethod === "scan" ? continueWithBarcode : continueWithManual
-              }
-              fullWidth
-            >
-              다음 재료 추가
-            </Button>
-            <Button
-              icon={entryMethod === "scan" ? Plus : Barcode}
-              variant="secondary"
-              onPress={
-                entryMethod === "scan" ? continueWithManual : continueWithBarcode
-              }
-              fullWidth
-            >
-              {entryMethod === "scan" ? "직접 입력" : "바코드 스캔"}
-            </Button>
-            <Button variant="surface" onPress={finishRegistration} fullWidth>
-              추가 완료
-            </Button>
-          </View>
+          <RegistrationCompletionActions
+            primaryIcon={entryMethod === "scan" ? Barcode : Plus}
+            primaryLabel={
+              entryMethod === "scan" ? "다음 재료 스캔" : "다음 재료 직접 입력"
+            }
+            onPrimary={
+              entryMethod === "scan" ? continueWithBarcode : continueWithManual
+            }
+            onDone={finishRegistration}
+            tertiaryLabel={
+              entryMethod === "scan" ? "직접 입력으로 추가" : "바코드로 추가"
+            }
+            onTertiary={
+              entryMethod === "scan" ? continueWithManual : continueWithBarcode
+            }
+          />
         }
       >
         <View style={styles.doneHero}>
@@ -1130,9 +1123,6 @@ const localStyles = StyleSheet.create({
   },
   doneBubble: {
     alignSelf: "stretch",
-  },
-  doneFooter: {
-    gap: spacing.xs,
   },
   doneFooterSection: {
     paddingTop: spacing.sm,

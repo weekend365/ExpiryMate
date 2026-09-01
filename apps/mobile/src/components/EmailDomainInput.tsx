@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     paddingHorizontal: spacing.md,
     fontFamily: typography.body.fontFamily,
   },

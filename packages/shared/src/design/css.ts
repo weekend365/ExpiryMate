@@ -26,6 +26,7 @@ import {
 export const cssVariables: Record<string, string> = {
   "--background": semanticColors.background,
   "--surface": semanticColors.surface,
+  "--surface-warm": semanticColors.surfaceWarm,
   "--surface-muted": semanticColors.mutedSurface,
   "--surface-inset": semanticColors.insetSurface,
   "--surface-pressed": semanticColors.surfacePressed,
@@ -33,12 +34,16 @@ export const cssVariables: Record<string, string> = {
   "--muted": semanticColors.subtext,
   "--muted-strong": semanticColors.mutedText,
   "--border": semanticColors.border,
+  "--border-subtle": semanticColors.borderSubtle,
+  "--border-control": semanticColors.borderControl,
+  "--focus-ring": semanticColors.focusRing,
 
   "--brand-accent": semanticColors.brandAccent,
   "--brand-accent-pressed": semanticColors.brandAccentPressed,
   "--primary": semanticColors.primary,
   "--primary-pressed": semanticColors.primaryPressed,
   "--primary-soft": semanticColors.primarySoft,
+  "--brand-soft-strong": semanticColors.brandSoftStrong,
   "--primary-foreground": semanticColors.primaryForeground,
   "--action-primary-background": semanticColors.actionPrimaryBackground,
   "--action-primary-pressed": semanticColors.actionPrimaryPressed,
@@ -48,6 +53,10 @@ export const cssVariables: Record<string, string> = {
 
   "--accent": semanticColors.accent,
   "--accent-soft": semanticColors.accentSoft,
+  "--pineapple-accent": semanticColors.pineappleAccent,
+  "--pineapple-soft": semanticColors.pineappleSoft,
+  "--water-blue-accent": semanticColors.waterBlueAccent,
+  "--water-blue-soft": semanticColors.waterBlueSoft,
 
   "--danger": semanticColors.danger,
   "--danger-soft": semanticColors.dangerSoft,
@@ -75,8 +84,17 @@ export const cssVariables: Record<string, string> = {
   "--action-info-foreground": semanticColors.actionInfoForeground,
 
   "--expiry-expired-accent": semanticColors.expiryExpiredAccent,
+  "--expiry-expired-soft": semanticColors.expiryExpiredSoft,
+  "--expiry-expired-foreground": semanticColors.expiryExpiredForeground,
   "--expiry-expiring-accent": semanticColors.expiryExpiringAccent,
+  "--expiry-expiring-soft": semanticColors.expiryExpiringSoft,
+  "--expiry-expiring-foreground": semanticColors.expiryExpiringForeground,
   "--expiry-safe-accent": semanticColors.expirySafeAccent,
+  "--expiry-safe-soft": semanticColors.expirySafeSoft,
+  "--expiry-safe-foreground": semanticColors.expirySafeForeground,
+  "--expiry-unknown-accent": semanticColors.expiryUnknownAccent,
+  "--expiry-unknown-soft": semanticColors.expiryUnknownSoft,
+  "--expiry-unknown-foreground": semanticColors.expiryUnknownForeground,
   "--expiry-accent-foreground": semanticColors.expiryAccentForeground,
 
   "--radius-md": `${radius.md}px`,

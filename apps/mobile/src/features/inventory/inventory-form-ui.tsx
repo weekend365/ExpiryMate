@@ -382,7 +382,7 @@ export const inventoryFormStyles = StyleSheet.create({
     minHeight: controlSize.cta,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
     color: colors.text,
@@ -401,7 +401,7 @@ export const inventoryFormStyles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
   },
   sectionCardSoft: {
     backgroundColor: colors.primarySoft,

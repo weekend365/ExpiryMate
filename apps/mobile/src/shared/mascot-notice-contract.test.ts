@@ -69,6 +69,8 @@ describe("Jango notice presentation contract", () => {
     expect(bubble).not.toContain("textDecorationLine");
     expect(hero).not.toContain("transient");
     expect(hero).not.toContain("onDismiss");
+    expect(hero).toContain("actionLabel?: string");
+    expect(hero).toContain("notice.onPress && notice.actionLabel");
   });
 
   it("limits direct mascot rendering to decorative or text-free artwork", () => {

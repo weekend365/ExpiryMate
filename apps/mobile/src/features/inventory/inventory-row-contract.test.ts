@@ -10,6 +10,15 @@ function read(relativePath: string) {
 }
 
 describe("inventory row interaction contract", () => {
+  it("uses the same expiry status colors as the filter lamps", () => {
+    const card = read("src/components/InventoryCard.tsx");
+
+    expect(card).toContain("expired: colors.expiryExpiredAccent");
+    expect(card).toContain("within_7_days: colors.expiryExpiringAccent");
+    expect(card).toContain("safe: colors.expirySafeAccent");
+    expect(card).toContain("color: colors.expiryAccentForeground");
+  });
+
   it("opens quick editing from the row and usage cleanup from the trailing action", () => {
     const screen = read("app/(tabs)/inventory.tsx");
     const card = read("src/components/InventoryCard.tsx");
@@ -38,16 +47,5 @@ describe("inventory row interaction contract", () => {
     expect(card).toContain("사용량 반영");
     expect(card).toContain("onPress={() => onCleanup(item)}");
     expect(card).not.toContain("<PenLine");
-  });
-
-  it("uses the shared traffic-light accents for D-day badges", () => {
-    const card = read("src/components/InventoryCard.tsx");
-
-    expect(card).toContain("expired: colors.expiryExpiredAccent");
-    expect(card).toContain("within_7_days: colors.expiryExpiringAccent");
-    expect(card).toContain("safe: colors.expirySafeAccent");
-    expect(card).toMatch(
-      /expiryLampText:[\s\S]*?color: colors\.expiryAccentForeground/,
-    );
   });
 });

@@ -32,7 +32,9 @@ export function SurfaceCard({
   const backgroundColor =
     variant === "inline" && tone === "default"
       ? "transparent"
-      : toneBackground[tone];
+      : variant === "hero" && tone === "default"
+        ? colors.surfaceWarm
+        : toneBackground[tone];
 
   return (
     <View
@@ -50,7 +52,7 @@ export function SurfaceCard({
                 ? colors.warningSoft
                 : tone === "primary"
                   ? colors.primarySoft
-                  : colors.border,
+                  : colors.borderSubtle,
         },
         style,
       ]}
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: radius.xxl,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderSubtle,
     padding: spacing.lg,
   },
   inline: {

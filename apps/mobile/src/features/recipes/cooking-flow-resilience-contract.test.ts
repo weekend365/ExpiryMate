@@ -91,5 +91,7 @@ describe("cooking flow resilience contract", () => {
     expect(screen).toContain("setPendingCookingCleanup");
     expect(home).toContain("PendingCookingCleanupCard");
     expect(cleanupCard).toContain('cleanup: "1"');
+    expect(screen).toContain('title="요리를 다 마쳤어요"');
+    expect(screen).not.toContain("맛있게 완성했어요");
   });
 });

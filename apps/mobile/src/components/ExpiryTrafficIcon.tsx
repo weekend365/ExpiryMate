@@ -15,35 +15,40 @@ interface ExpiryTrafficIconProps {
 }
 
 const VIEWBOX_SIZE = 64;
-const INACTIVE_OPACITY = 0.3;
+const INACTIVE_OPACITY = 0.42;
 
 const trafficLamps: Record<
   ExpiryTrafficTone,
-  { fill: string; glyph: string }
+  { fill: string; soft: string; foreground: string }
 > = {
   unknown: {
-    fill: colors.mutedText,
-    glyph: colors.surface,
+    fill: colors.expiryUnknownAccent,
+    soft: colors.expiryUnknownSoft,
+    foreground: colors.expiryUnknownForeground,
   },
   danger: {
     fill: colors.expiryExpiredAccent,
-    glyph: colors.expiryAccentForeground,
+    soft: colors.expiryExpiredSoft,
+    foreground: colors.expiryExpiredForeground,
   },
   warning: {
     fill: colors.expiryExpiringAccent,
-    glyph: colors.expiryAccentForeground,
+    soft: colors.expiryExpiringSoft,
+    foreground: colors.expiryExpiringForeground,
   },
   success: {
     fill: colors.expirySafeAccent,
-    glyph: colors.expiryAccentForeground,
+    soft: colors.expirySafeSoft,
+    foreground: colors.expirySafeForeground,
   },
 };
 
 /**
  * Flat citrus status lamp used by the home summary and inventory filters.
  *
- * The neutral outer ring stays visually quiet until a filter is selected.
- * The state glyph keeps the UI understandable without color alone.
+ * An unselected lamp keeps a soft version of its status hue; selection adds
+ * the full-color outer ring. The state glyph keeps the UI understandable
+ * without color alone.
  */
 export function ExpiryTrafficIcon({
   size,
@@ -52,7 +57,9 @@ export function ExpiryTrafficIcon({
   selected = false,
 }: ExpiryTrafficIconProps) {
   const lamp = trafficLamps[tone];
-  const glyphColor = active ? lamp.glyph : colors.subtext;
+  const glyphColor = active
+    ? colors.expiryAccentForeground
+    : lamp.foreground;
 
   return (
     <Svg
@@ -66,9 +73,9 @@ export function ExpiryTrafficIcon({
         cx="32"
         cy="32"
         r="30"
-        fill={selected ? lamp.fill : colors.disabled}
+        fill={selected ? lamp.fill : lamp.soft}
       />
-      <Circle cx="32" cy="32" r="24" fill={colors.insetSurface} />
+      <Circle cx="32" cy="32" r="24" fill={colors.surfaceWarm} />
       <Circle
         cx="32"
         cy="32"
@@ -98,17 +105,13 @@ function StatusGlyph({
 }) {
   if (tone === "unknown") {
     return (
-      <>
-        <Path
-          d="M26.5 27c.9-3.4 3.3-5.2 6.7-5.2 4.1 0 6.9 2.5 6.9 5.9 0 2.9-1.7 4.4-4.2 5.8-2.2 1.3-3 2.4-3 4.5"
-          fill="none"
-          stroke={color}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="3.25"
-        />
-        <Circle cx="33.2" cy="43" r="1.8" fill={color} />
-      </>
+      <Path
+        d="M25 32h14"
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
     );
   }
 

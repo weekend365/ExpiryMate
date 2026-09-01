@@ -24,7 +24,7 @@ describe("getInventoryHeroNotice", () => {
     });
   });
 
-  it("keeps Jango visible while the first load is in progress", () => {
+  it("leaves the first load to the list skeleton", () => {
     expect(
       getInventoryHeroNotice({
         ...populated,
@@ -32,12 +32,7 @@ describe("getInventoryHeroNotice", () => {
         totalCount: 0,
         visibleCount: 0,
       }),
-    ).toEqual({
-      show: true,
-      mood: "think",
-      tone: "neutral",
-      message: "보관함을 살펴보고 있어요. 조금만 기다려 주세요.",
-    });
+    ).toEqual({ show: false });
   });
 
   it("keeps Jango visible for an initial error", () => {
@@ -53,6 +48,8 @@ describe("getInventoryHeroNotice", () => {
       mood: "worry",
       tone: "danger",
       message: "앗, 보관함을 불러오지 못했어요. 다시 살펴볼까요?",
+      action: "retry",
+      actionLabel: "다시 시도",
     });
   });
 
@@ -68,6 +65,8 @@ describe("getInventoryHeroNotice", () => {
       mood: "empty",
       tone: "neutral",
       message: "아직 넣어둔 재료가 없어요. 첫 재료를 넣어 볼까요?",
+      action: "add_ingredient",
+      actionLabel: "재료 넣기",
     });
   });
 
@@ -84,6 +83,8 @@ describe("getInventoryHeroNotice", () => {
       mood: "idle",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
+      action: "clear_filters",
+      actionLabel: "필터 해제",
     });
   });
 
@@ -142,6 +143,7 @@ describe("getInventoryHeroNotice", () => {
       mood: "worry",
       tone: "danger",
       message: "기한이 지난 재료 1개부터 정리할까요?",
+      action: "show_expired",
     });
   });
 
@@ -156,6 +158,7 @@ describe("getInventoryHeroNotice", () => {
       mood: "speak",
       tone: "warning",
       message: "7일 안에 손볼 재료 3개를 확인할까요?",
+      action: "show_within7",
     });
   });
 

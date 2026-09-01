@@ -11,41 +11,37 @@ import {
   View,
   type TextInput,
 } from "react-native";
-import { AppText } from "../src/components/AppText";
-import { AppTextInput } from "../src/components/AppTextInput";
-import { Button } from "../src/components/Button";
-import { SkeletonBlock } from "../src/components/ContentSkeleton";
-import { JangoHeroNoticeCarousel } from "../src/components/JangoHeroNoticeCarousel";
-import { Screen } from "../src/components/Screen";
-import { AffiliateProductGroupView } from "../src/features/affiliate/affiliate-product-group";
-import { AffiliateDisclosure } from "../src/features/affiliate/affiliate-disclosure";
+import { AppText } from "../../components/AppText";
+import { AppTextInput } from "../../components/AppTextInput";
+import { Button } from "../../components/Button";
+import { SkeletonBlock } from "../../components/ContentSkeleton";
+import { JangoHeroNoticeCarousel } from "../../components/JangoHeroNoticeCarousel";
+import { Screen } from "../../components/Screen";
+import { AffiliateProductGroupView } from "./affiliate-product-group";
+import { AffiliateDisclosure } from "./affiliate-disclosure";
 import {
   getShoppingHeroNotices,
   initialShoppingQuery,
   isShoppingSearchActive,
-} from "../src/features/affiliate/shopping-hero";
+} from "./shopping-hero";
 import {
   SHOPPING_RECENT_PAGE_SIZE,
   canLoadMoreRecentShopping,
   nextRecentShoppingVisibleCount,
   resolveRecentShoppingCount,
   takeRecentShoppingGroups,
-} from "../src/features/affiliate/shopping-recent-rotation";
-import { parseShoppingEntryContext } from "../src/features/affiliate/shopping-entry-context";
-import { useAffiliateShopping } from "../src/features/affiliate/use-affiliate-shopping";
-import { useActiveSpace } from "../src/features/spaces/space-provider";
+} from "./shopping-recent-rotation";
+import { parseShoppingEntryContext } from "./shopping-entry-context";
+import { useAffiliateShopping } from "./use-affiliate-shopping";
+import { useActiveSpace } from "../spaces/space-provider";
 import {
   searchAffiliateProducts,
   trackMonetizationEvent,
-} from "../src/services/api";
-import { useResponsiveLayout } from "../src/shared/responsive-layout";
-import { colors, radius, spacing, controlSize } from "../src/shared/theme";
+} from "../../services/api";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
+import { colors, radius, spacing, controlSize } from "../../shared/theme";
 
-export default function ShoppingScreen({
-  inTabs = false,
-}: {
-  inTabs?: boolean;
-}) {
+export function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
   const shoppingQuery = useAffiliateShopping();
   const params = useLocalSearchParams<{
@@ -161,16 +157,7 @@ export default function ShoppingScreen({
     shopping?.recentResolvedCount ?? shopping?.recentConsumedCount,
     allRecentGroups.length,
   );
-  const heroNotices = getShoppingHeroNotices({
-    isSearching: searchMutation.isPending,
-    hasSearchError: searchMutation.isError,
-    hasSearchResults: searchGroups.length > 0,
-    searchWasEmpty: Boolean(searchMutation.isSuccess && !searchGroups.length),
-    isShoppingLoading: shoppingQuery.isLoading || isRefreshingRecent,
-    isShoppingError: shoppingQuery.isError && !isRefreshingRecent,
-    isShoppingEnabled: shopping?.enabled !== false,
-    hasRecentGroups: recentGroups.length > 0,
-  });
+  const heroNotices = getShoppingHeroNotices();
   useEffect(() => {
     setRecentVisibleCount(SHOPPING_RECENT_PAGE_SIZE);
   }, [activeSpaceId, shoppingQuery.dataUpdatedAt]);
@@ -198,8 +185,8 @@ export default function ShoppingScreen({
   return (
     <Screen
       density="compact"
-      topInsetMode={inTabs ? "safe" : "none"}
-      bottomInsetMode={inTabs ? "navigator" : "system"}
+      topInsetMode="safe"
+      bottomInsetMode="navigator"
       contentWidth="wide"
       testID="affiliate-shopping-screen"
       refreshControl={

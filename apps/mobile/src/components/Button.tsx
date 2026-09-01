@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   outlined: {
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
   },
   dangerOutline: {
     borderColor: colors.dangerForeground,

@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     minHeight: controlSize.ctaLarge,
     borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderControl,
     backgroundColor: colors.surface,
     flexDirection: "row",
     alignItems: "center",
