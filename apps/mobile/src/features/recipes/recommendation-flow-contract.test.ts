@@ -15,21 +15,63 @@ function read(relativePath: string) {
 describe("recommendation screen flow contract", () => {
   const screen = read("app/(tabs)/recommendations.tsx");
   const detailSheet = read("src/features/recipes/recipe-detail-sheet.tsx");
+  const bottomSheet = read("src/components/BottomSheet.tsx");
 
   it("keeps the pre-generation hero to one compact setup entry", () => {
     expect(screen).toContain('title="이번 추천 설정"');
+    expect(screen).toContain("chips={recommendationSetupChips}");
+    expect(screen).toContain('mealType === "any" ? "끼니 무관" : mealTypeLabel');
+    expect(screen).toContain("scope={recommendationSetupScope}");
+    expect(screen).toContain("sectionHeader");
+    expect(screen).not.toContain("SlidersHorizontal");
     expect(screen).toContain('badgeLabel={');
     expect(screen).toContain('testID="recommendation-options-ingredient-link"');
     expect(screen).not.toContain('testID="recommendation-preference-summary-button"');
+  });
+
+  it("separates the setup surface from the Jango hero and gives summary chips semantic tones", () => {
+    expect(screen).toMatch(
+      /<View style=\{styles\.heroCard\}>[\s\S]*?<JangoHeroNoticeCarousel[\s\S]*?<\/View>\s*<View style=\{styles\.optionsSummaryGroup\}>/,
+    );
+    expect(screen).toContain(
+      'tone: selectedInventoryItemIds ? "primary" : "neutral"',
+    );
+    expect(screen).toContain('tone: "warning" as const');
+    expect(screen).toContain("icon: Timer");
+    expect(screen).toContain("styles.optionsSummarySectionHeader");
+    expect(screen).toContain("size={typography.bodySmall.fontSize}");
+    expect(screen).toContain('tone="latest"');
+    expect(screen).toContain('tone="previous"');
+    expect(screen).toContain("styles.recipeSectionHeaderLatest");
+    expect(screen).toContain("styles.recipeSectionHeaderPrevious");
+  });
+
+  it("groups the serving and cooking-time filters into a responsive quick grid", () => {
+    expect(screen).toContain("styles.quickOptionGrid");
+    expect(screen).toContain("shouldStackDense && styles.quickOptionGridStacked");
+    expect(screen.match(/styles\.quickOptionColumn,/g)).toHaveLength(2);
+    expect(screen.match(/style=\{styles\.compactPillRow\}/g)).toHaveLength(2);
   });
 
   it("supports scalable ingredient finding and bulk selection", () => {
     expect(screen).toContain('placeholder="재료 이름 검색"');
     expect(screen).toContain("ingredientFilterOptions.map");
     expect(screen).toContain("handleSelectExpiringIngredients");
+    expect(screen).toContain("handleToggleAllIngredients");
     expect(screen).toContain("전체 선택");
     expect(screen).toContain("전체 해제");
     expect(screen).toContain("선택 {ingredientSelectionDraft.length}/");
+  });
+
+  it("keeps ingredient controls visible and compacts long sheets on short windows", () => {
+    expect(screen).toContain("stickyBodyHeader={");
+    expect(screen.match(/compactHeaderOnShort/g)).toHaveLength(2);
+    expect(screen).toContain("fullHeightOnShort");
+    expect(screen).toContain("styles.ingredientSheetFooterRegular");
+    expect(bottomSheet).toContain("stickyBodyHeader?: ReactNode");
+    expect(bottomSheet).toContain("compactHeaderOnShort?: boolean");
+    expect(bottomSheet).toContain("fullHeightOnShort?: boolean");
+    expect(bottomSheet).toContain("isShort || isPhoneLandscape");
   });
 
   it("opens details directly from every recipe row before cooking", () => {

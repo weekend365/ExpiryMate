@@ -27,7 +27,6 @@ import {
   RotateCcw,
   Search,
   ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   Sun,
   Timer,
@@ -138,6 +137,13 @@ const MAX_SELECTED_RECIPE_INGREDIENTS = 30;
 const SHEET_TRANSITION_DELAY_MS = 320;
 type RecipeView = "recommendations" | "favorites";
 type RecipeSectionKey = "latest" | "previous" | "favorites";
+type RecommendationSetupChipTone = "neutral" | "primary" | "warning";
+type RecommendationSetupChip = {
+  key: string;
+  label: string;
+  tone: RecommendationSetupChipTone;
+  icon?: LucideIcon;
+};
 
 const mealTypeOptions: Array<{
   value: RecipeMealType;
@@ -156,7 +162,7 @@ const ingredientFilterOptions: Array<{
   label: string;
 }> = [
   { value: "all", label: "전체" },
-  { value: "expiring", label: "임박 재료만" },
+  { value: "expiring", label: "임박만 보기" },
   { value: "fridge", label: "냉장" },
   { value: "freezer", label: "냉동" },
 ];
@@ -178,7 +184,8 @@ function isRecipeCandidateInventoryItem(item: InventoryItem) {
 }
 
 export default function RecommendationsScreen() {
-  const { shouldStack, width } = useResponsiveLayout();
+  const { shouldStack, shouldStackDense, isRegular, width } =
+    useResponsiveLayout();
   const contentMaxWidth = getContentMaxWidth("wide", width);
   const historyQuery = useRecipeRecommendations();
   const favoritesQuery = useRecipeFavorites();
@@ -264,6 +271,9 @@ export default function RecommendationsScreen() {
     () => getExpiringRecommendationIngredientIds(selectableInventoryItems),
     [selectableInventoryItems],
   );
+  const hasSelectedAllIngredients =
+    selectableInventoryItems.length > 0 &&
+    ingredientSelectionDraft.length === selectableInventoryItems.length;
   const hasSafetyPreferences = Boolean(
     recipePreferencesQuery.data &&
       (recipePreferencesQuery.data.allergens.length > 0 ||
@@ -419,6 +429,35 @@ export default function RecommendationsScreen() {
   } · ${servings}인 · ${maxCookingMinutes}분 · ${mealTypeLabel}${
     useExpiringFirst ? " · 임박 먼저" : ""
   }`;
+  const recommendationSetupChips: RecommendationSetupChip[] = [
+    {
+      key: "ingredients",
+      label: selectedInventoryItemIds
+        ? `재료 ${selectedInventoryItemIds.length}개`
+        : "재료 자동",
+      tone: selectedInventoryItemIds ? "primary" : "neutral",
+    },
+    { key: "servings", label: `${servings}인`, tone: "neutral" },
+    { key: "time", label: `${maxCookingMinutes}분`, tone: "neutral" },
+    {
+      key: "meal",
+      label: mealType === "any" ? "끼니 무관" : mealTypeLabel,
+      tone: "neutral",
+    },
+    ...(useExpiringFirst
+      ? [
+          {
+            key: "expiring",
+            label: "임박 우선",
+            tone: "warning" as const,
+            icon: Timer,
+          },
+        ]
+      : []),
+  ];
+  const recommendationSetupScope = useExpiringFirst
+    ? "임박한 재료를 우선해 요리를 추천해요."
+    : "선택한 재료와 조건에 맞춰 요리를 추천해요.";
   const hasRecommendationResult = Boolean(
     latestRecommendation?.recommendations.length,
   );
@@ -595,8 +634,12 @@ export default function RecommendationsScreen() {
     handleCloseIngredientSelection();
   }, [handleCloseIngredientSelection]);
 
-  const handleSelectAllIngredients = useCallback(() => {
-    setIngredientSelectionDraft(selectableInventoryItems.map((item) => item.id));
+  const handleToggleAllIngredients = useCallback(() => {
+    setIngredientSelectionDraft((current) =>
+      current.length === selectableInventoryItems.length
+        ? []
+        : selectableInventoryItems.map((item) => item.id),
+    );
   }, [selectableInventoryItems]);
 
   const handleSelectExpiringIngredients = useCallback(() => {
@@ -889,26 +932,28 @@ export default function RecommendationsScreen() {
           ) : null}
 
           {recipeView === "recommendations" ? (
-            <View style={styles.heroCard}>
-              <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
-
+            <>
+              <View style={styles.heroCard}>
+                <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
+              </View>
               <View style={styles.optionsSummaryGroup}>
                 <RecommendationSetupSummaryRow
                   testID="recommendation-options-button"
                   title="이번 추천 설정"
-                  value={recommendationSetupSummary}
-                  scope="눌러서 재료·인원·시간·끼니를 바꿀 수 있어요"
+                  chips={recommendationSetupChips}
+                  scope={recommendationSetupScope}
                   badgeLabel={
-                    hasSafetyPreferences ? "안전 맞춤 설정 적용 중" : undefined
+                    hasSafetyPreferences
+                      ? "제외 재료·식단 맞춤 적용 중"
+                      : undefined
                   }
-                  actionLabel="설정"
-                  actionIcon={SlidersHorizontal}
+                  sectionHeader
                   onPress={() => setShowOptionsSheet(true)}
-                  accessibilityLabel="이번 추천 설정 열기"
+                  accessibilityLabel={`이번 추천 설정 열기, ${recommendationSetupSummary}`}
                   accessibilityHint="재료, 인원, 시간, 끼니와 항상 적용할 맞춤 설정을 확인할 수 있어요."
                 />
               </View>
-            </View>
+            </>
           ) : null}
 
           {recipeView === "recommendations" &&
@@ -943,6 +988,7 @@ export default function RecommendationsScreen() {
           !isGenerating ? (
             <RecipeSection
               title="이번에 골라본 요리"
+              tone="latest"
               count={latestRecommendation.recommendations.length}
               collapsed={Boolean(collapsedSections.latest)}
               onToggle={() => toggleRecipeSection("latest")}
@@ -1029,6 +1075,7 @@ export default function RecommendationsScreen() {
           !isGenerating ? (
             <RecipeSection
               title="이전 추천"
+              tone="previous"
               count={previousRecommendations.length}
               collapsed={Boolean(collapsedSections.previous)}
               onToggle={() => toggleRecipeSection("previous")}
@@ -1211,26 +1258,9 @@ export default function RecommendationsScreen() {
         mascotMood="idle"
         title="추천에 사용할 재료"
         description={`이번 추천에 반영할 재료를 골라 주세요. 최대 ${MAX_SELECTED_RECIPE_INGREDIENTS}개까지 사용할 수 있어요.`}
-        footer={
-          <View style={styles.sheetFooter}>
-            <Button
-              variant="secondary"
-              onPress={handleResetIngredientSelection}
-              fullWidth
-            >
-              자동 선택
-            </Button>
-            <Button
-              onPress={handleApplyIngredientSelection}
-              disabled={ingredientSelectionDraft.length === 0}
-              fullWidth
-            >
-              선택한 재료 {ingredientSelectionDraft.length}개 적용
-            </Button>
-          </View>
-        }
-      >
-        <View style={styles.ingredientSelectionList}>
+        compactHeaderOnShort
+        fullHeightOnShort
+        stickyBodyHeader={
           <View style={styles.ingredientSelectionToolbar}>
             <View style={styles.ingredientSearchField}>
               <Search
@@ -1259,7 +1289,12 @@ export default function RecommendationsScreen() {
               ))}
             </View>
 
-            <View style={styles.ingredientBulkHeader}>
+            <View
+              style={[
+                styles.ingredientBulkHeader,
+                shouldStackDense && styles.ingredientBulkHeaderStacked,
+              ]}
+            >
               <AppText style={styles.ingredientSelectionCount}>
                 선택 {ingredientSelectionDraft.length}/
                 {selectableInventoryItems.length}
@@ -1269,48 +1304,78 @@ export default function RecommendationsScreen() {
                   onPress={handleSelectExpiringIngredients}
                   disabled={expiringSelectableInventoryItemIds.length === 0}
                   accessibilityRole="button"
-                  accessibilityLabel="임박 재료만 선택"
+                  accessibilityLabel="임박 재료 선택"
                   style={({ pressed }) => [
                     styles.ingredientBulkAction,
+                    styles.ingredientBulkActionRecommended,
                     pressed && styles.optionsSummaryPressed,
                     expiringSelectableInventoryItemIds.length === 0 &&
                       styles.ingredientBulkActionDisabled,
                   ]}
                 >
-                  <AppText style={styles.ingredientBulkActionText}>
-                    임박만 선택
+                  <AppText
+                    style={[
+                      styles.ingredientBulkActionText,
+                      styles.ingredientBulkActionRecommendedText,
+                    ]}
+                  >
+                    임박 재료 선택
                   </AppText>
                 </Pressable>
                 <Pressable
-                  onPress={handleSelectAllIngredients}
+                  onPress={handleToggleAllIngredients}
                   accessibilityRole="button"
-                  accessibilityLabel="추천 재료 전체 선택"
+                  accessibilityLabel={
+                    hasSelectedAllIngredients
+                      ? "추천 재료 전체 선택 해제"
+                      : "추천 재료 전체 선택"
+                  }
                   style={({ pressed }) => [
                     styles.ingredientBulkAction,
                     pressed && styles.optionsSummaryPressed,
                   ]}
                 >
                   <AppText style={styles.ingredientBulkActionText}>
-                    전체 선택
-                  </AppText>
-                </Pressable>
-                <Pressable
-                  onPress={() => setIngredientSelectionDraft([])}
-                  accessibilityRole="button"
-                  accessibilityLabel="추천 재료 전체 선택 해제"
-                  style={({ pressed }) => [
-                    styles.ingredientBulkAction,
-                    pressed && styles.optionsSummaryPressed,
-                  ]}
-                >
-                  <AppText style={styles.ingredientBulkActionText}>
-                    전체 해제
+                    {hasSelectedAllIngredients ? "전체 해제" : "전체 선택"}
                   </AppText>
                 </Pressable>
               </View>
             </View>
           </View>
-
+        }
+        footer={
+          <View
+            style={[
+              styles.ingredientSheetFooter,
+              isRegular && styles.ingredientSheetFooterRegular,
+            ]}
+          >
+            <Pressable
+              onPress={handleResetIngredientSelection}
+              accessibilityRole="button"
+              accessibilityLabel="재료 자동 선택으로 돌아가기"
+              style={({ pressed }) => [
+                styles.ingredientAutoSelectionAction,
+                isRegular && styles.ingredientAutoSelectionActionRegular,
+                pressed && styles.ingredientAutoSelectionActionPressed,
+              ]}
+            >
+              <AppText style={styles.ingredientAutoSelectionActionText}>
+                자동 선택
+              </AppText>
+            </Pressable>
+            <Button
+              onPress={handleApplyIngredientSelection}
+              disabled={ingredientSelectionDraft.length === 0}
+              fullWidth={!isRegular}
+              style={isRegular && styles.ingredientApplyActionRegular}
+            >
+              선택한 재료 {ingredientSelectionDraft.length}개 적용
+            </Button>
+          </View>
+        }
+      >
+        <View style={styles.ingredientSelectionList}>
           {filteredSelectableInventoryItems.map((item) => {
             const selected = ingredientSelectionDraft.includes(item.id);
             return (
@@ -1372,6 +1437,7 @@ export default function RecommendationsScreen() {
         mascotMood="idle"
         title="오늘은 어떤 요리로 할까요?"
         description="인원·시간·끼니는 이번 추천에만 적용돼요."
+        compactHeaderOnShort
         footer={
           <Button onPress={() => setShowOptionsSheet(false)} fullWidth>
             적용
@@ -1394,31 +1460,52 @@ export default function RecommendationsScreen() {
           accessibilityHint="이 설정 화면을 닫고 추천에 포함할 보관 재료를 고릅니다."
         />
 
-        <OptionGroup icon={Users} title="몇 명이서 먹나요?">
-          <View style={styles.pillRow}>
-            {servingOptions.map((value) => (
-              <Pill
-                key={value}
-                label={`${value}인`}
-                selected={servings === value}
-                onPress={() => setServings(value)}
-              />
-            ))}
+        <View
+          style={[
+            styles.quickOptionGrid,
+            shouldStackDense && styles.quickOptionGridStacked,
+          ]}
+        >
+          <View
+            style={[
+              styles.quickOptionColumn,
+              shouldStackDense && styles.quickOptionColumnStacked,
+            ]}
+          >
+            <OptionGroup icon={Users} title="몇 명이서 먹나요?">
+              <View style={styles.compactPillRow}>
+                {servingOptions.map((value) => (
+                  <Pill
+                    key={value}
+                    label={`${value}인`}
+                    selected={servings === value}
+                    onPress={() => setServings(value)}
+                  />
+                ))}
+              </View>
+            </OptionGroup>
           </View>
-        </OptionGroup>
 
-        <OptionGroup icon={Clock3} title="얼마나 걸려도 괜찮나요?">
-          <View style={styles.pillRow}>
-            {timeOptions.map((value) => (
-              <Pill
-                key={value}
-                label={`${value}분`}
-                selected={maxCookingMinutes === value}
-                onPress={() => setMaxCookingMinutes(value)}
-              />
-            ))}
+          <View
+            style={[
+              styles.quickOptionColumn,
+              shouldStackDense && styles.quickOptionColumnStacked,
+            ]}
+          >
+            <OptionGroup icon={Clock3} title="얼마나 걸려도 괜찮나요?">
+              <View style={styles.compactPillRow}>
+                {timeOptions.map((value) => (
+                  <Pill
+                    key={value}
+                    label={`${value}분`}
+                    selected={maxCookingMinutes === value}
+                    onPress={() => setMaxCookingMinutes(value)}
+                  />
+                ))}
+              </View>
+            </OptionGroup>
           </View>
-        </OptionGroup>
+        </View>
 
         <OptionGroup icon={Utensils} title="어떤 식사인가요?">
           <View style={styles.pillRow}>
@@ -1589,12 +1676,14 @@ export default function RecommendationsScreen() {
 
 function RecipeSection({
   title,
+  tone = "neutral",
   count,
   collapsed,
   onToggle,
   children,
 }: {
   title: string;
+  tone?: "latest" | "previous" | "neutral";
   count: number;
   collapsed: boolean;
   onToggle: () => void;
@@ -1607,6 +1696,8 @@ function RecipeSection({
       <View
         style={[
           styles.recipeSectionHeader,
+          tone === "latest" && styles.recipeSectionHeaderLatest,
+          tone === "previous" && styles.recipeSectionHeaderPrevious,
           !collapsed && styles.recipeSectionHeaderExpanded,
         ]}
         accessibilityRole="header"
@@ -1617,7 +1708,11 @@ function RecipeSection({
           scaleRole="chrome"
           densityAware={false}
           numberOfLines={1}
-          style={styles.recipeSectionTitle}
+          style={[
+            styles.recipeSectionTitle,
+            tone === "latest" && styles.recipeSectionTitleLatest,
+            tone === "previous" && styles.recipeSectionTitlePrevious,
+          ]}
         >
           {heading}
         </AppText>
@@ -1673,21 +1768,25 @@ function RecommendationSetupSummaryRow({
   testID,
   title,
   value,
+  chips,
   scope,
   badgeLabel,
   actionLabel,
   actionIcon: ActionIcon,
+  sectionHeader = false,
   onPress,
   accessibilityLabel,
   accessibilityHint,
 }: {
   testID?: string;
   title: string;
-  value: string;
+  value?: string;
+  chips?: readonly RecommendationSetupChip[];
   scope: string;
   badgeLabel?: string;
-  actionLabel: string;
-  actionIcon: LucideIcon;
+  actionLabel?: string;
+  actionIcon?: LucideIcon;
+  sectionHeader?: boolean;
   onPress: () => void;
   accessibilityLabel: string;
   accessibilityHint: string;
@@ -1703,50 +1802,131 @@ function RecommendationSetupSummaryRow({
       accessibilityHint={accessibilityHint}
       style={({ pressed }) => [
         styles.optionsSummary,
-        shouldStack && styles.optionsSummaryStacked,
+        sectionHeader && styles.optionsSummarySection,
+        !sectionHeader && shouldStack && styles.optionsSummaryStacked,
         pressed && styles.optionsSummaryPressed,
       ]}
     >
-      <View style={styles.optionsSummaryCopy}>
-        <AppText style={styles.optionsSummaryLabel}>{title}</AppText>
-        <AppText
-          style={styles.optionsSummaryValue}
-          numberOfLines={shouldStack ? undefined : 1}
-        >
-          {value}
-        </AppText>
-        <AppText style={styles.optionsSummaryScope}>{scope}</AppText>
-        {badgeLabel ? (
-          <View style={styles.optionsSummarySafetyBadge}>
-            <ShieldCheck
-              color={colors.successForeground}
-              size={spacing.sm}
-              strokeWidth={2.4}
-            />
-            <AppText style={styles.optionsSummarySafetyBadgeText}>
-              {badgeLabel}
-            </AppText>
-          </View>
-        ) : null}
-      </View>
       <View
         style={[
-          styles.optionsSummaryAction,
-          shouldStack && styles.optionsSummaryActionStacked,
+          styles.optionsSummaryCopy,
+          sectionHeader && styles.optionsSummarySectionCopy,
         ]}
       >
-        <ActionIcon
-          color={colors.primaryForeground}
-          size={spacing.sm + spacing.xxs}
-          strokeWidth={2.4}
-        />
-        <AppText style={styles.optionsSummaryActionLabel}>{actionLabel}</AppText>
-        <ChevronRight
-          color={colors.primaryForeground}
-          size={spacing.sm}
-          strokeWidth={2.4}
-        />
+        {sectionHeader ? (
+          <View style={styles.optionsSummarySectionHeader}>
+            <AppText
+              variant="bodySmall"
+              scaleRole="chrome"
+              densityAware={false}
+              numberOfLines={1}
+              style={styles.optionsSummarySectionTitle}
+            >
+              {title}
+            </AppText>
+            <ChevronRight
+              color={colors.primaryForeground}
+              size={typography.bodySmall.fontSize}
+              strokeWidth={2.4}
+              accessibilityElementsHidden
+              importantForAccessibility="no"
+            />
+          </View>
+        ) : (
+          <AppText style={styles.optionsSummaryLabel}>{title}</AppText>
+        )}
+        <View
+          style={sectionHeader ? styles.optionsSummarySectionBody : undefined}
+        >
+          {chips?.length ? (
+            <View style={styles.optionsSummaryChips}>
+              {chips.map((chip) => (
+                <View
+                  key={chip.key}
+                  style={[
+                    styles.optionsSummaryChip,
+                    chip.tone === "primary" && styles.optionsSummaryChipPrimary,
+                    chip.tone === "warning" && styles.optionsSummaryChipWarning,
+                  ]}
+                >
+                  {chip.icon ? (
+                    <chip.icon
+                      color={colors.warningForeground}
+                      size={typography.caption.fontSize}
+                      strokeWidth={2.4}
+                    />
+                  ) : null}
+                  <AppText
+                    variant="caption"
+                    scaleRole="chrome"
+                    densityAware={false}
+                    numberOfLines={1}
+                    style={[
+                      styles.optionsSummaryChipText,
+                      chip.tone === "primary" &&
+                        styles.optionsSummaryChipPrimaryText,
+                      chip.tone === "warning" &&
+                        styles.optionsSummaryChipWarningText,
+                    ]}
+                  >
+                    {chip.label}
+                  </AppText>
+                </View>
+              ))}
+            </View>
+          ) : value ? (
+            <AppText
+              style={styles.optionsSummaryValue}
+              numberOfLines={shouldStack ? undefined : 1}
+            >
+              {value}
+            </AppText>
+          ) : null}
+          <View style={styles.optionsSummaryMeta}>
+            <AppText style={styles.optionsSummaryScope}>{scope}</AppText>
+            {badgeLabel ? (
+              <View style={styles.optionsSummarySafetyBadge}>
+                <ShieldCheck
+                  color={colors.successForeground}
+                  size={spacing.sm}
+                  strokeWidth={2.4}
+                />
+                <AppText style={styles.optionsSummarySafetyBadgeText}>
+                  {badgeLabel}
+                </AppText>
+              </View>
+            ) : null}
+          </View>
+        </View>
       </View>
+      {sectionHeader ? null : (
+        <View
+          style={[
+            styles.optionsSummaryAction,
+            shouldStack && actionLabel && styles.optionsSummaryActionStacked,
+          ]}
+        >
+          {ActionIcon ? (
+            <ActionIcon
+              color={colors.primaryForeground}
+              size={spacing.sm + spacing.xxs}
+              strokeWidth={2.4}
+            />
+          ) : null}
+          {actionLabel ? (
+            <>
+              <AppText style={styles.optionsSummaryActionLabel}>
+                {actionLabel}
+              </AppText>
+              <ChevronRight
+                color={colors.primaryForeground}
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+            </>
+          ) : null}
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -2120,6 +2300,16 @@ const styles = StyleSheet.create({
   optionsSummaryGroup: {
     gap: spacing.xs,
   },
+  optionsSummarySection: {
+    paddingHorizontal: spacing.none,
+    paddingVertical: spacing.none,
+    flexDirection: "column",
+    alignItems: "stretch",
+    gap: spacing.none,
+    borderRadius: radius.xxl,
+    borderColor: colors.borderSubtle,
+    overflow: "hidden",
+  },
   optionsSummaryStacked: {
     flexDirection: "column",
     alignItems: "stretch",
@@ -2130,6 +2320,30 @@ const styles = StyleSheet.create({
   optionsSummaryCopy: {
     flex: 1,
     gap: spacing.xxs,
+  },
+  optionsSummarySectionCopy: {
+    gap: spacing.none,
+  },
+  optionsSummarySectionHeader: {
+    minHeight: controlSize.minimum,
+    paddingHorizontal: spacing.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    backgroundColor: colors.primarySoft,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.borderSubtle,
+  },
+  optionsSummarySectionTitle: {
+    flex: 1,
+    minWidth: 0,
+    color: colors.primaryForeground,
+    fontFamily: typography.bodyStrong.fontFamily,
+  },
+  optionsSummarySectionBody: {
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   optionsSummaryLabel: {
     fontSize: typography.caption.fontSize,
@@ -2142,6 +2356,45 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.bodySmall.fontFamily,
     color: colors.text,
+  },
+  optionsSummaryChips: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
+  optionsSummaryChip: {
+    maxWidth: "100%",
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.mutedSurface,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xxs,
+  },
+  optionsSummaryChipPrimary: {
+    borderColor: colors.focusRing,
+    backgroundColor: colors.brandSoftStrong,
+  },
+  optionsSummaryChipWarning: {
+    borderColor: colors.expiryExpiringAccent,
+    backgroundColor: colors.warningSoft,
+  },
+  optionsSummaryChipText: {
+    color: colors.subtext,
+    fontFamily: typography.label.fontFamily,
+  },
+  optionsSummaryChipPrimaryText: {
+    color: colors.primaryForeground,
+  },
+  optionsSummaryChipWarningText: {
+    color: colors.warningForeground,
+  },
+  optionsSummaryMeta: {
+    gap: spacing.xs,
+    paddingTop: spacing.xxs,
   },
   optionsSummaryScope: {
     fontSize: typography.caption.fontSize,
@@ -2198,9 +2451,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
+  recipeSectionHeaderLatest: {
+    backgroundColor: colors.primarySoft,
+  },
+  recipeSectionHeaderPrevious: {
+    backgroundColor: colors.infoSoft,
+  },
   recipeSectionTitle: {
     flex: 1,
     minWidth: 0,
+  },
+  recipeSectionTitleLatest: {
+    color: colors.primaryForeground,
+  },
+  recipeSectionTitlePrevious: {
+    color: colors.infoForeground,
   },
   recipeSectionToggle: {
     minWidth: controlSize.minimum,
@@ -2384,12 +2649,39 @@ const styles = StyleSheet.create({
   optionGroup: {
     gap: spacing.sm,
   },
+  quickOptionGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+    gap: spacing.md,
+  },
+  quickOptionGridStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
+  },
+  quickOptionColumn: {
+    flexBasis: controlSize.minimum * 3,
+    flexGrow: 1,
+    minWidth: controlSize.minimum * 3,
+  },
+  quickOptionColumnStacked: {
+    flexBasis: "auto",
+    minWidth: 0,
+    width: "100%",
+  },
+  compactPillRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+  },
   ingredientSelectionList: {
     gap: spacing.xs,
   },
   ingredientSelectionToolbar: {
     gap: spacing.sm,
     paddingBottom: spacing.xs,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.borderSubtle,
   },
   ingredientSearchField: {
     minHeight: controlSize.minimum,
@@ -2414,7 +2706,14 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   ingredientBulkHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     gap: spacing.xs,
+  },
+  ingredientBulkHeaderStacked: {
+    flexDirection: "column",
+    alignItems: "stretch",
   },
   ingredientSelectionCount: {
     fontSize: typography.bodySmall.fontSize,
@@ -2425,13 +2724,21 @@ const styles = StyleSheet.create({
   ingredientBulkActions: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "flex-end",
     gap: spacing.xs,
   },
   ingredientBulkAction: {
     minHeight: controlSize.minimum,
     borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.borderControl,
+    backgroundColor: colors.surface,
     paddingHorizontal: spacing.sm,
     justifyContent: "center",
+  },
+  ingredientBulkActionRecommended: {
+    borderColor: colors.expiryExpiringAccent,
+    backgroundColor: colors.warningSoft,
   },
   ingredientBulkActionDisabled: {
     opacity: 0.45,
@@ -2441,6 +2748,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.bodySmall.lineHeight,
     fontFamily: typography.label.fontFamily,
     color: colors.primaryForeground,
+  },
+  ingredientBulkActionRecommendedText: {
+    color: colors.warningForeground,
   },
   ingredientSelectionRow: {
     minHeight: controlSize.minimum,
@@ -2539,6 +2849,37 @@ const styles = StyleSheet.create({
   },
   sheetFooter: {
     gap: spacing.sm,
+  },
+  ingredientSheetFooter: {
+    gap: spacing.xs,
+  },
+  ingredientSheetFooterRegular: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+  },
+  ingredientAutoSelectionAction: {
+    minHeight: controlSize.minimum,
+    alignSelf: "stretch",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: radius.lg,
+    paddingHorizontal: spacing.md,
+  },
+  ingredientAutoSelectionActionRegular: {
+    alignSelf: "center",
+  },
+  ingredientAutoSelectionActionPressed: {
+    backgroundColor: colors.surfacePressed,
+  },
+  ingredientAutoSelectionActionText: {
+    fontSize: typography.bodySmall.fontSize,
+    lineHeight: typography.bodySmall.lineHeight,
+    fontFamily: typography.label.fontFamily,
+    color: colors.primaryForeground,
+  },
+  ingredientApplyActionRegular: {
+    flex: 1,
   },
   entryMethodActions: {
     gap: spacing.xs,

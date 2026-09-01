@@ -42,6 +42,8 @@ interface BottomSheetProps extends PropsWithChildren {
   description?: string;
   /** Optional 장고 mood above the sheet title (success / confirm / guide). */
   mascotMood?: MascotMood;
+  /** Body controls that stay visible while the sheet content scrolls. */
+  stickyBodyHeader?: ReactNode;
   footer?: ReactNode;
   /** When false, body content is not wrapped in a ScrollView (e.g. native date picker). */
   scrollEnabled?: boolean;
@@ -50,6 +52,10 @@ interface BottomSheetProps extends PropsWithChildren {
    * Set false for confirmations that must be kept or cancelled with an explicit action.
    */
   dismissible?: boolean;
+  /** Replace a mascot header with a compact text header on short windows. */
+  compactHeaderOnShort?: boolean;
+  /** Let long selection flows use the full window height on short windows. */
+  fullHeightOnShort?: boolean;
 }
 
 const SPRING = {
@@ -68,13 +74,20 @@ export function BottomSheet({
   title,
   description,
   mascotMood,
+  stickyBodyHeader,
   footer,
   scrollEnabled = true,
   dismissible = true,
+  compactHeaderOnShort = false,
+  fullHeightOnShort = false,
   children,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
-  const { height: windowHeight, isRegular } = useResponsiveLayout();
+  const { height: windowHeight, isRegular, isShort, isPhoneLandscape } =
+    useResponsiveLayout();
+  const hasShortLayout = isShort || isPhoneLandscape;
+  const usesCompactHeader = compactHeaderOnShort && hasShortLayout;
+  const usesFullHeight = fullHeightOnShort && hasShortLayout;
   const translateY = useSharedValue(windowHeight);
   const backdropOpacity = useSharedValue(0);
   const dragStartY = useSharedValue(0);
@@ -189,17 +202,31 @@ export function BottomSheet({
           <Animated.View
             style={[
               styles.sheet,
-              isRegular && styles.regularSheet,
+              isRegular && !usesFullHeight && styles.regularSheet,
+              usesFullHeight && styles.fullHeightSheet,
               sheetStyle,
               {
-                maxHeight: windowHeight * 0.88,
+                height: usesFullHeight ? windowHeight : undefined,
+                maxHeight: usesFullHeight ? windowHeight : windowHeight * 0.88,
+                paddingTop: usesFullHeight
+                  ? Math.max(insets.top, spacing.sm)
+                  : spacing.sm,
+                paddingLeft: usesFullHeight
+                  ? Math.max(insets.left, spacing.md)
+                  : spacing.md,
+                paddingRight: usesFullHeight
+                  ? Math.max(insets.right, spacing.md)
+                  : spacing.md,
                 paddingBottom: Math.max(insets.bottom, spacing.md),
               },
             ]}
           >
             <GestureDetector gesture={dragGesture}>
               <View
-                style={styles.dragHeader}
+                style={[
+                  styles.dragHeader,
+                  usesCompactHeader && styles.dragHeaderCompact,
+                ]}
                 accessible
                 accessibilityLabel={
                   [title, description].filter(Boolean).join(". ") || "바텀시트"
@@ -209,7 +236,11 @@ export function BottomSheet({
                 }
               >
                 {dismissible ? <View style={styles.handle} /> : null}
-                {mascotMood && title ? (
+                {usesCompactHeader && title ? (
+                  <View style={styles.compactHeader}>
+                    <AppText variant="subheading">{title}</AppText>
+                  </View>
+                ) : mascotMood && title ? (
                   <MascotSpeechBubble
                     message={title}
                     supportingMessage={description}
@@ -229,6 +260,9 @@ export function BottomSheet({
                 ) : null}
               </View>
             </GestureDetector>
+            {stickyBodyHeader ? (
+              <View style={styles.stickyBodyHeader}>{stickyBodyHeader}</View>
+            ) : null}
             {scrollEnabled ? (
               <ScrollView
                 style={styles.bodyScroll}
@@ -280,11 +314,17 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: radius.xxl,
     borderBottomRightRadius: radius.xxl,
   },
+  fullHeightSheet: {
+    borderRadius: radius.none,
+  },
   dragHeader: {
     minHeight: controlSize.minimum,
     gap: spacing.md,
     justifyContent: "center",
     flexShrink: 0,
+  },
+  dragHeaderCompact: {
+    gap: spacing.xs,
   },
   handle: {
     alignSelf: "center",
@@ -296,6 +336,13 @@ const styles = StyleSheet.create({
   },
   header: {
     gap: spacing.xs,
+    flexShrink: 0,
+  },
+  compactHeader: {
+    flexShrink: 0,
+  },
+  stickyBodyHeader: {
+    gap: spacing.sm,
     flexShrink: 0,
   },
   bodyScroll: {
