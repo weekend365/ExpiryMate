@@ -81,6 +81,13 @@ import type {
   AffiliateProductSearchResponse,
   AffiliateReorderPreviewResponse,
 } from "@expirymate/shared";
+import {
+  authSessionSchema,
+  authUserSchema,
+  registerResponseSchema,
+  startOAuthResponseSchema,
+} from "@expirymate/shared";
+import type { ZodType } from "zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 import { withAsyncTimeout } from "../shared/async-timeout";
@@ -212,6 +219,7 @@ async function request<T>(
   options: {
     retryOnUnauthorized?: boolean;
     timeoutMs?: number;
+    schema?: ZodType<T>;
   } = { retryOnUnauthorized: true },
 ): Promise<T> {
   const session = await requireRegisteredSession();
@@ -228,7 +236,7 @@ async function request<T>(
     },
     options.timeoutMs,
   );
-  const body = await parseEnvelope<T>(response);
+  const body = await parseEnvelope(response, options.schema);
 
   if (!response.ok || !body.success) {
     if (response.status === 401 && options.retryOnUnauthorized !== false) {
@@ -325,7 +333,11 @@ async function requestMultipart<T>(
   return body.data;
 }
 
-async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
+async function publicRequest<T>(
+  path: string,
+  init?: RequestInit,
+  schema?: ZodType<T>,
+): Promise<T> {
   const response = await fetchWithNetworkError(path, {
     ...init,
     headers: {
@@ -334,7 +346,7 @@ async function publicRequest<T>(path: string, init?: RequestInit): Promise<T> {
       ...(init?.headers ?? {}),
     },
   });
-  const body = await parseEnvelope<T>(response);
+  const body = await parseEnvelope(response, schema);
 
   if (!response.ok || !body.success) {
     throw new ApiError(
@@ -385,12 +397,56 @@ async function fetchWithNetworkError(
   }
 }
 
-async function parseEnvelope<T>(response: Response) {
+async function parseEnvelope<T>(response: Response, schema?: ZodType<T>) {
+  let value: unknown;
   try {
-    return (await response.json()) as ApiEnvelope<T>;
+    value = await response.json();
   } catch {
     throw new Error("앗, 답을 제대로 받지 못했어요.");
   }
+
+  if (!value || typeof value !== "object" || !("success" in value)) {
+    throw new Error("서버 응답 형식을 확인하지 못했어요.");
+  }
+
+  const candidate = value as {
+    success?: unknown;
+    data?: unknown;
+    error?: unknown;
+  };
+  if (typeof candidate.success !== "boolean") {
+    throw new Error("서버 응답 형식을 확인하지 못했어요.");
+  }
+
+  let error: ApiEnvelope<unknown>["error"];
+  if (candidate.error !== undefined) {
+    if (!candidate.error || typeof candidate.error !== "object") {
+      throw new Error("서버 오류 응답 형식을 확인하지 못했어요.");
+    }
+    const rawError = candidate.error as Record<string, unknown>;
+    error = {
+      code: typeof rawError.code === "string" ? rawError.code : undefined,
+      message: typeof rawError.message === "string" ? rawError.message : undefined,
+      details: rawError.details,
+    };
+  }
+
+  if (!candidate.success) {
+    return { success: false, data: candidate.data as T, error };
+  }
+
+  if (!schema) {
+    return { success: true, data: candidate.data as T, error };
+  }
+
+  const parsed = schema.safeParse(candidate.data);
+  if (!parsed.success) {
+    captureStartupBootstrapIssue("api.response-schema", parsed.error, {
+      status: response.status,
+    });
+    throw new Error("서버 응답 형식을 확인하지 못했어요.");
+  }
+  return { success: true, data: parsed.data, error };
 }
 
 async function requireRegisteredSession() {
@@ -450,7 +506,7 @@ async function loadRegisteredSession(): Promise<AuthSession | null> {
 
   let parsed: AuthUser;
   try {
-    parsed = JSON.parse(storedUser) as AuthUser;
+    parsed = authUserSchema.parse(JSON.parse(storedUser));
   } catch {
     await clearAuthSession();
     return null;
@@ -525,7 +581,11 @@ function isTerminalRefreshError(error: unknown) {
   );
 }
 
-async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit) {
+async function authRequestWithOptionalBearer<T>(
+  path: string,
+  init?: RequestInit,
+  schema?: ZodType<T>,
+) {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(init?.headers as Record<string, string> | undefined),
@@ -535,17 +595,25 @@ async function authRequestWithOptionalBearer<T>(path: string, init?: RequestInit
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  return publicRequest<T>(path, {
-    ...init,
-    headers,
-  });
+  return publicRequest<T>(
+    path,
+    {
+      ...init,
+      headers,
+    },
+    schema,
+  );
 }
 
 async function refreshSession(refreshToken: string) {
-  const session = await publicRequest<AuthSession>("/auth/refresh", {
-    method: "POST",
-    body: JSON.stringify({ refreshToken }),
-  });
+  const session = await publicRequest<AuthSession>(
+    "/auth/refresh",
+    {
+      method: "POST",
+      body: JSON.stringify({ refreshToken }),
+    },
+    authSessionSchema,
+  );
 
   return persistAuthSession(session);
 }
@@ -556,20 +624,30 @@ async function persistAuthSession(session: AuthSession) {
     throw new Error("등록된 계정으로만 이어갈 수 있어요.");
   }
 
-  accessToken = session.accessToken;
-  currentUser = session.user;
-  sessionPromise = Promise.resolve(session);
-  await runAuthStorageOperation(
-    AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user)),
-    "async-storage.write-user",
-  );
+  if (!session.refreshToken) {
+    await clearAuthSession();
+    throw new Error("로그인 갱신 정보를 받지 못했어요. 다시 시도해 주세요.");
+  }
 
-  if (session.refreshToken) {
+  try {
     await runAuthStorageOperation(
       SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, session.refreshToken),
       "secure-store.write-refresh-token",
     );
+    await runAuthStorageOperation(
+      AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user)),
+      "async-storage.write-user",
+    );
+  } catch (error) {
+    // Never expose a session in memory when either half of persistence failed.
+    // clearAuthSession also removes a refresh token written before AsyncStorage failed.
+    await clearAuthSession();
+    throw error;
   }
+
+  accessToken = session.accessToken;
+  currentUser = session.user;
+  sessionPromise = Promise.resolve(session);
 
   return session;
 }
@@ -612,7 +690,7 @@ export const getMe = async (): Promise<AuthUser | null> => {
     return null;
   }
 
-  return request<AuthUser>("/auth/me");
+  return request<AuthUser>("/auth/me", undefined, { schema: authUserSchema });
 };
 
 export const getPrivacyStatus = () => request<PrivacyStatus>("/privacy/status");
@@ -660,6 +738,7 @@ export const register = async (
       method: "POST",
       body: JSON.stringify(payload),
     },
+    registerResponseSchema,
   );
 
   if (isRegisterPendingResponse(result)) {
@@ -681,10 +760,14 @@ function isRegisterPendingResponse(
 
 export const login = async (payload: LoginRequest) =>
   persistAuthSession(
-    await authRequestWithOptionalBearer<AuthSession>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+    await authRequestWithOptionalBearer<AuthSession>(
+      "/auth/login",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      authSessionSchema,
+    ),
   );
 
 export const logout = async () => {
@@ -747,10 +830,14 @@ export const getEmailVerificationStatus = (email: string) =>
 
 export const verifyEmail = async (token: string) =>
   persistAuthSession(
-    await publicRequest<AuthSession>("/auth/email/verify", {
-      method: "POST",
-      body: JSON.stringify({ token }),
-    }),
+    await publicRequest<AuthSession>(
+      "/auth/email/verify",
+      {
+        method: "POST",
+        body: JSON.stringify({ token }),
+      },
+      authSessionSchema,
+    ),
   );
 
 export const forgotPassword = (email: string) =>
@@ -766,20 +853,28 @@ export const resetPassword = (token: string, password: string) =>
   });
 
 export const startOAuth = (payload: StartOAuthRequest) =>
-  publicRequest<StartOAuthResponse>("/auth/oauth/start", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  publicRequest<StartOAuthResponse>(
+    "/auth/oauth/start",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+    startOAuthResponseSchema,
+  );
 
 export const oauthLogin = async (
   provider: "apple" | "google" | "kakao" | "naver",
   payload: OAuthLoginRequest,
 ) =>
   persistAuthSession(
-    await authRequestWithOptionalBearer<AuthSession>(`/auth/oauth/${provider}`, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+    await authRequestWithOptionalBearer<AuthSession>(
+      `/auth/oauth/${provider}`,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+      authSessionSchema,
+    ),
   );
 
 const MISSING_SPACE_ID_MESSAGE =

@@ -7,7 +7,10 @@ const REQUIRED_PRODUCTION_VALUES = [
   "EXPO_PUBLIC_ADMOB_ANDROID_APP_ID",
   "EXPO_PUBLIC_ADMOB_IOS_REWARDED_AD_UNIT_ID",
   "EXPO_PUBLIC_ADMOB_ANDROID_REWARDED_AD_UNIT_ID",
+  "EXPO_PUBLIC_SENTRY_DSN",
 ];
+
+const REQUIRED_PRODUCTION_EAS_VALUES = ["SENTRY_AUTH_TOKEN"];
 
 const OPTIONAL_PROVIDER_CLIENT_IDS = ["EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID"];
 
@@ -39,6 +42,14 @@ function validateExpoPublicEnv(env = process.env) {
 
     if (GOOGLE_SAMPLE_ADMOB_IDS.has(value)) {
       errors.push(`${key} must not use Google's sample AdMob ID in production.`);
+    }
+  }
+
+  if (env.EAS_BUILD === "true") {
+    for (const key of REQUIRED_PRODUCTION_EAS_VALUES) {
+      if (!env[key]?.trim()) {
+        errors.push(`${key} is required for production EAS builds.`);
+      }
     }
   }
 

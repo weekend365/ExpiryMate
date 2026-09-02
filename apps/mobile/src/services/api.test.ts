@@ -10,6 +10,7 @@ const stores = vi.hoisted(() => ({
   asyncStorage: new Map<string, string>(),
   secureStore: new Map<string, string>(),
   secureStoreGet: vi.fn<(key: string) => Promise<string | null>>(),
+  secureStoreSet: vi.fn<(key: string, value: string) => Promise<void>>(),
   secureStoreDelete: vi.fn<(key: string) => Promise<void>>(),
   fetch: vi.fn(),
   unregisterDevicePushToken: vi.fn(async () => ({ ok: true, skipped: false })),
@@ -29,9 +30,7 @@ vi.mock("@react-native-async-storage/async-storage", () => ({
 
 vi.mock("expo-secure-store", () => ({
   getItemAsync: (key: string) => stores.secureStoreGet(key),
-  setItemAsync: vi.fn(async (key: string, value: string) => {
-    stores.secureStore.set(key, value);
-  }),
+  setItemAsync: (key: string, value: string) => stores.secureStoreSet(key, value),
   deleteItemAsync: (key: string) => stores.secureStoreDelete(key),
 }));
 
@@ -76,6 +75,10 @@ describe("mobile API client core flow", () => {
     stores.secureStoreGet.mockImplementation(
       async (key: string) => stores.secureStore.get(key) ?? null,
     );
+    stores.secureStoreSet.mockReset();
+    stores.secureStoreSet.mockImplementation(async (key: string, value: string) => {
+      stores.secureStore.set(key, value);
+    });
     stores.secureStoreDelete.mockReset();
     stores.secureStoreDelete.mockImplementation(async (key: string) => {
       stores.secureStore.delete(key);
@@ -346,6 +349,34 @@ describe("mobile API client core flow", () => {
         }),
       }),
     );
+  });
+
+  it("does not expose an in-memory session when secure persistence fails", async () => {
+    stores.fetch.mockResolvedValueOnce(
+      successResponse(createSession("access-unpersisted", "refresh-unpersisted")),
+    );
+    stores.secureStoreSet.mockRejectedValueOnce(new Error("keychain unavailable"));
+    const { login, getDashboardSummary } = await import("./api");
+
+    await expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).rejects.toThrow(/keychain unavailable/);
+    await expect(getDashboardSummary("personal_user-1")).rejects.toThrow(/로그인/);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+  });
+
+  it("rejects malformed authentication responses before persisting them", async () => {
+    stores.fetch.mockResolvedValueOnce(
+      successResponse({ accessToken: "access-without-user" }),
+    );
+    const { login } = await import("./api");
+
+    await expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).rejects.toThrow(/응답 형식/);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
   });
 
   it("unregisters the push token before clearing the session on logout", async () => {

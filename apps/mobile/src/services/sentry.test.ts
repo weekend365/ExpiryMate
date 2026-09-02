@@ -13,9 +13,12 @@ vi.mock("@sentry/react-native", () => ({
 }));
 vi.mock("expo-constants", () => ({
   default: {
+    nativeAppVersion: "1.2.3",
+    nativeBuildVersion: "46",
     expoConfig: {
       version: "1.2.3",
       ios: { buildNumber: "45" },
+      extra: { build: { gitSha: "abcdef123456" } },
     },
   },
 }));
@@ -60,7 +63,8 @@ describe("mobile Sentry initialization", () => {
     expect(mocks.init).toHaveBeenCalledWith(
       expect.objectContaining({
         environment: "production",
-        release: "expirymate-mobile@1.2.3+45",
+        release: "expirymate-mobile@1.2.3+46",
+        dist: "abcdef123456",
       }),
     );
   });

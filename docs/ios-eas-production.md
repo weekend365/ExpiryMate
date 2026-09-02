@@ -8,7 +8,7 @@ source_of_truth: true
 # iOS · EAS production (P0-06)
 
 Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight/App Store** 를 켜기 위한 체크리스트입니다.  
-코드 쪽 설정은 `apps/mobile/app.json`, `app.config.js`, `eas.json`, `ios/ExpiryMate/ExpiryMate.entitlements`에 반영되어 있습니다.
+코드 쪽 설정은 `apps/mobile/app.json`, `app.config.js`, `eas.json`에 반영됩니다. iOS EAS worker에서는 패키지 `postinstall`이 tracked native 프로젝트를 `expo prebuild`로 다시 동기화하며, 이후 EAS가 CocoaPods를 설치합니다.
 
 ## 0. 개인 플러스 `1.4.0` 업데이트 빌드
 
@@ -26,7 +26,7 @@ Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight
 ### 버전 기준
 
 - `apps/mobile/app.json`의 `expo.version`: `1.4.0`
-- `ios/ExpiryMate/Info.plist`의 `CFBundleShortVersionString`: `1.4.0`
+- 생성되는 iOS 프로젝트의 `CFBundleShortVersionString`: `1.4.0`
 - Xcode Debug/Release `MARKETING_VERSION`: `1.4.0`
 - `eas.json`은 `appVersionSource: "remote"`, production `autoIncrement: true`이므로
   iOS build number와 Android versionCode는 EAS의 현재 원격 값에서 증가시킵니다.
@@ -74,10 +74,10 @@ EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID
 pnpm dlx eas-cli@21.2.0 build:version:get -p ios
 ```
 
-native 수정 (또는 `npx expo prebuild`로 동기화한 뒤 검수):
+필요할 때 `npx expo prebuild --platform ios --clean`으로 생성 결과를 검수:
 
-- `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.4.0`
-- `ios/ExpiryMate.xcodeproj/project.pbxproj` → `MARKETING_VERSION = 1.4.0`
+- 생성된 `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.4.0`
+- 생성된 `ios/ExpiryMate.xcodeproj/project.pbxproj` → `MARKETING_VERSION` = `1.4.0`
 - `app.json` → `"version": "1.4.0"` 유지
 - `CFBundleVersion` / `CURRENT_PROJECT_VERSION` 은 production
   `autoIncrement` 가 remote에서 올리므로 로컬 `"1"`에 집착하지 않아도 됨
@@ -192,14 +192,16 @@ pnpm --filter @expirymate/mobile eas:submit:ios
    - `aps-environment` = `production` (스토어 서명 시; 개발 entitlements 파일 기본값은 `development`)
 2. TestFlight에서 **Apple 로그인** 신규·재로그인
 3. 설정 → 알림 허용 후 **푸시 토큰 등록** (API `push-tokens`)
-4. (선택) Railway `PUSH_REMINDER_SCHEDULER_ENABLED=true` 후 만료 알림 수신
+4. 바코드 스캔으로 상품 등록 후 OCR 영수증/라벨 인식까지 실제 기기에서 확인
+5. 구독 상품 조회·구매·복원과 추천 크레딧 구매 완료 후 권한 반영 확인
+6. (선택) Railway `PUSH_REMINDER_SCHEDULER_ENABLED=true` 후 만료 알림 수신
 
 ## 5. 관련 파일
 
 - `apps/mobile/app.json` — `usesAppleSignIn`, entitlements, `expo-apple-authentication` plugin
 - `apps/mobile/app.config.js` — Personal Team 시 plugin/entitlement 제거 + production 가드
 - `apps/mobile/eas.json` — profile별 `EXPO_IOS_PERSONAL_TEAM`
-- `apps/mobile/ios/ExpiryMate/ExpiryMate.entitlements` — 커밋된 native 프로젝트 동기화
+- `apps/mobile/scripts/eas-sync-native-config.cjs` — EAS iOS 패키지 설치 직후, CocoaPods 설치 전에 entitlement·privacy manifest·config plugin 동기화
 - `apps/mobile/scripts/validate-public-env.cjs` — production EAS 공개 env 검사
 - `docs/store-privacy-declarations.md` — 스토어 Privacy 선언 (다음 단계)
 - `docs/monetization.md` — 현재 AdMob·쿠팡 파트너스 운영 기준

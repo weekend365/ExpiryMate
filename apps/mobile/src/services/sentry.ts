@@ -9,13 +9,15 @@ export function initMobileSentry() {
     return false;
   }
 
-  const version = Constants.expoConfig?.version ?? "1.0.0";
+  const version =
+    Constants.nativeAppVersion ?? Constants.expoConfig?.version ?? "1.0.0";
   const buildNumber =
+    Constants.nativeBuildVersion ??
     Constants.expoConfig?.ios?.buildNumber ??
     String(Constants.expoConfig?.android?.versionCode ?? "0");
   const gitSha =
+    resolveBuildGitSha(Constants.expoConfig?.extra) ||
     process.env.EXPO_PUBLIC_GIT_SHA?.trim() ||
-    process.env.EAS_BUILD_GIT_COMMIT_HASH?.trim() ||
     "unknown";
 
   Sentry.init({
@@ -27,6 +29,17 @@ export function initMobileSentry() {
   });
 
   return true;
+}
+
+function resolveBuildGitSha(extra: unknown) {
+  if (!extra || typeof extra !== "object" || !("build" in extra)) {
+    return undefined;
+  }
+  const build = extra.build;
+  if (!build || typeof build !== "object" || !("gitSha" in build)) {
+    return undefined;
+  }
+  return typeof build.gitSha === "string" ? build.gitSha.trim() : undefined;
 }
 
 /** Lightweight breadcrumbs for space bootstrap diagnosis (no PII). */

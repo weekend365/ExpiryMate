@@ -321,6 +321,7 @@ jobs:
       - name: Prepare deterministic API data
         run: |
           pnpm --filter @expirymate/shared build
+          pnpm --filter @expirymate/api db:generate
           pnpm --filter @expirymate/api exec prisma migrate deploy
           E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
           nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &
@@ -514,6 +515,7 @@ jobs:
       - name: Prepare deterministic API data
         run: |
           pnpm --filter @expirymate/shared build
+          pnpm --filter @expirymate/api db:generate
           pnpm --filter @expirymate/api exec prisma migrate deploy
           E2E_USER_PASSWORD='demo1234!' pnpm --filter @expirymate/api db:seed
           nohup pnpm --filter @expirymate/api exec nest start > /tmp/expirymate-layout-api.log 2>&1 &

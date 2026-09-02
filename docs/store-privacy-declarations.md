@@ -85,8 +85,8 @@ Google UMP, ML Kit, Sentry 개인정보 매니페스트를 합친 정본입니�
 - Photos or Videos는 App Functionality, 사용자 시작, 필수 아님으로 신고. 원본은
   서버에 보관하지 않고 OpenAI Vision 파싱 후 폐기.
   바코드/OCR 카메라 프레임은 Photos가 아님.
-- `apps/mobile/ios/ExpiryMate/PrivacyInfo.xcprivacy`의
-  `NSPrivacyCollectedDataTypes`와 같은 범위를 유지
+- `apps/mobile/app.json`의 `ios.privacyManifests.NSPrivacyCollectedDataTypes`와
+  같은 범위를 유지하며, EAS prebuild가 `PrivacyInfo.xcprivacy`를 생성
 
 ### Google Play Console · Data safety
 

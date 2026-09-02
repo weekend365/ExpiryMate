@@ -1,5 +1,4 @@
 import type { Product, Purchase } from "expo-iap";
-import { useIAP } from "expo-iap";
 import { ShieldCheck, Sparkles } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Platform, Pressable, StyleSheet, View } from "react-native";
@@ -11,6 +10,7 @@ import { IapUnavailableState } from "../../src/features/monetization/IapUnavaila
 import {
   isIapRuntimeAvailable,
 } from "../../src/features/monetization/iap-runtime";
+import { useIapStore } from "../../src/features/monetization/iap-purchase-provider";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   trackMonetizationEvent,
@@ -84,7 +84,9 @@ function RecommendationCreditsStoreScreen() {
     fetchProducts,
     requestPurchase,
     finishTransaction,
-  } = useIAP({
+  } = useIapStore({
+    handlesPurchase: (productId) =>
+      configuredProducts.some((product) => product.productId === productId),
     onPurchaseSuccess: (purchase) => void handlePurchase(purchase),
     onPurchaseError: (error) => {
       setPurchasing(false);

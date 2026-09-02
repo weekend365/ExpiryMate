@@ -5,7 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useIsRestoring } from "@tanstack/react-query";
 import * as Sentry from "@sentry/react-native";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -17,6 +17,7 @@ import {
 import { useAuth } from "../src/features/auth/use-auth";
 import { NotificationNavigationBridge } from "../src/features/notifications/notification-navigation";
 import { MonetizationProvider } from "../src/features/monetization/monetization-provider";
+import { IapPurchaseProvider } from "../src/features/monetization/iap-purchase-provider";
 import { RecipeGenerationProvider } from "../src/features/recipes/recipe-generation-provider";
 import { SpaceProvider } from "../src/features/spaces/space-provider";
 import { PendingSpaceInvitationBridge } from "../src/features/spaces/pending-invitation";
@@ -27,23 +28,38 @@ import {
   refreshRestoredQueries,
 } from "../src/services/query-client";
 import { initMobileSentry } from "../src/services/sentry";
+import { captureStartupBootstrapIssue } from "../src/services/bootstrap-diagnostics";
 import { pretendardFonts } from "../src/shared/fonts";
 import { colors, fontFamily, typography } from "../src/shared/theme";
 
 const isSentryEnabled = initMobileSentry();
+export const FONT_LOAD_TIMEOUT_MS = 8_000;
 
 SplashScreen.preventAutoHideAsync().catch(() => null);
 
 function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(pretendardFonts);
+  const [fontLoadTimedOut, setFontLoadTimedOut] = useState(false);
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (fontsLoaded || fontError) return;
+    const timer = setTimeout(() => {
+      const error = new Error("Bundled fonts did not settle before timeout.");
+      captureStartupBootstrapIssue("fonts.load-timeout", error, {
+        timeout_ms: FONT_LOAD_TIMEOUT_MS,
+      });
+      setFontLoadTimedOut(true);
+    }, FONT_LOAD_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [fontError, fontsLoaded]);
+
+  useEffect(() => {
+    if (fontsLoaded || fontError || fontLoadTimedOut) {
       SplashScreen.hideAsync().catch(() => null);
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontLoadTimedOut, fontsLoaded, fontError]);
 
-  if (!fontsLoaded && !fontError) {
+  if (!fontsLoaded && !fontError && !fontLoadTimedOut) {
     return null;
   }
 
@@ -58,13 +74,14 @@ function RootLayout() {
           <QueryCacheRestoreBoundary>
             <SpaceProvider>
               <MonetizationProvider>
-                <RecipeGenerationProvider>
-                  <PushTokenSync />
-                  <PendingSpaceInvitationBridge />
-                  <NotificationNavigationBridge />
-                  <AuthRedirectGate />
-                  <StatusBar style="dark" />
-                  <Stack
+                <IapPurchaseProvider>
+                  <RecipeGenerationProvider>
+                    <PushTokenSync />
+                    <PendingSpaceInvitationBridge />
+                    <NotificationNavigationBridge />
+                    <AuthRedirectGate />
+                    <StatusBar style="dark" />
+                    <Stack
               screenOptions={({ navigation }) => ({
                 contentStyle: {
                   backgroundColor: colors.background,
@@ -198,8 +215,9 @@ function RootLayout() {
                 name="settings/recommendation-credits"
                 options={{ title: "AI 추천권" }}
               />
-                  </Stack>
-                </RecipeGenerationProvider>
+                    </Stack>
+                  </RecipeGenerationProvider>
+                </IapPurchaseProvider>
               </MonetizationProvider>
             </SpaceProvider>
           </QueryCacheRestoreBoundary>

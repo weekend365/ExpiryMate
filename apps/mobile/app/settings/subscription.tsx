@@ -2,12 +2,10 @@ import type {
   SubscriptionPurchaseIntent,
   SubscriptionVerificationRequest,
 } from "@expirymate/shared";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Purchase, ProductSubscription } from "expo-iap";
 import {
   deepLinkToSubscriptions,
   getAvailablePurchases,
-  useIAP,
 } from "expo-iap";
 import { router } from "expo-router";
 import {
@@ -34,6 +32,17 @@ import { IapUnavailableState } from "../../src/features/monetization/IapUnavaila
 import {
   isIapRuntimeAvailable,
 } from "../../src/features/monetization/iap-runtime";
+import { useIapStore } from "../../src/features/monetization/iap-purchase-provider";
+import {
+  ANDROID_PACKAGE_NAME,
+  APPLE_MONTHLY_SUBSCRIPTION_ID,
+  APPLE_YEARLY_SUBSCRIPTION_ID,
+  GOOGLE_SUBSCRIPTION_ID,
+  clearPendingSubscriptionPurchaseIntent,
+  isPersonalSubscriptionProduct,
+  readPendingSubscriptionPurchaseIntent,
+  savePendingSubscriptionPurchaseIntent,
+} from "../../src/features/monetization/iap-products";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   formatSubscriptionExpiry,
@@ -47,12 +56,6 @@ import {
   createSubscriptionPurchaseIntent,
   trackMonetizationEvent,
 } from "../../src/services/api";
-
-const APPLE_MONTHLY_ID = "expirymate_premium_monthly";
-const APPLE_YEARLY_ID = "expirymate_premium_yearly";
-const GOOGLE_PRODUCT_ID = "jango_plus";
-const PACKAGE_NAME = "com.expirymate.mobile";
-const PENDING_INTENT_STORAGE_KEY = "expirymate.pendingPlusPurchaseIntent.v1";
 
 type BillingPeriod = "monthly" | "yearly";
 type StorePlan = {
@@ -90,19 +93,12 @@ function SubscriptionStoreScreen() {
     if (purchaseIntentRef.current?.productId === productId) {
       return purchaseIntentRef.current;
     }
-    const stored = await AsyncStorage.getItem(PENDING_INTENT_STORAGE_KEY);
-    if (!stored) return null;
-    try {
-      const parsed = JSON.parse(stored) as SubscriptionPurchaseIntent;
-      return parsed.productId === productId ? parsed : null;
-    } catch {
-      return null;
-    }
+    return readPendingSubscriptionPurchaseIntent(productId);
   }
 
   async function clearPurchaseIntent() {
     purchaseIntentRef.current = null;
-    await AsyncStorage.removeItem(PENDING_INTENT_STORAGE_KEY);
+    await clearPendingSubscriptionPurchaseIntent();
   }
 
   async function handleStorePurchase(
@@ -169,7 +165,8 @@ function SubscriptionStoreScreen() {
     fetchProducts,
     requestPurchase,
     finishTransaction,
-  } = useIAP({
+  } = useIapStore({
+    handlesPurchase: isPersonalSubscriptionProduct,
     onPurchaseSuccess: (purchase) => {
       if (isPersonalSubscriptionProduct(purchase.productId)) {
         void handleStorePurchase(purchase);
@@ -199,8 +196,8 @@ function SubscriptionStoreScreen() {
     void fetchProducts({
       skus:
         Platform.OS === "ios"
-          ? [APPLE_MONTHLY_ID, APPLE_YEARLY_ID]
-          : [GOOGLE_PRODUCT_ID],
+          ? [APPLE_MONTHLY_SUBSCRIPTION_ID, APPLE_YEARLY_SUBSCRIPTION_ID]
+          : [GOOGLE_SUBSCRIPTION_ID],
       type: "subs",
     });
   }, [connected, fetchProducts]);
@@ -251,10 +248,7 @@ function SubscriptionStoreScreen() {
         productId: selectedPlan.productId,
       });
       purchaseIntentRef.current = intent;
-      await AsyncStorage.setItem(
-        PENDING_INTENT_STORAGE_KEY,
-        JSON.stringify(intent),
-      );
+      await savePendingSubscriptionPurchaseIntent(intent);
       await requestPurchase({
         type: "subs",
         request:
@@ -334,8 +328,8 @@ function SubscriptionStoreScreen() {
 
   const manage = () =>
     deepLinkToSubscriptions({
-      skuAndroid: GOOGLE_PRODUCT_ID,
-      packageNameAndroid: PACKAGE_NAME,
+      skuAndroid: GOOGLE_SUBSCRIPTION_ID,
+      packageNameAndroid: ANDROID_PACKAGE_NAME,
     }).catch((error) =>
       Alert.alert("구독 관리를 열지 못했어요", getErrorMessage(error)),
     );
@@ -498,9 +492,9 @@ function resolvePlans(products: ProductSubscription[]): StorePlan[] {
     return products.flatMap((product) => {
       if (product.platform !== "ios") return [];
       const period =
-        product.id === APPLE_YEARLY_ID
+        product.id === APPLE_YEARLY_SUBSCRIPTION_ID
           ? "yearly"
-          : product.id === APPLE_MONTHLY_ID
+          : product.id === APPLE_MONTHLY_SUBSCRIPTION_ID
             ? "monthly"
             : null;
       return period
@@ -517,7 +511,7 @@ function resolvePlans(products: ProductSubscription[]): StorePlan[] {
   }
 
   const product = products.find(
-    (item) => item.platform === "android" && item.id === GOOGLE_PRODUCT_ID,
+    (item) => item.platform === "android" && item.id === GOOGLE_SUBSCRIPTION_ID,
   );
   if (!product || product.platform !== "android") return [];
   return product.subscriptionOffers.flatMap((offer) => {
@@ -546,12 +540,6 @@ function getAnnualSavings(plans: StorePlan[]) {
   const yearly = plans.find((plan) => plan.period === "yearly")?.price;
   if (!monthly || !yearly || monthly <= 0) return null;
   return Math.max(0, Math.round((1 - yearly / (monthly * 12)) * 100));
-}
-
-function isPersonalSubscriptionProduct(productId: string) {
-  return [APPLE_MONTHLY_ID, APPLE_YEARLY_ID, GOOGLE_PRODUCT_ID].includes(
-    productId,
-  );
 }
 
 function getErrorMessage(error: unknown) {

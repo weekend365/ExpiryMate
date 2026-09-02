@@ -24,6 +24,10 @@ const personalTeamPluginNames = new Set([
 ]);
 const personalTeam = isPersonalTeamBuild(process.env);
 const isProduction = process.env.EXPO_PUBLIC_APP_ENV === "production";
+const buildGitSha =
+  process.env.EXPO_PUBLIC_GIT_SHA?.trim() ||
+  process.env.EAS_BUILD_GIT_COMMIT_HASH?.trim() ||
+  "unknown";
 const googleTestAppIds = {
   ios: "ca-app-pub-3940256099942544~1458002511",
   android: "ca-app-pub-3940256099942544~3347511713",
@@ -54,8 +58,6 @@ const plugins = appJson.expo.plugins.filter((plugin) => {
 });
 
 plugins.push("expo-iap");
-// Config plugins do not rewrite the committed ios/ folder. EAS still injects
-// GADApplicationIdentifier via scripts/sync-admob-ios-plist.cjs.
 plugins.push([
   googleMobileAdsPlugin,
   {
@@ -85,14 +87,18 @@ const personalTeamIosCapabilities = {
   entitlements: {},
 };
 
-/** @type {import('expo/config').ExpoConfig} */
-module.exports = {
-  expo: {
-    ...appJson.expo,
-    plugins,
-    ios: {
-      ...appJson.expo.ios,
-      ...(personalTeam ? personalTeamIosCapabilities : paidTeamIosCapabilities),
+/** @type {(context: import('expo/config').ConfigContext) => import('expo/config').ExpoConfig} */
+module.exports = ({ config }) => ({
+  ...config,
+  plugins,
+  ios: {
+    ...config.ios,
+    ...(personalTeam ? personalTeamIosCapabilities : paidTeamIosCapabilities),
+  },
+  extra: {
+    ...config.extra,
+    build: {
+      gitSha: buildGitSha,
     },
   },
-};
+});
