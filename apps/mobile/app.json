@@ -76,11 +76,11 @@
           }
         }
       ],
-        [
+      [
         "@sentry/react-native",
         {
-          "organization": "expirymate",
-          "project": "mobile",
+          "organization": "devnamu",
+          "project": "jango-mobile",
           "disableAutoUpload": false
         }
       ]

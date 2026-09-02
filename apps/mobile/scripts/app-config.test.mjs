@@ -37,3 +37,21 @@ describe("Android adaptive-window app configuration", () => {
     );
   });
 });
+
+describe("Sentry build upload configuration", () => {
+  it("uploads source maps and debug symbols to the production mobile project", () => {
+    const sentryPlugin = appConfig.expo.plugins.find(
+      (plugin) =>
+        Array.isArray(plugin) && plugin[0] === "@sentry/react-native",
+    );
+
+    expect(sentryPlugin).toEqual([
+      "@sentry/react-native",
+      {
+        organization: "devnamu",
+        project: "jango-mobile",
+        disableAutoUpload: false,
+      },
+    ]);
+  });
+});
