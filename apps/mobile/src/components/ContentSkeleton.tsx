@@ -80,22 +80,6 @@ export function HomeStatsSkeleton() {
   );
 }
 
-export function HomeListSkeleton({ rows = 2 }: { rows?: number }) {
-  return (
-    <View style={styles.list} accessibilityLabel="목록을 불러오고 있어요">
-      {Array.from({ length: rows }, (_, index) => (
-        <View key={index} style={styles.card}>
-          <View style={styles.cardCopy}>
-            <SkeletonBlock height={spacing.md} width="58%" />
-            <SkeletonBlock height={spacing.sm} width="44%" />
-          </View>
-          <SkeletonBlock height={spacing.xl} width={spacing.xxxl} radiusToken="pill" />
-        </View>
-      ))}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   block: {
     backgroundColor: colors.mutedSurface,

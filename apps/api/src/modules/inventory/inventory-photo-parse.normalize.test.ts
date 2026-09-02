@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ProductCategory, UnitCode } from "@expirymate/shared";
-import {
-  isLikelyNonInventoryLine,
-  normalizePhotoParseItems,
-} from "./inventory-photo-parse.normalize";
+import { normalizePhotoParseItems } from "./inventory-photo-parse.normalize";
 
 const visionItem = (
   overrides: Partial<Parameters<typeof normalizePhotoParseItems>[1][number]> = {},
@@ -60,10 +57,5 @@ describe("normalizePhotoParseItems", () => {
     expect(kept[0]?.suggestedExpiryDate).toBe("2026-09-01");
     expect(kept[0]?.expirySource).toBe("ocr_detected");
     expect(dropped[0]?.suggestedExpiryDate).toBeUndefined();
-  });
-
-  it("detects non-inventory receipt lines", () => {
-    expect(isLikelyNonInventoryLine("부가세")).toBe(true);
-    expect(isLikelyNonInventoryLine("바나나")).toBe(false);
   });
 });

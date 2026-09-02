@@ -15,13 +15,11 @@ import { useActiveSpace } from "../spaces/space-provider";
 import { useSpaceScopedQueryGate } from "../spaces/use-space-scoped-query-gate";
 import { useSpaceScopedQueryResult } from "../spaces/use-space-scoped-query-result";
 import {
-  createRecipeRecommendation,
   deleteRecipeFavorite,
   listRecipeFavorites,
   listRecipeRecommendations,
   saveRecipeFavorite,
   updateRecipeEngagement,
-  type RecipeRecommendationPayload,
 } from "../../services/api";
 
 export const recipeRecommendationsQueryKey = sessionQueryKeys.recipes;
@@ -52,44 +50,6 @@ export const useRecipeRecommendations = () => {
   });
 
   return useSpaceScopedQueryResult(query, gate);
-};
-
-export const useCreateRecipeRecommendation = () => {
-  const queryClient = useQueryClient();
-  const { sessionUserId } = useAuth();
-  const { activeSpaceId } = useActiveSpace();
-
-  return useMutation({
-    mutationFn: (payload: RecipeRecommendationPayload) => {
-      if (!activeSpaceId) {
-        throw new Error("함께 쓸 냉장고를 먼저 골라 주세요.");
-      }
-      return createRecipeRecommendation(payload, activeSpaceId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: withInventorySpace(
-          recipeRecommendationsQueryKey,
-          sessionUserId,
-          activeSpaceId,
-        ),
-      });
-      queryClient.invalidateQueries({
-        queryKey: withInventorySpace(
-          sessionQueryKeys.dashboard,
-          sessionUserId,
-          activeSpaceId,
-        ),
-      });
-      queryClient.invalidateQueries({
-        queryKey: withInventorySpace(
-          sessionQueryKeys.inventory,
-          sessionUserId,
-          activeSpaceId,
-        ),
-      });
-    },
-  });
 };
 
 export const useRecipeFavorites = () => {

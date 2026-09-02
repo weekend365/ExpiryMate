@@ -35,9 +35,6 @@ export function getScanLineTravel(frameHeight: number = SCAN_FRAME_HEIGHT): numb
   return Math.max(frameHeight - SCAN_LINE_INSET * 2 - SCAN_LINE_HEIGHT, 0);
 }
 
-/** Distance the scan line travels inside the compact baseline frame. */
-export const SCAN_LINE_TRAVEL = getScanLineTravel(SCAN_FRAME_HEIGHT);
-
 export type GuideFrameLayout = {
   x: number;
   y: number;

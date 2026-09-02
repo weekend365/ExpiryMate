@@ -1,5 +1,3 @@
-import { useFonts } from "expo-font";
-
 /**
  * Pretendard static faces used by the mobile typography ramp.
  * Family names must match the keys passed to `useFonts` / `expo-font` plugin.
@@ -37,8 +35,4 @@ const weightToFontFamily: Record<string, AppFontFamily> = {
 /** Map a shared `fontWeight` token string to the matching Pretendard face. */
 export function fontFamilyForWeight(weight: string): AppFontFamily {
   return weightToFontFamily[weight] ?? fontFamily.regular;
-}
-
-export function usePretendardFonts() {
-  return useFonts(pretendardFonts);
 }

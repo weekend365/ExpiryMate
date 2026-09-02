@@ -12,7 +12,6 @@ vi.mock("@react-native-async-storage/async-storage", () => ({
 }));
 
 import {
-  isSamePhotoIntakeSelection,
   loadRecentPhotoIntakeSelection,
   saveRecentPhotoIntakeSelection,
 } from "./photo-intake-selection";
@@ -40,20 +39,5 @@ describe("photo intake recent selection", () => {
     );
 
     await expect(loadRecentPhotoIntakeSelection("user-a")).resolves.toBeNull();
-  });
-
-  it("matches only when both scene and source are the same", () => {
-    expect(
-      isSamePhotoIntakeSelection(
-        { scene: "receipt", source: "camera" },
-        { scene: "receipt", source: "camera" },
-      ),
-    ).toBe(true);
-    expect(
-      isSamePhotoIntakeSelection(
-        { scene: "receipt", source: "camera" },
-        { scene: "receipt", source: "library" },
-      ),
-    ).toBe(false);
   });
 });

@@ -2,10 +2,8 @@ import {
   formatBaseQuantity,
   type RecipeInventorySnapshotItem,
   type RecipeRecommendationDish,
-  type RecipeStrategy,
 } from "@expirymate/shared";
 
-export const COLLAPSED_INGREDIENT_PREVIEW_COUNT = 2;
 export const EXPIRING_DAYS_THRESHOLD = 7;
 
 export type HighlightIngredient = {
@@ -14,11 +12,6 @@ export type HighlightIngredient = {
   amountLabel: string | null;
   daysUntilExpiry: number | null;
   isExpiring: boolean;
-};
-
-export type RecipeDecisionSignals = {
-  badges: string[];
-  rationale: string;
 };
 
 export type RecipeCardSignal = {
@@ -56,13 +49,6 @@ export const equipmentLabels = {
   air_fryer: "에어프라이어",
 } as const;
 
-export const recipeStrategyLabels: Record<RecipeStrategy, string> = {
-  expiring_first: "임박 우선",
-  balanced: "고루 활용",
-  minimal_extra: "추가 최소",
-  quick_novel: "새로운 한 끼",
-};
-
 export function getUsedIngredientRows(
   dish: RecipeRecommendationDish,
   inventorySnapshot: RecipeInventorySnapshotItem[],
@@ -93,28 +79,6 @@ export function getUsedIngredientRows(
   });
 }
 
-export function getHighlightedIngredients(
-  dish: RecipeRecommendationDish,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
-): HighlightIngredient[] {
-  const resolved = getUsedIngredientRows(dish, inventorySnapshot);
-
-  const expiring = resolved
-    .filter((ingredient) => ingredient.isExpiring)
-    .sort(
-      (left, right) =>
-        (left.daysUntilExpiry ?? Number.POSITIVE_INFINITY) -
-        (right.daysUntilExpiry ?? Number.POSITIVE_INFINITY),
-    );
-
-  if (expiring.length > 0) {
-    const nonExpiring = resolved.filter((ingredient) => !ingredient.isExpiring);
-    return [...expiring, ...nonExpiring];
-  }
-
-  return resolved;
-}
-
 export function formatDishMeta(dish: RecipeRecommendationDish) {
   const values = [
     `${dish.servings}인분`,
@@ -134,27 +98,6 @@ export function formatCompactDishMeta(dish: RecipeRecommendationDish) {
   return `${dish.cookingTimeMinutes}분 · ${dish.servings}인분 · ${difficultyLabels[dish.difficulty]}`;
 }
 
-export function formatRecipeStrategyLabel(
-  strategy: RecipeStrategy | undefined,
-) {
-  return strategy ? recipeStrategyLabels[strategy] : "추천";
-}
-
-export function formatIngredientPreview(ingredients: HighlightIngredient[]) {
-  if (ingredients.length === 0) {
-    return "재료 정보 없음";
-  }
-
-  const visibleNames = ingredients
-    .slice(0, COLLAPSED_INGREDIENT_PREVIEW_COUNT)
-    .map((ingredient) => ingredient.name);
-  const remainingCount = ingredients.length - visibleNames.length;
-
-  return `재료 ${visibleNames.join(" · ")}${
-    remainingCount > 0 ? ` +${remainingCount}` : ""
-  }`;
-}
-
 export function formatIngredientDdayLabel(daysUntilExpiry: number | null) {
   if (daysUntilExpiry == null) {
     return null;
@@ -169,38 +112,6 @@ export function formatIngredientDdayLabel(daysUntilExpiry: number | null) {
   }
 
   return `D-${daysUntilExpiry}`;
-}
-
-export function getRecipeDecisionSignals(
-  dish: RecipeRecommendationDish,
-  inventorySnapshot: RecipeInventorySnapshotItem[],
-): RecipeDecisionSignals {
-  const { expiring, ownedCount, missingCount, totalCount } =
-    getRecipeDecisionContext(dish, inventorySnapshot);
-  const badges = [
-    expiring.length > 0
-      ? `${formatIngredientDdayLabel(expiring[0]?.daysUntilExpiry ?? null) ?? "임박"} 재료 ${expiring.length}개`
-      : "임박 재료 없음",
-    `보유 ${ownedCount}/${Math.max(ownedCount, totalCount)}`,
-    missingCount > 0 ? `추가 ${missingCount}개` : "추가 구매 없음",
-  ];
-
-  if (expiring.length > 0) {
-    const names = expiring
-      .slice(0, 2)
-      .map((ingredient) => ingredient.name)
-      .join(" · ");
-    return { badges, rationale: `${names}부터 쓰기 좋은 요리예요.` };
-  }
-
-  if (missingCount === 0) {
-    return { badges, rationale: "보관 중인 재료만으로 만들 수 있어요." };
-  }
-
-  return {
-    badges,
-    rationale: `보유 재료 ${ownedCount}개를 중심으로 만들어요.`,
-  };
 }
 
 export function getRecipeCardSignals(
@@ -273,6 +184,5 @@ function getRecipeDecisionContext(
     expiring,
     ownedCount,
     missingCount,
-    totalCount: ownedCount + missingCount,
   };
 }

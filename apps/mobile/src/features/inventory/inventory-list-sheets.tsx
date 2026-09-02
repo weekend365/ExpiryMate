@@ -7,12 +7,9 @@ import { router } from "expo-router";
 import {
   CalendarDays,
   Check,
-  ListChecks,
   MapPin,
-  Minus,
   Package,
   PenLine,
-  Trash2,
 } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 import { AppText } from "../../components/AppText";
@@ -88,114 +85,6 @@ export function InventoryQuickEditSheet({
   );
 }
 
-export function InventoryItemActionsSheet({
-  item,
-  onClose,
-  onUse,
-  onEdit,
-  onSelect,
-  onDiscard,
-}: {
-  item: InventoryItem | null;
-  onClose: () => void;
-  onUse: (item: InventoryItem) => void;
-  onEdit: (item: InventoryItem) => void;
-  onSelect: (item: InventoryItem) => void;
-  onDiscard: (item: InventoryItem) => void;
-}) {
-  return (
-    <BottomSheet
-      visible={item !== null}
-      onClose={onClose}
-      title={item?.displayName ?? "재료 더보기"}
-      description="할 일을 골라 주세요."
-    >
-      {item ? (
-        <View style={styles.entryMethodActions}>
-          <Button
-            icon={Minus}
-            onPress={() => onUse(item)}
-            fullWidth
-            variant="secondary"
-          >
-            사용한 양 빼기
-          </Button>
-          <Button
-            icon={PenLine}
-            onPress={() => onEdit(item)}
-            fullWidth
-            variant="surface"
-          >
-            내용 수정하기
-          </Button>
-          <Button
-            icon={ListChecks}
-            onPress={() => onSelect(item)}
-            fullWidth
-            variant="surface"
-          >
-            여러 개 정리하기
-          </Button>
-          <Button
-            icon={Trash2}
-            onPress={() => onDiscard(item)}
-            fullWidth
-            variant="danger"
-            accessibilityLabel={`${item.displayName}을 폐기하고 보관함에서 빼기`}
-          >
-            폐기하고 보관함에서 빼기
-          </Button>
-        </View>
-      ) : null}
-    </BottomSheet>
-  );
-}
-export function InventoryListToolsSheet({
-  visible,
-  onClose,
-  selectedLocationLabel,
-  hasLocationFilter,
-  onOpenLocation,
-  onEnterSelectionMode,
-}: {
-  visible: boolean;
-  onClose: () => void;
-  selectedLocationLabel: string;
-  hasLocationFilter: boolean;
-  onOpenLocation: () => void;
-  onEnterSelectionMode: () => void;
-}) {
-  return (
-    <BottomSheet
-      visible={visible}
-      onClose={onClose}
-      title="보기와 정리"
-      description="위치별로 모아 보거나 여러 재료를 한 번에 정리할 수 있어요."
-    >
-      <View style={styles.entryMethodActions}>
-        <Button
-          icon={MapPin}
-          onPress={onOpenLocation}
-          fullWidth
-          variant={hasLocationFilter ? "secondary" : "surface"}
-          accessibilityLabel={`보관 위치 필터, 현재 ${selectedLocationLabel}`}
-        >
-          {hasLocationFilter
-            ? `${selectedLocationLabel}만 보는 중`
-            : "보관 위치 고르기"}
-        </Button>
-        <Button
-          icon={ListChecks}
-          onPress={onEnterSelectionMode}
-          fullWidth
-          variant="surface"
-        >
-          여러 개 정리하기
-        </Button>
-      </View>
-    </BottomSheet>
-  );
-}
 export function InventoryLocationFilterSheet({
   visible,
   onClose,

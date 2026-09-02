@@ -1,5 +1,4 @@
 import {
-  ExpirySource,
   ItemStatus,
   ProductCategory,
   ProductMasterCorrectionStatus,
@@ -29,11 +28,6 @@ export const SYSTEM_STORAGE_LOCATION_KEYS = [
 
 export type SystemStorageLocationKey =
   (typeof SYSTEM_STORAGE_LOCATION_KEYS)[number];
-
-/** @deprecated Prefer SYSTEM_STORAGE_LOCATION_KEYS */
-export const selectableStorageLocations: StorageLocation[] = [
-  ...SYSTEM_STORAGE_LOCATION_KEYS,
-];
 
 export const isSystemStorageLocationKey = (
   key: string,
@@ -74,13 +68,6 @@ export const unitCodeLabels: Record<UnitCode, string> = {
   [UnitCode.G]: "g",
 };
 
-export const expirySourceLabels: Record<ExpirySource, string> = {
-  [ExpirySource.MANUAL]: "직접 입력",
-  [ExpirySource.PRESET]: "빠른 선택",
-  [ExpirySource.OCR_DETECTED]: "OCR 인식",
-  [ExpirySource.UNKNOWN]: "기한 모름",
-};
-
 export const productCategoryLabels: Record<ProductCategory, string> = {
   [ProductCategory.DAIRY]: "유제품",
   [ProductCategory.EGG]: "계란",
@@ -97,27 +84,12 @@ export const productCategoryLabels: Record<ProductCategory, string> = {
   [ProductCategory.HOUSEHOLD]: "생활용품",
 };
 
-export const storageLocationOptions = SYSTEM_STORAGE_LOCATION_KEYS.map(
-  (value) => ({
-    value,
-    label: storageLocationLabels[value],
-  }),
-);
-
 export const productCategoryOptions = Object.entries(productCategoryLabels).map(
   ([value, label]) => ({
     value,
     label,
   }),
 );
-
-export const expiryPresetOptions = [
-  { label: "오늘", days: 0 },
-  { label: "3일 뒤", days: 3 },
-  { label: "7일 뒤", days: 7 },
-  { label: "14일 뒤", days: 14 },
-  { label: "30일 뒤", days: 30 },
-];
 
 export const supportInquiryCategoryLabels: Record<
   SupportInquiryCategory,

@@ -7,17 +7,10 @@ import {
   selectReorderPreviewCandidate,
 } from "./affiliate-offer.service";
 
-const deeplinkMocks = vi.hoisted(() => ({
+const deeplinkMocks = {
   convert: vi.fn(),
   readCredentials: vi.fn(),
-}));
-
-vi.mock("./coupang-deeplink", () => ({
-  convertCoupangSearchUrlToDeeplink: (...args: unknown[]) =>
-    deeplinkMocks.convert(...args),
-  readCoupangPartnersCredentials: (...args: unknown[]) =>
-    deeplinkMocks.readCredentials(...args),
-}));
+};
 
 const dish = {
   title: "계란찜",

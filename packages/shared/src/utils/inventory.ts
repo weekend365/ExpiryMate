@@ -1,6 +1,6 @@
 import { unitCodeLabels } from "../constants/labels";
 import { ItemStatus, StorageLocation, UnitCode } from "../enums/app-enums";
-import type { DashboardSummary, InventoryItem } from "../types/models";
+import type { InventoryItem } from "../types/models";
 import { calculateDaysLeftUntilExpiry } from "./date";
 
 export interface InventoryItemGroup {
@@ -174,24 +174,6 @@ export const groupInventoryItems = (
   });
 };
 
-export const filterExpiringItems = (
-  items: InventoryItem[],
-  maxDays: number,
-  now: Date | string = new Date(),
-) => {
-  return items.filter((item) => {
-    if (!isTrackedItem(item)) {
-      return false;
-    }
-
-    if (!item.expiryDate) {
-      return false;
-    }
-    const daysLeft = calculateDaysLeftUntilExpiry(item.expiryDate, now);
-    return daysLeft <= maxDays;
-  });
-};
-
 export const buildLocationCounts = (
   items: InventoryItem[],
   customKeys: string[] = [],
@@ -210,50 +192,4 @@ export const buildLocationCounts = (
   });
 
   return counts;
-};
-
-export const generateDashboardSummary = (
-  items: InventoryItem[],
-  now: Date | string = new Date(),
-): DashboardSummary => {
-  const trackedItems = items.filter(isTrackedItem);
-  const sortedItems = sortInventoryByNearestExpiry(trackedItems, now);
-  const expiringGroups = groupInventoryItems(sortedItems, now).slice(0, 5);
-
-  return {
-    todayExpiryCount: trackedItems.filter(
-      (item) => getExpiryBucket(item.expiryDate, now) === "today",
-    ).length,
-    within3DaysCount: trackedItems.filter((item) => {
-      const bucket = getExpiryBucket(item.expiryDate, now);
-      return bucket === "today" || bucket === "within_3_days";
-    }).length,
-    within7DaysCount: trackedItems.filter((item) => {
-      const bucket = getExpiryBucket(item.expiryDate, now);
-      return (
-        bucket === "today" ||
-        bucket === "within_3_days" ||
-        bucket === "within_7_days"
-      );
-    }).length,
-    expiredCount: trackedItems.filter(
-      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "expired",
-    ).length,
-    safeCount: trackedItems.filter(
-      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "safe",
-    ).length,
-    unknownExpiryCount: trackedItems.filter(
-      (item) => getExpiryTrafficBucket(item.expiryDate, now) === "unknown",
-    ).length,
-    totalActiveCount: trackedItems.length,
-    recentItems: [...items]
-      .sort(
-        (left, right) =>
-          new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime(),
-      )
-      .slice(0, 5),
-    expiringItems: expiringGroups.flatMap((group) => group.items),
-    locationCounts: buildLocationCounts(trackedItems),
-    latestRecommendationPreview: null,
-  };
 };

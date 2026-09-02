@@ -92,7 +92,3 @@ function clampConfidence(value: number) {
   }
   return Math.min(1, Math.max(0, value));
 }
-
-export function isLikelyNonInventoryLine(name: string) {
-  return RECEIPT_NOISE_PATTERN.test(name.trim());
-}

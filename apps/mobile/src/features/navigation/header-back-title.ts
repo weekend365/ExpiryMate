@@ -1,11 +1,3 @@
-type NavigationRouteLike = {
-  name?: string;
-  state?: {
-    index?: number;
-    routes?: NavigationRouteLike[];
-  } | null;
-};
-
 const BACK_TITLE = "뒤로가기";
 
 const COMPACT_HEADER_TITLES: Record<string, string> = {
@@ -32,16 +24,5 @@ export function resolveCompactHeaderTitle(
  */
 export function resolveTabHeaderBackTitle(tabName?: string | null): string {
   void tabName;
-  return BACK_TITLE;
-}
-
-/**
- * Builds a back label from the previous stack route.
- * Every stack origin uses the same wording.
- */
-export function resolveHeaderBackTitle(
-  previousRoute?: NavigationRouteLike | null,
-): string {
-  void previousRoute;
   return BACK_TITLE;
 }

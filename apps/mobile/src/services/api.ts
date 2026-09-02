@@ -679,11 +679,6 @@ export async function clearAuthSession() {
   }
 }
 
-export const getCurrentUser = async () => {
-  const session = await restoreRegisteredSession();
-  return session?.user ?? null;
-};
-
 export const getMe = async (): Promise<AuthUser | null> => {
   const session = await restoreRegisteredSession();
   if (!session) {

@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { fieldLimits } from "../constants/field-limits";
 import {
-  BarcodeLookupSource,
   ProductMasterCorrectionStatus,
   ProductMasterSource,
 } from "../enums/app-enums";
@@ -22,19 +21,6 @@ export const productMasterSchema = z.object({
   confirmCount: z.number().int().min(0),
   createdAt: z.string(),
   updatedAt: z.string(),
-});
-
-export const barcodeLookupResultSchema = z.object({
-  barcode: z.string().min(1),
-  name: z.string().nullable(),
-  brand: z.string().nullable(),
-  category: z.string().nullable(),
-  imageUrl: z.string().url().nullable(),
-  source: z.nativeEnum(BarcodeLookupSource),
-  productMasterId: z.string().nullable(),
-  contributionToken: z.string().optional(),
-  confidence: z.number().int().min(0).max(100).optional(),
-  needsNameConfirmation: z.boolean().optional(),
 });
 
 export const barcodeRewardReasonSchema = z.enum([

@@ -72,17 +72,6 @@ export const inventoryItemSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const inventoryUpsertSchema = inventoryItemSchema.omit({
-  id: true,
-  ownerKey: true,
-  spaceId: true,
-  createdByUserId: true,
-  updatedByUserId: true,
-  version: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
 /** Mobile form + API create body (without server-owned status default). */
 const inventoryFormFields = {
   productId: optionalText(fieldLimits.productId),

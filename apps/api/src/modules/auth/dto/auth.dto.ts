@@ -93,9 +93,3 @@ export class StartOAuthDto {
   @IsString()
   returnUri!: string;
 }
-
-export class AdminClientDto {
-  @IsOptional()
-  @IsIn(["admin", "mobile"])
-  clientType?: "admin" | "mobile";
-}

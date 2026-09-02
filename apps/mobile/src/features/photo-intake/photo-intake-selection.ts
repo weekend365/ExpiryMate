@@ -40,10 +40,3 @@ export async function saveRecentPhotoIntakeSelection(
 ) {
   await AsyncStorage.setItem(storageKey(userId), JSON.stringify(selection));
 }
-
-export function isSamePhotoIntakeSelection(
-  left: PhotoIntakeSelection | null,
-  right: PhotoIntakeSelection,
-) {
-  return left?.scene === right.scene && left.source === right.source;
-}

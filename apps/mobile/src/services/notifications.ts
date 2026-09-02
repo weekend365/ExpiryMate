@@ -110,8 +110,6 @@ export const scheduleLocalNotification = async (
   });
 };
 
-export const scheduleMockExpiryReminder = scheduleLocalNotification;
-
 export async function scheduleCookingTimerNotification(input: {
   seconds: number;
   dishTitle: string;
