@@ -10,12 +10,20 @@ describe("EAS native config sync", () => {
   it("runs prebuild during package installation, before the EAS iOS pod step", () => {
     const packageJson = JSON.parse(
       readFileSync(resolve(process.cwd(), "package.json"), "utf8"),
-    ) as { scripts: Record<string, string> };
+    ) as {
+      scripts: Record<string, string>;
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
 
     expect(packageJson.scripts.postinstall).toContain("eas-sync-native-config.cjs");
     expect(packageJson.scripts["eas-build-post-install"]).not.toContain(
       "eas-sync-native-config.cjs",
     );
+    expect(
+      packageJson.dependencies?.["@sentry/cli"] ??
+        packageJson.devDependencies?.["@sentry/cli"],
+    ).toBe("2.55.0");
   });
 
   it("does not rewrite native files outside an iOS EAS worker", () => {
