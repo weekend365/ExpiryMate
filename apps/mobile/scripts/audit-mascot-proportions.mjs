@@ -17,12 +17,14 @@ const variants = [
     name: "full",
     targetWidth: 473,
     targetHeight: 365,
+    enforcePadding: true,
     asset: (mood) => PNG.sync.read(fs.readFileSync(fullAssetPath(mood))),
   },
   {
     name: "small",
     targetWidth: 583,
     targetHeight: 450,
+    enforcePadding: false,
     asset: (mood) =>
       deriveSmallMaster(PNG.sync.read(fs.readFileSync(fullAssetPath(mood)))),
   },
@@ -96,6 +98,10 @@ function measureLargestWarmWhiteRegion(png) {
     if (!largest || area > largest.area) {
       largest = {
         area,
+        minX,
+        minY,
+        maxX,
+        maxY,
         width: maxX - minX + 1,
         height: maxY - minY + 1,
       };
@@ -106,6 +112,35 @@ function measureLargestWarmWhiteRegion(png) {
   return largest;
 }
 
+function measureOpaqueBounds(png) {
+  let minX = png.width;
+  let minY = png.height;
+  let maxX = -1;
+  let maxY = -1;
+
+  for (let y = 0; y < png.height; y += 1) {
+    for (let x = 0; x < png.width; x += 1) {
+      const alpha = png.data[(y * png.width + x) * 4 + 3];
+      if (alpha <= 16) continue;
+
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+
+  if (maxX < 0 || maxY < 0) throw new Error("Could not measure mascot bounds");
+  return {
+    minX,
+    minY,
+    maxX,
+    maxY,
+    width: maxX - minX + 1,
+    height: maxY - minY + 1,
+  };
+}
+
 function formatDelta(value) {
   return `${value >= 0 ? "+" : ""}${(value * 100).toFixed(1)}%`;
 }
@@ -114,17 +149,43 @@ let failureCount = 0;
 
 for (const variant of variants) {
   console.log(`\n${variant.name} (${variant.targetWidth}x${variant.targetHeight})`);
+  const referenceAsset = variant.asset("idle");
+  const referenceDoor = measureLargestWarmWhiteRegion(referenceAsset);
+  const referenceBounds = measureOpaqueBounds(referenceAsset);
+  const referenceDoorCenterX = (referenceDoor.minX + referenceDoor.maxX) / 2;
+  const referenceDoorCenterY = (referenceDoor.minY + referenceDoor.maxY) / 2;
+  const referenceLowerHeight = referenceBounds.maxY - referenceDoor.maxY;
+  const anchorTolerance = Math.max(2, Math.round(referenceAsset.height * 0.003));
 
   for (const mood of moods) {
-    const measurement = measureLargestWarmWhiteRegion(variant.asset(mood));
+    const asset = variant.asset(mood);
+    const measurement = measureLargestWarmWhiteRegion(asset);
+    const bounds = measureOpaqueBounds(asset);
     const widthDelta = measurement.width / variant.targetWidth - 1;
     const heightDelta = measurement.height / variant.targetHeight - 1;
-    const passed =
+    const doorCenterX = (measurement.minX + measurement.maxX) / 2;
+    const doorCenterY = (measurement.minY + measurement.maxY) / 2;
+    const lowerHeight = bounds.maxY - measurement.maxY;
+    const lowerHeightDelta = lowerHeight / referenceLowerHeight - 1;
+    const passedDoorSize =
       Math.abs(widthDelta) <= tolerance && Math.abs(heightDelta) <= tolerance;
+    const passedAnchors =
+      Math.abs(doorCenterX - referenceDoorCenterX) <= anchorTolerance &&
+      Math.abs(doorCenterY - referenceDoorCenterY) <= anchorTolerance &&
+      Math.abs(bounds.maxY - referenceBounds.maxY) <= anchorTolerance;
+    const passedLowerHeight = Math.abs(lowerHeightDelta) <= tolerance;
+    const passedEdges =
+      !variant.enforcePadding ||
+      (bounds.minX > 0 &&
+        bounds.minY > 0 &&
+        bounds.maxX < asset.width - 1 &&
+        bounds.maxY < asset.height - 1);
+    const passed =
+      passedDoorSize && passedAnchors && passedLowerHeight && passedEdges;
 
     if (!passed) failureCount += 1;
     console.log(
-      `${passed ? "PASS" : "FAIL"} ${mood.padEnd(7)} ${String(measurement.width).padStart(3)}x${String(measurement.height).padEnd(3)} width ${formatDelta(widthDelta).padStart(6)} height ${formatDelta(heightDelta).padStart(6)}`,
+      `${passed ? "PASS" : "FAIL"} ${mood.padEnd(7)} door ${String(measurement.width).padStart(3)}x${String(measurement.height).padEnd(3)} width ${formatDelta(widthDelta).padStart(6)} height ${formatDelta(heightDelta).padStart(6)} lower ${String(lowerHeight).padStart(3)} ${formatDelta(lowerHeightDelta).padStart(6)} baseline ${String(bounds.maxY).padStart(4)}${passedEdges ? "" : " edge-contact"}`,
     );
   }
 }

@@ -91,6 +91,28 @@ function measureDoorInterior(png) {
   };
 }
 
+function measureOpaqueBounds(png) {
+  let minX = png.width;
+  let minY = png.height;
+  let maxX = -1;
+  let maxY = -1;
+
+  for (let y = 0; y < png.height; y += 1) {
+    for (let x = 0; x < png.width; x += 1) {
+      const alpha = png.data[(y * png.width + x) * 4 + 3];
+      if (alpha <= 16) continue;
+
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+
+  if (maxX < 0 || maxY < 0) throw new Error("Could not locate mascot pixels");
+  return { minX, minY, maxX, maxY };
+}
+
 function samplePremultiplied(source, sourceX, sourceY) {
   if (
     sourceX < 0 ||
@@ -145,8 +167,17 @@ if (
 
 const sourceDoor = measureDoorInterior(source);
 const targetDoor = measureDoorInterior(reference);
+const sourceBounds = measureOpaqueBounds(source);
+const targetBounds = measureOpaqueBounds(reference);
 const scaleX = targetDoor.width / sourceDoor.width;
 const scaleY = targetDoor.height / sourceDoor.height;
+const sourceLowerHeight = sourceBounds.maxY - sourceDoor.maxY;
+const targetLowerHeight = targetBounds.maxY - targetDoor.maxY;
+
+if (sourceLowerHeight <= 0 || targetLowerHeight <= 0) {
+  throw new Error("Mascot feet must extend below the refrigerator door");
+}
+
 const output = new PNG({
   width: reference.width,
   height: reference.height,
@@ -156,7 +187,11 @@ const output = new PNG({
 for (let y = 0; y < output.height; y += 1) {
   for (let x = 0; x < output.width; x += 1) {
     const sourceX = sourceDoor.minX + (x - targetDoor.minX) / scaleX;
-    const sourceY = sourceDoor.minY + (y - targetDoor.minY) / scaleY;
+    const sourceY =
+      y <= targetDoor.maxY
+        ? sourceDoor.minY + (y - targetDoor.minY) / scaleY
+        : sourceDoor.maxY +
+          ((y - targetDoor.maxY) / targetLowerHeight) * sourceLowerHeight;
     const [red, green, blue, alpha] = samplePremultiplied(
       source,
       sourceX,
@@ -180,6 +215,7 @@ fs.writeFileSync(
 );
 
 const normalizedDoor = measureDoorInterior(output);
+const normalizedBounds = measureOpaqueBounds(output);
 console.log(
-  `normalized ${sourceDoor.width}x${sourceDoor.height} -> ${normalizedDoor.width}x${normalizedDoor.height} (target ${targetDoor.width}x${targetDoor.height})`,
+  `normalized door ${sourceDoor.width}x${sourceDoor.height} -> ${normalizedDoor.width}x${normalizedDoor.height} (target ${targetDoor.width}x${targetDoor.height}); foot baseline ${sourceBounds.maxY} -> ${normalizedBounds.maxY} (target ${targetBounds.maxY})`,
 );
