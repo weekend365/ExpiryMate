@@ -82,6 +82,31 @@ describe("validateExpoPublicEnv", () => {
     ).toThrow(/SENTRY_AUTH_TOKEN/);
   });
 
+  it("allows production EAS builds that explicitly disable Sentry uploads", () => {
+    expect(() =>
+      validateExpoPublicEnv({
+        EXPO_PUBLIC_APP_ENV: "production",
+        EAS_BUILD: "true",
+        SENTRY_DISABLE_AUTO_UPLOAD: "true",
+        EXPO_PUBLIC_API_BASE_URL: "https://api.expirymate.app",
+        EXPO_PUBLIC_OAUTH_REDIRECT_URI:
+          "https://api.expirymate.app/oauth/callback",
+        EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID:
+          "google-client.apps.googleusercontent.com",
+        EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID: "kakao-client-id",
+        EXPO_PUBLIC_ADMOB_IOS_APP_ID:
+          "ca-app-pub-1234567890123456~1234567890",
+        EXPO_PUBLIC_ADMOB_ANDROID_APP_ID:
+          "ca-app-pub-1234567890123456~0987654321",
+        EXPO_PUBLIC_ADMOB_IOS_REWARDED_AD_UNIT_ID:
+          "ca-app-pub-1234567890123456/1234567890",
+        EXPO_PUBLIC_ADMOB_ANDROID_REWARDED_AD_UNIT_ID:
+          "ca-app-pub-1234567890123456/0987654321",
+        EXPO_PUBLIC_SENTRY_DSN: "https://public@example.invalid/1",
+      }),
+    ).not.toThrow();
+  });
+
   it("rejects Google sample AdMob IDs in production", () => {
     expect(() =>
       validateExpoPublicEnv({

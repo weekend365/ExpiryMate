@@ -10,8 +10,6 @@ const REQUIRED_PRODUCTION_VALUES = [
   "EXPO_PUBLIC_SENTRY_DSN",
 ];
 
-const REQUIRED_PRODUCTION_EAS_VALUES = ["SENTRY_AUTH_TOKEN"];
-
 const OPTIONAL_PROVIDER_CLIENT_IDS = ["EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID"];
 
 const GOOGLE_SAMPLE_ADMOB_IDS = new Set([
@@ -45,12 +43,14 @@ function validateExpoPublicEnv(env = process.env) {
     }
   }
 
-  if (env.EAS_BUILD === "true") {
-    for (const key of REQUIRED_PRODUCTION_EAS_VALUES) {
-      if (!env[key]?.trim()) {
-        errors.push(`${key} is required for production EAS builds.`);
-      }
-    }
+  if (
+    env.EAS_BUILD === "true" &&
+    !env.SENTRY_AUTH_TOKEN?.trim() &&
+    env.SENTRY_DISABLE_AUTO_UPLOAD !== "true"
+  ) {
+    errors.push(
+      "SENTRY_AUTH_TOKEN is required for production EAS builds unless SENTRY_DISABLE_AUTO_UPLOAD=true.",
+    );
   }
 
   validatePublicHttpsUrl(

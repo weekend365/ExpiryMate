@@ -161,6 +161,10 @@ production 빌드 시 `EAS_BUILD=true` 이면
 `apps/mobile/scripts/validate-public-env.cjs` 가 위 필수 키를 검사합니다.
 비어 있으면 **Read app config** 단계에서 실패합니다.
 
+Sentry 소스맵·dSYM 업로드는 EAS production 환경의 `SENTRY_AUTH_TOKEN` secret을 사용합니다.
+토큰이 없는 임시 빌드가 필요할 때만 `SENTRY_DISABLE_AUTO_UPLOAD=true`를 명시할 수 있지만,
+그 경우 심볼 업로드가 생략되어 Sentry 스택 추적이 제한됩니다.
+
 ## 3. 프로파일 구분
 
 | Profile | 용도 | Personal Team | Apple / Push |

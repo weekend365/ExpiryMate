@@ -213,6 +213,7 @@ eas env:list --environment production
 | `EXPO_PUBLIC_NAVER_OAUTH_CLIENT_ID` | 실클라이언트 ID |
 | `EXPO_PUBLIC_WEB_BASE_URL` | `https://jango.devnamu.com` |
 | `EXPO_PUBLIC_SENTRY_DSN` | `jango-mobile` DSN |
+| `SENTRY_AUTH_TOKEN` | Sentry 소스맵·dSYM 업로드용 secret (production 필수) |
 | `EXPO_PUBLIC_INVENTORY_PHOTO_PARSE_ENABLED` | 기본 `true`; `false`/`0`/`off`로 진입점 비활성화 |
 | `EXPO_PUBLIC_ADMOB_IOS_APP_ID` | AdMob 앱 ID (빌드 검증 필수) |
 | `EXPO_PUBLIC_ADMOB_ANDROID_APP_ID` | 〃 |
@@ -221,6 +222,10 @@ eas env:list --environment production
 
 AdMob 4개가 비어 있으면 production EAS 빌드가 `validate-public-env`에서 실패할 수 있습니다.  
 `EXPO_PUBLIC_*`는 앱 바이너리에 들어가므로 **비밀키·서버 시크릿을 넣지 마세요.**
+
+production 프로필은 EAS의 `SENTRY_AUTH_TOKEN`으로 소스맵·dSYM을 자동 업로드합니다.
+토큰이 없는 임시 빌드가 필요할 때만 `SENTRY_DISABLE_AUTO_UPLOAD=true`를 명시적으로
+추가할 수 있으며, 이 경우 런타임 오류 수집은 유지되지만 심볼 업로드는 생략됩니다.
 
 변수 변경 후 **새 빌드**를 돌려야 반영됩니다. 이미 끝난 IPA에는 적용되지 않습니다.
 
