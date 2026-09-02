@@ -172,7 +172,6 @@
       "infoPlist": {
         "CFBundleDevelopmentRegion": "ko",
         "CFBundleDisplayName": "장고야 부탁해",
-        "LSMinimumSystemVersion": "16.4",
         "NSCameraUsageDescription": "바코드·유통기한을 스캔하거나, 영수증·냉장고 사진으로 재료를 넣으려면 카메라 접근이 필요해요.",
         "NSPhotoLibraryUsageDescription": "영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.",
         "UIRequiresFullScreen": false,

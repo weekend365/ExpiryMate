@@ -55,3 +55,17 @@ describe("Sentry build upload configuration", () => {
     ]);
   });
 });
+
+describe("iOS deployment configuration", () => {
+  it("uses the iOS deployment target without declaring a macOS minimum version", () => {
+    const buildPropertiesPlugin = appConfig.expo.plugins.find(
+      (plugin) =>
+        Array.isArray(plugin) && plugin[0] === "expo-build-properties",
+    );
+
+    expect(buildPropertiesPlugin?.[1]?.ios?.deploymentTarget).toBe("16.4");
+    expect(appConfig.expo.ios.infoPlist).not.toHaveProperty(
+      "LSMinimumSystemVersion",
+    );
+  });
+});

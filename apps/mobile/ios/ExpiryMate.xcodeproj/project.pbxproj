@@ -14,6 +14,11 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 		F6F823E373F4D53B1AB32D57 /* libPods-ExpiryMate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7642CC67A63B72E1BA580385 /* libPods-ExpiryMate.a */; };
+		D8E71CB84995440D9321CA63 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */; };
+		054CA5802DCE40C0A092056E /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */; };
+		85FF9908426E490C9F2AC96F /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */; };
+		68876CEB59044F58A31E073E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */; };
+		6D4F88E8FFA841C88C7A6C06 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +35,11 @@
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ExpiryMate/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* ExpiryMate-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ExpiryMate-Bridging-Header.h"; path = "ExpiryMate/ExpiryMate-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4999402C92E85532CAE7AA3 /* Pods-ExpiryMate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExpiryMate.debug.xcconfig"; path = "Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate.debug.xcconfig"; sourceTree = "<group>"; };
+		CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; name = "Pretendard-Medium.otf"; path = "../assets/fonts/Pretendard-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; name = "Pretendard-SemiBold.otf"; path = "../assets/fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */ = {isa = PBXFileReference; name = "Pretendard-Bold.otf"; path = "../assets/fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; name = "Pretendard-ExtraBold.otf"; path = "../assets/fonts/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +101,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				977FC02B0745BD92AD35ED05 /* Pods */,
 				CF16D7E3AA39EA7A7AA93A8D /* ExpoModulesProviders */,
+				23B2C6D73FD5419A93EF36BC /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -131,6 +142,19 @@
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
+		23B2C6D73FD5419A93EF36BC /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */,
+				E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */,
+				B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */,
+				1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */,
+				2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -147,6 +171,7 @@
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
 				361189AFB8E6FE3B78BFBD06 /* [CP] Embed Pods Frameworks */,
 				46FBEF7434CEC2F6B9177FE2 /* [CP-User] [RNGoogleMobileAds] Configuration */,
+				1A0B6C32E8804E878EB1B61E /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -198,6 +223,11 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				87E3AAED4A0497A690BDA85E /* PrivacyInfo.xcprivacy in Resources */,
+				D8E71CB84995440D9321CA63 /* Pretendard-Regular.otf in Resources */,
+				054CA5802DCE40C0A092056E /* Pretendard-Medium.otf in Resources */,
+				85FF9908426E490C9F2AC96F /* Pretendard-SemiBold.otf in Resources */,
+				68876CEB59044F58A31E073E /* Pretendard-Bold.otf in Resources */,
+				6D4F88E8FFA841C88C7A6C06 /* Pretendard-ExtraBold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +249,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
+			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n/bin/sh `\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('@sentry/react-native/package.json')) + '/scripts/sentry-xcode.sh'\"` `\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
 		};
 		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -368,6 +398,20 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1A0B6C32E8804E878EB1B61E /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			name = "Upload Debug Symbols to Sentry";
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh `${NODE_BINARY:-node} --print \"require('path').dirname(require.resolve('@sentry/react-native/package.json')) + '/scripts/sentry-xcode-debug-files.sh'\"`";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -413,11 +457,11 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = ExpiryMate;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -447,10 +491,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = ExpiryMate;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

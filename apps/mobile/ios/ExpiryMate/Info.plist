@@ -55,16 +55,26 @@
     </dict>
     <key>NSCameraUsageDescription</key>
     <string>바코드·유통기한을 스캔하거나, 영수증·냉장고 사진으로 재료를 넣으려면 카메라 접근이 필요해요.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.</string>
     <key>NSFaceIDUsageDescription</key>
     <string>로그인 정보를 안전하게 지키기 위해 Face ID를 쓸 수 있어요.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your microphone</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>
     </array>
     <key>RCTNewArchEnabled</key>
     <true/>
+    <key>UIAppFonts</key>
+    <array>
+      <string>Pretendard-Regular.otf</string>
+      <string>Pretendard-Medium.otf</string>
+      <string>Pretendard-SemiBold.otf</string>
+      <string>Pretendard-Bold.otf</string>
+      <string>Pretendard-ExtraBold.otf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
