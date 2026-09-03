@@ -2,16 +2,19 @@ import { appBrand, loginRequestSchema } from "@expirymate/shared";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { router, useLocalSearchParams } from "expo-router";
 import { ChevronDown, ChevronUp, Eye, EyeOff } from "lucide-react-native";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
+  findNodeHandle,
   ImageBackground,
+  Keyboard,
   LayoutAnimation,
   Linking,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
+  type TextInput,
   View,
 } from "react-native";
 import loginWelcomeBg from "../../assets/backgrounds/login-welcome-bg.png";
@@ -55,6 +58,58 @@ export default function LoginScreen() {
   const [emailExpanded, setEmailExpanded] = useState(() =>
     Boolean(initialEmail),
   );
+  const scrollViewRef = useRef<ScrollView>(null);
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+  const focusedInputRef = useRef<TextInput | null>(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const scrollFocusedInputIntoView = useCallback((input: TextInput | null) => {
+    focusedInputRef.current = input;
+    if (!input) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      const nodeHandle = findNodeHandle(input);
+      if (nodeHandle == null) {
+        return;
+      }
+
+      scrollViewRef.current
+        ?.getScrollResponder()
+        .scrollResponderScrollNativeHandleToKeyboard(
+          nodeHandle,
+          spacing.md,
+          true,
+        );
+    });
+  }, []);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height);
+
+        // Re-run after the keyboard has changed the available layout and the
+        // extra bottom inset has been rendered.
+        setTimeout(() => {
+          scrollFocusedInputIntoView(focusedInputRef.current);
+        }, 80);
+      },
+    );
+    const hideSubscription = Keyboard.addListener(
+      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
+      () => setKeyboardHeight(0),
+    );
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [scrollFocusedInputIntoView]);
+
   const { pendingProvider, setPendingProvider, startWebOAuth } = useWebOAuth({
     completeSession: async (input) => {
       await oauthMutation.mutateAsync(input);
@@ -176,11 +231,19 @@ export default function LoginScreen() {
           importantForAccessibility="no-hide-descendants"
         />
         <ScrollView
+          ref={scrollViewRef}
           style={styles.scrollFlex}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            keyboardHeight > 0 && {
+              paddingBottom: keyboardHeight + spacing.xl,
+            },
+          ]}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive"
+          keyboardDismissMode={
+            Platform.OS === "android" ? "on-drag" : "interactive"
+          }
         >
           <View
             style={[
@@ -281,12 +344,18 @@ export default function LoginScreen() {
 
               <View style={styles.formFields}>
                 <EmailDomainInput
+                  ref={emailInputRef}
                   testID="login-email"
                   value={email}
                   onChangeText={setEmail}
                   autoCorrect={false}
                   placeholder="이메일"
                   editable={!isBusy}
+                  onFocus={() =>
+                    scrollFocusedInputIntoView(emailInputRef.current)
+                  }
+                  returnKeyType="next"
+                  onSubmitEditing={() => passwordInputRef.current?.focus()}
                   style={styles.fieldWell}
                 />
                 <View style={styles.passwordBlock}>
@@ -297,6 +366,7 @@ export default function LoginScreen() {
                     ]}
                   >
                     <AppTextInput
+                      ref={passwordInputRef}
                       testID="login-password"
                       value={password}
                       onChangeText={setPassword}
@@ -304,8 +374,17 @@ export default function LoginScreen() {
                       textContentType="password"
                       placeholder="비밀번호"
                       editable={!isBusy}
-                      onFocus={() => setPasswordFocused(true)}
+                      onFocus={() => {
+                        setPasswordFocused(true);
+                        scrollFocusedInputIntoView(passwordInputRef.current);
+                      }}
                       onBlur={() => setPasswordFocused(false)}
+                      returnKeyType="done"
+                      onSubmitEditing={() => {
+                        if (canEmailLogin) {
+                          void handleEmailLogin();
+                        }
+                      }}
                       style={styles.passwordInput}
                     />
                     <Pressable

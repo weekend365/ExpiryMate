@@ -13,6 +13,7 @@ type EmailDomainInputProps = {
   style?: StyleProp<TextStyle>;
   returnKeyType?: TextInputProps["returnKeyType"];
   onSubmitEditing?: TextInputProps["onSubmitEditing"];
+  onFocus?: TextInputProps["onFocus"];
   textContentType?: TextInputProps["textContentType"];
   autoCorrect?: boolean;
   testID?: string;
@@ -33,6 +34,7 @@ export const EmailDomainInput = forwardRef<TextInput, EmailDomainInputProps>(
       style,
       returnKeyType,
       onSubmitEditing,
+      onFocus,
       textContentType = "emailAddress",
       autoCorrect = false,
       testID,
@@ -55,6 +57,7 @@ export const EmailDomainInput = forwardRef<TextInput, EmailDomainInputProps>(
         editable={editable}
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
+        onFocus={onFocus}
         style={[styles.input, style]}
       />
     );
