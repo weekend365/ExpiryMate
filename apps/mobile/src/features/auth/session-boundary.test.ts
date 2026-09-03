@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, QueryObserver } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -99,15 +99,82 @@ describe("session boundary cleanup", () => {
       withSessionUser(sessionQueryKeys.inventory, "user-a"),
       [{ id: "item-a" }],
     );
+    const authObserver = new QueryObserver(queryClient, {
+      queryKey: sessionQueryKeys.auth,
+      queryFn: async () => null,
+      enabled: false,
+    });
+    const unsubscribe = authObserver.subscribe(() => undefined);
 
     handleAuthSessionCleared(queryClient);
 
     expect(queryClient.getQueryData(sessionQueryKeys.auth)).toBeNull();
+    expect(authObserver.getCurrentResult().data).toBeNull();
     expect(
       queryClient.getQueryData(
         withSessionUser(sessionQueryKeys.inventory, "user-a"),
       ),
     ).toBeUndefined();
+    unsubscribe();
+  });
+
+  it("keeps mounted auth observers attached across a new login", async () => {
+    const { clearUserScopedClientState, sessionQueryKeys } = await import(
+      "./session-boundary"
+    );
+    const queryClient = new QueryClient();
+    queryClient.setQueryData(sessionQueryKeys.auth, {
+      id: "user-a",
+      accountType: "registered",
+    });
+    const authObserver = new QueryObserver(queryClient, {
+      queryKey: sessionQueryKeys.auth,
+      queryFn: async () => null,
+      enabled: false,
+    });
+    const unsubscribe = authObserver.subscribe(() => undefined);
+
+    clearUserScopedClientState(queryClient);
+    queryClient.setQueryData(sessionQueryKeys.auth, {
+      id: "user-b",
+      accountType: "registered",
+    });
+
+    expect(authObserver.getCurrentResult().data).toEqual({
+      id: "user-b",
+      accountType: "registered",
+    });
+    unsubscribe();
+  });
+
+  it("unblocks a mounted pending auth observer when login seeds the session", async () => {
+    const { clearUserScopedClientState, sessionQueryKeys } = await import(
+      "./session-boundary"
+    );
+    const queryClient = new QueryClient();
+    const authObserver = new QueryObserver(queryClient, {
+      queryKey: sessionQueryKeys.auth,
+      queryFn: () => new Promise<null>(() => undefined),
+    });
+    const unsubscribe = authObserver.subscribe(() => undefined);
+
+    expect(authObserver.getCurrentResult().status).toBe("pending");
+
+    clearUserScopedClientState(queryClient);
+    queryClient.setQueryData(sessionQueryKeys.auth, {
+      id: "user-a",
+      accountType: "registered",
+    });
+
+    expect(authObserver.getCurrentResult()).toMatchObject({
+      status: "success",
+      fetchStatus: "idle",
+      data: {
+        id: "user-a",
+        accountType: "registered",
+      },
+    });
+    unsubscribe();
   });
 
   it("scopes query keys by session user id", async () => {

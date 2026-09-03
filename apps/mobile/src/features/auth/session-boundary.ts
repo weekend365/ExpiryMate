@@ -6,10 +6,23 @@ import { clearRecipePreferenceNavigationState } from "../settings/recipe-prefere
 
 /**
  * Wipe user-scoped client state so A→logout→B never paints A's cache/drafts.
+ * Keep the auth query object itself alive: mounted useAuth observers remain
+ * attached to that exact object and would otherwise miss the next setQueryData,
+ * leaving an old or permanently-pending session result on screen.
  * Call after tokens are cleared (or immediately on logout success).
  */
 export function clearUserScopedClientState(queryClient: QueryClient) {
-  queryClient.clear();
+  // Cancellation is synchronous inside TanStack Query even though the public
+  // method returns a Promise. This prevents an older getMe request from
+  // overwriting the session value that the caller seeds immediately after.
+  void queryClient.cancelQueries(
+    { queryKey: sessionQueryKeys.auth, exact: true },
+    { silent: true },
+  );
+  queryClient.removeQueries({
+    predicate: (query) => !isAuthSessionQuery(query.queryKey),
+  });
+  queryClient.getMutationCache().clear();
   void Promise.resolve(clearPersistedQueryCache()).catch(() => undefined);
   useRegistrationStore.getState().clearDraft();
   useRegistrationStore.getState().clearPrefill();
@@ -31,6 +44,13 @@ export function clearUserScopedClientState(queryClient: QueryClient) {
 export function handleAuthSessionCleared(queryClient: QueryClient) {
   clearUserScopedClientState(queryClient);
   queryClient.setQueryData(sessionQueryKeys.auth, null);
+}
+
+function isAuthSessionQuery(queryKey: readonly unknown[]) {
+  return (
+    queryKey.length === sessionQueryKeys.auth.length &&
+    queryKey.every((part, index) => part === sessionQueryKeys.auth[index])
+  );
 }
 
 /** Prefix-stable keys; append userId at the call site for session isolation. */
