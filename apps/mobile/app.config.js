@@ -72,6 +72,9 @@ plugins.push([
     optimizeAdLoading: true,
   },
 ]);
+// Keep the macOS-only minimum-version key out of the final iOS bundle, including
+// when Prebuild reuses the tracked native project and its existing Info.plist.
+plugins.push("./plugins/with-ios-info-plist-sanitization");
 
 const paidTeamIosCapabilities = {
   usesAppleSignIn: true,

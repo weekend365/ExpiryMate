@@ -1,14 +1,23 @@
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const { removeMacOSMinimumSystemVersion } = require(
+  "../plugins/with-ios-info-plist-sanitization.js",
+);
 const appConfig = JSON.parse(
   readFileSync(resolve(scriptDir, "../app.json"), "utf8"),
 );
 const dynamicAppConfig = readFileSync(
   resolve(scriptDir, "../app.config.js"),
+  "utf8",
+);
+const nativeInfoPlist = readFileSync(
+  resolve(scriptDir, "../ios/ExpiryMate/Info.plist"),
   "utf8",
 );
 
@@ -67,5 +76,18 @@ describe("iOS deployment configuration", () => {
     expect(appConfig.expo.ios.infoPlist).not.toHaveProperty(
       "LSMinimumSystemVersion",
     );
+    expect(dynamicAppConfig).toContain(
+      'plugins.push("./plugins/with-ios-info-plist-sanitization")',
+    );
+    expect(nativeInfoPlist).not.toContain("LSMinimumSystemVersion");
+  });
+
+  it("removes a stale macOS minimum version during Expo Prebuild", () => {
+    expect(
+      removeMacOSMinimumSystemVersion({
+        CFBundleDisplayName: "Jango",
+        LSMinimumSystemVersion: "16.4",
+      }),
+    ).toEqual({ CFBundleDisplayName: "Jango" });
   });
 });
