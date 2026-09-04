@@ -295,7 +295,7 @@ export default function HomeScreen() {
             </Pressable>
           ) : null}
 
-          {!isInitialError && (hasInventory || recommendationPreview) ? (
+          {!isInitialError && hasLoaded ? (
             <View style={styles.previewCard}>
               <HomeSectionHeader
                 title="오늘의 요리 추천"
@@ -308,12 +308,18 @@ export default function HomeScreen() {
                 }
               />
               <Pressable
-                onPress={handleOpenRecommendations}
+                onPress={
+                  hasInventory || recommendationPreview
+                    ? handleOpenRecommendations
+                    : () => setEntryMethodVisible(true)
+                }
                 accessibilityRole="button"
                 accessibilityLabel={
                   recommendationPreview
                     ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}${recommendationReason ? `, ${recommendationReason}` : ""}`
-                    : "보관 중인 재료로 오늘의 요리 추천받기"
+                    : hasInventory
+                      ? "보관 중인 재료로 오늘의 요리 추천받기"
+                      : "추천 요리가 아직 없어요. 재료를 넣으면 오늘의 요리를 골라드려요."
                 }
                 style={({ pressed }) => [
                   styles.recommendationPreview,
@@ -337,7 +343,9 @@ export default function HomeScreen() {
                   >
                     {recommendationPreview
                       ? recommendationPreview.title
-                      : "보관 중인 재료로 오늘의 요리를 찾아볼까요?"}
+                      : hasInventory
+                        ? "보관 중인 재료로 오늘의 요리를 찾아볼까요?"
+                        : "추천 요리가 여기에 보여요"}
                   </AppText>
                   {recommendationPreview ? (
                     <AppText
@@ -352,7 +360,9 @@ export default function HomeScreen() {
                     </AppText>
                   ) : (
                     <AppText variant="caption" tone="subtext">
-                      유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요.
+                      {hasInventory
+                        ? "유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요."
+                        : "첫 재료를 넣으면 유통기한을 살펴 메뉴를 골라드려요."}
                     </AppText>
                   )}
                   {recommendationReason ? (
@@ -381,7 +391,7 @@ export default function HomeScreen() {
             </View>
           ) : null}
 
-          {!isInitialError && (isInitialLoading || hasInventory) ? (
+          {!isInitialError && (isInitialLoading || hasLoaded) ? (
             <View style={styles.trafficGroup}>
               <HomeSectionHeader
                 title="유통기한 현황"

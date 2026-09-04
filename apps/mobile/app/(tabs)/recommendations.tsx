@@ -984,6 +984,34 @@ export default function RecommendationsScreen() {
           ) : null}
 
           {recipeView === "recommendations" &&
+          !latestRecommendation &&
+          !isGenerating &&
+          !isHistoryInitialLoading &&
+          !errorMessage ? (
+            <RecipeSection
+              title="이번에 골라볼 요리"
+              tone="latest"
+              count={0}
+              collapsed={Boolean(collapsedSections.latest)}
+              onToggle={() => toggleRecipeSection("latest")}
+            >
+              <View style={styles.recipeSectionInset}>
+                <EmptyState
+                  variant="plain"
+                  kind="no-results"
+                  icon={Utensils}
+                  title="추천 요리가 여기에 보여요"
+                  description={
+                    needsIngredients
+                      ? "첫 재료를 넣으면 이번 추천 설정에 맞춰 요리를 골라 드릴게요."
+                      : "아래 추천 받기를 누르면 이번 설정에 맞는 요리를 이곳에 모아 드릴게요."
+                  }
+                />
+              </View>
+            </RecipeSection>
+          ) : null}
+
+          {recipeView === "recommendations" &&
           latestRecommendation &&
           !isGenerating ? (
             <RecipeSection

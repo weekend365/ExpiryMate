@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import fridgeInteriorBg from "../../assets/backgrounds/fridge-interior-bg.png";
+import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import {
   HomeStatsSkeleton,
@@ -211,7 +212,11 @@ export default function InventoryScreen() {
   // Only treat as empty after a successful load — never during loading/error.
   const isEmptyInventory =
     hasLoadedInventory && !isError && trackedItems.length === 0;
-  const isFilteredEmpty = !isEmptyInventory && filtered.length === 0;
+  const isFilteredEmpty =
+    hasLoadedInventory &&
+    !isError &&
+    !isEmptyInventory &&
+    filtered.length === 0;
   const showListChrome = hasLoadedInventory && !isError && !isEmptyInventory;
   const actionError =
     deferredRemoval.errorMessage ?? actionErrorMessage ?? null;
@@ -691,7 +696,13 @@ export default function InventoryScreen() {
             </View>
           }
           ListEmptyComponent={
-            isLoading && !hasLoadedInventory ? <InventoryListSkeleton /> : null
+            isLoading && !hasLoadedInventory ? (
+              <InventoryListSkeleton />
+            ) : isEmptyInventory ? (
+              <InventoryEmptyListLayout />
+            ) : isFilteredEmpty ? (
+              <InventoryEmptyListLayout filtered />
+            ) : null
           }
           renderItem={({ item: section }) => (
             <UrgencySection
@@ -754,5 +765,37 @@ export default function InventoryScreen() {
         }
       />
     </Screen>
+  );
+}
+
+function InventoryEmptyListLayout({ filtered = false }: { filtered?: boolean }) {
+  const title = filtered ? "조건에 맞는 재료 0건" : "보관 중인 재료 0건";
+  const description = filtered
+    ? "검색어나 필터를 바꾸면 조건에 맞는 재료가 이곳에 보여요."
+    : "첫 재료를 넣으면 유통기한 순서에 맞춰 이곳에 차곡차곡 정리해 드릴게요.";
+
+  return (
+    <View
+      style={styles.emptyInventorySection}
+      testID="inventory-empty-list-layout"
+      accessible
+      accessibilityLabel={`${title}. ${description}`}
+    >
+      <View style={styles.emptyInventorySectionHeader}>
+        <AppText
+          variant="bodySmall"
+          scaleRole="chrome"
+          densityAware={false}
+          style={styles.emptyInventorySectionTitle}
+        >
+          {title}
+        </AppText>
+      </View>
+      <View style={styles.emptyInventorySectionBody}>
+        <AppText variant="bodySmall" tone="subtext">
+          {description}
+        </AppText>
+      </View>
+    </View>
   );
 }

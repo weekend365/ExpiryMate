@@ -383,4 +383,29 @@ export const inventoryScreenStyles = StyleSheet.create({
   urgencySectionBody: {
     backgroundColor: colors.surface,
   },
+  emptyInventorySection: {
+    borderRadius: radius.xxl,
+    borderWidth: 1,
+    borderColor: colors.borderSubtle,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
+  },
+  emptyInventorySectionHeader: {
+    minHeight: controlSize.minimum,
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.borderSubtle,
+    backgroundColor: colors.primarySoft,
+  },
+  emptyInventorySectionTitle: {
+    color: colors.primaryForeground,
+  },
+  emptyInventorySectionBody: {
+    minHeight: controlSize.ctaLarge,
+    justifyContent: "center",
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.md,
+    backgroundColor: colors.surface,
+  },
 });

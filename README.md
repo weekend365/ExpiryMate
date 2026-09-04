@@ -11,13 +11,13 @@
 
 ## 저장소 구성
 
-| 경로 | 역할 | 주요 기술 |
-|---|---|---|
-| `apps/mobile` | 사용자 모바일 앱 | Expo, React Native, Expo Router |
-| `apps/admin` | 내부 운영 도구 | Next.js App Router |
-| `apps/api` | Mobile·Admin 공용 API | NestJS, Prisma, PostgreSQL |
-| `packages/shared` | 공유 타입·스키마·유틸리티 | TypeScript, Zod |
-| `docs` | 제품·디자인·운영 문서 | [문서 인덱스](./docs/README.md) |
+| 경로              | 역할                      | 주요 기술                       |
+| ----------------- | ------------------------- | ------------------------------- |
+| `apps/mobile`     | 사용자 모바일 앱          | Expo, React Native, Expo Router |
+| `apps/admin`      | 내부 운영 도구            | Next.js App Router              |
+| `apps/api`        | Mobile·Admin 공용 API     | NestJS, Prisma, PostgreSQL      |
+| `packages/shared` | 공유 타입·스키마·유틸리티 | TypeScript, Zod                 |
+| `docs`            | 제품·디자인·운영 문서     | [문서 인덱스](./docs/README.md) |
 
 ## 요구사항
 
@@ -74,12 +74,12 @@ pnpm dev:admin
 pnpm dev:mobile
 ```
 
-| 서비스 | 로컬 주소 |
-|---|---|
-| API | `http://localhost:4000` |
-| API readiness | `http://localhost:4000/ready` |
-| Admin | `http://localhost:3000` |
-| Mobile | Expo가 출력하는 QR 또는 emulator |
+| 서비스        | 로컬 주소                        |
+| ------------- | -------------------------------- |
+| API           | `http://localhost:4000`          |
+| API readiness | `http://localhost:4000/ready`    |
+| Admin         | `http://localhost:3000`          |
+| Mobile        | Expo가 출력하는 QR 또는 emulator |
 
 실기기에서 Mobile을 실행할 때 `localhost`는 개발 PC가 아니라 휴대폰 자신을 가리킵니다.
 `EXPO_PUBLIC_API_BASE_URL`에 같은 네트워크의 개발 PC 주소를 사용하고 Expo를 재시작하세요.
@@ -105,16 +105,16 @@ iOS 서명과 production 제출은 [iOS·EAS production 런북](./docs/ios-eas-p
 
 ## 주요 명령
 
-| 명령 | 용도 |
-|---|---|
-| `pnpm lint` | 전체 ESLint 검사 |
-| `pnpm typecheck` | Prisma·shared를 포함한 전체 타입 검사 |
-| `pnpm test` | 패키지별 테스트 |
-| `pnpm docs:check` | 문서 메타데이터와 내부 링크 검사 |
-| `pnpm validate:env-parity` | 환경변수 예시 간 키 정합성 검사 |
-| `pnpm db:migrate:deploy` | 대상 DB에 production migration 적용 |
-| `pnpm docker:up` | 로컬 Docker 서비스 시작 |
-| `pnpm docker:down` | 로컬 Docker 서비스 종료 |
+| 명령                       | 용도                                  |
+| -------------------------- | ------------------------------------- |
+| `pnpm lint`                | 전체 ESLint 검사                      |
+| `pnpm typecheck`           | Prisma·shared를 포함한 전체 타입 검사 |
+| `pnpm test`                | 패키지별 테스트                       |
+| `pnpm docs:check`          | 문서 메타데이터와 내부 링크 검사      |
+| `pnpm validate:env-parity` | 환경변수 예시 간 키 정합성 검사       |
+| `pnpm db:migrate:deploy`   | 대상 DB에 production migration 적용   |
+| `pnpm docker:up`           | 로컬 Docker 서비스 시작               |
+| `pnpm docker:down`         | 로컬 Docker 서비스 종료               |
 
 ## 개발 원칙
 
@@ -134,3 +134,9 @@ iOS 서명과 production 제출은 [iOS·EAS production 런북](./docs/ios-eas-p
 - [장고 캐릭터 스타일](./docs/JANGO_CHARACTER_STYLE_GUIDE.md)
 - [수익화 운영 기준](./docs/monetization.md)
 - [스토어 제출 문서](./docs/README.md#스토어-출시)
+
+단순히 iPhone에서 Expo 서버에 접속하려면.
+
+```bash
+pnpm --filter @expirymate/mobile exec expo start --dev-client --tunnel
+```

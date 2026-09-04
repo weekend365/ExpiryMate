@@ -110,9 +110,11 @@ describe("recommendation screen flow contract", () => {
     expect(screen).toContain('variant="surface"');
   });
 
-  it("does not repeat the initial recommendation state below the hero", () => {
+  it("previews the result layout without adding a second action", () => {
     expect(screen).not.toContain("아직 냉장고가 비어 있어요");
     expect(screen).not.toContain("아직 추천이 없어요");
+    expect(screen).toContain('title="이번에 골라볼 요리"');
+    expect(screen).toContain('title="추천 요리가 여기에 보여요"');
     expect(screen).toContain("{primaryCtaLabel}");
   });
 

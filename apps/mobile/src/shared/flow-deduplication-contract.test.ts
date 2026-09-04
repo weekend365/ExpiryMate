@@ -13,12 +13,15 @@ function read(relativePath: string) {
 }
 
 describe("major flow deduplication contract", () => {
-  it("lets the inventory hero own empty and initial-error recovery", () => {
+  it("lets the inventory hero own recovery while keeping the empty list layout visible", () => {
     const screen = read("app/(tabs)/inventory.tsx");
     const hero = read("src/features/inventory/inventory-hero.ts");
 
     expect(screen).not.toContain('from "../../src/components/EmptyState"');
     expect(screen).toContain("handleInventoryHeroAction");
+    expect(screen).toContain("<InventoryEmptyListLayout />");
+    expect(screen).toContain('testID="inventory-empty-list-layout"');
+    expect(screen).toContain('"보관 중인 재료 0건"');
     expect(hero).toContain('actionLabel: "다시 시도"');
     expect(hero).toContain('actionLabel: "재료 넣기"');
     expect(hero).toContain('actionLabel: "필터 해제"');
@@ -35,14 +38,14 @@ describe("major flow deduplication contract", () => {
     expect(screen).toContain("일치하는 상품이 없어요");
   });
 
-  it("hides content-free home sections and preserves the agreed priority", () => {
+  it("keeps empty home section layouts visible and preserves the agreed priority", () => {
     const screen = read("app/(tabs)/home.tsx");
     const notices = read("src/features/home/home-notices.ts");
 
-    expect(screen).toContain(
-      "!isInitialError && (hasInventory || recommendationPreview)",
-    );
-    expect(screen).not.toContain("아직 보관 중인 재료가 없어요");
+    expect(screen).toContain("!isInitialError && hasLoaded");
+    expect(screen).toContain('title="오늘의 요리 추천"');
+    expect(screen).toContain('title="유통기한 현황"');
+    expect(screen).toContain("추천 요리가 여기에 보여요");
     expect(notices.indexOf("input.isInitialError")).toBeLessThan(
       notices.indexOf("input.expiringGroups.length > 0"),
     );
@@ -61,11 +64,13 @@ describe("major flow deduplication contract", () => {
     expect(screen).toContain('"확인된 재료 먼저 추가"');
   });
 
-  it("uses the hero and sticky CTA as the only initial recommendation state", () => {
+  it("keeps one actionable hero while previewing the empty recommendation layout", () => {
     const screen = read("app/(tabs)/recommendations.tsx");
 
     expect(screen).not.toContain("아직 냉장고가 비어 있어요");
     expect(screen).not.toContain("아직 추천이 없어요");
+    expect(screen).toContain('title="이번에 골라볼 요리"');
+    expect(screen).toContain("추천 요리가 여기에 보여요");
     expect(screen).toContain("{primaryCtaLabel}");
   });
 
