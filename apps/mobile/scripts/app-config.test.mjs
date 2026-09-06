@@ -30,6 +30,7 @@ describe("Android adaptive-window app configuration", () => {
     expect(appConfig.expo.android.permissions).toEqual(["CAMERA"]);
     expect(appConfig.expo.android.blockedPermissions).toEqual(
       expect.arrayContaining([
+        "android.permission.RECORD_AUDIO",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO",
@@ -89,5 +90,20 @@ describe("iOS deployment configuration", () => {
         LSMinimumSystemVersion: "16.4",
       }),
     ).toEqual({ CFBundleDisplayName: "Jango" });
+  });
+});
+
+describe("iOS protected resource configuration", () => {
+  it("does not declare microphone access for image-only camera features", () => {
+    for (const pluginName of ["expo-camera", "expo-image-picker"]) {
+      const plugin = appConfig.expo.plugins.find(
+        (candidate) =>
+          Array.isArray(candidate) && candidate[0] === pluginName,
+      );
+
+      expect(plugin?.[1]?.microphonePermission).toBe(false);
+    }
+
+    expect(nativeInfoPlist).not.toContain("NSMicrophoneUsageDescription");
   });
 });
