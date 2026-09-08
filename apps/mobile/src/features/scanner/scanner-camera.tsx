@@ -58,15 +58,17 @@ import { useResponsiveLayout } from "../../shared/responsive-layout";
 import {
   parseRegistrationReturnTo,
   registerRoute,
-  registrationReturnHref,
+  registrationReturnLabel,
+  type RegistrationRouteParams,
 } from "../registration/registration-return";
+import { cancelRegistration, returnFromRegistration } from "../registration/registration-navigation";
 
 export function ScannerCameraExperience() {
   const { shouldStack, isPhoneLandscape } = useResponsiveLayout();
   const shouldStackTopBar = shouldStack && !isPhoneLandscape;
   const shouldStackCameraActions = shouldStack && !isPhoneLandscape;
-  const params = useLocalSearchParams<{ from?: string | string[] }>();
-  const returnTo = parseRegistrationReturnTo(params.from);
+  const params = useLocalSearchParams<RegistrationRouteParams>();
+  const returnTo = parseRegistrationReturnTo(params.from, params.returnTo);
   const { activeSpaceId } = useActiveSpace();
   const scanner = useProductScanner();
   const setPrefill = useRegistrationStore((state) => state.setPrefill);
@@ -433,7 +435,7 @@ export function ScannerCameraExperience() {
   const handleFinishQuickAdd = () => {
     setQuickSavedItem(null);
     scanner.resetScanner();
-    router.replace(registrationReturnHref(returnTo));
+    returnFromRegistration(returnTo);
   };
 
   const handleEditQuickSavedItem = () => {
@@ -447,7 +449,10 @@ export function ScannerCameraExperience() {
     scanner.resetScanner();
     router.replace({
       pathname: "/inventory/[id]",
-      params: { id: savedItemId },
+      params: {
+        id: savedItemId,
+        ...(returnTo === "recommendations" ? { returnTo } : {}),
+      },
     });
   };
 
@@ -501,7 +506,7 @@ export function ScannerCameraExperience() {
         collapsable={false}
       >
         <View style={[styles.topBar, shouldStackTopBar && styles.topBarStacked]}>
-          <CloseButton onPress={() => router.back()} />
+          <CloseButton onPress={() => cancelRegistration(returnTo)} />
           <View
             style={styles.stepPill}
             accessible
@@ -707,6 +712,11 @@ export function ScannerCameraExperience() {
         }}
         onScanNext={handleRescan}
         onFinishQuickAdd={handleFinishQuickAdd}
+        finishLabel={
+          returnTo === "recommendations"
+            ? registrationReturnLabel(returnTo)
+            : undefined
+        }
         onEditQuickSavedItem={handleEditQuickSavedItem}
         onContinueWithoutContribution={handleContinueWithoutContribution}
         onCatalogNameAccepted={setCatalogNameAccepted}

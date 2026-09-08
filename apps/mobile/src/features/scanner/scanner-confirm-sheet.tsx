@@ -67,6 +67,7 @@ export function ScannerConfirmSheet({
   onQuickStorageLocationChange,
   onScanNext,
   onFinishQuickAdd,
+  finishLabel,
   onEditQuickSavedItem,
   onContinueWithoutContribution,
   onCatalogNameAccepted,
@@ -117,6 +118,7 @@ export function ScannerConfirmSheet({
   onQuickStorageLocationChange: (location: string) => void;
   onScanNext: () => void;
   onFinishQuickAdd: () => void;
+  finishLabel?: string;
   onEditQuickSavedItem: () => void;
   onContinueWithoutContribution: () => void;
   onCatalogNameAccepted: (accepted: boolean) => void;
@@ -178,6 +180,7 @@ export function ScannerConfirmSheet({
               primaryLabel="다음 재료 스캔"
               onPrimary={onScanNext}
               onDone={onFinishQuickAdd}
+              doneLabel={finishLabel}
               tertiaryLabel="방금 추가한 재료 수정"
               onTertiary={onEditQuickSavedItem}
               primaryTestID="scanner-scan-next-button"

@@ -39,6 +39,8 @@ import {
 type MonetizationContextValue = {
   access: RecommendationAccess | undefined;
   isLoading: boolean;
+  isError: boolean;
+  isFetching: boolean;
   adState: "idle" | "loading" | "verifying";
   rewardNotice: "verified" | null;
   dismissRewardNotice: () => void;
@@ -226,6 +228,8 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
     () => ({
       access: query.data,
       isLoading: query.isLoading,
+      isError: query.isError,
+      isFetching: query.isFetching,
       adState,
       rewardNotice,
       dismissRewardNotice,
@@ -237,6 +241,8 @@ export function MonetizationProvider({ children }: PropsWithChildren) {
       dismissRewardNotice,
       query.data,
       query.isLoading,
+      query.isError,
+      query.isFetching,
       refresh,
       rewardNotice,
       watchRewardedAd,

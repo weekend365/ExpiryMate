@@ -63,9 +63,11 @@ import { useSaveInventoryItem } from "../src/features/registration/use-save-inve
 import { RegistrationCompletionActions } from "../src/features/registration/registration-completion-actions";
 import {
   parseRegistrationReturnTo,
-  registrationReturnHref,
+  registrationReturnLabel,
+  type RegistrationRouteParams,
   scannerRoute,
 } from "../src/features/registration/registration-return";
+import { cancelRegistration, returnFromRegistration } from "../src/features/registration/registration-navigation";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
@@ -231,10 +233,10 @@ const getPrefillKey = (prefill: RegistrationPrefill | null) =>
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
-  const params = useLocalSearchParams<{ from?: string | string[] }>();
-  const returnTo = parseRegistrationReturnTo(params.from);
+  const params = useLocalSearchParams<RegistrationRouteParams>();
+  const returnTo = parseRegistrationReturnTo(params.from, params.returnTo);
   const leaveRegistration = useCallback(() => {
-    router.replace(registrationReturnHref(returnTo));
+    returnFromRegistration(returnTo);
   }, [returnTo]);
   const { activeSpaceId } = useActiveSpace();
   const hasHydrated = useRegistrationStore((state) => state.hasHydrated);
@@ -510,8 +512,8 @@ export default function RegisterScreen() {
       return;
     }
 
-    router.back();
-  }, [skipProduct, step, stepIndex, visibleSteps]);
+    cancelRegistration(returnTo);
+  }, [returnTo, skipProduct, step, stepIndex, visibleSteps]);
 
   const goToRegistrationStep = useCallback(
     (target: InputRegistrationStep, options?: { openLocation?: boolean }) => {
@@ -798,6 +800,12 @@ export default function RegisterScreen() {
               entryMethod === "scan" ? continueWithBarcode : continueWithManual
             }
             onDone={finishRegistration}
+            doneLabel={
+              returnTo === "recommendations"
+                ? registrationReturnLabel(returnTo)
+                : undefined
+            }
+            doneTestID="registration-finish-button"
             tertiaryLabel={
               entryMethod === "scan" ? "직접 입력으로 추가" : "바코드로 추가"
             }

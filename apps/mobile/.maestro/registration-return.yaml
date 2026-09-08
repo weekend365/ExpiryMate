@@ -1,0 +1,74 @@
+appId: com.expirymate.mobile
+name: Registration returns to the existing recommendation setup
+# Requires a signed-in user and a writable space on an isolated local/test API.
+# Provide SCREENSHOT_DIR; this flow saves one test ingredient and does not request AI.
+---
+- launchApp:
+    permissions:
+      camera: deny
+- openLink: expirymate://recommendations
+- extendedWaitUntil:
+    visible:
+      id: recommendations-screen
+    timeout: 20000
+- tapOn:
+    id: recommendation-options-button
+- tapOn: "4인"
+- tapOn: "60분"
+- back
+- openLink: expirymate://register?from=home&returnTo=recommendations
+- extendedWaitUntil:
+    visible:
+      id: register-screen
+    timeout: 10000
+- tapOn:
+    id: form-field-displayName
+- inputText: 복귀 테스트 재료
+- hideKeyboard
+- tapOn:
+    id: register-next-button
+- tapOn: "유통기한을 모르겠어요"
+- tapOn:
+    id: register-next-button
+- extendedWaitUntil:
+    visible:
+      id: registration-finish-button
+    timeout: 20000
+- assertVisible: "추천으로 돌아가기"
+- takeScreenshot: ${SCREENSHOT_DIR}/registration-return-complete
+- tapOn:
+    id: registration-finish-button
+- extendedWaitUntil:
+    visible:
+      id: recommendations-screen
+    timeout: 10000
+- tapOn:
+    id: recommendation-options-button
+- assertVisible:
+    text: "4인"
+    selected: true
+- assertVisible:
+    text: "60분"
+    selected: true
+- takeScreenshot: ${SCREENSHOT_DIR}/registration-return-options
+- back
+- openLink: expirymate://scanner?from=home&returnTo=recommendations
+- extendedWaitUntil:
+    visible:
+      id: scanner-screen
+    timeout: 10000
+- tapOn: "스캐너 닫기"
+- extendedWaitUntil:
+    visible:
+      id: recommendations-screen
+    timeout: 10000
+- openLink: expirymate://register-photo?from=home&returnTo=recommendations
+- extendedWaitUntil:
+    visible:
+      id: photo-capture-screen
+    timeout: 10000
+- tapOn: "사진 등록 닫기"
+- extendedWaitUntil:
+    visible:
+      id: recommendations-screen
+    timeout: 10000

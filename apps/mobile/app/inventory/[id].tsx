@@ -25,6 +25,8 @@ import { FeedbackBanner } from "../../src/components/FeedbackBanner";
 import { HeaderBackButton } from "../../src/components/HeaderBackButton";
 import { Screen } from "../../src/components/Screen";
 import { StepFlow } from "../../src/components/StepFlow";
+import { returnFromRegistration } from "../../src/features/registration/registration-navigation";
+import { parseRegistrationReturnTo } from "../../src/features/registration/registration-return";
 import {
   AddLocationSheet,
   AdditionalInfoSheet,
@@ -91,9 +93,10 @@ const EDIT_SCREEN_TITLES: Record<InventoryEditMode, string> = {
 };
 
 export default function InventoryEditScreen() {
-  const { id, mode } = useLocalSearchParams<{
+  const { id, mode, returnTo } = useLocalSearchParams<{
     id: string;
     mode?: string | string[];
+    returnTo?: string | string[];
   }>();
   const editMode = parseInventoryEditMode(mode);
   const initialEditStep = inventoryEditStepForMode(editMode);
@@ -241,13 +244,17 @@ export default function InventoryEditScreen() {
   const selectedLocationLabel = resolveLabel(storageLocation);
 
   const leaveScreen = useCallback(() => {
+    if (parseRegistrationReturnTo(undefined, returnTo) === "recommendations") {
+      returnFromRegistration("recommendations");
+      return;
+    }
     if (router.canGoBack()) {
       router.back();
       return;
     }
 
     router.replace("/(tabs)/inventory");
-  }, []);
+  }, [returnTo]);
 
   const goToPreviousEditStep = useCallback(() => {
     const previousStep = editStepHistory.at(-1);

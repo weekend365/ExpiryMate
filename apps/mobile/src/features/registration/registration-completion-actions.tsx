@@ -9,6 +9,7 @@ export function RegistrationCompletionActions({
   primaryIcon,
   onPrimary,
   onDone,
+  doneLabel = "추가 완료",
   tertiaryLabel,
   onTertiary,
   primaryTestID,
@@ -19,6 +20,7 @@ export function RegistrationCompletionActions({
   primaryIcon?: LucideIcon;
   onPrimary: () => void;
   onDone: () => void;
+  doneLabel?: string;
   tertiaryLabel: string;
   onTertiary: () => void;
   primaryTestID?: string;
@@ -41,7 +43,7 @@ export function RegistrationCompletionActions({
         fullWidth
         testID={doneTestID}
       >
-        추가 완료
+        {doneLabel}
       </Button>
       <Pressable
         onPress={onTertiary}

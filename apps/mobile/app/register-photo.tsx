@@ -64,8 +64,10 @@ import { usePrivacyStatus } from "../src/features/privacy/use-privacy";
 import {
   parseRegistrationReturnTo,
   registerRoute,
-  registrationReturnHref,
+  registrationReturnLabel,
+  type RegistrationRouteParams,
 } from "../src/features/registration/registration-return";
+import { returnFromRegistration } from "../src/features/registration/registration-navigation";
 import { usePhotoParseAccess } from "../src/features/photo-intake/use-photo-parse-access";
 import { resolvePhotoParseAccessUi } from "../src/features/photo-intake/photo-parse-access-ui";
 import { QuickExpiryPills } from "../src/features/inventory/inventory-form-ui";
@@ -96,8 +98,8 @@ type FlowIssue = {
 type DuplicateMatch = PhotoIntakeDuplicateMatch<InventoryItem>;
 
 export default function RegisterPhotoScreen() {
-  const params = useLocalSearchParams<{ from?: string | string[] }>();
-  const returnTo = parseRegistrationReturnTo(params.from);
+  const params = useLocalSearchParams<RegistrationRouteParams>();
+  const returnTo = parseRegistrationReturnTo(params.from, params.returnTo);
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const { activeSpaceId } = useActiveSpace();
@@ -661,10 +663,11 @@ export default function RegisterPhotoScreen() {
       </Button>
     ) : step === "done" ? (
       <Button
-        onPress={() => router.replace(registrationReturnHref(returnTo))}
+        onPress={() => returnFromRegistration(returnTo)}
         fullWidth
+        testID="photo-registration-finish-button"
       >
-            보관함으로 이동
+        {registrationReturnLabel(returnTo)}
       </Button>
     ) : null;
   const gateIssue = photoAccessIssue(
@@ -687,7 +690,7 @@ export default function RegisterPhotoScreen() {
           isActive={!awaitingConsent}
           isCameraReady={isCameraReady}
           onCameraReady={() => setIsCameraReady(true)}
-          onClose={() => router.replace(registrationReturnHref(returnTo))}
+          onClose={() => returnFromRegistration(returnTo)}
           onSceneChange={(nextScene) => {
             setSelectedScene(nextScene);
             setPendingSelection(null);

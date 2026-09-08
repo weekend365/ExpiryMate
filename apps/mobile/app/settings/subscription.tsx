@@ -12,7 +12,6 @@ import {
   CreditCard,
   RefreshCw,
   ShieldCheck,
-  TrendingDown,
 } from "lucide-react-native";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -49,6 +48,8 @@ import {
   formatSubscriptionStore,
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
+import { getSubscriptionScreenState } from "../../src/features/subscriptions/subscription-screen-state";
+import { SubscriptionSalesNotice, SubscriptionStatusSection } from "../../src/features/subscriptions/subscription-status";
 import { publicWebUrl } from "../../src/shared/public-web-url";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { colors, radius, spacing } from "../../src/shared/theme";
@@ -80,6 +81,14 @@ function SubscriptionStoreScreen() {
   const monetization = useMonetization();
   const entitlement = subscription.query.data;
   const hasActiveEntitlement = Boolean(entitlement?.hasActiveEntitlement);
+  const screenState = getSubscriptionScreenState({
+    entitlement: subscription.query,
+    sales: {
+      data: monetization.access?.subscriptionsEnabled,
+      isError: monetization.isError,
+      isFetching: monetization.isFetching,
+    },
+  });
   const [selectedPeriod, setSelectedPeriod] =
     useState<BillingPeriod>("monthly");
   const [busyAction, setBusyAction] = useState<"purchase" | "restore" | null>(
@@ -336,33 +345,13 @@ function SubscriptionStoreScreen() {
 
   return (
     <SettingsScreen>
-      <SettingsGroup title="지금 상태">
-        <ListRow
-          title={
-            hasActiveEntitlement
-              ? "장고 플러스를 이용 중이에요"
-              : "무료 이용 중이에요"
-          }
-          description={
-            subscription.query.isLoading
-              ? "구독 상태를 불러오고 있어요."
-              : hasActiveEntitlement
-                ? `${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`
-                : "재고·공유·기본 알림은 계속 무료로 이용할 수 있어요."
-          }
-          icon={CreditCard}
-          last={!hasActiveEntitlement}
-        />
-        {hasActiveEntitlement ? (
-          <ListRow
-            title="폐기 예방 리포트 보기"
-            description="30·90일 추세와 이번 주 실천 제안을 확인해요."
-            icon={TrendingDown}
-            onPress={() => router.push("/insights")}
-            last
-          />
-        ) : null}
-      </SettingsGroup>
+      <SubscriptionStatusSection
+        state={screenState}
+        activeDescription={`${formatSubscriptionStore(entitlement?.store)} · ${formatSubscriptionExpiry(entitlement?.expiresAt)}까지`}
+        isRetrying={subscription.query.isFetching}
+        onRetry={() => { void subscription.query.refetch(); }}
+        onOpenInsights={() => router.push("/insights")}
+      />
 
       <SettingsGroup
         title="냉장고를 덜 버리는 습관"
@@ -378,7 +367,7 @@ function SubscriptionStoreScreen() {
         </View>
       </SettingsGroup>
 
-      {!hasActiveEntitlement && monetization.access?.subscriptionsEnabled ? (
+      {screenState.sales === "available" ? (
         <SettingsGroup
           title="이용권 고르기"
           description="무료 체험 없이 선택한 기간마다 자동 갱신돼요."
@@ -446,13 +435,12 @@ function SubscriptionStoreScreen() {
               : "연간으로 시작하기"}
           </Button>
         </SettingsGroup>
-      ) : !hasActiveEntitlement ? (
-        <SettingsGroup
-          title="지금은 신규 가입을 쉬고 있어요"
-          description="원가 검증 또는 운영 점검 중에는 신규 판매만 닫고, 이미 결제한 혜택은 그대로 유지해요."
-          content="plain"
+      ) : (
+        <SubscriptionSalesNotice
+          sales={screenState.sales}
+          onRetry={() => { void monetization.refresh().catch(() => undefined); }}
         />
-      ) : null}
+      )}
 
       <SettingsGroup title="스토어에서 관리하기">
         <ListRow

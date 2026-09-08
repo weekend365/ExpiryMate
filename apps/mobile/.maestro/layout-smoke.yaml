@@ -101,7 +101,8 @@ name: Responsive layout smoke
 - tapOn:
     id: inventory-add-button
 - assertVisible: "어떻게 넣을까요?"
-- tapOn: "직접 입력할게요"
+- tapOn:
+    id: ingredient-entry-manual-button
 - extendedWaitUntil:
     visible:
       id: register-screen
@@ -121,7 +122,8 @@ name: Responsive layout smoke
       camera: deny
 - tapOn:
     id: inventory-add-button
-- tapOn: "바코드로 넣을래요"
+- tapOn:
+    id: ingredient-entry-scan-button
 - extendedWaitUntil:
     visible:
       id: scanner-screen
@@ -134,7 +136,8 @@ name: Responsive layout smoke
       camera: allow
 - tapOn:
     id: inventory-add-button
-- tapOn: "바코드로 넣을래요"
+- tapOn:
+    id: ingredient-entry-scan-button
 - extendedWaitUntil:
     visible:
       id: scanner-screen

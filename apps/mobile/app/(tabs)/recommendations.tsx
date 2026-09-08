@@ -107,7 +107,11 @@ import { resolveRecipePreferenceSummary } from "../../src/features/settings/reci
 import { useActiveSpace } from "../../src/features/spaces/space-provider";
 import { useRegistrationStore } from "../../src/store/registration-store";
 import { isInventoryPhotoParseEnabled } from "../../src/features/photo-intake/photo-parse-enabled";
-import { photoParseRoute } from "../../src/features/registration/registration-return";
+import {
+  photoParseRoute,
+  registerRoute,
+  scannerRoute,
+} from "../../src/features/registration/registration-return";
 import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
 import {
   getRecipeFavoriteKey,
@@ -1262,21 +1266,21 @@ export default function RecommendationsScreen() {
         onScan={() => {
           setEntryMethodVisible(false);
           if (activeSpaceId) clearPrefill(activeSpaceId);
-          router.push("/scanner");
+          router.push(scannerRoute("recommendations"));
         }}
         onPhoto={
           isInventoryPhotoParseEnabled()
             ? () => {
                 setEntryMethodVisible(false);
                 if (activeSpaceId) clearPrefill(activeSpaceId);
-                router.push(photoParseRoute("home"));
+                router.push(photoParseRoute("recommendations"));
               }
             : undefined
         }
         onManual={() => {
           setEntryMethodVisible(false);
           if (activeSpaceId) clearPrefill(activeSpaceId);
-          router.push("/register");
+          router.push(registerRoute("recommendations"));
         }}
       />
 
