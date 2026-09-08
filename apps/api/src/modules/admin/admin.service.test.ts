@@ -1,10 +1,10 @@
 import { ItemStatus } from "@prisma/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { maskOwnerKey } from "../../common/serializers";
-import {
-  AdminService,
-  buildAffiliatePlacementMetrics,
-} from "./admin.service";
+import { AdminService } from "./admin.service";
+
+import { AdminMonetizationService } from "./admin-monetization.service";
+import { buildAffiliatePlacementMetrics } from "./admin-monetization-metrics";
 
 describe("AdminService", () => {
   afterEach(() => {
@@ -255,7 +255,7 @@ describe("AdminService", () => {
       },
     };
 
-    const service = new AdminService(prisma as never);
+    const service = new AdminMonetizationService(prisma as never);
     const overview = await service.getMonetizationOverview(
       30,
       new Date("2026-08-10T03:00:00.000Z"),
@@ -279,6 +279,7 @@ describe("AdminService", () => {
     expect(overview.conversion.paywallToPurchasePercent).toBe(20);
     expect(overview.conversion.rewardedAdVerificationPercent).toBe(75);
     expect(overview.usageBySource).toContainEqual({ source: "free", count: 5 });
+    expect(overview).toMatchSnapshot();
   });
 
   it("uses core inventory activity for retention and evaluates unit economics", async () => {
@@ -377,7 +378,7 @@ describe("AdminService", () => {
         ]),
       },
     };
-    const service = new AdminService(prisma as never);
+    const service = new AdminMonetizationService(prisma as never);
 
     const overview = await service.getMonetizationOverview(
       30,
@@ -396,5 +397,6 @@ describe("AdminService", () => {
       costCoverageMultiple: 2,
       status: "review",
     });
+    expect(overview).toMatchSnapshot();
   });
 });

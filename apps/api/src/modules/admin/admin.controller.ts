@@ -17,6 +17,7 @@ import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { AdminGuard } from "../auth/admin.guard";
 import type { AuthenticatedRequest } from "../auth/auth.types";
 import { AdminService } from "./admin.service";
+import { AdminMonetizationService } from "./admin-monetization.service";
 import { ProductMastersAdminService } from "./product-masters-admin.service";
 
 @UseGuards(AdminGuard)
@@ -25,6 +26,7 @@ export class AdminController {
   constructor(
     private readonly adminService: AdminService,
     private readonly productMastersAdmin: ProductMastersAdminService,
+    private readonly adminMonetization: AdminMonetizationService,
   ) {}
 
   @Get("inventory")
@@ -47,7 +49,7 @@ export class AdminController {
 
   @Get("monetization/overview")
   getMonetizationOverview(@Query("days") days?: string) {
-    return this.adminService.getMonetizationOverview(
+    return this.adminMonetization.getMonetizationOverview(
       days ? Number(days) : undefined,
     );
   }

@@ -4,12 +4,18 @@ import { AuthModule } from "../auth/auth.module";
 import { AdminAuditService } from "./admin-audit.service";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
+import { AdminMonetizationService } from "./admin-monetization.service";
 import { ProductMastersAdminService } from "./product-masters-admin.service";
 
 @Module({
   imports: [AuthModule, PrismaModule],
   controllers: [AdminController],
-  providers: [AdminService, AdminAuditService, ProductMastersAdminService],
+  providers: [
+    AdminService,
+    AdminMonetizationService,
+    AdminAuditService,
+    ProductMastersAdminService,
+  ],
   exports: [AdminService, AdminAuditService],
 })
 export class AdminModule {}

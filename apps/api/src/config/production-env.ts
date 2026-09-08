@@ -1,3 +1,4 @@
+import { isUnsafeProductionHostname } from "@expirymate/shared";
 import { isKnownOpenAiModel } from "../common/openai-model-config";
 
 type EnvMap = NodeJS.ProcessEnv;
@@ -879,21 +880,5 @@ function looksLikePlaceholder(value: string) {
     PLACEHOLDER_VALUES.has(normalized) ||
     normalized.includes("your-") ||
     normalized.includes("...")
-  );
-}
-
-function isUnsafeProductionHostname(hostname: string) {
-  const normalized = hostname.toLowerCase();
-
-  return (
-    normalized === "localhost" ||
-    normalized === "127.0.0.1" ||
-    normalized === "::1" ||
-    normalized.endsWith(".localhost") ||
-    normalized.endsWith(".local") ||
-    normalized.endsWith(".example") ||
-    normalized.endsWith(".invalid") ||
-    normalized.endsWith(".test") ||
-    normalized.includes("your-domain")
   );
 }

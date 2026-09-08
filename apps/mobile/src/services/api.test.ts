@@ -88,7 +88,88 @@ describe("mobile API client core flow", () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
+  });
+
+  const authenticatedCalls = [
+    {
+      name: "JSON",
+      call: (api: typeof import("./api")) => api.getDashboardSummary("personal_user-1"),
+    },
+    {
+      name: "multipart",
+      call: (api: typeof import("./api")) => api.parseInventoryPhoto(
+        { scene: "receipt", uri: "file:///receipt.jpg" }, "personal_user-1",
+      ),
+    },
+  ];
+
+  it.each(authenticatedCalls)("preserves $name payload and headers through one refresh", async ({ name, call }) => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(errorResponse(401, "expired"))
+      .mockResolvedValueOnce(successResponse(createSession("access-2", "refresh-2")))
+      .mockResolvedValueOnce(successResponse({ result: "ok" }));
+    const api = await import("./api");
+
+    await expect(call(api)).resolves.toEqual({ result: "ok" });
+    expect(stores.fetch).toHaveBeenCalledTimes(4);
+    const first = stores.fetch.mock.calls[1]![1];
+    const retry = stores.fetch.mock.calls[3]![1];
+    expect(retry.body).toBe(first.body);
+    expect(retry.cache).toBe("no-store");
+    expect(retry.headers.Authorization).toBe("Bearer access-2");
+    expect(first.headers["Content-Type"]).toBe(name === "JSON" ? "application/json" : undefined);
+    expect(retry.headers["Content-Type"]).toBe(first.headers["Content-Type"]);
+    if (name === "multipart") expect(first.body).toBeInstanceOf(FormData);
+  });
+
+  it.each(authenticatedCalls)("does not retry $name indefinitely on a second 401", async ({ call }) => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(errorResponse(401, "expired"))
+      .mockResolvedValueOnce(successResponse(createSession("access-2", "refresh-2")))
+      .mockResolvedValueOnce(errorResponse(401, "denied"));
+    const api = await import("./api");
+
+    await expect(call(api)).rejects.toMatchObject({ name: "ApiError", status: 401, message: "denied" });
+    expect(stores.fetch).toHaveBeenCalledTimes(4);
+  });
+
+  it.each(authenticatedCalls)("preserves $name forbidden error details without refreshing", async ({ call }) => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce({ ok: false, status: 403, json: async () => ({
+        success: false, error: { code: "SPACE_FORBIDDEN", message: "  denied  ", details: { reason: "role" } },
+      }) });
+    const api = await import("./api");
+
+    await expect(call(api)).rejects.toMatchObject({
+      name: "ApiError", status: 403, code: "SPACE_FORBIDDEN", message: "denied", details: { reason: "role" },
+    });
+    expect(stores.fetch).toHaveBeenCalledTimes(2);
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe("refresh-1");
+  });
+
+  it.each(authenticatedCalls)("clears $name session when refresh is terminally rejected", async ({ call }) => {
+    stores.asyncStorage.set("expirymate.authUser.v2", JSON.stringify(authUser));
+    stores.secureStore.set("expirymate.refreshToken.v2", "refresh-existing");
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-1", "refresh-1")))
+      .mockResolvedValueOnce(errorResponse(401, "expired"))
+      .mockResolvedValueOnce(errorResponse(401, "invalid refresh"));
+    const api = await import("./api");
+
+    await expect(call(api)).rejects.toThrow("로그인이 만료됐어요. 다시 이어가 주세요.");
+    expect(stores.fetch).toHaveBeenCalledTimes(3);
+    expect(stores.secureStore.size).toBe(0);
   });
 
   it("requires a registered session before calling an authenticated endpoint", async () => {

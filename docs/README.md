@@ -28,6 +28,7 @@ source_of_truth: true
 | [배포·운영 런북](./operations/deployment.md) | migration, 배포, 장애 1차 대응 | platform | Yes |
 | [iOS·EAS production](./ios-eas-production.md) | iOS capability, build, submit | mobile-release | Yes |
 | [모바일 반응형 QA](./mobile-responsive-qa.md) | 글자·화면 크기 조합과 회귀 기준 | mobile-design | Yes |
+| [리팩터링 실행 계획](./refactoring-plan.md) | 공유 계약·모바일 API·Admin 집계 구조 개선과 검증 기록 | engineering | Yes |
 
 ## 제품·디자인
 

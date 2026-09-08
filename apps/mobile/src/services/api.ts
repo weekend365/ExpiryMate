@@ -1,5 +1,4 @@
 import type {
-  AuthSession,
   AuthUser,
   BarcodeLookupResult,
   ContributeBarcodeProductRequest,
@@ -10,12 +9,8 @@ import type {
   DeleteAccountResponse,
   InventoryItem,
   InventoryListResponse,
-  LoginRequest,
   NotificationPreference,
   PushToken,
-  OAuthLoginRequest,
-  StartOAuthRequest,
-  StartOAuthResponse,
   PrivacyStatus,
   RegisterPushTokenRequest,
   AcceptAiDataNoticeResponse,
@@ -36,9 +31,6 @@ import type {
   RecipePreference,
   RecipeRecommendationRequestInput,
   UpdateRecipePreference,
-  RegisterPendingResponse,
-  RegisterRequest,
-  RegisterResponse,
   StorageLocationsResponse,
   CreateUserStorageLocationBody,
   UpdateUserStorageLocationBody,
@@ -81,42 +73,42 @@ import type {
   AffiliateProductSearchResponse,
   AffiliateReorderPreviewResponse,
 } from "@expirymate/shared";
-import {
-  authSessionSchema,
-  authUserSchema,
-  registerResponseSchema,
-  startOAuthResponseSchema,
-} from "@expirymate/shared";
+import { authUserSchema } from "@expirymate/shared";
 import type { ZodType } from "zod";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from "expo-secure-store";
-import { withAsyncTimeout } from "../shared/async-timeout";
-import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
+import {
+  ApiError,
+  clientHeaders,
+  fetchWithNetworkError,
+  parseEnvelope,
+  publicRequest,
+  RECIPE_GENERATION_TIMEOUT_MS,
+  PHOTO_PARSE_TIMEOUT_MS,
+} from "./api-transport";
+import {
+  clearAuthSession,
+  hasRegisteredAccessToken,
+  requireRegisteredSession,
+  restoreRegisteredSession,
+  tryRefreshRegisteredSession,
+} from "./api-session";
 
-const API_BASE_URL = resolveApiBaseUrl();
-export const AUTH_STORAGE_TIMEOUT_MS = 8_000;
-
-interface ApiEnvelope<T> {
-  success: boolean;
-  data: T;
-  error?: {
-    code?: string;
-    message?: string;
-    details?: unknown;
-  };
-}
-
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly code: string,
-    readonly status: number,
-    readonly details?: unknown,
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
+// Keep this module as the public entry point for every existing API consumer.
+export { ApiError } from "./api-transport";
+export {
+  AUTH_STORAGE_TIMEOUT_MS,
+  clearAuthSession,
+  restoreRegisteredSession,
+  subscribeToAuthSessionCleared,
+  register,
+  login,
+  logout,
+  getEmailVerificationStatus,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+  startOAuth,
+  oauthLogin,
+} from "./api-session";
 
 type BatchDiscardInventoryItemsResponse = {
   count: number;
@@ -125,95 +117,7 @@ type BatchDiscardInventoryItemsResponse = {
 
 export type RecipeRecommendationPayload = RecipeRecommendationRequestInput;
 
-const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
-const AUTH_USER_STORAGE_KEY = "expirymate.authUser.v2";
-const REFRESH_TOKEN_STORAGE_KEY = "expirymate.refreshToken.v2";
-const LEGACY_AUTH_SESSION_STORAGE_KEY = "expirymate.authSession.v1";
-const clientHeaders = {
-  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.4.0",
-  "X-Client-Platform": "mobile",
-};
-
-let accessToken: string | null = null;
-let currentUser: AuthUser | null = null;
-let sessionPromise: Promise<AuthSession | null> | null = null;
-/** Single-flight mutex so parallel 401s share one refresh instead of racing. */
-let refreshInFlight: Promise<AuthSession | null> | null = null;
-const authSessionClearedListeners = new Set<() => void>();
-
-/**
- * Lets the React session boundary invalidate cached user state when the API
- * client discovers a terminal refresh failure outside the auth query itself.
- */
-export function subscribeToAuthSessionCleared(listener: () => void) {
-  authSessionClearedListeners.add(listener);
-  return () => {
-    authSessionClearedListeners.delete(listener);
-  };
-}
-
-function notifyAuthSessionCleared() {
-  for (const listener of authSessionClearedListeners) {
-    try {
-      listener();
-    } catch {
-      // Session cleanup must not fail because a UI subscriber was unmounted.
-    }
-  }
-}
-
-function resolveApiBaseUrl() {
-  const value = process.env.EXPO_PUBLIC_API_BASE_URL;
-  const appEnv = process.env.EXPO_PUBLIC_APP_ENV ?? "development";
-
-  if (appEnv === "production") {
-    if (!value) {
-      throw new Error("EXPO_PUBLIC_API_BASE_URL is required in production.");
-    }
-
-    const url = parseUrl(value);
-
-    if (!url || url.protocol !== "https:" || isUnsafeProductionHostname(url.hostname)) {
-      throw new Error(
-        "EXPO_PUBLIC_API_BASE_URL must be a public https:// URL in production.",
-      );
-    }
-
-    return stripTrailingSlash(value);
-  }
-
-  return stripTrailingSlash(value ?? "http://localhost:4000");
-}
-
-function stripTrailingSlash(value: string) {
-  return value.replace(/\/$/, "");
-}
-
-function parseUrl(value: string) {
-  try {
-    return new URL(value);
-  } catch {
-    return null;
-  }
-}
-
-function isUnsafeProductionHostname(hostname: string) {
-  const normalized = hostname.toLowerCase();
-
-  return (
-    normalized === "localhost" ||
-    normalized === "127.0.0.1" ||
-    normalized === "::1" ||
-    normalized.endsWith(".localhost") ||
-    normalized.endsWith(".local") ||
-    normalized.endsWith(".example") ||
-    normalized.endsWith(".invalid") ||
-    normalized.endsWith(".test") ||
-    normalized.includes("your-domain")
-  );
-}
-
-async function request<T>(
+async function authenticatedRequest<T>(
   path: string,
   init?: RequestInit,
   options: {
@@ -228,7 +132,6 @@ async function request<T>(
     {
       ...init,
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${session.accessToken}`,
         ...clientHeaders,
         ...(init?.headers ?? {}),
@@ -242,7 +145,7 @@ async function request<T>(
     if (response.status === 401 && options.retryOnUnauthorized !== false) {
       const refreshed = await tryRefreshRegisteredSession();
       if (refreshed) {
-        return request<T>(path, init, {
+        return authenticatedRequest<T>(path, init, {
           ...options,
           retryOnUnauthorized: false,
         });
@@ -262,19 +165,32 @@ async function request<T>(
       );
     }
 
-    if (response.status >= 500) {
-      throw new Error(
-        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-      );
-    }
-
     throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
   }
 
   return body.data;
 }
 
-async function requestMultipart<T>(
+function request<T>(
+  path: string,
+  init?: RequestInit,
+  options: {
+    retryOnUnauthorized?: boolean;
+    timeoutMs?: number;
+    schema?: ZodType<T>;
+  } = { retryOnUnauthorized: true },
+): Promise<T> {
+  return authenticatedRequest(
+    path,
+    {
+      ...init,
+      headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    },
+    options,
+  );
+}
+
+function requestMultipart<T>(
   path: string,
   formData: FormData,
   options: {
@@ -283,400 +199,15 @@ async function requestMultipart<T>(
     headers?: Record<string, string>;
   } = { retryOnUnauthorized: true, timeoutMs: PHOTO_PARSE_TIMEOUT_MS },
 ): Promise<T> {
-  const session = await requireRegisteredSession();
-  const response = await fetchWithNetworkError(
+  return authenticatedRequest<T>(
     path,
     {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${session.accessToken}`,
-        ...clientHeaders,
-        ...options.headers,
-      },
+      headers: options.headers,
       body: formData,
     },
-    options.timeoutMs,
+    options,
   );
-  const body = await parseEnvelope<T>(response);
-
-  if (!response.ok || !body.success) {
-    if (response.status === 401 && options.retryOnUnauthorized !== false) {
-      const refreshed = await tryRefreshRegisteredSession();
-      if (refreshed) {
-        return requestMultipart<T>(path, formData, {
-          ...options,
-          retryOnUnauthorized: false,
-        });
-      }
-
-      await clearAuthSession();
-      throw new Error("로그인이 만료됐어요. 다시 이어가 주세요.");
-    }
-
-    const serverMessage = body.error?.message?.trim();
-    if (serverMessage) {
-      throw new ApiError(
-        serverMessage,
-        body.error?.code ?? `HTTP_${response.status}`,
-        response.status,
-        body.error?.details,
-      );
-    }
-
-    if (response.status >= 500) {
-      throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
-    }
-
-    throw new Error("앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?");
-  }
-
-  return body.data;
-}
-
-async function publicRequest<T>(
-  path: string,
-  init?: RequestInit,
-  schema?: ZodType<T>,
-): Promise<T> {
-  const response = await fetchWithNetworkError(path, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...clientHeaders,
-      ...(init?.headers ?? {}),
-    },
-  });
-  const body = await parseEnvelope(response, schema);
-
-  if (!response.ok || !body.success) {
-    throw new ApiError(
-      body.error?.message ??
-        "앗, 잠시 문제가 생겼어요. 조금 뒤에 다시 해볼까요?",
-      body.error?.code ?? `HTTP_${response.status}`,
-      response.status,
-      body.error?.details,
-    );
-  }
-
-  return body.data;
-}
-
-const DEFAULT_FETCH_TIMEOUT_MS = 25_000;
-const RECIPE_GENERATION_TIMEOUT_MS = 90_000;
-const PHOTO_PARSE_TIMEOUT_MS = 90_000;
-
-async function fetchWithNetworkError(
-  path: string,
-  init?: RequestInit,
-  timeoutMs = DEFAULT_FETCH_TIMEOUT_MS,
-) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  const upstreamSignal = init?.signal;
-
-  const onUpstreamAbort = () => controller.abort();
-  upstreamSignal?.addEventListener("abort", onUpstreamAbort);
-
-  try {
-    return await fetch(buildUrl(path), {
-      ...init,
-      // Authenticated inventory responses must never be satisfied by a stale
-      // native URL cache. In particular, an empty 304 response cannot be
-      // decoded as our JSON envelope on a restored/review-device session.
-      cache: "no-store",
-      signal: controller.signal,
-    });
-  } catch (error) {
-    if (error instanceof Error && error.name === "AbortError") {
-      throw new Error("응답이 너무 늦어요. 잠시 뒤 다시 해볼까요?");
-    }
-    throw new Error("인터넷 연결을 한번 봐 주세요.");
-  } finally {
-    clearTimeout(timer);
-    upstreamSignal?.removeEventListener("abort", onUpstreamAbort);
-  }
-}
-
-async function parseEnvelope<T>(response: Response, schema?: ZodType<T>) {
-  let value: unknown;
-  try {
-    value = await response.json();
-  } catch {
-    throw new Error("앗, 답을 제대로 받지 못했어요.");
-  }
-
-  if (!value || typeof value !== "object" || !("success" in value)) {
-    throw new Error("서버 응답 형식을 확인하지 못했어요.");
-  }
-
-  const candidate = value as {
-    success?: unknown;
-    data?: unknown;
-    error?: unknown;
-  };
-  if (typeof candidate.success !== "boolean") {
-    throw new Error("서버 응답 형식을 확인하지 못했어요.");
-  }
-
-  let error: ApiEnvelope<unknown>["error"];
-  if (candidate.error !== undefined) {
-    if (!candidate.error || typeof candidate.error !== "object") {
-      throw new Error("서버 오류 응답 형식을 확인하지 못했어요.");
-    }
-    const rawError = candidate.error as Record<string, unknown>;
-    error = {
-      code: typeof rawError.code === "string" ? rawError.code : undefined,
-      message: typeof rawError.message === "string" ? rawError.message : undefined,
-      details: rawError.details,
-    };
-  }
-
-  if (!candidate.success) {
-    return { success: false, data: candidate.data as T, error };
-  }
-
-  if (!schema) {
-    return { success: true, data: candidate.data as T, error };
-  }
-
-  const parsed = schema.safeParse(candidate.data);
-  if (!parsed.success) {
-    captureStartupBootstrapIssue("api.response-schema", parsed.error, {
-      status: response.status,
-    });
-    throw new Error("서버 응답 형식을 확인하지 못했어요.");
-  }
-  return { success: true, data: parsed.data, error };
-}
-
-async function requireRegisteredSession() {
-  if (!sessionPromise) {
-    sessionPromise = loadRegisteredSession().catch((error: unknown) => {
-      sessionPromise = null;
-      throw error;
-    });
-  }
-
-  const session = await sessionPromise;
-
-  if (!session) {
-    throw new Error("로그인이 필요해요. 계정으로 이어가 주세요.");
-  }
-
-  return session;
-}
-
-/** Restores a registered session from storage, or returns null (no anonymous fallback). */
-export async function restoreRegisteredSession(): Promise<AuthSession | null> {
-  if (!sessionPromise) {
-    sessionPromise = loadRegisteredSession().catch((error: unknown) => {
-      sessionPromise = null;
-      throw error;
-    });
-  }
-
-  return sessionPromise;
-}
-
-async function loadRegisteredSession(): Promise<AuthSession | null> {
-  if (accessToken && currentUser?.accountType === "registered") {
-    return { user: currentUser, accessToken };
-  }
-
-  await runAuthStorageOperation(
-    AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
-    "async-storage.remove-legacy-session",
-  ).catch(() => undefined);
-
-  const [storedUser, refreshToken] = await Promise.all([
-    runAuthStorageOperation(
-      AsyncStorage.getItem(AUTH_USER_STORAGE_KEY),
-      "async-storage.read-user",
-    ),
-    runAuthStorageOperation(
-      SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
-      "secure-store.read-refresh-token",
-    ),
-  ]);
-
-  if (!storedUser || !refreshToken) {
-    await clearAuthSession();
-    return null;
-  }
-
-  let parsed: AuthUser;
-  try {
-    parsed = authUserSchema.parse(JSON.parse(storedUser));
-  } catch {
-    await clearAuthSession();
-    return null;
-  }
-
-  if (parsed.accountType !== "registered") {
-    await clearAuthSession();
-    return null;
-  }
-
-  try {
-    currentUser = parsed;
-    return await refreshRegisteredSessionSingleFlight();
-  } catch (error) {
-    accessToken = null;
-    currentUser = null;
-    throw error;
-  }
-}
-
-async function tryRefreshRegisteredSession() {
-  return refreshRegisteredSessionSingleFlight();
-}
-
-/**
- * One in-flight refresh at a time. Parallel 401 handlers await the same promise
- * so a loser never clears a winner's newly rotated session.
- */
-async function refreshRegisteredSessionSingleFlight(): Promise<AuthSession | null> {
-  if (refreshInFlight) {
-    return refreshInFlight;
-  }
-
-  refreshInFlight = (async () => {
-    const refreshToken = await runAuthStorageOperation(
-      SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
-      "secure-store.read-refresh-token",
-    );
-
-    if (!refreshToken) {
-      return null;
-    }
-
-    try {
-      const session = await refreshSession(refreshToken);
-      if (!session || session.user.accountType !== "registered") {
-        await clearAuthSession();
-        return null;
-      }
-      return session;
-    } catch (error) {
-      if (isTerminalRefreshError(error)) {
-        await clearAuthSession();
-        return null;
-      }
-      throw error;
-    }
-  })().finally(() => {
-    refreshInFlight = null;
-  });
-
-  return refreshInFlight;
-}
-
-function isTerminalRefreshError(error: unknown) {
-  return (
-    error instanceof ApiError &&
-    error.status >= 400 &&
-    error.status < 500 &&
-    error.status !== 408 &&
-    error.status !== 429
-  );
-}
-
-async function authRequestWithOptionalBearer<T>(
-  path: string,
-  init?: RequestInit,
-  schema?: ZodType<T>,
-) {
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(init?.headers as Record<string, string> | undefined),
-  };
-
-  if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
-  }
-
-  return publicRequest<T>(
-    path,
-    {
-      ...init,
-      headers,
-    },
-    schema,
-  );
-}
-
-async function refreshSession(refreshToken: string) {
-  const session = await publicRequest<AuthSession>(
-    "/auth/refresh",
-    {
-      method: "POST",
-      body: JSON.stringify({ refreshToken }),
-    },
-    authSessionSchema,
-  );
-
-  return persistAuthSession(session);
-}
-
-async function persistAuthSession(session: AuthSession) {
-  if (session.user.accountType !== "registered") {
-    await clearAuthSession();
-    throw new Error("등록된 계정으로만 이어갈 수 있어요.");
-  }
-
-  if (!session.refreshToken) {
-    await clearAuthSession();
-    throw new Error("로그인 갱신 정보를 받지 못했어요. 다시 시도해 주세요.");
-  }
-
-  try {
-    await runAuthStorageOperation(
-      SecureStore.setItemAsync(REFRESH_TOKEN_STORAGE_KEY, session.refreshToken),
-      "secure-store.write-refresh-token",
-    );
-    await runAuthStorageOperation(
-      AsyncStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(session.user)),
-      "async-storage.write-user",
-    );
-  } catch (error) {
-    // Never expose a session in memory when either half of persistence failed.
-    // clearAuthSession also removes a refresh token written before AsyncStorage failed.
-    await clearAuthSession();
-    throw error;
-  }
-
-  accessToken = session.accessToken;
-  currentUser = session.user;
-  sessionPromise = Promise.resolve(session);
-
-  return session;
-}
-
-export async function clearAuthSession() {
-  accessToken = null;
-  currentUser = null;
-  sessionPromise = null;
-  refreshInFlight = null;
-  try {
-    // Local cleanup must never hold the signed-out transition hostage. Report
-    // individual failures, but let React move to the login screen.
-    await Promise.allSettled([
-      runAuthStorageOperation(
-        AsyncStorage.removeItem(AUTH_USER_STORAGE_KEY),
-        "async-storage.remove-user",
-      ),
-      runAuthStorageOperation(
-        AsyncStorage.removeItem(LEGACY_AUTH_SESSION_STORAGE_KEY),
-        "async-storage.remove-legacy-session",
-      ),
-      runAuthStorageOperation(
-        SecureStore.deleteItemAsync(REFRESH_TOKEN_STORAGE_KEY),
-        "secure-store.remove-refresh-token",
-      ),
-    ]);
-  } finally {
-    notifyAuthSessionCleared();
-  }
 }
 
 export const getMe = async (): Promise<AuthUser | null> => {
@@ -724,88 +255,10 @@ export const deleteAccount = async (payload: DeleteAccountRequest) => {
   return result;
 };
 
-export const register = async (
-  payload: RegisterRequest,
-): Promise<RegisterResponse> => {
-  const result = await authRequestWithOptionalBearer<RegisterResponse>(
-    "/auth/register",
-    {
-      method: "POST",
-      body: JSON.stringify(payload),
-    },
-    registerResponseSchema,
-  );
-
-  if (isRegisterPendingResponse(result)) {
-    return result;
-  }
-
-  return persistAuthSession(result);
-};
-
-function isRegisterPendingResponse(
-  value: RegisterResponse,
-): value is RegisterPendingResponse {
-  return (
-    "requiresEmailVerification" in value &&
-    value.requiresEmailVerification === true &&
-    typeof value.email === "string"
-  );
-}
-
-export const login = async (payload: LoginRequest) =>
-  persistAuthSession(
-    await authRequestWithOptionalBearer<AuthSession>(
-      "/auth/login",
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-      },
-      authSessionSchema,
-    ),
-  );
-
-export const logout = async () => {
-  // Unregister this device's push token while the session is still valid.
-  const { unregisterDevicePushToken } = await import("./notifications");
-  await unregisterDevicePushToken().catch(() => null);
-
-  const refreshToken = await runAuthStorageOperation(
-    SecureStore.getItemAsync(REFRESH_TOKEN_STORAGE_KEY),
-    "secure-store.read-refresh-token-for-logout",
-  ).catch(() => null);
-
-  if (refreshToken) {
-    await publicRequest<{ ok: boolean }>("/auth/logout", {
-      method: "POST",
-      body: JSON.stringify({ refreshToken }),
-    }).catch(() => null);
-  }
-
-  await clearAuthSession();
-};
-
-function runAuthStorageOperation<T>(
-  operation: PromiseLike<T>,
-  stage: string,
-): Promise<T> {
-  return withAsyncTimeout(
-    operation,
-    AUTH_STORAGE_TIMEOUT_MS,
-    stage,
-    "로그인 정보를 확인하는 데 시간이 오래 걸리고 있어요. 다시 시도해 주세요.",
-  ).catch((error: unknown) => {
-    captureStartupBootstrapIssue(`auth-storage.${stage}`, error, {
-      timeout_ms: AUTH_STORAGE_TIMEOUT_MS,
-    });
-    throw error;
-  });
-}
-
 export const requestEmailVerification = async (email?: string) => {
   const body = JSON.stringify({ email });
 
-  if (accessToken) {
+  if (hasRegisteredAccessToken()) {
     return request<{ ok: boolean }>("/auth/email/verify/request", {
       method: "POST",
       body,
@@ -817,60 +270,6 @@ export const requestEmailVerification = async (email?: string) => {
     body,
   });
 };
-
-export const getEmailVerificationStatus = (email: string) =>
-  publicRequest<{ verified: boolean }>(
-    `/auth/email/verification-status?email=${encodeURIComponent(email)}`,
-  );
-
-export const verifyEmail = async (token: string) =>
-  persistAuthSession(
-    await publicRequest<AuthSession>(
-      "/auth/email/verify",
-      {
-        method: "POST",
-        body: JSON.stringify({ token }),
-      },
-      authSessionSchema,
-    ),
-  );
-
-export const forgotPassword = (email: string) =>
-  publicRequest<{ ok: boolean }>("/auth/password/forgot", {
-    method: "POST",
-    body: JSON.stringify({ email }),
-  });
-
-export const resetPassword = (token: string, password: string) =>
-  publicRequest<{ ok: boolean }>("/auth/password/reset", {
-    method: "POST",
-    body: JSON.stringify({ token, password }),
-  });
-
-export const startOAuth = (payload: StartOAuthRequest) =>
-  publicRequest<StartOAuthResponse>(
-    "/auth/oauth/start",
-    {
-      method: "POST",
-      body: JSON.stringify(payload),
-    },
-    startOAuthResponseSchema,
-  );
-
-export const oauthLogin = async (
-  provider: "apple" | "google" | "kakao" | "naver",
-  payload: OAuthLoginRequest,
-) =>
-  persistAuthSession(
-    await authRequestWithOptionalBearer<AuthSession>(
-      `/auth/oauth/${provider}`,
-      {
-        method: "POST",
-        body: JSON.stringify(payload),
-      },
-      authSessionSchema,
-    ),
-  );
 
 const MISSING_SPACE_ID_MESSAGE =
   "함께 쓸 냉장고를 먼저 골라 주세요.";
