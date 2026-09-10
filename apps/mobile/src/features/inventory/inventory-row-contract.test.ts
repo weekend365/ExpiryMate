@@ -44,7 +44,7 @@ describe("inventory row interaction contract", () => {
     );
     expect(editScreen).toContain("currentIndex={isQuickEdit ? 0");
     expect(card).toContain("<CircleMinus");
-    expect(card).toContain("사용량 반영");
+    expect(card).toContain("사용 기록");
     expect(card).toContain("onPress={() => onCleanup(item)}");
     expect(card).not.toContain("<PenLine");
   });

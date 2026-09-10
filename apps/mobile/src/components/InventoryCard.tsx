@@ -8,12 +8,9 @@ import {
 } from "@expirymate/shared";
 import { Check, CircleMinus } from "lucide-react-native";
 import { Pressable, StyleSheet, View } from "react-native";
-import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
+import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
-
-/** Visual lamp size — card press owns the touch target, so this can be under 48. */
-const HERO_LAMP_SIZE = spacing.xl;
 
 interface InventoryCardProps {
   item: InventoryItem;
@@ -77,15 +74,9 @@ export function InventoryCard({
           pressed && styles.pressed,
         ]}
       >
-        <ExpiryBadge
-          ddayLabel={presentation.ddayLabel}
-          lampColor={presentation.lampColor}
-        />
         <View style={styles.copy}>
           <AppText
             variant="bodyStrong"
-            numberOfLines={shouldStack ? undefined : 1}
-            ellipsizeMode="tail"
             style={styles.name}
           >
             {item.displayName}
@@ -96,10 +87,13 @@ export function InventoryCard({
               </AppText>
             ) : null}
           </AppText>
+          <ExpiryBadge
+            ddayLabel={presentation.ddayLabel}
+            lampColor={presentation.lampColor}
+          />
           <AppText
             variant="caption"
             tone="subtext"
-            numberOfLines={shouldStack ? undefined : 1}
             style={styles.meta}
           >
             {locationLabel} · {quantityLabel} · {dateLabel}
@@ -135,10 +129,11 @@ export function InventoryCard({
           testID="inventory-item-cleanup-button"
           hitSlop={spacing.xs}
           accessibilityRole="button"
-          accessibilityLabel={`${item.displayName} 사용량 반영`}
+          accessibilityLabel={`${item.displayName} 사용 기록`}
           accessibilityHint="전부 사용했는지 일부만 사용했는지 고를 수 있어요."
           style={({ pressed }) => [
             styles.trailingHit,
+            styles.usageAction,
             shouldStack && styles.trailingHitStacked,
             pressed && styles.pressed,
           ]}
@@ -148,6 +143,7 @@ export function InventoryCard({
             size={spacing.sm + spacing.xxs}
             strokeWidth={2.4}
           />
+          <AppText variant="bodySmall" tone="primary">사용 기록</AppText>
         </Pressable>
       ) : null}
     </View>
@@ -168,8 +164,6 @@ function ExpiryBadge({
     >
       <AppText
         variant="caption"
-        scaleRole="chrome"
-        densityAware={false}
         style={styles.expiryLampText}
       >
         {ddayLabel}
@@ -180,17 +174,17 @@ function ExpiryBadge({
 
 function getExpiryLampPresentation(expiryDate: string | null) {
   if (!expiryDate) {
-    return { lampColor: colors.mutedText, ddayLabel: "확인" };
+    return { lampColor: colors.expiryUnknownAccent, ddayLabel: "기한 미입력" };
   }
 
   const bucket = getExpiryTrafficBucket(expiryDate);
   const daysLeft = calculateDaysLeftUntilExpiry(expiryDate);
   const ddayLabel =
     daysLeft < 0
-      ? `D+${Math.abs(daysLeft)}`
+      ? `${Math.abs(daysLeft)}일 지남`
       : daysLeft === 0
-        ? "오늘"
-        : `D-${daysLeft}`;
+        ? "오늘까지"
+        : `${daysLeft}일 남음`;
 
   const lampColor = {
     unknown: colors.expiryUnknownAccent,
@@ -254,6 +248,7 @@ const styles = StyleSheet.create({
   copy: {
     flex: 1,
     minWidth: 0,
+    alignSelf: "stretch",
     gap: spacing.xxs,
   },
   name: {
@@ -273,15 +268,22 @@ const styles = StyleSheet.create({
   trailingHitStacked: {
     alignSelf: "flex-end",
   },
+  usageAction: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+  },
   expiryLamp: {
-    width: HERO_LAMP_SIZE,
-    height: HERO_LAMP_SIZE,
+    alignSelf: "flex-start",
+    maxWidth: "100%",
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
     borderRadius: radius.pill,
     alignItems: "center",
     justifyContent: "center",
   },
   expiryLampText: {
-    fontFamily: typography.title.fontFamily,
     color: colors.expiryAccentForeground,
   },
   selectionIndicator: {

@@ -4,6 +4,8 @@ import type { MascotMood } from "../../components/Mascot";
 export type HomeNoticeAction =
   | "retry"
   | "recommendations"
+  | "expired"
+  | "unknown"
   | "expiring"
   | "scanner"
   | "register";
@@ -26,6 +28,9 @@ export function getHomeNotices(input: {
   recipeStatus: RecipeGenerationStatus;
   recipeErrorMessage: string | null;
   expiringGroups: InventoryItemGroup[];
+  expiredCount: number;
+  within7DaysCount: number;
+  unknownExpiryCount: number;
   hasInventory: boolean;
   hasLoaded: boolean;
 }): HomeNotice[] {
@@ -53,13 +58,35 @@ export function getHomeNotices(input: {
     }];
   }
 
-  if (input.hasLoaded && input.expiringGroups.length > 0) {
+  if (input.hasLoaded && input.expiredCount > 0) {
+    return [{
+      id: "expired",
+      message: `기한이 지난 재료 ${input.expiredCount}건의 상태를 먼저 확인해 주세요.`,
+      mood: "worry",
+      action: "expired",
+      actionHint: "기한 지난 재료 확인",
+    }];
+  }
+
+  if (input.hasLoaded && input.within7DaysCount > 0) {
     return [{
       id: "expiring",
-      message: getExpiringNoticeMessage(input.expiringGroups),
+      message: input.expiringGroups.length > 0
+        ? getExpiringNoticeMessage(input.expiringGroups)
+        : `7일 안에 기한이 오는 재료 ${input.within7DaysCount}건을 먼저 살펴보세요.`,
       mood: "speak",
       action: "expiring",
       actionHint: "보관함에 임박 재료 필터 적용",
+    }];
+  }
+
+  if (input.hasLoaded && input.unknownExpiryCount > 0) {
+    return [{
+      id: "unknown",
+      message: `재료 ${input.unknownExpiryCount}건의 기한을 확인해 주세요.`,
+      mood: "speak",
+      action: "unknown",
+      actionHint: "기한 미입력 재료 확인",
     }];
   }
 
@@ -96,17 +123,17 @@ export function getHomeNotices(input: {
   if (input.hasLoaded && !input.hasInventory) {
     return [{
       id: "empty",
-      message: "냉장고가 비어 있어요. 바코드만 비춰도 첫 재료를 넣을 수 있어요.",
+      message: "첫 재료를 넣으면 언제 챙겨야 할지 알려드릴게요.",
       mood: "empty",
-      action: "scanner",
-      actionHint: "바코드 스캔 시작",
+      action: "register",
+      actionHint: "재료 등록 방식 선택",
     }];
   }
 
   if (input.hasLoaded && input.hasInventory) {
     return [{
       id: "calm",
-      message: "오늘은 급한 재료가 없어요. 여유 있을 때 재료를 더 넣어볼까요?",
+      message: "오늘은 급한 재료가 없어요. 보관 중인 재료를 살펴보세요.",
       mood: "speak",
     }];
   }

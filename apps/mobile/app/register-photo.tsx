@@ -40,8 +40,6 @@ import {
   withInventorySpace,
 } from "../src/features/auth/session-boundary";
 import {
-  applyExpiryToAll,
-  applyStorageLocationToAll,
   canSubmitPhotoIntake,
   candidatesToDrafts,
   draftsToCreateBody,
@@ -53,6 +51,7 @@ import {
   type PhotoIntakeDuplicateMatch,
   type PhotoIntakeDraftItem,
 } from "../src/features/photo-intake/photo-intake-draft";
+import { PhotoBulkEditPanel } from "../src/features/photo-intake/photo-bulk-edit-panel";
 import { pickInventoryPhoto } from "../src/features/photo-intake/pick-inventory-photo";
 import { PhotoCaptureScreen } from "../src/features/photo-intake/photo-capture-screen";
 import {
@@ -742,65 +741,14 @@ export default function RegisterPhotoScreen() {
                 냉장고 사진은 가려진 재료를 놓칠 수 있어요. 한번만 더 봐 주세요.
               </AppText>
             ) : null}
-            <View style={styles.bulkCard}>
-              <AppText variant="bodyStrong">한 번에 자리 정하기</AppText>
-              <View style={styles.pillRow}>
-                {selectableOptions.map((option) => (
-                  <Pressable
-                    key={option.key}
-                    onPress={() =>
-                      setItems((current) =>
-                        applyStorageLocationToAll(current, option.key),
-                      )
-                    }
-                    accessibilityRole="button"
-                    accessibilityLabel={`보관 위치 ${option.label} 선택`}
-                    style={({ pressed }) => [
-                      styles.pill,
-                      pressed && styles.pillPressed,
-                    ]}
-                  >
-                    <AppText variant="bodySmall">{option.label}</AppText>
-                  </Pressable>
-                ))}
-              </View>
-              <QuickExpiryPills
-                isSelected={(isoDate) =>
-                  items.length > 0 && items.every((item) => item.expiryDate === isoDate)
-                }
-                onSelect={(isoDate) =>
-                  setItems((current) =>
-                    applyExpiryToAll(current, isoDate, ExpirySource.PRESET),
-                  )
-                }
-              />
-              <Pressable
-                onPress={() =>
-                  setItems((current) =>
-                    applyExpiryToAll(current, null, ExpirySource.UNKNOWN),
-                  )
-                }
-                accessibilityRole="button"
-                accessibilityState={{
-                  selected:
-                    items.length > 0 &&
-                    items.every(
-                      (item) => item.expirySource === ExpirySource.UNKNOWN,
-                    ),
-                }}
-                style={({ pressed }) => [
-                  styles.pill,
-                  items.length > 0 &&
-                    items.every(
-                      (item) => item.expirySource === ExpirySource.UNKNOWN,
-                    ) &&
-                    styles.pillSelected,
-                  pressed && styles.pillPressed,
-                ]}
-              >
-                <AppText variant="bodySmall">기한 모름 전체 적용</AppText>
-              </Pressable>
-            </View>
+            <PhotoBulkEditPanel
+              key={activeSpaceId}
+              items={items}
+              locations={selectableOptions}
+              onChange={(expected, next) => {
+                setItems((current) => current === expected ? next : current);
+              }}
+            />
             {items.map((item) => {
               const duplicateMatch = duplicateMatches.get(item.localId);
               const isUnconfirmedDuplicate =
@@ -1544,14 +1492,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mutedSurface,
     padding: spacing.md,
     gap: spacing.xxs,
-  },
-  bulkCard: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
-    gap: spacing.sm,
   },
   pillRow: {
     flexDirection: "row",

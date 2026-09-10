@@ -13,6 +13,15 @@ function read(relativePath: string) {
 }
 
 describe("major flow deduplication contract", () => {
+  it("shows cooking inventory results before shopping and opens the actual inventory", () => {
+    const screen = read("app/cooking/[recommendationId].tsx");
+    const completion = screen.slice(screen.indexOf("  if (updatedItems) {"), screen.indexOf("  const stepTimerSeconds"));
+    expect(completion).toMatch(/router\.replace\("\/\(tabs\)\/inventory"\)[\s\S]*?보관함 보기/);
+    expect(completion).not.toContain('router.replace("/(tabs)/home")');
+    expect(completion.indexOf("냉장고에 남은 양")).toBeGreaterThan(-1);
+    expect(completion.indexOf("냉장고에 남은 양")).toBeLessThan(completion.indexOf('<AffiliateEntryImpression placement="cooking_complete">'));
+    expect(completion).toContain("onUndo={handleUndoInventory}");
+  });
   it("lets the inventory hero own recovery while keeping the empty list layout visible", () => {
     const screen = read("app/(tabs)/inventory.tsx");
     const hero = read("src/features/inventory/inventory-hero.ts");
@@ -45,6 +54,19 @@ describe("major flow deduplication contract", () => {
     expect(screen).toContain("!isInitialError && hasLoaded");
     expect(screen).toContain('title="오늘의 요리 추천"');
     expect(screen).toContain('title="유통기한 현황"');
+    expect(screen).not.toContain("HomeInventorySummary");
+    expect(screen).not.toContain("home-review-ingredients-button");
+    const hero = screen.indexOf("<HomeHero notices=");
+    const expiry = screen.indexOf('title="유통기한 현황"');
+    const add = screen.indexOf('testID="home-add-ingredients-button"');
+    const recipes = screen.indexOf('title="오늘의 요리 추천"');
+    expect(hero).toBeGreaterThan(-1);
+    expect(hero).toBeLessThan(expiry);
+    expect(expiry).toBeLessThan(add);
+    expect(add).toBeLessThan(recipes);
+    expect(screen.indexOf('title="오늘의 요리 추천"')).toBeLessThan(
+      screen.indexOf("이번 주 장고 브리핑"),
+    );
     expect(screen).toContain("추천 요리가 여기에 보여요");
     expect(notices.indexOf("input.isInitialError")).toBeLessThan(
       notices.indexOf("input.expiringGroups.length > 0"),

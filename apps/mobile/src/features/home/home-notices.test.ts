@@ -9,6 +9,9 @@ const base = {
   recipeStatus: "idle" as const,
   recipeErrorMessage: null,
   expiringGroups: [] as [],
+  expiredCount: 0,
+  within7DaysCount: 0,
+  unknownExpiryCount: 0,
   hasInventory: true,
   hasLoaded: true,
 };
@@ -79,6 +82,7 @@ describe("getHomeNotices", () => {
           hasMixedUnits: false,
         },
       ],
+      within7DaysCount: 1,
     });
 
     expect(notices.map((notice) => notice.id)).toEqual(["expiring"]);
@@ -107,10 +111,25 @@ describe("getHomeNotices", () => {
     expect(notices).toEqual([
       expect.objectContaining({
         id: "empty",
-        action: "scanner",
+        action: "register",
         mood: "empty",
       }),
     ]);
+  });
+
+  it("prioritizes expired inventory over missing dates and recommendations", () => {
+    expect(getHomeNotices({ ...base, expiredCount: 2, within7DaysCount: 3, unknownExpiryCount: 1, recipeStatus: "success" })[0])
+      .toMatchObject({ id: "expired", action: "expired" });
+  });
+
+  it("uses the full urgent count even when the preview has no items", () => {
+    expect(getHomeNotices({ ...base, within7DaysCount: 2, unknownExpiryCount: 1 })[0])
+      .toMatchObject({ id: "expiring", action: "expiring", message: "7일 안에 기한이 오는 재료 2건을 먼저 살펴보세요." });
+  });
+
+  it("does not describe missing expiry dates as having no urgent work", () => {
+    expect(getHomeNotices({ ...base, unknownExpiryCount: 3 })[0])
+      .toMatchObject({ id: "unknown", action: "unknown" });
   });
 });
 

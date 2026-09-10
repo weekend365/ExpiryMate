@@ -17,8 +17,8 @@ import homeWelcomeBg from "../../assets/backgrounds/home-welcome-bg.png";
 import { AppText } from "../../src/components/AppText";
 import { Button } from "../../src/components/Button";
 import { SkeletonBlock } from "../../src/components/ContentSkeleton";
-import { Screen } from "../../src/components/Screen";
 import { StatCard } from "../../src/components/StatCard";
+import { Screen } from "../../src/components/Screen";
 import { SpaceSwitcher } from "../../src/components/SpaceSwitcher";
 import { useDashboardSummary } from "../../src/features/dashboard/use-dashboard-summary";
 import { HomeHero } from "../../src/features/home/home-hero";
@@ -112,11 +112,17 @@ export default function HomeScreen() {
         recipeStatus: recipeGenerationStatus,
         recipeErrorMessage: recipeGenerationError,
         expiringGroups,
+        expiredCount,
+        within7DaysCount,
+        unknownExpiryCount,
         hasInventory,
         hasLoaded,
       }),
     [
       expiringGroups,
+      expiredCount,
+      within7DaysCount,
+      unknownExpiryCount,
       hasInventory,
       hasLoaded,
       isInitialError,
@@ -189,6 +195,12 @@ export default function HomeScreen() {
       case "recommendations":
         handleOpenRecommendations();
         return;
+      case "expired":
+        openInventoryFilter("expired");
+        return;
+      case "unknown":
+        openInventoryFilter("unknown");
+        return;
       case "expiring":
         openInventoryFilter("within7");
         return;
@@ -196,7 +208,7 @@ export default function HomeScreen() {
         handleOpenScanner();
         return;
       case "register":
-        handleManualRegister();
+        setEntryMethodVisible(true);
         return;
       default:
         return;
@@ -249,148 +261,6 @@ export default function HomeScreen() {
         >
           <SpaceSwitcher />
           <HomeHero notices={notices} onNoticeAction={handleNoticeAction} />
-          <PendingCookingCleanupCard />
-          <Button
-            icon={Plus}
-            onPress={() => setEntryMethodVisible(true)}
-            fullWidth
-            testID="home-add-ingredients-button"
-          >
-            재료 넣기
-          </Button>
-
-          {insightsPreview.data?.ready ? (
-            <Pressable
-              onPress={() => router.push("/insights")}
-              accessibilityRole="button"
-              accessibilityLabel={`이번 주 장고 브리핑, 최근 30일 소비 ${insightsPreview.data.consumed}개, 폐기 ${insightsPreview.data.discarded}개`}
-              style={({ pressed }) => [
-                styles.briefingCard,
-                pressed && styles.previewBodyPressed,
-              ]}
-            >
-              <View style={styles.briefingIcon}>
-                <TrendingDown
-                  color={colors.primaryForeground}
-                  size={spacing.md}
-                  strokeWidth={2.2}
-                />
-              </View>
-              <View style={styles.briefingCopy}>
-                <AppText variant="bodyStrong">이번 주 장고 브리핑</AppText>
-                <AppText variant="caption" tone="subtext">
-                  최근 30일 소비 {insightsPreview.data.consumed}개 · 폐기 {insightsPreview.data.discarded}개
-                </AppText>
-                <AppText variant="caption" tone="primary">
-                  {hasPlus
-                    ? "이번 주 실천 제안과 90일 추세를 확인해 보세요."
-                    : "기록이 준비됐어요. 무료 미리보기를 확인해 보세요."}
-                </AppText>
-              </View>
-              <ChevronRight
-                color={colors.primaryForeground}
-                size={spacing.sm}
-                strokeWidth={2.4}
-              />
-            </Pressable>
-          ) : null}
-
-          {!isInitialError && hasLoaded ? (
-            <View style={styles.previewCard}>
-              <HomeSectionHeader
-                title="오늘의 요리 추천"
-                metaLabel={
-                  recommendationPreview
-                    ? formatRecommendationCreatedAt(
-                        recommendationPreview.createdAt,
-                      )
-                    : undefined
-                }
-              />
-              <Pressable
-                onPress={
-                  hasInventory || recommendationPreview
-                    ? handleOpenRecommendations
-                    : () => setEntryMethodVisible(true)
-                }
-                accessibilityRole="button"
-                accessibilityLabel={
-                  recommendationPreview
-                    ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}${recommendationReason ? `, ${recommendationReason}` : ""}`
-                    : hasInventory
-                      ? "보관 중인 재료로 오늘의 요리 추천받기"
-                      : "추천 요리가 아직 없어요. 재료를 넣으면 오늘의 요리를 골라드려요."
-                }
-                style={({ pressed }) => [
-                  styles.recommendationPreview,
-                  shouldStack && styles.recommendationPreviewStacked,
-                  pressed && styles.previewBodyPressed,
-                ]}
-              >
-                <View style={styles.recommendationIcon}>
-                  <Sparkles
-                    color={colors.primaryForeground}
-                    size={spacing.md}
-                    strokeWidth={2.2}
-                    accessibilityElementsHidden
-                    importantForAccessibility="no"
-                  />
-                </View>
-                <View style={styles.recommendationCopy}>
-                  <AppText
-                    variant="bodyStrong"
-                    numberOfLines={shouldStack ? undefined : 2}
-                  >
-                    {recommendationPreview
-                      ? recommendationPreview.title
-                      : hasInventory
-                        ? "보관 중인 재료로 오늘의 요리를 찾아볼까요?"
-                        : "추천 요리가 여기에 보여요"}
-                  </AppText>
-                  {recommendationPreview ? (
-                    <AppText
-                      variant="caption"
-                      tone="subtext"
-                      numberOfLines={shouldStack ? undefined : 2}
-                    >
-                      {recommendationPreview.servings}인분
-                      {"  ·  "}
-                      {recommendationPreview.cookingTimeMinutes}분{"  ·  "}
-                      {difficultyLabels[recommendationPreview.difficulty]}
-                    </AppText>
-                  ) : (
-                    <AppText variant="caption" tone="subtext">
-                      {hasInventory
-                        ? "유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요."
-                        : "첫 재료를 넣으면 유통기한을 살펴 메뉴를 골라드려요."}
-                    </AppText>
-                  )}
-                  {recommendationReason ? (
-                    <AppText
-                      variant="caption"
-                      tone={
-                        hasUrgentRecommendationIngredient
-                          ? "warning"
-                          : "primary"
-                      }
-                      numberOfLines={shouldStack ? undefined : 2}
-                      style={styles.recommendationReasonText}
-                    >
-                      {recommendationReason}
-                    </AppText>
-                  ) : null}
-                </View>
-                <ChevronRight
-                  color={colors.primaryForeground}
-                  size={spacing.sm}
-                  strokeWidth={2.4}
-                  accessibilityElementsHidden
-                  importantForAccessibility="no"
-                />
-              </Pressable>
-            </View>
-          ) : null}
-
           {!isInitialError && (isInitialLoading || hasLoaded) ? (
             <View style={styles.trafficGroup}>
               <HomeSectionHeader
@@ -515,6 +385,148 @@ export default function HomeScreen() {
               </View>
               )}
             </View>
+          ) : null}
+
+          <Button
+            icon={Plus}
+            onPress={() => setEntryMethodVisible(true)}
+            fullWidth
+            testID="home-add-ingredients-button"
+          >
+            재료 넣기
+          </Button>
+          <PendingCookingCleanupCard />
+
+          {!isInitialError && hasLoaded ? (
+            <View style={styles.previewCard}>
+              <HomeSectionHeader
+                title="오늘의 요리 추천"
+                metaLabel={
+                  recommendationPreview
+                    ? formatRecommendationCreatedAt(
+                        recommendationPreview.createdAt,
+                      )
+                    : undefined
+                }
+              />
+              <Pressable
+                onPress={
+                  hasInventory || recommendationPreview
+                    ? handleOpenRecommendations
+                    : () => setEntryMethodVisible(true)
+                }
+                accessibilityRole="button"
+                accessibilityLabel={
+                  recommendationPreview
+                    ? `${recommendationPreview.title}, ${recommendationPreview.servings}인분, ${recommendationPreview.cookingTimeMinutes}분, ${difficultyLabels[recommendationPreview.difficulty]}${recommendationReason ? `, ${recommendationReason}` : ""}`
+                    : hasInventory
+                      ? "보관 중인 재료로 오늘의 요리 추천받기"
+                      : "추천 요리가 아직 없어요. 재료를 넣으면 오늘의 요리를 골라드려요."
+                }
+                style={({ pressed }) => [
+                  styles.recommendationPreview,
+                  shouldStack && styles.recommendationPreviewStacked,
+                  pressed && styles.previewBodyPressed,
+                ]}
+              >
+                <View style={styles.recommendationIcon}>
+                  <Sparkles
+                    color={colors.primaryForeground}
+                    size={spacing.md}
+                    strokeWidth={2.2}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                  />
+                </View>
+                <View style={styles.recommendationCopy}>
+                  <AppText
+                    variant="bodyStrong"
+                    numberOfLines={shouldStack ? undefined : 2}
+                  >
+                    {recommendationPreview
+                      ? recommendationPreview.title
+                      : hasInventory
+                        ? "보관 중인 재료로 오늘의 요리를 찾아볼까요?"
+                        : "추천 요리가 여기에 보여요"}
+                  </AppText>
+                  {recommendationPreview ? (
+                    <AppText
+                      variant="caption"
+                      tone="subtext"
+                      numberOfLines={shouldStack ? undefined : 2}
+                    >
+                      {recommendationPreview.servings}인분
+                      {"  ·  "}
+                      {recommendationPreview.cookingTimeMinutes}분{"  ·  "}
+                      {difficultyLabels[recommendationPreview.difficulty]}
+                    </AppText>
+                  ) : (
+                    <AppText variant="caption" tone="subtext">
+                      {hasInventory
+                        ? "유통기한과 보관 재료를 살펴보고 메뉴를 골라드려요."
+                        : "첫 재료를 넣으면 유통기한을 살펴 메뉴를 골라드려요."}
+                    </AppText>
+                  )}
+                  {recommendationReason ? (
+                    <AppText
+                      variant="caption"
+                      tone={
+                        hasUrgentRecommendationIngredient
+                          ? "warning"
+                          : "primary"
+                      }
+                      numberOfLines={shouldStack ? undefined : 2}
+                      style={styles.recommendationReasonText}
+                    >
+                      {recommendationReason}
+                    </AppText>
+                  ) : null}
+                </View>
+                <ChevronRight
+                  color={colors.primaryForeground}
+                  size={spacing.sm}
+                  strokeWidth={2.4}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
+                />
+              </Pressable>
+            </View>
+          ) : null}
+
+          {insightsPreview.data?.ready ? (
+            <Pressable
+              onPress={() => router.push("/insights")}
+              accessibilityRole="button"
+              accessibilityLabel={`이번 주 장고 브리핑, 최근 30일 소비 ${insightsPreview.data.consumed}개, 폐기 ${insightsPreview.data.discarded}개`}
+              style={({ pressed }) => [
+                styles.briefingCard,
+                pressed && styles.previewBodyPressed,
+              ]}
+            >
+              <View style={styles.briefingIcon}>
+                <TrendingDown
+                  color={colors.primaryForeground}
+                  size={spacing.md}
+                  strokeWidth={2.2}
+                />
+              </View>
+              <View style={styles.briefingCopy}>
+                <AppText variant="bodyStrong">이번 주 장고 브리핑</AppText>
+                <AppText variant="caption" tone="subtext">
+                  최근 30일 소비 {insightsPreview.data.consumed}개 · 폐기 {insightsPreview.data.discarded}개
+                </AppText>
+                <AppText variant="caption" tone="primary">
+                  {hasPlus
+                    ? "이번 주 실천 제안과 90일 추세를 확인해 보세요."
+                    : "기록이 준비됐어요. 무료 미리보기를 확인해 보세요."}
+                </AppText>
+              </View>
+              <ChevronRight
+                color={colors.primaryForeground}
+                size={spacing.sm}
+                strokeWidth={2.4}
+              />
+            </Pressable>
           ) : null}
 
           {reorderPreview.data?.group ? (

@@ -309,16 +309,9 @@ export default function CookingScreen() {
         }
         footer={
           <View style={styles.footerStack}>
-            {undoLabel ? (
-              <InventoryUndoSnackbar
-                label={undoLabel}
-                stacked={shouldStack}
-                onUndo={handleUndoInventory}
-              />
-            ) : null}
             <Button
               icon={Refrigerator}
-              onPress={() => router.replace("/(tabs)/home")}
+              onPress={() => router.replace("/(tabs)/inventory")}
               fullWidth
             >
               보관함 보기
@@ -333,6 +326,37 @@ export default function CookingScreen() {
           </View>
         }
       >
+        {undoLabel ? (
+          <InventoryUndoSnackbar
+            label={undoLabel}
+            stacked={shouldStack}
+            onUndo={handleUndoInventory}
+          />
+        ) : null}
+        {updatedItems.length ? (
+          <View style={styles.remainingCard}>
+            <AppText variant="subheading">냉장고에 남은 양</AppText>
+            {updatedItems.map((item) => (
+              <View
+                key={item.id}
+                style={[
+                  styles.remainingRow,
+                  shouldStack && styles.remainingRowStacked,
+                ]}
+              >
+                <AppText variant="body" style={styles.remainingName}>
+                  {item.displayName}
+                </AppText>
+                <AppText variant="bodySmall" tone="subtext">
+                  {item.status === ItemStatus.CONSUMED ||
+                  item.quantityBase === 0
+                    ? "다 사용했어요"
+                    : `${formatBaseQuantity(item.quantityBase, item.unitCode)} 남았어요`}
+                </AppText>
+              </View>
+            ))}
+          </View>
+        ) : null}
         {depletedTargets.length ? (
           <AffiliateEntryImpression placement="cooking_complete">
             <View style={styles.shoppingSummaryCard}>
@@ -375,30 +399,6 @@ export default function CookingScreen() {
               </Button>
             </View>
           </AffiliateEntryImpression>
-        ) : null}
-        {updatedItems.length ? (
-          <View style={styles.remainingCard}>
-            <AppText variant="subheading">냉장고에 남은 양</AppText>
-            {updatedItems.map((item) => (
-              <View
-                key={item.id}
-                style={[
-                  styles.remainingRow,
-                  shouldStack && styles.remainingRowStacked,
-                ]}
-              >
-                <AppText variant="body" style={styles.remainingName}>
-                  {item.displayName}
-                </AppText>
-                <AppText variant="bodySmall" tone="subtext">
-                  {item.status === ItemStatus.CONSUMED ||
-                  item.quantityBase === 0
-                    ? "다 사용했어요"
-                    : `${formatBaseQuantity(item.quantityBase, item.unitCode)} 남았어요`}
-                </AppText>
-              </View>
-            ))}
-          </View>
         ) : null}
       </Screen>
     );

@@ -11,12 +11,9 @@ name: Responsive layout smoke
       id: onboarding-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/onboarding
-- repeat:
-    times: 4
-    commands:
-      - tapOn:
-          id: onboarding-next-button
-      - waitForAnimationToEnd
+- tapOn:
+    id: onboarding-next-button
+- waitForAnimationToEnd
 - extendedWaitUntil:
     visible:
       id: login-screen
@@ -76,7 +73,8 @@ name: Responsive layout smoke
       id: inventory-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/inventory
-- tapOn: "서울우유 1L 내용을 고칠게요"
+- tapOn: "서울우유 1L,.*"
+- tapOn: "전체 내용 수정하기"
 - extendedWaitUntil:
     visible:
       id: inventory-edit-screen

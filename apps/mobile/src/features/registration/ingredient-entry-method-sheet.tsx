@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { BottomSheet } from "../../components/BottomSheet";
+import { Button } from "../../components/Button";
 import { colors, radius, spacing, controlSize } from "../../shared/theme";
 import {
   photoDraftForSpace,
@@ -56,7 +57,7 @@ export function IngredientEntryMethodSheet({
       {
         method: "scan",
         title: "바코드로 넣기",
-        description: "포장 상품 하나를 가장 빠르게 등록해요.",
+        description: "포장 상품 1개",
         icon: Barcode,
         testID: "ingredient-entry-scan-button",
         onPress: onScan,
@@ -65,10 +66,8 @@ export function IngredientEntryMethodSheet({
     if (onPhoto) {
       next.push({
         method: "photo",
-        title: photoDraftCount ? "사진 초안 이어서" : "사진으로 여러 개 넣기",
-        description: photoDraftCount
-          ? `확인 중인 ${photoDraftCount}개부터 이어서 볼 수 있어요.`
-          : "장 본 재료를 한 번에 읽고 필요한 것만 확인해요.",
+        title: "사진으로 여러 개 넣기",
+        description: "여러 재료 한 번에",
         icon: ImageIcon,
         testID: "ingredient-entry-photo-button",
         onPress: onPhoto,
@@ -77,25 +76,13 @@ export function IngredientEntryMethodSheet({
     next.push({
       method: "manual",
       title: "직접 입력하기",
-      description: "바코드가 없거나 이름만 빠르게 적고 싶을 때 좋아요.",
+      description: "바코드 없는 재료",
       icon: PenLine,
       testID: "ingredient-entry-manual-button",
       onPress: onManual,
     });
     return next;
-  }, [onManual, onPhoto, onScan, photoDraftCount]);
-
-  const availableMethods = new Set(options.map((option) => option.method));
-  const recommendedMethod: IngredientEntryMethod =
-    photoDraftCount > 0 && onPhoto
-      ? "photo"
-      : preferredMethod && availableMethods.has(preferredMethod)
-        ? preferredMethod
-        : "scan";
-  const orderedOptions = [
-    ...options.filter((option) => option.method === recommendedMethod),
-    ...options.filter((option) => option.method !== recommendedMethod),
-  ];
+  }, [onManual, onPhoto, onScan]);
 
   const choose = (option: EntryOption) => {
     if (activeSpaceId) {
@@ -109,51 +96,64 @@ export function IngredientEntryMethodSheet({
       visible={visible}
       onClose={onClose}
       title="어떻게 넣을까요?"
-      description="포장 상품은 바코드, 여러 재료는 사진이 빨라요. 최근 방식은 다음에도 먼저 보여드릴게요."
+      description="재료에 맞는 방식을 골라 주세요."
       mascotMood="idle"
     >
       <View style={styles.optionStack}>
-        {orderedOptions.map((option) => {
-          const recommended = option.method === recommendedMethod;
+        {photoDraftCount > 0 && onPhoto ? (
+          <View style={styles.draftResume} testID="ingredient-entry-photo-draft">
+            <AppText variant="bodySmall" tone="subtext">
+              아직 저장하지 않은 사진 초안이 있어요. 새 사진은 초안을 확인한 뒤 선택할 수 있어요.
+            </AppText>
+            <Button
+              variant="secondary"
+              fullWidth
+              testID="ingredient-entry-resume-photo-button"
+              onPress={() => {
+                if (activeSpaceId) {
+                  setPreferredEntryMethod(activeSpaceId, "photo");
+                }
+                onPhoto();
+              }}
+            >
+              {`확인 중인 재료 ${photoDraftCount}개 이어서`}
+            </Button>
+          </View>
+        ) : null}
+        {options.map((option) => {
           const Icon = option.icon;
-          const badge =
-            option.method === "photo" && photoDraftCount > 0
-              ? "초안 이어서"
-              : preferredMethod === option.method
-                ? "최근 사용"
-                : "빠른 등록";
+          const recentlyUsed = preferredMethod === option.method;
           return (
             <Pressable
               key={option.method}
               onPress={() => choose(option)}
               accessibilityRole="button"
-              accessibilityLabel={`${option.title}, ${option.description}`}
+              accessibilityLabel={`${option.title}, ${option.description}${recentlyUsed ? ", 최근 사용" : ""}`}
+              accessibilityHint={
+                option.method === "photo" && photoDraftCount > 0
+                  ? "저장하지 않은 초안을 먼저 확인해요."
+                  : undefined
+              }
               testID={option.testID}
               style={({ pressed }) => [
                 styles.option,
-                recommended && styles.optionRecommended,
                 pressed && styles.optionPressed,
               ]}
             >
-              <View
-                style={[
-                  styles.iconWrap,
-                  recommended && styles.iconWrapRecommended,
-                ]}
-              >
+              <View style={styles.iconWrap}>
                 <Icon
-                  color={recommended ? colors.primaryForeground : colors.mutedText}
+                  color={colors.primaryForeground}
                   size={spacing.lg}
                   strokeWidth={2.4}
                 />
               </View>
               <View style={styles.optionCopy}>
                 <View style={styles.optionTitleRow}>
-                  <AppText variant="bodyStrong">{option.title}</AppText>
-                  {recommended ? (
+                  <AppText variant="bodyStrong" style={styles.optionTitle}>{option.title}</AppText>
+                  {recentlyUsed ? (
                     <View style={styles.badge}>
                       <AppText variant="caption" tone="primary">
-                        {badge}
+                        최근 사용
                       </AppText>
                     </View>
                   ) : null}
@@ -186,9 +186,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceWarm,
     padding: spacing.md,
   },
-  optionRecommended: {
-    borderColor: colors.primaryForeground,
-    backgroundColor: colors.primarySoft,
+  draftResume: {
+    gap: spacing.xs,
+    paddingBottom: spacing.sm,
+    marginBottom: spacing.xs,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.borderSubtle,
   },
   optionPressed: {
     opacity: 0.84,
@@ -201,9 +204,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     backgroundColor: colors.mutedSurface,
   },
-  iconWrapRecommended: {
-    backgroundColor: colors.surface,
-  },
   optionCopy: {
     flex: 1,
     minWidth: 0,
@@ -214,6 +214,9 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     gap: spacing.xs,
+  },
+  optionTitle: {
+    flexShrink: 1,
   },
   badge: {
     borderRadius: radius.pill,
