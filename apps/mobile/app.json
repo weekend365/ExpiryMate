@@ -74,7 +74,9 @@
             "deploymentTarget": "16.4"
           },
           "android": {
-            "kotlinVersion": "2.2.20"
+            "kotlinVersion": "2.2.20",
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
           }
         }
       ],
@@ -212,7 +214,6 @@
     },
     "androidNavigationBar": {
       "barStyle": "dark-content",
-      "backgroundColor": "#FFFFFF",
       "enforceContrast": true
     },
     "extra": {

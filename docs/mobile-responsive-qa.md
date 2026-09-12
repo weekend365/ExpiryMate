@@ -80,3 +80,30 @@ delegate's portrait declaration is vendor-owned, so this project intentionally
 does not override it with a manifest merge rule. Revisit it after an upstream
 `expo-camera` or Google Code Scanner update, while keeping the large-screen
 profiles above as the compatibility check.
+
+## Google Play release quality checks
+
+- Android release builds enable R8 minification and resource shrinking through
+  `expo-build-properties` in `apps/mobile/app.json`. The
+  `with-android-release-optimization` config plugin selects
+  `proguard-android-optimize.txt` during Prebuild; the SDK 54 template's legacy
+  default disables code optimization. Do not edit generated Android files.
+- After a release build, retain `app/build/outputs/mapping/release/mapping.txt`
+  for crash deobfuscation and inspect `configuration.txt` for global
+  `-dontoptimize`, `-dontshrink`, or `-dontobfuscate` rules. Exercise login,
+  camera/OCR, notifications, ads, purchase and restore on the optimized build.
+- Play Console's affected bundle details remain the acceptance check for DEX
+  optimization, shrinking and obfuscation percentages. Enabling R8 alone does
+  not prove that all three reach the 25% threshold.
+- SDK 54 already enables edge-to-edge. The app does not request a navigation bar
+  background color; test both gesture and three-button navigation with safe
+  areas and keyboard visible. Deprecated calls can still exist in native
+  dependencies (including `react-native-screens`); match the exact classes in
+  Play Console to the dependency before choosing an upgrade.
+- The main activity uses unrestricted orientation. Recheck the final merged
+  manifest for library activities as well as the tablet/foldable profiles above.
+  Do not force a vendor scanner activity into an unsupported orientation.
+
+References: [Expo SDK 54 build properties](https://docs.expo.dev/versions/v54.0.0/sdk/build-properties/),
+[Android R8 setup](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization),
+[Google Play technical quality requirements](https://support.google.com/googleplay/android-developer/answer/17492799).
