@@ -2,7 +2,7 @@ import type {
   SubscriptionPurchaseIntent,
   SubscriptionVerificationRequest,
 } from "@expirymate/shared";
-import type { Purchase, ProductSubscription } from "expo-iap";
+import type { Purchase } from "expo-iap";
 import {
   deepLinkToSubscriptions,
   getAvailablePurchases,
@@ -13,7 +13,7 @@ import {
   RefreshCw,
   ShieldCheck,
 } from "lucide-react-native";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Alert,
   Linking,
@@ -34,14 +34,15 @@ import {
 import { useIapStore } from "../../src/features/monetization/iap-purchase-provider";
 import {
   ANDROID_PACKAGE_NAME,
-  APPLE_MONTHLY_SUBSCRIPTION_ID,
-  APPLE_YEARLY_SUBSCRIPTION_ID,
   GOOGLE_SUBSCRIPTION_ID,
   clearPendingSubscriptionPurchaseIntent,
   isPersonalSubscriptionProduct,
   readPendingSubscriptionPurchaseIntent,
   savePendingSubscriptionPurchaseIntent,
 } from "../../src/features/monetization/iap-products";
+import { useSubscriptionProducts } from "../../src/features/subscriptions/use-subscription-products";
+import { SubscriptionProductsNotice } from "../../src/features/subscriptions/subscription-products-notice";
+import { getAnnualSavings, type BillingPeriod } from "../../src/features/subscriptions/subscription-plans";
 import { useMonetization } from "../../src/features/monetization/monetization-provider";
 import {
   formatSubscriptionExpiry,
@@ -57,15 +58,6 @@ import {
   createSubscriptionPurchaseIntent,
   trackMonetizationEvent,
 } from "../../src/services/api";
-
-type BillingPeriod = "monthly" | "yearly";
-type StorePlan = {
-  period: BillingPeriod;
-  displayPrice: string;
-  price: number | null;
-  productId: string;
-  offerToken?: string;
-};
 
 export default function SubscriptionSettingsScreen() {
   if (!isIapRuntimeAvailable()) {
@@ -170,8 +162,7 @@ function SubscriptionStoreScreen() {
 
   const {
     connected,
-    subscriptions,
-    fetchProducts,
+    reconnect,
     requestPurchase,
     finishTransaction,
   } = useIapStore({
@@ -196,20 +187,17 @@ function SubscriptionStoreScreen() {
         stage: "store_connection",
         reason: error.name,
       });
-      Alert.alert("스토어를 불러오지 못했어요", error.message);
+      // Product loading failures are shown inline with a retry action.
     },
   });
 
-  useEffect(() => {
-    if (!connected) return;
-    void fetchProducts({
-      skus:
-        Platform.OS === "ios"
-          ? [APPLE_MONTHLY_SUBSCRIPTION_ID, APPLE_YEARLY_SUBSCRIPTION_ID]
-          : [GOOGLE_SUBSCRIPTION_ID],
-      type: "subs",
-    });
-  }, [connected, fetchProducts]);
+  const productsQuery = useSubscriptionProducts({
+    connected,
+    reconnect,
+    enabled: screenState.sales === "available",
+  });
+  const plans = productsQuery.isError ? [] : productsQuery.data ?? [];
+  const pricesLoading = productsQuery.isFetching || productsQuery.isPending;
 
   useEffect(() => {
     if (
@@ -233,12 +221,11 @@ function SubscriptionStoreScreen() {
     [],
   );
 
-  const plans = useMemo(() => resolvePlans(subscriptions), [subscriptions]);
   const selectedPlan = plans.find((plan) => plan.period === selectedPeriod);
   const annualSavings = getAnnualSavings(plans);
 
   const startPurchase = async () => {
-    if (!selectedPlan) {
+    if (!connected || productsQuery.isFetching || !selectedPlan) {
       Alert.alert(
         "가격을 불러오는 중이에요",
         "스토어 연결을 확인한 뒤 잠시 후 다시 눌러 주세요.",
@@ -373,6 +360,12 @@ function SubscriptionStoreScreen() {
           description="무료 체험 없이 선택한 기간마다 자동 갱신돼요."
           content="plain"
         >
+          <SubscriptionProductsNotice
+            plans={plans}
+            loading={pricesLoading}
+            failed={productsQuery.isError}
+            onRetry={() => { void productsQuery.refetch(); }}
+          />
           <View style={styles.planList}>
             {(["monthly", "yearly"] as const).map((period) => {
               const plan = plans.find((item) => item.period === period);
@@ -388,7 +381,8 @@ function SubscriptionStoreScreen() {
                     });
                   }}
                   accessibilityRole="radio"
-                  accessibilityState={{ selected }}
+                  accessibilityState={{ selected, disabled: !plan || productsQuery.isFetching }}
+                  disabled={!plan || productsQuery.isFetching}
                   style={[
                     styles.planCard,
                     shouldStack && styles.planCardStacked,
@@ -402,11 +396,11 @@ function SubscriptionStoreScreen() {
                     <AppText variant="caption" tone="subtext">
                       {period === "yearly" && annualSavings
                         ? `월간 결제 대비 약 ${annualSavings}% 절약`
-                        : "매월 자동 갱신"}
+                        : period === "yearly" ? "매년 자동 갱신" : "매월 자동 갱신"}
                     </AppText>
                   </View>
                   <AppText variant="bodyStrong" tone="primary">
-                    {plan?.displayPrice ?? "가격 확인 중"}
+                    {plan?.displayPrice ?? (pricesLoading ? "가격 확인 중" : "현재 이용 불가")}
                   </AppText>
                 </Pressable>
               );
@@ -425,11 +419,11 @@ function SubscriptionStoreScreen() {
           <Button
             onPress={() => void startPurchase()}
             loading={busyAction === "purchase"}
-            disabled={!connected || busyAction !== null || !selectedPlan}
+            disabled={!connected || productsQuery.isFetching || busyAction !== null || !selectedPlan}
             fullWidth
           >
             {!selectedPlan
-              ? "가격을 확인하고 있어요"
+              ? pricesLoading ? "가격을 확인하고 있어요" : "지금은 구독할 수 없어요"
               : selectedPeriod === "monthly"
               ? "월간으로 시작하기"
               : "연간으로 시작하기"}
@@ -473,61 +467,6 @@ function SubscriptionStoreScreen() {
       </SettingsGroup>
     </SettingsScreen>
   );
-}
-
-function resolvePlans(products: ProductSubscription[]): StorePlan[] {
-  if (Platform.OS === "ios") {
-    return products.flatMap((product) => {
-      if (product.platform !== "ios") return [];
-      const period =
-        product.id === APPLE_YEARLY_SUBSCRIPTION_ID
-          ? "yearly"
-          : product.id === APPLE_MONTHLY_SUBSCRIPTION_ID
-            ? "monthly"
-            : null;
-      return period
-        ? [
-            {
-              period,
-              displayPrice: product.displayPrice,
-              price: product.price ?? null,
-              productId: product.id,
-            },
-          ]
-        : [];
-    });
-  }
-
-  const product = products.find(
-    (item) => item.platform === "android" && item.id === GOOGLE_SUBSCRIPTION_ID,
-  );
-  if (!product || product.platform !== "android") return [];
-  return product.subscriptionOffers.flatMap((offer) => {
-    const period =
-      offer.basePlanIdAndroid === "yearly"
-        ? "yearly"
-        : offer.basePlanIdAndroid === "monthly"
-          ? "monthly"
-          : null;
-    return period
-      ? [
-          {
-            period,
-            displayPrice: offer.displayPrice,
-            price: offer.price,
-            productId: product.id,
-            offerToken: offer.offerTokenAndroid ?? undefined,
-          },
-        ]
-      : [];
-  });
-}
-
-function getAnnualSavings(plans: StorePlan[]) {
-  const monthly = plans.find((plan) => plan.period === "monthly")?.price;
-  const yearly = plans.find((plan) => plan.period === "yearly")?.price;
-  if (!monthly || !yearly || monthly <= 0) return null;
-  return Math.max(0, Math.round((1 - yearly / (monthly * 12)) * 100));
 }
 
 function getErrorMessage(error: unknown) {

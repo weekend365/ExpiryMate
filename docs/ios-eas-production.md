@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-release
-last_reviewed: 2026-08-29
+last_reviewed: 2026-09-12
 source_of_truth: true
 ---
 
@@ -10,24 +10,27 @@ source_of_truth: true
 Apple Developer Program 가입 이후 **Sign in with Apple · Push · TestFlight/App Store** 를 켜기 위한 체크리스트입니다.  
 코드 쪽 설정은 `apps/mobile/app.json`, `app.config.js`, `eas.json`에 반영됩니다. iOS EAS worker에서는 패키지 `postinstall`이 tracked native 프로젝트를 `expo prebuild`로 다시 동기화하며, 이후 EAS가 CocoaPods를 설치합니다.
 
-## 0. 개인 플러스 `1.4.0` 업데이트 빌드
+## 0. 개인 플러스 `1.4.1` 업데이트 빌드
 
-장고야 부탁해는 App Store에 `1.3.0`까지 공개되어 있습니다. 개인 플러스와 인사이트를
-추가하는 다음 업데이트는 `1.4.0`으로 제출합니다. 첫 자동 갱신 구독이므로 새 앱 버전,
-구독 그룹, 월간·연간 상품을 같은 App Review 제출에 포함합니다.
+2026-09-12 App Store Connect에서 확인한 현재 출시 버전은 `1.4.0`(45)입니다.
+구독 가격 조회의 무한 대기·오류 안내를 수정한 다음 버전은 `1.4.1`입니다.
+첫 자동 갱신 구독이므로 새 앱 버전, 구독 그룹, 월간·연간 상품을 같은 App Review
+제출에 포함해야 합니다. 빌드 업로드와 App Review 제출은 별개 단계입니다.
 
-> **일정:** production EAS 빌드는 2026-09-01에 생성합니다. 2026-08-29에는 버전·Pods·
-> 타입 검사·모바일 테스트까지만 완료했으며 App Store Connect의 빌드 연결과 구독 심사
-> 추가는 의도적으로 대기 중입니다. 최신 준비 상태는
-> [`subscription-store-rollout.md`](./subscription-store-rollout.md)의 진행 스냅샷을 따릅니다.
-> 2026-08-29에 확인한 EAS remote iOS buildNumber는 `35`입니다. 9월 1일 빌드 직전에
-> 다시 조회하고, 값이 그대로라면 production `autoIncrement` 결과는 `36`이어야 합니다.
+- EAS production 빌드: `6c6de756-73a4-4507-b9d8-157b7a21d671`, `1.4.1`(46)
+- EAS 빌드 및 App Store Connect 업로드 성공. 다운로드한 최종 앱의 `1.4.1`(46)과 수정 코드 포함 확인
+- App Store Connect에서 `1.4.1` 버전에 빌드 `46` 연결 및 저장 완료
+- 원격 buildNumber `45`를 확인한 뒤 production `autoIncrement`로 `46` 생성
+- 문서 검사, 린트, 전체 타입 검사, 테스트 1,027개 통과
+- 구독 가격 조회·재연결은 최대 15초로 제한하고, 상품 없음·부분 누락·오류에 재시도 제공
+- 로컬 화면 캡처 비교는 Maestro 미설치로 미실행. TestFlight 화면·구매·복원 확인 필요
+- 상품 상태 및 이후 심사 단계는 [`subscription-store-rollout.md`](./subscription-store-rollout.md) 참고
 
 ### 버전 기준
 
-- `apps/mobile/app.json`의 `expo.version`: `1.4.0`
-- 생성되는 iOS 프로젝트의 `CFBundleShortVersionString`: `1.4.0`
-- Xcode Debug/Release `MARKETING_VERSION`: `1.4.0`
+- `apps/mobile/app.json`의 `expo.version`: `1.4.1`
+- 생성되는 iOS 프로젝트의 `CFBundleShortVersionString`: `1.4.1`
+- 실제 번들 버전은 Info.plist의 `CFBundleShortVersionString`으로 검증합니다.
 - `eas.json`은 `appVersionSource: "remote"`, production `autoIncrement: true`이므로
   iOS build number와 Android versionCode는 EAS의 현재 원격 값에서 증가시킵니다.
 - 로컬 `buildNumber: "1"`, `versionCode: 1`은 원격 버전 정본이 아닙니다.
@@ -67,7 +70,7 @@ EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID
 EXPO_PUBLIC_KAKAO_OAUTH_CLIENT_ID
 ```
 
-3. **버전 문자열과 원격 빌드 번호 확인** (Connect에는 **`1.4.0`** 사용):
+3. **버전 문자열과 원격 빌드 번호 확인** (Connect에는 **`1.4.1`** 사용):
 
 ```bash
 # remote buildNumber만 확인 (다운그레이드 금지)
@@ -76,9 +79,9 @@ pnpm dlx eas-cli@21.2.0 build:version:get -p ios
 
 필요할 때 `npx expo prebuild --platform ios --clean`으로 생성 결과를 검수:
 
-- 생성된 `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.4.0`
-- 생성된 `ios/ExpiryMate.xcodeproj/project.pbxproj` → `MARKETING_VERSION` = `1.4.0`
-- `app.json` → `"version": "1.4.0"` 유지
+- 생성된 `ios/ExpiryMate/Info.plist` → `CFBundleShortVersionString` = `1.4.1`
+- native 프로젝트가 있는 경우에도 EAS build metadata와 최종 IPA 버전이 `1.4.1`인지 확인
+- `app.json` → `"version": "1.4.1"` 유지
 - `CFBundleVersion` / `CURRENT_PROJECT_VERSION` 은 production
   `autoIncrement` 가 remote에서 올리므로 로컬 `"1"`에 집착하지 않아도 됨
 
@@ -94,7 +97,7 @@ pnpm dlx eas-cli@21.2.0 build --platform ios --profile production
 
 5. **App Store Connect (수동)**
 
-- 기존 앱에 새 iOS 버전 **`1.4.0`** 생성
+- 기존 앱에 새 iOS 버전 **`1.4.1`** 생성
 - 방금 빌드 연결
 - **마케팅 URL:** `https://jango.devnamu.com`
 - **지원 URL:** `https://jango.devnamu.com/privacy/choices`
