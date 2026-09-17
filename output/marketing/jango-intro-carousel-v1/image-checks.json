@@ -1,0 +1,32 @@
+[
+  {
+    "file": "01-cover.png",
+    "width": 1122,
+    "height": 1402,
+    "size_bytes": 1323183
+  },
+  {
+    "file": "02-problem.png",
+    "width": 1122,
+    "height": 1402,
+    "size_bytes": 1359917
+  },
+  {
+    "file": "03-inventory.png",
+    "width": 1122,
+    "height": 1402,
+    "size_bytes": 1169651
+  },
+  {
+    "file": "04-recipes.png",
+    "width": 1122,
+    "height": 1402,
+    "size_bytes": 1185951
+  },
+  {
+    "file": "05-download.png",
+    "width": 1122,
+    "height": 1402,
+    "size_bytes": 1196731
+  }
+]

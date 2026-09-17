@@ -1,0 +1,19 @@
+Use case: compositing.
+Edit target: image 1, the already approved Jango end-card.
+Supporting insert: image 2, the USER'S ACTUAL APP SCREENSHOT.
+Make ONE precise local change: replace ONLY the contents inside the smartphone display in image 1 with image 2.
+
+Treat image 2 as a finished raster screenshot to paste and fit, NOT as a UI inspiration reference. Do not redraw, redesign, paraphrase, simplify, regenerate, translate, change, or fabricate any of its app interface, Korean text, numbers, icons or colors. Preserve the visible expiration warning and all data exactly, including 4 expired items, 1 soon item, 12 remaining items and the current recommended dish. Do not substitute the previous illustrated hotpot, and do not make the app show a tofu recipe.
+
+Fit the complete screenshot proportionally into the phone's inner screen, keeping its top status bar and bottom navigation visible. Preserve the original screenshot aspect ratio; if needed use narrow matching warm-cream side margins inside the display rather than stretching or cropping away parts of the screenshot. Clip neatly to the phone screen's rounded inner corners. The phone's existing dark outer frame and small top pill remain in place. Its small top pill may overlay the empty center of the screenshot status bar without hiding the time or icons.
+At the 941x1672 source scale, the display is approximately x=513..787, y=678..1215. Work only inside that display; these coordinates are only guidance. Preserve the phone frame, its size, angle, position, shadow and outline.
+
+Everything outside the phone display must remain identical to image 1: warm-white background, safe margins, all typography, colors, Jango's face, pointing arm, glove, pineapple mark, body, chef hat, shoes, and the mint download button. Do NOT regenerate the mascot or change the composition.
+Keep the external end-card copy exactly:
+장고야 부탁해
+임박한 재료로,
+오늘의 요리 추천.
+지금 다운로드
+
+Do not add another screenshot beside the phone. Do not place the screenshot as a floating card. Do not retain any of the old ingredient tiles, illustrated hotpot or '두부버섯전골' text inside the display.
+Output one full finished end-card image in the same 9:16 portrait aspect ratio and same overall layout as image1. No new watermark, no additional text or decorative elements.

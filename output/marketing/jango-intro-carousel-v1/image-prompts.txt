@@ -1,0 +1,63 @@
+생성 방식: built-in image_gen
+
+=== SLIDE 1 ===
+Use case: ads-marketing.
+Create ONE finished Korean Instagram carousel card, slide 1 of a coordinated 5-card campaign for the app "장고야 부탁해". Portrait 4:5 aspect ratio, ideally 1080×1350. This is a finished ready-to-publish card with Korean typography, NOT a contact sheet or phone mockup.
+Supporting reference image: the attached icon is the authoritative Jango mascot identity. Preserve that exact flat 2D illustrated refrigerator character, its body proportions, asymmetric chef toque, mint hat band, single refrigerator door, mint handle at viewer left, tiny pineapple sticker at upper left, two gray hinges on viewer right, mint oven mitts, apron, face. Keep the reference pose and wink. Remove only the reference square background when compositing it into this new card. Do not redesign the character, do not add human fingers or photorealism.
+Art direction: warm contemporary Korean lifestyle app editorial campaign. Cream/off-white #FFFCF5 background, mint #D1FAE5, strong deep green #28775A and charcoal #1A1F27 type, tiny food yellow accents. Flat 2D illustration, gently hand-drawn charcoal contours matching Jango. Sophisticated, spacious, clean, charming but not childish. No gradients, no 3D, no stock-photo look, no drop shadows, no busy decoration. Use a bold highly legible Korean sans font like Pretendard. Keep 80px safe margins and consistent visual rhythm.
+Layout: small brand header top left "장고야 부탁해", page indicator top right "01 / 05". A very large left-aligned headline across the top third, EXACT text and line breaks:
+"있는 줄 모르고 또 사고,
+아껴두다 버렸다면?"
+Highlight "또 사고" and "버렸다면?" with deep green type, rest charcoal. Under headline smaller line: "냉장고 속 재료, 장고와 함께 챙겨요."
+Lower half: big recognizable Jango from attached icon at center-right, with three small complementary flat illustrations of tofu, mushrooms and scallions loosely arranged beside it at bottom-left, like ingredients waiting to be used. No rotten food, trash, monetary savings claims or open refrigerator door.
+Bottom footer small left "버리기 전에, 오늘의 한 끼" and right "옆으로 넘겨보세요 →".
+Render Korean text EXACTLY, crisp and professionally typeset, no additional text or invented brand. The mascot and headline should be readable at phone size. Deliver just this single complete slide.
+
+=== CORRECTION ===
+Edit the attached finished carousel card ONLY to fix its background and output geometry. Preserve all existing Korean lettering verbatim, all illustration, character identity, proportions, colors, and positions. Composite everything on a uniform fully OPAQUE warm cream background #FFFCF5 covering the entire rectangle edge to edge. All background pixels must have full opacity; there must be NO transparent areas anywhere in the final PNG. Do not erase, darken, distort, or redraw the letters or mascot. The final image is a ready-to-publish portrait Instagram card with cream background, not a transparent graphic. Set the exact canvas to 1080 × 1350 pixels (4:5), scaling the complete layout proportionately to fit and retaining safe margins. No black background, no checkerboard, no cutout output.
+
+=== SLIDE 2 ===
+Use case: ads-marketing / compositing. Create exactly ONE standalone finished Korean Instagram carousel card in a five-card campaign for "장고야 부탁해", portrait 4:5, same canvas geometry as reference card 1 (1122×1402) so all files match. The first reference is the approved cover STYLE REFERENCE: match its fully opaque warm cream background, deep green + charcoal type, mint accents, bold Korean sans typography, small brand name at top left and page number at top right, 60–80px safe margins, footer anchored near the bottom. Output a fully OPAQUE rectangular image with NO transparent pixels. Flat 2D, warm and clear. No gradients, photorealistic scenes, black background, 3D, phone frames, mockup devices, fabricated ratings, exaggerated benefits, invented app features, or additional promotional copy. Korean text must be spelled exactly and remain legible. Reuse Jango's exact visual identity from supplied icon when required; never change into another mascot. This is a single slide, NOT multiple slides in one image.
+SLIDE 2 / 5: the relatable problem card. Top-right "02 / 05". Top-left "장고야 부탁해".
+Large headline EXACT, two lines:
+"냉장고 속 재료,
+기억에만 맡기지 마세요"
+The second reference is the authoritative Jango mascot icon; reuse this exact winking character, its shape, handle, pineapple, chef hat and mint mittens unchanged, in the lower-right half of the card, smaller than cover.
+Create an open editorial composition in the central area with two large white rounded speech bubbles, structurally outlined in a subtle mint color. Bubble 1 upper-left reads EXACT "뭐가 남았지?" with a small flat illustration of a tofu block and mushrooms next to it. Bubble 2 middle-left reads EXACT "언제까지 먹어야 하지?" with a small simple hand-drawn calendar pictogram next to it; no words or numbers in calendar. Jango beside the questions feels like a friendly companion, not a new human character. No clutter, no other claims.
+Under the central illustration, a short prominent supporting line EXACT: "장고가 함께 챙길게요."
+Footer left "버리기 전에, 오늘의 한 끼", footer right "재료부터 확인해요 →". Make the cream background uninterrupted and all parts fully opaque.
+
+=== SLIDE 3 ===
+Use case: ads-marketing / compositing. Create exactly ONE standalone finished Korean Instagram carousel card in a five-card campaign for "장고야 부탁해", portrait 4:5, same canvas geometry as reference card 1 (1122×1402) so all files match. The first reference is the approved cover STYLE REFERENCE: match its fully opaque warm cream background, deep green + charcoal type, mint accents, bold Korean sans typography, small brand name at top left and page number at top right, 60–80px safe margins, footer anchored near the bottom. Output a fully OPAQUE rectangular image with NO transparent pixels. Flat 2D, warm and clear. No gradients, photorealistic scenes, black background, 3D, phone frames, mockup devices, fabricated ratings, exaggerated benefits, invented app features, or additional promotional copy. Korean text must be spelled exactly and remain legible. Reuse Jango's exact visual identity from supplied icon when required; never change into another mascot. This is a single slide, NOT multiple slides in one image.
+SLIDE 3 / 5: actual inventory screenshot demonstration. Top-right "03 / 05". Top-left "장고야 부탁해".
+Large headline EXACT on two lines:
+"재료와 유통기한을
+한눈에"
+Use green for "한눈에". Smaller subtitle EXACT: "뭐가 있고, 언제까지인지 바로 확인해요."
+The second reference is the REAL INVENTORY APP SCREENSHOT, an immutable source image to COMPOSITE, not a concept to redraw. Preserve its actual Korean UI, font, spacing, all original values and item names. It is critically important not to fabricate or change the app. CROP away the iPhone status bar, the top refrigerator switcher, the upper mascot/search/filter block, and the bottom fixed green action button plus bottom navigation. Use a LARGE close crop of the actual inventory list section beginning at "곧 만료 1건", showing the complete "감귤" entry with yellow "1일 남음", "팬트리 · 1개 · 2026. 09. 18.까지", and then the visible start of the "여유 있어요 12건" section and "청고추장 1kg" entry. Keep those visual details EXACTLY as in the screenshot; do not complete unseen clipped UI or invent data.
+Position this real screenshot excerpt prominently in the middle-lower area, almost full card width, without a phone frame. Preserve original screenshot shapes and colors. Outside the screenshot, add one small deep-green editorial label just above it: "실제 앱 화면". A small curved mint arrow may point to the existing yellow "1일 남음" badge from outside, without covering any letters. No fake UI elements or repeated enlarged redraws.
+Footer left "버리기 전에, 오늘의 한 끼", footer right "남은 재료로 요리도 →". Keep bottom safe margin. This slide must show the user's real screenshot faithfully.
+
+=== SLIDE 4 ===
+Use case: ads-marketing / compositing. Create exactly ONE standalone finished Korean Instagram carousel card in a five-card campaign for "장고야 부탁해", portrait 4:5, same canvas geometry as reference card 1 (1122×1402) so all files match. The first reference is the approved cover STYLE REFERENCE: match its fully opaque warm cream background, deep green + charcoal type, mint accents, bold Korean sans typography, small brand name at top left and page number at top right, 60–80px safe margins, footer anchored near the bottom. Output a fully OPAQUE rectangular image with NO transparent pixels. Flat 2D, warm and clear. No gradients, photorealistic scenes, black background, 3D, phone frames, mockup devices, fabricated ratings, exaggerated benefits, invented app features, or additional promotional copy. Korean text must be spelled exactly and remain legible. Reuse Jango's exact visual identity from supplied icon when required; never change into another mascot. This is a single slide, NOT multiple slides in one image.
+SLIDE 4 / 5: actual recipe recommendation screenshot demonstration. Top-right "04 / 05". Top-left "장고야 부탁해".
+Large headline EXACT on two lines:
+"남은 재료로
+오늘의 요리까지"
+Green emphasis for "오늘의 요리". Smaller subtitle EXACT: "지금 있는 재료로, 오늘의 한 끼를 골라요."
+The second reference is the REAL RECIPE RECOMMENDATION APP SCREENSHOT, an immutable bitmap source to CROP AND COMPOSITE, not a UI design to redraw. Preserve its actual Korean UI lettering, font, spacing, green heart buttons and original factual values exactly. Do not invent recipes or change item names.
+Crop away the status bar, the top mascot speech balloon, "이번 추천 설정", the bottom "다시 추천받기" button and navigation. Show the actual list panel beginning at "이번에 골라본 요리 3건", with all three original recipe entries: "닭고기 양파 덮밥" / "두부 양파 전" / "고추장 두부 버섯 볶음". Preserve the descriptions, timings, servings, ingredient counts and hearts within that crop as in the source. Do not replace truncated source text with invented full descriptions.
+Place this screenshot excerpt very large, centered beneath the subtitle, nearly full width, with no phone hardware or screenshot distortion. Screenshot text must be comfortably readable at phone viewing size. A small label just above the crop reads "실제 앱 추천 화면". Do not add food photos, additional screen designs or decorative character that competes with the screenshot.
+Footer left "버리기 전에, 오늘의 한 끼", footer right "이제 시작해볼까요? →". Output must have opaque cream background.
+
+=== SLIDE 5 ===
+Use case: ads-marketing / compositing. Create exactly ONE standalone finished Korean Instagram carousel card in a five-card campaign for "장고야 부탁해", portrait 4:5, same canvas geometry as reference card 1 (1122×1402) so all files match. The first reference is the approved cover STYLE REFERENCE: match its fully opaque warm cream background, deep green + charcoal type, mint accents, bold Korean sans typography, small brand name at top left and page number at top right, 60–80px safe margins, footer anchored near the bottom. Output a fully OPAQUE rectangular image with NO transparent pixels. Flat 2D, warm and clear. No gradients, photorealistic scenes, black background, 3D, phone frames, mockup devices, fabricated ratings, exaggerated benefits, invented app features, or additional promotional copy. Korean text must be spelled exactly and remain legible. Reuse Jango's exact visual identity from supplied icon when required; never change into another mascot. This is a single slide, NOT multiple slides in one image.
+SLIDE 5 / 5: calm, encouraging app download invitation. Top-right "05 / 05". Top-left "장고야 부탁해".
+Large headline EXACT on two lines:
+"오늘은 냉장고 재료
+하나부터 넣어보세요"
+Use deep green for "하나부터". Secondary line EXACT: "처음부터 전부 정리하지 않아도 괜찮아요."
+The second reference is the ACTUAL APP ICON. Place this exact recognizable icon as a large square with softly rounded corners in the center of the slide, about 330px wide. Preserve all pixels, character pose, proportions and pale background as closely as possible. Do not invent an alternate logo. Under it display the app name "장고야 부탁해" in bold charcoal and smaller supporting line "냉장고 재료 · 유통기한 관리 · 요리 추천".
+Below that, place a single flat deep-green rounded CTA panel with exact white Korean text "프로필 링크에서 다운로드" and a subtle simple arrow to the right. This is a graphic CTA referring to the profile link; do not add a fake URL, QR code or clickable functionality claim.
+Below CTA, small neutral text EXACT "iPhone · Android".
+Footer left "버리기 전에, 오늘의 한 끼", footer right "저장하고 시작해요". Keep the entire design balanced and generous with whitespace; no extra visual effects or shadows. Fully opaque cream background.

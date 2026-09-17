@@ -1,0 +1,60 @@
+03 PHONE RECIPE
+
+Use case: ads-marketing. Asset: ONE high-resolution 9:16 portrait PHONE INSERT reference frame for a Korean recipe app commercial.
+Input1 is an approved 4-panel storyboard: use ONLY its upper-right smartphone framing, hand, sage phone case, over-the-shoulder camera and warm apartment look. Do not copy any other panels or its plain fried-tofu meal.
+Input2 is the EXACT Jango mascot artwork; this overrides all mascot details. Input3 is the exact tofu-and-mushroom hotpot photo and ivory casserole reference.
+Create one full-frame, photorealistic over-the-shoulder close-up of the SAME sage-cased vertical smartphone held in the SAME adult Korean woman's left hand, a little of her brown low ponytail and ivory shirt softly visible at the left edge. Warm light-oak small studio kitchen softly blurred behind. Phone dominant and nearly front-facing, with all four corners visible and its display sharply legible.
+Preserve the approved phone screen's friendly mint-and-cream visual style and original Jango illustration. Revise only the lower content so the screen communicates 'ingredients about to expire -> recipe recommendation'. This is a polished ADVERTISING CONCEPT DISPLAY, not a claim to replicate a real shipped application screen.
+Screen layout from top to bottom:
+1. Upper quarter: original Jango mascot on a warm-white soft oval over pale mint, same compact single-door body, hat and linework as input2, do not redraw as 3D.
+2. A compact single horizontal row of three small clean ingredient chips with small pictorial thumbnails and clearly rendered exact Korean text: '두부 D-1' / '버섯 D-1' / '애호박 D-2'. Use a restrained small coral accent for D-1 and charcoal for text; no red alarm screen.
+3. One large rounded recipe card containing the SAME ivory pot of tofu+shiitake+enoki+zucchini+scallion hotpot from input3, above or below the photo the exact title '두부버섯전골'. Under the title a tiny simple 1, 2, 3 step motif WITHOUT additional words, to suggest a recipe.
+No other words, no long paragraphs, no fake status-bar text, no buttons, no chat bubble, no call-to-action, no app store icons. Keep overall display simple and beautiful with enough white space. Realistic phone perspective, hand anatomy and display integration. Do not introduce more screens, more people, physical 3D mascots, grid, endcard, watermarks or text outside the phone.
+
+------------------------------
+
+04 PREPARATION
+
+Use case: ads-marketing. Asset: ONE high-resolution 9:16 portrait INGREDIENTS AND PREPARATION reference for the same Korean recipe-app commercial.
+Input1 locks the adult woman, opaque ivory t-shirt and sage lounge pants, pale oak counter and modest warmly lit Korean studio kitchen. Input2 locks the ingredients and exact ivory pot for the final tofu-and-mushroom hotpot.
+A realistic 45-degree close-up over the counter: the SAME unbranded transparent rectangular tofu pack with pale mint label from input1, now opened; one intact white firm tofu block on a small clean pale wooden cutting board, one thick slice being cut by the woman using a normal kitchen knife with a natural safe grip. Her other hand steadies the far end with fingertips tucked away from the cutting edge. Her ivory-clad torso and sage trousers at top edge; no face necessary.
+Nearby are a SMALL amount of fresh brown shiitake mushrooms and white enoki, half a pale-green Korean zucchini, and a green-onion stalk. These are the identifiable ingredients used in input2; all should read clearly as a modest one-person serving. At the back edge the SAME small shallow ivory two-handled pot from input2 sits on a single black induction hob, not yet filled. No rice or finished meal in this frame. A sage-cased smartphone on a simple stand at the far rear, its screen out of focus, suggests she is following a recipe.
+Photorealistic natural textures, warm domestic evening light, believable attainable kitchenette, appetizing clean preparation, restrained commercial photography. No collage, no text, no captions, no watermark, no eggs, no meat, no seafood, no extra people or mascot in real space. Preserve consistency of woman's clothing, tofu package and pot shape.
+
+------------------------------
+
+05 COOKING
+
+Use case: ads-marketing. Asset: ONE 9:16 portrait cinematic COOKING reference frame, photorealistic.
+Input1 is the locked identity of the fictional 23-year-old adult Korean woman, her exact ivory crew-neck t-shirt with chest pocket and sage lounge trousers, low ponytail with wispy bangs, and modest Korean studio kitchenette.
+Input2 is the exact ivory shallow two-handled casserole and finished tofu-and-mushroom hotpot continuity reference.
+Input3 is the same cooking preparation counter/wardrobe reference, not an additional person.
+Show the SAME woman in a natural medium three-quarter shot at the small pale oak kitchen counter, subtly smiling with focused satisfaction as she follows a recipe. She uses ONE small wooden ladle to gently baste broth over tofu in the pot; her other hand rests safely on the counter away from the hot hob. Natural anatomical hands, no multiple simultaneous actions, no handling hot pot barehanded. Her face must closely match input1, same adult age and facial proportions, authentic skin texture and minimal makeup. Do not beautify into a different actress.
+The SAME ivory small shallow two-handled pot sits on the same single black induction hob. In it are white tofu slices, sliced shiitake mushrooms, white enoki, green zucchini half-moons and diagonal green onion in amber broth, matching input2. Visible gentle steam and small simmer bubbles, no frying, no eggs, no meat, no noodles. The pot's scale is suitable for one person.
+A sage-cased smartphone on a simple stand sits safely beside the hob, tilted toward her, very softly blurred display suggesting she follows instructions. Do not invent legible text.
+Keep the cramped warm-white cabinetry and same apartment kitchen, warm evening practical lighting with natural shadows, attainable domestic setting, cinematic crispness, no staged chef costume or apron. Compose woman in upper half and pot lower half, both recognizable. No other people, no real-world mascot, no title, no watermark, no collage, no endcard.
+
+------------------------------
+
+06 DISH HERO
+
+Use case: ads-marketing.
+Create ONE high-resolution 9:16 portrait photorealistic FOOD HERO reference for a 12-second Korean recipe-recommendation app ad.
+Input image is location/color/props reference only. Use the exact same modest small Korean studio apartment, pale oak tabletop, warm evening light, muted sage accents. Do not include the woman or refrigerator in this close-up.
+Subject: appetizing homemade Korean tofu-and-mushroom hotpot, dubu beoseot jeongol, clearly more composed than plain fried tofu. A SMALL one-person 18 cm shallow warm-ivory ceramic cooking casserole, cream interior, two small rounded integrated handles, sits on a circular natural cork trivet on a light-oak dining table. A believable single-person portion, never an enormous party pot.
+The dish has silky white rectangular tofu slices in a tidy short fan along one side, several sliced brown shiitake caps, a modest tuft of thin white enoki mushrooms, pale green Korean zucchini half-moons, and diagonal fresh green-onion slices. All these ingredients are visible together and partially submerged in clear amber savory broth. Two thin red chili rings as a tiny optional garnish only, no meat, no seafood, no eggs, no noodles, no kimchi-red soup. This is a simmered tofu and vegetable hotpot, NOT browned fried tofu and NOT ramen.
+Camera: intimate appetizing 45-degree overhead food close-up, 65mm lens feel. The pot occupies the lower-middle 65 percent, both handles are visible, a small plain white rice bowl just behind it, sage-cased phone on a simple stand softly blurred in rear background. Subtle real steam, delicate natural highlights, realistic moisture and mushroom texture. Restrained cozy photography, attainable home dinner, not a luxury restaurant.
+Continuity lock for all future images: this exact ivory pot, tofu+shiitake+enoki+zucchini+scallion combination, clear amber broth, white rice bowl, cork trivet.
+No text, no captions, no watermark, no logos, no collage, no end card.
+
+------------------------------
+
+07 DINNER ENDING
+
+Use case: ads-marketing. Asset: ONE 9:16 portrait ENDING LIVE-ACTION reference, not an end card.
+Input1 locks the exact fictional adult Korean woman's face (23 years old), low ponytail, wispy bangs, ivory pocket t-shirt, sage homewear, natural beauty, apartment lighting.
+Input2 is an older storyboard: preserve ONLY the relaxed framing and small-table phone placement of the lower-right dinner panel. Replace the old plain fried-tofu meal entirely with the hotpot from input3. Do not copy the older food. This output is ONE full-frame photo, not a grid.
+Input3 is the exact dish and pot to preserve: small shallow ivory two-handled pot with white tofu slices, shiitake, enoki, pale-green zucchini and diagonal scallions in amber broth, on a round cork trivet, with plain white rice bowl.
+Show the SAME woman seated at the SAME pale-oak dining table in the SAME modest warm Korean studio kitchen. She looks toward the sage-cased phone on its simple stand at the lower-right table edge and smiles warmly, as if saying 'Jango, thanks'. Her mouth is empty, relaxed naturally slightly open for dialogue, no chewing, no exaggerated amazement. Her right hand loosely holds a small wooden soup spoon just above the rice bowl, left forearm rests naturally on the table, not holding her cheek. Natural safe posture.
+The EXACT appetizing tofu-and-mushroom hotpot occupies the lower center foreground, showing recognizable tofu, shiitake, enoki, zucchini and scallions, with gentle steam. Pot is single-person-sized; no huge feast, no second main dish, no fried tofu plate. Keep woman's face clear and close enough for identity and expression to read, with subtle shallow depth of field. Warm cozy evening atmosphere, authentic skin texture, realistic fabric, restrained commercial photography. Phone screen faces the woman so no additional mascot needs to be drawn.
+No extra people, no outfit/hair changes, no large decorative text, no captions, no endcard, no watermarks, no recipe overlays outside the phone, no collage, no physical cartoon mascot.

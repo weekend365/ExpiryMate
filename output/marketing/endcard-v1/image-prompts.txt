@@ -1,0 +1,41 @@
+INITIAL GENERATION
+
+Use case: ads-marketing.
+Asset type: finished Korean mobile-app advertisement END CARD, portrait 9:16, intended to be held for THREE SECONDS after a live-action cooking commercial. Deliver one polished full-bleed image, ideally 1080x1920 pixels. It must look professionally typeset, immediately readable on a phone, and brand-specific.
+Input image1: the approved Jango pointing mascot. Use this exact character as the primary branded illustration, preserving its silhouette, face, drawing, mint gloves, white body, large chef hat and all parts. Do not redesign it. It has one round mitten pointing toward viewer-right. Preserve original short arm and mitten, no human fingers.
+Input image2: existing official Jango store art is STYLE REFERENCE ONLY: warm-white background, flat 2D illustration, gentle charcoal outlines. DO NOT copy its text, layout, scene clutter, speech bubble, or extra mascot.
+Concept: Jango helps turn expiring ingredients into a recipe, echoing a tofu mushroom hotpot commercial. Audience is young Korean adults living alone.
+Art direction: premium minimal Korean app advertising graphic. Soft warm-white #FAFAF7 background. Primary mint #10B981 and pale mint #D1FAE5. Very dark charcoal #1A1F27 typography. Crisp, flat, clean. No photographic food, no real-world kitchen, no gradient, no 3D mockup. Generous negative space. The character keeps the subtle hand-drawn texture of its original artwork, while text and phone card edges are crisp.
+Hierarchy and layout, coordinates expressed relative to a 1080x1920 canvas:
+Keep all essential content in x=100..940 and y=240..1560 so platform UI has breathing room at the edges.
+- Top at y~270: centered app name '장고야 부탁해' in large bold charcoal Korean sans-serif, approximately 66px, clean Pretendard-like type. No extra English tagline, no logo symbol.
+- Headline at y~410..640, centered, two intentional lines, approximately 100px extra-bold type with comfortable line spacing:
+  Line 1 exactly: '임박한 재료로,'
+  Line 2 exactly: '오늘의 요리 추천.'
+  First line charcoal, second line darker mint #07865F for legibility. This is the dominant text.
+- Middle hero at y~740..1320: exact Jango pointing character from input1 placed left, about 400px wide and 540px tall, with original proportions completely preserved. A slightly taller, almost straight-on FLAT illustrated smartphone stands to its right, about 350px wide and 650px tall. The mascot points toward the phone, does not hold it or sit inside a border. Character and phone form one coherent central group and do not overlap the headline or CTA.
+- Smartphone: simple charcoal outline and rounded corners, pale-mint screen, no metallic reflections, no drop shadow, no status-bar gibberish. Inside show three small illustrated ingredient tiles across the upper screen (white tofu, brown mushrooms, green zucchini); use small coral expiry dots only, no tiny ingredient text. Below them, a clean cream recipe card with an attractive FLAT 2D illustration of a small ivory handled casserole containing white tofu, brown mushrooms, green zucchini and green onion. Under the illustration one short clearly rendered recipe title: '두부버섯전골'. Do not invent additional app interface labels, buttons, or chat features. This is an illustrative recipe concept display, not a literal screenshot.
+- Bottom CTA centered around y~1450: a large flat mint rounded pill with DARK CHARCOAL bold text exactly '지금 다운로드', approximately 56px. Width about 570px, height 125px. Optional small dark downward arrow icon at right of CTA text only if balanced, otherwise omit. The whole CTA must finish above y=1570.
+- Leave the last ~300px of canvas quiet warm-white with no tiny footer.
+Text must be exactly these five strings and no others:
+'장고야 부탁해'
+'임박한 재료로,'
+'오늘의 요리 추천.'
+'두부버섯전골'
+'지금 다운로드'
+Character invariants: squat single-door white refrigerator body, large chef hat with mint band, vertical mint handle at viewer-left, pineapple badge above handle, two small gray hinges at viewer-right, white apron with mint edging and center pocket, short white limbs, mint oven mitts and shoes. Keep the reference's black oval eyes and small smile. No morphing to toy/plush/3D, no new accessories, no open refrigerator door, no second mascot in the phone, no extra people.
+No decorative sparkles, floating emojis, long copy, badges, QR code, app-store logos, fake ratings, shadows, arbitrary icons, watermarks or border around the overall canvas. Exact spelling and visual hierarchy matter more than decoration.
+
+SAFE-MARGIN REVISION
+
+Edit the supplied end-card image only for SAFE MARGINS and flat-color finish. Keep the same exact Korean text, same hierarchy, same Jango pointing mascot, same phone and recipe illustration, same positions relative to one another, same colors and 9:16 aspect ratio. This is for the final 3 seconds of a vertical short-form ad.
+Treat the ENTIRE existing artwork group (all text, character, phone, button) as one group. Uniformly shrink this group to about 82 percent of its current size. Center it horizontally and position its visual bounding box within the central safe area. The background stays full-bleed warm white.
+On a 1080x1920 canvas, the top of the app name must be no higher than y=240; the bottom of the download button must be no lower than y=1550. Leave at least 330 pixels of quiet warm-white background below the download button and at least 100 pixels of side margin around all lettering. All content must have comfortable negative space.
+Keep headline large and crisp but do NOT enlarge it to refill the empty margins. Keep all elements fully visible and proportional. Do not add any new elements to the empty margins.
+Preserve EXACT spelling:
+장고야 부탁해
+임박한 재료로,
+오늘의 요리 추천.
+두부버섯전골
+지금 다운로드
+Make the CTA button a FLAT solid pale mint #74E5BE (no gradient) with dark charcoal text. Keep the background flat warm white, no vignette or paper texture. No new text, no icons, no logos, no watermark. Output one finished 9:16 portrait image, ideally 1080x1920.

@@ -18,3 +18,8 @@ apps/mobile/e2e/screenshots/current/
 apps/mobile/e2e/screenshots/diff/
 apps/mobile/e2e/screenshots/baseline/**/*.png
 .env
+
+# Reproducible marketing archives, render temporary files, and QA captures.
+/output/marketing/**/*.zip
+/output/marketing/**/*.sb-*
+/output/marketing/**/qa/
