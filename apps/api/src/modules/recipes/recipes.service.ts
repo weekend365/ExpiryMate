@@ -25,6 +25,7 @@ import type {
 } from "@expirymate/shared";
 import {
   calculateDaysLeftUntilExpiry,
+  createInventoryBoundRecipeRecommendationsSchema,
   dateOnlyToUtcDate,
   generatedRecipeRecommendationsPayloadSchema,
   recipeDishEngagementSchema,
@@ -65,7 +66,7 @@ import {
   validateAlignedRecommendations,
 } from "./recipe-validation";
 
-const PROMPT_VERSION = "recipe-recommendation-v10";
+const PROMPT_VERSION = "recipe-recommendation-v11";
 const DEFAULT_MAX_OUTPUT_TOKENS = 3500;
 const MAX_GENERATION_ATTEMPTS = 3;
 
@@ -633,6 +634,7 @@ export class RecipesService {
         throw new ServiceUnavailableException("OpenAI API 키가 설정되지 않았습니다.");
       }
       const client = new OpenAI({ apiKey });
+      const outputFormat = buildGenerationOutputFormat(inventorySnapshot);
       const run = async (requestInput: string, attempt: number) => {
         generationAttempts = Math.max(generationAttempts, attempt);
         const reasoning = getOpenAiReasoning(modelSelection.model);
@@ -654,10 +656,7 @@ export class RecipesService {
             variant: modelSelection.variant,
           },
           text: {
-            format: zodTextFormat(
-              generatedRecipeRecommendationsPayloadSchema,
-              "recipe_recommendations",
-            ),
+            format: outputFormat,
             verbosity: "low",
           },
         });
@@ -665,7 +664,7 @@ export class RecipesService {
         const attemptUsage = normalizeUsage(
           response.usage,
           instructions,
-          requestInput,
+          `${requestInput}\n${JSON.stringify(outputFormat.schema)}`,
           response.output_parsed,
         );
         usage = combineUsage(usage, attemptUsage);
@@ -935,6 +934,8 @@ function buildInstructions() {
     "usedIngredients의 각 항목에는 이 요리에 실제로 사용할 정수 amount와 unitCode를 반드시 넣으세요.",
     "unitCode는 ea, ml, g 중 하나만 쓰고, ml와 g는 최소 단위 정수로 적으세요. 예: 우유 0.5L는 amount 500, unitCode ml입니다.",
     "inventoryItemId가 있는 재료는 입력 inventory의 unitCode와 같은 단위를 쓰고 amount가 quantityBase를 넘지 않게 하세요.",
+    "quantityBase와 unitCode가 현재 남은 재고의 기준입니다. quantity와 unit의 포장 표시를 사용량으로 해석하거나 포장 중량을 추측하지 마세요.",
+    "세 요리는 하나를 고르는 대안입니다. 각 요리를 따로 보유량 안에서 구성하고, 부족하면 다른 보유 재료를 조합하거나 요리를 바꾸세요. steps와 tips도 usedIngredients의 실제 사용량과 일치시킵니다.",
     "단위가 다르거나 재고보다 많이 쓰면 결과가 거부되므로, 반드시 처음부터 재고 단위와 한도에 맞추세요.",
     "면·밥·고기·계란처럼 익힘 시간이 중요한 재료는 분 단위로 안내하세요. 패키지 표기가 있으면 '표기 시간의 약 1분 전'처럼 표현해도 됩니다.",
     "'적당히', '잘', '살짝', '충분히'만으로 끝내거나 '끓인다', '섞는다', '익힌다'처럼 한 단어에 가까운 뭉뚱그린 단계는 금지합니다.",
@@ -1037,6 +1038,13 @@ function buildOpenAIPromptCacheKey(ownerKey: string) {
   return `recipe:${hashValue(ownerKey).slice(0, 48)}`;
 }
 
+function buildGenerationOutputFormat(inventorySnapshot: RecipeInventorySnapshotItem[]) {
+  return zodTextFormat(
+    createInventoryBoundRecipeRecommendationsSchema(inventorySnapshot),
+    "recipe_recommendations",
+  );
+}
+
 function estimateGenerationCostUsd(
   request: RecipeRecommendationRequest,
   inventorySnapshot: RecipeInventorySnapshotItem[],
@@ -1044,7 +1052,7 @@ function estimateGenerationCostUsd(
 ) {
   const usage: RecipeRecommendationUsage = {
     inputTokens: estimateTokenCount(
-      `${buildInstructions()}\n${buildInput(request, inventorySnapshot)}`,
+      `${buildInstructions()}\n${buildInput(request, inventorySnapshot)}\n${JSON.stringify(buildGenerationOutputFormat(inventorySnapshot).schema)}`,
     ),
     cachedInputTokens: 0,
     outputTokens: getNonNegativeIntegerEnv(

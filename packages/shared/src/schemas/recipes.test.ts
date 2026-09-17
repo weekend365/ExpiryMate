@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { UnitCode } from "../enums/app-enums";
 import {
+  createInventoryBoundRecipeRecommendationsSchema,
   recipeFavoriteSchema,
   generatedRecipeRecommendationsPayloadSchema,
   updateRecipePreferenceSchema,
@@ -66,6 +67,80 @@ describe("recipe recommendation request contracts", () => {
 });
 
 describe("recipe ingredient quantity contracts", () => {
+  const stock = [
+    { inventoryItemId: "milk-1", quantityBase: 500, unitCode: UnitCode.ML },
+    { inventoryItemId: "egg-1", quantityBase: 2, unitCode: UnitCode.EA },
+    { inventoryItemId: "rice-1", quantityBase: 150, unitCode: UnitCode.G },
+  ];
+
+  it("bounds each ingredient by its own inventory id, unit and available amount", () => {
+    const schema = createInventoryBoundRecipeRecommendationsSchema(stock);
+    for (const item of stock) {
+      const recommendations = generatedDishes().map((generated) => ({
+        ...generated,
+        usedIngredients: [
+          {
+            inventoryItemId: item.inventoryItemId,
+            name: "보관 재료",
+            unitCode: item.unitCode,
+            amount: item.quantityBase,
+          },
+        ],
+      }));
+      // These are alternatives, so the same stock can be used in all three dishes.
+      expect(schema.safeParse({ recommendations }).success).toBe(true);
+      recommendations[0]!.usedIngredients[0]!.amount += 1;
+      expect(
+        generatedRecipeRecommendationsPayloadSchema.safeParse({ recommendations }).success,
+      ).toBe(true);
+      expect(schema.safeParse({ recommendations }).success).toBe(false);
+    }
+  });
+
+  it.each([
+    { inventoryItemId: "unknown", amount: 1, unitCode: UnitCode.ML },
+    { inventoryItemId: null, amount: 1, unitCode: UnitCode.ML },
+    { inventoryItemId: "milk-1", amount: 1, unitCode: UnitCode.G },
+    { inventoryItemId: "egg-1", amount: 500, unitCode: UnitCode.ML },
+    { inventoryItemId: "egg-1", amount: 0, unitCode: UnitCode.EA },
+    { inventoryItemId: "egg-1", amount: -1, unitCode: UnitCode.EA },
+    { inventoryItemId: "egg-1", amount: 0.5, unitCode: UnitCode.EA },
+  ])("rejects invalid inventory use: %j", (ingredient) => {
+    const recommendations = generatedDishes().map((generated) => ({
+      ...generated,
+      usedIngredients: [{ name: "보관 재료", ...ingredient }],
+    }));
+    expect(
+      createInventoryBoundRecipeRecommendationsSchema(stock).safeParse({
+        recommendations,
+      }).success,
+    ).toBe(false);
+  });
+
+  it("supports one inventory item and rejects empty ingredient lists", () => {
+    const schema = createInventoryBoundRecipeRecommendationsSchema([stock[0]!]);
+    expect(schema.safeParse({ recommendations: generatedDishes() }).success).toBe(true);
+    expect(
+      schema.safeParse({
+        recommendations: generatedDishes().map((generated) => ({
+          ...generated,
+          usedIngredients: [],
+        })),
+      }).success,
+    ).toBe(false);
+  });
+
+  it.each([
+    [],
+    [{ inventoryItemId: "milk-1", unitCode: UnitCode.ML }],
+    [{ inventoryItemId: "milk-1", quantityBase: 500 }],
+    [{ inventoryItemId: "milk-1", quantityBase: 0, unitCode: UnitCode.ML }],
+    [{ inventoryItemId: "milk-1", quantityBase: 1.5, unitCode: UnitCode.ML }],
+    [stock[0]!, { ...stock[0]!, quantityBase: 1000 }],
+  ].map((items) => ({ items })))("rejects ambiguous or unavailable inventory: $items", ({ items }) => {
+    expect(() => createInventoryBoundRecipeRecommendationsSchema(items)).toThrow();
+  });
+
   it("keeps stored legacy recommendations readable", () => {
     expect(recipeRecommendationDishSchema.safeParse(dish).success).toBe(true);
   });

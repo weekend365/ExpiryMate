@@ -15,7 +15,6 @@ vi.mock("openai", () => ({
     responses = { parse: parseMock };
   },
 }));
-vi.mock("openai/helpers/zod", () => ({ zodTextFormat: vi.fn(() => ({})) }));
 
 import { RecipePolicyService } from "./recipe-policy.service";
 import { RecipesService } from "./recipes.service";
@@ -187,6 +186,87 @@ describe("RecipesService semantic repair", () => {
     expect(parseMock.mock.calls[1]?.[0]?.input).toContain(
       "DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED",
     );
+  });
+
+  it("sends inventory-bound structured output for the initial call and both repairs", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const snapshot: RecipeInventorySnapshotItem[] = [
+      ...inventory,
+      {
+        ...inventory[0]!, inventoryItemId: "milk-1", name: "우유", quantity: 1,
+        unit: "팩", quantityBase: 100, unitCode: UnitCode.ML,
+      },
+      {
+        ...inventory[0]!, inventoryItemId: "rice-1", name: "쌀", quantity: 1,
+        unit: "봉", quantityBase: 150, unitCode: UnitCode.G,
+      },
+    ];
+    parseMock
+      .mockResolvedValueOnce(response(recommendations(1)))
+      .mockResolvedValueOnce(response(recommendations(1)))
+      .mockResolvedValueOnce(response(recommendations(2)));
+
+    const result = await generate(createService(), undefined, request, snapshot);
+
+    expect(result.generationAttempts).toBe(3);
+    for (const [call] of parseMock.mock.calls) {
+      expect(call.metadata.promptVersion).toBe("recipe-recommendation-v11");
+      expect(call.text.format).toMatchObject({
+        type: "json_schema",
+        strict: true,
+        schema: {
+          type: "object",
+          properties: {
+            recommendations: {
+              minItems: 3,
+              maxItems: 3,
+              items: {
+                properties: {
+                  usedIngredients: {
+                    minItems: 1,
+                    items: {
+                      anyOf: snapshot.map((item) => ({
+                        type: "object",
+                        additionalProperties: false,
+                        properties: {
+                          inventoryItemId: { const: item.inventoryItemId },
+                          unitCode: { const: item.unitCode },
+                          amount: {
+                            type: "integer", minimum: 1, maximum: item.quantityBase,
+                          },
+                        },
+                      })),
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+  });
+
+  it("still rejects repeated excess quantities without clamping or extra attempts", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    const excessive = recommendations().map((dish) => ({
+      ...dish,
+      usedIngredients: dish.usedIngredients.map((item) => ({ ...item, amount: 4 })),
+    }));
+    parseMock.mockResolvedValue(response(excessive));
+
+    await expect(generate(createService())).rejects.toBeInstanceOf(
+      BadGatewayException,
+    );
+    expect(parseMock).toHaveBeenCalledTimes(3);
+    expect(eventCreateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          failureCode: "semantic_validation", generationAttempts: 3,
+        }),
+      }),
+    );
+    expect(excessive[0]!.usedIngredients[0]!.amount).toBe(4);
   });
 
   it("gives targeted repair guidance for undeclared ingredients", async () => {
@@ -362,6 +442,7 @@ function generate(
     variant: "control" | "candidate";
   } = { model: "gpt-5.4-mini", variant: "control" },
   generationRequest: RecipeRecommendationRequest = request,
+  generationInventory: RecipeInventorySnapshotItem[] = inventory,
 ) {
   return (
     service as unknown as {
@@ -397,7 +478,7 @@ function generate(
   ).generateRecommendations(
     "owner-a",
     generationRequest,
-    inventory,
+    generationInventory,
     preference,
     {
       positiveDishTitles: [],

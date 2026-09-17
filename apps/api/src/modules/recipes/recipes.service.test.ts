@@ -293,7 +293,7 @@ describe("RecipesService recommendation guards", () => {
       undefined,
     );
     expect(createPayload?.data).toMatchObject({
-      promptVersion: "recipe-recommendation-v10",
+      promptVersion: "recipe-recommendation-v11",
       aiModel: "gpt-5.6-terra",
       inputTokens: 1000,
       cachedInputTokens: 100,

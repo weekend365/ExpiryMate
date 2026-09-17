@@ -225,6 +225,47 @@ export const generatedRecipeRecommendationsPayloadSchema = z.object({
     .length(3),
 });
 
+/** Bind new generation output to live stock without changing stored recipe contracts. */
+export function createInventoryBoundRecipeRecommendationsSchema(
+  inventory: ReadonlyArray<
+    Pick<RecipeInventorySnapshotItem, "inventoryItemId" | "quantityBase" | "unitCode">
+  >,
+) {
+  const stock = recipeInventorySnapshotItemSchema
+    .pick({ inventoryItemId: true, quantityBase: true, unitCode: true })
+    .extend({
+      inventoryItemId: z.string().min(1),
+      quantityBase: z.number().int().positive(),
+      unitCode: z.nativeEnum(UnitCode),
+    })
+    .array()
+    .min(1)
+    .parse(inventory);
+  if (new Set(stock.map((item) => item.inventoryItemId)).size !== stock.length) {
+    throw new Error("Recipe generation inventory IDs must be unique.");
+  }
+
+  // Keep id/unit/amount in the same branch: separate enums would allow mixing
+  // one ingredient's unit or larger quantity limit with another ingredient's id.
+  const ingredients = stock.map((item) =>
+    generatedRecipeUsedIngredientSchema.extend({
+      inventoryItemId: z.literal(item.inventoryItemId),
+      unitCode: z.literal(item.unitCode),
+      amount: z.number().int().min(1).max(item.quantityBase),
+    }),
+  );
+  const ingredient =
+    ingredients.length === 1 ? ingredients[0]! : z.union(ingredients);
+  const dish =
+    generatedRecipeRecommendationsPayloadSchema.shape.recommendations.element.extend({
+      usedIngredients: z.array(ingredient).min(1),
+    });
+
+  return generatedRecipeRecommendationsPayloadSchema.extend({
+    recommendations: z.array(dish).length(3),
+  });
+}
+
 export const recipeRecommendationSchema = z.object({
   id: z.string(),
   ownerKey: z.string(),
