@@ -1,0 +1,98 @@
+{
+  "duration": 32.666666666666664,
+  "sample_rate": 48000,
+  "normalized_peak_dbfs": -3,
+  "gain": 0.8409890149729906,
+  "cues": [
+    {
+      "id": "01-hook",
+      "start": 0.08,
+      "end": 2.0,
+      "text": "남은 두부로 뭐 먹지?",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 1.50675,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/01-hook-trimmed.wav"
+    },
+    {
+      "id": "02-register",
+      "start": 2.12,
+      "end": 6.26,
+      "text": "먼저, 냉장고 재료를 넣어요.",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.156458333333333,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/02-register-trimmed.wav"
+    },
+    {
+      "id": "03-date",
+      "start": 6.5,
+      "end": 10.42,
+      "text": "유통기한을 고르면, 두부 등록 끝!",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.493333333333333,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/03-date-trimmed.wav"
+    },
+    {
+      "id": "04-ingredients",
+      "start": 10.8,
+      "end": 15.5,
+      "text": "추천에 쓸 재료를 고르고,",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 1.7908333333333333,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/04-ingredients-trimmed.wav"
+    },
+    {
+      "id": "05-recommend",
+      "start": 15.65,
+      "end": 19.03,
+      "text": "조건을 정해 추천받아요.",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.0744583333333333,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/05-recommend-trimmed.wav"
+    },
+    {
+      "id": "06-result",
+      "start": 19.35,
+      "end": 21.9,
+      "text": "두부 표고 김치전, 어때요?",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.0342708333333333,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/06-result-trimmed.wav"
+    },
+    {
+      "id": "07-recipe",
+      "start": 22.03,
+      "end": 24.92,
+      "text": "재료와 조리법을 확인하고,",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 1.8410416666666667,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/07-recipe-trimmed.wav"
+    },
+    {
+      "id": "08-timer",
+      "start": 25.06,
+      "end": 28.55,
+      "text": "타이머와 함께 따라 해보세요.",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.0958125,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/08-timer-trimmed.wav"
+    },
+    {
+      "id": "09-cta",
+      "start": 28.8,
+      "end": 32.55,
+      "text": "장고야 부탁해. 지금 시작해 보세요.",
+      "voice": "macOS Yuna (Korean built-in synthetic voice)",
+      "rate": 175,
+      "duration": 2.9246666666666665,
+      "file": "/Users/namu/Desktop/ExpiryMate/output/marketing/app-walkthrough-reel-v4-narrated/voice/09-cta-trimmed.wav"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "caption_timing_and_position" : "Preserved proportionally with the complete frame",
+  "display_rect" : [
+    98.443935926773463,
+    0,
+    883.11212814645307,
+    1920
+  ],
+  "fixed_layout_entire_video" : true,
+  "fps" : 30,
+  "frames" : 980,
+  "height" : 1920,
+  "output" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v6-instagram916\/video-9x16.mp4",
+  "reencoded_video_passes_this_revision" : 1,
+  "scale" : 0.73226544622425627,
+  "side_padding_color" : "#FFFCF5",
+  "source" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/jango-walkthrough-reel.mp4",
+  "source_crop" : [
+    0,
+    0,
+    1206,
+    2622
+  ],
+  "target_video_bitrate" : 14000000,
+  "width" : 1080
+}

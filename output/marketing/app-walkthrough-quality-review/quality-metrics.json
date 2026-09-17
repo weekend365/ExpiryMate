@@ -1,0 +1,297 @@
+{
+  "method": "Final decoded video compared with lossless frames rendered directly from the original recording, with the same HDR-to-SDR conversion, exposure and subtitles. App region x=20..1186, y=160..2100 excludes subtitle overlay. This measures the export/decode path, not the independent HDR-to-SDR or 60-to-30 fps changes.",
+  "ssim_definition": "Mean 8x8 non-overlapping population-variance SSIM on Rec.709 luma; C1=6.5025 and C2=58.5225. Not a perceptual quality percentage.",
+  "sample_count": 23,
+  "metrics": {
+    "psnr_rgb_db": {
+      "mean": 36.534620206813386,
+      "min": 33.45310306880905,
+      "max": 38.54569920052308
+    },
+    "ssim_8x8_luma": {
+      "mean": 0.9988444862158402,
+      "min": 0.997165322303772,
+      "max": 0.9994449615478516
+    },
+    "mean_absolute_rgb_error": {
+      "mean": 3.1121063854383384,
+      "min": 2.358534097671509,
+      "max": 4.756781101226807
+    },
+    "text_edge_psnr_db": {
+      "mean": 29.766835701582615,
+      "min": 27.910191554649685,
+      "max": 31.67986700078469
+    },
+    "text_edge_absolute_luma_error": {
+      "mean": 6.45610002849413,
+      "min": 5.50860071182251,
+      "max": 7.761073112487793
+    },
+    "mean_luma_shift": {
+      "mean": 2.9093264496844746,
+      "min": 2.251781940460205,
+      "max": 4.609826564788818
+    },
+    "decoded_time_error_seconds": {
+      "mean": 0.0,
+      "min": 0,
+      "max": 0
+    }
+  },
+  "samples": [
+    {
+      "frame": 0,
+      "time": 0,
+      "psnr_rgb_db": 34.3609632440795,
+      "ssim_8x8_luma": 0.997165322303772,
+      "mean_absolute_rgb_error": 3.6797308921813965,
+      "text_edge_psnr_db": 27.910191554649685,
+      "text_edge_absolute_luma_error": 7.761073112487793,
+      "mean_luma_shift": 3.442538022994995,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 60,
+      "time": 2,
+      "psnr_rgb_db": 33.45310306880905,
+      "ssim_8x8_luma": 0.9986207485198975,
+      "mean_absolute_rgb_error": 4.756781101226807,
+      "text_edge_psnr_db": 28.84560414357512,
+      "text_edge_absolute_luma_error": 7.416605472564697,
+      "mean_luma_shift": 4.607919216156006,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 90,
+      "time": 3,
+      "psnr_rgb_db": 33.57024050264813,
+      "ssim_8x8_luma": 0.9988728761672974,
+      "mean_absolute_rgb_error": 4.731983661651611,
+      "text_edge_psnr_db": 29.506741015501024,
+      "text_edge_absolute_luma_error": 7.168317794799805,
+      "mean_luma_shift": 4.609826564788818,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 102,
+      "time": 3.4,
+      "psnr_rgb_db": 38.54569920052308,
+      "ssim_8x8_luma": 0.998987078666687,
+      "mean_absolute_rgb_error": 2.358534097671509,
+      "text_edge_psnr_db": 30.070763176683517,
+      "text_edge_absolute_luma_error": 6.116164207458496,
+      "mean_luma_shift": 2.251781940460205,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 180,
+      "time": 6,
+      "psnr_rgb_db": 38.17554179226717,
+      "ssim_8x8_luma": 0.9990206956863403,
+      "mean_absolute_rgb_error": 2.549229860305786,
+      "text_edge_psnr_db": 30.17679115873722,
+      "text_edge_absolute_luma_error": 5.8353729248046875,
+      "mean_luma_shift": 2.417239189147949,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 192,
+      "time": 6.4,
+      "psnr_rgb_db": 38.11599188660132,
+      "ssim_8x8_luma": 0.999055802822113,
+      "mean_absolute_rgb_error": 2.5107784271240234,
+      "text_edge_psnr_db": 30.318367567126824,
+      "text_edge_absolute_luma_error": 5.902831554412842,
+      "mean_luma_shift": 2.347111463546753,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 264,
+      "time": 8.8,
+      "psnr_rgb_db": 37.2509049227612,
+      "ssim_8x8_luma": 0.9992679357528687,
+      "mean_absolute_rgb_error": 2.648949146270752,
+      "text_edge_psnr_db": 29.62717366854699,
+      "text_edge_absolute_luma_error": 6.420424461364746,
+      "mean_luma_shift": 2.5119118690490723,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 270,
+      "time": 9,
+      "psnr_rgb_db": 37.25460794015072,
+      "ssim_8x8_luma": 0.999268651008606,
+      "mean_absolute_rgb_error": 2.648221254348755,
+      "text_edge_psnr_db": 29.64467522935732,
+      "text_edge_absolute_luma_error": 6.4136247634887695,
+      "mean_luma_shift": 2.5115966796875,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 318,
+      "time": 10.6,
+      "psnr_rgb_db": 36.96121883504132,
+      "ssim_8x8_luma": 0.9986222982406616,
+      "mean_absolute_rgb_error": 2.85834002494812,
+      "text_edge_psnr_db": 28.88287800622517,
+      "text_edge_absolute_luma_error": 6.826325416564941,
+      "mean_luma_shift": 2.585540533065796,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 360,
+      "time": 12,
+      "psnr_rgb_db": 37.1410346876198,
+      "ssim_8x8_luma": 0.9988858103752136,
+      "mean_absolute_rgb_error": 2.905458688735962,
+      "text_edge_psnr_db": 29.54174824966854,
+      "text_edge_absolute_luma_error": 6.5370097160339355,
+      "mean_luma_shift": 2.623154878616333,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 378,
+      "time": 12.6,
+      "psnr_rgb_db": 36.05472310468451,
+      "ssim_8x8_luma": 0.9991118907928467,
+      "mean_absolute_rgb_error": 3.2383430004119873,
+      "text_edge_psnr_db": 29.596092183784073,
+      "text_edge_absolute_luma_error": 6.39915657043457,
+      "mean_luma_shift": 2.9482171535491943,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 450,
+      "time": 15,
+      "psnr_rgb_db": 36.13592802503543,
+      "ssim_8x8_luma": 0.9992096424102783,
+      "mean_absolute_rgb_error": 3.2392890453338623,
+      "text_edge_psnr_db": 29.681326807496124,
+      "text_edge_absolute_luma_error": 6.432773590087891,
+      "mean_luma_shift": 2.947411060333252,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 468,
+      "time": 15.6,
+      "psnr_rgb_db": 37.34934302184559,
+      "ssim_8x8_luma": 0.9992552399635315,
+      "mean_absolute_rgb_error": 2.8031435012817383,
+      "text_edge_psnr_db": 30.377168802668248,
+      "text_edge_absolute_luma_error": 6.033259868621826,
+      "mean_luma_shift": 2.7110233306884766,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 522,
+      "time": 17.4,
+      "psnr_rgb_db": 37.358466137083674,
+      "ssim_8x8_luma": 0.9985815286636353,
+      "mean_absolute_rgb_error": 2.9449541568756104,
+      "text_edge_psnr_db": 29.814701148697075,
+      "text_edge_absolute_luma_error": 6.33435583114624,
+      "mean_luma_shift": 2.6259756088256836,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 540,
+      "time": 18,
+      "psnr_rgb_db": 37.3777763677409,
+      "ssim_8x8_luma": 0.9985833168029785,
+      "mean_absolute_rgb_error": 2.939995765686035,
+      "text_edge_psnr_db": 29.854482842426776,
+      "text_edge_absolute_luma_error": 6.302245140075684,
+      "mean_luma_shift": 2.6240956783294678,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 542,
+      "time": 18.066666666666666,
+      "psnr_rgb_db": 37.374237577444276,
+      "ssim_8x8_luma": 0.9985824227333069,
+      "mean_absolute_rgb_error": 2.9414186477661133,
+      "text_edge_psnr_db": 29.85688229872936,
+      "text_edge_absolute_luma_error": 6.299977779388428,
+      "mean_luma_shift": 2.6239099502563477,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 584,
+      "time": 19.466666666666665,
+      "psnr_rgb_db": 34.768465010970864,
+      "ssim_8x8_luma": 0.9982785582542419,
+      "mean_absolute_rgb_error": 3.448030471801758,
+      "text_edge_psnr_db": 29.308610673035634,
+      "text_edge_absolute_luma_error": 6.807801246643066,
+      "mean_luma_shift": 3.3057615756988525,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 630,
+      "time": 21,
+      "psnr_rgb_db": 34.79002897721681,
+      "ssim_8x8_luma": 0.9983716011047363,
+      "mean_absolute_rgb_error": 3.4412841796875,
+      "text_edge_psnr_db": 29.35400143349899,
+      "text_edge_absolute_luma_error": 6.788045883178711,
+      "mean_luma_shift": 3.300229072570801,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 659,
+      "time": 21.966666666666665,
+      "psnr_rgb_db": 34.87545793036334,
+      "ssim_8x8_luma": 0.9986474514007568,
+      "mean_absolute_rgb_error": 3.5638508796691895,
+      "text_edge_psnr_db": 29.687758008393168,
+      "text_edge_absolute_luma_error": 7.0117316246032715,
+      "mean_luma_shift": 3.4243860244750977,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 720,
+      "time": 24,
+      "psnr_rgb_db": 36.566345877959876,
+      "ssim_8x8_luma": 0.9994449615478516,
+      "mean_absolute_rgb_error": 3.2537591457366943,
+      "text_edge_psnr_db": 31.67986700078469,
+      "text_edge_absolute_luma_error": 5.50860071182251,
+      "mean_luma_shift": 3.0754141807556152,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 749,
+      "time": 24.966666666666665,
+      "psnr_rgb_db": 37.4572017240656,
+      "ssim_8x8_luma": 0.9991950392723083,
+      "mean_absolute_rgb_error": 2.7083206176757812,
+      "text_edge_psnr_db": 30.069751261052634,
+      "text_edge_absolute_luma_error": 6.412295341491699,
+      "mean_luma_shift": 2.5380442142486572,
+      "decoded_time_error_seconds": 0.0
+    },
+    {
+      "frame": 810,
+      "time": 27,
+      "psnr_rgb_db": 37.67678270574081,
+      "ssim_8x8_luma": 0.999196469783783,
+      "mean_absolute_rgb_error": 2.7044992446899414,
+      "text_edge_psnr_db": 30.40925218211936,
+      "text_edge_absolute_luma_error": 5.885298252105713,
+      "mean_luma_shift": 2.4411122798919678,
+      "decoded_time_error_seconds": 0
+    },
+    {
+      "frame": 815,
+      "time": 27.166666666666668,
+      "psnr_rgb_db": 37.68220221605469,
+      "ssim_8x8_luma": 0.9991978406906128,
+      "mean_absolute_rgb_error": 2.7035510540008545,
+      "text_edge_psnr_db": 30.42239272364273,
+      "text_edge_absolute_luma_error": 5.877009391784668,
+      "mean_luma_shift": 2.440307855606079,
+      "decoded_time_error_seconds": 0.0
+    }
+  ]
+}

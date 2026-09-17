@@ -1,0 +1,45 @@
+{
+  "duration" : 104.12,
+  "sample_times" : [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30,
+    35,
+    40,
+    45,
+    50,
+    55,
+    60,
+    65,
+    70,
+    75,
+    80,
+    85,
+    90,
+    95,
+    100
+  ],
+  "source" : "\/Users\/namu\/Downloads\/ScreenRecording_09-17-2026 10-52-50_1.mov",
+  "tracks" : [
+    {
+      "dataRate" : 2818838,
+      "duration" : 104.12,
+      "fps" : 59.9500732421875,
+      "height" : 2622,
+      "type" : "vide",
+      "width" : 1206
+    },
+    {
+      "dataRate" : 2067.1875,
+      "duration" : 104.11833333333334,
+      "fps" : 43.06640625,
+      "height" : 0,
+      "type" : "soun",
+      "width" : 0
+    }
+  ]
+}

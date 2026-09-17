@@ -1,0 +1,62 @@
+[
+  {
+    "bit_depth_luma" : 8,
+    "bytes" : 11644871,
+    "codec" : "avc1",
+    "color_matrix" : "ITU_R_709_2",
+    "color_primaries" : "ITU_R_709_2",
+    "duration" : 32.666666666666664,
+    "estimated_video_bitrate_mbps" : 2.8484447002410889,
+    "fps" : 30,
+    "height" : 1920,
+    "label" : "v1",
+    "path" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v1\/jango-walkthrough-reel.mp4",
+    "transfer_function" : "ITU_R_709_2",
+    "width" : 1080
+  },
+  {
+    "bit_depth_luma" : 8,
+    "bytes" : 12326029,
+    "codec" : "avc1",
+    "color_matrix" : "ITU_R_709_2",
+    "color_primaries" : "ITU_R_709_2",
+    "duration" : 32.666666666666664,
+    "estimated_video_bitrate_mbps" : 3.0152597427368164,
+    "fps" : 30.000001907348633,
+    "height" : 1920,
+    "label" : "v2",
+    "path" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v2\/jango-walkthrough-reel.mp4",
+    "transfer_function" : "ITU_R_709_2",
+    "width" : 1080
+  },
+  {
+    "bit_depth_luma" : 8,
+    "bytes" : 14139916,
+    "codec" : "avc1",
+    "color_matrix" : "ITU_R_709_2",
+    "color_primaries" : "ITU_R_709_2",
+    "duration" : 32.666666666666664,
+    "estimated_video_bitrate_mbps" : 3.4594712257385254,
+    "fps" : 30.000001907348633,
+    "height" : 2622,
+    "label" : "v3",
+    "path" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/jango-walkthrough-reel.mp4",
+    "transfer_function" : "ITU_R_709_2",
+    "width" : 1206
+  },
+  {
+    "bit_depth_luma" : 8,
+    "bytes" : 14730288,
+    "codec" : "avc1",
+    "color_matrix" : "ITU_R_709_2",
+    "color_primaries" : "ITU_R_709_2",
+    "duration" : 32.666666666666664,
+    "estimated_video_bitrate_mbps" : 3.452425479888916,
+    "fps" : 30.000001907348633,
+    "height" : 2622,
+    "label" : "narrated",
+    "path" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v4-narrated\/jango-walkthrough-narrated.mp4",
+    "transfer_function" : "ITU_R_709_2",
+    "width" : 1206
+  }
+]

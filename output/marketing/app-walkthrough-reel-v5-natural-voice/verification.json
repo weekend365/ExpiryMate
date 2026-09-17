@@ -1,0 +1,15 @@
+{
+  "audio_decode_completed" : true,
+  "audio_decoded_samples" : 1568000,
+  "audio_peak" : 0.70796549320220947,
+  "audio_peak_dbfs" : -2.999758243560791,
+  "duration_seconds" : 32.666666666666664,
+  "height" : 2622,
+  "output" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v5-natural-voice\/jango-walkthrough-delicate.mp4",
+  "passed" : true,
+  "video_digest" : "05d70baff14ba94e08a9bd3f5fb9a84078c87418bddca10701f96c9b26e5a569",
+  "video_sample_count" : 980,
+  "video_samples_unchanged" : true,
+  "voice" : "AI Voice Generator delicate (user-selected)",
+  "width" : 1206
+}

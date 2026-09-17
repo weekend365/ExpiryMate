@@ -1,0 +1,424 @@
+{
+  "audio" : "Source PCM verified silent; no audio added",
+  "fps" : 30,
+  "height" : 1920,
+  "layout" : "Full uncropped original frame, constant scale and position, fixed subtitle overlay",
+  "output_duration" : 32.666666666666664,
+  "segments" : [
+    {
+      "caption" : "남은 두부로\n오늘 뭐 먹지?",
+      "chapter" : "재료 등록부터 요리 추천까지",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "hook",
+      "note" : "추천 결과 미리보기",
+      "output_end" : 2,
+      "output_start" : 0,
+      "source_end" : 81.650000000000006,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 80.920000000000002,
+      "speed" : 0.36500000000000199,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "냉장고 재료부터 넣어요",
+      "chapter" : "01  재료 등록",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "open-entry",
+      "note" : "입력 방식 선택",
+      "output_end" : 3.3999999999999999,
+      "output_start" : 2,
+      "source_end" : 15.1,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 13,
+      "speed" : 1.4999999999999998,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "재료 이름을 넣고",
+      "chapter" : "01  재료 등록",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "name",
+      "note" : "입력 구간 1.58배속",
+      "output_end" : 6.4000000000000004,
+      "output_start" : 3.3999999999999999,
+      "source_end" : 19.850000000000001,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 15.1,
+      "speed" : 1.5833333333333339,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "유통기한을 골라주세요",
+      "chapter" : "01  재료 등록",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "date",
+      "note" : "날짜 선택 1.21배속",
+      "output_end" : 8.8000000000000007,
+      "output_start" : 6.4000000000000004,
+      "source_end" : 22.75,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 19.850000000000001,
+      "speed" : 1.2083333333333328,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "두부 등록, 끝!",
+      "chapter" : "01  재료 등록",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "saved",
+      "note" : "등록 결과 확인",
+      "output_end" : 10.6,
+      "output_start" : 8.8000000000000007,
+      "source_end" : 24.699999999999999,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 22.75,
+      "speed" : 1.0833333333333328,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "어떤 재료로 요리할까요?",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "settings",
+      "note" : "추천 설정 진입",
+      "output_end" : 12.6,
+      "output_start" : 10.6,
+      "source_end" : 44.649999999999999,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 40.799999999999997,
+      "speed" : 1.9250000000000007,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "추천에 쓸 재료를 골라요",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "ingredients",
+      "note" : "재료 선택 구간 3.7배속",
+      "output_end" : 15.6,
+      "output_start" : 12.6,
+      "source_end" : 55.75,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 44.649999999999999,
+      "speed" : 3.7000000000000006,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "조건을 정하고 추천받기",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "apply",
+      "note" : "조건 적용 2.86배속",
+      "output_end" : 17.399999999999999,
+      "output_start" : 15.6,
+      "source_end" : 60.899999999999999,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 55.75,
+      "speed" : 2.8611111111111103,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "장고가 요리를 고르는 중",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "wait-start",
+      "note" : "대기 구간 편집",
+      "output_end" : 18.066666666666666,
+      "output_start" : 17.399999999999999,
+      "source_end" : 62.100000000000001,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 60.899999999999999,
+      "speed" : 1.8000000000000043,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "장고가 요리를 고르는 중",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "wait-end",
+      "note" : "중간 대기 13.8초 생략",
+      "output_end" : 19.466666666666665,
+      "output_start" : 18.066666666666666,
+      "source_end" : 78.799999999999997,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 75.900000000000006,
+      "speed" : 2.0714285714285654,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "두부 표고 김치전, 어때요?",
+      "chapter" : "02  요리 추천",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "results",
+      "note" : "실제 추천 결과",
+      "output_end" : 21.966666666666665,
+      "output_start" : 19.466666666666665,
+      "source_end" : 81.400000000000006,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 78.799999999999997,
+      "speed" : 1.0400000000000034,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "필요한 재료와 조리법까지",
+      "chapter" : "03  레시피 확인",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "recipe",
+      "note" : "추천 요리 상세 1.7배속",
+      "output_end" : 24.966666666666665,
+      "output_start" : 21.966666666666665,
+      "source_end" : 86.5,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 81.400000000000006,
+      "speed" : 1.6999999999999982,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "한 단계씩 따라 해보세요",
+      "chapter" : "03  레시피 확인",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "cooking-step",
+      "note" : "실제 조리 안내 화면",
+      "output_end" : 27.166666666666668,
+      "output_start" : 24.966666666666665,
+      "source_end" : 96,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 93.5,
+      "speed" : 1.1363636363636362,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "caption" : "순서와 타이머도 함께",
+      "chapter" : "03  레시피 확인",
+      "display_frame" : [
+        98.443935926773463,
+        0,
+        883.11212814645307,
+        1920
+      ],
+      "id" : "cooking-timer",
+      "note" : "조리 단계 시연, 실제 조리 완료 아님",
+      "output_end" : 28.666666666666668,
+      "output_start" : 27.166666666666668,
+      "source_end" : 98.25,
+      "source_frame" : [
+        0,
+        0,
+        1206,
+        2622
+      ],
+      "source_start" : 96,
+      "speed" : 1.5,
+      "subtitle_panel" : [
+        132,
+        148,
+        816,
+        124
+      ]
+    },
+    {
+      "id" : "endcard",
+      "note" : "New generated Jango endcard, 4 seconds",
+      "output_end" : 32.666666666666664,
+      "output_start" : 28.666666666666668
+    }
+  ],
+  "source" : "\/Users\/namu\/Downloads\/ScreenRecording_09-17-2026 10-52-50_1.mov",
+  "source_duration" : 104.12,
+  "width" : 1080
+}

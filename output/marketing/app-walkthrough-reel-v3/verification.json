@@ -1,0 +1,21 @@
+{
+  "audio_tracks" : 0,
+  "body_frames_geometry_checked" : 860,
+  "bytes" : 14139916,
+  "decoded_frames" : 980,
+  "duration_seconds" : 32.666666666666664,
+  "endcard_frames" : 120,
+  "expected_frames" : 980,
+  "first_timestamp" : 0,
+  "fps" : 30.000001907348633,
+  "height" : 2622,
+  "last_timestamp" : 32.633333333333333,
+  "max_timestamp_error_seconds" : 0,
+  "original_frame_fills_output_without_margins" : true,
+  "passed" : true,
+  "path" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/jango-walkthrough-reel.mp4",
+  "reader_completed" : true,
+  "source_audio_note" : "Original recording was verified silent. Output intentionally has no added music or voiceover.",
+  "source_sample_max_error_seconds" : 0.016333333333335531,
+  "width" : 1206
+}

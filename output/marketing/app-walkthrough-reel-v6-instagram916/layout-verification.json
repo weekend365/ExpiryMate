@@ -1,0 +1,13 @@
+{
+  "audio_mux_did_not_reencode_video" : true,
+  "audio_tracks" : 1,
+  "decoded_frames" : 980,
+  "duration_seconds" : 32.666666666666664,
+  "fixed_dimensions_verified_all_frames" : true,
+  "fps" : 30,
+  "height" : 1920,
+  "max_timestamp_error_seconds" : 0,
+  "passed" : true,
+  "video_was_rescaled_and_encoded_once_for_9x16" : true,
+  "width" : 1080
+}

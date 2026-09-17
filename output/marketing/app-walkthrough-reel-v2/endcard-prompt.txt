@@ -1,0 +1,16 @@
+Built-in image_gen
+
+Use case: ads-marketing. Generate ONE finished 9:16 portrait end card for a Korean Instagram Reel advertising the app "장고야 부탁해". Ideally 1080×1920. The supplied image is the actual app icon and authoritative Jango character reference. Make a polished static 4-second closing card, fully OPAQUE cream background edge to edge, no transparency.
+Match the prior campaign language: flat 2D hand-drawn friendly mascot, cream/off-white background #FFFCF5, mint #D1FAE5, deep green #28775A, charcoal #1A1F27. Crisp bold Korean sans typography like Pretendard. No gradients, shadows, 3D, photorealism, invented badge, QR code, price, app store logo, URL, or watermark.
+All important content must stay inside a central safe area: x 100 to 940 and y 280 to 1480 on a 1080×1920 canvas. Leave ample empty cream background at top and bottom for Instagram controls. Do not place any text near the right screen edge.
+Composition:
+At y about 320 a medium-large two-line headline EXACT:
+"냉장고 속 재료,
+오늘의 한 끼로."
+Use charcoal for first line and deep green for second.
+In the middle, a large ACTUAL supplied app icon with gentle rounded corners, approximately 380×380, preserving its exact character proportions, chef hat, single refrigerator door, left mint handle, pineapple, right hinges, wink and mint oven mitts. Do not redesign the character. Do not add other props.
+Below icon, a bold app-name line EXACT "장고야 부탁해".
+Below it, smaller line EXACT "재료 관리부터 요리 추천까지".
+At y about 1280 a flat deep-green rounded panel with white text EXACT "프로필 링크에서 다운로드" with small right arrow.
+Below that, small neutral type EXACT "iPhone · Android".
+No further text. Balanced, generous whitespace, all typography clearly readable on a phone. The design should feel like the same brand as the actual app, and function as a ready-to-use video end card.

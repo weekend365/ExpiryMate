@@ -1,0 +1,15 @@
+{
+  "audio_decode_completed" : true,
+  "audio_decoded_samples" : 3136000,
+  "audio_peak" : 0.71984249353408813,
+  "audio_peak_dbfs" : -2.8552505970001221,
+  "duration_seconds" : 32.666666666666664,
+  "height" : 1920,
+  "output" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v6-instagram916\/jango-walkthrough-carefree-9x16.mp4",
+  "passed" : true,
+  "video_digest" : "ba8d8cd9b0d88a2a731056de637d44f87d5bd3a5abfb0efbc7fbcd8e4acfde73",
+  "video_sample_count" : 980,
+  "video_samples_unchanged" : true,
+  "voice" : "AI Voice Generator delicate + Carefree by Kevin MacLeod",
+  "width" : 1080
+}

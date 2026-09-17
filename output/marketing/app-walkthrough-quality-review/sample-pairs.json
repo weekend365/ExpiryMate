@@ -1,0 +1,163 @@
+[
+  {
+    "decoded_time" : 0,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00000.png",
+    "frame" : 0,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00000.png",
+    "time" : 0
+  },
+  {
+    "decoded_time" : 2,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00060.png",
+    "frame" : 60,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00060.png",
+    "time" : 2
+  },
+  {
+    "decoded_time" : 3,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00090.png",
+    "frame" : 90,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00090.png",
+    "time" : 3
+  },
+  {
+    "decoded_time" : 3.3999999999999999,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00102.png",
+    "frame" : 102,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00102.png",
+    "time" : 3.3999999999999999
+  },
+  {
+    "decoded_time" : 6,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00180.png",
+    "frame" : 180,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00180.png",
+    "time" : 6
+  },
+  {
+    "decoded_time" : 6.4000000000000004,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00192.png",
+    "frame" : 192,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00192.png",
+    "time" : 6.4000000000000004
+  },
+  {
+    "decoded_time" : 8.8000000000000007,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00264.png",
+    "frame" : 264,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00264.png",
+    "time" : 8.8000000000000007
+  },
+  {
+    "decoded_time" : 9,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00270.png",
+    "frame" : 270,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00270.png",
+    "time" : 9
+  },
+  {
+    "decoded_time" : 10.6,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00318.png",
+    "frame" : 318,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00318.png",
+    "time" : 10.6
+  },
+  {
+    "decoded_time" : 12,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00360.png",
+    "frame" : 360,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00360.png",
+    "time" : 12
+  },
+  {
+    "decoded_time" : 12.6,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00378.png",
+    "frame" : 378,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00378.png",
+    "time" : 12.6
+  },
+  {
+    "decoded_time" : 15,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00450.png",
+    "frame" : 450,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00450.png",
+    "time" : 15
+  },
+  {
+    "decoded_time" : 15.6,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00468.png",
+    "frame" : 468,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00468.png",
+    "time" : 15.6
+  },
+  {
+    "decoded_time" : 17.399999999999999,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00522.png",
+    "frame" : 522,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00522.png",
+    "time" : 17.399999999999999
+  },
+  {
+    "decoded_time" : 18,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00540.png",
+    "frame" : 540,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00540.png",
+    "time" : 18
+  },
+  {
+    "decoded_time" : 18.066666666666666,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00542.png",
+    "frame" : 542,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00542.png",
+    "time" : 18.066666666666666
+  },
+  {
+    "decoded_time" : 19.466666666666665,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00584.png",
+    "frame" : 584,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00584.png",
+    "time" : 19.466666666666665
+  },
+  {
+    "decoded_time" : 21,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00630.png",
+    "frame" : 630,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00630.png",
+    "time" : 21
+  },
+  {
+    "decoded_time" : 21.966666666666665,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00659.png",
+    "frame" : 659,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00659.png",
+    "time" : 21.966666666666665
+  },
+  {
+    "decoded_time" : 24,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00720.png",
+    "frame" : 720,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00720.png",
+    "time" : 24
+  },
+  {
+    "decoded_time" : 24.966666666666665,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00749.png",
+    "frame" : 749,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00749.png",
+    "time" : 24.966666666666665
+  },
+  {
+    "decoded_time" : 27,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00810.png",
+    "frame" : 810,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00810.png",
+    "time" : 27
+  },
+  {
+    "decoded_time" : 27.166666666666668,
+    "encoded" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-quality-review\/encoded-frames\/frame-00815.png",
+    "frame" : 815,
+    "reference" : "\/Users\/namu\/Desktop\/ExpiryMate\/output\/marketing\/app-walkthrough-reel-v3\/render-review\/frame-00815.png",
+    "time" : 27.166666666666668
+  }
+]

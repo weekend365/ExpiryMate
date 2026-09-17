@@ -23,3 +23,21 @@ apps/mobile/e2e/screenshots/baseline/**/*.png
 /output/marketing/**/*.zip
 /output/marketing/**/*.sb-*
 /output/marketing/**/qa/
+
+# Regenerable walkthrough previews and verified intermediate media.
+/output/marketing/app-walkthrough-quality-review/encoded-frames/*.png
+/output/marketing/app-walkthrough-reel-v1/final-review/*.png
+/output/marketing/app-walkthrough-reel-v2/final-review/*.png
+/output/marketing/app-walkthrough-reel-v3/final-review/*.png
+/output/marketing/app-walkthrough-reel-v6-instagram916/expected/*.png
+/output/marketing/app-walkthrough-reel-v6-instagram916/final-review/*.png
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/01-hook.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/02-register.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/03-date.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/04-ingredients.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/05-recommend.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/06-result.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/07-recipe.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/08-timer.wav
+/output/marketing/app-walkthrough-reel-v4-narrated/voice/09-cta.wav
+/output/marketing/app-walkthrough-reel-v6-instagram916/video-9x16.mp4

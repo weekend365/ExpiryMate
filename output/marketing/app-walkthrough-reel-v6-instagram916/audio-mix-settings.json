@@ -1,0 +1,94 @@
+{
+  "music": "Carefree — Kevin MacLeod",
+  "music_excerpt_seconds": [
+    0,
+    32.666666666666664
+  ],
+  "narration": "User-selected delicate recording, existing alignment preserved",
+  "duration_seconds": 32.666666666666664,
+  "sample_rate": 48000,
+  "channels": 2,
+  "music_nominal_gap_rms_dbfs": -25.0,
+  "music_duck_during_narration_db": 7.5,
+  "music_nominal_speech_rms_dbfs": -32.5,
+  "music_fade_in_seconds": 0.45,
+  "music_fade_out_seconds": 1.1,
+  "voice_gain_db": 0,
+  "mix_peak_dbfs": -2.8533723292561977,
+  "mix_rms_dbfs": -22.472490340338847,
+  "clipped_samples": 0,
+  "cues": [
+    {
+      "id": "01-hook",
+      "text": "남은 두부로 뭐 먹지?",
+      "source_start": 0.0,
+      "source_end": 1.4,
+      "start": 0.03,
+      "end": 1.43
+    },
+    {
+      "id": "02-register",
+      "text": "먼저, 냉장고 재료를 넣어요.",
+      "source_start": 1.65,
+      "source_end": 3.6,
+      "start": 2.22,
+      "end": 4.17
+    },
+    {
+      "id": "03-date",
+      "text": "유통기한을 고르면, 두부 등록 끝!",
+      "source_start": 4.08,
+      "source_end": 6.47,
+      "start": 7.3,
+      "end": 9.69
+    },
+    {
+      "id": "04-ingredients",
+      "text": "추천에 쓸 재료를 고르고,",
+      "source_start": 6.6,
+      "source_end": 8.3,
+      "start": 12.67,
+      "end": 14.37
+    },
+    {
+      "id": "05-recommend",
+      "text": "조건을 정해 추천받아요.",
+      "source_start": 8.3,
+      "source_end": 10.12,
+      "start": 15.65,
+      "end": 17.47
+    },
+    {
+      "id": "06-result",
+      "text": "두부 표고 김치전, 어때요?",
+      "source_start": 10.44,
+      "source_end": 12.43,
+      "start": 19.45,
+      "end": 21.44
+    },
+    {
+      "id": "07-recipe",
+      "text": "재료와 조리법을 확인하고,",
+      "source_start": 12.51,
+      "source_end": 14.15,
+      "start": 22.1,
+      "end": 23.74
+    },
+    {
+      "id": "08-timer",
+      "text": "타이머와 함께 따라 해보세요.",
+      "source_start": 14.15,
+      "source_end": 15.92,
+      "start": 26.2,
+      "end": 27.97
+    },
+    {
+      "id": "09-cta",
+      "text": "장고야 부탁해. 지금 시작해 보세요.",
+      "source_start": 16.12,
+      "source_end": 19.032,
+      "start": 28.83,
+      "end": 31.742
+    }
+  ]
+}

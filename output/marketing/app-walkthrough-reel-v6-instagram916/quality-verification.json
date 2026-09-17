@@ -1,0 +1,61 @@
+{
+  "reference": "Uncompressed resized frames immediately before the current encode; this does not compare to the missing camera original.",
+  "checked_frames": 9,
+  "mean_content_psnr_db": 35.845726780122405,
+  "checks": [
+    {
+      "frame": "frame-00000",
+      "content_psnr_db": 33.928019599639946,
+      "caption_area_psnr_db": 30.465523260778046,
+      "side_padding_mean_error": 1.3770137080439815
+    },
+    {
+      "frame": "frame-00090",
+      "content_psnr_db": 34.36147783297925,
+      "caption_area_psnr_db": 30.41225899672955,
+      "side_padding_mean_error": 1.3331380208333334
+    },
+    {
+      "frame": "frame-00264",
+      "content_psnr_db": 36.882107220601114,
+      "caption_area_psnr_db": 30.347032577279514,
+      "side_padding_mean_error": 1.3334689670138888
+    },
+    {
+      "frame": "frame-00450",
+      "content_psnr_db": 35.33043184431949,
+      "caption_area_psnr_db": 29.575447469233545,
+      "side_padding_mean_error": 1.3333333333333333
+    },
+    {
+      "frame": "frame-00584",
+      "content_psnr_db": 34.90714720895727,
+      "caption_area_psnr_db": 30.082284597109798,
+      "side_padding_mean_error": 1.3333297164351852
+    },
+    {
+      "frame": "frame-00720",
+      "content_psnr_db": 35.477438693990734,
+      "caption_area_psnr_db": 30.98687874466508,
+      "side_padding_mean_error": 1.3333333333333333
+    },
+    {
+      "frame": "frame-00810",
+      "content_psnr_db": 36.375996748038894,
+      "caption_area_psnr_db": 30.957921213789916,
+      "side_padding_mean_error": 1.3333170572916666
+    },
+    {
+      "frame": "frame-00900",
+      "content_psnr_db": 37.648823767470326,
+      "caption_area_psnr_db": 34.304392096832665,
+      "side_padding_mean_error": 1.3333586516203704
+    },
+    {
+      "frame": "frame-00979",
+      "content_psnr_db": 37.70009810510466,
+      "caption_area_psnr_db": 34.329701131296225,
+      "side_padding_mean_error": 1.3333423755787037
+    }
+  ]
+}
