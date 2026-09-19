@@ -37,6 +37,7 @@ import {
 import OpenAI from "openai";
 import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
+import { getNonNegativeIntegerEnv } from "../../common/number-env";
 import { PrismaService } from "../../database/prisma.service";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import {
@@ -1175,26 +1176,6 @@ function normalizeTokenCount(value: number) {
   }
 
   return Math.floor(value);
-}
-
-function getNonNegativeIntegerEnv(name: string, fallback: number) {
-  return Math.floor(getNonNegativeNumberEnv(name, fallback));
-}
-
-function getNonNegativeNumberEnv(name: string, fallback: number) {
-  const raw = process.env[name];
-
-  if (!raw) {
-    return fallback;
-  }
-
-  const value = Number(raw);
-
-  if (!Number.isFinite(value) || value < 0) {
-    return fallback;
-  }
-
-  return value;
 }
 
 function roundCost(value: number) {

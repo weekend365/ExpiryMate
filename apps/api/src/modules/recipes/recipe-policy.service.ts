@@ -5,6 +5,11 @@ import {
   ServiceUnavailableException,
 } from "@nestjs/common";
 import { getKstDayStart } from "@expirymate/shared";
+import {
+  getNonNegativeIntegerEnv,
+  getNonNegativeNumberEnv,
+} from "../../common/number-env";
+import { decimalToNumber } from "../../common/decimal";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 
@@ -160,45 +165,4 @@ export class RecipePolicyService {
       this.inflightGenerations = Math.max(0, this.inflightGenerations - 1);
     }
   }
-}
-
-function getNonNegativeIntegerEnv(name: string, fallback: number) {
-  return Math.floor(getNonNegativeNumberEnv(name, fallback));
-}
-
-function getNonNegativeNumberEnv(name: string, fallback: number) {
-  const raw = process.env[name];
-
-  if (!raw) {
-    return fallback;
-  }
-
-  const value = Number(raw);
-
-  if (!Number.isFinite(value) || value < 0) {
-    return fallback;
-  }
-
-  return value;
-}
-
-function decimalToNumber(value: { toNumber?: () => number } | number | string | null) {
-  if (value == null) {
-    return 0;
-  }
-
-  if (typeof value === "number") {
-    return value;
-  }
-
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-
-  if (typeof value.toNumber === "function") {
-    return value.toNumber();
-  }
-
-  return 0;
 }

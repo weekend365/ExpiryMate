@@ -30,6 +30,7 @@ import {
   type RewardedAdSession,
   type TrackMonetizationEventRequest,
 } from "@expirymate/shared";
+import { isRetryableTransactionError } from "../../common/prisma-errors";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 import { InventoryPhotoParsePolicyService } from "../inventory/inventory-photo-parse.policy";
@@ -1302,13 +1303,6 @@ function decodeUrlSafeBase64(value: string) {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
   const padding = "=".repeat((4 - (normalized.length % 4)) % 4);
   return Buffer.from(`${normalized}${padding}`, "base64");
-}
-
-function isRetryableTransactionError(error: unknown) {
-  return (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    (error.code === "P2034" || error.code === "P2002")
-  );
 }
 
 function hasRevenueLedger(db: DbClient) {

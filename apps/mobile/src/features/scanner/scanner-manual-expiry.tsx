@@ -2,7 +2,6 @@ import {
   addDays,
   ExpirySource,
   formatDateKorean,
-  isDateOnlyString,
   toIsoDate,
 } from "@expirymate/shared";
 import DateTimePicker, {
@@ -11,28 +10,12 @@ import DateTimePicker, {
 import { CalendarDays } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { Platform, Pressable, View } from "react-native";
+import { toDatePickerDate, toDatePickerDateOnly } from "../../shared/date-picker";
 import { AppText } from "../../components/AppText";
 import { Pill } from "../../components/Pill";
 import { colors } from "../../shared/theme";
 import { QUICK_EXPIRY_OPTIONS } from "../inventory/inventory-form-copy";
 import { scannerScreenStyles as styles } from "./scanner-screen-styles";
-
-function toDatePickerDate(value: string) {
-  if (!isDateOnlyString(value)) {
-    return new Date(value);
-  }
-
-  const [yearText, monthText, dayText] = value.split("-");
-  return new Date(Number(yearText), Number(monthText) - 1, Number(dayText));
-}
-
-function toDatePickerDateOnly(value: Date) {
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
 
 export function ManualExpirySection({
   expiryDate,

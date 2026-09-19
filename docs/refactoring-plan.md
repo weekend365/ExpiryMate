@@ -1,7 +1,7 @@
 ---
 status: active
 owner: engineering
-last_reviewed: 2026-09-08
+last_reviewed: 2026-09-19
 source_of_truth: true
 ---
 
@@ -9,8 +9,10 @@ source_of_truth: true
 
 제품 범위와 정책은 [출시 범위](./product/release-scope.md),
 [수익화 기준](./monetization.md), [저장소 규칙](../AGENTS.md)을 따른다.
-이 문서는 2026-09-08 로컬 리팩터링의 범위·진행·검증만 관리한다.
+이 문서는 2026-09-08 로컬 리팩터링과 2026-09-19 추가 정리의 범위·진행·검증을 관리한다.
 운영 서비스 상태는 조회하지 않았다.
+
+아래 기존 기록은 보존하며, 최신 정리 결과는 마지막의 **2026-09-19 안전한 코드 정리**에 기록한다.
 
 ## 진단과 고정 범위
 
@@ -137,3 +139,61 @@ Admin build에는 기존 OpenTelemetry 동적 require와 Next ESLint plugin 경�
 선정한 세 단계의 코드 구현과 로컬 품질 검사는 끝났지만, Admin standalone 패키징과
 환경 의존 QA가 남아 있어 전체 release 검증 완료를 의미하지 않는다. 이 기록은 그 검증이
 끝날 때까지 active로 유지한다.
+
+## 2026-09-19 안전한 코드 정리
+
+### 범위와 변경 근거
+
+- 시작 기준은 `b1a99bf`이며 작업 트리는 깨끗했다. 계획 단계에서
+  `pnpm docs:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`가 통과했다.
+- 사진 등록의 `applyStorageLocationToAll`은 참조가 없고 `applyExpiryToAll`은
+  테스트 준비에만 사용되어 제거했다. 기존 테스트는 날짜가 있는 입력을 직접 만들며
+  검토 전 저장 거부·검토 후 저장 허용 검증을 유지한다. 실제 사진 일괄 편집 UI는 유지한다.
+- DatePickerField와 스캐너의 날짜 변환 두 개를
+  [모바일 날짜 선택 유틸리티](../apps/mobile/src/shared/date-picker.ts)로 통합했다.
+  기기 현지 날짜, 시간 포함 문자열과 잘못된 문자열의 기존 Date 생성자 fallback을 보존한다.
+- API와 모바일의 제휴 상품 중복 제거를
+  [shared 상품 유틸리티](../packages/shared/src/utils/affiliate-products.ts)로 통합했다.
+  `uniqueProductsById(products: AffiliateProduct[]): AffiliateProduct[]`를 shared 진입점에서
+  공개하고 두 소비자가 직접 사용한다. 모바일 중복 모듈은 삭제하고 테스트는 shared로 이동·보강했다.
+- API의 재시도 오류 판별 3곳, 비음수 환경값·정수 변환 각 3곳, Decimal 변환 2곳을
+  [Prisma 오류 판별](../apps/api/src/common/prisma-errors.ts),
+  [환경값 변환](../apps/api/src/common/number-env.ts),
+  [Decimal 변환](../apps/api/src/common/decimal.ts)으로 통합했다.
+  환경값은 호출할 때 읽으며 재시도 횟수, 비용 한도, 기본값, 숫자 변환 규칙을 보존한다.
+
+기존 shared export, HTTP 계약, DB schema/migration, 인증·구독·알림 정책과
+화면 구성·스타일은 변경하지 않았다. 의존성 변경, 대형 모듈 분리, 구버전 호환 코드 삭제는
+포함하지 않았다. 커밋·배포·운영 DB 작업은 실행하지 않았다.
+
+### 동작 보존과 검증 결과
+
+- TypeScript AST로 이동 전 함수 본문 17개와 공통화 후 본문이 동일함을 확인했다.
+  기존 production 파일 10개의 나머지 구문도 import 변경, 계획된 함수 제거와
+  제휴 함수 호출명 변경을 제외하면 동일하다. 날짜 화면의 JSX·스타일·이벤트 처리도 동일하다.
+- 날짜 변환 테스트 12개를 `TZ=UTC`, `TZ=Asia/Seoul`, `TZ=America/Los_Angeles`로
+  각각 실행해 통과했다. 윤년·월말·연말·서머타임 전환일, 현지 자정 왕복과 fallback을 확인했다.
+- shared 공개 진입점으로 상품 중복 제거를 검증했다. 빈 배열, 첫 상품의 객체 유지,
+  입력 순서, 배열·상품 불변 테스트 3개가 통과했다.
+- API 보조 함수와 관련 service 테스트 9개 파일·140개가 통과했다.
+  Prisma 오류 종류, 환경값의 미설정·음수·소수·비정상 값, Decimal·문자열·null을 검증했다.
+  사진 분석에는 충돌 후 성공, 최대 3회 시도, 비대상 오류 즉시 전파, 정확한 비용 한도 허용과
+  초과 거부, 0으로 비활성화한 한도의 회귀 테스트를 추가했다.
+- 사진 등록·스캐너·제휴·반응형 관련 모바일 테스트 20개 파일·83개가 통과했다.
+- `pnpm lint`, `pnpm typecheck`, shared ESM/CJS/DTS build,
+  `pnpm --filter @expirymate/api build`가 통과했다. Prisma client 생성만 실행했으며
+  migration이나 DB 데이터 변경은 실행하지 않았다.
+- `pnpm test`: shared 139개, API 484개, 모바일 500개로 **총 1,123개 테스트·172개 파일**이
+  통과했다. Admin은 test script가 없으며 이번에도 타입 검사 범위에만 포함된다.
+- `pnpm docs:check`와 `git diff --check`도 통과했다. 문서 메타데이터·링크와
+  모바일 빌드 진입점 검사를 포함한다.
+
+### 남은 검증
+
+날짜 선택 화면의 변경 전후 캡처와 네이티브 QA는 실행하지 못했다.
+`xcrun simctl list devices booted`가 Xcode 라이선스 미동의로 실패했고 Maestro와 ADB도
+PATH에서 찾을 수 없었다. 시스템 라이선스 동의나 도구 설치는 수행하지 않았다.
+AST 비교·시간대 테스트·레이아웃 계약 테스트는 통과했지만 실제 화면 캡처 검증을 대신하지 않는다.
+네이티브 도구와 실행 환경이 준비되면 저장소의 기존 layout E2E 절차로 확인해야 한다.
+
+앞선 2026-09-08 기록의 Admin 패키징·외부 환경 QA는 이번 변경으로 완료 처리하지 않는다.

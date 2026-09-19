@@ -1,9 +1,10 @@
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { formatDateKorean, isDateOnlyString } from "@expirymate/shared";
+import { formatDateKorean } from "@expirymate/shared";
 import { forwardRef, useCallback, useImperativeHandle, useState, type PropsWithChildren } from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { toDatePickerDate, toDatePickerDateOnly } from "../shared/date-picker";
 import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
 import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
@@ -219,23 +220,6 @@ export const DatePickerField = forwardRef<
     </View>
   );
 });
-
-function toDatePickerDate(value: string) {
-  if (!isDateOnlyString(value)) {
-    return new Date(value);
-  }
-
-  const [yearText, monthText, dayText] = value.split("-");
-  return new Date(Number(yearText), Number(monthText) - 1, Number(dayText));
-}
-
-function toDatePickerDateOnly(value: Date) {
-  const year = value.getFullYear();
-  const month = String(value.getMonth() + 1).padStart(2, "0");
-  const day = String(value.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
 
 const styles = StyleSheet.create({
   wrapper: {

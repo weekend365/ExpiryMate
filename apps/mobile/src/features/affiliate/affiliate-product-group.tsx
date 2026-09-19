@@ -3,7 +3,7 @@ import type {
   AffiliateProduct,
   AffiliateProductGroup,
 } from "@expirymate/shared";
-import { COUPANG_PARTNERS_CTA_LABEL } from "@expirymate/shared";
+import { COUPANG_PARTNERS_CTA_LABEL, uniqueProductsById } from "@expirymate/shared";
 import { useCallback, useRef, useState } from "react";
 import {
   Alert,
@@ -19,7 +19,6 @@ import { useResponsiveLayout } from "../../shared/responsive-layout";
 import { colors, radius, spacing, controlSize } from "../../shared/theme";
 import { AffiliateCta } from "./affiliate-cta";
 import { visibleIngredientReason } from "./affiliate-group-reason";
-import { uniqueProductsById } from "./unique-affiliate-products";
 import { useVisibleImpression } from "./use-visible-impression";
 
 const PRODUCT_IMAGE_SIZE = spacing.xxl * 2;

@@ -16,6 +16,7 @@ const envKeys = [
   "INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT",
   "INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT",
   "INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD",
+  "INVENTORY_PHOTO_PARSE_GLOBAL_DAILY_COST_LIMIT_USD",
 ] as const;
 
 describe("InventoryPhotoParsePolicyService", () => {
@@ -72,6 +73,40 @@ describe("InventoryPhotoParsePolicyService", () => {
     expect(prisma.$transaction).toHaveBeenCalledWith(expect.any(Function), {
       isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
     });
+  });
+
+  it.each(["P2034", "P2002"])("retries %s and reserves exactly once", async (code) => {
+    const prisma = createPrismaMock();
+    prisma.inventoryPhotoParseEvent.count.mockResolvedValue(0);
+    prisma.rewardedAdSession.count.mockResolvedValue(0);
+    prisma.inventoryPhotoParseEvent.create.mockResolvedValue({ id: "event-1" });
+    prisma.$transaction.mockRejectedValueOnce(
+      new Prisma.PrismaClientKnownRequestError("conflict", { code, clientVersion: "test" }),
+    );
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+
+    await expect(policy.reserveParse(reservationInput(new Date("2026-08-28T01:00:00Z"))))
+      .resolves.toEqual({ kind: "reserved", eventId: "event-1" });
+    expect(prisma.$transaction).toHaveBeenCalledTimes(2);
+    expect(prisma.inventoryPhotoParseEvent.create).toHaveBeenCalledOnce();
+  });
+
+  it.each([
+    ["P2034", 3],
+    ["P2002", 3],
+    ["P2025", 1],
+  ])("propagates persistent %s after %i attempts", async (code, attempts) => {
+    const prisma = createPrismaMock();
+    const error = new Prisma.PrismaClientKnownRequestError("failure", {
+      code, clientVersion: "test",
+    });
+    prisma.$transaction.mockRejectedValue(error);
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+
+    await expect(policy.reserveParse(reservationInput(new Date("2026-08-28T01:00:00Z"))))
+      .rejects.toBe(error);
+    expect(prisma.$transaction).toHaveBeenCalledTimes(attempts);
+    expect(prisma.inventoryPhotoParseEvent.create).not.toHaveBeenCalled();
   });
 
   it("consumes only an inventory-photo verified reward after the free use", async () => {
@@ -162,6 +197,47 @@ describe("InventoryPhotoParsePolicyService", () => {
         new Date("2026-08-28T05:00:00Z"),
       ),
     ).resolves.toBeUndefined();
+    expect(prisma.inventoryPhotoParseEvent.aggregate).not.toHaveBeenCalled();
+  });
+
+  it.each(["owner", "global"])("allows the exact %s cost limit and rejects excess", async (scope) => {
+    process.env.INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD = "0.25";
+    process.env.INVENTORY_PHOTO_PARSE_GLOBAL_DAILY_COST_LIMIT_USD = "0.25";
+    const prisma = createPrismaMock();
+    prisma.inventoryPhotoParseEvent.aggregate.mockResolvedValue({
+      _sum: { estimatedCostUsd: new Prisma.Decimal("0.125"), reservedCostUsd: "0.0625" },
+    });
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+    const now = new Date("2026-08-28T01:00:00Z");
+    const enforce = (cost: number) => scope === "owner"
+      ? policy.enforceDailyCostLimit("owner-a", cost, now)
+      : policy.enforceGlobalDailyCostLimit(cost, now);
+
+    await expect(enforce(0.0625)).resolves.toBeUndefined();
+    await expect(enforce(0.063)).rejects.toMatchObject({
+      status: 429,
+      errorCode: scope === "owner"
+        ? "INVENTORY_PHOTO_PARSE_DAILY_BUDGET_EXHAUSTED"
+        : "INVENTORY_PHOTO_PARSE_SERVICE_CAPACITY_REACHED",
+    });
+    expect(prisma.inventoryPhotoParseEvent.aggregate).toHaveBeenCalledWith({
+      _sum: { estimatedCostUsd: true, reservedCostUsd: true },
+      where: {
+        ownerKey: scope === "owner" ? "owner-a" : undefined,
+        createdAt: { gte: new Date("2026-08-27T15:00:00Z") },
+      },
+    });
+  });
+
+  it("keeps zero cost limits disabled without querying spending", async () => {
+    process.env.INVENTORY_PHOTO_PARSE_DAILY_COST_LIMIT_USD = "0";
+    process.env.INVENTORY_PHOTO_PARSE_GLOBAL_DAILY_COST_LIMIT_USD = "0";
+    const prisma = createPrismaMock();
+    const policy = new InventoryPhotoParsePolicyService(prisma as never);
+    const now = new Date("2026-08-28T01:00:00Z");
+
+    await expect(policy.enforceDailyCostLimit("owner-a", 100, now)).resolves.toBeUndefined();
+    await expect(policy.enforceGlobalDailyCostLimit(100, now)).resolves.toBeUndefined();
     expect(prisma.inventoryPhotoParseEvent.aggregate).not.toHaveBeenCalled();
   });
 

@@ -96,21 +96,6 @@ export function candidatesToDrafts(
   }));
 }
 
-export function applyStorageLocationToAll(
-  items: PhotoIntakeDraftItem[],
-  storageLocation: string,
-): PhotoIntakeDraftItem[] {
-  return items.map((item) => ({ ...item, storageLocation }));
-}
-
-export function applyExpiryToAll(
-  items: PhotoIntakeDraftItem[],
-  expiryDate: string | null,
-  expirySource: ExpirySource,
-): PhotoIntakeDraftItem[] {
-  return items.map((item) => ({ ...item, expiryDate, expirySource }));
-}
-
 export function prioritizePhotoIntakeDrafts(
   items: PhotoIntakeDraftItem[],
 ): PhotoIntakeDraftItem[] {

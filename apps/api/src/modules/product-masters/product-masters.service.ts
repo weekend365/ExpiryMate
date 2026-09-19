@@ -19,6 +19,7 @@ import {
   resolveCatalogConfidence,
   resolveCatalogDisplayIdentity,
 } from "@expirymate/shared";
+import { isRetryableTransactionError } from "../../common/prisma-errors";
 import { serializeProductMaster } from "../../common/serializers";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
@@ -487,11 +488,4 @@ export class ProductMastersService {
       return null;
     }
   }
-}
-
-function isRetryableTransactionError(error: unknown) {
-  return (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    (error.code === "P2034" || error.code === "P2002")
-  );
 }

@@ -12,6 +12,7 @@ import {
 import {
   COUPANG_PARTNERS_DISCLOSURE,
   fieldLimits,
+  uniqueProductsById,
   type AffiliateOffer,
   type AffiliateContextualSearchPlacement,
   type AffiliateOffersResponse,
@@ -279,7 +280,7 @@ export class AffiliateOfferService {
       .join(" ")
       .slice(0, fieldLimits.recipeIngredientName);
     const products = this.coupang.hasCredentials()
-      ? uniqueByProductId(
+      ? uniqueProductsById(
           filterRelevantProducts(
             (await this.coupang.searchProducts(query)) ?? [],
             baseQuery,
@@ -339,15 +340,6 @@ function uniqueRecentResolvedItems(
     if (!unique.has(key)) unique.set(key, item);
   }
   return unique;
-}
-
-function uniqueByProductId(products: AffiliateProduct[]) {
-  const seen = new Set<string>();
-  return products.filter((product) => {
-    if (seen.has(product.productId)) return false;
-    seen.add(product.productId);
-    return true;
-  });
 }
 
 function filterRelevantProducts(products: AffiliateProduct[], query: string) {

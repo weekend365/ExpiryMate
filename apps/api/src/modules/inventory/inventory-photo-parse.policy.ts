@@ -22,6 +22,12 @@ import {
   RewardedAdPurpose,
   RewardedAdSessionStatus,
 } from "@prisma/client";
+import { isRetryableTransactionError } from "../../common/prisma-errors";
+import {
+  getNonNegativeIntegerEnv,
+  getNonNegativeNumberEnv,
+} from "../../common/number-env";
+import { decimalToNumber } from "../../common/decimal";
 import { CodedHttpException } from "../../common/coded-http.exception";
 import { PrismaService } from "../../database/prisma.service";
 
@@ -630,46 +636,4 @@ function normalizeIdempotencyKey(value?: string) {
     throw new BadRequestException("Idempotency-Key가 너무 깁니다.");
   }
   return normalized;
-}
-
-function isRetryableTransactionError(error: unknown) {
-  return (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    (error.code === "P2034" || error.code === "P2002")
-  );
-}
-
-function getNonNegativeIntegerEnv(name: string, fallback: number) {
-  return Math.floor(getNonNegativeNumberEnv(name, fallback));
-}
-
-function getNonNegativeNumberEnv(name: string, fallback: number) {
-  const raw = process.env[name];
-  if (!raw) {
-    return fallback;
-  }
-  const value = Number(raw);
-  if (!Number.isFinite(value) || value < 0) {
-    return fallback;
-  }
-  return value;
-}
-
-function decimalToNumber(
-  value: { toNumber?: () => number } | number | string | null,
-) {
-  if (value == null) {
-    return 0;
-  }
-  if (typeof value === "number") {
-    return value;
-  }
-  if (typeof value === "string") {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-  if (typeof value.toNumber === "function") {
-    return value.toNumber();
-  }
-  return 0;
 }

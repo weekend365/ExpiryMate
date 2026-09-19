@@ -6,7 +6,6 @@ import {
 } from "@expirymate/shared";
 import { describe, expect, it } from "vitest";
 import {
-  applyExpiryToAll,
   canSubmitPhotoIntake,
   candidatesToDrafts,
   draftsToCreateBody,
@@ -30,7 +29,11 @@ describe("photo intake drafts", () => {
     expect(canSubmitPhotoIntake(drafts)).toBe(false);
     expect(photoIntakeReadyCount(drafts)).toBe(0);
 
-    const dated = applyExpiryToAll(drafts, "2026-09-01", ExpirySource.PRESET);
+    const dated = drafts.map((item) => ({
+      ...item,
+      expiryDate: "2026-09-01",
+      expirySource: ExpirySource.PRESET,
+    }));
     expect(canSubmitPhotoIntake(dated)).toBe(false);
     expect(photoIntakeReadyCount(dated)).toBe(0);
     expect(draftsToCreateBody(dated)).toEqual([]);
