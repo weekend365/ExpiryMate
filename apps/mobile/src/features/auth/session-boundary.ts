@@ -1,3 +1,4 @@
+import { reviewService } from "../store-review/store-review";
 import type { QueryClient } from "@tanstack/react-query";
 import { clearRecipeGenerationState } from "../recipes/recipe-generation-reset";
 import { clearPersistedQueryCache } from "../../services/query-client";
@@ -12,6 +13,7 @@ import { clearRecipePreferenceNavigationState } from "../settings/recipe-prefere
  * Call after tokens are cleared (or immediately on logout success).
  */
 export function clearUserScopedClientState(queryClient: QueryClient) {
+  reviewService.setSession(undefined);
   // Cancellation is synchronous inside TanStack Query even though the public
   // method returns a Promise. This prevents an older getMe request from
   // overwriting the session value that the caller seeds immediately after.

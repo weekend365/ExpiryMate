@@ -21,9 +21,12 @@ import {
   isPendingForDifferentSpace,
 } from "./deferred-inventory-removal";
 
+import { reviewService } from "../store-review/store-review";
+
 const UNDO_WINDOW_MS = 5000;
 
 type PendingRemoval = {
+  reviewSession: ReturnType<typeof reviewService.captureSession>;
   entries: InventoryRemovalEntry[];
   timeoutId: ReturnType<typeof setTimeout>;
   spaceId: string;
@@ -77,6 +80,7 @@ function patchItemInCache(
 async function submitRemovals(
   entries: InventoryRemovalEntry[],
   spaceId: string,
+  onConsumed: () => void,
 ) {
   const consumedEntries = entries.filter((entry) => entry.action === "consume");
   const discardedItems = entries.flatMap((entry) =>
@@ -89,7 +93,7 @@ async function submitRemovals(
 
   if (consumedEntries.length === 1 && !hasPartialConsume) {
     requests.push(
-      consumeInventoryItem(consumedEntries[0]!.item.id, spaceId),
+      consumeInventoryItem(consumedEntries[0]!.item.id, spaceId).then(onConsumed),
     );
   } else if (consumedEntries.length > 0) {
     requests.push(
@@ -101,7 +105,7 @@ async function submitRemovals(
           })),
         },
         spaceId,
-      ),
+      ).then(onConsumed),
     );
   }
 
@@ -151,7 +155,9 @@ export function useDeferredInventoryItemRemoval() {
       }
 
       try {
-        await submitRemovals(pending.entries, pending.spaceId);
+        await submitRemovals(pending.entries, pending.spaceId, () => {
+          void reviewService.recordConsume(pending.reviewSession);
+        });
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: keys.inventory }),
           queryClient.invalidateQueries({ queryKey: keys.dashboard }),
@@ -284,6 +290,7 @@ export function useDeferredInventoryItemRemoval() {
       }, UNDO_WINDOW_MS);
 
       pendingRef.current = {
+        reviewSession: previous?.reviewSession ?? reviewService.captureSession(),
         entries: nextEntries,
         timeoutId,
         spaceId: activeSpaceId,

@@ -32,12 +32,16 @@ import { captureStartupBootstrapIssue } from "../src/services/bootstrap-diagnost
 import { pretendardFonts } from "../src/shared/fonts";
 import { colors, fontFamily, typography } from "../src/shared/theme";
 
+import { reviewService } from "../src/features/store-review/store-review";
+import { ReviewSessionBridge } from "../src/features/store-review/use-store-review";
+
 const isSentryEnabled = initMobileSentry();
 export const FONT_LOAD_TIMEOUT_MS = 8_000;
 
 SplashScreen.preventAutoHideAsync().catch(() => null);
 
 function RootLayout() {
+  useEffect(() => { void reviewService.initialize(); }, []);
   const [fontsLoaded, fontError] = useFonts(pretendardFonts);
   const [fontLoadTimedOut, setFontLoadTimedOut] = useState(false);
 
@@ -76,6 +80,7 @@ function RootLayout() {
               <MonetizationProvider>
                 <IapPurchaseProvider>
                   <RecipeGenerationProvider>
+                    <ReviewSessionBridge />
                     <PushTokenSync />
                     <PendingSpaceInvitationBridge />
                     <NotificationNavigationBridge />

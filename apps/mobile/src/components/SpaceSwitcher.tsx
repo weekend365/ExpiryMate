@@ -27,7 +27,7 @@ import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
 import { FeedbackBanner } from "./FeedbackBanner";
 
-export function SpaceSwitcher() {
+export function SpaceSwitcher({ onVisibilityChange }: { onVisibilityChange?: (visible: boolean) => void } = {}) {
   const queryClient = useQueryClient();
   const { sessionUserId } = useAuth();
   const {
@@ -39,7 +39,11 @@ export function SpaceSwitcher() {
     refetchSpaces,
     setActiveSpaceId,
   } = useActiveSpace();
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisibleState] = useState(false);
+  const setVisible = (next: boolean) => {
+    onVisibilityChange?.(next);
+    setVisibleState(next);
+  };
 
   useFocusEffect(
     useCallback(() => {

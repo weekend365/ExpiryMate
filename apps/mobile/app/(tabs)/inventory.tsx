@@ -72,6 +72,8 @@ import { colors } from "../../src/shared/theme";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
 import { useRegistrationStore } from "../../src/store/registration-store";
 
+import { useStoreReview } from "../../src/features/store-review/use-store-review";
+
 export default function InventoryScreen() {
   const { shouldStackDense } = useResponsiveLayout();
   const params = useLocalSearchParams<{ filter?: string | string[] }>();
@@ -88,6 +90,7 @@ export default function InventoryScreen() {
   );
   const [location, setLocation] = useState<string | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [spaceSwitcherVisible, setSpaceSwitcherVisible] = useState(false);
   const [filterSheetVisible, setFilterSheetVisible] = useState(false);
   const [entryMethodVisible, setEntryMethodVisible] = useState(false);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -225,6 +228,12 @@ export default function InventoryScreen() {
     deferredRemoval.undoLabel !== dismissedRemovalNotice
       ? deferredRemoval.undoLabel
       : null;
+  useStoreReview(Boolean(
+    isLoading || isError || isRefetching || actionError ||
+    deferredRemoval.undoLabel || deferredRemoval.isPending || lastCommittedRemoval ||
+    isSelectionMode || filterSheetVisible || entryMethodVisible || cleanupItem ||
+    quickEditItem || shoppingOfferTarget || spaceSwitcherVisible
+  ));
   const inventoryActionNoticeTone = actionError
     ? "danger"
     : visibleRemovalNotice || shoppingOfferTarget
@@ -609,7 +618,7 @@ export default function InventoryScreen() {
           removeClippedSubviews
           ListHeaderComponent={
             <View style={styles.listHeader}>
-              <SpaceSwitcher />
+              <SpaceSwitcher onVisibilityChange={setSpaceSwitcherVisible} />
               {isLoading && !hasLoadedInventory ? (
                 <View
                   style={[
