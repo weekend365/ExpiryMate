@@ -4,7 +4,7 @@
 Sources:
   - assets/characters/jango-icon-crop.png
       → app icon / adaptive (dedicated icon pose; transparent source)
-      → final icon.png is opaque on #F1F3F5 (iOS-safe)
+      → final icon.png is opaque on shared ivory background (iOS-safe)
   - generated app icon
       → compact rounded splash icon
   - assets/characters/jango-idle.png
@@ -21,6 +21,8 @@ Usage (from apps/mobile):
 from __future__ import annotations
 
 import sys
+import json
+import subprocess
 from pathlib import Path
 
 try:
@@ -47,8 +49,16 @@ ANDROID_MONOCHROME_SIZES = {
     "xxxhdpi": 432,
 }
 
-BG_RGB = (241, 243, 245)  # semanticColors.background
-ICON_BORDER_RGB = (219, 223, 228)  # semanticColors.border
+# Read the built shared package: no Python-specific duplicate color constants.
+TOKENS = json.loads(subprocess.check_output(
+    ["node", "--input-type=module", "-e",
+     "import {semanticColors} from '@expirymate/shared'; console.log(JSON.stringify(semanticColors))"],
+    cwd=ROOT, text=True,
+))
+def rgb(hex_color: str) -> tuple[int, int, int]:
+    return tuple(int(hex_color[i:i+2], 16) for i in (1, 3, 5))
+BG_RGB = rgb(TOKENS["background"])
+ICON_BORDER_RGB = rgb(TOKENS["border"])
 SPLASH_LOGICAL_SIZE = 88
 
 

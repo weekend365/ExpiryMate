@@ -64,14 +64,14 @@ export const semanticColors = {
   waterBlueForeground: blue[700],
 
   // Text
-  text: neutral[900],
+  text: "#302E2C", // UI charcoal, independent from decorative character parts.
   subtext: sage[600],
   mutedText: sage[500],
 
   // Lines
   border: cream[400],
   borderSubtle: cream[400],
-  borderControl: sage[400],
+  borderControl: "#7B887F", // >=3:1 on warm/selected surfaces; expiry colors stay unchanged.
   focusRing: brand[600],
 
   // Camera overlays

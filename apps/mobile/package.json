@@ -31,13 +31,16 @@
     "e2e:layout:ios": "bash scripts/run-layout-maestro-ios.sh",
     "screenshots:compare": "node scripts/compare-layout-screenshots.mjs",
     "screenshots:update": "node scripts/compare-layout-screenshots.mjs --update",
-    "branding:sync": "python3 scripts/sync-branding-from-jango.py",
+    "branding:sync": "node scripts/sync-branding-config.mjs && python3 scripts/sync-branding-from-jango.py",
     "branding:audit": "node scripts/audit-branding-assets.mjs --check",
     "store:sync": "node scripts/sync-store-graphics.mjs",
     "store:audit": "node scripts/sync-store-graphics.mjs --check",
     "mascot:small:build": "node scripts/build-mascot-runtime-assets.mjs",
-    "mascot:audit": "node scripts/audit-mascot-proportions.mjs --check && node scripts/audit-mascot-small-fidelity.mjs --check && node scripts/audit-branding-assets.mjs --check",
-    "mascot:build": "node scripts/build-mascot-runtime-assets.mjs"
+    "mascot:audit": "node scripts/audit-mascot-proportions.mjs --check && node scripts/audit-mascot-runtime.mjs && node scripts/audit-mascot-small-fidelity.mjs --check && node scripts/audit-branding-assets.mjs --check && node scripts/mascot-anatomy.mjs --check",
+    "mascot:build": "node scripts/build-mascot-runtime-assets.mjs",
+    "mascot:sync": "node scripts/sync-mascot-sources.mjs",
+    "mascot:measure": "node scripts/mascot-anatomy.mjs",
+    "mascot:anatomy:audit": "node scripts/mascot-anatomy.mjs --check"
   },
   "dependencies": {
     "@expirymate/shared": "workspace:*",

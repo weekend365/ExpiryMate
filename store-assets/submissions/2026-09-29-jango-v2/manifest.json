@@ -1,0 +1,27 @@
+{
+  "date": "2026-09-29",
+  "designVersion": "Jango v2 / kit v3",
+  "status": "review-candidate-not-uploaded",
+  "gitBase": "52e4ed04a327c2e9c8cd40b6fbe704ea56bee256",
+  "includesUncommittedDesignChanges": true,
+  "iosScreenshotStatus": "not-captured: Xcode license not accepted",
+  "files": [
+    {
+      "file": "graphics/google-play-feature-graphic.png",
+      "size": [
+        1024,
+        500
+      ],
+      "sha256": "07904ac78ff619cd84319932bd2e5c5dab03cdd4654f395624326aef6c35bbe6"
+    },
+    {
+      "file": "graphics/jango-appstore-space-copy-ko-1242x2688.png",
+      "size": [
+        1242,
+        2688
+      ],
+      "sha256": "5a5e1e95921267c2b6fde856e4b548fb7e029022a4ccf8f471957f634d5f9c64"
+    }
+  ],
+  "androidScreenshotStatus": "rolled-back: new captures excluded; previous submissions retained"
+}

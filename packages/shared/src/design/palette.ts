@@ -1,7 +1,7 @@
 /**
  * Primitive color scales for the Jango (장고야 부탁해) design system.
  *
- * The brand hue centers on a fresh emerald/mint (`brand[500] = #10B981`) to
+ * The brand hue centers on Jango Kit v3 mint (`brand[500] = #66C6A3`) to
  * reflect the food-freshness domain. All values here are original to this
  * project or drawn from widely-used open palette conventions; they are chosen
  * to stay visually and legally distinct from any unrelated third-party brand
@@ -44,7 +44,7 @@ export const neutral = {
 /** Warm cream surfaces that match Jango's kitchen and refrigerator artwork. */
 export const cream: ColorScale = {
   50: "#FFFCF7",
-  100: "#FFF9F0",
+  100: "#FDF8F2",
   200: "#F7F2E9",
   300: "#F0E9DE",
   400: "#E8DED0",
@@ -69,18 +69,18 @@ export const sage: ColorScale = {
   900: "#1A1F27",
 };
 
-/** Brand: fresh emerald / mint. Primary anchor of the product identity. */
+/** Kit v3 mint. Darker steps are reserved for accessible actions and text. */
 export const brand: ColorScale = {
-  50: "#E6FAF1",
-  100: "#D1FAE5",
-  200: "#C9F4E2",
-  300: "#A7EDD3",
-  400: "#3ED0A2",
-  500: "#10B981",
-  600: "#0D9F70",
-  700: "#067A58",
-  800: "#055F46",
-  900: "#044A38",
+  50: "#EDF8F2",
+  100: "#DCEFE3",
+  200: "#C6E6D5",
+  300: "#A8DCC4",
+  400: "#85D1B2",
+  500: "#66C6A3",
+  600: "#398563",
+  700: "#28674F",
+  800: "#20533F",
+  900: "#193F31",
 };
 
 /** Friendly coral status ramp with dark destructive action steps. */

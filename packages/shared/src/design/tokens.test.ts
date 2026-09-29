@@ -11,6 +11,19 @@ import {
 } from "./tokens";
 
 describe("design tokens", () => {
+  it("keeps brand actions readable across every interactive warm surface", () => {
+    const surfaces = [semanticColors.background, semanticColors.surfaceWarm, semanticColors.primarySoft,
+      semanticColors.primarySoftPressed, semanticColors.surface, semanticColors.mutedSurface, semanticColors.insetSurface];
+    for (const surface of surfaces) {
+      for (const foreground of [semanticColors.primaryForeground, semanticColors.linkText, semanticColors.text]) {
+        expect(contrastRatio(foreground, surface)).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(contrastRatio(semanticColors.focusRing, surface)).toBeGreaterThanOrEqual(3);
+      expect(contrastRatio(semanticColors.borderControl, surface)).toBeGreaterThanOrEqual(3);
+    }
+    expect(semanticColors.brandAccent).not.toBe(semanticColors.actionPrimaryBackground);
+  });
+
   it("keeps small emphasis on the shared type ramp", () => {
     expect(typography.bodySmallStrong).toEqual({
       fontSize: typography.bodySmall.fontSize,

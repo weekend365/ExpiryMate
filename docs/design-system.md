@@ -1,7 +1,7 @@
 ---
 status: active
 owner: design-system
-last_reviewed: 2026-08-31
+last_reviewed: 2026-09-29
 source_of_truth: true
 ---
 
@@ -42,6 +42,11 @@ source_of_truth: true
 정의하지 않는다. 프레임워크 변환만 각 앱의 theme facade 또는 CSS bridge에서 허용한다.
 
 ## 3. 색상 역할
+
+캐릭터 키트 v3의 아이보리·부드러운 민트를 모바일과 Admin의 공유 토큰으로 적용한다.
+밝은 브랜드 강조와 짙은 CTA·링크를 분리하며, 캐릭터 전용 색상은 `characterColors`에서 관리한다.
+캐릭터 팔레트 변경은 유통기한 신호·오류·경고·OAuth 고유 색의 의미를 바꾸지 않는다.
+
 
 색은 모양이 아니라 **사용 목적**으로 선택한다.
 

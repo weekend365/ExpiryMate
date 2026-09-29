@@ -5,6 +5,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import { semanticColors } from "@expirymate/shared";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const mobileDir = path.resolve(scriptDir, "..");
@@ -36,7 +37,7 @@ const nativeIconPath = path.join(
 );
 const shouldCheck = process.argv.includes("--check");
 const expectedSize = 1024;
-const iconBackground = [241, 243, 245];
+const iconBackground = semanticColors.background.slice(1).match(/.{2}/g).map((value) => parseInt(value, 16));
 
 function readPng(assetPath) {
   return PNG.sync.read(fs.readFileSync(assetPath));
@@ -115,6 +116,9 @@ function measureThumbMint(png, side) {
 
   for (let y = yStart; y < yEnd; y += 1) {
     for (let x = xStart; x < xEnd; x += 1) {
+      // v2 bust: the handle extends into this scan window. Exclude its
+      // separate upper-left region; it is not part of the left oven mitten.
+      if (side === "left" && x < 290 && y < 735) continue;
       if (isMintPixel(png, x, y)) {
         count += 1;
         yTotal += y;

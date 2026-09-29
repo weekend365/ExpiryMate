@@ -1,0 +1,191 @@
+{
+  "version": 2,
+  "kit": "JANGO Character Kit v3 (2026-09-29)",
+  "importedFrom": "/Users/namu/Documents/Codex/2026-09-29/JANGO-Character-Kit",
+  "referenceMaster": {
+    "file": "reference/bible-master-idle.png",
+    "sha256": "dfadfb07ab91f7c7124f7bf6c4004ab004056262f0eab6fabe387286e1b6402b"
+  },
+  "poses": [
+    {
+      "mood": "idle",
+      "source": "kit-v3/01-jango-idle.png",
+      "sha256": "a5d59815c712f9581df2b2459ba3eebca6229c0fc445acb2c06351c331bf402a",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 0,
+      "expectedBounds": [
+        232,
+        23,
+        789,
+        995
+      ],
+      "review": {
+        "method": "kit v3 BIBLE measurements and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "happy",
+      "source": "kit-v3/02-jango-happy.png",
+      "sha256": "e5133c048fc2283976354724646a7514a7d1c30d461babd371e7cbccf8111b0c",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 0,
+      "expectedBounds": [
+        175,
+        17,
+        880,
+        1003
+      ],
+      "review": {
+        "method": "kit v3 BIBLE measurements and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "worry",
+      "source": "generated/worry.png",
+      "sha256": "c5a017c9f048914ccb5ab30c87be83ff791b413a2f35c9452d92d59fb35f90c1",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 1,
+      "expectedBounds": [
+        239,
+        25,
+        813,
+        995
+      ],
+      "review": {
+        "method": "built-in image_gen reference edit and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "cooking",
+      "source": "kit-v3/04-jango-cooking.png",
+      "sha256": "aac2089391bbd16ff1415f997b3c84f122140e4e6b9178245381a975a78ac671",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 0,
+      "expectedBounds": [
+        245,
+        32,
+        789,
+        980
+      ],
+      "review": {
+        "method": "kit v3 BIBLE measurements and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "empty",
+      "source": "generated/empty.png",
+      "sha256": "13e76d3b481f4e1a46d27d6b897818f66c45f5f9c6bb27c5449ff13dcae8eabd",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 1,
+      "expectedBounds": [
+        241,
+        25,
+        813,
+        995
+      ],
+      "review": {
+        "method": "built-in image_gen reference edit and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "speak",
+      "source": "generated/speak.png",
+      "sha256": "bfccbdb69d9f309679d7fd9ac66ed0c6d2e47ecfef7ef8779dde42bab404b760",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 1,
+      "expectedBounds": [
+        232,
+        22,
+        789,
+        995
+      ],
+      "review": {
+        "method": "built-in image_gen reference edit and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "think",
+      "source": "kit-v3/03-jango-thinking.png",
+      "sha256": "9e2e703d54f7b31b0548168c6c47326001dd848e08fef98965a8e32bdc32dfc1",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 0,
+      "expectedBounds": [
+        261,
+        36,
+        854,
+        997
+      ],
+      "review": {
+        "method": "kit v3 BIBLE measurements and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "point",
+      "source": "generated/point.png",
+      "sha256": "ecce2f8b79bcbe2c6568cac3eab825b4419f6361692994ad9756a9b7d905c985",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 1,
+      "expectedBounds": [
+        232,
+        23,
+        822,
+        995
+      ],
+      "review": {
+        "method": "built-in image_gen reference edit and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    },
+    {
+      "mood": "icon-crop",
+      "source": "generated/icon-crop.png",
+      "sha256": "73e96854683f9c76ea328989a8a19a5a6d6bde4b3437be23848e35f04a178eb7",
+      "sourceSize": 1254,
+      "outputSize": 1024,
+      "transform": "uniform-square-resize",
+      "alphaFloor": 1,
+      "expectedBounds": [
+        178,
+        26,
+        838,
+        991
+      ],
+      "review": {
+        "method": "built-in image_gen reference edit and visual inspection",
+        "date": "2026-09-29",
+        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
+      }
+    }
+  ]
+}

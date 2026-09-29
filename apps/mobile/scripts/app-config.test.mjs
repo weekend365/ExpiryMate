@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { semanticColors } from "@expirymate/shared";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -105,5 +106,23 @@ describe("iOS protected resource configuration", () => {
     }
 
     expect(nativeInfoPlist).not.toContain("NSMicrophoneUsageDescription");
+  });
+});
+
+
+describe("shared branding colors", () => {
+  it("keeps Expo icons, splash and notifications in sync with shared tokens", () => {
+    expect(appConfig.expo.backgroundColor).toBe(semanticColors.background);
+    expect(appConfig.expo.primaryColor).toBe(semanticColors.brandAccent);
+    expect(appConfig.expo.android.adaptiveIcon.backgroundColor).toBe(semanticColors.background);
+    const splash = appConfig.expo.plugins.find((plugin) => Array.isArray(plugin) && plugin[0] === "expo-splash-screen");
+    const notifications = appConfig.expo.plugins.find((plugin) => Array.isArray(plugin) && plugin[0] === "expo-notifications");
+    expect(splash[1].backgroundColor).toBe(semanticColors.background);
+    expect(splash[1].imageWidth).toBe(88);
+    expect(notifications[1].color).toBe(semanticColors.brandAccent);
+    const native = JSON.parse(readFileSync(resolve(scriptDir, "../ios/ExpiryMate/Images.xcassets/SplashScreenBackground.colorset/Contents.json"), "utf8"));
+    const { red, green, blue } = native.colors[0].color.components;
+    const nativeHex = `#${[red, green, blue].map((component) => Math.round(Number(component) * 255).toString(16).padStart(2, "0")).join("")}`;
+    expect(nativeHex.toUpperCase()).toBe(semanticColors.background);
   });
 });

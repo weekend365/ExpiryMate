@@ -1,0 +1,437 @@
+{
+  "version": 1,
+  "method": "outer-door-roi-v1",
+  "poses": [
+    {
+      "mood": "empty",
+      "expression": "listless",
+      "source": "generated/empty.png",
+      "sha256": "13e76d3b481f4e1a46d27d6b897818f66c45f5f9c6bb27c5449ff13dcae8eabd",
+      "size": [
+        1254,
+        1254
+      ],
+      "uncertaintyPx": 3.673828125,
+      "reviewedAt": "2026-09-29",
+      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
+      "face": {
+        "left": [
+          299,
+          550,
+          335,
+          700
+        ],
+        "right": [
+          905,
+          580,
+          935,
+          690
+        ],
+        "top": [
+          425,
+          372,
+          790,
+          416
+        ],
+        "bottom": [
+          585,
+          849,
+          680,
+          874
+        ]
+      },
+      "features": {
+        "leftEye": {
+          "roi": [
+            462,
+            568,
+            548,
+            674
+          ],
+          "occluded": false
+        },
+        "rightEye": {
+          "roi": [
+            701,
+            581,
+            787,
+            691
+          ],
+          "occluded": false
+        },
+        "mouth": {
+          "roi": [
+            569,
+            638,
+            675,
+            700
+          ],
+          "occluded": false
+        },
+        "leftCheek": {
+          "roi": [
+            409,
+            655,
+            505,
+            720
+          ],
+          "occluded": false
+        },
+        "rightCheek": {
+          "roi": [
+            745,
+            679,
+            840,
+            745
+          ],
+          "occluded": false
+        }
+      }
+    },
+    {
+      "mood": "worry",
+      "expression": "worried",
+      "source": "generated/worry.png",
+      "sha256": "c5a017c9f048914ccb5ab30c87be83ff791b413a2f35c9452d92d59fb35f90c1",
+      "size": [
+        1254,
+        1254
+      ],
+      "uncertaintyPx": 3.673828125,
+      "reviewedAt": "2026-09-29",
+      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
+      "face": {
+        "left": [
+          299,
+          550,
+          335,
+          700
+        ],
+        "right": [
+          905,
+          580,
+          935,
+          690
+        ],
+        "top": [
+          425,
+          372,
+          790,
+          416
+        ],
+        "bottom": [
+          585,
+          849,
+          680,
+          874
+        ]
+      },
+      "features": {
+        "leftEye": {
+          "roi": [
+            462,
+            568,
+            548,
+            674
+          ],
+          "occluded": false
+        },
+        "rightEye": {
+          "roi": [
+            701,
+            581,
+            787,
+            691
+          ],
+          "occluded": false
+        },
+        "mouth": {
+          "roi": [
+            569,
+            638,
+            675,
+            700
+          ],
+          "occluded": false
+        },
+        "leftCheek": {
+          "roi": [
+            409,
+            655,
+            505,
+            720
+          ],
+          "occluded": false
+        },
+        "rightCheek": {
+          "roi": [
+            745,
+            679,
+            840,
+            745
+          ],
+          "occluded": false
+        }
+      }
+    },
+    {
+      "mood": "speak",
+      "expression": "speaking",
+      "source": "generated/speak.png",
+      "sha256": "bfccbdb69d9f309679d7fd9ac66ed0c6d2e47ecfef7ef8779dde42bab404b760",
+      "size": [
+        1254,
+        1254
+      ],
+      "uncertaintyPx": 3.673828125,
+      "reviewedAt": "2026-09-29",
+      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
+      "face": {
+        "left": [
+          298,
+          550,
+          333,
+          700
+        ],
+        "right": [
+          918,
+          570,
+          948,
+          690
+        ],
+        "top": [
+          430,
+          372,
+          810,
+          412
+        ],
+        "bottom": [
+          585,
+          849,
+          680,
+          874
+        ]
+      },
+      "features": {
+        "leftEye": {
+          "roi": [
+            466,
+            561,
+            556,
+            686
+          ],
+          "occluded": false
+        },
+        "rightEye": {
+          "roi": [
+            708,
+            561,
+            800,
+            686
+          ],
+          "occluded": false
+        },
+        "mouth": {
+          "roi": [
+            576,
+            634,
+            686,
+            710
+          ],
+          "occluded": false
+        },
+        "leftCheek": {
+          "roi": [
+            410,
+            658,
+            511,
+            730
+          ],
+          "occluded": false
+        },
+        "rightCheek": {
+          "roi": [
+            754,
+            658,
+            854,
+            730
+          ],
+          "occluded": false
+        }
+      }
+    },
+    {
+      "mood": "point",
+      "expression": "neutral",
+      "source": "generated/point.png",
+      "sha256": "ecce2f8b79bcbe2c6568cac3eab825b4419f6361692994ad9756a9b7d905c985",
+      "size": [
+        1254,
+        1254
+      ],
+      "uncertaintyPx": 3.673828125,
+      "reviewedAt": "2026-09-29",
+      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
+      "face": {
+        "left": [
+          298,
+          550,
+          333,
+          700
+        ],
+        "right": [
+          918,
+          570,
+          948,
+          690
+        ],
+        "top": [
+          430,
+          372,
+          810,
+          412
+        ],
+        "bottom": [
+          585,
+          849,
+          680,
+          874
+        ]
+      },
+      "features": {
+        "leftEye": {
+          "roi": [
+            466,
+            561,
+            556,
+            686
+          ],
+          "occluded": false
+        },
+        "rightEye": {
+          "roi": [
+            708,
+            561,
+            800,
+            686
+          ],
+          "occluded": false
+        },
+        "mouth": {
+          "roi": [
+            576,
+            634,
+            686,
+            710
+          ],
+          "occluded": false
+        },
+        "leftCheek": {
+          "roi": [
+            410,
+            658,
+            511,
+            730
+          ],
+          "occluded": false
+        },
+        "rightCheek": {
+          "roi": [
+            754,
+            658,
+            854,
+            730
+          ],
+          "occluded": false
+        }
+      }
+    },
+    {
+      "mood": "icon-crop",
+      "expression": "wink",
+      "winkEye": "rightEye",
+      "source": "generated/icon-crop.png",
+      "sha256": "73e96854683f9c76ea328989a8a19a5a6d6bde4b3437be23848e35f04a178eb7",
+      "size": [
+        1254,
+        1254
+      ],
+      "uncertaintyPx": 3.673828125,
+      "reviewedAt": "2026-09-29",
+      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
+      "face": {
+        "left": [
+          234,
+          650,
+          275,
+          790
+        ],
+        "right": [
+          975,
+          650,
+          1010,
+          775
+        ],
+        "top": [
+          480,
+          427,
+          805,
+          475
+        ],
+        "bottom": [
+          580,
+          978,
+          680,
+          1000
+        ]
+      },
+      "features": {
+        "leftEye": {
+          "roi": [
+            431,
+            660,
+            538,
+            805
+          ],
+          "occluded": false
+        },
+        "rightEye": {
+          "roi": [
+            719,
+            700,
+            858,
+            780
+          ],
+          "occluded": false
+        },
+        "mouth": {
+          "roi": [
+            566,
+            746,
+            698,
+            822
+          ],
+          "occluded": false
+        },
+        "leftCheek": {
+          "roi": [
+            376,
+            782,
+            485,
+            850
+          ],
+          "occluded": false
+        },
+        "rightCheek": {
+          "roi": [
+            781,
+            778,
+            893,
+            850
+          ],
+          "occluded": false
+        }
+      }
+    }
+  ]
+}

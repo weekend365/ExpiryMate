@@ -29,27 +29,20 @@ function cornerAlphas(png) {
 }
 
 describe("mascot runtime assets", () => {
-  it(
-    "derives every small runtime asset without outline, palette, or design drift",
-    () => {
-      for (const mood of moods) {
-        const full = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
-        const actualPath = path.join(
-          charactersDir,
-          "runtime/small",
-          `jango-${mood}@3x.png`,
-        );
-        const actual = PNG.sync.read(fs.readFileSync(actualPath));
-        const expected = resizePremultiplied(deriveSmallMaster(full), 216, 216);
-
-        expect([actual.width, actual.height], mood).toEqual([
-          expected.width,
-          expected.height,
-        ]);
-        expect(
-          Buffer.compare(Buffer.from(actual.data), Buffer.from(expected.data)),
-          `${mood} small runtime must be an exact crop of its full master`,
-        ).toBe(0);
+  it.each(moods)(
+    "derives all six runtime assets for %s without design drift",
+    (mood) => {
+      const full = PNG.sync.read(fs.readFileSync(fullAssetPath(mood)));
+      const small = deriveSmallMaster(full);
+      for (const variant of variants) {
+        for (const density of densities) {
+          const size = variant.logicalSize * density.scale;
+          const actualPath = path.join(charactersDir, `runtime/${variant.name}`, `jango-${mood}${density.suffix}.png`);
+          const actual = PNG.sync.read(fs.readFileSync(actualPath));
+          const expected = resizePremultiplied(variant.name === "small" ? small : full, size, size);
+          expect([actual.width, actual.height], actualPath).toEqual([size, size]);
+          expect(Buffer.compare(Buffer.from(actual.data), Buffer.from(expected.data)), actualPath).toBe(0);
+        }
       }
     },
     15_000,

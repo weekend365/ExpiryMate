@@ -1,0 +1,21 @@
+/** Decorative artwork colors; do not use these as UI action/foreground roles. */
+export const characterColors = {
+  body: "#FDF8F2",
+  mint: "#66C6A3",
+  outline: "#302E2C",
+  expression: "#1B1B19",
+  cheeks: "#CCE0CF",
+  shadow: "#E7E2DD",
+  mintShadow: "#4AA785",
+  mintHighlight: "#8ED2B5",
+  pineappleFruit: "#F5C93E",
+  pineappleLeaves: "#5FBD98",
+  hinges: "#C6C5C5",
+  stitching: "#BCB8B4",
+  handle: "#68C3A1",
+  gloves: "#65C3A0",
+  pocket: "#65C5A2",
+  shoes: "#65C4A1",
+  sweat: "#BFE8F5",
+  tongue: "#F2A7B5",
+} as const;
