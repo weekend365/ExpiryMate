@@ -49,16 +49,51 @@ name: Responsive layout smoke
     visible:
       id: login-screen
     timeout: 10000
+- runFlow:
+    when:
+      visible:
+        id: login-email-expand
+    commands:
+      - tapOn:
+          id: login-email-expand
+- scrollUntilVisible:
+    element:
+      id: login-email
+    direction: DOWN
 - tapOn:
-    id: login-email-local
-- inputText: demo
-- tapOn:
-    id: login-email-domain-input
-- inputText: gmail.com
+    id: login-email
+- inputText: demo@gmail.com
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: login-password
+    direction: DOWN
 - tapOn:
     id: login-password
 - inputText: demo1234!
-- hideKeyboard
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - back
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
 - tapOn:
     id: login-submit-button
 - extendedWaitUntil:
@@ -172,12 +207,13 @@ name: Responsive layout smoke
       id: insights-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/insights
-- openLink: expirymate://shopping
+- openLink: expirymate://shop
 - extendedWaitUntil:
     visible:
       id: affiliate-shopping-screen
     timeout: 20000
 - takeScreenshot: ${SCREENSHOT_DIR}/shopping
+- tapOn: "관련 상품"
 - tapOn:
     id: affiliate-shopping-search-input
 - inputText: extra-long-responsive-ingredient-name
@@ -287,3 +323,22 @@ name: Responsive layout smoke
     visible: "함께 쓸 준비가 됐어요"
     timeout: 10000
 - takeScreenshot: ${SCREENSHOT_DIR}/invitation-accept
+
+- openLink: expirymate://inventory/activity?spaceId=personal_layout-e2e-user
+- extendedWaitUntil:
+    visible: "냉장고 변경 내역"
+    timeout: 20000
+- extendedWaitUntil:
+    notVisible: "변경 내역을 불러오고 있어요."
+    timeout: 20000
+- waitForAnimationToEnd
+- takeScreenshot: ${SCREENSHOT_DIR}/inventory-activity
+- openLink: expirymate://inventory/layout-e2e-inventory-milk?mode=expiry
+- extendedWaitUntil:
+    visible: "유통기한 바꾸기"
+    timeout: 20000
+- scrollUntilVisible:
+    element: "개봉 후 관리"
+    direction: DOWN
+- waitForAnimationToEnd
+- takeScreenshot: ${SCREENSHOT_DIR}/inventory-opened

@@ -35,6 +35,8 @@ const preference = {
   remindOnDayOf: false,
   quietHoursStart: "22:00",
   quietHoursEnd: "07:00",
+  deliveryTime: "09:00",
+  groupBySpace: false,
   createdAt: new Date("2026-06-01T00:00:00.000Z"),
   updatedAt: new Date("2026-06-01T00:00:00.000Z"),
   owner: {
@@ -215,7 +217,9 @@ describe("NotificationsService", () => {
     );
     prisma.notificationPreference.findMany.mockResolvedValue([preference]);
     prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
-    prisma.pushNotificationDelivery.create.mockRejectedValueOnce(duplicateError);
+    prisma.pushNotificationDelivery.create.mockRejectedValueOnce(
+      duplicateError,
+    );
     prisma.pushNotificationDelivery.findUnique.mockResolvedValue({
       id: "delivery-1",
       status: "failed",
@@ -270,52 +274,150 @@ describe("NotificationsService", () => {
     });
   });
 
-  it("retries stale pending deliveries left after a mid-send crash", async () => {
+  it("retries stale pending only after rechecking current preferences and inventory", async () => {
     const { prisma, expoPush, service } = createService();
     mockLeaseAcquired(prisma);
-    prisma.notificationPreference.findMany.mockResolvedValue([]);
-    prisma.pushNotificationDelivery.findMany
-      .mockResolvedValueOnce([]) // receipts query
-      .mockResolvedValueOnce([
-        {
-          id: "delivery-stale",
-          title: "1일 뒤 유통기한이 끝나요",
-          body: "계란의 유통기한이 1일 남았어요.",
-          inventoryItemId: "item-1",
-          daysBefore: 1,
-          updatedAt: new Date("2026-06-07T00:30:00.000Z"),
-          pushToken: {
-            id: "push-token-1",
-            token: "ExpoPushToken[device-token]",
-          },
-          inventoryItem: {
-            spaceId: "space-a",
-          },
-        },
-      ]);
-    prisma.pushNotificationDelivery.updateMany.mockResolvedValue({ count: 1 });
-    expoPush.send.mockResolvedValue({
-      status: "ok",
-      id: "ticket-stale",
+    prisma.notificationPreference.findMany.mockResolvedValue([preference]);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+    prisma.pushNotificationDelivery.create.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("duplicate", {
+        code: "P2002",
+        clientVersion: "test",
+      }),
+    );
+    prisma.pushNotificationDelivery.findUnique.mockResolvedValue({
+      id: "delivery-stale",
+      status: "pending",
+      attempts: 1,
+      updatedAt: new Date("2026-06-07T00:30:00.000Z"),
     });
-
+    prisma.pushNotificationDelivery.update.mockImplementation(
+      async ({ data }) => ({ id: "delivery-stale", ...data }),
+    );
     const stats = await service.runDueReminders(
       new Date("2026-06-07T01:00:00.000Z"),
     );
-
     expect(stats.stalePendingRetried).toBe(1);
     expect(stats.notificationsSent).toBe(1);
-    expect(expoPush.send).toHaveBeenCalledWith({
-      to: "ExpoPushToken[device-token]",
-      title: "1일 뒤 유통기한이 끝나요",
-      body: "계란의 유통기한이 1일 남았어요.",
-      data: {
-        type: "expiry_reminder",
-        inventoryItemId: "item-1",
-        daysBefore: 1,
-        spaceId: "space-a",
+    expect(expoPush.sendMany).toHaveBeenCalledWith([
+      expect.objectContaining({
+        data: expect.objectContaining({
+          spaceId: "space-a",
+          inventoryItemId: "item-1",
+        }),
+      }),
+    ]);
+    prisma.inventoryItem.findMany.mockResolvedValue([]);
+    expoPush.sendMany.mockClear();
+    await service.runDueReminders(new Date("2026-06-07T02:00:00.000Z"));
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
+  });
+
+  it("groups multiple reminder dates into one daily message per space and device", async () => {
+    const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
+    prisma.notificationPreference.findMany.mockResolvedValue([
+      { ...preference, groupBySpace: true, reminderDaysBefore: [1, 3] },
+    ]);
+    prisma.inventorySpaceMembership.findMany.mockResolvedValue([
+      { userId: "owner-a", spaceId: "space-a" },
+      { userId: "owner-a", spaceId: "space-b" },
+    ]);
+    prisma.inventoryItem.findMany.mockResolvedValue([
+      inventoryItem,
+      {
+        ...inventoryItem,
+        id: "item-2",
+        displayName: "우유",
+        expiryDate: new Date("2026-06-10T00:00:00Z"),
       },
+      {
+        ...inventoryItem,
+        id: "item-3",
+        spaceId: "space-b",
+        displayName: "두부",
+      },
+    ]);
+    prisma.pushNotificationDelivery.create.mockImplementation(
+      async ({ data }) => ({ id: data.dedupeKey, ...data }),
+    );
+    const stats = await service.runDueReminders(
+      new Date("2026-06-07T01:00:00Z"),
+    );
+    expect(stats.itemsMatched).toBe(3);
+    expect(stats.notificationsSent).toBe(2);
+    expect(expoPush.sendMany).toHaveBeenCalledWith([
+      expect.objectContaining({
+        title: "오늘 확인할 재료 2개가 있어요",
+        data: {
+          type: "expiry_reminder",
+          grouped: true,
+          daysBefore: 0,
+          spaceId: "space-a",
+        },
+      }),
+      expect.objectContaining({
+        title: "오늘 확인할 재료 1개가 있어요",
+        data: expect.objectContaining({ spaceId: "space-b" }),
+      }),
+    ]);
+    expect(prisma.pushNotificationDelivery.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        inventoryItemId: null,
+        spaceId: "space-a",
+        dedupeKey: "owner-a:push-token-1:space-a:2026-06-07",
+      }),
     });
+    prisma.pushNotificationDelivery.create.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("duplicate", {
+        code: "P2002",
+        clientVersion: "test",
+      }),
+    );
+    prisma.pushNotificationDelivery.findUnique.mockResolvedValue({
+      id: "sent",
+      status: "sent",
+      attempts: 1,
+    });
+    expoPush.sendMany.mockClear();
+    await service.runDueReminders(new Date("2026-06-07T02:00:00Z"));
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
+  });
+
+  it("honors the chosen minute and permits early times independently of the legacy global hour", async () => {
+    const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
+    prisma.notificationPreference.findMany.mockResolvedValue([
+      { ...preference, deliveryTime: "07:15" },
+    ]);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+    prisma.pushNotificationDelivery.create.mockImplementation(
+      async ({ data }) => ({ id: "delivery", ...data }),
+    );
+    const before = await service.runDueReminders(
+      new Date("2026-06-06T22:14:00Z"),
+    );
+    expect(before.skippedByTime).toBe(true);
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
+    await service.runDueReminders(new Date("2026-06-06T22:15:00Z"));
+    expect(expoPush.sendMany).toHaveBeenCalledOnce();
+  });
+
+  it("does not dispatch for quiet hours or removed/muted memberships", async () => {
+    const { prisma, expoPush, service } = createService();
+    mockLeaseAcquired(prisma);
+    prisma.notificationPreference.findMany.mockResolvedValue([preference]);
+    await service.runDueReminders(new Date("2026-06-07T13:00:00Z"));
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
+    prisma.inventorySpaceMembership.findMany.mockResolvedValue([]);
+    prisma.inventoryItem.findMany.mockResolvedValue([inventoryItem]);
+    await service.runDueReminders(new Date("2026-06-07T01:00:00Z"));
+    expect(expoPush.sendMany).not.toHaveBeenCalled();
+    expect(prisma.inventorySpaceMembership.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { userId: { in: ["owner-a"] }, notificationsEnabled: true },
+      }),
+    );
   });
 
   it("marks sent deliveries failed when Expo receipts report DeviceNotRegistered", async () => {
@@ -357,6 +459,44 @@ describe("NotificationsService", () => {
       }),
     });
   });
+  it.each([false, true])(
+    "includes opened checks once per item when grouped=%s",
+    async (groupBySpace) => {
+      const { prisma, expoPush, service } = createService();
+      mockLeaseAcquired(prisma);
+      prisma.notificationPreference.findMany.mockResolvedValue([
+        { ...preference, groupBySpace, reminderDaysBefore: [1, 7] },
+      ]);
+      prisma.inventoryItem.findMany.mockResolvedValue([
+        {
+          ...inventoryItem,
+          expiryDate: new Date("2026-06-14"),
+          openedCheckDate: new Date("2026-06-08"),
+        },
+      ]);
+      prisma.pushNotificationDelivery.create.mockImplementation(
+        async ({ data }) => ({ id: "opened-delivery", ...data }),
+      );
+      expoPush.sendMany.mockResolvedValue([{ status: "ok", id: "ticket" }]);
+      await service.runDueReminders(new Date("2026-06-07T01:00:00.000Z"));
+      expect(prisma.pushNotificationDelivery.create).toHaveBeenCalledTimes(1);
+      const message = expoPush.sendMany.mock.calls[0]?.[0]?.[0];
+      expect(message.title).toBe(
+        groupBySpace
+          ? "오늘 확인할 재료 1개가 있어요"
+          : "1일 뒤 개봉한 재료를 확인해요",
+      );
+      expect(prisma.inventoryItem.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            OR: expect.arrayContaining([
+              expect.objectContaining({ openedCheckDate: expect.anything() }),
+            ]),
+          }),
+        }),
+      );
+    },
+  );
 });
 
 function createService() {
@@ -417,13 +557,11 @@ function mockLeaseAcquired(prisma: {
 }) {
   let acquiredOwnerId: string | undefined;
 
-  prisma.$executeRaw.mockImplementation(
-    async (...args: unknown[]) => {
-      // Tagged template: (strings, key, ownerId, expiresAt, now, now, ownerId)
-      acquiredOwnerId = args[2] as string;
-      return 1;
-    },
-  );
+  prisma.$executeRaw.mockImplementation(async (...args: unknown[]) => {
+    // Tagged template: (strings, key, ownerId, expiresAt, now, now, ownerId)
+    acquiredOwnerId = args[2] as string;
+    return 1;
+  });
   prisma.schedulerLease.findUnique.mockImplementation(async () => ({
     ownerId: acquiredOwnerId,
   }));

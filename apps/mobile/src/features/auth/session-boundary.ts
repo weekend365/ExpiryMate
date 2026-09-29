@@ -61,6 +61,7 @@ export const sessionQueryKeys = {
   dashboard: ["dashboard-summary"] as const,
   inventory: ["inventory-list"] as const,
   inventoryItem: ["inventory-item"] as const,
+  inventoryActivity: ["inventory-activity"] as const,
   recipes: ["recipe-recommendations"] as const,
   recipeFavorites: ["recipe-favorites"] as const,
   recipePreferences: ["recipe-preferences"] as const,
@@ -69,6 +70,7 @@ export const sessionQueryKeys = {
   subscription: ["subscription-entitlement"] as const,
   monetization: ["monetization-status"] as const,
   affiliateShopping: ["affiliate-shopping"] as const,
+  shoppingList: ["shopping-list"] as const,
   affiliateReorderPreview: ["affiliate-reorder-preview"] as const,
   photoParseAccess: ["inventory-photo-parse-access"] as const,
   privacy: ["privacy-status"] as const,
@@ -87,11 +89,7 @@ export function withInventorySpace(
   userId: string | undefined,
   spaceId: string | undefined,
 ) {
-  return [
-    ...key,
-    userId ?? "signed-out",
-    spaceId ?? "no-space",
-  ] as const;
+  return [...key, userId ?? "signed-out", spaceId ?? "no-space"] as const;
 }
 
 export function spacesListQueryKey(userId: string | undefined) {

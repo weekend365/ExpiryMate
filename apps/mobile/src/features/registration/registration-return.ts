@@ -1,4 +1,8 @@
-export type RegistrationReturnTo = "inventory" | "home" | "recommendations";
+export type RegistrationReturnTo =
+  | "inventory"
+  | "home"
+  | "recommendations"
+  | "shop";
 
 export type RegistrationRouteParams = {
   from?: string | string[];
@@ -15,22 +19,25 @@ export function parseRegistrationReturnTo(
 ): RegistrationReturnTo {
   // Keep legacy `from` links (including unknown values) on their existing path.
   if (firstParam(returnTo) === "recommendations") return "recommendations";
+  if (firstParam(returnTo) === "shop") return "shop";
   return firstParam(value) === "inventory" ? "inventory" : "home";
 }
 
 export function registrationReturnHref(returnTo: RegistrationReturnTo) {
+  if (returnTo === "shop") return "/(tabs)/shop";
   if (returnTo === "recommendations") return "/(tabs)/recommendations";
   return returnTo === "inventory" ? "/(tabs)/inventory" : "/(tabs)/home";
 }
 
 export function registrationReturnLabel(returnTo: RegistrationReturnTo) {
+  if (returnTo === "shop") return "장보기로 돌아가기";
   if (returnTo === "recommendations") return "추천으로 돌아가기";
   return returnTo === "inventory" ? "보관함으로 이동" : "홈으로 돌아가기";
 }
 
 function registrationRouteParams(returnTo: RegistrationReturnTo) {
-  return returnTo === "recommendations"
-    ? { from: "home", returnTo: "recommendations" }
+  return returnTo === "recommendations" || returnTo === "shop"
+    ? { from: "home", returnTo }
     : { from: returnTo };
 }
 

@@ -10,6 +10,8 @@ const preference = {
   remindOnDayOf: true,
   quietHoursStart: "22:00",
   quietHoursEnd: "07:00",
+  deliveryTime: "09:00",
+  groupBySpace: true,
   createdAt: new Date("2026-06-01T00:00:00.000Z"),
   updatedAt: new Date("2026-06-01T00:00:00.000Z"),
 };
@@ -28,6 +30,7 @@ describe("SettingsService notification preferences", () => {
   let prisma: {
     notificationPreference: {
       upsert: ReturnType<typeof vi.fn>;
+      findUnique: ReturnType<typeof vi.fn>;
     };
     recipePreference: {
       upsert: ReturnType<typeof vi.fn>;
@@ -51,6 +54,7 @@ describe("SettingsService notification preferences", () => {
     prisma = {
       notificationPreference: {
         upsert: vi.fn(),
+        findUnique: vi.fn().mockResolvedValue(preference),
       },
       recipePreference: {
         upsert: vi.fn(),
@@ -124,6 +128,31 @@ describe("SettingsService notification preferences", () => {
     });
   });
 
+  it("rejects a delivery time inside existing quiet hours on partial update", async () => {
+    await expect(
+      service.updateNotificationPreferences("owner-a", {
+        deliveryTime: "23:00",
+      }),
+    ).rejects.toThrow(BadRequestException);
+    expect(prisma.notificationPreference.upsert).not.toHaveBeenCalled();
+  });
+
+  it("accepts the exact end of quiet hours and persists grouping", async () => {
+    prisma.notificationPreference.upsert.mockResolvedValue({
+      ...preference,
+      deliveryTime: "07:00",
+    });
+    await service.updateNotificationPreferences("owner-a", {
+      deliveryTime: "07:00",
+      groupBySpace: false,
+    });
+    expect(prisma.notificationPreference.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        update: { deliveryTime: "07:00", groupBySpace: false },
+      }),
+    );
+  });
+
   it("upserts complete recipe preference updates", async () => {
     const update = {
       allergens: ["egg" as const],
@@ -142,7 +171,10 @@ describe("SettingsService notification preferences", () => {
     const result = await service.updateRecipePreferences("owner-a", update);
     expect(result).toMatchObject(update);
     expect(prisma.recipePreference.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({ update, create: { ownerKey: "owner-a", ...update } }),
+      expect.objectContaining({
+        update,
+        create: { ownerKey: "owner-a", ...update },
+      }),
     );
   });
 

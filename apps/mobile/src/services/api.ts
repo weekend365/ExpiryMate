@@ -1,3 +1,10 @@
+import {
+  inventoryActivityPageSchema,
+  shoppingListSchema,
+  shoppingItemSchema,
+  type CreateShoppingItem,
+  type UpdateShoppingItem,
+} from "@expirymate/shared";
 import type {
   AuthUser,
   BarcodeLookupResult,
@@ -246,10 +253,13 @@ export const deleteRecommendationHistory = () =>
   );
 
 export const deleteAccount = async (payload: DeleteAccountRequest) => {
-  const result = await request<DeleteAccountResponse>("/privacy/account/delete", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  const result = await request<DeleteAccountResponse>(
+    "/privacy/account/delete",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
 
   await clearAuthSession();
   return result;
@@ -271,8 +281,7 @@ export const requestEmailVerification = async (email?: string) => {
   });
 };
 
-const MISSING_SPACE_ID_MESSAGE =
-  "함께 쓸 냉장고를 먼저 골라 주세요.";
+const MISSING_SPACE_ID_MESSAGE = "함께 쓸 냉장고를 먼저 골라 주세요.";
 
 function requireSpaceId(spaceId: string | undefined): string {
   if (!spaceId || spaceId === "no-space" || spaceId === "signed-out") {
@@ -370,8 +379,7 @@ function normalizeInventoryListResponse(
     Array.isArray((data as InventoryListResponse).items)
   ) {
     const page = (data as InventoryListResponse).page ?? params?.page ?? 1;
-    const limit =
-      (data as InventoryListResponse).limit ?? params?.limit ?? 100;
+    const limit = (data as InventoryListResponse).limit ?? params?.limit ?? 100;
     const items = (data as InventoryListResponse).items;
     const totalCount =
       (data as InventoryListResponse).totalCount ?? items.length;
@@ -389,9 +397,7 @@ function normalizeInventoryListResponse(
     };
   }
 
-  throw new Error(
-    "보관함 정보를 읽지 못했어요. 잠시 후 다시 해볼까요?",
-  );
+  throw new Error("보관함 정보를 읽지 못했어요. 잠시 후 다시 해볼까요?");
 }
 
 export const getInventoryItem = (id: string, spaceId: string) =>
@@ -466,14 +472,11 @@ export const parseInventoryPhoto = (
 ) => {
   const formData = new FormData();
   formData.append("scene", payload.scene);
-  formData.append(
-    "image",
-    {
-      uri: payload.uri,
-      name: payload.fileName ?? "photo.jpg",
-      type: payload.mimeType ?? "image/jpeg",
-    } as unknown as Blob,
-  );
+  formData.append("image", {
+    uri: payload.uri,
+    name: payload.fileName ?? "photo.jpg",
+    type: payload.mimeType ?? "image/jpeg",
+  } as unknown as Blob);
   return requestMultipart<InventoryPhotoParseResponse>(
     `${spaceResourcePath(spaceId, "inventory")}/parse-photo`,
     formData,
@@ -628,7 +631,13 @@ export const updateNotificationPreferences = (
   payload: Partial<
     Pick<
       NotificationPreference,
-      "enabled" | "reminderDaysBefore" | "remindOnDayOf" | "quietHoursStart" | "quietHoursEnd"
+      | "enabled"
+      | "reminderDaysBefore"
+      | "remindOnDayOf"
+      | "quietHoursStart"
+      | "quietHoursEnd"
+      | "deliveryTime"
+      | "groupBySpace"
     >
   >,
 ) =>
@@ -735,23 +744,16 @@ export const inviteSpaceMember = (
     body: JSON.stringify(payload),
   });
 
-export const revokeSpaceInvitation = (
-  spaceId: string,
-  invitationId: string,
-) =>
-  request<{ id: string }>(
-    `/spaces/${spaceId}/invitations/${invitationId}`,
-    { method: "DELETE" },
-  );
+export const revokeSpaceInvitation = (spaceId: string, invitationId: string) =>
+  request<{ id: string }>(`/spaces/${spaceId}/invitations/${invitationId}`, {
+    method: "DELETE",
+  });
 
 export const acceptSpaceInvitation = (payload: AcceptSpaceInvitationBody) =>
-  request<AcceptSpaceInvitationResult>(
-    "/space-invitations/accept",
-    {
-      method: "POST",
-      body: JSON.stringify(payload),
-    },
-  );
+  request<AcceptSpaceInvitationResult>("/space-invitations/accept", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
 
 export const listSpaceInvitationCodes = (spaceId: string) =>
   request<SpaceInvitationCode[]>(`/spaces/${spaceId}/invitation-codes`);
@@ -787,10 +789,7 @@ export const acceptSpaceInvitationCode = (
     body: JSON.stringify(payload),
   });
 
-export const updateSpaceNotifications = (
-  spaceId: string,
-  enabled: boolean,
-) =>
+export const updateSpaceNotifications = (spaceId: string, enabled: boolean) =>
   request<{ enabled: boolean }>(`/spaces/${spaceId}/notifications`, {
     method: "PATCH",
     body: JSON.stringify({ enabled }),
@@ -894,3 +893,50 @@ export function createIdempotencyKey() {
     .toString(36)
     .slice(2)}`;
 }
+
+export function getInventoryActivity(
+  spaceId: string,
+  cursor?: string,
+  inventoryItemId?: string,
+) {
+  const query = new URLSearchParams();
+  if (cursor) query.set("cursor", cursor);
+  if (inventoryItemId) query.set("inventoryItemId", inventoryItemId);
+  return request(
+    `${spaceResourcePath(spaceId, "inventory")}/activity?${query}`,
+    undefined,
+    { schema: inventoryActivityPageSchema },
+  );
+}
+export const getShoppingList = (spaceId: string) =>
+  request(spaceResourcePath(spaceId, "shopping-list"), undefined, {
+    schema: shoppingListSchema,
+  });
+export const createShoppingItem = (
+  spaceId: string,
+  payload: CreateShoppingItem,
+) =>
+  request(
+    spaceResourcePath(spaceId, "shopping-list"),
+    { method: "POST", body: JSON.stringify(payload) },
+    { schema: shoppingItemSchema },
+  );
+export const updateShoppingItem = (
+  spaceId: string,
+  id: string,
+  payload: UpdateShoppingItem,
+) =>
+  request(
+    `${spaceResourcePath(spaceId, "shopping-list")}/${encodeURIComponent(id)}`,
+    { method: "PATCH", body: JSON.stringify(payload) },
+    { schema: shoppingItemSchema },
+  );
+export const deleteShoppingItem = (
+  spaceId: string,
+  id: string,
+  expectedVersion: number,
+) =>
+  request<{ id: string }>(
+    `${spaceResourcePath(spaceId, "shopping-list")}/${encodeURIComponent(id)}`,
+    { method: "DELETE", body: JSON.stringify({ expectedVersion }) },
+  );

@@ -15,6 +15,8 @@ import {
 } from "@prisma/client";
 import {
   addDaysToDateOnly,
+  toKstDateOnly,
+  inventoryActivityPageSchema,
   type BatchConsumeInventoryItemsBody,
   type BatchCreateInventoryItemsBody,
   dateOnlyToUtcDate,
@@ -36,6 +38,8 @@ import {
   loadProductMasterOrThrow,
   syncCatalogCorrectionAfterCreate,
 } from "../product-masters/catalog-correction";
+
+import { recordInventoryActivity } from "./inventory-activity";
 
 const DEFAULT_PAGE_SIZE = 100;
 const MAX_PAGE_SIZE = 200;
@@ -137,6 +141,64 @@ export class InventoryService {
     return serializeInventoryItem(item);
   }
 
+  async findActivity(
+    spaceId: string,
+    cursor?: string,
+    inventoryItemId?: string,
+  ) {
+    let after: { createdAt: Date; id: string } | undefined;
+    if (cursor) {
+      const [date, id, extra] = cursor.split("|");
+      if (
+        !date ||
+        !id ||
+        extra ||
+        !Number.isFinite(Date.parse(date)) ||
+        cursor.length > 200
+      ) {
+        throw new BadRequestException("이력 페이지를 다시 열어 주세요.");
+      }
+      after = { createdAt: new Date(date), id };
+    }
+    const rows = await this.prisma.inventoryActivity.findMany({
+      where: {
+        spaceId,
+        inventoryItemId,
+        ...(after
+          ? {
+              OR: [
+                { createdAt: { lt: after.createdAt } },
+                { createdAt: after.createdAt, id: { lt: after.id } },
+              ],
+            }
+          : {}),
+      },
+      include: { actor: { select: { displayName: true, deletedAt: true } } },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      take: 31,
+    });
+    const items = rows.slice(0, 30);
+    const last = items.at(-1);
+    return inventoryActivityPageSchema.parse({
+      items: items.map((row) => ({
+        id: row.id,
+        inventoryItemId: row.inventoryItemId,
+        actorName:
+          !row.actor || row.actor.deletedAt
+            ? "탈퇴한 구성원"
+            : row.actor.displayName?.trim() || "구성원",
+        action: row.action,
+        before: row.before,
+        after: row.after,
+        createdAt: row.createdAt.toISOString(),
+      })),
+      nextCursor:
+        rows.length > 30 && last
+          ? `${last.createdAt.toISOString()}|${last.id}`
+          : null,
+    });
+  }
+
   async create(
     dto: CreateInventoryItemBody,
     ownerKey: string,
@@ -180,7 +242,12 @@ export class InventoryService {
       }
     }
 
-    const uniqueLocations = [...new Set(items.map((item) => item.storageLocation))];
+    for (const item of items)
+      assertOpenedDates(item.openedDate, item.openedCheckDate);
+
+    const uniqueLocations = [
+      ...new Set(items.map((item) => item.storageLocation)),
+    ];
     for (const location of uniqueLocations) {
       await this.settingsService.assertValidStorageLocation(
         ownerKey,
@@ -200,33 +267,65 @@ export class InventoryService {
       created = await this.prisma.$transaction(async (tx) => {
         const records = [];
         for (const [index, dto] of items.entries()) {
+          const shoppingItem = dto.shoppingListItemId
+            ? await tx.shoppingListItem.findFirst({
+                where: { id: dto.shoppingListItemId, spaceId: requestSpaceId },
+              })
+            : null;
+          if (dto.shoppingListItemId && !shoppingItem)
+            throw new NotFoundException("장보기 항목을 찾을 수 없어요.");
+          if (shoppingItem?.inventoryItemId)
+            throw new ConflictException(
+              "이미 보관함에 등록한 장보기 항목이에요.",
+            );
           const catalog = catalogs[index];
           const derivedQuantity = toBaseQuantity(dto.quantity, dto.unit);
-          records.push(
-            await tx.inventoryItem.create({
-              data: {
-                ownerKey,
-                spaceId,
-                createdByUserId: ownerKey,
-                updatedByUserId: ownerKey,
-                productId: dto.productId,
-                productMasterId: catalog?.id,
-                displayName: dto.displayName,
-                brand: dto.brand,
-                category: dto.category as ProductCategory | undefined,
-                quantity: dto.quantity,
-                unit: dto.unit ?? "개",
-                quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
-                unitCode: (dto.unitCode ??
-                  derivedQuantity.unitCode) as InventoryUnitCode,
-                storageLocation: dto.storageLocation,
-                expiryDate: parseExpiryDate(dto.expiryDate),
-                expirySource: dto.expirySource as ExpirySource,
-                status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
-                notes: dto.notes,
+          const record = await tx.inventoryItem.create({
+            data: {
+              ownerKey,
+              spaceId: requestSpaceId,
+              createdByUserId: ownerKey,
+              updatedByUserId: ownerKey,
+              productId: dto.productId,
+              productMasterId: catalog?.id,
+              displayName: dto.displayName,
+              brand: dto.brand,
+              category: dto.category as ProductCategory | undefined,
+              quantity: dto.quantity,
+              unit: dto.unit ?? "개",
+              quantityBase: dto.quantityBase ?? derivedQuantity.quantityBase,
+              unitCode: (dto.unitCode ??
+                derivedQuantity.unitCode) as InventoryUnitCode,
+              storageLocation: dto.storageLocation,
+              expiryDate: parseExpiryDate(dto.expiryDate),
+              openedDate: parseExpiryDate(dto.openedDate ?? null),
+              openedCheckDate: parseExpiryDate(dto.openedCheckDate ?? null),
+              expirySource: dto.expirySource as ExpirySource,
+              status: (dto.status ?? SharedItemStatus.ACTIVE) as ItemStatus,
+              notes: dto.notes,
+            },
+          });
+          if (shoppingItem) {
+            const claimed = await tx.shoppingListItem.updateMany({
+              where: {
+                id: shoppingItem.id,
+                spaceId: requestSpaceId,
+                version: shoppingItem.version,
+                inventoryItemId: null,
               },
-            }),
-          );
+              data: {
+                inventoryItemId: record.id,
+                completedAt: shoppingItem.completedAt ?? new Date(),
+                version: { increment: 1 },
+              },
+            });
+            if (claimed.count !== 1)
+              throw new ConflictException(
+                "장보기 목록이 바뀌었어요. 다시 확인해 주세요.",
+              );
+          }
+          await recordInventoryActivity(tx, ownerKey, "created", record);
+          records.push(record);
         }
         if (normalizedIdempotencyKey) {
           await tx.inventoryCreateRequest.create({
@@ -304,6 +403,13 @@ export class InventoryService {
     spaceId?: string,
   ) {
     const current = await this.findOne(id, ownerKey, spaceId);
+    const openedDate =
+      dto.openedDate === undefined ? current.openedDate : dto.openedDate;
+    const openedCheckDate =
+      dto.openedCheckDate === undefined
+        ? current.openedCheckDate
+        : dto.openedCheckDate;
+    assertOpenedDates(openedDate, openedCheckDate);
     const nextExpiryDate =
       dto.expiryDate === undefined ? current.expiryDate : dto.expiryDate;
     const nextExpirySource = dto.expirySource ?? current.expirySource;
@@ -337,7 +443,7 @@ export class InventoryService {
         where: {
           id,
           ...inventoryScope(ownerKey, spaceId),
-          version: dto.expectedVersion,
+          version: dto.expectedVersion ?? current.version,
         },
         data: {
           productId: dto.productId,
@@ -356,6 +462,14 @@ export class InventoryService {
             dto.expiryDate === undefined
               ? undefined
               : parseExpiryDate(dto.expiryDate),
+          openedDate:
+            dto.openedDate === undefined
+              ? undefined
+              : parseExpiryDate(dto.openedDate),
+          openedCheckDate:
+            dto.openedCheckDate === undefined
+              ? undefined
+              : parseExpiryDate(dto.openedCheckDate),
           expirySource: dto.expirySource as ExpirySource | undefined,
           status: dto.status as ItemStatus | undefined,
           notes: dto.notes,
@@ -375,6 +489,13 @@ export class InventoryService {
       if (current.status === SharedItemStatus.ACTIVE && disposition) {
         await createDispositionEvent(tx, next, ownerKey, disposition);
       }
+      await recordInventoryActivity(
+        tx,
+        ownerKey,
+        disposition ?? "updated",
+        next,
+        current,
+      );
       return next;
     });
     return serializeInventoryItem(item);
@@ -390,11 +511,13 @@ export class InventoryService {
         },
       });
       if (!current) {
-        throw new NotFoundException("소비할 수 있는 재고 항목을 찾을 수 없습니다.");
+        throw new NotFoundException(
+          "소비할 수 있는 재고 항목을 찾을 수 없습니다.",
+        );
       }
 
-      await tx.inventoryItem.update({
-        where: { id },
+      const updated = await tx.inventoryItem.updateMany({
+        where: { id, version: current.version, status: ItemStatus.active },
         data: {
           status: ItemStatus.consumed,
           quantityBase: 0,
@@ -402,7 +525,16 @@ export class InventoryService {
           version: { increment: 1 },
         },
       });
+      if (updated.count !== 1)
+        throw new ConflictException("재료가 바뀌었어요. 다시 확인해 주세요.");
       const next = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
+      await recordInventoryActivity(
+        tx,
+        ownerKey,
+        next.status === ItemStatus.consumed ? "consumed" : "discarded",
+        next,
+        current,
+      );
       await createDispositionEvent(
         tx,
         current,
@@ -424,18 +556,29 @@ export class InventoryService {
         },
       });
       if (!current) {
-        throw new NotFoundException("폐기할 수 있는 재고 항목을 찾을 수 없습니다.");
+        throw new NotFoundException(
+          "폐기할 수 있는 재고 항목을 찾을 수 없습니다.",
+        );
       }
 
-      await tx.inventoryItem.update({
-        where: { id },
+      const updated = await tx.inventoryItem.updateMany({
+        where: { id, version: current.version, status: ItemStatus.active },
         data: {
           status: ItemStatus.discarded,
           updatedByUserId: ownerKey,
           version: { increment: 1 },
         },
       });
+      if (updated.count !== 1)
+        throw new ConflictException("재료가 바뀌었어요. 다시 확인해 주세요.");
       const next = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
+      await recordInventoryActivity(
+        tx,
+        ownerKey,
+        next.status === ItemStatus.consumed ? "consumed" : "discarded",
+        next,
+        current,
+      );
       await createDispositionEvent(
         tx,
         current,
@@ -467,25 +610,38 @@ export class InventoryService {
         throw new BadRequestException("폐기할 수 없는 항목이 포함되어 있어요.");
       }
 
-      await tx.inventoryItem.updateMany({
-        where: {
-          id: { in: ids },
-          ...inventoryScope(params.ownerKey, params.spaceId),
-          status: ItemStatus.active,
-        },
-        data: {
-          status: ItemStatus.discarded,
-          updatedByUserId: params.ownerKey,
-          version: { increment: 1 },
-        },
-      });
+      for (const item of items) {
+        const updated = await tx.inventoryItem.updateMany({
+          where: {
+            id: item.id,
+            version: item.version,
+            status: ItemStatus.active,
+          },
+          data: {
+            status: ItemStatus.discarded,
+            updatedByUserId: params.ownerKey,
+            version: { increment: 1 },
+          },
+        });
+        if (updated.count !== 1)
+          throw new ConflictException("재료가 바뀌었어요. 다시 확인해 주세요.");
+        await recordInventoryActivity(
+          tx,
+          params.ownerKey,
+          "discarded",
+          { ...item, status: ItemStatus.discarded },
+          item,
+        );
+      }
 
       await tx.inventoryDispositionEvent.createMany({
-        data: items.map((item) => dispositionEventData(
-          item,
-          params.ownerKey,
-          InventoryDispositionOutcome.discarded,
-        )),
+        data: items.map((item) =>
+          dispositionEventData(
+            item,
+            params.ownerKey,
+            InventoryDispositionOutcome.discarded,
+          ),
+        ),
       });
 
       return tx.inventoryItem.findMany({
@@ -549,6 +705,7 @@ export class InventoryService {
             ...inventoryScope(params.ownerKey, params.spaceId),
             status: ItemStatus.active,
             quantityBase: { gte: requestItem.amountBase },
+            version: current.version,
           },
           data: {
             quantityBase: { decrement: requestItem.amountBase },
@@ -584,6 +741,16 @@ export class InventoryService {
         },
         orderBy: [{ expiryDate: "asc" }, { createdAt: "desc" }],
       });
+
+      for (const item of consumedItems) {
+        await recordInventoryActivity(
+          tx,
+          params.ownerKey,
+          "consumed",
+          item,
+          storedById.get(item.id),
+        );
+      }
 
       const newlyConsumed = consumedItems.filter(
         (item) => item.status === ItemStatus.consumed,
@@ -631,7 +798,9 @@ function dispositionEventData(
   outcome: InventoryDispositionOutcome,
 ) {
   if (!item.spaceId) {
-    throw new BadRequestException("재고 공간을 확인할 수 없어 상태를 바꿀 수 없습니다.");
+    throw new BadRequestException(
+      "재고 공간을 확인할 수 없어 상태를 바꿀 수 없습니다.",
+    );
   }
 
   return {
@@ -706,4 +875,24 @@ function parseExpiryDate(value: string | null) {
   }
 
   return dateOnlyToUtcDate(value);
+}
+
+function assertOpenedDates(
+  openedDate?: string | null,
+  openedCheckDate?: string | null,
+) {
+  if (
+    openedDate &&
+    (!isDateOnlyString(openedDate) || openedDate > toKstDateOnly(new Date()))
+  ) {
+    throw new BadRequestException("개봉일은 오늘까지의 날짜로 골라 주세요.");
+  }
+  if (
+    openedCheckDate &&
+    (!openedDate ||
+      !isDateOnlyString(openedCheckDate) ||
+      openedCheckDate < openedDate)
+  ) {
+    throw new BadRequestException("확인일은 개봉일 이후로 골라 주세요.");
+  }
 }

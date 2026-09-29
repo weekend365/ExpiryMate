@@ -50,9 +50,7 @@ import {
 } from "../../src/features/inventory/inventory-list-sheets";
 import type { InventoryEditMode } from "../../src/features/inventory/inventory-form-copy";
 import { IngredientEntryMethodSheet } from "../../src/features/registration/ingredient-entry-method-sheet";
-import {
-  inventoryScreenStyles as styles,
-} from "../../src/features/inventory/inventory-screen-styles";
+import { inventoryScreenStyles as styles } from "../../src/features/inventory/inventory-screen-styles";
 import { UrgencySection } from "../../src/features/inventory/inventory-urgency-section";
 import { useDeferredInventoryItemRemoval } from "../../src/features/inventory/use-deferred-inventory-item-removal";
 import { useInventoryList } from "../../src/features/inventory/use-inventory-list";
@@ -126,9 +124,7 @@ export default function InventoryScreen() {
   }, [location, selectableOptions]);
 
   useEffect(() => {
-    const committedTarget = getCommittedFullConsumeTarget(
-      lastCommittedRemoval,
-    );
+    const committedTarget = getCommittedFullConsumeTarget(lastCommittedRemoval);
 
     if (committedTarget) {
       setShoppingOfferTarget(committedTarget);
@@ -228,12 +224,24 @@ export default function InventoryScreen() {
     deferredRemoval.undoLabel !== dismissedRemovalNotice
       ? deferredRemoval.undoLabel
       : null;
-  useStoreReview(Boolean(
-    isLoading || isError || isRefetching || actionError ||
-    deferredRemoval.undoLabel || deferredRemoval.isPending || lastCommittedRemoval ||
-    isSelectionMode || filterSheetVisible || entryMethodVisible || cleanupItem ||
-    quickEditItem || shoppingOfferTarget || spaceSwitcherVisible
-  ));
+  useStoreReview(
+    Boolean(
+      isLoading ||
+        isError ||
+        isRefetching ||
+        actionError ||
+        deferredRemoval.undoLabel ||
+        deferredRemoval.isPending ||
+        lastCommittedRemoval ||
+        isSelectionMode ||
+        filterSheetVisible ||
+        entryMethodVisible ||
+        cleanupItem ||
+        quickEditItem ||
+        shoppingOfferTarget ||
+        spaceSwitcherVisible,
+    ),
+  );
   const inventoryActionNoticeTone = actionError
     ? "danger"
     : visibleRemovalNotice || shoppingOfferTarget
@@ -343,8 +351,7 @@ export default function InventoryScreen() {
           ...notice,
           onPress: () => handleInventoryHeroAction(inventoryStatusHero.action!),
           accessibilityHint:
-            notice.actionLabel ??
-            "해당 유통기한 상태의 재료만 보여 드릴게요.",
+            notice.actionLabel ?? "해당 유통기한 상태의 재료만 보여 드릴게요.",
         }
       : notice,
   );
@@ -545,9 +552,9 @@ export default function InventoryScreen() {
         fullWidth
         testID="inventory-discard-selected-button"
       >
-          {selectedIds.length
-            ? `${selectedIds.length}개 폐기`
-            : "폐기할 재료를 골라 주세요"}
+        {selectedIds.length
+          ? `${selectedIds.length}개 폐기`
+          : "폐기할 재료를 골라 주세요"}
       </Button>
     ) : (
       <Button
@@ -619,6 +626,17 @@ export default function InventoryScreen() {
           ListHeaderComponent={
             <View style={styles.listHeader}>
               <SpaceSwitcher onVisibilityChange={setSpaceSwitcherVisible} />
+              <Button
+                variant="surface"
+                onPress={() =>
+                  router.push({
+                    pathname: "/inventory/activity",
+                    params: { spaceId: activeSpaceId },
+                  })
+                }
+              >
+                냉장고 변경 내역
+              </Button>
               {isLoading && !hasLoadedInventory ? (
                 <View
                   style={[
@@ -769,15 +787,17 @@ export default function InventoryScreen() {
         onClose={() => setEntryMethodVisible(false)}
         onScan={goToScanner}
         onManual={goToManualRegister}
-        onPhoto={
-          isInventoryPhotoParseEnabled() ? goToPhotoParse : undefined
-        }
+        onPhoto={isInventoryPhotoParseEnabled() ? goToPhotoParse : undefined}
       />
     </Screen>
   );
 }
 
-function InventoryEmptyListLayout({ filtered = false }: { filtered?: boolean }) {
+function InventoryEmptyListLayout({
+  filtered = false,
+}: {
+  filtered?: boolean;
+}) {
   const title = filtered ? "조건에 맞는 재료 0건" : "보관 중인 재료 0건";
   const description = filtered
     ? "검색어나 필터를 바꾸면 조건에 맞는 재료가 이곳에 보여요."

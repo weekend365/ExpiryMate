@@ -2,10 +2,22 @@ import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { formatDateKorean } from "@expirymate/shared";
-import { forwardRef, useCallback, useImperativeHandle, useState, type PropsWithChildren } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useState,
+  type PropsWithChildren,
+} from "react";
 import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { toDatePickerDate, toDatePickerDateOnly } from "../shared/date-picker";
-import { colors, radius, spacing, controlSize, typography } from "../shared/theme";
+import {
+  colors,
+  radius,
+  spacing,
+  controlSize,
+  typography,
+} from "../shared/theme";
 import { AppText } from "./AppText";
 import { BottomSheet } from "./BottomSheet";
 import { Button } from "./Button";
@@ -177,8 +189,8 @@ export const DatePickerField = forwardRef<
         <BottomSheet
           visible={isVisible}
           onClose={closePicker}
-          title="언제까지인가요?"
-          description="유통기한을 손가락으로 골라 주세요."
+          title={label ?? "언제까지인가요?"}
+          description={`${label ?? "유통기한"} 날짜를 골라 주세요.`}
           scrollEnabled={false}
           footer={
             <View style={styles.buttonRow}>

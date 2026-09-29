@@ -37,6 +37,8 @@ export const layoutScreenshotNames = [
   "settings-support.png",
   "invitation-code.png",
   "invitation-accept.png",
+  "inventory-activity.png",
+  "inventory-opened.png",
 ];
 
 /** One canonical visual state for every user-facing Expo route. */
@@ -55,6 +57,7 @@ export const layoutRouteScreenshots = {
   "cooking/[recommendationId]": "cooking.png",
   insights: "insights.png",
   "inventory/[id]": "inventory-edit.png",
+  "inventory/activity": "inventory-activity.png",
   onboarding: "onboarding.png",
   privacy: "privacy.png",
   "privacy/account-delete": "account-delete.png",

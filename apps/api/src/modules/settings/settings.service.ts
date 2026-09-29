@@ -17,13 +17,14 @@ import {
   type StorageLocationsResponse,
   type UpdateRecipePreference,
   type UpdateUserStorageLocationBody,
+  type UpdateNotificationPreference,
+  updateNotificationPreferenceSchema,
 } from "@expirymate/shared";
 import {
   serializeNotificationPreference,
   serializeUserStorageLocation,
 } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
-import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 
 @Injectable()
 export class SettingsService {
@@ -71,8 +72,22 @@ export class SettingsService {
 
   async updateNotificationPreferences(
     ownerKey: string,
-    dto: UpdateNotificationPreferenceDto,
+    dto: UpdateNotificationPreference,
   ) {
+    const current = await this.prisma.notificationPreference.findUnique({
+      where: { ownerKey },
+    });
+    const schedule = updateNotificationPreferenceSchema.safeParse({
+      deliveryTime: dto.deliveryTime ?? current?.deliveryTime ?? "09:00",
+      quietHoursStart:
+        dto.quietHoursStart ??
+        current?.quietHoursStart ??
+        DEFAULT_QUIET_HOURS.start,
+      quietHoursEnd:
+        dto.quietHoursEnd ?? current?.quietHoursEnd ?? DEFAULT_QUIET_HOURS.end,
+    });
+    if (!schedule.success)
+      throw new BadRequestException(schedule.error.issues[0]?.message);
     const preference = await this.prisma.notificationPreference.upsert({
       where: { ownerKey },
       update: dto,
@@ -83,6 +98,8 @@ export class SettingsService {
         remindOnDayOf: dto.remindOnDayOf ?? true,
         quietHoursStart: dto.quietHoursStart ?? DEFAULT_QUIET_HOURS.start,
         quietHoursEnd: dto.quietHoursEnd ?? DEFAULT_QUIET_HOURS.end,
+        deliveryTime: dto.deliveryTime ?? "09:00",
+        groupBySpace: dto.groupBySpace ?? true,
       },
     });
 
@@ -287,7 +304,8 @@ function serializeRecipePreference(preference: {
     allergens: preference.allergens as RecipePreference["allergens"],
     excludedIngredients: preference.excludedIngredients,
     dietaryStyle: preference.dietaryStyle as RecipePreference["dietaryStyle"],
-    maxSpiceLevel: preference.maxSpiceLevel as RecipePreference["maxSpiceLevel"],
+    maxSpiceLevel:
+      preference.maxSpiceLevel as RecipePreference["maxSpiceLevel"],
     availableEquipment:
       preference.availableEquipment as RecipePreference["availableEquipment"],
     updatedAt: preference.updatedAt.toISOString(),

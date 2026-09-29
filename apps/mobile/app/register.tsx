@@ -1,3 +1,4 @@
+import { OpenedInventoryFields } from "../src/features/inventory/opened-inventory-fields";
 import {
   DEFAULT_INVENTORY_FORM,
   ExpirySource,
@@ -19,21 +20,17 @@ import {
 } from "@expirymate/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { Barcode, CheckCircle2, ChevronRight, Plus } from "lucide-react-native";
 import {
-  Barcode,
-  CheckCircle2,
-  ChevronRight,
-  Plus,
-} from "lucide-react-native";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
-import {
-  Alert,
-  BackHandler,
-  Pressable,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Alert, BackHandler, Pressable, StyleSheet, View } from "react-native";
 import { AppText } from "../src/components/AppText";
 import { HeaderBackButton } from "../src/components/HeaderBackButton";
 import { Button } from "../src/components/Button";
@@ -67,7 +64,10 @@ import {
   type RegistrationRouteParams,
   scannerRoute,
 } from "../src/features/registration/registration-return";
-import { cancelRegistration, returnFromRegistration } from "../src/features/registration/registration-navigation";
+import {
+  cancelRegistration,
+  returnFromRegistration,
+} from "../src/features/registration/registration-navigation";
 import { getSettingsErrorMessage } from "../src/features/settings/settings-format";
 import { useStorageLocations } from "../src/features/settings/use-storage-locations";
 import { useActiveSpace } from "../src/features/spaces/space-provider";
@@ -88,6 +88,9 @@ import {
 } from "../src/store/registration-store";
 
 type RegistrationFormValues = {
+  shoppingListItemId?: string;
+  openedDate?: string | null;
+  openedCheckDate?: string | null;
   productId?: string;
   productMasterId?: string;
   displayName: string;
@@ -254,7 +257,9 @@ export default function RegisterScreen() {
   const setLastStorageLocation = useRegistrationStore(
     (state) => state.setLastStorageLocation,
   );
-  const setRewardNotice = useRegistrationStore((state) => state.setRewardNotice);
+  const setRewardNotice = useRegistrationStore(
+    (state) => state.setRewardNotice,
+  );
   const clearPrefill = useRegistrationStore((state) => state.clearPrefill);
   const clearDraft = useRegistrationStore((state) => state.clearDraft);
   const mutation = useSaveInventoryItem();
@@ -296,11 +301,7 @@ export default function RegisterScreen() {
       return;
     }
 
-    const nextValues = buildInitialValues(
-      prefill,
-      draft,
-      lastStorageLocation,
-    );
+    const nextValues = buildInitialValues(prefill, draft, lastStorageLocation);
     const nextPrefillKey = getPrefillKey(prefill);
 
     if (!initializedRef.current) {
@@ -341,6 +342,9 @@ export default function RegisterScreen() {
       }
 
       setDraft(activeSpaceId, {
+        shoppingListItemId: value.shoppingListItemId,
+        openedDate: value.openedDate,
+        openedCheckDate: value.openedCheckDate,
         productId: value.productId,
         productMasterId: value.productMasterId,
         displayName: value.displayName,
@@ -449,7 +453,10 @@ export default function RegisterScreen() {
 
     const currentUnit = form.getValues("unit");
     const currentQuantity = Number(form.getValues("quantity")) || 1;
-    if (resolveQuantityInputUnit(currentUnit) !== "개" || currentQuantity !== 1) {
+    if (
+      resolveQuantityInputUnit(currentUnit) !== "개" ||
+      currentQuantity !== 1
+    ) {
       return;
     }
 
@@ -473,9 +480,7 @@ export default function RegisterScreen() {
     ? visibleSteps.findIndex((item) => item.key === step)
     : -1;
   const isLastStep =
-    isInputStep &&
-    stepIndex >= 0 &&
-    stepIndex === visibleSteps.length - 1;
+    isInputStep && stepIndex >= 0 && stepIndex === visibleSteps.length - 1;
   const catalogNameDiffers = Boolean(
     prefill?.productMasterId &&
       prefill.catalogName &&
@@ -540,9 +545,7 @@ export default function RegisterScreen() {
 
     navigation.setOptions({
       title: "",
-      headerLeft: () => (
-        <HeaderBackButton onPress={leaveRegistration} />
-      ),
+      headerLeft: () => <HeaderBackButton onPress={leaveRegistration} />,
     });
   }, [goToPreviousStep, leaveRegistration, navigation, step]);
 
@@ -672,6 +675,9 @@ export default function RegisterScreen() {
       setSubmitErrorMessage(null);
       const canonical = toBaseQuantity(values.quantity, values.unit);
       const created = await mutation.mutateAsync({
+        shoppingListItemId: values.shoppingListItemId,
+        openedDate: values.openedDate,
+        openedCheckDate: values.openedCheckDate,
         productId: values.productId,
         productMasterId: values.productMasterId,
         displayName: values.displayName,
@@ -731,12 +737,11 @@ export default function RegisterScreen() {
     }
   });
 
-  const primaryCtaLabel =
-    isLastStep
-      ? "재료 추가"
-      : step === "product"
-        ? "기한 선택"
-        : "다음";
+  const primaryCtaLabel = isLastStep
+    ? "재료 추가"
+    : step === "product"
+      ? "기한 선택"
+      : "다음";
 
   const saveSummary = `${displayName} · ${enteredQuantityLabel} · ${selectedLocationLabel} · ${
     expirySource === ExpirySource.UNKNOWN
@@ -849,7 +854,9 @@ export default function RegisterScreen() {
                   ]}
                 >
                   <View style={styles.sessionRowCopy}>
-                    <AppText style={styles.sessionName}>{item.displayName}</AppText>
+                    <AppText style={styles.sessionName}>
+                      {item.displayName}
+                    </AppText>
                     <AppText style={styles.sessionMeta}>
                       {resolveLabel(item.storageLocation)} ·{" "}
                       {formatInventoryQuantity(item)} ·{" "}
@@ -873,11 +880,11 @@ export default function RegisterScreen() {
   }
 
   return (
-      <Screen
-        contentWidth="form"
-        contentStyle={styles.screenSections}
-        topInsetMode="none"
-        testID="register-screen"
+    <Screen
+      contentWidth="form"
+      contentStyle={styles.screenSections}
+      topInsetMode="none"
+      testID="register-screen"
       footer={
         <View style={styles.footerStack}>
           {isLastStep && canGoNext ? (
@@ -946,8 +953,12 @@ export default function RegisterScreen() {
         ) : null}
         {submitErrorMessage ? (
           <View style={styles.errorStrip}>
-            <AppText style={styles.errorTitle}>앗, 잠시 문제가 생겼어요</AppText>
-            <AppText style={styles.errorDescription}>{submitErrorMessage}</AppText>
+            <AppText style={styles.errorTitle}>
+              앗, 잠시 문제가 생겼어요
+            </AppText>
+            <AppText style={styles.errorDescription}>
+              {submitErrorMessage}
+            </AppText>
           </View>
         ) : null}
 
@@ -961,14 +972,18 @@ export default function RegisterScreen() {
                     <AppText style={styles.noticeEyebrow}>
                       {catalogNameDiffers ? "목록과 다른 이름" : "불러온 재료"}
                     </AppText>
-                    <AppText style={styles.noticeTitle}>{displayName || prefill.displayName}</AppText>
+                    <AppText style={styles.noticeTitle}>
+                      {displayName || prefill.displayName}
+                    </AppText>
                     {catalogNameDiffers ? (
                       <AppText style={styles.noticeDescription}>
                         목록 이름은 {prefill.catalogName}예요. 냉장고에는 지금
                         이름으로 넣을게요.
                       </AppText>
                     ) : prefill.brand ? (
-                      <AppText style={styles.noticeDescription}>{prefill.brand}</AppText>
+                      <AppText style={styles.noticeDescription}>
+                        {prefill.brand}
+                      </AppText>
                     ) : null}
                   </View>
                 </View>
@@ -1074,6 +1089,32 @@ export default function RegisterScreen() {
                 }
               />
             </RecapCard>
+            <OpenedInventoryFields
+              openedDate={
+                typeof form.watch("openedDate") === "string"
+                  ? String(form.watch("openedDate"))
+                  : null
+              }
+              openedCheckDate={
+                typeof form.watch("openedCheckDate") === "string"
+                  ? String(form.watch("openedCheckDate"))
+                  : null
+              }
+              onChange={(openedDate, openedCheckDate) => {
+                form.setValue("openedDate", openedDate, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+                form.setValue("openedCheckDate", openedCheckDate, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              error={
+                form.formState.errors.openedDate?.message ||
+                form.formState.errors.openedCheckDate?.message
+              }
+            />
           </InventoryExpiryStep>
         ) : null}
       </StepFlow>

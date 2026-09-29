@@ -61,7 +61,7 @@ export function InventoryQuickEditSheet({
             fullWidth
             variant="surface"
           >
-            유통기한 바꾸기
+            유통기한·개봉 기록 바꾸기
           </Button>
           <Button
             icon={MapPin}
@@ -78,6 +78,22 @@ export function InventoryQuickEditSheet({
             variant="surface"
           >
             전체 내용 수정하기
+          </Button>
+          <Button
+            variant="surface"
+            fullWidth
+            onPress={() => {
+              onClose();
+              router.push({
+                pathname: "/inventory/activity",
+                params: {
+                  inventoryItemId: item.id,
+                  spaceId: item.spaceId ?? undefined,
+                },
+              });
+            }}
+          >
+            이 재료 변경 내역
           </Button>
         </View>
       ) : null}

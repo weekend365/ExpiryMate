@@ -21,6 +21,9 @@ export interface RegistrationPrefill {
 }
 
 export interface RegistrationDraft extends RegistrationPrefill {
+  shoppingListItemId?: string;
+  openedDate?: string | null;
+  openedCheckDate?: string | null;
   quantity?: number;
   unit?: string;
   storageLocation?: string;
@@ -53,7 +56,10 @@ interface RegistrationState {
     spaceId: string,
     method: IngredientEntryMethod,
   ) => void;
-  setPhotoDraft: (spaceId: string, items: PhotoIntakeDraftItem[] | null) => void;
+  setPhotoDraft: (
+    spaceId: string,
+    items: PhotoIntakeDraftItem[] | null,
+  ) => void;
   setRewardNotice: (notice: RegistrationRewardNotice | null) => void;
   clearPrefill: (spaceId?: string) => void;
   clearDraft: (spaceId?: string) => void;
@@ -159,9 +165,7 @@ export const useRegistrationStore = create<RegistrationState>()(
       setRewardNotice: (rewardNotice) => set({ rewardNotice }),
       clearPrefill: (spaceId) =>
         set((state) => ({
-          prefills: spaceId
-            ? omitRecordKey(state.prefills, spaceId)
-            : {},
+          prefills: spaceId ? omitRecordKey(state.prefills, spaceId) : {},
         })),
       clearDraft: (spaceId) =>
         set((state) => ({

@@ -30,7 +30,8 @@ export type NotificationNavigationPath =
 Notifications.setNotificationHandler({
   handleNotification: async (notification) => {
     const shouldPlaySound =
-      notification.request.content.data?.type === NOTIFICATION_TYPES.cookingTimer;
+      notification.request.content.data?.type ===
+      NOTIFICATION_TYPES.cookingTimer;
 
     return {
       shouldPlaySound,
@@ -72,6 +73,30 @@ export const syncPushTokenIfPermissionGranted = async () => {
 
   return registerCurrentPushToken();
 };
+
+export type DeviceNotificationStatus =
+  | "permission_required"
+  | "blocked"
+  | "connected"
+  | "connection_error";
+
+/** A successful token registration is connection readiness, not proof of delivery. */
+export async function getDeviceNotificationStatus(
+  requestPermission = false,
+): Promise<DeviceNotificationStatus> {
+  const permissions = requestPermission
+    ? await requestNotificationPermissions()
+    : await Notifications.getPermissionsAsync();
+  if (!permissions.granted) {
+    return permissions.canAskAgain ? "permission_required" : "blocked";
+  }
+  try {
+    await registerCurrentPushToken();
+    return "connected";
+  } catch {
+    return "connection_error";
+  }
+}
 
 /** Best-effort: disable this device token for the current authenticated owner. */
 export const unregisterDevicePushToken = async () => {
@@ -228,7 +253,8 @@ async function registerCurrentPushToken() {
 
 async function getExpoPushToken() {
   const projectId =
-    Constants.expoConfig?.extra?.eas?.projectId ?? Constants.easConfig?.projectId;
+    Constants.expoConfig?.extra?.eas?.projectId ??
+    Constants.easConfig?.projectId;
   const tokenResponse = projectId
     ? await Notifications.getExpoPushTokenAsync({ projectId })
     : await Notifications.getExpoPushTokenAsync();
@@ -260,7 +286,11 @@ async function ensureCookingTimerChannel() {
 }
 
 function getPushTokenPlatform() {
-  if (Platform.OS === "ios" || Platform.OS === "android" || Platform.OS === "web") {
+  if (
+    Platform.OS === "ios" ||
+    Platform.OS === "android" ||
+    Platform.OS === "web"
+  ) {
     return Platform.OS;
   }
 

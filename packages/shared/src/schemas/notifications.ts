@@ -1,6 +1,52 @@
 import { z } from "zod";
 import { fieldLimits } from "../constants/field-limits";
 
+export const notificationTimeSchema = z
+  .string()
+  .regex(
+    /^(?:[01]\d|2[0-3]):[0-5]\d$/,
+    "시간은 00:00부터 23:59 사이로 입력해 주세요",
+  );
+
+export const updateNotificationPreferenceSchema = z
+  .object({
+    enabled: z.boolean().optional(),
+    reminderDaysBefore: z
+      .array(z.number().int().min(1).max(365))
+      .max(30)
+      .transform((days) => [...new Set(days)].sort((a, b) => a - b))
+      .optional(),
+    remindOnDayOf: z.boolean().optional(),
+    quietHoursStart: notificationTimeSchema.optional(),
+    quietHoursEnd: notificationTimeSchema.optional(),
+    deliveryTime: notificationTimeSchema.optional(),
+    groupBySpace: z.boolean().optional(),
+  })
+  .superRefine((value, context) => {
+    const { deliveryTime, quietHoursStart, quietHoursEnd } = value;
+    if (
+      !deliveryTime ||
+      !quietHoursStart ||
+      !quietHoursEnd ||
+      quietHoursStart === quietHoursEnd
+    )
+      return;
+    const withinQuietHours =
+      quietHoursStart < quietHoursEnd
+        ? deliveryTime >= quietHoursStart && deliveryTime < quietHoursEnd
+        : deliveryTime >= quietHoursStart || deliveryTime < quietHoursEnd;
+    if (withinQuietHours)
+      context.addIssue({
+        code: "custom",
+        path: ["deliveryTime"],
+        message: "알림 시간은 방해 금지 시간 밖으로 골라 주세요",
+      });
+  });
+
+export type UpdateNotificationPreference = z.infer<
+  typeof updateNotificationPreferenceSchema
+>;
+
 export const pushTokenPlatformSchema = z.enum([
   "ios",
   "android",
@@ -29,4 +75,6 @@ export const unregisterPushTokenSchema = z.object({
 
 export type PushTokenPlatform = z.infer<typeof pushTokenPlatformSchema>;
 export type RegisterPushTokenRequest = z.infer<typeof registerPushTokenSchema>;
-export type UnregisterPushTokenRequest = z.infer<typeof unregisterPushTokenSchema>;
+export type UnregisterPushTokenRequest = z.infer<
+  typeof unregisterPushTokenSchema
+>;

@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-design
-last_reviewed: 2026-08-25
+last_reviewed: 2026-09-29
 source_of_truth: true
 ---
 
@@ -42,6 +42,10 @@ Mark each cell pass/fail after a visual pass (no clip, no overlap, primary CTA r
 | Scanner overlays + date / name fields | | | | |
 | Login `EmailDomainInput` + password | | | | |
 | BottomSheet + keyboard (date picker, space switcher) | | | | |
+| Shopping list / completed items / add form / related product tab | | | | |
+| Notification permission state / grouped delivery / time inputs | | | | |
+| Opened date / check date / clear actions in expiry step | | | | |
+| Space and item activity history / pagination | | | | |
 
 ## Expected policy
 
@@ -107,3 +111,47 @@ profiles above as the compatibility check.
 References: [Expo SDK 54 build properties](https://docs.expo.dev/versions/v54.0.0/sdk/build-properties/),
 [Android R8 setup](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization),
 [Google Play technical quality requirements](https://support.google.com/googleplay/android-developer/answer/17492799).
+
+## 2026-09-29 feature verification
+
+The shopping tab now starts on the persisted list; the smoke flow explicitly
+opens the related products tab before searching. The manifest also includes
+`inventory-activity.png` and `inventory-opened.png`. The seed supplies an opened
+milk item with a stable ID and sample activity records.
+
+Android native verification passed on an API 33 ARM64 debug emulator with
+Maestro 2.10.0 for `small-three-button`, `small-large-text` (font scale 2.0), and
+`tablet-landscape`. The feature pass covered the shopping list, add form and
+keyboard, notification permission state and delivery-time field, expiry/opened
+fields and clear actions, activity history, and the inventory history entry.
+This is a focused feature pass, not a completed full-route matrix above.
+
+The pass found and fixed two layout issues: modal sheets now shrink within the
+keyboard's available height and respect the top safe area; stacked step headers
+stretch their guide card so its copy remains visible on compact screens.
+The login smoke flow now expands the email section and uses the current single
+email field. Activity captures wait for the initial data load.
+
+There are 27 current feature captures and 12 before/after comparison pairs
+against `b730753`. Local artifacts are under
+`apps/mobile/e2e/screenshots/{current,baseline,diff}/feature-update/`; flow logs,
+capture flows, and `comparison.json` are under
+`apps/mobile/e2e/results/feature-update/`. Differences for the new default list,
+notification controls, activity entry, and corrected guide width were reviewed
+as intentional. Raw pixel differences also include system chrome, image loading,
+and refresh indicators; they are evidence, not a zero-diff CI pass. No canonical
+baseline or visual-approval bypass was used. Preserve the intentional layout
+change review requirement when preparing a PR.
+
+The debug APK built with installed NDK 28.2 through a temporary local Gradle
+override; repository native configuration was not changed. Current and baseline
+JavaScript ran from separate temporary source copies without environment files,
+against an isolated local API and PostgreSQL database. The emulator has no Play
+Store billing connection; only the known Expo-IAP development overlay was hidden
+in the temporary entry point. This pass does not verify purchases, actual push
+delivery, or the optimized release build. iOS simulator verification remains
+unavailable because the local Xcode license has not been accepted.
+
+Validation also passed: 1,170 general tests, four opt-in PostgreSQL integration
+tests, authenticated HTTP workflow checks, and 50 related tests after the layout
+fixes. Lint/design-token checks and type checking passed after the final UI changes.

@@ -51,6 +51,46 @@ vi.mock("expo-constants", () => ({
 }));
 
 describe("mobile notification service", () => {
+  it("distinguishes denied permissions from a connected token", async () => {
+    const { getDeviceNotificationStatus } = await import("./notifications");
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: false,
+      canAskAgain: false,
+    });
+    await expect(getDeviceNotificationStatus()).resolves.toBe("blocked");
+    expect(mocks.api.registerPushToken).not.toHaveBeenCalled();
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: false,
+      canAskAgain: true,
+    });
+    await expect(getDeviceNotificationStatus()).resolves.toBe(
+      "permission_required",
+    );
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
+    mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
+      data: "ExpoPushToken[test]",
+    });
+    mocks.api.registerPushToken.mockResolvedValue({ enabled: true });
+    await expect(getDeviceNotificationStatus()).resolves.toBe("connected");
+  });
+
+  it("does not report readiness when registration fails after permission was granted", async () => {
+    const { getDeviceNotificationStatus } = await import("./notifications");
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
+    mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
+      data: "ExpoPushToken[test]",
+    });
+    mocks.api.registerPushToken.mockRejectedValue(
+      new Error("network unavailable"),
+    );
+    await expect(getDeviceNotificationStatus()).resolves.toBe(
+      "connection_error",
+    );
+  });
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
@@ -58,7 +98,9 @@ describe("mobile notification service", () => {
   });
 
   it("gets and registers the Expo push token after permission is granted", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
     mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
       data: "ExpoPushToken[token]",
     });
@@ -85,7 +127,9 @@ describe("mobile notification service", () => {
   });
 
   it("unregisters the Expo push token for the current session", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
     mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
       data: "ExpoPushToken[token]",
     });
@@ -101,7 +145,9 @@ describe("mobile notification service", () => {
   });
 
   it("skips unregister when notification permission is not granted", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: false });
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: false,
+    });
     const { unregisterDevicePushToken } = await import("./notifications");
 
     const result = await unregisterDevicePushToken();
@@ -111,8 +157,12 @@ describe("mobile notification service", () => {
   });
 
   it("does not request permissions during silent startup sync", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: false });
-    const { syncPushTokenIfPermissionGranted } = await import("./notifications");
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: false,
+    });
+    const { syncPushTokenIfPermissionGranted } = await import(
+      "./notifications"
+    );
 
     const result = await syncPushTokenIfPermissionGranted();
 
@@ -124,7 +174,9 @@ describe("mobile notification service", () => {
 
   it("configures the Android notification channel before registering", async () => {
     mocks.platform.Platform.OS = "android";
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
     mocks.notifications.getExpoPushTokenAsync.mockResolvedValue({
       data: "ExpoPushToken[android-token]",
     });
@@ -136,7 +188,9 @@ describe("mobile notification service", () => {
 
     await registerDevicePushToken();
 
-    expect(mocks.notifications.setNotificationChannelAsync).toHaveBeenCalledWith(
+    expect(
+      mocks.notifications.setNotificationChannelAsync,
+    ).toHaveBeenCalledWith(
       "expiry-reminders",
       expect.objectContaining({
         name: "유통기한 알림",
@@ -151,12 +205,15 @@ describe("mobile notification service", () => {
   });
 
   it("schedules a local notification with navigation data", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
-    mocks.notifications.scheduleNotificationAsync.mockResolvedValue("notification-1");
-    const {
-      NOTIFICATION_TYPES,
-      scheduleLocalNotification,
-    } = await import("./notifications");
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
+    mocks.notifications.scheduleNotificationAsync.mockResolvedValue(
+      "notification-1",
+    );
+    const { NOTIFICATION_TYPES, scheduleLocalNotification } = await import(
+      "./notifications"
+    );
 
     await scheduleLocalNotification(
       "요리 추천이 준비됐어요",
@@ -184,9 +241,13 @@ describe("mobile notification service", () => {
 
   it("schedules a sounding cooking timer on its Android channel", async () => {
     mocks.platform.Platform.OS = "android";
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: true });
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: true,
+    });
     mocks.notifications.scheduleNotificationAsync.mockResolvedValue("timer-1");
-    const { scheduleCookingTimerNotification } = await import("./notifications");
+    const { scheduleCookingTimerNotification } = await import(
+      "./notifications"
+    );
 
     const result = await scheduleCookingTimerNotification({
       seconds: 180,
@@ -198,10 +259,13 @@ describe("mobile notification service", () => {
     });
 
     expect(result).toBe("timer-1");
-    expect(mocks.notifications.setNotificationChannelAsync).toHaveBeenCalledWith(
-      "cooking-timers",
-      { name: "조리 타이머", importance: 4, sound: "default" },
-    );
+    expect(
+      mocks.notifications.setNotificationChannelAsync,
+    ).toHaveBeenCalledWith("cooking-timers", {
+      name: "조리 타이머",
+      importance: 4,
+      sound: "default",
+    });
     expect(mocks.notifications.scheduleNotificationAsync).toHaveBeenCalledWith({
       content: {
         title: "양파볶음 타이머가 끝났어요",
@@ -224,9 +288,15 @@ describe("mobile notification service", () => {
   });
 
   it("keeps the timer in-app when notification permission is denied", async () => {
-    mocks.notifications.getPermissionsAsync.mockResolvedValue({ granted: false });
-    mocks.notifications.requestPermissionsAsync.mockResolvedValue({ granted: false });
-    const { scheduleCookingTimerNotification } = await import("./notifications");
+    mocks.notifications.getPermissionsAsync.mockResolvedValue({
+      granted: false,
+    });
+    mocks.notifications.requestPermissionsAsync.mockResolvedValue({
+      granted: false,
+    });
+    const { scheduleCookingTimerNotification } = await import(
+      "./notifications"
+    );
 
     await expect(
       scheduleCookingTimerNotification({
@@ -238,14 +308,15 @@ describe("mobile notification service", () => {
         stepIndex: 0,
       }),
     ).resolves.toBeNull();
-    expect(mocks.notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
+    expect(
+      mocks.notifications.scheduleNotificationAsync,
+    ).not.toHaveBeenCalled();
   });
 
   it("maps notification data to in-app paths", async () => {
-    const {
-      NOTIFICATION_TYPES,
-      getNotificationNavigationPath,
-    } = await import("./notifications");
+    const { NOTIFICATION_TYPES, getNotificationNavigationPath } = await import(
+      "./notifications"
+    );
 
     expect(
       getNotificationNavigationPath({
@@ -277,7 +348,8 @@ describe("mobile notification service", () => {
 
   it("plays sound only for foreground cooking timer notifications", async () => {
     await import("./notifications");
-    const handler = mocks.notifications.setNotificationHandler.mock.calls[0]?.[0];
+    const handler =
+      mocks.notifications.setNotificationHandler.mock.calls[0]?.[0];
 
     await expect(
       handler.handleNotification({

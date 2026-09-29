@@ -65,6 +65,8 @@ export const inventoryItemSchema = z.object({
   unitCode: z.nativeEnum(UnitCode),
   storageLocation: storageLocationKeySchema,
   expiryDate: dateOnlySchema.nullable(),
+  openedDate: nullableDateOnlySchema.optional(),
+  openedCheckDate: nullableDateOnlySchema.optional(),
   expirySource: z.nativeEnum(ExpirySource),
   status: z.nativeEnum(ItemStatus),
   notes: z.string().max(fieldLimits.notes).nullable().optional(),
@@ -74,13 +76,17 @@ export const inventoryItemSchema = z.object({
 
 /** Mobile form + API create body (without server-owned status default). */
 const inventoryFormFields = {
+  shoppingListItemId: optionalText(fieldLimits.productId),
   productId: optionalText(fieldLimits.productId),
   productMasterId: optionalText(fieldLimits.productMasterId),
   displayName: z
     .string()
     .trim()
     .min(1, "상품명을 입력해주세요")
-    .max(fieldLimits.displayName, `상품명은 ${fieldLimits.displayName}자까지예요`),
+    .max(
+      fieldLimits.displayName,
+      `상품명은 ${fieldLimits.displayName}자까지예요`,
+    ),
   brand: optionalText(
     fieldLimits.brand,
     `브랜드는 ${fieldLimits.brand}자까지예요`,
@@ -92,6 +98,8 @@ const inventoryFormFields = {
   unitCode: z.nativeEnum(UnitCode).optional(),
   storageLocation: storageLocationKeySchema,
   expiryDate: nullableDateOnlySchema,
+  openedDate: nullableDateOnlySchema.optional(),
+  openedCheckDate: nullableDateOnlySchema.optional(),
   expirySource: z.nativeEnum(ExpirySource),
   notes: optionalText(
     fieldLimits.notes,
@@ -99,11 +107,38 @@ const inventoryFormFields = {
   ),
 };
 
+export function validateOpenedDates(
+  value: { openedDate?: string | null; openedCheckDate?: string | null },
+  context: z.RefinementCtx,
+) {
+  if (value.openedCheckDate && !value.openedDate) {
+    context.addIssue({
+      code: "custom",
+      path: ["openedDate"],
+      message: "개봉일을 먼저 골라 주세요",
+    });
+  }
+  if (
+    value.openedDate &&
+    value.openedCheckDate &&
+    value.openedCheckDate < value.openedDate
+  ) {
+    context.addIssue({
+      code: "custom",
+      path: ["openedCheckDate"],
+      message: "확인일은 개봉일 이후로 골라 주세요",
+    });
+  }
+}
+
 function validateExpirySelection(
   value: { expiryDate: string | null; expirySource: ExpirySource },
   context: z.RefinementCtx,
 ) {
-  if (value.expirySource === ExpirySource.UNKNOWN && value.expiryDate !== null) {
+  if (
+    value.expirySource === ExpirySource.UNKNOWN &&
+    value.expiryDate !== null
+  ) {
     context.addIssue({
       code: "custom",
       path: ["expiryDate"],
@@ -111,7 +146,10 @@ function validateExpirySelection(
     });
   }
 
-  if (value.expirySource !== ExpirySource.UNKNOWN && value.expiryDate === null) {
+  if (
+    value.expirySource !== ExpirySource.UNKNOWN &&
+    value.expiryDate === null
+  ) {
     context.addIssue({
       code: "custom",
       path: ["expiryDate"],
@@ -122,7 +160,8 @@ function validateExpirySelection(
 
 export const inventoryFormSchema = z
   .object(inventoryFormFields)
-  .superRefine(validateExpirySelection);
+  .superRefine(validateExpirySelection)
+  .superRefine(validateOpenedDates);
 
 /** API create body — same as form, plus optional status override. */
 export const createInventoryItemBodySchema = z
@@ -130,13 +169,15 @@ export const createInventoryItemBodySchema = z
     ...inventoryFormFields,
     status: z.nativeEnum(ItemStatus).optional(),
   })
-  .superRefine(validateExpirySelection);
+  .superRefine(validateExpirySelection)
+  .superRefine(validateOpenedDates);
 
 export const updateInventoryItemBodySchema = z
   .object({
     ...inventoryFormFields,
     status: z.nativeEnum(ItemStatus).optional(),
   })
+  .omit({ shoppingListItemId: true })
   .partial()
   .extend({
     expectedVersion: z.number().int().positive().optional(),
@@ -144,10 +185,7 @@ export const updateInventoryItemBodySchema = z
 
 export const batchConsumeInventoryItemSchema = z.object({
   inventoryItemId: z.string().trim().min(1),
-  amountBase: z.coerce
-    .number()
-    .int()
-    .min(1, "사용량은 1 이상이어야 해요"),
+  amountBase: z.coerce.number().int().min(1, "사용량은 1 이상이어야 해요"),
 });
 
 export const batchConsumeInventoryItemsBodySchema = z.object({
@@ -193,13 +231,20 @@ export const inventoryPhotoParseCandidateSchema = z.object({
     .string()
     .trim()
     .min(1, "상품명을 입력해주세요")
-    .max(fieldLimits.displayName, `상품명은 ${fieldLimits.displayName}자까지예요`),
+    .max(
+      fieldLimits.displayName,
+      `상품명은 ${fieldLimits.displayName}자까지예요`,
+    ),
   brand: optionalText(
     fieldLimits.brand,
     `브랜드는 ${fieldLimits.brand}자까지예요`,
   ),
   category: z.nativeEnum(ProductCategory).optional(),
-  quantity: z.coerce.number().int().min(1, "수량은 1 이상이어야 해요").optional(),
+  quantity: z.coerce
+    .number()
+    .int()
+    .min(1, "수량은 1 이상이어야 해요")
+    .optional(),
   unit: optionalText(fieldLimits.unit),
   quantityBase: z.coerce.number().int().min(1).optional(),
   unitCode: z.nativeEnum(UnitCode).optional(),
@@ -293,7 +338,9 @@ export const inventoryPhotoParseVisionItemSchema = z.object({
 });
 
 export const inventoryPhotoParseVisionPayloadSchema = z.object({
-  items: z.array(inventoryPhotoParseVisionItemSchema).max(PHOTO_PARSE_MAX_ITEMS),
+  items: z
+    .array(inventoryPhotoParseVisionItemSchema)
+    .max(PHOTO_PARSE_MAX_ITEMS),
 });
 
 export const batchCreateInventoryItemsBodySchema = z.object({
@@ -313,8 +360,12 @@ export const batchCreateInventoryItemsResponseSchema = z.object({
 
 export type InventoryFormValues = z.output<typeof inventoryFormSchema>;
 export type InventoryFormInput = z.input<typeof inventoryFormSchema>;
-export type CreateInventoryItemBody = z.output<typeof createInventoryItemBodySchema>;
-export type UpdateInventoryItemBody = z.output<typeof updateInventoryItemBodySchema>;
+export type CreateInventoryItemBody = z.output<
+  typeof createInventoryItemBodySchema
+>;
+export type UpdateInventoryItemBody = z.output<
+  typeof updateInventoryItemBodySchema
+>;
 export type BatchConsumeInventoryItem = z.output<
   typeof batchConsumeInventoryItemSchema
 >;

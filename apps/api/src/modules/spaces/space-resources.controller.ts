@@ -93,6 +93,17 @@ export class SpaceInventoryController {
     return this.photoParseService.getAccess(userId);
   }
 
+  @Get("activity")
+  async activity(
+    @Param("spaceId") spaceId: string,
+    @CurrentOwnerKey() userId: string,
+    @Query("cursor") cursor?: string,
+    @Query("inventoryItemId") inventoryItemId?: string,
+  ) {
+    await this.spacesService.requireMembership(spaceId, userId);
+    return this.inventoryService.findActivity(spaceId, cursor, inventoryItemId);
+  }
+
   @Get(":id")
   async get(
     @Param("spaceId") spaceId: string,

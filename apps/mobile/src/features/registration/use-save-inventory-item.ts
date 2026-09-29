@@ -7,10 +7,7 @@ import {
 } from "../../services/api";
 import { useActiveSpace } from "../spaces/space-provider";
 import { useAuth } from "../auth/use-auth";
-import {
-  sessionQueryKeys,
-  withInventorySpace,
-} from "../auth/session-boundary";
+import { sessionQueryKeys, withInventorySpace } from "../auth/session-boundary";
 
 export const useSaveInventoryItem = () => {
   const queryClient = useQueryClient();
@@ -38,6 +35,13 @@ export const useSaveInventoryItem = () => {
     },
     onSuccess: () => {
       submissionRef.current = null;
+      queryClient.invalidateQueries({
+        queryKey: withInventorySpace(
+          sessionQueryKeys.shoppingList,
+          sessionUserId,
+          activeSpaceId,
+        ),
+      });
       queryClient.invalidateQueries({
         queryKey: withInventorySpace(
           sessionQueryKeys.dashboard,

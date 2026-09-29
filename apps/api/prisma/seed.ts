@@ -14,6 +14,7 @@ import {
   recipeRecommendationsPayloadSchema,
 } from "@expirymate/shared";
 import argon2 from "argon2";
+import { recordInventoryActivity } from "../src/modules/inventory/inventory-activity";
 
 if (process.env.NODE_ENV === "production") {
   throw new Error("db:seed must not run in production — it wipes all tables.");
@@ -28,6 +29,10 @@ async function main() {
   await prisma.refreshSession.deleteMany();
   await prisma.oAuthAccount.deleteMany();
   await prisma.passwordCredential.deleteMany();
+  await prisma.shoppingListItem.deleteMany();
+  await prisma.spaceInvitation.deleteMany();
+  await prisma.inventorySpaceMembership.deleteMany();
+  await prisma.inventorySpace.deleteMany();
   await prisma.pushNotificationDelivery.deleteMany();
   await prisma.pushToken.deleteMany();
   await prisma.recipeFavorite.deleteMany();
@@ -92,7 +97,8 @@ async function main() {
         name: "서울우유 1L",
         brand: "서울우유",
         category: ProductCategory.dairy,
-        imageUrl: "https://placehold.co/400x400?text=%EC%84%9C%EC%9A%B8%EC%9A%B0%EC%9C%A0",
+        imageUrl:
+          "https://placehold.co/400x400?text=%EC%84%9C%EC%9A%B8%EC%9A%B0%EC%9C%A0",
       },
       {
         name: "계란 10구",
@@ -110,19 +116,22 @@ async function main() {
         name: "플레인 요거트",
         brand: "매일",
         category: ProductCategory.dairy,
-        imageUrl: "https://placehold.co/400x400?text=%EC%9A%94%EA%B1%B0%ED%8A%B8",
+        imageUrl:
+          "https://placehold.co/400x400?text=%EC%9A%94%EA%B1%B0%ED%8A%B8",
       },
       {
         name: "오렌지 주스",
         brand: "델몬트",
         category: ProductCategory.beverage,
-        imageUrl: "https://placehold.co/400x400?text=%EC%98%A4%EB%A0%8C%EC%A7%80+%EC%A3%BC%EC%8A%A4",
+        imageUrl:
+          "https://placehold.co/400x400?text=%EC%98%A4%EB%A0%8C%EC%A7%80+%EC%A3%BC%EC%8A%A4",
       },
       {
         name: "컵라면",
         brand: "농심",
         category: ProductCategory.instant_food,
-        imageUrl: "https://placehold.co/400x400?text=%EC%BB%B5%EB%9D%BC%EB%A9%B4",
+        imageUrl:
+          "https://placehold.co/400x400?text=%EC%BB%B5%EB%9D%BC%EB%A9%B4",
       },
       {
         name: "샴푸",
@@ -146,7 +155,8 @@ async function main() {
         name: "냉동 만두",
         brand: "비비고",
         category: ProductCategory.frozen_food,
-        imageUrl: "https://placehold.co/400x400?text=%EB%83%89%EB%8F%99+%EB%A7%8C%EB%91%90",
+        imageUrl:
+          "https://placehold.co/400x400?text=%EB%83%89%EB%8F%99+%EB%A7%8C%EB%91%90",
       },
     ].map((product) =>
       prisma.product.create({
@@ -155,7 +165,9 @@ async function main() {
     ),
   );
 
-  const productByName = new Map(products.map((product) => [product.name, product]));
+  const productByName = new Map(
+    products.map((product) => [product.name, product]),
+  );
 
   const requireProduct = (name: string) => {
     const product = productByName.get(name);
@@ -171,6 +183,7 @@ async function main() {
     data: ["demo-user", e2eUserId].flatMap((ownerKey) => [
       {
         ownerKey,
+        id: ownerKey === e2eUserId ? "layout-e2e-inventory-milk" : undefined,
         productId: requireProduct("서울우유 1L").id,
         displayName: "서울우유 1L",
         brand: "서울우유",
@@ -357,90 +370,156 @@ async function main() {
       ]),
       recommendations:
         recipeRecommendationsPayloadSchema.shape.recommendations.parse([
-        {
-          title: "우유 달걀 프렌치토스트",
-          summary: "기한이 가까운 우유를 먼저 쓰는 든든한 한 끼예요.",
-          cookingTimeMinutes: 20,
-          difficulty: "easy",
-          servings: 2,
-          usedIngredients: [
-            {
-              inventoryItemId: layoutMilk.id,
-              name: layoutMilk.displayName,
-              amount: 300,
-              unitCode: "ml",
-            },
-          ],
-          optionalMissingIngredients: [
-            { name: "식빵", reason: "우유와 달걀물을 머금어 부드러워져요." },
-          ],
-          steps: [
-            "우유와 달걀을 고르게 섞어 주세요.",
-            "식빵을 달걀물에 충분히 적셔 주세요.",
-            "팬을 달군 뒤 앞뒤로 노릇하게 익혀 주세요.",
-            "속까지 익었는지 확인하고 접시에 담아 주세요.",
-          ],
-          tips: ["약한 불에서 천천히 익히면 속까지 부드러워요."],
-          safetyNote: "우유의 냄새와 상태를 먼저 확인하고 달걀은 완전히 익혀 주세요.",
-          spiceLevel: "none",
-          requiredEquipment: ["stovetop"],
-          mealType: "breakfast",
-          stepTimerSeconds: [null, null, 60, null],
-          strategy: "expiring_first",
-        },
-        {
-          title: "따뜻한 우유 오트밀",
-          summary: "추가 재료를 최소화한 간단한 아침 식사예요.",
-          cookingTimeMinutes: 10,
-          difficulty: "easy",
-          servings: 2,
-          usedIngredients: [
-            {
-              inventoryItemId: layoutMilk.id,
-              name: layoutMilk.displayName,
-              amount: 300,
-              unitCode: "ml",
-            },
-          ],
-          optionalMissingIngredients: [],
-          steps: ["우유를 냄비에 부어 주세요.", "오트밀을 넣어 주세요.", "약한 불에서 저어가며 끓여 주세요.", "알맞게 걸쭉해지면 불을 꺼 주세요."],
-          tips: ["바닥이 눌어붙지 않게 계속 저어 주세요."],
-          safetyNote: "우유의 상태를 먼저 확인하고 끓어넘치지 않게 지켜봐 주세요.",
-          spiceLevel: "none",
-          requiredEquipment: ["stovetop"],
-          mealType: "breakfast",
-          strategy: "minimal_extra",
-        },
-        {
-          title: "우유 바나나 쉐이크",
-          summary: "짧은 시간에 만드는 새로운 간식 조합이에요.",
-          cookingTimeMinutes: 5,
-          difficulty: "easy",
-          servings: 2,
-          usedIngredients: [
-            {
-              inventoryItemId: layoutMilk.id,
-              name: layoutMilk.displayName,
-              amount: 300,
-              unitCode: "ml",
-            },
-          ],
-          optionalMissingIngredients: [
-            { name: "바나나", reason: "자연스러운 단맛과 농도를 더해 줘요." },
-          ],
-          steps: ["우유 상태를 확인해 주세요.", "바나나를 작게 잘라 주세요.", "재료를 믹서에 넣어 주세요.", "부드러워질 때까지 갈아 주세요."],
-          tips: ["차가운 우유를 쓰면 더 산뜻해요."],
-          safetyNote: "우유의 냄새와 상태를 먼저 확인해 주세요.",
-          spiceLevel: "none",
-          requiredEquipment: ["microwave"],
-          mealType: "snack",
-          strategy: "quick_novel",
-        },
+          {
+            title: "우유 달걀 프렌치토스트",
+            summary: "기한이 가까운 우유를 먼저 쓰는 든든한 한 끼예요.",
+            cookingTimeMinutes: 20,
+            difficulty: "easy",
+            servings: 2,
+            usedIngredients: [
+              {
+                inventoryItemId: layoutMilk.id,
+                name: layoutMilk.displayName,
+                amount: 300,
+                unitCode: "ml",
+              },
+            ],
+            optionalMissingIngredients: [
+              { name: "식빵", reason: "우유와 달걀물을 머금어 부드러워져요." },
+            ],
+            steps: [
+              "우유와 달걀을 고르게 섞어 주세요.",
+              "식빵을 달걀물에 충분히 적셔 주세요.",
+              "팬을 달군 뒤 앞뒤로 노릇하게 익혀 주세요.",
+              "속까지 익었는지 확인하고 접시에 담아 주세요.",
+            ],
+            tips: ["약한 불에서 천천히 익히면 속까지 부드러워요."],
+            safetyNote:
+              "우유의 냄새와 상태를 먼저 확인하고 달걀은 완전히 익혀 주세요.",
+            spiceLevel: "none",
+            requiredEquipment: ["stovetop"],
+            mealType: "breakfast",
+            stepTimerSeconds: [null, null, 60, null],
+            strategy: "expiring_first",
+          },
+          {
+            title: "따뜻한 우유 오트밀",
+            summary: "추가 재료를 최소화한 간단한 아침 식사예요.",
+            cookingTimeMinutes: 10,
+            difficulty: "easy",
+            servings: 2,
+            usedIngredients: [
+              {
+                inventoryItemId: layoutMilk.id,
+                name: layoutMilk.displayName,
+                amount: 300,
+                unitCode: "ml",
+              },
+            ],
+            optionalMissingIngredients: [],
+            steps: [
+              "우유를 냄비에 부어 주세요.",
+              "오트밀을 넣어 주세요.",
+              "약한 불에서 저어가며 끓여 주세요.",
+              "알맞게 걸쭉해지면 불을 꺼 주세요.",
+            ],
+            tips: ["바닥이 눌어붙지 않게 계속 저어 주세요."],
+            safetyNote:
+              "우유의 상태를 먼저 확인하고 끓어넘치지 않게 지켜봐 주세요.",
+            spiceLevel: "none",
+            requiredEquipment: ["stovetop"],
+            mealType: "breakfast",
+            strategy: "minimal_extra",
+          },
+          {
+            title: "우유 바나나 쉐이크",
+            summary: "짧은 시간에 만드는 새로운 간식 조합이에요.",
+            cookingTimeMinutes: 5,
+            difficulty: "easy",
+            servings: 2,
+            usedIngredients: [
+              {
+                inventoryItemId: layoutMilk.id,
+                name: layoutMilk.displayName,
+                amount: 300,
+                unitCode: "ml",
+              },
+            ],
+            optionalMissingIngredients: [
+              { name: "바나나", reason: "자연스러운 단맛과 농도를 더해 줘요." },
+            ],
+            steps: [
+              "우유 상태를 확인해 주세요.",
+              "바나나를 작게 잘라 주세요.",
+              "재료를 믹서에 넣어 주세요.",
+              "부드러워질 때까지 갈아 주세요.",
+            ],
+            tips: ["차가운 우유를 쓰면 더 산뜻해요."],
+            safetyNote: "우유의 냄새와 상태를 먼저 확인해 주세요.",
+            spiceLevel: "none",
+            requiredEquipment: ["microwave"],
+            mealType: "snack",
+            strategy: "quick_novel",
+          },
         ]),
       aiProvider: "seed",
       aiModel: "layout-fixture",
       promptVersion: "layout-e2e-v1",
     },
+  });
+
+  for (const userId of ["demo-user", e2eUserId]) {
+    const space = await prisma.inventorySpace.create({
+      data: {
+        id: `personal_${userId}`,
+        name: "내 냉장고",
+        type: "personal",
+        ownerUserId: userId,
+        memberships: {
+          create: { userId, role: "owner", notificationsEnabled: true },
+        },
+      },
+    });
+    await prisma.inventoryItem.updateMany({
+      where: { ownerKey: userId, spaceId: null },
+      data: { spaceId: space.id },
+    });
+    await prisma.recipeRecommendation.updateMany({
+      where: { ownerKey: userId, spaceId: null },
+      data: { spaceId: space.id },
+    });
+    const seededItems = await prisma.inventoryItem.findMany({
+      where: { spaceId: space.id },
+    });
+    for (const item of seededItems) {
+      const opened = item.displayName.includes("우유");
+      const next = opened
+        ? await prisma.inventoryItem.update({
+            where: { id: item.id },
+            data: { openedDate: seedDay(0), openedCheckDate: seedDay(1) },
+          })
+        : item;
+      await recordInventoryActivity(prisma, userId, "created", next);
+    }
+  }
+
+  await prisma.shoppingListItem.createMany({
+    data: [
+      {
+        spaceId: "personal_demo-user",
+        name: "두부",
+        normalizedName: "두부",
+        quantity: 2,
+        unit: "개",
+      },
+      {
+        spaceId: `personal_${e2eUserId}`,
+        name: "두부",
+        normalizedName: "두부",
+        quantity: 2,
+        unit: "개",
+      },
+    ],
   });
 
   await prisma.notificationPreference.createMany({
@@ -451,9 +530,10 @@ async function main() {
       remindOnDayOf: true,
       quietHoursStart: "22:00",
       quietHoursEnd: "07:00",
+      deliveryTime: "09:00",
+      groupBySpace: true,
     })),
   });
-
 }
 
 main()

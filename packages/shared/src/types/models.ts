@@ -147,6 +147,8 @@ export interface InventoryItem {
   /** System key (fridge/…) or owner custom key. */
   storageLocation: string;
   expiryDate: string | null;
+  openedDate?: string | null;
+  openedCheckDate?: string | null;
   expirySource: ExpirySource;
   status: ItemStatus;
   notes?: string | null;
@@ -170,6 +172,9 @@ export interface NotificationPreference {
   remindOnDayOf: boolean;
   quietHoursStart: string;
   quietHoursEnd: string;
+  /** KST wall clock time. Delivery occurs on the first scheduler pass after this time. */
+  deliveryTime: string;
+  groupBySpace: boolean;
   updatedAt: string;
 }
 

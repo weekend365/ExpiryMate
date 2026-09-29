@@ -11,7 +11,11 @@ import {
   PushNotificationDeliveryStatus,
   PushTokenPlatform,
 } from "@prisma/client";
-import { addDaysToDateOnly, dateOnlyToUtcDate, toKstDateOnly } from "@expirymate/shared";
+import {
+  addDaysToDateOnly,
+  dateOnlyToUtcDate,
+  toKstDateOnly,
+} from "@expirymate/shared";
 import { serializePushToken } from "../../common/serializers";
 import { PrismaService } from "../../database/prisma.service";
 import type { RegisterPushTokenRequest } from "@expirymate/shared";
@@ -45,6 +49,7 @@ interface ReminderStats {
 }
 
 interface DueItem {
+  openedCheck?: boolean;
   id: string;
   displayName: string;
   spaceId: string;
@@ -86,7 +91,10 @@ export class NotificationsService
 
     void this.releaseLease(PUSH_REMINDER_LEASE_KEY, this.leaseOwnerId).catch(
       (error: unknown) => {
-        this.logger.warn("Failed to release push reminder lease on shutdown", error);
+        this.logger.warn(
+          "Failed to release push reminder lease on shutdown",
+          error,
+        );
       },
     );
   }
@@ -162,13 +170,6 @@ export class NotificationsService
 
     try {
       await this.processPushReceipts(now, stats);
-      await this.recoverStalePendingDeliveries(now, stats);
-
-      if (getLocalHour(now) < getDeliveryHour()) {
-        stats.skippedByTime = true;
-        return stats;
-      }
-
       await this.sendDueExpiryReminders(now, stats);
       return stats;
     } finally {
@@ -209,6 +210,14 @@ export class NotificationsService
 
     const activePreferences = preferences.filter((preference) => {
       stats.preferencesChecked += 1;
+      const deliveryMinutes = parseTimeMinutes(
+        preference.deliveryTime ??
+          `${String(getDeliveryHour()).padStart(2, "0")}:00`,
+      );
+      if (getLocalMinutes(now) < deliveryMinutes) {
+        stats.skippedByTime = true;
+        return false;
+      }
       return !isWithinQuietHours(
         now,
         preference.quietHoursStart,
@@ -237,7 +246,9 @@ export class NotificationsService
       return { preference, daysBeforeValues };
     });
 
-    const ownerKeys = activePreferences.map((preference) => preference.ownerKey);
+    const ownerKeys = activePreferences.map(
+      (preference) => preference.ownerKey,
+    );
     const memberships = await this.prisma.inventorySpaceMembership.findMany({
       where: {
         userId: { in: ownerKeys },
@@ -258,30 +269,39 @@ export class NotificationsService
       where: {
         spaceId: { in: spaceIds },
         status: ItemStatus.active,
-        expiryDate: { in: reminderDates },
+        OR: [
+          { expiryDate: { in: reminderDates } },
+          { openedCheckDate: { in: reminderDates } },
+        ],
       },
       select: {
         id: true,
         displayName: true,
         spaceId: true,
         expiryDate: true,
+        openedCheckDate: true,
       },
       orderBy: [{ expiryDate: "asc" }, { createdAt: "asc" }],
     });
 
     const itemsBySpaceAndDate = new Map<string, DueItem[]>();
     for (const item of dueItems) {
-      if (!item.spaceId || !item.expiryDate) {
-        continue;
+      if (!item.spaceId) continue;
+      const dates = new Map<string, boolean>();
+      if (item.expiryDate) dates.set(item.expiryDate.toISOString(), false);
+      if (item.openedCheckDate)
+        dates.set(item.openedCheckDate.toISOString(), true);
+      for (const [date, openedCheck] of dates) {
+        const key = `${item.spaceId}:${date}`;
+        const bucket = itemsBySpaceAndDate.get(key) ?? [];
+        bucket.push({
+          id: item.id,
+          displayName: item.displayName,
+          spaceId: item.spaceId,
+          openedCheck,
+        });
+        itemsBySpaceAndDate.set(key, bucket);
       }
-      const key = `${item.spaceId}:${item.expiryDate.toISOString()}`;
-      const bucket = itemsBySpaceAndDate.get(key) ?? [];
-      bucket.push({
-        id: item.id,
-        displayName: item.displayName,
-        spaceId: item.spaceId,
-      });
-      itemsBySpaceAndDate.set(key, bucket);
     }
 
     type OutboundJob = {
@@ -290,7 +310,7 @@ export class NotificationsService
       body: string;
       pushTokenId: string;
       token: string;
-      inventoryItemId: string;
+      inventoryItemId: string | null;
       daysBefore: number;
       spaceId: string;
     };
@@ -298,9 +318,61 @@ export class NotificationsService
     const outbound: OutboundJob[] = [];
 
     for (const plan of preferencePlans) {
-      const memberSpaceIds =
-        spaceIdsByUser.get(plan.preference.ownerKey) ?? [];
-      for (const daysBefore of plan.daysBeforeValues) {
+      const memberSpaceIds = spaceIdsByUser.get(plan.preference.ownerKey) ?? [];
+      if (plan.preference.groupBySpace) {
+        for (const spaceId of memberSpaceIds) {
+          const matched = plan.daysBeforeValues.flatMap(
+            (daysBefore) =>
+              itemsBySpaceAndDate.get(
+                `${spaceId}:${dateOnlyToUtcDate(getLocalDateOnly(now, daysBefore)).toISOString()}`,
+              ) ?? [],
+          );
+          const items = [
+            ...new Map(matched.map((item) => [item.id, item])).values(),
+          ];
+          if (!items.length) continue;
+          stats.itemsMatched += items.length;
+          for (const pushToken of plan.preference.owner.pushTokens) {
+            const delivery = await this.createPendingDelivery(
+              {
+                ownerKey: plan.preference.ownerKey,
+                pushTokenId: pushToken.id,
+                inventoryItemId: null,
+                spaceId,
+                dedupeKey: `${plan.preference.ownerKey}:${pushToken.id}:${spaceId}:${toKstDateOnly(now)}`,
+                reminderDate: dateOnlyToUtcDate(toKstDateOnly(now)),
+                daysBefore: 0,
+                title: `오늘 확인할 재료 ${items.length}개가 있어요`,
+                body: `${items
+                  .slice(0, 3)
+                  .map((item) => item.displayName)
+                  .join(
+                    ", ",
+                  )}${items.length > 3 ? ` 외 ${items.length - 3}개` : ""}의 기한과 개봉 후 상태를 확인해 주세요.`,
+              },
+              now,
+              stats,
+            );
+            if (!delivery) continue;
+            stats.notificationsCreated += 1;
+            outbound.push({
+              deliveryId: delivery.id,
+              title: delivery.title,
+              body: delivery.body,
+              pushTokenId: pushToken.id,
+              token: pushToken.token,
+              inventoryItemId: null,
+              daysBefore: 0,
+              spaceId,
+            });
+          }
+        }
+        continue;
+      }
+      const sentItemIds = new Set<string>();
+      for (const daysBefore of [...plan.daysBeforeValues].sort(
+        (a, b) => a - b,
+      )) {
         const reminderDate = dateOnlyToUtcDate(
           getLocalDateOnly(now, daysBefore),
         );
@@ -313,16 +385,22 @@ export class NotificationsService
         stats.itemsMatched += items.length;
 
         for (const item of items) {
+          if (sentItemIds.has(item.id)) continue;
+          sentItemIds.add(item.id);
           for (const pushToken of plan.preference.owner.pushTokens) {
             const copy = buildReminderCopy(item, daysBefore);
-            const delivery = await this.createPendingDelivery({
-              ownerKey: plan.preference.ownerKey,
-              pushTokenId: pushToken.id,
-              inventoryItemId: item.id,
-              reminderDate,
-              daysBefore,
-              ...copy,
-            });
+            const delivery = await this.createPendingDelivery(
+              {
+                ownerKey: plan.preference.ownerKey,
+                pushTokenId: pushToken.id,
+                inventoryItemId: item.id,
+                reminderDate,
+                daysBefore,
+                ...copy,
+              },
+              now,
+              stats,
+            );
 
             if (!delivery) {
               continue;
@@ -355,7 +433,9 @@ export class NotificationsService
         body: job.body,
         data: {
           type: "expiry_reminder",
-          inventoryItemId: job.inventoryItemId,
+          ...(job.inventoryItemId
+            ? { inventoryItemId: job.inventoryItemId }
+            : { grouped: true }),
           daysBefore: job.daysBefore,
           spaceId: job.spaceId,
         },
@@ -389,92 +469,6 @@ export class NotificationsService
       if (ticket.details?.error === "DeviceNotRegistered") {
         await this.disablePushToken(job.pushTokenId, stats);
       }
-    }
-  }
-
-  private async recoverStalePendingDeliveries(now: Date, stats: ReminderStats) {
-    const staleBefore = new Date(now.getTime() - getStalePendingMs());
-    const staleDeliveries = await this.prisma.pushNotificationDelivery.findMany({
-      where: {
-        status: PushNotificationDeliveryStatus.pending,
-        updatedAt: {
-          lt: staleBefore,
-        },
-        attempts: {
-          lt: getMaxAttempts(),
-        },
-        pushToken: {
-          enabled: true,
-        },
-      },
-      include: {
-        pushToken: {
-          select: {
-            id: true,
-            token: true,
-          },
-        },
-        inventoryItem: {
-          select: {
-            spaceId: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: "asc",
-      },
-      take: getReceiptBatchSize(),
-    });
-
-    for (const delivery of staleDeliveries) {
-      const claimed = await this.prisma.pushNotificationDelivery.updateMany({
-        where: {
-          id: delivery.id,
-          status: PushNotificationDeliveryStatus.pending,
-          updatedAt: delivery.updatedAt,
-        },
-        data: {
-          attempts: {
-            increment: 1,
-          },
-        },
-      });
-
-      if (claimed.count === 0) {
-        continue;
-      }
-
-      stats.stalePendingRetried += 1;
-      const spaceId = delivery.inventoryItem.spaceId;
-      if (!spaceId) {
-        stats.notificationsFailed += 1;
-        await this.prisma.pushNotificationDelivery.update({
-          where: { id: delivery.id },
-          data: {
-            status: PushNotificationDeliveryStatus.failed,
-            errorCode: "MISSING_SPACE_CONTEXT",
-            errorMessage: "Inventory item has no space for notification routing.",
-          },
-        });
-        continue;
-      }
-
-      stats.notificationsCreated += 1;
-      await this.dispatchDelivery(
-        {
-          id: delivery.id,
-          title: delivery.title,
-          body: delivery.body,
-        },
-        {
-          id: delivery.pushToken.id,
-          token: delivery.pushToken.token,
-        },
-        delivery.inventoryItemId,
-        delivery.daysBefore,
-        spaceId,
-        stats,
-      );
     }
   }
 
@@ -525,7 +519,13 @@ export class NotificationsService
       }
 
       stats.receiptsChecked += 1;
-      await this.applyPushReceipt(delivery.id, delivery.pushTokenId, receipt, checkedAt, stats);
+      await this.applyPushReceipt(
+        delivery.id,
+        delivery.pushTokenId,
+        receipt,
+        checkedAt,
+        stats,
+      );
     }
   }
 
@@ -565,44 +565,6 @@ export class NotificationsService
     }
   }
 
-  private async dispatchDelivery(
-    delivery: { id: string; title: string; body: string },
-    pushToken: { id: string; token: string },
-    inventoryItemId: string,
-    daysBefore: number,
-    spaceId: string,
-    stats: ReminderStats,
-  ) {
-    const ticket = await this.expoPush.send({
-      to: pushToken.token,
-      title: delivery.title,
-      body: delivery.body,
-      data: {
-        type: "expiry_reminder",
-        inventoryItemId,
-        daysBefore,
-        spaceId,
-      },
-    });
-    const update = toDeliveryUpdate(ticket);
-
-    await this.prisma.pushNotificationDelivery.update({
-      where: { id: delivery.id },
-      data: update,
-    });
-
-    if (ticket.status === "ok") {
-      stats.notificationsSent += 1;
-      return;
-    }
-
-    stats.notificationsFailed += 1;
-
-    if (ticket.details?.error === "DeviceNotRegistered") {
-      await this.disablePushToken(pushToken.id, stats);
-    }
-  }
-
   private async disablePushToken(pushTokenId: string, stats: ReminderStats) {
     await this.prisma.pushToken.update({
       where: { id: pushTokenId },
@@ -614,15 +576,21 @@ export class NotificationsService
     stats.tokensDisabled += 1;
   }
 
-  private async createPendingDelivery(params: {
-    ownerKey: string;
-    pushTokenId: string;
-    inventoryItemId: string;
-    reminderDate: Date;
-    daysBefore: number;
-    title: string;
-    body: string;
-  }) {
+  private async createPendingDelivery(
+    params: {
+      ownerKey: string;
+      pushTokenId: string;
+      inventoryItemId: string | null;
+      spaceId?: string;
+      dedupeKey?: string;
+      reminderDate: Date;
+      daysBefore: number;
+      title: string;
+      body: string;
+    },
+    now: Date,
+    stats: ReminderStats,
+  ) {
     try {
       return await this.prisma.pushNotificationDelivery.create({
         data: {
@@ -637,14 +605,16 @@ export class NotificationsService
         error.code === "P2002"
       ) {
         const existing = await this.prisma.pushNotificationDelivery.findUnique({
-          where: {
-            pushTokenId_inventoryItemId_reminderDate_daysBefore: {
-              pushTokenId: params.pushTokenId,
-              inventoryItemId: params.inventoryItemId,
-              reminderDate: params.reminderDate,
-              daysBefore: params.daysBefore,
-            },
-          },
+          where: params.dedupeKey
+            ? { dedupeKey: params.dedupeKey }
+            : {
+                pushTokenId_inventoryItemId_reminderDate_daysBefore: {
+                  pushTokenId: params.pushTokenId,
+                  inventoryItemId: params.inventoryItemId!,
+                  reminderDate: params.reminderDate,
+                  daysBefore: params.daysBefore,
+                },
+              },
         });
 
         if (!existing || existing.attempts >= getMaxAttempts()) {
@@ -655,12 +625,13 @@ export class NotificationsService
           existing.status === PushNotificationDeliveryStatus.failed;
         const canRetryStalePending =
           existing.status === PushNotificationDeliveryStatus.pending &&
-          isStalePending(existing.updatedAt, new Date());
+          isStalePending(existing.updatedAt, now);
 
         if (!canRetryFailed && !canRetryStalePending) {
           return null;
         }
 
+        if (canRetryStalePending) stats.stalePendingRetried += 1;
         return this.prisma.pushNotificationDelivery.update({
           where: { id: existing.id },
           data: {
@@ -759,7 +730,10 @@ function getLeaseTtlMs() {
 function getDeliveryHour() {
   return Math.min(
     23,
-    readPositiveIntegerEnv("PUSH_REMINDER_DELIVERY_HOUR", DEFAULT_DELIVERY_HOUR),
+    readPositiveIntegerEnv(
+      "PUSH_REMINDER_DELIVERY_HOUR",
+      DEFAULT_DELIVERY_HOUR,
+    ),
   );
 }
 
@@ -816,13 +790,10 @@ function readIntegerEnv(key: string, fallback: number) {
   return Number.isInteger(value) ? value : fallback;
 }
 
-function getLocalHour(now: Date) {
-  const localNow = new Date(now.getTime() + getTimezoneOffsetMinutes() * 60 * 1000);
-  return localNow.getUTCHours();
-}
-
 function getLocalMinutes(now: Date) {
-  const localNow = new Date(now.getTime() + getTimezoneOffsetMinutes() * 60 * 1000);
+  const localNow = new Date(
+    now.getTime() + getTimezoneOffsetMinutes() * 60 * 1000,
+  );
   return localNow.getUTCHours() * 60 + localNow.getUTCMinutes();
 }
 
@@ -835,7 +806,9 @@ function getReminderDays(reminderDaysBefore: number[], remindOnDayOf: boolean) {
   return [
     ...new Set([
       ...(remindOnDayOf ? [0] : []),
-      ...reminderDaysBefore.filter((value) => Number.isInteger(value) && value > 0),
+      ...reminderDaysBefore.filter(
+        (value) => Number.isInteger(value) && value > 0,
+      ),
     ]),
   ].sort((left, right) => left - right);
 }
@@ -863,6 +836,15 @@ function parseTimeMinutes(value: string) {
 }
 
 function buildReminderCopy(item: DueItem, daysBefore: number) {
+  if (item.openedCheck) {
+    return {
+      title:
+        daysBefore === 0
+          ? "개봉한 재료를 확인할 날이에요"
+          : `${daysBefore}일 뒤 개봉한 재료를 확인해요`,
+      body: `${item.displayName}에 직접 정한 확인일이에요. 상태와 포장 안내를 확인해 주세요.`,
+    };
+  }
   if (daysBefore === 0) {
     return {
       title: "오늘 유통기한이 끝나요",

@@ -1,7 +1,7 @@
 ---
 status: active
 owner: product
-last_reviewed: 2026-08-29
+last_reviewed: 2026-09-29
 source_of_truth: true
 ---
 
@@ -376,6 +376,12 @@ SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=true
 MONETIZATION_REVENUE_LEDGER_ENABLED=true
 MONETIZATION_OFFER_MODE=core
 ```
+
+2026-09-29 결정: 상품 확대는 보류하고 개인 플러스에 집중합니다.
+`MONETIZATION_OFFER_MODE`를 생략하거나 잘못 지정해도 서버 기본값은 `core`입니다.
+`expanded`는 명시적으로 설정한 검토 환경에서만 사용할 수 있습니다. 기존 가족 상품 및
+추천권 구매자의 권리·구매 복원 경로는 유지하며, 바코드 보상 활성화 범위도 확대하지 않습니다.
+
 
 가족 플러스나 추천권 판매를 검토할 때에는 가격·AI 원가, 상품 승인, 권한 범위,
 구매 복원, 환불·취소와 스토어 개인정보 선언을 별도 출시 계획으로 작성합니다.

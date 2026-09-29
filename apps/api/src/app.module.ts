@@ -18,6 +18,7 @@ import { SupportModule } from "./modules/support/support.module";
 import { SpacesModule } from "./modules/spaces/spaces.module";
 import { MonetizationModule } from "./modules/monetization/monetization.module";
 import { AffiliateModule } from "./modules/affiliate/affiliate.module";
+import { ShoppingModule } from "./modules/shopping/shopping.module";
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AffiliateModule } from "./modules/affiliate/affiliate.module";
     NotificationsModule,
     SupportModule,
     SpacesModule,
+    ShoppingModule,
   ],
 })
 export class AppModule {}

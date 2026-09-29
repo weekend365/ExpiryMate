@@ -3,7 +3,11 @@ import {
   ConflictException,
   NotFoundException,
 } from "@nestjs/common";
-import { ExpirySource, StorageLocation, type CreateInventoryItemBody } from "@expirymate/shared";
+import {
+  ExpirySource,
+  StorageLocation,
+  type CreateInventoryItemBody,
+} from "@expirymate/shared";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InventoryService } from "./inventory.service";
 
@@ -20,6 +24,7 @@ const createBody = (
 
 const inventoryItem = {
   id: "item-1",
+  version: 1,
   ownerKey: "owner-a",
   spaceId: "personal_owner-a",
   productId: null,
@@ -42,6 +47,14 @@ const inventoryItem = {
 
 describe("InventoryService owner isolation", () => {
   let prisma: {
+    inventoryActivity: {
+      create: ReturnType<typeof vi.fn>;
+      findMany: ReturnType<typeof vi.fn>;
+    };
+    shoppingListItem: {
+      findFirst: ReturnType<typeof vi.fn>;
+      updateMany: ReturnType<typeof vi.fn>;
+    };
     $transaction: ReturnType<typeof vi.fn>;
     inventoryItem: {
       findUnique: ReturnType<typeof vi.fn>;
@@ -83,13 +96,14 @@ describe("InventoryService owner isolation", () => {
 
   beforeEach(() => {
     prisma = {
+      inventoryActivity: { create: vi.fn(), findMany: vi.fn() },
+      shoppingListItem: { findFirst: vi.fn(), updateMany: vi.fn() },
       $transaction: vi.fn(
         async (
           input:
             | Array<Promise<unknown>>
             | ((transaction: typeof prisma) => Promise<unknown>),
-        ) =>
-          typeof input === "function" ? input(prisma) : Promise.all(input),
+        ) => (typeof input === "function" ? input(prisma) : Promise.all(input)),
       ),
       inventoryItem: {
         findUnique: vi.fn(),
@@ -127,9 +141,12 @@ describe("InventoryService owner isolation", () => {
         createMany: vi.fn().mockResolvedValue({ count: 1 }),
       },
     };
-    service = new InventoryService(prisma as never, {
-      assertValidStorageLocation: vi.fn().mockResolvedValue(undefined),
-    } as never);
+    service = new InventoryService(
+      prisma as never,
+      {
+        assertValidStorageLocation: vi.fn().mockResolvedValue(undefined),
+      } as never,
+    );
   });
 
   it("hides an item when the owner does not match", async () => {
@@ -158,7 +175,7 @@ describe("InventoryService owner isolation", () => {
 
   it("checks item ownership before discarding", async () => {
     prisma.inventoryItem.findFirst.mockResolvedValue(inventoryItem);
-    prisma.inventoryItem.update.mockResolvedValue({});
+    prisma.inventoryItem.updateMany.mockResolvedValue({ count: 1 });
     prisma.inventoryItem.findUniqueOrThrow.mockResolvedValue({
       ...inventoryItem,
       status: "discarded",
@@ -169,8 +186,8 @@ describe("InventoryService owner isolation", () => {
     expect(prisma.inventoryItem.findFirst).toHaveBeenCalledWith({
       where: expect.objectContaining({ id: "item-1", ownerKey: "owner-a" }),
     });
-    expect(prisma.inventoryItem.update).toHaveBeenCalledWith({
-      where: { id: "item-1" },
+    expect(prisma.inventoryItem.updateMany).toHaveBeenCalledWith({
+      where: { id: "item-1", version: 1, status: "active" },
       data: expect.objectContaining({
         status: "discarded",
         version: { increment: 1 },
@@ -201,10 +218,7 @@ describe("InventoryService owner isolation", () => {
   it("stores expiryDate as a date-only UTC date", async () => {
     prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
 
-    await service.create(
-      createBody(),
-      "owner-a",
-    );
+    await service.create(createBody(), "owner-a");
 
     expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
@@ -240,7 +254,10 @@ describe("InventoryService owner isolation", () => {
       unitCode: "ml",
     });
 
-    await service.create(createBody({ displayName: "우유", unit: "L" }), "owner-a");
+    await service.create(
+      createBody({ displayName: "우유", unit: "L" }),
+      "owner-a",
+    );
 
     expect(prisma.inventoryItem.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
@@ -529,10 +546,7 @@ describe("InventoryService owner isolation", () => {
     prisma.productMaster.findUnique.mockResolvedValue(null);
 
     await expect(
-      service.create(
-        createBody({ productMasterId: "missing-pm" }),
-        "owner-a",
-      ),
+      service.create(createBody({ productMasterId: "missing-pm" }), "owner-a"),
     ).rejects.toThrow(BadRequestException);
     expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
   });
@@ -557,6 +571,66 @@ describe("InventoryService owner isolation", () => {
     expect(prisma.inventoryItem.create).toHaveBeenCalledTimes(2);
   });
 
+  it("links a shopping item in the same transaction as inventory creation", async () => {
+    prisma.shoppingListItem.findFirst.mockResolvedValue({
+      id: "s1",
+      spaceId: "personal_owner-a",
+      version: 2,
+      completedAt: null,
+      inventoryItemId: null,
+    });
+    prisma.shoppingListItem.updateMany.mockResolvedValue({ count: 1 });
+    prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
+    await service.create(
+      createBody({ shoppingListItemId: "s1" }),
+      "owner-a",
+      "personal_owner-a",
+    );
+    expect(prisma.shoppingListItem.findFirst).toHaveBeenCalledWith({
+      where: { id: "s1", spaceId: "personal_owner-a" },
+    });
+    expect(prisma.shoppingListItem.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: "s1",
+        spaceId: "personal_owner-a",
+        version: 2,
+        inventoryItemId: null,
+      },
+      data: {
+        inventoryItemId: "item-1",
+        completedAt: expect.any(Date),
+        version: { increment: 1 },
+      },
+    });
+  });
+
+  it("rejects missing/foreign/already registered shopping entries", async () => {
+    prisma.shoppingListItem.findFirst.mockResolvedValue(null);
+    await expect(
+      service.create(createBody({ shoppingListItemId: "s1" }), "owner-a"),
+    ).rejects.toThrow(NotFoundException);
+    prisma.shoppingListItem.findFirst.mockResolvedValue({
+      inventoryItemId: "existing",
+    });
+    await expect(
+      service.create(createBody({ shoppingListItemId: "s1" }), "owner-a"),
+    ).rejects.toThrow(ConflictException);
+    expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
+
+  it("aborts inventory creation when another member claimed the shopping entry", async () => {
+    prisma.shoppingListItem.findFirst.mockResolvedValue({
+      id: "s1",
+      version: 2,
+      inventoryItemId: null,
+    });
+    prisma.inventoryItem.create.mockResolvedValue(inventoryItem);
+    prisma.shoppingListItem.updateMany.mockResolvedValue({ count: 0 });
+    await expect(
+      service.create(createBody({ shoppingListItemId: "s1" }), "owner-a"),
+    ).rejects.toThrow(ConflictException);
+  });
+
   it("replays an existing create result for the same idempotency key", async () => {
     prisma.inventoryCreateRequest.findUnique.mockResolvedValue({
       itemIds: ["item-1"],
@@ -572,5 +646,128 @@ describe("InventoryService owner isolation", () => {
 
     expect(result.id).toBe("item-1");
     expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
+  it("stores opened dates without changing packaging expiry and records the actor", async () => {
+    prisma.inventoryItem.create.mockImplementation(async ({ data }) => ({
+      ...inventoryItem,
+      ...data,
+    }));
+    const result = await service.create(
+      createBody({ openedDate: "2026-06-01", openedCheckDate: "2026-06-03" }),
+      "owner-a",
+      "personal_owner-a",
+    );
+    expect(result).toMatchObject({
+      expiryDate: "2026-06-10",
+      openedDate: "2026-06-01",
+      openedCheckDate: "2026-06-03",
+    });
+    expect(prisma.inventoryActivity.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        spaceId: "personal_owner-a",
+        actorUserId: "owner-a",
+        action: "created",
+        after: expect.objectContaining({ openedCheckDate: "2026-06-03" }),
+      }),
+    });
+  });
+
+  it("rejects a check date before opening or without an opened date and future opening", async () => {
+    for (const values of [
+      { openedCheckDate: "2026-06-03" },
+      { openedDate: "2026-06-04", openedCheckDate: "2026-06-03" },
+      { openedDate: "2999-01-01" },
+    ]) {
+      await expect(
+        service.create(createBody(values), "owner-a"),
+      ).rejects.toThrow(BadRequestException);
+    }
+    expect(prisma.inventoryItem.create).not.toHaveBeenCalled();
+  });
+
+  it("validates merged dates on a partial update", async () => {
+    prisma.inventoryItem.findUnique.mockResolvedValue({
+      ...inventoryItem,
+      openedDate: new Date("2026-06-01"),
+      openedCheckDate: new Date("2026-06-03"),
+    });
+    await expect(
+      service.update("item-1", { openedDate: null }, "owner-a"),
+    ).rejects.toThrow(BadRequestException);
+    expect(prisma.inventoryItem.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("does not record a stale consume or discard", async () => {
+    prisma.inventoryItem.findFirst.mockResolvedValue(inventoryItem);
+    prisma.inventoryItem.updateMany.mockResolvedValue({ count: 0 });
+    await expect(service.consume("item-1", "owner-a")).rejects.toThrow(
+      ConflictException,
+    );
+    await expect(service.discard("item-1", "owner-a")).rejects.toThrow(
+      ConflictException,
+    );
+    expect(prisma.inventoryActivity.create).not.toHaveBeenCalled();
+  });
+
+  it("keeps partial consumption quantity before and after in history", async () => {
+    const before = { ...inventoryItem, quantityBase: 500, unitCode: "ml" };
+    prisma.inventoryItem.findMany
+      .mockResolvedValueOnce([before])
+      .mockResolvedValueOnce([{ ...before, quantityBase: 300 }]);
+    prisma.inventoryItem.updateMany.mockResolvedValue({ count: 1 });
+    await service.batchConsume({
+      ownerKey: "owner-a",
+      items: [{ inventoryItemId: "item-1", amountBase: 200 }],
+    });
+    expect(prisma.inventoryActivity.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        action: "consumed",
+        before: expect.objectContaining({ quantityBase: 500 }),
+        after: expect.objectContaining({ quantityBase: 300 }),
+      }),
+    });
+  });
+
+  it("paginates history within one space and hides deleted actor names", async () => {
+    const snapshot = {
+      displayName: "우유",
+      quantityBase: 500,
+      unitCode: "ml",
+      storageLocation: "fridge",
+      expiryDate: null,
+      openedDate: null,
+      openedCheckDate: null,
+      status: "active",
+    };
+    const rows = Array.from({ length: 31 }, (_, index) => ({
+      id: `event-${index}`,
+      inventoryItemId: "item-1",
+      action: "created",
+      before: null,
+      after: snapshot,
+      createdAt: new Date("2026-06-01T00:00:00Z"),
+      actor: { displayName: "deleted-person", deletedAt: new Date() },
+    }));
+    prisma.inventoryActivity.findMany.mockResolvedValue(rows);
+    const result = await service.findActivity(
+      "space-a",
+      "2026-06-02T00:00:00.000Z|event-z",
+      "item-1",
+    );
+    expect(result.items).toHaveLength(30);
+    expect(result.items[0]?.actorName).toBe("탈퇴한 구성원");
+    expect(result.nextCursor).toBe("2026-06-01T00:00:00.000Z|event-29");
+    expect(prisma.inventoryActivity.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          spaceId: "space-a",
+          inventoryItemId: "item-1",
+        }),
+        take: 31,
+      }),
+    );
+    await expect(service.findActivity("space-a", "bad-cursor")).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

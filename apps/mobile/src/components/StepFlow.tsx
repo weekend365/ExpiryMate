@@ -362,6 +362,7 @@ const styles = StyleSheet.create({
   },
   stepHeaderStacked: {
     flexDirection: "column",
+    alignItems: "stretch",
     gap: spacing.sm,
   },
   stepCopy: {

@@ -14,8 +14,12 @@ afterEach(() => {
 });
 
 describe("monetization offer mode", () => {
-  it("keeps expanded behavior as the local-development fallback", () => {
-    expect(getMonetizationOfferMode()).toBe("expanded");
+  it("defaults to core offers when expansion has not been explicitly enabled", () => {
+    expect(getMonetizationOfferMode()).toBe("core");
+    expect(expandedMonetizationOffersEnabled()).toBe(false);
+    process.env.MONETIZATION_OFFER_MODE = "invalid";
+    expect(getMonetizationOfferMode()).toBe("core");
+    process.env.MONETIZATION_OFFER_MODE = "expanded";
     expect(expandedMonetizationOffersEnabled()).toBe(true);
   });
 

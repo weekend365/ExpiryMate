@@ -12,6 +12,8 @@ import {
   createUserStorageLocationBodySchema,
   updateRecipePreferenceSchema,
   updateUserStorageLocationBodySchema,
+  updateNotificationPreferenceSchema,
+  type UpdateNotificationPreference,
   type CreateUserStorageLocationBody,
   type UpdateRecipePreference,
   type UpdateUserStorageLocationBody,
@@ -20,7 +22,6 @@ import { ZodValidationPipe } from "../../common/zod-validation.pipe";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { SettingsService } from "./settings.service";
-import { UpdateNotificationPreferenceDto } from "./dto/update-notification-preference.dto";
 
 @UseGuards(RegisteredGuard)
 @Controller("settings")
@@ -48,7 +49,8 @@ export class SettingsController {
 
   @Patch("notification-preferences")
   updateNotificationPreferences(
-    @Body() dto: UpdateNotificationPreferenceDto,
+    @Body(new ZodValidationPipe(updateNotificationPreferenceSchema))
+    dto: UpdateNotificationPreference,
     @CurrentOwnerKey() ownerKey: string,
   ) {
     return this.settingsService.updateNotificationPreferences(ownerKey, dto);

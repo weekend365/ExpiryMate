@@ -1,3 +1,4 @@
+import { OpenedInventoryFields } from "../../src/features/inventory/opened-inventory-fields";
 import {
   ExpirySource,
   ItemStatus,
@@ -14,7 +15,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { CheckCircle2, ChevronRight } from "lucide-react-native";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import { Alert, BackHandler, View } from "react-native";
 import { z } from "zod";
@@ -223,8 +230,7 @@ export default function InventoryEditScreen() {
   const isLastEditStep = editStep === "expiry";
   const isQuickEdit = editMode !== "product";
   const isSaveAction = isQuickEdit || isLastEditStep;
-  const activeEditStep =
-    EDIT_STEPS[Math.max(stepIndex, 0)] ?? EDIT_STEPS[0];
+  const activeEditStep = EDIT_STEPS[Math.max(stepIndex, 0)] ?? EDIT_STEPS[0];
   const visibleEditSteps = isQuickEdit ? [activeEditStep] : EDIT_STEPS;
   const canGoNext = isLastEditStep
     ? Boolean(
@@ -234,8 +240,7 @@ export default function InventoryEditScreen() {
       ) && quantity > 0
     : (editStep === "product" && Boolean(displayName)) ||
       (editStep === "quantity" && Boolean(storageLocation) && quantity > 0);
-  const primaryCtaLabel =
-    isQuickEdit || isLastEditStep ? "변경 저장" : "다음";
+  const primaryCtaLabel = isQuickEdit || isLastEditStep ? "변경 저장" : "다음";
 
   const item = itemQuery.data;
   const isFinalStatus =
@@ -515,11 +520,35 @@ export default function InventoryEditScreen() {
               <RecapRow
                 label="자리"
                 value={selectedLocationLabel}
-                onPress={() =>
-                  goToEditStep("quantity", { openLocation: true })
-                }
+                onPress={() => goToEditStep("quantity", { openLocation: true })}
               />
             </RecapCard>
+            <OpenedInventoryFields
+              openedDate={
+                typeof form.watch("openedDate") === "string"
+                  ? String(form.watch("openedDate"))
+                  : null
+              }
+              openedCheckDate={
+                typeof form.watch("openedCheckDate") === "string"
+                  ? String(form.watch("openedCheckDate"))
+                  : null
+              }
+              onChange={(openedDate, openedCheckDate) => {
+                form.setValue("openedDate", openedDate, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+                form.setValue("openedCheckDate", openedCheckDate, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }}
+              error={
+                form.formState.errors.openedDate?.message ||
+                form.formState.errors.openedCheckDate?.message
+              }
+            />
           </InventoryExpiryStep>
         ) : null}
       </StepFlow>

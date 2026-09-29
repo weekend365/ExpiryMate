@@ -3,7 +3,10 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
-const MOBILE_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+const MOBILE_ROOT = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../..",
+);
 
 function read(relativePath: string) {
   return readFileSync(join(MOBILE_ROOT, relativePath), "utf8");
@@ -32,7 +35,7 @@ describe("inventory row interaction contract", () => {
     expect(screen).toContain("params: { id: item.id, mode }");
     expect(screen).toContain("onCleanup={openCleanupSheet}");
     expect(sheets).toContain("남은 양 바꾸기");
-    expect(sheets).toContain("유통기한 바꾸기");
+    expect(sheets).toContain("유통기한·개봉 기록 바꾸기");
     expect(sheets).toContain("보관 위치 바꾸기");
     expect(sheets).toContain("전체 내용 수정하기");
     expect(editScreen).toContain('const isQuickEdit = editMode !== "product"');

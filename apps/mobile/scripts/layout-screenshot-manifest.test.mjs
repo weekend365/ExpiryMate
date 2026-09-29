@@ -110,6 +110,8 @@ describe("layout screenshot manifest", () => {
       "settings-support.png",
       "invitation-code.png",
       "invitation-accept.png",
+      "inventory-activity.png",
+      "inventory-opened.png",
     ]);
 
     const flow = readFileSync(

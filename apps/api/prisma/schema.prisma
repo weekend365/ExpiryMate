@@ -260,6 +260,7 @@ model User {
   pushTokens                       PushToken[]
   pushNotificationDeliveries       PushNotificationDelivery[]
   supportInquiries                 SupportInquiry[]
+  inventoryActivities              InventoryActivity[]
   ownedInventorySpaces             InventorySpace[]               @relation("InventorySpaceOwner")
   inventorySpaceMemberships        InventorySpaceMembership[]
   sentSpaceInvitations             SpaceInvitation[]              @relation("SpaceInvitationSender")
@@ -295,9 +296,31 @@ model InventorySpace {
   monetizationRevenueEvents MonetizationRevenueEvent[]
   photoParseEvents          InventoryPhotoParseEvent[]
   dispositionEvents         InventoryDispositionEvent[]
+  pushNotificationDeliveries PushNotificationDelivery[]
+  activities                InventoryActivity[]
+  shoppingListItems         ShoppingListItem[]
 
   @@index([ownerUserId])
   @@index([type])
+}
+
+model ShoppingListItem {
+  id              String         @id @default(cuid())
+  spaceId         String
+  space           InventorySpace @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  name            String
+  normalizedName  String
+  quantity        Int            @default(1)
+  unit            String         @default("개")
+  version         Int            @default(1)
+  completedAt     DateTime?
+  inventoryItemId String?
+  inventoryItem   InventoryItem? @relation(fields: [inventoryItemId], references: [id], onDelete: SetNull)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@unique([spaceId, normalizedName])
+  @@index([spaceId, completedAt])
 }
 
 model InventorySpaceMembership {
@@ -495,6 +518,8 @@ model InventoryItem {
   unitCode                   InventoryUnitCode          @default(ea)
   storageLocation            String
   expiryDate                 DateTime?                  @db.Date
+  openedDate                 DateTime?                  @db.Date
+  openedCheckDate            DateTime?                  @db.Date
   expirySource               ExpirySource
   status                     ItemStatus                 @default(active)
   notes                      String?
@@ -502,11 +527,14 @@ model InventoryItem {
   updatedAt                  DateTime                   @updatedAt
   pushNotificationDeliveries PushNotificationDelivery[]
   dispositionEvent           InventoryDispositionEvent?
+  activities                 InventoryActivity[]
+  shoppingListItems          ShoppingListItem[]
 
   @@index([ownerKey, status])
   @@index([ownerKey, expiryDate])
   @@index([spaceId, status])
   @@index([spaceId, expiryDate])
+  @@index([spaceId, openedCheckDate])
   @@index([productMasterId])
 }
 
@@ -555,6 +583,8 @@ model NotificationPreference {
   remindOnDayOf      Boolean  @default(true)
   quietHoursStart    String   @default("22:00")
   quietHoursEnd      String   @default("07:00")
+  deliveryTime       String   @default("09:00")
+  groupBySpace       Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }
@@ -954,8 +984,12 @@ model PushNotificationDelivery {
   owner            User                           @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
   pushTokenId      String
   pushToken        PushToken                      @relation(fields: [pushTokenId], references: [id], onDelete: Cascade)
-  inventoryItemId  String
-  inventoryItem    InventoryItem                  @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  inventoryItemId  String?
+  inventoryItem    InventoryItem?                 @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  spaceId         String?
+  space           InventorySpace?                @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  /// One digest per owner, device, space and KST calendar day.
+  dedupeKey       String?                         @unique
   reminderDate     DateTime
   daysBefore       Int
   status           PushNotificationDeliveryStatus @default(pending)
@@ -1037,4 +1071,22 @@ model SupportInquiry {
   @@index([userId, createdAt])
   @@index([status, createdAt])
   @@index([category, createdAt])
+}
+
+/// Append-only inventory change history. Actor identity is resolved at read time.
+model InventoryActivity {
+  id              String         @id @default(cuid())
+  spaceId         String
+  space           InventorySpace @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  inventoryItemId String?
+  inventoryItem   InventoryItem? @relation(fields: [inventoryItemId], references: [id], onDelete: SetNull)
+  actorUserId     String?
+  actor           User?          @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  action          String
+  before          Json?
+  after           Json
+  createdAt       DateTime       @default(now())
+
+  @@index([spaceId, createdAt, id])
+  @@index([inventoryItemId, createdAt])
 }

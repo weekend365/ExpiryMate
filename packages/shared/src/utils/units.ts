@@ -90,6 +90,8 @@ export const inventoryItemToFormValues = (
     | "quantityBase"
     | "unitCode"
     | "storageLocation"
+    | "openedDate"
+    | "openedCheckDate"
     | "expiryDate"
     | "expirySource"
     | "notes"
@@ -113,6 +115,8 @@ export const inventoryItemToFormValues = (
     unitCode: item.unitCode,
     storageLocation: item.storageLocation,
     expiryDate: item.expiryDate,
+    openedDate: item.openedDate ?? null,
+    openedCheckDate: item.openedCheckDate ?? null,
     expirySource: item.expirySource,
     notes: item.notes ?? undefined,
   };
@@ -163,10 +167,7 @@ export const resolveCanonicalQuantityUpdate = (params: {
 };
 
 export const formatInventoryQuantity = (
-  item: Pick<
-    InventoryItem,
-    "quantity" | "unit" | "quantityBase" | "unitCode"
-  >,
+  item: Pick<InventoryItem, "quantity" | "unit" | "quantityBase" | "unitCode">,
 ): string => {
   return usesCanonicalQuantity(item)
     ? formatBaseQuantity(item.quantityBase, item.unitCode)

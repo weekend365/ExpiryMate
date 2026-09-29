@@ -43,14 +43,18 @@ export function InventoryCard({
   const dateLabel = item.expiryDate
     ? `${formatDateKoreanCompact(item.expiryDate)}까지`
     : "기한 확인 필요";
-  const accessibilityLabel = `${item.displayName}, ${presentation.ddayLabel}, ${locationLabel}, ${quantityLabel}, ${dateLabel}`;
+  const openedLabel = item.openedDate
+    ? `개봉 ${formatDateKoreanCompact(item.openedDate)}${item.openedCheckDate ? ` · 확인 ${formatDateKoreanCompact(item.openedCheckDate)}${calculateDaysLeftUntilExpiry(item.openedCheckDate) <= 0 ? " · 확인 필요" : ""}` : ""}`
+    : "";
+  const accessibilityLabel = `${item.displayName}, ${presentation.ddayLabel}, ${locationLabel}, ${quantityLabel}, ${dateLabel}, ${openedLabel}`;
 
   return (
     <View
       style={[
         styles.card,
         embedded && styles.cardEmbedded,
-        selected && (embedded ? styles.cardEmbeddedSelected : styles.cardSelected),
+        selected &&
+          (embedded ? styles.cardEmbeddedSelected : styles.cardSelected),
         showDivider && styles.cardDivider,
         shouldStack && styles.cardStacked,
       ]}
@@ -75,10 +79,7 @@ export function InventoryCard({
         ]}
       >
         <View style={styles.copy}>
-          <AppText
-            variant="bodyStrong"
-            style={styles.name}
-          >
+          <AppText variant="bodyStrong" style={styles.name}>
             {item.displayName}
             {item.brand ? (
               <AppText variant="caption" tone="muted">
@@ -91,13 +92,14 @@ export function InventoryCard({
             ddayLabel={presentation.ddayLabel}
             lampColor={presentation.lampColor}
           />
-          <AppText
-            variant="caption"
-            tone="subtext"
-            style={styles.meta}
-          >
+          <AppText variant="caption" tone="subtext" style={styles.meta}>
             {locationLabel} · {quantityLabel} · {dateLabel}
           </AppText>
+          {openedLabel ? (
+            <AppText variant="caption" tone="primary">
+              {openedLabel}
+            </AppText>
+          ) : null}
         </View>
       </Pressable>
 
@@ -143,7 +145,9 @@ export function InventoryCard({
             size={spacing.sm + spacing.xxs}
             strokeWidth={2.4}
           />
-          <AppText variant="bodySmall" tone="primary">사용 기록</AppText>
+          <AppText variant="bodySmall" tone="primary">
+            사용 기록
+          </AppText>
         </Pressable>
       ) : null}
     </View>
@@ -162,10 +166,7 @@ function ExpiryBadge({
       style={[styles.expiryLamp, { backgroundColor: lampColor }]}
       accessibilityLabel={ddayLabel}
     >
-      <AppText
-        variant="caption"
-        style={styles.expiryLampText}
-      >
+      <AppText variant="caption" style={styles.expiryLampText}>
         {ddayLabel}
       </AppText>
     </View>

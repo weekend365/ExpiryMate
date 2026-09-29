@@ -1,4 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
+import {
+  useIsFetching,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { ChevronDown, History, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
@@ -17,6 +21,11 @@ import { Button } from "../../components/Button";
 import { SkeletonBlock } from "../../components/ContentSkeleton";
 import { JangoHeroNoticeCarousel } from "../../components/JangoHeroNoticeCarousel";
 import { Screen } from "../../components/Screen";
+import { Pill } from "../../components/Pill";
+import { SpaceSwitcher } from "../../components/SpaceSwitcher";
+import { ShoppingListPanel } from "../shopping/shopping-list-panel";
+import { useAuth } from "../auth/use-auth";
+import { sessionQueryKeys, withInventorySpace } from "../auth/session-boundary";
 import { AffiliateProductGroupView } from "./affiliate-product-group";
 import { AffiliateDisclosure } from "./affiliate-disclosure";
 import {
@@ -43,7 +52,16 @@ import { colors, radius, spacing, controlSize } from "../../shared/theme";
 
 export function ShoppingScreen() {
   const { activeSpaceId } = useActiveSpace();
-  const shoppingQuery = useAffiliateShopping();
+  const { sessionUserId } = useAuth();
+  const client = useQueryClient();
+  const listKey = withInventorySpace(
+    sessionQueryKeys.shoppingList,
+    sessionUserId,
+    activeSpaceId,
+  );
+  const listFetching = useIsFetching({ queryKey: listKey }) > 0;
+  const [view, setView] = useState<"list" | "products">("list");
+  const shoppingQuery = useAffiliateShopping(view === "products");
   const params = useLocalSearchParams<{
     q?: string | string[];
     items?: string | string[];
@@ -87,18 +105,19 @@ export function ShoppingScreen() {
       );
     },
   });
+  const resetSearch = searchMutation.reset;
 
   useEffect(() => {
-    if (trackedOpened.current === incomingKey) return;
+    if (view !== "products" || trackedOpened.current === incomingKey) return;
     trackedOpened.current = incomingKey;
     void trackMonetizationEvent({
       event: "affiliate_shopping_opened",
       properties: { source: entryContext.source.slice(0, 120) },
     }).catch(() => undefined);
-  }, [entryContext.source, incomingKey]);
+  }, [view, entryContext.source, incomingKey]);
 
   useEffect(() => {
-    if (!entryContext.queries.length || !activeSpaceId) {
+    if (view !== "products" || !entryContext.queries.length || !activeSpaceId) {
       return;
     }
     if (appliedIncomingQuery.current === incomingKey) {
@@ -112,6 +131,7 @@ export function ShoppingScreen() {
       placement: entryContext.placement,
     });
   }, [
+    view,
     activeSpaceId,
     entryContext.placement,
     entryContext.queries,
@@ -138,21 +158,21 @@ export function ShoppingScreen() {
     recentVisibleCount,
   );
   const searchGroups = (searchMutation.data ?? []).flatMap((response) =>
-    response.group && response.group.products.length > 0 ? [response.group] : [],
+    response.group && response.group.products.length > 0
+      ? [response.group]
+      : [],
   );
   const isRefreshingRecent =
     shoppingQuery.isRefetching && !shoppingQuery.isLoading;
   const searchActive = isShoppingSearchActive(searchMutation.status);
-  const canClearSearch =
-    query.length > 0 || searchMutation.status !== "idle";
+  const canClearSearch = query.length > 0 || searchMutation.status !== "idle";
   const canLoadMoreRecent = canLoadMoreRecentShopping(
     recentGroups.length,
     allRecentGroups.length,
   );
   const nextRecentBatchSize =
-    nextRecentShoppingVisibleCount(
-      allRecentGroups.length,
-    ) - recentGroups.length;
+    nextRecentShoppingVisibleCount(allRecentGroups.length) -
+    recentGroups.length;
   const recentResolvedCount = resolveRecentShoppingCount(
     shopping?.recentResolvedCount ?? shopping?.recentConsumedCount,
     allRecentGroups.length,
@@ -161,6 +181,13 @@ export function ShoppingScreen() {
   useEffect(() => {
     setRecentVisibleCount(SHOPPING_RECENT_PAGE_SIZE);
   }, [activeSpaceId, shoppingQuery.dataUpdatedAt]);
+
+  useEffect(() => {
+    setView("list");
+    resetSearch();
+    appliedIncomingQuery.current = null;
+    // A previous space's product search must not remain visible after switching.
+  }, [activeSpaceId, incomingKey, resetSearch]);
 
   const refreshRecentItems = () => {
     setRecentVisibleCount(SHOPPING_RECENT_PAGE_SIZE);
@@ -192,234 +219,279 @@ export function ShoppingScreen() {
       refreshControl={
         <RefreshControl
           tintColor={colors.linkText}
-          refreshing={isRefreshingRecent}
-          onRefresh={refreshRecentItems}
+          refreshing={view === "list" ? listFetching : isRefreshingRecent}
+          onRefresh={
+            view === "list"
+              ? () => {
+                  void client.invalidateQueries({ queryKey: listKey });
+                }
+              : refreshRecentItems
+          }
         />
       }
     >
-      <View style={styles.heroCard}>
-        <JangoHeroNoticeCarousel notices={heroNotices} />
-        <View
-          style={[
-            styles.searchBar,
-            shouldStackDense && styles.searchBarStacked,
-          ]}
-        >
-          <Pressable
-            accessible={false}
-            onPress={() => searchInputRef.current?.focus()}
-            style={[
-              styles.searchField,
-              shouldStackDense && styles.searchFieldStacked,
-            ]}
-          >
-            <Search
-              color={colors.mutedText}
-              size={spacing.sm}
-              strokeWidth={2.4}
-              accessibilityElementsHidden
-              importantForAccessibility="no"
-            />
-            <AppTextInput
-              ref={searchInputRef}
-              testID="affiliate-shopping-search-input"
-              value={query}
-              onChangeText={setQuery}
-              onSubmitEditing={submitSearch}
-              returnKeyType="search"
-              placeholder="예: 대파, 달걀, 밀폐용기"
-              accessibilityLabel="식재료 검색"
-              variant="bodyStrong"
-              scaleRole="chrome"
-              textAlignVertical="center"
-              underlineColorAndroid="transparent"
-              style={styles.searchInput}
-            />
-            {canClearSearch ? (
+      <SpaceSwitcher />
+      <View style={styles.viewTabs}>
+        <Pill
+          label="살 것 목록"
+          selected={view === "list"}
+          onPress={() => setView("list")}
+        />
+        <Pill
+          label="관련 상품"
+          selected={view === "products"}
+          onPress={() => setView("products")}
+        />
+      </View>
+      {view === "list" ? (
+        <ShoppingListPanel
+          key={activeSpaceId}
+          suggestedNames={entryContext.queries}
+          onFindProducts={(name) => {
+            appliedIncomingQuery.current = incomingKey;
+            setQuery(name);
+            setView("products");
+            searchMutation.reset();
+            searchMutation.mutate({
+              queries: [name],
+              placement: "shopping_search",
+            });
+          }}
+        />
+      ) : (
+        <>
+          <View style={styles.heroCard}>
+            <JangoHeroNoticeCarousel notices={heroNotices} />
+            <View
+              style={[
+                styles.searchBar,
+                shouldStackDense && styles.searchBarStacked,
+              ]}
+            >
               <Pressable
-                onPress={clearSearch}
-                accessibilityRole="button"
-                accessibilityLabel="검색 지우기"
-                testID="affiliate-shopping-clear-button"
-                hitSlop={spacing.xs}
-                style={({ pressed }) => [
-                  styles.searchClear,
-                  pressed && styles.searchSubmitPressed,
+                accessible={false}
+                onPress={() => searchInputRef.current?.focus()}
+                style={[
+                  styles.searchField,
+                  shouldStackDense && styles.searchFieldStacked,
                 ]}
               >
-                <X
+                <Search
                   color={colors.mutedText}
                   size={spacing.sm}
                   strokeWidth={2.4}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no"
                 />
+                <AppTextInput
+                  ref={searchInputRef}
+                  testID="affiliate-shopping-search-input"
+                  value={query}
+                  onChangeText={setQuery}
+                  onSubmitEditing={submitSearch}
+                  returnKeyType="search"
+                  placeholder="예: 대파, 달걀, 밀폐용기"
+                  accessibilityLabel="식재료 검색"
+                  variant="bodyStrong"
+                  scaleRole="chrome"
+                  textAlignVertical="center"
+                  underlineColorAndroid="transparent"
+                  style={styles.searchInput}
+                />
+                {canClearSearch ? (
+                  <Pressable
+                    onPress={clearSearch}
+                    accessibilityRole="button"
+                    accessibilityLabel="검색 지우기"
+                    testID="affiliate-shopping-clear-button"
+                    hitSlop={spacing.xs}
+                    style={({ pressed }) => [
+                      styles.searchClear,
+                      pressed && styles.searchSubmitPressed,
+                    ]}
+                  >
+                    <X
+                      color={colors.mutedText}
+                      size={spacing.sm}
+                      strokeWidth={2.4}
+                    />
+                  </Pressable>
+                ) : null}
               </Pressable>
-            ) : null}
-          </Pressable>
-          <Pressable
-            onPress={submitSearch}
-            disabled={!query.trim() || searchMutation.isPending}
-            accessibilityRole="button"
-            accessibilityLabel="검색"
-            accessibilityState={{
-              disabled: !query.trim() || searchMutation.isPending,
-              busy: searchMutation.isPending,
-            }}
-            testID="affiliate-shopping-search-button"
-            hitSlop={spacing.xs}
-            style={({ pressed }) => [
-              styles.searchSubmit,
-              shouldStackDense && styles.searchSubmitStacked,
-              pressed && query.trim() ? styles.searchSubmitPressed : null,
-            ]}
-          >
-            {searchMutation.isPending ? (
-              <ActivityIndicator color={colors.linkText} />
-            ) : (
-              <AppText
-                variant="bodyStrong"
-                tone={query.trim() ? "link" : "muted"}
-                scaleRole="chrome"
-                densityAware={false}
+              <Pressable
+                onPress={submitSearch}
+                disabled={!query.trim() || searchMutation.isPending}
+                accessibilityRole="button"
+                accessibilityLabel="검색"
+                accessibilityState={{
+                  disabled: !query.trim() || searchMutation.isPending,
+                  busy: searchMutation.isPending,
+                }}
+                testID="affiliate-shopping-search-button"
+                hitSlop={spacing.xs}
+                style={({ pressed }) => [
+                  styles.searchSubmit,
+                  shouldStackDense && styles.searchSubmitStacked,
+                  pressed && query.trim() ? styles.searchSubmitPressed : null,
+                ]}
               >
-                검색
-              </AppText>
-            )}
-          </Pressable>
-        </View>
-      </View>
-
-      {searchActive ? (
-        <ShoppingCatalogSection
-          title={searchSectionTitle}
-          count={searchGroups.reduce(
-            (sum, group) => sum + group.products.length,
-            0,
-          )}
-          onBackToRecent={clearSearch}
-          testID="affiliate-shopping-search-results"
-        >
-          {searchMutation.isPending ? (
-            <ShoppingCatalogSkeleton label="상품을 찾아보고 있어요" />
-          ) : searchGroups.length ? (
-            <>
-              {searchGroups.map((group, index) => (
-                <ShoppingIngredientCard
-                  key={`${group.placement}:${group.query}`}
-                  showDivider={index < searchGroups.length - 1}
-                >
-                  <AffiliateProductGroupView headingBand group={group} />
-                </ShoppingIngredientCard>
-              ))}
-            </>
-          ) : searchMutation.isError ? (
-            <View style={styles.empty}>
-              <AppText variant="bodySmall" tone="subtext">
-                상품을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
-              </AppText>
-              <Button variant="secondary" size="small" onPress={submitSearch}>
-                다시 검색
-              </Button>
-            </View>
-          ) : (
-            <View style={styles.empty}>
-              <AppText variant="bodySmall" tone="subtext">
-                일치하는 상품이 없어요. 다른 재료 이름으로 찾아보세요.
-              </AppText>
-              <Button
-                variant="secondary"
-                size="small"
-                onPress={() => searchInputRef.current?.focus()}
-              >
-                검색어 바꾸기
-              </Button>
-            </View>
-          )}
-        </ShoppingCatalogSection>
-      ) : (
-        <ShoppingCatalogSection
-          title="최근 다 쓴 재료"
-          count={
-            !shoppingQuery.isLoading &&
-            !shoppingQuery.isError &&
-            shopping &&
-            shopping.enabled !== false
-              ? recentResolvedCount
-              : undefined
-          }
-          testID="affiliate-shopping-recent"
-        >
-          {shoppingQuery.isLoading ? (
-            <ShoppingCatalogSkeleton label="최근 소비 상품을 불러오고 있어요" />
-          ) : shoppingQuery.isError ? (
-            <View style={styles.empty}>
-              <AppText variant="bodySmall" tone="subtext">
-                불러오지 못했어요.
-              </AppText>
-              <Button variant="secondary" size="small" onPress={refreshRecentItems}>
-                다시 시도
-              </Button>
-            </View>
-          ) : !shopping?.enabled ? (
-            <View style={styles.empty}>
-              <AppText variant="bodySmall" tone="subtext">
-                장보기 기능을 준비하고 있어요.
-              </AppText>
-            </View>
-          ) : recentGroups.length === 0 ? (
-            <View style={styles.empty}>
-              <AppText variant="caption" tone="subtext">
-                아직 없어요. 위 검색창에서 찾아볼 수 있어요.
-              </AppText>
-            </View>
-          ) : (
-            <>
-              {recentGroups.map((group, index) => (
-                <ShoppingIngredientCard
-                  key={`${group.placement}:${group.query}:${group.ingredientName}`}
-                  showDivider={
-                    index < recentGroups.length - 1 || canLoadMoreRecent
-                  }
-                >
-                  <AffiliateProductGroupView headingBand group={group} />
-                </ShoppingIngredientCard>
-              ))}
-              {canLoadMoreRecent ? (
-                <Pressable
-                  onPress={loadMoreRecentItems}
-                  accessibilityRole="button"
-                  accessibilityLabel="더 보기"
-                  accessibilityHint={`최근 다 쓴 재료를 ${nextRecentBatchSize}건 더 보여 줘요.`}
-                  testID="affiliate-shopping-load-more"
-                  style={({ pressed }) => [
-                    styles.loadMore,
-                    pressed && styles.loadMorePressed,
-                  ]}
-                >
+                {searchMutation.isPending ? (
+                  <ActivityIndicator color={colors.linkText} />
+                ) : (
                   <AppText
-                    variant="bodySmall"
-                    tone="subtext"
+                    variant="bodyStrong"
+                    tone={query.trim() ? "link" : "muted"}
                     scaleRole="chrome"
                     densityAware={false}
                   >
-                    더 보기
+                    검색
                   </AppText>
-                  <ChevronDown
-                    color={colors.subtext}
-                    size={spacing.sm}
-                    strokeWidth={2.4}
-                  />
-                </Pressable>
-              ) : null}
-            </>
+                )}
+              </Pressable>
+            </View>
+          </View>
+
+          {searchActive ? (
+            <ShoppingCatalogSection
+              title={searchSectionTitle}
+              count={searchGroups.reduce(
+                (sum, group) => sum + group.products.length,
+                0,
+              )}
+              onBackToRecent={clearSearch}
+              testID="affiliate-shopping-search-results"
+            >
+              {searchMutation.isPending ? (
+                <ShoppingCatalogSkeleton label="상품을 찾아보고 있어요" />
+              ) : searchGroups.length ? (
+                <>
+                  {searchGroups.map((group, index) => (
+                    <ShoppingIngredientCard
+                      key={`${group.placement}:${group.query}`}
+                      showDivider={index < searchGroups.length - 1}
+                    >
+                      <AffiliateProductGroupView headingBand group={group} />
+                    </ShoppingIngredientCard>
+                  ))}
+                </>
+              ) : searchMutation.isError ? (
+                <View style={styles.empty}>
+                  <AppText variant="bodySmall" tone="subtext">
+                    상품을 불러오지 못했어요. 잠시 후 다시 시도해 주세요.
+                  </AppText>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onPress={submitSearch}
+                  >
+                    다시 검색
+                  </Button>
+                </View>
+              ) : (
+                <View style={styles.empty}>
+                  <AppText variant="bodySmall" tone="subtext">
+                    일치하는 상품이 없어요. 다른 재료 이름으로 찾아보세요.
+                  </AppText>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onPress={() => searchInputRef.current?.focus()}
+                  >
+                    검색어 바꾸기
+                  </Button>
+                </View>
+              )}
+            </ShoppingCatalogSection>
+          ) : (
+            <ShoppingCatalogSection
+              title="최근 다 쓴 재료"
+              count={
+                !shoppingQuery.isLoading &&
+                !shoppingQuery.isError &&
+                shopping &&
+                shopping.enabled !== false
+                  ? recentResolvedCount
+                  : undefined
+              }
+              testID="affiliate-shopping-recent"
+            >
+              {shoppingQuery.isLoading ? (
+                <ShoppingCatalogSkeleton label="최근 소비 상품을 불러오고 있어요" />
+              ) : shoppingQuery.isError ? (
+                <View style={styles.empty}>
+                  <AppText variant="bodySmall" tone="subtext">
+                    불러오지 못했어요.
+                  </AppText>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onPress={refreshRecentItems}
+                  >
+                    다시 시도
+                  </Button>
+                </View>
+              ) : !shopping?.enabled ? (
+                <View style={styles.empty}>
+                  <AppText variant="bodySmall" tone="subtext">
+                    장보기 기능을 준비하고 있어요.
+                  </AppText>
+                </View>
+              ) : recentGroups.length === 0 ? (
+                <View style={styles.empty}>
+                  <AppText variant="caption" tone="subtext">
+                    아직 없어요. 위 검색창에서 찾아볼 수 있어요.
+                  </AppText>
+                </View>
+              ) : (
+                <>
+                  {recentGroups.map((group, index) => (
+                    <ShoppingIngredientCard
+                      key={`${group.placement}:${group.query}:${group.ingredientName}`}
+                      showDivider={
+                        index < recentGroups.length - 1 || canLoadMoreRecent
+                      }
+                    >
+                      <AffiliateProductGroupView headingBand group={group} />
+                    </ShoppingIngredientCard>
+                  ))}
+                  {canLoadMoreRecent ? (
+                    <Pressable
+                      onPress={loadMoreRecentItems}
+                      accessibilityRole="button"
+                      accessibilityLabel="더 보기"
+                      accessibilityHint={`최근 다 쓴 재료를 ${nextRecentBatchSize}건 더 보여 줘요.`}
+                      testID="affiliate-shopping-load-more"
+                      style={({ pressed }) => [
+                        styles.loadMore,
+                        pressed && styles.loadMorePressed,
+                      ]}
+                    >
+                      <AppText
+                        variant="bodySmall"
+                        tone="subtext"
+                        scaleRole="chrome"
+                        densityAware={false}
+                      >
+                        더 보기
+                      </AppText>
+                      <ChevronDown
+                        color={colors.subtext}
+                        size={spacing.sm}
+                        strokeWidth={2.4}
+                      />
+                    </Pressable>
+                  ) : null}
+                </>
+              )}
+            </ShoppingCatalogSection>
           )}
-        </ShoppingCatalogSection>
+
+          <AffiliateDisclosure
+            disclosure={shopping?.disclosure}
+            supportingText="상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다."
+          />
+        </>
       )}
-
-      <AffiliateDisclosure
-        disclosure={shopping?.disclosure}
-        supportingText="상품 가격과 배송 정보는 쿠팡에서 변경될 수 있으며, 결제와 배송은 쿠팡에서 처리됩니다."
-      />
-
     </Screen>
   );
 }
@@ -517,7 +589,11 @@ function ShoppingCatalogSkeleton({ label }: { label: string }) {
     <View style={styles.loadingSkeleton} accessibilityLabel={label}>
       <ShoppingIngredientCard showDivider>
         <View style={styles.skeletonRow}>
-          <SkeletonBlock height={spacing.xxl * 2} width={spacing.xxl * 2} radiusToken="md" />
+          <SkeletonBlock
+            height={spacing.xxl * 2}
+            width={spacing.xxl * 2}
+            radiusToken="md"
+          />
           <View style={styles.skeletonCopy}>
             <SkeletonBlock height={spacing.sm} width="88%" />
             <SkeletonBlock height={spacing.sm} width="42%" />
@@ -526,7 +602,11 @@ function ShoppingCatalogSkeleton({ label }: { label: string }) {
       </ShoppingIngredientCard>
       <ShoppingIngredientCard>
         <View style={styles.skeletonRow}>
-          <SkeletonBlock height={spacing.xxl * 2} width={spacing.xxl * 2} radiusToken="md" />
+          <SkeletonBlock
+            height={spacing.xxl * 2}
+            width={spacing.xxl * 2}
+            radiusToken="md"
+          />
           <View style={styles.skeletonCopy}>
             <SkeletonBlock height={spacing.sm} width="76%" />
             <SkeletonBlock height={spacing.sm} width="36%" />
@@ -538,6 +618,7 @@ function ShoppingCatalogSkeleton({ label }: { label: string }) {
 }
 
 const styles = StyleSheet.create({
+  viewTabs: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xs },
   heroCard: {
     backgroundColor: colors.primarySoft,
     borderRadius: radius.xxl,

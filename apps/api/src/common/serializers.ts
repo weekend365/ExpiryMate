@@ -6,6 +6,7 @@ import {
   type ProductMasterCorrection as PrismaProductMasterCorrection,
   type PushToken as PrismaPushToken,
   type UserStorageLocation as PrismaUserStorageLocation,
+  type ShoppingListItem as PrismaShoppingListItem,
 } from "@prisma/client";
 import { createHash } from "node:crypto";
 import {
@@ -24,8 +25,24 @@ import {
   type PushTokenPlatform,
   UnitCode,
   type UserStorageLocation,
+  type ShoppingItem,
   toKstDateOnly,
 } from "@expirymate/shared";
+
+export const serializeShoppingItem = (
+  item: PrismaShoppingListItem,
+): ShoppingItem => ({
+  id: item.id,
+  spaceId: item.spaceId,
+  name: item.name,
+  quantity: item.quantity,
+  unit: item.unit,
+  version: item.version,
+  completedAt: item.completedAt?.toISOString() ?? null,
+  inventoryItemId: item.inventoryItemId,
+  createdAt: item.createdAt.toISOString(),
+  updatedAt: item.updatedAt.toISOString(),
+});
 
 export const serializeProduct = (product: PrismaProduct): Product => ({
   id: product.id,
@@ -115,6 +132,10 @@ export const serializeInventoryItem = (
   unitCode: item.unitCode as UnitCode,
   storageLocation: item.storageLocation,
   expiryDate: item.expiryDate ? toKstDateOnly(item.expiryDate) : null,
+  openedDate: item.openedDate ? toKstDateOnly(item.openedDate) : null,
+  openedCheckDate: item.openedCheckDate
+    ? toKstDateOnly(item.openedCheckDate)
+    : null,
   expirySource: item.expirySource as ExpirySource,
   status: resolveStatus(item),
   notes: item.notes,
@@ -149,6 +170,8 @@ export const serializeNotificationPreference = (
   remindOnDayOf: preference.remindOnDayOf,
   quietHoursStart: preference.quietHoursStart,
   quietHoursEnd: preference.quietHoursEnd,
+  deliveryTime: preference.deliveryTime,
+  groupBySpace: preference.groupBySpace,
   updatedAt: preference.updatedAt.toISOString(),
 });
 

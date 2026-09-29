@@ -195,7 +195,7 @@ export function BottomSheet({
           // Modal sheets don't inherit Android window resize the same way as
           // the root activity — pad on both platforms so footers stay visible.
           behavior="padding"
-          style={styles.keyboardAvoid}
+          style={[styles.keyboardAvoid, { paddingTop: insets.top }]}
           pointerEvents="box-none"
           keyboardVerticalOffset={Platform.OS === "android" ? spacing.xs : 0}
         >
@@ -299,6 +299,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.text,
   },
   sheet: {
+    flexShrink: 1,
     width: "100%",
     backgroundColor: colors.surface,
     borderTopLeftRadius: radius.xxl,
