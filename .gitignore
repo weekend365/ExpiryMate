@@ -18,6 +18,7 @@ apps/mobile/e2e/screenshots/current/
 apps/mobile/e2e/screenshots/diff/
 apps/mobile/e2e/screenshots/baseline/**/*.png
 .env
+/output/jango-approved/
 
 # Reproducible marketing archives, render temporary files, and QA captures.
 /output/marketing/**/*.zip

@@ -1,0 +1,14 @@
+---
+description: 장고 제작 시 MASTER·사전 준비·디자인 검수·최종 채택 절차 적용
+globs: design/jango/**,scripts/*jango*,docs/JANGO_CHARACTER_STYLE_GUIDE.md
+alwaysApply: false
+---
+
+# 장고 디자인 규칙
+
+저장소 AGENTS.md와 design/jango/quality/README.md가 절차의 정본이다.
+장고 생성·수정 전에 jango:prepare를 실행하고 고정 MASTER를 실제 이미지로 첨부한다.
+감정·동작 변경은 형태 규칙 예외가 아니다. 기존 입선·얼굴·장갑 구조를 유지한다.
+기술 검사와 디자인 검사를 분리해서 보고한다. 후보는 최종본이 아니다.
+실패·미검사·재검토 후보를 승인하거나 검수 서명·사용자 승인 기록을 만들어내지 않는다.
+최종 채택·출력은 jango:promote와 jango:export를 통해서만 수행한다.

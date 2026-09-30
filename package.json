@@ -17,7 +17,7 @@
     "lint": "eslint . --max-warnings=0 && node scripts/check-design-system.mjs",
     "design:check": "node scripts/check-design-system.mjs",
     "typecheck": "pnpm db:generate && pnpm --filter @expirymate/shared build && pnpm -r --if-present typecheck",
-    "test": "pnpm -r --if-present test",
+    "test": "pnpm jango:test && pnpm -r --if-present test",
     "validate:env-parity": "node scripts/check-env-parity.mjs",
     "docs:check": "node scripts/check-docs.mjs && node scripts/check-mobile-build-entry.mjs",
     "db:generate": "pnpm --filter @expirymate/api db:generate",
@@ -27,7 +27,13 @@
     "db:seed:barcodes": "pnpm --filter @expirymate/api db:seed:barcodes",
     "db:upload:product-master": "pnpm --filter @expirymate/api db:upload:product-master",
     "docker:up": "docker compose up --build",
-    "docker:down": "docker compose down"
+    "docker:down": "docker compose down",
+    "jango:prepare": "node scripts/jango-design-gate.mjs prepare",
+    "jango:audit": "node scripts/jango-design-gate.mjs audit",
+    "jango:check": "node scripts/jango-design-gate.mjs check",
+    "jango:promote": "node scripts/jango-design-gate.mjs promote",
+    "jango:export": "node scripts/jango-design-gate.mjs export",
+    "jango:test": "node --test scripts/jango-design-gate.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",

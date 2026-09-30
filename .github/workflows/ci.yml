@@ -38,6 +38,11 @@ jobs:
       - name: Documentation
         run: pnpm docs:check
 
+      - name: Jango design records and signed releases
+        run: pnpm jango:check
+        env:
+          JANGO_REVIEW_PUBLIC_KEY: ${{ vars.JANGO_REVIEW_PUBLIC_KEY }}
+
       - name: Lint
         run: pnpm lint
 

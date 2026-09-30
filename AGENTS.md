@@ -52,6 +52,12 @@
   [`docs/mobile-responsive-qa.md`](docs/mobile-responsive-qa.md)를 따른다.
 - 장고 에셋과 mood 사용은 [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](docs/JANGO_CHARACTER_STYLE_GUIDE.md)를
   따른다. 화면에서 캐릭터 PNG를 직접 import하거나 사용자 문구에 구 브랜드명을 노출하지 않는다.
+- 장고 제작·수정은 먼저 [`design/jango/quality/README.md`](design/jango/quality/README.md)의
+  준비 절차를 실행하고 고정 MASTER를 실제 이미지 참조로 첨부한다. 감정·동작 요청을
+  형태 규칙 변경이나 사용자 예외 승인으로 해석하지 않는다. 생성물은 후보로 등록하며
+  기술 검사 통과를 디자인 승인으로 보고하지 않는다. 실패·미검사·재검토 후보는 최종본으로
+  채택하지 않고, 이모티콘 최종 채택·출력은 `jango:promote`·`jango:export`만 사용한다.
+  검수 서명을 에이전트가 생성하거나 검사를 통과시키려고 기준·ROI·신뢰 키를 변경하지 않는다.
 - Admin은 `apps/admin/app`에 route, `apps/admin/src/features`에 feature UI,
   `apps/admin/src/components`에 재사용 UI를 둔다. 기존 CSS variable과 Tailwind 패턴을 따른다.
 

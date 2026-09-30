@@ -1,0 +1,46 @@
+{
+  "version": "v11",
+  "baseVersion": "v10",
+  "changedNumbers": [
+    2
+  ],
+  "fullSet": false,
+  "unchangedNumbersSource": "../v10/",
+  "status": "rejected",
+  "request": "2번 손 위치와 눈썹을 정돈하고 말을 거는 듯한 입으로 수정",
+  "ruleScope": "No user-authorized exception. Previous exception claim was incorrect; filled mouth violates MASTER single-stroke rule.",
+  "method": "Built-in image_gen, two edit passes; deterministic alpha-aware framing and original lettering composition",
+  "sourceSHA256": "282f4c9018d22a2e7a74012ff00a84c709458effe4ebd2324070ff8ae06d2d5f",
+  "file": "stickers/02.png",
+  "sha256": "a8cd1f14410b1ed4fb01c3ae99527c0b56ceb77a826c37d2280951056c2af154",
+  "sourceCrop": [
+    113,
+    62,
+    1009,
+    1325
+  ],
+  "caption": {
+    "fontSize": 48,
+    "rotation": -3,
+    "placement": "top",
+    "bbox": [
+      147,
+      10,
+      257,
+      62
+    ]
+  },
+  "line": "뭐해?",
+  "prompts": [
+    "prompts/02-edit.txt",
+    "prompts/02-refine.txt"
+  ],
+  "checks": {
+    "width": 360,
+    "height": 360,
+    "transparentEdges": true,
+    "captionArtOverlapPixels": 0,
+    "letteringUnchanged": true
+  },
+  "rejectionReason": "말을 거는 느낌을 디자인 예외로 잘못 해석함. 검은 채움 입은 MASTER 단일 U자 선 위반. 사용자 예외 승인 없음."
+}

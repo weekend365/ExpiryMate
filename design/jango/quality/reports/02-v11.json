@@ -1,0 +1,92 @@
+{
+  "id": "02-v11",
+  "binding": "c4e4bbe93015df9618e0923c47fcb45543fc20ff494e789afff4b2eb76b3af71",
+  "candidate": {
+    "id": "02-v11",
+    "directory": "design/jango/emoticons/kakao-32/v11",
+    "source": "design/jango/emoticons/kakao-32/v11/source-originals/02.png",
+    "sticker": "design/jango/emoticons/kakao-32/v11/stickers/02.png",
+    "mouthRoi": [
+      596,
+      743,
+      97,
+      77
+    ],
+    "tiltDegrees": -13,
+    "visibility": "clear",
+    "preflight": null,
+    "disposition": "rejected",
+    "reason": "말을 거는 느낌을 디자인 예외로 잘못 해석함. 검은 채움 입은 MASTER 단일 U자 선 위반. 사용자 예외 승인 없음."
+  },
+  "context": {
+    "rules": "593dd551a732b2b458fbaf0ba89fad16d63fad413fc2392c75871d6d8ea01b0c",
+    "master": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "implementation": "69880b5de528c653f55f5c7aea35282a80fb20b7d88ac5ebc1eb1819137b2631",
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE-v1.md": "c2dc9182a1ea20fd7417a5031478bbb1fdac2f0c458f56c19ec672841a3c8fe9",
+      "design/jango/reference/JANGO-STYLE-GUIDE-v1.md": "6db8f8a8233e2d0f33c206aec7df500c91f048fedde662d7864c97b539512b7e"
+    }
+  },
+  "assets": {
+    "design/jango/emoticons/kakao-32/v11/artwork/02.png": "49483ad8138f24c13c798d9eb4ee70eae52e6d6d2da02b2039c97f705ce427dc",
+    "design/jango/emoticons/kakao-32/v11/characters/02.png": "36e765dab1b86900ddb48f7ba96f60b399ffc48267d3656b2c40d2708799d23a",
+    "design/jango/emoticons/kakao-32/v11/comparison-dark.png": "637fefe548f897b121a3a459edeb80c4e00b08f96cdf3e63416dff534e2b13aa",
+    "design/jango/emoticons/kakao-32/v11/comparison-light.png": "d4eb58ff76f1f57626a2a2fd4d452dfb29bdb77aeac4462573b6159f7394d1b0",
+    "design/jango/emoticons/kakao-32/v11/lettering/02.png": "d685d22d5625125c6264111bed0a609acba06423aff177c6998d3624b0aa7989",
+    "design/jango/emoticons/kakao-32/v11/preview-120.png": "0bb1bbcf901fd43eefa5a253bfda7e42f739000946d8759eb904cc7be0c7fa07",
+    "design/jango/emoticons/kakao-32/v11/production-record.json": "e55fb35279c65556d855cf787eedfa536f1c99f080e56864eb25b386669c8264",
+    "design/jango/emoticons/kakao-32/v11/prompts/02-edit.txt": "3bf56bf1ba9cb14f2a24ed064385b008788f30a502a79a7389a565839b7242e2",
+    "design/jango/emoticons/kakao-32/v11/prompts/02-refine.txt": "5021c1ffaf15de14ee97863bd2cf9e00ad34207a138aa3174f6343fd1904d48e",
+    "design/jango/emoticons/kakao-32/v11/source-originals/02.png": "282f4c9018d22a2e7a74012ff00a84c709458effe4ebd2324070ff8ae06d2d5f",
+    "design/jango/emoticons/kakao-32/v11/stickers/02.png": "a8cd1f14410b1ed4fb01c3ae99527c0b56ceb77a826c37d2280951056c2af154"
+  },
+  "preflight": null,
+  "mouth": {
+    "status": "fail",
+    "samples": [
+      {
+        "threshold": 65,
+        "pixels": 2301,
+        "components": 1,
+        "fill": 0.6895415043452202,
+        "holes": 0,
+        "touchesEdge": false,
+        "referenceFill": 0.3917748917748918,
+        "status": "fail",
+        "reason": "filled-mouth"
+      },
+      {
+        "threshold": 100,
+        "pixels": 2337,
+        "components": 1,
+        "fill": 0.6906028368794326,
+        "holes": 0,
+        "touchesEdge": false,
+        "referenceFill": 0.4090909090909091,
+        "status": "fail",
+        "reason": "filled-mouth"
+      },
+      {
+        "threshold": 135,
+        "pixels": 2372,
+        "components": 1,
+        "fill": 0.6863425925925926,
+        "holes": 0,
+        "touchesEdge": false,
+        "referenceFill": 0.4126663977410246,
+        "status": "fail",
+        "reason": "filled-mouth"
+      }
+    ]
+  },
+  "technical": {
+    "status": "pass",
+    "visible": true,
+    "transparentEdge": true,
+    "width": 360,
+    "height": 360
+  },
+  "preparation": "missing",
+  "designStatus": "fail",
+  "note": "Automatic mouth pass is not full design approval. Signed visual review is required."
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "master": {
+    "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+    "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "mouthRoi": [
+      473,
+      519,
+      83,
+      51
+    ]
+  },
+  "documents": [
+    "design/jango/reference/JANGO-CHARACTER-BIBLE-v1.md",
+    "design/jango/reference/JANGO-STYLE-GUIDE-v1.md"
+  ],
+  "invariants": {
+    "mouth": "MASTER의 끝이 둥근 단일 U자 선. 내부 채움, 닫힌 테두리, 혀, 치아, 입술 금지.",
+    "identity": "싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개. 좌우 반전 금지.",
+    "anatomy": "얼굴 비례·눈 간격은 BIBLE 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개.",
+    "style": "MASTER의 팔레트·선화 유지. 감정은 시선·눈썹·고개·몸짓으로 표현.",
+    "exceptions": "감정·동작 요청을 규칙 예외로 해석하지 않는다. 명시적인 규칙 변경은 정본·검사·외부 검수 정책을 함께 검토한다."
+  },
+  "mouthScreen": {
+    "thresholds": [
+      65,
+      100,
+      135
+    ],
+    "alphaMin": 220,
+    "minPixels": 40,
+    "maxFillRatio": 0.64,
+    "maxFillRelativeToMaster": 1.4,
+    "maxHolePixels": 8,
+    "maxTiltDegrees": 25
+  },
+  "visualChecks": [
+    "masterIdentity",
+    "mouthSingleStroke",
+    "mouthRoiAndPose",
+    "faceAndEyes",
+    "mittensAndConnections",
+    "hatDoorAndPalette",
+    "sourceMatchesSticker",
+    "smallAndDarkPreview"
+  ],
+  "scope": "Automated mouth screen for clear near-frontal U mouths only. Other poses/expressions require a separately reviewed policy; never auto-pass."
+}

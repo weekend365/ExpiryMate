@@ -13,6 +13,10 @@ source_of_truth: true
 [production manifest](../design/jango/manifest.json)를 따른다.
 [이전 가이드](./archive/JANGO_CHARACTER_STYLE_GUIDE_v1.md)는 현재 제작 기준으로 사용하지 않는다.
 
+신규 제작·수정은 [자동 준비·검사·최종 채택 절차](../design/jango/quality/README.md)를 따른다.
+감정이나 동작 변경 요청은 고정 형태 규칙의 예외 승인이 아니다.
+파일 검사, 자동 입 검사, 전체 디자인 검수 결과를 구분하며 미검증 결과를 승인본으로 부르지 않는다.
+
 ## 1. 정체성과 기준 원화
 
 장고는 친절하고 약간 덤벙대는 냉장고 셰프 메이트다. 잔소리보다 챙김을 표현한다.
