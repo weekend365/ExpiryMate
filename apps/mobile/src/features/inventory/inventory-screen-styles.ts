@@ -8,6 +8,12 @@ import {
 } from "../../shared/theme";
 
 export const inventoryScreenStyles = StyleSheet.create({
+  spaceHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+  },
+  spaceSwitcherSlot: { flex: 1, minWidth: 0 },
   filterToolbar: {
     gap: spacing.sm,
     padding: spacing.sm,

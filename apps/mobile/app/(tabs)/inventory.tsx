@@ -42,6 +42,7 @@ import {
 import { getCommittedFullConsumeTarget } from "../../src/features/inventory/deferred-inventory-removal";
 import {
   InventoryFilterToolbar,
+  InventoryMoreMenuButton,
   InventorySelectionBar,
 } from "../../src/features/inventory/inventory-list-header";
 import {
@@ -444,6 +445,13 @@ export default function InventoryScreen() {
     setActionErrorMessage(null);
   };
 
+  const openActivity = () => {
+    router.push({
+      pathname: "/inventory/activity",
+      params: { spaceId: activeSpaceId },
+    });
+  };
+
   const toggleSelectedId = (id: string) => {
     setSelectedIds((current) =>
       current.includes(id)
@@ -625,18 +633,14 @@ export default function InventoryScreen() {
           removeClippedSubviews
           ListHeaderComponent={
             <View style={styles.listHeader}>
-              <SpaceSwitcher onVisibilityChange={setSpaceSwitcherVisible} />
-              <Button
-                variant="surface"
-                onPress={() =>
-                  router.push({
-                    pathname: "/inventory/activity",
-                    params: { spaceId: activeSpaceId },
-                  })
-                }
-              >
-                냉장고 변경 내역
-              </Button>
+              <View style={styles.spaceHeader}>
+                <View style={styles.spaceSwitcherSlot}>
+                  <SpaceSwitcher onVisibilityChange={setSpaceSwitcherVisible} />
+                </View>
+                {!showListChrome || isSelectionMode ? (
+                  <InventoryMoreMenuButton onOpenActivity={openActivity} />
+                ) : null}
+              </View>
               {isLoading && !hasLoadedInventory ? (
                 <View
                   style={[
@@ -663,6 +667,7 @@ export default function InventoryScreen() {
                   onChangeSearchQuery={setSearchQuery}
                   hasSearchQuery={hasSearchQuery}
                   onEnterSelectionMode={() => enterSelectionMode()}
+                  onOpenActivity={openActivity}
                   facetCounts={facetCounts}
                   filter={filter}
                   onToggleExpiryFilter={toggleExpiryFilter}

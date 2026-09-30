@@ -1,12 +1,47 @@
-import { ListChecks, MapPin, RefreshCw, Search, X } from "lucide-react-native";
+import { MoreHorizontal, MapPin, RefreshCw, Search, X } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { Pressable, View } from "react-native";
+import { Alert, Pressable, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
 import { colors, spacing } from "../../shared/theme";
 import type { InventoryFacetCounts, InventoryViewFilter } from "./filters";
 import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
 import { ExpiryTrafficLamp } from "./inventory-urgency-section";
+
+export function InventoryMoreMenuButton({
+  onEnterSelectionMode,
+  onOpenActivity,
+}: {
+  onEnterSelectionMode?: () => void;
+  onOpenActivity: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={() =>
+        Alert.alert("보관함 메뉴", undefined, [
+          { text: "취소", style: "cancel" },
+          ...(onEnterSelectionMode
+            ? [{ text: "다중선택", onPress: onEnterSelectionMode }]
+            : []),
+          { text: "변경 내역 조회", onPress: onOpenActivity },
+        ])
+      }
+      style={({ pressed }) => [
+        styles.moreMenuButton,
+        pressed && styles.headerFilterButtonPressed,
+      ]}
+      accessibilityRole="button"
+      accessibilityLabel="보관함 메뉴"
+      accessibilityHint={
+        onEnterSelectionMode
+          ? "재료 다중선택과 냉장고 변경 내역을 확인할 수 있어요."
+          : "냉장고 변경 내역을 확인할 수 있어요."
+      }
+    >
+      <MoreHorizontal color={colors.subtext} size={spacing.md} strokeWidth={2.4} />
+    </Pressable>
+  );
+}
 
 export function InventoryFilterToolbar({
   heroContent,
@@ -16,6 +51,7 @@ export function InventoryFilterToolbar({
   onChangeSearchQuery,
   hasSearchQuery,
   onEnterSelectionMode,
+  onOpenActivity,
   facetCounts,
   filter,
   onToggleExpiryFilter,
@@ -32,6 +68,7 @@ export function InventoryFilterToolbar({
   onChangeSearchQuery: (value: string) => void;
   hasSearchQuery: boolean;
   onEnterSelectionMode: () => void;
+  onOpenActivity: () => void;
   facetCounts: InventoryFacetCounts;
   filter: InventoryViewFilter;
   onToggleExpiryFilter: (next: Exclude<InventoryViewFilter, "all">) => void;
@@ -88,22 +125,10 @@ export function InventoryFilterToolbar({
               </Pressable>
             ) : null}
           </View>
-          <Pressable
-            onPress={onEnterSelectionMode}
-            style={({ pressed }) => [
-              styles.moreMenuButton,
-              pressed && styles.headerFilterButtonPressed,
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="여러 재료 선택"
-            accessibilityHint="정리할 재료를 골라 한 번에 빼 둘 수 있어요."
-          >
-            <ListChecks
-              color={colors.subtext}
-              size={spacing.md}
-              strokeWidth={2.4}
-            />
-          </Pressable>
+          <InventoryMoreMenuButton
+            onEnterSelectionMode={onEnterSelectionMode}
+            onOpenActivity={onOpenActivity}
+          />
         </View>
 
         <View
