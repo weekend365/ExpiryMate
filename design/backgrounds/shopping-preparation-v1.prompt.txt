@@ -1,0 +1,17 @@
+Tool: built-in image_gen
+Purpose: Shopping tab background source artwork
+References:
+- apps/mobile/assets/backgrounds/home-welcome-bg.png
+- apps/mobile/assets/backgrounds/fridge-interior-bg.png
+- apps/mobile/assets/backgrounds/kitchen-cooking-bg.png
+Output: design/backgrounds/shopping-preparation-v1.png
+
+Final prompt:
+Use case: illustration-story
+Asset type: finished portrait background illustration for the Jango Korean grocery app, not a UI mockup.
+Primary request: Create ONE new "grocery preparation corner" background that looks painted by the same illustrator as the three supplied background images and belongs to the exact same series.
+Input images: Image 1 home-welcome-bg.png, Image 2 fridge-interior-bg.png, Image 3 kitchen-cooking-bg.png are STYLE AND PALETTE REFERENCES, not subjects to reproduce. Match their extremely light warm ivory field, delicate pale beige/sage hand-drawn outlines, subtle paper grain, translucent pastel color, rounded simple shapes, soft contact shadows, and gentle diffuse daylight. Especially follow the kitchen background's calm frontal composition.
+Scene: A quiet little grocery preparation nook in the same cozy home. Warm ivory wall and a low pale wooden preparation counter along the bottom. A simple cream fabric grocery tote hangs from a small hook near the outer left edge. A small empty woven basket sits at the lower left edge. At the lower right is a small pale kraft grocery bag containing only a few softly drawn leafy greens and one carrot. Sparse, practical, cozy.
+Composition: portrait 2:3, ideally 1024x1536. Keep the broad central area and upper middle almost completely empty ivory so live app text, tabs, grocery lists and product cards can be layered over it. Concentrate props in the outermost left/right portions and lower corners, with only a low, unobtrusive counter near the bottom. The bag and basket must not be giant hero objects. No strong horizontal shelf lines through the central reading area. The outer edges softly blend into warm ivory. Preserve ample negative space.
+Style fidelity: Match the supplied backgrounds directly. Thin softly irregular pale outlines, restrained flat washes with very subtle shading, lightly textured paper, low contrast and low saturation throughout. Warm cream dominates; muted mint/sage leaves, pale straw/tan basket, and a tiny washed peach carrot accent. Match apparent line weight and faintness at 1024px width. This is an ambient decorative background for a working app, so keep it as soft and faint as the references.
+Constraints: output only the finished background artwork. No text, letters, prices, labels, logos, watermarks, UI controls, shopping list paper, character or mascot, people, faces, extra kitchen equipment, glossy surfaces, 3D rendering, photography, bold black outlines, saturated colors, dramatic light, or busy ornament. Do not copy the refrigerator or cooking tools from the references.

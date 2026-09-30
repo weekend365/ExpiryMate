@@ -32,7 +32,7 @@ export class ApiError extends Error {
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 export const clientHeaders = {
-  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.4.0",
+  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.4.2",
   "X-Client-Platform": "mobile",
 };
 

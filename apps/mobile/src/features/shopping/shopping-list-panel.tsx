@@ -14,7 +14,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Check, Plus, Square } from "lucide-react-native";
+import { Check, MoreHorizontal, Plus, Square } from "lucide-react-native";
 import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
 import { BottomSheet } from "../../components/BottomSheet";
@@ -99,96 +99,114 @@ export function ShoppingListPanel({
       );
     else start();
   };
-  const renderItem = (item: ShoppingItem) => (
-    <View key={item.id} style={styles.item} testID={`shopping-item-${item.id}`}>
-      <View style={styles.row}>
-        <Pressable
-          onPress={() =>
+  const confirmDelete = (item: ShoppingItem) =>
+    Alert.alert(
+      "목록에서 삭제할까요?",
+      `${item.name}을 장보기 목록에서 지워요. 등록된 재고는 유지돼요.`,
+      [
+        { text: "취소", style: "cancel" },
+        {
+          text: "삭제",
+          style: "destructive",
+          onPress: () =>
             void change({
-              action: "update",
+              action: "delete",
               id: item.id,
-              body: {
-                completed: !item.completedAt,
-                expectedVersion: item.version,
-              },
+              expectedVersion: item.version,
+            }).catch(notifyError),
+        },
+      ],
+    );
+  const showItemMenu = (item: ShoppingItem) =>
+    Alert.alert(`${item.name} 관리`, undefined, [
+      { text: "취소", style: "cancel" },
+      { text: "수정", onPress: () => edit(item) },
+      { text: "삭제", style: "destructive", onPress: () => confirmDelete(item) },
+    ]);
+  const renderItem = (item: ShoppingItem, isLast: boolean) => (
+    <View
+      key={item.id}
+      style={[
+        styles.itemRow,
+        item.completedAt && styles.itemCompleted,
+        !isLast && styles.itemDivider,
+      ]}
+      testID={`shopping-item-${item.id}`}
+    >
+      <Pressable
+        onPress={() =>
+          void change({
+            action: "update",
+            id: item.id,
+            body: {
+              completed: !item.completedAt,
+              expectedVersion: item.version,
+            },
+          })
+            .then(() => {
+              if (!item.completedAt) setShowCompleted(true);
             })
-              .then(() => {
-                if (!item.completedAt) setShowCompleted(true);
-              })
-              .catch(notifyError)
-          }
-          disabled={isPending || Boolean(item.inventoryItemId)}
-          accessibilityRole="checkbox"
-          accessibilityLabel={`${item.name} 구매 완료`}
-          accessibilityState={{
-            checked: Boolean(item.completedAt),
-            disabled: isPending || Boolean(item.inventoryItemId),
-          }}
-          style={styles.check}
-        >
-          {item.completedAt ? (
-            <Check size={spacing.md} color={colors.primaryForeground} />
-          ) : (
-            <Square size={spacing.md} color={colors.subtext} />
-          )}
-        </Pressable>
-        <View style={styles.copy}>
-          <AppText variant="bodyStrong">{item.name}</AppText>
-          <AppText variant="caption" tone="subtext">
-            {item.quantity}
-            {item.unit}
-            {item.inventoryItemId
-              ? " · 보관함 등록 완료"
-              : item.completedAt
-                ? " · 구매 완료"
-                : ""}
+            .catch(notifyError)
+        }
+        disabled={isPending || Boolean(item.inventoryItemId)}
+        accessibilityRole="checkbox"
+        accessibilityLabel={`${item.name} 구매 ${item.completedAt ? "완료 취소" : "완료"}`}
+        accessibilityState={{
+          checked: Boolean(item.completedAt),
+          disabled: isPending || Boolean(item.inventoryItemId),
+        }}
+        style={styles.check}
+      >
+        {item.completedAt ? (
+          <View style={styles.completedCheck}>
+            <Check size={spacing.md} color={colors.actionSuccessForeground} />
+          </View>
+        ) : (
+          <Square size={spacing.md} color={colors.subtext} />
+        )}
+      </Pressable>
+      <Pressable
+        onPress={
+          item.inventoryItemId
+            ? undefined
+            : item.completedAt
+              ? () => register(item)
+              : () => onFindProducts(item.name)
+        }
+        disabled={Boolean(item.inventoryItemId)}
+        accessibilityRole={item.inventoryItemId ? "text" : "button"}
+        accessibilityLabel={`${item.name} ${item.quantity}${item.unit}, ${item.inventoryItemId ? "보관함 등록 완료" : item.completedAt ? "보관함에 등록" : "관련 상품 보기"}`}
+        style={styles.itemDetails}
+      >
+        <View style={styles.nameAndQuantity}>
+          <AppText variant="subheading" style={styles.itemName}>
+            {item.name}
+          </AppText>
+          <AppText variant="bodySmallStrong" tone="subtext">
+            {item.quantity}{item.unit}
           </AppText>
         </View>
-        <Button
-          variant="surface"
-          onPress={() => edit(item)}
-          disabled={isPending}
+        <AppText
+          variant="bodySmall"
+          tone={item.inventoryItemId ? "success" : "link"}
         >
-          수정
-        </Button>
-      </View>
-      <View style={styles.actions}>
-        {item.completedAt && !item.inventoryItemId ? (
-          <Button variant="secondary" onPress={() => register(item)}>
-            보관함에 등록
-          </Button>
-        ) : null}
-        {!item.completedAt ? (
-          <Button variant="surface" onPress={() => onFindProducts(item.name)}>
-            관련 상품 보기
-          </Button>
-        ) : null}
-        <Button
-          variant="surface"
-          disabled={isPending}
-          onPress={() =>
-            Alert.alert(
-              "목록에서 삭제할까요?",
-              `${item.name}을 장보기 목록에서 지워요. 등록된 재고는 유지돼요.`,
-              [
-                { text: "취소", style: "cancel" },
-                {
-                  text: "삭제",
-                  style: "destructive",
-                  onPress: () =>
-                    void change({
-                      action: "delete",
-                      id: item.id,
-                      expectedVersion: item.version,
-                    }).catch(notifyError),
-                },
-              ],
-            )
-          }
-        >
-          삭제
-        </Button>
-      </View>
+          {item.inventoryItemId
+            ? "보관함 등록 완료"
+            : item.completedAt
+              ? "보관함에 등록 ›"
+              : "관련 상품 보기 ›"}
+        </AppText>
+      </Pressable>
+      <Pressable
+        onPress={() => showItemMenu(item)}
+        disabled={isPending}
+        accessibilityRole="button"
+        accessibilityLabel={`${item.name} 관리`}
+        accessibilityState={{ disabled: isPending }}
+        style={styles.moreButton}
+      >
+        <MoreHorizontal size={spacing.md} color={colors.primaryForeground} />
+      </Pressable>
     </View>
   );
   return (
@@ -207,7 +225,7 @@ export function ShoppingListPanel({
         목록에 추가
       </Button>
       {suggestedNames.length ? (
-        <View style={styles.item}>
+        <View style={styles.suggestionCard}>
           <AppText variant="bodyStrong">이 재료도 담을까요?</AppText>
           <View style={styles.actions}>
             {suggestedNames.map((name) => (
@@ -245,7 +263,13 @@ export function ShoppingListPanel({
           description="다 쓴 재료나 요리에 필요한 재료를 담아 보세요."
         />
       ) : null}
-      {pending.map(renderItem)}
+      {pending.length ? (
+        <View style={styles.list}>
+          {pending.map((item, index) =>
+            renderItem(item, index === pending.length - 1),
+          )}
+        </View>
+      ) : null}
       {completed.length ? (
         <>
           <Button
@@ -254,7 +278,13 @@ export function ShoppingListPanel({
           >
             구매 완료 {completed.length}개 {showCompleted ? "접기" : "보기"}
           </Button>
-          {showCompleted ? completed.map(renderItem) : null}
+          {showCompleted ? (
+            <View style={styles.list}>
+              {completed.map((item, index) =>
+                renderItem(item, index === completed.length - 1),
+              )}
+            </View>
+          ) : null}
         </>
       ) : null}
       <BottomSheet
@@ -317,15 +347,61 @@ export function ShoppingListPanel({
 
 const styles = StyleSheet.create({
   root: { gap: spacing.sm },
-  item: {
+  suggestionCard: {
     gap: spacing.xs,
     padding: spacing.sm,
     borderRadius: radius.lg,
     backgroundColor: colors.surface,
   },
-  row: { flexDirection: "row", alignItems: "center", gap: spacing.xs },
+  list: {
+    borderRadius: radius.lg,
+    backgroundColor: colors.surface,
+    overflow: "hidden",
+  },
+  itemRow: {
+    minHeight: controlSize.ctaLarge + spacing.sm,
+    flexDirection: "row",
+    alignItems: "stretch",
+    gap: spacing.xs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
+  },
+  itemCompleted: { backgroundColor: colors.successSoft },
+  itemDivider: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderSubtle,
+  },
   copy: { flex: 1, minWidth: 0, gap: spacing.xxs },
+  itemDetails: {
+    flex: 1,
+    minWidth: 0,
+    minHeight: controlSize.minimum,
+    justifyContent: "center",
+    gap: spacing.xxs,
+  },
+  nameAndQuantity: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    gap: spacing.xs,
+  },
+  itemName: { flexShrink: 1 },
   check: {
+    minHeight: controlSize.minimum,
+    minWidth: controlSize.minimum,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  completedCheck: {
+    width: spacing.lg,
+    height: spacing.lg,
+    borderRadius: radius.pill,
+    backgroundColor: colors.actionSuccessBackground,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  moreButton: {
     minHeight: controlSize.minimum,
     minWidth: controlSize.minimum,
     alignItems: "center",

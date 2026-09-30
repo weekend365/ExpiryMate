@@ -15,6 +15,7 @@ const state = vi.hoisted(() => ({
   items: [] as ShoppingItem[],
   draft: null as null | { displayName: string },
   change: vi.fn(),
+  findProducts: vi.fn(),
   push: vi.fn(),
   alert: vi.fn(),
   setDraft: vi.fn(),
@@ -45,6 +46,7 @@ vi.mock("react-native", () => ({
 vi.mock("expo-router", () => ({ router: { push: state.push } }));
 vi.mock("lucide-react-native", () => ({
   Check: "Check",
+  MoreHorizontal: "MoreHorizontal",
   Plus: "Plus",
   Square: "Square",
 }));
@@ -111,6 +113,7 @@ type Props = {
   onPress?: () => unknown;
   onChange?: (value: string) => unknown;
   accessibilityRole?: string;
+  accessibilityLabel?: string;
   label?: string;
   visible?: boolean;
   footer?: ReactNode;
@@ -131,14 +134,19 @@ function text(tree: ReactNode): string {
 }
 function press(tree: ReactNode, label: string) {
   const button = nodes(tree).find(
-    (node) => node.props.onPress && text(node) === label,
+    (node) =>
+      node.props.onPress &&
+      (text(node) === label || node.props.accessibilityLabel === label),
   );
   if (!button) throw Error(`Missing ${label}`);
   return button.props.onPress!();
 }
 function render() {
   state.index = 0;
-  return ShoppingListPanel({ suggestedNames: [], onFindProducts: vi.fn() });
+  return ShoppingListPanel({
+    suggestedNames: [],
+    onFindProducts: state.findProducts,
+  });
 }
 const item: ShoppingItem = {
   id: "shop-1",
@@ -153,6 +161,48 @@ const item: ShoppingItem = {
   updatedAt: "2026-09-29T00:00:00Z",
 };
 describe("shopping and opened controls", () => {
+  it("opens related products from the item details", () => {
+    state.items = [item];
+    press(render(), "우유 2개, 관련 상품 보기");
+    expect(state.findProducts).toHaveBeenCalledWith("우유");
+  });
+  it("moves item editing and deletion into a management menu", async () => {
+    state.items = [item];
+    const tree = render();
+    expect(text(tree)).not.toContain("삭제");
+    const manage = nodes(tree).find(
+      (node) => node.props.accessibilityLabel === "우유 관리",
+    );
+    manage?.props.onPress?.();
+    expect(state.alert).toHaveBeenCalledWith(
+      "우유 관리",
+      undefined,
+      expect.any(Array),
+    );
+    const menu = state.alert.mock.calls[0]?.[2] as {
+      text: string;
+      onPress?: () => void;
+    }[];
+    menu.find((action) => action.text === "수정")?.onPress?.();
+    expect(state.form).toEqual({ name: "우유", quantity: 2, unit: "개" });
+    menu.find((action) => action.text === "삭제")?.onPress?.();
+    expect(state.alert).toHaveBeenLastCalledWith(
+      "목록에서 삭제할까요?",
+      expect.stringContaining("우유"),
+      expect.any(Array),
+    );
+    const confirmation = state.alert.mock.calls[1]?.[2] as {
+      text: string;
+      onPress?: () => void;
+    }[];
+    confirmation.find((action) => action.text === "삭제")?.onPress?.();
+    await Promise.resolve();
+    expect(state.change).toHaveBeenCalledWith({
+      action: "delete",
+      id: "shop-1",
+      expectedVersion: 3,
+    });
+  });
   it("checks purchase completion using the displayed version", async () => {
     state.items = [item];
     const checkbox = nodes(render()).find(
@@ -169,7 +219,7 @@ describe("shopping and opened controls", () => {
   it("prefills inventory registration in the current space after purchase", () => {
     state.items = [{ ...item, completedAt: "2026-09-29T00:00:00Z" }];
     press(render(), "구매 완료 1개 보기");
-    press(render(), "보관함에 등록");
+    press(render(), "우유 2개, 보관함에 등록");
     expect(state.setDraft).toHaveBeenCalledWith("space-a", {
       shoppingListItemId: "shop-1",
       displayName: "우유",
@@ -186,7 +236,7 @@ describe("shopping and opened controls", () => {
     state.draft = { displayName: "작성 중" };
     state.items = [{ ...item, completedAt: "2026-09-29T00:00:00Z" }];
     press(render(), "구매 완료 1개 보기");
-    press(render(), "보관함에 등록");
+    press(render(), "우유 2개, 보관함에 등록");
     expect(state.alert).toHaveBeenCalled();
     expect(state.setDraft).not.toHaveBeenCalled();
     expect(state.push).not.toHaveBeenCalled();
