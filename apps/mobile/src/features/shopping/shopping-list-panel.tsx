@@ -28,6 +28,7 @@ import { useRegistrationStore } from "../../store/registration-store";
 import { registerRoute } from "../registration/registration-return";
 import { useActiveSpace } from "../spaces/space-provider";
 import { useShoppingList } from "./use-shopping-list";
+import { ShoppingHeroCard } from "./shopping-hero-card";
 
 export function ShoppingListPanel({
   suggestedNames,
@@ -211,19 +212,24 @@ export function ShoppingListPanel({
   );
   return (
     <View style={styles.root} testID="shopping-list-panel">
-      <AppText variant="heading">살 것 목록</AppText>
-      <AppText variant="bodySmall" tone="subtext">
-        필요한 재료를 적고 구매한 뒤 체크해 주세요. 같은 냉장고의 구성원과 함께
-        써요.
-      </AppText>
-      <Button
-        icon={Plus}
-        onPress={() => edit("new")}
-        disabled={!ready || isPending}
-        testID="shopping-add-button"
+      <ShoppingHeroCard
+        notices={[
+          {
+            id: "shopping-list-guide",
+            mood: "speak",
+            message: "살 재료를 적어 주세요. 구매한 재료는 체크하면 돼요!",
+          },
+        ]}
       >
-        목록에 추가
-      </Button>
+        <Button
+          icon={Plus}
+          onPress={() => edit("new")}
+          disabled={!ready || isPending}
+          testID="shopping-add-button"
+        >
+          목록에 추가
+        </Button>
+      </ShoppingHeroCard>
       {suggestedNames.length ? (
         <View style={styles.suggestionCard}>
           <AppText variant="bodyStrong">이 재료도 담을까요?</AppText>

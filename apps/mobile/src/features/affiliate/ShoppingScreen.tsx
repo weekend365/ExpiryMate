@@ -22,11 +22,11 @@ import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
 import { Button } from "../../components/Button";
 import { SkeletonBlock } from "../../components/ContentSkeleton";
-import { JangoHeroNoticeCarousel } from "../../components/JangoHeroNoticeCarousel";
 import { Screen } from "../../components/Screen";
 import { Pill } from "../../components/Pill";
 import { SpaceSwitcher } from "../../components/SpaceSwitcher";
 import { ShoppingListPanel } from "../shopping/shopping-list-panel";
+import { ShoppingHeroCard } from "../shopping/shopping-hero-card";
 import { useAuth } from "../auth/use-auth";
 import { sessionQueryKeys, withInventorySpace } from "../auth/session-boundary";
 import { AffiliateProductGroupView } from "./affiliate-product-group";
@@ -295,8 +295,7 @@ export function ShoppingScreen() {
             />
           ) : (
             <>
-              <View style={styles.heroCard}>
-                <JangoHeroNoticeCarousel notices={heroNotices} />
+              <ShoppingHeroCard notices={heroNotices}>
                 <View
                   style={[
                     styles.searchBar,
@@ -384,7 +383,7 @@ export function ShoppingScreen() {
                     )}
                   </Pressable>
                 </View>
-              </View>
+              </ShoppingHeroCard>
 
               {searchActive ? (
                 <ShoppingCatalogSection
@@ -678,14 +677,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxxl + spacing.sm,
   },
   viewTabs: { flexDirection: "row", flexWrap: "wrap", gap: spacing.xs },
-  heroCard: {
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.xxl,
-    borderWidth: 1,
-    borderColor: colors.primarySoft,
-    padding: spacing.sm,
-    gap: spacing.sm,
-  },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",

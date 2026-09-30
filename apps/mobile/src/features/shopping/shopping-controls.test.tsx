@@ -72,6 +72,7 @@ vi.mock("../../components/BottomSheet", () => ({ BottomSheet: "Sheet" }));
 vi.mock("../../components/FormField", () => ({ FormField: "Field" }));
 vi.mock("../../components/Pill", () => ({ Pill: "Pill" }));
 vi.mock("../../components/EmptyState", () => ({ EmptyState: "EmptyState" }));
+vi.mock("./shopping-hero-card", () => ({ ShoppingHeroCard: "ShoppingHeroCard" }));
 vi.mock("../../components/FeedbackBanner", () => ({
   FeedbackBanner: "Banner",
 }));
