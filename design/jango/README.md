@@ -8,6 +8,12 @@ The external folder is read-only reference material, not a build dependency.
 - `generated/`: five built-in image_gen reference edits (empty, worry, speak, point, icon). Exact prompts are in `prompts.json`; no CLI model fallback was used.
 - `manifest.json`: application mood mapping, immutable source hashes, explicit uniform transforms and reviewed output bounds.
 
+On 2026-09-30, the required character-kit resources were imported for continued
+emoticon production. `reference/` now includes the latest BIBLE/style guide mouth
+correction, acting guide and image prompts. The [emoticon workspace](./emoticons/kakao-32/README.md)
+contains the complete v10 snapshot, initial planning documents and a file-level
+import manifest. The application sources and runtime assets remain unchanged.
+
 The kit's original reports apply to its six source files; their numeric claims are not automatically claims about the generated additions.
 Generated additions were visually compared with the kit. Every source remains unchanged; alpha=1 dust in generated files is removed only in deterministic app derivatives.
 

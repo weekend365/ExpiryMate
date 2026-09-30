@@ -1,0 +1,1362 @@
+[
+  {
+    "number": 1,
+    "line": "안녕!",
+    "file": "stickers/01.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 87035,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 52,
+      "rotation": 3,
+      "placement": "top",
+      "bbox": [
+        98.75,
+        10.0,
+        203.25,
+        64.25
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "c1bbb3a998c0570fedfcb7d4422fa6313143151f7604db66c3390dc415337f75",
+    "sha256": "247930b52c4ecc43511c151617bb8807b49a38d6681cc5e9b2f2c75fcaa41f06",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "안녕!",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 2,
+    "line": "뭐해?",
+    "file": "stickers/02.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 87227,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 48,
+      "rotation": -3,
+      "placement": "top",
+      "bbox": [
+        147.0,
+        10.0,
+        257.0,
+        62.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "d8ee38d2c343cee7b3fb2d2cab98070c1af1e7065e9a1c3ba623003fd190e530",
+    "sha256": "4c693c4a2ac4e8de2e1589f4b8024b0bd6dc19b49c0c3c9b0330b5c51f3bdb4f",
+    "revision": "v10 MASTER single-stroke mouth",
+    "status": "refined for review",
+    "editMethod": "Built-in image_gen; coherent pose edit; native alpha; uniform framing and original caption",
+    "change": "2번의 색 채움과 검은 테두리 입을 MASTER의 단일 U자 입선으로 교체",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "뭐해?",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": true
+  },
+  {
+    "number": 3,
+    "line": "잘 자",
+    "file": "stickers/03.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 126575,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 48,
+      "rotation": -2,
+      "placement": "bottom",
+      "bbox": [
+        169.0,
+        301.0,
+        272.75,
+        350.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "163cfd9ea20b38c90b1f5d674020746f57d8128e05c3155970ed1d6316015933",
+    "sha256": "7dabd2014065edb92b1f6909c012f9fd80e2c075ea10ee4a0ea25abe5ece3916",
+    "revision": "v6 coherent pose",
+    "status": "approved 03 adopted unchanged",
+    "editMethod": "approved image copied unchanged",
+    "change": "승인본 그대로 유지",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "잘 자",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 4,
+    "line": "지금 가!",
+    "file": "stickers/04.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 94291,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 52,
+      "rotation": 5,
+      "placement": "top",
+      "bbox": [
+        94.0,
+        10.0,
+        256.25,
+        71.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "08e946a0a0433c20a67fe732dc220b9a42b1adf6136e345429de10ede2bbcb69",
+    "sha256": "51a3d28d63abba89433765a11c18c5139bafa29e007097a17165e6eb476b0272",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "지금 가!",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 5,
+    "line": "좋아!",
+    "file": "stickers/05.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 79305,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 54,
+      "rotation": 4,
+      "placement": "top",
+      "bbox": [
+        84.75,
+        10.0,
+        191.25,
+        67.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "059409de4cd933ef7282c2a3f01c51fc8f045bbd790821f52e09a845c8627ecf",
+    "sha256": "8d310ff8aba7abf505053352ae03064247e5d467d913a1591eacefa0d8d6dc38",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "좋아!",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 6,
+    "line": "고마워",
+    "file": "stickers/06.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 82782,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 46,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        120.5,
+        10.0,
+        239.75,
+        55.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "0889da627fbd7f98ba846b780dc911507952ced4429f629f46fb678e9e23f906",
+    "sha256": "92fca5dffc35be11af120a25946cca405e5c4f6b6eb00e46e561e9ea0aa6accc",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "고마워",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 7,
+    "line": "최고야",
+    "file": "stickers/07.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 90478,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 54,
+      "rotation": 0,
+      "placement": "bottom",
+      "bbox": [
+        110.5,
+        296.25,
+        249.25,
+        350.0
+      ]
+    },
+    "framing": "upper-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "f8f18b561bd62604736ae9052167adbea775e121454f66d51c8064052bbc65e9",
+    "sha256": "ba10ce2eba077dd58ba066d1c51d5556e050dd891cf06d7e42456a507c02c898",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "최고야",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 8,
+    "line": "싫어",
+    "file": "stickers/08.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 79685,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 49,
+      "rotation": -3,
+      "placement": "top",
+      "bbox": [
+        105.5,
+        10.0,
+        188.75,
+        61.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "a6e1c860ce1cba628bd3613d162512e99cc676396cb2e421293c42143e221b16",
+    "sha256": "6e41f3d0b988f120b7a719479de5f3c026f44412bb4b3caeac261392d22bc7fe",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "싫어",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 9,
+    "line": "모르겠어",
+    "file": "stickers/09.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 89343,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 46,
+      "rotation": -2,
+      "placement": "top",
+      "bbox": [
+        113.5,
+        10.0,
+        266.25,
+        58.75
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "84bfe3008e188d2db28dd0192cface30c02d7326608ee427ed35396940d2c42a",
+    "sha256": "db14bb5dcf624a6113ebc2f201167b414983b8281e0c6d1554821c65256b2f77",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "모르겠어",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 10,
+    "line": "",
+    "file": "stickers/10.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 116984,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 12,
+    "caption": null,
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "b72947d786c5a29538b663b0606c4f829abc974043d6c432f4c1f8b7f7094d89",
+    "sha256": "e7f0349a92acfa6eff1692495931f2c5c22a4666566925f50263ae5d19a5c01c",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old collapsed defeated pose with a comically flustered almost-trip while trying to catch ONE falling wooden spoon. Jango lunges diagonally forward with the rigid head/hat and compact torso leaning in the same direction. Both short arms reach forward from beneath the head, the two open pouch mittens are spaced apart ready to catch the spoon in midair just beyond them. One planted foot supports the weight and the other foot lifts behind for balance; torso stays compact, not stretched. The spoon is clearly separate, angled falling downward, with two tiny motion ticks. Eyes retain MASTER oval size and spacing, eyebrows rise unevenly, mouth is a small startled open oval. It should read as a small clumsy mistake, NOT sorrow or hopelessness. No old kneeling/crawling pose, no tears, no duplicate spoon. Full body and spoon visible.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "앗, 놓쳤다",
+    "hasText": false,
+    "changedInV7": true,
+    "previousLine": "망했다",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 11,
+    "line": "삐짐",
+    "file": "stickers/11.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 74327,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 48,
+      "rotation": -4,
+      "placement": "top",
+      "bbox": [
+        185.5,
+        10.0,
+        268.75,
+        60.75
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "27ad3c0739715cbd461cf862fea37ae6a33dc2ec2b379481cc46bbfd573ec076",
+    "sha256": "f3b19579fa45440a6f197baa54379d29d215050c80e5f46c9cd462a5ab1fe0cd",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "삐짐",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 12,
+    "line": "",
+    "file": "stickers/12.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 130066,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 13,
+    "caption": null,
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "d2e309c2c4aa85e3266b88e55829b94bf198d0269dd332349841b5b53819854a",
+    "sha256": "949661a369ad084f9abb96a945f321bb227db9b3f2c25a905def9c690b65403b",
+    "revision": "v8 option 1 selected by user",
+    "status": "revised for review",
+    "editMethod": "Previously generated option 1 adopted unchanged; uniform framing only",
+    "change": "사용자 선택 1안: 하반신 연결을 수정한 최초 결과를 채택. 추가 머리 폭 축소는 적용하지 않음",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "완전 방전",
+    "hasText": false,
+    "changedInV7": true,
+    "previousLine": "지쳤어",
+    "changedInV8": true,
+    "changedInV9": false
+  },
+  {
+    "number": 13,
+    "line": "",
+    "file": "stickers/13.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 96236,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 12,
+    "caption": null,
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "95beb93ac24d735245f3774bf086ade91550b5827eb344fc07e52807b4aca54c",
+    "sha256": "be28ee39036bc0bafb4cdd99cfe2f4fb148c167316116030784e9b69c9347f4c",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old seated crouch with a STANDING inward, emotionally hurt pose. Feet together, toes slightly inward, knees close. Head/hat and chest lower and tilt together gently, shoulders drawn inward while maintaining the same rigid proportions. One short arm raises a pouch mitten just below the mouth as if holding back a sob; the other short arm brings its mitten to firmly grip the LOWER apron hem at the hip, wrinkling only the fabric slightly. Eyes remain standard black ovals with sad inner brows, a tiny trembling mouth mostly visible above the mitten, and at most ONE small tear along one lower cheek. The whole contracted standing body must communicate holding back tears; the tear is secondary. No sitting, no table, no falling pose, no river of tears, no fist pump, no heart. Full body.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "울컥",
+    "hasText": false,
+    "changedInV7": true,
+    "previousLine": "속상해",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 14,
+    "line": "ㅋㅋㅋ",
+    "file": "stickers/14.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 92055,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 54,
+      "rotation": 6,
+      "placement": "top",
+      "bbox": [
+        104.0,
+        10.0,
+        238.0,
+        55.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "132bd7c222442ab0d5166e1ac6112290728a840bfaa16bd0f14558ad6a987ce6",
+    "sha256": "5a5b50ae168e17c85e6e590840e021a01d38ff904fedaaec0abac3ad6c06cfbf",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "ㅋㅋㅋ",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 15,
+    "line": "헉!",
+    "file": "stickers/15.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 79950,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 54,
+      "rotation": -5,
+      "placement": "top",
+      "bbox": [
+        219.5,
+        10.0,
+        282.75,
+        66.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "dd099a1112de62699780d8c2c5ce8899d1c74cb8a2dbe6c1dfb008f3ab6bb936",
+    "sha256": "1248501214dc2e84714f9769acda2755979f3452ef36884b042c48501154f27b",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "헉!",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 16,
+    "line": "잠깐만",
+    "file": "stickers/16.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 89978,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 50,
+      "rotation": 4,
+      "placement": "top",
+      "bbox": [
+        87.0,
+        10.0,
+        221.25,
+        65.75
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "1828863fe935565386c585b480a47ffefa49a3e29db49b9798d5748e85a3ca6b",
+    "sha256": "fdbaea5270e75cb33015a3d06266ffc964231309bbbeaf0857af8e44901a4199",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "잠깐만",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 17,
+    "line": "집중 중",
+    "file": "stickers/17.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 89491,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 46,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        114.0,
+        10.0,
+        246.0,
+        56.25
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "d0c012020e3d3511ee94b63e7c8798361949e39f34127a826f83f705b22ee03d",
+    "sha256": "a43173a76cdd20a579c08e9380339c91c6ebcbb27d4bbcc7691ddb5698e42cd6",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "집중 중",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 18,
+    "line": "휴… 끝났다!",
+    "file": "stickers/18.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 94392,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 46,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        75.25,
+        10.0,
+        284.75,
+        58.25
+      ],
+      "renderedText": "휴... 끝났다!",
+      "ellipsisRendering": "Three Jua period glyphs; no missing-glyph box"
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "71e990a02feda24838d6e4b24d7da53e0fd5db594a77495457c97274f9aa64ca",
+    "sha256": "ab1ce84835b687d1b7cdccd85a676cd7d9562aaec022d12dc5a1c0e5c0634380",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "휴… 끝났다!",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 19,
+    "line": "수고했어",
+    "file": "stickers/19.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 92875,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 48,
+      "rotation": 0,
+      "placement": "bottom",
+      "bbox": [
+        100.5,
+        302.0,
+        259.75,
+        350.0
+      ]
+    },
+    "framing": "upper-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "35a9502d7f1e86bc3df20a0ca15f6aa683cb93ded4936fdb5730c7f4e7fd1b7f",
+    "sha256": "4809ed659a1651f8f8466a6a269059187b8462f73a22188dcdb2700d6a545b4e",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "수고했어",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 20,
+    "line": "힘내!",
+    "file": "stickers/20.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 99832,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 54,
+      "rotation": 3,
+      "placement": "top",
+      "bbox": [
+        108.5,
+        10.0,
+        217.5,
+        66.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "f25f298e51d26548947a1e6f71dba0338aeb2e435b9bad288bb5d12c260af1bd",
+    "sha256": "95657e9ddb45394b057ffc829423df6719a5d9cbdeafe5002040b2129bc64b02",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old mild one-mitten encouragement with an ENERGETIC SMALL CHEERING JUMP. Capture takeoff: both mint shoes visibly lifted, feet spread sideways slightly, knees bent compactly. The compact body springs upward and slightly forward together with the head/hat. Both bent short arms drive clenched pouch mittens OUTWARD and UP beside the lower sides of the head, staying close enough for the short anatomical arms; never reach above the tall hat. The silhouette opens widely and symmetrically. Happy squeezed arc eyes at MASTER eye centers, a clearly open cheering mouth with small pink inner shape, enthusiastic but kind. Two short mint action ticks beside the arms and one small movement tick beneath shoes, no pedestal or floor shadow. The pose should give a friend energy and look vigorous at 120px, not merely stand and smile. No raised index finger, no props, no giant muscles, no long arms. Do NOT render any lettering; the Korean message will be added separately.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "온몸으로 응원",
+    "hasText": true,
+    "changedInV7": true,
+    "previousLine": "힘내!",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 21,
+    "line": "밥 먹었어?",
+    "file": "stickers/21.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 95713,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 48,
+      "rotation": 2,
+      "placement": "top",
+      "bbox": [
+        78.0,
+        10.0,
+        278.25,
+        62.25
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "6e4c031a8e8c6e202b35d067f181e377784620d3ab3a0d08f370f5b52d7fa40f",
+    "sha256": "9c4555f2c9e8e36d71002bfe4fdde60b4b208491665535c741781e64d80bbf44",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "밥 먹었어?",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 22,
+    "line": "배고파",
+    "file": "stickers/22.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 87736,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 48,
+      "rotation": -2,
+      "placement": "top",
+      "bbox": [
+        115.0,
+        10.0,
+        241.25,
+        60.0
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "b8255fedc13077363085228999ef368250fb18b79e54328db40e5b05e0a3a3df",
+    "sha256": "99d7e0bf908c324a4afc56586563105ebac92cc893f4bc1515cea0e66606a5fe",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "배고파",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 23,
+    "line": "",
+    "file": "stickers/23.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 102821,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 12,
+    "caption": null,
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "ae9d83fcfe60ff56fc1e12369ae60ed362853eff156bcfd996f4c605fb833c85",
+    "sha256": "e6783d68d660474b2385f2ec19f73eb656c9d8dec5c7d44bfecccc46aa2ebf8e",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old eating/spoon/plate scene with a NO-PROP eager, tempted reaction usable for food or an exciting invitation. Jango stands in a slight three-quarter angle with the whole connected head/hat/chest leaning forward expectantly, weight on the front of the short shoes. Both compact mittens are gathered just below the chin/lower head edge, elbows tucked close to torso. Keep the front face rigid and the normal MASTER oval eyes alert and focused slightly toward the viewer; eyebrows gently lifted. A small eager open smile with ONE tiny mint saliva drop at ONE corner of the mouth. The droplet must be near the mouth, not tears on cheeks. The forward-leaning body and gathered mittens carry anticipation. No spoon, plate, food, fork, cup, chef tool, belly-holding, seated pose, floating food or stars. No enlarged sparkling eyes, no human tongue hanging out, no exaggerated drool. Full body.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "솔깃 / 군침",
+    "hasText": false,
+    "changedInV7": true,
+    "previousLine": "맛있다",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 24,
+    "line": "보고 싶어",
+    "file": "stickers/24.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 94953,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 46,
+      "rotation": -2,
+      "placement": "top",
+      "bbox": [
+        101.25,
+        10.0,
+        268.75,
+        59.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "d25fa84a624a775102aac3f1f147e3fe9e411ab946cb1c7a1a2195f41f77f88a",
+    "sha256": "e48d9981b88ce087f18572c32736465466c06dc0f6ec575a929f17c45c181314",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "보고 싶어",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 25,
+    "line": "사랑해",
+    "file": "stickers/25.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 80854,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 53,
+      "rotation": 2,
+      "placement": "top",
+      "bbox": [
+        110.75,
+        10.0,
+        247.25,
+        64.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "8061b6dd246c47c99b2168051d282fdf6801d45d5f2b60cc950d89775606dbeb",
+    "sha256": "cde561a8f85676657f6d64896bf05302f93a335900a7428530b1153fee657b58",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "사랑해",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 26,
+    "line": "안아줘",
+    "file": "stickers/26.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 105111,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 52,
+      "rotation": 0,
+      "placement": "bottom",
+      "bbox": [
+        113.0,
+        299.0,
+        247.0,
+        350.0
+      ]
+    },
+    "framing": "upper-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "5ec285bd01e9700862bb656bd7716cd40c07b9feda1681d8e548fdf54117572b",
+    "sha256": "1a62e7a0449dfdb17a768b90068c0ab7fda0a7c9c792f3314ae1638d42ba1586",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "안아줘",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 27,
+    "line": "기다릴게",
+    "file": "stickers/27.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 94062,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 46,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        125.0,
+        10.0,
+        281.25,
+        56.25
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "1abb8c6d40b2dda80f73543ed736093280f049d109a2f5a5c1f7c5017779bfad",
+    "sha256": "3f83d330470a5ee778ba23b7dcc8159fb59d30dc917f1eb6781522b4dcb7614e",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "기다릴게",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 28,
+    "line": "미안해",
+    "file": "stickers/28.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 86997,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 46,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        122.5,
+        10.0,
+        237.5,
+        55.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "1079c01ff9a8decc5ead59af87417b9e83ade790e012f575be761e8e5ae3d743",
+    "sha256": "c5743f1c45d7428a90306877167b590544f5056ab63ec6bc67658cf66b83a4c1",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "미안해",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 29,
+    "line": "괜찮아",
+    "file": "stickers/29.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 96311,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 49,
+      "rotation": 0,
+      "placement": "bottom",
+      "bbox": [
+        115.5,
+        300.0,
+        244.75,
+        350.0
+      ]
+    },
+    "framing": "upper-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "96687721006da4f374a8cc10eec4d8e2c47030fe81c7f354465cc2fd71ae5b49",
+    "sha256": "0b48763ba1a691509f47bd7581e9b34a352696a77e54d9c03c8bad4bb498ce93",
+    "revision": "v6 coherent pose",
+    "status": "refined for review",
+    "editMethod": "built-in image_gen; uniform scale and original caption composition",
+    "change": "머리·몸통·팔다리 연결과 자세 함께 정리",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "괜찮아",
+    "hasText": true,
+    "changedInV7": false,
+    "carriedFrom": "v6",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 30,
+    "line": "응!",
+    "file": "stickers/30.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 79648,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 7,
+    "caption": {
+      "fontSize": 56,
+      "rotation": 0,
+      "placement": "top",
+      "bbox": [
+        148.0,
+        10.0,
+        211.75,
+        63.5
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "c802450fcdc23192a4b4fb6a703c54bbef74eff81b2f8a237d59a561c3ea6ac5",
+    "sha256": "6c1d5b552a77aa9ba5d19f29dedd506cb263a08538ab8659de950c3b71e07103",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old forward fist/stepping promise pose with a small definite AGREEING NOD. Jango is upright with feet planted close, two short arms down and both mitten pouches neatly side by side at the lower apron; no fist raised and no thumb-up. The rigid head/hat and upper chest tilt forward only about 8 to 12 degrees in a small nod, not a deep bow. Standard open black oval eyes, friendly assured small U smile. Two restrained curved mint ticks outside one side of the head indicate a short vertical nod, no duplicate ghost head. Keep a lightly buoyant poised stance; body proportions remain MASTER. This is a concise yes/understood, not gratitude, apology or offering help. No props. Full body. Do NOT render any text; the brief Korean answer will be added separately.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "응, 알겠어",
+    "hasText": true,
+    "changedInV7": true,
+    "previousLine": "내가 할게",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 31,
+    "line": "밥 먹자",
+    "file": "stickers/31.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 90939,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 8,
+    "caption": {
+      "fontSize": 50,
+      "rotation": -2,
+      "placement": "top",
+      "bbox": [
+        108.0,
+        10.0,
+        252.0,
+        62.75
+      ]
+    },
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "661944c2cf7b8a517a4012d65940fb481ccedad5a5454f96da4655e68790be40",
+    "sha256": "83952756c3badf3d961fb4bd2f0a9a606c06dd55c67eda2de7c64c6222c8920a",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old one-handed rice-ball offering with a welcoming invitation to eat a PROPER COOKED MEAL together. Jango takes one small step toward the viewer, connected head/hat and chest inclining forward. BOTH short mitten hands support the underside/edges of ONE white oval plate held horizontally at chest/apron level, distinctly below the mouth. On it is one clearly recognizable plump golden-yellow OMURICE (omelette over rice), warm yellow oval dome, three simple red ketchup stripes across the top. Plate approximately .60 head widths, omurice .43 head widths; hearty and readable at small size. Two restrained steam strokes above food. Hands must contact and support the plate naturally, thumb plus pouch only; do not fuse plate into the apron or head. Open welcoming small smile, bright normal MASTER oval eyes. The delicious meal is offered toward the other person, not eaten by Jango. No rice ball, separate rice bowl, lunchbox, spoon to mouth, extra dishes, table, tiny dessert cube, or elaborate garnish. Full body and whole plate. No lettering; Korean invitation will be added separately.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "같이 먹자",
+    "hasText": true,
+    "changedInV7": true,
+    "previousLine": "먹고 해",
+    "changedInV8": false,
+    "changedInV9": false
+  },
+  {
+    "number": 32,
+    "line": "",
+    "file": "stickers/32.png",
+    "width": 360,
+    "height": 360,
+    "bytes": 101609,
+    "mode": "RGBA",
+    "dpi": [
+      72.009,
+      72.009
+    ],
+    "trueAlpha": true,
+    "minMargin": 12,
+    "caption": null,
+    "framing": "full-body",
+    "letterArtOverlapPixels": 0,
+    "sourceSHA256": "9e4ff1de04b2371f6cb3ef9bbcec4c1bde3b34b1fd1f5c8e3f47d46a380b2584",
+    "sha256": "a3a9782c74d3b26126f4981729daaa64b0d13bafb10a0728a9998c41d02d7ee0",
+    "revision": "v7 acting replacement",
+    "status": "revised for review",
+    "editMethod": "built-in image_gen; native alpha; uniform scale and separate lettering",
+    "change": "Replace the old lunchbox packing pose with an enthusiastic NO-PROP APPLAUSE reaction. Jango stands buoyantly with heels slightly raised, feet close but offset for a small rhythmic bounce. The head/hat tilts gently with the torso, never detached. Both short elbows bend inward and mittens meet in front of the upper apron just below the head: one mitten pouch seen front-on, the other turned slightly edge-on, clearly TWO mittens clapping palm-to-palm rather than a fist or prayer gesture. Short motion ticks outside the hand contact show a clap, no word or SFX. Happy squeezed arc eyes centered as in MASTER, small open celebratory smile. One heel lifted and slight sideways sway make the whole body join the applause. No lunchbox, heart, food, confetti, stars, additional arms or finger shapes. Preserve mitten pouch plus one thumb plus cuff. Full body. It should read as bravo/congratulations/well done without words, distinct from the wide airborne cheer in 20 and clasped happy pose in 05.",
+    "alphaExtrema": [
+      0,
+      255
+    ],
+    "title": "짝짝짝",
+    "hasText": false,
+    "changedInV7": true,
+    "previousLine": "챙겨가",
+    "changedInV8": false,
+    "changedInV9": false
+  }
+]

@@ -3,7 +3,7 @@
   "method": "outer-door-roi-v1",
   "inputSha256": "771c647b83687330c371a79369782294f57a53227d6bdd7e9d2214d212eecaca",
   "implementationSha256": "fcbd135db633316e60d8242abe482edb150bc243383a0e4819dd1832a201be8f",
-  "bibleSha256": "bbf9320a898b350f91eb157b98315fabf7a33a6a02c80bb983a60925db1dff6c",
+  "bibleSha256": "c2dc9182a1ea20fd7417a5031478bbb1fdac2f0c458f56c19ec672841a3c8fe9",
   "poses": [
     {
       "mood": "empty",
