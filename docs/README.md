@@ -33,13 +33,13 @@ source_of_truth: true
 ## 제품·디자인
 
 모바일 화면·사용자 흐름·장고 상호작용 작업 전에는 디자인 시스템을 먼저 확인합니다.
-상시 적용 원칙과 구현 예정인 개편 목표를 그 문서에서 구분합니다. 공통 작업 의무는
+기존 UI/UX 보존 기준과 크레파스 표현의 허용 범위를 그 문서에서 확인합니다. 이전 전체 개편은 철회했으며 자동 재개하지 않습니다. 공통 작업 의무는
 [AGENTS.md](../AGENTS.md), 모바일 파일의 자동 적용 규칙은
 [mobile-app-design.mdc](../.cursor/rules/mobile-app-design.mdc)에서 연결합니다.
 
 | 문서 | 용도 | 담당 | 정본 |
 |---|---|---|---|
-| [디자인 시스템](./design-system.md) | 모바일 크레파스 표현·사용 흐름·장고 상호작용, 공통 토큰·접근성 원칙과 구현 예정 목표 | design-system | Yes |
+| [디자인 시스템](./design-system.md) | 기존 UI/UX 보존·변경 범위·크레파스 표현, 공통 토큰·접근성·검토 기준 | design-system | Yes |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v18 MASTER 32종·앱 파생·캐릭터 사용 규칙 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |

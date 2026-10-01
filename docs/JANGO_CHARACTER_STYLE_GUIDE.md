@@ -12,9 +12,9 @@ source_of_truth: true
 ## 앱 사용
 
 화면의 시각 표현·사용자 흐름·장고 반응은 [디자인 시스템](./design-system.md)이 정본이다.
-작업 전에 해당 원칙을 확인하고 수정하는 범위부터 적용한다. 캐릭터 외형·제작은 위 MASTER·BIBLE·스타일 가이드를 따른다.
+작업 전에 변경 범위·보존 기준을 확인한다. 기존 화면 구도·흐름을 유지하며 캐릭터 그림체 변경을 앱 구조 변경의 근거로 사용하지 않는다. 캐릭터 외형·제작은 위 MASTER·BIBLE·스타일 가이드를 따른다.
 
-화면은 기존 `Mascot`와 `MascotSpeechBubble`을 사용한다. 직접 PNG import는 Mascot 내부로 제한한다. 기존 mood·size API는 유지한다. 공통 `JangoCompanion`과 MASTER 번호 선택 인터페이스는 구현 예정이며 현재 사용을 요구하지 않는다.
+화면은 기존 `Mascot`와 `MascotSpeechBubble`을 사용한다. 직접 PNG import는 Mascot 내부로 제한한다. 기존 mood·size API는 유지한다. `JangoCompanion` 등을 포함한 이전 전체 개편은 철회했으며 자동 도입하지 않는다.
 
 - idle 24, happy 02, worry 17, cooking 23, empty 20, speak 01, think 11, point 14.
 - 앱 기본·아이콘·스플래시·알림 실루엣은 24번에서 파생한다. 문구 없는 원화를 사용한다.

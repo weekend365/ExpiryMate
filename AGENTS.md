@@ -49,9 +49,11 @@
   component를 사용하며 행동·구성 기준은 [`docs/design-system.md`](docs/design-system.md)를
   따른다.
 - 모바일 화면·사용자 흐름·장고 상호작용·공유 디자인 토큰을 작업하기 전에
-  [`docs/design-system.md`](docs/design-system.md)를 먼저 읽는다. 상시 적용 원칙은 수정하는
-  범위부터 지키고, 문서의 구현 예정 목표를 현재 컴포넌트나 검사 계약으로 간주하지 않는다.
-  UI 변경 기록에는 적용 규칙, 변경 전후 화면, 주요 상태와 접근성 확인 결과를 남긴다.
+  [`docs/design-system.md`](docs/design-system.md)의 변경 범위·보존 기준을 먼저 읽는다. 기본값은
+  기존 UI/UX 보존이며 크레파스 요청은 기존 구도의 표현 변경으로 한정한다. 탭·정보 묶음·조작
+  위치·입력 단계 변경은 해당 범위의 명시적 요청이 있을 때만 수행한다. 철회한 전체 개편을
+  자동 재개하지 않는다. 공통 기본값 변경 전 영향 화면을 확인하고 대표 화면 전후 검토 후
+  요청 범위에 적용한다. 변경 기록에는 보존 요소·변경 요소·주요 상태·접근성 확인 결과를 남긴다.
 - 모바일은 큰 글자, safe area, keyboard, 작은 화면, 태블릿을 함께 고려한다. 반응형 기준은
   [`docs/mobile-responsive-qa.md`](docs/mobile-responsive-qa.md)를 따른다.
 - 장고 에셋과 mood 사용은 [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](docs/JANGO_CHARACTER_STYLE_GUIDE.md)를
