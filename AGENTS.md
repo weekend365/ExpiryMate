@@ -48,6 +48,10 @@
   `apps/mobile/src/components`에 둔다. 디자인 값은 `@expirymate/shared` token과 기존 공통
   component를 사용하며 행동·구성 기준은 [`docs/design-system.md`](docs/design-system.md)를
   따른다.
+- 모바일 화면·사용자 흐름·장고 상호작용·공유 디자인 토큰을 작업하기 전에
+  [`docs/design-system.md`](docs/design-system.md)를 먼저 읽는다. 상시 적용 원칙은 수정하는
+  범위부터 지키고, 문서의 구현 예정 목표를 현재 컴포넌트나 검사 계약으로 간주하지 않는다.
+  UI 변경 기록에는 적용 규칙, 변경 전후 화면, 주요 상태와 접근성 확인 결과를 남긴다.
 - 모바일은 큰 글자, safe area, keyboard, 작은 화면, 태블릿을 함께 고려한다. 반응형 기준은
   [`docs/mobile-responsive-qa.md`](docs/mobile-responsive-qa.md)를 따른다.
 - 장고 에셋과 mood 사용은 [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](docs/JANGO_CHARACTER_STYLE_GUIDE.md)를
