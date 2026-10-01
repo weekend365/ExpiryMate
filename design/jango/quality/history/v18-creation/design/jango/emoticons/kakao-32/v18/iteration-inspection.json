@@ -1,0 +1,220 @@
+{
+  "01-v18": {
+    "mouthRoi": [
+      590,
+      633,
+      121,
+      100
+    ],
+    "tiltDegrees": 3,
+    "observation": "규칙 문서 정리 전 시안. 형태 유지 재편집 r2로 교체.",
+    "visibility": "clear"
+  },
+  "08-v18": {
+    "mouthRoi": [
+      590,
+      640,
+      125,
+      100
+    ],
+    "tiltDegrees": -12,
+    "observation": "규칙 문서 정리 전 시안. 최신 준비를 따른 r2로 교체.",
+    "visibility": "clear"
+  },
+  "13-v18": {
+    "mouthRoi": [
+      600,
+      635,
+      130,
+      135
+    ],
+    "tiltDegrees": -3,
+    "observation": "세로로 긴 열린 입 때문에 제외. 초기 준비 기록은 보존.",
+    "visibility": "clear"
+  },
+  "13-v18-r2": {
+    "mouthRoi": [
+      610,
+      640,
+      120,
+      135
+    ],
+    "tiltDegrees": -3,
+    "observation": "세로로 긴 열린 입이 유지되어 제외. r3 국소 편집으로 교체.",
+    "visibility": "clear"
+  },
+  "17-v18": {
+    "mouthRoi": [
+      580,
+      725,
+      105,
+      70
+    ],
+    "tiltDegrees": 8,
+    "observation": "규칙 문서 정리 전 시안. 최신 준비를 따른 r2로 교체.",
+    "visibility": "clear"
+  },
+  "12-v18-r2": {
+    "mouthRoi": [
+      629,
+      641,
+      100,
+      129
+    ],
+    "tiltDegrees": 5,
+    "visibility": "clear",
+    "observation": "세로로 긴 열린 입 때문에 제외; 새 r3에서 낮고 넓은 입으로 편집."
+  },
+  "12-v18-r3": {
+    "mouthRoi": [
+      602,
+      690,
+      140,
+      108
+    ],
+    "faceRoi": [
+      290,
+      390,
+      720,
+      530
+    ],
+    "tiltDegrees": 5,
+    "visibility": "clear",
+    "observation": "입 모양 교정됐으나 원본 하단 alpha 잘림으로 제외. r4 여백 재편집.",
+    "method": "원본 전체와 입 주변을 보고 전체 입과 여백을 지정. 기울기는 실제 눈 중심선 관찰값.",
+    "sourceSHA256": "ae1bfa26edd286b6db5b238cc2cd9368d1e9bfcd38354d75cda3a94fb1a0d659"
+  },
+  "25-v18-r2": {
+    "mouthRoi": [
+      562,
+      644,
+      121,
+      95
+    ],
+    "faceRoi": [
+      275,
+      370,
+      670,
+      520
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "동작·장갑 또는 문자형 기호를 보완한 r3로 교체. 이전 원본 보존.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "945829900b0893d7a26370743d49c28e36a418b598e5b49098e33ab207805503"
+  },
+  "26-v18-r2": {
+    "mouthRoi": [
+      600,
+      631,
+      108,
+      82
+    ],
+    "faceRoi": [
+      295,
+      375,
+      660,
+      470
+    ],
+    "tiltDegrees": -5,
+    "visibility": "clear",
+    "observation": "동작·장갑 또는 문자형 기호를 보완한 r3로 교체. 이전 원본 보존.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "a19663542e9333010b1ad1f0f75b478fa81d71d11bd0d2174203cc5602711167"
+  },
+  "04-v18-r2": {
+    "mouthRoi": [
+      572,
+      629,
+      115,
+      91
+    ],
+    "faceRoi": [
+      290,
+      370,
+      670,
+      500
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "동작·장갑 또는 문자형 기호를 보완한 r3로 교체. 이전 원본 보존.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "d162ecc1268fd19c52fa4c127fa75eaa2c2d5d207272702348ab64909fd45aa3"
+  },
+  "06-v18-r2": {
+    "mouthRoi": [
+      587,
+      638,
+      117,
+      99
+    ],
+    "faceRoi": [
+      285,
+      370,
+      690,
+      510
+    ],
+    "tiltDegrees": -3,
+    "visibility": "clear",
+    "observation": "동작·장갑 또는 문자형 기호를 보완한 r3로 교체. 이전 원본 보존.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "afdc9736118082e5f6fc31e2ace07cd718b6fd2ad75b9d01ce8d37e7e63edbbd"
+  },
+  "11-v18-r2": {
+    "mouthRoi": [
+      588,
+      652,
+      90,
+      45
+    ],
+    "faceRoi": [
+      300,
+      380,
+      650,
+      480
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "중립 입선 두께가 기준을 초과해 r3 국소 편집으로 교체.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "23167d43283dc91f190a5d341d55fdf3b64002ed09dc72b5b15e3a2eec854438"
+  },
+  "28-v18-r2": {
+    "mouthRoi": [
+      635,
+      657,
+      94,
+      56
+    ],
+    "faceRoi": [
+      325,
+      380,
+      685,
+      505
+    ],
+    "tiltDegrees": -10,
+    "visibility": "clear",
+    "observation": "중립 입선 두께가 기준을 초과해 r3 국소 편집으로 교체.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "33a3823e442a86aa8da13582270b3450efa1e66fd8fc2a516b9084d44a5674a4"
+  },
+  "11-v18-r3": {
+    "mouthRoi": [
+      590,
+      664,
+      94,
+      40
+    ],
+    "faceRoi": [
+      280,
+      375,
+      685,
+      510
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "입선 두께 초과가 남아 r4로 교체.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "a555d62edbb23046f781797a60fea54f31f56bbfe0b24f65c58012988a112dbb"
+  }
+}

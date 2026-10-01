@@ -1,0 +1,54 @@
+{
+  "id": "15-v18-r2",
+  "tool": "built-in image_gen",
+  "operation": "individual image edit",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+  "sourceSHA256": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-6f0c809a-2c2d-48e1-bdef-7ebe67d7300a.png",
+  "preflight": "design/jango/quality/jobs/15-v18-r2/preflight.json",
+  "preflightSHA256": "6c5dbe4e1672340dab7bef897a5d7e3da40c8ac18b8cbb54c27309230553927f",
+  "prompt": "design/jango/quality/jobs/15-v18-r2/prompt.txt",
+  "promptSHA256": "eefb76053bc04c04461e007b7c4ab74e98d626ebbf1241eeb848427525989ff0",
+  "actualReferences": [
+    {
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142"
+    },
+    {
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "sha256": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c"
+    },
+    {
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "sha256": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37"
+    }
+  ],
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 15,
+      "imageIndex": 3
+    }
+  ],
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 15
+  },
+  "approval": "candidate; no external signature"
+}

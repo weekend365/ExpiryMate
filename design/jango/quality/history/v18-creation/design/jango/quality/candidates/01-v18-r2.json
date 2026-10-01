@@ -1,0 +1,32 @@
+{
+  "id": "01-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/01.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    594,
+    670,
+    122,
+    100
+  ],
+  "tiltDegrees": 2,
+  "visibility": "clear",
+  "expression": {
+    "family": "반가운 인사",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "한 장갑을 얼굴 옆에서 흔들고 다른 손은 자연스럽게 내린 인사. 작은 노랑 인사 동작선 2개."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 1
+  },
+  "preflight": "design/jango/quality/jobs/01-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/01-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

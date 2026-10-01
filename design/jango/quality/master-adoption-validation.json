@@ -1,0 +1,88 @@
+{
+  "status": "implemented; user-selected-master; external release unsigned",
+  "date": "2026-10-01",
+  "masterSet": "design/jango/master-set.json",
+  "masterSetSHA256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+  "representative": 24,
+  "imageIntegrity": {
+    "criticalOriginalStickerLettering": 96,
+    "allProtectedPNG": 237,
+    "status": "unchanged from pre-transition SHA256 baseline"
+  },
+  "closedCreationHistory": {
+    "files": 173,
+    "status": "original archived bytes verified"
+  },
+  "cleanup": {
+    "manifest": "design/jango/quality/cleanup-master-v18.json",
+    "deletedFiles": 3087,
+    "deletedBytes": 692419189,
+    "rewrittenCanvases": 2,
+    "oldTargetsAbsent": true
+  },
+  "currentMouth": {
+    "pass": 23,
+    "needsReview": [
+      5,
+      12,
+      15,
+      20,
+      21,
+      28,
+      29,
+      31,
+      32
+    ],
+    "fail": 0,
+    "thresholds": "unchanged; new v18 references",
+    "historicalStatuses": "preserved separately"
+  },
+  "checks": {
+    "jangoTest": "20/20 pass",
+    "jangoCheck": "pass; 0 signed releases",
+    "docs": "pass",
+    "lint": "pass",
+    "typecheck": "pass",
+    "fullTests": {
+      "shared": 156,
+      "api": 509,
+      "mobile": 532,
+      "jango": 20,
+      "apiSkipped": 4
+    },
+    "additionalSourceRegression": "5/5 pass, including faint alpha edge preservation",
+    "mascotAudit": "pass; empty/20 mouth remains needs-review",
+    "brandingAudit": "pass including all native density outputs, adaptive circular mask and Android 288dp canvas / 88dp mark",
+    "storeAudit": "pass",
+    "canvasTypecheck": "3 files, 0 errors",
+    "androidDebugBuild": "pass, offline, arm64-v8a, locally installed NDK 28.2.13676358 supplied by CLI only",
+    "canvasRetiredImageScan": "112 embedded images; no deleted original bytes retained"
+  },
+  "visual": {
+    "assetSheets": [
+      "design/jango/app-review-light.png",
+      "design/jango/app-review-dark.png",
+      "design/jango/branding-review.png"
+    ],
+    "androidScreens": [
+      "design/jango/app-review/android-login.png",
+      "design/jango/app-review/android-onboarding.png",
+      "design/jango/app-review/android-splash.png",
+      "design/jango/app-review/android-launcher.png"
+    ],
+    "device": "Pixel 3a API 33 emulator; 720x1280 override; 320dpi; font scale 1.0",
+    "observations": [
+      "8 moods at 52/72/120px preserve hats, mittens, props and complete pose on light/dark backgrounds; very fine texture softens at 52px.",
+      "Login uses 24; onboarding uses 02; both preserve full silhouettes without changing screen logic.",
+      "Android native launch initially clipped the hat/feet; native-only 288dp canvas with centered configured 88dp mark fixes masking. Adaptive foreground also fits central circular safe region.",
+      "Android launcher: representative 24 fully visible inside the circular icon; current store graphics also visually checked."
+    ],
+    "limits": [
+      "iOS native PNG equality audited; iOS simulator not run because local Xcode license is not accepted.",
+      "Authenticated screens were not exercised; auth/API/data logic unchanged.",
+      "Four API integration tests were skipped by the existing suite environment."
+    ]
+  },
+  "deployment": "none",
+  "externalSources": "Downloads, external kit folders and Git history untouched"
+}

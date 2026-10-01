@@ -1,0 +1,18 @@
+{
+  "version": "v18",
+  "method": "32 individual built-in image_gen edits from fixed identity/style masters and numbered user composition board; Gaegu lettering composed separately; unchanged v17 and application assets.",
+  "priorVersionPreserved": "v17",
+  "compositionReference": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+  "numbering": "Replaced by approved board numbering; not index-aligned with v17.",
+  "pilot": [
+    1,
+    8,
+    13,
+    17,
+    23,
+    29,
+    30,
+    32
+  ],
+  "captionPolicy": "Exact 32 approved strings. No paper cards or broad color backdrops."
+}

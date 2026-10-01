@@ -1,0 +1,32 @@
+{
+  "id": "04-v18-r3",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/04.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    570,
+    653,
+    123,
+    98
+  ],
+  "tiltDegrees": 1,
+  "visibility": "clear",
+  "expression": {
+    "family": "감사",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "작은 분홍 빨강 하트를 두 장갑으로 받쳐 상대에게 앞으로 내민다. 하트가 입을 가리지 않게 가슴 아래에 둔다."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 4
+  },
+  "preflight": "design/jango/quality/jobs/04-v18-r3/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/04-v18-r3.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

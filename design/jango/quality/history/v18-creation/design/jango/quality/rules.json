@@ -1,0 +1,153 @@
+{
+  "version": 4,
+  "master": {
+    "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+    "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "mouthRoi": [
+      473,
+      519,
+      83,
+      51
+    ]
+  },
+  "documents": [
+    "design/jango/reference/JANGO-CHARACTER-BIBLE-v2.md",
+    "design/jango/reference/JANGO-STYLE-GUIDE-v2.md"
+  ],
+  "invariants": {
+    "mouth": "입은 사전 지정한 네 모드만 사용: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 MASTER 선 색·두께 유지, 채움·혀 없음. 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지.",
+    "identity": "싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개. 좌우 반전 금지.",
+    "anatomy": "얼굴 비례·눈 간격은 BIBLE 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개.",
+    "style": "jango-idle은 형태·비례 MASTER, speak는 입 전용 보조 정본. 표현은 선택한 styleProfile의 선·채색·질감·팔레트를 따른다. 스타일 방향 참조의 형태 편차나 생성 후보를 새 MASTER로 삼지 않는다.",
+    "exceptions": "감정·동작 요청을 규칙 예외로 해석하지 않는다. 명시적인 규칙 변경은 정본·검사·외부 검수 정책을 함께 검토한다."
+  },
+  "mouthScreen": {
+    "thresholds": [
+      65,
+      100,
+      135
+    ],
+    "alphaMin": 220,
+    "minPixels": 40,
+    "maxFillRatio": 0.64,
+    "maxFillRelativeToMaster": 1.4,
+    "maxHolePixels": 8,
+    "maxTiltDegrees": 25
+  },
+  "visualChecks": [
+    "masterIdentity",
+    "mouthModeAndReference",
+    "mouthRoiAndPose",
+    "faceAndEyes",
+    "mittensAndConnections",
+    "hatDoorAndPalette",
+    "sourceMatchesSticker",
+    "smallAndDarkPreview",
+    "mouthContextNatural",
+    "mouthInteriorAndTongue",
+    "expressionMatchesIntent",
+    "expressionContrast"
+  ],
+  "scope": "Mode-specific conservative screens: existing idle-u and speak-open criteria preserved; neutral-line and sad-arc use stroke topology and curvature. Uncertain geometry requires review; screen pass is never design approval.",
+  "openMouthReference": {
+    "file": "design/jango/reference/mouth/jango-speak-reference.png",
+    "source": "apps/mobile/assets/characters/jango-speak.png",
+    "sha256": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715",
+    "mouthRoi": [
+      470,
+      517,
+      88,
+      66
+    ]
+  },
+  "mouthModes": {
+    "idle-u": "기본·조용한 반응·잠·방전·위로. 내부 채움과 혀 없는 단일 U선.",
+    "speak-open": "소리 내어 인사·말 걸기·웃음·응원·축하·짧은 감탄이 자연스러운 장면. 생성 전 선택 사유 기록 및 speak 참조 필수.",
+    "neutral-line": "거절·토라짐·집중. 끝이 둥근 짧은 수평 단일 입선. 채움·혀·치아 없음. 선택 사유 필수.",
+    "sad-arc": "슬픔·허기·그리움·미안함. 양 끝이 중앙보다 아래로 내려오는 작은 단일 곡선. 채움·혀·치아 없음. 선택 사유 필수."
+  },
+  "openMouthScreen": {
+    "minDarkFraction": 0.4,
+    "maxDarkFraction": 0.88,
+    "minPinkFraction": 0.06,
+    "maxPinkFraction": 0.4,
+    "minPinkCenterY": 0.5,
+    "minPinkCenterX": 0.2,
+    "maxPinkCenterX": 0.8,
+    "minAspectRelative": 0.65,
+    "maxAspectRelative": 1.45,
+    "maxInteriorOtherFraction": 0.08,
+    "minPixels": 40
+  },
+  "lineMouthScreen": {
+    "minCoverage": 0.9,
+    "minThicknessRatio": 0.025,
+    "maxThicknessRatio": 0.2,
+    "maxSlope": 0.5,
+    "maxNeutralCurvature": 0.035,
+    "maxNeutralFlatness": 0.06,
+    "minSadCurvature": 0.05,
+    "maxSadCurvature": 0.28
+  },
+  "defaultStyleProfile": "handdrawn-crayon",
+  "candidateKinds": {
+    "emoticon": "design/jango/emoticons/",
+    "style-reference": "design/jango/style-lab/"
+  },
+  "styleProfiles": {
+    "legacy-clean": {
+      "purpose": "기존 제작 재현·과거 기록 해석용",
+      "documents": [
+        "design/jango/reference/JANGO-CHARACTER-BIBLE-v1.md",
+        "design/jango/reference/JANGO-STYLE-GUIDE-v1.md"
+      ],
+      "instruction": "기존 민트 볼터치와 정리한 선·옅은 명암을 보존한다. 과거 재현용이며 신규 제작 기본 스타일이 아니다.",
+      "visualChecks": []
+    },
+    "handdrawn-crayon": {
+      "purpose": "모든 신규 장고 제작 기본 스타일",
+      "documents": [
+        "design/jango/reference/JANGO-CHARACTER-BIBLE-v2.md",
+        "design/jango/reference/JANGO-STYLE-GUIDE-v2.md"
+      ],
+      "directionReference": {
+        "file": "design/jango/reference/styles/crayon-direction-board.png",
+        "sha256": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e",
+        "panel": "② 손그림 크레파스형",
+        "role": "style-direction-only"
+      },
+      "palette": {
+        "file": "design/jango/reference/styles/crayon-palette.json",
+        "sha256": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9"
+      },
+      "instruction": "사용자가 선택한 jango-crayon-style-master의 선·색·질감을 그대로 따른다. 고정 jango-idle은 형태·비례 전용이다. 최초 방향 보드 ②는 출처 자료다. 별도 구성 보드가 첨부되면 지정한 컷의 동작·소품만 사용하고 형태·그림체는 각 MASTER를 우선한다. 따뜻한 차콜 크레파스 윤곽, 불투명 무광 색면 위 채색 결, 분홍 살구 볼터치. 대표색은 민트 #78BFA5, 볼 #EDAEA1, 외곽 #4A4038, 본체 #FDF8F2이며 MASTER의 실제 질감·색 농담을 임의로 재채색하지 않는다. 눈·입의 연결된 진한 중심과 입 모드 유지. 종이색 입자는 색 변화이며 투명 구멍이 아님. 선택 MASTER의 작은 밝은 색 농담은 보존하되 광택·입체 그라데이션으로 과장하지 않는다. 후광·캐릭터 밖 먼지·종이 배경 금지.",
+      "visualChecks": [
+        "crayonStroke",
+        "matteOpaqueFill",
+        "peachCheeksAndPalette",
+        "textureReadability",
+        "cleanTransparentSilhouette"
+      ],
+      "styleMaster": {
+        "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+        "sha256": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+        "role": "style-master-only"
+      },
+      "selection": {
+        "file": "design/jango/reference/styles/crayon-master-selection.json",
+        "sha256": "86a604e2eb750ee035abf10c26d412eb8dbcce3b220cf44e509af42fd3cb4a66"
+      }
+    }
+  },
+  "attachmentVersion": 2,
+  "compositionReferences": {
+    "kakao32CrayonV18": {
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "sha256": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37",
+      "panels": 32,
+      "rows": 4,
+      "columns": 8,
+      "role": "composition-and-action-only"
+    }
+  }
+}

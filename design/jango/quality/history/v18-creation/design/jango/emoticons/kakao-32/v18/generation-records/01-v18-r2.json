@@ -1,0 +1,67 @@
+{
+  "id": "01-v18-r2",
+  "tool": "built-in image_gen",
+  "operation": "individual image edit",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+  "sourceSHA256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-e0fae71d-785f-47f1-8c8c-616a8a0da809.png",
+  "preflight": "design/jango/quality/jobs/01-v18-r2/preflight.json",
+  "preflightSHA256": "d335730df0f94c9de85ba53e1b1c16302d66c4f832a79d68709f4013913d6e77",
+  "prompt": "design/jango/quality/jobs/01-v18-r2/prompt.txt",
+  "promptSHA256": "2a7cf93c2e32fab16de43e1cbb5f0e9b302712f91f629d5ab17e8f2a1f464c4a",
+  "actualReferences": [
+    {
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142"
+    },
+    {
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "sha256": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01.png",
+      "sha256": "b17beee29ed82cd5f026744d0039435ab13b09e46d9cd8d2d1c5d45b622e52ad"
+    },
+    {
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "sha256": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37"
+    },
+    {
+      "file": "design/jango/reference/mouth/jango-speak-reference.png",
+      "sha256": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715"
+    }
+  ],
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01.png",
+      "imageIndex": 3
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 1,
+      "imageIndex": 4
+    },
+    {
+      "role": "speak-mouth",
+      "file": "design/jango/reference/mouth/jango-speak-reference.png",
+      "imageIndex": 5
+    }
+  ],
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 1
+  },
+  "approval": "candidate; no external signature"
+}

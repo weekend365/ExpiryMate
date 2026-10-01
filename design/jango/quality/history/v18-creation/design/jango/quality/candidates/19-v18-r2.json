@@ -1,0 +1,32 @@
+{
+  "id": "19-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/19.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    574,
+    648,
+    113,
+    75
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "다정한 응원",
+    "intensity": 1,
+    "eyes": "부드러운 기본 타원 눈",
+    "brows": "없음",
+    "pose": "분홍 하트 무늬가 있는 작은 아이보리 컵을 두 장갑으로 받쳐 상대에게 조심스레 건넨다. 하트는 도형이며 글자 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 19
+  },
+  "preflight": "design/jango/quality/jobs/19-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/19-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

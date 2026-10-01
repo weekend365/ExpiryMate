@@ -1,0 +1,32 @@
+{
+  "id": "29-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/29.png",
+  "mouthMode": "neutral-line",
+  "mouthRoi": [
+    495,
+    760,
+    78,
+    65
+  ],
+  "tiltDegrees": -34,
+  "visibility": "clear",
+  "expression": {
+    "family": "피로",
+    "intensity": 1,
+    "eyes": "힘없이 반쯤 감은 검은 눈, 흰자 없음",
+    "brows": "없음",
+    "pose": "장고가 옆으로 약 85도 누워 힘이 빠진 모습. 몸 전체를 한 덩어리로 회전하며 모자·얼굴·앞치마·장갑·두 신발은 완전하게 보인다. 손잡이·파인애플·경첩은 원래 물체에 붙은 위치를 유지한다. 작은 동작선만, 종이 배경·색칠 배경 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 29
+  },
+  "preflight": "design/jango/quality/jobs/29-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/29-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -4,10 +4,7 @@ import path from "node:path";
 import { PNG } from "pngjs";
 import { alphaBounds, assertSamePixels, assertTransparentPadding, charactersDir, expectedMaster, readManifest } from "./sync-mascot-sources.mjs";
 
-// Kit v3 includes rotation and lifted feet. The old warm-white connected region
-// and idle-aligned baseline were not measurements of anatomical face geometry.
-// Reviewed source hashes plus deterministic uniform scaling protect each pose;
-// anatomical landmarks remain a separate, recorded visual/BIBLE review.
+// v18 source hashes and deterministic content fitting protect the selected pose.
 for (const entry of readManifest().poses) {
   const expected = expectedMaster(entry);
   const actual = PNG.sync.read(fs.readFileSync(path.join(charactersDir, `jango-${entry.mood}.png`)));

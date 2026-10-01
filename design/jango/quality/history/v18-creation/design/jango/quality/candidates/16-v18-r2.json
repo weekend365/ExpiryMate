@@ -1,0 +1,32 @@
+{
+  "id": "16-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/16.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    580,
+    649,
+    120,
+    100
+  ],
+  "tiltDegrees": -1,
+  "visibility": "clear",
+  "expression": {
+    "family": "감탄",
+    "intensity": 3,
+    "eyes": "웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "양 장갑을 얼굴 아래 가슴 앞에서 마주 모아 감탄하는 작은 박수. 장갑이 입을 가리지 않는다. 작은 별 하나."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 16
+  },
+  "preflight": "design/jango/quality/jobs/16-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/16-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

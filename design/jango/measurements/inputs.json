@@ -1,437 +1,222 @@
 {
-  "version": 1,
-  "method": "outer-door-roi-v1",
+  "version": 2,
+  "method": "v18-master-observation-v1",
   "poses": [
     {
-      "mood": "empty",
-      "expression": "listless",
-      "source": "generated/empty.png",
-      "sha256": "13e76d3b481f4e1a46d27d6b897818f66c45f5f9c6bb27c5449ff13dcae8eabd",
+      "mood": "idle",
+      "masterNumber": 24,
+      "source": "emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
       "size": [
         1254,
         1254
       ],
-      "uncertaintyPx": 3.673828125,
-      "reviewedAt": "2026-09-29",
-      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
-      "face": {
-        "left": [
-          299,
-          550,
-          335,
-          700
-        ],
-        "right": [
-          905,
-          580,
-          935,
-          690
-        ],
-        "top": [
-          425,
-          372,
-          790,
-          416
-        ],
-        "bottom": [
-          585,
-          849,
-          680,
-          874
-        ]
-      },
-      "features": {
-        "leftEye": {
-          "roi": [
-            462,
-            568,
-            548,
-            674
-          ],
-          "occluded": false
-        },
-        "rightEye": {
-          "roi": [
-            701,
-            581,
-            787,
-            691
-          ],
-          "occluded": false
-        },
-        "mouth": {
-          "roi": [
-            569,
-            638,
-            675,
-            700
-          ],
-          "occluded": false
-        },
-        "leftCheek": {
-          "roi": [
-            409,
-            655,
-            505,
-            720
-          ],
-          "occluded": false
-        },
-        "rightCheek": {
-          "roi": [
-            745,
-            679,
-            840,
-            745
-          ],
-          "occluded": false
-        }
-      }
+      "faceRoi": [
+        280,
+        350,
+        695,
+        525
+      ],
+      "mouthRoi": [
+        598,
+        632,
+        112,
+        82
+      ],
+      "tiltDegrees": -9,
+      "observation": "양손으로 접시를 앞으로 보여줌. 윙크와 U 입."
+    },
+    {
+      "mood": "happy",
+      "masterNumber": 2,
+      "source": "emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "sha256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        285,
+        390,
+        675,
+        475
+      ],
+      "mouthRoi": [
+        574,
+        659,
+        124,
+        104
+      ],
+      "tiltDegrees": 0,
+      "observation": "볼 옆에 올린 양손과 강한 웃는 눈. 정면 반가움."
     },
     {
       "mood": "worry",
-      "expression": "worried",
-      "source": "generated/worry.png",
-      "sha256": "c5a017c9f048914ccb5ab30c87be83ff791b413a2f35c9452d92d59fb35f90c1",
+      "masterNumber": 17,
+      "source": "emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
       "size": [
         1254,
         1254
       ],
-      "uncertaintyPx": 3.673828125,
-      "reviewedAt": "2026-09-29",
-      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
-      "face": {
-        "left": [
-          299,
-          550,
-          335,
-          700
-        ],
-        "right": [
-          905,
-          580,
-          935,
-          690
-        ],
-        "top": [
-          425,
-          372,
-          790,
-          416
-        ],
-        "bottom": [
-          585,
-          849,
-          680,
-          874
-        ]
-      },
-      "features": {
-        "leftEye": {
-          "roi": [
-            462,
-            568,
-            548,
-            674
-          ],
-          "occluded": false
-        },
-        "rightEye": {
-          "roi": [
-            701,
-            581,
-            787,
-            691
-          ],
-          "occluded": false
-        },
-        "mouth": {
-          "roi": [
-            569,
-            638,
-            675,
-            700
-          ],
-          "occluded": false
-        },
-        "leftCheek": {
-          "roi": [
-            409,
-            655,
-            505,
-            720
-          ],
-          "occluded": false
-        },
-        "rightCheek": {
-          "roi": [
-            745,
-            679,
-            840,
-            745
-          ],
-          "occluded": false
-        }
-      }
+      "faceRoi": [
+        295,
+        430,
+        680,
+        495
+      ],
+      "mouthRoi": [
+        581,
+        749,
+        103,
+        60
+      ],
+      "tiltDegrees": 7,
+      "observation": "낮게 모은 양손·걱정 눈썹·처진 입선으로 사과."
+    },
+    {
+      "mood": "cooking",
+      "masterNumber": 23,
+      "source": "emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "sha256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        290,
+        360,
+        655,
+        490
+      ],
+      "mouthRoi": [
+        576,
+        633,
+        117,
+        91
+      ],
+      "tiltDegrees": 0,
+      "observation": "뒤집개와 팬을 각각 잡은 두 장갑. 도구는 입을 가리지 않음."
+    },
+    {
+      "mood": "empty",
+      "masterNumber": 20,
+      "source": "emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "sha256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        280,
+        410,
+        650,
+        475
+      ],
+      "mouthRoi": [
+        565,
+        698,
+        104,
+        63
+      ],
+      "tiltDegrees": 0,
+      "observation": "양손으로 배를 감싸고 sad 입·약한 눈썹·밥 생각 기호로 허기."
     },
     {
       "mood": "speak",
-      "expression": "speaking",
-      "source": "generated/speak.png",
-      "sha256": "bfccbdb69d9f309679d7fd9ac66ed0c6d2e47ecfef7ef8779dde42bab404b760",
+      "masterNumber": 1,
+      "source": "emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
       "size": [
         1254,
         1254
       ],
-      "uncertaintyPx": 3.673828125,
-      "reviewedAt": "2026-09-29",
-      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
-      "face": {
-        "left": [
-          298,
-          550,
-          333,
-          700
-        ],
-        "right": [
-          918,
-          570,
-          948,
-          690
-        ],
-        "top": [
-          430,
-          372,
-          810,
-          412
-        ],
-        "bottom": [
-          585,
-          849,
-          680,
-          874
-        ]
-      },
-      "features": {
-        "leftEye": {
-          "roi": [
-            466,
-            561,
-            556,
-            686
-          ],
-          "occluded": false
-        },
-        "rightEye": {
-          "roi": [
-            708,
-            561,
-            800,
-            686
-          ],
-          "occluded": false
-        },
-        "mouth": {
-          "roi": [
-            576,
-            634,
-            686,
-            710
-          ],
-          "occluded": false
-        },
-        "leftCheek": {
-          "roi": [
-            410,
-            658,
-            511,
-            730
-          ],
-          "occluded": false
-        },
-        "rightCheek": {
-          "roi": [
-            754,
-            658,
-            854,
-            730
-          ],
-          "occluded": false
-        }
-      }
+      "faceRoi": [
+        315,
+        365,
+        680,
+        520
+      ],
+      "mouthRoi": [
+        594,
+        670,
+        122,
+        100
+      ],
+      "tiltDegrees": 2,
+      "observation": "한 장갑 인사와 열린 입. 고정 장식과 낮은 반대 손 보존."
+    },
+    {
+      "mood": "think",
+      "masterNumber": 11,
+      "source": "emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        280,
+        375,
+        685,
+        510
+      ],
+      "mouthRoi": [
+        581,
+        662,
+        100,
+        39
+      ],
+      "tiltDegrees": 0,
+      "observation": "턱의 장갑과 한쪽 눈썹으로 고민. r4에서 수평 중립 입선을 더 가늘게 편집."
     },
     {
       "mood": "point",
-      "expression": "neutral",
-      "source": "generated/point.png",
-      "sha256": "ecce2f8b79bcbe2c6568cac3eab825b4419f6361692994ad9756a9b7d905c985",
+      "masterNumber": 14,
+      "source": "emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "sha256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
       "size": [
         1254,
         1254
       ],
-      "uncertaintyPx": 3.673828125,
-      "reviewedAt": "2026-09-29",
-      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
-      "face": {
-        "left": [
-          298,
-          550,
-          333,
-          700
-        ],
-        "right": [
-          918,
-          570,
-          948,
-          690
-        ],
-        "top": [
-          430,
-          372,
-          810,
-          412
-        ],
-        "bottom": [
-          585,
-          849,
-          680,
-          874
-        ]
-      },
-      "features": {
-        "leftEye": {
-          "roi": [
-            466,
-            561,
-            556,
-            686
-          ],
-          "occluded": false
-        },
-        "rightEye": {
-          "roi": [
-            708,
-            561,
-            800,
-            686
-          ],
-          "occluded": false
-        },
-        "mouth": {
-          "roi": [
-            576,
-            634,
-            686,
-            710
-          ],
-          "occluded": false
-        },
-        "leftCheek": {
-          "roi": [
-            410,
-            658,
-            511,
-            730
-          ],
-          "occluded": false
-        },
-        "rightCheek": {
-          "roi": [
-            754,
-            658,
-            854,
-            730
-          ],
-          "occluded": false
-        }
-      }
+      "faceRoi": [
+        330,
+        375,
+        660,
+        490
+      ],
+      "mouthRoi": [
+        598,
+        653,
+        113,
+        93
+      ],
+      "tiltDegrees": 3,
+      "observation": "장갑의 기존 엄지와 주머니를 들어 전구를 향함. 분리 검지 없이 깨달음을 표시."
     },
     {
       "mood": "icon-crop",
-      "expression": "wink",
-      "winkEye": "rightEye",
-      "source": "generated/icon-crop.png",
-      "sha256": "73e96854683f9c76ea328989a8a19a5a6d6bde4b3437be23848e35f04a178eb7",
+      "masterNumber": 24,
+      "source": "emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
       "size": [
         1254,
         1254
       ],
-      "uncertaintyPx": 3.673828125,
-      "reviewedAt": "2026-09-29",
-      "notes": "Visually selected original-pixel ROIs. Exterior door edge sections exclude handle, hinges, hat and hands; the lower central door edge determines the axis. No eye-derived alignment. Four-sided frontal door approximation, not a perspective reconstruction.",
-      "face": {
-        "left": [
-          234,
-          650,
-          275,
-          790
-        ],
-        "right": [
-          975,
-          650,
-          1010,
-          775
-        ],
-        "top": [
-          480,
-          427,
-          805,
-          475
-        ],
-        "bottom": [
-          580,
-          978,
-          680,
-          1000
-        ]
-      },
-      "features": {
-        "leftEye": {
-          "roi": [
-            431,
-            660,
-            538,
-            805
-          ],
-          "occluded": false
-        },
-        "rightEye": {
-          "roi": [
-            719,
-            700,
-            858,
-            780
-          ],
-          "occluded": false
-        },
-        "mouth": {
-          "roi": [
-            566,
-            746,
-            698,
-            822
-          ],
-          "occluded": false
-        },
-        "leftCheek": {
-          "roi": [
-            376,
-            782,
-            485,
-            850
-          ],
-          "occluded": false
-        },
-        "rightCheek": {
-          "roi": [
-            781,
-            778,
-            893,
-            850
-          ],
-          "occluded": false
-        }
-      }
+      "faceRoi": [
+        280,
+        350,
+        695,
+        525
+      ],
+      "mouthRoi": [
+        598,
+        632,
+        112,
+        82
+      ],
+      "tiltDegrees": -9,
+      "observation": "양손으로 접시를 앞으로 보여줌. 윙크와 U 입."
     }
   ]
 }

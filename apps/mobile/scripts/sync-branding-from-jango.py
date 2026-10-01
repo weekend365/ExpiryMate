@@ -10,7 +10,7 @@ Sources:
   - assets/characters/jango-idle.png
       → notification silhouette
 
-Does NOT overwrite jango-icon-crop.png (hand-authored icon pose).
+Does NOT overwrite jango-icon-crop.png (v18 representative 24 derived pose).
 
 Requires: pip install pillow
 
@@ -21,6 +21,7 @@ Usage (from apps/mobile):
 from __future__ import annotations
 
 import sys
+import io
 import json
 import subprocess
 from pathlib import Path
@@ -55,11 +56,40 @@ TOKENS = json.loads(subprocess.check_output(
      "import {semanticColors} from '@expirymate/shared'; console.log(JSON.stringify(semanticColors))"],
     cwd=ROOT, text=True,
 ))
+CHECK = "--check" in sys.argv
+
+def save_image(image, destination, format=None, **options):
+    buffer = io.BytesIO()
+    image.save(buffer, format or ("WEBP" if destination.suffix == ".webp" else "PNG"), **options)
+    if CHECK:
+        if not destination.exists():
+            raise SystemExit(f"Missing branding derivative: {destination}")
+        with Image.open(destination) as actual, Image.open(io.BytesIO(buffer.getvalue())) as expected:
+            if actual.size != expected.size or actual.convert("RGBA").tobytes() != expected.convert("RGBA").tobytes():
+                raise SystemExit(f"Stale branding derivative: {destination}")
+    else:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(buffer.getvalue())
+
 def rgb(hex_color: str) -> tuple[int, int, int]:
     return tuple(int(hex_color[i:i+2], 16) for i in (1, 3, 5))
 BG_RGB = rgb(TOKENS["background"])
 ICON_BORDER_RGB = rgb(TOKENS["border"])
 SPLASH_LOGICAL_SIZE = 88
+ANDROID_SPLASH_CANVAS_SIZE = 288
+
+def android_splash(splash: Image.Image, scale: float) -> Image.Image:
+    """Match Expo's 288dp Android canvas; retain the configured 88dp launch mark.
+
+    Android 12 masks the canvas. Supplying an 88dp full-bleed drawable makes
+    the OS enlarge and clip the character instead of preserving imageWidth.
+    """
+    size = round(ANDROID_SPLASH_CANVAS_SIZE * scale)
+    content_size = round(SPLASH_LOGICAL_SIZE * scale)
+    output = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    output.alpha_composite(splash.resize((content_size, content_size), Image.Resampling.LANCZOS),
+                           ((size-content_size)//2, (size-content_size)//2))
+    return output
 
 
 def build_splash_app_icon(icon: Image.Image, size: int = 1024) -> Image.Image:
@@ -90,35 +120,6 @@ def build_splash_app_icon(icon: Image.Image, size: int = 1024) -> Image.Image:
     )
     source.alpha_composite(border)
     return source
-
-
-def build_icon_crop_from_idle(idle: Image.Image, size: int = 1024) -> Image.Image:
-    """Deterministic bust crop from idle master — no AI redraw drift."""
-    bbox = idle.getbbox()
-    if not bbox:
-        raise SystemExit(f"{IDLE} has no opaque pixels")
-    content = idle.crop(bbox)
-    cw, ch = content.size
-    slice_img = content.crop((0, 0, cw, min(ch, int(ch * 0.70))))
-    sw, sh = slice_img.size
-    side = max(sw, sh)
-    pad = int(side * 0.06)
-    canvas_side = side + pad * 2
-    canvas = Image.new("RGBA", (canvas_side, canvas_side), (0, 0, 0, 0))
-    x = (canvas_side - sw) // 2
-    y = max(pad // 2, (canvas_side - sh) // 2 - int(canvas_side * 0.02))
-    canvas.alpha_composite(slice_img, (x, y))
-    final = canvas.resize((size, size), Image.Resampling.LANCZOS)
-    pixels = final.load()
-    w, h = final.size
-    for yy in range(h):
-        for xx in range(w):
-            r, g, b, a = pixels[xx, yy]
-            if a < 16:
-                pixels[xx, yy] = (r, g, b, 0)
-            elif a > 240:
-                pixels[xx, yy] = (r, g, b, 255)
-    return final
 
 
 def fit_on_canvas(
@@ -168,9 +169,9 @@ def simplified_silhouette(
     character: Image.Image,
     master: int = 192,
     final: int = 96,
-    upper_crop_ratio: float = 0.70,
+    upper_crop_ratio: float = 1.0,
 ) -> tuple[Image.Image, Image.Image]:
-    """White notification glyph cropped to Jango's hat and refrigerator head."""
+    """White notification glyph from the entire v18 representative, retaining the plate."""
     bbox = character.getbbox()
     if not bbox:
         raise SystemExit("source has no opaque pixels")
@@ -234,7 +235,7 @@ def main() -> None:
         raise SystemExit(f"missing source: {IDLE}")
     if not CROP.exists():
         raise SystemExit(
-            f"missing icon pose: {CROP} (create wink/thumbs-up icon crop first)"
+            f"missing icon pose: {CROP} (run mascot:sync for v18 representative 24 first)"
         )
 
     idle = Image.open(IDLE).convert("RGBA")
@@ -245,15 +246,16 @@ def main() -> None:
     icon = to_opaque_rgb(
         fit_on_canvas(crop, 1024, scale=0.90, background=(*BG_RGB, 255))
     )
-    icon.save(BRAND / "icon.png", optimize=True)
+    save_image(icon, BRAND / "icon.png", optimize=True)
 
-    adaptive = fit_on_canvas(crop, 1024, scale=0.72, background=None)
+    # Keep the entire pose inside the central Android adaptive-icon safe circle.
+    adaptive = fit_on_canvas(crop, 1024, scale=0.60, background=None)
     adaptive = harden_rgba_alpha(adaptive)
-    adaptive.save(BRAND / "adaptive-icon.png", optimize=True)
+    save_image(adaptive, BRAND / "adaptive-icon.png", optimize=True)
 
     # Android 13+ themed icon: exact adaptive silhouette, tinted by the OS.
     monochrome = to_white_alpha_glyph(adaptive)
-    monochrome.save(BRAND / "monochrome-icon.png", optimize=True)
+    save_image(monochrome, BRAND / "monochrome-icon.png", optimize=True)
 
     if ANDROID_RES.exists():
         for density, dim in ANDROID_MONOCHROME_SIZES.items():
@@ -261,7 +263,7 @@ def main() -> None:
                 ANDROID_RES / f"mipmap-{density}" / "ic_launcher_monochrome.webp"
             )
             destination.parent.mkdir(parents=True, exist_ok=True)
-            monochrome.resize((dim, dim), Image.Resampling.LANCZOS).save(
+            save_image(monochrome.resize((dim, dim), Image.Resampling.LANCZOS),
                 destination,
                 "WEBP",
                 lossless=True,
@@ -270,15 +272,25 @@ def main() -> None:
 
     # Splash: compact rounded derivative of the shipped app icon.
     splash = build_splash_app_icon(icon, 1024)
-    splash.save(BRAND / "splash-icon.png", optimize=True)
+    save_image(splash, BRAND / "splash-icon.png", optimize=True)
 
     # Notification: 192 master → 96
     notif_192, notif_96 = simplified_silhouette(idle, 192, 96)
-    notif_192.save(BRAND / "notification-icon-192.png", optimize=True)
-    notif_96.save(BRAND / "notification-icon.png", optimize=True)
+    save_image(notif_192, BRAND / "notification-icon-192.png", optimize=True)
+    save_image(notif_96, BRAND / "notification-icon.png", optimize=True)
+
+    if ANDROID_RES.exists():
+        for density, scale in {"mdpi": 1, "hdpi": 1.5, "xhdpi": 2, "xxhdpi": 3, "xxxhdpi": 4}.items():
+            mipmap = ANDROID_RES / f"mipmap-{density}"
+            drawable = ANDROID_RES / f"drawable-{density}"
+            for name, art, dim in [("ic_launcher.webp", icon, round(48*scale)), ("ic_launcher_round.webp", splash, round(48*scale)), ("ic_launcher_foreground.webp", adaptive, round(108*scale))]:
+                save_image(art.resize((dim, dim), Image.Resampling.LANCZOS), mipmap/name, "WEBP", lossless=True, method=6)
+            save_image(android_splash(splash, scale), drawable/"splashscreen_logo.png", optimize=True)
+            for name, art, dim in [("notification_icon.png", notif_192, round(24*scale))]:
+                save_image(art.resize((dim, dim), Image.Resampling.LANCZOS), drawable/name, optimize=True)
 
     if APPICON.parent.exists():
-        icon.save(APPICON, optimize=True)
+        save_image(icon, APPICON, optimize=True)
     else:
         print(f"skip AppIcon (missing {APPICON.parent})")
 
@@ -288,13 +300,13 @@ def main() -> None:
             ("image@2x.png", SPLASH_LOGICAL_SIZE * 2),
             ("image@3x.png", SPLASH_LOGICAL_SIZE * 3),
         ]:
-            splash.resize((dim, dim), Image.Resampling.LANCZOS).save(
+            save_image(splash.resize((dim, dim), Image.Resampling.LANCZOS),
                 SPLASH_DIR / name, optimize=True
             )
     else:
         print(f"skip SplashScreenLogo (missing {SPLASH_DIR})")
 
-    print("synced branding from Jango sources + compact splash app icon:")
+    print("verified" if CHECK else "synced", "v18 24 branding and all native derivatives:")
     for path in sorted(BRAND.glob("*.png")):
         im = Image.open(path)
         print(f"  {path.relative_to(ROOT)}  {im.mode} {im.size[0]}x{im.size[1]}")

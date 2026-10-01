@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { PNG } from "pngjs";
-import { assertSamePixels, assertTransparentPadding, deriveMaster, expectedMaster, readManifest } from "./sync-mascot-sources.mjs";
+import { alphaBounds, assertSamePixels, assertTransparentPadding, deriveMaster, expectedMaster, readManifest } from "./sync-mascot-sources.mjs";
 
-describe("mascot v2 source pipeline", () => {
+describe("mascot v18 source pipeline", () => {
+  it("preserves faint visible edges above the documented dust threshold", () => {
+    const png = new PNG({ width: 8, height: 8 });
+    png.data[(4 * 8 + 4) * 4 + 3] = 255;
+    png.data[(2 * 8 + 1) * 4 + 3] = 3;
+    png.data[(1 * 8 + 7) * 4 + 3] = 2;
+    expect(alphaBounds(png)).toEqual([1, 2, 4, 4]);
+  });
   it("keeps all reviewed source files reproducible", () => {
     for (const entry of readManifest().poses) {
       const output = expectedMaster(entry);

@@ -1,29 +1,9 @@
-# Jango production artwork v2
+# 장고 v18 MASTER
 
-Imported from `/Users/namu/Documents/Codex/2026-09-29/JANGO-Character-Kit` on 2026-09-29.
-The external folder is read-only reference material, not a build dependency.
+[32종 MASTER](./master-set.json) · [BIBLE](./reference/JANGO-CHARACTER-BIBLE.md) · [스타일 가이드](./reference/JANGO-STYLE-GUIDE.md) · [검수](./quality/README.md)
 
-- `kit-v3/`: six unmodified 1254px transparent source PNGs and the original kit manifest/report. LOVE remains reference-only.
-- `reference/`: BIBLE and style guide; `bible-master-idle.png` preserves the original app idle used for BIBLE measurements.
-- `generated/`: five built-in image_gen reference edits (empty, worry, speak, point, icon). Exact prompts are in `prompts.json`; no CLI model fallback was used.
-- `manifest.json`: application mood mapping, immutable source hashes, explicit uniform transforms and reviewed output bounds.
+대표는 24번 완성!이다. 신규 제작과 앱은 선택된 v18 원화만 사용한다. [갤러리](./emoticons/kakao-32/v18/index.html)에서 32종을 비교한다. 앱 파생은 manifest.json과 기존 sync/build 명령으로 재현한다.
 
-On 2026-09-30, the required character-kit resources were imported for continued
-emoticon production. `reference/` now includes the latest BIBLE/style guide mouth
-correction, acting guide and image prompts. The [emoticon workspace](./emoticons/kakao-32/README.md)
-contains the complete v10 snapshot, initial planning documents and a file-level
-import manifest. The application sources and runtime assets remain unchanged.
+사용자 MASTER 채택과 외부 서명된 이모티콘 출시는 별도다. 종료된 제작 기록과 삭제 목록은 quality 아래에 보존한다.
 
-The kit's original reports apply to its six source files; their numeric claims are not automatically claims about the generated additions.
-Generated additions were visually compared with the kit. Every source remains unchanged; alpha=1 dust in generated files is removed only in deterministic app derivatives.
-
-Application rules are in [the active character guide](../../docs/JANGO_CHARACTER_STYLE_GUIDE.md).
-Run `mascot:sync` → `mascot:build` → `branding:sync` → `store:sync` after building shared.
-Run their audits before shipping. A source hash mismatch requires reviewing the new source and updating the manifest deliberately; audit never re-approves artwork automatically.
-
-Do not copy the kit's `work/`, ZIPs, redundant HTML or historical previews into the app bundle.
-The old visual rules are retained in [the archived v1 guide](../../docs/archive/JANGO_CHARACTER_STYLE_GUIDE_v1.md).
-
-Additional generated poses now have [numeric anatomy evidence](./measurements/README.md), independent of the kit's original measurements.
-`mascot:measure` records the measurements; `mascot:anatomy:audit` rejects stale evidence and non-passing anatomy.
-The icon has confirmed numeric failures; the other four poses require review. Source hashes and visual provenance are not declarations that every BIBLE measurement passes.
+앱 에셋을 sync/build한 뒤 `pnpm jango:app-review`로 밝고 어두운 배경의 크기별 비교와 브랜딩 비교 화면을 재생성한다(Python Pillow 필요). 실제 기기 화면은 `app-review/`에 별도로 기록한다.

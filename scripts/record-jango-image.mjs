@@ -1,0 +1,24 @@
+// Persist a built-in generation result without changing its bytes or approval state.
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {local,readJson,writeJson,fileHash,sha,policy,contextBinding,canonical,validateInputLineage} from './jango-design-gate.mjs';
+const [id,generatedFile]=process.argv.slice(2),match=/^(\d\d)-(v\d+)(?:-([a-z0-9]+))?$/.exec(id??'');
+assert(match&&Number(match[1])>=1&&Number(match[1])<=32,'Versioned job ID required');
+assert(path.isAbsolute(generatedFile)&&fs.statSync(generatedFile).isFile(),'Generated file required');
+assert(match[2]!=='v18','v18 MASTER is immutable');
+const base='design/jango/emoticons/kakao-32/'+match[2],source=`${base}/source-originals/${match[1]}${match[3]?'-'+match[3]:''}.png`;
+assert(!fs.existsSync(local(source)),'Preserve existing generation; use a new job ID');
+const preflight=`design/jango/quality/jobs/${id}/preflight.json`,p=readJson(preflight);
+assert.equal(p.id,id,'Preparation ID mismatch');
+assert.equal(p.policyVersion,policy().version,'Retired preparation cannot record new work');
+assert.equal(canonical(p.context),canonical(contextBinding(policy(),p.styleProfile)),'Stale preparation context');
+assert.equal(fileHash(p.input),p.inputSHA256,'Input changed after preparation');
+validateInputLineage(p.input);
+assert(p.composition?.panel===Number(match[1]),'Composition panel mismatch');
+for(const f of p.references)assert.equal(fileHash(f),p.referenceHashes[f],'Reference changed after preparation');
+assert.equal(fileHash(p.prompt),p.promptSHA256,'Prompt changed after preparation');
+fs.mkdirSync(path.dirname(local(source)),{recursive:true});fs.copyFileSync(generatedFile,local(source));
+assert.equal(fileHash(source),sha(fs.readFileSync(generatedFile)));
+writeJson(`${base}/generation-records/${id}.json`,{id,tool:'built-in image_gen',operation:'individual image edit',source,sourceSHA256:fileHash(source),generatedFile,preflight,preflightSHA256:fileHash(preflight),prompt:p.prompt,promptSHA256:p.promptSHA256,actualReferences:p.references.map(file=>({file,sha256:fileHash(file)})),referenceRoles:p.referenceRoles,composition:p.composition,approval:'candidate; no external signature'});
+console.log(source);

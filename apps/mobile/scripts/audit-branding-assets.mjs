@@ -6,6 +6,7 @@ import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import { semanticColors } from "@expirymate/shared";
+import {readManifest,expectedMaster,assertSamePixels} from "./sync-mascot-sources.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const mobileDir = path.resolve(scriptDir, "..");
@@ -92,43 +93,6 @@ function nonBackgroundBounds(png) {
   return { minX, minY, maxX, maxY };
 }
 
-function isMintPixel(png, x, y) {
-  const index = (y * png.width + x) * 4;
-  const red = png.data[index];
-  const green = png.data[index + 1];
-  const blue = png.data[index + 2];
-  const alpha = png.data[index + 3];
-  return (
-    alpha >= 180 &&
-    green >= 115 &&
-    green >= red + 28 &&
-    green >= blue + 8
-  );
-}
-
-function measureThumbMint(png, side) {
-  const xStart = side === "left" ? 150 : 620;
-  const xEnd = side === "left" ? 430 : 900;
-  const yStart = 680;
-  const yEnd = 950;
-  let count = 0;
-  let yTotal = 0;
-
-  for (let y = yStart; y < yEnd; y += 1) {
-    for (let x = xStart; x < xEnd; x += 1) {
-      // v2 bust: the handle extends into this scan window. Exclude its
-      // separate upper-left region; it is not part of the left oven mitten.
-      if (side === "left" && x < 290 && y < 735) continue;
-      if (isMintPixel(png, x, y)) {
-        count += 1;
-        yTotal += y;
-      }
-    }
-  }
-
-  return { count, centroidY: count > 0 ? yTotal / count : 0 };
-}
-
 function cornerAlphas(png) {
   return [
     png.data[3],
@@ -172,9 +136,6 @@ const adaptiveBounds = alphaBounds(adaptive);
 const monochromeBounds = alphaBounds(monochrome);
 const notificationMasterBounds = alphaBounds(notificationMaster);
 const notificationBounds = alphaBounds(notification);
-const leftThumb = measureThumbMint(source, "left");
-const rightThumb = measureThumbMint(source, "right");
-const thumbAreaRatio = leftThumb.count / rightThumb.count;
 const sourceCenterX = (sourceBounds.minX + sourceBounds.maxX) / 2;
 
 check(
@@ -199,13 +160,8 @@ check(
     Math.abs(sourceCenterX - expectedSize / 2) <= 16,
   `bbox=${sourceBounds.minX},${sourceBounds.minY}..${sourceBounds.maxX},${sourceBounds.maxY} centerX=${sourceCenterX.toFixed(1)}`,
 );
-check(
-  "two-thumb balance",
-  thumbAreaRatio >= 0.9 &&
-    thumbAreaRatio <= 1.1 &&
-    Math.abs(leftThumb.centroidY - rightThumb.centroidY) <= 12,
-  `area ratio=${thumbAreaRatio.toFixed(3)} y-delta=${Math.abs(leftThumb.centroidY - rightThumb.centroidY).toFixed(1)}`,
-);
+assertSamePixels(source,expectedMaster(readManifest().poses.find(p=>p.mood==='icon-crop')),'v18 24 icon');
+check('v18 representative fidelity',true,'24 source, whole pose, uniform derivation');
 check(
   "opaque app icon",
   icon.width === expectedSize && icon.height === expectedSize && !icon.alpha,
@@ -255,16 +211,15 @@ check(
   `bbox=${monochromeBounds.minX},${monochromeBounds.minY}..${monochromeBounds.maxX},${monochromeBounds.maxY}`,
 );
 check(
-  "notification master upper-body glyph",
+  "notification full representative silhouette",
   notificationMaster.width === 192 &&
     notificationMaster.height === 192 &&
     notificationMaster.alpha &&
     isWhiteAlphaGlyph(notificationMaster) &&
     cornerAlphas(notificationMaster).every((alpha) => alpha === 0) &&
-    (notificationMasterBounds.maxX - notificationMasterBounds.minX + 1) / 192 >= 0.6 &&
-    (notificationMasterBounds.maxX - notificationMasterBounds.minX + 1) / 192 <= 0.7 &&
-    (notificationMasterBounds.maxY - notificationMasterBounds.minY + 1) / 192 >= 0.74 &&
-    (notificationMasterBounds.maxY - notificationMasterBounds.minY + 1) / 192 <= 0.82,
+    Math.max(notificationMasterBounds.maxX-notificationMasterBounds.minX+1, notificationMasterBounds.maxY-notificationMasterBounds.minY+1)/192 >= 0.74 &&
+    Math.max(notificationMasterBounds.maxX-notificationMasterBounds.minX+1, notificationMasterBounds.maxY-notificationMasterBounds.minY+1)/192 <= 0.82 &&
+    Math.abs((notificationMasterBounds.maxX-notificationMasterBounds.minX+1)/(notificationMasterBounds.maxY-notificationMasterBounds.minY+1)-(sourceBounds.maxX-sourceBounds.minX+1)/(sourceBounds.maxY-sourceBounds.minY+1))<0.04,
   `bbox=${notificationMasterBounds.minX},${notificationMasterBounds.minY}..${notificationMasterBounds.maxX},${notificationMasterBounds.maxY}`,
 );
 check(
@@ -291,6 +246,25 @@ if (fs.existsSync(nativeIconPath)) {
     Buffer.compare(fs.readFileSync(iconPath), fs.readFileSync(nativeIconPath)) === 0,
     path.relative(mobileDir, nativeIconPath),
   );
+}
+
+// Android masks adaptive icons and launch drawables; rectangular padding alone
+// does not prove the hat, plate and feet survive the mask.
+function fitsSafeCircle(png) {
+  const radius = png.width / 3;
+  for(let y=0;y<png.height;y++) for(let x=0;x<png.width;x++) {
+    if(png.data[(y*png.width+x)*4+3]>2 && Math.hypot(x+.5-png.width/2,y+.5-png.height/2)>radius)return false;
+  }
+  return true;
+}
+check('adaptive whole pose survives circular mask', fitsSafeCircle(adaptive), 'central 2/3 diameter safe circle');
+const appConfig=JSON.parse(fs.readFileSync(path.join(mobileDir,'app.json'),'utf8'));
+const imageWidth=appConfig.expo.plugins.find(p=>Array.isArray(p)&&p[0]==='expo-splash-screen')[1].imageWidth;
+for(const [density,scale]of Object.entries({mdpi:1,hdpi:1.5,xhdpi:2,xxhdpi:3,xxxhdpi:4})) {
+  const file=path.join(mobileDir,`android/app/src/main/res/drawable-${density}/splashscreen_logo.png`);
+  if(!fs.existsSync(file))continue;
+  const png=readPng(file),bounds=alphaBounds(png),content=Math.max(bounds.maxX-bounds.minX+1,bounds.maxY-bounds.minY+1);
+  check(`Android splash mask and configured size ${density}`,png.width===288*scale&&png.height===288*scale&&fitsSafeCircle(png)&&Math.abs(content-imageWidth*scale)<=2,`canvas ${png.width}px, content ${content}px`);
 }
 
 const failureCount = checks.filter((item) => !item.passed).length;

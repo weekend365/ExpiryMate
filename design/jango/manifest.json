@@ -1,191 +1,164 @@
 {
-  "version": 2,
-  "kit": "JANGO Character Kit v3 (2026-09-29)",
-  "importedFrom": "/Users/namu/Documents/Codex/2026-09-29/JANGO-Character-Kit",
-  "referenceMaster": {
-    "file": "reference/bible-master-idle.png",
-    "sha256": "dfadfb07ab91f7c7124f7bf6c4004ab004056262f0eab6fabe387286e1b6402b"
+  "version": 3,
+  "masterSet": {
+    "file": "design/jango/master-set.json",
+    "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
   },
+  "representative": 24,
+  "authorization": "Explicit user v18 app adoption; not a signed emoticon release",
   "poses": [
     {
       "mood": "idle",
-      "source": "kit-v3/01-jango-idle.png",
-      "sha256": "a5d59815c712f9581df2b2459ba3eebca6229c0fc445acb2c06351c331bf402a",
+      "masterNumber": 24,
+      "source": "emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 0,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        232,
-        23,
-        789,
-        995
-      ],
-      "review": {
-        "method": "kit v3 BIBLE measurements and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        182,
+        63,
+        840,
+        961
+      ]
     },
     {
       "mood": "happy",
-      "source": "kit-v3/02-jango-happy.png",
-      "sha256": "e5133c048fc2283976354724646a7514a7d1c30d461babd371e7cbccf8111b0c",
+      "masterNumber": 2,
+      "source": "emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "sha256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 0,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        175,
-        17,
-        880,
-        1003
-      ],
-      "review": {
-        "method": "kit v3 BIBLE measurements and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        174,
+        62,
+        849,
+        961
+      ]
     },
     {
       "mood": "worry",
-      "source": "generated/worry.png",
-      "sha256": "c5a017c9f048914ccb5ab30c87be83ff791b413a2f35c9452d92d59fb35f90c1",
+      "masterNumber": 17,
+      "source": "emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 1,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        239,
-        25,
-        813,
-        995
-      ],
-      "review": {
-        "method": "built-in image_gen reference edit and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        214,
+        62,
+        809,
+        961
+      ]
     },
     {
       "mood": "cooking",
-      "source": "kit-v3/04-jango-cooking.png",
-      "sha256": "aac2089391bbd16ff1415f997b3c84f122140e4e6b9178245381a975a78ac671",
+      "masterNumber": 23,
+      "source": "emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "sha256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 0,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        245,
-        32,
-        789,
-        980
-      ],
-      "review": {
-        "method": "kit v3 BIBLE measurements and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        231,
+        62,
+        790,
+        960
+      ]
     },
     {
       "mood": "empty",
-      "source": "generated/empty.png",
-      "sha256": "13e76d3b481f4e1a46d27d6b897818f66c45f5f9c6bb27c5449ff13dcae8eabd",
+      "masterNumber": 20,
+      "source": "emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "sha256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 1,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "needs-review",
       "expectedBounds": [
-        241,
-        25,
-        813,
-        995
-      ],
-      "review": {
-        "method": "built-in image_gen reference edit and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        107,
+        62,
+        915,
+        961
+      ]
     },
     {
       "mood": "speak",
-      "source": "generated/speak.png",
-      "sha256": "bfccbdb69d9f309679d7fd9ac66ed0c6d2e47ecfef7ef8779dde42bab404b760",
+      "masterNumber": 1,
+      "source": "emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 1,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        232,
-        22,
-        789,
-        995
-      ],
-      "review": {
-        "method": "built-in image_gen reference edit and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        186,
+        62,
+        835,
+        961
+      ]
     },
     {
       "mood": "think",
-      "source": "kit-v3/03-jango-thinking.png",
-      "sha256": "9e2e703d54f7b31b0548168c6c47326001dd848e08fef98965a8e32bdc32dfc1",
+      "masterNumber": 11,
+      "source": "emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 0,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        261,
-        36,
-        854,
-        997
-      ],
-      "review": {
-        "method": "kit v3 BIBLE measurements and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        242,
+        62,
+        780,
+        961
+      ]
     },
     {
       "mood": "point",
-      "source": "generated/point.png",
-      "sha256": "ecce2f8b79bcbe2c6568cac3eab825b4419f6361692994ad9756a9b7d905c985",
+      "masterNumber": 14,
+      "source": "emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "sha256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 1,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        232,
-        23,
-        822,
-        995
-      ],
-      "review": {
-        "method": "built-in image_gen reference edit and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        189,
+        62,
+        832,
+        961
+      ]
     },
     {
       "mood": "icon-crop",
-      "source": "generated/icon-crop.png",
-      "sha256": "73e96854683f9c76ea328989a8a19a5a6d6bde4b3437be23848e35f04a178eb7",
+      "masterNumber": 24,
+      "source": "emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
       "sourceSize": 1254,
       "outputSize": 1024,
-      "transform": "uniform-square-resize",
-      "alphaFloor": 1,
+      "transform": "uniform-content-fit",
+      "alphaFloor": 2,
+      "historicalMouthStatus": "pass",
       "expectedBounds": [
-        178,
-        26,
-        838,
-        991
-      ],
-      "review": {
-        "method": "built-in image_gen reference edit and visual inspection",
-        "date": "2026-09-29",
-        "anatomy": "single door, left handle/pineapple, two right hinges, mitten pouch and one thumb, mint cheeks"
-      }
+        182,
+        63,
+        840,
+        961
+      ]
     }
   ]
 }

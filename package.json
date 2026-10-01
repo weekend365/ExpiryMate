@@ -33,7 +33,10 @@
     "jango:check": "node scripts/jango-design-gate.mjs check",
     "jango:promote": "node scripts/jango-design-gate.mjs promote",
     "jango:export": "node scripts/jango-design-gate.mjs export",
-    "jango:test": "node --test scripts/jango-design-gate.test.mjs"
+    "jango:test": "node --test --test-concurrency=1 scripts/jango-design-gate.test.mjs scripts/jango-emoticon-layout.test.mjs",
+    "jango:reports:refresh": "node scripts/refresh-jango-reports.mjs",
+    "jango:build": "node scripts/build-jango-emoticons.mjs",
+    "jango:app-review": "python3 scripts/build-jango-app-review.py"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",

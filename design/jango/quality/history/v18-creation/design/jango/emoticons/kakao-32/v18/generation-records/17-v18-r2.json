@@ -1,0 +1,58 @@
+{
+  "id": "17-v18-r2",
+  "tool": "built-in image_gen",
+  "operation": "individual image edit",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+  "sourceSHA256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-9b94ffd7-fe5c-4135-8ceb-45f314ad51ff.png",
+  "preflight": "design/jango/quality/jobs/17-v18-r2/preflight.json",
+  "preflightSHA256": "3e30a5fce1ade843bd633441c1c45df350deb5f31983ecf1718f5ffe16c45138",
+  "prompt": "design/jango/quality/jobs/17-v18-r2/prompt.txt",
+  "promptSHA256": "01b441db6b72e5c80a124be439cdf8b65229489d748acf55ed114c4465832601",
+  "actualReferences": [
+    {
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142"
+    },
+    {
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "sha256": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17.png",
+      "sha256": "9f8eeeeec8326ccc70cd5b928231638015e6e99c1a0bb237c83b63ec651e3772"
+    },
+    {
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "sha256": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37"
+    }
+  ],
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17.png",
+      "imageIndex": 3
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 17,
+      "imageIndex": 4
+    }
+  ],
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 17
+  },
+  "approval": "candidate; no external signature"
+}

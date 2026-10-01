@@ -1,0 +1,698 @@
+{
+  "status": "closed-historical-records",
+  "reason": "v18 user master adoption; old referenced binaries retired, no retroactive preparation or signature",
+  "files": {
+    "design/jango/emoticons/kakao-32/v18/change-record.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/change-record.json",
+      "sha256": "d5855093997479e6fbc3a932275990580c129daca262b8f2f8b762c6454237e8"
+    },
+    "design/jango/emoticons/kakao-32/v18/inspection-status.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/inspection-status.json",
+      "sha256": "4bae5cfa21bd9430a11bd2ea987424275c1e0d6e483dc83acad50152f2209675"
+    },
+    "design/jango/emoticons/kakao-32/v18/inspection.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/inspection.json",
+      "sha256": "bd534eb25c3e17dc77667d671ead0b578b45e3860eb8664a589ca3e0397ccab5"
+    },
+    "design/jango/emoticons/kakao-32/v18/iteration-inspection.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/iteration-inspection.json",
+      "sha256": "d223a0593e8a5559f0a636ffc30f5b121d0c383dbee3cbf3031b136ff388d65f"
+    },
+    "design/jango/emoticons/kakao-32/v18/lettering-record.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/lettering-record.json",
+      "sha256": "9b1455d2022a4d77b04fbd350697f578df3b9255f6ea9c5215c1eeff1400e427"
+    },
+    "design/jango/emoticons/kakao-32/v18/manifest.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/manifest.json",
+      "sha256": "b5a3f3de82e8a4a7311209a860d94be3d5842931c3654673b4996a485d552c07"
+    },
+    "design/jango/emoticons/kakao-32/v18/pilot-review.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/pilot-review.json",
+      "sha256": "3cc6bb6dfd4fcf0a0b448546c30e006df9d792694ccabab4ead2025965206c7c"
+    },
+    "design/jango/emoticons/kakao-32/v18/plan.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/plan.json",
+      "sha256": "0d2a66f5bb1c7850f5b1b4787649146d31846ca3ae1868f6c738f88017cfb4ad"
+    },
+    "design/jango/emoticons/kakao-32/v18/preservation.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/preservation.json",
+      "sha256": "d0bd4d527f3b213fa98481f7011ca481a438f475097416f2a5d6e42e7c23e43b"
+    },
+    "design/jango/emoticons/kakao-32/v18/production-record.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/production-record.json",
+      "sha256": "40d30b582d76cb6f90a677a75562e7614767b9abc2156af26b58f0a85a2f4127"
+    },
+    "design/jango/emoticons/kakao-32/v18/selection.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/selection.json",
+      "sha256": "f4204fbca50d7aa9c8982d931f396da0fa8dae4399b9d4024a3f5c9675dfec75"
+    },
+    "design/jango/emoticons/kakao-32/v18/visual-review.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/visual-review.json",
+      "sha256": "710fbb7ebed5d61e832ec29f720ccb736e54f9723e1260d41a73a1372718be7e"
+    },
+    "design/jango/quality/rules.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/rules.json",
+      "sha256": "9e4300440ce0e608b90d14d450fe6ed566f04400a9c689a03036ffcbf63fe042"
+    },
+    "design/jango/quality/jobs/10-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/10-v18-r2/preflight.json",
+      "sha256": "22cf886e721cd0ff2f8c9967e2540a2bb6d89915abc67a3e06b7c5e2286dbbdf"
+    },
+    "design/jango/quality/jobs/10-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/10-v18-r2/prompt.txt",
+      "sha256": "c62720dbb929daa5e0db4afb615a7d03a69fc50b076d1358282267c954810ab0"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/10-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/10-v18-r2.json",
+      "sha256": "e5644d3cce054d9f6420fd5afbdf426885a4e999098d4619a3676d47f2726ecd"
+    },
+    "design/jango/quality/candidates/10-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/10-v18-r2.json",
+      "sha256": "1a51cc6878109edddcea039ec0acfbf4ddd223620cce9f66c3a165297a1a457b"
+    },
+    "design/jango/quality/reports/10-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/10-v18-r2.json",
+      "sha256": "103915d025cc4ca69dcaff07a637acbb233ae6c69e0ca5f5c3fc71fd14f44214"
+    },
+    "design/jango/quality/jobs/11-v18-r4/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/11-v18-r4/preflight.json",
+      "sha256": "2b3769326880ddfcac95563f23c7b9fea61ce25719ef2290d1d27f03761ddaad"
+    },
+    "design/jango/quality/jobs/11-v18-r4/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/11-v18-r4/prompt.txt",
+      "sha256": "8fbeacc3fc73bb01a8e82b849873cfa9dbbd52eb895ba8605df34c93f1a9fe24"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/11-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/11-v18-r4.json",
+      "sha256": "5a346bb4f33a8105ef6abf37ac1737b60724d343b31703be3a6af6c9b6b6418c"
+    },
+    "design/jango/quality/candidates/11-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/11-v18-r4.json",
+      "sha256": "db5e4ba36fbdbbfe15a33bd787e1000e96716172b384184b66bcf692696bc923"
+    },
+    "design/jango/quality/reports/11-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/11-v18-r4.json",
+      "sha256": "c007ffdbd49610aae1bf2273b0ef9933a08065e2087e211082dd69f591b35d33"
+    },
+    "design/jango/quality/jobs/12-v18-r4/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/12-v18-r4/preflight.json",
+      "sha256": "a8d0fac20ac08c9685e550517c14be237396fd36f6f0a02ce1b6346bf2354939"
+    },
+    "design/jango/quality/jobs/12-v18-r4/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/12-v18-r4/prompt.txt",
+      "sha256": "4fe2a16e162b31a76632ad89a46524e75091bee63f27f44e900fca244e6f4a0b"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/12-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/12-v18-r4.json",
+      "sha256": "a7b4d5c840b9aabd088dc97582112cbe102500684dd1efd97afc2a17bf8a1e33"
+    },
+    "design/jango/quality/candidates/12-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/12-v18-r4.json",
+      "sha256": "a17d8b9bc33523d8b6495778c8cb4cba6389eb5ade859879bace941bf8c0f3ea"
+    },
+    "design/jango/quality/reports/12-v18-r4.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/12-v18-r4.json",
+      "sha256": "dc7b677a42c5df59e96577a4439c5f27b2071bcb04015764e7c8a5d23e02cbfa"
+    },
+    "design/jango/quality/jobs/13-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/13-v18-r3/preflight.json",
+      "sha256": "24a4c51cc2c5f1f46b2af3a2e6606441477e0bd3e8f47238c621fda72073d1bc"
+    },
+    "design/jango/quality/jobs/13-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/13-v18-r3/prompt.txt",
+      "sha256": "4091d499fa0baff7d42217fab6b0136ff3f6a888e6b601d0d72974cd6977aae0"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/13-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/13-v18-r3.json",
+      "sha256": "95b19ee243117dc6f40156c0d24f585a0a70a452a4562a80e2b986c60781ffdd"
+    },
+    "design/jango/quality/candidates/13-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/13-v18-r3.json",
+      "sha256": "22b35da45073566b2cba1b3a5560992de619e7deab9443556cb369e4d6d3878e"
+    },
+    "design/jango/quality/reports/13-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/13-v18-r3.json",
+      "sha256": "f1c9fe92d4160015b0ca9e30f0f597edfc3515556e8a0c994df32cc025e856b1"
+    },
+    "design/jango/quality/jobs/14-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/14-v18-r2/preflight.json",
+      "sha256": "0732872611753acd1f493a07611234a4ace938743bb306dbee760aaa6e53ccee"
+    },
+    "design/jango/quality/jobs/14-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/14-v18-r2/prompt.txt",
+      "sha256": "290b2764a52894566c9fbf9c2365e67e8df88581221017c4afd4122cdaa0719f"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/14-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/14-v18-r2.json",
+      "sha256": "2a6ad9bf83584c9ed9c758f309893423dd7584689a4ecbbf2f9484a5799a7a01"
+    },
+    "design/jango/quality/candidates/14-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/14-v18-r2.json",
+      "sha256": "00f0e20d54fe7292085b42f100b89c84cba307ad09d2dc790d63e5dbabef3943"
+    },
+    "design/jango/quality/reports/14-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/14-v18-r2.json",
+      "sha256": "e562d1902e3f46132b6098c4ae7accf87158660655f8c20944bb9eff3c3d7c39"
+    },
+    "design/jango/quality/jobs/15-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/15-v18-r2/preflight.json",
+      "sha256": "6c5dbe4e1672340dab7bef897a5d7e3da40c8ac18b8cbb54c27309230553927f"
+    },
+    "design/jango/quality/jobs/15-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/15-v18-r2/prompt.txt",
+      "sha256": "eefb76053bc04c04461e007b7c4ab74e98d626ebbf1241eeb848427525989ff0"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/15-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/15-v18-r2.json",
+      "sha256": "afc39423e5970c95bf16b2227a9747ddb0c65a4adcd34ff2a93c53e0583b7467"
+    },
+    "design/jango/quality/candidates/15-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/15-v18-r2.json",
+      "sha256": "9b937076b143accf90786280cd09fdf63390ddade84eea0b6b5b50f85c868566"
+    },
+    "design/jango/quality/reports/15-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/15-v18-r2.json",
+      "sha256": "1c68a11bd56ea0f7352d3482ae42a271d87a81860c617e1b18cbf8f7e371155c"
+    },
+    "design/jango/quality/jobs/16-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/16-v18-r2/preflight.json",
+      "sha256": "901fb1a2fc149795eb73c9c717060bd0fc7c28c8ea4c8bf2a257b300488bc3c5"
+    },
+    "design/jango/quality/jobs/16-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/16-v18-r2/prompt.txt",
+      "sha256": "a1d6330b681e716f886cff0d543de98e66d73916af45014c20146b9251fc3b74"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/16-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/16-v18-r2.json",
+      "sha256": "322c19c90d143b527d1d32927a7e1b259b014e5e3b686fab20c145ecf63a1644"
+    },
+    "design/jango/quality/candidates/16-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/16-v18-r2.json",
+      "sha256": "a7c33d057437de204357464f157f5f1b3464324bd00a58def7346892937ca819"
+    },
+    "design/jango/quality/reports/16-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/16-v18-r2.json",
+      "sha256": "3d638702a934aeb91fa67e9d979bfd0aa14d5006ea455609eecce27540601508"
+    },
+    "design/jango/quality/jobs/17-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/17-v18-r2/preflight.json",
+      "sha256": "3e30a5fce1ade843bd633441c1c45df350deb5f31983ecf1718f5ffe16c45138"
+    },
+    "design/jango/quality/jobs/17-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/17-v18-r2/prompt.txt",
+      "sha256": "01b441db6b72e5c80a124be439cdf8b65229489d748acf55ed114c4465832601"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/17-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/17-v18-r2.json",
+      "sha256": "a126ce62febad2cf57003c9fbe9c67089ef8934bc72c849fea70c07e41eaaa3e"
+    },
+    "design/jango/quality/candidates/17-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/17-v18-r2.json",
+      "sha256": "bc5dc4362d54aabaf901b2967b727e944f9c2ec9bdb553f6dbda4cfa24be046a"
+    },
+    "design/jango/quality/reports/17-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/17-v18-r2.json",
+      "sha256": "bd64fa7c3ae43937157127419800bb63de9f7170d86bdf6d1a6afe4a5a0cd15d"
+    },
+    "design/jango/quality/jobs/18-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/18-v18-r2/preflight.json",
+      "sha256": "a9e9d1210096a516afadf5b10d0839d65a21e0217e9581b18a9cb89de3d61a8d"
+    },
+    "design/jango/quality/jobs/18-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/18-v18-r2/prompt.txt",
+      "sha256": "e80e84d5f7b1ab76bcdc6d4ec603bc1add03cee403dec526abf10cb6d11d191d"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/18-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/18-v18-r2.json",
+      "sha256": "07fd3aa9fe9046fb7cc6e6d43cd7325fe43eea0de789e63217246498fe0cede2"
+    },
+    "design/jango/quality/candidates/18-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/18-v18-r2.json",
+      "sha256": "2ce8aa48d380acdde11e901e3d3b1e7b88af2f2ce33907542e337113c08affc2"
+    },
+    "design/jango/quality/reports/18-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/18-v18-r2.json",
+      "sha256": "e12d1ad961368f46e8687c2da12d0a3cf922f979ff405fbc96e9b5011b9ae592"
+    },
+    "design/jango/quality/jobs/19-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/19-v18-r2/preflight.json",
+      "sha256": "0a4bae31b41e3b63a3034fe6b75906abf636e9e18e2f41956144306effbda292"
+    },
+    "design/jango/quality/jobs/19-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/19-v18-r2/prompt.txt",
+      "sha256": "63593d288666f67b8d01f0f285a5e8ed38790d7826ccd061227c95a52fc496d4"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/19-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/19-v18-r2.json",
+      "sha256": "14a6f6d38aaf15e6d725e9d2141e19f0315e023a8aaaeb94fd760220ec70a532"
+    },
+    "design/jango/quality/candidates/19-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/19-v18-r2.json",
+      "sha256": "e69c1938983cec104bef1563e6874704e7aa4b74b813670f1b908c4dcc7a9a87"
+    },
+    "design/jango/quality/reports/19-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/19-v18-r2.json",
+      "sha256": "6b4a04561e860838b3f6d5712c3bb52c6084bbbfcdf9ceae23051860cba806be"
+    },
+    "design/jango/quality/jobs/20-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/20-v18-r2/preflight.json",
+      "sha256": "120e5984d70d8352c07fd3e21698f768e08b557655c69a6691bd60782bb081c1"
+    },
+    "design/jango/quality/jobs/20-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/20-v18-r2/prompt.txt",
+      "sha256": "1f3ddc9f72ba83b7926b15a674d6fa6b520e191cee9bc3dd881b5546ff138b20"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/20-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/20-v18-r2.json",
+      "sha256": "10b2a65af6a4908ce01b522ff22f9da1daf35d4c8c2f43f1cf64735d5bd01aa4"
+    },
+    "design/jango/quality/candidates/20-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/20-v18-r2.json",
+      "sha256": "b1dcb38ed0d57577446f24dc495806cbd8afc3898481850363b539b1ec891829"
+    },
+    "design/jango/quality/reports/20-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/20-v18-r2.json",
+      "sha256": "89006c9cf7b8dc31134826b07588c4e89a69f27d5257f1c0838195b4a8c02a16"
+    },
+    "design/jango/quality/jobs/21-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/21-v18-r2/preflight.json",
+      "sha256": "7dc93f0a2fc158636ca98dff2808df967ca46af154ac2b3f7740bf9d62c12076"
+    },
+    "design/jango/quality/jobs/21-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/21-v18-r2/prompt.txt",
+      "sha256": "583dcfd399960cd215f563aa6f490c0bf15c3ea27920e1df9e27607c2f1e8400"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/21-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/21-v18-r2.json",
+      "sha256": "27ea1c847bff9dd42020ee274d54eee7ece0270dbf7f0a875196c78066f6f87d"
+    },
+    "design/jango/quality/candidates/21-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/21-v18-r2.json",
+      "sha256": "2fd01b0b4c046fc486fa95471662fff7869e013ed2509038a66d4b4af6dfe526"
+    },
+    "design/jango/quality/reports/21-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/21-v18-r2.json",
+      "sha256": "e96be3ec528e7e6c5613803d9a4c91e2433c0ac70ed6203a40f7bcfa5666b4aa"
+    },
+    "design/jango/quality/jobs/22-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/22-v18-r2/preflight.json",
+      "sha256": "248bd2bb897e3751f7e9618667f2f1dc1b864b3bf23c03f3f303803276ba6fd7"
+    },
+    "design/jango/quality/jobs/22-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/22-v18-r2/prompt.txt",
+      "sha256": "a70634a14061c3c15885c999e06b400e0fd7e986040333ab3915d327f52ecf8e"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/22-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/22-v18-r2.json",
+      "sha256": "8256e970961f95a92f943ca876250c58f83a0200f18b2b46e3e9327588b7af5d"
+    },
+    "design/jango/quality/candidates/22-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/22-v18-r2.json",
+      "sha256": "2d8d3c333cbb66ff4590baef625306bb5d88b21493a8d4ee4f16912168d50de2"
+    },
+    "design/jango/quality/reports/22-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/22-v18-r2.json",
+      "sha256": "8d22ed8a2f8923aab76dbcf268604a7b13dbe3bc9c09417170c94a0b223a665f"
+    },
+    "design/jango/quality/jobs/23-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/23-v18-r2/preflight.json",
+      "sha256": "c18002844bcdd93b5fed665fb5c9397175388f881eaf11f5af29d547803d9737"
+    },
+    "design/jango/quality/jobs/23-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/23-v18-r2/prompt.txt",
+      "sha256": "4dcc819147fcf38cf360ede62c5303e11efb4a85172cfc8ffa6a0053ab6d3da1"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/23-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/23-v18-r2.json",
+      "sha256": "11d6670e5291dcfc045808d389890f4fb790f5c59a58bd3700ccb81a9adab270"
+    },
+    "design/jango/quality/candidates/23-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/23-v18-r2.json",
+      "sha256": "04701bfb4fea853e1095fe0f71ac410bb1c465d9057e8fc744110b9788cf48e2"
+    },
+    "design/jango/quality/reports/23-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/23-v18-r2.json",
+      "sha256": "50d093b6779a7d871d9384eaeca63ec07c34b93e0c09af34ad493bf8a086ccc4"
+    },
+    "design/jango/quality/jobs/24-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/24-v18-r2/preflight.json",
+      "sha256": "9b6340bd64e2bf083d5f6e31058e834da00428e8090aa68a690b1e0983211e6a"
+    },
+    "design/jango/quality/jobs/24-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/24-v18-r2/prompt.txt",
+      "sha256": "57c292d08e059f1c866a198c3f95d33c16e0c328926e755f0d79d5529564843e"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/24-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/24-v18-r2.json",
+      "sha256": "12a8ec729a5bc00be620c13b624f3f6536ebc74053987775d93d9685bb82b820"
+    },
+    "design/jango/quality/candidates/24-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/24-v18-r2.json",
+      "sha256": "47e7e4f338bd7397a03b92a4249b26105b0c5cc926f6bb086acd50b3e1a458ab"
+    },
+    "design/jango/quality/reports/24-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/24-v18-r2.json",
+      "sha256": "4676cff8c17b07b06f7689253253efc9db2d47646f9c55b20e7583e936c61701"
+    },
+    "design/jango/quality/jobs/25-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/25-v18-r3/preflight.json",
+      "sha256": "33c0f58093096cd0d98a5e1099a2df9bcae69c8fcf5cf465ee88e8e66295d639"
+    },
+    "design/jango/quality/jobs/25-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/25-v18-r3/prompt.txt",
+      "sha256": "e57e82534a0c87f071853b064723996ad9c83e8d2ca80180c13af7aeeb646ece"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/25-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/25-v18-r3.json",
+      "sha256": "57a9b1a70580b0b40a8d40c1b9b654328ef4c87545d11671f8fd53f32d513f22"
+    },
+    "design/jango/quality/candidates/25-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/25-v18-r3.json",
+      "sha256": "9e91666ae0a8d5c465ef52968702f39a211837b513e111213e447d5bc1b35279"
+    },
+    "design/jango/quality/reports/25-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/25-v18-r3.json",
+      "sha256": "b7aff755d864d3d14f0adadb76d66311e0b4911b1f6af6c2100633c0498d9a74"
+    },
+    "design/jango/quality/jobs/26-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/26-v18-r3/preflight.json",
+      "sha256": "1abd4b984e08e8705fc20d57fd4e990c5f86290863ec2712defe29eba6e28468"
+    },
+    "design/jango/quality/jobs/26-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/26-v18-r3/prompt.txt",
+      "sha256": "22814c461ffb720702a7f5ab232bd7522fe9691ff500dc475a68851dcebfcce7"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/26-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/26-v18-r3.json",
+      "sha256": "60e5c7bb56215b00658a2b930e17fbae1e5d30528379ea562960ae8b53c5596a"
+    },
+    "design/jango/quality/candidates/26-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/26-v18-r3.json",
+      "sha256": "b5258a02218b2aa37f5c2c2ed3999f08d388261ae3c2b81c8a3bf23b438a6513"
+    },
+    "design/jango/quality/reports/26-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/26-v18-r3.json",
+      "sha256": "88fb3cf4af5e5c4933e03f16c7d1a38501ba4d360374cdaeaee23a0715c8a0ba"
+    },
+    "design/jango/quality/jobs/27-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/27-v18-r2/preflight.json",
+      "sha256": "d1aa8743f2ce64aeaa8225bf6499d2c23e115e26871ea354529c69df84a2a721"
+    },
+    "design/jango/quality/jobs/27-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/27-v18-r2/prompt.txt",
+      "sha256": "3705f3be2ad1775acd5f308865638e69fe8ff4e8a27ebb45941043c9e6775bb8"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/27-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/27-v18-r2.json",
+      "sha256": "2ac781f13f5f2543d80d37564c7fccee8cc759bf8bef7a6e08ae76889bd29d6f"
+    },
+    "design/jango/quality/candidates/27-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/27-v18-r2.json",
+      "sha256": "a1f4243f9d37e8bc31ba528fb939d4d33842b7007ab5dc1f30cc33f92519fd71"
+    },
+    "design/jango/quality/reports/27-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/27-v18-r2.json",
+      "sha256": "6fe85470b0130841f3d5b8bbc3f978a6e90ba75b678197ece333fc0001945c81"
+    },
+    "design/jango/quality/jobs/28-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/28-v18-r3/preflight.json",
+      "sha256": "b7fa801577ea15544fcc929a8ea26e48de15d67188a38b3c03253558119ff182"
+    },
+    "design/jango/quality/jobs/28-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/28-v18-r3/prompt.txt",
+      "sha256": "defae29eba0635abe05260a3a00a469c9a3d23a07a7335c903193ae30fc21983"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/28-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/28-v18-r3.json",
+      "sha256": "48725295b714e72019aedc67e7dc29b82174641cccd770bda93cae46eaa63146"
+    },
+    "design/jango/quality/candidates/28-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/28-v18-r3.json",
+      "sha256": "b83b270fda91a144f4bca2269a8c0662cc90b0a8afc5a47e1237dddc15159f6f"
+    },
+    "design/jango/quality/reports/28-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/28-v18-r3.json",
+      "sha256": "fdf7c5fb56b432b12e6c53d78228a9c23f789edfea506a655773674d8185cef9"
+    },
+    "design/jango/quality/jobs/29-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/29-v18-r2/preflight.json",
+      "sha256": "7c617c8fd7803c656627cc45f724f94ab549b78d2d1ddf68198fce07fdfa5629"
+    },
+    "design/jango/quality/jobs/29-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/29-v18-r2/prompt.txt",
+      "sha256": "ae8e3406ffe924e150ef59f05bfccd145eea79bf1028e4cca181133b45af79f6"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/29-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/29-v18-r2.json",
+      "sha256": "00f1a8d61d0333248d193e43f9ad7a22b0fa92f15c238ffd83971cdcb0c00d74"
+    },
+    "design/jango/quality/candidates/29-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/29-v18-r2.json",
+      "sha256": "4bda874fc3cc2de8118f8ca88fcba2a9363769595fe6477957ddf20d93cc46ab"
+    },
+    "design/jango/quality/reports/29-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/29-v18-r2.json",
+      "sha256": "63d9fd020f7bfdc6475cee826c23db05a59fd3ac507aa6b8c86451702710e973"
+    },
+    "design/jango/quality/jobs/30-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/30-v18-r2/preflight.json",
+      "sha256": "e2ab92c7437a0926e51a704197dc1745a7f10c9a14da85cd52a393ccd6c7ccc6"
+    },
+    "design/jango/quality/jobs/30-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/30-v18-r2/prompt.txt",
+      "sha256": "d49ee900c21b1943dfd5622efc7c69fc69825bb2c86101c8e35aee662db87b21"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/30-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/30-v18-r2.json",
+      "sha256": "2daca331369917084913f301ae977d36b12af4098a82c9446283bafdcfcda691"
+    },
+    "design/jango/quality/candidates/30-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/30-v18-r2.json",
+      "sha256": "281d4e54581f5579f784fc07219e4f6086df670826bd42239ea031bb206a1228"
+    },
+    "design/jango/quality/reports/30-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/30-v18-r2.json",
+      "sha256": "6fe0dc3ec1772f8c427ac0ed6284ba9b68b9da0edfee1cae5694f968decca34c"
+    },
+    "design/jango/quality/jobs/31-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/31-v18-r2/preflight.json",
+      "sha256": "168da7443821555aec1ac4838e470b47e00b31eb4b503155d8737efad27c1239"
+    },
+    "design/jango/quality/jobs/31-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/31-v18-r2/prompt.txt",
+      "sha256": "7ce87b7b5bc4a2d577bebe698f14683b3771097ca59ff6607fc69c4fc3c7157f"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/31-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/31-v18-r2.json",
+      "sha256": "09fc9370f9cc6ac1efa952bc4a17c0d5ff65fe848b006027bcfa523fa3c4cad9"
+    },
+    "design/jango/quality/candidates/31-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/31-v18-r2.json",
+      "sha256": "92ffac040db0e2ee963079cf24f67f10e823bafd53908970c2532e87c64ca9eb"
+    },
+    "design/jango/quality/reports/31-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/31-v18-r2.json",
+      "sha256": "402f8d17a45b87f4b0e6f25a2a0feb277428606364f178d17860cbea983f91fc"
+    },
+    "design/jango/quality/jobs/32-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/32-v18-r2/preflight.json",
+      "sha256": "968d6624ccde481520ec077a882e2cb9558f88bb8c4433106e33276d5815c9cf"
+    },
+    "design/jango/quality/jobs/32-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/32-v18-r2/prompt.txt",
+      "sha256": "56ff5034b8f4009f04cc0f30c7211c394d3c457d45552dbde38f335535caece8"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/32-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/32-v18-r2.json",
+      "sha256": "ca43c0695d338605987ebee3be2496d2d6a07aed849f770cdf3ce904d820b24e"
+    },
+    "design/jango/quality/candidates/32-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/32-v18-r2.json",
+      "sha256": "4b25d17e7c036d66c756215d2cfb1a5c68fb3d5a733d41c1ab8b9f7540de417d"
+    },
+    "design/jango/quality/reports/32-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/32-v18-r2.json",
+      "sha256": "eef3fa61c3540a5b2ba34acca7ff728d11ed911c39e716184865450bf2b7df12"
+    },
+    "design/jango/quality/jobs/01-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/01-v18-r2/preflight.json",
+      "sha256": "d335730df0f94c9de85ba53e1b1c16302d66c4f832a79d68709f4013913d6e77"
+    },
+    "design/jango/quality/jobs/01-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/01-v18-r2/prompt.txt",
+      "sha256": "2a7cf93c2e32fab16de43e1cbb5f0e9b302712f91f629d5ab17e8f2a1f464c4a"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/01-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/01-v18-r2.json",
+      "sha256": "0f5e66dd2b7cb7a41b501ef6da97054276e52cccdeb7e52ea04ae45b58761745"
+    },
+    "design/jango/quality/candidates/01-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/01-v18-r2.json",
+      "sha256": "3ee4ce7ad343c95c3e1e67fe688935b953567e259e52469d3d1c68dff9e12efb"
+    },
+    "design/jango/quality/reports/01-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/01-v18-r2.json",
+      "sha256": "a7a041bd0587cdec5725e0ec00f2c4d6d99ccdee6d2fbe64df7c2bd7abd3ca99"
+    },
+    "design/jango/quality/jobs/02-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/02-v18-r2/preflight.json",
+      "sha256": "f5636d14b8c0198a853633753865bf47139e9ff7c660fcf44be18483961ba2e2"
+    },
+    "design/jango/quality/jobs/02-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/02-v18-r2/prompt.txt",
+      "sha256": "247fcc6e87b6a304d08ee97652e1b399aad853ab25604d2f9c9bc9222d1e0d29"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/02-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/02-v18-r2.json",
+      "sha256": "9eaf98b9e4ea5d25b7f1180515a6f9d46e02512c3d668911edecb6104d98cc3b"
+    },
+    "design/jango/quality/candidates/02-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/02-v18-r2.json",
+      "sha256": "a5551f800063cccf91f98e636d5ebf55186cf50548095aa5c6871f1c0671174c"
+    },
+    "design/jango/quality/reports/02-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/02-v18-r2.json",
+      "sha256": "4c36fd1598a26bfa6e68163c5f9ceb34b4ec6cf4d9ee670601be385d5a009821"
+    },
+    "design/jango/quality/jobs/03-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/03-v18-r2/preflight.json",
+      "sha256": "a1d2677ed08a43fac8894e6b3cae6475b6472f516f0724b1b3917d87101c14f6"
+    },
+    "design/jango/quality/jobs/03-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/03-v18-r2/prompt.txt",
+      "sha256": "c644a5818462ccfee052b572610c83fe733468e74a9194b715a5ab7ac21ba64a"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/03-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/03-v18-r2.json",
+      "sha256": "a9ffec3aa4d5b82876cccd27017d042d4945a487b1c73150e44c6cec146292ab"
+    },
+    "design/jango/quality/candidates/03-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/03-v18-r2.json",
+      "sha256": "f70c22e06b587c55918674d5f2be442d438a7e0aa7667c0f02d33519fdb5b0ed"
+    },
+    "design/jango/quality/reports/03-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/03-v18-r2.json",
+      "sha256": "187e2d95815dc2180f0fe6ed7536112584d952d0932c7154b924f200dfbb204e"
+    },
+    "design/jango/quality/jobs/04-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/04-v18-r3/preflight.json",
+      "sha256": "d69e0ae8b3deffc0d5c25af400f4bf5166766b4a38a1fdde881c9ce152052643"
+    },
+    "design/jango/quality/jobs/04-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/04-v18-r3/prompt.txt",
+      "sha256": "44ca578a6c1eb0b5559bb618e597f3b3f8620633ff51a0941ae8087b7853ce7e"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/04-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/04-v18-r3.json",
+      "sha256": "08bf7f13b49fd392cee22037a803babb56614c5f6ca7a5bfa292b1509c6d4d82"
+    },
+    "design/jango/quality/candidates/04-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/04-v18-r3.json",
+      "sha256": "d0a915e621595c9773d6433653ce0d937c852f7ae34d1897275f52aef2848ffc"
+    },
+    "design/jango/quality/reports/04-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/04-v18-r3.json",
+      "sha256": "05bed535635c0fb7f93103ceddb59a6cc9edb83ddbc14383d2dd8bbb5375b1b9"
+    },
+    "design/jango/quality/jobs/05-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/05-v18-r2/preflight.json",
+      "sha256": "e6d920f9d094939e206219682649bda91a2c43a5f7551c1d55a5f85fea5f75d8"
+    },
+    "design/jango/quality/jobs/05-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/05-v18-r2/prompt.txt",
+      "sha256": "98c0d2810eabd635c50f1497e4b2d0c5e2a6561fef757d2abf0a46c88d1bf73b"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/05-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/05-v18-r2.json",
+      "sha256": "369758a93316c7765331752c216c4a2d6197a745e4367819cc9d1f791d092c8a"
+    },
+    "design/jango/quality/candidates/05-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/05-v18-r2.json",
+      "sha256": "29262ad2c54d4cdff869bd68fe2a5cba80acabb838e0d66c7ee65711305e3342"
+    },
+    "design/jango/quality/reports/05-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/05-v18-r2.json",
+      "sha256": "2dbc49d0cd53a93f19f3862e4c0cabded845a46e6ffcfafdd9ebbf2ea7420bd4"
+    },
+    "design/jango/quality/jobs/06-v18-r3/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/06-v18-r3/preflight.json",
+      "sha256": "83f6b0f9ded5cfe51a4cd69fb28117006fa099ce76f21e6cc380cd6bd9e81997"
+    },
+    "design/jango/quality/jobs/06-v18-r3/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/06-v18-r3/prompt.txt",
+      "sha256": "e76f463958d32b9a73c638d4270bdae238139727a06cab4613d0cfb8d28a6ead"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/06-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/06-v18-r3.json",
+      "sha256": "90bbab9064d5db853b47db9c7cfa4e9aa0c687621073840c85348a3624169c4a"
+    },
+    "design/jango/quality/candidates/06-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/06-v18-r3.json",
+      "sha256": "5ccf221d6e5f62d79a24ee3e0f31bad255acdc6b87829e319222f0d588985a94"
+    },
+    "design/jango/quality/reports/06-v18-r3.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/06-v18-r3.json",
+      "sha256": "f787d6fae081b38aa53c333aa306df0b52e605ee0c7607b6d045153ae3a5bcd4"
+    },
+    "design/jango/quality/jobs/07-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/07-v18-r2/preflight.json",
+      "sha256": "f7d3ad3d51b94a8e40de378da9b06ed6869cf8ebf7c81a9e916ff4285559b147"
+    },
+    "design/jango/quality/jobs/07-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/07-v18-r2/prompt.txt",
+      "sha256": "46cdad0075f307736adc7e7d48075d9ab84bfbb8808c55bddb57734401ea6aec"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/07-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/07-v18-r2.json",
+      "sha256": "1035956ab61998708130bf1444c4af42f408f7bfa3ed6adda73830e8cd19c00d"
+    },
+    "design/jango/quality/candidates/07-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/07-v18-r2.json",
+      "sha256": "15d9c544b2d66cb8c6fa510bcd93a7ecec74f260b8648dee45195f230e40f2aa"
+    },
+    "design/jango/quality/reports/07-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/07-v18-r2.json",
+      "sha256": "7cd81dc135e5e5200c02dd13151e9751fbdd3d22469baa6e70219770583cba46"
+    },
+    "design/jango/quality/jobs/08-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/08-v18-r2/preflight.json",
+      "sha256": "cf0cc107be396cd9557913e4dab00cbce7fa0444768684e99227ebfe1f2fa830"
+    },
+    "design/jango/quality/jobs/08-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/08-v18-r2/prompt.txt",
+      "sha256": "9eb49f98a456b1bb58083aecd8e5df8c8029b4afb733f9e148f357b4ef4f1938"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/08-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/08-v18-r2.json",
+      "sha256": "50a1da589dcc6cecf303dabb87221042275d00bcb4e341b3285142b069004633"
+    },
+    "design/jango/quality/candidates/08-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/08-v18-r2.json",
+      "sha256": "6c75fdeddb541ac51eaedd51d76ce65845989f72b738654fb04d9ee6e6e92be5"
+    },
+    "design/jango/quality/reports/08-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/08-v18-r2.json",
+      "sha256": "2895c9cd5f29ffa5572f5cff2b194cde5c6ca948b554edcdbaaed50088f72e04"
+    },
+    "design/jango/quality/jobs/09-v18-r2/preflight.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/09-v18-r2/preflight.json",
+      "sha256": "145ed1c66ed386f505ddbf9871858324163126b2c6d7d63c4e912962d2a93b2a"
+    },
+    "design/jango/quality/jobs/09-v18-r2/prompt.txt": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/jobs/09-v18-r2/prompt.txt",
+      "sha256": "7496e9474d1a343fa641d0462420a2873a4ec2dc18b27ac5e5c733a4a4fa5430"
+    },
+    "design/jango/emoticons/kakao-32/v18/generation-records/09-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/generation-records/09-v18-r2.json",
+      "sha256": "54952f7c213889d23a537b44da849e445c0c5c41191c1f9e3a3371e93a8d135a"
+    },
+    "design/jango/quality/candidates/09-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/candidates/09-v18-r2.json",
+      "sha256": "18a799c3b40c8a337661e16987741ce305234440f70f444f5ebd3d2ca5aa08e8"
+    },
+    "design/jango/quality/reports/09-v18-r2.json": {
+      "archive": "design/jango/quality/history/v18-creation/design/jango/quality/reports/09-v18-r2.json",
+      "sha256": "95cdc1e666b003c3c4ededd88abf866c454b9efb119ae5cc81ef211bb4256ea0"
+    }
+  }
+}

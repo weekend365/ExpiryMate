@@ -1,0 +1,32 @@
+{
+  "id": "09-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/09.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    573,
+    659,
+    110,
+    78
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "동의",
+    "intensity": 1,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "두 장갑을 가슴 앞에 가지런히 모으고 고개를 살짝 끄덕인다. 위아래 짧은 동작선 두 개."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 9
+  },
+  "preflight": "design/jango/quality/jobs/09-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/09-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

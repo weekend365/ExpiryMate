@@ -1,0 +1,32 @@
+{
+  "id": "17-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/17.png",
+  "mouthMode": "sad-arc",
+  "mouthRoi": [
+    581,
+    749,
+    103,
+    60
+  ],
+  "tiltDegrees": 7,
+  "visibility": "clear",
+  "expression": {
+    "family": "사과",
+    "intensity": 2,
+    "eyes": "기본 타원 눈을 조심스럽게 아래로 향함, 위치 범위 유지",
+    "brows": "안쪽이 조금 올라간 걱정 눈썹",
+    "pose": "양손을 앞치마 아래쪽에 낮게 모으고 고개와 상체를 상대에게 약 15도 숙여 사과한다. 작은 파랑 떨림선 두 개."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 17
+  },
+  "preflight": "design/jango/quality/jobs/17-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/17-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

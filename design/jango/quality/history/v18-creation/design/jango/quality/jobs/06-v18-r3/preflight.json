@@ -1,0 +1,101 @@
+{
+  "id": "06-v18-r3",
+  "policyVersion": 4,
+  "attachmentVersion": 2,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 6
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r2.png",
+      "imageIndex": 3
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 6,
+      "imageIndex": 4
+    },
+    {
+      "role": "speak-mouth",
+      "file": "design/jango/reference/mouth/jango-speak-reference.png",
+      "imageIndex": 5
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/06-v18-r3/master-mouth.png"
+    },
+    {
+      "role": "style-direction-origin",
+      "file": "design/jango/reference/styles/crayon-direction-board.png",
+      "panel": "② 손그림 크레파스형"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/06-v18-r3/master-mouth.png": "635ccd8e11a7ecd3a2fc74b18a61036038cadaf5814523217e6a30d09e051634",
+    "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e"
+  },
+  "request": "Keep the edit-target crayon style and happy small speak mouth. Change the giggle pose to make it distinct from applause: shoulders lift bashfully, torso bends a little forward, head tilts about 8 degrees, elbows tuck tightly inward. Both oven mittens are clasped one OVER the other horizontally at the lower chest above the apron pocket, NOT upright palms touching in front of the mouth. Soft closed curved eyes. Small shoulder shake marks. No star. One rounded pouch+one thumb+cuff per glove, no additional fingers. Full original hat and shoes fully inside transparent canvas with ample margin. No lettering.",
+  "mouthMode": "speak-open",
+  "mouthReason": "키득거림을 지정한 입 모드와 눈·눈썹·자세로 표현",
+  "expression": {
+    "family": "키득거림",
+    "intensity": 2,
+    "eyes": "부드럽게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다."
+  },
+  "input": "design/jango/emoticons/kakao-32/v18/source-originals/06-r2.png",
+  "inputSHA256": "afdc9736118082e5f6fc31e2ace07cd718b6fd2ad75b9d01ce8d37e7e63edbbd",
+  "context": {
+    "rules": "9e4300440ce0e608b90d14d450fe6ed566f04400a9c689a03036ffcbf63fe042",
+    "master": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "implementation": "f90032dc3a7f17b6721e20fdd1bd21bcae5febc4e1def6481d105e1d8b29209b",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715",
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e",
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+      "design/jango/reference/styles/crayon-master-selection.json": "86a604e2eb750ee035abf10c26d412eb8dbcce3b220cf44e509af42fd3cb4a66"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE-v2.md": "0123b1be7683717282c0cd3a288534fb0d4b694fcb147cf6a03b80f3572fd6d0",
+      "design/jango/reference/JANGO-STYLE-GUIDE-v2.md": "13706fce3ccf38d886da5ba42a92e8936f8f150f576cdc56ee120830c745ad85"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+    "design/jango/reference/styles/jango-crayon-style-master.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/06-r2.png",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "design/jango/reference/mouth/jango-speak-reference.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/06-r2.png": "afdc9736118082e5f6fc31e2ace07cd718b6fd2ad75b9d01ce8d37e7e63edbbd",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37",
+    "design/jango/reference/mouth/jango-speak-reference.png": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715"
+  },
+  "prompt": "design/jango/quality/jobs/06-v18-r3/prompt.txt",
+  "promptSHA256": "e76f463958d32b9a73c638d4270bdae238139727a06cab4613d0cfb8d28a6ead"
+}

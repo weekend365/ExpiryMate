@@ -1,25 +1,26 @@
 {
-  "version": 1,
+  "version": 5,
   "master": {
-    "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
-    "sha256": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
     "mouthRoi": [
-      473,
-      519,
-      83,
-      51
+      598,
+      632,
+      112,
+      82
     ]
   },
   "documents": [
-    "design/jango/reference/JANGO-CHARACTER-BIBLE-v1.md",
-    "design/jango/reference/JANGO-STYLE-GUIDE-v1.md"
+    "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+    "design/jango/reference/JANGO-STYLE-GUIDE.md"
   ],
   "invariants": {
-    "mouth": "MASTER의 끝이 둥근 단일 U자 선. 내부 채움, 닫힌 테두리, 혀, 치아, 입술 금지.",
+    "mouth": "입은 사전 지정한 네 모드만 사용: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 MASTER 선 색·두께 유지, 채움·혀 없음. 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지.",
     "identity": "싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개. 좌우 반전 금지.",
     "anatomy": "얼굴 비례·눈 간격은 BIBLE 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개.",
-    "style": "MASTER의 팔레트·선화 유지. 감정은 시선·눈썹·고개·몸짓으로 표현.",
-    "exceptions": "감정·동작 요청을 규칙 예외로 해석하지 않는다. 명시적인 규칙 변경은 정본·검사·외부 검수 정책을 함께 검토한다."
+    "style": "v18 24번이 형태·선·색·질감 대표다. 선택한 v18 동작 원화와 입 전용 참조를 역할별로 따른다. 신규 후보는 별도 사용자 채택 전까지 MASTER가 아니다.",
+    "exceptions": "감정·동작 요청을 규칙 예외로 해석하지 않는다. 명시적인 규칙 변경은 정본·검사·외부 검수 정책을 함께 검토한다.",
+    "master": "v18 32종이 유일한 MASTER. 대표 24번, 입 U 09·열린 입 01·중립 11·처진 입 17 참조."
   },
   "mouthScreen": {
     "thresholds": [
@@ -36,13 +37,153 @@
   },
   "visualChecks": [
     "masterIdentity",
-    "mouthSingleStroke",
+    "mouthModeAndReference",
     "mouthRoiAndPose",
     "faceAndEyes",
     "mittensAndConnections",
     "hatDoorAndPalette",
     "sourceMatchesSticker",
-    "smallAndDarkPreview"
+    "smallAndDarkPreview",
+    "mouthContextNatural",
+    "mouthInteriorAndTongue",
+    "expressionMatchesIntent",
+    "expressionContrast"
   ],
-  "scope": "Automated mouth screen for clear near-frontal U mouths only. Other poses/expressions require a separately reviewed policy; never auto-pass."
+  "scope": "Mode-specific conservative screens: existing idle-u and speak-open criteria preserved; neutral-line and sad-arc use stroke topology and curvature. Uncertain geometry requires review; screen pass is never design approval.",
+  "openMouthReference": {
+    "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+    "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthRoi": [
+      594,
+      670,
+      122,
+      100
+    ]
+  },
+  "mouthModes": {
+    "idle-u": "기본·조용한 반응·잠·방전·위로. 내부 채움과 혀 없는 단일 U선.",
+    "speak-open": "소리 내어 인사·말 걸기·웃음·응원·축하·짧은 감탄이 자연스러운 장면. 생성 전 선택 사유 기록 및 speak 참조 필수.",
+    "neutral-line": "거절·토라짐·집중. 끝이 둥근 짧은 수평 단일 입선. 채움·혀·치아 없음. 선택 사유 필수.",
+    "sad-arc": "슬픔·허기·그리움·미안함. 양 끝이 중앙보다 아래로 내려오는 작은 단일 곡선. 채움·혀·치아 없음. 선택 사유 필수."
+  },
+  "openMouthScreen": {
+    "minDarkFraction": 0.4,
+    "maxDarkFraction": 0.88,
+    "minPinkFraction": 0.06,
+    "maxPinkFraction": 0.4,
+    "minPinkCenterY": 0.5,
+    "minPinkCenterX": 0.2,
+    "maxPinkCenterX": 0.8,
+    "minAspectRelative": 0.65,
+    "maxAspectRelative": 1.45,
+    "maxInteriorOtherFraction": 0.08,
+    "minPixels": 40
+  },
+  "lineMouthScreen": {
+    "minCoverage": 0.9,
+    "minThicknessRatio": 0.025,
+    "maxThicknessRatio": 0.2,
+    "maxSlope": 0.5,
+    "maxNeutralCurvature": 0.035,
+    "maxNeutralFlatness": 0.06,
+    "minSadCurvature": 0.05,
+    "maxSadCurvature": 0.28
+  },
+  "defaultStyleProfile": "handdrawn-crayon",
+  "candidateKinds": {
+    "emoticon": "design/jango/emoticons/",
+    "style-reference": "design/jango/style-lab/"
+  },
+  "styleProfiles": {
+    "handdrawn-crayon": {
+      "purpose": "모든 신규 장고 제작 기본 스타일",
+      "documents": [
+        "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+        "design/jango/reference/JANGO-STYLE-GUIDE.md"
+      ],
+      "palette": {
+        "file": "design/jango/reference/styles/crayon-palette.json",
+        "sha256": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9"
+      },
+      "instruction": "v18 32종만 MASTER로 사용한다. 24번의 형태·크레파스 선·불투명 색면·민트·차콜·살구 볼터치를 유지한다. 해당 컷은 동작·소품, 입 전용 참조는 선택한 입 구조 기준이다. 미세 질감은 색 변화로 표현하며 투명 구멍·후광·광택·입체 그라데이션을 만들지 않는다. 대표색에 맞추려고 원화를 재채색하지 않는다.",
+      "visualChecks": [
+        "crayonStroke",
+        "matteOpaqueFill",
+        "peachCheeksAndPalette",
+        "textureReadability",
+        "cleanTransparentSilhouette"
+      ],
+      "styleMaster": {
+        "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+        "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "mouthRoi": [
+          598,
+          632,
+          112,
+          82
+        ]
+      },
+      "selection": {
+        "file": "design/jango/master-set.json",
+        "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+      }
+    }
+  },
+  "attachmentVersion": 3,
+  "compositionReferences": {
+    "v18": {
+      "file": "design/jango/reference/v18-composition.png",
+      "sha256": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+      "panels": 32,
+      "rows": 4,
+      "columns": 8,
+      "role": "v18-composition"
+    }
+  },
+  "masterSet": {
+    "file": "design/jango/master-set.json",
+    "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+  },
+  "mouthReferences": {
+    "idle-u": {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "mouthRoi": [
+        573,
+        659,
+        110,
+        78
+      ]
+    },
+    "speak-open": {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "mouthRoi": [
+        594,
+        670,
+        122,
+        100
+      ]
+    },
+    "neutral-line": {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "mouthRoi": [
+        581,
+        662,
+        100,
+        39
+      ]
+    },
+    "sad-arc": {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "mouthRoi": [
+        581,
+        749,
+        103,
+        60
+      ]
+    }
+  }
 }

@@ -1,0 +1,32 @@
+{
+  "id": "23-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/23.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    576,
+    633,
+    117,
+    91
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "요리의 즐거움",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "한 장갑은 팬 손잡이를, 다른 장갑은 뒤집개를 엄지와 주머니 사이로 잡고 채소를 볶는다. 팬 위로 작은 채소 몇 개만. 팬과 뒤집개가 몸이나 장갑을 관통하지 않으며 팔은 두 개. 음표·문자 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 23
+  },
+  "preflight": "design/jango/quality/jobs/23-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/23-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

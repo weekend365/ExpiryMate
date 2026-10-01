@@ -1,0 +1,92 @@
+{
+  "id": "32-v18-r2",
+  "policyVersion": 4,
+  "attachmentVersion": 2,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 32
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 32,
+      "imageIndex": 3
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/32-v18-r2/master-mouth.png"
+    },
+    {
+      "role": "style-direction-origin",
+      "file": "design/jango/reference/styles/crayon-direction-board.png",
+      "panel": "② 손그림 크레파스형"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/32-v18-r2/master-mouth.png": "a09635df272efc72c40e44be4ac0918acf32b3f4f7b28ddae564459dee6216bd",
+    "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e"
+  },
+  "request": "Use case: precise-object-edit. 구성 보드 32번의 동작과 상황으로 편집 대상 장고를 새로 그린다. 한 장면의 장고 한 명만. 큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다. 눈: 편안하게 감은 웃는 곡선 눈. 눈썹: 없음. 기존 스타일 MASTER의 가벼운 차콜 크레파스 윤곽, 민트 채색 결, 살구 볼터치를 그대로 유지한다. 형태 MASTER의 넓은 얼굴 비율·눈 간격·입 중심·다섯 모자 볼륨·싱글도어·왼쪽 손잡이와 파인애플·오른쪽 경첩 둘을 유지한다. 장갑마다 둥근 주머니 하나+엄지 하나+커프스 하나, 검지·사람 손가락 없음. 눈과 입 중심부는 #1B1B19의 연결된 진한 중심으로, 입 내부에 밝은 입자나 구멍 없음. 요청한 입 모드 외 입은 그리지 않는다. 실제 알파 투명 정사각형 PNG. 완전한 원화로 모자·손·발·소품을 모두 담고 위아래·좌우 각각 최소 8% 투명 여백; 전체 모습이 캔버스의 약 80% 높이를 차지하게 한다. 상반신 출력 프레이밍은 후처리이므로 원본을 자르지 않는다. 작은 하트·별·동작선 외 종이 배경·넓은 크레파스 배경 색칠·후광·바닥 그림자·테두리 카드·번호·한국어·영어·문자·기호 글자·워터마크 없음. 구성 보드에 보이는 문구는 별도 레터링으로 조립하므로 절대 생성하지 않는다.",
+  "mouthMode": "idle-u",
+  "mouthReason": "따뜻한 감사을 지정한 입 모드와 눈·눈썹·자세로 표현",
+  "expression": {
+    "family": "따뜻한 감사",
+    "intensity": 2,
+    "eyes": "편안하게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다."
+  },
+  "input": "design/jango/reference/styles/jango-crayon-style-master.png",
+  "inputSHA256": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+  "context": {
+    "rules": "9e4300440ce0e608b90d14d450fe6ed566f04400a9c689a03036ffcbf63fe042",
+    "master": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "implementation": "f90032dc3a7f17b6721e20fdd1bd21bcae5febc4e1def6481d105e1d8b29209b",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715",
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e",
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+      "design/jango/reference/styles/crayon-master-selection.json": "86a604e2eb750ee035abf10c26d412eb8dbcce3b220cf44e509af42fd3cb4a66"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE-v2.md": "0123b1be7683717282c0cd3a288534fb0d4b694fcb147cf6a03b80f3572fd6d0",
+      "design/jango/reference/JANGO-STYLE-GUIDE-v2.md": "13706fce3ccf38d886da5ba42a92e8936f8f150f576cdc56ee120830c745ad85"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+    "design/jango/reference/styles/jango-crayon-style-master.png",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37"
+  },
+  "prompt": "design/jango/quality/jobs/32-v18-r2/prompt.txt",
+  "promptSHA256": "56ff5034b8f4009f04cc0f30c7211c394d3c457d45552dbde38f335535caece8"
+}

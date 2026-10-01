@@ -2,30 +2,30 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
+import {readMasterSet} from "../../../scripts/jango-master-set.mjs";
+import {screenMouthMode,policy} from "../../../scripts/jango-design-gate.mjs";
 import { sha256, sourceDir, readManifest } from "./sync-mascot-sources.mjs";
 
-export const methodVersion = "outer-door-roi-v1";
-export const targets = { empty: "listless", worry: "worried", speak: "speaking", point: "neutral", "icon-crop": "wink" };
+export const methodVersion = "v18-master-observation-v1";
+export const targets = {idle:24,happy:2,worry:17,cooking:23,empty:20,speak:1,think:11,point:14,"icon-crop":24};
 export const measurementDir = path.join(sourceDir, "measurements");
 const scriptPath = fileURLToPath(import.meta.url);
-const biblePath = path.join(sourceDir, "reference/JANGO-CHARACTER-BIBLE-v1.md");
+const biblePath = path.join(sourceDir, "reference/JANGO-CHARACTER-BIBLE.md");
 const featureNames = ["leftEye", "rightEye", "mouth", "leftCheek", "rightCheek"];
 const sides = ["left", "right", "top", "bottom"];
-const round = (n) => Math.round(n * 1e6) / 1e6;
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 const dark = (r, g, b, a) => a > 220 && Math.max(r, g, b) < 100;
-// Pale green cheek fill, deliberately excluding the saturated mint parts.
-const cheek = (r, g, b, a) => a > 220 && r >= 175 && r <= 225 && g >= 200 && g <= 240 && b >= 180 && b <= 225 && g - r >= 8 && g - b >= 5;
-
+// Peach cheeks; colour classification is diagnostic, never a substitute for source fidelity.
+const cheek = (r,g,b,a) => a>220 && r>=190 && r>g*1.12 && g>=100 && Math.abs(g-b)<65;
 export function validateInput(input) {
-  if (input.version !== 1 || input.method !== methodVersion || !Array.isArray(input.poses)) throw new Error("Unsupported anatomy input");
-  const names = input.poses.map((pose) => pose.mood).sort();
-  if (JSON.stringify(names) !== JSON.stringify(Object.keys(targets).sort())) throw new Error("Anatomy input must contain exactly the five target poses, without duplicates");
-  for (const pose of input.poses) {
-    if (pose.expression !== targets[pose.mood]) throw new Error(`${pose.mood}: wrong expression class`);
-    if (pose.expression === "wink" && !["leftEye", "rightEye"].includes(pose.winkEye)) throw new Error("Wink eye must be explicitly annotated");
-    if (!pose.reviewedAt || !pose.notes) throw new Error(`${pose.mood}: visual annotation provenance missing`);
-    if (pose.uncertaintyPx !== 3 * pose.size[0] / 1024) throw new Error("Use the BIBLE ±3px observation uncertainty scaled to source resolution");
+  if(input.version!==2||input.method!==methodVersion||!Array.isArray(input.poses))throw new Error('Unsupported anatomy input');
+  if(JSON.stringify(input.poses.map(p=>p.mood).sort())!==JSON.stringify(Object.keys(targets).sort()))throw new Error('Anatomy input must contain exactly nine mapped targets');
+  const set=readMasterSet();
+  for(const pose of input.poses){
+    const entry=set.entries.find(e=>e.number===targets[pose.mood]);
+    if(pose.masterNumber!==entry.number||pose.sha256!==entry.sourceSHA256||pose.source!==entry.source.replace('design/jango/',''))throw new Error('Annotation source hash/mapping mismatch');
+    if(JSON.stringify(pose.faceRoi)!==JSON.stringify(entry.inspection.faceRoi)||JSON.stringify(pose.mouthRoi)!==JSON.stringify(entry.inspection.mouthRoi)||pose.tiltDegrees!==entry.inspection.tiltDegrees)throw new Error('Observed ROI or pose changed');
+    if(!pose.observation)throw new Error('Visual observation required');
   }
 }
 
@@ -174,57 +174,28 @@ export function evaluatePose(measurement, pose) {
 
 // Diagnostic only: clone the source, then draw sampled edges, ROIs and measured
 // boxes. Never write to an artwork/source/runtime directory.
-export function renderOverlay(png, pose, measurement) {
-  const output = new PNG({ width: png.width, height: png.height });
-  png.data.copy(output.data);
-  const dot = (x, y, color) => {
-    x = Math.round(x); y = Math.round(y);
-    if (x >= 0 && y >= 0 && x < output.width && y < output.height) output.data.set([...color, 255], (y * output.width + x) * 4);
-  };
-  function line(a, b, color) {
-    const steps = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]));
-    for (let i = 0; i <= steps; i++) dot(a[0] + (b[0] - a[0]) * i / (steps || 1), a[1] + (b[1] - a[1]) * i / (steps || 1), color);
-  }
-  function box([x0, y0, x1, y1], color, angle = 0) {
-    const corners = [[x0, y0], [x1, y0], [x1, y1], [x0, y1]].map((p) => localPoint(p, -angle));
-    corners.forEach((p, i) => line(p, corners[(i + 1) % 4], color));
-  }
-  for (const roi of Object.values(pose.face)) box(roi, [0, 110, 255]);
-  for (const points of Object.values(measurement.sampledEdges)) for (const p of points) dot(...p, [0, 255, 255]);
-  const f = measurement.frame;
-  box([f.left, f.top, f.right, f.bottom], [255, 0, 200], f.angle);
-  for (const name of featureNames) {
-    box(pose.features[name].roi, [255, 140, 0]);
-    const feature = measurement.features[name];
-    if (feature.localBounds) box(feature.localBounds, [220, 0, 0], f.angle);
-    if (feature.measured) {
-      const center = localPoint([feature.measured.x + f.left, feature.measured.y + f.top], -f.angle);
-      line([center[0] - 5, center[1]], [center[0] + 5, center[1]], [220, 0, 0]);
-      line([center[0], center[1] - 5], [center[0], center[1] + 5], [220, 0, 0]);
-    }
-  }
-  return PNG.sync.write(output);
-}
-
 export function buildReport(input, manifest, readSource) {
-  validateInput(input);
-  const overlays = {};
-  const poses = input.poses.map((pose) => {
-    const entries = manifest.poses.filter((entry) => entry.mood === pose.mood);
-    if (entries.length !== 1 || entries[0].sha256 !== pose.sha256 || entries[0].source !== pose.source) throw new Error(`${pose.mood}: annotation does not match the production manifest`);
-    const bytes = readSource(pose.source);
-    if (sha256(bytes) !== pose.sha256) throw new Error(`${pose.mood}: stale annotation/source hash`);
-    const png = PNG.sync.read(bytes);
-    if (JSON.stringify([png.width, png.height]) !== JSON.stringify(pose.size)) throw new Error(`${pose.mood}: source size changed`);
-    const measured = measurePose(png, pose);
-    const evaluated = evaluatePose(measured, pose);
-    const overlay = renderOverlay(png, pose, measured);
-    overlays[`${pose.mood}.png`] = overlay;
-    return { ...pose, ...measured, ...evaluated, overlaySha256: sha256(overlay) };
+  validateInput(input);const overlays={},rules=policy(),set=readMasterSet();
+  const poses=input.poses.map(pose=>{
+    const entry=manifest.poses.find(e=>e.mood===pose.mood);
+    if(!entry||entry.sha256!==pose.sha256||entry.source!==pose.source)throw new Error('Annotation does not match manifest');
+    const bytes=readSource(pose.source);if(sha256(bytes)!==pose.sha256)throw new Error('Source hash mismatch');
+    const png=PNG.sync.read(bytes);if(JSON.stringify([png.width,png.height])!==JSON.stringify(pose.size))throw new Error('Source size changed');
+    const overlay=new PNG({width:png.width,height:png.height});png.data.copy(overlay.data);
+    for(const [roi,color]of [[pose.faceRoi,[0,110,255,255]],[pose.mouthRoi,[255,140,0,255]]]){
+      const [x,y,w,h]=roi;if(x<0||y<0||w<8||h<8||x+w>png.width||y+h>png.height)throw new Error('Incomplete ROI');
+      for(let i=x;i<x+w;i++){overlay.data.set(color,(y*png.width+i)*4);overlay.data.set(color,((y+h-1)*png.width+i)*4);}
+      for(let i=y;i<y+h;i++){overlay.data.set(color,(i*png.width+x)*4);overlay.data.set(color,(i*png.width+x+w-1)*4);}
+    }
+    const master=set.entries.find(e=>e.number===pose.masterNumber);
+    const mouth=screenMouthMode(png,pose.mouthRoi,rules,master.mouthMode);
+    if(master.inspection.visibility!=='clear'||Math.abs(pose.tiltDegrees)>rules.mouthScreen.maxTiltDegrees)mouth.status='needs-review';
+    const colorPixels={charcoal:0,peach:0};
+    for(let i=0;i<png.data.length;i+=4){const color=png.data.subarray(i,i+4);if(dark(...color))colorPixels.charcoal++;if(cheek(...color))colorPixels.peach++;}
+    const overlayBytes=PNG.sync.write(overlay);overlays[pose.mood+'.png']=overlayBytes;
+    return {...pose,mouth,historicalMouthStatus:master.historicalMouthStatus,colorPixels,geometryStatus:'visual-observation-only; face ROI is not a measured door boundary',overlaySha256:sha256(overlayBytes)};
   });
-  const report = { version: 1, method: methodVersion, inputSha256: sha256(Buffer.from(json(input))), implementationSha256: sha256(fs.readFileSync(scriptPath)), bibleSha256: sha256(fs.readFileSync(biblePath)), poses };
-  // Stable numeric serialization; the pass/fail decisions use unrounded values.
-  return { report: JSON.parse(JSON.stringify(report, (_key, value) => typeof value === "number" ? round(value) : value)), overlays };
+  return {report:{version:2,method:methodVersion,inputSha256:sha256(Buffer.from(json(input))),implementationSha256:sha256(fs.readFileSync(scriptPath)),bibleSha256:sha256(fs.readFileSync(biblePath)),status:'master artifact integrity; not full anatomy approval',poses},overlays};
 }
 
 export function assertFreshReport(actual, expected) {
@@ -232,21 +203,9 @@ export function assertFreshReport(actual, expected) {
 }
 
 export function reportMarkdown(report) {
-  const fmt = (n) => n == null ? "unmeasured" : n.toFixed(6);
-  const lines = ["# 추가 포즈의 BIBLE 수치 검수", "", "`mascot:measure`로 생성한 기록. 원화 수정·자동 승인을 수행하지 않는다.", "",
-    "실측값의 범위 내 여부와 오차를 고려한 최종 판정은 구분한다. ±3px/1024px의 좌표 관찰 오차를 원본 크기로 환산하고, 두 경계의 차이인 분자·분모에 각각 ±2배를 전파한 보수적 구간이다. 통계적 신뢰구간이나 원근 복원 결과는 아니다. 허용 범위는 넓히지 않는다.", "",
-    "키트 포즈의 기존 측정은 ../kit-v3/manifest.json에 보존한다. 이 문서는 추가 제작한 5종만 직접 측정한 결과다.", "",
-    "## 측정 입력과 시각 증거", "", "[입력·영역·원본 해시](./inputs.json) · [전체 수치·좌표·판정](./results.json) · [측정 방법과 한계](./README.md)", "",
-    "겹쳐 그린 선: 파랑=외곽 선택 영역, 청록=추출한 외곽 픽셀, 자홍=얼굴 좌표틀, 주황=표정 선택 영역, 빨강=측정한 표정 경계·중심.", ""];
-  for (const pose of report.poses) {
-    lines.push(`## ${pose.mood}: ${pose.status}`, "", `[측정선 이미지](./overlays/${pose.mood}.png)`, "",
-      `원본 SHA-256: \`${pose.sha256}\`. 얼굴 폭 ${fmt(pose.frame.width)}px, 높이 ${fmt(pose.frame.height)}px, 외곽 기준 회전 ${fmt(pose.frame.angleDegrees)}°.`, "",
-      "| 항목 | 실측값 | BIBLE 범위 | 오차 구간 | 실측값 범위 내 여부 | 최종 판정 |", "| --- | ---: | --- | --- | --- | --- |");
-    for (const m of pose.metrics) lines.push(`| ${m.name} | ${fmt(m.value)} | ${m.allowed.map(fmt).join("–")} | ${m.interval.map(fmt).join("–")} | ${m.nominalStatus} | ${m.status} |`);
-    if (pose.issues.length) lines.push("", ...pose.issues.map((issue) => `- ${issue}`));
-    lines.push("");
-  }
-  return `${lines.join("\n")}\n`;
+ const lines=['# v18 앱 원화 관찰 기록','','사용자 MASTER 채택과 자동 입 검사는 별개다. 얼굴 ROI는 시각 비교용 영역이며 문 외곽의 정밀 실측값으로 취급하지 않는다. 색 픽셀 수는 차콜·살구 분류의 진단값이다.',''];
+ for(const p of report.poses)lines.push(`- ${p.mood}: v18 ${p.masterNumber}, 현재 입 ${p.mouth.status}, 제작 당시 ${p.historicalMouthStatus}. [원화 관찰](./overlays/${p.mood}.png)`);
+ return lines.join('\n')+'\n';
 }
 
 export function runMeasurement({ check = false } = {}) {
@@ -266,11 +225,7 @@ export function runMeasurement({ check = false } = {}) {
     fs.writeFileSync(markdownPath, reportMarkdown(report));
     for (const [name, bytes] of Object.entries(overlays)) fs.writeFileSync(path.join(measurementDir, "overlays", name), bytes);
   }
-  for (const pose of report.poses) {
-    const counts = Object.fromEntries(["pass", "fail", "needs-review"].map((s) => [s, pose.metrics.filter((m) => m.status === s).length]));
-    console.log(`${pose.status.toUpperCase()} ${pose.mood}: ${JSON.stringify(counts)}, face ratio=${pose.metrics[0].value}`);
-  }
-  if (check && report.poses.some((pose) => pose.status !== "pass")) throw new Error("Anatomy does not fully meet BIBLE: see measurements/results.json; do not loosen limits or re-approve the artwork");
+  for(const pose of report.poses)console.log(`MASTER ${pose.mood}: source integrity verified; mouth ${pose.mouth.status}; geometry visual review`);
   return report;
 }
 

@@ -1,0 +1,114 @@
+{
+  "baselineCommit": "b730753",
+  "comparison": "Raw pixel evidence for manual review of intentional changes; not a zero-diff CI acceptance or baseline update.",
+  "results": [
+    {
+      "profile": "small-three-button",
+      "screen": "shopping",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 103398,
+      "changedPercent": 11.22,
+      "expectedChange": "Persisted shopping list is now the default; product search moved to a separate tab."
+    },
+    {
+      "profile": "small-three-button",
+      "screen": "notifications",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 67251,
+      "changedPercent": 7.3,
+      "expectedChange": "Device connection status, grouped delivery, space controls and a single same-day option."
+    },
+    {
+      "profile": "small-three-button",
+      "screen": "expiry",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 7426,
+      "changedPercent": 0.81,
+      "expectedChange": "Opened-date section added below; stacked guide width corrected on compact screens."
+    },
+    {
+      "profile": "small-three-button",
+      "screen": "inventory",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 43710,
+      "changedPercent": 4.74,
+      "expectedChange": "Shared activity entry added above inventory controls; refresh indicator and image loading may vary."
+    },
+    {
+      "profile": "small-large-text",
+      "screen": "shopping",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 124557,
+      "changedPercent": 13.52,
+      "expectedChange": "Persisted shopping list is now the default; product search moved to a separate tab."
+    },
+    {
+      "profile": "small-large-text",
+      "screen": "notifications",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 64608,
+      "changedPercent": 7.01,
+      "expectedChange": "Device connection status, grouped delivery, space controls and a single same-day option."
+    },
+    {
+      "profile": "small-large-text",
+      "screen": "expiry",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 23384,
+      "changedPercent": 2.54,
+      "expectedChange": "Opened-date section added below; stacked guide width corrected on compact screens."
+    },
+    {
+      "profile": "small-large-text",
+      "screen": "inventory",
+      "width": 720,
+      "height": 1280,
+      "changedPixels": 57920,
+      "changedPercent": 6.28,
+      "expectedChange": "Shared activity entry added above inventory controls; refresh indicator and image loading may vary."
+    },
+    {
+      "profile": "tablet-landscape",
+      "screen": "shopping",
+      "width": 1600,
+      "height": 1200,
+      "changedPixels": 136528,
+      "changedPercent": 7.11,
+      "expectedChange": "Persisted shopping list is now the default; product search moved to a separate tab."
+    },
+    {
+      "profile": "tablet-landscape",
+      "screen": "notifications",
+      "width": 1600,
+      "height": 1200,
+      "changedPixels": 63846,
+      "changedPercent": 3.33,
+      "expectedChange": "Device connection status, grouped delivery, space controls and a single same-day option."
+    },
+    {
+      "profile": "tablet-landscape",
+      "screen": "expiry",
+      "width": 1600,
+      "height": 1200,
+      "changedPixels": 94,
+      "changedPercent": 0,
+      "expectedChange": "Opened-date section added below; stacked guide width corrected on compact screens."
+    },
+    {
+      "profile": "tablet-landscape",
+      "screen": "inventory",
+      "width": 1600,
+      "height": 1200,
+      "changedPixels": 49599,
+      "changedPercent": 2.58,
+      "expectedChange": "Shared activity entry added above inventory controls; refresh indicator and image loading may vary."
+    }
+  ]
+}

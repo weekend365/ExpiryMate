@@ -1,0 +1,32 @@
+{
+  "id": "30-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/30.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    699,
+    690,
+    104,
+    80
+  ],
+  "tiltDegrees": 24,
+  "visibility": "clear",
+  "expression": {
+    "family": "편안한 수면",
+    "intensity": 1,
+    "eyes": "부드럽게 감은 곡선 눈",
+    "brows": "없음",
+    "pose": "작은 베개에 머리를 대고 옆으로 약 35도 편안하게 누워 민트 이불을 덮고 잠든다. 모자 다섯 볼륨과 얼굴 전체, 얼굴 가까이 모인 장갑이 보인다. 이불은 임시 소품이며 연한 작은 점무늬만. 글자 zzz는 넣지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 30
+  },
+  "preflight": "design/jango/quality/jobs/30-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/30-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

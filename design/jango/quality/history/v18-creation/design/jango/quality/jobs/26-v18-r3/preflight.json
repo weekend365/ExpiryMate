@@ -1,0 +1,94 @@
+{
+  "id": "26-v18-r3",
+  "policyVersion": 4,
+  "attachmentVersion": 2,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 26
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/reference/styles/jango-crayon-style-master.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/26-r2.png",
+      "imageIndex": 3
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+      "panel": 26,
+      "imageIndex": 4
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/26-v18-r3/master-mouth.png"
+    },
+    {
+      "role": "style-direction-origin",
+      "file": "design/jango/reference/styles/crayon-direction-board.png",
+      "panel": "② 손그림 크레파스형"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/26-v18-r3/master-mouth.png": "a09635df272efc72c40e44be4ac0918acf32b3f4f7b28ddae564459dee6216bd",
+    "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e"
+  },
+  "request": "Precisely remove the black musical note from the edit-target, leaving that area fully transparent. Preserve the rest of this shopping scene: both rounded oven mittens on the trolley bar, vegetables, all trolley wheels, lifted foot, closed happy eyes and U line mouth. No letters, no music notes, no glyphs. Those will be separately typeset. Whole original artwork inside transparent canvas with at least 60 pixels space on all four edges. No crop, no extra fingers.",
+  "mouthMode": "idle-u",
+  "mouthReason": "출발을 지정한 입 모드와 눈·눈썹·자세로 표현",
+  "expression": {
+    "family": "출발",
+    "intensity": 2,
+    "eyes": "부드럽게 감은 곡선 눈",
+    "brows": "없음",
+    "pose": "두 장갑으로 작은 장보기 카트의 가로 손잡이를 잡고 한 발 앞으로 움직인다. 카트 안에는 당근·파프리카·초록 채소 몇 개. 손잡이와 장갑 연결 명확, 문자 없음."
+  },
+  "input": "design/jango/emoticons/kakao-32/v18/source-originals/26-r2.png",
+  "inputSHA256": "a19663542e9333010b1ad1f0f75b478fa81d71d11bd0d2174203cc5602711167",
+  "context": {
+    "rules": "9e4300440ce0e608b90d14d450fe6ed566f04400a9c689a03036ffcbf63fe042",
+    "master": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "implementation": "f90032dc3a7f17b6721e20fdd1bd21bcae5febc4e1def6481d105e1d8b29209b",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "34c8ab9adc510e1ffe0b990e225618ea25d62bf06ace17f0dee27e018bdce715",
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-direction-board.png": "6d6b533146d09e94fadf371bebb43ec51a4c084b172ad2aa0e4117cd915d4e0e",
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+      "design/jango/reference/styles/crayon-master-selection.json": "86a604e2eb750ee035abf10c26d412eb8dbcce3b220cf44e509af42fd3cb4a66"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE-v2.md": "0123b1be7683717282c0cd3a288534fb0d4b694fcb147cf6a03b80f3572fd6d0",
+      "design/jango/reference/JANGO-STYLE-GUIDE-v2.md": "13706fce3ccf38d886da5ba42a92e8936f8f150f576cdc56ee120830c745ad85"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png",
+    "design/jango/reference/styles/jango-crayon-style-master.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/26-r2.png",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v10/references/jango-idle-original.png": "6427c274a29f831c1bd3d00bf68b84a9946b228e6e7f236a9b1b18f41ca5c142",
+    "design/jango/reference/styles/jango-crayon-style-master.png": "ff8a2685e490adf4590a72c493585650584518eb27e496b8f96d2cb99a19058c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/26-r2.png": "a19663542e9333010b1ad1f0f75b478fa81d71d11bd0d2174203cc5602711167",
+    "design/jango/reference/compositions/kakao-32-crayon-v18-board.png": "6766f360f2837a5c6abccf621473dd436eef493399bfcbea2ba6e9326f7d6e37"
+  },
+  "prompt": "design/jango/quality/jobs/26-v18-r3/prompt.txt",
+  "promptSHA256": "22814c461ffb720702a7f5ab232bd7522fe9691ff500dc475a68851dcebfcce7"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "18-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/18.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    581,
+    660,
+    110,
+    76
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "위로",
+    "intensity": 1,
+    "eyes": "편안하게 감은 곡선 눈",
+    "brows": "없음",
+    "pose": "작은 분홍 하트를 가슴 아래에서 양손으로 편안하게 받쳐 들고 안정된 정면 자세. 04처럼 앞으로 크게 내밀지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 18
+  },
+  "preflight": "design/jango/quality/jobs/18-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/18-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

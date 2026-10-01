@@ -6,7 +6,7 @@ import { assertFreshReport, buildReport, classifyInterval, evaluatePose, localPo
 import { readManifest, sourceDir } from "./sync-mascot-sources.mjs";
 
 // Synthetic raster fixture: a rectangular refrigerator door, two oval eyes,
-// a bounded mouth and two pale-green cheeks. All geometry is independent of
+// a bounded mouth and two peach cheeks. All geometry is independent of
 // the production images and deliberately changes under each mutation.
 function fixture({ angle = 0, faceWidth = 505, eyeSpacing = 196, mouthDrop = 0, missingCheek = false, wink = false } = {}) {
   const origin = [220, 260], height = 394;
@@ -42,7 +42,7 @@ function fixture({ angle = 0, faceWidth = 505, eyeSpacing = 196, mouthDrop = 0, 
     if (lx >= origin[0] - 0.6 && lx <= origin[0] + faceWidth + 0.6 && ly >= origin[1] - 0.6 && ly <= origin[1] + height + 0.6 && (atXEdge || atYEdge)) color = [30, 30, 30, 255];
     for (const [name, [cx, cy, w, h]] of Object.entries(features)) {
       if (missingCheek && name === "leftCheek") continue;
-      if (((lx - cx) / (w / 2)) ** 2 + ((ly - cy) / (h / 2)) ** 2 <= 1) color = name.includes("Cheek") ? [204, 224, 207, 255] : [27, 27, 25, 255];
+      if (((lx - cx) / (w / 2)) ** 2 + ((ly - cy) / (h / 2)) ** 2 <= 1) color = name.includes("Cheek") ? [237, 174, 161, 255] : [27, 27, 25, 255];
     }
     if (color) png.data.set(color, (y * 1024 + x) * 4);
   }
@@ -103,14 +103,14 @@ describe("anatomy provenance and reproducibility", () => {
     expect(() => validateInput({ ...input, poses: input.poses.slice(1) })).toThrow("exactly");
     expect(() => validateInput({ ...input, poses: [input.poses[0], ...input.poses.slice(0, 4)] })).toThrow("exactly");
     const changed = structuredClone(input);
-    changed.poses[0].expression = "neutral";
-    expect(() => validateInput(changed)).toThrow("expression");
+    changed.poses[0].masterNumber = 2;
+    expect(() => validateInput(changed)).toThrow("mapping");
   });
   it("rejects modified source hashes and stale measurement records", () => {
     expect(() => buildReport(input, readManifest(), () => Buffer.from("modified source"))).toThrow("hash");
     const recorded = JSON.parse(fs.readFileSync(path.join(measurementDir, "results.json"), "utf8"));
     const stale = structuredClone(recorded);
-    stale.poses[0].metrics[0].value += 0.1;
+    stale.poses[0].tiltDegrees += 0.1;
     expect(() => assertFreshReport(stale, recorded)).toThrow("Stale");
   });
   it("reproduces committed measurements and overlays, including honest failing art results", () => {
@@ -118,7 +118,7 @@ describe("anatomy provenance and reproducibility", () => {
     const actual = JSON.parse(fs.readFileSync(path.join(measurementDir, "results.json"), "utf8"));
     expect(() => assertFreshReport(actual, report)).not.toThrow();
     for (const [name, data] of Object.entries(overlays)) expect(data.equals(fs.readFileSync(path.join(measurementDir, "overlays", name)))).toBe(true);
-    // Artwork compliance is enforced by mascot:anatomy:audit. This test verifies
+    // Source integrity is enforced by mascot:anatomy:audit. This test verifies
     // that the measurement engine truthfully reproduces the tracked evidence.
   }, 20000);
 });

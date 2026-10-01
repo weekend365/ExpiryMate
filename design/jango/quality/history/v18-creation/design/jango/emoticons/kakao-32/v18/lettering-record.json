@@ -1,0 +1,546 @@
+[
+  {
+    "number": 1,
+    "line": "안녕!",
+    "fontSize1024": 155,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 300,
+      "y": 150,
+      "size": 155,
+      "rotation": -5,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 2,
+    "line": "좋아!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 3,
+    "line": "최고야!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 4,
+    "line": "고마워!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 5,
+    "line": "사랑해!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 6,
+    "line": "ㅎㅎㅎ",
+    "fontSize1024": 88,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 135,
+      "y": 565,
+      "size": 180,
+      "rotation": -7,
+      "maxWidth": 220,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 7,
+    "line": "화이팅!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 8,
+    "line": "잘했어!",
+    "fontSize1024": 155,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 700,
+      "y": 160,
+      "size": 155,
+      "rotation": 5,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 9,
+    "line": "응!",
+    "fontSize1024": 172,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 135,
+      "y": 565,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 220,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 10,
+    "line": "좋아좋아!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 11,
+    "line": "음...",
+    "fontSize1024": 118,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 135,
+      "y": 565,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 220,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 12,
+    "line": "어?!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 13,
+    "line": "헉!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 14,
+    "line": "아하!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 15,
+    "line": "멋져!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 16,
+    "line": "대단해!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 17,
+    "line": "미안해...",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 18,
+    "line": "괜찮아!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 19,
+    "line": "힘내...",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 20,
+    "line": "배고파...",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 21,
+    "line": "냠냠!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 22,
+    "line": "맛있다!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 23,
+    "line": "요리중!",
+    "fontSize1024": 155,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 610,
+      "y": 135,
+      "size": 155,
+      "rotation": 3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 24,
+    "line": "완성!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 25,
+    "line": "냉장고 체크!",
+    "fontSize1024": 145,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 250,
+      "y": 175,
+      "size": 145,
+      "rotation": -3,
+      "maxWidth": 440,
+      "font": "Gaegu-Regular",
+      "outline": 5,
+      "lines": [
+        "냉장고",
+        "체크!"
+      ]
+    }
+  },
+  {
+    "number": 26,
+    "line": "장보기 가자!",
+    "fontSize1024": 145,
+    "symbols": [
+      {
+        "text": "♪",
+        "x": 170,
+        "y": 600,
+        "size": 135,
+        "rotation": 5
+      }
+    ],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 250,
+      "y": 175,
+      "size": 145,
+      "rotation": -3,
+      "maxWidth": 440,
+      "font": "Gaegu-Regular",
+      "outline": 5,
+      "lines": [
+        "장보기",
+        "가자!"
+      ]
+    }
+  },
+  {
+    "number": 27,
+    "line": "신선해!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": -3,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 28,
+    "line": "오늘 뭐 먹지?",
+    "fontSize1024": 145,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 250,
+      "y": 175,
+      "size": 145,
+      "rotation": -3,
+      "maxWidth": 440,
+      "font": "Gaegu-Regular",
+      "outline": 5,
+      "lines": [
+        "오늘 뭐",
+        "먹지?"
+      ]
+    }
+  },
+  {
+    "number": 29,
+    "line": "피곤해...",
+    "fontSize1024": 155,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 580,
+      "y": 230,
+      "size": 155,
+      "rotation": -5,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 30,
+    "line": "잘자",
+    "fontSize1024": 175,
+    "symbols": [
+      {
+        "text": "zzz",
+        "x": 790,
+        "y": 210,
+        "size": 110,
+        "rotation": 8
+      }
+    ],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 340,
+      "y": 200,
+      "size": 175,
+      "rotation": -5,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 31,
+    "line": "조금만 더!",
+    "fontSize1024": 150,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 512,
+      "y": 115,
+      "size": 150,
+      "rotation": 0,
+      "maxWidth": 900,
+      "font": "Gaegu-Regular",
+      "outline": 7
+    }
+  },
+  {
+    "number": 32,
+    "line": "항상 고마워!",
+    "fontSize1024": 145,
+    "symbols": [],
+    "font": "Gaegu-Regular",
+    "placement": {
+      "x": 250,
+      "y": 175,
+      "size": 145,
+      "rotation": -3,
+      "maxWidth": 440,
+      "font": "Gaegu-Regular",
+      "outline": 5,
+      "lines": [
+        "항상",
+        "고마워!"
+      ]
+    }
+  }
+]

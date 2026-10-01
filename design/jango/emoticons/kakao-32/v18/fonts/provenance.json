@@ -1,0 +1,10 @@
+{
+  "family": "Gaegu",
+  "source": "https://github.com/google/fonts/tree/main/ofl/gaegu",
+  "license": "SIL OFL 1.1",
+  "files": {
+    "Gaegu-Regular.ttf": "aa52c98336f7c62e2896fc8b12b56a75d5b476d88a2f104b0980f4f7ce0adfc3",
+    "Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "OFL.txt": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251"
+  }
+}

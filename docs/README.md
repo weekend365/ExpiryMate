@@ -36,8 +36,7 @@ source_of_truth: true
 |---|---|---|---|
 | [디자인 시스템](./design-system.md) | 토큰 역할, 정보 위계, 공통 UI·문구·접근성 규칙 | design-system | Yes |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
-| [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v2 캐릭터 제작·원본·생성·사용 규칙 | design | Yes |
-| [장고 v2 적용 기록](./jango-v2-migration.md) | 원본·재생성·검증 결과와 플랫폼 제약 | design | No |
+| [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v3 손그림 크레파스 제작·기존 앱 원본·사용 규칙 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |
 | [수익화 운영 기준](./monetization.md) | 광고·파트너스 정책과 QA | product | Yes |
 

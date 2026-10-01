@@ -1,0 +1,32 @@
+{
+  "id": "13-v18-r3",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/13.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    605,
+    676,
+    121,
+    91
+  ],
+  "tiltDegrees": -3,
+  "visibility": "clear",
+  "expression": {
+    "family": "큰 놀람",
+    "intensity": 3,
+    "eyes": "기본 타원 범위 내 높이 110% 정도의 눈",
+    "brows": "높게 올라간 작은 눈썹",
+    "pose": "양 장갑을 몸 옆으로 멈춰 세우고 한 발을 뒤로 물리며 상체가 멈칫한다. 작은 빨강 놀람선. 흰자·동공·빈 O입을 절대 복제하지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 13
+  },
+  "preflight": "design/jango/quality/jobs/13-v18-r3/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/13-v18-r3.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

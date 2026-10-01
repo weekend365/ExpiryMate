@@ -1,0 +1,32 @@
+{
+  "id": "12-v18-r4",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/12.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    595,
+    685,
+    118,
+    91
+  ],
+  "tiltDegrees": 5,
+  "visibility": "clear",
+  "expression": {
+    "family": "가벼운 놀람",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "조금 올라간 눈썹",
+    "pose": "한 장갑을 가슴 앞에서 멈칫, 몸을 살짝 뒤로 젖힌다. 작은 물색 땀방울 두 개. 눈 흰자·빈 O형 입 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 12
+  },
+  "preflight": "design/jango/quality/jobs/12-v18-r4/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/12-v18-r4.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

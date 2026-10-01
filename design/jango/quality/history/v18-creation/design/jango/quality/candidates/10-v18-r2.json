@@ -1,0 +1,32 @@
+{
+  "id": "10-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/10.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    578,
+    642,
+    124,
+    100
+  ],
+  "tiltDegrees": 7,
+  "visibility": "clear",
+  "expression": {
+    "family": "들뜸",
+    "intensity": 3,
+    "eyes": "웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "양팔을 몸 옆으로 벌리고 몸을 한쪽으로 약 12도 기울여 신나게 흔드는 순간. 두 신발과 작은 동작선. 02의 볼 옆 손 환호와 구분."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 10
+  },
+  "preflight": "design/jango/quality/jobs/10-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/10-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

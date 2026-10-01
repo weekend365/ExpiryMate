@@ -1,0 +1,417 @@
+{
+  "status": "candidate-no-signature",
+  "items": [
+    {
+      "number": 1,
+      "id": "01-v18-r2",
+      "observation": "한 장갑 인사와 열린 입. 고정 장식과 낮은 반대 손 보존.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 2,
+      "id": "02-v18-r2",
+      "observation": "볼 옆에 올린 양손과 강한 웃는 눈. 정면 반가움.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 3,
+      "id": "03-v18-r2",
+      "observation": "양쪽 기존 엄지와 별로 정면 칭찬. 양 장갑은 각각 주머니·엄지·커프스 구조.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 4,
+      "id": "04-v18-r3",
+      "observation": "열린 눈·열린 입으로 작은 하트를 아래에서 상대 쪽으로 내민 감사. 32의 큰 하트 포옹과 눈·하트 크기로 구분. 깊이 방향의 팔 전진감은 정지 이미지에서 약함.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 5,
+      "id": "05-v18-r2",
+      "observation": "볼 가까이 모은 장갑과 작은 하트·U 입. 수줍은 애정.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "진한 임계값에서 크레파스 입선 내부의 작은 밝은 입자가 닫힌 영역으로 측정됨. 다른 임계값 통과를 근거로 승인하지 않음.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 6,
+      "id": "06-v18-r3",
+      "observation": "머리를 기울이고 두 장갑을 아래에서 포개며 키득거림. 16의 수직 박수 손과 구별.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 7,
+      "id": "07-v18-r2",
+      "observation": "결의 있는 눈썹과 높게 든 한 장갑·벌린 발. 힘찬 응원.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 8,
+      "id": "08-v18-r2",
+      "observation": "윙크·한쪽 엄지척과 별. 엄지와 둥근 주머니 구조가 읽힘.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 9,
+      "id": "09-v18-r2",
+      "observation": "가슴 앞 모은 두 장갑·U 입·끄덕임 선.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 10,
+      "id": "10-v18-r2",
+      "observation": "양팔을 넓게 벌리고 한 발을 든 들뜸. 02의 얼굴 옆 두 손과 구별.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 11,
+      "id": "11-v18-r4",
+      "observation": "턱의 장갑과 한쪽 눈썹으로 고민. r4에서 수평 중립 입선을 더 가늘게 편집.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 12,
+      "id": "12-v18-r4",
+      "observation": "낮고 넓은 speak 입을 보존하며 원화 전체 여백을 확보한 r4. 멈칫한 손과 땀방울.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "입 주변 여백에 가까운 장갑 윤곽이 함께 잡혀 보수적 자동 판정은 재검토. 전체 입은 보이지만 ROI를 좁혀 통과시키지 않음.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 13,
+      "id": "13-v18-r3",
+      "observation": "재편집에서 낮고 넓은 speak 입으로 교정. 뒤로 물러난 발·올라간 눈썹으로 놀람 전달.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 14,
+      "id": "14-v18-r2",
+      "observation": "장갑의 기존 엄지와 주머니를 들어 전구를 향함. 분리 검지 없이 깨달음을 표시.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 15,
+      "id": "15-v18-r2",
+      "observation": "선글라스는 임시 소품. U 입과 한 손 허리 자세로 자신감.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "선글라스 끝이 입 주변 진단 범위에 가까워 자동 연결 성분 측정이 모호함. 소품과 입을 함께 시각 검수.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 16,
+      "id": "16-v18-r2",
+      "observation": "웃는 곡선 눈·얼굴 아래 마주 모은 장갑과 박수선. 감탄.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 17,
+      "id": "17-v18-r2",
+      "observation": "낮게 모은 양손·걱정 눈썹·처진 입선으로 사과.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 18,
+      "id": "18-v18-r2",
+      "observation": "작은 하트를 안정적으로 받침. 감은 눈·U 입으로 조용한 위로.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 19,
+      "id": "19-v18-r2",
+      "observation": "하트 컵을 두 장갑으로 받쳐 조심스럽게 내민 정면 응원.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 20,
+      "id": "20-v18-r2",
+      "observation": "양손으로 배를 감싸고 sad 입·약한 눈썹·밥 생각 기호로 허기.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "sad 입선의 두께 비율이 임계값에 따라 허용 상한을 넘음. 재생성 또는 외부 검토 필요.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 21,
+      "id": "21-v18-r2",
+      "observation": "한 손 포크·다른 손 접시. 음식이 입과 겹치지 않으며 먹기 직전 기대.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "포크 위 음식 윤곽이 입 주변 진단 범위에 가까움. 자동 측정은 재검토이며 감정 전달 평가는 별도.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 22,
+      "id": "22-v18-r2",
+      "observation": "웃는 곡선 눈으로 국수 그릇을 안음. 입이 음식과 김에 가려지지 않음.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 23,
+      "id": "23-v18-r2",
+      "observation": "뒤집개와 팬을 각각 잡은 두 장갑. 도구는 입을 가리지 않음.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 24,
+      "id": "24-v18-r2",
+      "observation": "양손으로 접시를 앞으로 보여줌. 윙크와 U 입.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 25,
+      "id": "25-v18-r3",
+      "observation": "별도 검지 돌출을 제거하고 둥근 장갑 전체를 체크리스트 쪽으로 돌림.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "측면 2줄 레터링 공간을 넓혀 1024px 조립 기준 글자 크기 145px를 유지. 80px·120px 밝고 어두운 배경에서 줄 순서와 간격을 관찰했고 글자/그림 충돌은 없음. 작은 출력에서는 질감·조리 소품의 세부가 약해짐."
+    },
+    {
+      "number": 26,
+      "id": "26-v18-r3",
+      "observation": "양 장갑이 카트 손잡이를 잡고 한 발을 든 출발. 생성 음표를 제거해 별도 Gaegu 기호로 조립.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "측면 2줄 레터링 공간을 넓혀 1024px 조립 기준 글자 크기 145px를 유지. 80px·120px 밝고 어두운 배경에서 줄 순서와 간격을 관찰했고 글자/그림 충돌은 없음. 작은 출력에서는 질감·조리 소품의 세부가 약해짐."
+    },
+    {
+      "number": 27,
+      "id": "27-v18-r2",
+      "observation": "큰 당근을 두 손으로 안고 윙크. 잎·장갑·당근 끝 모두 보존.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 28,
+      "id": "28-v18-r3",
+      "observation": "턱의 장갑과 기울인 얼굴·수평 입. 당근·치즈·달걀로 메뉴 고민. 입선을 얇게 다시 그린 r3.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "얇게 재편집했으나 중립 입선 두께가 임계값에 따라 상한을 넘음. 통과 사례로 사용하지 않음.",
+      "smallPreview": "측면 2줄 레터링 공간을 넓혀 1024px 조립 기준 글자 크기 145px를 유지. 80px·120px 밝고 어두운 배경에서 줄 순서와 간격을 관찰했고 글자/그림 충돌은 없음. 작은 출력에서는 질감·조리 소품의 세부가 약해짐."
+    },
+    {
+      "number": 29,
+      "id": "29-v18-r2",
+      "observation": "옆으로 누운 피로. 실제 얼굴 기울기는 약 -34도이며 자동 입 측정 범위 밖.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "실제 얼굴 기울기 약 -34도, 자동 입 측정 허용 25도를 넘음. 정면 검사 통과로 처리하지 않음.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 30,
+      "id": "30-v18-r2",
+      "observation": "이불·베개와 감은 눈. 실제 눈 중심선 기울기 약 24도; 수면 곡선 눈과 U 입 구분.",
+      "mouthStatus": "pass",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "입 자동 검사는 선·채움의 보수적 검사만 의미한다. 형태 비례·장갑·소품 연결·감정 전달은 외부 시각 검수 전이다.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 31,
+      "id": "31-v18-r2",
+      "observation": "좁은 벽 뒤에서 빼꼼한 부탁. 한 장갑으로 벽을 짚고 반대 손은 몸 뒤에 가려짐.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "sad 입선 두께 비율이 임계값에 따라 상한을 넘음. 재검토 유지.",
+      "smallPreview": "80px에서 미세 질감·장갑 격자는 약해지지만 주 실루엣과 표정을 우선 확인."
+    },
+    {
+      "number": 32,
+      "id": "32-v18-r2",
+      "observation": "가슴에 큰 하트를 품은 감사. 소품이 입을 가리지 않음.",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "needs-attention",
+      "reviewNote": "진한 임계값에서 작은 질감 입자가 닫힌 영역으로 검출됨. 다른 임계값만 선택해 통과시키지 않음.",
+      "smallPreview": "측면 2줄 레터링 공간을 넓혀 1024px 조립 기준 글자 크기 145px를 유지. 80px·120px 밝고 어두운 배경에서 줄 순서와 간격을 관찰했고 글자/그림 충돌은 없음. 작은 출력에서는 질감·조리 소품의 세부가 약해짐."
+    }
+  ],
+  "pairs": [
+    {
+      "numbers": [
+        2,
+        10
+      ],
+      "result": "반가움과 들뜸: 손 높이와 발 동작으로 구분",
+      "evidence": "02는 정면에서 볼 옆 양손을 올리고, 10은 양팔을 옆으로 벌리고 한 발을 들어 몸을 흔든다."
+    },
+    {
+      "numbers": [
+        3,
+        8,
+        16
+      ],
+      "result": "양손 칭찬 / 윙크 칭찬 / 감탄 박수",
+      "evidence": "03 양쪽 엄지·타원 눈, 08 한쪽 엄지·윙크·기울임, 16 모은 박수 장갑·감은 눈을 비교했다."
+    },
+    {
+      "numbers": [
+        4,
+        18,
+        32
+      ],
+      "result": "하트 크기·눈·기울임으로 감사와 위로를 나눔",
+      "evidence": "04 열린 눈·열린 입과 작은 하트 건넴, 18 정면 감은 눈·U 입과 작은 하트, 32 큰 하트를 품고 고개를 기울인다. 세 컷의 정서가 인접해 구체적 사용 맥락에는 문구가 도움 된다."
+    },
+    {
+      "numbers": [
+        7,
+        19
+      ],
+      "result": "힘찬 응원과 다정한 응원",
+      "evidence": "07 높은 장갑과 결의 있는 눈썹·벌린 발, 19 낮게 받쳐 건네는 하트 컵과 편안한 타원 눈·U 입."
+    },
+    {
+      "numbers": [
+        6,
+        16
+      ],
+      "result": "키득거림과 감탄의 손 형태 분리",
+      "evidence": "06 재편집에서 몸을 기울이고 장갑을 아래에서 포갰다. 16은 얼굴 아래 세운 장갑과 박수선을 유지한다."
+    },
+    {
+      "numbers": [
+        12,
+        13
+      ],
+      "result": "멈칫과 큰 놀람",
+      "evidence": "12 한 장갑·땀방울·조심스런 눈썹, 13 양손·뒤로 물러난 발·높은 눈썹과 빨강 동작선. 두 컷 모두 O 입을 낮고 넓은 speak 입으로 교정했다."
+    }
+  ],
+  "method": "원본·입 확대·실제 최종 배치에서 문구를 가린 전신·80px와 120px의 밝고 어두운 배경을 에이전트가 시각 관찰했다. 사용자 감정 식별 실험이나 외부 서명 검수는 수행하지 않았다.",
+  "limitations": [
+    "32종 모두 외부 서명 전 후보다. 자동 검사와 이 관찰 기록은 최종 디자인 승인이 아니다.",
+    "입 자동 검사 23종 통과, 9종 재검토. 실패했던 이전 시도는 별도 이력으로 보존했다.",
+    "작은 출력에서 조리 채소·봉제선·질감이 약해진다. 25·26·28·32의 긴 문구는 2줄 배치로 보완했으며 80px 가독성은 확대 비교와 함께 판단한다.",
+    "첨부 포스터의 형태 편차·흰자·빈 O 입·분리 검지를 복제하지 않는다. 전체 비례의 정량 적합성을 자동 보증하지 않으며 최종 형태 검수는 별도다.",
+    "v17과 번호별 상황이 다르므로 같은 번호의 전후 비교는 제공하지 않는다. v17과 앱 파일은 원본 해시 그대로 보존했다."
+  ]
+}

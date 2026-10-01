@@ -1,0 +1,32 @@
+{
+  "id": "15-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/15.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    594,
+    667,
+    108,
+    75
+  ],
+  "tiltDegrees": 3,
+  "visibility": "clear",
+  "expression": {
+    "family": "자신감",
+    "intensity": 1,
+    "eyes": "기존 눈 위에 임시 검은 선글라스",
+    "brows": "없음",
+    "pose": "작은 검은 선글라스를 쓰고 한 장갑을 허리 옆에 둔 자신 있는 자세. 다른 장갑을 살짝 들어 인사. 선글라스는 별도 소품이며 눈을 새로 만들지 않는다. 작은 별 두 개."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 15
+  },
+  "preflight": "design/jango/quality/jobs/15-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/15-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -32,7 +32,7 @@
     "screenshots:compare": "node scripts/compare-layout-screenshots.mjs",
     "screenshots:update": "node scripts/compare-layout-screenshots.mjs --update",
     "branding:sync": "node scripts/sync-branding-config.mjs && python3 scripts/sync-branding-from-jango.py",
-    "branding:audit": "node scripts/audit-branding-assets.mjs --check",
+    "branding:audit": "node scripts/audit-branding-assets.mjs --check && python3 scripts/sync-branding-from-jango.py --check",
     "backgrounds:sync": "node scripts/sync-background-assets.mjs",
     "backgrounds:audit": "node scripts/sync-background-assets.mjs --check",
     "store:sync": "node scripts/sync-store-graphics.mjs",

@@ -1,0 +1,9 @@
+{
+  "version": "v18",
+  "status": "user-selected-master",
+  "method": "Immutable selected 32 originals, stickers and lettering adopted as the sole MASTER set. App derivatives now use this set.",
+  "masterSet": "design/jango/master-set.json",
+  "compositionReference": "design/jango/reference/v18-composition.png",
+  "originalCreationRecord": "design/jango/quality/history/v18-creation/design/jango/emoticons/kakao-32/v18/change-record.json",
+  "release": "External signed emoticon release remains separate from user master adoption."
+}

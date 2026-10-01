@@ -1,0 +1,32 @@
+{
+  "id": "22-v18-r2",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v18",
+  "source": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+  "sticker": "design/jango/emoticons/kakao-32/v18/stickers/22.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    569,
+    639,
+    122,
+    100
+  ],
+  "tiltDegrees": -3,
+  "visibility": "clear",
+  "expression": {
+    "family": "맛있는 만족",
+    "intensity": 2,
+    "eyes": "행복하게 감은 곡선 눈",
+    "brows": "없음",
+    "pose": "국수 그릇을 두 장갑으로 가슴 아래에 안고 맛있어하는 웃는 얼굴. 작은 분홍 하트 두 개. 입·혀가 보이게 하고 별도 내민 혀 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/compositions/kakao-32-crayon-v18-board.png",
+    "panel": 22
+  },
+  "preflight": "design/jango/quality/jobs/22-v18-r2/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v18/generation-records/22-v18-r2.json",
+  "disposition": "candidate",
+  "selection": "review-set"
+}
