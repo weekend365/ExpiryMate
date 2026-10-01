@@ -1,0 +1,37 @@
+{
+  "status": "implemented-and-verified",
+  "baselineCommit": "3ccf656aaf344e6fc32b6808f31656b67f6604f9",
+  "changedCode": [
+    "apps/mobile/src/features/inventory/inventory-list-header.tsx"
+  ],
+  "change": "공유 반응형 기준 1.15배 이상에서 안내를 재료 검색으로 축약하고 한 줄 입력을 명시",
+  "preserved": [
+    "기본 크기의 기존 안내 문구",
+    "검색창 크기·글꼴·배치·기능",
+    "이름·브랜드 검색 accessibilityLabel",
+    "공통 AppTextInput 기본값",
+    "모든 배경·MASTER 이미지"
+  ],
+  "verification": {
+    "actualDevice": "Android 13 emulator, 360x640dp",
+    "fontScales": [
+      1.0,
+      1.3,
+      2.0
+    ],
+    "defaultContentDifferentPixels": 0,
+    "searchAndClear": "실제 무결과 검색과 검색어 지우기 확인",
+    "fontScaleRestored": 1.0,
+    "targetedTests": 36,
+    "docs:check": "pass",
+    "lintAndDesignCheck": "pass",
+    "typecheck": "pass",
+    "test": "pass: Jango 20, shared 156, API 509 (4 skipped), mobile 533",
+    "CanvasTypecheck": "pass"
+  },
+  "limitations": [
+    "iOS·실제 기기·태블릿 미실시",
+    "화면 읽기 실제 낭독 미실시; accessibilityLabel 보존만 확인"
+  ],
+  "canvas": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-search-fix-completion-review.canvas.tsx"
+}

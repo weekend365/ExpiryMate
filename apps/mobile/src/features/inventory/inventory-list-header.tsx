@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Alert, Pressable, View } from "react-native";
 import { AppText } from "../../components/AppText";
 import { AppTextInput } from "../../components/AppTextInput";
+import { useResponsiveLayout } from "../../shared/responsive-layout";
 import { colors, spacing } from "../../shared/theme";
 import type { InventoryFacetCounts, InventoryViewFilter } from "./filters";
 import { inventoryScreenStyles as styles } from "./inventory-screen-styles";
@@ -78,6 +79,8 @@ export function InventoryFilterToolbar({
   hasActiveFilters: boolean;
   onClearFilters: () => void;
 }) {
+  const { isComfortableText } = useResponsiveLayout();
+
   return (
     <View
       style={[
@@ -100,8 +103,10 @@ export function InventoryFilterToolbar({
             <AppTextInput
               value={searchQuery}
               onChangeText={onChangeSearchQuery}
-              placeholder="재료 이름이나 브랜드 검색"
+              placeholder={isComfortableText ? "재료 검색" : "재료 이름이나 브랜드 검색"}
               accessibilityLabel="재료 이름이나 브랜드 검색"
+              multiline={false}
+              numberOfLines={1}
               returnKeyType="search"
               autoCorrect={false}
               autoCapitalize="none"
