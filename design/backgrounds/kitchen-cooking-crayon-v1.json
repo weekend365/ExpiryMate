@@ -1,0 +1,17 @@
+{
+  "source": "kitchen-cooking-crayon-v1.png",
+  "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (edit)",
+  "prompt": "kitchen-cooking-crayon-v1.prompt.txt",
+  "previousArtwork": "../reviews/tab-backgrounds-crayon-v1/references/kitchen-cooking-bg.png",
+  "styleReference": "home-welcome-crayon-v1.png",
+  "styleReferenceSha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+  "runtime": "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png",
+  "review": "../reviews/tab-backgrounds-crayon-v1/manifest.json",
+  "status": "implemented-for-review",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-c207f6a4-3981-4b9d-adfc-2536d6f253be.png"
+}

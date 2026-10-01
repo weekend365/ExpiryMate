@@ -1,0 +1,12 @@
+{
+  "trackedFilesCompared": 1313,
+  "unchanged": 1309,
+  "expectedChanges": [
+    "apps/mobile/assets/backgrounds/fridge-interior-bg.png",
+    "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png",
+    "apps/mobile/assets/backgrounds/shopping-preparation-bg.png",
+    "apps/mobile/scripts/sync-background-assets.mjs"
+  ],
+  "unexpectedChanges": [],
+  "homeLoginMasterAndScreenSources": "byte-identical"
+}

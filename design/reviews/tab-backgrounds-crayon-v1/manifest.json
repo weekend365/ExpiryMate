@@ -1,0 +1,116 @@
+{
+  "status": "implemented-locally-for-review",
+  "baselineCommit": "ef1eb18e39dcc4cd8598406523edf5913bf5a595",
+  "baselinePush": "origin/main; ef1eb18 pushed before new background work",
+  "scope": [
+    "추천 배경",
+    "보관함 배경",
+    "장보기 배경"
+  ],
+  "unchanged": [
+    "5개 탭·라우트·레이아웃·카드·버튼·글꼴·문구·동작",
+    "홈·로그인 배경",
+    "v18 MASTER·캐릭터 이미지",
+    "설정(기존 이미지 배경 없음)"
+  ],
+  "production": {
+    "tool": "built-in image_gen",
+    "mode": "individual style-transfer edits",
+    "composition": "each original background",
+    "style": "design/backgrounds/home-welcome-crayon-v1.png",
+    "outputs": [
+      {
+        "path": "design/backgrounds/fridge-interior-crayon-v1.png",
+        "sha256": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067",
+        "dimensions": [
+          1024,
+          1536
+        ]
+      },
+      {
+        "path": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+        "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+        "dimensions": [
+          1024,
+          1536
+        ]
+      },
+      {
+        "path": "design/backgrounds/shopping-preparation-crayon-v1.png",
+        "sha256": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+        "dimensions": [
+          1024,
+          1536
+        ]
+      }
+    ],
+    "refinement": "장보기 하단 고지 뒤 조리대 선·색면을 옅게 조정; 구도와 화면 코드는 유지",
+    "approval": "사용자의 배경 교체 요청에 따라 로컬 적용. 최종 시각 채택 응답은 별도."
+  },
+  "captureEnvironment": {
+    "device": "Pixel_3a_API_33_arm64-v8a Android 13 emulator",
+    "physicalCapturePixels": [
+      720,
+      1280
+    ],
+    "layoutDp": [
+      360,
+      640
+    ],
+    "densityDpi": 320,
+    "fontScales": [
+      1.0,
+      1.3
+    ],
+    "metroPort": 8093,
+    "data": "same local QA refrigerator; no mutations performed",
+    "fontScaleRestored": 1.0
+  },
+  "comparison": [
+    {
+      "tab": "recommendations",
+      "visibleLabeledNodes": 28,
+      "textBoundsAndInteractionPropertiesEqual": true
+    },
+    {
+      "tab": "inventory",
+      "visibleLabeledNodes": 28,
+      "textBoundsAndInteractionPropertiesEqual": true
+    },
+    {
+      "tab": "shop",
+      "visibleLabeledNodes": 26,
+      "textBoundsAndInteractionPropertiesEqual": true
+    }
+  ],
+  "pixelComparison": "foreground-pixel-comparison.json",
+  "preservation": "preservation-result.json",
+  "observations": [
+    "배경 장면·소품·여백과 전체 구도 유지. 재묘화로 미세 윤곽 차이는 있음.",
+    "카드·장고·말풍선·냉장고 선택·탭의 표본 픽셀 영역 전후 동일. 모든 픽셀이 같다는 주장은 아님.",
+    "보관함 상단은 카드로 배경이 대부분 가려짐; 크레파스를 보이게 하려고 UI 위치나 크기를 변경하지 않음.",
+    "스크롤 및 1.3배 글자에서 배경이 불투명 카드나 입력창 내부로 번지지 않음.",
+    "보관함 글자 1.3에서 검색 안내 문구 하단 잘림 관찰. 화면 소스는 기준점과 동일하며 이번 범위에서 레이아웃 수정하지 않음."
+  ],
+  "checks": {
+    "backgrounds:audit": "pass after final artwork sync",
+    "isolatedSyncNegativeChecks": "source tamper, runtime tamper and missing hash rejected",
+    "docs:check": "pass",
+    "design:check": "pass via pnpm lint",
+    "lint": "pass",
+    "typecheck": "pass (includes shared build)",
+    "test": "pass; existing skipped tests preserved",
+    "jango:check": "pass; 0 signed releases unchanged",
+    "CanvasTypecheck": "pass",
+    "git diff --check": "pass"
+  },
+  "notVerified": [
+    "실제 물리 기기",
+    "iOS",
+    "태블릿",
+    "글자 2.0",
+    "화면 읽기 사용자 테스트",
+    "실제 사용자 사용성 테스트"
+  ],
+  "canvas": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-tab-backgrounds-crayon.canvas.tsx"
+}

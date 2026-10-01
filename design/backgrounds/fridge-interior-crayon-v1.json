@@ -1,0 +1,17 @@
+{
+  "source": "fridge-interior-crayon-v1.png",
+  "sha256": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (edit)",
+  "prompt": "fridge-interior-crayon-v1.prompt.txt",
+  "previousArtwork": "../reviews/tab-backgrounds-crayon-v1/references/fridge-interior-bg.png",
+  "styleReference": "home-welcome-crayon-v1.png",
+  "styleReferenceSha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+  "runtime": "apps/mobile/assets/backgrounds/fridge-interior-bg.png",
+  "review": "../reviews/tab-backgrounds-crayon-v1/manifest.json",
+  "status": "implemented-for-review",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-cc1c6366-b7b4-4e82-8c49-959521f667bf.png"
+}

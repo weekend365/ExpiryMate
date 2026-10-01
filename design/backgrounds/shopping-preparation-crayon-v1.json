@@ -1,0 +1,21 @@
+{
+  "source": "shopping-preparation-crayon-v1.png",
+  "sha256": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "tool": "built-in image_gen (edit)",
+  "prompt": "shopping-preparation-crayon-v1.prompt.txt",
+  "previousArtwork": "../reviews/tab-backgrounds-crayon-v1/references/shopping-preparation-bg.png",
+  "styleReference": "home-welcome-crayon-v1.png",
+  "styleReferenceSha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+  "runtime": "apps/mobile/assets/backgrounds/shopping-preparation-bg.png",
+  "review": "../reviews/tab-backgrounds-crayon-v1/manifest.json",
+  "status": "implemented-for-review",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-e112b13f-222b-4dc6-9045-7b4a9222c854.png",
+  "initialGeneratedFile": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-e05415f8-4195-4cf8-aa81-698d0f40bcc5.png",
+  "initialSha256": "16992986dfeab67ba39bd364a104bdc879efeec4ae0f1e846ecff6670b1963a5",
+  "refinementPrompt": "shopping-preparation-crayon-v1.refinement-prompt.txt",
+  "refinementReason": "하단 필수 고지 뒤에 있는 조리대의 가로선과 색면을 옅게 조정해 가독성 유지"
+}

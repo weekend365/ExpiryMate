@@ -1,0 +1,98 @@
+{
+  "recommendations": {
+    "fridgeSelector": {
+      "bounds": [
+        100,
+        110,
+        620,
+        210
+      ],
+      "differentPixels": 0,
+      "totalPixels": 52000
+    },
+    "tabs": {
+      "bounds": [
+        0,
+        1065,
+        720,
+        1180
+      ],
+      "differentPixels": 0,
+      "totalPixels": 82800
+    },
+    "mascotAndBubble": {
+      "bounds": [
+        65,
+        465,
+        665,
+        650
+      ],
+      "differentPixels": 0,
+      "totalPixels": 111000
+    }
+  },
+  "inventory": {
+    "fridgeSelector": {
+      "bounds": [
+        100,
+        110,
+        620,
+        210
+      ],
+      "differentPixels": 0,
+      "totalPixels": 52000
+    },
+    "tabs": {
+      "bounds": [
+        0,
+        1065,
+        720,
+        1180
+      ],
+      "differentPixels": 0,
+      "totalPixels": 82800
+    },
+    "mascotAndBubble": {
+      "bounds": [
+        70,
+        320,
+        650,
+        475
+      ],
+      "differentPixels": 0,
+      "totalPixels": 89900
+    }
+  },
+  "shop": {
+    "fridgeSelector": {
+      "bounds": [
+        100,
+        110,
+        620,
+        210
+      ],
+      "differentPixels": 0,
+      "totalPixels": 52000
+    },
+    "tabs": {
+      "bounds": [
+        0,
+        1065,
+        720,
+        1180
+      ],
+      "differentPixels": 0,
+      "totalPixels": 82800
+    },
+    "mascotAndBubble": {
+      "bounds": [
+        65,
+        465,
+        665,
+        650
+      ],
+      "differentPixels": 0,
+      "totalPixels": 111000
+    }
+  }
+}
