@@ -1,0 +1,147 @@
+{
+  "stage": 1,
+  "status": "concept-accepted-pending-home-implementation",
+  "scope": "홈 배경의 동일 구도 크레파스 표현 시안 1개. 제품 앱 구현 단계가 아님.",
+  "sourceCommit": "d263dba12ca83c093fed2cffaa8eb7832099b519",
+  "createdAt": "2026-10-01T20:35:20.835064+09:00",
+  "generation": {
+    "tool": "built-in image_gen",
+    "useCase": "style-transfer",
+    "promptFile": "generation-prompt.txt",
+    "output": "home-kitchen-crayon.png",
+    "sourceOutput": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-7745e629-e08e-42eb-9ade-62a1410cec9b.png",
+    "references": [
+      {
+        "role": "edit-target / composition",
+        "file": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+        "sha256": "d33ed98ee2804ef2dd3660e6590e9c498aad0af9ef19ef8be622c14bf32cc4fd",
+        "preservedCopy": "reference-home-background.png"
+      },
+      {
+        "role": "stroke / pigment style only; character not generated",
+        "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+        "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+      }
+    ],
+    "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  "render": {
+    "method": "기존 모바일 소스와 일치하는 /private/tmp 체크아웃에서 배경 PNG만 바꾼 후 실제 Android 화면 촬영",
+    "repositoryRuntimeChanged": false,
+    "previewCheckout": "/private/tmp/jango-redesign-before",
+    "metroPort": 8092,
+    "apiPort": 4071,
+    "fontScale": 1.0,
+    "capturePixels": [
+      720,
+      1280
+    ],
+    "previewHarnessDifferences": [
+      "metro watchFolders adds actual workspace for symlinked dependencies",
+      "package entry index.js creates ExpoRoot from same ./app routes"
+    ],
+    "baseline": "../home-baseline-2026-10-01",
+    "sameDataExpected": true,
+    "scrollNote": "상단·하단의 텍스트/접근성 노드 위치·크기는 일치. 중간은 스와이프 관성 차이로 콘텐츠가 일괄 19px 아래에 있으며 X·크기는 일치. 원본 캡처를 이동·보정하지 않았다."
+  },
+  "observations": {
+    "changed": [
+      "배경의 윤곽을 짙은 따뜻한 갈색의 크레파스 선으로 변경",
+      "식물·커튼·가구·바닥의 색면에 크레파스 결 적용",
+      "매끈한 명암을 줄이고 종이에 칠한 듯한 색면으로 변경"
+    ],
+    "preserved": [
+      "창문·커튼·선반·식물·냉장고·가구의 주요 위치와 시점",
+      "기존 카드·말풍선·장고·Pretendard·정보·버튼·5개 탭",
+      "앱 기능 색상과 등록·추천 진입 흐름"
+    ],
+    "visualLimits": [
+      "생성 편집이므로 가구의 미세 윤곽과 내부 세부 표현은 원본 픽셀과 같지 않음",
+      "주방 윤곽은 원본보다 진함. 앱 배경으로서의 강도는 사용자 대조 필요",
+      "표현 범위를 배경으로 한정한 후보로 카드·버튼까지 새로 그린 전체 스타일 안이 아님",
+      "기존 큰 글자 잘림과 기본 말풍선 줄바꿈은 이번에 수정하지 않음"
+    ],
+    "notVerified": [
+      "실사용자 평가",
+      "iOS·태블릿·큰 글자의 후보 화면",
+      "다른 홈 상태",
+      "최종 앱 적용·배포"
+    ]
+  },
+  "decision": "사용자가 홈 배경 시안의 표현 방향을 채택함. 다음 단계는 홈에만 구현한 뒤 실제 화면을 대조하는 작업이며 아직 프로젝트 앱에는 미적용.",
+  "layoutComparison": {
+    "home-top": {
+      "sameVisibleText": true,
+      "sameXAndSize": true,
+      "exactBounds": true,
+      "contentYOffsetPx": [
+        0
+      ],
+      "baselineNodes": 36,
+      "candidateNodes": 36
+    },
+    "home-middle": {
+      "sameVisibleText": true,
+      "sameXAndSize": true,
+      "exactBounds": false,
+      "contentYOffsetPx": [
+        19
+      ],
+      "baselineNodes": 34,
+      "candidateNodes": 34
+    },
+    "home-bottom": {
+      "sameVisibleText": true,
+      "sameXAndSize": true,
+      "exactBounds": true,
+      "contentYOffsetPx": [
+        0
+      ],
+      "baselineNodes": 34,
+      "candidateNodes": 34
+    }
+  },
+  "screenshots": [
+    {
+      "file": "home-bottom.png",
+      "sha256": "dfb6e2c0ad50bdd1df9c1f573f33ec5d895ac56dd86b3bd87035ab4afa8f8ebe"
+    },
+    {
+      "file": "home-middle.png",
+      "sha256": "17b0308c99142bdbeaffbc6a87f3af0e45abc1adcb8a66d7ee131485ce49185b"
+    },
+    {
+      "file": "home-top.png",
+      "sha256": "e9471c52654194118b61f46d7c00b3ceb45784a680989f0c9e5225a5cebfedfa"
+    }
+  ],
+  "verification": {
+    "trackedApplicationAndMasterFilesUnchanged": true,
+    "verifiedFileCount": 1313,
+    "previewBackgroundRestored": true,
+    "newCharacterGeneration": false,
+    "appDeployment": false
+  },
+  "visualAcceptance": {
+    "recordedAt": "2026-10-01T20:42:07.091556+09:00",
+    "basis": "사용자: 시안 맘에 들어.",
+    "scope": "현재 홈 구도를 유지한 크레파스 배경 시안의 선·색칠·질감 방향 채택",
+    "assetSha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+    "runtimeApplied": false,
+    "doesNotApprove": [
+      "다른 화면 구조 변경",
+      "장고 MASTER 변경",
+      "접근성 검증 통과",
+      "앱 배포"
+    ]
+  },
+  "subsequentImplementation": {
+    "record": "../home-crayon-implementation-v1/manifest.json",
+    "status": "home-applied-review-ready",
+    "note": "시안 당시 미적용 기록은 유지하고 후속 실제 적용 기록을 별도 연결"
+  }
+}

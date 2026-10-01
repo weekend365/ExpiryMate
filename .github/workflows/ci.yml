@@ -38,6 +38,9 @@ jobs:
       - name: Documentation
         run: pnpm docs:check
 
+      - name: Background source fidelity
+        run: pnpm --filter @expirymate/mobile backgrounds:audit
+
       - name: Jango design records and signed releases
         run: pnpm jango:check
         env:

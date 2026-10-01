@@ -1,0 +1,157 @@
+{
+  "stage": 2,
+  "status": "home-applied-review-ready",
+  "sourceCommit": "d263dba12ca83c093fed2cffaa8eb7832099b519",
+  "recordedAt": "2026-10-01T20:46:17.556922+09:00",
+  "scope": "채택한 크레파스 배경을 홈에만 실제 적용. 다른 화면으로 확장하지 않음.",
+  "authorization": [
+    "시안 맘에 들어.",
+    "다음 작업 진행해줘."
+  ],
+  "source": "design/backgrounds/home-welcome-crayon-v1.png",
+  "runtime": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+  "acceptedSha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+  "sourceAndRuntimeIdentical": true,
+  "implementation": [
+    "배경 원화를 정본 폴더에 등록",
+    "기존 backgrounds:sync / backgrounds:audit에 홈을 추가",
+    "CI에 배경 정본 일치 검사 추가"
+  ],
+  "preserved": [
+    "모든 모바일 TS/TSX 화면·컴포넌트·스타일",
+    "API·공유 토큰·Admin",
+    "기존 장보기 배경",
+    "v18 MASTER·검수·서명 상태"
+  ],
+  "negativeCheck": "동기화 전 기존 배경에서 audit의 Home out-of-sync 거부를 확인한 후 sync와 audit 통과",
+  "previousReference": "design/reviews/home-crayon-concept-v1/reference-home-background.png",
+  "baseline": "design/reviews/home-baseline-2026-10-01",
+  "notPerformed": [
+    "원격 배포",
+    "iOS 실제 화면",
+    "첫 사용·오류·이어하기 상태의 전체 대조",
+    "실제 사용자 사용성 검증",
+    "태블릿 실제 화면",
+    "화면 읽기 실제 낭독"
+  ],
+  "knownIssue": "기존 large-text 기준은 실행 중 글자 크기 변경 직후 잘림을 관찰한 캡처다. 이번에는 전후 모두 1.3배 설정 후 재시작하여 동일한 확장 배치를 확인했다. 재시작 조건 차이를 결함 수정으로 해석하지 않는다. 동적 글자 변경 문제와 실제 화면 읽기는 미해결·미검증.",
+  "preservationCheck": {
+    "comparedFiles": 1313,
+    "changedFiles": [
+      "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+      "apps/mobile/scripts/sync-background-assets.mjs"
+    ],
+    "allOtherRecordedFilesUnchanged": true
+  },
+  "checks": {
+    "docs:check": "passed",
+    "lint (includes design:check)": "passed",
+    "typecheck": "passed",
+    "test": {
+      "jango": 20,
+      "shared": 156,
+      "apiPassed": 509,
+      "apiSkipped": 4,
+      "mobile": 533
+    },
+    "jango:check": "passed; 0 signed releases, unchanged",
+    "backgrounds:audit": "passed",
+    "canvasTypecheck": "passed",
+    "git diff --check": "passed"
+  },
+  "captures": [
+    {
+      "file": "before-large-text-relaunch.png",
+      "sha256": "a9ea03267722eafbf4d2f023c333fd0f5cea935d1805879bd899ac42abb0ea5f",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.3
+    },
+    {
+      "file": "home-bottom.png",
+      "sha256": "37bca31aaa044185b13d6013417380282e45a8bd3db46d5d6ad87d3893244ba3",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.0
+    },
+    {
+      "file": "home-entry-sheet.png",
+      "sha256": "b2ec7fb746ffe306450919236cec7313250b2fc06cdd4681e3575057f93f1db4",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.0
+    },
+    {
+      "file": "home-large-text.png",
+      "sha256": "94592bf8865345f6bcfca00cd6d1119d3e1afc3634fa25e0d712e0667086f3ec",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.3
+    },
+    {
+      "file": "home-middle.png",
+      "sha256": "10916178aeb05baef154e61eda54600978695825ceac265d371dbb2ac9e87d5c",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.0
+    },
+    {
+      "file": "home-top.png",
+      "sha256": "068aa51ff3dd04c511041814e8e91cf7e86cfe65ea93dd4c1208fcc7209320cf",
+      "dimensions": [
+        720,
+        1280
+      ],
+      "fontScale": 1.0
+    }
+  ],
+  "captureEnvironment": {
+    "platform": "Android 13 emulator",
+    "viewportDp": [
+      360,
+      640
+    ],
+    "runtime": "actual workspace Metro 8093; before large-text comparison uses isolated old-background Metro 8092",
+    "data": "같은 QA 냉장고: 확인 1 / 만료 1 / 곧 5 / 여유 4",
+    "registration": "선택창 열기·닫기만 확인; 저장 수행 없음"
+  },
+  "observations": [
+    "상단 4개 전경 영역 픽셀 차이 0: 공간 선택·장고/말풍선·기한 카드 내용·탭. 전체 화면 픽셀 동일 주장은 아님.",
+    "상단·하단 XML의 추가 로딩 접근성 설명을 별도로 기록.",
+    "등록 선택창 PNG는 제목 노출 확인 후 캡처. 기존과 배경 스크롤 위치가 다를 수 있음."
+  ],
+  "emulatorFontScaleRestored": 1.0,
+  "comparisonCanvas": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-home-applied.canvas.tsx",
+  "validationLogs": [
+    {
+      "path": "/private/tmp/jango-home-apply-docs.log",
+      "sha256": "7f339e7f49c4e5bf80e25cf0b863d6fd66945ead43dc6cf8f6627ab76497c82d"
+    },
+    {
+      "path": "/private/tmp/jango-home-apply-jango.log",
+      "sha256": "56a245ea2d94bae774438607ee92ff2db1aa973d90b40b52eab027a7b943c138"
+    },
+    {
+      "path": "/private/tmp/jango-home-apply-lint.log",
+      "sha256": "aeebfe25093162b7793de107d0a5b604850955a2e7255a35f1f0351f994d68a5"
+    },
+    {
+      "path": "/private/tmp/jango-home-apply-test.log",
+      "sha256": "60ff8e27eda49534e0e1f95a785433b1c1dbee86669cc02ac54e4f681f289bb8"
+    },
+    {
+      "path": "/private/tmp/jango-home-apply-typecheck.log",
+      "sha256": "c9a9678b75aa907ba7195ea59dabade53ecf97b6d241f0777e244e0064ae9259"
+    }
+  ]
+}

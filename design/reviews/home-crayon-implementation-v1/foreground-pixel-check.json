@@ -1,0 +1,42 @@
+[
+  {
+    "name": "space-selector",
+    "rect": [
+      90,
+      120,
+      630,
+      210
+    ],
+    "changedPixels": 0
+  },
+  {
+    "name": "mascot-and-bubble",
+    "rect": [
+      90,
+      330,
+      620,
+      490
+    ],
+    "changedPixels": 0
+  },
+  {
+    "name": "expiry-card-content",
+    "rect": [
+      90,
+      600,
+      630,
+      990
+    ],
+    "changedPixels": 0
+  },
+  {
+    "name": "tab-bar",
+    "rect": [
+      0,
+      1073,
+      720,
+      1184
+    ],
+    "changedPixels": 0
+  }
+]

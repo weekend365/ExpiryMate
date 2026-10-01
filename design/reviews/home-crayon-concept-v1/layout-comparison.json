@@ -1,0 +1,32 @@
+{
+  "home-top": {
+    "sameVisibleText": true,
+    "sameXAndSize": true,
+    "exactBounds": true,
+    "contentYOffsetPx": [
+      0
+    ],
+    "baselineNodes": 36,
+    "candidateNodes": 36
+  },
+  "home-middle": {
+    "sameVisibleText": true,
+    "sameXAndSize": true,
+    "exactBounds": false,
+    "contentYOffsetPx": [
+      19
+    ],
+    "baselineNodes": 34,
+    "candidateNodes": 34
+  },
+  "home-bottom": {
+    "sameVisibleText": true,
+    "sameXAndSize": true,
+    "exactBounds": true,
+    "contentYOffsetPx": [
+      0
+    ],
+    "baselineNodes": 34,
+    "candidateNodes": 34
+  }
+}

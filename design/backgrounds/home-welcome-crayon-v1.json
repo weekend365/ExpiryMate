@@ -1,0 +1,13 @@
+{
+  "source": "home-welcome-crayon-v1.png",
+  "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "usage": "모바일 홈 배경만 사용",
+  "acceptedFrom": "../reviews/home-crayon-concept-v1/manifest.json",
+  "prompt": "../reviews/home-crayon-concept-v1/generation-prompt.txt",
+  "previousArtwork": "../reviews/home-crayon-concept-v1/reference-home-background.png",
+  "runtime": "apps/mobile/assets/backgrounds/home-welcome-bg.png"
+}
