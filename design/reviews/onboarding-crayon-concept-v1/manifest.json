@@ -1,0 +1,96 @@
+{
+  "status": "rejected-and-removed",
+  "decision": "사용자: 그래 장식은 제거하자.",
+  "reason": "기존 캐릭터 동작선과 역할이 중복되고 안내에 필요한 표현이 아님. 첫 사용 안내는 기존 화면 유지.",
+  "runtimeApplied": false,
+  "sourceCommit": "0196dfaca7be4834b1742d704a0f4363bfad4aca",
+  "sourceScreen": "apps/mobile/app/onboarding.tsx",
+  "sourceScreenSHA256": "2135ad4c084dedff3b793df31017da9604d4d851c9d1463b9069a859933b5b44",
+  "preserved": [
+    "before/ 기준 캡처",
+    "preservation.json 원본 해시"
+  ],
+  "removed": [
+    {
+      "path": "after/font-1.0.png",
+      "sha256": "a4343e08b3fdefea6579eb6e040c1129dbb0bd1cdaa00d703aa9e36449cf344f"
+    },
+    {
+      "path": "after/font-1.0.xml",
+      "sha256": "1f6e00b929ed5c8bc6dc3b1ca953c209a537034370cf10861db18b021f02558f"
+    },
+    {
+      "path": "after/font-1.3.png",
+      "sha256": "ccaa38bc33b602ebda0ef007eb8a911debe9251810211aa1271cbe7b27ef4f4f"
+    },
+    {
+      "path": "after/font-1.3.xml",
+      "sha256": "a18aa53e3eadd16cb1f779257024a956554afecb230f7563758cd423a02c0d37"
+    },
+    {
+      "path": "after/guide.png",
+      "sha256": "ef8a3941db615c7d1226f705ae729e1ce0e64e0939d5c1722ba2dfcbd62d09fb"
+    },
+    {
+      "path": "after/guide.xml",
+      "sha256": "1e65ecc20c580f0c3725507068e40997930761127c025c2715032c869eb1c54b"
+    },
+    {
+      "path": "after/font-1.0-bottom.png",
+      "sha256": "18d45b4350206f0a9731aadc63f2d604ea558d0c61b883c4e1f99c96b390083d"
+    },
+    {
+      "path": "after/font-1.0-bottom.xml",
+      "sha256": "f969807a44553ce9e76f539b58c774641d40d5c8544560f1d77665ac61da00c1"
+    },
+    {
+      "path": "after/font-2.0.xml",
+      "sha256": "1c9b6a53fdc207801cd3e6ae1483cad54bd2f4c9e445b8b526d3c28c1aee8c88"
+    },
+    {
+      "path": "after/font-2.0.png",
+      "sha256": "3ce234fdbbe45d4184e5dc34eb6a07e56d2fd31c3ea0f35cf1d6cfd4f13a1ff0"
+    },
+    {
+      "path": "after/login-registered-return.xml",
+      "sha256": "933540dec1773383a1156b06148d2ad30b9a67892a3f6eb67538ad468dce7a32"
+    },
+    {
+      "path": "after/font-2.0-bottom.png",
+      "sha256": "d23d6768ae6f9b3da4994f3b65da5c04d1209f8c790c686680d78e3828ecc70d"
+    },
+    {
+      "path": "after/font-2.0-bottom.xml",
+      "sha256": "6ec327a6ceebab22715301e7a8218b86c31e00e502e042dd4fcc6be2ac0d9214"
+    },
+    {
+      "path": "after/font-1.3-bottom.png",
+      "sha256": "3e10a9107e9c4e3f0d0127876adb2162d735fdabbcc00e25bfc92d8291010344"
+    },
+    {
+      "path": "after/font-1.3-bottom.xml",
+      "sha256": "f2134fa85970f51e094d76c63091bb33b2a1e5b91a44be93aeb71b346a0355fe"
+    },
+    {
+      "path": "crayon-accent.png",
+      "sha256": "8a009195e777e621db32117c3f2c5e4288526878b364a7ecaf7362f21db3d1c7"
+    },
+    {
+      "path": "generation-prompt.txt",
+      "sha256": "f5d86f2d7223f2aa3cb5bf71c3f614b1c2d396a67d319334b8bb2b08565b3c12"
+    },
+    {
+      "path": "preview-onboarding.tsx.txt",
+      "sha256": "aeda7705643ea766589cdf9adb3616e694d0488cc8ac7b13fb78a4db7f3306b0"
+    },
+    {
+      "path": "layout-comparison.json",
+      "sha256": "339c50995d10a4af74a50f9a99a3a9993351484b6eebe286eba291694cd07a23"
+    },
+    {
+      "path": "pixel-comparison.json",
+      "sha256": "5d12925451ab9b5c200c2b4f6612d92d7b50a8d1be70a5203aa61d331ed5f68c"
+    }
+  ],
+  "next": "빈 상태의 기존 표현을 확인하고 변경 필요성부터 판단. 장식을 추가하는 것을 기본값으로 삼지 않음."
+}
