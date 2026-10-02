@@ -1,0 +1,39 @@
+{
+  "status": "android-large-text-checked-partial-photo-and-barcode-coverage",
+  "environment": {
+    "device": "Android 13 emulator",
+    "window": "720x1280 pixels at 320 dpi",
+    "fontScale": 2,
+    "api": "isolated local QA server on port 4071",
+    "restoredFontScale": 1
+  },
+  "directRegistration": {
+    "method": "one uniquely named QA item saved through the app after scrolling the expiry form",
+    "result": "completion started at the top; the full message was reachable by scrolling; actions and return to inventory remained available",
+    "cleanup": "the QA item was discarded through the app and the same search returned zero items",
+    "capture": "android-font-2-direct-complete.png",
+    "sha256": "8e733c6b6c009748799e5f89c3c6b98c593977962fffcb2ea99defb9a017c587"
+  },
+  "photoCompletion": {
+    "method": "temporary development-only completion state with three example items; no photo parsing or server save",
+    "result": "title, count, Jango and return button were visible at font scale 2; the button returned to inventory",
+    "fix": "the photo completion Screen has a distinct React key so it cannot inherit the review ScrollView position",
+    "fixtureRemoved": true,
+    "capture": "android-font-2-photo-state.png",
+    "sha256": "a240b9848fdaad2b14c6c2dfe1e785cbd83fe260009a4ce539d5b30674e01aa6"
+  },
+  "barcode": {
+    "finding": "scanner-camera routes recognized results through registerRoute into the same registration completion Screen",
+    "actualCameraScanVerified": false
+  },
+  "ios": {
+    "verified": false,
+    "reason": "Xcode license has not been accepted on this machine; simctl and xcodebuild exit with code 69"
+  },
+  "checks": {
+    "focusedTests": "41 passed across registration, photo draft and responsive text tests",
+    "mobileTypecheck": "passed",
+    "lintAndDesignCheck": "passed"
+  },
+  "retention": "Only two distinct final-state screenshots are retained. Intermediate screenshots and UI-tree dumps are not part of this review."
+}

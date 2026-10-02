@@ -72,6 +72,7 @@ export const semanticColors = {
   border: cream[400],
   borderSubtle: cream[400],
   borderControl: "#7B887F", // >=3:1 on warm/selected surfaces; expiry colors stay unchanged.
+  brandSketchLine: "#4A4038", // Decorative crayon contour; never a status or control border.
   focusRing: brand[600],
 
   // Camera overlays

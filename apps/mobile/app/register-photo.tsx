@@ -704,7 +704,12 @@ export default function RegisterPhotoScreen() {
           onShowAccessDetails={() => setAccessDetailsVisible(true)}
         />
       ) : (
-        <Screen title={title} subtitle={subtitle} footer={footer}>
+        <Screen
+          key={step === "done" ? "photo-registration-complete" : "photo-registration-flow"}
+          title={title}
+          subtitle={subtitle}
+          footer={footer}
+        >
           {step === "loading" ? (
             <View style={styles.loadingCard}>
               <PhotoFlowProgress current={1} />

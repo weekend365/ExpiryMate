@@ -31,6 +31,7 @@ type JangoHeroNoticeCarouselProps = {
   density?: "default" | "compact";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
+  appearance?: "default" | "crayon";
   onIndexChange?: (index: number) => void;
 };
 
@@ -40,6 +41,7 @@ export function JangoHeroNoticeCarousel({
   density = "default",
   textVariant,
   bubbleStyle,
+  appearance = "default",
   onIndexChange,
 }: JangoHeroNoticeCarouselProps) {
   const [noticeIndex, setNoticeIndex] = useState(0);
@@ -133,6 +135,7 @@ export function JangoHeroNoticeCarousel({
                 density={density}
                 textVariant={textVariant}
                 bubbleStyle={bubbleStyle}
+                appearance={appearance}
               />
             </View>
           ))}
@@ -144,6 +147,7 @@ export function JangoHeroNoticeCarousel({
           density={density}
           textVariant={textVariant}
           bubbleStyle={bubbleStyle}
+          appearance={appearance}
         />
       ) : null}
     </View>
@@ -156,12 +160,14 @@ function JangoHeroNoticeBubble({
   density,
   textVariant,
   bubbleStyle,
+  appearance,
 }: {
   notice: JangoHeroNoticeItem;
   size: "small" | "medium";
   density: "default" | "compact";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
+  appearance: "default" | "crayon";
 }) {
   const bubble = (
     <MascotSpeechBubble
@@ -172,6 +178,7 @@ function JangoHeroNoticeBubble({
       density={density}
       textVariant={textVariant}
       style={bubbleStyle}
+      appearance={appearance}
     />
   );
 
