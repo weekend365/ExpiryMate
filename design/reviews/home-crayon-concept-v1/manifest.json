@@ -8,7 +8,7 @@
     "tool": "built-in image_gen",
     "useCase": "style-transfer",
     "promptFile": "generation-prompt.txt",
-    "output": "home-kitchen-crayon.png",
+    "output": "../../backgrounds/home-welcome-crayon-v1.png",
     "sourceOutput": "/Users/namu/.codex/generated_images/01a0f097-3b78-75b0-befe-1b3226377eb0/exec-7745e629-e08e-42eb-9ade-62a1410cec9b.png",
     "references": [
       {

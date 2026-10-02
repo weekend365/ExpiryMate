@@ -1,10 +1,6 @@
 {
   "before-save.png": "3ad29a4fc6f6147453aeedc99978c9b1a0ba8d41fcde517fe8dd63a8c2df4d70",
-  "before-save.xml": "57466d7fe21c029f63173c974f4fb03a9fbe21056596033238ef5ede0cbd6bf3",
   "manual-before-next.png": "e6c450aed105f9b2e4f60ee67abf6c27d1a154168fb5a09f30bae1fc4a5f7c8a",
-  "manual-before-next.xml": "36396843fd17bf7fc10cc1fa6d20b903a038604dcd080e3b2f6e9ff0016bc660",
   "manual-complete.png": "aeda82c94c434c5b2d90a6a24da4c74c7a1480c272635dbf593291723425ad8e",
-  "manual-complete.xml": "55e2a89f359ec3ba4c5c4e587656b46ac8067dc65b1902401171bd426037c9e7",
-  "returned-inventory.png": "46b5c4cfe15a80daa77d0545c45cea6ef059a749562e9a2211b4501ffe166dd4",
-  "returned-inventory.xml": "07cc172ed73a36653c3b55a898d67edfbdef648f9b8877eb8439b12f5182a7ee"
+  "returned-inventory.png": "46b5c4cfe15a80daa77d0545c45cea6ef059a749562e9a2211b4501ffe166dd4"
 }
