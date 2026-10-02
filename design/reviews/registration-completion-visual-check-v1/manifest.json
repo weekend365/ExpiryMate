@@ -1,0 +1,50 @@
+{
+  "status": "verified-on-android-emulator-retain-current-visual-style",
+  "date": "2026-10-02",
+  "codeCommit": "42703a47a95103e993b976b93ae0b7165558ce88",
+  "resolvesEarlierUnverifiedRecord": "../registration-completion-scroll-fix-v1/manifest.json",
+  "conditions": {
+    "device": "Android 13 Pixel 3a emulator",
+    "layout": "360×640dp",
+    "api": "isolated local QA 127.0.0.1:4071",
+    "fontScale": 1.0,
+    "route": "register?from=inventory",
+    "data": "one test item with unknown expiry"
+  },
+  "actions": [
+    "Scrolled the expiry form to the bottom",
+    "Selected unknown expiry and saved",
+    "Observed the completed screen at top with full Jango and success copy",
+    "Scrolled the completed screen to the saved item",
+    "Tapped existing 추가 완료 button and returned to inventory"
+  ],
+  "results": {
+    "fullCompletionMessageVisibleInActualScreenshot": true,
+    "savedItemPresentInScrolIedUITree": true,
+    "completionScrollWorks": true,
+    "returnToInventoryWorks": true,
+    "assetOrRuntimeCodeChangedThisReview": false,
+    "testItemCreated": 1,
+    "testItemAndItsActivityAndRequestRemoved": true,
+    "itemCountAfterCleanup": 22
+  },
+  "captureNote": "The screenshot was captured after the transition; the paired XML snapshot for complete-after-scroll was taken before the transition because the item name was present in both states. The XML is not evidence for the success message.",
+  "designObservation": "The existing v18 Jango drawing, mint notice card, and plain result card already make the success state readable. Additional crayon ornament behind the item name or buttons would compete with the transaction result.",
+  "decision": "Retain current completion artwork and layout; do not add ornament or change fonts, card positions, copy, or button order in this review.",
+  "comparisonCaveat": "Prior and current actual screenshots use different QA item names and were taken on consecutive days; compare framing and visibility, not text pixels.",
+  "capturedPngSha256": {
+    "before-save.png": "dd71bacba01f10077d5629bd27bb3bc9e64bd2df96ada19e82c5ce5dcc66ae2c",
+    "complete-after-scroll.png": "4e60e21c08ffcc95047cc0d5b947aea7ef4889b715fa15923ce1a078c9fa29e5",
+    "complete-scrolled.png": "1c603a2d5ec2ba75343fbc01f3304afb0360b0097335c48810263bca79d6eb03",
+    "form-scrolled.png": "a0ce3a8e689e4d7854c887ef3ea6e8eaefbf778cc2a4a662f8bd5fbcee3601a9",
+    "returned-inventory.png": "70b424bb185db4ed96c37de1ea072354b45624b1e974b400a1cf9d54d92e91a5"
+  },
+  "canvas": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-registration-completion-visual-check.canvas.tsx",
+  "notVerified": [
+    "Physical device",
+    "iOS",
+    "tablet",
+    "large system font",
+    "photo/barcode save flow"
+  ]
+}
