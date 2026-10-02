@@ -791,6 +791,7 @@ export default function RegisterScreen() {
 
     return (
       <Screen
+        key="registration-complete"
         contentWidth="form"
         contentStyle={styles.screenSections}
         topInsetMode="none"
@@ -881,6 +882,7 @@ export default function RegisterScreen() {
 
   return (
     <Screen
+      key="registration-form"
       contentWidth="form"
       contentStyle={styles.screenSections}
       topInsetMode="none"

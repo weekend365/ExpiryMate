@@ -1,0 +1,5 @@
+{
+  "commit": "af62d48afb1da0c87cbab6c44d42b666b8a928c3",
+  "before": "../registration-completion-review-v1/manual-complete.png",
+  "change": "Different Screen keys isolate form/completion scroll containers; form state remains in parent."
+}

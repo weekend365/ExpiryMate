@@ -28,12 +28,17 @@ name: Registration returns to the existing recommendation setup
 - tapOn:
     id: register-next-button
 - tapOn: "유통기한을 모르겠어요"
+# Completing a scrolled form must show the result from the top.
+- swipe:
+    direction: UP
+    duration: 500
 - tapOn:
     id: register-next-button
 - extendedWaitUntil:
     visible:
       id: registration-finish-button
     timeout: 20000
+- assertVisible: "복귀 테스트 재료를 넣었어요"
 - assertVisible: "추천으로 돌아가기"
 - takeScreenshot: ${SCREENSHOT_DIR}/registration-return-complete
 - tapOn:

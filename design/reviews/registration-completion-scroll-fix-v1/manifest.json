@@ -1,0 +1,39 @@
+{
+  "status": "implemented-automated-checks-passed-device-recheck-blocked",
+  "cause": "입력·완료 분기가 같은 Screen/ScrollView 인스턴스를 재사용하여 이전 스크롤 위치를 유지",
+  "fix": "registration-form과 registration-complete 키로 스크롤 컨테이너 구분. 완료 진입과 다음 입력 시작에 새 컨테이너를 사용. 입력 단계 사이·완료 상태 재렌더는 같은 키 유지.",
+  "scope": [
+    "apps/mobile/app/register.tsx: two keys",
+    "apps/mobile/.maestro/registration-return.yaml: scrolled form completion visibility assertion"
+  ],
+  "preserved": [
+    "입력값과 등록 이력은 부모 상태 유지",
+    "완료 안내·장고·버튼·레이아웃·저장 로직",
+    "공통 Screen 기본 동작",
+    "사진 등록 경로 미변경"
+  ],
+  "verification": {
+    "docs:check": "pass",
+    "lint": "pass including design check",
+    "typecheck": "pass",
+    "tests": "pass: Jango20/shared156/API509+4skipped/mobile533",
+    "diffCheck": "pass",
+    "sourcePreservation": "source-preservation.json",
+    "actualAfterCapture": "NOT VERIFIED: Android System UI ANR and null UiAutomator root persisted after reboot; see emulator-system-ui-error.png",
+    "maestroFlow": "regression assertion added; Maestro CLI unavailable, not executed",
+    "localTestRowsCreated": 0
+  },
+  "reproduction": [
+    "격리된 테스트 API에서 register?from=home&returnTo=recommendations 진입",
+    "복귀 테스트 재료 입력 후 기한 모름 선택",
+    "입력 화면 아래로 스크롤한 상태로 재료 추가",
+    "완료 안내가 상단에서 보이는지 확인",
+    "완료 화면 스크롤 후 재조회에 강제 초기화되지 않는지 확인",
+    "다음 재료 입력·두 번째 저장·원래 화면 복귀 확인"
+  ],
+  "limitations": [
+    "수정 후 실제 화면·연속 저장·복귀 미검증",
+    "iOS·큰 글자 미검증"
+  ],
+  "runtimeChangeIsOnlyTwoKeys": true
+}

@@ -1,0 +1,10 @@
+{
+  "source": "apps/mobile/app/register.tsx",
+  "beforeSha256": "f3c058abb4c0136b89cc8c317b1d292a3d5b0b0c33e2131412228df15ad9889f",
+  "afterSha256": "6529a867084a207a4157e386d6dba18b6f29f5ef486dc726a563d8f6173cc778",
+  "onlyRuntimeChange": "two explicit keys distinguishing form and completion Screen trees",
+  "sharedScreenChanged": false,
+  "formStepsShareSameKey": true,
+  "formStateLivesInParent": true,
+  "visualContentAndActionsUnchanged": true
+}
