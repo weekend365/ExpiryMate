@@ -1,71 +1,53 @@
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { colors, radius } from "../shared/theme";
-
-const OUTSET = 18;
-const INSET = 1.5;
+import { getCrayonSpeechBubbleGeometry } from "../shared/crayon-speech-bubble";
+import { colors, crayonSpeechBubble } from "../shared/theme";
 
 /** A stable speech shape with restrained pigment on its outline. */
 export const CrayonSpeechBubbleArt = memo(function CrayonSpeechBubbleArt({
   width,
   height,
+  density = "default",
 }: {
   width: number;
   height: number;
+  density?: "default" | "compact";
 }) {
-  if (width < 48 || height < 40) return null;
-
-  const right = width - INSET;
-  const bottom = height - INSET;
-  const corner = Math.min(radius.xxl - INSET, width / 4, height / 3);
-  const tailHalfHeight = Math.min(10, Math.max(3, (height - corner * 2) / 3));
-  const tailCenter = Math.max(
-    corner + tailHalfHeight,
-    Math.min(height - 40, height - corner - tailHalfHeight),
-  );
-  const outline = [
-    `M ${INSET + corner} ${INSET}`,
-    `H ${right - corner}`,
-    `Q ${right} ${INSET} ${right} ${INSET + corner}`,
-    `V ${bottom - corner}`,
-    `Q ${right} ${bottom} ${right - corner} ${bottom}`,
-    `H ${INSET + corner}`,
-    `Q ${INSET} ${bottom} ${INSET} ${bottom - corner}`,
-    `V ${tailCenter + tailHalfHeight}`,
-    `L ${-OUTSET + 2} ${tailCenter}`,
-    `L ${INSET} ${tailCenter - tailHalfHeight}`,
-    `V ${INSET + corner}`,
-    `Q ${INSET} ${INSET} ${INSET + corner} ${INSET}`,
-    "Z",
-  ].join(" ");
+  const geometry = getCrayonSpeechBubbleGeometry({ width, height, density });
+  if (!geometry) return null;
+  const { outline, outset } = geometry;
 
   return (
     <View
       pointerEvents="none"
-      style={[styles.frame, { width: width + OUTSET, height }]}
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={[styles.frame, { left: -outset, width: width + outset, height }]}
     >
       <Svg
-        width={width + OUTSET}
+        accessible={false}
+        width={width + outset}
         height={height}
-        viewBox={`${-OUTSET} 0 ${width + OUTSET} ${height}`}
+        viewBox={`${-outset} 0 ${width + outset} ${height}`}
       >
         <Path
           d={outline}
           fill={colors.surfaceWarm}
           stroke={colors.brandSketchLine}
-          strokeWidth={1.45}
+          strokeWidth={crayonSpeechBubble.strokeWidth}
           strokeLinejoin="round"
-          strokeOpacity={0.62}
+          strokeOpacity={crayonSpeechBubble.strokeOpacity}
         />
         <Path
           d={outline}
           fill="none"
           stroke={colors.brandSketchLine}
-          strokeWidth={1.85}
+          strokeWidth={crayonSpeechBubble.grainStrokeWidth}
           strokeLinecap="round"
-          strokeDasharray="8 3 13 1 6 2 17 4 5 1"
-          strokeOpacity={0.18}
+          strokeDasharray={crayonSpeechBubble.grainDashArray}
+          strokeOpacity={crayonSpeechBubble.grainStrokeOpacity}
         />
       </Svg>
     </View>
@@ -76,6 +58,5 @@ const styles = StyleSheet.create({
   frame: {
     position: "absolute",
     top: 0,
-    left: -OUTSET,
   },
 });

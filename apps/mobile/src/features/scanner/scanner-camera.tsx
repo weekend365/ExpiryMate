@@ -548,6 +548,7 @@ export function ScannerCameraExperience() {
                 카메라를 준비하고 있어요
               </AppText>
               <MascotSpeechBubble
+                appearance="crayon"
                 message="장고가 렌즈를 닦는 중이에요. 조금만 기다려 주세요."
                 mood="idle"
                 size="small"

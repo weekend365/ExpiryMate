@@ -357,7 +357,10 @@ export default function InventoryScreen() {
       : notice,
   );
   const inventoryDefaultHero = inventoryStatusNotices.length ? (
-    <JangoHeroNoticeCarousel notices={inventoryStatusNotices} />
+    <JangoHeroNoticeCarousel
+      notices={inventoryStatusNotices}
+      appearance={trackedItems.length > 0 && filtered.length > 0 ? "crayon" : "default"}
+    />
   ) : null;
   const inventoryFilterHero = inventoryActionNotice ?? inventoryDefaultHero;
   const inventoryFilterHeroTone =

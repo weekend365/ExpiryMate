@@ -471,6 +471,10 @@ export default function RecommendationsScreen() {
     const notices = [];
     const statusNotice = {
       id: "status",
+      appearance:
+        justGenerated || (needsIngredients && !hasRecommendationResult)
+          ? "default" as const
+          : "crayon" as const,
       ...getRecommendationHeroStatus({
         isGenerating,
         justGenerated,
@@ -489,6 +493,7 @@ export default function RecommendationsScreen() {
     if (monetization.rewardNotice === "verified") {
       notices.push({
         id: "ad-reward",
+        appearance: "default" as const,
         mood: "happy" as const,
         message: "광고 추천권이 준비됐어요",
         supportingMessage: "다음 추천을 만들 때 바로 사용할 수 있어요.",
@@ -938,7 +943,10 @@ export default function RecommendationsScreen() {
           {recipeView === "recommendations" ? (
             <>
               <View style={styles.heroCard}>
-                <JangoHeroNoticeCarousel notices={recommendationHeroNotices} />
+                <JangoHeroNoticeCarousel
+                  notices={recommendationHeroNotices}
+                  appearance="crayon"
+                />
               </View>
               <View style={styles.optionsSummaryGroup}>
                 <RecommendationSetupSummaryRow
@@ -1288,6 +1296,7 @@ export default function RecommendationsScreen() {
         visible={showIngredientSheet}
         onClose={handleCloseIngredientSelection}
         mascotMood="idle"
+        speechAppearance="crayon"
         title="추천에 사용할 재료"
         description={`이번 추천에 반영할 재료를 골라 주세요. 최대 ${MAX_SELECTED_RECIPE_INGREDIENTS}개까지 사용할 수 있어요.`}
         compactHeaderOnShort
@@ -1467,6 +1476,7 @@ export default function RecommendationsScreen() {
         visible={showOptionsSheet}
         onClose={() => setShowOptionsSheet(false)}
         mascotMood="idle"
+        speechAppearance="crayon"
         title="오늘은 어떤 요리로 할까요?"
         description="인원·시간·끼니는 이번 추천에만 적용돼요."
         compactHeaderOnShort
@@ -1582,6 +1592,7 @@ export default function RecommendationsScreen() {
         visible={showAiNotice}
         onClose={closeAiNotice}
         mascotMood="idle"
+        speechAppearance="crayon"
         title="추천에 쓸 정보를 확인할까요?"
         description="장고가 요리를 고를 때 어떤 정보가 쓰이는지 짧게 알려드릴게요."
         footer={
@@ -1622,6 +1633,7 @@ export default function RecommendationsScreen() {
         visible={Boolean(historyRecommendation)}
         onClose={() => setHistoryRecommendation(null)}
         mascotMood="happy"
+        speechAppearance="crayon"
         title={
           historyRecommendation
             ? `${formatCreatedAt(historyRecommendation.createdAt)} 추천`

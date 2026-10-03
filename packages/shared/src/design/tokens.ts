@@ -185,6 +185,23 @@ export const radius = {
 
 export type Radius = typeof radius;
 
+/** Decorative speech contours only; never control borders or text textures. */
+export const crayonSpeechBubble = {
+  minimumWidth: spacing.xxl,
+  minimumHeight: spacing.xl,
+  inset: 1.5,
+  outset: 18,
+  compactOutset: spacing.sm,
+  tailTipInset: 2,
+  tailMaximumHalfHeight: 10,
+  tailBottomOffset: spacing.xl,
+  strokeWidth: 1.45,
+  strokeOpacity: 0.62,
+  grainStrokeWidth: 1.85,
+  grainStrokeOpacity: 0.18,
+  grainDashArray: "8 3 13 1 6 2 17 4 5 1",
+} as const;
+
 /**
  * Interactive-control dimensions in px.
  *

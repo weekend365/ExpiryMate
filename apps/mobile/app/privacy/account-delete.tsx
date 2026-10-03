@@ -81,6 +81,7 @@ export default function AccountDeleteScreen() {
         }
       >
         <MascotSpeechBubble
+          appearance="crayon"
           message={`${appBrand.characterNameKo}가 조금 걱정돼요`}
           supportingMessage="떠나셔도 괜찮아요. 다만 아래 정보는 바로 지워지니, 한 번만 더 살펴봐 주세요."
           mood="worry"
@@ -157,6 +158,7 @@ export default function AccountDeleteScreen() {
         visible={confirmSheetOpen}
         onClose={() => setConfirmSheetOpen(false)}
         mascotMood="worry"
+        speechAppearance="crayon"
         title="정말 계정을 정리할까요?"
         description={`개인 냉장고와 내 계정 기록이 사라져요. 공동 재고는 다른 구성원을 위해 남으며, 이 선택은 되돌릴 수 없어요.`}
         footer={

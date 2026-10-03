@@ -1,0 +1,13 @@
+{
+  "checkedFiles": 635,
+  "scope": [
+    "design/jango",
+    "design/backgrounds",
+    "apps/mobile/assets",
+    "apps/admin"
+  ],
+  "fingerprintMethod": "SHA256 of JSON.stringify([{path,sha256},...]) in git ls-files order; hashes use original working-tree bytes including CRLF.",
+  "beforeFingerprint": "69cc42572f3b0c01afe50c956e6ec10348724b5c20c7ec448fed688d7dc7466d",
+  "afterFingerprint": "69cc42572f3b0c01afe50c956e6ec10348724b5c20c7ec448fed688d7dc7466d",
+  "changed": []
+}

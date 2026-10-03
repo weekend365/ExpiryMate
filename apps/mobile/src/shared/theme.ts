@@ -12,6 +12,7 @@
 import {
   controlSize as designControlSize,
   contentWidth as designContentWidth,
+  crayonSpeechBubble as designCrayonSpeechBubble,
   elevation as designElevation,
   radius as designRadius,
   fontWeight as designFontWeight,
@@ -33,6 +34,8 @@ export const oauthBrand = designOauthBrand;
 export const spacing = designSpacing;
 
 export const radius = designRadius;
+
+export const crayonSpeechBubble = designCrayonSpeechBubble;
 
 export const controlSize = designControlSize;
 export const motion = designMotion;

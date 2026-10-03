@@ -244,6 +244,7 @@ export function AdditionalInfoSheet({
       visible={visible}
       onClose={onClose}
       mascotMood="idle"
+      speechAppearance="crayon"
       title="조금만 더 알려주세요"
       description="브랜드와 메모는 필요할 때만 적어도 돼요."
       footer={
@@ -309,6 +310,7 @@ export function AddLocationSheet({
       title="어디에 둘까요?"
       description="위치 이름을 알려 주시면 목록에 넣어 둘게요."
       mascotMood="idle"
+      speechAppearance="crayon"
       footer={
         <Button
           onPress={onSubmit}

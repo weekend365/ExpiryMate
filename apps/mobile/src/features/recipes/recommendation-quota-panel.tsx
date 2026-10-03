@@ -164,6 +164,7 @@ export function RecommendationOfferAlternativesSheet({
       visible={visible}
       onClose={onClose}
       mascotMood="idle"
+      speechAppearance="crayon"
       title="다른 이용 방법"
       description="지금 사용할 수 있는 방법만 모았어요."
     >

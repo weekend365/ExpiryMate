@@ -99,6 +99,7 @@ export default function AiDataNoticeScreen() {
         }
       >
         <MascotSpeechBubble
+          appearance="crayon"
           message={
             accepted
               ? "안내를 살펴보시고 동의해 주셨어요"
@@ -171,6 +172,7 @@ export default function AiDataNoticeScreen() {
         visible={revokeSheetOpen}
         onClose={() => setRevokeSheetOpen(false)}
         mascotMood="worry"
+        speechAppearance="crayon"
         title="추천 동의를 거둘까요?"
         description="거두면 새 요리 추천이나 사진으로 재료 읽기를 부탁할 때 다시 안내를 살펴보게 돼요. 이미 받아 두신 추천은 그대로 둘 수 있어요."
         footer={

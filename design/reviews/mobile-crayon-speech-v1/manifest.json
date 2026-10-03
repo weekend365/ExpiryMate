@@ -1,0 +1,78 @@
+{
+  "status": "implemented-awaiting-native-review",
+  "date": "2026-10-03",
+  "baselineCommit": "388a595dd0d4b217ae7f6a182c773ba5568068f5",
+  "scope": "모바일의 기존 장고 안내 말풍선 윤곽·색면을 선택적으로 통일. 카드·버튼·입력·구도·5개 탭과 흐름 보존.",
+  "applied": [
+    "홈·추천·데이터가 있는 보관함·장보기 안내",
+    "인증·고객지원·개인정보 안내",
+    "재료 등록·수정·조리 단계·사진 분석·카메라 안내",
+    "장고가 있는 선택·확인 시트; 바코드는 저장 전만"
+  ],
+  "retained": [
+    "첫 사용 안내·실제 빈 상태·검색 결과 없음",
+    "등록 완료·바코드 빠른 저장 완료·이메일 확인 완료",
+    "일시적 피드백·광고 보상 완료 안내·추천 직후 결과",
+    "MASTER·배경·runtime asset·Admin·글꼴·기능 색상·카드·입력·버튼"
+  ],
+  "implementation": [
+    "공통 appearance와 wrapper speechAppearance 기본값 default 유지",
+    "소식별 appearance로 같은 carousel 안의 결과 안내 보존",
+    "compact 모서리와 꼬리 위치 대응; 측정 전·작은 크기는 기존 말풍선으로 fallback",
+    "장식 수치는 공유 token export; 터치·낭독 트리에서 SVG 장식 제외",
+    "동작 줄이기 시 말풍선 opacity=1, offset=0; 새 모션 없음"
+  ],
+  "visualReview": {
+    "type": "browser component review only",
+    "representativesBeforeExpansion": "recommendation/register, four before/after pairs",
+    "totalPairs": 66,
+    "textAndBoundsEqual": true,
+    "horizontalOverflow": false,
+    "preservedPairsPixelIdentical": 24,
+    "observations": [
+      "기존 글자 위계·여백·위치는 유지되고 외곽과 따뜻한 면만 변경",
+      "compact 꼬리는 장고와 겹치지 않으며 긴 안내도 닫힌 윤곽 안에 표시",
+      "320 폭·2배 글자에서는 긴 세로 안내가 유지되고 스크롤이 필요함; 글자 축소·정보 삭제 없음"
+    ]
+  },
+  "checks": {
+    "lint": "passed in workspace",
+    "typecheck": "passed for all workspaces, including shared build",
+    "backgroundsAudit": "passed in workspace",
+    "cleanCopy": "git -c core.autocrlf=false archive HEAD plus current source changes; existing dependency junctions, no environment files",
+    "docsCheck": "passed in clean copy; workspace retains eight pre-existing dist/promo dependency link failures",
+    "tests": {
+      "environment": "clean LF copy",
+      "sharedPassed": 156,
+      "mobilePassed": 543,
+      "apiPassed": 509,
+      "apiSkipped": 4,
+      "jangoPassed": 19,
+      "jangoSkipped": 1
+    },
+    "jangoCheck": "passed in clean copy; 0 signed releases unchanged",
+    "mascotAudit": "passed in clean copy; existing empty-mouth needs-review retained",
+    "brandingAudit": "passed in clean copy with bundled Python",
+    "workspaceKnownFailures": "core.autocrlf=true alters protected text hashes and a newline-sensitive cooking contract; no thresholds, trust keys, signatures or protected originals changed"
+  },
+  "notVerified": [
+    "Full Android/iOS app screenshots and native device layout pending CI",
+    "Physical device, actual TalkBack/VoiceOver and live OS font/motion settings",
+    "Actual user usability sessions"
+  ],
+  "evidence": [
+    "component-comparison.json",
+    "preservation.json"
+  ],
+  "capturedPngSHA256": {
+    "recommendation-360x640-font-1-before.png": "29aa97f1c6e07e786578c35710ff9142676cdff944bf89918d722c3d2fe477d0",
+    "recommendation-360x640-font-1-after.png": "ce5a3b89dadd1e1b4ffa2d39fc5d92c42fe811ada25bde803509ffda09fab770",
+    "register-360x640-font-1-before.png": "1d538c4528bed365f76b4f8037cbcc5a68bd36c369f956ba47931e141029cb6c",
+    "register-360x640-font-1-after.png": "d6913d92afd8a8ceed08340e85dd19a196b873a1c2277d194f9e6095faf6999f",
+    "register-320x640-font-2-before.png": "45198e0231f9f6e1ff0a32c31a7bd758c4fa77d52c5bfd2cc1e6317a274707a5",
+    "register-320x640-font-2-after.png": "e0e954c6db8b63363cccd6f9f8a213e5e71600abd8269e7925728bfa9f1a3144",
+    "compact-360x640-font-1.3-before.png": "5ab430ac3f153d4e91ec6ac4b1f929077c03c965ad9b8d4d042ccafa121fcb91",
+    "compact-360x640-font-1.3-after.png": "f44c9759dca4878f1e250e1ef7bbf9f2f2ba283eceb28fd660a4d952e502084c"
+  },
+  "cleanup": "Renderer, full temporary captures, dependency installation and LF test copy kept outside repository; only eight representative PNGs and compact records retained."
+}

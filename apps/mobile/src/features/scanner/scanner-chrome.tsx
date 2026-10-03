@@ -122,6 +122,7 @@ export function ScannerGuide({
           ) : (
             <View style={styles.guideBubbleWrap} pointerEvents="none">
               <MascotSpeechBubble
+                appearance="crayon"
                 message={guideMessage}
                 mood={guideMood}
                 size="small"
@@ -198,6 +199,7 @@ export function PermissionCard({
       <View style={styles.centerCard}>
         <AppText style={styles.centerTitle}>카메라가 필요해요</AppText>
         <MascotSpeechBubble
+          appearance="crayon"
           message="바코드를 읽으려면 카메라 권한을 허용해 주세요. 장고가 대신 봐 드릴게요."
           mood="worry"
           size="small"

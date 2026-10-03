@@ -118,6 +118,7 @@ type Props = {
   label?: string;
   visible?: boolean;
   footer?: ReactNode;
+  appearance?: "default" | "crayon";
 };
 function nodes(tree: ReactNode): ReactElement<Props>[] {
   return Children.toArray(tree).flatMap((node) =>
@@ -162,6 +163,16 @@ const item: ShoppingItem = {
   updatedAt: "2026-09-29T00:00:00Z",
 };
 describe("shopping and opened controls", () => {
+  it("preserves the empty-list guide and styles a populated shopping guide", () => {
+    const guide = () => nodes(render()).find((node) => node.type === "ShoppingHeroCard");
+    expect(guide()?.props.appearance).toBe("default");
+    state.items = [item];
+    expect(guide()?.props.appearance).toBe("crayon");
+    state.items = [{ ...item, completedAt: "2026-09-29T00:00:00Z" }];
+    expect(guide()?.props.appearance).toBe("crayon");
+    state.items = [];
+    expect(guide()?.props.appearance).toBe("default");
+  });
   it("opens related products from the item details", () => {
     state.items = [item];
     press(render(), "우유 2개, 관련 상품 보기");

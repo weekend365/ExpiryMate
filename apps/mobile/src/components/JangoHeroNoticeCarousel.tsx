@@ -13,7 +13,10 @@ import { colors, radius, spacing } from "../shared/theme";
 import type { AppTextVariant } from "./AppText";
 import { Button } from "./Button";
 import type { MascotMood } from "./Mascot";
-import { MascotSpeechBubble } from "./MascotSpeechBubble";
+import {
+  MascotSpeechBubble,
+  type MascotSpeechBubbleAppearance,
+} from "./MascotSpeechBubble";
 
 export type JangoHeroNoticeItem = {
   id: string;
@@ -23,6 +26,8 @@ export type JangoHeroNoticeItem = {
   onPress?: () => void;
   actionLabel?: string;
   accessibilityHint?: string;
+  /** Preserve a result surface when the surrounding guide opts in. */
+  appearance?: MascotSpeechBubbleAppearance;
 };
 
 type JangoHeroNoticeCarouselProps = {
@@ -31,7 +36,7 @@ type JangoHeroNoticeCarouselProps = {
   density?: "default" | "compact";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
-  appearance?: "default" | "crayon";
+  appearance?: MascotSpeechBubbleAppearance;
   onIndexChange?: (index: number) => void;
 };
 
@@ -167,7 +172,7 @@ function JangoHeroNoticeBubble({
   density: "default" | "compact";
   textVariant?: AppTextVariant;
   bubbleStyle?: StyleProp<ViewStyle>;
-  appearance: "default" | "crayon";
+  appearance: MascotSpeechBubbleAppearance;
 }) {
   const bubble = (
     <MascotSpeechBubble
@@ -178,7 +183,7 @@ function JangoHeroNoticeBubble({
       density={density}
       textVariant={textVariant}
       style={bubbleStyle}
-      appearance={appearance}
+      appearance={notice.appearance ?? appearance}
     />
   );
 

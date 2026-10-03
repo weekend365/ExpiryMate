@@ -213,6 +213,7 @@ export function ShoppingListPanel({
   return (
     <View style={styles.root} testID="shopping-list-panel">
       <ShoppingHeroCard
+        appearance={items.length > 0 ? "crayon" : "default"}
         notices={[
           {
             id: "shopping-list-guide",

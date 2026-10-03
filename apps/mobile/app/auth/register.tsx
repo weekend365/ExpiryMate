@@ -121,6 +121,7 @@ export default function RegisterScreen() {
         </Pressable>
 
         <MascotSpeechBubble
+          appearance="crayon"
           message="이메일로 시작해요"
           supportingMessage="필요한 것만 적을게요. 이름은 나중에 적어도 괜찮아요."
           mood="idle"

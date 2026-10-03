@@ -436,6 +436,7 @@ export default function InventoryEditScreen() {
       ) : null}
 
       <StepFlow
+        speechAppearance="crayon"
         steps={visibleEditSteps}
         currentIndex={isQuickEdit ? 0 : Math.max(stepIndex, 0)}
         onBack={goToPreviousEditStep}

@@ -158,6 +158,7 @@ export default function PrivacyScreen() {
         visible={historySheetOpen}
         onClose={() => setHistorySheetOpen(false)}
         mascotMood="worry"
+        speechAppearance="crayon"
         title="추천과 즐겨찾기를 정리할까요?"
         description="그동안 받아 두신 요리 추천 기록과 즐겨찾기가 사라져요. 계정과 재료는 그대로 두어요."
         footer={

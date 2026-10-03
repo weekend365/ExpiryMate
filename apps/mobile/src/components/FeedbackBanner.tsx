@@ -10,7 +10,10 @@ import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText, type AppTextVariant } from "./AppText";
 import type { MascotMood } from "./Mascot";
-import { MascotSpeechBubble } from "./MascotSpeechBubble";
+import {
+  MascotSpeechBubble,
+  type MascotSpeechBubbleAppearance,
+} from "./MascotSpeechBubble";
 
 type FeedbackTone = "danger" | "success" | "warning" | "info";
 
@@ -30,6 +33,7 @@ interface FeedbackBannerProps {
   /** Lets hero placements use the same spacing as Home and Recommendations. */
   speechDensity?: "default" | "compact";
   speechTextVariant?: AppTextVariant;
+  speechAppearance?: MascotSpeechBubbleAppearance;
   /** Set to `null` to keep a transient notice until the user closes it. */
   autoDismissMs?: number | null;
   onDismiss?: () => void;
@@ -79,6 +83,7 @@ export function FeedbackBanner({
   transient = false,
   speechDensity = "compact",
   speechTextVariant = "bodyStrong",
+  speechAppearance = "default",
   autoDismissMs = DEFAULT_FEEDBACK_AUTO_DISMISS_MS,
   onDismiss,
 }: FeedbackBannerProps) {
@@ -159,6 +164,7 @@ export function FeedbackBanner({
   const content = showMascot ? (
     <View style={styles.speechContent}>
       <MascotSpeechBubble
+        appearance={isTransientNotice ? "default" : speechAppearance}
         message={title}
         supportingMessage={description}
         mood={palette.mascotMood}

@@ -934,6 +934,7 @@ export default function RegisterScreen() {
       }
     >
       <StepFlow
+        speechAppearance="crayon"
         steps={visibleSteps}
         currentIndex={Math.max(stepIndex, 0)}
         onBack={goToPreviousStep}

@@ -59,6 +59,7 @@ export default function ResetPasswordScreen() {
       }
     >
       <MascotSpeechBubble
+        appearance="crayon"
         message="8자 이상으로 정해주시면, 장고가 안전하게 기억해 둘게요."
         mood="idle"
         density="compact"

@@ -70,6 +70,7 @@ export default function ForgotPasswordScreen() {
       }
     >
       <MascotSpeechBubble
+        appearance="crayon"
         message="이메일만 알려주시면, 장고가 재설정 길을 안내할게요."
         mood="idle"
         density="compact"

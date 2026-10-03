@@ -131,6 +131,7 @@ export function PhotoCaptureScreen({
                 카메라가 필요해요
               </AppText>
               <MascotSpeechBubble
+                appearance="crayon"
                 message="영수증이나 냉장고를 찍으려면 카메라 권한을 허용해 주세요."
                 mood="worry"
                 size="small"
