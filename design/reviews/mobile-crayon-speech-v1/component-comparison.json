@@ -745,5 +745,56 @@
     "register-320x640-font-2-after.png": "e0e954c6db8b63363cccd6f9f8a213e5e71600abd8269e7925728bfa9f1a3144",
     "compact-360x640-font-1.3-before.png": "5ab430ac3f153d4e91ec6ac4b1f929077c03c965ad9b8d4d042ccafa121fcb91",
     "compact-360x640-font-1.3-after.png": "f44c9759dca4878f1e250e1ef7bbf9f2f2ba283eceb28fd660a4d952e502084c"
+  },
+  "interactionReview": {
+    "renderer": "RN Web component fixture; no native OS accessibility validation",
+    "resizeWithoutRemount": [
+      {
+        "width": 360,
+        "height": 640,
+        "textAndBoundsEqual": true,
+        "horizontalOverflow": false,
+        "afterViewBox": "-18 0 234 482"
+      },
+      {
+        "width": 640,
+        "height": 360,
+        "textAndBoundsEqual": true,
+        "horizontalOverflow": false,
+        "afterViewBox": "-18 0 514 202"
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "textAndBoundsEqual": true,
+        "horizontalOverflow": false,
+        "afterViewBox": "-18 0 898 162"
+      },
+      {
+        "width": 320,
+        "height": 640,
+        "textAndBoundsEqual": true,
+        "horizontalOverflow": false,
+        "afterViewBox": "-18 0 194 682"
+      }
+    ],
+    "carousel": [
+      {
+        "mode": "before",
+        "indexLabel": "2개 소식 중 1번째. 옆으로 밀면 다음 소식을 볼 수 있어요.",
+        "nativeMomentumAnnouncement": "not verified by RN Web fixture",
+        "secondNoticePreserved": true,
+        "actionSucceeded": true,
+        "decorativeSvgHidden": true
+      },
+      {
+        "mode": "after",
+        "indexLabel": "2개 소식 중 1번째. 옆으로 밀면 다음 소식을 볼 수 있어요.",
+        "nativeMomentumAnnouncement": "not verified by RN Web fixture",
+        "secondNoticePreserved": true,
+        "actionSucceeded": true,
+        "decorativeSvgHidden": true
+      }
+    ]
   }
 }
