@@ -8,36 +8,45 @@
       "distribution": "internal",
       "environment": "development",
       "ios": {
-        "simulator": true
+        "simulator": true,
+        "scheme": "ExpiryMateQA",
+        "buildConfiguration": "Debug-QA"
       },
       "android": {
         "buildType": "apk"
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "development",
-        "EXPO_IOS_PERSONAL_TEAM": "0"
-      }
+        "EXPO_IOS_PERSONAL_TEAM": "0",
+        "APP_VARIANT": "development"
+      },
+      "developmentClient": true
     },
     "development-device": {
       "extends": "development",
       "distribution": "internal",
       "developmentClient": true,
       "ios": {
-        "simulator": false
+        "simulator": false,
+        "scheme": "ExpiryMateQA",
+        "buildConfiguration": "Debug-QA"
       },
       "android": {
         "buildType": "apk"
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "development",
-        "EXPO_IOS_PERSONAL_TEAM": "1"
+        "EXPO_IOS_PERSONAL_TEAM": "1",
+        "APP_VARIANT": "development"
       }
     },
     "preview": {
       "distribution": "internal",
       "environment": "preview",
       "ios": {
-        "simulator": false
+        "simulator": false,
+        "scheme": "ExpiryMate",
+        "buildConfiguration": "Release"
       },
       "android": {
         "buildType": "apk"
@@ -45,7 +54,8 @@
       "env": {
         "EXPO_PUBLIC_APP_ENV": "preview",
         "EXPO_IOS_PERSONAL_TEAM": "0",
-        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true",
+        "APP_VARIANT": "production"
       }
     },
     "production": {
@@ -54,14 +64,17 @@
       "environment": "production",
       "ios": {
         "image": "latest",
-        "resourceClass": "medium"
+        "resourceClass": "medium",
+        "scheme": "ExpiryMate",
+        "buildConfiguration": "Release"
       },
       "android": {
         "buildType": "app-bundle"
       },
       "env": {
         "EXPO_PUBLIC_APP_ENV": "production",
-        "EXPO_IOS_PERSONAL_TEAM": "0"
+        "EXPO_IOS_PERSONAL_TEAM": "0",
+        "APP_VARIANT": "production"
       }
     }
   },

@@ -1,0 +1,119 @@
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/internal/featureflags/ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android.kt b/ReactAndroid/src/main/java/com/facebook/react/internal/featureflags/ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android.kt
+index f47d8198fbd652f4b5afa7b8cd1f599a4bf3a678..7f7624b78bf8720ac59dfcef6d4fe6f62c2ced80 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/internal/featureflags/ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android.kt
++++ b/ReactAndroid/src/main/java/com/facebook/react/internal/featureflags/ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android.kt
+@@ -19,4 +19,6 @@ public class ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android(
+   override fun useTurboModules(): Boolean = bridgelessEnabled || turboModulesEnabled
+ 
+   override fun useShadowNodeStateOnClone(): Boolean = true
++
++  override fun enableFontScaleChangesUpdatingLayout(): Boolean = bridgelessEnabled || fabricEnabled
+ }
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
+index 4ed8dd2738c928377ea4e0eb11c0467d7ef5f17d..6c723731c78bc2c9e0f7582123282ac5401a32b8 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
++++ b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
+@@ -621,6 +621,13 @@ public class ReactHostImpl(
+     if (currentReactContext != null) {
+       if (ReactNativeFeatureFlags.enableFontScaleChangesUpdatingLayout()) {
+         DisplayMetricsHolder.initDisplayMetrics(currentReactContext)
++        // A handled fontScale change can keep the same root bounds. Request a
++        // measure pass so each surface forwards the new font scale to Fabric.
++        synchronized(attachedSurfaces) {
++          for (surface in attachedSurfaces) {
++            surface.view?.requestLayout()
++          }
++        }
+       }
+ 
+       val appearanceModule = currentReactContext.getNativeModule(AppearanceModule::class.java)
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactSurfaceView.kt b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactSurfaceView.kt
+index 0948dc932ee2b40065bf3767b171a7bd9a6b8eb0..ff64a7dc6a98e830962bd7cef73165168b1aebe5 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactSurfaceView.kt
++++ b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactSurfaceView.kt
+@@ -20,6 +20,8 @@ import com.facebook.react.bridge.ReactContext
+ import com.facebook.react.common.annotations.FrameworkAPI
+ import com.facebook.react.common.annotations.UnstableReactNativeAPI
+ import com.facebook.react.config.ReactFeatureFlags
++import com.facebook.react.internal.featureflags.ReactNativeFeatureFlags
++import com.facebook.react.uimanager.DisplayMetricsHolder
+ import com.facebook.react.uimanager.IllegalViewOperationException
+ import com.facebook.react.uimanager.JSPointerDispatcher
+ import com.facebook.react.uimanager.JSTouchDispatcher
+@@ -49,6 +51,17 @@ public class ReactSurfaceView(context: Context?, private val surface: ReactSurfa
+ 
+   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+     Systrace.beginSection(Systrace.TRACE_TAG_REACT, "ReactSurfaceView.onMeasure")
++    if (ReactNativeFeatureFlags.enableFontScaleChangesUpdatingLayout()) {
++      // View measurement can precede the host's configuration callback. Keep
++      // SP conversion in sync before Fabric caches a measurement for this scale.
++      DisplayMetricsHolder.initDisplayMetricsIfNotInitialized(context)
++      val currentMetrics = DisplayMetricsHolder.getWindowDisplayMetrics()
++      val viewMetrics = context.resources.displayMetrics
++      if (currentMetrics.density != viewMetrics.density ||
++          currentMetrics.scaledDensity != viewMetrics.scaledDensity) {
++        DisplayMetricsHolder.initDisplayMetrics(context)
++      }
++    }
+     var width = 0
+     var height = 0
+     val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+diff --git a/ReactCommon/react/renderer/components/text/ParagraphShadowNode.cpp b/ReactCommon/react/renderer/components/text/ParagraphShadowNode.cpp
+index 17e3b057b633df7a59f127feecd3da6a075c369b..24006bb417ca366eaee331fd1fc3777eec3f6b0a 100644
+--- a/ReactCommon/react/renderer/components/text/ParagraphShadowNode.cpp
++++ b/ReactCommon/react/renderer/components/text/ParagraphShadowNode.cpp
+@@ -61,9 +61,20 @@ ParagraphShadowNode::ParagraphShadowNode(
+ }
+ 
+ bool ParagraphShadowNode::shouldNewRevisionDirtyMeasurement(
+-    const ShadowNode& /*sourceShadowNode*/,
++    const ShadowNode& sourceShadowNode,
+     const ShadowNodeFragment& fragment) const {
+-  return fragment.props != nullptr;
++  if (fragment.props != nullptr) {
++    return true;
++  }
++  if (!ReactNativeFeatureFlags::enableFontScaleChangesUpdatingLayout()) {
++    return false;
++  }
++  const auto& sourceContent =
++      static_cast<const ParagraphShadowNode&>(sourceShadowNode).content_;
++  return !sourceContent.has_value() ||
++      !floatEquality(
++          sourceContent->attributedString.getBaseTextAttributes().fontSizeMultiplier,
++          getStateData().attributedString.getBaseTextAttributes().fontSizeMultiplier);
+ }
+ 
+ const Content& ParagraphShadowNode::getContent(
+diff --git a/ReactCommon/react/renderer/components/view/YogaLayoutableShadowNode.cpp b/ReactCommon/react/renderer/components/view/YogaLayoutableShadowNode.cpp
+index 961a8bb25b9b6e0b7c3e156c0fd495c992a5a31f..7a922c215d8ef3742fa28182dfefba77e978d9df 100644
+--- a/ReactCommon/react/renderer/components/view/YogaLayoutableShadowNode.cpp
++++ b/ReactCommon/react/renderer/components/view/YogaLayoutableShadowNode.cpp
+@@ -153,13 +153,13 @@ YogaLayoutableShadowNode::YogaLayoutableShadowNode(
+ }
+ 
+ void YogaLayoutableShadowNode::completeClone(
+-    const ShadowNode& /*sourceShadowNode*/,
++    const ShadowNode& sourceShadowNode,
+     const ShadowNodeFragment& fragment) {
+   if (getTraits().check(ShadowNodeTraits::Trait::MeasurableYogaNode) &&
+       // New children means we must always dirty to visit. Otherwise, ask the
+       // Node if the new revision invalidates measurement.
+       (fragment.children ||
+-       shouldNewRevisionDirtyMeasurement(*this, fragment))) {
++       shouldNewRevisionDirtyMeasurement(sourceShadowNode, fragment))) {
+     yogaNode_.setDirty(true);
+   }
+ }
+diff --git a/ReactCommon/react/renderer/scheduler/SurfaceHandler.cpp b/ReactCommon/react/renderer/scheduler/SurfaceHandler.cpp
+index 0f29ed67cf15bddc154d40d70fae2b7d9e12c5a1..04f6387786836a19822e5b91e1daea85f33f7c17 100644
+--- a/ReactCommon/react/renderer/scheduler/SurfaceHandler.cpp
++++ b/ReactCommon/react/renderer/scheduler/SurfaceHandler.cpp
+@@ -344,6 +344,7 @@ void SurfaceHandler::constraintLayout(
+               layoutContext.fontSizeMultiplier !=
+                   oldRootShadowNode.getConcreteProps()
+                       .layoutContext.fontSizeMultiplier) {
++            newRoot->dirtyLayout();
+             dirtyMeasurableNodes(*newRoot);
+           }
+ 

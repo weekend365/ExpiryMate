@@ -1,0 +1,275 @@
+{
+  "date": "2026-10-07",
+  "status": "pass-focused-android-emulator-validation",
+  "scope": "Opt-in RN0.81.5 source-built debug candidate; API33 ARM64,360x640dp; not adopted in normal/release builds.",
+  "fixture": {
+    "status": "pass",
+    "device": "own API33 ARM64 AVD;360x640dp",
+    "observations": [
+      {
+        "label": "candidate-baseline",
+        "instance": 1791274225646,
+        "nativeFontUpdates": true,
+        "fontScale": 1,
+        "width": 360,
+        "height": 72,
+        "count": 1,
+        "value": "보존 확인LIVE",
+        "inputFocused": true,
+        "selection": {
+          "end": 9,
+          "start": 9
+        },
+        "lines": [
+          {
+            "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 함께 ",
+            "width": 288.5,
+            "height": 24
+          },
+          {
+            "text": "확인해 주세요. 필요한 내용을 끝까지 읽을 수 ",
+            "width": 284,
+            "height": 24
+          },
+          {
+            "text": "있어요.",
+            "width": 46,
+            "height": 24
+          }
+        ]
+      },
+      {
+        "label": "candidate-live-13",
+        "instance": 1791274225646,
+        "nativeFontUpdates": true,
+        "fontScale": 1.2999999523162842,
+        "width": 360,
+        "height": 94.5,
+        "count": 1,
+        "value": "보존 확인LIVE",
+        "inputFocused": true,
+        "selection": {
+          "end": 9,
+          "start": 9
+        },
+        "lines": [
+          {
+            "text": "토마토, 먼저 살펴볼까요? 개봉한 재",
+            "width": 288,
+            "height": 31.5
+          },
+          {
+            "text": "료도 함께 확인해 주세요. 필요한 내",
+            "width": 282.5,
+            "height": 31.5
+          },
+          {
+            "text": "용을 끝까지 읽을 수 있어요.",
+            "width": 223.5,
+            "height": 31.5
+          }
+        ]
+      },
+      {
+        "label": "candidate-live-20",
+        "instance": 1791274225646,
+        "nativeFontUpdates": true,
+        "fontScale": 2,
+        "width": 360,
+        "height": 240,
+        "count": 1,
+        "value": "보존 확인LIVE",
+        "inputFocused": true,
+        "selection": {
+          "end": 9,
+          "start": 9
+        },
+        "lines": [
+          {
+            "text": "토마토, 먼저 살펴볼까",
+            "width": 272,
+            "height": 48
+          },
+          {
+            "text": "요? 개봉한 재료도 함께 ",
+            "width": 295.5,
+            "height": 48
+          },
+          {
+            "text": "확인해 주세요. 필요한 ",
+            "width": 280,
+            "height": 48
+          },
+          {
+            "text": "내용을 끝까지 읽을 수 ",
+            "width": 279.5,
+            "height": 48
+          },
+          {
+            "text": "있어요.",
+            "width": 91,
+            "height": 48
+          }
+        ]
+      },
+      {
+        "label": "candidate-return-10",
+        "instance": 1791274225646,
+        "nativeFontUpdates": true,
+        "fontScale": 1,
+        "width": 360,
+        "height": 72,
+        "count": 1,
+        "value": "보존 확인LIVE",
+        "inputFocused": true,
+        "selection": {
+          "end": 9,
+          "start": 9
+        },
+        "lines": [
+          {
+            "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 함께 ",
+            "width": 288.5,
+            "height": 24
+          },
+          {
+            "text": "확인해 주세요. 필요한 내용을 끝까지 읽을 수 ",
+            "width": 284,
+            "height": 24
+          },
+          {
+            "text": "있어요.",
+            "width": 46,
+            "height": 24
+          }
+        ]
+      }
+    ],
+    "visual": "1.3 full text visible;2.0 all five lines visible after scroll with keyboard"
+  },
+  "coldLaunches": [
+    {
+      "scale": 1.2999999523162842,
+      "height": 94.5,
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? 개봉한 재",
+          "width": 288,
+          "height": 31.5
+        },
+        {
+          "text": "료도 함께 확인해 주세요. 필요한 내",
+          "width": 282.5,
+          "height": 31.5
+        },
+        {
+          "text": "용을 끝까지 읽을 수 있어요.",
+          "width": 223.5,
+          "height": 31.5
+        }
+      ],
+      "coldInstance": 1791274463820,
+      "matchesLive": true
+    },
+    {
+      "scale": 2,
+      "height": 240,
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까",
+          "width": 272,
+          "height": 48
+        },
+        {
+          "text": "요? 개봉한 재료도 함께 ",
+          "width": 295.5,
+          "height": 48
+        },
+        {
+          "text": "확인해 주세요. 필요한 ",
+          "width": 280,
+          "height": 48
+        },
+        {
+          "text": "내용을 끝까지 읽을 수 ",
+          "width": 279.5,
+          "height": 48
+        },
+        {
+          "text": "있어요.",
+          "width": 91,
+          "height": 48
+        }
+      ],
+      "coldInstance": 1791274493521,
+      "matchesLive": true
+    }
+  ],
+  "actualInventory": {
+    "status": "pass",
+    "api": "isolated local QA database and compiled API; explicit temporary Expo virtual env override verified",
+    "processId": 14046,
+    "processPreserved": true,
+    "observations": [
+      {
+        "fontScaleRequested": 1.0,
+        "query": "LIVE",
+        "focused": true,
+        "bounds": "[132,496][428,592]",
+        "screenRoot": "[0,0][720,1160]"
+      },
+      {
+        "fontScaleRequested": 1.3,
+        "query": "LIVE",
+        "focused": true,
+        "bounds": "[132,537][428,633]",
+        "screenRoot": "[0,0][720,1112]"
+      },
+      {
+        "fontScaleRequested": 2.0,
+        "query": "LIVE",
+        "focused": true,
+        "bounds": "[132,728][428,840]",
+        "screenRoot": "[0,0][720,1112]"
+      },
+      {
+        "fontScaleRequested": 1.0,
+        "query": "LIVE",
+        "focused": true,
+        "bounds": "[132,496][428,592]",
+        "screenRoot": "[0,0][720,1112]"
+      }
+    ],
+    "visual": "At2.0 the entire notice and search value are readable; existing list scroll remains available. Input focus persisted, but OS keyboard visibility varied during configuration changes; uninterrupted keyboard display is not claimed."
+  },
+  "rejectedObservations": [
+    "Initial development bundle contained a production API address and a different shell QA address; QA endpoint isolation was not established. Public demo login attempts failed and that run is excluded. App stopped, then temporary resolver explicitly bound the virtual environment to local QA before successful login. No authenticated production test or production data mutation is claimed.",
+    "The initial temporary API was launched by tsx and failed dependency reflection. Replaced by compiled dist/main.js for actual-app observations.",
+    "Transient Android immersive-mode guidance was not accepted as an app capture. A tap intended to dismiss it changed an underlying filter; that run was excluded. Final cycle has no intervening application taps."
+  ],
+  "reproduction": {
+    "entry": "apps/mobile/e2e/fixtures/native-font-scale-entry.js",
+    "entrySha256": "5cb950edcd7dc5e3f24fdd2c7e7984394398f804b5bf6b08ccade846f62f0361",
+    "adapter": "apps/mobile/e2e/serve-font-scale-fixture.cjs",
+    "adapterSha256": "b01ef6fa0e4a3da9a41c5923a36cb9723864dd8f44efb4ec3062fc79f90ed54a",
+    "smoke": "manifest, bundle and actual native fixture diagnostics verified"
+  },
+  "limits": [
+    "ARM64 API33 emulator only; OEM physical Android and optimized release not tested",
+    "iOS actual UI and auditory TalkBack/VoiceOver remain unverified",
+    "Example fixture state does not prove backend success; actual app observations cover login and inventory search, not save/cooking/purchase flows"
+  ],
+  "screens": {
+    "screens/native-font-live-13.png": "ecc943d1ef77c3e65944472452e4e2d0dce117dbb86598b93056559785949d72",
+    "screens/native-font-live-20.png": "8dae362deb74c546b5c7d588f76fbdb8ef11d287eb64cf789c3e88f20e3b6d13",
+    "screens/inventory-native-font-20.png": "b96742f796de485bd6dd6e93faa2c3a531c8942bb509c9cdc81b3d215bc14127"
+  },
+  "candidateBuild": {
+    "apkSha256": "58ba27f1d0c3328b28752045ea98c77cdb4855d0e4526f7f83cf939bbd02a7c6",
+    "apkBytes": 115381130,
+    "libraries": {
+      "lib/arm64-v8a/libreactnative.so": "61b1ccacf6617a8c3153d88c5d8756e2bc153697d5d91963bbb45bd9d6ec33f1",
+      "lib/arm64-v8a/libhermes.so": "0cecc63969cdd89f892e9f859a407027d97857c62d9d1037e3aa551192587e99"
+    }
+  }
+}

@@ -1,8 +1,9 @@
 import * as AuthSession from "expo-auth-session";
+import Constants from "expo-constants";
 import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import { startOAuth } from "../../services/api";
-import { parseOAuthReturnUrl } from "./oauth-return";
+import { parseOAuthReturnUrl, resolveOAuthReturnScheme } from "./oauth-return";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -10,10 +11,10 @@ export type WebOAuthProvider = "google" | "kakao" | "naver";
 
 /**
  * URI WebBrowser waits for. Must be an app / Expo scheme — not https.
- * Expo Go → exp://…/--/oauth, standalone → expirymate://oauth
+ * Use this binary's scheme so the QA callback cannot open the App Store app.
  */
 export const appReturnUri = AuthSession.makeRedirectUri({
-  scheme: "expirymate",
+  scheme: resolveOAuthReturnScheme(Constants.expoConfig?.scheme),
   path: "oauth",
 });
 

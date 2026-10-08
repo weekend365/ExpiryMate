@@ -42,7 +42,11 @@
     "mascot:build": "node scripts/build-mascot-runtime-assets.mjs",
     "mascot:sync": "node scripts/sync-mascot-sources.mjs",
     "mascot:measure": "node scripts/mascot-anatomy.mjs",
-    "mascot:anatomy:audit": "node scripts/mascot-anatomy.mjs --check"
+    "mascot:anatomy:audit": "node scripts/mascot-anatomy.mjs --check",
+    "ios:dev": "node scripts/dev-client.cjs ios",
+    "dev:client:tunnel": "node scripts/dev-client.cjs start",
+    "native:variants:sync": "node scripts/sync-ios-app-variants.cjs",
+    "predev:client:tunnel": "pnpm --filter @expirymate/shared build"
   },
   "dependencies": {
     "@expirymate/shared": "workspace:*",

@@ -1,3 +1,7 @@
+export function resolveOAuthReturnScheme(scheme?: string | string[]): string {
+  return (Array.isArray(scheme) ? scheme[0] : scheme) || "expirymate";
+}
+
 export function parseOAuthReturnUrl(url: string): Record<string, string> {
   const [, fragment = ""] = url.split("#");
   const [baseUrl, query = ""] = url.split("?");

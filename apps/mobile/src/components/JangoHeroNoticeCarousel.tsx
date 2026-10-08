@@ -210,11 +210,17 @@ function JangoHeroNoticeBubble({
     <Pressable
       onPress={notice.onPress}
       accessibilityRole="button"
-      accessibilityLabel={notice.message}
+      accessibilityLabel={`${notice.message}${
+        notice.supportingMessage?.trim()
+          ? ` ${notice.supportingMessage.trim()}`
+          : ""
+      }`}
       accessibilityHint={notice.accessibilityHint}
       style={({ pressed }) => [pressed && styles.noticePressed]}
     >
-      {bubble}
+      <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+        {bubble}
+      </View>
     </Pressable>
   );
 }

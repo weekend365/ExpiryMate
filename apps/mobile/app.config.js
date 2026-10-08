@@ -1,4 +1,6 @@
 const appJson = require("./app.json");
+const { QA, resolveAppVariant } = require("./scripts/app-variant.cjs");
+const variant = resolveAppVariant();
 const { validateExpoPublicEnv } = require("./scripts/validate-public-env.cjs");
 const {
   assertIosTeamCompatibleWithAppEnv,
@@ -76,6 +78,9 @@ plugins.push([
 // when Prebuild reuses the tracked native project and its existing Info.plist.
 plugins.push("./plugins/with-ios-info-plist-sanitization");
 plugins.push("./plugins/with-android-release-optimization");
+plugins.push("./plugins/with-android-font-scale-patch");
+plugins.push(["expo-dev-client", { addGeneratedScheme: false }]);
+plugins.push("./plugins/with-ios-app-variants");
 
 const paidTeamIosCapabilities = {
   usesAppleSignIn: true,
@@ -94,9 +99,15 @@ const personalTeamIosCapabilities = {
 /** @type {(context: import('expo/config').ConfigContext) => import('expo/config').ExpoConfig} */
 module.exports = ({ config }) => ({
   ...config,
+  ...(variant === "development" ? { name: QA.name, scheme: QA.scheme } : {}),
   plugins,
+  android: {
+    ...config.android,
+    ...(variant === "development" ? { package: QA.id } : {}),
+  },
   ios: {
     ...config.ios,
+    ...(variant === "development" ? { bundleIdentifier: QA.id } : {}),
     ...(personalTeam ? personalTeamIosCapabilities : paidTeamIosCapabilities),
   },
   extra: {

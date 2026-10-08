@@ -7,6 +7,7 @@ const backgrounds = [
   ["Inventory", "fridge-interior"],
   ["Recommendations", "kitchen-cooking"],
   ["Shopping", "shopping-preparation"],
+  ["Login", "login-welcome"],
 ].map(([name, stem]) => {
   const record = JSON.parse(fs.readFileSync(
     new URL(`../../../design/backgrounds/${stem}-crayon-v1.json`, import.meta.url),

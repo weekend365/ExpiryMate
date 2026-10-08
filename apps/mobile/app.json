@@ -74,7 +74,14 @@
         "expo-build-properties",
         {
           "ios": {
-            "deploymentTarget": "16.4"
+            "deploymentTarget": "16.4",
+            "extraPods": [
+              { "name": "GoogleDataTransport", "version": "= 10.1.0" },
+              { "name": "GoogleUtilities/Environment", "version": "= 8.1.2" },
+              { "name": "GoogleUtilities/Logger", "version": "= 8.1.2" },
+              { "name": "GoogleUtilities/Privacy", "version": "= 8.1.2" },
+              { "name": "GoogleUtilities/UserDefaults", "version": "= 8.1.2" }
+            ]
           },
           "android": {
             "kotlinVersion": "2.2.20",

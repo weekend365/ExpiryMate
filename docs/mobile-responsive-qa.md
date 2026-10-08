@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-design
-last_reviewed: 2026-09-29
+last_reviewed: 2026-10-07
 source_of_truth: true
 ---
 
@@ -77,6 +77,129 @@ route plus the additional flow states declared in
 with the latest successful `main` artifacts and upload current, baseline, diff,
 JUnit, and JSON comparison evidence.
 
+## Android live font-scale native validation
+
+Cold launch and live changes are separate checks. Keep the activity and React
+tree running while changing font scale **1.0 → 1.3 → 2.0 → 1.0**. Verify that
+unchanged text is remeasured, the full message remains readable by scrolling,
+and input values, focus/selection where supported, and operation state survive.
+Do not lower the shared scaling caps or remount forms to hide stale bounds.
+
+The pinned React Native 0.81.5 patch in `patches/react-native@0.81.5.patch`
+adds Fabric root layout invalidation, enables that path for Android's stable
+Fabric/bridgeless host, and requests surface measurement after display metrics
+refresh. The candidate also invalidates a paragraph clone when its state's font
+multiplier differs from previously measured content, and synchronizes display
+metrics before surface measurement. The clone measurement callback receives the
+original node so it can compare prior content against the new state. These are
+validation candidates: an earlier
+root/host-only build enlarged glyphs inside stale text bounds and failed the
+live-change check. The final candidate passed the live/cold comparison on an
+API 33 ARM64 emulator at 360×640dp: measured text heights were
+72 → 94.5 → 240 → 72dp at 1.0 → 1.3 → 2.0 → 1.0. The React instance,
+counter, input, focus and selection stayed the same. Actual inventory search
+also retained its query and focus through the cycle. These are focused
+emulator results, not OEM, iOS, release or screen-reader approval.
+Expo SDK 54 and package versions are unchanged. The
+published ReactAndroid AAR does not contain the C++ change; verification builds
+must compile the installed patched source explicitly:
+
+```bash
+cd apps/mobile
+pnpm exec expo prebuild --platform android --no-install
+pnpm branding:sync
+cd android
+./gradlew :app:assembleDebug -PjangoFontScaleNativePatch=true \
+  -PreactNativeArchitectures=arm64-v8a --max-workers=2
+```
+
+`ANDROID_HOME` must point to the local SDK. This validation option is **off by
+default**; it does not silently change normal or release builds. The Expo plugin
+preserves autolinking and performs dependency substitution only when enabled.
+The same flag adds `fontScale` to the activity's existing `configChanges` so
+React receives the change without recreating the form. Without the flag, the
+merged manifest retains the SDK template's exact configuration handling.
+Source builds require the RN template's NDK/CMake and SDK command-line tools.
+Run branding sync after Prebuild to restore the existing native splash sizing;
+its Python generator requires Pillow. Do not hand-edit the generated images.
+`prepare-android-font-scale-source.cjs` copies installed source to an ignored,
+content-hashed cache because Prefab rejects `=` in pnpm patch store paths even
+through canonicalized symlinks. Generated files are excluded; codegen is linked
+from the installed dependency. No generated native file is edited manually.
+Patched pnpm peer paths also affect normal Prefab builds. Their generated output
+directories are relocated in both modes; native inputs and source substitution
+remain controlled by the verification flag. Reanimated's Worklets reference
+follows the relocated output.
+
+Switching between source and published-AAR builds can leave Expo's incremental
+Kotlin outputs inconsistent. In this validation, the first normal build failed;
+`./gradlew :expo-modules-core:clean` followed by the normal build succeeded.
+Both libraries in that normal debug APK matched the published RN/Hermes AARs
+byte for byte. Do not enable the source flag to work around a normal build failure.
+
+The regression fixture uses the real `AppText`, `AppTextInput`, `Button` and
+`MascotSpeechBubble` with example text and no application API calls. It is not
+a runtime route. After installing the opt-in APK, run Metro and the local
+manifest adapter in separate terminals:
+
+```bash
+cd apps/mobile
+EXPO_NO_DOTENV=1 EXPO_PUBLIC_APP_ENV=development pnpm exec expo start \
+  --dev-client --localhost --clear --port 8093
+# In another terminal, from apps/mobile:
+node e2e/serve-font-scale-fixture.cjs
+adb reverse tcp:8093 tcp:8093
+adb reverse tcp:8095 tcp:8095
+adb shell am start -a android.intent.action.VIEW \
+  -d 'exp+expirymate://expo-development-client/?url=http%3A%2F%2F127.0.0.1%3A8095' \
+  com.expirymate.mobile
+```
+
+Use the dedicated QA device's serial with `adb -s` if multiple devices are
+connected. Set an input and increment the counter before changing scale.
+The `qa-diagnostics` accessibility label records the instance, measured height,
+line metrics, input and selection. Change the QA device's `font_scale` in the
+cycle above without restarting the app, then compare with cold launches at
+1.3 and 2.0. Preserve the full text and restore the original scale after testing.
+Dismissed or transient system overlays are not accepted as app captures.
+Actual-app QA must additionally verify the API address used by Expo's virtual
+environment module; a shell environment value alone is insufficient evidence.
+
+Native results and unresolved environments are recorded in
+[`verification.json`](../design/reviews/crayon-expression-rollout-v1/verification.json).
+Build success alone is not live layout, accessibility, or release verification.
+The source build must be validated before considering adoption in normal builds.
+
+References: [open root-invalidation proposal](https://github.com/react/react-native/pull/57124),
+[upstream surface-layout change](https://github.com/react/react-native/commit/417e0682203d70bd5ca510f7999a7f6c6990566f),
+[original font-change implementation](https://github.com/react/react-native/commit/c008604e0a05460b440fcfaded70498594465916),
+[official source-build workflow](https://reactnative.dev/contributing/how-to-build-from-source).
+
+## iOS native generation after the pnpm patch
+
+The pnpm patch changes native dependency paths even though package versions stay
+the same. Regenerate CocoaPods linkage rather than retaining old store paths.
+`expo-build-properties` in `apps/mobile/app.json` pins the existing
+GoogleDataTransport 10.1.0 and four GoogleUtilities 8.1.2 subspecs through
+`ios.extraPods`; ordinary regeneration must not silently update those versions.
+The generated native lock now matches the already installed Expo 54.0.37 and
+RN 0.81.5 packages. The configured app minimum remains iOS 16.4.
+
+```bash
+cd apps/mobile/ios
+pod install --no-repo-update
+pod install --deployment --no-repo-update
+```
+
+The second command verifies the resulting lock without changing it. Generate
+native properties from Expo configuration when that configuration changes; do
+not edit `Pods/Manifest.lock` or native store paths by hand. Current iOS QA uses
+the official prebuilt React, ReactNativeDependencies and Hermes device slices,
+whose bytes were verified against the installed Pods. The separate unsigned QA
+build used a CLI-only 15.1 target to diagnose the current Xcode toolchain; this
+does not change the app's configured 16.4 minimum. Successful compilation is
+separate from signing, installation, actual screenshots and VoiceOver checks.
+
 ## Google Scanner manifest note
 
 `expo-camera` currently packages Google Code Scanner's delegate activity. The
@@ -149,8 +272,10 @@ JavaScript ran from separate temporary source copies without environment files,
 against an isolated local API and PostgreSQL database. The emulator has no Play
 Store billing connection; only the known Expo-IAP development overlay was hidden
 in the temporary entry point. This pass does not verify purchases, actual push
-delivery, or the optimized release build. iOS simulator verification remains
-unavailable because the local Xcode license has not been accepted.
+delivery, or the optimized release build. At that verification date the local
+Xcode license was not accepted. The user has since accepted it. Current iOS
+execution limits are recorded in the linked rollout verification report;
+the historical license block is resolved.
 
 Validation also passed: 1,170 general tests, four opt-in PostgreSQL integration
 tests, authenticated HTTP workflow checks, and 50 related tests after the layout

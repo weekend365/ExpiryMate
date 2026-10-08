@@ -3,5 +3,6 @@
   "EX_DEV_CLIENT_NETWORK_INSPECTOR": "true",
   "ios.deploymentTarget": "16.4",
   "ios.forceStaticLinking": "[]",
-  "apple.privacyManifestAggregationEnabled": "true"
+  "apple.privacyManifestAggregationEnabled": "true",
+  "apple.extraPods": "[{\"name\":\"GoogleDataTransport\",\"version\":\"= 10.1.0\"},{\"name\":\"GoogleUtilities/Environment\",\"version\":\"= 8.1.2\"},{\"name\":\"GoogleUtilities/Logger\",\"version\":\"= 8.1.2\"},{\"name\":\"GoogleUtilities/Privacy\",\"version\":\"= 8.1.2\"},{\"name\":\"GoogleUtilities/UserDefaults\",\"version\":\"= 8.1.2\"}]"
 }

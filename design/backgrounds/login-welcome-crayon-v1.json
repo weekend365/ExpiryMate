@@ -1,0 +1,33 @@
+{
+  "source": "login-welcome-crayon-v1.png",
+  "sha256": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "usage": "모바일 로그인 배경만 사용",
+  "prompt": "login-welcome-crayon-v1.prompt.txt",
+  "runtime": "apps/mobile/assets/backgrounds/login-welcome-bg.png",
+  "generation": {
+    "tool": "built-in imagegen",
+    "date": "2026-10-06",
+    "editTarget": {
+      "path": "apps/mobile/assets/backgrounds/login-welcome-bg.png",
+      "sha256": "8c5a5591dac19e1acdb1a546b6b45be0007903ab355bdd778aa3b67b9854c048"
+    },
+    "styleReference": {
+      "path": "design/backgrounds/home-welcome-crayon-v1.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf"
+    }
+  },
+  "preserved": [
+    "방·아치 구도",
+    "옷걸이·가방·스카프",
+    "좌측 화분",
+    "우측 액자·선반·화분",
+    "중앙 안내 공간"
+  ],
+  "changed": [
+    "윤곽·색면·크레파스 질감"
+  ]
+}

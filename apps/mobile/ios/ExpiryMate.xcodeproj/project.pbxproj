@@ -7,39 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		054CA5802DCE40C0A092056E /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2F2D5E9D0C3B174A6E92818F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ECA929E86290AC648B5D80 /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		87E3AAED4A0497A690BDA85E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DC5C99AE897F2D78492D2D38 /* PrivacyInfo.xcprivacy */; };
-		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		F6F823E373F4D53B1AB32D57 /* libPods-ExpiryMate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7642CC67A63B72E1BA580385 /* libPods-ExpiryMate.a */; };
-		D8E71CB84995440D9321CA63 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */; };
-		054CA5802DCE40C0A092056E /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */; };
-		85FF9908426E490C9F2AC96F /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */; };
 		68876CEB59044F58A31E073E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */; };
 		6D4F88E8FFA841C88C7A6C06 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */; };
+		85FF9908426E490C9F2AC96F /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */; };
+		87E3AAED4A0497A690BDA85E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DC5C99AE897F2D78492D2D38 /* PrivacyInfo.xcprivacy */; };
+		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		D8E71CB84995440D9321CA63 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */; };
+		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F6F823E373F4D53B1AB32D57 /* libPods-ExpiryMate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7642CC67A63B72E1BA580385 /* libPods-ExpiryMate.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* ExpiryMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpiryMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ExpiryMate/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ExpiryMate/Info.plist; sourceTree = "<group>"; };
 		14ECA929E86290AC648B5D80 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-ExpiryMate/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.otf"; path = "../assets/fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-ExtraBold.otf"; path = "../assets/fonts/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
 		67B115330BA0E8FB9276DABF /* Pods-ExpiryMate.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExpiryMate.release.xcconfig"; path = "Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate.release.xcconfig"; sourceTree = "<group>"; };
 		7642CC67A63B72E1BA580385 /* libPods-ExpiryMate.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ExpiryMate.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		81BB0B4FCDCFAB8E8AF4C2F6 /* Pods-ExpiryMate.release-qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExpiryMate.release-qa.xcconfig"; path = "Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate.release-qa.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = ExpiryMate/SplashScreen.storyboard; sourceTree = "<group>"; };
+		B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.otf"; path = "../assets/fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
+		CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		D3C7AF723C2BE8B9A86D6CAD /* Pods-ExpiryMate.debug-qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExpiryMate.debug-qa.xcconfig"; path = "Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate.debug-qa.xcconfig"; sourceTree = "<group>"; };
 		DC5C99AE897F2D78492D2D38 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ExpiryMate/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.otf"; path = "../assets/fonts/Pretendard-Medium.otf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ExpiryMate/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* ExpiryMate-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ExpiryMate-Bridging-Header.h"; path = "ExpiryMate/ExpiryMate-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4999402C92E85532CAE7AA3 /* Pods-ExpiryMate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExpiryMate.debug.xcconfig"; path = "Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate.debug.xcconfig"; sourceTree = "<group>"; };
-		CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; name = "Pretendard-Medium.otf"; path = "../assets/fonts/Pretendard-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; name = "Pretendard-SemiBold.otf"; path = "../assets/fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */ = {isa = PBXFileReference; name = "Pretendard-Bold.otf"; path = "../assets/fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; name = "Pretendard-ExtraBold.otf"; path = "../assets/fonts/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,18 @@
 				DC5C99AE897F2D78492D2D38 /* PrivacyInfo.xcprivacy */,
 			);
 			name = ExpiryMate;
+			sourceTree = "<group>";
+		};
+		23B2C6D73FD5419A93EF36BC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */,
+				E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */,
+				B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */,
+				1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */,
+				2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -111,7 +125,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* ExpiryMate.app */,
+				13B07F961A680F5B00A75B9A /* app.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,6 +135,8 @@
 			children = (
 				F4999402C92E85532CAE7AA3 /* Pods-ExpiryMate.debug.xcconfig */,
 				67B115330BA0E8FB9276DABF /* Pods-ExpiryMate.release.xcconfig */,
+				D3C7AF723C2BE8B9A86D6CAD /* Pods-ExpiryMate.debug-qa.xcconfig */,
+				81BB0B4FCDCFAB8E8AF4C2F6 /* Pods-ExpiryMate.release-qa.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -141,19 +157,6 @@
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
-		};
-		23B2C6D73FD5419A93EF36BC /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				CAE4A868C68A415381F4CE05 /* Pretendard-Regular.otf */,
-				E60F79AD7BB14A88BE7D97D3 /* Pretendard-Medium.otf */,
-				B839B64EE1B04909A4FAC71E /* Pretendard-SemiBold.otf */,
-				1C43A81AB30A45A3B72FB59F /* Pretendard-Bold.otf */,
-				2C94CDAC5E7349D99621384D /* Pretendard-ExtraBold.otf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -179,7 +182,7 @@
 			);
 			name = ExpiryMate;
 			productName = ExpiryMate;
-			productReference = 13B07F961A680F5B00A75B9A /* ExpiryMate.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* app.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -273,6 +276,20 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		1A0B6C32E8804E878EB1B61E /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh `${NODE_BINARY:-node} --print \"require('path').dirname(require.resolve('@sentry/react-native/package.json')) + '/scripts/sentry-xcode-debug-files.sh'\"`";
+		};
 		361189AFB8E6FE3B78BFBD06 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -362,6 +379,8 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/Sentry/Sentry.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-launcher/EXDevLauncher.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/expo-dev-menu/EXDevMenu.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb_Privacy.bundle",
 				"${PODS_ROOT}/openiap/openiap-versions.json",
 			);
@@ -390,6 +409,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Sentry.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nanopb_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/openiap-versions.json",
 			);
@@ -397,20 +418,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ExpiryMate/Pods-ExpiryMate-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		1A0B6C32E8804E878EB1B61E /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Sentry";
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "/bin/sh `${NODE_BINARY:-node} --print \"require('path').dirname(require.resolve('@sentry/react-native/package.json')) + '/scripts/sentry-xcode-debug-files.sh'\"`";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -445,6 +452,8 @@
 				);
 				INFOPLIST_FILE = ExpiryMate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				JANGO_APP_DISPLAY_NAME = "장고야 부탁해";
+				JANGO_APP_SCHEME = expirymate;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -457,11 +466,11 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = "app";
+				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -479,6 +488,8 @@
 				DEVELOPMENT_TEAM = 92RS8PY7SX;
 				INFOPLIST_FILE = ExpiryMate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				JANGO_APP_DISPLAY_NAME = "장고야 부탁해";
+				JANGO_APP_SCHEME = expirymate;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -491,13 +502,104 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = "app";
+				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		243F0CCC5A4C4DB2B7120BBE /* Release-QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 81BB0B4FCDCFAB8E8AF4C2F6 /* Pods-ExpiryMate.release-qa.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ExpiryMate/ExpiryMate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RS8PY7SX;
+				INFOPLIST_FILE = ExpiryMate/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				JANGO_APP_DISPLAY_NAME = "장고 QA";
+				JANGO_APP_SCHEME = "jango-crayonqa";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.4.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile.crayonqa;
+				PRODUCT_NAME = app;
+				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = "Release-QA";
+		};
+		3E1CF35177AE43DC98C7F891 /* Release-QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_patch_hash=mqi4rrnrltet2v4fgkb75fu62a_@babel+core@7.29.0_@react-native+me_rrcrnimeoqwfl4aqswafji2c5e/node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release-QA";
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -554,7 +656,7 @@
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-config@0.85.1_@babel+core@7.29.0___7tlutemzsulwe5b3sc2m5fyefq/node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_patch_hash=mqi4rrnrltet2v4fgkb75fu62a_@babel+core@7.29.0_@react-native+me_rrcrnimeoqwfl4aqswafji2c5e/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
@@ -610,13 +712,117 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.29.0_@react-native+metro-config@0.85.1_@babel+core@7.29.0___7tlutemzsulwe5b3sc2m5fyefq/node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_patch_hash=mqi4rrnrltet2v4fgkb75fu62a_@babel+core@7.29.0_@react-native+me_rrcrnimeoqwfl4aqswafji2c5e/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		8D003078201A418D8A049CE2 /* Debug-QA */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../../../node_modules/.pnpm/react-native@0.81.5_patch_hash=mqi4rrnrltet2v4fgkb75fu62a_@babel+core@7.29.0_@react-native+me_rrcrnimeoqwfl4aqswafji2c5e/node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				USE_HERMES = true;
+			};
+			name = "Debug-QA";
+		};
+		A28AF09D36BC450CBBF022E5 /* Debug-QA */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3C7AF723C2BE8B9A86D6CAD /* Pods-ExpiryMate.debug-qa.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ExpiryMate/ExpiryMate.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 92RS8PY7SX;
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"FB_SONARKIT_ENABLED=1",
+				);
+				INFOPLIST_FILE = ExpiryMate/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				JANGO_APP_DISPLAY_NAME = "장고 QA";
+				JANGO_APP_SCHEME = "jango-crayonqa";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.4.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile.crayonqa;
+				PRODUCT_NAME = app;
+				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = "Debug-QA";
 		};
 /* End XCBuildConfiguration section */
 
@@ -626,6 +832,8 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+				A28AF09D36BC450CBBF022E5 /* Debug-QA */,
+				243F0CCC5A4C4DB2B7120BBE /* Release-QA */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -635,6 +843,8 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+				8D003078201A418D8A049CE2 /* Debug-QA */,
+				3E1CF35177AE43DC98C7F891 /* Release-QA */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,0 +1,364 @@
+{
+  "date": "2026-10-07",
+  "baselineCommit": "388a595dd0d4b217ae7f6a182c773ba5568068f5",
+  "scope": [
+    "로그인 배경의 구도 보존·크레파스 표현 전환",
+    "추천·보관함·장보기 주 장고 안내의 선택적 크레파스 말풍선",
+    "말풍선 장식의 접근성 탐색 제외",
+    "클릭 가능한 기존 안내의 보조 설명 접근성 이름 보완"
+  ],
+  "preserved": [
+    "홈·추천·보관함·장보기·설정 5개 탭",
+    "정보 순서·카드·장고·문구·버튼 위치",
+    "Pretendard와 기능 색상",
+    "인증·API·등록·재료 사용·요리·장보기 동작",
+    "공통 말풍선의 기본 appearance",
+    "v18 MASTER 바이트·기존 입 재검토·외부 서명 상태"
+  ],
+  "source": "design/backgrounds/login-welcome-crayon-v1.json",
+  "masterIntegrity": {
+    "design/jango/master-set.json": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "3b893fe3224c354054a5cdb40acd592fb93fe9dfe6eca7a7a312260ff1253771",
+    "design/jango/reference/JANGO-STYLE-GUIDE.md": "5768902f8e77748a5f02b58bedf5c4305ecc44258c5ce8c0c1f1f3fa86f04aeb"
+  },
+  "validation": {
+    "docs:check": "pass; final document/link/script checks after native result and workflow update",
+    "lint/design:check": "pass; final lint/design contracts after fixture and adapter added",
+    "typecheck": "pass; shared build and all app typechecks completed",
+    "responsiveContractTests": "33 passed; notice contracts5 passed",
+    "jango:test": "20 passed",
+    "jango:check": "pass; signed releases 0",
+    "mobileTests": "539 passed",
+    "apiTests": "509 passed; 4 integration tests skipped",
+    "backgrounds:audit": "pass; 5 source/runtime pairs",
+    "mascot:audit": "pass; MASTER source/full/small/anatomy/branding valid; empty mouth needs-review preserved",
+    "branding:audit": "pass; after prebuild, existing branding:sync restored native splash sizing; tracked source/runtime branding files unchanged",
+    "iosBundleExport": "pass",
+    "wholeSuite": "pass;1224 general tests: Jango20/shared156/API509/mobile539;4 opt-in DB tests skipped; worker count1, thresholds unchanged. Native C++ runtime validation now separately passed in opt-in candidate.",
+    "accessibilityFollowup": "pass: native Android hierarchy exposes combined message+supportingMessage once as a button; inner bubble/decoration excluded. Auditory TalkBack/VoiceOver reading not tested.",
+    "store:audit": "pass;2 managed graphics unchanged; Pillow12.3.0 in temporary QA venv",
+    "nativePatchLint": "pass; existing design contract unchanged",
+    "nativePatchTypecheck": "pass; final shared/all-app typecheck after reusable fixture added",
+    "nativeFixture": "Local manifest/bundle and real native entry smoke passed; reproducer separate from runtime routes.",
+    "nativeFollowupTests": "33 passed in final checks: native config/cache6,dynamic type6,font scaling4,home notices12,mascot notice4,inventory notice1",
+    "iosNativeReconcile": {
+      "docs:check": "pass:27 metadata documents and41 links; mobile build-entry check passed",
+      "lint": "pass: ESLint and design contracts,40 Admin/226 mobile source files",
+      "typecheck": "pass: shared build and all apps",
+      "test": "pass:1224 total: Jango20, shared156, API509, mobile539;4 opt-in DB tests skipped",
+      "gitDiffCheck": "pass",
+      "sdkIntegrity": "1405 resolved pnpm package versions unchanged",
+      "runtimeScope": "No device install, external Apple account changes, app deployment or layout/flow changes in this follow-up"
+    }
+  },
+  "nativeValidation": {
+    "androidLoggedInHome": "360x640dp, font 1.0: expired notice displayed; copy/button arrangement preserved",
+    "remaining": [
+      "실행 가능한 iOS 환경에서 실제 앱 화면·접근성 검증",
+      "TalkBack/VoiceOver 실제 음성 확인",
+      "네이티브 후보의 일반·출시 빌드 채택은 별도 판단; 현재 기본값 off"
+    ],
+    "iosBuild": "PASS: current Xcode27 unsigned arm64 device QA build in isolated workspace, Expo54.0.37/RN0.81.5 unchanged; native core/dependency/Hermes library bytes match official device slices. Historical x86_64 simulator compile success remains separate; actual iOS UI/accessibility still unverified.",
+    "iosInstall": "not performed: unsigned separate QA app is ready; user permission requested for external QA development profile and device installation.",
+    "loginComparison": "Android360x640dp,font1.0: identical title/mascot/OAuth/email button positions; room/arch preserved; only background rendering changed",
+    "liveFontChange": "pass in final opt-in candidate:72→94.5→240→72dp; unchanged full text; preserved instance/input/count/focus/selection. Cold1.3/2.0 equal live. Default published-AAR app is not claimed fixed.",
+    "fontIssueReference": "https://github.com/react/react-native/pull/57124",
+    "multipleNotices": "font1.0 native component fixture: short/long/error displayed; explicit swipe inside carousel moved to second page, observed dot2 and full long message",
+    "reducedMotion": "Android emulator: system animator scales disabled; Reanimated reports Reduced Motion active and native guidance renders statically. No per-screen animation workaround added.",
+    "responsiveComponent": "cold launch:320dp/default,360dp/font1.0/1.3/2.0,1066.67dp tablet landscape/default visually inspected; font2 long content uses existing scroll. Fixture example data, not backend success evidence.",
+    "manualLimits": [
+      "iOS 실제 화면·TalkBack/VoiceOver 음성 확인 미실시",
+      "스크린리더 API 구조 검사와 자동 테스트는 사용성 승인 아님",
+      "실시간 글자 변경은 API33 ARM64 후보 빌드에서 검증; OEM·release 미검증",
+      "OS configuration 전환 시 키보드 표시 상태가 달라짐; 입력 포커스와 값 보존 확인과 구분"
+    ],
+    "tabComparison": "pass: Android360x640dp/font1.0, same QA account/data; recommendations/inventory/shop before+after visually checked. Card groups, live text line breaks, mascot positions, search/filter/buttons and five-tab bar unchanged. Only bubble surface/outline/tail treatment differs.",
+    "loginFlow": "pass: local QA backend; email-prefilled login, password keyboard dismissal, login submit, home arrival and tab transitions. Store connection dev warning dismissed; purchase behavior unchanged.",
+    "iosLicense": "license accepted by user; license check no longer blocks build",
+    "iosRuntimeFollowup": "2026-10-07 read-only recheck: no QA simulators/booted devices; iOS26.4 runtime23E244 universal and23E254a arm64-only files both exist. Earlier report that23E244 had been fully removed is corrected. Current installed Simulator.app missing. No current runtime deletion without ownership evidence.",
+    "nativeFontRepairOption": {
+      "status": "Validation complete on specified Android emulator; opt-in candidate, not default/release adoption",
+      "cause": "Observed root/host-only invalidation failed; final candidate also invalidates paragraph measurement using the actual prior node and synchronizes display metrics. The full candidate passed; necessity of each individual change was not isolated by an ablation study.",
+      "concreteChange": "RN0.81.5 validation candidate: stable Android font-layout flag, Fabric root invalidation, attached-surface requestLayout after display refresh, paragraph clone invalidation on changed state font multiplier, and display-metric synchronization before surface measurement. Opt-in activity handles fontScale; SDK/JS caps unchanged. Measurement callback receives the original source node instead of the clone, so multiplier comparison uses the correct prior content.",
+      "packaging": "Pinned RN0.81.5 patch plus explicit ReactAndroid/Hermes source-build dependency substitution. Default build remains published AAR; verification flag is required. Content-hashed source staging and consumer build-output relocation avoid Prefab parsing = in pnpm store paths. No font cap changes.",
+      "reference": "https://github.com/react/react-native/pull/57124",
+      "sourceBuildReference": "https://reactnative.dev/contributing/how-to-build-from-source",
+      "patchFile": "patches/react-native@0.81.5.patch",
+      "patchHash": "mqi4rrnrltet2v4fgkb75fu62a",
+      "verificationBuildFlag": "-PjangoFontScaleNativePatch=true",
+      "configurationTests": "32 related tests passed; final config/cache6 rerun passed; installed-source copy digest verified after native compilation",
+      "buildStatus": "pass; candidate source build18m33s/642tasks147executed495up-to-date; installed APK SHA checked; live and cold runtime validation passed on API33 ARM64 emulator.",
+      "sourceCache": "Installed source digest 8ed987e838635ec6fdee721101f8103471215d5e99bca6e9ea20f34eaea85ab9; content-hashed staging verified; previous generated candidate caches removed after recording observations.",
+      "runtimeStatus": "pass: same React instance/count/input/focus/selection through1.0→1.3→2.0→1.0; measured height72→94.5→240→72dp; full text and cold-launch line metrics match. Actual inventory query/focus also preserved. See native-font-scale-results.json.",
+      "normalManifest": "Verified final normal APK uses published RN0.81.5/Hermes AAR library bytes exactly; manifest matches SDK template flags without fontScale. Source candidate manifest adds fontScale.",
+      "scopeNote": "User-authorized native validation complete; opt-in only. Normal debug build validated with official AAR library bytes. OEM, release, iOS and auditory screen-reader acceptance are not claimed.",
+      "priorRootHostCandidate": {
+        "patchHash": "rbh4z57fjbfcua4vz23ildzoza",
+        "buildStatus": "source build passed19m36s/642tasks; final repeated build passed27s/642tasks. Runtime failed: larger glyphs rendered inside stale72dp body box.",
+        "sourceCache": "apps/mobile/scripts/prepare-android-font-scale-source.cjs; candidate installed source digest2b07fa5047c542b9aa0108c768f4d8e3bd5d8e098a01497013cb89ace923bc7e; generated builds/downloads excluded; source hash verified",
+        "apkSha256": "3deea8a8d225334156aabde2e28481be0a6ee464a0c77bef8dbd827b22c83975",
+        "apkBytes": 115381130,
+        "libraries": {
+          "lib/arm64-v8a/libreactnative.so": "7c674db05a6a9b1e9034ac01aac3051065df3bd671eb67a3b5aa448f51161036",
+          "lib/arm64-v8a/libhermes.so": "68393d0e5bb187e7fda33f78658a7d7d804509398bd6568fe0ce10424334cd36"
+        },
+        "runtimeStatus": "needs-review: React instance1791269661104,count1,input 보존 확인LIVE preserved at1.3 and2.0; body height72dp unchanged. onTextLayout line heights24→31.5→48, and actual screenshot shows bottom-line clipping. JDWP observed surface configuration fontScale2 and cached display scaledDensity4 (density2); diagnostic pause excluded from acceptance tests. This historical failed candidate is superseded by the separately validated final candidate; its failure is retained."
+      },
+      "sdkIntegrity": "All1405 locked package versions/artifact resolutions and mobile dependency declarations unchanged: Expo54.0.37 / RN0.81.5.",
+      "apkSha256": "58ba27f1d0c3328b28752045ea98c77cdb4855d0e4526f7f83cf939bbd02a7c6",
+      "apkBytes": 115381130,
+      "libraries": {
+        "lib/arm64-v8a/libreactnative.so": "61b1ccacf6617a8c3153d88c5d8756e2bc153697d5d91963bbb45bd9d6ec33f1",
+        "lib/arm64-v8a/libhermes.so": "0cecc63969cdd89f892e9f859a407027d97857c62d9d1037e3aa551192587e99"
+      },
+      "normalBuild": {
+        "status": "pass; first normal build failed Expo incremental Kotlin classes; module clean + rebuild succeeded. Wall time6h13m11s includes overnight suspended machine and is not a performance benchmark.",
+        "apkSha256": "f320d1f2ea090a39fff6a45c356d312b4338aadb03785d08d176bbd1730cb12b",
+        "libraries": {
+          "libreactnative.so": {
+            "sha256": "45219e87365683805eca7c1a67e7a8528636ffed9cb20a04b1312befdca7ec72",
+            "matchesPublishedAar": true
+          },
+          "libhermes.so": {
+            "sha256": "de9ec8dc062f6cb755b879802f5696ca540f6ea3dddd32245a960119d68b8daa",
+            "matchesPublishedAar": true
+          }
+        },
+        "configChanges": "keyboard|keyboardHidden|orientation|screenSize|screenLayout|uiMode"
+      },
+      "runtimeEvidence": "native-font-scale-results.json"
+    },
+    "iosBuiltExecutableSha256": "768f32ee35364db54e954d019fb86c5829aa057259892eadefbbb638114ec59b",
+    "nativeScopeAuthorization": "사용자가 기존 SDK의 네이티브 패치 검증 진행을 명시적으로 선택함. iOS 실행 환경 문제와 구분해 진행.",
+    "actualInventoryFontChange": "pass: compiled isolated QA API login, actual inventory search LIVE and focus preserved through1.0→1.3→2.0→1.0; app PID14046 unchanged.2.0 notice/search visually readable. No unrelated app source workaround.",
+    "iosPhysicalReadiness": {
+      "status": "unverified UI",
+      "available": "paired physical iPhone iOS26.6.2 over network; unlocked since boot; developer process service responds; compatible DDI metadata",
+      "qaBundle": "com.expirymate.mobile.crayonqa",
+      "qaAppPresentBeforeBuild": false,
+      "buildStatus": "pass unsigned arm64; separate-bundle device installation and runtime QA pending",
+      "blockers": [
+        "Separate QA development profile unavailable locally; external identifier/profile setup and installation awaiting user permission."
+      ],
+      "scope": "Read-only device check and local separate-bundle build; production app/data untouched."
+    },
+    "iosLocalBuild": {
+      "status": "pass-unsigned-arm64-device-build",
+      "workspace": "temporary isolated QA workspace outside repository",
+      "bundleIdentifier": "com.expirymate.mobile.crayonqa",
+      "displayName": "장고 QA",
+      "urlScheme": "exp+jango-crayonqa",
+      "configuration": "Debug / iphoneos / generic iOS / arm64 / code signing disabled",
+      "sdk": "iphoneOS27.0",
+      "deploymentTarget": "Unsigned QA CLI override15.1; configured production/app minimum16.4 unchanged",
+      "reactNative": "0.81.5 official prebuilt RN Core and dependencies",
+      "expo": "54.0.37 matching installed pnpm dependency",
+      "googleDependencyGuard": "Exact GoogleDataTransport10.1.0 and GoogleUtilities8.1.2 original four subspecs preserved in QA workspace",
+      "attempts": [
+        {
+          "result": "failed-exit65",
+          "reason": "Existing Pod minimums9.0–13.4 below SDK27 minimum15.0; unsigned compile not yet validated"
+        },
+        {
+          "result": "failed-exit65",
+          "reason": "CLI15.1 resolved minimums; generated Hermes phase referenced deleted old pnpm path"
+        },
+        {
+          "result": "not-accepted",
+          "reason": "Root pod install refreshed stale paths but drifted unrequested Google dependencies; tracked project and lock restored byte-for-byte; subsequent build canceled"
+        }
+      ],
+      "trackedBeforeCheckSha256": {
+        "apps/mobile/ios/ExpiryMate.xcodeproj/project.pbxproj": "3b72249c35c6a7bbb8af399f8f99a70c92b3e7fafe1a4307d4a248ebc4437c76",
+        "apps/mobile/ios/ExpiryMate.xcodeproj/xcshareddata/xcschemes/ExpiryMate.xcscheme": "95fd96e417e3059e8b7ee322765d459b8a1b0e342949ad9caeda54ade016e5ed",
+        "apps/mobile/ios/ExpiryMate/Info.plist": "bf2335d6721defc4311b31a2cbdb06d97d6ee5f9ebb398e5c53c400ac8bdd558",
+        "apps/mobile/ios/Podfile.lock": "7870b676c89d21cacc3e7fd08e52e6edd9eb936a7b79143b64e40993f045df07"
+      },
+      "rootCacheNote": "Ignored root Pods cache and tracked native lock now reconciled through CocoaPods with the installed pnpm paths. Existing Google versions are explicitly preserved through the Expo build-properties generator. Normal root-workspace iOS compilation/UI acceptance is still not claimed.",
+      "privacyManifest": "CocoaPods formatting-only change restored after semantic equality check; no privacy policy change",
+      "runtimeVerification": "not performed; unsigned build is not UI, accessibility, signing, installation or release verification",
+      "failedAttemptCleanup": {
+        "path": "/private/tmp/jango-crayon-ios-device-qa-v2",
+        "reason": "Terminal failed/canceled local build; current isolated build has a different derived-data path",
+        "failedLogSha256": "86afb84f0c6d57340fb700b03ca00b5ce0a9551ca59203515b78bb65dad761b9",
+        "reportedSize": "382MiB",
+        "removed": true
+      },
+      "appPath": "/private/tmp/jango-crayon-ios-unsigned-qa.app",
+      "executableSha256": "d79ff43af94506abc9b70a1adfe54062a480ac88fc82385c93a438e6e3360946",
+      "debugDylibSha256": "40a2187d73d5e4ba4193d51efa415b358b58bd72c419215a83e432a0bb0396ae",
+      "buildLogSha256": "298daa3644c905d89f03b8c27a2c71fd3cea3204cd9337a683a437422f29cecf",
+      "errors": 0,
+      "dependencyWarnings": "3075 warning lines, predominantly repeated dependency/compiler deprecations with Xcode27; build succeeded, no warnings suppression added",
+      "prebuiltLibraryByteCheck": {
+        "React": {
+          "sha256": "85195f0ff98a22a8a810ca460b3a265a93f6b539f04bdae1fa373caf94912a41",
+          "identicalToOfficialDeviceSlice": true
+        },
+        "ReactNativeDependencies": {
+          "sha256": "c43c48fa5fe499cab92c0849487772359e9059cd350bed6a5ca5b2dad355c1e4",
+          "identicalToOfficialDeviceSlice": true
+        },
+        "hermes": {
+          "sha256": "75f33039c152c4f254cde479146ad327e893a76054ba79e68f0101877c627121",
+          "identicalToOfficialDeviceSlice": true
+        }
+      },
+      "masterIntegrity": "All32 selected entries:96 source/sticker/lettering files match manifest hashes and Git HEAD; rules and9review statuses not modified",
+      "signing": "not performed; no embedded provisioning profile",
+      "externalState": "No Apple Developer identifier/profile creation or device app installation performed",
+      "nextStep": "Pending user permission for separate QA identifier/development profile and installation; existing production app unchanged",
+      "rootGeneratedPodCacheCheck": {
+        "initialObservedMismatch": true,
+        "trackedLockSha256": "4edb946ed080eaa88e4220c8a6b8ba57278bd3b5536b88ee048db41f160b880a",
+        "generatedManifestSha256": "4edb946ed080eaa88e4220c8a6b8ba57278bd3b5536b88ee048db41f160b880a",
+        "matchesTrackedLock": true,
+        "deploymentLockedReinstall": "pass: pod install --deployment --no-repo-update, exit0",
+        "deploymentLogSha256": "059a4b010cac6cc4265beaff5cf316a278242a04b3907635c1021235208fe498",
+        "podVersions": "Exact PODS definitions match successful isolated QA build; GoogleDataTransport10.1.0, original four GoogleUtilities8.1.2 subspecs, Expo54.0.37 and RN/Hermes0.81.5",
+        "sourceConfig": "apps/mobile/app.json, existing expo-build-properties ios.extraPods; generated properties agree with source config",
+        "originalPodfile": "Exact pre-reconcile bytes retained; no manual Manifest.lock or pnpm-path editing",
+        "nativeProjectDelta": [
+          {
+            "type": "nativeDependencyPath",
+            "resolvedPathExists": true
+          },
+          {
+            "type": "nativeDependencyPath",
+            "resolvedPathExists": true
+          },
+          {
+            "type": "existingDevClientResourceLinkage"
+          },
+          {
+            "type": "existingDevClientResourceLinkage"
+          }
+        ],
+        "preserved": "Original Info.plist and scheme bytes, original app identifiers, minimum16.4, privacy policy; all1405 resolved JS packages and96 MASTER assets unchanged",
+        "knownLimit": "This verifies generation/locking/path integrity; does not replace ordinary app compilation, signing or device QA."
+      },
+      "rootReconcileAttempts": "Removing temporary pins allowed unintended Google minor updates; rejected. Exact versions persisted via Expo ios.extraPods, only those two Pods restored with targeted pod update, then deployment-locked install passed.",
+      "artifactRelocation": "Unsigned app bytes retained; owned build intermediates and old isolated QA workspace removed to recover disk space, no active build job"
+    },
+    "deviceVerificationHold": {
+      "status": "requires-user-input",
+      "reason": "Separate iOS QA identifier/development profile creation and installation permission is still pending; same condition persisted across three goal turns.",
+      "latestLocalEvidence": {
+        "matchingQaDevelopmentProfiles": 0,
+        "unsignedQaArtifactReady": true,
+        "SimulatorApplicationInstalled": false,
+        "androidConnectedQaDevices": 0
+      },
+      "completedIndependentWork": "Android source candidate validation, unsigned iOS QA compilation, root Pods generation/lock reconciliation, mandatory automated checks and owned temporary-resource cleanup",
+      "notClaimedComplete": [
+        "Actual iOS app screenshots/interaction/accessibility",
+        "Auditory TalkBack/VoiceOver verification"
+      ],
+      "nextAction": "Continue device verification when the user answers the existing QA registration/installation question; no external account update or installation before that answer."
+    }
+  },
+  "cleanup": {
+    "status": "complete for current owned native QA resources",
+    "removed": [
+      "temporary apps/mobile/.native-font-qa.js",
+      "current generated RN source cache8ed987…(recreated automatically by script when needed)",
+      "own Jango_Native_Font_20261006 AVD and registration",
+      "own temporary APKs/screens/XML/logs/Pillow venv",
+      "own separate-iPhone QA DerivedData and device metadata",
+      "own isolated local database jango_font_native_qa_20261006"
+    ],
+    "stopped": [
+      "own Metro8093",
+      "own fixture manifest8095",
+      "own QA API4071",
+      "own emulator"
+    ],
+    "temporaryTopLevelArtifactsRemoved": 256,
+    "temporaryDirectFileBytesRemoved": 366098439,
+    "retained": "13 minimum screenshots, source artwork/provenance, structured native results and reusable fixture; normal generated debug APK remains in existing Android build output",
+    "preserved": [
+      "user services and original AVD",
+      "installed iOS runtime23E244/23E254a and pre-existing iOS tracked changes",
+      "v18 MASTER and mouth review/signature states"
+    ],
+    "note": "Historical claim that23E244 was removed is corrected; no current runtime deletion without established ownership.",
+    "iosFollowup": "Owned failed382MiB device build cache removed. Successful unsigned QA app, isolated Pods/build cache and before-check snapshots retained outside repository while device-verification permission is pending; cleanup after result is verified.",
+    "iosRootReconcile": {
+      "removed": [
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-podfile-before-reconcile.rb",
+          "sha256": "610c1ab730be24aa662ada5f1d2a44c248a47839ad4dce6d534eacad894806c9",
+          "bytes": 2562,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-pods-pinned.log",
+          "sha256": "5dbd1ca13bab6ec8aa6afe5975503b108629d47cbc602eb5703b5d1e1467f35b",
+          "bytes": 23537,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-pods-final.log",
+          "sha256": "f3116956c41973d818cb66b05b570a11579c7417e7a93ea307d700751a4d203e",
+          "bytes": 22139,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-pods-preserved.log",
+          "sha256": "4322e03675a08e6d747ab7b9a8a841f59bd5dfb6f6a3db7ae17ed6dc5a02faab",
+          "bytes": 22409,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-pods-deployment-check.log",
+          "sha256": "059a4b010cac6cc4265beaff5cf316a278242a04b3907635c1021235208fe498",
+          "bytes": 22334,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-ios-root-native-delta.json",
+          "sha256": "1a12505744f830f38ffa1108f2f5e98f9c7acb8eba3d2eed851978891df96394",
+          "bytes": 267,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-root-pod-reconcile-lint.log",
+          "sha256": "9adcf284e280adef9034fd9e879b2afcfc7099f3e337185cb03cc446e5358fa6",
+          "bytes": 196,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-root-pod-reconcile-typecheck.log",
+          "sha256": "c995a5ecdd0186eec83c5ca406c4f33c7958706830e2853b777e05827ba5d3c6",
+          "bytes": 5657,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        },
+        {
+          "path": "/private/tmp/jango-crayon-root-pod-reconcile-tests.log",
+          "sha256": "729a61b983389a057262711272191e6ccac73e9fee782bdfef128c2c699921a0",
+          "bytes": 41804,
+          "reason": "Completed local Pods reconciliation/check; concise verified results retained in this record"
+        }
+      ],
+      "files": 9,
+      "bytes": 140905,
+      "retained": "Generated active Pods/native lock and source configuration, successful isolated QA app/cache pending device-verification permission; structured results"
+    }
+  },
+  "screens": {
+    "screens/login-before.png": "7680e37dd977a756ca1632098c72b0ab6b1b72b4f210f07db673312138647fc8",
+    "screens/inventory-before.png": "d874df09270dbbd58b0174f60a0129e945435633da976851fa96839cf2c6af19",
+    "screens/shop-before.png": "10fa87c9b48fe2ab2dfa5cc425b60e29c1606509cdbaf6bbab44cd41fd9ca1a4",
+    "screens/component-tablet.png": "cbe6b7de458ffeb5c0987094dc38959a39ada245bddae9f307f6b0c47aedb792",
+    "screens/recommendations-before.png": "4c4cd4251f677af6b7e6bf4da340a0d307fcdd59790c57ca6ad39e411668965e",
+    "screens/login-after.png": "4f092f916034b68684dfaa3d4f8b46aa4011710d3099c03213e7a56ffd6793a0",
+    "screens/recommendations-after.png": "1d7a0df762101a667d9592453257c6d10cb934999788f7987a169138acea5fe0",
+    "screens/shop-after.png": "ff04c46921d4873ae2c37ac459ccaa569225a97d7894fa347cded2aaa7c4b08f",
+    "screens/component-live-font-failure.png": "2e6d77ddf5989eb3f68f154032a745b24fd4b4580a61dcbbf3f21277d2d5e518",
+    "screens/inventory-after.png": "1c34b5eb7c8af82060036c46257699efa406e65f5144177f04cf49d462b6660e",
+    "screens/native-font-live-13.png": "ecc943d1ef77c3e65944472452e4e2d0dce117dbb86598b93056559785949d72",
+    "screens/native-font-live-20.png": "8dae362deb74c546b5c7d588f76fbdb8ef11d287eb64cf789c3e88f20e3b6d13",
+    "screens/inventory-native-font-20.png": "b96742f796de485bd6dd6e93faa2c3a531c8942bb509c9cdc81b3d215bc14127"
+  },
+  "result": "로그인·3개 탭 크레파스 표현과 Android 전후 비교·자동 검증 통과. 사용자 허용 범위의 RN0.81.5 네이티브 후보는 실시간·새 실행 및 실제 보관함 검색 검증 통과. 기본·출시 빌드는 후보 미채택. iOS 실화면·음성 접근성·OEM/release 미검증을 별도 기록."
+}
