@@ -6,6 +6,8 @@ WORKDIR /app
 
 FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# pnpm validates root patchedDependencies even when the mobile app is excluded.
+COPY patches ./patches
 COPY apps/api/package.json apps/api/
 COPY packages/shared/package.json packages/shared/
 RUN pnpm install --frozen-lockfile
