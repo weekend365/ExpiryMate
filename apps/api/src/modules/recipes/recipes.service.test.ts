@@ -107,6 +107,7 @@ type RecipeRecommendationGeneration = {
     totalTokens: number;
   };
   estimatedCostUsd: number;
+  attempts: [];
 };
 
 type TestableRecipesService = RecipesService & {
@@ -159,6 +160,7 @@ describe("RecipesService recommendation guards", () => {
       "generateRecommendations",
     ).mockResolvedValue({
       recommendations,
+      attempts: [],
       usage: {
         inputTokens: 10,
         cachedInputTokens: 0,
@@ -247,6 +249,7 @@ describe("RecipesService recommendation guards", () => {
     };
     const generation: RecipeRecommendationGeneration = {
       recommendations,
+      attempts: [],
       usage: {
         inputTokens: 1000,
         cachedInputTokens: 100,
@@ -291,9 +294,10 @@ describe("RecipesService recommendation guards", () => {
       expect.any(Object),
       { model: "gpt-5.6-terra", variant: "candidate" },
       undefined,
+      undefined,
     );
     expect(createPayload?.data).toMatchObject({
-      promptVersion: "recipe-recommendation-v11",
+      promptVersion: "recipe-recommendation-v12",
       aiModel: "gpt-5.6-terra",
       inputTokens: 1000,
       cachedInputTokens: 100,

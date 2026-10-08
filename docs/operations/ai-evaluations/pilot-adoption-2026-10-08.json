@@ -1,0 +1,66 @@
+[
+  {
+    "feature": "recipe",
+    "scene": null,
+    "datasetHash": "76ad11f63b0277df3c1e261e2576e0ff983e1c68ddf94c3f6bbe7cfc6ac5b97e",
+    "model": "gpt-6-luna",
+    "controlModel": "gpt-5.4-mini",
+    "passed": false,
+    "issues": [
+      "unmatched_cases",
+      "insufficient_samples",
+      "incomplete_accounting",
+      "missing_quality_grades",
+      "cost_target_unverified",
+      "quality_not_evaluated"
+    ],
+    "control": {
+      "requests": 27,
+      "successes": 20,
+      "successRate": 0.7407407407407407,
+      "costPerSuccessUsd": null,
+      "quality": null,
+      "p95DurationMs": 45018
+    },
+    "candidate": {
+      "requests": 26,
+      "successes": 23,
+      "successRate": 0.8846153846153846,
+      "costPerSuccessUsd": 0.0014846521739130436,
+      "quality": null,
+      "p95DurationMs": 28458
+    }
+  },
+  {
+    "feature": "recipe",
+    "scene": null,
+    "datasetHash": "76ad11f63b0277df3c1e261e2576e0ff983e1c68ddf94c3f6bbe7cfc6ac5b97e",
+    "model": "gpt-6.1-sol",
+    "controlModel": "gpt-5.4-mini",
+    "passed": false,
+    "issues": [
+      "insufficient_samples",
+      "incomplete_accounting",
+      "missing_quality_grades",
+      "cost_target_unverified",
+      "quality_not_evaluated",
+      "latency_regression"
+    ],
+    "control": {
+      "requests": 27,
+      "successes": 20,
+      "successRate": 0.7407407407407407,
+      "costPerSuccessUsd": null,
+      "quality": null,
+      "p95DurationMs": 45018
+    },
+    "candidate": {
+      "requests": 27,
+      "successes": 22,
+      "successRate": 0.8148148148148148,
+      "costPerSuccessUsd": null,
+      "quality": null,
+      "p95DurationMs": 59844
+    }
+  }
+]

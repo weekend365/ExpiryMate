@@ -624,6 +624,13 @@ model InventoryPhotoParseEvent {
   durationMs                Int?
   inputTokens               Int                             @default(0)
   cachedInputTokens         Int                             @default(0)
+  cacheWriteInputTokens     Int?
+  reasoningTokens           Int?
+  usageStatus               String                          @default("legacy")
+  pricingVersion            String                          @default("legacy")
+  variant                   String                          @default("control")
+  generationAttempts        Int                             @default(1)
+  attempts                  Json?
   outputTokens              Int                             @default(0)
   totalTokens               Int                             @default(0)
   estimatedCostUsd          Decimal                         @default(0) @db.Decimal(10, 6)
@@ -650,30 +657,34 @@ model InventoryPhotoParseEvent {
 }
 
 model RecipeRecommendation {
-  id                 String                    @id @default(cuid())
-  ownerKey           String                    @default("demo-user")
-  owner              User                      @relation(fields: [ownerKey], references: [id])
-  spaceId            String?
-  space              InventorySpace?           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  requestCacheKey    String?
-  request            Json
-  inventorySnapshot  Json
-  recommendations    Json
-  aiProvider         String
-  aiModel            String
-  promptVersion      String
-  inputTokens        Int                       @default(0)
-  cachedInputTokens  Int                       @default(0)
-  outputTokens       Int                       @default(0)
-  totalTokens        Int                       @default(0)
-  estimatedCostUsd   Decimal                   @default(0) @db.Decimal(10, 6)
-  generationAttempts Int                       @default(1)
-  repairApplied      Boolean                   @default(false)
-  selectionVersion   String                    @default("recipe-selection-v1")
-  createdAt          DateTime                  @default(now())
-  usageEvent         RecommendationUsageEvent?
-  dishEngagements    RecipeDishEngagement[]
-  aiGenerationEvent  RecipeAiGenerationEvent?
+  id                    String                    @id @default(cuid())
+  ownerKey              String                    @default("demo-user")
+  owner                 User                      @relation(fields: [ownerKey], references: [id])
+  spaceId               String?
+  space                 InventorySpace?           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  requestCacheKey       String?
+  request               Json
+  inventorySnapshot     Json
+  recommendations       Json
+  aiProvider            String
+  aiModel               String
+  promptVersion         String
+  inputTokens           Int                       @default(0)
+  cachedInputTokens     Int                       @default(0)
+  cacheWriteInputTokens Int?
+  reasoningTokens       Int?
+  usageStatus           String                    @default("legacy")
+  pricingVersion        String                    @default("legacy")
+  outputTokens          Int                       @default(0)
+  totalTokens           Int                       @default(0)
+  estimatedCostUsd      Decimal                   @default(0) @db.Decimal(10, 6)
+  generationAttempts    Int                       @default(1)
+  repairApplied         Boolean                   @default(false)
+  selectionVersion      String                    @default("recipe-selection-v1")
+  createdAt             DateTime                  @default(now())
+  usageEvent            RecommendationUsageEvent?
+  dishEngagements       RecipeDishEngagement[]
+  aiGenerationEvent     RecipeAiGenerationEvent?
 
   @@index([ownerKey, createdAt])
   @@index([ownerKey, requestCacheKey, createdAt])
@@ -682,29 +693,36 @@ model RecipeRecommendation {
 }
 
 model RecipeAiGenerationEvent {
-  id                 String                @id @default(cuid())
-  ownerKey           String
-  owner              User                  @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
-  spaceId            String?
-  space              InventorySpace?       @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  recommendationId   String?               @unique
-  recommendation     RecipeRecommendation? @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
-  variant            String
-  aiProvider         String                @default("openai")
-  aiModel            String
-  reasoningEffort    String
-  promptVersion      String
-  status             String
-  failureCode        String?
-  inputTokens        Int                   @default(0)
-  cachedInputTokens  Int                   @default(0)
-  outputTokens       Int                   @default(0)
-  totalTokens        Int                   @default(0)
-  estimatedCostUsd   Decimal               @default(0) @db.Decimal(10, 6)
-  generationAttempts Int                   @default(0)
-  repairApplied      Boolean               @default(false)
-  durationMs         Int?
-  createdAt          DateTime              @default(now())
+  id                    String                @id @default(cuid())
+  ownerKey              String
+  owner                 User                  @relation(fields: [ownerKey], references: [id], onDelete: Cascade)
+  spaceId               String?
+  space                 InventorySpace?       @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  recommendationId      String?               @unique
+  recommendation        RecipeRecommendation? @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  variant               String
+  aiProvider            String                @default("openai")
+  aiModel               String
+  reasoningEffort       String
+  promptVersion         String
+  status                String
+  failureCode           String?
+  inputTokens           Int                   @default(0)
+  cachedInputTokens     Int                   @default(0)
+  cacheWriteInputTokens Int?
+  reasoningTokens       Int?
+  usageStatus           String                @default("legacy")
+  pricingVersion        String                @default("legacy")
+  usageSource           String?
+  requestClass          String                @default("legacy")
+  attempts              Json?
+  outputTokens          Int                   @default(0)
+  totalTokens           Int                   @default(0)
+  estimatedCostUsd      Decimal               @default(0) @db.Decimal(10, 6)
+  generationAttempts    Int                   @default(0)
+  repairApplied         Boolean               @default(false)
+  durationMs            Int?
+  createdAt             DateTime              @default(now())
 
   @@index([ownerKey, createdAt])
   @@index([aiModel, status, createdAt])

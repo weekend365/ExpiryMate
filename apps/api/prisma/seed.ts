@@ -464,6 +464,10 @@ async function main() {
         ]),
       aiProvider: "seed",
       aiModel: "layout-fixture",
+      usageStatus: "estimated",
+      pricingVersion: "fixture-no-provider-charge",
+      cacheWriteInputTokens: null,
+      reasoningTokens: null,
       promptVersion: "layout-e2e-v1",
     },
   });

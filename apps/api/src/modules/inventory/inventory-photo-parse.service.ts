@@ -16,21 +16,23 @@ import {
   type InventoryPhotoParseScene,
 } from "@expirymate/shared";
 import OpenAI from "openai";
-import type { ResponseUsage } from "openai/resources/responses/responses";
 import { zodTextFormat } from "openai/helpers/zod";
 import {
   calculateOpenAiCostUsd,
   getOpenAiModelPricing,
   getOpenAiReasoning,
-  type OpenAiTokenUsage,
+  getOpenAiTextOptions,
 } from "../../common/openai-model-config";
+import { emptyOpenAiUsage, normalizeOpenAiUsage, type OpenAiUsage } from "../../common/openai-usage";
+import { serializeAiUsage, serializeAiAttempts } from "../../common/ai-telemetry";
+import { OpenAiRequestBudget } from "../../common/openai-request-budget";
+import { selectPhotoModel } from "./inventory-photo-model-rollout";
 import { PrivacyService } from "../privacy/privacy.service";
 import { prepareVisionImage } from "./inventory-photo-parse.image";
 import { normalizePhotoParseItems } from "./inventory-photo-parse.normalize";
 import { InventoryPhotoParsePolicyService } from "./inventory-photo-parse.policy";
 
-const PROMPT_VERSION = "inventory-photo-parse-v1";
-const DEFAULT_MODEL = "gpt-5.6-luna";
+export const PHOTO_AI_PROMPT_VERSION = "inventory-photo-parse-v1";
 const DEFAULT_MAX_OUTPUT_TOKENS = 1800;
 const DEFAULT_MAX_BYTES = 4 * 1024 * 1024;
 const PROJECTED_PARSE_COST_USD = 0.04;
@@ -65,7 +67,7 @@ export class InventoryPhotoParseService {
     const prepared = prepareUpload(params.file);
     const now = new Date();
     const startedAt = Date.now();
-    const model = process.env.INVENTORY_PHOTO_PARSE_MODEL?.trim() || DEFAULT_MODEL;
+    const { model, variant } = selectPhotoModel(params.ownerKey, scene);
     getOpenAiModelPricing(model);
 
     this.policy.enforceRateLimit(params.ownerKey, now);
@@ -81,7 +83,7 @@ export class InventoryPhotoParseService {
       spaceId: params.spaceId,
       scene,
       aiModel: model,
-      promptVersion: PROMPT_VERSION,
+      promptVersion: PHOTO_AI_PROMPT_VERSION,
       projectedCostUsd: PROJECTED_PARSE_COST_USD,
       idempotencyKey: params.idempotencyKey,
       now,
@@ -91,18 +93,20 @@ export class InventoryPhotoParseService {
     }
 
     let generation: Awaited<ReturnType<InventoryPhotoParseService["recognizeItems"]>>;
+    let recognitionStarted = false;
     try {
-      generation = await this.policy.withInflightLimit(() =>
-        this.recognizeItems(scene, prepared, model, params.ownerKey),
-      );
+      generation = await this.policy.withInflightLimit(() => {
+        recognitionStarted = true;
+        return this.recognizeItems(scene, prepared, model, params.ownerKey);
+      });
     } catch (error) {
       if (error instanceof PhotoParseGenerationError) {
         await this.policy.failParse(reservation.eventId, {
           failureCode: error.failureCode,
-          inputTokens: error.usage.inputTokens,
-          cachedInputTokens: error.usage.cachedInputTokens,
-          outputTokens: error.usage.outputTokens,
-          totalTokens: error.usage.totalTokens,
+          ...serializeAiUsage(error.usage),
+          generationAttempts: error.usage.usageStatus === "reported" && error.usage.totalTokens === 0 ? 0 : 1,
+          variant,
+          attempts: serializeAiAttempts([{ model, reasoningEffort: getOpenAiReasoning(model)?.effort ?? "none", status: error.failureCode, usage: error.usage, estimatedCostUsd: calculateOpenAiCostUsd(error.usage, model), durationMs: Date.now() - startedAt }]),
           estimatedCostUsd: toCostDecimal(
             calculateOpenAiCostUsd(error.usage, model),
           ),
@@ -113,7 +117,9 @@ export class InventoryPhotoParseService {
       await this.policy.failParse(reservation.eventId, {
         failureCode: "provider_error",
         durationMs: Date.now() - startedAt,
-        ...emptyUsage(),
+        ...serializeAiUsage(recognitionStarted ? normalizeOpenAiUsage(undefined, model) : emptyOpenAiUsage()),
+        generationAttempts: recognitionStarted ? 1 : 0,
+        variant,
         estimatedCostUsd: new Prisma.Decimal(0),
       });
       throw error;
@@ -132,17 +138,17 @@ export class InventoryPhotoParseService {
           : new Prisma.Decimal(averageConfidence.toFixed(4)),
       aiModel: generation.model,
       durationMs: Date.now() - startedAt,
-      inputTokens: generation.usage.inputTokens,
-      cachedInputTokens: generation.usage.cachedInputTokens,
-      outputTokens: generation.usage.outputTokens,
-      totalTokens: generation.usage.totalTokens,
+      ...serializeAiUsage(generation.usage),
+      variant,
+      attempts: serializeAiAttempts([{ model, reasoningEffort: getOpenAiReasoning(model)?.effort ?? "none", status: "succeeded", usage: generation.usage, estimatedCostUsd: generation.estimatedCostUsd, durationMs: Date.now() - startedAt }]),
       estimatedCostUsd: toCostDecimal(generation.estimatedCostUsd),
     });
 
     return result;
   }
 
-  private async recognizeItems(
+  /** Recognition engine; API callers enter through parsePhoto and its policy guards. */
+  async recognizeItems(
     scene: InventoryPhotoParseScene,
     image: { buffer: Buffer; mimeType: string },
     model: string,
@@ -152,20 +158,22 @@ export class InventoryPhotoParseService {
     if (!apiKey) {
       throw new PhotoParseGenerationError(
         "provider_config",
-        emptyUsage(),
+        emptyOpenAiUsage(),
         new ServiceUnavailableException(
           "지금은 사진을 읽기 어려워요. 조금 뒤에 다시 시도해 주세요.",
         ),
       );
     }
 
-    const client = new OpenAI({ apiKey });
+    const client = new OpenAI({ apiKey, maxRetries: 0 });
+    const budget = new OpenAiRequestBudget("INVENTORY_PHOTO_PARSE");
     const dataUrl = `data:${image.mimeType};base64,${image.buffer.toString("base64")}`;
 
     try {
       const reasoning = getOpenAiReasoning(model);
-      const response = await client.responses.parse({
+      const response = await budget.run(options => client.responses.parse({
         model,
+        service_tier: "default",
         instructions: buildInstructions(scene),
         ...(reasoning ? { reasoning } : {}),
         safety_identifier: hashValue(ownerKey),
@@ -175,7 +183,7 @@ export class InventoryPhotoParseService {
         ),
         metadata: {
           feature: "inventory_photo_parse",
-          promptVersion: PROMPT_VERSION,
+          promptVersion: PHOTO_AI_PROMPT_VERSION,
           scene,
         },
         input: [
@@ -202,11 +210,11 @@ export class InventoryPhotoParseService {
             inventoryPhotoParseVisionPayloadSchema,
             "inventory_photo_parse",
           ),
-          verbosity: "low",
+          ...getOpenAiTextOptions(model),
         },
-      });
+      }, options));
 
-      const usage = normalizeUsage(response.usage);
+      const usage = normalizeOpenAiUsage(response.usage, model, { inputTokens: 1200, outputTokens: 400 });
 
       if (hasOpenAiRefusal(response.output)) {
         throw new PhotoParseAttemptError(
@@ -260,7 +268,7 @@ export class InventoryPhotoParseService {
             : "provider_error";
       throw new PhotoParseGenerationError(
         failureCode,
-        error instanceof PhotoParseAttemptError ? error.usage : emptyUsage(),
+        error instanceof PhotoParseAttemptError ? error.usage : normalizeOpenAiUsage(undefined, model),
         new BadGatewayException(
           "사진을 읽지 못했어요. 조금 뒤에 다시 찍어 볼까요?",
         ),
@@ -285,7 +293,7 @@ type PhotoParseFailureCode =
 class PhotoParseAttemptError extends Error {
   constructor(
     readonly failureCode: PhotoParseFailureCode,
-    readonly usage: OpenAiTokenUsage & { totalTokens: number },
+    readonly usage: OpenAiUsage,
     message: string,
   ) {
     super(message);
@@ -293,10 +301,10 @@ class PhotoParseAttemptError extends Error {
   }
 }
 
-class PhotoParseGenerationError extends Error {
+export class PhotoParseGenerationError extends Error {
   constructor(
     readonly failureCode: PhotoParseFailureCode,
-    readonly usage: OpenAiTokenUsage & { totalTokens: number },
+    readonly usage: OpenAiUsage,
     readonly userError: BadGatewayException | ServiceUnavailableException,
   ) {
     super(userError.message);
@@ -359,30 +367,6 @@ function buildInstructions(scene: InventoryPhotoParseScene) {
     "reason should be a short Korean hint when review is needed.",
     "Respond in Korean product names. Maximum 30 items.",
   ].join(" ");
-}
-
-function normalizeUsage(usage: ResponseUsage | undefined) {
-  const inputTokens = usage?.input_tokens ?? 1200;
-  const cachedInputTokens = Math.min(
-    usage?.input_tokens_details?.cached_tokens ?? 0,
-    inputTokens,
-  );
-  const outputTokens = usage?.output_tokens ?? 400;
-  return {
-    inputTokens,
-    cachedInputTokens,
-    outputTokens,
-    totalTokens: usage?.total_tokens ?? inputTokens + outputTokens,
-  };
-}
-
-function emptyUsage() {
-  return {
-    inputTokens: 0,
-    cachedInputTokens: 0,
-    outputTokens: 0,
-    totalTokens: 0,
-  };
 }
 
 function getAverageConfidence(items: Array<{ confidence: number }>) {

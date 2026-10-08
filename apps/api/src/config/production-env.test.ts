@@ -105,6 +105,25 @@ describe("validateProductionEnvironment", () => {
     expect(() => validateProductionEnvironment(env)).not.toThrow();
   });
 
+  it("validates photo candidates and the AI time budgets", () => {
+    const env = validProductionEnv();
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL = "gpt-6-luna";
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT = "5";
+    env.RECIPE_AI_MODEL = "gpt-6.1-sol";
+    env.RECIPE_AI_DEADLINE_MS = "60000";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT = "101";
+    expect(() => validateProductionEnvironment(env)).toThrow(/INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT/);
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT = "5";
+    delete env.INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL;
+    expect(() => validateProductionEnvironment(env)).toThrow(/INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL/);
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL = "unknown-photo-model";
+    expect(() => validateProductionEnvironment(env)).toThrow(/unsupported pricing/);
+    env.INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL = "gpt-6-luna";
+    env.RECIPE_AI_DEADLINE_MS = "0";
+    expect(() => validateProductionEnvironment(env)).toThrow(/RECIPE_AI_DEADLINE_MS/);
+  });
+
   it("rejects OpenAI models without registered pricing", () => {
     const env = validProductionEnv();
     env.RECIPE_AI_MODEL = "unknown-recipe-model";

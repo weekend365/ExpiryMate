@@ -339,6 +339,21 @@ function validateOpenAi(env: EnvMap, errors: string[]) {
       `RECIPE_AI_CANDIDATE_MODEL has unsupported pricing: ${candidateModel}.`,
     );
   }
+  const photoCandidate = env.INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL?.trim();
+  const photoPercent = Number(env.INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT?.trim() || "0");
+  if (!Number.isInteger(photoPercent) || photoPercent < 0 || photoPercent > 100) {
+    errors.push("INVENTORY_PHOTO_PARSE_CANDIDATE_PERCENT must be an integer from 0 to 100.");
+  } else if (photoPercent > 0 && !photoCandidate) {
+    errors.push("INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL is required when the candidate percentage is greater than 0.");
+  }
+  if (photoCandidate && !isKnownOpenAiModel(photoCandidate)) {
+    errors.push("INVENTORY_PHOTO_PARSE_CANDIDATE_MODEL has unsupported pricing.");
+  }
+  for (const key of ["RECIPE_AI_REQUEST_TIMEOUT_MS", "RECIPE_AI_DEADLINE_MS", "INVENTORY_PHOTO_PARSE_REQUEST_TIMEOUT_MS", "INVENTORY_PHOTO_PARSE_DEADLINE_MS"] as const) {
+    if (env[key] !== undefined && (!Number.isSafeInteger(Number(env[key])) || Number(env[key]) <= 0)) {
+      errors.push(`${key} must be a positive integer.`);
+    }
+  }
 }
 
 function isRecipeAiEnabled(env: EnvMap) {

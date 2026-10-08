@@ -58,7 +58,7 @@ type DbClient = PrismaService | Prisma.TransactionClient;
 
 type ReservationResult =
   | { kind: "existing"; recommendationId: string }
-  | { kind: "reserved"; usageEventId: string };
+  | { kind: "reserved"; usageEventId: string; source?: RecommendationUsageSource };
 
 interface AdMobPublicKeyResponse {
   keys?: Array<{ keyId?: number; base64?: string }>;
@@ -523,7 +523,7 @@ export class MonetizationService {
               });
             }
 
-            return { kind: "reserved" as const, usageEventId: event.id };
+            return { kind: "reserved" as const, usageEventId: event.id, source };
           },
           { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
         );

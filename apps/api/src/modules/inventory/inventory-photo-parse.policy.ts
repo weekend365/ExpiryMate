@@ -463,6 +463,13 @@ export class InventoryPhotoParsePolicyService {
       outputTokens: number;
       totalTokens: number;
       estimatedCostUsd: Prisma.Decimal;
+      cacheWriteInputTokens?: number | null;
+      reasoningTokens?: number | null;
+      usageStatus?: string;
+      pricingVersion?: string;
+      variant?: string;
+      attempts?: Prisma.InputJsonValue;
+      generationAttempts?: number;
     },
     now = new Date(),
   ) {
@@ -489,6 +496,13 @@ export class InventoryPhotoParsePolicyService {
       outputTokens: number;
       totalTokens: number;
       estimatedCostUsd: Prisma.Decimal;
+      cacheWriteInputTokens?: number | null;
+      reasoningTokens?: number | null;
+      usageStatus?: string;
+      pricingVersion?: string;
+      variant?: string;
+      attempts?: Prisma.InputJsonValue;
+      generationAttempts?: number;
     },
   ) {
     await this.prisma.inventoryPhotoParseEvent.update({

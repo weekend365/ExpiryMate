@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-08",
+  "scope": "one synthetic recipe condition, one repetition per model; not an adoption evaluation",
+  "datasetHash": "15f3692c99b2f9a49284782bd3e6b44f0b101c2b001778a75a5b604772525a20",
+  "caseId": "synthetic-recipe-007",
+  "promptVersion": "recipe-recommendation-v12",
+  "pricingVersion": "openai-standard-2026-10-08",
+  "providerServiceTier": "default",
+  "knownGenerationCostUsd": 0.03147,
+  "setupFailure": {
+    "status": 401,
+    "code": "invalid_api_key",
+    "usageStatus": "unavailable",
+    "excludedFromSmokeComparison": true,
+    "reason": "credentials were replaced before these three generation requests"
+  },
+  "adoptionDecision": "pending_full_evaluation",
+  "qualityGrades": null,
+  "photoEvaluation": "photo-smoke-2026-10-08.json",
+  "resultSha256": "ec5551b72a775861b005117c794f66b4bc9604b94ee2976aa010694082a52197",
+  "results": [
+    {
+      "model": "gpt-5.4-mini",
+      "status": "succeeded",
+      "durationMs": 7940,
+      "estimatedCostUsd": 0.008262,
+      "usage": {
+        "inputTokens": 3000,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 1336,
+        "reasoningTokens": 0,
+        "totalTokens": 4336,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "repairApplied": false
+    },
+    {
+      "model": "gpt-6-luna",
+      "status": "succeeded",
+      "durationMs": 12741,
+      "estimatedCostUsd": 0.001099,
+      "usage": {
+        "inputTokens": 3000,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 2997,
+        "outputTokens": 1448,
+        "reasoningTokens": 0,
+        "totalTokens": 4448,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "repairApplied": false
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "status": "succeeded",
+      "durationMs": 24706,
+      "estimatedCostUsd": 0.022109,
+      "usage": {
+        "inputTokens": 3000,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 2997,
+        "outputTokens": 1461,
+        "reasoningTokens": 0,
+        "totalTokens": 4461,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "repairApplied": false
+    }
+  ]
+}

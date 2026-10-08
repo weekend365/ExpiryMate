@@ -47,6 +47,11 @@ export class AdminController {
     return this.adminService.getDashboardSummary();
   }
 
+  @Get("ai/metrics")
+  getAiMetrics(@Query("days") days?: string) {
+    return this.adminMonetization.getAiMetrics(days ? Number(days) : undefined);
+  }
+
   @Get("monetization/overview")
   getMonetizationOverview(@Query("days") days?: string) {
     return this.adminMonetization.getMonetizationOverview(

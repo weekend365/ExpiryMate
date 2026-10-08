@@ -1,0 +1,157 @@
+{
+  "date": "2026-10-08",
+  "scope": "one synthetic receipt, one repetition per model; not a photo adoption evaluation",
+  "caseId": "synthetic-receipt-001",
+  "datasetHash": "2c12f92cb6e47d829e905e9117dd8f9eb567c89ed625829690f1e26c2c0d0c34",
+  "promptVersion": "inventory-photo-parse-v1",
+  "pricingVersion": "openai-standard-2026-10-08",
+  "providerServiceTier": "default",
+  "knownGenerationCostUsd": 0.001689,
+  "fixtureSha256": "e9bfaac2d81e1c2bbfe996a33049acaf4c9ae5ac968aae1bb35149bf9ea78957",
+  "resultSha256": "dac76b45778fe155879aac8d811a2620ab1c00a8218d97d1510af21a7f8af1ae",
+  "adoptionDecision": "pending_full_evaluation",
+  "qualityGrades": null,
+  "compatibilityFailure": {
+    "model": "gpt-4.1-mini",
+    "status": 400,
+    "code": "unsupported_value",
+    "param": "text.verbosity",
+    "usageStatus": "unavailable",
+    "excludedFromSmokeComparison": true,
+    "fix": "omit unsupported verbosity on GPT-4.x"
+  },
+  "results": [
+    {
+      "model": "gpt-4.1-mini",
+      "status": "succeeded",
+      "durationMs": 2939,
+      "estimatedCostUsd": 0.000896,
+      "usage": {
+        "inputTokens": 1560,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 0,
+        "outputTokens": 170,
+        "reasoningTokens": 0,
+        "totalTokens": 1730,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "photoExactNameF1": 1,
+      "items": [
+        {
+          "displayName": "우유",
+          "category": "dairy",
+          "quantity": 2,
+          "unitCode": "ea",
+          "confidence": 1,
+          "needsReview": true
+        },
+        {
+          "displayName": "두부",
+          "category": "tofu",
+          "quantity": 1,
+          "unitCode": "ea",
+          "confidence": 1,
+          "needsReview": true
+        },
+        {
+          "displayName": "사과",
+          "category": "produce",
+          "quantity": 3,
+          "unitCode": "ea",
+          "confidence": 1,
+          "needsReview": true
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "status": "succeeded",
+      "durationMs": 3579,
+      "estimatedCostUsd": 0.000543,
+      "usage": {
+        "inputTokens": 1262,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 1259,
+        "outputTokens": 190,
+        "reasoningTokens": 0,
+        "totalTokens": 1452,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "photoExactNameF1": 1,
+      "items": [
+        {
+          "displayName": "우유",
+          "category": "dairy",
+          "quantity": 2,
+          "unitCode": "ea",
+          "suggestedStorageLocation": "냉장고",
+          "confidence": 1,
+          "needsReview": true
+        },
+        {
+          "displayName": "두부",
+          "category": "tofu",
+          "quantity": 1,
+          "unitCode": "ea",
+          "suggestedStorageLocation": "냉장고",
+          "confidence": 1,
+          "needsReview": true
+        },
+        {
+          "displayName": "사과",
+          "category": "produce",
+          "quantity": 3,
+          "unitCode": "ea",
+          "suggestedStorageLocation": "실온 또는 냉장고",
+          "confidence": 1,
+          "needsReview": true
+        }
+      ]
+    },
+    {
+      "model": "gpt-6-luna",
+      "status": "succeeded",
+      "durationMs": 3875,
+      "estimatedCostUsd": 0.00025,
+      "usage": {
+        "inputTokens": 1262,
+        "cachedInputTokens": 0,
+        "cacheWriteInputTokens": 1259,
+        "outputTokens": 184,
+        "reasoningTokens": 0,
+        "totalTokens": 1446,
+        "usageStatus": "reported"
+      },
+      "generationAttempts": 1,
+      "photoExactNameF1": 1,
+      "items": [
+        {
+          "displayName": "우유",
+          "category": "dairy",
+          "quantity": 2,
+          "unitCode": "ea",
+          "confidence": 0.99,
+          "needsReview": true
+        },
+        {
+          "displayName": "두부",
+          "category": "tofu",
+          "quantity": 1,
+          "unitCode": "ea",
+          "confidence": 0.99,
+          "needsReview": true
+        },
+        {
+          "displayName": "사과",
+          "category": "produce",
+          "quantity": 3,
+          "unitCode": "ea",
+          "confidence": 0.99,
+          "needsReview": true
+        }
+      ]
+    }
+  ]
+}

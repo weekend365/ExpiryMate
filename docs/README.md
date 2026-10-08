@@ -29,6 +29,8 @@ source_of_truth: true
 | [iOS·EAS production](./ios-eas-production.md) | iOS capability, build, submit | mobile-release | Yes |
 | [모바일 반응형 QA](./mobile-responsive-qa.md) | 글자·화면 크기 조합과 회귀 기준 | mobile-design | Yes |
 | [리팩터링 실행 계획](./refactoring-plan.md) | 공유 계약·모바일 API·Admin 집계 구조 개선과 검증 기록 | engineering | Yes |
+| [AI API 성능과 비용 개선안](./operations/ai-api-improvement-proposal.md) | 현재 모델·원가 계측, 저비용 후보와 품질 평가 계획 | engineering | Draft |
+- [AI 모델 평가 실행 안내](operations/ai-model-evaluation.md) — 원가 지표, 후보 설정, 평가·검수·채택 기준
 
 ## 제품·디자인
 

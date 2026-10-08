@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import {
   getKstDayWindow,
+  adminAiMetricsSchema,
+  type AdminAiMetrics,
   getKstMonthWindow,
   type AdminMonetizationOverview,
 } from "@expirymate/shared";
@@ -23,12 +25,35 @@ import {
   percentile,
 } from "./admin-monetization-metrics";
 
+import { buildAiMetrics } from "./admin-ai-metrics";
+
 const REWARDED_AD_COST_COVERAGE_TARGET = 1;
 const PAID_CREDIT_COST_COVERAGE_TARGET = 3;
 
 @Injectable()
 export class AdminMonetizationService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getAiMetrics(requestedDays = 30, now = new Date()): Promise<AdminAiMetrics> {
+    const days = [7, 30, 90].includes(requestedDays) ? requestedDays : 30;
+    const from = addUtcDays(getKstDayWindow(now).start, -(days - 1));
+    const limit = 20_000;
+    const select = { aiModel: true, promptVersion: true, variant: true, pricingVersion: true,
+      status: true, usageStatus: true, estimatedCostUsd: true, generationAttempts: true,
+      durationMs: true, inputTokens: true, cachedInputTokens: true, cacheWriteInputTokens: true } as const;
+    const [recipes, photos] = await Promise.all([
+      this.prisma.recipeAiGenerationEvent.findMany({ where: { createdAt: { gte: from, lte: now } },
+        select: { ...select, requestClass: true }, orderBy: { createdAt: "desc" }, take: limit + 1 }),
+      this.prisma.inventoryPhotoParseEvent.findMany({ where: { createdAt: { gte: from, lte: now }, status: { in: ["succeeded", "failed"] } },
+        select: { ...select, scene: true }, orderBy: { createdAt: "desc" }, take: limit + 1 }),
+    ]);
+    return adminAiMetricsSchema.parse({ from: from.toISOString(), to: now.toISOString(), days,
+      truncated: recipes.length > limit || photos.length > limit, sampleLimitPerFeature: limit,
+      groups: buildAiMetrics([
+        ...recipes.slice(0, limit).map(row => ({ ...row, feature: "recipe" as const, requestClass: normalizeRequestClass(row.requestClass), scene: null })),
+        ...photos.slice(0, limit).map(row => ({ ...row, feature: "photo" as const, requestClass: "photo" as const })),
+      ]) });
+  }
 
   async getMonetizationOverview(
     requestedDays = 30,
@@ -765,4 +790,8 @@ function hasMethod(value: unknown, key: string) {
       typeof value === "object" &&
       typeof (value as Record<string, unknown>)[key] === "function",
   );
+}
+
+function normalizeRequestClass(value: string): "simple" | "complex" | "legacy" {
+  return value === "simple" || value === "complex" ? value : "legacy";
 }

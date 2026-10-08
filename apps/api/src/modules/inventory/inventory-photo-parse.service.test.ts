@@ -145,6 +145,13 @@ describe("InventoryPhotoParseService", () => {
     expect(parseMock).not.toHaveBeenCalled();
   });
 
+  it("records a local capacity rejection as no provider request", async () => {
+    policy.withInflightLimit.mockRejectedValueOnce(new Error("capacity reached"));
+    await expect(service.parsePhoto({ ownerKey: "user-1", scene: "receipt", file: { buffer: jpeg, mimetype: "image/jpeg" } })).rejects.toThrow("capacity reached");
+    expect(parseMock).not.toHaveBeenCalled();
+    expect(policy.failParse).toHaveBeenCalledWith("evt-1", expect.objectContaining({ generationAttempts: 0, usageStatus: "reported", totalTokens: 0 }));
+  });
+
   it("returns milk and drops receipt totals from vision output", async () => {
     parseMock.mockResolvedValue({
       output: [],
@@ -174,6 +181,7 @@ describe("InventoryPhotoParseService", () => {
         reasoning: { effort: "none" },
         safety_identifier: expect.stringMatching(/^[a-f0-9]{64}$/),
       }),
+      expect.objectContaining({ maxRetries: 0, timeout: 30000 }),
     );
     expect(policy.completeParse).toHaveBeenCalledWith(
       "evt-1",
@@ -188,10 +196,10 @@ describe("InventoryPhotoParseService", () => {
       estimatedCostUsd: { toString(): string };
     };
     expect(eventData.averageConfidence.toString()).toBe("0.92");
-    expect(eventData.estimatedCostUsd.toString()).toBe("0.000304");
+    expect(eventData.estimatedCostUsd.toString()).toBe("0.000344");
   });
 
-  it("omits reasoning when rolling photo parsing back to GPT-4.1", async () => {
+  it("omits unsupported reasoning and verbosity when using GPT-4.1", async () => {
     process.env.INVENTORY_PHOTO_PARSE_MODEL = "gpt-4.1-mini";
     parseMock.mockResolvedValue({
       output: [],
@@ -214,6 +222,7 @@ describe("InventoryPhotoParseService", () => {
     const request = parseMock.mock.calls[0]?.[0] as Record<string, unknown>;
     expect(request.model).toBe("gpt-4.1-mini");
     expect(request).not.toHaveProperty("reasoning");
+    expect(request.text).not.toHaveProperty("verbosity");
   });
 
   it("records failed Luna parses with partial usage", async () => {

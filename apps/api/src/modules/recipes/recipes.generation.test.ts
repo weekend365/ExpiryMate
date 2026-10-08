@@ -114,6 +114,7 @@ describe("RecipesService semantic repair", () => {
         reasoning: { effort: "none" },
         metadata: expect.objectContaining({ variant: "candidate" }),
       }),
+      expect.objectContaining({ maxRetries: 0, timeout: expect.any(Number) }),
     );
   });
 
@@ -152,8 +153,30 @@ describe("RecipesService semantic repair", () => {
       cachedInputTokens: 4,
       outputTokens: 45,
       totalTokens: 70,
+      cacheWriteInputTokens: 0,
+      reasoningTokens: null,
+      usageStatus: "reported",
     });
     expect(parseMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("prices the candidate and control repair separately", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    parseMock.mockResolvedValueOnce(response(recommendations(1), 1000, 2000))
+      .mockResolvedValueOnce(response(recommendations(2), 1000, 2000));
+    const result = await generate(createService(), { model: "gpt-6-luna", variant: "candidate", repairModel: "gpt-5.4-mini" });
+    expect(parseMock.mock.calls.map(call => call[0].model)).toEqual(["gpt-6-luna", "gpt-5.4-mini"]);
+    expect(result.estimatedCostUsd).toBe(0.010874);
+    expect(result.usage).toMatchObject({ usageStatus: "estimated", cacheWriteInputTokens: null });
+  });
+
+  it("preserves known cost when a repair loses the provider response", async () => {
+    process.env.OPENAI_API_KEY = "test-key";
+    parseMock.mockResolvedValueOnce(response(recommendations(1), 1000, 2000))
+      .mockRejectedValueOnce(new Error("connection lost"));
+    await expect(generate(createService())).rejects.toBeInstanceOf(BadGatewayException);
+    expect(eventCreateMock).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ usageStatus: "partial", inputTokens: 1000, generationAttempts: 2,
+      attempts: expect.arrayContaining([expect.objectContaining({ status: "provider_error", usage: expect.objectContaining({ usageStatus: "unavailable" }) })]) }) }));
   });
 
   it("repairs unit and quantity mismatches instead of silently clamping them", async () => {
@@ -210,7 +233,7 @@ describe("RecipesService semantic repair", () => {
 
     expect(result.generationAttempts).toBe(3);
     for (const [call] of parseMock.mock.calls) {
-      expect(call.metadata.promptVersion).toBe("recipe-recommendation-v11");
+      expect(call.metadata.promptVersion).toBe("recipe-recommendation-v12");
       expect(call.text.format).toMatchObject({
         type: "json_schema",
         strict: true,
@@ -440,6 +463,7 @@ function generate(
   modelSelection: {
     model: string;
     variant: "control" | "candidate";
+    repairModel?: string;
   } = { model: "gpt-5.4-mini", variant: "control" },
   generationRequest: RecipeRecommendationRequest = request,
   generationInventory: RecipeInventorySnapshotItem[] = inventory,
@@ -459,6 +483,7 @@ function generate(
         modelSelection: {
           model: string;
           variant: "control" | "candidate";
+    repairModel?: string;
         },
         spaceId?: string,
       ) => Promise<{

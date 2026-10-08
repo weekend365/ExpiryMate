@@ -1,0 +1,169 @@
+{
+  "date": "2026-10-08",
+  "status": "stopped",
+  "startedAt": "2026-10-08T05:00:07.004286+00:00",
+  "feature": "recipe",
+  "dataPolicy": "synthetic",
+  "datasetHash": "76ad11f63b0277df3c1e261e2576e0ff983e1c68ddf94c3f6bbe7cfc6ac5b97e",
+  "promptVersion": "recipe-recommendation-v12",
+  "pricingVersion": "openai-standard-2026-10-08",
+  "models": [
+    "gpt-5.4-mini",
+    "gpt-6-luna",
+    "gpt-6.1-sol"
+  ],
+  "casesPerModel": 200,
+  "repetitions": 3,
+  "plannedRequests": 1800,
+  "concurrency": 6,
+  "requestedTotalBudgetUsd": 30,
+  "runBudgetUsd": 29.96,
+  "precedingKnownSmokeCostUsd": 0.033159,
+  "maxOutputTokens": 3500,
+  "requestTimeoutMs": 45000,
+  "generationDeadlineMs": 60000,
+  "providerServiceTier": "default",
+  "sdkMaxRetries": 0,
+  "qualityGrades": null,
+  "adoptionDecision": "not_approved_insufficient_samples_unaccounted_charges_missing_quality_grades",
+  "resultFile": "recipe-pilot-2026-10-08.jsonl",
+  "stopReasons": [
+    "incomplete_provider_accounting",
+    "user_requested_small_evaluation"
+  ],
+  "completedRequests": 80,
+  "caseCount": 27,
+  "knownGenerationCostUsd": 1.039486,
+  "knownEvaluationCostIncludingSmokeUsd": 1.072645,
+  "unaccountedRequests": 6,
+  "billingReconciled": false,
+  "endedAt": "2026-10-08T05:05:19.252280+00:00",
+  "resultSha256": "70d4c4111f3717a0c88d0fadce192b207da45e214311b3680793fb84246ceb67",
+  "caseFile": "recipe-cases-2026-10-08.jsonl",
+  "modelsSummary": [
+    {
+      "model": "gpt-5.4-mini",
+      "requests": 27,
+      "successes": 20,
+      "failures": 7,
+      "successRate": 0.7407407407407407,
+      "knownCostUsd": 0.354391,
+      "costPerSuccessUsd": null,
+      "p50DurationMs": 14647,
+      "p95DurationMs": 45018,
+      "usageStatuses": {
+        "reported": 25,
+        "unavailable": 1,
+        "partial": 1
+      },
+      "repairs": 13,
+      "failureCodes": {
+        "semantic_validation": 5,
+        "provider_error": 2
+      }
+    },
+    {
+      "model": "gpt-6-luna",
+      "requests": 26,
+      "successes": 23,
+      "failures": 3,
+      "successRate": 0.8846153846153846,
+      "knownCostUsd": 0.034147,
+      "costPerSuccessUsd": 0.0014846521739130434,
+      "p50DurationMs": 11538,
+      "p95DurationMs": 28458,
+      "usageStatuses": {
+        "reported": 26
+      },
+      "repairs": 7,
+      "failureCodes": {
+        "semantic_validation": 2,
+        "incomplete": 1
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "requests": 27,
+      "successes": 22,
+      "failures": 5,
+      "successRate": 0.8148148148148148,
+      "knownCostUsd": 0.650948,
+      "costPerSuccessUsd": null,
+      "p50DurationMs": 30462,
+      "p95DurationMs": 59844,
+      "usageStatuses": {
+        "reported": 23,
+        "partial": 1,
+        "unavailable": 3
+      },
+      "repairs": 5,
+      "failureCodes": {
+        "semantic_validation": 1,
+        "provider_error": 4
+      }
+    }
+  ],
+  "reportedPairedSubset": {
+    "caseCount": 23,
+    "repetitions": 1,
+    "exclusionRule": "Exclude the entire case when any model has missing output or non-reported accounting. This is an exploratory subset selected after execution, not an adoption evaluation.",
+    "modelsSummary": [
+      {
+        "model": "gpt-5.4-mini",
+        "requests": 23,
+        "successes": 19,
+        "failures": 4,
+        "successRate": 0.8260869565217391,
+        "knownCostUsd": 0.306173,
+        "costPerSuccessUsd": 0.01611436842105263,
+        "p50DurationMs": 10041,
+        "p95DurationMs": 29300,
+        "usageStatuses": {
+          "reported": 23
+        },
+        "repairs": 10,
+        "failureCodes": {
+          "semantic_validation": 4
+        }
+      },
+      {
+        "model": "gpt-6-luna",
+        "requests": 23,
+        "successes": 20,
+        "failures": 3,
+        "successRate": 0.8695652173913043,
+        "knownCostUsd": 0.030261,
+        "costPerSuccessUsd": 0.00151305,
+        "p50DurationMs": 11538,
+        "p95DurationMs": 28458,
+        "usageStatuses": {
+          "reported": 23
+        },
+        "repairs": 6,
+        "failureCodes": {
+          "incomplete": 1,
+          "semantic_validation": 2
+        }
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "requests": 23,
+        "successes": 22,
+        "failures": 1,
+        "successRate": 0.9565217391304348,
+        "knownCostUsd": 0.628599,
+        "costPerSuccessUsd": 0.02857268181818182,
+        "p50DurationMs": 29030,
+        "p95DurationMs": 52939,
+        "usageStatuses": {
+          "reported": 23
+        },
+        "repairs": 4,
+        "failureCodes": {
+          "semantic_validation": 1
+        }
+      }
+    ]
+  },
+  "noFurtherPaidRequests": true
+}

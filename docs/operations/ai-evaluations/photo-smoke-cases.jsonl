@@ -1,0 +1,1 @@
+{"id": "synthetic-receipt-001", "dataPolicy": "synthetic", "feature": "photo", "scene": "receipt", "imagePath": "jango-ai-synthetic-receipt.png", "expectedNames": ["우유", "두부", "사과"]}

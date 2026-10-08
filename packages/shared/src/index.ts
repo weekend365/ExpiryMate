@@ -5,6 +5,7 @@ export * from "./constants/labels";
 export * from "./design";
 export * from "./enums/app-enums";
 export * from "./schemas/affiliate";
+export * from "./schemas/ai";
 export * from "./schemas/inventory";
 export * from "./schemas/insights";
 export * from "./schemas/monetization";
@@ -31,3 +32,5 @@ export * from "./utils/recipe-preference-summary";
 export * from "./utils/recipe-step-timer";
 export * from "./utils/affiliate-products";
 export * from "./schemas/inventory-activity";
+
+export * from "./schemas/ai-evaluation";

@@ -496,7 +496,7 @@ describe("MonetizationService", () => {
 
     await expect(
       service.reserveRecommendation("owner-a", "new-key"),
-    ).resolves.toEqual({ kind: "reserved", usageEventId: "usage-1" });
+    ).resolves.toEqual({ kind: "reserved", usageEventId: "usage-1", source: "free" });
     expect(prisma.recommendationUsageEvent.create).toHaveBeenCalledWith({
       data: expect.objectContaining({
         ownerKey: "owner-a",
