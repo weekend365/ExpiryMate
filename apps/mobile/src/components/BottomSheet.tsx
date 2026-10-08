@@ -33,10 +33,7 @@ import {
 } from "../shared/theme";
 import { AppText } from "./AppText";
 import type { MascotMood } from "./Mascot";
-import {
-  MascotSpeechBubble,
-  type MascotSpeechBubbleAppearance,
-} from "./MascotSpeechBubble";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
 
 interface BottomSheetProps extends PropsWithChildren {
   visible: boolean;
@@ -45,7 +42,6 @@ interface BottomSheetProps extends PropsWithChildren {
   description?: string;
   /** Optional 장고 mood above the sheet title (success / confirm / guide). */
   mascotMood?: MascotMood;
-  speechAppearance?: MascotSpeechBubbleAppearance;
   /** Body controls that stay visible while the sheet content scrolls. */
   stickyBodyHeader?: ReactNode;
   footer?: ReactNode;
@@ -78,7 +74,6 @@ export function BottomSheet({
   title,
   description,
   mascotMood,
-  speechAppearance = "default",
   stickyBodyHeader,
   footer,
   scrollEnabled = true,
@@ -247,7 +242,6 @@ export function BottomSheet({
                   </View>
                 ) : mascotMood && title ? (
                   <MascotSpeechBubble
-                    appearance={speechAppearance}
                     message={title}
                     supportingMessage={description}
                     mood={mascotMood}

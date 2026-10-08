@@ -714,7 +714,6 @@ export default function RegisterPhotoScreen() {
             <View style={styles.loadingCard}>
               <PhotoFlowProgress current={1} />
               <MascotSpeechBubble
-                appearance="crayon"
                 message="글자와 재료를 천천히 읽고 있어요."
                 mood="think"
                 size="medium"

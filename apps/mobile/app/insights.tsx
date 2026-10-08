@@ -271,7 +271,6 @@ function PlusReport({
             void overview.refetch();
           }}
           presentation={overview.data ? "inline" : "mascot"}
-          speechAppearance="crayon"
         />
       ) : null}
 

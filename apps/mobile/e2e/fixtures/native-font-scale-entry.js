@@ -31,7 +31,7 @@ function App() {
       h(AppText,{testID:'qa-measured-copy',onLayout:({nativeEvent:{layout}})=>setHeight(layout.height),onTextLayout:({nativeEvent})=>setLines(nativeEvent.lines.map(({text,width,height})=>({text,width,height})))},copy),
       h(AppTextInput,{value,onChangeText:setValue,onFocus:()=>setInputFocused(true),onBlur:()=>setInputFocused(false),onSelectionChange:({nativeEvent})=>setSelection(nativeEvent.selection),testID:'qa-input',style:{minHeight:controlSize.minimum,padding:spacing.sm,borderWidth:1,borderColor:colors.borderControl}}),
       h(Button,{testID:'qa-counter',onPress:()=>setCount(c=>c+1)},'반응 확인'),
-      h(MascotSpeechBubble,{message:copy,supportingMessage:'개봉한 재료도 함께 살펴보세요.',appearance:'crayon'}),
+      h(MascotSpeechBubble,{message:copy,supportingMessage:'개봉한 재료도 함께 살펴보세요.'}),
       h(AppText,null,'기존 컴포넌트의 글자 상한과 문구는 유지합니다.'),
       h(Text,{allowFontScaling:false,testID:'qa-line-layout',accessibilityLabel:JSON.stringify(lines)},'측정 기록')
     )));

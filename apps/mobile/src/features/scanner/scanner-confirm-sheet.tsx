@@ -170,7 +170,6 @@ export function ScannerConfirmSheet({
       onClose={onClose}
       dismissible={false}
       mascotMood={quickSavedItem ? "happy" : resultMood}
-      speechAppearance={quickSavedItem ? "default" : "crayon"}
       title={sheetTitle}
       description={sheetDescription}
       footer={

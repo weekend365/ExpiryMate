@@ -606,7 +606,6 @@ export default function CookingScreen() {
           <CookingKeepAwake />
         ) : null}
         <StepFlow
-          speechAppearance="crayon"
           steps={steps}
           currentIndex={currentIndex}
           onBack={handlePreviousStep}
@@ -888,7 +887,6 @@ export default function CookingScreen() {
         onClose={() => undefined}
         dismissible={false}
         mascotMood="cooking"
-        speechAppearance="crayon"
         title="하던 요리를 이어갈까요?"
         description={
           draftStepLabel

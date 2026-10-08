@@ -295,7 +295,7 @@ export function ShoppingScreen() {
             />
           ) : (
             <>
-              <ShoppingHeroCard notices={heroNotices} appearance="crayon">
+              <ShoppingHeroCard notices={heroNotices}>
                 <View
                   style={[
                     styles.searchBar,

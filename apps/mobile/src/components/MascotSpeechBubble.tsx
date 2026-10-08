@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -17,10 +17,6 @@ import { appBrand } from "@expirymate/shared";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText, type AppTextVariant } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
-import { CrayonSpeechBubbleArt } from "./CrayonSpeechBubbleArt";
-import { getCrayonSpeechBubbleGeometry } from "../shared/crayon-speech-bubble";
-
-export type MascotSpeechBubbleAppearance = "default" | "crayon";
 
 interface MascotSpeechBubbleProps {
   message: string;
@@ -28,7 +24,6 @@ interface MascotSpeechBubbleProps {
   size?: "small" | "medium";
   numberOfLines?: number;
   style?: StyleProp<ViewStyle>;
-  appearance?: MascotSpeechBubbleAppearance;
   /** Headline lines (step questions, success) should read as the main copy. */
   textVariant?: AppTextVariant;
   /** Quieter follow-up under the main line. */
@@ -61,7 +56,6 @@ export function MascotSpeechBubble({
   size = "small",
   numberOfLines,
   style,
-  appearance = "default",
   textVariant = "bodySmall",
   supportingMessage,
   density = "default",
@@ -72,11 +66,7 @@ export function MascotSpeechBubble({
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
   const isCompact = density === "compact";
-  const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const reduceMotion = useReducedMotion();
-  const showCrayon =
-    appearance === "crayon" &&
-    Boolean(getCrayonSpeechBubbleGeometry({ ...bubbleSize, density }));
 
   useEffect(() => {
     if (reduceMotion) {
@@ -118,32 +108,12 @@ export function MascotSpeechBubble({
       <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
         <View
-          onLayout={
-            appearance === "crayon"
-              ? ({ nativeEvent: { layout } }) => {
-                  if (
-                    layout.width !== bubbleSize.width ||
-                    layout.height !== bubbleSize.height
-                  ) {
-                    setBubbleSize({ width: layout.width, height: layout.height });
-                  }
-                }
-              : undefined
-          }
           style={[
             styles.bubble,
             isCompact && styles.bubbleCompact,
             onDismiss && styles.bubbleDismissible,
-            showCrayon && styles.bubbleCrayon,
           ]}
         >
-          {showCrayon ? (
-            <CrayonSpeechBubbleArt
-              width={bubbleSize.width}
-              height={bubbleSize.height}
-              density={density}
-            />
-          ) : null}
           <AppText
             variant={textVariant}
             numberOfLines={numberOfLines}
@@ -186,9 +156,7 @@ export function MascotSpeechBubble({
           ) : null}
         </View>
         {/* Tail points toward the mascot (left). */}
-        {showCrayon ? null : (
-          <View style={[styles.tail, isCompact && styles.tailCompact]} />
-        )}
+        <View style={[styles.tail, isCompact && styles.tailCompact]} />
       </View>
     </Animated.View>
   );
@@ -231,10 +199,6 @@ const styles = StyleSheet.create({
     minHeight: spacing.xl,
     borderRadius: radius.lg,
     gap: spacing.xxs, // 4px: keep the question and guide as one thought
-  },
-  bubbleCrayon: {
-    backgroundColor: colors.surfaceWarm,
-    borderColor: "transparent",
   },
   bubbleDismissible: {
     paddingRight: controlSize.icon + spacing.xs,

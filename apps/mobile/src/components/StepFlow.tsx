@@ -10,10 +10,7 @@ import { ChevronLeft } from "lucide-react-native";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { useResponsiveLayout } from "../shared/responsive-layout";
 import { AppText } from "./AppText";
-import {
-  MascotSpeechBubble,
-  type MascotSpeechBubbleAppearance,
-} from "./MascotSpeechBubble";
+import { MascotSpeechBubble } from "./MascotSpeechBubble";
 import type { MascotMood } from "./Mascot";
 
 export interface StepFlowStep {
@@ -37,7 +34,6 @@ interface StepFlowProps extends PropsWithChildren {
   /** When set, replaces the step description with a speaking-mascot bubble. */
   guideMessage?: string;
   guideMood?: MascotMood;
-  speechAppearance?: MascotSpeechBubbleAppearance;
   /**
    * `compact` drops the chrome card and eyebrow so 장고's bubble carries
    * the step question. Use when the stack header already owns Back.
@@ -62,7 +58,6 @@ export function StepFlow({
   headerAccessory,
   guideMessage,
   guideMood = "speak",
-  speechAppearance = "default",
   density = "default",
   hideBack = false,
   children,
@@ -139,7 +134,6 @@ export function StepFlow({
     <View style={[styles.stepHeader, shouldStack && styles.stepHeaderStacked]}>
       <View style={styles.guideCard}>
         <MascotSpeechBubble
-          appearance={speechAppearance}
           message={compactMessage}
           supportingMessage={resolvedGuide}
           mood={guideMood}
@@ -277,7 +271,6 @@ export function StepFlow({
           {stepCopy}
           {resolvedGuide ? (
             <MascotSpeechBubble
-              appearance={speechAppearance}
               message={resolvedGuide}
               mood={guideMood}
               size="small"

@@ -137,7 +137,6 @@ export default function VerifyPendingScreen() {
     >
       <View style={styles.content}>
         <MascotSpeechBubble
-          appearance={verified ? "default" : "crayon"}
           message={verified ? "확인됐어요!" : "메일함을 열어볼까요?"}
           supportingMessage={`${
             email

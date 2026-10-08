@@ -36,7 +36,6 @@ export function HomeHero({
           accessibilityHint: notice.actionHint,
         }))}
         bubbleStyle={styles.heroNotice}
-        appearance="crayon"
         onIndexChange={setNoticeIndex}
       />
     </SurfaceCard>

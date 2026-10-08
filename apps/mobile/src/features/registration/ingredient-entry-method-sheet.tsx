@@ -98,7 +98,6 @@ export function IngredientEntryMethodSheet({
       title="어떻게 넣을까요?"
       description="재료에 맞는 방식을 골라 주세요."
       mascotMood="idle"
-      speechAppearance="crayon"
     >
       <View style={styles.optionStack}>
         {photoDraftCount > 0 && onPhoto ? (

@@ -347,18 +347,68 @@
   },
   "screens": {
     "screens/login-before.png": "7680e37dd977a756ca1632098c72b0ab6b1b72b4f210f07db673312138647fc8",
-    "screens/inventory-before.png": "d874df09270dbbd58b0174f60a0129e945435633da976851fa96839cf2c6af19",
-    "screens/shop-before.png": "10fa87c9b48fe2ab2dfa5cc425b60e29c1606509cdbaf6bbab44cd41fd9ca1a4",
-    "screens/component-tablet.png": "cbe6b7de458ffeb5c0987094dc38959a39ada245bddae9f307f6b0c47aedb792",
-    "screens/recommendations-before.png": "4c4cd4251f677af6b7e6bf4da340a0d307fcdd59790c57ca6ad39e411668965e",
     "screens/login-after.png": "4f092f916034b68684dfaa3d4f8b46aa4011710d3099c03213e7a56ffd6793a0",
-    "screens/recommendations-after.png": "1d7a0df762101a667d9592453257c6d10cb934999788f7987a169138acea5fe0",
-    "screens/shop-after.png": "ff04c46921d4873ae2c37ac459ccaa569225a97d7894fa347cded2aaa7c4b08f",
     "screens/component-live-font-failure.png": "2e6d77ddf5989eb3f68f154032a745b24fd4b4580a61dcbbf3f21277d2d5e518",
-    "screens/inventory-after.png": "1c34b5eb7c8af82060036c46257699efa406e65f5144177f04cf49d462b6660e",
     "screens/native-font-live-13.png": "ecc943d1ef77c3e65944472452e4e2d0dce117dbb86598b93056559785949d72",
     "screens/native-font-live-20.png": "8dae362deb74c546b5c7d588f76fbdb8ef11d287eb64cf789c3e88f20e3b6d13",
     "screens/inventory-native-font-20.png": "b96742f796de485bd6dd6e93faa2c3a531c8942bb509c9cdc81b3d215bc14127"
   },
-  "result": "로그인·3개 탭 크레파스 표현과 Android 전후 비교·자동 검증 통과. 사용자 허용 범위의 RN0.81.5 네이티브 후보는 실시간·새 실행 및 실제 보관함 검색 검증 통과. 기본·출시 빌드는 후보 미채택. iOS 실화면·음성 접근성·OEM/release 미검증을 별도 기록."
+  "result": "로그인·3개 탭 크레파스 표현과 Android 전후 비교·자동 검증 통과. 사용자 허용 범위의 RN0.81.5 네이티브 후보는 실시간·새 실행 및 실제 보관함 검색 검증 통과. 기본·출시 빌드는 후보 미채택. iOS 실화면·음성 접근성·OEM/release 미검증을 별도 기록.",
+  "speechReviewWithdrawal": {
+    "date": "2026-10-08",
+    "reason": "사용자 요청으로 크레파스 말풍선을 철회하고 기존 흰색 면·얇은 테두리·왼쪽 꼬리로 복원. 위 말풍선 검토 결과는 종료된 이력이며 현재 적용 기준이 아님.",
+    "preserved": "로그인·탭 배경과 장고 v18, 글자 확대 네이티브 패치 검증·접근성 개선은 유지.",
+    "removedScreens": [
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/recommendations-before.png",
+        "sha256": "4c4cd4251f677af6b7e6bf4da340a0d307fcdd59790c57ca6ad39e411668965e",
+        "bytes": 338752
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/recommendations-after.png",
+        "sha256": "1d7a0df762101a667d9592453257c6d10cb934999788f7987a169138acea5fe0",
+        "bytes": 340522
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/inventory-before.png",
+        "sha256": "d874df09270dbbd58b0174f60a0129e945435633da976851fa96839cf2c6af19",
+        "bytes": 145246
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/inventory-after.png",
+        "sha256": "1c34b5eb7c8af82060036c46257699efa406e65f5144177f04cf49d462b6660e",
+        "bytes": 147897
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/shop-before.png",
+        "sha256": "10fa87c9b48fe2ab2dfa5cc425b60e29c1606509cdbaf6bbab44cd41fd9ca1a4",
+        "bytes": 390926
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/shop-after.png",
+        "sha256": "ff04c46921d4873ae2c37ac459ccaa569225a97d7894fa347cded2aaa7c4b08f",
+        "bytes": 351306
+      },
+      {
+        "path": "design/reviews/crayon-expression-rollout-v1/screens/component-tablet.png",
+        "sha256": "cbe6b7de458ffeb5c0987094dc38959a39ada245bddae9f307f6b0c47aedb792",
+        "bytes": 95332
+      }
+    ],
+    "fixture": "native-font-scale-entry.js에서 말풍선 appearance 옵션만 제거. 기존 해시는 당시 검증 파일 기준이며 현재 실행 검증으로 소급하지 않음.",
+    "verification": {
+      "originalBubble": "388a595^: MascotSpeechBubble JSX와 StyleSheet 전체가 원래 말풍선과 동일. 당시 원본에 없는 동작 줄이기 지원만 유지.",
+      "unchangedResources": "design/jango, design/backgrounds, apps/mobile/assets, apps/admin의 원본·리소스 640개 SHA256 동일; 생성 tsbuildinfo 제외.",
+      "docs:check": "pass; metadata28/links42",
+      "lint/design:check": "pass; Admin40/mobile225",
+      "typecheck": "pass; shared/Admin/API/mobile",
+      "mobileTests": "556 passed in99 files",
+      "sharedTests": "162 passed",
+      "jango:test": "20 passed",
+      "jango:check": "pass;0 signed releases;needs-review preserved",
+      "wholeSuite": "3 API tests failed in monetization.service.test.ts and recipes.service.test.ts; concurrent AI usage/accounting changes outside speech rollback. Mobile was rerun independently and passed.",
+      "visual": "현재 기기 화면 캡처 미실시. 임시 React Native Web 비교 번들은 생성됐지만 로컬 headless browser가 종료되고 CUA 브라우저가 없어 캡처 실패. 화면 대조 통과로 표시하지 않음.",
+      "accessibility": "원래 문구·닫기·인라인 행동·캐러셀 접근성 및 큰 글자 정책·동작 줄이기 유지. 실제 TalkBack/VoiceOver 음성 확인 미실시."
+    }
+  }
 }

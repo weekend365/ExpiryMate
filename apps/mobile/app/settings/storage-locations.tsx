@@ -188,7 +188,6 @@ export default function StorageLocationsSettingsScreen() {
         title="어디에 둘까요?"
         description="위치 이름을 알려 주시면 목록에 넣어 둘게요."
         mascotMood="idle"
-        speechAppearance="crayon"
         footer={
           <Button
             onPress={handleCreate}
@@ -212,7 +211,6 @@ export default function StorageLocationsSettingsScreen() {
         title="이름을 바꿀까요?"
         description="키는 그대로 두고, 보이는 이름만 바꿔요."
         mascotMood="idle"
-        speechAppearance="crayon"
         footer={
           <View style={styles.sheetActions}>
             <Button
