@@ -85,8 +85,8 @@
           },
           "android": {
             "kotlinVersion": "2.2.20",
-            "enableMinifyInReleaseBuilds": true,
-            "enableShrinkResourcesInReleaseBuilds": true
+            "enableMinifyInReleaseBuilds": false,
+            "enableShrinkResourcesInReleaseBuilds": false
           }
         }
       ],

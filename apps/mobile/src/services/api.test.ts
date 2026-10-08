@@ -5,6 +5,8 @@ import type {
   RecipePreference,
 } from "@expirymate/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
 
 const stores = vi.hoisted(() => ({
   asyncStorage: new Map<string, string>(),
@@ -414,6 +416,12 @@ describe("mobile API client core flow", () => {
     const result = await getMe();
 
     expect(result?.id).toBe("user-registered");
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe(
+      "registered-refresh",
+    );
+    expect(JSON.parse(stores.asyncStorage.get("expirymate.authUser.v2")!)).toEqual(
+      registeredUser,
+    );
     expect(stores.fetch).toHaveBeenNthCalledWith(
       1,
       "http://localhost:4000/auth/login",
@@ -441,8 +449,95 @@ describe("mobile API client core flow", () => {
 
     await expect(
       login({ email: "test@example.com", password: "password123" }),
-    ).rejects.toThrow(/keychain unavailable/);
+    ).rejects.toThrow(/로그인 정보를 안전하게 처리하지 못했어요/);
     await expect(getDashboardSummary("personal_user-1")).rejects.toThrow(/로그인/);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+  });
+
+  it("handles the Android SecureStoreOptions rejection without exposing native errors and allows retry", async () => {
+    const nativeError = new Error(
+      "Call to function 'ExpoSecureStore.setValueWithKeyAsync' has been rejected. " +
+      "The 3rd argument cannot be cast to type expo.modules.securestore.SecureStoreOptions " +
+      "(received class com.facebook.react.bridge.ReadableNativeMap). " +
+      "Caused by: java.lang.NullPointerException",
+    );
+    stores.secureStoreSet.mockRejectedValueOnce(nativeError);
+    stores.fetch
+      .mockResolvedValueOnce(successResponse(createSession("access-failed", "refresh-failed")))
+      .mockResolvedValueOnce(successResponse(createSession("access-retry", "refresh-retry")));
+    const { login, hasRegisteredAccessToken, restoreRegisteredSession } = await import("./api-session");
+
+    await expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).rejects.toThrow(
+      "로그인 정보를 안전하게 처리하지 못했어요. 앱을 다시 열고 시도해 주세요.",
+    );
+    expect(captureStartupBootstrapIssue).toHaveBeenCalledWith(
+      "auth-storage.secure-store.write-refresh-token",
+      nativeError,
+      { timeout_ms: 8_000 },
+    );
+    expect(hasRegisteredAccessToken()).toBe(false);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+    await expect(restoreRegisteredSession()).resolves.toBeNull();
+
+    await expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).resolves.toMatchObject({ accessToken: "access-retry" });
+    expect(hasRegisteredAccessToken()).toBe(true);
+    expect(stores.secureStore.get("expirymate.refreshToken.v2")).toBe("refresh-retry");
+  });
+
+  it("removes the newly written refresh token when user persistence fails", async () => {
+    stores.fetch.mockResolvedValueOnce(
+      successResponse(createSession("access-partial", "refresh-partial")),
+    );
+    vi.mocked(AsyncStorage.setItem).mockRejectedValueOnce(new Error("disk full"));
+    const { login, hasRegisteredAccessToken } = await import("./api-session");
+
+    await expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).rejects.toThrow(/로그인 정보를 안전하게 처리하지 못했어요/);
+    expect(stores.secureStoreSet).toHaveBeenCalledWith(
+      "expirymate.refreshToken.v2", "refresh-partial",
+    );
+    expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
+    expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
+    expect(hasRegisteredAccessToken()).toBe(false);
+  });
+
+  it("preserves an invalid-credentials response without attempting secure persistence", async () => {
+    stores.fetch.mockResolvedValueOnce(errorResponse(401, "이메일 또는 비밀번호를 확인해 주세요."));
+    const { login, hasRegisteredAccessToken } = await import("./api-session");
+
+    await expect(
+      login({ email: "test@example.com", password: "wrong-password" }),
+    ).rejects.toMatchObject({
+      name: "ApiError", status: 401, message: "이메일 또는 비밀번호를 확인해 주세요.",
+    });
+    expect(stores.secureStoreSet).not.toHaveBeenCalled();
+    expect(hasRegisteredAccessToken()).toBe(false);
+  });
+
+  it("times out a stalled login write without exposing an in-memory session", async () => {
+    vi.useFakeTimers();
+    stores.fetch.mockResolvedValueOnce(
+      successResponse(createSession("access-stalled", "refresh-stalled")),
+    );
+    stores.secureStoreSet.mockImplementationOnce(() => new Promise<void>(() => undefined));
+    const { login, hasRegisteredAccessToken, AUTH_STORAGE_TIMEOUT_MS } = await import("./api-session");
+
+    const rejection = expect(
+      login({ email: "test@example.com", password: "password123" }),
+    ).rejects.toMatchObject({
+      name: "AsyncOperationTimeoutError",
+      message: "로그인 정보를 확인하는 데 시간이 오래 걸리고 있어요. 다시 시도해 주세요.",
+    });
+    await vi.advanceTimersByTimeAsync(AUTH_STORAGE_TIMEOUT_MS);
+    await rejection;
+    expect(hasRegisteredAccessToken()).toBe(false);
     expect(stores.asyncStorage.has("expirymate.authUser.v2")).toBe(false);
     expect(stores.secureStore.has("expirymate.refreshToken.v2")).toBe(false);
   });

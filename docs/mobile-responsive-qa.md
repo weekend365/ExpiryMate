@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-design
-last_reviewed: 2026-10-07
+last_reviewed: 2026-10-08
 source_of_truth: true
 ---
 
@@ -210,12 +210,13 @@ profiles above as the compatibility check.
 
 ## Google Play release quality checks
 
-- Android release builds enable R8 minification and resource shrinking through
-  `expo-build-properties` in `apps/mobile/app.json`. The
+- Android release builds currently disable R8 minification and resource shrinking
+  through `expo-build-properties` in `apps/mobile/app.json` after the 1.4.1
+  SecureStore login failure described below. The
   `with-android-release-optimization` config plugin selects
   `proguard-android-optimize.txt` during Prebuild; the SDK 54 template's legacy
   default disables code optimization. Do not edit generated Android files.
-- After a release build, retain `app/build/outputs/mapping/release/mapping.txt`
+- Before re-enabling R8, retain `app/build/outputs/mapping/release/mapping.txt`
   for crash deobfuscation and inspect `configuration.txt` for global
   `-dontoptimize`, `-dontshrink`, or `-dontobfuscate` rules. Exercise login,
   camera/OCR, notifications, ads, purchase and restore on the optimized build.
@@ -234,6 +235,36 @@ profiles above as the compatibility check.
 References: [Expo SDK 54 build properties](https://docs.expo.dev/versions/v54.0.0/sdk/build-properties/),
 [Android R8 setup](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization),
 [Google Play technical quality requirements](https://support.google.com/googleplay/android-developer/answer/17492799).
+
+### 2026-10-08 Android 로그인 저장 오류 대응
+
+- 1.4.1 실기기 사진의 오류는 `ExpoSecureStore.setValueWithKeyAsync`의 세 번째 인자인
+  `SecureStoreOptions` 변환 중 발생한 `NullPointerException`이다. 현재 이메일·소셜 로그인,
+  이메일 인증과 토큰 갱신도 같은 저장 경로를 사용한다. 옵션 생략은 Expo의 정상 API 사용법이며
+  로그인 API 거부나 잘못된 비밀번호를 나타내는 오류가 아니다.
+- SDK 54의 옵션 변환은 Kotlin 리플렉션을 사용한다. 1.4.1에서 활성화한 R8 설정이 현재
+  코드에도 남아 있고 [Expo 저장소의 같은 유형 보고](https://github.com/expo/expo/discussions/43567)와
+  일치해 릴리스 최적화 영향을 우선 의심한다. 사진만으로 정확한 네이티브 실패 지점이나 R8의
+  인과관계가 확정된 것은 아니다. 검증되지 않은 keep 규칙 대신 코드·리소스 축소를 함께
+  비활성화하는 보수적인 완화책을 적용한다. 앱 크기 증가와 Play 최적화 지표 하락이 가능하다.
+- 저장 실패는 기존 진단 경로에 원인을 남기고 사용자에게 한국어 재시도 안내를 반환한다.
+  저장 실패 후 메모리 세션과 부분 저장을 정리하는 동작, SecureStore 암호화 저장,
+  저장 키·인증 정책, 기존 로그인 화면·조작·입력 단계·접근성 설정은 보존한다.
+- 자동 회귀 검증은 정상 로그인, 사진과 같은 옵션 변환 거부·재시도, 부분 저장 실패,
+  잘못된 비밀번호 거부, 저장 시간 초과와 빌드 축소 설정을 다룬다. 화면 구조·스타일은
+  변경하지 않았으며 새 한국어 안내의 실기기 큰 글자·스크린리더 확인은 별도 QA다.
+- `pnpm docs:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`가 통과했다. 전체 테스트는
+  1,257개 통과, 기존 opt-in DB 통합 테스트 4개 생략이다. Expo Android Prebuild로 생성된
+  Gradle 설정에서도 코드·리소스 축소의 `false` 반영을 확인했다.
+- 로컬 `:app:assembleRelease`는 SDK 경로 지정과 누락 의존성 확보 후에도
+  `:app:configureCMakeRelWithDebInfo[arm64-v8a]`에서 실패했다. 생성된 autolinking CMake가
+  AsyncStorage·Sentry·Gesture Handler·Worklets의 존재하지 않는 codegen JNI 경로를
+  참조했다. 새 릴리스 APK 생성과 실기기 로그인 재검증은 미완료이며, 네이티브 생성 경로를
+  정리한 환경에서 다시 확인해야 한다. 자동 테스트 통과를 실기기 오류 해소로 간주하지 않는다.
+- 이 대응은 네이티브 빌드 설정 변경이므로 Android 앱을 다시 빌드해야 한다. 출시 전 릴리스
+  APK/AAB에서 이메일·소셜 로그인 → 앱 재실행·세션 복원 → 토큰 갱신 → 로그아웃과
+  초대 링크 로그인 복귀를 실기기로 확인한다. R8 재활성화는 같은 흐름의 최적화 빌드 검증과
+  네이티브 실패 지점 확인 후 별도 변경으로 진행한다.
 
 ## 2026-09-29 feature verification
 

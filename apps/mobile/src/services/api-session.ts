@@ -16,7 +16,10 @@ import {
 import type { ZodType } from "zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
-import { withAsyncTimeout } from "../shared/async-timeout";
+import {
+  AsyncOperationTimeoutError,
+  withAsyncTimeout,
+} from "../shared/async-timeout";
 import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
 import { ApiError, publicRequest } from "./api-transport";
 
@@ -360,7 +363,13 @@ function runAuthStorageOperation<T>(
     captureStartupBootstrapIssue(`auth-storage.${stage}`, error, {
       timeout_ms: AUTH_STORAGE_TIMEOUT_MS,
     });
-    throw error;
+    if (error instanceof AsyncOperationTimeoutError) {
+      throw error;
+    }
+    // Native bridge/keystore errors belong in diagnostics, not login alerts.
+    throw new Error(
+      "로그인 정보를 안전하게 처리하지 못했어요. 앱을 다시 열고 시도해 주세요.",
+    );
   });
 }
 
