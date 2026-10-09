@@ -639,5 +639,9 @@
       }
     }
   ],
-  "cleanup": "4 superseded initial viewport-derived capture files removed after hash and reference checks; only 4 final app comparison captures retained."
+  "cleanup": "4 superseded initial viewport-derived capture files removed after hash and reference checks; only 4 final app comparison captures retained.",
+  "recordKind": "historical-first-implementation-checkpoint",
+  "sourceSnapshotCommit": "c057084",
+  "followupRecord": "../jango-crayon-followup-v1/manifest.json",
+  "hashScope": "source hashes describe c057084; later source changes are recorded by the follow-up manifest"
 }

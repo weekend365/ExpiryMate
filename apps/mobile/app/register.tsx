@@ -46,8 +46,6 @@ import {
   RecapCard,
   RecapRow,
   extraDetailsRowLabel,
-  formatPutAwayMessage,
-  formatPutAwaySupportingMessage,
   inventoryFormStyles,
 } from "../src/features/inventory/inventory-form-ui";
 import {
@@ -58,6 +56,7 @@ import {
 import { useInventoryList } from "../src/features/inventory/use-inventory-list";
 import { useSaveInventoryItem } from "../src/features/registration/use-save-inventory-item";
 import { RegistrationCompletionActions } from "../src/features/registration/registration-completion-actions";
+import { getRegistrationCompletionNotices } from "../src/features/registration/registration-completion-notices";
 import {
   parseRegistrationReturnTo,
   registrationReturnLabel,
@@ -752,42 +751,12 @@ export default function RegisterScreen() {
   }`;
 
   if (step === "done") {
-    const doneHeroNotices = [
-      ...(registeredSessionItems.length >= 2
-        ? [
-            {
-              id: "recipe-recommend",
-              mood: "cooking" as const,
-              message: "요리 추천 받아볼까요?",
-              supportingMessage: "방금 넣은 재료로 메뉴를 찾아볼게요.",
-              onPress: openRecipeRecommendations,
-              accessibilityHint: "추천 받을게요",
-            },
-          ]
-        : []),
-      ...(rewardNotice?.granted
-        ? [
-            {
-              id: "barcode-reward",
-              mood: "happy" as const,
-              message: "바코드 추천권 1회를 받았어요",
-              supportingMessage: `현재 ${rewardNotice.balance}/${rewardNotice.balanceLimit}회 보유하고 있어요.`,
-            },
-          ]
-        : []),
-      {
-        id: "put-away",
-        mood: "happy" as const,
-        message: latestRegisteredItem
-          ? formatPutAwayMessage(latestRegisteredItem.displayName)
-          : "잘 넣어뒀어요",
-        supportingMessage: formatPutAwaySupportingMessage({
-          expiryDate: latestRegisteredItem?.expiryDate,
-          expirySource: latestRegisteredItem?.expirySource,
-          sessionCount: registeredSessionItems.length,
-        }),
-      },
-    ];
+    const doneHeroNotices = getRegistrationCompletionNotices({
+      latestItem: latestRegisteredItem,
+      sessionCount: registeredSessionItems.length,
+      rewardNotice,
+      onRecommendations: openRecipeRecommendations,
+    });
 
     return (
       <Screen

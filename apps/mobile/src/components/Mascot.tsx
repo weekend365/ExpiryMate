@@ -1,4 +1,4 @@
-import { appBrand } from "@expirymate/shared";
+import { appBrand, type CrayonMascotPoint } from "@expirymate/shared";
 import {
   Image,
   StyleSheet,
@@ -24,6 +24,7 @@ import jangoSpeakSmall from "../../assets/characters/runtime/small/jango-speak.p
 import jangoThinkSmall from "../../assets/characters/runtime/small/jango-think.png";
 import jangoWorrySmall from "../../assets/characters/runtime/small/jango-worry.png";
 import { spacing } from "../shared/theme";
+import { CrayonMascotDecoration } from "./CrayonMascotDecoration";
 
 export type MascotMood =
   | "idle"
@@ -39,6 +40,8 @@ interface MascotProps {
   size?: "small" | "medium" | "large";
   mood?: MascotMood;
   style?: StyleProp<ViewStyle>;
+  /** Explicit context only; mood never enables decorations by itself. */
+  decoration?: CrayonMascotPoint;
 }
 
 const mascotSources: Record<MascotMood, ImageSourcePropType> = {
@@ -74,7 +77,7 @@ const moodLabels: Record<MascotMood, string> = {
   point: "가리키는",
 };
 
-export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
+export function Mascot({ size = "medium", mood = "idle", style, decoration }: MascotProps) {
   const source = size === "small" ? smallMascotSources[mood] : mascotSources[mood];
 
   return (
@@ -89,6 +92,7 @@ export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
         accessibilityIgnoresInvertColors
         accessibilityLabel={`${appBrand.characterNameKo}, ${moodLabels[mood]} 표정`}
       />
+      {decoration && <CrayonMascotDecoration point={decoration} />}
     </View>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { CrayonMascotPoint } from "@expirymate/shared";
 import {
   Pressable,
   ScrollView,
@@ -23,6 +24,7 @@ export type JangoHeroNoticeItem = {
   onPress?: () => void;
   actionLabel?: string;
   accessibilityHint?: string;
+  mascotDecoration?: CrayonMascotPoint;
 };
 
 type JangoHeroNoticeCarouselProps = {
@@ -168,6 +170,7 @@ function JangoHeroNoticeBubble({
       message={notice.message}
       supportingMessage={notice.supportingMessage}
       mood={notice.mood}
+      mascotDecoration={notice.mascotDecoration}
       size={size}
       density={density}
       textVariant={textVariant}

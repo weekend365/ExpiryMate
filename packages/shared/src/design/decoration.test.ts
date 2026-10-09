@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { crayonCardDecoration, semanticColors } from "../index";
+import { crayonCardDecoration, crayonMascotDecoration, semanticColors } from "../index";
 
 describe("crayon decoration contract", () => {
   it("keeps decorations in the card's existing semantic color family", () => {
@@ -10,5 +10,6 @@ describe("crayon decoration contract", () => {
     expect(colors.success).toEqual(colors.primary);
     expect(colors.default.accent).toBeNull();
     expect(colors.muted.accent).toBeNull();
+    expect(crayonMascotDecoration.color).toBe(semanticColors.primaryForeground);
   });
 });

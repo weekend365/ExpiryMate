@@ -42,7 +42,7 @@ source_of_truth: true
 | 문서 | 용도 | 담당 | 정본 |
 |---|---|---|---|
 | [디자인 시스템](./design-system.md) | 기존 UI/UX 보존·변경 범위·크레파스 표현, 공통 토큰·접근성·검토 기준 | design-system | Yes |
-| [모바일 크레파스 포인트 적용 계획안](./product/mobile-crayon-point-plan.md) | 홈 안내 카드의 대표 시안, 선택적 장식 구현과 단계별 확대·검증 계획 | mobile-design | Draft |
+| [모바일 크레파스 포인트 적용 계획안](./product/mobile-crayon-point-plan.md) | 홈 카드·첫 등록·저장 완료의 선택적 장식 구현과 단계별 확대·검증 계획 | mobile-design | Draft |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v18 MASTER 32종·앱 파생·캐릭터 사용 규칙 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |

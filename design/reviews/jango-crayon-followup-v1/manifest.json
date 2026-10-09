@@ -1,0 +1,645 @@
+{
+  "status": "implemented-browser-reviewed-pending-native-qa",
+  "updatedAt": "2026-10-09T14:04:45+09:00",
+  "baselineCommit": "c057084",
+  "authorization": "지금까지의 변경사항 커밋해주고 우선 순위에 맞게 작업 진행해.",
+  "applicationSourceApplied": true,
+  "deployed": false,
+  "scope": [
+    "빈 보관함의 첫 등록 안내 welcome",
+    "저장 성공 후 등록 완료 put-away 안내 celebrate"
+  ],
+  "priorityAudit": {
+    "nativeHomeQa": "pending; user is preparing Android device",
+    "existingTitleAccents": "deferred; SectionHeader surface/accentColor are unused; HomeSectionHeader has no accent",
+    "firstUseEmptyState": "implemented; successful-empty guard plus add_ingredient action only",
+    "completion": "implemented; saved latest item only; existing await mutation then done flow unchanged"
+  },
+  "preserved": [
+    "tabs and route structure",
+    "positions, dimensions, spacing and scroll structure",
+    "copy and actions",
+    "character sources/moods/bytes",
+    "speech bubble fill/border/tail",
+    "functional colors",
+    "save and return behavior",
+    "home card A treatment"
+  ],
+  "decoration": {
+    "defaultOff": true,
+    "randomness": false,
+    "animation": false,
+    "largeText": "fontScale >= 1.3 omits symbols",
+    "accessibility": "hidden decorative subtree; native verification pending",
+    "pointerEvents": "none",
+    "newRasterAssets": false
+  },
+  "glyphClearance": {
+    "method": "actual small PNG alpha in 64-point contain coordinates",
+    "regions": [
+      [
+        51,
+        0,
+        62,
+        11
+      ],
+      [
+        51,
+        51,
+        60,
+        61
+      ]
+    ],
+    "emptyMaximumAlpha": [
+      0,
+      0
+    ],
+    "happyMaximumAlpha": [
+      0,
+      0
+    ]
+  },
+  "validation": {
+    "typecheck": "passed",
+    "lint": "passed",
+    "relatedTests": "14 passed: inventory state guards and registration completion order/callback",
+    "fullTests": "passed equivalent full suite with sequential workspaces and maxWorkers=2: Jango 21 + shared 163 + API 541 + mobile 562 = 1287 passed; 6 existing API skipped",
+    "docsCheck": "passed",
+    "androidApplicationBundle": "passed; Expo/Hermes export; not APK/native QA",
+    "iosApplicationBundle": "passed; Expo/Hermes export; not IPA/native QA",
+    "nativeFixtureBundle": "passed; Android Metro bundle, 3051 modules; source-map confirms live API/query persistence/store excluded",
+    "browserVisualReview": "performed in Chrome through CUA; local page explicitly approved after automatic approval timeouts recovered; three minimal captures retained",
+    "browserMeasurement": "22 loaded state/width/font-scale combinations; non-decoration bounds/content/image/button/accessibility-name and scroll parity",
+    "nativeDeviceCapture": "not performed",
+    "screenReaders": "not performed",
+    "nativeTouchesCarouselResponsive": "not performed",
+    "nativeQaServer": "started Metro 8096 plus localhost-only manifest adapter 8097; HTTP 200 and QA-only launchAsset confirmed; not device QA",
+    "sharedDecorationContract": "passed",
+    "fullTestAttempts": [
+      "default concurrent root: unchanged Google test-purchase rejection exceeded 5000ms; isolated file passed 19 tests",
+      "second default root: unchanged mascot anatomy test exceeded 5000ms",
+      "first serial invocation rejected pnpm shorthand maxWorkers; corrected to explicit run test",
+      "Jango suite and all workspace suites passed; no tests, thresholds or timeout limits modified"
+    ],
+    "browserActions": "empty add, large-text completion, recommendation: each callback once; horizontal carousel reached second page and returned",
+    "browserCarouselLimit": "RN Web adapter horizontal scroll works, but native onMomentumScrollEnd indicator/ordinal does not update; native verification remains pending"
+  },
+  "review": {
+    "method": "real presentation components and product notice selectors with synthetic data; browser/native fixtures; no runtime route",
+    "frames": [
+      "baseline disables mascotDecoration only",
+      "runtime enables reviewed callsites"
+    ],
+    "sourceStates": 13,
+    "liveApiAndPersistedStoreExcluded": true,
+    "screens": [
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/inventory-empty-320-font-2.jpg",
+        "sha256": "e759fe602bf1461058d3445be99d4a92612915d5add84e79c66c25a298ad7375"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/inventory-empty-360.jpg",
+        "sha256": "b46ca8dbcb8c8646327c98552a5648893f204a2dd44d78f3082d5bb792569dbf"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/registration-done-360.jpg",
+        "sha256": "315f89461a116f6b6cc4f4f9b3445b0eb26c08be27652a0d26fdbdfb4ed7433d"
+      }
+    ],
+    "browser": "Chrome",
+    "measurementsMethod": "real presentation components; fonts loaded and all images complete; relative DOM boxes/text/labels/images/button background excluding SVG; body/document/fixture scroll heights",
+    "measurements": [
+      {
+        "scene": "inventory-empty",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          184
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          224
+        ],
+        "glyphCounts": [
+          0,
+          1
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          164
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          204
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-loading",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          536
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          576
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-error",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          184
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          224
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-refresh-error",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          348
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          388
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          108
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          148
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          372
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          412
+        ],
+        "glyphCounts": [
+          0,
+          1
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          392
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          432
+        ],
+        "glyphCounts": [
+          0,
+          1
+        ]
+      },
+      {
+        "scene": "registration-pending",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          72
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          112
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-error",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          96
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          136
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          128
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          168
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          128
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          168
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 360,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          128
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          168
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-empty",
+        "width": 320,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          256,
+          204
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          244
+        ],
+        "glyphCounts": [
+          0,
+          1
+        ]
+      },
+      {
+        "scene": "inventory-empty",
+        "width": 320,
+        "fontScale": 2,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          256,
+          484
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          540
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-empty",
+        "width": 360,
+        "fontScale": 1.3,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          228
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          273
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "inventory-empty",
+        "width": 768,
+        "fontScale": 2,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          704,
+          204
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          260
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 320,
+        "fontScale": 1,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          256,
+          416
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          456
+        ],
+        "glyphCounts": [
+          0,
+          1
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 320,
+        "fontScale": 2,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          256,
+          864
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          920
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 360,
+        "fontScale": 1.3,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          296,
+          454.40625
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          499
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 768,
+        "fontScale": 2,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          704,
+          440
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          496
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 320,
+        "fontScale": 2,
+        "loaded": true,
+        "nonDecorationEqual": true,
+        "baselineAndRuntimeBounds": [
+          256,
+          880
+        ],
+        "baselineAndRuntimeScrollHeights": [
+          640,
+          640,
+          936
+        ],
+        "glyphCounts": [
+          0,
+          0
+        ]
+      }
+    ],
+    "knownLayoutLimit": "At width 320/fontScale 2, existing bubble wraps into short lines in both variants; parity verified, no layout redesign; native results pending"
+  },
+  "sourceHashes": [
+    {
+      "file": "apps/mobile/app/(tabs)/inventory.tsx",
+      "sha256": "da4e891bb094a007ceecc471d1d8ea8eaf3ec4e828d3795dc5308e9386de9a5f"
+    },
+    {
+      "file": "apps/mobile/app/register.tsx",
+      "sha256": "8dc4188a1ca3dc23b0e38a520ad206f0a3676d4f6c1e086e06317450dbf4de76"
+    },
+    {
+      "file": "apps/mobile/src/components/Mascot.tsx",
+      "sha256": "df65ae83835023a61cf584a5afa8484f09bc8c69f9b473bde4c8b93d7bc2bf38"
+    },
+    {
+      "file": "apps/mobile/src/components/MascotSpeechBubble.tsx",
+      "sha256": "4a0a151c116134e8757ac0fa584bdd1737ada363dfb94461a7dfd18e0ada531c"
+    },
+    {
+      "file": "apps/mobile/src/components/JangoHeroNoticeCarousel.tsx",
+      "sha256": "c0d0b9043fb6d60aa09924d80f351d0aa1a3d8c66505a8f6c994bc61e1a9f2d7"
+    },
+    {
+      "file": "apps/mobile/src/components/CrayonMascotDecoration.tsx",
+      "sha256": "47f4db6cbd6a31ac20ba6b84e7604b5ba762f0f0f6fd7126651dd0d18ef62133"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-hero.ts",
+      "sha256": "126c1de1bd2e419a35d59fe914893900d69af30e5696627d31d537a4ebb1c26c"
+    },
+    {
+      "file": "apps/mobile/src/features/inventory/inventory-hero.test.ts",
+      "sha256": "d9d96f6f4d079f623d437a92df85682aa046671d4d687e63a340cf9187230d1c"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-completion-notices.ts",
+      "sha256": "6bea907fb2303294fc4d8a78f3c0554a951a0a13340fd1a48b802cd8fbcd011b"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/registration-completion-notices.test.ts",
+      "sha256": "d2d13d8e3e520f603f75f704808547f6a35b2e6cebda6abca795824d7f5fd868"
+    },
+    {
+      "file": "packages/shared/src/design/decoration.ts",
+      "sha256": "1a100c7e0fd71548a5f3846f014464ce43bc8eeceafb39de0650f08ab3ad3706"
+    },
+    {
+      "file": "packages/shared/src/design/decoration.test.ts",
+      "sha256": "74ca8d0442c4d24b283c50fb2b5a0c1054228f4e6f24a63b12da7cc2168153b4"
+    },
+    {
+      "file": "apps/mobile/e2e/fixtures/crayon-review-scenes.tsx",
+      "sha256": "051f17ddf2d07cbecede5c50c735cfbaac63f96578462fbc9e65213da920982a"
+    },
+    {
+      "file": "apps/mobile/e2e/fixtures/native-crayon-entry.tsx",
+      "sha256": "c0b7d76ffbbf6f7522c3c9b46599509c2d5875ff74bb8f50bfc3c7a4848a1c0b"
+    },
+    {
+      "file": "apps/mobile/e2e/serve-crayon-fixture.cjs",
+      "sha256": "7d829f86014255529ee0399bfb1fcf50b6077a78d5f0de8dfe5e4def8d25a76a"
+    },
+    {
+      "file": "apps/mobile/assets/characters/runtime/small/jango-empty.png",
+      "sha256": "2585270d5fbd4ba5918f5a3e8a5574af2e9b5f41dfff0fc832f9555c28ae258e"
+    },
+    {
+      "file": "apps/mobile/assets/characters/runtime/small/jango-happy.png",
+      "sha256": "9148bc2d619d89b290b15286eb412c65fe4891f1c2146e297d0ef0dcd33ff434"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/fixture.jsx",
+      "sha256": "9fce7478d5026b2082c2e2892d56b5eb3d2a5dcd948b7c38b07c17379ae6b43f"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/preview.mjs",
+      "sha256": "8d2ea731d31627da4cc1e8d60f3e9da266598dd9ab683b9b42d9fa1fab27a9fb"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/index.html",
+      "sha256": "b46e8f597b730f090a531ee8f3c3c082eca59a29eda07e4e797190f4aaead4f3"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/README.md",
+      "sha256": "0992e39857160bccd07f1671304e7ce7173f30f8b0e95042f2a14b46fe32e86f"
+    }
+  ],
+  "nativeFixtureOutput": {
+    "bytes": 12772974,
+    "sha256": "a66d3f1ee8487e9ef4744684c957dba534a2dad4fc0ac6c143d99b9e16bee82e"
+  }
+}

@@ -3,6 +3,16 @@ import { semanticColors } from "./tokens";
 
 export type SurfaceTone = "default" | "primary" | "danger" | "warning" | "success" | "muted";
 
+export type CrayonMascotPoint = "welcome" | "celebrate";
+
+/** Points occupy existing transparent mascot corners, never extra layout space. */
+export const crayonMascotDecoration = {
+  canvasSize: 64,
+  strokeWidth: 1.5,
+  opacity: 0.68,
+  color: semanticColors.primaryForeground,
+} as const;
+
 /** Decorative roles only. Existing functional colors and card fills stay unchanged. */
 export const crayonCardDecoration = {
   colors: {
