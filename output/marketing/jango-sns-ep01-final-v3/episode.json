@@ -1,0 +1,134 @@
+{
+  "id": "jango-sns-ep01-final-v3",
+  "status": "complete-candidate-awaiting-user-review",
+  "format": {
+    "width": 1122,
+    "height": 1402
+  },
+  "fonts": [
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Regular.ttf"
+  ],
+  "panels": [
+    {
+      "number": 1,
+      "artwork": "artwork/01-r1.png",
+      "output": "jango-ep01-v3-01.png",
+      "texts": [
+        {
+          "speaker": "person",
+          "lines": [
+            "장도 봤는데…",
+            "왜 또 배달 앱이지?"
+          ],
+          "box": [
+            200,
+            113,
+            780,
+            192
+          ],
+          "size": 78,
+          "lineHeight": 94
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "preservedFile": "../jango-sns-ep01-direction-v3/discovery-review-r1.png",
+      "output": "jango-ep01-v3-02.png",
+      "sha256": "c370eeb90f6ea08ae07f5dab510230ba5bb8ffb81a6ca1da1d24f6260a9032fb",
+      "libraryFileId": "libfile_977ef578050c81919b9bb32a1fe91811",
+      "texts": []
+    },
+    {
+      "number": 3,
+      "artwork": "artwork/03-r1.png",
+      "output": "jango-ep01-v3-03.png",
+      "texts": [
+        {
+          "speaker": "person",
+          "lines": [
+            "두부 먼저 쓰는 메뉴!",
+            "달걀이랑 대파도",
+            "집에 있네."
+          ],
+          "box": [
+            105,
+            96,
+            505,
+            193
+          ],
+          "size": 56,
+          "lineHeight": 64
+        },
+        {
+          "speaker": "jango",
+          "lines": [
+            "등록한 재료로",
+            "고르니까요."
+          ],
+          "box": [
+            745,
+            158,
+            305,
+            137
+          ],
+          "size": 54,
+          "lineHeight": 69
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "artwork": "artwork/04-r1.png",
+      "output": "jango-ep01-v3-04.png",
+      "texts": [
+        {
+          "speaker": "person",
+          "lines": [
+            "오늘 저녁은",
+            "냉장고 안에 있었네."
+          ],
+          "box": [
+            140,
+            127,
+            500,
+            177
+          ],
+          "size": 64,
+          "lineHeight": 82
+        },
+        {
+          "speaker": "jango",
+          "lines": [
+            "내일도",
+            "같이 골라요."
+          ],
+          "box": [
+            757,
+            198,
+            295,
+            140
+          ],
+          "size": 56,
+          "lineHeight": 72
+        },
+        {
+          "speaker": "brand",
+          "lines": [
+            "장고야 부탁해 · 내 재료로 메뉴 찾기"
+          ],
+          "box": [
+            323,
+            1335,
+            740,
+            51
+          ],
+          "size": 36,
+          "lineHeight": 42,
+          "font": "Gaegu-Regular"
+        }
+      ]
+    }
+  ]
+}

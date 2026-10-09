@@ -1,0 +1,53 @@
+{
+  "status": "new-panels-complete-awaiting-user-review",
+  "reviewSurfaces": [
+    "All four full-resolution 1122x1402 panels",
+    "1182x1462 ordered overview",
+    "Each panel at 360px width"
+  ],
+  "observations": [
+    {
+      "topic": "Protagonist continuity",
+      "result": "Brown loose bun, cream ribbed sweater, green trousers, gray phone retained; fatigue changes to recognition, focused cooking and enjoyment."
+    },
+    {
+      "topic": "Jango structure",
+      "result": "Single refrigerator-door head, viewer-left handle and pineapple, right hinges, chef hat with mint band, mitten bodies and cuffs remain visible. Panel 1 has a new concerned mouth; this is an SNS expression variant, not a claimed emoticon gate result."
+    },
+    {
+      "topic": "Interaction and hands",
+      "result": "Woman holds the phone and spatula with separate hands in panel 3; fork contact and resting hand are visible in panel 4. Jango guides while the person cooks."
+    },
+    {
+      "topic": "Food continuity",
+      "result": "Tofu tray in panel 2 becomes sliced tofu with egg and scallions at the stove, then golden tofu pieces with scallion flecks on the plate. No shrimp/fried-rice substitution."
+    },
+    {
+      "topic": "Room continuity",
+      "result": "Warm wood, ivory fridge, plants, green cloth/floor and grocery bag recur. Minor fridge-handle/magnet and shelf-decoration details vary between generated views; exact set geometry is not claimed."
+    },
+    {
+      "topic": "Lettering and reading order",
+      "result": "Seven dialogue balloons plus one small final brand line. Korean lettering fits measured boxes; all dialogue remains readable at 360px width. Left-to-right exchange and balloon tails identify speakers."
+    },
+    {
+      "topic": "Call to action",
+      "result": "Final brand/menu-finding line stays below the meal and faces. Longer product explanation is in the caption."
+    }
+  ],
+  "automaticChecks": {
+    "approvedPanel2ByteIdentical": true,
+    "textOverflow": false,
+    "panelsOpaque": true,
+    "dimensions": [
+      1122,
+      1402
+    ],
+    "masterAssetIntegrity": true
+  },
+  "limits": [
+    "Agent review does not automatically approve the newly generated panels for SNS adoption.",
+    "No measured customer-conversion claim; only narrative and visual checks were performed."
+  ],
+  "userApprovedPanel": 2
+}

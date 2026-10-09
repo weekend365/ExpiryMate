@@ -1,0 +1,62 @@
+{
+  "id": "jango-sns-ep01-direction-v3-discovery-r1",
+  "medium": "SNS cartoon",
+  "status": "candidate-awaiting-direction-review",
+  "tool": "built-in image_gen",
+  "scope": "One new representative discovery panel only; remaining panels await direction confirmation",
+  "references": [
+    {
+      "imageIndex": 1,
+      "role": "Jango identity and drawing texture; new pose, not copied artwork",
+      "masterNumber": 24,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    },
+    {
+      "imageIndex": 2,
+      "role": "Talking facial expression and mitten anatomy",
+      "masterNumber": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+    },
+    {
+      "imageIndex": 3,
+      "role": "Kitchen material and palette reference, new scene composition",
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+    }
+  ],
+  "canonicalReferences": [
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "9c2f9d7cabeabc25bb1bb23cb9555b839337fbb50f1186a76530d03990f86203"
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "fdb2dbd1256bb91c2a9590fe0e53c2d3c6977b0f2dd2f4910bd170a49a6ec50a"
+    },
+    {
+      "file": "design/jango/quality/README.md",
+      "sha256": "0a557c2147dccdefa811a3c842b49b8b253cba7152635d4ab2ad4f6c1734835b"
+    }
+  ],
+  "changes": [
+    "Entire new kitchen scene",
+    "New Jango two-handed tofu gesture and eye line",
+    "Fictional adult protagonist interacting with Jango",
+    "New integrated balloons and foreground/background perspective"
+  ],
+  "preserved": [
+    "v18 MASTER image bytes",
+    "Existing v1 and v2 artifacts",
+    "App UI and production assets"
+  ],
+  "promptFile": "generation-prompt.txt",
+  "promptSHA256": "0a8f7c0c4721577ce48dc30b939a1ec3b0d4fc3198a53bb8319344dea921c41c",
+  "generationCallCount": 0,
+  "userAdoption": null
+}

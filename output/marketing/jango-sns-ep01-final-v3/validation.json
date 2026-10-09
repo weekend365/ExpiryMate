@@ -1,0 +1,49 @@
+{
+  "artifact": {
+    "render": "pass",
+    "panelDimensions": [
+      1122,
+      1402
+    ],
+    "panelCount": 4,
+    "overviewDimensions": [
+      1182,
+      1462
+    ],
+    "koreanTypography": "pass; measured boxes fit",
+    "visualReview": "four original-size panels, overview and 360px-width panels",
+    "approvedPanel2ByteIdentical": true,
+    "masterAssetsVerified": 237,
+    "v1FilesPreserved": 24,
+    "v2DeliverablesPreserved": 6,
+    "trackedPngFilesUnchanged": 403,
+    "gitDiffCheck": "pass"
+  },
+  "repository": {
+    "docsCheck": "pass",
+    "lint": "pass",
+    "typecheck": "pass",
+    "test": {
+      "status": "pass",
+      "jango": 21,
+      "shared": 163,
+      "api": 541,
+      "mobile": 562,
+      "totalPassed": 1287,
+      "skipped": 6
+    },
+    "jangoCheck": "pass; records valid, 0 signed releases"
+  },
+  "delivery": {
+    "local": "complete",
+    "newLibraryItemsCreated": 5,
+    "existingPanel2LibraryId": "libfile_977ef578050c81919b9bb32a1fe91811",
+    "status": "complete: five successful new items with metadata persisted, no replacement of approved panel 2",
+    "published": false,
+    "committed": false,
+    "pushed": false,
+    "installed": false,
+    "externalPaidApiCalls": 0,
+    "builtInImagegenCallsThisStage": 3
+  }
+}

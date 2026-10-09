@@ -1,0 +1,56 @@
+{
+  "width": 1122,
+  "height": 1402,
+  "text": [
+    {
+      "speaker": "jango",
+      "lines": [
+        "두부,",
+        "내일까지예요."
+      ],
+      "box": [
+        126,
+        142,
+        398,
+        165
+      ],
+      "size": 66,
+      "lineHeight": 78,
+      "measured": [
+        {
+          "width": 131.274,
+          "height": 66
+        },
+        {
+          "width": 347.358,
+          "height": 66
+        }
+      ]
+    },
+    {
+      "speaker": "person",
+      "lines": [
+        "맞다.",
+        "저걸 또 잊었네."
+      ],
+      "box": [
+        665,
+        103,
+        345,
+        149
+      ],
+      "size": 56,
+      "lineHeight": 70,
+      "measured": [
+        {
+          "width": 111.048,
+          "height": 56
+        },
+        {
+          "width": 341.7680000000001,
+          "height": 56
+        }
+      ]
+    }
+  ]
+}
