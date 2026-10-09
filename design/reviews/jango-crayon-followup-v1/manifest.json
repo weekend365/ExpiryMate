@@ -1,5 +1,5 @@
 {
-  "status": "implemented-browser-reviewed-pending-native-qa",
+  "status": "partial-native-reviewed-live-font-scale-defect-open",
   "updatedAt": "2026-10-09",
   "baselineCommit": "c057084",
   "authorization": "지금까지의 변경사항 커밋해주고 우선 순위에 맞게 작업 진행해.",
@@ -10,7 +10,7 @@
     "저장 성공 후 등록 완료 put-away 안내 celebrate"
   ],
   "priorityAudit": {
-    "nativeHomeQa": "pending; user is preparing Android device",
+    "nativeHomeQa": "Galaxy A34 fixture calm/warning/expired inspected; actual app routes and full device matrix not performed",
     "existingTitleAccents": "deferred; SectionHeader surface/accentColor are unused; HomeSectionHeader has no accent",
     "firstUseEmptyState": "implemented; successful-empty guard plus add_ingredient action only",
     "completion": "implemented; saved latest item only; existing await mutation then done flow unchanged"
@@ -30,7 +30,7 @@
     "randomness": false,
     "animation": false,
     "largeText": "fontScale >= 1.3 omits symbols",
-    "accessibility": "hidden decorative subtree; native verification pending",
+    "accessibility": "first-use TalkBack full announcement, decorative exclusion and button action confirmed by user; carousel ordinal and VoiceOver unverified",
     "pointerEvents": "none",
     "newRasterAssets": false
   },
@@ -70,10 +70,10 @@
     "nativeFixtureBundle": "passed; Android Metro bundle, 3051 modules; source-map confirms live API/query persistence/store excluded",
     "browserVisualReview": "performed in Chrome through CUA; local page explicitly approved after automatic approval timeouts recovered; three minimal captures retained",
     "browserMeasurement": "22 loaded state/width/font-scale combinations; non-decoration bounds/content/image/button/accessibility-name and scroll parity",
-    "nativeDeviceCapture": "not performed",
-    "screenReaders": "not performed",
-    "nativeTouchesCarouselResponsive": "not performed",
-    "nativeQaServer": "started Metro 8096 plus localhost-only manifest adapter 8097; HTTP 200 and QA-only launchAsset confirmed; not device QA",
+    "nativeDeviceCapture": "12 Galaxy A34 fixture captures through CUA and official scrcpy mirror",
+    "screenReaders": "partial; first-use TalkBack announcement, decorative exclusion and callback once confirmed by user; agent did not hear audio; carousel ordinal and VoiceOver unverified",
+    "nativeTouchesCarouselResponsive": "partial; font 1.15 first-use/completion actions, carousel swipe/dots/return/recommendation verified; font 2 cold-launch completion action captured; live font change fails",
+    "nativeQaServer": "USB reverse 8096/8097 and QA-only manifest HTTP 200 verified; fixture opened; no actual app route",
     "sharedDecorationContract": "passed",
     "fullTestAttempts": [
       "default concurrent root: unchanged Google test-purchase rejection exceeded 5000ms; isolated file passed 19 tests",
@@ -82,9 +82,10 @@
       "Jango suite and all workspace suites passed; no tests, thresholds or timeout limits modified"
     ],
     "browserActions": "empty add, large-text completion, recommendation: each callback once; horizontal carousel reached second page and returned",
-    "browserCarouselLimit": "RN Web adapter horizontal scroll works, but native onMomentumScrollEnd indicator/ordinal does not update; native verification remains pending",
+    "browserCarouselLimit": "Web adapter momentum indicator/ordinal does not update; physical Galaxy A34 swipe separately confirms visual dot updates; spoken ordinal unverified",
     "androidDevelopmentApk": "passed; local ARM64 QA identity and APK v2 signature verified; published RN/Hermes AAR bytes preserved; not device QA",
-    "androidDeviceInstallation": "passed; Galaxy A34 SDK 36 ARM64; separate QA package version 1.4.2; not rendered-device QA"
+    "androidDeviceInstallation": "passed; separate Galaxy A34 SDK 36 ARM64 QA package 1.4.2; subsequent partial native findings recorded separately",
+    "nativeLiveFontScale": "failed on installed published-AAR APK at live 1.15 to 2.0; cold launch at 2.0 readable and scrollable; QA patch build stopped at user request before new APK installation"
   },
   "review": {
     "method": "real presentation components and product notice selectors with synthetic data; browser/native fixtures; no runtime route",
@@ -637,7 +638,7 @@
     },
     {
       "file": "design/reviews/jango-crayon-followup-v1/README.md",
-      "sha256": "a178b5dac0056036db51c583b1eab0b698d297fe2623a09e35e7681d50c60d09"
+      "sha256": "edb52360f5ef12a1f0b7154fa20eaa6c374bf05cf0f60a2ad468bf18a1f28a75"
     }
   ],
   "nativeFixtureOutput": {
@@ -645,7 +646,7 @@
     "sha256": "a66d3f1ee8487e9ef4744684c957dba534a2dad4fc0ac6c143d99b9e16bee82e"
   },
   "nativeDevelopmentApk": {
-    "status": "installed-pending-native-qa",
+    "status": "installed-partial-native-reviewed-live-font-scale-defect-open",
     "sourceCommit": "cdd9f9aca6c6e0b66a826721a89718d9d375939d",
     "appName": "장고 QA",
     "package": "com.expirymate.mobile.crayonqa",
@@ -704,7 +705,156 @@
       ],
       "manifestHttpStatus": 200,
       "runtimeRouteOpened": false,
-      "nativeUiInspected": false
+      "nativeUiInspected": true,
+      "fixtureOpened": true
+    }
+  },
+  "nativeDeviceReview": {
+    "date": "2026-10-09",
+    "model": "Samsung Galaxy A34 (SM-A346N)",
+    "androidVersion": 16,
+    "sdk": 36,
+    "displayPixels": [
+      1080,
+      2340
+    ],
+    "densityDpi": 450,
+    "initialFontScale": 1.15,
+    "maximumFontScale": 2.0,
+    "method": "CUA screenshots of official scrcpy 5.0.1 mirror; user physical touches/swipes and CUA keyboard controls distinguished",
+    "route": "QA presentation fixture; synthetic data; no live API or persisted store",
+    "sourceStatesInspectedAtFont115": 13,
+    "homeFixtureLimit": "home always uses crayon; decoration toggle does not provide a native home baseline",
+    "visualPairComparison": {
+      "method": "JPEG tolerant card ROI, max channel difference >24; differences limited to corner glyphs; not byte-identical screenshots or native AX geometry",
+      "inventory": {
+        "roi": [
+          60,
+          715,
+          760,
+          1130
+        ],
+        "changedPixels": 182,
+        "differenceBoundsInclusive": [
+          233,
+          819,
+          253,
+          953
+        ]
+      },
+      "registration": {
+        "roi": [
+          60,
+          730,
+          760,
+          1140
+        ],
+        "changedPixels": 331,
+        "differenceBoundsInclusive": [
+          245,
+          859,
+          263,
+          999
+        ]
+      }
+    },
+    "actions": {
+      "inventoryFont115": "user touch; counter 1 captured",
+      "registrationFont115": "CUA keyboard; counter 1 captured with decoration on/off",
+      "carouselFont115": "user swipe second/back; right/left mint dot captured; recommendation callback 1 captured",
+      "inventoryColdFont2": "counter 1 reported by user before scene switch; not captured",
+      "registrationColdFont2": "three actions reachable by scrolling; user Add Done callback 1 captured"
+    },
+    "largeText": {
+      "liveChange": "failed: enlarged message/button glyphs inside stale bounds after 1.15 to 2.0; fixture activity/scene resets; points omitted",
+      "coldLaunch": "full first-use message and completion message/actions readable by scrolling; points omitted",
+      "defectFixed": false
+    },
+    "talkBack": {
+      "enabledDuringReview": true,
+      "firstUse": "user confirms full announcement, no stops on decorative points, double-tap callback 1",
+      "evidence": "user report; agent audio unavailable; transient/debug system overlays not retained as clean app captures",
+      "carouselSpokenOrdinal": "not verified",
+      "restoredToOriginalOff": "not confirmed; user instructed to turn off at wrap-up"
+    },
+    "settingsRestoration": {
+      "fontScale": 1.15,
+      "fontScaleReadBackConfirmed": true,
+      "talkBackOffConfirmed": false
+    },
+    "screens": [
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-home-calm-galaxy-a34-font-115.jpg",
+        "bytes": 106738,
+        "sha256": "d74d34908d382106320270e524f4fe6d3c477691a18ba02551fd301e063f64f7"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-home-expired-galaxy-a34-font-115.jpg",
+        "bytes": 106395,
+        "sha256": "c7c54cf0775046f20e3b0f81b2fa54903626fed2f7cbeab51d1857f37ce4e00e"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-home-warning-galaxy-a34-font-115.jpg",
+        "bytes": 106770,
+        "sha256": "65794d477e0eb9729076b06fc1788a5a78c44746d56d015ac4a08916cac5cee2"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-inventory-empty-galaxy-a34-font-115-off.jpg",
+        "bytes": 107963,
+        "sha256": "cf52448d8da403f77e3651412d21dd421456ad33d3212726ca8136eefd6c152f"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-inventory-empty-galaxy-a34-font-115-on.jpg",
+        "bytes": 108508,
+        "sha256": "60b5e770d9d0356b7b2cad25c87a7b70a9089d74fd3a83fcdf1fdf826696ec03"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-inventory-empty-galaxy-a34-font-2-cold.jpg",
+        "bytes": 147254,
+        "sha256": "d437da9850a2fe8e8e830007e7a1b930fed52d7201d20cc738f1dcedd79bbe5f"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-inventory-empty-galaxy-a34-font-2-live-change-clipped.jpg",
+        "bytes": 108736,
+        "sha256": "d42e38c759ff734c6e370becadda2279e3963885183d3f41ad8ecf3cbefec1c7"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-registration-carousel-galaxy-a34-font-115-first.jpg",
+        "bytes": 125545,
+        "sha256": "2196f2460a2e3de54f448dd318eb6c96fe0de1dc5fdaf0f0b663aaadcf33f179"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-registration-carousel-galaxy-a34-font-115-second.jpg",
+        "bytes": 130505,
+        "sha256": "1099b328e40ef542cb51026b548ad5231002e7df9854fee082ea4200a08f5261"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-registration-done-galaxy-a34-font-115-off.jpg",
+        "bytes": 127269,
+        "sha256": "061c81f0c7884e5f11f7638c98949ff36a2bc0ec93edf1606f20cc122ac533c0"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-registration-done-galaxy-a34-font-115-on.jpg",
+        "bytes": 127910,
+        "sha256": "fc2ba6a0751382842c21fcac0bf4c870f44e55c2b3ffbb6511b2c5d12aad0824"
+      },
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/screens/native-registration-done-galaxy-a34-font-2-cold-bottom.jpg",
+        "bytes": 135098,
+        "sha256": "bdb817e9a97155499bf5df7cf7cd2459f767ef1f8f357b998062e06a182313e9"
+      }
+    ],
+    "openChecks": [
+      "live font-scale patch on OEM device",
+      "TalkBack carousel spoken ordinal",
+      "VoiceOver",
+      "actual app routes and full responsive matrix"
+    ],
+    "wrapUp": {
+      "requestedByUser": "적당히 하고 마무리 해라 하루종일 작업하냐?",
+      "additionalReviewStopped": true,
+      "sourceBuildStopped": true,
+      "newPatchApkInstalled": false
     }
   }
 }

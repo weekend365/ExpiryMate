@@ -61,8 +61,44 @@ pnpm -r --workspace-concurrency=1 --if-present run test --maxWorkers=2
 
 Android 네이티브 fixture 번들도 컴파일했고 API·Query 영속화·등록 store가 포함되지 않는 것을
 source map으로 확인했다. 개발 서버 8096과 manifest adapter 8097을 시작해 manifest 응답과
-fixture 진입 URL을 확인했다. 아래 기록처럼 Android 기기 설치까지 완료했으며 네이티브 캡처,
-VoiceOver/TalkBack·터치·캐러셀·실제 화면의 전체 반응형 검증은 대기 중이다.
+fixture 진입 URL을 확인했다. 아래 기록처럼 Android 기기 설치와 일부 실기기 검수를 완료했다.
+실제 앱 route의 전체 반응형 검증과 VoiceOver는 수행하지 않았다.
+
+## 갤럭시 실기기 검수 · 2026-10-09
+
+갤럭시 A34 (SM-A346N), Android 16 / SDK 36, 화면 1080×2340·450dpi에서 별도 QA fixture를
+확인했다. 공식 scrcpy를 CUA로 관찰하고, 사용자의 터치·스와이프와 CUA 키보드 조작을 구분해
+기록했다. 사용자 데이터·실제 저장 API를 사용하는 제품 route는 열지 않았다.
+
+- 배율 1.15에서 13개 예시 상태를 확인했다. 홈의 민트·앰버·코랄 장식색과 첫 안내·완료의
+  기호가 표시되며, 로딩·오류·필터 결과 없음에는 후속 기호가 없다. 홈 fixture는 장식 전환
+  버튼으로 기준 화면이 되지 않으므로 네이티브 홈 전후 비교를 통과했다고 주장하지 않는다.
+- 첫 안내와 등록 완료의 장식 켬/끔을 캡처했다. JPEG 오차를 허용한 카드 영역 비교에서
+  차이는 작은 기호 영역에 한정됐다. 문구·캐릭터·말풍선·버튼 배치는 유지됐다.
+- 첫 안내의 재료 넣기, 완료의 추가 완료, 추천 카드의 callback 1회를 확인했다.
+  네이티브 캐러셀을 왕복해 첫/두 번째 카드와 왼쪽/오른쪽 민트 점이 함께 바뀌는 것을 확인했다.
+  브라우저 adapter의 점 갱신 한계와 이 실기기 결과를 구분한다.
+- 배율 2.0으로 **실행 중 변경하면 문구와 버튼이 잘렸다**. 작은 기호는 생략됐다.
+  강제 중지 후 새 실행에서는 첫 안내의 전체 문구와 버튼이 보였고, 완료 안내와 세 행동도
+  스크롤로 접근할 수 있었다. 큰 글자의 추가 완료 callback 1회도 캡처했다.
+  새 실행 통과는 실행 중 글자 변경 결함의 해결을 뜻하지 않는다.
+- TalkBack에서 첫 안내가 끝까지 읽히고 기호에 멈추지 않으며 재료 넣기 두 번 탭의 callback이
+  1회 실행됐다고 사용자가 확인했다. 음성을 에이전트가 직접 들은 결과는 아니다.
+  캐러셀의 음성 순번, VoiceOver와 전체 기기 조합은 미검증이다.
+
+사용자의 마무리 요청에 따라 추가 검수와 기존 글자 재측정 패치의 QA 전용 소스 빌드를
+중단했다. 패치 APK를 새로 설치하지 않았으며 일반·릴리스 빌드의 기본 꺼짐 정책을 유지했다.
+글자 배율은 검수 전 **1.15** 복원을 확인했다. 임시 TalkBack 켜짐은 종료 안내에서 끄도록
+안내하며, 꺼짐을 확인하지 않은 상태를 복원 완료로 기록하지 않는다.
+
+최소 증거 화면과 해시는 `manifest.json`의 `nativeDeviceReview`에 기록한다.
+
+- [첫 안내 · 장식 켬](./screens/native-inventory-empty-galaxy-a34-font-115-on.jpg) · [끔](./screens/native-inventory-empty-galaxy-a34-font-115-off.jpg)
+- [등록 완료 · 장식 켬](./screens/native-registration-done-galaxy-a34-font-115-on.jpg) · [끔](./screens/native-registration-done-galaxy-a34-font-115-off.jpg)
+- [캐러셀 · 첫 안내](./screens/native-registration-carousel-galaxy-a34-font-115-first.jpg) · [두 번째 안내](./screens/native-registration-carousel-galaxy-a34-font-115-second.jpg)
+- [홈 · 민트](./screens/native-home-calm-galaxy-a34-font-115.jpg) · [앰버](./screens/native-home-warning-galaxy-a34-font-115.jpg) · [코랄](./screens/native-home-expired-galaxy-a34-font-115.jpg)
+- [배율 2 · 실행 중 변경의 잘림](./screens/native-inventory-empty-galaxy-a34-font-2-live-change-clipped.jpg) · [새 실행](./screens/native-inventory-empty-galaxy-a34-font-2-cold.jpg)
+- [배율 2 · 완료 안내와 버튼 1회 실행](./screens/native-registration-done-galaxy-a34-font-2-cold-bottom.jpg)
 
 ## 로컬 재현
 
@@ -99,8 +135,8 @@ APK 해시는 [manifest.json](./manifest.json)의 `nativeDevelopmentApk`에 기�
 
 사용자는 USB 설치를 선택했고, **갤럭시 A34 (SM-A346N), SDK 36, ARM64**의 디버깅 연결을
 허용했다. `adb install -r`가 `Success`로 완료됐으며 설치된 별도 QA 패키지의 버전 `1.4.2`를
-확인했다. USB 8096·8097 연결과 QA fixture manifest HTTP 200도 확인했다. 네이티브 화면·
-큰 글자·TalkBack·터치·캐러셀 검수는 아직 대기 중이며 설치 성공을 검수 통과로 처리하지 않는다.
+확인했다. USB 8096·8097 연결과 QA fixture manifest HTTP 200도 확인했다. 이후의 네이티브
+부분 검수와 글자 크기 변경 결함은 위 실기기 기록에 있으며 설치 성공과 검수 결과를 구분한다.
 외부 배포와 새 EAS 빌드는 실행하지 않았다.
 
 다운로드 링크가 필요할 때는 [EAS development profile](../../../apps/mobile/eas.json)의
