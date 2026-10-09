@@ -1,0 +1,601 @@
+{
+  "stage": 2,
+  "status": "A-selected-tone-refined-pending-native-implementation",
+  "createdAt": "2026-10-09T12:17:52+09:00",
+  "scope": "사용자가 선택한 A안의 홈 안내 카드 바깥 면. 실제 카드 tone에 맞춘 윤곽·색칠의 색 보완. 제품 앱 구현·배포 단계가 아님.",
+  "sourceCommit": "37bc4b3d1ea971ce020f50f6a3d9c4f97396999d",
+  "render": {
+    "method": "현재 HomeScreen과 실제 공통 컴포넌트를 React Native Web으로 렌더링; Chrome CUA에서 비교",
+    "runtimeApplied": false,
+    "syntheticFixtures": true,
+    "nativeDeviceCapture": false,
+    "versions": {
+      "react": "19.1.0",
+      "reactDom": "19.1.0",
+      "reactNativeWeb": "0.21.2",
+      "esbuild": "0.27.7"
+    },
+    "adapters": [
+      "예시 서버 상태·공간·계정·추천 hooks",
+      "정지 Reanimated",
+      "고정 safe area",
+      "Text 배율 투영",
+      "검토용 탭 표시",
+      "메모리 번들에만 카드 검사 ID·실제 tone의 DOM 속성 추가"
+    ],
+    "liveApiExcludedByBuildGuard": true,
+    "details": "README.md",
+    "reviewSources": [
+      {
+        "file": "fixture.jsx",
+        "sha256": "7a2f8c097b59c367b455b75523a51a36ed72b089cb28c33ab86db2d8f40b647f"
+      },
+      {
+        "file": "fixture-data.js",
+        "sha256": "f008d837ed891c86922f8b59d72554e2dbf0dce16e1466a6d0d9ab0e69743d77"
+      },
+      {
+        "file": "native-bridge.jsx",
+        "sha256": "48985edfb11bd972553be70f576407a1e4c7c61b2686367d31074565ac12b1be"
+      },
+      {
+        "file": "index.html",
+        "sha256": "0fbadb313c88222d87e4ddb6e53f9fafb012ce1b51d44967b55524bb3ac32c2c"
+      },
+      {
+        "file": "preview.mjs",
+        "sha256": "62f241b04d63cb4b5851a5085b50f66308d7bf0edd58e4adc40ef5414eca971a"
+      }
+    ]
+  },
+  "variants": {
+    "standard": {
+      "name": "A · 색칠 포인트",
+      "outlineWidthCssPx": 1.65,
+      "outlineOpacity": 0.48,
+      "smallEdgeStrokes": 3,
+      "omitStrokesAtFontScale": 1.3
+    },
+    "light": {
+      "name": "B · 은은한 윤곽",
+      "outlineWidthCssPx": 1.15,
+      "outlineOpacity": 0.35,
+      "smallEdgeStrokes": 0
+    },
+    "note": "검토용 표현값. 제품 구현에서는 공유 장식 토큰과 공통 레이어로 정의한다. 윤곽은 단일 경로·고정된 미세 grain이며 기존 선과 중복하지 않는다.",
+    "tonePalette": {
+      "selection": "실제 SurfaceCard tone. 배경 RGB 추정·fixture 상태명·mood 매핑 없음.",
+      "primary": {
+        "outline": "primaryForeground",
+        "accent": "brandAccent"
+      },
+      "warning": {
+        "outline": "warningForeground",
+        "accent": "warningAccent"
+      },
+      "danger": {
+        "outline": "dangerForeground",
+        "accent": "dangerAccent"
+      },
+      "fallback": {
+        "outline": "borderControl",
+        "accent": null
+      },
+      "legacyPreview": "frame.html의 palette=original은 revision 1 고정색 장식 재현용",
+      "toneChanges": "실제 tone 속성 변경을 관찰해 크기 변경 없이 윤곽·색칠 갱신",
+      "existingFunctionalTokenValuesChanged": false
+    }
+  },
+  "observations": {
+    "changed": [
+      "카드 바깥 선의 미세한 손그림 윤곽과 정적 질감",
+      "A의 실제 카드 tone에 맞춘 민트·앰버·코랄 윤곽과 가장자리 작은 획"
+    ],
+    "preserved": [
+      "상태색 면과 기존 카드 형태·패딩",
+      "흰색 말풍선·얇은 테두리·왼쪽 꼬리",
+      "장고 원본·mood·비율·배치",
+      "Pretendard·정보 순서·버튼·배경",
+      "기존 안내·행동의 접근성 이름과 영역"
+    ],
+    "decorationAttributes": {
+      "ariaHidden": true,
+      "pointerEvents": "none",
+      "focusable": false,
+      "randomOrAnimatedTexture": false
+    },
+    "largeText": "폭 320·글자 2배에서 기존과 시안 카드 높이가 모두 388 CSS px. 작은 색칠은 생략. 네이티브 줄바꿈 검증을 뜻하지 않는다.",
+    "notVerified": [
+      "iOS/Android 기준·후보 캡처",
+      "VoiceOver/TalkBack·키보드 초점",
+      "실제 탭·안내 행동·입력·터치",
+      "다중 소식 캐러셀",
+      "가로·네이티브 스크롤 끝 접근·동작 줄이기",
+      "revision 2 상태별 색 보완안의 사용자 검토"
+    ]
+  },
+  "impact": {
+    "surfaceCardCallSites": {
+      "home": 1,
+      "insights": 6
+    },
+    "futureOptIn": "홈 안내 1곳",
+    "futureUnstyledRegression": "인사이트 6곳",
+    "existingSharedColorsUnchanged": [
+      "borderControl",
+      "borderSubtle",
+      "surfaceWarm"
+    ]
+  },
+  "layoutComparison": {
+    "method": "같은 조건의 before/after DOM에서 카드·모든 Text·이미지·기존 aria-label의 영역과 이름·상태색 면·스크롤 컨테이너 길이를 비교. CSS px 소수점 둘째 자리 반올림. 새 장식 노드만 제외.",
+    "uniqueConditions": 16,
+    "allComparedGeometryAndNamesEqual": true,
+    "cases": [
+      {
+        "state": "calm",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3"
+        }
+      },
+      {
+        "state": "expired",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "danger",
+        "observedDecoration": {
+          "outline": "#A52C23",
+          "accent": "#F2786D"
+        }
+      },
+      {
+        "state": "warning",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "warning",
+        "observedDecoration": {
+          "outline": "#6E5000",
+          "accent": "#FFD15C"
+        }
+      },
+      {
+        "state": "empty",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3"
+        }
+      },
+      {
+        "state": "error",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          148
+        ],
+        "equal": true,
+        "tone": "danger",
+        "observedDecoration": {
+          "outline": "#A52C23",
+          "accent": "#F2786D"
+        }
+      },
+      {
+        "state": "pending",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3"
+        }
+      },
+      {
+        "state": "success",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          108
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3"
+        }
+      },
+      {
+        "state": "loading",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": null,
+        "equal": true,
+        "tone": null,
+        "observedDecoration": null
+      },
+      {
+        "state": "calm",
+        "width": 360,
+        "fontScale": 1,
+        "variant": "light",
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": null
+        }
+      },
+      {
+        "state": "calm",
+        "width": 320,
+        "fontScale": 2,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          388
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": null
+        }
+      },
+      {
+        "state": "calm",
+        "width": 320,
+        "fontScale": 1,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          138,
+          272,
+          148
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3"
+        }
+      },
+      {
+        "state": "calm",
+        "width": 360,
+        "fontScale": 1.3,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          146,
+          312,
+          172
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": null
+        }
+      },
+      {
+        "state": "calm",
+        "width": 768,
+        "fontScale": 1.3,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          146,
+          720,
+          106
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": null
+        }
+      },
+      {
+        "state": "calm",
+        "width": 768,
+        "fontScale": 2,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          162.8,
+          720,
+          148
+        ],
+        "equal": true,
+        "tone": "primary",
+        "observedDecoration": {
+          "outline": "#28674F",
+          "accent": null
+        }
+      },
+      {
+        "state": "warning",
+        "width": 320,
+        "fontScale": 2,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          348
+        ],
+        "equal": true,
+        "tone": "warning",
+        "observedDecoration": {
+          "outline": "#6E5000",
+          "accent": null
+        }
+      },
+      {
+        "state": "expired",
+        "width": 320,
+        "fontScale": 2,
+        "variant": "standard",
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          348
+        ],
+        "equal": true,
+        "tone": "danger",
+        "observedDecoration": {
+          "outline": "#A52C23",
+          "accent": null
+        }
+      }
+    ],
+    "revision": 2,
+    "renderSettling": "처리 중 첫 측정의 이미지 준비 상태 차이를 확인했다. 접근성 렌더 완료 후 다시 비교해 모든 항목 일치. 반응형 비교도 렌더 완료 상태로 측정."
+  },
+  "decision": {
+    "recommendation": "standard",
+    "basis": "사용자: A 시안이 마음에 드는데 상태에 따라 배경색에 맞게 색을 바꿔야할 필요성도 보이네.",
+    "userAccepted": true,
+    "acceptedScope": "revision 1 A안의 표현 방향",
+    "requestedRefinement": "실제 카드 상태 배경색에 맞춘 장식색",
+    "refinementRevision": 2,
+    "refinedPaletteUserReviewed": false,
+    "scope": "홈 안내 카드의 바깥 면만. 제품 앱 적용 단계와 구분."
+  },
+  "sources": [
+    {
+      "file": "apps/mobile/app/(tabs)/home.tsx",
+      "sha256": "b5649669fab0c4d4241b1522d45c880472182bc6fdf5ca98f4ebd8a146689c51"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-hero.tsx",
+      "sha256": "16ba840285af23559391beff66e5db79281a5c48f6d5b108bb65b62687ab3269"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-notices.ts",
+      "sha256": "5abd8c442e9474685e6d7dfe20961fa9d700b4aad6ec310f906e30aeb006a660"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-screen-styles.ts",
+      "sha256": "eb8dc1ae9ac29f166303893d5aeb6fa6b46cd108d557fa4ce7a9a971755ef187"
+    },
+    {
+      "file": "apps/mobile/src/components/SurfaceCard.tsx",
+      "sha256": "a3db54bb8a6707f25ba29f20732d285ea02ad69bcf487b508b37a62c215dbd54"
+    },
+    {
+      "file": "apps/mobile/src/components/MascotSpeechBubble.tsx",
+      "sha256": "cd880e6c13115a0465c9864f18261018fa1c3c38603308ccc18e8b2b0c9606e6"
+    },
+    {
+      "file": "apps/mobile/src/components/Mascot.tsx",
+      "sha256": "e6d055adbf3a094fe6e24d40cbb3c906a33ebcf7d77eec6d8278af82615a9cbc"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf"
+    },
+    {
+      "file": "packages/shared/src/design/tokens.ts",
+      "sha256": "e7b2f71ab4c2c5dec9479c46f8baa534d3fa8cfe3751994de534b8af9e044bbd"
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "screens/comparison-320-large-text.jpg",
+      "sha256": "1cf6235fc0ac1f375835739f1ceb5dd6d505286307e68275bceb966684713076",
+      "bytes": 105539,
+      "revision": 1
+    },
+    {
+      "file": "screens/comparison-360-expired.jpg",
+      "sha256": "c78bc89fc85f7c5e688cd11adea694f3267fe6e7764f582f55aa7795c5a3c9c9",
+      "bytes": 109595,
+      "revision": 1
+    },
+    {
+      "file": "screens/comparison-360-light.jpg",
+      "sha256": "624755bd0761cb0444b9089d3d49518cb67b359645e083d9caae3c1fdddcf439",
+      "bytes": 108893,
+      "revision": 1
+    },
+    {
+      "file": "screens/comparison-360.jpg",
+      "sha256": "64ab6797f39427cd45a32f944c655aa507f5b182912e3579ace6c65be80c5957",
+      "bytes": 108809,
+      "revision": 1
+    },
+    {
+      "file": "screens/tone-360-primary.jpg",
+      "sha256": "bc1dbec5ce1676b9aa5bcddc68ddfe9c4ab2b072f145ebc45ed1f6a6720e57c5",
+      "bytes": 114434,
+      "revision": 2,
+      "tone": "primary"
+    },
+    {
+      "file": "screens/tone-360-warning-detail.jpg",
+      "sha256": "6c760cda7affaf21c51231c6e803f301728bdf67e24060ad1ba5d18e17316774",
+      "bytes": 66016,
+      "revision": 2,
+      "tone": "warning",
+      "crop": {
+        "method": "Chrome CUA screenshot clip",
+        "x": 155,
+        "y": 172,
+        "width": 748,
+        "height": 754,
+        "purpose": "두 화면과 비교 제목에 집중한 브라우저 원본 캡처"
+      }
+    },
+    {
+      "file": "screens/tone-360-danger.jpg",
+      "sha256": "19b0a86c476e3d6ae77ac446e3bdbc63df9ae2fafe29949f807cb3878b28918b",
+      "bytes": 115288,
+      "revision": 2,
+      "tone": "danger"
+    }
+  ],
+  "verification": {
+    "applicationAndSharedSourcesChanged": false,
+    "characterGeneratedOrEdited": false,
+    "masterChanged": false,
+    "checks": {
+      "reviewBundle": "passed",
+      "docsCheck": "passed",
+      "lint": "passed",
+      "typecheck": "passed",
+      "test": {
+        "status": "passed",
+        "passed": 1280,
+        "jango": 21,
+        "shared": 162,
+        "api": 541,
+        "mobile": 556,
+        "apiSkipped": 6
+      }
+    },
+    "initialTestFailure": "검사 중 캐릭터 지침과 검수/측정 보고서가 함께 갱신돼 첫 root 검사의 Stale MASTER report 2개와 별도 workspace 검사의 Stale anatomy record 1개 실패를 관찰했다. 갱신된 기준으로 pnpm test를 재실행해 통과했다. 해당 정본/보고서 갱신은 홈 카드 시안 작업의 변경에 포함하지 않는다.",
+    "toneRefinementChecks": {
+      "reviewBundle": "passed",
+      "browserLayoutComparison": "passed (16 conditions)",
+      "docsCheck": "passed",
+      "lint": "passed",
+      "typecheck": "passed",
+      "test": {
+        "status": "passed",
+        "passed": 1280,
+        "jango": 21,
+        "shared": 162,
+        "api": 541,
+        "mobile": 556,
+        "apiSkipped": 6
+      }
+    }
+  },
+  "revision": 2,
+  "updatedAt": "2026-10-09T12:39:28+09:00",
+  "previousRevision": {
+    "revision": 1,
+    "palette": "고정 borderControl 윤곽·민트 색칠",
+    "uniqueConditions": 14,
+    "allComparedGeometryAndNamesEqual": true,
+    "reviewSources": [
+      {
+        "file": "fixture.jsx",
+        "sha256": "7a2f8c097b59c367b455b75523a51a36ed72b089cb28c33ab86db2d8f40b647f"
+      },
+      {
+        "file": "fixture-data.js",
+        "sha256": "f008d837ed891c86922f8b59d72554e2dbf0dce16e1466a6d0d9ab0e69743d77"
+      },
+      {
+        "file": "native-bridge.jsx",
+        "sha256": "48985edfb11bd972553be70f576407a1e4c7c61b2686367d31074565ac12b1be"
+      },
+      {
+        "file": "index.html",
+        "sha256": "0fbadb313c88222d87e4ddb6e53f9fafb012ce1b51d44967b55524bb3ac32c2c"
+      },
+      {
+        "file": "preview.mjs",
+        "sha256": "62f241b04d63cb4b5851a5085b50f66308d7bf0edd58e4adc40ef5414eca971a"
+      }
+    ],
+    "evidence": "screens/comparison-*.jpg 원본 4장. 당시 소스 해시는 제작 이력이며 현재 검토 코드의 해시와 구분한다."
+  },
+  "recordKind": "historical-concept-selection",
+  "implementationRecord": "../home-card-crayon-implementation-v1/manifest.json",
+  "snapshotNote": "앱 적용 이전 revision 1·2의 출처·검토 결과다. 공용 harness와 앱 소스는 후속 구현에서 변경됐으므로 당시 해시를 현재 파일 검증값으로 사용하지 않는다."
+}

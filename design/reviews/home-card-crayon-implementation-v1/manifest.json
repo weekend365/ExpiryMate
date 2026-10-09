@@ -1,0 +1,643 @@
+{
+  "stage": 3,
+  "status": "implemented-pending-native-qa",
+  "updatedAt": "2026-10-09T13:09:50+09:00",
+  "baselineCommit": "6b27fad6eedb9d20faf0ef4d80ceb0b3e447b876",
+  "authorization": "사용자의 실제 앱 적용도 진행해줘 요청",
+  "conceptRecord": "../home-card-crayon-point-v1/manifest.json",
+  "scope": "홈 안내 카드 바깥 면 한 곳에 선택한 A안의 상태별 정적 윤곽·색칠 적용",
+  "applicationSourceApplied": true,
+  "deployed": false,
+  "implementation": {
+    "option": "SurfaceCard decoration=crayon (hero only, default omitted)",
+    "enabledCallSites": [
+      "apps/mobile/src/features/home/home-hero.tsx"
+    ],
+    "unchangedSurfaceCardCallSites": {
+      "insights": 6
+    },
+    "tokens": "crayonCardDecoration",
+    "toneSelection": "actual SurfaceCard tone; existing functional values and fills unchanged",
+    "sizing": "absolute layer onLayout measures inner card; SVG path recomputed in points",
+    "strokeScaledWithViewBox": false,
+    "randomness": false,
+    "animation": false,
+    "largeText": "isLargeText at fontScale >= 1.3 omits accent strokes",
+    "maskIds": "unique sanitized React useId per decorated card",
+    "newRasterAssets": false,
+    "characterGeneratedOrEdited": false,
+    "masterChanged": false
+  },
+  "render": {
+    "method": "actual HomeScreen/HomeHero/SurfaceCard/CrayonCardDecoration through React Native Web, Chrome CUA",
+    "nativeDeviceCapture": false,
+    "syntheticFixtures": true,
+    "liveApiExcludedByBuildGuard": true,
+    "baseline": "in-memory HomeHero decoration prop disabled; current app source keeps it enabled",
+    "qaOnlyInjection": "in-memory card inspection ID and tone DOM attribute; existing fixture hooks and web bridge",
+    "versions": {
+      "react": "19.1.0",
+      "reactDom": "19.1.0",
+      "reactNativeWeb": "0.21.2",
+      "esbuild": "0.27.7"
+    },
+    "reviewSources": [
+      {
+        "file": "design/reviews/home-card-crayon-implementation-v1/preview.mjs",
+        "sha256": "05c0841d7f7f6de5f3cc98d34bda6f4b2f282eb6d69155a994970efdd91576c6"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-implementation-v1/index.html",
+        "sha256": "797b8746e75346a9252dcb044e01f0d9e82289f76c115ed7afbf9540f842435a"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-implementation-v1/component-check.jsx",
+        "sha256": "89d028df2f21c14ba5efbfd4b649a1f17df680be36a85b8546e6a28555aef14a"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-point-v1/fixture.jsx",
+        "sha256": "b9a3e462df1c490364a212d8273cfbd4156cfe377246cd354f3315314477a21b"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-point-v1/fixture-data.js",
+        "sha256": "f008d837ed891c86922f8b59d72554e2dbf0dce16e1466a6d0d9ab0e69743d77"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-point-v1/native-bridge.jsx",
+        "sha256": "48985edfb11bd972553be70f576407a1e4c7c61b2686367d31074565ac12b1be"
+      },
+      {
+        "file": "design/reviews/home-card-crayon-point-v1/preview.mjs",
+        "sha256": "df6f14ce7c0c2318b3c8cd6f29c7d9a753ad59dd535ffb9af769b7c75bd1f8a2"
+      }
+    ]
+  },
+  "layoutComparison": {
+    "method": "before/after DOM card, all Text, images, existing accessible labels/regions, background fill and scroll-container lengths; rounded to two CSS decimals; only decorative subtree excluded",
+    "conditions": 16,
+    "allEqual": true,
+    "cases": [
+      {
+        "state": "calm",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3",
+          "canvas": [
+            310,
+            126
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "expired",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "tone": "danger",
+        "equal": true,
+        "decoration": {
+          "outline": "#A52C23",
+          "accent": "#F2786D",
+          "canvas": [
+            310,
+            126
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "warning",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "tone": "warning",
+        "equal": true,
+        "decoration": {
+          "outline": "#6E5000",
+          "accent": "#FFD15C",
+          "canvas": [
+            310,
+            126
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "empty",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3",
+          "canvas": [
+            310,
+            126
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "error",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          148
+        ],
+        "tone": "danger",
+        "equal": true,
+        "decoration": {
+          "outline": "#A52C23",
+          "accent": "#F2786D",
+          "canvas": [
+            310,
+            146
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "pending",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          128
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3",
+          "canvas": [
+            310,
+            126
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "success",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          312,
+          108
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3",
+          "canvas": [
+            310,
+            106
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "loading",
+        "width": 360,
+        "fontScale": 1,
+        "heroBounds": null,
+        "tone": null,
+        "equal": true,
+        "decoration": null
+      },
+      {
+        "state": "calm",
+        "width": 320,
+        "fontScale": 2,
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          388
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": null,
+          "canvas": [
+            270,
+            386
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "calm",
+        "width": 320,
+        "fontScale": 1,
+        "heroBounds": [
+          24,
+          138,
+          272,
+          148
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": "#66C6A3",
+          "canvas": [
+            270,
+            146
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "calm",
+        "width": 360,
+        "fontScale": 1.3,
+        "heroBounds": [
+          24,
+          146,
+          312,
+          172
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": null,
+          "canvas": [
+            310,
+            170
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "calm",
+        "width": 768,
+        "fontScale": 1.3,
+        "heroBounds": [
+          24,
+          146,
+          720,
+          106
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": null,
+          "canvas": [
+            718,
+            104
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "calm",
+        "width": 768,
+        "fontScale": 2,
+        "heroBounds": [
+          24,
+          162.8,
+          720,
+          148
+        ],
+        "tone": "primary",
+        "equal": true,
+        "decoration": {
+          "outline": "#28674F",
+          "accent": null,
+          "canvas": [
+            718,
+            146
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "warning",
+        "width": 320,
+        "fontScale": 2,
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          348
+        ],
+        "tone": "warning",
+        "equal": true,
+        "decoration": {
+          "outline": "#6E5000",
+          "accent": null,
+          "canvas": [
+            270,
+            346
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "expired",
+        "width": 320,
+        "fontScale": 2,
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          348
+        ],
+        "tone": "danger",
+        "equal": true,
+        "decoration": {
+          "outline": "#A52C23",
+          "accent": null,
+          "canvas": [
+            270,
+            346
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      },
+      {
+        "state": "error",
+        "width": 320,
+        "fontScale": 2,
+        "heroBounds": [
+          24,
+          162.8,
+          272,
+          548
+        ],
+        "tone": "danger",
+        "equal": true,
+        "decoration": {
+          "outline": "#A52C23",
+          "accent": null,
+          "canvas": [
+            270,
+            546
+          ],
+          "ariaHidden": true,
+          "pointerEvents": "none"
+        }
+      }
+    ]
+  },
+  "liveComponentCheck": {
+    "method": "real Button pressed in decorated SurfaceCard on review-only component page",
+    "toneCycle": [
+      "primary",
+      "warning",
+      "danger",
+      "primary"
+    ],
+    "cardBounds": [
+      1422,
+      166
+    ],
+    "sameCardMaskId": "crayon-mask-r0",
+    "secondCardMaskId": "crayon-mask-r1",
+    "sameCardSizeAndMaskAcrossToneChanges": true,
+    "secondCardColorAndMaskPreserved": true,
+    "defaultOffNoSvg": true,
+    "buttonRespondedThroughDecoration": true,
+    "hiddenLayerAriaHidden": true,
+    "hiddenLayerPointerEvents": "none"
+  },
+  "preserved": [
+    "5 tabs and existing navigation",
+    "Home information order and functionality",
+    "card border width, padding, shape and dimensions",
+    "background, character bytes/mood/position and white speech bubble",
+    "existing state fills and functional tokens",
+    "insights 6 call sites and Admin CSS"
+  ],
+  "verification": {
+    "sharedBuild": "passed",
+    "relatedTests": {
+      "shared": 12,
+      "mobile": 26
+    },
+    "docsCheck": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "test": {
+      "command": "pnpm test",
+      "status": "passed after recheck",
+      "passed": 1284,
+      "jango": 21,
+      "shared": 163,
+      "api": 541,
+      "mobile": 559,
+      "apiSkipped": 6
+    },
+    "initialFailure": "2 character gate tests failed around shared unregistered-test.png; concurrent fixture collision inferred. Unchanged gate/test code passed isolated and final root reruns.",
+    "mobileBundles": {
+      "android": {
+        "status": "passed",
+        "format": "Expo/Hermes hbc",
+        "directory": "/private/tmp/jango-crayon-app-android-20261009"
+      },
+      "ios": {
+        "status": "passed",
+        "format": "Expo/Hermes hbc",
+        "directory": "/private/tmp/jango-crayon-app-ios-20261009"
+      },
+      "environment": "development; EXPO_NO_DOTENV=1; SENTRY_DISABLE_AUTO_UPLOAD=true",
+      "nativeBinaryBuildOrRelease": false
+    },
+    "nativeUiEnvironment": "Available iOS device definitions were listed, but Simulator app could not be opened and no native QA app was active. No native capture claimed.",
+    "notVerified": [
+      "iOS/Android device before/after screenshots",
+      "VoiceOver/TalkBack",
+      "native carousel, touch/focus/navigation end-to-end",
+      "landscape and native scroll-end/reduced-motion matrix",
+      "release validation"
+    ]
+  },
+  "implementationSources": [
+    {
+      "file": "apps/mobile/src/features/home/home-hero.tsx",
+      "sha256": "ed36d26bcebbbfec9eabc2cfd322320ad04c60ca022b941d7be19bab588830b5"
+    },
+    {
+      "file": "apps/mobile/src/components/SurfaceCard.tsx",
+      "sha256": "f734ade8a3e73923f1440aa5553d8b60e0397547ad1d9f57d4e63e6708779ba3"
+    },
+    {
+      "file": "apps/mobile/src/components/CrayonCardDecoration.tsx",
+      "sha256": "10b14ddc487b63c4c8beb0d099f65e189bddbc082d9634f30b074a47488b294a"
+    },
+    {
+      "file": "apps/mobile/src/components/crayon-card-geometry.ts",
+      "sha256": "e094e39019cde23afc46700469357c6e59354ead433247be9da28737c60a422b"
+    },
+    {
+      "file": "apps/mobile/src/components/crayon-card-geometry.test.ts",
+      "sha256": "68511e5d5f0eb3c3569a7339e78b6c994ab56379666859e2a677080f0b56f774"
+    },
+    {
+      "file": "packages/shared/src/design/index.ts",
+      "sha256": "59f8e158b64556b5452534358243eb203688a91bf6d7f12f1179db4a474cde96"
+    },
+    {
+      "file": "packages/shared/src/design/decoration.ts",
+      "sha256": "ed27627722d23c6f696e798d0a4f7c3619ea45f28e2273c5f054c24b343f4922"
+    },
+    {
+      "file": "packages/shared/src/design/decoration.test.ts",
+      "sha256": "f84dcf49f4abede4be9b85d28e40e8805c8572fd45f046d51943cd5b2d9c8afa"
+    }
+  ],
+  "preservedSources": [
+    {
+      "file": "apps/mobile/app/(tabs)/home.tsx",
+      "sha256": "b5649669fab0c4d4241b1522d45c880472182bc6fdf5ca98f4ebd8a146689c51"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-notices.ts",
+      "sha256": "5abd8c442e9474685e6d7dfe20961fa9d700b4aad6ec310f906e30aeb006a660"
+    },
+    {
+      "file": "apps/mobile/src/features/home/home-screen-styles.ts",
+      "sha256": "eb8dc1ae9ac29f166303893d5aeb6fa6b46cd108d557fa4ce7a9a971755ef187"
+    },
+    {
+      "file": "apps/mobile/src/components/MascotSpeechBubble.tsx",
+      "sha256": "cd880e6c13115a0465c9864f18261018fa1c3c38603308ccc18e8b2b0c9606e6"
+    },
+    {
+      "file": "apps/mobile/src/components/Mascot.tsx",
+      "sha256": "e6d055adbf3a094fe6e24d40cbb3c906a33ebcf7d77eec6d8278af82615a9cbc"
+    },
+    {
+      "file": "apps/mobile/assets/backgrounds/home-welcome-bg.png",
+      "sha256": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf"
+    },
+    {
+      "file": "packages/shared/src/design/tokens.ts",
+      "sha256": "e7b2f71ab4c2c5dec9479c46f8baa534d3fa8cfe3751994de534b8af9e044bbd"
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    },
+    {
+      "file": "apps/mobile/app/insights.tsx",
+      "sha256": "0a68f553ce146b89b400a478ae71a249b4ec301fb8ad05b255a5c3f2282d6c39"
+    },
+    {
+      "file": "packages/shared/src/design/css.ts",
+      "sha256": "3bdf6d3492324d0ddeaf7aae0605c7b684fd7973f8df1a9e06453476169b9322"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "screens/app-comparison-360-warning.jpg",
+      "sha256": "5fafec3d5713daae96ac20381ad24fcf182625cf526943cb4ebe316946ed11bf",
+      "bytes": 66871,
+      "capture": {
+        "method": "Chrome CUA screenshot clip after activating preview tab and awaiting fonts/images",
+        "x": 155,
+        "y": 172,
+        "width": 748,
+        "height": 754,
+        "retouched": false
+      }
+    },
+    {
+      "file": "screens/app-comparison-360-calm.jpg",
+      "sha256": "1138df6a10fccd8522c958670abc0ae80116ddaf3edc3e17bc9d8da10cc13587",
+      "bytes": 66308,
+      "capture": {
+        "method": "Chrome CUA screenshot clip after activating preview tab and awaiting fonts/images",
+        "x": 155,
+        "y": 172,
+        "width": 748,
+        "height": 754,
+        "retouched": false
+      }
+    },
+    {
+      "file": "screens/app-comparison-360-expired.jpg",
+      "sha256": "ef1cb300cb453e5cd19add7d8c504f8bdd94625cde834c60bad7306744e662ac",
+      "bytes": 67268,
+      "capture": {
+        "method": "Chrome CUA screenshot clip after activating preview tab and awaiting fonts/images",
+        "x": 155,
+        "y": 172,
+        "width": 748,
+        "height": 754,
+        "retouched": false
+      }
+    },
+    {
+      "file": "screens/app-comparison-320-large-text.jpg",
+      "sha256": "dc474ea3a2f259c770dcc83fbab4c2b873169e109d830263754a24b28606fa38",
+      "bytes": 64847,
+      "capture": {
+        "method": "Chrome CUA screenshot clip after activating preview tab and awaiting fonts/images",
+        "x": 155,
+        "y": 172,
+        "width": 668,
+        "height": 754,
+        "retouched": false
+      }
+    }
+  ],
+  "cleanup": "4 superseded initial viewport-derived capture files removed after hash and reference checks; only 4 final app comparison captures retained."
+}

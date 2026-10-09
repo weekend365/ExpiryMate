@@ -24,7 +24,7 @@ export function HomeHero({
   }
 
   return (
-    <SurfaceCard variant="hero" tone={heroTone} style={styles.heroCard}>
+    <SurfaceCard variant="hero" tone={heroTone} decoration="crayon" style={styles.heroCard}>
       <JangoHeroNoticeCarousel
         notices={notices.map((notice) => ({
           id: notice.id,
