@@ -1,14 +1,16 @@
 ---
-description: 장고 v18 MASTER와 준비·파생·검수 절차
+description: 장고 v19 공통 MASTER와 v18 포즈 참조·준비·검수 절차
 globs: design/jango/**,scripts/*jango*,apps/mobile/assets/**,apps/mobile/scripts/*mascot*,apps/mobile/scripts/*branding*,docs/JANGO_CHARACTER_STYLE_GUIDE.md
 alwaysApply: false
 ---
 
 # 장고 제작 규칙
 
-- design/jango/master-set.json의 32종만 MASTER다. 대표 24번을 형태·그림체와 앱 기본·아이콘·스플래시에 사용한다.
-- reference/JANGO-CHARACTER-BIBLE.md와 JANGO-STYLE-GUIDE.md를 따른다. 옛 그림이나 옛 규칙을 생성 참조로 가져오지 않는다.
-- quality/README.md의 매체별 준비를 따른다. 현행 이모티콘·스타일 참조 후보는 먼저 jango:prepare를 실행한다. 실제 참조 역할과 해시, 중복 제거 후 최대 5개 첨부를 지킨다.
+- design/jango/style-master.json은 활성 v19 MASTER(design/jango/masters/v19/master.json)를 가리킨다. v19가 앱·브랜딩·이모티콘·SNS·영상의 공통 제작 기준에서 v18을 대체한다. v19 32포즈와 앱 파생물은 아직 미전환이다. 갈색 연필 선·따뜻한 겹채색·차분한 민트·부드러운 명암·종이 결을 따른다.
+- design/jango/master-set.json의 v18 32종은 역사적 원본·포즈·구조 참조다. 구조 대표 24번과 원본 해시를 보존한다. 기존 앱 기본·아이콘·스플래시는 아직 v18 24번 파생이다.
+- reference/STYLE-MASTER-ADOPTION.md의 채택·마이그레이션 범위를 따른다. 여성·배경·두부·대사·말풍선을 모든 출력에 복제하지 않는다. 규칙 채택은 앱 전체 교체나 32종 재작화 완료가 아니다.
+- reference/JANGO-CHARACTER-BIBLE.md와 JANGO-STYLE-GUIDE.md를 따른다. 등록된 v18의 구조/포즈 역할과 최신 그림체 역할을 구분하고 등록되지 않은 옛 그림은 참조하지 않는다.
+- quality/README.md의 매체별 준비를 따른다. 현행 이모티콘·스타일 참조 후보는 먼저 jango:prepare를 실행한다. 신규 준비 기본은 colored-pencil이며 handdrawn-crayon은 과거 감사 전용이다. 실제 참조 역할과 해시, 중복 제거 후 최대 5개 첨부를 지킨다.
 - 기본 입 참조는 idle-u 09번, speak-open 01번, neutral-line 11번, sad-arc 17번이다. SNS 파생물의 입 표현을 이 네 모드로 제한하지 않으며 미지원 입을 기존 모드로 거짓 분류하지 않는다.
 - 감정·눈·눈썹·자세·입 선택 이유와 변경 의도를 기록한다. 기본형 재현과 SNS 표현 확장은 BIBLE의 적용 범위를 구분한다.
 - SNS의 표정·입·포즈·소품·의상·비율·반전·색 변형을 일괄 금지하지 않는다. BIBLE에 따라 구조·질감·캐릭터 인지를 비교 검토하고 필요한 보정 후 사용자 채택 범위에서 재사용한다.

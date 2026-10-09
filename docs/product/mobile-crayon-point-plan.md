@@ -7,7 +7,7 @@ source_of_truth: false
 
 # 모바일 크레파스 포인트 적용 계획안
 
-기존 화면 구성에 v18 장고와 이어지는 손그림 윤곽·색칠·작은 기호를 더한다. 첫 적용 대상은
+이 계획은 기존 앱의 v18 기반 크레파스 장식 포인트를 다룬다. 신규 장고 자체의 작화는 [v19 공통 연필 스타일](../../design/jango/style-master.json)이 우선이며, [채택 범위](../../design/jango/reference/STYLE-MASTER-ADOPTION.md)에 따라 기존 runtime·장식 교체는 별도 진행한다. 기존 화면 구성에 손그림 윤곽·색칠·작은 기호를 더한다. 첫 적용 대상은
 **홈의 장고 안내 카드 바깥 면**이다. 같은 구도의 전후 화면에서 표현과 가독성을 확인한 뒤
 검토된 범위에 적용한다.
 
@@ -23,7 +23,7 @@ source_of_truth: false
 
 ## 1. 현재 기준
 
-- 캐릭터는 [v18 MASTER 32종](../../design/jango/master-set.json)이며 대표는 24번이다.
+- 현행 runtime의 캐릭터는 [v18 원본 32종](../../design/jango/master-set.json) 파생이며 구조 대표는 24번이다. 신규 작화의 연필 스타일 정본과 구분한다.
   화면은 기존 [Mascot](../../apps/mobile/src/components/Mascot.tsx)을 사용한다.
 - 홈·보관함·추천·장보기·로그인 배경은
   [배경 동기화 목록](../../apps/mobile/scripts/sync-background-assets.mjs)에 크레파스 원본으로

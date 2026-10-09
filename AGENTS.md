@@ -58,14 +58,18 @@
   [`docs/mobile-responsive-qa.md`](docs/mobile-responsive-qa.md)를 따른다.
 - 장고 에셋과 mood 사용은 [`docs/JANGO_CHARACTER_STYLE_GUIDE.md`](docs/JANGO_CHARACTER_STYLE_GUIDE.md)를
   따른다. 화면에서 캐릭터 PNG를 직접 import하거나 사용자 문구에 구 브랜드명을 노출하지 않는다.
-- 장고의 유일한 제작 기준은 [v18 MASTER 32종](design/jango/master-set.json)과
-  [BIBLE](design/jango/reference/JANGO-CHARACTER-BIBLE.md)·[STYLE GUIDE](design/jango/reference/JANGO-STYLE-GUIDE.md)다.
-  대표 컷은 24번이며 앱 기본·아이콘·스플래시도 여기서 파생한다. 선택된 MASTER 이미지 바이트는 보존한다.
+- 장고의 활성 제작 기준은 [v19 MASTER](design/jango/masters/v19/master.json)이며
+  [활성 참조](design/jango/style-master.json)가 v19를 가리킨다. v18은 과거 원본·포즈 자료로 보존한다.
+  앱·브랜딩·이모티콘·SNS·영상의 신규 제작은 갈색 연필 선·따뜻한 채색·차분한 민트·부드러운 명암·종이 결을 따른다.
+  [v18 32종](design/jango/master-set.json)은 역사적 원본·포즈·구조 참조로 바이트를 보존한다.
+  [BIBLE](design/jango/reference/JANGO-CHARACTER-BIBLE.md)·[STYLE GUIDE](design/jango/reference/JANGO-STYLE-GUIDE.md)와
+  [채택 범위](design/jango/reference/STYLE-MASTER-ADOPTION.md)를 따른다. 장면의 여성·배경·대사는 필수 요소가 아니다.
+  기존 앱 기본·아이콘·스플래시는 아직 v18 24번 파생이며, 새 스타일 채택만으로 runtime 교체·32종 재작화 완료를 주장하지 않는다.
   제작·수정 전 [검수 안내](design/jango/quality/README.md)의 매체별 준비와 실제 참조·해시 기록을
   따른다. 현행 이모티콘·스타일 참조 후보는 `jango:prepare`를 사용한다. SNS 카툰은 BIBLE의
   표현 확장에 따라 표정·입·포즈·소품·의상·비율·반전·색 변형을 별도 후보로 제작하고
   구조·질감·캐릭터 인지를 검토·보정한 뒤 사용자의 SNS 채택 범위에서 재사용한다.
-  등록되지 않은 과거 이미지나 다른 스타일을 참조하지 않으며 채택 파생본도 MASTER까지 계보를 남긴다.
+  등록된 새 스타일·v18 구조/포즈 참조의 역할을 구분하며 채택 파생본도 두 정본까지 계보를 남긴다.
   사용자 MASTER 채택·앱 사용 허용·SNS 채택·서명된 이모티콘 출시는 구분한다.
   불확실한 측정을 통과로 처리하지 않고, 이모티콘 최종 출력은 `jango:promote`·`jango:export`를 사용한다.
   에이전트는 검수 서명을 만들거나 통과를 위해 ROI·수치·신뢰 키를 변경하지 않는다.

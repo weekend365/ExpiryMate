@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "id": "jango-v19",
+  "status": "user-adopted",
+  "kind": "active-character-style-master",
+  "styleProfile": "colored-pencil",
+  "adoptedAt": "2026-10-09",
+  "recordedAt": "2026-10-09T06:06:21.324Z",
+  "authority": {
+    "type": "explicit-user-instruction",
+    "messageId": "Sentinel_ccb8503cd5fc8191b5ceb6d94d2bc1d7",
+    "sourceThreadId": "01a0fb96-8a42-771d-a8e7-2cfbeec72021",
+    "quote": "새로 만든 결과물이 마음에 들어 이제 이 결과물을 마스터로 삼아 프로젝트 규칙에 적용해줘. 카툰 뿐만 아니라 장고 디자인 규칙에도 반영해줘.",
+    "versionDesignation": {
+      "messageId": "Sentinel_9e3c34db1050819197dce2d4b6aa9d09",
+      "quote": "새 결과물로 v18 대체하고 싶은데 v19로 삼아서."
+    },
+    "implementationScope": {
+      "messageId": "Sentinel_85c17f0b20b48191bef06d5773880473",
+      "quote": "일단 규칙부터 적용해놓고 이후에 작업하자.",
+      "scope": "Rules, reference metadata and validation only; no image generation or runtime replacement"
+    }
+  },
+  "image": {
+    "file": "design/jango/masters/v19/master-scene.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "width": 1122,
+    "height": 1402,
+    "format": "opaque scene PNG"
+  },
+  "source": {
+    "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "libraryFileId": "libfile_e4728d44dfc48191bc17441d04d0a031"
+  },
+  "scope": {
+    "appliesTo": [
+      "app-character",
+      "branding-character",
+      "emoticon-character",
+      "sns-cartoon",
+      "marketing",
+      "video-character"
+    ],
+    "referenceSubject": "Jango character only; woman/background demonstrate line, color and material harmony",
+    "excludes": [
+      "mandatory woman",
+      "mandatory kitchen/background",
+      "mandatory tofu tray",
+      "mandatory scene pose",
+      "mandatory speech balloons or lettering",
+      "automatic replacement of existing app assets",
+      "automatic redraw or approval of all v18 poses",
+      "signed emoticon release"
+    ]
+  },
+  "precedence": {
+    "style": "v19 replaces v18 as the active common character drawing standard; use this approved scene for line/color/shading/paper texture",
+    "identityAndPoses": "v18 32 originals remain immutable historical/pose/anatomy references; representative 24",
+    "mouths": "v18 09/01/11/17 remain structural mouth references and existing conservative measurement anchors"
+  },
+  "characteristics": {
+    "line": "Warm umber/brown pencil contours, finer varied pressure and paper grain; avoid heavy uniform near-black sticker borders",
+    "color": "Layered warm cream/ochre instead of flat bright ivory; restrained mint with warm/green pencil variation; peach cheeks",
+    "shading": "Soft accumulated pencil shadows at hat folds, door edges, sleeves, mittens and apron; retain readable form without glossy 3D gradients",
+    "texture": "Visible directional hatching and paper tooth inside colored surfaces; harmonize with scene pencil density without transparent holes",
+    "expression": "Simple dark eyes/mouth remain readable; no human pupils or new anatomy inferred"
+  },
+  "legacyPoseRegistry": {
+    "file": "design/jango/master-set.json",
+    "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "status": "immutable-historical-originals-and-pose-reference",
+    "activeMaster": false
+  },
+  "provenance": {
+    "method": "One built-in image_gen style edit, localized to Jango on original scene, with existing Korean lettering restored",
+    "identityAncestors": [
+      {
+        "imageIndex": 1,
+        "role": "Jango identity and drawing texture; new pose, not copied artwork",
+        "masterNumber": 24,
+        "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+        "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+      },
+      {
+        "imageIndex": 2,
+        "role": "Talking facial expression and mitten anatomy",
+        "masterNumber": 1,
+        "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+        "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      }
+    ],
+    "sceneReferences": [
+      {
+        "imageIndex": 3,
+        "role": "Kitchen material and palette reference, new scene composition",
+        "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+        "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+      }
+    ],
+    "direction": {
+      "record": "output/marketing/jango-sns-ep01-direction-v3/production-record.json",
+      "recordSHA256": "fabb0b574d344b13201ed82b29865caecfe84b76453b340dcf451257336c4bd2",
+      "artwork": "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+      "artworkSHA256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+      "actualReferences": [
+        {
+          "imageIndex": 1,
+          "role": "Jango identity and drawing texture; new pose, not copied artwork",
+          "masterNumber": 24,
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+        },
+        {
+          "imageIndex": 2,
+          "role": "Talking facial expression and mitten anatomy",
+          "masterNumber": 1,
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+        },
+        {
+          "imageIndex": 3,
+          "role": "Kitchen material and palette reference, new scene composition",
+          "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+          "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+        }
+      ],
+      "promptSHA256": "0a8f7c0c4721577ce48dc30b939a1ec3b0d4fc3198a53bb8319344dea921c41c"
+    },
+    "styleEdit": {
+      "record": "output/marketing/jango-sns-ep01-style-review-v4/production-record.json",
+      "recordSHA256": "1fbf18e7e51739c826c05388d4e367506b5833318dc20864ecf4bb870cd5b403",
+      "actualReferences": [
+        {
+          "imageIndex": 1,
+          "file": "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+          "sha256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+          "role": "Edit target; approved scene without lettering. The woman and background are style authority.",
+          "lineageRecord": "output/marketing/jango-sns-ep01-direction-v3/production-record.json"
+        }
+      ],
+      "generation": {
+        "tool": "built-in image_gen",
+        "calls": 1,
+        "rawOriginal": "generated_images/exec-26748107-33c1-4139-a441-11ed71cda82f.png",
+        "rawSHA256": "93a2233737cf2b0f61ee61cb9d681473a9f540deca5923dd91ec590e1d2659b5",
+        "prompt": "style-prompt.txt",
+        "promptSHA256": "48bdd0062779c32e66f6b85ad907391506454890abfc1381701ba78e1d43f53f",
+        "promptNormalization": "trimmed outer whitespace before tool submission",
+        "submittedPromptSHA256": "808f9aa3d34d8d5276bc8d983f10e9249cd2b1bf41dbcce92570f8bc7e02c596"
+      },
+      "composition": {
+        "script": "compose.mjs",
+        "scriptSHA256": "e9f7451f62ad6e1c37a58322fdf9e735bf7810edb8ba3149ad30383ea6c9d740",
+        "mask": "edit-region-mask.png",
+        "maskSHA256": "f96282af930829b4e57151c97b1cc97e618d989b1d542089d8f6161090da9e9d",
+        "method": "Only official generated Jango region is composited; original scene and exact typography are retained elsewhere."
+      }
+    },
+    "historyNote": "Copied lineage facts at adoption; original creation records retain their contemporaneous candidate statuses and are not retroactively rewritten."
+  },
+  "migration": {
+    "appAssets": "pending separate redraw/review/integration; current v18 runtime and sync/build mapping unchanged",
+    "emoticon32": "pending separate redraw/review; none claimed complete",
+    "sceneToTransparentCharacter": "pending; this scene cannot be directly substituted for transparent runtime sprites",
+    "signedRelease": "not granted; existing unresolved reviews and external signature gate unchanged",
+    "poses": {
+      "targetCount": 32,
+      "v19RedrawnCount": 0,
+      "status": "not-started; v18 originals are historical pose references, not v19 finished poses"
+    }
+  },
+  "masterVersion": "v19"
+}

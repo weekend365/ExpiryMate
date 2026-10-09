@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "recordType": "automated-validation-not-design-approval",
+  "validatedAt": "2026-10-09T06:24:04.433964+00:00",
+  "scope": "v19 rules and reference metadata only; no new artwork, pose redraw, runtime replacement, commit, push or release",
+  "activeMasterVersion": "v19",
+  "activePointer": {
+    "file": "design/jango/style-master.json",
+    "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+  },
+  "master": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04"
+  },
+  "approvedImage": {
+    "file": "design/jango/masters/v19/master-scene.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "width": 1122,
+    "height": 1402,
+    "format": "opaque scene PNG"
+  },
+  "verification": {
+    "docsCheck": "pass (30 metadata records, 51 documented links, canonical mobile build entry)",
+    "changedDocumentLinks": {
+      "checked": 112,
+      "broken": 0
+    },
+    "lint": "pass (including design check: 40 Admin, 229 mobile files)",
+    "typecheck": "pass (shared, admin, API, mobile)",
+    "tests": {
+      "command": "pnpm test",
+      "status": "pass",
+      "passed": 1292,
+      "skipped": 6,
+      "suites": {
+        "jango": 23,
+        "shared": 163,
+        "api": 541,
+        "mobile": 565
+      },
+      "skippedFiles": [
+        "apps/api/src/common/ai-telemetry.integration.test.ts",
+        "apps/api/src/modules/inventory/inventory-workflows.integration.test.ts"
+      ]
+    },
+    "jangoCheck": "pass; records valid; 0 signed releases",
+    "diffCheck": "pass",
+    "node": "21.4.0 (already installed)"
+  },
+  "preservation": {
+    "approvedImageBytesUnchanged": true,
+    "legacyRegisteredAssetsUnchanged": 237,
+    "existingImagesAndFontsUnchanged": 410,
+    "appAssetsUnchanged": 75,
+    "appAndSharedSourceChanges": 0,
+    "historicalReportsWithUnchangedMeasurementsAndStatus": 32,
+    "anatomyRecordChangedFields": [
+      "bibleSha256"
+    ],
+    "historicalMouthReviewNumbers": [
+      5,
+      12,
+      15,
+      20,
+      21,
+      28,
+      29,
+      31,
+      32
+    ],
+    "concurrentChangesExcluded": [
+      {
+        "file": "design/reviews/jango-crayon-followup-v1/manifest.json",
+        "reason": "Pre-existing concurrent review work; not modified by this task"
+      }
+    ]
+  },
+  "remaining": {
+    "v19Poses": {
+      "redrawn": 0,
+      "target": 32
+    },
+    "appAndBrandingAssets": "still v18; migration not executed",
+    "signedEmoticonRelease": "not granted; original signature gate retained"
+  }
+}

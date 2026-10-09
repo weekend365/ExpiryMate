@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "activeMasterVersion": "v19",
+  "master": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04"
+  },
+  "scope": "Active common Jango drawing standard; v18 is preserved as historical pose/reference material. Existing runtime assets have not migrated."
+}

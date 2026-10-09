@@ -1,26 +1,26 @@
 # 장고 준비·검수·최종 출력
 
-[v18 MASTER 목록](../master-set.json), [BIBLE](../reference/JANGO-CHARACTER-BIBLE.md), [스타일 가이드](../reference/JANGO-STYLE-GUIDE.md)가 정본이다. 정책 v5의 CLI는 MASTER 무결성·기존 측정과 `emoticon`·`style-reference` 후보의 준비·검수·서명 출시를 지원하며 handdrawn-crayon 스타일을 사용한다. SNS 표현 확장의 허용·검토 기준은 BIBLE에 둔다. SNS 허용을 이유로 기존 CLI의 임계값·입 모드·제출 규격·서명 조건을 완화하지 않는다.
+[v19 활성 MASTER](../style-master.json), [v18 원본·포즈 목록](../master-set.json), [BIBLE](../reference/JANGO-CHARACTER-BIBLE.md), [스타일 가이드](../reference/JANGO-STYLE-GUIDE.md)가 역할별 정본이다. [2026-10-09 채택 범위](../reference/STYLE-MASTER-ADOPTION.md)를 확인한다. 정책 v6의 CLI는 두 정본의 무결성·기존 입 측정과 `emoticon`·`style-reference` 후보의 준비·검수·서명 출시를 지원한다. 신규 준비의 기본/허용 스타일은 `colored-pencil`이고 `handdrawn-crayon`은 v18·과거 후보 감사 전용이다. SNS 표현 확장의 허용·검토 기준은 BIBLE에 둔다. SNS 허용을 이유로 기존 CLI의 임계값·입 모드·제출 규격·서명 조건을 완화하지 않는다.
 
 ## 현행 이모티콘·스타일 참조 후보 준비
 
 `jango:prepare id input request [mouthMode] [reason] [expression.json]` 위치 인자와 `--style`·`--kind`·`--composition`·`--panel` 옵션을 유지한다. 구성 옵션은 등록된 v18 보드와 1–32 번호를 함께 사용한다.
 
 ```sh
-pnpm jango:prepare 01-v19 design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png '손인사 동작 변경' speak-open '먼저 인사' --style handdrawn-crayon --kind emoticon --composition design/jango/reference/v18-composition.png --panel 1
+pnpm jango:prepare 01-v19 design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png '손인사 동작 변경' speak-open '먼저 인사' --style colored-pencil --kind emoticon --composition design/jango/reference/v18-composition.png --panel 1
 ```
 
 이 CLI가 지원하는 입은 idle-u·speak-open·neutral-line·sad-arc다. SNS 파생물 전체의 입 표현을 제한하는 목록은 아니다. 기본 외 모드는 선택 이유가 필요하다. 표정 JSON은 family·intensity(1–3)·eyes·brows·pose를 기록한다. 실제 참조는 v18 MASTER 또는 생성 기록이 연결된 파생 후보여야 한다. 등록되지 않은 파일·변조·삭제된 파일·순환 계보는 거부한다.
 
-형태·그림체는 24번, 입은 09/01/11/17번, 동작은 해당 컷을 첨부한다. 동일 파일을 한 번만 첨부하고 실제 배열 기준 imageIndex를 기록한다. 최대 5개, 입 확대는 진단 자료로 구분한다. 준비 기록을 덮어쓰지 않는다.
+그림체는 승인된 장면 스타일 MASTER, 구조는 v18 24번, 입 구조는 09/01/11/17번, 동작은 해당 컷을 첨부한다. 장면 속 장고만 스타일 기준이며 여성·주방·두부·대사·말풍선을 출력에 복제하지 않는다. 장면 MASTER 자체를 투명 캐릭터 edit-target으로 전달하지 않는다. 동일 파일을 한 번만 첨부하고 실제 배열 기준 imageIndex를 기록한다. 최대 5개, 입 확대는 진단 자료로 구분한다. 준비 기록을 덮어쓰지 않는다.
 
 ## SNS 카툰의 준비·검토·재사용
 
 SNS는 MASTER를 보존하면서 BIBLE의 표현 확장 기준으로 별도 파생본을 제작할 수 있다. 현재 `jango:prepare`에는 SNS 종류나 새 입 모드가 없고, SNS 전용 등록·검사·출력 CLI도 없다. 기존 `emoticon`·`style-reference` 종류나 네 입 모드로 거짓 분류해 SNS 변형을 통과시키지 않는다. 도구 미지원은 창작 금지가 아니며 아래 제작·검토 기록을 별도로 남긴다.
 
-1. **제작 전:** 고유 후보 ID와 `SNS 카툰` 용도, MASTER까지 이어지는 입력 경로·해시, 형태·동작·입의 실제 참조, 바꿀 영역·목적·방법을 기록한다. 새 입은 기본 입과의 차이와 원하는 감정을 설명한다. 생성·편집 시 실제 첨부 참조와 해시를 기록하며, 생성 없이 합성했다면 그 사실과 변환·레이어 정보를 기록한다.
+1. **제작 전:** 고유 후보 ID와 `SNS 카툰` 용도, v19 활성 MASTER와 v18 구조/포즈까지 이어지는 입력 경로·해시, 그림체·형태·동작·입의 실제 참조, 바꿀 영역·목적·방법을 기록한다. 새 입은 기본 입과의 차이와 원하는 감정을 설명한다. 생성·편집 시 실제 첨부 참조와 해시를 기록하며, 생성 없이 합성했다면 그 사실과 변환·레이어 정보를 기록한다.
 2. **후보 제작:** 원본을 덮어쓰지 않고 별도 파일로 만든다. 단순 합성 가능한 변경은 오프라인 처리를 우선하고, 새 작화·편집이 필요한 변경을 구분한다. 기존 준비·생성 기록을 소급 작성하거나 덮어쓰지 않는다.
-3. **비교 검토:** 원본과 후보를 함께 보며 BIBLE의 변형별 기준으로 구조 연결·가림·원근, 크레파스 질감·편집 이음새, 캐릭터 인지·감정·컷 간 일관성을 확인한다. 좌우 반전은 구조 변화와 보정 여부를 기록한다. 불확실한 부분은 재검토로 남긴다.
+3. **비교 검토:** 원본과 후보를 함께 보며 BIBLE의 변형별 기준으로 구조 연결·가림·원근, 최신 연필 선·겹채색·종이 질감과 편집 이음새, 캐릭터 인지·감정·컷 간 일관성을 확인한다. 좌우 반전은 구조 변화와 보정 여부를 기록한다. 불확실한 부분은 재검토로 남긴다.
 4. **사용자 채택:** 보정·재검토 후 사용자의 명시적 SNS 채택 근거, 대상 파일 해시·용도·사용 범위를 기록한다. 에이전트의 자동 검사나 이번 정책 변경을 개별 후보의 채택으로 대신하지 않는다.
 5. **재사용:** 채택된 파일과 기록을 ID로 참조한다. 재변형은 새 후보로 검토한다. 앱 반영·MASTER 승격·서명된 이모티콘 출시는 각각 별도 절차다.
 
@@ -28,22 +28,24 @@ SNS는 MASTER를 보존하면서 BIBLE의 표현 확장 기준으로 별도 파�
 
 ## MASTER와 후보
 
-v18 32종은 사용자 지정 MASTER다. 새 준비를 소급 작성한 생성 후보가 아니다. 종료된 제작 기록은 history/v18-creation에 원문으로 보존하며 과거 이미지가 삭제되었음을 명시한다. 이력 속 경로는 활성 입력이 아니다.
+v18 32종은 당시 사용자 지정 MASTER이며 현재는 불변의 역사적 원본·포즈 레지스트리다. v19 활성 MASTER와 구분한다. 새 준비를 소급 작성한 생성 후보가 아니다. 종료된 제작 기록은 history/v18-creation에 원문으로 보존하며 과거 이미지가 삭제되었음을 명시한다. 이력 속 경로는 활성 입력이 아니다.
 
 `jango:audit v18-01`부터 `v18-32`까지 현재 정책으로 재측정할 수 있다. preparation은 master-adoption으로 명시한다. 과거 9종 재검토와 현재 입 측정을 별도 표시한다. MASTER 해시 변경을 자동 수용하지 않는다.
 
-새 이모티콘 결과는 별도 버전에 개별 준비·생성 기록과 후보를 만든다. `record-jango-image.mjs <번호-v버전[-시도]> <실제 생성 파일>`로 도구 출력 바이트를 보존하고 `build-jango-emoticons.mjs --base=...`로 조립한다. v18 원화·스티커·레터링은 덮어쓰지 않는다. SNS 제작 기록을 이모티콘 생성·준비 기록으로 대신하지 않는다.
+새 이모티콘 결과는 v19 연필 스타일로 별도 버전에 개별 준비·생성 기록과 후보를 만든다. `record-jango-image.mjs <번호-v버전[-시도]> <실제 생성 파일>`로 도구 출력 바이트를 보존하고 `build-jango-emoticons.mjs --base=...`로 조립한다. v18 원화·스티커·레터링은 덮어쓰지 않는다. SNS 제작 기록을 이모티콘 생성·준비 기록으로 대신하지 않는다.
 
 ## 기존 검사와 이모티콘 출시
 
 - jango:reports:refresh는 현재 증거만 재계산한다. 서명·준비·채택을 생성하지 않는다.
-- jango:check는 MASTER 바이트, 보고서 최신성, 지원하는 후보 종류의 미등록 이미지, 서명된 출시 목록을 검사한다. 종료 이력은 활성 후보 검사에서 제외한다. SNS 전체를 검사하는 명령은 아니다.
-- 입 검사의 임계값·채움·연결·닫힌 영역·곡률·혀 기준은 유지한다. 기준 원화는 v18로 교체하며 기준 변화에 따른 결과를 숨기지 않는다.
+- jango:check는 최신 스타일 장면·레지스트리와 v18 원본 바이트, 보고서 최신성, 지원하는 후보 종류의 미등록 이미지, 서명된 출시 목록을 검사한다. 종료 이력은 활성 후보 검사에서 제외한다. SNS 전체를 검사하는 명령은 아니다.
+- 입 검사의 임계값·채움·연결·닫힌 영역·곡률·혀 기준은 유지한다. 기준 원화는 v18 입 구조 참조를 유지한다. 새 스타일 장면에서 임의 ROI를 따서 통과 기준으로 바꾸지 않는다. 연필 질감의 품질은 별도 시각 검사이며 기존 보수적 입 검사의 불확실성을 숨기지 않는다.
 - 가림·질감 불확실성·25도 초과 기울기는 재검토다. 원화 ROI를 거짓으로 바꾸지 않는다.
 - 360px·최소 8px 여백·투명 가장자리·원화 잘림·문구 충돌을 검사한다. 작은 출력과 감정 구분은 별도 시각 관찰이다.
 
 `jango:promote <id> <signed-review.json>`와 `jango:export`는 기술·입 검사 통과와 JANGO_REVIEW_PUBLIC_KEY로 검증한 Ed25519 외부 서명을 요구한다. 사용자 MASTER 채택이나 앱 사용 지시를 출시 서명으로 대신하지 않는다. 에이전트는 서명이나 검수용 개인키를 만들지 않는다.
 
 서명 payload는 `{binding, decision:"approved", reviewer, reviewedAt, checks}`이며 rules.json의 공통·스타일 시각 검사 전 항목이 true여야 한다. 내용 변경은 binding을 변경해 이전 서명을 무효화한다. `releases.json`만 승인된 이모티콘 출력 목록이다.
+
+v19 채택은 앱 PNG 교체·32종 재작화·입 재검토 해결·외부 서명을 뜻하지 않는다. v18 보고서는 historical-v18-original 범위로 남으며 mouth/technical/기존 재검토 결과를 보존한다. 정책 v5의 파생 계보는 파일·해시가 온전할 때 구조 참조로 읽을 수 있지만, 과거 준비를 v6 신규 준비로 통과시키지 않는다.
 
 정본 문서나 관문 설명이 바뀌면 보고서의 context·binding도 바뀐다. `jango:reports:refresh`로 현재 증거를 갱신하되 MASTER·기존 측정과 재검토 상태·과거 준비·채택·서명 이력은 보존한다. 갱신된 보고서를 새로운 승인으로 해석하지 않는다.

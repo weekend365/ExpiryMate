@@ -7,7 +7,9 @@ source_of_truth: true
 
 # 장고 캐릭터 사용 가이드
 
-[MASTER 32종](../design/jango/master-set.json), [BIBLE](../design/jango/reference/JANGO-CHARACTER-BIBLE.md), [스타일 가이드](../design/jango/reference/JANGO-STYLE-GUIDE.md)가 정본이다. 유일한 스타일은 v18 손그림 크레파스형이며 대표는 24번 완성!이다.
+[v19 활성 MASTER](../design/jango/style-master.json), [BIBLE](../design/jango/reference/JANGO-CHARACTER-BIBLE.md), [스타일 가이드](../design/jango/reference/JANGO-STYLE-GUIDE.md)가 신규 제작 정본이다. 2026-10-09 승인된 갈색 연필 선·따뜻한 채색·차분한 민트·부드러운 명암·종이 질감을 앱·브랜딩·이모티콘·SNS·마케팅·영상에 공통 적용한다. [채택 기록과 마이그레이션 범위](../design/jango/reference/STYLE-MASTER-ADOPTION.md)를 확인한다.
+
+[v18 32종](../design/jango/master-set.json)은 역사적 원본·포즈·구조 참고로 바이트를 보존한다. 장면 속 여성·배경·두부·대사는 필수 요소가 아니다. 기존 앱 에셋은 아직 v18 파생이며 이번 규칙 변경으로 이미 재작화됐다고 표시하지 않는다.
 
 ## 앱 사용
 
@@ -16,10 +18,10 @@ source_of_truth: true
 
 화면은 기존 `Mascot`와 `MascotSpeechBubble`을 사용한다. 직접 PNG import는 Mascot 내부로 제한한다. 기존 mood·size API는 유지한다. `JangoCompanion` 등을 포함한 이전 전체 개편은 철회했으며 자동 도입하지 않는다.
 
-- idle 24, happy 02, worry 17, cooking 23, empty 20, speak 01, think 11, point 14.
-- 앱 기본·아이콘·스플래시·알림 실루엣은 24번에서 파생한다. 문구 없는 원화를 사용한다.
+- 현재 v18 runtime 매핑: idle 24, happy 02, worry 17, cooking 23, empty 20, speak 01, think 11, point 14.
+- 현행 앱 기본·아이콘·스플래시·알림 실루엣은 v18 24번에서 파생한다. 새 연필 스타일 투명 원화의 제작·검토·채택·매핑 변경은 별도 작업이다. 문구 없는 원화를 사용한다.
 - 원화 전체 가시 영역을 비율 유지해 1024px 안에 배치하고, full/small 및 1x·2x·3x를 만든다. 고정 얼굴 크롭이나 얼굴 늘이기를 하지 않는다.
-- 캐릭터 팔레트는 `characterColors`이며 UI semantic token을 대체하지 않는다.
+- 현재 runtime의 캐릭터 팔레트는 `characterColors`다. 새 스타일의 색은 승인 이미지로 검토하며 이번 변경에서 공유 토큰이나 UI semantic token을 바꾸지 않는다.
 - 앱 UI는 Pretendard를 사용하고 Gaegu는 짧은 브랜드 보조 문구에 제한한다. 이모티콘 레터링 기준을 전체 UI에 적용하지 않는다.
 - 주 장고 안내는 화면당 하나다. 주요 작업의 성공 반응·중복 방지·맥락 전환·접근성은 디자인 시스템의 상호작용 규칙을 따른다.
 - 배포는 별도 작업이다. 로컬 에셋 교체가 이미 설치된 앱이나 스토어 이미지를 자동 변경하지 않는다.
@@ -30,7 +32,7 @@ source_of_truth: true
 
 SNS 카툰은 BIBLE의 「SNS 카툰의 표현 확장」을 따른다. 표정·입·포즈·소품·의상·비율 과장·좌우 반전·색 변형은 별도 후보로 검토·보정하고 사용자가 채택한 범위에서 재사용한다. 기본 입 네 모드는 SNS 표현의 절대 상한이 아니다. SNS 채택을 앱 에셋 교체나 서명된 이모티콘 출시로 해석하지 않으며, 위 앱 파생 기준과 기존 앱 말풍선 스타일은 유지한다.
 
-아래 명령은 앱·브랜딩 파생용이며 SNS 후보의 채택·출력 명령이 아니다.
+아래 명령은 현재 등록된 v18 앱·브랜딩 파생을 재현한다. 최신 스타일의 재작화를 실행하지 않으며 SNS 후보의 채택·출력 명령도 아니다.
 
 ```sh
 pnpm --filter @expirymate/shared build

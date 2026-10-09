@@ -31,8 +31,8 @@ export default function JangoReview(){
  const count=data.rows.filter(r=>r.mouthStatus==='pass').length;
  const open=(path:string)=>dispatch({type:'openFile',path});
  return <main style={{padding:24,color:theme.text.primary,background:theme.bg.editor,maxWidth:1500,margin:'auto',fontSize:13,lineHeight:1.6}}>
- <H1>장고 {data.base.split("/").at(-1)} · 크레파스 32종</H1>
- <Text>{data.isMaster?"사용자가 지정한 유일한 MASTER 32종입니다. 대표 24번을 앱 기본·아이콘·스플래시에 적용했습니다.":"v18 MASTER에서 제작한 검토 후보이며 자동 채택하지 않습니다."} 서명된 이모티콘 출시는 별도입니다.</Text>
+ <H1>장고 {data.base.split("/").at(-1)} · 32종 검토</H1>
+ <Text>{data.isMaster?"역사적 v18 원본·포즈 32종입니다. 현재 앱은 24번 등 v18 파생을 사용하며 v19 연필 스타일로 교체하지 않았습니다.":"구조·포즈와 v19 스타일 참조에서 제작한 검토 후보이며 자동 채택하지 않습니다."} 서명된 이모티콘 출시는 별도입니다.</Text>
  <p style={{color:theme.text.secondary}}>{data.isMaster?"MASTER":"후보"} 32종 · 현재 입 자동 검사 통과 {count}종 · 나머지는 재검토 · 제작 당시 재검토 이력 보존</p>
  <div style={{display:'flex',gap:8,flexWrap:'wrap',margin:'16px 0'}}>
  <Button onClick={()=>open(data.base+'/index.html')}>HTML 갤러리</Button><Button onClick={()=>open(data.base+'/README.md')}>제작·검수 안내</Button><Button onClick={()=>open(data.base+'/visual-review.json')}>검토 기록</Button>
