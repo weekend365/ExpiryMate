@@ -66,6 +66,40 @@ function prepareWorkletsSource(sourceDir, cacheDir, buildDir) {
   return reference;
 }
 
+// Some libraries ship a custom CMakeLists.txt that locates generated headers
+// relative to android/build. Give CMake an identical source tree with a build link
+// to Gradle's relocated output, without changing the installed package.
+function prepareCmakeSourceReference(sourceDir, cacheDir, buildDir) {
+  if (!existsSync(path.join(sourceDir, "android/src/main/jni/CMakeLists.txt")) ||
+      !existsSync(path.join(sourceDir, "common/cpp"))) {
+    throw new Error(`Source CMake layout changed: ${sourceDir}`);
+  }
+  const androidSource = path.join(sourceDir, "android/src");
+  const commonSource = path.join(sourceDir, "common");
+  const androidDigest = sourceDigest(androidSource);
+  const commonDigest = sourceDigest(commonSource);
+  const key = createHash("sha256").update(sourceDir).update(androidDigest).update(commonDigest).digest("hex");
+  const reference = path.join(cacheDir, `cmake-reference-${key}`);
+  if (reference.includes("=")) throw new Error("Native CMake reference path must not contain '='.");
+  const marker = path.join(reference, ".jango-source-sha256");
+  if (!existsSync(marker)) {
+    if (existsSync(reference)) throw new Error(`Incomplete native CMake cache: ${reference}`);
+    mkdirSync(path.join(reference, "android"), { recursive: true });
+    // CMake uses src/main/jni/../../../build. Directory symlinks would resolve
+    // '..' through the original package, bypassing the relocated build link.
+    cpSync(androidSource, path.join(reference, "android/src"), { recursive: true });
+    cpSync(commonSource, path.join(reference, "common"), { recursive: true });
+    writeFileSync(marker, `${key}\n`);
+  }
+  if (readFileSync(marker, "utf8").trim() !== key ||
+      sourceDigest(path.join(reference, "android/src")) !== androidDigest ||
+      sourceDigest(path.join(reference, "common")) !== commonDigest) {
+    throw new Error("Cached CMake source differs from the installed package; remove this cache before rebuilding.");
+  }
+  linkDependency(buildDir, path.join(reference, "android/build"));
+  return reference;
+}
+
 if (require.main === module) {
   const mobileDir = path.resolve(__dirname, "..");
   const sourceDir = path.dirname(require.resolve("react-native/package.json", { paths: [mobileDir] }));
@@ -85,4 +119,4 @@ if (require.main === module) {
   linkDependency(path.dirname(sourceDir), path.join(destination, "node_modules"));
   process.stdout.write(destination);
 }
-module.exports = { prepareSource, prepareWorkletsSource };
+module.exports = { prepareSource, prepareWorkletsSource, prepareCmakeSourceReference };

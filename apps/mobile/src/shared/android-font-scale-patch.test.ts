@@ -1,12 +1,14 @@
 import { createRequire } from "node:module";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, readlinkSync, realpathSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const require = createRequire(import.meta.url);
 const { insertFontScaleSourceBuild, insertModuleBuildDirectories, insertActivityConfig, configChangesForManifest } = require("../../plugins/with-android-font-scale-patch.js");
-const { prepareSource, prepareWorkletsSource } = require("../../scripts/prepare-android-font-scale-source.cjs");
+const { prepareSource, prepareWorkletsSource, prepareCmakeSourceReference } = require("../../scripts/prepare-android-font-scale-source.cjs");
+const { androidCodegenOverrides } = require("../../scripts/android-codegen-paths.cjs");
 
 describe("Android font-scale source build configuration", () => {
   it("preserves autolinking and unrelated application settings across repeated prebuilds", () => {
@@ -97,6 +99,90 @@ describe("Android font-scale source build configuration", () => {
       writeFileSync(join(build, "libworklets.so"), "compiled output");
       expect(readFileSync(join(reference, "Common/header.h"), "utf8")).toBe("installed header");
       expect(readFileSync(join(reference, "android/build/libworklets.so"), "utf8")).toBe("compiled output");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("resolves pnpm symlinks and relocates only generated JNI paths with '='", () => {
+    const root = mkdtempSync(join(tmpdir(), "jango-codegen-"));
+    const libraries = ["@react-native-async-storage/async-storage", "@react-native-community/datetimepicker",
+      "@sentry/react-native", "react-native-gesture-handler", "react-native-worklets",
+      "react-native-safe-area-context", "react-native-screens", "react-native-svg"];
+    try {
+      writeFileSync(join(root, "package.json"), "{}");
+      for (const [index, name] of libraries.entries()) {
+        const source = join(root, index === 0 ? "patched=async-storage" : `ordinary-${index}`);
+        mkdirSync(join(source, "android"), { recursive: true });
+        writeFileSync(join(source, "package.json"), JSON.stringify({ name }));
+        const link = join(root, "node_modules", name);
+        mkdirSync(dirname(link), { recursive: true });
+        symlinkSync(source, link, "dir");
+      }
+      const config = androidCodegenOverrides(root);
+      expect(Object.keys(config)).toEqual([libraries[0]]);
+      const androidDir = realpathSync(join(root, "node_modules", libraries[0], "android"));
+      expect(resolve(androidDir, config[libraries[0]].platforms.android.cmakeListsPath)).toBe(
+        join(root, "android/build/jango-font-scale/react-native-async-storage_async-storage/generated/source/codegen/jni/CMakeLists.txt"),
+      );
+      expect(config[libraries[0]].platforms.android).not.toHaveProperty("sourceDir");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("passes relocated paths through the installed Expo autolinker while preserving source CMake libraries", () => {
+    const mobileRoot = resolve(__dirname, "../..");
+    const mobileRequire = createRequire(join(mobileRoot, "package.json"));
+    const expoRequire = createRequire(mobileRequire.resolve("expo/package.json"));
+    const cli = join(dirname(expoRequire.resolve("expo-modules-autolinking/package.json")), "bin/expo-modules-autolinking.js");
+    const output = JSON.parse(execFileSync(process.execPath,
+      [cli, "react-native-config", "--json", "--platform", "android"], { cwd: mobileRoot, encoding: "utf8" }));
+    for (const [name, config] of Object.entries(androidCodegenOverrides(mobileRoot)) as [string, { platforms: { android: { cmakeListsPath: string } } }][]) {
+      const android = output.dependencies[name].platforms.android;
+      expect(android.cmakeListsPath).toBe(resolve(android.sourceDir, config.platforms.android.cmakeListsPath));
+      expect(android.libraryName).toBeTruthy();
+      expect(android.packageImportPath).toBeTruthy();
+    }
+    for (const name of ["react-native-safe-area-context", "react-native-screens", "react-native-svg"]) {
+      const android = output.dependencies[name].platforms.android;
+      const sourceCmake = join(android.sourceDir, "src/main/jni/CMakeLists.txt");
+      if (android.sourceDir.includes("=")) {
+        expect(readFileSync(android.cmakeListsPath)).toEqual(readFileSync(sourceCmake));
+        expect(readlinkSync(resolve(dirname(android.cmakeListsPath), "../../../build"))).toBe(
+          join(mobileRoot, "android/build/jango-font-scale", name),
+        );
+      } else {
+        expect(android.cmakeListsPath).toBe(sourceCmake);
+      }
+    }
+    const reanimated = output.dependencies["react-native-reanimated"].platforms.android;
+    expect(reanimated.cmakeListsPath).toBe(join(reanimated.sourceDir, "build/generated/source/codegen/jni/CMakeLists.txt"));
+  });
+
+  it("preserves source CMake bytes and connects its relative generated-header path without modifying the package", () => {
+    const root = mkdtempSync(join(tmpdir(), "jango-source-cmake-"));
+    try {
+      const source = join(root, "package=fixture");
+      mkdirSync(join(source, "android/src/main/jni"), { recursive: true });
+      mkdirSync(join(source, "common/cpp"), { recursive: true });
+      const cmake = "set(JNI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../build/generated/source/codegen/jni)\n";
+      writeFileSync(join(source, "android/src/main/jni/CMakeLists.txt"), cmake);
+      writeFileSync(join(source, "common/cpp/custom.cpp"), "custom native input");
+      const build = join(root, "relocated-build");
+      const reference = prepareCmakeSourceReference(source, join(root, "cache"), build);
+      expect(prepareCmakeSourceReference(source, join(root, "cache"), build)).toBe(reference);
+      mkdirSync(join(build, "generated/source/codegen/jni"), { recursive: true });
+      writeFileSync(join(build, "generated/source/codegen/jni/EventEmitters.h"), "generated header");
+      expect(readFileSync(join(reference, "android/src/main/jni/CMakeLists.txt"), "utf8")).toBe(cmake);
+      expect(readFileSync(join(reference, "common/cpp/custom.cpp"), "utf8")).toBe("custom native input");
+      expect(readFileSync(join(reference, "android/build/generated/source/codegen/jni/EventEmitters.h"), "utf8")).toBe("generated header");
+      // Keep '..' unnormalized, as in the library's actual CMakeLists.txt.
+      expect(readFileSync(`${reference}/android/src/main/jni/../../../build/generated/source/codegen/jni/EventEmitters.h`, "utf8")).toBe("generated header");
+      expect(existsSync(join(source, "android/build"))).toBe(false);
+      expect(() => prepareCmakeSourceReference(source, join(root, "bad=cache"), build)).toThrow("must not contain");
+      writeFileSync(join(reference, "common/cpp/custom.cpp"), "cache tampering");
+      expect(() => prepareCmakeSourceReference(source, join(root, "cache"), build)).toThrow("differs from the installed package");
     } finally {
       rmSync(root, { recursive: true, force: true });
     }

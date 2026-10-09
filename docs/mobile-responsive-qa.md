@@ -1,7 +1,7 @@
 ---
 status: active
 owner: mobile-design
-last_reviewed: 2026-10-08
+last_reviewed: 2026-10-09
 source_of_truth: true
 ---
 
@@ -130,6 +130,19 @@ Patched pnpm peer paths also affect normal Prefab builds. Their generated output
 directories are relocated in both modes; native inputs and source substitution
 remain controlled by the verification flag. Reanimated's Worklets reference
 follows the relocated output.
+
+The five libraries that use generated JNI (AsyncStorage, DateTimePicker,
+Sentry, Gesture Handler and Worklets) also need autolinking to reference those
+relocated outputs. `apps/mobile/react-native.config.js` supplies their supported
+`platforms.android.cmakeListsPath` overrides, relative to each Android source
+directory, only when its canonical path contains `=`. Libraries with source
+CMake files (Safe Area, Screens and SVG) use content-hashed, byte-identical source
+copies; their relative `android/build` symlink points to the relocated output.
+The source directories themselves are real copies so CMake's `../../../build`
+does not resolve back through a directory symlink to the installed package.
+Their installed CMake and C++ files are not rewritten. The source build
+flag remains off by default. See the
+[React Native CLI dependency configuration](https://github.com/react-native-community/cli/blob/main/docs/dependencies.md).
 
 Switching between source and published-AAR builds can leave Expo's incremental
 Kotlin outputs inconsistent. In this validation, the first normal build failed;
@@ -265,6 +278,56 @@ References: [Expo SDK 54 build properties](https://docs.expo.dev/versions/v54.0.
   APK/AAB에서 이메일·소셜 로그인 → 앱 재실행·세션 복원 → 토큰 갱신 → 로그아웃과
   초대 링크 로그인 복귀를 실기기로 확인한다. R8 재활성화는 같은 흐름의 최적화 빌드 검증과
   네이티브 실패 지점 확인 후 별도 변경으로 진행한다.
+
+### 2026-10-09 Android 개발 빌드 codegen 경로 수정
+
+- Android EAS `development` 빌드 두 건이 Gradle 단계에서 실패했다. 최신 빌드
+  `b4cc2053-11b9-4c05-a0d3-60b92d8c26f7`의 `configureCMakeDebug[arm64-v8a]` 로그에서
+  AsyncStorage·DateTimePicker·Sentry·Gesture Handler·Worklets의 JNI 경로 누락을 확인했다.
+  기존 플러그인이 pnpm `=` 경로를 피하려고 생성물을 Android 루트 build 아래로 옮겼지만,
+  autolinking은 의존성 내부의 기본 `android/build` 경로를 계속 참조한 것이 원인이다.
+- 생성된 Gradle·CMake 파일을 직접 수정하지 않고 React Native의 프로젝트 설정에서
+  해당 5개 참조를 실제 출력 경로에 연결한다. 깨끗한 Android Prebuild 후 누락됐던 5개
+  CMake 파일의 실제 생성과 앱 CMake 설정 단계 통과를 확인했다. 후속 C++ 컴파일에서
+  Safe Area의 생성 헤더 누락이 드러났고, 자체 CMake를 쓰는 Safe Area·Screens·SVG의 내부
+  상대 경로도 같은 출력 이동을 따라야 함을 확인했다. 원본 native 파일의 content-hashed
+  복사본과 relocated build symlink를 함께 제공해 원본 CMake·C++ 바이트를 보존한다.
+  소스 디렉터리를 symlink로 연결하면 `..`가 원본 패키지로 되돌아가므로 실제 복사본을 사용한다.
+  cache 바이트가 달라지면 빌드를 중단하며 설치된 의존성의 소스·기존 build 경로는 수정하지 않는다.
+- 설치된 Expo autolinker의 의존성 JSON 비교에서 이 8개 CMake 참조만 달라졌고 의존성
+  목록·소스 경로·패키지 등록 정보는 같았다. QA Prebuild가 선택한 별도 앱 식별자는 예상한
+  변경이다. 생성 경로·symlink·원본 보존과 실제 autolinker 통합을 다루는 관련 테스트는
+  9개 통과했다.
+- `pnpm docs:check`, `pnpm lint`, `pnpm typecheck`가 통과했다. 기존 동시 실행의 자원 경합을
+  피하고 같은 전체 테스트를 workspace 순차 실행·worker 2개로 확인했다. 장고 21개,
+  shared 163개, API 541개가 통과했고, 후속 헤더 경로 회귀 테스트를 포함한 mobile 전체
+  565개도 통과해 총 1,290개 통과, 기존 API opt-in 6개 생략이다. 기존 테스트의 내용·제한
+  시간·통과 기준은 바꾸지 않았으며 추가 수정 뒤 관련 native 설정 테스트 9개를 재검증했다.
+- 로컬 QA `assembleDebug`가 성공했다. APK는 Android 7 이상 ARM64용 약 101MiB이며,
+  `aapt`로 앱 이름 **장고 QA**, 패키지 `com.expirymate.mobile.crayonqa`, 버전 `1.4.2`를
+  확인했다. `apksigner`의 v2 서명 검증도 통과했다. APK의 React Native·Hermes 라이브러리가
+  published 0.81.5 debug AAR과 바이트 단위로 같아 source opt-in을 우회 활성화하지 않았음을
+  확인했다. APK SHA-256은
+  `364d82d5b3a3b5f87a58c7c7d0a38a460c1ea365f839c8689f5a6c980c360f58`이다.
+  USB 실기기 설치·큰 글자·TalkBack·캐러셀 검수는 별도 진행한다.
+- 검증용 앱은 `APP_VARIANT=development`의 **장고 QA**
+  (`com.expirymate.mobile.crayonqa`)다. 기존 앱과 별도 설치되며 버전·SDK·RN source opt-in,
+  인증·알림·광고·구독 정책과 화면 구성을 바꾸지 않는다. APK 빌드와 실기기 화면·TalkBack
+  검수 결과는 구분한다. 이 변경으로 production 릴리스 검수를 통과한 것으로 처리하지 않는다.
+
+```bash
+cd apps/mobile
+APP_VARIANT=development EXPO_PUBLIC_APP_ENV=development \
+  pnpm exec expo prebuild --clean --platform android --no-install
+pnpm branding:sync
+cd android
+ANDROID_HOME=/path/to/android-sdk ./gradlew :app:assembleDebug \
+  -PreactNativeArchitectures=arm64-v8a --max-workers=2
+```
+
+EAS로 설치 링크를 만들 때는 저장소에 수정 내용을 포함한 뒤 `apps/mobile`에서
+`pnpm dlx eas-cli@21.2.0 build --platform android --profile development`를 실행한다.
+폰에 APK 설치 후 같은 디렉터리에서 `pnpm dev:client:tunnel`을 실행하고 개발 서버에 연결한다.
 
 ## 2026-09-29 feature verification
 
