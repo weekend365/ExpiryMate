@@ -40,6 +40,15 @@ test('old style, unregistered input, missing references and hash changes are ref
  bad.master=rules.master;bad.mouthReferences['idle-u'].file='design/jango/missing.png';assert.throws(()=>validateReferences(bad),/reference mismatch/);
  assert.throws(()=>local('../outside.png'),/Canonical/);
 });
+test('SNS expression policy does not admit unsupported kinds or mouths into the emoticon gate',()=>{
+ const id=`sns-boundary-test-${process.pid}`;
+ try{
+  assert.throws(()=>prepare(id,entry(9).source,'SNS 반전 후보','idle-u','',null,{kind:'sns-cartoon'}),/Unknown candidate kind/);
+  assert.throws(()=>prepare(id,entry(9).source,'SNS 새 입 후보','custom-mouth','새 표현',expression),/Unknown mouth mode/);
+  assert(!fs.existsSync(local(`${quality}/jobs/${id}`)),'Unsupported preparation must not create a job');
+  assert(!fs.existsSync(local(`${quality}/candidates/${id}.json`)),'Unsupported preparation must not register a candidate');
+ }finally{clean(id);}
+});
 test('prepare keeps positional CLI, validates options and computes deduplicated actual indices',()=>{
  assert.deepEqual(parsePrepareArgs(['x',entry(1).source,'인사','speak-open','인사','--style=handdrawn-crayon','--kind','emoticon']).options,{styleProfile:'handdrawn-crayon',kind:'emoticon'});
  assert.throws(()=>parsePrepareArgs(['--unknown','x']),/Unknown/);

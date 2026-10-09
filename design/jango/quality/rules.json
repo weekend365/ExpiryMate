@@ -15,11 +15,11 @@
     "design/jango/reference/JANGO-STYLE-GUIDE.md"
   ],
   "invariants": {
-    "mouth": "입은 사전 지정한 네 모드만 사용: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 MASTER 선 색·두께 유지, 채움·혀 없음. 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지.",
-    "identity": "싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개. 좌우 반전 금지.",
-    "anatomy": "얼굴 비례·눈 간격은 BIBLE 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개.",
+    "mouth": "현행 이모티콘·스타일 참조 후보의 입 검수는 사전 지정한 네 모드만 지원: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 MASTER 선 색·두께 유지, 채움·혀 없음. 이 관문에서는 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지. SNS의 새 입은 BIBLE의 표현 확장과 별도 제작·검토 기록을 따르며 이 네 모드로 거짓 분류하지 않는다.",
+    "identity": "기본형 재현·앱 파생·현행 이모티콘 검수 기준: 싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개, 좌우 반전 없음. SNS 반전은 BIBLE에 따라 구조 변화·보정 여부를 별도 검토한다.",
+    "anatomy": "이 관문의 얼굴 비례·눈 간격은 BIBLE의 기본형 기준 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개. SNS의 의도한 비율·포즈·소품 변형은 이 관문의 자동 통과 대상이 아니다.",
     "style": "v18 24번이 형태·선·색·질감 대표다. 선택한 v18 동작 원화와 입 전용 참조를 역할별로 따른다. 신규 후보는 별도 사용자 채택 전까지 MASTER가 아니다.",
-    "exceptions": "감정·동작 요청을 규칙 예외로 해석하지 않는다. 명시적인 규칙 변경은 정본·검사·외부 검수 정책을 함께 검토한다.",
+    "exceptions": "기본형 재현·현행 이모티콘 검사에서 감정·동작 요청을 검사 예외로 해석하지 않는다. SNS는 BIBLE의 표현 확장을 적용하되 기존 임계값·입 모드·서명 관문을 완화하지 않고 별도로 준비·검토한다. SNS 채택은 MASTER 승격·앱 반영·서명된 이모티콘 출시가 아니다.",
     "master": "v18 32종이 유일한 MASTER. 대표 24번, 입 U 09·열린 입 01·중립 11·처진 입 17 참조."
   },
   "mouthScreen": {
@@ -96,7 +96,7 @@
   },
   "styleProfiles": {
     "handdrawn-crayon": {
-      "purpose": "모든 신규 장고 제작 기본 스타일",
+      "purpose": "현행 이모티콘·스타일 참조 후보의 기본형 제작·검수 스타일. SNS 표현 확장은 BIBLE과 별도 제작·검토 기록을 따른다.",
       "documents": [
         "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
         "design/jango/reference/JANGO-STYLE-GUIDE.md"

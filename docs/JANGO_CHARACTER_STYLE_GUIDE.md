@@ -1,7 +1,7 @@
 ---
 status: active
 owner: design
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-09
 source_of_truth: true
 ---
 
@@ -27,6 +27,10 @@ source_of_truth: true
 ## 생성과 검사
 
 [준비·검수](../design/jango/quality/README.md)를 따른다. 실제 참조와 파일 해시를 기록하고 MASTER의 이미지 바이트는 보존한다.
+
+SNS 카툰은 BIBLE의 「SNS 카툰의 표현 확장」을 따른다. 표정·입·포즈·소품·의상·비율 과장·좌우 반전·색 변형은 별도 후보로 검토·보정하고 사용자가 채택한 범위에서 재사용한다. 기본 입 네 모드는 SNS 표현의 절대 상한이 아니다. SNS 채택을 앱 에셋 교체나 서명된 이모티콘 출시로 해석하지 않으며, 위 앱 파생 기준과 기존 앱 말풍선 스타일은 유지한다.
+
+아래 명령은 앱·브랜딩 파생용이며 SNS 후보의 채택·출력 명령이 아니다.
 
 ```sh
 pnpm --filter @expirymate/shared build

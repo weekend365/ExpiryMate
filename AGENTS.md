@@ -61,10 +61,13 @@
 - 장고의 유일한 제작 기준은 [v18 MASTER 32종](design/jango/master-set.json)과
   [BIBLE](design/jango/reference/JANGO-CHARACTER-BIBLE.md)·[STYLE GUIDE](design/jango/reference/JANGO-STYLE-GUIDE.md)다.
   대표 컷은 24번이며 앱 기본·아이콘·스플래시도 여기서 파생한다. 선택된 MASTER 이미지 바이트는 보존한다.
-  제작·수정 전에 [검수 안내](design/jango/quality/README.md)에 따라 `jango:prepare`를 실행하고
-  실제 MASTER·동작·입 참조를 첨부한다. 등록되지 않은 과거 이미지나 다른 스타일을 사용하지 않는다.
-  새 결과는 별도 후보로 기록한다. 사용자 MASTER 채택·앱 사용 허용과 서명된 이모티콘 출시는 구분한다.
-  불확실한 측정을 통과로 처리하지 않고, 최종 출력은 `jango:promote`·`jango:export`를 사용한다.
+  제작·수정 전 [검수 안내](design/jango/quality/README.md)의 매체별 준비와 실제 참조·해시 기록을
+  따른다. 현행 이모티콘·스타일 참조 후보는 `jango:prepare`를 사용한다. SNS 카툰은 BIBLE의
+  표현 확장에 따라 표정·입·포즈·소품·의상·비율·반전·색 변형을 별도 후보로 제작하고
+  구조·질감·캐릭터 인지를 검토·보정한 뒤 사용자의 SNS 채택 범위에서 재사용한다.
+  등록되지 않은 과거 이미지나 다른 스타일을 참조하지 않으며 채택 파생본도 MASTER까지 계보를 남긴다.
+  사용자 MASTER 채택·앱 사용 허용·SNS 채택·서명된 이모티콘 출시는 구분한다.
+  불확실한 측정을 통과로 처리하지 않고, 이모티콘 최종 출력은 `jango:promote`·`jango:export`를 사용한다.
   에이전트는 검수 서명을 만들거나 통과를 위해 ROI·수치·신뢰 키를 변경하지 않는다.
 - Admin은 `apps/admin/app`에 route, `apps/admin/src/features`에 feature UI,
   `apps/admin/src/components`에 재사용 UI를 둔다. 기존 CSS variable과 Tailwind 패턴을 따른다.

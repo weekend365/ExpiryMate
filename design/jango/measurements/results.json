@@ -3,7 +3,7 @@
   "method": "v18-master-observation-v1",
   "inputSha256": "c1492aab5d71ace2c9016a77d9d41927061b132dda9f311dd16f478a1ade4923",
   "implementationSha256": "389136f37223dd5bfa9b9d1ae3bc09f0b87a6b195727b3e2275db57e4ccfde5a",
-  "bibleSha256": "3b893fe3224c354054a5cdb40acd592fb93fe9dfe6eca7a7a312260ff1253771",
+  "bibleSha256": "9c2f9d7cabeabc25bb1bb23cb9555b839337fbb50f1186a76530d03990f86203",
   "status": "master artifact integrity; not full anatomy approval",
   "poses": [
     {

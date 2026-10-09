@@ -1,6 +1,6 @@
 {
   "id": "v18-23",
-  "binding": "0ef05f9cf267b45e00659b12eb03b5cf366e734515ed7dc4d109aed0b31f7e83",
+  "binding": "e8f7a87ed0a2b6ccad0b651d2ad5cf8a80ef5f3b60370d9b5bfa624a298844c4",
   "candidate": {
     "id": "v18-23",
     "kind": "emoticon",
@@ -22,7 +22,7 @@
   },
   "context": {
     "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
-    "rules": "a335acfa8ca5a08cf5518c35062ab7b24d61890535b1b1fa4de1d9f4adc1ad57",
+    "rules": "142b8fcd8acf53290ec7f4bbbd9682ee2a5d1ede92c6e62d8d0d31b6d8644b40",
     "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
     "implementation": "c359a4f6dbc733455b4a8e34883d4091be0e7eb8073b9a79364c253b83096d17",
     "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
@@ -42,8 +42,8 @@
       "design/jango/master-set.json": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
     },
     "documents": {
-      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "3b893fe3224c354054a5cdb40acd592fb93fe9dfe6eca7a7a312260ff1253771",
-      "design/jango/reference/JANGO-STYLE-GUIDE.md": "5768902f8e77748a5f02b58bedf5c4305ecc44258c5ce8c0c1f1f3fa86f04aeb"
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "9c2f9d7cabeabc25bb1bb23cb9555b839337fbb50f1186a76530d03990f86203",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "fdb2dbd1256bb91c2a9590fe0e53c2d3c6977b0f2dd2f4910bd170a49a6ec50a"
     }
   },
   "assets": {
