@@ -61,7 +61,7 @@ pnpm -r --workspace-concurrency=1 --if-present run test --maxWorkers=2
 
 Android 네이티브 fixture 번들도 컴파일했고 API·Query 영속화·등록 store가 포함되지 않는 것을
 source map으로 확인했다. 개발 서버 8096과 manifest adapter 8097을 시작해 manifest 응답과
-fixture 진입 URL을 확인했다. 사용자는 Android 검수 기기를 준비 중이며 네이티브 캡처,
+fixture 진입 URL을 확인했다. 아래 기록처럼 Android 기기 설치까지 완료했으며 네이티브 캡처,
 VoiceOver/TalkBack·터치·캐러셀·실제 화면의 전체 반응형 검증은 대기 중이다.
 
 ## 로컬 재현
@@ -89,9 +89,20 @@ USB로 연결한 전용 Android 검수 기기에 `adb reverse tcp:8096 tcp:8096`
 바꿔 크기·화면 읽기·버튼·캐러셀·동작 줄이기를 확인한다. 로컬 예시 검수와 실제 화면 검수는
 별도로 기록한다.
 
-장고 QA APK는 [EAS development profile](../../../apps/mobile/eas.json)로 만든다.
-`pnpm dlx eas-cli@21.2.0 build --platform android --profile development`의 결과 링크를 폰에서
-열어 설치한다. 개발 앱 ID는 `com.expirymate.mobile.crayonqa`다. 기존 로컬 debug APK는
-`com.expirymate.mobile`이므로 일반 앱과 충돌할 수 있어 이 안내에서 배포하지 않는다.
-APK 빌드·배포 및 기기 설치는 이 후속 작업에서 실행하지 않았다.
+2026-10-09 Android JNI 생성 경로 오류를 수정한 `cdd9f9a`로 로컬 **장고 QA** APK를 만들었다.
+기존 일반 앱용 APK 대신 `APP_VARIANT=development`로 깨끗한 Android Prebuild를 수행했다.
+`apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk`는 현재 별도 개발 앱 ID
+`com.expirymate.mobile.crayonqa`, 버전 `1.4.2`, Android 7 이상 ARM64용이다. 앱 이름·패키지·
+ABI와 v2 서명을 확인했으며, RN·Hermes 라이브러리가 published debug AAR과 같았다.
+빌드 원인·수정·검증은 [Android 검증 기록](../../../docs/mobile-responsive-qa.md)에 있고
+APK 해시는 [manifest.json](./manifest.json)의 `nativeDevelopmentApk`에 기록한다.
+
+사용자는 USB 설치를 선택했고, **갤럭시 A34 (SM-A346N), SDK 36, ARM64**의 디버깅 연결을
+허용했다. `adb install -r`가 `Success`로 완료됐으며 설치된 별도 QA 패키지의 버전 `1.4.2`를
+확인했다. USB 8096·8097 연결과 QA fixture manifest HTTP 200도 확인했다. 네이티브 화면·
+큰 글자·TalkBack·터치·캐러셀 검수는 아직 대기 중이며 설치 성공을 검수 통과로 처리하지 않는다.
+외부 배포와 새 EAS 빌드는 실행하지 않았다.
+
+다운로드 링크가 필요할 때는 [EAS development profile](../../../apps/mobile/eas.json)의
+`pnpm dlx eas-cli@21.2.0 build --platform android --profile development`를 사용한다.
 APK 다운로드·설치 절차는 [Expo 공식 안내](https://docs.expo.dev/build-reference/apk/)를 따른다.

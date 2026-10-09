@@ -1,6 +1,6 @@
 {
   "status": "implemented-browser-reviewed-pending-native-qa",
-  "updatedAt": "2026-10-09T14:04:45+09:00",
+  "updatedAt": "2026-10-09",
   "baselineCommit": "c057084",
   "authorization": "지금까지의 변경사항 커밋해주고 우선 순위에 맞게 작업 진행해.",
   "applicationSourceApplied": true,
@@ -82,7 +82,9 @@
       "Jango suite and all workspace suites passed; no tests, thresholds or timeout limits modified"
     ],
     "browserActions": "empty add, large-text completion, recommendation: each callback once; horizontal carousel reached second page and returned",
-    "browserCarouselLimit": "RN Web adapter horizontal scroll works, but native onMomentumScrollEnd indicator/ordinal does not update; native verification remains pending"
+    "browserCarouselLimit": "RN Web adapter horizontal scroll works, but native onMomentumScrollEnd indicator/ordinal does not update; native verification remains pending",
+    "androidDevelopmentApk": "passed; local ARM64 QA identity and APK v2 signature verified; published RN/Hermes AAR bytes preserved; not device QA",
+    "androidDeviceInstallation": "passed; Galaxy A34 SDK 36 ARM64; separate QA package version 1.4.2; not rendered-device QA"
   },
   "review": {
     "method": "real presentation components and product notice selectors with synthetic data; browser/native fixtures; no runtime route",
@@ -635,11 +637,74 @@
     },
     {
       "file": "design/reviews/jango-crayon-followup-v1/README.md",
-      "sha256": "0992e39857160bccd07f1671304e7ce7173f30f8b0e95042f2a14b46fe32e86f"
+      "sha256": "a178b5dac0056036db51c583b1eab0b698d297fe2623a09e35e7681d50c60d09"
     }
   ],
   "nativeFixtureOutput": {
     "bytes": 12772974,
     "sha256": "a66d3f1ee8487e9ef4744684c957dba534a2dad4fc0ac6c143d99b9e16bee82e"
+  },
+  "nativeDevelopmentApk": {
+    "status": "installed-pending-native-qa",
+    "sourceCommit": "cdd9f9aca6c6e0b66a826721a89718d9d375939d",
+    "appName": "장고 QA",
+    "package": "com.expirymate.mobile.crayonqa",
+    "versionName": "1.4.2",
+    "minSdk": 24,
+    "abi": "arm64-v8a",
+    "file": "apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 105622529,
+    "sha256": "364d82d5b3a3b5f87a58c7c7d0a38a460c1ea365f839c8689f5a6c980c360f58",
+    "signatureV2Verified": true,
+    "publishedNativeLibraryBytes": {
+      "libreactnative.so": {
+        "matchesPublishedAar": true,
+        "sha256": "45219e87365683805eca7c1a67e7a8528636ffed9cb20a04b1312befdca7ec72"
+      },
+      "libhermes.so": {
+        "matchesPublishedAar": true,
+        "sha256": "de9ec8dc062f6cb755b879802f5696ca540f6ea3dddd32245a960119d68b8daa"
+      }
+    },
+    "fontScaleSourceBuildEnabled": false,
+    "deviceInstalled": true,
+    "nativeBuildSourceHashes": [
+      {
+        "file": "apps/mobile/react-native.config.js",
+        "sha256": "b5e4ab2c525c358fa69287677dc95e14c6f66c6491e1b4b386612285cec732f5"
+      },
+      {
+        "file": "apps/mobile/scripts/android-codegen-paths.cjs",
+        "sha256": "7515031ff6e5ea40287cd80728fc47bf5ba40be1296b082a75a7fd49aff74b66"
+      },
+      {
+        "file": "apps/mobile/scripts/prepare-android-font-scale-source.cjs",
+        "sha256": "87069c1509d126197f6994a3814f6edc90c9ecb8971a76f209c92e7e47abd21c"
+      },
+      {
+        "file": "apps/mobile/src/shared/android-font-scale-patch.test.ts",
+        "sha256": "a61214a5384470e8e520e2732f6b5b1c13f7401d27e6afdb0172c06113a6e888"
+      },
+      {
+        "file": "docs/mobile-responsive-qa.md",
+        "sha256": "dc64a0116b7d33c0881c4758c7d86f7849496afec0bfb0eb95c6925ff7257eef"
+      }
+    ],
+    "installation": {
+      "model": "Samsung Galaxy A34 (SM-A346N)",
+      "sdk": 36,
+      "abi": "arm64-v8a",
+      "method": "USB adb install -r",
+      "result": "Success",
+      "installedVersionName": "1.4.2",
+      "installedPackage": "com.expirymate.mobile.crayonqa",
+      "qaServerPorts": [
+        8096,
+        8097
+      ],
+      "manifestHttpStatus": 200,
+      "runtimeRouteOpened": false,
+      "nativeUiInspected": false
+    }
   }
 }
