@@ -1,0 +1,17 @@
+Use case: style-transfer, precise local character retouch.
+Edit the attached approved comic scene. Change ONLY the drawing treatment of Jango, the mint-and-ivory refrigerator mascot at lower-left/center. Keep the adult woman, her face/hair/clothes/hands/phone, the entire kitchen/fridge/food/table/floor, the tofu tray, composition, lighting, camera, dimensions, the two empty speech balloons and their exact silhouettes unchanged. This is a localized style correction, not a new scene. The woman and kitchen are the style authority.
+
+What to match from the existing pixels:
+The woman and kitchen have warm brown colored-pencil contours, varied fine strokes, layered pencil hatching, textured midtones, softly accumulated ochre shadows and visible paper tooth. Jango currently has much heavier uniform dark charcoal contours, brighter flatter ivory, saturated mint blocks and a separate crayon-sticker appearance. Integrate Jango into the surrounding pencil illustration.
+
+Change on Jango only:
+- Redraw his contours as warm umber/brown pencil with finer, more varied line pressure and slightly sketchy grain, about one-third less visual weight than the existing heavy contour. Do not simply blur or lower opacity.
+- Replace the flat bright ivory of the chef hat, face door and apron with softly layered cream/ochre pencil shading and visible paper texture like the woman's sweater. Maintain clear light/dark structure, with restrained warm ambient reflected color in folds and at overlaps.
+- Keep recognizably mint clothing, handle, hat band, mittens, pocket and shoes, but make the mint quieter and more naturally layered, harmonizing with the woman's sage-green clothing and warm wooden room. Use subtle pencil shadows/hatching rather than a flat neon mint fill.
+- Reduce the sticker-like edge contrast while keeping the face readable at phone size. Eye/mouth marks remain dark simple shapes, not human eyes.
+- The character should look drawn by the SAME illustrator with the SAME pencils on the SAME paper as the woman and background. Favor the woman's/background's actual style over preserving the old mascot crayon style.
+
+Strict invariants:
+Same exact Jango position, scale, silhouette, pose, head tilt, eye/mouth positions and happy speaking expression. Same refrigerator-door face, viewer-left handle and pineapple, viewer-right two hinges, five-volume chef hat with mint band, short apron and mint pocket, cuffed one-thumb oven mitts, feet. Keep both hands supporting the SAME unchanged tofu tray at the SAME coordinates. No extra fingers, pupils, shine, nose, neck, ears, logos, objects or folds that redesign him. Do not move Jango, resize his head, change his proportions, turn him into a human, or change the story.
+Do not retouch or regenerate ANY non-Jango content. In particular preserve the woman and all background strokes, and do not alter the balloons or introduce lettering. The balloons are deliberately blank; the exact existing Korean text will be restored as a separate original layer. No new text, titles, watermark or branding.
+Return the complete full scene at the same portrait aspect ratio. One candidate only.

@@ -45,6 +45,7 @@ source_of_truth: true
 | [모바일 크레파스 포인트 적용 계획안](./product/mobile-crayon-point-plan.md) | 홈 카드·첫 등록·저장 완료의 선택적 장식 구현과 단계별 확대·검증 계획 | mobile-design | Draft |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v19 공통 MASTER·v18 포즈 참조·앱 마이그레이션 경계 | design | Yes |
+| [장고 SNS 카툰 제작 기준](../design/jango/reference/SNS-CARTOON-GUIDE.md) | 승인 v6·장면 통합·연출·한글/360px 검수·기능 표현·회차별 채택 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |
 | [수익화 운영 기준](./monetization.md) | 광고·파트너스 정책과 QA | product | Yes |
 

@@ -1,0 +1,175 @@
+{
+  "id": "jango-sns-ep01-v19-review-v6",
+  "status": "candidate-awaiting-user-review",
+  "format": {
+    "width": 1122,
+    "height": 1402
+  },
+  "fonts": [
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Regular.ttf",
+    "apps/mobile/assets/fonts/Pretendard-SemiBold.otf",
+    "apps/mobile/assets/fonts/Pretendard-Regular.otf"
+  ],
+  "panels": [
+    {
+      "number": 1,
+      "output": "jango-ep01-v6-01.png",
+      "preservedFile": "../jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "texts": []
+    },
+    {
+      "number": 2,
+      "output": "jango-ep01-v6-02.png",
+      "preservedFile": "../jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "texts": []
+    },
+    {
+      "number": 3,
+      "output": "jango-ep01-v6-03.png",
+      "artwork": "artwork/03-r2.png",
+      "texts": [
+        {
+          "lines": [
+            "등록한 재료로 추천해 줬네.",
+            "오늘은 두부달걀부침!"
+          ],
+          "box": [
+            185,
+            100,
+            800,
+            185
+          ],
+          "size": 68,
+          "lineHeight": 82,
+          "speaker": "woman"
+        },
+        {
+          "lines": [
+            "두부달걀",
+            "부침"
+          ],
+          "box": [
+            402,
+            797,
+            216,
+            119
+          ],
+          "size": 47,
+          "lineHeight": 56,
+          "font": "Pretendard-SemiBold",
+          "speaker": "verified-ui-example"
+        },
+        {
+          "lines": [
+            "사용할 재료"
+          ],
+          "box": [
+            397,
+            948,
+            209,
+            45
+          ],
+          "size": 30,
+          "lineHeight": 36,
+          "font": "Pretendard-SemiBold",
+          "speaker": "verified-ui-label"
+        },
+        {
+          "lines": [
+            "두부 · D-1",
+            "달걀 · 대파"
+          ],
+          "box": [
+            390,
+            1004,
+            220,
+            94
+          ],
+          "size": 34,
+          "lineHeight": 46,
+          "font": "Pretendard-Regular",
+          "speaker": "illustrative-ingredient-data"
+        },
+        {
+          "lines": [
+            "이 요리 시작"
+          ],
+          "box": [
+            387,
+            1127,
+            193,
+            47
+          ],
+          "size": 34,
+          "lineHeight": 40,
+          "font": "Pretendard-SemiBold",
+          "color": [
+            0.1,
+            0.3,
+            0.23
+          ],
+          "speaker": "actual-ui-action"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "output": "jango-ep01-v6-04.png",
+      "artwork": "artwork/04-r1.png",
+      "texts": [
+        {
+          "lines": [
+            "오늘 저녁은",
+            "냉장고 안에 있었네."
+          ],
+          "box": [
+            175,
+            102,
+            755,
+            194
+          ],
+          "size": 78,
+          "lineHeight": 90,
+          "speaker": "woman"
+        },
+        {
+          "lines": [
+            "장고야 부탁해"
+          ],
+          "box": [
+            120,
+            1236,
+            882,
+            90
+          ],
+          "size": 80,
+          "lineHeight": 88,
+          "speaker": "brand",
+          "color": [
+            0.14,
+            0.35,
+            0.28
+          ]
+        },
+        {
+          "lines": [
+            "내 재료로 오늘 메뉴 찾기"
+          ],
+          "box": [
+            120,
+            1331,
+            882,
+            63
+          ],
+          "size": 54,
+          "lineHeight": 60,
+          "speaker": "single-benefit-action"
+        }
+      ]
+    }
+  ],
+  "screenDisclosure": "Panel 3 simplifies a real recipe detail feature. Dish and dates are illustrative, not an actual recommendation capture."
+}

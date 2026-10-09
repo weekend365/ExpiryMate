@@ -1,0 +1,130 @@
+{
+  "id": "jango-sns-ep01-v19-review-v6",
+  "preparedAt": "2026-10-09T10:11:06.124773+00:00",
+  "medium": "SNS cartoon",
+  "status": "prepared-before-generation",
+  "authorization": "Parent delegation: improve panels 3/4; preserve approved panels 1/2; Mac task authorization restored at 2026-10-09 10:07 UTC.",
+  "scope": "New scenes 3/4 and separate Korean lettering. No runtime, rules, emoticons, commit, push, posting.",
+  "canonicalRules": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "8adcfa62357bfa5b02f92c9969fb93e42372367d286d16063202dbd48c0b8eef"
+    },
+    {
+      "file": "design/jango/style-master.json",
+      "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+    },
+    {
+      "file": "design/jango/masters/v19/master.json",
+      "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04"
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "f293f9a2f549ff2ecf33c65518515b1742ef15ec98abcbf5edd12c2b77501906"
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "d650b62520ca29688e27bb8d09f64fbcedd53f5d2e672ecaa0e521d5e9251607"
+    },
+    {
+      "file": "design/jango/quality/README.md",
+      "sha256": "eb9afbad560db26bcc464206f705e5d21cf72a700252e01cebfeba401365a2ba"
+    }
+  ],
+  "preservedPanels": [
+    {
+      "panel": 1,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec"
+    },
+    {
+      "panel": 2,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    }
+  ],
+  "panels": [
+    {
+      "number": 3,
+      "references": [
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+          "sha256": "7a114c4aa734ea8c923826f9feba6550a248d62e0d5a51691e6e10c3edfaaec7",
+          "role": "edit target: original human/kitchen episode identity",
+          "imageIndex": 1
+        },
+        {
+          "file": "design/jango/masters/v19/master-scene.png",
+          "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+          "role": "v19 style and character identity",
+          "imageIndex": 2
+        },
+        {
+          "file": "design/reviews/tab-backgrounds-crayon-v1/after/recommendations-scrolled.png",
+          "sha256": "583b4594e23cf0f2bff4f706d32c8b20eeb268bf2c1b3a3f70219a1c1cbfecd4",
+          "role": "actual recorded app UI visual reference; fictional dish not copied",
+          "imageIndex": 3
+        }
+      ],
+      "prompt": {
+        "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r1.txt",
+        "sha256": "f8f63ab3f37a06f53faf4b500f706154c6287ae07446c49065a6f117667cc741"
+      },
+      "action": "choose recommended recipe on phone, not cook",
+      "expression": "small happy idle-u; whole mitten points toward phone"
+    },
+    {
+      "number": 4,
+      "references": [
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+          "sha256": "db873ecb64c4d5438199ea33a433f416501f45901a999272ecd9b9e1125b5f3d",
+          "role": "edit target: dinner narrative and human identity",
+          "imageIndex": 1
+        },
+        {
+          "file": "design/jango/masters/v19/master-scene.png",
+          "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+          "role": "v19 style and character identity",
+          "imageIndex": 2
+        }
+      ],
+      "prompt": {
+        "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/04-r1.txt",
+        "sha256": "0e85fb269c611e2081c10550b909d3770e6d687078c46077287bc072ee312218"
+      },
+      "action": "enjoy chosen meal; existing mitten thumb gesture",
+      "expression": "happy closed eyes and small idle-u"
+    }
+  ],
+  "lineageRecords": [
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/preparation.json",
+      "sha256": "2fa3c48e3cf9c7abad16530ead47148cdff4cad5532e3c5b6ac752e425e50e8b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/production-record.json",
+      "sha256": "7092dfde24615068ffbf05a5ec6de443f64bc68b7a8fab87469d764a3d73af67"
+    }
+  ],
+  "uiEvidence": [
+    {
+      "file": "apps/mobile/app/(tabs)/recommendations.tsx",
+      "sha256": "6d7ea2a5b9fd624cbef25d99ef7e7ac32e2b9a60be5cfb00513379e6d2d5a55c"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx",
+      "sha256": "5805ba32710983b2c672ea4218482be6ad5a638b9f518e13e14143363695ca22"
+    },
+    {
+      "file": "apps/api/src/modules/recipes/recipes.service.ts",
+      "sha256": "9881300acd872e148bd6b3422129323e57e127d6397b1b07a4549030a6a2f758"
+    }
+  ],
+  "uiDepiction": "Simplified illustrated recipe detail, not literal screenshot; using verified title, ingredients, expiry label and 이 요리 시작 action. Dish is narrative example.",
+  "userAdoptionOfNewPanels": null
+}

@@ -1,0 +1,56 @@
+{
+  "outputs": [
+    {
+      "panel": 1,
+      "file": "jango-ep01-v3-01.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "7f1f07092bacc956901716dbae1eab43e8f280dd0820ee4fd6f01e85e8216dfa",
+      "bytes": 3307640,
+      "approvedPanelPreserved": false
+    },
+    {
+      "panel": 2,
+      "file": "jango-ep01-v3-02.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "c370eeb90f6ea08ae07f5dab510230ba5bb8ffb81a6ca1da1d24f6260a9032fb",
+      "bytes": 3428258,
+      "approvedPanelPreserved": true
+    },
+    {
+      "panel": 3,
+      "file": "jango-ep01-v3-03.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "3455964aea6b716b978f6d153be93effffa8a73a857ae117e6bcf26e5854d3eb",
+      "bytes": 3349852,
+      "approvedPanelPreserved": false
+    },
+    {
+      "panel": 4,
+      "file": "jango-ep01-v3-04.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "22730e9868864286ba811183b4a84cbc621538b8bb27a98ba88737bfb40c5f20",
+      "bytes": 3235746,
+      "approvedPanelPreserved": false
+    }
+  ],
+  "overview": {
+    "file": "jango-ep01-v3-overview.png",
+    "width": 1182,
+    "height": 1462,
+    "sha256": "a3ee174c5a63c01e5c94b38e876ab883faaf9e9d8e452956d9feca1409493ac0"
+  },
+  "mobile": {
+    "file": "review-mobile-360.png",
+    "width": 744,
+    "height": 924,
+    "sha256": "2a808ed19e90c7a34ef217cc777b6108ae8e751242d25ec77241de778d6fb770"
+  },
+  "masterAssetsVerified": 237,
+  "typography": "typography-report.json",
+  "approvedPanel2BytePreservation": "pass",
+  "networkRequired": false
+}

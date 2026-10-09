@@ -1,0 +1,76 @@
+{
+  "format": {
+    "width": 1122,
+    "height": 1402
+  },
+  "masterVersion": "v19",
+  "masterSHA256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+  "approvedPanel2BytePreservation": true,
+  "outputs": [
+    {
+      "panel": 1,
+      "file": "jango-ep01-v5-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "generatedSource": "artwork/01-style-r1.png",
+      "generatedSourceSHA256": "f49faafae19d06e22d88c00a519a9fc137d4603beb55a51cc7a0c2ecff8eec79",
+      "mask": "masks/01.png",
+      "maskSHA256": "bfbb50bd12e5ddde9fabe6c5c1f447f89a99d6699347061877bfb47ff7d7b5b2",
+      "maskPixels": 145641,
+      "changedPixels": 145601,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    },
+    {
+      "panel": 2,
+      "file": "jango-ep01-v5-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "approvedBytesPreserved": true
+    },
+    {
+      "panel": 3,
+      "file": "jango-ep01-v5-03.png",
+      "sha256": "7a114c4aa734ea8c923826f9feba6550a248d62e0d5a51691e6e10c3edfaaec7",
+      "generatedSource": "artwork/03-style-r1.png",
+      "generatedSourceSHA256": "23796ee6f2b194988a1f1d5bac2a9ab01425abba0e4bb527e254b0dd7579193f",
+      "mask": "masks/03.png",
+      "maskSHA256": "c80811dfbdacff4a789b7bbc3942792483a2c1428e13027657e2f1f41128f30b",
+      "maskPixels": 242626,
+      "changedPixels": 242601,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    },
+    {
+      "panel": 4,
+      "file": "jango-ep01-v5-04.png",
+      "sha256": "db873ecb64c4d5438199ea33a433f416501f45901a999272ecd9b9e1125b5f3d",
+      "generatedSource": "artwork/04-style-r1.png",
+      "generatedSourceSHA256": "b229916faecc102ba451bc1b5a7056c8cd304011d57f8b3af8e66495912781fb",
+      "mask": "masks/04.png",
+      "maskSHA256": "4c32ed99242012884a2d7fedd373e067e00574737c414198fc16f2b2ea82119a",
+      "maskPixels": 243130,
+      "changedPixels": 243121,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    }
+  ],
+  "overview": {
+    "file": "jango-ep01-v5-overview.png",
+    "width": 1182,
+    "height": 1462,
+    "sha256": "4c7bc62b184cdac0c31a686f0ed46a02cf4e11edd4e7d279efe2873328856edc"
+  },
+  "mobile": {
+    "file": "review-mobile-360.png",
+    "width": 756,
+    "height": 936,
+    "sha256": "6e5da4218e4e18b14fd02219d3ae41aa6d3f0946267c2753c2c42434816845ed"
+  },
+  "legacyAssetsVerified": 237,
+  "inputHashesPreserved": true,
+  "originalLetteringPreserved": true,
+  "composition": "Original finished panel plus official generated pixels inside reviewed Jango edit boundary. Text and non-target scene outside boundary preserved exactly; boundary visual review required.",
+  "userAdoption": null
+}

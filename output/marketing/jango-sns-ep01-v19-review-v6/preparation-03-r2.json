@@ -1,0 +1,18 @@
+{
+  "preparedAt": "2026-10-09T10:12:59.076175+00:00",
+  "panel": 3,
+  "iteration": 2,
+  "reason": "Phone too small; generated skeleton photo card inconsistent with verified text-only recipe detail. Enlarge phone, clear screen, keep scene.",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "generated_images/exec-09001118-32b6-49ee-86c8-8b7c7e9bcdd6.png",
+      "sha256": "e8f9079f88cab5ad9373e4e4d75eda84a0b2fff7294455c339ae4b3b744dcc8f",
+      "role": "edit-target generated candidate 03-r1 with recorded v19 lineage"
+    }
+  ],
+  "prompt": {
+    "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r2.txt",
+    "sha256": "63113ada32786bacfb00704854ce619d7e16f93859c7fd1eee1b277cae6d0a7a"
+  }
+}

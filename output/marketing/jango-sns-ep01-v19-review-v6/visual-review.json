@@ -1,0 +1,39 @@
+{
+  "reviewedAt": "2026-10-09T10:17:54.560183+00:00",
+  "method": "Direct visual inspection of both final 1122x1402 panels, 1182x1462 overview and each-panel-360px review sheet. Automated hash and glyph bounds checks.",
+  "panels1And2": "Byte-identical to approved v5; first dialogue unchanged.",
+  "panel3": {
+    "story": "Woman checks a tofu-and-egg recommendation and touches the verified 이 요리 시작 action before cooking. No stove/pan/spatula or ingredient prop clutter.",
+    "mobile": "Dialogue and dish name readable. Phone microcopy is secondary and smaller (approximately 10–15px at panel width 360); do not use the 2x2 overview as the primary mobile post.",
+    "anatomy": "Left hand grips phone; four fingertips and thumb connect; right index taps the button with remaining fingers curled. Jango has two mittens, one points as a whole mitten, the other rests on counter.",
+    "character": "Left handle/pineapple, two right hinges, cream hat, muted mint, U smile, integrated pencil texture. Close framing slightly meets the right hat edge; recorded as intentional close-up, not full-body reference.",
+    "ui": "Illustrated simplification based on actual screenshot and current recipe detail source; real labels 사용할 재료/이 요리 시작 and D-1 semantics verified. No QR, link, scanning, purchase, guarantee, or fabricated app feature."
+  },
+  "panel4": {
+    "story": "Dinner payoff with woman eating and Jango using one existing mitten thumb; pose differs from panel 3.",
+    "mobile": "Brand at nominal 25.7px, action line at 17.3px when scaled to 360px. Readable without relying on caption.",
+    "anatomy": "Two Jango arms/mittens; woman fork/hand and meal contact visually coherent. No extra fingers on mascot.",
+    "continuity": "Same woman, sweater, bun, tofu/egg/scallion meal and warm kitchen. Supporting bowl and face-down phone only."
+  },
+  "korean": "Exact typed Korean; all measured boxes fit; manually inspected final glyphs and line breaks.",
+  "featureEvidence": [
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx",
+      "supports": "recipe title, 사용할 재료, ingredient expiry and 이 요리 시작"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail.ts",
+      "supports": "D-1 display for one day remaining"
+    },
+    {
+      "file": "apps/api/src/modules/recipes/recipes.service.ts",
+      "supports": "stored ingredient recommendations and opt-in/default expiring-first strategy"
+    }
+  ],
+  "limitations": [
+    "Screen is an illustrated, simplified narrative example, not a pixel-faithful live app capture; disclosed in caption.",
+    "Approved panels 1 and 2 were frozen, so their existing relative-size difference was intentionally not revised.",
+    "Agent visual QA is not user adoption or an emoticon release signature."
+  ],
+  "userAdoption": null
+}

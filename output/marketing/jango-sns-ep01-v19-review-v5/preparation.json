@@ -1,0 +1,158 @@
+{
+  "id": "jango-sns-ep01-v19-review-v5",
+  "preparedAt": "2026-10-09T06:33:39.142962+00:00",
+  "medium": "SNS cartoon",
+  "status": "prepared-before-generation",
+  "userRequest": "Sentinel_f3a56a18461081918658a042d3c7a396",
+  "scope": "Edit Jango style in panels 1,3,4; preserve approved panel 2 byte-for-byte. No emoticon redraw, app migration, posting, push or new commit.",
+  "activeMaster": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
+    "version": "v19"
+  },
+  "canonicalRules": [
+    {
+      "file": "AGENTS.md",
+      "sha256": "8adcfa62357bfa5b02f92c9969fb93e42372367d286d16063202dbd48c0b8eef"
+    },
+    {
+      "file": "design/jango/style-master.json",
+      "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+    },
+    {
+      "file": "design/jango/master-set.json",
+      "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "f293f9a2f549ff2ecf33c65518515b1742ef15ec98abcbf5edd12c2b77501906"
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "d650b62520ca29688e27bb8d09f64fbcedd53f5d2e672ecaa0e521d5e9251607"
+    },
+    {
+      "file": "design/jango/quality/README.md",
+      "sha256": "eb9afbad560db26bcc464206f705e5d21cf72a700252e01cebfeba401365a2ba"
+    }
+  ],
+  "panels": [
+    {
+      "number": 1,
+      "prompt": "prompts/01-style-r1.txt",
+      "promptSHA256": "f284083d31e74360d4d7ed3f63a262c3501d7b07b7ceea852e088aa398375870",
+      "references": [
+        {
+          "imageIndex": 1,
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+          "sha256": "ecd78dbba7aaeda3bb0311197cae684701331c196e9ffc52adb387bb6eee5e1e",
+          "role": "edit-target; original scene, exact pose, composition and dialogue"
+        },
+        {
+          "imageIndex": 2,
+          "file": "design/jango/masters/v19/master-scene.png",
+          "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+          "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+        }
+      ],
+      "originalArtwork": "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+      "originalLettering": "output/marketing/jango-sns-ep01-style-review-v4/lettering/01.png",
+      "sourceLineageRecord": "output/marketing/jango-sns-ep01-style-review-v4/production-record.json"
+    },
+    {
+      "number": 3,
+      "prompt": "prompts/03-style-r1.txt",
+      "promptSHA256": "51fb8b72a02d85da478efd1be776eba590aac8b7b7baa50ce7e3adfb533d7bbe",
+      "references": [
+        {
+          "imageIndex": 1,
+          "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+          "sha256": "3455964aea6b716b978f6d153be93effffa8a73a857ae117e6bcf26e5854d3eb",
+          "role": "edit-target; original scene, exact pose, composition and dialogue"
+        },
+        {
+          "imageIndex": 2,
+          "file": "design/jango/masters/v19/master-scene.png",
+          "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+          "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+        }
+      ],
+      "originalArtwork": "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+      "originalLettering": "output/marketing/jango-sns-ep01-final-v3/lettering/03.png",
+      "sourceLineageRecord": "output/marketing/jango-sns-ep01-final-v3/production-record.json"
+    },
+    {
+      "number": 4,
+      "prompt": "prompts/04-style-r1.txt",
+      "promptSHA256": "13e7502bdaa1f2e3151e00cf5d34694b69d2ccc968715739abea057672165cc4",
+      "references": [
+        {
+          "imageIndex": 1,
+          "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+          "sha256": "22730e9868864286ba811183b4a84cbc621538b8bb27a98ba88737bfb40c5f20",
+          "role": "edit-target; original scene, exact pose, composition and dialogue"
+        },
+        {
+          "imageIndex": 2,
+          "file": "design/jango/masters/v19/master-scene.png",
+          "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+          "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+        }
+      ],
+      "originalArtwork": "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+      "originalLettering": "output/marketing/jango-sns-ep01-final-v3/lettering/04.png",
+      "sourceLineageRecord": "output/marketing/jango-sns-ep01-final-v3/production-record.json"
+    }
+  ],
+  "inputFiles": [
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+      "sha256": "ecd78dbba7aaeda3bb0311197cae684701331c196e9ffc52adb387bb6eee5e1e"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/lettering/01.png",
+      "sha256": "23b4ff769b34ced3ba7d44455144fe69fd1c0c45d9a1043ecf028e49b51d52c9"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+      "sha256": "842f3b9a12e590c54373d6bae39436d6a625e00ea49a913b8d797023a026871c"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+      "sha256": "3455964aea6b716b978f6d153be93effffa8a73a857ae117e6bcf26e5854d3eb"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering/03.png",
+      "sha256": "99fea046ea9dc58fb37b43bca12a7a515298774d406b992a6751f2d627ca10e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+      "sha256": "c135b534ad6487764ebb341b7ecb6f2561cf2367c4aa0b3da6d2aaa3b9a85bc0"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+      "sha256": "22730e9868864286ba811183b4a84cbc621538b8bb27a98ba88737bfb40c5f20"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering/04.png",
+      "sha256": "38838499e08eaaf211bae79a776d3765c1e084c472b372a47b8f7115081bffe7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+      "sha256": "4e8e2a224fb20e4506a0003c281bd9f1106b8d664acddade94b9a8f7f6ab0f50"
+    },
+    {
+      "file": "design/jango/masters/v19/master-scene.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    }
+  ],
+  "generationMethod": "built-in image_gen",
+  "externalPaidApiCalls": 0,
+  "approvedPanel2": {
+    "file": "design/jango/masters/v19/master-scene.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "libraryFileId": "libfile_e4728d44dfc48191bc17441d04d0a031",
+    "fileId": "file_0000000084e481f5b6d75688e8f0548c",
+    "status": "approved-and-preserved"
+  }
+}

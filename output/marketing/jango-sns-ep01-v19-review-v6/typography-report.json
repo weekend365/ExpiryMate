@@ -1,0 +1,170 @@
+[
+  {
+    "panel": 3,
+    "text": [
+      {
+        "lines": [
+          "등록한 재료로 추천해 줬네.",
+          "오늘은 두부달걀부침!"
+        ],
+        "box": [
+          185,
+          100,
+          800,
+          185
+        ],
+        "size": 68,
+        "lineHeight": 82,
+        "speaker": "woman",
+        "font": "Gaegu-Bold",
+        "measuredWidth": 722.3639999999999,
+        "measuredHeight": 150,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "두부달걀",
+          "부침"
+        ],
+        "box": [
+          402,
+          797,
+          216,
+          119
+        ],
+        "size": 47,
+        "lineHeight": 56,
+        "font": "Pretendard-SemiBold",
+        "speaker": "verified-ui-example",
+        "measuredWidth": 162.48046875,
+        "measuredHeight": 112,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "사용할 재료"
+        ],
+        "box": [
+          397,
+          948,
+          209,
+          45
+        ],
+        "size": 30,
+        "lineHeight": 36,
+        "font": "Pretendard-SemiBold",
+        "speaker": "verified-ui-label",
+        "measuredWidth": 136.7578125,
+        "measuredHeight": 36,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "두부 · D-1",
+          "달걀 · 대파"
+        ],
+        "box": [
+          390,
+          1004,
+          220,
+          94
+        ],
+        "size": 34,
+        "lineHeight": 46,
+        "font": "Pretendard-Regular",
+        "speaker": "illustrative-ingredient-data",
+        "measuredWidth": 143.23828125,
+        "measuredHeight": 86,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "이 요리 시작"
+        ],
+        "box": [
+          387,
+          1127,
+          193,
+          47
+        ],
+        "size": 34,
+        "lineHeight": 40,
+        "font": "Pretendard-SemiBold",
+        "color": [
+          0.1,
+          0.3,
+          0.23
+        ],
+        "speaker": "actual-ui-action",
+        "measuredWidth": 163.060546875,
+        "measuredHeight": 40,
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "panel": 4,
+    "text": [
+      {
+        "lines": [
+          "오늘 저녁은",
+          "냉장고 안에 있었네."
+        ],
+        "box": [
+          175,
+          102,
+          755,
+          194
+        ],
+        "size": 78,
+        "lineHeight": 90,
+        "speaker": "woman",
+        "font": "Gaegu-Bold",
+        "measuredWidth": 603.954,
+        "measuredHeight": 168,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "장고야 부탁해"
+        ],
+        "box": [
+          120,
+          1236,
+          882,
+          90
+        ],
+        "size": 80,
+        "lineHeight": 88,
+        "speaker": "brand",
+        "color": [
+          0.14,
+          0.35,
+          0.28
+        ],
+        "font": "Gaegu-Bold",
+        "measuredWidth": 427.20000000000005,
+        "measuredHeight": 80,
+        "overflow": false
+      },
+      {
+        "lines": [
+          "내 재료로 오늘 메뉴 찾기"
+        ],
+        "box": [
+          120,
+          1331,
+          882,
+          63
+        ],
+        "size": 54,
+        "lineHeight": 60,
+        "speaker": "single-benefit-action",
+        "font": "Gaegu-Bold",
+        "measuredWidth": 533.52,
+        "measuredHeight": 54,
+        "overflow": false
+      }
+    ]
+  }
+]

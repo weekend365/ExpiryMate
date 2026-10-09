@@ -1,0 +1,12 @@
+Use case: style-transfer. Asset: one finished Korean SNS comic panel.
+Image 1 is the edit target. Image 2 is the APPROVED v19 MASTER and is a style reference only; do not redraw or output image 2.
+Edit ONLY Jango, the small refrigerator chef mascot in image 1, to precisely match the drawing treatment of Jango in image 2. Keep image 1's scene, subject positions, scale, crop, woman, face, hairstyle, clothing, hands, smartphone, furniture, plants, food, light, balloons, lettering and composition unchanged. This is a local character style edit, not a new illustration or a new pose.
+
+Match v19: warm umber/brown colored-pencil contours with finer varied pressure, softly layered cream/ochre on the chef hat, refrigerator door, sleeves and apron, quieter desaturated mint/green on hat band, handle, mittens, pocket and shoes, peach cheeks, soft pencil contact shadows, directional hatching and visible paper tooth. Jango must look drawn with the same pencils and on the same paper as the woman and kitchen, as in image 2. Remove the old heavy near-black uniform sticker border, bright flat white and neon-turquoise fill. Do not use blur, low opacity, glossy 3D gradients, plastic highlights or muddy flat brown as substitutes for actual pencil redraw.
+
+Preserve image 1's exact Jango silhouette, size, position, head tilt, pose, expression, eyes/mouth placement and structural connections. Preserve the single refrigerator door, viewer-left mint handle and pineapple, two viewer-right hinges, chef hat, apron, and each mitten's one-thumb/cuff structure. No extra fingers, human pupils, nose, ears, new limbs, extra props, costume redesign or copied tofu-tray pose from image 2. The target pose must not change. Preserve all existing overlap with scene objects.
+
+Retain every Korean letter and balloon exactly as in image 1; do not reword, relocate or add text. Keep non-Jango areas as close to pixel-identical as possible, especially the woman and lettering. Return the complete same portrait panel, same framing and 1122×1402 canvas, one candidate.
+
+Panel-specific: Jango is on the RIGHT, happily speaking with both mittens raised near his chest. Keep the open dark mouth with a small pink lower tongue and the same cooking-scene crop. The woman on the left cooks tofu/egg pieces while holding her phone. Preserve the woman, spatula, pan, tofu tray, egg bowl, scallions and every food object. Preserve exact dialogue: left "두부 먼저 쓰는 메뉴! / 달걀이랑 대파도 / 집에 있네.", right "등록한 재료로 / 고르니까요." The slashes indicate existing line breaks, not literal characters.
+

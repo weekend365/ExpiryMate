@@ -1,0 +1,32 @@
+{
+  "status": "candidate-ready-for-user-review",
+  "reviewedAt": "2026-10-09T06:43:33.945018+00:00",
+  "reviewKind": "agent visual observation, not user adoption or release signature",
+  "sizes": [
+    "1122x1402 native panels",
+    "360x450 per panel mobile contact sheet"
+  ],
+  "panels": [
+    {
+      "panel": 1,
+      "findings": "Warm pencil contours and layered cream/muted mint harmonize with v19; small full-body silhouette, worried expression and mouth-side mitten preserved. Exact v4 first dialogue and original woman/background preserved."
+    },
+    {
+      "panel": 2,
+      "findings": "Approved v19 scene copied byte-for-byte; no redraw."
+    },
+    {
+      "panel": 3,
+      "findings": "Happy speaking mouth, raised mittens, cook and food scene preserved; a clipped pocket boundary found in the first local composite was corrected using the same generated pixels and re-reviewed."
+    },
+    {
+      "panel": 4,
+      "findings": "Quiet U smile and raised mittens retained; woman eating, food, phone and exact dialogues/bottom brand caption preserved."
+    }
+  ],
+  "mobileReadability": "Dialogue and expressions readable at 360px panel width; bottom brand caption remains secondary as in original.",
+  "sceneContinuity": "Woman, kitchen, story order, food props and existing framing remain consistent.",
+  "boundaryReview": "Final panels inspected after localization; panel 3 pocket boundary corrected, no conspicuous hard seam observed in final native/mobile review.",
+  "unresolved": "User review and adoption of the three new panels remain pending. This is not technical proof of perfect semantic anatomy.",
+  "userAdoption": null
+}

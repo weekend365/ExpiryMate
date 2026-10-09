@@ -1,0 +1,131 @@
+[
+  {
+    "panel": 1,
+    "text": [
+      {
+        "speaker": "person",
+        "lines": [
+          "장도 봤는데…",
+          "왜 또 배달 앱이지?"
+        ],
+        "box": [
+          200,
+          113,
+          780,
+          192
+        ],
+        "size": 78,
+        "lineHeight": 94,
+        "font": "Gaegu-Bold",
+        "measuredWidth": 588.4319999999999,
+        "measuredHeight": 172,
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "panel": 3,
+    "text": [
+      {
+        "speaker": "person",
+        "lines": [
+          "두부 먼저 쓰는 메뉴!",
+          "달걀이랑 대파도",
+          "집에 있네."
+        ],
+        "box": [
+          105,
+          96,
+          505,
+          193
+        ],
+        "size": 56,
+        "lineHeight": 64,
+        "font": "Gaegu-Bold",
+        "measuredWidth": 462.84000000000003,
+        "measuredHeight": 184,
+        "overflow": false
+      },
+      {
+        "speaker": "jango",
+        "lines": [
+          "등록한 재료로",
+          "고르니까요."
+        ],
+        "box": [
+          745,
+          158,
+          305,
+          137
+        ],
+        "size": 54,
+        "lineHeight": 69,
+        "font": "Gaegu-Bold",
+        "measuredWidth": 288.36,
+        "measuredHeight": 123,
+        "overflow": false
+      }
+    ]
+  },
+  {
+    "panel": 4,
+    "text": [
+      {
+        "speaker": "person",
+        "lines": [
+          "오늘 저녁은",
+          "냉장고 안에 있었네."
+        ],
+        "box": [
+          140,
+          127,
+          500,
+          177
+        ],
+        "size": 64,
+        "lineHeight": 82,
+        "font": "Gaegu-Bold",
+        "measuredWidth": 495.5520000000001,
+        "measuredHeight": 146,
+        "overflow": false
+      },
+      {
+        "speaker": "jango",
+        "lines": [
+          "내일도",
+          "같이 골라요."
+        ],
+        "box": [
+          757,
+          198,
+          295,
+          140
+        ],
+        "size": 56,
+        "lineHeight": 72,
+        "font": "Gaegu-Bold",
+        "measuredWidth": 272.32800000000003,
+        "measuredHeight": 128,
+        "overflow": false
+      },
+      {
+        "speaker": "brand",
+        "lines": [
+          "장고야 부탁해 · 내 재료로 메뉴 찾기"
+        ],
+        "box": [
+          323,
+          1335,
+          740,
+          51
+        ],
+        "size": 36,
+        "lineHeight": 42,
+        "font": "Gaegu-Regular",
+        "measuredWidth": 514.001953125,
+        "measuredHeight": 36,
+        "overflow": false
+      }
+    ]
+  }
+]

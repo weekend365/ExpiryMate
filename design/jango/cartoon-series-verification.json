@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "recordedAt": "2026-10-09T11:10:50.547416+00:00",
+  "scope": "v6 series adoption; no new character/master/runtime approval",
+  "integrity": {
+    "protectedFilesByteIdentical": 365,
+    "registryHashedReferencesVerified": 25,
+    "approvedPanels": 4,
+    "panelDimensions": [
+      1122,
+      1402
+    ],
+    "libraryIdsAndVersionsMatchConfirmedDelivery": true,
+    "characterMasterVersionUnchanged": "v19",
+    "historicalPendingMetadataPreserved": true,
+    "reportsRefreshed": 32,
+    "reportChangesLimitedTo": [
+      "context.documents",
+      "binding"
+    ],
+    "measurementsReviewStatesAndReleaseDataUnchanged": true
+  },
+  "anatomyRefresh": {
+    "command": "pnpm --filter @expirymate/mobile mascot:measure",
+    "changedFields": [
+      "bibleSha256"
+    ],
+    "measurementsAndOverlaysUnchanged": true
+  },
+  "checks": {
+    "pnpm docs:check": "pass",
+    "pnpm lint": "pass",
+    "pnpm typecheck": "pass",
+    "pnpm jango:check": "pass",
+    "pnpm test": {
+      "status": "pass",
+      "designGateTests": 23,
+      "sharedTests": 163,
+      "apiTests": 541,
+      "apiSkipped": 6,
+      "mobileTests": 565
+    },
+    "git diff --cached --check": {
+      "status": "three preserved historical prompt EOF blank lines",
+      "files": [
+        "output/marketing/jango-sns-ep01-v19-review-v5/prompts/01-style-r1.txt",
+        "output/marketing/jango-sns-ep01-v19-review-v5/prompts/03-style-r1.txt",
+        "output/marketing/jango-sns-ep01-v19-review-v5/prompts/04-style-r1.txt"
+      ],
+      "reason": "Exact submitted prompt bytes and recorded hashes are preserved; no current code whitespace defects."
+    }
+  },
+  "approvalRecord": "design/jango/cartoon-series.json",
+  "historicalEvidencePolicy": "Preparation and generation records remain byte-preserved snapshots. Their prior rule hashes are historical and are not rewritten to current values.",
+  "preserved": [
+    "v18 all original and derived assets",
+    "v19 master and active pointer",
+    "mobile runtime assets",
+    "quality thresholds, review state and releases"
+  ],
+  "commitScope": "Approved v6 and source lineage needed to inspect it, rules, generated document bindings. Retired v1/v2 and QA/ZIP scratch excluded."
+}

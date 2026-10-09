@@ -1,0 +1,54 @@
+{
+  "status": "saved",
+  "items": [
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/jango-ep01-v4-01-dialogue.png",
+      "file_id": "file_000000002d8c81f5905924880c5515fb",
+      "library_file_id": "libfile_99ff62b93038819182cf1d82f85e7513",
+      "file_name": "jango-ep01-v4-01-dialogue.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_e5889eebb7388191829012cc2ae58620",
+      "mime_type": "image/png",
+      "library_artifact_type": "image",
+      "file_size_bytes": 3308974,
+      "local_path": "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+      "localMetadataApplied": true
+    },
+    {
+      "operation": "create_library_file",
+      "status": "succeeded",
+      "path": "/jango-ep01-v4-02-style.png",
+      "file_id": "file_0000000084e481f5b6d75688e8f0548c",
+      "library_file_id": "libfile_e4728d44dfc48191bc17441d04d0a031",
+      "file_name": "jango-ep01-v4-02-style.png",
+      "current_version_number": 0,
+      "restored_from_version_number": null,
+      "xattrs": [
+        {
+          "name": "user.library-file-version",
+          "value": "0"
+        }
+      ],
+      "directory_id": "libdir_e5889eebb7388191829012cc2ae58620",
+      "mime_type": "image/png",
+      "library_artifact_type": "image",
+      "file_size_bytes": 3471261,
+      "local_path": "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+      "localMetadataApplied": true
+    }
+  ],
+  "comparisonFiles": [
+    "review-two-panels.png",
+    "style-before-after.png"
+  ],
+  "originalLibraryItemPreserved": "libfile_977ef578050c81919b9bb32a1fe91811"
+}

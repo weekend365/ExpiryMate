@@ -1,0 +1,202 @@
+{
+  "id": "jango-sns-ep01-v19-review-v6",
+  "status": "ready-for-user-review",
+  "preparedBeforeGeneration": true,
+  "preparation": "preparation.json",
+  "iterationPreparation": "preparation-03-r2.json",
+  "masterVersion": "v19",
+  "generation": {
+    "tool": "official built-in image_gen",
+    "calls": 3,
+    "externalPaidApiCalls": 0,
+    "items": [
+      {
+        "panel": 3,
+        "iteration": 1,
+        "tool": "official built-in image_gen",
+        "rawOriginal": {
+          "file": "generated_images/exec-09001118-32b6-49ee-86c8-8b7c7e9bcdd6.png",
+          "sha256": "e8f9079f88cab5ad9373e4e4d75eda84a0b2fff7294455c339ae4b3b744dcc8f"
+        },
+        "savedArtwork": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r1.png",
+          "sha256": "e8f9079f88cab5ad9373e4e4d75eda84a0b2fff7294455c339ae4b3b744dcc8f"
+        },
+        "prompt": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r1.txt",
+          "sha256": "f8f63ab3f37a06f53faf4b500f706154c6287ae07446c49065a6f117667cc741"
+        },
+        "actualReferences": [
+          {
+            "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "sha256": "7a114c4aa734ea8c923826f9feba6550a248d62e0d5a51691e6e10c3edfaaec7",
+            "role": "edit target: original human/kitchen episode identity",
+            "imageIndex": 1
+          },
+          {
+            "file": "design/jango/masters/v19/master-scene.png",
+            "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+            "role": "v19 style and character identity",
+            "imageIndex": 2
+          },
+          {
+            "file": "design/reviews/tab-backgrounds-crayon-v1/after/recommendations-scrolled.png",
+            "sha256": "583b4594e23cf0f2bff4f706d32c8b20eeb268bf2c1b3a3f70219a1c1cbfecd4",
+            "role": "actual recorded app UI visual reference; fictional dish not copied",
+            "imageIndex": 3
+          }
+        ],
+        "selected": false
+      },
+      {
+        "panel": 3,
+        "iteration": 2,
+        "tool": "official built-in image_gen",
+        "rawOriginal": {
+          "file": "generated_images/exec-56b883e2-1e30-411a-aca2-827447fc5730.png",
+          "sha256": "268fcc7df0b643d637bc799a866b117f321b33854e5e607054357c5c6767094b"
+        },
+        "savedArtwork": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r2.png",
+          "sha256": "268fcc7df0b643d637bc799a866b117f321b33854e5e607054357c5c6767094b"
+        },
+        "prompt": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/03-r2.txt",
+          "sha256": "63113ada32786bacfb00704854ce619d7e16f93859c7fd1eee1b277cae6d0a7a"
+        },
+        "actualReferences": [
+          {
+            "imageIndex": 1,
+            "file": "generated_images/exec-09001118-32b6-49ee-86c8-8b7c7e9bcdd6.png",
+            "sha256": "e8f9079f88cab5ad9373e4e4d75eda84a0b2fff7294455c339ae4b3b744dcc8f",
+            "role": "edit-target generated candidate 03-r1 with recorded v19 lineage"
+          }
+        ],
+        "selected": true
+      },
+      {
+        "panel": 4,
+        "iteration": 1,
+        "tool": "official built-in image_gen",
+        "rawOriginal": {
+          "file": "generated_images/exec-6b6585dd-478d-4ec6-8076-d6ada7790102.png",
+          "sha256": "2964f68085bc99e6242a0d28adab050fbf6fab21be50f5c7349f9e2c83f19704"
+        },
+        "savedArtwork": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/04-r1.png",
+          "sha256": "2964f68085bc99e6242a0d28adab050fbf6fab21be50f5c7349f9e2c83f19704"
+        },
+        "prompt": {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/prompts/04-r1.txt",
+          "sha256": "0e85fb269c611e2081c10550b909d3770e6d687078c46077287bc072ee312218"
+        },
+        "actualReferences": [
+          {
+            "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "sha256": "db873ecb64c4d5438199ea33a433f416501f45901a999272ecd9b9e1125b5f3d",
+            "role": "edit target: dinner narrative and human identity",
+            "imageIndex": 1
+          },
+          {
+            "file": "design/jango/masters/v19/master-scene.png",
+            "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+            "role": "v19 style and character identity",
+            "imageIndex": 2
+          }
+        ],
+        "selected": true
+      }
+    ]
+  },
+  "composition": {
+    "method": "Full coherent imagegen artwork for panels 3 and 4; only exact Korean text added through the existing native lettering renderer. No sticker collage or character crops. Panels 1 and 2 copied byte-for-byte.",
+    "script": {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/render.mjs",
+      "sha256": "d543e26942515caf02a4a646657c5cd8e5a4cf52bbb008b63a72c240bfd08014"
+    },
+    "letteringScript": {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/lettering.jxa.js",
+      "sha256": "e001d6812d0fb446815728ca6167e5ac98c080b0dc68ebdc1e4715d79c9bd126"
+    },
+    "spec": {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/episode.json",
+      "sha256": "e88b31305319f5df954748614ed6a1b860f69ff1ef797274ba2aa0792047f102"
+    }
+  },
+  "outputs": [
+    {
+      "panel": 1,
+      "file": "jango-ep01-v6-01.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "bytes": 3323778,
+      "approvedPanelPreserved": true
+    },
+    {
+      "panel": 2,
+      "file": "jango-ep01-v6-02.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "bytes": 3471261,
+      "approvedPanelPreserved": true
+    },
+    {
+      "panel": 3,
+      "file": "jango-ep01-v6-03.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "0153389c9aa8fd423f6e823d2ec0b0e01dbc3f042c508c37b77b685e336a93a7",
+      "bytes": 3046167,
+      "approvedPanelPreserved": false
+    },
+    {
+      "panel": 4,
+      "file": "jango-ep01-v6-04.png",
+      "width": 1122,
+      "height": 1402,
+      "sha256": "ef75a46ae3d11de97f3a0890f599b19d6c61f64a1c8f1bd03d49757ff03e4099",
+      "bytes": 3143952,
+      "approvedPanelPreserved": false
+    }
+  ],
+  "overview": {
+    "file": "jango-ep01-v6-overview.png",
+    "width": 1182,
+    "height": 1462,
+    "sha256": "2675dba0508be6c6da03643f1266b524bb4e4424b141a6bce182ad965e6def56"
+  },
+  "mobileReview": {
+    "file": "review-mobile-360.png",
+    "width": 744,
+    "height": 924,
+    "sha256": "00f8bdf33d1ef34a8fdb5a2fa4ac7255f3af961ff5b885fa340544adac3fb6dc"
+  },
+  "caption": {
+    "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-caption.txt",
+    "sha256": "6cd9c91df1f2f558fed4a61e3aed393379975794f3ea1b83cdfd4451d52802e4"
+  },
+  "validation": "validation.json",
+  "visualReview": "visual-review.json",
+  "approvedPanelsPreserved": [
+    1,
+    2
+  ],
+  "rulesChanged": false,
+  "appAssetsChanged": false,
+  "emoticonsChanged": false,
+  "committed": false,
+  "pushed": false,
+  "published": false,
+  "userAdoptionOfNewPanels": null,
+  "libraryStatus": "saved: original panels 1/2 reused; existing 3/4/overview/caption replaced at version 1, version 0 preserved",
+  "delivery": "delivery.json",
+  "verification": {
+    "docs:check": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "test": "passed",
+    "sourceTrackedDiff": "none"
+  }
+}

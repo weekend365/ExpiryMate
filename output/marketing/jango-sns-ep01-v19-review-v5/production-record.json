@@ -1,0 +1,181 @@
+{
+  "id": "jango-sns-ep01-v19-review-v5",
+  "status": "candidate-ready-for-user-review",
+  "preparedBeforeGeneration": true,
+  "preparation": "preparation.json",
+  "masterVersion": "v19",
+  "approvedPanel2": {
+    "file": "design/jango/masters/v19/master-scene.png",
+    "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "libraryFileId": "libfile_e4728d44dfc48191bc17441d04d0a031",
+    "fileId": "file_0000000084e481f5b6d75688e8f0548c",
+    "status": "approved-and-preserved"
+  },
+  "generation": {
+    "tool": "built-in image_gen",
+    "calls": 3,
+    "externalPaidApiCalls": 0,
+    "panels": [
+      {
+        "panel": 1,
+        "tool": "built-in image_gen",
+        "rawOriginal": "generated_images/exec-c9d47876-a5b1-42d4-97ec-8ff91dbcb4dd.png",
+        "rawSHA256": "f49faafae19d06e22d88c00a519a9fc137d4603beb55a51cc7a0c2ecff8eec79",
+        "savedFile": "artwork/01-style-r1.png",
+        "savedSHA256": "f49faafae19d06e22d88c00a519a9fc137d4603beb55a51cc7a0c2ecff8eec79",
+        "prompt": "prompts/01-style-r1.txt",
+        "submittedPromptSHA256": "f284083d31e74360d4d7ed3f63a262c3501d7b07b7ceea852e088aa398375870",
+        "promptSubmission": "Exact UTF-8 prompt file contents read and passed to image_gen",
+        "actualReferences": [
+          {
+            "imageIndex": 1,
+            "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "sha256": "ecd78dbba7aaeda3bb0311197cae684701331c196e9ffc52adb387bb6eee5e1e",
+            "role": "edit-target; original scene, exact pose, composition and dialogue"
+          },
+          {
+            "imageIndex": 2,
+            "file": "design/jango/masters/v19/master-scene.png",
+            "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+            "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+          }
+        ]
+      },
+      {
+        "panel": 3,
+        "tool": "built-in image_gen",
+        "rawOriginal": "generated_images/exec-6b40a6e8-71a6-41b6-b496-4bd1a0429861.png",
+        "rawSHA256": "23796ee6f2b194988a1f1d5bac2a9ab01425abba0e4bb527e254b0dd7579193f",
+        "savedFile": "artwork/03-style-r1.png",
+        "savedSHA256": "23796ee6f2b194988a1f1d5bac2a9ab01425abba0e4bb527e254b0dd7579193f",
+        "prompt": "prompts/03-style-r1.txt",
+        "submittedPromptSHA256": "51fb8b72a02d85da478efd1be776eba590aac8b7b7baa50ce7e3adfb533d7bbe",
+        "promptSubmission": "Exact UTF-8 prompt file contents read and passed to image_gen",
+        "actualReferences": [
+          {
+            "imageIndex": 1,
+            "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "sha256": "3455964aea6b716b978f6d153be93effffa8a73a857ae117e6bcf26e5854d3eb",
+            "role": "edit-target; original scene, exact pose, composition and dialogue"
+          },
+          {
+            "imageIndex": 2,
+            "file": "design/jango/masters/v19/master-scene.png",
+            "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+            "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+          }
+        ]
+      },
+      {
+        "panel": 4,
+        "tool": "built-in image_gen",
+        "rawOriginal": "generated_images/exec-95819e59-7137-4fed-a71d-753ece0c0554.png",
+        "rawSHA256": "b229916faecc102ba451bc1b5a7056c8cd304011d57f8b3af8e66495912781fb",
+        "savedFile": "artwork/04-style-r1.png",
+        "savedSHA256": "b229916faecc102ba451bc1b5a7056c8cd304011d57f8b3af8e66495912781fb",
+        "prompt": "prompts/04-style-r1.txt",
+        "submittedPromptSHA256": "13e7502bdaa1f2e3151e00cf5d34694b69d2ccc968715739abea057672165cc4",
+        "promptSubmission": "Exact UTF-8 prompt file contents read and passed to image_gen",
+        "actualReferences": [
+          {
+            "imageIndex": 1,
+            "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "sha256": "22730e9868864286ba811183b4a84cbc621538b8bb27a98ba88737bfb40c5f20",
+            "role": "edit-target; original scene, exact pose, composition and dialogue"
+          },
+          {
+            "imageIndex": 2,
+            "file": "design/jango/masters/v19/master-scene.png",
+            "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+            "role": "approved-v19-style-master; Jango drawing treatment only, not target pose"
+          }
+        ]
+      }
+    ]
+  },
+  "composition": {
+    "script": "compose.mjs",
+    "scriptSHA256": "4eec3ecdf47bd65d41ecd9e201e67c3e3faab2ffab89813dd4c3d4871213bfd4",
+    "editRegions": "edit-regions.json",
+    "editRegionsSHA256": "5337b0c344ccec697146bb8fba86f55c4f8c8406843cffca7b4a0ef270ed92b5",
+    "method": "Only generated Jango-region pixels are composited over original finished panels. Original lettering and all outside-boundary pixels are retained. No v18 sticker overlay.",
+    "boundaryCorrection": "Panel 3 pocket clipping corrected within new composition mask; no extra image generation."
+  },
+  "outputs": [
+    {
+      "panel": 1,
+      "file": "jango-ep01-v5-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "generatedSource": "artwork/01-style-r1.png",
+      "generatedSourceSHA256": "f49faafae19d06e22d88c00a519a9fc137d4603beb55a51cc7a0c2ecff8eec79",
+      "mask": "masks/01.png",
+      "maskSHA256": "bfbb50bd12e5ddde9fabe6c5c1f447f89a99d6699347061877bfb47ff7d7b5b2",
+      "maskPixels": 145641,
+      "changedPixels": 145601,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    },
+    {
+      "panel": 2,
+      "file": "jango-ep01-v5-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "approvedBytesPreserved": true
+    },
+    {
+      "panel": 3,
+      "file": "jango-ep01-v5-03.png",
+      "sha256": "7a114c4aa734ea8c923826f9feba6550a248d62e0d5a51691e6e10c3edfaaec7",
+      "generatedSource": "artwork/03-style-r1.png",
+      "generatedSourceSHA256": "23796ee6f2b194988a1f1d5bac2a9ab01425abba0e4bb527e254b0dd7579193f",
+      "mask": "masks/03.png",
+      "maskSHA256": "c80811dfbdacff4a789b7bbc3942792483a2c1428e13027657e2f1f41128f30b",
+      "maskPixels": 242626,
+      "changedPixels": 242601,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    },
+    {
+      "panel": 4,
+      "file": "jango-ep01-v5-04.png",
+      "sha256": "db873ecb64c4d5438199ea33a433f416501f45901a999272ecd9b9e1125b5f3d",
+      "generatedSource": "artwork/04-style-r1.png",
+      "generatedSourceSHA256": "b229916faecc102ba451bc1b5a7056c8cd304011d57f8b3af8e66495912781fb",
+      "mask": "masks/04.png",
+      "maskSHA256": "4c32ed99242012884a2d7fedd373e067e00574737c414198fc16f2b2ea82119a",
+      "maskPixels": 243130,
+      "changedPixels": 243121,
+      "outsideMaskChangedPixels": 0,
+      "originalLetteringChangedPixels": 0,
+      "protectedSceneChangedPixels": 0
+    }
+  ],
+  "overview": {
+    "file": "jango-ep01-v5-overview.png",
+    "width": 1182,
+    "height": 1462,
+    "sha256": "4c7bc62b184cdac0c31a686f0ed46a02cf4e11edd4e7d279efe2873328856edc"
+  },
+  "mobileReview": {
+    "file": "review-mobile-360.png",
+    "width": 756,
+    "height": 936,
+    "sha256": "6e5da4218e4e18b14fd02219d3ae41aa6d3f0946267c2753c2c42434816845ed"
+  },
+  "caption": {
+    "file": "jango-ep01-v5-caption.txt",
+    "sha256": "c50e0fbf5c71e4162abd70109f20e25a7d073159978cdc1137659019143d56f2",
+    "preservedFrom": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-caption.txt"
+  },
+  "validation": "validation.json",
+  "visualReview": "visual-review.json",
+  "priorRulesCommit": "1944330820626b77fb280bb84a57a000aab36f86",
+  "newArtworkCommitted": false,
+  "appAssetsMigrated": false,
+  "emoticonsRedrawn": 0,
+  "published": false,
+  "newPanelsUserAdoption": null,
+  "libraryStatus": "saved: three edited panels, overview and caption; approved panel 2 reused",
+  "delivery": "delivery.json"
+}

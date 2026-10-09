@@ -1,0 +1,243 @@
+{
+  "version": 1,
+  "id": "jango-sns-ep01-v6",
+  "status": "user-adopted",
+  "kind": "sns-cartoon-series-standard",
+  "adoptedAt": "2026-10-09",
+  "recordedAt": "2026-10-09T11:03:21.849078+00:00",
+  "authority": {
+    "type": "delegated-explicit-user-approval",
+    "sourceThreadId": "01a0fb96-8a42-771d-a8e7-2cfbeec72021",
+    "precedingQuestion": "우선 v6를 기준으로 확정하고 제작 규칙에 반영할까?",
+    "userReply": "그래.",
+    "evidence": "Parent task relayed the user approval and explicitly delegated adoption of the completed v6 as cartoon-series production rules. The original user message ID was not supplied; no message ID or review signature is invented.",
+    "scope": "Completed v6 four panels and cartoon series rules; not a new character master, app migration, emoticon release, new cartoon, commit, push or publication."
+  },
+  "characterMaster": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
+    "masterVersion": "v19",
+    "image": {
+      "file": "design/jango/masters/v19/master-scene.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    }
+  },
+  "characterMasterPointer": {
+    "file": "design/jango/style-master.json",
+    "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+  },
+  "legacyPoseRegistry": {
+    "file": "design/jango/master-set.json",
+    "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "role": "Historical v18 identity/pose lineage; not active cartoon drawing style"
+  },
+  "guide": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "67c27169b0f44bd8f7018d098ee6328d3e3e07f1fd85278c508540461df15804"
+  },
+  "scope": {
+    "appliesTo": [
+      "SNS static-image cartoon scene integration",
+      "shot/action/story and app-value clarity",
+      "Korean lettering and 360px review",
+      "series preparation/generation/review/adoption workflow"
+    ],
+    "doesNotReplace": [
+      "v19 character master and its active pointer",
+      "BIBLE SNS expressive freedom",
+      "app speech-bubble/font/runtime policy",
+      "emoticon preparation/measurement/signing gate"
+    ],
+    "notMandatoryAcrossEpisodes": [
+      "same woman",
+      "same kitchen",
+      "tofu dish",
+      "same four-beat plot",
+      "same camera layouts",
+      "phone in every episode"
+    ],
+    "reuse": "Approved v6 references can guide future SNS candidates. New derivatives require their own review and user adoption; this is not automatic publication permission."
+  },
+  "approvedPanels": [
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "number": 1,
+      "width": 1122,
+      "height": 1402,
+      "role": "생활 고민·표정과 환경",
+      "library": {
+        "library_file_id": "libfile_d9efeef7e76c81919da62d7cbdf6a539",
+        "file_id": "file_000000003ac081f5b0c117142c7bbc21",
+        "file_name": "jango-ep01-v5-01.png",
+        "current_version_number": 0
+      }
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "number": 2,
+      "width": 1122,
+      "height": 1402,
+      "role": "재료 발견·장고와 사람의 상호작용",
+      "library": {
+        "library_file_id": "libfile_e4728d44dfc48191bc17441d04d0a031",
+        "file_id": "file_0000000084e481f5b6d75688e8f0548c",
+        "file_name": "jango-ep01-v4-02-style.png",
+        "current_version_number": 0
+      }
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-03.png",
+      "sha256": "0153389c9aa8fd423f6e823d2ec0b0e01dbc3f042c508c37b77b685e336a93a7",
+      "number": 3,
+      "width": 1122,
+      "height": 1402,
+      "role": "추천 메뉴 확인·선택 동작·가까운 구도",
+      "library": {
+        "library_file_id": "libfile_d30ad0f8bf2881918e82f4ba235bb95a",
+        "file_id": "file_000000009e7881f59111be9cf00ddaac",
+        "file_name": "jango-ep01-v6-03.png",
+        "current_version_number": 1
+      }
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-04.png",
+      "sha256": "ef75a46ae3d11de97f3a0890f599b19d6c61f64a1c8f1bd03d49757ff03e4099",
+      "number": 4,
+      "width": 1122,
+      "height": 1402,
+      "role": "결과·감정·브랜드와 효용 중심 행동 안내",
+      "library": {
+        "library_file_id": "libfile_79418c0e38cc81918a952bf570194ee6",
+        "file_id": "file_000000008ea881f596f90da75386898a",
+        "file_name": "jango-ep01-v6-04.png",
+        "current_version_number": 1
+      }
+    }
+  ],
+  "supportingFiles": [
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-overview.png",
+      "sha256": "2675dba0508be6c6da03643f1266b524bb4e4424b141a6bce182ad965e6def56",
+      "role": "overview",
+      "library": {
+        "library_file_id": "libfile_632fc6193e508191aceb0bb7d6202013",
+        "file_id": "file_000000002a6481f6925eb5e19eefdfba",
+        "file_name": "jango-ep01-v6-overview.png",
+        "current_version_number": 1
+      }
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-caption.txt",
+      "sha256": "6cd9c91df1f2f558fed4a61e3aed393379975794f3ea1b83cdfd4451d52802e4",
+      "role": "caption",
+      "library": {
+        "library_file_id": "libfile_8ab9641a88fc819183a510d906ecd281",
+        "file_id": "file_00000000e0ac81f587b10911e7e4d57d",
+        "file_name": "jango-ep01-v6-caption.txt",
+        "current_version_number": 1
+      }
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/review-mobile-360.png",
+      "sha256": "00f8bdf33d1ef34a8fdb5a2fa4ac7255f3af961ff5b885fa340544adac3fb6dc",
+      "role": "mobile-review",
+      "panelWidth": 360,
+      "library": null
+    }
+  ],
+  "productionEvidence": [
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/preparation.json",
+      "sha256": "403e649aa2595bd153f289e01b561a5ab32bb181de7112c4c66671e633d0b65e",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/preparation-03-r2.json",
+      "sha256": "29631254934fa31cdb09bc77d42123f021bbb10d6bfc81b95f7b3b85e0e4fb8d",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/episode.json",
+      "sha256": "e88b31305319f5df954748614ed6a1b860f69ff1ef797274ba2aa0792047f102",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/production-record.json",
+      "sha256": "7c06afbc682c803376e6727ca8915f264a4efaba27a9b012d826899781351e4e",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/visual-review.json",
+      "sha256": "20ac87724904dc17bb33c3d21ae8ae628f4b535076075e06b5a49e8d172af0ac",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/typography-report.json",
+      "sha256": "deb078acc7f169588b2bd884e64edf4fea7eefa529184a1e9be0a46b9b333847",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/render-report.json",
+      "sha256": "deccee1ce8b5a04fc5ca6c6a9f1cd49c7847a0d711a46f5b2024c07b3a1669b0",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/validation.json",
+      "sha256": "a4634642b8acd7fb334f5ad8f8d08b02d2c4b8a878c1a11f3bfb7d42eb1a255f",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/delivery.json",
+      "sha256": "f1529d3afd09aa760346341499076354fe88c02be3e9d3720e28741949b59d3d",
+      "recordScope": "historical-production-and-pre-adoption-review"
+    }
+  ],
+  "featureEvidence": [
+    {
+      "file": "apps/mobile/app/(tabs)/recommendations.tsx",
+      "sha256": "6d7ea2a5b9fd624cbef25d99ef7e7ac32e2b9a60be5cfb00513379e6d2d5a55c",
+      "checkedAt": "2026-10-09",
+      "supports": "추천 목록·임박 우선 조건"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx",
+      "sha256": "5805ba32710983b2c672ea4218482be6ad5a638b9f518e13e14143363695ca22",
+      "checkedAt": "2026-10-09",
+      "supports": "요리 제목·사용할 재료·이 요리 시작"
+    },
+    {
+      "file": "apps/mobile/src/features/recipes/recipe-detail.ts",
+      "sha256": "c5d40c72c3995b1987622284e269746c56bc03f38b0b0df697960557e7084efb",
+      "checkedAt": "2026-10-09",
+      "supports": "D-1 기한 표시"
+    },
+    {
+      "file": "apps/api/src/modules/recipes/recipes.service.ts",
+      "sha256": "9881300acd872e148bd6b3422129323e57e127d6397b1b07a4549030a6a2f758",
+      "checkedAt": "2026-10-09",
+      "supports": "등록 재료 기반 추천, useExpiringFirst 조건"
+    }
+  ],
+  "screenDisclosure": "Panel 3 is a simplified illustration of verified functionality; dish/date are story examples, not a literal current screen capture. Re-check feature evidence for each new episode.",
+  "referenceSelection": {
+    "requiredStyle": "v19 character master",
+    "sceneQuality": "Relevant approved v6 individual panel(s)",
+    "editTarget": "Exact target being changed, separate role from style/scene reference",
+    "deduplication": "Attach identical image bytes once, record all roles and actual imageIndex; maximum 5 images.",
+    "excludedForNewProduction": [
+      "output/marketing/jango-sns-ep01-draft-v1/",
+      "output/marketing/jango-sns-ep01-draft-v2/"
+    ],
+    "intermediateVersions": "v3-v5 are provenance/comparison only, except the v4 panel 2 source remains the approved v19 master."
+  },
+  "knownLimits": [
+    "Panels 1 and 2 retain their approved relative-size difference; do not generalize it to future scale continuity.",
+    "Panel 3 phone detail is smaller than dialogue and not a mandatory font-size target.",
+    "Panel 3 close framing meets the right hat edge; do not treat this as permission for accidental cropping."
+  ],
+  "historicalRecordPolicy": "Pending/null approval fields in productionEvidence describe the time before this adoption. This separate record supplies current adoption for exactly the listed hashes without rewriting preparation, generation or review history.",
+  "portability": "The exact listed assets and provenance under output/marketing must travel with this record. Do not copy this JSON alone or silently substitute another Library version/file.",
+  "verificationRecord": "design/jango/cartoon-series-verification.json"
+}

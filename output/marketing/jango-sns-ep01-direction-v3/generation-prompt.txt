@@ -1,0 +1,24 @@
+Use case: illustration-story.
+Create ONE newly drawn, polished Korean lifestyle webtoon panel for an SNS cartoon introducing the Jango food-inventory app. This is a new narrative scene, not an arrangement of existing stickers. Portrait 4:5 composition, edge-to-edge illustrated scene, no panel grid.
+
+References and roles:
+Image 1 (v18 MASTER 24): Jango's exact identity, refrigerator-door head, chef hat, mitten structure, proportions, ivory/mint/apricot palette, charcoal crayon line and matte wax-pencil texture. Do not copy its plated-food pose.
+Image 2 (v18 MASTER 01): clear Jango facial language and open talking mouth; reference anatomy only, draw a new gesture and pose.
+Image 3 (existing kitchen): warm ivory paper, restrained ochre/mint kitchen palette, wood cabinetry and hand-drawn material treatment. Compose a NEW lived-in apartment kitchen with coherent perspective; do not paste this background.
+
+Scene and story:
+An exhausted young adult has been scrolling a food-delivery phone out of habit despite having ingredients at home. At this moment they have turned toward the open fridge because Jango has found the forgotten tofu that needs using soon. Show the emotional turn: the adult's thumb pauses, their shoulders relax and eyes focus on the tofu with an 'oh, I forgot that' expression. Jango is an attentive helpful companion looking up at the adult, gently holding forward ONE sealed tofu tray with both rounded mint mitten hands. It is a shared discovery, not a mascot presenting to the audience.
+
+Staging:
+A real domestic fridge, open on the left/rear, a few plausible ingredients on its shelves. Jango stands naturally in front of it at lower-left/center; the adult is on the right, leaning toward Jango, three-quarter view. Jango should be around the adult's waist-to-chest height including the tall chef hat. Hands, eye lines and the tofu tray form the central focal triangle. All subjects share the same floor plane and perspective. A modest kitchen counter with eggs and green onions is a quiet supporting detail, not a product lineup or separate list. A cloth shopping bag hangs from a chair. The phone is in the adult's lowered hand, back or edge facing the viewer: NO invented app UI, screenshots, logos or readable screen. No price, date numbers, savings claims or charts.
+
+Composition and lettering space:
+Use a medium-wide scene with strong overlapping foreground/midground/background, enough character face detail to read on a phone. Avoid excessively empty card-like margins. Maintain breathing room around heads and hands.
+Draw TWO organically hand-drawn EMPTY speech balloons in the upper third, integrated with the composition: first on the upper-left/middle with a clear short tail toward Jango; second on upper-right with a tail toward the adult. Leave their interiors genuinely blank and pale ivory for later accurate Korean lettering. Give each enough clear space for two short Korean lines. Balloon outlines should have the same physical charcoal crayon texture and natural pressure variation as the scene, not smooth UI rectangles. No text of any language anywhere in the image, no title/footer/signature/watermark.
+
+Jango identity constraints:
+Big rounded rectangular single refrigerator door as head, five main rounded chef-hat volumes, tall central lobe, ivory hat and mint band. Viewer-left mint vertical door handle and small pineapple emblem, viewer-right two hinges in a readable frontal/three-quarter view. Dark simple oval eyes, apricot cheeks, small open talking mouth with black interior and one small pink tongue. No pupils or eye shine, no nose/ears/neck/skin. Short trapezoid apron with mint pocket, short arms and legs, mint rounded shoes. Jango's oven mitts are one rounded mitten body with ONE existing thumb and clear cuffs: NO separate fingers or pointing index finger. Both hands clearly support the tofu tray; preserve believable arm–cuff–mitten contact. The adult may have ordinary human hands. The domestic fridge itself is an ordinary appliance, not a second mascot.
+
+Art direction:
+Warm, emotionally observant, professionally composed hand-drawn comic. Controlled charcoal single contours, natural line-weight changes, visible fine wax-pencil grain, opaque ivory and mint color masses, light warm kitchen depth, crisp dark facial marks. The human and environment must use the SAME crayon drawing language as Jango. Subtle contact shadows only. No glossy 3D shading, vector clipart, photorealism, pasted sprites, sticker white outlines, decorative UI cards, isolated floating props or generic advertising stock-art smiles.
+Only this ONE discovery panel. Do not generate the rest of the episode.

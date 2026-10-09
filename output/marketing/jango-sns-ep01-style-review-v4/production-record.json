@@ -1,0 +1,42 @@
+{
+  "id": "jango-sns-ep01-style-review-v4",
+  "status": "candidate-ready-for-user-review",
+  "preparedBeforeGeneration": true,
+  "preparation": "preparation.json",
+  "actualReferences": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+      "sha256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+      "role": "Edit target; approved scene without lettering. The woman and background are style authority.",
+      "lineageRecord": "output/marketing/jango-sns-ep01-direction-v3/production-record.json"
+    }
+  ],
+  "sourceLineage": "../jango-sns-ep01-direction-v3/production-record.json",
+  "generation": {
+    "tool": "built-in image_gen",
+    "calls": 1,
+    "rawOriginal": "generated_images/exec-26748107-33c1-4139-a441-11ed71cda82f.png",
+    "rawSHA256": "93a2233737cf2b0f61ee61cb9d681473a9f540deca5923dd91ec590e1d2659b5",
+    "prompt": "style-prompt.txt",
+    "promptSHA256": "48bdd0062779c32e66f6b85ad907391506454890abfc1381701ba78e1d43f53f",
+    "promptNormalization": "trimmed outer whitespace before tool submission",
+    "submittedPromptSHA256": "808f9aa3d34d8d5276bc8d983f10e9249cd2b1bf41dbcce92570f8bc7e02c596"
+  },
+  "composition": {
+    "script": "compose.mjs",
+    "scriptSHA256": "e9f7451f62ad6e1c37a58322fdf9e735bf7810edb8ba3149ad30383ea6c9d740",
+    "mask": "edit-region-mask.png",
+    "maskSHA256": "f96282af930829b4e57151c97b1cc97e618d989b1d542089d8f6161090da9e9d",
+    "method": "Only official generated Jango region is composited; original scene and exact typography are retained elsewhere."
+  },
+  "firstPanel": {
+    "script": "lettering.jxa.js",
+    "artwork": "../jango-sns-ep01-final-v3/artwork/01-r1.png",
+    "dialogue": "냉장고에 뭐 있더라… 그냥 배달 시킬까?"
+  },
+  "validation": "validation.json",
+  "visualReview": "visual-review.json",
+  "delivery": "delivery.json",
+  "userAdoption": null
+}

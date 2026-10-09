@@ -1,0 +1,77 @@
+{
+  "id": "jango-sns-ep01-direction-v3-discovery-r1",
+  "status": "candidate-awaiting-direction-review",
+  "tool": "built-in image_gen",
+  "generationCalls": 1,
+  "externalPaidApiCalls": 0,
+  "sourceFile": "generated_images/exec-c84fe286-9d32-4ece-98ca-65478b7ac8e8.png",
+  "sourceSHA256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+  "savedFile": "discovery-art-r1.png",
+  "savedSHA256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+  "references": [
+    {
+      "imageIndex": 1,
+      "role": "Jango identity and drawing texture; new pose, not copied artwork",
+      "masterNumber": 24,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    },
+    {
+      "imageIndex": 2,
+      "role": "Talking facial expression and mitten anatomy",
+      "masterNumber": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+    },
+    {
+      "imageIndex": 3,
+      "role": "Kitchen material and palette reference, new scene composition",
+      "file": "design/backgrounds/kitchen-cooking-crayon-v1.png",
+      "sha256": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c"
+    }
+  ],
+  "promptFile": "generation-prompt.txt",
+  "promptSHA256": "0a8f7c0c4721577ce48dc30b939a1ec3b0d4fc3198a53bb8319344dea921c41c",
+  "dimensions": [
+    1122,
+    1402
+  ],
+  "koreanLettering": {
+    "file": "discovery-lettering-r1.png",
+    "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+    "fontSHA256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "method": "AppKit/CoreText text-only transparent overlay; all balloons and scene artwork are imagegen"
+  },
+  "outputs": [
+    {
+      "file": "discovery-review-r1.png",
+      "sha256": "c370eeb90f6ea08ae07f5dab510230ba5bb8ffb81a6ca1da1d24f6260a9032fb"
+    },
+    {
+      "file": "discovery-review-mobile-r1.png",
+      "sha256": "4382042b96055adf13caab610f842ff8e68cc841336c713dc98141f6e4c22ba7"
+    }
+  ],
+  "visualReview": {
+    "surfaces": [
+      "1122x1402 full-size scene",
+      "360px width scene"
+    ],
+    "observations": [
+      "Person, Jango, food, phone and kitchen share one continuous newly drawn scene.",
+      "The tofu and the adult reaction carry the discovery beat; phone UI is hidden.",
+      "Two short dialogue groups fit the generated balloons and remain readable at 360px width.",
+      "Jango retains single door head, left handle and pineapple, right hinges, chef hat, mitten cuffs and apron."
+    ],
+    "remainingDirectionQuestions": [
+      "Whether this human protagonist and warm domestic illustration style suit the intended audience.",
+      "Whether the discovery scene and dialogue earn attention before the app-value panel.",
+      "Full episode rhythm and app-conversion effectiveness remain untested; one image is not evidence of conversion."
+    ]
+  },
+  "masterAssetsVerified": 237,
+  "userAdoption": null,
+  "libraryUploaded": true,
+  "published": false,
+  "libraryDeliveryRecord": "delivery.json"
+}

@@ -1,0 +1,35 @@
+{
+  "width": 1122,
+  "height": 1402,
+  "exactFirstDialogue": "냉장고에 뭐 있더라… 그냥 배달 시킬까?",
+  "firstPanelOutsideLetteringChangedPixels": 0,
+  "secondPanelOutsideLocalEditMaskChangedPixels": 0,
+  "editMaskPixels": 291615,
+  "originalSecondLetteringSHA256": "e0d3fbe53da4edcefe6fdce4676bfd862b1d7c0b93ce728430cec2e76ee28990",
+  "masterFilesVerified": 237,
+  "originalInputHashesPreserved": true,
+  "generatedSource": "generated_images/exec-26748107-33c1-4139-a441-11ed71cda82f.png",
+  "generatedSourceSHA256": "93a2233737cf2b0f61ee61cb9d681473a9f540deca5923dd91ec590e1d2659b5",
+  "generationTool": "built-in image_gen",
+  "generationCalls": 1,
+  "localization": "Original pixels restored outside a manually delineated Jango edit boundary; original tofu tray preserved. Boundary visual review required.",
+  "outputs": [
+    {
+      "file": "jango-ep01-v4-01-dialogue.png",
+      "sha256": "ecd78dbba7aaeda3bb0311197cae684701331c196e9ffc52adb387bb6eee5e1e"
+    },
+    {
+      "file": "jango-ep01-v4-02-style.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    },
+    {
+      "file": "review-two-panels.png",
+      "sha256": "8f47541bea3b1cee35b8a88bdfba4b5e83292f763e1709dddc23ef1f2f8a8c3a"
+    },
+    {
+      "file": "style-before-after.png",
+      "sha256": "b64d8939b611eaf1812d5693666b2b7d99de2d3fc9445a3a5ef045c7cc3b8077"
+    }
+  ],
+  "userAdoption": null
+}
