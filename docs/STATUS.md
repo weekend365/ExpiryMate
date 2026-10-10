@@ -17,47 +17,73 @@ data_as_of: 2026-10-10
 
 ## 2026-10-10 · 1.4.3 출시 전 점검 진행
 
-- App Store 공개 버전은 `1.4.2`(48), Google Play production은 `1.4.2`(35)입니다.
-  Google Play에는 미게시 변경이나 조치가 필요한 정책 선언이 없습니다.
-- Apple의 `Jango Plus` 그룹과 월간·연간 상품은 모두 **승인됨**입니다. 한국 가격은
-  월 4,900원·연 39,000원이며 가족 공유와 신규 구독 특가는 꺼져 있습니다.
-  첫 구독을 새 앱 버전과 함께 제출해야 한다는 아래 준비 기록은 현재 관문이 아닙니다.
-- App Privacy의 15개 데이터 유형, 개인정보처리방침·개인정보 선택 URL을 확인했습니다.
-  Google Play Data Safety의 전송 암호화·이메일/OAuth 계정 생성·계정/데이터 삭제 URL도
-  확인했습니다. 다만 사진·구매 내역·충돌 로그·성능 데이터 신고가 빠져 있고 쿠팡 검색어
-  공유가 신고되지 않았습니다. **콘솔의 정책 알림 없음은 이 대조의 통과를 뜻하지 않습니다.**
-  [신고 수정안](../design/reviews/release-readiness-2026-10-10/store-corrections.json)은
-  로컬 초안이며 콘솔 저장·심사 제출은 수행하지 않았습니다.
-- Railway API·Admin은 `37bc4b3d` 소스로 배포되어 있습니다. `/health`, `/ready`와 공개
-  정책 페이지는 정상이며, 운영 DB migration 45개가 모두 완료됐습니다. 이번 점검에서
-  운영 데이터·migration·판매 플래그를 변경하지 않았습니다.
-- 현재 운영의 개인 플러스 판매·원가 guardrail·purchase intent·resync는 **on**,
-  가족 플러스·일회성 추천권·Sandbox 구매 허용은 **off**입니다. 설정 존재만으로
-  구매·복원·실제 원가 검증을 통과했다고 판단하지 않습니다.
-- 로컬 `release/1.4.3-preflight`의 `14d5669`에서 버전을 1.4.3으로 올리고 API 업로드
-  크기·필드 제한 및 오류 응답, API/Sentry 소스 식별, 모바일 버전 헤더, iOS EAS 자산
-  보존과 의존성 보안 패치를 반영했습니다. API·Admin의 이 수정은 아직 운영에 배포하지
-  않았습니다. production 반영은 [운영 런북](./operations/deployment.md)을 따릅니다.
-- 기본 테스트 1,309개, lint·typecheck·docs·브랜딩 audit, API·Admin 빌드와 양 플랫폼
-  production Hermes export가 통과했습니다. 변경 전 격리 DB의 migration·통합 테스트
-  6개도 통과했으며 Prisma 변경은 없습니다.
-- npm 공식 advisory의 production/optional lockfile 그래프 검사에서 고유 GHSA가
-  117개에서 65개로 줄고 critical은 5개에서 0개로 줄었습니다. 남은 high 45·moderate
-  18·low 2는 실행 경로와 버전별 추가 검토 대상입니다. `pnpm audit` 자체는 메모리
-  부족으로 완료하지 못했습니다. 근거는 [의존성 감사 기록](../design/reviews/release-readiness-2026-10-10/dependency-audit.json)입니다.
-- 사용자가 EAS 소스 전송과 두 플랫폼 서명 빌드를 허용했습니다. iOS `1.4.3`(49)
-  [서명 빌드](https://expo.dev/accounts/devnamu/projects/expirymate/builds/a1543fd4-d748-4989-9589-f5363a912972)는 완료됐고 서명·버전·권한을 확인했습니다.
-  실제 IPA에서 구매 내역 manifest 누락을 발견해 Expo 설정과 생성된 네이티브 manifest에
-  추가했습니다. 이 수정이 포함된 다음 IPA로 교체해야 합니다.
-- Galaxy A34(Android 16)의 opt-in 글자 크기 후보에서 본문 live/cold 재측정과 입력·초점·
-  선택·React 인스턴스 보존은 확인했지만 JS Dimensions 배율은 갱신되지 않았습니다.
-  [실기기 기록](../design/reviews/release-readiness-2026-10-10/android-font-scale-qa.json)에
-  실패를 남기고 DeviceInfoModule의 configuration 갱신을 추가한 두 번째 후보를 빌드 중입니다.
-  일반·production 기본값은 계속 off이며 후보의 출시 채택은 하지 않았습니다.
+- 공개 버전은 App Store `1.4.2`(48), Google Play production `1.4.2`(35)입니다.
+  공개 출시·App Store 심사 제출은 수행하지 않았습니다.
+- `6335e02` 소스의 iOS `1.4.3`(50)과 Android `1.4.3`(36) 서명 빌드가 완료됐습니다.
+  [실제 IPA](../design/reviews/release-readiness-2026-10-10/ios-artifact-50.json)의 서명,
+  SDK 26.5·버전·앱 ID·production push·Apple 로그인·PurchaseHistory를 확인했습니다.
+  TestFlight 업로드와 iPhone의 실제 설치 버전 50을 직접 확인했으며, 사용자가 로그인·
+  완전 종료/재실행·재고·사진 추가 화면·개인 플러스 가격의 정상 동작을 확인했습니다.
+  실제 결제·복원·사진 파싱·푸시 수신까지 검증한 결과는 아닙니다.
+- [Android AAB](../design/reviews/release-readiness-2026-10-10/android-artifact-36.json)의
+  서명 무결성·버전·target/compile SDK 36·AD_ID 제거·54개 LOAD와 ZIP 16KB 정렬을
+  확인했습니다. 같은 AAB에서 만든 로컬 서명 APK는 공식 ARM64 16KB 이미지에서
+  `PAGE_SIZE=16384`, `pageSizeCompat=0`으로 초기 화면·로그인 진입·프로세스 유지가
+  통과했습니다. GNU_RELRO 끝 경계 44개는 추가 검토 대상이며 모든 SDK 실행 경로의
+  호환성을 확정하지 않았습니다. production RN/Hermes는 공식 release AAR와 같고
+  글자 크기 source 후보는 off입니다.
+- 사용자 허용으로 Android 내부 테스트 36을 게시했고 Google이 요구한 내부 테스트
+  자동 심사 범위만 허용받았습니다. production 35는 유지했습니다. 콘솔에 테스터 목록이
+  없어 별도 허용 후 QA 계정 한 명을 등록해 트랙을 활성화했습니다. USB로 직접 읽은
+  Galaxy의 앱은 아직 `1.4.2`(35)였으므로 사용자 정상 검사 보고를 RC 36의 통과로
+  처리하지 않았습니다. 참여·업데이트 뒤 실제 버전·스토어 서명·회귀 검증이 남습니다.
+- 최신 운영 DB의 일관된 snapshot 백업과 로컬 격리 복구를 확인했습니다.
+  41개 테이블의 행 수·catalog·45개 migration이 모두 일치했고 `pg_amcheck`도
+  통과했습니다. 원본 dump는 저장소 밖의 권한 제한 백업 폴더에 보존했으며 격리 복구의
+  사용자 데이터는 정리했습니다. [백업·설정 복구 기록](../design/reviews/release-readiness-2026-10-10/production-email-recovery.json)을 따릅니다.
+  Railway volume의 자동 백업 일정은 별도로 미설정입니다.
+- 사용자 허용으로 Google 구매 검증 서비스 계정의 **이메일만 수정**했습니다.
+  기존 비공개 키와 다른 설정은 유지했고 재배포 후 실제 운영 설정으로 OAuth와
+  `jango_plus` 상품 조회가 성공했습니다. [월·연 상품](../design/reviews/release-readiness-2026-10-10/google-subscription-config.json)은
+  활성이고 한국 가격 4,900원·39,000원, grace 7일·14일입니다. 구매·복원은 미검증입니다.
+- 사용자 허용으로 `6335e02`의 API·Admin 보안 수정을 운영에 배포했습니다.
+  Multer 2.4.0·업로드 경계/안전한 400·Next 15.5.27이 반영됐고
+  [운영 검증](../design/reviews/release-readiness-2026-10-10/server-security-deployment.json)에서
+  `/health`의 소스 SHA 일치·`/ready`·공개 정책 페이지 200과 인증 없는 데이터
+  GET 6경로 401을 확인했습니다. 운영 데이터·Prisma·판매 플래그·main push는 변경하지
+  않았습니다. 새로운 실제 Sentry 이벤트의 수집 확인은 남습니다.
+- 추가로 Google RTDN이 서명·audience만 확인하고 지정된 Push 계정 이메일과
+  `email_verified`를 확인하지 않는 점을 발견했습니다. Google 콘솔에서 실제 Push 계정,
+  endpoint/audience 일치·인증 on·payload unwrapping off를 확인했습니다.
+  [로컬 수정 68bd324](../design/reviews/release-readiness-2026-10-10/google-rtdn-auth.json)는
+  발신 계정을 제한하고 필수 설정 누락을 거부합니다. 운영 배포·새 환경값은 별도 허용 대기입니다.
+- 기본 테스트 1,323개(장고 23·shared 163·API 570·mobile 567)가 통과했습니다.
+  API opt-in DB 6개는 기본 실행에서 생략했으며 변경 전 깨끗한 격리 DB의 45개 migration·
+  통합 6개는 통과했습니다. lint·docs·각 workspace typecheck·환경 예시 parity·API 빌드가
+  통과했습니다. Google SDK의 overloaded mock 타입 오류는 수정 후 API 타입 검사로
+  재확인했습니다. 기존 Admin 빌드·양 플랫폼 production Hermes export·브랜딩 audit와
+  iOS EAS worker prebuild도 통과했습니다.
+- Google Play Data Safety의 사진·구매 내역·충돌·성능 신고와 쿠팡/SDK 공유 응답에
+  불일치가 있습니다. [신고 수정안](../design/reviews/release-readiness-2026-10-10/store-corrections.json)은
+  로컬 초안이며 콘솔 반영은 하지 않았습니다. App Privacy 15개 데이터 유형과 정책 URL,
+  Apple 구독 승인·한국 가격은 확인했습니다.
+- [운영 원가·구독·푸시 집계](../design/reviews/release-readiness-2026-10-10/runtime-aggregates.json)는
+  요리 4건·사진 1건 legacy 표본입니다. 정책 50건·30건·월 858원과 운영 10건·3건·
+  월 2,000원 설정이 다릅니다. 현재 모델의 p95 관문을 충족하지 않으며 수동 screenshot
+  권한은 실제 결제 근거가 아닙니다. 판매·guardrail·purchase intent·resync는 on,
+  Sandbox·가족 플러스·추천권은 off입니다. 판매/원가 설정을 임의 변경하지 않았습니다.
+  과거 푸시 100건의 receipt 오류는 없지만 새 RC의 실제 수신은 별개입니다.
+- Galaxy 글자 크기 후보 2는 debug fixture의 live/cold 배율·측정과 입력·초점·선택·
+  counter·React 인스턴스 보존을 통과했습니다. [집중 QA 기록](../design/reviews/release-readiness-2026-10-10/android-font-scale-qa.json)의
+  source release·전체 앱·스크린리더 검증은 남으며 출시 채택은 하지 않았습니다.
+- [의존성 감사](../design/reviews/release-readiness-2026-10-10/dependency-audit.json)의 고유
+  GHSA는 117→65, critical 5→0입니다. 남은 high 45·moderate 18·low 2는 실행 경로별
+  검토 대상이며 모든 권고를 안전으로 판정하지 않았습니다. `pnpm audit` 자체는 메모리
+  부족으로 완료하지 못했습니다.
 
-출시 판정은 **보류**입니다. Android 글자 크기 live/cold 검증과 release 로그인 저장,
-새 두 플랫폼 RC 실기기 회귀·푸시·구매/복원, 최종 바이너리 SDK/권한/버전 대조와
-운영 보안 수정 반영이 남아 있습니다. 스토어 심사 제출·공개 출시까지 허용된 것은 아닙니다.
+출시 판정은 **보류**입니다. Android RC 36의 실제 설치·스토어 서명·회귀, 새 RC 푸시·
+구매/복원·권한/공간 QA, 개인정보 신고 반영·원가 관문, 추가 RTDN 발신자 제한의 운영
+반영이 남습니다. opt-in 글자 크기 후보는 기본 off이며 이번 출시 채택 범위가 아닙니다.
 
 ## 현재 위치
 

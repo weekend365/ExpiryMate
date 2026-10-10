@@ -1,8 +1,9 @@
 ---
 status: active
 owner: privacy-release
-last_reviewed: 2026-08-29
+last_reviewed: 2026-10-10
 source_of_truth: true
+data_as_of: 2026-10-10
 ---
 
 # Store Privacy Declarations · Contrast Matrix
@@ -19,6 +20,26 @@ source_of_truth: true
 - 앱 제어: `앱/설정 → 개인정보와 추천 안내`
 - API: `GET /privacy/status`, `POST /privacy/ai-data-notice/accept|revoke`,
   `POST /privacy/recommendation-history/delete`, `POST /privacy/account/delete`
+
+## 2026-10-10 콘솔 대조 결과
+
+App Store의 15개 label 유형과 정책 URL을 확인했습니다. 실제 iOS 1.4.3(49) IPA에서는
+앱의 PurchaseHistory manifest 누락을 발견해 Expo 설정과 생성된 네이티브 manifest를
+보완했습니다. 교체 1.4.3(50) IPA에서 PurchaseHistory 포함·서명을 직접 확인했고
+TestFlight 업로드 및 실제 iPhone 핵심 화면 QA를 마쳤습니다. 실제 결제 QA는 별개입니다.
+
+Google Play 기존 신고는 8개 유형이며 Photos·Purchase history·Crash logs·Other app
+performance data가 빠져 있습니다. 광고 관련 위치·상호작용·진단이 임시 처리로 신고됐고,
+기기 ID·쿠팡 검색어를 포함한 제3자 공유도 꺼져 있습니다. `Sentry.wrap`의 상호작용
+breadcrumb·설치 ID·오류/성능 수집은 광고 선택과 독립적이며 opt-out이 확인되지 않았습니다.
+보상 광고 SSV에서는 계정 ID의 안정적인 HMAC 식별자를 Google에 전송하므로 이 경로도
+User IDs 공유와 목적에 대조해야 합니다. AD_ID 권한 제거와 비맞춤형 광고가 전체 SDK
+수집·공유를 없애지는 않습니다.
+
+[유형별 수정안과 근거](../design/reviews/release-readiness-2026-10-10/store-corrections.json)는
+로컬 초안이며 콘솔 저장·심사 제출은 하지 않았습니다. 아래 신고 기준을 기존 콘솔이
+이미 모두 반영했다고 해석하지 않습니다. 최종 vendor 안내는 GMA 25.5.0, 실제 설치는
+25.0.0이므로 최종 광고 경로 QA와 선언 검토를 남깁니다.
 
 ---
 
@@ -53,7 +74,7 @@ Photos or Videos / Play Photos and videos 신고와 권한 문구가 필요합�
 
 ---
 
-## 현재 v1 콘솔 입력값
+## 신고 기준과 기존 제출 이력
 
 ### App Store Connect · App Privacy
 

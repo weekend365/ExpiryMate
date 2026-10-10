@@ -1,0 +1,38 @@
+{
+  "sourceGitSHA": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+  "fileCount": 341,
+  "bytes": 2172576,
+  "secretFileCount": 0,
+  "prismaChanged": false,
+  "generatedBuildMetadata": {
+    "file": "apps/api/Dockerfile",
+    "gitShaDefault": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+    "repositoryDockerfileUnchanged": true,
+    "sha256": "60143269aa83f83eba413075727fd86a82c676dcd0fdb859c631e7bb3050fadb"
+  },
+  "uploaded": false,
+  "targetService": "api",
+  "requiredEnvironmentChange": {
+    "key": "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
+    "value": "jango-rtdn-push@jango-plz.iam.gserviceaccount.com"
+  },
+  "googlePushConsoleVerified": {
+    "authenticationEnabled": true,
+    "audienceMatchesEndpoint": true,
+    "payloadUnwrappingDisabled": true,
+    "serviceAccountMatchesRequiredValue": true
+  },
+  "checks": {
+    "apiTestsPassed": 570,
+    "apiOptInDbTestsSkipped": 6,
+    "apiTypecheckPassed": true,
+    "focusedTestsPassed": 56,
+    "apiBuildPassed": true,
+    "lintPassed": true,
+    "envParityPassed": true
+  },
+  "deploymentRequiresExplicitPermission": true,
+  "deploymentStatus": "awaiting-explicit-user-permission",
+  "officialReference": "https://docs.cloud.google.com/pubsub/docs/authenticate-push-subscriptions",
+  "finding": "Deployed source verifies Google signature/audience but does not compare the authenticated push email or require email_verified=true. Local fix restricts sender before package/purchase processing."
+}

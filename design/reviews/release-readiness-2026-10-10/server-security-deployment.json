@@ -1,0 +1,167 @@
+{
+  "checkedAt": "2026-10-10T08:30:33.395Z",
+  "authorizedSourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+  "productionDataOrSalesFlagChanged": false,
+  "gitPushed": false,
+  "checks": [
+    {
+      "url": "https://api-production-1504.up.railway.app/health",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true,
+      "metadata": {
+        "status": "ok",
+        "version": "0.1.0",
+        "gitSha": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+        "env": "production"
+      }
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/ready",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/inventory",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/spaces",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/privacy/status",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/privacy",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/privacy/choices",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/terms",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    }
+  ],
+  "apiSourceIdentityMatches": true,
+  "deployments": {
+    "api": {
+      "id": "61fcea39-0c61-4893-a59a-5d7ba7b45c91",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-10T08:26:34.425Z",
+      "sourceCommit": null,
+      "deployMessage": null,
+      "metadataKeys": [
+        "buildOnly",
+        "cliAgentSessionId",
+        "cliCaller",
+        "cliMessage",
+        "fileServiceManifest",
+        "imageDigest",
+        "logsV2",
+        "nixpacksProviders",
+        "propertyFileMapping",
+        "reason",
+        "rootDirectory",
+        "runtime",
+        "serviceManifest",
+        "volumeMounts"
+      ]
+    },
+    "admin": {
+      "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-10T08:22:58.703Z",
+      "sourceCommit": null,
+      "deployMessage": null,
+      "metadataKeys": [
+        "buildOnly",
+        "cliAgentSessionId",
+        "cliCaller",
+        "cliMessage",
+        "fileServiceManifest",
+        "imageDigest",
+        "logsV2",
+        "nixpacksProviders",
+        "propertyFileMapping",
+        "reason",
+        "rootDirectory",
+        "runtime",
+        "serviceManifest",
+        "volumeMounts"
+      ]
+    }
+  },
+  "adminBuildNext15527Observed": true,
+  "buildLogsPrinted": false,
+  "runtimeFlags": {
+    "sandboxPurchases": "false",
+    "subscriptions": "true",
+    "minimumRecipeSamples": "10",
+    "minimumPhotoSamples": "3",
+    "monthlyAiBudgetKrw": "2000"
+  },
+  "googleEmailCorrect": true,
+  "rtdnConfig": {
+    "audienceMatchesWebhook": true,
+    "configuredPushIdentityEnforcedByDeployedSource": false
+  },
+  "allPublicAndUnauthenticatedChecksPassed": true,
+  "sourceTransfer": {
+    "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+    "fileCount": 388,
+    "bytes": 2317106,
+    "apiMulter": "^2.4.0",
+    "adminNext": "^15.5.27",
+    "prismaSchemaChanged": false,
+    "secretFileCount": 0,
+    "gitPushed": false,
+    "uploaded": true,
+    "generatedReleaseBuildMetadata": {
+      "file": "apps/api/Dockerfile",
+      "gitShaBuildArgumentDefault": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+      "repositorySourceChanged": false,
+      "runtimeVariableChanged": false,
+      "dockerfileSha256": "7608f107238662436458f61b2d5f719cd1a7d4c6a128ebbfb5a78848ca0b05f6"
+    }
+  },
+  "backupEvidence": "production-email-recovery.json",
+  "limitations": [
+    "New RTDN sender identity fix is local and not deployed.",
+    "Sentry ingestion of a new live release event has not been directly verified."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "dataAsOf": "2026-10-10",
-  "status": "candidate-v1-rejected-js-font-scale-stale",
+  "status": "candidate-v2-oem-focused-live-cold-passed-release-pending",
   "device": {
     "model": "Samsung Galaxy A34 SM-A346N",
     "android": 16,
@@ -9,13 +9,14 @@
     "originalFontScale": 1.15
   },
   "scope": "Isolated QA fixture using real AppText, AppTextInput, Button and MascotSpeechBubble. No server calls or real account data.",
-  "candidateSourceSHA256": "8ed987e838635ec6fdee721101f8103471215d5e99bca6e9ea20f34eaea85ab9",
-  "apkSHA256": "f08fffb12782ed012408770827b0e4736847981ed2e7df17ab00c9bcdcde7e1c",
+  "candidateSourceSHA256": "3bd11a0aaf15ea5129c2ddcf8656a64ca3ff3e4e65ca791b61e40beb848faf0c",
+  "apkSHA256": "545725ee38baa84e189cafb162fe04596ec6488b2594308279cdd92ecf9803b0",
+  "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
   "live": [
     {
-      "instance": 1791615687274,
+      "instance": 1791618694569,
       "nativeFontUpdates": true,
-      "fontScale": 1.149999976158142,
+      "fontScale": 1,
       "width": 384,
       "height": 72.5333251953125,
       "count": 1,
@@ -45,9 +46,9 @@
       "label": "live-10"
     },
     {
-      "instance": 1791615687274,
+      "instance": 1791618694569,
       "nativeFontUpdates": true,
-      "fontScale": 1.149999976158142,
+      "fontScale": 1.2999999523162842,
       "width": 384,
       "height": 80,
       "count": 1,
@@ -77,9 +78,9 @@
       "label": "live-13"
     },
     {
-      "instance": 1791615687274,
+      "instance": 1791618694569,
       "nativeFontUpdates": true,
-      "fontScale": 1.149999976158142,
+      "fontScale": 2,
       "width": 384,
       "height": 145.066650390625,
       "count": 1,
@@ -114,9 +115,9 @@
       "label": "live-20"
     },
     {
-      "instance": 1791615687274,
+      "instance": 1791618694569,
       "nativeFontUpdates": true,
-      "fontScale": 1.149999976158142,
+      "fontScale": 1,
       "width": 384,
       "height": 72.5333251953125,
       "count": 1,
@@ -148,15 +149,18 @@
   ],
   "cold": [
     {
-      "instance": 1791616066475,
+      "instance": 1791618812254,
       "nativeFontUpdates": true,
       "fontScale": 2,
       "width": 384,
       "height": 145.066650390625,
       "count": 0,
       "value": "보존 확인",
-      "inputFocused": false,
-      "selection": null,
+      "inputFocused": true,
+      "selection": {
+        "end": 5,
+        "start": 5
+      },
       "lines": [
         {
           "text": "토마토, 먼저 살펴볼까요? ",
@@ -182,7 +186,7 @@
       "label": "cold-20"
     },
     {
-      "instance": 1791616078562,
+      "instance": 1791618825561,
       "nativeFontUpdates": true,
       "fontScale": 1.2999999523162842,
       "width": 384,
@@ -218,9 +222,30 @@
     "selectionPreserved": true,
     "counterPreserved": true,
     "nativeBodyLiveMatchesCold": true,
-    "jsDimensionsUpdated": false,
+    "jsDimensionsUpdated": true,
+    "fullSpeechBubbleReadableByScrolling": true,
+    "buttonReadable": true,
     "originalDeviceFontScaleRestored": true
   },
-  "followup": "Candidate v2 explicitly updates DeviceInfoModule on handled ReactHost configuration changes before requesting native layout. Source build remains opt-in and production default remains off. OEM and release QA pending.",
-  "uiPreservation": "No layout, navigation, font scaling caps, input keys or remount changes. Live 2.0 screenshot has keyboard and cold 2.0 has no keyboard; scroll container permits content continuation. Button visible in cold screenshot. Speech bubble full-scroll QA pending."
+  "screenshots": [
+    {
+      "file": "galaxy-font-v2-live-20.png",
+      "sha256": "57413faeff1106638dd708757d64ac6f40af96768b081d41980bc8c2498fef14",
+      "reviewed": true
+    },
+    {
+      "file": "galaxy-font-v2-cold-20-bottom.png",
+      "sha256": "73a8a364b216fdc96f7ef382dcda06305f7ec7e3191d7d78d0cbb21e35a8d745",
+      "reviewed": true
+    }
+  ],
+  "previousCandidate": {
+    "status": "candidate-v1-rejected-js-font-scale-stale",
+    "candidateSourceSHA256": "8ed987e838635ec6fdee721101f8103471215d5e99bca6e9ea20f34eaea85ab9",
+    "apkSHA256": "f08fffb12782ed012408770827b0e4736847981ed2e7df17ab00c9bcdcde7e1c",
+    "jsDimensionsUpdated": false,
+    "historyCommit": "6335e0246bcd43ba201b2b19f6762b867bcb0308"
+  },
+  "followup": "Focused Galaxy A34 debug fixture passed. Release source-build and full app/account/accessibility QA remain; EAS production AAB(36) keeps candidate off. No adoption into normal builds claimed.",
+  "uiPreservation": "No layout/navigation/scaling-cap/input-key/remount changes. Full body, button and complete speech bubble visually checked at 2.0 via scrolling. Cold launch may restore Android keyboard focus; live-cycle preservation is checked separately."
 }

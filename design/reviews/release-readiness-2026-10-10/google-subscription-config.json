@@ -1,0 +1,58 @@
+{
+  "dataAsOf": "2026-10-10T08:17:13.704Z",
+  "source": "Google Play Developer API monetization.subscriptions.get using actual production configuration after authorized email correction (read-only)",
+  "packageName": "com.expirymate.mobile",
+  "productId": "jango_plus",
+  "basePlans": [
+    {
+      "basePlanId": "monthly",
+      "state": "ACTIVE",
+      "autoRenewingBasePlanType": {
+        "billingPeriodDuration": "P1M",
+        "gracePeriodDuration": "P7D",
+        "resubscribeState": "RESUBSCRIBE_STATE_ACTIVE",
+        "prorationMode": "SUBSCRIPTION_PRORATION_MODE_CHARGE_ON_NEXT_BILLING_DATE",
+        "legacyCompatible": true,
+        "legacyCompatibleSubscriptionOfferId": ""
+      },
+      "krPrice": {
+        "regionCode": "KR",
+        "newSubscriberAvailability": true,
+        "price": {
+          "currencyCode": "KRW",
+          "units": "4900"
+        }
+      },
+      "availableRegionCount": 1
+    },
+    {
+      "basePlanId": "yearly",
+      "state": "ACTIVE",
+      "autoRenewingBasePlanType": {
+        "billingPeriodDuration": "P1Y",
+        "gracePeriodDuration": "P14D",
+        "resubscribeState": "RESUBSCRIBE_STATE_ACTIVE",
+        "prorationMode": "SUBSCRIPTION_PRORATION_MODE_CHARGE_ON_NEXT_BILLING_DATE",
+        "legacyCompatibleSubscriptionOfferId": ""
+      },
+      "krPrice": {
+        "regionCode": "KR",
+        "newSubscriberAvailability": true,
+        "price": {
+          "currencyCode": "KRW",
+          "units": "39000"
+        }
+      },
+      "availableRegionCount": 1
+    }
+  ],
+  "listings": [
+    {
+      "title": "장고 개인 플러스",
+      "benefits": [
+        "광고 없는 요리·사진 AI 소비·폐기 브리핑 재고 기반 실천 제안"
+      ],
+      "languageCode": "ko-KR"
+    }
+  ]
+}
