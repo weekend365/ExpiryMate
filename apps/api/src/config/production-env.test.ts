@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { validateProductionEnvironment } from "./production-env";
 
 describe("validateProductionEnvironment", () => {
+  it("requires the expected Google RTDN push account when subscriptions are enabled", () => {
+    const env = validSubscriptionProductionEnv();
+    delete env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL;
+    expect(() => validateProductionEnvironment(env)).toThrow(/GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL/);
+
+    env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL = "rtdn-push@example.iam.gserviceaccount.com";
+    expect(() => validateProductionEnvironment(env)).not.toThrow();
+  });
   it("skips validation outside production", () => {
     expect(() =>
       validateProductionEnvironment({
@@ -389,5 +397,6 @@ function validSubscriptionProductionEnv(): NodeJS.ProcessEnv {
     APPLE_ROOT_CERTIFICATES_BASE64: "base64-root-certificate",
     APPLE_APP_ID: "1234567890",
     GOOGLE_RTDN_AUDIENCE: "https://api.expirymate.app/subscriptions/google/rtdn",
+    GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL: "rtdn-push@expirymate-prod.iam.gserviceaccount.com",
   };
 }

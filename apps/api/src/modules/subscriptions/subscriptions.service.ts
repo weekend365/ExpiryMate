@@ -28,7 +28,6 @@ import { dateOnlyToUtcDate, toKstDateOnly } from "@expirymate/shared";
 import {
   Environment as AppleEnvironment,
 } from "@apple/app-store-server-library";
-import { OAuth2Client } from "google-auth-library";
 import { PrismaService } from "../../database/prisma.service";
 import {
   createAppleSignedDataVerifier,
@@ -41,6 +40,7 @@ import {
   isGoogleSubscriptionAcknowledged,
   listGoogleVoidedPurchases,
 } from "../../common/store-billing/google-play-publisher";
+import { verifyGooglePubSubPushIdentity } from "../../common/store-billing/google-pubsub-auth";
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
 import {
   householdSubscriptionSalesEnabled,
@@ -566,10 +566,15 @@ export class SubscriptionsService {
       "GOOGLE_RTDN_AUDIENCE",
       "Google RTDN audience가 설정되지 않았습니다.",
     );
-    await new OAuth2Client().verifyIdToken({
-      idToken: authorization.slice("Bearer ".length),
+    const serviceAccountEmail = getRequiredEnv(
+      "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
+      "Google RTDN 발신 서비스 계정이 설정되지 않았습니다.",
+    );
+    await verifyGooglePubSubPushIdentity(
+      authorization.slice("Bearer ".length),
       audience,
-    });
+      serviceAccountEmail,
+    );
 
     const payload = JSON.parse(
       Buffer.from(encodedData, "base64").toString("utf8"),

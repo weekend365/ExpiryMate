@@ -1,5 +1,6 @@
 import { generateKeyPairSync } from "node:crypto";
-import { BadRequestException, ConflictException } from "@nestjs/common";
+import { BadRequestException, ConflictException, UnauthorizedException } from "@nestjs/common";
+import { LoginTicket, OAuth2Client } from "google-auth-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SubscriptionsService } from "./subscriptions.service";
 
@@ -15,6 +16,8 @@ const managedEnvKeys = [
   "GOOGLE_PLAY_PACKAGE_NAME",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+  "GOOGLE_RTDN_AUDIENCE",
+  "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
   "MONETIZATION_EXPERIMENT_SALT",
   "MONETIZATION_OFFER_MODE",
   "SUBSCRIPTIONS_ENABLED",
@@ -73,6 +76,66 @@ describe("SubscriptionsService", () => {
       environment: null,
       verifiedAt: null,
     });
+  });
+
+  it("accepts a test RTDN from the configured verified push account without purchase lookups", async () => {
+    configureGooglePush();
+    const verify = mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    const { prisma, service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification()))
+      .resolves.toEqual({ ok: true });
+
+    expect(verify).toHaveBeenCalledWith({
+      idToken: "test-token",
+      audience: "https://api.example.com/subscriptions/notifications/google",
+    });
+    expect(fetch).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.findUnique).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { email: "other@example.iam.gserviceaccount.com", verified: true },
+    { email: "rtdn-push@example.iam.gserviceaccount.com", verified: false },
+  ])("rejects an unauthorized RTDN before store lookups or entitlement writes: $email/$verified", async ({ email, verified }) => {
+    configureGooglePush();
+    mockGooglePushIdentity(email, verified);
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    const { prisma, service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification("test-purchase-token")))
+      .rejects.toBeInstanceOf(UnauthorizedException);
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.findUnique).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when the expected RTDN service account is not configured", async () => {
+    configureGooglePush();
+    delete process.env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL;
+    const verify = mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const { service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification()))
+      .rejects.toThrow("Google RTDN 발신 서비스 계정이 설정되지 않았습니다.");
+    expect(verify).not.toHaveBeenCalled();
+  });
+
+  it("keeps RTDN package validation after push identity verification", async () => {
+    configureGooglePush();
+    mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const { service } = createService();
+    const data = Buffer.from(JSON.stringify({ packageName: "com.other.app" })).toString("base64");
+
+    await expect(service.processGoogleNotification("Bearer test-token", data))
+      .rejects.toBeInstanceOf(BadRequestException);
   });
 
   it("creates a short-lived personal purchase intent with store account bindings", async () => {
@@ -1089,6 +1152,31 @@ function createService() {
     prisma,
     service: new SubscriptionsService(prisma as never),
   };
+}
+
+function configureGooglePush() {
+  process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+  process.env.GOOGLE_RTDN_AUDIENCE = "https://api.example.com/subscriptions/notifications/google";
+  process.env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL = "rtdn-push@example.iam.gserviceaccount.com";
+}
+
+function mockGooglePushIdentity(email: string, emailVerified = true) {
+  return vi.spyOn(OAuth2Client.prototype, "verifyIdToken").mockImplementation(async () => new LoginTicket("test-envelope", {
+    iss: "https://accounts.google.com",
+    sub: "test-push-service-account",
+    aud: process.env.GOOGLE_RTDN_AUDIENCE!,
+    iat: 100,
+    exp: 200,
+    email,
+    email_verified: emailVerified,
+  }));
+}
+
+function googleNotification(purchaseToken?: string) {
+  return Buffer.from(JSON.stringify({
+    packageName: "com.expirymate.mobile",
+    ...(purchaseToken ? { subscriptionNotification: { purchaseToken } } : { testNotification: { version: "1.0" } }),
+  })).toString("base64");
 }
 
 function jsonResponse(payload: unknown, ok = true, status = 200) {
