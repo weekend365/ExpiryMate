@@ -1469,7 +1469,7 @@
     "loadAlignmentPassCount": 54,
     "relroEndAlignmentPassCount": 10
   },
-  "limitations": "Signed AAB validated; actual Galaxy version37/Play installer and base/native split signing certificate verified. Actual Play-generated arm64 split 16KB ZIP alignment passes. 54 AAB native library hashes match RC36 with prior official 16KB initial runtime evidence. New full JavaScript/core flow/accessibility and every native SDK runtime path remain unqualified. 44 GNU_RELRO end boundaries remain review items. Menu visible per user; price/purchase/restore lifecycle still blocked by cost gate.",
+  "limitations": "Signed AAB validated; actual Galaxy version37/Play installer and base/native split signing certificate verified. Actual Play-generated arm64 split 16KB ZIP alignment passes. 54 AAB native library hashes match RC36 with prior official 16KB initial runtime evidence. New full JavaScript/core flow/accessibility and every native SDK runtime path remain unqualified. 44 GNU_RELRO end boundaries remain review items. Menu, price and join-button display confirmed by user after personal sales cost exception activation; actual purchase/restore/lifecycle QA pending. Sandbox receipts remain rejected.",
   "nativeLibraryComparisonTo36": {
     "samePaths": true,
     "identicalSha256Count": 54,
@@ -1479,7 +1479,7 @@
   "realDeviceQA": {
     "version37Installed": true,
     "menuVisibility": "User reports Jango Plus menu now visible",
-    "pricePurchaseAndRestoreLifecycle": "pending; new sales still blocked by cost gate",
+    "pricePurchaseAndRestoreLifecycle": "Price and join-button display confirmed by user after personal cost exception activation; actual purchase/restore/lifecycle pending",
     "nativeLayoutAndAccessibility": "pending",
     "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
     "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
@@ -1531,6 +1531,19 @@
       "zipalignExitCode": 0,
       "deviceIdentifiersPrinted": false,
       "limitations": "Static check of actual Play-generated native split; Galaxy page size and all SDK runtime paths are not qualified by this check."
+    },
+    "storePriceDisplayQA": {
+      "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
+      "evidenceSource": "User report after requested complete app restart and Jango Plus screen check",
+      "userReply": "두 기기 모두 가격·가입 버튼 표시",
+      "iPhonePriceAndJoinButtonVisible": true,
+      "galaxyPriceAndJoinButtonVisible": true,
+      "requestedPricesKrw": {
+        "monthly": 4900,
+        "yearly": 39000
+      },
+      "paymentOrRestorePressedByAgent": false,
+      "realPurchaseRestoreLifecycleVerified": false
     }
   },
   "internalTest": {

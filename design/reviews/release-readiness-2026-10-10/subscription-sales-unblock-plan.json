@@ -78,5 +78,6 @@
   "productionActivationRecord": "subscription-sales-activation.json",
   "effectivePersonalSalesAvailability": true,
   "realPurchaseRestoreQaPassed": false,
-  "actualDevicePriceQa": "Requested after deployment; not yet confirmed"
+  "actualDevicePriceQa": "Price and join button visible on both devices per user after requested restart",
+  "devicePriceQaConfirmedAt": "2026-10-10T12:16:01.105568+00:00"
 }

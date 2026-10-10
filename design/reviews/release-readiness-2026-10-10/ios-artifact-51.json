@@ -286,7 +286,7 @@
       "types": []
     }
   ],
-  "limitations": "Static artifact checks and TestFlight processing/internal group verified. iPhone 51 installation and menu/native layout QA pending. Price/purchase/restore lifecycle remains unqualified while effective new sales are blocked by cost guardrail. No App Review or public release.",
+  "limitations": "Static artifact checks and TestFlight processing/internal group verified. User confirms menu, price and join-button display after requested update/restart; direct iOS 51 version read unavailable. Full native layout/core flow/accessibility and actual purchase/restore/lifecycle QA remain incomplete. Personal sales cost exception is deployed; Sandbox receipts remain rejected. No App Review or public app update release.",
   "testFlight": {
     "uploadCompleted": true,
     "submissionId": "a69ab139-3e96-4f64-922b-d849ee85d118",
@@ -305,7 +305,20 @@
     "menuVisibility": "User reports Jango Plus menu now visible",
     "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
     "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
-    "pricePurchaseAndRestoreLifecycle": "pending; new sales still blocked by cost gate",
-    "directVersion51Read": "not currently available; user reports menu visible after requested TestFlight update"
+    "pricePurchaseAndRestoreLifecycle": "Price and join-button display confirmed by user after personal cost exception activation; actual purchase/restore/lifecycle pending",
+    "directVersion51Read": "not currently available; user reports menu visible after requested TestFlight update",
+    "storePriceDisplayQA": {
+      "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
+      "evidenceSource": "User report after requested complete app restart and Jango Plus screen check",
+      "userReply": "두 기기 모두 가격·가입 버튼 표시",
+      "iPhonePriceAndJoinButtonVisible": true,
+      "galaxyPriceAndJoinButtonVisible": true,
+      "requestedPricesKrw": {
+        "monthly": 4900,
+        "yearly": 39000
+      },
+      "paymentOrRestorePressedByAgent": false,
+      "realPurchaseRestoreLifecycleVerified": false
+    }
   }
 }

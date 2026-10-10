@@ -98,7 +98,7 @@
     "iOS51RequestedUpdate": "menu visible per user; direct version read unavailable",
     "android37": "actual installed version/Play installer/app signing cert verified; menu visible per user",
     "loginRelaunchInventoryPhotoFlow": "not separately reconfirmed by latest reply",
-    "pricePurchaseRestoreLifecycle": "pending; sales cost gate remains false",
+    "pricePurchaseRestoreLifecycle": "Price and join-button display confirmed by user on both devices after sales activation; purchase/restore/lifecycle pending",
     "salesUnlockRequestedByUser": true
   },
   "personalSalesFollowUp": {
@@ -106,6 +106,19 @@
     "userApprovedCostException": true,
     "effectivePersonalSalesAvailability": true,
     "apiSourceGitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
-    "devicePriceQaPending": true
+    "devicePriceQaPending": false,
+    "devicePriceQa": {
+      "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
+      "evidenceSource": "User report after requested complete app restart and Jango Plus screen check",
+      "userReply": "두 기기 모두 가격·가입 버튼 표시",
+      "iPhonePriceAndJoinButtonVisible": true,
+      "galaxyPriceAndJoinButtonVisible": true,
+      "requestedPricesKrw": {
+        "monthly": 4900,
+        "yearly": 39000
+      },
+      "paymentOrRestorePressedByAgent": false,
+      "realPurchaseRestoreLifecycleVerified": false
+    }
   }
 }

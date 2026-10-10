@@ -1,5 +1,5 @@
 {
-  "state": "Deployed and runtime verified; actual device price and purchase QA pending",
+  "state": "Deployed, runtime verified and price/join-button display confirmed by user on both devices; purchase QA pending",
   "userAuthorization": {
     "date": "2026-10-10",
     "request": "원가 검증 예외를 승인하고 전체 판매 열기",
@@ -68,7 +68,7 @@
   "realPurchaseRestoreQaPassed": false,
   "publicAppUpdateReleased": false,
   "gitPushed": false,
-  "remaining": "Actual device price display; real store purchase/restore and lifecycle QA; current-model cost qualification",
+  "remaining": "Real store purchase/restore and lifecycle QA; current-model cost qualification",
   "verifiedAt": "2026-10-10T11:42:40.115Z",
   "publicAndUnauthenticatedChecks": [
     {
@@ -194,11 +194,17 @@
     "userDataOrRawCostsReturned": false
   },
   "appDevicePriceQa": {
-    "state": "Requested after deployment; waiting for user confirmation",
-    "expectedKoreanPrices": {
-      "monthlyKrw": 4900,
-      "yearlyKrw": 39000
+    "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
+    "evidenceSource": "User report after requested complete app restart and Jango Plus screen check",
+    "userReply": "두 기기 모두 가격·가입 버튼 표시",
+    "iPhonePriceAndJoinButtonVisible": true,
+    "galaxyPriceAndJoinButtonVisible": true,
+    "requestedPricesKrw": {
+      "monthly": 4900,
+      "yearly": 39000
     },
-    "paymentOrRestorePressedByAgent": false
+    "paymentOrRestorePressedByAgent": false,
+    "realPurchaseRestoreLifecycleVerified": false,
+    "state": "Passed display check per user; purchase and restoration untested"
   }
 }
