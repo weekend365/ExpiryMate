@@ -1,7 +1,7 @@
 {
   "source": "npm Bulk Advisory endpoint",
-  "recordedAt": "2026-10-10T06:34:25.531Z",
-  "lockfileSHA256": "dc2b4d1f6076214b5c7cc8c1b31d7af641b5285b79290ae7fc731340796e305a",
+  "recordedAt": "2026-10-10T07:15:25.741Z",
+  "lockfileSHA256": "4d291c7c4c6cd4aa96568fa8d2922b6063bf32abfdb1220c2e379fb7b61d81fc",
   "scope": "all workspace production dependency roots and recursive dependencies/optionalDependencies; excludes importer devDependencies; includes build-time dependencies under production roots",
   "packageNames": 986,
   "packageVersions": 1114,
@@ -46,7 +46,7 @@
         "8.4.49": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "postcss@8.4.49"
           ]
@@ -82,7 +82,7 @@
         "8.4.49": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "postcss@8.4.49"
           ]
@@ -119,7 +119,7 @@
         "8.4.49": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "postcss@8.4.49"
           ]
@@ -155,7 +155,7 @@
         "8.4.49": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "postcss@8.4.49"
           ]
@@ -272,7 +272,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)",
+            "react-native-worklets@0.5.1(@babel/core@7.29.0)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)",
             "@babel/core@7.29.0"
           ]
         }
@@ -305,7 +305,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo-router@6.0.24(pujf2pieuas3tmc2ba66ibokt4)",
+            "expo-router@6.0.24(gpvml36wthh6cc44d7vdwdwpsy)",
             "nanoid@3.3.11"
           ]
         }
@@ -338,7 +338,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo-router@6.0.24(pujf2pieuas3tmc2ba66ibokt4)",
+            "expo-router@6.0.24(gpvml36wthh6cc44d7vdwdwpsy)",
             "nanoid@3.3.11"
           ]
         }
@@ -371,7 +371,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo-router@6.0.24(pujf2pieuas3tmc2ba66ibokt4)",
+            "expo-router@6.0.24(gpvml36wthh6cc44d7vdwdwpsy)",
             "nanoid@3.3.11"
           ]
         }
@@ -404,7 +404,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "postcss@8.4.49",
             "source-map-js@1.2.1"
@@ -440,7 +440,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "browserslist@4.28.2"
           ]
@@ -476,7 +476,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "browserslist@4.28.2"
           ]
@@ -512,7 +512,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -542,7 +542,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -572,8 +572,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -610,7 +610,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -648,7 +648,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -678,8 +678,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -708,7 +708,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -738,8 +738,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -768,7 +768,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -806,7 +806,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -844,7 +844,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -874,7 +874,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -904,8 +904,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -942,7 +942,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -972,7 +972,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -1002,8 +1002,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -1040,7 +1040,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/fingerprint@0.15.5",
             "minimatch@10.2.5",
             "brace-expansion@5.0.5"
@@ -1070,7 +1070,7 @@
         "1.1.14": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "glob@7.2.3",
             "minimatch@3.1.5",
             "brace-expansion@1.1.14"
@@ -1100,8 +1100,8 @@
         "2.1.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "minimatch@9.0.9",
             "brace-expansion@2.1.0"
           ]
@@ -1137,7 +1137,7 @@
           ],
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro-config@54.0.17(expo@54.0.37)",
             "browserslist@4.28.2",
             "baseline-browser-mapping@2.10.20"
@@ -1772,8 +1772,8 @@
         "8.20.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "ws@8.20.0"
           ]
         }
@@ -1802,8 +1802,8 @@
         "8.20.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "ws@8.20.0"
           ]
         }
@@ -1832,7 +1832,7 @@
         "7.5.10": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "react-devtools-core@6.1.5",
             "ws@7.5.10"
           ]
@@ -1862,7 +1862,7 @@
         "6.2.3": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "ws@6.2.3"
           ]
         }
@@ -1890,8 +1890,8 @@
         "1.8.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "compression@1.8.1"
           ]
         }
@@ -1918,8 +1918,8 @@
         "1.4.0": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "node-forge@1.4.0"
           ]
         }
@@ -1949,7 +1949,7 @@
         "0.2.2": {
           "apps/mobile": [
             "apps/mobile",
-            "expo-router@6.0.24(pujf2pieuas3tmc2ba66ibokt4)",
+            "expo-router@6.0.24(gpvml36wthh6cc44d7vdwdwpsy)",
             "query-string@7.1.3",
             "decode-uri-component@0.2.2"
           ]
@@ -1977,8 +1977,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2006,8 +2006,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2035,8 +2035,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2064,8 +2064,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2093,8 +2093,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2122,8 +2122,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2151,8 +2151,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2181,8 +2181,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2210,8 +2210,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2240,8 +2240,8 @@
         "0.8.13": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/plist@0.4.9",
             "@xmldom/xmldom@0.8.13"
           ]
@@ -2269,7 +2269,7 @@
         "3.14.2": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "babel-jest@29.7.0(@babel/core@7.29.0)",
             "babel-plugin-istanbul@6.1.1",
             "@istanbuljs/load-nyc-config@1.1.0",
@@ -2299,8 +2299,8 @@
         "4.1.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/xcpretty@4.4.3",
             "js-yaml@4.1.1"
           ]
@@ -2329,8 +2329,8 @@
         "4.1.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/xcpretty@4.4.3",
             "js-yaml@4.1.1"
           ]
@@ -2359,7 +2359,7 @@
         "3.14.2": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "babel-jest@29.7.0(@babel/core@7.29.0)",
             "babel-plugin-istanbul@6.1.1",
             "@istanbuljs/load-nyc-config@1.1.0",
@@ -2389,7 +2389,7 @@
         "3.14.2": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "babel-jest@29.7.0(@babel/core@7.29.0)",
             "babel-plugin-istanbul@6.1.1",
             "@istanbuljs/load-nyc-config@1.1.0",
@@ -2419,8 +2419,8 @@
         "4.1.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/xcpretty@4.4.3",
             "js-yaml@4.1.1"
           ]
@@ -2449,7 +2449,7 @@
         "3.14.2": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "babel-jest@29.7.0(@babel/core@7.29.0)",
             "babel-plugin-istanbul@6.1.1",
             "@istanbuljs/load-nyc-config@1.1.0",
@@ -2480,8 +2480,8 @@
         "4.1.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
-            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "@expo/cli@54.0.27(expo-router@6.0.24)(expo@54.0.37)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(typescript@5.9.3)",
             "@expo/xcpretty@4.4.3",
             "js-yaml@4.1.1"
           ]
@@ -2510,7 +2510,7 @@
         "7.0.3": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/config-plugins@54.0.5",
             "xcode@3.0.1",
             "uuid@7.0.3"
@@ -2539,7 +2539,7 @@
         "1.2.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro@54.2.0",
             "metro@0.83.3",
             "image-size@1.2.1"
@@ -2568,7 +2568,7 @@
         "1.2.1": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro@54.2.0",
             "metro@0.83.3",
             "image-size@1.2.1"
@@ -2597,7 +2597,7 @@
         "3.0.3": {
           "apps/mobile": [
             "apps/mobile",
-            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
+            "expo@54.0.37(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.24)(react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)(typescript@5.9.3)",
             "@expo/metro@54.2.0",
             "metro-file-map@0.83.3",
             "micromatch@4.0.8",
@@ -2627,7 +2627,7 @@
         "1.0.3": {
           "apps/mobile": [
             "apps/mobile",
-            "react-native@0.81.5(patch_hash=mqi4rrnrltet2v4fgkb75fu62a)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
+            "react-native@0.81.5(patch_hash=e4sh4gkked5uvoowclmack7hrm)(@babel/core@7.29.0)(@react-native/metro-config@0.85.1(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0)",
             "babel-jest@29.7.0(@babel/core@7.29.0)",
             "babel-plugin-istanbul@6.1.1",
             "@istanbuljs/load-nyc-config@1.1.0",
@@ -2638,6 +2638,5 @@
         }
       }
     }
-  ],
-  "notice": "Registry version matches, not proof of runtime exploitability. pnpm audit --prod crashed with Node heap OOM; this report uses official npm Bulk Advisory endpoint instead."
+  ]
 }

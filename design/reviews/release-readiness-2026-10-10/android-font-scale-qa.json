@@ -1,0 +1,226 @@
+{
+  "dataAsOf": "2026-10-10",
+  "status": "candidate-v1-rejected-js-font-scale-stale",
+  "device": {
+    "model": "Samsung Galaxy A34 SM-A346N",
+    "android": 16,
+    "sdk": 36,
+    "widthDp": 384,
+    "originalFontScale": 1.15
+  },
+  "scope": "Isolated QA fixture using real AppText, AppTextInput, Button and MascotSpeechBubble. No server calls or real account data.",
+  "candidateSourceSHA256": "8ed987e838635ec6fdee721101f8103471215d5e99bca6e9ea20f34eaea85ab9",
+  "apkSHA256": "f08fffb12782ed012408770827b0e4736847981ed2e7df17ab00c9bcdcde7e1c",
+  "live": [
+    {
+      "instance": 1791615687274,
+      "nativeFontUpdates": true,
+      "fontScale": 1.149999976158142,
+      "width": 384,
+      "height": 72.5333251953125,
+      "count": 1,
+      "value": "보존 확인QA143",
+      "inputFocused": true,
+      "selection": {
+        "end": 10,
+        "start": 10
+      },
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 함께 ",
+          "width": 285.1555480957031,
+          "height": 24.177778244018555
+        },
+        {
+          "text": "확인해 주세요. 필요한 내용을 끝까지 읽을 수 ",
+          "width": 281.24444580078125,
+          "height": 24.177778244018555
+        },
+        {
+          "text": "있어요.",
+          "width": 45.86666488647461,
+          "height": 24.177778244018555
+        }
+      ],
+      "label": "live-10"
+    },
+    {
+      "instance": 1791615687274,
+      "nativeFontUpdates": true,
+      "fontScale": 1.149999976158142,
+      "width": 384,
+      "height": 80,
+      "count": 1,
+      "value": "보존 확인QA143",
+      "inputFocused": true,
+      "selection": {
+        "end": 10,
+        "start": 10
+      },
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 ",
+          "width": 318.9333190917969,
+          "height": 26.66666603088379
+        },
+        {
+          "text": "함께 확인해 주세요. 필요한 내용을 ",
+          "width": 274.1333312988281,
+          "height": 26.66666603088379
+        },
+        {
+          "text": "끝까지 읽을 수 있어요.",
+          "width": 177.06666564941406,
+          "height": 26.66666603088379
+        }
+      ],
+      "label": "live-13"
+    },
+    {
+      "instance": 1791615687274,
+      "nativeFontUpdates": true,
+      "fontScale": 1.149999976158142,
+      "width": 384,
+      "height": 145.066650390625,
+      "count": 1,
+      "value": "보존 확인QA143",
+      "inputFocused": true,
+      "selection": {
+        "end": 10,
+        "start": 10
+      },
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? ",
+          "width": 283.3777770996094,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "개봉한 재료도 함께 확인해 ",
+          "width": 292.977783203125,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "주세요. 필요한 내용을 끝까지 ",
+          "width": 324.6222229003906,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "읽을 수 있어요.",
+          "width": 166.04444885253906,
+          "height": 36.266666412353516
+        }
+      ],
+      "label": "live-20"
+    },
+    {
+      "instance": 1791615687274,
+      "nativeFontUpdates": true,
+      "fontScale": 1.149999976158142,
+      "width": 384,
+      "height": 72.5333251953125,
+      "count": 1,
+      "value": "보존 확인QA143",
+      "inputFocused": true,
+      "selection": {
+        "end": 10,
+        "start": 10
+      },
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 함께 ",
+          "width": 285.1555480957031,
+          "height": 24.177778244018555
+        },
+        {
+          "text": "확인해 주세요. 필요한 내용을 끝까지 읽을 수 ",
+          "width": 281.24444580078125,
+          "height": 24.177778244018555
+        },
+        {
+          "text": "있어요.",
+          "width": 45.86666488647461,
+          "height": 24.177778244018555
+        }
+      ],
+      "label": "live-return-10"
+    }
+  ],
+  "cold": [
+    {
+      "instance": 1791616066475,
+      "nativeFontUpdates": true,
+      "fontScale": 2,
+      "width": 384,
+      "height": 145.066650390625,
+      "count": 0,
+      "value": "보존 확인",
+      "inputFocused": false,
+      "selection": null,
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? ",
+          "width": 283.3777770996094,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "개봉한 재료도 함께 확인해 ",
+          "width": 292.977783203125,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "주세요. 필요한 내용을 끝까지 ",
+          "width": 324.6222229003906,
+          "height": 36.266666412353516
+        },
+        {
+          "text": "읽을 수 있어요.",
+          "width": 166.04444885253906,
+          "height": 36.266666412353516
+        }
+      ],
+      "label": "cold-20"
+    },
+    {
+      "instance": 1791616078562,
+      "nativeFontUpdates": true,
+      "fontScale": 1.2999999523162842,
+      "width": 384,
+      "height": 80,
+      "count": 0,
+      "value": "보존 확인",
+      "inputFocused": false,
+      "selection": null,
+      "lines": [
+        {
+          "text": "토마토, 먼저 살펴볼까요? 개봉한 재료도 ",
+          "width": 318.9333190917969,
+          "height": 26.66666603088379
+        },
+        {
+          "text": "함께 확인해 주세요. 필요한 내용을 ",
+          "width": 274.1333312988281,
+          "height": 26.66666603088379
+        },
+        {
+          "text": "끝까지 읽을 수 있어요.",
+          "width": 177.06666564941406,
+          "height": 26.66666603088379
+        }
+      ],
+      "label": "cold-13"
+    }
+  ],
+  "observed": {
+    "sameReactInstance": true,
+    "inputValuePreserved": true,
+    "inputFocusPreserved": true,
+    "selectionPreserved": true,
+    "counterPreserved": true,
+    "nativeBodyLiveMatchesCold": true,
+    "jsDimensionsUpdated": false,
+    "originalDeviceFontScaleRestored": true
+  },
+  "followup": "Candidate v2 explicitly updates DeviceInfoModule on handled ReactHost configuration changes before requesting native layout. Source build remains opt-in and production default remains off. OEM and release QA pending.",
+  "uiPreservation": "No layout, navigation, font scaling caps, input keys or remount changes. Live 2.0 screenshot has keyboard and cold 2.0 has no keyboard; scroll container permits content continuation. Button visible in cold screenshot. Speech bubble full-scroll QA pending."
+}

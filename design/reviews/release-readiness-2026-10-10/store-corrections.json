@@ -1,0 +1,89 @@
+{
+  "status": "draft-not-applied",
+  "dataAsOf": "2026-10-10",
+  "app": "장고야 부탁해",
+  "version": "1.4.3",
+  "destination": "Google Play Console / com.expirymate.mobile / Data Safety",
+  "observed": {
+    "policyAttentionItems": 0,
+    "completedDeclarations": 11,
+    "declaredTypes": ["Approximate location", "Name", "Email address", "User IDs", "App interactions", "Other user-generated content", "Diagnostics", "Device or other IDs"],
+    "missingTypes": ["Photos", "Purchase history", "Crash logs", "Other app performance data"],
+    "otherUserGeneratedContent": {"collected": true, "shared": false, "ephemeral": false, "optional": true, "collectionPurposes": ["App functionality", "Personalization"]},
+    "previewSharedData": "No data shared with third parties",
+    "encryptedInTransit": true,
+    "accountMethods": ["Username and password", "OAuth"],
+    "accountDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "dataDeletionUrl": "https://jango.devnamu.com/privacy/choices"
+  },
+  "proposedCorrections": [
+    {
+      "type": "Photos",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": ["App functionality"],
+      "reason": "사용자가 영수증/냉장고 사진을 서버로 보내며 OpenAI Vision이 처리합니다. 서버 원본 폐기와 제공자의 보관 정책을 구분하므로 전체 처리 경로를 임시 처리라고 신고하지 않습니다. OCR/바코드 프레임은 기기 내 처리로 별개입니다.",
+      "source": "docs/store-privacy-declarations.md"
+    },
+    {
+      "type": "Purchase history",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": ["App functionality", "Account management"],
+      "reason": "개인 플러스 구매·복원의 상품/거래/토큰·갱신/만료/취소 정보가 서버 검증 및 권리 복원에 사용됩니다. 카드번호를 수집한다는 신고는 아닙니다.",
+      "source": "docs/store-privacy-declarations.md"
+    },
+    {
+      "type": "Crash logs",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": ["Analytics"],
+      "reason": "production에서 Sentry 네이티브 오류와 captureException 경로가 활성화됩니다. Sentry는 서비스 제공자로 처리하며 별도의 사용자 opt-out은 확인되지 않았습니다.",
+      "source": "apps/mobile/src/services/sentry.ts"
+    },
+    {
+      "type": "Other app performance data",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": ["Analytics"],
+      "reason": "Sentry tracesSampleRate=0.2로 성능 추적이 켜져 있습니다. 광고 SDK의 추가 수집·공유 목적은 아래 추가 대조 범위에 포함합니다.",
+      "source": "apps/mobile/src/services/sentry.ts"
+    },
+    {
+      "type": "Other user-generated content",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": ["App functionality", "Personalization"],
+      "sharingPurposes": ["App functionality"],
+      "reason": "쿠팡 상품 검색어 한 건의 제3자 전달을 신고합니다. 전체 재고·수량·유통기한·계정 ID·공간 정보는 전송하지 않습니다.",
+      "source": "docs/store-privacy-declarations.md"
+    }
+  ],
+  "additionalReconciliation": {
+    "required": true,
+    "scope": "광고 SDK의 대략적 위치·앱 상호작용·진단·기기 ID 수집/공유/목적 및 임시 처리 응답을 설치 SDK와 실제 광고 선택 경로에 대조해야 합니다. 현재 미리보기의 공유 없음과 일부 선택된 유형이 표시되지 않는 상태만으로 이를 통과 처리하지 않습니다.",
+    "sources": ["apps/mobile/src/features/monetization/rewarded-ad.ts", "https://developers.google.com/admob/android/privacy/play-data-disclosure", "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"]
+  },
+  "apple": {
+    "privacyTypes": 15,
+    "privacyUrlsMatch": true,
+    "monthlyProduct": {"id": "expirymate_premium_monthly", "status": "APPROVED", "krw": 4900, "familySharing": false, "introductoryOffers": 0},
+    "yearlyProduct": {"id": "expirymate_premium_yearly", "status": "APPROVED", "krw": 39000, "familySharing": false, "introductoryOffers": 0},
+    "currentVersion": "1.4.2",
+    "currentBuild": "48",
+    "currentReleaseMode": "Automatically after approval",
+    "notes": "현재 공개 버전의 설정은 변경하지 않았습니다. 새 버전의 출시 방식은 최종 QA·제출 단계에서 확인해야 합니다. 기존 상품 심사 노트에는 과거 1.4.1 언급이 남아 있습니다."
+  },
+  "externalWritesPerformed": false,
+  "authorization": "EAS 소스 전송 및 두 플랫폼 서명 빌드 허용. 스토어 심사 제출·공개 출시는 포함하지 않음."
+}

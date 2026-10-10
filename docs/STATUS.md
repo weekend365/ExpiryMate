@@ -1,9 +1,9 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-08-29
+last_reviewed: 2026-10-10
 source_of_truth: true
-data_as_of: 2026-08-29
+data_as_of: 2026-10-10
 ---
 
 # 프로젝트 현황
@@ -12,8 +12,52 @@ data_as_of: 2026-08-29
 [`ROADMAP.md`](./ROADMAP.md), 배포 절차는
 [`operations/deployment.md`](./operations/deployment.md)를 확인하세요.
 
-> 앱의 스토어 출시 상태는 2026-08-29 확인을 기준으로 합니다. 개인 플러스 업데이트 전
-> Railway, EAS, App Store Connect, Play Console의 실제 상태를 다시 확인해야 합니다.
+> 최신 확인은 아래 2026-10-10 기록을 우선합니다. 8월 기록의 버전, 판매 플래그,
+> 상품 승인 대기는 역사적 상태이며 현재 콘솔 상태로 해석하지 않습니다.
+
+## 2026-10-10 · 1.4.3 출시 전 점검 진행
+
+- App Store 공개 버전은 `1.4.2`(48), Google Play production은 `1.4.2`(35)입니다.
+  Google Play에는 미게시 변경이나 조치가 필요한 정책 선언이 없습니다.
+- Apple의 `Jango Plus` 그룹과 월간·연간 상품은 모두 **승인됨**입니다. 한국 가격은
+  월 4,900원·연 39,000원이며 가족 공유와 신규 구독 특가는 꺼져 있습니다.
+  첫 구독을 새 앱 버전과 함께 제출해야 한다는 아래 준비 기록은 현재 관문이 아닙니다.
+- App Privacy의 15개 데이터 유형, 개인정보처리방침·개인정보 선택 URL을 확인했습니다.
+  Google Play Data Safety의 전송 암호화·이메일/OAuth 계정 생성·계정/데이터 삭제 URL도
+  확인했습니다. 다만 사진·구매 내역·충돌 로그·성능 데이터 신고가 빠져 있고 쿠팡 검색어
+  공유가 신고되지 않았습니다. **콘솔의 정책 알림 없음은 이 대조의 통과를 뜻하지 않습니다.**
+  [신고 수정안](../design/reviews/release-readiness-2026-10-10/store-corrections.json)은
+  로컬 초안이며 콘솔 저장·심사 제출은 수행하지 않았습니다.
+- Railway API·Admin은 `37bc4b3d` 소스로 배포되어 있습니다. `/health`, `/ready`와 공개
+  정책 페이지는 정상이며, 운영 DB migration 45개가 모두 완료됐습니다. 이번 점검에서
+  운영 데이터·migration·판매 플래그를 변경하지 않았습니다.
+- 현재 운영의 개인 플러스 판매·원가 guardrail·purchase intent·resync는 **on**,
+  가족 플러스·일회성 추천권·Sandbox 구매 허용은 **off**입니다. 설정 존재만으로
+  구매·복원·실제 원가 검증을 통과했다고 판단하지 않습니다.
+- 로컬 `release/1.4.3-preflight`의 `14d5669`에서 버전을 1.4.3으로 올리고 API 업로드
+  크기·필드 제한 및 오류 응답, API/Sentry 소스 식별, 모바일 버전 헤더, iOS EAS 자산
+  보존과 의존성 보안 패치를 반영했습니다. API·Admin의 이 수정은 아직 운영에 배포하지
+  않았습니다. production 반영은 [운영 런북](./operations/deployment.md)을 따릅니다.
+- 기본 테스트 1,309개, lint·typecheck·docs·브랜딩 audit, API·Admin 빌드와 양 플랫폼
+  production Hermes export가 통과했습니다. 변경 전 격리 DB의 migration·통합 테스트
+  6개도 통과했으며 Prisma 변경은 없습니다.
+- npm 공식 advisory의 production/optional lockfile 그래프 검사에서 고유 GHSA가
+  117개에서 65개로 줄고 critical은 5개에서 0개로 줄었습니다. 남은 high 45·moderate
+  18·low 2는 실행 경로와 버전별 추가 검토 대상입니다. `pnpm audit` 자체는 메모리
+  부족으로 완료하지 못했습니다. 근거는 [의존성 감사 기록](../design/reviews/release-readiness-2026-10-10/dependency-audit.json)입니다.
+- 사용자가 EAS 소스 전송과 두 플랫폼 서명 빌드를 허용했습니다. iOS `1.4.3`(49)
+  [서명 빌드](https://expo.dev/accounts/devnamu/projects/expirymate/builds/a1543fd4-d748-4989-9589-f5363a912972)는 완료됐고 서명·버전·권한을 확인했습니다.
+  실제 IPA에서 구매 내역 manifest 누락을 발견해 Expo 설정과 생성된 네이티브 manifest에
+  추가했습니다. 이 수정이 포함된 다음 IPA로 교체해야 합니다.
+- Galaxy A34(Android 16)의 opt-in 글자 크기 후보에서 본문 live/cold 재측정과 입력·초점·
+  선택·React 인스턴스 보존은 확인했지만 JS Dimensions 배율은 갱신되지 않았습니다.
+  [실기기 기록](../design/reviews/release-readiness-2026-10-10/android-font-scale-qa.json)에
+  실패를 남기고 DeviceInfoModule의 configuration 갱신을 추가한 두 번째 후보를 빌드 중입니다.
+  일반·production 기본값은 계속 off이며 후보의 출시 채택은 하지 않았습니다.
+
+출시 판정은 **보류**입니다. Android 글자 크기 live/cold 검증과 release 로그인 저장,
+새 두 플랫폼 RC 실기기 회귀·푸시·구매/복원, 최종 바이너리 SDK/권한/버전 대조와
+운영 보안 수정 반영이 남아 있습니다. 스토어 심사 제출·공개 출시까지 허용된 것은 아닙니다.
 
 ## 현재 위치
 
