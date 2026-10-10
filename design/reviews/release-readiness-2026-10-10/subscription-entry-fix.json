@@ -31,7 +31,7 @@
     "mobileTestsPassed": 571,
     "mobileTypecheckPassed": true,
     "mobileLintPassed": true,
-    "signedBuildAndDeviceVerification": "pending new builds",
+    "signedBuildAndDeviceVerification": "Both signed binaries inspected and uploaded. TestFlight 51 processing/existing internal group verified; Play internal 37 committed/console available with production 35 unchanged. New device versions/menu/native accessibility QA pending.",
     "nativeLayoutScreenshotComparison": "pending; component tests do not qualify native layout or screen reader"
   },
   "userMenuAbsenceConfirmed": true,
@@ -53,21 +53,45 @@
   "signedBuilds": [
     {
       "id": "a1982185-b6ac-48db-b6ee-6cc79badd137",
-      "status": "NEW",
+      "status": "FINISHED",
       "platform": "ANDROID",
       "appVersion": "1.4.3",
       "appBuildVersion": "37",
       "gitCommitHash": "6da71d1092546badec18f70dafd8455058953f77",
-      "createdAt": "2026-10-10T10:16:00.712Z"
+      "createdAt": "2026-10-10T10:16:00.712Z",
+      "completedAt": "2026-10-10T10:33:25.707Z",
+      "error": null
     },
     {
       "id": "a4561c35-0faf-434c-801c-203996e2d8c3",
-      "status": "NEW",
+      "status": "FINISHED",
       "platform": "IOS",
       "appVersion": "1.4.3",
       "appBuildVersion": "51",
       "gitCommitHash": "6da71d1092546badec18f70dafd8455058953f77",
-      "createdAt": "2026-10-10T10:16:23.687Z"
+      "createdAt": "2026-10-10T10:16:23.687Z",
+      "completedAt": "2026-10-10T10:23:59.332Z",
+      "error": null
     }
-  ]
+  ],
+  "buildStatusCheckedAt": "2026-10-10T10:33:41.508Z",
+  "testFlight": {
+    "version": "1.4.3",
+    "build": "51",
+    "processingCompleted": true,
+    "existingInternalGroup": "Team (Expo)",
+    "inviteCount": 1,
+    "deviceQA": "pending"
+  },
+  "androidInternalTest": {
+    "version": "1.4.3",
+    "versionCode": 37,
+    "internalVersionActive": true,
+    "consoleAvailableToInternalTesters": true,
+    "productionVersionCode": 35,
+    "productionTrackChanged": false,
+    "testersChanged": false,
+    "requiredInternalAutomaticReviewAuthorized": true,
+    "realDeviceQA": "pending"
+  }
 }

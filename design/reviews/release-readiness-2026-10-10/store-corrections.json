@@ -295,7 +295,10 @@
       "https://developers.google.com/admob/android/ssv",
       "https://docs.sentry.io/platforms/react-native/data-management/data-collected/",
       "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"
-    ]
+    ],
+    "vendorRecheckedAt": "2026-10-10T10:35:15.560910+00:00",
+    "vendorSourceLastUpdated": "2026-10-07",
+    "vendorVersionLimitation": "Official disclosure states it covers only latest version 25.5.0. This is not a version-specific attestation for installed 25.0.0. Conservative data categories remain draft, actual ad choice/SDK paths and older-version declaration review pending."
   },
   "apple": {
     "privacyTypes": 15,
@@ -335,7 +338,20 @@
       "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
       "artifactReport": "ios-artifact-50.json",
       "storeUploadPerformed": true,
-      "uploadScope": "TestFlight only, authorized separately; core user smoke passed"
+      "uploadScope": "Authorized TestFlight only. Login/relaunch/inventory/photo entry reported normal; later user reports missing Plus menu, so price QA is revoked."
+    },
+    "plusMenuFollowup": "subscription-entry-fix.json",
+    "ipa51Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "51",
+      "purchaseHistoryPresent": true,
+      "sourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+      "artifactReport": "ios-artifact-51.json",
+      "testFlightUploadAndProcessingCompleted": true,
+      "newRealDeviceQA": "pending",
+      "appReviewSubmitted": false
     }
   },
   "externalWritesPerformed": false,

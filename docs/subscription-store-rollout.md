@@ -38,7 +38,9 @@ data_as_of: 2026-10-10
   월 2,000원 기준이 다르며 수동 screenshot 권한은 실제 결제 근거가 아닙니다.
 - [메뉴 수정 ec4afd1](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
   설정 진입점과 구매 복원을 판매 가능 여부와 분리합니다. 신규 결제 차단은 유지하며
-  새 서명 빌드 iOS 1.4.3(51)·Android 1.4.3(37)의 설치 검증이 남습니다.
+  iOS 1.4.3(51)은 IPA 검사·TestFlight 처리·기존 내부 그룹 연결까지 완료했습니다.
+  Android 1.4.3(37)도 AAB 검사·기존 내부 트랙 게시를 마쳤습니다. production 35·테스터는
+  유지했습니다. 두 플랫폼 새 설치본의 메뉴·실제 화면·접근성 검증은 대기 중입니다.
 - 실제 구매·복원·갱신/취소/환불·새 RC 푸시·개인정보 신고 반영·원가 관문은 남습니다.
   App Store 심사·Play production·공개 출시는 수행하지 않았습니다.
   자세한 현황은 [STATUS](./STATUS.md)의 2026-10-10 기록을 우선합니다.
