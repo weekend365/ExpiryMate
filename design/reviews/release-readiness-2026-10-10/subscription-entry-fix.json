@@ -100,5 +100,12 @@
     "loginRelaunchInventoryPhotoFlow": "not separately reconfirmed by latest reply",
     "pricePurchaseRestoreLifecycle": "pending; sales cost gate remains false",
     "salesUnlockRequestedByUser": true
+  },
+  "personalSalesFollowUp": {
+    "record": "subscription-sales-activation.json",
+    "userApprovedCostException": true,
+    "effectivePersonalSalesAvailability": true,
+    "apiSourceGitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "devicePriceQaPending": true
   }
 }

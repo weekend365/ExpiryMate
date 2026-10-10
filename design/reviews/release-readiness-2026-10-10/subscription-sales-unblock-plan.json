@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-10T11:37:11.567723+00:00",
-  "state": "Approved operator cost exception; implementation validated; production deployment pending",
+  "checkedAt": "2026-10-10T11:42:40.115Z",
+  "state": "Selected operator cost exception deployed and runtime verified",
   "userRequest": "Enable new subscriptions after menu fix",
   "productionPrecheck": {
     "checkedAt": "2026-10-10T10:56:03.431Z",
@@ -54,10 +54,10 @@
       "requires": "Explicit user selection of whole personal Plus sales with cost-policy exception; new personal-Plus-only cost override applied consistently to three checks",
       "globalGuardrailDisabled": false,
       "existingEntitlementsAndMonthlyDailyQuotasPreserved": true,
-      "proposedServerChanges": "Implemented shared personal-only sales policy for status, purchase intent and new verified receipts; deployment pending"
+      "proposedServerChanges": "Shared personal Plus policy deployed to API 9cabee4; operator_override set; raw economics and other safeguards preserved"
     }
   },
-  "productionWritesPerformed": false,
+  "productionWritesPerformed": true,
   "newPaidAiEvaluationStarted": false,
   "newPublicAppReleasePerformed": false,
   "userAuthorization": {
@@ -73,5 +73,10 @@
     "emergencyStop": "SUBSCRIPTIONS_ENABLED=false",
     "rawEconomicsRewritten": false,
     "sandboxAcceptanceChanged": false
-  }
+  },
+  "productionWritesScope": "One Railway API variable plus authorized API deployment; no production DB data changes",
+  "productionActivationRecord": "subscription-sales-activation.json",
+  "effectivePersonalSalesAvailability": true,
+  "realPurchaseRestoreQaPassed": false,
+  "actualDevicePriceQa": "Requested after deployment; not yet confirmed"
 }

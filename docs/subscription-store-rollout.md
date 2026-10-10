@@ -32,12 +32,12 @@ data_as_of: 2026-10-10
   배포했습니다. `GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL` 추가·health SHA·인증 거부와
   Google Push 테스트 알림의 확인 지표까지 확인했습니다.
 - 판매 플래그·guardrail·purchase intent·resync는 on, Sandbox 구매 허용은 off입니다.
-  실제 신규 판매는 guardrail의 `learning` 판정으로 off입니다.
+  원가 판정은 여전히 `learning`이며 아래의 승인한 예외 적용 전 신규 판매는 off였습니다.
   [요리 4건·사진 1건 legacy 표본](../design/reviews/release-readiness-2026-10-10/runtime-aggregates.json)은
   현재 모델 원가 관문을 충족하지 않습니다. 정책 50건·30건·월 858원과 운영 10건·3건·
   월 2,000원 기준이 다르며 수동 screenshot 권한은 실제 결제 근거가 아닙니다.
 - [메뉴 수정 ec4afd1](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
-  설정 진입점과 구매 복원을 판매 가능 여부와 분리합니다. 신규 결제 차단은 유지하며
+  설정 진입점과 구매 복원을 판매 가능 여부와 분리합니다. 메뉴 수정 당시 신규 결제 차단을 유지했고
   iOS 1.4.3(51)은 IPA 검사·TestFlight 처리·기존 내부 그룹 연결까지 완료했습니다.
   Android 1.4.3(37)도 AAB 검사·기존 내부 트랙 게시를 마쳤습니다. production 35·테스터는
   유지했습니다. 사용자가 두 기기에서 메뉴 표시를 확인했고 Galaxy 실제 37·Play 서명을
@@ -47,6 +47,10 @@ data_as_of: 2026-10-10
   따라 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를 API에 적용합니다. 기본 모드는
   `required`이며 긴급 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`입니다.
   측정값·다른 상품·한도·Sandbox 거부를 보존합니다. 결제 QA·원가 검증은 아직 미완료입니다.
+- [개인 판매 예외의 운영 반영](../design/reviews/release-readiness-2026-10-10/subscription-sales-activation.json)을
+  완료했습니다. API `9cabee4`·실제 소스 SHA·서버/인증 검사 13개와 유효 개인 판매 on을
+  확인했습니다. 최신 백업·격리 복구·보호 백업 검증 후 예외 모드 하나만 변경했습니다.
+  두 기기의 가격·가입 버튼 표시를 요청했으며 실제 결제·복원은 별도 확인 대상입니다.
 - 실제 구매·복원·갱신/취소/환불·새 RC 푸시·개인정보 신고 반영·원가 관문은 남습니다.
   App Store 심사·Play production·공개 출시는 수행하지 않았습니다.
   자세한 현황은 [STATUS](./STATUS.md)의 2026-10-10 기록을 우선합니다.

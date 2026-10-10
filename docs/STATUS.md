@@ -66,7 +66,7 @@ data_as_of: 2026-10-10
   관측했습니다. 기존 비공개 키·판매 플래그·Prisma는 유지했습니다.
 - [플러스 메뉴 누락](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
   운영 원가 guardrail이 `subscriptionsEnabled=false`를 반환할 때 설정 진입점도 숨긴
-  코드에서 발생합니다. 최근 요리 4건·사진 1건으로 `learning`이며 유효 판매는 off입니다.
+  코드에서 발생했습니다. 수정 전 요리 4건·사진 1건으로 `learning`이며 유효 판매는 off였습니다.
   `ec4afd1`은 판매 중단·조회 대기/실패에도 설정 진입점과 구매 복원을 유지합니다.
   판매·원가 정책과 기존 위치·스타일은 보존했습니다. 수정 소스 `6da71d1`의 새 iOS
   `1.4.3`(51)의 [IPA 검사](../design/reviews/release-readiness-2026-10-10/ios-artifact-51.json)와
@@ -83,8 +83,13 @@ data_as_of: 2026-10-10
   따라 서버 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를 적용합니다. 상품 표시·구매
   의도·새 영수증의 원가 조건에만 예외를 두고, 원가 측정·한도·다른 상품·Sandbox 거부를
   유지합니다. 기본 정책은 `required`, 긴급 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`입니다.
-  실제 결제·복원·원가 표본 검증과 공개 앱 업데이트 출시는 별도 미완료입니다.
-- 기본 테스트 1,327개(장고 23·shared 163·API 570·mobile 571)가 통과했습니다.
+  API `9cabee4`의 [운영 반영](../design/reviews/release-readiness-2026-10-10/subscription-sales-activation.json)이
+  완료됐습니다. 새 snapshot의 41개 테이블·45개 migration·격리 복구·보호 백업을 확인했고,
+  실제 health SHA 일치와 서버/인증 검사 13개, 유효 개인 판매 on을 확인했습니다.
+  변경된 운영 변수는 예외 모드 하나뿐이며 Admin·키·원가 기준은 유지했습니다.
+  두 기기의 실제 가격 표시를 요청했습니다. 실제 결제·복원·원가 표본 검증과 공개 앱
+  업데이트 출시는 별도 미완료입니다.
+- 기본 테스트 1,345개(장고 23·shared 163·API 588·mobile 571)가 통과했습니다.
   API opt-in DB 6개는 기본 실행에서 생략했으며 변경 전 깨끗한 격리 DB의 45개 migration·
   통합 6개는 통과했습니다. lint·docs·각 workspace typecheck·환경 예시 parity·API 빌드가
   통과했습니다. Google SDK의 overloaded mock 타입 오류는 수정 후 API 타입 검사로
@@ -98,8 +103,8 @@ data_as_of: 2026-10-10
   요리 4건·사진 1건 legacy 표본입니다. 정책 50건·30건·월 858원과 운영 10건·3건·
   월 2,000원 설정이 다릅니다. 현재 모델의 p95 관문을 충족하지 않으며 수동 screenshot
   권한은 실제 결제 근거가 아닙니다. 판매 플래그·guardrail·purchase intent·resync는 on이나
-  guardrail 판정으로 유효 신규 판매는 off입니다.
-  Sandbox·가족 플러스·추천권은 off입니다. 판매/원가 설정을 임의 변경하지 않았습니다.
+  원가 판정은 여전히 `learning`·미통과입니다. 위의 명시적 승인에 따른 개인 판매 예외로
+  유효 신규 판매는 on이며 Sandbox·가족 플러스·추천권은 off입니다.
   과거 푸시 100건의 receipt 오류는 없지만 새 RC의 실제 수신은 별개입니다.
 - Galaxy 글자 크기 후보 2는 debug fixture의 live/cold 배율·측정과 입력·초점·선택·
   counter·React 인스턴스 보존을 통과했습니다. [집중 QA 기록](../design/reviews/release-readiness-2026-10-10/android-font-scale-qa.json)의
