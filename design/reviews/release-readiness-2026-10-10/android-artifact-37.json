@@ -1469,7 +1469,7 @@
     "loadAlignmentPassCount": 54,
     "relroEndAlignmentPassCount": 10
   },
-  "limitations": "Signed AAB validated before internal upload. 54 native library hashes match RC36, whose AAB-derived local APK passed initial launch on official 16KB ARM64 image. That native evidence does not qualify the new JavaScript/menu, Play-generated APK ZIP, every SDK path, or new real-device QA. 44 GNU_RELRO end boundaries remain additional review items. Android upload certificate self-signed trust warnings are expected; JAR integrity verified.",
+  "limitations": "Signed AAB validated; actual Galaxy version37/Play installer and base/native split signing certificate verified. Actual Play-generated arm64 split 16KB ZIP alignment passes. 54 AAB native library hashes match RC36 with prior official 16KB initial runtime evidence. New full JavaScript/core flow/accessibility and every native SDK runtime path remain unqualified. 44 GNU_RELRO end boundaries remain review items. Menu visible per user; price/purchase/restore lifecycle still blocked by cost gate.",
   "nativeLibraryComparisonTo36": {
     "samePaths": true,
     "identicalSha256Count": 54,
@@ -1477,10 +1477,61 @@
     "interpretation": "Only unchanged native library bytes can reuse prior native evidence. New JavaScript/menu and complete new release QA are pending."
   },
   "realDeviceQA": {
-    "version37Installed": false,
-    "menuVisibility": "pending",
-    "pricePurchaseAndRestoreLifecycle": "unqualified; effective new sales paused by guardrail",
-    "nativeLayoutAndAccessibility": "pending"
+    "version37Installed": true,
+    "menuVisibility": "User reports Jango Plus menu now visible",
+    "pricePurchaseAndRestoreLifecycle": "pending; new sales still blocked by cost gate",
+    "nativeLayoutAndAccessibility": "pending",
+    "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
+    "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
+    "deviceVersion": {
+      "checkedAt": "2026-10-10T10:56:27.370729+00:00",
+      "device": "Galaxy",
+      "physicalAndroidConnected": 1,
+      "deviceIdentifiersPrinted": false,
+      "versionCode": "37",
+      "version": "1.4.3",
+      "installedFromPlay": true
+    },
+    "playSigningEvidence": {
+      "checkedAt": "2026-10-10",
+      "artifact": "Play-generated installed base APK from Galaxy A34",
+      "package": "com.expirymate.mobile",
+      "versionName": "1.4.3",
+      "versionCode": 37,
+      "installerPackageName": "com.android.vending",
+      "apkBytes": 91813124,
+      "apkSha256": "ed2d0c0e734bdbddc1d09ff15a4d49c1e6bf7253d6feb59c892ed0880d6eaca2",
+      "signatureVerificationPassed": true,
+      "signingMetadata": [
+        "Verifies",
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): true",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false",
+        "Signer #1 certificate SHA-256 digest: 7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+        "Source Stamp Signer certificate SHA-256 digest: 3257d599a49d2c961a471ca9843f59d341a405884583fc087df4237b733bbd6d"
+      ],
+      "expectedPlayCertificateComparison": "Matches previously verified Play Console app signing certificate",
+      "expectedPlaySignerSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "deviceSerialCommitted": false
+    },
+    "playNativeSplitEvidence": {
+      "checkedAt": "2026-10-10T11:00:54.919523+00:00",
+      "artifact": "Play generated installed arm64 native split APK version37",
+      "artifactBytes": 35559882,
+      "artifactSha256": "c950e3d66853e7eea56fc0f300f67031014b13f9bdae6d091d2ff0a22845228e",
+      "nativeLibraryCount": 27,
+      "abis": [
+        "arm64-v8a"
+      ],
+      "appSigningCertificateMatchesPlayConsole": true,
+      "apkSignatureVerificationPassed": true,
+      "zipalignPageSize16KB": true,
+      "zipalignExitCode": 0,
+      "deviceIdentifiersPrinted": false,
+      "limitations": "Static check of actual Play-generated native split; Galaxy page size and all SDK runtime paths are not qualified by this check."
+    }
   },
   "internalTest": {
     "uploadedBundle": {

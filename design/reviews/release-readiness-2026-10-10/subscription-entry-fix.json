@@ -31,7 +31,7 @@
     "mobileTestsPassed": 571,
     "mobileTypecheckPassed": true,
     "mobileLintPassed": true,
-    "signedBuildAndDeviceVerification": "Both signed binaries inspected and uploaded. TestFlight 51 processing/existing internal group verified; Play internal 37 committed/console available with production 35 unchanged. New device versions/menu/native accessibility QA pending.",
+    "signedBuildAndDeviceVerification": "Both signed binaries inspected and uploaded. User reports menu visible on both devices. Android 37 actual version/Play signer verified; direct iOS 51 version read unavailable. Full native accessibility/core flow/IAP QA remains incomplete.",
     "nativeLayoutScreenshotComparison": "pending; component tests do not qualify native layout or screen reader"
   },
   "userMenuAbsenceConfirmed": true,
@@ -93,5 +93,12 @@
     "testersChanged": false,
     "requiredInternalAutomaticReviewAuthorized": true,
     "realDeviceQA": "pending"
+  },
+  "newDeviceMenuQA": {
+    "iOS51RequestedUpdate": "menu visible per user; direct version read unavailable",
+    "android37": "actual installed version/Play installer/app signing cert verified; menu visible per user",
+    "loginRelaunchInventoryPhotoFlow": "not separately reconfirmed by latest reply",
+    "pricePurchaseRestoreLifecycle": "pending; sales cost gate remains false",
+    "salesUnlockRequestedByUser": true
   }
 }

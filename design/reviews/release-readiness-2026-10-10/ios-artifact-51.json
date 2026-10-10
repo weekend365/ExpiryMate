@@ -299,6 +299,13 @@
     "verifiedAt": "2026-10-10T10:33:07.873871+00:00",
     "appReviewSubmitted": false,
     "publicReleasePerformed": false,
-    "realDeviceQA": "pending 51 update and actual menu checks"
+    "realDeviceQA": "User reports Plus menu visible after requested 51 update. Direct version51 read currently unavailable; full core flow/accessibility/IAP QA incomplete."
+  },
+  "realDeviceQA": {
+    "menuVisibility": "User reports Jango Plus menu now visible",
+    "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
+    "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
+    "pricePurchaseAndRestoreLifecycle": "pending; new sales still blocked by cost gate",
+    "directVersion51Read": "not currently available; user reports menu visible after requested TestFlight update"
   }
 }

@@ -72,10 +72,16 @@ data_as_of: 2026-10-10
   `1.4.3`(51)의 [IPA 검사](../design/reviews/release-readiness-2026-10-10/ios-artifact-51.json)와
   TestFlight 처리·기존 내부 그룹 연결이 완료됐습니다. Android `1.4.3`(37)의
   [AAB 검사](../design/reviews/release-readiness-2026-10-10/android-artifact-37.json)도 통과했고
-  기존 내부 테스트에 게시됐습니다. production 35·테스터는 유지했습니다. 마지막 직접
-  확인 설치본 50·36에는 미반영입니다. 새 빌드의 실제 화면·접근성 비교는 남습니다.
+  기존 내부 테스트에 게시됐습니다. production 35·테스터는 유지했습니다. 사용자가 두
+  플랫폼에서 메뉴 표시를 확인했습니다. Galaxy는 실제 설치 버전 37·Play 설치자·스토어
+  인증서 일치를 직접 재확인했고 iOS 51의 직접 버전 읽기는 현재 불가합니다. 새 빌드의
+  전체 핵심 흐름·화면·접근성 비교는 남습니다.
   EAS에는 비밀 파일·Git 이력·운영 자료·
   로컬 native 캐시를 제외한 905개 파일 38.3MB만 전송했습니다.
+- 사용자가 신규 구독 차단 해제를 요청했습니다. [해제 범위 준비안](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)은
+  테스트 계정만의 결제 QA, 원가 검증 후 판매, 명시적 원가 예외의 전체 개인 플러스 판매를
+  구분합니다. 운영 판매 스위치는 이미 on이고 원가·Sandbox 검사가 별개로 차단합니다.
+  필요한 적용 범위를 확인 중이며 새 운영 설정·정책 예외·유료 AI 호출은 실행하지 않았습니다.
 - 기본 테스트 1,327개(장고 23·shared 163·API 570·mobile 571)가 통과했습니다.
   API opt-in DB 6개는 기본 실행에서 생략했으며 변경 전 깨끗한 격리 DB의 45개 migration·
   통합 6개는 통과했습니다. lint·docs·각 workspace typecheck·환경 예시 parity·API 빌드가
