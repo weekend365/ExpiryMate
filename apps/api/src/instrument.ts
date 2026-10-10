@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/nestjs";
+import { getReleaseMetadata } from "./common/release-metadata";
 
 const dsn = process.env.SENTRY_DSN?.trim();
 
@@ -6,7 +7,7 @@ if (dsn) {
   const options = {
     dsn,
     environment: process.env.NODE_ENV ?? "development",
-    release: process.env.GIT_SHA,
+    release: getReleaseMetadata().gitSha,
     tracesSampleRate: 0.1,
     beforeSend(event: Sentry.ErrorEvent) {
       if (isOperationalProbeEvent(event)) {

@@ -1,5 +1,6 @@
 import { resolveApiBaseUrl } from "@expirymate/shared";
 import type { ZodType } from "zod";
+import appConfig from "../../app.json";
 import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
 
 const API_BASE_URL = resolveApiBaseUrl({
@@ -32,7 +33,7 @@ export class ApiError extends Error {
 
 const buildUrl = (path: string) => `${API_BASE_URL}${path}`;
 export const clientHeaders = {
-  "X-App-Version": process.env.EXPO_PUBLIC_APP_VERSION ?? "1.4.2",
+  "X-App-Version": appConfig.expo.version,
   "X-Client-Platform": "mobile",
 };
 

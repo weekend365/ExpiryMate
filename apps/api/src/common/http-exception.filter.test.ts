@@ -5,6 +5,7 @@ import {
   type ArgumentsHost,
 } from "@nestjs/common";
 import * as Sentry from "@sentry/node";
+import { MulterError } from "multer";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { HttpExceptionFilter } from "./http-exception.filter";
 
@@ -20,6 +21,19 @@ describe("HttpExceptionFilter", () => {
     restoreEnv("NODE_ENV", originalNodeEnv);
     restoreEnv("SENTRY_DSN", originalSentryDsn);
     vi.mocked(Sentry.captureException).mockClear();
+  });
+
+  it.each(["LIMIT_FIELD_NESTING", "LIMIT_FIELD_ARRAY_INDEX", "INVALID_FIELD_NAME"])("returns a safe 400 for new multipart validation error %s", code => {
+    process.env.NODE_ENV = "production";
+    process.env.SENTRY_DSN = "https://examplePublicKey@o0.ingest.sentry.io/0";
+    const { host, response } = createHttpHost("/inventory/parse-photo");
+    const error = Object.assign(new MulterError("LIMIT_FIELD_KEY"), { code, field: "private-field-name" });
+    new HttpExceptionFilter().catch(error, host);
+    expect(response.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+    expect(response.json).toHaveBeenCalledWith({ success: false, error: {
+      code: "HTTP_400", message: "사진 업로드 요청 형식을 확인해 주세요.",
+    } });
+    expect(Sentry.captureException).not.toHaveBeenCalled();
   });
 
   it("removes HTTP exception details in production", () => {

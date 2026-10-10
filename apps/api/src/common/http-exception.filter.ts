@@ -1,16 +1,25 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
   HttpStatus,
 } from "@nestjs/common";
 import * as Sentry from "@sentry/node";
+import { MulterError } from "multer";
 import { CodedHttpException } from "./coded-http.exception";
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(caughtException: unknown, host: ArgumentsHost) {
+    // Nest's multipart adapter does not yet map Multer 2.3's field-shape
+    // validation errors. Treat them as client errors without echoing field names.
+    const exception = caughtException instanceof MulterError && [
+      "LIMIT_FIELD_NESTING", "LIMIT_FIELD_ARRAY_INDEX", "INVALID_FIELD_NAME",
+    ].includes(caughtException.code)
+      ? new BadRequestException("사진 업로드 요청 형식을 확인해 주세요.")
+      : caughtException;
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest<{ url?: string; originalUrl?: string; path?: string }>();

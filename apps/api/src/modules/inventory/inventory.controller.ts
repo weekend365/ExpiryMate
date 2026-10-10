@@ -12,7 +12,6 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { memoryStorage } from "multer";
 import {
   batchConsumeInventoryItemsBodySchema,
   batchCreateInventoryItemsBodySchema,
@@ -25,6 +24,7 @@ import {
   type UpdateInventoryItemBody,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
+import { photoUploadOptions } from "../../common/photo-upload-options";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { BatchDiscardInventoryItemsDto } from "./dto/batch-discard-inventory-items.dto";
@@ -88,10 +88,7 @@ export class InventoryController {
 
   @Post("parse-photo")
   @UseInterceptors(
-    FileInterceptor("image", {
-      storage: memoryStorage(),
-      limits: { fileSize: 4 * 1024 * 1024 },
-    }),
+    FileInterceptor("image", photoUploadOptions),
   )
   parsePhoto(
     @CurrentOwnerKey() ownerKey: string,
