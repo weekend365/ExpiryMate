@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-10T10:59:16.984702+00:00",
-  "state": "Prepared; waiting for requested sales scope clarification",
+  "checkedAt": "2026-10-10T11:37:11.567723+00:00",
+  "state": "Approved operator cost exception; implementation validated; production deployment pending",
   "userRequest": "Enable new subscriptions after menu fix",
   "productionPrecheck": {
     "checkedAt": "2026-10-10T10:56:03.431Z",
@@ -27,7 +27,7 @@
     "flagsChanged": false,
     "userDataOrRawCostsReturned": false
   },
-  "sourcePolicy": "docs/monetization.md:335; docs/operations/deployment.md personal Plus release sequence",
+  "sourcePolicy": "docs/monetization.md dated 2026-10-10 personal Plus exception",
   "policyGate": {
     "minimumRecipes": 50,
     "minimumPhotos": 30,
@@ -54,10 +54,24 @@
       "requires": "Explicit user selection of whole personal Plus sales with cost-policy exception; new personal-Plus-only cost override applied consistently to three checks",
       "globalGuardrailDisabled": false,
       "existingEntitlementsAndMonthlyDailyQuotasPreserved": true,
-      "proposedServerChanges": "Explicit operator override for personal Plus; currently absent and not deployed"
+      "proposedServerChanges": "Implemented shared personal-only sales policy for status, purchase intent and new verified receipts; deployment pending"
     }
   },
   "productionWritesPerformed": false,
   "newPaidAiEvaluationStarted": false,
-  "newPublicAppReleasePerformed": false
+  "newPublicAppReleasePerformed": false,
+  "userAuthorization": {
+    "request": "원가 검증 예외를 승인하고 전체 판매 열기",
+    "date": "2026-10-10",
+    "scope": "All new personal Plus sales on iOS and Android; personal cost gate only"
+  },
+  "selectedOption": "operatorExceptionSales",
+  "operatorMode": {
+    "key": "SUBSCRIPTION_COST_GATE_MODE",
+    "value": "operator_override",
+    "default": "required",
+    "emergencyStop": "SUBSCRIPTIONS_ENABLED=false",
+    "rawEconomicsRewritten": false,
+    "sandboxAcceptanceChanged": false
+  }
 }

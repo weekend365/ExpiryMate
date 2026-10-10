@@ -78,10 +78,12 @@ data_as_of: 2026-10-10
   전체 핵심 흐름·화면·접근성 비교는 남습니다.
   EAS에는 비밀 파일·Git 이력·운영 자료·
   로컬 native 캐시를 제외한 905개 파일 38.3MB만 전송했습니다.
-- 사용자가 신규 구독 차단 해제를 요청했습니다. [해제 범위 준비안](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)은
-  테스트 계정만의 결제 QA, 원가 검증 후 판매, 명시적 원가 예외의 전체 개인 플러스 판매를
-  구분합니다. 운영 판매 스위치는 이미 on이고 원가·Sandbox 검사가 별개로 차단합니다.
-  필요한 적용 범위를 확인 중이며 새 운영 설정·정책 예외·유료 AI 호출은 실행하지 않았습니다.
+- 사용자가 **원가 검증 예외와 전체 개인 플러스 판매 열기**를 명시적으로 승인했습니다.
+  [적용 기록](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)에
+  따라 서버 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를 적용합니다. 상품 표시·구매
+  의도·새 영수증의 원가 조건에만 예외를 두고, 원가 측정·한도·다른 상품·Sandbox 거부를
+  유지합니다. 기본 정책은 `required`, 긴급 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`입니다.
+  실제 결제·복원·원가 표본 검증과 공개 앱 업데이트 출시는 별도 미완료입니다.
 - 기본 테스트 1,327개(장고 23·shared 163·API 570·mobile 571)가 통과했습니다.
   API opt-in DB 6개는 기본 실행에서 생략했으며 변경 전 깨끗한 격리 DB의 45개 migration·
   통합 6개는 통과했습니다. lint·docs·각 workspace typecheck·환경 예시 parity·API 빌드가

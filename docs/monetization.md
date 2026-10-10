@@ -1,7 +1,7 @@
 ---
 status: active
 owner: product
-last_reviewed: 2026-09-29
+last_reviewed: 2026-10-10
 source_of_truth: true
 ---
 
@@ -15,6 +15,21 @@ source_of_truth: true
 추천권은 판매하지 않습니다.
 
 ## 1. 현재 범위
+
+### 2026-10-10 개인 플러스 원가 검증 예외
+
+사용자가 **“원가 검증 예외를 승인하고 전체 판매 열기”**를 명시적으로 요청했습니다.
+이번 개인 플러스 신규 판매에는 서버 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를
+적용합니다. 상품·가격 표시, 구매 의도 생성, 새 영수증 승인에 같은 예외를 적용합니다.
+기본값 `required`는 기존 원가 조건을 요구하며 알 수 없는 값도 예외를 허용하지 않습니다.
+`SUBSCRIPTIONS_ENABLED=false`는 예외 모드에서도 신규 판매를 즉시 중단합니다.
+
+최근 운영 표본은 요리 4건·사진 1건, 과거 표본의 월 환산은 약 2,190원입니다.
+요리 50건·사진 30건·월 858원 기준을 통과한 것으로 기록하지 않으며, 원가 측정의
+`learning` 판정·예산·표본 기준은 보존합니다. 기존 구독 혜택·AI 한도·광고/추천권
+guardrail·가족 플러스 보류·영수증 서명/계정 결합·Sandbox 거부는 그대로 적용합니다.
+실기기 결제·복원과 구독 수명주기 QA는 미완료이며 이번 예외는 해당 검사의 통과나
+스토어 앱 업데이트의 심사·공개 출시를 뜻하지 않습니다. 후속 실호출 원가 검증은 남습니다.
 
 | 모델 | 현재 상태 | 사용자 가치 | 수익 발생 시점 |
 | --- | --- | --- | --- |
@@ -332,7 +347,8 @@ DB migration을 실행하므로 Railway 배포 로그에서 성공 여부를 확
 - 처분 이벤트 백필, 무료 미리보기, 30/90일 분석과 공간 권한 검증
 - 구매 검증·복원 성공률 98% 이상, 중복 권한·미승인 Google 구매 0건
 - 환불 비중 5% 미만, AI 원가 순매출의 25% 이하
-- `60 × 요리 p95 + 30 × 사진 p95 ≤ 858원`; 미충족 시 판매 활성화 금지
+- `60 × 요리 p95 + 30 × 사진 p95 ≤ 858원`; 기본 정책은 미충족 시 판매 활성화 금지
+  (2026-10-10의 명시적 개인 플러스 운영 예외는 위 기록을 따름)
 
 ### 광고
 
@@ -369,6 +385,7 @@ DB migration을 실행하므로 Railway 배포 로그에서 성공 여부를 확
 
 ```text
 SUBSCRIPTIONS_ENABLED=true  # 앱 공개와 원가 No-Go 통과 전에는 false
+SUBSCRIPTION_COST_GATE_MODE=required  # 2026-10-10 승인한 개인 판매 예외는 operator_override
 PAID_RECOMMENDATION_CREDITS_ENABLED=false
 HOUSEHOLD_SUBSCRIPTIONS_ENABLED=false
 BARCODE_REWARDS_ENABLED=false

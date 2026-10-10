@@ -42,9 +42,11 @@ data_as_of: 2026-10-10
   Android 1.4.3(37)도 AAB 검사·기존 내부 트랙 게시를 마쳤습니다. production 35·테스터는
   유지했습니다. 사용자가 두 기기에서 메뉴 표시를 확인했고 Galaxy 실제 37·Play 서명을
   재확인했습니다. iOS 51의 직접 버전 읽기와 새 빌드의 전체 흐름·접근성·결제 QA는 남습니다.
-- 신규 가입 차단 해제 요청에 따라 개인 플러스만의 [적용 범위](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)를 준비했습니다.
-  테스트 계정의 결제 QA와 원가 기준 예외를 둔 전체 판매를 확인 중입니다. 새 판매/원가
-  설정 변경·Sandbox 허용·유료 AI 호출은 아직 실행하지 않았습니다.
+- 사용자가 개인 플러스 전체 판매의 원가 검증 예외를 승인했습니다.
+  [적용 범위](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)에
+  따라 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를 API에 적용합니다. 기본 모드는
+  `required`이며 긴급 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`입니다.
+  측정값·다른 상품·한도·Sandbox 거부를 보존합니다. 결제 QA·원가 검증은 아직 미완료입니다.
 - 실제 구매·복원·갱신/취소/환불·새 RC 푸시·개인정보 신고 반영·원가 관문은 남습니다.
   App Store 심사·Play production·공개 출시는 수행하지 않았습니다.
   자세한 현황은 [STATUS](./STATUS.md)의 2026-10-10 기록을 우선합니다.

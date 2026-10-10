@@ -44,6 +44,7 @@ import { verifyGooglePubSubPushIdentity } from "../../common/store-billing/googl
 import { recordRevenueEvent } from "../monetization/revenue-ledger";
 import {
   householdSubscriptionSalesEnabled,
+  personalSubscriptionSalesAllowed,
   subscriptionSalesEnabled,
 } from "../monetization/subscription-sales-policy";
 import { getUnitEconomicsAvailability } from "../monetization/unit-economics-guardrail";
@@ -148,7 +149,7 @@ export class SubscriptionsService {
       );
     }
     const economics = await getUnitEconomicsAvailability(this.prisma, now);
-    if (!economics.subscriptions.allowed) {
+    if (!personalSubscriptionSalesAllowed(economics)) {
       throw new ServiceUnavailableException(
         "원가 검증이 끝날 때까지 장고 플러스 신규 가입을 잠시 쉬고 있어요.",
       );
@@ -1051,7 +1052,7 @@ export class SubscriptionsService {
     }
     if (verification.planCode === "jango_plus") {
       const economics = await getUnitEconomicsAvailability(this.prisma);
-      if (!economics.subscriptions.allowed) {
+      if (!personalSubscriptionSalesAllowed(economics)) {
         throw new ServiceUnavailableException(
           "원가 검증이 끝날 때까지 장고 플러스 신규 가입을 잠시 쉬고 있어요.",
         );

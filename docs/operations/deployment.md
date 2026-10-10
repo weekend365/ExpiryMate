@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-08-29
+last_reviewed: 2026-10-10
 source_of_truth: true
 ---
 
@@ -119,6 +119,13 @@ AdMob 값이 Expo의 production 환경에 들어 있는지 확인합니다. 로�
 
 장애 시 `SUBSCRIPTIONS_ENABLED=false`로 신규 판매만 중단합니다. 기존 권한 검증,
 스토어 알림, 재동기화는 유지해 결제 기간 중 활성 사용자의 혜택을 보존합니다.
+
+2026-10-10 사용자는 개인 플러스 전체 판매의 **원가 검증 예외**를 명시적으로 승인했습니다.
+`SUBSCRIPTION_COST_GATE_MODE=operator_override`는 개인 플러스 상품 표시·구매 의도·새 영수증
+승인의 원가 조건만 면제합니다. 측정값·예산·다른 상품·AI 사용 한도·Sandbox 거부를
+유지하며 결제 QA 통과를 뜻하지 않습니다. 적용 전에 최신 snapshot 백업·격리 복구·
+보호된 백업의 해시를 확인하고 API만 배포합니다. 예외 철회는 `required`로 복귀하고,
+즉시 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`로 수행합니다. 기존 권한은 유지합니다.
 
 ## Sentry
 
