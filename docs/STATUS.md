@@ -23,7 +23,8 @@ data_as_of: 2026-10-10
   [실제 IPA](../design/reviews/release-readiness-2026-10-10/ios-artifact-50.json)의 서명,
   SDK 26.5·버전·앱 ID·production push·Apple 로그인·PurchaseHistory를 확인했습니다.
   TestFlight 업로드와 iPhone의 실제 설치 버전 50을 직접 확인했으며, 사용자가 로그인·
-  완전 종료/재실행·재고·사진 추가 화면·개인 플러스 가격의 정상 동작을 확인했습니다.
+  완전 종료/재실행·재고·사진 추가 화면을 정상으로 보고했습니다. 이후 두 플랫폼에서
+  `장고 플러스` 메뉴 자체가 없다고 정정했으므로 가격 검사는 미완료로 되돌렸습니다.
   실제 결제·복원·사진 파싱·푸시 수신까지 검증한 결과는 아닙니다.
 - [Android AAB](../design/reviews/release-readiness-2026-10-10/android-artifact-36.json)의
   서명 무결성·버전·target/compile SDK 36·AD_ID 제거·54개 LOAD와 ZIP 16KB 정렬을
@@ -35,8 +36,11 @@ data_as_of: 2026-10-10
 - 사용자 허용으로 Android 내부 테스트 36을 게시했고 Google이 요구한 내부 테스트
   자동 심사 범위만 허용받았습니다. production 35는 유지했습니다. 콘솔에 테스터 목록이
   없어 별도 허용 후 QA 계정 한 명을 등록해 트랙을 활성화했습니다. USB로 직접 읽은
-  Galaxy의 앱은 아직 `1.4.2`(35)였으므로 사용자 정상 검사 보고를 RC 36의 통과로
-  처리하지 않았습니다. 참여·업데이트 뒤 실제 버전·스토어 서명·회귀 검증이 남습니다.
+  Galaxy의 앱은 당시 `1.4.2`(35)였으므로 그 정상 검사 보고를 RC 36의 통과로
+  처리하지 않았습니다. 테스트 참여 자격과 기기를 확인하고 사용자의 Google 본인 인증
+  후 무료 원격 설치를 진행했습니다. 현재 직접 읽은 버전은 `1.4.3`(36), 설치자는
+  `com.android.vending`이며 APK 서명 검증과 Play Console 앱 서명 인증서 일치가
+  통과했습니다. RC 36의 핵심 흐름 QA는 가격 메뉴 문제를 포함해 미완료입니다.
 - 최신 운영 DB의 일관된 snapshot 백업과 로컬 격리 복구를 확인했습니다.
   41개 테이블의 행 수·catalog·45개 migration이 모두 일치했고 `pg_amcheck`도
   통과했습니다. 원본 dump는 저장소 밖의 권한 제한 백업 폴더에 보존했으며 격리 복구의
@@ -55,9 +59,20 @@ data_as_of: 2026-10-10
 - 추가로 Google RTDN이 서명·audience만 확인하고 지정된 Push 계정 이메일과
   `email_verified`를 확인하지 않는 점을 발견했습니다. Google 콘솔에서 실제 Push 계정,
   endpoint/audience 일치·인증 on·payload unwrapping off를 확인했습니다.
-  [로컬 수정 68bd324](../design/reviews/release-readiness-2026-10-10/google-rtdn-auth.json)는
-  발신 계정을 제한하고 필수 설정 누락을 거부합니다. 운영 배포·새 환경값은 별도 허용 대기입니다.
-- 기본 테스트 1,323개(장고 23·shared 163·API 570·mobile 567)가 통과했습니다.
+  [수정 68bd324](../design/reviews/release-readiness-2026-10-10/google-rtdn-auth.json)는
+  발신 계정을 제한하고 필수 설정 누락을 거부합니다. 추가 허용 후 새 snapshot 백업과
+  격리 복구를 재확인하고 운영 API에 배포했습니다. `/health` SHA·`/ready`·공개 페이지·
+  인증 거부 13개 확인이 통과했고 19:11 KST Google Push 테스트 알림의 확인 지표를
+  관측했습니다. 기존 비공개 키·판매 플래그·Prisma는 유지했습니다.
+- [플러스 메뉴 누락](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
+  운영 원가 guardrail이 `subscriptionsEnabled=false`를 반환할 때 설정 진입점도 숨긴
+  코드에서 발생합니다. 최근 요리 4건·사진 1건으로 `learning`이며 유효 판매는 off입니다.
+  `ec4afd1`은 판매 중단·조회 대기/실패에도 설정 진입점과 구매 복원을 유지합니다.
+  판매·원가 정책과 기존 위치·스타일은 보존했습니다. 수정 소스 `6da71d1`의 새 iOS
+  `1.4.3`(51)·Android `1.4.3`(37) 서명 빌드는 생성 중이며 설치본 50·36에는 미반영입니다.
+  새 빌드의 실제 화면·접근성 비교는 남습니다. EAS에는 비밀 파일·Git 이력·운영 자료·
+  로컬 native 캐시를 제외한 905개 파일 38.3MB만 전송했습니다.
+- 기본 테스트 1,327개(장고 23·shared 163·API 570·mobile 571)가 통과했습니다.
   API opt-in DB 6개는 기본 실행에서 생략했으며 변경 전 깨끗한 격리 DB의 45개 migration·
   통합 6개는 통과했습니다. lint·docs·각 workspace typecheck·환경 예시 parity·API 빌드가
   통과했습니다. Google SDK의 overloaded mock 타입 오류는 수정 후 API 타입 검사로
@@ -70,7 +85,8 @@ data_as_of: 2026-10-10
 - [운영 원가·구독·푸시 집계](../design/reviews/release-readiness-2026-10-10/runtime-aggregates.json)는
   요리 4건·사진 1건 legacy 표본입니다. 정책 50건·30건·월 858원과 운영 10건·3건·
   월 2,000원 설정이 다릅니다. 현재 모델의 p95 관문을 충족하지 않으며 수동 screenshot
-  권한은 실제 결제 근거가 아닙니다. 판매·guardrail·purchase intent·resync는 on,
+  권한은 실제 결제 근거가 아닙니다. 판매 플래그·guardrail·purchase intent·resync는 on이나
+  guardrail 판정으로 유효 신규 판매는 off입니다.
   Sandbox·가족 플러스·추천권은 off입니다. 판매/원가 설정을 임의 변경하지 않았습니다.
   과거 푸시 100건의 receipt 오류는 없지만 새 RC의 실제 수신은 별개입니다.
 - Galaxy 글자 크기 후보 2는 debug fixture의 live/cold 배율·측정과 입력·초점·선택·

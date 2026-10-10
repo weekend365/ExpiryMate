@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-10-10T10:04:34.313Z",
+  "productionSelectOnly": true,
+  "subscriptionsFlagEnabled": true,
+  "guardrailEnabled": true,
+  "effectiveSubscriptionsEnabled": false,
+  "subscriptions": {
+    "allowed": false,
+    "status": "learning",
+    "projectedMonthlyCostKrw": 2190.33,
+    "budgetKrw": 2000,
+    "recipeSamples": 4,
+    "photoSamples": 1
+  },
+  "minimumRecipeSamples": "10",
+  "minimumPhotoSamples": "3",
+  "settingsMenuCondition": "effectiveSubscriptionsEnabled || active subscription tier",
+  "freeUserSettingsMenuVisible": false,
+  "interpretation": "Settings hides Jango Plus for free users when economics guardrail blocks new sales. Store product discovery is not reached from that missing entry. This does not prove an App Store/Play product registration failure.",
+  "flagsChanged": false,
+  "userDataOrRawCostsReturned": false,
+  "userCorrection": "User reports personal Plus absent in settings on both installed platform builds. Previous price QA pass is revoked.",
+  "localFix": {
+    "sourceGitSHA": "ec4afd1dc6dfbfccb30906615870703120f16b2b",
+    "buildSourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+    "behavior": "Settings entry stays reachable, including loading/error/sales pause. Existing subscription screen keeps new checkout unavailable while restoring purchases and store management remain accessible.",
+    "salesOrCostPolicyChanged": false,
+    "positionAndVisualStylesPreserved": true,
+    "focusedTestsPassed": 31,
+    "newRegressionTests": 4,
+    "mobileTestsPassed": 571,
+    "mobileTypecheckPassed": true,
+    "mobileLintPassed": true,
+    "signedBuildAndDeviceVerification": "pending new builds",
+    "nativeLayoutScreenshotComparison": "pending; component tests do not qualify native layout or screen reader"
+  },
+  "userMenuAbsenceConfirmed": true,
+  "easTransfer": {
+    "sourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+    "fileCount": 905,
+    "bytes": 38347791,
+    "secretFileCount": 0,
+    "blockedFileNames": [],
+    "gitHistoryExcluded": true,
+    "operationalReportsExcluded": true,
+    "nativeCachesExcluded": true,
+    "iosNativeSourcesPresent": true,
+    "sharedAndPatchPresent": true,
+    "uploaded": true,
+    "easIgnoreMatches": true,
+    "settingsSourceMatches": true
+  },
+  "signedBuilds": [
+    {
+      "id": "a1982185-b6ac-48db-b6ee-6cc79badd137",
+      "status": "NEW",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "37",
+      "gitCommitHash": "6da71d1092546badec18f70dafd8455058953f77",
+      "createdAt": "2026-10-10T10:16:00.712Z"
+    },
+    {
+      "id": "a4561c35-0faf-434c-801c-203996e2d8c3",
+      "status": "NEW",
+      "platform": "IOS",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "51",
+      "gitCommitHash": "6da71d1092546badec18f70dafd8455058953f77",
+      "createdAt": "2026-10-10T10:16:23.687Z"
+    }
+  ]
+}

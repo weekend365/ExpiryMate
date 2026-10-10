@@ -17,22 +17,28 @@ data_as_of: 2026-10-10
 - Apple 개인 플러스 월·연 상품은 승인됐고 한국 가격은 4,900원·39,000원입니다.
   가족 공유·신규 구독 특가는 off입니다.
 - 새 iOS 1.4.3(50)은 실제 IPA 검사·TestFlight 업로드·직접 설치 버전 확인과 사용자
-  핵심 화면 QA를 마쳤습니다. Android 1.4.3(36)은 AAB 정적 검사와 같은 AAB에서 만든
+  핵심 화면 QA를 보고받았습니다. 이후 사용자가 두 플랫폼의 `장고 플러스` 메뉴 누락을
+  정정했으므로 가격 검사는 미완료입니다. Android 1.4.3(36)은 AAB 정적 검사와 같은 AAB에서 만든
   로컬 APK의 실제 16KB 초기 실행을 통과했고 내부 테스트 게시까지 완료했습니다.
-  별도 허용 후 테스터 한 명을 등록했으나 Galaxy의 직접 설치 버전은 아직 35여서
-  참여·업데이트 후 RC 36의 회귀 검증이 남습니다.
+  별도 허용 후 테스터 한 명을 등록했고 다운로드 문제를 해결했습니다. Galaxy의 실제
+  RC 36 설치·Play 설치자·앱 서명 인증서 일치를 직접 확인했습니다. 핵심 회귀는 미완료입니다.
 - 최신 운영 snapshot 백업의 41개 테이블·45개 migration과 격리 복구 검증을 마친 뒤
   사용자 허용으로 Google 서비스 계정 이메일만 수정했습니다. 실제 운영 OAuth와
   [상품 조회](../design/reviews/release-readiness-2026-10-10/google-subscription-config.json)는
   성공했고 기존 키는 유지했습니다. 월·연 base plan 활성, grace 7일·14일을 확인했습니다.
 - API·Admin 6335e02 보안 배포와 health/readiness/인증 거부 확인을 완료했습니다.
   추가 [RTDN 발신자 인증 수정](../design/reviews/release-readiness-2026-10-10/google-rtdn-auth.json)은
-  테스트·타입·빌드를 통과했으며 운영 API 배포와 `GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL`
-  추가는 별도 허용 대기입니다. 실제 Push 계정은 Google 콘솔에서 확인했습니다.
-- 판매·guardrail·purchase intent·resync는 on, Sandbox 구매 허용은 off입니다.
+  테스트·타입·빌드를 통과했고 추가 허용 후 최신 백업·격리 복구를 재확인해 운영 API에
+  배포했습니다. `GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL` 추가·health SHA·인증 거부와
+  Google Push 테스트 알림의 확인 지표까지 확인했습니다.
+- 판매 플래그·guardrail·purchase intent·resync는 on, Sandbox 구매 허용은 off입니다.
+  실제 신규 판매는 guardrail의 `learning` 판정으로 off입니다.
   [요리 4건·사진 1건 legacy 표본](../design/reviews/release-readiness-2026-10-10/runtime-aggregates.json)은
   현재 모델 원가 관문을 충족하지 않습니다. 정책 50건·30건·월 858원과 운영 10건·3건·
   월 2,000원 기준이 다르며 수동 screenshot 권한은 실제 결제 근거가 아닙니다.
+- [메뉴 수정 ec4afd1](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
+  설정 진입점과 구매 복원을 판매 가능 여부와 분리합니다. 신규 결제 차단은 유지하며
+  새 서명 빌드 iOS 1.4.3(51)·Android 1.4.3(37)의 설치 검증이 남습니다.
 - 실제 구매·복원·갱신/취소/환불·새 RC 푸시·개인정보 신고 반영·원가 관문은 남습니다.
   App Store 심사·Play production·공개 출시는 수행하지 않았습니다.
   자세한 현황은 [STATUS](./STATUS.md)의 2026-10-10 기록을 우선합니다.

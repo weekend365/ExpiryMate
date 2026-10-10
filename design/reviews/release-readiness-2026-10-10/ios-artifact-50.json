@@ -286,7 +286,7 @@
       "types": []
     }
   ],
-  "limitations": "Static artifact and TestFlight upload passed; installed iPhone version directly verified and user confirmed core smoke flows. Full two-account, push and purchase/restore QA remains.",
+  "limitations": "Static IPA, TestFlight upload and installed build verified. User confirmed login/relaunch/inventory/photo entry, then corrected missing Plus. Purchase/restore, price, full two-account, push and AI parsing QA remain.",
   "testFlight": {
     "uploadAuthorized": true,
     "submissionId": "66cdb9df-b4ee-4ef3-897d-5124ee9b3a68",
@@ -309,8 +309,9 @@
       "forceCloseAndRelaunchSession": true,
       "inventoryList": true,
       "photoAddScreen": true,
-      "plusProductPrices": true
+      "plusProductPrices": false
     },
-    "scope": "Installed version directly queried; listed flows confirmed by user. No purchase initiated. Push receipt, shared-space two-account QA, AI photo parse, purchase/restore and subscription lifecycle remain unverified."
+    "scope": "Installed version directly queried; listed flows confirmed by user. No purchase initiated. Push receipt, shared-space two-account QA, AI photo parse, purchase/restore and subscription lifecycle remain unverified.",
+    "priceQACorrection": "User later reports Plus not visible in settings on both platforms. Previous price pass is revoked."
   }
 }

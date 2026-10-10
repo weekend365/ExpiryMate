@@ -1534,13 +1534,41 @@
     }
   },
   "realDeviceQA": {
-    "deviceModel": "Galaxy A34",
-    "directInstalledVersionName": "1.4.2",
-    "directInstalledVersionCode": 35,
-    "targetVersionCode": 36,
-    "targetVersionVerified": false,
-    "userReportedCoreChecksNormal": true,
-    "userReportQualifiedForTargetBuild": false,
-    "reason": "Direct installed package metadata conflicts with reported 1.4.3; previously empty internal tester list has now been fixed with explicit permission. Awaiting opt-in/update."
+    "installedVersionDirectlyVerified": true,
+    "deviceModel": "Galaxy A34 (SM-A346N)",
+    "versionName": "1.4.3",
+    "versionCode": 36,
+    "installerPackageName": "com.android.vending",
+    "targetRCInstalled": true,
+    "playSigning": {
+      "checkedAt": "2026-10-10",
+      "artifact": "Play-generated installed base APK from Galaxy A34",
+      "package": "com.expirymate.mobile",
+      "versionName": "1.4.3",
+      "versionCode": 36,
+      "installerPackageName": "com.android.vending",
+      "apkBytes": 91813124,
+      "apkSha256": "3045b97c941ebf1cb114e9d3780266a6fd97ae6620d37e75cfff35a51d042b88",
+      "signatureVerificationPassed": true,
+      "signingMetadata": [
+        "Verifies",
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): true",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false",
+        "Signer #1 certificate SHA-256 digest: 7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+        "Source Stamp Signer certificate SHA-256 digest: 3257d599a49d2c961a471ca9843f59d341a405884583fc087df4237b733bbd6d"
+      ],
+      "expectedPlayCertificateComparison": "matches Google Play Console app signing certificate",
+      "deviceSerialCommitted": false,
+      "expectedPlayCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playAppSigningCertificateMatched": true
+    },
+    "userReportedChecks": {
+      "plusProductPrices": false
+    },
+    "scope": "Previously reported core QA occurred before actual RC36 installation and is not carried forward. User reports missing Plus on the confirmed RC36. Login/relaunch/inventory/photo entry and full SDK/purchase/push QA on RC36 remain unconfirmed.",
+    "resolution": "Account tester eligibility confirmed; free remote Play install completed after user performed Google identity verification. No app data cleared, no paid purchase or authentication setting changed."
   }
 }

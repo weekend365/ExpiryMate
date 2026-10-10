@@ -161,7 +161,9 @@
   },
   "backupEvidence": "production-email-recovery.json",
   "limitations": [
-    "New RTDN sender identity fix is local and not deployed.",
+    "This record describes the earlier 6335e02 API/Admin security deployment. Current API68bd324 validation is in google-rtdn-auth.json; Admin remains6335e02.",
     "Sentry ingestion of a new live release event has not been directly verified."
-  ]
+  ],
+  "historicalSnapshot": true,
+  "supersededApiDeploymentEvidence": "google-rtdn-auth.json"
 }

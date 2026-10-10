@@ -143,5 +143,10 @@
     ],
     "schedules": [],
     "interpretation": "Only 2026-08-16 backup is present. No automatic schedule; new backup and isolated restore proof required before production changes. No creation or restore performed."
+  },
+  "followUpEvidence": {
+    "googleAuthenticationRestored": "production-email-recovery.json",
+    "effectiveSubscriptionSalesAndSettingsVisibility": "subscription-entry-fix.json",
+    "currentRtdnDeployment": "google-rtdn-auth.json"
   }
 }
