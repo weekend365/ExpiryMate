@@ -1469,7 +1469,7 @@
     "loadAlignmentPassCount": 54,
     "relroEndAlignmentPassCount": 10
   },
-  "limitations": "Signed AAB validated; actual Galaxy version37/Play installer and base/native split signing certificate verified. Actual Play-generated arm64 split 16KB ZIP alignment passes. 54 AAB native library hashes match RC36 with prior official 16KB initial runtime evidence. New full JavaScript/core flow/accessibility and every native SDK runtime path remain unqualified. 44 GNU_RELRO end boundaries remain review items. Menu, price and join-button display confirmed by user after personal sales cost exception activation; actual purchase/restore/lifecycle QA pending. Sandbox receipts remain rejected.",
+  "limitations": "Signed AAB validated; actual Galaxy version37/Play installer and base/native split signing certificate verified. Actual Play-generated arm64 split 16KB ZIP alignment passes. 54 AAB native library hashes match RC36 with prior official 16KB initial runtime evidence. New full JavaScript/core flow/accessibility and every native SDK runtime path remain unqualified. 44 GNU_RELRO end boundaries remain review items. Menu, price and join-button display confirmed by user after personal sales cost exception activation; monthly sandbox purchase/restore passed; annual purchase and full lifecycle pending. Sandbox receipts temporarily accepted for QA/App Review; must disable before public release.",
   "nativeLibraryComparisonTo36": {
     "samePaths": true,
     "identicalSha256Count": 54,
@@ -1479,7 +1479,7 @@
   "realDeviceQA": {
     "version37Installed": true,
     "menuVisibility": "User reports Jango Plus menu now visible",
-    "pricePurchaseAndRestoreLifecycle": "Price and join-button display confirmed by user after personal cost exception activation; actual purchase/restore/lifecycle pending",
+    "pricePurchaseAndRestoreLifecycle": "Menu, price/join buttons and monthly sandbox purchase/restore passed; annual purchase and full subscription lifecycle matrix remain unqualified.",
     "nativeLayoutAndAccessibility": "pending",
     "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
     "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
@@ -1544,6 +1544,37 @@
       },
       "paymentOrRestorePressedByAgent": false,
       "realPurchaseRestoreLifecycleVerified": false
+    },
+    "monthlyPurchaseAndRestoreQA": {
+      "record": "final-release-submission.json",
+      "passed": true,
+      "userReply": "\"장고 플러스가 시작됐어요\", 플러스 이용중도 표시됨.",
+      "storeEvidence": {
+        "store": "google_play",
+        "status": "active",
+        "isActive": true,
+        "environment": "sandbox",
+        "verifiedAt": "2026-10-10T13:37:05.365Z",
+        "expiresAt": "2026-10-10T13:41:59.223Z",
+        "applePrivateRelayLogin": false,
+        "googleAcknowledged": true,
+        "events": [
+          {
+            "name": "purchase_verified",
+            "count": 3
+          },
+          {
+            "name": "restore_completed",
+            "count": 2
+          },
+          {
+            "name": "restore_started",
+            "count": 2
+          }
+        ],
+        "consumedPurchaseIntents": 1
+      },
+      "fullSubscriptionLifecycleQualified": false
     }
   },
   "internalTest": {
@@ -1572,5 +1603,36 @@
     "publicReleasePerformed": false,
     "consoleState": "활성 · 1.4.3 (37) 출시 전 QA · 내부 테스터에게 제공됨 · Oct 10 19:36 KST",
     "scope": "Existing internal track and tester account only. Required internal automatic review authorized; production version 35 unchanged."
+  },
+  "finalReviewSubmission": {
+    "version": "1.4.3",
+    "versionCode": 37,
+    "reviewSubmitted": true,
+    "reviewStatus": "IN_REVIEW",
+    "observedLabel": "검토 중인 변경사항; 변경사항을 검토 중입니다.",
+    "automaticPreReviewChecksComplete": true,
+    "productionReleaseId": "7",
+    "initialRolloutPercent": 5,
+    "managedPublishingEnabled": true,
+    "countriesUnchanged": true,
+    "countryCount": 1,
+    "submittedChangeCount": 2,
+    "submittedChanges": [
+      "production 1.4.3 (37), 5% rollout",
+      "Data Safety corrections"
+    ],
+    "blockingErrors": 0,
+    "nonBlockingWarnings": [
+      "Download size increased by 20.2 MB to 66.1 MB",
+      "No ReTrace/deobfuscation mapping file; native debug symbols attached"
+    ],
+    "publicReleasePerformed": false,
+    "serviceAccountApiFallback": {
+      "validateAndCommitDeniedHttpStatus": 403,
+      "privateEditDeleted": true,
+      "committedProductionChangeFromFailedApiAttempt": false,
+      "permissionsExpanded": false,
+      "consoleUiSubmissionSucceeded": true
+    }
   }
 }

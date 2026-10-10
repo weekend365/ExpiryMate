@@ -286,7 +286,7 @@
       "types": []
     }
   ],
-  "limitations": "Static artifact checks and TestFlight processing/internal group verified. User confirms menu, price and join-button display after requested update/restart; direct iOS 51 version read unavailable. Full native layout/core flow/accessibility and actual purchase/restore/lifecycle QA remain incomplete. Personal sales cost exception is deployed; Sandbox receipts remain rejected. No App Review or public app update release.",
+  "limitations": "Static artifact checks and TestFlight processing/internal group verified. User confirms requested build51 menu, price, monthly sandbox purchase/restore and active Plus; direct iOS51 version read unavailable. Full native layout/core flow/accessibility, annual purchase and full subscription lifecycle QA remain incomplete. Personal sales cost exception is deployed; Sandbox receipts temporarily accepted for QA/App Review and must be rejected before public release. App Review submitted; public app update awaits approval.",
   "testFlight": {
     "uploadCompleted": true,
     "submissionId": "a69ab139-3e96-4f64-922b-d849ee85d118",
@@ -297,15 +297,15 @@
     "inviteCount": 1,
     "testersChanged": false,
     "verifiedAt": "2026-10-10T10:33:07.873871+00:00",
-    "appReviewSubmitted": false,
+    "appReviewSubmitted": true,
     "publicReleasePerformed": false,
-    "realDeviceQA": "User reports Plus menu visible after requested 51 update. Direct version51 read currently unavailable; full core flow/accessibility/IAP QA incomplete."
+    "realDeviceQA": "User confirms requested TestFlight51 menu, price, monthly sandbox purchase/restore and active Plus. Direct version read and full core/accessibility/lifecycle matrix remain unqualified."
   },
   "realDeviceQA": {
     "menuVisibility": "User reports Jango Plus menu now visible",
     "userReportedAt": "2026-10-10T10:59:16.984702+00:00",
     "loginRelaunchInventoryPhotoEntry": "not separately reconfirmed by this reply",
-    "pricePurchaseAndRestoreLifecycle": "Price and join-button display confirmed by user after personal cost exception activation; actual purchase/restore/lifecycle pending",
+    "pricePurchaseAndRestoreLifecycle": "Menu, price/join buttons and monthly sandbox purchase/restore passed; annual purchase and full subscription lifecycle matrix remain unqualified.",
     "directVersion51Read": "not currently available; user reports menu visible after requested TestFlight update",
     "storePriceDisplayQA": {
       "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
@@ -319,6 +319,52 @@
       },
       "paymentOrRestorePressedByAgent": false,
       "realPurchaseRestoreLifecycleVerified": false
+    },
+    "monthlyPurchaseAndRestoreQA": {
+      "record": "final-release-submission.json",
+      "passed": true,
+      "userReply": "\"장고 플러스가 시작됐어요\", 플러스 이용중도 표시됨.",
+      "storeEvidence": {
+        "store": "apple_app_store",
+        "status": "active",
+        "isActive": true,
+        "environment": "Sandbox",
+        "verifiedAt": "2026-10-10T13:33:34.760Z",
+        "expiresAt": "2026-10-11T13:33:12.000Z",
+        "applePrivateRelayLogin": true,
+        "googleAcknowledged": null,
+        "events": [
+          {
+            "name": "purchase_verified",
+            "count": 4
+          },
+          {
+            "name": "restore_completed",
+            "count": 3
+          },
+          {
+            "name": "restore_started",
+            "count": 3
+          }
+        ],
+        "consumedPurchaseIntents": 1
+      },
+      "fullSubscriptionLifecycleQualified": false
     }
+  },
+  "finalReviewSubmission": {
+    "version": "1.4.3",
+    "build": "51",
+    "reviewSubmitted": true,
+    "reviewStatus": "WAITING_FOR_REVIEW",
+    "observedLabel": "심사 대기 중",
+    "submissionId": "409a7140-9212-4aec-9283-9b6472961af2",
+    "submittedAtConsoleKst": "2026-10-10 22:41",
+    "releaseMode": "MANUAL",
+    "phasedReleaseDays": 7,
+    "appStoreConnectBuildId": "aa562802-5051-4579-b9bb-dd6dba62a164",
+    "existingReviewCredentialsPreserved": true,
+    "existingScreenshots": 6,
+    "publicReleasePerformed": false
   }
 }

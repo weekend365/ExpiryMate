@@ -1,5 +1,5 @@
 {
-  "state": "Deployed, runtime verified and price/join-button display confirmed by user on both devices; purchase QA pending",
+  "state": "Personal cost exception deployed; both-device price and monthly sandbox purchase/restore verified; both app updates submitted for review",
   "userAuthorization": {
     "date": "2026-10-10",
     "request": "원가 검증 예외를 승인하고 전체 판매 열기",
@@ -65,10 +65,10 @@
     "Admin source and public app versions"
   ],
   "rawEconomicsQualified": false,
-  "realPurchaseRestoreQaPassed": false,
+  "realPurchaseRestoreQaPassed": true,
   "publicAppUpdateReleased": false,
   "gitPushed": false,
-  "remaining": "Real store purchase/restore and lifecycle QA; current-model cost qualification",
+  "remaining": "Store approval and sandbox rejection restoration before public app release; annual/full lifecycle and current-model cost qualification remain separate",
   "verifiedAt": "2026-10-10T11:42:40.115Z",
   "publicAndUnauthenticatedChecks": [
     {
@@ -206,5 +206,25 @@
     "paymentOrRestorePressedByAgent": false,
     "realPurchaseRestoreLifecycleVerified": false,
     "state": "Passed display check per user; purchase and restoration untested"
+  },
+  "realPurchaseRestoreQaScope": "Monthly sandbox purchase and restoration only; full subscription lifecycle matrix not qualified",
+  "currentState": {
+    "dataAsOf": "2026-10-10T14:08:11.656909+00:00",
+    "record": "final-release-submission.json",
+    "apiDeployment": {
+      "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-10T13:25:35.591Z"
+    },
+    "sandboxPurchasesAllowedTemporarily": true,
+    "disableSandboxBeforePublicRelease": true,
+    "storeReviewSubmitted": true,
+    "publicReleasePerformed": false,
+    "originalActivationSnapshotRetained": true
+  },
+  "monthlySandboxQA": {
+    "record": "final-release-submission.json",
+    "passed": true,
+    "userReply": "\"장고 플러스가 시작됐어요\", 플러스 이용중도 표시됨."
   }
 }

@@ -11,50 +11,44 @@ data_as_of: 2026-10-10
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
 
-## 현재 상태 — 2026-10-10
+## 현재 상태 — 2026-10-10 최종 심사 제출
 
-- 공개 버전은 iOS 1.4.2(48), Google Play production 1.4.2(35)입니다.
-- Apple 개인 플러스 월·연 상품은 승인됐고 한국 가격은 4,900원·39,000원입니다.
-  가족 공유·신규 구독 특가는 off입니다.
-- 새 iOS 1.4.3(50)은 실제 IPA 검사·TestFlight 업로드·직접 설치 버전 확인과 사용자
-  핵심 화면 QA를 보고받았습니다. 이후 사용자가 두 플랫폼의 `장고 플러스` 메뉴 누락을
-  정정했으므로 가격 검사는 미완료입니다. Android 1.4.3(36)은 AAB 정적 검사와 같은 AAB에서 만든
-  로컬 APK의 실제 16KB 초기 실행을 통과했고 내부 테스트 게시까지 완료했습니다.
-  별도 허용 후 테스터 한 명을 등록했고 다운로드 문제를 해결했습니다. Galaxy의 실제
-  RC 36 설치·Play 설치자·앱 서명 인증서 일치를 직접 확인했습니다. 핵심 회귀는 미완료입니다.
-- 최신 운영 snapshot 백업의 41개 테이블·45개 migration과 격리 복구 검증을 마친 뒤
-  사용자 허용으로 Google 서비스 계정 이메일만 수정했습니다. 실제 운영 OAuth와
-  [상품 조회](../design/reviews/release-readiness-2026-10-10/google-subscription-config.json)는
-  성공했고 기존 키는 유지했습니다. 월·연 base plan 활성, grace 7일·14일을 확인했습니다.
-- API·Admin 6335e02 보안 배포와 health/readiness/인증 거부 확인을 완료했습니다.
-  추가 [RTDN 발신자 인증 수정](../design/reviews/release-readiness-2026-10-10/google-rtdn-auth.json)은
-  테스트·타입·빌드를 통과했고 추가 허용 후 최신 백업·격리 복구를 재확인해 운영 API에
-  배포했습니다. `GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL` 추가·health SHA·인증 거부와
-  Google Push 테스트 알림의 확인 지표까지 확인했습니다.
-- 판매 플래그·guardrail·purchase intent·resync는 on, Sandbox 구매 허용은 off입니다.
-  원가 판정은 여전히 `learning`이며 아래의 승인한 예외 적용 전 신규 판매는 off였습니다.
-  [요리 4건·사진 1건 legacy 표본](../design/reviews/release-readiness-2026-10-10/runtime-aggregates.json)은
-  현재 모델 원가 관문을 충족하지 않습니다. 정책 50건·30건·월 858원과 운영 10건·3건·
-  월 2,000원 기준이 다르며 수동 screenshot 권한은 실제 결제 근거가 아닙니다.
-- [메뉴 수정 ec4afd1](../design/reviews/release-readiness-2026-10-10/subscription-entry-fix.json)은
-  설정 진입점과 구매 복원을 판매 가능 여부와 분리합니다. 메뉴 수정 당시 신규 결제 차단을 유지했고
-  iOS 1.4.3(51)은 IPA 검사·TestFlight 처리·기존 내부 그룹 연결까지 완료했습니다.
-  Android 1.4.3(37)도 AAB 검사·기존 내부 트랙 게시를 마쳤습니다. production 35·테스터는
-  유지했습니다. 사용자가 두 기기에서 메뉴 표시를 확인했고 Galaxy 실제 37·Play 서명을
-  재확인했습니다. iOS 51의 직접 버전 읽기와 새 빌드의 전체 흐름·접근성·결제 QA는 남습니다.
-- 사용자가 개인 플러스 전체 판매의 원가 검증 예외를 승인했습니다.
-  [적용 범위](../design/reviews/release-readiness-2026-10-10/subscription-sales-unblock-plan.json)에
-  따라 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를 API에 적용합니다. 기본 모드는
-  `required`이며 긴급 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`입니다.
-  측정값·다른 상품·한도·Sandbox 거부를 보존합니다. 결제 QA·원가 검증은 아직 미완료입니다.
-- [개인 판매 예외의 운영 반영](../design/reviews/release-readiness-2026-10-10/subscription-sales-activation.json)을
-  완료했습니다. API `9cabee4`·실제 소스 SHA·서버/인증 검사 13개와 유효 개인 판매 on을
-  확인했습니다. 최신 백업·격리 복구·보호 백업 검증 후 예외 모드 하나만 변경했습니다.
-  사용자가 앱 종료·재실행 후 iPhone·Galaxy 모두 월 4,900원·연 39,000원 가격과
-  가입 버튼 표시를 확인했습니다. 실제 결제·복원은 별도 확인 대상입니다.
-- 실제 구매·복원·갱신/취소/환불·새 RC 푸시·개인정보 신고 반영·원가 관문은 남습니다.
-  App Store 심사·Play production·공개 출시는 수행하지 않았습니다.
-  자세한 현황은 [STATUS](./STATUS.md)의 2026-10-10 기록을 우선합니다.
+- [최종 제출·QA 기록](../design/reviews/release-readiness-2026-10-10/final-release-submission.json)이
+  현재 기준입니다. 공개 버전은 iOS 1.4.2(48), Android 1.4.2(35)입니다.
+- 메뉴 수정 소스 `6da71d1`의 iOS 1.4.3(51)을 22:41 KST App Review에 제출했고
+  **심사 대기 중**입니다. 빌드 51 연결·기존 6개 스크린샷·심사 로그인 정보 유지·새 심사 노트를
+  확인했습니다. 수동 출시와 7일 단계적 업데이트를 설정했습니다.
+- 같은 소스의 Android 1.4.3(37)을 production 심사에 제출했습니다. 기존 서명 AAB를
+  라이브러리에서 연결했고 기존 대한민국 범위·5% 초기 rollout을 저장했습니다.
+  관리형 게시가 켜졌으며 자동 사전 검사 완료 후 **검토 중**입니다. 비차단 경고는 다운로드
+  20.2MB 증가(66.1MB)와 ReTrace 파일 미첨부이며 native debug symbols는 있습니다.
+  서비스 계정의 production validate/commit 403은 권한을 늘리지 않고 비공개 edit를 삭제한 뒤
+  사용자 콘솔로 완료했습니다. 실패한 API 시도는 외부 production 변경을 commit하지 않았습니다.
+- [Play Data Safety](./store-privacy-declarations.md)는 누락·공유·임시 처리·필수 여부
+  11개 응답을 수정해 12개 수집 유형·7개 공유 유형으로 저장하고 같은 심사에 포함했습니다.
+  설치 GMA25.0.0에 대한 정확한 vendor 확인·전체 SDK 경로 QA와 보수적 신고는 구분합니다.
+- Apple 월·연 구독은 승인, 한국 가격은 4,900원·39,000원이고 가족 공유·할인은 off입니다.
+  Google 월·연 base plan은 활성, 같은 한국 가격·grace7일/14일이며 기존 키를 유지한
+  구매 검증 이메일 복구·RTDN 지정 발신자 인증·실제 테스트 알림 확인을 마쳤습니다.
+- 기존 QA 한 명의 라이선스 테스트 목록을 활성화했습니다. iPhone TestFlight51과
+  Galaxy Play 내부37에서 월 구독 Sandbox 승인·구매 의도 소비·복원 완료를 서버 기록으로
+  확인했습니다. Google acknowledgement와 첫 테스트 갱신도 확인했습니다. 사용자는 두
+  기기에서 “장고 플러스가 시작됐어요”와 “플러스 이용 중”을 확인했습니다. Apple 영수증의
+  비공개 이메일 로그인 소유자와 Play 결제 계정/앱 계정 차이는 메모리에서 대조했습니다.
+  검사 보고서에는 원문 계정·거래·토큰을 기록하지 않습니다. Galaxy37 버전·Play 서명은 직접 확인했으며
+  iOS51 설치는 사용자 확인으로 직접 버전 읽기와 구분합니다.
+- API `9cabee4`에 승인한 `SUBSCRIPTION_COST_GATE_MODE=operator_override`가 적용돼
+  개인 판매는 on입니다. 원가 `learning`, legacy 요리4·사진1, 정책50·30·858원과 운영
+  10·3·2,000원 기준을 통과로 바꾸지 않았습니다. 가족·유료 추천권은 off, AI 한도·
+  guardrail·구매 의도·서명/계정 검증은 유지합니다. 유료 모델 평가를 새로 실행하지 않았습니다.
+- **현재 `IAP_ALLOW_SANDBOX_PURCHASES=true`는 QA·App Review용 임시 설정입니다.**
+  직전 새 snapshot41개 테이블·45개 migration·격리 복구·보호 해시를 확인하고 기존 API
+  artifact만 재배포했습니다. 운영 검사13개 통과·Admin 유지입니다.
+
+공개 전 스토어 승인과 남은 연 구독·pending·계정 충돌·취소/grace/hold/pause/환불/철회
+수명주기 QA, 새 RC 전체 흐름·공간·접근성·푸시 확인을 완료합니다. 공개 직전 새 백업·격리
+복구를 확인하고 Sandbox 허용을 **false**로 되돌려 재배포·운영 검사한 뒤 수동/관리형
+게시를 실행합니다. 승인 대기와 공개 완료를 구분하며 원가 예외를 원가 합격으로 기록하지 않습니다.
 
 ## 2026-09-12 준비 이력
 

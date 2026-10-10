@@ -31,7 +31,7 @@
     "mobileTestsPassed": 571,
     "mobileTypecheckPassed": true,
     "mobileLintPassed": true,
-    "signedBuildAndDeviceVerification": "Both signed binaries inspected and uploaded. User reports menu visible on both devices. Android 37 actual version/Play signer verified; direct iOS 51 version read unavailable. Full native accessibility/core flow/IAP QA remains incomplete.",
+    "signedBuildAndDeviceVerification": "Both signed artifacts and actual Android37 Play signer verified. Both-device monthly sandbox receipt/restore verified and user active Plus confirmed; direct iOS51 version read/full core/accessibility matrix remain unqualified.",
     "nativeLayoutScreenshotComparison": "pending; component tests do not qualify native layout or screen reader"
   },
   "userMenuAbsenceConfirmed": true,
@@ -98,7 +98,7 @@
     "iOS51RequestedUpdate": "menu visible per user; direct version read unavailable",
     "android37": "actual installed version/Play installer/app signing cert verified; menu visible per user",
     "loginRelaunchInventoryPhotoFlow": "not separately reconfirmed by latest reply",
-    "pricePurchaseRestoreLifecycle": "Price and join-button display confirmed by user on both devices after sales activation; purchase/restore/lifecycle pending",
+    "pricePurchaseRestoreLifecycle": "Both-device menu, prices/join buttons, monthly sandbox purchase/restore and active Plus confirmed. Full annual/lifecycle QA remains unqualified.",
     "salesUnlockRequestedByUser": true
   },
   "personalSalesFollowUp": {
@@ -120,5 +120,13 @@
       "paymentOrRestorePressedByAgent": false,
       "realPurchaseRestoreLifecycleVerified": false
     }
+  },
+  "finalSubmission": {
+    "record": "final-release-submission.json",
+    "iosBuild": 51,
+    "androidVersionCode": 37,
+    "bothStoreReviewSubmitted": true,
+    "monthlyPurchaseRestoreQaPassed": true,
+    "publicReleasePerformed": false
   }
 }

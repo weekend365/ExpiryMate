@@ -25,21 +25,25 @@ data_as_of: 2026-10-10
 
 App Store의 15개 label 유형과 정책 URL을 확인했습니다. 실제 iOS 1.4.3(49) IPA에서는
 앱의 PurchaseHistory manifest 누락을 발견해 Expo 설정과 생성된 네이티브 manifest를
-보완했습니다. 교체 1.4.3(50) IPA에서 PurchaseHistory 포함·서명을 직접 확인했고
-TestFlight 업로드 및 실제 iPhone 핵심 화면 QA를 마쳤습니다. 실제 결제 QA는 별개입니다.
+보완했습니다. 교체 1.4.3(50)과 최종 1.4.3(51) IPA에서 PurchaseHistory 포함·서명을
+직접 확인했습니다. 최종 51은 TestFlight 월 구독·복원을 서버 영수증 및 사용자 표시로
+검증한 뒤 App Review에 제출했고 현재 심사 대기 중입니다. 전체 수명주기 QA는 별개입니다.
 
-Google Play 기존 신고는 8개 유형이며 Photos·Purchase history·Crash logs·Other app
-performance data가 빠져 있습니다. 광고 관련 위치·상호작용·진단이 임시 처리로 신고됐고,
+Google Play 수정 전 신고는 8개 유형이며 Photos·Purchase history·Crash logs·Other app
+performance data가 빠져 있었습니다. 광고 관련 위치·상호작용·진단이 임시 처리로 신고됐고,
 기기 ID·쿠팡 검색어를 포함한 제3자 공유도 꺼져 있습니다. `Sentry.wrap`의 상호작용
 breadcrumb·설치 ID·오류/성능 수집은 광고 선택과 독립적이며 opt-out이 확인되지 않았습니다.
 보상 광고 SSV에서는 계정 ID의 안정적인 HMAC 식별자를 Google에 전송하므로 이 경로도
 User IDs 공유와 목적에 대조해야 합니다. AD_ID 권한 제거와 비맞춤형 광고가 전체 SDK
 수집·공유를 없애지는 않습니다.
 
-[유형별 수정안과 근거](../design/reviews/release-readiness-2026-10-10/store-corrections.json)는
-로컬 초안이며 콘솔 저장·심사 제출은 하지 않았습니다. 아래 신고 기준을 기존 콘솔이
-이미 모두 반영했다고 해석하지 않습니다. 최종 vendor 안내는 GMA 25.5.0, 실제 설치는
-25.0.0이므로 최종 광고 경로 QA와 선언 검토를 남깁니다.
+[유형별 수정과 근거](../design/reviews/release-readiness-2026-10-10/store-corrections.json)를
+콘솔에 저장하고 production 1.4.3(37)과 함께 심사에 제출했습니다. 현재 12개 수집 유형·
+7개 공유 유형이며 누락·공유·임시 처리·필수 여부 11개 응답을 바로잡았습니다. 이름은
+가입 화면·공유 계약·서버에서 선택 입력이므로 신고도 선택으로 수정했습니다.
+최신 vendor 안내는 GMA 25.5.0만을 대상으로 하며 실제 설치는 25.0.0입니다. 실제 광고
+초기화·SSV·Sentry 코드와 공식 안내로 보수적으로 신고했으며, 설치 버전의 정확한 vendor
+확인이나 전체 SDK 실행 경로 QA를 완료한 것으로 처리하지 않습니다. 공개 게시는 승인 대기입니다.
 
 ---
 
@@ -114,21 +118,31 @@ Google UMP, ML Kit, Sentry 개인정보 매니페스트를 합친 정본입니�
 - 사용자 데이터를 수집하거나 공유하는가: **예**
 - 수집 데이터가 전송 중 암호화되는가: **예**
 - 데이터 삭제 요청 방법을 제공하는가: **예**
-- 제3자와 공유하는가: **쿠팡 상품 검색 활성 빌드는 예**
+- 제3자와 공유하는가: **예 — 쿠팡 검색어·광고 SDK 및 보상 SSV 경로**
   - 호스팅·메일·AI·푸시 제공자는 개발자 지시에 따라 처리하는 서비스 제공자
   - 공유 냉장고 구성원 공개는 사용자가 시작하고 기대하는 기능
   - 쿠팡 상품 검색에서는 검색어 한 건이 쿠팡으로 전달되므로
     `App activity → Other user-generated content`를 App functionality 목적으로 공유한다고 신고
 
-| 데이터 유형 | 수집 | 필수 여부 | 목적 |
-| --- | --- | --- | --- |
-| Personal info → Name | 예 | 선택 | App functionality · Account management |
-| Personal info → Email address | 예 | 필수 | App functionality · Account management |
-| Personal info → User IDs | 예 | 필수 | App functionality · Account management |
-| App activity → Other user-generated content | 예 | 선택 | App functionality · Personalization |
-| Photos and videos | 예 (사진 일괄 등록 사용 시) | 선택 | App functionality |
-| Device or other IDs → Device or other IDs | 예 | 선택 | App functionality |
-| Financial info → Purchase history | 예 (개인 플러스 구매·복원 시) | 선택 | App functionality · Account management |
+아래는 저장·심사 제출한 응답입니다. 모든 유형은 수집=예·임시 처리=아니오입니다.
+`광고 SDK 목적`은 Advertising or marketing · Analytics · Fraud prevention, security,
+and compliance를 뜻합니다. SDK 공유는 해당 경로의 목적이며 필수 여부는 전체 앱의
+수집(광고와 독립적인 Sentry 포함)을 기준으로 판단했습니다.
+
+| 데이터 유형 | 공유 | 필수 여부 | 수집 목적 | 공유 목적 |
+| --- | --- | --- | --- | --- |
+| Personal info → Name | 아니오 | 선택 | App functionality · Account management | — |
+| Personal info → Email address | 아니오 | 필수 | App functionality · Account management | — |
+| Personal info → User IDs | 예 | 필수 | App functionality · Account management · Fraud prevention, security, and compliance | App functionality · Fraud prevention, security, and compliance |
+| App activity → Other user-generated content | 예 | 선택 | App functionality · Personalization | App functionality |
+| Photos and videos → Photos | 아니오 | 선택 | App functionality | — |
+| Financial info → Purchase history | 아니오 | 선택 | App functionality · Account management | — |
+| Location → Approximate location | 예 | 선택 | 광고 SDK 목적 | 광고 SDK 목적 |
+| App activity → App interactions | 예 | 필수 | 광고 SDK 목적 | 광고 SDK 목적 |
+| App info and performance → Crash logs | 아니오 | 필수 | Analytics | — |
+| App info and performance → Diagnostics | 예 | 필수 | 광고 SDK 목적 | 광고 SDK 목적 |
+| App info and performance → Other app performance data | 예 | 필수 | 광고 SDK 목적 | 광고 SDK 목적 |
+| Device or other IDs | 예 | 필수 | App functionality · 광고 SDK 목적 | 광고 SDK 목적 |
 
 외부 계정 삭제 URL:
 `https://jango.devnamu.com/privacy/choices`

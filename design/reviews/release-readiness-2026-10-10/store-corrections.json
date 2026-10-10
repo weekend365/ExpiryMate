@@ -1,6 +1,6 @@
 {
-  "status": "draft-not-applied",
-  "dataAsOf": "2026-10-10",
+  "status": "saved-and-submitted-for-review",
+  "dataAsOf": "2026-10-10T14:08:11.656909+00:00",
   "app": "장고야 부탁해",
   "version": "1.4.3",
   "destination": "Google Play Console / com.expirymate.mobile / Data Safety",
@@ -78,9 +78,102 @@
           "App functionality"
         ]
       }
+    },
+    "scope": "Historical console snapshot before final-release corrections"
+  },
+  "additionalReconciliation": {
+    "required": false,
+    "scope": "Static installed-SDK/app initialization and SSV path reconciliation completed; conservative collection/shared/required answers saved in Console and submitted with production37. Full SDK runtime-path qualification remains separate.",
+    "installedVersions": {
+      "androidGma": "25.0.0",
+      "androidUmp": "4.0.0",
+      "reactNativeGoogleMobileAds": "16.3.4",
+      "sentryReactNative": "7.2.0"
+    },
+    "vendorDisclosureVersion": "25.5.0",
+    "sources": [
+      "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+      "https://developers.google.com/admob/android/ssv",
+      "https://docs.sentry.io/platforms/react-native/data-management/data-collected/",
+      "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"
+    ],
+    "vendorRecheckedAt": "2026-10-10T10:35:15.560910+00:00",
+    "vendorSourceLastUpdated": "2026-10-07",
+    "vendorVersionLimitation": "Official latest-version disclosure is for GMA25.5.0, installed version25.0.0. These conservative saved categories are an inference using official disclosure and actual initialization/SSV/Sentry code, not an exact vendor attestation or complete SDK runtime QA."
+  },
+  "apple": {
+    "privacyTypes": 15,
+    "privacyUrlsMatch": true,
+    "monthlyProduct": {
+      "id": "expirymate_premium_monthly",
+      "status": "APPROVED",
+      "krw": 4900,
+      "familySharing": false,
+      "introductoryOffers": 0
+    },
+    "yearlyProduct": {
+      "id": "expirymate_premium_yearly",
+      "status": "APPROVED",
+      "krw": 39000,
+      "familySharing": false,
+      "introductoryOffers": 0
+    },
+    "currentVersion": "1.4.2",
+    "currentBuild": "48",
+    "currentReleaseMode": "Automatically after approval",
+    "notes": "Existing public1.4.2 settings preserved. New1.4.3(51) submitted manually with seven-day phased release; approval pending.",
+    "ipa49Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "49",
+      "purchaseHistoryMissing": true,
+      "followup": "Replaced by signed IPA 1.4.3(50); PurchaseHistory verified in root manifest."
+    },
+    "ipa50Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "50",
+      "purchaseHistoryPresent": true,
+      "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+      "artifactReport": "ios-artifact-50.json",
+      "storeUploadPerformed": true,
+      "uploadScope": "Authorized TestFlight only. Login/relaunch/inventory/photo entry reported normal; later user reports missing Plus menu, so price QA is revoked."
+    },
+    "plusMenuFollowup": "subscription-entry-fix.json",
+    "ipa51Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "51",
+      "purchaseHistoryPresent": true,
+      "sourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+      "artifactReport": "ios-artifact-51.json",
+      "testFlightUploadAndProcessingCompleted": true,
+      "newRealDeviceQA": "Monthly sandbox purchase and restore verified by server receipts/events and user active Plus confirmation. Direct iOS51 version read and full device matrix remain separate.",
+      "appReviewSubmitted": true
+    },
+    "submission": {
+      "version": "1.4.3",
+      "build": "51",
+      "reviewSubmitted": true,
+      "reviewStatus": "WAITING_FOR_REVIEW",
+      "observedLabel": "심사 대기 중",
+      "submissionId": "409a7140-9212-4aec-9283-9b6472961af2",
+      "submittedAtConsoleKst": "2026-10-10 22:41",
+      "releaseMode": "MANUAL",
+      "phasedReleaseDays": 7,
+      "appStoreConnectBuildId": "aa562802-5051-4579-b9bb-dd6dba62a164",
+      "existingReviewCredentialsPreserved": true,
+      "existingScreenshots": 6,
+      "publicReleasePerformed": false
     }
   },
-  "proposedCorrections": [
+  "externalWritesPerformed": true,
+  "authorization": "User explicitly requested final iOS and Android release after prior build/test/deployment approvals.",
+  "externalWritesScope": "Google Play Data Safety corrections and production37 review submission; new App Store1.4.3 build51 metadata and review submission. Public release awaits review approval.",
+  "appliedCorrections": [
     {
       "type": "Photos",
       "collected": true,
@@ -278,83 +371,211 @@
         "https://developers.google.com/admob/android/privacy/play-data-disclosure",
         "https://docs.sentry.io/platforms/react-native/enriching-events/identify-user/"
       ]
+    },
+    {
+      "type": "Name",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality",
+        "Account management"
+      ],
+      "reason": "Registration screen, shared contract and API accept optional name/nickname. Console required response corrected to optional.",
+      "sources": [
+        "apps/mobile/app/auth/register.tsx",
+        "packages/shared/src/schemas/auth.ts"
+      ]
     }
   ],
-  "additionalReconciliation": {
-    "required": true,
-    "scope": "설치 Android GMA 25.0.0 / react-native-google-mobile-ads 16.3.4의 vendor 안내와 비교 완료. 현재 공식 Google 안내는 25.5.0 기준이므로 최종 실제 SDK 경로/광고 선택 QA와 선언 검토를 남깁니다. 사용자 ID의 SSV 경로도 추가합니다. 콘솔 저장은 수행하지 않았습니다.",
-    "installedVersions": {
-      "androidGma": "25.0.0",
-      "androidUmp": "4.0.0",
-      "reactNativeGoogleMobileAds": "16.3.4",
-      "sentryReactNative": "7.2.0"
-    },
-    "vendorDisclosureVersion": "25.5.0",
-    "sources": [
-      "https://developers.google.com/admob/android/privacy/play-data-disclosure",
-      "https://developers.google.com/admob/android/ssv",
-      "https://docs.sentry.io/platforms/react-native/data-management/data-collected/",
-      "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"
+  "savedDeclaration": {
+    "collectedTypeCount": 12,
+    "sharedTypeCount": 7,
+    "correctionCount": 11,
+    "dataTypes": [
+      {
+        "type": "Photos",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality"
+        ]
+      },
+      {
+        "type": "Purchase history",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "Crash logs",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Analytics"
+        ]
+      },
+      {
+        "type": "Other app performance data",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Analytics",
+          "Advertising or marketing",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Other user-generated content",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Personalization"
+        ],
+        "sharingPurposes": [
+          "App functionality"
+        ]
+      },
+      {
+        "type": "Approximate location",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "User IDs",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "App functionality",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "App interactions",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Diagnostics",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Device or other IDs",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Name",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "Email address",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "changed": false
+      }
     ],
-    "vendorRecheckedAt": "2026-10-10T10:35:15.560910+00:00",
-    "vendorSourceLastUpdated": "2026-10-07",
-    "vendorVersionLimitation": "Official disclosure states it covers only latest version 25.5.0. This is not a version-specific attestation for installed 25.0.0. Conservative data categories remain draft, actual ad choice/SDK paths and older-version declaration review pending."
-  },
-  "apple": {
-    "privacyTypes": 15,
-    "privacyUrlsMatch": true,
-    "monthlyProduct": {
-      "id": "expirymate_premium_monthly",
-      "status": "APPROVED",
-      "krw": 4900,
-      "familySharing": false,
-      "introductoryOffers": 0
-    },
-    "yearlyProduct": {
-      "id": "expirymate_premium_yearly",
-      "status": "APPROVED",
-      "krw": 39000,
-      "familySharing": false,
-      "introductoryOffers": 0
-    },
-    "currentVersion": "1.4.2",
-    "currentBuild": "48",
-    "currentReleaseMode": "Automatically after approval",
-    "notes": "현재 공개 버전의 설정은 변경하지 않았습니다. 새 버전의 출시 방식은 최종 QA·제출 단계에서 확인해야 합니다. 기존 상품 심사 노트에는 과거 1.4.1 언급이 남아 있습니다.",
-    "ipa49Inspection": {
-      "signatureVerified": true,
-      "sdk": "iphoneos26.5",
-      "version": "1.4.3",
-      "build": "49",
-      "purchaseHistoryMissing": true,
-      "followup": "Replaced by signed IPA 1.4.3(50); PurchaseHistory verified in root manifest."
-    },
-    "ipa50Inspection": {
-      "signatureVerified": true,
-      "sdk": "iphoneos26.5",
-      "version": "1.4.3",
-      "build": "50",
-      "purchaseHistoryPresent": true,
-      "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
-      "artifactReport": "ios-artifact-50.json",
-      "storeUploadPerformed": true,
-      "uploadScope": "Authorized TestFlight only. Login/relaunch/inventory/photo entry reported normal; later user reports missing Plus menu, so price QA is revoked."
-    },
-    "plusMenuFollowup": "subscription-entry-fix.json",
-    "ipa51Inspection": {
-      "signatureVerified": true,
-      "sdk": "iphoneos26.5",
-      "version": "1.4.3",
-      "build": "51",
-      "purchaseHistoryPresent": true,
-      "sourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
-      "artifactReport": "ios-artifact-51.json",
-      "testFlightUploadAndProcessingCompleted": true,
-      "newRealDeviceQA": "pending",
-      "appReviewSubmitted": false
-    }
-  },
-  "externalWritesPerformed": false,
-  "authorization": "EAS signed builds, iOS TestFlight, Android internal test with required automatic review, backup/isolated restore and server email/security deployment authorized separately. Data Safety save and public release are not yet authorized.",
-  "externalWritesScope": "Data Safety form and existing Apple production settings only; separate TestFlight/internal-test uploads and server email/security deployments are recorded in artifact/recovery reports"
+    "encryptedInTransit": true,
+    "accountMethods": [
+      "Username and password",
+      "OAuth"
+    ],
+    "privacyPolicyUrl": "https://jango.devnamu.com/privacy",
+    "accountDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "dataDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "consoleSaved": true,
+    "submittedForReview": true,
+    "reviewStatus": "IN_REVIEW",
+    "publicPublished": false
+  }
 }

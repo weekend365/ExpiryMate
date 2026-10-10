@@ -127,6 +127,23 @@ AdMob 값이 Expo의 production 환경에 들어 있는지 확인합니다. 로�
 보호된 백업의 해시를 확인하고 API만 배포합니다. 예외 철회는 `required`로 복귀하고,
 즉시 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`로 수행합니다. 기존 권한은 유지합니다.
 
+## 2026-10-10 스토어 심사 기간의 운영 설정
+
+[최종 심사 제출 기록](../../design/reviews/release-readiness-2026-10-10/final-release-submission.json)에
+따라 QA·App Review 동안만 `IAP_ALLOW_SANDBOX_PURCHASES=true`를 사용합니다. 22:24 KST
+새 snapshot의 41개 테이블·45개 migration·격리 복구·`pg_amcheck`·보호 백업 해시를 확인했고,
+API `9cabee4` 기존 artifact를 소스 업로드 없이 재배포했습니다. deployment
+`5378178a-2ba4-4700-a246-3f7f9288f1bc`는 SUCCESS이며 운영 검사 13개가 통과했습니다.
+설정 변경은 이 변수 하나이고 비공개 키·Admin·Prisma·인증/서명·원가 예외는 유지했습니다.
+원본 dump는 저장소 밖에 보관하며 SHA-256은
+`fb9e37b6ea0f1a1aa7604c168d0146bf44edd4ec6810a8576e65b57ef076a680`입니다.
+
+iOS는 수동 출시, Google은 관리형 게시로 승인 후 자동 공개를 막아 두었습니다.
+공개 직전 새 일관된 백업·격리 복구·보호 해시를 확인하고 변수를 **false**로 되돌린 뒤
+동일 API artifact를 재배포합니다. `/health` SHA·`/ready`·정책 URL·인증 거부 13개와
+Sandbox 거부 설정을 재확인한 뒤 승인된 iOS 7일 단계적 업데이트·Android 5% 출시를 게시합니다.
+현재의 심사 제출은 공개 완료가 아니며 재배포에 `--from-source`를 사용하지 않습니다.
+
 ## Sentry
 
 | App | 환경변수 | 배포 위치 |

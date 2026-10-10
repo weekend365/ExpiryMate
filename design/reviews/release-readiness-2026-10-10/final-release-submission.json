@@ -1,0 +1,359 @@
+{
+  "state": "Both stores submitted for review; public release pending",
+  "dataAsOf": "2026-10-10T14:08:11.656909+00:00",
+  "app": "장고야 부탁해",
+  "version": "1.4.3",
+  "authorizedBy": {
+    "request": "최종 출시 진행해줘.",
+    "scope": "iOS and Android final submission and release; prelaunch QA/review configuration under existing runbook"
+  },
+  "mobileSourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+  "apiSourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+  "ios": {
+    "version": "1.4.3",
+    "build": "51",
+    "reviewSubmitted": true,
+    "reviewStatus": "WAITING_FOR_REVIEW",
+    "observedLabel": "심사 대기 중",
+    "submissionId": "409a7140-9212-4aec-9283-9b6472961af2",
+    "submittedAtConsoleKst": "2026-10-10 22:41",
+    "releaseMode": "MANUAL",
+    "phasedReleaseDays": 7,
+    "appStoreConnectBuildId": "aa562802-5051-4579-b9bb-dd6dba62a164",
+    "existingReviewCredentialsPreserved": true,
+    "existingScreenshots": 6,
+    "publicReleasePerformed": false
+  },
+  "android": {
+    "version": "1.4.3",
+    "versionCode": 37,
+    "reviewSubmitted": true,
+    "reviewStatus": "IN_REVIEW",
+    "observedLabel": "검토 중인 변경사항; 변경사항을 검토 중입니다.",
+    "automaticPreReviewChecksComplete": true,
+    "productionReleaseId": "7",
+    "initialRolloutPercent": 5,
+    "managedPublishingEnabled": true,
+    "countriesUnchanged": true,
+    "countryCount": 1,
+    "submittedChangeCount": 2,
+    "submittedChanges": [
+      "production 1.4.3 (37), 5% rollout",
+      "Data Safety corrections"
+    ],
+    "blockingErrors": 0,
+    "nonBlockingWarnings": [
+      "Download size increased by 20.2 MB to 66.1 MB",
+      "No ReTrace/deobfuscation mapping file; native debug symbols attached"
+    ],
+    "publicReleasePerformed": false,
+    "serviceAccountApiFallback": {
+      "validateAndCommitDeniedHttpStatus": 403,
+      "privateEditDeleted": true,
+      "committedProductionChangeFromFailedApiAttempt": false,
+      "permissionsExpanded": false,
+      "consoleUiSubmissionSucceeded": true
+    }
+  },
+  "publicVersionsUnchanged": {
+    "ios": "1.4.2(48)",
+    "android": "1.4.2(35)"
+  },
+  "privacy": {
+    "googlePlaySavedAndSubmitted": true,
+    "collectedTypeCount": 12,
+    "sharedTypeCount": 7,
+    "correctedResponses": 11,
+    "appleDeclaredTypes": 15,
+    "record": "store-corrections.json"
+  },
+  "licenseTesting": {
+    "existingOnePersonListEnabled": true,
+    "memberCount": 1,
+    "newMembersAddedThisStep": false,
+    "responseModeUnchanged": "RESPOND_NORMALLY",
+    "rawEmailCommitted": false
+  },
+  "temporaryReviewConfiguration": {
+    "flag": "IAP_ALLOW_SANDBOX_PURCHASES",
+    "previous": false,
+    "current": true,
+    "disableBeforePublicRelease": true,
+    "sourceUpload": false,
+    "prismaChanges": false,
+    "appliedAt": "2026-10-10T13:25:34.066Z",
+    "apiDeployment": {
+      "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-10T13:25:35.591Z"
+    },
+    "adminDeploymentUnchanged": true,
+    "onlyReviewFlagChanged": true,
+    "privateKeysUnchanged": true,
+    "postdeploy": {
+      "checkedAt": "2026-10-10T13:34:10.280Z",
+      "authorizedSourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+      "productionDatabaseDataChanged": false,
+      "temporarySandboxReviewModeWithFinalReleaseAuthorization": true,
+      "gitPushed": false,
+      "checks": [
+        {
+          "url": "https://api-production-1504.up.railway.app/health",
+          "status": 200,
+          "expectedStatus": 200,
+          "passed": true,
+          "metadata": {
+            "status": "ok",
+            "version": "0.1.0",
+            "gitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+            "env": "production"
+          }
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/ready",
+          "status": 200,
+          "expectedStatus": 200,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/inventory",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/spaces",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/privacy/status",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true
+        },
+        {
+          "url": "https://jango.devnamu.com/privacy",
+          "status": 200,
+          "expectedStatus": 200,
+          "passed": true
+        },
+        {
+          "url": "https://jango.devnamu.com/privacy/choices",
+          "status": 200,
+          "expectedStatus": 200,
+          "passed": true
+        },
+        {
+          "url": "https://jango.devnamu.com/terms",
+          "status": 200,
+          "expectedStatus": 200,
+          "passed": true
+        },
+        {
+          "path": "/subscriptions/notifications/google",
+          "case": "missing-auth",
+          "status": 400,
+          "expectedStatus": 400,
+          "passed": true,
+          "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+        },
+        {
+          "path": "/subscriptions/notifications/google",
+          "case": "invalid-signature",
+          "status": 401,
+          "expectedStatus": 401,
+          "passed": true,
+          "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+        }
+      ],
+      "apiSourceIdentityMatches": true,
+      "deployments": {
+        "api": {
+          "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T13:25:35.591Z"
+        },
+        "admin": {
+          "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+          "status": "SUCCESS",
+          "createdAt": "2026-10-10T08:22:58.703Z"
+        }
+      },
+      "adminBuildNext15527Observed": true,
+      "buildLogsPrinted": false,
+      "runtimeFlags": {
+        "personalCostGateMode": "operator_override",
+        "guardrailEnabled": "true",
+        "sandboxPurchases": "true",
+        "subscriptions": "true",
+        "minimumRecipeSamples": "10",
+        "minimumPhotoSamples": "3",
+        "monthlyAiBudgetKrw": "2000"
+      },
+      "googleEmailCorrect": true,
+      "rtdnConfig": {
+        "audienceMatchesWebhook": true,
+        "serviceAccountConfigured": true
+      },
+      "allPublicAndUnauthenticatedChecksPassed": true,
+      "personalSalesConfigurationMatches": true,
+      "adminDeploymentUnchanged": true
+    },
+    "backup": {
+      "startedAt": "2026-10-10T13:23:27.466Z",
+      "backupPath": "/tmp/jango-prod-backup-iap-review-20261010-1323/production.dump",
+      "backupMode": "consistent exported repeatable-read snapshot; custom format; no owner/ACL",
+      "productionWrites": false,
+      "localRestoreOnly": true,
+      "rawDataCommitted": false,
+      "productionPostgresVersion": "180006",
+      "productionDatabaseBytes": "146978495",
+      "backupCompletedAt": "2026-10-10T13:24:47.345Z",
+      "backupBytes": 11712406,
+      "backupSha256": "fb9e37b6ea0f1a1aa7604c168d0146bf44edd4ec6810a8576e65b57ef076a680",
+      "tableCount": 41,
+      "allTableRowCountsMatch": true,
+      "catalogMatches": true,
+      "migrationsMatch": true,
+      "migrationCount": 45,
+      "unfinishedMigrations": 0,
+      "constraints": 449,
+      "indexes": 167,
+      "invalidIndexes": 0,
+      "unvalidatedConstraints": 0,
+      "pgAmcheckPassed": true,
+      "consistencyChecks": {
+        "usersWithoutPersonalSpace": 4,
+        "inventoryWithoutSpace": 0,
+        "storageWithoutSpace": 0,
+        "recipeWithoutSpace": 0
+      },
+      "restoreVerifiedAt": "2026-10-10T13:24:50.036Z",
+      "restorePassed": true,
+      "localServerStopped": true,
+      "isolatedRestoredUserDataRemoved": true,
+      "protectedBackupPath": "/Users/namu/Library/Application Support/Jango/ReleaseBackups/2026-10-10/production-before-iap-review-2224.dump",
+      "protectedBackupHashVerified": true
+    },
+    "postdeployScope": "Read-only health/configuration checks and artifact-only configuration redeploy. No DB writes by these scripts. User sandbox purchases/restore create normal entitlement, intent and funnel records."
+  },
+  "monthlySandboxQa": {
+    "evidenceSource": "User performed monthly sandbox checkout/restore on both requested test builds and confirmed current Plus display; agent did not press payment or restore",
+    "reply": "\"장고 플러스가 시작됐어요\", 플러스 이용중도 표시됨.",
+    "bothDevicesRestoreMessageConfirmed": true,
+    "bothDevicesPlusActiveDisplayConfirmed": true,
+    "monthlyPurchaseAndRestoreQaPassed": true,
+    "entitlementEvidence": {
+      "checkedAt": "2026-10-10T13:41:16.553Z",
+      "readOnly": true,
+      "rawTokensAndIdentifiersReturned": false,
+      "stores": [
+        {
+          "store": "apple_app_store",
+          "status": "active",
+          "isActive": true,
+          "environment": "Sandbox",
+          "verifiedAt": "2026-10-10T13:33:34.760Z",
+          "expiresAt": "2026-10-11T13:33:12.000Z",
+          "applePrivateRelayLogin": true,
+          "googleAcknowledged": null,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 4
+            },
+            {
+              "name": "restore_completed",
+              "count": 3
+            },
+            {
+              "name": "restore_started",
+              "count": 3
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        },
+        {
+          "store": "google_play",
+          "status": "active",
+          "isActive": true,
+          "environment": "sandbox",
+          "verifiedAt": "2026-10-10T13:37:05.365Z",
+          "expiresAt": "2026-10-10T13:41:59.223Z",
+          "applePrivateRelayLogin": false,
+          "googleAcknowledged": true,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 3
+            },
+            {
+              "name": "restore_completed",
+              "count": 2
+            },
+            {
+              "name": "restore_started",
+              "count": 2
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        }
+      ]
+    },
+    "googleFirstSandboxRenewalVerified": true,
+    "firstGoogleVerificationAt": "2026-10-10T13:32:30.021Z",
+    "firstGoogleExpiry": "2026-10-10T13:36:59.223Z",
+    "googleAcknowledged": true,
+    "accountReconciliation": "Resolved using actual verified receipt owner in memory. Apple private-relay app login differs from supplied test emails; Play account is distinct from app account. No raw owner, email, token or transaction identifier returned."
+  },
+  "remainingBeforePublicReleaseAndQualificationLimits": [
+    "Store review approval; public release remains pending. Existing final-release authorization remains valid for later publishing.",
+    "Before publishing: fresh consistent backup and isolated restore, set IAP_ALLOW_SANDBOX_PURCHASES=false, redeploy existing API artifact, verify all 13 health/policy/auth checks",
+    "Publish approved iOS with 7-day phased update; publish approved Android production at initial 5% and monitor before expanding",
+    "Annual purchase and full pending/account-conflict/cancel/grace/hold/pause/refund/revocation device QA are not yet qualified",
+    "Fresh complete RC core/accessibility/shared-space/push and all native SDK paths are not fully qualified",
+    "Current-model 50 recipe / 30 photo cost qualification remains incomplete under explicitly approved cost exception"
+  ],
+  "screenshots": [
+    {
+      "file": "ios-review-submitted.jpg",
+      "sha256": "b654b70fc327c657049c69807eb556633b3e307fd77ee17b61fc019431703080"
+    },
+    {
+      "file": "android-review-submitted.jpg",
+      "sha256": "5d33e93f1c6dedb9591e2b3956a7072bb9471ac6848520047a0ac90cbed898c2"
+    }
+  ],
+  "gitPushed": false,
+  "rawUserDataOrSecretsCommitted": false,
+  "validation": {
+    "existingSourceTestsPassed": 1345,
+    "apiOptInDbTestsSkippedInDefaultRun": 6,
+    "cleanIsolatedDbIntegrationTestsPassed": 6,
+    "docsCheckPassed": true,
+    "diffWhitespaceCheckPassed": true,
+    "canvasTypecheckPassed": true,
+    "applicationCodeChangedInFinalSubmissionTurn": false,
+    "validationScope": "Reused passed validation for unchanged application source; final changes are store configuration, metadata and evidence documentation."
+  }
+}
