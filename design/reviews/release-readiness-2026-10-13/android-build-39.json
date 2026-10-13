@@ -1,0 +1,160 @@
+{
+  "finalReleaseCandidate": true,
+  "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+  "easBuild": {
+    "checkedAt": "2026-10-13T10:54:46.100Z",
+    "build": {
+      "id": "9f8d5ab2-0bf5-40c3-b924-ef973c05a193",
+      "status": "FINISHED",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "39",
+      "gitCommitHash": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "createdAt": "2026-10-13T10:37:29.995Z",
+      "completedAt": "2026-10-13T10:53:35.574Z"
+    },
+    "errorCode": null
+  },
+  "request": {
+    "requestedAt": "2026-10-13T10:37:31.036Z",
+    "purpose": "Android foreground and automatic recovery period verification fix; no auto store submission",
+    "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+    "transfer": {
+      "checkedAt": "2026-10-13T10:35:10.284Z",
+      "outputRoot": "/tmp/jango-android-recovery-eas-archive-20261013",
+      "fileCount": 907,
+      "bytes": 38358147,
+      "secretFileCount": 0,
+      "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "sourceMatches": true,
+      "sourceUploaded": true
+    },
+    "build": {
+      "id": "9f8d5ab2-0bf5-40c3-b924-ef973c05a193",
+      "status": "NEW",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "39",
+      "gitCommitHash": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "createdAt": "2026-10-13T10:37:29.995Z"
+    },
+    "storeSubmitted": false,
+    "publicReleasePerformed": false
+  },
+  "artifactValidated": true,
+  "internalPublished": true,
+  "productionSubmitted": false,
+  "publicReleasePerformed": false,
+  "artifactRecord": "android-artifact-39.json",
+  "internalTest": {
+    "startedAt": "2026-10-13T10:55:47.841Z",
+    "authorizedTrack": "internal",
+    "versionCode": 39,
+    "packageName": "com.expirymate.mobile",
+    "productionTrackChanged": false,
+    "testersChanged": false,
+    "reviewSubmitted": true,
+    "publicReleasePerformed": false,
+    "artifactSha256": "8ad348ea820a68e5cb5d2b729510eee4ed52403b9db82a2aa4d3521bd1e7e474",
+    "stage": "internal-test-committed",
+    "editId": "13676367433543566863",
+    "previousInternalTrack": {
+      "track": "internal",
+      "releases": [
+        {
+          "name": "1.4.3 (38) 출시 전 QA",
+          "versionCodes": [
+            "38"
+          ],
+          "releaseNotes": [
+            {
+              "language": "ko-KR",
+              "text": "Android 월간·연간 구매와 복원 시 서버에서 확인한 구독 기간을 사용하도록 보완한 출시 전 QA 빌드입니다."
+            }
+          ],
+          "status": "completed"
+        }
+      ]
+    },
+    "previousProductionReleases": [
+      {
+        "versionCodes": [
+          "37"
+        ],
+        "status": "inProgress"
+      },
+      {
+        "versionCodes": [
+          "35"
+        ],
+        "status": "completed"
+      }
+    ],
+    "uploadedBundle": {
+      "versionCode": 39,
+      "sha256": "8ad348ea820a68e5cb5d2b729510eee4ed52403b9db82a2aa4d3521bd1e7e474",
+      "sha1": "e4b0d9a0cd5341b4b2a99cd4d102a870509db920"
+    },
+    "internalTrack": {
+      "track": "internal",
+      "releases": [
+        {
+          "name": "1.4.3 (39) 출시 전 QA",
+          "versionCodes": [
+            "39"
+          ],
+          "releaseNotes": [
+            {
+              "language": "ko-KR",
+              "text": "Android 월간·연간 구매와 복원 시 서버에서 확인한 구독 기간을 사용하도록 보완한 출시 전 QA 빌드입니다."
+            }
+          ],
+          "status": "completed"
+        }
+      ]
+    },
+    "editValidated": true,
+    "readyForInternalCommit": true,
+    "commitOptions": {
+      "changesInReviewBehavior": "ERROR_IF_IN_REVIEW"
+    },
+    "internalAutomaticReviewAuthorized": true,
+    "committedAt": "2026-10-13T10:58:24.761Z",
+    "reviewScope": "Internal test automatic review only, as required by Google",
+    "verifiedInternalTrack": {
+      "track": "internal",
+      "releases": [
+        {
+          "name": "1.4.3 (39) 출시 전 QA",
+          "versionCodes": [
+            "39"
+          ],
+          "releaseNotes": [
+            {
+              "language": "ko-KR",
+              "text": "Android 월간·연간 구매와 복원 시 서버에서 확인한 구독 기간을 사용하도록 보완한 출시 전 QA 빌드입니다."
+            }
+          ],
+          "status": "completed"
+        }
+      ]
+    },
+    "verifiedProductionReleases": [
+      {
+        "versionCodes": [
+          "37"
+        ],
+        "status": "inProgress"
+      },
+      {
+        "versionCodes": [
+          "35"
+        ],
+        "status": "completed"
+      }
+    ],
+    "productionReleasesUnchanged": true,
+    "internalVersion39Active": true,
+    "verifiedAt": "2026-10-13T10:58:28.451Z"
+  }
+}

@@ -1469,7 +1469,7 @@
     "loadAlignmentPassCount": 54,
     "relroEndAlignmentPassCount": 10
   },
-  "limitations": "Signed AAB38 validation, upload signer equality and static LOAD/bundle16KB configuration passed. All54 native library hashes match37 with earlier16KB initial runtime evidence. Actual Play-generated38 APK signer/ZIP alignment and new annual/restore device QA remain pending. Every SDK runtime path and44 GNU_RELRO end boundaries remain unqualified.",
+  "limitations": "Signed AAB38 validation, upload signer, Galaxy version38 and Play signer verified. All54 native library hashes match37; static LOAD/bundle16KB configuration passed. Foreground annual purchase/restore QA requested. Final candidate39 adds global automatic recovery fix. Full SDK runtime paths and44 GNU_RELRO end boundaries remain unqualified.",
   "uploadCertificateMatches37": true,
   "nativeComparisonTo37": {
     "samePaths": true,
@@ -1606,9 +1606,22 @@
     "consoleScreenshotSha256": "849826f28269f03f4354ec698dd4f2e4d5fd03b29d147082183a08c1e1aa89f0"
   },
   "realDeviceQA": {
-    "version38Installed": false,
+    "version38Installed": true,
     "annualPurchaseRestorePassed": false,
-    "pendingDeviceCaseSkippedByUser": true
+    "pendingDeviceCaseSkippedByUser": true,
+    "installedStoreBuild": {
+      "checkedAt": "2026-10-13T10:46:20.172325+00:00",
+      "deviceModel": "SM-A346N",
+      "version": "1.4.3",
+      "versionCode": 38,
+      "installedFromPlay": true,
+      "signatureVerified": true,
+      "playSigningCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playSigningCertificateMatches": true,
+      "baseApkSha256": "3db4673288c87cfaddf451f89f5e25ca561823f256bfb9ae6961fe536a3c951e",
+      "devicePageSizeBytes": "4096",
+      "deviceSerialsOrAppDataReturned": false
+    }
   },
   "publicReleasePerformed": false
 }

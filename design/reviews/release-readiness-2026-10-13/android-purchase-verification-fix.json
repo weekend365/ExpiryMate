@@ -84,5 +84,20 @@
     "mobileTypecheckPassed": true,
     "mobileLintPassed": true,
     "nativeOrUiLayoutChanges": false
+  },
+  "finalSourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+  "finalBuild": {
+    "checkedAt": "2026-10-13T10:50:21.695Z",
+    "build": {
+      "id": "9f8d5ab2-0bf5-40c3-b924-ef973c05a193",
+      "status": "IN_PROGRESS",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "39",
+      "gitCommitHash": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "createdAt": "2026-10-13T10:37:29.995Z",
+      "completedAt": null
+    },
+    "errorCode": null
   }
 }

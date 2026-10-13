@@ -1,6 +1,6 @@
 {
   "state": "Both initial store approvals preserved; Android final candidate39 includes foreground and global recovery period fixes",
-  "dataAsOf": "2026-10-13T10:01:51.679Z",
+  "dataAsOf": "2026-10-13T10:58:28.451Z",
   "authorization": {
     "request": "심사 통과했어 마저 작업 진행해줘.",
     "previousFinalReleaseAuthorizationPersists": true
@@ -315,7 +315,7 @@
     "coreFlowAndAnnualTestPurchase": "Requested; awaiting user result",
     "androidPending": "Explicitly skipped by user: 이건 패스",
     "iosExistingMonthlyActive": "Direct production read confirms still active; app intentionally hides another purchase plan for active subscribers",
-    "androidAnnualAndRestore": "Verification failures observed for same previous purchase owner; exact user-visible error requested; no successful annual entitlement yet",
+    "androidAnnualAndRestore": "Galaxy Play38 installed and signer verified; yearly test checkout and foreground restore requested; final39 will cover cold relaunch automatic recovery",
     "userReported": "둘 다 장고 플러스가 시작됐어요 라고 뜸.",
     "iosExistingMonthly": "아이폰은 기존 플러스 이용 중",
     "visibleAndroidError": "User reports none: 안떴어.",
@@ -324,7 +324,7 @@
     "androidMonthlyTestExpiredAndRightsRemoved": true
   },
   "productionModeRestored": false,
-  "sourceOrPrismaChanged": false,
+  "sourceOrPrismaChanged": true,
   "gitPushed": false,
   "screenshots": [
     {
@@ -334,6 +334,10 @@
     {
       "file": "android-approved.jpg",
       "sha256": "a88a448550a9c894e3e1b452b137105d7585708e8d96872ce131e328996f705a"
+    },
+    {
+      "file": "android-internal-39.jpg",
+      "sha256": "a6c24accc5bf7a4af5293dcad520926c7f4475e2988397b30476f88438c91a85"
     }
   ],
   "rawSecretsAndReceiptIdentifiersCommitted": false,
@@ -480,12 +484,79 @@
   "androidInternal38": {
     "record": "android-artifact-38.json",
     "posted": true,
-    "actualVersion38Installed": false,
+    "actualVersion38Installed": true,
     "annualPurchaseRestoreVerified": false,
     "productionUnchanged": true,
     "testersChanged": false,
-    "finalReleaseCandidate": false
+    "finalReleaseCandidate": false,
+    "installedStoreBuild": {
+      "checkedAt": "2026-10-13T10:46:20.172325+00:00",
+      "deviceModel": "SM-A346N",
+      "version": "1.4.3",
+      "versionCode": 38,
+      "installedFromPlay": true,
+      "signatureVerified": true,
+      "playSigningCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playSigningCertificateMatches": true,
+      "baseApkSha256": "3db4673288c87cfaddf451f89f5e25ca561823f256bfb9ae6961fe536a3c951e",
+      "devicePageSizeBytes": "4096",
+      "deviceSerialsOrAppDataReturned": false
+    }
   },
   "finalAndroidVersionCode": 39,
-  "globalRecoveryFollowupRecord": "android-purchase-verification-fix.json"
+  "globalRecoveryFollowupRecord": "android-purchase-verification-fix.json",
+  "androidFinal39Build": {
+    "checkedAt": "2026-10-13T10:54:46.100Z",
+    "build": {
+      "id": "9f8d5ab2-0bf5-40c3-b924-ef973c05a193",
+      "status": "FINISHED",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "39",
+      "gitCommitHash": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "createdAt": "2026-10-13T10:37:29.995Z",
+      "completedAt": "2026-10-13T10:53:35.574Z"
+    },
+    "errorCode": null
+  },
+  "changeScope": {
+    "mobileRuntimeChanged": true,
+    "apiRuntimeChanged": false,
+    "prismaChanged": false,
+    "finalSourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1"
+  },
+  "finalSourceVerification": {
+    "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+    "testExitCode": 0,
+    "testsPassed": 1352,
+    "apiTestsPassed": 589,
+    "apiIntegrationTestsSkipped": 6,
+    "mobileTestsPassed": 577,
+    "sharedTestsPassed": 163,
+    "rootScriptTestsPassed": 23,
+    "typecheckExitCode": 0,
+    "lintExitCode": 0,
+    "docsCheckExitCode": 0,
+    "paidModelEvaluationRun": false
+  },
+  "productionCandidateReplacement": {
+    "priorActionRejected": true,
+    "action": "Play Console 변경사항 삭제 button click",
+    "reason": "May remove approved production and Data Safety changes together without explicit approval of removal scope",
+    "externalChangePerformed": false,
+    "officialDocumentation": "https://support.google.com/googleplay/android-developer/answer/9859654?hl=en",
+    "officialMeaning": "Moves approved changes back to Changes not yet sent for review; approval can require repeat review; no permanent deletion asserted",
+    "replacementPerformed": false
+  },
+  "androidInternal39": {
+    "record": "android-artifact-39.json",
+    "posted": true,
+    "internalVersion39Active": true,
+    "actualVersion39Installed": false,
+    "annualPurchaseRestoreVerified": false,
+    "coldRelaunchAutomaticRecoveryVerified": false,
+    "productionUnchanged": true,
+    "testersChanged": false,
+    "finalReleaseCandidate": true
+  }
 }

@@ -23,10 +23,15 @@ data_as_of: 2026-10-13
 비정확한 SDK currentPlanId/화면 선택값을 검증 요청에서 빼고 기존 서버의 Google 검증 기간을
 사용합니다. 모바일577개·서버 구독32개·타입·lint 검증 후 EAS1.4.3(38) 서명 빌드를
 요청해 실제 AAB 검증·내부 게시를 마쳤습니다. 이어 자동 복구의 같은 추정값도 공통
-builder로 제거하고 모바일577개·타입·lint를 재확인했습니다. 최종 Android 후보는39이며
-iOS51은 유지합니다. 사용자 허용 범위의 결제 대기 기기 QA는 이번에 명시적으로
+builder로 제거하고 모바일577개·타입·lint를 재확인했습니다. Galaxy에 설치된38의 실제
+버전 코드·Play 서명을 직접 확인했고 연간 구매·화면 복원 결과를 기다립니다. 최종 Android
+후보39는 `d1c703f`의 EAS `9f8d5ab2`로 빌드·서명·SDK·16KB 정적 검증을 마치고
+19:58 KST 기존 내부 테스트에 게시했습니다. 전체 테스트1,352개·타입·lint·문서 검사도
+통과했습니다(API 통합 테스트6개 제외). iOS51은 유지합니다. 사용자 허용 범위의 결제 대기 기기 QA는 이번에 명시적으로
 제외합니다. 취소한 Android 월간 테스트 구독의 만료·권한 해제도 확인했습니다.
-최종39의 실제 연간·복원·재실행 자동 복구, production 재심사와 공개 전 운영 설정 원복은 남습니다.
+최종39의 실제 설치·연간·복원·재실행 자동 복구, production 재심사와 공개 전 운영 설정 원복은 남습니다.
+승인된production37·Data Safety를 심사 전 목록으로 되돌리는 버튼 클릭은 자동 승인 검사가
+범위 허용 부족으로 거절했으며 실제 변경은 없었습니다. 후보 교체의 영향 범위 허용을 기다립니다.
 운영 Sandbox=true·개인 판매 원가 예외·서버/키/상품/AI 한도는 유지했습니다.
 
 ## 2026-10-10 최종 심사 제출 이력
@@ -233,7 +238,8 @@ Product ID와 Base plan ID는 코드 계약입니다. 오타가 난 상품을 �
 3. Version은 **V2**를 선택합니다.
 4. Sandbox Server URL은 안정적인 staging API가 있으면 staging의 같은 경로를 넣습니다.
    staging을 운영하지 않으면 production URL을 같이 사용하되, QA·심사 기간에만
-   `IAP_ALLOW_SANDBOX_PURCHASES=true`로 두고 출시 후 다시 `false`로 내립니다.
+   `IAP_ALLOW_SANDBOX_PURCHASES=true`로 둡니다. 공개 직전 백업·격리 복구를 확인한 뒤
+   `false`로 내리고 재배포·운영 검사를 마칩니다.
 5. App Store Connect에서 test notification을 보내 API 2xx와 로그를 확인합니다.
 
 ### 3.5 Grace period와 개인정보
