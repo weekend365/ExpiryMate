@@ -1492,13 +1492,107 @@
   },
   "finalReleaseCandidate": true,
   "internalPublished": true,
-  "productionSubmitted": false,
+  "productionSubmitted": true,
   "publicReleasePerformed": false,
   "realDeviceQA": {
-    "version39Installed": false,
-    "coldRelaunchAndRestorePassed": false,
-    "annualEntitlementVerified": false,
-    "pendingDeviceCaseSkippedByUser": true
+    "version39Installed": true,
+    "coldRelaunchAndRestorePassed": true,
+    "annualEntitlementVerified": true,
+    "pendingDeviceCaseSkippedByUser": true,
+    "installedStoreBuild": {
+      "checkedAt": "2026-10-13T11:27:18.104893+00:00",
+      "deviceModel": "SM-A346N",
+      "version": "1.4.3",
+      "versionCode": 39,
+      "installedFromPlay": true,
+      "signatureVerified": true,
+      "playSigningCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playSigningCertificateMatches": true,
+      "baseApkSha256": "3008a99f09c086f5dd825f80618fae75c1762390abaf7506d4d5f1391ba56bfe",
+      "devicePageSizeBytes": "4096",
+      "deviceSerialsOrAppDataReturned": false
+    },
+    "annualStoreVerification": {
+      "checkedAt": "2026-10-13T11:27:24.503Z",
+      "readOnly": true,
+      "rawTokensAndIdentifiersReturned": false,
+      "stores": [
+        {
+          "store": "google_play",
+          "productId": "jango_plus",
+          "billingPeriod": "yearly",
+          "basePlanId": "yearly",
+          "willRenew": true,
+          "status": "active",
+          "isActive": true,
+          "environment": "sandbox",
+          "verifiedAt": "2026-10-13T11:26:45.641Z",
+          "expiresAt": "2026-10-13T11:34:53.932Z",
+          "applePrivateRelayLogin": false,
+          "googleAcknowledged": true,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 2
+            },
+            {
+              "name": "restore_completed",
+              "count": 1
+            },
+            {
+              "name": "restore_started",
+              "count": 2
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        }
+      ]
+    },
+    "userReportedRestore": "구매 복원 눌렀을때 장고 플러스가 시작됐어요 라고 뜸",
+    "coldRelaunchRequested": false,
+    "postRelaunchUserResult": "플러스 이용 중이고 구매 복원도 성공함",
+    "postRelaunchStoreVerification": {
+      "checkedAt": "2026-10-13T11:35:10.911Z",
+      "readOnly": true,
+      "rawTokensAndIdentifiersReturned": false,
+      "stores": [
+        {
+          "store": "google_play",
+          "productId": "jango_plus",
+          "billingPeriod": "yearly",
+          "basePlanId": "yearly",
+          "willRenew": true,
+          "status": "active",
+          "isActive": true,
+          "environment": "sandbox",
+          "verifiedAt": "2026-10-13T11:35:00.449Z",
+          "expiresAt": "2026-10-13T12:04:53.932Z",
+          "applePrivateRelayLogin": false,
+          "googleAcknowledged": true,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 4
+            },
+            {
+              "name": "restore_completed",
+              "count": 3
+            },
+            {
+              "name": "restore_started",
+              "count": 4
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        }
+      ]
+    },
+    "annualRenewalObserved": {
+      "previousExpiresAt": "2026-10-13T11:34:53.932Z",
+      "currentExpiresAt": "2026-10-13T12:04:53.932Z",
+      "activeAndAcknowledged": true,
+      "readingOnlyNoSubscriptionMutation": true
+    }
   },
   "internalTest": {
     "startedAt": "2026-10-13T10:55:47.841Z",
@@ -1613,5 +1707,6 @@
     "consoleStatus": "활성 · 내부 테스터에게 제공됨 · 2026-10-13 19:58 KST",
     "consoleScreenshot": "android-internal-39.jpg",
     "consoleScreenshotSha256": "a6c24accc5bf7a4af5293dcad520926c7f4475e2988397b30476f88438c91a85"
-  }
+  },
+  "productionRecord": "android-production-39.json"
 }

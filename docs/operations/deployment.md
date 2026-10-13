@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-13
 source_of_truth: true
 ---
 
@@ -143,6 +143,16 @@ iOS는 수동 출시, Google은 관리형 게시로 승인 후 자동 공개를 
 동일 API artifact를 재배포합니다. `/health` SHA·`/ready`·정책 URL·인증 거부 13개와
 Sandbox 거부 설정을 재확인한 뒤 승인된 iOS 7일 단계적 업데이트·Android 5% 출시를 게시합니다.
 현재의 심사 제출은 공개 완료가 아니며 재배포에 `--from-source`를 사용하지 않습니다.
+
+## 2026-10-13 Android39 재심사 중
+
+[최신 공개 준비 기록](../../design/reviews/release-readiness-2026-10-13/release-publication.json)의
+Android39는 실제 Play 설치·서명, 연간·ACK·갱신·재실행·복원을 확인하고 production
+재심사에 접수됐습니다. iOS51은 승인·수동 출시 대기입니다. 공유 API는 QA·재심사용
+`IAP_ALLOW_SANDBOX_PURCHASES=true`를 유지하며 이 날짜에는 서버 재배포·Prisma 변경이
+없습니다. 10월13일 최초 백업·격리 복구 기록은 보존하되 공개 시점의 새 백업을 대체하지
+않습니다. 남은 필수 QA 또는 명시적 범위 예외와 Google 승인을 확인한 뒤 공개 직전15분
+이내의 새 검증·보호 백업으로 위 원복 절차를 실행합니다.
 
 ## Sentry
 

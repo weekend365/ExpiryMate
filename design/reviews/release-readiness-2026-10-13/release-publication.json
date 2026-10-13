@@ -1,9 +1,10 @@
 {
-  "state": "Both initial store approvals preserved; Android final candidate39 includes foreground and global recovery period fixes",
-  "dataAsOf": "2026-10-13T10:58:28.451Z",
+  "state": "Android39 annual purchase, store installation, relaunch and restore verified; production39 and preserved Data Safety under new Google review; iOS51 approved and held",
+  "dataAsOf": "2026-10-13T11:42:16.289820+00:00",
   "authorization": {
     "request": "심사 통과했어 마저 작업 진행해줘.",
-    "previousFinalReleaseAuthorizationPersists": true
+    "previousFinalReleaseAuthorizationPersists": true,
+    "androidCandidateReplacement": "기존 항목 복귀·39 교체·재심사 허용"
   },
   "ios": {
     "version": "1.4.3",
@@ -16,18 +17,22 @@
   },
   "android": {
     "version": "1.4.3",
-    "versionCode": 37,
-    "approved": true,
-    "consoleStatus": "변경사항이 게시 준비됨",
+    "versionCode": 39,
+    "approved": false,
+    "consoleStatus": "검토 중인 변경사항",
     "initialRolloutPercent": 5,
     "managedPublishingEnabled": true,
-    "approvedChanges": [
-      "production37",
+    "approvedChanges": [],
+    "publicReleasePerformed": false,
+    "newReleaseCandidateRequired": false,
+    "approvedVersion37NotPublished": true,
+    "reviewSubmitted": true,
+    "reviewedChanges": [
+      "production39 at5%",
       "Data Safety"
     ],
-    "publicReleasePerformed": false,
-    "newReleaseCandidateRequired": true,
-    "approvedVersion37NotPublished": true
+    "initialVersion37ApprovalHistoryRetained": true,
+    "productionRecord": "android-production-39.json"
   },
   "prepublishOperationalChecks": {
     "checkedAt": "2026-10-13T09:42:11.100Z",
@@ -315,13 +320,14 @@
     "coreFlowAndAnnualTestPurchase": "Requested; awaiting user result",
     "androidPending": "Explicitly skipped by user: 이건 패스",
     "iosExistingMonthlyActive": "Direct production read confirms still active; app intentionally hides another purchase plan for active subscribers",
-    "androidAnnualAndRestore": "Galaxy Play38 installed and signer verified; yearly test checkout and foreground restore requested; final39 will cover cold relaunch automatic recovery",
+    "androidAnnualAndRestore": "Verified yearly/yearly entitlement active, acknowledged, purchase verified2 and restore completed1 after internal39 posting; Play39 installed directly; cold relaunch requested",
     "userReported": "둘 다 장고 플러스가 시작됐어요 라고 뜸.",
     "iosExistingMonthly": "아이폰은 기존 플러스 이용 중",
     "visibleAndroidError": "User reports none: 안떴어.",
     "androidMonthlyTestCancellation": "User confirmed 취소 완료.",
-    "annualVerifiedByStore": "Not yet qualified: current server entitlement is monthly on both platforms.",
-    "androidMonthlyTestExpiredAndRightsRemoved": true
+    "annualVerifiedByStore": "Android annual verified; iOS remains existing monthly",
+    "androidMonthlyTestExpiredAndRightsRemoved": true,
+    "android39PostRelaunch": "User confirms 플러스 이용 중이고 구매 복원도 성공함; server yearly active/ACK,4 purchase verified and3 restore complete, no failed events in window; renewal expiry extended"
   },
   "productionModeRestored": false,
   "sourceOrPrismaChanged": true,
@@ -338,6 +344,10 @@
     {
       "file": "android-internal-39.jpg",
       "sha256": "a6c24accc5bf7a4af5293dcad520926c7f4475e2988397b30476f88438c91a85"
+    },
+    {
+      "file": "android-39-review-submitted.jpg",
+      "sha256": "9b2700aa4bf9709ea799f03a7c099dc6b5f6893baf05388ed5a98239b1735e41"
     }
   ],
   "rawSecretsAndReceiptIdentifiersCommitted": false,
@@ -464,7 +474,8 @@
     "mobileTypecheckPassed": true,
     "mobileLintPassed": true,
     "uiLayoutChanged": false,
-    "fixDeployed": false
+    "fixDeployed": true,
+    "deploymentScope": "Android internal39 only; API runtime unchanged; public mobile versions remain48/35"
   },
   "androidFixBuild": {
     "checkedAt": "2026-10-13T10:20:55.784Z",
@@ -546,19 +557,123 @@
     "externalChangePerformed": false,
     "officialDocumentation": "https://support.google.com/googleplay/android-developer/answer/9859654?hl=en",
     "officialMeaning": "Moves approved changes back to Changes not yet sent for review; approval can require repeat review; no permanent deletion asserted",
-    "replacementPerformed": false,
+    "replacementPerformed": true,
     "screenshot": "android-candidate-replacement-held.jpg",
-    "screenshotSha256": "2d7f089308c8166b8df26ae1e9c30c9506570ef3dea62dd7918a2b453072f82b"
+    "screenshotSha256": "2d7f089308c8166b8df26ae1e9c30c9506570ef3dea62dd7918a2b453072f82b",
+    "scopeExplicitlyAuthorized": true,
+    "authorization": "기존 항목 복귀·39 교체·재심사 허용",
+    "approvedItemsReturnedToUnsent": true,
+    "oldUnpublishedRelease37Removed": true,
+    "uploadedArtifactsPreserved": true,
+    "publicVersion35StillProvided": true,
+    "newProduction39DraftStarted": true,
+    "new39SavedAt5Percent": true,
+    "DataSafetyPreviewPreserved": true,
+    "authorizationSatisfied": true,
+    "new39ReviewSubmitted": true,
+    "automaticApprovalRejectionResolved": true
   },
   "androidInternal39": {
     "record": "android-artifact-39.json",
     "posted": true,
     "internalVersion39Active": true,
-    "actualVersion39Installed": false,
-    "annualPurchaseRestoreVerified": false,
-    "coldRelaunchAutomaticRecoveryVerified": false,
+    "actualVersion39Installed": true,
+    "annualPurchaseRestoreVerified": true,
+    "coldRelaunchAutomaticRecoveryVerified": true,
     "productionUnchanged": true,
     "testersChanged": false,
-    "finalReleaseCandidate": true
-  }
+    "finalReleaseCandidate": true,
+    "installedStoreBuild": {
+      "checkedAt": "2026-10-13T11:27:18.104893+00:00",
+      "deviceModel": "SM-A346N",
+      "version": "1.4.3",
+      "versionCode": 39,
+      "installedFromPlay": true,
+      "signatureVerified": true,
+      "playSigningCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playSigningCertificateMatches": true,
+      "baseApkSha256": "3008a99f09c086f5dd825f80618fae75c1762390abaf7506d4d5f1391ba56bfe",
+      "devicePageSizeBytes": "4096",
+      "deviceSerialsOrAppDataReturned": false
+    },
+    "annualStoreVerification": {
+      "checkedAt": "2026-10-13T11:27:24.503Z",
+      "readOnly": true,
+      "rawTokensAndIdentifiersReturned": false,
+      "stores": [
+        {
+          "store": "google_play",
+          "productId": "jango_plus",
+          "billingPeriod": "yearly",
+          "basePlanId": "yearly",
+          "willRenew": true,
+          "status": "active",
+          "isActive": true,
+          "environment": "sandbox",
+          "verifiedAt": "2026-10-13T11:26:45.641Z",
+          "expiresAt": "2026-10-13T11:34:53.932Z",
+          "applePrivateRelayLogin": false,
+          "googleAcknowledged": true,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 2
+            },
+            {
+              "name": "restore_completed",
+              "count": 1
+            },
+            {
+              "name": "restore_started",
+              "count": 2
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        }
+      ]
+    },
+    "postRelaunchStoreVerification": {
+      "checkedAt": "2026-10-13T11:35:10.911Z",
+      "readOnly": true,
+      "rawTokensAndIdentifiersReturned": false,
+      "stores": [
+        {
+          "store": "google_play",
+          "productId": "jango_plus",
+          "billingPeriod": "yearly",
+          "basePlanId": "yearly",
+          "willRenew": true,
+          "status": "active",
+          "isActive": true,
+          "environment": "sandbox",
+          "verifiedAt": "2026-10-13T11:35:00.449Z",
+          "expiresAt": "2026-10-13T12:04:53.932Z",
+          "applePrivateRelayLogin": false,
+          "googleAcknowledged": true,
+          "events": [
+            {
+              "name": "purchase_verified",
+              "count": 4
+            },
+            {
+              "name": "restore_completed",
+              "count": 3
+            },
+            {
+              "name": "restore_started",
+              "count": 4
+            }
+          ],
+          "consumedPurchaseIntents": 1
+        }
+      ]
+    }
+  },
+  "remainingBeforePublic": [
+    "Google approval of production39 and preserved Data Safety",
+    "Remaining required device lifecycle/RC checks or explicit scoped QA exception; PENDING already skipped by user",
+    "Fresh protected production backup and isolated restore within15minutes",
+    "IAP_ALLOW_SANDBOX_PURCHASES=false and same API artifact redeploy, then13 operational checks",
+    "Manual iOS51 seven-day phased release and managed Android39 five-percent rollout, then store availability verification"
+  ]
 }

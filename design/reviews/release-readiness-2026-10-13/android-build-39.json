@@ -43,7 +43,7 @@
   },
   "artifactValidated": true,
   "internalPublished": true,
-  "productionSubmitted": false,
+  "productionSubmitted": true,
   "publicReleasePerformed": false,
   "artifactRecord": "android-artifact-39.json",
   "internalTest": {
@@ -156,5 +156,6 @@
     "productionReleasesUnchanged": true,
     "internalVersion39Active": true,
     "verifiedAt": "2026-10-13T10:58:28.451Z"
-  }
+  },
+  "productionRecord": "android-production-39.json"
 }

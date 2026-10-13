@@ -1,0 +1,96 @@
+{
+  "startedAt": "2026-10-13T11:31:53.864411+00:00",
+  "authorization": "기존 항목 복귀·39 교체·재심사 허용",
+  "packageName": "com.expirymate.mobile",
+  "version": "1.4.3",
+  "versionCode": 39,
+  "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+  "artifactSHA256": "8ad348ea820a68e5cb5d2b729510eee4ed52403b9db82a2aa4d3521bd1e7e474",
+  "track": "production",
+  "productionReleaseId": 8,
+  "countryScope": "Existing Republic of Korea scope preserved",
+  "initialRolloutPercent": 5,
+  "managedPublishingEnabled": true,
+  "previousApprovedItemsReturnedToUnsent": true,
+  "oldUnpublishedRelease37Removed": true,
+  "uploadedArtifactsPreserved": true,
+  "publicVersion35Preserved": true,
+  "dataSafetyExpected": {
+    "collectedDataTypes": 12,
+    "sharedDataTypes": 7,
+    "changesRequested": false
+  },
+  "stage": "Production39 and preserved Data Safety submitted; awaiting Google approval",
+  "reviewSubmitted": true,
+  "publicReleasePerformed": false,
+  "apiOrPrismaChanged": false,
+  "onlyArtifactVersionCode": 39,
+  "candidateSaved": true,
+  "deviceSupportLost": 0,
+  "deviceSupportAdded": 0,
+  "warnings": [
+    {
+      "category": "APK_DOWNLOAD_SIZE_INCREASE",
+      "newInstallMegabytes": 66.1,
+      "increaseMegabytes": 20.2
+    },
+    {
+      "category": "RETRACE_MAPPING_NOT_ATTACHED",
+      "nativeDebugSymbolsPresent": true
+    }
+  ],
+  "blockingErrors": 0,
+  "releaseNotes": "설정에서 장고 플러스와 구매 복원을 더 쉽게 이용할 수 있도록 개선했어요.\n월간·연간 구독 구매와 복원의 안정성을 개선했어요.",
+  "dataSafetyConfirmed": {
+    "collectedDataTypes": [
+      "Name",
+      "Email address",
+      "User IDs",
+      "Purchase history",
+      "Approximate location",
+      "Photos",
+      "Crash logs",
+      "Diagnostics",
+      "Other app performance data",
+      "App interactions",
+      "Other user-generated content",
+      "Device or other IDs"
+    ],
+    "sharedDataTypes": [
+      "User IDs",
+      "Approximate location",
+      "Diagnostics",
+      "Other app performance data",
+      "App interactions",
+      "Other user-generated content",
+      "Device or other IDs"
+    ],
+    "collectedCount": 12,
+    "sharedCount": 7,
+    "encryptionInTransit": true,
+    "accountCreationMethods": [
+      "Username and password",
+      "OAuth"
+    ],
+    "accountDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "dataDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "formValuesChanged": false,
+    "previewSaveDisabledAsNoValuesChanged": true,
+    "screenshot": "android-data-safety-preserved.jpg",
+    "screenshotSha256": "4187e9837594d91f428d971d1c67311f38767808b1d983daedb72ce3f4d4be0a"
+  },
+  "submissionActionAt": "2026-10-13T11:38:44.473767+00:00",
+  "reviewSubmissionClicked": true,
+  "preReviewChecksCompleted": true,
+  "reviewVerifiedAt": "2026-10-13T11:42:16.289820+00:00",
+  "consoleStatus": "검토 중인 변경사항",
+  "reviewedItems": [
+    "production1.4.3(39) at5%",
+    "Data Safety preserved collected12/shared7"
+  ],
+  "consoleScreenshot": "android-39-review-submitted.jpg",
+  "consoleScreenshotSha256": "9b2700aa4bf9709ea799f03a7c099dc6b5f6893baf05388ed5a98239b1735e41",
+  "iosReleaseButtonAvailable": true,
+  "iosPublicReleasePerformed": false,
+  "automaticApprovalRejectionResolvedByExplicitScopeAuthorization": true
+}

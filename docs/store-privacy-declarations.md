@@ -1,9 +1,9 @@
 ---
 status: active
 owner: privacy-release
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-13
 source_of_truth: true
-data_as_of: 2026-10-10
+data_as_of: 2026-10-13
 ---
 
 # Store Privacy Declarations · Contrast Matrix
@@ -21,7 +21,17 @@ data_as_of: 2026-10-10
 - API: `GET /privacy/status`, `POST /privacy/ai-data-notice/accept|revoke`,
   `POST /privacy/recommendation-history/delete`, `POST /privacy/account/delete`
 
-## 2026-10-10 콘솔 대조 결과
+## 2026-10-13 승인 후 Android39 재심사
+
+iOS1.4.3(51)은 승인·수동 출시 대기입니다. Android37·Data Safety의 최초 승인은 확인했지만,
+결제 검증 수정39로 교체하기 위해 사용자가 기존 항목의 심사 전 복귀·39 교체·재심사를
+명시적으로 허용했습니다. [39 재심사 기록](../design/reviews/release-readiness-2026-10-13/android-production-39.json)의
+콘솔 미리보기에서 수집12개·공유7개 유형, 암호화·계정 생성 방식·삭제 URL이 유지됨을
+확인했습니다. 폼 응답은 바꾸지 않았으며39와 함께 접수돼 현재 검토 중입니다. 관리형
+게시를 유지했고 실제 공개는 아직 실행하지 않았습니다. SDK 버전·전체 실행 검증의
+미완료 범위는 기존 기록대로 유지합니다.
+
+## 2026-10-10 콘솔 대조 이력
 
 App Store의 15개 label 유형과 정책 URL을 확인했습니다. 실제 iOS 1.4.3(49) IPA에서는
 앱의 PurchaseHistory manifest 누락을 발견해 Expo 설정과 생성된 네이티브 manifest를
