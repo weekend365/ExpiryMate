@@ -1,9 +1,9 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-13
 source_of_truth: true
-data_as_of: 2026-10-10
+data_as_of: 2026-10-13
 ---
 
 # 개인 플러스 스토어 설정·출시 체크리스트
@@ -11,7 +11,25 @@ data_as_of: 2026-10-10
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
 
-## 현재 상태 — 2026-10-10 최종 심사 제출
+## 현재 상태 — 2026-10-13 승인 후 공개 준비
+
+[공개 준비 기록](../design/reviews/release-readiness-2026-10-13/release-publication.json)을
+최신 기준으로 삼습니다. iOS51 승인·개발자 출시 대기, Google37·Data Safety 승인·게시
+준비를 직접 확인했습니다. 공개 앱은 아직48·35입니다. 마지막 Android 연간 선택·복원에서
+서버 검증 실패가 관측됐고 사용자는 눈에 보인 오류는 없다고 보고했습니다. 현재 서버에서
+확인한 월간 구매·복원은 정상이며 연간 통과로 기록하지 않습니다.
+
+[Android 검증 요청 수정](../design/reviews/release-readiness-2026-10-13/android-purchase-verification-fix.json)은
+비정확한 SDK currentPlanId/화면 선택값을 검증 요청에서 빼고 기존 서버의 Google 검증 기간을
+사용합니다. 모바일577개·서버 구독32개·타입·lint 검증 후 EAS1.4.3(38) 서명 빌드를
+요청해 실제 AAB 검증·내부 게시를 마쳤습니다. 이어 자동 복구의 같은 추정값도 공통
+builder로 제거하고 모바일577개·타입·lint를 재확인했습니다. 최종 Android 후보는39이며
+iOS51은 유지합니다. 사용자 허용 범위의 결제 대기 기기 QA는 이번에 명시적으로
+제외합니다. 취소한 Android 월간 테스트 구독의 만료·권한 해제도 확인했습니다.
+최종39의 실제 연간·복원·재실행 자동 복구, production 재심사와 공개 전 운영 설정 원복은 남습니다.
+운영 Sandbox=true·개인 판매 원가 예외·서버/키/상품/AI 한도는 유지했습니다.
+
+## 2026-10-10 최종 심사 제출 이력
 
 - [최종 제출·QA 기록](../design/reviews/release-readiness-2026-10-10/final-release-submission.json)이
   현재 기준입니다. 공개 버전은 iOS 1.4.2(48), Android 1.4.2(35)입니다.
@@ -362,9 +380,9 @@ SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=false  # 유료 판매 시작과 함께 tr
 MONETIZATION_REVENUE_LEDGER_ENABLED=true
 ```
 
-App Review/TestFlight가 production API를 사용하는 동안만
-`IAP_ALLOW_SANDBOX_PURCHASES=true`로 설정하고, production 판매 시작 직후
-`false`로 되돌립니다.
+App Review/TestFlight·라이선스 QA가 production API를 사용하는 동안만
+`IAP_ALLOW_SANDBOX_PURCHASES=true`로 설정합니다. 공개 직전 신선한 백업·격리 복구를
+확인하고 `false`로 되돌려 재배포·운영 검사를 마친 뒤 production 앱을 게시합니다.
 
 ## 7. 장애 시
 

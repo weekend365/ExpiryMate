@@ -21,6 +21,7 @@ import {
 import { captureStartupBootstrapIssue } from "../../services/sentry";
 import { isIapRuntimeAvailable } from "./iap-runtime";
 import { useMonetization } from "./monetization-provider";
+import { buildSubscriptionVerificationRequest } from "../subscriptions/subscription-verification-request";
 import {
   clearPendingSubscriptionPurchaseIntent,
   isPersonalSubscriptionProduct,
@@ -226,20 +227,11 @@ async function recoverPurchase(purchase: Purchase, subscription: boolean) {
   if (subscription) {
     const intent = await readPendingSubscriptionPurchaseIntent(purchase.productId);
     return verifySubscription(
-      Platform.OS === "ios"
-        ? {
-            store: "apple_app_store",
-            productId: purchase.productId,
-            transactionId: purchase.transactionId ?? undefined,
-            purchaseIntentId: intent?.id,
-          }
-        : {
-            store: "google_play",
-            productId: purchase.productId,
-            purchaseToken: purchase.purchaseToken ?? undefined,
-            basePlanId: purchase.currentPlanId ?? undefined,
-            purchaseIntentId: intent?.id,
-          },
+      buildSubscriptionVerificationRequest(
+        Platform.OS === "ios" ? "apple_app_store" : "google_play",
+        purchase,
+        intent?.id,
+      ),
     );
   }
 
