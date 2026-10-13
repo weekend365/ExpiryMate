@@ -1,9 +1,9 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-10-10
+last_reviewed: 2026-10-13
 source_of_truth: true
-data_as_of: 2026-10-10
+data_as_of: 2026-10-13
 ---
 
 # 프로젝트 현황
@@ -12,8 +12,29 @@ data_as_of: 2026-10-10
 [`ROADMAP.md`](./ROADMAP.md), 배포 절차는
 [`operations/deployment.md`](./operations/deployment.md)를 확인하세요.
 
-> 최신 확인은 아래 2026-10-10 기록을 우선합니다. 8월 기록의 버전, 판매 플래그,
+> 최신 확인은 아래 2026-10-13 기록을 우선합니다. 8월 기록의 버전, 판매 플래그,
 > 상품 승인 대기는 역사적 상태이며 현재 콘솔 상태로 해석하지 않습니다.
+
+## 2026-10-13 · 양 스토어 승인 · Android 결제 검증 오류로 공개 대기
+
+사용자의 **“심사 통과했어 마저 작업 진행해줘.”** 요청에 따라
+[공개 준비 기록](../design/reviews/release-readiness-2026-10-13/release-publication.json)을 갱신합니다.
+iOS 1.4.3(51)은 승인·개발자 출시 대기, Google production37과 Data Safety는 게시 준비입니다.
+수동 iOS7일 단계 배포·Google 관리형5% 시작은 유지하며 공개 버튼은 아직 실행하지 않았습니다.
+
+기존 테스트 영수증에서 Apple 월 구독 갱신·Android 월 구독 만료/권한 해제를 확인했습니다.
+그러나 마지막 Android 연간 선택과 복원에서 같은 구매 소유자의 검증 실패4건·복원 실패2건이
+발생해 공개를 멈췄습니다. 실제 안내 문구를 요청했고 다른 계정 충돌은 아닌 것으로 대조했습니다.
+[수정안](../design/reviews/release-readiness-2026-10-13/android-purchase-verification-fix.json)은
+SDK의 비정확한 currentPlanId와 화면 선택값을 구독 검증 요청에서 제거합니다. 실제 기간은
+기존 서버의 Google 검증 응답을 사용하며 서명·소유자·구매 의도·상품 선택은 유지합니다.
+모바일577개·구독 서버32개 테스트, 타입·모바일lint가 통과했습니다. 새 Android 서명 빌드·
+실제 연간/복원 QA·재심사가 필요하며 승인된37을 그대로 공개하지 않습니다. iOS51 승인도 유지합니다.
+
+최신 DB snapshot41개 테이블·45개 migration·격리 복구·pg_amcheck·보호 백업 해시를
+확인했고 기존 API/정책/인증 검사13개가 통과했습니다. 운영 API9cabee4와 임시
+Sandbox 허용=true는 QA 중 유지하며 아직 원복·재배포하지 않았습니다. 공개 직전에는
+다시 신선한 백업·격리 복구를 확인하고 false로 복귀한 뒤 운영 검사를 마쳐야 합니다.
 
 ## 2026-10-10 · 1.4.3 최종 심사 제출 · 공개 대기
 

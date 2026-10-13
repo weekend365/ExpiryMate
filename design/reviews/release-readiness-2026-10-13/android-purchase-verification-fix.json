@@ -1,0 +1,34 @@
+{
+  "dataAsOf": "2026-10-13",
+  "state": "Local fix tested; signed Android candidate and real-store QA pending",
+  "observed": "Annual plan selected, verification ApiError4 and restore_failed2 in original Google entitlement owner; exact message awaiting user",
+  "sourceIssue": "Android DTO used currentPlanId ?? selectedPeriod, even for restored purchases. CurrentPlanId is not an authoritative base plan for groups with multiple base plans; selected UI period cannot identify an older restored purchase. API already resolves verified Google lineItems.offerDetails.basePlanId.",
+  "officialSource": "https://hyochan.github.io/expo-iap/guides/subscription-validation/#android-baseplanid-limitation",
+  "installedExpoIap": "4.7.2",
+  "interpretation": "Fundamental Google Billing Purchase limitation documented by SDK maintainer; exact causality of current user error must still be confirmed by device message and corrected-build QA.",
+  "changes": [
+    "Google verification sends SKU, purchase token and existing purchase intent without a guessed basePlanId",
+    "Apple transaction/intent request remains equivalent",
+    "Purchase funnel period uses server verified entitlement period"
+  ],
+  "preserved": [
+    "Purchase selection and offer token",
+    "Server signature/owner/account binding validation",
+    "UI layout, styles, controls, accessibility and assets",
+    "Approved iOS51 and existing production35/48",
+    "All production API flags and deployed source"
+  ],
+  "validation": {
+    "mobileTestsPassed": 577,
+    "newMobileRegressionTests": 6,
+    "apiSubscriptionTestsPassed": 32,
+    "newServerContractTests": 1,
+    "mobileTypecheckPassed": true,
+    "mobileLintPassed": true,
+    "docsCheckPassed": true
+  },
+  "plannedAndroidVersionCode": 38,
+  "easUploadPerformed": false,
+  "storeReviewRequiredForNewCandidate": true,
+  "publicReleasePerformed": false
+}

@@ -449,6 +449,46 @@ describe("SubscriptionsService", () => {
     });
   });
 
+  it("resolves the annual Google plan from the verified purchase without a client period hint", async () => {
+    process.env.IAP_ALLOWED_PRODUCT_IDS = "jango_plus";
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
+    mockUnqualifiedEconomics();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = createRsaPrivateKey();
+    const { prisma, service } = createService();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") {
+        return jsonResponse({ access_token: "google-access-token" });
+      }
+      return jsonResponse({
+        subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+        acknowledgementState: "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+        lineItems: [{
+          productId: "jango_plus",
+          expiryTime: "2100-06-07T00:00:00Z",
+          offerDetails: { basePlanId: "yearly" },
+          autoRenewingPlan: { autoRenewEnabled: true },
+        }],
+      });
+    }));
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "google_play",
+      productId: "jango_plus",
+      purchaseToken: "annual-store-token",
+    });
+
+    expect(response.entitlement).toMatchObject({
+      hasActiveEntitlement: true,
+      billingPeriod: "yearly",
+      basePlanId: "yearly",
+    });
+    expect(prisma.subscriptionEntitlement.create.mock.calls[0]?.[0].data)
+      .toMatchObject({ billingPeriod: "yearly", basePlanId: "yearly" });
+  });
+
   it("rejects a Google purchase whose obfuscated account id does not match the intent", async () => {
     process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";

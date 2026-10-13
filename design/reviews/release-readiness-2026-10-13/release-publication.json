@@ -1,0 +1,422 @@
+{
+  "state": "Both stores approved; public release withheld after Android annual/restore QA verification failures",
+  "dataAsOf": "2026-10-13",
+  "authorization": {
+    "request": "심사 통과했어 마저 작업 진행해줘.",
+    "previousFinalReleaseAuthorizationPersists": true
+  },
+  "ios": {
+    "version": "1.4.3",
+    "build": 51,
+    "approved": true,
+    "consoleStatus": "개발자 출시 대기 중",
+    "manualRelease": true,
+    "phasedReleaseDays": 7,
+    "publicReleasePerformed": false
+  },
+  "android": {
+    "version": "1.4.3",
+    "versionCode": 37,
+    "approved": true,
+    "consoleStatus": "변경사항이 게시 준비됨",
+    "initialRolloutPercent": 5,
+    "managedPublishingEnabled": true,
+    "approvedChanges": [
+      "production37",
+      "Data Safety"
+    ],
+    "publicReleasePerformed": false,
+    "newReleaseCandidateRequired": true,
+    "approvedVersion37NotPublished": true
+  },
+  "prepublishOperationalChecks": {
+    "checkedAt": "2026-10-13T09:42:11.100Z",
+    "authorizedSourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "productionDatabaseDataChanged": false,
+    "temporarySandboxReviewModeWithFinalReleaseAuthorization": true,
+    "gitPushed": false,
+    "checks": [
+      {
+        "url": "https://api-production-1504.up.railway.app/health",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "metadata": {
+          "status": "ok",
+          "version": "0.1.0",
+          "gitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+          "env": "production"
+        }
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/ready",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/inventory",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/spaces",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/privacy/status",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy/choices",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/terms",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "missing-auth",
+        "status": 400,
+        "expectedStatus": 400,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "invalid-signature",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      }
+    ],
+    "apiSourceIdentityMatches": true,
+    "deployments": {
+      "api": {
+        "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T13:25:35.591Z"
+      },
+      "admin": {
+        "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:22:58.703Z"
+      }
+    },
+    "adminBuildNext15527Observed": true,
+    "buildLogsPrinted": false,
+    "runtimeFlags": {
+      "personalCostGateMode": "operator_override",
+      "guardrailEnabled": "true",
+      "sandboxPurchases": "true",
+      "subscriptions": "true",
+      "minimumRecipeSamples": "10",
+      "minimumPhotoSamples": "3",
+      "monthlyAiBudgetKrw": "2000"
+    },
+    "googleEmailCorrect": true,
+    "rtdnConfig": {
+      "audienceMatchesWebhook": true,
+      "serviceAccountConfigured": true
+    },
+    "allPublicAndUnauthenticatedChecksPassed": true,
+    "personalSalesConfigurationMatches": true,
+    "adminDeploymentUnchanged": true
+  },
+  "backupAndIsolatedRestore": {
+    "startedAt": "2026-10-13T09:43:21.362Z",
+    "backupPath": "/tmp/jango-prod-backup-public-release-20261013/production.dump",
+    "backupMode": "consistent exported repeatable-read snapshot; custom format; no owner/ACL",
+    "productionWrites": false,
+    "localRestoreOnly": true,
+    "rawDataCommitted": false,
+    "productionPostgresVersion": "180006",
+    "productionDatabaseBytes": "147224255",
+    "backupCompletedAt": "2026-10-13T09:44:38.232Z",
+    "backupBytes": 11719695,
+    "backupSha256": "d4f707a816be4dfcab7f186c05858af8b41e8de8a75a4fddfa038ce085414dd4",
+    "tableCount": 41,
+    "allTableRowCountsMatch": true,
+    "catalogMatches": true,
+    "migrationsMatch": true,
+    "migrationCount": 45,
+    "unfinishedMigrations": 0,
+    "constraints": 449,
+    "indexes": 167,
+    "invalidIndexes": 0,
+    "unvalidatedConstraints": 0,
+    "pgAmcheckPassed": true,
+    "consistencyChecks": {
+      "usersWithoutPersonalSpace": 4,
+      "inventoryWithoutSpace": 0,
+      "storageWithoutSpace": 0,
+      "recipeWithoutSpace": 0
+    },
+    "restoreVerifiedAt": "2026-10-13T09:44:40.952Z",
+    "restorePassed": true,
+    "localServerStopped": true,
+    "isolatedRestoredUserDataRemoved": true,
+    "protectedBackupPath": "/Users/namu/Library/Application Support/Jango/ReleaseBackups/2026-10-13/production-before-public-release-1844.dump",
+    "protectedBackupHashVerified": true,
+    "protectedBackupMode": "0600"
+  },
+  "storeMonthlyLifecycle": {
+    "checkedAt": "2026-10-13T09:48:35.136Z",
+    "readOnly": true,
+    "rawTokensAndIdentifiersReturned": false,
+    "stores": [
+      {
+        "store": "google_play",
+        "productId": "jango_plus",
+        "billingPeriod": "monthly",
+        "basePlanId": "monthly",
+        "willRenew": null,
+        "status": "expired",
+        "isActive": false,
+        "environment": "sandbox",
+        "verifiedAt": "2026-10-10T14:07:03.740Z",
+        "expiresAt": "2026-10-10T14:07:00.368Z",
+        "applePrivateRelayLogin": false,
+        "googleAcknowledged": true,
+        "events": [
+          {
+            "name": "checkout_failed",
+            "count": 4
+          },
+          {
+            "name": "purchase_verified",
+            "count": 5
+          },
+          {
+            "name": "restore_completed",
+            "count": 4
+          },
+          {
+            "name": "restore_failed",
+            "count": 2
+          },
+          {
+            "name": "restore_started",
+            "count": 7
+          }
+        ],
+        "consumedPurchaseIntents": 1
+      },
+      {
+        "store": "apple_app_store",
+        "productId": "expirymate_premium_monthly",
+        "billingPeriod": "monthly",
+        "basePlanId": null,
+        "willRenew": true,
+        "status": "active",
+        "isActive": true,
+        "environment": "Sandbox",
+        "verifiedAt": "2026-10-13T09:46:21.816Z",
+        "expiresAt": "2026-10-13T13:33:12.000Z",
+        "applePrivateRelayLogin": true,
+        "googleAcknowledged": null,
+        "events": [
+          {
+            "name": "purchase_verified",
+            "count": 5
+          },
+          {
+            "name": "restore_completed",
+            "count": 4
+          },
+          {
+            "name": "restore_started",
+            "count": 4
+          }
+        ],
+        "consumedPurchaseIntents": 1
+      }
+    ]
+  },
+  "freshFocusedTests": {
+    "api": 51,
+    "mobile": 47,
+    "passed": true,
+    "coverage": "Subscription verify/owner-binding/sandbox rejection/resync/RTDN identity, product discovery and screen state. Not complete real-device lifecycle matrix."
+  },
+  "humanDeviceQa": {
+    "coreFlowAndAnnualTestPurchase": "Requested; awaiting user result",
+    "androidPending": "Requested; may be unavailable for an existing active subscriber",
+    "iosExistingMonthlyActive": "Direct production read confirms still active; app intentionally hides another purchase plan for active subscribers",
+    "androidAnnualAndRestore": "Verification failures observed for same previous purchase owner; exact user-visible error requested; no successful annual entitlement yet"
+  },
+  "productionModeRestored": false,
+  "sourceOrPrismaChanged": false,
+  "gitPushed": false,
+  "screenshots": [
+    {
+      "file": "ios-approved.jpg",
+      "sha256": "afa8c03432eeb236a674041170a552af039e6044610a8e19ac67c93bb58c57c5"
+    },
+    {
+      "file": "android-approved.jpg",
+      "sha256": "a88a448550a9c894e3e1b452b137105d7585708e8d96872ce131e328996f705a"
+    }
+  ],
+  "rawSecretsAndReceiptIdentifiersCommitted": false,
+  "observedFailures": {
+    "checkedAt": "2026-10-13T09:50:40.879Z",
+    "readOnly": true,
+    "events": [
+      {
+        "name": "restore_started",
+        "createdAt": "2026-10-13T09:44:05.926Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": null
+      },
+      {
+        "name": "plan_selected",
+        "createdAt": "2026-10-13T09:46:12.713Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": "yearly"
+      },
+      {
+        "name": "checkout_started",
+        "createdAt": "2026-10-13T09:46:14.209Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": "yearly"
+      },
+      {
+        "name": "checkout_failed",
+        "createdAt": "2026-10-13T09:46:22.399Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": "verification",
+        "reason": "ApiError",
+        "billingPeriod": null
+      },
+      {
+        "name": "checkout_started",
+        "createdAt": "2026-10-13T09:46:28.732Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": "yearly"
+      },
+      {
+        "name": "restore_started",
+        "createdAt": "2026-10-13T09:46:43.240Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": null
+      },
+      {
+        "name": "checkout_failed",
+        "createdAt": "2026-10-13T09:46:43.535Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": "verification",
+        "reason": "ApiError",
+        "billingPeriod": null
+      },
+      {
+        "name": "restore_failed",
+        "createdAt": "2026-10-13T09:46:43.770Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": "no_verified_purchase",
+        "billingPeriod": null
+      },
+      {
+        "name": "checkout_failed",
+        "createdAt": "2026-10-13T09:46:43.776Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": "verification",
+        "reason": "ApiError",
+        "billingPeriod": null
+      },
+      {
+        "name": "restore_started",
+        "createdAt": "2026-10-13T09:46:47.326Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": null,
+        "billingPeriod": null
+      },
+      {
+        "name": "restore_failed",
+        "createdAt": "2026-10-13T09:46:48.020Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": null,
+        "reason": "no_verified_purchase",
+        "billingPeriod": null
+      },
+      {
+        "name": "checkout_failed",
+        "createdAt": "2026-10-13T09:46:48.026Z",
+        "matchesPreviousGoogleOwner": true,
+        "matchesPreviousAppleOwner": false,
+        "stage": "verification",
+        "reason": "ApiError",
+        "billingPeriod": null
+      }
+    ],
+    "rawUserDataReturned": false
+  },
+  "localFix": {
+    "record": "android-purchase-verification-fix.json",
+    "mobileTestsPassed": 577,
+    "focusedMobileTestsPassed": 53,
+    "apiSubscriptionTestsPassed": 32,
+    "mobileTypecheckPassed": true,
+    "mobileLintPassed": true,
+    "uiLayoutChanged": false,
+    "fixDeployed": false
+  }
+}
