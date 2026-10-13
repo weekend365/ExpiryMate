@@ -546,7 +546,9 @@
     "externalChangePerformed": false,
     "officialDocumentation": "https://support.google.com/googleplay/android-developer/answer/9859654?hl=en",
     "officialMeaning": "Moves approved changes back to Changes not yet sent for review; approval can require repeat review; no permanent deletion asserted",
-    "replacementPerformed": false
+    "replacementPerformed": false,
+    "screenshot": "android-candidate-replacement-held.jpg",
+    "screenshotSha256": "2d7f089308c8166b8df26ae1e9c30c9506570ef3dea62dd7918a2b453072f82b"
   },
   "androidInternal39": {
     "record": "android-artifact-39.json",
