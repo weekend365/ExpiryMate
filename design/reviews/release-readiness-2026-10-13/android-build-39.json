@@ -44,7 +44,7 @@
   "artifactValidated": true,
   "internalPublished": true,
   "productionSubmitted": true,
-  "publicReleasePerformed": false,
+  "publicReleasePerformed": true,
   "artifactRecord": "android-artifact-39.json",
   "internalTest": {
     "startedAt": "2026-10-13T10:55:47.841Z",
@@ -157,5 +157,6 @@
     "internalVersion39Active": true,
     "verifiedAt": "2026-10-13T10:58:28.451Z"
   },
-  "productionRecord": "android-production-39.json"
+  "productionRecord": "android-production-39.json",
+  "publicReleaseRecord": "full-public-release.json"
 }

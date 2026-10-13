@@ -144,15 +144,20 @@ iOS는 수동 출시, Google은 관리형 게시로 승인 후 자동 공개를 
 Sandbox 거부 설정을 재확인한 뒤 승인된 iOS 7일 단계적 업데이트·Android 5% 출시를 게시합니다.
 현재의 심사 제출은 공개 완료가 아니며 재배포에 `--from-source`를 사용하지 않습니다.
 
-## 2026-10-13 Android39 재심사 중
+## 2026-10-13 정식 출시와 운영 설정 원복
 
-[최신 공개 준비 기록](../../design/reviews/release-readiness-2026-10-13/release-publication.json)의
-Android39는 실제 Play 설치·서명, 연간·ACK·갱신·재실행·복원을 확인하고 production
-재심사에 접수됐습니다. iOS51은 승인·수동 출시 대기입니다. 공유 API는 QA·재심사용
-`IAP_ALLOW_SANDBOX_PURCHASES=true`를 유지하며 이 날짜에는 서버 재배포·Prisma 변경이
-없습니다. 10월13일 최초 백업·격리 복구 기록은 보존하되 공개 시점의 새 백업을 대체하지
-않습니다. 남은 필수 QA 또는 명시적 범위 예외와 Google 승인을 확인한 뒤 공개 직전15분
-이내의 새 검증·보호 백업으로 위 원복 절차를 실행합니다.
+[정식 출시 기록](../../design/reviews/release-readiness-2026-10-13/full-public-release.json)의
+명시적 QA 범위 예외·즉시 전체 출시 요청에 따라 iOS51·Android39를 공개했습니다.
+21:12 KST 새 snapshot41개 테이블·45개 migration·catalog·격리 복구·pg_amcheck·보호
+덤프 SHA-256 `f2fee066f204eb984ce1aae5f336ffbad41ec4f202cc8d9d9622d1dedea2a835`가
+일치했습니다. 해당 백업 검증15분 이내에 Sandbox 허용을false로 원복했고 동일 API9cabee4
+artifact를 재배포했습니다. deployment `0d589013-7aff-49a2-ba9d-2543bd2de152` SUCCESS·
+운영 검사13개 통과 후 iOS즉시 전체·Android100%를 게시했습니다. 변수 변경은 Sandbox
+허용 하나이며 Admin·비공개 키·Prisma·원가 예외·AI 한도·guardrail은 유지했습니다.
+
+원본 dump는 저장소 밖0600 보호 폴더에 보존했고 로컬 격리 복구 사용자 데이터는 제거했습니다.
+미완료 기기 QA는 이번 버전에 한한 사용자 예외이며 통과로 기록하지 않습니다. 위10월10일의
+7일/5% 계획은 이 최종 요청으로 대체됐습니다. 앞으로 운영 변경에는 새 백업·검증을 사용합니다.
 
 ## Sentry
 

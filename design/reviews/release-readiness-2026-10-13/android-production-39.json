@@ -20,9 +20,9 @@
     "sharedDataTypes": 7,
     "changesRequested": false
   },
-  "stage": "Production39 and preserved Data Safety submitted; awaiting Google approval",
+  "stage": "Completed100% production publication and Data Safety publication",
   "reviewSubmitted": true,
-  "publicReleasePerformed": false,
+  "publicReleasePerformed": true,
   "apiOrPrismaChanged": false,
   "onlyArtifactVersionCode": 39,
   "candidateSaved": true,
@@ -83,7 +83,7 @@
   "reviewSubmissionClicked": true,
   "preReviewChecksCompleted": true,
   "reviewVerifiedAt": "2026-10-13T11:42:16.289820+00:00",
-  "consoleStatus": "검토 중인 변경사항",
+  "consoleStatus": "Google Play에 제공됨 · 프로덕션 · 출시율100%",
   "reviewedItems": [
     "production1.4.3(39) at5%",
     "Data Safety preserved collected12/shared7"
@@ -92,5 +92,11 @@
   "consoleScreenshotSha256": "9b2700aa4bf9709ea799f03a7c099dc6b5f6893baf05388ed5a98239b1735e41",
   "iosReleaseButtonAvailable": true,
   "iosPublicReleasePerformed": false,
-  "automaticApprovalRejectionResolvedByExplicitScopeAuthorization": true
+  "automaticApprovalRejectionResolvedByExplicitScopeAuthorization": true,
+  "approved": true,
+  "approvalVerifiedAt": "2026-10-13T12:10:42.519269+00:00",
+  "fullRolloutAuthorized": true,
+  "finalRolloutPercent": 100,
+  "publishedAtKst": "2026-10-13 21:25",
+  "publicReleaseRecord": "full-public-release.json"
 }

@@ -21,15 +21,14 @@ data_as_of: 2026-10-13
 - API: `GET /privacy/status`, `POST /privacy/ai-data-notice/accept|revoke`,
   `POST /privacy/recommendation-history/delete`, `POST /privacy/account/delete`
 
-## 2026-10-13 승인 후 Android39 재심사
+## 2026-10-13 정식 공개
 
-iOS1.4.3(51)은 승인·수동 출시 대기입니다. Android37·Data Safety의 최초 승인은 확인했지만,
-결제 검증 수정39로 교체하기 위해 사용자가 기존 항목의 심사 전 복귀·39 교체·재심사를
-명시적으로 허용했습니다. [39 재심사 기록](../design/reviews/release-readiness-2026-10-13/android-production-39.json)의
-콘솔 미리보기에서 수집12개·공유7개 유형, 암호화·계정 생성 방식·삭제 URL이 유지됨을
-확인했습니다. 폼 응답은 바꾸지 않았으며39와 함께 접수돼 현재 검토 중입니다. 관리형
-게시를 유지했고 실제 공개는 아직 실행하지 않았습니다. SDK 버전·전체 실행 검증의
-미완료 범위는 기존 기록대로 유지합니다.
+iOS1.4.3(51)·Android1.4.3(39)가 정식 공개됐습니다. [최종 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)을
+따릅니다. Google 후보 교체 전 미리보기에서 수집12개·공유7개 유형, 암호화·계정 생성 방식·
+삭제 URL을 재확인했고 폼 값을 바꾸지 않았습니다.39와 함께 재심사 승인 후21:25 KST
+게시했습니다. Apple15개 유형과 실제51 manifest는 보존됐고 공개 App Store에1.4.3·앱 내
+구입 사용 가능·개인정보 요약이 표시됩니다. SDK 버전·전체 실행 검증의 미완료 범위는
+기존대로 보존하며 실제 수행하지 않은 검사를 합격으로 처리하지 않습니다.
 
 ## 2026-10-10 콘솔 대조 이력
 

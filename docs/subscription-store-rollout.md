@@ -11,39 +11,29 @@ data_as_of: 2026-10-13
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
 
-## 현재 상태 — 2026-10-13 승인 후 공개 준비
+## 현재 상태 — 2026-10-13 정식 출시 완료
 
-[공개 준비 기록](../design/reviews/release-readiness-2026-10-13/release-publication.json)을
-최신 기준으로 삼습니다. 현재 iOS51 승인·수동 출시 대기이며 Google39·Data Safety는
-[재심사 접수 후 검토 중](../design/reviews/release-readiness-2026-10-13/android-production-39.json)입니다.
-처음 승인된37·Data Safety는 사용자 허용 후 심사 전으로 복귀하고 후보를39로 교체했습니다.
-기존5%·대한민국·관리형 게시와 개인정보 응답은 보존했습니다. 공개 앱은 아직48·35입니다.
-마지막 Android 연간 선택·복원에서 서버 검증 실패가 관측됐고 사용자는 눈에 보인 오류는
-없다고 보고했습니다. 당시 서버에서 확인한 월간 구매·복원을 연간 통과로 확대하지 않습니다.
+[정식 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)이 최신 기준입니다.
+iOS1.4.3(51)은21:22 KST 즉시 모든 사용자에게 출시했고 공개 한국 App Store에1.4.3이
+표시됩니다. Android1.4.3(39)와 Data Safety는21:25 KST 게시됐으며 production 출시율100%·
+Google Play에 제공됨을 확인했습니다. 사용자의 최종 요청으로 기존 iOS7일·Android5% 계획을
+해제했습니다. 기존 iOS175개 국가·Android대한민국·서명·상품·키·개인정보 응답은 보존했습니다.
 
-[Android 검증 요청 수정](../design/reviews/release-readiness-2026-10-13/android-purchase-verification-fix.json)은
-비정확한 SDK currentPlanId/화면 선택값을 검증 요청에서 빼고 기존 서버의 Google 검증 기간을
-사용합니다. 모바일577개·서버 구독32개·타입·lint 검증 후 EAS1.4.3(38) 서명 빌드를
-요청해 실제 AAB 검증·내부 게시를 마쳤습니다. 이어 자동 복구의 같은 추정값도 공통
-builder로 제거하고 모바일577개·타입·lint를 재확인했습니다. Galaxy에 설치된38의 실제
-버전 코드·Play 서명을 직접 확인했습니다. 최종 Android
-후보39는 `d1c703f`의 EAS `9f8d5ab2`로 빌드·서명·SDK·16KB 정적 검증을 마치고
-19:58 KST 기존 내부 테스트에 게시했습니다. 전체 테스트1,352개·타입·lint·문서 검사도
-통과했습니다(API 통합 테스트6개 제외). iOS51은 유지합니다. 사용자 허용 범위의 결제 대기 기기 QA는 이번에 명시적으로
-제외합니다. 취소한 Android 월간 테스트 구독의 만료·권한 해제도 확인했습니다.
-최종39의 실제 설치·Play 서명, 연간/yearly 활성 권한·ACK·복원·테스트 갱신을 확인했습니다.
-사용자는 완전 종료·재실행 후 플러스 유지·복원 성공을 확인했으며 검사 창에 새 실패 기록은 없습니다.
-production39와 보존된Data Safety는 사전 검사 완료 후 심사에 접수됐습니다.
-승인된production37·Data Safety를 심사 전 목록으로 되돌리는 버튼 클릭은 자동 승인 검사가
-범위 허용 부족으로 처음 거절했고, 이후 명시 허용으로 해결했습니다.
-운영 Sandbox=true·개인 판매 원가 예외·서버/키/상품/AI 한도는 유지했습니다.
-Google 승인과 남은 수명주기·전체RC 검사 또는 별도 QA 예외를 확인한 뒤 공개 직전 운영
-설정을 원복합니다. PENDING 제외를 다른 검사 완료나 제외로 확대하지 않습니다.
+최종39의 실제 Play 설치·서명, 연간/yearly·ACK·갱신·복원과 재실행 후 플러스 유지가
+확인됐습니다. iOS51의 월간 구매·복원과 구분합니다. 전체 테스트1,352개·타입·lint·문서가
+통과했고 API 통합6개는 제외돼 있습니다. [수정·검증 기록](../design/reviews/release-readiness-2026-10-13/android-purchase-verification-fix.json)과
+[Google 교체·재심사 기록](../design/reviews/release-readiness-2026-10-13/android-production-39.json)을 유지합니다.
+
+사용자는 이번1.4.3의 iOS연간·타계정 복원·grace/hold/pause·환불/철회·재설치/오프라인·
+전체RC 접근성/공유/푸시 실기기 QA 예외를 명시적으로 허용했습니다. PENDING 제외와 해당
+예외를 실제 통과로 바꾸지 않습니다. 원가learning·개인 판매 원가 예외·AI 한도·guardrail은
+유지합니다. 공개 전21:12 KST 새 보호 백업·격리 복구를 확인하고 Sandbox 허용을false로
+원복·동일 API artifact 재배포·운영 검사13개를 완료했습니다.
 
 ## 2026-10-10 최종 심사 제출 이력
 
 - [최종 제출·QA 기록](../design/reviews/release-readiness-2026-10-10/final-release-submission.json)이
-  현재 기준입니다. 공개 버전은 iOS 1.4.2(48), Android 1.4.2(35)입니다.
+  해당 날짜의 기준입니다. 당시 공개 버전은 iOS1.4.2(48), Android1.4.2(35)였습니다.
 - 메뉴 수정 소스 `6da71d1`의 iOS 1.4.3(51)을 22:41 KST App Review에 제출했고
   **심사 대기 중**입니다. 빌드 51 연결·기존 6개 스크린샷·심사 로그인 정보 유지·새 심사 노트를
   확인했습니다. 수동 출시와 7일 단계적 업데이트를 설정했습니다.
@@ -157,7 +147,7 @@ Google 승인과 남은 수명주기·전체RC 검사 또는 별도 QA 예외를
 
 | 항목 | 값 |
 |---|---|
-| 업데이트 앱 버전 | `1.4.3` (기존 공개 버전 `1.4.2`) |
+| 현재 공개 앱 버전 | `1.4.3` (iOS51·Android39) |
 | iOS Bundle ID | `com.expirymate.mobile` |
 | Android package | `com.expirymate.mobile` |
 | Apple 월간 Product ID | `expirymate_premium_monthly` |

@@ -1493,7 +1493,7 @@
   "finalReleaseCandidate": true,
   "internalPublished": true,
   "productionSubmitted": true,
-  "publicReleasePerformed": false,
+  "publicReleasePerformed": true,
   "realDeviceQA": {
     "version39Installed": true,
     "coldRelaunchAndRestorePassed": true,
@@ -1708,5 +1708,6 @@
     "consoleScreenshot": "android-internal-39.jpg",
     "consoleScreenshotSha256": "a6c24accc5bf7a4af5293dcad520926c7f4475e2988397b30476f88438c91a85"
   },
-  "productionRecord": "android-production-39.json"
+  "productionRecord": "android-production-39.json",
+  "publicReleaseRecord": "full-public-release.json"
 }

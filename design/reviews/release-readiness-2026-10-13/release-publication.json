@@ -1,29 +1,65 @@
 {
-  "state": "Android39 annual purchase, store installation, relaunch and restore verified; production39 and preserved Data Safety under new Google review; iOS51 approved and held",
-  "dataAsOf": "2026-10-13T11:42:16.289820+00:00",
+  "state": "iOS51 and Android39 immediate full public release verified",
+  "dataAsOf": "2026-10-13T12:36:38.091175+00:00",
   "authorization": {
     "request": "심사 통과했어 마저 작업 진행해줘.",
     "previousFinalReleaseAuthorizationPersists": true,
-    "androidCandidateReplacement": "기존 항목 복귀·39 교체·재심사 허용"
+    "androidCandidateReplacement": "기존 항목 복귀·39 교체·재심사 허용",
+    "remainingQaScopeException": {
+      "userReply": "이번 QA 예외·단계 출시 허용",
+      "releaseScope": "1.4.3 only",
+      "unverifiedDeviceCases": [
+        "iOS yearly",
+        "cross-account restore",
+        "grace/hold/pause",
+        "refund/revocation",
+        "reinstall/offline return",
+        "full RC accessibility/shared-space/push"
+      ],
+      "markedAsPassed": false
+    },
+    "publicationModeOverride": {
+      "userRequest": "그냥 정식 출시해 뭔 단계적으로 하냐",
+      "iosPhasedReleaseDays": 0,
+      "androidRolloutPercent": 100,
+      "existingCountriesPreserved": true
+    }
   },
   "ios": {
     "version": "1.4.3",
     "build": 51,
     "approved": true,
-    "consoleStatus": "개발자 출시 대기 중",
+    "consoleStatus": "1.4.3 배포 준비됨",
     "manualRelease": true,
-    "phasedReleaseDays": 7,
-    "publicReleasePerformed": false
+    "phasedReleaseDays": 0,
+    "publicReleasePerformed": true,
+    "immediateAllUsersSettingSaved": true,
+    "existingCountryCount": 175,
+    "publicLookup": {
+      "checkedAt": "2026-10-13T12:27:53.262Z",
+      "source": "https://itunes.apple.com/lookup?id=6793375883&country=kr",
+      "resultCount": 1,
+      "trackId": 6793375883,
+      "trackName": "장고야 부탁해",
+      "version": "1.4.3",
+      "currentVersionReleaseDate": "2026-10-13T12:22:06Z",
+      "trackViewUrl": "https://apps.apple.com/kr/app/%EC%9E%A5%EA%B3%A0%EC%95%BC-%EB%B6%80%ED%83%81%ED%95%B4/id6793375883?uo=4",
+      "finalVersionVisible": true
+    },
+    "publishedAt": "2026-10-13T12:22:06Z"
   },
   "android": {
     "version": "1.4.3",
     "versionCode": 39,
-    "approved": false,
-    "consoleStatus": "검토 중인 변경사항",
+    "approved": true,
+    "consoleStatus": "Google Play에 제공됨 · 프로덕션 · 출시율100%",
     "initialRolloutPercent": 5,
     "managedPublishingEnabled": true,
-    "approvedChanges": [],
-    "publicReleasePerformed": false,
+    "approvedChanges": [
+      "production39",
+      "Data Safety"
+    ],
+    "publicReleasePerformed": true,
     "newReleaseCandidateRequired": false,
     "approvedVersion37NotPublished": true,
     "reviewSubmitted": true,
@@ -32,7 +68,16 @@
       "Data Safety"
     ],
     "initialVersion37ApprovalHistoryRetained": true,
-    "productionRecord": "android-production-39.json"
+    "productionRecord": "android-production-39.json",
+    "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+    "releasedAtKst": "2026-10-13 21:25",
+    "rolloutPercent": 100,
+    "countryScope": "Existing Republic of Korea only",
+    "countriesChanged": false,
+    "dataSafetyPublished": true,
+    "dataSafetyCollectedTypes": 12,
+    "dataSafetySharedTypes": 7,
+    "publicationOverviewReadyChangesEmpty": true
   },
   "prepublishOperationalChecks": {
     "checkedAt": "2026-10-13T09:42:11.100Z",
@@ -317,7 +362,7 @@
     "coverage": "Subscription verify/owner-binding/sandbox rejection/resync/RTDN identity, product discovery and screen state. Not complete real-device lifecycle matrix."
   },
   "humanDeviceQa": {
-    "coreFlowAndAnnualTestPurchase": "Requested; awaiting user result",
+    "coreFlowAndAnnualTestPurchase": "Android39 yearly purchase/renewal/restore and relaunch confirmed; iOS51 monthly confirmed; listed remaining device cases explicitly waived for1.4.3",
     "androidPending": "Explicitly skipped by user: 이건 패스",
     "iosExistingMonthlyActive": "Direct production read confirms still active; app intentionally hides another purchase plan for active subscribers",
     "androidAnnualAndRestore": "Verified yearly/yearly entitlement active, acknowledged, purchase verified2 and restore completed1 after internal39 posting; Play39 installed directly; cold relaunch requested",
@@ -329,7 +374,7 @@
     "androidMonthlyTestExpiredAndRightsRemoved": true,
     "android39PostRelaunch": "User confirms 플러스 이용 중이고 구매 복원도 성공함; server yearly active/ACK,4 purchase verified and3 restore complete, no failed events in window; renewal expiry extended"
   },
-  "productionModeRestored": false,
+  "productionModeRestored": true,
   "sourceOrPrismaChanged": true,
   "gitPushed": false,
   "screenshots": [
@@ -348,6 +393,14 @@
     {
       "file": "android-39-review-submitted.jpg",
       "sha256": "9b2700aa4bf9709ea799f03a7c099dc6b5f6893baf05388ed5a98239b1735e41"
+    },
+    {
+      "file": "ios-full-public.jpg",
+      "sha256": "9720e08247a05049c7dc3697530911b869777482540e023eb5e9722a4cd0055e"
+    },
+    {
+      "file": "android-full-public.jpg",
+      "sha256": "e6a43857ebdd49528e042156b613a96860c1ee1631b26da19ae68c2893a71155"
     }
   ],
   "rawSecretsAndReceiptIdentifiersCommitted": false,
@@ -669,11 +722,181 @@
       ]
     }
   },
-  "remainingBeforePublic": [
-    "Google approval of production39 and preserved Data Safety",
-    "Remaining required device lifecycle/RC checks or explicit scoped QA exception; PENDING already skipped by user",
-    "Fresh protected production backup and isolated restore within15minutes",
-    "IAP_ALLOW_SANDBOX_PURCHASES=false and same API artifact redeploy, then13 operational checks",
-    "Manual iOS51 seven-day phased release and managed Android39 five-percent rollout, then store availability verification"
+  "remainingBeforePublic": [],
+  "fullPublicReleaseRecord": "full-public-release.json",
+  "fullPublicBackupAndIsolatedRestore": {
+    "startedAt": "2026-10-13T12:10:49.463Z",
+    "backupPath": "/tmp/jango-prod-backup-full-public-20261013-2112/production.dump",
+    "backupMode": "consistent exported repeatable-read snapshot; custom format; no owner/ACL",
+    "productionWrites": false,
+    "localRestoreOnly": true,
+    "rawDataCommitted": false,
+    "productionPostgresVersion": "180006",
+    "productionDatabaseBytes": "147265215",
+    "backupCompletedAt": "2026-10-13T12:12:07.728Z",
+    "backupBytes": 11726204,
+    "backupSha256": "f2fee066f204eb984ce1aae5f336ffbad41ec4f202cc8d9d9622d1dedea2a835",
+    "tableCount": 41,
+    "allTableRowCountsMatch": true,
+    "catalogMatches": true,
+    "migrationsMatch": true,
+    "migrationCount": 45,
+    "unfinishedMigrations": 0,
+    "constraints": 449,
+    "indexes": 167,
+    "invalidIndexes": 0,
+    "unvalidatedConstraints": 0,
+    "pgAmcheckPassed": true,
+    "consistencyChecks": {
+      "usersWithoutPersonalSpace": 4,
+      "inventoryWithoutSpace": 0,
+      "storageWithoutSpace": 0,
+      "recipeWithoutSpace": 0
+    },
+    "restoreVerifiedAt": "2026-10-13T12:12:11.011Z",
+    "restorePassed": true,
+    "localServerStopped": true,
+    "isolatedRestoredUserDataRemoved": true,
+    "protectedBackupPath": "/Users/namu/Library/Application Support/Jango/ReleaseBackups/2026-10-13/production-before-full-public-2112.dump",
+    "protectedBackupHashVerified": true,
+    "protectedBackupMode": "0600"
+  },
+  "finalOperationalChecks": {
+    "checkedAt": "2026-10-13T12:19:41.521Z",
+    "authorizedSourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "productionDatabaseDataChanged": false,
+    "gitPushed": false,
+    "checks": [
+      {
+        "url": "https://api-production-1504.up.railway.app/health",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "metadata": {
+          "status": "ok",
+          "version": "0.1.0",
+          "gitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+          "env": "production"
+        }
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/ready",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/inventory",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/spaces",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/privacy/status",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy/choices",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/terms",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "missing-auth",
+        "status": 400,
+        "expectedStatus": 400,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "invalid-signature",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      }
+    ],
+    "apiSourceIdentityMatches": true,
+    "deployments": {
+      "api": {
+        "id": "0d589013-7aff-49a2-ba9d-2543bd2de152",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-13T12:14:51.495Z"
+      },
+      "admin": {
+        "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:22:58.703Z"
+      }
+    },
+    "adminBuildNext15527Observed": true,
+    "buildLogsPrinted": false,
+    "runtimeFlags": {
+      "personalCostGateMode": "operator_override",
+      "guardrailEnabled": "true",
+      "sandboxPurchases": "false",
+      "subscriptions": "true",
+      "minimumRecipeSamples": "10",
+      "minimumPhotoSamples": "3",
+      "monthlyAiBudgetKrw": "2000"
+    },
+    "googleEmailCorrect": true,
+    "rtdnConfig": {
+      "audienceMatchesWebhook": true,
+      "serviceAccountConfigured": true
+    },
+    "allPublicAndUnauthenticatedChecksPassed": true,
+    "personalSalesConfigurationMatches": true,
+    "adminDeploymentUnchanged": true,
+    "productionModeRestoredWithUserApproval": true,
+    "personalCostGateModeUnchanged": true
+  },
+  "unverifiedCasesRetainedAsException": [
+    "iOS yearly",
+    "cross-account restore",
+    "grace/hold/pause",
+    "refund/revocation",
+    "reinstall/offline return",
+    "full RC accessibility/shared-space/push"
   ]
 }
