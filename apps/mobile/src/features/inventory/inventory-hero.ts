@@ -116,8 +116,6 @@ export function getInventoryHeroNotice(input: {
 
 export function getInventoryHeroNotices(input: {
   hero: InventoryHeroNotice;
-  /** Screen excludes loading and failed initial/background loads from emptiness. */
-  isEmptyInventory?: boolean;
 }): JangoHeroNoticeItem[] {
   if (!input.hero.show) {
     return [];
@@ -128,9 +126,6 @@ export function getInventoryHeroNotices(input: {
       id: "status",
       mood: input.hero.mood,
       message: input.hero.message,
-      ...(input.isEmptyInventory && input.hero.action === "add_ingredient"
-        ? { mascotDecoration: "welcome" as const }
-        : {}),
       ...(input.hero.actionLabel
         ? { actionLabel: input.hero.actionLabel }
         : {}),

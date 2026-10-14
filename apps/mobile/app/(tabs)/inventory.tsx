@@ -346,7 +346,6 @@ export default function InventoryScreen() {
   };
   const inventoryStatusNotices = getInventoryHeroNotices({
     hero: inventoryStatusHero,
-    isEmptyInventory,
   }).map((notice) =>
     inventoryStatusHero.show && inventoryStatusHero.action
       ? {

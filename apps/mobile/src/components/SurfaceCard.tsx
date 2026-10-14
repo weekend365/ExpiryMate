@@ -2,7 +2,6 @@ import type { PropsWithChildren } from "react";
 import type { SurfaceTone } from "@expirymate/shared";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
 import { colors, radius, spacing } from "../shared/theme";
-import { CrayonCardDecoration } from "./CrayonCardDecoration";
 
 export type SurfaceVariant = "hero" | "card" | "inline";
 
@@ -10,8 +9,6 @@ interface SurfaceCardProps extends PropsWithChildren {
   /** hero = one focus surface per screen; card = bordered section; inline = open/no chrome */
   variant?: SurfaceVariant;
   tone?: SurfaceTone;
-  /** Opt-in only; the reviewed crayon treatment applies to hero cards. */
-  decoration?: "crayon";
   style?: StyleProp<ViewStyle>;
 }
 
@@ -31,10 +28,8 @@ export function SurfaceCard({
   children,
   variant = "card",
   tone = "default",
-  decoration,
   style,
 }: SurfaceCardProps) {
-  const hasCrayonDecoration = variant === "hero" && decoration === "crayon";
   const backgroundColor =
     variant === "inline" && tone === "default"
       ? "transparent"
@@ -61,10 +56,8 @@ export function SurfaceCard({
                   : colors.borderSubtle,
         },
         style,
-        hasCrayonDecoration && styles.decorated,
       ]}
     >
-      {hasCrayonDecoration && <CrayonCardDecoration tone={tone} />}
       {children}
     </View>
   );
@@ -73,9 +66,6 @@ export function SurfaceCard({
 const styles = StyleSheet.create({
   base: {
     gap: spacing.md,
-  },
-  decorated: {
-    borderColor: "transparent",
   },
   hero: {
     borderRadius: radius.xxl,

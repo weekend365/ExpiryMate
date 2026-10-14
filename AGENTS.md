@@ -50,7 +50,8 @@
   따른다.
 - 모바일 화면·사용자 흐름·장고 상호작용·공유 디자인 토큰을 작업하기 전에
   [`docs/design-system.md`](docs/design-system.md)의 변경 범위·보존 기준을 먼저 읽는다. 기본값은
-  기존 UI/UX 보존이며 크레파스 요청은 기존 구도의 표현 변경으로 한정한다. 탭·정보 묶음·조작
+  기존 UI/UX 보존이며 손그림 스타일은 캐릭터·배경 이미지에만 적용한다. 카드·말풍선·버튼·
+  제목·기능 아이콘·UI 글꼴에는 그림체를 확장하지 않는다. 탭·정보 묶음·조작
   위치·입력 단계 변경은 해당 범위의 명시적 요청이 있을 때만 수행한다. 철회한 전체 개편을
   자동 재개하지 않는다. 공통 기본값 변경 전 영향 화면을 확인하고 대표 화면 전후 검토 후
   요청 범위에 적용한다. 변경 기록에는 보존 요소·변경 요소·주요 상태·접근성 확인 결과를 남긴다.
@@ -60,7 +61,7 @@
   따른다. 화면에서 캐릭터 PNG를 직접 import하거나 사용자 문구에 구 브랜드명을 노출하지 않는다.
 - 장고의 활성 제작 기준은 [v19 MASTER](design/jango/masters/v19/master.json)이며
   [활성 참조](design/jango/style-master.json)가 v19를 가리킨다. v18은 과거 원본·포즈 자료로 보존한다.
-  앱·브랜딩·이모티콘·SNS·영상의 신규 제작은 갈색 연필 선·따뜻한 채색·차분한 민트·부드러운 명암·종이 결을 따른다.
+  앱·브랜딩·이모티콘·SNS·영상의 신규 장고 작화는 갈색 연필 선·따뜻한 채색·차분한 민트·부드러운 명암·종이 결을 따른다.
   [v18 32종](design/jango/master-set.json)은 역사적 원본·포즈·구조 참조로 바이트를 보존한다.
   [BIBLE](design/jango/reference/JANGO-CHARACTER-BIBLE.md)·[STYLE GUIDE](design/jango/reference/JANGO-STYLE-GUIDE.md)와
   [채택 범위](design/jango/reference/STYLE-MASTER-ADOPTION.md)를 따른다. 장면의 여성·배경·대사는 필수 요소가 아니다.

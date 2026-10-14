@@ -1,7 +1,7 @@
 ---
 status: archived
 owner: project
-last_reviewed: 2026-09-29
+last_reviewed: 2026-10-14
 source_of_truth: false
 ---
 
@@ -17,3 +17,4 @@ source_of_truth: false
 | [`MOBILE_REDESIGN_PROMPTS.md`](./MOBILE_REDESIGN_PROMPTS.md) | 완료된 모바일 UI 리디자인 실행 기록 |
 | [`monetization-v1.1-v1.2.md`](./monetization-v1.1-v1.2.md) | 폐기된 초기 수익화 방향 |
 | [`cursor-cloud-secrets.md`](./cursor-cloud-secrets.md) | `dev-secrets.md`로 통합된 이전 경로 |
+| [모바일 크레파스 포인트 적용 계획안](./mobile-crayon-point-plan.md) | 2026-10-14 철회한 UI 장식 적용·확대 계획과 당시 검증 이력 |

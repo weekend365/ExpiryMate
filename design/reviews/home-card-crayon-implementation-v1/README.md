@@ -1,5 +1,9 @@
 # 홈 안내 카드 크레파스 A안 앱 적용
 
+> **2026-10-14 철회:** 홈 카드의 크레파스 윤곽·색칠을 제거하고 일반 테두리를 복원했다.
+> 캐릭터·배경 이미지와 당시 승인·캡처·manifest 해시는 보존한다. 아래는 `c057084`의
+> 구현 이력이며 현행 컴포넌트 계약이 아니다. 현재 소스를 이용한 과거 장식 비교는 종료했다.
+
 2026-10-09 사용자의 실제 앱 적용 요청에 따라 선택한 A안을 홈 안내 한 곳에 연결했다.
 [A안·상태색 보완 기록](../home-card-crayon-point-v1/README.md)을 구현 기준으로 사용했다.
 기존 탭·정보 순서·카드 크기·패딩·장고·말풍선·상태색 면·기능 배치를 유지한다.
@@ -10,10 +14,10 @@
 - [SurfaceCard](../../../apps/mobile/src/components/SurfaceCard.tsx)의 `decoration="crayon"`은
   기본 꺼짐이고 `hero`에만 적용한다. [HomeHero](../../../apps/mobile/src/features/home/home-hero.tsx)
   한 곳에서 켰다. 인사이트 6곳과 일반·inline 카드는 기존 외관을 유지한다.
-- [공유 장식 토큰](../../../packages/shared/src/design/decoration.ts)은 색·선 굵기·불투명도·
+- 당시 공유 장식 토큰 `decoration.ts`는 색·선 굵기·불투명도·
   grain을 관리한다. 기존 기능 토큰 값과 Admin CSS 변수는 변경하지 않았다.
-- [CrayonCardDecoration](../../../apps/mobile/src/components/CrayonCardDecoration.tsx)은 실제
-  카드 안쪽 크기로 [정적인 경로](../../../apps/mobile/src/components/crayon-card-geometry.ts)를
+- 당시 `CrayonCardDecoration`은 실제
+  카드 안쪽 크기로 `crayon-card-geometry.ts`의 정적인 경로를
   계산한다. 전체 프레임을 확대하지 않아 선 굵기·모서리가 늘어나지 않는다.
 - 윤곽·작은 획은 실제 카드 tone의 민트·앰버·코랄 계열을 함께 따른다. 렌더마다 난수를
   생성하지 않으며 SVG pattern/mask는 카드마다 고유 ID를 사용한다.
@@ -57,20 +61,8 @@ iOS 기기 정의는 있었으나 Simulator 실행 앱을 열 수 없었고 활�
 기기 캡처로 표시하지 않는다. 의도한 모바일 시각 변경의 PR에는 전후 자료와 이유를 남기고
 `approve-mobile-layout-change` 검토 절차를 따른다. 회귀 기준을 우회하거나 갱신하지 않았다.
 
-## 로컬 재현
+## 과거 검토의 재현
 
-```sh
-node design/reviews/home-card-crayon-implementation-v1/preview.mjs
-```
-
-[앱 구현 비교](http://127.0.0.1:4180/)에서 상태·글자·화면 폭을 바꾼다.
-[컴포넌트 검증](http://127.0.0.1:4180/frame.html?variant=runtime&check=component)은 기본 꺼짐·
-상태 변경·여러 mask를 확인하는 검토용 페이지이며 제품 앱 route가 아니다.
-기존 시안 harness와 외부 Web 의존성을 재사용한다. 설치 조건은 이전 기록의 로컬 재현을 따른다.
-
-모바일 번들 확인은 다음과 같이 저장소 밖에 출력한다. 환경 파일을 변경하지 않는다.
-
-```sh
-EXPO_NO_DOTENV=1 EXPO_PUBLIC_APP_ENV=development SENTRY_DISABLE_AUTO_UPLOAD=true pnpm --filter @expirymate/mobile exec expo export --platform android --output-dir /private/tmp/jango-crayon-app-android-20261009 --no-minify --max-workers 2
-EXPO_NO_DOTENV=1 EXPO_PUBLIC_APP_ENV=development SENTRY_DISABLE_AUTO_UPLOAD=true pnpm --filter @expirymate/mobile exec expo export --platform ios --output-dir /private/tmp/jango-crayon-app-ios-20261009 --no-minify --max-workers 2
-```
+현재 소스 기반 장식 비교 서버는 종료했다. 당시 화면과 승인·측정·출처 해시는 이 폴더의
+보존 자료에서 확인한다. 코드 재현이 필요하면 `c057084`의 저장소 스냅샷과 당시 기록을
+사용한다. 과거 시안·검사 결과를 현재 UI나 출시 검증으로 표시하지 않는다.

@@ -149,6 +149,9 @@ export const semanticColors = {
 export type SemanticColors = typeof semanticColors;
 export type SemanticColorToken = keyof SemanticColors;
 
+/** Semantic tone names for ordinary UI surfaces. */
+export type SurfaceTone = "default" | "primary" | "danger" | "warning" | "success" | "muted";
+
 /**
  * Spacing scale in px — strict 8pt grid (with a single 4px micro-step).
  * All layout spacing MUST come from this scale; do not use off-grid values.

@@ -1,7 +1,7 @@
 ---
 status: active
 owner: project
-last_reviewed: 2026-10-09
+last_reviewed: 2026-10-14
 source_of_truth: true
 ---
 
@@ -35,14 +35,13 @@ source_of_truth: true
 ## 제품·디자인
 
 모바일 화면·사용자 흐름·장고 상호작용 작업 전에는 디자인 시스템을 먼저 확인합니다.
-기존 UI/UX 보존 기준과 크레파스 표현의 허용 범위를 그 문서에서 확인합니다. 이전 전체 개편은 철회했으며 자동 재개하지 않습니다. 공통 작업 의무는
+기존 UI/UX 보존 기준과 캐릭터·배경 이미지에 한정한 손그림 적용 범위를 그 문서에서 확인합니다. 이전 전체 개편과 크레파스 UI 장식 확대는 철회했으며 자동 재개하지 않습니다. 공통 작업 의무는
 [AGENTS.md](../AGENTS.md), 모바일 파일의 자동 적용 규칙은
 [mobile-app-design.mdc](../.cursor/rules/mobile-app-design.mdc)에서 연결합니다.
 
 | 문서 | 용도 | 담당 | 정본 |
 |---|---|---|---|
-| [디자인 시스템](./design-system.md) | 기존 UI/UX 보존·변경 범위·크레파스 표현, 공통 토큰·접근성·검토 기준 | design-system | Yes |
-| [모바일 크레파스 포인트 적용 계획안](./product/mobile-crayon-point-plan.md) | 홈 카드·첫 등록·저장 완료의 선택적 장식 구현과 단계별 확대·검증 계획 | mobile-design | Draft |
+| [디자인 시스템](./design-system.md) | 기존 UI/UX 보존·이미지 그림체 적용 경계, 공통 토큰·접근성·검토 기준 | design-system | Yes |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v19 공통 MASTER·v18 포즈 참조·앱 마이그레이션 경계 | design | Yes |
 | [장고 SNS 카툰 제작 기준](../design/jango/reference/SNS-CARTOON-GUIDE.md) | 승인 v6·장면 통합·연출·한글/360px 검수·기능 표현·회차별 채택 | design | Yes |

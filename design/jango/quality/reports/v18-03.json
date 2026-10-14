@@ -1,6 +1,6 @@
 {
   "id": "v18-03",
-  "binding": "04ed7f70d7f502f8dc832c1e6166d77ae5406aa6d7ad7b9ca4eac1d8cbe9c5ff",
+  "binding": "46cb034e36d5bc798a286c01829a2a95238406963405a9a5356fd43fd38c9140",
   "candidate": {
     "id": "v18-03",
     "kind": "emoticon",
@@ -47,7 +47,7 @@
     },
     "documents": {
       "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "fe2811649e53cf96da69f2c41d02db62dc6049070f1eb5752586541a90550dd7",
-      "design/jango/reference/JANGO-STYLE-GUIDE.md": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75"
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
     }
   },
   "assets": {

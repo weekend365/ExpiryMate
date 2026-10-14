@@ -37,7 +37,6 @@ export function getRegistrationCompletionNotices({
     {
       id: "put-away",
       mood: "happy",
-      ...(latestItem ? { mascotDecoration: "celebrate" as const } : {}),
       message: latestItem ? formatPutAwayMessage(latestItem.displayName) : "잘 넣어뒀어요",
       supportingMessage: formatPutAwaySupportingMessage({
         expiryDate: latestItem?.expiryDate,

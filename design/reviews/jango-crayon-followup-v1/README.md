@@ -1,5 +1,10 @@
 # 장고 크레파스 후속 적용 · 첫 등록과 저장 완료
 
+> **2026-10-14 철회:** 빈 보관함·등록 완료의 추가 기호와 UI 장식 확대를 종료했다.
+> 캐릭터·배경 이미지, 당시 승인·기기 검수·manifest 해시는 보존한다. 아래는 `3d6a854`
+> 이후의 역사적 기록이며 현행 UI 계약이 아니다. 예시 fixture는 추가 장식 없는 화면 QA로
+> 유지하며 `crayonqa` 앱 ID·scheme·기존 진입점 이름은 변경하지 않는다.
+
 2026-10-09 사용자가 기존 결과를 채택하고 커밋·우선순위에 따른 후속 작업을 요청했다.
 기준은 홈 카드 적용 커밋 `c057084`이며 구현·검증 상태와 해시는 [manifest.json](./manifest.json)에 기록한다.
 
@@ -15,7 +20,7 @@
   뒤 `done`에 진입하는 순서는 유지한다. 실제 저장된 재료가 없는 대체 안내와 추천·보상 안내에는
   켜지 않는다. 재시도·취소·복귀·재료 수정·이어서 등록의 동작은 변경하지 않는다.
 - [Mascot](../../../apps/mobile/src/components/Mascot.tsx)의 옵션은 기본 꺼짐이다. mood는 자동으로
-  장식을 켜지 않는다. [장식 레이어](../../../apps/mobile/src/components/CrayonMascotDecoration.tsx)는
+  장식을 켜지 않는다. 당시 장식 레이어 `CrayonMascotDecoration`은
   이미지 프레임의 투명한 오른쪽 위·아래 모서리에 정적 SVG만 추가한다. 기존 이미지·프레임 크기,
   말풍선의 흰 면·얇은 선·꼬리, 카드·문구·버튼·탭·배경·접근성 이름을 유지한다.
 - 공유 장식 토큰의 민트 전경을 현재 두 안내의 밝은 면 위에서 사용한다. 다른 상태의 기능색을
@@ -100,14 +105,10 @@ fixture 진입 URL을 확인했다. 아래 기록처럼 Android 기기 설치와
 - [배율 2 · 실행 중 변경의 잘림](./screens/native-inventory-empty-galaxy-a34-font-2-live-change-clipped.jpg) · [새 실행](./screens/native-inventory-empty-galaxy-a34-font-2-cold.jpg)
 - [배율 2 · 완료 안내와 버튼 1회 실행](./screens/native-registration-done-galaxy-a34-font-2-cold-bottom.jpg)
 
-## 로컬 재현
+## 로컬 화면 QA
 
-```sh
-node design/reviews/jango-crayon-followup-v1/preview.mjs
-```
-
-[브라우저 전후 비교](http://127.0.0.1:4181/)는 외부 Web 의존성 설치가 필요하다.
-설치 조건은 [첫 시안의 재현 안내](../home-card-crayon-point-v1/README.md)를 따른다.
+과거 브라우저 장식 전후 비교는 종료했다. 보존된 화면·manifest와 당시 저장소 커밋으로
+검토 이력을 확인한다. 아래 네이티브 fixture는 현재 추가 장식 없는 화면 QA에 사용할 수 있다.
 
 기기에서 예시 컴포넌트를 확인하려면 다음 개발 서버와 manifest adapter를 각각 실행한다.
 실제 API를 쓰지 않고 환경 파일을 로드하지 않는다.
@@ -121,8 +122,8 @@ node e2e/serve-crayon-fixture.cjs
 USB로 연결한 전용 Android 검수 기기에 `adb reverse tcp:8096 tcp:8096`와
 `adb reverse tcp:8097 tcp:8097`을 설정하고, **장고 QA** 개발 앱의 URL 입력에서
 `http://127.0.0.1:8097`을 연다. 새 manifest를 쓰므로 기존 8081 개발 서버나 실제 앱 route를
-바꾸지 않는다. iOS adapter는 `JANGO_QA_PLATFORM=ios`를 지정한다. 기기에서 상태·전후를
-바꿔 크기·화면 읽기·버튼·캐러셀·동작 줄이기를 확인한다. 로컬 예시 검수와 실제 화면 검수는
+바꾸지 않는다. iOS adapter는 `JANGO_QA_PLATFORM=ios`를 지정한다. 기기에서 상태를
+바꿔 크기·화면 읽기·버튼·캐러셀·동작 줄이기를 확인한다. 장식 전후 전환은 제거했다. 로컬 예시 검수와 실제 화면 검수는
 별도로 기록한다.
 
 2026-10-09 Android JNI 생성 경로 오류를 수정한 `cdd9f9a`로 로컬 **장고 QA** APK를 만들었다.

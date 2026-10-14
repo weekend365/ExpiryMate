@@ -173,28 +173,6 @@ describe("getInventoryHeroNotice", () => {
 });
 
 describe("getInventoryHeroNotices", () => {
-  it("decorates only a loaded empty fridge, not filtered, loading, error or calm states", () => {
-    const noticesFor = (overrides: Partial<typeof populated> = {}) =>
-      getInventoryHeroNotices({
-        hero: getInventoryHeroNotice({ ...populated, ...overrides }),
-        isEmptyInventory: true,
-      });
-    expect(noticesFor({ totalCount: 0, visibleCount: 0 })[0]?.mascotDecoration).toBe("welcome");
-    for (const input of [
-      {},
-      { visibleCount: 0 },
-      { totalCount: 0, visibleCount: 0, isInitialLoading: true },
-      { totalCount: 0, visibleCount: 0, isInitialError: true },
-      { isSelectionMode: true },
-    ]) {
-      expect(noticesFor(input).every(notice => notice.mascotDecoration === undefined)).toBe(true);
-    }
-    expect(getInventoryHeroNotices({
-      hero: getInventoryHeroNotice({ ...populated, totalCount: 0, visibleCount: 0 }),
-      isEmptyInventory: false,
-    })[0]?.mascotDecoration).toBeUndefined();
-  });
-
   it("still supports an explicitly disabled hero", () => {
     expect(
       getInventoryHeroNotices({
