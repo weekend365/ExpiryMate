@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "master": {
     "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
     "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
@@ -9,7 +9,7 @@
       112,
       82
     ],
-    "role": "legacy-identity-and-pose-anchor"
+    "role": "active-character-style-identity-and-pose-anchor"
   },
   "documents": [
     "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
@@ -19,9 +19,9 @@
     "mouth": "현행 이모티콘·스타일 참조 후보의 입 검수는 사전 지정한 네 모드만 지원: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 v18의 구조·위치를 참고하고 새 스타일의 읽히는 진한 선 사용, 채움·혀 없음. 이 관문에서는 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지. SNS의 새 입은 BIBLE의 표현 확장과 별도 제작·검토 기록을 따르며 이 네 모드로 거짓 분류하지 않는다.",
     "identity": "기본형 재현·앱 파생·현행 이모티콘 검수 기준: 싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개, 좌우 반전 없음. SNS 반전은 BIBLE에 따라 구조 변화·보정 여부를 별도 검토한다.",
     "anatomy": "이 관문의 얼굴 비례·눈 간격은 BIBLE의 기본형 기준 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개. SNS의 의도한 비율·포즈·소품 변형은 이 관문의 자동 통과 대상이 아니다.",
-    "style": "최신 공통 제작 기준은 style-master.json이 가리키는 v19 MASTER다. v19의 갈색 연필 선·따뜻한 크림/황토 채색·차분한 민트·부드러운 명암·종이 결을 따른다. v18은 과거 원본·구조·동작·입 모양 참조이며 활성 제작 기준이 아니다.",
+    "style": "공통 제작 MASTER는 style-master.json이 가리키는 v18 source-originals 32종이다. 24번과 해당 원화의 크레파스 선·불투명 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 따른다. v19 연필 스타일은 과거 채택 이력이며 새 제작 기본값이 아니다.",
     "exceptions": "기본형 재현·현행 이모티콘 검사에서 감정·동작 요청을 검사 예외로 해석하지 않는다. SNS는 BIBLE의 표현 확장을 적용하되 기존 임계값·입 모드·서명 관문을 완화하지 않고 별도로 준비·검토한다. SNS 채택은 MASTER 승격·앱 반영·서명된 이모티콘 출시가 아니다.",
-    "master": "v19가 활성 MASTER를 대체한다. 승인된 장면 기준이미지와 사양만 등록됐으며 v19 32포즈와 앱 파생물은 미전환이다. v18 바이트와 과거 검수는 보존한다. 장면의 여성·배경·두부·대사·말풍선은 장고 제작의 필수 요소가 아니다. 규칙 적용은 앱 교체·32종 재작화 완료·서명 출시가 아니다."
+    "master": "v18 원본 32종을 활성 MASTER로 복원했다. 원본 바이트·과거 채택·입 재검토를 보존하고 새 결과는 별도 후보로 만든다. v19 runtime 교체는 중단했으며 재작화·검수 완료·서명 출시는 주장하지 않는다. 새 앱 작화는 모자·양팔·앞치마·다리·신발이 모두 보이는 전신을 기본으로 하되 기존 원본의 하반신 프레이밍은 변경하지 않는다."
   },
   "mouthScreen": {
     "thresholds": [
@@ -50,7 +50,7 @@
     "expressionMatchesIntent",
     "expressionContrast"
   ],
-  "scope": "Mode-specific conservative screens: existing idle-u and speak-open criteria preserved; neutral-line and sad-arc use stroke topology and curvature. Uncertain geometry requires review; screen pass is never design approval. Style policy v6: colored-pencil is required for new preparation across media; handdrawn-crayon is historical audit only. Mouth thresholds and references remain conservative legacy measurement anchors, not proof of new-style quality.",
+  "scope": "Policy v7: v18 source-originals are the active common character MASTER; handdrawn-crayon is the required new-preparation style; colored-pencil is retained for historical audit only. Conservative mouth thresholds, reference ROIs, submission specifications and external signing remain unchanged.",
   "openMouthReference": {
     "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
     "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
@@ -90,23 +90,24 @@
     "minSadCurvature": 0.05,
     "maxSadCurvature": 0.28
   },
-  "defaultStyleProfile": "colored-pencil",
+  "defaultStyleProfile": "handdrawn-crayon",
   "candidateKinds": {
     "emoticon": "design/jango/emoticons/",
     "style-reference": "design/jango/style-lab/"
   },
   "styleProfiles": {
     "handdrawn-crayon": {
-      "purpose": "v18 원본과 과거 후보의 감사·재현 전용. 신규 준비는 금지하며 최신 공통 스타일을 대신하지 않는다.",
+      "purpose": "v18 source-originals 32종의 활성 공통 장고 제작·비교 기준. 24번은 형태·선·색·질감 대표이며 동작과 표정은 해당 원화를 따른다.",
       "documents": [
         "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
-        "design/jango/reference/JANGO-STYLE-GUIDE.md"
+        "design/jango/reference/JANGO-STYLE-GUIDE.md",
+        "design/jango/reference/STYLE-MASTER-ADOPTION.md"
       ],
       "palette": {
         "file": "design/jango/reference/styles/crayon-palette.json",
         "sha256": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9"
       },
-      "instruction": "과거 v18 크레파스 원본의 선·색·질감을 당시 기준으로 비교한다. 이 프로필은 신규 제작 지시가 아니며 최신 스타일은 colored-pencil이다.",
+      "instruction": "활성 v18 32종 중 24번과 해당 원화의 크레파스 선·불투명 무광 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 따른다. 한 번에 읽히는 윤곽과 진한 눈·입, 연결된 벙어리장갑 구조를 보존한다. 질감을 투명 구멍·털 같은 잔선·광택 3D 그라데이션으로 대신하지 않는다. 새 앱 작화는 모자부터 두 신발까지 전신을 포함하며 하반신이 생략된 원본은 표정·동작 참조로만 사용하고 원본을 덮어쓰지 않는다. UI 카드·말풍선·버튼·글꼴로 그림체를 확장하지 않는다.",
       "visualChecks": [
         "crayonStroke",
         "matteOpaqueFill",
@@ -125,20 +126,20 @@
         ]
       },
       "selection": {
-        "file": "design/jango/master-set.json",
-        "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+        "file": "design/jango/style-master.json",
+        "sha256": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
       },
-      "preparation": "historical-audit-only"
+      "preparation": "active"
     },
     "colored-pencil": {
-      "purpose": "v19 활성 MASTER: 앱·브랜딩·이모티콘·SNS·마케팅·영상의 신규 장고 공통 스타일. 현재 CLI는 기존 emoticon/style-reference 종류와 네 입 구조만 지원한다.",
-      "preparation": "active",
+      "purpose": "v19 과거 채택·후보의 감사 전용. 신규 준비와 공통 제작 기본값으로 사용하지 않는다.",
+      "preparation": "historical-audit-only",
       "documents": [
         "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
         "design/jango/reference/JANGO-STYLE-GUIDE.md",
         "design/jango/reference/STYLE-MASTER-ADOPTION.md"
       ],
-      "instruction": "승인된 style-master 장면 속 장고의 갈색 연필 윤곽, 압력에 따른 가는 선의 변화, 따뜻한 크림/황토색 겹채색, 차분한 민트, 부드러운 접촉·형태 명암, 방향성 연필 획과 종이 결을 따른다. v18의 굵고 균일한 검은 외곽선·형광 민트·평평한 흰색으로 되돌리지 않는다. 단순한 진한 눈·입과 냉장고/모자/장갑 구조는 읽혀야 한다. 여성·주방·두부·글자·말풍선·종이 바탕을 새 투명 캐릭터에 복제하지 않는다. 종이 질감은 불투명 색면 내부에 표현하고 투명 구멍이나 광택 3D 그라데이션을 만들지 않는다.",
+      "instruction": "과거 v19 장면과 후보의 갈색 연필 선·따뜻한 겹채색·차분한 민트·부드러운 명암·종이 결을 당시 참조와 비교한다. 역사적 감사 프로필이며 신규 제작은 활성 v18 handdrawn-crayon을 따른다.",
       "visualChecks": [
         "warmPencilContour",
         "layeredCreamAndMutedMint",
@@ -153,7 +154,7 @@
         "role": "Jango drawing treatment only; full scene is not a sprite"
       },
       "selection": {
-        "file": "design/jango/style-master.json",
+        "file": "design/jango/quality/history/master-v19-20261009/style-master.json",
         "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
       }
     }
@@ -217,6 +218,6 @@
   },
   "activeStyleMaster": {
     "file": "design/jango/style-master.json",
-    "sha256": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+    "sha256": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
   }
 }

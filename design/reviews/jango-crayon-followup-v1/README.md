@@ -5,6 +5,9 @@
 > 이후의 역사적 기록이며 현행 UI 계약이 아니다. 예시 fixture는 추가 장식 없는 화면 QA로
 > 유지하며 `crayonqa` 앱 ID·scheme·기존 진입점 이름은 변경하지 않는다.
 
+2026-10-14 종료된 브라우저 fixture·HTML·preview 파일을 제거했다. 캡처·manifest·기기 검수
+기록과 아래 네이티브 QA 진입점은 보존한다. [삭제 경로와 해시](../../jango/quality/cleanup-resources-20261014.json)를 따른다.
+
 2026-10-09 사용자가 기존 결과를 채택하고 커밋·우선순위에 따른 후속 작업을 요청했다.
 기준은 홈 카드 적용 커밋 `c057084`이며 구현·검증 상태와 해시는 [manifest.json](./manifest.json)에 기록한다.
 

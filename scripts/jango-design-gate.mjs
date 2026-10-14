@@ -42,7 +42,7 @@ export function filesIn(directory) {
 }
 export function policy() {
   const rules = readJson(`${quality}/rules.json`);
-  assert.equal(rules.version, 6);
+  assert.equal(rules.version, 7);
   validateReferences(rules);
   return rules;
 }
@@ -66,9 +66,10 @@ export function validateReferences(rules) {
   assert.deepEqual(rules.openMouthReference,rules.mouthReferences['speak-open']);
   for(const ref of Object.values(rules.compositionReferences))assert.equal(fileHash(ref.file),ref.sha256,'Composition reference hash mismatch');
   const profile=rules.styleProfiles['handdrawn-crayon'];
-  for(const ref of [profile.palette,profile.styleMaster,profile.selection])assert.equal(fileHash(ref.file),ref.sha256,'Style reference hash mismatch');
+  for(const p of Object.values(rules.styleProfiles))for(const ref of [p.palette,p.styleMaster,p.selection].filter(Boolean))assert.equal(fileHash(ref.file),ref.sha256,'Style reference hash mismatch');
   assert.equal(profile.styleMaster.file,representative.source);
-  assert.equal(profile.preparation,'historical-audit-only');
+  assert.equal(profile.preparation,'active');
+  assert.equal(rules.styleProfiles['colored-pencil'].preparation,'historical-audit-only');
   const current=rules.styleProfiles[active.styleProfile];
   assert.equal(current.preparation,'active');
   assert.equal(current.styleMaster.file,active.image.file,'Active style reference mismatch');
@@ -87,7 +88,7 @@ export function validateInputLineage(input,seen=new Set()) {
   assert.equal(generation.preflight,entry.preflight,'Generation preparation mismatch');
   assert.equal(generation.preflightSHA256,fileHash(entry.preflight),'Derived preparation changed');
   assert.equal(generation.promptSHA256,fileHash(prepared.prompt),'Derived prompt changed');
-  assert([5,6].includes(prepared.policyVersion),'Retired preparation cannot create new lineage');
+  assert([5,6,7].includes(prepared.policyVersion),'Retired preparation cannot create new lineage');
   assert.equal(prepared.inputSHA256,fileHash(prepared.input),'Derived input changed');
   for(const ref of prepared.references)assert.equal(fileHash(ref),prepared.referenceHashes[ref],'Derived reference changed');
   assert.deepEqual(generation.actualReferences,prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]})));
@@ -104,7 +105,7 @@ export function contextBinding(rules = policy(), name = rules.defaultStyleProfil
     implementation: fileHash("scripts/jango-design-gate.mjs"),
     masterSetImplementation: fileHash("scripts/jango-master-set.mjs"),
     activeStyleMaster: fileHash(styleMasterPath),
-    activeMasterVersion: 'v19',
+    activeMasterVersion: readStyleMaster().masterVersion,
     activeMasterRecord: fileHash(styleMasterRecordPath),
     styleMasterImplementation: fileHash("scripts/jango-style-master.mjs"),
     lineMouthImplementation: fileHash("scripts/jango-line-mouth-screen.mjs"),
@@ -199,8 +200,8 @@ export function attachmentPlan(rules,id,input,mouthMode,name,composition=null) {
   validateInputLineage(input);
   const profile=styleProfile(rules,name);
   const raw=[
-    {role:'identity-master',file:rules.master.file,scope:'v18 structure and pose; not the latest drawing style'},
-    ...(profile.styleMaster?[{role:'style-master',file:profile.styleMaster.file,scope:name==='colored-pencil'?'Jango line/color/shading/texture only; exclude woman, background, props and text':'historical v18 audit only'}]:[]),
+    {role:'identity-master',file:rules.master.file,scope:'active v18 character identity, structure and pose'},
+    ...(profile.styleMaster?[{role:'style-master',file:profile.styleMaster.file,scope:name==='colored-pencil'?'historical v19 style audit only; not a new-production default':'active v18 line/color/texture; use the selected original pose'}]:[]),
     {role:'edit-target',file:input},
     ...(composition?[{role:'composition-reference',file:composition.file,panel:composition.panel}]:[]),
     {role:mouthMode==='speak-open'?'speak-mouth':'mouth-reference',file:rules.mouthReferences[mouthMode].file},
@@ -223,7 +224,7 @@ export function auditMaster(id) {
   const mouth=screenMouthMode(readPng(entry.source),inspection.mouthRoi,rules,entry.mouthMode);
   if(inspection.visibility!=='clear'||Math.abs(inspection.tiltDegrees)>rules.mouthScreen.maxTiltDegrees)mouth.status='needs-review';
   const payload={candidate,context,assets:set.assets,adoption:fileHash(masterSetPath),historicalRecord:fileHash(entry.creationRecord)};
-  return {id,binding:sha(canonical(payload)),...payload,mouth,historicalMouthStatus:entry.historicalMouthStatus,technical:styleTechnical(readPng(entry.sticker),readPng(entry.source)),preparation:'master-adoption',designStatus:'user-selected-master; signed release pending',styleScope:'historical-v18-original; not migrated to v19',note:'Immutable historical user-selected MASTER; original preparation remains closed history, never retroactively passed. Active v19 MASTER is registered separately; this v18 pose has not migrated.'};
+  return {id,binding:sha(canonical(payload)),...payload,mouth,historicalMouthStatus:entry.historicalMouthStatus,technical:styleTechnical(readPng(entry.sticker),readPng(entry.source)),preparation:'master-adoption',designStatus:'user-selected-master; signed release pending',styleScope:'active-v18-original; immutable user-selected MASTER',note:'v18 originals restored as the active common MASTER. Original preparation remains closed history, never retroactively passed. Historical mouth reviews and external signing requirements are unchanged; v19 runtime replacement was cancelled.'};
 }
 export function audit(id) {
   validId(id);
@@ -293,7 +294,7 @@ export function prepare(id, input, request, mouthMode = "idle-u", mouthReason = 
   assert(input.startsWith("design/jango/"), "Jango input required");
   const rules = policy(), directory = `${quality}/jobs/${id}`;
   const name=options.styleProfile??rules.defaultStyleProfile, kind=options.kind??'emoticon', profile=styleProfile(rules,name);
-  assert.equal(profile.preparation,'active','Historical style is audit-only; use the active colored-pencil style for new preparation');
+  assert.equal(profile.preparation,'active','Historical style is audit-only; use the active handdrawn-crayon style for new preparation');
   assert(Object.hasOwn(rules.candidateKinds,kind), 'Unknown candidate kind');
   assert(Object.hasOwn(rules.mouthModes, mouthMode), "Unknown mouth mode");
   assert(mouthMode === "idle-u" || typeof mouthReason === "string" && mouthReason.trim().length > 0, "Mouth context reason required");
@@ -312,7 +313,7 @@ export function prepare(id, input, request, mouthMode = "idle-u", mouthReason = 
   const prompt = `${directory}/prompt.txt`;
   const {references,referenceRoles:roles}=attachments;
   const diagnostics=diagnosticReferences(rules,id,name);
-  const text = `장고 개별 이미지 편집. 실제 첨부 파일은 아래 imageIndex에 따른다. 같은 파일은 한 번만 첨부하며 여러 역할을 가질 수 있다.\n${Object.values(rules.invariants).join("\n")}\n선택 입 모드: ${mouthMode}. ${rules.mouthModes[mouthMode]}\n선택 이유: ${mouthReason || "기본 입 유지"}\n입 전용 규칙: ${mouthMode==='speak-open'?'speak-mouth 역할의 검은 입 안과 하단 작은 분홍 혀만 사용. 입 이외의 동작은 선택한 v18 원화를 따른다.':mouthMode==='idle-u'?'09번 입 참조의 짧은 단일 U선 유지. 채움·혀·치아 없음.':'선택한 v18 입 참조의 구조·입 중심을 유지하고 최신 스타일의 읽히는 진한 선으로 선택한 선형 입을 적용. U 곡률 복제·채움·혀·치아 없음. 입 중심부는 질감 구멍 없이 연결한다.'}\n스타일: ${name}. ${profile.instruction}\n실제 이미지 역할: ${canonical(roles)}\n${composition?`구성 참조는 4행 8열 보드의 ${composition.panel}번 컷만 사용한다. 번호·포스터 제목·문구·종이판·넓은 배경 색칠은 복제하지 않는다. 그림체는 최신 장면 스타일 MASTER, 구조·동작은 v18 포즈 참조를 따른다.`:'구성 보드 미지정.'}\n진단 자료(실제 첨부와 구분): ${canonical(diagnostics)}. 진단 확대는 실제 참조 목록과 구분한다.\n규칙 정본: ${profile.documents.join(", ")}\n표정 설계: ${expression ? canonical(expression) : "기존 명령 호환 모드"}\n작업 요청: ${request}\n출력은 글자 없는 실제 알파 투명 배경 캐릭터 한 명. 생성 결과는 후보이며 자동 승인하지 않는다.\n`;
+  const text = `장고 개별 이미지 편집. 실제 첨부 파일은 아래 imageIndex에 따른다. 같은 파일은 한 번만 첨부하며 여러 역할을 가질 수 있다.\n${Object.values(rules.invariants).join("\n")}\n선택 입 모드: ${mouthMode}. ${rules.mouthModes[mouthMode]}\n선택 이유: ${mouthReason || "기본 입 유지"}\n입 전용 규칙: ${mouthMode==='speak-open'?'speak-mouth 역할의 검은 입 안과 하단 작은 분홍 혀만 사용. 입 이외의 동작은 선택한 v18 원화를 따른다.':mouthMode==='idle-u'?'09번 입 참조의 짧은 단일 U선 유지. 채움·혀·치아 없음.':'선택한 v18 입 참조의 구조·입 중심을 유지하고 최신 스타일의 읽히는 진한 선으로 선택한 선형 입을 적용. U 곡률 복제·채움·혀·치아 없음. 입 중심부는 질감 구멍 없이 연결한다.'}\n스타일: ${name}. ${profile.instruction}\n실제 이미지 역할: ${canonical(roles)}\n${composition?`구성 참조는 4행 8열 보드의 ${composition.panel}번 컷만 사용한다. 번호·포스터 제목·문구·종이판·넓은 배경 색칠은 복제하지 않는다. 그림체·구조·동작은 활성 v18 MASTER와 해당 원화를 따른다.`:'구성 보드 미지정.'}\n진단 자료(실제 첨부와 구분): ${canonical(diagnostics)}. 진단 확대는 실제 참조 목록과 구분한다.\n규칙 정본: ${profile.documents.join(", ")}\n표정 설계: ${expression ? canonical(expression) : "기존 명령 호환 모드"}\n작업 요청: ${request}\n출력은 글자 없는 실제 알파 투명 배경 캐릭터 한 명. 생성 결과는 후보이며 자동 승인하지 않는다.\n`;
   fs.writeFileSync(local(prompt), text);
   const record = { id, policyVersion:rules.version, attachmentVersion:rules.attachmentVersion, styleProfile:name, kind, composition, referenceRoles:roles, diagnosticReferences:diagnostics, diagnosticHashes:Object.fromEntries(diagnostics.map(r=>[r.file,fileHash(r.file)])), request, mouthMode, mouthReason, expression, input, inputSHA256, context: contextBinding(rules,name), references, referenceHashes: Object.fromEntries(references.map((f) => [f, fileHash(f)])), prompt, promptSHA256: fileHash(prompt) };
   writeJson(`${directory}/preflight.json`, record);
@@ -392,7 +393,7 @@ function main([command, id, ...args]) {
     for (const entry of releases.entries) fs.copyFileSync(local(audit(entry.id).candidate.sticker), path.join(destination, `${entry.id}.png`));
     console.log("Exported signed releases to output/jango-approved"); return;
   }
-  throw new Error("Usage: prepare <id> <input> <request> [idle-u|speak-open|neutral-line|sad-arc] [reason] [expression.json] [--style colored-pencil] [--kind emoticon|style-reference] [--composition <file> --panel <1-32>] | audit <id> | check | promote <id> <signed-review.json> | export");
+  throw new Error("Usage: prepare <id> <input> <request> [idle-u|speak-open|neutral-line|sad-arc] [reason] [expression.json] [--style handdrawn-crayon] [--kind emoticon|style-reference] [--composition <file> --panel <1-32>] | audit <id> | check | promote <id> <signed-review.json> | export");
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try { main(process.argv.slice(2)); } catch (error) { console.error(error.message); process.exitCode = 1; }

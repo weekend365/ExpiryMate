@@ -1,6 +1,6 @@
 {
   "id": "v18-23",
-  "binding": "5cbee7993c853947bf9a7f5a35b215d3d3d8313fbc0a27ca52ba0363a72af20f",
+  "binding": "3cad98c6c401a8ec297d9e880771d3d5d8569fc785ec8d103559ad3436858944",
   "candidate": {
     "id": "v18-23",
     "kind": "emoticon",
@@ -22,14 +22,14 @@
   },
   "context": {
     "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
-    "rules": "f7c0f4f60ea20ff0a22db81c972c6264d0b2347fdbdf6f54419ae154a30614cb",
+    "rules": "65eb41dded7d5912834743d82e43af66eb6edef3e1c4df8576a6a80fc10cd15d",
     "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
-    "implementation": "acecc2413c2eff27cb396040f330e81ba1239e74cc5ba35806c76618b0cbace9",
+    "implementation": "936b993900e3579005eca6d9f6e25ac18d441e022eafcc4fccbea7873d36615e",
     "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
-    "activeStyleMaster": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1",
-    "activeMasterVersion": "v19",
-    "activeMasterRecord": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
-    "styleMasterImplementation": "3d8e2821ec2b2e04c6f0d836b9a1b53fa1982a2bb0d0bafb38343fa994814589",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
     "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
     "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
     "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
@@ -43,11 +43,12 @@
     "styleResources": {
       "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
       "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
-      "design/jango/master-set.json": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
     },
     "documents": {
-      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "fe2811649e53cf96da69f2c41d02db62dc6049070f1eb5752586541a90550dd7",
-      "design/jango/reference/JANGO-STYLE-GUIDE.md": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "916d2890a18b4ff5fe6985183fd9ea93719d85abaf0ee618e0d92ef8f7bf4302",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "c83b156743fd11a52f50dd39f05174db3460b830e215f3ed98a5811b61c8370c",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "1d3ccf2627a90ffcaa937559302ad2bd1c875a166527359a27998df47970cca2"
     }
   },
   "assets": {
@@ -371,6 +372,6 @@
   },
   "preparation": "master-adoption",
   "designStatus": "user-selected-master; signed release pending",
-  "styleScope": "historical-v18-original; not migrated to v19",
-  "note": "Immutable historical user-selected MASTER; original preparation remains closed history, never retroactively passed. Active v19 MASTER is registered separately; this v18 pose has not migrated."
+  "styleScope": "active-v18-original; immutable user-selected MASTER",
+  "note": "v18 originals restored as the active common MASTER. Original preparation remains closed history, never retroactively passed. Historical mouth reviews and external signing requirements are unchanged; v19 runtime replacement was cancelled."
 }

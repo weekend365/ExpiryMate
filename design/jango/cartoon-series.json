@@ -14,13 +14,11 @@
     "scope": "Completed v6 four panels and cartoon series rules; not a new character master, app migration, emoticon release, new cartoon, commit, push or publication."
   },
   "characterMaster": {
-    "file": "design/jango/masters/v19/master.json",
-    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
-    "masterVersion": "v19",
-    "image": {
-      "file": "design/jango/masters/v19/master-scene.png",
-      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
-    }
+    "file": "design/jango/masters/v18/master.json",
+    "sha256": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "masterVersion": "v18",
+    "sourceDirectory": "design/jango/emoticons/kakao-32/v18/source-originals",
+    "role": "Current character MASTER; approved v6 artwork and its v19 production lineage remain unchanged"
   },
   "characterMasterPointer": {
     "file": "design/jango/style-master.json",
@@ -43,7 +41,7 @@
       "series preparation/generation/review/adoption workflow"
     ],
     "doesNotReplace": [
-      "v19 character master and its active pointer",
+      "active v18 source-originals character MASTER and its pointer",
       "BIBLE SNS expressive freedom",
       "app speech-bubble/font/runtime policy",
       "emoticon preparation/measurement/signing gate"
@@ -222,7 +220,7 @@
   ],
   "screenDisclosure": "Panel 3 is a simplified illustration of verified functionality; dish/date are story examples, not a literal current screen capture. Re-check feature evidence for each new episode.",
   "referenceSelection": {
-    "requiredStyle": "v19 character master",
+    "requiredStyle": "active v18 source-originals character master; v6 supplies scene/story/lettering quality, not an override of character style",
     "sceneQuality": "Relevant approved v6 individual panel(s)",
     "editTarget": "Exact target being changed, separate role from style/scene reference",
     "deduplication": "Attach identical image bytes once, record all roles and actual imageIndex; maximum 5 images.",
@@ -230,7 +228,7 @@
       "output/marketing/jango-sns-ep01-draft-v1/",
       "output/marketing/jango-sns-ep01-draft-v2/"
     ],
-    "intermediateVersions": "v3-v5 are provenance/comparison only, except the v4 panel 2 source remains the approved v19 master."
+    "intermediateVersions": "v3-v5 remain provenance/comparison only; v4 panel 2 and v19 adoption are preserved historical records, not the current character MASTER."
   },
   "knownLimits": [
     "Panels 1 and 2 retain their approved relative-size difference; do not generalize it to future scale continuity.",
@@ -239,5 +237,23 @@
   ],
   "historicalRecordPolicy": "Pending/null approval fields in productionEvidence describe the time before this adoption. This separate record supplies current adoption for exactly the listed hashes without rewriting preparation, generation or review history.",
   "portability": "The exact listed assets and provenance under output/marketing must travel with this record. Do not copy this JSON alone or silently substitute another Library version/file.",
-  "verificationRecord": "design/jango/cartoon-series-verification.json"
+  "verificationRecord": "design/jango/cartoon-series-verification.json",
+  "characterMasterAtAdoption": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
+    "masterVersion": "v19",
+    "image": {
+      "file": "design/jango/masters/v19/master-scene.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb"
+    }
+  },
+  "masterRestoration": {
+    "date": "2026-10-14",
+    "record": "design/jango/masters/v18/master.json",
+    "previousRegistry": {
+      "file": "design/jango/quality/history/master-v19-20261009/cartoon-series.json",
+      "sha256": "29e4f21cd64ec32f9ee702f1866cf0c2875fb5ee21b5e88817c598d1b31f276f"
+    },
+    "approvedArtwork": "All approved v6 image, lettering, production and review bytes remain unchanged; no redraw or new SNS approval is implied"
+  }
 }

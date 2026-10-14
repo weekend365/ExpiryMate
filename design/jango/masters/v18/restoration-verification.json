@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-14",
+  "status": "implemented-local; no image replacement or deployment",
+  "integrity": {
+    "characterAssetsByteIdentical": 57,
+    "brandingAssetsByteIdentical": 6,
+    "protectedOriginalStyleBackgroundTokenFilesByteIdentical": 274,
+    "runtimeManifestByteIdentical": true,
+    "masterReports": 32,
+    "reportChangedFields": [
+      "binding",
+      "context",
+      "styleScope",
+      "note"
+    ],
+    "mouthTechnicalReviewStatesAndReleaseUnchanged": true,
+    "anatomyChangedFields": [
+      "bibleSha256"
+    ],
+    "anatomyObservationsAndOverlaysByteIdentical": true,
+    "historicalV19AdoptionAndImageByteIdentical": true,
+    "releaseListByteIdentical": true
+  },
+  "checks": {
+    "targetedDesignTests": {
+      "status": "pass",
+      "count": 23
+    },
+    "docs": "pass",
+    "lint": "pass",
+    "typecheck": "pass",
+    "sharedBuild": "pass (included in typecheck)",
+    "test": {
+      "status": "pass",
+      "designGate": 23,
+      "shared": 162,
+      "api": 589,
+      "apiSkipped": 6,
+      "mobile": 574,
+      "totalPassed": 1348
+    },
+    "jangoCheck": "pass; 0 signed releases",
+    "mascotAudit": "pass",
+    "brandingAudit": "pass; existing Python/Pillow 12.3.0 environment",
+    "backgroundsAudit": "pass",
+    "diffWhitespace": "pass"
+  },
+  "limitations": [
+    "No UI or image bytes changed, so new device captures/VoiceOver/TalkBack verification were not performed",
+    "No app build, store upload, production deployment or signed emoticon release"
+  ]
+}

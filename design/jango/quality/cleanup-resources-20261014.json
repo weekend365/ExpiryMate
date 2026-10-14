@@ -1,0 +1,1124 @@
+{
+  "version": 1,
+  "date": "2026-10-14",
+  "status": "completed-local-not-deployed",
+  "authority": {
+    "type": "explicit-user-instruction",
+    "retentionChoice": "승인본·최소 이력 보존",
+    "implementation": "PLEASE IMPLEMENT THIS PLAN: 장고 캐릭터·마케팅 리소스 정리"
+  },
+  "scope": "Repository working files only; preserve v18/master/runtime, approved SNS images and immutable provenance. No Git history rewrite, Library change, publication, runtime replacement or deployment.",
+  "planned": {
+    "files": 68,
+    "bytes": 106260738
+  },
+  "retained": {
+    "masterInventory": "design/jango/master-set.json",
+    "masterAssets": 237,
+    "sourceOriginals": 32,
+    "approvedArtwork": [
+      "design/jango/masters/v19/master-scene.png",
+      "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png",
+      "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-03.png",
+      "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-04.png",
+      "output/marketing/jango-sns-ep01-direction-v3/discovery-review-r1.png"
+    ],
+    "protectedFiles": 796
+  },
+  "entries": [
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/compose-lettering.mjs",
+      "sha256": "1bb4935751d791977ea0e005ceaad7da154c1a13dacb6ee66aeb44f5108c1e3e",
+      "bytes": 1201,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+      "sha256": "ad31aa380433c7fabdef85f8032ee9cc6166147423ac25ba381ce6730635db13",
+      "bytes": 3133996,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/discovery-lettering-r1.png",
+      "sha256": "e0d3fbe53da4edcefe6fdce4676bfd862b1d7c0b93ce728430cec2e76ee28990",
+      "bytes": 54706,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/discovery-review-mobile-r1.png",
+      "sha256": "4382042b96055adf13caab610f842ff8e68cc841336c713dc98141f6e4c22ba7",
+      "bytes": 379686,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-direction-v3/lettering.jxa.js",
+      "sha256": "b44a9b10702bf179e0a24066f32aa19ef0f89c54a7cac9c5897073c44353e6e5",
+      "bytes": 2292,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+      "sha256": "842f3b9a12e590c54373d6bae39436d6a625e00ea49a913b8d797023a026871c",
+      "bytes": 3001105,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+      "sha256": "c135b534ad6487764ebb341b7ecb6f2561cf2367c4aa0b3da6d2aaa3b9a85bc0",
+      "bytes": 3050012,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+      "sha256": "4e8e2a224fb20e4506a0003c281bd9f1106b8d664acddade94b9a8f7f6ab0f50",
+      "bytes": 2915752,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png",
+      "sha256": "7f1f07092bacc956901716dbae1eab43e8f280dd0820ee4fd6f01e85e8216dfa",
+      "bytes": 3307640,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-02.png",
+      "sha256": "c370eeb90f6ea08ae07f5dab510230ba5bb8ffb81a6ca1da1d24f6260a9032fb",
+      "bytes": 3428258,
+      "group": "marketing",
+      "reason": "byte-identical duplicate of retained approved artwork",
+      "sameContentRetainedAt": "output/marketing/jango-sns-ep01-direction-v3/discovery-review-r1.png",
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+      "sha256": "3455964aea6b716b978f6d153be93effffa8a73a857ae117e6bcf26e5854d3eb",
+      "bytes": 3349852,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+      "sha256": "22730e9868864286ba811183b4a84cbc621538b8bb27a98ba88737bfb40c5f20",
+      "bytes": 3235746,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-overview.png",
+      "sha256": "a3ee174c5a63c01e5c94b38e876ab883faaf9e9d8e452956d9feca1409493ac0",
+      "bytes": 3633467,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering/01.png",
+      "sha256": "599e75d7d8be861c3fd48b48c18a1248fe1caee7b3cf14722122890f2c68a333",
+      "bytes": 56414,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering/03.png",
+      "sha256": "99fea046ea9dc58fb37b43bca12a7a515298774d406b992a6751f2d627ca10e3",
+      "bytes": 70357,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering/04.png",
+      "sha256": "38838499e08eaaf211bae79a776d3765c1e084c472b372a47b8f7115081bffe7",
+      "bytes": 74875,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/lettering.jxa.js",
+      "sha256": "fb814d11be1df6221ac3e078dae54652bdb66b248530975cb9972359cc783088",
+      "bytes": 2713,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/render.mjs",
+      "sha256": "fdf7e0a3511e165f2e2633d0d3534423f702f5575449489fd40e75bcde96e1cf",
+      "bytes": 3736,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-final-v3/review-mobile-360.png",
+      "sha256": "2a808ed19e90c7a34ef217cc777b6108ae8e751242d25ec77241de778d6fb770",
+      "bytes": 1525863,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/artwork/02-localized-r1.png",
+      "sha256": "cccb2413a69a1460558fa237badd125c732d1db3d4ee9aae453b3a99df47e587",
+      "bytes": 3462178,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/artwork/02-style-r1.png",
+      "sha256": "93a2233737cf2b0f61ee61cb9d681473a9f540deca5923dd91ec590e1d2659b5",
+      "bytes": 3033337,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/compose.mjs",
+      "sha256": "e9f7451f62ad6e1c37a58322fdf9e735bf7810edb8ba3149ad30383ea6c9d740",
+      "bytes": 6199,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/edit-region-mask.png",
+      "sha256": "f96282af930829b4e57151c97b1cc97e618d989b1d542089d8f6161090da9e9d",
+      "bytes": 11236,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+      "sha256": "ecd78dbba7aaeda3bb0311197cae684701331c196e9ffc52adb387bb6eee5e1e",
+      "bytes": 3308974,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "bytes": 3471261,
+      "group": "marketing",
+      "reason": "byte-identical duplicate of retained approved artwork",
+      "sameContentRetainedAt": "design/jango/masters/v19/master-scene.png",
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/lettering/01.png",
+      "sha256": "23b4ff769b34ced3ba7d44455144fe69fd1c0c45d9a1043ecf028e49b51d52c9",
+      "bytes": 61553,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/lettering.jxa.js",
+      "sha256": "915581dcd5414eead164e306f672490d0204f5c9eac08104926ef974471e61b4",
+      "bytes": 2701,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/review-mobile-360.png",
+      "sha256": "94835eaaf6bc047f5a6eae754ff0ce487c6a1cc2dbda501be74ed08886ac0642",
+      "bytes": 763104,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/review-two-panels.png",
+      "sha256": "8f47541bea3b1cee35b8a88bdfba4b5e83292f763e1709dddc23ef1f2f8a8c3a",
+      "bytes": 1835308,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-style-review-v4/style-before-after.png",
+      "sha256": "b64d8939b611eaf1812d5693666b2b7d99de2d3fc9445a3a5ef045c7cc3b8077",
+      "bytes": 1842654,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/artwork/01-style-r1.png",
+      "sha256": "f49faafae19d06e22d88c00a519a9fc137d4603beb55a51cc7a0c2ecff8eec79",
+      "bytes": 2894019,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/artwork/03-style-r1.png",
+      "sha256": "23796ee6f2b194988a1f1d5bac2a9ab01425abba0e4bb527e254b0dd7579193f",
+      "bytes": 3046134,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/artwork/04-style-r1.png",
+      "sha256": "b229916faecc102ba451bc1b5a7056c8cd304011d57f8b3af8e66495912781fb",
+      "bytes": 2876911,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/compose.mjs",
+      "sha256": "4eec3ecdf47bd65d41ecd9e201e67c3e3faab2ffab89813dd4c3d4871213bfd4",
+      "bytes": 5555,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+      "sha256": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+      "bytes": 3323778,
+      "group": "marketing",
+      "reason": "byte-identical duplicate of retained approved artwork",
+      "sameContentRetainedAt": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png",
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "bytes": 3471261,
+      "group": "marketing",
+      "reason": "byte-identical duplicate of retained approved artwork",
+      "sameContentRetainedAt": "design/jango/masters/v19/master-scene.png",
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+      "sha256": "7a114c4aa734ea8c923826f9feba6550a248d62e0d5a51691e6e10c3edfaaec7",
+      "bytes": 3407521,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+      "sha256": "db873ecb64c4d5438199ea33a433f416501f45901a999272ecd9b9e1125b5f3d",
+      "bytes": 3280369,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-overview.png",
+      "sha256": "4c7bc62b184cdac0c31a686f0ed46a02cf4e11edd4e7d279efe2873328856edc",
+      "bytes": 3680984,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/masks/01.png",
+      "sha256": "bfbb50bd12e5ddde9fabe6c5c1f447f89a99d6699347061877bfb47ff7d7b5b2",
+      "bytes": 9246,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/masks/03.png",
+      "sha256": "c80811dfbdacff4a789b7bbc3942792483a2c1428e13027657e2f1f41128f30b",
+      "bytes": 9643,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/masks/04.png",
+      "sha256": "4c32ed99242012884a2d7fedd373e067e00574737c414198fc16f2b2ea82119a",
+      "bytes": 9618,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/01-before-after.png",
+      "sha256": "4d07e3f6874cfda0c38e19a60b5eeef801b3573cac030015783778c91845bd60",
+      "bytes": 6623287,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/01-mobile.png",
+      "sha256": "07d80f3df57f0fbd46a798501c2210aecfb0720d2e3d346544a5f968cc71ae5a",
+      "bytes": 375865,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/03-before-after.png",
+      "sha256": "55175bfbef2592f6e186d3cc43fdeae2f512492f5cde5a7306513dc033212495",
+      "bytes": 6751110,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/03-mobile.png",
+      "sha256": "fd840229b0c6167efd9ea0da3cfe0da8a850eebb776d56770e4693634af1483a",
+      "bytes": 388488,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/04-before-after.png",
+      "sha256": "a81f7082e03abf37165929f49e7d4d26f51b769c9aca681e1bd577ec02d05449",
+      "bytes": 6510022,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/qa/04-mobile.png",
+      "sha256": "6b7bb62486658cdc411c3c5d549467a92099d36b155066b37b0fab6eb4894cc0",
+      "bytes": 381568,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v5/review-mobile-360.png",
+      "sha256": "6e5da4218e4e18b14fd02219d3ae41aa6d3f0946267c2753c2c42434816845ed",
+      "bytes": 1538890,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r1.png",
+      "sha256": "e8f9079f88cab5ad9373e4e4d75eda84a0b2fff7294455c339ae4b3b744dcc8f",
+      "bytes": 2882762,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r2.png",
+      "sha256": "268fcc7df0b643d637bc799a866b117f321b33854e5e607054357c5c6767094b",
+      "bytes": 2714814,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/artwork/04-r1.png",
+      "sha256": "2964f68085bc99e6242a0d28adab050fbf6fab21be50f5c7349f9e2c83f19704",
+      "bytes": 2847037,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/lettering/03.png",
+      "sha256": "8958d4d866cd539ca19e54fb76a0dc62d87b22b21f76d1695663f99b1a53700e",
+      "bytes": 82166,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/lettering/04.png",
+      "sha256": "ed9abb73e46fe873c4bc4f04f135038909186dfe24f268c4e324f2716afe7646",
+      "bytes": 82350,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/lettering.jxa.js",
+      "sha256": "e001d6812d0fb446815728ca6167e5ac98c080b0dc68ebdc1e4715d79c9bd126",
+      "bytes": 2781,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/render.mjs",
+      "sha256": "d543e26942515caf02a4a646657c5cd8e5a4cf52bbb008b63a72c240bfd08014",
+      "bytes": 3831,
+      "group": "marketing",
+      "reason": "retired intermediate/rendering material; approved final and provenance retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-point-v1/fixture-data.js",
+      "sha256": "f008d837ed891c86922f8b59d72554e2dbf0dce16e1466a6d0d9ab0e69743d77",
+      "bytes": 2329,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-point-v1/fixture.jsx",
+      "sha256": "b9a3e462df1c490364a212d8273cfbd4156cfe377246cd354f3315314477a21b",
+      "bytes": 6522,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-point-v1/index.html",
+      "sha256": "0fbadb313c88222d87e4ddb6e53f9fafb012ce1b51d44967b55524bb3ac32c2c",
+      "bytes": 4012,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-point-v1/native-bridge.jsx",
+      "sha256": "48985edfb11bd972553be70f576407a1e4c7c61b2686367d31074565ac12b1be",
+      "bytes": 1254,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-point-v1/preview.mjs",
+      "sha256": "cc15e1cf022cf291375a084920e0cbdf0a3e3917009777f0da742211215bd901",
+      "bytes": 344,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-implementation-v1/component-check.jsx",
+      "sha256": "89d028df2f21c14ba5efbfd4b649a1f17df680be36a85b8546e6a28555aef14a",
+      "bytes": 1346,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-implementation-v1/index.html",
+      "sha256": "797b8746e75346a9252dcb044e01f0d9e82289f76c115ed7afbf9540f842435a",
+      "bytes": 3023,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/home-card-crayon-implementation-v1/preview.mjs",
+      "sha256": "cc15e1cf022cf291375a084920e0cbdf0a3e3917009777f0da742211215bd901",
+      "bytes": 344,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/fixture.jsx",
+      "sha256": "9fce7478d5026b2082c2e2892d56b5eb3d2a5dcd948b7c38b07c17379ae6b43f",
+      "bytes": 793,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/index.html",
+      "sha256": "b46e8f597b730f090a531ee8f3c3c082eca59a29eda07e4e797190f4aaead4f3",
+      "bytes": 3997,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "design/reviews/jango-crayon-followup-v1/preview.mjs",
+      "sha256": "cc15e1cf022cf291375a084920e0cbdf0a3e3917009777f0da742211215bd901",
+      "bytes": 344,
+      "group": "retired-ui-preview",
+      "reason": "withdrawn UI decoration harness; current native QA fixture retained",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    },
+    {
+      "file": "apps/mobile/assets/.DS_Store",
+      "sha256": "40b5e7b77cf8da3e04d3d6d6ee6abb53534d2ac4b8271d960f63b446e80653f6",
+      "bytes": 10244,
+      "group": "local-metadata",
+      "reason": "Finder metadata; no application use",
+      "sameContentRetainedAt": null,
+      "status": "deleted"
+    }
+  ],
+  "result": {
+    "deletedFiles": 68,
+    "deletedBytes": 106260738,
+    "skipped": [],
+    "prunedEmptyDirectories": [
+      "output/marketing/jango-sns-ep01-style-review-v4/lettering",
+      "output/marketing/jango-sns-ep01-style-review-v4/artwork",
+      "output/marketing/jango-sns-ep01-v19-review-v6/lettering",
+      "output/marketing/jango-sns-ep01-v19-review-v5/artwork",
+      "output/marketing/jango-sns-ep01-v19-review-v6/artwork",
+      "output/marketing/jango-sns-ep01-v19-review-v5/masks",
+      "output/marketing/jango-sns-ep01-final-v3/lettering",
+      "output/marketing/jango-sns-ep01-final-v3/artwork",
+      "output/marketing/jango-sns-ep01-v19-review-v5/qa"
+    ],
+    "groups": {
+      "marketing": {
+        "files": 56,
+        "bytes": 106226186
+      },
+      "retired-ui-preview": {
+        "files": 11,
+        "bytes": 24308
+      },
+      "local-metadata": {
+        "files": 1,
+        "bytes": 10244
+      }
+    }
+  },
+  "retiredReproduction": "Previous SNS render inputs and local renderers were removed; full historical re-rendering is intentionally unavailable. Retained snapshots/approvals are not rewritten.",
+  "documentationChanged": [
+    "output/marketing/APP_WALKTHROUGH.md",
+    "output/marketing/jango-sns-ep01-final-v3/README.md",
+    "output/marketing/jango-sns-ep01-v19-review-v6/README.md",
+    "design/reviews/home-card-crayon-point-v1/README.md",
+    "design/reviews/home-card-crayon-implementation-v1/README.md",
+    "design/reviews/jango-crayon-followup-v1/README.md"
+  ],
+  "verification": {
+    "status": "passed",
+    "preservation": {
+      "files": 796,
+      "beforeDigest": "0e5be31d6f103f26180bc3ec259f62a13e90961563eb7036f49900c5dd02fd94",
+      "afterDigest": "0e5be31d6f103f26180bc3ec259f62a13e90961563eb7036f49900c5dd02fd94",
+      "previousUncommittedFilesBytePreserved": 52,
+      "masterAssets": 237,
+      "sourceOriginals": 32,
+      "approvedArtworkBytePreserved": true,
+      "preparationGenerationApprovalLibraryAndPromptBytesPreserved": true,
+      "documentationEdits": [
+        "design/reviews/home-card-crayon-implementation-v1/README.md",
+        "design/reviews/home-card-crayon-point-v1/README.md",
+        "design/reviews/jango-crayon-followup-v1/README.md",
+        "output/marketing/APP_WALKTHROUGH.md",
+        "output/marketing/jango-sns-ep01-final-v3/README.md",
+        "output/marketing/jango-sns-ep01-v19-review-v6/README.md"
+      ],
+      "unexpectedEdits": [],
+      "trackedOrVisibleBaselineDeletedFiles": 61,
+      "intendedDeletedFiles": 68,
+      "historicalReferencesImmutable": 24,
+      "baselineFilesVerifiedAfterTests": 1794,
+      "unexpectedNewFiles": [],
+      "sameContentRetainedHashesVerified": 4
+    },
+    "checks": {
+      "docs": {
+        "status": "passed",
+        "command": "pnpm docs:check",
+        "metadataFiles": 30,
+        "markdownFiles": 59
+      },
+      "lint": {
+        "status": "passed",
+        "command": "pnpm lint"
+      },
+      "typecheck": {
+        "status": "passed",
+        "command": "pnpm typecheck",
+        "sharedBuild": "passed"
+      },
+      "test": {
+        "status": "passed",
+        "command": "pnpm test",
+        "passed": 1348,
+        "jango": 23,
+        "shared": 162,
+        "api": 589,
+        "mobile": 574,
+        "skipped": 6,
+        "skippedReason": "Existing opt-in PostgreSQL integration suites require JANGO_WORKFLOW_TEST_DATABASE_URL; no isolated test database was supplied.",
+        "skippedSuites": [
+          "apps/api/src/common/ai-telemetry.integration.test.ts",
+          "apps/api/src/modules/inventory/inventory-workflows.integration.test.ts"
+        ]
+      },
+      "jangoReportsRefresh": {
+        "status": "passed",
+        "command": "pnpm jango:reports:refresh",
+        "reports": 32,
+        "byteIdenticalToPreCleanup": 32,
+        "newApproval": false
+      },
+      "jangoCheck": {
+        "status": "passed",
+        "command": "pnpm jango:check",
+        "signedReleases": 0,
+        "newApproval": false
+      },
+      "mascotAudit": {
+        "status": "passed",
+        "command": "pnpm --filter @expirymate/mobile mascot:audit",
+        "existingReviewStatus": "empty mood mouth remains needs-review; no measurement, ROI or review result was changed."
+      },
+      "brandingAudit": {
+        "status": "passed",
+        "command": "pnpm --filter @expirymate/mobile branding:audit"
+      },
+      "backgroundsAudit": {
+        "status": "passed",
+        "command": "pnpm --filter @expirymate/mobile backgrounds:audit"
+      },
+      "storeAudit": {
+        "status": "passed",
+        "command": "pnpm --filter @expirymate/mobile store:audit"
+      },
+      "activeReferences": {
+        "status": "passed",
+        "retainedRegistryBindingsVerified": 21,
+        "deletedPathUsesInAppsPackagesScriptsCiAndRules": 0,
+        "retiredJsonReferences": 190,
+        "immutableHistoricalRecords": 24,
+        "policy": "Only historical production, adoption provenance and retired review manifests contain these removed paths. No historic hash/path/Library field was rewritten; each path is covered by entries."
+      },
+      "finderMetadata": {
+        "status": "passed",
+        "remainingInInspectedScope": 0
+      },
+      "changeBoundary": {
+        "status": "passed",
+        "intendedDeletions": 68,
+        "unexpectedDeletions": 0,
+        "unexpectedEdits": 0,
+        "unexpectedNewFiles": 0,
+        "gitDiffCheck": "passed"
+      }
+    },
+    "references": {
+      "historicalRecords": [
+        {
+          "file": "design/jango/masters/v19/master.json",
+          "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png"
+          ]
+        },
+        {
+          "file": "design/reviews/home-card-crayon-implementation-v1/manifest.json",
+          "sha256": "d8971d6ff9a3ec938e918234d12fad9c6dc12bd0fce65d8a641e66d37aa51052",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "design/reviews/home-card-crayon-implementation-v1/component-check.jsx",
+            "design/reviews/home-card-crayon-implementation-v1/index.html",
+            "design/reviews/home-card-crayon-implementation-v1/preview.mjs",
+            "design/reviews/home-card-crayon-point-v1/fixture-data.js",
+            "design/reviews/home-card-crayon-point-v1/fixture.jsx",
+            "design/reviews/home-card-crayon-point-v1/native-bridge.jsx",
+            "design/reviews/home-card-crayon-point-v1/preview.mjs"
+          ]
+        },
+        {
+          "file": "design/reviews/home-card-crayon-point-v1/manifest.json",
+          "sha256": "7c7d582b826acfe188a33c3d1e8fd2a429e2a086ca23e80c19c66715ce0ca1c6",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "design/reviews/home-card-crayon-point-v1/fixture-data.js",
+            "design/reviews/home-card-crayon-point-v1/fixture.jsx",
+            "design/reviews/home-card-crayon-point-v1/index.html",
+            "design/reviews/home-card-crayon-point-v1/native-bridge.jsx",
+            "design/reviews/home-card-crayon-point-v1/preview.mjs"
+          ]
+        },
+        {
+          "file": "design/reviews/jango-crayon-followup-v1/manifest.json",
+          "sha256": "d7542d754138e48b5c83e8acb8e9df25446eb5a50b43d09df869440478f66bd9",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "design/reviews/jango-crayon-followup-v1/fixture.jsx",
+            "design/reviews/jango-crayon-followup-v1/index.html",
+            "design/reviews/jango-crayon-followup-v1/preview.mjs"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-direction-v3/production-record.json",
+          "sha256": "fabb0b574d344b13201ed82b29865caecfe84b76453b340dcf451257336c4bd2",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-lettering-r1.png",
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-review-mobile-r1.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-final-v3/delivery.json",
+          "sha256": "f54427368404b20cba5b1cbdcc74af07a786b8dd0a3015cc412e11e7356ef213",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-02.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-overview.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-final-v3/episode.json",
+          "sha256": "842ec2b244f659c9ff6a6a37cca66a6bad8f6a39a81d4bf8ae09b462ac9b624f",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-02.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-final-v3/production-record.json",
+          "sha256": "558c6acbca1a63e09e1c0ca3108121d111f26e9ae7af4bb49832d621f3a8f7c7",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-02.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-overview.png",
+            "output/marketing/jango-sns-ep01-final-v3/review-mobile-360.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-final-v3/render-report.json",
+          "sha256": "1ca93283dcc17f77b8097e8e0dfc0e283e59e26eec80a450fd333c70de6ae7e6",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-02.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-overview.png",
+            "output/marketing/jango-sns-ep01-final-v3/review-mobile-360.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/delivery.json",
+          "sha256": "064f3a57d4908c8854843f292853f7d1d14a25cd45f2f3b2597c1adb9860720a",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/review-two-panels.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/style-before-after.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/episode.json",
+          "sha256": "5bb6d0fbcc8bd2c650a36e66798b45b9ca30a4c7fdd63c9d240dbc35784576bb",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/preparation.json",
+          "sha256": "4a61578957b3459ee731284c6d8e083ab492d1fd18c48353b71ad0b1a7daa06f",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-lettering-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-01.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/production-record.json",
+          "sha256": "1fbf18e7e51739c826c05388d4e367506b5833318dc20864ecf4bb870cd5b403",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-direction-v3/discovery-art-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/compose.mjs",
+            "output/marketing/jango-sns-ep01-style-review-v4/edit-region-mask.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/lettering.jxa.js"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-style-review-v4/validation.json",
+          "sha256": "c3eb0e1735d889a6516ee51f817355bdda5bf0972031173bf08fcbba6aae2ad2",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/review-two-panels.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/style-before-after.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/delivery-library-images.json",
+          "sha256": "bff14e50ce7f971558c7aaafb33ae4cb46e57f2560df9c7206247219f5aefe0c",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-overview.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/delivery.json",
+          "sha256": "28243d948ecc937f7c74a1c87c5e1e6ae4724f71c523e9dd3bfc0dd12e5c9275",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-02-style.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-overview.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/episode.json",
+          "sha256": "a811799ecc27e29c15c00580c1b6aeb756ea98cd571cafa25e80d83c6df1b1f4",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-final-v3/lettering/03.png",
+            "output/marketing/jango-sns-ep01-final-v3/lettering/04.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/lettering/01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/01-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/03-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/04-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/preparation.json",
+          "sha256": "2fa3c48e3cf9c7abad16530ead47148cdff4cad5532e3c5b6ac752e425e50e8b",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/artwork/01-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/03-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/artwork/04-r1.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-final-v3/lettering/03.png",
+            "output/marketing/jango-sns-ep01-final-v3/lettering/04.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/lettering/01.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/production-record.json",
+          "sha256": "7092dfde24615068ffbf05a5ec6de443f64bc68b7a8fab87469d764a3d73af67",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-03.png",
+            "output/marketing/jango-sns-ep01-final-v3/jango-ep01-v3-04.png",
+            "output/marketing/jango-sns-ep01-style-review-v4/jango-ep01-v4-01-dialogue.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/01-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/03-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/04-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/compose.mjs",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-overview.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/review-mobile-360.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v5/validation.json",
+          "sha256": "8ff1e83ffdd70bb11249456ec851c5854d1b7633e728605c5683292ef1d483ae",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/01-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/03-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/artwork/04-style-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-overview.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/masks/04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/review-mobile-360.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/delivery.json",
+          "sha256": "f1529d3afd09aa760346341499076354fe88c02be3e9d3720e28741949b59d3d",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/episode.json",
+          "sha256": "e88b31305319f5df954748614ed6a1b860f69ff1ef797274ba2aa0792047f102",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r2.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/artwork/04-r1.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/preparation.json",
+          "sha256": "403e649aa2595bd153f289e01b561a5ab32bb181de7112c4c66671e633d0b65e",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-01.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-02.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png"
+          ]
+        },
+        {
+          "file": "output/marketing/jango-sns-ep01-v19-review-v6/production-record.json",
+          "sha256": "7c06afbc682c803376e6727ca8915f264a4efaba27a9b012d826899781351e4e",
+          "scope": "closed historical provenance; not current runnable inputs",
+          "retiredPaths": [
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-03.png",
+            "output/marketing/jango-sns-ep01-v19-review-v5/jango-ep01-v5-04.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/artwork/03-r2.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/artwork/04-r1.png",
+            "output/marketing/jango-sns-ep01-v19-review-v6/lettering.jxa.js",
+            "output/marketing/jango-sns-ep01-v19-review-v6/render.mjs"
+          ]
+        }
+      ],
+      "registryHistoricalHashPolicy": "characterMasterPointer/guide and featureEvidence bindings retain adoption-time values that already existed before this cleanup. Current v18 and retained approved assets/evidence were checked separately; the approval registry bytes are unchanged."
+    },
+    "notPerformed": [
+      {
+        "check": "New device screenshots, screen-reader and touch-flow checks",
+        "reason": "App/UI code, design tokens and runtime image bytes were not changed; existing captures and current QA fixtures remain preserved."
+      },
+      {
+        "check": "Past-version complete rerender",
+        "reason": "Intermediate inputs and retired local renderers were intentionally removed under the selected retention policy."
+      }
+    ]
+  },
+  "documentationAdded": [
+    "design/jango/quality/cleanup-resources-20261014.md",
+    "output/marketing/jango-sns-ep01-direction-v3/README.md",
+    "output/marketing/jango-sns-ep01-style-review-v4/README.md",
+    "output/marketing/jango-sns-ep01-v19-review-v5/README.md"
+  ]
+}

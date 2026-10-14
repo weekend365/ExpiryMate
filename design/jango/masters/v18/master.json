@@ -1,0 +1,286 @@
+{
+  "version": 1,
+  "id": "jango-v18",
+  "masterVersion": "v18",
+  "status": "user-adopted",
+  "kind": "active-character-master-set",
+  "styleProfile": "handdrawn-crayon",
+  "adoptedAt": "2026-10-14",
+  "authority": {
+    "type": "explicit-user-instruction",
+    "sourceThreadId": "01a13973-fcf1-7d11-95d2-e5219c4023c9",
+    "quote": "교체작업 멈추고 /Users/namu/Desktop/ExpiryMate/design/jango/emoticons/kakao-32/v18/source-originals를 마스터로 기존 장고 디자인 규칙 정리해줘.",
+    "scope": "Restore v18 originals as the common character design MASTER and stop v19 runtime replacement; rules/reference/tool defaults only"
+  },
+  "sourceDirectory": "design/jango/emoticons/kakao-32/v18/source-originals",
+  "poseRegistry": {
+    "file": "design/jango/master-set.json",
+    "sha256": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441"
+  },
+  "representative": 24,
+  "image": {
+    "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "width": 1254,
+    "height": 1254
+  },
+  "images": [
+    {
+      "number": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "sha256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 3,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+      "sha256": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 4,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+      "sha256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 5,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png",
+      "sha256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 6,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+      "sha256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+      "width": 1157,
+      "height": 1360
+    },
+    {
+      "number": 7,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+      "sha256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 8,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+      "sha256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 9,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 10,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+      "sha256": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 11,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "sha256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 12,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+      "sha256": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 13,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+      "sha256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 14,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "sha256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 15,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+      "sha256": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 16,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+      "sha256": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 17,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "sha256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 18,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+      "sha256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 19,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+      "sha256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 20,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "sha256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 21,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+      "sha256": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 22,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+      "sha256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 23,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "sha256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 24,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 25,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+      "sha256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 26,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+      "sha256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 27,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png",
+      "sha256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 28,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png",
+      "sha256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 29,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+      "sha256": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 30,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+      "sha256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 31,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "sha256": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67",
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "number": 32,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png",
+      "sha256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+      "width": 1254,
+      "height": 1254
+    }
+  ],
+  "scope": {
+    "appliesTo": [
+      "app-character",
+      "branding-character",
+      "emoticon-character",
+      "sns-cartoon",
+      "marketing",
+      "video-character"
+    ],
+    "excludes": [
+      "automatic runtime replacement",
+      "rewriting or redrawing immutable v18 originals",
+      "signed emoticon release",
+      "crayon treatment on functional UI"
+    ]
+  },
+  "previousMaster": {
+    "file": "design/jango/masters/v19/master.json",
+    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04",
+    "active": false,
+    "role": "historical user adoption; not the current common production standard"
+  },
+  "framing": {
+    "newAppArtwork": "full body including hat, both connected arms/mittens, apron, legs and shoes with transparent padding",
+    "originals": "Preserve each original framing and bytes, including cropped lower bodies; any extension is a new separately reviewed derivative",
+    "sns": "Preserve expressive freedom and record intentional scene framing under SNS-CARTOON-GUIDE"
+  },
+  "runtime": {
+    "file": "design/jango/manifest.json",
+    "sha256": "87ce450655575a0b6e797f065be929e4f9f20f6732354992a3e339f2c582d3c2",
+    "status": "existing v18 source mapping and runtime/branding assets unchanged"
+  },
+  "releaseStatus": "User-selected design MASTER; not a signed emoticon release"
+}

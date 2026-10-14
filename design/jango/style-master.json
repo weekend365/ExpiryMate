@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "activeMasterVersion": "v19",
+  "activeMasterVersion": "v18",
   "master": {
-    "file": "design/jango/masters/v19/master.json",
-    "sha256": "02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04"
+    "file": "design/jango/masters/v18/master.json",
+    "sha256": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83"
   },
-  "scope": "Active common Jango drawing standard; v18 is preserved as historical pose/reference material. Existing runtime assets have not migrated."
+  "scope": "Active common character MASTER is the selected v18 32 source-originals; v19 adoption and cancelled runtime experiment are historical. Existing runtime/branding remain unchanged."
 }

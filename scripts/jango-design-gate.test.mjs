@@ -6,7 +6,7 @@ import {createRequire} from 'node:module';
 import {generateKeyPairSync,sign} from 'node:crypto';
 import {policy,root,local,quality,readJson,readPng,fileHash,writeJson,prepare,audit,check,promote,assertReview,canonical,screenMouthMode,technical,styleTechnical,validateReferences,validateComposition,attachmentPlan,parsePrepareArgs,validateInputLineage} from './jango-design-gate.mjs';
 import {readMasterSet} from './jango-master-set.mjs';
-import {readStyleMaster,validateStyleMaster} from './jango-style-master.mjs';
+import {readStyleMaster,validateStyleMaster,validateHistoricalStyleMaster} from './jango-style-master.mjs';
 const require=createRequire(path.join(root,'apps/mobile/package.json')),{PNG}=require('pngjs');
 const rules=policy(),set=readMasterSet();
 const entry=n=>set.entries.find(e=>e.number===n);
@@ -17,7 +17,7 @@ function fixture(id,number=9){
  const prepared=prepare(id,source.source,'표정 유지',source.mouthMode,'모드 유지',expression);
  fs.mkdirSync(local(directory),{recursive:true});
  fs.copyFileSync(local(source.source),local(directory+'/source.png'));fs.copyFileSync(local(source.sticker),local(directory+'/sticker.png'));
- const candidate={id,kind:'emoticon',styleProfile:'colored-pencil',directory,source:directory+'/source.png',sticker:directory+'/sticker.png',mouthMode:source.mouthMode,mouthRoi:source.inspection.mouthRoi,tiltDegrees:source.inspection.tiltDegrees,visibility:'clear',expression,preflight:`${quality}/jobs/${id}/preflight.json`,disposition:'candidate'};
+ const candidate={id,kind:'emoticon',styleProfile:rules.defaultStyleProfile,directory,source:directory+'/source.png',sticker:directory+'/sticker.png',mouthMode:source.mouthMode,mouthRoi:source.inspection.mouthRoi,tiltDegrees:source.inspection.tiltDegrees,visibility:'clear',expression,preflight:`${quality}/jobs/${id}/preflight.json`,disposition:'candidate'};
  writeJson(`${quality}/candidates/${id}.json`,candidate);return{candidate,prepared};
 }
 function clean(id){for(const dir of [`design/jango/emoticons/kakao-32/${id}`,`${quality}/jobs/${id}`])fs.rmSync(local(dir),{recursive:true,force:true});for(const dir of ['candidates','reports'])fs.rmSync(local(`${quality}/${dir}/${id}.json`),{force:true});}
@@ -28,45 +28,49 @@ test('v18 selected bytes and representative are immutable; mouth thresholds unch
  for(const key of ['mouthScreen','openMouthScreen','lineMouthScreen','mouthModes'])assert.deepEqual(rules[key],old[key]);
  assert.deepEqual(set.entries.filter(e=>e.historicalMouthStatus==='needs-review').map(e=>e.number),[5,12,15,20,21,28,29,31,32]);
 });
-test('v19 replaces the active master while v18 poses remain historical and unconverted',()=>{
- const active=readStyleMaster();
- assert.equal(readJson('design/jango/style-master.json').activeMasterVersion,'v19');
- assert.equal(active.masterVersion,'v19');
- assert.equal(active.id,'jango-v19');
- assert.equal(active.migration.poses.v19RedrawnCount,0);
- assert.equal(active.legacyPoseRegistry.activeMaster,false);
- assert.equal(active.source.libraryFileId,'libfile_e4728d44dfc48191bc17441d04d0a031');
- assert.equal(active.image.sha256,'275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb');
- assert.equal(rules.defaultStyleProfile,'colored-pencil');
+test('v18 originals are the active MASTER and v19 adoption history remains intact',()=>{
+ const active=readStyleMaster(),historical=readJson('design/jango/masters/v19/master.json');
+ assert.equal(readJson('design/jango/style-master.json').activeMasterVersion,'v18');
+ assert.equal(active.masterVersion,'v18');
+ assert.equal(active.id,'jango-v18');
+ assert.equal(active.sourceDirectory,'design/jango/emoticons/kakao-32/v18/source-originals');
+ assert.equal(active.images.length,32);
+ assert.equal(active.previousMaster.active,false);
+ assert.equal(active.previousMaster.sha256,'02300282dbacfbb6bfb11a018930d44abaf4f9282293bc2388be990e71f82b04');
+ assert.doesNotThrow(()=>validateHistoricalStyleMaster(historical));
+ assert.equal(historical.source.libraryFileId,'libfile_e4728d44dfc48191bc17441d04d0a031');
+ assert.equal(historical.image.sha256,'275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb');
+ assert.equal(rules.defaultStyleProfile,'handdrawn-crayon');
  assert.equal(set.styleProfile,'handdrawn-crayon');
  assert.equal(audit('v18-24').context.styleProfile,'handdrawn-crayon');
- assert.equal(audit('v18-24').styleScope,'historical-v18-original; not migrated to v19');
- const legacyVersion=structuredClone(active);legacyVersion.masterVersion='v18';
- assert.throws(()=>validateStyleMaster(legacyVersion));
- const wrong=structuredClone(active);wrong.image.sha256='0'.repeat(64);
+ assert.equal(audit('v18-24').context.activeMasterVersion,'v18');
+ assert.equal(audit('v18-24').styleScope,'active-v18-original; immutable user-selected MASTER');
+ for(const change of [{masterVersion:'v19'},{sourceDirectory:'design/jango/masters/v19'},{images:active.images.slice(1)}])assert.throws(()=>validateStyleMaster({...active,...change}));
+ const wrong=structuredClone(active);wrong.images[0].sha256='0'.repeat(64);
  assert.throws(()=>validateStyleMaster(wrong),/hash mismatch/);
  const tampered=structuredClone(rules);tampered.activeStyleMaster.sha256='0'.repeat(64);
  assert.throws(()=>validateReferences(tampered),/registry hash mismatch/);
- const oldDefault=structuredClone(rules);oldDefault.defaultStyleProfile='handdrawn-crayon';
+ const oldDefault=structuredClone(rules);oldDefault.defaultStyleProfile='colored-pencil';
  assert.throws(()=>validateReferences(oldDefault));
- assert.throws(()=>validateInputLineage(active.image.file),/registered derivative/,'Scene is a style attachment, not a transparent pose input');
+ assert.throws(()=>validateInputLineage(historical.image.file),/registered derivative/,'Historical scene is not a transparent original pose input');
 });
-test('new preparation requires approved pencil reference and cannot reopen the historical style',()=>{
- const id=`style-adoption-test-${process.pid}`;
+test('new preparation uses the selected v18 original and refuses the retired pencil style',()=>{
+ const id=`style-restoration-test-${process.pid}`;
  try{
-  assert.throws(()=>prepare(id,entry(24).source,'새 작화','idle-u','',null,{styleProfile:'handdrawn-crayon'}),/audit-only/);
+  assert.throws(()=>prepare(id,entry(24).source,'새 작화','idle-u','',null,{styleProfile:'colored-pencil'}),/audit-only/);
   assert(!fs.existsSync(local(`${quality}/jobs/${id}`)));
-  const p=prepare(id,entry(24).source,'새 연필 스타일 포즈','idle-u');
+  const p=prepare(id,entry(24).source,'새 전신 포즈','idle-u');
   const active=readStyleMaster(),role=p.referenceRoles.find(r=>r.role==='style-master');
-  assert.equal(p.context.activeMasterVersion,'v19');
-  assert.equal(p.context.activeMasterRecord,fileHash('design/jango/masters/v19/master.json'));
+  assert.equal(p.context.activeMasterVersion,'v18');
+  assert.equal(p.context.activeMasterRecord,fileHash('design/jango/masters/v18/master.json'));
   assert.equal(role.file,active.image.file);assert.equal(p.referenceHashes[role.file],active.image.sha256);
   assert.equal(p.references[role.imageIndex-1],role.file);
   assert.equal(p.references.length,new Set(p.references).size);
   assert.equal(p.referenceRoles.find(r=>r.role==='identity-master').imageIndex,p.referenceRoles.find(r=>r.role==='edit-target').imageIndex);
   const prompt=fs.readFileSync(local(p.prompt),'utf8');
-  assert.match(prompt,/갈색 연필/);assert.match(prompt,/여성·주방·두부·글자·말풍선/);
-  assert.doesNotMatch(prompt,/v18 32종만 MASTER로 사용|24번이 형태·선·색·질감 대표/);
+  assert(!p.references.includes('design/jango/masters/v19/master-scene.png'));
+  assert.match(prompt,/크레파스/);assert.match(prompt,/전신/);
+  assert.doesNotMatch(prompt,/그림체는 최신 장면 스타일 MASTER/);
  }finally{clean(id);}
 });
 test('four actual v18 mouth anchors pass without recalibrating limits',()=>{for(const n of [9,1,11,17]){const e=entry(n);assert.equal(screenMouthMode(readPng(e.source),e.inspection.mouthRoi,rules,e.mouthMode).status,'pass',String(n));}});
@@ -93,16 +97,16 @@ test('SNS expression policy does not admit unsupported kinds or mouths into the 
  }finally{clean(id);}
 });
 test('prepare keeps positional CLI, validates options and computes deduplicated actual indices',()=>{
- assert.deepEqual(parsePrepareArgs(['x',entry(1).source,'인사','speak-open','인사','--style=colored-pencil','--kind','emoticon']).options,{styleProfile:'colored-pencil',kind:'emoticon'});
+ assert.deepEqual(parsePrepareArgs(['x',entry(1).source,'인사','speak-open','인사','--style=handdrawn-crayon','--kind','emoticon']).options,{styleProfile:'handdrawn-crayon',kind:'emoticon'});
  assert.throws(()=>parsePrepareArgs(['--unknown','x']),/Unknown/);
  const composition={file:rules.compositionReferences.v18.file,panel:13};
- const attached=attachmentPlan(rules,'attachment-test',entry(13).source,'speak-open','colored-pencil',composition);
- assert.equal(attached.references.length,5);assert.notEqual(attached.referenceRoles[0].imageIndex,attached.referenceRoles[1].imageIndex);
+ const attached=attachmentPlan(rules,'attachment-test',entry(13).source,'speak-open','handdrawn-crayon',composition);
+ assert.equal(attached.references.length,4);assert.equal(attached.referenceRoles[0].imageIndex,attached.referenceRoles[1].imageIndex);
  for(const role of attached.referenceRoles)assert.equal(attached.references[role.imageIndex-1],role.file);
  for(const panel of [0,33,1.5])assert.throws(()=>validateComposition(rules,{...composition,panel}),/panel/);
  assert.throws(()=>validateComposition(rules,{file:entry(1).source,panel:1}),/Unregistered/);
- const over=structuredClone(rules);over.styleProfiles['colored-pencil'].styleMaster.file=entry(3).source;over.master.file=entry(4).source;
- const max=attachmentPlan(over,'max',entry(5).source,'speak-open','colored-pencil',composition);assert.equal(max.references.length,5);
+ const over=structuredClone(rules);over.styleProfiles['handdrawn-crayon'].styleMaster.file=entry(3).source;over.master.file=entry(4).source;
+ const max=attachmentPlan(over,'max',entry(5).source,'speak-open','handdrawn-crayon',composition);assert.equal(max.references.length,5);
 });
 test('new preparation rejects missing reasons or malformed intent and never overwrites a job',()=>{
  const id=`prepare-test-${process.pid}`;
@@ -110,7 +114,7 @@ test('new preparation rejects missing reasons or malformed intent and never over
  assert.throws(()=>prepare(id,entry(11).source,'집중','neutral-line'),/reason/);
  assert.throws(()=>prepare(id,entry(11).source,'집중','neutral-line','집중',{...expression,intensity:4}),/intensity/);
  assert.throws(()=>prepare(id,entry(11).source,'집중','neutral-line','집중',null,{panel:11}),/together/);
- const p=prepare(id,entry(11).source,'집중','neutral-line','집중',expression);assert.equal(p.policyVersion,6);assert(p.references.includes(entry(11).source));assert(!p.references.includes(`${quality}/jobs/${id}/master-mouth.png`));
+ const p=prepare(id,entry(11).source,'집중','neutral-line','집중',expression);assert.equal(p.policyVersion,7);assert(p.references.includes(entry(11).source));assert(!p.references.includes(`${quality}/jobs/${id}/master-mouth.png`));
  assert.throws(()=>prepare(id,entry(11).source,'집중'),/already exists/);
  }finally{clean(id);}
 });
@@ -120,14 +124,14 @@ test('fresh candidate, valid test signature, forgery, stale prompt and uncertain
  const {candidate,prepared}=fixture(id);const report=audit(id);writeJson(`${quality}/reports/${id}.json`,report);
  assert.equal(report.preparation,'pass');assert.equal(report.mouth.status,'pass');assert.equal(report.designStatus,'needs-review');
  const keys=generateKeyPairSync('ed25519'),publicKey=keys.publicKey.export({type:'spki',format:'pem'});
- const payload={binding:report.binding,decision:'approved',reviewer:'ephemeral-unit-test',reviewedAt:'2026-10-01',checks:Object.fromEntries([...rules.visualChecks,...rules.styleProfiles['colored-pencil'].visualChecks].map(k=>[k,true]))};
+ const payload={binding:report.binding,decision:'approved',reviewer:'ephemeral-unit-test',reviewedAt:'2026-10-01',checks:Object.fromEntries([...rules.visualChecks,...rules.styleProfiles[rules.defaultStyleProfile].visualChecks].map(k=>[k,true]))};
  const review={payload,signature:sign(null,Buffer.from(canonical(payload)),keys.privateKey).toString('base64')};
  assert.doesNotThrow(()=>assertReview(report,review,publicKey));
  assert.throws(()=>assertReview(report,review,''),/not configured/);
  assert.throws(()=>assertReview(report,{...review,payload:{...payload,reviewer:'forged'}},publicKey),/signature/);
  assert.throws(()=>assertReview(report,{...review,payload:{...payload,checks:{}}},publicKey),/Visual check/);
- const legacyChecks=Object.fromEntries([...rules.visualChecks,...rules.styleProfiles['handdrawn-crayon'].visualChecks].map(k=>[k,true]));
- assert.throws(()=>assertReview(report,{...review,payload:{...payload,checks:legacyChecks}},publicKey),/warmPencilContour/);
+ const historicalChecks=Object.fromEntries([...rules.visualChecks,...rules.styleProfiles['colored-pencil'].visualChecks].map(k=>[k,true]));
+ assert.throws(()=>assertReview(report,{...review,payload:{...payload,checks:historicalChecks}},publicKey),/crayonStroke/);
  promote(id,review,publicKey);assert(check(publicKey).entries.some(e=>e.id===id));
  for(const changed of [{...report,preparation:'stale'},{...report,mouth:{status:'needs-review'}},{...report,technical:{status:'fail'}}])assert.throws(()=>assertReview(changed,review,publicKey));
  fs.appendFileSync(local(prepared.prompt),' changed');const stale=audit(id);assert.equal(stale.preparation,'stale');assert.notEqual(stale.binding,report.binding);

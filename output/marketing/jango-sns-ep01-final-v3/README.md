@@ -1,11 +1,21 @@
-# 장고툰 1화 · 승인된 대표 컷에서 이어진 4컷
+# 장고툰 1화 v3 · 종료된 제작 이력
 
-`jango-ep01-v3-01.png`부터 `04.png`까지 1122×1402 PNG다. `02.png`는 사용자가 채택한 `../jango-sns-ep01-direction-v3/discovery-review-r1.png`의 바이트 동일 복사본이며, 기존 Library 항목 `libfile_977ef578050c81919b9bb32a1fe91811`을 유지한다. 1·3·4컷은 승인 장면과 v18 MASTER 24·01번을 실제 참조로 사용해 정식 내장 imagegen으로 새로 그렸다.
+당시 `jango-ep01-v3-01.png`부터 `04.png`까지 1122×1402 PNG를 제작했다. `02.png`는 사용자가 채택한
+[v3 대표 컷](../jango-sns-ep01-direction-v3/discovery-review-r1.png)의 바이트 동일 복사본이었으며,
+Library 항목 `libfile_977ef578050c81919b9bb32a1fe91811`은 변경하지 않았다. 1·3·4컷은 승인 장면과
+v18 MASTER 24·01번을 실제 참조로 사용해 정식 내장 imagegen으로 새로 그린 당시 후보다.
 
-`jango-ep01-v3-overview.png`는 읽는 순서의 2×2 미리보기, `review-mobile-360.png`는 각 컷 폭 360px 검토본이다. 게시 문구는 `jango-ep01-v3-caption.txt`에 있다. 새 컷의 사용자 SNS 채택이나 게시 완료를 자동으로 주장하지 않는다.
+2026-10-14 승인본·최소 이력 기준으로 이 폴더의 중간/비교 이미지와 렌더러를 제거했다.
+대표 컷은 위 보존 위치에서 확인하고, 현재 사용 가능한 SNS 최종본은
+[승인 v6](../jango-sns-ep01-v19-review-v6/README.md)를 따른다. 기존 게시 문구
+`jango-ep01-v3-caption.txt`는 당시 이력으로 남기며 새 컷의 채택·게시 완료를 의미하지 않는다.
 
-그림·말풍선 원본은 `artwork/`, 한글 글자 레이어는 `lettering/`에 분리했다. 재렌더는 네트워크나 새 이미지 생성을 호출하지 않는다. 저장소 루트에서 `node output/marketing/jango-sns-ep01-final-v3/render.mjs`를 실행한다. macOS AppKit/CoreText와 기존 pngjs·리사이즈 코드를 사용한다.
+그림·말풍선 원본과 한글 레이어는 당시 분리 제작했다. 현재 체크아웃에서는 입력과 로컬 렌더러가
+종료되어 전체 재렌더를 지원하지 않는다. 원래 경로·SHA-256과 중복 파일의 보존 위치는
+[정리 기록](../../../design/jango/quality/cleanup-resources-20261014.json)에서 확인한다.
 
-실제 프롬프트는 `prompts/`, 참조 경로·SHA256·생성 원본·MASTER 계보는 `preparation.json`과 `production-record.json`에 기록했다. `visual-review.json`은 사람·장고·음식·조판 검토와 관찰 한계, `render-report.json`은 출력 크기·해시·승인 컷 보존, `validation.json`은 코드 검사, `delivery.json`은 파일별 Library 상태를 기록한다. Library 전달 전후에는 `delivery.json`의 확인된 상태를 따른다.
+실제 프롬프트와 [준비](./preparation.json)·[제작](./production-record.json)·[시각 검수](./visual-review.json)·
+[렌더 기록](./render-report.json)·[당시 검사](./validation.json)·[Library 상태](./delivery.json)는 바이트 그대로
+보존한다. 그 안의 입력·출력 경로는 당시 스냅샷이며 삭제된 파일의 존재나 현재 재현 가능성을 주장하지 않는다.
 
 앱의 등록 재료 기반 추천과 임박 재료 우선 기능을 이야기로 표현했다. 두부·달걀·대파 요리는 이야기 속 예시이며 실제 AI 응답 캡처가 아니다. 생성된 앱 UI, 절약 수치, 식품 안전 보장, SNS 자동 게시를 포함하지 않는다. 앱 코드·기존 v1/v2·MASTER 원본은 수정하지 않았다.

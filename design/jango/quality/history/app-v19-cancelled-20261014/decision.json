@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-14",
+  "status": "cancelled-by-user; no runtime integration",
+  "quote": "교체작업 멈추고 /Users/namu/Desktop/ExpiryMate/design/jango/emoticons/kakao-32/v18/source-originals를 마스터로 기존 장고 디자인 규칙 정리해줘.",
+  "runtime": "Existing v18 source mapping, assets and branding remain unchanged",
+  "archive": {
+    "location": "/private/tmp/jango-v19-app-20261014-62k79d17/cancelled-worktree",
+    "sha256": "1fc2c9e73cd6225073bfbd7bb1e64f4bd01c0faa1d3318fdf288bb2a732f290e",
+    "scope": "Local discarded working material; excluded from active inputs; original imagegen outputs retained"
+  },
+  "generated": [
+    {
+      "id": "idle-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-2e214acc-12cc-4875-8b51-e1bb1c292360.png",
+      "sha256": "7eaca8347aecf88fa3e68e05162d0187a396a64438e63eccb85b98e4f5cf57e0",
+      "applied": false
+    },
+    {
+      "id": "idle-r3",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-610fcff1-fbbc-494c-82e0-4ae7ff299849.png",
+      "sha256": "caaba62e92c3e843a5955f8cc7e403f34d9f8910bb5aac433098b5f902dd8d7f",
+      "applied": false
+    },
+    {
+      "id": "speak-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-2d375881-1129-4566-9819-a3c4e5e8ed50.png",
+      "sha256": "26ba76050fe4928357e1462417e6e195c70c29e5cf20b127516ebad10ff6087c",
+      "applied": false
+    },
+    {
+      "id": "empty-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-9c997d51-ba04-4d02-a79f-59212b44eb6e.png",
+      "sha256": "76036eac8b03b14eea92c9966dc0776d91b7d6bea1d1fa72238453ba8f59186f",
+      "applied": false
+    },
+    {
+      "id": "happy-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-57b693ae-0b32-4762-bfed-0470e23d11a9.png",
+      "sha256": "14241220266d44ea53ba7ef358535b3ff022c4c72a27f45f0fad70cdfecaa707",
+      "applied": false
+    },
+    {
+      "id": "worry-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-fc5cf8ac-9323-47a8-b906-07cb00bd0ac9.png",
+      "sha256": "16cc1441a1f8698ba8b198594ea8a07132792ca065173bc1dddd8da49e772fca",
+      "applied": false
+    },
+    {
+      "id": "think-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-7141f5fe-b5e5-4e35-b84c-d5f5eefe88a7.png",
+      "sha256": "ef3e7d7ec679b9b2e03c8b7b83f0fecc306a6fa749f50c5a07c1b4264453db4b",
+      "applied": false
+    },
+    {
+      "id": "cooking-r1",
+      "file": "/Users/namu/.codex/generated_images/01a13973-fcf1-7d11-95d2-e5219c4023c9/exec-385548e5-8bd5-4bef-98c9-d7e8a76fb5b4.png",
+      "sha256": "4dfcd1edde95b55346536fd378189139d72bd9d69e30d86a39d29800561039f9",
+      "applied": false
+    }
+  ]
+}
