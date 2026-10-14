@@ -1,7 +1,9 @@
 import { generateKeyPairSync } from "node:crypto";
-import { BadRequestException, ConflictException } from "@nestjs/common";
+import { BadRequestException, ConflictException, UnauthorizedException } from "@nestjs/common";
+import { LoginTicket, OAuth2Client } from "google-auth-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SubscriptionsService } from "./subscriptions.service";
+import * as unitEconomics from "../monetization/unit-economics-guardrail";
 
 const managedEnvKeys = [
   "NODE_ENV",
@@ -15,9 +17,12 @@ const managedEnvKeys = [
   "GOOGLE_PLAY_PACKAGE_NAME",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
   "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
+  "GOOGLE_RTDN_AUDIENCE",
+  "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
   "MONETIZATION_EXPERIMENT_SALT",
   "MONETIZATION_OFFER_MODE",
   "SUBSCRIPTIONS_ENABLED",
+  "SUBSCRIPTION_COST_GATE_MODE",
   "HOUSEHOLD_SUBSCRIPTIONS_ENABLED",
   "HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT",
   "SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED",
@@ -39,6 +44,7 @@ describe("SubscriptionsService", () => {
     process.env.MONETIZATION_EXPERIMENT_SALT = "subscription-test";
     process.env.MONETIZATION_OFFER_MODE = "expanded";
     process.env.SUBSCRIPTIONS_ENABLED = "true";
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "required";
     process.env.HOUSEHOLD_SUBSCRIPTIONS_ENABLED = "true";
     process.env.HOUSEHOLD_SUBSCRIPTIONS_ROLLOUT_PERCENT = "100";
     process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "false";
@@ -73,6 +79,89 @@ describe("SubscriptionsService", () => {
       environment: null,
       verifiedAt: null,
     });
+  });
+
+  it("accepts a test RTDN from the configured verified push account without purchase lookups", async () => {
+    configureGooglePush();
+    const verify = mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    const { prisma, service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification()))
+      .resolves.toEqual({ ok: true });
+
+    expect(verify).toHaveBeenCalledWith({
+      idToken: "test-token",
+      audience: "https://api.example.com/subscriptions/notifications/google",
+    });
+    expect(fetch).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.findUnique).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { email: "other@example.iam.gserviceaccount.com", verified: true },
+    { email: "rtdn-push@example.iam.gserviceaccount.com", verified: false },
+  ])("rejects an unauthorized RTDN before store lookups or entitlement writes: $email/$verified", async ({ email, verified }) => {
+    configureGooglePush();
+    mockGooglePushIdentity(email, verified);
+    const fetch = vi.fn();
+    vi.stubGlobal("fetch", fetch);
+    const { prisma, service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification("test-purchase-token")))
+      .rejects.toBeInstanceOf(UnauthorizedException);
+
+    expect(fetch).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.findUnique).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    expect(prisma.subscriptionEntitlement.update).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when the expected RTDN service account is not configured", async () => {
+    configureGooglePush();
+    delete process.env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL;
+    const verify = mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const { service } = createService();
+
+    await expect(service.processGoogleNotification("Bearer test-token", googleNotification()))
+      .rejects.toThrow("Google RTDN 발신 서비스 계정이 설정되지 않았습니다.");
+    expect(verify).not.toHaveBeenCalled();
+  });
+
+  it("keeps RTDN package validation after push identity verification", async () => {
+    configureGooglePush();
+    mockGooglePushIdentity("rtdn-push@example.iam.gserviceaccount.com");
+    const { service } = createService();
+    const data = Buffer.from(JSON.stringify({ packageName: "com.other.app" })).toString("base64");
+
+    await expect(service.processGoogleNotification("Bearer test-token", data))
+      .rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it.each([
+    { mode: "required", sales: "true", allowed: false },
+    { mode: "operator_override", sales: "true", allowed: true },
+    { mode: "operator_override", sales: "false", allowed: false },
+    { mode: "invalid", sales: "true", allowed: false },
+  ])("applies the personal cost policy before creating purchase intents: $mode/$sales", async ({ mode, sales, allowed }) => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = mode;
+    process.env.SUBSCRIPTIONS_ENABLED = sales;
+    mockUnqualifiedEconomics();
+    const { prisma, service } = createService();
+    prisma.subscriptionPurchaseIntent.create.mockImplementation(async ({ data }) => data);
+    const pending = service.createPurchaseIntent("owner-a", {
+      store: "apple_app_store", productId: "expirymate_premium_monthly",
+    });
+    if (allowed) {
+      await expect(pending).resolves.toMatchObject({ productId: "expirymate_premium_monthly" });
+      expect(prisma.subscriptionPurchaseIntent.create).toHaveBeenCalledOnce();
+    } else {
+      await expect(pending).rejects.toThrow(/신규 가입/);
+      expect(prisma.subscriptionPurchaseIntent.create).not.toHaveBeenCalled();
+    }
   });
 
   it("creates a short-lived personal purchase intent with store account bindings", async () => {
@@ -175,6 +264,7 @@ describe("SubscriptionsService", () => {
   });
 
   it("rejects an Apple purchase whose app account token does not match the intent", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";
     const privateKey = createEcPrivateKey();
     process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
@@ -314,6 +404,8 @@ describe("SubscriptionsService", () => {
   });
 
   it("verifies a Google Play subscription and stores only the token hash", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
+    mockUnqualifiedEconomics();
     const privateKey = createRsaPrivateKey();
     process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
     process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
@@ -357,7 +449,48 @@ describe("SubscriptionsService", () => {
     });
   });
 
+  it("resolves the annual Google plan from the verified purchase without a client period hint", async () => {
+    process.env.IAP_ALLOWED_PRODUCT_IDS = "jango_plus";
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
+    mockUnqualifiedEconomics();
+    process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
+      "play-service@expirymate.iam.gserviceaccount.com";
+    process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY = createRsaPrivateKey();
+    const { prisma, service } = createService();
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
+      if (url === "https://oauth2.googleapis.com/token") {
+        return jsonResponse({ access_token: "google-access-token" });
+      }
+      return jsonResponse({
+        subscriptionState: "SUBSCRIPTION_STATE_ACTIVE",
+        acknowledgementState: "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED",
+        lineItems: [{
+          productId: "jango_plus",
+          expiryTime: "2100-06-07T00:00:00Z",
+          offerDetails: { basePlanId: "yearly" },
+          autoRenewingPlan: { autoRenewEnabled: true },
+        }],
+      });
+    }));
+
+    const response = await service.verifySubscription("owner-a", {
+      store: "google_play",
+      productId: "jango_plus",
+      purchaseToken: "annual-store-token",
+    });
+
+    expect(response.entitlement).toMatchObject({
+      hasActiveEntitlement: true,
+      billingPeriod: "yearly",
+      basePlanId: "yearly",
+    });
+    expect(prisma.subscriptionEntitlement.create.mock.calls[0]?.[0].data)
+      .toMatchObject({ billingPeriod: "yearly", basePlanId: "yearly" });
+  });
+
   it("rejects a Google purchase whose obfuscated account id does not match the intent", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     process.env.SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED = "true";
     const privateKey = createRsaPrivateKey();
     process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
@@ -615,6 +748,7 @@ describe("SubscriptionsService", () => {
   });
 
   it("does not allow one store purchase to be attached to two owners", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     const privateKey = createRsaPrivateKey();
     process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
     process.env.GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL =
@@ -653,6 +787,7 @@ describe("SubscriptionsService", () => {
   });
 
   it("rejects Google test purchases in production", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     process.env.NODE_ENV = "production";
     process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
     delete process.env.IAP_ALLOW_SANDBOX_PURCHASES;
@@ -694,6 +829,7 @@ describe("SubscriptionsService", () => {
   });
 
   it("rejects Apple sandbox entitlements in production even if the client asks for sandbox", async () => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "operator_override";
     process.env.NODE_ENV = "production";
     process.env.APPLE_APP_STORE_ENVIRONMENT = "production";
     delete process.env.IAP_ALLOW_SANDBOX_PURCHASES;
@@ -851,8 +987,15 @@ describe("SubscriptionsService", () => {
     });
   });
 
-  it("rejects new Plus purchases while subscription sales are paused", async () => {
-    process.env.SUBSCRIPTIONS_ENABLED = "false";
+  it.each([
+    { mode: "required", sales: "false", allowed: false },
+    { mode: "required", sales: "true", allowed: false },
+    { mode: "operator_override", sales: "true", allowed: true },
+    { mode: "operator_override", sales: "false", allowed: false },
+  ])("applies the personal cost policy to verified new receipts: $mode/$sales", async ({ mode, sales, allowed }) => {
+    process.env.SUBSCRIPTIONS_ENABLED = sales;
+    process.env.SUBSCRIPTION_COST_GATE_MODE = mode;
+    mockUnqualifiedEconomics();
     const privateKey = createEcPrivateKey();
     process.env.APPLE_APP_STORE_ISSUER_ID = "issuer-id";
     process.env.APPLE_APP_STORE_KEY_ID = "key-id";
@@ -892,14 +1035,18 @@ describe("SubscriptionsService", () => {
       ),
     );
 
-    await expect(
-      service.verifySubscription("owner-a", {
+    const pending = service.verifySubscription("owner-a", {
         store: "apple_app_store",
         transactionId: "transaction-sales-off",
         environment: "sandbox",
-      }),
-    ).rejects.toThrow(/신규 가입은 잠시 쉬고/);
-    expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+      });
+    if (allowed) {
+      await expect(pending).resolves.toMatchObject({ entitlement: { hasActiveEntitlement: true } });
+      expect(prisma.subscriptionEntitlement.create).toHaveBeenCalledOnce();
+    } else {
+      await expect(pending).rejects.toThrow(/신규 가입/);
+      expect(prisma.subscriptionEntitlement.create).not.toHaveBeenCalled();
+    }
   });
 
   it("still restores an existing entitlement while subscription sales are paused", async () => {
@@ -1056,6 +1203,16 @@ describe("SubscriptionsService", () => {
   });
 });
 
+function mockUnqualifiedEconomics() {
+  return vi.spyOn(unitEconomics, "getUnitEconomicsAvailability").mockResolvedValue({
+    subscriptions: { allowed: false, status: "learning", projectedMonthlyCostKrw: 2190,
+      budgetKrw: 858, recipeSamples: 4, photoSamples: 1 },
+    rewardedAds: { allowed: false, status: "blocked", coverageMultiple: 0.5 },
+    paidCredits: { allowed: false, status: "blocked", coverageMultiple: 0.5 },
+    subscriptionDailyLimitCaps: { subscriber: null, household: null },
+  });
+}
+
 function createService() {
   const prisma = {
     inventorySpace: {
@@ -1089,6 +1246,31 @@ function createService() {
     prisma,
     service: new SubscriptionsService(prisma as never),
   };
+}
+
+function configureGooglePush() {
+  process.env.GOOGLE_PLAY_PACKAGE_NAME = "com.expirymate.mobile";
+  process.env.GOOGLE_RTDN_AUDIENCE = "https://api.example.com/subscriptions/notifications/google";
+  process.env.GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL = "rtdn-push@example.iam.gserviceaccount.com";
+}
+
+function mockGooglePushIdentity(email: string, emailVerified = true) {
+  return vi.spyOn(OAuth2Client.prototype, "verifyIdToken").mockImplementation(async () => new LoginTicket("test-envelope", {
+    iss: "https://accounts.google.com",
+    sub: "test-push-service-account",
+    aud: process.env.GOOGLE_RTDN_AUDIENCE!,
+    iat: 100,
+    exp: 200,
+    email,
+    email_verified: emailVerified,
+  }));
+}
+
+function googleNotification(purchaseToken?: string) {
+  return Buffer.from(JSON.stringify({
+    packageName: "com.expirymate.mobile",
+    ...(purchaseToken ? { subscriptionNotification: { purchaseToken } } : { testNotification: { version: "1.0" } }),
+  })).toString("base64");
 }
 
 function jsonResponse(payload: unknown, ok = true, status = 200) {

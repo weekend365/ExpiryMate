@@ -1,0 +1,152 @@
+{
+  "dataAsOf": "2026-10-10T07:21:33.303Z",
+  "scope": "Production aggregate SELECT only, last 30 days. No account, inventory, purchase token, push token, payload or credential values returned.",
+  "settings": {
+    "SUBSCRIPTIONS_ENABLED": "true",
+    "IAP_ALLOW_SANDBOX_PURCHASES": "false",
+    "MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED": "true",
+    "MONETIZATION_GUARDRAIL_LOOKBACK_DAYS": null,
+    "MONETIZATION_GUARDRAIL_MIN_SAMPLES": "10",
+    "MONETIZATION_GUARDRAIL_MIN_PHOTO_SAMPLES": "3",
+    "MONETIZATION_SUBSCRIPTION_MONTHLY_AI_BUDGET_KRW": "2000"
+  },
+  "usdKrw": 1500,
+  "projectedMonthlyCostKrw": 2190.33,
+  "telemetry": [
+    {
+      "feature": "photo",
+      "aiModel": "gpt-5.6-luna",
+      "promptVersion": "inventory-photo-parse-v1",
+      "usageStatus": "legacy",
+      "pricingVersion": "legacy",
+      "status": "succeeded",
+      "samples": 1,
+      "firstAt": "2026-09-15T05:51:04.922Z",
+      "lastAt": "2026-09-15T05:51:04.922Z",
+      "p95CostUsd": 0.001186,
+      "totalCostUsd": 0.001186
+    },
+    {
+      "feature": "recipe",
+      "aiModel": "gpt-5.4-mini",
+      "promptVersion": "recipe-recommendation-v11",
+      "usageStatus": "legacy",
+      "pricingVersion": "legacy",
+      "status": "succeeded",
+      "samples": 3,
+      "firstAt": "2026-09-17T01:49:25.634Z",
+      "lastAt": "2026-09-17T01:54:06.753Z",
+      "p95CostUsd": 0.023744,
+      "totalCostUsd": 0.046643
+    },
+    {
+      "feature": "recipe",
+      "aiModel": "gpt-5.4-mini",
+      "promptVersion": "recipe-recommendation-v10",
+      "usageStatus": "legacy",
+      "pricingVersion": "legacy",
+      "status": "failed",
+      "samples": 2,
+      "firstAt": "2026-09-17T01:12:10.417Z",
+      "lastAt": "2026-09-17T01:12:51.995Z",
+      "p95CostUsd": 0.035803,
+      "totalCostUsd": 0.063824
+    },
+    {
+      "feature": "recipe",
+      "aiModel": "gpt-5.4-mini",
+      "promptVersion": "recipe-recommendation-v10",
+      "usageStatus": "legacy",
+      "pricingVersion": "legacy",
+      "status": "succeeded",
+      "samples": 1,
+      "firstAt": "2026-09-14T05:47:07.973Z",
+      "lastAt": "2026-09-14T05:47:07.973Z",
+      "p95CostUsd": 0.009125,
+      "totalCostUsd": 0.009125
+    }
+  ],
+  "guardrailSamples": [
+    {
+      "feature": "recipe",
+      "samples": 4,
+      "p95CostUsd": 0.023744,
+      "incompleteAccountingSamples": 4
+    },
+    {
+      "feature": "photo",
+      "samples": 1,
+      "p95CostUsd": 0.001186,
+      "incompleteAccountingSamples": 1
+    }
+  ],
+  "subscriptionStates": [
+    {
+      "store": "apple_app_store",
+      "environment": "manual_screenshot",
+      "status": "active",
+      "isActive": true,
+      "count": 1
+    }
+  ],
+  "pushStates": [
+    {
+      "status": "sent",
+      "errorCode": null,
+      "count": 100,
+      "receiptCheckedCount": 100,
+      "latestSentAt": "2026-10-01T00:08:07.723Z"
+    }
+  ],
+  "releaseInterpretation": {
+    "costGate": "not-qualified",
+    "requiredRecipeSamples": 50,
+    "requiredPhotoSamples": 30,
+    "policyMonthlyBudgetKrw": 858,
+    "runtimeMonthlyBudgetKrw": 2000,
+    "sampleAccounting": "All observed last-30-day samples are legacy; no current-model/pricing-version cost qualification inferred.",
+    "historicalProjectionOnlyKrw": 2190.33,
+    "realStorePurchaseEvidence": false,
+    "manualScreenshotEntitlementNotPurchaseProof": true,
+    "pushReceipts": "100 sent rows have checked receipts and no stored error code; not a new-RC physical receipt test.",
+    "productionWritesPerformed": false
+  },
+  "googlePlayAuthentication": {
+    "status": "failed",
+    "httpStatus": 400,
+    "oauthError": "invalid_grant",
+    "descriptionCategory": "account-not-found",
+    "tokenOrCredentialsLogged": false,
+    "writesPerformed": false,
+    "interpretation": "Existing production service account could not obtain a Google OAuth token. Product query and server-side purchase/restore verification not qualified. Credential/account repair needed.",
+    "diagnosis": {
+      "enabledExistingServiceAccount": "jango-play-verifier@jango-plz.iam.gserviceaccount.com",
+      "productionEmailMatches": false,
+      "existingKeyMatchesActivePublicCertificate": true,
+      "correctedIssuerInMemoryOAuthAndProductReadPassed": true,
+      "newKeyRequired": false,
+      "productionSettingsChanged": false,
+      "productReport": "google-subscription-config.json"
+    }
+  },
+  "productionBackup": {
+    "source": "Railway GraphQL read-only",
+    "backups": [
+      {
+        "id": "e611d693-7963-4f77-aad7-7f227bd13f73",
+        "createdAt": "2026-08-16T12:18:11.068Z",
+        "expiresAt": null,
+        "usedMB": 300,
+        "referencedMB": 487,
+        "volumeInstanceSizeMB": 500
+      }
+    ],
+    "schedules": [],
+    "interpretation": "Only 2026-08-16 backup is present. No automatic schedule; new backup and isolated restore proof required before production changes. No creation or restore performed."
+  },
+  "followUpEvidence": {
+    "googleAuthenticationRestored": "production-email-recovery.json",
+    "effectiveSubscriptionSalesAndSettingsVisibility": "subscription-entry-fix.json",
+    "currentRtdnDeployment": "google-rtdn-auth.json"
+  }
+}

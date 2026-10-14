@@ -1,11 +1,16 @@
 ---
-status: draft
+status: archived
 owner: mobile-design
-last_reviewed: 2026-10-09
+last_reviewed: 2026-10-14
 source_of_truth: false
 ---
 
 # 모바일 크레파스 포인트 적용 계획안
+
+> **2026-10-14 철회:** 사용자가 손그림 스타일을 캐릭터·배경 이미지에만 적용하도록 범위를
+> 축소했다. 홈 카드 윤곽·색칠과 첫 등록·저장 완료의 추가 기호를 제거하며, 제목·말풍선·UI
+> 손글씨를 포함한 확대 후보도 종료한다. 아래는 당시 계획·승인·검증 이력이며 현행 구현
+> 지침이나 미완료 과제가 아니다. 현재 기준은 [디자인 시스템](../design-system.md)이다.
 
 이 계획은 기존 앱의 v18 기반 크레파스 장식 포인트를 다룬다. 신규 장고 자체의 작화는 [v19 공통 연필 스타일](../../design/jango/style-master.json)이 우선이며, [채택 범위](../../design/jango/reference/STYLE-MASTER-ADOPTION.md)에 따라 기존 runtime·장식 교체는 별도 진행한다. 기존 화면 구성에 손그림 윤곽·색칠·작은 기호를 더한다. 첫 적용 대상은
 **홈의 장고 안내 카드 바깥 면**이다. 같은 구도의 전후 화면에서 표현과 가독성을 확인한 뒤
@@ -88,7 +93,7 @@ source_of_truth: false
 - [x] `SurfaceCard`에 기본 꺼짐인 `decoration="crayon"` 옵션을 추가한다. 현재는 `hero`에만 적용한다.
 - [x] 기존 `react-native-svg`로 윤곽·고정 grain·작은 획을 구현한다. 래스터 에셋은 추가하지 않는다.
 - [x] 실제 카드 안쪽 크기를 측정해 경로를 재계산하고 선 굵기·모서리를 보존한다.
-- [x] 필요한 장식 역할만 [공유 디자인 토큰](../../packages/shared/src/design/decoration.ts)에 추가하고 공개 export를 확인한다.
+- [x] 필요한 장식 역할만 [공유 디자인 토큰](../../packages/shared/src/design)에 추가하고 공개 export를 확인한다. 당시 `decoration.ts`는 UI 장식 롤백으로 제거했다.
 - [x] 공통 장식 레이어에서 터치·화면 읽기 제외와 큰 글자 시 작은 획 생략을 관리한다.
 - [x] A안 출처·코드형 SVG·소스 해시를 구현 기록에 남긴다. 새 이미지 파일이 없어 에셋 sync·audit 추가는 해당 없음이다.
 - [x] 홈 안내 한 곳에만 옵션을 켜고 내부 말풍선·상태색 면·기존 행동 계약을 유지한다.

@@ -23,7 +23,8 @@ export const crayonReviewScenes = [
 ] as const;
 export type CrayonReviewSceneName = typeof crayonReviewScenes[number];
 
-export function CrayonReviewScene({ scene, decorated = true }: { scene: CrayonReviewSceneName; decorated?: boolean }) {
+// Historical entry names are retained for the existing QA app/manifest adapter.
+export function CrayonReviewScene({ scene }: { scene: CrayonReviewSceneName }) {
   const [actions, setActions] = useState(0);
   const onAction = () => setActions(value => value + 1);
   let content;
@@ -35,9 +36,8 @@ export function CrayonReviewScene({ scene, decorated = true }: { scene: CrayonRe
       visibleCount: empty || scene === "inventory-filtered" ? 0 : 4,
       expiredCount: 0, within7Count: 0, statusFilter: "all",
     });
-    const notices = getInventoryHeroNotices({ hero, isEmptyInventory: scene === "inventory-empty" }).map(notice => ({
+    const notices = getInventoryHeroNotices({ hero }).map(notice => ({
       ...notice, onPress: hero.show && hero.action ? onAction : undefined,
-      mascotDecoration: decorated ? notice.mascotDecoration : undefined,
     }));
     content = <>
       {notices.length > 0 && <View style={[inventoryScreenStyles.filterToolbar,
@@ -53,7 +53,7 @@ export function CrayonReviewScene({ scene, decorated = true }: { scene: CrayonRe
     const notices = getRegistrationCompletionNotices({
       latestItem: done ? { displayName: "토마토", expiryDate: null, expirySource: ExpirySource.UNKNOWN } : null,
       sessionCount: scene === "registration-multiple" ? 2 : 1, onRecommendations: onAction,
-    }).map(notice => ({ ...notice, mascotDecoration: decorated ? notice.mascotDecoration : undefined }));
+    });
     content = done ? <>
       <View style={styles.doneHero}><View style={[inventoryFormStyles.sectionCard, inventoryFormStyles.sectionCardSoft, inventoryFormStyles.sectionCardPadded]}>
         <JangoHeroNoticeCarousel notices={notices} density="compact" textVariant="bodyStrong" bubbleStyle={styles.doneBubble} />

@@ -1,0 +1,230 @@
+{
+  "state": "Personal cost exception deployed; both-device price and monthly sandbox purchase/restore verified; both app updates submitted for review",
+  "userAuthorization": {
+    "date": "2026-10-10",
+    "request": "원가 검증 예외를 승인하고 전체 판매 열기",
+    "scope": "All personal Plus new sales on iOS and Android; cost policy only"
+  },
+  "sourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+  "tests": {
+    "apiTestsPassed": 588,
+    "apiOptInDbTestsSkipped": 6,
+    "focusedTestsPassed": 76,
+    "totalTestsPassed": 1345,
+    "typecheckPassed": true,
+    "apiBuildPassed": true,
+    "lintPassed": true,
+    "envParityPassed": true
+  },
+  "sourceTransfer": {
+    "fileCount": 341,
+    "bytes": 2179050,
+    "secretFileCount": 0,
+    "manifestSha256": "f2305601c9147db84577f96f103d529c3c10d52d86ba381ecb4b0bcb9e99b080",
+    "generatedDockerfileSha256": "b3ebdc7bf72ae4b5df398747bce771a02d6734339c299925992ac77ed32cd8ba",
+    "uploaded": true
+  },
+  "backup": {
+    "sha256": "3b01871a4c90cd24ea66ccfa758fcae4a1d0396d27079c73fb8c62b6f6382ee1",
+    "restoreVerifiedAt": "2026-10-10T11:39:30.924Z",
+    "tableCount": 41,
+    "migrationCount": 45,
+    "allTableRowCountsMatch": true,
+    "catalogMatches": true,
+    "migrationsMatch": true,
+    "pgAmcheckPassed": true,
+    "isolatedRestoredUserDataRemoved": true,
+    "protectedBackupHashVerified": true
+  },
+  "configuration": {
+    "appliedAt": "2026-10-10T11:40:07.145Z",
+    "expectedPersonalCostMode": "operator_override",
+    "modeMatches": true,
+    "changedVariableNames": [
+      "SUBSCRIPTION_COST_GATE_MODE"
+    ],
+    "onlyRequestedVariableChanged": true,
+    "privateKeyUnchanged": true,
+    "skippedSeparateOldSourceDeploy": true
+  },
+  "deployment": {
+    "id": "d2c5859f-151f-4425-8b83-65ff58600718",
+    "status": "SUCCESS",
+    "createdAt": "2026-10-10T11:40:07.738Z",
+    "actualApiGitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "sourceIdentityMatches": true,
+    "adminDeploymentUnchanged": true
+  },
+  "unchanged": [
+    "Prisma schema and migrations",
+    "Existing entitlement rights and AI quotas",
+    "Global economics guardrail and budgets/sample thresholds",
+    "Household, paid-credit and offer rollout",
+    "Private keys and RTDN verifier identity",
+    "Sandbox receipt rejection",
+    "Admin source and public app versions"
+  ],
+  "rawEconomicsQualified": false,
+  "realPurchaseRestoreQaPassed": true,
+  "publicAppUpdateReleased": false,
+  "gitPushed": false,
+  "remaining": "Store approval and sandbox rejection restoration before public app release; annual/full lifecycle and current-model cost qualification remain separate",
+  "verifiedAt": "2026-10-10T11:42:40.115Z",
+  "publicAndUnauthenticatedChecks": [
+    {
+      "url": "https://api-production-1504.up.railway.app/health",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true,
+      "metadata": {
+        "status": "ok",
+        "version": "0.1.0",
+        "gitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+        "env": "production"
+      }
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/ready",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/inventory",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/spaces",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/privacy/status",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/privacy",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/privacy/choices",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "url": "https://jango.devnamu.com/terms",
+      "status": 200,
+      "expectedStatus": 200,
+      "passed": true
+    },
+    {
+      "path": "/subscriptions/notifications/google",
+      "case": "missing-auth",
+      "status": 400,
+      "expectedStatus": 400,
+      "passed": true,
+      "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+    },
+    {
+      "path": "/subscriptions/notifications/google",
+      "case": "invalid-signature",
+      "status": 401,
+      "expectedStatus": 401,
+      "passed": true,
+      "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+    }
+  ],
+  "all13PostdeployChecksPassed": true,
+  "effectivePersonalSalesAvailability": true,
+  "economicsVerification": {
+    "checkedAt": "2026-10-10T11:42:40.115Z",
+    "productionSelectOnly": true,
+    "evidenceScope": "Local compiled deployed-source policy evaluated against live variables and read-only production economics; authenticated device price QA remains separate",
+    "subscriptionsFlagEnabled": true,
+    "guardrailEnabled": true,
+    "effectiveSubscriptionsEnabled": true,
+    "personalCostGateMode": "operator_override",
+    "householdSalesEnabled": false,
+    "purchaseIntentRequired": true,
+    "householdFlagEnabled": false,
+    "paidCreditFlagEnabled": false,
+    "subscriptions": {
+      "allowed": false,
+      "status": "learning",
+      "projectedMonthlyCostKrw": 2190.33,
+      "budgetKrw": 2000,
+      "recipeSamples": 4,
+      "photoSamples": 1
+    },
+    "minimumRecipeSamples": "10",
+    "minimumPhotoSamples": "3",
+    "settingsMenuVisibility": "User confirmed visible on both updated test builds",
+    "interpretation": "Operator-approved personal cost exception applies to status, purchase intent and new receipt acceptance; raw economics remains unchanged; store/owner and Sandbox checks are independent",
+    "sandboxPurchasesAllowed": false,
+    "configuredUsdKrw": 1500,
+    "currentRecipeModel": "gpt-5.4-mini",
+    "currentPhotoModel": "gpt-5.6-luna",
+    "flagsChanged": false,
+    "userDataOrRawCostsReturned": false
+  },
+  "appDevicePriceQa": {
+    "confirmedAt": "2026-10-10T12:16:01.105568+00:00",
+    "evidenceSource": "User report after requested complete app restart and Jango Plus screen check",
+    "userReply": "두 기기 모두 가격·가입 버튼 표시",
+    "iPhonePriceAndJoinButtonVisible": true,
+    "galaxyPriceAndJoinButtonVisible": true,
+    "requestedPricesKrw": {
+      "monthly": 4900,
+      "yearly": 39000
+    },
+    "paymentOrRestorePressedByAgent": false,
+    "realPurchaseRestoreLifecycleVerified": false,
+    "state": "Passed display check per user; purchase and restoration untested"
+  },
+  "realPurchaseRestoreQaScope": "Monthly sandbox purchase and restoration only; full subscription lifecycle matrix not qualified",
+  "currentState": {
+    "dataAsOf": "2026-10-10T14:08:11.656909+00:00",
+    "record": "final-release-submission.json",
+    "apiDeployment": {
+      "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-10T13:25:35.591Z"
+    },
+    "sandboxPurchasesAllowedTemporarily": true,
+    "disableSandboxBeforePublicRelease": true,
+    "storeReviewSubmitted": true,
+    "publicReleasePerformed": false,
+    "originalActivationSnapshotRetained": true
+  },
+  "monthlySandboxQA": {
+    "record": "final-release-submission.json",
+    "passed": true,
+    "userReply": "\"장고 플러스가 시작됐어요\", 플러스 이용중도 표시됨."
+  }
+}

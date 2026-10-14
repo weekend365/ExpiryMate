@@ -8,7 +8,7 @@
       "android"
     ],
     "scheme": "expirymate",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "orientation": "default",
     "userInterfaceStyle": "light",
     "backgroundColor": "#FDF8F2",
@@ -76,11 +76,26 @@
           "ios": {
             "deploymentTarget": "16.4",
             "extraPods": [
-              { "name": "GoogleDataTransport", "version": "= 10.1.0" },
-              { "name": "GoogleUtilities/Environment", "version": "= 8.1.2" },
-              { "name": "GoogleUtilities/Logger", "version": "= 8.1.2" },
-              { "name": "GoogleUtilities/Privacy", "version": "= 8.1.2" },
-              { "name": "GoogleUtilities/UserDefaults", "version": "= 8.1.2" }
+              {
+                "name": "GoogleDataTransport",
+                "version": "= 10.1.0"
+              },
+              {
+                "name": "GoogleUtilities/Environment",
+                "version": "= 8.1.2"
+              },
+              {
+                "name": "GoogleUtilities/Logger",
+                "version": "= 8.1.2"
+              },
+              {
+                "name": "GoogleUtilities/Privacy",
+                "version": "= 8.1.2"
+              },
+              {
+                "name": "GoogleUtilities/UserDefaults",
+                "version": "= 8.1.2"
+              }
             ]
           },
           "android": {
@@ -200,6 +215,14 @@
           },
           {
             "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePhotosorVideos",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
+          },
+          {
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePurchaseHistory",
             "NSPrivacyCollectedDataTypeLinked": true,
             "NSPrivacyCollectedDataTypeTracking": false,
             "NSPrivacyCollectedDataTypePurposes": [

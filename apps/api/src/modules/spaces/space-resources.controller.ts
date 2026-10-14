@@ -15,7 +15,6 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { memoryStorage } from "multer";
 import { InventorySpaceRole } from "@prisma/client";
 import {
   batchConsumeInventoryItemsBodySchema,
@@ -39,6 +38,7 @@ import {
   type UpdateUserStorageLocationBody,
 } from "@expirymate/shared";
 import { ZodValidationPipe } from "../../common/zod-validation.pipe";
+import { photoUploadOptions } from "../../common/photo-upload-options";
 import { CurrentOwnerKey } from "../auth/current-owner-key.decorator";
 import { RegisteredGuard } from "../auth/registered.guard";
 import { DashboardService } from "../dashboard/dashboard.service";
@@ -128,10 +128,7 @@ export class SpaceInventoryController {
 
   @Post("parse-photo")
   @UseInterceptors(
-    FileInterceptor("image", {
-      storage: memoryStorage(),
-      limits: { fileSize: 4 * 1024 * 1024 },
-    }),
+    FileInterceptor("image", photoUploadOptions),
   )
   async parsePhoto(
     @Param("spaceId") spaceId: string,

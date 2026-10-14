@@ -2,14 +2,24 @@ import { describe, expect, it, vi } from "vitest";
 import { ExpirySource } from "@expirymate/shared";
 import { getRegistrationCompletionNotices } from "./registration-completion-notices";
 
-describe("registration completion decorations", () => {
-  it("keeps absent saved data undecorated", () => {
+describe("registration completion notices", () => {
+  it("keeps the fallback saved-item notice when saved data is absent", () => {
     const notices = getRegistrationCompletionNotices({ latestItem: null, sessionCount: 0, onRecommendations: vi.fn() });
     expect(notices).toHaveLength(1);
-    expect(notices[0]?.mascotDecoration).toBeUndefined();
+    expect(notices[0]).toMatchObject({ id: "put-away", mood: "happy", message: "잘 넣어뒀어요" });
   });
 
-  it("keeps recommendation/reward order and decorates the saved-item notice only", () => {
+  it("keeps a single saved-item notice without recommendation or reward prompts", () => {
+    const notices = getRegistrationCompletionNotices({
+      latestItem: { displayName: "토마토", expiryDate: null, expirySource: ExpirySource.UNKNOWN },
+      sessionCount: 1,
+      onRecommendations: vi.fn(),
+    });
+    expect(notices).toHaveLength(1);
+    expect(notices[0]).toMatchObject({ id: "put-away", mood: "happy", message: "토마토를 넣었어요" });
+  });
+
+  it("keeps recommendation/reward order, copy and the recommendation action", () => {
     const onRecommendations = vi.fn();
     const notices = getRegistrationCompletionNotices({
       latestItem: { displayName: "토마토", expiryDate: null, expirySource: ExpirySource.UNKNOWN },
@@ -18,7 +28,7 @@ describe("registration completion decorations", () => {
       onRecommendations,
     });
     expect(notices.map(notice => notice.id)).toEqual(["recipe-recommend", "barcode-reward", "put-away"]);
-    expect(notices.filter(notice => notice.mascotDecoration).map(notice => notice.id)).toEqual(["put-away"]);
+    expect(notices[2]?.message).toBe("토마토를 넣었어요");
     expect(notices[2]?.supportingMessage).toBe("기한은 모름으로 두었어요. 상태를 살펴보며 사용해 주세요.");
     expect(onRecommendations).not.toHaveBeenCalled();
     notices[0]?.onPress?.();

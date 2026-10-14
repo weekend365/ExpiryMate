@@ -1,5 +1,6 @@
 import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
 import { expandedMonetizationOffersEnabled } from "./monetization-offer-mode";
+import type { UnitEconomicsAvailability } from "./unit-economics-guardrail";
 
 /**
  * Controls whether *new* personal Plus checkouts are offered and accepted.
@@ -9,6 +10,21 @@ import { expandedMonetizationOffersEnabled } from "./monetization-offer-mode";
  */
 export function subscriptionSalesEnabled() {
   return process.env.SUBSCRIPTIONS_ENABLED?.trim().toLowerCase() === "true";
+}
+
+/**
+ * An explicitly approved operator exception may open personal Plus sales
+ * without changing the measured economics or any usage/other-offer guardrails.
+ * Unknown or missing modes keep the cost requirement; the sales stop wins.
+ */
+export function personalSubscriptionSalesAllowed(
+  economics: Pick<UnitEconomicsAvailability, "subscriptions">,
+) {
+  return (
+    subscriptionSalesEnabled() &&
+    (economics.subscriptions.allowed ||
+      process.env.SUBSCRIPTION_COST_GATE_MODE?.trim() === "operator_override")
+  );
 }
 
 /**

@@ -43,7 +43,7 @@ import { recordRevenueEvent } from "./revenue-ledger";
 import { isStableMonetizationRolloutEnabled } from "./monetization-rollout";
 import {
   householdSubscriptionSalesEnabled,
-  subscriptionSalesEnabled,
+  personalSubscriptionSalesAllowed,
 } from "./subscription-sales-policy";
 import { getUnitEconomicsAvailability } from "./unit-economics-guardrail";
 
@@ -685,7 +685,7 @@ export class MonetizationService {
     // always apply so pausing sales never strips benefits users already paid for.
     const economicsAvailability = await getUnitEconomicsAvailability(db, now);
     const subscriptionsEnabled =
-      subscriptionSalesEnabled() && economicsAvailability.subscriptions.allowed;
+      personalSubscriptionSalesAllowed(economicsAvailability);
     const rewardedAdsEnabled =
       isEnabled("REWARDED_ADS_ENABLED") &&
       economicsAvailability.rewardedAds.allowed;

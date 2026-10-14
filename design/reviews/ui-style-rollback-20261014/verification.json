@@ -1,0 +1,2150 @@
+{
+  "date": "2026-10-14",
+  "status": "implemented-local-not-deployed",
+  "baselineCommit": "3f19b077b13d4827bb6ab88fe2b93315016989c1",
+  "reversedDecorationCommits": [
+    "c0570840677cee9aa4bb28fdf2cdf48f4fc3a1b2",
+    "3d6a854a4f9d205413cae3f3892ec24335b712b1"
+  ],
+  "method": "actual HomeScreen and shared/feature components in offline React Native Web fixture; frozen before/after bundles; Chrome CUA; synthetic data; stationary motion; fixed safe area and projected fontScale; no API/account/purchase/persistence calls",
+  "cases": [
+    {
+      "kind": "home",
+      "state": "calm",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "d93363d33d4ec060ec67ddc557366016424944e6c23c4e4db4873723e155abf9",
+          "after": "d93363d33d4ec060ec67ddc557366016424944e6c23c4e4db4873723e155abf9"
+        },
+        "controls": {
+          "before": "b2224c4b17aa7b5a710c0634895c7008c856165fd756263b0e82c87219e23c7c",
+          "after": "b2224c4b17aa7b5a710c0634895c7008c856165fd756263b0e82c87219e23c7c"
+        },
+        "images": {
+          "before": "58993da302a4166edfa04171d6495b02b2782b5b8401e51cffdf41c48bc79449",
+          "after": "58993da302a4166edfa04171d6495b02b2782b5b8401e51cffdf41c48bc79449"
+        },
+        "accessibility": {
+          "before": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c",
+          "after": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c"
+        },
+        "scrolling": {
+          "before": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a",
+          "after": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a"
+        },
+        "hero": {
+          "before": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25",
+          "after": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "warning",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "5c524af8a5b2a0a26c2f5a06a5d72e03b6dc2d9624507833c7aaf8319f4ed240",
+          "after": "5c524af8a5b2a0a26c2f5a06a5d72e03b6dc2d9624507833c7aaf8319f4ed240"
+        },
+        "controls": {
+          "before": "f5855c528ed57b40e7a82cbdf5dbbd76a80aa01c276df5d675ce8c5d86e98dd3",
+          "after": "f5855c528ed57b40e7a82cbdf5dbbd76a80aa01c276df5d675ce8c5d86e98dd3"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38",
+          "after": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38"
+        },
+        "scrolling": {
+          "before": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a",
+          "after": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a"
+        },
+        "hero": {
+          "before": "42aeb1d2769106ec449b5ee1a2cf5568a0e3a0cb39e566118a129910cb382339",
+          "after": "42aeb1d2769106ec449b5ee1a2cf5568a0e3a0cb39e566118a129910cb382339"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "expired",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "96b69ee7df2995885080614771f60bea1bbb26b305844b35362993e53601cfa1",
+          "after": "96b69ee7df2995885080614771f60bea1bbb26b305844b35362993e53601cfa1"
+        },
+        "controls": {
+          "before": "f8ed90de4e0152908b1d4f2f5a3f676a8bca572bf718b538be2e6ddfa3b9ce59",
+          "after": "f8ed90de4e0152908b1d4f2f5a3f676a8bca572bf718b538be2e6ddfa3b9ce59"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "6e93b185de866a814ab5a1ab2a2a984dc770e937f81f9a999952f12c18e47f30",
+          "after": "6e93b185de866a814ab5a1ab2a2a984dc770e937f81f9a999952f12c18e47f30"
+        },
+        "scrolling": {
+          "before": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a",
+          "after": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a"
+        },
+        "hero": {
+          "before": "5d003a6cd1ad74cab922282eaa1d16584664a828c523c6021d054c6c509f88db",
+          "after": "5d003a6cd1ad74cab922282eaa1d16584664a828c523c6021d054c6c509f88db"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "empty",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "4fc08b808699931df950d7b58f64cd607d373b4be58af582fa5869da0a3f43d4",
+          "after": "4fc08b808699931df950d7b58f64cd607d373b4be58af582fa5869da0a3f43d4"
+        },
+        "controls": {
+          "before": "185c8fae41da0029f56cac809e5157c80b7834b386ce2c5193dde4caab77b885",
+          "after": "185c8fae41da0029f56cac809e5157c80b7834b386ce2c5193dde4caab77b885"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "0702b28e7c88360462e3e3c9a6c8903d81ea2066d5d4a2918a497a098c469d01",
+          "after": "0702b28e7c88360462e3e3c9a6c8903d81ea2066d5d4a2918a497a098c469d01"
+        },
+        "scrolling": {
+          "before": "c5b4382742d1dbb3a9fd701763b6a5cb3db580c47e3243a5c08d632dc0be2e60",
+          "after": "c5b4382742d1dbb3a9fd701763b6a5cb3db580c47e3243a5c08d632dc0be2e60"
+        },
+        "hero": {
+          "before": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25",
+          "after": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "error",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "51d14a0f9b9182809487e569aefd2ba03ca46bf922a8bf50a36675eae3cb3bdf",
+          "after": "51d14a0f9b9182809487e569aefd2ba03ca46bf922a8bf50a36675eae3cb3bdf"
+        },
+        "controls": {
+          "before": "7559ddec1035cc3d02d6b75edce5cf8b23c199e1fce4aed038e27d720f6a2b76",
+          "after": "7559ddec1035cc3d02d6b75edce5cf8b23c199e1fce4aed038e27d720f6a2b76"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "31e3002bd9d9011b71041db3f1ac6a5083beeb4054198f8aee915112b0e50d85",
+          "after": "31e3002bd9d9011b71041db3f1ac6a5083beeb4054198f8aee915112b0e50d85"
+        },
+        "scrolling": {
+          "before": "3cd5e6ab1fbe7854ee151872aa2f086fb4d450471a5ae44b54d07cb0f2778d92",
+          "after": "3cd5e6ab1fbe7854ee151872aa2f086fb4d450471a5ae44b54d07cb0f2778d92"
+        },
+        "hero": {
+          "before": "5d1921c1ccda4a0506f01247310dc1b0c140a38b812af0e96923d9f4a0d8bd16",
+          "after": "5d1921c1ccda4a0506f01247310dc1b0c140a38b812af0e96923d9f4a0d8bd16"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "pending",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "4e573d1a8a9543032541bc066f4245fe60f308eee636e31b5328c6525402cbe7",
+          "after": "4e573d1a8a9543032541bc066f4245fe60f308eee636e31b5328c6525402cbe7"
+        },
+        "controls": {
+          "before": "b2224c4b17aa7b5a710c0634895c7008c856165fd756263b0e82c87219e23c7c",
+          "after": "b2224c4b17aa7b5a710c0634895c7008c856165fd756263b0e82c87219e23c7c"
+        },
+        "images": {
+          "before": "425ad59f24f5f219b9cdc697b9f8c799ca0199658522d4a9c8fc73b3041d1164",
+          "after": "425ad59f24f5f219b9cdc697b9f8c799ca0199658522d4a9c8fc73b3041d1164"
+        },
+        "accessibility": {
+          "before": "ab1c63add97bbb43c89872922429507f74d221b66762b5b8ffa4d7ba40b7d78b",
+          "after": "ab1c63add97bbb43c89872922429507f74d221b66762b5b8ffa4d7ba40b7d78b"
+        },
+        "scrolling": {
+          "before": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a",
+          "after": "1e260da683a10d7671b0543bae7b28bcbeaaf9ebaccdedb4ce9bcdf22384100a"
+        },
+        "hero": {
+          "before": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25",
+          "after": "3194a2c0a3f6f0660097efad976bb431955cce8a79cdcf1868c9104c22579c25"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "success",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "555521902ed5f3c48df05b276c65f2319601827b7de218682921df7f968051d4",
+          "after": "555521902ed5f3c48df05b276c65f2319601827b7de218682921df7f968051d4"
+        },
+        "controls": {
+          "before": "2922fff85ae7c8a611aa125027a66646a2cfc4c29b4205ae6f16b1b6f961b4c8",
+          "after": "2922fff85ae7c8a611aa125027a66646a2cfc4c29b4205ae6f16b1b6f961b4c8"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "4e1ad5c93bcbac8122bf909f98816c11c338f68d73bbff0997bd0512d50e3a93",
+          "after": "4e1ad5c93bcbac8122bf909f98816c11c338f68d73bbff0997bd0512d50e3a93"
+        },
+        "scrolling": {
+          "before": "1f1acbaac0f19936210420a4e0fad81df391ad6686355bb431c996fb3a72a37e",
+          "after": "1f1acbaac0f19936210420a4e0fad81df391ad6686355bb431c996fb3a72a37e"
+        },
+        "hero": {
+          "before": "6a6e597e815554c918a189be5f1f66fd30c139f19f551b6a3e5106da1a417366",
+          "after": "6a6e597e815554c918a189be5f1f66fd30c139f19f551b6a3e5106da1a417366"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "loading",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "4706093c9469fbcf7fa0ec4a9b60691a3b7e2683ace5ac644bef5932d8f9371c",
+          "after": "4706093c9469fbcf7fa0ec4a9b60691a3b7e2683ace5ac644bef5932d8f9371c"
+        },
+        "controls": {
+          "before": "056f1fd106904644f8f81d5ec8ca947b97913f0b9072e0b0c350c35cdda1d077",
+          "after": "056f1fd106904644f8f81d5ec8ca947b97913f0b9072e0b0c350c35cdda1d077"
+        },
+        "images": {
+          "before": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91",
+          "after": "46ac47a8884d1777025507e7b154b637c609c949c35ff456c34c5e5ae6604e91"
+        },
+        "accessibility": {
+          "before": "d7594a14d77f8474df034bcf25a3e0c666c9c66a86f1e1e0c65efa5212efa621",
+          "after": "d7594a14d77f8474df034bcf25a3e0c666c9c66a86f1e1e0c65efa5212efa621"
+        },
+        "scrolling": {
+          "before": "3cd5e6ab1fbe7854ee151872aa2f086fb4d450471a5ae44b54d07cb0f2778d92",
+          "after": "3cd5e6ab1fbe7854ee151872aa2f086fb4d450471a5ae44b54d07cb0f2778d92"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "calm",
+      "width": 320,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "b03fca90c9861d3c12eaf62ce6f7181432046c8aaefc7f630842761df80ced6d",
+          "after": "b03fca90c9861d3c12eaf62ce6f7181432046c8aaefc7f630842761df80ced6d"
+        },
+        "controls": {
+          "before": "17d585f4462693618305a78fde7165017e857c957b823267b7ea4c07698aa1fe",
+          "after": "17d585f4462693618305a78fde7165017e857c957b823267b7ea4c07698aa1fe"
+        },
+        "images": {
+          "before": "3eddc0ceed04fc4c3822f69e2edff3c86f9a2a4057dd12f63c7ad7df6102c5bb",
+          "after": "3eddc0ceed04fc4c3822f69e2edff3c86f9a2a4057dd12f63c7ad7df6102c5bb"
+        },
+        "accessibility": {
+          "before": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c",
+          "after": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c"
+        },
+        "scrolling": {
+          "before": "fc93f6cd09408d7830ef64ac2fbe62e62725bbf0097f021cc1d57926298d521a",
+          "after": "fc93f6cd09408d7830ef64ac2fbe62e62725bbf0097f021cc1d57926298d521a"
+        },
+        "hero": {
+          "before": "0d6e3c5530151cfbdad79eb5b807a29aa550948e9f70fd639c9b9758d37dd7ac",
+          "after": "0d6e3c5530151cfbdad79eb5b807a29aa550948e9f70fd639c9b9758d37dd7ac"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "calm",
+      "width": 360,
+      "scale": 1.3,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "e55581f24a29cecaf5bc44f6f1c31f9f6def6fb4a724f0ce3547f8b5b64b38b5",
+          "after": "e55581f24a29cecaf5bc44f6f1c31f9f6def6fb4a724f0ce3547f8b5b64b38b5"
+        },
+        "controls": {
+          "before": "9c4cf345cfcbae869871791c933ae4d7976f838671f18633baeb8731dc78b542",
+          "after": "9c4cf345cfcbae869871791c933ae4d7976f838671f18633baeb8731dc78b542"
+        },
+        "images": {
+          "before": "8046f4df1e1fa5d1eb5cfdaa79eda4442301ad66d5b554a090b328d7013adeb1",
+          "after": "8046f4df1e1fa5d1eb5cfdaa79eda4442301ad66d5b554a090b328d7013adeb1"
+        },
+        "accessibility": {
+          "before": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c",
+          "after": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c"
+        },
+        "scrolling": {
+          "before": "bc35043515ffb0fd4d9d86e3c2506ed9d4d78fc7305fcb7f3ca39f2fe2a8d97c",
+          "after": "bc35043515ffb0fd4d9d86e3c2506ed9d4d78fc7305fcb7f3ca39f2fe2a8d97c"
+        },
+        "hero": {
+          "before": "2e94f253d904cfac52be4f01b5f9529c344695bce0e3b589091f288d84ffbc84",
+          "after": "2e94f253d904cfac52be4f01b5f9529c344695bce0e3b589091f288d84ffbc84"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "warning",
+      "width": 320,
+      "scale": 1.3,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "207273026f62379d8df4b384cf737e4d73aaf0d43ba4d16ea2f3d49a8bfbb4ac",
+          "after": "207273026f62379d8df4b384cf737e4d73aaf0d43ba4d16ea2f3d49a8bfbb4ac"
+        },
+        "controls": {
+          "before": "d9f46bd86f7bb7b66ae392264ac4b090cf34a04d02e94389bbde610595f23b71",
+          "after": "d9f46bd86f7bb7b66ae392264ac4b090cf34a04d02e94389bbde610595f23b71"
+        },
+        "images": {
+          "before": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c",
+          "after": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c"
+        },
+        "accessibility": {
+          "before": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38",
+          "after": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38"
+        },
+        "scrolling": {
+          "before": "8f2ff5b37d25e031abc222129f62d41fa4a8b7fdd464efd0670650c9062e4ec1",
+          "after": "8f2ff5b37d25e031abc222129f62d41fa4a8b7fdd464efd0670650c9062e4ec1"
+        },
+        "hero": {
+          "before": "6296889dfca8c4fb8990bf74433eebc641040211222fc8cb0cb9de2ef2547dc1",
+          "after": "6296889dfca8c4fb8990bf74433eebc641040211222fc8cb0cb9de2ef2547dc1"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "warning",
+      "width": 320,
+      "scale": 2,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "c7c379fdbd7aaaa831b356a51f23cb3e87b73057713b1fa72239a456d33a771a",
+          "after": "c7c379fdbd7aaaa831b356a51f23cb3e87b73057713b1fa72239a456d33a771a"
+        },
+        "controls": {
+          "before": "38bbb9c31632c290abb4211476c8c3cc1629721bdaff24dfc2f02307a8387e5c",
+          "after": "38bbb9c31632c290abb4211476c8c3cc1629721bdaff24dfc2f02307a8387e5c"
+        },
+        "images": {
+          "before": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c",
+          "after": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c"
+        },
+        "accessibility": {
+          "before": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38",
+          "after": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38"
+        },
+        "scrolling": {
+          "before": "a7da7cf559c88fe06828f296638de65dc63b08f8838cba9f691167211c8ed596",
+          "after": "a7da7cf559c88fe06828f296638de65dc63b08f8838cba9f691167211c8ed596"
+        },
+        "hero": {
+          "before": "c1b3d90663b23cf4e7ec8f0493e8e32133ed93019d7ab3f58bc5675da73aea65",
+          "after": "c1b3d90663b23cf4e7ec8f0493e8e32133ed93019d7ab3f58bc5675da73aea65"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "expired",
+      "width": 320,
+      "scale": 2,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "4e8c6d27ae9ad517b48efa76af3f0d264fc2789a1fd80b79aac2f90c1f93daf4",
+          "after": "4e8c6d27ae9ad517b48efa76af3f0d264fc2789a1fd80b79aac2f90c1f93daf4"
+        },
+        "controls": {
+          "before": "611a7e78c6dbd3e79abb777be58c4e1829a5815d96d465a0fa47072f8ac5e895",
+          "after": "611a7e78c6dbd3e79abb777be58c4e1829a5815d96d465a0fa47072f8ac5e895"
+        },
+        "images": {
+          "before": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c",
+          "after": "10f2eca734623ea23ac031d6a0b1233266c4b685695ef857b664c3007fc9bf1c"
+        },
+        "accessibility": {
+          "before": "6e93b185de866a814ab5a1ab2a2a984dc770e937f81f9a999952f12c18e47f30",
+          "after": "6e93b185de866a814ab5a1ab2a2a984dc770e937f81f9a999952f12c18e47f30"
+        },
+        "scrolling": {
+          "before": "a7da7cf559c88fe06828f296638de65dc63b08f8838cba9f691167211c8ed596",
+          "after": "a7da7cf559c88fe06828f296638de65dc63b08f8838cba9f691167211c8ed596"
+        },
+        "hero": {
+          "before": "cc17afbfe6d7f7bf47831d1c3fcb18285b89dc94bc4bcbcbd076b3632946e989",
+          "after": "cc17afbfe6d7f7bf47831d1c3fcb18285b89dc94bc4bcbcbd076b3632946e989"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "calm",
+      "width": 768,
+      "scale": 1,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "d2b57b980c109c728a438ed6fc302a4107af6ac7768d201f02b4990f5f3bccbd",
+          "after": "d2b57b980c109c728a438ed6fc302a4107af6ac7768d201f02b4990f5f3bccbd"
+        },
+        "controls": {
+          "before": "b059812d56f8fc5ea6edf295d144c8459d6e533a070383e94bd67019818f2543",
+          "after": "b059812d56f8fc5ea6edf295d144c8459d6e533a070383e94bd67019818f2543"
+        },
+        "images": {
+          "before": "34c5b209d0cd6243ebb6020be84dd3ce5efdc8d3d6220f1cc6846afbabc43140",
+          "after": "34c5b209d0cd6243ebb6020be84dd3ce5efdc8d3d6220f1cc6846afbabc43140"
+        },
+        "accessibility": {
+          "before": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c",
+          "after": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c"
+        },
+        "scrolling": {
+          "before": "61b9fa8c04c0cd1cd6d60959e45a2a809b7e083c0fea481a9ff12e172c11606b",
+          "after": "61b9fa8c04c0cd1cd6d60959e45a2a809b7e083c0fea481a9ff12e172c11606b"
+        },
+        "hero": {
+          "before": "4961fc0a1bd5f2163bd5811d0b5916de4e6f13e445d2815dbbe0f6cc19f57a1b",
+          "after": "4961fc0a1bd5f2163bd5811d0b5916de4e6f13e445d2815dbbe0f6cc19f57a1b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "warning",
+      "width": 768,
+      "scale": 1.3,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "57b634e985a8e683f30cc5c00af2117e3f97ab51639bac87014938196a35f996",
+          "after": "57b634e985a8e683f30cc5c00af2117e3f97ab51639bac87014938196a35f996"
+        },
+        "controls": {
+          "before": "b2f65d0ad737f0408dd8dbe7c357e32f113eb2d4b268d7b751e41f9129c3e8a7",
+          "after": "b2f65d0ad737f0408dd8dbe7c357e32f113eb2d4b268d7b751e41f9129c3e8a7"
+        },
+        "images": {
+          "before": "c7063dd9129831341cd66c31b66aabdd3a5cc25e0d95c6f2219dc1c54979a7d3",
+          "after": "c7063dd9129831341cd66c31b66aabdd3a5cc25e0d95c6f2219dc1c54979a7d3"
+        },
+        "accessibility": {
+          "before": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38",
+          "after": "4f6ad7b1757002d035de25b81308be70782489293192181c5caff33595d25f38"
+        },
+        "scrolling": {
+          "before": "b1edb3f2eb3e492a5fc7f366a27e62e3296d60c4725f3a4e1f3191ebdd688190",
+          "after": "b1edb3f2eb3e492a5fc7f366a27e62e3296d60c4725f3a4e1f3191ebdd688190"
+        },
+        "hero": {
+          "before": "b510dc9b87583f947052df6b7cd9977f91ed2f6d32018883b92914d13ec976f7",
+          "after": "b510dc9b87583f947052df6b7cd9977f91ed2f6d32018883b92914d13ec976f7"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "home",
+      "state": "calm",
+      "width": 768,
+      "scale": 2,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "ec5c5dea189267fdfc5cfc8da3bad755e40bdbd91e15e71bd68f8c82c22c6342",
+          "after": "ec5c5dea189267fdfc5cfc8da3bad755e40bdbd91e15e71bd68f8c82c22c6342"
+        },
+        "controls": {
+          "before": "5298951bf248f5be004004569f9e29edfc0b627158a4d26585348baedcbbd780",
+          "after": "5298951bf248f5be004004569f9e29edfc0b627158a4d26585348baedcbbd780"
+        },
+        "images": {
+          "before": "514b1020490ca7ada36510a7d65f05f7489fb375b9e0856ba96ceff0ca919a66",
+          "after": "514b1020490ca7ada36510a7d65f05f7489fb375b9e0856ba96ceff0ca919a66"
+        },
+        "accessibility": {
+          "before": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c",
+          "after": "cd8f18d929f8137bd55990ac612df5023a95b5989343e0fd3850b601542d6a7c"
+        },
+        "scrolling": {
+          "before": "94e540f86ba5cd0de220ed3a8d297d0b53be9ce31cd4d220748cec0be7214647",
+          "after": "94e540f86ba5cd0de220ed3a8d297d0b53be9ce31cd4d220748cec0be7214647"
+        },
+        "hero": {
+          "before": "e3a75d734f6df7ae29bc87312ed76530c9651f00e02e9c996be290dc5289a852",
+          "after": "e3a75d734f6df7ae29bc87312ed76530c9651f00e02e9c996be290dc5289a852"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "49fce7e80cd1bb65adb102d6ba3506061aa26a7d91f6835f949cd5480a5ec3ec",
+          "after": "49fce7e80cd1bb65adb102d6ba3506061aa26a7d91f6835f949cd5480a5ec3ec"
+        },
+        "controls": {
+          "before": "19481112c34641f3d52338ce7c4c27fa21cef7d263d5f4da4528942bc4c3c859",
+          "after": "19481112c34641f3d52338ce7c4c27fa21cef7d263d5f4da4528942bc4c3c859"
+        },
+        "images": {
+          "before": "be0427333858315e8281bb3b2553dc41c0ce51913b717a5e521f3b3ed11189a4",
+          "after": "be0427333858315e8281bb3b2553dc41c0ce51913b717a5e521f3b3ed11189a4"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-filtered",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "e93280d9b1dfb7f8a2851a73bf042e0e02ab84cffae24a51482dc652032df936",
+          "after": "e93280d9b1dfb7f8a2851a73bf042e0e02ab84cffae24a51482dc652032df936"
+        },
+        "controls": {
+          "before": "df7b0cbe1db0a9fe9cd0d9927a2e50000b89b28a30a2f22e0bc8098dfd446aa2",
+          "after": "df7b0cbe1db0a9fe9cd0d9927a2e50000b89b28a30a2f22e0bc8098dfd446aa2"
+        },
+        "images": {
+          "before": "881183d248fa1956ada3ce9aa2ba21ce9d97667d512f67470352e7582f6b3da5",
+          "after": "881183d248fa1956ada3ce9aa2ba21ce9d97667d512f67470352e7582f6b3da5"
+        },
+        "accessibility": {
+          "before": "304da2a08515f5b4af057dd2549812deb5eb9c5080c94259310088a1090be2f5",
+          "after": "304da2a08515f5b4af057dd2549812deb5eb9c5080c94259310088a1090be2f5"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-loading",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "c9f34a4767e90b2964c412022ea432691b23754a78ca21c7be747a3a1075f60c",
+          "after": "c9f34a4767e90b2964c412022ea432691b23754a78ca21c7be747a3a1075f60c"
+        },
+        "controls": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "images": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "accessibility": {
+          "before": "d7b93413cfe63e21680a34bbf3211a411a800b8a01cc54addf7b14aaf033fe91",
+          "after": "d7b93413cfe63e21680a34bbf3211a411a800b8a01cc54addf7b14aaf033fe91"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-error",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "7e3b945ed92df72bb26ef8f02d3b1d126bd74ea174040a35497f9f47ee1e751b",
+          "after": "7e3b945ed92df72bb26ef8f02d3b1d126bd74ea174040a35497f9f47ee1e751b"
+        },
+        "controls": {
+          "before": "083252af793655468a52bcda0929a321bad45d7ee22aa3544bdcb191e17a1339",
+          "after": "083252af793655468a52bcda0929a321bad45d7ee22aa3544bdcb191e17a1339"
+        },
+        "images": {
+          "before": "78f86929adf15d41dafae2b210ce6e88bbd0efc53793dc775bfc6bf934c459fd",
+          "after": "78f86929adf15d41dafae2b210ce6e88bbd0efc53793dc775bfc6bf934c459fd"
+        },
+        "accessibility": {
+          "before": "c15c603af83325bfa9b98e2dad14946dc303aeeb5b955666905792d7af0228fe",
+          "after": "c15c603af83325bfa9b98e2dad14946dc303aeeb5b955666905792d7af0228fe"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-refresh-error",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "8d716e860519bdad5bdaabf3a7a3cf8079bac215e5226045e59c1788dedfec37",
+          "after": "8d716e860519bdad5bdaabf3a7a3cf8079bac215e5226045e59c1788dedfec37"
+        },
+        "controls": {
+          "before": "138a3b20460b3fdf5646dfac9a0e616c07b94b4fe561667b662d15a16af9a5e1",
+          "after": "138a3b20460b3fdf5646dfac9a0e616c07b94b4fe561667b662d15a16af9a5e1"
+        },
+        "images": {
+          "before": "be0427333858315e8281bb3b2553dc41c0ce51913b717a5e521f3b3ed11189a4",
+          "after": "be0427333858315e8281bb3b2553dc41c0ce51913b717a5e521f3b3ed11189a4"
+        },
+        "accessibility": {
+          "before": "758bc35abdc3e43bb37857e4a716fa776529560dac032f02f02bbb0118579d47",
+          "after": "758bc35abdc3e43bb37857e4a716fa776529560dac032f02f02bbb0118579d47"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-calm",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "633b109cfbb085d9ef1dbb8202c945f8e9322a5647ae406df3107c21485bccf2",
+          "after": "633b109cfbb085d9ef1dbb8202c945f8e9322a5647ae406df3107c21485bccf2"
+        },
+        "controls": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "images": {
+          "before": "1ca9d6c5b6d6ce085747a0c5c8a7c040050701fac36f631a2f2a01a1955ad476",
+          "after": "1ca9d6c5b6d6ce085747a0c5c8a7c040050701fac36f631a2f2a01a1955ad476"
+        },
+        "accessibility": {
+          "before": "522513961a82e9f9873477114f96530b412178eeae4dcd1115b3585bc9d09ab2",
+          "after": "522513961a82e9f9873477114f96530b412178eeae4dcd1115b3585bc9d09ab2"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-done",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "7940895024a9dbf3fc0d85ac3b2a8d81c179bfb4b746536c8c9b742015783290",
+          "after": "7940895024a9dbf3fc0d85ac3b2a8d81c179bfb4b746536c8c9b742015783290"
+        },
+        "controls": {
+          "before": "16ab140238020f7b840396c13f847f5e2bb962de9e7c34678ed96c2d8a2f5aaf",
+          "after": "16ab140238020f7b840396c13f847f5e2bb962de9e7c34678ed96c2d8a2f5aaf"
+        },
+        "images": {
+          "before": "95f0aef2a43aa11a9ccdb8b985294dd8616fcb4f6e0152ae547201c6911d53db",
+          "after": "95f0aef2a43aa11a9ccdb8b985294dd8616fcb4f6e0152ae547201c6911d53db"
+        },
+        "accessibility": {
+          "before": "8ed63d0617bbd9cf7fcdf6eedbec6bada6fbb7816a0878e7790812d7cdfaa160",
+          "after": "8ed63d0617bbd9cf7fcdf6eedbec6bada6fbb7816a0878e7790812d7cdfaa160"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "c5015bb9b15e21dff723e13e8446c0a176e5f2fc01f3404cb140ebe128da3110",
+          "after": "c5015bb9b15e21dff723e13e8446c0a176e5f2fc01f3404cb140ebe128da3110"
+        },
+        "controls": {
+          "before": "453877c56e3327ecbfc295aae46cc3bb4ae8685ba1ef1b18cf2f6bf30b702dab",
+          "after": "453877c56e3327ecbfc295aae46cc3bb4ae8685ba1ef1b18cf2f6bf30b702dab"
+        },
+        "images": {
+          "before": "0aecb6b764b655b62e3948945b392b4f64799d2df14f18ad03ebd0884d817128",
+          "after": "0aecb6b764b655b62e3948945b392b4f64799d2df14f18ad03ebd0884d817128"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "8ef898954ccb8a526e246b6c0ac4e372ed4eeacd4e42757933f9b8e2602fea80",
+          "after": "8ef898954ccb8a526e246b6c0ac4e372ed4eeacd4e42757933f9b8e2602fea80"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-pending",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "8ff1d85b5deb465fcf9ef2b79540d4417df99497f8ac24980e9422e9701b04c8",
+          "after": "8ff1d85b5deb465fcf9ef2b79540d4417df99497f8ac24980e9422e9701b04c8"
+        },
+        "controls": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "images": {
+          "before": "5c6eba2f0355c34651772b7ab53f1ff69db219537ff023afe158b985afdd1616",
+          "after": "5c6eba2f0355c34651772b7ab53f1ff69db219537ff023afe158b985afdd1616"
+        },
+        "accessibility": {
+          "before": "c121ffb0ddf86d4c5410e53d8da28251fa0692db51d544c6923c875497c5c9fb",
+          "after": "c121ffb0ddf86d4c5410e53d8da28251fa0692db51d544c6923c875497c5c9fb"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-error",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "afa5245855af54b978612085207607022b143715be046608a3f93147f156e673",
+          "after": "afa5245855af54b978612085207607022b143715be046608a3f93147f156e673"
+        },
+        "controls": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "images": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "accessibility": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "home-calm",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "26afe836019d6214280f40aa15a0a3e73dfc69eecee4b39db915477d729cbf5a",
+          "after": "26afe836019d6214280f40aa15a0a3e73dfc69eecee4b39db915477d729cbf5a"
+        },
+        "controls": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "images": {
+          "before": "674408e68dd97db3d0fa91c1a5120e543f4ed41a35892c673f784f73f2b75ba2",
+          "after": "674408e68dd97db3d0fa91c1a5120e543f4ed41a35892c673f784f73f2b75ba2"
+        },
+        "accessibility": {
+          "before": "d8103f1a3dd17516de07988a322cb5d6a55403c42d6427f37792b26877861372",
+          "after": "d8103f1a3dd17516de07988a322cb5d6a55403c42d6427f37792b26877861372"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "76871de76846734de39fc0c65252949c0ef903b46990c04a09ea62ce37394bea",
+          "after": "76871de76846734de39fc0c65252949c0ef903b46990c04a09ea62ce37394bea"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "home-warning",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "96de68ad0f43321f8f5554b2336b8e445a3d50911523877a40ab6b7d60e88c21",
+          "after": "96de68ad0f43321f8f5554b2336b8e445a3d50911523877a40ab6b7d60e88c21"
+        },
+        "controls": {
+          "before": "548c7df502d3cfbbe143073539fa49d4ada5942868a0ebcc4344a663f5d3517e",
+          "after": "548c7df502d3cfbbe143073539fa49d4ada5942868a0ebcc4344a663f5d3517e"
+        },
+        "images": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "accessibility": {
+          "before": "39c197f9dd5ae63272b9c3c2f41ff08979490db1ceda92cf64dead6197b4332b",
+          "after": "39c197f9dd5ae63272b9c3c2f41ff08979490db1ceda92cf64dead6197b4332b"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "08fa846852580518928bb21815d1d1d7ca4ac992ab6eb7e3c3be733817bb3eb9",
+          "after": "08fa846852580518928bb21815d1d1d7ca4ac992ab6eb7e3c3be733817bb3eb9"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "home-expired",
+      "width": 360,
+      "scale": 1,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "96de68ad0f43321f8f5554b2336b8e445a3d50911523877a40ab6b7d60e88c21",
+          "after": "96de68ad0f43321f8f5554b2336b8e445a3d50911523877a40ab6b7d60e88c21"
+        },
+        "controls": {
+          "before": "48d9502d7a54eeb0bcb8cf44632a45252d7cfa3ebac71b6eb9dfecf5a465ef92",
+          "after": "48d9502d7a54eeb0bcb8cf44632a45252d7cfa3ebac71b6eb9dfecf5a465ef92"
+        },
+        "images": {
+          "before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "after": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "accessibility": {
+          "before": "4a7e6babba43a0aaa5977cb0f96affda581360cf3e921cc005fad441e0167c38",
+          "after": "4a7e6babba43a0aaa5977cb0f96affda581360cf3e921cc005fad441e0167c38"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "0256b5bbd1ce7d75201df9fcd9d7a0b9d84543f2fb95a0469e4e9bad01552c77",
+          "after": "0256b5bbd1ce7d75201df9fcd9d7a0b9d84543f2fb95a0469e4e9bad01552c77"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 320,
+      "scale": 2,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "7e2ef768be36c91e5e0dccacc22547655215d482e70d125f75e85bb1d3d93be8",
+          "after": "7e2ef768be36c91e5e0dccacc22547655215d482e70d125f75e85bb1d3d93be8"
+        },
+        "controls": {
+          "before": "90c2c7ed9d1f964c5d7ef7a21e73b406c90b31635e6c7a6652c938cfa923e985",
+          "after": "90c2c7ed9d1f964c5d7ef7a21e73b406c90b31635e6c7a6652c938cfa923e985"
+        },
+        "images": {
+          "before": "e97fd939ba5bbd55dda1a9838b8fdb9cb54c4cd21df5bdc084fb9b85930fd249",
+          "after": "e97fd939ba5bbd55dda1a9838b8fdb9cb54c4cd21df5bdc084fb9b85930fd249"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "9b53cf785eb3126801f295a164a8e78f99c127b68357176274e0b18fc4b68216",
+          "after": "9b53cf785eb3126801f295a164a8e78f99c127b68357176274e0b18fc4b68216"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 320,
+      "scale": 2,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "7e8e4e2eebb96752af85e7cb68cea081bcd7a6ae236117d6ba8dff4746dd1182",
+          "after": "7e8e4e2eebb96752af85e7cb68cea081bcd7a6ae236117d6ba8dff4746dd1182"
+        },
+        "controls": {
+          "before": "01089d08cbd70cbe279faf3d7984c1b956a8dcd921603419ec479010e9bafd53",
+          "after": "01089d08cbd70cbe279faf3d7984c1b956a8dcd921603419ec479010e9bafd53"
+        },
+        "images": {
+          "before": "a1b76e91888568e09fd52b8e425dffe9f24168a99e069ce5f4ac0d6a9e0014ff",
+          "after": "a1b76e91888568e09fd52b8e425dffe9f24168a99e069ce5f4ac0d6a9e0014ff"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "f6983a8d62d9fab28521d6cafc9c2444ed948ab319b97e456b3080f8a041a897",
+          "after": "f6983a8d62d9fab28521d6cafc9c2444ed948ab319b97e456b3080f8a041a897"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 360,
+      "scale": 1.3,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "51b9d7f61f4e5b93c053bb2b5f64b57b23259d169948cd7b5610a4ccbb6c315a",
+          "after": "51b9d7f61f4e5b93c053bb2b5f64b57b23259d169948cd7b5610a4ccbb6c315a"
+        },
+        "controls": {
+          "before": "9debd5f09267b300749fb1478415f68900c11cde08d75267aa634287e97e80d0",
+          "after": "9debd5f09267b300749fb1478415f68900c11cde08d75267aa634287e97e80d0"
+        },
+        "images": {
+          "before": "a6b1a8ed8bc93f8a9226a689372b39bf192b86096048b9007e8edbcde3c7ab14",
+          "after": "a6b1a8ed8bc93f8a9226a689372b39bf192b86096048b9007e8edbcde3c7ab14"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f",
+          "after": "6393cb635ae17c65d14161ee054624c2cab0de079b71248ae200e7640047191f"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 360,
+      "scale": 1.3,
+      "height": 780,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "f7906c6b929f13f88fac7e06b46136449c73d5693c6dd3f7c0a0f5b33b62adf4",
+          "after": "f7906c6b929f13f88fac7e06b46136449c73d5693c6dd3f7c0a0f5b33b62adf4"
+        },
+        "controls": {
+          "before": "2ea0204b26e5b494d640dad50294f7d9a52b1603eaa411acd8b87c17743219a9",
+          "after": "2ea0204b26e5b494d640dad50294f7d9a52b1603eaa411acd8b87c17743219a9"
+        },
+        "images": {
+          "before": "254d030d157e0932d106817f8a25e9d8ce736c62742ae3df23e9db967656ee64",
+          "after": "254d030d157e0932d106817f8a25e9d8ce736c62742ae3df23e9db967656ee64"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "36947732ac2afcf23c5c1c697b733b3bf1ec9382e51496ff8631b4305506ca60",
+          "after": "36947732ac2afcf23c5c1c697b733b3bf1ec9382e51496ff8631b4305506ca60"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 768,
+      "scale": 1,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "9801b7317cac282a2a92a6523e868c628705838eadc7a2f0e09fa8d1a5cb7577",
+          "after": "9801b7317cac282a2a92a6523e868c628705838eadc7a2f0e09fa8d1a5cb7577"
+        },
+        "controls": {
+          "before": "3d4f7a7c3b8981aa67ea8a6bb2e472cb7218a64cc94e6cf6694760448b6280f8",
+          "after": "3d4f7a7c3b8981aa67ea8a6bb2e472cb7218a64cc94e6cf6694760448b6280f8"
+        },
+        "images": {
+          "before": "c09ddd18c6d3183f46373a0edae1d642c2bf1d8b6ce2b6e736d9418a96d2d368",
+          "after": "c09ddd18c6d3183f46373a0edae1d642c2bf1d8b6ce2b6e736d9418a96d2d368"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb",
+          "after": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 768,
+      "scale": 1,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "56b68b6ac0e2e9a23c55faa031345dab38fb355bc8a469fe4f1fe9fb747a31eb",
+          "after": "56b68b6ac0e2e9a23c55faa031345dab38fb355bc8a469fe4f1fe9fb747a31eb"
+        },
+        "controls": {
+          "before": "3c5b1e00d48ad4040c8f915c4747e6a07d5d8d959a02441f2bcdcc82a77ad8b8",
+          "after": "3c5b1e00d48ad4040c8f915c4747e6a07d5d8d959a02441f2bcdcc82a77ad8b8"
+        },
+        "images": {
+          "before": "fc48dd544c88dc77f160f9c7eae564343a1202c48e46a7793b1f7f36aad5e5e9",
+          "after": "fc48dd544c88dc77f160f9c7eae564343a1202c48e46a7793b1f7f36aad5e5e9"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "e7eb88b101ab971b2f41b30e08395371f0ed9be1acf16afc906f1928563033e8",
+          "after": "e7eb88b101ab971b2f41b30e08395371f0ed9be1acf16afc906f1928563033e8"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 1,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 768,
+      "scale": 1.3,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "dfe4a20ff29a9179e8a3029ddea9bef84c74ed66200392e9aa8bdd43f0651f5d",
+          "after": "dfe4a20ff29a9179e8a3029ddea9bef84c74ed66200392e9aa8bdd43f0651f5d"
+        },
+        "controls": {
+          "before": "3d4f7a7c3b8981aa67ea8a6bb2e472cb7218a64cc94e6cf6694760448b6280f8",
+          "after": "3d4f7a7c3b8981aa67ea8a6bb2e472cb7218a64cc94e6cf6694760448b6280f8"
+        },
+        "images": {
+          "before": "c09ddd18c6d3183f46373a0edae1d642c2bf1d8b6ce2b6e736d9418a96d2d368",
+          "after": "c09ddd18c6d3183f46373a0edae1d642c2bf1d8b6ce2b6e736d9418a96d2d368"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb",
+          "after": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 768,
+      "scale": 1.3,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "bceab99f21673c555d2accbe70b452bf218829f3ea1b9a072030e9d5ffd89337",
+          "after": "bceab99f21673c555d2accbe70b452bf218829f3ea1b9a072030e9d5ffd89337"
+        },
+        "controls": {
+          "before": "5c05610d6907bcdcccaf845066f701d30654b35f74ec90394ef5d50ca062c13c",
+          "after": "5c05610d6907bcdcccaf845066f701d30654b35f74ec90394ef5d50ca062c13c"
+        },
+        "images": {
+          "before": "3d4f52de94b8bdf1fc6c3daf5e700c94f16f238814d3bee84cbc767c447b6a4b",
+          "after": "3d4f52de94b8bdf1fc6c3daf5e700c94f16f238814d3bee84cbc767c447b6a4b"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "c27a4048e7bb296e7236ed98d2d994931a8dd6819ae50d5ae1b278ba143f7e40",
+          "after": "c27a4048e7bb296e7236ed98d2d994931a8dd6819ae50d5ae1b278ba143f7e40"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "inventory-empty",
+      "width": 768,
+      "scale": 2,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "b00821b50bddd5bbf3f3650d6edc2c8de8237951101612fa7178344bb7459f8c",
+          "after": "b00821b50bddd5bbf3f3650d6edc2c8de8237951101612fa7178344bb7459f8c"
+        },
+        "controls": {
+          "before": "9df9be90b356cdbb6cb2c21c3f0032f9e15c18320053a8e98a28f22691b82ef9",
+          "after": "9df9be90b356cdbb6cb2c21c3f0032f9e15c18320053a8e98a28f22691b82ef9"
+        },
+        "images": {
+          "before": "61218fa453ac5abe0e1061cdeb2c837bbce0c8b820034d2cd86bb3cfdb073f4d",
+          "after": "61218fa453ac5abe0e1061cdeb2c837bbce0c8b820034d2cd86bb3cfdb073f4d"
+        },
+        "accessibility": {
+          "before": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df",
+          "after": "916163de0d8b12fc58c1ef7c096c78cc163d7d71b0083f43e200736aaf2c66df"
+        },
+        "scrolling": {
+          "before": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb",
+          "after": "aa02d8a76b1c6939f6ec9874a4b31a335d54df6b438dc7e632732a12fa1a6ccb"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    },
+    {
+      "kind": "scenes",
+      "state": "registration-multiple",
+      "width": 768,
+      "scale": 2,
+      "height": 1024,
+      "preservedFieldHashes": {
+        "text": {
+          "before": "ed6a2d3a5956333f7c2734f88e824e0c32d66e6b562a6023c90a0e0e71be0453",
+          "after": "ed6a2d3a5956333f7c2734f88e824e0c32d66e6b562a6023c90a0e0e71be0453"
+        },
+        "controls": {
+          "before": "1c7be66a5856b9d45a709b5e19c8213a668d2d5a21f6a86babc7fb44f71dbd0c",
+          "after": "1c7be66a5856b9d45a709b5e19c8213a668d2d5a21f6a86babc7fb44f71dbd0c"
+        },
+        "images": {
+          "before": "47ef0a83720022d1755a2bbe02be249719e13fec383ec393a6561f2cc8d20a48",
+          "after": "47ef0a83720022d1755a2bbe02be249719e13fec383ec393a6561f2cc8d20a48"
+        },
+        "accessibility": {
+          "before": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a",
+          "after": "35d4bec7ea16ccd840a4e3a3f13ac27fccb50f1e68c2ba416b26227e8d1c6a6a"
+        },
+        "scrolling": {
+          "before": "fbebc68388a752a6e9b39c9488020d8a63e4cef1d0979fbf14a26155b3d32194",
+          "after": "fbebc68388a752a6e9b39c9488020d8a63e4cef1d0979fbf14a26155b3d32194"
+        },
+        "hero": {
+          "before": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "after": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      },
+      "beforeDecorationMasks": 0,
+      "afterDecorationMasks": 0
+    }
+  ],
+  "captures": [
+    {
+      "file": "screens/home-warning-360-font-1.png",
+      "sha256": "e9100e2cfe4c63c69b7fdb004770fe1eb7b24139485ef3cb1d63ece733f2cb1d",
+      "originalViewport": [
+        360,
+        780
+      ],
+      "crop": [
+        0,
+        0,
+        360,
+        780
+      ],
+      "beforeCaptureSHA256": "b9f493dadfe9911995ece58a87a17893815fcc072cd63d839d28373e39ca2293",
+      "afterCaptureSHA256": "59822a436eef94b948894c55f8021a80aab08e0d9b240a87b69e16bb8946ddd3",
+      "assembly": "lossless side-by-side, same crop and 40px explanatory header; no retouching"
+    },
+    {
+      "file": "screens/home-warning-320-font-2.png",
+      "sha256": "5ced87cd420e4588165e3f06695b5c2e66832dbde4aa360a9006b139fae8edad",
+      "originalViewport": [
+        320,
+        780
+      ],
+      "crop": [
+        0,
+        0,
+        320,
+        780
+      ],
+      "beforeCaptureSHA256": "f95f872f2b257b83e9061699b39b88db4ddc84ffd553a3567d92674e766b0242",
+      "afterCaptureSHA256": "cf051dd79c3dfe9a2c422f5ca3aab06a7d89d1f8b37c62a9a4f077a601d754d7",
+      "assembly": "lossless side-by-side, same crop and 40px explanatory header; no retouching"
+    },
+    {
+      "file": "screens/scenes-inventory-empty-360-font-1.png",
+      "sha256": "1e5df9c737b617be3b5801f8cf04672946e989c8d157a8322f1bac4c23e04746",
+      "originalViewport": [
+        360,
+        780
+      ],
+      "crop": [
+        0,
+        0,
+        360,
+        280
+      ],
+      "beforeCaptureSHA256": "ec6a565d7649189c8c37226b3c5555ab5a6aa5655a60e1abeadc124becc70689",
+      "afterCaptureSHA256": "ce2117f1fd037fd5366f324e37802290c9baa3432595835e67fdce9144e6a7ab",
+      "assembly": "lossless side-by-side, same crop and 40px explanatory header; no retouching"
+    },
+    {
+      "file": "screens/scenes-registration-done-360-font-1.png",
+      "sha256": "f6c490608b3672c4e325e2f1c2910ad557c878fce3da285e920f4dbbd1af9007",
+      "originalViewport": [
+        360,
+        780
+      ],
+      "crop": [
+        0,
+        0,
+        360,
+        460
+      ],
+      "beforeCaptureSHA256": "0920dcaa5e9954ad8e44440e6878c7640fbd7cf08fc350d6b945f13324320e38",
+      "afterCaptureSHA256": "0482fe11f6191a3f4c8bcad4e7c5aabf21a7756d09124c5210b02b2f79c4ce49",
+      "assembly": "lossless side-by-side, same crop and 40px explanatory header; no retouching"
+    }
+  ],
+  "pixelComparisons": [
+    {
+      "case": "home-warning-320-font-2.png",
+      "size": [
+        320,
+        780
+      ],
+      "changedBounds": [
+        15,
+        159,
+        305,
+        513
+      ],
+      "changedPixels": 17082
+    },
+    {
+      "case": "home-warning-360-font-1.png",
+      "size": [
+        360,
+        780
+      ],
+      "changedBounds": [
+        15,
+        127,
+        337,
+        273
+      ],
+      "changedPixels": 14856
+    },
+    {
+      "case": "scenes-inventory-empty-360-font-1.png",
+      "size": [
+        360,
+        780
+      ],
+      "changedBounds": [
+        104,
+        64,
+        128,
+        136
+      ],
+      "changedPixels": 653
+    },
+    {
+      "case": "scenes-registration-done-360-font-1.png",
+      "size": [
+        360,
+        780
+      ],
+      "changedBounds": [
+        111,
+        80,
+        129,
+        161
+      ],
+      "changedPixels": 760
+    },
+    {
+      "case": "scenes-registration-multiple-320-font-2.png",
+      "size": [
+        320,
+        780
+      ],
+      "changedBounds": null,
+      "changedPixels": 0
+    }
+  ],
+  "interactions": [
+    {
+      "stage": "before",
+      "scenario": "first-item",
+      "count": "검토용 동작 확인: 1회"
+    },
+    {
+      "stage": "before",
+      "scenario": "recommendation-and-finish",
+      "count": "검토용 동작 확인: 2회"
+    },
+    {
+      "stage": "before",
+      "scenario": "carousel-next",
+      "scroll": {
+        "left": 246,
+        "total": 492,
+        "width": 246
+      }
+    },
+    {
+      "stage": "before",
+      "scenario": "large-text-finish-below-fold",
+      "count": "검토용 동작 확인: 1회"
+    },
+    {
+      "stage": "after",
+      "scenario": "first-item",
+      "count": "검토용 동작 확인: 1회"
+    },
+    {
+      "stage": "after",
+      "scenario": "recommendation-and-finish",
+      "count": "검토용 동작 확인: 2회"
+    },
+    {
+      "stage": "after",
+      "scenario": "carousel-next",
+      "scroll": {
+        "left": 246,
+        "total": 492,
+        "width": 246
+      }
+    },
+    {
+      "stage": "after",
+      "scenario": "large-text-finish-below-fold",
+      "count": "검토용 동작 확인: 1회"
+    }
+  ],
+  "assetPreservation": {
+    "files": {
+      "apps/mobile/assets/backgrounds/fridge-interior-bg.png": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067",
+      "apps/mobile/assets/backgrounds/home-welcome-bg.png": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "apps/mobile/assets/backgrounds/kitchen-cooking-bg.png": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "apps/mobile/assets/backgrounds/login-welcome-bg.png": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b",
+      "apps/mobile/assets/backgrounds/shopping-preparation-bg.png": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+      "apps/mobile/assets/branding/adaptive-icon.png": "d9103dad3c26c87d81f437ce538c6a3539988a18bd5354311b40029f7fd2b909",
+      "apps/mobile/assets/branding/icon.png": "740df632d96e65c37b789a4092f85f318bc7c95bc9a47c84b07c2053768a73b8",
+      "apps/mobile/assets/branding/monochrome-icon.png": "8362bad791913b4746ee1646e1de241f3683aa3d7c48c9668685d0246f5882fc",
+      "apps/mobile/assets/branding/notification-icon-192.png": "8b3b7eca2c108c0ff7795e4f5bfdd9996ee86afe197ce041fa4947be7751a1dd",
+      "apps/mobile/assets/branding/notification-icon.png": "02c913d532799669ad3f5e343808a8c186aba1840dcd5b6d87c91decdf1d9e6b",
+      "apps/mobile/assets/branding/splash-icon.png": "c06e8e18fb21c8d33c9441240bb8fd86df799dc43cbc2bd043c1d05a9f103b0d",
+      "apps/mobile/assets/characters/jango-cooking.png": "5685f0af490def399bbba4abe9cc4432e969c08421fe80eafeb4c3883f1b38b3",
+      "apps/mobile/assets/characters/jango-empty.png": "75fc867924ee969c1e1cc29010b834a1f3bd5fd25c656091e6f6a020515d3569",
+      "apps/mobile/assets/characters/jango-happy.png": "d6bb119772529d9153e82fa58768ef23ee924d6343c79393b11522676f93a512",
+      "apps/mobile/assets/characters/jango-icon-crop.png": "40132cf95f9096895ab2e8b823db9fa443565dcdecbff5fd541bf7a6ab5ea5b9",
+      "apps/mobile/assets/characters/jango-idle.png": "40132cf95f9096895ab2e8b823db9fa443565dcdecbff5fd541bf7a6ab5ea5b9",
+      "apps/mobile/assets/characters/jango-point.png": "52707412a9c83de3f588ab5e7caa989feaee398106183007ab5798f09e58e905",
+      "apps/mobile/assets/characters/jango-speak.png": "e2a72bc33c4cd94770b637bb30c93d3063aaeee4e4045d1216b0f98dcdf69555",
+      "apps/mobile/assets/characters/jango-think.png": "c8433b7b2e208e72d8cc1bc1e389335caf1a8d4d21afe9231b3cceb28d38c81a",
+      "apps/mobile/assets/characters/jango-worry.png": "bd1bb253596fd1f576cfb22d76a552f82bfd38ad0d457d44cb99f4c5f7287f36",
+      "apps/mobile/assets/characters/runtime/full/jango-cooking.png": "04a44dd1e154f27f76a9a699de7b4dadcdc0056f3d6fc33400501cd08ade92a9",
+      "apps/mobile/assets/characters/runtime/full/jango-cooking@2x.png": "997b5e27ab4db60fa50655ad5523cdd72de2f93a3d0136f4926b518ad0f8257f",
+      "apps/mobile/assets/characters/runtime/full/jango-cooking@3x.png": "33fc5c3373ffb373c87170f968c3e0fc6cc80cd7cbbbda1a6c8b7b7509c345af",
+      "apps/mobile/assets/characters/runtime/full/jango-empty.png": "15369e5aa407e102a561a89426de4949a3571ca7e0c14eec9fcd65084a5d231e",
+      "apps/mobile/assets/characters/runtime/full/jango-empty@2x.png": "0798f58ccf25752e862e6203e140d41f9e1e5799f8a2d6670d55f55f953cf954",
+      "apps/mobile/assets/characters/runtime/full/jango-empty@3x.png": "26f2547f518676100197ef615619d1626bcd829b00de72ab8e33a698283eafc0",
+      "apps/mobile/assets/characters/runtime/full/jango-happy.png": "75ee49295c3e0efbf87462df8357a38c2d83ea9704c2de1e5e606781ee405e7c",
+      "apps/mobile/assets/characters/runtime/full/jango-happy@2x.png": "33cf1c92728810461502d16245f39ad3deb70a3eaccf400defcd297730916ad0",
+      "apps/mobile/assets/characters/runtime/full/jango-happy@3x.png": "0536635e2f32c0579b3852b34bf2a2166a43287a6df26ee58c680c56f103b62a",
+      "apps/mobile/assets/characters/runtime/full/jango-idle.png": "93afccb79b89e37ed4240f618a29c3a92587f91438a888d3ab3cc37a1cc3ed58",
+      "apps/mobile/assets/characters/runtime/full/jango-idle@2x.png": "4786adbe9aee32c5d1f361ac49e684ee6a01a0a71b00e2c745d578ba853ccccb",
+      "apps/mobile/assets/characters/runtime/full/jango-idle@3x.png": "f00ec9716fb0679c7a6a084c9acf2b2be087f7a2ea1d80a62209e60947db3640",
+      "apps/mobile/assets/characters/runtime/full/jango-point.png": "40cd5e3976f2601d0edfa4e70fe4b4a320230f9f431c9278b0eead5822f67934",
+      "apps/mobile/assets/characters/runtime/full/jango-point@2x.png": "0bb5c899abe96b53e31e6cb5790f464edc79b12367771078903afb14bd950f26",
+      "apps/mobile/assets/characters/runtime/full/jango-point@3x.png": "8fc6c3783c87c780378e0db5838baf043a83350e02525de954bd76f2f6a2f09b",
+      "apps/mobile/assets/characters/runtime/full/jango-speak.png": "7c1324c299ffca8275895b0caa29e23111f759b32c7980b206ec169940d6d299",
+      "apps/mobile/assets/characters/runtime/full/jango-speak@2x.png": "1a4acb873119984d379dfa9e47d606c951b90c842033429db28660271a538f17",
+      "apps/mobile/assets/characters/runtime/full/jango-speak@3x.png": "a7962c369279a9abdc35be38a4189ea7cc3660781d7c7405631dd4e136a073c2",
+      "apps/mobile/assets/characters/runtime/full/jango-think.png": "b327ad260bc59d5b281147747412fdab5a64257110385a0fbd08ff50b9f2d934",
+      "apps/mobile/assets/characters/runtime/full/jango-think@2x.png": "f46b18f97680fe727765e326ead2a1f4c6171e2e33e0dfc619679a82967d6caf",
+      "apps/mobile/assets/characters/runtime/full/jango-think@3x.png": "61cb6605d9eb6260f2ab649c89b61e5d1dce382cf1bb19f8d40fc16298382ec9",
+      "apps/mobile/assets/characters/runtime/full/jango-worry.png": "389c761c6d474bf4583875aaa1ea6d72d682af190bab5d98b6e0bf8a4451753e",
+      "apps/mobile/assets/characters/runtime/full/jango-worry@2x.png": "0d64d6c24795fbfa96bcfc184080bec35be104c93666c36597a9160ed149ab9d",
+      "apps/mobile/assets/characters/runtime/full/jango-worry@3x.png": "0b01781b0f6295e2cf13e6c03b9ba5ed9807c37078b54ddc5acb4a5e926f8f87",
+      "apps/mobile/assets/characters/runtime/small/jango-cooking.png": "559e49aa3dab58599d52fbc5c068f2f1c5753e7a72469174e71768f4071c7293",
+      "apps/mobile/assets/characters/runtime/small/jango-cooking@2x.png": "89ddae5f5ce6b65ec8f844b65431228f70a6c5c3202e6c1c5b4dd4c0f544c722",
+      "apps/mobile/assets/characters/runtime/small/jango-cooking@3x.png": "20c2330da0ddd687adac764d28acd1b9d15f238e2ddeebc2eae0369e5ae81133",
+      "apps/mobile/assets/characters/runtime/small/jango-empty.png": "2585270d5fbd4ba5918f5a3e8a5574af2e9b5f41dfff0fc832f9555c28ae258e",
+      "apps/mobile/assets/characters/runtime/small/jango-empty@2x.png": "adf02b03b5b17ae716ee26c6eebc32b33bdb5b5ec06a96213be966c5cddb8a90",
+      "apps/mobile/assets/characters/runtime/small/jango-empty@3x.png": "d1e568aa61c6a81f2340c5ca775287ffbc642c52c8a3ba2574288db68d271fc5",
+      "apps/mobile/assets/characters/runtime/small/jango-happy.png": "9148bc2d619d89b290b15286eb412c65fe4891f1c2146e297d0ef0dcd33ff434",
+      "apps/mobile/assets/characters/runtime/small/jango-happy@2x.png": "ee9c7b9c43897e71f5458ae08d152155dd0e656f93ed05f7315cd5ffe40ba7cf",
+      "apps/mobile/assets/characters/runtime/small/jango-happy@3x.png": "5a9a3c33cdb59c7f7c64739ea8b135527932b4aecdcc99c1f7e83d7032899c6b",
+      "apps/mobile/assets/characters/runtime/small/jango-idle.png": "07491815edc70a6d658e935ab14a8290b2fccda3a92508602aee8794a9061df8",
+      "apps/mobile/assets/characters/runtime/small/jango-idle@2x.png": "48a7d664c619094f0b4574d6cf7cccdea00098159c5d407007fea00b9b40c217",
+      "apps/mobile/assets/characters/runtime/small/jango-idle@3x.png": "508ba3ff16dc21d03e439900198aea8b6fe224d44690e7dcb9ea2dd39288cfcf",
+      "apps/mobile/assets/characters/runtime/small/jango-point.png": "9c88cba1c6308c60e65c8facecb293c1d1429109dfc8d46a99c571c121dae3a3",
+      "apps/mobile/assets/characters/runtime/small/jango-point@2x.png": "f2000959fdcad8b670460a8bae1f04eb36b11b3066b02d0511af517cecb10444",
+      "apps/mobile/assets/characters/runtime/small/jango-point@3x.png": "dd86541ab878bb86adf962a1c448921258698050743713defca42bf365e4d655",
+      "apps/mobile/assets/characters/runtime/small/jango-speak.png": "5dc0eae600cbf33fd63b6a7a691f0d511edab804d8153a5eedd9ad6340ae5e19",
+      "apps/mobile/assets/characters/runtime/small/jango-speak@2x.png": "ae2281437be1cbb78191f61c833e9a1254e14c7caf5e683b473fcb8326df5645",
+      "apps/mobile/assets/characters/runtime/small/jango-speak@3x.png": "35902e89912a4b186387839151cef2f7fb69f65e8073457017f8b8a2f02d8a24",
+      "apps/mobile/assets/characters/runtime/small/jango-think.png": "a44c9282c1fc7b03fee358229df096e6dc82ee600d5cf531b4511e1e8a180071",
+      "apps/mobile/assets/characters/runtime/small/jango-think@2x.png": "532e06f10c0fb2831a2931936242293ac0b293c52451d385769bcf161af0c85b",
+      "apps/mobile/assets/characters/runtime/small/jango-think@3x.png": "4649e0ca5ce29dd993222bc569e24d31782fbe76958142d536addd72b6b9f2b2",
+      "apps/mobile/assets/characters/runtime/small/jango-worry.png": "7625d8c28b530eced009d67b7041e6be20601ec2b4bd726854aecc19e7e85b72",
+      "apps/mobile/assets/characters/runtime/small/jango-worry@2x.png": "1db73e595f0281ec1a242a12f93aaeca76f46971d915a518db7fb68e4fca7ab5",
+      "apps/mobile/assets/characters/runtime/small/jango-worry@3x.png": "4e8265f49e09f200bea835ee43cac878d3bf17a4df21dc88588faea28e1b0101",
+      "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+      "apps/mobile/assets/fonts/Pretendard-ExtraBold.otf": "c35fe941b7568d52a96010561540e47f9d3948dfde66ba25bc1908233e0a40cd",
+      "apps/mobile/assets/fonts/Pretendard-Medium.otf": "d39e50e4bb52b4993b6a4eeb821a171254745bd824446af01e1f616b89fface0",
+      "apps/mobile/assets/fonts/Pretendard-Regular.otf": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93",
+      "apps/mobile/assets/fonts/Pretendard-SemiBold.otf": "c89bc43027dc7cde5726e96223376f8eec09302b2fc1f8147fd5b57cfc376118",
+      "apps/mobile/assets/store/google-play-feature-graphic.png": "0a7bbeeca3c648b8a693dbd8340266a7d76daefda0aa9c7d730c564883fb4d3f",
+      "apps/mobile/assets/store/jango-appstore-space-copy-ko-1242x2688.png": "d2810176d63d7df2fabdccb0bc3f824c90322db1a47064b4f9b07d52c582b5b1",
+      "design/backgrounds/fridge-interior-crayon-v1.png": "9327e58d2c122199738b706219f73ce4ec237a3c91e3f207481021afcd5a8067",
+      "design/backgrounds/home-welcome-crayon-v1.png": "45fcf31027e767b8d0fd8b3c5c42b7c635432c169a974ec20f395d5088bed1cf",
+      "design/backgrounds/kitchen-cooking-crayon-v1.png": "d6f224d7af2e2111847ddfa383bfb9836801aea4d3c048ba7f6f7c0d583df17c",
+      "design/backgrounds/login-welcome-crayon-v1.png": "e6992b8d99609c01f1648f2690e77481cd26ccf0336d5bce9137ad3f9346e30b",
+      "design/backgrounds/shopping-preparation-crayon-v1.png": "44720e9280b6657a566fe52c107829665aae00cf1022bafe7e53b5bba81e030d",
+      "design/backgrounds/shopping-preparation-v1.png": "594c088d770ab8bc98ef6308aa2a67ee34d7e2c150d0cfa5c637332f59d5d6a8",
+      "design/jango/emoticons/kakao-32/v18/artwork/01.png": "c662256cf87fe9e069b9879f73001f3b137973b4f1b44b0f033a96becb3e99fe",
+      "design/jango/emoticons/kakao-32/v18/artwork/02.png": "79c2a06bd4725029c11b4fcec7e936094ada6a10a3b791bd7337574e5e90059e",
+      "design/jango/emoticons/kakao-32/v18/artwork/03.png": "a782ac59d963f1ecc142c39f6a7e18d07de8a0f9a93ae3e36c25b070dd3a8e52",
+      "design/jango/emoticons/kakao-32/v18/artwork/04.png": "960b5727388f7fa4bd7aac7e027464972afb797073af530b1b14c856ece4015e",
+      "design/jango/emoticons/kakao-32/v18/artwork/05.png": "c669dd11d6007b8c25e873c9613f6e13d5f9772c7b3a6694fd4b2639dd9f7a47",
+      "design/jango/emoticons/kakao-32/v18/artwork/06.png": "bc28f83c19498c1e0841cd02adc327e61da2e281f39748770d8f225c9216e2ce",
+      "design/jango/emoticons/kakao-32/v18/artwork/07.png": "b5825da30a855d3c6e66607f99b6581c990855f52953c38cc4eb7324199e1db9",
+      "design/jango/emoticons/kakao-32/v18/artwork/08.png": "b3da06c6df64c4dba50564c3ad50ed4e09ace6b3adc7670f0b17dd2d2d834ce4",
+      "design/jango/emoticons/kakao-32/v18/artwork/09.png": "eb838c085e672ca5d76f1827882a13983f3be2bb14af0177959b2d00c894686a",
+      "design/jango/emoticons/kakao-32/v18/artwork/10.png": "7e61fa98950341cd92f8f73e8d494f6f3293dc533b07538dba2eb9316a59edf6",
+      "design/jango/emoticons/kakao-32/v18/artwork/11.png": "1ace72d87d6bfabd42dc21e2b76caabfe7a1b28ec724f0f4938009c61440e840",
+      "design/jango/emoticons/kakao-32/v18/artwork/12.png": "3ea3cf54d93d6df45d0b63fe1e9ad178e67a7e2c107e7631135283fd3cbd595b",
+      "design/jango/emoticons/kakao-32/v18/artwork/13.png": "93c10862cca0768c28944737f5a00edcf9b59cdd5c953ecb74cebc7e66319e9c",
+      "design/jango/emoticons/kakao-32/v18/artwork/14.png": "6cd58f664a2e4ba54fccbc9893df0472d52394a02166f2ab29947f3f74de90b6",
+      "design/jango/emoticons/kakao-32/v18/artwork/15.png": "aac007e6da1b279321319e8aa8e163217ec9b667318cda41a92109eb8027460e",
+      "design/jango/emoticons/kakao-32/v18/artwork/16.png": "985cbbee470b5267c1c74b3c4bafb4c9123d183eaf87e411f54a39dde49d45d2",
+      "design/jango/emoticons/kakao-32/v18/artwork/17.png": "353783e2de612ad786ed6f84343135dc472513a8c93288eb9291a2263b60258c",
+      "design/jango/emoticons/kakao-32/v18/artwork/18.png": "753121b4957b6f11fd5613c99a145bad68f37d9849b77390c96012f77842953d",
+      "design/jango/emoticons/kakao-32/v18/artwork/19.png": "be0f37cf55e7b7545ca2b81fb98fb4591dc90c3302638e9ddfdb36de4816044b",
+      "design/jango/emoticons/kakao-32/v18/artwork/20.png": "4f083de1083f6c37b039850f27508e513470f472c75c68b2b4db4692e12e8279",
+      "design/jango/emoticons/kakao-32/v18/artwork/21.png": "43f0433074a6549cb495c46acfab70b896208cfe7af715ae22c5bc0fafd1edcb",
+      "design/jango/emoticons/kakao-32/v18/artwork/22.png": "e63250265635f709e10621000431bb2ff6f295e2e4502756533ac2fa2baff0a5",
+      "design/jango/emoticons/kakao-32/v18/artwork/23.png": "f986e22485b0d6dd64504d646469805a9f1ef8f153dee2474044826eeae84ddd",
+      "design/jango/emoticons/kakao-32/v18/artwork/24.png": "8267493a33a0a2d882707ed04ccca5fc35254674a65cba0829b3d4468adf4a13",
+      "design/jango/emoticons/kakao-32/v18/artwork/25.png": "24d5cada2c4f9e72027c66c2a0f55bc7d04fb74979be601eefbd49f464844549",
+      "design/jango/emoticons/kakao-32/v18/artwork/26.png": "27ea839a676acd0e78650a3be0e7da2cbb055eebc62c7d343a57fbe3311ba56d",
+      "design/jango/emoticons/kakao-32/v18/artwork/27.png": "3ba2aab0ba63656fb1226531ade044019a703f3bfa6ecd1ba1bb54524ff3afc9",
+      "design/jango/emoticons/kakao-32/v18/artwork/28.png": "007a234f10959f5453c66a9106402a7421c0e952f915f4b7f159719febdda931",
+      "design/jango/emoticons/kakao-32/v18/artwork/29.png": "07dd8e62e079b9d701adb91dd6e8cce877102c88b9b614c3ba0b8a7f9a9e85a7",
+      "design/jango/emoticons/kakao-32/v18/artwork/30.png": "871a873cf10bce5c3fb755b54b9b9d8a1a3d348f8e150b00d581f167b96df7a9",
+      "design/jango/emoticons/kakao-32/v18/artwork/31.png": "02775463834ec0a6f0152fcc8957f320c70c87103b7f96c8842bf047bf7690fb",
+      "design/jango/emoticons/kakao-32/v18/artwork/32.png": "82278328988236e50174a6d5d0581a504f8ec18fabe9f9c5bd58aa99c7de831d",
+      "design/jango/emoticons/kakao-32/v18/caption-120-dark.png": "7a2e2cf4da1b6ea5138dd88f292d82ee30af383729c91632aab84c4f89ce12bc",
+      "design/jango/emoticons/kakao-32/v18/caption-120-light.png": "d381a54e02df9042eed37bac0653ea8aab297456e4b7607b406c0c132a8e8aaa",
+      "design/jango/emoticons/kakao-32/v18/caption-80-dark.png": "bd5d26d5baf79edd738ad08d4622bbda87c00aa0894f3c000d09dbff8d6f6638",
+      "design/jango/emoticons/kakao-32/v18/caption-80-light.png": "69f1a4f8a64c226ee62513fbb4d63dc064f623d2c5e536886387b7abb125aef9",
+      "design/jango/emoticons/kakao-32/v18/characters/01.png": "66cf0785245699f22975e9f664a035779f6bee6a06a107e86e180815e69c8423",
+      "design/jango/emoticons/kakao-32/v18/characters/02.png": "6f85ce7d240277a3fec0283bcf4b2191666fc9ba0272a9f4579cb8c5ed692694",
+      "design/jango/emoticons/kakao-32/v18/characters/03.png": "addab3bd8ac7f5c207710ecd6733c4b100349d86a131dfab49b163794175f3cc",
+      "design/jango/emoticons/kakao-32/v18/characters/04.png": "0b04bfef7598936241bb7ef75dd55969b1aa3fe9924e9fd8e6aba71c0a9131b0",
+      "design/jango/emoticons/kakao-32/v18/characters/05.png": "cd6c28667839f6fd8792470461d6253c8c72283e5276fc614b1e2da226492ba7",
+      "design/jango/emoticons/kakao-32/v18/characters/06.png": "16d3142829b7c4a2d3843c8433a91ab7f643fec29a3e08f11772ea188339006a",
+      "design/jango/emoticons/kakao-32/v18/characters/07.png": "6913912d25fed9c08ceb1e2ae9c7ed69cc50bd61468767487900d3f8e04e25b6",
+      "design/jango/emoticons/kakao-32/v18/characters/08.png": "da099ea12be0b3ab5dd5a2923acfd05c74074c2731500291e5db2d8df3c0ec7d",
+      "design/jango/emoticons/kakao-32/v18/characters/09.png": "ebc0cee97e87027464181629abe281a36ea801f3dbc273f9b45c4f5b09dcd360",
+      "design/jango/emoticons/kakao-32/v18/characters/10.png": "5a7785b7351222b78253c757731befbb67186b422b17b184161bc221547b7b47",
+      "design/jango/emoticons/kakao-32/v18/characters/11.png": "fe303728c1d844495d134e0ce2cab3ae54096bc111c84a6eabe5e9b550b576bf",
+      "design/jango/emoticons/kakao-32/v18/characters/12.png": "c82ed39c7c03d3b45e35d2c73c13957611510217b2d2f2d9c69ec17910c5285f",
+      "design/jango/emoticons/kakao-32/v18/characters/13.png": "de49f14cf150b23625687eb4e8550bd33b570b6b306d62d2b83c0e8ba1f1c003",
+      "design/jango/emoticons/kakao-32/v18/characters/14.png": "bfa44686a3c3c738d14269b086cab1ef89a4edc458663e42bf7130ff805d3ff2",
+      "design/jango/emoticons/kakao-32/v18/characters/15.png": "a8ddb88e53d6d4f178973c09e97b2aed4acf449632963743edec709045ca3993",
+      "design/jango/emoticons/kakao-32/v18/characters/16.png": "6d242493b2b55782eef74e5b400c25314934915d023c664d2bdcbeb9d2f2e2af",
+      "design/jango/emoticons/kakao-32/v18/characters/17.png": "e59ad233372cc418bb736032a48960c8188c0da48a8e5d115e38fe5a7816cb5c",
+      "design/jango/emoticons/kakao-32/v18/characters/18.png": "5ec0458363ad48fc504321ea2d409f7826842fd12de57226a0cf4280d87ffad2",
+      "design/jango/emoticons/kakao-32/v18/characters/19.png": "c489521e2a5085a919b27f447d96a0ae795305f9bfc84ed8ada8be223a043525",
+      "design/jango/emoticons/kakao-32/v18/characters/20.png": "c1d154e64c2abbd4a36ca2fa39483fae44bee78472ffad3c1ea34a6ca45c9bc5",
+      "design/jango/emoticons/kakao-32/v18/characters/21.png": "658e3f5635678ae0a48cf3e8e0045aa28340bbaea9297ff01317ec1c5b6e80bd",
+      "design/jango/emoticons/kakao-32/v18/characters/22.png": "6df631ab9c7d0fc45493b81ccfcd5ff31dbb8782b0183cf0e9a1b3bf260e9b88",
+      "design/jango/emoticons/kakao-32/v18/characters/23.png": "1023869b6736f15f7b062f7ead3bf1db857eb2749c87fc7eff637d953bf8c8b6",
+      "design/jango/emoticons/kakao-32/v18/characters/24.png": "94ea68e7ca4947e60227984543eee283c821986fb614c55f39fb622041e7ebfb",
+      "design/jango/emoticons/kakao-32/v18/characters/25.png": "fcab03b02698961108dbbb0a5f7bbc99770b2f1e0cf50c8cb2e2396642cf35da",
+      "design/jango/emoticons/kakao-32/v18/characters/26.png": "a4257dff5d95e36fa6ac8365eea05eb00fdd71a59680754524fadefbb63b7fd9",
+      "design/jango/emoticons/kakao-32/v18/characters/27.png": "6a0ba1bf71e9f1d09162f17e40a02e4961aa96cc06dc498b50a39552bac714de",
+      "design/jango/emoticons/kakao-32/v18/characters/28.png": "9b41a1f7c8c33605d7bf8df8c61f8244cd724139906769a85169e56825699f36",
+      "design/jango/emoticons/kakao-32/v18/characters/29.png": "50f265636e7178b1031aaf684076d4a8b7b8df79955b9fc8af1cecf25c0e117d",
+      "design/jango/emoticons/kakao-32/v18/characters/30.png": "fe7112906c89d888d347883c9623545b55d078f3511bb61b94548bed1cea98ee",
+      "design/jango/emoticons/kakao-32/v18/characters/31.png": "a87e6693dc43dde823fe8d1309bfe9290f6897cae691c7b239094ec7f2642aee",
+      "design/jango/emoticons/kakao-32/v18/characters/32.png": "82a51325fd17fbe4cbf2cad06bb17ce585dad6819a362732ca06fb74e4ccf578",
+      "design/jango/emoticons/kakao-32/v18/expression-120-dark.png": "2e58862b9fc724ce843d9fd90bc590026a068a047bb29b29f562c95c5c4f9911",
+      "design/jango/emoticons/kakao-32/v18/expression-120-light.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+      "design/jango/emoticons/kakao-32/v18/expression-80-dark.png": "e28f5e42617710a35cd6e98a991eff18e865b944ffa83c39752d7684dc1ac431",
+      "design/jango/emoticons/kakao-32/v18/expression-80-light.png": "88ac955b7979e16c91d15fb4257212e30711e65e936295a5ef8fa310fa3c59e2",
+      "design/jango/emoticons/kakao-32/v18/expression-faces.png": "b3bce2a36b913b455e72c73ccdee84c84c07c03bbfccf0116506d0b3c1419681",
+      "design/jango/emoticons/kakao-32/v18/faces/01.png": "6334e7deca87729f9de8e3968318adeeac2204b67b670480b7f75ff42fcaa6f6",
+      "design/jango/emoticons/kakao-32/v18/faces/02.png": "174129b0679d67cc363e50e69c2a2dff3e68cc1f31a12117d3962633fea44e9a",
+      "design/jango/emoticons/kakao-32/v18/faces/03.png": "805254314c52ce2d3ebbd0fdbe30f761604d71ee3dbc0dd8565d7209e89358fe",
+      "design/jango/emoticons/kakao-32/v18/faces/04.png": "1ef08a24bb11176a8ba6ae91e0d92a2cf81b4671cfa732db2c298ac9cf84ccc8",
+      "design/jango/emoticons/kakao-32/v18/faces/05.png": "08be05aac0ccf2bda51d5e50daadd5aeaa0b70407b719751750e809c44f1b868",
+      "design/jango/emoticons/kakao-32/v18/faces/06.png": "6b09930b5c3162806166e85778f895bdce3a4d676ec2996626dd5424befefaf8",
+      "design/jango/emoticons/kakao-32/v18/faces/07.png": "4ed584aea19a94971f8d29e9053deb38f23c1219b419f8548edaffc5df3b134a",
+      "design/jango/emoticons/kakao-32/v18/faces/08.png": "7be4c7f37ef3e9fc8d9e225baf5a9dd4431ef57951a8f96bdb3e6576c843873f",
+      "design/jango/emoticons/kakao-32/v18/faces/09.png": "2f7d315bbb44c3d1895b3b8f5976ab5db2cfb1aa74f546ca89570029f5398cad",
+      "design/jango/emoticons/kakao-32/v18/faces/10.png": "b4c4dcc71b26e549655766e7d3c25a2989d9ff85ee5df59b6b738781d630741c",
+      "design/jango/emoticons/kakao-32/v18/faces/11.png": "23ed4b9214de56e39b5728c77333d2c3d9e3871f2b7e2fab90e68a2902026003",
+      "design/jango/emoticons/kakao-32/v18/faces/12.png": "79f6772f796d8380d1784471f200d38692e0afed117fe9041482741493469283",
+      "design/jango/emoticons/kakao-32/v18/faces/13.png": "89a8b76f237f605cb83d256e60ba76516c92bb307eade77a90af75d53ab8d90b",
+      "design/jango/emoticons/kakao-32/v18/faces/14.png": "01fdb14b8ee481f348398a0df133723e989d5e254b85d489ab8e472bbffecdfd",
+      "design/jango/emoticons/kakao-32/v18/faces/15.png": "73a743bc627a3f20afcf153cd60a5a1e45ca2312a772d24a96ceea752a844cf4",
+      "design/jango/emoticons/kakao-32/v18/faces/16.png": "44510a94a7ba27b8b580eda4464ac43a297948558ed4f886d45033d1bd2c81f9",
+      "design/jango/emoticons/kakao-32/v18/faces/17.png": "6278959ba23dcf70cb9c646407b88b564a31da9b806ebbfc31d78aff11cf035a",
+      "design/jango/emoticons/kakao-32/v18/faces/18.png": "37cddf476d60e679353b949da20f320ad99b0d49b517dfd5263e9e93f4100aee",
+      "design/jango/emoticons/kakao-32/v18/faces/19.png": "695e100de4794425b48ded822e7cd486072f2a0a926045f3067e04918d6392bf",
+      "design/jango/emoticons/kakao-32/v18/faces/20.png": "095d20cf0f191af334c8de8b40e76907503ab6bacd5718c990bd08d4b5737788",
+      "design/jango/emoticons/kakao-32/v18/faces/21.png": "4bce322dac2c242fe6ca2da63062e7d862c172d0cf45166042626fed57132701",
+      "design/jango/emoticons/kakao-32/v18/faces/22.png": "5f6789d583dda1f6494ba39cc14211fa14be2a72a5a1afa08028169d92d1e72d",
+      "design/jango/emoticons/kakao-32/v18/faces/23.png": "6a9b5db25a3c8399bc1a6d6f698f62a7d49718c5804c782e4ce82d5b24c29d3a",
+      "design/jango/emoticons/kakao-32/v18/faces/24.png": "5689880d19ba2802ae5dd19cad0f81f5fcc4e6c8b82e2e80b175280ce2a58abd",
+      "design/jango/emoticons/kakao-32/v18/faces/25.png": "817dac23b6e3c31b58cc69d5aab2fb187293edd4a128aeecf9d42883a8b95694",
+      "design/jango/emoticons/kakao-32/v18/faces/26.png": "65ceb2e4e40988e09ddd97e4f695b1fc2306b43712655637824770cb491b9175",
+      "design/jango/emoticons/kakao-32/v18/faces/27.png": "0750d96fef173aedae0ed3e0b8cd98881a35cd53a77a387221e9972b24eae1c2",
+      "design/jango/emoticons/kakao-32/v18/faces/28.png": "61cb4202b98cdddae87c6fef3bd03b6c0767ff59cc40f09dab362dacd2eccc18",
+      "design/jango/emoticons/kakao-32/v18/faces/29.png": "f7b0fd86892e50745f913040ea2b26935a86968d40e07c3f290bcd561e0449f5",
+      "design/jango/emoticons/kakao-32/v18/faces/30.png": "d893877916a907b3431509a6a38c6c5985985a162f638688e855882b38e53578",
+      "design/jango/emoticons/kakao-32/v18/faces/31.png": "349a6c5f7734d22c23830aff50e12d9a2723b3d2657e07195565c9c5a40c4e8b",
+      "design/jango/emoticons/kakao-32/v18/faces/32.png": "fb2e0190dc36601f1a7c245fc7644028d2bf8c867cbbef58839cfe13446edd6a",
+      "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+      "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Regular.ttf": "aa52c98336f7c62e2896fc8b12b56a75d5b476d88a2f104b0980f4f7ce0adfc3",
+      "design/jango/emoticons/kakao-32/v18/lettering/01.png": "a1249a7089be746793023fea6dc3d747fad235d73d7e1d8cefe7958c70059311",
+      "design/jango/emoticons/kakao-32/v18/lettering/02.png": "277601e17984b18fbb9945ca3c62445dad41cc9c0c5ff173035ba294029e20eb",
+      "design/jango/emoticons/kakao-32/v18/lettering/03.png": "13278631d134330caab2eab1109788ba2ca261496db28aaf24c210bfb379031d",
+      "design/jango/emoticons/kakao-32/v18/lettering/04.png": "b98a7002c30bb5052560c9f280d0faba014970c2c310ca19be1c05f13c2bd755",
+      "design/jango/emoticons/kakao-32/v18/lettering/05.png": "f41805877b96d00cf4000e79640a7b03373cacabb1749c428d041a94be64a6af",
+      "design/jango/emoticons/kakao-32/v18/lettering/06.png": "e0d0a28f6878eb38123e6027c45790e373d74129a7be3ef57cd2c94027d2992f",
+      "design/jango/emoticons/kakao-32/v18/lettering/07.png": "e91c453a17c6b3a3e0a34885ae779502e5910f655f97f31cc124949c9e7ded05",
+      "design/jango/emoticons/kakao-32/v18/lettering/08.png": "f27d67a54339f4424157ca48efd7527d61e5c01337f892c9cdfbd8962c208dea",
+      "design/jango/emoticons/kakao-32/v18/lettering/09.png": "74542931896a96ba6ed3466096f418ee2e02a698071d2e5401ee733e0fbe6050",
+      "design/jango/emoticons/kakao-32/v18/lettering/10.png": "3af6ceb9d007e6f2ca7b705a82efa5320baa10be22ffd7d7335ff9b9c936a108",
+      "design/jango/emoticons/kakao-32/v18/lettering/11.png": "8c3f553c11fc9c0c439861ef3a27558bf7e6278cfe455c128f90945c04127225",
+      "design/jango/emoticons/kakao-32/v18/lettering/12.png": "31ad7e95f88d5c186ba8213bc67eba28f8d595f665d2c1e3b017d9bed2c53a65",
+      "design/jango/emoticons/kakao-32/v18/lettering/13.png": "8d41fe07de08da2b0c3626f9ea0810e13a121bf88ba261f67da9ff3578c1f259",
+      "design/jango/emoticons/kakao-32/v18/lettering/14.png": "a6a35bcffd1c7ee99cc691a38b1ad962a91e1cc7ca003eccd85b5f1a2a6ec743",
+      "design/jango/emoticons/kakao-32/v18/lettering/15.png": "673eb688361c1c37f644201c89ae6154a952e81bdeeff793fc836d88b1934ff3",
+      "design/jango/emoticons/kakao-32/v18/lettering/16.png": "9a362ddc93d8024cd2048d043502da5d14184157f1d715c06ddadb9ba6d0bdf8",
+      "design/jango/emoticons/kakao-32/v18/lettering/17.png": "7613d73193cbd9b235191e3ef231e610932f7b1cda0a36838769872b1dff3353",
+      "design/jango/emoticons/kakao-32/v18/lettering/18.png": "3f53cd8e186526f9245fdd4c11d5ce0a01d33ed6a32b85aaccb721fab97527b4",
+      "design/jango/emoticons/kakao-32/v18/lettering/19.png": "259bdda4f3f81b0ef8c5bb916540c26d2897250774f5c93cfe1f108e8310dcd7",
+      "design/jango/emoticons/kakao-32/v18/lettering/20.png": "e8bcb6cb0b586b2888bf41deff1a865d0a7edeae85b92c75863038d82791ed8f",
+      "design/jango/emoticons/kakao-32/v18/lettering/21.png": "d759fc0dfd1a3753fc0348df691a980131746dab054b64f972e298b21483c217",
+      "design/jango/emoticons/kakao-32/v18/lettering/22.png": "0f75b212ef176432c65040c344ceef54d75151726d809629cce6a757d5a3d1d9",
+      "design/jango/emoticons/kakao-32/v18/lettering/23.png": "cb92cd81c8d127537f8428262fdb3fefb35babcba8d5b54f340e6138ced72185",
+      "design/jango/emoticons/kakao-32/v18/lettering/24.png": "cb5d59f586bc52f7d9e2454bc275011bf4cbc68db9f34366b3cf8575eaa583de",
+      "design/jango/emoticons/kakao-32/v18/lettering/25.png": "e0c3fc2b846992c6561169fa6d302cb62df8c5e47d90dcdc19700e1b9bf23f4b",
+      "design/jango/emoticons/kakao-32/v18/lettering/26.png": "fa28cbc6bae52a89e2da398465c55a5442be81b42360f363eb5dd4d91547fc6a",
+      "design/jango/emoticons/kakao-32/v18/lettering/27.png": "623a7087003ac59d7a98e63d55d6989d1a67e1a36fdaf83cccd318b24fd3cb3f",
+      "design/jango/emoticons/kakao-32/v18/lettering/28.png": "959b8ce66d54f93b2cbba46a44b561179cab843ef013acb6c3fbccb4f2c68c49",
+      "design/jango/emoticons/kakao-32/v18/lettering/29.png": "8abf4c104ac1a1b41c16451e118392d6ad98929fe7eb3da49907c162106a98ee",
+      "design/jango/emoticons/kakao-32/v18/lettering/30.png": "7e1bcb29becb7f34f4295ac59db9f6733928f70c06f64050a564db57b1cd0f3b",
+      "design/jango/emoticons/kakao-32/v18/lettering/31.png": "a237e8a70d96ea8117c30aa0d0085761f2d3dd690ab8cae63989e73c25ee7f89",
+      "design/jango/emoticons/kakao-32/v18/lettering/32.png": "8f1d502d8c7195c4eafda9b5b2aa9a6bd33b6422d374d344550c87dad2e075b0",
+      "design/jango/emoticons/kakao-32/v18/mouth-contact.png": "8097c8417908aaac09feb1fddbeb8b684c755c6f36d3ac5ce8ede7f4bccf3261",
+      "design/jango/emoticons/kakao-32/v18/preview-120.png": "6e34b11d48b76c4b3540ff4d920baa11cddadaf6799887e92959db7a11b3f947",
+      "design/jango/emoticons/kakao-32/v18/preview-dark.png": "a60854578fcae10937e8152054df93b31d9a7ae275efd370c1b66ef96be25f96",
+      "design/jango/emoticons/kakao-32/v18/preview-light.png": "f5b0e463b52cc62f53e438863053be497c14b0b773954ee832cbf998011a8c98",
+      "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc",
+      "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+      "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+      "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+      "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+      "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365",
+      "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+      "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+      "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af",
+      "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26",
+      "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+      "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+      "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03",
+      "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+      "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+      "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+      "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+      "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67",
+      "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+      "design/jango/emoticons/kakao-32/v18/stickers/01.png": "315b3d032175cedce5c2016d60c7cce075e1781e5291cd37d2b2c38c99ec56e6",
+      "design/jango/emoticons/kakao-32/v18/stickers/02.png": "3355f9ab58e7dd709698e11f8a661b2637c54238e40cbde0d2f121775186f48f",
+      "design/jango/emoticons/kakao-32/v18/stickers/03.png": "f70ec79e79c0ed559f9553cd24482f79dc1270244f7a2df0ae832834c87449f1",
+      "design/jango/emoticons/kakao-32/v18/stickers/04.png": "42074396d75831f2f8d9bbce759d6a176eb7ef95ece2b207fbb042eeb91e7e8e",
+      "design/jango/emoticons/kakao-32/v18/stickers/05.png": "d184057a239d585f773387afc9817b67232c0c4be3994693d10b4eb2b34b2e9d",
+      "design/jango/emoticons/kakao-32/v18/stickers/06.png": "372a6eb2f86d5c692ea3164daa222f54fe742b95e2c2796d8de2a05bb9771c41",
+      "design/jango/emoticons/kakao-32/v18/stickers/07.png": "e3bc4d60ac719cf6cd9d8e791f00b73edc4ea81685de37741e1a37d2c7989f83",
+      "design/jango/emoticons/kakao-32/v18/stickers/08.png": "d714d8086acfc463ec63c931b164702400c49258895ec0ecd698f9ece46c13d2",
+      "design/jango/emoticons/kakao-32/v18/stickers/09.png": "6b2bb7a9de13f1c1e84488bdd515339f74b33ff9ce13ab1b4e97a343a992d57a",
+      "design/jango/emoticons/kakao-32/v18/stickers/10.png": "34e6b7fe3252984bb58e86aa7aa95e02a2b19dbf867ddb49dbb45bf923a8dfee",
+      "design/jango/emoticons/kakao-32/v18/stickers/11.png": "91c26cce444a7a5771c2dc6837a137125b0e03d0d6015bf304def7a01ae54272",
+      "design/jango/emoticons/kakao-32/v18/stickers/12.png": "4f8005d9d4683b4e0eac69e9759038c651ee9fb79e344335b7d8495a9a5d7d25",
+      "design/jango/emoticons/kakao-32/v18/stickers/13.png": "2d23f4402b4f87a6beeb84f29d89288e8fb6d727b2c93cec7f4e76828f39a9d1",
+      "design/jango/emoticons/kakao-32/v18/stickers/14.png": "f8bf0d25f32895a137279f0819af2c316bf731bb593ebf25d4253f8620f1108a",
+      "design/jango/emoticons/kakao-32/v18/stickers/15.png": "961a5a25db665750f62737896b6db55b2aa0b0a1130974e5cb1ce8f78f3d9783",
+      "design/jango/emoticons/kakao-32/v18/stickers/16.png": "8dcf6a41fad62dacaa975ee0c83811aa1a3299ab9ef307f1c4c505d3370c87c0",
+      "design/jango/emoticons/kakao-32/v18/stickers/17.png": "208e2f417311a4f369c56bbede6a86940fcdb7f73d8de0bfb9dab1b5bb24bc3c",
+      "design/jango/emoticons/kakao-32/v18/stickers/18.png": "bb024bb7efe15740c06481420577cb2d98458eee1a27b557c5d84bf2fe274185",
+      "design/jango/emoticons/kakao-32/v18/stickers/19.png": "c918413e83170fc68ac9140f826bbc71389847a77f0cfa5fb57bfa6b0ddb16b5",
+      "design/jango/emoticons/kakao-32/v18/stickers/20.png": "6e16b1a140a47878bcef9277ef07d6288a1e4f8aae157c4ce63519ef648b050e",
+      "design/jango/emoticons/kakao-32/v18/stickers/21.png": "bc56fd8b9a3335a692a2b1696f702630bf7b5fa9c36d7f6e1a8866e9388ae920",
+      "design/jango/emoticons/kakao-32/v18/stickers/22.png": "d72b9e8397b1a3571aac45d1cc006b2179202ca00cabcc1352c6b259c58e04b0",
+      "design/jango/emoticons/kakao-32/v18/stickers/23.png": "f73280d3b86cbb63ebe08d5e2ef30cb4ad95c7d6572e7077b6b495312f192b77",
+      "design/jango/emoticons/kakao-32/v18/stickers/24.png": "33c0924d475c703405000a0e1ff97f8fa7ff7b64904ef4dc2e883b505945a5b6",
+      "design/jango/emoticons/kakao-32/v18/stickers/25.png": "2e5b42078ed3f625621404a3faaeb431d47244d4fe1a446cb807ffd15492e236",
+      "design/jango/emoticons/kakao-32/v18/stickers/26.png": "cf489bfc1578a2d0183cd41fe717c7dcd25cb21b6020d92af709a64f3b7bfcbb",
+      "design/jango/emoticons/kakao-32/v18/stickers/27.png": "3a672efe8b26bb02be5a8082e9e5ae214ee6b0637230a660bc51196421d0ba40",
+      "design/jango/emoticons/kakao-32/v18/stickers/28.png": "e00b1a66f36ec0e6a57e7951a26c89089f8225f4d6c2134bfc0d26d7ead3401b",
+      "design/jango/emoticons/kakao-32/v18/stickers/29.png": "ddf70a5df8568ab3bb168f3ebdeeaceb8291886e8f81b7192cda36bff571e541",
+      "design/jango/emoticons/kakao-32/v18/stickers/30.png": "3cb6c3d493bc2e7c3037dcfc908fbc0b7552bde61c38acca875f77982cef5f93",
+      "design/jango/emoticons/kakao-32/v18/stickers/31.png": "71026b5bf83213b6196a5a749eb60c8ee7d56f6119d21f178d76912567a27f15",
+      "design/jango/emoticons/kakao-32/v18/stickers/32.png": "5ba82a7e2a74651ba3828600811c40c1a45eb75130280fc5f3bb166805390718",
+      "design/jango/emoticons/kakao-32/v18/thumbs/01.png": "622a6add09f605c33e8a659509ec953a788b1e436e60e0730c73bb526ed1f209",
+      "design/jango/emoticons/kakao-32/v18/thumbs/02.png": "ba35f5f8145c283ea453b468fd362e61e0e6a4e9583dc4fdde3347c2d0bd83db",
+      "design/jango/emoticons/kakao-32/v18/thumbs/03.png": "5d2d9e29697689e0533083835435f013cd1736b05f4aced377f1f7a4a9702eca",
+      "design/jango/emoticons/kakao-32/v18/thumbs/04.png": "4b2388e9158a566465039eccb9feb918be6f102f6811bc4ca5f938228483cf1e",
+      "design/jango/emoticons/kakao-32/v18/thumbs/05.png": "90f4cefffaf1e0b99383f35151832aef02bf40cc9dc912391255a16dcf222021",
+      "design/jango/emoticons/kakao-32/v18/thumbs/06.png": "4cb26e5d2856936b6eebd6dad6f7013668681d12e919d501e5a4781d2fb69c74",
+      "design/jango/emoticons/kakao-32/v18/thumbs/07.png": "00c1b813afb7bd8ff4d308805ad254209526dca94485890a5c4631ba8a47a6a5",
+      "design/jango/emoticons/kakao-32/v18/thumbs/08.png": "3f6408ac8108f0aad9a07c7142cb9f6c30a6cffe609ca85da3e35cf0f79b562c",
+      "design/jango/emoticons/kakao-32/v18/thumbs/09.png": "bfdacdf0b712d3926e77dc1f71b383301df6858d8354dbd69c4eea1bda5434c0",
+      "design/jango/emoticons/kakao-32/v18/thumbs/10.png": "56bf8e9af1e4926cc16dc4a33823cae3d7e8aaa3498800b6683ea06b7a275a10",
+      "design/jango/emoticons/kakao-32/v18/thumbs/11.png": "95af012e1bdff84c32d086e598c9db2b4ddeb535d36d659c6cd607cdd41f407d",
+      "design/jango/emoticons/kakao-32/v18/thumbs/12.png": "60adb0827518da63275b68b93b42e584e6247d7fa62d156e6cd19ac1719ce5da",
+      "design/jango/emoticons/kakao-32/v18/thumbs/13.png": "8be02c2653419ae57d2ce73b4ab51414c12d84c1c04acba276f810f1fde67aca",
+      "design/jango/emoticons/kakao-32/v18/thumbs/14.png": "15d118cee3ae556e6e578bb93358817f6e1a198aaeb235a1cc2d3bc3d489b4a4",
+      "design/jango/emoticons/kakao-32/v18/thumbs/15.png": "95c709fb1075325c6ba0d45609749923e1578dbb495dc69732e7da30125d1ce1",
+      "design/jango/emoticons/kakao-32/v18/thumbs/16.png": "a645f22aa5e177566f5a6ef952b0735bd76d632c365d082c1de10de520472033",
+      "design/jango/emoticons/kakao-32/v18/thumbs/17.png": "ad53c66d138ff15ab6ebe5004a777d7c1f6bd2efcd65e0defb48c75191ca36b4",
+      "design/jango/emoticons/kakao-32/v18/thumbs/18.png": "6a8b294f257578c31e3032dbde37425fe0b48b6f210628a2c626fa8c7e3fa7b3",
+      "design/jango/emoticons/kakao-32/v18/thumbs/19.png": "22694663eb987e08775cc6c9d1939f41d254284d13c5f4e9df2d215fa20aa0e5",
+      "design/jango/emoticons/kakao-32/v18/thumbs/20.png": "a62658a82ad8f935c997c7a1d3d2aac24c8944792bab9bf8c5f952992f79edac",
+      "design/jango/emoticons/kakao-32/v18/thumbs/21.png": "a1c4febaf6dfc192d1a1fc9cce50fb61e43cf31275921336f2ae34cd52228d03",
+      "design/jango/emoticons/kakao-32/v18/thumbs/22.png": "a4b69ccc8d5c1e66ef7d1e7d997344bd80d9b78528efe0df49748f5e35def03c",
+      "design/jango/emoticons/kakao-32/v18/thumbs/23.png": "45dd2f7ab06c3e584cd42191676603fc086ba3cf1908943d118f81bd6bd146c1",
+      "design/jango/emoticons/kakao-32/v18/thumbs/24.png": "ec078ba0bd29fce1f5ef51ed2935560bf07a9a621f5f55cbcfdc1e7b8e20f4bb",
+      "design/jango/emoticons/kakao-32/v18/thumbs/25.png": "7d764d94d2400dc9c55ec07fe19ba1f45beb9eaa3a901c404761b949bc166c76",
+      "design/jango/emoticons/kakao-32/v18/thumbs/26.png": "a5c38080bb570e221d7b528b7cc617bac1a84c6e3c2dbe2d47ddd6927560ccd2",
+      "design/jango/emoticons/kakao-32/v18/thumbs/27.png": "4bd81f7880bfc9eedb2b553ae92438b884ea543bdacff6b31ed81735b4db718e",
+      "design/jango/emoticons/kakao-32/v18/thumbs/28.png": "09c802a897cea0a2a81d25f351f0a09f68c03fcf6aaf3ddc04fa8dfc47811742",
+      "design/jango/emoticons/kakao-32/v18/thumbs/29.png": "dc646a6edf5605b0222070dd8182e4ecfebd06b40736bdf691eea3cc24b704dc",
+      "design/jango/emoticons/kakao-32/v18/thumbs/30.png": "adff0a8283b5682f51b760ccd5610c928e8101eafb891303567cbbb38967ef51",
+      "design/jango/emoticons/kakao-32/v18/thumbs/31.png": "48d23bae1cb0846556ebf2a080eccb83d8a98cfac3e30a90cc164a0adbc93e14",
+      "design/jango/emoticons/kakao-32/v18/thumbs/32.png": "9308cd80ea5475ab6fd60c000a53cec308f5937343be29a24b32575eec533713",
+      "design/jango/master-set.json": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+      "design/jango/masters/v19/master-scene.png": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "design/jango/style-master.json": "4275648fbf29e1cf2e32c51b72b957fc4fb73833c1113ea5a3569f2b3d03d1f1"
+    },
+    "checked": 323,
+    "changed": []
+  },
+  "jangoReportRefresh": {
+    "reports": [
+      {
+        "id": "v18-01",
+        "beforeBinding": "3bfc16e53eb7ef8462fecae6dd5b936b6644dafc783f65bacf64e96df568920b",
+        "afterBinding": "3ad74db0125d34e0aa2db35e8e1ca756faa7ce54bff8ffda31c621e48ce3053d",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-02",
+        "beforeBinding": "bae49e4332c952352f77aff36ee7ea08b58fdba1e0f451cb322bd8344059cbd5",
+        "afterBinding": "879300e1c369b7b3cc19adc9538209df0269792c17eaf669e160fd24214eef15",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-03",
+        "beforeBinding": "04ed7f70d7f502f8dc832c1e6166d77ae5406aa6d7ad7b9ca4eac1d8cbe9c5ff",
+        "afterBinding": "46cb034e36d5bc798a286c01829a2a95238406963405a9a5356fd43fd38c9140",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-04",
+        "beforeBinding": "9acee8363aab20b33777622890405a1e2fae6c0e1033ae2ab9a08bd5f2c80c2a",
+        "afterBinding": "39a9e3b57b27e0a952e103d3044b3d979bb27733b89a25c6f21c0fe99657706c",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-05",
+        "beforeBinding": "8f5ce61c1d22c06103f2ea732c97a4c87e2eca5105eaffdf44b4462f9f4bfefe",
+        "afterBinding": "d7dedecf2e895ea76c4b2443749c4c899946ae81047db9bcb66ad8082973cb6e",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-06",
+        "beforeBinding": "a81efbe8b093ba7085d8ae3d915863136c981d163ce84aa39e41549700cce42e",
+        "afterBinding": "15d1453ebbe9a747065060ae68d8d255c59df677f961dec11dce47d3017cb257",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-07",
+        "beforeBinding": "4b09755b84996299b176bef153d7ab3c27d64260a684ed571c3c919b85180ef0",
+        "afterBinding": "2de80f4e09ec05cafe45f729b2069c243f7e64d6a4af5e41cbfc9bbc50e411f4",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-08",
+        "beforeBinding": "98bfd4930322f6afed4581a68371bf5a277d4a87835f8ecb185eba523a072982",
+        "afterBinding": "181048d879d07fad42f7a257dbd21085198b55dbb93449c6129a5e9e7efe412a",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-09",
+        "beforeBinding": "51329d3c474a78d84405f8be36bfe55ea732a81a38b129a779f071b52566737a",
+        "afterBinding": "0bc44db21caed0797e0f7fd351cdcb9db4cacf20d2dfcb4fe1393cd2d41bb30a",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-10",
+        "beforeBinding": "b6d350a2a774dbf87edc24a7462b62b24d359c4cd0f8c9b488e6ba7416c23318",
+        "afterBinding": "9df648d2360a0370a8a6603ea952d79da1ed0757b2f0f76d8cf0ee50db33fd9f",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-11",
+        "beforeBinding": "a25dc8a1b9a590c64f83716310f092fdd45d60d1cff880fa382fc80324f74b2b",
+        "afterBinding": "dea710d975ceea392fac79a4b0e2a30c5faa1d01aec25a5cfac1d3bd0d74f8b2",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-12",
+        "beforeBinding": "404cf53ccaaa19a41a195be2214a7534a92f999bb4d2e0dd5125e3bc60194da9",
+        "afterBinding": "1fb2b48dc236c347c29f7b1730aa48bafc015e8d96a9a6c40f81489017d99685",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-13",
+        "beforeBinding": "87dfb7b4b0a57bf38911aba8191d2ed474f83048a149050c712ad11e35c6efb9",
+        "afterBinding": "139f84d57db2d00f13e56c0957061b7baab5b597ddd794631a6dc6f8c3576c53",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-14",
+        "beforeBinding": "cb3d5607957a931fe96f777b0c9ba9948f11c2ef3a09177f08694d79d52d6747",
+        "afterBinding": "8a111ca20d50efa61998549ea7b1852925d59e2535659689b9e24d51a920d267",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-15",
+        "beforeBinding": "df58c770711d0abfccc6bb847c3309cab458a306d2226db8c698503eea65f401",
+        "afterBinding": "89c6b525051e837daab5c81ecf09490afa7c30f1c24e9b5971eb4ff3ebab2fa2",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-16",
+        "beforeBinding": "72bfbd44088cd5c3187d9ad62caf2a36bff115190214636f139ac53e0686cb42",
+        "afterBinding": "db14e47589078ba1a7abe7c89846ca55577c81a538f1d81c5acfce6f16b3d7e3",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-17",
+        "beforeBinding": "ba43f676c67af02f3996491989d959cf86ddd31df99249aec41057f9d7fe8c72",
+        "afterBinding": "23b27fe95a692a4f40231f0578ed6210e6c66d6a7008c027ea8a15a7367a547f",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-18",
+        "beforeBinding": "4247fe1a9d9b6ad8d70a3abe8ff671ce5f7225c7de9430e99df289d397b3d2a0",
+        "afterBinding": "899fc547b82ccd09207c8449934706293b512a6120f290a087065e2d851a66d6",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-19",
+        "beforeBinding": "1f8b28587fb8cde1a84f36da5afd4a678b2effe7afcd78fbcb66edba225eebf5",
+        "afterBinding": "60a9200744625b579179da04803605b7c7bd23a39873b1f091d043ecfa67300e",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-20",
+        "beforeBinding": "c1b885f02240b9f20a41cb1e2a30d82956e731aef1696e22a975e3a28ac24590",
+        "afterBinding": "f22e53d0de399c856d51c606d02cb8491b6bb0d0034831ee2b2013318fe730b3",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-21",
+        "beforeBinding": "19f38482d11ec0b30992a2a8f927392716d7292f039369e24bdcdd5c3a26a63e",
+        "afterBinding": "d701a66ce419212646ff868dae1ece7c67431e6a8a3f78ffd1ab4f121285b404",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-22",
+        "beforeBinding": "d7ff3a233a088c2f730a23a43a5865c21f7805ce313ef7f559dba7192aa4fa48",
+        "afterBinding": "92cb6ca4f03f7d9393e4b4d71806608548773174cafdb99591327f6bc277a3e9",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-23",
+        "beforeBinding": "f99ed0840beffbffbfc03ab41f6d18bde8d190647ab86d9a13f31229710bba08",
+        "afterBinding": "5cbee7993c853947bf9a7f5a35b215d3d3d8313fbc0a27ca52ba0363a72af20f",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-24",
+        "beforeBinding": "79c018e2e1c6375fed8d8f0a036ff7350808403c96253df82f18f2171e520e97",
+        "afterBinding": "7d69392a3722e389f01d1e860d1f99e0ad402d99a5225d4bed2ac16f7f1aa89d",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-25",
+        "beforeBinding": "2e8378fbd4d4760b31c4fba083dfbf682974fb54cd6bd90cae6243bddacf29db",
+        "afterBinding": "d5bff1433cd32ad29af740c925431c2d4a3aa6c626794a798d4d5932798caf24",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-26",
+        "beforeBinding": "99f1fb5fad8c7acc7687d2a796f5e6e0497e0997bd10155a1af98da7d93ced74",
+        "afterBinding": "5298f1f259cb5422ffdd8af9ff43ba6d6b4bd00a9dce514ea7801d38ea7d2d39",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-27",
+        "beforeBinding": "bd5ce459da684176c85fb3eff065e11d953f737abffd1a7e1e27a6eaa15e3737",
+        "afterBinding": "39dd997ff218e09da063dd44a04b27e4ce24bf3a7a283b3ec2f9cd04e8b1e194",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-28",
+        "beforeBinding": "54aec494996fada31b3ad2c9b4655af5b7e162cd60719ebde9b2be62bbe4ac31",
+        "afterBinding": "344ed53ab2b4ab4a04dcb9824d379895f0142be09a9a6999047d730794330c29",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-29",
+        "beforeBinding": "55fdb658ae4b6d2ac51f792c808834b3275f894caf67b89b53929a34d3abe2d5",
+        "afterBinding": "4eb6716e6a378b146f03f8bb1fe4b5c3be9c4755005fc78abae5f7c210039416",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-30",
+        "beforeBinding": "5c296c4f13b65078e8fef219290b119b277f492b0df9e63f941de580575bf372",
+        "afterBinding": "4b7a0fb4638e599d7ed90c51134b0fa3ddd8601a6060bb643240e37cd8b9345a",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-31",
+        "beforeBinding": "f24b29be798c0133be5748a7b268f9f69b97bbb9a33670c546755bda2e8d4f23",
+        "afterBinding": "4e639fe7d698ffc9eee6f8c59c0795704f92efb28c509034b15a1f2c0c470e44",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      },
+      {
+        "id": "v18-32",
+        "beforeBinding": "bb82029b366db5d31ce959dfed0079b85295f0bd17c20c63ed07b940eeb8873b",
+        "afterBinding": "4938c3308ad052447e27b3bbe78a7b7d8c95a8e774b021e26bd1c5038a9bae32",
+        "beforeStyleDocumentSHA256": "8669e104c38bb1e0540006fcf73228443349ab865c91e7de3ae0292f29b54d75",
+        "afterStyleDocumentSHA256": "1749726042237f5fc6591d3849d3e0fd90977b1dcae448036813291cb87eac06"
+      }
+    ],
+    "preserved": "all content except binding and style-guide document hash; no measurement, review, preparation, adoption or release change"
+  },
+  "checks": {
+    "relatedMobileTests": 63,
+    "sharedBuild": "passed",
+    "docsCheck": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "test": {
+      "passed": 1348,
+      "skipped": 6,
+      "groups": {
+        "jango": 23,
+        "shared": 162,
+        "api": 589,
+        "mobile": 574
+      }
+    },
+    "jangoCheck": "passed",
+    "backgroundAudit": "passed",
+    "mascotAudit": "passed",
+    "brandingAudit": "passed using existing /private/tmp/jango-release-build-tools-20261010 Python with Pillow 12.3.0"
+  },
+  "limitations": [
+    "No new Android/iOS native device captures",
+    "VoiceOver/TalkBack and native reduce-motion QA not performed",
+    "Web fixture carousel scroll reached its second notice; its momentum-end accessibility ordinal is not native verification",
+    "320px/fontScale=2 retains existing narrow line wrapping; finish action remains reachable by scrolling",
+    "No store build/upload/release or deployment"
+  ]
+}

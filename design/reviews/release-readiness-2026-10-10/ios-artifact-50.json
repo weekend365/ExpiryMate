@@ -1,0 +1,317 @@
+{
+  "dataAsOf": "2026-10-10",
+  "buildId": "5eed6f72-4531-4211-9fd2-2a3ccd5f1582",
+  "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+  "artifact": "jango-release-ios-1.4.3-50.ipa",
+  "artifactBytes": 72124009,
+  "artifactSHA256": "4d24cf46e0391ec007f98736d55d065f2a9b4aa20286d49b5dd34c74b1cab1c1",
+  "info": {
+    "CFBundleIdentifier": "com.expirymate.mobile",
+    "CFBundleDisplayName": "장고야 부탁해",
+    "CFBundleShortVersionString": "1.4.3",
+    "CFBundleVersion": "50",
+    "MinimumOSVersion": "16.4",
+    "DTSDKName": "iphoneos26.5",
+    "DTXcode": "2660",
+    "ITSAppUsesNonExemptEncryption": false,
+    "NSCameraUsageDescription": "바코드·유통기한을 스캔하거나, 영수증·냉장고 사진으로 재료를 넣으려면 카메라 접근이 필요해요.",
+    "NSPhotoLibraryUsageDescription": "영수증이나 냉장고 사진으로 재료를 한꺼번에 넣으려면 사진 접근이 필요해요.",
+    "NSMicrophoneUsageDescription": null,
+    "UIBackgroundModes": null
+  },
+  "codesignVerifyExitCode": 0,
+  "entitlements": {
+    "application-identifier": "92RS8PY7SX.com.expirymate.mobile",
+    "com.apple.developer.team-identifier": "92RS8PY7SX",
+    "aps-environment": "production",
+    "get-task-allow": false,
+    "com.apple.developer.applesignin": [
+      "Default"
+    ]
+  },
+  "provisioning": {
+    "expiration": "2027-07-22T04:14:19",
+    "provisionedDeviceCount": 0,
+    "allDevices": false
+  },
+  "rootPrivacy": {
+    "NSPrivacyAccessedAPITypes": [
+      {
+        "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+        "NSPrivacyAccessedAPITypeReasons": [
+          "C617.1",
+          "0A2A.1",
+          "3B52.1"
+        ]
+      },
+      {
+        "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+        "NSPrivacyAccessedAPITypeReasons": [
+          "CA92.1",
+          "C56D.1"
+        ]
+      },
+      {
+        "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
+        "NSPrivacyAccessedAPITypeReasons": [
+          "E174.1",
+          "85F4.1"
+        ]
+      },
+      {
+        "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+        "NSPrivacyAccessedAPITypeReasons": [
+          "35F9.1"
+        ]
+      }
+    ],
+    "NSPrivacyCollectedDataTypes": [
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeName",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeEmailAddress",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeCustomerSupport",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherUserContent",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality",
+          "NSPrivacyCollectedDataTypePurposeProductPersonalization"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePhotosorVideos",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      },
+      {
+        "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypePurchaseHistory",
+        "NSPrivacyCollectedDataTypeLinked": true,
+        "NSPrivacyCollectedDataTypePurposes": [
+          "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+        ],
+        "NSPrivacyCollectedDataTypeTracking": false
+      }
+    ],
+    "NSPrivacyTracking": false,
+    "NSPrivacyTrackingDomains": []
+  },
+  "allPrivacyManifestCount": 21,
+  "distinctCollectedTypes": [
+    "NSPrivacyCollectedDataTypeAdvertisingData",
+    "NSPrivacyCollectedDataTypeCoarseLocation",
+    "NSPrivacyCollectedDataTypeCrashData",
+    "NSPrivacyCollectedDataTypeCustomerSupport",
+    "NSPrivacyCollectedDataTypeDeviceID",
+    "NSPrivacyCollectedDataTypeEmailAddress",
+    "NSPrivacyCollectedDataTypeName",
+    "NSPrivacyCollectedDataTypeOtherDiagnosticData",
+    "NSPrivacyCollectedDataTypeOtherUserContent",
+    "NSPrivacyCollectedDataTypePerformanceData",
+    "NSPrivacyCollectedDataTypePhotosorVideos",
+    "NSPrivacyCollectedDataTypeProductInteraction",
+    "NSPrivacyCollectedDataTypePurchaseHistory",
+    "NSPrivacyCollectedDataTypeUserID"
+  ],
+  "privacyManifests": [
+    {
+      "path": "PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": [
+        "NSPrivacyCollectedDataTypeName",
+        "NSPrivacyCollectedDataTypeEmailAddress",
+        "NSPrivacyCollectedDataTypeUserID",
+        "NSPrivacyCollectedDataTypeDeviceID",
+        "NSPrivacyCollectedDataTypeCustomerSupport",
+        "NSPrivacyCollectedDataTypeOtherUserContent",
+        "NSPrivacyCollectedDataTypePhotosorVideos",
+        "NSPrivacyCollectedDataTypePurchaseHistory"
+      ]
+    },
+    {
+      "path": "FBLPromises_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "Sentry.bundle/PrivacyInfo.xcprivacy",
+      "tracking": null,
+      "types": [
+        "NSPrivacyCollectedDataTypeCrashData",
+        "NSPrivacyCollectedDataTypePerformanceData",
+        "NSPrivacyCollectedDataTypeOtherDiagnosticData"
+      ]
+    },
+    {
+      "path": "GoogleToolboxForMac_Logger_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "ExpoConstants_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "UserMessagingPlatformResources.bundle/PrivacyInfo.xcprivacy",
+      "tracking": null,
+      "types": [
+        "NSPrivacyCollectedDataTypeCoarseLocation",
+        "NSPrivacyCollectedDataTypePerformanceData",
+        "NSPrivacyCollectedDataTypeProductInteraction"
+      ]
+    },
+    {
+      "path": "GoogleDataTransport_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": [
+        "NSPrivacyCollectedDataTypeOtherDiagnosticData"
+      ]
+    },
+    {
+      "path": "React-cxxreact_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "GoogleMobileAdsResources.bundle/PrivacyInfo.xcprivacy",
+      "tracking": null,
+      "types": [
+        "NSPrivacyCollectedDataTypeOtherDiagnosticData",
+        "NSPrivacyCollectedDataTypeCoarseLocation",
+        "NSPrivacyCollectedDataTypePerformanceData",
+        "NSPrivacyCollectedDataTypeCrashData",
+        "NSPrivacyCollectedDataTypeAdvertisingData",
+        "NSPrivacyCollectedDataTypeProductInteraction",
+        "NSPrivacyCollectedDataTypeDeviceID"
+      ]
+    },
+    {
+      "path": "nanopb_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "ExpoApplication_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "GTMSessionFetcher_Core_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "GoogleUtilities_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "ExpoNotifications_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "ExpoFileSystem_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "GoogleToolboxForMac_Privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "RNCAsyncStorage_resources.bundle/PrivacyInfo.xcprivacy",
+      "tracking": null,
+      "types": []
+    },
+    {
+      "path": "React-Core_privacy.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "Frameworks/ReactNativeDependencies.framework/ReactNativeDependencies_folly.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "Frameworks/ReactNativeDependencies.framework/ReactNativeDependencies_glog.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    },
+    {
+      "path": "Frameworks/ReactNativeDependencies.framework/ReactNativeDependencies_boost.bundle/PrivacyInfo.xcprivacy",
+      "tracking": false,
+      "types": []
+    }
+  ],
+  "limitations": "Static IPA, TestFlight upload and installed build verified. User confirmed login/relaunch/inventory/photo entry, then corrected missing Plus. Purchase/restore, price, full two-account, push and AI parsing QA remain.",
+  "testFlight": {
+    "uploadAuthorized": true,
+    "submissionId": "66cdb9df-b4ee-4ef3-897d-5124ee9b3a68",
+    "ascBuildId": "8abe6b34-0e2d-4690-9b2f-5fa33e73aeb0",
+    "uploadStatus": "Complete",
+    "buildStatus": "Ready to Submit",
+    "internalGroup": "Team (Expo)",
+    "invitedTesterCount": 1,
+    "observedUploadedAt": "2026-10-10 16:48 KST",
+    "appReviewSubmitted": false,
+    "publicReleasePerformed": false
+  },
+  "realDeviceQA": {
+    "installedVersionVerifiedViaCoreDevice": true,
+    "version": "1.4.3",
+    "build": "50",
+    "deviceModel": "iPhone 16 Pro",
+    "userReportedChecks": {
+      "login": true,
+      "forceCloseAndRelaunchSession": true,
+      "inventoryList": true,
+      "photoAddScreen": true,
+      "plusProductPrices": false
+    },
+    "scope": "Installed version directly queried; listed flows confirmed by user. No purchase initiated. Push receipt, shared-space two-account QA, AI photo parse, purchase/restore and subscription lifecycle remain unverified.",
+    "priceQACorrection": "User later reports Plus not visible in settings on both platforms. Previous price pass is revoked."
+  }
+}

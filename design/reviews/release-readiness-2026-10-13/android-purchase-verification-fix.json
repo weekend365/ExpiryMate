@@ -1,0 +1,106 @@
+{
+  "dataAsOf": "2026-10-13",
+  "state": "Foreground38 fix validated/internal published; global purchase recovery path also corrected; final candidate39 required",
+  "observed": "Annual plan selected, verification ApiError4 and restore_failed2 in original Google entitlement owner; exact message awaiting user",
+  "sourceIssue": "Android DTO used currentPlanId ?? selectedPeriod, even for restored purchases. CurrentPlanId is not an authoritative base plan for groups with multiple base plans; selected UI period cannot identify an older restored purchase. API already resolves verified Google lineItems.offerDetails.basePlanId.",
+  "officialSource": "https://hyochan.github.io/expo-iap/guides/subscription-validation/#android-baseplanid-limitation",
+  "installedExpoIap": "4.7.2",
+  "interpretation": "Fundamental Google Billing Purchase limitation documented by SDK maintainer; exact causality of current user error must still be confirmed by device message and corrected-build QA.",
+  "changes": [
+    "Google verification sends SKU, purchase token and existing purchase intent without a guessed basePlanId",
+    "Apple transaction/intent request remains equivalent",
+    "Purchase funnel period uses server verified entitlement period"
+  ],
+  "preserved": [
+    "Purchase selection and offer token",
+    "Server signature/owner/account binding validation",
+    "UI layout, styles, controls, accessibility and assets",
+    "Approved iOS51 and existing production35/48",
+    "All production API flags and deployed source"
+  ],
+  "validation": {
+    "mobileTestsPassed": 577,
+    "newMobileRegressionTests": 6,
+    "apiSubscriptionTestsPassed": 32,
+    "newServerContractTests": 1,
+    "mobileTypecheckPassed": true,
+    "mobileLintPassed": true,
+    "docsCheckPassed": true
+  },
+  "plannedAndroidVersionCode": 39,
+  "easUploadPerformed": true,
+  "storeReviewRequiredForNewCandidate": true,
+  "publicReleasePerformed": false,
+  "sourceGitSHA": "a1104b9bc72e24fc45759af6352ef3524d5bffc5",
+  "easBuild": {
+    "requestedAt": "2026-10-13T10:01:26.583Z",
+    "purpose": "Android annual purchase/restore verification fix; no auto store submission",
+    "sourceGitSHA": "a1104b9bc72e24fc45759af6352ef3524d5bffc5",
+    "transfer": {
+      "checkedAt": "2026-10-13T09:59:48.703Z",
+      "outputRoot": "/tmp/jango-android-plan-eas-archive-20261013",
+      "fileCount": 907,
+      "bytes": 38358390,
+      "secretFileCount": 0,
+      "sourceGitSHA": "a1104b9bc72e24fc45759af6352ef3524d5bffc5",
+      "sourceMatches": true,
+      "sourceUploaded": true
+    },
+    "build": {
+      "id": "251185f7-6f65-4c24-b2d8-fe1c50bc8b9d",
+      "status": "NEW",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "38",
+      "gitCommitHash": "a1104b9bc72e24fc45759af6352ef3524d5bffc5",
+      "createdAt": "2026-10-13T10:01:25.674Z"
+    },
+    "storeSubmitted": false,
+    "publicReleasePerformed": false
+  },
+  "exactUserError": "User reports no visible error. Intermittent verification failures were observed in server funnel; direct causality remains to be confirmed by corrected-build QA.",
+  "userMonthlyRestoreReportedSuccess": true,
+  "easBuildStatus": {
+    "checkedAt": "2026-10-13T10:20:55.784Z",
+    "build": {
+      "id": "251185f7-6f65-4c24-b2d8-fe1c50bc8b9d",
+      "status": "FINISHED",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "38",
+      "gitCommitHash": "a1104b9bc72e24fc45759af6352ef3524d5bffc5",
+      "createdAt": "2026-10-13T10:01:25.674Z",
+      "completedAt": "2026-10-13T10:19:03.283Z"
+    },
+    "errorCode": null
+  },
+  "artifactRecord": "android-artifact-38.json",
+  "internalVersion38Active": true,
+  "globalRecoveryFollowup": {
+    "issue": "Automatic startup/unclaimed purchase recovery still sent purchase.currentPlanId after foreground38 patch",
+    "correction": "Both foreground purchase/restore and global recovery now call the same verified request builder",
+    "allCurrentPlanIdPayloadConsumersRemoved": true,
+    "mobileTestsPassed": 577,
+    "mobileTypecheckPassed": true,
+    "mobileLintPassed": true,
+    "nativeOrUiLayoutChanges": false
+  },
+  "finalSourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+  "finalBuild": {
+    "checkedAt": "2026-10-13T10:54:46.100Z",
+    "build": {
+      "id": "9f8d5ab2-0bf5-40c3-b924-ef973c05a193",
+      "status": "FINISHED",
+      "platform": "ANDROID",
+      "appVersion": "1.4.3",
+      "appBuildVersion": "39",
+      "gitCommitHash": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+      "createdAt": "2026-10-13T10:37:29.995Z",
+      "completedAt": "2026-10-13T10:53:35.574Z"
+    },
+    "errorCode": null
+  },
+  "finalAndroidDeviceQARecord": "android-artifact-39.json",
+  "finalProductionReviewRecord": "android-production-39.json",
+  "finalCandidateStatus": "39 installed from Play, yearly purchase/restore/renewal and relaunch verified; production39 under review"
+}

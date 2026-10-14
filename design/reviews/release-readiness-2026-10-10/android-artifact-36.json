@@ -1,0 +1,1574 @@
+{
+  "dataAsOf": "2026-10-10",
+  "buildId": "45771930-1730-465c-a73b-765fa5f8d2c2",
+  "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+  "artifact": "jango-release-android-1.4.3-36.aab",
+  "artifactBytes": 128257746,
+  "artifactSHA256": "e9f7578aa20df2499f64c6edd36ddec35364272655472fb2b27fb90808ce2691",
+  "bundletoolValidator": "1.18.3",
+  "bundleValidationExitCode": 0,
+  "jarIntegrityVerified": true,
+  "uploadCertificateSHA256": "45:0A:95:1E:9A:EF:3E:A0:46:E1:8C:9D:2B:4F:89:F3:2D:B2:35:F2:CE:1E:88:DA:C7:A2:76:48:B1:02:99:57",
+  "manifest": {
+    "package": "com.expirymate.mobile",
+    "versionName": "1.4.3",
+    "versionCode": "36",
+    "compileSdk": "36",
+    "minSdk": "24",
+    "targetSdk": "36",
+    "debuggable": "false",
+    "extractNativeLibs": "false",
+    "mainActivityConfigChangesHex": "0x000007b0",
+    "optInFontScaleConfiguration": false,
+    "permissions": [
+      "android.permission.CAMERA",
+      "android.permission.INTERNET",
+      "android.permission.VIBRATE",
+      "com.android.vending.BILLING",
+      "android.permission.WAKE_LOCK",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.POST_NOTIFICATIONS",
+      "com.google.android.c2dm.permission.RECEIVE",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT",
+      "android.permission.ACCESS_ADSERVICES_AD_ID",
+      "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+      "android.permission.ACCESS_ADSERVICES_TOPICS",
+      "android.permission.FOREGROUND_SERVICE",
+      "com.expirymate.mobile.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+      "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+      "com.sec.android.provider.badge.permission.READ",
+      "com.sec.android.provider.badge.permission.WRITE",
+      "com.htc.launcher.permission.READ_SETTINGS",
+      "com.htc.launcher.permission.UPDATE_SHORTCUT",
+      "com.sonyericsson.home.permission.BROADCAST_BADGE",
+      "com.sonymobile.home.permission.PROVIDER_INSERT_BADGE",
+      "com.anddoes.launcher.permission.UPDATE_COUNT",
+      "com.majeur.launcher.permission.UPDATE_BADGE",
+      "com.huawei.android.launcher.permission.CHANGE_BADGE",
+      "com.huawei.android.launcher.permission.READ_SETTINGS",
+      "com.huawei.android.launcher.permission.WRITE_SETTINGS",
+      "android.permission.READ_APP_BADGE",
+      "com.oppo.launcher.permission.READ_SETTINGS",
+      "com.oppo.launcher.permission.WRITE_SETTINGS",
+      "me.everything.badger.permission.BADGE_COUNT_READ",
+      "me.everything.badger.permission.BADGE_COUNT_WRITE"
+    ],
+    "advertisingIdPermissionPresent": false,
+    "adServicesPermissions": [
+      "android.permission.ACCESS_ADSERVICES_AD_ID",
+      "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+      "android.permission.ACCESS_ADSERVICES_TOPICS"
+    ]
+  },
+  "bundleConfiguration": {
+    "enabled": true,
+    "alignment": "PAGE_ALIGNMENT_16K"
+  },
+  "native64BitLibraries": [
+    {
+      "path": "base/lib/arm64-v8a/libandroidx.graphics.path.so",
+      "sha256": "41e9a793c43a0f4fddb19e33f346bace464f30f888ba7b9eaf96294ea115bfb6",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libappmodules.so",
+      "sha256": "508729ece6aa04fc51dbcba5eafee85b92fce052ff202adbfc0f2eb0e1089b14",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libbarhopper_v3.so",
+      "sha256": "ec09597e9eb3aee0eb55ae3366da0d4ba416f5aa35a1af0b3811f50ff46743a1",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/arm64-v8a/libc++_shared.so",
+      "sha256": "3e852764502d06e0cf1080d532ae7c608b7649d946a3a9d7e84e3d4b7d683214",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libexpo-modules-core.so",
+      "sha256": "c41b356f5211fca996d3b94fe47d695c7cfa9e54ce15870a3c01dfca5450ff67",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libfbjni.so",
+      "sha256": "a9e35ba55d3f956920281f519385f8a72475ee24819799cb08375fdd4cce2b22",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libgesturehandler.so",
+      "sha256": "5ac4ce26371ddaba37f3a000605f61b801c6a71fca821fe7111a62c2e8770793",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libgifimage.so",
+      "sha256": "9f605249728da7091569772a38a4dde298ed48e1e73fed3da0e4b662ef38715c",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libhermes.so",
+      "sha256": "5705c7e2cf51fcd3befa825ae2a6717524037b368cdac005a7a63c4a92ef4467",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libhermestooling.so",
+      "sha256": "142247a46e46a9c2b07397b2b69fff61ffe9f635da3c42308d214b134ad73e31",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libimage_processing_util_jni.so",
+      "sha256": "f0e4611db0d6b68942d8ba6977519f3dd1cdbffa87b7fc16d8006696ba954af4",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/arm64-v8a/libimagepipeline.so",
+      "sha256": "1b377992e4256fa9398ec057722f84a359c7d588e570c8a41f51d930c19ece7d",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libjsi.so",
+      "sha256": "4473c47c5bd25e2856b6b13f756e39abb299b1c19954830f6efbf13b6b6cf0b4",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libmlkit_google_ocr_pipeline.so",
+      "sha256": "fa41d509a661e8aa8b3e3ac1a28541f8823f308414fcad733fe26d61feea2646",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libnative-filters.so",
+      "sha256": "4294b57460e70a6351ce7ae2733a79c088c907dfa54673a657227ec5bb669594",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libnative-imagetranscoder.so",
+      "sha256": "2aed28298a25afd52ac670cf9682398c6c7ba42a57195c01efd565e7ddfe17ca",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libreact_codegen_rnscreens.so",
+      "sha256": "13e55dbe1561178476f90f8e8f42cde743cb4005d4f0ce4b2d70597f0169c395",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libreact_codegen_rnsvg.so",
+      "sha256": "8940cf4b98de256b6297f8850cee408d35dedb70b2e441f3e10f76c5eedee686",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libreact_codegen_safeareacontext.so",
+      "sha256": "6b866ccbb2af82481ab41ee2aabf260d88a048d686e2e5ce5c6e6e141febe630",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libreactnative.so",
+      "sha256": "8fd69e877877a85f768190343e587a5a0238246c2903c4063be9fc05b7c705b7",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libreanimated.so",
+      "sha256": "f07c4b7ac5374b99bb2781494ff989b5bb58761a9fc19627cd146819a3f93012",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/librnscreens.so",
+      "sha256": "92859dae4b98294158259e9d21fbe40b32d9e3a234d2801098807e45c89b9a4d",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/arm64-v8a/libsentry-android.so",
+      "sha256": "03b041cefda2a3712d25cbadf804f1bddea080f5f17c380355f4f995645e8a4c",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/arm64-v8a/libsentry.so",
+      "sha256": "e65f7d6eb3eada2fff1639f9e2c16b61796e66b525cf4e03133102456fcc7eda",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/arm64-v8a/libstatic-webp.so",
+      "sha256": "f3e5f9ab4f93f2a0a057285a2de9c93ba0ab59c76c22874d0356493ce283c4c7",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libsurface_util_jni.so",
+      "sha256": "6cb2eac3c68e6a82ce2a5ea5aba86749eb8c609914392e125f6cdfbc208992f8",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/arm64-v8a/libworklets.so",
+      "sha256": "d9e4ea88493686c485c52bc30651eb93222018bf4a5015edfa4ed63cddbbf57b",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libandroidx.graphics.path.so",
+      "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libappmodules.so",
+      "sha256": "eff5fbe152a4f4186d8b1eeb16a666f521dbe64f273248685838b4e1eb5bbbc1",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libbarhopper_v3.so",
+      "sha256": "6c5deea87d962af008fd48c3229db13ab68eef2e9feeccb2df5b33a920c0579a",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libc++_shared.so",
+      "sha256": "0a2c7afa35b183fdd5a3cb20e2080ad54cbea06c2a4f0bc8f122cb7d1e9e0b9f",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libexpo-modules-core.so",
+      "sha256": "4c19afc08dd160276593cf85a32b1bde21b9fb3cdb95b9b5ec3cb7bf6cd104dd",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/x86_64/libfbjni.so",
+      "sha256": "a51410366a0394e05bc04052cfb237c70dcf7d4d53a56e1d00a041436cb0b653",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libgesturehandler.so",
+      "sha256": "307be3efb2b97710070d826eea4a6fe4c4658f717e69904fe091ce64f805c918",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libgifimage.so",
+      "sha256": "20768d822119deee9beeccfd4340987976381587b519b630f5393fee4d731c1f",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libhermes.so",
+      "sha256": "2e9e9d813b39822f60c9343b7a6df37e85ed07da297ade1f868117be73c5bd09",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libhermestooling.so",
+      "sha256": "af87414def343b2308cf176c619535490f4cdbd71db11519d54b0ba40c2b2936",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libimage_processing_util_jni.so",
+      "sha256": "f5d02c9c50c33a45c2125f63f4d6c954aec0e9b1a6ade25074f146ed92264efe",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/x86_64/libimagepipeline.so",
+      "sha256": "2e596f4955f65abaa93c891b49eb58b5416581806a04bde0097cc369ae4dbfb3",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libjsi.so",
+      "sha256": "7d73423333c32673b11963df6f65d9b6a0b6cd31596a84278c85bd6660529a8b",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libmlkit_google_ocr_pipeline.so",
+      "sha256": "3ddffb498b60f7f9512e341d4ee3abe4e1580c4fd65ef9b2c8ce9e490de467d8",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libnative-filters.so",
+      "sha256": "1a5270f007dd4b2f0fc52ceac82e05143648ba9be59c2213a21cf61c84f1f5e5",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libnative-imagetranscoder.so",
+      "sha256": "f6b92ad7f1c30973f40704c46987504757c3d079c7f4ace6efc8b318dd9c22f3",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/x86_64/libreact_codegen_rnscreens.so",
+      "sha256": "23b3e6c3f7ff28402fb2eedeb75f643acac68f79bcd7bc42ffc3e8671dba8f80",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libreact_codegen_rnsvg.so",
+      "sha256": "a5e284a737ced08cfa3cf5aa5ee4f29f00cf7939cf8714baa0e5c1e7c319c57a",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/x86_64/libreact_codegen_safeareacontext.so",
+      "sha256": "0041721b64c561e779b70d28da1030e9c78e0bcd040e4694c880350a628328f9",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libreactnative.so",
+      "sha256": "3a51379ec521d6f701bd9fb92d9af9f2b2450b496704a31b12f1caba84f4aa95",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 8192
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libreanimated.so",
+      "sha256": "132e3001673c12416d606191fc13c9f4266e6b6b5b9c0f2025859958bdb8c1c0",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/librnscreens.so",
+      "sha256": "88fc2156bb79a5808a0dbccce2088c843329c5051b187bec712f731a4c368252",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libsentry-android.so",
+      "sha256": "12f93144c1a66d375550473aa88ecbfe78126fde0748dd61628709d7b21ba55c",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": true,
+          "endModulo16K": 0
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": true
+    },
+    {
+      "path": "base/lib/x86_64/libsentry.so",
+      "sha256": "8780b31b8d91bbf5ff29131a13b8fcc7089468ee35b80684df57b4c29334bd21",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libstatic-webp.so",
+      "sha256": "e7884cd18761b5ee54de98b9a3f4b9e4b0dea364c186e24ff9b740b29742562b",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libsurface_util_jni.so",
+      "sha256": "84d8ca201f2160b2ca3a5bd2886994f7287ee7cd09fe73b081f5b236dda8496d",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 4096
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    },
+    {
+      "path": "base/lib/x86_64/libworklets.so",
+      "sha256": "26f221190c8ffba81db7ae3740b345bc2373dd43da2a44cabc63140b0977ffc6",
+      "loadSegments": [
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        },
+        {
+          "alignment": 16384,
+          "congruent16K": true
+        }
+      ],
+      "gnuRelro": [
+        {
+          "endAlignment16K": false,
+          "endModulo16K": 12288
+        }
+      ],
+      "loadAlignment16K": true,
+      "relroEndAlignment16K": false
+    }
+  ],
+  "alignmentSummary": {
+    "libraryCount": 54,
+    "loadAlignmentPassCount": 54,
+    "relroEndAlignmentPassCount": 10,
+    "relroReviewNecessary": true,
+    "relroReviewReason": "44 of 54 GNU_RELRO ends are not divisible by 16KB under the static check; actual ARM64 16KB startup/login navigation passed with pageSizeCompat=0. This is not proof every native SDK execution path is compatible."
+  },
+  "limitations": "Static AAB/locally generated APK checks and isolated ARM64 16KB startup passed. Play-generated APK, OEM OAuth/session, camera/OCR, ads and IAP QA pending. Expected self-signed upload-key trust warning is separate from verified JAR integrity.",
+  "publishedAarComparison": [
+    {
+      "abi": "arm64-v8a",
+      "library": "libreactnative.so",
+      "matchesOfficialReleaseAarBytes": true
+    },
+    {
+      "abi": "x86_64",
+      "library": "libreactnative.so",
+      "matchesOfficialReleaseAarBytes": true
+    },
+    {
+      "abi": "arm64-v8a",
+      "library": "libhermes.so",
+      "matchesOfficialReleaseAarBytes": true
+    },
+    {
+      "abi": "x86_64",
+      "library": "libhermes.so",
+      "matchesOfficialReleaseAarBytes": true
+    }
+  ],
+  "localGeneratedApk": {
+    "purpose": "Isolated 16KB runtime/ZIP validation; debug certificate only, not a store artifact",
+    "zipAlignment16KVerified": true,
+    "sha256": "81b77a9314d0332b990213308b56d5abcb19e2eb7983b624ae4a07207d393501",
+    "releaseOAuthIdentityQualified": false
+  },
+  "isolated16KRuntime": {
+    "image": "system-images;android-36;google_apis_ps16k;arm64-v8a",
+    "kernelPageSize": 16384,
+    "pageSizeCompat": 0,
+    "packageVersion": "1.4.3 (36)",
+    "coldStartPassed": true,
+    "coldStartTotalMilliseconds": 3566,
+    "welcomeScreenRendered": true,
+    "loginScreenNavigationPassed": true,
+    "processSurvived": true,
+    "crashBufferEmpty": true,
+    "nativeLinkerErrorObserved": false,
+    "artifact": "local universal APK derived from exact AAB, release manifest/debug signing certificate",
+    "screenshot": "android-16k-login.png",
+    "limitations": "Startup and unauthenticated login navigation only; not OAuth, purchase, camera/OCR, ads or full SDK runtime qualification. Play-generated APK/OEM QA pending."
+  },
+  "internalTestUpload": {
+    "committedAt": "2026-10-10T08:28:58.582Z",
+    "versionCode": 36,
+    "artifactSha256": "e9f7578aa20df2499f64c6edd36ddec35364272655472fb2b27fb90808ce2691",
+    "reviewScope": "Internal test automatic review only, as required by Google",
+    "productionReleasesUnchanged": true,
+    "internalVersion36Active": true,
+    "publicReleasePerformed": false,
+    "testerRegistration": {
+      "explicitlyAuthorized": true,
+      "selectedList": "장고 1.4.3 출시 QA",
+      "accountCount": 1,
+      "consoleSaved": true,
+      "trackActive": true,
+      "optInURL": "https://play.google.com/apps/internaltest/4701301604013240291"
+    }
+  },
+  "realDeviceQA": {
+    "installedVersionDirectlyVerified": true,
+    "deviceModel": "Galaxy A34 (SM-A346N)",
+    "versionName": "1.4.3",
+    "versionCode": 36,
+    "installerPackageName": "com.android.vending",
+    "targetRCInstalled": true,
+    "playSigning": {
+      "checkedAt": "2026-10-10",
+      "artifact": "Play-generated installed base APK from Galaxy A34",
+      "package": "com.expirymate.mobile",
+      "versionName": "1.4.3",
+      "versionCode": 36,
+      "installerPackageName": "com.android.vending",
+      "apkBytes": 91813124,
+      "apkSha256": "3045b97c941ebf1cb114e9d3780266a6fd97ae6620d37e75cfff35a51d042b88",
+      "signatureVerificationPassed": true,
+      "signingMetadata": [
+        "Verifies",
+        "Verified using v1 scheme (JAR signing): false",
+        "Verified using v2 scheme (APK Signature Scheme v2): true",
+        "Verified using v3 scheme (APK Signature Scheme v3): true",
+        "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+        "Verified using v4 scheme (APK Signature Scheme v4): false",
+        "Signer #1 certificate SHA-256 digest: 7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+        "Source Stamp Signer certificate SHA-256 digest: 3257d599a49d2c961a471ca9843f59d341a405884583fc087df4237b733bbd6d"
+      ],
+      "expectedPlayCertificateComparison": "matches Google Play Console app signing certificate",
+      "deviceSerialCommitted": false,
+      "expectedPlayCertificateSha256": "7e1cefd4e0ec3a8b8c5d02cec06f95106e571ac4518423594edb08e9be7e8ce6",
+      "playAppSigningCertificateMatched": true
+    },
+    "userReportedChecks": {
+      "plusProductPrices": false
+    },
+    "scope": "Previously reported core QA occurred before actual RC36 installation and is not carried forward. User reports missing Plus on the confirmed RC36. Login/relaunch/inventory/photo entry and full SDK/purchase/push QA on RC36 remain unconfirmed.",
+    "resolution": "Account tester eligibility confirmed; free remote Play install completed after user performed Google identity verification. No app data cleared, no paid purchase or authentication setting changed."
+  }
+}

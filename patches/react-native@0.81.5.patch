@@ -9,14 +9,44 @@ index f47d8198fbd652f4b5afa7b8cd1f599a4bf3a678..7f7624b78bf8720ac59dfcef6d4fe6f6
 +
 +  override fun enableFontScaleChangesUpdatingLayout(): Boolean = bridgelessEnabled || fabricEnabled
  }
+diff --git a/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt b/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt
+index 6d570f224ca7c794e355360fdb5df7250bfd71ee..22da8be83bc39f6ed52f17b95e45244d79392a5a 100644
+--- a/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt
++++ b/ReactAndroid/src/main/java/com/facebook/react/modules/deviceinfo/DeviceInfoModule.kt
+@@ -43,6 +43,14 @@ internal class DeviceInfoModule(reactContext: ReactApplicationContext) :
+   }
+ 
+   override fun onHostResume() {
++    updateFontScale()
++  }
++
++  fun onConfigurationChanged() {
++    updateFontScale()
++  }
++
++  private fun updateFontScale() {
+     val newFontScale = reactApplicationContext.resources?.configuration?.fontScale
+     if (newFontScale != null && newFontScale != fontScale) {
+       fontScale = newFontScale
 diff --git a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
-index 4ed8dd2738c928377ea4e0eb11c0467d7ef5f17d..6c723731c78bc2c9e0f7582123282ac5401a32b8 100644
+index 4ed8dd2738c928377ea4e0eb11c0467d7ef5f17d..7fe78ca005236fcb502efc13bea0cf5e90c25393 100644
 --- a/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
 +++ b/ReactAndroid/src/main/java/com/facebook/react/runtime/ReactHostImpl.kt
-@@ -621,6 +621,13 @@ public class ReactHostImpl(
+@@ -57,6 +57,7 @@ import com.facebook.react.internal.featureflags.ReactNativeNewArchitectureFeatur
+ import com.facebook.react.modules.appearance.AppearanceModule
+ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
+ import com.facebook.react.modules.core.DeviceEventManagerModule
++import com.facebook.react.modules.deviceinfo.DeviceInfoModule
+ import com.facebook.react.modules.systeminfo.AndroidInfoHelpers
+ import com.facebook.react.runtime.internal.bolts.Task
+ import com.facebook.react.runtime.internal.bolts.TaskCompletionSource
+@@ -621,6 +622,16 @@ public class ReactHostImpl(
      if (currentReactContext != null) {
        if (ReactNativeFeatureFlags.enableFontScaleChangesUpdatingLayout()) {
          DisplayMetricsHolder.initDisplayMetrics(currentReactContext)
++        // A handled configuration change can happen without a host resume.
++        // Update JS Dimensions from the same configuration before measuring.
++        currentReactContext.getNativeModule(DeviceInfoModule::class.java)?.onConfigurationChanged()
 +        // A handled fontScale change can keep the same root bounds. Request a
 +        // measure pass so each surface forwards the new font scale to Fabric.
 +        synchronized(attachedSurfaces) {

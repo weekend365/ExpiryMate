@@ -1,0 +1,83 @@
+{
+  "checkedAt": "2026-10-10T11:42:40.115Z",
+  "state": "Selected operator cost exception deployed and runtime verified",
+  "userRequest": "Enable new subscriptions after menu fix",
+  "productionPrecheck": {
+    "checkedAt": "2026-10-10T10:56:03.431Z",
+    "productionSelectOnly": true,
+    "subscriptionsFlagEnabled": true,
+    "guardrailEnabled": true,
+    "effectiveSubscriptionsEnabled": false,
+    "subscriptions": {
+      "allowed": false,
+      "status": "learning",
+      "projectedMonthlyCostKrw": 2190.33,
+      "budgetKrw": 2000,
+      "recipeSamples": 4,
+      "photoSamples": 1
+    },
+    "minimumRecipeSamples": "10",
+    "minimumPhotoSamples": "3",
+    "settingsMenuVisibility": "User confirmed visible on both updated test builds",
+    "interpretation": "New checkout is rejected by economics guardrail in status, purchase intent and new receipt acceptance; menu visibility fixed separately",
+    "sandboxPurchasesAllowed": false,
+    "configuredUsdKrw": 1500,
+    "currentRecipeModel": "gpt-5.4-mini",
+    "currentPhotoModel": "gpt-5.6-luna",
+    "flagsChanged": false,
+    "userDataOrRawCostsReturned": false
+  },
+  "sourcePolicy": "docs/monetization.md dated 2026-10-10 personal Plus exception",
+  "policyGate": {
+    "minimumRecipes": 50,
+    "minimumPhotos": 30,
+    "maximumMonthlyAiCostKrw": 858,
+    "formula": "60 × recipe p95 + 30 × photo p95"
+  },
+  "salesSwitchAlreadyOn": true,
+  "threeConsistentChecks": [
+    "monetization status sales availability",
+    "purchase intent creation",
+    "new verified receipt acceptance"
+  ],
+  "options": {
+    "testOnly": {
+      "requires": "Server-authenticated QA account allowlist; genuine Apple/Google sandbox environment; Google license tester setup; no real production purchase enabled for the cost exception",
+      "globalGuardrailDisabled": false,
+      "publicSalesEnabled": false,
+      "proposedServerChanges": "Scoped QA cost exception and sandbox acceptance with account matching; currently absent and not deployed"
+    },
+    "qualifiedSales": {
+      "requires": "Current-model 50 recipe/30 photo actual quality and cost evidence, complete IAP QA; read-only guardrail false preserved until qualification"
+    },
+    "operatorExceptionSales": {
+      "requires": "Explicit user selection of whole personal Plus sales with cost-policy exception; new personal-Plus-only cost override applied consistently to three checks",
+      "globalGuardrailDisabled": false,
+      "existingEntitlementsAndMonthlyDailyQuotasPreserved": true,
+      "proposedServerChanges": "Shared personal Plus policy deployed to API 9cabee4; operator_override set; raw economics and other safeguards preserved"
+    }
+  },
+  "productionWritesPerformed": true,
+  "newPaidAiEvaluationStarted": false,
+  "newPublicAppReleasePerformed": false,
+  "userAuthorization": {
+    "request": "원가 검증 예외를 승인하고 전체 판매 열기",
+    "date": "2026-10-10",
+    "scope": "All new personal Plus sales on iOS and Android; personal cost gate only"
+  },
+  "selectedOption": "operatorExceptionSales",
+  "operatorMode": {
+    "key": "SUBSCRIPTION_COST_GATE_MODE",
+    "value": "operator_override",
+    "default": "required",
+    "emergencyStop": "SUBSCRIPTIONS_ENABLED=false",
+    "rawEconomicsRewritten": false,
+    "sandboxAcceptanceChanged": false
+  },
+  "productionWritesScope": "One Railway API variable plus authorized API deployment; no production DB data changes",
+  "productionActivationRecord": "subscription-sales-activation.json",
+  "effectivePersonalSalesAvailability": true,
+  "realPurchaseRestoreQaPassed": false,
+  "actualDevicePriceQa": "Price and join button visible on both devices per user after requested restart",
+  "devicePriceQaConfirmedAt": "2026-10-10T12:16:01.105568+00:00"
+}

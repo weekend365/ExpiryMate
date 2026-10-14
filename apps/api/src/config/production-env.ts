@@ -586,6 +586,7 @@ function validateMonetization(env: EnvMap, errors: string[]) {
       "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL",
       "GOOGLE_PLAY_SERVICE_ACCOUNT_PRIVATE_KEY",
       "GOOGLE_RTDN_AUDIENCE",
+      "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
       "SUBSCRIPTION_ACCOUNT_LINK_SECRET",
     ]) {
       requireFeatureValue(env, key, "SUBSCRIPTIONS_ENABLED", errors);

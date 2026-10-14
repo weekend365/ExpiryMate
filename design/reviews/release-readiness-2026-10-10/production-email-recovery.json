@@ -1,0 +1,157 @@
+{
+  "dataAsOf": "2026-10-10",
+  "authorization": "User approved latest production backup + isolated restore, then only service-account email correction and existing-source redeploy",
+  "backupAndRestore": {
+    "startedAt": "2026-10-10T08:13:28.028Z",
+    "backupPath": "/tmp/jango-prod-backup-20261010/production.dump",
+    "backupMode": "consistent exported repeatable-read snapshot; custom format; no owner/ACL",
+    "productionWrites": false,
+    "localRestoreOnly": true,
+    "rawDataCommitted": false,
+    "productionPostgresVersion": "180006",
+    "productionDatabaseBytes": "146912959",
+    "backupCompletedAt": "2026-10-10T08:14:54.530Z",
+    "backupBytes": 11704536,
+    "backupSha256": "a0e70ae9b186a2a40fae99bf531e0631b8591b94ffd83ef2b66a58294e1bc771",
+    "tableCount": 41,
+    "allTableRowCountsMatch": true,
+    "catalogMatches": true,
+    "migrationsMatch": true,
+    "migrationCount": 45,
+    "unfinishedMigrations": 0,
+    "constraints": 449,
+    "indexes": 167,
+    "invalidIndexes": 0,
+    "unvalidatedConstraints": 0,
+    "pgAmcheckPassed": true,
+    "consistencyChecks": {
+      "usersWithoutPersonalSpace": 4,
+      "inventoryWithoutSpace": 0,
+      "storageWithoutSpace": 0,
+      "recipeWithoutSpace": 0
+    },
+    "restoreVerifiedAt": "2026-10-10T08:15:03.964Z",
+    "restorePassed": true,
+    "localServerStopped": true,
+    "isolatedRestoredUserDataRemoved": true,
+    "retainedBackupPath": "/Users/namu/Library/Application Support/Jango/ReleaseBackups/2026-10-10/production.dump",
+    "retainedBackupPermissions": "0700 directory / 0600 file"
+  },
+  "emailCorrection": {
+    "appliedAt": "2026-10-10T08:16:22.572Z",
+    "authorizedScope": "Only Google Play service account email; existing private key unchanged; consequent existing-source API redeployment",
+    "backupSha256": "a0e70ae9b186a2a40fae99bf531e0631b8591b94ffd83ef2b66a58294e1bc771",
+    "backupRestoreVerifiedAt": "2026-10-10T08:15:03.964Z",
+    "correctedPublicServiceAccountEmail": "jango-play-verifier@jango-plz.iam.gserviceaccount.com",
+    "emailMatches": true,
+    "existingPrivateKeyUnchanged": true,
+    "changedVariableNames": [
+      "GOOGLE_PLAY_SERVICE_ACCOUNT_EMAIL"
+    ],
+    "onlyRequestedVariableChanged": true,
+    "previousDeployments": [
+      {
+        "id": "54350afd-6ae2-49d3-b034-c212fcc781cd",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T05:51:01.818Z",
+        "sourceCommit": "ddb18f7abaadb705311c6f997e404241dca9ca5c"
+      },
+      {
+        "id": "d09f7f9a-3e25-4e03-8a39-5533ec0ca275",
+        "status": "REMOVED",
+        "createdAt": "2026-10-08T05:48:43.763Z",
+        "sourceCommit": "37bc4b3d1ea971ce020f50f6a3d9c4f97396999d"
+      },
+      {
+        "id": "b08d7da4-dc21-45e5-93fd-3c9ecb460cf2",
+        "status": "FAILED",
+        "createdAt": "2026-10-08T03:43:40.965Z",
+        "sourceCommit": "c2939d9c24d9248ad69fc5f85892fa0c27c3dad8"
+      }
+    ],
+    "postChangeDeployments": [
+      {
+        "id": "8016c2d5-120f-4bfb-bfe5-88d3ed18db5c",
+        "status": "INITIALIZING",
+        "createdAt": "2026-10-10T08:16:25.652Z",
+        "sourceCommit": "ddb18f7abaadb705311c6f997e404241dca9ca5c"
+      },
+      {
+        "id": "54350afd-6ae2-49d3-b034-c212fcc781cd",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T05:51:01.818Z",
+        "sourceCommit": "ddb18f7abaadb705311c6f997e404241dca9ca5c"
+      },
+      {
+        "id": "d09f7f9a-3e25-4e03-8a39-5533ec0ca275",
+        "status": "REMOVED",
+        "createdAt": "2026-10-08T05:48:43.763Z",
+        "sourceCommit": "37bc4b3d1ea971ce020f50f6a3d9c4f97396999d"
+      }
+    ],
+    "localSourceUploaded": false,
+    "gitPushed": false,
+    "credentialsPrinted": false
+  },
+  "deploymentVerified": {
+    "id": "8016c2d5-120f-4bfb-bfe5-88d3ed18db5c",
+    "status": "SUCCESS",
+    "createdAt": "2026-10-10T08:16:25.652Z",
+    "sourceCommit": "ddb18f7abaadb705311c6f997e404241dca9ca5c"
+  },
+  "googleOAuthAndProductReadPassed": true,
+  "googleAccountKeyMatch": {
+    "emailExactMatch": true,
+    "emailTrimmedMatch": true,
+    "emailHasWhitespace": false,
+    "emailHasQuote": false,
+    "enabledExistingServiceAccount": "jango-play-verifier@jango-plz.iam.gserviceaccount.com",
+    "activePublicCertificateCount": 3,
+    "existingPrivateKeyMatchesActiveCertificate": true,
+    "matchingPublicKeyIds": [
+      "3042c0c2294658e778a1d30c04969065f3f87ef0"
+    ],
+    "privateKeyPrinted": false
+  },
+  "publicHealthAndReadyPassed": true,
+  "spaceConsistency": {
+    "checkedAt": "2026-10-10T08:22:08.317Z",
+    "scope": "Aggregate SELECT only; no identities returned",
+    "missingPersonalSpaceGroups": [
+      {
+        "accountType": "anonymous",
+        "deleted": true,
+        "merged": false,
+        "count": 1
+      },
+      {
+        "accountType": "registered",
+        "deleted": false,
+        "merged": false,
+        "count": 3
+      }
+    ],
+    "activeUnmergedUsersWithoutPersonalSpace": 3,
+    "activeMissingSpaceMetadata": [
+      {
+        "role": "user",
+        "emailVerified": false,
+        "hasSession": false,
+        "hasInventory": false,
+        "hasMembership": false,
+        "count": 2
+      },
+      {
+        "role": "user",
+        "emailVerified": true,
+        "hasSession": false,
+        "hasInventory": false,
+        "hasMembership": false,
+        "count": 1
+      }
+    ]
+  },
+  "spaceConsistencyInterpretation": "3 registered accounts have no current session, inventory or membership; createSession ensures personal space. Existing inactive/uncompleted account state, not a restore mismatch; no data repair performed. 1 deleted anonymous account also has no space.",
+  "realPurchaseOrRestoreVerified": false,
+  "privateKeyPrintedOrCommitted": false
+}

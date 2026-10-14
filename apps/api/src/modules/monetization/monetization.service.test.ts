@@ -11,6 +11,7 @@ import {
 } from "@prisma/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MonetizationService } from "./monetization.service";
+import * as unitEconomics from "./unit-economics-guardrail";
 
 const managedEnvKeys = [
   "AUTH_TOKEN_SECRET",
@@ -19,6 +20,7 @@ const managedEnvKeys = [
   "ADMOB_ANDROID_REWARDED_AD_UNIT_ID",
   "REWARDED_ADS_ENABLED",
   "SUBSCRIPTIONS_ENABLED",
+  "SUBSCRIPTION_COST_GATE_MODE",
   "MONETIZATION_OFFER_MODE",
   "RECIPE_FREE_DAILY_LIMIT",
   "RECIPE_REWARDED_DAILY_LIMIT",
@@ -50,6 +52,7 @@ describe("MonetizationService", () => {
   beforeEach(() => {
     process.env.REWARDED_ADS_ENABLED = "true";
     process.env.SUBSCRIPTIONS_ENABLED = "true";
+    process.env.SUBSCRIPTION_COST_GATE_MODE = "required";
     process.env.MONETIZATION_OFFER_MODE = "core";
     process.env.RECIPE_FREE_DAILY_LIMIT = "1";
     process.env.RECIPE_REWARDED_DAILY_LIMIT = "3";
@@ -86,6 +89,29 @@ describe("MonetizationService", () => {
       if (value === undefined) delete process.env[key];
       else process.env[key] = value;
     }
+  });
+
+  it.each([
+    { mode: "required", sales: "true", expected: false },
+    { mode: "operator_override", sales: "true", expected: true },
+    { mode: "operator_override", sales: "false", expected: false },
+    { mode: "invalid", sales: "true", expected: false },
+  ])("applies the personal cost policy to paywall availability: $mode/$sales", async ({ mode, sales, expected }) => {
+    process.env.SUBSCRIPTION_COST_GATE_MODE = mode;
+    process.env.SUBSCRIPTIONS_ENABLED = sales;
+    vi.spyOn(unitEconomics, "getUnitEconomicsAvailability").mockResolvedValue({
+      subscriptions: { allowed: false, status: "learning", projectedMonthlyCostKrw: 2190,
+        budgetKrw: 858, recipeSamples: 4, photoSamples: 1 },
+      rewardedAds: { allowed: false, status: "blocked", coverageMultiple: 0.5 },
+      paidCredits: { allowed: false, status: "blocked", coverageMultiple: 0.5 },
+      subscriptionDailyLimitCaps: { subscriber: null, household: null },
+    });
+    const service = new MonetizationService(createPrismaMock() as never);
+    const status = await service.getStatus("owner-a");
+    expect(status.subscriptionsEnabled).toBe(expected);
+    expect(status.tier).toBe("free");
+    expect(status.free.limit).toBe(1);
+    expect(status.rewardedAds.canWatch).toBe(false);
   });
 
   it("uses the KST day and includes reservations in the free limit", async () => {

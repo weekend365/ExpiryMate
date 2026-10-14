@@ -1,0 +1,581 @@
+{
+  "status": "saved-and-submitted-for-review",
+  "dataAsOf": "2026-10-10T14:08:11.656909+00:00",
+  "app": "장고야 부탁해",
+  "version": "1.4.3",
+  "destination": "Google Play Console / com.expirymate.mobile / Data Safety",
+  "observed": {
+    "policyAttentionItems": 0,
+    "completedDeclarations": 11,
+    "declaredTypes": [
+      "Approximate location",
+      "Name",
+      "Email address",
+      "User IDs",
+      "App interactions",
+      "Other user-generated content",
+      "Diagnostics",
+      "Device or other IDs"
+    ],
+    "missingTypes": [
+      "Photos",
+      "Purchase history",
+      "Crash logs",
+      "Other app performance data"
+    ],
+    "otherUserGeneratedContent": {
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality",
+        "Personalization"
+      ]
+    },
+    "previewSharedData": "No data shared with third parties",
+    "encryptedInTransit": true,
+    "accountMethods": [
+      "Username and password",
+      "OAuth"
+    ],
+    "accountDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "dataDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "adRelatedCurrentAnswers": {
+      "Approximate location": {
+        "collected": true,
+        "shared": false,
+        "ephemeral": true,
+        "optional": true,
+        "collectionPurposes": [
+          "Advertising or marketing"
+        ]
+      },
+      "App interactions": {
+        "collected": true,
+        "shared": false,
+        "ephemeral": true,
+        "optional": true,
+        "collectionPurposes": [
+          "Advertising or marketing"
+        ]
+      },
+      "Diagnostics": {
+        "collected": true,
+        "shared": false,
+        "ephemeral": true,
+        "optional": true,
+        "collectionPurposes": [
+          "Advertising or marketing"
+        ]
+      },
+      "Device or other IDs": {
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality"
+        ]
+      }
+    },
+    "scope": "Historical console snapshot before final-release corrections"
+  },
+  "additionalReconciliation": {
+    "required": false,
+    "scope": "Static installed-SDK/app initialization and SSV path reconciliation completed; conservative collection/shared/required answers saved in Console and submitted with production37. Full SDK runtime-path qualification remains separate.",
+    "installedVersions": {
+      "androidGma": "25.0.0",
+      "androidUmp": "4.0.0",
+      "reactNativeGoogleMobileAds": "16.3.4",
+      "sentryReactNative": "7.2.0"
+    },
+    "vendorDisclosureVersion": "25.5.0",
+    "sources": [
+      "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+      "https://developers.google.com/admob/android/ssv",
+      "https://docs.sentry.io/platforms/react-native/data-management/data-collected/",
+      "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"
+    ],
+    "vendorRecheckedAt": "2026-10-10T10:35:15.560910+00:00",
+    "vendorSourceLastUpdated": "2026-10-07",
+    "vendorVersionLimitation": "Official latest-version disclosure is for GMA25.5.0, installed version25.0.0. These conservative saved categories are an inference using official disclosure and actual initialization/SSV/Sentry code, not an exact vendor attestation or complete SDK runtime QA."
+  },
+  "apple": {
+    "privacyTypes": 15,
+    "privacyUrlsMatch": true,
+    "monthlyProduct": {
+      "id": "expirymate_premium_monthly",
+      "status": "APPROVED",
+      "krw": 4900,
+      "familySharing": false,
+      "introductoryOffers": 0
+    },
+    "yearlyProduct": {
+      "id": "expirymate_premium_yearly",
+      "status": "APPROVED",
+      "krw": 39000,
+      "familySharing": false,
+      "introductoryOffers": 0
+    },
+    "currentVersion": "1.4.2",
+    "currentBuild": "48",
+    "currentReleaseMode": "Automatically after approval",
+    "notes": "Existing public1.4.2 settings preserved. New1.4.3(51) submitted manually with seven-day phased release; approval pending.",
+    "ipa49Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "49",
+      "purchaseHistoryMissing": true,
+      "followup": "Replaced by signed IPA 1.4.3(50); PurchaseHistory verified in root manifest."
+    },
+    "ipa50Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "50",
+      "purchaseHistoryPresent": true,
+      "sourceGitSHA": "6335e0246bcd43ba201b2b19f6762b867bcb0308",
+      "artifactReport": "ios-artifact-50.json",
+      "storeUploadPerformed": true,
+      "uploadScope": "Authorized TestFlight only. Login/relaunch/inventory/photo entry reported normal; later user reports missing Plus menu, so price QA is revoked."
+    },
+    "plusMenuFollowup": "subscription-entry-fix.json",
+    "ipa51Inspection": {
+      "signatureVerified": true,
+      "sdk": "iphoneos26.5",
+      "version": "1.4.3",
+      "build": "51",
+      "purchaseHistoryPresent": true,
+      "sourceGitSHA": "6da71d1092546badec18f70dafd8455058953f77",
+      "artifactReport": "ios-artifact-51.json",
+      "testFlightUploadAndProcessingCompleted": true,
+      "newRealDeviceQA": "Monthly sandbox purchase and restore verified by server receipts/events and user active Plus confirmation. Direct iOS51 version read and full device matrix remain separate.",
+      "appReviewSubmitted": true
+    },
+    "submission": {
+      "version": "1.4.3",
+      "build": "51",
+      "reviewSubmitted": true,
+      "reviewStatus": "WAITING_FOR_REVIEW",
+      "observedLabel": "심사 대기 중",
+      "submissionId": "409a7140-9212-4aec-9283-9b6472961af2",
+      "submittedAtConsoleKst": "2026-10-10 22:41",
+      "releaseMode": "MANUAL",
+      "phasedReleaseDays": 7,
+      "appStoreConnectBuildId": "aa562802-5051-4579-b9bb-dd6dba62a164",
+      "existingReviewCredentialsPreserved": true,
+      "existingScreenshots": 6,
+      "publicReleasePerformed": false
+    }
+  },
+  "externalWritesPerformed": true,
+  "authorization": "User explicitly requested final iOS and Android release after prior build/test/deployment approvals.",
+  "externalWritesScope": "Google Play Data Safety corrections and production37 review submission; new App Store1.4.3 build51 metadata and review submission. Public release awaits review approval.",
+  "appliedCorrections": [
+    {
+      "type": "Photos",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality"
+      ],
+      "reason": "사용자가 영수증/냉장고 사진을 서버로 보내며 OpenAI Vision이 처리합니다. 서버 원본 폐기와 제공자의 보관 정책을 구분하므로 전체 처리 경로를 임시 처리라고 신고하지 않습니다. OCR/바코드 프레임은 기기 내 처리로 별개입니다.",
+      "source": "docs/store-privacy-declarations.md"
+    },
+    {
+      "type": "Purchase history",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality",
+        "Account management"
+      ],
+      "reason": "개인 플러스 구매·복원의 상품/거래/토큰·갱신/만료/취소 정보가 서버 검증 및 권리 복원에 사용됩니다. 카드번호를 수집한다는 신고는 아닙니다.",
+      "source": "docs/store-privacy-declarations.md"
+    },
+    {
+      "type": "Crash logs",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "Analytics"
+      ],
+      "reason": "production에서 Sentry 네이티브 오류와 captureException 경로가 활성화됩니다. Sentry는 서비스 제공자로 처리하며 별도의 사용자 opt-out은 확인되지 않았습니다.",
+      "source": "apps/mobile/src/services/sentry.ts"
+    },
+    {
+      "type": "Other app performance data",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "Analytics",
+        "Advertising or marketing",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "Sentry tracesSampleRate=0.2에 따른 성능 수집과 Google Mobile Ads의 app launch time·hang rate·energy usage 수집·공유를 이 유형에 대조합니다. Sentry 서비스 제공자 처리와 광고 SDK의 제3자 공유를 구분합니다. 설치 25.0.0과 최신 vendor 안내 25.5.0의 차이는 최종 실제 광고 경로 검토에 남깁니다.",
+      "sharingPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sources": [
+        "apps/mobile/src/services/sentry.ts",
+        "https://developers.google.com/admob/android/privacy/play-data-disclosure"
+      ]
+    },
+    {
+      "type": "Other user-generated content",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality",
+        "Personalization"
+      ],
+      "sharingPurposes": [
+        "App functionality"
+      ],
+      "reason": "쿠팡 상품 검색어 한 건의 제3자 전달을 신고합니다. 전체 재고·수량·유통기한·계정 ID·공간 정보는 전송하지 않습니다.",
+      "source": "docs/store-privacy-declarations.md"
+    },
+    {
+      "type": "Approximate location",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sharingPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "Google Mobile Ads 공식 안내의 SDK 수집·공유와 광고/분석/부정 이용 방지 목적을 반영합니다. 비맞춤형 광고와 AD_ID 권한 제거는 IP·app set ID·진단·상호작용을 모두 차단하는 설정이 아닙니다. 보상 광고는 사용자 선택 흐름이며 SDK 초기화도 그 흐름에서 시작합니다.",
+      "sources": [
+        "apps/mobile/src/features/monetization/rewarded-ad.ts",
+        "apps/mobile/src/services/sentry.ts",
+        "apps/mobile/app/_layout.tsx",
+        "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+        "https://docs.sentry.io/platforms/react-native/enriching-events/identify-user/"
+      ]
+    },
+    {
+      "type": "User IDs",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "App functionality",
+        "Account management",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sharingPurposes": [
+        "App functionality",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "앱 계정 ID에서 생성한 안정적인 HMAC 식별자와 세션 ID를 Google 보상 광고 SSV 옵션으로 전송합니다. 원문 계정 ID를 보내지 않는다는 사실은 식별자 미공유와 다릅니다. 공유는 보상 검증·부정 이용 방지 목적이며 광고 타겟팅에 사용한다고 추정하지 않습니다.",
+      "sources": [
+        "apps/mobile/src/features/monetization/rewarded-ad.ts",
+        "apps/api/src/modules/monetization/monetization.service.ts",
+        "https://developers.google.com/admob/android/ssv"
+      ]
+    },
+    {
+      "type": "App interactions",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sharingPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "Google Mobile Ads 공식 안내의 SDK 수집·공유와 광고/분석/부정 이용 방지 목적을 반영합니다. 비맞춤형 광고와 AD_ID 권한 제거는 IP·app set ID·진단·상호작용을 모두 차단하는 설정이 아닙니다. Sentry.wrap의 TouchEventBoundary 및 진단·설치 ID 전송에는 별도 opt-out이 없어 전체 앱 수집은 선택이라고 판단하지 않습니다.",
+      "sources": [
+        "apps/mobile/src/features/monetization/rewarded-ad.ts",
+        "apps/mobile/src/services/sentry.ts",
+        "apps/mobile/app/_layout.tsx",
+        "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+        "https://docs.sentry.io/platforms/react-native/enriching-events/identify-user/"
+      ]
+    },
+    {
+      "type": "Diagnostics",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sharingPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "Google Mobile Ads 공식 안내의 SDK 수집·공유와 광고/분석/부정 이용 방지 목적을 반영합니다. 비맞춤형 광고와 AD_ID 권한 제거는 IP·app set ID·진단·상호작용을 모두 차단하는 설정이 아닙니다. Sentry.wrap의 TouchEventBoundary 및 진단·설치 ID 전송에는 별도 opt-out이 없어 전체 앱 수집은 선택이라고 판단하지 않습니다.",
+      "sources": [
+        "apps/mobile/src/features/monetization/rewarded-ad.ts",
+        "apps/mobile/src/services/sentry.ts",
+        "apps/mobile/app/_layout.tsx",
+        "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+        "https://docs.sentry.io/platforms/react-native/enriching-events/identify-user/"
+      ]
+    },
+    {
+      "type": "Device or other IDs",
+      "collected": true,
+      "shared": true,
+      "ephemeral": false,
+      "optional": false,
+      "collectionPurposes": [
+        "App functionality",
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "sharingPurposes": [
+        "Advertising or marketing",
+        "Analytics",
+        "Fraud prevention, security, and compliance"
+      ],
+      "reason": "Google Mobile Ads 공식 안내의 SDK 수집·공유와 광고/분석/부정 이용 방지 목적을 반영합니다. 비맞춤형 광고와 AD_ID 권한 제거는 IP·app set ID·진단·상호작용을 모두 차단하는 설정이 아닙니다. Sentry.wrap의 TouchEventBoundary 및 진단·설치 ID 전송에는 별도 opt-out이 없어 전체 앱 수집은 선택이라고 판단하지 않습니다.",
+      "sources": [
+        "apps/mobile/src/features/monetization/rewarded-ad.ts",
+        "apps/mobile/src/services/sentry.ts",
+        "apps/mobile/app/_layout.tsx",
+        "https://developers.google.com/admob/android/privacy/play-data-disclosure",
+        "https://docs.sentry.io/platforms/react-native/enriching-events/identify-user/"
+      ]
+    },
+    {
+      "type": "Name",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "optional": true,
+      "collectionPurposes": [
+        "App functionality",
+        "Account management"
+      ],
+      "reason": "Registration screen, shared contract and API accept optional name/nickname. Console required response corrected to optional.",
+      "sources": [
+        "apps/mobile/app/auth/register.tsx",
+        "packages/shared/src/schemas/auth.ts"
+      ]
+    }
+  ],
+  "savedDeclaration": {
+    "collectedTypeCount": 12,
+    "sharedTypeCount": 7,
+    "correctionCount": 11,
+    "dataTypes": [
+      {
+        "type": "Photos",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality"
+        ]
+      },
+      {
+        "type": "Purchase history",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "Crash logs",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Analytics"
+        ]
+      },
+      {
+        "type": "Other app performance data",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Analytics",
+          "Advertising or marketing",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Other user-generated content",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Personalization"
+        ],
+        "sharingPurposes": [
+          "App functionality"
+        ]
+      },
+      {
+        "type": "Approximate location",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "User IDs",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "App functionality",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "App interactions",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Diagnostics",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Device or other IDs",
+        "collected": true,
+        "shared": true,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ],
+        "sharingPurposes": [
+          "Advertising or marketing",
+          "Analytics",
+          "Fraud prevention, security, and compliance"
+        ]
+      },
+      {
+        "type": "Name",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": true,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ]
+      },
+      {
+        "type": "Email address",
+        "collected": true,
+        "shared": false,
+        "ephemeral": false,
+        "optional": false,
+        "collectionPurposes": [
+          "App functionality",
+          "Account management"
+        ],
+        "changed": false
+      }
+    ],
+    "encryptedInTransit": true,
+    "accountMethods": [
+      "Username and password",
+      "OAuth"
+    ],
+    "privacyPolicyUrl": "https://jango.devnamu.com/privacy",
+    "accountDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "dataDeletionUrl": "https://jango.devnamu.com/privacy/choices",
+    "consoleSaved": true,
+    "submittedForReview": true,
+    "reviewStatus": "IN_REVIEW",
+    "publicPublished": false
+  }
+}

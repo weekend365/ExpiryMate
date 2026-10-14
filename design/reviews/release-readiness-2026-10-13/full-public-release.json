@@ -1,0 +1,276 @@
+{
+  "state": "iOS51 and Android39 immediate full public release verified",
+  "verifiedAt": "2026-10-13T12:36:38.091175+00:00",
+  "authorization": {
+    "fullReleaseRequest": "그냥 정식 출시해 뭔 단계적으로 하냐",
+    "remainingQaException": "이번 QA 예외·단계 출시 허용",
+    "qaExceptionLimitedTo": "1.4.3 and listed unverified device cases; not marked passed",
+    "previousStagedModeSuperseded": true
+  },
+  "ios": {
+    "version": "1.4.3",
+    "build": 51,
+    "publicReleasePerformed": true,
+    "consoleStatus": "1.4.3 배포 준비됨",
+    "phasedReleaseDays": 0,
+    "immediateAllUsersSettingSaved": true,
+    "existingCountryCount": 175,
+    "publicLookup": {
+      "checkedAt": "2026-10-13T12:27:53.262Z",
+      "source": "https://itunes.apple.com/lookup?id=6793375883&country=kr",
+      "resultCount": 1,
+      "trackId": 6793375883,
+      "trackName": "장고야 부탁해",
+      "version": "1.4.3",
+      "currentVersionReleaseDate": "2026-10-13T12:22:06Z",
+      "trackViewUrl": "https://apps.apple.com/kr/app/%EC%9E%A5%EA%B3%A0%EC%95%BC-%EB%B6%80%ED%83%81%ED%95%B4/id6793375883?uo=4",
+      "finalVersionVisible": true
+    },
+    "publishedAt": "2026-10-13T12:22:06Z"
+  },
+  "android": {
+    "version": "1.4.3",
+    "versionCode": 39,
+    "sourceGitSHA": "d1c703f162ca20b748564f64db795347fa8ccdb1",
+    "publicReleasePerformed": true,
+    "consoleStatus": "Google Play에 제공됨 · 프로덕션 · 출시율100%",
+    "releasedAtKst": "2026-10-13 21:25",
+    "rolloutPercent": 100,
+    "countryScope": "Existing Republic of Korea only",
+    "countriesChanged": false,
+    "managedPublishingEnabled": true,
+    "dataSafetyPublished": true,
+    "dataSafetyCollectedTypes": 12,
+    "dataSafetySharedTypes": 7,
+    "publicationOverviewReadyChangesEmpty": true
+  },
+  "backupAndIsolatedRestore": {
+    "startedAt": "2026-10-13T12:10:49.463Z",
+    "backupPath": "/tmp/jango-prod-backup-full-public-20261013-2112/production.dump",
+    "backupMode": "consistent exported repeatable-read snapshot; custom format; no owner/ACL",
+    "productionWrites": false,
+    "localRestoreOnly": true,
+    "rawDataCommitted": false,
+    "productionPostgresVersion": "180006",
+    "productionDatabaseBytes": "147265215",
+    "backupCompletedAt": "2026-10-13T12:12:07.728Z",
+    "backupBytes": 11726204,
+    "backupSha256": "f2fee066f204eb984ce1aae5f336ffbad41ec4f202cc8d9d9622d1dedea2a835",
+    "tableCount": 41,
+    "allTableRowCountsMatch": true,
+    "catalogMatches": true,
+    "migrationsMatch": true,
+    "migrationCount": 45,
+    "unfinishedMigrations": 0,
+    "constraints": 449,
+    "indexes": 167,
+    "invalidIndexes": 0,
+    "unvalidatedConstraints": 0,
+    "pgAmcheckPassed": true,
+    "consistencyChecks": {
+      "usersWithoutPersonalSpace": 4,
+      "inventoryWithoutSpace": 0,
+      "storageWithoutSpace": 0,
+      "recipeWithoutSpace": 0
+    },
+    "restoreVerifiedAt": "2026-10-13T12:12:11.011Z",
+    "restorePassed": true,
+    "localServerStopped": true,
+    "isolatedRestoredUserDataRemoved": true,
+    "protectedBackupPath": "/Users/namu/Library/Application Support/Jango/ReleaseBackups/2026-10-13/production-before-full-public-2112.dump",
+    "protectedBackupHashVerified": true,
+    "protectedBackupMode": "0600"
+  },
+  "productionModeRestoration": {
+    "purpose": "Restore production Sandbox rejection immediately before approved 1.4.3 public release",
+    "authorizedBy": "User: 심사 통과했어 마저 작업 진행해줘.",
+    "sourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "sourceUpload": false,
+    "prismaChanges": false,
+    "gitPushed": false,
+    "backup": {
+      "sha256": "f2fee066f204eb984ce1aae5f336ffbad41ec4f202cc8d9d9622d1dedea2a835",
+      "restoreVerifiedAt": "2026-10-13T12:12:11.011Z",
+      "tables": 41,
+      "migrations": 45,
+      "protectedHashVerified": true
+    },
+    "configuration": {
+      "appliedAt": "2026-10-13T12:14:49.688Z",
+      "changedVariableNames": [
+        "IAP_ALLOW_SANDBOX_PURCHASES"
+      ],
+      "onlyRequestedFlagChanged": true,
+      "sandboxRejected": true,
+      "allOtherVariablesUnchanged": true,
+      "privateKeysUnchanged": true
+    },
+    "redeployRequestedAt": "2026-10-13T12:14:51.988Z",
+    "deployments": [
+      {
+        "id": "0d589013-7aff-49a2-ba9d-2543bd2de152",
+        "status": "BUILDING",
+        "createdAt": "2026-10-13T12:14:51.495Z"
+      },
+      {
+        "id": "5378178a-2ba4-4700-a246-3f7f9288f1bc",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T13:25:35.591Z"
+      },
+      {
+        "id": "d2c5859f-151f-4425-8b83-65ff58600718",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T11:40:07.738Z"
+      }
+    ],
+    "redeployCompletedDeployment": {
+      "id": "0d589013-7aff-49a2-ba9d-2543bd2de152",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-13T12:14:51.495Z"
+    }
+  },
+  "postdeployOperationalChecks": {
+    "checkedAt": "2026-10-13T12:19:41.521Z",
+    "authorizedSourceGitSHA": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+    "productionDatabaseDataChanged": false,
+    "gitPushed": false,
+    "checks": [
+      {
+        "url": "https://api-production-1504.up.railway.app/health",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "metadata": {
+          "status": "ok",
+          "version": "0.1.0",
+          "gitSha": "9cabee43f8da4c607950dddcc0f0ad2c5ba9c944",
+          "env": "production"
+        }
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/ready",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/inventory",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/spaces",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/privacy/status",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy/choices",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/terms",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "missing-auth",
+        "status": 400,
+        "expectedStatus": 400,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "invalid-signature",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      }
+    ],
+    "apiSourceIdentityMatches": true,
+    "deployments": {
+      "api": {
+        "id": "0d589013-7aff-49a2-ba9d-2543bd2de152",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-13T12:14:51.495Z"
+      },
+      "admin": {
+        "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:22:58.703Z"
+      }
+    },
+    "adminBuildNext15527Observed": true,
+    "buildLogsPrinted": false,
+    "runtimeFlags": {
+      "personalCostGateMode": "operator_override",
+      "guardrailEnabled": "true",
+      "sandboxPurchases": "false",
+      "subscriptions": "true",
+      "minimumRecipeSamples": "10",
+      "minimumPhotoSamples": "3",
+      "monthlyAiBudgetKrw": "2000"
+    },
+    "googleEmailCorrect": true,
+    "rtdnConfig": {
+      "audienceMatchesWebhook": true,
+      "serviceAccountConfigured": true
+    },
+    "allPublicAndUnauthenticatedChecksPassed": true,
+    "personalSalesConfigurationMatches": true,
+    "adminDeploymentUnchanged": true,
+    "productionModeRestoredWithUserApproval": true,
+    "personalCostGateModeUnchanged": true
+  },
+  "rawSecretsReceiptsAndUserIdentifiersCommitted": false,
+  "newSourceUploadedToRailway": false,
+  "prismaChanged": false,
+  "gitPushed": false,
+  "screenshots": [
+    {
+      "file": "ios-full-public.jpg",
+      "sha256": "9720e08247a05049c7dc3697530911b869777482540e023eb5e9722a4cd0055e"
+    },
+    {
+      "file": "android-full-public.jpg",
+      "sha256": "e6a43857ebdd49528e042156b613a96860c1ee1631b26da19ae68c2893a71155"
+    }
+  ]
+}

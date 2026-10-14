@@ -1,13 +1,13 @@
 ---
 status: active
 owner: product
-last_reviewed: 2026-09-29
+last_reviewed: 2026-10-13
 source_of_truth: true
 ---
 
 # 장고 수익화 운영 기준
 
-기준일: 2026년 8월 29일
+기준일: 2026년 10월 13일
 
 이 문서는 현재 장고(ExpiryMate)의 수익화 범위와 운영 방법을 정리한 단일 기준입니다.
 이미 출시된 앱의 다음 수익화 업데이트 범위는 **개인 플러스 자동 갱신 구독**입니다.
@@ -16,9 +16,43 @@ source_of_truth: true
 
 ## 1. 현재 범위
 
+### 2026-10-13 정식 공개
+
+iOS1.4.3(51)·Android1.4.3(39)가 즉시 전체/100%로 공개됐습니다.
+[최종 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)을 따릅니다.
+Android 연간·ACK·갱신·복원·재실행과 iOS월간 구매·복원을 확인했고 나머지 지정된 실기기
+QA는 이번1.4.3에 한한 사용자 명시 예외입니다. 공개 직전 새 보호 백업·격리 복구·기존 API
+재배포·운영 검사13개를 마쳤으며 `IAP_ALLOW_SANDBOX_PURCHASES=false`입니다.
+원가 예외·개인 판매on·AI 한도·guardrail·가족/추천권off는 보존합니다. 원가learning과
+실제 원가 표본 미완료를 합격으로 바꾸지 않습니다.
+
+### 2026-10-10 개인 플러스 원가 검증 예외
+
+사용자가 **“원가 검증 예외를 승인하고 전체 판매 열기”**를 명시적으로 요청했습니다.
+이번 개인 플러스 신규 판매에는 서버 `SUBSCRIPTION_COST_GATE_MODE=operator_override`를
+적용합니다. 상품·가격 표시, 구매 의도 생성, 새 영수증 승인에 같은 예외를 적용합니다.
+기본값 `required`는 기존 원가 조건을 요구하며 알 수 없는 값도 예외를 허용하지 않습니다.
+`SUBSCRIPTIONS_ENABLED=false`는 예외 모드에서도 신규 판매를 즉시 중단합니다.
+
+최근 운영 표본은 요리 4건·사진 1건, 과거 표본의 월 환산은 약 2,190원입니다.
+요리 50건·사진 30건·월 858원 기준을 통과한 것으로 기록하지 않으며, 원가 측정의
+`learning` 판정·예산·표본 기준은 보존합니다. 기존 구독 혜택·AI 한도·광고/추천권
+guardrail·가족 플러스 보류·영수증 서명/계정 결합은 그대로 적용합니다. 원가 예외 자체는
+결제 QA나 스토어 승인·공개 완료를 뜻하지 않습니다. 후속 실호출 원가 검증은 남습니다.
+Sandbox는 원가 예외와 독립적으로 QA·App Review 기간만 임시 허용하고 공개 전에 거부로 복귀합니다.
+
+API `9cabee4`의 [운영 적용 기록](../design/reviews/release-readiness-2026-10-10/subscription-sales-activation.json)에서
+최신 백업·격리 복구 후 모드 변수 하나만 추가하고 실제 서버 SHA·서버/인증 검사 13개·
+유효 개인 판매 on을 확인했습니다. 사용자가 앱 재실행 후 iPhone·Galaxy 모두 월 4,900원·
+연 39,000원 가격과 가입 버튼 표시를 확인했습니다. 이어서 두 기기의 월 구독 Sandbox
+영수증 승인·구매 복원·플러스 적용을 확인했고 Google acknowledgement·첫 테스트 갱신도
+확인했습니다. [최종 제출 기록](../design/reviews/release-readiness-2026-10-10/final-release-submission.json)의
+당시 iOS51·Android37은 심사 제출·공개 승인 대기였습니다. 현재 공개와 QA 범위 예외는
+위10월13일 기록을 우선합니다.
+
 | 모델 | 현재 상태 | 사용자 가치 | 수익 발생 시점 |
 | --- | --- | --- | --- |
-| 개인 플러스 | 출시 대상 | 광고 없는 AI 흐름, 폐기 예방 브리핑, 30/90일 추세와 실천 제안 | Apple/Google 자동 갱신 결제 |
+| 개인 플러스 | 공개 판매 중(원가 예외) | 광고 없는 AI 흐름, 폐기 예방 브리핑, 30/90일 추세와 실천 제안 | Apple/Google 자동 갱신 결제 |
 | AdMob 보상형 광고 | 운영 대상 | 무료 AI 한도를 쓴 사용자가 광고를 보고 당일 사용량 1회 획득 | 서버가 검증한 광고 완료 |
 | 쿠팡 파트너스 | 운영 대상 | 레시피의 부족 재료, 최근 소비 재료, 직접 검색 상품을 쿠팡에서 확인 | 제휴 링크 이후 쿠팡에서 인정된 구매 |
 | 가족 플러스 | 이후 검토 | 현재 신규 판매하지 않음 | 해당 없음 |
@@ -332,7 +366,8 @@ DB migration을 실행하므로 Railway 배포 로그에서 성공 여부를 확
 - 처분 이벤트 백필, 무료 미리보기, 30/90일 분석과 공간 권한 검증
 - 구매 검증·복원 성공률 98% 이상, 중복 권한·미승인 Google 구매 0건
 - 환불 비중 5% 미만, AI 원가 순매출의 25% 이하
-- `60 × 요리 p95 + 30 × 사진 p95 ≤ 858원`; 미충족 시 판매 활성화 금지
+- `60 × 요리 p95 + 30 × 사진 p95 ≤ 858원`; 기본 정책은 미충족 시 판매 활성화 금지
+  (2026-10-10의 명시적 개인 플러스 운영 예외는 위 기록을 따름)
 
 ### 광고
 
@@ -369,6 +404,7 @@ DB migration을 실행하므로 Railway 배포 로그에서 성공 여부를 확
 
 ```text
 SUBSCRIPTIONS_ENABLED=true  # 앱 공개와 원가 No-Go 통과 전에는 false
+SUBSCRIPTION_COST_GATE_MODE=required  # 2026-10-10 승인한 개인 판매 예외는 operator_override
 PAID_RECOMMENDATION_CREDITS_ENABLED=false
 HOUSEHOLD_SUBSCRIPTIONS_ENABLED=false
 BARCODE_REWARDS_ENABLED=false

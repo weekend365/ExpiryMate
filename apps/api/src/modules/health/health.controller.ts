@@ -10,6 +10,7 @@ import {
 import type { Response } from "express";
 import { AuthService } from "../auth/auth.service";
 import { PrismaService } from "../../database/prisma.service";
+import { getReleaseMetadata } from "../../common/release-metadata";
 import {
   buildInvalidOAuthCallbackHtml,
   buildOAuthCallbackHtml,
@@ -29,8 +30,7 @@ export class HealthController {
   getHealth() {
     return {
       status: "ok",
-      version: process.env.APP_VERSION ?? "0.1.0",
-      gitSha: process.env.GIT_SHA ?? "unknown",
+      ...getReleaseMetadata(),
       env: process.env.NODE_ENV ?? "development",
     };
   }

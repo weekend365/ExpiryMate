@@ -1,7 +1,7 @@
 ---
 status: active
 owner: platform
-last_reviewed: 2026-08-29
+last_reviewed: 2026-10-13
 source_of_truth: true
 ---
 
@@ -119,6 +119,45 @@ AdMob 값이 Expo의 production 환경에 들어 있는지 확인합니다. 로�
 
 장애 시 `SUBSCRIPTIONS_ENABLED=false`로 신규 판매만 중단합니다. 기존 권한 검증,
 스토어 알림, 재동기화는 유지해 결제 기간 중 활성 사용자의 혜택을 보존합니다.
+
+2026-10-10 사용자는 개인 플러스 전체 판매의 **원가 검증 예외**를 명시적으로 승인했습니다.
+`SUBSCRIPTION_COST_GATE_MODE=operator_override`는 개인 플러스 상품 표시·구매 의도·새 영수증
+승인의 원가 조건만 면제합니다. 측정값·예산·다른 상품·AI 사용 한도·Sandbox 거부를
+유지하며 결제 QA 통과를 뜻하지 않습니다. 적용 전에 최신 snapshot 백업·격리 복구·
+보호된 백업의 해시를 확인하고 API만 배포합니다. 예외 철회는 `required`로 복귀하고,
+즉시 판매 중단은 `SUBSCRIPTIONS_ENABLED=false`로 수행합니다. 기존 권한은 유지합니다.
+
+## 2026-10-10 스토어 심사 기간의 운영 설정
+
+[최종 심사 제출 기록](../../design/reviews/release-readiness-2026-10-10/final-release-submission.json)에
+따라 QA·App Review 동안만 `IAP_ALLOW_SANDBOX_PURCHASES=true`를 사용합니다. 22:24 KST
+새 snapshot의 41개 테이블·45개 migration·격리 복구·`pg_amcheck`·보호 백업 해시를 확인했고,
+API `9cabee4` 기존 artifact를 소스 업로드 없이 재배포했습니다. deployment
+`5378178a-2ba4-4700-a246-3f7f9288f1bc`는 SUCCESS이며 운영 검사 13개가 통과했습니다.
+설정 변경은 이 변수 하나이고 비공개 키·Admin·Prisma·인증/서명·원가 예외는 유지했습니다.
+원본 dump는 저장소 밖에 보관하며 SHA-256은
+`fb9e37b6ea0f1a1aa7604c168d0146bf44edd4ec6810a8576e65b57ef076a680`입니다.
+
+iOS는 수동 출시, Google은 관리형 게시로 승인 후 자동 공개를 막아 두었습니다.
+공개 직전 새 일관된 백업·격리 복구·보호 해시를 확인하고 변수를 **false**로 되돌린 뒤
+동일 API artifact를 재배포합니다. `/health` SHA·`/ready`·정책 URL·인증 거부 13개와
+Sandbox 거부 설정을 재확인한 뒤 승인된 iOS 7일 단계적 업데이트·Android 5% 출시를 게시합니다.
+현재의 심사 제출은 공개 완료가 아니며 재배포에 `--from-source`를 사용하지 않습니다.
+
+## 2026-10-13 정식 출시와 운영 설정 원복
+
+[정식 출시 기록](../../design/reviews/release-readiness-2026-10-13/full-public-release.json)의
+명시적 QA 범위 예외·즉시 전체 출시 요청에 따라 iOS51·Android39를 공개했습니다.
+21:12 KST 새 snapshot41개 테이블·45개 migration·catalog·격리 복구·pg_amcheck·보호
+덤프 SHA-256 `f2fee066f204eb984ce1aae5f336ffbad41ec4f202cc8d9d9622d1dedea2a835`가
+일치했습니다. 해당 백업 검증15분 이내에 Sandbox 허용을false로 원복했고 동일 API9cabee4
+artifact를 재배포했습니다. deployment `0d589013-7aff-49a2-ba9d-2543bd2de152` SUCCESS·
+운영 검사13개 통과 후 iOS즉시 전체·Android100%를 게시했습니다. 변수 변경은 Sandbox
+허용 하나이며 Admin·비공개 키·Prisma·원가 예외·AI 한도·guardrail은 유지했습니다.
+
+원본 dump는 저장소 밖0600 보호 폴더에 보존했고 로컬 격리 복구 사용자 데이터는 제거했습니다.
+미완료 기기 QA는 이번 버전에 한한 사용자 예외이며 통과로 기록하지 않습니다. 위10월10일의
+7일/5% 계획은 이 최종 요청으로 대체됐습니다. 앞으로 운영 변경에는 새 백업·검증을 사용합니다.
 
 ## Sentry
 

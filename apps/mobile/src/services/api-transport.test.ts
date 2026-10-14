@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
+import appConfig from "../../app.json";
 import { captureStartupBootstrapIssue } from "./bootstrap-diagnostics";
-import { fetchWithNetworkError, parseEnvelope } from "./api-transport";
+import { fetchWithNetworkError, parseEnvelope, publicRequest } from "./api-transport";
 
 vi.mock("./bootstrap-diagnostics", () => ({ captureStartupBootstrapIssue: vi.fn() }));
 
@@ -10,6 +11,18 @@ describe("mobile API transport", () => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+  });
+
+  it("sends the configured release version with public API requests", async () => {
+    const fetch = vi.fn().mockResolvedValue(Response.json({ success: true, data: { ok: true } }));
+    vi.stubGlobal("fetch", fetch);
+    await expect(publicRequest("/health")).resolves.toEqual({ ok: true });
+    expect(fetch).toHaveBeenCalledWith(expect.stringContaining("/health"), expect.objectContaining({
+      headers: expect.objectContaining({
+        "X-App-Version": appConfig.expo.version,
+        "X-Client-Platform": "mobile",
+      }),
+    }));
   });
 
   it.each([null, {}, { success: "true" }])("rejects malformed envelopes: %j", async (value) => {

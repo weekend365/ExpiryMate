@@ -466,11 +466,11 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = app;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -502,10 +502,10 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile;
-				PRODUCT_NAME = app;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -524,7 +524,7 @@
 				INFOPLIST_FILE = ExpiryMate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				JANGO_APP_DISPLAY_NAME = "장고 QA";
-				JANGO_APP_SCHEME = "jango-crayonqa";
+				JANGO_APP_SCHEME = jango-crayonqa;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -537,13 +537,13 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile.crayonqa;
-				PRODUCT_NAME = app;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = "Release-QA";
+			name = Release-QA;
 		};
 		3E1CF35177AE43DC98C7F891 /* Release-QA */ = {
 			isa = XCBuildConfiguration;
@@ -599,7 +599,7 @@
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = "Release-QA";
+			name = Release-QA;
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -781,7 +781,7 @@
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
 			};
-			name = "Debug-QA";
+			name = Debug-QA;
 		};
 		A28AF09D36BC450CBBF022E5 /* Debug-QA */ = {
 			isa = XCBuildConfiguration;
@@ -802,7 +802,7 @@
 				INFOPLIST_FILE = ExpiryMate/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				JANGO_APP_DISPLAY_NAME = "장고 QA";
-				JANGO_APP_SCHEME = "jango-crayonqa";
+				JANGO_APP_SCHEME = jango-crayonqa;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -815,14 +815,14 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.expirymate.mobile.crayonqa;
-				PRODUCT_NAME = app;
+				PRODUCT_NAME = "app";
 				SWIFT_OBJC_BRIDGING_HEADER = "ExpiryMate/ExpiryMate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = "Debug-QA";
+			name = Debug-QA;
 		};
 /* End XCBuildConfiguration section */
 

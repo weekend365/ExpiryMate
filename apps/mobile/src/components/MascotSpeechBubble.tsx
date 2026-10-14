@@ -13,7 +13,7 @@ import Animated, {
   withSpring,
   useReducedMotion,
 } from "react-native-reanimated";
-import { appBrand, type CrayonMascotPoint } from "@expirymate/shared";
+import { appBrand } from "@expirymate/shared";
 import { colors, radius, spacing, controlSize } from "../shared/theme";
 import { AppText, type AppTextVariant } from "./AppText";
 import { Mascot, type MascotMood } from "./Mascot";
@@ -38,8 +38,6 @@ interface MascotSpeechBubbleProps {
   /** Optional link appended to the message in the same text line. */
   inlineActionLabel?: string;
   onInlineAction?: () => void;
-  /** Decorates mascot corners only; bubble chrome stays unchanged. */
-  mascotDecoration?: CrayonMascotPoint;
 }
 
 const SPRING = {
@@ -64,7 +62,6 @@ export function MascotSpeechBubble({
   onDismiss,
   inlineActionLabel,
   onInlineAction,
-  mascotDecoration,
 }: MascotSpeechBubbleProps) {
   const opacity = useSharedValue(0);
   const offset = useSharedValue(0);
@@ -108,7 +105,7 @@ export function MascotSpeechBubble({
             }`
       }
     >
-      <Mascot size={size} mood={mood} style={styles.mascot} decoration={mascotDecoration} />
+      <Mascot size={size} mood={mood} style={styles.mascot} />
       <View style={styles.bubbleColumn}>
         <View
           style={[

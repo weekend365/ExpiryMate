@@ -1,6 +1,5 @@
 import type {
   SubscriptionPurchaseIntent,
-  SubscriptionVerificationRequest,
 } from "@expirymate/shared";
 import type { Purchase } from "expo-iap";
 import {
@@ -50,6 +49,7 @@ import {
 } from "../../src/features/settings/settings-format";
 import { useSubscriptionEntitlement } from "../../src/features/subscriptions/use-subscription-entitlement";
 import { getSubscriptionScreenState } from "../../src/features/subscriptions/subscription-screen-state";
+import { buildSubscriptionVerificationRequest } from "../../src/features/subscriptions/subscription-verification-request";
 import { SubscriptionSalesNotice, SubscriptionStatusSection } from "../../src/features/subscriptions/subscription-status";
 import { publicWebUrl } from "../../src/shared/public-web-url";
 import { useResponsiveLayout } from "../../src/shared/responsive-layout";
@@ -119,29 +119,19 @@ function SubscriptionStoreScreen() {
       const purchaseIntent = options?.restore
         ? null
         : await readPurchaseIntent(purchase.productId);
-      const verification: SubscriptionVerificationRequest =
-        Platform.OS === "ios"
-          ? {
-              store: "apple_app_store",
-              productId: purchase.productId,
-              transactionId: purchase.transactionId ?? undefined,
-              purchaseIntentId: purchaseIntent?.id,
-            }
-          : {
-              store: "google_play",
-              productId: purchase.productId,
-              purchaseToken: purchase.purchaseToken ?? undefined,
-              basePlanId: purchase.currentPlanId ?? selectedPeriod,
-              purchaseIntentId: purchaseIntent?.id,
-            };
-      await subscription.verifyMutation.mutateAsync(verification);
+      const verification = buildSubscriptionVerificationRequest(
+        Platform.OS === "ios" ? "apple_app_store" : "google_play",
+        purchase,
+        purchaseIntent?.id,
+      );
+      const verified = await subscription.verifyMutation.mutateAsync(verification);
       await finishTransaction({ purchase, isConsumable: false });
       await clearPurchaseIntent();
       purchaseCompletedRef.current = true;
       trackFunnelEvent("purchase_verified", {
         store: Platform.OS,
         product_id: purchase.productId,
-        billing_period: purchase.currentPlanId ?? selectedPeriod,
+        billing_period: verified.entitlement.billingPeriod ?? "unknown",
       });
       setBusyAction(null);
       Alert.alert(

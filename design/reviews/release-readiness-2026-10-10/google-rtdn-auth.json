@@ -1,0 +1,299 @@
+{
+  "sourceGitSHA": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+  "fileCount": 341,
+  "bytes": 2172576,
+  "secretFileCount": 0,
+  "prismaChanged": false,
+  "generatedBuildMetadata": {
+    "file": "apps/api/Dockerfile",
+    "gitShaDefault": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+    "repositoryDockerfileUnchanged": true,
+    "sha256": "60143269aa83f83eba413075727fd86a82c676dcd0fdb859c631e7bb3050fadb"
+  },
+  "uploaded": true,
+  "targetService": "api",
+  "requiredEnvironmentChange": {
+    "key": "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL",
+    "value": "jango-rtdn-push@jango-plz.iam.gserviceaccount.com"
+  },
+  "googlePushConsoleVerified": {
+    "authenticationEnabled": true,
+    "audienceMatchesEndpoint": true,
+    "payloadUnwrappingDisabled": true,
+    "serviceAccountMatchesRequiredValue": true
+  },
+  "checks": {
+    "apiTestsPassed": 570,
+    "apiOptInDbTestsSkipped": 6,
+    "apiTypecheckPassed": true,
+    "focusedTestsPassed": 56,
+    "apiBuildPassed": true,
+    "lintPassed": true,
+    "envParityPassed": true
+  },
+  "deploymentRequiresExplicitPermission": true,
+  "deploymentStatus": "SUCCESS",
+  "officialReference": "https://docs.cloud.google.com/pubsub/docs/authenticate-push-subscriptions",
+  "finding": "Deployed source now checks Google signature/audience, exact push email and email_verified=true before purchase processing. Required configuration was added with user permission after fresh backup/isolated restore.",
+  "deploymentAuthorized": true,
+  "deploymentId": "ff1e23f9-0dff-493b-b94d-c7964452b91f",
+  "deploymentEvidence": {
+    "sourceGitSHA": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+    "authorized": true,
+    "apiOnly": true,
+    "prismaChanged": false,
+    "gitPushed": false,
+    "privateCredentialsPrinted": false,
+    "backup": {
+      "sha256": "5fcc84d390868b9fc99de7b10120904bf35babf2a68f61ca8eaa43c210e6ea45",
+      "restoreVerifiedAt": "2026-10-10T10:00:38.984Z",
+      "tableCount": 41,
+      "migrationCount": 45,
+      "allTableRowCountsMatch": true,
+      "catalogMatches": true,
+      "migrationsMatch": true,
+      "pgAmcheckPassed": true,
+      "isolatedRestoredUserDataRemoved": true,
+      "protectedBackupHashVerified": true
+    },
+    "previousDeployments": [
+      {
+        "id": "61fcea39-0c61-4893-a59a-5d7ba7b45c91",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:26:34.425Z"
+      },
+      {
+        "id": "f4af635d-fa54-4c5d-86ba-701ce101ab48",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T08:21:53.695Z"
+      },
+      {
+        "id": "8016c2d5-120f-4bfb-bfe5-88d3ed18db5c",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T08:16:25.652Z"
+      },
+      {
+        "id": "54350afd-6ae2-49d3-b034-c212fcc781cd",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T05:51:01.818Z"
+      },
+      {
+        "id": "d09f7f9a-3e25-4e03-8a39-5533ec0ca275",
+        "status": "REMOVED",
+        "createdAt": "2026-10-08T05:48:43.763Z"
+      }
+    ],
+    "configuration": {
+      "appliedAt": "2026-10-10T10:01:42.683Z",
+      "expectedServiceAccountEmail": "jango-rtdn-push@jango-plz.iam.gserviceaccount.com",
+      "emailMatches": true,
+      "changedVariableNames": [
+        "GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL"
+      ],
+      "onlyRequestedVariableChanged": true,
+      "privateKeyUnchanged": true,
+      "skippedSeparateOldSourceDeploy": true
+    },
+    "sourceUploaded": true,
+    "uploadedAt": "2026-10-10T10:01:44.788Z",
+    "postUploadDeployments": [
+      {
+        "id": "ff1e23f9-0dff-493b-b94d-c7964452b91f",
+        "status": "INITIALIZING",
+        "createdAt": "2026-10-10T10:01:43.445Z"
+      },
+      {
+        "id": "61fcea39-0c61-4893-a59a-5d7ba7b45c91",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:26:34.425Z"
+      },
+      {
+        "id": "f4af635d-fa54-4c5d-86ba-701ce101ab48",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T08:21:53.695Z"
+      },
+      {
+        "id": "8016c2d5-120f-4bfb-bfe5-88d3ed18db5c",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T08:16:25.652Z"
+      },
+      {
+        "id": "54350afd-6ae2-49d3-b034-c212fcc781cd",
+        "status": "REMOVED",
+        "createdAt": "2026-10-10T05:51:01.818Z"
+      }
+    ]
+  },
+  "postDeployChecks": {
+    "checkedAt": "2026-10-10T10:09:40.325Z",
+    "authorizedSourceGitSHA": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+    "productionDataOrSalesFlagChanged": false,
+    "gitPushed": false,
+    "checks": [
+      {
+        "url": "https://api-production-1504.up.railway.app/health",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true,
+        "metadata": {
+          "status": "ok",
+          "version": "0.1.0",
+          "gitSha": "68bd3242aac6e0ebba762cc11b4564852c8efd89",
+          "env": "production"
+        }
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/ready",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/inventory",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/spaces",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/privacy/status",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/subscriptions/entitlement",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/recommendations",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://api-production-1504.up.railway.app/recipes/favorites",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/privacy/choices",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "url": "https://jango.devnamu.com/terms",
+        "status": 200,
+        "expectedStatus": 200,
+        "passed": true
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "missing-auth",
+        "status": 400,
+        "expectedStatus": 400,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      },
+      {
+        "path": "/subscriptions/notifications/google",
+        "case": "invalid-signature",
+        "status": 401,
+        "expectedStatus": 401,
+        "passed": true,
+        "contract": "missing required auth rejected as bad request; invalid signature rejected as unauthorized"
+      }
+    ],
+    "apiSourceIdentityMatches": true,
+    "deployments": {
+      "api": {
+        "id": "ff1e23f9-0dff-493b-b94d-c7964452b91f",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T10:01:43.445Z",
+        "sourceCommit": null,
+        "deployMessage": null,
+        "metadataKeys": [
+          "buildOnly",
+          "cliAgentSessionId",
+          "cliCaller",
+          "cliMessage",
+          "fileServiceManifest",
+          "imageDigest",
+          "logsV2",
+          "nixpacksProviders",
+          "propertyFileMapping",
+          "reason",
+          "rootDirectory",
+          "runtime",
+          "serviceManifest",
+          "volumeMounts"
+        ]
+      },
+      "admin": {
+        "id": "34a43064-79cb-43b5-8cb2-517ea79e83ed",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-10T08:22:58.703Z",
+        "sourceCommit": null,
+        "deployMessage": null,
+        "metadataKeys": [
+          "buildOnly",
+          "cliAgentSessionId",
+          "cliCaller",
+          "cliMessage",
+          "fileServiceManifest",
+          "imageDigest",
+          "logsV2",
+          "nixpacksProviders",
+          "propertyFileMapping",
+          "reason",
+          "rootDirectory",
+          "runtime",
+          "serviceManifest",
+          "volumeMounts"
+        ]
+      }
+    },
+    "adminBuildNext15527Observed": true,
+    "buildLogsPrinted": false,
+    "runtimeFlags": {
+      "sandboxPurchases": "false",
+      "subscriptions": "true",
+      "minimumRecipeSamples": "10",
+      "minimumPhotoSamples": "3",
+      "monthlyAiBudgetKrw": "2000"
+    },
+    "googleEmailCorrect": true,
+    "rtdnConfig": {
+      "audienceMatchesWebhook": true,
+      "serviceAccountConfigured": true
+    },
+    "allPublicAndUnauthenticatedChecksPassed": true
+  },
+  "liveGooglePushTest": {
+    "playConsoleTestNotificationSent": true,
+    "purchaseMade": false,
+    "consoleMonitoringObservedAtKst": "2026-10-10 19:12",
+    "pushAckBucketKst": "2026-10-10 19:11",
+    "ackRatePerSecond": 0.0167,
+    "publishedDeliveredAcknowledgedRatesEqual": true,
+    "oldestUnacknowledgedAgeSeconds": 0,
+    "ackMinusPublishDelta": 0,
+    "source": "Google Cloud Pub/Sub jango-play-rtdn-push monitoring visible chart/table",
+    "interpretation": "After deployment, the configured authenticated Google Push accepted a no-purchase Play test event. This does not qualify real purchase/renewal/refund processing."
+  }
+}

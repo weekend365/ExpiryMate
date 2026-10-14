@@ -1,11 +1,15 @@
 # 홈 안내 카드 크레파스 포인트 시안
 
+> **2026-10-14 철회:** 캐릭터·배경 이미지의 그림체는 유지하고 UI 손그림 장식·확대 계획은
+> 종료했다. 아래 승인·시안·manifest 해시는 당시 이력으로 보존한다. 현재 소스에서 과거
+> 전후 비교를 재생하지 않으며, 당시 코드가 필요하면 `c057084`의 저장소 스냅샷을 사용한다.
+
 이 문서는 앱 적용 전 revision 1·2의 선택 근거를 보존한 기록이다. 이후 사용자가 실제 앱
 적용을 요청해 [앱 적용·검증 기록](../home-card-crayon-implementation-v1/README.md)으로 진행했다.
 아래 미적용 표현과 소스 해시는 당시 스냅샷이며 현행 앱 상태와 구분한다. 공용 검토 harness는
 앱 구현 비교에도 사용하므로 현재 파일 해시와 당시 해시가 다를 수 있다.
 
-2026-10-09 작성. [계획안](../../../docs/product/mobile-crayon-point-plan.md)의 대표 시안 단계다.
+2026-10-09 작성. [철회된 계획안](../../../docs/archive/mobile-crayon-point-plan.md)의 대표 시안 단계다.
 현재 모바일 소스로 기준 화면과 A/B안을 함께 렌더링한다. 사용자가 A안 방향을 선택했고,
 상태 배경색에 맞춘 색 보완안을 추가했다. 제품 앱에는 아직 적용하지 않았다.
 보존 요소·치수 비교·출처 해시는 [manifest.json](./manifest.json)에 기록한다.
@@ -88,24 +92,8 @@
 함께 갱신돼 초기 검사에 stale report 실패가 있었고 갱신된 기준으로 재검사했다.
 해당 정본·보고서 갱신은 홈 카드 시안 변경에 포함하지 않는다.
 
-## 로컬 재현
+## 과거 검토의 재현
 
-루트의 workspace 의존성이 설치돼 있어야 한다. 검토용 Web 의존성은 저장소 밖에 둔다.
-루트 package/lockfile에는 추가하지 않는다.
-
-```sh
-npm install --prefix /private/tmp/jango-home-card-preview-deps-20261009 --ignore-scripts --no-package-lock react-native-web@0.21.2 react@19.1.0 react-dom@19.1.0
-node design/reviews/home-card-crayon-point-v1/preview.mjs
-```
-
-[로컬 비교 화면](http://127.0.0.1:4179/)에서 상태·글자·폭·A/B안을 선택한다.
-시안 코드를 수정하면 서버를 다시 시작하고 브라우저를 새로고침한다.
-초기 고정색 장식은 `/frame.html?state=expired&scale=1&variant=standard&palette=original`에서
-표현을 재현할 수 있다. 최신 비교 화면의 기본값은 상태색을 따르는 `palette=tone`이다.
-`JANGO_PREVIEW_DEPS`로 다른 외부 `node_modules` 경로,
-`JANGO_PREVIEW_PORT`로 다른 로컬 포트를 지정할 수 있다. 서버는 `127.0.0.1`에만 바인딩한다.
-`/capture.html`은 검토 도구가 촬영한 JPEG를 이 폴더의 `screens`에 보관하는 로컬 입력 화면이다.
-검토 종료 후 서버를 끄면 외부 임시 의존성 폴더도 정리할 수 있다.
-
-다음 앱 구현은 홈 한 곳의 기본 꺼짐 장식 옵션과 공유 장식 토큰으로 옮긴 뒤 실제 기기에서
-같은 조건을 대조하는 단계다. 현재 브라우저 SVG의 수치와 DOM 어댑터를 제품 구현 정본으로 복사하지 않는다.
+현재 소스 기반 장식 비교 서버는 종료했다. 당시 화면과 승인·측정·출처 해시는 이 폴더의
+보존 자료에서 확인한다. 코드 재현이 필요하면 `c057084`의 저장소 스냅샷과 당시 기록을
+사용한다. 과거 시안·검사 결과를 현재 UI나 출시 검증으로 표시하지 않는다.

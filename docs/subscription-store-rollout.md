@@ -1,9 +1,9 @@
 ---
 status: active
 owner: product-release
-last_reviewed: 2026-09-12
+last_reviewed: 2026-10-13
 source_of_truth: true
-data_as_of: 2026-09-12
+data_as_of: 2026-10-13
 ---
 
 # 개인 플러스 스토어 설정·출시 체크리스트
@@ -11,7 +11,65 @@ data_as_of: 2026-09-12
 장고야 부탁해는 이미 iOS와 Android에 출시되어 있습니다. 이 문서는 신규 앱 등록이
 아니라 **기존 앱에 첫 자동 갱신 구독을 추가하는 업데이트** 절차입니다.
 
-## 현재 상태 — 2026-09-12
+## 현재 상태 — 2026-10-13 정식 출시 완료
+
+[정식 출시 기록](../design/reviews/release-readiness-2026-10-13/full-public-release.json)이 최신 기준입니다.
+iOS1.4.3(51)은21:22 KST 즉시 모든 사용자에게 출시했고 공개 한국 App Store에1.4.3이
+표시됩니다. Android1.4.3(39)와 Data Safety는21:25 KST 게시됐으며 production 출시율100%·
+Google Play에 제공됨을 확인했습니다. 사용자의 최종 요청으로 기존 iOS7일·Android5% 계획을
+해제했습니다. 기존 iOS175개 국가·Android대한민국·서명·상품·키·개인정보 응답은 보존했습니다.
+
+최종39의 실제 Play 설치·서명, 연간/yearly·ACK·갱신·복원과 재실행 후 플러스 유지가
+확인됐습니다. iOS51의 월간 구매·복원과 구분합니다. 전체 테스트1,352개·타입·lint·문서가
+통과했고 API 통합6개는 제외돼 있습니다. [수정·검증 기록](../design/reviews/release-readiness-2026-10-13/android-purchase-verification-fix.json)과
+[Google 교체·재심사 기록](../design/reviews/release-readiness-2026-10-13/android-production-39.json)을 유지합니다.
+
+사용자는 이번1.4.3의 iOS연간·타계정 복원·grace/hold/pause·환불/철회·재설치/오프라인·
+전체RC 접근성/공유/푸시 실기기 QA 예외를 명시적으로 허용했습니다. PENDING 제외와 해당
+예외를 실제 통과로 바꾸지 않습니다. 원가learning·개인 판매 원가 예외·AI 한도·guardrail은
+유지합니다. 공개 전21:12 KST 새 보호 백업·격리 복구를 확인하고 Sandbox 허용을false로
+원복·동일 API artifact 재배포·운영 검사13개를 완료했습니다.
+
+## 2026-10-10 최종 심사 제출 이력
+
+- [최종 제출·QA 기록](../design/reviews/release-readiness-2026-10-10/final-release-submission.json)이
+  해당 날짜의 기준입니다. 당시 공개 버전은 iOS1.4.2(48), Android1.4.2(35)였습니다.
+- 메뉴 수정 소스 `6da71d1`의 iOS 1.4.3(51)을 22:41 KST App Review에 제출했고
+  **심사 대기 중**입니다. 빌드 51 연결·기존 6개 스크린샷·심사 로그인 정보 유지·새 심사 노트를
+  확인했습니다. 수동 출시와 7일 단계적 업데이트를 설정했습니다.
+- 같은 소스의 Android 1.4.3(37)을 production 심사에 제출했습니다. 기존 서명 AAB를
+  라이브러리에서 연결했고 기존 대한민국 범위·5% 초기 rollout을 저장했습니다.
+  관리형 게시가 켜졌으며 자동 사전 검사 완료 후 **검토 중**입니다. 비차단 경고는 다운로드
+  20.2MB 증가(66.1MB)와 ReTrace 파일 미첨부이며 native debug symbols는 있습니다.
+  서비스 계정의 production validate/commit 403은 권한을 늘리지 않고 비공개 edit를 삭제한 뒤
+  사용자 콘솔로 완료했습니다. 실패한 API 시도는 외부 production 변경을 commit하지 않았습니다.
+- [Play Data Safety](./store-privacy-declarations.md)는 누락·공유·임시 처리·필수 여부
+  11개 응답을 수정해 12개 수집 유형·7개 공유 유형으로 저장하고 같은 심사에 포함했습니다.
+  설치 GMA25.0.0에 대한 정확한 vendor 확인·전체 SDK 경로 QA와 보수적 신고는 구분합니다.
+- Apple 월·연 구독은 승인, 한국 가격은 4,900원·39,000원이고 가족 공유·할인은 off입니다.
+  Google 월·연 base plan은 활성, 같은 한국 가격·grace7일/14일이며 기존 키를 유지한
+  구매 검증 이메일 복구·RTDN 지정 발신자 인증·실제 테스트 알림 확인을 마쳤습니다.
+- 기존 QA 한 명의 라이선스 테스트 목록을 활성화했습니다. iPhone TestFlight51과
+  Galaxy Play 내부37에서 월 구독 Sandbox 승인·구매 의도 소비·복원 완료를 서버 기록으로
+  확인했습니다. Google acknowledgement와 첫 테스트 갱신도 확인했습니다. 사용자는 두
+  기기에서 “장고 플러스가 시작됐어요”와 “플러스 이용 중”을 확인했습니다. Apple 영수증의
+  비공개 이메일 로그인 소유자와 Play 결제 계정/앱 계정 차이는 메모리에서 대조했습니다.
+  검사 보고서에는 원문 계정·거래·토큰을 기록하지 않습니다. Galaxy37 버전·Play 서명은 직접 확인했으며
+  iOS51 설치는 사용자 확인으로 직접 버전 읽기와 구분합니다.
+- API `9cabee4`에 승인한 `SUBSCRIPTION_COST_GATE_MODE=operator_override`가 적용돼
+  개인 판매는 on입니다. 원가 `learning`, legacy 요리4·사진1, 정책50·30·858원과 운영
+  10·3·2,000원 기준을 통과로 바꾸지 않았습니다. 가족·유료 추천권은 off, AI 한도·
+  guardrail·구매 의도·서명/계정 검증은 유지합니다. 유료 모델 평가를 새로 실행하지 않았습니다.
+- **현재 `IAP_ALLOW_SANDBOX_PURCHASES=true`는 QA·App Review용 임시 설정입니다.**
+  직전 새 snapshot41개 테이블·45개 migration·격리 복구·보호 해시를 확인하고 기존 API
+  artifact만 재배포했습니다. 운영 검사13개 통과·Admin 유지입니다.
+
+공개 전 스토어 승인과 남은 연 구독·pending·계정 충돌·취소/grace/hold/pause/환불/철회
+수명주기 QA, 새 RC 전체 흐름·공간·접근성·푸시 확인을 완료합니다. 공개 직전 새 백업·격리
+복구를 확인하고 Sandbox 허용을 **false**로 되돌려 재배포·운영 검사한 뒤 수동/관리형
+게시를 실행합니다. 승인 대기와 공개 완료를 구분하며 원가 예외를 원가 합격으로 기록하지 않습니다.
+
+## 2026-09-12 준비 이력
 
 - App Store Connect 현재 출시 버전: `1.4.0`(45)
 - Jango Plus 구독 그룹: 심사 준비됨. 월간·연간 상품: 제출 준비 중
@@ -89,7 +147,7 @@ data_as_of: 2026-09-12
 
 | 항목 | 값 |
 |---|---|
-| 업데이트 앱 버전 | `1.4.0` (기존 공개 버전 `1.3.0`) |
+| 현재 공개 앱 버전 | `1.4.3` (iOS51·Android39) |
 | iOS Bundle ID | `com.expirymate.mobile` |
 | Android package | `com.expirymate.mobile` |
 | Apple 월간 Product ID | `expirymate_premium_monthly` |
@@ -176,7 +234,8 @@ Product ID와 Base plan ID는 코드 계약입니다. 오타가 난 상품을 �
 3. Version은 **V2**를 선택합니다.
 4. Sandbox Server URL은 안정적인 staging API가 있으면 staging의 같은 경로를 넣습니다.
    staging을 운영하지 않으면 production URL을 같이 사용하되, QA·심사 기간에만
-   `IAP_ALLOW_SANDBOX_PURCHASES=true`로 두고 출시 후 다시 `false`로 내립니다.
+   `IAP_ALLOW_SANDBOX_PURCHASES=true`로 둡니다. 공개 직전 백업·격리 복구를 확인한 뒤
+   `false`로 내리고 재배포·운영 검사를 마칩니다.
 5. App Store Connect에서 test notification을 보내 API 2xx와 로그를 확인합니다.
 
 ### 3.5 Grace period와 개인정보
@@ -250,6 +309,9 @@ Product ID와 Base plan ID는 코드 계약입니다. 오타가 난 상품을 �
    `service-PROJECT_NUMBER@gcp-sa-pubsub.iam.gserviceaccount.com`에
    `Service Account Token Creator` 역할을 부여합니다.
 6. Railway `GOOGLE_RTDN_AUDIENCE`도 동일한 endpoint 문자열로 설정합니다.
+   `GOOGLE_RTDN_SERVICE_ACCOUNT_EMAIL`에는 3단계 push 인증 계정의 정확한 이메일을
+   설정합니다. API는 Google 서명·audience 검증 뒤 해당 이메일과
+   `email_verified=true`를 확인하며, 설정이 없거나 다른 발신자이면 처리를 거부합니다.
 7. Play Console **Monetize with Play → Monetization setup → Real-time developer
    notifications**에서 RTDN을 켭니다.
 8. Topic name에 전체 `projects/…/topics/…` 이름을 넣고, subscriptions와 voided
@@ -320,9 +382,9 @@ SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED=false  # 유료 판매 시작과 함께 tr
 MONETIZATION_REVENUE_LEDGER_ENABLED=true
 ```
 
-App Review/TestFlight가 production API를 사용하는 동안만
-`IAP_ALLOW_SANDBOX_PURCHASES=true`로 설정하고, production 판매 시작 직후
-`false`로 되돌립니다.
+App Review/TestFlight·라이선스 QA가 production API를 사용하는 동안만
+`IAP_ALLOW_SANDBOX_PURCHASES=true`로 설정합니다. 공개 직전 신선한 백업·격리 복구를
+확인하고 `false`로 되돌려 재배포·운영 검사를 마친 뒤 production 앱을 게시합니다.
 
 ## 7. 장애 시
 
