@@ -1,0 +1,1338 @@
+{
+  "id": "instagram-jango-plz-followup-20261015",
+  "account": "jango_plz",
+  "authorization": "User explicitly requested implementation and upload of all three planned follow-up posts.",
+  "method": "Direct Pretendard typography/geometric layouts, whole existing v18 app derivatives; no new character drawing.",
+  "sources": {
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+    "apps/mobile/assets/fonts/Pretendard-Medium.otf": "d39e50e4bb52b4993b6a4eeb821a171254745bd824446af01e1f616b89fface0",
+    "apps/mobile/assets/fonts/Pretendard-SemiBold.otf": "c89bc43027dc7cde5726e96223376f8eec09302b2fc1f8147fd5b57cfc376118",
+    "design/jango/manifest.json": "b5a27a9ae6025ca22361bc1d33938fa42a422d300d5484dbf595b4944f6d02b7",
+    "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+    "apps/mobile/assets/characters/jango-check.png": "83617d300caf9e1706bf3f97158216f6846a2e15b81eeda5a66fe36251181682",
+    "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+    "apps/mobile/assets/characters/jango-shopping.png": "ed53f9f31848945407079757f65ad7c7e8abc4d61fa3a851916d84534fb663df",
+    "packages/shared/src/design/palette.ts": "602c6b459c575f753312d625681046e2041d7499544cf390c0b42e69be39e334",
+    "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+    "apps/mobile/assets/characters/jango-cooking.png": "5685f0af490def399bbba4abe9cc4432e969c08421fe80eafeb4c3883f1b38b3",
+    "output/marketing/instagram-jango-plz-followup-20261015/app-demo/overview-browser.jpg": "00951c466e9407ad87e074ed06ac78cafdef5801beb6021aefbadc6c6bcf2d35",
+    "output/marketing/instagram-jango-plz-followup-20261015/app-demo/options-browser.jpg": "2728033b8211ecd3f4c00edec48dd835e652519ca397308e3b044c1c0eca0895",
+    "output/marketing/instagram-jango-plz-followup-20261015/app-demo/detail-browser.jpg": "2bb455d710237d1be05dfba82c95a4a962957d1061d816efcbf2c8efbbba5fbc"
+  },
+  "textBoxes": [
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "장보기 전 체크리스트",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        327,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "01/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        966,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "마트 가기 전,",
+      "fontSize": 66,
+      "bbox": [
+        88,
+        275,
+        422,
+        342
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "냉장고에서",
+      "fontSize": 96,
+      "bbox": [
+        88,
+        379,
+        503,
+        465
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "확인할 3가지",
+      "fontSize": 96,
+      "bbox": [
+        88,
+        503,
+        586,
+        590
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "01",
+      "fontSize": 40,
+      "bbox": [
+        88,
+        745,
+        133,
+        775
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "이미 있는 재료",
+      "fontSize": 49,
+      "bbox": [
+        181,
+        739,
+        455,
+        784
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "02",
+      "fontSize": 40,
+      "bbox": [
+        88,
+        871,
+        138,
+        901
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "남은 양",
+      "fontSize": 49,
+      "bbox": [
+        181,
+        865,
+        318,
+        910
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "03",
+      "fontSize": 40,
+      "bbox": [
+        88,
+        997,
+        140,
+        1027
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/01.png",
+      "text": "먼저 쓸 재료",
+      "fontSize": 49,
+      "bbox": [
+        181,
+        991,
+        413,
+        1036
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "CHECK 01 · 중복 구매 전에",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        412,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "02/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        970,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "01",
+      "fontSize": 124,
+      "bbox": [
+        88,
+        276,
+        228,
+        367
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "이미 있는 재료",
+      "fontSize": 86,
+      "bbox": [
+        88,
+        461,
+        572,
+        538
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "같은 재료를 또 사기 전에,",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        608,
+        569,
+        657
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "보관함부터 확인해요.",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        671,
+        491,
+        716
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "냉장 · 냉동 · 팬트리",
+      "fontSize": 48,
+      "bbox": [
+        128,
+        874,
+        485,
+        918
+      ],
+      "essential": true,
+      "color": "#193F31"
+    },
+    {
+      "file": "01-shopping-check/02.png",
+      "text": "우리 집 재료, 한 번 더 확인.",
+      "fontSize": 48,
+      "bbox": [
+        128,
+        1000,
+        632,
+        1049
+      ],
+      "essential": true,
+      "color": "#193F31"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "CHECK 02 · 살 양을 정하기 전에",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        473,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "03/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        971,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "02",
+      "fontSize": 124,
+      "bbox": [
+        88,
+        276,
+        246,
+        367
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "남은 양",
+      "fontSize": 86,
+      "bbox": [
+        88,
+        461,
+        330,
+        538
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "얼마나 남았는지 살펴보고,",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        608,
+        587,
+        657
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "이번에 살 양을 정해요.",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        671,
+        515,
+        715
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "남은 양 예시",
+      "fontSize": 30,
+      "bbox": [
+        128,
+        860,
+        272,
+        887
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "두부",
+      "fontSize": 61,
+      "bbox": [
+        128,
+        925,
+        234,
+        978
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "½모",
+      "fontSize": 61,
+      "bbox": [
+        788,
+        925,
+        895,
+        970
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "달걀",
+      "fontSize": 61,
+      "bbox": [
+        128,
+        1023,
+        234,
+        1077
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "01-shopping-check/03.png",
+      "text": "2개",
+      "fontSize": 61,
+      "bbox": [
+        788,
+        1023,
+        878,
+        1078
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "CHECK 03 · 이번 식사에 활용하기",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        492,
+        215
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "04/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        971,
+        211
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "03",
+      "fontSize": 124,
+      "bbox": [
+        88,
+        276,
+        249,
+        367
+      ],
+      "essential": true,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "먼저 쓸 재료",
+      "fontSize": 86,
+      "bbox": [
+        88,
+        461,
+        498,
+        538
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "기한이 가까운 재료부터,",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        608,
+        545,
+        657
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "이번 식사에 활용해 보세요.",
+      "fontSize": 49,
+      "bbox": [
+        88,
+        671,
+        599,
+        716
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "장보기 전,",
+      "fontSize": 58,
+      "bbox": [
+        88,
+        891,
+        318,
+        950
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "장고 보관함부터.",
+      "fontSize": 58,
+      "bbox": [
+        88,
+        965,
+        467,
+        1018
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "01-shopping-check/04.png",
+      "text": "프로필에서 앱 다운로드",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1111,
+        520,
+        1155
+      ],
+      "essential": true,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "오늘의 장고 사용법",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        302,
+        215
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "01/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        966,
+        211
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "오늘 저녁",
+      "fontSize": 92,
+      "bbox": [
+        88,
+        287,
+        429,
+        370
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "고민될 땐,",
+      "fontSize": 92,
+      "bbox": [
+        88,
+        408,
+        455,
+        501
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "‘임박 우선’",
+      "fontSize": 109,
+      "bbox": [
+        88,
+        538,
+        547,
+        636
+      ],
+      "essential": true,
+      "color": "#DCEFE3"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "기한이 가까운 재료로",
+      "fontSize": 51,
+      "bbox": [
+        88,
+        816,
+        508,
+        862
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "메뉴 고르기",
+      "fontSize": 51,
+      "bbox": [
+        88,
+        881,
+        320,
+        927
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/01.png",
+      "text": "현재 앱 UI · 예시 데이터 시연",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1102,
+        625,
+        1146
+      ],
+      "essential": true,
+      "color": "#FFFCF7"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "STEP 01 · 조건 확인",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        327,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "02/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        970,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "추천 화면에서",
+      "fontSize": 79,
+      "bbox": [
+        88,
+        284,
+        514,
+        356
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "조건을 확인해요.",
+      "fontSize": 79,
+      "bbox": [
+        88,
+        385,
+        604,
+        457
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "재료 · 인원 · 시간 · 끼니까지",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1000,
+        609,
+        1044
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "추천 조건을 살펴보세요.",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1061,
+        535,
+        1105
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/02.png",
+      "text": "현재 앱 UI · 예시 데이터",
+      "fontSize": 30,
+      "bbox": [
+        88,
+        1170,
+        368,
+        1197
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "STEP 02 · 설정 확인",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        331,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "03/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        971,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "‘임박 우선’이",
+      "fontSize": 83,
+      "bbox": [
+        88,
+        284,
+        511,
+        359
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "켜져 있는지 확인해요.",
+      "fontSize": 73,
+      "bbox": [
+        88,
+        399,
+        710,
+        465
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "켜짐",
+      "fontSize": 56,
+      "bbox": [
+        88,
+        582,
+        184,
+        633
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "기한이 가까운 재료를",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1009,
+        481,
+        1053
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "먼저 활용하도록 선택해요.",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1070,
+        576,
+        1114
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/03.png",
+      "text": "현재 앱 UI 일부 · 예시 데이터",
+      "fontSize": 30,
+      "bbox": [
+        88,
+        1170,
+        427,
+        1197
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "장고야 부탁해",
+      "fontSize": 32,
+      "bbox": [
+        88,
+        88,
+        263,
+        117
+      ],
+      "essential": false,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "@jango_plz",
+      "fontSize": 28,
+      "bbox": [
+        794,
+        91,
+        937,
+        118
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "STEP 03 · 메뉴 선택",
+      "fontSize": 29,
+      "bbox": [
+        88,
+        188,
+        332,
+        215
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "04/04",
+      "fontSize": 27,
+      "bbox": [
+        894,
+        188,
+        971,
+        211
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "내 재료로 오늘의 한 끼",
+      "fontSize": 28,
+      "bbox": [
+        88,
+        1253,
+        332,
+        1279
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "장고에게 부탁해",
+      "fontSize": 27,
+      "bbox": [
+        807,
+        1253,
+        975,
+        1278
+      ],
+      "essential": false,
+      "color": "#28674F"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "마음에 드는",
+      "fontSize": 79,
+      "bbox": [
+        88,
+        284,
+        446,
+        356
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "02-expiring-first/04.png",
+      "text": "요리를 골라요.",
+      "fontSize": 79,
+      "bbox": [
+        88,
+        385,
+        536,
+        457
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    }
+  ],
+  "originalsPreserved": true,
+  "status": "complete",
+  "publicationRecord": "publication.json",
+  "verificationRecord": "verification.json",
+  "appDemoRecord": "app-demo/production-record.json",
+  "videoRecord": "03-reel-edit/production-record.json",
+  "publishedPostCount": 3,
+  "outputHashes": {
+    "02-expiring-first/01.png": "65d4a5f055bfee1ec91591ee8c6cf33048d26762da7e1b571b64759a872851b5",
+    "02-expiring-first/03.png": "c57c0a28a2edbd5350d1e3135ea5c993222067678f226ed5e81eec46a6b87f91",
+    "02-expiring-first/02.png": "9f2b0cef31f55b968bc8801e6daf8356edf8642880a9d376efb43d88fd0213ca",
+    "02-expiring-first/04.png": "f47f82d2cc99184910e04d55d7780fd047fbf70187caed2be2e56c37322cfcd2",
+    "01-shopping-check/01.png": "6a62acfab9aa121d19446bad96c2261fb0686ba6fd3b3b2bddd72477d69b9734",
+    "01-shopping-check/03.png": "8022b4559a595f0ac564dad766936433de674ca3420c00687f46531b6f63c1db",
+    "01-shopping-check/02.png": "2ae14147de8e62be54d1074e0424ec9c0a3d5081419fa64b570ade7234b95af6",
+    "01-shopping-check/04.png": "d6448ff7adc9760c6e9731d4fe623a89f346fccd89697f147c35bf4a76236ed9",
+    "03-reel-edit/jango-fridge-to-meal.mp4": "fa37232bb3b9ebe132bdc737a0696d3b225e0e7b4030dca5157bec3d3aa14a67",
+    "03-reel-edit/cover.jpg": "af39c03d7cfc19bbe384d7aed3c6a32c006324af2506d5761c6f89478cfa4169",
+    "03-reel-edit/cover.png": "b2adc3f9cfe233b76ee3a64480f0949e2462e1e6294cb653f7dbb5d90a30c5d0",
+    "review/03-reel-360.jpg": "51c22e5b9133039a6a629b172cba9e0795d3caf595ae131b1a03fdf8c2b6fe35",
+    "review/03-reel-cover-grid.jpg": "f21bb7c53722aa324809892dcb4a92cba248eb88cf78c93bc40bd805e1684228",
+    "review/02-expiring-first-360.jpg": "bad546c818a3f03d87cc4562ee517d8f1b1d6d873c811294003a687fd108f0ad",
+    "review/02-expiring-first-grid.jpg": "f0f6347051b09056dd91972de98b8b701cdb2bfb85bca089901e3b26e73054b9",
+    "review/03-reel-published.jpg": "c7fa1836175a91ee90e2161f4da58ab892877994afe76df6fde46d4818147c07",
+    "review/01-shopping-published.jpg": "63fa459199ee3d68220dbe67b3db9d0663bf6e7ce5f808667b5250c427d1d26c",
+    "review/01-shopping-check-grid.jpg": "f50e476af76841d8a48384e66963e9f7e5a0be55de34d835b7999777f8b24777",
+    "review/02-feature-published.jpg": "f44a36271f4d271143087617a224aa88af98126622cc63ca2c360b0c29921009",
+    "review/01-shopping-check-360.jpg": "61cda7e2e3fb91872904cf4a2f9be44db1445bcf626e2a20a1a3349d7a98aa42",
+    "review/profile-final.jpg": "d153f7a6a6a42e63008f0a3a83857f20d43180d15828bb7bad0e2c570769133f",
+    "app-demo/detail-browser.jpg": "2bb455d710237d1be05dfba82c95a4a962957d1061d816efcbf2c8efbbba5fbc",
+    "app-demo/options-browser.jpg": "2728033b8211ecd3f4c00edec48dd835e652519ca397308e3b044c1c0eca0895",
+    "app-demo/overview-browser.jpg": "00951c466e9407ad87e074ed06ac78cafdef5801beb6021aefbadc6c6bcf2d35"
+  },
+  "temporaryCleanup": {
+    "removed": [
+      "/private/tmp/jango-followup-render-20261015",
+      "/private/tmp/jango-followup-video-20261015"
+    ],
+    "preserved": "Renderer source/adapters, source hashes, raw app captures, final media, review sheets and publication evidence are retained in this pack. Original user video and existing shared temporary dependencies were preserved."
+  }
+}

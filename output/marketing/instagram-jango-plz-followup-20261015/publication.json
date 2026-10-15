@@ -1,0 +1,64 @@
+{
+  "account": "jango_plz",
+  "status": "complete",
+  "completedAt": "2026-10-15T07:06:57.117Z",
+  "publishOrder": [
+    "01-shopping-check",
+    "02-expiring-first",
+    "03-reel-edit"
+  ],
+  "posts": [
+    {
+      "id": "01-shopping-check",
+      "url": "https://www.instagram.com/jango_plz/p/DegVsg0naIf/",
+      "captionVerified": true,
+      "slideCount": 4,
+      "verifiedAt": "2026-10-15T06:42:23.932Z",
+      "liveAltTextVerified": true,
+      "imageOrderVerified": true
+    },
+    {
+      "id": "02-expiring-first",
+      "url": "https://www.instagram.com/jango_plz/p/DegXD7HnUQR/",
+      "captionVerified": true,
+      "slideCount": 4,
+      "liveAltTextVerified": true,
+      "imageOrderVerified": true,
+      "exampleDisclosureVerified": true,
+      "verifiedAt": "2026-10-15T06:54:15.116Z"
+    },
+    {
+      "id": "03-reel-edit",
+      "url": "https://www.instagram.com/jango_plz/reel/DegYXXSyYXZ/",
+      "captionVerified": true,
+      "aiLabelVerified": true,
+      "originalAudioVisible": true,
+      "videoPlayer": [
+        {
+          "currentTime": 1.133824,
+          "duration": 12.099999,
+          "error": null,
+          "height": 1280,
+          "playing": true,
+          "readyState": 4,
+          "width": 720
+        }
+      ],
+      "verifiedAt": "2026-10-15T07:06:13.092Z",
+      "customCoverVerified": true
+    }
+  ],
+  "downloadLinks": [
+    {
+      "kind": "iPhone 다운로드",
+      "url": "https://apps.apple.com/kr/app/id6793375883",
+      "verified": true
+    },
+    {
+      "kind": "Android 다운로드",
+      "url": "https://play.google.com/store/apps/details?id=com.expirymate.mobile",
+      "verified": true
+    }
+  ],
+  "finalProfileScreenshot": "review/profile-final.jpg"
+}

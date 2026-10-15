@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {URL} from 'node:url';
+import console from 'node:console';
+import {build} from '/Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/esbuild@0.27.7/node_modules/esbuild/lib/main.js';
+const root='/Users/namu/Desktop/ExpiryMate',tmp=path.dirname(new URL(import.meta.url).pathname);
+const web='/private/tmp/jango-app-poses-20261015-nc1DhM/web/node_modules';
+const require=createRequire(path.join(web,'react/package.json'));
+const stub=/\/(use-inventory-list|use-recipe-recommendations|recipe-generation-provider|use-recipe-preferences|space-provider|use-auth|use-subscription-entitlement|monetization-provider|registration-store|use-recommendation-generate-flow|recipe-preference-navigation|use-affiliate-offers|use-affiliate-settings|affiliate-entry-tracking)$|\/services\/api$|^expo-router$/;
+const result=await build({entryPoints:[path.join(tmp,'entry.tsx')],bundle:true,loader:{'.otf':'dataurl'},jsx:'automatic',platform:'browser',format:'iife',outfile:path.join(tmp,'app.js'),metafile:true,resolveExtensions:['.web.tsx','.web.ts','.web.js','.tsx','.ts','.jsx','.js','.json'],define:{'process.env':'{}',global:'window','process.env.NODE_ENV':'"production"',__DEV__:'false'},nodePaths:[web,path.join(root,'apps/mobile/node_modules'),path.join(root,'node_modules')],plugins:[{name:'offline-demo',setup(b){
+ b.onResolve({filter:stub},()=>({path:path.join(tmp,'hooks.tsx')}));
+ b.onResolve({filter:/^react-native$/},()=>({path:path.join(tmp,'native.tsx')}));
+ b.onResolve({filter:/^react-native-(reanimated|gesture-handler|safe-area-context)$/},()=>({path:path.join(tmp,'runtime.tsx')}));
+ b.onResolve({filter:/^react-native-svg$/},()=>({path:path.join(root,'apps/mobile/node_modules/react-native-svg/lib/module/ReactNativeSVG.web.js')}));
+ b.onResolve({filter:/^react($|\/)|^react-dom($|\/)/},args=>({path:require.resolve(args.path)}));
+ b.onLoad({filter:/lucide-react-native\.mjs$/},args=>({contents:fs.readFileSync(args.path,'utf8').replace('LucideProvider, useLucideContext','useLucideContext'),loader:'js',resolveDir:path.dirname(args.path)}));
+ b.onLoad({filter:/\.(png|jpg)$/},args=>{const bytes=fs.readFileSync(args.path);return {contents:`export default ${JSON.stringify({uri:'data:image/png;base64,'+bytes.toString('base64'),width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20),scale:1})}`,loader:'js'};});
+}}]});
+fs.writeFileSync(path.join(tmp,'meta.json'),JSON.stringify(result.metafile,null,2));
+console.log('Built actual recommendation route with offline data adapters.');

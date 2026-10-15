@@ -1,0 +1,21 @@
+{
+  "account": "jango_plz",
+  "url": "https://www.instagram.com/jango_plz/reel/DegSkIxy6C6/",
+  "kind": "reel",
+  "status": "published",
+  "verifiedAt": "2026-10-15T06:15:36.814Z",
+  "caption": "냉장고에 재료는 있는데, 오늘 뭐 먹지? 🥕\n\n두부도, 버섯도 잊기 전에 한 끼로.\n장고야 부탁해에서 재료와 유통기한을 관리하고,\n내 재료로 만들 요리를 추천받아 보세요.\n\n프로필의 iPhone · Android 링크에서 다운로드하고,\n오늘은 자주 남기는 재료 하나부터 등록해 보세요.\n\n영상 속 메뉴와 앱 화면은 이해를 돕기 위한 연출 예시입니다.\nAI로 제작한 홍보 영상입니다.\n\n#장고야부탁해 #자취생활 #냉장고털이 #유통기한관리 #오늘뭐먹지",
+  "captionVerified": true,
+  "aiLabel": "AI 콘텐츠 (visible on published post)",
+  "audio": "오리지널 오디오 (visible on published post); source sound enabled in composer",
+  "player": [
+    {
+      "durationSeconds": 12.097596,
+      "height": 1280,
+      "playing": true,
+      "readyState": 4,
+      "width": 720
+    }
+  ],
+  "screenshot": "reel-published.jpg"
+}

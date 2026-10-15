@@ -1,0 +1,44 @@
+{
+  "01-shopping-check": {
+    "status": "published",
+    "dimensions": "1080x1350, 4 slides",
+    "originalReviewed": true,
+    "360pxReviewed": true,
+    "profileThumbnailReviewed": true,
+    "essentialCopyMinimumFontPx": 48,
+    "essentialCopyOuterMarginPx": 88,
+    "originalAssetHashesVerified": true,
+    "captionAndKoreanAltTextReady": true
+  },
+  "02-expiring-first": {
+    "status": "published",
+    "dimensions": "1080x1350, 4 slides",
+    "originalReviewed": true,
+    "360pxReviewed": true,
+    "profileThumbnailReviewed": true,
+    "actualAppComponentsVerified": true,
+    "exampleDataDisclosed": true,
+    "captionAndKoreanAltTextReady": true,
+    "knownProjection": "Browser rendering, not native device capture"
+  },
+  "03-reel-edit": {
+    "status": "published",
+    "dimensions": "1080x1920, 12.10 seconds",
+    "originalAnd360pxReviewed": true,
+    "coverThumbnailReviewed": true,
+    "fullVideoDecode": true,
+    "blackFramesDetected": false,
+    "audioIdenticalToSource": true,
+    "watermarksPreserved": true
+  },
+  "repositoryCheck": {
+    "docsCheck": "passed",
+    "appCodeChanged": false,
+    "apiOrDbChanged": false
+  },
+  "status": "complete",
+  "allOriginalSourceHashesVerified": true,
+  "allCaptionAndAltTextVerified": true,
+  "bothDownloadLinksVerified": true,
+  "videoLivePlaybackVerified": true
+}

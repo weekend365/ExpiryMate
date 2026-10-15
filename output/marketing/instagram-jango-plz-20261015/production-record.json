@@ -1,0 +1,1279 @@
+{
+  "id": "instagram-jango-plz-20261015",
+  "dateKst": "2026-10-15",
+  "authorization": "User explicitly requested implementation of the complete profile and three-post plan in this conversation.",
+  "method": "Pillow typography/geometric layout and uniform placement/conversion of existing assets. No new character drawing or generative image edits.",
+  "characterMaster": "v18 original 24; unchanged existing app icon derivative",
+  "cartoon": "Previously user-adopted v6, approved panels 1–4, unchanged source bytes; proportional 1080x1350 distribution copies",
+  "sources": {
+    "apps/mobile/assets/branding/icon.png": "740df632d96e65c37b789a4092f85f318bc7c95bc9a47c84b07c2053768a73b8",
+    "apps/mobile/assets/characters/jango-icon-crop.png": "40132cf95f9096895ab2e8b823db9fa443565dcdecbff5fd541bf7a6ab5ea5b9",
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/masters/v18/master.json": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "design/jango/cartoon-series.json": "c4f5ca25e364a8d6397f1854b9b754836e286a9c86fe7f39786738cea3363150",
+    "packages/shared/src/design/palette.ts": "602c6b459c575f753312d625681046e2041d7499544cf390c0b42e69be39e334",
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+    "apps/mobile/assets/fonts/Pretendard-SemiBold.otf": "c89bc43027dc7cde5726e96223376f8eec09302b2fc1f8147fd5b57cfc376118",
+    "apps/mobile/assets/fonts/Pretendard-Medium.otf": "d39e50e4bb52b4993b6a4eeb821a171254745bd824446af01e1f616b89fface0",
+    "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-01.png": "aa5025215557a3c3d6bb6ee8ab7f9f98b0ff05e6bc9d25a1976ba55c50e6dbec",
+    "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+    "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-03.png": "0153389c9aa8fd423f6e823d2ec0b0e01dbc3f042c508c37b77b685e336a93a7",
+    "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-04.png": "ef75a46ae3d11de97f3a0890f599b19d6c61f64a1c8f1bd03d49757ff03e4099"
+  },
+  "originalsUnchanged": true,
+  "profileIcon": {
+    "file": "profile-icon.png",
+    "sha256": "740df632d96e65c37b789a4092f85f318bc7c95bc9a47c84b07c2053768a73b8",
+    "identicalToAppIcon": true
+  },
+  "featureEvidenceCheckedAt": "2026-10-15",
+  "featureEvidence": [
+    "docs/product/release-scope.md",
+    "apps/mobile/app/register.tsx",
+    "apps/mobile/app/(tabs)/inventory.tsx",
+    "apps/mobile/app/(tabs)/recommendations.tsx",
+    "apps/mobile/src/features/recipes/recipe-detail-sheet.tsx"
+  ],
+  "layout": {
+    "size": [
+      1080,
+      1350
+    ],
+    "font": "Pretendard",
+    "essentialMinimumFontPx": 44,
+    "reviewWidthPx": 360,
+    "textBoxes": [
+      {
+        "file": "01-intro/01.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "남은 재료로, 오늘의 메뉴까지",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          405,
+          206
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "01 / 03",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          976,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "재료는 있는데,",
+        "fontSize": 91,
+        "bbox": [
+          88,
+          276,
+          609,
+          368
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "오늘 뭐 먹지?",
+        "fontSize": 104,
+        "bbox": [
+          88,
+          405,
+          642,
+          499
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "냉장고 속 재료로",
+        "fontSize": 50,
+        "bbox": [
+          88,
+          592,
+          413,
+          637
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "오늘의 한 끼를 찾아요.",
+        "fontSize": 50,
+        "bbox": [
+          88,
+          654,
+          524,
+          699
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "재료 관리부터",
+        "fontSize": 55,
+        "bbox": [
+          88,
+          885,
+          389,
+          935
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "요리 추천까지",
+        "fontSize": 55,
+        "bbox": [
+          88,
+          953,
+          389,
+          1003
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/01.png",
+        "text": "장고야 부탁해",
+        "fontSize": 43,
+        "bbox": [
+          88,
+          1115,
+          320,
+          1154
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "기억 대신, 기록해요",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          302,
+          206
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "02 / 03",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          979,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "뭐가 있는지,",
+        "fontSize": 96,
+        "bbox": [
+          88,
+          287,
+          553,
+          384
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "언제까지인지.",
+        "fontSize": 96,
+        "bbox": [
+          88,
+          406,
+          613,
+          492
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "냉장 · 냉동 · 팬트리 재료를",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          567,
+          594,
+          611
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "한곳에 기록하고 살펴보세요.",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          628,
+          629,
+          672
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "장보기 전에",
+        "fontSize": 74,
+        "bbox": [
+          88,
+          869,
+          425,
+          936
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/02.png",
+        "text": "냉장고부터 확인해요.",
+        "fontSize": 74,
+        "bbox": [
+          88,
+          961,
+          702,
+          1028
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "오늘은, 재료 하나부터",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          326,
+          206
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "03 / 03",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          980,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "내 재료로",
+        "fontSize": 88,
+        "bbox": [
+          88,
+          292,
+          412,
+          371
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "오늘의 요리 추천",
+        "fontSize": 88,
+        "bbox": [
+          88,
+          401,
+          660,
+          481
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "마음에 드는 메뉴를 고르고",
+        "fontSize": 48,
+        "bbox": [
+          88,
+          563,
+          575,
+          606
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "한 끼를 시작해 보세요.",
+        "fontSize": 48,
+        "bbox": [
+          88,
+          623,
+          506,
+          667
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "오늘은 자주 남기는",
+        "fontSize": 55,
+        "bbox": [
+          112,
+          865,
+          522,
+          914
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "재료 하나부터",
+        "fontSize": 55,
+        "bbox": [
+          112,
+          931,
+          413,
+          981
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "등록해 보세요.",
+        "fontSize": 55,
+        "bbox": [
+          112,
+          997,
+          429,
+          1046
+        ],
+        "essential": true
+      },
+      {
+        "file": "01-intro/03.png",
+        "text": "프로필에서 앱 다운로드",
+        "fontSize": 42,
+        "bbox": [
+          88,
+          1154,
+          468,
+          1192
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "처음 쓰는 장고 안내서",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          325,
+          203
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "01 / 04",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          977,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "장고 처음이라면,",
+        "fontSize": 89,
+        "bbox": [
+          88,
+          280,
+          674,
+          371
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "딱 3단계",
+        "fontSize": 112,
+        "bbox": [
+          88,
+          408,
+          477,
+          509
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "01",
+        "fontSize": 50,
+        "bbox": [
+          88,
+          661,
+          144,
+          698
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "재료 등록",
+        "fontSize": 58,
+        "bbox": [
+          230,
+          658,
+          443,
+          711
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "02",
+        "fontSize": 50,
+        "bbox": [
+          88,
+          778,
+          152,
+          815
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "기한 확인",
+        "fontSize": 58,
+        "bbox": [
+          230,
+          775,
+          443,
+          828
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "03",
+        "fontSize": 50,
+        "bbox": [
+          88,
+          895,
+          153,
+          932
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "메뉴 선택",
+        "fontSize": 58,
+        "bbox": [
+          230,
+          892,
+          443,
+          945
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "한 번에 다 정리하지 않아도 괜찮아요.",
+        "fontSize": 44,
+        "bbox": [
+          88,
+          1090,
+          725,
+          1129
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/01.png",
+        "text": "재료 하나로 가볍게 시작해요.",
+        "fontSize": 44,
+        "bbox": [
+          88,
+          1145,
+          589,
+          1184
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "STEP 01 · 재료 등록",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          319,
+          203
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "02 / 04",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          980,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "01",
+        "fontSize": 157,
+        "bbox": [
+          88,
+          277,
+          266,
+          392
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "재료와 기한을",
+        "fontSize": 96,
+        "bbox": [
+          88,
+          507,
+          608,
+          593
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "등록해요.",
+        "fontSize": 96,
+        "bbox": [
+          88,
+          626,
+          447,
+          712
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "재료 이름 · 수량 · 유통기한을",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          803,
+          636,
+          847
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "입력해 두세요.",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          864,
+          365,
+          908
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "자주 남기는 재료 하나로",
+        "fontSize": 47,
+        "bbox": [
+          108,
+          1053,
+          551,
+          1096
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/02.png",
+        "text": "시작해도 괜찮아요.",
+        "fontSize": 47,
+        "bbox": [
+          108,
+          1111,
+          460,
+          1154
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "STEP 02 · 기한 확인",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          323,
+          203
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "03 / 04",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          981,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "02",
+        "fontSize": 157,
+        "bbox": [
+          88,
+          277,
+          288,
+          392
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "기한이 가까운",
+        "fontSize": 87,
+        "bbox": [
+          88,
+          507,
+          558,
+          585
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "재료를 확인해요.",
+        "fontSize": 87,
+        "bbox": [
+          88,
+          615,
+          658,
+          694
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "보관함에서 남은 재료와",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          795,
+          532,
+          840
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "유통기한을 살펴보세요.",
+        "fontSize": 49,
+        "bbox": [
+          88,
+          856,
+          533,
+          900
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "잊고 있던 재료부터,",
+        "fontSize": 57,
+        "bbox": [
+          88,
+          1052,
+          522,
+          1110
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/03.png",
+        "text": "오늘의 한 끼로.",
+        "fontSize": 57,
+        "bbox": [
+          88,
+          1123,
+          424,
+          1175
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "장고야 부탁해",
+        "fontSize": 34,
+        "bbox": [
+          88,
+          75,
+          270,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "@jango_plz",
+        "fontSize": 28,
+        "bbox": [
+          800,
+          80,
+          943,
+          107
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "STEP 03 · 메뉴 선택",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          177,
+          324,
+          203
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "04 / 04",
+        "fontSize": 26,
+        "bbox": [
+          895,
+          177,
+          982,
+          200
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "내 재료로 오늘의 한 끼",
+        "fontSize": 28,
+        "bbox": [
+          88,
+          1273,
+          332,
+          1299
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "장고에게 부탁해",
+        "fontSize": 27,
+        "bbox": [
+          820,
+          1273,
+          988,
+          1298
+        ],
+        "essential": false
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "03",
+        "fontSize": 157,
+        "bbox": [
+          88,
+          277,
+          292,
+          392
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "‘임박 우선’을 켜고",
+        "fontSize": 79,
+        "bbox": [
+          88,
+          509,
+          642,
+          581
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "메뉴를 골라요.",
+        "fontSize": 79,
+        "bbox": [
+          88,
+          607,
+          536,
+          679
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "기한이 가까운 재료를 먼저 활용하도록",
+        "fontSize": 45,
+        "bbox": [
+          88,
+          757,
+          756,
+          797
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "추천 조건을 선택해 보세요.",
+        "fontSize": 45,
+        "bbox": [
+          88,
+          813,
+          562,
+          853
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "마음에 드는 요리를 골라",
+        "fontSize": 48,
+        "bbox": [
+          88,
+          993,
+          532,
+          1037
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "‘이 요리 시작’을 눌러 보세요.",
+        "fontSize": 48,
+        "bbox": [
+          88,
+          1053,
+          620,
+          1097
+        ],
+        "essential": true
+      },
+      {
+        "file": "03-howto/04.png",
+        "text": "프로필에서 앱 다운로드",
+        "fontSize": 40,
+        "bbox": [
+          88,
+          1163,
+          458,
+          1199
+        ],
+        "essential": false
+      }
+    ]
+  },
+  "publication": {
+    "account": "jango_plz",
+    "status": "complete",
+    "completedAtUtc": "2026-10-15T06:01:18.020Z",
+    "profileUrl": "https://www.instagram.com/jango_plz/",
+    "downloadLinks": [
+      {
+        "title": "iPhone 다운로드",
+        "url": "https://apps.apple.com/kr/app/id6793375883"
+      },
+      {
+        "title": "Android 다운로드",
+        "url": "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+      }
+    ],
+    "gridOrder": [
+      "01-intro",
+      "02-cartoon",
+      "03-howto"
+    ],
+    "posts": [
+      {
+        "id": "03-howto",
+        "url": "https://www.instagram.com/jango_plz/p/DegPENknWhH/",
+        "confirmedAtUtc": "2026-10-15T05:44:44.724Z",
+        "slideCount": 4,
+        "liveCaptionVerified": true,
+        "liveAltTextVerified": true,
+        "liveAspectRatio": "4:5"
+      },
+      {
+        "id": "02-cartoon",
+        "url": "https://www.instagram.com/jango_plz/p/DegPZjuHTyt/",
+        "confirmedAtUtc": "2026-10-15T05:47:17.533Z",
+        "slideCount": 4,
+        "liveCaptionVerified": true,
+        "liveAltTextVerified": true,
+        "liveAspectRatio": "4:5"
+      },
+      {
+        "id": "01-intro",
+        "url": "https://www.instagram.com/jango_plz/p/DegQzO7HZ2X/",
+        "confirmedAtUtc": "2026-10-15T05:59:56.060Z",
+        "slideCount": 3,
+        "liveCaptionVerified": true,
+        "liveAltTextVerified": true,
+        "liveAspectRatio": "4:5"
+      }
+    ],
+    "screenshot": "review/profile-final.jpg"
+  },
+  "profileApplied": {
+    "businessAccount": true,
+    "category": "소프트웨어",
+    "categoryAdjustment": "앱 페이지 and 제품/서비스 were not returned by live Instagram category search; selected the available software category.",
+    "contactInformationPublished": false,
+    "bioSaved": true,
+    "profileImageUploaded": true,
+    "uploadMethod": "Native file picker for avatar/howto/cartoon; browser chooser for original intro PNGs after user enabled file URL access."
+  },
+  "discardedCompatibilityCopies": [
+    {
+      "source": "01-intro/01.png",
+      "file": "01-intro/upload-jpeg/01.jpg",
+      "sha256": "ffa27fd453749df2ae22cf387f950223605671b1728032cd28cce3c5e9affd5d",
+      "transform": "JPEG quality 98, subsampling 0; unchanged dimensions and composition",
+      "status": "deleted-unused-compatibility-copy",
+      "reason": "Original PNG upload succeeded after user enabled extension file URL access."
+    },
+    {
+      "source": "01-intro/02.png",
+      "file": "01-intro/upload-jpeg/02.jpg",
+      "sha256": "e0ecbca4c5cf0b1dcb4359a83a9429a7eedc37337a72049ba0e65394803ff0f3",
+      "transform": "JPEG quality 98, subsampling 0; unchanged dimensions and composition",
+      "status": "deleted-unused-compatibility-copy",
+      "reason": "Original PNG upload succeeded after user enabled extension file URL access."
+    },
+    {
+      "source": "01-intro/03.png",
+      "file": "01-intro/upload-jpeg/03.jpg",
+      "sha256": "534a2f1b8a36f1926dab18fcf0ba89b6dd3d3bcb84fb6ae25eadfe5668de0891",
+      "transform": "JPEG quality 98, subsampling 0; unchanged dimensions and composition",
+      "status": "deleted-unused-compatibility-copy",
+      "reason": "Original PNG upload succeeded after user enabled extension file URL access."
+    }
+  ],
+  "browserSettingChange": {
+    "performedBy": "user",
+    "confirmation": "설정을 켰어요",
+    "scope": "ChatGPT Chrome extension file URL access; browser settings page was not accessed or modified by the agent."
+  }
+}

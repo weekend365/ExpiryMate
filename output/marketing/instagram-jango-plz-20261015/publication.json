@@ -1,0 +1,51 @@
+{
+  "account": "jango_plz",
+  "status": "complete",
+  "completedAtUtc": "2026-10-15T06:01:18.020Z",
+  "profileUrl": "https://www.instagram.com/jango_plz/",
+  "downloadLinks": [
+    {
+      "title": "iPhone 다운로드",
+      "url": "https://apps.apple.com/kr/app/id6793375883"
+    },
+    {
+      "title": "Android 다운로드",
+      "url": "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    }
+  ],
+  "gridOrder": [
+    "01-intro",
+    "02-cartoon",
+    "03-howto"
+  ],
+  "posts": [
+    {
+      "id": "03-howto",
+      "url": "https://www.instagram.com/jango_plz/p/DegPENknWhH/",
+      "confirmedAtUtc": "2026-10-15T05:44:44.724Z",
+      "slideCount": 4,
+      "liveCaptionVerified": true,
+      "liveAltTextVerified": true,
+      "liveAspectRatio": "4:5"
+    },
+    {
+      "id": "02-cartoon",
+      "url": "https://www.instagram.com/jango_plz/p/DegPZjuHTyt/",
+      "confirmedAtUtc": "2026-10-15T05:47:17.533Z",
+      "slideCount": 4,
+      "liveCaptionVerified": true,
+      "liveAltTextVerified": true,
+      "liveAspectRatio": "4:5"
+    },
+    {
+      "id": "01-intro",
+      "url": "https://www.instagram.com/jango_plz/p/DegQzO7HZ2X/",
+      "confirmedAtUtc": "2026-10-15T05:59:56.060Z",
+      "slideCount": 3,
+      "liveCaptionVerified": true,
+      "liveAltTextVerified": true,
+      "liveAspectRatio": "4:5"
+    }
+  ],
+  "screenshot": "review/profile-final.jpg"
+}

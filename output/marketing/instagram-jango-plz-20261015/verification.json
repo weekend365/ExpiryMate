@@ -1,0 +1,56 @@
+{
+  "checkedAtKst": "2026-10-15",
+  "checks": {
+    "pnpm docs:check": {
+      "exitCode": 0,
+      "log": "/private/tmp/jango-instagram-docs-check.log"
+    },
+    "pnpm lint": {
+      "exitCode": 0,
+      "log": "/private/tmp/jango-instagram-lint.log"
+    },
+    "pnpm typecheck": {
+      "exitCode": 0,
+      "log": "/private/tmp/jango-instagram-typecheck.log"
+    },
+    "pnpm test": {
+      "exitCode": 0,
+      "log": "/private/tmp/jango-instagram-test.log"
+    }
+  },
+  "visualReview": {
+    "originalSize": "1080x1350; no clipped essential text in rendered cards inspected",
+    "mobileWidthPx": 360,
+    "mobileReview": "All 11 slides inspected in all-slides-360.png; Korean dialogue and actions reviewed. Fine phone UI text in approved cartoon is supplemental, as already recorded in the source standard.",
+    "profileAvatar": "Full icon readable in circular live profile preview; no additional crop applied.",
+    "newCharacterDrawing": false,
+    "sourceHashesUnchanged": true
+  },
+  "links": [
+    {
+      "title": "iPhone 다운로드",
+      "url": "https://apps.apple.com/kr/app/id6793375883",
+      "verifiedInLiveProfile": true
+    },
+    {
+      "title": "Android 다운로드",
+      "url": "https://play.google.com/store/apps/details?id=com.expirymate.mobile",
+      "verifiedInLiveProfile": true
+    }
+  ],
+  "liveInstagram": {
+    "profilePhotoAndBioVerified": true,
+    "businessAccountVerified": true,
+    "contactInformationPublished": false,
+    "downloadLinksVerified": true,
+    "carouselSlidesVerified": 11,
+    "allAltTextsVerified": true,
+    "allCaptionsVerified": true,
+    "gridOrderVerified": [
+      "01-intro",
+      "02-cartoon",
+      "03-howto"
+    ],
+    "screenshot": "review/profile-final.jpg"
+  }
+}

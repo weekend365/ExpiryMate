@@ -1,0 +1,257 @@
+{
+  "source": {
+    "path": "/Users/namu/Downloads/dreamina-2026-09-15-6281-세로 9_16, 정확히 12초 길이의 한국어 앱 광고 영상을 제작한다. ....mp4",
+    "sha256": "8a684ade77c7549ad48dd7b35bfb80d5fefec1643041bd63c0c6b074976af9c1",
+    "bytes": 30876542,
+    "originalPreserved": true
+  },
+  "output": {
+    "file": "jango-fridge-to-meal.mp4",
+    "sha256": "fa37232bb3b9ebe132bdc737a0696d3b225e0e7b4030dca5157bec3d3aa14a67",
+    "width": 1080,
+    "height": 1920,
+    "durationSeconds": 12.1,
+    "frameRate": 30,
+    "videoCodec": "H.264 High, CRF18, yuv420p",
+    "audio": "Original AAC stream copied"
+  },
+  "edit": "Original shot sequence and timing retained; direct Pretendard promotional text overlays; no scene redraw, speed change or new audio",
+  "timeline": [
+    {
+      "start": 0,
+      "end": 2.4,
+      "overlaySha256": "9f2ebef863f4afd6bada0cd7d2295c25052a35e2b2c0923c491acc4398cf0c1b"
+    },
+    {
+      "start": 2.4,
+      "end": 5.8,
+      "overlaySha256": "3f0157a9dc2ae7936b77937fe7cb95bea5f973cedeeb5266df75b75c9102a2c0"
+    },
+    {
+      "start": 5.8,
+      "end": 9.6,
+      "overlaySha256": "cb17593653f2c3eae0c4a493136ba21752038ce7094d4da522bbf4fc07dc8ceb"
+    },
+    {
+      "start": 9.6,
+      "end": 12.1,
+      "overlaySha256": "f942b2cec86c89c21002fb9586ddcd7fe62cdb2b6fd65f5b8a3115d5db1f965b"
+    }
+  ],
+  "overlayTextBounds": [
+    {
+      "file": "03-reel-edit/overlay-01.png",
+      "text": "냉장고에 재료는 있는데,",
+      "fontSize": 62,
+      "bbox": [
+        126,
+        1203,
+        712,
+        1266
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/overlay-01.png",
+      "text": "오늘 뭐 먹지?",
+      "fontSize": 62,
+      "bbox": [
+        126,
+        1282,
+        457,
+        1338
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/overlay-02.png",
+      "text": "재료와 유통기한을 챙기고",
+      "fontSize": 62,
+      "bbox": [
+        126,
+        167,
+        748,
+        223
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/overlay-03.png",
+      "text": "내 재료로 만들 요리 추천",
+      "fontSize": 62,
+      "bbox": [
+        126,
+        167,
+        722,
+        223
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/overlay-04.png",
+      "text": "장고야 부탁해",
+      "fontSize": 68,
+      "bbox": [
+        126,
+        1145,
+        496,
+        1207
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "03-reel-edit/overlay-04.png",
+      "text": "프로필에서 iPhone · Android",
+      "fontSize": 48,
+      "bbox": [
+        126,
+        1252,
+        707,
+        1296
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/overlay-04.png",
+      "text": "다운로드",
+      "fontSize": 48,
+      "bbox": [
+        126,
+        1313,
+        290,
+        1357
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "장고야 부탁해",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        310,
+        345,
+        354
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "냉장고 속 재료로,",
+      "fontSize": 83,
+      "bbox": [
+        88,
+        535,
+        654,
+        620
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "오늘의 한 끼",
+      "fontSize": 102,
+      "bbox": [
+        88,
+        658,
+        576,
+        750
+      ],
+      "essential": true,
+      "color": "#28674F"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "재료 관리부터",
+      "fontSize": 54,
+      "bbox": [
+        88,
+        1009,
+        383,
+        1057
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "요리 추천까지",
+      "fontSize": 54,
+      "bbox": [
+        88,
+        1078,
+        383,
+        1126
+      ],
+      "essential": true,
+      "color": "#1A1F27"
+    },
+    {
+      "file": "03-reel-edit/cover.png",
+      "text": "프로필에서 앱 다운로드",
+      "fontSize": 48,
+      "bbox": [
+        88,
+        1690,
+        520,
+        1734
+      ],
+      "essential": true,
+      "color": "#28674F"
+    }
+  ],
+  "sources": {
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+    "apps/mobile/assets/fonts/Pretendard-SemiBold.otf": "c89bc43027dc7cde5726e96223376f8eec09302b2fc1f8147fd5b57cfc376118",
+    "apps/mobile/assets/fonts/Pretendard-Medium.otf": "d39e50e4bb52b4993b6a4eeb821a171254745bd824446af01e1f616b89fface0",
+    "design/jango/manifest.json": "b5a27a9ae6025ca22361bc1d33938fa42a422d300d5484dbf595b4944f6d02b7",
+    "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+    "apps/mobile/assets/characters/jango-cooking.png": "5685f0af490def399bbba4abe9cc4432e969c08421fe80eafeb4c3883f1b38b3"
+  },
+  "verification": {
+    "fullVideoDecode": "passed",
+    "blackFrames": "none detected at >=0.04 seconds",
+    "sourceAndOutputPcmSha256": "e736988437c5eec1af87cb3ef56c3fabee7853f5e92d261afc0a5224d6dacc38",
+    "decodedPcmBytes": 2134016,
+    "audioIdentical": true,
+    "sampleTimes": [
+      0,
+      1.5,
+      2.4,
+      4.5,
+      5.8,
+      7.5,
+      9.6,
+      11.4
+    ],
+    "visualReview": "passed: original frame + 360px timeline + profile cover thumbnail",
+    "facesAndPhoneScreen": "No promotional text covers the face or front-facing app screen in reviewed shots",
+    "originalAiWatermarks": "preserved",
+    "reelsUiReview": "Critical text is above y=1400 and left of x=900 for the ending; right and bottom action areas considered",
+    "chromePlayback": {
+      "duration": 12.1,
+      "width": 1080,
+      "height": 1920,
+      "readyState": 4,
+      "error": null,
+      "ended": true,
+      "lastCurrentTime": 12.1
+    }
+  },
+  "cover": {
+    "file": "cover.png",
+    "sha256": "b2adc3f9cfe233b76ee3a64480f0949e2462e1e6294cb653f7dbb5d90a30c5d0",
+    "uploadFile": "cover.jpg",
+    "uploadSha256": "af39c03d7cfc19bbe384d7aed3c6a32c006324af2506d5761c6f89478cfa4169",
+    "conversion": "JPEG quality 98, subsampling 0; same 1080x1920 layout"
+  }
+}

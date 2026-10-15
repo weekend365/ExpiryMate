@@ -1,0 +1,17 @@
+import React from 'react';
+import {View} from 'react-native-web';
+const pass=({children}:any)=><>{children}</>;
+export const SafeAreaProvider=pass,SafeAreaView=View;
+export const useSafeAreaInsets=()=>({top:0,right:0,bottom:0,left:0});
+export const useSafeAreaFrame=()=>({x:0,y:0,width:420,height:900});
+const pan:any={};
+for(const key of ['enabled','activeOffsetY','onStart','onUpdate','onEnd','onFinalize','runOnJS','minDistance','simultaneousWithExternalGesture'])pan[key]=()=>pan;
+export const Gesture={Pan:()=>pan};
+export const GestureDetector=pass,GestureHandlerRootView=View;
+export default {View};
+export const useSharedValue=(value:any)=>({value});
+export const useAnimatedStyle=(fn:any)=>{const v=fn();return v.transform?{transform:[{translateY:0}]}:{opacity:0.42};};
+export const withSpring=(v:any)=>v,withTiming=(v:any)=>v;
+export const useReducedMotion=()=>true;
+export const Easing={out:(v:any)=>v,cubic:(v:any)=>v};
+export const runOnJS=(fn:any)=>fn;
