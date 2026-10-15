@@ -1,8 +1,8 @@
 {
   "version": 2,
   "method": "v18-master-observation-v1",
-  "inputSha256": "c1492aab5d71ace2c9016a77d9d41927061b132dda9f311dd16f478a1ade4923",
-  "implementationSha256": "389136f37223dd5bfa9b9d1ae3bc09f0b87a6b195727b3e2275db57e4ccfde5a",
+  "inputSha256": "5f1c298400a414cf931e4eb379b0f95e01501533978a2dce0e609d0bcc755997",
+  "implementationSha256": "0d6489bfb684fb6c5c4d37dd2b6fcdf1a858d75aed2bc1e64a750df49c90a609",
   "bibleSha256": "916d2890a18b4ff5fe6985183fd9ea93719d85abaf0ee618e0d92ef8f7bf4302",
   "status": "master artifact integrity; not full anatomy approval",
   "poses": [
@@ -765,6 +765,638 @@
       },
       "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
       "overlaySha256": "3c524cb08c6cfc195a02e2dd1522075f14386179861f9e9b5c2a5ba5724ac267"
+    },
+    {
+      "mood": "encourage",
+      "masterNumber": 7,
+      "source": "emoticons/kakao-32/v18/source-originals/07-r2.png",
+      "sha256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        310,
+        375,
+        680,
+        515
+      ],
+      "mouthRoi": [
+        592,
+        654,
+        120,
+        108
+      ],
+      "tiltDegrees": 5,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "mode": "speak-open",
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 5597,
+            "darkPixels": 4045,
+            "pinkPixels": 1552,
+            "aspect": 1.1481481481481481,
+            "darkFraction": 0.7227085938895838,
+            "pinkFraction": 0.2772914061104163,
+            "pinkCenterX": 0.4565666223256845,
+            "pinkCenterY": 0.6580358279241441,
+            "interiorOtherFraction": 0.02167453242440133,
+            "touchesEdge": false,
+            "referenceAspect": 1.2972972972972974,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 5747,
+            "darkPixels": 4195,
+            "pinkPixels": 1552,
+            "aspect": 1.1604938271604939,
+            "darkFraction": 0.7299460588132939,
+            "pinkFraction": 0.2700539411867061,
+            "pinkCenterX": 0.4517095305988155,
+            "pinkCenterY": 0.6580358279241441,
+            "interiorOtherFraction": 0.01050275482093664,
+            "touchesEdge": false,
+            "referenceAspect": 1.2763157894736843,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 5854,
+            "darkPixels": 4302,
+            "pinkPixels": 1552,
+            "aspect": 1.1604938271604939,
+            "darkFraction": 0.7348821318756406,
+            "pinkFraction": 0.2651178681243594,
+            "pinkCenterX": 0.4517095305988155,
+            "pinkCenterY": 0.6580358279241441,
+            "interiorOtherFraction": 0.0028955884857775507,
+            "touchesEdge": false,
+            "referenceAspect": 1.2894736842105263,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 97810,
+        "peach": 7343
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "333d25d271d616fe5a3b19aacdaa78fc96226d066e1d3ec514fc59700a1860e2"
+    },
+    {
+      "mood": "praise",
+      "masterNumber": 8,
+      "source": "emoticons/kakao-32/v18/source-originals/08-r2.png",
+      "sha256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        260,
+        380,
+        700,
+        565
+      ],
+      "mouthRoi": [
+        583,
+        677,
+        123,
+        112
+      ],
+      "tiltDegrees": -14,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "mode": "speak-open",
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 5022,
+            "darkPixels": 3452,
+            "pinkPixels": 1570,
+            "aspect": 1.2077922077922079,
+            "darkFraction": 0.6873755475906014,
+            "pinkFraction": 0.3126244524093986,
+            "pinkCenterX": 0.5584138072734744,
+            "pinkCenterY": 0.6835718421705683,
+            "interiorOtherFraction": 0.019140625,
+            "touchesEdge": false,
+            "referenceAspect": 1.2972972972972974,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 5150,
+            "darkPixels": 3580,
+            "pinkPixels": 1570,
+            "aspect": 1.2077922077922079,
+            "darkFraction": 0.6951456310679611,
+            "pinkFraction": 0.3048543689320388,
+            "pinkCenterX": 0.5584138072734744,
+            "pinkCenterY": 0.6835718421705683,
+            "interiorOtherFraction": 0.01037663335895465,
+            "touchesEdge": false,
+            "referenceAspect": 1.2763157894736843,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 5241,
+            "darkPixels": 3671,
+            "pinkPixels": 1570,
+            "aspect": 1.2077922077922079,
+            "darkFraction": 0.7004388475481779,
+            "pinkFraction": 0.2995611524518222,
+            "pinkCenterX": 0.5584138072734744,
+            "pinkCenterY": 0.6835718421705683,
+            "interiorOtherFraction": 0.002664129400570885,
+            "touchesEdge": false,
+            "referenceAspect": 1.2894736842105263,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 105881,
+        "peach": 8107
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "2207f8e26ddf09b1c596b866826ea72e2b1c11a66096375b553c24485d8fc514"
+    },
+    {
+      "mood": "acknowledge",
+      "masterNumber": 9,
+      "source": "emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "sha256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        280,
+        365,
+        680,
+        520
+      ],
+      "mouthRoi": [
+        573,
+        659,
+        110,
+        78
+      ],
+      "tiltDegrees": 0,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 1550,
+            "components": 1,
+            "fill": 0.4193722943722944,
+            "holes": 6,
+            "touchesEdge": false,
+            "referenceFill": 0.4193722943722944,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 1630,
+            "components": 1,
+            "fill": 0.4261437908496732,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4261437908496732,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 1696,
+            "components": 1,
+            "fill": 0.4433986928104575,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4433986928104575,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 89043,
+        "peach": 5307
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "429da74bda7675aee560d7dbf9d65ec8ed0b053a375c2eb254407d117fa5cd80"
+    },
+    {
+      "mood": "excited",
+      "masterNumber": 10,
+      "source": "emoticons/kakao-32/v18/source-originals/10-r2.png",
+      "sha256": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        270,
+        375,
+        720,
+        510
+      ],
+      "mouthRoi": [
+        578,
+        642,
+        124,
+        100
+      ],
+      "tiltDegrees": 7,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "mode": "speak-open",
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 5173,
+            "darkPixels": 3786,
+            "pinkPixels": 1387,
+            "aspect": 1.3333333333333333,
+            "darkFraction": 0.7318770539338875,
+            "pinkFraction": 0.26812294606611253,
+            "pinkCenterX": 0.4366288151886566,
+            "pinkCenterY": 0.6652747736922214,
+            "interiorOtherFraction": 0.0180334092634776,
+            "touchesEdge": false,
+            "referenceAspect": 1.2972972972972974,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 5292,
+            "darkPixels": 3905,
+            "pinkPixels": 1387,
+            "aspect": 1.3150684931506849,
+            "darkFraction": 0.7379062736205594,
+            "pinkFraction": 0.2620937263794407,
+            "pinkCenterX": 0.4366288151886566,
+            "pinkCenterY": 0.6698600507649307,
+            "interiorOtherFraction": 0.008988764044943821,
+            "touchesEdge": false,
+            "referenceAspect": 1.2763157894736843,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 5385,
+            "darkPixels": 3998,
+            "pinkPixels": 1387,
+            "aspect": 1.3287671232876712,
+            "darkFraction": 0.7424326833797585,
+            "pinkFraction": 0.2575673166202414,
+            "pinkCenterX": 0.43212748719702093,
+            "pinkCenterY": 0.6698600507649307,
+            "interiorOtherFraction": 0.0031469825990373935,
+            "touchesEdge": false,
+            "referenceAspect": 1.2894736842105263,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 85771,
+        "peach": 7510
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "b53c96e15010fcacecd66004dc55389bb50c6b59ad5477d2c934c97861318658"
+    },
+    {
+      "mood": "comfort",
+      "masterNumber": 18,
+      "source": "emoticons/kakao-32/v18/source-originals/18-r2.png",
+      "sha256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        280,
+        375,
+        690,
+        510
+      ],
+      "mouthRoi": [
+        581,
+        660,
+        110,
+        76
+      ],
+      "tiltDegrees": 0,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 1519,
+            "components": 1,
+            "fill": 0.45289206917113894,
+            "holes": 2,
+            "touchesEdge": false,
+            "referenceFill": 0.4193722943722944,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 1580,
+            "components": 1,
+            "fill": 0.4710793082886106,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4261437908496732,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 1631,
+            "components": 1,
+            "fill": 0.48012952605239917,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4433986928104575,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 83338,
+        "peach": 19246
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "8e7d92d0a2963dabd63eecb9ef2793a4739b2bec374a89661eb6aeb5717f71bf"
+    },
+    {
+      "mood": "enjoy",
+      "masterNumber": 22,
+      "source": "emoticons/kakao-32/v18/source-originals/22-r2.png",
+      "sha256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        280,
+        390,
+        680,
+        505
+      ],
+      "mouthRoi": [
+        569,
+        639,
+        122,
+        100
+      ],
+      "tiltDegrees": -3,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "mode": "speak-open",
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 5437,
+            "darkPixels": 3834,
+            "pinkPixels": 1603,
+            "aspect": 1.3150684931506849,
+            "darkFraction": 0.7051682913371344,
+            "pinkFraction": 0.29483170866286557,
+            "pinkCenterX": 0.5198131108338532,
+            "pinkCenterY": 0.6322819371213222,
+            "interiorOtherFraction": 0.018237630913687252,
+            "touchesEdge": false,
+            "referenceAspect": 1.2972972972972974,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 5558,
+            "darkPixels": 3955,
+            "pinkPixels": 1603,
+            "aspect": 1.3150684931506849,
+            "darkFraction": 0.7115869017632241,
+            "pinkFraction": 0.2884130982367758,
+            "pinkCenterX": 0.5198131108338532,
+            "pinkCenterY": 0.6322819371213222,
+            "interiorOtherFraction": 0.00997506234413965,
+            "touchesEdge": false,
+            "referenceAspect": 1.2763157894736843,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 5650,
+            "darkPixels": 4047,
+            "pinkPixels": 1603,
+            "aspect": 1.2972972972972974,
+            "darkFraction": 0.7162831858407079,
+            "pinkFraction": 0.283716814159292,
+            "pinkCenterX": 0.5198131108338532,
+            "pinkCenterY": 0.6237375866196827,
+            "interiorOtherFraction": 0.0038787023977433005,
+            "touchesEdge": false,
+            "referenceAspect": 1.2894736842105263,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 85479,
+        "peach": 25322
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "222c188fa9411d66dc69c63b5f34b0d2ee6cb218fb6fb19fabccbae923ce73d9"
+    },
+    {
+      "mood": "check",
+      "masterNumber": 25,
+      "source": "emoticons/kakao-32/v18/source-originals/25-r3.png",
+      "sha256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        270,
+        380,
+        700,
+        505
+      ],
+      "mouthRoi": [
+        572,
+        654,
+        125,
+        98
+      ],
+      "tiltDegrees": 0,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "mode": "speak-open",
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 5210,
+            "darkPixels": 3585,
+            "pinkPixels": 1625,
+            "aspect": 1.3661971830985915,
+            "darkFraction": 0.6880998080614203,
+            "pinkFraction": 0.31190019193857965,
+            "pinkCenterX": 0.49599365582870736,
+            "pinkCenterY": 0.6383098591549295,
+            "interiorOtherFraction": 0.0225140712945591,
+            "touchesEdge": false,
+            "referenceAspect": 1.2972972972972974,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 5336,
+            "darkPixels": 3711,
+            "pinkPixels": 1625,
+            "aspect": 1.3661971830985915,
+            "darkFraction": 0.6954647676161919,
+            "pinkFraction": 0.3045352323838081,
+            "pinkCenterX": 0.49599365582870736,
+            "pinkCenterY": 0.6383098591549295,
+            "interiorOtherFraction": 0.009099350046425255,
+            "touchesEdge": false,
+            "referenceAspect": 1.2763157894736843,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 5414,
+            "darkPixels": 3789,
+            "pinkPixels": 1625,
+            "aspect": 1.3661971830985915,
+            "darkFraction": 0.6998522349464351,
+            "pinkFraction": 0.30014776505356483,
+            "pinkCenterX": 0.49599365582870736,
+            "pinkCenterY": 0.6383098591549295,
+            "interiorOtherFraction": 0.004230274048188339,
+            "touchesEdge": false,
+            "referenceAspect": 1.2894736842105263,
+            "status": "pass",
+            "reason": "speak-reference-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 102562,
+        "peach": 13295
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "6aa97973141490cef1a80571a81a244fa37fc7412d471c923c878838cf092ab7"
+    },
+    {
+      "mood": "shopping",
+      "masterNumber": 26,
+      "source": "emoticons/kakao-32/v18/source-originals/26-r3.png",
+      "sha256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "size": [
+        1254,
+        1254
+      ],
+      "faceRoi": [
+        290,
+        385,
+        675,
+        475
+      ],
+      "mouthRoi": [
+        594,
+        650,
+        114,
+        79
+      ],
+      "tiltDegrees": -4,
+      "observation": "Existing v18 MASTER reused without redrawing. Whole visible pose and props are uniformly fitted; original inspection ROI and uncertainty are preserved.",
+      "mouth": {
+        "status": "pass",
+        "samples": [
+          {
+            "threshold": 65,
+            "pixels": 1666,
+            "components": 1,
+            "fill": 0.4219858156028369,
+            "holes": 8,
+            "touchesEdge": false,
+            "referenceFill": 0.4193722943722944,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 100,
+            "pixels": 1730,
+            "components": 1,
+            "fill": 0.4381965552178318,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4261437908496732,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          },
+          {
+            "threshold": 135,
+            "pixels": 1780,
+            "components": 1,
+            "fill": 0.4508611955420466,
+            "holes": 0,
+            "touchesEdge": false,
+            "referenceFill": 0.4433986928104575,
+            "status": "pass",
+            "reason": "mouth-screen-only"
+          }
+        ]
+      },
+      "historicalMouthStatus": "pass",
+      "colorPixels": {
+        "charcoal": 122764,
+        "peach": 6311
+      },
+      "geometryStatus": "visual-observation-only; face ROI is not a measured door boundary",
+      "overlaySha256": "04e68d407b9002430b9117b05b2972e68c711881ad43bd023a8415918d414a15"
     }
   ]
 }

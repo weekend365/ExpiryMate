@@ -1006,7 +1006,7 @@ export default function RegisterPhotoScreen() {
 
         {step === "done" ? (
           <View style={styles.loadingCard}>
-            <Mascot mood="happy" size="large" />
+            <Mascot mood="praise" size="large" />
           </View>
         ) : null}
         </Screen>

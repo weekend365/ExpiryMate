@@ -6,7 +6,7 @@ describe("registration completion notices", () => {
   it("keeps the fallback saved-item notice when saved data is absent", () => {
     const notices = getRegistrationCompletionNotices({ latestItem: null, sessionCount: 0, onRecommendations: vi.fn() });
     expect(notices).toHaveLength(1);
-    expect(notices[0]).toMatchObject({ id: "put-away", mood: "happy", message: "잘 넣어뒀어요" });
+    expect(notices[0]).toMatchObject({ id: "put-away", mood: "praise", message: "잘 넣어뒀어요" });
   });
 
   it("keeps a single saved-item notice without recommendation or reward prompts", () => {
@@ -16,7 +16,7 @@ describe("registration completion notices", () => {
       onRecommendations: vi.fn(),
     });
     expect(notices).toHaveLength(1);
-    expect(notices[0]).toMatchObject({ id: "put-away", mood: "happy", message: "토마토를 넣었어요" });
+    expect(notices[0]).toMatchObject({ id: "put-away", mood: "praise", message: "토마토를 넣었어요" });
   });
 
   it("keeps recommendation/reward order, copy and the recommendation action", () => {

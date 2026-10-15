@@ -23,17 +23,26 @@ import jangoPointSmall from "../../assets/characters/runtime/small/jango-point.p
 import jangoSpeakSmall from "../../assets/characters/runtime/small/jango-speak.png";
 import jangoThinkSmall from "../../assets/characters/runtime/small/jango-think.png";
 import jangoWorrySmall from "../../assets/characters/runtime/small/jango-worry.png";
+import jangoEncourage from "../../assets/characters/runtime/full/jango-encourage.png";
+import jangoPraise from "../../assets/characters/runtime/full/jango-praise.png";
+import jangoAcknowledge from "../../assets/characters/runtime/full/jango-acknowledge.png";
+import jangoExcited from "../../assets/characters/runtime/full/jango-excited.png";
+import jangoComfort from "../../assets/characters/runtime/full/jango-comfort.png";
+import jangoEnjoy from "../../assets/characters/runtime/full/jango-enjoy.png";
+import jangoCheck from "../../assets/characters/runtime/full/jango-check.png";
+import jangoShopping from "../../assets/characters/runtime/full/jango-shopping.png";
+import jangoEncourageSmall from "../../assets/characters/runtime/small/jango-encourage.png";
+import jangoPraiseSmall from "../../assets/characters/runtime/small/jango-praise.png";
+import jangoAcknowledgeSmall from "../../assets/characters/runtime/small/jango-acknowledge.png";
+import jangoExcitedSmall from "../../assets/characters/runtime/small/jango-excited.png";
+import jangoComfortSmall from "../../assets/characters/runtime/small/jango-comfort.png";
+import jangoEnjoySmall from "../../assets/characters/runtime/small/jango-enjoy.png";
+import jangoCheckSmall from "../../assets/characters/runtime/small/jango-check.png";
+import jangoShoppingSmall from "../../assets/characters/runtime/small/jango-shopping.png";
+import mascotMoodConfig from "../../assets/characters/moods.json";
 import { spacing } from "../shared/theme";
 
-export type MascotMood =
-  | "idle"
-  | "happy"
-  | "worry"
-  | "cooking"
-  | "empty"
-  | "speak"
-  | "think"
-  | "point";
+export type MascotMood = keyof typeof mascotMoodConfig;
 
 interface MascotProps {
   size?: "small" | "medium" | "large";
@@ -50,6 +59,14 @@ const mascotSources: Record<MascotMood, ImageSourcePropType> = {
   speak: jangoSpeak,
   think: jangoThink,
   point: jangoPoint,
+  encourage: jangoEncourage,
+  praise: jangoPraise,
+  acknowledge: jangoAcknowledge,
+  excited: jangoExcited,
+  comfort: jangoComfort,
+  enjoy: jangoEnjoy,
+  check: jangoCheck,
+  shopping: jangoShopping,
 };
 
 const smallMascotSources: Record<MascotMood, ImageSourcePropType> = {
@@ -61,17 +78,14 @@ const smallMascotSources: Record<MascotMood, ImageSourcePropType> = {
   speak: jangoSpeakSmall,
   think: jangoThinkSmall,
   point: jangoPointSmall,
-};
-
-const moodLabels: Record<MascotMood, string> = {
-  idle: "기본",
-  happy: "기쁜",
-  worry: "걱정하는",
-  cooking: "요리하는",
-  empty: "빈 냉장고",
-  speak: "말하는",
-  think: "생각하는",
-  point: "가리키는",
+  encourage: jangoEncourageSmall,
+  praise: jangoPraiseSmall,
+  acknowledge: jangoAcknowledgeSmall,
+  excited: jangoExcitedSmall,
+  comfort: jangoComfortSmall,
+  enjoy: jangoEnjoySmall,
+  check: jangoCheckSmall,
+  shopping: jangoShoppingSmall,
 };
 
 export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
@@ -87,7 +101,7 @@ export function Mascot({ size = "medium", mood = "idle", style }: MascotProps) {
         style={styles.image}
         resizeMode="contain"
         accessibilityIgnoresInvertColors
-        accessibilityLabel={`${appBrand.characterNameKo}, ${moodLabels[mood]} 표정`}
+        accessibilityLabel={`${appBrand.characterNameKo}, ${mascotMoodConfig[mood].label} 표정`}
       />
     </View>
   );

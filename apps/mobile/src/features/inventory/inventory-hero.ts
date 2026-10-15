@@ -69,7 +69,7 @@ export function getInventoryHeroNotice(input: {
   if (input.visibleCount === 0) {
     return {
       show: true,
-      mood: "idle",
+      mood: "comfort",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
       action: "clear_filters",
@@ -108,7 +108,7 @@ export function getInventoryHeroNotice(input: {
 
   return {
     show: true,
-    mood: "happy",
+    mood: "check",
     tone: "success",
     message: `재료 ${input.totalCount}개가 잘 정리되어 있어요.`,
   };

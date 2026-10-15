@@ -617,7 +617,7 @@ export default function CookingScreen() {
             dish.steps.length,
             uncheckedPrepCount,
           )}
-          guideMood={currentIndex >= completionStepIndex ? "happy" : "cooking"}
+          guideMood={currentIndex >= completionStepIndex ? "enjoy" : "cooking"}
         >
         {draftSaveError ? (
           <View

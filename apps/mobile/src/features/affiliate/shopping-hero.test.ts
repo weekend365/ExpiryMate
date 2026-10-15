@@ -9,7 +9,7 @@ import {
 describe("getShoppingHeroNotice", () => {
   it("keeps Jango focused on the search entry context", () => {
     expect(getShoppingHeroNotice()).toMatchObject({
-      mood: "speak",
+      mood: "shopping",
       message: "필요한 식재료, 쿠팡에서 바로 찾아드릴게요. 이름만 알려 주세요.",
     });
   });

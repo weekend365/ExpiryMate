@@ -3,7 +3,7 @@ import type { MascotMood } from "../../components/Mascot";
 
 export function getShoppingHeroNotice(): { message: string; mood: MascotMood } {
   return {
-    mood: "speak",
+    mood: "shopping",
     message: "필요한 식재료, 쿠팡에서 바로 찾아드릴게요. 이름만 알려 주세요.",
   };
 }

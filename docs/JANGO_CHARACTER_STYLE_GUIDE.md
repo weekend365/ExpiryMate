@@ -1,7 +1,7 @@
 ---
 status: active
 owner: design
-last_reviewed: 2026-10-14
+last_reviewed: 2026-10-15
 source_of_truth: true
 ---
 
@@ -18,7 +18,9 @@ source_of_truth: true
 
 화면은 기존 `Mascot`와 `MascotSpeechBubble`을 사용한다. 직접 PNG import는 Mascot 내부로 제한한다. 기존 mood·size API는 유지한다. `JangoCompanion` 등을 포함한 이전 전체 개편은 철회했으며 자동 도입하지 않는다.
 
-- 현재 v18 runtime 매핑(유지): idle 24, happy 02, worry 17, cooking 23, empty 20, speak 01, think 11, point 14.
+- 기존 v18 runtime 매핑(유지): idle 24, happy 02, worry 17, cooking 23, empty 20, speak 01, think 11, point 14.
+- 2026-10-15 추가 매핑: encourage 07(첫 시작 응원), praise 08(재료 등록 완료), acknowledge 09(안내 확인), excited 10(추천 준비 완료), comfort 18(필터 결과 없음), enjoy 22(조리 완료), check 25(홈·보관함 확인), shopping 26(장보기 안내). 원본 32종 중 맥락이 맞는 16종을 사용하며 모든 원화를 억지로 노출하지 않는다. 기존 화면의 캐릭터 영역·문구·순서·동작과 경고/오류의 의미는 보존한다.
+- 앱 mood 이름·원본 번호·접근성 표기는 [앱 포즈 목록](../apps/mobile/assets/characters/moods.json), 원본 해시·가공 설정은 [파생 목록](../design/jango/manifest.json)에서 관리한다. 기준 원본 목록의 appMoods는 기존 8종 기준으로 유지하며 신규 매핑은 앱 포즈 목록에서 확장한다. 변경 범위와 검수는 [추가 포즈 검토](../design/reviews/jango-app-poses-20261015/README.md)에 기록한다.
 - 현행 앱 기본·아이콘·스플래시·알림 실루엣은 v18 24번에서 파생한다. 새 포즈 제작·검토·채택·매핑 변경은 별도 작업이다. 문구 없는 원화를 사용한다.
 - 새 앱 작화는 모자·양팔과 장갑·앞치마·두 다리·두 신발이 모두 보이는 전신을 기본으로 한다. 하반신이 생략된 원본은 보존하고 확장은 전신 MASTER 구조·비율을 따른 별도 후보로 제작·검토한다.
 - 원화 전체 가시 영역을 비율 유지해 1024px 안에 배치하고, full/small 및 1x·2x·3x를 만든다. 고정 얼굴 크롭이나 얼굴 늘이기를 하지 않는다.

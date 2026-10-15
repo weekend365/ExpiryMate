@@ -80,7 +80,7 @@ describe("getInventoryHeroNotice", () => {
       }),
     ).toEqual({
       show: true,
-      mood: "idle",
+      mood: "comfort",
       tone: "neutral",
       message: "지금 고른 조건에 맞는 재료가 없어요.",
       action: "clear_filters",
@@ -165,7 +165,7 @@ describe("getInventoryHeroNotice", () => {
   it("keeps a calm success message visible", () => {
     expect(getInventoryHeroNotice(populated)).toEqual({
       show: true,
-      mood: "happy",
+      mood: "check",
       tone: "success",
       message: "재료 4개가 잘 정리되어 있어요.",
     });

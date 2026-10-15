@@ -109,7 +109,7 @@ export default function AiDataNoticeScreen() {
               ? ` · ${formatDate(status.aiDataNoticeAcceptedAt)}에 동의`
               : ""
           }`}
-          mood={accepted ? "happy" : "idle"}
+          mood={accepted ? "acknowledge" : "idle"}
           density="compact"
           textVariant="bodyStrong"
         />

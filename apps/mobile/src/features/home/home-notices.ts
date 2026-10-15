@@ -114,7 +114,7 @@ export function getHomeNotices(input: {
     return [{
       id: "recipe-success",
       message: "추천이 준비됐어요. 같이 살펴볼까요?",
-      mood: "happy",
+      mood: "excited",
       action: "recommendations",
       actionHint: "추천 보기",
     }];
@@ -134,7 +134,7 @@ export function getHomeNotices(input: {
     return [{
       id: "calm",
       message: "오늘은 급한 재료가 없어요. 보관 중인 재료를 살펴보세요.",
-      mood: "speak",
+      mood: "check",
     }];
   }
 

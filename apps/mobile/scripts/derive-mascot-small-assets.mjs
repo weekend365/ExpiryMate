@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
@@ -5,16 +6,8 @@ import { PNG } from "pngjs";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const charactersDir = path.resolve(scriptDir, "../assets/characters");
 
-export const mascotMoods = [
-  "idle",
-  "happy",
-  "worry",
-  "cooking",
-  "empty",
-  "speak",
-  "think",
-  "point",
-];
+export const mascotMoodConfig = JSON.parse(fs.readFileSync(path.join(charactersDir, "moods.json"), "utf8"));
+export const mascotMoods = Object.keys(mascotMoodConfig);
 
 // Both variants preserve the whole selected pose and every prop. No fixed face crop.
 export const smallMasterCrop = Object.freeze({x:0,y:0,size:1024,outputSize:1024});

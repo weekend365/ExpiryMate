@@ -1,0 +1,18 @@
+{
+  "idle": { "masterNumber": 24, "label": "기본" },
+  "happy": { "masterNumber": 2, "label": "기쁜" },
+  "worry": { "masterNumber": 17, "label": "걱정하는" },
+  "cooking": { "masterNumber": 23, "label": "요리하는" },
+  "empty": { "masterNumber": 20, "label": "빈 냉장고" },
+  "speak": { "masterNumber": 1, "label": "말하는" },
+  "think": { "masterNumber": 11, "label": "생각하는" },
+  "point": { "masterNumber": 14, "label": "가리키는" },
+  "encourage": { "masterNumber": 7, "label": "응원하는" },
+  "praise": { "masterNumber": 8, "label": "칭찬하는" },
+  "acknowledge": { "masterNumber": 9, "label": "끄덕이는" },
+  "excited": { "masterNumber": 10, "label": "신나는" },
+  "comfort": { "masterNumber": 18, "label": "위로하는" },
+  "enjoy": { "masterNumber": 22, "label": "음식을 즐기는" },
+  "check": { "masterNumber": 25, "label": "확인하는" },
+  "shopping": { "masterNumber": 26, "label": "장보는" }
+}

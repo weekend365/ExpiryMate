@@ -1,0 +1,2247 @@
+{
+  "version": 1,
+  "date": "2026-10-15",
+  "status": "implemented-locally-not-deployed",
+  "baseCommit": "8ccaf6d",
+  "authority": {
+    "request": "나머지 이모티콘도 적절하게 더 배치할 수 있을까?",
+    "scope": "Additional reuse of the selected v18 originals in existing app character areas; not new artwork, a new MASTER, signed emoticon release or deployment."
+  },
+  "moods": {
+    "before": 8,
+    "after": 16,
+    "added": [
+      {
+        "mood": "encourage",
+        "masterNumber": 7,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+        "sourceSHA256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+        "locations": [
+          "apps/mobile/app/onboarding.tsx"
+        ]
+      },
+      {
+        "mood": "praise",
+        "masterNumber": 8,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+        "sourceSHA256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+        "locations": [
+          "apps/mobile/src/features/registration/registration-completion-notices.ts",
+          "apps/mobile/app/register-photo.tsx"
+        ]
+      },
+      {
+        "mood": "acknowledge",
+        "masterNumber": 9,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+        "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+        "locations": [
+          "apps/mobile/app/privacy/ai-data-notice.tsx"
+        ]
+      },
+      {
+        "mood": "excited",
+        "masterNumber": 10,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+        "sourceSHA256": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+        "locations": [
+          "apps/mobile/src/features/home/home-notices.ts"
+        ]
+      },
+      {
+        "mood": "comfort",
+        "masterNumber": 18,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+        "sourceSHA256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+        "locations": [
+          "apps/mobile/src/features/inventory/inventory-hero.ts"
+        ]
+      },
+      {
+        "mood": "enjoy",
+        "masterNumber": 22,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+        "sourceSHA256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+        "locations": [
+          "apps/mobile/app/cooking/[recommendationId].tsx"
+        ]
+      },
+      {
+        "mood": "check",
+        "masterNumber": 25,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+        "sourceSHA256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+        "locations": [
+          "apps/mobile/src/features/home/home-notices.ts",
+          "apps/mobile/src/features/inventory/inventory-hero.ts"
+        ]
+      },
+      {
+        "mood": "shopping",
+        "masterNumber": 26,
+        "source": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+        "sourceSHA256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+        "locations": [
+          "apps/mobile/src/features/affiliate/shopping-hero.ts"
+        ]
+      }
+    ],
+    "configuration": "apps/mobile/assets/characters/moods.json",
+    "sourceManifest": "design/jango/manifest.json"
+  },
+  "preservation": {
+    "protectedFiles": 337,
+    "beforeDigest": "7f3a0aab7eb84c19b1822f4c5586abd630c71d321c55eef9ad3e2d1ee305bacd",
+    "afterDigest": "7f3a0aab7eb84c19b1822f4c5586abd630c71d321c55eef9ad3e2d1ee305bacd",
+    "v18Files": 252,
+    "masterAssets": 237,
+    "originalSources": 32,
+    "existingMobileAssets": 76,
+    "existingRuntimeFiles": 48,
+    "existingSourceMappings": 9,
+    "existingObservationResults": 9,
+    "existingMouthReviewUnchanged": true,
+    "originalRoiAndThresholdsUnchanged": true,
+    "layoutCopyOrderActionsColorsFontsAndTokensUnchanged": true,
+    "masterReportsByteIdentical": 32
+  },
+  "runtime": {
+    "beforeFiles": 48,
+    "afterFiles": 96,
+    "beforePngBytes": 2857673,
+    "afterPngBytes": 5773743,
+    "addedPngBytes": 2916070,
+    "note": "Raw runtime PNG byte totals; final app package/install size has not been measured."
+  },
+  "checks": {
+    "relatedTests": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/mobile exec vitest run [7 related files]",
+      "passed": 63
+    },
+    "sharedBuild": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/shared build (included in pnpm typecheck)"
+    },
+    "docs": {
+      "status": "passed",
+      "command": "pnpm docs:check",
+      "summary": "문서 검사 통과: metadata 30개, links 60개; Mobile Expo/EAS build entry is canonical and unambiguous."
+    },
+    "lint": {
+      "status": "passed",
+      "command": "pnpm lint"
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "pnpm typecheck"
+    },
+    "test": {
+      "status": "passed",
+      "command": "pnpm test",
+      "passed": 1356,
+      "jango": 23,
+      "shared": 162,
+      "api": 589,
+      "mobile": 582,
+      "skipped": 6,
+      "skipReason": "Existing opt-in PostgreSQL integration suites; JANGO_WORKFLOW_TEST_DATABASE_URL was not supplied."
+    },
+    "reportsRefresh": {
+      "status": "passed",
+      "command": "pnpm jango:reports:refresh",
+      "masterAdoptionReports": 32,
+      "newApproval": false
+    },
+    "jango": {
+      "status": "passed",
+      "command": "pnpm jango:check",
+      "signedReleases": 0
+    },
+    "mascot": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/mobile mascot:audit",
+      "newMouthChecks": 8,
+      "newMouthPass": 8,
+      "existingEmptyMood": "needs-review"
+    },
+    "branding": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/mobile branding:audit"
+    },
+    "backgrounds": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/mobile backgrounds:audit"
+    },
+    "store": {
+      "status": "passed",
+      "command": "pnpm --filter @expirymate/mobile store:audit"
+    },
+    "reviewSheets": {
+      "status": "passed",
+      "command": "pnpm jango:app-review",
+      "pythonPillow": "12.3.0",
+      "readabilitySizes": [
+        52,
+        72,
+        120
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ]
+    },
+    "changeBoundary": {
+      "status": "passed",
+      "changedTrackedFiles": 24,
+      "additionalFiles": 71,
+      "deletions": 0,
+      "unexpectedChanges": 0,
+      "masterReportsByteIdentical": 32,
+      "gitDiffCheck": "passed"
+    }
+  },
+  "browserReview": {
+    "status": "passed",
+    "renderer": "React Native Web 0.21.2 / React 19.1.0",
+    "surfaces": "Actual local component QA and pure status functions; onboarding, acknowledged notice and cooking completion are component-level examples, not full app route captures.",
+    "widths": [
+      320,
+      360,
+      768
+    ],
+    "fontScales": [
+      1,
+      1.3,
+      2
+    ],
+    "conditions": 108,
+    "allGeometryCopyFunctionalLabelsColorsAndScrollEqual": true,
+    "excludedIntentionalDifferences": [
+      "PNG source/pixels",
+      "Image accessibility mood labels"
+    ],
+    "renderGuard": "Each frame must contain rendered Korean copy, an image, and at least ten measured DOM nodes.",
+    "adapters": [
+      "Fixed reduced motion",
+      "Web font-size/line-height projection respecting app caps",
+      "No API, account, purchase or persisted user state",
+      "Unused LucideProvider export omitted in temporary QA bundle only"
+    ],
+    "actions": {
+      "scene": "registration-multiple",
+      "width": 320,
+      "fontScale": 2,
+      "buttons": [
+        "추가 완료",
+        "요리 추천 받아볼까요?"
+      ],
+      "beforeCallbackCount": 2,
+      "afterCallbackCount": 2,
+      "scope": "Local fixture callbacks only; no server mutations"
+    },
+    "cases": [
+      {
+        "scene": "home-calm",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "6cf5880709460997cce6fc704abdf5c14e78f804b9a6d2b2d5ba0a8ecf94e044",
+        "afterDigest": "6cf5880709460997cce6fc704abdf5c14e78f804b9a6d2b2d5ba0a8ecf94e044",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "4e895b2299b9a85d3eff8ee0de9f71b49878c8d5fbfbd7cc34787573093dbae1",
+        "afterDigest": "4e895b2299b9a85d3eff8ee0de9f71b49878c8d5fbfbd7cc34787573093dbae1",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "0f6aa34fb3b69b49bc08b8c94ad8af034549724c5384eba6b31818cb5c81cf38",
+        "afterDigest": "0f6aa34fb3b69b49bc08b8c94ad8af034549724c5384eba6b31818cb5c81cf38",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "1596ca653e2f2573fab52eadf506f55ab21f582548adb70ee9cac00c08ada448",
+        "afterDigest": "1596ca653e2f2573fab52eadf506f55ab21f582548adb70ee9cac00c08ada448",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "ebf057f641b88e9c7df027f009b56982ddac7eebc827496455df32f908b12909",
+        "afterDigest": "ebf057f641b88e9c7df027f009b56982ddac7eebc827496455df32f908b12909",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 18,
+        "beforeDigest": "7d3b577766b45ffb7547f792648034f13f0ffedb0d7c69888cf1c713eb09c5f2",
+        "afterDigest": "7d3b577766b45ffb7547f792648034f13f0ffedb0d7c69888cf1c713eb09c5f2",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 24,
+        "beforeDigest": "8eec46277866797eec506136e23aced8a84bbeb094a20b2fdb8ec2bf5dc3959e",
+        "afterDigest": "8eec46277866797eec506136e23aced8a84bbeb094a20b2fdb8ec2bf5dc3959e",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 46,
+        "beforeDigest": "a6b2b7a8432e80baf8baec5d130b4c67f140fbb0e3bdd728617335c77489f496",
+        "afterDigest": "a6b2b7a8432e80baf8baec5d130b4c67f140fbb0e3bdd728617335c77489f496",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "d6a9911a0aad73f7a0a8c9de3f990a623208cf5e5fb92f985fc11af3cc976807",
+        "afterDigest": "d6a9911a0aad73f7a0a8c9de3f990a623208cf5e5fb92f985fc11af3cc976807",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "3f0e030f6c44235766daba30d32de676fdd1ba802f412be2dfb30139e56df4d3",
+        "afterDigest": "3f0e030f6c44235766daba30d32de676fdd1ba802f412be2dfb30139e56df4d3",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "e26dbbd86c7ae3ac138f1db350736c5ab88341dc0d65c6909e6ae2662744111b",
+        "afterDigest": "e26dbbd86c7ae3ac138f1db350736c5ab88341dc0d65c6909e6ae2662744111b",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 320,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "c7c22aff84a6aa9f7ca82c9ba6310f262d46b0109f43d964285bb4262bf10156",
+        "afterDigest": "c7c22aff84a6aa9f7ca82c9ba6310f262d46b0109f43d964285bb4262bf10156",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "a28d9eaa41beb1026ca5ea3bba2b7380be0dd8a9a5dcadc033ee98087808819e",
+        "afterDigest": "a28d9eaa41beb1026ca5ea3bba2b7380be0dd8a9a5dcadc033ee98087808819e",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "c7f05d3541e4de893131c48434c1d212a3fd90ce2e6a76e3c15a0e984e695e1f",
+        "afterDigest": "c7f05d3541e4de893131c48434c1d212a3fd90ce2e6a76e3c15a0e984e695e1f",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "edbe866060517de96cabc49d68e58b53689575352d0cf8e4295425422ebeb9f2",
+        "afterDigest": "edbe866060517de96cabc49d68e58b53689575352d0cf8e4295425422ebeb9f2",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "af9e3378ba2f0888a2f224a212b9f2801c46231a482ea3d05871fededd576d72",
+        "afterDigest": "af9e3378ba2f0888a2f224a212b9f2801c46231a482ea3d05871fededd576d72",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "7c161f3bc7b1789f09a2d6d8eee8c857fb4c69dec73e922fa5d74c89aa4eabaa",
+        "afterDigest": "7c161f3bc7b1789f09a2d6d8eee8c857fb4c69dec73e922fa5d74c89aa4eabaa",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 18,
+        "beforeDigest": "17d9e6a62785c6b73e4ea48a863ddfc212dada012b162128b016df6210f035f9",
+        "afterDigest": "17d9e6a62785c6b73e4ea48a863ddfc212dada012b162128b016df6210f035f9",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 24,
+        "beforeDigest": "b46b21a902144e39c31e0ecd7144f40baceb49bf62af4aa23378392f324fb846",
+        "afterDigest": "b46b21a902144e39c31e0ecd7144f40baceb49bf62af4aa23378392f324fb846",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 46,
+        "beforeDigest": "6fcbc3e75cf1a7dce29fbdda68e751982e21a525600e03c6fa91170dc5c7ad25",
+        "afterDigest": "6fcbc3e75cf1a7dce29fbdda68e751982e21a525600e03c6fa91170dc5c7ad25",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "01c3380162610cde35b7c38e63ae15ffd6d72086b34bf6bbad02613fadb5da55",
+        "afterDigest": "01c3380162610cde35b7c38e63ae15ffd6d72086b34bf6bbad02613fadb5da55",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "cfa6fea94fe828c2239fdc3a35edeb238668c86b79af4b267c21282d07a92969",
+        "afterDigest": "cfa6fea94fe828c2239fdc3a35edeb238668c86b79af4b267c21282d07a92969",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "05a0277eacaef73131ffc3bcc81201c8a3d9da7effa6279f07c427a490f526c3",
+        "afterDigest": "05a0277eacaef73131ffc3bcc81201c8a3d9da7effa6279f07c427a490f526c3",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 320,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "62460127fad1e380c6f235ae1ff02bf08ed8e36cc6aa0e4f0166c62c06f47f09",
+        "afterDigest": "62460127fad1e380c6f235ae1ff02bf08ed8e36cc6aa0e4f0166c62c06f47f09",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "0b0714b4d92d44cbb01d9fcd8e0660fec7ad098ab0ab44c905cd26e02caea1e5",
+        "afterDigest": "0b0714b4d92d44cbb01d9fcd8e0660fec7ad098ab0ab44c905cd26e02caea1e5",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "c252f8034f3e5187b0a0e8e16b5204e0430989b8450d78d5d64c77accd6c4f8f",
+        "afterDigest": "c252f8034f3e5187b0a0e8e16b5204e0430989b8450d78d5d64c77accd6c4f8f",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "548403fbb129bade86e3a194c9b053f853f9c465e8afc80a38e7ce9d15c15ffd",
+        "afterDigest": "548403fbb129bade86e3a194c9b053f853f9c465e8afc80a38e7ce9d15c15ffd",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "d539cfa901de012bf945249bbb8c94b30e0341a13d6c52f9cc9a5b023dfdaed9",
+        "afterDigest": "d539cfa901de012bf945249bbb8c94b30e0341a13d6c52f9cc9a5b023dfdaed9",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "e67325001ba231e0063116ff514f95186a28ba5c35264498b4050f7876ae5c2d",
+        "afterDigest": "e67325001ba231e0063116ff514f95186a28ba5c35264498b4050f7876ae5c2d",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 18,
+        "beforeDigest": "cfa20220eba2154706a959f263b024155441da0061315fd13729b6e7ae5c5104",
+        "afterDigest": "cfa20220eba2154706a959f263b024155441da0061315fd13729b6e7ae5c5104",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 24,
+        "beforeDigest": "0cbb5a061dfe8c9d74bddb6c2a21ce5b5aa0dc3dcd8810411d85b0fa3dcaf4f6",
+        "afterDigest": "0cbb5a061dfe8c9d74bddb6c2a21ce5b5aa0dc3dcd8810411d85b0fa3dcaf4f6",
+        "scroll": [
+          320,
+          984
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 46,
+        "beforeDigest": "acba8b4fc9c567b2052d479aa3e26b05ddb7fe35b4c4acbc30d0489f65365c38",
+        "afterDigest": "acba8b4fc9c567b2052d479aa3e26b05ddb7fe35b4c4acbc30d0489f65365c38",
+        "scroll": [
+          320,
+          1000
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "44383c8edcbc561f0deb3a1f65dd12e48830146210de9912e0c9e207bad1ab34",
+        "afterDigest": "44383c8edcbc561f0deb3a1f65dd12e48830146210de9912e0c9e207bad1ab34",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "80d93fdc4084ba910ff42c466976d325e1332fd68d6dc50cf0b509ac53dac4e4",
+        "afterDigest": "80d93fdc4084ba910ff42c466976d325e1332fd68d6dc50cf0b509ac53dac4e4",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "09f28be2c68819fcdc89f706e953915dd16f32859148aff6a98e79332f3b9ec5",
+        "afterDigest": "09f28be2c68819fcdc89f706e953915dd16f32859148aff6a98e79332f3b9ec5",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 320,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "a5e19e37a44e86e4ea97f9a7ec83a8933c1bea8b9101dad9936836ce9d0ca5bf",
+        "afterDigest": "a5e19e37a44e86e4ea97f9a7ec83a8933c1bea8b9101dad9936836ce9d0ca5bf",
+        "scroll": [
+          320,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "21ff92377d864ddb3ffaadeec3693de354fa12b79f293b8292a9233dd1661c42",
+        "afterDigest": "21ff92377d864ddb3ffaadeec3693de354fa12b79f293b8292a9233dd1661c42",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "245290fc56646061b6883781998135e6dce51b80d970231c742e677e736e2f2e",
+        "afterDigest": "245290fc56646061b6883781998135e6dce51b80d970231c742e677e736e2f2e",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "de9274e409665660ee991a1adaa29f23051b2187652308311c8997112df1dfa7",
+        "afterDigest": "de9274e409665660ee991a1adaa29f23051b2187652308311c8997112df1dfa7",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "be198d752592df8cac24ef614e715854e2078fdd5048c5695168607067b71d49",
+        "afterDigest": "be198d752592df8cac24ef614e715854e2078fdd5048c5695168607067b71d49",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "26b3494155778dcc17c3b111d128016500520c2602f0e15c33a76e5c7a487628",
+        "afterDigest": "26b3494155778dcc17c3b111d128016500520c2602f0e15c33a76e5c7a487628",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 18,
+        "beforeDigest": "ca0f1b48dc324537aa46be567b30c3de790b89fa36bffa71f578c3fa4175a50d",
+        "afterDigest": "ca0f1b48dc324537aa46be567b30c3de790b89fa36bffa71f578c3fa4175a50d",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 24,
+        "beforeDigest": "f7874ba6608d2d1594f26b6c60fc8d254b7304de8df421d1f6f2311368c12837",
+        "afterDigest": "f7874ba6608d2d1594f26b6c60fc8d254b7304de8df421d1f6f2311368c12837",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 46,
+        "beforeDigest": "9b220687c99c576d77e30da44fcae3eae39bad0f718b6ab9b5568592a05d36fe",
+        "afterDigest": "9b220687c99c576d77e30da44fcae3eae39bad0f718b6ab9b5568592a05d36fe",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "d4a6e35f14cf5d2c11664d6e689d42a156b984ebc58bfe100c986cf0edf01357",
+        "afterDigest": "d4a6e35f14cf5d2c11664d6e689d42a156b984ebc58bfe100c986cf0edf01357",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "152682ebff62a8e790878d9670ea6946cf11c1ec38543eb5ec7156df7a5df0c2",
+        "afterDigest": "152682ebff62a8e790878d9670ea6946cf11c1ec38543eb5ec7156df7a5df0c2",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "55dfd9ac51548ce02d1869aa76ec6d2aaaed7c80467d2f0419ca0b5ca31b509a",
+        "afterDigest": "55dfd9ac51548ce02d1869aa76ec6d2aaaed7c80467d2f0419ca0b5ca31b509a",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 360,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "f10b91f7ddcbefba9d2c71c44341247ec9bddccf0a6983da6301ca1fb80b4750",
+        "afterDigest": "f10b91f7ddcbefba9d2c71c44341247ec9bddccf0a6983da6301ca1fb80b4750",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "3e66315a7a76225be7b0e22a57a1e7abc91ef2302f08e0b42981c9d98a733bc0",
+        "afterDigest": "3e66315a7a76225be7b0e22a57a1e7abc91ef2302f08e0b42981c9d98a733bc0",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "197e76a303b680543c8481e14420b150e6ab58c54ddb7ed7775c57bbe3a5f3b2",
+        "afterDigest": "197e76a303b680543c8481e14420b150e6ab58c54ddb7ed7775c57bbe3a5f3b2",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "de19395b7f24e6bb42ccabc83b66131b65651f8597a5ce76f5085e220a7ad780",
+        "afterDigest": "de19395b7f24e6bb42ccabc83b66131b65651f8597a5ce76f5085e220a7ad780",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "a3f4530dc509510e8f2880bcddd098797cefd1201847a92cde5cf49668acb734",
+        "afterDigest": "a3f4530dc509510e8f2880bcddd098797cefd1201847a92cde5cf49668acb734",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "06d23ecd98004976fcba364d4cb110e63f7ecb9f41b1a9161877182fe445c58c",
+        "afterDigest": "06d23ecd98004976fcba364d4cb110e63f7ecb9f41b1a9161877182fe445c58c",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 18,
+        "beforeDigest": "edfbabde2cbddc4ae258acb8d2a65510408566091c381285e9dbc16537ee6795",
+        "afterDigest": "edfbabde2cbddc4ae258acb8d2a65510408566091c381285e9dbc16537ee6795",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 24,
+        "beforeDigest": "2c53f6bde649c011fc827fc37e27a7341f1d28c57cb3060b11e23b3369ed272f",
+        "afterDigest": "2c53f6bde649c011fc827fc37e27a7341f1d28c57cb3060b11e23b3369ed272f",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 46,
+        "beforeDigest": "9c02292925bfc30027ed2be927357bebb221cbb0071cf392080fe37eb1d6fcb4",
+        "afterDigest": "9c02292925bfc30027ed2be927357bebb221cbb0071cf392080fe37eb1d6fcb4",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "11960c9f28ad969ed895a1c38b391c1d1f5c01d007ac97b41b44e64b4dafcdd3",
+        "afterDigest": "11960c9f28ad969ed895a1c38b391c1d1f5c01d007ac97b41b44e64b4dafcdd3",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "6d594ea5eaf81b864bcf281353dd0cba89bc5636a11ed509cf5d0e584f766bb6",
+        "afterDigest": "6d594ea5eaf81b864bcf281353dd0cba89bc5636a11ed509cf5d0e584f766bb6",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "1f9c45bb20888b2b172c49a2f28bdbc2c87af42b6193e08874105748018e4c50",
+        "afterDigest": "1f9c45bb20888b2b172c49a2f28bdbc2c87af42b6193e08874105748018e4c50",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 360,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "5d155bb2c64ec3c6a728ce00196d0d8423dfdb7b3eb620c3eb180f707f675085",
+        "afterDigest": "5d155bb2c64ec3c6a728ce00196d0d8423dfdb7b3eb620c3eb180f707f675085",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "fa199f356bf326f6ddfce08effeda6b6c8f757a758c0761532865f565521f664",
+        "afterDigest": "fa199f356bf326f6ddfce08effeda6b6c8f757a758c0761532865f565521f664",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "dd219ffe3d3c7c264c0c19f273fb3a1cdfded792999067f41e4557cc67f52650",
+        "afterDigest": "dd219ffe3d3c7c264c0c19f273fb3a1cdfded792999067f41e4557cc67f52650",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "ac3152febbd18adb8a0ad9ee516865b820b4a124e8d35faf080bda17b1618d58",
+        "afterDigest": "ac3152febbd18adb8a0ad9ee516865b820b4a124e8d35faf080bda17b1618d58",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "f344a54acf15f962750aaf4cd806d80644a54316a207fce28a2792612de89e3d",
+        "afterDigest": "f344a54acf15f962750aaf4cd806d80644a54316a207fce28a2792612de89e3d",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "df26c1b4f395ee98167de0d59e80690a4e11e38d4e24a2a6f6aecc67e9347258",
+        "afterDigest": "df26c1b4f395ee98167de0d59e80690a4e11e38d4e24a2a6f6aecc67e9347258",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 18,
+        "beforeDigest": "a03f9668e704ce44863cf09242be3cfd7b0acfc9795f64ac7da16ef63db4ee98",
+        "afterDigest": "a03f9668e704ce44863cf09242be3cfd7b0acfc9795f64ac7da16ef63db4ee98",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 24,
+        "beforeDigest": "b39cb76a23bfa276746c4db7da417430b1056a3f38619243348f01bba83cc5c9",
+        "afterDigest": "b39cb76a23bfa276746c4db7da417430b1056a3f38619243348f01bba83cc5c9",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 46,
+        "beforeDigest": "8d5af7e75a0b77d13148feb3557bf46c74f14661a8d98941492b88e0bd29fa89",
+        "afterDigest": "8d5af7e75a0b77d13148feb3557bf46c74f14661a8d98941492b88e0bd29fa89",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "120f5b21c53d5fe61b5f6104fb7a5de16ccb9c3e8b6725b489c611c9bb6a0244",
+        "afterDigest": "120f5b21c53d5fe61b5f6104fb7a5de16ccb9c3e8b6725b489c611c9bb6a0244",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "a01ced28dd490d076c6d08a5f484d551765746e14f18a50e7debb4aa80d38cf8",
+        "afterDigest": "a01ced28dd490d076c6d08a5f484d551765746e14f18a50e7debb4aa80d38cf8",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "659e213ec19bdadc6e0600e1ca1331cf299f0b118e044aafe7826960e3636f5b",
+        "afterDigest": "659e213ec19bdadc6e0600e1ca1331cf299f0b118e044aafe7826960e3636f5b",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 360,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "d6cf172748f795ce4b3086f2d80a2576a58e72b6d35c69f928398473ad3ea262",
+        "afterDigest": "d6cf172748f795ce4b3086f2d80a2576a58e72b6d35c69f928398473ad3ea262",
+        "scroll": [
+          360,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "84fe904c9bc19b279d3a45c72c280151d85844850835ff33e65a15d91aab978e",
+        "afterDigest": "84fe904c9bc19b279d3a45c72c280151d85844850835ff33e65a15d91aab978e",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "a6884ce155464ce9045fc62ff6212a806d6565dc2319a3816e44b8f97cf0d63c",
+        "afterDigest": "a6884ce155464ce9045fc62ff6212a806d6565dc2319a3816e44b8f97cf0d63c",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "3464ffebef9cb2d3e879e8677abcea10a460b9b9764a656ae576bdd1e0d17987",
+        "afterDigest": "3464ffebef9cb2d3e879e8677abcea10a460b9b9764a656ae576bdd1e0d17987",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 17,
+        "beforeDigest": "a162fba215e665a0cd0e796e9e11013a839383d9b3034443cbd4e52dbc5d5bdf",
+        "afterDigest": "a162fba215e665a0cd0e796e9e11013a839383d9b3034443cbd4e52dbc5d5bdf",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 15,
+        "beforeDigest": "4df331817c3782bfa2a53e358da412ad1f2bddd55952bdbd267a7fea314f6a3f",
+        "afterDigest": "4df331817c3782bfa2a53e358da412ad1f2bddd55952bdbd267a7fea314f6a3f",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 18,
+        "beforeDigest": "4d84615cb3fed3915b17d26ddc86d9c2675b70b3e92c9f35d6bc97eae4f63fbb",
+        "afterDigest": "4d84615cb3fed3915b17d26ddc86d9c2675b70b3e92c9f35d6bc97eae4f63fbb",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 24,
+        "beforeDigest": "1d62f02e2c747f5e039ef20cfa024ee3bb8cf9b721834c7dffd09d8a14721eb0",
+        "afterDigest": "1d62f02e2c747f5e039ef20cfa024ee3bb8cf9b721834c7dffd09d8a14721eb0",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 46,
+        "beforeDigest": "85c7e06908a76f9c126b8100a11c43410e1cf22e6e56fb9af958313e26a329ed",
+        "afterDigest": "85c7e06908a76f9c126b8100a11c43410e1cf22e6e56fb9af958313e26a329ed",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 14,
+        "beforeDigest": "9e34ca3547933bc2d5ed7ee35db5cde8af2babbae45bd80b46d791e4c18e73f0",
+        "afterDigest": "9e34ca3547933bc2d5ed7ee35db5cde8af2babbae45bd80b46d791e4c18e73f0",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "6ecefa169eb74543999d8d52624abaf437ffb9822963b96e75427847cb3ac571",
+        "afterDigest": "6ecefa169eb74543999d8d52624abaf437ffb9822963b96e75427847cb3ac571",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "139ad53b132ded2813e6c46e92166e2ea60e02f668c5d60af08b291f683dc7b2",
+        "afterDigest": "139ad53b132ded2813e6c46e92166e2ea60e02f668c5d60af08b291f683dc7b2",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 768,
+        "fontScale": 1,
+        "nodeCount": 10,
+        "beforeDigest": "5f9b74858ddf032996e581063c3a6e414511ec5475fe96082ece6958e4387fc6",
+        "afterDigest": "5f9b74858ddf032996e581063c3a6e414511ec5475fe96082ece6958e4387fc6",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "801ddd35aa90d48a017a70e9e7413e6754901a9dd98e343483e381214e9821e8",
+        "afterDigest": "801ddd35aa90d48a017a70e9e7413e6754901a9dd98e343483e381214e9821e8",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "59999e3c60ea87a94e63ba2e2054fdcf8a6f9f26a2050652699cff94df0f24fd",
+        "afterDigest": "59999e3c60ea87a94e63ba2e2054fdcf8a6f9f26a2050652699cff94df0f24fd",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "35a6c044a16b9f85334c131a83b855c8af2e90f3581cb8ea8b87443ca671e942",
+        "afterDigest": "35a6c044a16b9f85334c131a83b855c8af2e90f3581cb8ea8b87443ca671e942",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 17,
+        "beforeDigest": "41bb79cb0ba84c34b4d3e5d0e9b128996c9bf00f420d63b1f84c0a89c95b58f9",
+        "afterDigest": "41bb79cb0ba84c34b4d3e5d0e9b128996c9bf00f420d63b1f84c0a89c95b58f9",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 15,
+        "beforeDigest": "5b1e89ac8afd7a8cddd6a6e3d41359402f44a9a85c9de223f21ed40435f18309",
+        "afterDigest": "5b1e89ac8afd7a8cddd6a6e3d41359402f44a9a85c9de223f21ed40435f18309",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 18,
+        "beforeDigest": "87c054ad7118b219ed16d6d57afad0b2a47e8d12f1531c68ce12865b3cfabd36",
+        "afterDigest": "87c054ad7118b219ed16d6d57afad0b2a47e8d12f1531c68ce12865b3cfabd36",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 24,
+        "beforeDigest": "feecfbf1b89ca5c3af17339cc2e9a90b3d4d6afd46ca4dae3c385525d8cc7fc5",
+        "afterDigest": "feecfbf1b89ca5c3af17339cc2e9a90b3d4d6afd46ca4dae3c385525d8cc7fc5",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 46,
+        "beforeDigest": "2e9464da46d016f529c320e638e39ae43d1e94ae3cb14d7103ff3bca6dcfe181",
+        "afterDigest": "2e9464da46d016f529c320e638e39ae43d1e94ae3cb14d7103ff3bca6dcfe181",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 14,
+        "beforeDigest": "df0647c28f0171d27f52da91c0d02d3914076df93e0487fd78ce6008b873e7ac",
+        "afterDigest": "df0647c28f0171d27f52da91c0d02d3914076df93e0487fd78ce6008b873e7ac",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "0420bc0ebb83d4aaba6f1622875ad8583e06d84a7cbcebb70df4f4d04779970c",
+        "afterDigest": "0420bc0ebb83d4aaba6f1622875ad8583e06d84a7cbcebb70df4f4d04779970c",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "c7c0dc4d78ee71c008bb4686482746447de6bd0f422613d0cbcb3f0b16ee2b36",
+        "afterDigest": "c7c0dc4d78ee71c008bb4686482746447de6bd0f422613d0cbcb3f0b16ee2b36",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 768,
+        "fontScale": 1.3,
+        "nodeCount": 10,
+        "beforeDigest": "ff48bb89b9c2abfa16d230e4c79936ecac17fadbdb9243018c5b0484114a2869",
+        "afterDigest": "ff48bb89b9c2abfa16d230e4c79936ecac17fadbdb9243018c5b0484114a2869",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      },
+      {
+        "scene": "home-calm",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "b4bb025b4f703431485fa76fc42974746289e72dcf25034dbfff71e09fb5a85e",
+        "afterDigest": "b4bb025b4f703431485fa76fc42974746289e72dcf25034dbfff71e09fb5a85e",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "home-success",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "d895c7cb7ed31d4008411f567444738b51721ff868d1bd22a02417fd894db5e2",
+        "afterDigest": "d895c7cb7ed31d4008411f567444738b51721ff868d1bd22a02417fd894db5e2",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 신나는 표정"
+        ]
+      },
+      {
+        "scene": "home-warning",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "0958b28200a679286b851bcfaebb4f187dce381fac781f5757d38a64ffca08c6",
+        "afterDigest": "0958b28200a679286b851bcfaebb4f187dce381fac781f5757d38a64ffca08c6",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 말하는 표정"
+        ]
+      },
+      {
+        "scene": "home-expired",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 17,
+        "beforeDigest": "0f1522626ac81c0cc0214d6fd7e12e8ccb73f3f6a0302c5c86b9f3a183f84aac",
+        "afterDigest": "0f1522626ac81c0cc0214d6fd7e12e8ccb73f3f6a0302c5c86b9f3a183f84aac",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 걱정하는 표정"
+        ],
+        "afterImages": [
+          "장고, 걱정하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-calm",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 15,
+        "beforeDigest": "7e583a4ffb492a0f714fffe2b7c12f86ebad2c464c1fbdac0c1616785c79b000",
+        "afterDigest": "7e583a4ffb492a0f714fffe2b7c12f86ebad2c464c1fbdac0c1616785c79b000",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 확인하는 표정"
+        ]
+      },
+      {
+        "scene": "inventory-filtered",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 18,
+        "beforeDigest": "f34c5776bb7ea5631ac42c57fe768999149d3fe2976bfe902773c04b31b2c239",
+        "afterDigest": "f34c5776bb7ea5631ac42c57fe768999149d3fe2976bfe902773c04b31b2c239",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기본 표정"
+        ],
+        "afterImages": [
+          "장고, 위로하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-done",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 24,
+        "beforeDigest": "aca08471eef92ba9cba083713e0ffc0d834cb393e94957829b2b2fa7f5d109e3",
+        "afterDigest": "aca08471eef92ba9cba083713e0ffc0d834cb393e94957829b2b2fa7f5d109e3",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "registration-multiple",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 46,
+        "beforeDigest": "d821503e058058c2a58d239ed8b1ae5babe8c74f9b0a8e45b71fc1ad6648bf16",
+        "afterDigest": "d821503e058058c2a58d239ed8b1ae5babe8c74f9b0a8e45b71fc1ad6648bf16",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 요리하는 표정",
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 요리하는 표정",
+          "장고, 칭찬하는 표정"
+        ]
+      },
+      {
+        "scene": "shopping",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 14,
+        "beforeDigest": "067b266b64310436f62ac7872288dc232babfb2b22f8f8d12d267b34c63aea2d",
+        "afterDigest": "067b266b64310436f62ac7872288dc232babfb2b22f8f8d12d267b34c63aea2d",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 말하는 표정"
+        ],
+        "afterImages": [
+          "장고, 장보는 표정"
+        ]
+      },
+      {
+        "scene": "onboarding",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "dc3aac9777cadce18c0acd95c3aabbbfc398cd1506fda8a75b8003e7dcf0854a",
+        "afterDigest": "dc3aac9777cadce18c0acd95c3aabbbfc398cd1506fda8a75b8003e7dcf0854a",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 응원하는 표정"
+        ]
+      },
+      {
+        "scene": "acknowledge",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "58ad6b8c20ed8005b44f10c54c7cf9a93f73ca4749e5f6a55ab9765e3e94a96f",
+        "afterDigest": "58ad6b8c20ed8005b44f10c54c7cf9a93f73ca4749e5f6a55ab9765e3e94a96f",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 끄덕이는 표정"
+        ]
+      },
+      {
+        "scene": "cooking-complete",
+        "width": 768,
+        "fontScale": 2,
+        "nodeCount": 10,
+        "beforeDigest": "24a455ddda67cb75904270bd7db447dc54c97da5ae96f7e74b0f2d59d9b476c1",
+        "afterDigest": "24a455ddda67cb75904270bd7db447dc54c97da5ae96f7e74b0f2d59d9b476c1",
+        "scroll": [
+          768,
+          850
+        ],
+        "beforeImages": [
+          "장고, 기쁜 표정"
+        ],
+        "afterImages": [
+          "장고, 음식을 즐기는 표정"
+        ]
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "design/reviews/jango-app-poses-20261015/screens/cooking-complete-360-font-1.png",
+      "sha256": "ebeaac2b25e81179b566670f693adb09ce48eef0ed67477d3d60b965fa5109f2",
+      "bytes": 24831
+    },
+    {
+      "file": "design/reviews/jango-app-poses-20261015/screens/home-calm-360-font-1.png",
+      "sha256": "156eaed5259d787f4d5e8635d9260adda4276150d5dc92d273e7a2ca3112a8c9",
+      "bytes": 20311
+    },
+    {
+      "file": "design/reviews/jango-app-poses-20261015/screens/registration-done-320-font-2.png",
+      "sha256": "5cec0a225e56dfc1187112770a1bab6f1dd8de24ac99ad62425ba65e6da4f21f",
+      "bytes": 40792
+    },
+    {
+      "file": "design/reviews/jango-app-poses-20261015/screens/shopping-360-font-1.png",
+      "sha256": "9d30668d85931a52f2b85a8667c6b4c556060ca76ad5fe5c716c537457d98ee7",
+      "bytes": 23583
+    }
+  ],
+  "notPerformed": [
+    "Android/iOS native before/after screen capture",
+    "VoiceOver/TalkBack and native text scaling/reduced motion",
+    "Store build, upload, publication or deployment"
+  ],
+  "knownExistingLayout": "At width 320/font 2, narrow Korean wrapping in the existing registration bubble is identical before/after; bottom actions remain reachable by scrolling.",
+  "temporaryQa": "HTML, adapters, bundles, browser measurements and tool dependencies were kept outside the repository; only representative captures and the summary remain.",
+  "implementationSnapshot": {
+    "apps/mobile/app/cooking/[recommendationId].tsx": "3fd07f6e72b8e39eb20d9f82cf340e32a33f23e77f1d9e98acf12630958ccc99",
+    "apps/mobile/app/onboarding.tsx": "8b247c0b85f31517e1d35114a342f8159abf9bdae111bac6d77400d0a123b4a7",
+    "apps/mobile/app/privacy/ai-data-notice.tsx": "c67e4cfb6b1ae5ca5fd18868280c964cd953e1c0ecc010fc7ca27543728ef4d7",
+    "apps/mobile/app/register-photo.tsx": "4ee3ee2ccfa2a4cb85e72355e520d2547e080f58e9886b582c050060dc1c3996",
+    "apps/mobile/src/features/affiliate/shopping-hero.ts": "db9cfec33d6a782a398535c28e44754ac99cf8905a3ee6ae47a19e312065224f",
+    "apps/mobile/src/features/home/home-notices.ts": "4bb928a8091a9651a3f964036951f0000b813063b6da773ef7e3cc8a61dfdb96",
+    "apps/mobile/src/features/inventory/inventory-hero.ts": "20734d65924afd861858799e4061d8ed68c5fd3a97176dabb526a99ecfc20be2",
+    "apps/mobile/src/features/registration/registration-completion-notices.ts": "e2cb658607ffb546ef368b6f296f0b35bd3db55b1977957cfc39519ac034bf80"
+  }
+}

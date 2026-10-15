@@ -5,9 +5,10 @@ import { PNG } from "pngjs";
 import {readMasterSet} from "../../../scripts/jango-master-set.mjs";
 import {screenMouthMode,policy} from "../../../scripts/jango-design-gate.mjs";
 import { sha256, sourceDir, readManifest } from "./sync-mascot-sources.mjs";
+import { mascotMoodConfig } from "./derive-mascot-small-assets.mjs";
 
 export const methodVersion = "v18-master-observation-v1";
-export const targets = {idle:24,happy:2,worry:17,cooking:23,empty:20,speak:1,think:11,point:14,"icon-crop":24};
+export const targets = {...Object.fromEntries(Object.entries(mascotMoodConfig).map(([mood, pose]) => [mood, pose.masterNumber])), "icon-crop":24};
 export const measurementDir = path.join(sourceDir, "measurements");
 const scriptPath = fileURLToPath(import.meta.url);
 const biblePath = path.join(sourceDir, "reference/JANGO-CHARACTER-BIBLE.md");
@@ -19,7 +20,7 @@ const dark = (r, g, b, a) => a > 220 && Math.max(r, g, b) < 100;
 const cheek = (r,g,b,a) => a>220 && r>=190 && r>g*1.12 && g>=100 && Math.abs(g-b)<65;
 export function validateInput(input) {
   if(input.version!==2||input.method!==methodVersion||!Array.isArray(input.poses))throw new Error('Unsupported anatomy input');
-  if(JSON.stringify(input.poses.map(p=>p.mood).sort())!==JSON.stringify(Object.keys(targets).sort()))throw new Error('Anatomy input must contain exactly nine mapped targets');
+  if(JSON.stringify(input.poses.map(p=>p.mood).sort())!==JSON.stringify(Object.keys(targets).sort()))throw new Error('Anatomy input must contain every mapped target exactly once');
   const set=readMasterSet();
   for(const pose of input.poses){
     const entry=set.entries.find(e=>e.number===targets[pose.mood]);

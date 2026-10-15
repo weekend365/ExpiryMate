@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { PNG } from "pngjs";
 import {readMasterSet, masterHash, masterSetPath} from "../../../scripts/jango-master-set.mjs";
 import { resizePremultiplied } from "./build-mascot-runtime-assets.mjs";
+import { mascotMoodConfig, mascotMoods } from "./derive-mascot-small-assets.mjs";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 export const sourceDir = path.resolve(scriptDir, "../../../design/jango");
@@ -15,8 +16,11 @@ export function readManifest() {
   if (manifest.version !== 3) throw new Error("Unsupported Jango source manifest version");
   const set=readMasterSet();
   if(manifest.masterSet.sha256!==masterHash(masterSetPath))throw new Error('MASTER registry changed');
+  const expectedMoods = [...mascotMoods, 'icon-crop'].sort();
+  if(JSON.stringify(manifest.poses.map(pose=>pose.mood).sort())!==JSON.stringify(expectedMoods))throw new Error('Manifest must contain every configured mood exactly once and the representative icon pose');
+  for(const [mood, number] of Object.entries(set.appMoods))if(mascotMoodConfig[mood]?.masterNumber!==number)throw new Error('Existing runtime mood mapping must remain unchanged');
   for(const pose of manifest.poses){
-    const number=pose.mood==='icon-crop'?24:set.appMoods[pose.mood];
+    const number=pose.mood==='icon-crop'?set.representative:mascotMoodConfig[pose.mood]?.masterNumber;
     const entry=set.entries.find(e=>e.number===number);
     if(!entry||pose.masterNumber!==number||'design/jango/'+pose.source!==entry.source||pose.sha256!==entry.sourceSHA256)throw new Error('Runtime mapping must use selected v18 MASTER');
   }
@@ -90,10 +94,6 @@ export function expectedMaster(entry) {
 
 export function syncMascotSources({ check = false } = {}) {
   const manifest = readManifest();
-  const expectedMoods = ["idle", "happy", "worry", "cooking", "empty", "speak", "think", "point", "icon-crop"];
-  if (JSON.stringify(manifest.poses.map((pose) => pose.mood).sort()) !== JSON.stringify(expectedMoods.sort())) {
-    throw new Error("Manifest must contain exactly eight moods and the 24 representative icon pose");
-  }
   // Validate every input before touching any existing master.
   const outputs = manifest.poses.map((entry) => ({ entry, png: expectedMaster(entry) }));
   for (const { entry, png } of outputs) {

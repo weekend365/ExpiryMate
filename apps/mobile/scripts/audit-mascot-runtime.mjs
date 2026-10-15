@@ -15,4 +15,4 @@ for (const mood of mascotMoods) {
     }
   }
 }
-console.log("PASS all 48 runtime assets match their source transforms");
+console.log(`PASS all ${mascotMoods.length * 6} runtime assets match their source transforms`);
