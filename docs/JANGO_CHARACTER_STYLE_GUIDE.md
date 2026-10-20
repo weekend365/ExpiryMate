@@ -1,7 +1,7 @@
 ---
 status: active
 owner: design
-last_reviewed: 2026-10-15
+last_reviewed: 2026-10-16
 source_of_truth: true
 ---
 
@@ -10,6 +10,12 @@ source_of_truth: true
 [v18 활성 MASTER](../design/jango/style-master.json), [BIBLE](../design/jango/reference/JANGO-CHARACTER-BIBLE.md), [스타일 가이드](../design/jango/reference/JANGO-STYLE-GUIDE.md)가 신규 제작 정본이다. 2026-10-14 사용자가 지정한 source-originals 32종의 크레파스 선·불투명 무광 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 기준으로 한다. [복원 범위와 과거 채택 기록](../design/jango/reference/STYLE-MASTER-ADOPTION.md)을 확인한다.
 
 [v18 원본 32종](../design/jango/emoticons/kakao-32/v18/source-originals)이 활성 MASTER이며 [목록](../design/jango/master-set.json)의 경로·출처·해시·기존 검수를 보존한다. v19 교체는 중단했고 자동 재개하지 않는다. 현재 앱과 브랜딩 에셋은 기존 v18 파생 그대로다.
+
+## 성격과 매체별 표현
+
+장고는 **다정하지만 허당인 생활 친구**다. 남의 밥·휴식·기분을 챙기면서 자신은 멍해지거나 한입을 탐내는 작은 빈틈을 가진다. 따뜻한 외형과 잘 작동하는 원화·문구를 살리고, 장고 인지·보낼 상황·성격 전달을 기준으로 개선한다. [v21 제작 경험의 규칙 반영](../design/jango/reference/STYLE-MASTER-ADOPTION.md)에 따라 성격·표현 원칙은 [BIBLE](../design/jango/reference/JANGO-CHARACTER-BIBLE.md)을 따른다.
+
+신규 이모티콘은 문구가 있어도 전신을 살리며, 눈·입·얼굴 배치·전신 동작을 감정에 맞게 설계한다. 기본형 재현의 좌표와 네 입 모드를 표현의 상한으로 삼지 않는다. 서체 비교·공통 글자 크기·짧은 대화 문구·감정별 레터링과 작은 출력 검토는 [스타일 가이드](../design/jango/reference/JANGO-STYLE-GUIDE.md)를 따른다. 이 표현 기준은 기존 앱의 mood 매핑·상태 안내·Pretendard UI 글꼴을 변경하지 않는다.
 
 ## 앱 사용
 
@@ -32,6 +38,8 @@ source_of_truth: true
 ## 생성과 검사
 
 [준비·검수](../design/jango/quality/README.md)를 따른다. 실제 참조와 파일 해시를 기록하고 MASTER의 이미지 바이트는 보존한다.
+
+이모티콘의 새 입·표정은 BIBLE의 「이모티콘의 표현 확장」과 `--creative-brief` 준비 경로로 의도를 기록한다. `expressive-custom`의 입 진단은 항상 시각 재검토로 남긴다. 기존 원화를 재사용한 배치·레터링 파생과 실제 AI 작화의 출처를 구분하며, 사용자 선호나 규칙 반영으로 검수 결과·출시 서명을 대신하지 않는다.
 
 SNS 카툰은 BIBLE의 「SNS 카툰의 표현 확장」을 따른다. 표정·입·포즈·소품·의상·비율 과장·좌우 반전·색 변형은 별도 후보로 검토·보정하고 사용자가 채택한 범위에서 재사용한다. 기본 입 네 모드는 SNS 표현의 절대 상한이 아니다. SNS 채택을 앱 에셋 교체나 서명된 이모티콘 출시로 해석하지 않으며, 위 앱 파생 기준과 기존 앱 말풍선 스타일은 유지한다.
 

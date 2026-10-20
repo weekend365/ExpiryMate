@@ -1,0 +1,634 @@
+{
+  "10": {
+    "mouthRoi": [
+      591,
+      676,
+      110,
+      65
+    ],
+    "faceRoi": [
+      300,
+      420,
+      680,
+      470
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "정면 전신, 한 장갑을 앞으로 들어 대기 요청. 낮춘 반대 손, 두 신발, 채움·혀 없는 짧은 U 입.",
+    "method": "생성 원본 전체와 190px 입 진단 확대를 먼저 관찰했다. 눈·장갑과 분리된 입 영역에서 실제 U선 전체 범위를 찾고 12px 여백을 더했다. 측정 임계값·입 픽셀은 변경하지 않았다. 기울기 0도는 정면 눈·문 테두리 관찰값이다.",
+    "sourceSHA256": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "11": {
+    "mouthRoi": [
+      710,
+      686,
+      84,
+      45
+    ],
+    "faceRoi": [
+      285,
+      380,
+      695,
+      540
+    ],
+    "tiltDegrees": -5,
+    "visibility": "clear",
+    "observation": "힘 빠진 반눈과 짧은 수평 입. 얼굴이 붙은 문이 열리고 왼쪽 틈에 빈 선반이 보인다. 오른쪽 경첩 연결과 문 원근은 별도 시각 재검토 대상.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "dab6bfe89d814d1f721e7ea0d083220c5f10e28720aa24e4d82e9f42407c6d36"
+  },
+  "12": {
+    "mouthRoi": [
+      642,
+      671,
+      81,
+      89
+    ],
+    "faceRoi": [
+      320,
+      390,
+      680,
+      510
+    ],
+    "tiltDegrees": -3,
+    "visibility": "clear",
+    "observation": "작은 빈 O형 입과 서로 다른 눈 크기, 비대칭 눈썹. 혀가 없는 의도적 새 입. 땀방울이 요청한 하나보다 많지만 가벼운 당황이 읽힌다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c"
+  },
+  "13": {
+    "mouthRoi": [
+      605,
+      676,
+      121,
+      91
+    ],
+    "faceRoi": [
+      285,
+      390,
+      695,
+      505
+    ],
+    "tiltDegrees": -3,
+    "visibility": "clear",
+    "observation": "넓게 열린 입, 뒤로 물러난 발과 올라간 눈썹·번개로 큰 놀람을 전달한다.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "14": {
+    "mouthRoi": [
+      598,
+      653,
+      113,
+      93
+    ],
+    "faceRoi": [
+      330,
+      375,
+      660,
+      490
+    ],
+    "tiltDegrees": 3,
+    "visibility": "clear",
+    "observation": "장갑의 기존 엄지와 주머니를 들어 전구를 향함. 분리 검지 없이 깨달음을 표시.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "15": {
+    "mouthRoi": [
+      580,
+      658,
+      108,
+      70
+    ],
+    "faceRoi": [
+      290,
+      400,
+      690,
+      490
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "정면 전신, 가슴 앞의 두 팔·장갑 X로 정중한 거절. 두 신발과 채움·혀 없는 U 입이 보인다.",
+    "method": "생성 원본 전체와 190px 입 진단 확대를 먼저 관찰했다. 눈·장갑과 분리된 입 영역에서 실제 U선 전체 범위를 찾고 12px 여백을 더했다. 측정 임계값·입 픽셀은 변경하지 않았다. 기울기 0도는 정면 눈·문 테두리 관찰값이다.",
+    "sourceSHA256": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "16": {
+    "mouthRoi": [
+      590,
+      640,
+      111,
+      111
+    ],
+    "faceRoi": [
+      300,
+      385,
+      690,
+      480
+    ],
+    "tiltDegrees": 5,
+    "visibility": "clear",
+    "observation": "기쁘게 열린 입, 접힌 눈, 양팔 위와 두 발을 띄운 점프. 색종이 네 조각과 발 아래 동작선.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "7de28e512527b8ad1f0433a20e726d8940a7cf22bc4de77db2315179680b3ea2"
+  },
+  "17": {
+    "mouthRoi": [
+      581,
+      749,
+      103,
+      60
+    ],
+    "faceRoi": [
+      295,
+      430,
+      680,
+      495
+    ],
+    "tiltDegrees": 7,
+    "visibility": "clear",
+    "observation": "낮게 모은 양손·걱정 눈썹·처진 입선으로 사과.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "18": {
+    "mouthRoi": [
+      594,
+      671,
+      112,
+      69
+    ],
+    "faceRoi": [
+      285,
+      380,
+      700,
+      530
+    ],
+    "tiltDegrees": -3,
+    "visibility": "clear",
+    "observation": "감긴 눈과 U형 미소, 양팔을 넓게 벌린 포옹. 무릎을 굽혀 안정적으로 몸을 낮췄다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "e53aa2e370782a9b9e545c122050c9e52419255fb58103a114a471800fca2c8b"
+  },
+  "19": {
+    "mouthRoi": [
+      574,
+      648,
+      113,
+      75
+    ],
+    "faceRoi": [
+      290,
+      375,
+      680,
+      505
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "하트 컵을 두 장갑으로 받쳐 조심스럽게 내민 정면 응원.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "20": {
+    "mouthRoi": [
+      565,
+      698,
+      104,
+      63
+    ],
+    "faceRoi": [
+      280,
+      410,
+      650,
+      475
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "양손으로 배를 감싸고 sad 입·약한 눈썹·밥 생각 기호로 허기.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "21": {
+    "mouthRoi": [
+      550,
+      655,
+      105,
+      80
+    ],
+    "faceRoi": [
+      185,
+      365,
+      720,
+      535
+    ],
+    "tiltDegrees": -8,
+    "visibility": "clear",
+    "observation": "옆 음식에 향한 동공과 기대하는 U 미소. 한 장갑은 음식 쪽, 다른 장갑은 배 앞. 접시는 독립 소품으로 떠 있다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "c14212f69901605fcb8c27929644cf659d9ba7df7d7aa2c8bdb61203adc33e27"
+  },
+  "22": {
+    "mouthRoi": [
+      569,
+      639,
+      122,
+      100
+    ],
+    "faceRoi": [
+      280,
+      390,
+      680,
+      505
+    ],
+    "tiltDegrees": -3,
+    "visibility": "clear",
+    "observation": "웃는 곡선 눈으로 국수 그릇을 안음. 입이 음식과 김에 가려지지 않음.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "23": {
+    "mouthRoi": [
+      576,
+      633,
+      117,
+      91
+    ],
+    "faceRoi": [
+      290,
+      360,
+      655,
+      490
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "뒤집개와 팬을 각각 잡은 두 장갑. 도구는 입을 가리지 않음.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "24": {
+    "mouthRoi": [
+      598,
+      632,
+      112,
+      82
+    ],
+    "faceRoi": [
+      280,
+      350,
+      695,
+      525
+    ],
+    "tiltDegrees": -9,
+    "visibility": "clear",
+    "observation": "양손으로 접시를 앞으로 보여줌. 윙크와 U 입.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "25": {
+    "mouthRoi": [
+      572,
+      654,
+      125,
+      98
+    ],
+    "faceRoi": [
+      270,
+      380,
+      700,
+      505
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "둥근 장갑 전체를 체크리스트 쪽으로 돌린 확인 동작.",
+    "sourceSHA256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+    "method": "새 편집 원본을 실제로 관찰하여 전체 입과 주변 여백 재지정. 이전 시안 좌표는 이전 검사 기록에 보존.",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "26": {
+    "mouthRoi": [
+      594,
+      650,
+      114,
+      79
+    ],
+    "faceRoi": [
+      290,
+      385,
+      675,
+      475
+    ],
+    "tiltDegrees": -4,
+    "visibility": "clear",
+    "observation": "양 장갑이 카트 손잡이를 잡고 한 발을 든 출발. 카트와 식재료를 포함한 전신을 보존했다.",
+    "sourceSHA256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+    "method": "새 편집 원본을 실제로 관찰하여 전체 입과 주변 여백 재지정. 이전 시안 좌표는 이전 검사 기록에 보존.",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "27": {
+    "mouthRoi": [
+      591,
+      611,
+      111,
+      94
+    ],
+    "faceRoi": [
+      300,
+      365,
+      650,
+      495
+    ],
+    "tiltDegrees": -9,
+    "visibility": "clear",
+    "observation": "큰 당근을 두 손으로 안고 윙크. 잎·장갑·당근 끝 모두 보존.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "28": {
+    "mouthRoi": [
+      643,
+      663,
+      94,
+      50
+    ],
+    "faceRoi": [
+      310,
+      365,
+      710,
+      545
+    ],
+    "tiltDegrees": -10,
+    "visibility": "clear",
+    "observation": "턱의 장갑과 기울인 얼굴·수평 입. 당근·치즈·달걀로 메뉴 고민을 표현한다.",
+    "method": "원본 전체와 입 주변을 시각 관찰한 진단 좌표. 자동 검사와 시각 판단을 구분.",
+    "sourceSHA256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "29": {
+    "mouthRoi": [
+      495,
+      760,
+      78,
+      65
+    ],
+    "faceRoi": [
+      165,
+      400,
+      700,
+      655
+    ],
+    "tiltDegrees": -34,
+    "visibility": "clear",
+    "observation": "옆으로 누운 피로. 실제 얼굴 기울기는 약 -34도이며 자동 입 측정 범위 밖.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "30": {
+    "mouthRoi": [
+      699,
+      690,
+      104,
+      80
+    ],
+    "faceRoi": [
+      410,
+      385,
+      680,
+      565
+    ],
+    "tiltDegrees": 24,
+    "visibility": "clear",
+    "observation": "이불·베개와 감은 눈. 실제 눈 중심선 기울기 약 24도; 수면 곡선 눈과 U 입 구분.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "31": {
+    "mouthRoi": [
+      565,
+      665,
+      110,
+      101
+    ],
+    "faceRoi": [
+      300,
+      370,
+      690,
+      570
+    ],
+    "tiltDegrees": 12,
+    "visibility": "clear",
+    "observation": "벽 옆으로 전신을 내밀며 한 장갑을 든 참여 요청. 작은 열린 미소와 기대하는 눈썹. 다른 손이 문틀에 닿고 두 신발이 보인다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "f67e89026ae82d91cd9bb6ae64da58daf95bdeb2f946698f23e1d47142752c06"
+  },
+  "32": {
+    "mouthRoi": [
+      601,
+      642,
+      107,
+      74
+    ],
+    "faceRoi": [
+      305,
+      380,
+      660,
+      510
+    ],
+    "tiltDegrees": -10,
+    "visibility": "clear",
+    "observation": "가슴에 큰 하트를 품어 마음을 건네는 애정 표현. 소품이 입을 가리지 않는다.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "01": {
+    "mouthRoi": [
+      594,
+      670,
+      122,
+      100
+    ],
+    "faceRoi": [
+      315,
+      365,
+      680,
+      520
+    ],
+    "tiltDegrees": 2,
+    "visibility": "clear",
+    "observation": "한 장갑 인사와 열린 입. 고정 장식과 낮은 반대 손 보존.",
+    "method": "원본과 입 확대에서 전체 입을 확인하고 12px 안팎 여백으로 지정. 초기 대략 범위에 들어온 눈 조각/잘린 입 끝을 제외·복원한 진단 좌표이며 픽셀·검사 수치는 변경하지 않음.",
+    "sourceSHA256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "02": {
+    "mouthRoi": [
+      574,
+      659,
+      124,
+      104
+    ],
+    "faceRoi": [
+      285,
+      390,
+      675,
+      475
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "볼 옆에 올린 양손과 강한 웃는 눈. 정면 반가움.",
+    "method": "원본 전체와 입 주변을 보고 전체 입과 여백을 지정. 기울기는 실제 눈 중심선 관찰값.",
+    "sourceSHA256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "04": {
+    "mouthRoi": [
+      570,
+      653,
+      123,
+      98
+    ],
+    "faceRoi": [
+      280,
+      365,
+      695,
+      515
+    ],
+    "tiltDegrees": 1,
+    "visibility": "clear",
+    "observation": "열린 눈·열린 입으로 작은 하트를 아래에서 상대 쪽으로 내민 감사. 32의 큰 하트 포옹과 눈·하트 크기로 구분. 깊이 방향의 팔 전진감은 정지 이미지에서 약함.",
+    "sourceSHA256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+    "method": "새 편집 원본을 실제로 관찰하여 전체 입과 주변 여백 재지정. 이전 시안 좌표는 이전 검사 기록에 보존.",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "05": {
+    "mouthRoi": [
+      606,
+      638,
+      116,
+      78
+    ],
+    "faceRoi": [
+      300,
+      360,
+      675,
+      520
+    ],
+    "tiltDegrees": -4,
+    "visibility": "clear",
+    "observation": "볼 가까이 모은 장갑과 작은 하트·U 입. 수줍은 애정.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "06": {
+    "mouthRoi": [
+      520,
+      715,
+      124,
+      101
+    ],
+    "faceRoi": [
+      195,
+      395,
+      785,
+      595
+    ],
+    "tiltDegrees": 14,
+    "visibility": "clear",
+    "observation": "머리를 기울이고 두 장갑을 아래에서 포개며 키득거림. 08의 가슴 앞 박수와 16의 점프 동작과 구별된다.",
+    "sourceSHA256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+    "method": "새 편집 원본을 실제로 관찰하여 전체 입과 주변 여백 재지정. 이전 시안 좌표는 이전 검사 기록에 보존.",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "07": {
+    "mouthRoi": [
+      592,
+      654,
+      120,
+      108
+    ],
+    "faceRoi": [
+      310,
+      375,
+      680,
+      515
+    ],
+    "tiltDegrees": 5,
+    "visibility": "clear",
+    "observation": "결의 있는 눈썹과 높게 든 한 장갑·벌린 발. 힘찬 응원.",
+    "method": "원본 전체와 입 주변을 보고 전체 입과 여백을 지정. 기울기는 실제 눈 중심선 관찰값.",
+    "sourceSHA256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "09": {
+    "mouthRoi": [
+      573,
+      659,
+      110,
+      78
+    ],
+    "faceRoi": [
+      280,
+      365,
+      680,
+      520
+    ],
+    "tiltDegrees": 0,
+    "visibility": "clear",
+    "observation": "가슴 앞 모은 두 장갑·U 입·끄덕임 선.",
+    "method": "원본과 전체 입 주변을 관찰하여 지정한 진단 영역. 임계값 변경 없음.",
+    "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+    "provenance": "Byte-identical selected v20 original; coordinates, tilt and uncertainty retained."
+  },
+  "03": {
+    "mouthRoi": [
+      616,
+      645,
+      133,
+      107
+    ],
+    "faceRoi": [
+      335,
+      395,
+      700,
+      490
+    ],
+    "tiltDegrees": 5,
+    "visibility": "clear",
+    "observation": "앞으로 나온 큰 엄지 하나와 윙크, 작은 열린 웃는 입. 전신과 반대쪽 팔 연결이 보인다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "d89963e38a42b5aa64752c14ee8c75f50f30b629e89891d3dd7d815ecd67c8fb"
+  },
+  "08": {
+    "mouthRoi": [
+      635,
+      645,
+      110,
+      88
+    ],
+    "faceRoi": [
+      285,
+      375,
+      710,
+      535
+    ],
+    "tiltDegrees": -8,
+    "visibility": "clear",
+    "observation": "오른쪽으로 기울어 작은 박수. 감긴 눈과 U형 미소, 두 장갑과 커프스가 분리되어 보인다.",
+    "method": "실제 생성된 1254px 원본을 전체 관찰해 입과 얼굴의 진단 영역 및 기울기를 기록. expressive-custom은 모양의 자동 통과를 주장하지 않고 모든 결과를 시각 재검토로 남김.",
+    "sourceSHA256": "e65542fa8f97666d439611633f68601b526ee0a4d7ee44665519d78d4a74b01e"
+  }
+}

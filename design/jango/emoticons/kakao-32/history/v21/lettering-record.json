@@ -1,0 +1,1084 @@
+[
+  {
+    "number": 1,
+    "line": "안녕!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 440,
+      "y": 115,
+      "size": 180,
+      "rotation": -3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -3,
+      "bounds": [
+        297,
+        44,
+        286,
+        142
+      ]
+    },
+    "sha256": "6b553b0a316d9edede08a026e48ce2334e90ba15f3375c484e102b3fc30d80f8"
+  },
+  {
+    "number": 2,
+    "line": "좋아!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 570,
+      "y": 120,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 3,
+      "bounds": [
+        442,
+        50,
+        257,
+        141
+      ]
+    },
+    "sha256": "0d0d8643000fcf35b3ea1fe55a9f0eb96b8d6d062e43545a14e5725780bf450d"
+  },
+  {
+    "number": 3,
+    "line": "최고야!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 535,
+      "y": 120,
+      "size": 180,
+      "rotation": -4,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -4,
+      "bounds": [
+        263,
+        44,
+        544,
+        153
+      ]
+    },
+    "sha256": "bedaddb36d95d453a3edf5cc732a32788b6f2bccb6453885ee48dce0a8ddcc92"
+  },
+  {
+    "number": 4,
+    "line": "고마워!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 490,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        214,
+        53,
+        553,
+        134
+      ]
+    },
+    "sha256": "c65e3c3c75ade8faa57ed751958fa9dd37ef231c96e92b76afca6bec2be3be06"
+  },
+  {
+    "number": 5,
+    "line": "사랑해",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 550,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        358,
+        52,
+        384,
+        136
+      ]
+    },
+    "sha256": "3b413c27982102ca4e00c8cb0018ef9cb7cabb6d59c9b0e94d071cbf2a0d8e53"
+  },
+  {
+    "number": 6,
+    "line": "히히",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 390,
+      "y": 130,
+      "size": 180,
+      "rotation": -5,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -5,
+      "bounds": [
+        214,
+        58,
+        353,
+        144
+      ]
+    },
+    "sha256": "f00182b294d15db006ed4eb703176febe8ec99fb4ecbf89ca8847cc40f19db5b"
+  },
+  {
+    "number": 7,
+    "line": "파이팅!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 560,
+      "y": 125,
+      "size": 180,
+      "rotation": -4,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 128,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 128,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -4,
+      "bounds": [
+        312,
+        53,
+        497,
+        145
+      ]
+    },
+    "sha256": "c86fb4a96a39c8434339bae2ee82e09d0ae23912cabdd2d680afa7115f20c452"
+  },
+  {
+    "number": 8,
+    "line": "잘했어!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 540,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        369,
+        54,
+        342,
+        133
+      ]
+    },
+    "sha256": "da205f27a909a54247691d3e7edf63b34ca562572366f4191e8f03993c282d80"
+  },
+  {
+    "number": 9,
+    "line": "알겠어!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 470,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        298,
+        53,
+        344,
+        134
+      ]
+    },
+    "sha256": "623441b18c8974123a0de3d349d825297e554865f5c0bad3ec7e308dc0781f80"
+  },
+  {
+    "number": 10,
+    "line": "잠깐만!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 500,
+      "y": 120,
+      "size": 180,
+      "rotation": -2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -2,
+      "bounds": [
+        276,
+        47,
+        448,
+        146
+      ]
+    },
+    "sha256": "71d9b25b9c171171fa9bda00248e9b4b61cdce869df5e85b963ba3005e49c94e"
+  },
+  {
+    "number": 11,
+    "line": "멍…",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 600,
+      "y": 150,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 3,
+      "bounds": [
+        496,
+        77,
+        209,
+        147
+      ]
+    },
+    "sha256": "d9d858c19f779fc06f4c5fab9b421a815c2d8f224ad03c9264f55e146f74655b"
+  },
+  {
+    "number": 12,
+    "line": "어라?",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 390,
+      "y": 140,
+      "size": 180,
+      "rotation": -6,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 126,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -6,
+      "bounds": [
+        190,
+        66,
+        401,
+        149
+      ]
+    },
+    "sha256": "90d41a860a55854b0245973b83cb4ce1e9ce33bdd7b661c75596a60a48bd50cb"
+  },
+  {
+    "number": 13,
+    "line": "헉!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 250,
+      "y": 170,
+      "size": 180,
+      "rotation": -7,
+      "maxWidth": 400,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 144,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 144,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -7,
+      "bounds": [
+        148,
+        94,
+        205,
+        153
+      ]
+    },
+    "sha256": "f76b4b2cc7679121c7ae9dbb1fc3c0663bb87df85ca6040d2392541df6a84b01"
+  },
+  {
+    "number": 14,
+    "line": "아하!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 650,
+      "y": 130,
+      "size": 180,
+      "rotation": 4,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 124,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 124,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 4,
+      "bounds": [
+        459,
+        55,
+        382,
+        151
+      ]
+    },
+    "sha256": "f5c69f577668520b8307723c5bd03a22c7c0391316af3c29769d3beb0149beb9"
+  },
+  {
+    "number": 15,
+    "line": "난 패스!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 500,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        234,
+        53,
+        533,
+        134
+      ]
+    },
+    "sha256": "f96710473f5b20039e32db9a2ce72d4b9407b4ed6bf10227c7bc299be530f203"
+  },
+  {
+    "number": 16,
+    "line": "축하해!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 540,
+      "y": 130,
+      "size": 180,
+      "rotation": -5,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 128,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 128,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -5,
+      "bounds": [
+        337,
+        59,
+        407,
+        142
+      ]
+    },
+    "sha256": "9c9cc1100d2b35f9a49f4b2f4e62f60cb522006c2fd67a25f65f6725c298825b"
+  },
+  {
+    "number": 17,
+    "line": "미안해…",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 610,
+      "y": 155,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 108,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 108,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 3,
+      "bounds": [
+        401,
+        88,
+        419,
+        135
+      ]
+    },
+    "sha256": "42601c8f16b47fdd5b4e5f80e8573d68dd5731b9f709f33eee6cc67f3277e4c6"
+  },
+  {
+    "number": 18,
+    "line": "괜찮아",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 460,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        302,
+        53,
+        317,
+        134
+      ]
+    },
+    "sha256": "9110953f7874622c0c9e04d787b043d530ee269619a19a077c58bed9167086d8"
+  },
+  {
+    "number": 19,
+    "line": "좀 쉬자",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 510,
+      "y": 120,
+      "size": 180,
+      "rotation": -2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -2,
+      "bounds": [
+        294,
+        52,
+        432,
+        136
+      ]
+    },
+    "sha256": "c19ae5eadddbf2483c9bd474a8caf2f8826d82a172f283aca66b1c882db78d50"
+  },
+  {
+    "number": 20,
+    "line": "배고파…",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 540,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        267,
+        44,
+        546,
+        152
+      ]
+    },
+    "sha256": "dc17a0a0879fb1ae6a2b2e414332fb9b7c1b54b816db4620fcefafc31b735186"
+  },
+  {
+    "number": 21,
+    "line": "한 입만",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 580,
+      "y": 120,
+      "size": 180,
+      "rotation": -3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -3,
+      "bounds": [
+        398,
+        55,
+        365,
+        131
+      ]
+    },
+    "sha256": "9a5e07a86c4238d96df0561c6c7c95d71af21285030d85b6d442fbf377f06fa4"
+  },
+  {
+    "number": 22,
+    "line": "맛있어!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 490,
+      "y": 120,
+      "size": 180,
+      "rotation": 3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 3,
+      "bounds": [
+        285,
+        50,
+        410,
+        140
+      ]
+    },
+    "sha256": "59aa717aded934985d3e21e5dba95e6e6c21d10d2505d390d24c6683a2b047a3"
+  },
+  {
+    "number": 23,
+    "line": "내가 할게!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 530,
+      "y": 120,
+      "size": 180,
+      "rotation": -3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -3,
+      "bounds": [
+        282,
+        53,
+        496,
+        134
+      ]
+    },
+    "sha256": "b5687f624b0fde948d7391b93f433d6b6322123588c4763fbabcaf0cc34a05ef"
+  },
+  {
+    "number": 24,
+    "line": "다 됐어!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 500,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        286,
+        52,
+        428,
+        136
+      ]
+    },
+    "sha256": "5b48de3f97fa7707ed5fcc2b02cfdebc10561e6fccdc1750cc83919d8be2b9a3"
+  },
+  {
+    "number": 25,
+    "line": "확인했어!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 520,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        279,
+        53,
+        483,
+        134
+      ]
+    },
+    "sha256": "d3b83da9870b61882fff6f1188263dade1908bdabcb62c6dcc9c4b14f17f5f54"
+  },
+  {
+    "number": 26,
+    "line": "같이 가자!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 550,
+      "y": 120,
+      "size": 180,
+      "rotation": -3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -3,
+      "bounds": [
+        280,
+        46,
+        540,
+        148
+      ]
+    },
+    "sha256": "bb0eb21b3a92547d94fd72a0ddbd48885ecabba122a89ab7aad571973cee29b9"
+  },
+  {
+    "number": 27,
+    "line": "밥 먹었어?",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 480,
+      "y": 120,
+      "size": 180,
+      "rotation": 0,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "bounds": [
+        208,
+        53,
+        545,
+        134
+      ]
+    },
+    "sha256": "9a895b39221ce08e2b5e2cd3a798c9e5d01fa02d1dc97302cb173007985b0685"
+  },
+  {
+    "number": 28,
+    "line": "뭐 먹을까?",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 520,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        244,
+        52,
+        552,
+        136
+      ]
+    },
+    "sha256": "c686eafb7547e7b60b2c1f6ef78a0e153bfc118dc240de7cd098eb25a472301a"
+  },
+  {
+    "number": 29,
+    "line": "절전 중…",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 640,
+      "y": 260,
+      "size": 180,
+      "rotation": 4,
+      "maxWidth": 650,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 4,
+      "bounds": [
+        429,
+        191,
+        422,
+        138
+      ]
+    },
+    "sha256": "358bdd05a2b465c30be6b333c127f4d0afec1fa1f66012cf4af2c26a5997adac"
+  },
+  {
+    "number": 30,
+    "line": "잘 자",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 310,
+      "y": 210,
+      "size": 180,
+      "rotation": -4,
+      "maxWidth": 480,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 110,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 110,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -4,
+      "bounds": [
+        179,
+        147,
+        263,
+        127
+      ]
+    },
+    "sha256": "94136a4de178d4b487d7bf64a08d315448f228465f62bdaa3743de889df6328e"
+  },
+  {
+    "number": 31,
+    "line": "나도 껴줘",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 610,
+      "y": 120,
+      "size": 180,
+      "rotation": -3,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": -3,
+      "bounds": [
+        270,
+        48,
+        681,
+        144
+      ]
+    },
+    "sha256": "e209f5b6ab4df820335cc9d4c7f6543fd749d2ce53e0cf32725c0a4beabec36e"
+  },
+  {
+    "number": 32,
+    "line": "내 맘 받아!",
+    "fontSize1024": 180,
+    "symbols": [],
+    "font": "Gaegu-Bold",
+    "placement": {
+      "x": 490,
+      "y": 120,
+      "size": 180,
+      "rotation": 2,
+      "maxWidth": 880,
+      "font": "Gaegu-Bold",
+      "outline": 0,
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55
+    },
+    "normalization": {
+      "complete": true,
+      "method": "normalized-ink-with-pixel-outline",
+      "inkHeight": 120,
+      "outlinePx": 7,
+      "punctuationScale": 0.55,
+      "rotation": 2,
+      "bounds": [
+        174,
+        50,
+        632,
+        140
+      ]
+    },
+    "sha256": "41c5792b03eda3ba2c669d4fa8c2e48257567485a585156e6bdfbcb6942c45a8"
+  }
+]

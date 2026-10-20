@@ -8,6 +8,7 @@ import {readMasterSet, masterSetPath} from "./jango-master-set.mjs";
 import {readStyleMaster, styleMasterPath, styleMasterRecordPath} from "./jango-style-master.mjs";
 import { screenLineMouth } from "./jango-line-mouth-screen.mjs";
 import { screenOpenMouth } from "./jango-open-mouth-screen.mjs";
+import {archivedCandidate,assertOpenVersion,hasHistory,historicalHash,historyIndex,readHistoricalJson,verifyHistory} from './jango-history.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const quality = "design/jango/quality";
@@ -80,19 +81,41 @@ export function validateInputLineage(input,seen=new Set()) {
   assert(!seen.has(input),'Cyclic input lineage');seen.add(input);
   const set=readMasterSet();
   if(set.entries.some(e=>e.source===input))return;
-  const entry=filesIn(`${quality}/candidates`).filter(f=>f.endsWith('.json')).map(readJson).find(c=>c.source===input);
-  assert(entry&&entry.disposition==='candidate'&&entry.generationRecord,'Input must be a v18 MASTER or registered derivative');
-  const generation=readJson(entry.generationRecord),prepared=readJson(entry.preflight);
-  assert.equal(generation.source,input,'Generation source mismatch');
-  assert.equal(generation.sourceSHA256,fileHash(input),'Derived source changed');
-  assert.equal(generation.preflight,entry.preflight,'Generation preparation mismatch');
-  assert.equal(generation.preflightSHA256,fileHash(entry.preflight),'Derived preparation changed');
-  assert.equal(generation.promptSHA256,fileHash(prepared.prompt),'Derived prompt changed');
+  const entry=filesIn(`${quality}/candidates`).filter(f=>f.endsWith('.json')).map(readJson).find(c=>c.source===input)??archivedCandidate(input);
+  assert(entry&&entry.disposition==='candidate'&&(entry.generationRecord||entry.derivationRecord),'Input must be a v18 MASTER or registered derivative');
+  validateCandidateRecord(entry,seen);
+}
+export function validateCandidateRecord(entry,seen=new Set([entry.source])) {
+  assert(Boolean(entry.generationRecord)!==Boolean(entry.derivationRecord),'Exactly one generation or derivation record required');
+  const record=readHistoricalJson(entry.derivationRecord??entry.generationRecord),prepared=readHistoricalJson(entry.preflight,record.preflightSHA256);
+  assert.equal(record.source,entry.source,'Record source mismatch');
+  assert.equal(record.sourceSHA256,historicalHash(entry.source,record.sourceSHA256),'Derived source changed');
+  assert.equal(record.preflight,entry.preflight,'Record preparation mismatch');
+  assert.equal(record.preflightSHA256,historicalHash(entry.preflight,record.preflightSHA256),'Derived preparation changed');
+  assert.equal(record.promptSHA256,historicalHash(prepared.prompt,record.promptSHA256),'Derived prompt changed');
   assert([5,6,7].includes(prepared.policyVersion),'Retired preparation cannot create new lineage');
-  assert.equal(prepared.inputSHA256,fileHash(prepared.input),'Derived input changed');
-  for(const ref of prepared.references)assert.equal(fileHash(ref),prepared.referenceHashes[ref],'Derived reference changed');
-  assert.deepEqual(generation.actualReferences,prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]})));
+  assert.equal(prepared.inputSHA256,historicalHash(prepared.input,prepared.inputSHA256),'Derived input changed');
+  if(prepared.creativeBrief){
+    assert.equal(canonical(prepared.creativeBrief),canonical(readCreativeBrief(prepared.creativeBrief.file)),'Creative brief changed');
+    assert.equal(prepared.mouthMode,'expressive-custom','Creative intent must not be classified as a legacy mouth');
+    if(entry.creativeBrief)assert.equal(canonical(entry.creativeBrief),canonical(prepared.creativeBrief),'Creative candidate mismatch');
+  }else assert.notEqual(prepared.mouthMode,'expressive-custom','Creative brief required');
+  for(const ref of prepared.references)assert.equal(historicalHash(ref,prepared.referenceHashes[ref]),prepared.referenceHashes[ref],'Derived reference changed');
+  if(entry.derivationRecord){
+    assert.equal(record.id,entry.id,'Derivation ID mismatch');
+    assert.equal(record.operation,'layout-lettering-only','Unsupported derivation operation');
+    assert.equal(record.tool,'deterministic-layout','Reuse must not claim image generation');
+    assert.equal(record.imageGeneration,false,'Reuse must not claim image generation');
+    assert(!Object.hasOwn(record,'generatedFile')&&!Object.hasOwn(record,'actualReferences'),'Reuse has no generated output or image attachments');
+    assert.equal(record.origin,prepared.input,'Reuse origin mismatch');
+    assert.equal(record.originSHA256,prepared.inputSHA256,'Reuse origin hash mismatch');
+    assert.equal(record.sourceSHA256,record.originSHA256,'Reuse must preserve original bytes');
+    assert.deepEqual(record.inputs,[{role:'source-original',file:prepared.input,sha256:prepared.inputSHA256}],'Reuse input provenance mismatch');
+  }else{
+    assert.deepEqual(record.actualReferences,prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]})));
+  }
   validateInputLineage(prepared.input,seen);
+  return record;
 }
 export function styleProfile(rules, name) {
   assert(Object.hasOwn(rules.styleProfiles, name), "Unknown style profile");
@@ -103,6 +126,8 @@ export function contextBinding(rules = policy(), name = rules.defaultStyleProfil
   return {
     masterSet:fileHash(masterSetPath), rules: fileHash(`${quality}/rules.json`), master: fileHash(rules.master.file),
     implementation: fileHash("scripts/jango-design-gate.mjs"),
+    historyResolver:fileHash('scripts/jango-history.mjs'),
+    ...(hasHistory()?{historyIndex:fileHash(historyIndex)}:{}),
     masterSetImplementation: fileHash("scripts/jango-master-set.mjs"),
     activeStyleMaster: fileHash(styleMasterPath),
     activeMasterVersion: readStyleMaster().masterVersion,
@@ -159,6 +184,7 @@ export function screenMouth(png, roi, rules, master = readPng(rules.mouthReferen
   return { status: statuses.size === 1 ? samples[0].status : "needs-review", samples };
 }
 export function screenMouthMode(png, roi, rules, mode = "idle-u") {
+  if(mode==='expressive-custom')return {status:'needs-review',reason:'intentional-expression-requires-visual-review',samples:rules.mouthScreen.thresholds.map(threshold=>({threshold,...measureMouth(png,roi,threshold,rules.mouthScreen.alphaMin),status:'needs-review'}))};
   assert(Object.hasOwn(rules.mouthModes, mode), "Unknown mouth mode");
   return mode === "speak-open"
     ? screenOpenMouth(png, roi, rules, readPng(rules.openMouthReference.file), measureMouth)
@@ -195,7 +221,7 @@ export function validateComposition(rules, composition) {
   assert(Number.isInteger(composition.panel)&&composition.panel>=1&&composition.panel<=registered.panels,'Invalid composition panel');
   assert.equal(fileHash(registered.file),registered.sha256,'Composition reference hash mismatch');
 }
-export function attachmentPlan(rules,id,input,mouthMode,name,composition=null) {
+export function attachmentPlan(rules,id,input,mouthMode,name,composition=null,creativeBrief=null) {
   validateComposition(rules,composition);
   validateInputLineage(input);
   const profile=styleProfile(rules,name);
@@ -204,7 +230,7 @@ export function attachmentPlan(rules,id,input,mouthMode,name,composition=null) {
     ...(profile.styleMaster?[{role:'style-master',file:profile.styleMaster.file,scope:name==='colored-pencil'?'historical v19 style audit only; not a new-production default':'active v18 line/color/texture; use the selected original pose'}]:[]),
     {role:'edit-target',file:input},
     ...(composition?[{role:'composition-reference',file:composition.file,panel:composition.panel}]:[]),
-    {role:mouthMode==='speak-open'?'speak-mouth':'mouth-reference',file:rules.mouthReferences[mouthMode].file},
+    {role:creativeBrief?'expression-context-reference':mouthMode==='speak-open'?'speak-mouth':'mouth-reference',file:rules.mouthReferences[creativeBrief?.referenceMouthMode??mouthMode].file},
 
   ];
   const references=[...new Set(raw.map(r=>r.file))];
@@ -228,8 +254,10 @@ export function auditMaster(id) {
 }
 export function audit(id) {
   validId(id);
+  assertOpenVersion(id);
   if(/^v18-\d{2}$/.test(id))return auditMaster(id);
   const rules = policy(), candidate = readJson(`${quality}/candidates/${id}.json`);
+  assertOpenVersion(candidate.directory);assertOpenVersion(candidate.source);
   assert.equal(candidate.id, id);
   const kind=candidate.kind??'emoticon', name=candidate.styleProfile??'handdrawn-crayon';
   styleProfile(rules,name);
@@ -242,19 +270,24 @@ export function audit(id) {
   const mouthMode = candidate.mouthMode ?? "idle-u";
   const mouth = screenMouthMode(readPng(candidate.source), candidate.mouthRoi, rules, mouthMode);
   if (candidate.visibility !== "clear" || !Number.isFinite(candidate.tiltDegrees) || Math.abs(candidate.tiltDegrees) > rules.mouthScreen.maxTiltDegrees) mouth.status = "needs-review";
+  let sourceProvenance={status:'missing',operation:null};
+  try{const record=validateCandidateRecord(candidate);sourceProvenance={status:'pass',operation:record.operation??'individual image edit'};}catch{sourceProvenance={status:'invalid',operation:null};}
   let preparation = "missing", preparationAssets = null;
   if (candidate.preflight) {
     const prepared = readJson(candidate.preflight);
     const preparationFiles = [prepared.input, prepared.prompt, ...(prepared.references ?? []), ...(prepared.diagnosticReferences ?? []).map(ref => ref.file)];
     preparationAssets = Object.fromEntries([...new Set(preparationFiles)].filter(file => typeof file === 'string').map(file => {
-      try { return [file, fileHash(file)]; } catch { return [file, null]; }
+      const expected=file===prepared.input?prepared.inputSHA256:file===prepared.prompt?prepared.promptSHA256:prepared.referenceHashes?.[file]??prepared.diagnosticHashes?.[file];
+      try { return [file, historicalHash(file,expected)]; } catch { return [file, null]; }
     }));
     let referencesValid=false,profileValid=false;
     try {
       const composition=prepared.composition??null;
-      const expected=attachmentPlan(rules,id,prepared.input,mouthMode,name,composition);
+      if(prepared.creativeBrief)assert.equal(canonical(prepared.creativeBrief),canonical(readCreativeBrief(prepared.creativeBrief.file)),'Creative brief changed');
+      assert.equal(canonical(candidate.creativeBrief??null),canonical(prepared.creativeBrief??null),'Creative intent mismatch');
+      const expected=attachmentPlan(rules,id,prepared.input,mouthMode,name,composition,prepared.creativeBrief??null);
       const diagnostics=diagnosticReferences(rules,id,name);
-      referencesValid=canonical(prepared.references)===canonical(expected.references) && prepared.references.every(f=>fileHash(f)===prepared.referenceHashes?.[f]) && canonical(prepared.diagnosticReferences)===canonical(diagnostics) && diagnostics.every(r=>fileHash(r.file)===prepared.diagnosticHashes?.[r.file]);
+      referencesValid=canonical(prepared.references)===canonical(expected.references) && prepared.references.every(f=>historicalHash(f,prepared.referenceHashes?.[f])===prepared.referenceHashes?.[f]) && canonical(prepared.diagnosticReferences)===canonical(diagnostics) && diagnostics.every(r=>fileHash(r.file)===prepared.diagnosticHashes?.[r.file]);
       profileValid=(prepared.styleProfile??'handdrawn-crayon')===name && (prepared.kind??'emoticon')===kind && prepared.policyVersion===rules.version && prepared.attachmentVersion===rules.attachmentVersion && canonical(prepared.referenceRoles)===canonical(expected.referenceRoles) && canonical(composition)===canonical(candidate.composition??null);
     } catch { /* Missing or altered references are stale, never approved. */ }
     const modeValid = prepared.mouthMode === mouthMode && (mouthMode === "idle-u" || typeof prepared.mouthReason === "string" && prepared.mouthReason.trim().length > 0);
@@ -263,13 +296,14 @@ export function audit(id) {
       try { validateExpression(prepared.expression); validateExpression(candidate.expression); } catch { expressionValid = false; }
     }
     let inputsValid=false;
-    try { inputsValid=fileHash(prepared.input)===prepared.inputSHA256 && fileHash(prepared.prompt)===prepared.promptSHA256; } catch { /* Missing preparation assets fail closed. */ }
-    preparation = profileValid && expressionValid && modeValid && referencesValid && canonical(prepared.context) === canonical(context) && inputsValid && prepared.id === id ? "pass" : "stale";
+    try { inputsValid=historicalHash(prepared.input,prepared.inputSHA256)===prepared.inputSHA256 && fileHash(prepared.prompt)===prepared.promptSHA256; } catch { /* Missing preparation assets fail closed. */ }
+    preparation = profileValid && expressionValid && modeValid && referencesValid && canonical(prepared.context) === canonical(context) && inputsValid && prepared.id === id && sourceProvenance.status==='pass' ? "pass" : "stale";
   }
-  const payload = { candidate, context, assets, preparation, preparationAssets, preflight: candidate.preflight ? fileHash(candidate.preflight) : null };
+  const payload = { candidate, context, assets, preparation, preparationAssets, sourceProvenance, preflight: candidate.preflight ? fileHash(candidate.preflight) : null };
   return { id, binding: sha(canonical(payload)), ...payload, mouth, technical: styleTechnical(readPng(candidate.sticker),readPng(candidate.source)), preparation, designStatus: candidate.disposition === "rejected" || mouth.status === "fail" ? "fail" : "needs-review", note: "Automatic mouth pass is not full design approval. Signed visual review is required." };
 }
 export function assertReview(report, review, publicKey) {
+  assert.notEqual(report.candidate.mouthMode,'expressive-custom','Creative expression candidates require a separate visual review workflow; release blocked');
   assert.equal(report.candidate.disposition, "candidate", "Rejected candidate cannot be promoted");
   if(report.preparation==='master-adoption')assert.equal(report.binding,auditMaster(report.id).binding,'MASTER adoption binding mismatch');
   else assert.equal(report.preparation, "pass", "Missing/stale generation preparation");
@@ -289,23 +323,38 @@ export function validateExpression(expression) {
   for (const key of ["family", "eyes", "brows", "pose"]) assert(typeof expression[key] === "string" && expression[key].trim(), `Expression ${key} required`);
   assert(Number.isInteger(expression.intensity) && expression.intensity >= 1 && expression.intensity <= 3, "Expression intensity must be 1–3");
 }
+export function readCreativeBrief(file) {
+  assert(/^design\/jango\/emoticons\/kakao-32\/v\d+\/creative-intents\/[a-z0-9-]+\.json$/.test(file),'Versioned creative brief required');
+  assert(!file.startsWith('design/jango/emoticons/kakao-32/v18/'),'MASTER is immutable');
+  const brief=readHistoricalJson(file),rules=policy();
+  assert.equal(brief.version,1,'Unknown creative brief version');
+  assert.equal(brief.scope,'candidate-only','Creative scope must remain candidate-only');
+  for(const field of ['authorization','intent','mouthIntent','identity'])assert(typeof brief[field]==='string'&&brief[field].trim(),`Creative ${field} required`);
+  assert(Object.hasOwn(rules.mouthModes,brief.referenceMouthMode),'Known context mouth reference required');
+  assert(Array.isArray(brief.allowedChanges)&&brief.allowedChanges.length>0&&brief.allowedChanges.every(s=>['flexible-face','o-mouth','ajar-door','dynamic-pose'].includes(s)),'Unknown creative change');
+  return {file,sha256:historicalHash(file),referenceMouthMode:brief.referenceMouthMode,scope:brief.scope};
+}
 export function prepare(id, input, request, mouthMode = "idle-u", mouthReason = "", expression = null, options = {}) {
+  assertOpenVersion(id);assertOpenVersion(input);
+  if(options.creativeBrief)assertOpenVersion(options.creativeBrief);
   validId(id); assert(typeof request === "string" && request.trim().length > 0, "Task request required");
   assert(input.startsWith("design/jango/"), "Jango input required");
   const rules = policy(), directory = `${quality}/jobs/${id}`;
   const name=options.styleProfile??rules.defaultStyleProfile, kind=options.kind??'emoticon', profile=styleProfile(rules,name);
   assert.equal(profile.preparation,'active','Historical style is audit-only; use the active handdrawn-crayon style for new preparation');
   assert(Object.hasOwn(rules.candidateKinds,kind), 'Unknown candidate kind');
-  assert(Object.hasOwn(rules.mouthModes, mouthMode), "Unknown mouth mode");
+  const creativeBrief=options.creativeBrief?readCreativeBrief(options.creativeBrief):null;
+  if(creativeBrief){assert.equal(kind,'emoticon','Creative brief is an emoticon candidate');assert.equal(mouthMode,'expressive-custom','Creative intent requires expressive-custom');validateExpression(expression);}
+  else assert(Object.hasOwn(rules.mouthModes, mouthMode), "Unknown mouth mode");
   assert(mouthMode === "idle-u" || typeof mouthReason === "string" && mouthReason.trim().length > 0, "Mouth context reason required");
   if (expression !== null) validateExpression(expression);
   assert(!fs.existsSync(local(directory)), "Job already exists; choose a new ID");
   const inputSHA256 = fileHash(input);
   assert((options.composition===undefined)===(options.panel===undefined),'Composition and panel must be specified together');
   const composition=options.composition===undefined?null:{file:options.composition,panel:options.panel};
-  const attachments=attachmentPlan(rules,id,input,mouthMode,name,composition);
+  const attachments=attachmentPlan(rules,id,input,mouthMode,name,composition,creativeBrief);
   fs.mkdirSync(local(directory), { recursive: true });
-  const mouthReference = rules.mouthReferences[mouthMode];
+  const mouthReference = rules.mouthReferences[creativeBrief?.referenceMouthMode??mouthMode];
   const master = readPng(mouthReference.file), [x, y, w, h] = mouthReference.mouthRoi;
   const crop = new PNG({ width: w, height: h });
   PNG.bitblt(master, crop, x, y, w, h, 0, 0);
@@ -314,12 +363,21 @@ export function prepare(id, input, request, mouthMode = "idle-u", mouthReason = 
   const {references,referenceRoles:roles}=attachments;
   const diagnostics=diagnosticReferences(rules,id,name);
   const text = `장고 개별 이미지 편집. 실제 첨부 파일은 아래 imageIndex에 따른다. 같은 파일은 한 번만 첨부하며 여러 역할을 가질 수 있다.\n${Object.values(rules.invariants).join("\n")}\n선택 입 모드: ${mouthMode}. ${rules.mouthModes[mouthMode]}\n선택 이유: ${mouthReason || "기본 입 유지"}\n입 전용 규칙: ${mouthMode==='speak-open'?'speak-mouth 역할의 검은 입 안과 하단 작은 분홍 혀만 사용. 입 이외의 동작은 선택한 v18 원화를 따른다.':mouthMode==='idle-u'?'09번 입 참조의 짧은 단일 U선 유지. 채움·혀·치아 없음.':'선택한 v18 입 참조의 구조·입 중심을 유지하고 최신 스타일의 읽히는 진한 선으로 선택한 선형 입을 적용. U 곡률 복제·채움·혀·치아 없음. 입 중심부는 질감 구멍 없이 연결한다.'}\n스타일: ${name}. ${profile.instruction}\n실제 이미지 역할: ${canonical(roles)}\n${composition?`구성 참조는 4행 8열 보드의 ${composition.panel}번 컷만 사용한다. 번호·포스터 제목·문구·종이판·넓은 배경 색칠은 복제하지 않는다. 그림체·구조·동작은 활성 v18 MASTER와 해당 원화를 따른다.`:'구성 보드 미지정.'}\n진단 자료(실제 첨부와 구분): ${canonical(diagnostics)}. 진단 확대는 실제 참조 목록과 구분한다.\n규칙 정본: ${profile.documents.join(", ")}\n표정 설계: ${expression ? canonical(expression) : "기존 명령 호환 모드"}\n작업 요청: ${request}\n출력은 글자 없는 실제 알파 투명 배경 캐릭터 한 명. 생성 결과는 후보이며 자동 승인하지 않는다.\n`;
-  fs.writeFileSync(local(prompt), text);
+  const creativeText=creativeBrief?`Use case: stylized-concept. One individual Jango emoticon illustration, edited from the attached v18 reference artwork.\nUser-authorized candidate-only creative brief: ${canonical(readJson(creativeBrief.file))}\nInput image roles in actual attachment order: ${canonical(roles)}\nKeep the recognizable mint refrigerator character, ivory chef hat and apron, peach cheeks, rounded mittens with one thumb and cuff, and two short legs with mint shoes. Preserve the hand-drawn crayon contour and opaque matte colors of image 1.\nThe user explicitly permits expressive eye/mouth changes, flexible facial placement and poses described in this brief. The context-mouth image is a historical style reference, NOT an exact shape/position constraint. Do not force the new expression into one of the four legacy mouth shapes. If the brief requests an open refrigerator door, that is an intentional exception. Other references show identity/style; follow the new requested action instead of copying their poses or props.\nExpression: ${canonical(expression)}\nRequest: ${request}\nFraming: square 1024x1024, entire character from hat to both shoes visible with generous transparent margin. No body parts cropped. Exactly one character. No caption, letters, numbers, logo, watermark, frame, background, cast shadow, or checkerboard. Genuine transparent alpha background. This is a creative candidate, not a signed release.\n`:text;
+  fs.writeFileSync(local(prompt), creativeText);
   const record = { id, policyVersion:rules.version, attachmentVersion:rules.attachmentVersion, styleProfile:name, kind, composition, referenceRoles:roles, diagnosticReferences:diagnostics, diagnosticHashes:Object.fromEntries(diagnostics.map(r=>[r.file,fileHash(r.file)])), request, mouthMode, mouthReason, expression, input, inputSHA256, context: contextBinding(rules,name), references, referenceHashes: Object.fromEntries(references.map((f) => [f, fileHash(f)])), prompt, promptSHA256: fileHash(prompt) };
+  if(creativeBrief)record.creativeBrief=creativeBrief;
   writeJson(`${directory}/preflight.json`, record);
   return record;
 }
 export function check(publicKey = process.env.JANGO_REVIEW_PUBLIC_KEY) {
+  const releases = readJson(`${quality}/releases.json`);
+  assert.equal(releases.version, 1); assert(Array.isArray(releases.entries));
+  for(const entry of releases.entries)assertOpenVersion(entry.id);
+  if(hasHistory()){
+    verifyHistory();
+    for(const row of readHistoricalJson(historyIndex).candidates)validateCandidateRecord(readHistoricalJson(row.file,row.sha256));
+  }
   const set=readMasterSet();
   const history=readJson(`${quality}/history/v18-creation/index.json`);
   assert.equal(history.status,'closed-historical-records');
@@ -339,8 +397,6 @@ export function check(publicKey = process.env.JANGO_REVIEW_PUBLIC_KEY) {
     const normalized=directory.replace(/\/$/,'');
     if(fs.existsSync(local(normalized))) for(const file of filesIn(normalized)) if(file.endsWith('.png')) assert(tracked.has(file), `Unregistered artwork: ${file}`);
   }
-  const releases = readJson(`${quality}/releases.json`);
-  assert.equal(releases.version, 1); assert(Array.isArray(releases.entries));
   const seen = new Set();
   for (const entry of releases.entries) {
     assert(!seen.has(entry.id), "Duplicate release"); seen.add(entry.id);
@@ -350,6 +406,7 @@ export function check(publicKey = process.env.JANGO_REVIEW_PUBLIC_KEY) {
   return releases;
 }
 export function promote(id, review, publicKey = process.env.JANGO_REVIEW_PUBLIC_KEY) {
+  assertOpenVersion(id);
   check(publicKey);
   const report = audit(id);
   assertReview(report, review, publicKey);
@@ -361,9 +418,9 @@ export function parsePrepareArgs(args) {
   const positional=[], options={};
   for(let i=0;i<args.length;i++) {
     if(!args[i].startsWith('--')) {positional.push(args[i]);continue;}
-    const match=/^--(style|kind|composition|panel)(?:=(.*))?$/.exec(args[i]);
+    const match=/^--(style|kind|composition|panel|creative-brief)(?:=(.*))?$/.exec(args[i]);
     assert(match,'Unknown prepare option');
-    const key=match[1]==='style'?'styleProfile':match[1];
+    const key=match[1]==='style'?'styleProfile':match[1]==='creative-brief'?'creativeBrief':match[1];
     assert(!Object.hasOwn(options,key),'Duplicate prepare option');
     const value=match[2]??args[++i];
     assert(typeof value==='string' && value.length>0 && !value.startsWith('--'),'Missing prepare option value');

@@ -1,0 +1,40 @@
+{
+  "version": "v23",
+  "status": "observed-not-approved",
+  "reviewedAt": "2026-10-16",
+  "method": "실제 생성 원화 1254px와 문구 포함 360px, v22 전후 비교 및 80·120px 밝고 어두운 배경을 직접 관찰했다. 요청한 주저앉은 자세와 기운 없는 표정, 장고의 인지·부품 연결·전신·글자 간격을 검토했다. 실기기 카카오톡 검사는 하지 않았다.",
+  "items": [
+    {
+      "number": 29,
+      "id": "29-v23-r1",
+      "mouthMode": "expressive-custom",
+      "observation": "엉덩이를 붙여 주저앉고 두 신발 밑창을 앞으로 내밀었다. 장갑은 양옆으로 내려놓고 어깨를 낮췄다. 반쯤 감긴 눈·아래를 보는 시선·처진 눈썹·짧은 힘없는 입이 지침을 전달한다. 모자, 손잡이·파인애플·경첩, 앞치마·장갑·두 신발의 연결을 보존했다. 문구는 요청한 세 마침표까지 지쳤어... 그대로 조판했다.",
+      "sourceOperation": "공식 built-in imagegen 새 작화 1종",
+      "mouthStatus": "needs-review",
+      "technicalStatus": "pass",
+      "preparation": "pass",
+      "visualStatus": "observed-not-approved",
+      "reviewNote": "새 표현의 입 검사 결과는 needs-review로 보존했다. 검사 좌표는 실제 원화 관찰값이며 자동 통과를 위한 변경이 없다.",
+      "smallPreview": "80·120px에서 처진 눈·팔·주저앉은 실루엣과 두 신발을 관찰했다. 80px의 작은 문구와 마침표, 앞치마 봉제·장갑 격자는 약해진다.",
+      "sourceUnchanged": false,
+      "copyDirection": "절전 중… → 지쳤어...",
+      "selectionDecision": "new-candidate-for-slot-29",
+      "designApproval": "candidate; no external signature"
+    }
+  ],
+  "pairs": [
+    {
+      "numbers": [
+        29
+      ],
+      "result": "누운 절전 표현에서 털썩 주저앉은 지침으로 변경",
+      "evidence": "v22의 옆으로 누운 자세 대신 엉덩이·양 장갑·앞으로 내민 두 발이 바닥에 놓이는 자세다. 반쯤 뜬 눈과 힘없는 입으로 수면과 구분했다. 전후 비교 PNG는 왼쪽 v22, 오른쪽 v23이다."
+    }
+  ],
+  "limitations": [
+    "80px에서 문구·세 마침표와 장갑 격자·봉제 디테일은 약해진다.",
+    "새 표정은 expressive-custom으로 기록해 자동 입 검사를 needs-review로 유지한다.",
+    "PNG 관찰이며 실제 카카오톡 실기기 사용성 검사나 외부 서명이 아니다.",
+    "나머지 31종은 v22 원본·PNG·기록을 사용한다. MASTER·앱·카카오 제출·서명된 출시 변경은 없다."
+  ]
+}

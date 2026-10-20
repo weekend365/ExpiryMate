@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-20",
+  "historyIndex": {
+    "file": "design/jango/quality/history/emoticons-v20-v23/index.json",
+    "sha256": "aa08214f69d2b5447614f70c4f972706a687eb6db2fdd1a57171589a1ad25785"
+  },
+  "resolver": {
+    "file": "scripts/jango-history.mjs",
+    "sha256": "28591f08a858f8031d17db1a282c5f0cbcead755b84065d856982fcb4f4dbc68"
+  },
+  "removed": {
+    "files": 767,
+    "bytes": 316344917,
+    "oldMedia": 670,
+    "diagnostics": 97,
+    "originalsVerified": 97
+  },
+  "preservation": {
+    "protectedFiles": 659,
+    "unchangedProtectedFiles": 656,
+    "imageAndFontFiles": 579,
+    "unchangedImageFontInventorySHA256": "257ebdf53979969c5a7772e36695fc378c8f11bc76ac61298348122479b81c3d",
+    "allowedMetadataChanges": [
+      {
+        "file": "design/jango/emoticons/kakao-32/v24/README.md",
+        "before": "e64425d7d861f9649136e9a35897d3622f563bb388a19321cf8104b06b2da102",
+        "after": "ff7735bf8efe197a0bb27b2a44744b9fc737e3a6bdde462d50722cbf8645ad66"
+      },
+      {
+        "file": "design/jango/emoticons/kakao-32/v24/collection.json",
+        "before": "a35ce6a78206ae9346ed02b40a95871c48c1f2e331cd7403a3378859a5a06bfa",
+        "after": "a83556e9f4b813c0ec63c8bb2ac342a76c4bc7a326eaca91f1129b2d68914f84"
+      },
+      {
+        "file": "design/jango/emoticons/kakao-32/v24/inspection-status.json",
+        "before": "0fcdf2ca4b6725ff47c48a6d48ad00b0a0cdb139f9b22a5a8a84b6f03696f72b",
+        "after": "c902cb5740ae0dc4473a15ad24113ab88bf0266c202145338cce5ab41841de60"
+      }
+    ],
+    "verifiedRetainedOrMovedFiles": 1007,
+    "mouthAndTechnicalReportsUnchanged": 64,
+    "measurementValuesROIAndUncertaintyUnchanged": true,
+    "measurementSupportFilesUnchanged": 20,
+    "bibleSHA256Before": "3e4a0e8d9ae306e46e01e195bafaa300a01c2d6b9f352bb9960acca89d14a44c",
+    "bibleSHA256After": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84"
+  },
+  "finalVersion": "v24",
+  "activeMaster": "v18",
+  "slot29": "지쳤어...",
+  "preparation": {
+    "stale": 32,
+    "rewrittenHistoricalPreflights": 0
+  },
+  "closedCandidates": 97,
+  "signedReleases": 0,
+  "commitCreated": false,
+  "permanentImageArchiveCreated": false,
+  "previous197CleanupReceipt": {
+    "file": "design/jango/quality/cleanup/20261020.json",
+    "sha256": "cc1316a891140e22968cb105d68639b9c7ed2647ac930580b1b62c46f6b26aae"
+  },
+  "tests": {
+    "jango": 40,
+    "shared": 162,
+    "api": 589,
+    "optionalDatabaseSkipped": 6,
+    "mobile": 582
+  },
+  "schemaVersion": 1,
+  "status": "verified",
+  "scope": "Authorized v20–v23 resource retirement; preserve v18 MASTER, v24 design bytes and app assets. No new generation, submission, signed release or commit.",
+  "commands": [
+    {
+      "command": "pnpm jango:history:cleanup --check",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm jango:cleanup",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm jango:final:check",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm jango:check",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm test (includes pnpm jango:test)",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile mascot:measure",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile mascot:anatomy:audit",
+      "exitCode": 0
+    }
+  ],
+  "recovery": "both temporary recovery copies removed after all validation passed; no permanent image archive"
+}

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-20",
+  "purpose": "Pre-commit resource cleanup",
+  "receipt": "design/jango/quality/cleanup/20261020.json",
+  "receiptSHA256": "cc1316a891140e22968cb105d68639b9c7ed2647ac930580b1b62c46f6b26aae",
+  "removed": {
+    "files": 197,
+    "bytes": 76997267,
+    "allRemainAbsent": true,
+    "allReconstructedByteForByteBeforeDeletion": true
+  },
+  "preserved": {
+    "files": 1833,
+    "inventorySHA256": "beb36a5c0de37ffd6375b57105988fc7ca556220aa1099205d87ce954a43fe4b",
+    "allMatch": true,
+    "curatedStickers": 32,
+    "curatedOriginals": 32,
+    "galleryLinks": 486,
+    "releaseListUnchanged": true
+  },
+  "validation": {
+    "targetedCleanupTests": {
+      "passed": 2,
+      "failed": 0
+    },
+    "reportsRefresh": {
+      "total": 129,
+      "preparation": {
+        "pass": 33,
+        "stale": 64,
+        "missing": 0,
+        "master-adoption": 32
+      }
+    },
+    "docsCheck": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "rootTest": {
+      "exitCode": 0,
+      "jango": {
+        "passed": 36,
+        "failed": 0,
+        "includesFullGateChecks": true
+      },
+      "shared": {
+        "passed": 162
+      },
+      "api": {
+        "passed": 589,
+        "skipped": 6
+      },
+      "mobile": {
+        "passed": 582
+      }
+    }
+  },
+  "commitCreated": false
+}

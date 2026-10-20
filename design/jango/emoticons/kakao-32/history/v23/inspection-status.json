@@ -1,0 +1,65 @@
+{
+  "approval": "candidate; external signature required",
+  "entries": [
+    {
+      "id": "29-v23-r1",
+      "number": 29,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 978,
+          "components": 1,
+          "fill": 0.489,
+          "holes": 0,
+          "touchesEdge": false,
+          "status": "needs-review"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1023,
+          "components": 1,
+          "fill": 0.4736111111111111,
+          "holes": 0,
+          "touchesEdge": false,
+          "status": "needs-review"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1060,
+          "components": 1,
+          "fill": 0.49074074074074076,
+          "holes": 0,
+          "touchesEdge": false,
+          "status": "needs-review"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 84,
+          "top": 17,
+          "right": 282,
+          "bottom": 339,
+          "margin": 17
+        },
+        "sourceBounds": {
+          "left": 202,
+          "top": 60,
+          "right": 1052,
+          "bottom": 1219,
+          "margin": 34
+        }
+      },
+      "observation": "엉덩이를 붙여 주저앉고 두 신발 밑창을 앞으로 내밀었다. 양 장갑은 골반 옆, 눈은 반쯤 감겨 아래를 향하고 눈썹과 짧은 입이 처져 기운이 없다. 모자·문 손잡이·파인애플·경첩·앞치마와 두 장갑의 연결이 보인다."
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-16",
+  "baseVersion": "v22",
+  "concept": "29번 · 지쳤어...",
+  "scope": "one revised candidate only; remaining 31 use preferred v22 candidates; no MASTER/app/submission/release changes",
+  "method": "One official imagegen redraw from active v18 MASTER; separate v22 Gamja Flower lettering and deterministic full-body layout",
+  "redraws": [
+    29
+  ],
+  "captionChanges": {
+    "29": "지쳤어..."
+  },
+  "typography": {
+    "font": "GamjaFlower-Regular",
+    "fontDisplayName": "감자꽃 · Gamja Flower",
+    "referenceText": "장고야 부탁해",
+    "sizeBasis": "font-reference",
+    "referenceInkHeights360": [
+      30,
+      32,
+      36
+    ],
+    "outline360": 1.8,
+    "inkStrokePercent": 1.6,
+    "punctuationScale": 0.55,
+    "rotationDegrees": [
+      -3,
+      0,
+      3
+    ]
+  },
+  "partial": true,
+  "numbers": [
+    29
+  ]
+}

@@ -1,0 +1,331 @@
+{
+  "status": "candidate-curation",
+  "baseVersion": "v22",
+  "changedNumbers": [
+    29
+  ],
+  "newImageGeneration": 1,
+  "unchangedV22Png": 31,
+  "items": [
+    {
+      "number": 1,
+      "title": "안녕!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/01.png",
+      "sha256": "5d8234db588eafb3c6d4a46624a12b74dff1ef09c7d911db79efc18d60f4bf56",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/01-r1.png",
+      "sourceSHA256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 2,
+      "title": "좋아!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/02.png",
+      "sha256": "3090a6ed642e5c92e4aa4ca5d94ef6cacef94f31b0d18c19d8cb96eb7a1f0cd7",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/02-r1.png",
+      "sourceSHA256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 3,
+      "title": "최고야!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/03.png",
+      "sha256": "910344bebb1d584af9dc69c8304588e983510b17a4d4c809830eae30dbcefff2",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/03-r1.png",
+      "sourceSHA256": "d89963e38a42b5aa64752c14ee8c75f50f30b629e89891d3dd7d815ecd67c8fb",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 4,
+      "title": "고마워!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/04.png",
+      "sha256": "7d278998817990eee593a0fe4dabf7d2018903de813e8e1efa0870c68809a810",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/04-r1.png",
+      "sourceSHA256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 5,
+      "title": "사랑해",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/05.png",
+      "sha256": "bf775897bb70bce6c30f6f76d999b19eade728cc4a06be80bb083916f59b32cf",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/05-r1.png",
+      "sourceSHA256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 6,
+      "title": "히히",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/06.png",
+      "sha256": "6d7cf5770f00e31502cb208f2258bfdf8d031815a7d41ef693b6b20de834836d",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/06-r1.png",
+      "sourceSHA256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 7,
+      "title": "파이팅!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/07.png",
+      "sha256": "94a1a71d6f7c69e42dcf95d070a0f885e42bbcd6e262f6ed8f7ba1d545619857",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/07-r1.png",
+      "sourceSHA256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 8,
+      "title": "잘했어!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/08.png",
+      "sha256": "80cc5da5e4e88ea6e69ea2ba4c79a723e496d13d0ecbd6917c8063932383d06d",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/08-r1.png",
+      "sourceSHA256": "e65542fa8f97666d439611633f68601b526ee0a4d7ee44665519d78d4a74b01e",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 9,
+      "title": "알겠어!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/09.png",
+      "sha256": "cde10a0e89b34211f8088746290ee4b5bb22609f3f1edd39bab09f747191a89c",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/09-r1.png",
+      "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 10,
+      "title": "잠깐만!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/10.png",
+      "sha256": "d93c118d36a8791c7b06c648ffec9a4d01be27458abc2d6bfe0a4c748c17615d",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/10-r1.png",
+      "sourceSHA256": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 11,
+      "title": "멍…",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/11.png",
+      "sha256": "2bf170576845340ffe85c63693919add45f5ea0b8bda90ed8a31796e52eb4491",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/11-r1.png",
+      "sourceSHA256": "dab6bfe89d814d1f721e7ea0d083220c5f10e28720aa24e4d82e9f42407c6d36",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 12,
+      "title": "어라?",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/12.png",
+      "sha256": "abce714b358b6cfbc18143ee43c45ffeb6637352f8bfb2a13fa972a00085a7a2",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/12-r1.png",
+      "sourceSHA256": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 13,
+      "title": "헉!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/13.png",
+      "sha256": "c09cf3a7f93e5f1e50f01dfd0a186182c66ccb9b500b756daab8e7298f7c4183",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/13-r1.png",
+      "sourceSHA256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 14,
+      "title": "아하!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/14.png",
+      "sha256": "4c811fd5cb48e7238fb692ba63d11282bd7aad8911614cb9fd435349e3810477",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/14-r1.png",
+      "sourceSHA256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 15,
+      "title": "난 패스!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/15.png",
+      "sha256": "e8b0ffc87d76069040c21dae636eec49bdbe0a7f2a799ec9b509edd386feeedd",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/15-r1.png",
+      "sourceSHA256": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 16,
+      "title": "축하해!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/16.png",
+      "sha256": "9dba8fbefe6f5a082059fdd76b1a211d22672e3be6a72128f141d1bed14fdbfd",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/16-r1.png",
+      "sourceSHA256": "7de28e512527b8ad1f0433a20e726d8940a7cf22bc4de77db2315179680b3ea2",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 17,
+      "title": "미안해…",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/17.png",
+      "sha256": "33b3aa46b3b4df51f1f299af6258942b4397ecb63bcc994497305f1e061528eb",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/17-r1.png",
+      "sourceSHA256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 18,
+      "title": "괜찮아",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/18.png",
+      "sha256": "26cc23e394a9815b20d62206f7494ab10dbf781d21356bfe689f3e2a7d2d38d1",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/18-r1.png",
+      "sourceSHA256": "e53aa2e370782a9b9e545c122050c9e52419255fb58103a114a471800fca2c8b",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 19,
+      "title": "좀 쉬자",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/19.png",
+      "sha256": "589be65398c462fffeeb604a7ab18c96fcc81615c06c25614c8089b81518a38e",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/19-r1.png",
+      "sourceSHA256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 20,
+      "title": "배고파…",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/20.png",
+      "sha256": "8a30cada80418da0893d7960f3eb6df144c29a875ec03d2059927eaef1eb90d0",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/20-r1.png",
+      "sourceSHA256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 21,
+      "title": "한 입만",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/21.png",
+      "sha256": "80ea1310cecc02149c5cfc525272b21fb5e13b46ec6e4e84731ddc43c98c8e29",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/21-r1.png",
+      "sourceSHA256": "c14212f69901605fcb8c27929644cf659d9ba7df7d7aa2c8bdb61203adc33e27",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 22,
+      "title": "맛있어!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/22.png",
+      "sha256": "b86660c44a48495df6ce87a84478cdd7ed61aad13da1b83c7f17e765aeaa2581",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/22-r1.png",
+      "sourceSHA256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 23,
+      "title": "내가 할게!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/23.png",
+      "sha256": "cb18875350dd04906c4ccb1e67a272e000e53bf716183097ee374ead1aefa2a2",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/23-r1.png",
+      "sourceSHA256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 24,
+      "title": "다 됐어!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/24.png",
+      "sha256": "6a84e5fe2826e6610a1eded0e15f75943584714be4f05ddc062c055cd9ecd324",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/24-r1.png",
+      "sourceSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 25,
+      "title": "확인했어!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/25.png",
+      "sha256": "5b0174fb1735692c206037ae4682f9a3ee6b79375cc70693a8358aea34821b9d",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/25-r1.png",
+      "sourceSHA256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 26,
+      "title": "같이 가자!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/26.png",
+      "sha256": "6ff659b80aa68b04b43340a37f568d561ff7a3d28ca8ad3d4a3c87cef0a93309",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/26-r1.png",
+      "sourceSHA256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 27,
+      "title": "밥 먹었어?",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/27.png",
+      "sha256": "7386359d881a7f55c2b6b91d7cca0374afc972830a9da68583cc2277b3b1e9da",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/27-r1.png",
+      "sourceSHA256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 28,
+      "title": "뭐 먹을까?",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/28.png",
+      "sha256": "cfac3da518dbfe7464e37a1e8ad220cfd8d3afc9d6a22c58f02a9b2e871fc545",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/28-r1.png",
+      "sourceSHA256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 29,
+      "title": "지쳤어...",
+      "file": "design/jango/emoticons/kakao-32/v23/stickers/29.png",
+      "sha256": "861281848037939de5e880d72b07eea2632746d3ac26f60f4cb68339e84a6ac3",
+      "source": "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png",
+      "sourceSHA256": "b546a8160bf5a83dbdf95d166bd5060f27b528254f4c7a70b4dcf731e5d7714d",
+      "record": "design/jango/emoticons/kakao-32/v23/manifest.json",
+      "operation": "new-generated-candidate"
+    },
+    {
+      "number": 30,
+      "title": "잘 자",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/30.png",
+      "sha256": "4d908a6bd8e25e1ad693da6fb14aaefa68ba7e019f3c13ac80cfbd3047953dab",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/30-r1.png",
+      "sourceSHA256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 31,
+      "title": "나도 껴줘",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/31.png",
+      "sha256": "6ff60ec3b1970268d5dfafeb7b91b9eb92f9b410fcf77cf7596d787e7fd47577",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/31-r1.png",
+      "sourceSHA256": "f67e89026ae82d91cd9bb6ae64da58daf95bdeb2f946698f23e1d47142752c06",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    },
+    {
+      "number": 32,
+      "title": "내 맘 받아!",
+      "file": "design/jango/emoticons/kakao-32/v22/stickers/32.png",
+      "sha256": "ae4189b9218892caf9a39a1a6e8de6808cb286d28e66ec33a0760daf5ad733b6",
+      "source": "design/jango/emoticons/kakao-32/v22/source-originals/32-r1.png",
+      "sourceSHA256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+      "record": "design/jango/emoticons/kakao-32/v22/manifest.json",
+      "operation": "unchanged-v22-candidate"
+    }
+  ]
+}

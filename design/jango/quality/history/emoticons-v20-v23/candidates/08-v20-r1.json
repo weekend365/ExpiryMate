@@ -1,0 +1,33 @@
+{
+  "id": "08-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/08-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/08.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    583,
+    677,
+    123,
+    112
+  ],
+  "tiltDegrees": -14,
+  "visibility": "clear",
+  "expression": {
+    "family": "상대의 행동 칭찬",
+    "intensity": 2,
+    "eyes": "한 눈은 윙크, 반대 눈은 기본 타원",
+    "brows": "없음",
+    "pose": "한쪽 장갑 엄지만 들어 상대를 칭찬하고 얼굴을 가볍게 기울인다. 작은 별 하나. 분리 검지 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 8
+  },
+  "preflight": "design/jango/quality/jobs/08-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/08-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

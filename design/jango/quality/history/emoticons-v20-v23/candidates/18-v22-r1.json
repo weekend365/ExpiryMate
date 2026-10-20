@@ -1,0 +1,39 @@
+{
+  "id": "18-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/18-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/18.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    594,
+    671,
+    112,
+    69
+  ],
+  "tiltDegrees": -3,
+  "visibility": "clear",
+  "expression": {
+    "family": "안심과 포옹",
+    "intensity": 2,
+    "eyes": "따뜻하게 감긴 곡선 눈",
+    "brows": "편안함",
+    "pose": "상대를 안아주려고 두 팔을 넓게 앞으로 벌리고 무릎을 조금 굽혀 몸을 낮춘다. 가슴 앞 하트 소품을 없앤다. 장갑 손바닥을 관객에게 열어 보이되 손가락은 그리지 않는다. 몸을 앞으로 숙인 따뜻한 작은 포옹, 두 신발이 모두 보인다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 18
+  },
+  "preflight": "design/jango/quality/jobs/18-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/18-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v22/creative-intents/18.json",
+    "sha256": "85a2bf1da4cbd1d3207a6f869d657ca42376a34f86a7cd5ae0cd419ecd0d1509",
+    "referenceMouthMode": "idle-u",
+    "scope": "candidate-only"
+  }
+}

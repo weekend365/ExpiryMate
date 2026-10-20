@@ -1,0 +1,10 @@
+{
+  "version": "v24",
+  "role": "user-selected-emoticon-design",
+  "path": "design/jango/emoticons/kakao-32/v24",
+  "gallery": "design/jango/emoticons/kakao-32/v24/index.html",
+  "collection": "design/jango/emoticons/kakao-32/v24/collection.json",
+  "collectionSHA256": "a35ce6a78206ae9346ed02b40a95871c48c1f2e331cd7403a3378859a5a06bfa",
+  "activeCharacterMaster": "v18",
+  "signedRelease": false
+}

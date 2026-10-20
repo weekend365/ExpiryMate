@@ -1,0 +1,33 @@
+{
+  "id": "25-v21-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v21",
+  "source": "design/jango/emoticons/kakao-32/v21/source-originals/25-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v21/stickers/25.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    572,
+    654,
+    125,
+    98
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "확인 완료",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "한 장갑에 작은 체크리스트 판을 들고 다른 장갑 전체로 체크 표시를 가리킨다. 판에는 큰 민트 체크 도형 두 개만 있고 글자는 없다. 냉장고 문은 닫힘 유지."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 25
+  },
+  "preflight": "design/jango/quality/jobs/25-v21-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v21/derivation-records/25-v21-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

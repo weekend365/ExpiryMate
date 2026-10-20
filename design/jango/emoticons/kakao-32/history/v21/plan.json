@@ -1,0 +1,1642 @@
+[
+  {
+    "n": 1,
+    "title": "안녕!",
+    "line": "안녕!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "인사",
+    "chat": "인사를 상대에게 전할 때",
+    "action": "한 장갑을 얼굴 옆에서 흔들고 다른 손은 자연스럽게 내린 인사. 작은 노랑 인사 동작선 2개.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑을 얼굴 옆에서 흔들고 다른 손은 자연스럽게 내린 인사. 작은 노랑 인사 동작선 2개.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "인사",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "한 장갑을 얼굴 옆에서 흔들고 다른 손은 자연스럽게 내린 인사. 작은 노랑 인사 동작선 2개."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/01-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 1
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 440,
+        "y": 115,
+        "size": 180,
+        "rotation": -3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 2,
+    "title": "좋아!",
+    "line": "좋아!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "동의·호응",
+    "chat": "동의·호응를 상대에게 전할 때",
+    "action": "양 장갑을 볼 옆 높이로 짧게 들어 반갑게 환호. 몸은 정면, 작은 노랑 동작선.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "양 장갑을 볼 옆 높이로 짧게 들어 반갑게 환호. 몸은 정면, 작은 노랑 동작선.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "동의·호응",
+      "intensity": 2,
+      "eyes": "부드럽게 감은 웃는 곡선 눈",
+      "brows": "없음",
+      "pose": "양 장갑을 볼 옆 높이로 짧게 들어 반갑게 환호. 몸은 정면, 작은 노랑 동작선."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/02-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 2
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 570,
+        "y": 120,
+        "size": 180,
+        "rotation": 3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 126,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 3,
+    "title": "최고야!",
+    "line": "최고야!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "명확한 칭찬",
+    "chat": "다정하지만 허당인 친구의 명확한 칭찬",
+    "action": "한 벙어리장갑의 엄지를 카메라 앞으로 내밀어 크게 보이게 한다. 다른 손은 옆구리. 몸은 살짝 3/4 방향으로 기울이며 두 신발을 안정적으로 벌린다. 엄지는 하나뿐이고 장갑 나머지는 둥근 덩어리. 얼굴을 가리지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 벙어리장갑의 엄지를 카메라 앞으로 내밀어 크게 보이게 한다. 다른 손은 옆구리. 몸은 살짝 3/4 방향으로 기울이며 두 신발을 안정적으로 벌린다. 엄지는 하나뿐이고 장갑 나머지는 둥근 덩어리. 얼굴을 가리지 않는다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "기분 좋게 작게 벌어진 웃는 입, 차콜 안쪽과 작은 살구 혀",
+    "expression": {
+      "family": "명확한 칭찬",
+      "intensity": 3,
+      "eyes": "자신 있게 웃는 눈",
+      "brows": "부드러운 자신감",
+      "pose": "한 벙어리장갑의 엄지를 카메라 앞으로 내밀어 크게 보이게 한다. 다른 손은 옆구리. 몸은 살짝 3/4 방향으로 기울이며 두 신발을 안정적으로 벌린다. 엄지는 하나뿐이고 장갑 나머지는 둥근 덩어리. 얼굴을 가리지 않는다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 3
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 535,
+        "y": 120,
+        "size": 180,
+        "rotation": -4,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 126,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/03.json"
+  },
+  {
+    "n": 4,
+    "title": "고마워!",
+    "line": "고마워!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "감사",
+    "chat": "감사를 상대에게 전할 때",
+    "action": "작은 분홍 빨강 하트를 두 장갑으로 받쳐 상대에게 앞으로 내민다. 하트가 입을 가리지 않게 가슴 아래에 둔다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "작은 분홍 빨강 하트를 두 장갑으로 받쳐 상대에게 앞으로 내민다. 하트가 입을 가리지 않게 가슴 아래에 둔다.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "감사",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "작은 분홍 빨강 하트를 두 장갑으로 받쳐 상대에게 앞으로 내민다. 하트가 입을 가리지 않게 가슴 아래에 둔다."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/04-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 4
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 490,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 5,
+    "title": "사랑해",
+    "line": "사랑해",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "애정",
+    "chat": "애정를 상대에게 전할 때",
+    "action": "두 장갑을 양 볼 가까이 모으고 살짝 부끄럽게 몸을 안쪽으로 모은다. 작은 분홍 하트 2개, 손가락 하트 아님.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "두 장갑을 양 볼 가까이 모으고 살짝 부끄럽게 몸을 안쪽으로 모은다. 작은 분홍 하트 2개, 손가락 하트 아님.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "애정",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "두 장갑을 양 볼 가까이 모으고 살짝 부끄럽게 몸을 안쪽으로 모은다. 작은 분홍 하트 2개, 손가락 하트 아님."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/05-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 5
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 550,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 6,
+    "title": "히히",
+    "line": "히히",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "작은 웃음",
+    "chat": "작은 웃음를 상대에게 전할 때",
+    "action": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "작은 웃음",
+      "intensity": 2,
+      "eyes": "부드럽게 감은 웃는 곡선 눈",
+      "brows": "없음",
+      "pose": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/06-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 6
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 390,
+        "y": 130,
+        "size": 180,
+        "rotation": -5,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 7,
+    "title": "파이팅!",
+    "line": "파이팅!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "응원",
+    "chat": "응원를 상대에게 전할 때",
+    "action": "한 장갑 주먹을 높이 들고 다른 장갑은 허리 옆, 두 발을 안정적으로 벌린 힘찬 응원. 배경 색칠 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑 주먹을 높이 들고 다른 장갑은 허리 옆, 두 발을 안정적으로 벌린 힘찬 응원. 배경 색칠 없음.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "응원",
+      "intensity": 3,
+      "eyes": "또렷한 기본 타원 눈",
+      "brows": "작고 결의 있는 눈썹",
+      "pose": "한 장갑 주먹을 높이 들고 다른 장갑은 허리 옆, 두 발을 안정적으로 벌린 힘찬 응원. 배경 색칠 없음."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/07-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 7
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 560,
+        "y": 125,
+        "size": 180,
+        "rotation": -4,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 128,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 8,
+    "title": "잘했어!",
+    "line": "잘했어!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "다정한 칭찬",
+    "chat": "다정하지만 허당인 친구의 다정한 칭찬",
+    "action": "상대 쪽인 화면 오른쪽으로 몸을 10도 정도 기울여 작고 다정한 박수를 보낸다. 두 벙어리장갑은 가슴 앞에서 접촉 직전이며 짧은 동작선 두 개만 있다. 두 팔의 연결과 두 신발이 모두 보인다. 점프하지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "상대 쪽인 화면 오른쪽으로 몸을 10도 정도 기울여 작고 다정한 박수를 보낸다. 두 벙어리장갑은 가슴 앞에서 접촉 직전이며 짧은 동작선 두 개만 있다. 두 팔의 연결과 두 신발이 모두 보인다. 점프하지 않는다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "짧고 작은 U 미소",
+    "expression": {
+      "family": "다정한 칭찬",
+      "intensity": 2,
+      "eyes": "따뜻하게 가늘어진 웃는 눈",
+      "brows": "편안함",
+      "pose": "상대 쪽인 화면 오른쪽으로 몸을 10도 정도 기울여 작고 다정한 박수를 보낸다. 두 벙어리장갑은 가슴 앞에서 접촉 직전이며 짧은 동작선 두 개만 있다. 두 팔의 연결과 두 신발이 모두 보인다. 점프하지 않는다."
+    },
+    "phase": 1,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 8
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 540,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/08.json"
+  },
+  {
+    "n": 9,
+    "title": "알겠어!",
+    "line": "알겠어!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "확인·수긍",
+    "chat": "확인·수긍를 상대에게 전할 때",
+    "action": "두 장갑을 가슴 앞에 가지런히 모으고 고개를 살짝 끄덕인다. 위아래 짧은 동작선 두 개.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "두 장갑을 가슴 앞에 가지런히 모으고 고개를 살짝 끄덕인다. 위아래 짧은 동작선 두 개.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "확인·수긍",
+      "intensity": 1,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "두 장갑을 가슴 앞에 가지런히 모으고 고개를 살짝 끄덕인다. 위아래 짧은 동작선 두 개."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/09-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 9
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 470,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 10,
+    "title": "잠깐만!",
+    "line": "잠깐만!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "대기 요청",
+    "chat": "대기 요청를 상대에게 전할 때",
+    "action": "정면 전신으로 한 벙어리장갑을 얼굴 옆 높이에서 상대 쪽으로 들어 잠깐 멈춤을 요청. 반대 손은 아래. 양발은 안정적으로 바닥에 둠.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "정면 전신으로 한 벙어리장갑을 얼굴 옆 높이에서 상대 쪽으로 들어 잠깐 멈춤을 요청. 반대 손은 아래. 양발은 안정적으로 바닥에 둠.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "대기 요청",
+      "intensity": 2,
+      "eyes": "기본 어두운 타원 눈",
+      "brows": "약하게 올라간 부드러운 눈썹",
+      "pose": "정면 전신으로 한 벙어리장갑을 얼굴 옆 높이에서 상대 쪽으로 들어 잠깐 멈춤을 요청. 반대 손은 아래. 양발은 안정적으로 바닥에 둠."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/10-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 10
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 500,
+        "y": 120,
+        "size": 180,
+        "rotation": -2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 11,
+    "title": "멍…",
+    "line": "멍…",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "멍함",
+    "chat": "다정하지만 허당인 친구의 멍함",
+    "action": "냉장고 머리의 오른쪽 경첩을 중심으로 앞문이 25도 정도 살짝 열렸다. 문 바깥쪽에 얼굴과 왼쪽 손잡이·파인애플이 그대로 붙어 있고 얼굴이 관객에게 읽힌다. 벌어진 왼쪽 틈으로 텅 빈 아이보리 내부와 빈 선반 하나가 보인다. 문과 냉장고 뒤쪽 상자는 실제 경첩으로 연결되어 있다. 어깨와 양 장갑은 축 처지고 두 발은 느슨하게 벌어진다. 음식·뇌·분리된 머리·두 번째 얼굴을 넣지 않는다. 모자는 전체 냉장고 머리 위에 하나만 있다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "냉장고 머리의 오른쪽 경첩을 중심으로 앞문이 25도 정도 살짝 열렸다. 문 바깥쪽에 얼굴과 왼쪽 손잡이·파인애플이 그대로 붙어 있고 얼굴이 관객에게 읽힌다. 벌어진 왼쪽 틈으로 텅 빈 아이보리 내부와 빈 선반 하나가 보인다. 문과 냉장고 뒤쪽 상자는 실제 경첩으로 연결되어 있다. 어깨와 양 장갑은 축 처지고 두 발은 느슨하게 벌어진다. 음식·뇌·분리된 머리·두 번째 얼굴을 넣지 않는다. 모자는 전체 냉장고 머리 위에 하나만 있다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "작고 느슨한 짧은 수평 입",
+    "expression": {
+      "family": "멍함",
+      "intensity": 2,
+      "eyes": "반쯤 감겨 힘이 빠진 눈",
+      "brows": "기울어진 무기력한 눈썹",
+      "pose": "냉장고 머리의 오른쪽 경첩을 중심으로 앞문이 25도 정도 살짝 열렸다. 문 바깥쪽에 얼굴과 왼쪽 손잡이·파인애플이 그대로 붙어 있고 얼굴이 관객에게 읽힌다. 벌어진 왼쪽 틈으로 텅 빈 아이보리 내부와 빈 선반 하나가 보인다. 문과 냉장고 뒤쪽 상자는 실제 경첩으로 연결되어 있다. 어깨와 양 장갑은 축 처지고 두 발은 느슨하게 벌어진다. 음식·뇌·분리된 머리·두 번째 얼굴을 넣지 않는다. 모자는 전체 냉장고 머리 위에 하나만 있다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 11
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        275,
+        932,
+        703
+      ],
+      "lettering": {
+        "x": 600,
+        "y": 150,
+        "size": 180,
+        "rotation": 3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 126,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/11.json"
+  },
+  {
+    "n": 12,
+    "title": "어라?",
+    "line": "어라?",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "가벼운 당황",
+    "chat": "다정하지만 허당인 친구의 가벼운 당황",
+    "action": "한 발을 반 걸음 뒤로 빼며 몸이 멈칫한다. 양 장갑은 허리 앞에서 어정쩡하게 벌어져 있다. 한쪽 눈썹과 작은 땀방울 하나로 가벼운 당황. 놀라 크게 뛰거나 환하게 웃지 않는다. 두 신발 모두 보인다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 발을 반 걸음 뒤로 빼며 몸이 멈칫한다. 양 장갑은 허리 앞에서 어정쩡하게 벌어져 있다. 한쪽 눈썹과 작은 땀방울 하나로 가벼운 당황. 놀라 크게 뛰거나 환하게 웃지 않는다. 두 신발 모두 보인다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "작고 둥근 빈 O형 입, 아이보리 내부, 차콜 외곽선, 혀와 치아 없음",
+    "expression": {
+      "family": "가벼운 당황",
+      "intensity": 2,
+      "eyes": "크기가 살짝 다른 둥근 눈",
+      "brows": "한쪽만 올라간 비대칭 눈썹",
+      "pose": "한 발을 반 걸음 뒤로 빼며 몸이 멈칫한다. 양 장갑은 허리 앞에서 어정쩡하게 벌어져 있다. 한쪽 눈썹과 작은 땀방울 하나로 가벼운 당황. 놀라 크게 뛰거나 환하게 웃지 않는다. 두 신발 모두 보인다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 12
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        100,
+        285,
+        878,
+        693
+      ],
+      "lettering": {
+        "x": 390,
+        "y": 140,
+        "size": 180,
+        "rotation": -6,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 126,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/12.json"
+  },
+  {
+    "n": 13,
+    "title": "헉!",
+    "line": "헉!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "큰 놀람",
+    "chat": "큰 놀람를 상대에게 전할 때",
+    "action": "양 장갑을 몸 옆으로 멈춰 세우고 한 발을 뒤로 물리며 상체가 멈칫한다. 작은 빨강 놀람선. 흰자·동공·빈 O입을 절대 복제하지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "양 장갑을 몸 옆으로 멈춰 세우고 한 발을 뒤로 물리며 상체가 멈칫한다. 작은 빨강 놀람선. 흰자·동공·빈 O입을 절대 복제하지 않는다.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "큰 놀람",
+      "intensity": 3,
+      "eyes": "기본 타원 범위 내 높이 110% 정도의 눈",
+      "brows": "높게 올라간 작은 눈썹",
+      "pose": "양 장갑을 몸 옆으로 멈춰 세우고 한 발을 뒤로 물리며 상체가 멈칫한다. 작은 빨강 놀람선. 흰자·동공·빈 O입을 절대 복제하지 않는다."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/13-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 13
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        135,
+        305,
+        843,
+        673
+      ],
+      "lettering": {
+        "x": 250,
+        "y": 170,
+        "size": 180,
+        "rotation": -7,
+        "maxWidth": 400,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 144,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 14,
+    "title": "아하!",
+    "line": "아하!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "깨달음",
+    "chat": "깨달음를 상대에게 전할 때",
+    "action": "한 장갑 전체를 들어 깨달음을 표현하고 머리 옆에 작은 노란 전구 한 개. 분리된 검지가 아니라 장갑 주머니 전체와 기존 엄지로 손짓.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑 전체를 들어 깨달음을 표현하고 머리 옆에 작은 노란 전구 한 개. 분리된 검지가 아니라 장갑 주머니 전체와 기존 엄지로 손짓.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "깨달음",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "한쪽 눈썹 살짝 올라감",
+      "pose": "한 장갑 전체를 들어 깨달음을 표현하고 머리 옆에 작은 노란 전구 한 개. 분리된 검지가 아니라 장갑 주머니 전체와 기존 엄지로 손짓."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/14-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 14
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 650,
+        "y": 130,
+        "size": 180,
+        "rotation": 4,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 124,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 15,
+    "title": "난 패스!",
+    "line": "난 패스!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "부드러운 거절",
+    "chat": "부드러운 거절를 상대에게 전할 때",
+    "action": "정면 전신으로 두 팔과 벙어리장갑을 가슴 앞에서 작은 X로 교차해 부드럽게 거절. 손목과 소매가 연결되고 두 신발이 보임. 선글라스와 별은 제거.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "정면 전신으로 두 팔과 벙어리장갑을 가슴 앞에서 작은 X로 교차해 부드럽게 거절. 손목과 소매가 연결되고 두 신발이 보임. 선글라스와 별은 제거.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "부드러운 거절",
+      "intensity": 2,
+      "eyes": "기본 어두운 타원 눈",
+      "brows": "공격적이지 않은 편안한 눈썹",
+      "pose": "정면 전신으로 두 팔과 벙어리장갑을 가슴 앞에서 작은 X로 교차해 부드럽게 거절. 손목과 소매가 연결되고 두 신발이 보임. 선글라스와 별은 제거."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/15-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 15
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 500,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 16,
+    "title": "축하해!",
+    "line": "축하해!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "큰 축하",
+    "chat": "다정하지만 허당인 친구의 큰 축하",
+    "action": "두 팔을 머리 양옆으로 위로 벌리고 두 발을 동시에 띄워 폴짝 뛰며 축하한다. 무릎은 살짝 구부리고 두 신발 사이 틈이 보인다. 소량의 노랑과 민트 색종이 4조각만 주위에 흩날린다. 모든 색종이와 모자·신발이 화면 안에 있다. 손에는 물건이 없고 박수 자세가 아니다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "두 팔을 머리 양옆으로 위로 벌리고 두 발을 동시에 띄워 폴짝 뛰며 축하한다. 무릎은 살짝 구부리고 두 신발 사이 틈이 보인다. 소량의 노랑과 민트 색종이 4조각만 주위에 흩날린다. 모든 색종이와 모자·신발이 화면 안에 있다. 손에는 물건이 없고 박수 자세가 아니다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "기쁘게 열린 작고 차콜인 입과 작은 살구 혀",
+    "expression": {
+      "family": "큰 축하",
+      "intensity": 3,
+      "eyes": "활짝 접힌 웃는 눈",
+      "brows": "들뜬 눈썹",
+      "pose": "두 팔을 머리 양옆으로 위로 벌리고 두 발을 동시에 띄워 폴짝 뛰며 축하한다. 무릎은 살짝 구부리고 두 신발 사이 틈이 보인다. 소량의 노랑과 민트 색종이 4조각만 주위에 흩날린다. 모든 색종이와 모자·신발이 화면 안에 있다. 손에는 물건이 없고 박수 자세가 아니다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 16
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 540,
+        "y": 130,
+        "size": 180,
+        "rotation": -5,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 128,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/16.json"
+  },
+  {
+    "n": 17,
+    "title": "미안해…",
+    "line": "미안해…",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "사과",
+    "chat": "사과를 상대에게 전할 때",
+    "action": "양손을 앞치마 아래쪽에 낮게 모으고 고개와 상체를 상대에게 약 15도 숙여 사과한다. 작은 파랑 떨림선 두 개.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "양손을 앞치마 아래쪽에 낮게 모으고 고개와 상체를 상대에게 약 15도 숙여 사과한다. 작은 파랑 떨림선 두 개.",
+    "mouthMode": "sad-arc",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "사과",
+      "intensity": 2,
+      "eyes": "기본 타원 눈을 조심스럽게 아래로 향함, 위치 범위 유지",
+      "brows": "안쪽이 조금 올라간 걱정 눈썹",
+      "pose": "양손을 앞치마 아래쪽에 낮게 모으고 고개와 상체를 상대에게 약 15도 숙여 사과한다. 작은 파랑 떨림선 두 개."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/17-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 17
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        265,
+        932,
+        713
+      ],
+      "lettering": {
+        "x": 610,
+        "y": 155,
+        "size": 180,
+        "rotation": 3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 108,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 18,
+    "title": "괜찮아",
+    "line": "괜찮아",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "안심과 포옹",
+    "chat": "다정하지만 허당인 친구의 안심과 포옹",
+    "action": "상대를 안아주려고 두 팔을 넓게 앞으로 벌리고 무릎을 조금 굽혀 몸을 낮춘다. 가슴 앞 하트 소품을 없앤다. 장갑 손바닥을 관객에게 열어 보이되 손가락은 그리지 않는다. 몸을 앞으로 숙인 따뜻한 작은 포옹, 두 신발이 모두 보인다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "상대를 안아주려고 두 팔을 넓게 앞으로 벌리고 무릎을 조금 굽혀 몸을 낮춘다. 가슴 앞 하트 소품을 없앤다. 장갑 손바닥을 관객에게 열어 보이되 손가락은 그리지 않는다. 몸을 앞으로 숙인 따뜻한 작은 포옹, 두 신발이 모두 보인다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "작고 부드러운 U 미소",
+    "expression": {
+      "family": "안심과 포옹",
+      "intensity": 2,
+      "eyes": "따뜻하게 감긴 곡선 눈",
+      "brows": "편안함",
+      "pose": "상대를 안아주려고 두 팔을 넓게 앞으로 벌리고 무릎을 조금 굽혀 몸을 낮춘다. 가슴 앞 하트 소품을 없앤다. 장갑 손바닥을 관객에게 열어 보이되 손가락은 그리지 않는다. 몸을 앞으로 숙인 따뜻한 작은 포옹, 두 신발이 모두 보인다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 18
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 460,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/18.json"
+  },
+  {
+    "n": 19,
+    "title": "좀 쉬자",
+    "line": "좀 쉬자",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "배려·휴식 권유",
+    "chat": "배려·휴식 권유를 상대에게 전할 때",
+    "action": "분홍 하트 무늬가 있는 작은 아이보리 컵을 두 장갑으로 받쳐 상대에게 조심스레 건넨다. 하트는 도형이며 글자 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "분홍 하트 무늬가 있는 작은 아이보리 컵을 두 장갑으로 받쳐 상대에게 조심스레 건넨다. 하트는 도형이며 글자 없음.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "배려·휴식 권유",
+      "intensity": 1,
+      "eyes": "부드러운 기본 타원 눈",
+      "brows": "없음",
+      "pose": "분홍 하트 무늬가 있는 작은 아이보리 컵을 두 장갑으로 받쳐 상대에게 조심스레 건넨다. 하트는 도형이며 글자 없음."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/19-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 19
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 510,
+        "y": 120,
+        "size": 180,
+        "rotation": -2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 20,
+    "title": "배고파…",
+    "line": "배고파…",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "식사 전 상태",
+    "chat": "식사 전 상태를 상대에게 전할 때",
+    "action": "배를 두 장갑으로 감싸고 상체를 조금 숙인다. 머리 옆 작은 생각 기호 안에는 밥그릇 하나만, 글자·로고 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "배를 두 장갑으로 감싸고 상체를 조금 숙인다. 머리 옆 작은 생각 기호 안에는 밥그릇 하나만, 글자·로고 없음.",
+    "mouthMode": "sad-arc",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "식사 전 상태",
+      "intensity": 2,
+      "eyes": "힘이 조금 빠진 기본 타원 눈",
+      "brows": "약한 걱정 눈썹",
+      "pose": "배를 두 장갑으로 감싸고 상체를 조금 숙인다. 머리 옆 작은 생각 기호 안에는 밥그릇 하나만, 글자·로고 없음."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/20-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 20
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 540,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 21,
+    "title": "한 입만",
+    "line": "한 입만",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "조심스러운 욕심",
+    "chat": "다정하지만 허당인 친구의 조심스러운 욕심",
+    "action": "자기 접시를 들고 먹는 포즈를 바꾼다. 화면 오른쪽 아래에 작은 먹음직스러운 접시가 떠 있고 장고가 그 음식을 바라보며 한 벙어리장갑을 아주 조심스럽게 내민다. 다른 장갑은 배 앞에 모은다. 한 발을 앞으로 살짝 디뎌 한 입을 청하는 수줍은 욕심. 접시는 인접한 소품 하나이며 다른 사람이나 손을 추가하지 않는다. 두 발 모두 보인다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "자기 접시를 들고 먹는 포즈를 바꾼다. 화면 오른쪽 아래에 작은 먹음직스러운 접시가 떠 있고 장고가 그 음식을 바라보며 한 벙어리장갑을 아주 조심스럽게 내민다. 다른 장갑은 배 앞에 모은다. 한 발을 앞으로 살짝 디뎌 한 입을 청하는 수줍은 욕심. 접시는 인접한 소품 하나이며 다른 사람이나 손을 추가하지 않는다. 두 발 모두 보인다.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "작은 기대의 미소, 혀를 내밀거나 침을 흘리지 않음",
+    "expression": {
+      "family": "조심스러운 욕심",
+      "intensity": 2,
+      "eyes": "화면 오른쪽 음식에 몰래 꽂힌 시선",
+      "brows": "기대하며 약간 치켜든 눈썹",
+      "pose": "자기 접시를 들고 먹는 포즈를 바꾼다. 화면 오른쪽 아래에 작은 먹음직스러운 접시가 떠 있고 장고가 그 음식을 바라보며 한 벙어리장갑을 아주 조심스럽게 내민다. 다른 장갑은 배 앞에 모은다. 한 발을 앞으로 살짝 디뎌 한 입을 청하는 수줍은 욕심. 접시는 인접한 소품 하나이며 다른 사람이나 손을 추가하지 않는다. 두 발 모두 보인다."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 21
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 580,
+        "y": 120,
+        "size": 180,
+        "rotation": -3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/21.json"
+  },
+  {
+    "n": 22,
+    "title": "맛있어!",
+    "line": "맛있어!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "식사 만족",
+    "chat": "식사 만족를 상대에게 전할 때",
+    "action": "국수 그릇을 두 장갑으로 가슴 아래에 안고 맛있어하는 웃는 얼굴. 작은 분홍 하트 두 개. 입·혀가 보이게 하고 별도 내민 혀 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "국수 그릇을 두 장갑으로 가슴 아래에 안고 맛있어하는 웃는 얼굴. 작은 분홍 하트 두 개. 입·혀가 보이게 하고 별도 내민 혀 없음.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "식사 만족",
+      "intensity": 2,
+      "eyes": "행복하게 감은 곡선 눈",
+      "brows": "없음",
+      "pose": "국수 그릇을 두 장갑으로 가슴 아래에 안고 맛있어하는 웃는 얼굴. 작은 분홍 하트 두 개. 입·혀가 보이게 하고 별도 내민 혀 없음."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/22-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 22
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 490,
+        "y": 120,
+        "size": 180,
+        "rotation": 3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 23,
+    "title": "내가 할게!",
+    "line": "내가 할게!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "조리 중 상태",
+    "chat": "조리 중 상태를 상대에게 전할 때",
+    "action": "한 장갑은 팬 손잡이를, 다른 장갑은 뒤집개를 엄지와 주머니 사이로 잡고 채소를 볶는다. 팬 위로 작은 채소 몇 개만. 팬과 뒤집개가 몸이나 장갑을 관통하지 않으며 팔은 두 개. 음표·문자 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑은 팬 손잡이를, 다른 장갑은 뒤집개를 엄지와 주머니 사이로 잡고 채소를 볶는다. 팬 위로 작은 채소 몇 개만. 팬과 뒤집개가 몸이나 장갑을 관통하지 않으며 팔은 두 개. 음표·문자 없음.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "조리 중 상태",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "한 장갑은 팬 손잡이를, 다른 장갑은 뒤집개를 엄지와 주머니 사이로 잡고 채소를 볶는다. 팬 위로 작은 채소 몇 개만. 팬과 뒤집개가 몸이나 장갑을 관통하지 않으며 팔은 두 개. 음표·문자 없음."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/23-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 23
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 530,
+        "y": 120,
+        "size": 180,
+        "rotation": -3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 24,
+    "title": "다 됐어!",
+    "line": "다 됐어!",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "완료·공유",
+    "chat": "완료·공유를 상대에게 전할 때",
+    "action": "완성한 음식이 담긴 접시를 두 손으로 상대 쪽에 보여준다. 접시가 입을 가리지 않으며 작은 별 두 개.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "완성한 음식이 담긴 접시를 두 손으로 상대 쪽에 보여준다. 접시가 입을 가리지 않으며 작은 별 두 개.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "완료·공유",
+      "intensity": 2,
+      "eyes": "한 눈 윙크, 다른 기본 타원",
+      "brows": "없음",
+      "pose": "완성한 음식이 담긴 접시를 두 손으로 상대 쪽에 보여준다. 접시가 입을 가리지 않으며 작은 별 두 개."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/24-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 24
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 500,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 25,
+    "title": "확인했어!",
+    "line": "확인했어!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "확인 완료",
+    "chat": "확인 완료를 상대에게 전할 때",
+    "action": "한 장갑에 작은 체크리스트 판을 들고 다른 장갑 전체로 체크 표시를 가리킨다. 판에는 큰 민트 체크 도형 두 개만 있고 글자는 없다. 냉장고 문은 닫힘 유지.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑에 작은 체크리스트 판을 들고 다른 장갑 전체로 체크 표시를 가리킨다. 판에는 큰 민트 체크 도형 두 개만 있고 글자는 없다. 냉장고 문은 닫힘 유지.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "확인 완료",
+      "intensity": 2,
+      "eyes": "기본 타원 눈",
+      "brows": "없음",
+      "pose": "한 장갑에 작은 체크리스트 판을 들고 다른 장갑 전체로 체크 표시를 가리킨다. 판에는 큰 민트 체크 도형 두 개만 있고 글자는 없다. 냉장고 문은 닫힘 유지."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/25-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 25
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 520,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 26,
+    "title": "같이 가자!",
+    "line": "같이 가자!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "초대",
+    "chat": "초대를 상대에게 전할 때",
+    "action": "두 장갑으로 작은 장보기 카트의 가로 손잡이를 잡고 한 발 앞으로 움직인다. 카트 안에는 당근·파프리카·초록 채소 몇 개. 손잡이와 장갑 연결 명확, 문자 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "두 장갑으로 작은 장보기 카트의 가로 손잡이를 잡고 한 발 앞으로 움직인다. 카트 안에는 당근·파프리카·초록 채소 몇 개. 손잡이와 장갑 연결 명확, 문자 없음.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "초대",
+      "intensity": 2,
+      "eyes": "부드럽게 감은 곡선 눈",
+      "brows": "없음",
+      "pose": "두 장갑으로 작은 장보기 카트의 가로 손잡이를 잡고 한 발 앞으로 움직인다. 카트 안에는 당근·파프리카·초록 채소 몇 개. 손잡이와 장갑 연결 명확, 문자 없음."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/26-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 26
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 550,
+        "y": 120,
+        "size": 180,
+        "rotation": -3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 27,
+    "title": "밥 먹었어?",
+    "line": "밥 먹었어?",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "상대 안부",
+    "chat": "상대 안부를 상대에게 전할 때",
+    "action": "큰 주황 당근 한 개를 두 장갑으로 소중히 안고 신나게 보여준다. 초록 잎과 작은 노랑 별만.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "큰 주황 당근 한 개를 두 장갑으로 소중히 안고 신나게 보여준다. 초록 잎과 작은 노랑 별만.",
+    "mouthMode": "speak-open",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "상대 안부",
+      "intensity": 2,
+      "eyes": "한 눈 윙크, 다른 기본 타원",
+      "brows": "없음",
+      "pose": "큰 주황 당근 한 개를 두 장갑으로 소중히 안고 신나게 보여준다. 초록 잎과 작은 노랑 별만."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/27-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 27
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 480,
+        "y": 120,
+        "size": 180,
+        "rotation": 0,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 28,
+    "title": "뭐 먹을까?",
+    "line": "뭐 먹을까?",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "메뉴 상의",
+    "chat": "메뉴 상의를 상대에게 전할 때",
+    "action": "한 장갑을 턱에 대고 고개를 약 10도 기울인다. 얼굴 밖에 작은 당근·치즈·달걀 음식 기호 3개만. 글자·물음표는 생성하지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "한 장갑을 턱에 대고 고개를 약 10도 기울인다. 얼굴 밖에 작은 당근·치즈·달걀 음식 기호 3개만. 글자·물음표는 생성하지 않는다.",
+    "mouthMode": "neutral-line",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "메뉴 상의",
+      "intensity": 1,
+      "eyes": "기본 타원 눈",
+      "brows": "한쪽이 올라간 고민 눈썹",
+      "pose": "한 장갑을 턱에 대고 고개를 약 10도 기울인다. 얼굴 밖에 작은 당근·치즈·달걀 음식 기호 3개만. 글자·물음표는 생성하지 않는다."
+    },
+    "phase": 2,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/28-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 28
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 520,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 29,
+    "title": "절전 중…",
+    "line": "절전 중…",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "피곤함",
+    "chat": "피곤함를 상대에게 전할 때",
+    "action": "장고가 옆으로 약 85도 누워 힘이 빠진 모습. 몸 전체를 한 덩어리로 회전하며 모자·얼굴·앞치마·장갑·두 신발은 완전하게 보인다. 손잡이·파인애플·경첩은 원래 물체에 붙은 위치를 유지한다. 작은 동작선만, 종이 배경·색칠 배경 없음.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "장고가 옆으로 약 85도 누워 힘이 빠진 모습. 몸 전체를 한 덩어리로 회전하며 모자·얼굴·앞치마·장갑·두 신발은 완전하게 보인다. 손잡이·파인애플·경첩은 원래 물체에 붙은 위치를 유지한다. 작은 동작선만, 종이 배경·색칠 배경 없음.",
+    "mouthMode": "neutral-line",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "피곤함",
+      "intensity": 1,
+      "eyes": "힘없이 반쯤 감은 검은 눈, 흰자 없음",
+      "brows": "없음",
+      "pose": "장고가 옆으로 약 85도 누워 힘이 빠진 모습. 몸 전체를 한 덩어리로 회전하며 모자·얼굴·앞치마·장갑·두 신발은 완전하게 보인다. 손잡이·파인애플·경첩은 원래 물체에 붙은 위치를 유지한다. 작은 동작선만, 종이 배경·색칠 배경 없음."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/29-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 29
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        390,
+        932,
+        588
+      ],
+      "lettering": {
+        "x": 640,
+        "y": 260,
+        "size": 180,
+        "rotation": 4,
+        "maxWidth": 650,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 30,
+    "title": "잘 자",
+    "line": "잘 자",
+    "captionKind": "reaction",
+    "status": "다정한 허당 검토 후보",
+    "role": "수면 인사",
+    "chat": "수면 인사를 상대에게 전할 때",
+    "action": "작은 베개에 머리를 대고 옆으로 약 35도 편안하게 누워 민트 이불을 덮고 잠든다. 모자 다섯 볼륨과 얼굴 전체, 얼굴 가까이 모인 장갑이 보인다. 이불은 임시 소품이며 연한 작은 점무늬만. 글자 zzz는 넣지 않는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "작은 베개에 머리를 대고 옆으로 약 35도 편안하게 누워 민트 이불을 덮고 잠든다. 모자 다섯 볼륨과 얼굴 전체, 얼굴 가까이 모인 장갑이 보인다. 이불은 임시 소품이며 연한 작은 점무늬만. 글자 zzz는 넣지 않는다.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "수면 인사",
+      "intensity": 1,
+      "eyes": "부드럽게 감은 곡선 눈",
+      "brows": "없음",
+      "pose": "작은 베개에 머리를 대고 옆으로 약 35도 편안하게 누워 민트 이불을 덮고 잠든다. 모자 다섯 볼륨과 얼굴 전체, 얼굴 가까이 모인 장갑이 보인다. 이불은 임시 소품이며 연한 작은 점무늬만. 글자 zzz는 넣지 않는다."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/30-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 30
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        350,
+        932,
+        628
+      ],
+      "lettering": {
+        "x": 310,
+        "y": 210,
+        "size": 180,
+        "rotation": -4,
+        "maxWidth": 480,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 110,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  },
+  {
+    "n": 31,
+    "title": "나도 껴줘",
+    "line": "나도 껴줘",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "소심한 참여 요청",
+    "chat": "다정하지만 허당인 친구의 소심한 참여 요청",
+    "action": "화면 왼쪽에 낮고 가느다란 문틀 모서리 하나. 장고가 그 옆에서 온몸을 빼꼼 내밀며 한 장갑을 얼굴 옆으로 조심스럽게 든다. 다른 손은 문틀을 짚는다. 몸은 문틀 밖으로 충분히 나오며 앞치마·짧은 다리·두 신발이 온전히 보인다. 벽 배경·방·다른 캐릭터를 넣지 않는다. 슬픈 울상 대신 함께 끼고 싶은 기대감.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "화면 왼쪽에 낮고 가느다란 문틀 모서리 하나. 장고가 그 옆에서 온몸을 빼꼼 내밀며 한 장갑을 얼굴 옆으로 조심스럽게 든다. 다른 손은 문틀을 짚는다. 몸은 문틀 밖으로 충분히 나오며 앞치마·짧은 다리·두 신발이 온전히 보인다. 벽 배경·방·다른 캐릭터를 넣지 않는다. 슬픈 울상 대신 함께 끼고 싶은 기대감.",
+    "mouthMode": "expressive-custom",
+    "mouthReason": "수줍고 작게 열린 미소",
+    "expression": {
+      "family": "소심한 참여 요청",
+      "intensity": 2,
+      "eyes": "상대를 쳐다보는 기대 어린 타원 눈",
+      "brows": "살짝 올라간 조심스러운 눈썹",
+      "pose": "화면 왼쪽에 낮고 가느다란 문틀 모서리 하나. 장고가 그 옆에서 온몸을 빼꼼 내밀며 한 장갑을 얼굴 옆으로 조심스럽게 든다. 다른 손은 문틀을 짚는다. 몸은 문틀 밖으로 충분히 나오며 앞치마·짧은 다리·두 신발이 온전히 보인다. 벽 배경·방·다른 캐릭터를 넣지 않는다. 슬픈 울상 대신 함께 끼고 싶은 기대감."
+    },
+    "phase": 2,
+    "operation": "individual image edit",
+    "input": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 31
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 610,
+        "y": 120,
+        "size": 180,
+        "rotation": -3,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    },
+    "creativeBrief": "design/jango/emoticons/kakao-32/v21/creative-intents/31.json"
+  },
+  {
+    "n": 32,
+    "title": "내 맘 받아!",
+    "line": "내 맘 받아!",
+    "captionKind": "dialogue",
+    "status": "다정한 허당 검토 후보",
+    "role": "애정 건네기",
+    "chat": "애정 건네기를 상대에게 전할 때",
+    "action": "큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다.",
+    "scene": "문구별 크기·기울기·위치와 전신",
+    "read": "큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다.",
+    "mouthMode": "idle-u",
+    "mouthReason": "v20 원화의 표정과 입 구조를 보존하는 생성 없는 파생",
+    "expression": {
+      "family": "애정 건네기",
+      "intensity": 2,
+      "eyes": "편안하게 감은 웃는 곡선 눈",
+      "brows": "없음",
+      "pose": "큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다."
+    },
+    "phase": 1,
+    "operation": "layout-lettering-only",
+    "input": "design/jango/emoticons/kakao-32/v20/source-originals/32-r1.png",
+    "styleProfile": "handdrawn-crayon",
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 32
+    },
+    "framingIntent": "모자·장갑·앞치마·두 신발과 모든 소품을 자르지 않고 전신 배치",
+    "layout": {
+      "framing": "full-body",
+      "characterBox": [
+        46,
+        245,
+        932,
+        733
+      ],
+      "lettering": {
+        "x": 490,
+        "y": 120,
+        "size": 180,
+        "rotation": 2,
+        "maxWidth": 880,
+        "font": "Gaegu-Bold",
+        "outline": 0,
+        "inkHeight": 120,
+        "outlinePx": 7,
+        "punctuationScale": 0.55
+      }
+    }
+  }
+]

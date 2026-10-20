@@ -1,0 +1,39 @@
+{
+  "id": "03-v21-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v21",
+  "source": "design/jango/emoticons/kakao-32/v21/source-originals/03-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v21/stickers/03.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    616,
+    645,
+    133,
+    107
+  ],
+  "tiltDegrees": 5,
+  "visibility": "clear",
+  "expression": {
+    "family": "명확한 칭찬",
+    "intensity": 3,
+    "eyes": "자신 있게 웃는 눈",
+    "brows": "부드러운 자신감",
+    "pose": "한 벙어리장갑의 엄지를 카메라 앞으로 내밀어 크게 보이게 한다. 다른 손은 옆구리. 몸은 살짝 3/4 방향으로 기울이며 두 신발을 안정적으로 벌린다. 엄지는 하나뿐이고 장갑 나머지는 둥근 덩어리. 얼굴을 가리지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 3
+  },
+  "preflight": "design/jango/quality/jobs/03-v21-r1/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v21/generation-records/03-v21-r1.json",
+  "operation": "individual image edit",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v21/creative-intents/03.json",
+    "sha256": "a52d82fa6f13122b829d4bfdcb604f790e18e18ff72b8a662079900d11656734",
+    "referenceMouthMode": "speak-open",
+    "scope": "candidate-only"
+  }
+}

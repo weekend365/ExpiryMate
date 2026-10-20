@@ -1,0 +1,6 @@
+
+> expirymate-monorepo@ docs:check /Users/namu/Desktop/ExpiryMate
+> node scripts/check-docs.mjs && node scripts/check-mobile-build-entry.mjs
+
+문서 검사 통과: metadata 30개, links 63개
+Mobile Expo/EAS build entry is canonical and unambiguous.

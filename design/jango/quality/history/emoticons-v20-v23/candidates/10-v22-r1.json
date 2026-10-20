@@ -1,0 +1,33 @@
+{
+  "id": "10-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/10-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/10.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    591,
+    676,
+    110,
+    65
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "대기 요청",
+    "intensity": 2,
+    "eyes": "기본 어두운 타원 눈",
+    "brows": "약하게 올라간 부드러운 눈썹",
+    "pose": "정면 전신으로 한 벙어리장갑을 얼굴 옆 높이에서 상대 쪽으로 들어 잠깐 멈춤을 요청. 반대 손은 아래. 양발은 안정적으로 바닥에 둠."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 10
+  },
+  "preflight": "design/jango/quality/jobs/10-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/10-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-20",
+  "license": "SIL OFL 1.1",
+  "operation": "byte-identical reuse; selected Gamja Flower plus fonts required by the existing lettering renderer",
+  "origin": {
+    "file": "design/jango/emoticons/kakao-32/v22/fonts/provenance.json",
+    "sha256": "a04a164e07675fb2d70f7c624a2211666d27b2fd115a5e22da92cf0f12806385"
+  },
+  "files": {
+    "Gaegu-Regular.ttf": "aa52c98336f7c62e2896fc8b12b56a75d5b476d88a2f104b0980f4f7ce0adfc3",
+    "Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "GamjaFlower-Regular.ttf": "ece32819ed58536355a49a095b0cdfdd3b8ef9081c5ed9ca1cef8f5d999ae1ac",
+    "GamjaFlower-OFL.txt": "39de3de5f1873f89bca4af37823ab22e28e88d0d8f7fe2f07e82e9e6e9bf7b70",
+    "OFL.txt": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251"
+  }
+}

@@ -1,0 +1,85 @@
+TAP version 13
+# Subtest: MASTER roster retains exact 32 titles, lines, mouth modes and original 96 protected assets
+ok 1 - MASTER roster retains exact 32 titles, lines, mouth modes and original 96 protected assets # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.568792
+  ...
+# Subtest: silent titles and missing/duplicate roster entries are rejected correctly
+ok 2 - silent titles and missing/duplicate roster entries are rejected correctly # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.032792
+  ...
+# Subtest: invalid framing, omitted framing intent and excluded character cannot be hidden
+ok 3 - invalid framing, omitted framing intent and excluded character cannot be hidden # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.031292
+  ...
+# Subtest: caption kind, typography, rotation and exact multiline order are enforced
+ok 4 - caption kind, typography, rotation and exact multiline order are enforced # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.027583
+  ...
+# Subtest: full-body framing rejects anatomy crops and preserves all source bounds
+ok 5 - full-body framing rejects anatomy crops and preserves all source bounds # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.031459
+  ...
+# Subtest: measured lettering retains dark ink, a visible white outline and transparent padding
+ok 6 - measured lettering retains dark ink, a visible white outline and transparent padding # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.02475
+  ...
+# Subtest: normalized text rotation preserves ink, white outline and safe transparent bounds
+ok 7 - normalized text rotation preserves ink, white outline and safe transparent bounds # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.090875
+  ...
+# Subtest: shared font reference retains natural glyph heights instead of enlarging short syllables
+ok 8 - shared font reference retains natural glyph heights instead of enlarging short syllables
+  ---
+  duration_ms: 20.095
+  ...
+# Subtest: 32 PNGs retain transparent edges, safe margins and exact caption-free layout without collisions
+ok 9 - 32 PNGs retain transparent edges, safe margins and exact caption-free layout without collisions # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.164959
+  ...
+# Subtest: Gaegu font and license match preserved source provenance
+ok 10 - Gaegu font and license match preserved source provenance # SKIP test name does not match pattern
+  ---
+  duration_ms: 2.847042
+  ...
+# Subtest: MASTER builder verifies without overwriting and no previous version input is needed
+ok 11 - MASTER builder verifies without overwriting and no previous version input is needed # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.149292
+  ...
+# Subtest: macOS lettering reproduces frozen v18 output in a separate version and refuses MASTER writes
+ok 12 - macOS lettering reproduces frozen v18 output in a separate version and refuses MASTER writes # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.031166
+  ...
+# Subtest: v20 implements the exact 32 captions, full-body outputs and honest 30-reuse/2-redraw lineage
+ok 13 - v20 implements the exact 32 captions, full-body outputs and honest 30-reuse/2-redraw lineage # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.02375
+  ...
+# Subtest: v21 keeps 24 originals and distinguishes 8 expressive redraws with the requested captions
+ok 14 - v21 keeps 24 originals and distinguishes 8 expressive redraws with the requested captions # SKIP test name does not match pattern
+  ---
+  duration_ms: 0.023291
+  ...
+# Subtest: v22 preserves all v21 artwork and expressions while sharing font size across each caption tier
+ok 15 - v22 preserves all v21 artwork and expressions while sharing font size across each caption tier
+  ---
+  duration_ms: 2332.450708
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 13
+# todo 0
+# duration_ms 2646.064209

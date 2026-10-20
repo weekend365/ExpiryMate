@@ -1,0 +1,39 @@
+{
+  "id": "16-v21-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v21",
+  "source": "design/jango/emoticons/kakao-32/v21/source-originals/16-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v21/stickers/16.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    590,
+    640,
+    111,
+    111
+  ],
+  "tiltDegrees": 5,
+  "visibility": "clear",
+  "expression": {
+    "family": "큰 축하",
+    "intensity": 3,
+    "eyes": "활짝 접힌 웃는 눈",
+    "brows": "들뜬 눈썹",
+    "pose": "두 팔을 머리 양옆으로 위로 벌리고 두 발을 동시에 띄워 폴짝 뛰며 축하한다. 무릎은 살짝 구부리고 두 신발 사이 틈이 보인다. 소량의 노랑과 민트 색종이 4조각만 주위에 흩날린다. 모든 색종이와 모자·신발이 화면 안에 있다. 손에는 물건이 없고 박수 자세가 아니다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 16
+  },
+  "preflight": "design/jango/quality/jobs/16-v21-r1/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v21/generation-records/16-v21-r1.json",
+  "operation": "individual image edit",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v21/creative-intents/16.json",
+    "sha256": "a6bd8d17df2fbc2887b9a323234276db926396c9422492b245f23a55f1db247b",
+    "referenceMouthMode": "speak-open",
+    "scope": "candidate-only"
+  }
+}

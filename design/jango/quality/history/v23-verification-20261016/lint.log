@@ -1,0 +1,5 @@
+
+> expirymate-monorepo@ lint /Users/namu/Desktop/ExpiryMate
+> eslint . --max-warnings=0 && node scripts/check-design-system.mjs
+
+Design system check passed (40 Admin and 227 mobile source files).

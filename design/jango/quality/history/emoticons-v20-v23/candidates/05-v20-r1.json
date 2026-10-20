@@ -1,0 +1,33 @@
+{
+  "id": "05-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/05-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/05.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    606,
+    638,
+    116,
+    78
+  ],
+  "tiltDegrees": -4,
+  "visibility": "clear",
+  "expression": {
+    "family": "애정",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "없음",
+    "pose": "두 장갑을 양 볼 가까이 모으고 살짝 부끄럽게 몸을 안쪽으로 모은다. 작은 분홍 하트 2개, 손가락 하트 아님."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 5
+  },
+  "preflight": "design/jango/quality/jobs/05-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/05-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

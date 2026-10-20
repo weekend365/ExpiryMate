@@ -1,6 +1,6 @@
 {
   "id": "v18-30",
-  "binding": "6d601b353891646f56cc2866d5e73032ef87ce25a2ad83405613f498a0aded73",
+  "binding": "4cadf7c3da97ee034a5b825ee6e7d861f6e74bf01cc1e5f373cf00f7c92963e0",
   "candidate": {
     "id": "v18-30",
     "kind": "emoticon",
@@ -22,9 +22,11 @@
   },
   "context": {
     "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
-    "rules": "65eb41dded7d5912834743d82e43af66eb6edef3e1c4df8576a6a80fc10cd15d",
+    "rules": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9",
     "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
-    "implementation": "936b993900e3579005eca6d9f6e25ac18d441e022eafcc4fccbea7873d36615e",
+    "implementation": "d30167ac06a54af43c89e289f4f06765d75a34fce3408133d0d978a3867791a6",
+    "historyResolver": "28591f08a858f8031d17db1a282c5f0cbcead755b84065d856982fcb4f4dbc68",
+    "historyIndex": "aa08214f69d2b5447614f70c4f972706a687eb6db2fdd1a57171589a1ad25785",
     "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
     "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
     "activeMasterVersion": "v18",
@@ -46,9 +48,9 @@
       "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
     },
     "documents": {
-      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "916d2890a18b4ff5fe6985183fd9ea93719d85abaf0ee618e0d92ef8f7bf4302",
-      "design/jango/reference/JANGO-STYLE-GUIDE.md": "c83b156743fd11a52f50dd39f05174db3460b830e215f3ed98a5811b61c8370c",
-      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "1d3ccf2627a90ffcaa937559302ad2bd1c875a166527359a27998df47970cca2"
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "3db1683e8697835c413e765a49d23679a16d08ab7649aaf3c58fad0c31d99e48"
     }
   },
   "assets": {

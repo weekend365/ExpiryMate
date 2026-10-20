@@ -16,16 +16,22 @@ export function validRect(rect,width,height,label){
 export function validateLayout(row,source){
  if(!row.layout)return null;
  const layout=row.layout;
+ assert(layout.framing===undefined||layout.framing==='full-body','Unknown framing mode');
+ if(layout.framing==='full-body')assert(!layout.framingCrop,'Full-body framing must not crop the original');
  validRect(layout.characterBox,1024,1024,'Character box');
  assert(['silent','reaction','dialogue'].includes(row.captionKind),'Unknown caption kind');
  assert.equal(row.captionKind==='silent',row.line==='','Caption kind / line mismatch');
  if(layout.framingCrop){validRect(layout.framingCrop,source.width,source.height,'Framing crop');assert(typeof layout.framingNote==='string'&&layout.framingNote.trim(),'Framing intent required');}
- if(row.line){const l=layout.lettering;assert(l&&Number.isFinite(l.x)&&Number.isFinite(l.y)&&l.x>0&&l.x<1024&&l.y>0&&l.y<1024,'Lettering center required');assert(Number.isFinite(l.size)&&l.size>=60&&l.size<=220,'Lettering size out of bounds');assert(Number.isFinite(l.rotation)&&Math.abs(l.rotation)<=10,'Lettering rotation out of bounds');assert(['Gaegu-Regular','Gaegu-Bold'].includes(l.font),'Unknown lettering font');assert(Number.isFinite(l.outline)&&l.outline>=0&&l.outline<=12,'Outline out of bounds');}
+ if(row.line){const l=layout.lettering;assert(l&&Number.isFinite(l.x)&&Number.isFinite(l.y)&&l.x>0&&l.x<1024&&l.y>0&&l.y<1024,'Lettering center required');assert(Number.isFinite(l.size)&&l.size>=60&&l.size<=220,'Lettering size out of bounds');assert(Number.isFinite(l.rotation)&&Math.abs(l.rotation)<=10,'Lettering rotation out of bounds');assert(['Gaegu-Regular','Gaegu-Bold','GamjaFlower-Regular'].includes(l.font),'Unknown lettering font');assert(Number.isFinite(l.outline)&&l.outline>=0&&l.outline<=12,'Outline out of bounds');}
+ if(layout.lettering?.sizeBasis!==undefined){const l=layout.lettering;assert.equal(l.sizeBasis,'font-reference','Unknown lettering size basis');assert(Number.isFinite(l.inkHeight),'Reference sizing requires measured lettering');assert(typeof l.referenceText==='string'&&l.referenceText.trim()===l.referenceText&&l.referenceText.length>=2&&l.referenceText.length<=20&&!/[\n\r…]/.test(l.referenceText),'Stable reference text required');}
+ if(layout.lettering?.inkStrokePercent!==undefined){const l=layout.lettering;assert.equal(l.sizeBasis,'font-reference','Ink reinforcement requires shared font sizing');assert(Number.isFinite(l.inkStrokePercent)&&l.inkStrokePercent>=0&&l.inkStrokePercent<=3,'Ink reinforcement out of bounds');}
  if(layout.lettering?.lines){assert(Array.isArray(layout.lettering.lines)&&layout.lettering.lines.length>=1&&layout.lettering.lines.length<=3&&layout.lettering.lines.every(s=>typeof s==='string'&&s.trim()===s&&s.length),'Invalid caption lines');assert.equal(layout.lettering.lines.join(' '),row.line,'Caption lines must preserve exact reading order and text');}
+ if(layout.lettering?.inkHeight!==undefined){const l=layout.lettering;assert(Number.isFinite(l.inkHeight)&&l.inkHeight>=60&&l.inkHeight<=180,'Ink height out of bounds');assert(Number.isFinite(l.outlinePx)&&l.outlinePx>=0&&l.outlinePx<=16,'Pixel outline out of bounds');assert(Number.isFinite(l.punctuationScale)&&l.punctuationScale>=0.4&&l.punctuationScale<=1,'Punctuation scale out of bounds');assert(!l.lines&&!layout.symbols?.length,'Normalized lettering requires a single line without extra symbols');assert(Number.isFinite(l.maxWidth)&&l.maxWidth>2*l.outlinePx&&l.maxWidth<=944,'Normalized lettering width out of bounds');}
  for(const symbol of layout.symbols??[]){assert(['?','zzz','♪'].includes(symbol.text),'Unknown text symbol');assert(Number.isFinite(symbol.x)&&symbol.x>0&&symbol.x<1024&&Number.isFinite(symbol.y)&&symbol.y>0&&symbol.y<1024,'Symbol center required');assert(Number.isFinite(symbol.size)&&symbol.size>=60&&symbol.size<=220,'Symbol size out of bounds');assert(Number.isFinite(symbol.rotation)&&Math.abs(symbol.rotation)<=10,'Symbol rotation out of bounds');}
  return layout;
 }
 export function cropFor(sourceBox,source,layout){
+ if(layout?.framing==='full-body')assert(!layout.framingCrop,'Full-body framing must not crop the original');
  if(layout?.framingCrop){const [x,y,w,h]=layout.framingCrop;const l=Math.max(x,sourceBox[0]-4),t=Math.max(y,sourceBox[1]-4),r=Math.min(x+w,sourceBox[2]+4),b=Math.min(y+h,sourceBox[3]+4);assert(r>l&&b>t,'Framing crop excludes character');return[l,t,r-l,b-t];}
  const [l,t,r,b]=sourceBox,x=Math.max(0,l-4),y=Math.max(0,t-4);return [x,y,Math.min(source.width,r+4)-x,Math.min(source.height,b+4)-y];
 }

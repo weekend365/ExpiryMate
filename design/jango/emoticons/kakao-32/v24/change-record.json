@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-20",
+  "concept": "사용자 선택 최종 32종",
+  "inputVersions": [
+    "v22",
+    "v23"
+  ],
+  "method": "Byte-identical reuse of the selected v22/v23 originals, lettering and layouts; collection assembly only; no new image generation.",
+  "redraws": [],
+  "captionChanges": {},
+  "typography": {
+    "font": "GamjaFlower-Regular",
+    "fontDisplayName": "감자꽃 · Gamja Flower",
+    "referenceText": "장고야 부탁해",
+    "sizeBasis": "font-reference",
+    "referenceInkHeights360": [
+      30,
+      32,
+      36
+    ],
+    "outline360": 1.8,
+    "inkStrokePercent": 1.6,
+    "punctuationScale": 0.55,
+    "rotationDegrees": [
+      -3,
+      0,
+      3
+    ]
+  },
+  "scope": "user-selected final design collection; candidate-only; no MASTER/app/submission/signed release change"
+}

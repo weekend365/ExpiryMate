@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "attempts": [
+    {
+      "attempt": 1,
+      "result": "connection-failed",
+      "error": "image generation failed: connection failed: error sending request"
+    },
+    {
+      "attempt": 2,
+      "result": "connection-failed",
+      "error": "image generation failed: connection failed: error sending request"
+    },
+    {
+      "attempt": 3,
+      "result": "success",
+      "record": "generation-records/29-v23-r1.json"
+    }
+  ],
+  "fallbackCLIUsed": false
+}

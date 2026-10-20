@@ -1,0 +1,167 @@
+{
+  "version": "v22",
+  "date": "2026-10-16",
+  "status": "candidate-implementation-complete",
+  "outputDirectory": "design/jango/emoticons/kakao-32/v22",
+  "scope": "32 separate typography/layout candidates. No MASTER adoption, app asset replacement, Kakao submission, or signed release.",
+  "manifestSHA256": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+  "assets": {
+    "captionedPng": 32,
+    "captionFreePngWithIdenticalLayout": 32,
+    "width": 360,
+    "height": 360,
+    "transparentEdges": 32,
+    "maxBytes": 105630,
+    "minimumMarginPx": 13,
+    "captionArtOverlapPixels": 0,
+    "fullBodyPreserved": 32,
+    "newImageGeneration": 0,
+    "byteIdenticalV21Originals": 32,
+    "captionChanges": 0
+  },
+  "typography": {
+    "font": "GamjaFlower-Regular",
+    "fontSHA256": "ece32819ed58536355a49a095b0cdfdd3b8ef9081c5ed9ca1cef8f5d999ae1ac",
+    "sizeBasis": "font-reference",
+    "referenceText": "장고야 부탁해",
+    "referenceInkHeightTiers360": [
+      30,
+      32,
+      36
+    ],
+    "inkStrokePercent": 1.6,
+    "whiteOutline360": 1.8,
+    "punctuationScale": 0.55,
+    "actualInkHeightMedianBefore360": 42.1875,
+    "actualInkHeightMedianAfter360": 31.640625,
+    "normalArtworkScaleIncreasePercent": 10.5,
+    "normalArtworkCount": 26,
+    "comparison": "design/jango/emoticons/kakao-32/v22/font-decision.json"
+  },
+  "preservation": {
+    "count": 1489,
+    "allMatchAfterTests": true,
+    "snapshot": "design/jango/emoticons/kakao-32/v22/preservation-before.json",
+    "comparison": "design/jango/emoticons/kakao-32/v22/preservation-check.json",
+    "v18MasterAndAppAssetsPreserved": true,
+    "v20AndV21EntireDirectoriesPreserved": true,
+    "sourceMouthRoiTiltVisibilityUnchanged": true
+  },
+  "quality": {
+    "preparationPass": 32,
+    "sourceProvenancePass": 32,
+    "technicalPass": 32,
+    "mouthAutomaticPass": 18,
+    "mouthNeedsReview": [
+      3,
+      5,
+      8,
+      11,
+      12,
+      15,
+      16,
+      18,
+      20,
+      21,
+      28,
+      29,
+      31,
+      32
+    ],
+    "historicalPreparationStale": 64,
+    "historicalNote": "v20/v21 retain their original preparation and document hashes. Historical stale context is not rewritten as approval.",
+    "signedReleases": 0
+  },
+  "appMeasurementReconciliation": {
+    "changedField": "bibleSha256 only",
+    "posesUnchanged": 17,
+    "sourcePixelsAndMeasurementsUnchanged": true
+  },
+  "gallery": {
+    "relativeLinksVerified": 153,
+    "articles": 32,
+    "themePreviousVersionAndSizeFunctions": "verified in isolated DOM stub",
+    "browserRendered": "not verified: local file URL navigation blocked by browser tool security policy",
+    "pngVisualReview": "completed for 80/120 light/dark, full grid and selected 360px outputs"
+  },
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/docs.log",
+      "sha256": "df480822d335da1a25b3f8677a5ebcf7c4a9ccb64c0e27fc4b72b706626d8dc3"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/lint.log",
+      "sha256": "7c7bd877700d8030663458f79d6881073501f6f129015df700a02e3076706627"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/typecheck.log",
+      "sha256": "f306cd7a6c687a3abeb3570d50f3a7296bbf026629f37b65d3d36b8f0dafc33d"
+    },
+    {
+      "command": "pnpm jango:reports:refresh",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/reports.log",
+      "sha256": "fb21c689c73902ec7ddf02f3006534f505bdf8af0dca3f29e8b10c375d44d3ba"
+    },
+    {
+      "command": "pnpm jango:check",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/check.log",
+      "sha256": "56a245ea2d94bae774438607ee92ff2db1aa973d90b40b52eab027a7b943c138"
+    },
+    {
+      "command": "pnpm test (includes pnpm jango:test)",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/full-test.log",
+      "sha256": "2268ff2bd34309609c08e9d477a2b6489e1b06f6cf2fc48b0f04f03b2a5f7a50"
+    },
+    {
+      "command": "Shared font scaling and v22 source preservation regression checks",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/integration-test.log",
+      "sha256": "6a37bd2a1c2c5a304b0ac86a72e1d20e3e86f40a03c8675a06f96fc67229ba30"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile mascot:measure",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v22-verification-20261016/mascot-measure.log",
+      "sha256": "349a90a379475422506ba16dd73617ed3380fc45baa34d68a80318a12dd0ade0"
+    }
+  ],
+  "testSummaryLines": [
+    "# tests 32",
+    "# pass 32",
+    "# fail 0",
+    "# skipped 0",
+    "packages/shared test:  Test Files  24 passed (24)",
+    "packages/shared test:       Tests  162 passed (162)",
+    "apps/api test:  Test Files  70 passed | 2 skipped (72)",
+    "apps/api test:       Tests  589 passed | 6 skipped (595)",
+    "apps/mobile test:  Test Files  102 passed (102)",
+    "apps/mobile test:       Tests  582 passed (582)"
+  ],
+  "remaining": [
+    "User visual review of the v22 candidate set.",
+    "Existing 14 mouth diagnostic reviews and external signature requirements remain.",
+    "80px tiny punctuation, low natural glyphs and small props remain weak; no physical KakaoTalk device test was performed."
+  ],
+  "afterTests": {
+    "currentReportContexts": 128,
+    "currentReportAssetsVerified": 1236,
+    "testFixturesCleaned": true
+  }
+}

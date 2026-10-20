@@ -1,0 +1,33 @@
+{
+  "id": "11-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/11-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/11.png",
+  "mouthMode": "neutral-line",
+  "mouthRoi": [
+    581,
+    662,
+    100,
+    39
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "생각·망설임",
+    "intensity": 1,
+    "eyes": "기본 타원 눈",
+    "brows": "한쪽을 살짝 올린 눈썹",
+    "pose": "한 장갑의 둥근 주머니를 턱에 대고 반대 손은 팔꿈치를 받친다. 작은 물음표 자리는 빈 공간으로 남긴다. 글자와 물음표를 직접 그리지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 11
+  },
+  "preflight": "design/jango/quality/jobs/11-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/11-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

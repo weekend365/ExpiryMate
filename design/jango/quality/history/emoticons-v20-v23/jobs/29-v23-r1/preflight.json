@@ -1,0 +1,111 @@
+{
+  "id": "29-v23-r1",
+  "policyVersion": 7,
+  "attachmentVersion": 4,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 29
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 character identity, structure and pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 line/color/texture; use the selected original pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "imageIndex": 1
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 29,
+      "imageIndex": 2
+    },
+    {
+      "role": "expression-context-reference",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "imageIndex": 3
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/29-v23-r1/master-mouth.png"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/29-v23-r1/master-mouth.png": "2008e9d1d8900dbaa38dde91b6c727676f07b49d6f16f6951f9cc51a8da3ec2c"
+  },
+  "request": "Create one NEW full-body Jango emoticon for slot 29, visibly exhausted after a hard day. Replace the food-serving pose completely: no plate, food, tools, extra props or hearts. Jango has flopped down onto the floor on his bottom, with the apron torso slumped forward, shoulders dropped and both arms hanging limply, one round mitten resting beside each hip. Two short legs extend forward and apart with both mint shoes clearly visible. This must read as sitting heavily, NOT lying sideways, sleeping, kneeling, standing, or a yoga cross-legged pose. Face nearly frontal with a subtle 5–8 degree exhausted head tilt. Half-lidded black eyes with a low unfocused gaze; small drooping brows; a short slightly downturned tired line mouth. No smile, tongue, tears, open yawning mouth or dramatic crying. Keep the recognizable v18 mint refrigerator-door face, left handle and tiny pineapple, right hinges, ivory five-lobed chef hat with mint band, apron/pocket, peach cheeks, single-thumb mittens and crayon contour/opaque paper-textured color. Make the dropped body and blank low-energy face the emotion. At most two tiny crayon settling ticks near the hips. Entire hat-to-shoes silhouette on genuine transparent alpha, generous margin. No text, punctuation, ZZZ, battery symbol, logo, watermark, room, floor line, cast shadow or background fill. The board panel is historical slot context only: ignore its old sideways lying pose. Exact caption 지쳤어... is added separately later; do not draw it.",
+  "mouthMode": "expressive-custom",
+  "mouthReason": "기운 없는 반쯤 뜬 눈과 짧고 힘없이 처진 입선. 웃음·울음·잠든 표정과 구분하는 의도된 새 표현.",
+  "expression": {
+    "family": "지침·탈진",
+    "intensity": 2,
+    "eyes": "힘없이 반쯤 뜬 검은 눈과 낮은 시선, 흰자 없음",
+    "brows": "안쪽이 살짝 들리고 바깥쪽이 처진 작은 눈썹",
+    "pose": "바닥에 엉덩이를 붙이고 털썩 주저앉은 자세. 짧은 두 다리와 신발은 앞으로 벌려 내밀고, 양팔·둥근 벙어리장갑은 골반 양옆으로 힘없이 늘어뜨린다. 몸은 약간 앞으로 구부정하고 모자와 냉장고 얼굴은 5–8도만 기울인다. 모자·앞치마·장갑·두 신발을 모두 보이며 옆으로 눕거나 웅크려 신발을 숨기지 않는다."
+  },
+  "input": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+  "inputSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+  "context": {
+    "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "rules": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9",
+    "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "implementation": "fc75b2a630007385e0d9638697f0486801fbaa06deb5be387c9cf2dd2491d523",
+    "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthReferences": {
+      "idle-u": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "speak-open": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "neutral-line": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sad-arc": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "3e4a0e8d9ae306e46e01e195bafaa300a01c2d6b9f352bb9960acca89d14a44c",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "be9ed6b4cb61b92158008165fab824fdc8a8664168e89ec5f4138ab1001b569e",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "f652552c6a88aaeedfd3a0bfa50640296c6f327e2267fdaff091aa24bd6b8603"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "design/jango/reference/v18-composition.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+  },
+  "prompt": "design/jango/quality/jobs/29-v23-r1/prompt.txt",
+  "promptSHA256": "c59e1feaf8659035be0920789551a10073ab9cec2cb5dd366f7728843e2c757d",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v23/creative-intents/29.json",
+    "sha256": "68a03c125872ee03e9606c45a1c2d939df0e06115f9a4759dd9acc569f794101",
+    "referenceMouthMode": "neutral-line",
+    "scope": "candidate-only"
+  }
+}

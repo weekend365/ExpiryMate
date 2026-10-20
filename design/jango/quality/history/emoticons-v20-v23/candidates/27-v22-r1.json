@@ -1,0 +1,33 @@
+{
+  "id": "27-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/27-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/27.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    591,
+    611,
+    111,
+    94
+  ],
+  "tiltDegrees": -9,
+  "visibility": "clear",
+  "expression": {
+    "family": "상대 안부",
+    "intensity": 2,
+    "eyes": "한 눈 윙크, 다른 기본 타원",
+    "brows": "없음",
+    "pose": "큰 주황 당근 한 개를 두 장갑으로 소중히 안고 신나게 보여준다. 초록 잎과 작은 노랑 별만."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 27
+  },
+  "preflight": "design/jango/quality/jobs/27-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/27-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

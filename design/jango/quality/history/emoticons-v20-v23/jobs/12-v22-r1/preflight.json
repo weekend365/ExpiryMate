@@ -1,0 +1,113 @@
+{
+  "id": "12-v22-r1",
+  "policyVersion": 7,
+  "attachmentVersion": 4,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 12
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 character identity, structure and pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 line/color/texture; use the selected original pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 12,
+      "imageIndex": 3
+    },
+    {
+      "role": "expression-context-reference",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "imageIndex": 4
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/12-v22-r1/master-mouth.png"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/12-v22-r1/master-mouth.png": "7893c6e8b66ff6ff6ffe83b76e383c6d1339c50be7cb9a9294ab1fe58e09bf40"
+  },
+  "request": "2026-10-16 사용자 요청에 따른 생성 없는 파생. 선택된 v21 원화의 모든 픽셀·표정·구조를 그대로 복사한다. 문구는 유지하고 별도 레터링 레이어의 서체·공통 크기·획·배치 및 전신 균일 확대만 조정한다. 이 준비 프롬프트를 이미지 생성기에 전송하지 않는다.",
+  "mouthMode": "expressive-custom",
+  "mouthReason": "v21 원본의 표정·입 구조를 바이트 그대로 보존하고 조판·배치만 수정. 기존 의도: 작고 둥근 빈 O형 입, 아이보리 내부, 차콜 외곽선, 혀와 치아 없음",
+  "expression": {
+    "family": "가벼운 당황",
+    "intensity": 2,
+    "eyes": "크기가 살짝 다른 둥근 눈",
+    "brows": "한쪽만 올라간 비대칭 눈썹",
+    "pose": "한 발을 반 걸음 뒤로 빼며 몸이 멈칫한다. 양 장갑은 허리 앞에서 어정쩡하게 벌어져 있다. 한쪽 눈썹과 작은 땀방울 하나로 가벼운 당황. 놀라 크게 뛰거나 환하게 웃지 않는다. 두 신발 모두 보인다."
+  },
+  "input": "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png",
+  "inputSHA256": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c",
+  "context": {
+    "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "rules": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9",
+    "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "implementation": "fc75b2a630007385e0d9638697f0486801fbaa06deb5be387c9cf2dd2491d523",
+    "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthReferences": {
+      "idle-u": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "speak-open": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "neutral-line": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sad-arc": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "3e4a0e8d9ae306e46e01e195bafaa300a01c2d6b9f352bb9960acca89d14a44c",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "be9ed6b4cb61b92158008165fab824fdc8a8664168e89ec5f4138ab1001b569e",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "f652552c6a88aaeedfd3a0bfa50640296c6f327e2267fdaff091aa24bd6b8603"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png",
+    "design/jango/reference/v18-composition.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c",
+    "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+  },
+  "prompt": "design/jango/quality/jobs/12-v22-r1/prompt.txt",
+  "promptSHA256": "4d93f0862ccfb6156de7d9a75f25c3bb678b47c65bab433d967a9a46b96e0a88",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v22/creative-intents/12.json",
+    "sha256": "1341169f2d5e15f5eb50d1d4d04c28b15d2e856b3ad8a05bcd8695297f4e54ab",
+    "referenceMouthMode": "speak-open",
+    "scope": "candidate-only"
+  }
+}

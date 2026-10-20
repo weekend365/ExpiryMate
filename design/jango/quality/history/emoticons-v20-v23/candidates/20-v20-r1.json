@@ -1,0 +1,33 @@
+{
+  "id": "20-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/20-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/20.png",
+  "mouthMode": "sad-arc",
+  "mouthRoi": [
+    565,
+    698,
+    104,
+    63
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "식사 전 상태",
+    "intensity": 2,
+    "eyes": "힘이 조금 빠진 기본 타원 눈",
+    "brows": "약한 걱정 눈썹",
+    "pose": "배를 두 장갑으로 감싸고 상체를 조금 숙인다. 머리 옆 작은 생각 기호 안에는 밥그릇 하나만, 글자·로고 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 20
+  },
+  "preflight": "design/jango/quality/jobs/20-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/20-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

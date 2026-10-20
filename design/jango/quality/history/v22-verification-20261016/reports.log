@@ -1,0 +1,5 @@
+
+> expirymate-monorepo@ jango:reports:refresh /Users/namu/Desktop/ExpiryMate
+> node scripts/refresh-jango-reports.mjs
+
+{"preparation":{"pass":32,"stale":64,"missing":0,"master-adoption":32},"note":"Reports refreshed. No preparation or release was approved."}

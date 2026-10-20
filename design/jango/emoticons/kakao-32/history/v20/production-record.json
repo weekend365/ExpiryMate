@@ -1,0 +1,3080 @@
+{
+  "version": "v20",
+  "status": "candidate",
+  "fullSet": true,
+  "count": 32,
+  "method": "30 byte-identical v18 original reuses plus two individually prepared built-in image_gen pose edits; full-body layout and separately typeset Gaegu Bold lettering",
+  "builder": "scripts/build-jango-emoticons.mjs",
+  "letteringBuilder": "scripts/render-jango-lettering.mjs",
+  "plan": "design/jango/emoticons/kakao-32/v20/plan.json",
+  "designApproval": "Independent signed visual review required; no release adopted",
+  "records": [
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 1
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 1,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 2
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "number": 1,
+      "title": "안녕!",
+      "line": "안녕!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "a3219c101e54365b736437f880190be60132b02ae6c3b936dc1a37e40980b6a2",
+      "file": "stickers/01.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/01-r1.png",
+      "sourceSHA256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "sha256": "9ec2fd323f93c95ae2f14fa8e1950ea3f856fe8d3172e9d55405e4117eb89cce",
+      "width": 360,
+      "height": 360,
+      "bytes": 76956,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1198,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/01-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 2
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 2,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/02-r2.png",
+      "number": 2,
+      "title": "좋아!",
+      "line": "좋아!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "bfa095302f3cacfeea2eb1b5930d14af3114113b57652c03439dbba7f7281269",
+      "file": "stickers/02.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/02-r1.png",
+      "sourceSHA256": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09",
+      "sha256": "aca70884d2c7f43dffb211d05b03f52e7d633ba82f47c1c737a080626df88048",
+      "width": 360,
+      "height": 360,
+      "bytes": 75268,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1214,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/02-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 3
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 3,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/03-r2.png",
+      "number": 3,
+      "title": "최고야!",
+      "line": "최고야!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "ed5eb8ae67ccc427a63f652167739d62c6d010f73d5caad45bf3dac4e687f775",
+      "file": "stickers/03.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/03-r1.png",
+      "sourceSHA256": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc",
+      "sha256": "7d1f6248fe220224a9bfa29c9e5f305f4361fd2984ee7af959da1509f1621313",
+      "width": 360,
+      "height": 360,
+      "bytes": 81350,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        15,
+        1206,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/03-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 4
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 4,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/04-r3.png",
+      "number": 4,
+      "title": "고마워!",
+      "line": "고마워!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "5a072731b576f8228cd8a18d914a1f8cd987bcea417a41332403511c2cfb32f9",
+      "file": "stickers/04.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/04-r1.png",
+      "sourceSHA256": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6",
+      "sha256": "858f1ec1aeb040f2cad5e6ad76a559c96b699025d6ea14f0c1fe5194f94a29a7",
+      "width": 360,
+      "height": 360,
+      "bytes": 76041,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        92,
+        12,
+        1061,
+        1236
+      ],
+      "preflight": "design/jango/quality/jobs/04-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 5
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 5,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/05-r2.png",
+      "number": 5,
+      "title": "사랑해",
+      "line": "사랑해",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "6823ff4cca38e85264e093e834c7330e74323abac386fae9a8bba4d72f47c3f7",
+      "file": "stickers/05.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/05-r1.png",
+      "sourceSHA256": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9",
+      "sha256": "9dcdd04eefca3c5c5e92c9139c1cded5dd7aa9c410c7574aba03e54c24cc42d2",
+      "width": 360,
+      "height": 360,
+      "bytes": 79988,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        23,
+        1214,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/05-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 6
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 6,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+      "number": 6,
+      "title": "히히",
+      "line": "히히",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "12ffc0397b22e95f21cf0820e01cd16321d080ae7970d7a3127c552323f23935",
+      "file": "stickers/06.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/06-r1.png",
+      "sourceSHA256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+      "sha256": "0545f55998299ac842ba8d05ead10329b52f70cc627fe297075bf31c4037cdf8",
+      "width": 360,
+      "height": 360,
+      "bytes": 75673,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1157,
+        1360
+      ],
+      "sourceCrop": [
+        45,
+        13,
+        1083,
+        1336
+      ],
+      "preflight": "design/jango/quality/jobs/06-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 7
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 7,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png",
+      "number": 7,
+      "title": "파이팅!",
+      "line": "파이팅!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "d95a53872021eccb0e2db6de6c84125ece5d15f2cb03610d0b1fe8471008e0cf",
+      "file": "stickers/07.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/07-r1.png",
+      "sourceSHA256": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e",
+      "sha256": "1b6e657593889a689161383fa1666a4e836a1e9ccd1e91508fe765ce135f9fbf",
+      "width": 360,
+      "height": 360,
+      "bytes": 86410,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        24,
+        1218,
+        1244
+      ],
+      "preflight": "design/jango/quality/jobs/07-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 8
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 8,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/08-r2.png",
+      "number": 8,
+      "title": "잘했어!",
+      "line": "잘했어!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "867db81ed32dfb7d8c0ee179df4d1b06e284e1a8b6b9fbeefd85542d9dbd1487",
+      "file": "stickers/08.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/08-r1.png",
+      "sourceSHA256": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0",
+      "sha256": "b0ed212e76a7fafeb4e40a95bac50c87779b3a51e42440889aed21d037031f5f",
+      "width": 360,
+      "height": 360,
+      "bytes": 85287,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1151,
+        1244
+      ],
+      "preflight": "design/jango/quality/jobs/08-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 9
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 9,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 2
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+      "number": 9,
+      "title": "알겠어!",
+      "line": "알겠어!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "65ef3dc1e73f91017200da0c2581f968aed3a628226b849990dfa27f9913b4b2",
+      "file": "stickers/09.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/09-r1.png",
+      "sourceSHA256": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "sha256": "51e6afd8438453282f8f446cd45ba2f7fc48debcedeb0e8ed004e7b0a22afcd1",
+      "width": 360,
+      "height": 360,
+      "bytes": 76113,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        23,
+        1156,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/09-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 10
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 10,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png": "ef68d5f142571ce57e39984070ffa0262fedea2464e61166694e29e687ff3595",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "individual image edit",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/10-r2.png",
+      "number": 10,
+      "title": "잠깐만!",
+      "line": "잠깐만!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "af9ce77b4b0e93e4dbddbeeecd027a5afc5d38b4cef7c4b0b59c2b1eaff8bb8d",
+      "file": "stickers/10.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/10-r1.png",
+      "sourceSHA256": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e",
+      "sha256": "54431733e384706c04a1b99c82fa58ac45d61a8d4b4c0de9d8eae6ba4084ef8d",
+      "width": 360,
+      "height": 360,
+      "bytes": 79794,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        27,
+        1240,
+        1234
+      ],
+      "preflight": "design/jango/quality/jobs/10-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 11
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 11,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+          "imageIndex": 2
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c"
+      },
+      "mouthMode": "neutral-line",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+      "number": 11,
+      "title": "음…",
+      "line": "음…",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "a9894e372fb188462912d06bdaf087b71c05f5420dcf631f926da650e2846560",
+      "file": "stickers/11.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/11-r1.png",
+      "sourceSHA256": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sha256": "a5e401c96da72959985b524ee11bde8b23b731108b8ec21cb40710bac815efea",
+      "width": 360,
+      "height": 360,
+      "bytes": 69186,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        991,
+        1242
+      ],
+      "preflight": "design/jango/quality/jobs/11-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 12
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 12,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/12-r4.png",
+      "number": 12,
+      "title": "어라?",
+      "line": "어라?",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "79ab62000b3f8f3b4de5836618166d30be16b6a1286aa65c78458482207f4c24",
+      "file": "stickers/12.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/12-r1.png",
+      "sourceSHA256": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365",
+      "sha256": "fa0b0df20e9ed07aeaf33523961f1e28b1233f7599966ab12a1befe8440ff0a8",
+      "width": 360,
+      "height": 360,
+      "bytes": 58201,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        17,
+        1236,
+        1254
+      ],
+      "preflight": "design/jango/quality/jobs/12-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 13
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 13,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/13-r3.png",
+      "number": 13,
+      "title": "헉!",
+      "line": "헉!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "2e57201647ba8295316361f33353a915156eae3b471b5e1b22ede972ffb4e9f5",
+      "file": "stickers/13.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/13-r1.png",
+      "sourceSHA256": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04",
+      "sha256": "9c6a902daf1dd63d339849b039d643c1a41eb42bfb55ad335c4b520a2c3e4b48",
+      "width": 360,
+      "height": 360,
+      "bytes": 84911,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        31,
+        1204,
+        1244
+      ],
+      "preflight": "design/jango/quality/jobs/13-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 14
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 14,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/14-r2.png",
+      "number": 14,
+      "title": "아하!",
+      "line": "아하!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "340d2f9a44ac30a74ba76d62980eb56bfa8389763abf63a9fcdbba34311c9e56",
+      "file": "stickers/14.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/14-r1.png",
+      "sourceSHA256": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83",
+      "sha256": "b1a445d16fc228a5f09c9dd131c5fd5636b728890f224f35b186be66c566d8b3",
+      "width": 360,
+      "height": 360,
+      "bytes": 82641,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        30,
+        1218,
+        1226
+      ],
+      "preflight": "design/jango/quality/jobs/14-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 15
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 15,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png": "8f39ab6b0e3ee5f68dede647e6d9e26354a779201cc113e7ea118584d7ce47af",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "individual image edit",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/15-r2.png",
+      "number": 15,
+      "title": "난 패스!",
+      "line": "난 패스!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "3e2ef758f972c4a2fbd9457f795364020e7c0d0e3db26f2fc105f7f5861f7ea1",
+      "file": "stickers/15.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/15-r1.png",
+      "sourceSHA256": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4",
+      "sha256": "845b0ca19ccfb7cdca9624a88f5bc2599cdd0b6095ec6126ea1ae3a417a05f04",
+      "width": 360,
+      "height": 360,
+      "bytes": 76959,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        19,
+        1234,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/15-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 16
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 16,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/16-r2.png",
+      "number": 16,
+      "title": "축하해!",
+      "line": "축하해!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "2c022c48acd53821038db5bb08b5e3a03478fe840b4e0ead33e1970f9217417f",
+      "file": "stickers/16.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/16-r1.png",
+      "sourceSHA256": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26",
+      "sha256": "a0a8d381a91da204de54a490a656a26f1c6f1a21d5d9a68135de7e99c16af52e",
+      "width": 360,
+      "height": 360,
+      "bytes": 79952,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        22,
+        1214,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/16-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 17
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 17,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+          "imageIndex": 2
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c"
+      },
+      "mouthMode": "sad-arc",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+      "number": 17,
+      "title": "미안해…",
+      "line": "미안해…",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "5ae7d708c8c1a1527681de8d9d8b2c4d7771522ee3e1acf3f19efecd1e3a85b3",
+      "file": "stickers/17.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/17-r1.png",
+      "sourceSHA256": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3",
+      "sha256": "255593dbf8ed1fe5c3b2a0d0af5a32a4f34cdea99095b18322f416d1c5acd917",
+      "width": 360,
+      "height": 360,
+      "bytes": 71519,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        59,
+        17,
+        1202,
+        1235
+      ],
+      "preflight": "design/jango/quality/jobs/17-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 18
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 18,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/18-r2.png",
+      "number": 18,
+      "title": "괜찮아",
+      "line": "괜찮아",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "c58d8fdc5cc4869114b95c71b2efb18bb3b5455b271fa04994432743dc7018bd",
+      "file": "stickers/18.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/18-r1.png",
+      "sourceSHA256": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01",
+      "sha256": "a5e4c192aa836848f9baa5861fba87cd179170ccc786ba17fd4fbca7c1e83eb6",
+      "width": 360,
+      "height": 360,
+      "bytes": 76109,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        92,
+        21,
+        1196,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/18-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 19
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 19,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/19-r2.png",
+      "number": 19,
+      "title": "쉬어 가",
+      "line": "쉬어 가",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "b075e58cb049fd39215f6661e465c4dde7f956d70b8c6e46c27431be242b4575",
+      "file": "stickers/19.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/19-r1.png",
+      "sourceSHA256": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23",
+      "sha256": "c04b30f042a9df35f59cec1ce84fc50eb66444637de8bb8065e039352a9d185a",
+      "width": 360,
+      "height": 360,
+      "bytes": 80795,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        15,
+        1200,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/19-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 20
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 20,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+      },
+      "mouthMode": "sad-arc",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/20-r2.png",
+      "number": 20,
+      "title": "배고파…",
+      "line": "배고파…",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "1ddfbeae81b80a796723d1a3832aa3204b8c9ace171e71fe128a6cc4d63bde98",
+      "file": "stickers/20.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/20-r1.png",
+      "sourceSHA256": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838",
+      "sha256": "4697e91a7471de4a135a25eedb4016584480cd4acaa9b6bc88d58bfbc683fedc",
+      "width": 360,
+      "height": 360,
+      "bytes": 81662,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1238,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/20-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 21
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 21,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/21-r2.png",
+      "number": 21,
+      "title": "냠냠",
+      "line": "냠냠",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "067b04af8f272b87f0557a7a5d5a5ac34dec20a8cd0ad5859659d875dcde1343",
+      "file": "stickers/21.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/21-r1.png",
+      "sourceSHA256": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03",
+      "sha256": "a790f36407045b6b51cd920559a40c3271c507721c4156f6f6b407f80196daf1",
+      "width": 360,
+      "height": 360,
+      "bytes": 73269,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        87,
+        13,
+        1214,
+        1239
+      ],
+      "preflight": "design/jango/quality/jobs/21-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 22
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 22,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/22-r2.png",
+      "number": 22,
+      "title": "맛있어!",
+      "line": "맛있어!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "0095cfbded50215e254b2ca1b0c93aecb8eac135f03bec41a8cc75720a0af6e4",
+      "file": "stickers/22.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/22-r1.png",
+      "sourceSHA256": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8",
+      "sha256": "f6dcc6c04fdddc1befe500e485801dd4346dcca5891afaa18bccb6fb0a77e912",
+      "width": 360,
+      "height": 360,
+      "bytes": 79072,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1214,
+        1229
+      ],
+      "preflight": "design/jango/quality/jobs/22-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 23
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 23,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/23-r2.png",
+      "number": 23,
+      "title": "요리 중!",
+      "line": "요리 중!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "979358e604492eadca323c6336903fbef7a4d11f5464d2a61e0806ac172e0200",
+      "file": "stickers/23.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/23-r1.png",
+      "sourceSHA256": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a",
+      "sha256": "2966753ba48307bc0f48a94ab29434644da3cc7b8233f1a43209460e4d9c0b24",
+      "width": 360,
+      "height": 360,
+      "bytes": 81987,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        19,
+        1218,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/23-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 24
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "imageIndex": 1
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 24,
+          "imageIndex": 2
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 3
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "number": 24,
+      "title": "완성!",
+      "line": "완성!",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "c93dfaadf6e07bce9df9aadda9c61b28c39124318efa52425984e62337c75abf",
+      "file": "stickers/24.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/24-r1.png",
+      "sourceSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "sha256": "17780e0958992bb327bf7f42d23f0a7e819879122382ffe963ce0548d23cd842",
+      "width": 360,
+      "height": 360,
+      "bytes": 78470,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1216,
+        1224
+      ],
+      "preflight": "design/jango/quality/jobs/24-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 25
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 25,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/25-r3.png",
+      "number": 25,
+      "title": "확인했어!",
+      "line": "확인했어!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "9d4583745ee33ddb5f57d44fe8053d2b0247fe58229037c54915e5dab04bd665",
+      "file": "stickers/25.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/25-r1.png",
+      "sourceSHA256": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109",
+      "sha256": "3d9390496a323110d150e0e115725b3e048ab864cb606239199038779358daed",
+      "width": 360,
+      "height": 360,
+      "bytes": 82553,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1214,
+        1240
+      ],
+      "preflight": "design/jango/quality/jobs/25-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 26
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 26,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/26-r3.png",
+      "number": 26,
+      "title": "같이 가자!",
+      "line": "같이 가자!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "58252a6977ee34a6bf16f9c41955bd9f5dfe34df3e0dcb7af830d043963bb7af",
+      "file": "stickers/26.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/26-r1.png",
+      "sourceSHA256": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810",
+      "sha256": "0c530b4d1786c07a0273516c9442ec68eb95c15a5fbb79f60db1933fc659fd97",
+      "width": 360,
+      "height": 360,
+      "bytes": 82441,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        61,
+        17,
+        1226,
+        1242
+      ],
+      "preflight": "design/jango/quality/jobs/26-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 27
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 27,
+          "imageIndex": 3
+        },
+        {
+          "role": "speak-mouth",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+      },
+      "mouthMode": "speak-open",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/27-r2.png",
+      "number": 27,
+      "title": "밥 먹었어?",
+      "line": "밥 먹었어?",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "5b6271a19f841130a00f7eeb82853f47ef06ed5e0b21ac9e647dc441ff1ebe34",
+      "file": "stickers/27.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/27-r1.png",
+      "sourceSHA256": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2",
+      "sha256": "5469d8a8f93ae1a00233f3ee306bb1bcf7b78b6160b937dff1e3bc842ed9789c",
+      "width": 360,
+      "height": 360,
+      "bytes": 86615,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        17,
+        1218,
+        1228
+      ],
+      "preflight": "design/jango/quality/jobs/27-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 28
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 28,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+      },
+      "mouthMode": "neutral-line",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/28-r3.png",
+      "number": 28,
+      "title": "뭐 먹을까?",
+      "line": "뭐 먹을까?",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "6e8269a05a5b98526eff25a283af3c95bceff4d5211645c2e35230184313d324",
+      "file": "stickers/28.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/28-r1.png",
+      "sourceSHA256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+      "sha256": "eba9f4c88ae1ca9782cb8f37ab2762f5b997605d5a3578d818d85464796a3186",
+      "width": 360,
+      "height": 360,
+      "bytes": 91813,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        93,
+        14,
+        1181,
+        1245
+      ],
+      "preflight": "design/jango/quality/jobs/28-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 29
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 29,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+      },
+      "mouthMode": "neutral-line",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/29-r2.png",
+      "number": 29,
+      "title": "방전…",
+      "line": "방전…",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "66b550833d91ef48b26ad18919d070e83e99c5402fa670885fe12cd4fc6316f7",
+      "file": "stickers/29.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/29-r1.png",
+      "sourceSHA256": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c",
+      "sha256": "409ef19ce35fb1981e127effcfcda3c9e9c50e326bb1c8d0eb649242e8c663bd",
+      "width": 360,
+      "height": 360,
+      "bytes": 72929,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        16,
+        1224,
+        1254
+      ],
+      "preflight": "design/jango/quality/jobs/29-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 30
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 30,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/30-r2.png",
+      "number": 30,
+      "title": "잘 자",
+      "line": "잘 자",
+      "captionKind": "reaction",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "374b4c92c0896fbdc89845edc6c687474a6f194e6dc51419ded2b5b3e2f0ecd9",
+      "file": "stickers/30.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/30-r1.png",
+      "sourceSHA256": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6",
+      "sha256": "d217b45b5b38956618567061333e66b4ffcc39c429463d4696525ba1509b839a",
+      "width": 360,
+      "height": 360,
+      "bytes": 91980,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        15,
+        1208,
+        1218
+      ],
+      "preflight": "design/jango/quality/jobs/30-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 31
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 31,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/17-r2.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+      },
+      "mouthMode": "sad-arc",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "number": 31,
+      "title": "저기…",
+      "line": "저기…",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "5fad95b9c32030d36e2703650efbdfe51f729ee7dfd4ad23ce57f15b97763306",
+      "file": "stickers/31.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/31-r1.png",
+      "sourceSHA256": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67",
+      "sha256": "c7ff56193959f35fff9e41fa5dec6c6e2ec87bcef29e4ed9cce7cd17e3e59c40",
+      "width": 360,
+      "height": 360,
+      "bytes": 76652,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        5,
+        1214,
+        1230
+      ],
+      "preflight": "design/jango/quality/jobs/31-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    },
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 32
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png",
+          "imageIndex": 2
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 32,
+          "imageIndex": 3
+        },
+        {
+          "role": "mouth-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png",
+          "imageIndex": 4
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/09-r2.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+      },
+      "mouthMode": "idle-u",
+      "operation": "layout-lettering-only",
+      "origin": "design/jango/emoticons/kakao-32/v18/source-originals/32-r2.png",
+      "number": 32,
+      "title": "마음 받아!",
+      "line": "마음 받아!",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          46,
+          234,
+          932,
+          744
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 110,
+          "size": 220,
+          "rotation": 0,
+          "maxWidth": 888,
+          "font": "Gaegu-Bold",
+          "outline": 0,
+          "inkHeight": 108,
+          "outlinePx": 9,
+          "punctuationScale": 0.55
+        }
+      },
+      "letteringSHA256": "e3c10c72f7dd1949119bbb733fe0f4b5a43bd92657546afb781d134146cd8adc",
+      "file": "stickers/32.png",
+      "source": "design/jango/emoticons/kakao-32/v20/source-originals/32-r1.png",
+      "sourceSHA256": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d",
+      "sha256": "4a062ea8810dbb5bfa3ff8e638d48d60cad0a5d6a47775027417c50c9f09c426",
+      "width": 360,
+      "height": 360,
+      "bytes": 79534,
+      "minMargin": 16,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        61,
+        16,
+        1214,
+        1224
+      ],
+      "preflight": "design/jango/quality/jobs/32-v20-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    }
+  ]
+}

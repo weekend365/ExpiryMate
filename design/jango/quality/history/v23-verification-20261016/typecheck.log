@@ -1,0 +1,112 @@
+
+> expirymate-monorepo@ typecheck /Users/namu/Desktop/ExpiryMate
+> pnpm db:generate && pnpm --filter @expirymate/shared build && pnpm -r --if-present typecheck
+
+
+> expirymate-monorepo@ db:generate /Users/namu/Desktop/ExpiryMate
+> pnpm --filter @expirymate/api db:generate
+
+
+> @expirymate/api@0.1.0 db:generate /Users/namu/Desktop/ExpiryMate/apps/api
+> node ./scripts/prisma-generate.mjs
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v6.19.3) to ./../../node_modules/.pnpm/@prisma+client@6.19.3_prisma@6.19.3_typescript@5.9.3__typescript@5.9.3/node_modules/@prisma/client in 343ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+
+> @expirymate/shared@0.1.0 build /Users/namu/Desktop/ExpiryMate/packages/shared
+> tsup src/index.ts --format esm,cjs --dts
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Target: es2022
+ESM Build start
+CJS Build start
+CJS dist/index.cjs 135.67 KB
+CJS ⚡️ Build success in 149ms
+ESM dist/index.js 109.45 KB
+ESM ⚡️ Build success in 149ms
+DTS Build start
+DTS ⚡️ Build success in 2052ms
+DTS dist/index.d.ts  173.72 KB
+DTS dist/index.d.cts 173.72 KB
+Scope: 4 of 5 workspace projects
+packages/shared typecheck$ tsc --noEmit
+packages/shared typecheck: Done
+apps/admin pretypecheck$ pnpm --filter @expirymate/shared build
+apps/api pretypecheck$ pnpm --filter @expirymate/shared build && node ./scripts/prisma-generate.mjs
+apps/mobile pretypecheck$ pnpm --filter @expirymate/shared build
+apps/api pretypecheck: > @expirymate/shared@0.1.0 build /Users/namu/Desktop/ExpiryMate/packages/shared
+apps/api pretypecheck: > tsup src/index.ts --format esm,cjs --dts
+apps/admin pretypecheck: > @expirymate/shared@0.1.0 build /Users/namu/Desktop/ExpiryMate/packages/shared
+apps/admin pretypecheck: > tsup src/index.ts --format esm,cjs --dts
+apps/mobile pretypecheck: > @expirymate/shared@0.1.0 build /Users/namu/Desktop/ExpiryMate/packages/shared
+apps/mobile pretypecheck: > tsup src/index.ts --format esm,cjs --dts
+apps/api pretypecheck: CLI Building entry: src/index.ts
+apps/api pretypecheck: CLI Using tsconfig: tsconfig.json
+apps/api pretypecheck: CLI tsup v8.5.1
+apps/admin pretypecheck: CLI Building entry: src/index.ts
+apps/admin pretypecheck: CLI Using tsconfig: tsconfig.json
+apps/admin pretypecheck: CLI tsup v8.5.1
+apps/mobile pretypecheck: CLI Building entry: src/index.ts
+apps/mobile pretypecheck: CLI Using tsconfig: tsconfig.json
+apps/mobile pretypecheck: CLI tsup v8.5.1
+apps/api pretypecheck: CLI Target: es2022
+apps/api pretypecheck: ESM Build start
+apps/api pretypecheck: CJS Build start
+apps/admin pretypecheck: CLI Target: es2022
+apps/admin pretypecheck: ESM Build start
+apps/admin pretypecheck: CJS Build start
+apps/mobile pretypecheck: CLI Target: es2022
+apps/mobile pretypecheck: ESM Build start
+apps/mobile pretypecheck: CJS Build start
+apps/mobile pretypecheck: ESM dist/index.js 109.45 KB
+apps/mobile pretypecheck: ESM ⚡️ Build success in 76ms
+apps/mobile pretypecheck: CJS dist/index.cjs 135.67 KB
+apps/mobile pretypecheck: CJS ⚡️ Build success in 79ms
+apps/api pretypecheck: CJS dist/index.cjs 135.67 KB
+apps/api pretypecheck: CJS ⚡️ Build success in 85ms
+apps/api pretypecheck: ESM dist/index.js 109.45 KB
+apps/api pretypecheck: ESM ⚡️ Build success in 85ms
+apps/admin pretypecheck: ESM dist/index.js 109.45 KB
+apps/admin pretypecheck: ESM ⚡️ Build success in 84ms
+apps/admin pretypecheck: CJS dist/index.cjs 135.67 KB
+apps/admin pretypecheck: CJS ⚡️ Build success in 85ms
+apps/admin pretypecheck: DTS Build start
+apps/mobile pretypecheck: DTS Build start
+apps/api pretypecheck: DTS Build start
+apps/api pretypecheck: DTS ⚡️ Build success in 2263ms
+apps/api pretypecheck: DTS dist/index.d.ts  173.72 KB
+apps/api pretypecheck: DTS dist/index.d.cts 173.72 KB
+apps/mobile pretypecheck: DTS ⚡️ Build success in 2317ms
+apps/mobile pretypecheck: DTS dist/index.d.ts  173.72 KB
+apps/mobile pretypecheck: DTS dist/index.d.cts 173.72 KB
+apps/admin pretypecheck: DTS ⚡️ Build success in 2360ms
+apps/admin pretypecheck: DTS dist/index.d.ts  173.72 KB
+apps/admin pretypecheck: DTS dist/index.d.cts 173.72 KB
+apps/mobile pretypecheck: Done
+apps/mobile typecheck$ tsc --noEmit
+apps/admin pretypecheck: Done
+apps/admin typecheck$ tsc --noEmit
+apps/api pretypecheck: warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+apps/api pretypecheck: For more information, see: https://pris.ly/prisma-config
+apps/api pretypecheck: Environment variables loaded from .env
+apps/api pretypecheck: Prisma schema loaded from prisma/schema.prisma
+apps/api pretypecheck: ✔ Generated Prisma Client (v6.19.3) to ./../../node_modules/.pnpm/@prisma+client@6.19.3_prisma@6.19.3_typescript@5.9.3__typescript@5.9.3/node_modules/@prisma/client in 731ms
+apps/api pretypecheck: Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+apps/api pretypecheck: Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+apps/api pretypecheck: Done
+apps/api typecheck$ tsc --noEmit
+apps/admin typecheck: Done
+apps/api typecheck: Done
+apps/mobile typecheck: Done

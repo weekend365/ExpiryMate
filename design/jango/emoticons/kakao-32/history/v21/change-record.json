@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-15",
+  "baseVersion": "v20",
+  "concept": "다정하지만 허당인 생활 친구",
+  "method": "24 byte-identical v20 artwork reuses and 8 individual official imagegen redraws; separately rendered Gaegu Bold captions with measured sizes, pixel outlines and per-caption rotation/placement",
+  "redraws": [
+    3,
+    8,
+    11,
+    12,
+    16,
+    18,
+    21,
+    31
+  ],
+  "captionChanges": {
+    "11": "멍…",
+    "19": "좀 쉬자",
+    "21": "한 입만",
+    "23": "내가 할게!",
+    "24": "다 됐어!",
+    "29": "절전 중…",
+    "31": "나도 껴줘",
+    "32": "내 맘 받아!"
+  },
+  "scope": "candidate-only; no MASTER adoption, app replacement, Kakao submission or signed release"
+}

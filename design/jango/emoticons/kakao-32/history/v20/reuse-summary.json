@@ -1,0 +1,8 @@
+{
+  "count": 30,
+  "operation": "layout-lettering-only",
+  "imageGeneration": false,
+  "scope": "Only the 30 v20 reuse operations; inherited v18 built-in image_gen history is preserved",
+  "inheritedAIHistory": true,
+  "approval": "candidate; signed release pending"
+}

@@ -1,0 +1,509 @@
+
+> expirymate-monorepo@ test /Users/namu/Desktop/ExpiryMate
+> pnpm jango:test && pnpm -r --if-present test
+
+
+> expirymate-monorepo@ jango:test /Users/namu/Desktop/ExpiryMate
+> node --test --test-concurrency=1 scripts/jango-design-gate.test.mjs scripts/jango-emoticon-layout.test.mjs
+
+TAP version 13
+# Subtest: v18 selected bytes and representative are immutable; mouth thresholds unchanged
+ok 1 - v18 selected bytes and representative are immutable; mouth thresholds unchanged
+  ---
+  duration_ms: 1.312583
+  ...
+# Subtest: v18 originals are the active MASTER and v19 adoption history remains intact
+ok 2 - v18 originals are the active MASTER and v19 adoption history remains intact
+  ---
+  duration_ms: 4265.463042
+  ...
+# Subtest: new preparation uses the selected v18 original and refuses the retired pencil style
+ok 3 - new preparation uses the selected v18 original and refuses the retired pencil style
+  ---
+  duration_ms: 1701.153334
+  ...
+# Subtest: four actual v18 mouth anchors pass without recalibrating limits
+ok 4 - four actual v18 mouth anchors pass without recalibrating limits
+  ---
+  duration_ms: 460.749667
+  ...
+# Subtest: master adoption is explicit and is not a signed release or recreated preparation
+ok 5 - master adoption is explicit and is not a signed release or recreated preparation
+  ---
+  duration_ms: 3671.426084
+  ...
+# Subtest: old style, unregistered input, missing references and hash changes are refused
+ok 6 - old style, unregistered input, missing references and hash changes are refused
+  ---
+  duration_ms: 1407.883792
+  ...
+# Subtest: SNS expression policy does not admit unsupported kinds or mouths into the emoticon gate
+ok 7 - SNS expression policy does not admit unsupported kinds or mouths into the emoticon gate
+  ---
+  duration_ms: 878.559083
+  ...
+# Subtest: prepare keeps positional CLI, validates options and computes deduplicated actual indices
+ok 8 - prepare keeps positional CLI, validates options and computes deduplicated actual indices
+  ---
+  duration_ms: 494.795916
+  ...
+# Subtest: new preparation rejects missing reasons or malformed intent and never overwrites a job
+ok 9 - new preparation rejects missing reasons or malformed intent and never overwrites a job
+  ---
+  duration_ms: 2452.460708
+  ...
+# Subtest: expressive candidates bind an explicit creative brief and never receive legacy mouth approval
+ok 10 - expressive candidates bind an explicit creative brief and never receive legacy mouth approval
+  ---
+  duration_ms: 2953.517584
+  ...
+# Subtest: fresh candidate, valid test signature, forgery, stale prompt and uncertain pose remain enforced
+ok 11 - fresh candidate, valid test signature, forgery, stale prompt and uncertain pose remain enforced
+  ---
+  duration_ms: 324921.83475
+  ...
+# Subtest: registered derivative must have intact generation, input and attachment provenance
+ok 12 - registered derivative must have intact generation, input and attachment provenance
+  ---
+  duration_ms: 1032.988167
+  ...
+# Subtest: byte-identical reuse rejects missing provenance, tampered origins, generated claims and cycles
+ok 13 - byte-identical reuse rejects missing provenance, tampered origins, generated claims and cycles
+  ---
+  duration_ms: 6829.754667
+  ...
+# Subtest: incomplete ROI, empty PNG, insufficient margin and clipped original never pass
+ok 14 - incomplete ROI, empty PNG, insufficient margin and clipped original never pass
+  ---
+  duration_ms: 135.57725
+  ...
+# Subtest: unregistered image is rejected
+ok 15 - unregistered image is rejected
+  ---
+  duration_ms: 160183.033792
+  ...
+# Subtest: line modes distinguish flat, sad, smiling, filled and cropped geometry
+ok 16 - line modes distinguish flat, sad, smiling, filled and cropped geometry
+  ---
+  duration_ms: 126.850459
+  ...
+# Subtest: open mouth rejects missing tongue and teeth without inheriting old images
+ok 17 - open mouth rejects missing tongue and teeth without inheriting old images
+  ---
+  duration_ms: 203.909291
+  ...
+# Subtest: MASTER roster retains exact 32 titles, lines, mouth modes and original 96 protected assets
+ok 18 - MASTER roster retains exact 32 titles, lines, mouth modes and original 96 protected assets
+  ---
+  duration_ms: 32.185833
+  ...
+# Subtest: silent titles and missing/duplicate roster entries are rejected correctly
+ok 19 - silent titles and missing/duplicate roster entries are rejected correctly
+  ---
+  duration_ms: 0.706458
+  ...
+# Subtest: invalid framing, omitted framing intent and excluded character cannot be hidden
+ok 20 - invalid framing, omitted framing intent and excluded character cannot be hidden
+  ---
+  duration_ms: 0.41375
+  ...
+# Subtest: caption kind, typography, rotation and exact multiline order are enforced
+ok 21 - caption kind, typography, rotation and exact multiline order are enforced
+  ---
+  duration_ms: 0.597584
+  ...
+# Subtest: full-body framing rejects anatomy crops and preserves all source bounds
+ok 22 - full-body framing rejects anatomy crops and preserves all source bounds
+  ---
+  duration_ms: 0.268833
+  ...
+# Subtest: measured lettering retains dark ink, a visible white outline and transparent padding
+ok 23 - measured lettering retains dark ink, a visible white outline and transparent padding
+  ---
+  duration_ms: 16.913208
+  ...
+# Subtest: normalized text rotation preserves ink, white outline and safe transparent bounds
+ok 24 - normalized text rotation preserves ink, white outline and safe transparent bounds
+  ---
+  duration_ms: 173.847458
+  ...
+# Subtest: shared font reference retains natural glyph heights instead of enlarging short syllables
+ok 25 - shared font reference retains natural glyph heights instead of enlarging short syllables
+  ---
+  duration_ms: 8.033958
+  ...
+# Subtest: 32 PNGs retain transparent edges, safe margins and exact caption-free layout without collisions
+ok 26 - 32 PNGs retain transparent edges, safe margins and exact caption-free layout without collisions
+  ---
+  duration_ms: 1179.784916
+  ...
+# Subtest: Gaegu font and license match preserved source provenance
+ok 27 - Gaegu font and license match preserved source provenance
+  ---
+  duration_ms: 9.111291
+  ...
+# Subtest: MASTER builder verifies without overwriting and no previous version input is needed
+ok 28 - MASTER builder verifies without overwriting and no previous version input is needed
+  ---
+  duration_ms: 258.048833
+  ...
+# Subtest: macOS lettering reproduces frozen v18 output in a separate version and refuses MASTER writes
+ok 29 - macOS lettering reproduces frozen v18 output in a separate version and refuses MASTER writes
+  ---
+  duration_ms: 1392.811084
+  ...
+# Subtest: single-cut lettering preserves unselected layers and the exact three-period caption
+ok 30 - single-cut lettering preserves unselected layers and the exact three-period caption
+  ---
+  duration_ms: 544.1905
+  ...
+# Subtest: v20 implements the exact 32 captions, full-body outputs and honest 30-reuse/2-redraw lineage
+ok 31 - v20 implements the exact 32 captions, full-body outputs and honest 30-reuse/2-redraw lineage
+  ---
+  duration_ms: 439.273291
+  ...
+# Subtest: v21 keeps 24 originals and distinguishes 8 expressive redraws with the requested captions
+ok 32 - v21 keeps 24 originals and distinguishes 8 expressive redraws with the requested captions
+  ---
+  duration_ms: 556.390708
+  ...
+# Subtest: v22 preserves all v21 artwork and expressions while sharing font size across each caption tier
+ok 33 - v22 preserves all v21 artwork and expressions while sharing font size across each caption tier
+  ---
+  duration_ms: 1973.747208
+  ...
+# Subtest: v23 changes only slot 29 with generated seated exhaustion and the exact requested caption
+ok 34 - v23 changes only slot 29 with generated seated exhaustion and the exact requested caption
+  ---
+  duration_ms: 480.881625
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 519877.525292
+Scope: 4 of 5 workspace projects
+packages/shared test$ vitest run
+packages/shared test:  RUN  v3.2.4 /Users/namu/Desktop/ExpiryMate/packages/shared
+packages/shared test:  ✓ src/utils/recipe-step-timer.test.ts (10 tests) 3ms
+packages/shared test:  ✓ src/utils/units.test.ts (11 tests) 6ms
+packages/shared test:  ✓ src/utils/date.test.ts (5 tests) 41ms
+packages/shared test:  ✓ src/design/tokens.test.ts (11 tests) 8ms
+packages/shared test:  ✓ src/utils/inventory.test.ts (6 tests) 28ms
+packages/shared test:  ✓ src/schemas/inventory-contracts.test.ts (14 tests) 15ms
+packages/shared test:  ✓ src/schemas/recipes.test.ts (24 tests) 50ms
+packages/shared test:  ✓ src/utils/api-url.test.ts (15 tests) 3ms
+packages/shared test:  ✓ src/schemas/spaces.test.ts (3 tests) 3ms
+packages/shared test:  ✓ src/schemas/monetization.test.ts (3 tests) 6ms
+packages/shared test:  ✓ src/schemas/notifications.test.ts (10 tests) 8ms
+packages/shared test:  ✓ src/schemas/opened-inventory.test.ts (3 tests) 6ms
+packages/shared test:  ✓ src/schemas/affiliate.test.ts (7 tests) 5ms
+packages/shared test:  ✓ src/schemas/ai.test.ts (6 tests) 8ms
+packages/shared test:  ✓ src/constants/labels.test.ts (6 tests) 6ms
+packages/shared test:  ✓ src/utils/catalog-confidence.test.ts (6 tests) 2ms
+packages/shared test:  ✓ src/utils/recipe-preference-summary.test.ts (4 tests) 4ms
+packages/shared test:  ✓ src/schemas/shopping.test.ts (2 tests) 8ms
+packages/shared test:  ✓ src/schemas/insights.test.ts (1 test) 3ms
+packages/shared test:  ✓ src/utils/catalog-text.test.ts (6 tests) 3ms
+packages/shared test:  ✓ src/schemas/auth.test.ts (3 tests) 6ms
+packages/shared test:  ✓ src/schemas/support.test.ts (2 tests) 2ms
+packages/shared test:  ✓ src/design/character.test.ts (1 test) 2ms
+packages/shared test:  ✓ src/utils/affiliate-products.test.ts (3 tests) 2ms
+packages/shared test:  Test Files  24 passed (24)
+packages/shared test:       Tests  162 passed (162)
+packages/shared test:    Start at  15:30:50
+packages/shared test:    Duration  1.33s (transform 839ms, setup 0ms, collect 2.62s, tests 227ms, environment 3ms, prepare 1.39s)
+packages/shared test: Done
+apps/api test$ vitest run
+apps/mobile test$ vitest run
+apps/mobile test:  RUN  v3.2.4 /Users/namu/Desktop/ExpiryMate/apps/mobile
+apps/api test:  RUN  v3.2.4 /Users/namu/Desktop/ExpiryMate/apps/api
+apps/api test: (node:67694) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+apps/api test: (Use `node --trace-deprecation ...` to show where the warning was created)
+apps/api test: [Nest] 67697  - 10/16/2026, 3:30:52 PM    WARN [InventoryPhotoParseService] Photo parse failed for scene=receipt bytes=2 hash=71563ad80061
+apps/api test:  ✓ src/modules/inventory/inventory-photo-parse.service.test.ts (8 tests) 19ms
+apps/api test:  ✓ src/modules/monetization/monetization.service.test.ts (33 tests) 47ms
+apps/api test:  ✓ src/modules/inventory/inventory.service.test.ts (30 tests) 37ms
+apps/api test: (node:67691) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+apps/api test: (Use `node --trace-deprecation ...` to show where the warning was created)
+apps/api test:  ✓ src/modules/monetization/credit-purchases.service.test.ts (4 tests) 313ms
+apps/api test:    ✓ CreditPurchasesService > consumes a Google Play credit purchase after granting credits  305ms
+apps/api test:  ✓ src/modules/product-masters/barcode-contribution-moderation.test.ts (19 tests) 24ms
+apps/api test:  ✓ src/modules/admin/admin-monetization.service.test.ts (7 tests) 15ms
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM   ERROR [RecipesService] Recipe generation failed; see accounting failureCode.
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_INGREDIENT_1_UNIT_MISMATCH,DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_2_INGREDIENT_1_UNIT_MISMATCH,DISH_2_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_3_INGREDIENT_1_UNIT_MISMATCH,DISH_3_INGREDIENT_1_QUANTITY_EXCEEDED
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested final repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_2_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_3_INGREDIENT_1_QUANTITY_EXCEEDED
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested final repair: DISH_1_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_2_INGREDIENT_1_QUANTITY_EXCEEDED,DISH_3_INGREDIENT_1_QUANTITY_EXCEEDED
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM   ERROR [RecipesService] Recipe generation failed; see accounting failureCode.
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_UNDECLARED_INGREDIENT:버터
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_UNDECLARED_INGREDIENT:버터
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested final repair: DISH_1_UNDECLARED_INGREDIENT:고추장
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested final repair: QUICK_NOVEL_STRATEGY_MUST_BE_FASTEST
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM    WARN [RecipesService] Recipe semantic validation requested final repair: DISH_1_SERVINGS_MISMATCH,DISH_2_SERVINGS_MISMATCH,DISH_3_SERVINGS_MISMATCH
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM   ERROR [RecipesService] Recipe generation failed; see accounting failureCode.
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM   ERROR [RecipesService] Recipe generation failed; see accounting failureCode.
+apps/api test: [Nest] 67715  - 10/16/2026, 3:30:53 PM   ERROR [RecipesService] Recipe generation failed; see accounting failureCode.
+apps/api test:  ✓ src/modules/recipes/recipes.generation.test.ts (14 tests) 124ms
+apps/api test:  ✓ src/modules/affiliate/coupang-partners.client.test.ts (11 tests) 1101ms
+apps/api test:    ✓ CoupangPartnersClient > returns null after invalid JSON or a timed-out request  506ms
+apps/api test:  ✓ src/modules/auth/auth.service.test.ts (26 tests) 965ms
+apps/api test:    ✓ AuthService > ignores client-supplied Apple email when the id_token has no email claim  419ms
+apps/api test: [Nest] 67720  - 10/16/2026, 3:30:53 PM    WARN [ProductMastersService] Open Food Facts lookup error: network unavailable
+apps/api test:  ✓ src/modules/product-masters/product-masters.service.test.ts (19 tests) 45ms
+apps/api test:  ✓ src/modules/admin/admin.service.test.ts (5 tests) 41ms
+apps/api test:  ✓ src/modules/affiliate/affiliate-offer.service.test.ts (14 tests) 52ms
+apps/api test:  ✓ src/common/photo-upload-options.test.ts (6 tests) 43ms
+apps/api test:  ✓ src/modules/recipes/recipe-validation.test.ts (16 tests) 53ms
+apps/api test:  ✓ scripts/ai-evaluation-report.test.ts (3 tests) 124ms
+apps/api test:  ✓ src/modules/notifications/notifications.service.test.ts (12 tests) 61ms
+apps/api test:  ✓ src/common/prisma-errors.test.ts (10 tests) 2ms
+apps/api test:  ✓ src/modules/recipes/recipes.service.test.ts (12 tests) 132ms
+apps/api test:  ✓ src/modules/recipes/recipe-model-rollout.test.ts (6 tests) 31ms
+apps/api test:  ✓ src/modules/spaces/spaces.service.test.ts (23 tests) 37ms
+apps/api test:  ✓ src/modules/settings/settings.service.test.ts (11 tests) 21ms
+apps/api test:  ✓ src/modules/dashboard/dashboard.service.test.ts (2 tests) 15ms
+apps/mobile test:  ✓ src/features/auth/session-boundary.test.ts (7 tests) 346ms
+apps/mobile test:    ✓ session boundary cleanup > clears query cache, registration draft, and recipe generation state  340ms
+apps/api test:  ✓ src/modules/admin/admin.controller.test.ts (6 tests) 6ms
+apps/api test:  ✓ src/modules/notifications/expo-push.service.test.ts (4 tests) 63ms
+apps/api test:  ✓ src/modules/inventory/inventory-photo-parse.policy.test.ts (17 tests) 74ms
+apps/api test:  ✓ src/modules/admin/product-masters-admin.service.test.ts (5 tests) 8ms
+apps/api test:  ✓ src/modules/insights/insights.service.test.ts (3 tests) 19ms
+apps/mobile test: (node:67772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+apps/mobile test: (Use `node --trace-warnings ...` to show where the warning was created)
+apps/api test:  ✓ src/modules/shopping/shopping.service.test.ts (9 tests) 11ms
+apps/mobile test:  ✓ scripts/app-variant.test.mjs (6 tests) 280ms
+apps/mobile test:  ✓ src/shared/android-font-scale-patch.test.ts (9 tests) 1557ms
+apps/mobile test:    ✓ Android font-scale source build configuration > passes relocated paths through the installed Expo autolinker while preserving source CMake libraries  1497ms
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > accepts a complete production configuration
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, MONETIZATION_REVENUE_LEDGER_ENABLED, HOUSEHOLD_SUBSCRIPTIONS_ENABLED, SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES, SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > allows production without Naver OAuth credentials
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, MONETIZATION_REVENUE_LEDGER_ENABLED, HOUSEHOLD_SUBSCRIPTIONS_ENABLED, SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES, SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > allows missing OPENAI_API_KEY when both AI features are disabled
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, MONETIZATION_REVENUE_LEDGER_ENABLED, HOUSEHOLD_SUBSCRIPTIONS_ENABLED, SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES, SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > validates photo candidates and the AI time budgets
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, MONETIZATION_REVENUE_LEDGER_ENABLED, HOUSEHOLD_SUBSCRIPTIONS_ENABLED, SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES, SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > applies safe monetization defaults when production omits those keys
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_SUBSCRIBER_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_SUBSCRIBER_MONTHLY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, RECIPE_FREE_DAILY_LIMIT, RECIPE_REWARDED_DAILY_LIMIT, RECIPE_SUBSCRIBER_DAILY_LIMIT, RECIPE_SUBSCRIBER_MONTHLY_LIMIT, RECIPE_ABSOLUTE_DAILY_LIMIT, MONETIZATION_OFFER_MODE, MONETIZATION_UNIT_ECONOMICS_GUARDRAILS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, MONETIZATION_REVENUE_LEDGER_ENABLED, HOUSEHOLD_SUBSCRIPTIONS_ENABLED, BARCODE_REWARDS_ENABLED, BARCODE_REWARD_ROLLOUT_PERCENT, BARCODE_REWARD_DAILY_LIMIT, BARCODE_REWARD_BALANCE_LIMIT, PAID_RECOMMENDATION_CREDITS_ENABLED, REWARDED_ADS_ENABLED, SUBSCRIPTIONS_ENABLED, SUBSCRIPTION_PURCHASE_INTENTS_REQUIRED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES, SUBSCRIPTION_RESYNC_SCHEDULER_ENABLED
+apps/api test:  ✓ src/modules/admin/admin-monetization-metrics.test.ts (9 tests) 49ms
+apps/api test: stderr | src/config/production-env.test.ts > validateProductionEnvironment > requires the fixed personal Plus launch controls when sales are enabled
+apps/api test: [production-env] Applied monetization defaults for missing keys: INVENTORY_PHOTO_PARSE_FREE_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_DAILY_LIMIT, INVENTORY_PHOTO_PARSE_REWARDED_ADS_ENABLED, PERSONALIZED_MONETIZATION_OFFERS_ENABLED, AFFILIATE_OFFERS_ENABLED, AFFILIATE_OFFERS_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_MISSING_ENABLED, AFFILIATE_PLACEMENT_RECIPE_MISSING_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_RECENT_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ENABLED, AFFILIATE_PLACEMENT_SHOPPING_SEARCH_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ENABLED, AFFILIATE_PLACEMENT_INVENTORY_CONSUMED_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ENABLED, AFFILIATE_PLACEMENT_COOKING_COMPLETE_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ENABLED, AFFILIATE_PLACEMENT_RECIPE_OPTIONAL_ENTRY_ROLLOUT_PERCENT, AFFILIATE_PLACEMENT_HOME_REORDER_ENABLED, AFFILIATE_PLACEMENT_HOME_REORDER_ROLLOUT_PERCENT, AFFILIATE_OFFER_CACHE_SECONDS, AFFILIATE_OFFER_STALE_SECONDS, AFFILIATE_MAX_PRODUCTS_PER_INGREDIENT, COUPANG_REPORT_SYNC_ENABLED, IAP_ALLOW_SANDBOX_PURCHASES
+apps/api test:  ✓ src/config/production-env.test.ts (24 tests) 56ms
+apps/api test:  ✓ src/common/openai-model-config.test.ts (12 tests) 7ms
+apps/api test:  ✓ src/common/store-billing/google-pubsub-auth.test.ts (8 tests) 6ms
+apps/mobile test:  ✓ src/services/notifications.test.ts (12 tests) 116ms
+apps/api test: [Nest] 67798  - 10/16/2026, 3:30:56 PM    WARN [AuthRateLimitService] Auth rate-limit database store unavailable; falling back to memory. Can't reach database server at postgres.example:5432
+apps/api test: [Nest] 67798  - 10/16/2026, 3:30:56 PM    WARN [AuthRateLimitService] Auth rate-limit database store unavailable; falling back to memory. Can't reach database server at postgres.example:5432
+apps/api test: [Nest] 67798  - 10/16/2026, 3:30:56 PM    WARN [AuthRateLimitService] Auth rate-limit database store unavailable; falling back to memory. Can't reach database server at postgres.example:5432
+apps/api test:  ✓ src/modules/auth/auth-rate-limit.service.test.ts (10 tests) 16ms
+apps/mobile test:  ✓ src/shared/design-token-contract.test.ts (11 tests) 1648ms
+apps/mobile test:    ✓ mobile design token contract > keeps action labels concise while body copy stays conversational  1322ms
+apps/api test: (node:67789) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+apps/api test: (Use `node --trace-deprecation ...` to show where the warning was created)
+apps/api test: [Nest] 67789  - 10/16/2026, 3:30:57 PM     LOG [SubscriptionEntitlementResyncService] Subscription resync: apple scanned=2 updated=1 failed=0; google voids sub=1 product=0 entitlementsRevoked=1 creditsRevoked=0
+apps/api test:  ✓ src/modules/subscriptions/subscription-entitlement-resync.service.test.ts (3 tests) 11ms
+apps/mobile test:  ✓ src/services/api-transport.test.ts (9 tests) 130ms
+apps/api test:  ✓ src/modules/auth/mail.service.test.ts (1 test) 15ms
+apps/mobile test:  ✓ src/features/subscriptions/subscription-products-query.test.ts (7 tests) 67ms
+apps/api test:  ✓ src/common/openai-request-budget.test.ts (2 tests) 14ms
+apps/api test:  ✓ src/modules/auth/admin-client-session.test.ts (3 tests) 3ms
+apps/api test: [Nest] 67812  - 10/16/2026, 3:30:57 PM     LOG [InventoryPhotoParseCleanupService] Deleted 2 expired photo parse results
+apps/api test:  ✓ src/modules/inventory/inventory-photo-parse-cleanup.service.test.ts (1 test) 5ms
+apps/api test:  ✓ src/modules/product-masters/catalog-correction.test.ts (8 tests) 70ms
+apps/api test: [Nest] 67814  - 10/16/2026, 3:30:57 PM     LOG [AffiliateReportSyncService] Coupang affiliate report sync completed rows=0
+apps/api test: [Nest] 67814  - 10/16/2026, 3:30:57 PM     LOG [AffiliateReportSyncService] Coupang affiliate report sync completed rows=1
+apps/api test:  ✓ src/modules/affiliate/affiliate-report-sync.service.test.ts (5 tests) 10ms
+apps/mobile test:  ✓ src/features/home/inventory-ux.test.tsx (13 tests) 81ms
+apps/api test:  ✓ src/modules/subscriptions/subscriptions.service.test.ts (32 tests) 5123ms
+apps/api test:    ✓ SubscriptionsService > resolves the annual Google plan from the verified purchase without a client period hint  446ms
+apps/api test:    ✓ SubscriptionsService > rejects a Google purchase whose obfuscated account id does not match the intent  558ms
+apps/api test:    ✓ SubscriptionsService > acknowledges a Google Play subscription after granting entitlement  496ms
+apps/api test:    ✓ SubscriptionsService > migrates Google entitlements when Play rotates the purchase token  386ms
+apps/api test:    ✓ SubscriptionsService > does not allow one store purchase to be attached to two owners  644ms
+apps/api test:    ✓ SubscriptionsService > rejects Google test purchases in production  663ms
+apps/api test:    ✓ SubscriptionsService > allows sandbox purchases only when explicitly opted in  1414ms
+apps/mobile test:  ✓ src/features/store-review/review-service.test.ts (8 tests) 58ms
+apps/mobile test:  ✓ src/services/sentry.test.ts (3 tests) 62ms
+apps/api test:  ✓ src/modules/monetization/monetization-rollout.test.ts (2 tests) 23ms
+apps/api test:  ✓ src/modules/admin/admin-ai-metrics.test.ts (3 tests) 10ms
+apps/mobile test:  ✓ src/features/recipes/recommendation-hero.test.ts (9 tests) 47ms
+apps/api test:  ✓ src/modules/privacy/privacy.service.test.ts (6 tests) 6ms
+apps/mobile test:  ✓ src/shared/mascot-notice-contract.test.ts (4 tests) 79ms
+apps/api test:  ✓ src/common/openai-usage.test.ts (4 tests) 8ms
+apps/api test: [Nest] 67835  - 10/16/2026, 3:30:58 PM   ERROR [SupportService] Support inquiry mail failed for inquiry-1
+apps/api test: Error: smtp down
+apps/api test:     at /Users/namu/Desktop/ExpiryMate/apps/api/src/modules/support/support.service.test.ts:74:7
+apps/api test:     at file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:155:11
+apps/api test:     at file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:752:26
+apps/api test:     at file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:1897:20
+apps/api test:     at new Promise (<anonymous>)
+apps/api test:     at runWithTimeout (file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:1863:10)
+apps/api test:     at runTest (file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:1574:12)
+apps/api test:     at processTicksAndRejections (node:internal/process/task_queues:95:5)
+apps/api test:     at runSuite (file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)
+apps/api test:     at runSuite (file:///Users/namu/Desktop/ExpiryMate/node_modules/.pnpm/@vitest+runner@3.2.4/node_modules/@vitest/runner/dist/chunk-hooks.js:1729:8)
+apps/api test:  ✓ src/modules/support/support.service.test.ts (4 tests) 8ms
+apps/mobile test:  ✓ src/features/inventory/filters.test.ts (11 tests) 65ms
+apps/mobile test:  ✓ src/store/app-store.test.ts (3 tests) 63ms
+apps/api test:  ✓ src/modules/health/oauth-callback.test.ts (4 tests) 4ms
+apps/api test:  ✓ src/modules/monetization/unit-economics-guardrail.test.ts (3 tests) 10ms
+apps/mobile test:  ✓ src/features/photo-intake/pick-inventory-photo.test.ts (3 tests) 19ms
+apps/api test:  ✓ src/modules/health/health.controller.test.ts (7 tests) 50ms
+apps/api test:  ✓ src/common/http-exception.filter.test.ts (9 tests) 10ms
+apps/api test:  ✓ src/modules/inventory/inventory-photo-model-rollout.test.ts (2 tests) 3ms
+apps/api test:  ✓ src/modules/auth/app-links.test.ts (3 tests) 2ms
+apps/api test:  ✓ src/modules/recipes/recipe-ranking.test.ts (10 tests) 47ms
+apps/mobile test:  ✓ src/shared/dynamic-type-contract.test.ts (6 tests) 81ms
+apps/mobile test:  ✓ src/services/api.test.ts (30 tests) 4390ms
+apps/mobile test:    ✓ mobile API client core flow > preserves 'JSON' payload and headers through one refresh  503ms
+apps/mobile test:    ✓ mobile API client core flow > requires a registered session before calling an authenticated endpoint  352ms
+apps/mobile test:  ✓ src/features/store-review/use-store-review.test.ts (5 tests) 8ms
+apps/api test:  ✓ src/common/release-metadata.test.ts (6 tests) 3ms
+apps/api test:  ✓ src/modules/affiliate/coupang-hmac.test.ts (3 tests) 2ms
+apps/api test:  ✓ src/modules/inventory/inventory-photo-parse.image.test.ts (2 tests) 2ms
+apps/mobile test:  ✓ src/store/registration-store.test.ts (4 tests) 29ms
+apps/mobile test:  ✓ scripts/layout-screenshot-manifest.test.mjs (6 tests) 7ms
+apps/api test: [Nest] 67866  - 10/16/2026, 3:30:59 PM     LOG [RecipeRecommendationCleanupService] Deleted 3 unfavorited recipe recommendations older than 90 days
+apps/api test:  ✓ src/modules/recipes/recipe-recommendation-cleanup.service.test.ts (2 tests) 10ms
+apps/api test:  ✓ src/modules/monetization/subscription-sales-policy.test.ts (9 tests) 3ms
+apps/api test:  ✓ src/modules/affiliate/coupang-search-url.test.ts (5 tests) 5ms
+apps/api test:  ✓ src/modules/products/products.service.test.ts (1 test) 2ms
+apps/api test:  ✓ src/modules/monetization/monetization-offer-mode.test.ts (2 tests) 3ms
+apps/mobile test: stdout | scripts/ios-device.test.mjs > physical iPhone development build > installs the verified QA binary with CoreDevice, without Expo run:ios
+apps/mobile test: 장고 QA 설치 완료. dev:client:tunnel을 실행하고 QA 앱에서 QR을 열어주세요.
+apps/mobile test:  ✓ scripts/ios-device.test.mjs (5 tests) 44ms
+apps/mobile test:  ✓ src/shared/eas-sync-native-config.test.ts (3 tests) 10ms
+apps/mobile test:  ✓ src/features/photo-intake/photo-bulk-edit.test.tsx (7 tests) 20ms
+apps/api test:  ✓ src/modules/monetization/revenue-ledger.test.ts (3 tests) 3ms
+apps/api test:  ✓ src/common/number-env.test.ts (14 tests) 7ms
+apps/mobile test:  ✓ src/features/inventory/inventory-form-ui.test.ts (5 tests) 52ms
+apps/api test:  ✓ src/modules/inventory/inventory-photo-parse.normalize.test.ts (3 tests) 5ms
+apps/api test:  ✓ scripts/ai-evaluation-scheduler.test.ts (4 tests) 6ms
+apps/api test:  ✓ src/common/decimal.test.ts (13 tests) 3ms
+apps/mobile test:  ✓ src/features/recipes/cooking-timer.test.ts (8 tests) 9ms
+apps/mobile test:  ✓ src/services/query-cache-persistence.test.ts (2 tests) 14ms
+apps/api test:  ✓ src/modules/auth/registered.guard.test.ts (3 tests) 3ms
+apps/api test:  ✓ src/modules/spaces/space-affiliate.controller.test.ts (3 tests) 21ms
+apps/mobile test:  ✓ src/features/inventory/review-consumption.test.ts (4 tests) 9ms
+apps/api test:  ✓ src/common/zod-validation.pipe.test.ts (2 tests) 2ms
+apps/api test:  ✓ src/modules/auth/auth-bridge.test.ts (4 tests) 6ms
+apps/mobile test:  ✓ src/features/shopping/shopping-controls.test.tsx (7 tests) 8ms
+apps/mobile test:  ✓ src/features/subscriptions/subscription-status.test.tsx (9 tests) 11ms
+apps/mobile test:  ✓ src/features/auth/onboarding.test.tsx (2 tests) 12ms
+apps/mobile test:  ✓ src/features/registration/registration-return.test.ts (16 tests) 9ms
+apps/mobile test:  ✓ src/features/monetization/monetization-offer.test.ts (6 tests) 3ms
+apps/mobile test:  ✓ src/features/home/home-notices.test.ts (12 tests) 8ms
+apps/mobile test:  ✓ src/services/query-cache-policy.test.ts (5 tests) 12ms
+apps/mobile test:  ✓ src/shared/responsive-layout.test.ts (12 tests) 5ms
+apps/mobile test:  ✓ src/features/spaces/prefetch-space-queries.test.ts (2 tests) 6ms
+apps/mobile test:  ✓ src/features/monetization/recommendation-access.test.ts (8 tests) 5ms
+apps/mobile test:  ✓ src/features/recipes/cooking.test.ts (17 tests) 8ms
+apps/mobile test:  ✓ src/features/inventory/inventory-row-contract.test.ts (2 tests) 3ms
+apps/mobile test:  ✓ src/features/recipes/recommendation-flow-contract.test.ts (10 tests) 9ms
+apps/mobile test:  ✓ src/features/settings/subscription-entry.test.tsx (4 tests) 5ms
+apps/mobile test:  ✓ src/features/auth/oauth-return.test.ts (2 tests) 5ms
+apps/mobile test:  ✓ src/shared/async-timeout.test.ts (2 tests) 3ms
+apps/api test:  ↓ src/modules/inventory/inventory-workflows.integration.test.ts (4 tests | 4 skipped)
+apps/api test:  ↓ src/common/ai-telemetry.integration.test.ts (2 tests | 2 skipped)
+apps/api test:  Test Files  70 passed | 2 skipped (72)
+apps/api test:       Tests  589 passed | 6 skipped (595)
+apps/api test:    Start at  15:30:51
+apps/api test:    Duration  10.04s (transform 1.69s, setup 0ms, collect 28.59s, tests 9.14s, environment 16ms, prepare 10.17s)
+apps/mobile test:  ✓ src/features/inventory/inventory-expiry-filter-contract.test.ts (2 tests) 3ms
+apps/api test: Done
+apps/mobile test:  ✓ src/shared/flow-deduplication-contract.test.ts (8 tests) 4ms
+apps/mobile test:  ✓ src/shared/validate-public-env.test.ts (8 tests) 4ms
+apps/mobile test:  ✓ scripts/app-config.test.mjs (8 tests) 3ms
+apps/mobile test:  ✓ scripts/mascot-runtime-assets.test.mjs (17 tests) 7109ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for idle without design drift  605ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for happy without design drift  533ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for worry without design drift  710ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for cooking without design drift  527ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for empty without design drift  518ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for speak without design drift  556ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for think without design drift  487ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for point without design drift  503ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for encourage without design drift  367ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for praise without design drift  529ms
+apps/mobile test:    ✓ mascot runtime assets > derives all six runtime assets for acknowledge without design drift  395ms
+apps/mobile test:    ✓ mascot runtime assets > provides valid RGBA images for every mood and display density  316ms
+apps/mobile test:  ✓ src/features/subscriptions/subscription-verification-request.test.ts (6 tests) 6ms
+apps/mobile test:  ✓ src/features/monetization/pending-rewarded-ad.test.ts (5 tests) 3ms
+apps/mobile test:  ✓ src/features/inventory/inventory-action-notice-contract.test.ts (1 test) 4ms
+apps/mobile test:  ✓ src/features/auth/auth-errors.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ src/features/inventory/inventory-hero.test.ts (11 tests) 4ms
+apps/mobile test:  ✓ src/features/scanner/parseExpirationDate.test.ts (8 tests) 3ms
+apps/mobile test:  ✓ src/features/affiliate/shopping-layout-contract.test.ts (2 tests) 4ms
+apps/mobile test:  ✓ src/shared/date-picker.test.ts (12 tests) 4ms
+apps/mobile test:  ✓ src/features/registration/registration-navigation.test.ts (4 tests) 4ms
+apps/mobile test:  ✓ src/features/photo-intake/photo-parse-access-ui.test.ts (4 tests) 2ms
+apps/mobile test:  ✓ src/features/spaces/pending-invitation.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ scripts/mascot-source-contract.test.mjs (5 tests) 7628ms
+apps/mobile test:    ✓ mascot v18 source pipeline > keeps all reviewed source files reproducible  7397ms
+apps/mobile test:  ✓ src/features/registration/registration-completion-notices.test.ts (3 tests) 4ms
+apps/mobile test:  ✓ src/features/photo-intake/photo-intake-draft.test.ts (5 tests) 5ms
+apps/mobile test:  ✓ src/features/monetization/iap-provider-contract.test.ts (1 test) 1ms
+apps/mobile test:  ✓ src/features/affiliate/shopping-hero.test.ts (4 tests) 6ms
+apps/mobile test:  ✓ src/features/recipes/cooking-flow-resilience-contract.test.ts (6 tests) 4ms
+apps/mobile test:  ✓ src/features/affiliate/shopping-recent-rotation.test.ts (6 tests) 6ms
+apps/mobile test:  ✓ src/features/affiliate/optional-missing-ingredients.test.ts (2 tests) 4ms
+apps/mobile test:  ✓ src/features/subscriptions/subscription-screen-state.test.ts (18 tests) 4ms
+apps/mobile test:  ✓ src/features/affiliate/affiliate-group-reason.test.ts (2 tests) 3ms
+apps/mobile test:  ✓ src/features/monetization/iap-runtime-policy.test.ts (3 tests) 1ms
+apps/mobile test:  ✓ src/shared/font-scale.test.ts (4 tests) 4ms
+apps/mobile test:  ✓ src/features/spaces/space-notification-copy.test.ts (1 test) 3ms
+apps/mobile test:  ✓ src/features/monetization/iap-products.test.ts (3 tests) 3ms
+apps/mobile test:  ✓ src/features/navigation/header-back-title.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ src/features/subscriptions/subscription-products-notice.test.tsx (5 tests) 5ms
+apps/mobile test:  ✓ src/features/recipes/cooking-session-draft-writer.test.ts (2 tests) 5ms
+apps/mobile test:  ✓ src/features/recipes/cooking-session-draft.test.ts (3 tests) 3ms
+apps/mobile test:  ✓ src/features/inventory/deferred-inventory-removal.test.ts (7 tests) 3ms
+apps/mobile test:  ✓ src/features/spaces/ensure-enabled-query-fetch.test.ts (2 tests) 2ms
+apps/mobile test:  ✓ scripts/screenshot-comparison-core.test.mjs (3 tests) 4ms
+apps/mobile test:  ✓ scripts/android-release-optimization.test.mjs (4 tests) 5ms
+apps/mobile test:  ✓ src/features/scanner/scanGuide.test.ts (4 tests) 2ms
+apps/mobile test:  ✓ src/features/photo-intake/photo-intake-selection.test.ts (2 tests) 4ms
+apps/mobile test:  ✓ src/features/settings/recipe-preference-navigation.test.ts (4 tests) 2ms
+apps/mobile test:  ✓ src/features/recipes/recommendation-ingredient-selection.test.ts (2 tests) 2ms
+apps/mobile test:  ✓ src/features/spaces/space-selection.test.ts (7 tests) 5ms
+apps/mobile test:  ✓ src/shared/ios-team-env.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ src/features/recipes/CookingStepText.test.ts (3 tests) 3ms
+apps/mobile test:  ✓ src/features/recipes/recipe-detail.test.ts (4 tests) 10ms
+apps/mobile test:  ✓ src/features/spaces/use-space-scoped-query-result.test.ts (3 tests) 5ms
+apps/mobile test:  ✓ src/features/auth/auth-routing.test.ts (3 tests) 3ms
+apps/mobile test:  ✓ src/features/photo-intake/photo-parse-enabled.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ src/features/scanner/barcodeContributionModeration.test.ts (3 tests) 4ms
+apps/mobile test:  ✓ src/features/scanner/scanner-quick-add.test.ts (3 tests) 3ms
+apps/mobile test:  ✓ src/features/settings/recipe-preference-display.test.ts (2 tests) 2ms
+apps/mobile test:  ✓ src/features/affiliate/shopping-entry-context.test.ts (2 tests) 2ms
+apps/mobile test:  ✓ src/shared/public-web-url.test.ts (3 tests) 2ms
+apps/mobile test:  ✓ src/features/monetization/rewarded-ad-runtime.test.ts (2 tests) 3ms
+apps/mobile test:  ✓ src/features/recipes/recipe-generation-provider.test.ts (3 tests) 1ms
+apps/mobile test:  ✓ src/features/affiliate/use-visible-impression.test.ts (1 test) 3ms
+apps/mobile test:  ✓ src/features/scanner/scanner-confirm-copy.test.ts (4 tests) 2ms
+apps/mobile test:  ✓ scripts/mascot-anatomy.test.mjs (11 tests) 21868ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > measures an independent valid raster without relying on eye-based alignment  1542ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > rejects a stretched door and compressed eye spacing  2487ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > rejects displaced mouth position  1262ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > records a missing cheek as unmeasured, never as a pass  685ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > applies closed-eye limits only to the explicitly annotated wink eye  544ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > keeps measurements stable under rigid rotation of the whole door  570ms
+apps/mobile test:    ✓ BIBLE anatomy measurement > does not silently accept an ROI that clips a feature  521ms
+apps/mobile test:    ✓ anatomy provenance and reproducibility > rejects modified source hashes and stale measurement records  938ms
+apps/mobile test:    ✓ anatomy provenance and reproducibility > reproduces committed measurements and overlays, including honest failing art results  13181ms
+apps/mobile test:  Test Files  102 passed (102)
+apps/mobile test:       Tests  582 passed (582)
+apps/mobile test:    Start at  15:30:51
+apps/mobile test:    Duration  25.37s (transform 2.01s, setup 0ms, collect 10.87s, tests 46.20s, environment 12ms, prepare 9.26s)
+apps/mobile test: Done

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "scope": "candidate-only",
+  "authorization": "2026-10-15 user explicitly requested implementation of the friendly-but-goofy Jango plan, permitting new eye/mouth shapes, facial placement and an ajar fridge door.",
+  "intent": "큰 축하",
+  "mouthIntent": "기쁘게 열린 작고 차콜인 입과 작은 살구 혀",
+  "identity": "v18 mint refrigerator face, chef hat and apron, crayon texture, round mittens and shoes, full body",
+  "referenceMouthMode": "speak-open",
+  "allowedChanges": [
+    "flexible-face",
+    "dynamic-pose"
+  ]
+}

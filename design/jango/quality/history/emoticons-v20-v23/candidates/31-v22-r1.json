@@ -1,0 +1,39 @@
+{
+  "id": "31-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/31-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/31.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    565,
+    665,
+    110,
+    101
+  ],
+  "tiltDegrees": 12,
+  "visibility": "clear",
+  "expression": {
+    "family": "소심한 참여 요청",
+    "intensity": 2,
+    "eyes": "상대를 쳐다보는 기대 어린 타원 눈",
+    "brows": "살짝 올라간 조심스러운 눈썹",
+    "pose": "화면 왼쪽에 낮고 가느다란 문틀 모서리 하나. 장고가 그 옆에서 온몸을 빼꼼 내밀며 한 장갑을 얼굴 옆으로 조심스럽게 든다. 다른 손은 문틀을 짚는다. 몸은 문틀 밖으로 충분히 나오며 앞치마·짧은 다리·두 신발이 온전히 보인다. 벽 배경·방·다른 캐릭터를 넣지 않는다. 슬픈 울상 대신 함께 끼고 싶은 기대감."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 31
+  },
+  "preflight": "design/jango/quality/jobs/31-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/31-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v22/creative-intents/31.json",
+    "sha256": "ed78b326bd70423b8c00d55c28b074549146f9b4d574712a33142cb604a25088",
+    "referenceMouthMode": "speak-open",
+    "scope": "candidate-only"
+  }
+}

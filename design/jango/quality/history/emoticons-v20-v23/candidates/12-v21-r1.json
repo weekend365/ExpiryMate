@@ -1,0 +1,39 @@
+{
+  "id": "12-v21-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v21",
+  "source": "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v21/stickers/12.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    642,
+    671,
+    81,
+    89
+  ],
+  "tiltDegrees": -3,
+  "visibility": "clear",
+  "expression": {
+    "family": "가벼운 당황",
+    "intensity": 2,
+    "eyes": "크기가 살짝 다른 둥근 눈",
+    "brows": "한쪽만 올라간 비대칭 눈썹",
+    "pose": "한 발을 반 걸음 뒤로 빼며 몸이 멈칫한다. 양 장갑은 허리 앞에서 어정쩡하게 벌어져 있다. 한쪽 눈썹과 작은 땀방울 하나로 가벼운 당황. 놀라 크게 뛰거나 환하게 웃지 않는다. 두 신발 모두 보인다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 12
+  },
+  "preflight": "design/jango/quality/jobs/12-v21-r1/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v21/generation-records/12-v21-r1.json",
+  "operation": "individual image edit",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v21/creative-intents/12.json",
+    "sha256": "b2966fd61813e5ac508bd09e962b9a559d504ec44651dd6be0f22eef7f317644",
+    "referenceMouthMode": "speak-open",
+    "scope": "candidate-only"
+  }
+}

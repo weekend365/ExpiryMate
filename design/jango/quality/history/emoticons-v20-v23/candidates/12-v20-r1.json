@@ -1,0 +1,33 @@
+{
+  "id": "12-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/12-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/12.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    595,
+    685,
+    118,
+    91
+  ],
+  "tiltDegrees": 5,
+  "visibility": "clear",
+  "expression": {
+    "family": "가벼운 당황",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "조금 올라간 눈썹",
+    "pose": "한 장갑을 가슴 앞에서 멈칫, 몸을 살짝 뒤로 젖힌다. 작은 물색 땀방울 두 개. 눈 흰자·빈 O형 입 없음."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 12
+  },
+  "preflight": "design/jango/quality/jobs/12-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/12-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

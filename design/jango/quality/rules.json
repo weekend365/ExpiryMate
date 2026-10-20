@@ -16,12 +16,12 @@
     "design/jango/reference/JANGO-STYLE-GUIDE.md"
   ],
   "invariants": {
-    "mouth": "현행 이모티콘·스타일 참조 후보의 입 검수는 사전 지정한 네 모드만 지원: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 v18의 구조·위치를 참고하고 새 스타일의 읽히는 진한 선 사용, 채움·혀 없음. 이 관문에서는 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지. SNS의 새 입은 BIBLE의 표현 확장과 별도 제작·검토 기록을 따르며 이 네 모드로 거짓 분류하지 않는다.",
-    "identity": "기본형 재현·앱 파생·현행 이모티콘 검수 기준: 싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개, 좌우 반전 없음. SNS 반전은 BIBLE에 따라 구조 변화·보정 여부를 별도 검토한다.",
-    "anatomy": "이 관문의 얼굴 비례·눈 간격은 BIBLE의 기본형 기준 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개. SNS의 의도한 비율·포즈·소품 변형은 이 관문의 자동 통과 대상이 아니다.",
+    "mouth": "기본형 재현의 기존 입 자동 판정은 사전 지정한 네 모드를 지원: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 v18의 구조·위치를 참고하고 읽히는 진한 선 사용, 채움·혀 없음. 이 기본형에는 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리를 추가하지 않는다. 이모티콘의 작은 O형 등 의도한 새 입은 BIBLE에 따라 creative-brief와 expressive-custom으로 준비하고 항상 시각 재검토로 남긴다. SNS의 새 입은 별도 제작·검토 기록을 따른다. 확장 표현을 네 모드로 거짓 분류하거나 검사 통과를 위해 의도한 표현을 되돌리지 않는다.",
+    "identity": "기본형 재현·기존 앱 파생 기준: 싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개, 좌우 반전 없음. 이모티콘의 의도한 문 열기는 BIBLE에 따라 얼굴·문·경첩·머리·모자의 연결과 원근을 검토한다. SNS 반전은 BIBLE에 따라 구조 변화·보정 여부를 별도 검토한다. 형태·색·질감 MASTER는 v18을 유지한다.",
+    "anatomy": "기본형 재현은 BIBLE의 얼굴 비례·눈 간격을 따른다. 이모티콘 표현 확장은 감정·원근에 맞춘 얼굴 위치·크기와 전신 동작을 허용하며 장고 인지와 신체 연결을 시각 검토한다. 장갑은 주머니 1개·기존 엄지 1개·커프스 1개를 유지한다. SNS의 의도한 비율·포즈·소품 변형은 이 관문의 자동 통과 대상이 아니다.",
     "style": "공통 제작 MASTER는 style-master.json이 가리키는 v18 source-originals 32종이다. 24번과 해당 원화의 크레파스 선·불투명 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 따른다. v19 연필 스타일은 과거 채택 이력이며 새 제작 기본값이 아니다.",
-    "exceptions": "기본형 재현·현행 이모티콘 검사에서 감정·동작 요청을 검사 예외로 해석하지 않는다. SNS는 BIBLE의 표현 확장을 적용하되 기존 임계값·입 모드·서명 관문을 완화하지 않고 별도로 준비·검토한다. SNS 채택은 MASTER 승격·앱 반영·서명된 이모티콘 출시가 아니다.",
-    "master": "v18 원본 32종을 활성 MASTER로 복원했다. 원본 바이트·과거 채택·입 재검토를 보존하고 새 결과는 별도 후보로 만든다. v19 runtime 교체는 중단했으며 재작화·검수 완료·서명 출시는 주장하지 않는다. 새 앱 작화는 모자·양팔·앞치마·다리·신발이 모두 보이는 전신을 기본으로 하되 기존 원본의 하반신 프레이밍은 변경하지 않는다."
+    "exceptions": "BIBLE의 이모티콘·SNS 표현 확장은 창작 허용 범위이며 기존 자동 검사의 임계값·입 분류·서명 관문을 완화하는 예외가 아니다. 이모티콘 expressive-custom은 의도와 실제 참조를 기록하고 항상 needs-review이며 현행 promote 대상이 아니다. SNS는 별도로 준비·검토한다. 규칙 반영·개별 디자인 선호·SNS 채택을 MASTER 승격·앱 반영·서명된 이모티콘 출시로 대신하지 않는다.",
+    "master": "v18 원본 32종이 활성 MASTER다. 원본 바이트·과거 채택·입 재검토를 보존하고 새 결과는 별도 후보로 만든다. v21에서 반영한 생활 친구 성격·표현·전신·레터링 기준은 BIBLE과 STYLE GUIDE를 따른다. v19 runtime 교체는 중단했다. 새 앱 작화와 문구 포함 이모티콘은 모자·양팔·앞치마·다리·신발을 담는 전신을 기본으로 하며 자연스러운 가림은 허용한다. 문구 공간 때문에 신체를 자르지 않고 기존 원본의 하반신 프레이밍은 변경하지 않는다."
   },
   "mouthScreen": {
     "thresholds": [
@@ -50,7 +50,7 @@
     "expressionMatchesIntent",
     "expressionContrast"
   ],
-  "scope": "Policy v7: v18 source-originals are the active common character MASTER; handdrawn-crayon is the required new-preparation style; colored-pencil is retained for historical audit only. Conservative mouth thresholds, reference ROIs, submission specifications and external signing remain unchanged.",
+  "scope": "Policy v7: v18 source-originals are the active common character MASTER; handdrawn-crayon is the required new-preparation style; colored-pencil is retained for historical audit only. The BIBLE incorporates v21 character and emoticon expression principles. Creative-brief expressive-custom candidates remain needs-review and cannot be promoted by the current gate. Conservative mouth thresholds, reference ROIs, submission specifications and external signing remain unchanged.",
   "openMouthReference": {
     "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
     "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",

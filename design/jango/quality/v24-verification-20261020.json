@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-20",
+  "purpose": "Organize the user-selected final Jango emoticon design set",
+  "version": "v24",
+  "collection": {
+    "file": "design/jango/emoticons/kakao-32/v24/collection.json",
+    "sha256": "a35ce6a78206ae9346ed02b40a95871c48c1f2e331cd7403a3378859a5a06bfa",
+    "files": 269
+  },
+  "builder": {
+    "file": "scripts/build-jango-final-set.mjs",
+    "sha256": "71fe56594a32f7239314fa3c8ffc9e6f73298a2d367ad442325431d6a8e12686"
+  },
+  "content": {
+    "stickers": 32,
+    "sourceOriginals": 32,
+    "captionFree": 32,
+    "fromV22": 31,
+    "fromV23": [
+      29
+    ],
+    "slot29": "지쳤어...",
+    "newImageGeneration": 0,
+    "selectedArtworkAndPngBytesUnchanged": true
+  },
+  "preservation": {
+    "files": 1834,
+    "inventorySHA256": "2a90d7f1023ccc2f0d5dbec4933fd3f0c2d71ee9914b28a82b6441c9612d5a08",
+    "allMatch": true,
+    "releaseListUnchanged": true,
+    "previouslyPrunedFilesRemainAbsent": 197,
+    "unusedFinalCachesAbsent": true,
+    "temporaryTestVersionsAbsent": true
+  },
+  "validation": {
+    "finalCollectionTest": {
+      "passed": 1,
+      "failed": 0,
+      "includesTamperRejection": true
+    },
+    "localLinks": {
+      "files": 5,
+      "valid": 178
+    },
+    "visualPreviewInspection": [
+      "review/caption-80-light.png",
+      "review/caption-120-dark.png"
+    ],
+    "newCandidateReports": {
+      "preparationPass": 32,
+      "technicalPass": 32
+    },
+    "docsCheck": "passed",
+    "lint": "passed",
+    "typecheck": "passed",
+    "rootTest": {
+      "exitCode": 0,
+      "jango": {
+        "passed": 37,
+        "failed": 0,
+        "includesFullGateChecks": true
+      },
+      "shared": {
+        "passed": 162
+      },
+      "api": {
+        "passed": 589,
+        "skipped": 6
+      },
+      "mobile": {
+        "passed": 582
+      }
+    }
+  },
+  "activeCharacterMaster": "v18",
+  "signedRelease": false,
+  "commitCreated": false
+}

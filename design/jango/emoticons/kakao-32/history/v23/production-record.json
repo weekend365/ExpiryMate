@@ -1,0 +1,110 @@
+{
+  "version": "v23",
+  "status": "candidate",
+  "fullSet": false,
+  "count": 1,
+  "method": "One official imagegen redraw from active v18 MASTER; separate v22 Gamja Flower lettering and deterministic full-body layout",
+  "builder": "scripts/build-jango-emoticons.mjs",
+  "letteringBuilder": "scripts/render-jango-lettering.mjs",
+  "plan": "design/jango/emoticons/kakao-32/v23/plan.json",
+  "designApproval": "Independent signed visual review required; no release adopted",
+  "records": [
+    {
+      "styleProfile": "handdrawn-crayon",
+      "composition": {
+        "file": "design/jango/reference/v18-composition.png",
+        "panel": 29
+      },
+      "referenceRoles": [
+        {
+          "role": "identity-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 character identity, structure and pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "style-master",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "scope": "active v18 line/color/texture; use the selected original pose",
+          "imageIndex": 1
+        },
+        {
+          "role": "edit-target",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+          "imageIndex": 1
+        },
+        {
+          "role": "composition-reference",
+          "file": "design/jango/reference/v18-composition.png",
+          "panel": 29,
+          "imageIndex": 2
+        },
+        {
+          "role": "expression-context-reference",
+          "file": "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png",
+          "imageIndex": 3
+        }
+      ],
+      "referenceHashes": {
+        "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+        "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+        "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+      },
+      "mouthMode": "expressive-custom",
+      "operation": "individual image edit",
+      "number": 29,
+      "title": "지쳤어...",
+      "line": "지쳤어...",
+      "captionKind": "dialogue",
+      "layout": {
+        "framing": "full-body",
+        "characterBox": [
+          28,
+          180,
+          968,
+          810
+        ],
+        "lettering": {
+          "x": 512,
+          "y": 96,
+          "size": 160,
+          "rotation": 0,
+          "maxWidth": 860,
+          "font": "GamjaFlower-Regular",
+          "outline": 0,
+          "inkHeight": 85.3333,
+          "outlinePx": 5.12,
+          "punctuationScale": 1,
+          "sizeBasis": "font-reference",
+          "referenceText": "장고야 부탁해",
+          "inkStrokePercent": 1.6
+        }
+      },
+      "letteringSHA256": "3559c1ee40d07d0d85c20ba5c928a992d85e499af19864e3201aea390b2640cf",
+      "file": "stickers/29.png",
+      "source": "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png",
+      "sourceSHA256": "b546a8160bf5a83dbdf95d166bd5060f27b528254f4c7a70b4dcf731e5d7714d",
+      "sha256": "861281848037939de5e880d72b07eea2632746d3ac26f60f4cb68339e84a6ac3",
+      "width": 360,
+      "height": 360,
+      "bytes": 93399,
+      "minMargin": 17,
+      "captionArtOverlapPixels": 0,
+      "sourceClipped": false,
+      "fullBodyPreserved": true,
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "sourceCrop": [
+        0,
+        28,
+        1224,
+        1254
+      ],
+      "preflight": "design/jango/quality/jobs/29-v23-r1/preflight.json",
+      "status": "candidate",
+      "designApproval": "needs-review"
+    }
+  ]
+}

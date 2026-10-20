@@ -1,0 +1,33 @@
+{
+  "id": "31-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/31-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/31.png",
+  "mouthMode": "sad-arc",
+  "mouthRoi": [
+    570,
+    682,
+    104,
+    69
+  ],
+  "tiltDegrees": 12,
+  "visibility": "clear",
+  "expression": {
+    "family": "조심스러운 말 걸기",
+    "intensity": 1,
+    "eyes": "기본 타원 눈",
+    "brows": "작은 걱정 눈썹",
+    "pose": "화면 왼쪽의 좁은 아이보리 벽 가장자리에서 몸을 약 15도 기울여 빼꼼 내다보며 한 장갑으로 벽을 짚는다. 벽은 단색의 작은 소품, 폭은 얼굴의 25% 이하. 얼굴·모자·입·핵심 장갑을 가리지 않고 원화 외곽으로 벽이나 캐릭터가 잘리지 않게 한다. 물색 땀 한 개."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 31
+  },
+  "preflight": "design/jango/quality/jobs/31-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/31-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

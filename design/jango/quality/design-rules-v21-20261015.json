@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-15",
+  "verifiedAt": "2026-10-15T10:13:01.704080+00:00",
+  "status": "design-rules-updated-and-verified",
+  "authorization": "현재 생성물 마음에 드는데 만드면서 기존 장고 디자인 규칙에도 반영할 점이 있는지 체크해줘. 있다면 기존 장고 디자인 규칙을 수정해줘.",
+  "scope": "Adopt v21 design principles in existing Jango rules. Preserve v18 MASTER, existing app assets, v20/v21 artwork and creation records. No signed release or app replacement.",
+  "decisionRecord": "design/jango/reference/STYLE-MASTER-ADOPTION.md",
+  "reviewEvidence": [
+    "design/jango/emoticons/kakao-32/v21/visual-review.json",
+    "design/jango/emoticons/kakao-32/v21/caption-120-light.png",
+    "design/jango/emoticons/kakao-32/v21/expression-80-dark.png"
+  ],
+  "principles": [
+    "다정하지만 허당인 생활 친구: 따뜻함과 생활 돌봄을 유지하고 작은 빈틈을 더한다.",
+    "기본형 재현과 표현 확장을 구분한다. 고정 얼굴 좌표·네 입 모드를 모든 표현의 상한으로 삼지 않는다.",
+    "문구가 있어도 전신을 살리고 문구 없는 감정 구분·동작 차이를 검토한다.",
+    "Gaegu Bold, 실제 잉크 높이, 감정별 조판과 짧은 대화 문구를 적용한다.",
+    "좋은 원화는 재사용하고 실제 AI 생성과 생성 없는 파생의 출처를 구분한다.",
+    "장고 인지·보낼 상황·성격 전달로 개선을 판단하며 효과 없는 변경은 기존안을 유지한다."
+  ],
+  "documents": {
+    "AGENTS.md": {
+      "beforeSHA256": "a75eb37e0a365608f0e59de8f94dc5121885bca62f926ce95b5808b5740cc3ad",
+      "afterSHA256": "36644aaa4ebb0d837f691779ba3cc3f16b8592a1c0241ea9fa890af0f2f117bd"
+    },
+    ".cursor/rules/jango-design.mdc": {
+      "beforeSHA256": "7a13cb168f268cc5c7c1a14d4ef95875cca31ab0187b9c35fc8a2d60a50ed136",
+      "afterSHA256": "e8739a65e4039e577ab9d29ced81653f05247e2618d7ca32972e1aa538a89483"
+    },
+    "docs/JANGO_CHARACTER_STYLE_GUIDE.md": {
+      "beforeSHA256": "fdf094abfa066a69b18ded548168ba665a53705355cd8836b183b74757d7db82",
+      "afterSHA256": "742454a87694d88d36ebfb0f2523752e5ba1d158909440f24b0511711e475d9d"
+    },
+    "docs/README.md": {
+      "beforeSHA256": "a80e5bba415bd322e20a7eabb8748d78893b33b65ba13a71cf51fcd24ba9f6e1",
+      "afterSHA256": "4cac69b61e4b097a33209b8f6916a545167162ad2926c11ebd629c7148acdd24"
+    },
+    "design/jango/reference/JANGO-CHARACTER-BIBLE.md": {
+      "beforeSHA256": "916d2890a18b4ff5fe6985183fd9ea93719d85abaf0ee618e0d92ef8f7bf4302",
+      "afterSHA256": "fd9ec971ad9f33313c33e53a41918283de6a9e50973726763bbe49752bfcfd50"
+    },
+    "design/jango/reference/JANGO-STYLE-GUIDE.md": {
+      "beforeSHA256": "c83b156743fd11a52f50dd39f05174db3460b830e215f3ed98a5811b61c8370c",
+      "afterSHA256": "6ea154fc212cd75c04e0126fe0a96fb2b532f2bc434aee933b48636a8556f5d2"
+    },
+    "design/jango/reference/STYLE-MASTER-ADOPTION.md": {
+      "beforeSHA256": "1d3ccf2627a90ffcaa937559302ad2bd1c875a166527359a27998df47970cca2",
+      "afterSHA256": "4fdbef42e25c20792ff0e7f221d9c3c8c8aaac0553b76ce986f6fb5db28d90bb"
+    },
+    "design/jango/quality/README.md": {
+      "beforeSHA256": "c53dfdc3998a03ba4709736926807630a7c16360b29e07b2eb0ffc72de2830db",
+      "afterSHA256": "2a9fb2fbb8cd20c02af4e96f5ba4af685cb215f03a4819f2736b0984892051d4"
+    },
+    "design/jango/quality/rules.json": {
+      "beforeSHA256": "65eb41dded7d5912834743d82e43af66eb6edef3e1c4df8576a6a80fc10cd15d",
+      "afterSHA256": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9"
+    }
+  },
+  "preservation": {
+    "filesCompared": 1489,
+    "allUnchanged": true,
+    "beforeAggregateSHA256": "dbc130458d23c8bd50de81b39369a5fe2ca17baff82517a612909111e87b3dbf",
+    "afterAggregateSHA256": "dbc130458d23c8bd50de81b39369a5fe2ca17baff82517a612909111e87b3dbf",
+    "aggregation": "SHA256 of UTF-8 JSON path-to-SHA256 map, sorted keys, no whitespace",
+    "selection": "Existing v21 preservation set plus entire v21 directory and quality jobs/candidates/history; deduplicated",
+    "existingPreservationSnapshot": "design/jango/emoticons/kakao-32/v21/preservation-before.json"
+  },
+  "policy": {
+    "version": 7,
+    "changedTopLevelFields": [
+      "invariants",
+      "scope"
+    ],
+    "unchangedEnforcementFields": [
+      "version",
+      "master",
+      "documents",
+      "mouthScreen",
+      "visualChecks",
+      "openMouthReference",
+      "mouthModes",
+      "openMouthScreen",
+      "lineMouthScreen",
+      "defaultStyleProfile",
+      "candidateKinds",
+      "styleProfiles",
+      "attachmentVersion",
+      "compositionReferences",
+      "masterSet",
+      "mouthReferences",
+      "activeStyleMaster"
+    ],
+    "enforcementSHA256": "56a032594f617e2d61b89c0f1140f5f99492bd5f620e02b359647d9fbfa9b5db",
+    "thresholdsRoisSignaturesAndReleaseRequirementsUnchanged": true
+  },
+  "currentDiagnostics": {
+    "reports": 96,
+    "assetHashesVerified": 893,
+    "preparation": {
+      "stale": 64,
+      "master-adoption": 32
+    },
+    "v21Mouth": {
+      "pass": 18,
+      "needs-review": 14
+    },
+    "v21Technical": {
+      "pass": 32
+    },
+    "releases": 0,
+    "testFixturesCleaned": true,
+    "contextsMatch": true
+  },
+  "historicalPreparationNote": "64 v20/v21 preparations are stale against revised canonical document hashes. Their original preflight, prompts, creation-time inspections and provenance remain unchanged. Current diagnostic reports were refreshed; no approval was added.",
+  "appObservationRefresh": {
+    "file": "design/jango/measurements/results.json",
+    "changedFields": [
+      "bibleSha256"
+    ],
+    "beforeSHA256": "b4fa6b5a6ad963ef256b4e2e14b327deb4d186be0bea6874828b32e67b38f350",
+    "afterSHA256": "ed654c5d06941d3095f89356d957c1785852b106620e34905c812124ade268c1",
+    "unchangedPoses": 17,
+    "unchangedOverlays": 17,
+    "inputsMeasurementsStatusesAndArtworkUnchanged": true
+  },
+  "checks": [
+    {
+      "command": "pnpm jango:reports:refresh",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm docs:check",
+      "result": "pass",
+      "metadata": 30,
+      "links": 62
+    },
+    {
+      "command": "pnpm lint",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm typecheck",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm test",
+      "result": "initial attempt failed on one stale app observation record",
+      "jango": {
+        "passed": 30,
+        "failed": 0
+      },
+      "resolvedBy": "Official mascot:measure refreshed only bibleSha256. All workspace suites then passed. The passing Jango suite and its global integrity checks were unaffected."
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile mascot:measure",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm --filter @expirymate/mobile mascot:anatomy:audit",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm -r --if-present test",
+      "result": "pass",
+      "passed": 1333,
+      "failed": 0,
+      "skipped": 6,
+      "breakdown": {
+        "shared": 162,
+        "api": 589,
+        "mobile": 582
+      }
+    },
+    {
+      "command": "Current report context and asset hash verification",
+      "result": "pass",
+      "reports": 96,
+      "assetHashes": 893
+    },
+    {
+      "command": "Protected artifact hash and mechanical policy comparison",
+      "result": "pass",
+      "files": 1489
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "finalTestCoverage": {
+    "passed": 1363,
+    "failed": 0,
+    "skipped": 6,
+    "notes": "30 Jango tests passed in the root run; all 1333 workspace tests passed after refreshing app observation metadata. Existing opt-in API integration tests remain skipped."
+  },
+  "logs": {
+    "refresh": {
+      "file": "/private/tmp/jango-rules-refresh.log",
+      "sha256": "c0d9b9eee2d4c1c115690983be31a680fda0a5667fdf021925dc91e9c0aa500a"
+    },
+    "docs": {
+      "file": "/private/tmp/jango-rules-docs.log",
+      "sha256": "c352e0db40e0d6189236c5d005d10e3c9ecbefb25eda923430a8b3b45fca7825"
+    },
+    "lint": {
+      "file": "/private/tmp/jango-rules-lint.log",
+      "sha256": "7c7bd877700d8030663458f79d6881073501f6f129015df700a02e3076706627"
+    },
+    "typecheck": {
+      "file": "/private/tmp/jango-rules-typecheck.log",
+      "sha256": "43a01fbe10f9335a5eb4f0dbd9927b5ffd4f0be290f9bb21d73cf8dcb2ab629c"
+    },
+    "test": {
+      "file": "/private/tmp/jango-rules-test.log",
+      "sha256": "c0dcf3b69e4b6ab3f3bf4d15e8f4c576b5a21d8c70b81ef99c33f8386098f0e9"
+    },
+    "measure": {
+      "file": "/private/tmp/jango-rules-measure.log",
+      "sha256": "349a90a379475422506ba16dd73617ed3380fc45baa34d68a80318a12dd0ade0"
+    },
+    "anatomy-audit": {
+      "file": "/private/tmp/jango-rules-anatomy-audit.log",
+      "sha256": "ff9af3eea8520ee630e54672c31c2e4d8a56f4c5cde6c74f62a8b074e7cbd616"
+    },
+    "workspace-test": {
+      "file": "/private/tmp/jango-rules-workspace-test.log",
+      "sha256": "cfb3f334536c7ac98d7b459b9eae20ff5fea9dc4aa1d4c77cb1828dcd0d3cd8a"
+    }
+  }
+}

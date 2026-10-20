@@ -1,0 +1,39 @@
+{
+  "id": "21-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/21-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/21.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    550,
+    655,
+    105,
+    80
+  ],
+  "tiltDegrees": -8,
+  "visibility": "clear",
+  "expression": {
+    "family": "조심스러운 욕심",
+    "intensity": 2,
+    "eyes": "화면 오른쪽 음식에 몰래 꽂힌 시선",
+    "brows": "기대하며 약간 치켜든 눈썹",
+    "pose": "자기 접시를 들고 먹는 포즈를 바꾼다. 화면 오른쪽 아래에 작은 먹음직스러운 접시가 떠 있고 장고가 그 음식을 바라보며 한 벙어리장갑을 아주 조심스럽게 내민다. 다른 장갑은 배 앞에 모은다. 한 발을 앞으로 살짝 디뎌 한 입을 청하는 수줍은 욕심. 접시는 인접한 소품 하나이며 다른 사람이나 손을 추가하지 않는다. 두 발 모두 보인다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 21
+  },
+  "preflight": "design/jango/quality/jobs/21-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/21-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v22/creative-intents/21.json",
+    "sha256": "214b0ef56f386909d03029f48db09cb8b06bd1700663c07dada3fa1331dd8786",
+    "referenceMouthMode": "idle-u",
+    "scope": "candidate-only"
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "version": "v21",
+  "date": "2026-10-15",
+  "status": "candidate-implementation-complete",
+  "concept": "다정하지만 허당인 생활 친구",
+  "scope": "32 separate review candidates; no MASTER adoption, app asset replacement, Kakao submission, or signed release",
+  "outputDirectory": "design/jango/emoticons/kakao-32/v21",
+  "manifestSHA256": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+  "assets": {
+    "captionedPng": 32,
+    "captionFreePngWithIdenticalLayout": 32,
+    "width": 360,
+    "height": 360,
+    "transparentEdges": 32,
+    "maxBytes": 91492,
+    "minimumMarginPx": 15,
+    "captionArtOverlapPixels": 0,
+    "fullBodyPreserved": 32,
+    "newOfficialImagegenArtworks": 8,
+    "byteIdenticalReusedArtworks": 24,
+    "captionChanges": 8
+  },
+  "redraws": [
+    3,
+    8,
+    11,
+    12,
+    16,
+    18,
+    21,
+    31
+  ],
+  "preservation": {
+    "count": 720,
+    "allMatchAfterTests": true,
+    "snapshot": "design/jango/emoticons/kakao-32/v21/preservation-before.json",
+    "comparison": "design/jango/emoticons/kakao-32/v21/preservation-check.json",
+    "v18OriginalsAndMasterPreserved": true,
+    "v20EntireDirectoryPreserved": true,
+    "appAssetsPreserved": true
+  },
+  "quality": {
+    "preparationPass": 32,
+    "technicalPass": 32,
+    "mouthAutomaticPass": 18,
+    "mouthNeedsReview": 14,
+    "intentionalExpressionReview": [
+      3,
+      8,
+      11,
+      12,
+      16,
+      18,
+      21,
+      31
+    ],
+    "retainedMeasurementUncertainty": [
+      5,
+      15,
+      20,
+      28,
+      29,
+      32
+    ],
+    "signedReleases": 0,
+    "finalReportAssetHashesVerified": 893,
+    "testFixturesCleaned": true,
+    "visualReview": "design/jango/emoticons/kakao-32/v21/visual-review.json"
+  },
+  "checks": [
+    {
+      "command": "pnpm jango:reports:refresh",
+      "result": "pass",
+      "notes": "32 current preparations pass, 32 v18 MASTER adoption records, 32 v20 historical preparations stale after gate implementation changed. v20 preparation/source bytes remain untouched; current diagnostics are refreshed honestly."
+    },
+    {
+      "command": "pnpm jango:check",
+      "result": "pass",
+      "notes": "Record integrity valid; 0 signed releases. This is not expression approval."
+    },
+    {
+      "command": "pnpm jango:test",
+      "result": "pass",
+      "tests": 30,
+      "failed": 0
+    },
+    {
+      "command": "pnpm docs:check",
+      "result": "pass",
+      "metadata": 30,
+      "links": 62
+    },
+    {
+      "command": "pnpm lint",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm typecheck",
+      "result": "pass"
+    },
+    {
+      "command": "pnpm test",
+      "result": "pass",
+      "passed": 1363,
+      "skipped": 6,
+      "failed": 0,
+      "breakdown": {
+        "jango": 30,
+        "shared": 162,
+        "api": 589,
+        "mobile": 582
+      },
+      "skippedFiles": [
+        "apps/api/src/common/ai-telemetry.integration.test.ts",
+        "apps/api/src/modules/inventory/inventory-workflows.integration.test.ts"
+      ],
+      "notes": "The existing opt-in API integration tests were skipped. Root test command includes a second successful 30-test Jango run."
+    },
+    {
+      "command": "Canvas strict TypeScript check",
+      "result": "pass",
+      "file": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-v21-friendly-goof-review.canvas.tsx"
+    },
+    {
+      "command": "HTML gallery browser check",
+      "result": "pass",
+      "observed": [
+        "light/dark switch",
+        "caption-free 80px",
+        "captioned 120px",
+        "v20 previous-version switch"
+      ],
+      "notes": "Temporary localhost server stopped after inspection."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    }
+  ],
+  "earlierTestAttempt": {
+    "result": "2 stale-report failures before refresh",
+    "resolvedBy": "Regenerated current diagnostic reports with pnpm jango:reports:refresh. No reference, ROI, threshold, preparation record or signature was adjusted to pass."
+  },
+  "logs": {
+    "jango-check": {
+      "path": "/private/tmp/jango-v21-jango-check.log",
+      "sha256": "56a245ea2d94bae774438607ee92ff2db1aa973d90b40b52eab027a7b943c138"
+    },
+    "jango-test-final": {
+      "path": "/private/tmp/jango-v21-jango-test-final.log",
+      "sha256": "a4d6fc020d50a186100e3a37430448be84a1da9f7b2c9bcc950f4293e1c7a4c5"
+    },
+    "full-test": {
+      "path": "/private/tmp/jango-v21-full-test.log",
+      "sha256": "19385c3ee9a97954a6c921af4af7ddec94bea8cb0a0a520e2a7c0f8daa1973d8"
+    },
+    "docs-check": {
+      "path": "/private/tmp/jango-v21-docs-check.log",
+      "sha256": "c352e0db40e0d6189236c5d005d10e3c9ecbefb25eda923430a8b3b45fca7825"
+    },
+    "lint": {
+      "path": "/private/tmp/jango-v21-lint.log",
+      "sha256": "7c7bd877700d8030663458f79d6881073501f6f129015df700a02e3076706627"
+    },
+    "typecheck": {
+      "path": "/private/tmp/jango-v21-typecheck.log",
+      "sha256": "6f45f049b7e7a76da97f9c9f97a1ed4ad34323582d76fdcc7b1ba8e87899ead6"
+    },
+    "reports-refresh": {
+      "path": "/private/tmp/jango-v21-reports-refresh.log",
+      "sha256": "4e984b15bf8b3edae0a9f86f3209f955d7a3dc33e276b911ae2b41e20494fa8f"
+    }
+  },
+  "limitations": [
+    "Agent visual observations are not independent user research or external signed approval.",
+    "At 80px, small mouth interiors, the fridge shelf, food detail and crayon grid weaken; dark-background text outlines look thinner.",
+    "11 door perspective/hinge remains a visual-review item; 12 has more sweat marks than requested; 21 food plate is an independent prop.",
+    "AI provenance and existing submission restrictions remain recorded."
+  ]
+}

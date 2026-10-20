@@ -1,0 +1,23 @@
+{
+  "id": "28-v24-r1",
+  "tool": "deterministic-layout",
+  "operation": "layout-lettering-only",
+  "imageGeneration": false,
+  "origin": "design/jango/emoticons/kakao-32/v22/source-originals/28-r1.png",
+  "originSHA256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/28-r1.png",
+  "sourceSHA256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922",
+  "preflight": "design/jango/quality/jobs/28-v24-r1/preflight.json",
+  "preflightSHA256": "5b60defd92aac6745070f75776faaebb6ea6c9cd88b192b406e60018fa35fe7a",
+  "prompt": "design/jango/quality/jobs/28-v24-r1/prompt.txt",
+  "promptSHA256": "38d0dddeaa8cc2ea8863187980a207f99e1972ee4c0be0e5a2a6cd4f5800146d",
+  "inputs": [
+    {
+      "role": "source-original",
+      "file": "design/jango/emoticons/kakao-32/v22/source-originals/28-r1.png",
+      "sha256": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922"
+    }
+  ],
+  "preparationNote": "The preparation prompt was not sent to an image generator. Only a byte-identical copy and subsequent layout/lettering are performed.",
+  "approval": "candidate; no external signature"
+}

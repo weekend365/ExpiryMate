@@ -1,0 +1,39 @@
+{
+  "id": "29-v23-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v23",
+  "source": "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v23/stickers/29.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    606,
+    747,
+    104,
+    51
+  ],
+  "tiltDegrees": -9,
+  "visibility": "clear",
+  "expression": {
+    "family": "지침·탈진",
+    "intensity": 2,
+    "eyes": "힘없이 반쯤 뜬 검은 눈과 낮은 시선, 흰자 없음",
+    "brows": "안쪽이 살짝 들리고 바깥쪽이 처진 작은 눈썹",
+    "pose": "바닥에 엉덩이를 붙이고 털썩 주저앉은 자세. 짧은 두 다리와 신발은 앞으로 벌려 내밀고, 양팔·둥근 벙어리장갑은 골반 양옆으로 힘없이 늘어뜨린다. 몸은 약간 앞으로 구부정하고 모자와 냉장고 얼굴은 5–8도만 기울인다. 모자·앞치마·장갑·두 신발을 모두 보이며 옆으로 눕거나 웅크려 신발을 숨기지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 29
+  },
+  "preflight": "design/jango/quality/jobs/29-v23-r1/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v23/generation-records/29-v23-r1.json",
+  "operation": "individual image edit",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v23/creative-intents/29.json",
+    "sha256": "68a03c125872ee03e9606c45a1c2d939df0e06115f9a4759dd9acc569f794101",
+    "referenceMouthMode": "neutral-line",
+    "scope": "candidate-only"
+  }
+}

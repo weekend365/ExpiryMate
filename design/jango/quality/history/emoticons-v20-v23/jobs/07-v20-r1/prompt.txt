@@ -1,0 +1,18 @@
+장고 개별 이미지 편집. 실제 첨부 파일은 아래 imageIndex에 따른다. 같은 파일은 한 번만 첨부하며 여러 역할을 가질 수 있다.
+현행 이모티콘·스타일 참조 후보의 입 검수는 사전 지정한 네 모드만 지원: idle-u는 MASTER U선, speak-open은 speak 정본의 검은 입 안·아래 작은 분홍 혀, neutral-line은 둥근 끝의 짧은 수평선, sad-arc는 양 끝이 중앙보다 아래인 작은 처진 곡선. 선형 입은 v18의 구조·위치를 참고하고 새 스타일의 읽히는 진한 선 사용, 채움·혀 없음. 이 관문에서는 입술 링·치아·노란 입 안·내민 혀·빈 O 테두리 금지. SNS의 새 입은 BIBLE의 표현 확장과 별도 제작·검토 기록을 따르며 이 네 모드로 거짓 분류하지 않는다.
+기본형 재현·앱 파생·현행 이모티콘 검수 기준: 싱글도어, 왼쪽 민트 손잡이·파인애플, 오른쪽 경첩 2개, 좌우 반전 없음. SNS 반전은 BIBLE에 따라 구조 변화·보정 여부를 별도 검토한다.
+이 관문의 얼굴 비례·눈 간격은 BIBLE의 기본형 기준 유지. 장갑은 주머니 1개·엄지 1개·커프스 1개. SNS의 의도한 비율·포즈·소품 변형은 이 관문의 자동 통과 대상이 아니다.
+공통 제작 MASTER는 style-master.json이 가리키는 v18 source-originals 32종이다. 24번과 해당 원화의 크레파스 선·불투명 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 따른다. v19 연필 스타일은 과거 채택 이력이며 새 제작 기본값이 아니다.
+기본형 재현·현행 이모티콘 검사에서 감정·동작 요청을 검사 예외로 해석하지 않는다. SNS는 BIBLE의 표현 확장을 적용하되 기존 임계값·입 모드·서명 관문을 완화하지 않고 별도로 준비·검토한다. SNS 채택은 MASTER 승격·앱 반영·서명된 이모티콘 출시가 아니다.
+v18 원본 32종을 활성 MASTER로 복원했다. 원본 바이트·과거 채택·입 재검토를 보존하고 새 결과는 별도 후보로 만든다. v19 runtime 교체는 중단했으며 재작화·검수 완료·서명 출시는 주장하지 않는다. 새 앱 작화는 모자·양팔·앞치마·다리·신발이 모두 보이는 전신을 기본으로 하되 기존 원본의 하반신 프레이밍은 변경하지 않는다.
+선택 입 모드: speak-open. 소리 내어 인사·말 걸기·웃음·응원·축하·짧은 감탄이 자연스러운 장면. 생성 전 선택 사유 기록 및 speak 참조 필수.
+선택 이유: v18 원화의 입·표정·포즈는 그대로 보존하고 전신 배치와 문구만 개선
+입 전용 규칙: speak-mouth 역할의 검은 입 안과 하단 작은 분홍 혀만 사용. 입 이외의 동작은 선택한 v18 원화를 따른다.
+스타일: handdrawn-crayon. 활성 v18 32종 중 24번과 해당 원화의 크레파스 선·불투명 무광 색면·민트·따뜻한 차콜·살구 볼터치·약한 종이 결을 따른다. 한 번에 읽히는 윤곽과 진한 눈·입, 연결된 벙어리장갑 구조를 보존한다. 질감을 투명 구멍·털 같은 잔선·광택 3D 그라데이션으로 대신하지 않는다. 새 앱 작화는 모자부터 두 신발까지 전신을 포함하며 하반신이 생략된 원본은 표정·동작 참조로만 사용하고 원본을 덮어쓰지 않는다. UI 카드·말풍선·버튼·글꼴로 그림체를 확장하지 않는다.
+실제 이미지 역할: [{"file":"design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png","imageIndex":1,"role":"identity-master","scope":"active v18 character identity, structure and pose"},{"file":"design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png","imageIndex":1,"role":"style-master","scope":"active v18 line/color/texture; use the selected original pose"},{"file":"design/jango/emoticons/kakao-32/v18/source-originals/07-r2.png","imageIndex":2,"role":"edit-target"},{"file":"design/jango/reference/v18-composition.png","imageIndex":3,"panel":7,"role":"composition-reference"},{"file":"design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png","imageIndex":4,"role":"speak-mouth"}]
+구성 참조는 4행 8열 보드의 7번 컷만 사용한다. 번호·포스터 제목·문구·종이판·넓은 배경 색칠은 복제하지 않는다. 그림체·구조·동작은 활성 v18 MASTER와 해당 원화를 따른다.
+진단 자료(실제 첨부와 구분): [{"file":"design/jango/quality/jobs/07-v20-r1/master-mouth.png","role":"mouth-detail"}]. 진단 확대는 실제 참조 목록과 구분한다.
+규칙 정본: design/jango/reference/JANGO-CHARACTER-BIBLE.md, design/jango/reference/JANGO-STYLE-GUIDE.md, design/jango/reference/STYLE-MASTER-ADOPTION.md
+표정 설계: {"brows":"작고 결의 있는 눈썹","eyes":"또렷한 기본 타원 눈","family":"응원","intensity":3,"pose":"한 장갑 주먹을 높이 들고 다른 장갑은 허리 옆, 두 발을 안정적으로 벌린 힘찬 응원. 배경 색칠 없음."}
+작업 요청: 이미지 생성 없이 v18 원본 바이트를 재사용한다. 입·눈·몸·소품을 편집하지 않고 전신 프레이밍과 별도 Gaegu Bold 문구만 조립한다.
+출력은 글자 없는 실제 알파 투명 배경 캐릭터 한 명. 생성 결과는 후보이며 자동 승인하지 않는다.

@@ -1,0 +1,23 @@
+{
+  "id": "24-v24-r1",
+  "tool": "deterministic-layout",
+  "operation": "layout-lettering-only",
+  "imageGeneration": false,
+  "origin": "design/jango/emoticons/kakao-32/v22/source-originals/24-r1.png",
+  "originSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/24-r1.png",
+  "sourceSHA256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+  "preflight": "design/jango/quality/jobs/24-v24-r1/preflight.json",
+  "preflightSHA256": "354113541fbf3218af9c7674ad3fa37affb165e4acd8c0d8270c6f714a192a62",
+  "prompt": "design/jango/quality/jobs/24-v24-r1/prompt.txt",
+  "promptSHA256": "34f5ceb32f2339dd02a932c25fadc307f03d319f63db32ad0e01d3074a646ab5",
+  "inputs": [
+    {
+      "role": "source-original",
+      "file": "design/jango/emoticons/kakao-32/v22/source-originals/24-r1.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    }
+  ],
+  "preparationNote": "The preparation prompt was not sent to an image generator. Only a byte-identical copy and subsequent layout/lettering are performed.",
+  "approval": "candidate; no external signature"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "08-v24-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v24",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/08-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v24/stickers/08.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    635,
+    645,
+    110,
+    88
+  ],
+  "tiltDegrees": -8,
+  "visibility": "clear",
+  "expression": {
+    "family": "다정한 칭찬",
+    "intensity": 2,
+    "eyes": "따뜻하게 가늘어진 웃는 눈",
+    "brows": "편안함",
+    "pose": "상대 쪽인 화면 오른쪽으로 몸을 10도 정도 기울여 작고 다정한 박수를 보낸다. 두 벙어리장갑은 가슴 앞에서 접촉 직전이며 짧은 동작선 두 개만 있다. 두 팔의 연결과 두 신발이 모두 보인다. 점프하지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 8
+  },
+  "preflight": "design/jango/quality/jobs/08-v24-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v24/derivation-records/08-v24-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v24/creative-intents/08.json",
+    "sha256": "0e6c4de4d1a617f2b78a460c1867238d704b6801b28df31b87b5c0c50fa48a2d",
+    "referenceMouthMode": "idle-u",
+    "scope": "candidate-only"
+  }
+}

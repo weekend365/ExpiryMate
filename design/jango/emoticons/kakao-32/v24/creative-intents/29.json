@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "scope": "candidate-only",
+  "authorization": "2026-10-20 user selected the existing result and requested final-version folder/resource organization. Preserve all existing expression pixels; no new illustration.",
+  "intent": "바닥에 엉덩이를 붙이고 털썩 주저앉은 자세. 짧은 두 다리와 신발은 앞으로 벌려 내밀고, 양팔·둥근 벙어리장갑은 골반 양옆으로 힘없이 늘어뜨린다. 몸은 약간 앞으로 구부정하고 모자와 냉장고 얼굴은 5–8도만 기울인다. 모자·앞치마·장갑·두 신발을 모두 보이며 옆으로 눕거나 웅크려 신발을 숨기지 않는다.",
+  "mouthIntent": "기운 없는 반쯤 뜬 눈과 짧고 힘없이 처진 입선. 웃음·울음·잠든 표정과 구분하는 의도된 새 표현.",
+  "identity": "v18 mint refrigerator face, ivory chef hat with five main lobes and mint band, apron/pocket, peach cheeks, crayon texture, one-thumb mittens and two mint shoes, full body",
+  "referenceMouthMode": "neutral-line",
+  "allowedChanges": [
+    "flexible-face",
+    "dynamic-pose"
+  ],
+  "caption": "지쳤어...",
+  "letteringInstruction": "Do not generate the caption. It will be composed separately with the v22 Gamja Flower typography.",
+  "operation": "layout-lettering-only",
+  "retainedExpression": true,
+  "allowedWork": [
+    "byte-identical-collection"
+  ],
+  "originalIntent": {
+    "file": "design/jango/emoticons/kakao-32/v23/creative-intents/29.json",
+    "sha256": "68a03c125872ee03e9606c45a1c2d939df0e06115f9a4759dd9acc569f794101"
+  }
+}

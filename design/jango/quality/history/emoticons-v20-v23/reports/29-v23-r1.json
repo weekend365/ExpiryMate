@@ -1,0 +1,194 @@
+{
+  "id": "29-v23-r1",
+  "binding": "55b3a2f6c75c7d3c9c961feeb81440a5169e753d6d6c142a436868f8bd541247",
+  "candidate": {
+    "id": "29-v23-r1",
+    "kind": "emoticon",
+    "styleProfile": "handdrawn-crayon",
+    "directory": "design/jango/emoticons/kakao-32/v23",
+    "source": "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png",
+    "sticker": "design/jango/emoticons/kakao-32/v23/stickers/29.png",
+    "mouthMode": "expressive-custom",
+    "mouthRoi": [
+      606,
+      747,
+      104,
+      51
+    ],
+    "tiltDegrees": -9,
+    "visibility": "clear",
+    "expression": {
+      "family": "지침·탈진",
+      "intensity": 2,
+      "eyes": "힘없이 반쯤 뜬 검은 눈과 낮은 시선, 흰자 없음",
+      "brows": "안쪽이 살짝 들리고 바깥쪽이 처진 작은 눈썹",
+      "pose": "바닥에 엉덩이를 붙이고 털썩 주저앉은 자세. 짧은 두 다리와 신발은 앞으로 벌려 내밀고, 양팔·둥근 벙어리장갑은 골반 양옆으로 힘없이 늘어뜨린다. 몸은 약간 앞으로 구부정하고 모자와 냉장고 얼굴은 5–8도만 기울인다. 모자·앞치마·장갑·두 신발을 모두 보이며 옆으로 눕거나 웅크려 신발을 숨기지 않는다."
+    },
+    "composition": {
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 29
+    },
+    "preflight": "design/jango/quality/jobs/29-v23-r1/preflight.json",
+    "generationRecord": "design/jango/emoticons/kakao-32/v23/generation-records/29-v23-r1.json",
+    "operation": "individual image edit",
+    "disposition": "candidate",
+    "selection": "review-set",
+    "creativeBrief": {
+      "file": "design/jango/emoticons/kakao-32/v23/creative-intents/29.json",
+      "sha256": "68a03c125872ee03e9606c45a1c2d939df0e06115f9a4759dd9acc569f794101",
+      "referenceMouthMode": "neutral-line",
+      "scope": "candidate-only"
+    }
+  },
+  "context": {
+    "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "rules": "dfc9aff4ff798a2242dea7209babb25b58628b3a650c7b098d6740a3954295a9",
+    "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "implementation": "fc75b2a630007385e0d9638697f0486801fbaa06deb5be387c9cf2dd2491d523",
+    "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthReferences": {
+      "idle-u": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "speak-open": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "neutral-line": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sad-arc": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "3e4a0e8d9ae306e46e01e195bafaa300a01c2d6b9f352bb9960acca89d14a44c",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "be9ed6b4cb61b92158008165fab824fdc8a8664168e89ec5f4138ab1001b569e",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "f652552c6a88aaeedfd3a0bfa50640296c6f327e2267fdaff091aa24bd6b8603"
+    }
+  },
+  "assets": {
+    "design/jango/emoticons/kakao-32/v23/README.md": "f507274a46c42ea6df4d5de6b864c0b22fe033e5933fc6e05485a086d6463acd",
+    "design/jango/emoticons/kakao-32/v23/artwork-360/29.png": "9fcb541cea39b46d3daa83ad21c41e9f04616b748fb4b5cb044bee709b29d4f0",
+    "design/jango/emoticons/kakao-32/v23/artwork/29.png": "f74ec75c0ad4e67f65685ef8e11c0e1491ab7f41b38ff96f739b3113aa531fa5",
+    "design/jango/emoticons/kakao-32/v23/caption-120-dark.png": "b11c3fe769c50178540b8477ae0c668db095a6d1d03d2702239640ce090400d6",
+    "design/jango/emoticons/kakao-32/v23/caption-120-light.png": "aaee2d55cce1b0cc5bb379afc7dbcde042c47f639d49c9975ccf388cbe24387e",
+    "design/jango/emoticons/kakao-32/v23/caption-360-dark.png": "5792939d97df67d24ba12f2666c84391a41b2fa867bf472eb575fc2a86b0f46e",
+    "design/jango/emoticons/kakao-32/v23/caption-360-light.png": "f342d66a63a779359e01d5b474ad170f8be9b54fd7e375a775d50ac2baeff4eb",
+    "design/jango/emoticons/kakao-32/v23/caption-80-dark.png": "40fad5a4d91ae3b555bd23ebf135f88f73bad4aa386afb0693d66cd8bc2b9217",
+    "design/jango/emoticons/kakao-32/v23/caption-80-light.png": "81b09e8d676c3d3649e9519f1a1261091480741c888505cdbdd0d5ac6a428b49",
+    "design/jango/emoticons/kakao-32/v23/change-record.json": "75275d0116728887bbe721bc77a299f346cf50722ccfddbf1792e12575eb6bd6",
+    "design/jango/emoticons/kakao-32/v23/comparison-v22.png": "485ed90d2cbd6054d700424d568863ea63033ca5b0402b46c2648d157a5aee27",
+    "design/jango/emoticons/kakao-32/v23/creative-intents/29.json": "68a03c125872ee03e9606c45a1c2d939df0e06115f9a4759dd9acc569f794101",
+    "design/jango/emoticons/kakao-32/v23/expression-120-dark.png": "8b3c792d4bceeb9415bfd3e223a6bb337e56efafcaec75ff31bcc99f7ef64fdb",
+    "design/jango/emoticons/kakao-32/v23/expression-120-light.png": "22cbf939646e01f758362621b090825469e03495f97c8533998ee62db8e1d35c",
+    "design/jango/emoticons/kakao-32/v23/expression-360-dark.png": "ee5713690636660e2e17867e941f3ca3e41bdd0d168291e5037831628583b4f3",
+    "design/jango/emoticons/kakao-32/v23/expression-360-light.png": "6f25aed852d7c3ec1ec0929b6aebc86160691ec330909d90aae220126c35787a",
+    "design/jango/emoticons/kakao-32/v23/expression-80-dark.png": "da8582dfcc46cf61c2aace1f82e261c8390e2d8d01b23bc049daa85c5be7e20a",
+    "design/jango/emoticons/kakao-32/v23/expression-80-light.png": "c44260af7fde54cf8017db36ac307254e52a2c51d3e4a071044725ff2ca756c8",
+    "design/jango/emoticons/kakao-32/v23/expression-faces.png": "bca8fb2db1ed1d4e9fd142041e0af9279e7305ebff478ba41ae9b8a90faa5e80",
+    "design/jango/emoticons/kakao-32/v23/faces/29.png": "d2f27716e70bd1d6585f2e0732dd05ee19f3c57694a34d4be2ac18760e9dff9f",
+    "design/jango/emoticons/kakao-32/v23/fonts/Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "design/jango/emoticons/kakao-32/v23/fonts/Gaegu-Regular.ttf": "aa52c98336f7c62e2896fc8b12b56a75d5b476d88a2f104b0980f4f7ce0adfc3",
+    "design/jango/emoticons/kakao-32/v23/fonts/GamjaFlower-OFL.txt": "39de3de5f1873f89bca4af37823ab22e28e88d0d8f7fe2f07e82e9e6e9bf7b70",
+    "design/jango/emoticons/kakao-32/v23/fonts/GamjaFlower-Regular.ttf": "ece32819ed58536355a49a095b0cdfdd3b8ef9081c5ed9ca1cef8f5d999ae1ac",
+    "design/jango/emoticons/kakao-32/v23/fonts/OFL.txt": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251",
+    "design/jango/emoticons/kakao-32/v23/fonts/provenance.json": "a04a164e07675fb2d70f7c624a2211666d27b2fd115a5e22da92cf0f12806385",
+    "design/jango/emoticons/kakao-32/v23/generation-attempts.json": "ef947dbb02b4d5409b08128f3322c6ec510dca273e71a022d7428d3ad146ce11",
+    "design/jango/emoticons/kakao-32/v23/generation-records/29-v23-r1.json": "25fa965b6d77737740d2001692e0318e788bf06c3a9f69a47c07dc3f894bef40",
+    "design/jango/emoticons/kakao-32/v23/index.html": "20a441596e7059e34b6b1dcbfbb35362dba11485b2d4664f9b1b839d0d99bf5b",
+    "design/jango/emoticons/kakao-32/v23/inspection-status.json": "82756d9f9beba5b0f6cd6bfa7b503a94f10dc5390287ace63e876f7f87535580",
+    "design/jango/emoticons/kakao-32/v23/inspection.json": "222836e59db233176258888c22059d4df45a6fdaac99f12d9be641d76d90799a",
+    "design/jango/emoticons/kakao-32/v23/lettering-calibration/GamjaFlower-Regular-160-0.png": "32217aa088609714daf9bb91a66471d1f4fccb748dc81275da5a459f2dae64f8",
+    "design/jango/emoticons/kakao-32/v23/lettering-record.json": "5462a8830bbf0f5fac5e9046676b3af49eb5a4ca399360f69ad89d8966eee16b",
+    "design/jango/emoticons/kakao-32/v23/lettering/29.png": "3559c1ee40d07d0d85c20ba5c928a992d85e499af19864e3201aea390b2640cf",
+    "design/jango/emoticons/kakao-32/v23/manifest.json": "2a03447107ebc415c2fed1e5166248c3751023dc2bc796887fb56667f0981730",
+    "design/jango/emoticons/kakao-32/v23/mouth-contact.png": "9330c0864fb068041cc5768377c75274a7bfcd11ba5136a37ded03241ec6c18d",
+    "design/jango/emoticons/kakao-32/v23/plan.json": "855296fea3496a6c1595b2444d569ec3323474ebe1f5ab7fb3b5416823f155f7",
+    "design/jango/emoticons/kakao-32/v23/preservation-before.json": "a2b3d79cf92cd193e5f2233a4be0801f996868357cf1a82607a332fb4c0a1b50",
+    "design/jango/emoticons/kakao-32/v23/preservation-check.json": "39e2611fcd64b9c58e60f502699fa6ffe805faf9a65a42747a447859f4ba6e19",
+    "design/jango/emoticons/kakao-32/v23/preview-dark.png": "deb4d7178611c36b5fac03a36962ab4d6013545fb8380a6102f5cc9adf4bb6a3",
+    "design/jango/emoticons/kakao-32/v23/preview-light.png": "211dddbc791f6df4be5fdc66aa9d8989f5ca15d30b372916a29f0f4b21eabcd0",
+    "design/jango/emoticons/kakao-32/v23/production-record.json": "8a57408b78230181d9955ef1da2813cfc30db33b7e1ecf8ef0e9ef1208b1f6f2",
+    "design/jango/emoticons/kakao-32/v23/review-set.json": "e8c5f7406c42815b510429ccab37e33cf40aa6af5d9c0857c8094fc51e640ace",
+    "design/jango/emoticons/kakao-32/v23/selection.json": "45082c35e06a2f1cf7d7862c1e0ec00a01f202947ab0ff50c5e3d554dac3ebf6",
+    "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png": "b546a8160bf5a83dbdf95d166bd5060f27b528254f4c7a70b4dcf731e5d7714d",
+    "design/jango/emoticons/kakao-32/v23/stickers/29.png": "861281848037939de5e880d72b07eea2632746d3ac26f60f4cb68339e84a6ac3",
+    "design/jango/emoticons/kakao-32/v23/visual-review.json": "02d684576622c2cd41447f3d1cb2fcc1e4decc54cda323c32d87fd7c8c7d5064"
+  },
+  "preparation": "pass",
+  "preparationAssets": {
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/quality/jobs/29-v23-r1/prompt.txt": "c59e1feaf8659035be0920789551a10073ab9cec2cb5dd366f7728843e2c757d",
+    "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/11-r4.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+    "design/jango/quality/jobs/29-v23-r1/master-mouth.png": "2008e9d1d8900dbaa38dde91b6c727676f07b49d6f16f6951f9cc51a8da3ec2c"
+  },
+  "sourceProvenance": {
+    "status": "pass",
+    "operation": "individual image edit"
+  },
+  "preflight": "3ae0ca2afb542fd89647f6b34c78af41cc5e511766ee1976bd2c5abda631bdcf",
+  "mouth": {
+    "status": "needs-review",
+    "reason": "intentional-expression-requires-visual-review",
+    "samples": [
+      {
+        "threshold": 65,
+        "pixels": 978,
+        "components": 1,
+        "fill": 0.489,
+        "holes": 0,
+        "touchesEdge": false,
+        "status": "needs-review"
+      },
+      {
+        "threshold": 100,
+        "pixels": 1023,
+        "components": 1,
+        "fill": 0.4736111111111111,
+        "holes": 0,
+        "touchesEdge": false,
+        "status": "needs-review"
+      },
+      {
+        "threshold": 135,
+        "pixels": 1060,
+        "components": 1,
+        "fill": 0.49074074074074076,
+        "holes": 0,
+        "touchesEdge": false,
+        "status": "needs-review"
+      }
+    ]
+  },
+  "technical": {
+    "status": "pass",
+    "visible": true,
+    "transparentEdge": true,
+    "width": 360,
+    "height": 360,
+    "safeMargin": true,
+    "sourceUnclipped": true,
+    "bounds": {
+      "left": 84,
+      "top": 17,
+      "right": 282,
+      "bottom": 339,
+      "margin": 17
+    },
+    "sourceBounds": {
+      "left": 202,
+      "top": 60,
+      "right": 1052,
+      "bottom": 1219,
+      "margin": 34
+    }
+  },
+  "designStatus": "needs-review",
+  "note": "Automatic mouth pass is not full design approval. Signed visual review is required."
+}

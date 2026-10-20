@@ -1,0 +1,33 @@
+{
+  "id": "06-v24-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v24",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/06-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v24/stickers/06.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    520,
+    715,
+    124,
+    101
+  ],
+  "tiltDegrees": 14,
+  "visibility": "clear",
+  "expression": {
+    "family": "작은 웃음",
+    "intensity": 2,
+    "eyes": "부드럽게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 6
+  },
+  "preflight": "design/jango/quality/jobs/06-v24-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v24/derivation-records/06-v24-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

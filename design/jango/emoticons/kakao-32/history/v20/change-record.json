@@ -1,0 +1,32 @@
+{
+  "version": "v20",
+  "baseVersion": "v18",
+  "status": "candidate",
+  "method": "30 byte-identical v18 original reuses plus two individually prepared built-in image_gen pose edits; full-body layout and separately typeset Gaegu Bold lettering",
+  "preserved": [
+    "v18 MASTER originals/stickers/lettering",
+    "v18 active style identity",
+    "mobile runtime and branding",
+    "mouth thresholds and external signing requirements"
+  ],
+  "changed": [
+    "full-body framing",
+    "32 captions",
+    "Gaegu Bold measured lettering",
+    "pose 10 wait and pose 15 polite refusal"
+  ],
+  "layout": {
+    "coordinates": 1024,
+    "fullBody": true,
+    "targetMargin360": 16,
+    "minimumMargin360": 8,
+    "inkHeight1024": 108,
+    "outline1024": 9,
+    "punctuationScale": 0.55
+  },
+  "approval": "Implementation authorized; design adoption and signed release pending",
+  "marketplace": {
+    "aiGenerationHistory": true,
+    "eligibility": "Current generative-AI proposal restriction remains unresolved; not a submission-ready or approved pack"
+  }
+}

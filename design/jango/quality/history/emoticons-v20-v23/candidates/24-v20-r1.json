@@ -1,0 +1,33 @@
+{
+  "id": "24-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/24-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/24.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    598,
+    632,
+    112,
+    82
+  ],
+  "tiltDegrees": -9,
+  "visibility": "clear",
+  "expression": {
+    "family": "완료·공유",
+    "intensity": 2,
+    "eyes": "한 눈 윙크, 다른 기본 타원",
+    "brows": "없음",
+    "pose": "완성한 음식이 담긴 접시를 두 손으로 상대 쪽에 보여준다. 접시가 입을 가리지 않으며 작은 별 두 개."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 24
+  },
+  "preflight": "design/jango/quality/jobs/24-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/24-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -12,12 +12,16 @@ const rules=policy(),set=readMasterSet();
 const entry=n=>set.entries.find(e=>e.number===n);
 const expression={family:'인사',intensity:2,eyes:'타원',brows:'없음',pose:'손인사'};
 // Historical pixels below are temporary gate fixtures, not evidence of a new-style redraw.
-function fixture(id,number=9){
+function fixture(id,number=9,withProvenance=true){
  const source=entry(number),directory=`design/jango/emoticons/kakao-32/${id}`;
  const prepared=prepare(id,source.source,'표정 유지',source.mouthMode,'모드 유지',expression);
  fs.mkdirSync(local(directory),{recursive:true});
  fs.copyFileSync(local(source.source),local(directory+'/source.png'));fs.copyFileSync(local(source.sticker),local(directory+'/sticker.png'));
  const candidate={id,kind:'emoticon',styleProfile:rules.defaultStyleProfile,directory,source:directory+'/source.png',sticker:directory+'/sticker.png',mouthMode:source.mouthMode,mouthRoi:source.inspection.mouthRoi,tiltDegrees:source.inspection.tiltDegrees,visibility:'clear',expression,preflight:`${quality}/jobs/${id}/preflight.json`,disposition:'candidate'};
+ if(withProvenance){
+  candidate.derivationRecord=directory+'/derivation.json';
+  writeJson(candidate.derivationRecord,{id,tool:'deterministic-layout',operation:'layout-lettering-only',imageGeneration:false,source:candidate.source,sourceSHA256:fileHash(candidate.source),origin:prepared.input,originSHA256:prepared.inputSHA256,preflight:candidate.preflight,preflightSHA256:fileHash(candidate.preflight),promptSHA256:prepared.promptSHA256,inputs:[{role:'source-original',file:prepared.input,sha256:prepared.inputSHA256}]});
+ }
  writeJson(`${quality}/candidates/${id}.json`,candidate);return{candidate,prepared};
 }
 function clean(id){for(const dir of [`design/jango/emoticons/kakao-32/${id}`,`${quality}/jobs/${id}`])fs.rmSync(local(dir),{recursive:true,force:true});for(const dir of ['candidates','reports'])fs.rmSync(local(`${quality}/${dir}/${id}.json`),{force:true});}
@@ -118,6 +122,29 @@ test('new preparation rejects missing reasons or malformed intent and never over
  assert.throws(()=>prepare(id,entry(11).source,'집중'),/already exists/);
  }finally{clean(id);}
 });
+test('expressive candidates bind an explicit creative brief and never receive legacy mouth approval',()=>{
+ const id=`creative-test-${process.pid}`,directory=`design/jango/emoticons/kakao-32/v${Date.now()}`,file=directory+'/creative-intents/test.json';
+ const brief={version:1,scope:'candidate-only',authorization:'Unit-test fixture only',intent:'surprise',mouthIntent:'small O',identity:'preserve Jango',referenceMouthMode:'speak-open',allowedChanges:['o-mouth','flexible-face']};
+ try{
+  assert.throws(()=>prepare(id,entry(12).source,'test','expressive-custom','surprise',expression),/Unknown mouth mode/);
+  writeJson(file,brief);
+  assert.throws(()=>prepare(id,entry(12).source,'test','idle-u','surprise',expression,{creativeBrief:file}),/expressive-custom/);
+  const p=prepare(id,entry(12).source,'test','expressive-custom','surprise',expression,{creativeBrief:file});
+  assert.equal(p.creativeBrief.sha256,fileHash(file));
+  assert(fs.readFileSync(local(p.prompt),'utf8').includes('NOT an exact shape/position constraint'));
+  assert(!fs.readFileSync(local(p.prompt),'utf8').includes('빈 O 테두리 금지'));
+  assert.equal(screenMouthMode(readPng(entry(12).source),entry(12).inspection.mouthRoi,rules,'expressive-custom').status,'needs-review');
+  assert.throws(()=>assertReview({candidate:{mouthMode:'expressive-custom'}},{},''),/release blocked/);
+  const source=directory+'/source.png';fs.copyFileSync(local(entry(12).source),local(source));
+  const recordFile=directory+'/generation.json';
+  writeJson(recordFile,{source,sourceSHA256:fileHash(source),preflight:`${quality}/jobs/${id}/preflight.json`,preflightSHA256:fileHash(`${quality}/jobs/${id}/preflight.json`),promptSHA256:p.promptSHA256,actualReferences:p.references.map(f=>({file:f,sha256:p.referenceHashes[f]}))});
+  const c={id,source,preflight:`${quality}/jobs/${id}/preflight.json`,generationRecord:recordFile,disposition:'candidate'};
+  writeJson(`${quality}/candidates/${id}.json`,c);
+  assert.doesNotThrow(()=>validateInputLineage(source));
+  writeJson(file,{...brief,mouthIntent:'changed after preparation'});
+  assert.throws(()=>validateInputLineage(source),/Creative brief changed/);
+ }finally{clean(id);fs.rmSync(local(directory),{recursive:true,force:true});}
+});
 test('fresh candidate, valid test signature, forgery, stale prompt and uncertain pose remain enforced',()=>{
  const id=`gate-test-${process.pid}`,releases=fs.readFileSync(local(`${quality}/releases.json`));
  try{
@@ -142,11 +169,31 @@ test('fresh candidate, valid test signature, forgery, stale prompt and uncertain
 test('registered derivative must have intact generation, input and attachment provenance',()=>{
  const id=`lineage-test-${process.pid}`;
  try{
- const {candidate,prepared}=fixture(id);assert.throws(()=>validateInputLineage(candidate.source),/registered derivative/);
+ const {candidate,prepared}=fixture(id,9,false);assert.throws(()=>validateInputLineage(candidate.source),/registered derivative/);
  candidate.generationRecord=candidate.directory+'/generation.json';
  const generation={source:candidate.source,sourceSHA256:fileHash(candidate.source),preflight:candidate.preflight,preflightSHA256:fileHash(candidate.preflight),promptSHA256:prepared.promptSHA256,actualReferences:prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]}))};
  writeJson(candidate.generationRecord,generation);writeJson(`${quality}/candidates/${id}.json`,candidate);assert.doesNotThrow(()=>validateInputLineage(candidate.source));
- writeJson(candidate.generationRecord,{...generation,sourceSHA256:'tampered'});assert.throws(()=>validateInputLineage(candidate.source),/changed/);
+ writeJson(candidate.generationRecord,{...generation,sourceSHA256:'tampered'});assert.throws(()=>validateInputLineage(candidate.source),/changed|hash mismatch/);
+ }finally{clean(id);}
+});
+test('byte-identical reuse rejects missing provenance, tampered origins, generated claims and cycles',()=>{
+ const id=`reuse-test-${process.pid}`;
+ try{
+  const {candidate,prepared}=fixture(id),file=candidate.derivationRecord,original=readJson(file);
+  assert.doesNotThrow(()=>validateInputLineage(candidate.source));
+  assert.equal(audit(id).sourceProvenance.status,'pass');
+  for(const change of [{originSHA256:'tampered'},{sourceSHA256:'tampered'},{imageGeneration:true},{tool:'built-in image_gen'},{actualReferences:[]}]){
+   writeJson(file,{...original,...change});
+   assert.throws(()=>validateInputLineage(candidate.source));
+   assert.equal(audit(id).preparation,'stale');
+  }
+  writeJson(file,original);
+  const missing={...candidate};delete missing.derivationRecord;writeJson(`${quality}/candidates/${id}.json`,missing);
+  assert.equal(audit(id).preparation,'stale');
+  writeJson(`${quality}/candidates/${id}.json`,candidate);
+  const cyclic={...prepared,input:candidate.source,inputSHA256:fileHash(candidate.source)};writeJson(candidate.preflight,cyclic);
+  writeJson(file,{...original,origin:cyclic.input,originSHA256:cyclic.inputSHA256,preflightSHA256:fileHash(candidate.preflight),inputs:[{role:'source-original',file:cyclic.input,sha256:cyclic.inputSHA256}]});
+  assert.throws(()=>validateInputLineage(candidate.source),/Cyclic/);
  }finally{clean(id);}
 });
 test('incomplete ROI, empty PNG, insufficient margin and clipped original never pass',()=>{

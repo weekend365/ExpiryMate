@@ -1,0 +1,33 @@
+{
+  "id": "32-v22-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v22",
+  "source": "design/jango/emoticons/kakao-32/v22/source-originals/32-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v22/stickers/32.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    601,
+    642,
+    107,
+    74
+  ],
+  "tiltDegrees": -10,
+  "visibility": "clear",
+  "expression": {
+    "family": "애정 건네기",
+    "intensity": 2,
+    "eyes": "편안하게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "큰 분홍 빨강 하트를 가슴에 두 장갑으로 품고 고개를 약 10도 기울이는 따뜻한 감사. 하트 윗부분은 입보다 아래, 작은 하트 둘. 04의 앞으로 내미는 동작과 달리 품 안에 끌어안는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 32
+  },
+  "preflight": "design/jango/quality/jobs/32-v22-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v22/derivation-records/32-v22-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

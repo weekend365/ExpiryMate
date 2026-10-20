@@ -1,0 +1,3771 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-20",
+  "authorization": "지금 결과물 마음에 들어. 단, 변경사항 커밋전에 불필요한 리소스는 제거해줘.",
+  "purpose": "Remove unused, byte-reconstructible build caches before commit; retain original artwork, final stickers, active previews and provenance.",
+  "builder": "scripts/build-jango-emoticons.mjs",
+  "reproduceFlag": "--keep-intermediates",
+  "preserved": {
+    "scopes": [
+      "design/jango/emoticons/kakao-32/v20",
+      "design/jango/emoticons/kakao-32/v21",
+      "design/jango/emoticons/kakao-32/v22",
+      "design/jango/emoticons/kakao-32/v23",
+      "design/jango/emoticons/kakao-32/v18",
+      "design/jango/masters",
+      "design/jango/reference",
+      "design/jango/quality/jobs",
+      "design/jango/quality/candidates",
+      "design/jango/quality/history",
+      "apps/mobile/assets"
+    ],
+    "files": 1833,
+    "inventorySHA256": "beb36a5c0de37ffd6375b57105988fc7ca556220aa1099205d87ce954a43fe4b"
+  },
+  "removedFiles": 197,
+  "removedBytes": 76997267,
+  "categories": {
+    "characters": {
+      "files": 97,
+      "bytes": 74760640
+    },
+    "thumbs": {
+      "files": 97,
+      "bytes": 1183261
+    },
+    "preview-120": {
+      "files": 3,
+      "bytes": 1053366
+    }
+  },
+  "removed": [
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/01.png",
+      "sha256": "cf9e0447c51463f4d344365b6b314c1c086c0c9f0716487a93cbcb0d37ba3f5e",
+      "bytes": 762570,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/01-r1.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/02.png",
+      "sha256": "3bc9ad9962de7d2c8c96b2b4d20055df0db728ed9f93ecdd93cf8f73de5d236b",
+      "bytes": 743717,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/02-r1.png": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/03.png",
+      "sha256": "1e4f2f2cc5c1915de590dcc5b4577ef983de7fd78f24f822a55a89bd05e13398",
+      "bytes": 771920,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/03-r1.png": "5848875e991d14ce53e7eed2ff488fbb3280920f3a84bc794fafc4534eaf7adc"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/04.png",
+      "sha256": "86fa580bd8c1bf09a5bf6234d5cde2268f131831a4119243f00cb05db214c2c3",
+      "bytes": 722987,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/04-r1.png": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/05.png",
+      "sha256": "cffaf5936e6376488fdb492e933a9d18d6612660d84d2f3b2114e507a8711a26",
+      "bytes": 783134,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/05-r1.png": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/06.png",
+      "sha256": "cdedc86bcbf582b0c5ee98852b95e21b53c3126f8bead1f66c044412410cfbbe",
+      "bytes": 737797,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/06-r1.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/07.png",
+      "sha256": "e8559972e2e150fdd3cfba9c6179972610b2809bcdcf8ea70e367f5f02944dbb",
+      "bytes": 851913,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/07-r1.png": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/08.png",
+      "sha256": "9d303f56acefaf7532d9025c92dffec911fdec24f628ae1bde741a38d7203146",
+      "bytes": 815377,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/08-r1.png": "5da498b5f0e8f60b9d5cf53a8336bc07832467579413526b1fdef4b51a7be0c0"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/09.png",
+      "sha256": "b36f94b27ad34b9742a210f9903e2538fe349fa58546cc13fb3ad178d8b30a41",
+      "bytes": 743811,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/09-r1.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/10.png",
+      "sha256": "7424e98fe1ea80cf3a5b43e29b38da5449a3af40d1ae1dda856c54912ea6f766",
+      "bytes": 726125,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/10-r1.png": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/11.png",
+      "sha256": "16c781a9001e87dc37306c2697eeb0c01d364d232ba8c0a563d8d48873f488b8",
+      "bytes": 696494,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/11-r1.png": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/12.png",
+      "sha256": "dc106bc097a2e3275a57d58e1d62473abe2dc64fe4e1babe68b0d5125f738a3e",
+      "bytes": 522699,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/12-r1.png": "b55fa9d0e08b8198e367d16e9af4bf44b2aebb8395594d454ef2f2a92a15b365"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/13.png",
+      "sha256": "2636c5a6615438d4806e68a62d86a7d1482b10cdc47dd1a780dfd834782a0ba8",
+      "bytes": 853836,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/13-r1.png": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/14.png",
+      "sha256": "a6f7b00a95ee0736efae0ce44ff3f584610aedad0349c5699aa7ffefc24e7f1b",
+      "bytes": 788195,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/14-r1.png": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/15.png",
+      "sha256": "654ecb944da987232ab480ded61bd53021ff8b0118554e2e5919e61da7d347e4",
+      "bytes": 716357,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/15-r1.png": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/16.png",
+      "sha256": "497c6d59d0fd0e6c10bca0a200d35e588a4a4adf971fe51943128ee99b435273",
+      "bytes": 783205,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/16-r1.png": "bb48947c860c6495e91385a70a5531e273e6c3aa2150970acad39c5d0d7e8e26"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/17.png",
+      "sha256": "d5ece8999a9fb99bb9000541c299d24c6b366bed1ceae00f7e884bd290f2eee9",
+      "bytes": 670711,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/17-r1.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/18.png",
+      "sha256": "5b754f2c7be5ee689c3c7c75301b81bae964eaf4afa61652c6c069ef97ba0d8d",
+      "bytes": 759685,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/18-r1.png": "9dc6f5d4794c88b61cb306d7c784c011b77ff7d9c82c8033ffd1c8b2a68c9e01"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/19.png",
+      "sha256": "ec396cef467a0290b8e0a3ba58a13abda6d35e9a8c640e060040bf09cbee2c33",
+      "bytes": 781579,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/19-r1.png": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/20.png",
+      "sha256": "c03ee435d83069f49e18ae80f35b60c8b1146448dac9acdf14e83d25c4a9b09c",
+      "bytes": 764889,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/20-r1.png": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/21.png",
+      "sha256": "8d9cd70095073741e6d1d033454334ca14d05d73eca36f5b7e47eb0b9cf4dfbc",
+      "bytes": 744057,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/21-r1.png": "9971aa63fcd09fd32560af952f933502a4c4f03df1722c924f1fb01139b7fc03"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/22.png",
+      "sha256": "9a875eae6206cadd23246685c52f062609d18123cae8954c69750d9c47606de5",
+      "bytes": 761223,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/22-r1.png": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/23.png",
+      "sha256": "512329e1e2fc8da3d552768bed72f10120cf05dd3fbebaa5400c6e1bdec128a5",
+      "bytes": 818232,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/23-r1.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/24.png",
+      "sha256": "f98933a4ffe923cb199e9c24b1ef662e7820bb978467c340e236a6009d5c773a",
+      "bytes": 760316,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/24-r1.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/25.png",
+      "sha256": "8f8002f65c23d9bb38bd2c59388ebbd76e5e30b48a7e8459d815f9b31bf92ce9",
+      "bytes": 785785,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/25-r1.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/26.png",
+      "sha256": "59bd6342d7d0c539634916ef9b66979f6d5d3b16d96fa55d7d57a8376d27783f",
+      "bytes": 797010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/26-r1.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/27.png",
+      "sha256": "d1db915cd50ec0c0212e1818b5d0ea0200c871c3fa24accb5c8aac49155c7c30",
+      "bytes": 810411,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/27-r1.png": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/28.png",
+      "sha256": "30e86725e4e88695f588a681119caefefa5ab08acd180f67fb85637fc89ddbfa",
+      "bytes": 848057,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/28-r1.png": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/29.png",
+      "sha256": "90d2ecc07f151e2e6ca075e853f4b3a0b4a4fcafbfbf86663430dbd5902eea1a",
+      "bytes": 712010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/29-r1.png": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/30.png",
+      "sha256": "67b0f5e2c190d9e1ceb8746036fd93d3dcb8a0990205becbdb9ce3df236997df",
+      "bytes": 940177,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/30-r1.png": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/31.png",
+      "sha256": "76c39e08c146d0315a585254258acbd596712e4d935e743ad9d2e7cc181481f1",
+      "bytes": 783950,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/31-r1.png": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/characters/32.png",
+      "sha256": "398e1d1af81ee9ad12b418573175af7fb1a3e7ae51c8bc8e68a42d676b58b64e",
+      "bytes": 773873,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/source-originals/32-r1.png": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/preview-120.png",
+      "sha256": "6de355e065f27ced844e05d4ccdffa00fbcc4cb4e23c77b41cddbe5da4308f70",
+      "bytes": 337778,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "preview-120",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/01.png": "fd7beeb679030dd1c1717a6eb424e7aaba700208c819fd736cde383062576f2e",
+          "design/jango/emoticons/kakao-32/v20/lettering/01.png": "a3219c101e54365b736437f880190be60132b02ae6c3b936dc1a37e40980b6a2",
+          "design/jango/emoticons/kakao-32/v20/artwork/02.png": "5f619ffe1cbec07e26ef23bea31afda1bdaf140964a9394a8ae6c80f554be925",
+          "design/jango/emoticons/kakao-32/v20/lettering/02.png": "bfa095302f3cacfeea2eb1b5930d14af3114113b57652c03439dbba7f7281269",
+          "design/jango/emoticons/kakao-32/v20/artwork/03.png": "bcaf4c96814e089ef063a9b6eb3644da3a9db6527fb190cb9426b7b45e73f3a1",
+          "design/jango/emoticons/kakao-32/v20/lettering/03.png": "ed5eb8ae67ccc427a63f652167739d62c6d010f73d5caad45bf3dac4e687f775",
+          "design/jango/emoticons/kakao-32/v20/artwork/04.png": "fe998d2eb001e2c09b57a9b9cab0d34269c6e21259d6fcb691c14fef0e0297d9",
+          "design/jango/emoticons/kakao-32/v20/lettering/04.png": "5a072731b576f8228cd8a18d914a1f8cd987bcea417a41332403511c2cfb32f9",
+          "design/jango/emoticons/kakao-32/v20/artwork/05.png": "13e8d0433ca1636ede928698e5205dcd093bc41cb63de9dc443d42c5a7c6f098",
+          "design/jango/emoticons/kakao-32/v20/lettering/05.png": "6823ff4cca38e85264e093e834c7330e74323abac386fae9a8bba4d72f47c3f7",
+          "design/jango/emoticons/kakao-32/v20/artwork/06.png": "7c358e92b8ad911c80169f62b0043efc601a8cff8ec37d78f37c97cd760801bc",
+          "design/jango/emoticons/kakao-32/v20/lettering/06.png": "12ffc0397b22e95f21cf0820e01cd16321d080ae7970d7a3127c552323f23935",
+          "design/jango/emoticons/kakao-32/v20/artwork/07.png": "5e0d56cd706b7eb7269f130b13cb17835b7d1dd317889b89ee92d21048eed423",
+          "design/jango/emoticons/kakao-32/v20/lettering/07.png": "d95a53872021eccb0e2db6de6c84125ece5d15f2cb03610d0b1fe8471008e0cf",
+          "design/jango/emoticons/kakao-32/v20/artwork/08.png": "0cfb913264d8438e9f680b2fad5f5dd096c20b4995ba1b48c5c3bd9746e998f6",
+          "design/jango/emoticons/kakao-32/v20/lettering/08.png": "867db81ed32dfb7d8c0ee179df4d1b06e284e1a8b6b9fbeefd85542d9dbd1487",
+          "design/jango/emoticons/kakao-32/v20/artwork/09.png": "9537f66373ba3d5664abc97b042fdab4899e1fc0088957d525aa7efe20347f45",
+          "design/jango/emoticons/kakao-32/v20/lettering/09.png": "65ef3dc1e73f91017200da0c2581f968aed3a628226b849990dfa27f9913b4b2",
+          "design/jango/emoticons/kakao-32/v20/artwork/10.png": "3eb522ddf0f796ae8bbd8351f69f6eaa395c15cd1e6ca66dcbd531e7e445ac05",
+          "design/jango/emoticons/kakao-32/v20/lettering/10.png": "af9ce77b4b0e93e4dbddbeeecd027a5afc5d38b4cef7c4b0b59c2b1eaff8bb8d",
+          "design/jango/emoticons/kakao-32/v20/artwork/11.png": "74e4826c8952cd2145acc60b53a76d696788c18dfde1e1aab76fd1423a6170ba",
+          "design/jango/emoticons/kakao-32/v20/lettering/11.png": "a9894e372fb188462912d06bdaf087b71c05f5420dcf631f926da650e2846560",
+          "design/jango/emoticons/kakao-32/v20/artwork/12.png": "d174ae45d9d5624aa00f583ba2cf6b5a8846b2f7f526fdd696fabeb0219db9d8",
+          "design/jango/emoticons/kakao-32/v20/lettering/12.png": "79ab62000b3f8f3b4de5836618166d30be16b6a1286aa65c78458482207f4c24",
+          "design/jango/emoticons/kakao-32/v20/artwork/13.png": "65c63962aa0e0aa4558bb5dea7a9225db1038b5d1b5d21530d7a63d17178a26d",
+          "design/jango/emoticons/kakao-32/v20/lettering/13.png": "2e57201647ba8295316361f33353a915156eae3b471b5e1b22ede972ffb4e9f5",
+          "design/jango/emoticons/kakao-32/v20/artwork/14.png": "b788931d1de9638e1d954560d670b80b14c09d2674e7572057414738bf34f166",
+          "design/jango/emoticons/kakao-32/v20/lettering/14.png": "340d2f9a44ac30a74ba76d62980eb56bfa8389763abf63a9fcdbba34311c9e56",
+          "design/jango/emoticons/kakao-32/v20/artwork/15.png": "84abcfa85d6842e9d874b6f02503c22c86f5ce71fa335c396ff84bb3253659fd",
+          "design/jango/emoticons/kakao-32/v20/lettering/15.png": "3e2ef758f972c4a2fbd9457f795364020e7c0d0e3db26f2fc105f7f5861f7ea1",
+          "design/jango/emoticons/kakao-32/v20/artwork/16.png": "834dc438c07fe8f67c2f5fcdf4ca41022d4cc3be01e2d21b210de3342e7ef356",
+          "design/jango/emoticons/kakao-32/v20/lettering/16.png": "2c022c48acd53821038db5bb08b5e3a03478fe840b4e0ead33e1970f9217417f",
+          "design/jango/emoticons/kakao-32/v20/artwork/17.png": "4805a11c05571fdc47d061746b591f1bb8f6fdbd930d0ed918761f8ddaf21f73",
+          "design/jango/emoticons/kakao-32/v20/lettering/17.png": "5ae7d708c8c1a1527681de8d9d8b2c4d7771522ee3e1acf3f19efecd1e3a85b3",
+          "design/jango/emoticons/kakao-32/v20/artwork/18.png": "83fedff06f30de2f8f07e01005dc5878d7bb648d764411fff99779922fa2cc9f",
+          "design/jango/emoticons/kakao-32/v20/lettering/18.png": "c58d8fdc5cc4869114b95c71b2efb18bb3b5455b271fa04994432743dc7018bd",
+          "design/jango/emoticons/kakao-32/v20/artwork/19.png": "72820e31edb5e7c72e1e744b635fe57e5a4aa8bd6751e0657c518c4bc4303e6d",
+          "design/jango/emoticons/kakao-32/v20/lettering/19.png": "b075e58cb049fd39215f6661e465c4dde7f956d70b8c6e46c27431be242b4575",
+          "design/jango/emoticons/kakao-32/v20/artwork/20.png": "c87846dec9c7205ae4259737c500fa198fe8cc56a7d0e59f7215759c2e68575e",
+          "design/jango/emoticons/kakao-32/v20/lettering/20.png": "1ddfbeae81b80a796723d1a3832aa3204b8c9ace171e71fe128a6cc4d63bde98",
+          "design/jango/emoticons/kakao-32/v20/artwork/21.png": "d0dc48ea23aba164a81bbb6de5117825738f7a2388bfc19ab8ccedec64866b26",
+          "design/jango/emoticons/kakao-32/v20/lettering/21.png": "067b04af8f272b87f0557a7a5d5a5ac34dec20a8cd0ad5859659d875dcde1343",
+          "design/jango/emoticons/kakao-32/v20/artwork/22.png": "6167f3a06ef4c9f2dde62259c66201970c01885dd432685a085cf56850947b17",
+          "design/jango/emoticons/kakao-32/v20/lettering/22.png": "0095cfbded50215e254b2ca1b0c93aecb8eac135f03bec41a8cc75720a0af6e4",
+          "design/jango/emoticons/kakao-32/v20/artwork/23.png": "f31635981818c0c33f8dca9e1876f121e467d215fbb375ca08d351c5d0420192",
+          "design/jango/emoticons/kakao-32/v20/lettering/23.png": "979358e604492eadca323c6336903fbef7a4d11f5464d2a61e0806ac172e0200",
+          "design/jango/emoticons/kakao-32/v20/artwork/24.png": "aa5a1c13191f2fa887fa2d61cae554512bd9fc19530b626dcbef3e0196845828",
+          "design/jango/emoticons/kakao-32/v20/lettering/24.png": "c93dfaadf6e07bce9df9aadda9c61b28c39124318efa52425984e62337c75abf",
+          "design/jango/emoticons/kakao-32/v20/artwork/25.png": "58f360715cb83a956dd56257190f953acd9e6d952ffa8375ab5188a39e7581c5",
+          "design/jango/emoticons/kakao-32/v20/lettering/25.png": "9d4583745ee33ddb5f57d44fe8053d2b0247fe58229037c54915e5dab04bd665",
+          "design/jango/emoticons/kakao-32/v20/artwork/26.png": "314986eae4495cdc734981816a1d62b15cd700200448deae7de49b7333b72b65",
+          "design/jango/emoticons/kakao-32/v20/lettering/26.png": "58252a6977ee34a6bf16f9c41955bd9f5dfe34df3e0dcb7af830d043963bb7af",
+          "design/jango/emoticons/kakao-32/v20/artwork/27.png": "678e7d5a1e07d1add113c1d24c22b947fcc4d32a1c32de9fc0f9b605a1f904a5",
+          "design/jango/emoticons/kakao-32/v20/lettering/27.png": "5b6271a19f841130a00f7eeb82853f47ef06ed5e0b21ac9e647dc441ff1ebe34",
+          "design/jango/emoticons/kakao-32/v20/artwork/28.png": "603cf75ae422ee7f4e573fe80dd8bd396e0bba1d27b541eeb0f6d069d7948993",
+          "design/jango/emoticons/kakao-32/v20/lettering/28.png": "6e8269a05a5b98526eff25a283af3c95bceff4d5211645c2e35230184313d324",
+          "design/jango/emoticons/kakao-32/v20/artwork/29.png": "7af62080c2c1dc2e7994ca49fd6388de9ef2e2bcee5c96e7092680258812536d",
+          "design/jango/emoticons/kakao-32/v20/lettering/29.png": "66b550833d91ef48b26ad18919d070e83e99c5402fa670885fe12cd4fc6316f7",
+          "design/jango/emoticons/kakao-32/v20/artwork/30.png": "7a958b87954d5720763bd9a1750db8cfeccbace2eb1446c58d452dba4273caa0",
+          "design/jango/emoticons/kakao-32/v20/lettering/30.png": "374b4c92c0896fbdc89845edc6c687474a6f194e6dc51419ded2b5b3e2f0ecd9",
+          "design/jango/emoticons/kakao-32/v20/artwork/31.png": "b3acf084640a0d7eb5a6c0aa1736fb587a20109f88c18bc0594809d5f3a0b35c",
+          "design/jango/emoticons/kakao-32/v20/lettering/31.png": "5fad95b9c32030d36e2703650efbdfe51f729ee7dfd4ad23ce57f15b97763306",
+          "design/jango/emoticons/kakao-32/v20/artwork/32.png": "bb46dcd8e03f545b82482443bd273e26785b29f2c72d3ed9263f5a2fb76f90bf",
+          "design/jango/emoticons/kakao-32/v20/lettering/32.png": "e3c10c72f7dd1949119bbb733fe0f4b5a43bd92657546afb781d134146cd8adc"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/01.png",
+      "sha256": "0322026273414b89130be4eb2b365d287bd33527f6894afddc51391c272ba2a2",
+      "bytes": 11182,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/01.png": "fd7beeb679030dd1c1717a6eb424e7aaba700208c819fd736cde383062576f2e",
+          "design/jango/emoticons/kakao-32/v20/lettering/01.png": "a3219c101e54365b736437f880190be60132b02ae6c3b936dc1a37e40980b6a2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/02.png",
+      "sha256": "360deabbc339584e265746f8cdd393575a892e9d24c571dd54f8749769fd0688",
+      "bytes": 10911,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/02.png": "5f619ffe1cbec07e26ef23bea31afda1bdaf140964a9394a8ae6c80f554be925",
+          "design/jango/emoticons/kakao-32/v20/lettering/02.png": "bfa095302f3cacfeea2eb1b5930d14af3114113b57652c03439dbba7f7281269"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/03.png",
+      "sha256": "88a6627b05326468a35b20f6e464f09bd2fa9aa1e436921991660e0a3858fe79",
+      "bytes": 12297,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/03.png": "bcaf4c96814e089ef063a9b6eb3644da3a9db6527fb190cb9426b7b45e73f3a1",
+          "design/jango/emoticons/kakao-32/v20/lettering/03.png": "ed5eb8ae67ccc427a63f652167739d62c6d010f73d5caad45bf3dac4e687f775"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/04.png",
+      "sha256": "f78dfd2023d7291037b310f8cc84cc53ac9645ea7c01336e3ba7c8736f85ef95",
+      "bytes": 11362,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/04.png": "fe998d2eb001e2c09b57a9b9cab0d34269c6e21259d6fcb691c14fef0e0297d9",
+          "design/jango/emoticons/kakao-32/v20/lettering/04.png": "5a072731b576f8228cd8a18d914a1f8cd987bcea417a41332403511c2cfb32f9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/05.png",
+      "sha256": "40035f1d45178de1235fc6b5b0d0c81c076af2b9163d9f59f81c65195fdae2dd",
+      "bytes": 11764,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/05.png": "13e8d0433ca1636ede928698e5205dcd093bc41cb63de9dc443d42c5a7c6f098",
+          "design/jango/emoticons/kakao-32/v20/lettering/05.png": "6823ff4cca38e85264e093e834c7330e74323abac386fae9a8bba4d72f47c3f7"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/06.png",
+      "sha256": "64f4e22318aa31e6af4ad8c9c8b03a26f2490bdc196015d607594619d36b4689",
+      "bytes": 11195,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/06.png": "7c358e92b8ad911c80169f62b0043efc601a8cff8ec37d78f37c97cd760801bc",
+          "design/jango/emoticons/kakao-32/v20/lettering/06.png": "12ffc0397b22e95f21cf0820e01cd16321d080ae7970d7a3127c552323f23935"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/07.png",
+      "sha256": "e1003fd96f79e98a1f889a0d88e1bdaebbb1d387bc5a722c3092b9f082f0f513",
+      "bytes": 12893,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/07.png": "5e0d56cd706b7eb7269f130b13cb17835b7d1dd317889b89ee92d21048eed423",
+          "design/jango/emoticons/kakao-32/v20/lettering/07.png": "d95a53872021eccb0e2db6de6c84125ece5d15f2cb03610d0b1fe8471008e0cf"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/08.png",
+      "sha256": "fe678c352563d0b84aefa7162f4a95d17120fafac96f7467e644e2608a5010f4",
+      "bytes": 12877,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/08.png": "0cfb913264d8438e9f680b2fad5f5dd096c20b4995ba1b48c5c3bd9746e998f6",
+          "design/jango/emoticons/kakao-32/v20/lettering/08.png": "867db81ed32dfb7d8c0ee179df4d1b06e284e1a8b6b9fbeefd85542d9dbd1487"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/09.png",
+      "sha256": "aeebd64c96224b8c6999d86b3b82032794ab14e8e4fa60844899dcd24be99c3f",
+      "bytes": 11201,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/09.png": "9537f66373ba3d5664abc97b042fdab4899e1fc0088957d525aa7efe20347f45",
+          "design/jango/emoticons/kakao-32/v20/lettering/09.png": "65ef3dc1e73f91017200da0c2581f968aed3a628226b849990dfa27f9913b4b2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/10.png",
+      "sha256": "65449bcbacc486863aa4865aff0acb20d9a8aa4b355354411242e103fb33149d",
+      "bytes": 12069,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/10.png": "3eb522ddf0f796ae8bbd8351f69f6eaa395c15cd1e6ca66dcbd531e7e445ac05",
+          "design/jango/emoticons/kakao-32/v20/lettering/10.png": "af9ce77b4b0e93e4dbddbeeecd027a5afc5d38b4cef7c4b0b59c2b1eaff8bb8d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/11.png",
+      "sha256": "c67c95c911cc9ad14afb486af11922f0b8eb0c82e0a3ec391db2b6f053884a09",
+      "bytes": 9881,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/11.png": "74e4826c8952cd2145acc60b53a76d696788c18dfde1e1aab76fd1423a6170ba",
+          "design/jango/emoticons/kakao-32/v20/lettering/11.png": "a9894e372fb188462912d06bdaf087b71c05f5420dcf631f926da650e2846560"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/12.png",
+      "sha256": "87a922af4a1f34cc386db46b553a250276b5814860fd421e5772c941dcf465c7",
+      "bytes": 9013,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/12.png": "d174ae45d9d5624aa00f583ba2cf6b5a8846b2f7f526fdd696fabeb0219db9d8",
+          "design/jango/emoticons/kakao-32/v20/lettering/12.png": "79ab62000b3f8f3b4de5836618166d30be16b6a1286aa65c78458482207f4c24"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/13.png",
+      "sha256": "64dcb3862b6c39b0d72920fc0c6da5152df675c4d5562b5ac1f281775fae6c24",
+      "bytes": 12375,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/13.png": "65c63962aa0e0aa4558bb5dea7a9225db1038b5d1b5d21530d7a63d17178a26d",
+          "design/jango/emoticons/kakao-32/v20/lettering/13.png": "2e57201647ba8295316361f33353a915156eae3b471b5e1b22ede972ffb4e9f5"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/14.png",
+      "sha256": "86d63b2600b316e3522b41d7c03fc3e9c345aa4742cecaa10105d70e1d379ef5",
+      "bytes": 12296,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/14.png": "b788931d1de9638e1d954560d670b80b14c09d2674e7572057414738bf34f166",
+          "design/jango/emoticons/kakao-32/v20/lettering/14.png": "340d2f9a44ac30a74ba76d62980eb56bfa8389763abf63a9fcdbba34311c9e56"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/15.png",
+      "sha256": "674d07c44b472d18b21c5cb67f4c26e195b999930f1da702b73eb40ebf7ac71a",
+      "bytes": 11541,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/15.png": "84abcfa85d6842e9d874b6f02503c22c86f5ce71fa335c396ff84bb3253659fd",
+          "design/jango/emoticons/kakao-32/v20/lettering/15.png": "3e2ef758f972c4a2fbd9457f795364020e7c0d0e3db26f2fc105f7f5861f7ea1"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/16.png",
+      "sha256": "dc6ab2f265277963a89346489284a66db600aeb0697f4d2e3dd29db2840f372b",
+      "bytes": 11768,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/16.png": "834dc438c07fe8f67c2f5fcdf4ca41022d4cc3be01e2d21b210de3342e7ef356",
+          "design/jango/emoticons/kakao-32/v20/lettering/16.png": "2c022c48acd53821038db5bb08b5e3a03478fe840b4e0ead33e1970f9217417f"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/17.png",
+      "sha256": "fb56a3cc2b8e2101d5df84933eb7a5f2fdb56705d0b145e18af3af9cfeb54d5e",
+      "bytes": 10857,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/17.png": "4805a11c05571fdc47d061746b591f1bb8f6fdbd930d0ed918761f8ddaf21f73",
+          "design/jango/emoticons/kakao-32/v20/lettering/17.png": "5ae7d708c8c1a1527681de8d9d8b2c4d7771522ee3e1acf3f19efecd1e3a85b3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/18.png",
+      "sha256": "00d701b92290e5e95726a23d1f178d0411f6a890c1320a5d1c042863306eb171",
+      "bytes": 11047,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/18.png": "83fedff06f30de2f8f07e01005dc5878d7bb648d764411fff99779922fa2cc9f",
+          "design/jango/emoticons/kakao-32/v20/lettering/18.png": "c58d8fdc5cc4869114b95c71b2efb18bb3b5455b271fa04994432743dc7018bd"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/19.png",
+      "sha256": "3b2f6c15619d92577e38e47b10220dee8bdc3777f3dd11e5b5c7286dc72843be",
+      "bytes": 12109,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/19.png": "72820e31edb5e7c72e1e744b635fe57e5a4aa8bd6751e0657c518c4bc4303e6d",
+          "design/jango/emoticons/kakao-32/v20/lettering/19.png": "b075e58cb049fd39215f6661e465c4dde7f956d70b8c6e46c27431be242b4575"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/20.png",
+      "sha256": "02536fdb012c394ec922fc2e4ad5479362c6ab5d429f73d7c6bbc8905e2d892e",
+      "bytes": 12382,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/20.png": "c87846dec9c7205ae4259737c500fa198fe8cc56a7d0e59f7215759c2e68575e",
+          "design/jango/emoticons/kakao-32/v20/lettering/20.png": "1ddfbeae81b80a796723d1a3832aa3204b8c9ace171e71fe128a6cc4d63bde98"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/21.png",
+      "sha256": "39bd7ec69816c5d9d173c713143be0fb9bdc33dcfd4256f09d9a1e8cdad55ebd",
+      "bytes": 10458,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/21.png": "d0dc48ea23aba164a81bbb6de5117825738f7a2388bfc19ab8ccedec64866b26",
+          "design/jango/emoticons/kakao-32/v20/lettering/21.png": "067b04af8f272b87f0557a7a5d5a5ac34dec20a8cd0ad5859659d875dcde1343"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/22.png",
+      "sha256": "61ad5367c9019fdd623c02635340b2f01a0915fa3c5a1e997293fccd14d50868",
+      "bytes": 11737,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/22.png": "6167f3a06ef4c9f2dde62259c66201970c01885dd432685a085cf56850947b17",
+          "design/jango/emoticons/kakao-32/v20/lettering/22.png": "0095cfbded50215e254b2ca1b0c93aecb8eac135f03bec41a8cc75720a0af6e4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/23.png",
+      "sha256": "546d9fea8b949a6555533a9b4f0845ac6e4bc9a5e34faa7dc8f26decec95aded",
+      "bytes": 11843,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/23.png": "f31635981818c0c33f8dca9e1876f121e467d215fbb375ca08d351c5d0420192",
+          "design/jango/emoticons/kakao-32/v20/lettering/23.png": "979358e604492eadca323c6336903fbef7a4d11f5464d2a61e0806ac172e0200"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/24.png",
+      "sha256": "6f5a489346577ab8081c3e5d766aecf7d94ee51942a2766cb99331b338ca37c1",
+      "bytes": 11597,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/24.png": "aa5a1c13191f2fa887fa2d61cae554512bd9fc19530b626dcbef3e0196845828",
+          "design/jango/emoticons/kakao-32/v20/lettering/24.png": "c93dfaadf6e07bce9df9aadda9c61b28c39124318efa52425984e62337c75abf"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/25.png",
+      "sha256": "889fcf93a1cd615ed2ad0300498f44d5c71e370b6bc2f9664f6041e9f7b944bf",
+      "bytes": 12319,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/25.png": "58f360715cb83a956dd56257190f953acd9e6d952ffa8375ab5188a39e7581c5",
+          "design/jango/emoticons/kakao-32/v20/lettering/25.png": "9d4583745ee33ddb5f57d44fe8053d2b0247fe58229037c54915e5dab04bd665"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/26.png",
+      "sha256": "17f5090c5140382b5b0a3f29e7f1b6a60258873f879a90940a751c1d0045db49",
+      "bytes": 11915,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/26.png": "314986eae4495cdc734981816a1d62b15cd700200448deae7de49b7333b72b65",
+          "design/jango/emoticons/kakao-32/v20/lettering/26.png": "58252a6977ee34a6bf16f9c41955bd9f5dfe34df3e0dcb7af830d043963bb7af"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/27.png",
+      "sha256": "321ef35546bc79ac9d3189c76f278e24f9103730b56dec817874262a8b0c7c2b",
+      "bytes": 12879,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/27.png": "678e7d5a1e07d1add113c1d24c22b947fcc4d32a1c32de9fc0f9b605a1f904a5",
+          "design/jango/emoticons/kakao-32/v20/lettering/27.png": "5b6271a19f841130a00f7eeb82853f47ef06ed5e0b21ac9e647dc441ff1ebe34"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/28.png",
+      "sha256": "239ef59833187a3dd09e52178ec3829279788138d1f8ea2bfebaebd835f0bcab",
+      "bytes": 14011,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/28.png": "603cf75ae422ee7f4e573fe80dd8bd396e0bba1d27b541eeb0f6d069d7948993",
+          "design/jango/emoticons/kakao-32/v20/lettering/28.png": "6e8269a05a5b98526eff25a283af3c95bceff4d5211645c2e35230184313d324"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/29.png",
+      "sha256": "78f0454b5018af452e4194ee6f4577938cb1703bf8b9b2d3e04c4277c91a6fcb",
+      "bytes": 10789,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/29.png": "7af62080c2c1dc2e7994ca49fd6388de9ef2e2bcee5c96e7092680258812536d",
+          "design/jango/emoticons/kakao-32/v20/lettering/29.png": "66b550833d91ef48b26ad18919d070e83e99c5402fa670885fe12cd4fc6316f7"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/30.png",
+      "sha256": "0bd06ce192c13e530a38e0f2a1e9dc78f906bb9d09b259de0cdaebf0e5060868",
+      "bytes": 12979,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/30.png": "7a958b87954d5720763bd9a1750db8cfeccbace2eb1446c58d452dba4273caa0",
+          "design/jango/emoticons/kakao-32/v20/lettering/30.png": "374b4c92c0896fbdc89845edc6c687474a6f194e6dc51419ded2b5b3e2f0ecd9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/31.png",
+      "sha256": "27ec796f2a0343f3deb3d9221dd1d185e7d53759536f1ab40d085d71f1fc3799",
+      "bytes": 11082,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/31.png": "b3acf084640a0d7eb5a6c0aa1736fb587a20109f88c18bc0594809d5f3a0b35c",
+          "design/jango/emoticons/kakao-32/v20/lettering/31.png": "5fad95b9c32030d36e2703650efbdfe51f729ee7dfd4ad23ce57f15b97763306"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v20/thumbs/32.png",
+      "sha256": "7f7363ddcda7e57959389984eea0cbcd124856a5c99d0dd2a1bd8b5941c760b4",
+      "bytes": 11808,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v20/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v20/manifest.json": "e1f1e0f347f37db03a2cdbc870417ae57ce7f78708e34419846b8fb1af98672c",
+          "design/jango/emoticons/kakao-32/v20/artwork/32.png": "bb46dcd8e03f545b82482443bd273e26785b29f2c72d3ed9263f5a2fb76f90bf",
+          "design/jango/emoticons/kakao-32/v20/lettering/32.png": "e3c10c72f7dd1949119bbb733fe0f4b5a43bd92657546afb781d134146cd8adc"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/01.png",
+      "sha256": "cf9e0447c51463f4d344365b6b314c1c086c0c9f0716487a93cbcb0d37ba3f5e",
+      "bytes": 762570,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/01-r1.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/02.png",
+      "sha256": "3bc9ad9962de7d2c8c96b2b4d20055df0db728ed9f93ecdd93cf8f73de5d236b",
+      "bytes": 743717,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/02-r1.png": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/03.png",
+      "sha256": "32d77ac2bb92f6d2625236159a97a33f72be7f51a1b907ad634edc8dac76c458",
+      "bytes": 759467,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/03-r1.png": "d89963e38a42b5aa64752c14ee8c75f50f30b629e89891d3dd7d815ecd67c8fb"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/04.png",
+      "sha256": "86fa580bd8c1bf09a5bf6234d5cde2268f131831a4119243f00cb05db214c2c3",
+      "bytes": 722987,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/04-r1.png": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/05.png",
+      "sha256": "cffaf5936e6376488fdb492e933a9d18d6612660d84d2f3b2114e507a8711a26",
+      "bytes": 783134,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/05-r1.png": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/06.png",
+      "sha256": "cdedc86bcbf582b0c5ee98852b95e21b53c3126f8bead1f66c044412410cfbbe",
+      "bytes": 737797,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/06-r1.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/07.png",
+      "sha256": "e8559972e2e150fdd3cfba9c6179972610b2809bcdcf8ea70e367f5f02944dbb",
+      "bytes": 851913,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/07-r1.png": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/08.png",
+      "sha256": "00c6b522f816bf5c6c5920c21421f332cbc14990e67e91fa0bf13c80f0bad5e6",
+      "bytes": 716759,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/08-r1.png": "e65542fa8f97666d439611633f68601b526ee0a4d7ee44665519d78d4a74b01e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/09.png",
+      "sha256": "b36f94b27ad34b9742a210f9903e2538fe349fa58546cc13fb3ad178d8b30a41",
+      "bytes": 743811,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/09-r1.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/10.png",
+      "sha256": "7424e98fe1ea80cf3a5b43e29b38da5449a3af40d1ae1dda856c54912ea6f766",
+      "bytes": 726125,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/10-r1.png": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/11.png",
+      "sha256": "5648432b02953a4ea3139485c41505ba986faa69f72657945e42392680ad3226",
+      "bytes": 702473,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/11-r1.png": "dab6bfe89d814d1f721e7ea0d083220c5f10e28720aa24e4d82e9f42407c6d36"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/12.png",
+      "sha256": "5adbe013d9f0cd24a9fd15af4835a59fb1523882e6eabcfc46d77cde97b0d03f",
+      "bytes": 701764,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/12-r1.png": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/13.png",
+      "sha256": "2636c5a6615438d4806e68a62d86a7d1482b10cdc47dd1a780dfd834782a0ba8",
+      "bytes": 853836,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/13-r1.png": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/14.png",
+      "sha256": "a6f7b00a95ee0736efae0ce44ff3f584610aedad0349c5699aa7ffefc24e7f1b",
+      "bytes": 788195,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/14-r1.png": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/15.png",
+      "sha256": "654ecb944da987232ab480ded61bd53021ff8b0118554e2e5919e61da7d347e4",
+      "bytes": 716357,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/15-r1.png": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/16.png",
+      "sha256": "78058fc090aaa5f0d641f61671910cd614555bd389d1a07c1c21e358551e5b57",
+      "bytes": 783372,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/16-r1.png": "7de28e512527b8ad1f0433a20e726d8940a7cf22bc4de77db2315179680b3ea2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/17.png",
+      "sha256": "d5ece8999a9fb99bb9000541c299d24c6b366bed1ceae00f7e884bd290f2eee9",
+      "bytes": 670711,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/17-r1.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/18.png",
+      "sha256": "b7371d0ea2df129587f4b08a0cd03209e052035ca5f8726764d39ecfcbefb197",
+      "bytes": 803714,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/18-r1.png": "e53aa2e370782a9b9e545c122050c9e52419255fb58103a114a471800fca2c8b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/19.png",
+      "sha256": "ec396cef467a0290b8e0a3ba58a13abda6d35e9a8c640e060040bf09cbee2c33",
+      "bytes": 781579,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/19-r1.png": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/20.png",
+      "sha256": "c03ee435d83069f49e18ae80f35b60c8b1146448dac9acdf14e83d25c4a9b09c",
+      "bytes": 764889,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/20-r1.png": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/21.png",
+      "sha256": "5d403ebc465b3ef02bd77d8dc722ddfe5ed0ac6733906a3bd3235b82ee5d941a",
+      "bytes": 776766,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/21-r1.png": "c14212f69901605fcb8c27929644cf659d9ba7df7d7aa2c8bdb61203adc33e27"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/22.png",
+      "sha256": "9a875eae6206cadd23246685c52f062609d18123cae8954c69750d9c47606de5",
+      "bytes": 761223,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/22-r1.png": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/23.png",
+      "sha256": "512329e1e2fc8da3d552768bed72f10120cf05dd3fbebaa5400c6e1bdec128a5",
+      "bytes": 818232,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/23-r1.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/24.png",
+      "sha256": "f98933a4ffe923cb199e9c24b1ef662e7820bb978467c340e236a6009d5c773a",
+      "bytes": 760316,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/24-r1.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/25.png",
+      "sha256": "8f8002f65c23d9bb38bd2c59388ebbd76e5e30b48a7e8459d815f9b31bf92ce9",
+      "bytes": 785785,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/25-r1.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/26.png",
+      "sha256": "59bd6342d7d0c539634916ef9b66979f6d5d3b16d96fa55d7d57a8376d27783f",
+      "bytes": 797010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/26-r1.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/27.png",
+      "sha256": "d1db915cd50ec0c0212e1818b5d0ea0200c871c3fa24accb5c8aac49155c7c30",
+      "bytes": 810411,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/27-r1.png": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/28.png",
+      "sha256": "30e86725e4e88695f588a681119caefefa5ab08acd180f67fb85637fc89ddbfa",
+      "bytes": 848057,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/28-r1.png": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/29.png",
+      "sha256": "90d2ecc07f151e2e6ca075e853f4b3a0b4a4fcafbfbf86663430dbd5902eea1a",
+      "bytes": 712010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/29-r1.png": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/30.png",
+      "sha256": "67b0f5e2c190d9e1ceb8746036fd93d3dcb8a0990205becbdb9ce3df236997df",
+      "bytes": 940177,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/30-r1.png": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/31.png",
+      "sha256": "c61e7e598860d2299f3a3f25831c730ee5ebd3940c828368e07b7c880c419f01",
+      "bytes": 813958,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/31-r1.png": "f67e89026ae82d91cd9bb6ae64da58daf95bdeb2f946698f23e1d47142752c06"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/characters/32.png",
+      "sha256": "398e1d1af81ee9ad12b418573175af7fb1a3e7ae51c8bc8e68a42d676b58b64e",
+      "bytes": 773873,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/source-originals/32-r1.png": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/preview-120.png",
+      "sha256": "bb898e17bce680e3fb53502039af7a60fc1312dacfc35173026d80c9cf643ded",
+      "bytes": 334974,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "preview-120",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/01.png": "a6f6df073f0df4aed7ae2071c6e4d482c8300b48cc381c689dc03ecfb29a6cc0",
+          "design/jango/emoticons/kakao-32/v21/lettering/01.png": "6b553b0a316d9edede08a026e48ce2334e90ba15f3375c484e102b3fc30d80f8",
+          "design/jango/emoticons/kakao-32/v21/artwork/02.png": "05c56c60dd8d6757fec16b8a0e8cf0f421c50a83e96ad3d1a680c5b0a2cfe7b4",
+          "design/jango/emoticons/kakao-32/v21/lettering/02.png": "0d0d8643000fcf35b3ea1fe55a9f0eb96b8d6d062e43545a14e5725780bf450d",
+          "design/jango/emoticons/kakao-32/v21/artwork/03.png": "0b0c9d7f20deeaf6c1c88bbcb4a2862018486fbbd6c9f0892c7eb93716583178",
+          "design/jango/emoticons/kakao-32/v21/lettering/03.png": "bedaddb36d95d453a3edf5cc732a32788b6f2bccb6453885ee48dce0a8ddcc92",
+          "design/jango/emoticons/kakao-32/v21/artwork/04.png": "7e9fffe59d6018a11a9d604bf46dbf7e7a31637e42a3a4ef3a18632fbb5842aa",
+          "design/jango/emoticons/kakao-32/v21/lettering/04.png": "c65e3c3c75ade8faa57ed751958fa9dd37ef231c96e92b76afca6bec2be3be06",
+          "design/jango/emoticons/kakao-32/v21/artwork/05.png": "9e3f866a3cc8bb8ca5cae45c5edb557163d6ad7c0adcae0aedb435ff58daef88",
+          "design/jango/emoticons/kakao-32/v21/lettering/05.png": "3b413c27982102ca4e00c8cb0018ef9cb7cabb6d59c9b0e94d071cbf2a0d8e53",
+          "design/jango/emoticons/kakao-32/v21/artwork/06.png": "5b98c6eba7ae5f1102fdf741fc966a82f4a69aa01522789dbe8858bb33a3e7f0",
+          "design/jango/emoticons/kakao-32/v21/lettering/06.png": "f00182b294d15db006ed4eb703176febe8ec99fb4ecbf89ca8847cc40f19db5b",
+          "design/jango/emoticons/kakao-32/v21/artwork/07.png": "562eb869872b4ababe555262c1e451eb7d3c7b889ae76a8b69f4c295630f0971",
+          "design/jango/emoticons/kakao-32/v21/lettering/07.png": "c86fb4a96a39c8434339bae2ee82e09d0ae23912cabdd2d680afa7115f20c452",
+          "design/jango/emoticons/kakao-32/v21/artwork/08.png": "500ea676f916e9305d8c9db404e69d4482c11074c8995c74e67a935bd494022b",
+          "design/jango/emoticons/kakao-32/v21/lettering/08.png": "da205f27a909a54247691d3e7edf63b34ca562572366f4191e8f03993c282d80",
+          "design/jango/emoticons/kakao-32/v21/artwork/09.png": "43b0f096296e0da7c94995fbc3ae54e16f2f58c87fa437d2a4e6d2ea78438437",
+          "design/jango/emoticons/kakao-32/v21/lettering/09.png": "623441b18c8974123a0de3d349d825297e554865f5c0bad3ec7e308dc0781f80",
+          "design/jango/emoticons/kakao-32/v21/artwork/10.png": "d6c50e9b09b9114a8a95c790656153a77dd03debdfd9abe398edb1f098e41ce8",
+          "design/jango/emoticons/kakao-32/v21/lettering/10.png": "71d9b25b9c171171fa9bda00248e9b4b61cdce869df5e85b963ba3005e49c94e",
+          "design/jango/emoticons/kakao-32/v21/artwork/11.png": "e2b8136c34f6c94864fd8a7a89a9e55d3c21d650279a205aef5f3364233d87e9",
+          "design/jango/emoticons/kakao-32/v21/lettering/11.png": "d9d858c19f779fc06f4c5fab9b421a815c2d8f224ad03c9264f55e146f74655b",
+          "design/jango/emoticons/kakao-32/v21/artwork/12.png": "af3e39e403b9ed6eede85a92feb604bdba82295c25b86d37db9f47505b1d9a45",
+          "design/jango/emoticons/kakao-32/v21/lettering/12.png": "90d41a860a55854b0245973b83cb4ce1e9ce33bdd7b661c75596a60a48bd50cb",
+          "design/jango/emoticons/kakao-32/v21/artwork/13.png": "43715a37177c8926c1a1c3630ec25fb17ad479c6c3ea803faacce7860ce7ec12",
+          "design/jango/emoticons/kakao-32/v21/lettering/13.png": "f76b4b2cc7679121c7ae9dbb1fc3c0663bb87df85ca6040d2392541df6a84b01",
+          "design/jango/emoticons/kakao-32/v21/artwork/14.png": "05fd2b792c110da53b5bac3d74ad386a661a104f238e3ec653c12ff3a9277eac",
+          "design/jango/emoticons/kakao-32/v21/lettering/14.png": "f5c69f577668520b8307723c5bd03a22c7c0391316af3c29769d3beb0149beb9",
+          "design/jango/emoticons/kakao-32/v21/artwork/15.png": "7d8b7ec102a4ce0e6f41960261c1e80621fc160b3561a293fd5b43e3c74d9e26",
+          "design/jango/emoticons/kakao-32/v21/lettering/15.png": "f96710473f5b20039e32db9a2ce72d4b9407b4ed6bf10227c7bc299be530f203",
+          "design/jango/emoticons/kakao-32/v21/artwork/16.png": "3fa20a9596ee1860483b89401114a345c9fb7bab337f7d5f5d34d4a829b15ebf",
+          "design/jango/emoticons/kakao-32/v21/lettering/16.png": "9c9cc1100d2b35f9a49f4b2f4e62f60cb522006c2fd67a25f65f6725c298825b",
+          "design/jango/emoticons/kakao-32/v21/artwork/17.png": "d4eb4e921f6812c9dff94a565e51b24b278ce2506f46ba591f492b5a9e5b153d",
+          "design/jango/emoticons/kakao-32/v21/lettering/17.png": "42601c8f16b47fdd5b4e5f80e8573d68dd5731b9f709f33eee6cc67f3277e4c6",
+          "design/jango/emoticons/kakao-32/v21/artwork/18.png": "ca95070c9d6e504293fb5f8bbffc50e7bddfcd5bc1410ad8bea47fbe4a54b4d3",
+          "design/jango/emoticons/kakao-32/v21/lettering/18.png": "9110953f7874622c0c9e04d787b043d530ee269619a19a077c58bed9167086d8",
+          "design/jango/emoticons/kakao-32/v21/artwork/19.png": "0b98fbf30d534ba6c729384b33f1da02d1c198cd1c1ed1cd66410186fbad2936",
+          "design/jango/emoticons/kakao-32/v21/lettering/19.png": "c19ae5eadddbf2483c9bd474a8caf2f8826d82a172f283aca66b1c882db78d50",
+          "design/jango/emoticons/kakao-32/v21/artwork/20.png": "a5b035ff3c6389cab1df5d3b6b51fd4a98bf08fa7797b122895b5f10f42fa44d",
+          "design/jango/emoticons/kakao-32/v21/lettering/20.png": "dc17a0a0879fb1ae6a2b2e414332fb9b7c1b54b816db4620fcefafc31b735186",
+          "design/jango/emoticons/kakao-32/v21/artwork/21.png": "0c39f8390043f0134326dbc4324c71aaacf451c65d60bee78076b700fad16523",
+          "design/jango/emoticons/kakao-32/v21/lettering/21.png": "9a5e07a86c4238d96df0561c6c7c95d71af21285030d85b6d442fbf377f06fa4",
+          "design/jango/emoticons/kakao-32/v21/artwork/22.png": "6cfe3388d36ceecdf4da311e1048f343e78f2cefd9244e0e7f12960f9c20042c",
+          "design/jango/emoticons/kakao-32/v21/lettering/22.png": "59aa717aded934985d3e21e5dba95e6e6c21d10d2505d390d24c6683a2b047a3",
+          "design/jango/emoticons/kakao-32/v21/artwork/23.png": "ccc46f6099b0522e8ebb54b20524bfbeb5d487dc2184d118eae141e8b99cd923",
+          "design/jango/emoticons/kakao-32/v21/lettering/23.png": "b5687f624b0fde948d7391b93f433d6b6322123588c4763fbabcaf0cc34a05ef",
+          "design/jango/emoticons/kakao-32/v21/artwork/24.png": "062ce78aac2d4f624592c5e25f069221531a2d21682ab95baa69b04061ab2c42",
+          "design/jango/emoticons/kakao-32/v21/lettering/24.png": "5b48de3f97fa7707ed5fcc2b02cfdebc10561e6fccdc1750cc83919d8be2b9a3",
+          "design/jango/emoticons/kakao-32/v21/artwork/25.png": "5fa8561d9840a524d2ce546cde265457d530b4ff60eb76047e275a156ae6064b",
+          "design/jango/emoticons/kakao-32/v21/lettering/25.png": "d3b83da9870b61882fff6f1188263dade1908bdabcb62c6dcc9c4b14f17f5f54",
+          "design/jango/emoticons/kakao-32/v21/artwork/26.png": "c8ee398bd659fb00e5fb21b5cd7437d0dced9f581da9db0fc1b7b4f4ba209f92",
+          "design/jango/emoticons/kakao-32/v21/lettering/26.png": "bb0eb21b3a92547d94fd72a0ddbd48885ecabba122a89ab7aad571973cee29b9",
+          "design/jango/emoticons/kakao-32/v21/artwork/27.png": "967728bc901e3cf8376d14a4d773e6acea5695216d7664203b23e1a80c874e30",
+          "design/jango/emoticons/kakao-32/v21/lettering/27.png": "9a895b39221ce08e2b5e2cd3a798c9e5d01fa02d1dc97302cb173007985b0685",
+          "design/jango/emoticons/kakao-32/v21/artwork/28.png": "be6ceb797ee2f8096adb3c198a4c1bbd2a6711c073276ad8a5a36dae4893d1bc",
+          "design/jango/emoticons/kakao-32/v21/lettering/28.png": "c686eafb7547e7b60b2c1f6ef78a0e153bfc118dc240de7cd098eb25a472301a",
+          "design/jango/emoticons/kakao-32/v21/artwork/29.png": "a4b9d9fc5455a57291a848b5425f59d9ff94b010d09acaa6f277fbc02550f75d",
+          "design/jango/emoticons/kakao-32/v21/lettering/29.png": "358bdd05a2b465c30be6b333c127f4d0afec1fa1f66012cf4af2c26a5997adac",
+          "design/jango/emoticons/kakao-32/v21/artwork/30.png": "00b50ba0aa8fa02f50700e8d23aee170972879d1ac7b3eee042413dc172b83b6",
+          "design/jango/emoticons/kakao-32/v21/lettering/30.png": "94136a4de178d4b487d7bf64a08d315448f228465f62bdaa3743de889df6328e",
+          "design/jango/emoticons/kakao-32/v21/artwork/31.png": "2543296d9d59d2e4452496d0cbe6c371de144584addb1e1a7c580833fa05552e",
+          "design/jango/emoticons/kakao-32/v21/lettering/31.png": "e209f5b6ab4df820335cc9d4c7f6543fd749d2ce53e0cf32725c0a4beabec36e",
+          "design/jango/emoticons/kakao-32/v21/artwork/32.png": "ee4dbd8702d183c0bc4b8faf5ae2eff88eead25e072535a6dd6df8b6a65fee8a",
+          "design/jango/emoticons/kakao-32/v21/lettering/32.png": "41c5792b03eda3ba2c669d4fa8c2e48257567485a585156e6bdfbcb6942c45a8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/01.png",
+      "sha256": "6a8cf53a773f96e0d916f3e9cbaa0326491a0e6852c9998c3051a03e90a96992",
+      "bytes": 11180,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/01.png": "a6f6df073f0df4aed7ae2071c6e4d482c8300b48cc381c689dc03ecfb29a6cc0",
+          "design/jango/emoticons/kakao-32/v21/lettering/01.png": "6b553b0a316d9edede08a026e48ce2334e90ba15f3375c484e102b3fc30d80f8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/02.png",
+      "sha256": "b4733c8b0a909e91d125d5e04cd8040195cbc1beb0c4de38240c813105be0b4e",
+      "bytes": 10894,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/02.png": "05c56c60dd8d6757fec16b8a0e8cf0f421c50a83e96ad3d1a680c5b0a2cfe7b4",
+          "design/jango/emoticons/kakao-32/v21/lettering/02.png": "0d0d8643000fcf35b3ea1fe55a9f0eb96b8d6d062e43545a14e5725780bf450d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/03.png",
+      "sha256": "0c3baadc9fa63625cd04e8cf802eeedd13c6ee61e21a3d9cfa1164e745eb53be",
+      "bytes": 12554,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/03.png": "0b0c9d7f20deeaf6c1c88bbcb4a2862018486fbbd6c9f0892c7eb93716583178",
+          "design/jango/emoticons/kakao-32/v21/lettering/03.png": "bedaddb36d95d453a3edf5cc732a32788b6f2bccb6453885ee48dce0a8ddcc92"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/04.png",
+      "sha256": "318a5d3889422a7323253cce685b6c1d206e27ae54b9a4ffbab898518613dfb6",
+      "bytes": 11218,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/04.png": "7e9fffe59d6018a11a9d604bf46dbf7e7a31637e42a3a4ef3a18632fbb5842aa",
+          "design/jango/emoticons/kakao-32/v21/lettering/04.png": "c65e3c3c75ade8faa57ed751958fa9dd37ef231c96e92b76afca6bec2be3be06"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/05.png",
+      "sha256": "9eaf0b49801affb29965d4dacad4acd5913c3da8b15c8975cad6409d2fec0d4b",
+      "bytes": 11638,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/05.png": "9e3f866a3cc8bb8ca5cae45c5edb557163d6ad7c0adcae0aedb435ff58daef88",
+          "design/jango/emoticons/kakao-32/v21/lettering/05.png": "3b413c27982102ca4e00c8cb0018ef9cb7cabb6d59c9b0e94d071cbf2a0d8e53"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/06.png",
+      "sha256": "17236a84febda22d04a6883c709dafad912867be0fced45573b2e39910b0c43f",
+      "bytes": 11116,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/06.png": "5b98c6eba7ae5f1102fdf741fc966a82f4a69aa01522789dbe8858bb33a3e7f0",
+          "design/jango/emoticons/kakao-32/v21/lettering/06.png": "f00182b294d15db006ed4eb703176febe8ec99fb4ecbf89ca8847cc40f19db5b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/07.png",
+      "sha256": "a27136a86e32fcae50c4ca4d1f845c6be0ed0ddfe5d9ea3f6268a8f26409f969",
+      "bytes": 12994,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/07.png": "562eb869872b4ababe555262c1e451eb7d3c7b889ae76a8b69f4c295630f0971",
+          "design/jango/emoticons/kakao-32/v21/lettering/07.png": "c86fb4a96a39c8434339bae2ee82e09d0ae23912cabdd2d680afa7115f20c452"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/08.png",
+      "sha256": "c7dc0e8445e309b7f81e188846af2f70b2f32a20addd0575581091c5d227cbe5",
+      "bytes": 11520,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/08.png": "500ea676f916e9305d8c9db404e69d4482c11074c8995c74e67a935bd494022b",
+          "design/jango/emoticons/kakao-32/v21/lettering/08.png": "da205f27a909a54247691d3e7edf63b34ca562572366f4191e8f03993c282d80"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/09.png",
+      "sha256": "902d44ec77222390a1283c470045884ea3490b4ae611a6dc86ffe997b789d809",
+      "bytes": 11070,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/09.png": "43b0f096296e0da7c94995fbc3ae54e16f2f58c87fa437d2a4e6d2ea78438437",
+          "design/jango/emoticons/kakao-32/v21/lettering/09.png": "623441b18c8974123a0de3d349d825297e554865f5c0bad3ec7e308dc0781f80"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/10.png",
+      "sha256": "69e3e8963bccf25c74a2fab9a640a96a1740b1508d27d0a9bb936148d66736f6",
+      "bytes": 12005,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/10.png": "d6c50e9b09b9114a8a95c790656153a77dd03debdfd9abe398edb1f098e41ce8",
+          "design/jango/emoticons/kakao-32/v21/lettering/10.png": "71d9b25b9c171171fa9bda00248e9b4b61cdce869df5e85b963ba3005e49c94e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/11.png",
+      "sha256": "97eae9d127e0779f17f9988b4981d7f1c0871b4893b2774b42277a559f6cdf2c",
+      "bytes": 9456,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/11.png": "e2b8136c34f6c94864fd8a7a89a9e55d3c21d650279a205aef5f3364233d87e9",
+          "design/jango/emoticons/kakao-32/v21/lettering/11.png": "d9d858c19f779fc06f4c5fab9b421a815c2d8f224ad03c9264f55e146f74655b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/12.png",
+      "sha256": "22abe016afb8cc54eef911c5b87ebdd4b44f6f3a06bb1809a42672c369a0b6b4",
+      "bytes": 10333,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/12.png": "af3e39e403b9ed6eede85a92feb604bdba82295c25b86d37db9f47505b1d9a45",
+          "design/jango/emoticons/kakao-32/v21/lettering/12.png": "90d41a860a55854b0245973b83cb4ce1e9ce33bdd7b661c75596a60a48bd50cb"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/13.png",
+      "sha256": "b27a0cfa84cf9d47104af048b516429e3fa96c0866e36e2c73ecf58a46f7245c",
+      "bytes": 10837,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/13.png": "43715a37177c8926c1a1c3630ec25fb17ad479c6c3ea803faacce7860ce7ec12",
+          "design/jango/emoticons/kakao-32/v21/lettering/13.png": "f76b4b2cc7679121c7ae9dbb1fc3c0663bb87df85ca6040d2392541df6a84b01"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/14.png",
+      "sha256": "112a31f438e8646d1bb15f85bab62495d4df5f6aa3d89719193ef7c2c4c9b649",
+      "bytes": 12216,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/14.png": "05fd2b792c110da53b5bac3d74ad386a661a104f238e3ec653c12ff3a9277eac",
+          "design/jango/emoticons/kakao-32/v21/lettering/14.png": "f5c69f577668520b8307723c5bd03a22c7c0391316af3c29769d3beb0149beb9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/15.png",
+      "sha256": "cea6086094cb11dd38d0455a5b3fa95047062b421b396b925f033bc3387838a5",
+      "bytes": 11444,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/15.png": "7d8b7ec102a4ce0e6f41960261c1e80621fc160b3561a293fd5b43e3c74d9e26",
+          "design/jango/emoticons/kakao-32/v21/lettering/15.png": "f96710473f5b20039e32db9a2ce72d4b9407b4ed6bf10227c7bc299be530f203"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/16.png",
+      "sha256": "4c452e47f8ba9a5090114bf0e918dc0fde1af8995f93f99a0c957d233bacd54a",
+      "bytes": 13473,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/16.png": "3fa20a9596ee1860483b89401114a345c9fb7bab337f7d5f5d34d4a829b15ebf",
+          "design/jango/emoticons/kakao-32/v21/lettering/16.png": "9c9cc1100d2b35f9a49f4b2f4e62f60cb522006c2fd67a25f65f6725c298825b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/17.png",
+      "sha256": "e790c0719f81f0b9d8d5b2ef049299264f952de213a3037808eaf20819301ffb",
+      "bytes": 10156,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/17.png": "d4eb4e921f6812c9dff94a565e51b24b278ce2506f46ba591f492b5a9e5b153d",
+          "design/jango/emoticons/kakao-32/v21/lettering/17.png": "42601c8f16b47fdd5b4e5f80e8573d68dd5731b9f709f33eee6cc67f3277e4c6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/18.png",
+      "sha256": "052f787d68dc55b06bbe23e52ee8bc95a8097e3cf685a6dfa9ecc073003102b5",
+      "bytes": 12119,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/18.png": "ca95070c9d6e504293fb5f8bbffc50e7bddfcd5bc1410ad8bea47fbe4a54b4d3",
+          "design/jango/emoticons/kakao-32/v21/lettering/18.png": "9110953f7874622c0c9e04d787b043d530ee269619a19a077c58bed9167086d8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/19.png",
+      "sha256": "6efde544c1c81257d8a8aa4e3ff574698167ac2157abe82bc959ef5ae5299f7d",
+      "bytes": 11558,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/19.png": "0b98fbf30d534ba6c729384b33f1da02d1c198cd1c1ed1cd66410186fbad2936",
+          "design/jango/emoticons/kakao-32/v21/lettering/19.png": "c19ae5eadddbf2483c9bd474a8caf2f8826d82a172f283aca66b1c882db78d50"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/20.png",
+      "sha256": "f373c1d43232f24f96f0a93429d1b28f6ff77a5503f9aa2d659ae2c6986c4b98",
+      "bytes": 12291,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/20.png": "a5b035ff3c6389cab1df5d3b6b51fd4a98bf08fa7797b122895b5f10f42fa44d",
+          "design/jango/emoticons/kakao-32/v21/lettering/20.png": "dc17a0a0879fb1ae6a2b2e414332fb9b7c1b54b816db4620fcefafc31b735186"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/21.png",
+      "sha256": "f16c3b10481b5f735734cf136bb4e74337cdf02b6dc21560d4b001f6f0ad27d4",
+      "bytes": 12686,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/21.png": "0c39f8390043f0134326dbc4324c71aaacf451c65d60bee78076b700fad16523",
+          "design/jango/emoticons/kakao-32/v21/lettering/21.png": "9a5e07a86c4238d96df0561c6c7c95d71af21285030d85b6d442fbf377f06fa4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/22.png",
+      "sha256": "5c37a144ed63e1f451cec9e8d32b0260e1ac04489c376e68a0c37fe5f072b034",
+      "bytes": 11617,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/22.png": "6cfe3388d36ceecdf4da311e1048f343e78f2cefd9244e0e7f12960f9c20042c",
+          "design/jango/emoticons/kakao-32/v21/lettering/22.png": "59aa717aded934985d3e21e5dba95e6e6c21d10d2505d390d24c6683a2b047a3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/23.png",
+      "sha256": "9aaa7c306d8803995dd08b51d56ecc1fb4b4c70ca2bbdd5084cf2c57a2981224",
+      "bytes": 11947,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/23.png": "ccc46f6099b0522e8ebb54b20524bfbeb5d487dc2184d118eae141e8b99cd923",
+          "design/jango/emoticons/kakao-32/v21/lettering/23.png": "b5687f624b0fde948d7391b93f433d6b6322123588c4763fbabcaf0cc34a05ef"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/24.png",
+      "sha256": "322e8012013acebc0223d0c7bca71f2a6aea70e25dfb38fa3bf6aaf0fc817e88",
+      "bytes": 11628,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/24.png": "062ce78aac2d4f624592c5e25f069221531a2d21682ab95baa69b04061ab2c42",
+          "design/jango/emoticons/kakao-32/v21/lettering/24.png": "5b48de3f97fa7707ed5fcc2b02cfdebc10561e6fccdc1750cc83919d8be2b9a3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/25.png",
+      "sha256": "16428fdb28868fa3c2796630dc54bf523a1b5e17ca8b40b2bddd4ded7ef36c22",
+      "bytes": 12294,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/25.png": "5fa8561d9840a524d2ce546cde265457d530b4ff60eb76047e275a156ae6064b",
+          "design/jango/emoticons/kakao-32/v21/lettering/25.png": "d3b83da9870b61882fff6f1188263dade1908bdabcb62c6dcc9c4b14f17f5f54"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/26.png",
+      "sha256": "3ecbf72b7b1062c4c3060cc2bc804d9eac013feb3bb67b94176cb131aed24bcf",
+      "bytes": 12149,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/26.png": "c8ee398bd659fb00e5fb21b5cd7437d0dced9f581da9db0fc1b7b4f4ba209f92",
+          "design/jango/emoticons/kakao-32/v21/lettering/26.png": "bb0eb21b3a92547d94fd72a0ddbd48885ecabba122a89ab7aad571973cee29b9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/27.png",
+      "sha256": "e76c8ff4c3174785fcbb8d9dd35e6edb9d35ad4a8f326fa39f382df2c4fb9d41",
+      "bytes": 12881,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/27.png": "967728bc901e3cf8376d14a4d773e6acea5695216d7664203b23e1a80c874e30",
+          "design/jango/emoticons/kakao-32/v21/lettering/27.png": "9a895b39221ce08e2b5e2cd3a798c9e5d01fa02d1dc97302cb173007985b0685"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/28.png",
+      "sha256": "b41a72f9f2051a421cc5c85d6726ba6466a2fff5bccbd3068becf1890f22f135",
+      "bytes": 13945,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/28.png": "be6ceb797ee2f8096adb3c198a4c1bbd2a6711c073276ad8a5a36dae4893d1bc",
+          "design/jango/emoticons/kakao-32/v21/lettering/28.png": "c686eafb7547e7b60b2c1f6ef78a0e153bfc118dc240de7cd098eb25a472301a"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/29.png",
+      "sha256": "8e28c7e69a1e269dae4aaeb41c70bf31d28894bf6853edf8343773fbfca25a1e",
+      "bytes": 8072,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/29.png": "a4b9d9fc5455a57291a848b5425f59d9ff94b010d09acaa6f277fbc02550f75d",
+          "design/jango/emoticons/kakao-32/v21/lettering/29.png": "358bdd05a2b465c30be6b333c127f4d0afec1fa1f66012cf4af2c26a5997adac"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/30.png",
+      "sha256": "b2edf0b243bf9e5fa74a6da54674006d9895983da4d5e336c9de5174d8e870bd",
+      "bytes": 9896,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/30.png": "00b50ba0aa8fa02f50700e8d23aee170972879d1ac7b3eee042413dc172b83b6",
+          "design/jango/emoticons/kakao-32/v21/lettering/30.png": "94136a4de178d4b487d7bf64a08d315448f228465f62bdaa3743de889df6328e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/31.png",
+      "sha256": "334386350b62759fad01b44762c6b035f8210f07393e7f6b5f6b18fbeba2a799",
+      "bytes": 13484,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/31.png": "2543296d9d59d2e4452496d0cbe6c371de144584addb1e1a7c580833fa05552e",
+          "design/jango/emoticons/kakao-32/v21/lettering/31.png": "e209f5b6ab4df820335cc9d4c7f6543fd749d2ce53e0cf32725c0a4beabec36e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v21/thumbs/32.png",
+      "sha256": "bca0bba292d8155526fabcaefb37bf89475ae51cce76336d204d313c0c8f9d24",
+      "bytes": 11920,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v21/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v21/manifest.json": "30f54a76b5789067418ac071c55d04b43b30ec2ae8efb728fc565bcfdd09c124",
+          "design/jango/emoticons/kakao-32/v21/artwork/32.png": "ee4dbd8702d183c0bc4b8faf5ae2eff88eead25e072535a6dd6df8b6a65fee8a",
+          "design/jango/emoticons/kakao-32/v21/lettering/32.png": "41c5792b03eda3ba2c669d4fa8c2e48257567485a585156e6bdfbcb6942c45a8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/01.png",
+      "sha256": "cf9e0447c51463f4d344365b6b314c1c086c0c9f0716487a93cbcb0d37ba3f5e",
+      "bytes": 762570,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/01-r1.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/02.png",
+      "sha256": "3bc9ad9962de7d2c8c96b2b4d20055df0db728ed9f93ecdd93cf8f73de5d236b",
+      "bytes": 743717,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/02-r1.png": "d29ad6fd126c9be533206848d84bd292099ddb0e0766de939c3c2db7bd715a09"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/03.png",
+      "sha256": "32d77ac2bb92f6d2625236159a97a33f72be7f51a1b907ad634edc8dac76c458",
+      "bytes": 759467,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/03-r1.png": "d89963e38a42b5aa64752c14ee8c75f50f30b629e89891d3dd7d815ecd67c8fb"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/04.png",
+      "sha256": "86fa580bd8c1bf09a5bf6234d5cde2268f131831a4119243f00cb05db214c2c3",
+      "bytes": 722987,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/04-r1.png": "4c070cd370e58c344cf33e9fd5fd12e5c9a18aaf39f5377b7117f75cecb109b6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/05.png",
+      "sha256": "cffaf5936e6376488fdb492e933a9d18d6612660d84d2f3b2114e507a8711a26",
+      "bytes": 783134,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/05-r1.png": "8322c7e7d76d1ad147dc505a339b9d0e8c2c65151916c594b7b35f4bf31e31d9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/06.png",
+      "sha256": "cdedc86bcbf582b0c5ee98852b95e21b53c3126f8bead1f66c044412410cfbbe",
+      "bytes": 737797,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/06-r1.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/07.png",
+      "sha256": "e8559972e2e150fdd3cfba9c6179972610b2809bcdcf8ea70e367f5f02944dbb",
+      "bytes": 851913,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/07-r1.png": "7b1218b66339d5fcebb71a7a0c2bdc5c9b18ab623167a388c6f207a4c1311e3e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/08.png",
+      "sha256": "00c6b522f816bf5c6c5920c21421f332cbc14990e67e91fa0bf13c80f0bad5e6",
+      "bytes": 716759,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/08-r1.png": "e65542fa8f97666d439611633f68601b526ee0a4d7ee44665519d78d4a74b01e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/09.png",
+      "sha256": "b36f94b27ad34b9742a210f9903e2538fe349fa58546cc13fb3ad178d8b30a41",
+      "bytes": 743811,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/09-r1.png": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/10.png",
+      "sha256": "7424e98fe1ea80cf3a5b43e29b38da5449a3af40d1ae1dda856c54912ea6f766",
+      "bytes": 726125,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/10-r1.png": "92f8a9c8df4289374d89960ff26d45291a46637b2af224e75889776beac8f09e"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/11.png",
+      "sha256": "5648432b02953a4ea3139485c41505ba986faa69f72657945e42392680ad3226",
+      "bytes": 702473,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/11-r1.png": "dab6bfe89d814d1f721e7ea0d083220c5f10e28720aa24e4d82e9f42407c6d36"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/12.png",
+      "sha256": "5adbe013d9f0cd24a9fd15af4835a59fb1523882e6eabcfc46d77cde97b0d03f",
+      "bytes": 701764,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/12-r1.png": "015e0108951108169b3ea30ec010de3fb7d1c67fbb4138a460617ac0ecb91d2c"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/13.png",
+      "sha256": "2636c5a6615438d4806e68a62d86a7d1482b10cdc47dd1a780dfd834782a0ba8",
+      "bytes": 853836,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/13-r1.png": "a918edcb2d31503946bf8fdee0c06a02546dc8e27d6f1f50fbffea92e2963f04"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/14.png",
+      "sha256": "a6f7b00a95ee0736efae0ce44ff3f584610aedad0349c5699aa7ffefc24e7f1b",
+      "bytes": 788195,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/14-r1.png": "19cc502b35e2cd6d6afeb30d088ed8f5d146600a00e01356f5964dee67385c83"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/15.png",
+      "sha256": "654ecb944da987232ab480ded61bd53021ff8b0118554e2e5919e61da7d347e4",
+      "bytes": 716357,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/15-r1.png": "21f11518ce257d49b6a617f1a964be10b8115619d3026bf51010d273c95d90d4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/16.png",
+      "sha256": "78058fc090aaa5f0d641f61671910cd614555bd389d1a07c1c21e358551e5b57",
+      "bytes": 783372,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/16-r1.png": "7de28e512527b8ad1f0433a20e726d8940a7cf22bc4de77db2315179680b3ea2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/17.png",
+      "sha256": "d5ece8999a9fb99bb9000541c299d24c6b366bed1ceae00f7e884bd290f2eee9",
+      "bytes": 670711,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/17-r1.png": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/18.png",
+      "sha256": "b7371d0ea2df129587f4b08a0cd03209e052035ca5f8726764d39ecfcbefb197",
+      "bytes": 803714,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/18-r1.png": "e53aa2e370782a9b9e545c122050c9e52419255fb58103a114a471800fca2c8b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/19.png",
+      "sha256": "ec396cef467a0290b8e0a3ba58a13abda6d35e9a8c640e060040bf09cbee2c33",
+      "bytes": 781579,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/19-r1.png": "97d8e2372b414b3bf0d897c00fbe91ee0313da789cd054ea8a40e71e582acb23"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/20.png",
+      "sha256": "c03ee435d83069f49e18ae80f35b60c8b1146448dac9acdf14e83d25c4a9b09c",
+      "bytes": 764889,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/20-r1.png": "8103f7592707cf97a1a708d15c36ffaaccdbd9e9b0782bef81cc4a2371325838"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/21.png",
+      "sha256": "5d403ebc465b3ef02bd77d8dc722ddfe5ed0ac6733906a3bd3235b82ee5d941a",
+      "bytes": 776766,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/21-r1.png": "c14212f69901605fcb8c27929644cf659d9ba7df7d7aa2c8bdb61203adc33e27"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/22.png",
+      "sha256": "9a875eae6206cadd23246685c52f062609d18123cae8954c69750d9c47606de5",
+      "bytes": 761223,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/22-r1.png": "4377e9f8a03f91dd67106dfaff79905d46f87d0293c3f68cb8aa0b45a114aea8"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/23.png",
+      "sha256": "512329e1e2fc8da3d552768bed72f10120cf05dd3fbebaa5400c6e1bdec128a5",
+      "bytes": 818232,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/23-r1.png": "239c7e1721e05d9489dc88906ea5e2d5e45c85aea6d90efa0724b1a13dc09b1a"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/24.png",
+      "sha256": "f98933a4ffe923cb199e9c24b1ef662e7820bb978467c340e236a6009d5c773a",
+      "bytes": 760316,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/24-r1.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/25.png",
+      "sha256": "8f8002f65c23d9bb38bd2c59388ebbd76e5e30b48a7e8459d815f9b31bf92ce9",
+      "bytes": 785785,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/25-r1.png": "ecc7e7e54f8450b331203e189178dbe6d7b4a1e135fd3aac46ae2ea79897a109"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/26.png",
+      "sha256": "59bd6342d7d0c539634916ef9b66979f6d5d3b16d96fa55d7d57a8376d27783f",
+      "bytes": 797010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/26-r1.png": "9ec37578afd66782ef7200426dd4df6e245edfd1e0c85a03451baeec7de20810"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/27.png",
+      "sha256": "d1db915cd50ec0c0212e1818b5d0ea0200c871c3fa24accb5c8aac49155c7c30",
+      "bytes": 810411,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/27-r1.png": "51a77ddbeb50d2ed43ca4b49be8c1ec3165d685c01e91f828eea4d92b5b03ad2"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/28.png",
+      "sha256": "30e86725e4e88695f588a681119caefefa5ab08acd180f67fb85637fc89ddbfa",
+      "bytes": 848057,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/28-r1.png": "d35ab3da94a1f7a26d1a603a0d9d8c48f7f923533aff0a4a1b020d82e12c2922"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/29.png",
+      "sha256": "90d2ecc07f151e2e6ca075e853f4b3a0b4a4fcafbfbf86663430dbd5902eea1a",
+      "bytes": 712010,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/29-r1.png": "0bc4807f8c774c42597811840ed2f32fa5545eeda97514d8be8fea4b71ed009c"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/30.png",
+      "sha256": "67b0f5e2c190d9e1ceb8746036fd93d3dcb8a0990205becbdb9ce3df236997df",
+      "bytes": 940177,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/30-r1.png": "a9f47abc6bd3228783fcaafbdd7ebb3010af7d0957ca44876e2ffbf702b7c6d6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/31.png",
+      "sha256": "c61e7e598860d2299f3a3f25831c730ee5ebd3940c828368e07b7c880c419f01",
+      "bytes": 813958,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/31-r1.png": "f67e89026ae82d91cd9bb6ae64da58daf95bdeb2f946698f23e1d47142752c06"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/characters/32.png",
+      "sha256": "398e1d1af81ee9ad12b418573175af7fb1a3e7ae51c8bc8e68a42d676b58b64e",
+      "bytes": 773873,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/source-originals/32-r1.png": "42e85ac08185f3da91cbb22af8f921c3f4f0698c2d0e9abe4b5a0b539110e53d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/preview-120.png",
+      "sha256": "f67a3ba4a460a59d134aa95ad42ff4ef4cc14926fa0cb9d8ae6bc2479070f971",
+      "bytes": 380614,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "preview-120",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/01.png": "c30ec251f482c425cc040b2c5f0f310d32372ad2e53727c4a5580081cc5b0b79",
+          "design/jango/emoticons/kakao-32/v22/lettering/01.png": "b52639258771186c7f9d59633dc1ac4743c7584aa92da541389b92d4a7b67bd9",
+          "design/jango/emoticons/kakao-32/v22/artwork/02.png": "f4668f984ed76519e586d894cedec32e60157c23de3e1ef5b9edfc963428dd2c",
+          "design/jango/emoticons/kakao-32/v22/lettering/02.png": "9fb01e17154eaa30517952bad6efb1b349a4b1185986194bf727640e1558a258",
+          "design/jango/emoticons/kakao-32/v22/artwork/03.png": "44c5b2b5427e1c056cae4371a7232c28849790bd02fd7b0c9143b0add8a3e8c3",
+          "design/jango/emoticons/kakao-32/v22/lettering/03.png": "61c441eed90d1d122f7801bd63d16c2c6efdf56ec55ed69dff40950da80ea6eb",
+          "design/jango/emoticons/kakao-32/v22/artwork/04.png": "79132c2ffba8c876e89560e612b8b6cec440e0e95627654253286406bd4259ad",
+          "design/jango/emoticons/kakao-32/v22/lettering/04.png": "30293b86867a691594bab9a27e77132da8009e811d8489b0882733a735e48f04",
+          "design/jango/emoticons/kakao-32/v22/artwork/05.png": "ac164374ea130de143f90901fa52ccdd75b637f56959e5dec6a49fe7d6a586e9",
+          "design/jango/emoticons/kakao-32/v22/lettering/05.png": "da016b8db3fc35ea2738831bcf9279c46f320e0babd08bcaba6569a3d1a282be",
+          "design/jango/emoticons/kakao-32/v22/artwork/06.png": "27a500cf0b2033431207ad9c285050c9eda04aa38407418b09caf1754b5c5a82",
+          "design/jango/emoticons/kakao-32/v22/lettering/06.png": "66f02b5518930fb7dd68bdb3067b260d9a0049a89249bd4286851d49642ef3c5",
+          "design/jango/emoticons/kakao-32/v22/artwork/07.png": "122235fb991389223541447c40f6c59a90811b4397cd71e6aa04c3aa0796047f",
+          "design/jango/emoticons/kakao-32/v22/lettering/07.png": "d94a68ef985d14edffd7dab888c701da7e29f71d37263a1f2610980c9fa64bef",
+          "design/jango/emoticons/kakao-32/v22/artwork/08.png": "f244aab27267c4d9cc9932267087d17d13e48020c792bd720a79d4d6453a5505",
+          "design/jango/emoticons/kakao-32/v22/lettering/08.png": "dbe9337ad4413ac241da68fa03f7f074b21d0de549749cec7db6236d9e16cc64",
+          "design/jango/emoticons/kakao-32/v22/artwork/09.png": "17914197a70475f46d6b6005fc5eaad5321c936bfddade655c1a4c213c769b6c",
+          "design/jango/emoticons/kakao-32/v22/lettering/09.png": "e5ca24ac73caec7a475b9c2e2d2407e1e11384e794f100f4188d0e316a1dfb63",
+          "design/jango/emoticons/kakao-32/v22/artwork/10.png": "34d73d5e3b98396239d7d6532ad0378112986a7c41e0bc8446d0a71701f312e8",
+          "design/jango/emoticons/kakao-32/v22/lettering/10.png": "8b5b22f0df249807662871233d9c00c03d8ae1738b70b2e2c7d0e55ff96af453",
+          "design/jango/emoticons/kakao-32/v22/artwork/11.png": "611f94744f59a98368c19640b485fc42c1100285c409a5232b8ab693cf7ba4d1",
+          "design/jango/emoticons/kakao-32/v22/lettering/11.png": "f798b7bf456cc5b6e624b2668d1ffd7854a46796af4783b64f0cefeb8e16f6c6",
+          "design/jango/emoticons/kakao-32/v22/artwork/12.png": "46a4920cdbb4e1f9deea5080ce3f23061a2c63e6113618069b4f9118dce2b5cc",
+          "design/jango/emoticons/kakao-32/v22/lettering/12.png": "10e5e902be33048fdec208f844cb23f7a5b526278eaddfb2c985bce62ea81d0f",
+          "design/jango/emoticons/kakao-32/v22/artwork/13.png": "1363e07e00918169968bca3806e6e590e38a7b8e89d4e10ea1946de061a5945e",
+          "design/jango/emoticons/kakao-32/v22/lettering/13.png": "b15b24486105ca4c6eeeaf22cc52e1c0c2b6070eafe1989621e7450f289e6584",
+          "design/jango/emoticons/kakao-32/v22/artwork/14.png": "3ae851b06d5285112b798af47a792d4313ee99a48e7883dc26a743db2d7c63c3",
+          "design/jango/emoticons/kakao-32/v22/lettering/14.png": "c517cbd5caf03fe4e7a458884707bc405e36a77f9b8962df3f1e02f740098b77",
+          "design/jango/emoticons/kakao-32/v22/artwork/15.png": "6109d45493b2c409b0d94665e0746d459db1102804e5cdb3b07638ca44fd72cd",
+          "design/jango/emoticons/kakao-32/v22/lettering/15.png": "9c789a6223f717dc2b09c593b026ec002e791947faadf657dd718a28ed808db5",
+          "design/jango/emoticons/kakao-32/v22/artwork/16.png": "3b72763477f190fe9e5cae1664fb4db64f15dc227572239d82e1f58725de0f16",
+          "design/jango/emoticons/kakao-32/v22/lettering/16.png": "bfeab268d615de62586ae3dd8a4c9bfaefea292841de5df70941a623c8d1ba93",
+          "design/jango/emoticons/kakao-32/v22/artwork/17.png": "afdf591b3631731e60122f5b4302e48325a126f7d19981180e558cb31609abd6",
+          "design/jango/emoticons/kakao-32/v22/lettering/17.png": "9aa227bf8c5ec74313de34351b94b5ee7212ac777cbbbb156e6c761905be1b46",
+          "design/jango/emoticons/kakao-32/v22/artwork/18.png": "ab8c968ccd085f1642d5e6b7ee97b66adf23f7fae426683106e78dc4e4931566",
+          "design/jango/emoticons/kakao-32/v22/lettering/18.png": "1b1dd9d5c3d385713a61f375ffabf7b68a9bcac01b0647d5abe10bcefe5e319b",
+          "design/jango/emoticons/kakao-32/v22/artwork/19.png": "1184828569ca3ce615c03566cde2b5436c8e52e9d813a883a8076f2b00382aee",
+          "design/jango/emoticons/kakao-32/v22/lettering/19.png": "002c6e11c501be044b756a11c3002f8f5e5159b3c88f89cdc48064cc87e20102",
+          "design/jango/emoticons/kakao-32/v22/artwork/20.png": "0bba30a690a2acc251aa5e8ec57815b660ba201fa6ef17c5aafa78c311f09804",
+          "design/jango/emoticons/kakao-32/v22/lettering/20.png": "fa82abe9989e528c65bb96f003aea1e6ce383c19345706b8874c7f10e4df0147",
+          "design/jango/emoticons/kakao-32/v22/artwork/21.png": "0f8e70b13b63d48003d804644f2bf0142557a4040bb6d50bddc6da1122785685",
+          "design/jango/emoticons/kakao-32/v22/lettering/21.png": "a581f27739c5056b43b74d9cbf224378f01e59cbdb5384311f9d8869115d2539",
+          "design/jango/emoticons/kakao-32/v22/artwork/22.png": "9923bee4f8d13147c32e322bc2138cbc2bf0101b1ea5699fbe7b5b2577e2944f",
+          "design/jango/emoticons/kakao-32/v22/lettering/22.png": "10fceff48aed8d961509cb4f3172f720d1c0a8f768b68e66ee4f06aa6d8b2f11",
+          "design/jango/emoticons/kakao-32/v22/artwork/23.png": "29f9bfe3da2995ac5fc037737cc317eb6027b1d39fd02ffaa21953cd654f0ed0",
+          "design/jango/emoticons/kakao-32/v22/lettering/23.png": "15262aa980e34f4a39843462c457c3bc091e3acc960f75ceee5007487f28b0fa",
+          "design/jango/emoticons/kakao-32/v22/artwork/24.png": "cfd972e3e5132a371b521916bd88979e2ce8bcb6c64f128eebb554744fea094b",
+          "design/jango/emoticons/kakao-32/v22/lettering/24.png": "73f0680a3cff6a74a4c0a9747a8072fcfda33050001e955478687710cda1c371",
+          "design/jango/emoticons/kakao-32/v22/artwork/25.png": "040b296f2cacc50b003c223d90f611bdf287f6e696ec7bfea9fde2191a8dfa2c",
+          "design/jango/emoticons/kakao-32/v22/lettering/25.png": "d187823237dab32dde9ea59a092459233b6211f419048f7068938e4034967a77",
+          "design/jango/emoticons/kakao-32/v22/artwork/26.png": "08f47d2c184f21aad87df1f0a3806256f84fdc6986ab7b1e8e99f28a012687a4",
+          "design/jango/emoticons/kakao-32/v22/lettering/26.png": "318fd2f62bb2002f293cc15a2912879c1faa5695e1254a12776fed76427b2014",
+          "design/jango/emoticons/kakao-32/v22/artwork/27.png": "d67045fb34e05509f1ac0d66208dbc32183ad43603242c86aab4049cc07b972e",
+          "design/jango/emoticons/kakao-32/v22/lettering/27.png": "2bd92ae0b30e44e04fc9ae7093529d4925373eefb15d36f1e338b0330873e7e0",
+          "design/jango/emoticons/kakao-32/v22/artwork/28.png": "cb3d942f416d9f599159720f8b00137b61a04715679710b76335a50d6ba76cac",
+          "design/jango/emoticons/kakao-32/v22/lettering/28.png": "90f111f3064084086918735cc2f7bdd9054d432c729feea4ca52cbf8b9af136d",
+          "design/jango/emoticons/kakao-32/v22/artwork/29.png": "aeb1732e5e0aabef6eb31e50820db2bba92e82eeca8549db9962875b5e6d113d",
+          "design/jango/emoticons/kakao-32/v22/lettering/29.png": "4da67ecbd9a97177e831ea8d53d36765c05b03430bc4cf681c5e37cc284cba28",
+          "design/jango/emoticons/kakao-32/v22/artwork/30.png": "bd936f83b367bfc0febcf1383c95d18999752786d8d448efb000ed0eff4ff8d0",
+          "design/jango/emoticons/kakao-32/v22/lettering/30.png": "fe9a8c2e410452bddd4754e246230980770c6331e51aa6f1e9a0f77ece5800a5",
+          "design/jango/emoticons/kakao-32/v22/artwork/31.png": "e5c7ec3f7d21530a0e1dd374a771cb724a023fc861c3b941a48fb169433f0e9e",
+          "design/jango/emoticons/kakao-32/v22/lettering/31.png": "87a23e0545395028f03eccbf1d6198f005aac6d7c949b9afb4380676fac4e5d4",
+          "design/jango/emoticons/kakao-32/v22/artwork/32.png": "b2fd0c90cd988b30f7274e489fc31ed6709cccf75a4e43ce666791990f2f776d",
+          "design/jango/emoticons/kakao-32/v22/lettering/32.png": "07a354805fb8d1484c487a6328dcf42bd86897854c7dd0f611f822b1e2a2c3a6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/01.png",
+      "sha256": "5fac3848dbced6219ff901e4a95d6d204b0b97ad5935e34065e7dcd74c5bc61f",
+      "bytes": 12628,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          1
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/01.png": "c30ec251f482c425cc040b2c5f0f310d32372ad2e53727c4a5580081cc5b0b79",
+          "design/jango/emoticons/kakao-32/v22/lettering/01.png": "b52639258771186c7f9d59633dc1ac4743c7584aa92da541389b92d4a7b67bd9"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/02.png",
+      "sha256": "7b29ae984615fa81e8c9483836aebf706d1aa680ee3aca9c1b1da111343aeb7b",
+      "bytes": 12450,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          2
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/02.png": "f4668f984ed76519e586d894cedec32e60157c23de3e1ef5b9edfc963428dd2c",
+          "design/jango/emoticons/kakao-32/v22/lettering/02.png": "9fb01e17154eaa30517952bad6efb1b349a4b1185986194bf727640e1558a258"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/03.png",
+      "sha256": "42083196788e15fa8dc62978114c10b6e94c90577367a03ddfea78996c5c9b66",
+      "bytes": 13364,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          3
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/03.png": "44c5b2b5427e1c056cae4371a7232c28849790bd02fd7b0c9143b0add8a3e8c3",
+          "design/jango/emoticons/kakao-32/v22/lettering/03.png": "61c441eed90d1d122f7801bd63d16c2c6efdf56ec55ed69dff40950da80ea6eb"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/04.png",
+      "sha256": "b74ef70ca1c86fe58e5a2518f88a3d49ab04c29d2e857b7a7db8cc87c57b9bdf",
+      "bytes": 11961,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          4
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/04.png": "79132c2ffba8c876e89560e612b8b6cec440e0e95627654253286406bd4259ad",
+          "design/jango/emoticons/kakao-32/v22/lettering/04.png": "30293b86867a691594bab9a27e77132da8009e811d8489b0882733a735e48f04"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/05.png",
+      "sha256": "a3a3ad9212b4a0ae09573fbc952b7b0418411926e726ea1dfb99b4a772be41ed",
+      "bytes": 12936,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          5
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/05.png": "ac164374ea130de143f90901fa52ccdd75b637f56959e5dec6a49fe7d6a586e9",
+          "design/jango/emoticons/kakao-32/v22/lettering/05.png": "da016b8db3fc35ea2738831bcf9279c46f320e0babd08bcaba6569a3d1a282be"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/06.png",
+      "sha256": "e2e4a4bacc798538d92a715da8649ae5ced339203ded08487b9d8b2a16af19cd",
+      "bytes": 12045,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          6
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/06.png": "27a500cf0b2033431207ad9c285050c9eda04aa38407418b09caf1754b5c5a82",
+          "design/jango/emoticons/kakao-32/v22/lettering/06.png": "66f02b5518930fb7dd68bdb3067b260d9a0049a89249bd4286851d49642ef3c5"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/07.png",
+      "sha256": "7c4c98e24b41bd4d1e1e4926e2cee3893ae215d4125e24a3c81c8eabe2bd79fd",
+      "bytes": 14067,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          7
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/07.png": "122235fb991389223541447c40f6c59a90811b4397cd71e6aa04c3aa0796047f",
+          "design/jango/emoticons/kakao-32/v22/lettering/07.png": "d94a68ef985d14edffd7dab888c701da7e29f71d37263a1f2610980c9fa64bef"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/08.png",
+      "sha256": "8f2ac48aa32e882ac416aa247619f88b8b21f00e25f92153c8ff0830a2511d7b",
+      "bytes": 13146,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          8
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/08.png": "f244aab27267c4d9cc9932267087d17d13e48020c792bd720a79d4d6453a5505",
+          "design/jango/emoticons/kakao-32/v22/lettering/08.png": "dbe9337ad4413ac241da68fa03f7f074b21d0de549749cec7db6236d9e16cc64"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/09.png",
+      "sha256": "ceb2e688057e0a0408fe6f1236b2463b3f5c663af268a0e9b49361c9f1abc0a1",
+      "bytes": 12636,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          9
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/09.png": "17914197a70475f46d6b6005fc5eaad5321c936bfddade655c1a4c213c769b6c",
+          "design/jango/emoticons/kakao-32/v22/lettering/09.png": "e5ca24ac73caec7a475b9c2e2d2407e1e11384e794f100f4188d0e316a1dfb63"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/10.png",
+      "sha256": "3892d81e83e4edeb6e8fcb7189a4cb248c8b2ca9a1ec5ab727d52df33f927441",
+      "bytes": 13070,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          10
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/10.png": "34d73d5e3b98396239d7d6532ad0378112986a7c41e0bc8446d0a71701f312e8",
+          "design/jango/emoticons/kakao-32/v22/lettering/10.png": "8b5b22f0df249807662871233d9c00c03d8ae1738b70b2e2c7d0e55ff96af453"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/11.png",
+      "sha256": "4463250c0fe02ec553cb50c8fbc4867763e4de19ba571bdb7692bed1b0695f47",
+      "bytes": 11370,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          11
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/11.png": "611f94744f59a98368c19640b485fc42c1100285c409a5232b8ab693cf7ba4d1",
+          "design/jango/emoticons/kakao-32/v22/lettering/11.png": "f798b7bf456cc5b6e624b2668d1ffd7854a46796af4783b64f0cefeb8e16f6c6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/12.png",
+      "sha256": "1d58048f1a5518faf0588fe2bd027a298c0131fa3e440f0fe4396d90ded72eab",
+      "bytes": 11903,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          12
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/12.png": "46a4920cdbb4e1f9deea5080ce3f23061a2c63e6113618069b4f9118dce2b5cc",
+          "design/jango/emoticons/kakao-32/v22/lettering/12.png": "10e5e902be33048fdec208f844cb23f7a5b526278eaddfb2c985bce62ea81d0f"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/13.png",
+      "sha256": "4f55756b539824ce7c79ca124093632e61f641041a88f36f02fcefe0004e8e9b",
+      "bytes": 14151,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          13
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/13.png": "1363e07e00918169968bca3806e6e590e38a7b8e89d4e10ea1946de061a5945e",
+          "design/jango/emoticons/kakao-32/v22/lettering/13.png": "b15b24486105ca4c6eeeaf22cc52e1c0c2b6070eafe1989621e7450f289e6584"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/14.png",
+      "sha256": "27fd6b0c1ff99bf52e7543e1bc0ac9e4502c3cadf43c1c8e8da00d1bd90563f0",
+      "bytes": 13529,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          14
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/14.png": "3ae851b06d5285112b798af47a792d4313ee99a48e7883dc26a743db2d7c63c3",
+          "design/jango/emoticons/kakao-32/v22/lettering/14.png": "c517cbd5caf03fe4e7a458884707bc405e36a77f9b8962df3f1e02f740098b77"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/15.png",
+      "sha256": "6bdfad576eaf086a33a4a63d595397854a734ed25281c68272f7d09c9b1ba8f9",
+      "bytes": 12463,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          15
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/15.png": "6109d45493b2c409b0d94665e0746d459db1102804e5cdb3b07638ca44fd72cd",
+          "design/jango/emoticons/kakao-32/v22/lettering/15.png": "9c789a6223f717dc2b09c593b026ec002e791947faadf657dd718a28ed808db5"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/16.png",
+      "sha256": "86d2b7a3ba5da451a59861b2fbe7e6db3ebaa0c6c0b7f997468682e3da654bad",
+      "bytes": 14959,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          16
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/16.png": "3b72763477f190fe9e5cae1664fb4db64f15dc227572239d82e1f58725de0f16",
+          "design/jango/emoticons/kakao-32/v22/lettering/16.png": "bfeab268d615de62586ae3dd8a4c9bfaefea292841de5df70941a623c8d1ba93"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/17.png",
+      "sha256": "27ec67a6a5547c0c150793c597d188ed2f4849243200872e92929c1632bead66",
+      "bytes": 11579,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          17
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/17.png": "afdf591b3631731e60122f5b4302e48325a126f7d19981180e558cb31609abd6",
+          "design/jango/emoticons/kakao-32/v22/lettering/17.png": "9aa227bf8c5ec74313de34351b94b5ee7212ac777cbbbb156e6c761905be1b46"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/18.png",
+      "sha256": "1f4e1ef537bb12c63e96a67cd651c26e891591692405b03a3385728fa6d169ce",
+      "bytes": 13943,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          18
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/18.png": "ab8c968ccd085f1642d5e6b7ee97b66adf23f7fae426683106e78dc4e4931566",
+          "design/jango/emoticons/kakao-32/v22/lettering/18.png": "1b1dd9d5c3d385713a61f375ffabf7b68a9bcac01b0647d5abe10bcefe5e319b"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/19.png",
+      "sha256": "e900023d3a7c1cd8f870fa366821646078eefdbdc915b993a321f73b817fb49c",
+      "bytes": 13059,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          19
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/19.png": "1184828569ca3ce615c03566cde2b5436c8e52e9d813a883a8076f2b00382aee",
+          "design/jango/emoticons/kakao-32/v22/lettering/19.png": "002c6e11c501be044b756a11c3002f8f5e5159b3c88f89cdc48064cc87e20102"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/20.png",
+      "sha256": "f301feab476f80efd0cc467add08eeca54909c1293858015d44eaaf6558036b9",
+      "bytes": 13355,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          20
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/20.png": "0bba30a690a2acc251aa5e8ec57815b660ba201fa6ef17c5aafa78c311f09804",
+          "design/jango/emoticons/kakao-32/v22/lettering/20.png": "fa82abe9989e528c65bb96f003aea1e6ce383c19345706b8874c7f10e4df0147"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/21.png",
+      "sha256": "3c6e2b727582a9e9e68991d842d5f3644f27ae5cbc727e336de2ad5d617adcf4",
+      "bytes": 14544,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          21
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/21.png": "0f8e70b13b63d48003d804644f2bf0142557a4040bb6d50bddc6da1122785685",
+          "design/jango/emoticons/kakao-32/v22/lettering/21.png": "a581f27739c5056b43b74d9cbf224378f01e59cbdb5384311f9d8869115d2539"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/22.png",
+      "sha256": "b386f51a4deb460edca8203be72d18c1eb0a520c45577b8a5fabea526b725a77",
+      "bytes": 12808,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          22
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/22.png": "9923bee4f8d13147c32e322bc2138cbc2bf0101b1ea5699fbe7b5b2577e2944f",
+          "design/jango/emoticons/kakao-32/v22/lettering/22.png": "10fceff48aed8d961509cb4f3172f720d1c0a8f768b68e66ee4f06aa6d8b2f11"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/23.png",
+      "sha256": "ee329d3ce8e00c7bd5a371ed8ecd8433baaac214eef8d4f7b14416443faeaa10",
+      "bytes": 13599,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          23
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/23.png": "29f9bfe3da2995ac5fc037737cc317eb6027b1d39fd02ffaa21953cd654f0ed0",
+          "design/jango/emoticons/kakao-32/v22/lettering/23.png": "15262aa980e34f4a39843462c457c3bc091e3acc960f75ceee5007487f28b0fa"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/24.png",
+      "sha256": "90d1ab00aed95d3ce9a6cfde6d5d6767ac907ba67478001a5d01e195943e13de",
+      "bytes": 13147,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          24
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/24.png": "cfd972e3e5132a371b521916bd88979e2ce8bcb6c64f128eebb554744fea094b",
+          "design/jango/emoticons/kakao-32/v22/lettering/24.png": "73f0680a3cff6a74a4c0a9747a8072fcfda33050001e955478687710cda1c371"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/25.png",
+      "sha256": "3d051860865bd8dd02f8150fcf479fc8cef7cbdcbf3d5daaa19565920fe5fddf",
+      "bytes": 13428,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          25
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/25.png": "040b296f2cacc50b003c223d90f611bdf287f6e696ec7bfea9fde2191a8dfa2c",
+          "design/jango/emoticons/kakao-32/v22/lettering/25.png": "d187823237dab32dde9ea59a092459233b6211f419048f7068938e4034967a77"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/26.png",
+      "sha256": "57bdda6c05fa0f30496bba603ab7432603a0bb0391dde1bc75ee45a2d8160b12",
+      "bytes": 13498,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          26
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/26.png": "08f47d2c184f21aad87df1f0a3806256f84fdc6986ab7b1e8e99f28a012687a4",
+          "design/jango/emoticons/kakao-32/v22/lettering/26.png": "318fd2f62bb2002f293cc15a2912879c1faa5695e1254a12776fed76427b2014"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/27.png",
+      "sha256": "18902eae035cb61ca7d427a2d8ab9ee05ddcec723ce5fef8d374b92e53e7127f",
+      "bytes": 14096,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          27
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/27.png": "d67045fb34e05509f1ac0d66208dbc32183ad43603242c86aab4049cc07b972e",
+          "design/jango/emoticons/kakao-32/v22/lettering/27.png": "2bd92ae0b30e44e04fc9ae7093529d4925373eefb15d36f1e338b0330873e7e0"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/28.png",
+      "sha256": "bb5cc1f722b9d10051dfb85ec4c875eeb2a559d7bedacba2ae330849e57832e7",
+      "bytes": 15325,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          28
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/28.png": "cb3d942f416d9f599159720f8b00137b61a04715679710b76335a50d6ba76cac",
+          "design/jango/emoticons/kakao-32/v22/lettering/28.png": "90f111f3064084086918735cc2f7bdd9054d432c729feea4ca52cbf8b9af136d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/29.png",
+      "sha256": "67589855ddfb0668b015d6c2d9a16e6d4fc7cd1c5baed6a6607303d26068459f",
+      "bytes": 12096,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/29.png": "aeb1732e5e0aabef6eb31e50820db2bba92e82eeca8549db9962875b5e6d113d",
+          "design/jango/emoticons/kakao-32/v22/lettering/29.png": "4da67ecbd9a97177e831ea8d53d36765c05b03430bc4cf681c5e37cc284cba28"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/30.png",
+      "sha256": "d30d087ef7f83e9723cf40f45eda81d387d68b809a1a1eb3d3097b5aca5639f2",
+      "bytes": 14527,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          30
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/30.png": "bd936f83b367bfc0febcf1383c95d18999752786d8d448efb000ed0eff4ff8d0",
+          "design/jango/emoticons/kakao-32/v22/lettering/30.png": "fe9a8c2e410452bddd4754e246230980770c6331e51aa6f1e9a0f77ece5800a5"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/31.png",
+      "sha256": "8a77f2b9d42a7379d6dff6d508224a23a9932564cbfb0e2e7283ce5e2744839a",
+      "bytes": 14074,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          31
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/31.png": "e5c7ec3f7d21530a0e1dd374a771cb724a023fc861c3b941a48fb169433f0e9e",
+          "design/jango/emoticons/kakao-32/v22/lettering/31.png": "87a23e0545395028f03eccbf1d6198f005aac6d7c949b9afb4380676fac4e5d4"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v22/thumbs/32.png",
+      "sha256": "8a1bea6e7a60eb57ac789b055107152553266f5275f42683ccdef34c9dde0b0f",
+      "bytes": 12969,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v22/manifest.json",
+        "numbers": [
+          32
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v22/manifest.json": "916d7e339b82e3f48796db7821d60e5a1b1897cff749d2e6c2246a9e22c9b08f",
+          "design/jango/emoticons/kakao-32/v22/artwork/32.png": "b2fd0c90cd988b30f7274e489fc31ed6709cccf75a4e43ce666791990f2f776d",
+          "design/jango/emoticons/kakao-32/v22/lettering/32.png": "07a354805fb8d1484c487a6328dcf42bd86897854c7dd0f611f822b1e2a2c3a6"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v23/characters/29.png",
+      "sha256": "eee65833dfc5eb8bd117b9ac6c35cb698b378c8b38fac4b42a47ece5b9ad1fec",
+      "bytes": 802562,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "characters",
+        "manifest": "design/jango/emoticons/kakao-32/v23/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v23/manifest.json": "2a03447107ebc415c2fed1e5166248c3751023dc2bc796887fb56667f0981730",
+          "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png": "b546a8160bf5a83dbdf95d166bd5060f27b528254f4c7a70b4dcf731e5d7714d"
+        }
+      }
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v23/thumbs/29.png",
+      "sha256": "5b60ece00e68fbce43708943fb9a50b540574e858140c5e434ae0b74c5e9dbf9",
+      "bytes": 13508,
+      "recipe": {
+        "version": "jango-build-intermediates-v1",
+        "type": "thumbs",
+        "manifest": "design/jango/emoticons/kakao-32/v23/manifest.json",
+        "numbers": [
+          29
+        ],
+        "inputs": {
+          "design/jango/emoticons/kakao-32/v23/manifest.json": "2a03447107ebc415c2fed1e5166248c3751023dc2bc796887fb56667f0981730",
+          "design/jango/emoticons/kakao-32/v23/artwork/29.png": "f74ec75c0ad4e67f65685ef8e11c0e1491ab7f41b38ff96f739b3113aa531fa5",
+          "design/jango/emoticons/kakao-32/v23/lettering/29.png": "3559c1ee40d07d0d85c20ba5c928a992d85e499af19864e3201aea390b2640cf"
+        }
+      }
+    }
+  ]
+}

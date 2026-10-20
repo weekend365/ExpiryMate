@@ -1,5 +1,5 @@
 ---
-description: 장고 v18 원본 MASTER·승인 v6 SNS 카툰 기준과 검수
+description: 장고 v18 MASTER·v21 표현 원칙·승인 v6 SNS 카툰 기준과 검수
 globs: design/jango/**,scripts/*jango*,output/marketing/jango-sns-*/**,apps/mobile/assets/**,apps/mobile/scripts/*mascot*,apps/mobile/scripts/*branding*,docs/JANGO_CHARACTER_STYLE_GUIDE.md
 alwaysApply: false
 ---
@@ -8,15 +8,17 @@ alwaysApply: false
 
 - design/jango/style-master.json은 활성 v18 MASTER(design/jango/masters/v18/master.json)를 가리킨다. source-originals 32종이 공통 제작 정본이며 24번과 해당 원화의 크레파스 선·불투명 색면·민트·차콜·살구 볼터치·약한 종이 결을 따른다. v19 교체는 중단했고 자동 재개하지 않는다.
 - design/jango/master-set.json의 v18 32종은 활성 원본·표정·포즈·구조 정본이다. 대표 24번과 원본 해시를 보존한다. 기존 앱 기본·아이콘·스플래시는 v18 24번 파생을 유지한다.
-- reference/STYLE-MASTER-ADOPTION.md의 복원 범위와 과거 채택 이력를 따른다. 여성·배경·두부·대사·말풍선을 모든 출력에 복제하지 않는다. 규칙 채택은 앱 전체 교체나 32종 재작화 완료가 아니다.
+- reference/STYLE-MASTER-ADOPTION.md의 복원·v21 규칙 반영 범위와 과거 채택 이력을 따른다. 여성·배경·두부·대사·말풍선을 모든 출력에 복제하지 않는다. 규칙 채택은 앱 전체 교체나 32종 재작화 완료가 아니다.
 - reference/JANGO-CHARACTER-BIBLE.md와 JANGO-STYLE-GUIDE.md를 따른다. v18 MASTER와 표정/포즈·매체 참조의 역할을 구분하고 등록되지 않은 옛 그림은 참조하지 않는다.
 - quality/README.md의 매체별 준비를 따른다. 현행 이모티콘·스타일 참조 후보는 먼저 jango:prepare를 실행한다. 신규 준비 기본/허용 스타일은 handdrawn-crayon이며 colored-pencil은 과거 감사 전용이다. 실제 참조 역할과 해시, 중복 제거 후 최대 5개 첨부를 지킨다.
-- 기본 입 참조는 idle-u 09번, speak-open 01번, neutral-line 11번, sad-arc 17번이다. SNS 파생물의 입 표현을 이 네 모드로 제한하지 않으며 미지원 입을 기존 모드로 거짓 분류하지 않는다.
-- 감정·눈·눈썹·자세·입 선택 이유와 변경 의도를 기록한다. 기본형 재현과 SNS 표현 확장은 BIBLE의 적용 범위를 구분한다.
+- 장고는 다정하지만 허당인 생활 친구다. 잘 작동하는 원화·문구는 살리고 장고 인지·보낼 상황·성격 전달로 개선을 판단한다. 기본형 재현과 이모티콘·SNS 표현 확장은 BIBLE의 적용 범위를 구분한다.
+- 기본 입 참조는 idle-u 09번, speak-open 01번, neutral-line 11번, sad-arc 17번이다. 이모티콘·SNS 표현을 이 네 모드나 고정 얼굴 좌표로 제한하지 않으며 새 입을 기존 모드로 거짓 분류하지 않는다.
+- 감정·눈·눈썹·자세·입 선택 이유와 변경 의도를 기록한다. 이모티콘 표현 확장은 --creative-brief와 expressive-custom으로 준비하고 시각 재검토를 유지한다. 검사 통과를 위해 의도한 표현이나 ROI·임계값을 바꾸지 않는다.
+- 이모티콘의 서체 비교·공통 글자 크기·짧은 대화 문구·감정별 배치는 STYLE GUIDE를 따른다. 문구 없는 감정 구분과 80/120px 밝고 어두운 배경의 읽힘을 확인한다. 앱 UI 글꼴·안내 문구에는 이모티콘 기준을 적용하지 않는다.
 - SNS의 표정·입·포즈·소품·의상·비율·반전·색 변형을 일괄 금지하지 않는다. BIBLE에 따라 구조·질감·캐릭터 인지를 비교 검토하고 필요한 보정 후 사용자 채택 범위에서 재사용한다.
 - SNS 연재는 design/jango/cartoon-series.json의 승인 v6와 reference/SNS-CARTOON-GUIDE.md를 따른다. v18 캐릭터 MASTER를 대체하지 않는다. 장면 전체의 재료감·상대 크기·포즈·핵심 행동·한글·원본/360px 읽힘·실제 앱 효용을 확인한다. 회차별 이야기/인물/배경/구도 변주는 허용하고 v1/v2 단순 콜라주는 새 제작 참조에서 제외한다.
 - 신규 장면의 실제 승인 참조·해시와 생성 전 프롬프트를 기록하고 필요한 작화는 공식 imagegen으로 생성/편집한다. 한글은 별도 조립한다. 기능 근거와 화면 간략화/이야기 예시를 구분하고 후보→검수→사용자 채택 후 재사용한다. v6 승인을 후속 회차·앱·이모티콘·게시 승인으로 확장하지 않는다.
-- MASTER 원화·360px PNG·레터링은 변경하지 않는다. 새 결과는 새 작업과 버전으로 만든다.
-- 앱 파생은 mascot:sync·mascot:build, 브랜딩은 branding:sync를 쓴다. 원화 변형·비균일 확대·우발적 잘림은 금지한다. 새 앱 작화는 모자·양팔·앞치마·다리·두 신발이 모두 보이는 전신을 기본으로 하며 기존 원본 크롭은 보존한다.
+- MASTER 원화·360px PNG·레터링은 변경하지 않는다. 새 결과는 새 작업과 버전으로 만든다. 생성 없는 원화 재사용·배치·레터링과 실제 AI 작화의 출처·입력 해시·작업 방법을 구분한다.
+- 앱 파생은 mascot:sync·mascot:build, 브랜딩은 branding:sync를 쓴다. 원화 변형·비균일 확대·우발적 잘림은 금지한다. 새 앱 작화와 문구 포함 이모티콘은 전신을 기본으로 하며 자연스러운 가림은 허용한다. 공간이 부족하면 문구를 먼저 조정하고 기존 원본 크롭은 보존한다.
 - MASTER 지정·앱 사용·SNS 채택·서명된 이모티콘 출시를 구분한다. SNS 채택은 MASTER나 앱으로 자동 승격하지 않는다. 기존 재검토를 지우지 않는다. 에이전트가 서명하지 않는다.
 - 이모티콘 최종 채택·출력은 jango:promote·jango:export만 사용한다.

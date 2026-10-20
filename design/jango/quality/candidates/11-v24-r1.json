@@ -1,0 +1,39 @@
+{
+  "id": "11-v24-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v24",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/11-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v24/stickers/11.png",
+  "mouthMode": "expressive-custom",
+  "mouthRoi": [
+    710,
+    686,
+    84,
+    45
+  ],
+  "tiltDegrees": -5,
+  "visibility": "clear",
+  "expression": {
+    "family": "멍함",
+    "intensity": 2,
+    "eyes": "반쯤 감겨 힘이 빠진 눈",
+    "brows": "기울어진 무기력한 눈썹",
+    "pose": "냉장고 머리의 오른쪽 경첩을 중심으로 앞문이 25도 정도 살짝 열렸다. 문 바깥쪽에 얼굴과 왼쪽 손잡이·파인애플이 그대로 붙어 있고 얼굴이 관객에게 읽힌다. 벌어진 왼쪽 틈으로 텅 빈 아이보리 내부와 빈 선반 하나가 보인다. 문과 냉장고 뒤쪽 상자는 실제 경첩으로 연결되어 있다. 어깨와 양 장갑은 축 처지고 두 발은 느슨하게 벌어진다. 음식·뇌·분리된 머리·두 번째 얼굴을 넣지 않는다. 모자는 전체 냉장고 머리 위에 하나만 있다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 11
+  },
+  "preflight": "design/jango/quality/jobs/11-v24-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v24/derivation-records/11-v24-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set",
+  "creativeBrief": {
+    "file": "design/jango/emoticons/kakao-32/v24/creative-intents/11.json",
+    "sha256": "f2109899746f140f8057055dd398893ae83b58e8b17b284ce8a7fe561c96489c",
+    "referenceMouthMode": "neutral-line",
+    "scope": "candidate-only"
+  }
+}

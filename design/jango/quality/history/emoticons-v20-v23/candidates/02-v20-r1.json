@@ -1,0 +1,33 @@
+{
+  "id": "02-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/02-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/02.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    574,
+    659,
+    124,
+    104
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "동의·호응",
+    "intensity": 2,
+    "eyes": "부드럽게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "양 장갑을 볼 옆 높이로 짧게 들어 반갑게 환호. 몸은 정면, 작은 노랑 동작선."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 2
+  },
+  "preflight": "design/jango/quality/jobs/02-v20-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v20/derivation-records/02-v20-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

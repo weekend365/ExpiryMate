@@ -1,0 +1,264 @@
+{
+  "status": "user-requested-candidate-production",
+  "date": "2026-10-15",
+  "proposalSHA256": "25b41b309bdd0888d2d1836d0eff53690ffa29e641465557ccc03f768086268e",
+  "scope": "32 candidate stickers only; not MASTER adoption, runtime replacement, marketplace submission or signed release",
+  "items": [
+    {
+      "n": 1,
+      "current": "안녕!",
+      "proposed": "안녕!",
+      "role": "인사",
+      "action": "기존 포즈",
+      "direction": "전신 배치로 전환"
+    },
+    {
+      "n": 2,
+      "current": "좋아!",
+      "proposed": "좋아!",
+      "role": "동의·호응",
+      "action": "기존 포즈",
+      "direction": "직접적인 호응 역할 유지"
+    },
+    {
+      "n": 3,
+      "current": "최고야!",
+      "proposed": "최고야!",
+      "role": "칭찬",
+      "action": "기존 포즈",
+      "direction": "엄지척을 대표 칭찬으로 유지"
+    },
+    {
+      "n": 4,
+      "current": "고마워!",
+      "proposed": "고마워!",
+      "role": "감사",
+      "action": "기존 포즈",
+      "direction": "가벼운 감사의 대표 컷"
+    },
+    {
+      "n": 5,
+      "current": "사랑해!",
+      "proposed": "사랑해",
+      "role": "애정",
+      "action": "기존 포즈",
+      "direction": "느낌표를 덜어 수줍은 표정과 연결"
+    },
+    {
+      "n": 6,
+      "current": "ㅎㅎㅎ",
+      "proposed": "히히",
+      "role": "작은 웃음",
+      "action": "기존 포즈",
+      "direction": "문구를 키우고 얼굴 가까운 상단에 배치"
+    },
+    {
+      "n": 7,
+      "current": "화이팅!",
+      "proposed": "파이팅!",
+      "role": "응원",
+      "action": "기존 포즈",
+      "direction": "표기를 다듬고 힘찬 전신 자세 유지"
+    },
+    {
+      "n": 8,
+      "current": "잘했어!",
+      "proposed": "잘했어!",
+      "role": "상대의 행동 칭찬",
+      "action": "기존 포즈",
+      "direction": "03번과 역할을 구분"
+    },
+    {
+      "n": 9,
+      "current": "응!",
+      "proposed": "알겠어!",
+      "role": "확인·수긍",
+      "action": "기존 포즈",
+      "direction": "끄덕이는 동작과 연결"
+    },
+    {
+      "n": 10,
+      "current": "좋아좋아!",
+      "proposed": "잠깐만!",
+      "role": "대기 요청",
+      "action": "새 포즈 후보",
+      "direction": "전신으로 한 장갑을 앞으로 들고 멈춤을 전달. 이번에는 미제작"
+    },
+    {
+      "n": 11,
+      "current": "음...",
+      "proposed": "음…",
+      "role": "생각·망설임",
+      "action": "기존 포즈",
+      "direction": "작은 말줄임표로 머뭇거림만 표현"
+    },
+    {
+      "n": 12,
+      "current": "어?!",
+      "proposed": "어라?",
+      "role": "가벼운 당황",
+      "action": "기존 포즈",
+      "direction": "13번의 큰 놀람과 구분"
+    },
+    {
+      "n": 13,
+      "current": "헉!",
+      "proposed": "헉!",
+      "role": "큰 놀람",
+      "action": "기존 포즈",
+      "direction": "짧은 문구와 벌린 팔다리 유지"
+    },
+    {
+      "n": 14,
+      "current": "아하!",
+      "proposed": "아하!",
+      "role": "깨달음",
+      "action": "기존 포즈",
+      "direction": "전구와 반응이 함께 읽히게 배치"
+    },
+    {
+      "n": 15,
+      "current": "멋져!",
+      "proposed": "난 패스!",
+      "role": "부드러운 거절",
+      "action": "새 포즈 후보",
+      "direction": "팔·벙어리장갑으로 작은 X를 만들고 양발이 보이는 거절 자세. 이번에는 미제작"
+    },
+    {
+      "n": 16,
+      "current": "대단해!",
+      "proposed": "축하해!",
+      "role": "축하",
+      "action": "기존 포즈",
+      "direction": "박수를 축하 전용 슬롯으로 연결"
+    },
+    {
+      "n": 17,
+      "current": "미안해...",
+      "proposed": "미안해…",
+      "role": "사과",
+      "action": "기존 포즈",
+      "direction": "문장부호 크기를 조정하고 처진 자세 유지"
+    },
+    {
+      "n": 18,
+      "current": "괜찮아!",
+      "proposed": "괜찮아",
+      "role": "안심",
+      "action": "기존 포즈",
+      "direction": "느낌표를 덜어 편안한 위로로 전달"
+    },
+    {
+      "n": 19,
+      "current": "힘내...",
+      "proposed": "쉬어 가",
+      "role": "배려·휴식 권유",
+      "action": "기존 포즈",
+      "direction": "따뜻한 잔과 쉬는 상황을 연결"
+    },
+    {
+      "n": 20,
+      "current": "배고파...",
+      "proposed": "배고파…",
+      "role": "식사 전 상태",
+      "action": "기존 포즈",
+      "direction": "배 앞 장갑과 밥그릇 생각 유지"
+    },
+    {
+      "n": 21,
+      "current": "냠냠!",
+      "proposed": "냠냠",
+      "role": "먹는 중",
+      "action": "기존 포즈",
+      "direction": "먹는 동작을 크게 살리고 문구는 짧게"
+    },
+    {
+      "n": 22,
+      "current": "맛있다!",
+      "proposed": "맛있어!",
+      "role": "식사 만족",
+      "action": "기존 포즈",
+      "direction": "대화에서 바로 쓰는 말투로 조정"
+    },
+    {
+      "n": 23,
+      "current": "요리중!",
+      "proposed": "요리 중!",
+      "role": "조리 중 상태",
+      "action": "기존 포즈",
+      "direction": "띄어쓰기를 정리하고 팬·손 연결 보존"
+    },
+    {
+      "n": 24,
+      "current": "완성!",
+      "proposed": "완성!",
+      "role": "완료·공유",
+      "action": "기존 포즈",
+      "direction": "문구 유지, 원화의 두 신발까지 전신 배치"
+    },
+    {
+      "n": 25,
+      "current": "냉장고 체크!",
+      "proposed": "확인했어!",
+      "role": "확인 완료",
+      "action": "기존 포즈",
+      "direction": "체크리스트를 일상 답장 기능과 연결"
+    },
+    {
+      "n": 26,
+      "current": "장보기 가자!",
+      "proposed": "같이 가자!",
+      "role": "초대",
+      "action": "기존 포즈",
+      "direction": "카트가 장보기 맥락을 맡고 문구는 짧게"
+    },
+    {
+      "n": 27,
+      "current": "신선해!",
+      "proposed": "밥 먹었어?",
+      "role": "상대 안부",
+      "action": "기존 포즈",
+      "direction": "식재료를 든 다정한 식사 안부로 전환"
+    },
+    {
+      "n": 28,
+      "current": "오늘 뭐 먹지?",
+      "proposed": "뭐 먹을까?",
+      "role": "메뉴 상의",
+      "action": "기존 포즈",
+      "direction": "한 줄 문구로 축약하고 전신 배치"
+    },
+    {
+      "n": 29,
+      "current": "피곤해...",
+      "proposed": "방전…",
+      "role": "피곤함",
+      "action": "기존 포즈",
+      "direction": "누운 전신 실루엣 보존, 폭을 활용한 위치 조정"
+    },
+    {
+      "n": 30,
+      "current": "잘자",
+      "proposed": "잘 자",
+      "role": "수면 인사",
+      "action": "기존 포즈",
+      "direction": "띄어쓰기 정리, 이불의 자연스러운 가림 유지"
+    },
+    {
+      "n": 31,
+      "current": "조금만 더!",
+      "proposed": "저기…",
+      "role": "조심스러운 말 걸기",
+      "action": "기존 포즈",
+      "direction": "문 뒤의 걱정스러운 얼굴과 문구를 일치시킴"
+    },
+    {
+      "n": 32,
+      "current": "항상 고마워!",
+      "proposed": "마음 받아!",
+      "role": "애정 건네기",
+      "action": "기존 포즈",
+      "direction": "큰 하트로 마음을 전하는 역할, 감사 컷과 구분"
+    }
+  ]
+}

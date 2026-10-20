@@ -1,0 +1,33 @@
+{
+  "id": "14-v24-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v24",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/14-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v24/stickers/14.png",
+  "mouthMode": "speak-open",
+  "mouthRoi": [
+    598,
+    653,
+    113,
+    93
+  ],
+  "tiltDegrees": 3,
+  "visibility": "clear",
+  "expression": {
+    "family": "깨달음",
+    "intensity": 2,
+    "eyes": "기본 타원 눈",
+    "brows": "한쪽 눈썹 살짝 올라감",
+    "pose": "한 장갑 전체를 들어 깨달음을 표현하고 머리 옆에 작은 노란 전구 한 개. 분리된 검지가 아니라 장갑 주머니 전체와 기존 엄지로 손짓."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 14
+  },
+  "preflight": "design/jango/quality/jobs/14-v24-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v24/derivation-records/14-v24-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

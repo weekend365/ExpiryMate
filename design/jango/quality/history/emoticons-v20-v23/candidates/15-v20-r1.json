@@ -1,0 +1,33 @@
+{
+  "id": "15-v20-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v20",
+  "source": "design/jango/emoticons/kakao-32/v20/source-originals/15-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v20/stickers/15.png",
+  "mouthMode": "idle-u",
+  "mouthRoi": [
+    580,
+    658,
+    108,
+    70
+  ],
+  "tiltDegrees": 0,
+  "visibility": "clear",
+  "expression": {
+    "family": "부드러운 거절",
+    "intensity": 2,
+    "eyes": "기본 어두운 타원 눈",
+    "brows": "공격적이지 않은 편안한 눈썹",
+    "pose": "정면 전신으로 두 팔과 벙어리장갑을 가슴 앞에서 작은 X로 교차해 부드럽게 거절. 손목과 소매가 연결되고 두 신발이 보임. 선글라스와 별은 제거."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 15
+  },
+  "preflight": "design/jango/quality/jobs/15-v20-r1/preflight.json",
+  "generationRecord": "design/jango/emoticons/kakao-32/v20/generation-records/15-v20-r1.json",
+  "operation": "individual image edit",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -1,0 +1,107 @@
+{
+  "id": "06-v20-r1",
+  "policyVersion": 7,
+  "attachmentVersion": 4,
+  "styleProfile": "handdrawn-crayon",
+  "kind": "emoticon",
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 6
+  },
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 character identity, structure and pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 line/color/texture; use the selected original pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 6,
+      "imageIndex": 3
+    },
+    {
+      "role": "speak-mouth",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "imageIndex": 4
+    }
+  ],
+  "diagnosticReferences": [
+    {
+      "role": "mouth-detail",
+      "file": "design/jango/quality/jobs/06-v20-r1/master-mouth.png"
+    }
+  ],
+  "diagnosticHashes": {
+    "design/jango/quality/jobs/06-v20-r1/master-mouth.png": "7893c6e8b66ff6ff6ffe83b76e383c6d1339c50be7cb9a9294ab1fe58e09bf40"
+  },
+  "request": "이미지 생성 없이 v18 원본 바이트를 재사용한다. 입·눈·몸·소품을 편집하지 않고 전신 프레이밍과 별도 Gaegu Bold 문구만 조립한다.",
+  "mouthMode": "speak-open",
+  "mouthReason": "v18 원화의 입·표정·포즈는 그대로 보존하고 전신 배치와 문구만 개선",
+  "expression": {
+    "family": "작은 웃음",
+    "intensity": 2,
+    "eyes": "부드럽게 감은 웃는 곡선 눈",
+    "brows": "없음",
+    "pose": "손을 가슴 앞에 모으고 어깨를 살짝 올려 키득거린다. 작은 웃음 동작선만. 02처럼 양팔을 번쩍 들지 않는다."
+  },
+  "input": "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+  "inputSHA256": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+  "context": {
+    "masterSet": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+    "rules": "65eb41dded7d5912834743d82e43af66eb6edef3e1c4df8576a6a80fc10cd15d",
+    "master": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "implementation": "cb52bedba3fa407caeeedfc71cefe94636f8eab4bc49fa2088e848fc4c22b647",
+    "masterSetImplementation": "2d035e95020e6bc85e7719560ce005787b684d5f08fd492b7020585bdb662301",
+    "activeStyleMaster": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0",
+    "activeMasterVersion": "v18",
+    "activeMasterRecord": "3aed25551c42d919a6a780e308b1c67e6e4d8628b6f5af575e6f65a1a4afba83",
+    "styleMasterImplementation": "cd17cd0478d9cda016f10151ef8c8d4fadc249c5c8335053721e468b676f8b07",
+    "lineMouthImplementation": "5b1e66f4bd3b6411a09328a829a8b931435a72d5553f178556eb86394ec2afc6",
+    "openMouthImplementation": "008b8d0347acaf994934d830a2ecc8c98af43ed89ef2beb1168fb0f355bd4325",
+    "openMouthReference": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+    "mouthReferences": {
+      "idle-u": "0e00aeb70c3eb4c3aae2bdbf15cad1784646a1d662df3b1c621102e32e5ae1d0",
+      "speak-open": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028",
+      "neutral-line": "6c696eef497a8667fd5d97849c3212231d45afdd74f6bba4031d71840606025f",
+      "sad-arc": "a46f7660d8eb8a89e43b643def389cbdfea76c88a425c9e8d6b87ef0459647e3"
+    },
+    "styleProfile": "handdrawn-crayon",
+    "styleResources": {
+      "design/jango/reference/styles/crayon-palette.json": "ae1b49fe7efc8cb7fbe7dbd008fcdf76e1eb11a8460993b5e42d548493a507c9",
+      "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+    },
+    "documents": {
+      "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "916d2890a18b4ff5fe6985183fd9ea93719d85abaf0ee618e0d92ef8f7bf4302",
+      "design/jango/reference/JANGO-STYLE-GUIDE.md": "c83b156743fd11a52f50dd39f05174db3460b830e215f3ed98a5811b61c8370c",
+      "design/jango/reference/STYLE-MASTER-ADOPTION.md": "1d3ccf2627a90ffcaa937559302ad2bd1c875a166527359a27998df47970cca2"
+    }
+  },
+  "references": [
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png",
+    "design/jango/reference/v18-composition.png",
+    "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png"
+  ],
+  "referenceHashes": {
+    "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+    "design/jango/emoticons/kakao-32/v18/source-originals/06-r3.png": "bdace36b69c1f86e0c086ae35e9acaa295187520c1d3c4dee30c1a6f34a0a2dd",
+    "design/jango/reference/v18-composition.png": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c",
+    "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+  },
+  "prompt": "design/jango/quality/jobs/06-v20-r1/prompt.txt",
+  "promptSHA256": "8b6634a3da7c94eaa97eb00e4d2bf26e42065feb09dbbd927632b61f98007ae8"
+}

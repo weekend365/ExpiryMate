@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "scope": "candidate-only",
+  "authorization": "2026-10-20 user selected the existing result and requested final-version folder/resource organization. Preserve all existing expression pixels; no new illustration.",
+  "intent": "멍함",
+  "mouthIntent": "작고 느슨한 짧은 수평 입",
+  "identity": "v18 mint refrigerator face, chef hat and apron, crayon texture, round mittens and shoes, full body",
+  "referenceMouthMode": "neutral-line",
+  "allowedChanges": [
+    "flexible-face",
+    "dynamic-pose",
+    "ajar-door"
+  ],
+  "operation": "layout-lettering-only",
+  "retainedExpression": true,
+  "allowedWork": [
+    "byte-identical-collection"
+  ],
+  "allowedChangesNote": "These are the historical expression categories already present in the source, not new changes to perform.",
+  "originalIntent": {
+    "file": "design/jango/emoticons/kakao-32/v22/creative-intents/11.json",
+    "sha256": "5ce1f336faaa6f9d7bb4607508be10155a3ce6444ca0a3fb299e89dffff2e8ad"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "version": "v23",
+  "date": "2026-10-16",
+  "status": "single-cut-candidate-complete",
+  "changedNumbers": [
+    29
+  ],
+  "caption": "지쳤어...",
+  "scope": "One newly generated candidate for slot 29 with 31 unchanged v22 candidate references; no MASTER/app/Kakao submission/signed release changes.",
+  "generatedImage": {
+    "tool": "built-in image_gen",
+    "successfulOutputs": 1,
+    "connectionFailures": 2,
+    "source": "design/jango/emoticons/kakao-32/v23/source-originals/29-r1.png",
+    "sourceSHA256": "b546a8160bf5a83dbdf95d166bd5060f27b528254f4c7a70b4dcf731e5d7714d",
+    "actualReferenceCount": 3,
+    "record": "design/jango/emoticons/kakao-32/v23/generation-records/29-v23-r1.json",
+    "prompt": "design/jango/quality/jobs/29-v23-r1/prompt.txt",
+    "sourcePixelsUnmodified": true
+  },
+  "output": {
+    "file": "design/jango/emoticons/kakao-32/v23/stickers/29.png",
+    "sha256": "861281848037939de5e880d72b07eea2632746d3ac26f60f4cb68339e84a6ac3",
+    "bytes": 93399,
+    "width": 360,
+    "height": 360,
+    "minimumMarginPx": 17,
+    "captionArtOverlapPixels": 0,
+    "fullBodyPreserved": true,
+    "captionExact": true,
+    "font": "GamjaFlower-Regular",
+    "fontSizeBasis": "same shared reference as v22"
+  },
+  "quality": {
+    "preparation": "pass",
+    "provenance": "pass",
+    "technical": "pass",
+    "mouth": "needs-review",
+    "mouthReason": "intentional-expression-requires-visual-review",
+    "signedRelease": false,
+    "auditExitCode": 1,
+    "auditExitExplanation": "Expected needs-review for expressive-custom. This was not converted into an automatic pass.",
+    "auditLog": "design/jango/quality/history/v23-verification-20261016/audit.log"
+  },
+  "preservation": {
+    "existingFiles": 1968,
+    "allMatchAfterTests": true,
+    "unchangedV22IndividualPng": 31,
+    "combinedPreviewOnlySlot29Changed": true,
+    "record": "design/jango/emoticons/kakao-32/v23/preservation-check.json"
+  },
+  "gallery": {
+    "linksVerified": 13,
+    "articles": 1,
+    "themePreviousAndSizeControls": "verified in isolated DOM stub",
+    "browserRendered": false,
+    "pngsVisuallyReviewed": "1254px source, 360px sticker, 80/120 light/dark, before-after and combined 32-slot preview"
+  },
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v23-verification-20261016/docs.log",
+      "sha256": "06ed8f5b3563e036da747de145aef069e6f76a2f18c3631d26b51e522bf0df81"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v23-verification-20261016/lint.log",
+      "sha256": "7c7bd877700d8030663458f79d6881073501f6f129015df700a02e3076706627"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v23-verification-20261016/typecheck.log",
+      "sha256": "dfe651cd1da2fd1393c331a9b1a786e4b18e9e87d413ba1f2704762a0805876e"
+    },
+    {
+      "command": "pnpm test (includes Jango global gate and legacy output replay tests)",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v23-verification-20261016/test.log",
+      "sha256": "52885d02df1610e62ea45ec7ac695f9591ef7a7021e66cc8de2057ec2b0446c0"
+    },
+    {
+      "command": "Single-cut lettering and new slot 29 regression tests",
+      "status": "passed",
+      "exitCode": 0,
+      "log": "design/jango/quality/history/v23-verification-20261016/targeted-test.log",
+      "sha256": "4274fc7874f451269fb52f691fd567d20ccbdd2a41157396b3694616f57dd644"
+    }
+  ],
+  "testSummaryLines": [
+    "# tests 34",
+    "# pass 34",
+    "# fail 0",
+    "# skipped 0",
+    "packages/shared test:  Test Files  24 passed (24)",
+    "packages/shared test:       Tests  162 passed (162)",
+    "apps/api test:  Test Files  70 passed | 2 skipped (72)",
+    "apps/api test:       Tests  589 passed | 6 skipped (595)",
+    "apps/mobile test:  Test Files  102 passed (102)",
+    "apps/mobile test:       Tests  582 passed (582)"
+  ],
+  "remaining": [
+    "User visual review of the new pose and caption.",
+    "New expressive mouth remains needs-review; no external review signature was created.",
+    "Tiny punctuation/lettering and texture details weaken at 80px; no physical KakaoTalk device test was performed."
+  ]
+}

@@ -1,10 +1,12 @@
 // Persist a built-in generation result without changing its bytes or approval state.
+import {assertOpenVersion} from './jango-history.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {local,readJson,writeJson,fileHash,sha,policy,contextBinding,canonical,validateInputLineage} from './jango-design-gate.mjs';
 const [id,generatedFile]=process.argv.slice(2),match=/^(\d\d)-(v\d+)(?:-([a-z0-9]+))?$/.exec(id??'');
 assert(match&&Number(match[1])>=1&&Number(match[1])<=32,'Versioned job ID required');
+assertOpenVersion(id);
 assert(path.isAbsolute(generatedFile)&&fs.statSync(generatedFile).isFile(),'Generated file required');
 assert(match[2]!=='v18','v18 MASTER is immutable');
 const base='design/jango/emoticons/kakao-32/'+match[2],source=`${base}/source-originals/${match[1]}${match[3]?'-'+match[3]:''}.png`;

@@ -1,0 +1,65 @@
+{
+  "id": "31-v21-r1",
+  "tool": "built-in image_gen",
+  "operation": "individual image edit",
+  "source": "design/jango/emoticons/kakao-32/v21/source-originals/31-r1.png",
+  "sourceSHA256": "f67e89026ae82d91cd9bb6ae64da58daf95bdeb2f946698f23e1d47142752c06",
+  "generatedFile": "/Users/namu/.codex/generated_images/01a13e66-98d3-7310-91f6-852b31413556/exec-ca3a7f3c-e8d1-4945-9bb9-4af091294eb9.png",
+  "preflight": "design/jango/quality/jobs/31-v21-r1/preflight.json",
+  "preflightSHA256": "6926cce99fbe9039bdc791c0c64952dda450d36b876700e1ae399e4c740ee8da",
+  "prompt": "design/jango/quality/jobs/31-v21-r1/prompt.txt",
+  "promptSHA256": "01aaf40c649d7ded291a6cacc703b8ffbfbf1a2c28ccc959557f5110a226bf78",
+  "actualReferences": [
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "sha256": "3713219781448de8e7e1d4d9d17de2b13f5d97da048a657aeda13a1b666e7b67"
+    },
+    {
+      "file": "design/jango/reference/v18-composition.png",
+      "sha256": "4871d003094ee2ff4b6547e6b320adff9cb89244869a07d375b1c1acf69e329c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "sha256": "324c65dc82c9a312eae636a7f22fb0c5647f89888ed9ac32468da7854559d028"
+    }
+  ],
+  "referenceRoles": [
+    {
+      "role": "identity-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 character identity, structure and pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "style-master",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "scope": "active v18 line/color/texture; use the selected original pose",
+      "imageIndex": 1
+    },
+    {
+      "role": "edit-target",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/31-r2.png",
+      "imageIndex": 2
+    },
+    {
+      "role": "composition-reference",
+      "file": "design/jango/reference/v18-composition.png",
+      "panel": 31,
+      "imageIndex": 3
+    },
+    {
+      "role": "expression-context-reference",
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/01-r2.png",
+      "imageIndex": 4
+    }
+  ],
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 31
+  },
+  "approval": "candidate; no external signature"
+}

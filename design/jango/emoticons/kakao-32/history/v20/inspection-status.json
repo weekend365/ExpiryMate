@@ -1,0 +1,2501 @@
+{
+  "approval": "candidate; external signature required",
+  "entries": [
+    {
+      "id": "01-v20-r1",
+      "number": 1,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5581,
+          "darkPixels": 3813,
+          "pinkPixels": 1768,
+          "aspect": 1.2972972972972974,
+          "darkFraction": 0.6832108941049991,
+          "pinkFraction": 0.3167891058950009,
+          "pinkCenterX": 0.4697869532428356,
+          "pinkCenterY": 0.6455530757001344,
+          "interiorOtherFraction": 0.016910339968293112,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5698,
+          "darkPixels": 3930,
+          "pinkPixels": 1768,
+          "aspect": 1.2763157894736843,
+          "darkFraction": 0.6897156897156898,
+          "pinkFraction": 0.3102843102843103,
+          "pinkCenterX": 0.47525306712693005,
+          "pinkCenterY": 0.6417227316027625,
+          "interiorOtherFraction": 0.009732360097323601,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5793,
+          "darkPixels": 4025,
+          "pinkPixels": 1768,
+          "aspect": 1.2894736842105263,
+          "darkFraction": 0.6948040738822717,
+          "pinkFraction": 0.3051959261177283,
+          "pinkCenterX": 0.47040354603379814,
+          "pinkCenterY": 0.6417227316027625,
+          "interiorOtherFraction": 0.003954607977991747,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 90,
+          "top": 16,
+          "right": 272,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 182,
+          "top": 50,
+          "right": 1030,
+          "bottom": 1223,
+          "margin": 30
+        }
+      },
+      "observation": "한 장갑 인사와 열린 입. 고정 장식과 낮은 반대 손 보존."
+    },
+    {
+      "id": "02-v20-r1",
+      "number": 2,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5734,
+          "darkPixels": 3875,
+          "pinkPixels": 1859,
+          "aspect": 1.2933333333333332,
+          "darkFraction": 0.6757935123822811,
+          "pinkFraction": 0.32420648761771886,
+          "pinkCenterX": 0.49425752677140466,
+          "pinkCenterY": 0.6432490586336741,
+          "interiorOtherFraction": 0.017309340188517566,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5852,
+          "darkPixels": 3993,
+          "pinkPixels": 1859,
+          "aspect": 1.2763157894736843,
+          "darkFraction": 0.6823308270676691,
+          "pinkFraction": 0.3176691729323308,
+          "pinkCenterX": 0.49425752677140466,
+          "pinkCenterY": 0.6479431499674415,
+          "interiorOtherFraction": 0.008471704506946797,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5942,
+          "darkPixels": 4083,
+          "pinkPixels": 1859,
+          "aspect": 1.2727272727272727,
+          "darkFraction": 0.6871423763042747,
+          "pinkFraction": 0.31285762369572534,
+          "pinkCenterX": 0.48921408262067606,
+          "pinkCenterY": 0.6395283038639682,
+          "interiorOtherFraction": 0.011972065181243765,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 88,
+          "top": 16,
+          "right": 279,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 184,
+          "top": 41,
+          "right": 1069,
+          "bottom": 1219,
+          "margin": 34
+        }
+      },
+      "observation": "볼 옆에 올린 양손과 강한 웃는 눈. 정면 반가움."
+    },
+    {
+      "id": "03-v20-r1",
+      "number": 3,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5435,
+          "darkPixels": 4054,
+          "pinkPixels": 1381,
+          "aspect": 1.3333333333333333,
+          "darkFraction": 0.7459061637534499,
+          "pinkFraction": 0.25409383624655013,
+          "pinkCenterX": 0.48517076997344916,
+          "pinkCenterY": 0.6538036044734089,
+          "interiorOtherFraction": 0.02177825773938085,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5582,
+          "darkPixels": 4201,
+          "pinkPixels": 1381,
+          "aspect": 1.3150684931506849,
+          "darkFraction": 0.7525976352561806,
+          "pinkFraction": 0.2474023647438194,
+          "pinkCenterX": 0.48517076997344916,
+          "pinkCenterY": 0.6448473907134992,
+          "interiorOtherFraction": 0.008173418621179816,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5656,
+          "darkPixels": 4275,
+          "pinkPixels": 1381,
+          "aspect": 1.2972972972972974,
+          "darkFraction": 0.7558345120226309,
+          "pinkFraction": 0.24416548797736917,
+          "pinkCenterX": 0.48517076997344916,
+          "pinkCenterY": 0.6496467502984519,
+          "interiorOtherFraction": 0.0036991368680641184,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 89,
+          "top": 16,
+          "right": 283,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 180,
+          "top": 23,
+          "right": 1083,
+          "bottom": 1223,
+          "margin": 23
+        }
+      },
+      "observation": "양쪽 기존 엄지와 별로 정면 칭찬. 양 장갑은 각각 주머니·엄지·커프스 구조."
+    },
+    {
+      "id": "04-v20-r1",
+      "number": 4,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5153,
+          "darkPixels": 3725,
+          "pinkPixels": 1428,
+          "aspect": 1.3285714285714285,
+          "darkFraction": 0.7228798758005046,
+          "pinkFraction": 0.27712012419949544,
+          "pinkCenterX": 0.4826210053914039,
+          "pinkCenterY": 0.6476290516206482,
+          "interiorOtherFraction": 0.027001510574018128,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5313,
+          "darkPixels": 3885,
+          "pinkPixels": 1428,
+          "aspect": 1.323943661971831,
+          "darkFraction": 0.7312252964426877,
+          "pinkFraction": 0.26877470355731226,
+          "pinkCenterX": 0.47748673937660174,
+          "pinkCenterY": 0.6385075156823292,
+          "interiorOtherFraction": 0.009323140033563304,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5412,
+          "darkPixels": 3984,
+          "pinkPixels": 1428,
+          "aspect": 1.3194444444444444,
+          "darkFraction": 0.7361419068736141,
+          "pinkFraction": 0.2638580931263858,
+          "pinkCenterX": 0.4829868789621112,
+          "pinkCenterY": 0.6435282446311859,
+          "interiorOtherFraction": 0.006972477064220183,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 91,
+          "top": 16,
+          "right": 270,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 280,
+          "top": 17,
+          "right": 1001,
+          "bottom": 1226,
+          "margin": 17
+        }
+      },
+      "observation": "열린 눈·열린 입으로 작은 하트를 아래에서 상대 쪽으로 내민 감사. 32의 큰 하트 포옹과 눈·하트 크기로 구분. 깊이 방향의 팔 전진감은 정지 이미지에서 약함."
+    },
+    {
+      "id": "05-v20-r1",
+      "number": 5,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1591,
+          "components": 1,
+          "fill": 0.3809865900383142,
+          "holes": 13,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "fail",
+          "reason": "closed-outline"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1680,
+          "components": 1,
+          "fill": 0.38961038961038963,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1737,
+          "components": 1,
+          "fill": 0.3947727272727273,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 93,
+          "top": 16,
+          "right": 276,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 252,
+          "top": 30,
+          "right": 1098,
+          "bottom": 1219,
+          "margin": 30
+        }
+      },
+      "observation": "볼 가까이 모은 장갑과 작은 하트·U 입. 수줍은 애정."
+    },
+    {
+      "id": "06-v20-r1",
+      "number": 6,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5124,
+          "darkPixels": 3732,
+          "pinkPixels": 1392,
+          "aspect": 1.28,
+          "darkFraction": 0.7283372365339579,
+          "pinkFraction": 0.2716627634660422,
+          "pinkCenterX": 0.40797862787356326,
+          "pinkCenterY": 0.6759865900383142,
+          "interiorOtherFraction": 0.016506717850287907,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5260,
+          "darkPixels": 3868,
+          "pinkPixels": 1392,
+          "aspect": 1.2894736842105263,
+          "darkFraction": 0.7353612167300381,
+          "pinkFraction": 0.264638783269962,
+          "pinkCenterX": 0.4098566150598171,
+          "pinkCenterY": 0.6670920296430731,
+          "interiorOtherFraction": 0.0066100094428706326,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5352,
+          "darkPixels": 3960,
+          "pinkPixels": 1392,
+          "aspect": 1.2894736842105263,
+          "darkFraction": 0.7399103139013453,
+          "pinkFraction": 0.2600896860986547,
+          "pinkCenterX": 0.4098566150598171,
+          "pinkCenterY": 0.6670920296430731,
+          "interiorOtherFraction": 0.002423112767940354,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 108,
+          "top": 16,
+          "right": 278,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 203,
+          "top": 46,
+          "right": 1062,
+          "bottom": 1328,
+          "margin": 31
+        }
+      },
+      "observation": "머리를 기울이고 두 장갑을 아래에서 포개며 키득거림. 16의 수직 박수 손과 구별."
+    },
+    {
+      "id": "07-v20-r1",
+      "number": 7,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5597,
+          "darkPixels": 4045,
+          "pinkPixels": 1552,
+          "aspect": 1.1481481481481481,
+          "darkFraction": 0.7227085938895838,
+          "pinkFraction": 0.2772914061104163,
+          "pinkCenterX": 0.4565666223256845,
+          "pinkCenterY": 0.6580358279241441,
+          "interiorOtherFraction": 0.02167453242440133,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5747,
+          "darkPixels": 4195,
+          "pinkPixels": 1552,
+          "aspect": 1.1604938271604939,
+          "darkFraction": 0.7299460588132939,
+          "pinkFraction": 0.2700539411867061,
+          "pinkCenterX": 0.4517095305988155,
+          "pinkCenterY": 0.6580358279241441,
+          "interiorOtherFraction": 0.01050275482093664,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5854,
+          "darkPixels": 4302,
+          "pinkPixels": 1552,
+          "aspect": 1.1604938271604939,
+          "darkFraction": 0.7348821318756406,
+          "pinkFraction": 0.2651178681243594,
+          "pinkCenterX": 0.4517095305988155,
+          "pinkCenterY": 0.6580358279241441,
+          "interiorOtherFraction": 0.0028955884857775507,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 80,
+          "top": 16,
+          "right": 287,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 146,
+          "top": 30,
+          "right": 1112,
+          "bottom": 1234,
+          "margin": 19
+        }
+      },
+      "observation": "결의 있는 눈썹과 높게 든 한 장갑·벌린 발. 힘찬 응원."
+    },
+    {
+      "id": "08-v20-r1",
+      "number": 8,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5022,
+          "darkPixels": 3452,
+          "pinkPixels": 1570,
+          "aspect": 1.2077922077922079,
+          "darkFraction": 0.6873755475906014,
+          "pinkFraction": 0.3126244524093986,
+          "pinkCenterX": 0.5584138072734744,
+          "pinkCenterY": 0.6835718421705683,
+          "interiorOtherFraction": 0.019140625,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5150,
+          "darkPixels": 3580,
+          "pinkPixels": 1570,
+          "aspect": 1.2077922077922079,
+          "darkFraction": 0.6951456310679611,
+          "pinkFraction": 0.3048543689320388,
+          "pinkCenterX": 0.5584138072734744,
+          "pinkCenterY": 0.6835718421705683,
+          "interiorOtherFraction": 0.01037663335895465,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5241,
+          "darkPixels": 3671,
+          "pinkPixels": 1570,
+          "aspect": 1.2077922077922079,
+          "darkFraction": 0.7004388475481779,
+          "pinkFraction": 0.2995611524518222,
+          "pinkCenterX": 0.5584138072734744,
+          "pinkCenterY": 0.6835718421705683,
+          "interiorOtherFraction": 0.002664129400570885,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 91,
+          "top": 16,
+          "right": 301,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 162,
+          "top": 52,
+          "right": 1145,
+          "bottom": 1236,
+          "margin": 17
+        }
+      },
+      "observation": "윙크·한쪽 엄지척과 별. 엄지와 둥근 주머니 구조가 읽힘."
+    },
+    {
+      "id": "09-v20-r1",
+      "number": 9,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1550,
+          "components": 1,
+          "fill": 0.4193722943722944,
+          "holes": 6,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1630,
+          "components": 1,
+          "fill": 0.4261437908496732,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1696,
+          "components": 1,
+          "fill": 0.4433986928104575,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 88,
+          "top": 16,
+          "right": 267,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 201,
+          "top": 28,
+          "right": 1027,
+          "bottom": 1221,
+          "margin": 28
+        }
+      },
+      "observation": "가슴 앞 모은 두 장갑·U 입·끄덕임 선."
+    },
+    {
+      "id": "11-v20-r1",
+      "number": 11,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 804,
+          "components": 1,
+          "fill": 0.9745454545454545,
+          "holes": 2,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 75,
+            "coverage": 1,
+            "thicknessRatio": 0.14666666666666667,
+            "splitColumns": false,
+            "curvature": 0,
+            "flatness": 0,
+            "slope": 0
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 885,
+          "components": 1,
+          "fill": 0.895748987854251,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 76,
+            "coverage": 1,
+            "thicknessRatio": 0.15888778550148958,
+            "splitColumns": false,
+            "curvature": 0.0014802631578947462,
+            "flatness": 0.015004027926960258,
+            "slope": -0.012755102040816327
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 950,
+          "components": 1,
+          "fill": 0.9615384615384616,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 76,
+            "coverage": 1,
+            "thicknessRatio": 0.17105263157894737,
+            "splitColumns": false,
+            "curvature": 0,
+            "flatness": 0,
+            "slope": 0
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 130,
+          "top": 16,
+          "right": 284,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 262,
+          "top": 25,
+          "right": 985,
+          "bottom": 1232,
+          "margin": 21
+        }
+      },
+      "observation": "턱의 장갑과 한쪽 눈썹으로 고민. r4에서 수평 중립 입선을 더 가늘게 편집."
+    },
+    {
+      "id": "12-v20-r1",
+      "number": 12,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 4765,
+          "darkPixels": 3728,
+          "pinkPixels": 1037,
+          "aspect": 1.3333333333333333,
+          "darkFraction": 0.7823714585519412,
+          "pinkFraction": 0.21762854144805877,
+          "pinkCenterX": 0.5161245456568504,
+          "pinkCenterY": 0.5700862942907302,
+          "interiorOtherFraction": 0.04124748490945674,
+          "touchesEdge": true,
+          "referenceAspect": 1.2972972972972974,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 100,
+          "pixels": 4940,
+          "darkPixels": 3903,
+          "pinkPixels": 1037,
+          "aspect": 1.3461538461538463,
+          "darkFraction": 0.790080971659919,
+          "pinkFraction": 0.20991902834008097,
+          "pinkCenterX": 0.5207328833172613,
+          "pinkCenterY": 0.5700862942907302,
+          "interiorOtherFraction": 0.043191942668990894,
+          "touchesEdge": true,
+          "referenceAspect": 1.2763157894736843,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5032,
+          "darkPixels": 3995,
+          "pinkPixels": 1037,
+          "aspect": 1.3291139240506329,
+          "darkFraction": 0.793918918918919,
+          "pinkFraction": 0.20608108108108109,
+          "pinkCenterX": 0.5207328833172613,
+          "pinkCenterY": 0.5755282399326197,
+          "interiorOtherFraction": 0.04552352048558422,
+          "touchesEdge": true,
+          "referenceAspect": 1.2894736842105263,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 101,
+          "top": 16,
+          "right": 242,
+          "bottom": 319,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 293,
+          "top": 161,
+          "right": 961,
+          "bottom": 1141,
+          "margin": 112
+        }
+      },
+      "observation": "낮고 넓은 speak 입을 보존하며 원화 전체 여백을 확보한 r4. 멈칫한 손과 땀방울."
+    },
+    {
+      "id": "13-v20-r1",
+      "number": 13,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 4733,
+          "darkPixels": 3491,
+          "pinkPixels": 1242,
+          "aspect": 1.4328358208955223,
+          "darkFraction": 0.7375871540249314,
+          "pinkFraction": 0.26241284597506864,
+          "pinkCenterX": 0.5244397477187333,
+          "pinkCenterY": 0.6663662364505972,
+          "interiorOtherFraction": 0.019270617488603398,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 4849,
+          "darkPixels": 3607,
+          "pinkPixels": 1242,
+          "aspect": 1.4328358208955223,
+          "darkFraction": 0.7438647143740977,
+          "pinkFraction": 0.25613528562590226,
+          "pinkCenterX": 0.5244397477187333,
+          "pinkCenterY": 0.6663662364505972,
+          "interiorOtherFraction": 0.009194932570494483,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 4933,
+          "darkPixels": 3691,
+          "pinkPixels": 1242,
+          "aspect": 1.4477611940298507,
+          "darkFraction": 0.7482262315021285,
+          "pinkFraction": 0.2517737684978715,
+          "pinkCenterX": 0.5190331523814268,
+          "pinkCenterY": 0.6663662364505972,
+          "interiorOtherFraction": 0.0028299979785728724,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 99,
+          "top": 16,
+          "right": 292,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 226,
+          "top": 40,
+          "right": 1126,
+          "bottom": 1238,
+          "margin": 15
+        }
+      },
+      "observation": "재편집에서 낮고 넓은 speak 입으로 교정. 뒤로 물러난 발·올라간 눈썹으로 놀람 전달."
+    },
+    {
+      "id": "14-v20-r1",
+      "number": 14,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 4382,
+          "darkPixels": 3362,
+          "pinkPixels": 1020,
+          "aspect": 1.3384615384615384,
+          "darkFraction": 0.7672295755362848,
+          "pinkFraction": 0.2327704244637152,
+          "pinkCenterX": 0.49479377958079784,
+          "pinkCenterY": 0.6651432880844645,
+          "interiorOtherFraction": 0.01748878923766816,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 4483,
+          "darkPixels": 3463,
+          "pinkPixels": 1020,
+          "aspect": 1.3384615384615384,
+          "darkFraction": 0.772473789872853,
+          "pinkFraction": 0.227526210127147,
+          "pinkCenterX": 0.49479377958079784,
+          "pinkCenterY": 0.6651432880844645,
+          "interiorOtherFraction": 0.010593687927609799,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 4561,
+          "darkPixels": 3541,
+          "pinkPixels": 1020,
+          "aspect": 1.3384615384615384,
+          "darkFraction": 0.7763648322736242,
+          "pinkFraction": 0.2236351677263758,
+          "pinkCenterX": 0.49479377958079784,
+          "pinkCenterY": 0.6651432880844645,
+          "interiorOtherFraction": 0.005234460196292257,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 82,
+          "top": 16,
+          "right": 267,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 163,
+          "top": 36,
+          "right": 1008,
+          "bottom": 1215,
+          "margin": 36
+        }
+      },
+      "observation": "장갑의 기존 엄지와 주머니를 들어 전구를 향함. 분리 검지 없이 깨달음을 표시."
+    },
+    {
+      "id": "16-v20-r1",
+      "number": 16,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5282,
+          "darkPixels": 3873,
+          "pinkPixels": 1409,
+          "aspect": 1.2266666666666666,
+          "darkFraction": 0.7332449829609996,
+          "pinkFraction": 0.2667550170390004,
+          "pinkCenterX": 0.5016200203659703,
+          "pinkCenterY": 0.6524816654837947,
+          "interiorOtherFraction": 0.023118180136859626,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5423,
+          "darkPixels": 4014,
+          "pinkPixels": 1409,
+          "aspect": 1.1948051948051948,
+          "darkFraction": 0.7401807117831458,
+          "pinkFraction": 0.2598192882168541,
+          "pinkCenterX": 0.5016200203659703,
+          "pinkCenterY": 0.6485211027439559,
+          "interiorOtherFraction": 0.010401459854014599,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5532,
+          "darkPixels": 4123,
+          "pinkPixels": 1409,
+          "aspect": 1.2077922077922079,
+          "darkFraction": 0.7453000723065799,
+          "pinkFraction": 0.2546999276934201,
+          "pinkCenterX": 0.4962262567061212,
+          "pinkCenterY": 0.6485211027439559,
+          "interiorOtherFraction": 0.004856988667026443,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 91,
+          "top": 16,
+          "right": 274,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 244,
+          "top": 28,
+          "right": 1091,
+          "bottom": 1223,
+          "margin": 28
+        }
+      },
+      "observation": "웃는 곡선 눈·얼굴 아래 마주 모은 장갑과 박수선. 감탄."
+    },
+    {
+      "id": "17-v20-r1",
+      "number": 17,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1130,
+          "components": 1,
+          "fill": 0.40867992766726946,
+          "holes": 2,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 79,
+            "coverage": 1,
+            "thicknessRatio": 0.17608499095840868,
+            "splitColumns": false,
+            "curvature": 0.12420886075949367,
+            "flatness": 0.15919141512495943,
+            "slope": 0.09695512820512817
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1193,
+          "components": 1,
+          "fill": 0.41947960618846697,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 79,
+            "coverage": 1,
+            "thicknessRatio": 0.18648282097649188,
+            "splitColumns": false,
+            "curvature": 0.12302215189873418,
+            "flatness": 0.1593841285296982,
+            "slope": 0.09695512820512817
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1235,
+          "components": 1,
+          "fill": 0.43424753867791843,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 79,
+            "coverage": 1,
+            "thicknessRatio": 0.19371609403254972,
+            "splitColumns": false,
+            "curvature": 0.12605485232067515,
+            "flatness": 0.16664638104511523,
+            "slope": 0.09775641025641023
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 105,
+          "top": 16,
+          "right": 268,
+          "bottom": 336,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 301,
+          "top": 81,
+          "right": 1043,
+          "bottom": 1202,
+          "margin": 51
+        }
+      },
+      "observation": "낮게 모은 양손·걱정 눈썹·처진 입선으로 사과."
+    },
+    {
+      "id": "18-v20-r1",
+      "number": 18,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1519,
+          "components": 1,
+          "fill": 0.45289206917113894,
+          "holes": 2,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1580,
+          "components": 1,
+          "fill": 0.4710793082886106,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1631,
+          "components": 1,
+          "fill": 0.48012952605239917,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 94,
+          "top": 16,
+          "right": 255,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 251,
+          "top": 28,
+          "right": 993,
+          "bottom": 1221,
+          "margin": 28
+        }
+      },
+      "observation": "작은 하트를 안정적으로 받침. 감은 눈·U 입으로 조용한 위로."
+    },
+    {
+      "id": "19-v20-r1",
+      "number": 19,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1617,
+          "components": 1,
+          "fill": 0.42777777777777776,
+          "holes": 4,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1690,
+          "components": 1,
+          "fill": 0.4322250639386189,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1763,
+          "components": 1,
+          "fill": 0.44565217391304346,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 82,
+          "top": 16,
+          "right": 284,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 199,
+          "top": 25,
+          "right": 1084,
+          "bottom": 1221,
+          "margin": 25
+        }
+      },
+      "observation": "하트 컵을 두 장갑으로 받쳐 조심스럽게 내민 정면 응원."
+    },
+    {
+      "id": "20-v20-r1",
+      "number": 20,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1059,
+          "components": 1,
+          "fill": 0.47702702702702704,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 74,
+            "coverage": 1,
+            "thicknessRatio": 0.19183889772125065,
+            "splitColumns": false,
+            "curvature": 0.1223791973791974,
+            "flatness": 0.1500563063063063,
+            "slope": 0.04071969696969694
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1112,
+          "components": 1,
+          "fill": 0.4847428073234525,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 74,
+            "coverage": 1,
+            "thicknessRatio": 0.20031796502384738,
+            "splitColumns": false,
+            "curvature": 0.12190827190827189,
+            "flatness": 0.1413288288288288,
+            "slope": 0.041666666666666664
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1144,
+          "components": 1,
+          "fill": 0.4986922406277245,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 74,
+            "coverage": 1,
+            "thicknessRatio": 0.20588235294117646,
+            "splitColumns": false,
+            "curvature": 0.12113022113022115,
+            "flatness": 0.14250614250614252,
+            "slope": 0.03977272727272722
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 87,
+          "top": 16,
+          "right": 311,
+          "bottom": 340,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 193,
+          "top": 58,
+          "right": 1230,
+          "bottom": 1212,
+          "margin": 23
+        }
+      },
+      "observation": "양손으로 배를 감싸고 sad 입·약한 눈썹·밥 생각 기호로 허기."
+    },
+    {
+      "id": "21-v20-r1",
+      "number": 21,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 4770,
+          "darkPixels": 3482,
+          "pinkPixels": 1288,
+          "aspect": 1.2380952380952381,
+          "darkFraction": 0.729979035639413,
+          "pinkFraction": 0.270020964360587,
+          "pinkCenterX": 0.5083164118490205,
+          "pinkCenterY": 0.533089322685596,
+          "interiorOtherFraction": 0.12203202650469354,
+          "touchesEdge": true,
+          "referenceAspect": 1.2972972972972974,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5014,
+          "darkPixels": 3726,
+          "pinkPixels": 1288,
+          "aspect": 1.223529411764706,
+          "darkFraction": 0.7431192660550459,
+          "pinkFraction": 0.25688073394495414,
+          "pinkCenterX": 0.5083164118490205,
+          "pinkCenterY": 0.5385823894775301,
+          "interiorOtherFraction": 0.09852571017619562,
+          "touchesEdge": true,
+          "referenceAspect": 1.2763157894736843,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5156,
+          "darkPixels": 3868,
+          "pinkPixels": 1288,
+          "aspect": 1.223529411764706,
+          "darkFraction": 0.7501939487975174,
+          "pinkFraction": 0.24980605120248253,
+          "pinkCenterX": 0.5083164118490205,
+          "pinkCenterY": 0.5385823894775301,
+          "interiorOtherFraction": 0.09289232934553132,
+          "touchesEdge": true,
+          "referenceAspect": 1.2894736842105263,
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 99,
+          "top": 16,
+          "right": 247,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 271,
+          "top": 24,
+          "right": 969,
+          "bottom": 1226,
+          "margin": 24
+        }
+      },
+      "observation": "한 손 포크·다른 손 접시. 음식이 입과 겹치지 않으며 먹기 직전 기대."
+    },
+    {
+      "id": "22-v20-r1",
+      "number": 22,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5437,
+          "darkPixels": 3834,
+          "pinkPixels": 1603,
+          "aspect": 1.3150684931506849,
+          "darkFraction": 0.7051682913371344,
+          "pinkFraction": 0.29483170866286557,
+          "pinkCenterX": 0.5198131108338532,
+          "pinkCenterY": 0.6322819371213222,
+          "interiorOtherFraction": 0.018237630913687252,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5558,
+          "darkPixels": 3955,
+          "pinkPixels": 1603,
+          "aspect": 1.3150684931506849,
+          "darkFraction": 0.7115869017632241,
+          "pinkFraction": 0.2884130982367758,
+          "pinkCenterX": 0.5198131108338532,
+          "pinkCenterY": 0.6322819371213222,
+          "interiorOtherFraction": 0.00997506234413965,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5650,
+          "darkPixels": 4047,
+          "pinkPixels": 1603,
+          "aspect": 1.2972972972972974,
+          "darkFraction": 0.7162831858407079,
+          "pinkFraction": 0.283716814159292,
+          "pinkCenterX": 0.5198131108338532,
+          "pinkCenterY": 0.6237375866196827,
+          "interiorOtherFraction": 0.0038787023977433005,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 87,
+          "top": 16,
+          "right": 284,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 178,
+          "top": 37,
+          "right": 1093,
+          "bottom": 1219,
+          "margin": 34
+        }
+      },
+      "observation": "웃는 곡선 눈으로 국수 그릇을 안음. 입이 음식과 김에 가려지지 않음."
+    },
+    {
+      "id": "23-v20-r1",
+      "number": 23,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 4588,
+          "darkPixels": 3167,
+          "pinkPixels": 1421,
+          "aspect": 1.373134328358209,
+          "darkFraction": 0.6902789886660854,
+          "pinkFraction": 0.30972101133391455,
+          "pinkCenterX": 0.49967873206254015,
+          "pinkCenterY": 0.6324850063545747,
+          "interiorOtherFraction": 0.030431107354184278,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 4741,
+          "darkPixels": 3320,
+          "pinkPixels": 1421,
+          "aspect": 1.3880597014925373,
+          "darkFraction": 0.7002742037544821,
+          "pinkFraction": 0.2997257962455178,
+          "pinkCenterX": 0.4943058424704698,
+          "pinkCenterY": 0.6324850063545747,
+          "interiorOtherFraction": 0.013524760715771952,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 4841,
+          "darkPixels": 3420,
+          "pinkPixels": 1421,
+          "aspect": 1.3880597014925373,
+          "darkFraction": 0.7064656062796942,
+          "pinkFraction": 0.2935343937203057,
+          "pinkCenterX": 0.4943058424704698,
+          "pinkCenterY": 0.6324850063545747,
+          "interiorOtherFraction": 0.007178014766201805,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 98,
+          "top": 16,
+          "right": 259,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 276,
+          "top": 26,
+          "right": 1023,
+          "bottom": 1224,
+          "margin": 26
+        }
+      },
+      "observation": "뒤집개와 팬을 각각 잡은 두 장갑. 도구는 입을 가리지 않음."
+    },
+    {
+      "id": "24-v20-r1",
+      "number": 24,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1396,
+          "components": 1,
+          "fill": 0.3926863572433193,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1460,
+          "components": 1,
+          "fill": 0.3967391304347826,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1516,
+          "components": 1,
+          "fill": 0.39821381665353295,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 93,
+          "top": 16,
+          "right": 279,
+          "bottom": 340,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 211,
+          "top": 42,
+          "right": 1065,
+          "bottom": 1209,
+          "margin": 42
+        }
+      },
+      "observation": "양손으로 접시를 앞으로 보여줌. 윙크와 U 입."
+    },
+    {
+      "id": "25-v20-r1",
+      "number": 25,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 5210,
+          "darkPixels": 3585,
+          "pinkPixels": 1625,
+          "aspect": 1.3661971830985915,
+          "darkFraction": 0.6880998080614203,
+          "pinkFraction": 0.31190019193857965,
+          "pinkCenterX": 0.49599365582870736,
+          "pinkCenterY": 0.6383098591549295,
+          "interiorOtherFraction": 0.0225140712945591,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 5336,
+          "darkPixels": 3711,
+          "pinkPixels": 1625,
+          "aspect": 1.3661971830985915,
+          "darkFraction": 0.6954647676161919,
+          "pinkFraction": 0.3045352323838081,
+          "pinkCenterX": 0.49599365582870736,
+          "pinkCenterY": 0.6383098591549295,
+          "interiorOtherFraction": 0.009099350046425255,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 5414,
+          "darkPixels": 3789,
+          "pinkPixels": 1625,
+          "aspect": 1.3661971830985915,
+          "darkFraction": 0.6998522349464351,
+          "pinkFraction": 0.30014776505356483,
+          "pinkCenterX": 0.49599365582870736,
+          "pinkCenterY": 0.6383098591549295,
+          "interiorOtherFraction": 0.004230274048188339,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 102,
+          "top": 16,
+          "right": 279,
+          "bottom": 340,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 247,
+          "top": 33,
+          "right": 1074,
+          "bottom": 1227,
+          "margin": 26
+        }
+      },
+      "observation": "별도 검지 돌출을 제거하고 둥근 장갑 전체를 체크리스트 쪽으로 돌림."
+    },
+    {
+      "id": "26-v20-r1",
+      "number": 26,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1666,
+          "components": 1,
+          "fill": 0.4219858156028369,
+          "holes": 8,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1730,
+          "components": 1,
+          "fill": 0.4381965552178318,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1780,
+          "components": 1,
+          "fill": 0.4508611955420466,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 93,
+          "top": 16,
+          "right": 271,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 258,
+          "top": 55,
+          "right": 1074,
+          "bottom": 1231,
+          "margin": 22
+        }
+      },
+      "observation": "양 장갑이 카트 손잡이를 잡고 한 발을 든 출발. 생성 음표를 제거해 별도 Gaegu 기호로 조립."
+    },
+    {
+      "id": "27-v20-r1",
+      "number": 27,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 3979,
+          "darkPixels": 2898,
+          "pinkPixels": 1081,
+          "aspect": 1.2575757575757576,
+          "darkFraction": 0.7283236994219653,
+          "pinkFraction": 0.27167630057803466,
+          "pinkCenterX": 0.5311792962785462,
+          "pinkCenterY": 0.659364225044151,
+          "interiorOtherFraction": 0.02403728231542801,
+          "touchesEdge": false,
+          "referenceAspect": 1.2972972972972974,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 4107,
+          "darkPixels": 3026,
+          "pinkPixels": 1081,
+          "aspect": 1.2537313432835822,
+          "darkFraction": 0.736790844898953,
+          "pinkFraction": 0.263209155101047,
+          "pinkCenterX": 0.536760495132373,
+          "pinkCenterY": 0.6644483410882682,
+          "interiorOtherFraction": 0.011314395763119885,
+          "touchesEdge": false,
+          "referenceAspect": 1.2763157894736843,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 4202,
+          "darkPixels": 3121,
+          "pinkPixels": 1081,
+          "aspect": 1.25,
+          "darkFraction": 0.7427415516420752,
+          "pinkFraction": 0.2572584483579248,
+          "pinkCenterX": 0.5304456657778746,
+          "pinkCenterY": 0.6546770419546172,
+          "interiorOtherFraction": 0.0023741690408357074,
+          "touchesEdge": false,
+          "referenceAspect": 1.2894736842105263,
+          "status": "pass",
+          "reason": "speak-reference-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 92,
+          "top": 16,
+          "right": 287,
+          "bottom": 340,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 204,
+          "top": 39,
+          "right": 1110,
+          "bottom": 1217,
+          "margin": 36
+        }
+      },
+      "observation": "큰 당근을 두 손으로 안고 윙크. 잎·장갑·당근 끝 모두 보존."
+    },
+    {
+      "id": "28-v20-r1",
+      "number": 28,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 800,
+          "components": 1,
+          "fill": 0.49230769230769234,
+          "holes": 1,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 65,
+            "coverage": 1,
+            "thicknessRatio": 0.19933110367892978,
+            "splitColumns": false,
+            "curvature": 0.0012383770076077384,
+            "flatness": 0.014581572273879956,
+            "slope": -0.22390109890109897
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 839,
+          "components": 1,
+          "fill": 0.5163076923076924,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 65,
+            "coverage": 1,
+            "thicknessRatio": 0.2076923076923077,
+            "splitColumns": false,
+            "curvature": 0.0018131868131868272,
+            "flatness": 0.01043956043956047,
+            "slope": -0.22023809523809523
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        },
+        {
+          "threshold": 135,
+          "pixels": 863,
+          "components": 1,
+          "fill": 0.5230303030303031,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 66,
+            "coverage": 1,
+            "thicknessRatio": 0.20889748549323017,
+            "splitColumns": false,
+            "curvature": 0.001223776223776233,
+            "flatness": 0.014622973925299518,
+            "slope": -0.22093023255813954
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 71,
+          "top": 16,
+          "right": 294,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 122,
+          "top": 23,
+          "right": 1175,
+          "bottom": 1238,
+          "margin": 15
+        }
+      },
+      "observation": "턱의 장갑과 기울인 얼굴·수평 입. 당근·치즈·달걀로 메뉴 고민. 입선을 얇게 다시 그린 r3."
+    },
+    {
+      "id": "29-v20-r1",
+      "number": 29,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 819,
+          "components": 1,
+          "fill": 0.40384615384615385,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 52,
+            "coverage": 1,
+            "thicknessRatio": 0.3305613305613306,
+            "splitColumns": false,
+            "curvature": 0.003387237762237756,
+            "flatness": 0.028846153846153848,
+            "slope": -0.6363636363636364
+          },
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 100,
+          "pixels": 858,
+          "components": 1,
+          "fill": 0.3972222222222222,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 54,
+            "coverage": 1,
+            "thicknessRatio": 0.33233233233233234,
+            "splitColumns": false,
+            "curvature": 0.001052188552188582,
+            "flatness": 0.02546296296296296,
+            "slope": -0.625
+          },
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        },
+        {
+          "threshold": 135,
+          "pixels": 888,
+          "components": 1,
+          "fill": 0.4010840108401084,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 54,
+            "coverage": 1,
+            "thicknessRatio": 0.34034034034034033,
+            "splitColumns": false,
+            "curvature": 0.003893097643097655,
+            "flatness": 0.023148148148148147,
+            "slope": -0.625
+          },
+          "status": "needs-review",
+          "reason": "unmeasurable-or-ambiguous"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 55,
+          "top": 16,
+          "right": 304,
+          "bottom": 310,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 22,
+          "top": 230,
+          "right": 1202,
+          "bottom": 1098,
+          "margin": 22
+        }
+      },
+      "observation": "옆으로 누운 피로. 실제 얼굴 기울기는 약 -34도이며 자동 입 측정 범위 밖."
+    },
+    {
+      "id": "30-v20-r1",
+      "number": 30,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1383,
+          "components": 1,
+          "fill": 0.3182968929804373,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1443,
+          "components": 1,
+          "fill": 0.3321058688147296,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1499,
+          "components": 1,
+          "fill": 0.3345982142857143,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 58,
+          "top": 16,
+          "right": 309,
+          "bottom": 327,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 44,
+          "top": 136,
+          "right": 1202,
+          "bottom": 1145,
+          "margin": 44
+        }
+      },
+      "observation": "이불·베개와 감은 눈. 실제 눈 중심선 기울기 약 24도; 수면 곡선 눈과 U 입 구분."
+    },
+    {
+      "id": "31-v20-r1",
+      "number": 31,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1018,
+          "components": 1,
+          "fill": 0.42845117845117847,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 72,
+            "coverage": 1,
+            "thicknessRatio": 0.19417211328976036,
+            "splitColumns": false,
+            "curvature": 0.12352693602693604,
+            "flatness": 0.16666666666666669,
+            "slope": 0.10869565217391304
+          },
+          "status": "pass",
+          "reason": "line-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1081,
+          "components": 1,
+          "fill": 0.435535858178888,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 73,
+            "coverage": 1,
+            "thicknessRatio": 0.20442571127502634,
+            "splitColumns": false,
+            "curvature": 0.12724604162960326,
+            "flatness": 0.165112212183037,
+            "slope": 0.12765957446808504
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1125,
+          "components": 1,
+          "fill": 0.4532634971796938,
+          "holes": 0,
+          "touchesEdge": false,
+          "geometry": {
+            "width": 73,
+            "coverage": 1,
+            "thicknessRatio": 0.2131190727081138,
+            "splitColumns": false,
+            "curvature": 0.12657890055150325,
+            "flatness": 0.15828939349778756,
+            "slope": 0.1324951644100581
+          },
+          "status": "fail",
+          "reason": "invalid-stroke"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 100,
+          "top": 16,
+          "right": 272,
+          "bottom": 341,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 235,
+          "top": 43,
+          "right": 1041,
+          "bottom": 1221,
+          "margin": 32
+        }
+      },
+      "observation": "좁은 벽 뒤에서 빼꼼한 부탁. 한 장갑으로 벽을 짚고 반대 손은 몸 뒤에 가려짐."
+    },
+    {
+      "id": "32-v20-r1",
+      "number": 32,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1530,
+          "components": 1,
+          "fill": 0.3854875283446712,
+          "holes": 9,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "fail",
+          "reason": "closed-outline"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1604,
+          "components": 1,
+          "fill": 0.39121951219512197,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1653,
+          "components": 1,
+          "fill": 0.3983132530120482,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 92,
+          "top": 16,
+          "right": 280,
+          "bottom": 340,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 237,
+          "top": 64,
+          "right": 1102,
+          "bottom": 1210,
+          "margin": 43
+        }
+      },
+      "observation": "가슴에 큰 하트를 품은 감사. 소품이 입을 가리지 않음."
+    },
+    {
+      "id": "10-v20-r1",
+      "number": 10,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "pass",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1513,
+          "components": 1,
+          "fill": 0.445,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1569,
+          "components": 1,
+          "fill": 0.45021520803443327,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1616,
+          "components": 1,
+          "fill": 0.4637015781922525,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 84,
+          "top": 16,
+          "right": 262,
+          "bottom": 337,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 175,
+          "top": 34,
+          "right": 1002,
+          "bottom": 1206,
+          "margin": 34
+        }
+      },
+      "observation": "정면 전신, 한 장갑을 앞으로 들어 대기 요청. 낮춘 반대 손, 두 신발, 채움·혀 없는 짧은 U 입."
+    },
+    {
+      "id": "15-v20-r1",
+      "number": 15,
+      "selected": true,
+      "preparation": "pass",
+      "mouthStatus": "needs-review",
+      "mouthSamples": [
+        {
+          "threshold": 65,
+          "pixels": 1573,
+          "components": 1,
+          "fill": 0.43597560975609756,
+          "holes": 11,
+          "touchesEdge": false,
+          "referenceFill": 0.4193722943722944,
+          "status": "fail",
+          "reason": "closed-outline"
+        },
+        {
+          "threshold": 100,
+          "pixels": 1640,
+          "components": 1,
+          "fill": 0.4444444444444444,
+          "holes": 1,
+          "touchesEdge": false,
+          "referenceFill": 0.4261437908496732,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        },
+        {
+          "threshold": 135,
+          "pixels": 1686,
+          "components": 1,
+          "fill": 0.45691056910569106,
+          "holes": 0,
+          "touchesEdge": false,
+          "referenceFill": 0.4433986928104575,
+          "status": "pass",
+          "reason": "mouth-screen-only"
+        }
+      ],
+      "technical": {
+        "status": "pass",
+        "visible": true,
+        "transparentEdge": true,
+        "width": 360,
+        "height": 360,
+        "safeMargin": true,
+        "sourceUnclipped": true,
+        "bounds": {
+          "left": 95,
+          "top": 16,
+          "right": 267,
+          "bottom": 342,
+          "margin": 16
+        },
+        "sourceBounds": {
+          "left": 233,
+          "top": 26,
+          "right": 1024,
+          "bottom": 1222,
+          "margin": 26
+        }
+      },
+      "observation": "정면 전신, 가슴 앞의 두 팔·장갑 X로 정중한 거절. 두 신발, 채움·혀 없는 U 입. 선글라스 제거."
+    }
+  ]
+}

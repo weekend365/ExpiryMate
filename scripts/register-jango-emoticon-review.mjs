@@ -1,21 +1,24 @@
 // Register measured review candidates and preserved attempts. Never signs or promotes.
+import {assertOpenVersion} from './jango-history.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {isDeepStrictEqual} from 'node:util';
 import {createRequire} from 'node:module';
-import {root,local,readJson,readPng,writeJson,fileHash,screenMouthMode,policy,styleTechnical,contextBinding} from './jango-design-gate.mjs';
+import {root,local,readJson,readPng,writeJson,fileHash,screenMouthMode,policy,styleTechnical,contextBinding,validateCandidateRecord} from './jango-design-gate.mjs';
 import {resizePremultiplied} from '../apps/mobile/scripts/build-mascot-runtime-assets.mjs';
 const require=createRequire(path.join(root,'apps/mobile/package.json'));
 const {PNG}=require('pngjs');
 const base=process.argv.find(a=>a.startsWith('--base='))?.slice(7);
 assert(base&&/^design\/jango\/emoticons\/kakao-32\/v\d+$/.test(base),'Explicit version required');
 assert(base!=='design/jango/emoticons/kakao-32/v18','v18 is a MASTER set, not an active generation batch');
+assertOpenVersion(base);
 const selected=readJson(base+'/selection.json'),inspection=readJson(base+'/inspection.json');
 const attempts=fs.existsSync(local(base+'/iteration-inspection.json'))?readJson(base+'/iteration-inspection.json'):{};
 const partial=process.argv.includes('--partial'),entries=[];
-for(const filename of fs.readdirSync(local(base+'/generation-records')).filter(f=>f.endsWith('.json')).sort()){
- const generation=readJson(base+'/generation-records/'+filename),id=generation.id;
+const records=['generation-records','derivation-records'].flatMap(folder=>fs.existsSync(local(base+'/'+folder))?fs.readdirSync(local(base+'/'+folder)).filter(f=>f.endsWith('.json')).map(filename=>({file:base+'/'+folder+'/'+filename,field:folder==='generation-records'?'generationRecord':'derivationRecord'})):[]).sort((a,b)=>a.file.localeCompare(b.file));
+for(const record of records){
+ const generation=readJson(record.file),id=generation.id;
  const number=Number(id.slice(0,2)),key=String(number).padStart(2,'0'),isSelected=selected[key]?.jobId===id;
  const observed=isSelected?inspection[key]:attempts[id];
  if(!observed&&partial)continue;
@@ -25,9 +28,11 @@ for(const filename of fs.readdirSync(local(base+'/generation-records')).filter(f
  assert.equal(fileHash(generation.preflight),generation.preflightSHA256,'Prepared record changed');
  assert.equal(fileHash(generation.prompt),generation.promptSHA256,'Actual prompt changed');
  const prepared=readJson(generation.preflight);
- assert.deepEqual(generation.referenceRoles,prepared.referenceRoles);
- assert.deepEqual(generation.actualReferences,prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]})));
- for(const ref of generation.actualReferences)assert.equal(fileHash(ref.file),ref.sha256,'Actual attached file changed');
+ if(record.field==='generationRecord'){
+  assert.deepEqual(generation.referenceRoles,prepared.referenceRoles);
+  assert.deepEqual(generation.actualReferences,prepared.references.map(file=>({file,sha256:prepared.referenceHashes[file]})));
+  for(const ref of generation.actualReferences)assert.equal(fileHash(ref.file),ref.sha256,'Actual attached file changed');
+ }
  assert.equal(prepared.composition.panel,number);
  const source=readPng(generation.source);
  let stickerFile;
@@ -38,7 +43,9 @@ for(const filename of fs.readdirSync(local(base+'/generation-records')).filter(f
   PNG.bitblt(scaled,preview,0,0,scaled.width,scaled.height,Math.floor((360-scaled.width)/2),Math.floor((360-scaled.height)/2));
   stickerFile=base+'/iterations/'+id+'.png';fs.mkdirSync(path.dirname(local(stickerFile)),{recursive:true});fs.writeFileSync(local(stickerFile),PNG.sync.write(preview));
  }
- const candidate={id,kind:'emoticon',styleProfile:prepared.styleProfile,directory:base,source:generation.source,sticker:stickerFile,mouthMode:prepared.mouthMode,mouthRoi:observed.mouthRoi,tiltDegrees:observed.tiltDegrees,visibility:observed.visibility,expression:prepared.expression,composition:prepared.composition,preflight:generation.preflight,generationRecord:base+'/generation-records/'+filename,disposition:isSelected?'candidate':'rejected',selection:isSelected?'review-set':'iteration-history'};
+ const candidate={id,kind:'emoticon',styleProfile:prepared.styleProfile,directory:base,source:generation.source,sticker:stickerFile,mouthMode:prepared.mouthMode,mouthRoi:observed.mouthRoi,tiltDegrees:observed.tiltDegrees,visibility:observed.visibility,expression:prepared.expression,composition:prepared.composition,preflight:generation.preflight,[record.field]:record.file,operation:generation.operation,disposition:isSelected?'candidate':'rejected',selection:isSelected?'review-set':'iteration-history'};
+ if(prepared.creativeBrief)candidate.creativeBrief=prepared.creativeBrief;
+ validateCandidateRecord(candidate);
  writeJson('design/jango/quality/candidates/'+id+'.json',candidate);
  const mouth=screenMouthMode(source,observed.mouthRoi,policy(),prepared.mouthMode);
  if(observed.visibility!=='clear'||Math.abs(observed.tiltDegrees)>policy().mouthScreen.maxTiltDegrees)mouth.status='needs-review';

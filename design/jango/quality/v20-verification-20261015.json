@@ -1,0 +1,137 @@
+{
+  "version": "v20",
+  "status": "verified-review-candidates-not-released",
+  "date": "2026-10-15",
+  "scope": "32 review candidates only; no MASTER adoption, app replacement, Kakao submission or signed release",
+  "artifacts": {
+    "directory": "design/jango/emoticons/kakao-32/v20",
+    "gallery": "design/jango/emoticons/kakao-32/v20/index.html",
+    "canvas": "/Users/namu/.cursor/projects/Users-namu-Desktop-ExpiryMate/canvases/jango-v20-full-body-review.canvas.tsx",
+    "captions": 32,
+    "captionFreeSameLayout": 32,
+    "byteIdenticalReusedOriginals": 30,
+    "officialImagegenPoses": 2,
+    "comparisonSizes": [
+      360,
+      120,
+      80
+    ],
+    "backgrounds": [
+      "light",
+      "dark"
+    ]
+  },
+  "outputChecks": {
+    "transparent360Pngs": 32,
+    "fullBodyPreserved": 32,
+    "minimumMarginPx": 16,
+    "maximumBytes": 91980,
+    "captionArtworkOverlapPixels": 0
+  },
+  "mouthScreen": {
+    "pass": 23,
+    "needsReview": [
+      5,
+      12,
+      15,
+      20,
+      21,
+      28,
+      29,
+      31,
+      32
+    ],
+    "roiThresholdsAndSignatureRequirementsChanged": false,
+    "note": "Uncertain results remain unapproved. Reused ROIs and face tilts are unchanged."
+  },
+  "preservation": {
+    "files": 396,
+    "allHashesMatch": true,
+    "evidence": "design/jango/emoticons/kakao-32/v20/preservation-check.json"
+  },
+  "generationCopies": [
+    {
+      "id": "10-v20-r1",
+      "sourceHashMatchesRecord": true,
+      "record": "design/jango/emoticons/kakao-32/v20/generation-records/10-v20-r1.json",
+      "byteIdenticalToActualToolOutput": true
+    },
+    {
+      "id": "15-v20-r1",
+      "sourceHashMatchesRecord": true,
+      "record": "design/jango/emoticons/kakao-32/v20/generation-records/15-v20-r1.json",
+      "byteIdenticalToActualToolOutput": true
+    }
+  ],
+  "browserReview": {
+    "galleryLoaded": true,
+    "images": 32,
+    "brokenLoadedImages": 0,
+    "captionMode": true,
+    "captionFreeMode": true,
+    "darkBackground": true,
+    "size120": true,
+    "size360": true,
+    "darkButtonContrast": "visually inspected after fixing foreground/background colors",
+    "ephemeralTabClosed": true,
+    "temporaryLocalServerStopped": true
+  },
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm lint",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm exec tsc --noEmit --skipLibCheck --strict --jsx react-jsx --module ESNext --moduleResolution bundler --target ES2021 --lib ESNext,DOM <review.canvas.tsx>",
+      "status": "passed"
+    },
+    {
+      "command": "pnpm jango:reports:refresh",
+      "status": "passed",
+      "result": "32 preparation pass, 32 historical MASTER adoption, 0 stale/missing"
+    },
+    {
+      "command": "pnpm test",
+      "status": "passed",
+      "includes": "pnpm jango:test and workspace tests",
+      "exitCode": 0,
+      "jango": {
+        "passed": 27,
+        "failed": 0
+      },
+      "workspace": {
+        "shared": 162,
+        "api": 589,
+        "mobile": 582,
+        "totalPassed": 1333,
+        "skipped": 6
+      },
+      "skipReason": "Six PostgreSQL integration tests require JANGO_WORKFLOW_TEST_DATABASE_URL; the isolated test database was not configured."
+    },
+    {
+      "command": "pnpm jango:check",
+      "status": "passed",
+      "exitCode": 0,
+      "result": "records valid; 0 signed releases; candidates are not approved"
+    }
+  ],
+  "release": {
+    "signedReleases": 0,
+    "marketplaceApproval": "not requested or granted",
+    "aiCreationHistoryRetained": true,
+    "submissionEligibility": "Existing AI proposal restriction unresolved"
+  },
+  "limitations": [
+    "Agent visual observation is not an independent signed design review.",
+    "Actual KakaoTalk device transfer, reading speed and purchasing preference were not tested.",
+    "Fine crayon texture, grids and small props lose detail at 80px."
+  ]
+}

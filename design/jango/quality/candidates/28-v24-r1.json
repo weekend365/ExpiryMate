@@ -1,0 +1,33 @@
+{
+  "id": "28-v24-r1",
+  "kind": "emoticon",
+  "styleProfile": "handdrawn-crayon",
+  "directory": "design/jango/emoticons/kakao-32/v24",
+  "source": "design/jango/emoticons/kakao-32/v24/source-originals/28-r1.png",
+  "sticker": "design/jango/emoticons/kakao-32/v24/stickers/28.png",
+  "mouthMode": "neutral-line",
+  "mouthRoi": [
+    643,
+    663,
+    94,
+    50
+  ],
+  "tiltDegrees": -10,
+  "visibility": "clear",
+  "expression": {
+    "family": "메뉴 상의",
+    "intensity": 1,
+    "eyes": "기본 타원 눈",
+    "brows": "한쪽이 올라간 고민 눈썹",
+    "pose": "한 장갑을 턱에 대고 고개를 약 10도 기울인다. 얼굴 밖에 작은 당근·치즈·달걀 음식 기호 3개만. 글자·물음표는 생성하지 않는다."
+  },
+  "composition": {
+    "file": "design/jango/reference/v18-composition.png",
+    "panel": 28
+  },
+  "preflight": "design/jango/quality/jobs/28-v24-r1/preflight.json",
+  "derivationRecord": "design/jango/emoticons/kakao-32/v24/derivation-records/28-v24-r1.json",
+  "operation": "layout-lettering-only",
+  "disposition": "candidate",
+  "selection": "review-set"
+}

@@ -1,0 +1,53 @@
+[
+  {
+    "number": 29,
+    "line": "지쳤어...",
+    "fontSize1024": 160,
+    "symbols": [],
+    "font": "GamjaFlower-Regular",
+    "placement": {
+      "x": 512,
+      "y": 96,
+      "size": 160,
+      "rotation": 0,
+      "maxWidth": 860,
+      "font": "GamjaFlower-Regular",
+      "outline": 0,
+      "inkHeight": 85.3333,
+      "outlinePx": 5.12,
+      "punctuationScale": 1,
+      "sizeBasis": "font-reference",
+      "referenceText": "장고야 부탁해",
+      "inkStrokePercent": 1.6
+    },
+    "calibration": {
+      "file": "design/jango/emoticons/kakao-32/v23/lettering-calibration/GamjaFlower-Regular-160-0.png",
+      "font": "GamjaFlower-Regular",
+      "fontSize1024": 160,
+      "text": "장고야 부탁해",
+      "sha256": "32217aa088609714daf9bb91a66471d1f4fccb748dc81275da5a459f2dae64f8"
+    },
+    "normalization": {
+      "complete": true,
+      "method": "shared-reference-font-size-with-pixel-outline",
+      "inkHeight": 82,
+      "outlinePx": 5.12,
+      "punctuationScale": 1,
+      "sizeBasis": "font-reference",
+      "referenceText": "장고야 부탁해",
+      "referenceInkHeight": 85.3333,
+      "rawReferenceInkHeight": 140,
+      "rawCaptionInkHeight": 134,
+      "scale": 0.6095235714285714,
+      "effectiveFontSize1024": 97.52377142857142,
+      "bounds": [
+        360,
+        50,
+        305,
+        92
+      ],
+      "inkStrokePercent": 1.6
+    },
+    "sha256": "3559c1ee40d07d0d85c20ba5c928a992d85e499af19864e3201aea390b2640cf"
+  }
+]
