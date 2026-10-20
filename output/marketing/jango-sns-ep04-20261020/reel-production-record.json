@@ -1,0 +1,86 @@
+{
+  "id": "jango-sns-ep04-reel-20261020",
+  "completedAt": "2026-10-20T07:44:07.271018+00:00",
+  "status": "completed-artifact-for-user-review",
+  "authorization": {
+    "quote": "지금 원화 기준으로 앱 화면의 퀄리티를 신경써서 장고 카툰 릴스 생성해줘. 실제 장고야 부탁해 앱의 UI 디자인을 활용해도 좋아.",
+    "scope": "Use the selected four raw artworks to create a complete cartoon Reel, improve phone UI using actual app design, typeset dialogue, add licensed instrumental music, produce cover and review artifacts. No Instagram publication, app/API/DB/MASTER changes, commit or push."
+  },
+  "sourceSelection": [
+    {
+      "scene": 1,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+      "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233"
+    },
+    {
+      "scene": 2,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png",
+      "sha256": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2"
+    },
+    {
+      "scene": 3,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+      "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f"
+    },
+    {
+      "scene": 4,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499"
+    }
+  ],
+  "sourceArtPhase": {
+    "method": "Official built-in imagegen, 4 initial scenes + 2 targeted corrections in the preceding raw-art task.",
+    "records": [
+      "README.md",
+      "production-record.json",
+      "selected-artwork.json",
+      "file-hashes.json",
+      "prompts/"
+    ],
+    "preserved": true
+  },
+  "thisPhaseMethod": "Offline current-app UI and Korean typesetting; perspective compositing with original hand masks; Pillow frame animation and FFmpeg video/audio encoding. No new image-generation call.",
+  "deliverables": {
+    "reel/jango-ep04-music.mp4": {
+      "bytes": 22697613,
+      "sha256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409"
+    },
+    "review/reel/jango-ep04-360.mp4": {
+      "bytes": 5292841,
+      "sha256": "4e792418cd89fa579a3ab3492ad4beb9a1a63891ff4b348ad3aefbf53fd31f70"
+    },
+    "cover.png": {
+      "bytes": 2464123,
+      "sha256": "b9cac8f9a48e944639b43303c931b2077107cb4e3665e68de1bfe1e33a0c518d"
+    },
+    "cover.jpg": {
+      "bytes": 1057306,
+      "sha256": "4aef302dd78b88bc049d7fd0de9fdd8ccf3be750cc8b85c72f8ac802735bb69e"
+    },
+    "caption.txt": {
+      "bytes": 1362,
+      "sha256": "4a7962360659db5d8aa9e71f1214666f4a2477bf2f6fd5765d44d3c029888812"
+    }
+  },
+  "details": [
+    "reel-preparation.json",
+    "reel-typography.json",
+    "ui/typography.json",
+    "reel/production.json",
+    "review/reel/visual-review.json",
+    "review/reel/technical-report.json",
+    "review/reel/preservation-and-frame-check.json"
+  ],
+  "approvalScope": "User authorized production using selected originals. Final movie approval/Instagram publication and global MASTER adoption are separate; none is invented.",
+  "excludedActions": [
+    "Instagram upload",
+    "commit/push",
+    "app/API/DB changes",
+    "MASTER or prior episode replacement"
+  ],
+  "limitations": [
+    "Subjective listening of the final audio",
+    "Actual Instagram preview/control overlap and cover crop",
+    "Apply AI content label, publish only within separately authorized scope and verify platform playback"
+  ]
+}

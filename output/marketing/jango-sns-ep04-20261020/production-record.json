@@ -1,0 +1,71 @@
+{
+  "id": "jango-sns-ep04-20261020",
+  "stage": "unlettered-original-artwork",
+  "status": "four-candidates-delivered-for-user-review",
+  "createdAt": "2026-10-20T07:10:33.004362+00:00",
+  "authorization": {
+    "quote": "이 콘티로 원화부터 생성해봐.",
+    "scope": "Approved receipt registration storyboard, source-art generation only."
+  },
+  "tool": "official built-in imagegen",
+  "generationCalls": 6,
+  "originalScenes": 4,
+  "targetedEdits": 2,
+  "selected": [
+    {
+      "scene": 1,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+      "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233",
+      "dimensions": [
+        941,
+        1672
+      ]
+    },
+    {
+      "scene": 2,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png",
+      "sha256": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2",
+      "dimensions": [
+        941,
+        1672
+      ]
+    },
+    {
+      "scene": 3,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+      "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f",
+      "dimensions": [
+        941,
+        1672
+      ]
+    },
+    {
+      "scene": 4,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499",
+      "dimensions": [
+        941,
+        1672
+      ]
+    }
+  ],
+  "editDecisions": [
+    {
+      "candidate": "scene-01-r2",
+      "reason": "Move yogurt inward and keep receipt blank."
+    },
+    {
+      "candidate": "scene-03-r2",
+      "reason": "Enlarge the phone for later app content legibility, preserving compact Jango."
+    }
+  ],
+  "preservationBaseline": "preservation-baseline.json",
+  "review": "review/visual-review.json",
+  "previews": "review/index.html",
+  "promptsDirectory": "prompts",
+  "workflowBoundary": "Source artwork only. No animation, lettering, audio, cover, Instagram publication, app/API/DB/MASTER change, commit or push.",
+  "userAdoption": {
+    "status": "pending",
+    "scope": "Exact selected files, if subsequently accepted for episode 4."
+  }
+}

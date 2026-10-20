@@ -1,0 +1,15 @@
+{
+  "candidate": "scene-03-r2",
+  "method": "official built-in imagegen",
+  "purpose": "Increase unobstructed phone area for future readable app information; move Jango face and hands inward without stretching body.",
+  "prompt": "prompts/scene-03-r2.txt",
+  "promptSha256": "f961daa731ee5e9fc760c5244aca549644db5b5dfbb3f37e81355a7f1cb195f0",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r1.png",
+      "sha256": "398859695556a735a9cd5dcaf0b4207632878ee552a75cf20792077c11af5740",
+      "role": "edit-target, episode 4 candidate"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "preparedAt": "2026-10-20T07:47:17.859824+00:00",
+  "authorization": {
+    "quote": "인스타그램에 게시해줘.",
+    "scope": "Publish the delivered ep04 Reel once to the existing @jango_plz Instagram session, with the prepared custom cover, caption/music attribution and AI content label. Verify results. No commit/push or app changes."
+  },
+  "files": {
+    "reel/jango-ep04-music.mp4": {
+      "sha256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409",
+      "bytes": 22697613
+    },
+    "cover.jpg": {
+      "sha256": "4aef302dd78b88bc049d7fd0de9fdd8ccf3be750cc8b85c72f8ac802735bb69e",
+      "bytes": 1057306
+    },
+    "caption.txt": {
+      "sha256": "4a7962360659db5d8aa9e71f1214666f4a2477bf2f6fd5765d44d3c029888812",
+      "bytes": 1362
+    }
+  },
+  "account": "jango_plz",
+  "profileBefore": {
+    "postCount": 9,
+    "latestEpisode": 3,
+    "episode04Present": false
+  },
+  "profileLinks": {
+    "iPhone": "https://apps.apple.com/kr/app/id6793375883",
+    "Android": "https://play.google.com/store/apps/details?id=com.expirymate.mobile",
+    "verified": "Both displayed in profile link popup; Android includes Instagram tracking query parameters."
+  },
+  "qualityContext": {
+    "priorVideoQA": "review/reel/visual-review.json",
+    "technicalAudio": "No detected clipping or silence; full decode passes.",
+    "subjectiveListening": "Not claimed. The preceding handoff disclosed this limitation; the user then expressly requested publication. No identified rights or audio defect remains."
+  }
+}

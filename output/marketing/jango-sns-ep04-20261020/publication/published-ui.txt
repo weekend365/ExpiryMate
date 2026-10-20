@@ -1,0 +1,75 @@
+Browser tab: 1370621329, Title: "Instagram", URL: "https://www.instagram.com/p/DetYJuaSyUD/".
+1 AXWebArea Instagram, URL: instagram.com/p/DetYJuaSyUD/
+	2 container
+		3 button 다음
+			4 image 다음
+		5 container
+			6 container
+				7 container
+					8 container Video player
+						9 slider Description: 볼륨 조정, Value: 50
+			10 container
+				11 container
+					12 button (disabled) jango_plz님의 프로필 사진
+						13 image
+						14 link Description: jango_plz님의 프로필 사진, Value: instagram.com/jango_plz/
+					15 link Description: jango_plz, Value: instagram.com/jango_plz/
+					16 container
+						17 pop up button AI 콘텐츠
+						18 link Description: 오리지널 오디오, Value: instagram.com/reels/audio/29651437421124967/
+				19 button 옵션 더 보기
+					20 image 옵션 더 보기
+				21 container
+					22 button 인사이트 보기
+					23 button 릴스 홍보하기
+				24 container
+					25 button 좋아요
+						26 image 좋아요
+					27 button 댓글 달기
+						28 image 댓글 달기
+					29 button 리포스트
+						30 image 리포스트
+					31 button 게시물 공유
+						32 image 게시물 공유
+					33 button 저장
+						34 button 저장
+							35 image 저장
+				36 container
+					37 text 가장 먼저 
+					38 button 좋아요
+					39 text 를 눌러보세요
+				40 content list
+					41 button jango_plz님의 프로필 사진 jango_plz 장고랑 살아보니 04 — 이걸 언제 다 입력해? 장 보고 돌아왔는데, 재료를 하나씩 입력할 생각에 막막했다면. 영수증 사진에서 찾은 재료를 확인하고, 유통기한과 보관 위치를 채워 한 번에 등록해 보세요. 장고는 벌써 요거트 먹을 준비 완료 🥄 AI 작화를 사용한 카툰입니다. 휴대전화 화면은 실제 장고야 부탁해 앱 디자인과 기능을 바탕으로 간략히 재구성했으며, 입력 과정을 축약했습니다. 영수증·재료·수량·날짜는 시연 예시입니다. 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요. 영상 설명: 장을 보고 돌아온 여성이 재료를 하나씩 입력해야 할지 고민합니다. 장고가 영수증 촬영을 제안하고, 앱에 나온 두부·달걀·요거트 목록을 확인합니다. 기한과 보관 위치를 확인한 뒤 재료를 함께 등록합니다. 여성이 등록을 마치자 장고는 요거트 앞에서 숟가락을 들고 기다립니다. 음악: Carefree — Kevin MacLeod (incompetech.com) CC BY 4.0: https://creativecommons.org/licenses/by/4.0/ 원곡 일부 발췌, 음량 조정 및 페이드 적용. #장고야부탁해 #장고툰 #자취생활 #냉장고털이 #유통기한관리 #오늘뭐먹지 2분
+						42 container
+							43 button (disabled) jango_plz님의 프로필 사진
+								44 image
+								45 link Description: jango_plz님의 프로필 사진, Value: instagram.com/jango_plz/
+							46 heading jango_plz, Value: 2
+								47 link Description: jango_plz, Value: instagram.com/jango_plz/
+							48 heading Value: 1, 장고랑 살아보니 04 — 이걸 언제 다 입력해? 장 보고 돌아왔는데, 재료를 하나씩 입력할 생각에 막막했다면. 영수증 사진에서 찾은 재료를 확인하고, 유통기한과 보관 위치를 채워 한 번에 등록해 보세요. 장고는 벌써 요거트 먹을 준비 완료 🥄 AI 작화를 사용한 카툰입니다. 휴대전화 화면은 실제 장고야 부탁해 앱 디자인과 기능을 바탕으로 간략히 재구성했으며, 입력 과정을 축약했습니다. 영수증·재료·수량·날짜는 시연 예시입니다. 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요. 영상 설명: 장을 보고 돌아온 여성이 재료를 하나씩 입력해야 할지 고민합니다. 장고가 영수증 촬영을 제안하고, 앱에 나온 두부·달걀·요거트 목록을 확인합니다. 기한과 보관 위치를 확인한 뒤 재료를 함께 등록합니다. 여성이 등록을 마치자 장고는 요거트 앞에서 숟가락을 들고 기다립니다. 음악: Carefree — Kevin MacLeod (incompetech.com) CC BY 4.0: https://creativecommons.org/licenses/by/4.0/ 원곡 일부 발췌, 음량 조정 및 페이드 적용. #장고야부탁해 #장고툰 #자취생활 #냉장고털이 #유통기한관리 #오늘뭐먹지
+								49 text 장고랑 살아보니 04 — 이걸 언제 다 입력해?
+								50 text 장 보고 돌아왔는데, 재료를 하나씩 입력할 생각에 막막했다면.
+								51 text 영수증 사진에서 찾은 재료를 확인하고, 유통기한과 보관 위치를 채워 한 번에 등록해 보세요.
+								52 text 장고는 벌써 요거트 먹을 준비 완료 🥄
+								53 text AI 작화를 사용한 카툰입니다. 휴대전화 화면은 실제 장고야 부탁해 앱 디자인과 기능을 바탕으로 간략히 재구성했으며, 입력 과정을 축약했습니다. 영수증·재료·수량·날짜는 시연 예시입니다.
+								54 text 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요.
+								55 text 영상 설명: 장을 보고 돌아온 여성이 재료를 하나씩 입력해야 할지 고민합니다. 장고가 영수증 촬영을 제안하고, 앱에 나온 두부·달걀·요거트 목록을 확인합니다. 기한과 보관 위치를 확인한 뒤 재료를 함께 등록합니다. 여성이 등록을 마치자 장고는 요거트 앞에서 숟가락을 들고 기다립니다.
+								56 text 음악: Carefree — Kevin MacLeod (incompetech.com)
+								57 text CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+								58 text 원곡 일부 발췌, 음량 조정 및 페이드 적용.
+								59 link Description: #장고야부탁해, Value: instagram.com/explore/tags/%EC%9E%A5%EA%B3%A0%EC%95%BC%EB%B6%80%ED%83%81%ED%95%B4/
+								60 link Description: #장고툰, Value: instagram.com/explore/tags/%EC%9E%A5%EA%B3%A0%ED%88%B0/
+								61 link Description: #자취생활, Value: instagram.com/explore/tags/%EC%9E%90%EC%B7%A8%EC%83%9D%ED%99%9C/
+								62 link Description: #냉장고털이, Value: instagram.com/explore/tags/%EB%83%89%EC%9E%A5%EA%B3%A0%ED%84%B8%EC%9D%B4/
+								63 link Description: #유통기한관리, Value: instagram.com/explore/tags/%EC%9C%A0%ED%86%B5%EA%B8%B0%ED%95%9C%EA%B4%80%EB%A6%AC/
+								64 link Description: #오늘뭐먹지, Value: instagram.com/explore/tags/%EC%98%A4%EB%8A%98%EB%AD%90%EB%A8%B9%EC%A7%80/
+							65 container
+								66 text 2분
+				67 link Description: 2분 전, Value: instagram.com/jango_plz/reel/DetYJuaSyUD/
+				68 container
+					69 pop up button (collapsed) 이모티콘, Secondary Actions: Expand
+						70 image 이모티콘
+					71 text entry area (settable) 댓글 달기...
+					72 button (disabled) 게시
+
+The focused UI element is 46 heading jango_plz, Value: 2

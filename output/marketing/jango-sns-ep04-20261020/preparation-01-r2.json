@@ -1,0 +1,15 @@
+{
+  "candidate": "scene-01-r2",
+  "method": "official built-in imagegen",
+  "purpose": "Move yogurt inside central protected composition; keep everything else and compact anatomy unchanged.",
+  "prompt": "prompts/scene-01-r2.txt",
+  "promptSha256": "4c6628594953bc00a57a81c1356c6cea776ff5d6547582b00a41bf26f0760ad7",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r1.png",
+      "sha256": "e12e80f4319444952b87c51dfaa1d84f098798e92d86ba3a3d7eac7bf0cf785e",
+      "role": "edit-target; fresh episode 4 candidate, not previously user-adopted artwork"
+    }
+  ]
+}

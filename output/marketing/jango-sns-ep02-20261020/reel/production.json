@@ -1,0 +1,31 @@
+{
+  "createdAt": "2026-10-20T05:18:18.449245+00:00",
+  "format": "1080x1920, 30 fps H.264/AAC, 24 seconds",
+  "sequence": [
+    {
+      "panel": "panels/01.png",
+      "start": 0,
+      "end": 6
+    },
+    {
+      "panel": "panels/02.png",
+      "start": 6,
+      "end": 12
+    },
+    {
+      "panel": "panels/03.png",
+      "start": 12,
+      "end": 18
+    },
+    {
+      "panel": "panels/04.png",
+      "start": 18,
+      "end": 24
+    }
+  ],
+  "artwork": "Uniformly scaled to 928x1160, fully preserved without crop, placed at x76 y300 on ivory; original PNGs unchanged. Separate episode header/page typography; original first-panel title retained. Hard cuts avoid text ghosting.",
+  "music": "Carefree by Kevin MacLeod, CC BY 4.0, first 24 seconds, normalized to -18 LUFS target, 0.3s fade-in and 1s fade-out.",
+  "sourceLicense": "music/license.json",
+  "software": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "sha256": "5cfa19a0e16727dbe990c40069148e102de05da3aa0f58cc142c96bf69551c1f"
+}

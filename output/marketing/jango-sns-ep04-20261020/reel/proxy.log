@@ -1,0 +1,63 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep04-20261020/reel/jango-ep04-music.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    title           : 장고랑 살아보니 04 — 이걸 언제 다 입력해?
+    encoder         : Lavf61.7.100
+    comment         : Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; excerpt, volume adjustment and fades.
+  Duration: 00:00:24.00, start: 0.000000, bitrate: 7565 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, 7363 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 193 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x11b705160] using cpu capabilities: ARMv8 NEON
+[libx264 @ 0x11b705160] profile High, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0x11b705160] 264 - core 164 r3190 7ed753b - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=1 ref=2 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=6 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=12 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=30 rc=crf mbtree=1 crf=18.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep04-20261020/review/reel/jango-ep04-360.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    title           : 장고랑 살아보니 04 — 이걸 언제 다 입력해?
+    comment         : Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; excerpt, volume adjustment and fades.
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 360x640, q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 193 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=  117 fps=0.0 q=24.0 size=    1024KiB time=00:00:03.83 bitrate=2188.4kbits/s speed=7.59x    frame=  199 fps=197 q=24.0 size=    1536KiB time=00:00:06.56 bitrate=1916.2kbits/s speed=6.51x    frame=  370 fps=245 q=24.0 size=    2560KiB time=00:00:12.26 bitrate=1709.7kbits/s speed=8.11x    frame=  541 fps=269 q=24.0 size=    3584KiB time=00:00:17.96 bitrate=1634.2kbits/s speed=8.92x    [mp4 @ 0x11b7044b0] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x11b7041d0] video:4578KiB audio:569KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.424745%
+frame=  720 fps=296 q=-1.0 Lsize=    5169KiB time=00:00:23.93 bitrate=1769.2kbits/s speed=9.84x    
+[libx264 @ 0x11b705160] frame I:5     Avg QP:16.12  size: 90317
+[libx264 @ 0x11b705160] frame P:713   Avg QP:19.28  size:  5941
+[libx264 @ 0x11b705160] frame B:2     Avg QP:18.99  size:    82
+[libx264 @ 0x11b705160] consecutive B-frames: 99.6%  0.0%  0.4%  0.0%
+[libx264 @ 0x11b705160] mb I  I16..4:  4.9% 25.9% 69.2%
+[libx264 @ 0x11b705160] mb P  I16..4:  0.0%  0.0%  0.0%  P16..4: 50.4%  5.1%  7.8%  0.0%  0.0%    skip:36.7%
+[libx264 @ 0x11b705160] mb B  I16..4:  0.4%  0.1%  0.0%  B16..8:  3.4%  0.4%  0.0%  direct: 0.4%  skip:95.3%  L0: 2.8% L1:97.2% BI: 0.0%
+[libx264 @ 0x11b705160] 8x8 transform intra:26.1% inter:51.6%
+[libx264 @ 0x11b705160] coded y,uvDC,uvAC intra: 88.6% 90.0% 84.8% inter: 32.6% 29.6% 11.1%
+[libx264 @ 0x11b705160] i16 v,h,dc,p: 29% 48% 19%  4%
+[libx264 @ 0x11b705160] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 19% 27%  5%  4%  4%  6%  7%  7%
+[libx264 @ 0x11b705160] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24% 23% 11%  6%  6%  7%  8%  7%  9%
+[libx264 @ 0x11b705160] i8c dc,h,v,p: 42% 27% 22%  8%
+[libx264 @ 0x11b705160] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x11b705160] ref P L0: 89.8% 10.2%
+[libx264 @ 0x11b705160] kb/s:1562.46

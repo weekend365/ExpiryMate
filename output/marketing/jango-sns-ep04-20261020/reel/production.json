@@ -1,0 +1,43 @@
+{
+  "format": "MP4/H.264,1080x1920,30fps,720 frames,AAC 48kHz",
+  "seconds": 24,
+  "sceneDurations": [
+    4,
+    5,
+    9,
+    6
+  ],
+  "sceneCuts": [
+    4,
+    9,
+    18
+  ],
+  "uiCuts": [
+    8.2,
+    12,
+    15
+  ],
+  "zoom": [
+    1,
+    1.03
+  ],
+  "fixedLettering": true,
+  "brandCTASeconds": [
+    21,
+    24
+  ],
+  "musicSource": "output/marketing/jango-sns-ep04-20261020/music/Carefree.mp3",
+  "musicSourceSHA256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+  "musicSegmentSeconds": [
+    0,
+    24
+  ],
+  "fadesSeconds": [
+    0.3,
+    1
+  ],
+  "targetLUFS": -18,
+  "maxTruePeakDB": -2,
+  "credit": "Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; excerpt, volume adjustment and fades.",
+  "videoSHA256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409"
+}

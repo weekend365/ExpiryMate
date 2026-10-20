@@ -1,0 +1,439 @@
+{
+  "method": "Pillow 13 separate Gaegu dialogue/brand, Pretendard illustrative phone labels and offer digits, transparent perspective lettering only, uniform export.",
+  "sourceNativeSize": [
+    1122,
+    1402
+  ],
+  "outputSize": [
+    1080,
+    1350
+  ],
+  "fonts": {
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7"
+  },
+  "textBoxes": [
+    {
+      "panel": 1,
+      "text": "장고랑 살아보니  02",
+      "role": "series",
+      "renderedText": "장고랑 살아보니  02",
+      "fontSize": 31,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        437,
+        6,
+        685,
+        36
+      ]
+    },
+    {
+      "panel": 1,
+      "text": "1+1인데, 집에도 1",
+      "role": "title",
+      "renderedText": "1+1인데, 집에도 1",
+      "fontSize": 68,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        316,
+        38,
+        806,
+        98
+      ]
+    },
+    {
+      "panel": 1,
+      "text": "하나 사면",
+      "role": "dialogue",
+      "renderedText": "하나 사면",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        204,
+        158,
+        516,
+        228
+      ]
+    },
+    {
+      "panel": 1,
+      "text": "하나 더?!",
+      "role": "dialogue",
+      "renderedText": "하나 더?!",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        198,
+        238,
+        522,
+        292
+      ]
+    },
+    {
+      "panel": 1,
+      "text": "두 개나!",
+      "role": "dialogue",
+      "renderedText": "두 개나!",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        726,
+        281,
+        1004,
+        337
+      ]
+    },
+    {
+      "panel": 1,
+      "text": "1+1",
+      "role": "offer",
+      "renderedText": "1+1",
+      "fontSize": 112,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        50,
+        45,
+        230,
+        125
+      ]
+    },
+    {
+      "panel": 1,
+      "role": "offer projection",
+      "projectedQuad": [
+        [
+          884,
+          643
+        ],
+        [
+          1053,
+          614
+        ],
+        [
+          1046,
+          733
+        ],
+        [
+          875,
+          757
+        ]
+      ],
+      "layerSize": [
+        280,
+        170
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "아.",
+      "role": "dialogue",
+      "renderedText": "아.",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        291,
+        122,
+        389,
+        168
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "어제 샀지.",
+      "role": "dialogue",
+      "renderedText": "어제 샀지.",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        170,
+        178,
+        510,
+        246
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "우리 둘 다",
+      "role": "dialogue",
+      "renderedText": "우리 둘 다",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        684,
+        203,
+        1010,
+        280
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "신났네…",
+      "role": "dialogue",
+      "renderedText": "신났네...",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        710,
+        290,
+        984,
+        353
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "장고야 부탁해",
+      "role": "illustrative app brand",
+      "renderedText": "장고야 부탁해",
+      "fontSize": 31,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        56,
+        37,
+        224,
+        65
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "보관함",
+      "role": "illustrative inventory heading",
+      "renderedText": "보관함",
+      "fontSize": 48,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        78,
+        92,
+        202,
+        136
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "등록한 재료",
+      "role": "illustrative inventory context",
+      "renderedText": "등록한 재료",
+      "fontSize": 33,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        64,
+        197,
+        216,
+        227
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "우유",
+      "role": "essential sample ingredient",
+      "renderedText": "우유",
+      "fontSize": 68,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        81,
+        263,
+        199,
+        323
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "1개",
+      "role": "essential sample quantity",
+      "renderedText": "1개",
+      "fontSize": 66,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        96,
+        346,
+        184,
+        406
+      ]
+    },
+    {
+      "panel": 2,
+      "text": "이야기용 예시",
+      "role": "illustrative UI disclosure",
+      "renderedText": "이야기용 예시",
+      "fontSize": 25,
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "bbox": [
+        71,
+        468,
+        209,
+        492
+      ]
+    },
+    {
+      "panel": 2,
+      "role": "simplified phone typography; not a screenshot",
+      "projectedQuad": [
+        [
+          387,
+          817
+        ],
+        [
+          594,
+          791
+        ],
+        [
+          676,
+          1255
+        ],
+        [
+          446,
+          1280
+        ]
+      ],
+      "layerSize": [
+        280,
+        540
+      ]
+    },
+    {
+      "panel": 3,
+      "text": "오늘은 집에 있는",
+      "role": "dialogue",
+      "renderedText": "오늘은 집에 있는",
+      "fontSize": 76,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        95,
+        94,
+        593,
+        168
+      ]
+    },
+    {
+      "panel": 3,
+      "text": "것부터 먹자.",
+      "role": "dialogue",
+      "renderedText": "것부터 먹자.",
+      "fontSize": 76,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        160,
+        178,
+        528,
+        238
+      ]
+    },
+    {
+      "panel": 3,
+      "text": "시리얼도",
+      "role": "dialogue",
+      "renderedText": "시리얼도",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        751,
+        134,
+        1007,
+        205
+      ]
+    },
+    {
+      "panel": 3,
+      "text": "있었지?",
+      "role": "dialogue",
+      "renderedText": "있었지?",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        762,
+        215,
+        996,
+        280
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "난",
+      "role": "dialogue",
+      "renderedText": "난",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        282,
+        102,
+        354,
+        162
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "맛만 볼게.",
+      "role": "dialogue",
+      "renderedText": "맛만 볼게.",
+      "fontSize": 84,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        148,
+        172,
+        488,
+        256
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "그릇은 왜",
+      "role": "dialogue",
+      "renderedText": "그릇은 왜",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        682,
+        166,
+        972,
+        232
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "네 게 더 커?",
+      "role": "dialogue",
+      "renderedText": "네 게 더 커?",
+      "fontSize": 78,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        628,
+        242,
+        1026,
+        292
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "장고야 부탁해",
+      "role": "brand",
+      "renderedText": "장고야 부탁해",
+      "fontSize": 88,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        326,
+        1206,
+        796,
+        1274
+      ]
+    },
+    {
+      "panel": 4,
+      "text": "장보기 전, 장고 보관함부터.",
+      "role": "cta",
+      "renderedText": "장보기 전, 장고 보관함부터.",
+      "fontSize": 57,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "bbox": [
+        246,
+        1296,
+        876,
+        1344
+      ]
+    }
+  ],
+  "outputHashes": {
+    "panels/01.png": "609e5b860bbc7b5d12be45207bdb5a5df618eb6d5f24783a078b5aa9a695cba7",
+    "panels/02.png": "251a218c6bdff92ac92aae1420b36c038a13b0f9d28bf13f5738f30ae0dea38d",
+    "panels/03.png": "1b77413eba8213d8a0d49770f866f57d9fc83d21e70250b53c8707b6237e0589",
+    "panels/04.png": "b9a90e59095ef9a2ceaa95a04c7a0f1ac80141a3a05c65703b88423a4c1f969c"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "id": "jango-sns-ep02-20261020",
+  "createdAt": "2026-10-20T04:55:54.996890+00:00",
+  "media": "SNS cartoon candidate",
+  "status": "storyboard-approved-production-in-progress",
+  "userAuthorization": {
+    "request": "내 인스타그램에 장고야 부탁해 홍보용 카툰을 연재해줘. 먼저 콘티부터 짜주고 나한테 컨펌 받은 후 생성물 제작하자.",
+    "approval": "2화 콘티로 제작을 시작해.",
+    "scope": "Produce episode 2 from the approved four-panel storyboard. New artwork remains a candidate until user visual adoption."
+  },
+  "episode": {
+    "series": "장고랑 살아보니",
+    "number": 2,
+    "title": "1+1인데, 집에도 1",
+    "deliverySize": [
+      1080,
+      1350
+    ],
+    "dialogues": [
+      [
+        "하나 사면 하나 더?!",
+        "두 개나!"
+      ],
+      [
+        "아. 어제 샀지.",
+        "우리 둘 다 신났네…"
+      ],
+      [
+        "오늘은 집에 있는 것부터 먹자.",
+        "시리얼도 있었지?"
+      ],
+      [
+        "난 맛만 볼게.",
+        "그릇은 왜 네 게 더 커?"
+      ]
+    ],
+    "cta": [
+      "장고야 부탁해",
+      "장보기 전, 장고 보관함부터."
+    ]
+  },
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 identity, crayon medium, opaque colors and anatomy; no food plate in new scene."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "Approved scene integration, woman identity and warm comic mood; not the Jango master style."
+    }
+  ],
+  "referencePaths": [
+    "/Users/namu/Desktop/ExpiryMate/design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png"
+  ],
+  "policyHashes": {
+    "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+    "design/jango/reference/JANGO-STYLE-GUIDE.md": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+    "design/jango/reference/SNS-CARTOON-GUIDE.md": "b6ca770b66b8c6f249f9f34be6ad06f3e238776c6ba4a4f99f885becb4c58e80",
+    "design/jango/quality/README.md": "298ef15d1fc11bc85cd1c4e2ea505a0dad718ad93fb3b76127e613b085ba8370"
+  },
+  "featureEvidence": {
+    "checkedAt": "2026-10-20",
+    "file": "apps/mobile/src/features/inventory/inventory-list-sheets.tsx",
+    "sha256": "04cf0e25cc56cf9312df10a1e282f84195cce1a4760e975bda071b5dde565d75",
+    "supports": "Registered ingredient name and remaining quantity. Comic phone screen will be a simplified illustration, not an app screenshot; sample milk 1 item."
+  },
+  "productionMethod": "Official built-in imagegen, one call per panel with active v18 character and approved v6 scene reference, then deterministic Korean lettering and proportional output preparation. No new production app/API/DB activity.",
+  "cropIntent": "Panel 1/3 keep full Jango, woman knee crop; panel 2 phone close-up with natural lower-body crop; panel 4 seated table occlusion. No arbitrary character stretching."
+}

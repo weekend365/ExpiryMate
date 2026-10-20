@@ -1,0 +1,10 @@
+{
+  "pnpm docs:check": {
+    "exitCode": 0,
+    "result": "31 metadata entries, 71 links and Expo/EAS build entry checked."
+  },
+  "git diff --check": {
+    "exitCode": 0
+  },
+  "applicationTests": "Not rerun: this task added source artwork and provenance only; no application code changed."
+}

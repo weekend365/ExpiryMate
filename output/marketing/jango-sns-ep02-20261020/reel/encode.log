@@ -1,0 +1,75 @@
+Input #0, png_pipe, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/panels/01.png':
+  Duration: N/A, bitrate: N/A
+  Stream #0:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1080x1350, 30 fps, 30 tbr, 30 tbn
+Input #1, png_pipe, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/panels/02.png':
+  Duration: N/A, bitrate: N/A
+  Stream #1:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1080x1350, 30 fps, 30 tbr, 30 tbn
+Input #2, png_pipe, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/panels/03.png':
+  Duration: N/A, bitrate: N/A
+  Stream #2:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1080x1350, 30 fps, 30 tbr, 30 tbn
+Input #3, png_pipe, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/panels/04.png':
+  Duration: N/A, bitrate: N/A
+  Stream #3:0: Video: png, rgb24(pc, gbr/unknown/unknown), 1080x1350, 30 fps, 30 tbr, 30 tbn
+[mp3 @ 0x127f05b20] Estimating duration from bitrate, this may be inaccurate
+Input #4, mp3, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/music/Carefree.mp3':
+  Metadata:
+    title           : Carefree
+    artist          : Kevin MacLeod
+    TCM             : Kevin MacLeod
+    album           : Royalty Free
+    iTunSMPB        :  00000000 00000210 00000870 00000000008A0000 00000000 00641054 00000000 00000000 00000000 00000000 00000000 00000000
+    TBP             : 96
+    genre           : Contemporary
+    comment         : USUAN1400037
+    iTunPGAP        : 0
+    encoded_by      : iTunes 11.1.5
+    iTunNORM        :  000000CB 00000117 0000121C 00000D78 00030D87 0002B092 00005848 00004A8C 00027134 0002711A
+    date            : 2014
+  Duration: 00:03:25.14, start: 0.000000, bitrate: 256 kb/s
+  Stream #4:0: Audio: mp3 (mp3float), 44100 Hz, stereo, fltp, 256 kb/s
+Stream mapping:
+  Stream #0:0 (png) -> scale:default
+  Stream #1:0 (png) -> scale:default
+  Stream #2:0 (png) -> scale:default
+  Stream #3:0 (png) -> scale:default
+  Stream #4:0 (mp3float) -> atrim:default
+  concat:out:v0 -> Stream #0:0 (libx264)
+  afade:default -> Stream #0:1 (aac)
+Press [q] to stop, [?] for help
+[libx264 @ 0x128814210] using SAR=1/1
+[libx264 @ 0x128814210] using cpu capabilities: ARMv8 NEON
+[libx264 @ 0x128814210] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0x128814210] 264 - core 164 r3190 7ed753b - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=12 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=crf mbtree=1 crf=18.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/reel/jango-ep02-music.mp4':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0: Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1080x1920 [SAR 1:1 DAR 9:16], q=2-31, 30 fps, 15360 tbn
+      Metadata:
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s
+      Metadata:
+        encoder         : Lavc61.19.100 aac
+frame=    0 fps=0.0 q=0.0 size=       0KiB time=N/A bitrate=N/A speed=N/A    frame=    9 fps=8.9 q=24.0 size=     256KiB time=00:00:00.26 bitrate=7865.8kbits/s speed=0.263x    frame=   48 fps= 32 q=24.0 size=     256KiB time=00:00:01.53 bitrate=1368.0kbits/s speed=1.01x    frame=  107 fps= 53 q=24.0 size=     512KiB time=00:00:03.50 bitrate=1198.5kbits/s speed=1.74x    frame=  161 fps= 64 q=24.0 size=     512KiB time=00:00:05.30 bitrate= 791.5kbits/s speed=2.11x    frame=  215 fps= 71 q=24.0 size=    1024KiB time=00:00:07.10 bitrate=1181.5kbits/s speed=2.35x    frame=  276 fps= 78 q=24.0 size=    1024KiB time=00:00:09.13 bitrate= 918.5kbits/s speed=2.59x    frame=  325 fps= 81 q=24.0 size=    1024KiB time=00:00:10.76 bitrate= 779.2kbits/s speed=2.68x    frame=  370 fps= 82 q=24.0 size=    1536KiB time=00:00:12.26 bitrate=1025.8kbits/s speed=2.71x    frame=  429 fps= 85 q=24.0 size=    1536KiB time=00:00:14.23 bitrate= 884.1kbits/s speed=2.83x    frame=  460 fps= 83 q=24.0 size=    1792KiB time=00:00:15.26 bitrate= 961.6kbits/s speed=2.76x    frame=  467 fps= 77 q=24.0 size=    1792KiB time=00:00:15.50 bitrate= 947.1kbits/s speed=2.56x    frame=  491 fps= 75 q=24.0 size=    1792KiB time=00:00:16.30 bitrate= 900.6kbits/s speed=2.49x    frame=  517 fps= 73 q=24.0 size=    1792KiB time=00:00:17.16 bitrate= 855.2kbits/s speed=2.43x    frame=  534 fps= 71 q=24.0 size=    1792KiB time=00:00:17.73 bitrate= 827.8kbits/s speed=2.35x    frame=  564 fps= 70 q=24.0 size=    2304KiB time=00:00:18.73 bitrate=1007.5kbits/s speed=2.32x    frame=  617 fps= 72 q=24.0 size=    2304KiB time=00:00:20.50 bitrate= 920.7kbits/s speed=2.39x    frame=  714 fps= 79 q=-1.0 size=    2304KiB time=N/A bitrate=N/A speed=N/A    [mp4 @ 0x128805080] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x128804810] video:1958KiB audio:569KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 1.076729%
+frame=  720 fps= 79 q=-1.0 Lsize=    2553KiB time=00:00:23.93 bitrate= 874.0kbits/s speed=2.64x    
+[libx264 @ 0x128814210] frame I:4     Avg QP: 9.68  size:484178
+[libx264 @ 0x128814210] frame P:180   Avg QP: 9.53  size:   166
+[libx264 @ 0x128814210] frame B:536   Avg QP: 8.67  size:    69
+[libx264 @ 0x128814210] consecutive B-frames:  0.6%  0.0%  1.7% 97.8%
+[libx264 @ 0x128814210] mb I  I16..4: 33.9% 35.8% 30.2%
+[libx264 @ 0x128814210] mb P  I16..4:  0.0%  0.0%  0.0%  P16..4:  0.4%  0.0%  0.0%  0.0%  0.0%    skip:99.6%
+[libx264 @ 0x128814210] mb B  I16..4:  0.0%  0.0%  0.0%  B16..8:  0.0%  0.0%  0.0%  direct: 0.0%  skip:100.0%  L0:22.2% L1:77.8% BI: 0.0%
+[libx264 @ 0x128814210] 8x8 transform intra:35.8% inter:92.3%
+[libx264 @ 0x128814210] coded y,uvDC,uvAC intra: 51.8% 53.6% 53.2% inter: 0.0% 0.0% 0.0%
+[libx264 @ 0x128814210] i16 v,h,dc,p: 92%  2%  6%  1%
+[libx264 @ 0x128814210] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 27% 22% 24%  6%  2%  2%  3%  5%  8%
+[libx264 @ 0x128814210] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 16% 16% 16% 10%  6%  7%  7% 10% 12%
+[libx264 @ 0x128814210] i8c dc,h,v,p: 72% 12% 10%  6%
+[libx264 @ 0x128814210] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x128814210] ref P L0: 99.3%  0.0%  0.5%  0.2%
+[libx264 @ 0x128814210] ref B L0: 51.3% 48.7%
+[libx264 @ 0x128814210] ref B L1: 99.3%  0.7%
+[libx264 @ 0x128814210] kb/s:667.94
+[aac @ 0x128815510] Qavg: 421.694

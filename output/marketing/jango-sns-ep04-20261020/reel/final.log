@@ -1,0 +1,53 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep04-20261020/reel/silent.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf61.7.100
+  Duration: 00:00:24.00, start: 0.000000, bitrate: 7365 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, 7363 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+[mp3 @ 0x140804c10] Estimating duration from bitrate, this may be inaccurate
+Input #1, mp3, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep04-20261020/music/Carefree.mp3':
+  Metadata:
+    title           : Carefree
+    artist          : Kevin MacLeod
+    TCM             : Kevin MacLeod
+    album           : Royalty Free
+    iTunSMPB        :  00000000 00000210 00000870 00000000008A0000 00000000 00641054 00000000 00000000 00000000 00000000 00000000 00000000
+    TBP             : 96
+    genre           : Contemporary
+    comment         : USUAN1400037
+    iTunPGAP        : 0
+    encoded_by      : iTunes 11.1.5
+    iTunNORM        :  000000CB 00000117 0000121C 00000D78 00030D87 0002B092 00005848 00004A8C 00027134 0002711A
+    date            : 2014
+  Duration: 00:03:25.14, start: 0.000000, bitrate: 256 kb/s
+  Stream #1:0: Audio: mp3 (mp3float), 44100 Hz, stereo, fltp, 256 kb/s
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (mp3 (mp3float) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep04-20261020/reel/jango-ep04-music.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    comment         : Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; excerpt, volume adjustment and fades.
+    title           : 장고랑 살아보니 04 — 이걸 언제 다 입력해?
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, q=2-31, 7363 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s
+      Metadata:
+        encoder         : Lavc61.19.100 aac
+frame=  469 fps=0.0 q=-1.0 size=   12800KiB time=00:00:15.46 bitrate=6779.6kbits/s speed=30.6x    [mp4 @ 0x140805e60] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x140805da0] video:21574KiB audio:569KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.104340%
+frame=  720 fps=0.0 q=-1.0 Lsize=   22166KiB time=00:00:23.93 bitrate=7586.9kbits/s speed=29.2x    
+[aac @ 0x140815860] Qavg: 421.694

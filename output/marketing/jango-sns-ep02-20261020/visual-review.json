@@ -1,0 +1,17 @@
+{
+  "reviewedAt": "2026-10-20T05:04:07.586729+00:00",
+  "status": "ready-for-user-visual-review",
+  "method": "Direct visual inspection of four native-size lettered images, four panels at 360px width in the proof sheet, separate 360px panel 2 after punctuation fix, and simulated 3:4 profile thumbnail. Programmatic checks supplement visual observations.",
+  "observations": {
+    "continuity": "Woman retains brown bun, ivory knit, green skirt and beige tote across store scenes; milk keeps the blue/ivory package. Jango retains the left handle/pineapple, right hinges, chef hat, mitten hands, apron pocket and mint shoes. At home his seating side changes to preserve setup-before-punchline reading order.",
+    "artIntegration": "Jango, woman and props share warm contour, opaque fills and paper texture; no pasted character cutout is used. Face/hand expressions differ by scene. Shelf return, empty basket and bowl contact read clearly.",
+    "story": "Excited 1+1 offer → registered milk quantity discovered → carton returned → existing milk used and giant-bowl joke. Exactly one primary action per panel; illustrated inventory is clearly marked as an example.",
+    "framing": "Panels 1/3 show Jango hat through shoes; panel 2 is a close view with shoes near the lower edge, consistent with declared close-up framing; panel 4 uses natural table occlusion. No source is stretched.",
+    "lettering": "Speech balloons remain clear of faces/hands. Dialogue has approximately 24–27px font size at 360px width before font ink proportions. Phone milk/quantity read at 360px. Gaegu lacks U+2026 and U+00B7: ellipsis is visibly composed using three Gaegu period glyphs; series label uses spacing. Canonical dialogue remains unchanged in records.",
+    "profileThumbnail": "Title and both first-panel dialogue blocks remain readable within simulated 3:4 crop; only peripheral store/cart edge is cropped.",
+    "footer": "Brand and single action line fit in the last panel ivory band with sufficient contrast; no download promise or fabricated button is depicted."
+  },
+  "unresolvedBlockingIssues": [],
+  "humanAdoption": "Pending. Agent visual review does not replace user SNS adoption.",
+  "scope": "Promotional illustration only; no application, production API, account, DB, MASTER or publication changes."
+}

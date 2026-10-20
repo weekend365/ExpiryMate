@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-20T05:16:17.634242+00:00",
+  "episode": 2,
+  "scope": "User adopted the completed four-panel artwork for publication to @jango_plz, then chose a music-backed cartoon Reel because the desktop carousel composer has no music control.",
+  "adoptionQuote": "내가 열어둔 크롬 브라우저의 인스타그램 계정에 업로드 진행해줘. 게시하면서 저작권 영향 없는 배경음악도 깔아주고.",
+  "formatChoiceQuote": "음악을 넣은 카툰 릴스로 게시 (추천)",
+  "files": [
+    {
+      "file": "panels/01.png",
+      "sha256": "609e5b860bbc7b5d12be45207bdb5a5df618eb6d5f24783a078b5aa9a695cba7"
+    },
+    {
+      "file": "panels/02.png",
+      "sha256": "251a218c6bdff92ac92aae1420b36c038a13b0f9d28bf13f5738f30ae0dea38d"
+    },
+    {
+      "file": "panels/03.png",
+      "sha256": "1b77413eba8213d8a0d49770f866f57d9fc83d21e70250b53c8707b6237e0589"
+    },
+    {
+      "file": "panels/04.png",
+      "sha256": "b9a90e59095ef9a2ceaa95a04c7a0f1ac80141a3a05c65703b88423a4c1f969c"
+    }
+  ],
+  "masterChange": false
+}

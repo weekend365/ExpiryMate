@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-20T05:25:28.335058+00:00",
+  "removed": [
+    {
+      "file": "reel/frame-01.png",
+      "sha256": "5791ec228a87400e4ffc43facb3a3a6735f62d4d78bc3b29c3e4570f1d24447a",
+      "reason": "Reproducible duplicate video frame; retained review-360.jpg, MP4 and extraction script."
+    },
+    {
+      "file": "reel/frame-02.png",
+      "sha256": "5996074785233297a0fc67b7017a412f3fc1f3f47588cfcf1b219d57ada2eb19",
+      "reason": "Reproducible duplicate video frame; retained review-360.jpg, MP4 and extraction script."
+    },
+    {
+      "file": "reel/frame-03.png",
+      "sha256": "65bf45f01e5511950ff7eae500a434eb042a6985b35c3b0afc841738cd4a08e4",
+      "reason": "Reproducible duplicate video frame; retained review-360.jpg, MP4 and extraction script."
+    },
+    {
+      "file": "reel/frame-04.png",
+      "sha256": "cf4f01dbab127755019a04332eb79ec930d74d322cb4f51f800ef307302cd283",
+      "reason": "Reproducible duplicate video frame; retained review-360.jpg, MP4 and extraction script."
+    }
+  ]
+}

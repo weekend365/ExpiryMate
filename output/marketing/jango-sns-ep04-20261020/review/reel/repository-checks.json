@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-20T07:44:07.271018+00:00",
+  "pnpm docs:check": {
+    "exitCode": 0,
+    "result": "31 metadata entries, 71 links, canonical Expo/EAS build entry."
+  },
+  "git diff --check": {
+    "exitCode": 0
+  },
+  "pythonSyntax": {
+    "result": "render_ui.py, build_reel.py, validate_reel.py compile successfully"
+  },
+  "applicationTests": "Not rerun: only offline marketing artifacts and renderer/provenance files were added; no application code was changed."
+}

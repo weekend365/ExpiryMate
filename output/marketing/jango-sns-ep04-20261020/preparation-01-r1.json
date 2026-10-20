@@ -1,0 +1,34 @@
+{
+  "candidate": "scene-01-r1",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-01-r1.txt",
+  "promptSha256": "b4edb6f4c19f3a696ae9c5eb3296914c0ccc233bb8c59d6c6fec610c10bf2c7a",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 character anatomy, compact body, mittens, crayon material; not the food plate."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r2.png",
+      "sha256": "2862cdf2ea520b2a51164b72d9b192a5359dcd49f3de9a45555ed7ea03a01fed",
+      "role": "Continuing woman, brown bun, ivory knit sweater, forest-green skirt, warm kitchen."
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "Episode 3 user-directed torso correction: short apron/torso, short legs, connected mittens and shoes. Supporting continuity reference, not new MASTER."
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "User-approved scene integration and warm human-character interaction; not character MASTER or 4:5 framing."
+    }
+  ],
+  "purpose": "Establish grocery registration effort and continuing character identities before photo-registration action.",
+  "authorization": "User-approved storyboard and explicit source-art generation request."
+}

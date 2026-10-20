@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-10-20T07:10:33.004107+00:00",
+  "scope": "Unlettered static source artwork only. Native outputs visually inspected through official imagegen; all four 360x640 previews inspected individually.",
+  "status": "source-art-review-complete-awaiting-user-feedback",
+  "scenes": [
+    {
+      "scene": 1,
+      "candidate": "scene-01-r2",
+      "observations": [
+        "Woman face, bun and clothing continue previous episode.",
+        "Jango full hat, mittens, short apron/torso, short legs and two shoes are visible.",
+        "One phone and three distinct grocery packages; yogurt moved inward.",
+        "Upper natural wall is available for later fixed dialogue."
+      ]
+    },
+    {
+      "scene": 2,
+      "candidate": "scene-02-r1",
+      "observations": [
+        "Over-shoulder view shows receipt photographing action.",
+        "One receipt held by whole mitten; phone held by woman, natural hand grip.",
+        "Compact Jango body, connected arms and supported feet visible on stool.",
+        "Peripheral grocery cropping is contextual; receipt and phone are primary."
+      ]
+    },
+    {
+      "scene": 3,
+      "candidate": "scene-03-r2",
+      "observations": [
+        "Phone enlarged after first candidate so app information can be composed later.",
+        "Two connected human hands, one confirming fingertip; screen center unobstructed.",
+        "Jango remains compact and stands on visible surface; both shoes and chef hat visible.",
+        "Foreground phone scale explains change in character size."
+      ]
+    },
+    {
+      "scene": 4,
+      "candidate": "scene-04-r1",
+      "observations": [
+        "Woman smiles and presents the phone; Jango waits with one spoon by same yogurt cup.",
+        "Same kitchen, bun, sweater, green skirt and packaging.",
+        "Short torso and visible stool support; part of right shoe is naturally occluded by table.",
+        "Upper natural wall reserved for final brand and CTA; small phone detail is supporting, not main readable instruction."
+      ]
+    }
+  ],
+  "knownLimits": [
+    "No speech balloons, dialogue, receipt line items or app screen labels are typeset yet. The white screens and receipt are intentional compositing surfaces.",
+    "Native generated images are 941x1672. These are source originals; no final 1080x1920 Reel has been exported.",
+    "Final dialogue/UI readability, motion/cropping, actual Instagram controls, cover thumbnail, video/audio playback and music rights will be checked in the later authorized video stage.",
+    "Specific generated images have not yet been explicitly adopted by the user; no publication has been performed."
+  ],
+  "illustrationDisclosure": "AI-generated drawings with examples. Actual feature is user-reviewed receipt candidates, required detail completion and batch save; no implication of automatic expiry extraction or automatic saving."
+}

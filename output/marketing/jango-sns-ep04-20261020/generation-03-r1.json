@@ -1,0 +1,13 @@
+{
+  "sourceFile": "/Users/namu/.codex/generated_images/01a13dfb-4c3c-74a0-b7d0-ad9f76c40c68/exec-7d435e19-7cdb-4d44-b1a2-a5685c6eadda.png",
+  "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r1.png",
+  "sha256": "398859695556a735a9cd5dcaf0b4207632878ee552a75cf20792077c11af5740",
+  "dimensions": [
+    941,
+    1672
+  ],
+  "method": "official built-in imagegen",
+  "preparation": "preparation-03-r1.json",
+  "status": "candidate-to-refine",
+  "visualReview": "Review/confirm gesture readable with natural hands; phone screen should be enlarged and Jango shifted inward for app information legibility."
+}

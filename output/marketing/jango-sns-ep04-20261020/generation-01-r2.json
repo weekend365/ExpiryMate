@@ -1,0 +1,13 @@
+{
+  "sourceFile": "/Users/namu/.codex/generated_images/01a13dfb-4c3c-74a0-b7d0-ad9f76c40c68/exec-4d913db7-2873-44d6-a48b-7a2cefb791de.png",
+  "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+  "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233",
+  "dimensions": [
+    941,
+    1672
+  ],
+  "method": "official built-in imagegen",
+  "preparation": "preparation-01-r2.json",
+  "status": "candidate-for-user-review",
+  "visualReview": "Yogurt, tofu and eggs now grouped inside central area; receipt blank. Woman and compact Jango remain visually consistent. Generated candidates are not yet user-adopted."
+}

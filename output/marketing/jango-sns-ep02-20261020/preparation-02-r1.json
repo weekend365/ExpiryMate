@@ -1,0 +1,30 @@
+{
+  "panel": 2,
+  "promptFile": "prompts/panel-02-r1.txt",
+  "promptSha256": "0a07aa0f58df0d526e9483e403cd5ecbd3072def59e894cf76849a53ba401bae",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 identity, crayon medium, opaque colors and anatomy; no food plate in new scene."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "Approved scene integration, woman identity and warm comic mood; not the Jango master style."
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-01-r1.png",
+      "sha256": "3394d753fa9d579e37d266d9e40f915122aa95aa3abe4f61cbe8f9578d8e39a8",
+      "role": "Episode 2 first-panel continuity reference: same person, milk, location and Jango style; candidate reference, not user-adopted artwork."
+    }
+  ],
+  "referencePaths": [
+    "/Users/namu/Desktop/ExpiryMate/design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+    "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep02-20261020/source-art/panel-01-r1.png"
+  ]
+}

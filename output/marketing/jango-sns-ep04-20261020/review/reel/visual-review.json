@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-20T07:44:07.271018+00:00",
+  "stage": "reel-delivery",
+  "status": "produced-and-visually-reviewed; publication-stage checks remain",
+  "visualReview": {
+    "evidence": [
+      "review/reel/decoded-timeline.jpg",
+      "review/reel/ui-overlap-sheet.jpg",
+      "review/reel/cover-360.png",
+      "review/reel/cover-profile-3x4.jpg",
+      "review/reel/cover-profile-square.jpg"
+    ],
+    "artwork": "Selected four originals preserved; compact Jango apron/legs and woman/grocery continuity retained. No stretching or new character artwork.",
+    "phoneUI": "Current semantic colors, Pretendard, verified labels and recognizable app controls; enlarged/abridged offline rendering. Screen perspective, bezel, notch and foreground fingertips preserved. Core names and add button readable at 360px; small receipt/date metadata is supporting detail.",
+    "manualConfirmation": "Candidate list shows confirmation needed and disabled add; expiry/location details appear before the ready list. Other candidate edits are explicitly abbreviated.",
+    "lettering": "Separate fixed Gaegu balloon layers. Adjusted scenes 1/4/CTA bubble position to keep text inside borders. Dialogue/CTA do not cover faces. Main text bounds checked inside x96–900/y280–1420.",
+    "motion": "All four scenes use continuous 100–103% zoom with full background. Phone UI and receipt move with artwork. Frames at state changes and scene ends inspected; no empty borders or face/phone occlusion by lettering.",
+    "time": "First-frame hook; hard cuts at 4/9/18 seconds; UI state changes at 8.2/12/15; final brand and one CTA from 21 to 24 seconds.",
+    "cover": "Title backed by ivory panel for contrast over window; title and Jango visible in central 3:4 and square crops. Small series line sits near upper edge in square crop; main title has margin.",
+    "uiOverlap": "Simulated top/right/bottom controls at 360px do not hide dialogue, phone names, add button or eyes. Controls may cover peripheral glove/table/background. This is not a live Instagram preview."
+  },
+  "nativePlayback": {
+    "player": "QuickTime Player",
+    "mainFile": "reel/jango-ep04-music.mp4",
+    "main": "Started at 0; sampled scene 1, receipt, ready state and ending; timeline reached 24 seconds and playback stopped.",
+    "proxyFile": "review/reel/jango-ep04-360.mp4",
+    "proxy": "Started at 0; played through to 24 seconds; ending CTA observed.",
+    "audioTrack": "AAC present; player not muted, volume control 1. This does not establish subjective listening.",
+    "subjectiveListening": "Not completed: tool observations provided screenshots/state, not an audible stream to the reviewer."
+  },
+  "technical": {
+    "source": "review/reel/technical-report.json",
+    "frames": 720,
+    "seconds": 24,
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "fps": 30,
+    "video": "H.264 High / yuv420p",
+    "audio": "AAC LC stereo 48kHz",
+    "decodeExitCode": 0,
+    "blackEvents": 0,
+    "silenceEventsAtMinus60dBFor100ms": 0,
+    "integratedLUFS": -18.1,
+    "truePeakDBFS": -4.4
+  },
+  "rights": {
+    "track": "Carefree — Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "licenseEvidence": "music/license.json",
+    "sourceMP3SHA256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+    "creditAndChanges": "Included in caption.txt and MP4 comment metadata"
+  },
+  "remainingBeforePublication": [
+    "Subjective listening of the final audio",
+    "Actual Instagram preview/control overlap and cover crop",
+    "Apply AI content label, publish only within separately authorized scope and verify platform playback"
+  ],
+  "publication": "Not performed in this request; no post URL.",
+  "sourcePreservation": "210 existing reference/source files unchanged; see preservation-and-frame-check.json."
+}

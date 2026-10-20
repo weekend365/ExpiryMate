@@ -1,0 +1,78 @@
+{
+  "recordedAt": "2026-10-20T08:16:21.461008+00:00",
+  "status": "published",
+  "account": "jango_plz",
+  "episode": 4,
+  "title": "장고랑 살아보니 04 — 이걸 언제 다 입력해?",
+  "reelUrl": "https://www.instagram.com/jango_plz/reel/DetYJuaSyUD/",
+  "observedPostUrl": "https://www.instagram.com/p/DetYJuaSyUD/",
+  "authorization": {
+    "userQuote": "인스타그램에 게시해줘.",
+    "continuationQuotes": [
+      "다시 시도해봐.",
+      "다른 Chrome 작업을 멈췄어요"
+    ],
+    "scope": "One delivered episode 4 Reel, with prepared caption, cover, embedded licensed BGM and AI content label. No commit or push."
+  },
+  "submittedFiles": {
+    "reel/jango-ep04-music.mp4": {
+      "sha256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409",
+      "bytes": 22697613
+    },
+    "cover.jpg": {
+      "sha256": "4aef302dd78b88bc049d7fd0de9fdd8ccf3be750cc8b85c72f8ac802735bb69e",
+      "bytes": 1057306
+    },
+    "caption.txt": {
+      "sha256": "4a7962360659db5d8aa9e71f1214666f4a2477bf2f6fd5765d44d3c029888812",
+      "bytes": 1362
+    }
+  },
+  "upload": {
+    "method": "Existing user Chrome session; native macOS picker using path navigation, keyboard typeahead and Return.",
+    "programmaticPickerIssue": "Programmatic transfer failed to read local media; native selection succeeded for both MP4 and cover JPG.",
+    "format": "9:16",
+    "durationSeconds": 24,
+    "trim": "Full 0–24 seconds",
+    "soundEnabled": true,
+    "publishClicks": 1,
+    "successMessage": "릴스가 공유되었습니다"
+  },
+  "verification": {
+    "profilePostCountBefore": 9,
+    "profilePostCountAfter": 10,
+    "episode04Occurrences": 1,
+    "customCover": "Uploaded cover.jpg visible in editor and latest profile thumbnail; title and Jango retained in actual grid crop.",
+    "caption": "Posted heading matches caption.txt after whitespace normalization; 635 characters.",
+    "aiLabel": "AI 콘텐츠 visible on published post.",
+    "accessibility": "No per-image alt-text field for Reel; Korean scene description included in caption. Auto captions left off because there is no narration.",
+    "music": "Embedded BGM retained; original audio link present; published player unmuted at volume 50. Carefree attribution, CC BY 4.0 URL and edit notice present in caption.",
+    "playback": {
+      "durationSeconds": 24,
+      "servedVideoSize": "720x1280",
+      "readyState": 4,
+      "error": null,
+      "observations": "Video advanced through scene/UI changes and looped. Public player confirmed paused=false and muted=false after enabling audio."
+    },
+    "subjectiveListening": "Not claimed; inherited listening limitation disclosed before the user authorized publication. Technical audio QA remains in prior production record.",
+    "profileDownloadLinks": {
+      "status": "Both verified in profile link popup during this publishing task; profile continues to display two links.",
+      "iPhone": "https://apps.apple.com/kr/app/id6793375883",
+      "Android": "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    }
+  },
+  "preservation": {
+    "baselineManifest": "reel-file-hashes.json",
+    "filesChecked": 143,
+    "mismatches": [],
+    "historicalPreparationAndProductionRecords": "Preserved; preflight waiting state is historical and resolved by this publication record."
+  },
+  "evidence": [
+    "ready-to-publish.jpg",
+    "share-success.jpg",
+    "profile-published.jpg",
+    "reel-published.jpg",
+    "published-ui.txt"
+  ],
+  "changes": "Added publication evidence and records only. No application code, public API, database, MASTER, prior episode or git history changes."
+}

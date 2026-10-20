@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-10-20T07:54:41.984020+00:00",
+  "captionCharacters": 635,
+  "captionLimit": 2200,
+  "requiredCopy": [
+    "AI artwork disclosure",
+    "UI reconstruction and example-data disclosure",
+    "video description",
+    "music attribution, license link, edit notice",
+    "download/first-registration CTA"
+  ],
+  "captionChecks": "pass",
+  "musicSHA256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+  "musicRights": "CC BY 4.0; official evidence retained",
+  "videoTechnicalChecks": "pass",
+  "status": "Waiting for native file picker handoff after programmatic transfer failed; publish has not been clicked."
+}

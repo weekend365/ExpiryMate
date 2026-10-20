@@ -1,0 +1,171 @@
+{
+  "id": "jango-sns-ep04-reel-20261020",
+  "createdAt": "2026-10-20T07:19:28.774498+00:00",
+  "authorization": {
+    "quote": "지금 원화 기준으로 앱 화면의 퀄리티를 신경써서 장고 카툰 릴스 생성해줘. 실제 장고야 부탁해 앱의 UI 디자인을 활용해도 좋아.",
+    "scope": "Use the selected four raw artworks to create a complete cartoon Reel, improve phone UI using actual app design, typeset dialogue, add licensed instrumental music, produce cover and review artifacts. No Instagram publication, app/API/DB/MASTER changes, commit or push."
+  },
+  "artworkAdoptionForThisReel": [
+    {
+      "scene": 1,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png",
+      "sha256": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233"
+    },
+    {
+      "scene": 2,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png",
+      "sha256": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2"
+    },
+    {
+      "scene": 3,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+      "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f"
+    },
+    {
+      "scene": 4,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499"
+    }
+  ],
+  "references": [
+    {
+      "file": "docs/design-system.md",
+      "sha256": "60feef61f9abb70871f489333704fcde504c2da11b8fca834c7bf99e1f2449b0"
+    },
+    {
+      "file": "packages/shared/src/design/palette.ts",
+      "sha256": "602c6b459c575f753312d625681046e2041d7499544cf390c0b42e69be39e334"
+    },
+    {
+      "file": "packages/shared/src/design/tokens.ts",
+      "sha256": "e21e134c3153ff50de6eb4e39ad3dfb6bd17efa90de4fd9cea19ec18671a1431"
+    },
+    {
+      "file": "apps/mobile/src/components/Button.tsx",
+      "sha256": "7ce48a7edcfa97df9ba6956f7abf6312207c2cac9e21e4c18a17fd1510f49155"
+    },
+    {
+      "file": "apps/mobile/src/components/AppText.tsx",
+      "sha256": "6e0efc43e63b31213877dbdcb52c123bd7bb7ec2a8f58b6179fde0ddb32839e2"
+    },
+    {
+      "file": "apps/mobile/app/register-photo.tsx",
+      "sha256": "4ee3ee2ccfa2a4cb85e72355e520d2547e080f58e9886b582c050060dc1c3996"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-capture-screen.tsx",
+      "sha256": "907396baa20d7d84e546de81a188c03da16d157c5ae43114e4f846b0bd405c43"
+    },
+    {
+      "file": "apps/mobile/src/features/registration/ingredient-entry-method-sheet.tsx",
+      "sha256": "4b5360431799371957a4301d3e8b96761f2d4dc97f81d0fddd31504e792ecd88"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "sha256": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "sha256": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-LICENSE.txt",
+      "sha256": "b04538c9abec39a3db75108cf0af0fd9c77032fe8aa2cf38345b4d250e98e38e"
+    },
+    {
+      "file": "apps/mobile/assets/characters/jango-praise.png",
+      "sha256": "9f2b255b91628294f5e1d820d6e28b318805b497fb110363e8f30fb7555e2a0c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt",
+      "sha256": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+    }
+  ],
+  "timeline": [
+    {
+      "start": 0,
+      "end": 4,
+      "scene": 1,
+      "screen": null
+    },
+    {
+      "start": 4,
+      "end": 8.2,
+      "scene": 2,
+      "screen": "receipt-camera"
+    },
+    {
+      "start": 8.2,
+      "end": 9,
+      "scene": 2,
+      "screen": "analysis"
+    },
+    {
+      "start": 9,
+      "end": 12,
+      "scene": 3,
+      "screen": "review-candidates"
+    },
+    {
+      "start": 12,
+      "end": 15,
+      "scene": 3,
+      "screen": "details-confirmation"
+    },
+    {
+      "start": 15,
+      "end": 18,
+      "scene": 3,
+      "screen": "ready-to-add"
+    },
+    {
+      "start": 18,
+      "end": 21,
+      "scene": 4,
+      "screen": "complete"
+    },
+    {
+      "start": 21,
+      "end": 24,
+      "scene": 4,
+      "screen": "complete",
+      "copy": "brand and one CTA"
+    }
+  ],
+  "uiMethod": "Offline typeset illustrative UI using current semantic colors, Pretendard, current card/button/input design and verified labels. Core controls enlarged and nonessential portions omitted for phone-in-video readability. Not literal screen capture; example data and abbreviated input flow are disclosed. No operational API or account connection.",
+  "uiCriticalFlow": "Receipt supplies candidate names/quantities; user checks or completes expiry/storage before pressing 재료 추가. Do not imply automatic expiry detection.",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration": 24,
+    "video": "H.264",
+    "audio": "AAC",
+    "motion": "100→103% per scene, fixed lettering; phone UI moves with artwork"
+  },
+  "music": {
+    "track": "Carefree",
+    "artist": "Kevin MacLeod",
+    "source": "music/license.json",
+    "segment": [
+      0,
+      24
+    ],
+    "fades": [
+      0.3,
+      1
+    ],
+    "targetLUFS": -18,
+    "truePeakLimitDB": -2,
+    "rightsEvidence": "Retained same-day official licensing screenshot; CC BY 4.0 page rechecked.",
+    "subjectiveListening": "To be attempted separately; technical audio checks do not imply listening."
+  }
+}

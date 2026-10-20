@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>장고랑 살아보니 04 — 릴스 검토</title>
+<style>
+  *{box-sizing:border-box}body{margin:0;padding:24px;background:#fdf8f2;color:#302e2c;font:16px system-ui,sans-serif}
+  h1{font-size:24px;margin:0 0 10px}p{line-height:1.6;max-width:850px}
+  .grid{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+  .column{width:360px}video,.cover{width:360px;height:640px;background:#302e2c;display:block;border-radius:12px}
+  video{object-fit:contain}button,a{font:inherit}button{padding:9px 14px;border:0;border-radius:9px;background:#28674f;color:white;cursor:pointer}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+  #status{font-size:13px;color:#515b55}a{color:#28674f}
+  .wide{max-width:1100px;width:100%;margin-top:28px}
+  .phone-wrap{position:relative}.sim{display:none;position:absolute;inset:0;pointer-events:none;color:white;font-weight:700;text-shadow:0 1px 3px #000}
+  .phone-wrap.simulate .sim{display:block}.sim:after{content:"";position:absolute;inset:495px 0 0;background:linear-gradient(transparent,#0009);border-radius:0 0 12px 12px}
+  .top{position:absolute;top:32px;left:18px}.side{position:absolute;right:12px;top:338px;font-size:28px;line-height:1.9;text-align:center}
+  .caption{position:absolute;left:18px;right:65px;bottom:50px;font-size:12px;z-index:1;line-height:1.7}
+  .caption small{font-size:10px}.label{color:#6e5000;font-size:13px}pre{white-space:pre-wrap;max-width:800px;font:14px/1.7 system-ui}
+</style>
+<h1>장고랑 살아보니 04 — 이걸 언제 다 입력해?</h1>
+<p>영수증으로 재료를 확인하고 함께 등록하는 24초 카툰 릴스. 앱 디자인을 바탕으로 시연 화면을 재구성하고 입력 과정을 축약했습니다.</p>
+<div class="grid">
+  <section class="column">
+    <div class="phone-wrap" id="phone">
+      <video id="reel" playsinline controls preload="auto" poster="../../cover.jpg" src="../../reel/jango-ep04-music.mp4"></video>
+      <div class="sim" aria-hidden="true">
+        <div class="top">릴스</div><div class="side">♡<br>◯<br>➤<br>⋯</div>
+        <div class="caption">@jango_plz<br>이걸 언제 다 입력해?<br><small>장고랑 살아보니 04 · Carefree — Kevin MacLeod</small></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="play">처음부터 재생</button>
+      <button id="overlay">UI 겹침 보기</button>
+    </div>
+    <p id="status" role="status">불러오는 중</p>
+    <p class="label">UI 겹침은 보수적인 검토용 시뮬레이션입니다. Instagram의 실제 게시 화면은 아닙니다.</p>
+    <p><a href="../../reel/jango-ep04-music.mp4">원본 MP4</a> · <a href="jango-ep04-360.mp4">360px 검토 영상</a> · <a href="../../caption.txt">캡션</a></p>
+  </section>
+  <section class="column">
+    <img class="cover" src="../../cover.jpg" alt="재료 등록, 하나씩 입력하고 있나요? 앱의 재료 목록 옆에서 장고가 손짓하는 커버">
+    <p><a href="../../cover.jpg">커버 JPG</a> · <a href="cover-profile-3x4.jpg">3:4 크롭</a> · <a href="cover-profile-square.jpg">정사각형 크롭</a></p>
+  </section>
+</div>
+<img class="wide" src="storyboard-360.jpg" alt="장보기 후 입력 고민, 영수증 촬영, 후보 확인과 등록, 완료의 네 장면">
+<p>음악: Carefree — Kevin MacLeod (incompetech.com), <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. 원곡 일부 발췌, 음량 조정 및 페이드 적용.</p>
+<script>
+const video=document.getElementById('reel'),status=document.getElementById('status');
+window.playbackAudit={events:[],ended:false};
+for(const event of ['loadedmetadata','playing','pause','ended','error']){
+  video.addEventListener(event,()=>{
+    playbackAudit.events.push({event,time:video.currentTime,at:new Date().toISOString()});
+    if(event==='ended')playbackAudit.ended=true;
+  });
+}
+video.addEventListener('timeupdate',()=>{
+  status.textContent=`${video.currentTime.toFixed(1)} / ${video.duration.toFixed(1)}초 · ${video.videoWidth}×${video.videoHeight} · ${video.muted?'음소거':'음악 켜짐'}`;
+});
+document.getElementById('play').onclick=async()=>{video.currentTime=0;video.muted=false;await video.play()};
+document.getElementById('overlay').onclick=()=>document.getElementById('phone').classList.toggle('simulate');
+</script>
+</html>

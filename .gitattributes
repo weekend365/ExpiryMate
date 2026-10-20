@@ -5,3 +5,9 @@
 apps/mobile/ios/.xcode.env text eol=lf
 **/.xcode.env text eol=lf
 **/.xcode.env.local text eol=lf
+
+# Preserve raw, hash-recorded cartoon encoder logs and captured UI text verbatim.
+output/marketing/jango-sns-ep02-20261020/reel/*.log -whitespace
+output/marketing/jango-sns-ep04-20261020/reel/*.log -whitespace
+output/marketing/jango-sns-ep04-20261020/review/reel/technical-decode.log -whitespace
+output/marketing/jango-sns-ep04-20261020/publication/published-ui.txt -whitespace

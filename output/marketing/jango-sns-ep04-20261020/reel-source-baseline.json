@@ -1,0 +1,18 @@
+{
+  "scope": "Existing source-art generation evidence remains unchanged. Newly added video files are excluded from this reference subset.",
+  "files": {
+    "output/marketing/jango-sns-ep04-20261020/preparation.json": "1e6b64309408c9842f2a35f4e1ac824099b83c20d3e5d9d3551c9d000bd0f997",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r1.png": "398859695556a735a9cd5dcaf0b4207632878ee552a75cf20792077c11af5740",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r2.png": "93163067606ece321451c3fdeda6233a104216848941913bc72ebef0bbbb9233",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-01-r1.png": "e12e80f4319444952b87c51dfaa1d84f098798e92d86ba3a3d7eac7bf0cf785e",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-02-r1.png": "a05f790869eedefdbcd40d240cb6eb7c657ed4789040093334edfb3bcf59bdb2",
+    "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-03-r1.txt": "faf7ad56c1a226ebacb0ec8b577f2c0c94d9d2e33d4c62d3e97fc0c035d58c2d",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-03-r2.txt": "f961daa731ee5e9fc760c5244aca549644db5b5dfbb3f37e81355a7f1cb195f0",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-01-r2.txt": "4c6628594953bc00a57a81c1356c6cea776ff5d6547582b00a41bf26f0760ad7",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-01-r1.txt": "b4edb6f4c19f3a696ae9c5eb3296914c0ccc233bb8c59d6c6fec610c10bf2c7a",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-04-r1.txt": "4f44b99843ee93c39d6ec71d230af50583472c7b6aa2d2f9791ee4b831baac81",
+    "output/marketing/jango-sns-ep04-20261020/prompts/scene-02-r1.txt": "f63c976ce3c729db6f5326e3cf7fcb9eeb0d8d9eeae56de8f53837ff7889dc1b"
+  }
+}

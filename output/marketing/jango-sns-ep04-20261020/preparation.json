@@ -1,0 +1,210 @@
+{
+  "id": "jango-sns-ep04-20261020",
+  "createdAt": "2026-10-20T07:00:01.655116+00:00",
+  "clientDate": "2026-10-20",
+  "media": "SNS cartoon Reel source artwork",
+  "status": "storyboard-approved-artwork-in-production",
+  "authorization": {
+    "quote": "이 콘티로 원화부터 생성해봐.",
+    "scope": "Generate and visually review four unlettered scene originals from the immediately preceding approved receipt-registration storyboard. Artwork candidates for user review; no publication, video/audio production, code changes, MASTER changes, commit or push.",
+    "storyboardTitle": "이걸 언제 다 입력해?",
+    "adoptionOfGeneratedImages": "pending-user-review"
+  },
+  "format": {
+    "plannedVideoSize": [
+      1080,
+      1920
+    ],
+    "nativeComposition": "9:16 full bleed",
+    "nativeGeneratedBytes": "Preserve actual output dimensions and bytes; no stretching.",
+    "plannedDurationSeconds": 24,
+    "safeArea": [
+      96,
+      280,
+      900,
+      1420
+    ],
+    "plannedMotion": "100 to 103 percent gentle zoom; fixed lettering later",
+    "text": "No generated text or speech bubbles. Phone displays and receipt text reserved for deterministic Korean typesetting later.",
+    "music": "Future video phase: commercially licensed instrumental BGM; no audio made in this artwork-only scope.",
+    "cover": "Future phase: separate vertical cover with title 재료 등록, 하나씩 입력하고 있나요? and Jango holding receipt."
+  },
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 character anatomy, compact body, mittens, crayon material; not the food plate."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r2.png",
+      "sha256": "2862cdf2ea520b2a51164b72d9b192a5359dcd49f3de9a45555ed7ea03a01fed",
+      "role": "Continuing woman, brown bun, ivory knit sweater, forest-green skirt, warm kitchen."
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "Episode 3 user-directed torso correction: short apron/torso, short legs, connected mittens and shoes. Supporting continuity reference, not new MASTER."
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "User-approved scene integration and warm human-character interaction; not character MASTER or 4:5 framing."
+    }
+  ],
+  "policies": [
+    {
+      "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+      "sha256": "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66",
+      "role": "Read-only production policy"
+    },
+    {
+      "file": "design/jango/reference/JANGO-CHARACTER-BIBLE.md",
+      "sha256": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+      "role": "Read-only production policy"
+    },
+    {
+      "file": "design/jango/reference/JANGO-STYLE-GUIDE.md",
+      "sha256": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+      "role": "Read-only production policy"
+    },
+    {
+      "file": "design/jango/reference/STYLE-MASTER-ADOPTION.md",
+      "sha256": "3db1683e8697835c413e765a49d23679a16d08ab7649aaf3c58fad0c31d99e48",
+      "role": "Read-only production policy"
+    },
+    {
+      "file": "design/jango/quality/README.md",
+      "sha256": "33f49454c228479add406f94ae4d6f6429ff1edfc376d5835b1b3ecc28ec510c",
+      "role": "Read-only production policy"
+    },
+    {
+      "file": "design/jango/cartoon-series.json",
+      "sha256": "be54d813f1a1ef8831be7dad7078c927316004b7f3a92db61be3fed611731e19",
+      "role": "Read-only production policy"
+    }
+  ],
+  "featureEvidence": [
+    {
+      "file": "apps/mobile/src/features/registration/ingredient-entry-method-sheet.tsx",
+      "sha256": "4b5360431799371957a4301d3e8b96761f2d4dc97f81d0fddd31504e792ecd88",
+      "role": "Receipt photo candidate review and batch inventory save verified from current source"
+    },
+    {
+      "file": "apps/mobile/app/register-photo.tsx",
+      "sha256": "4ee3ee2ccfa2a4cb85e72355e520d2547e080f58e9886b582c050060dc1c3996",
+      "role": "Receipt photo candidate review and batch inventory save verified from current source"
+    },
+    {
+      "file": "apps/mobile/src/features/photo-intake/photo-capture-screen.tsx",
+      "sha256": "907396baa20d7d84e546de81a188c03da16d157c5ae43114e4f846b0bd405c43",
+      "role": "Receipt photo candidate review and batch inventory save verified from current source"
+    },
+    {
+      "file": "docs/product/release-scope.md",
+      "sha256": "89e9d960d780307fc33e92158dbe8bdb07f4532581ab1dd5ca9f44d6f5251c61",
+      "role": "Receipt photo candidate review and batch inventory save verified from current source"
+    }
+  ],
+  "storyboard": [
+    {
+      "scene": 1,
+      "seconds": [
+        0,
+        4
+      ],
+      "action": "Woman has just returned with tofu, eggs and yogurt; looks between groceries and phone, tired by typing. Jango beside her.",
+      "dialogue": [
+        {
+          "speaker": "woman",
+          "text": "이걸 하나씩 다 입력해?"
+        }
+      ],
+      "camera": "medium kitchen/table establishing view"
+    },
+    {
+      "scene": 2,
+      "seconds": [
+        4,
+        9
+      ],
+      "action": "Jango holds receipt for the woman to photograph using the photo batch entry flow.",
+      "dialogue": [
+        {
+          "speaker": "Jango",
+          "text": "영수증부터 찍어 봐!"
+        }
+      ],
+      "camera": "receipt and phone interaction close enough to read later screen insert"
+    },
+    {
+      "scene": 3,
+      "seconds": [
+        9,
+        18
+      ],
+      "action": "Large phone review screen: tofu, eggs, yogurt. User checks names/quantities, supplies required expiry and storage information, then taps 재료 추가.",
+      "dialogue": [
+        {
+          "speaker": "woman",
+          "text": "재료 이름이 쭉 나왔네!"
+        },
+        {
+          "speaker": "Jango",
+          "text": "내용 확인하고, 함께 넣자!"
+        }
+      ],
+      "screenLater": [
+        "이 재료들이 맞나요?",
+        "두부",
+        "달걀",
+        "요거트",
+        "재료 추가",
+        "시연 예시"
+      ],
+      "camera": "large unobstructed phone screen and human touch; Jango small supporting figure"
+    },
+    {
+      "scene": 4,
+      "seconds": [
+        18,
+        24
+      ],
+      "action": "Woman sees completed registration, smiles. Jango waits by yogurt with a spoon.",
+      "dialogue": [
+        {
+          "speaker": "woman",
+          "text": "여러 개를 한 번에 넣었네!"
+        }
+      ],
+      "dialogueUntil": 21,
+      "brandFrom": 21,
+      "brand": "장고야 부탁해",
+      "cta": "영수증으로 재료 등록해 보세요.",
+      "camera": "warm table result scene with room for fixed end copy"
+    }
+  ],
+  "continuity": {
+    "groceries": [
+      "one white tofu tub with pale mint lid",
+      "one small brown egg carton with brown eggs",
+      "one ivory yogurt cup with mint lid"
+    ],
+    "phone": "single charcoal rounded smartphone",
+    "receipt": "single ivory narrow paper strip, lettering deferred",
+    "woman": "same brown messy bun, ivory knit top, green skirt",
+    "jango": "short body and legs; hat, face, body and mittens visibly connected; no elongation to reach props"
+  },
+  "visualIntent": {
+    "scene1": "mild overwhelmed woman; attentive Jango",
+    "scene2": "helpful proud Jango, whole-mitten receipt grip",
+    "scene3": "clear human decision and touch, supportive Jango",
+    "scene4": "relief and eager little snack anticipation",
+    "mouthReview": "SNS expressive poses; compare emotion, connection and legibility visually, no forged automatic mouth pass."
+  },
+  "featureDisclosure": "Illustrated demonstration, not literal production screenshots. Items, receipt and dates are examples. Photo analysis produces candidates; users review and complete required information before batch save.",
+  "preservation": "All previous episodes, active character MASTER and app sources remain unchanged."
+}

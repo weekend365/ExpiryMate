@@ -1,0 +1,44 @@
+{
+  "protectedFiles": 197,
+  "allUnchanged": true,
+  "selectedImagesDecode": 4,
+  "sourceHashesVerified": true,
+  "promptAndReferenceHashesVerified": true,
+  "sourceSizes": [
+    [
+      941,
+      1672
+    ],
+    [
+      941,
+      1672
+    ],
+    [
+      941,
+      1672
+    ],
+    [
+      941,
+      1672
+    ]
+  ],
+  "reviewSizes": [
+    [
+      360,
+      640
+    ],
+    [
+      360,
+      640
+    ],
+    [
+      360,
+      640
+    ],
+    [
+      360,
+      640
+    ]
+  ],
+  "runtimeChecks": "No application code changed. App lint/typecheck/test were not rerun for image-only output; artifact and document checks used."
+}

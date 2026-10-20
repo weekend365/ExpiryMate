@@ -1,0 +1,369 @@
+{
+  "nativeArtworkSize": [
+    941,
+    1672
+  ],
+  "videoSize": [
+    1080,
+    1920
+  ],
+  "framing": "Uniform scaling; less than 1 native pixel background crop for ratio rounding.",
+  "fonts": {
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+    "apps/mobile/assets/fonts/Pretendard-Regular.otf": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93"
+  },
+  "balloon": {
+    "source": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+    "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+  },
+  "phoneUI": "Offline enlarged/abridged current app design, not runtime screenshots. Precise perspective projection; original hands, bezel and notch retained.",
+  "screenQuads": {
+    "2": [
+      [
+        185,
+        766
+      ],
+      [
+        386,
+        770
+      ],
+      [
+        366,
+        1204
+      ],
+      [
+        158,
+        1193
+      ]
+    ],
+    "3": [
+      [
+        210,
+        599
+      ],
+      [
+        526,
+        577
+      ],
+      [
+        575,
+        1205
+      ],
+      [
+        252,
+        1232
+      ]
+    ],
+    "4": [
+      [
+        466,
+        768
+      ],
+      [
+        547,
+        749
+      ],
+      [
+        572,
+        911
+      ],
+      [
+        489,
+        926
+      ]
+    ]
+  },
+  "receiptQuads": {
+    "1": [
+      [
+        689,
+        1085
+      ],
+      [
+        749,
+        1076
+      ],
+      [
+        805,
+        1156
+      ],
+      [
+        734,
+        1171
+      ]
+    ],
+    "2": [
+      [
+        451,
+        808
+      ],
+      [
+        537,
+        811
+      ],
+      [
+        544,
+        1019
+      ],
+      [
+        443,
+        1013
+      ]
+    ],
+    "4": [
+      [
+        759,
+        1157
+      ],
+      [
+        830,
+        1150
+      ],
+      [
+        898,
+        1242
+      ],
+      [
+        812,
+        1255
+      ]
+    ]
+  },
+  "fixedText": [
+    {
+      "role": "scene 1 dialogue",
+      "copy": "이걸 하나씩",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 84,
+      "bbox": [
+        310,
+        284,
+        690,
+        361
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 1 dialogue",
+      "copy": "다 입력해?",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 84,
+      "bbox": [
+        322,
+        379,
+        678,
+        462
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 2 dialogue",
+      "copy": "영수증부터",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 84,
+      "bbox": [
+        328,
+        314,
+        672,
+        384
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 2 dialogue",
+      "copy": "찍어 봐!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 84,
+      "bbox": [
+        360,
+        402,
+        640,
+        466
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "screen disclosure",
+      "copy": "앱 디자인 기반 시연 · 예시 데이터",
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "size": 29,
+      "bbox": [
+        318,
+        586,
+        692,
+        612
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 3 dialogue 03a",
+      "copy": "재료 이름이",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        316,
+        284,
+        684,
+        354
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 3 dialogue 03a",
+      "copy": "쭉 나왔네!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        331,
+        372,
+        669,
+        446
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "screen disclosure",
+      "copy": "앱 디자인 기반 시연 · 입력 과정 축약",
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "size": 29,
+      "bbox": [
+        302,
+        586,
+        708,
+        612
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 3 dialogue 03b",
+      "copy": "내용 확인하고,",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        268,
+        280,
+        732,
+        352
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 3 dialogue 03b",
+      "copy": "함께 넣자!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        331,
+        370,
+        669,
+        450
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "screen disclosure",
+      "copy": "앱 디자인 기반 시연 · 입력 과정 축약",
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "size": 29,
+      "bbox": [
+        302,
+        586,
+        708,
+        612
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 4 dialogue",
+      "copy": "여러 개를",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 76,
+      "bbox": [
+        360,
+        282,
+        640,
+        358
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "scene 4 dialogue",
+      "copy": "한 번에 넣었네!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 76,
+      "bbox": [
+        265,
+        376,
+        735,
+        450
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "brand",
+      "copy": "장고야 부탁해",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 88,
+      "bbox": [
+        266,
+        296,
+        734,
+        364
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "single CTA",
+      "copy": "영수증으로 재료 등록해 보세요.",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 54,
+      "bbox": [
+        170,
+        402,
+        830,
+        448
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover series",
+      "copy": "장고랑 살아보니 04",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 44,
+      "bbox": [
+        330,
+        423,
+        666,
+        463
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "copy": "재료 등록,",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 76,
+      "bbox": [
+        344,
+        476,
+        652,
+        542
+      ],
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "copy": "하나씩 입력하고 있나요?",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 76,
+      "bbox": [
+        136,
+        558,
+        860,
+        634
+      ],
+      "fixedToFrame": true
+    }
+  ]
+}

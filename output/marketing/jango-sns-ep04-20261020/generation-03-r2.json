@@ -1,0 +1,13 @@
+{
+  "sourceFile": "/Users/namu/.codex/generated_images/01a13dfb-4c3c-74a0-b7d0-ad9f76c40c68/exec-25584772-8365-4fcf-9973-cbe129bc09eb.png",
+  "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-03-r2.png",
+  "sha256": "12bd855b1402e0517248fcea722feb813a29f5d33a440e12f128afe64a483c3f",
+  "dimensions": [
+    941,
+    1672
+  ],
+  "method": "official built-in imagegen",
+  "preparation": "preparation-03-r2.json",
+  "status": "candidate-for-user-review",
+  "visualReview": "Phone is visibly larger, mostly front-facing and clear for a later exact app insert. Jango remains compact, full hat and both shoes visible. Final UI compositing and actual Instagram overlay review are deferred to the video phase."
+}

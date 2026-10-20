@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-20T07:41:13.253737+00:00",
+  "preservedFiles": 210,
+  "preservationMismatches": [],
+  "selectedOriginalsUnchanged": 4,
+  "decodedFrames": 720,
+  "duration": 24.0,
+  "uiSimulation": "Illustrative right-side controls and bottom caption; not a live Instagram screenshot. Actual publishing preview remains a publishing-stage check.",
+  "decodedReviewTimes": [
+    0,
+    4,
+    8.2,
+    9,
+    12,
+    15,
+    18,
+    21
+  ],
+  "motionEndReviewTimes": [
+    3.9666667,
+    8,
+    17.9666667,
+    23.9666667
+  ],
+  "pythonSyntax": "pass",
+  "finalVideoSHA256": "ab6307d677c23cd61fce422e14b563641eb08b17dfafc328a8f01c051714b409",
+  "coverSHA256": "4aef302dd78b88bc049d7fd0de9fdd8ccf3be750cc8b85c72f8ac802735bb69e"
+}
