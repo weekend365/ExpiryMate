@@ -9,7 +9,7 @@ import {readMasterSet} from './jango-master-set.mjs';
 import {normalizeLettering,renderLettering} from './render-jango-lettering.mjs';
 import {cleanupReceipt,historicalArtifactHash,isPrunableIntermediate,reconstructedHash} from './jango-intermediate-artifacts.mjs';
 import {historicalHash,historicalEvidence,readHistoricalJson} from './jango-history.mjs';
-import {finalBase,verifyFinalSet} from './build-jango-final-set.mjs';
+import {finalBase,verifyFinalSet,verifyFinalBaselineEvidence} from './build-jango-final-set.mjs';
 const {PNG}=createRequire(new URL('../apps/mobile/package.json',import.meta.url))('pngjs');
 const base='design/jango/emoticons/kakao-32/v18',plan=readJson(base+'/plan.json'),set=readMasterSet();
 const example=()=>structuredClone(plan[0]);
@@ -181,6 +181,34 @@ test('default build omits unused caches and optional historical outputs reproduc
    assert.equal(fileHash(temp+'/'+dir+'/29.png'),entry.sha256);
   }
  }finally{fs.rmSync(local(temp),{recursive:true,force:true});}
+});
+test('SNS policy revisions preserve historical bytes and reject unrecorded changes or artwork exceptions',()=>{
+ const registryFile=local('design/jango/cartoon-series.json'),registryBytes=fs.readFileSync(registryFile),registry=JSON.parse(registryBytes);
+ const policy=registry.currentProductionPolicy,previous=policy.guideHistory[0];
+ const item={file:previous.file,sha256:previous.sha256};
+ const temporary='design/jango/quality/history/cartoon-reels-20261020/snapshot-test-'+process.pid+'.txt';
+ const temporaryPath=local(temporary);
+ const write=()=>fs.writeFileSync(registryFile,JSON.stringify(registry));
+ assert.equal(verifyFinalBaselineEvidence(item).status,'archived-policy');
+ assert.throws(()=>verifyFinalBaselineEvidence({...item,sha256:'0'.repeat(64)}),/Missing exact historical/);
+ assert.throws(()=>verifyFinalBaselineEvidence({file:readJson('design/jango/master-set.json').entries[0].source,sha256:'0'.repeat(64)}),/Historical hash mismatch/);
+ try{
+  policy.guide.sha256='0'.repeat(64);write();
+  assert.throws(()=>verifyFinalBaselineEvidence(item),/Unrecorded current SNS guide change/);
+  policy.guide.sha256=fileHash(item.file);policy.guideHistory=[];write();
+  assert.throws(()=>verifyFinalBaselineEvidence(item),/Missing exact historical SNS guide snapshot/);
+  policy.guideHistory=[{...previous,snapshot:item.file}];write();
+  assert.throws(()=>verifyFinalBaselineEvidence(item),/explicit history document/);
+  fs.writeFileSync(temporaryPath,'altered historical document');
+  policy.guideHistory=[{...previous,snapshot:temporary}];write();
+  assert.throws(()=>verifyFinalBaselineEvidence(item),/Historical hash mismatch/);
+  fs.unlinkSync(temporaryPath);fs.symlinkSync(local(previous.snapshot),temporaryPath);
+  assert.throws(()=>verifyFinalBaselineEvidence(item),/Symlink/);
+ }finally{
+  fs.writeFileSync(registryFile,registryBytes);fs.rmSync(temporaryPath,{force:true});
+ }
+ assert.equal(historicalHash(previous.snapshot,item.sha256),item.sha256);
+ assert.deepEqual(fs.readFileSync(registryFile),registryBytes);
 });
 test('final collection keeps the selected 29th design and rejects altered curation or file inventories',()=>{
  const collection=readJson(finalBase+'/collection.json');

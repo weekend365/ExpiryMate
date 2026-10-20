@@ -23,6 +23,24 @@ const copy=(source,target)=>{
 const run=(script,...args)=>execFileSync(process.execPath,['scripts/'+script,...args],{stdio:'pipe'});
 const escape=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 
+// This live SNS policy can evolve independently of the frozen emoticon set.
+// Its historical bytes must still match the original baseline, while the live
+// document must match the current user-authorized policy record. Artwork and
+// all other baseline resources retain the existing verification path.
+export function verifyFinalBaselineEvidence(item){
+  const snsGuide='design/jango/reference/SNS-CARTOON-GUIDE.md';
+  if(item.file!==snsGuide||fileHash(item.file)===item.sha256)return historicalEvidence(item.file,item.sha256);
+  const policy=readJson('design/jango/cartoon-series.json').currentProductionPolicy;
+  assert.equal(policy?.guide?.file,snsGuide,'Missing current SNS guide policy');
+  assert.equal(fileHash(snsGuide),policy.guide.sha256,'Unrecorded current SNS guide change');
+  historicalHash(snsGuide,policy.guide.sha256); // Keep canonical-path and symlink rejection for the live document too.
+  const previous=policy.guideHistory?.find(row=>row.file===item.file&&row.sha256===item.sha256);
+  assert(previous,'Missing exact historical SNS guide snapshot');
+  assert.match(previous.snapshot,/^design\/jango\/quality\/history\/.+\.txt$/,'SNS guide snapshot must be an explicit history document');
+  assert.equal(historicalHash(previous.snapshot,item.sha256),item.sha256,'Historical SNS guide bytes changed');
+  return {status:'archived-policy',measured:true,sha256:item.sha256,snapshot:previous.snapshot};
+}
+
 export function verifyFinalSet(collection=readJson(collectionFile)){
   assert.equal(collection.version,'v24');
   assert.equal(collection.newImageGeneration,0);
@@ -56,7 +74,7 @@ export function verifyFinalSet(collection=readJson(collectionFile)){
     const history=readHistory();verifyHistory();
     assert.equal(sha(canonical(history.baseline.files)),collection.preservation.inventorySHA256,'Historical baseline changed');
     assert.equal(history.baseline.files.length,collection.preservation.files);
-    for(const item of history.baseline.files)historicalEvidence(item.file,item.sha256);
+    for(const item of history.baseline.files)verifyFinalBaselineEvidence(item);
     assert.equal(collection.history.file,historyIndex);
     assert.equal(collection.history.sha256,fileHash(historyIndex),'Retirement manifest changed');
     assert.equal(collection.history.originalCollectionSHA256,historicalHash(collectionFile),'Original collection snapshot changed');

@@ -80,11 +80,14 @@
   사용자 MASTER 채택·앱 사용 허용·SNS 채택·서명된 이모티콘 출시는 구분한다.
   불확실한 측정을 통과로 처리하지 않고, 이모티콘 최종 출력은 `jango:promote`·`jango:export`를 사용한다.
   에이전트는 검수 서명을 만들거나 통과를 위해 ROI·수치·신뢰 키를 변경하지 않는다.
-- SNS 카툰 연재는 [승인 v6 기록](design/jango/cartoon-series.json)과
-  [카툰 제작·검수 정본](design/jango/reference/SNS-CARTOON-GUIDE.md)을 따른다. v18 원본은 캐릭터 정본,
-  v6는 장면 통합·연출·한글·모바일 읽힘·앱 효용 전달 기준이다. 회차별 창의적 변주는 허용하되
-  철회된 v1/v2 단순 콜라주를 신규 기본값으로 되살리지 않는다. 실제 승인 참조·공식 imagegen 작화,
-  별도 한글 조립·원본/360px 검수·기능과 예시 구분·사용자 채택 기록을 지킨다.
+- SNS 카툰 연재는 [승인 v6·현행 제작 정책](design/jango/cartoon-series.json)과
+  [카툰 릴스 제작·검수 정본](design/jango/reference/SNS-CARTOON-GUIDE.md)을 따른다. 신규 기본 형식은 처음부터
+  9:16으로 구성한 1080×1920 카툰 릴스이며 가벼운 확대 또는 이동·고정 말풍선/대사·사용 권한이 확인된 BGM을 쓴다.
+  캐러셀은 별도 요청 시 제작한다. v18은 캐릭터 정본, v6는 장면 통합·이야기·한글·앱 효용의 품질 참조다.
+  v6의 4:5 구도·2화의 여백 삽입 변환·철회된 v1/v2 단순 콜라주를 신규 기본값으로 되살리지 않는다.
+  실제 승인 참조·공식 imagegen 작화·별도 한글 조립·기능과 예시 구분을 지키고, 콘티 확인 후 제작한다.
+  원본·360×640 전체 재생·Instagram UI 겹침·프로필 커버·음악 권한/음향을 검수하고 승인 범위에 따라 게시한다.
+  기존 원본·승인 해시는 보존하며 현행 규격과 가이드 해시는 `currentProductionPolicy`에서 확인한다.
 - Admin은 `apps/admin/app`에 route, `apps/admin/src/features`에 feature UI,
   `apps/admin/src/components`에 재사용 UI를 둔다. 기존 CSS variable과 Tailwind 패턴을 따른다.
 

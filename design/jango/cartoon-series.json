@@ -255,5 +255,268 @@
       "sha256": "29e4f21cd64ec32f9ee702f1866cf0c2875fb5ee21b5e88817c598d1b31f276f"
     },
     "approvedArtwork": "All approved v6 image, lettering, production and review bytes remain unchanged; no redraw or new SNS approval is implied"
+  },
+  "currentProductionPolicy": {
+    "version": 1,
+    "id": "jango-cartoon-reels-20261020",
+    "effectiveFrom": "2026-10-20",
+    "status": "user-approved-production-rules",
+    "authority": {
+      "type": "explicit-user-instruction",
+      "changeRequest": "기존 카툰 연재보다 릴스 형식이 홍보할때에 더 유리한거 같아 기존 장고 카툰 생성 규칙을 카툰 릴스 형식에 맞게 수정해줘. 지금은 게시글 형태의 업로드 규칙이라 릴스 형식과 다르게 비율도 맞지 않아.",
+      "motionQuestion": "앞으로 카툰 릴스의 기본 연출은 어느 쪽으로 정할까요? 두 방식 모두 처음부터 9:16으로 작화하고 사용 권한이 확인된 배경음악을 넣습니다.",
+      "motionReply": "가벼운 움직임 추가 (Recommended)",
+      "implementationRequest": {
+        "instruction": "PLEASE IMPLEMENT THIS PLAN:",
+        "planTitle": "장고 카툰 제작 규칙을 세로 릴스 중심으로 전환",
+        "recordScope": "Instruction and title excerpt; the implementation plan was supplied by the user in the current conversation. No message ID or review signature is invented."
+      },
+      "scope": "Production rules and policy records for future cartoon Reels, including exact-byte archival verification of the previous guide; no new artwork adoption, episode production, upload, replacement of published posts, app/API/DB change, character MASTER change, commit or push."
+    },
+    "guide": {
+      "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+      "sha256": "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66"
+    },
+    "guideHistory": [
+      {
+        "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+        "sha256": "b6ca770b66b8c6f249f9f34be6ad06f3e238776c6ba4a4f99f885becb4c58e80",
+        "snapshot": "design/jango/quality/history/cartoon-reels-20261020/SNS-CARTOON-GUIDE.md.txt",
+        "archivedAt": "2026-10-20",
+        "recordScope": "Exact pre-Reels-policy document bytes; preserves the existing v24 historical baseline without changing any original expected hash."
+      }
+    ],
+    "defaults": {
+      "format": "cartoon-reel",
+      "composition": "native-9:16-full-frame-scene",
+      "width": 1080,
+      "height": 1920,
+      "durationSeconds": 24,
+      "sceneCount": 4,
+      "secondsPerScene": 6,
+      "timingPolicy": "Confirm per-scene timing in the storyboard; revise wording or duration when dialogue cannot be read comfortably.",
+      "hookWithinSeconds": 2,
+      "finalBrandAndActionMinimumSeconds": 3,
+      "safeArea": {
+        "left": 96,
+        "right": 900,
+        "top": 280,
+        "bottom": 1420,
+        "coordinateSystem": "Pixels in the final 1080x1920 frame, origin at top-left",
+        "role": "Project initial layout bounds, not an Instagram guarantee; check actual controls/caption overlays throughout motion."
+      },
+      "motion": {
+        "types": [
+          "gentle-zoom",
+          "gentle-pan"
+        ],
+        "maximumTypesPerScene": 1,
+        "zoomScaleRange": [
+          1,
+          1.04
+        ],
+        "scaleBasis": "Uniform scale that fills the 9:16 frame",
+        "panPolicy": "Set start/end positions in the storyboard; keep the frame filled and essential content inside the reviewed safe area.",
+        "stationaryLayers": [
+          "speech-bubbles",
+          "dialogue",
+          "brand",
+          "call-to-action"
+        ],
+        "transition": "hard-cut"
+      },
+      "lettering": {
+        "fonts": {
+          "dialogueAndBrand": "Gaegu",
+          "appUi": "Pretendard"
+        },
+        "startingFontSizePx": {
+          "dialogue": 72,
+          "brand": 80,
+          "callToAction": 54
+        },
+        "review": "Check actual glyphs and reading time at 360x640; these are starting values, not automatic pass thresholds."
+      },
+      "music": {
+        "requiredByDefault": true,
+        "vocals": false,
+        "commercialPromotionRightsRequired": true,
+        "provenanceRequired": [
+          "title",
+          "creator",
+          "sourceUrl",
+          "licenseUrlOrCopy",
+          "checkedAt",
+          "sha256",
+          "allowedUse",
+          "edits",
+          "requiredCredit"
+        ],
+        "narration": "Only when requested"
+      },
+      "export": {
+        "container": "mp4",
+        "videoCodec": "H.264",
+        "fps": 30,
+        "audioCodec": "AAC"
+      },
+      "cover": {
+        "separateAsset": true,
+        "width": 1080,
+        "height": 1920,
+        "layout": "Central title and Jango; verify actual profile thumbnail crop and published cover."
+      },
+      "carousel": "Only when separately requested"
+    },
+    "referenceRoles": {
+      "character": "Active v18 source-originals MASTER",
+      "approvedV6": "Scene integration, story, lettering and app-value quality; not a mandatory 4:5 composition or a new character MASTER",
+      "episode2": "Historical 4:5-to-9:16 conversion and publication evidence; padded layout is not the default for new Reels"
+    },
+    "workflow": [
+      "storyboard-confirmation",
+      "artwork-and-editing",
+      "native-and-360x640-playback-review",
+      "user-adoption-within-existing-authorization",
+      "publication-only-within-authorized-scope",
+      "published-playback-cover-caption-links-verification"
+    ],
+    "publication": {
+      "verify": [
+        "account",
+        "sequence-and-duration",
+        "included-music",
+        "cover",
+        "caption-and-music-credit",
+        "feature-example-disclosure",
+        "ai-disclosure-and-available-label",
+        "playback-and-audio",
+        "profile-download-links"
+      ],
+      "accessibilityFallback": "If the Reel composer has no per-image alt-text field, include a concise scene description in the caption and record that fallback.",
+      "evidence": [
+        "post-url",
+        "screenshots",
+        "remaining-limitations"
+      ]
+    },
+    "historicalRecordPolicy": "Top-level adoption fields, guide.sha256, scope, approvedPanels, supportingFiles, productionEvidence, featureEvidence and verificationRecord remain historical v6 records. The old guide hash is not a current-guide integrity assertion; use currentProductionPolicy.guide.sha256. Existing v18/v6 artwork and episode 2 files/posts remain unchanged.",
+    "verification": {
+      "checkedAt": "2026-10-20 05:46:04 UTC",
+      "status": "verified-after-targeted-rerun",
+      "scope": "Production-policy documents and exact-byte preservation compatibility; no new artwork/video production or publication, no visual/audio acceptance of a new episode.",
+      "integrity": {
+        "historicalRegistryUnchanged": true,
+        "protectedFilesUnchanged": 128,
+        "currentGuideHashValid": true,
+        "previousGuideSnapshotValid": true,
+        "masterReportDocumentHashesPreserved": true,
+        "internalLinksChecked": 70,
+        "changedTrackedFiles": 7,
+        "testFixturesCleaned": true
+      },
+      "protectedGroups": [
+        {
+          "directory": "design/jango/emoticons/kakao-32/v18/source-originals",
+          "files": 32,
+          "manifestSha256": "a5413ac2d76d352d153d2507040559196d093ab269f47ff7b8f0c6d4ceb6d235"
+        },
+        {
+          "directory": "design/jango/masters/v18",
+          "files": 3,
+          "manifestSha256": "ed7d41294bd01eeace9e62b763b7b6a8ac067c80622460cd7637470ad53eb0f7"
+        },
+        {
+          "directory": "output/marketing/jango-sns-ep01-v19-review-v6",
+          "files": 21,
+          "manifestSha256": "6ebc7adeb272ab84377345adba1bd4a899a547e9c3861cc7a17ad17cf947c5ba"
+        },
+        {
+          "directory": "output/marketing/jango-sns-ep02-20261020",
+          "files": 68,
+          "manifestSha256": "4941584ffb9f34e03ce7551b421a3e06146217bf254a73254fc2b6625031e143"
+        }
+      ],
+      "groupManifestEncoding": "SHA-256 of the UTF-8 JSON object {repository-relative path: file SHA-256}, sorted by path, compact separators, no trailing newline.",
+      "additionalProtectedFiles": {
+        "design/jango/cartoon-series-verification.json": "3c6bf8a0bfd34bdc638a41b327614c92a38e1ddcf7d64e74b4cae60f56325888",
+        "design/jango/master-set.json": "dc8c720fb0ffe8effbe448432f65534532f1c5913b50ab4947e8bbf465a21441",
+        "design/jango/quality/releases.json": "3335b14ba08f47258520575cc2ff8c25ee7c12d6f41c95c5758bd2fdda2bbef1",
+        "design/jango/style-master.json": "3eb9c0d46c7dd4666522d898c6ee51388221b2fa7d40f98cb62fb21b49c9b1c0"
+      },
+      "testedScripts": {
+        "scripts/build-jango-final-set.mjs": "5115f4e3dacee5424710706641af46d77223359ac5baa91c894cc1a16d7cadea",
+        "scripts/jango-emoticon-layout.test.mjs": "ed8105b77f0113e4539efffb4a827baddb2f3bbc64b987cdcc6e29f061a8cc44"
+      },
+      "checks": [
+        {
+          "command": "pnpm docs:check",
+          "exitCode": 0,
+          "result": "30 document metadata entries, 67 indexed links and mobile build entry passed; 70 internal links in the touched document entrypoints checked separately."
+        },
+        {
+          "command": "pnpm lint",
+          "exitCode": 0,
+          "result": "ESLint and design-system checks passed. The two changed scripts were also linted after the final test cleanup correction."
+        },
+        {
+          "command": "pnpm typecheck",
+          "exitCode": 0
+        },
+        {
+          "command": "pnpm -r --if-present test",
+          "exitCode": 0,
+          "passed": 1333,
+          "skipped": 6,
+          "byWorkspace": {
+            "shared": {
+              "passed": 162
+            },
+            "api": {
+              "passed": 589,
+              "skipped": 6
+            },
+            "mobile": {
+              "passed": 582
+            }
+          }
+        },
+        {
+          "command": "pnpm test",
+          "exitCode": 1,
+          "recordScope": "Initial attempt before fixes",
+          "resolution": "Restored the unchanged common STYLE GUIDE bytes and added verification of the archived pre-change SNS guide. Original expected hashes and review signatures were preserved."
+        },
+        {
+          "command": "pnpm jango:test",
+          "exitCode": 1,
+          "passed": 40,
+          "failed": 1,
+          "recordScope": "Full Jango suite after preservation fixes",
+          "resolution": "All production checks passed. The new regression test's cleanup used the symlink-rejecting path resolver; the test now retains its canonical temporary path before creating the test symlink. That one test was rerun successfully."
+        },
+        {
+          "command": "node --test --test-name-pattern='SNS policy revisions' scripts/jango-emoticon-layout.test.mjs",
+          "exitCode": 0,
+          "passed": 1,
+          "skippedByNameFilter": 18,
+          "result": "Verified exact archived bytes, rejection of unrecorded current edits, missing/mismatched snapshots, non-history paths, altered bytes, symlinks and artwork exceptions; temporary files and the registry were restored."
+        },
+        {
+          "command": "git diff --check",
+          "exitCode": 0
+        }
+      ],
+      "finalTestCoverage": {
+        "jangoCasesVerified": 41,
+        "workspaceTestsPassed": 1333,
+        "workspaceTestsSkipped": 6,
+        "note": "Retained the 40 passing Jango cases and reran the corrected cleanup regression in isolation; no production code changed after that full Jango run. The top-level pnpm test command was not rerun as one combined invocation."
+      },
+      "existingWarnings": [
+        "Prisma warns that package.json#prisma configuration is deprecated; typecheck succeeded and this task does not change Prisma configuration."
+      ],
+      "remainingIssues": []
+    }
   }
 }
