@@ -1,0 +1,36 @@
+{
+  "method": "official imagegen",
+  "promptFile": "prompts/scene-04-r1-final.txt",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 Jango identity, crayon material, opaque color and anatomy; food plate is not permanent."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-03-r1.png",
+      "sha256": "de9be3fe2fad3096c4e3e035ef0fcd917998617308597fda6d1a9db796656c42",
+      "role": "Episode 3 woman, warm kitchen and character scene integration; ancestry through episode 1 v6 and episode 2."
+    }
+  ],
+  "purpose": {
+    "n": 4,
+    "start": 18,
+    "end": 24,
+    "copyUntil": 21,
+    "copy": [
+      "발견자에게 한 입을!",
+      "찾은 건 난데?"
+    ],
+    "brandFrom": 21,
+    "brand": "장고야 부탁해",
+    "cta": "냉동실 재료도, 보관함에서 확인해요.",
+    "action": "Dumpling plate, Jango leans in with fork",
+    "zoom": [
+      1,
+      1.03
+    ]
+  }
+}

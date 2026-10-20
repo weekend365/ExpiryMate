@@ -1,0 +1,22 @@
+{
+  "reviewer": "assistant; not a user signature",
+  "method": "Viewed full-resolution artwork and composed frames; 360x640 start/mid/end samples extracted from the final MP4; cover 3:4 and square crop proof. Instagram continuous playback and actual UI evidence are recorded separately.",
+  "sourceCorrection": {
+    "userQuote": "두번째 컷 장고 몸통 비율이 기형적으로 긴거 같은데?",
+    "before": "source-art/scene-02-r3.png",
+    "after": "source-art/scene-02-r4.png",
+    "result": "Short torso/apron, short legs and two shoes visibly separate. Phone, hand, face, hat and pointing action retain their staging. No nonuniform image scaling."
+  },
+  "checks": {
+    "anatomy": "Four scenes retain chef hat, refrigerator face, mint handle, pineapple ornament, two arms/gloves, compact torso and shoes where visible. Scene 4 naturally occluded by table.",
+    "continuity": "Same brown bun, ivory knit, green skirt and warm kitchen; dumpling pouch leads to cooked dumpling table.",
+    "phone": "Registered frozen location and example ingredient/quantity only; no automatic detection claim. Projected Pretendard text follows phone through zoom.",
+    "mobileReadability": "Dialogue/brand/CTA and ingredient readable in 360px frames. Phone example disclosure is small secondary text and repeated in full in caption.",
+    "motion": "Scene start/mid/end samples, including 6/9/11.96s corrected scene, show 100 to 103 percent zoom without uncovered edge or clipped head/phone. Fixed balloons do not cover faces.",
+    "timing": "4 x 6 seconds; first-frame question; final exchange 18-21s then brand/single CTA 21-24s.",
+    "cover": "Separate cover verified on actual Instagram profile: full title, Jango and dumpling pouch visible."
+  },
+  "videoSHA256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3",
+  "unresolvedVisualIssues": [],
+  "publicationEvidence": "../publication/publication.json"
+}

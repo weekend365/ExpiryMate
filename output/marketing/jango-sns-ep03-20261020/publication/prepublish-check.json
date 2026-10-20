@@ -1,0 +1,15 @@
+{
+  "account": "jango_plz",
+  "videoSHA256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3",
+  "captionExactAfterTrim": true,
+  "aiLabel": true,
+  "automaticSpeechCaptions": false,
+  "customCover": "cover.jpg",
+  "sound": true,
+  "trimSeconds": [
+    0,
+    24
+  ],
+  "accessibility": "No per-image alternative text field for Reel; Korean video description included in caption.",
+  "authorization": "User approved creation, QA and one Instagram Reel publication; latest user correction applied."
+}

@@ -1,0 +1,154 @@
+{
+  "id": "jango-sns-ep03-20261020",
+  "createdAt": "2026-10-20T05:59:07.715Z",
+  "media": "SNS cartoon Reel",
+  "status": "storyboard-approved",
+  "authorization": {
+    "quote": "PLEASE IMPLEMENT THIS PLAN: 장고랑 살아보니 3화 — 「냉동실 보물찾기」",
+    "scope": "Produce, quality-review and publish exactly one Reel on @jango_plz from the user-approved full storyboard and caption. User explicitly authorized this plan and publication. No app/API/DB/MASTER change, commit or push."
+  },
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "seconds": 24,
+    "fps": 30,
+    "codec": "H.264/AAC",
+    "safeArea": [
+      96,
+      280,
+      900,
+      1420
+    ]
+  },
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 Jango identity, crayon material, opaque color and anatomy; food plate is not permanent."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "Approved scene integration and human-Jango relationship; not aspect ratio or replacement character MASTER."
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep02-20261020/source-art/panel-01-r1.png",
+      "sha256": "3394d753fa9d579e37d266d9e40f915122aa95aa3abe4f61cbe8f9578d8e39a8",
+      "role": "Episode 2 woman's face, messy brown bun, ivory knit sweater and forest-green skirt continuity."
+    }
+  ],
+  "storyboard": [
+    {
+      "n": 1,
+      "start": 0,
+      "end": 6,
+      "copy": [
+        "꽉 찼는데… 먹을 게 없네?"
+      ],
+      "speaker": "woman",
+      "action": "Packed freezer, puzzled look",
+      "zoom": [
+        1,
+        1.03
+      ]
+    },
+    {
+      "n": 2,
+      "start": 6,
+      "end": 12,
+      "copy": [
+        "등록해 둔 재료부터 볼까?"
+      ],
+      "speaker": "Jango",
+      "action": "Check registered frozen ingredients",
+      "screen": [
+        "보관함",
+        "냉동",
+        "냉동만두 · 1봉",
+        "이야기용 예시"
+      ],
+      "zoom": [
+        1,
+        1.03
+      ]
+    },
+    {
+      "n": 3,
+      "start": 12,
+      "end": 18,
+      "copy": [
+        "아! 여기 있었네!"
+      ],
+      "speaker": "woman",
+      "action": "Pull dumpling pouch from behind boxes",
+      "zoom": [
+        1,
+        1.03
+      ]
+    },
+    {
+      "n": 4,
+      "start": 18,
+      "end": 24,
+      "copyUntil": 21,
+      "copy": [
+        "발견자에게 한 입을!",
+        "찾은 건 난데?"
+      ],
+      "brandFrom": 21,
+      "brand": "장고야 부탁해",
+      "cta": "냉동실 재료도, 보관함에서 확인해요.",
+      "action": "Dumpling plate, Jango leans in with fork",
+      "zoom": [
+        1,
+        1.03
+      ]
+    }
+  ],
+  "music": {
+    "source": "../jango-sns-ep02-20261020/music/Carefree.mp3",
+    "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+    "license": "CC BY 4.0",
+    "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1400037",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "segment": [
+      0,
+      24
+    ],
+    "fadeIn": 0.3,
+    "fadeOut": 1,
+    "loudnessTargetLUFS": -18,
+    "truePeakLimitDBTP": -2
+  },
+  "method": "Official built-in imagegen for each artwork and empty balloon; deterministic separate Korean lettering, proportional framing, zoom and compositing in isolated local Python/FFmpeg environment.",
+  "featureEvidence": [
+    "apps/mobile/src/features/inventory/inventory-list-header.tsx",
+    "apps/mobile/src/features/inventory/inventory-list-sheets.tsx",
+    "apps/mobile/app/(tabs)/inventory.tsx",
+    "packages/shared/src/constants/labels.ts"
+  ],
+  "cropIntent": "Woman may be cropped below knees in kitchen. Scene 2 is intentional phone/face close-up; lower Jango cropped. Table naturally occludes lower bodies in scene 4. Scene 1/3 Jango full body.",
+  "cover": {
+    "size": [
+      1080,
+      1920
+    ],
+    "title": "냉동실 보물찾기",
+    "series": "장고랑 살아보니 03",
+    "source": "scene 3 artwork; separate centered lettering",
+    "required": true
+  },
+  "policyAndFeatureHashes": {
+    "design/jango/reference/SNS-CARTOON-GUIDE.md": "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66",
+    "design/jango/reference/JANGO-CHARACTER-BIBLE.md": "70c393a59470556073c95d3844df61e25921c703696be6d9e1f27cd824787e84",
+    "design/jango/reference/JANGO-STYLE-GUIDE.md": "ce89cd43092e3404296be9e32f5c7f4331d8c30c28e87b8e548868b1ee4ddc1a",
+    "design/jango/quality/README.md": "33f49454c228479add406f94ae4d6f6429ff1edfc376d5835b1b3ecc28ec510c",
+    "apps/mobile/src/features/inventory/inventory-list-header.tsx": "bc9c36d79519f6c2a10d40342dc478fd9d78f815d1fd401822797e99af90205a",
+    "apps/mobile/src/features/inventory/inventory-list-sheets.tsx": "04cf0e25cc56cf9312df10a1e282f84195cce1a4760e975bda071b5dde565d75",
+    "apps/mobile/app/(tabs)/inventory.tsx": "81007b74d990117461b185a26dc657be3ea75744eadb01a99d582c6b98b872d1",
+    "packages/shared/src/constants/labels.ts": "08e24221a9721331ff91cc69987f03a2045fcdf3e5c60e698357c27419504871"
+  }
+}

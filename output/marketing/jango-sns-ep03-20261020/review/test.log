@@ -1,0 +1,11 @@
+
+> expirymate-monorepo@ test /Users/namu/Desktop/ExpiryMate
+> pnpm jango:test && pnpm -r --if-present test
+
+
+> expirymate-monorepo@ jango:test /Users/namu/Desktop/ExpiryMate
+> node --test --test-concurrency=1 scripts/jango-design-gate.test.mjs scripts/jango-emoticon-layout.test.mjs scripts/jango-history.test.mjs
+
+TAP version 13
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,33 @@
+{
+  "method": "official imagegen",
+  "promptFile": "prompts/scene-03-r1-final.txt",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "Active v18 Jango identity, crayon material, opaque color and anatomy; food plate is not permanent."
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-01-r2.png",
+      "sha256": "2862cdf2ea520b2a51164b72d9b192a5359dcd49f3de9a45555ed7ea03a01fed",
+      "role": "Episode 3 kitchen, smaller staging and woman/Jango continuity."
+    }
+  ],
+  "purpose": {
+    "n": 3,
+    "start": 12,
+    "end": 18,
+    "copy": [
+      "아! 여기 있었네!"
+    ],
+    "speaker": "woman",
+    "action": "Pull dumpling pouch from behind boxes",
+    "zoom": [
+      1,
+      1.03
+    ]
+  },
+  "note": "Use current episode staging as direct continuity reference; approved v6 and episode 2 were consulted and used in scene 1 ancestry."
+}

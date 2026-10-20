@@ -1,0 +1,49 @@
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x126904ff0] Auto-inserting h264_mp4toannexb bitstream filter
+Input #0, concat, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep03-20261020/reel/concat.txt':
+  Duration: N/A, start: 0.000000, bitrate: 4746 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, 4746 kb/s, 30 fps, 30 tbr, 15360 tbn
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+[mp3 @ 0x126805030] Estimating duration from bitrate, this may be inaccurate
+Input #1, mp3, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep03-20261020/music/Carefree.mp3':
+  Metadata:
+    title           : Carefree
+    artist          : Kevin MacLeod
+    TCM             : Kevin MacLeod
+    album           : Royalty Free
+    iTunSMPB        :  00000000 00000210 00000870 00000000008A0000 00000000 00641054 00000000 00000000 00000000 00000000 00000000 00000000
+    TBP             : 96
+    genre           : Contemporary
+    comment         : USUAN1400037
+    iTunPGAP        : 0
+    encoded_by      : iTunes 11.1.5
+    iTunNORM        :  000000CB 00000117 0000121C 00000D78 00030D87 0002B092 00005848 00004A8C 00027134 0002711A
+    date            : 2014
+  Duration: 00:03:25.14, start: 0.000000, bitrate: 256 kb/s
+  Stream #1:0: Audio: mp3 (mp3float), 44100 Hz, stereo, fltp, 256 kb/s
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (mp3 (mp3float) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep03-20261020/reel/jango-ep03-music.mp4':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, q=2-31, 4746 kb/s, 30 fps, 30 tbr, 15360 tbn
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s
+      Metadata:
+        encoder         : Lavc61.19.100 aac
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x125e1fb70] Auto-inserting h264_mp4toannexb bitstream filter
+frame=  283 fps=0.0 q=-1.0 size=    5376KiB time=00:00:09.23 bitrate=4767.7kbits/s speed=18.3x
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x109104350] Auto-inserting h264_mp4toannexb bitstream filter
+[mov,mp4,m4a,3gp,3g2,mj2 @ 0x125e1fa80] Auto-inserting h264_mp4toannexb bitstream filter
+frame=  628 fps=622 q=-1.0 size=   11776KiB time=00:00:20.73 bitrate=4652.3kbits/s speed=20.5x
+[mp4 @ 0x126806df0] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x126814940] video:12816KiB audio:569KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.203068%
+frame=  720 fps=629 q=-1.0 Lsize=   13412KiB time=00:00:23.93 bitrate=4590.6kbits/s speed=20.9x
+[aac @ 0x125f06460] Qavg: 421.694

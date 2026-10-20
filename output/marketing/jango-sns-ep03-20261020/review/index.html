@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>장고 3화 — 360px 영상 검수</title>
+<style>
+body{margin:24px;background:#202321;color:#fff;font:16px system-ui}
+main{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+.phone{position:relative;width:360px;height:640px;background:black}
+video{display:block;width:360px;height:640px}
+button{padding:10px 15px;margin:4px;border:0;border-radius:8px;cursor:pointer}
+aside{max-width:570px}h1{font-size:23px}p{line-height:1.55}
+.ui{display:none;position:absolute;inset:0;pointer-events:none;color:white;text-shadow:0 1px 3px #000}
+.ui.on{display:block}.top{position:absolute;top:14px;left:16px}
+.right{position:absolute;right:12px;bottom:112px;display:grid;gap:18px;font-size:28px}
+.bottom{position:absolute;bottom:24px;left:16px;right:50px;line-height:1.7;font-size:13px}
+#status{white-space:pre-wrap;font:14px monospace}
+img{width:210px}small{color:#bbc6be}
+</style>
+<main>
+<div class="phone">
+<video id="movie" src="jango-ep03-360.mp4" preload="auto" playsinline controls></video>
+<div class="ui" id="overlay"><div class="top">릴스</div><div class="right">♡<br>♧<br>➤<br>⋮</div>
+<div class="bottom"><b>jango_plz</b><br>장고랑 살아보니 03 — 냉동실 보물찾기<br>Carefree · Kevin MacLeod</div></div>
+</div>
+<aside>
+<h1>장고 3화 — 360×640 전체 재생</h1>
+<p><button id="play">처음부터 소리 켜고 재생</button><button id="pause">일시정지</button>
+<button id="overlayToggle">조작 영역 예상 겹침</button></p>
+<p id="seeks"></p>
+<p id="status">영상 로딩 중</p>
+<small>겹침 표시는 검수용 예상 영역입니다. 실제 Instagram 화면은 업로드·게시 단계에서 확인합니다.</small>
+<p>프로필 커버 예상 크롭</p>
+<img src="cover-profile-3x4.jpg" alt="프로필 커버 3대4 예상 크롭">
+</aside>
+</main>
+<script>
+const video=document.getElementById('movie');
+const log={ended:false,errors:[],playedSeconds:0};
+document.getElementById('play').onclick=()=>{video.currentTime=0;video.muted=false;video.volume=0.5;log.ended=false;video.play()};
+document.getElementById('pause').onclick=()=>video.pause();
+document.getElementById('overlayToggle').onclick=()=>document.getElementById('overlay').classList.toggle('on');
+for(const t of [0,3,5.9,6,9,11.9,12,15,17.9,18,20.9,21,23.9]){
+ const b=document.createElement('button');b.textContent=t+'초';b.onclick=()=>{video.pause();video.currentTime=t};document.getElementById('seeks').append(b);
+}
+function update(){let ranges=[];for(let i=0;i<video.played.length;i++)ranges.push([video.played.start(i),video.played.end(i)]);document.getElementById('status').textContent=JSON.stringify({time:video.currentTime,duration:video.duration,paused:video.paused,muted:video.muted,ended:video.ended,readyState:video.readyState,played:ranges,errors:log.errors},null,2)}
+video.addEventListener('timeupdate',update);video.addEventListener('loadedmetadata',update);video.addEventListener('ended',()=>{log.ended=true;update()});video.addEventListener('error',()=>{log.errors.push(video.error?.message||'media error');update()});
+</script>
+</html>

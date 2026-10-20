@@ -1,0 +1,16 @@
+{
+  "method": "official imagegen",
+  "sourceFile": "/Users/namu/.codex/generated_images/01a13dfb-4c3c-74a0-b7d0-ad9f76c40c68/exec-0aaec782-a34a-49b0-8ce4-aaa7abb5493b.png",
+  "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+  "size": [
+    1774,
+    887
+  ],
+  "mode": "RGBA",
+  "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "reference": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png"
+}

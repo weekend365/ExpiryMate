@@ -1,0 +1,19 @@
+{
+  "candidate": "scene-02-r4",
+  "reason": "User reported elongated torso in scene 2; compact torso and visible short legs/shoes required before publishing.",
+  "method": "official imagegen",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r3.png",
+      "sha256": "639f69c10067514f0f2bad3ae2cb0bb04cc450906b0259ceb3676b791d42a73e",
+      "role": "edit-target"
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "v18 canonical proportions and texture"
+    }
+  ]
+}

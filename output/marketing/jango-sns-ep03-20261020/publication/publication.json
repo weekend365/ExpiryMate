@@ -1,0 +1,47 @@
+{
+  "account": "jango_plz",
+  "url": "https://www.instagram.com/jango_plz/reel/DetNFmvyZM3/",
+  "viewUrl": "https://www.instagram.com/p/DetNFmvyZM3/",
+  "publishedAtObserved": "2026-10-20T06:40:37.001Z",
+  "status": "published-and-verified",
+  "postCountBefore": 8,
+  "postCountAfter": 9,
+  "captionExactNormalized": true,
+  "aiLabelVisible": true,
+  "customCoverVisibleOnProfile": true,
+  "correctedScene2Visible": true,
+  "video": {
+    "duration": 24,
+    "height": 1280,
+    "muted": false,
+    "paused": true,
+    "played": [
+      [
+        0,
+        24
+      ]
+    ],
+    "readyState": 4,
+    "time": 18.60149,
+    "width": 720
+  },
+  "music": {
+    "presentInUploadedMP4": true,
+    "originalAudioLink": "https://www.instagram.com/reels/audio/29019385697702520/",
+    "playerUnmuted": true,
+    "subjectiveListening": false,
+    "technicalEvidence": "../review/audio-comparison.json"
+  },
+  "profileLinks": [
+    "https://apps.apple.com/kr/app/id6793375883",
+    "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+  ],
+  "accessibility": "Korean scene description in caption; Reel composer exposes automatic speech captions, no per-scene alt text field.",
+  "screenshots": [
+    "shared-confirmation.jpg",
+    "profile-posted.jpg",
+    "profile-thumbnail.jpg",
+    "reel-posted.jpg",
+    "profile-download-links.jpg"
+  ]
+}

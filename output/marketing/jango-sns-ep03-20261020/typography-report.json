@@ -1,0 +1,378 @@
+{
+  "method": "Official generated transparent balloon; Gaegu separate fixed dialogue/brand; Pretendard projected labels travel with phone artwork.",
+  "ellipsis": "Gaegu source lacks visible U+2026; three period glyphs render the canonical ellipsis, as in episode 2.",
+  "fonts": {
+    "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "apps/mobile/assets/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
+    "apps/mobile/assets/fonts/Pretendard-Regular.otf": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93"
+  },
+  "nativeSizesByScene": {
+    "1": [
+      941,
+      1672
+    ],
+    "2": [
+      941,
+      1671
+    ],
+    "3": [
+      941,
+      1672
+    ],
+    "4": [
+      941,
+      1672
+    ]
+  },
+  "output": [
+    1080,
+    1920
+  ],
+  "framing": "Uniform proportional cover, less than 2 source pixels of background rounding crop; no stretched artwork.",
+  "phoneCanonical": "보관함 / 냉동 / 냉동만두 · 1봉 / 이야기용 예시",
+  "textBoxes": [
+    {
+      "scene": 1,
+      "canonical": "꽉 찼는데…",
+      "rendered": "꽉 찼는데...",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        304,
+        352,
+        692,
+        426
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 1,
+      "canonical": "먹을 게 없네?",
+      "rendered": "먹을 게 없네?",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        274,
+        446,
+        722,
+        524
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 2,
+      "canonical": "장고야 부탁해",
+      "rendered": "장고야 부탁해",
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "size": 27,
+      "bbox": [
+        88,
+        28,
+        232,
+        52
+      ],
+      "role": "phone brand",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "보관함",
+      "rendered": "보관함",
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "size": 52,
+      "bbox": [
+        92,
+        86,
+        228,
+        134
+      ],
+      "role": "verified feature",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "냉동",
+      "rendered": "냉동",
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "size": 47,
+      "bbox": [
+        119,
+        202,
+        201,
+        244
+      ],
+      "role": "selected real location",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "냉동만두",
+      "rendered": "냉동만두",
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "size": 54,
+      "bbox": [
+        66,
+        306,
+        254,
+        354
+      ],
+      "role": "example ingredient",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "1봉",
+      "rendered": "1봉",
+      "font": "apps/mobile/assets/fonts/Pretendard-Bold.otf",
+      "size": 54,
+      "bbox": [
+        124,
+        380,
+        196,
+        426
+      ],
+      "role": "example quantity",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "이야기용",
+      "rendered": "이야기용",
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "size": 32,
+      "bbox": [
+        104,
+        479,
+        216,
+        508
+      ],
+      "role": "example disclosure",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "canonical": "예시",
+      "rendered": "예시",
+      "font": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "size": 32,
+      "bbox": [
+        132,
+        518,
+        188,
+        547
+      ],
+      "role": "example disclosure",
+      "fixedToFrame": false
+    },
+    {
+      "scene": 2,
+      "role": "phone typography plane",
+      "quadInSource": [
+        [
+          185,
+          527
+        ],
+        [
+          451,
+          527
+        ],
+        [
+          455,
+          987
+        ],
+        [
+          186,
+          989
+        ]
+      ],
+      "layerSize": [
+        320,
+        600
+      ],
+      "fixedToFrame": false,
+      "movesWithArtwork": true
+    },
+    {
+      "scene": 2,
+      "canonical": "등록해 둔",
+      "rendered": "등록해 둔",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        354,
+        288,
+        656,
+        360
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 2,
+      "canonical": "재료부터 볼까?",
+      "rendered": "재료부터 볼까?",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        264,
+        380,
+        746,
+        462
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 3,
+      "canonical": "아! 여기 있었네!",
+      "rendered": "아! 여기 있었네!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 82,
+      "bbox": [
+        227,
+        404,
+        769,
+        472
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "발견자에게",
+      "rendered": "발견자에게",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 72,
+      "bbox": [
+        178,
+        330,
+        474,
+        400
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "한 입을!",
+      "rendered": "한 입을!",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 72,
+      "bbox": [
+        206,
+        412,
+        446,
+        482
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "찾은 건",
+      "rendered": "찾은 건",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 72,
+      "bbox": [
+        592,
+        475,
+        800,
+        546
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "난데?",
+      "rendered": "난데?",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 72,
+      "bbox": [
+        618,
+        558,
+        774,
+        611
+      ],
+      "role": "dialogue",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "장고야 부탁해",
+      "rendered": "장고야 부탁해",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 96,
+      "bbox": [
+        241,
+        304,
+        755,
+        376
+      ],
+      "role": "brand",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "냉동실 재료도,",
+      "rendered": "냉동실 재료도,",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 64,
+      "bbox": [
+        318,
+        401,
+        678,
+        464
+      ],
+      "role": "single CTA",
+      "fixedToFrame": true
+    },
+    {
+      "scene": 4,
+      "canonical": "보관함에서 확인해요.",
+      "rendered": "보관함에서 확인해요.",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 64,
+      "bbox": [
+        240,
+        482,
+        756,
+        539
+      ],
+      "role": "single CTA",
+      "fixedToFrame": true
+    },
+    {
+      "scene": "cover",
+      "canonical": "장고랑 살아보니 03",
+      "rendered": "장고랑 살아보니 03",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 48,
+      "bbox": [
+        315,
+        349,
+        681,
+        393
+      ],
+      "role": "cover series",
+      "fixedToFrame": true
+    },
+    {
+      "scene": "cover",
+      "canonical": "냉동실 보물찾기",
+      "rendered": "냉동실 보물찾기",
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "size": 100,
+      "bbox": [
+        190,
+        424,
+        806,
+        522
+      ],
+      "role": "cover title",
+      "fixedToFrame": true
+    }
+  ]
+}

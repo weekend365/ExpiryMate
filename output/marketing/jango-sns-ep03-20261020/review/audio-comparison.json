@@ -1,0 +1,15 @@
+{
+  "decodedAudioStereo48kHzS16": {
+    "02": {
+      "sha256": "c28ee9551083154f574c2f9a5592bfd2f61887d7cb47f91a2c46818d5ddffc16",
+      "bytes": 4608000
+    },
+    "03": {
+      "sha256": "c28ee9551083154f574c2f9a5592bfd2f61887d7cb47f91a2c46818d5ddffc16",
+      "bytes": 4608000
+    }
+  },
+  "exactMatchToPublishedEpisode2": true,
+  "videoSHA256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3",
+  "listeningLimitation": "Assistant audio input is unavailable. No subjective listening completion is claimed. Full decode, zero clipping/silence, exact audio comparison and unmuted Instagram playback are separate evidence."
+}

@@ -1,0 +1,55 @@
+{
+  "id": "jango-sns-ep03-20261020",
+  "title": "장고랑 살아보니 03 — 냉동실 보물찾기",
+  "status": "published-and-verified",
+  "authorization": {
+    "quote": "PLEASE IMPLEMENT THIS PLAN: 장고랑 살아보니 3화 — 「냉동실 보물찾기」",
+    "scope": "Produce, quality-review and publish exactly one Reel on @jango_plz from the user-approved full storyboard and caption. User explicitly authorized this plan and publication. No app/API/DB/MASTER change, commit or push."
+  },
+  "latestUserCorrection": "두번째 컷 장고 몸통 비율이 기형적으로 긴거 같은데?",
+  "correction": "scene-02-r4 shortens apron/torso and reveals two short legs/shoes; composed, zoomed and re-encoded before publishing. Replaces r3 only for current episode.",
+  "storyboard": "preparation.json",
+  "finalCropIntent": "Scenes 1 and 3 show full Jango; scene 2 now also shows complete compact body and two shoes on counter, superseding preliminary crop intent. Scene 4 lower bodies naturally hidden behind table.",
+  "sources": "asset-provenance.json",
+  "rendering": "build.py",
+  "technicalChecks": "check.py",
+  "visualReview": "review/visual-review.json",
+  "technicalReview": "review/technical-quality.json",
+  "audioReview": "review/audio-comparison.json",
+  "media": "reel/production.json",
+  "finalFiles": {
+    "reel/jango-ep03-music.mp4": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3",
+    "cover.png": "ab28569fa234891516bef755c9edaa3d5c346b4f4cb796568b4a7e133a78a115",
+    "cover.jpg": "c9d099c330855f0eee4d3936abbbf86ca8fbaa2a37418050da2da0dfb8c15566",
+    "caption.txt": "e160f1f890609e64ae47278bfd11f44a7ae26613df3e534e3655a120eb3709b0"
+  },
+  "adoptionScope": "User explicitly authorized this episode production and one Instagram publication, plus directed scene-2 proportion correction. Assistant QA is not a user signature or new global MASTER adoption. No claim that user personally reviewed final bytes.",
+  "limits": [
+    "No subjective full listening: assistant audio input unavailable. Technical full decode, continuity/clipping checks and PCM identity to published episode 2 are recorded; unmuted UI playback checked separately."
+  ],
+  "preservation": "127 protected prior-episode/master/reference files unchanged; see preservation-baseline.json and technical-quality.json. App/API/DB code and existing episodes not intentionally changed by this task; no commit/push.",
+  "publication": "publication/publication.json",
+  "postURL": "https://www.instagram.com/jango_plz/reel/DetNFmvyZM3/",
+  "finalPreservationCheck": {
+    "files": 127,
+    "changed": []
+  },
+  "layoutMetadataCorrection": "Selected scene 2 r4 is 941x1671; other scenes are 941x1672. Proportional framing crops less than 2 source pixels of background, no stretching. Metadata updated and composed-pixel hashes verified identical to encoded input.",
+  "repositoryCommit": {
+    "authorization": "변경사항 커밋해줘.",
+    "scope": "Only output/marketing/jango-sns-ep03-20261020/; no push.",
+    "context": "Separately authorized after episode production and publication; original production authorization is retained as historical context.",
+    "logNormalization": {
+      "change": "Removed trailing whitespace from captured command logs for git diff --check; media and artwork bytes unchanged.",
+      "files": [
+        "reel/proxy.log",
+        "reel/scene-04.log",
+        "reel/final.log",
+        "reel/scene-02.log",
+        "reel/scene-03.log",
+        "reel/scene-01.log",
+        "review/decode.log"
+      ]
+    }
+  }
+}

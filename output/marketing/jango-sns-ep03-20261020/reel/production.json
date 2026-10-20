@@ -1,0 +1,38 @@
+{
+  "format": "MP4/H.264, 1080x1920, 30fps, 720 video frames, AAC 48kHz",
+  "seconds": 24,
+  "selectedArtwork": {
+    "1": "scene-01-r2.png",
+    "2": "scene-02-r4.png",
+    "3": "scene-03-r1.png",
+    "4": "scene-04-r1.png"
+  },
+  "zoomEachScene": [
+    1,
+    1.03
+  ],
+  "zoomAnchorNormalized": [
+    0.6,
+    1.0
+  ],
+  "transition": "hard cuts at 6, 12, 18 seconds",
+  "lettering": "Fixed speech overlays, scene 4 switched to fixed brand/CTA at 21 seconds; phone labels move with underlying art.",
+  "music": {
+    "track": "Carefree",
+    "artist": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "source": "music/license.json",
+    "segment": [
+      0,
+      24
+    ],
+    "targetLUFS": -18,
+    "truePeakLimit": -2,
+    "fades": [
+      0.3,
+      1
+    ]
+  },
+  "software": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "videoSHA256": "8edc087ec539eb3a24dc823eaf46228e8d0e8ded6bb6da29f3f17acdae1387a3"
+}

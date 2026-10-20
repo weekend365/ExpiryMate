@@ -1,0 +1,35 @@
+{
+  "docs:check": {
+    "status": "passed",
+    "exitCode": 0,
+    "log": "docs-check.log"
+  },
+  "lint": {
+    "status": "passed",
+    "exitCode": 0,
+    "log": "lint.log"
+  },
+  "typecheck": {
+    "status": "passed",
+    "exitCode": 0,
+    "log": "typecheck.log"
+  },
+  "test": {
+    "status": "not completed; intentionally stopped",
+    "exitCode": 1,
+    "reason": "Broad application suite remained in CPU-active jango-design-gate.test.mjs for several minutes without a completed result. Media/typography/decoding/protected-file verification was already complete. Only this task's exact runner/child processes were stopped after checking no PID-specific fixture remained. No pass is claimed.",
+    "log": "test.log"
+  },
+  "git diff --check": {
+    "status": "passed",
+    "exitCode": 0
+  },
+  "artifactVerification": {
+    "json": "all episode JSON files parsed; manifest and final video hashes verified",
+    "protectedFilesChecked": 127,
+    "protectedFilesChanged": [],
+    "media": "technical-quality.json",
+    "visual": "visual-review.json"
+  },
+  "scope": "Only this episode output directory is authored by this task. Unrelated concurrent workspace changes were observed and left alone."
+}
