@@ -1,0 +1,32 @@
+{
+  "candidate": "scene-05-r2",
+  "preparedAt": "2026-10-21T14:39:29.958786+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-05-r2.txt",
+  "promptSha256": "33d146a51a47b59f1339d7692b62d505d5eeedc27d27a4e5a510501c5b91e16a",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r1.png",
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6",
+      "role": "exact closing-scene edit target; preserve faces/outfit/crouch/sharing pose",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r2.png",
+      "sha256": "3b74a33c4290c5d7bf6d9582838942db30cecacc361df3da91ec1655a23bfdd7",
+      "role": "new mochi count/box, updated shop and queue continuity",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active character MASTER; short torso, texture, structural recognition",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

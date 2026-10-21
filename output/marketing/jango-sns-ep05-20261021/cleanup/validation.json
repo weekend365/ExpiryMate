@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-10-21T16:13:36.842339+09:00",
+  "scope": "Completed episode 5 archive cleanup and repository validation",
+  "checks": {
+    "archiveInputHashVerification": "passed: 97 retained historical inputs, 47 MASTER/reference files, 12 render inputs",
+    "intentionalDeletionRegistry": "passed: all 129 listed files absent; 55 appear in the historical pre-render baseline",
+    "finalCreativeFileHashes": "passed: published MP4, JPG and caption unchanged; 5 selected raw originals unchanged",
+    "rebuildVerification": "passed: 19 removed derived images recreated with identical SHA-256; retained cover JPG also identical",
+    "jsonAndPythonSyntax": "passed",
+    "localHtmlReferences": "passed",
+    "secretPatternScan": "passed",
+    "pnpm docs:check": "passed: 31 metadata, 74 links; mobile build entry canonical",
+    "pnpm lint": "passed",
+    "pnpm typecheck": "passed",
+    "pnpm test": {
+      "status": "failed",
+      "exitCode": 1,
+      "tests": 41,
+      "passed": 39,
+      "failed": 2,
+      "failedCases": [
+        {
+          "test": "fresh candidate, valid test signature, forgery, stale prompt and uncertain pose remain enforced",
+          "error": "Unregistered artwork: design/jango/emoticons/unregistered-test.png",
+          "evidence": "Path was already untracked in git status before starting this task."
+        },
+        {
+          "test": "retirement retains 97 originals and diagnostics as exact bytes and closes 97 candidates",
+          "error": "33 !== 32 candidates",
+          "evidence": "Pre-existing untracked design/jango/quality/candidates/gate-test-44135.json raises the global candidate count from 32 to 33."
+        }
+      ],
+      "durationMs": 348981.225958,
+      "workspaceTests": "Not reached because the leading Jango suite failed. No application changes included in this commit."
+    },
+    "git diff --cached --check": "passed"
+  },
+  "preservedLimitations": "Subjective listening and Instagram audio-name discrepancy remain as recorded in publication/published.json; cleanup does not change or resolve these.",
+  "testFixtureSideEffect": "The test suite deletes its shared unregistered-test.png fixture. Recreated the initial untracked test path using the suite's own v18-09 copy recipe; excluded from this commit. Initial bytes were not independently hashed, so exact pre-test equality is not claimed."
+}

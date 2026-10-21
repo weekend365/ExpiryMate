@@ -1,0 +1,351 @@
+{
+  "method": "New synthesis, then pitch and spectral-envelope shift together via sample-rate conversion; duration compensated with atempo. Gentle low-mid EQ and two-pass loudness normalization.",
+  "ffmpegVersion": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "ffmpegSha256": "6d175a4743ca50256e89a8cdd731100f9cee33bd79aeea46894d209410dc6617",
+  "technicalReference": "https://github.com/FFmpeg/FFmpeg/blob/n7.1/doc/filters.texi",
+  "referenceSections": [
+    "asetrate",
+    "aresample",
+    "atempo",
+    "loudnorm"
+  ],
+  "voiceSelectionBasis": "Different higher-register stock presets plus requested pitch/timbre targets; not a listening-based naturalness pass.",
+  "lines": [
+    {
+      "voice": "F2",
+      "pitchSemitones": 3.0,
+      "bodyEqHz": 230,
+      "bodyEqDb": -1.0,
+      "target": "밝고 가벼운 소녀 톤",
+      "character": "woman",
+      "line": 1,
+      "text": "장고가 이렇게 빨랐어?",
+      "source": "raw/woman-f2-01.wav",
+      "sourceSha256": "3888526c7daaa4424da2ac913444e2852710038b9379b35e6b870d78bbebc735",
+      "filter": "apad=pad_dur=0.12,asetrate=52444,aresample=44100,atempo=0.840896957,highpass=f=85,equalizer=f=230:t=q:w=0.7:g=-1.0,afade=t=in:d=0.003",
+      "actualPitchSemitones": 2.9999888516208504,
+      "tempoCompensation": 0.8408969567538709,
+      "normalization": {
+        "filter": "loudnorm=I=-18:TP=-2:LRA=7:linear=true:measured_I=-24.86:measured_TP=-7.21:measured_LRA=0.00:measured_thresh=-35.16:offset=1.66",
+        "inputMeasurement": {
+          "input_i": "-24.86",
+          "input_tp": "-7.21",
+          "input_lra": "0.00",
+          "input_thresh": "-35.16",
+          "output_i": "-19.66",
+          "output_tp": "-2.00",
+          "output_lra": "0.00",
+          "output_thresh": "-29.95",
+          "normalization_type": "linear",
+          "target_offset": "1.66"
+        },
+        "outputMeasurement": {
+          "input_i": "-19.66",
+          "input_tp": "-2.00",
+          "input_lra": "0.00",
+          "input_thresh": "-29.95",
+          "output_i": "-19.66",
+          "output_tp": "-2.00",
+          "output_lra": "0.00",
+          "output_thresh": "-29.95",
+          "normalization_type": "linear",
+          "target_offset": "1.66"
+        }
+      },
+      "file": "processed/woman-01-level.wav",
+      "sha256": "f8321a243de1cafffe5afb446ee71dbab678daf9afc61a2dc49469441f264750"
+    },
+    {
+      "voice": "F2",
+      "pitchSemitones": 3.0,
+      "bodyEqHz": 230,
+      "bodyEqDb": -1.0,
+      "target": "밝고 가벼운 소녀 톤",
+      "character": "woman",
+      "line": 2,
+      "text": "러닝 하자며?",
+      "source": "raw/woman-f2-02.wav",
+      "sourceSha256": "20c6ea69ad9cfd3f7d34f9698dedea8b6bb7a0ac76e022af117f9025de282db6",
+      "filter": "apad=pad_dur=0.12,asetrate=52444,aresample=44100,atempo=0.840896957,highpass=f=85,equalizer=f=230:t=q:w=0.7:g=-1.0,afade=t=in:d=0.003",
+      "actualPitchSemitones": 2.9999888516208504,
+      "tempoCompensation": 0.8408969567538709,
+      "normalization": {
+        "filter": "loudnorm=I=-18:TP=-2:LRA=7:linear=true:measured_I=-25.45:measured_TP=-9.74:measured_LRA=0.00:measured_thresh=-35.86:offset=-0.01",
+        "inputMeasurement": {
+          "input_i": "-25.45",
+          "input_tp": "-9.74",
+          "input_lra": "0.00",
+          "input_thresh": "-35.86",
+          "output_i": "-17.99",
+          "output_tp": "-2.29",
+          "output_lra": "0.00",
+          "output_thresh": "-28.40",
+          "normalization_type": "linear",
+          "target_offset": "-0.01"
+        },
+        "outputMeasurement": {
+          "input_i": "-17.99",
+          "input_tp": "-2.29",
+          "input_lra": "0.00",
+          "input_thresh": "-28.40",
+          "output_i": "-18.00",
+          "output_tp": "-2.30",
+          "output_lra": "0.00",
+          "output_thresh": "-28.40",
+          "normalization_type": "linear",
+          "target_offset": "-0.00"
+        }
+      },
+      "file": "processed/woman-02-level.wav",
+      "sha256": "c9cb866a506f6d6bfd0970b1052b4fa27bc15f424a6817243f3abf3211bd90f6"
+    },
+    {
+      "voice": "F4",
+      "pitchSemitones": 5.0,
+      "bodyEqHz": 280,
+      "bodyEqDb": -1.5,
+      "target": "장난기 있는 아이 톤",
+      "character": "jango",
+      "line": 1,
+      "text": "늦으면 끝이야!",
+      "source": "raw/jango-f4-01.wav",
+      "sourceSha256": "6160e5b583167a8b32c2d8fb1ba4e83e26e758dcec67e53e61aadded248cf262",
+      "filter": "apad=pad_dur=0.12,asetrate=58866,aresample=44100,atempo=0.749159107,highpass=f=85,equalizer=f=280:t=q:w=0.7:g=-1.5,afade=t=in:d=0.003",
+      "actualPitchSemitones": 4.999871312581042,
+      "tempoCompensation": 0.7491591071246559,
+      "normalization": {
+        "filter": "loudnorm=I=-18:TP=-2:LRA=7:linear=true:measured_I=-26.84:measured_TP=-10.13:measured_LRA=0.00:measured_thresh=-37.29:offset=0.73",
+        "inputMeasurement": {
+          "input_i": "-26.84",
+          "input_tp": "-10.13",
+          "input_lra": "0.00",
+          "input_thresh": "-37.29",
+          "output_i": "-18.73",
+          "output_tp": "-2.00",
+          "output_lra": "0.00",
+          "output_thresh": "-29.18",
+          "normalization_type": "linear",
+          "target_offset": "0.73"
+        },
+        "outputMeasurement": {
+          "input_i": "-18.73",
+          "input_tp": "-2.00",
+          "input_lra": "0.00",
+          "input_thresh": "-29.18",
+          "output_i": "-18.73",
+          "output_tp": "-2.00",
+          "output_lra": "0.00",
+          "output_thresh": "-29.18",
+          "normalization_type": "linear",
+          "target_offset": "0.73"
+        }
+      },
+      "file": "processed/jango-01-level.wav",
+      "sha256": "b3f7185965ad87a8df86bd8d5ce141ba09ad8f9797ee9e5a1b1c5c208bd7b6b4"
+    },
+    {
+      "voice": "F4",
+      "pitchSemitones": 5.0,
+      "bodyEqHz": 280,
+      "bodyEqDb": -1.5,
+      "target": "장난기 있는 아이 톤",
+      "character": "jango",
+      "line": 2,
+      "text": "오픈런도 런이잖아.",
+      "source": "raw/jango-f4-02.wav",
+      "sourceSha256": "b44307bf5528c36882a4e5cdea5d3200acf9fcad94a4463f1d248399b2f99ca8",
+      "filter": "apad=pad_dur=0.12,asetrate=58866,aresample=44100,atempo=0.749159107,highpass=f=85,equalizer=f=280:t=q:w=0.7:g=-1.5,afade=t=in:d=0.003",
+      "actualPitchSemitones": 4.999871312581042,
+      "tempoCompensation": 0.7491591071246559,
+      "normalization": {
+        "filter": "loudnorm=I=-18:TP=-2:LRA=7:linear=true:measured_I=-26.28:measured_TP=-11.15:measured_LRA=0.00:measured_thresh=-36.60:offset=-0.00",
+        "inputMeasurement": {
+          "input_i": "-26.28",
+          "input_tp": "-11.15",
+          "input_lra": "0.00",
+          "input_thresh": "-36.60",
+          "output_i": "-18.00",
+          "output_tp": "-2.87",
+          "output_lra": "0.00",
+          "output_thresh": "-28.31",
+          "normalization_type": "linear",
+          "target_offset": "-0.00"
+        },
+        "outputMeasurement": {
+          "input_i": "-18.00",
+          "input_tp": "-2.87",
+          "input_lra": "0.00",
+          "input_thresh": "-28.31",
+          "output_i": "-18.00",
+          "output_tp": "-2.87",
+          "output_lra": "0.00",
+          "output_thresh": "-28.32",
+          "normalization_type": "linear",
+          "target_offset": "-0.00"
+        }
+      },
+      "file": "processed/jango-02-level.wav",
+      "sha256": "1d79785a293a740ded4764f896fd919e6d3812beff5d168371de80c1d31c6cba"
+    }
+  ],
+  "outputs": [
+    {
+      "title": "여성 · 소녀 톤",
+      "wav": "preview/woman-girl-r2.wav",
+      "mp3": "preview/woman-girl-r2.mp3",
+      "durationSeconds": 4.171224489795918,
+      "timeline": [
+        {
+          "speaker": "woman",
+          "text": "장고가 이렇게 빨랐어?",
+          "startSeconds": 0.18,
+          "endSeconds": 2.2192517006802723,
+          "file": "processed/woman-01-level.wav"
+        },
+        {
+          "speaker": "woman",
+          "text": "러닝 하자며?",
+          "startSeconds": 2.4392517006802725,
+          "endSeconds": 3.921224489795919,
+          "file": "processed/woman-02-level.wav"
+        }
+      ],
+      "wavSha256": "f9bb594fee838c183f4694c319e320b73f3de634b7bbfb976cd9eeeb0c757e38",
+      "mp3Sha256": "db428a3ecf56590fe8f3863f8850cfa0427887d4c0187c395c2966f1c9f4f4ad",
+      "loudness": {
+        "input_i": "-18.85",
+        "input_tp": "-2.00",
+        "input_lra": "0.50",
+        "input_thresh": "-29.45",
+        "output_i": "-16.21",
+        "output_tp": "-2.00",
+        "output_lra": "0.10",
+        "output_thresh": "-26.73",
+        "normalization_type": "dynamic",
+        "target_offset": "-1.79"
+      },
+      "mp3Loudness": {
+        "input_i": "-19.30",
+        "input_tp": "-2.43",
+        "input_lra": "0.60",
+        "input_thresh": "-29.90",
+        "output_i": "-16.21",
+        "output_tp": "-2.00",
+        "output_lra": "0.10",
+        "output_thresh": "-26.73",
+        "normalization_type": "dynamic",
+        "target_offset": "-1.79"
+      }
+    },
+    {
+      "title": "장고 · 장난꾸러기 아이 톤",
+      "wav": "preview/jango-playful-child-r2.wav",
+      "mp3": "preview/jango-playful-child-r2.mp3",
+      "durationSeconds": 3.91297052154195,
+      "timeline": [
+        {
+          "speaker": "jango",
+          "text": "늦으면 끝이야!",
+          "startSeconds": 0.18,
+          "endSeconds": 1.7269841269841268,
+          "file": "processed/jango-01-level.wav"
+        },
+        {
+          "speaker": "jango",
+          "text": "오픈런도 런이잖아.",
+          "startSeconds": 1.9069841269841268,
+          "endSeconds": 3.6629705215419497,
+          "file": "processed/jango-02-level.wav"
+        }
+      ],
+      "wavSha256": "eaeb7200df548b5c8f05bea722b8615624f4f7180bec315f442b40bca0b47502",
+      "mp3Sha256": "43f6d70cd12266b094e83aa7ff1bf967623f08cee3ae7c0934fe3268787676e5",
+      "loudness": {
+        "input_i": "-18.65",
+        "input_tp": "-2.00",
+        "input_lra": "1.30",
+        "input_thresh": "-29.05",
+        "output_i": "-16.75",
+        "output_tp": "-2.00",
+        "output_lra": "0.00",
+        "output_thresh": "-27.10",
+        "normalization_type": "dynamic",
+        "target_offset": "-1.25"
+      },
+      "mp3Loudness": {
+        "input_i": "-19.12",
+        "input_tp": "-2.41",
+        "input_lra": "1.30",
+        "input_thresh": "-29.51",
+        "output_i": "-16.74",
+        "output_tp": "-2.00",
+        "output_lra": "0.00",
+        "output_thresh": "-27.09",
+        "normalization_type": "dynamic",
+        "target_offset": "-1.26"
+      }
+    },
+    {
+      "title": "두 캐릭터 대화",
+      "wav": "preview/dialogue-youth-r2.wav",
+      "mp3": "preview/dialogue-youth-r2.mp3",
+      "durationSeconds": 8.004195011337869,
+      "timeline": [
+        {
+          "speaker": "woman",
+          "text": "장고가 이렇게 빨랐어?",
+          "startSeconds": 0.18,
+          "endSeconds": 2.2192517006802723,
+          "file": "processed/woman-01-level.wav"
+        },
+        {
+          "speaker": "jango",
+          "text": "늦으면 끝이야!",
+          "startSeconds": 2.4692517006802723,
+          "endSeconds": 4.016235827664399,
+          "file": "processed/jango-01-level.wav"
+        },
+        {
+          "speaker": "woman",
+          "text": "러닝 하자며?",
+          "startSeconds": 4.266235827664399,
+          "endSeconds": 5.748208616780046,
+          "file": "processed/woman-02-level.wav"
+        },
+        {
+          "speaker": "jango",
+          "text": "오픈런도 런이잖아.",
+          "startSeconds": 5.998208616780046,
+          "endSeconds": 7.754195011337869,
+          "file": "processed/jango-02-level.wav"
+        }
+      ],
+      "wavSha256": "e5d64a3eadcbb4062981382942ada8c3c199dd919a0348226fd9fb83438c2e1d",
+      "mp3Sha256": "b92cd62a3797bc7948b5c12c91191e14dbb032a0ece652da26497c20107efaf6",
+      "loudness": {
+        "input_i": "-19.01",
+        "input_tp": "-2.00",
+        "input_lra": "2.20",
+        "input_thresh": "-29.13",
+        "output_i": "-17.05",
+        "output_tp": "-2.00",
+        "output_lra": "0.90",
+        "output_thresh": "-27.31",
+        "normalization_type": "dynamic",
+        "target_offset": "-0.95"
+      },
+      "mp3Loudness": {
+        "input_i": "-19.45",
+        "input_tp": "-2.34",
+        "input_lra": "2.20",
+        "input_thresh": "-29.57",
+        "output_i": "-17.06",
+        "output_tp": "-2.00",
+        "output_lra": "0.90",
+        "output_thresh": "-27.32",
+        "normalization_type": "dynamic",
+        "target_offset": "-0.94"
+      }
+    }
+  ]
+}

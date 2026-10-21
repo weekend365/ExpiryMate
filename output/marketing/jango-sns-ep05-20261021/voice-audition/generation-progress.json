@@ -1,0 +1,156 @@
+[
+  {
+    "character": "woman",
+    "voice": "F3",
+    "request": {
+      "op": "synthesize",
+      "text": "장고가 이렇게 빨랐어? 러닝 하자며?",
+      "voice": "F3",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261021,
+    "file": "raw/woman-f3-raw.wav",
+    "sampleRate": 44100,
+    "samples": 153600,
+    "durationSeconds": 3.4829931972789114,
+    "peakDbfs": -9.12075995042123,
+    "rmsDbfs": -25.9447043846271,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 2.877673999988474,
+    "sha256": "b992f7b89bc67e9f8eee80ac1c900d4c2c846e8ddc650eb48cbff991ebe9d907"
+  },
+  {
+    "character": "woman",
+    "voice": "F4",
+    "request": {
+      "op": "synthesize",
+      "text": "장고가 이렇게 빨랐어? 러닝 하자며?",
+      "voice": "F4",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261022,
+    "file": "raw/woman-f4-raw.wav",
+    "sampleRate": 44100,
+    "samples": 129024,
+    "durationSeconds": 2.9257142857142857,
+    "peakDbfs": -9.400974239277522,
+    "rmsDbfs": -25.75202229734195,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 0.9265550840063952,
+    "sha256": "2a28a2ae46fbf441d023060a8f5165c6e56ff0d6539a3e1f7404396b6d654542"
+  },
+  {
+    "character": "woman",
+    "voice": "F5",
+    "request": {
+      "op": "synthesize",
+      "text": "장고가 이렇게 빨랐어? 러닝 하자며?",
+      "voice": "F5",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261023,
+    "file": "raw/woman-f5-raw.wav",
+    "sampleRate": 44100,
+    "samples": 144384,
+    "durationSeconds": 3.274013605442177,
+    "peakDbfs": -12.263500289704323,
+    "rmsDbfs": -25.627869553648225,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 0.8744087920058519,
+    "sha256": "668450f93b12de8ba062d9a5b1b33085a1fb37b6e6a43f8bc03fe3e037d575dd"
+  },
+  {
+    "character": "jango",
+    "voice": "M1",
+    "request": {
+      "op": "synthesize",
+      "text": "늦으면 끝이야! 오픈런도 런이잖아.",
+      "voice": "M1",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261024,
+    "file": "raw/jango-m1-raw.wav",
+    "sampleRate": 44100,
+    "samples": 159744,
+    "durationSeconds": 3.622312925170068,
+    "peakDbfs": -9.628468223692153,
+    "rmsDbfs": -27.755182227200578,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 1.063264958007494,
+    "sha256": "9351ff79cd6a1dda2830c026ee5d770eafb735617418220f7a9fe26e0e7f475e"
+  },
+  {
+    "character": "jango",
+    "voice": "M3",
+    "request": {
+      "op": "synthesize",
+      "text": "늦으면 끝이야! 오픈런도 런이잖아.",
+      "voice": "M3",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261025,
+    "file": "raw/jango-m3-raw.wav",
+    "sampleRate": 44100,
+    "samples": 138240,
+    "durationSeconds": 3.1346938775510202,
+    "peakDbfs": -7.143558606152682,
+    "rmsDbfs": -25.742366139311294,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 0.9121722920099273,
+    "sha256": "145967d445c5d7eea4e362e403e76df488290f88d76557dc8ef3efcff0e20a09"
+  },
+  {
+    "character": "jango",
+    "voice": "M4",
+    "request": {
+      "op": "synthesize",
+      "text": "늦으면 끝이야! 오픈런도 런이잖아.",
+      "voice": "M4",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261026,
+    "file": "raw/jango-m4-raw.wav",
+    "sampleRate": 44100,
+    "samples": 150528,
+    "durationSeconds": 3.4133333333333336,
+    "peakDbfs": -11.595830977181675,
+    "rmsDbfs": -26.671204979319473,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 1.1011630830180366,
+    "sha256": "ea97d1b7b02944ccc5d911772c43fc9369a84d45438a09ef14e0329b2501d968"
+  },
+  {
+    "character": "jango",
+    "voice": "M5",
+    "request": {
+      "op": "synthesize",
+      "text": "늦으면 끝이야! 오픈런도 런이잖아.",
+      "voice": "M5",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10
+    },
+    "numpySeed": 20261027,
+    "file": "raw/jango-m5-raw.wav",
+    "sampleRate": 44100,
+    "samples": 159744,
+    "durationSeconds": 3.622312925170068,
+    "peakDbfs": -9.045334939842842,
+    "rmsDbfs": -26.278568224813462,
+    "fullScaleSampleCount": 0,
+    "generationSeconds": 1.0356482500210404,
+    "sha256": "1644d5fe4121848f661783af55c9435e60b983dd7417589e1ccdf67b5b744cb4"
+  }
+]

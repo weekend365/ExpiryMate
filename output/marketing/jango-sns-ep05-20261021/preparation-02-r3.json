@@ -1,0 +1,25 @@
+{
+  "candidate": "scene-02-r3",
+  "preparedAt": "2026-10-21T14:21:13.261210+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-02-r3.txt",
+  "promptSha256": "51241feee7bacbd48a9fc1b72f6f13b92a06b623a9add19989754a75fc43a064",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r2.png",
+      "sha256": "46f02c6b61939c25ee699427055cb50ce28b6da6900ced084468439e4af1e8ed",
+      "role": "exact edit target: watch appearance, closed oven-mitten shape and protected pointing-arm placement",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r1.png",
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6",
+      "role": "new candidate continuity reference: mint-cuff round watch; preserve its v18 lineage",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

@@ -1,0 +1,64 @@
+{
+  "createdAt": "2026-10-21T15:18:03.999072+09:00",
+  "status": "created; ready for user review",
+  "authorization": "그냥 더빙 없이 릴스 생성해줘.",
+  "title": "러닝인 줄 알았는데 오픈런",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "seconds": 20,
+    "scenes": 5,
+    "video": "H.264",
+    "audio": "AAC,48kHz,stereo"
+  },
+  "dubbing": false,
+  "music": "Carefree — Kevin MacLeod",
+  "outputs": [
+    {
+      "file": "reel/jango-ep05-music.mp4",
+      "bytes": 22622015,
+      "sha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe"
+    },
+    {
+      "file": "cover.jpg",
+      "bytes": 1464121,
+      "sha256": "d115671a4aea2baca11358288ba47e66f92a3ab89ff0d28d42884b3cf578f8a8"
+    },
+    {
+      "file": "cover.png",
+      "bytes": 3324749,
+      "sha256": "fecf3217b0947ec273284d220710813a044ed2d97bcea0e8f901f294fb0d00a4"
+    },
+    {
+      "file": "caption.txt",
+      "bytes": 1034,
+      "sha256": "a1fc66d3f05ae85cd802a7261d85fcdb58f15977f143c64d8af79210a001ebb6"
+    },
+    {
+      "file": "review/reel/jango-ep05-360.mp4",
+      "bytes": 8438569,
+      "sha256": "0b860c95858bd11322caed0740a3ed2ca17c59a9d682d9ff6101c8a0b5b89f42"
+    }
+  ],
+  "sources": "reel/preparation.json",
+  "production": "reel/production.json",
+  "musicLicense": "music/license.json",
+  "technicalQA": "review/reel/technical-quality.json",
+  "visualQA": "review/reel/visual-review.json",
+  "captionIncludes": [
+    "AI artwork disclosure",
+    "video description",
+    "music attribution/license/modification notice"
+  ],
+  "humanListening": "not performed; assistant audio input unavailable",
+  "publicationStatus": "not published in this creation task",
+  "publicationStageChecks": [
+    "user approves final media for posting",
+    "live cover crop/controls",
+    "AI label",
+    "actual audio/video playback",
+    "profile download links"
+  ],
+  "earlierArtAndVoiceAuditions": "preserved; canonical source hashes verified; mutable Finder .DS_Store metadata excluded"
+}

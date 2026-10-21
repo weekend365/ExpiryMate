@@ -1,0 +1,63 @@
+{
+  "wav": "preview/dialogue-f3-m3.wav",
+  "mp3": "preview/dialogue-f3-m3.mp3",
+  "durationSeconds": 8.565895691609978,
+  "timeline": [
+    {
+      "start": 0.2,
+      "end": 2.359455782312925,
+      "character": "woman",
+      "voice": "F3",
+      "text": "장고가 이렇게 빨랐어?",
+      "raw": "raw/dialogue-01-woman.wav",
+      "normalized": "preview/dialogue-line-01.wav",
+      "normalizedSha256": "daf233005ab0d0289966263d4c57ba41af4a23a13c003fa52a06640905daa78b"
+    },
+    {
+      "start": 2.7094557823129253,
+      "end": 4.241972789115646,
+      "character": "jango",
+      "voice": "M3",
+      "text": "늦으면 끝이야!",
+      "raw": "raw/dialogue-02-jango.wav",
+      "normalized": "preview/dialogue-line-02.wav",
+      "normalizedSha256": "0a90931c1226280f63948f1b1252d9811c382bf88d5d4b949be7e4805231b57b"
+    },
+    {
+      "start": 4.591972789115646,
+      "end": 6.124489795918367,
+      "character": "woman",
+      "voice": "F3",
+      "text": "러닝 하자며?",
+      "raw": "raw/dialogue-03-woman.wav",
+      "normalized": "preview/dialogue-line-03.wav",
+      "normalizedSha256": "88f7e76507d6f18b9803d7c17a39bebd317a6a951c5402fc01c934391484e333"
+    },
+    {
+      "start": 6.474489795918367,
+      "end": 8.215986394557822,
+      "character": "jango",
+      "voice": "M3",
+      "text": "오픈런도 런이잖아.",
+      "raw": "raw/dialogue-04-jango.wav",
+      "normalized": "preview/dialogue-line-04.wav",
+      "normalizedSha256": "2415ba91b68950ce265b30bd5d4c17a4ac7bf6f8c4de5f4f0d5ae82f40a26683"
+    }
+  ],
+  "wavSha256": "d9aebce1bb42e8893934a81e04d838208f2e092424538ceb5ae3c7e0b40ecf85",
+  "mp3Sha256": "b893d3943248488ecb5b6c9b4295556c99c74071dcc6d36072f80d42bbe415fa",
+  "editing": "Individually normalized dialogue; 0.20s lead-in and 0.35s gaps/tail; no BGM, pitch shift, speed change or spoken labels.",
+  "loudness": {
+    "input_i": "-18.34",
+    "input_tp": "-2.00",
+    "input_lra": "2.60",
+    "input_thresh": "-29.10",
+    "output_i": "-16.94",
+    "output_tp": "-2.00",
+    "output_lra": "2.50",
+    "output_thresh": "-27.58",
+    "normalization_type": "dynamic",
+    "target_offset": "-1.06"
+  },
+  "mp3Decode": "passed"
+}

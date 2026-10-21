@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-10-21T15:19:10.804184+09:00",
+  "algorithm": "SHA-256",
+  "scope": "No-dubbing Reel production and deliverables; excludes this manifest.",
+  "files": [
+    {
+      "file": "before-episode.json",
+      "bytes": 5519,
+      "sha256": "bd472435fbe17ae7e5c144639297d98ebc6115e7757af998b28e44a4151771ec"
+    },
+    {
+      "file": "before-production-record.json",
+      "bytes": 2582,
+      "sha256": "c92bbd63ad36e91670b19921913c259261d7d2e31ff87d5533cb5bb42c58ea2d"
+    },
+    {
+      "file": "before-selected-artwork.json",
+      "bytes": 4868,
+      "sha256": "42ca253c003311775a2c99127c381c4ea9324c93f183a11176edeb8336ec0bcf"
+    },
+    {
+      "file": "delivery.json",
+      "bytes": 2035,
+      "sha256": "250ed778cac65b52982661e888f2b525cae05105a0946a65d9dc1f27d9b14b0d"
+    },
+    {
+      "file": "final-command.json",
+      "bytes": 1009,
+      "sha256": "e7133130f6abd45a5b572bbedb1802b4ed31a5b3d057a5f17079a163c73b4a18"
+    },
+    {
+      "file": "final.log",
+      "bytes": 3062,
+      "sha256": "5e8dbb5b2865cd7b31dcf7c1eff900d95de10e1d5553484dd7554f23ce902206"
+    },
+    {
+      "file": "intermediate-cleanup.json",
+      "bytes": 340,
+      "sha256": "d449aaf364d0ce54182ded2309a651e9bdd35c25cf640bfd4e77870eb5b3f9da"
+    },
+    {
+      "file": "jango-ep05-music.mp4",
+      "bytes": 22622015,
+      "sha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe"
+    },
+    {
+      "file": "preparation.json",
+      "bytes": 3872,
+      "sha256": "21baa3ed65257e77c0b41da76e141c3e58296e92600cdb7a05ac99b10449269d"
+    },
+    {
+      "file": "preservation-before-render.json",
+      "bytes": 26317,
+      "sha256": "9557c64f3bab4abbbb70bfc65e27bc8692da83ecb98116178696c52446a6a7ad"
+    },
+    {
+      "file": "production.json",
+      "bytes": 883,
+      "sha256": "69cb25782c2f98cb81bfff06c5e2e8b7baf82c93cd52f17d3b39e6cf7ee4391d"
+    },
+    {
+      "file": "proxy-command.json",
+      "bytes": 530,
+      "sha256": "9bf36072492c6c8b2c166a4c904e4a4f2b25b2d1c8a8c85f8aa85d5b593845ee"
+    },
+    {
+      "file": "proxy.log",
+      "bytes": 4584,
+      "sha256": "a47be55f7c8b746be4be62584743d7c3794e404467bccc3c77c92860553e5ea9"
+    },
+    {
+      "file": "silent-command.json",
+      "bytes": 497,
+      "sha256": "47a2efeb6795616a1ff898af8b807a51ef58df382ec95c186fe85dee69f4c9b1"
+    },
+    {
+      "file": "silent.log",
+      "bytes": 13082,
+      "sha256": "b2c6797f7de84fcdc4be5c4db2564ea9c88307b8a70890289676675a42d3e3e6"
+    },
+    {
+      "file": "typography.json",
+      "bytes": 6188,
+      "sha256": "8564c5f37f9d91d5bcae3648a46fe5aaab0291ed2b61b076f4b5c65cfccc73ac"
+    },
+    {
+      "file": "voice-decision.json",
+      "bytes": 353,
+      "sha256": "adad7d3e026f15df5dd789f24115757339cfab5e6424ec2e2197f3730cb1c4a2"
+    }
+  ]
+}

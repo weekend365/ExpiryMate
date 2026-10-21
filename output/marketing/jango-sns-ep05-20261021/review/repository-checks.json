@@ -1,0 +1,44 @@
+{
+  "scope": "Repository checks requested by AGENTS.md; application files were not changed by this artwork task",
+  "checks": [
+    {
+      "command": "pnpm docs:check",
+      "status": "passed",
+      "exitCode": 0,
+      "summary": "31 metadata entries, 74 links, canonical Expo/EAS build entry"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm typecheck",
+      "status": "passed",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm lint",
+      "status": "failed-outside-artwork-scope",
+      "exitCode": 1,
+      "file": "apps/mobile/src/features/monetization/monetization-resume.test.tsx",
+      "line": 67,
+      "rule": "react-hooks/rules-of-hooks",
+      "summary": "useSubscriptionEntitlement called from entitlementKey, which is not a component/custom hook; no edit made to this file by the artwork task."
+    },
+    {
+      "command": "pnpm test",
+      "status": "interrupted-incomplete",
+      "exitCode": 1,
+      "summary": "Started the root suite. It remained in the initial jango:test gate with no subtest results emitted; interrupted after completing the still-artifact validation. The cancellation exit is not evidence of a failing assertion or a passing full suite."
+    }
+  ],
+  "artworkChecks": "review/artifact-checks.json",
+  "unrelatedChanges": "Existing and concurrent application changes were preserved; no claim that repository-wide validation is fully green.",
+  "queueMochiRevisionChecks": {
+    "checkedAt": "2026-10-21T14:42:15.327385+09:00",
+    "docsCheck": "passed: metadata 31, links 74; Expo/EAS canonical",
+    "gitDiffCheck": "passed",
+    "broaderChecks": "Asset-only revision. Earlier lint/typecheck/test results below are retained; not rerun or upgraded to pass by this revision."
+  }
+}

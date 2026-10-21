@@ -1,0 +1,25 @@
+{
+  "candidate": "scene-03-r3",
+  "preparedAt": "2026-10-21T14:36:36.416362+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-03-r3.txt",
+  "promptSha256": "307bd59aa17f9a6480fbdaf51caa390cd6cc283e290216b16db2f8a9493550ce",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r2.png",
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f",
+      "role": "edit target; previous selected scene 3; preserve main pair/store architecture",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 character master; compact body and crayon texture, not plate prop",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

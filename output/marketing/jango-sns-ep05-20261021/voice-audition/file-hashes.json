@@ -1,0 +1,255 @@
+{
+  "generatedAt": "2026-10-21T14:52:02.253843+09:00",
+  "files": [
+    {
+      "file": "build_audition_page.py",
+      "bytes": 7974,
+      "sha256": "e98e7abe651f9547771f7a0340bf532ff92f28c9d04b1dff69d4dde00b9c69b9"
+    },
+    {
+      "file": "build_previews.py",
+      "bytes": 3407,
+      "sha256": "7d5a81b148b22d816f2b05624c834a4e20f098aa0411379634fa4ce1dc6bc2c2"
+    },
+    {
+      "file": "delivery.json",
+      "bytes": 1420,
+      "sha256": "e34ef2739149874cca0f94dc301b9ec4676e6e562e3e36bd58f9077e00d0b863"
+    },
+    {
+      "file": "dialogue-generation.json",
+      "bytes": 1959,
+      "sha256": "359aefb42eb5c9367493638367a9d30e7b22c5783c62464374a479a3749c34c8"
+    },
+    {
+      "file": "dialogue-mix.json",
+      "bytes": 2182,
+      "sha256": "354bc3e74f9b32e13c84f9089568659fed4d3f44b9595cf16a1dfb510511af28"
+    },
+    {
+      "file": "dialogue-preparation.json",
+      "bytes": 870,
+      "sha256": "7f6b6d440f452da0be5bf5dafef51590fa816881cab73c09f9987487e7a62782"
+    },
+    {
+      "file": "generate_dialogue.py",
+      "bytes": 2627,
+      "sha256": "bd193bbdd96e2c56fc3452379227636d3bffb3dda0085f180702725ed54ffcf3"
+    },
+    {
+      "file": "generate_samples.py",
+      "bytes": 4752,
+      "sha256": "a5c3a9271f2712030afbe2be48f56c9a81dddacfc38a95e7b56a040d6788d33e"
+    },
+    {
+      "file": "generation-progress.json",
+      "bytes": 4458,
+      "sha256": "40f048efdee0fc58b57b42d6cb15190038d69e3f7b095951874570d762dcb813"
+    },
+    {
+      "file": "generation-record.json",
+      "bytes": 5755,
+      "sha256": "ab45c2f94f97207e61e49410f47842d62167d4d3058aebf7a8c78f67f041bff0"
+    },
+    {
+      "file": "index.html",
+      "bytes": 7446,
+      "sha256": "63778556961dcab158e64c976c268efec62b868b632749b58f614b30fb42fd45"
+    },
+    {
+      "file": "licenses/Supertonic-3-OpenRAIL-M.txt",
+      "bytes": 15007,
+      "sha256": "0d944a9110fed9a9602d60e0423a272903e7bd21ab060490774efc77c2275e9f"
+    },
+    {
+      "file": "licenses/VoiceStudio-AGPL-3.0.txt",
+      "bytes": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+    },
+    {
+      "file": "licenses/VoiceStudio-LICENSE-NOTICE.txt",
+      "bytes": 5164,
+      "sha256": "e01c368c0651d042c22f021ddd554a13b03fa90ab516385130625e318fcefd61"
+    },
+    {
+      "file": "model-source-hashes.json",
+      "bytes": 4446,
+      "sha256": "9144269b0dd8448333c0377d5e3363b4d5fb417735f8986ce11dd3a5efbc54ec"
+    },
+    {
+      "file": "preparation.json",
+      "bytes": 1767,
+      "sha256": "111d61350163c32b4c3340ca771a2d0fb0183ea17f25920c80038ac0b7fc8952"
+    },
+    {
+      "file": "preview/dialogue-f3-m3.mp3",
+      "bytes": 138041,
+      "sha256": "b893d3943248488ecb5b6c9b4295556c99c74071dcc6d36072f80d42bbe415fa"
+    },
+    {
+      "file": "preview/dialogue-f3-m3.wav",
+      "bytes": 755556,
+      "sha256": "d9aebce1bb42e8893934a81e04d838208f2e092424538ceb5ae3c7e0b40ecf85"
+    },
+    {
+      "file": "preview/dialogue-line-01.wav",
+      "bytes": 190542,
+      "sha256": "daf233005ab0d0289966263d4c57ba41af4a23a13c003fa52a06640905daa78b"
+    },
+    {
+      "file": "preview/dialogue-line-02.wav",
+      "bytes": 135246,
+      "sha256": "0a90931c1226280f63948f1b1252d9811c382bf88d5d4b949be7e4805231b57b"
+    },
+    {
+      "file": "preview/dialogue-line-03.wav",
+      "bytes": 135246,
+      "sha256": "88f7e76507d6f18b9803d7c17a39bebd317a6a951c5402fc01c934391484e333"
+    },
+    {
+      "file": "preview/dialogue-line-04.wav",
+      "bytes": 153678,
+      "sha256": "2415ba91b68950ce265b30bd5d4c17a4ac7bf6f8c4de5f4f0d5ae82f40a26683"
+    },
+    {
+      "file": "preview/jango-m1.mp3",
+      "bytes": 59037,
+      "sha256": "6fb4b516b5b5e6e384691b78e5be6c9dc00d10648aa563087aa7715995c53264"
+    },
+    {
+      "file": "preview/jango-m1.wav",
+      "bytes": 319566,
+      "sha256": "2c421fe626f3afe5b971cc0042744a7cfdc0065ce4752c4028f1fe49a3f6b180"
+    },
+    {
+      "file": "preview/jango-m3.mp3",
+      "bytes": 51096,
+      "sha256": "e06c2e19879f2922000706bf5e9f5ce277e6e8f7609d4d18c394379ab3e34f70"
+    },
+    {
+      "file": "preview/jango-m3.wav",
+      "bytes": 276558,
+      "sha256": "6e776d13f8fb510c1cfa37ef2caf56cf290f5d78e729933ef76a1e9d823dc117"
+    },
+    {
+      "file": "preview/jango-m4.mp3",
+      "bytes": 55693,
+      "sha256": "bf78cd4bd4a79bccedb90a6b6e0b1ce41b9f4ffe195d7430e317b0227224d182"
+    },
+    {
+      "file": "preview/jango-m4.wav",
+      "bytes": 301134,
+      "sha256": "1e41e3f20977530d5e288f100998c3f750e8e0d848f5d95104a05e9880d0f272"
+    },
+    {
+      "file": "preview/jango-m5.mp3",
+      "bytes": 59037,
+      "sha256": "a1883e92576270aeda92349ef9c291919a6ea0de5c3e3da7fd65981bfd6d5f96"
+    },
+    {
+      "file": "preview/jango-m5.wav",
+      "bytes": 319566,
+      "sha256": "201fed5d474db8fcc8e3b004ed37525a6ed5df7963cbd4422cae001625797f5e"
+    },
+    {
+      "file": "preview/woman-f3.mp3",
+      "bytes": 56947,
+      "sha256": "58bd18e978fc7a2bef8ccde1c837d82d26acc530f50306999802aca0544ee04f"
+    },
+    {
+      "file": "preview/woman-f3.wav",
+      "bytes": 307278,
+      "sha256": "ff88d5f5db980f8b27f262dfd86b894a9476c546412bf5c2b009e68b26f978ef"
+    },
+    {
+      "file": "preview/woman-f4.mp3",
+      "bytes": 47752,
+      "sha256": "9fef380f507d2e221919ca8453ffd15d0c6ede1b34296cd352539c26e28b301a"
+    },
+    {
+      "file": "preview/woman-f4.wav",
+      "bytes": 258126,
+      "sha256": "28d259226b8ae63a7027eb6c6df3cd2c048b240e4272a122fe6301126baf5030"
+    },
+    {
+      "file": "preview/woman-f5.mp3",
+      "bytes": 53603,
+      "sha256": "cad06a667ed504a33db51ae1f337948ae61ed768836f56e8ad5dd89641bb5688"
+    },
+    {
+      "file": "preview/woman-f5.wav",
+      "bytes": 288846,
+      "sha256": "55d051559ec2440c0c2a7b200d29c98436b9f20661c9c23010a5f3ac8d283111"
+    },
+    {
+      "file": "preview-record.json",
+      "bytes": 9871,
+      "sha256": "be3229b4343c05e467ff61a0920978911ac574e976388a9c3a442f250440f48b"
+    },
+    {
+      "file": "quality-record.json",
+      "bytes": 5932,
+      "sha256": "7bbbd5f8c29926582413b809ca6c98504266869b08f62da1107faed387af0e6d"
+    },
+    {
+      "file": "raw/dialogue-01-woman.wav",
+      "bytes": 190508,
+      "sha256": "1e8b3936b4953ac2b718ac1e5643c8d34151cab1cd196d8519c005a38717689e"
+    },
+    {
+      "file": "raw/dialogue-02-jango.wav",
+      "bytes": 135212,
+      "sha256": "ff57133c7b78e626a232985b58e402fb7294fa959aafd2b77161059d83021d09"
+    },
+    {
+      "file": "raw/dialogue-03-woman.wav",
+      "bytes": 135212,
+      "sha256": "a7b897ec4c13a606ae5f4d2b30845886fb67c3aed3517d3c6e68423dbc4ad983"
+    },
+    {
+      "file": "raw/dialogue-04-jango.wav",
+      "bytes": 153644,
+      "sha256": "451c6261b82281a30f35a6250fb814a58fa92a2117346f5955af96f174f8d47e"
+    },
+    {
+      "file": "raw/jango-m1-raw.wav",
+      "bytes": 319532,
+      "sha256": "9351ff79cd6a1dda2830c026ee5d770eafb735617418220f7a9fe26e0e7f475e"
+    },
+    {
+      "file": "raw/jango-m3-raw.wav",
+      "bytes": 276524,
+      "sha256": "145967d445c5d7eea4e362e403e76df488290f88d76557dc8ef3efcff0e20a09"
+    },
+    {
+      "file": "raw/jango-m4-raw.wav",
+      "bytes": 301100,
+      "sha256": "ea97d1b7b02944ccc5d911772c43fc9369a84d45438a09ef14e0329b2501d968"
+    },
+    {
+      "file": "raw/jango-m5-raw.wav",
+      "bytes": 319532,
+      "sha256": "1644d5fe4121848f661783af55c9435e60b983dd7417589e1ccdf67b5b744cb4"
+    },
+    {
+      "file": "raw/woman-f3-raw.wav",
+      "bytes": 307244,
+      "sha256": "b992f7b89bc67e9f8eee80ac1c900d4c2c846e8ddc650eb48cbff991ebe9d907"
+    },
+    {
+      "file": "raw/woman-f4-raw.wav",
+      "bytes": 258092,
+      "sha256": "2a28a2ae46fbf441d023060a8f5165c6e56ff0d6539a3e1f7404396b6d654542"
+    },
+    {
+      "file": "raw/woman-f5-raw.wav",
+      "bytes": 288812,
+      "sha256": "668450f93b12de8ba062d9a5b1b33085a1fb37b6e6a43f8bc03fe3e037d575dd"
+    },
+    {
+      "file": "voicestudio-source-hashes.json",
+      "bytes": 2363,
+      "sha256": "1a15698aee079af94877c41cc2f1ba5645321bede517e32dc9e14d299ae02ebe"
+    }
+  ]
+}

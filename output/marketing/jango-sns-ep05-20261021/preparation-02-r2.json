@@ -1,0 +1,32 @@
+{
+  "candidate": "scene-02-r2",
+  "preparedAt": "2026-10-21T14:14:27.560075+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-02-r2.txt",
+  "promptSha256": "9e34a27edca52d40e5fe7bbc6f78541d6391f360c42055b7f7c38d4b5dd94792",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r1.png",
+      "sha256": "37c9116c4f3800286ed330d67db9da732abf136535d177056ad78563d38fa248",
+      "role": "edit target; revise duplicated camera/pose; keep character, wardrobe, watch and scene material",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 compact anatomy/master identity",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499",
+      "role": "continuing woman face and bun identity",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

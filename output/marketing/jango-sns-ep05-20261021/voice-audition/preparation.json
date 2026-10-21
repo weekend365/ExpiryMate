@@ -1,0 +1,49 @@
+{
+  "createdAt": "2026-10-21T14:47:12.563499+09:00",
+  "authorization": "릴스로 만들기 전에 두 캐릭터의 짧은 샘플을 들어볼 수 있게 해줘.",
+  "scope": "Short two-character Korean voice audition only; no full Reel render or publishing.",
+  "method": "Unmodified VoiceStudio Supertonic-3 sidecar run in a dedicated temporary Python environment, with pinned upstream model and stock preset voices.",
+  "software": {
+    "repository": "https://github.com/debpalash/VoiceStudio",
+    "commit": "28bf2c7a83b8a64836297340c52a45d716684aed",
+    "sdk": "supertonic==1.3.1",
+    "device": "CPUExecutionProvider"
+  },
+  "model": {
+    "repo": "Supertone/supertonic-3",
+    "revision": "724fb5abbf5502583fb520898d45929e62f02c0b",
+    "license": "OpenRAIL-M",
+    "licenseURL": "https://huggingface.co/Supertone/supertonic-3/blob/724fb5abbf5502583fb520898d45929e62f02c0b/LICENSE",
+    "disclosure": "AI로 합성한 목소리 샘플입니다."
+  },
+  "scripts": {
+    "woman": "장고가 이렇게 빨랐어? 러닝 하자며?",
+    "jango": "늦으면 끝이야! 오픈런도 런이잖아."
+  },
+  "initialPresets": {
+    "woman": [
+      "F3",
+      "F4",
+      "F5"
+    ],
+    "jango": [
+      "M1",
+      "M3",
+      "M4",
+      "M5"
+    ]
+  },
+  "settings": {
+    "lang": "ko",
+    "speed": 1.0,
+    "total_steps": 10,
+    "format": "44.1 kHz mono WAV"
+  },
+  "reviewPlan": [
+    "Verify successful audio generation and decoded samples.",
+    "Compare preset delivery and Korean pronunciation.",
+    "Preserve raw takes; deliver character examples and short dialogue preview without background music.",
+    "Record actual device, durations, audio processing, source/model/voice hashes and limitations."
+  ],
+  "status": "prepared-before-synthesis"
+}

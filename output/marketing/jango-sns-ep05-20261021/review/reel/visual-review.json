@@ -1,0 +1,39 @@
+{
+  "reviewedAt": "2026-10-21T15:18:03.999072+09:00",
+  "scope": "Rendered ep05; internal visual review, not user casting/adoption or Instagram publication.",
+  "videoSha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe",
+  "evidence": [
+    "review/reel/timeline-00-09.jpg",
+    "review/reel/timeline-10-19.jpg",
+    "review/reel/cuts-and-zoom-1.jpg",
+    "review/reel/cuts-and-zoom-2.jpg",
+    "review/reel/ui-overlap-sheet.jpg",
+    "review/reel/native-06.00.jpg",
+    "review/reel/cover-profile-square.jpg",
+    "review/reel/cover-profile-3x4.jpg"
+  ],
+  "observations": [
+    "The five scene changes preserve the run → time check → queue reveal → pun → shared white rice cakes story.",
+    "Compact Jango body, gloves/watch, woman bun/running outfit and three-cakes-to-two-plus-one continuity remain visible.",
+    "All six lettering states are legible at 360x640. Dialogue and brand stay fixed while art zooms 100–103%.",
+    "Scene 4 woman question lasts 2.3 seconds and Jango reply lasts 3.7 seconds; closing brand and one question remain for 4 seconds.",
+    "First dialogue is visible at frame zero. Whole scene frames fill the 9:16 canvas; no added letterbox bars.",
+    "Balloon tails face the appropriate speaker side and do not cover faces, the watch or rice cakes in reviewed start/mid/end frames.",
+    "The conservative control-overlay simulation keeps dialogue, eyes, mouths, the watch and the closing question clear. Some peripheral mitten/character-edge pixels lie near the right-side control column; no core action is hidden in this simulation.",
+    "Central square and 3:4 cover crops retain both title lines and Jango face. Cover is separately typeset, not a random video frame."
+  ],
+  "corrections": [
+    {
+      "issue": "Original cover title touched the square-crop top edge.",
+      "fix": "Reduced title to 80px and moved its bounds to y>=450; reviewed square and 3:4 crops."
+    },
+    {
+      "issue": "Gaegu U+2026 is an empty glyph.",
+      "fix": "Preserved logical …찹쌀떡? text and rendered the ellipsis as three Gaegu period glyphs. Added a nonempty-glyph assertion and re-encoded/revalidated the complete video."
+    }
+  ],
+  "reviewMethod": "Sequential full-timeline one-second frames, all cut/zoom endpoints and native-resolution frames. No claim of real-time video playback.",
+  "audioReview": "Full AAC decode, per-second signal/loudness and clipping/continuity checks passed. Assistant cannot hear audio; full listening not performed.",
+  "platformReview": "Overlay images are labelled simulations. Live Instagram upload preview, profile crop, AI switch and actual playback are publication-stage checks.",
+  "result": "ready for user review as a no-dubbing Reel"
+}

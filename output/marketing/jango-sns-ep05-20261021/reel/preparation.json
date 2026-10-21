@@ -1,0 +1,102 @@
+{
+  "createdAt": "2026-10-21T15:03:29.388096+09:00",
+  "authorization": "그냥 더빙 없이 릴스 생성해줘.",
+  "scope": "Render current selected episode-5 art as a 20-second 5-scene Reel, with fixed Korean dialogue and licensed BGM; omit all audition voices.",
+  "storyboard": "episode.json",
+  "sceneDurationsSeconds": [
+    2,
+    4,
+    4,
+    6,
+    4
+  ],
+  "dialogue4Seconds": [
+    10,
+    12.3,
+    16
+  ],
+  "closingSeconds": [
+    16,
+    20
+  ],
+  "motion": "100–103% uniform zoom per scene; fixed balloons and lettering; straight cuts",
+  "output": {
+    "size": [
+      1080,
+      1920
+    ],
+    "fps": 30,
+    "codec": "H.264/AAC",
+    "coverSize": [
+      1080,
+      1920
+    ]
+  },
+  "sources": [
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-01-r1.png",
+      "role": "selected official-imagegen art",
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-02-r3.png",
+      "role": "selected official-imagegen art",
+      "sha256": "68bfeaf9601dbe66818201038488674e4258d622b082131f4b5070550498b282"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r3.png",
+      "role": "selected official-imagegen art",
+      "sha256": "4e595039c071d67bd5f83d6c0dfa26ebac1a12ea3530828bb14be1ba022ddacf"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r2.png",
+      "role": "selected official-imagegen art",
+      "sha256": "3b74a33c4290c5d7bf6d9582838942db30cecacc361df3da91ec1655a23bfdd7"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "role": "selected official-imagegen art",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "role": "dialogue and brand font",
+      "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt",
+      "role": "font license",
+      "sha256": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251"
+    },
+    {
+      "file": "apps/mobile/assets/fonts/Pretendard-Regular.otf",
+      "role": "QA overlay font",
+      "sha256": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "role": "approved existing balloon artwork",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/Carefree.mp3",
+      "role": "existing licensed instrumental BGM",
+      "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/source-license.png",
+      "role": "track license evidence",
+      "sha256": "b1d0cc3b51222d4233981324391fe0fa5c0a689681eb2714383125640327fca8"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep04-20261020/music/license.json",
+      "role": "prior music provenance",
+      "sha256": "cfe322a0dea62d46760f387e258f355585db7212edd91d74098a76091b647182"
+    }
+  ],
+  "newImageGeneration": false,
+  "renderingMethod": "Existing local Pillow and FFmpeg; preserve raw image and voice audition bytes.",
+  "publication": "not requested in latest turn; delivery for review",
+  "audioReviewLimitation": "Assistant audio input unavailable; perform technical audio checks and label full listening unperformed.",
+  "instagramReview": "Use a clearly labelled control-overlay simulation and profile-crop proofs. Actual Instagram upload-screen and profile checks belong to publication."
+}

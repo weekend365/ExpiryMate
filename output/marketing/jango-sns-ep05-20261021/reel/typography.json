@@ -1,0 +1,275 @@
+{
+  "nativeArtworkSize": [
+    941,
+    1672
+  ],
+  "outputSize": [
+    1080,
+    1920
+  ],
+  "uniformFraming": "Cover fit, <1 native pixel of background removed in total for ratio rounding.",
+  "fixedText": [
+    {
+      "role": "01 woman",
+      "text": "장고가 이렇게",
+      "sizePx": 84,
+      "renderedText": "장고가 이렇게",
+      "bbox": [
+        286,
+        296,
+        734,
+        372
+      ],
+      "inkHeightPx": 77,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "01 woman",
+      "text": "빨랐어?",
+      "sizePx": 84,
+      "renderedText": "빨랐어?",
+      "bbox": [
+        384,
+        388,
+        636,
+        464
+      ],
+      "inkHeightPx": 77,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "02 Jango",
+      "text": "늦으면",
+      "sizePx": 76,
+      "renderedText": "늦으면",
+      "bbox": [
+        557,
+        296,
+        743,
+        372
+      ],
+      "inkHeightPx": 76,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "02 Jango",
+      "text": "끝이야!",
+      "sizePx": 76,
+      "renderedText": "끝이야!",
+      "bbox": [
+        540,
+        384,
+        760,
+        454
+      ],
+      "inkHeightPx": 71,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "03 woman",
+      "text": "…찹쌀떡?",
+      "sizePx": 92,
+      "renderedText": "...찹쌀떡?",
+      "bbox": [
+        300,
+        342,
+        670,
+        432
+      ],
+      "inkHeightPx": 90,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 woman",
+      "text": "러닝 하자며?",
+      "sizePx": 90,
+      "renderedText": "러닝 하자며?",
+      "bbox": [
+        272,
+        372,
+        728,
+        438
+      ],
+      "inkHeightPx": 65,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 Jango",
+      "text": "오픈런도",
+      "sizePx": 88,
+      "renderedText": "오픈런도",
+      "bbox": [
+        356,
+        323,
+        644,
+        391
+      ],
+      "inkHeightPx": 68,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "04 Jango",
+      "text": "런이잖아.",
+      "sizePx": 88,
+      "renderedText": "런이잖아.",
+      "bbox": [
+        341,
+        406,
+        659,
+        487
+      ],
+      "inkHeightPx": 81,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 brand",
+      "text": "장고야 부탁해",
+      "sizePx": 80,
+      "renderedText": "장고야 부탁해",
+      "bbox": [
+        295,
+        317,
+        725,
+        377
+      ],
+      "inkHeightPx": 60,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 single closing question",
+      "text": "너는 러닝파,",
+      "sizePx": 84,
+      "renderedText": "너는 러닝파,",
+      "bbox": [
+        306,
+        394,
+        714,
+        462
+      ],
+      "inkHeightPx": 69,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 single closing question",
+      "text": "오픈런파?",
+      "sizePx": 84,
+      "renderedText": "오픈런파?",
+      "bbox": [
+        349,
+        478,
+        671,
+        542
+      ],
+      "inkHeightPx": 65,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "05 series",
+      "text": "장고랑 살아보니 05",
+      "sizePx": 43,
+      "renderedText": "장고랑 살아보니 05",
+      "bbox": [
+        346,
+        634,
+        674,
+        674
+      ],
+      "inkHeightPx": 39,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "text": "장고가 갑자기",
+      "sizePx": 80,
+      "renderedText": "장고가 갑자기",
+      "bbox": [
+        305,
+        454,
+        735,
+        525
+      ],
+      "inkHeightPx": 71,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover title",
+      "text": "빨라졌다",
+      "sizePx": 80,
+      "renderedText": "빨라졌다",
+      "bbox": [
+        387,
+        537,
+        653,
+        616
+      ],
+      "inkHeightPx": 79,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    },
+    {
+      "role": "cover series",
+      "text": "장고랑 살아보니 05",
+      "sizePx": 44,
+      "renderedText": "장고랑 살아보니 05",
+      "bbox": [
+        512,
+        657,
+        848,
+        697
+      ],
+      "inkHeightPx": 40,
+      "font": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "fixedToFrame": true
+    }
+  ],
+  "balloon": {
+    "source": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+    "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232",
+    "method": "Reused existing approved blank balloon, uniformly scaled and optionally mirrored."
+  },
+  "font": {
+    "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+    "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c",
+    "license": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt"
+  },
+  "storefront": {
+    "exactText": "11시 오픈",
+    "lineBreak": [
+      "11시",
+      "오픈"
+    ],
+    "nativeQuad": [
+      [
+        534,
+        724
+      ],
+      [
+        632,
+        710
+      ],
+      [
+        632,
+        791
+      ],
+      [
+        534,
+        804
+      ]
+    ],
+    "movesWithArtwork": true,
+    "notAnAppScreen": true
+  }
+}

@@ -1,0 +1,1549 @@
+{
+  "recordedAt": "2026-10-21T16:05:59.706887+09:00",
+  "authorization": "불필요한 리소스는 제거 후 커밋하자.",
+  "scope": "Episode 5 only; removed unused dubbing media and reproducible derived images. No original generated artwork, MASTER, used source reference, final published MP4/JPG/caption, BGM/license or publication evidence removed.",
+  "removedFileCount": 129,
+  "removedBytes": 71118456,
+  "reasonCounts": {
+    "finder-metadata": 3,
+    "rebuildable-png-cover-copy": 1,
+    "superseded-verbose-render-log": 4,
+    "rebuildable-cover-thumbnail": 1,
+    "rebuildable-frame-proof-in-retained-contact-sheets": 37,
+    "rebuildable-individual-layout-proof": 12,
+    "rebuildable-native-frame-proof": 5,
+    "rebuildable-overlay-proof-in-retained-contact-sheet": 6,
+    "rebuildable-uniform-scene-copy": 5,
+    "unused-dubbing-audition": 54,
+    "unused-dubbing-source-notice-with-retained-url-and-license-hashes": 1
+  },
+  "retainedOriginals": "All 11 imagegen PNG originals retained: 5 final selections and 6 actual inputs to subsequent image edits. This preserves byte-level generation lineage.",
+  "retainedProof": "360x640 full video; art/layout/timeline/cut/overlay contact sheets; native scene-3 frame; square/3:4 cover crops; original revision overview; live profile/post/AI/links screenshots and publication record.",
+  "historicalReferences": "Original preparation, generation, audition delivery, production and per-stage hash manifests remain dated snapshots. References to removed files describe past outputs; cleanup.json records their hash and intentional absence. Root file-hashes.json is the current inventory.",
+  "reproduction": {
+    "scenesAndLayout": "build_reel.py layout recreates scene copies, overlays, cover PNG and layout proofs from retained raw art and font/balloon references. Use a working copy to preserve archived publication bytes.",
+    "videoFrames": "validate_reel.py recreates individual frame/overlay proofs from the retained final video; it records intentional historical deletions separately from preserved files.",
+    "voiceAuditions": "Not retained or included in final Reel after the user chose no dubbing. Recipes, parameters, source/model hashes, licenses, feedback and historical output hashes remain; bit-identical speech regeneration is not guaranteed."
+  },
+  "temporaryRecovery": "Removed bytes verified in an out-of-repository temporary recovery archive before deletion. This is not a committed deliverable or permanent source.",
+  "metadataSnapshots": [
+    "cleanup/before-episode.json",
+    "cleanup/before-production-record.json",
+    "cleanup/before-selected-artwork.json",
+    "cleanup/before-file-hashes.json"
+  ],
+  "removed": [
+    {
+      "file": ".DS_Store",
+      "bytes": 6148,
+      "sha256": "40fc8a4bc0cb339b73b3f20ffbe6442fb1520c651e977c50b24e0de57e4d5a8f",
+      "reason": "finder-metadata",
+      "historicalOrRecipeReferences": [
+        "validate_reel.py",
+        "reel/preservation-before-render.json",
+        "reel/delivery.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "cover.png",
+      "bytes": 3324749,
+      "sha256": "fecf3217b0947ec273284d220710813a044ed2d97bcea0e8f901f294fb0d00a4",
+      "reason": "rebuildable-png-cover-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "build_reel.py",
+        "reel/delivery.json"
+      ]
+    },
+    {
+      "file": "reel/final.log",
+      "bytes": 3062,
+      "sha256": "5e8dbb5b2865cd7b31dcf7c1eff900d95de10e1d5553484dd7554f23ce902206",
+      "reason": "superseded-verbose-render-log",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "cleanup/before-file-hashes.json"
+      ]
+    },
+    {
+      "file": "reel/proxy.log",
+      "bytes": 4584,
+      "sha256": "a47be55f7c8b746be4be62584743d7c3794e404467bccc3c77c92860553e5ea9",
+      "reason": "superseded-verbose-render-log",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "cleanup/before-file-hashes.json"
+      ]
+    },
+    {
+      "file": "reel/silent.log",
+      "bytes": 13082,
+      "sha256": "b2c6797f7de84fcdc4be5c4db2564ea9c88307b8a70890289676675a42d3e3e6",
+      "reason": "superseded-verbose-render-log",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "build_reel.py",
+        "cleanup/before-file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/cover-360.png",
+      "bytes": 472098,
+      "sha256": "f6c5095ac7002ce2fa53d25c04e473cda7c478bc85a92892f1d79f84b40b7927",
+      "reason": "rebuildable-cover-thumbnail",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "build_reel.py"
+      ]
+    },
+    {
+      "file": "review/reel/decode.log",
+      "bytes": 2462,
+      "sha256": "c3585f6fc56a4573a2374b46d8f033d8c388389c3e2880e0d65a415ffa2628a2",
+      "reason": "superseded-verbose-render-log",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "cleanup/before-file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-00.00.jpg",
+      "bytes": 151214,
+      "sha256": "25054a243d8a3e9d329f07c32dfa4a9108ddb6d6d2ce64c652c84b09667f8887",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-01.00.jpg",
+      "bytes": 151194,
+      "sha256": "9651149012d627962e675b7ce4f33121be72d215add8ad0b6e8f3651cbe68e02",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-01.97.jpg",
+      "bytes": 150444,
+      "sha256": "c6d1d9104df075472fbe4c876408dc4ffccd06bafee73006cad2e29d58c02b39",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-02.00.jpg",
+      "bytes": 160892,
+      "sha256": "dc8f16a6d0fb33db56d57a04028aec3db7e4bc2896c6bfa7451cbba5d94d7496",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-04.00.jpg",
+      "bytes": 162132,
+      "sha256": "ecaa1082f28ceb0545e2e860c232c6b61c92eed1a218483b75a49c6d8384a39a",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-05.97.jpg",
+      "bytes": 160144,
+      "sha256": "20d56df0190037fd0b88b86239cdab6741665bebea1550d405e1820c309d503c",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-06.00.jpg",
+      "bytes": 160580,
+      "sha256": "9b15afea80407c0aae9f49be840df272c32f99c3148167760498799c0c360b53",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-08.00.jpg",
+      "bytes": 161843,
+      "sha256": "d4ce0425cb8f48512a7cfa699a5f56c938802866c63cdb4dc6b9365ba6eafe9b",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-09.97.jpg",
+      "bytes": 159887,
+      "sha256": "4c2c38a4ad6de9b4f098907b97d11af4c2d83da31cbfb426080d14e410f4d782",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-10.00.jpg",
+      "bytes": 163718,
+      "sha256": "b4dfd58223ffc321c2aa37a625cf7580644948ea712734fca96d388214975f94",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-12.27.jpg",
+      "bytes": 164289,
+      "sha256": "ddd0ea235f3b4fc3a6aeb1e3f2a64aab63914e93835cf6521a2d873a6ae6bf4a",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-12.30.jpg",
+      "bytes": 165132,
+      "sha256": "901fe8c2bc07f0d7bc89b74f0aaaf71f1cdf72e07ac8ba9e8a87f63f57b9c75f",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-13.00.jpg",
+      "bytes": 165493,
+      "sha256": "68735664ee0207f1df5ee86ee342b1c015c70f504ef062046acf97f4b5d04cab",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-15.97.jpg",
+      "bytes": 164382,
+      "sha256": "83e6bb9906843b08feeca139013e5972a13b29e83d5205b1322d2db037d0da82",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-16.00.jpg",
+      "bytes": 164717,
+      "sha256": "46fc93c914503b2cb07b07aaf9fdadf4864b0b7429e626e03c47a0fd8055e4d5",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-18.00.jpg",
+      "bytes": 165100,
+      "sha256": "487457c3e5c2d92a86fbc9502bdf8244e8d23bdfff884aa6a75962bf43b95a66",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/endpoint-19.97.jpg",
+      "bytes": 163320,
+      "sha256": "443da30bdc6b49e1355cad78b57374adfc66fe7456246ef51fdc41306b14c72b",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-01-360.png",
+      "bytes": 483444,
+      "sha256": "492960892d1d5fcd31a03002d42097da8823d9b295de069d10c62f3beff946ca",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-01.png",
+      "bytes": 3474833,
+      "sha256": "c402c6c867e019c85f5a9ad45bc17fb5231a17a85ff460b001b07b05a7bc5204",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-02-360.png",
+      "bytes": 506644,
+      "sha256": "d04e9215653b6e3c0661fcf68a35b2fa4506cd9a20a0d97cf938d90e0d630e68",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-02.png",
+      "bytes": 3532590,
+      "sha256": "85f33de3a439017e161ff8413c5cdca7aabb215096aa91ed3163a46d68b5a98e",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-03-360.png",
+      "bytes": 491574,
+      "sha256": "74f1c95af2cce9adbdc1fb7e5b8fc0c7640e75a5e18b85b0cfaa8585d8b8e605",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-03.png",
+      "bytes": 3487926,
+      "sha256": "f13ee74c728060b626a419a05326ae705736f6ee498d404221f41056c44b469d",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-04a-360.png",
+      "bytes": 497957,
+      "sha256": "1700ae8dcf924e89836442e438f138404adbf81cb0d7c4a318842d4424305dd5",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-04a.png",
+      "bytes": 3536141,
+      "sha256": "b98706f683b7c6321c8102b0251ad01a9391009b0af25805907658809bb6f54d",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-04b-360.png",
+      "bytes": 499314,
+      "sha256": "9ee0fc908de75394fc244b5c8f445764e2d5998f0f61c9b670919dbaf114407f",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-04b.png",
+      "bytes": 3537520,
+      "sha256": "a2138a9887f50762c55523a8b943d4db62f0dd5ee312d1ce11970abbe070c6fa",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-05-360.png",
+      "bytes": 502276,
+      "sha256": "460878cb2fdee9a636d118ededa4f8c2d7b6b9b8ed757f4f9774afeba99499dd",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/layout-05.png",
+      "bytes": 3496549,
+      "sha256": "eb663e69880ee9f202246c4aba00ebc56163e17d8e265a2d3f597b3b8c25e91f",
+      "reason": "rebuildable-individual-layout-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/native-00.00.jpg",
+      "bytes": 955011,
+      "sha256": "4638891182b9b4ca913feabc759d6f269fb98abc09dcf15d398068a42fe0a2a5",
+      "reason": "rebuildable-native-frame-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/native-02.00.jpg",
+      "bytes": 989860,
+      "sha256": "141969d0a5c9c6d1b10797e84ddbe2577a1f076b2836a52cd8e1f316d174c9fd",
+      "reason": "rebuildable-native-frame-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/native-12.30.jpg",
+      "bytes": 1012393,
+      "sha256": "42b1617ab61baf5baad8e3c251fd6d90304a4a38bcc48150704fb92c2af55f17",
+      "reason": "rebuildable-native-frame-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/native-16.00.jpg",
+      "bytes": 1013569,
+      "sha256": "91262de3ef131cfb8bdb522d4761f5ef841a932185225ebd012b5b15536b9fc8",
+      "reason": "rebuildable-native-frame-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/native-19.97.jpg",
+      "bytes": 967131,
+      "sha256": "2072ba35993bae61f5896dd81764bdb8b645f8f9e0e8191c47b1b08f5715d449",
+      "reason": "rebuildable-native-frame-proof",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-00.jpg",
+      "bytes": 151214,
+      "sha256": "25054a243d8a3e9d329f07c32dfa4a9108ddb6d6d2ce64c652c84b09667f8887",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-01.jpg",
+      "bytes": 151194,
+      "sha256": "9651149012d627962e675b7ce4f33121be72d215add8ad0b6e8f3651cbe68e02",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-02.jpg",
+      "bytes": 160892,
+      "sha256": "dc8f16a6d0fb33db56d57a04028aec3db7e4bc2896c6bfa7451cbba5d94d7496",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-03.jpg",
+      "bytes": 161350,
+      "sha256": "eb99eb397c0257c528a45eb36c467955fddb0b3c77a3b52e02001c2a75877855",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-04.jpg",
+      "bytes": 162132,
+      "sha256": "ecaa1082f28ceb0545e2e860c232c6b61c92eed1a218483b75a49c6d8384a39a",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-05.jpg",
+      "bytes": 161267,
+      "sha256": "a9e15471794b86573a856bd4dfedcb1912829fe09d55eaa9e9e3396569ffbaaa",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-06.jpg",
+      "bytes": 160580,
+      "sha256": "9b15afea80407c0aae9f49be840df272c32f99c3148167760498799c0c360b53",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-07.jpg",
+      "bytes": 160848,
+      "sha256": "3cee02043a680baa0faa013acfeb4e01455a103adfd07f63e020aaeada485784",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-08.jpg",
+      "bytes": 161843,
+      "sha256": "d4ce0425cb8f48512a7cfa699a5f56c938802866c63cdb4dc6b9365ba6eafe9b",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-09.jpg",
+      "bytes": 161026,
+      "sha256": "a351af79133db5c4a56bb0fee24199502585b8dfa87561549712078a19011126",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-10.jpg",
+      "bytes": 163718,
+      "sha256": "b4dfd58223ffc321c2aa37a625cf7580644948ea712734fca96d388214975f94",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-11.jpg",
+      "bytes": 164136,
+      "sha256": "52d0c5fcfcb646f76caa527fe5531cac5c9d9026bae5cd8c3998b87f807b6df2",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-12.jpg",
+      "bytes": 164624,
+      "sha256": "6e362dc3b176a1a01bac7c41438dd2092221b0381b395cad55fcd4c4951263a5",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-13.jpg",
+      "bytes": 165493,
+      "sha256": "68735664ee0207f1df5ee86ee342b1c015c70f504ef062046acf97f4b5d04cab",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-14.jpg",
+      "bytes": 165444,
+      "sha256": "c6cb36a151e8e4d712f53a0100d91cd9a8fa765bc01213964e086c5a6af39943",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-15.jpg",
+      "bytes": 165517,
+      "sha256": "3326c6adfad84745e32e61559192bf17ca75e5fc87673ec1211d16a58c77bbb8",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-16.jpg",
+      "bytes": 164717,
+      "sha256": "46fc93c914503b2cb07b07aaf9fdadf4864b0b7429e626e03c47a0fd8055e4d5",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-17.jpg",
+      "bytes": 164699,
+      "sha256": "7289ccb3c4a7f11361416e3743344f4fe2adabfb5d76bdded1b7b2d114c81b61",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-18.jpg",
+      "bytes": 165100,
+      "sha256": "487457c3e5c2d92a86fbc9502bdf8244e8d23bdfff884aa6a75962bf43b95a66",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/second-19.jpg",
+      "bytes": 164575,
+      "sha256": "e44936f97eb4e8c1c803c2784ba1c8130f45fa29bf88f78e4697bf602c1da651",
+      "reason": "rebuildable-frame-proof-in-retained-contact-sheets",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-01.jpg",
+      "bytes": 150870,
+      "sha256": "16b2ad47209e92b945f59cf806123a662ab307eb374721594bf531672fd49d29",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-02.jpg",
+      "bytes": 159086,
+      "sha256": "a456e868794b230700b2b4957fd5684d0036590572e023b8f440242aa3470053",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-03.jpg",
+      "bytes": 159297,
+      "sha256": "5fcdc3dc8ecf3fbed5836e422bb96573b8c0eefa3c772848532f801c5a29bc2e",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-04.jpg",
+      "bytes": 163306,
+      "sha256": "5c95dbea08889a750a87e6672dd31940713d379a3df510378d57985ced8462b7",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-05.jpg",
+      "bytes": 163212,
+      "sha256": "649aa390920c52e4b7efd1045641de251bb94f86894096bb6eab16c4d82e6e9c",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "review/reel/ui-overlap-06.jpg",
+      "bytes": 162157,
+      "sha256": "353295a1ba7b0f5cd8d70bb8e7773645e397c432541509052bc14dac67c044e9",
+      "reason": "rebuildable-overlay-proof-in-retained-contact-sheet",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "scenes/01.png",
+      "bytes": 4086358,
+      "sha256": "644d936eb3a1d9fe0588d2cd7070576107d8b1b7fac7daabbde8e8a8726ff71f",
+      "reason": "rebuildable-uniform-scene-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "build_reel.py"
+      ]
+    },
+    {
+      "file": "scenes/02.png",
+      "bytes": 4105989,
+      "sha256": "e437a84ef7cfbe7c1abb30e2431cd806206e51f6292beba1c39eec1a06732aff",
+      "reason": "rebuildable-uniform-scene-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "scenes/03.png",
+      "bytes": 4092909,
+      "sha256": "eeed0c9b36abeb725e3c56fe715e5a30eb595715c409818e630631bf6fcdc59f",
+      "reason": "rebuildable-uniform-scene-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "scenes/04.png",
+      "bytes": 4195215,
+      "sha256": "a17ab3a6a29feca8f8341be7bff194464bcfdadbab2a45b45454ab9038049e87",
+      "reason": "rebuildable-uniform-scene-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "scenes/05.png",
+      "bytes": 4169235,
+      "sha256": "549ec741977025941f8766e8663ff95e2d60c8851c4fe5bf3aab149ca08fe4aa",
+      "reason": "rebuildable-uniform-scene-copy",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/.DS_Store",
+      "bytes": 6148,
+      "sha256": "b29e30d6cc8d16ad6a5353799b1c9e7ac96b60f35cc03e9e12a888c7a95505f4",
+      "reason": "finder-metadata",
+      "historicalOrRecipeReferences": [
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/dialogue-youth-r2.mp3",
+      "bytes": 129327,
+      "sha256": "b92cd62a3797bc7948b5c12c91191e14dbb032a0ece652da26497c20107efaf6",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "episode.json",
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "reel/before-episode.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/dialogue-youth-r2.wav",
+      "bytes": 706014,
+      "sha256": "e5d64a3eadcbb4062981382942ada8c3c199dd919a0348226fd9fb83438c2e1d",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/jango-playful-child-r2.mp3",
+      "bytes": 63723,
+      "sha256": "43f6d70cd12266b094e83aa7ff1bf967623f08cee3ae7c0934fe3268787676e5",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "episode.json",
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "reel/before-episode.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/jango-playful-child-r2.wav",
+      "bytes": 345168,
+      "sha256": "eaeb7200df548b5c8f05bea722b8615624f4f7180bec315f442b40bca0b47502",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/woman-girl-r2.mp3",
+      "bytes": 67887,
+      "sha256": "db428a3ecf56590fe8f3863f8850cfa0427887d4c0187c395c2966f1c9f4f4ad",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "episode.json",
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "reel/before-episode.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/preview/woman-girl-r2.wav",
+      "bytes": 367946,
+      "sha256": "f9bb594fee838c183f4694c319e320b73f3de634b7bbfb976cd9eeeb0c757e38",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/jango-01-level.wav",
+      "bytes": 136522,
+      "sha256": "b3f7185965ad87a8df86bd8d5ce141ba09ad8f9797ee9e5a1b1c5c208bd7b6b4",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/jango-01-pitch.wav",
+      "bytes": 136522,
+      "sha256": "75553e537f699b7a7de4dbc327c0596af9d333f6527418fca14fc6c7311075f1",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/jango-02-level.wav",
+      "bytes": 154956,
+      "sha256": "1d79785a293a740ded4764f896fd919e6d3812beff5d168371de80c1d31c6cba",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/jango-02-pitch.wav",
+      "bytes": 154956,
+      "sha256": "f2442713fca1e03764db75144f02b940051c2ea39cccaca32f9ba83fc99b4155",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/woman-01-level.wav",
+      "bytes": 179940,
+      "sha256": "f8321a243de1cafffe5afb446ee71dbab678daf9afc61a2dc49469441f264750",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/woman-01-pitch.wav",
+      "bytes": 179940,
+      "sha256": "e9e2c930dc654ab576b9d39867d15377eaf52bbd388e200d29b035c2334b6eb6",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/woman-02-level.wav",
+      "bytes": 130788,
+      "sha256": "c9cb866a506f6d6bfd0970b1052b4fa27bc15f424a6817243f3abf3211bd90f6",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/delivery.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/processed/woman-02-pitch.wav",
+      "bytes": 130788,
+      "sha256": "909c735e1fb696aa9807019bba11bc101e1462b94957573209ae5b0ba68ed30a",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/jango-f4-01.wav",
+      "bytes": 129068,
+      "sha256": "6160e5b583167a8b32c2d8fb1ba4e83e26e758dcec67e53e61aadded248cf262",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/jango-f4-02.wav",
+      "bytes": 147500,
+      "sha256": "b44307bf5528c36882a4e5cdea5d3200acf9fcad94a4463f1d248399b2f99ca8",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/jango-f5-01.wav",
+      "bytes": 135212,
+      "sha256": "aff9c879b7257b55d506e133f18ad8435dd4689a065d8793aa4ac05c09b91793",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/jango-f5-02.wav",
+      "bytes": 153644,
+      "sha256": "1fa9e7affbcefa4b9af3bd6c0c015638934c233c0e8a808bf364d510413c80b7",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/woman-f1-01.wav",
+      "bytes": 178220,
+      "sha256": "b8fe77abde00d43e6e65f9fccbd16052d1111e84fe4b38bf6ca9ee740125faa8",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/woman-f1-02.wav",
+      "bytes": 129068,
+      "sha256": "9685842f23a4ab76941b951d63a5fd344c6fc7a0f81a36b9f3bf4fbb151dd3f1",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/woman-f2-01.wav",
+      "bytes": 172076,
+      "sha256": "3888526c7daaa4424da2ac913444e2852710038b9379b35e6b870d78bbebc735",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition-youth-r2/raw/woman-f2-02.wav",
+      "bytes": 122924,
+      "sha256": "20c6ea69ad9cfd3f7d34f9698dedea8b6bb7a0ac76e022af117f9025de282db6",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/file-hashes.json",
+        "voice-audition-youth-r2/processing-record.json",
+        "voice-audition-youth-r2/generation-record.json",
+        "voice-audition-youth-r2/quality-record.json"
+      ]
+    },
+    {
+      "file": "voice-audition/.DS_Store",
+      "bytes": 6148,
+      "sha256": "76e1c4417187e6de6283cb4f7d965653704a0c71d695ebc3eb048be5e91561a0",
+      "reason": "finder-metadata",
+      "historicalOrRecipeReferences": [
+        "reel/preservation-before-render.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/index.html",
+      "bytes": 7446,
+      "sha256": "63778556961dcab158e64c976c268efec62b868b632749b58f614b30fb42fd45",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/build_audition_page.py",
+        "voice-audition/delivery.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/licenses/VoiceStudio-LICENSE-NOTICE.txt",
+      "bytes": 5164,
+      "sha256": "e01c368c0651d042c22f021ddd554a13b03fa90ab516385130625e318fcefd61",
+      "reason": "unused-dubbing-source-notice-with-retained-url-and-license-hashes",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/build_previews.py",
+        "cleanup/before-file-hashes.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-f3-m3.mp3",
+      "bytes": 138041,
+      "sha256": "b893d3943248488ecb5b6c9b4295556c99c74071dcc6d36072f80d42bbe415fa",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/build_audition_page.py",
+        "voice-audition/delivery.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-f3-m3.wav",
+      "bytes": 755556,
+      "sha256": "d9aebce1bb42e8893934a81e04d838208f2e092424538ceb5ae3c7e0b40ecf85",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/build_audition_page.py",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-line-01.wav",
+      "bytes": 190542,
+      "sha256": "daf233005ab0d0289966263d4c57ba41af4a23a13c003fa52a06640905daa78b",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-line-02.wav",
+      "bytes": 135246,
+      "sha256": "0a90931c1226280f63948f1b1252d9811c382bf88d5d4b949be7e4805231b57b",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-line-03.wav",
+      "bytes": 135246,
+      "sha256": "88f7e76507d6f18b9803d7c17a39bebd317a6a951c5402fc01c934391484e333",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/dialogue-line-04.wav",
+      "bytes": 153678,
+      "sha256": "2415ba91b68950ce265b30bd5d4c17a4ac7bf6f8c4de5f4f0d5ae82f40a26683",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m1.mp3",
+      "bytes": 59037,
+      "sha256": "6fb4b516b5b5e6e384691b78e5be6c9dc00d10648aa563087aa7715995c53264",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m1.wav",
+      "bytes": 319566,
+      "sha256": "2c421fe626f3afe5b971cc0042744a7cfdc0065ce4752c4028f1fe49a3f6b180",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m3.mp3",
+      "bytes": 51096,
+      "sha256": "e06c2e19879f2922000706bf5e9f5ce277e6e8f7609d4d18c394379ab3e34f70",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m3.wav",
+      "bytes": 276558,
+      "sha256": "6e776d13f8fb510c1cfa37ef2caf56cf290f5d78e729933ef76a1e9d823dc117",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m4.mp3",
+      "bytes": 55693,
+      "sha256": "bf78cd4bd4a79bccedb90a6b6e0b1ce41b9f4ffe195d7430e317b0227224d182",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m4.wav",
+      "bytes": 301134,
+      "sha256": "1e41e3f20977530d5e288f100998c3f750e8e0d848f5d95104a05e9880d0f272",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m5.mp3",
+      "bytes": 59037,
+      "sha256": "a1883e92576270aeda92349ef9c291919a6ea0de5c3e3da7fd65981bfd6d5f96",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/jango-m5.wav",
+      "bytes": 319566,
+      "sha256": "201fed5d474db8fcc8e3b004ed37525a6ed5df7963cbd4422cae001625797f5e",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f3.mp3",
+      "bytes": 56947,
+      "sha256": "58bd18e978fc7a2bef8ccde1c837d82d26acc530f50306999802aca0544ee04f",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f3.wav",
+      "bytes": 307278,
+      "sha256": "ff88d5f5db980f8b27f262dfd86b894a9476c546412bf5c2b009e68b26f978ef",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f4.mp3",
+      "bytes": 47752,
+      "sha256": "9fef380f507d2e221919ca8453ffd15d0c6ede1b34296cd352539c26e28b301a",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f4.wav",
+      "bytes": 258126,
+      "sha256": "28d259226b8ae63a7027eb6c6df3cd2c048b240e4272a122fe6301126baf5030",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f5.mp3",
+      "bytes": 53603,
+      "sha256": "cad06a667ed504a33db51ae1f337948ae61ed768836f56e8ad5dd89641bb5688",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/preview/woman-f5.wav",
+      "bytes": 288846,
+      "sha256": "55d051559ec2440c0c2a7b200d29c98436b9f20661c9c23010a5f3ac8d283111",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/index.html",
+        "voice-audition/preview-record.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/dialogue-01-woman.wav",
+      "bytes": 190508,
+      "sha256": "1e8b3936b4953ac2b718ac1e5643c8d34151cab1cd196d8519c005a38717689e",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/dialogue-generation.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/dialogue-02-jango.wav",
+      "bytes": 135212,
+      "sha256": "ff57133c7b78e626a232985b58e402fb7294fa959aafd2b77161059d83021d09",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/dialogue-generation.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/dialogue-03-woman.wav",
+      "bytes": 135212,
+      "sha256": "a7b897ec4c13a606ae5f4d2b30845886fb67c3aed3517d3c6e68423dbc4ad983",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/dialogue-generation.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/dialogue-04-jango.wav",
+      "bytes": 153644,
+      "sha256": "451c6261b82281a30f35a6250fb814a58fa92a2117346f5955af96f174f8d47e",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/dialogue-mix.json",
+        "voice-audition/dialogue-generation.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/jango-m1-raw.wav",
+      "bytes": 319532,
+      "sha256": "9351ff79cd6a1dda2830c026ee5d770eafb735617418220f7a9fe26e0e7f475e",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/jango-m3-raw.wav",
+      "bytes": 276524,
+      "sha256": "145967d445c5d7eea4e362e403e76df488290f88d76557dc8ef3efcff0e20a09",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/jango-m4-raw.wav",
+      "bytes": 301100,
+      "sha256": "ea97d1b7b02944ccc5d911772c43fc9369a84d45438a09ef14e0329b2501d968",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/jango-m5-raw.wav",
+      "bytes": 319532,
+      "sha256": "1644d5fe4121848f661783af55c9435e60b983dd7417589e1ccdf67b5b744cb4",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/woman-f3-raw.wav",
+      "bytes": 307244,
+      "sha256": "b992f7b89bc67e9f8eee80ac1c900d4c2c846e8ddc650eb48cbff991ebe9d907",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/woman-f4-raw.wav",
+      "bytes": 258092,
+      "sha256": "2a28a2ae46fbf441d023060a8f5165c6e56ff0d6539a3e1f7404396b6d654542",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    },
+    {
+      "file": "voice-audition/raw/woman-f5-raw.wav",
+      "bytes": 288812,
+      "sha256": "668450f93b12de8ba062d9a5b1b33085a1fb37b6e6a43f8bc03fe3e037d575dd",
+      "reason": "unused-dubbing-audition",
+      "historicalOrRecipeReferences": [
+        "file-hashes.json",
+        "reel/preservation-before-render.json",
+        "voice-audition/file-hashes.json",
+        "voice-audition/generation-progress.json",
+        "voice-audition/generation-record.json",
+        "voice-audition/quality-record.json",
+        "voice-audition-youth-r2/preparation.json"
+      ]
+    }
+  ],
+  "modifiedFiles": [
+    {
+      "file": "build_reel.py",
+      "beforeSha256": "31fd70a2af6b2b987d54ab2be612953a15cf989c2b10787256e489f407824da8",
+      "afterSha256": "276e43bb2569ed9504e5546e12db81584a07f129a1c7202deeac1f0d4d398299",
+      "purpose": "Archive-aware rebuild/input verification"
+    },
+    {
+      "file": "episode.json",
+      "beforeSha256": "afee21e428621faff5f599e658781f102ac83cc223cee4dc6a9a990f71106aca",
+      "afterSha256": "76b1b6ced6c3d36982aa3c393969e2482cf2201e987bde77e4257e2fa39093e8",
+      "purpose": "Advance current pointers to published/cleaned status; original bytes retained in cleanup/before-* snapshots."
+    },
+    {
+      "file": "production-record.json",
+      "beforeSha256": "70869169bd10d953203b85c728bdc9f7369119274b07fa66503caeb695d9a36e",
+      "afterSha256": "d37e84c7585da1e67845ddb48e64b4410ce70c984536a606a0b0fa673f7aba0f",
+      "purpose": "Advance current pointers to published/cleaned status; original bytes retained in cleanup/before-* snapshots."
+    },
+    {
+      "file": "selected-artwork.json",
+      "beforeSha256": "87153c6b37a1dd7be4d4f26f4f1ca050a6c163178455dd87e37d0fac09295b4f",
+      "afterSha256": "97faf5e333d55cac513737714ac0e5be96dbe56b85cb3cde2c7afca8b15317da",
+      "purpose": "Advance current pointers to published/cleaned status; original bytes retained in cleanup/before-* snapshots."
+    },
+    {
+      "file": "validate_reel.py",
+      "beforeSha256": "e279f12b0056b589a07fe88646e3ea7b9f34c83781f15ad64f282274e99566c1",
+      "afterSha256": "e393fb79992ad6d98bb23ceafc5a1126f7db15b652620ed8de52c7fec0865217",
+      "purpose": "Archive-aware rebuild/input verification"
+    }
+  ],
+  "preCleanupInventorySha256": "47149827bc2651f3a0e116496225a33ccc71c264ffdc97fe9f611dabfbe2a058",
+  "rebuildVerification": {
+    "recreatedRemovedImages": 19,
+    "sha256MatchesOriginal": true,
+    "publishedCoverJpgAlsoMatches": true,
+    "scope": "Uniform scene copies, individual layouts, cover PNG and 360 cover thumbnail rebuilt in an automatically removed out-of-repository temporary directory; no new art generated."
+  },
+  "postCleanupValidationCache": "One generated Python __pycache__ file removed after validation; it was not an original user asset.",
+  "additionalCleanup": "Verbose FFmpeg logs are superseded by retained exact command JSON and technical-quality.json. Unused VoiceStudio notice is represented by its original URL, license/source hashes and intentional deletion entry; full AGPL and model license texts remain. No license text was rewritten to satisfy whitespace checks."
+}

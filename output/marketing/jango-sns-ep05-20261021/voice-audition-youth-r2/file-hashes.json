@@ -1,0 +1,152 @@
+{
+  "generatedAt": "2026-10-21T14:58:06.586776+09:00",
+  "algorithm": "SHA-256",
+  "scope": "Youthful voice audition revision; excludes this manifest.",
+  "files": [
+    {
+      "file": "build_samples.py",
+      "bytes": 10705,
+      "sha256": "07e132e6751640673f5ac548aefd639c5d646a7db0f1d014f917eb5fb1648081"
+    },
+    {
+      "file": "delivery.json",
+      "bytes": 6206,
+      "sha256": "54b7a8167772ff0afd902c09be7db1c4205015b3d49df5e71eaeadbfba4df4fe"
+    },
+    {
+      "file": "generate_raw.py",
+      "bytes": 5451,
+      "sha256": "124faa10bca157ed8da82b70482ed64037c145a3d181da9632d8d60d5166acd1"
+    },
+    {
+      "file": "generation-record.json",
+      "bytes": 4513,
+      "sha256": "73b1791e7f799e1843c825b83673bc500367b02e0f08e87aa7390b5f242f7e1c"
+    },
+    {
+      "file": "preparation.json",
+      "bytes": 11487,
+      "sha256": "053129450c6cde89883e20b810c2ebf337cca47d035aed3f843664a784e745c8"
+    },
+    {
+      "file": "preview/dialogue-youth-r2.mp3",
+      "bytes": 129327,
+      "sha256": "b92cd62a3797bc7948b5c12c91191e14dbb032a0ece652da26497c20107efaf6"
+    },
+    {
+      "file": "preview/dialogue-youth-r2.wav",
+      "bytes": 706014,
+      "sha256": "e5d64a3eadcbb4062981382942ada8c3c199dd919a0348226fd9fb83438c2e1d"
+    },
+    {
+      "file": "preview/jango-playful-child-r2.mp3",
+      "bytes": 63723,
+      "sha256": "43f6d70cd12266b094e83aa7ff1bf967623f08cee3ae7c0934fe3268787676e5"
+    },
+    {
+      "file": "preview/jango-playful-child-r2.wav",
+      "bytes": 345168,
+      "sha256": "eaeb7200df548b5c8f05bea722b8615624f4f7180bec315f442b40bca0b47502"
+    },
+    {
+      "file": "preview/woman-girl-r2.mp3",
+      "bytes": 67887,
+      "sha256": "db428a3ecf56590fe8f3863f8850cfa0427887d4c0187c395c2966f1c9f4f4ad"
+    },
+    {
+      "file": "preview/woman-girl-r2.wav",
+      "bytes": 367946,
+      "sha256": "f9bb594fee838c183f4694c319e320b73f3de634b7bbfb976cd9eeeb0c757e38"
+    },
+    {
+      "file": "processed/jango-01-level.wav",
+      "bytes": 136522,
+      "sha256": "b3f7185965ad87a8df86bd8d5ce141ba09ad8f9797ee9e5a1b1c5c208bd7b6b4"
+    },
+    {
+      "file": "processed/jango-01-pitch.wav",
+      "bytes": 136522,
+      "sha256": "75553e537f699b7a7de4dbc327c0596af9d333f6527418fca14fc6c7311075f1"
+    },
+    {
+      "file": "processed/jango-02-level.wav",
+      "bytes": 154956,
+      "sha256": "1d79785a293a740ded4764f896fd919e6d3812beff5d168371de80c1d31c6cba"
+    },
+    {
+      "file": "processed/jango-02-pitch.wav",
+      "bytes": 154956,
+      "sha256": "f2442713fca1e03764db75144f02b940051c2ea39cccaca32f9ba83fc99b4155"
+    },
+    {
+      "file": "processed/woman-01-level.wav",
+      "bytes": 179940,
+      "sha256": "f8321a243de1cafffe5afb446ee71dbab678daf9afc61a2dc49469441f264750"
+    },
+    {
+      "file": "processed/woman-01-pitch.wav",
+      "bytes": 179940,
+      "sha256": "e9e2c930dc654ab576b9d39867d15377eaf52bbd388e200d29b035c2334b6eb6"
+    },
+    {
+      "file": "processed/woman-02-level.wav",
+      "bytes": 130788,
+      "sha256": "c9cb866a506f6d6bfd0970b1052b4fa27bc15f424a6817243f3abf3211bd90f6"
+    },
+    {
+      "file": "processed/woman-02-pitch.wav",
+      "bytes": 130788,
+      "sha256": "909c735e1fb696aa9807019bba11bc101e1462b94957573209ae5b0ba68ed30a"
+    },
+    {
+      "file": "processing-record.json",
+      "bytes": 12629,
+      "sha256": "58c7137ab0833ea4beb8a6f0a474bc08969bbe903eed49a079dbad3cae27ec25"
+    },
+    {
+      "file": "quality-record.json",
+      "bytes": 5479,
+      "sha256": "b9d3eb246678353b27819fd12369634a8389281a936a3ced9fc2711d42b049f2"
+    },
+    {
+      "file": "raw/jango-f4-01.wav",
+      "bytes": 129068,
+      "sha256": "6160e5b583167a8b32c2d8fb1ba4e83e26e758dcec67e53e61aadded248cf262"
+    },
+    {
+      "file": "raw/jango-f4-02.wav",
+      "bytes": 147500,
+      "sha256": "b44307bf5528c36882a4e5cdea5d3200acf9fcad94a4463f1d248399b2f99ca8"
+    },
+    {
+      "file": "raw/jango-f5-01.wav",
+      "bytes": 135212,
+      "sha256": "aff9c879b7257b55d506e133f18ad8435dd4689a065d8793aa4ac05c09b91793"
+    },
+    {
+      "file": "raw/jango-f5-02.wav",
+      "bytes": 153644,
+      "sha256": "1fa9e7affbcefa4b9af3bd6c0c015638934c233c0e8a808bf364d510413c80b7"
+    },
+    {
+      "file": "raw/woman-f1-01.wav",
+      "bytes": 178220,
+      "sha256": "b8fe77abde00d43e6e65f9fccbd16052d1111e84fe4b38bf6ca9ee740125faa8"
+    },
+    {
+      "file": "raw/woman-f1-02.wav",
+      "bytes": 129068,
+      "sha256": "9685842f23a4ab76941b951d63a5fd344c6fc7a0f81a36b9f3bf4fbb151dd3f1"
+    },
+    {
+      "file": "raw/woman-f2-01.wav",
+      "bytes": 172076,
+      "sha256": "3888526c7daaa4424da2ac913444e2852710038b9379b35e6b870d78bbebc735"
+    },
+    {
+      "file": "raw/woman-f2-02.wav",
+      "bytes": 122924,
+      "sha256": "20c6ea69ad9cfd3f7d34f9698dedea8b6bb7a0ac76e022af117f9025de282db6"
+    }
+  ]
+}

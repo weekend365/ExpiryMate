@@ -1,0 +1,41 @@
+{
+  "requests": [
+    {
+      "character": "woman",
+      "voice": "F3",
+      "text": "장고가 이렇게 빨랐어?",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10,
+      "numpySeed": 20261100
+    },
+    {
+      "character": "jango",
+      "voice": "M3",
+      "text": "늦으면 끝이야!",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10,
+      "numpySeed": 20261101
+    },
+    {
+      "character": "woman",
+      "voice": "F3",
+      "text": "러닝 하자며?",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10,
+      "numpySeed": 20261102
+    },
+    {
+      "character": "jango",
+      "voice": "M3",
+      "text": "오픈런도 런이잖아.",
+      "lang": "ko",
+      "speed": 1.0,
+      "total_steps": 10,
+      "numpySeed": 20261103
+    }
+  ],
+  "scope": "short audio audition; no Reel timing commitment"
+}

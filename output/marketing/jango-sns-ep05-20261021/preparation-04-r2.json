@@ -1,0 +1,32 @@
+{
+  "candidate": "scene-04-r2",
+  "preparedAt": "2026-10-21T14:38:26.782350+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-04-r2.txt",
+  "promptSha256": "711bd5e30daec8785eed4af5edd50d9e973f473f916a6c201ce332c5749d4cbe",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-04-r1.png",
+      "sha256": "05eca16347334245f9f2f8a4b7394341c11ae244fcdd28d2c6687e0d42ecbaf3",
+      "role": "exact fourth-scene edit target; preserve woman and mascot pose/outfit/watch",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r3.png",
+      "sha256": "4e595039c071d67bd5f83d6c0dfa26ebac1a12ea3530828bb14be1ba022ddacf",
+      "role": "revised dessert shop, white rice cakes and queue continuity",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active MASTER for compact anatomy and crayon texture only",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

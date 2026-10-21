@@ -1,0 +1,164 @@
+{
+  "createdAt": "2026-10-21T14:56:43.062439+09:00",
+  "source": "/private/tmp/jango-voice-audition-20261021/voicestudio/backend/engines/supertonic3/sidecar.py",
+  "sourceSha256": "8127edb77fc4ffbb3f212c8326a55d798a193fcfc93e8c6e78165f677e312347",
+  "modelRevision": "724fb5abbf5502583fb520898d45929e62f02c0b",
+  "providers": {
+    "dp_ort": [
+      "CPUExecutionProvider"
+    ],
+    "text_enc_ort": [
+      "CPUExecutionProvider"
+    ],
+    "vector_est_ort": [
+      "CPUExecutionProvider"
+    ],
+    "vocoder_ort": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "packages": {
+    "supertonic": "1.3.1",
+    "onnxruntime": "1.31.0",
+    "numpy": "2.5.4"
+  },
+  "takes": [
+    {
+      "character": "woman",
+      "line": 1,
+      "request": {
+        "op": "synthesize",
+        "voice": "F1",
+        "text": "장고가 이렇게 빨랐어?",
+        "lang": "ko",
+        "speed": 1.03,
+        "total_steps": 12
+      },
+      "numpySeed": 20261200,
+      "file": "raw/woman-f1-01.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 2.020136054421769,
+      "sha256": "b8fe77abde00d43e6e65f9fccbd16052d1111e84fe4b38bf6ca9ee740125faa8"
+    },
+    {
+      "character": "woman",
+      "line": 2,
+      "request": {
+        "op": "synthesize",
+        "voice": "F1",
+        "text": "러닝 하자며?",
+        "lang": "ko",
+        "speed": 1.03,
+        "total_steps": 12
+      },
+      "numpySeed": 20261201,
+      "file": "raw/woman-f1-02.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.4628571428571429,
+      "sha256": "9685842f23a4ab76941b951d63a5fd344c6fc7a0f81a36b9f3bf4fbb151dd3f1"
+    },
+    {
+      "character": "woman",
+      "line": 1,
+      "request": {
+        "op": "synthesize",
+        "voice": "F2",
+        "text": "장고가 이렇게 빨랐어?",
+        "lang": "ko",
+        "speed": 1.03,
+        "total_steps": 12
+      },
+      "numpySeed": 20261202,
+      "file": "raw/woman-f2-01.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.9504761904761905,
+      "sha256": "3888526c7daaa4424da2ac913444e2852710038b9379b35e6b870d78bbebc735"
+    },
+    {
+      "character": "woman",
+      "line": 2,
+      "request": {
+        "op": "synthesize",
+        "voice": "F2",
+        "text": "러닝 하자며?",
+        "lang": "ko",
+        "speed": 1.03,
+        "total_steps": 12
+      },
+      "numpySeed": 20261203,
+      "file": "raw/woman-f2-02.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.3931972789115645,
+      "sha256": "20c6ea69ad9cfd3f7d34f9698dedea8b6bb7a0ac76e022af117f9025de282db6"
+    },
+    {
+      "character": "jango",
+      "line": 1,
+      "request": {
+        "op": "synthesize",
+        "voice": "F4",
+        "text": "늦으면 끝이야!",
+        "lang": "ko",
+        "speed": 1.08,
+        "total_steps": 12
+      },
+      "numpySeed": 20261204,
+      "file": "raw/jango-f4-01.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.4628571428571429,
+      "sha256": "6160e5b583167a8b32c2d8fb1ba4e83e26e758dcec67e53e61aadded248cf262"
+    },
+    {
+      "character": "jango",
+      "line": 2,
+      "request": {
+        "op": "synthesize",
+        "voice": "F4",
+        "text": "오픈런도 런이잖아.",
+        "lang": "ko",
+        "speed": 1.08,
+        "total_steps": 12
+      },
+      "numpySeed": 20261205,
+      "file": "raw/jango-f4-02.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.6718367346938776,
+      "sha256": "b44307bf5528c36882a4e5cdea5d3200acf9fcad94a4463f1d248399b2f99ca8"
+    },
+    {
+      "character": "jango",
+      "line": 1,
+      "request": {
+        "op": "synthesize",
+        "voice": "F5",
+        "text": "늦으면 끝이야!",
+        "lang": "ko",
+        "speed": 1.08,
+        "total_steps": 12
+      },
+      "numpySeed": 20261206,
+      "file": "raw/jango-f5-01.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.5325170068027212,
+      "sha256": "aff9c879b7257b55d506e133f18ad8435dd4689a065d8793aa4ac05c09b91793"
+    },
+    {
+      "character": "jango",
+      "line": 2,
+      "request": {
+        "op": "synthesize",
+        "voice": "F5",
+        "text": "오픈런도 런이잖아.",
+        "lang": "ko",
+        "speed": 1.08,
+        "total_steps": 12
+      },
+      "numpySeed": 20261207,
+      "file": "raw/jango-f5-02.wav",
+      "sampleRate": 44100,
+      "durationSeconds": 1.7414965986394557,
+      "sha256": "1fa9e7affbcefa4b9af3bd6c0c015638934c233c0e8a808bf364d510413c80b7"
+    }
+  ],
+  "listeningReview": "not performed; user audition pending"
+}

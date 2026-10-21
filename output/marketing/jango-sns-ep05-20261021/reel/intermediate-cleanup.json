@@ -1,0 +1,7 @@
+{
+  "file": "reel/silent.mp4",
+  "bytes": 22121115,
+  "sha256": "594b4efc88593d12ced60afdcc5ac6213ae4d2b2486d99a77745bc5f28b11a8c",
+  "reason": "Temporary video-only encode removed after successful final mux/decode. Recreated by build_reel.py encode; not a source or delivery artifact.",
+  "removedAt": "2026-10-21T15:18:03.999072+09:00"
+}

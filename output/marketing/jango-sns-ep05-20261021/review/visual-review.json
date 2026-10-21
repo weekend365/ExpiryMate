@@ -1,0 +1,112 @@
+{
+  "reviewedAt": "2026-10-21T14:42:15.327385+09:00",
+  "stage": "unlettered still artwork only",
+  "reviewer": "assistant visual inspection; not user adoption or a signed release",
+  "viewed": [
+    "three newly edited original PNGs returned by official imagegen",
+    "updated five-scene contact sheet with 360x640 views of each selected scene"
+  ],
+  "selection": [
+    "scene-01-r1",
+    "scene-02-r3",
+    "scene-03-r3",
+    "scene-04-r2",
+    "scene-05-r2"
+  ],
+  "observations": [
+    {
+      "scene": 1,
+      "result": "suitable for user review",
+      "evidence": [
+        "Surprised woman follows sprinting Jango; no bakery/food reveal.",
+        "Full chef hat, closed single fridge-door face, handle/pineapple, two connected mittens, short apron and both shoes are visible.",
+        "Foreground Jango appears larger than the woman further up the lane; street perspective explains the scale."
+      ],
+      "notes": [
+        "Sports watch is not visible behind foreshortened mitten/cuff in this pose."
+      ]
+    },
+    {
+      "scene": 2,
+      "result": "suitable for user review after two corrections",
+      "evidence": [
+        "Camera/pose changed from the duplicated first sprint: Jango pauses at a corner and checks time, woman raises a waiting hand.",
+        "Pointing glove changed to a rounded one-thumb oven mitten; no separate human index finger.",
+        "Visible watch changed to the mint-cuff round style used in later scenes, on anatomical right wrist.",
+        "Torso remains a short apron under the large head and hat."
+      ],
+      "notes": [
+        "Right gesturing mitten extends beyond the conservative internal text area; face, expression and watch are central. Actual Reel-control overlap remains a video-stage check."
+      ]
+    },
+    {
+      "scene": 3,
+      "result": "suitable for user review",
+      "evidence": [
+        "An orderly group of adult customers is visible toward the shop entrance; foreground main pair remains unobscured.",
+        "Window display now contains white round rice cakes in pale paper cups, not golden bread.",
+        "Blank central hours placard, woman running outfit, bun and compact Jango retained.",
+        "No generated storefront lettering or real-brand logo."
+      ],
+      "notes": [
+        "Some background customer anatomy is naturally occluded by other customers and the main pair; no strict full-body count claim.",
+        "Future dialogue changed to …찹쌀떡?; 11시 오픈 remains separate typesetting."
+      ]
+    },
+    {
+      "scene": 4,
+      "result": "suitable for user review",
+      "evidence": [
+        "Three countable white rice cakes in individual paper liners fit a shallow kraft box.",
+        "Both mint mittens contact the box; right-cuff watch, face and short apron body remain recognizable.",
+        "Woman pose/outfit and blue/olive/rust/beige background customers continue.",
+        "Shop display contains white mochi."
+      ],
+      "notes": [
+        "Door-opening state is not used as a visual proof of purchase; the acquired box conveys the time advance."
+      ]
+    },
+    {
+      "scene": 5,
+      "result": "suitable for user review",
+      "evidence": [
+        "Woman holds one white rice cake in its paper cup.",
+        "The same kraft box contains two rice cakes plus an empty third liner.",
+        "Same woman crouch, clothing and compact Jango with two connected mittens and shoes.",
+        "White rice-cake display and distant queue preserve shop continuity."
+      ],
+      "notes": [
+        "Background queue is intentionally less detailed and lower contrast.",
+        "Closing question and brand remain future lettering."
+      ]
+    }
+  ],
+  "stageResults": {
+    "characterRecognition": "reviewed",
+    "compactJangoAnatomy": "reviewed visually without fabricated numeric gate approval",
+    "womanAndWardrobeContinuity": "reviewed",
+    "storyAndPropContinuity": "reviewed",
+    "smallPreviewReadability": "Queue, white desserts, sharing action and faces inspected in five-scene overview at 360x640 per panel.",
+    "unletteredSceneCropping": "no accidental hat or shoe cut-offs seen in selected stills"
+  },
+  "deferred": [
+    {
+      "check": "Korean dialogue, brand and storefront text accuracy/read time",
+      "reason": "not yet typeset; still-image request only"
+    },
+    {
+      "check": "20-second playback, zoom start/middle/end, transitions and sound",
+      "reason": "no video/audio rendered in this task"
+    },
+    {
+      "check": "actual Instagram controls and profile cover crop",
+      "reason": "requires later video/cover production and platform review; no actual Instagram QA claim"
+    }
+  ],
+  "adoption": {
+    "status": "awaiting user review",
+    "generatedImageBytesApproved": false,
+    "publicationAuthorizedThisTurn": false
+  },
+  "previousReview": "revisions/queue-mochi-20261021/before/review/visual-review.json"
+}

@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-10-21T16:01:24.444792+09:00",
+  "algorithm": "SHA-256",
+  "scope": "Ep05 publication evidence; excludes this manifest and Finder metadata.",
+  "files": [
+    {
+      "file": "cover-and-sound.jpg",
+      "bytes": 113809,
+      "sha256": "c6d9a5dee2e91400c2563f824ebdbfda1c5b315e600c0357a51dae50fd80f6a8"
+    },
+    {
+      "file": "handoff.json",
+      "bytes": 1450,
+      "sha256": "25a6af2532466aedd1aba0404b354be69e39f999c5e4b88fa1a1fa002be193ed"
+    },
+    {
+      "file": "posted-caption.txt",
+      "bytes": 1034,
+      "sha256": "a1fc66d3f05ae85cd802a7261d85fcdb58f15977f143c64d8af79210a001ebb6"
+    },
+    {
+      "file": "preparation.json",
+      "bytes": 1272,
+      "sha256": "2aecef71a0d2be0943757be9fc01895c593271c01a072133fd9b9dcc071bf528"
+    },
+    {
+      "file": "profile-links.jpg",
+      "bytes": 52625,
+      "sha256": "d232bedd7a8638009fb81edd61780873917a2c522ba32473ebd262d790077eb4"
+    },
+    {
+      "file": "profile-published.jpg",
+      "bytes": 92395,
+      "sha256": "f0628c4c6a4b1a0824a9ca038a6937d035411590e5a1be31ae7a9d0118772096"
+    },
+    {
+      "file": "published-ui.txt",
+      "bytes": 9015,
+      "sha256": "142feb2493df256ef974bfb8a4ffe8719e74e9e9ff99e48c0adce9795b6c05d6"
+    },
+    {
+      "file": "published.json",
+      "bytes": 5480,
+      "sha256": "eece3dffda8d709cd3a8f912bb94bf1db60231165c0514ccf65362aab24b2f3c"
+    },
+    {
+      "file": "ready-to-publish.jpg",
+      "bytes": 104766,
+      "sha256": "ca9df99546ad69f1beb5336f46df01a477945f46656d5da7849f7aede4e53220"
+    },
+    {
+      "file": "reel-published.jpg",
+      "bytes": 159969,
+      "sha256": "4dd8845e255e9be67bf167f1cac04c9ba994bc3b1ca423dff1f15ed352e340b9"
+    },
+    {
+      "file": "resume-after-user-preview.json",
+      "bytes": 770,
+      "sha256": "649de38215089fa70ea8afb6cfa6efcd4b64ec95a126567c3c65857b1bffbd8d"
+    },
+    {
+      "file": "share-success.jpg",
+      "bytes": 42028,
+      "sha256": "df27daf2af470d678e8b0d40e142c9014af474066b713b65dac836243ee8ff9f"
+    }
+  ]
+}

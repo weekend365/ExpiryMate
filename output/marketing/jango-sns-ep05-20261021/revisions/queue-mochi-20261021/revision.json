@@ -1,0 +1,60 @@
+{
+  "requestedAt": "2026-10-21T14:36:36.308997+09:00",
+  "userRequest": "오픈런 대기줄에 사람들도 구현했으면 좋겠어. 그리고 요즘 유행하는것처럼 한정선과 같이 흰색 찹쌀떡이면 좋을듯해.",
+  "scope": "Revise raw-art scenes 3–5; keep scenes 1–2 and all prior original image bytes. Assess VoiceStudio dubbing feasibility only.",
+  "changes": [
+    "Add a visible orderly queue at the dessert-shop opening.",
+    "Use generic snow-white chapssaltteok, without a real-shop logo.",
+    "Replace bread bag with a shallow protective box: three rice cakes before sharing, two plus one afterward.",
+    "Update scene 3 future dialogue from …빵집? to …찹쌀떡?"
+  ],
+  "baselineSourceArt": [
+    {
+      "file": "source-art/scene-01-r1.png",
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda"
+    },
+    {
+      "file": "source-art/scene-02-r1.png",
+      "sha256": "37c9116c4f3800286ed330d67db9da732abf136535d177056ad78563d38fa248"
+    },
+    {
+      "file": "source-art/scene-02-r2.png",
+      "sha256": "46f02c6b61939c25ee699427055cb50ce28b6da6900ced084468439e4af1e8ed"
+    },
+    {
+      "file": "source-art/scene-02-r3.png",
+      "sha256": "68bfeaf9601dbe66818201038488674e4258d622b082131f4b5070550498b282"
+    },
+    {
+      "file": "source-art/scene-03-r1.png",
+      "sha256": "419ee837d7ae72a4e69b4de5e82cc4e173ab937d38990a171c9c9c2894577377"
+    },
+    {
+      "file": "source-art/scene-03-r2.png",
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f"
+    },
+    {
+      "file": "source-art/scene-04-r1.png",
+      "sha256": "05eca16347334245f9f2f8a4b7394341c11ae244fcdd28d2c6687e0d42ecbaf3"
+    },
+    {
+      "file": "source-art/scene-05-r1.png",
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6"
+    }
+  ],
+  "status": "revised-art-ready-for-user-review",
+  "completedAt": "2026-10-21T14:42:15.327385+09:00",
+  "selection": [
+    "scene-01-r1",
+    "scene-02-r3",
+    "scene-03-r3",
+    "scene-04-r2",
+    "scene-05-r2"
+  ],
+  "generatedCandidates": [
+    "scene-03-r3",
+    "scene-04-r2",
+    "scene-05-r2"
+  ],
+  "observedQueue": "Five visible customer heads in scene 3, with natural partial overlap; four prominent customer silhouettes continue in scene 4 and three appear in the distant scene 5 background."
+}

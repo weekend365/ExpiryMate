@@ -1,0 +1,66 @@
+{
+  "source": "/private/tmp/jango-voice-audition-20261021/voicestudio/backend/engines/supertonic3/sidecar.py",
+  "sourceSha256": "8127edb77fc4ffbb3f212c8326a55d798a193fcfc93e8c6e78165f677e312347",
+  "lines": [
+    {
+      "request": {
+        "character": "woman",
+        "voice": "F3",
+        "text": "장고가 이렇게 빨랐어?",
+        "lang": "ko",
+        "speed": 1.0,
+        "total_steps": 10,
+        "numpySeed": 20261100
+      },
+      "file": "raw/dialogue-01-woman.wav",
+      "durationSeconds": 2.159455782312925,
+      "sampleRate": 44100,
+      "sha256": "1e8b3936b4953ac2b718ac1e5643c8d34151cab1cd196d8519c005a38717689e"
+    },
+    {
+      "request": {
+        "character": "jango",
+        "voice": "M3",
+        "text": "늦으면 끝이야!",
+        "lang": "ko",
+        "speed": 1.0,
+        "total_steps": 10,
+        "numpySeed": 20261101
+      },
+      "file": "raw/dialogue-02-jango.wav",
+      "durationSeconds": 1.5325170068027212,
+      "sampleRate": 44100,
+      "sha256": "ff57133c7b78e626a232985b58e402fb7294fa959aafd2b77161059d83021d09"
+    },
+    {
+      "request": {
+        "character": "woman",
+        "voice": "F3",
+        "text": "러닝 하자며?",
+        "lang": "ko",
+        "speed": 1.0,
+        "total_steps": 10,
+        "numpySeed": 20261102
+      },
+      "file": "raw/dialogue-03-woman.wav",
+      "durationSeconds": 1.5325170068027212,
+      "sampleRate": 44100,
+      "sha256": "a7b897ec4c13a606ae5f4d2b30845886fb67c3aed3517d3c6e68423dbc4ad983"
+    },
+    {
+      "request": {
+        "character": "jango",
+        "voice": "M3",
+        "text": "오픈런도 런이잖아.",
+        "lang": "ko",
+        "speed": 1.0,
+        "total_steps": 10,
+        "numpySeed": 20261103
+      },
+      "file": "raw/dialogue-04-jango.wav",
+      "durationSeconds": 1.7414965986394557,
+      "sampleRate": 44100,
+      "sha256": "451c6261b82281a30f35a6250fb814a58fa92a2117346f5955af96f174f8d47e"
+    }
+  ]
+}

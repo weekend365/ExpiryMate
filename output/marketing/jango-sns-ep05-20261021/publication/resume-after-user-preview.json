@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-21T15:34:44.341751+09:00",
+  "userReply": "연결했고 영상 미리보기가 떴어요",
+  "userReportedPreview": true,
+  "agentVerifiedPreview": false,
+  "computerUseInventory": {
+    "apps": [],
+    "browsers": [],
+    "error": "Native app bridge startup failed"
+  },
+  "targetedChromeTabLookup": "Browser is not available: chrome",
+  "publishClicks": 0,
+  "publicationCompleted": false,
+  "nextRecovery": "Mention Chrome or the existing Instagram tab with @ in this chat, keeping the video preview open.",
+  "officialConnectionGuide": "https://learn.chatgpt.com/docs/chrome-extension#start-a-browser-task-from-chatgpt",
+  "reason": "No connected browser appears to the current conversation; avoid requesting duplicate media selection."
+}

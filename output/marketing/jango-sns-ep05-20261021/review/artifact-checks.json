@@ -1,0 +1,121 @@
+{
+  "checkedAt": "2026-10-21T14:42:37.879537+09:00",
+  "result": "passed for revised still-artifact scope",
+  "preservedReferenceFiles": 47,
+  "changedPreservedFiles": [],
+  "preservedPriorSourceArt": 8,
+  "changedPriorSourceArt": [],
+  "preparationRecordsVerified": 11,
+  "originalByteCopiesVerified": 11,
+  "selectedDistinctScenes": 5,
+  "nativeSize": [
+    941,
+    1672
+  ],
+  "previewSize": [
+    360,
+    640
+  ],
+  "sourceArtTransforms": "none; source art revised only by official imagegen",
+  "previewTransforms": "uniform-width resampling, integer rounding and labelled overview only",
+  "unchangedScenes": [
+    1,
+    2
+  ],
+  "revisedScenes": [
+    3,
+    4,
+    5
+  ],
+  "artifacts": [
+    {
+      "candidate": "scene-01-r1",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda"
+    },
+    {
+      "candidate": "scene-02-r1",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "37c9116c4f3800286ed330d67db9da732abf136535d177056ad78563d38fa248"
+    },
+    {
+      "candidate": "scene-02-r2",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "46f02c6b61939c25ee699427055cb50ce28b6da6900ced084468439e4af1e8ed"
+    },
+    {
+      "candidate": "scene-02-r3",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "68bfeaf9601dbe66818201038488674e4258d622b082131f4b5070550498b282"
+    },
+    {
+      "candidate": "scene-03-r1",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "419ee837d7ae72a4e69b4de5e82cc4e173ab937d38990a171c9c9c2894577377"
+    },
+    {
+      "candidate": "scene-03-r2",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f"
+    },
+    {
+      "candidate": "scene-03-r3",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "4e595039c071d67bd5f83d6c0dfa26ebac1a12ea3530828bb14be1ba022ddacf"
+    },
+    {
+      "candidate": "scene-04-r1",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "05eca16347334245f9f2f8a4b7394341c11ae244fcdd28d2c6687e0d42ecbaf3"
+    },
+    {
+      "candidate": "scene-04-r2",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "3b74a33c4290c5d7bf6d9582838942db30cecacc361df3da91ec1655a23bfdd7"
+    },
+    {
+      "candidate": "scene-05-r1",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "92f3fbf3b2c444eebd57fb0fd5428068bec3991aa0b0c40ba189c0125e4369c6"
+    },
+    {
+      "candidate": "scene-05-r2",
+      "size": [
+        941,
+        1672
+      ],
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2"
+    }
+  ],
+  "videoAndPublicationChecks": "deferred; no video/audio rendered or posted"
+}

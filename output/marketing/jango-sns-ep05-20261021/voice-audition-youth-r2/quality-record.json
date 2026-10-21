@@ -1,0 +1,180 @@
+{
+  "createdAt": "2026-10-21T14:57:51.066954+09:00",
+  "technical": {
+    "status": "passed",
+    "wavFiles": [
+      {
+        "file": "preview/dialogue-youth-r2.wav",
+        "decode": "passed",
+        "durationSeconds": 8.004195011337869,
+        "peakDbfs": -2.0289295992516467,
+        "rmsDbfs": -21.077141383086833,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "preview/jango-playful-child-r2.wav",
+        "decode": "passed",
+        "durationSeconds": 3.91297052154195,
+        "peakDbfs": -2.0924421422866817,
+        "rmsDbfs": -20.794762958771148,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "preview/woman-girl-r2.wav",
+        "decode": "passed",
+        "durationSeconds": 4.171224489795918,
+        "peakDbfs": -2.0289295992516467,
+        "rmsDbfs": -21.44966118075891,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/jango-01-level.wav",
+        "decode": "passed",
+        "durationSeconds": 1.546984126984127,
+        "peakDbfs": -2.0924421422866817,
+        "rmsDbfs": -20.911334856424784,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/jango-01-pitch.wav",
+        "decode": "passed",
+        "durationSeconds": 1.546984126984127,
+        "peakDbfs": -10.222571223541507,
+        "rmsDbfs": -29.04143833420813,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/jango-02-level.wav",
+        "decode": "passed",
+        "durationSeconds": 1.7559863945578231,
+        "peakDbfs": -2.8743455915252607,
+        "rmsDbfs": -19.42528983596653,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/jango-02-pitch.wav",
+        "decode": "passed",
+        "durationSeconds": 1.7559863945578231,
+        "peakDbfs": -11.157810661244767,
+        "rmsDbfs": -27.708948812131165,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/woman-01-level.wav",
+        "decode": "passed",
+        "durationSeconds": 2.039251700680272,
+        "peakDbfs": -2.0289295992516467,
+        "rmsDbfs": -21.631001215431553,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/woman-01-pitch.wav",
+        "decode": "passed",
+        "durationSeconds": 2.039251700680272,
+        "peakDbfs": -7.235139899023349,
+        "rmsDbfs": -26.83659047491057,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/woman-02-level.wav",
+        "decode": "passed",
+        "durationSeconds": 1.4819727891156462,
+        "peakDbfs": -2.3172546988328433,
+        "rmsDbfs": -19.703603318793327,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "processed/woman-02-pitch.wav",
+        "decode": "passed",
+        "durationSeconds": 1.4819727891156462,
+        "peakDbfs": -9.770166140013771,
+        "rmsDbfs": -27.15503466449432,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/jango-f4-01.wav",
+        "decode": "passed",
+        "durationSeconds": 1.4628571428571429,
+        "peakDbfs": -9.444897921441193,
+        "rmsDbfs": -28.087449849351383,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/jango-f4-02.wav",
+        "decode": "passed",
+        "durationSeconds": 1.6718367346938776,
+        "peakDbfs": -11.155895360324536,
+        "rmsDbfs": -26.797464495265473,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/jango-f5-01.wav",
+        "decode": "passed",
+        "durationSeconds": 1.5325170068027212,
+        "peakDbfs": -12.45820260602165,
+        "rmsDbfs": -25.907210979877835,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/jango-f5-02.wav",
+        "decode": "passed",
+        "durationSeconds": 1.7414965986394557,
+        "peakDbfs": -13.435624239611483,
+        "rmsDbfs": -25.45071492986061,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/woman-f1-01.wav",
+        "decode": "passed",
+        "durationSeconds": 2.020136054421769,
+        "peakDbfs": -9.886039984774467,
+        "rmsDbfs": -25.5553979660794,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/woman-f1-02.wav",
+        "decode": "passed",
+        "durationSeconds": 1.4628571428571429,
+        "peakDbfs": -9.73676039786976,
+        "rmsDbfs": -24.430282012976935,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/woman-f2-01.wav",
+        "decode": "passed",
+        "durationSeconds": 1.9504761904761905,
+        "peakDbfs": -7.059502890431998,
+        "rmsDbfs": -26.301701899088734,
+        "fullScaleSamples": 0
+      },
+      {
+        "file": "raw/woman-f2-02.wav",
+        "decode": "passed",
+        "durationSeconds": 1.3931972789115645,
+        "peakDbfs": -10.066601983104093,
+        "rmsDbfs": -26.538688992034146,
+        "fullScaleSamples": 0
+      }
+    ],
+    "mp3DecodeCount": 3,
+    "previewTruePeakBelowDbtp": -1.0,
+    "previousAuditionFilesPreserved": 52,
+    "masterAndReferenceHashesPreserved": 47
+  },
+  "listening": {
+    "status": "not performed by assistant",
+    "reason": "Audio input is unavailable in this environment. Decoding, waveform checks and pitch manipulation do not establish naturalness or perceived age.",
+    "pendingUserReview": [
+      "소녀·아이로 들리는지",
+      "장난기와 두 캐릭터 구분",
+      "한국어 발음",
+      "음색 보정의 자연스러움"
+    ]
+  },
+  "notDone": [
+    "final voice casting",
+    "full Reel rendering",
+    "Instagram publishing",
+    "commit/push"
+  ]
+}

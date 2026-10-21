@@ -1,0 +1,27 @@
+{
+  "track": "Carefree",
+  "artist": "Kevin MacLeod",
+  "isrc": "USUAN1400037",
+  "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1400037",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "checkedAt": "2026-10-20T05:16:17.726355+00:00",
+  "evidence": "music/source-license.png",
+  "commercialUse": "Allowed under CC BY 4.0, subject to attribution and modification notice. No absolute guarantee against automated platform claims is made.",
+  "credit": "Carefree — Kevin MacLeod (incompetech.com)\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정 및 페이드 적용.",
+  "sha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+  "distribution": "Licensed source retained for production provenance; promotional use synchronized to cartoon visuals.",
+  "sourceRecord": "output/marketing/jango-sns-ep04-20261020/music/license.json",
+  "evidenceReviewedAt": "2026-10-21T15:03:29.395480+09:00",
+  "newEdit": {
+    "segmentSeconds": [
+      0,
+      20
+    ],
+    "fadeInSeconds": 0.3,
+    "fadeOutSeconds": 1.0,
+    "targetLUFS": -18,
+    "narration": false
+  },
+  "recheck": "Original artist license screenshot and exact MP3 hash reviewed. Live artist-page fetch timed out; preserved CC BY 4.0 grant and current CC terms used."
+}

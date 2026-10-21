@@ -1,0 +1,46 @@
+{
+  "candidate": "scene-04-r1",
+  "preparedAt": "2026-10-21T14:18:33.241786+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-04-r1.txt",
+  "promptSha256": "37d106330ac46ad4c122d979dd864ddecc71839e204dc4851a59229802da3209",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER compact anatomy",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-01-r1.png",
+      "sha256": "1353b76d58ed10166bd8eaec27acd44eff6a18e23059d9927d55dda01b434fda",
+      "role": "new episode candidate: wardrobe and scale continuity",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r2.png",
+      "sha256": "ec82d6e7c2527d28c8f16c71b820b05a14b800bdf4fd3cb32fb61372a57c412f",
+      "role": "new episode candidate: corrected bakery facade and centrally placed hours sign",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep04-20261020/source-art/scene-04-r1.png",
+      "sha256": "24abe161550382285a0c4fe00468b5467b5b648f38d3b5ed1f99887924870499",
+      "role": "continuing woman face identity",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 5,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "approved integrated scene quality only",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}

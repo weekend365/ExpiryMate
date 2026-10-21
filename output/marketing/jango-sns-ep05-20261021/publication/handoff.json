@@ -1,0 +1,24 @@
+{
+  "recordedAt": "2026-10-21T15:29:31.063332+09:00",
+  "status": "awaiting browser reconnection and native file selection",
+  "account": "jango_plz",
+  "publicationCompleted": false,
+  "publishClicks": 0,
+  "profileCountObservedBefore": 10,
+  "lastConfirmedInstagramState": "Video upload error: browser could not read jango-ep05-music.mp4; Other file selection control shown.",
+  "programmaticUpload": "Documented filechooser/setFiles accepted, but Instagram reported file read failure.",
+  "nativeFallback": "Native Chrome app bridge failed to start on three attempts, including a runtime reset.",
+  "browserRecovery": "After runtime reset, prior Chrome browser id and named Chrome selection unavailable; browser list empty. No unsupported UI technology used.",
+  "userStepRequested": "Reconnect Chrome browser control; manually select the prepared MP4 if file selection is shown, then report preview readiness.",
+  "resumePlan": [
+    "Check current profile for ep05 before any resubmission if outcome becomes uncertain.",
+    "Verify MP4 preview uses full20s and9:16 with sound enabled.",
+    "Apply cover.jpg,caption.txt andAI label.",
+    "Share once, then verify playback/cover/caption/AI/download links and save post URL and screenshot."
+  ],
+  "video": "reel/jango-ep05-music.mp4",
+  "cover": "cover.jpg",
+  "caption": "caption.txt",
+  "downloadLinks": "Both observed in profile link popup; see profile-links.jpg.",
+  "noAppChanges": true
+}

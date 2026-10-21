@@ -1,0 +1,219 @@
+{
+  "checkedAt": "2026-10-21T14:52:02.253843+09:00",
+  "scope": "Korean character audio audition",
+  "wavChecks": [
+    {
+      "file": "preview/dialogue-f3-m3.wav",
+      "seconds": 8.565895691609978,
+      "peakDbfs": -2.017887574610058,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/dialogue-line-01.wav",
+      "seconds": 2.159455782312925,
+      "peakDbfs": -2.0567641760710855,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/dialogue-line-02.wav",
+      "seconds": 1.5325170068027212,
+      "peakDbfs": -2.017887574610058,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/dialogue-line-03.wav",
+      "seconds": 1.5325170068027212,
+      "peakDbfs": -5.557621295230391,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/dialogue-line-04.wav",
+      "seconds": 1.7414965986394557,
+      "peakDbfs": -3.109634382676262,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/jango-m1.wav",
+      "seconds": 3.622312925170068,
+      "peakDbfs": -1.9941779747474877,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/jango-m3.wav",
+      "seconds": 3.1346938775510202,
+      "peakDbfs": -2.0249126932275043,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/jango-m4.wav",
+      "seconds": 3.4133333333333336,
+      "peakDbfs": -3.6958540049664785,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/jango-m5.wav",
+      "seconds": 3.622312925170068,
+      "peakDbfs": -2.0122047324558308,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/woman-f3.wav",
+      "seconds": 3.4829931972789114,
+      "peakDbfs": -2.3508934247209807,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/woman-f4.wav",
+      "seconds": 2.9257142857142857,
+      "peakDbfs": -2.7392237385581946,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "preview/woman-f5.wav",
+      "seconds": 3.274013605442177,
+      "peakDbfs": -4.693335140076624,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/dialogue-01-woman.wav",
+      "seconds": 2.159455782312925,
+      "peakDbfs": -8.069641955072903,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/dialogue-02-jango.wav",
+      "seconds": 1.5325170068027212,
+      "peakDbfs": -9.285948250246733,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/dialogue-03-woman.wav",
+      "seconds": 1.5325170068027212,
+      "peakDbfs": -14.061428476110473,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/dialogue-04-jango.wav",
+      "seconds": 1.7414965986394557,
+      "peakDbfs": -10.097063975063856,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/jango-m1-raw.wav",
+      "seconds": 3.622312925170068,
+      "peakDbfs": -9.628468223692153,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/jango-m3-raw.wav",
+      "seconds": 3.1346938775510202,
+      "peakDbfs": -7.143558606152682,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/jango-m4-raw.wav",
+      "seconds": 3.4133333333333336,
+      "peakDbfs": -11.595830977181675,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/jango-m5-raw.wav",
+      "seconds": 3.622312925170068,
+      "peakDbfs": -9.045334939842842,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/woman-f3-raw.wav",
+      "seconds": 3.4829931972789114,
+      "peakDbfs": -9.12075995042123,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/woman-f4-raw.wav",
+      "seconds": 2.9257142857142857,
+      "peakDbfs": -9.400974239277522,
+      "noFullScaleSamples": true
+    },
+    {
+      "file": "raw/woman-f5-raw.wav",
+      "seconds": 3.274013605442177,
+      "peakDbfs": -12.263500289704323,
+      "noFullScaleSamples": true
+    }
+  ],
+  "mp3Checks": [
+    {
+      "file": "preview/dialogue-f3-m3.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.78,
+      "truePeakDbtp": -2.16
+    },
+    {
+      "file": "preview/jango-m1.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.33,
+      "truePeakDbtp": -2.43
+    },
+    {
+      "file": "preview/jango-m3.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.32,
+      "truePeakDbtp": -2.44
+    },
+    {
+      "file": "preview/jango-m4.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.45,
+      "truePeakDbtp": -4.14
+    },
+    {
+      "file": "preview/jango-m5.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.54,
+      "truePeakDbtp": -2.39
+    },
+    {
+      "file": "preview/woman-f3.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.43,
+      "truePeakDbtp": -2.69
+    },
+    {
+      "file": "preview/woman-f4.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.44,
+      "truePeakDbtp": -3.15
+    },
+    {
+      "file": "preview/woman-f5.mp3",
+      "decoded": true,
+      "integratedLUFS": -18.45,
+      "truePeakDbtp": -5.13
+    }
+  ],
+  "actualOnnxSessionProviders": {
+    "dp_ort": [
+      "CPUExecutionProvider"
+    ],
+    "text_enc_ort": [
+      "CPUExecutionProvider"
+    ],
+    "vector_est_ort": [
+      "CPUExecutionProvider"
+    ],
+    "vocoder_ort": [
+      "CPUExecutionProvider"
+    ]
+  },
+  "htmlMediaAndDownloadLinks": "All local paths resolve; eight audio players and transcripts are present.",
+  "browserVisualVerification": {
+    "status": "not performed",
+    "reason": "Browser tool rejected file:// navigation by URL security policy. No workaround or alternate browser route attempted; files and inline audio supplied directly."
+  },
+  "listeningReview": {
+    "status": "not completed by assistant",
+    "reason": "Audio preview tool returned audio content omitted because this model does not support audio input. No naturalness or pronunciation pass is claimed. User auditions samples."
+  },
+  "sourceImageEditing": "none in this task",
+  "approval": "Audition only; no character voice has been user-adopted."
+}

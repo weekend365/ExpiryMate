@@ -1,0 +1,40 @@
+{
+  "format": "MP4/H.264,1080x1920,30fps,600 frames,AAC 48kHz",
+  "seconds": 20,
+  "sceneDurations": [
+    2,
+    4,
+    4,
+    6,
+    4
+  ],
+  "sceneCuts": [
+    2,
+    6,
+    10,
+    16
+  ],
+  "dialogueChange": 12.3,
+  "closingBrandAndQuestionSeconds": [
+    16,
+    20
+  ],
+  "zoom": [
+    1,
+    1.03
+  ],
+  "fixedLettering": true,
+  "narration": false,
+  "auditionVoicesIncluded": false,
+  "musicSource": "music/Carefree.mp3",
+  "musicSourceSha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+  "musicExcerptSeconds": [
+    0,
+    20
+  ],
+  "fadeInSeconds": 0.3,
+  "fadeOutSeconds": 1,
+  "audioTargetLufs": -18,
+  "credit": "Carefree — Kevin MacLeod (incompetech.com), CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ; excerpt, level adjustment and fades.",
+  "videoSha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe"
+}

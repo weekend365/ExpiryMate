@@ -1,0 +1,93 @@
+{
+  "checkedAt": "2026-10-21T15:18:43.149319+09:00",
+  "fullVideoDecode": "passed",
+  "decodedFrames": 600,
+  "seconds": 20.0,
+  "metadata": {
+    "ffmpeg_version": "7.1 built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(progressive)",
+    "audio_codec": "aac",
+    "fps": 30.0,
+    "source_size": [
+      1080,
+      1920
+    ],
+    "size": [
+      1080,
+      1920
+    ],
+    "rotate": 0,
+    "duration": 20.0
+  },
+  "sceneCuts": [
+    2,
+    6,
+    10,
+    16
+  ],
+  "dialogueChange": 12.3,
+  "closingQuestionAndBrandSeconds": [
+    16,
+    20
+  ],
+  "blackFrameIntervals": [],
+  "audioDecodedSeconds": 20.010666666666665,
+  "audioPeakDbfs": -2.516,
+  "audioRmsDbfs": -19.437,
+  "clippedSamples": 0,
+  "audioRmsPerSecondDbfs": [
+    -19.818,
+    -18.48,
+    -18.757,
+    -19.814,
+    -21.028,
+    -18.72,
+    -17.832,
+    -18.859,
+    -19.127,
+    -19.995,
+    -20.896,
+    -20.101,
+    -18.589,
+    -18.923,
+    -18.257,
+    -21.395,
+    -20.546,
+    -18.735,
+    -18.876,
+    -23.492
+  ],
+  "loudness": {
+    "input_i": "-18.09",
+    "input_tp": "-4.38",
+    "input_lra": "1.60",
+    "input_thresh": "-28.16",
+    "output_i": "-18.07",
+    "output_tp": "-4.45",
+    "output_lra": "1.50",
+    "output_thresh": "-28.11",
+    "normalization_type": "dynamic",
+    "target_offset": "0.07"
+  },
+  "detectedSilence": [],
+  "narration": false,
+  "audioOnlySource": "music/Carefree.mp3",
+  "auditionFilesUsed": [],
+  "pcmMeasurementChannels": "48kHz mono downmix; loudness/true-peak measurement uses original stereo",
+  "priorEpisodeFilesPreserved": 152,
+  "masterAndReferenceFilesPreserved": 47,
+  "priorMetadataPreservedAsSnapshots": [
+    "reel/before-episode.json",
+    "reel/before-production-record.json",
+    "reel/before-selected-artwork.json"
+  ],
+  "productionInputHashesPreserved": 12,
+  "technicalStatus": "passed",
+  "humanListening": "not performed: assistant audio input unavailable",
+  "visualReviewEvidence": "Complete timeline via one frame each second, plus all cut/zoom endpoints and native-resolution frames. See visual-review.json.",
+  "realTimePlaybackClaim": false,
+  "instagramOverlay": "Conservative illustrative control overlay, not a live platform preview. Current live upload/profile verification is deferred until publication.",
+  "videoSha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe",
+  "coverSha256": "d115671a4aea2baca11358288ba47e66f92a3ab89ff0d28d42884b3cf578f8a8"
+}

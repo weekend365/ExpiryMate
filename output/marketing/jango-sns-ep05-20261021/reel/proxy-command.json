@@ -1,0 +1,20 @@
+[
+  "/private/tmp/jango-cartoon-20261020-venv/lib/python3.13/site-packages/imageio_ffmpeg/binaries/ffmpeg-macos-aarch64-v7.1",
+  "-hide_banner",
+  "-y",
+  "-i",
+  "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep05-20261021/reel/jango-ep05-music.mp4",
+  "-vf",
+  "scale=360:640:flags=lanczos",
+  "-c:v",
+  "libx264",
+  "-crf",
+  "18",
+  "-preset",
+  "fast",
+  "-c:a",
+  "copy",
+  "-movflags",
+  "+faststart",
+  "/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep05-20261021/review/reel/jango-ep05-360.mp4"
+]

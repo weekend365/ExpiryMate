@@ -1,0 +1,82 @@
+{
+  "researchedAt": "2026-10-21T14:42:15.327385+09:00",
+  "userQuestion": "https://github.com/debpalash/VoiceStudio 해당 리포지토리를 활용하여 카툰 릴스에 보이스 더빙도 가능할까?",
+  "conclusion": "Technically feasible using Korean per-line TTS and external Reel timeline mixing. Supertonic-3 presets are a practical audition candidate; do not use the default OmniVoice pretrained weights for this commercial promotion.",
+  "evidenceLevel": "Official repository documentation, upstream model cards and exact model-license text reviewed. No local installation, model download or real Korean speech test performed.",
+  "environment": {
+    "machine": "arm64",
+    "macOS": "26.6.2",
+    "memory": "Not measured; sandbox denies sysctl. No memory/performance guarantee.",
+    "publishedMacRequirements": "Apple Silicon macOS 13.3+; guide estimates roughly 10 GB for full app/runtime/models, varies by selected engines."
+  },
+  "application": {
+    "license": "AGPL-3.0-only",
+    "assessment": "Official notice explicitly includes commercial/internal use of the application under its terms. It does not grant rights for models, voices or output.",
+    "source": "https://github.com/debpalash/VoiceStudio/blob/main/LICENSE-NOTICE.md"
+  },
+  "defaultOmniVoice": {
+    "codeLicense": "Apache-2.0",
+    "pretrainedWeights": "CC-BY-NC per upstream model card",
+    "decision": "Excluded from app-promotion dubbing unless separate commercial rights are obtained.",
+    "source": "https://huggingface.co/k2-fsa/OmniVoice"
+  },
+  "auditionCandidate": {
+    "engine": "Supertonic-3",
+    "languages": "31 including Korean ko",
+    "engineMode": "CPU ONNX sidecar",
+    "presetsSurfaced": [
+      "M1",
+      "M3",
+      "M4",
+      "M5",
+      "F3",
+      "F4",
+      "F5"
+    ],
+    "nativeAudio": "44.1 kHz mono; WAV export supports editing",
+    "modelDownloadApprox": "400 MB per VoiceStudio guide, plus application/runtime",
+    "license": "OpenRAIL-M",
+    "commercialAssessment": "Reviewed model grant/output terms and Attachment A contain no non-commercial-only condition. This fictional app-promotional content is a candidate permitted use subject to the actual terms; no blanket clearance for unreviewed custom voice assets.",
+    "requiredOutputNotice": "AI 작화와 AI 음성을 사용한 카툰입니다.",
+    "reasonForNotice": "Attachment A(e) requires an express, intelligible machine-generated-content disclosure.",
+    "limitations": [
+      "VoiceStudio adapter exposes preset voices, not voice design or cloning.",
+      "Natural Korean comic delivery and matching the chosen characters are not proven until listening.",
+      "If a custom voice/recording is later used, its permission and terms must be checked separately."
+    ],
+    "sources": [
+      "https://github.com/debpalash/VoiceStudio/blob/main/docs/engines/supertonic3.md",
+      "https://huggingface.co/Supertone/supertonic-3",
+      "https://huggingface.co/Supertone/supertonic-3/blob/main/LICENSE"
+    ]
+  },
+  "proposedWorkflow": [
+    "Use distinct preset voice candidates for Jango and the woman; synthesize per dialogue line.",
+    "Audition 장고가 이렇게 빨랐어? and 오픈런도 런이잖아. before selecting recurring character voices.",
+    "Export separate WAV takes and align with the five scenes; adjust shot duration if needed rather than forcing rushed speech.",
+    "Mix with licensed instrumental BGM ducked beneath dialogue; keep fixed Korean lettering.",
+    "Listen to the entire exported Reel, verify pronunciation, timings, consistent voices, no clipping and intelligible dialogue; disclose AI voice use."
+  ],
+  "proposedDirection": {
+    "jango": "playful and cheerful, clear diction; audition target, not a claimed guaranteed model capability",
+    "woman": "natural conversational adult female tone, light surprise and amused reaction"
+  },
+  "notPerformed": [
+    "VoiceStudio installation",
+    "license acceptance on user behalf",
+    "model download",
+    "voice cloning",
+    "audio synthesis",
+    "video/audio playback test",
+    "Instagram upload"
+  ],
+  "otherPrimarySources": [
+    "https://github.com/debpalash/VoiceStudio/blob/main/docs/install/macos.md",
+    "https://github.com/debpalash/VoiceStudio/blob/main/docs/audio-quality.md"
+  ],
+  "subsequentImplementation": {
+    "completedAt": "2026-10-21T14:52:02.253843+09:00",
+    "record": "voice-audition/delivery.json",
+    "status": "Supertonic-3 audio samples generated locally; full desktop app not installed. Earlier evidenceLevel and notPerformed fields describe the dated research snapshot."
+  }
+}

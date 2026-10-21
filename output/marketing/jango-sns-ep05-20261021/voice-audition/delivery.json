@@ -1,0 +1,42 @@
+{
+  "completedAt": "2026-10-21T14:52:02.253843+09:00",
+  "method": "Unmodified VoiceStudio Supertonic-3 sidecar in dedicated temporary Python environment, Korean presets, CPU-only, offline synthesis after model download.",
+  "softwareCommit": "28bf2c7a83b8a64836297340c52a45d716684aed",
+  "modelRevision": "724fb5abbf5502583fb520898d45929e62f02c0b",
+  "modelBytes": 403513201,
+  "noteOnModelBytes": "Exact total is recorded in model-source-hashes.json.",
+  "sampleCount": 7,
+  "dialogueSeconds": 8.565895691609978,
+  "defaultCandidates": {
+    "woman": "F3",
+    "jango": "M3"
+  },
+  "allCandidates": {
+    "woman": [
+      "F3",
+      "F4",
+      "F5"
+    ],
+    "jango": [
+      "M1",
+      "M3",
+      "M4",
+      "M5"
+    ]
+  },
+  "disclosure": "AI로 합성한 목소리 샘플입니다.",
+  "page": "index.html",
+  "dialogue": "preview/dialogue-f3-m3.mp3",
+  "qualityRecord": "quality-record.json",
+  "selectionStatus": "awaiting user listening and choice",
+  "installedDesktopApp": false,
+  "temporaryRuntime": "/private/tmp/jango-voice-audition-20261021",
+  "futureReelTimingNote": "The first separately generated female line is 2.159s. Revisit the planned 2s first shot when fitting the final voiced Reel; do not cut speech to force the current still-storyboard timing.",
+  "notPerformed": [
+    "full Reel creation",
+    "Instagram upload",
+    "voice cloning",
+    "commit/push",
+    "app/API/DB edits"
+  ]
+}

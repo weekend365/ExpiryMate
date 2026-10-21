@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-21T16:05:59.709657+09:00",
+  "status": "published",
+  "title": "장고랑 살아보니 05 — 러닝인 줄 알았는데 오픈런",
+  "reelUrl": "https://www.instagram.com/jango_plz/reel/Devz59nStpp/",
+  "deliverables": {
+    "video": "reel/jango-ep05-music.mp4",
+    "cover": "cover.jpg",
+    "caption": "caption.txt",
+    "mobileReview": "review/reel/jango-ep05-360.mp4"
+  },
+  "sources": {
+    "selection": "selected-artwork.json",
+    "rawArtwork": "source-art/",
+    "editableLettering": "layers/",
+    "prompts": "prompts/",
+    "referencesAndHashes": "preparation-*.json",
+    "musicLicense": "music/license.json"
+  },
+  "records": {
+    "production": "reel/production.json",
+    "technicalReview": "review/reel/technical-quality.json",
+    "visualReview": "review/reel/visual-review.json",
+    "publication": "publication/published.json",
+    "cleanup": "cleanup.json",
+    "currentFileInventory": "file-hashes.json",
+    "cleanupValidation": "cleanup/validation.json"
+  },
+  "history": "Dated preparations, generation, voice auditions, delivery reports and non-root manifests are historical snapshots. Use cleanup.json for intentionally removed output hashes; preserve unresolved listening and Instagram audio-name discrepancies in publication/published.json.",
+  "retention": "Keep final delivery, raw generation lineage, editable layers, license provenance, minimal comparison/contact sheets, mobile video and live publication proof. Exclude regenerated scene/frame copies and unused voice sample media."
+}

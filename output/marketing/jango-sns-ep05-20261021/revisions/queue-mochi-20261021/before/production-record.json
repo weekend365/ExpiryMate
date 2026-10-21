@@ -1,0 +1,51 @@
+{
+  "id": "jango-sns-ep05-20261021",
+  "title": "러닝인 줄 알았는데 오픈런",
+  "scope": "5 original still scene candidates and review packaging",
+  "method": {
+    "generator": "official built-in image_gen.imagegen",
+    "fallbackApiUsed": false,
+    "scenePaintingByCode": false,
+    "derivatives": "Pillow uniform-scale QA thumbnails and a labelled contact sheet only; original source PNG bytes preserved",
+    "runtime": "existing /private/tmp/jango-cartoon-20261020-venv/bin/python"
+  },
+  "authorization": {
+    "quote": "1번을 기반으로 이미지부터 만들어줘.",
+    "appliesTo": "generating source artwork from the chosen 5-scene storyboard",
+    "artworkAdoption": "pending user review"
+  },
+  "sourceAndLineage": {
+    "characterMaster": "design/jango/masters/v18/master.json",
+    "representative": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+    "sceneQuality": "approved v6 individual scene",
+    "continuity": "episode 4 woman and episode 3 torso correction; new episode 5 candidates carry recorded lineage",
+    "preparations": "preparation-*.json contain actual image order, roles, SHA-256 and exact prompt hashes",
+    "prompts": "prompts/",
+    "generationRecords": "generation-*.json retain original tool output paths and copied original-byte hashes"
+  },
+  "selection": "selected-artwork.json",
+  "visualReview": "review/visual-review.json",
+  "viewer": "review/index.html",
+  "overview": "review/overview.jpg",
+  "nativeOutput": {
+    "count": 5,
+    "width": 941,
+    "height": 1672,
+    "format": "PNG",
+    "ratio": "approximately 9:16; source dimensions preserved"
+  },
+  "plannedReel": {
+    "width": 1080,
+    "height": 1920,
+    "seconds": 20,
+    "status": "not rendered"
+  },
+  "status": "source-art-ready-for-user-review",
+  "notPerformed": [
+    "video/audio rendering",
+    "publishing",
+    "commit/push",
+    "app/API/DB edits",
+    "MASTER or existing episode changes"
+  ]
+}

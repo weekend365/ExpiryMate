@@ -1,0 +1,224 @@
+- link:
+  - /url: /
+- link:
+  - /url: /
+- link:
+  - /url: /reels/
+- link:
+  - /url: /direct/inbox/
+- link:
+  - /url: /explore/
+- link:
+  - /url: "#"
+- link:
+  - /url: "#"
+- link:
+  - /url: "#"
+- link:
+  - /url: /jango_plz/
+  - link:
+- link:
+  - /url: "#"
+- link:
+  - /url: "#"
+- main:
+  - button:
+    - generic: 메모...
+  - button:
+  - link:
+    - /url: "#"
+    - heading [level=2]:
+      - generic: jango_plz
+  - button:
+  - generic: 장고야 부탁해
+  - text: 게시물
+  - generic: "11"
+  - link:
+    - /url: "#"
+    - text: 팔로워
+    - generic: "0"
+  - link:
+    - /url: "#"
+    - text: 팔로우
+    - generic: "0"
+  - generic: 소프트웨어
+  - button:
+    - generic: 냉장고 속 재료, 잊기 전에 한 끼로 🥕 유통기한 관리 · 내 재료로 요리 추천 자취 식재료 고민은 장고에게 부탁해 👇 iPhone · Android 다운로드
+  - button:
+    - generic: apps.apple.com/kr/app/id6793375883 외 1개
+  - link:
+    - /url: /accounts/edit/
+    - text: 프로필 편집
+  - link:
+    - /url: /archive/stories/
+    - text: 보관함 보기
+  - menu:
+    - list:
+      - button:
+        - generic: New
+  - tablist:
+    - link:
+      - /url: /jango_plz/
+    - link:
+      - /url: /jango_plz/reels/
+    - link:
+      - /url: /jango_plz/saved/
+    - link:
+      - /url: /jango_plz/tagged/
+  - link:
+    - /url: /jango_plz/reel/Devz59nStpp/
+  - link:
+    - /url: /jango_plz/reel/DetYJuaSyUD/
+  - link:
+    - /url: /jango_plz/reel/DetNFmvyZM3/
+  - link:
+    - /url: /jango_plz/reel/DetEogDy_9S/
+  - link:
+    - /url: /jango_plz/reel/DegYXXSyYXZ/
+  - link:
+    - /url: /jango_plz/p/DegXD7HnUQR/
+  - link:
+    - /url: /jango_plz/p/DegVsg0naIf/
+  - link:
+    - /url: /jango_plz/reel/DegSkIxy6C6/
+  - link:
+    - /url: /jango_plz/p/DegQzO7HZ2X/
+  - link:
+    - /url: /jango_plz/p/DegPZjuHTyt/
+  - link:
+    - /url: /jango_plz/p/DegPENknWhH/
+- contentinfo:
+  - link:
+    - /url: https://about.meta.com/
+    - generic: Meta
+  - link:
+    - /url: https://about.instagram.com/
+    - generic: 소개
+  - link:
+    - /url: https://about.instagram.com/blog/
+    - generic: 블로그
+  - link:
+    - /url: https://about.instagram.com/about-us/careers
+    - generic: 채용 정보
+  - link:
+    - /url: https://help.instagram.com/
+    - generic: 도움말
+  - link:
+    - /url: https://developers.facebook.com/docs/instagram
+    - generic: API
+  - link:
+    - /url: /legal/privacy/
+    - generic: 개인정보처리방침
+  - link:
+    - /url: /legal/terms/
+    - generic: 약관
+  - link:
+    - /url: /popular/
+    - generic: 인기
+  - link:
+    - /url: /web/lite/
+    - generic: Instagram Lite
+  - link:
+    - /url: https://www.meta.ai/?utm_source=foa_web_footer
+    - generic: Meta AI
+  - link:
+    - /url: https://muse.ai/
+    - generic: Muse
+  - link:
+    - /url: https://www.threads.com/
+    - generic: Threads
+  - link:
+    - /url: https://www.facebook.com/help/instagram/261704639352628
+    - generic: 연락처 업로드 & 비사용자
+  - link:
+    - /url: /accounts/meta_verified/?entrypoint=web_footer
+    - generic: Meta Verified
+  - generic: 한국어
+  - combobox
+  - generic: © 2026 Instagram from Meta
+- button "메시지":
+  - generic "메시지":
+    - img "메시지"
+    - generic: 메시지
+- button "닫기":
+  - img "닫기"
+- dialog:
+  - button "다음":
+    - img "다음"
+  - article [active]:
+    - group "Video player":
+      - slider "볼륨 조정":
+        - button "오디오를 재생 중입니다":
+          - img "오디오를 재생 중입니다"
+    - banner:
+      - button "jango_plz님의 프로필 사진" [disabled]:
+        - link "jango_plz님의 프로필 사진" [disabled]:
+          - /url: /jango_plz/
+          - img "jango_plz님의 프로필 사진"
+      - link "jango_plz":
+        - /url: /jango_plz/
+        - generic: jango_plz
+      - button "AI 콘텐츠"
+      - link "Castiel Inlove • A Place I've Never Been":
+        - /url: /reels/audio/1106598561923850/
+        - text: Castiel Inlove
+        - generic: •
+        - text: A Place I've Never Been
+    - button "옵션 더 보기":
+      - img "옵션 더 보기"
+    - button "인사이트 보기"
+    - button "릴스 홍보하기"
+    - button "좋아요":
+      - img "좋아요"
+    - button "댓글 달기":
+      - img "댓글 달기"
+    - button "리포스트":
+      - img "리포스트"
+    - button "게시물 공유":
+      - img "게시물 공유"
+    - button "저장":
+      - button "저장":
+        - img "저장"
+    - text: 가장 먼저
+    - button "좋아요"
+    - text: 를 눌러보세요
+    - list:
+      - 'button "jango_plz님의 프로필 사진 jango_plz 장고랑 살아보니 05 — 러닝인 줄 알았는데 오픈런 평소엔 느긋하던 장고가 오늘따라 유난히 빠른 이유. 러닝 하자더니, 목적지는 찹쌀떡 오픈런이었습니다. 🏃 여러분은 러닝파인가요, 오픈런파인가요? AI 작화를 사용한 카툰입니다. 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요. 영상 설명: 가을 골목에서 장고가 빠르게 달리고 여성이 놀라 따라갑니다. 장고가 시계를 확인하며 서두른 곳은 흰 찹쌀떡 가게의 오픈런 대기줄입니다. 여성이 “러닝 하자며?”라고 묻자 장고는 “오픈런도 런이잖아.”라고 답합니다. 둘은 찹쌀떡을 나누며 웃습니다. 음악: Carefree — Kevin MacLeod (incompetech.com) CC BY 4.0: https://creativecommons.org/licenses/by/4.0/ 원곡 일부 발췌, 음량 조정 및 페이드 적용. #장고야부탁해 #장고툰 #오픈런 #러닝 #찹쌀떡 #자취생활 33초"':
+        - button "jango_plz님의 프로필 사진" [disabled]:
+          - link "jango_plz님의 프로필 사진" [disabled]:
+            - /url: /jango_plz/
+            - img "jango_plz님의 프로필 사진"
+        - heading "jango_plz" [level=2]:
+          - link "jango_plz":
+            - /url: /jango_plz/
+        - 'heading "장고랑 살아보니 05 — 러닝인 줄 알았는데 오픈런 평소엔 느긋하던 장고가 오늘따라 유난히 빠른 이유. 러닝 하자더니, 목적지는 찹쌀떡 오픈런이었습니다. 🏃 여러분은 러닝파인가요, 오픈런파인가요? AI 작화를 사용한 카툰입니다. 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요. 영상 설명: 가을 골목에서 장고가 빠르게 달리고 여성이 놀라 따라갑니다. 장고가 시계를 확인하며 서두른 곳은 흰 찹쌀떡 가게의 오픈런 대기줄입니다. 여성이 “러닝 하자며?”라고 묻자 장고는 “오픈런도 런이잖아.”라고 답합니다. 둘은 찹쌀떡을 나누며 웃습니다. 음악: Carefree — Kevin MacLeod (incompetech.com) CC BY 4.0: https://creativecommons.org/licenses/by/4.0/ 원곡 일부 발췌, 음량 조정 및 페이드 적용. #장고야부탁해 #장고툰 #오픈런 #러닝 #찹쌀떡 #자취생활" [level=1]':
+          - text: 장고랑 살아보니 05 — 러닝인 줄 알았는데 오픈런
+          - text: 평소엔 느긋하던 장고가 오늘따라 유난히 빠른 이유.
+          - text: 러닝 하자더니, 목적지는 찹쌀떡 오픈런이었습니다. 🏃
+          - text: 여러분은 러닝파인가요, 오픈런파인가요?
+          - text: AI 작화를 사용한 카툰입니다.
+          - text: 프로필에서 iPhone · Android 앱을 다운로드하고, 자주 남기는 재료 하나부터 등록해 보세요.
+          - text: "영상 설명: 가을 골목에서 장고가 빠르게 달리고 여성이 놀라 따라갑니다. 장고가 시계를 확인하며 서두른 곳은 흰 찹쌀떡 가게의 오픈런 대기줄입니다. 여성이 “러닝 하자며?”라고 묻자 장고는 “오픈런도 런이잖아.”라고 답합니다. 둘은 찹쌀떡을 나누며 웃습니다."
+          - text: "음악: Carefree — Kevin MacLeod (incompetech.com)"
+          - text: "CC BY 4.0: https://creativecommons.org/licenses/by/4.0/"
+          - text: 원곡 일부 발췌, 음량 조정 및 페이드 적용.
+          - link "#장고야부탁해":
+            - /url: /explore/tags/%EC%9E%A5%EA%B3%A0%EC%95%BC%EB%B6%80%ED%83%81%ED%95%B4/
+          - link "#장고툰":
+            - /url: /explore/tags/%EC%9E%A5%EA%B3%A0%ED%88%B0/
+          - link "#오픈런":
+            - /url: /explore/tags/%EC%98%A4%ED%94%88%EB%9F%B0/
+          - link "#러닝":
+            - /url: /explore/tags/%EB%9F%AC%EB%8B%9D/
+          - link "#찹쌀떡":
+            - /url: /explore/tags/%EC%B0%B9%EC%8C%80%EB%96%A1/
+          - link "#자취생활":
+            - /url: /explore/tags/%EC%9E%90%EC%B7%A8%EC%83%9D%ED%99%9C/
+        - time: 33초
+    - link "33초 전":
+      - /url: /jango_plz/reel/Devz59nStpp/
+      - time: 33초 전
+    - button "이모티콘":
+      - img "이모티콘"
+    - textbox "댓글 달기..."
+    - button "게시" [disabled]

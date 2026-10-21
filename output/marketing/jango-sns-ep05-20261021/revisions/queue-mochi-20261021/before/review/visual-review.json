@@ -1,0 +1,108 @@
+{
+  "reviewedAt": "2026-10-21",
+  "stage": "unlettered still artwork only",
+  "reviewer": "assistant visual inspection; not user adoption or a signed release",
+  "viewed": [
+    "all generated originals as returned by official imagegen",
+    "selected 5-scene overview with each scene displayed at 360x640"
+  ],
+  "selection": [
+    "scene-01-r1",
+    "scene-02-r3",
+    "scene-03-r2",
+    "scene-04-r1",
+    "scene-05-r1"
+  ],
+  "observations": [
+    {
+      "scene": 1,
+      "result": "suitable for user review",
+      "evidence": [
+        "Surprised woman follows sprinting Jango; no bakery/food reveal.",
+        "Full chef hat, closed single fridge-door face, handle/pineapple, two connected mittens, short apron and both shoes are visible.",
+        "Foreground Jango appears larger than the woman further up the lane; street perspective explains the scale."
+      ],
+      "notes": [
+        "Sports watch is not visible behind foreshortened mitten/cuff in this pose."
+      ]
+    },
+    {
+      "scene": 2,
+      "result": "suitable for user review after two corrections",
+      "evidence": [
+        "Camera/pose changed from the duplicated first sprint: Jango pauses at a corner and checks time, woman raises a waiting hand.",
+        "Pointing glove changed to a rounded one-thumb oven mitten; no separate human index finger.",
+        "Visible watch changed to the mint-cuff round style used in later scenes, on anatomical right wrist.",
+        "Torso remains a short apron under the large head and hat."
+      ],
+      "notes": [
+        "Right gesturing mitten extends beyond the conservative internal text area; face, expression and watch are central. Actual Reel-control overlap remains a video-stage check."
+      ]
+    },
+    {
+      "scene": 3,
+      "result": "suitable for user review after placement correction",
+      "evidence": [
+        "Bakery is first revealed here; hands are empty before purchase.",
+        "Same ivory/green running outfit and hair; Jango is smaller on the shared ground plane.",
+        "Hours placard moved from far-right door to central window, jacket's unintended badge removed.",
+        "No generated text on the hours placard."
+      ],
+      "notes": [
+        "The planned '11시 오픈' text is not yet typeset."
+      ]
+    },
+    {
+      "scene": 4,
+      "result": "suitable for user review",
+      "evidence": [
+        "One bag with three golden round rolls; two mittens make contact with the bag.",
+        "Woman catches her breath beside Jango; bakery door is now open.",
+        "Same facade, mint striped awning, window/door order and central blank placard."
+      ],
+      "notes": [
+        "Bread is drawn as small golden round rolls rather than a product-specific salt-bread shape; the accepted storyboard only requires bread."
+      ]
+    },
+    {
+      "scene": 5,
+      "result": "suitable for user review",
+      "evidence": [
+        "Woman crouches naturally beside Jango, holding one roll; two remain in the bag.",
+        "Brown bun, jacket, green pants, shoes and compact Jango are continuous.",
+        "Woman's two hands and bent legs remain coherent; Jango's two mitten hands and shoes remain visible.",
+        "Sharing-food payoff provides a distinct ending pose."
+      ],
+      "notes": [
+        "Closing question and brand will be separately typeset."
+      ]
+    }
+  ],
+  "stageResults": {
+    "characterRecognition": "reviewed",
+    "compactJangoAnatomy": "reviewed visually without fabricated numeric gate approval",
+    "womanAndWardrobeContinuity": "reviewed",
+    "storyAndPropContinuity": "reviewed",
+    "smallPreviewReadability": "faces and actions reviewed at 360x640",
+    "unletteredSceneCropping": "no accidental hat or shoe cut-offs seen in selected stills"
+  },
+  "deferred": [
+    {
+      "check": "Korean dialogue, brand and storefront text accuracy/read time",
+      "reason": "not yet typeset; still-image request only"
+    },
+    {
+      "check": "20-second playback, zoom start/middle/end, transitions and sound",
+      "reason": "no video/audio rendered in this task"
+    },
+    {
+      "check": "actual Instagram controls and profile cover crop",
+      "reason": "requires later video/cover production and platform review; no actual Instagram QA claim"
+    }
+  ],
+  "adoption": {
+    "status": "awaiting user review",
+    "generatedImageBytesApproved": false,
+    "publicationAuthorizedThisTurn": false
+  }
+}

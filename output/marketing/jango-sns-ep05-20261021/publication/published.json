@@ -1,0 +1,103 @@
+{
+  "recordedAt": "2026-10-21T16:01:04.303511+09:00",
+  "status": "published",
+  "account": "jango_plz",
+  "episode": 5,
+  "title": "장고랑 살아보니 05 — 러닝인 줄 알았는데 오픈런",
+  "reelUrl": "https://www.instagram.com/jango_plz/reel/Devz59nStpp/",
+  "observedPostUrl": "https://www.instagram.com/p/Devz59nStpp/",
+  "authorization": {
+    "userQuote": "내 인스타그램에 게시해줘.",
+    "continuationQuotes": [
+      "연결했고 영상 미리보기가 떴어요",
+      "이어서 게시해줘.",
+      "커버가 적용됐어요"
+    ],
+    "scope": "One completed ep05 Reel with no dubbing, embedded licensed BGM, prepared custom cover, caption and AI artwork label. No commit or push."
+  },
+  "submittedFiles": {
+    "reel/jango-ep05-music.mp4": {
+      "sha256": "7eb05f5fcb87590f9038fcf1d1f9df90c0326adcd32137913f36953473edd6fe",
+      "bytes": 22622015
+    },
+    "cover.jpg": {
+      "sha256": "d115671a4aea2baca11358288ba47e66f92a3ab89ff0d28d42884b3cf578f8a8",
+      "bytes": 1464121
+    },
+    "caption.txt": {
+      "sha256": "a1fc66d3f05ae85cd802a7261d85fcdb58f15977f143c64d8af79210a001ebb6",
+      "bytes": 1034
+    }
+  },
+  "upload": {
+    "method": "Existing user Chrome session. User manually selected final MP4 and cover JPG after automated local picker transfer issues. Agent completed crop, settings, caption and publication.",
+    "format": "9:16",
+    "sourceDurationSeconds": 20,
+    "trim": "Full 0–20 seconds",
+    "soundEnabled": true,
+    "publishClicks": 1,
+    "successMessage": "릴스가 공유되었습니다"
+  },
+  "verification": {
+    "profilePostCountBefore": 10,
+    "profilePostCountAfter": 11,
+    "episode05Occurrences": 1,
+    "customCover": "cover.jpg confirmed in Instagram editor and latest profile thumbnail; title 장고가 갑자기 빨라졌다 is visible in actual crop.",
+    "caption": "Published h1 innerText matches caption.txt after whitespace normalization; posted-caption.txt retained.",
+    "aiLabel": "AI 콘텐츠 visible on published post.",
+    "accessibility": "Korean scene description included in caption; Reel accessibility UI offers auto captions only. Auto captions left off because no narration is present.",
+    "playback": {
+      "durationSeconds": 20.010666,
+      "servedVideoSize": "720x1280",
+      "readyState": 4,
+      "error": null,
+      "paused": false,
+      "muted": false,
+      "volumeSlider": 50,
+      "observations": "Observed running scene, watch scene and queue scene during playback; video advanced and looped. Source delivery is exactly 20 seconds; Instagram duration includes audio encoding padding."
+    },
+    "music": {
+      "embeddedSource": "Carefree — Kevin MacLeod",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "attribution": "Credit, license URL and edit notice retained in published caption.",
+      "sourceFileSha256": "8433b770a630d9b1594fd484442c677907ece899a4d149954cd2e74fd733e311",
+      "displayedInstagramAudio": "Castiel Inlove • A Place I've Never Been",
+      "displayedAudioUrl": "https://www.instagram.com/reels/audio/1106598561923850/",
+      "displayDiscrepancy": "Instagram initially showed original audio, then displayed a different track title without a music-selection action. Upload file hash matches the licensed Carefree delivery. Whether Instagram changed or only reidentified the served sound is not verified.",
+      "servedAudioComparison": "Unavailable: video.downloadMedia does not support blob downloads; documented pageAssets bundle failed to fetch observed audio segments. No alternate network or browser-control method used."
+    },
+    "subjectiveListening": "Not claimed. Assistant audio input unavailable; earlier source technical audio QA retained.",
+    "profileDownloadLinks": {
+      "status": "Both URLs verified in profile popup earlier in this publishing task; profile still shows two links after publication.",
+      "iPhone": "https://apps.apple.com/kr/app/id6793375883",
+      "Android": "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+    }
+  },
+  "preservation": {
+    "baselineManifest": "../file-hashes.json (pre-publication snapshot; regenerated after this record)",
+    "productionFilesChecked": 266,
+    "productionMismatches": [],
+    "masterAndReferenceFilesChecked": 47,
+    "masterAndReferenceMismatches": [],
+    "historicalRecords": "Preparation, handoff, production, source artwork and voice auditions preserved. Waiting states in older records are historical and resolved by this publication."
+  },
+  "evidence": [
+    "profile-links.jpg",
+    "cover-and-sound.jpg",
+    "ready-to-publish.jpg",
+    "share-success.jpg",
+    "profile-published.jpg",
+    "reel-published.jpg",
+    "published-ui.txt",
+    "posted-caption.txt"
+  ],
+  "changes": "Publication evidence and manifests only in this continuation. No application code, public API, database, MASTER, prior episode, commit or push changes.",
+  "validation": {
+    "pnpm docs:check": "passed: 31 metadata, 74 links; mobile build entry canonical",
+    "git diff --check -- output/marketing/jango-sns-ep05-20261021": "passed",
+    "captionWhitespaceNormalizedComparison": "passed",
+    "submittedCreativeFileHashes": "passed",
+    "productionAndMasterPreservation": "passed: 266 production files and 47 MASTER/reference files unchanged",
+    "applicationTestScope": "No application code changes; application lint, typecheck and tests not rerun for publication evidence."
+  }
+}

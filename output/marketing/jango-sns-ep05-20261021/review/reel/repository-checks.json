@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-21T15:18:03.999072+09:00",
+  "checks": {
+    "pnpm docs:check": "passed: metadata31, links74; canonical mobile build entry",
+    "git diff --check": "passed",
+    "python syntax": "build_reel.py and validate_reel.py compiled",
+    "media verification": "600 decoded frames,20.0s,1080x1920/30fps,H.264/AAC; no black intervals or clipped samples"
+  },
+  "scope": "Offline media/records only; no app/API/DB code changes. App test suites were not rerun for this media output."
+}

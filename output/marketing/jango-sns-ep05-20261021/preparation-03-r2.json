@@ -1,0 +1,18 @@
+{
+  "candidate": "scene-03-r2",
+  "preparedAt": "2026-10-21T14:16:52.948200+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-03-r2.txt",
+  "promptSha256": "547e6a86ffd10b795cfdf372c9af492f7e919719add7bda720f6fa4e07002a97",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-03-r1.png",
+      "sha256": "419ee837d7ae72a4e69b4de5e82cc4e173ab937d38990a171c9c9c2894577377",
+      "role": "exact edit target; move blank hours placard into protected central area and remove unintended jacket label",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation"
+}
