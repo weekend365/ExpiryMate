@@ -1,0 +1,112 @@
+{
+  "verifiedAt": "2026-10-24T16:53:01.541869+09:00",
+  "status": "published-and-visible",
+  "account": "jango_plz",
+  "postUrl": "https://www.instagram.com/jango_plz/reel/De3oj1AyJeY/",
+  "observedModalUrl": "https://www.instagram.com/p/De3oj1AyJeY/",
+  "authorization": {
+    "quote": "인스타그램에 게시해줘.",
+    "context": "User requested publication immediately after delivery of the final episode-6 video, cover and caption.",
+    "scope": "Publish one episode-6 Reel to @jango_plz with prepared music, cover, caption and AI disclosure."
+  },
+  "shareSuccessMessage": "릴스가 공유되었습니다.",
+  "postCountBefore": 11,
+  "postCountAfter": 12,
+  "duplicateAvoidance": "Confirmed no episode-6 post before uploading; clicked Share once; found the single new episode-6 link after success.",
+  "sourceFiles": [
+    {
+      "file": "reel/jango-ep06-music.mp4",
+      "sha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331"
+    },
+    {
+      "file": "cover.jpg",
+      "sha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7"
+    },
+    {
+      "file": "caption.txt",
+      "sha256": "ae6d9f82339418780259196d0ab357d06522f27b3cd6dc15c7da7211f06b3aae"
+    }
+  ],
+  "uploadMethod": "Existing Chrome Instagram session. Browser chooser could not read local files, so native macOS file selection was used for the video and cover.",
+  "video": {
+    "uploadedSize": [
+      1080,
+      1920
+    ],
+    "selectedAspect": "9:16",
+    "trimSeconds": [
+      0,
+      20
+    ],
+    "publishedPlayback": [
+      {
+        "audioDecodedBytes": null,
+        "currentTime": 12.863442,
+        "duration": 20.010666,
+        "error": null,
+        "height": 1280,
+        "muted": true,
+        "paused": false,
+        "width": 720
+      }
+    ],
+    "verified": "Autoplay progressed and looped, with no media error; published rendition observed at 720x1280, approximately 20.01 seconds."
+  },
+  "cover": {
+    "source": "cover.jpg",
+    "appliedInComposer": true,
+    "profileThumbnailObserved": true,
+    "observation": "The first profile tile shows the separate 안 나온다며? title, blanket Jango and series number; title and face survive the live grid crop."
+  },
+  "caption": {
+    "file": "caption.txt",
+    "publishedCopy": "publication/published-caption.txt",
+    "matchesSource": true,
+    "musicCreditAndLicenseLinkPresent": true,
+    "sceneDescriptionPresent": true
+  },
+  "aiLabel": {
+    "enabledInComposer": true,
+    "visibleAfterPublication": "AI 콘텐츠"
+  },
+  "accessibility": {
+    "individualImageAltTextField": false,
+    "fallback": "Prepared scene description included in caption. Automatic speech captions left off because the Reel has no narration."
+  },
+  "music": {
+    "title": "Monkeys Spinning Monkeys",
+    "creator": "Kevin MacLeod",
+    "license": "CC BY 4.0",
+    "sourceAACIncluded": true,
+    "composerSoundSwitch": true,
+    "publishedOriginalAudioLink": "https://www.instagram.com/reels/audio/28908041905520961/",
+    "publishedViewerDefault": "muted autoplay",
+    "humanListening": "Not performed; no assistant audio-perception claim. Original complete audio decode/loudness/peak checks remain the technical evidence."
+  },
+  "profileDownloadLinks": [
+    "https://apps.apple.com/kr/app/id6793375883",
+    "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+  ],
+  "screenshots": [
+    {
+      "file": "publication/before-share.jpg",
+      "sha256": "fdadd0ae9a4e0267d4283af67df23f356863bc59191b51d6f9076055cdcd1f81"
+    },
+    {
+      "file": "publication/shared-confirmation.jpg",
+      "sha256": "19a15dedb270b71355a0ec10f149f63ab4d645ebcaaa61976a968403685b8c3a"
+    },
+    {
+      "file": "publication/profile-published.jpg",
+      "sha256": "c02f435041ea32115f7160089d0e7b0c988773e274693c5fd703810094cf33b5"
+    },
+    {
+      "file": "publication/reel-published.jpg",
+      "sha256": "1082faebd8081ec210e5ef9aefba8f81a17119df54efc3232b0a2305d4a6be8e"
+    }
+  ],
+  "remainingLimitations": [
+    "Human listening was not performed by the assistant."
+  ],
+  "commitOrPushPerformed": false
+}

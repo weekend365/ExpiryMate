@@ -1,0 +1,57 @@
+{
+  "reviewedAt": "2026-10-24T16:30:34.000270+09:00",
+  "status": "visual-frames-reviewed; live-playback-and-listening-not-claimed",
+  "reviewer": "assistant visual inspection, not a signed release",
+  "method": "Inspected all six native 1080x1920 lettering states, all 40 half-second samples, cut/zoom boundaries, six illustrative Instagram overlays, 360px cover and profile crop previews.",
+  "observations": [
+    {
+      "item": "Korean lettering",
+      "result": "Exact approved dialogue and question are legible at 360px. Gaegu ellipsis is rendered as three supported periods. Fixed text is inside the initial safe bounds. Closing bubble bottom padding was increased before final encoding."
+    },
+    {
+      "item": "Speaker and continuity",
+      "result": "Bubble tails face Jango or the woman. Their faces, eyes, mittens and tangerines remain visible. Quilt occlusion is intentional; no character stretching or new artwork was introduced."
+    },
+    {
+      "item": "Timing",
+      "result": "0–2 hook; 2–6 invitation; 6–10 silent written movement cue; woman 10–12 and Jango 12–16; brand and one question remain 16–20. No blended text at cuts."
+    },
+    {
+      "item": "Zoom",
+      "result": "Start/mid/end and half-second samples show consistent full-frame fill and no exposed edges. The small zoom keeps the core expressions and food visible."
+    },
+    {
+      "item": "Instagram overlay simulation",
+      "result": "Dialogue, eyes, mouths, tangerine action and final question remain clear. Simulated right-side controls touch the peripheral quilt/hat edge in close shots. This is not live Instagram acceptance."
+    },
+    {
+      "item": "Cover",
+      "result": "Title moved down before final export so all glyphs survive both 3:4 and square center crops. The solo blanket Jango and title are recognizable at 360px."
+    }
+  ],
+  "evidence": [
+    "layout-overview.jpg",
+    "timeline-1.jpg",
+    "timeline-2.jpg",
+    "timeline-3.jpg",
+    "timeline-4.jpg",
+    "cuts-and-zoom-1.jpg",
+    "cuts-and-zoom-2.jpg",
+    "ui-overlap-sheet.jpg",
+    "cover-360.jpg",
+    "cover-profile-3x4.jpg",
+    "cover-profile-square.jpg",
+    "native-00.jpg",
+    "native-02.jpg",
+    "native-06.jpg",
+    "native-10.jpg",
+    "native-12.jpg",
+    "native-16.jpg"
+  ],
+  "technicalQuality": "technical-quality.json",
+  "pending": [
+    "Human listening and real-time playback on a device.",
+    "Actual Instagram composer/reel controls and profile cover crop when publication is requested."
+  ],
+  "noAutomaticPublication": true
+}

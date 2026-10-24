@@ -1,0 +1,34 @@
+{
+  "preparedAt": "2026-10-24T16:40:09.726898+09:00",
+  "authorization": {
+    "quote": "인스타그램에 게시해줘.",
+    "interpretation": "Publish the episode-6 Reel just delivered, with its prepared cover, caption, instrumental BGM and AI disclosure, to the existing @jango_plz account."
+  },
+  "account": "jango_plz",
+  "sourceFiles": [
+    {
+      "file": "reel/jango-ep06-music.mp4",
+      "sha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331"
+    },
+    {
+      "file": "cover.jpg",
+      "sha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7"
+    },
+    {
+      "file": "caption.txt",
+      "sha256": "ae6d9f82339418780259196d0ab357d06522f27b3cd6dc15c7da7211f06b3aae"
+    }
+  ],
+  "sourceManifestEntriesVerified": 90,
+  "musicCreditPresent": true,
+  "existingAccountConfirmed": true,
+  "profileLinksConfirmed": [
+    "https://apps.apple.com/kr/app/id6793375883",
+    "https://play.google.com/store/apps/details?id=com.expirymate.mobile"
+  ],
+  "existingPostCountObserved": 11,
+  "duplicateEpisode6Observed": false,
+  "status": "upload-pending",
+  "uploadAttempt": "Browser file chooser accepted the MP4 path but Instagram reported that the browser could not read the video. Native picker fallback paused because another Chrome tab became active. User was asked to leave Instagram foreground briefly.",
+  "audioReview": "Existing complete decode/loudness/peak checks passed; no assistant human-listening claim."
+}

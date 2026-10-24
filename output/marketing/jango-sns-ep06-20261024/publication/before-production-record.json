@@ -1,0 +1,35 @@
+{
+  "updatedAt": "2026-10-24T16:30:34.000270+09:00",
+  "episode": "jango-sns-ep06-20261024",
+  "title": "장고랑 살아보니 06 — 안 나온다며?",
+  "authorization": {
+    "quote": "추천 배경음악을 디폴트로 지정하고 카툰 릴스 생성해줘. 이후에 만드는 릴스에도 적용해.",
+    "scope": "Use the five existing episode-6 raw illustrations for a 20-second cartoon Reel with the selected instrumental BGM, Korean lettering and a separate cover. The request authorizes production and prospective default policy, not Instagram upload or commit."
+  },
+  "inputs": "selected-artwork.json",
+  "sourceProvenance": "preparation-01-r1.json through preparation-05-r1.json, matching generation records and prompts",
+  "production": "reel/production.json",
+  "typography": "reel/typography.json",
+  "musicLicense": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+  "defaultPolicy": "design/jango/cartoon-series.json#currentProductionPolicy.defaults.music",
+  "policyVerification": "design/jango/quality/history/cartoon-bgm-20261024/verification.json",
+  "visualReview": "review/reel/visual-review.json",
+  "technicalReview": "review/reel/technical-quality.json",
+  "repositoryChecks": "review/reel/repository-checks.json",
+  "preservation": "reel/preservation-before-render.json",
+  "noNewArtwork": true,
+  "caption": "caption.txt",
+  "artifacts": {
+    "video": "reel/jango-ep06-music.mp4",
+    "reviewVideo": "review/reel/jango-ep06-360.mp4",
+    "cover": "cover.jpg"
+  },
+  "publication": {
+    "status": "not-requested-not-published",
+    "futureRequirements": [
+      "Use separate cover.jpg and caption.txt with full CC BY 4.0 attribution.",
+      "Apply available Instagram AI content label.",
+      "Verify actual playback/audio, control overlap and profile cover before sharing."
+    ]
+  }
+}

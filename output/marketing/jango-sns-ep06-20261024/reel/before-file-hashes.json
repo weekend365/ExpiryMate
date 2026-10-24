@@ -1,0 +1,43 @@
+{
+  "recordedAt": "2026-10-24T16:03:50.166358+09:00",
+  "algorithm": "SHA-256",
+  "base": "output/marketing/jango-sns-ep06-20261024",
+  "excluded": [
+    "file-hashes.json"
+  ],
+  "files": {
+    "build_review.cjs": "2cc5759d07ddc0505a46b4d6bb909157424e225580814264731ecb3f0eed2be5",
+    "episode.json": "9f076b637b829bb8caad101895d7d7e64fcf864dc14ae47ab49cc42a26cb66b6",
+    "generation-01-r1.json": "663181793650c1bf2ae02c8aa297d6d8bac8a36f345e91178fa2ef2639016efa",
+    "generation-02-r1.json": "15113ab34c97630b31e022e95f917aba880add96b70a25f14003ed46b8810822",
+    "generation-03-r1.json": "8401fc7aef4aaf755d9ffd13ce0274e9161d1496958797de743d8d0b05deb3bb",
+    "generation-04-r1.json": "d1f1a378fe1a2bc8220061b5ba5ebcfc87ef72cec41174d34707f3d9d9e122cc",
+    "generation-05-r1.json": "973f16a8167bd5ca8705fecd664a95dcc624140e2b9edbc6a90f635941fe5383",
+    "preparation-01-r1.json": "bf51755b7fe133cc701506b560b7fb17fbf50ecef33affd1790c733ae325e9d9",
+    "preparation-02-r1.json": "94c74372f36edf691d63127d853ffd689cfb402ddfd9603b4d4da7c30f796d31",
+    "preparation-03-r1.json": "6e958b98ef0fa9836a43b3ae846d6c958e103f1d94781ba30091067b7f1b1ed9",
+    "preparation-04-r1.json": "1ea0b3fb25ff1e62fff2d90ea8320970b7140a50aa316a281572bb463f2e78a0",
+    "preparation-05-r1.json": "65bf30a1aadaf7d076d03b648e1c2f420019fadd32fdaf09e27bd52c6575b65c",
+    "prompts/common-spec.txt": "73dcfacf66950fdafd97db0e70ad06d2a94446b548742b2472fd794823c701a4",
+    "prompts/scene-01-r1.txt": "1cf6b31e8371b129575d1f7b18c76db31e69c0bc762aba4b73e39dca5666a554",
+    "prompts/scene-02-r1.txt": "2f078f18189ab91764a3c2b9815b8ca0f721ba4f311c17515d969db1f93d3182",
+    "prompts/scene-03-r1.txt": "cdd55a5e0375e47b5d8fbe6cacedcb3b3c0d7e00201dcc86eb229f417bac5a19",
+    "prompts/scene-04-r1.txt": "68ee2d19f1f5c19bfae4b53d8eb61abfab9edb254b219bae25e3723b076a8af1",
+    "prompts/scene-05-r1.txt": "7a1c819a8f0bcae1034a326ab6acd9d2d737197e3a7edfd52c25393401b8cc99",
+    "review/01-360.png": "c92dca467fa25891643cbcaa4e97f9651900da361195cd83f40fad5af965ef40",
+    "review/02-360.png": "61dd339c52dfc8fe8bc0a160978fdd40f38a441a117d8cdfd55ed200d34e74a6",
+    "review/03-360.png": "4a82a2f0c16da64043628cf969ed7fd179f79329d2c807b4b39832a2969dd554",
+    "review/04-360.png": "9bed49105fa6137323ce888b5dcfa0d71bc6f1867e6870e6670f0dedbbe1d5f3",
+    "review/05-360.png": "ae2541a5126213f3bf959f462bf9d5ccbce9bf487f9d90331e07e76568e32d2c",
+    "review/artifact-checks.json": "84b39b8d5cd21e7478ad5af2920369efafd3576ac02ab916fa561b5dc327b75c",
+    "review/overview.jpg": "1bcd4068fb70a6ca224d2f5a2aa4e6727ede8dba9a7967cd07bcbe66491766e4",
+    "review/repository-checks.json": "f41e6c27e0cc9ffad644416cf0ee0ce2aa4387edf79fbbe35ae43eb8a71dd917",
+    "review/visual-review.json": "aca29fb537117cf49741da8897b2d177678d8a11298433f99ad5f52d10b03bcb",
+    "selected-artwork.json": "d271f7621f0859ec3bf4009c646bec40a46bc013b09826a89fd9cfbf2e198bec",
+    "source-art/scene-01-r1.png": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3",
+    "source-art/scene-02-r1.png": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b",
+    "source-art/scene-03-r1.png": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a",
+    "source-art/scene-04-r1.png": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b",
+    "source-art/scene-05-r1.png": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6"
+  }
+}

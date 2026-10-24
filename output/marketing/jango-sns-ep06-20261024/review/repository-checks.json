@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-24T16:03:50.166358+09:00",
+  "scope": "New episode-6 output assets and records only; existing app changes were left untouched.",
+  "commands": {
+    "pnpm docs:check": "pass",
+    "pnpm lint": "pass",
+    "pnpm typecheck": "pass",
+    "pnpm test": "not rerun: raw-artwork-only change; known pre-existing design-gate fixtures are present and the full suite modifies one of those files. Scoped PNG integrity, reference hashes and preservation checks were run instead."
+  },
+  "preExistingFixturesPreserved": [
+    "design/jango/emoticons/unregistered-test.png",
+    "design/jango/quality/candidates/gate-test-44135.json"
+  ],
+  "warnings": "Existing Prisma package.json configuration deprecation during typecheck; no schema or DB operation."
+}

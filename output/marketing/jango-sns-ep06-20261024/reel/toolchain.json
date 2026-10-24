@@ -1,0 +1,17 @@
+{
+  "python": "3.13.1",
+  "pillow": "13.0.0",
+  "numpy": "2.5.4",
+  "imageioFfmpeg": "0.6.0",
+  "ffmpegVersion": "7.1",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "renderCommand": "python build_reel.py layout && python build_reel.py encode",
+  "validateCommand": "python validate_reel.py",
+  "runtimeUsed": "/private/tmp/jango-cartoon-20261020-venv/bin/python",
+  "dependencies": [
+    "Pillow",
+    "numpy",
+    "imageio-ffmpeg"
+  ],
+  "temporaryRenderCache": "TemporaryDirectory outside repository; automatically removed after audio mux."
+}

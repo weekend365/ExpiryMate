@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-10-24T16:56:53.071827+09:00",
+  "userRequest": "변경사항 커밋해줘.",
+  "scope": "Episode-6 media, publication records, default BGM and its production-policy documentation only.",
+  "verbatimArchive": {
+    "file": "output/marketing/jango-sns-ep06-20261024/publication/verbatim-records-before-commit.tar.gz",
+    "sha256": "8ac83cd5ced46647864dd8e810b5bc44b525dccc9a2e7c4a588885a0d88aadfe",
+    "members": [
+      {
+        "file": "design/jango/audio/monkeys-spinning-monkeys/source-page.html",
+        "sha256": "0aaccc3d496fc4ae189e27e3fe2d4f5216266e3bcccf2e0ba77fb1b57a28fa94"
+      },
+      {
+        "file": "output/marketing/jango-sns-ep06-20261024/reel/final.log",
+        "sha256": "a5f07630c0810e1fde3337e508fc2826c912f10d5e7553f7f295e1ccd04c3d7c"
+      },
+      {
+        "file": "output/marketing/jango-sns-ep06-20261024/reel/proxy.log",
+        "sha256": "b4a4359a9aa6be4b9590048a264c86903e39f29309979f4a33ed08f173a185b1"
+      },
+      {
+        "file": "output/marketing/jango-sns-ep06-20261024/reel/video.log",
+        "sha256": "f6c949d284ba418fd7872a1e50d5741003fc05c372906a54bf80a53a58be8226"
+      },
+      {
+        "file": "output/marketing/jango-sns-ep06-20261024/review/reel/decode.log",
+        "sha256": "80e2af37b518adbd3aa250a2cd25121e475c68283619f5e6ad894229d290a2ec"
+      },
+      {
+        "file": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+        "sha256": "46b45111ee1f66cae812ae3b1d72fa97bfed9847b1e693e2752b68da2e34b5ff"
+      }
+    ]
+  },
+  "readableCopies": [
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/source-page.html",
+      "originalSha256": "0aaccc3d496fc4ae189e27e3fe2d4f5216266e3bcccf2e0ba77fb1b57a28fa94",
+      "readableCopySha256": "3d679920ec825aa71cf4a6c89362828d8aefbe18279a6e69c790628ed12799e3",
+      "change": "Only trailing spaces/tabs and excess blank lines at EOF removed; verbatim bytes remain in the archive."
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/final.log",
+      "originalSha256": "a5f07630c0810e1fde3337e508fc2826c912f10d5e7553f7f295e1ccd04c3d7c",
+      "readableCopySha256": "d308352f68b0fb04bfbfb0feac5e587e1e38fa3532a4c633291d59bab5c5d62d",
+      "change": "Only trailing spaces/tabs and excess blank lines at EOF removed; verbatim bytes remain in the archive."
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/proxy.log",
+      "originalSha256": "b4a4359a9aa6be4b9590048a264c86903e39f29309979f4a33ed08f173a185b1",
+      "readableCopySha256": "4e21d2b3e665c5a067d0a766fa7ffa8565147427d317851eb83b9cedaedf77f6",
+      "change": "Only trailing spaces/tabs and excess blank lines at EOF removed; verbatim bytes remain in the archive."
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/reel/video.log",
+      "originalSha256": "f6c949d284ba418fd7872a1e50d5741003fc05c372906a54bf80a53a58be8226",
+      "readableCopySha256": "e02231e294934d3f54f10692be21dab76946dc204bb8fd4d8b38d05e23c58d36",
+      "change": "Only trailing spaces/tabs and excess blank lines at EOF removed; verbatim bytes remain in the archive."
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/review/reel/decode.log",
+      "originalSha256": "80e2af37b518adbd3aa250a2cd25121e475c68283619f5e6ad894229d290a2ec",
+      "readableCopySha256": "fd573a472d9089996a31f15e74e5b8eeb01970f92bce6a40932188921ba346e3",
+      "change": "Only trailing spaces/tabs and excess blank lines at EOF removed; verbatim bytes remain in the archive."
+    }
+  ],
+  "unchanged": "All original artwork, prompts, final MP4, cover, caption, published screenshots, existing episode sources and character MASTER bytes are unchanged.",
+  "reason": "Staged git diff --check reported trailing whitespace in downloaded third-party HTML and FFmpeg logs. Preserve exact source evidence while keeping readable copies clean."
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Monkeys Spinning Monkeys",
+  "creator": "Kevin MacLeod",
+  "isrc": "USUAN1400011",
+  "file": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+  "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+  "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+  "downloadUrl": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Monkeys%20Spinning%20Monkeys.mp3",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "checkedAt": "2026-10-24T16:23:49.936453+09:00",
+  "allowedUse": "Copy, redistribute and adapt, including commercial promotional video use, with attribution, a license link and a modification notice. No endorsement is implied.",
+  "requiredCredit": "Monkeys Spinning Monkeys — Kevin MacLeod (incompetech.com)\n출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011\nCC BY 4.0: https://creativecommons.org/licenses/by/4.0/\n원곡 일부 발췌, 음량 조정 및 페이드 적용.",
+  "evidence": [
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/source-page.html",
+      "sha256": "3d679920ec825aa71cf4a6c89362828d8aefbe18279a6e69c790628ed12799e3",
+      "verbatimSource": {
+        "archive": "output/marketing/jango-sns-ep06-20261024/publication/verbatim-records-before-commit.tar.gz",
+        "member": "design/jango/audio/monkeys-spinning-monkeys/source-page.html",
+        "sha256": "0aaccc3d496fc4ae189e27e3fe2d4f5216266e3bcccf2e0ba77fb1b57a28fa94"
+      },
+      "readableCopyEdit": "Trailing whitespace and extra final blank lines removed for repository formatting; original HTTP response bytes preserved in the archive."
+    },
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/source-track.json",
+      "sha256": "0e051ae453805fc35e6067cb3d22dc1c510f96cc647b6450d4824dd754ed5770"
+    },
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/cc-by-4.0.html",
+      "sha256": "8dda1ccec4be91fc80821d4e4fd5c568072b9a3a74b2fdc07c249a27e920ef01"
+    }
+  ],
+  "evidenceMethod": "Official track-page HTML fetches pieces.json, selects the exact ISRC, renders the track title and Creative Commons Attribution 4.0 attribution, and supplies the MP3 URL. The matching catalog record and original page are preserved.",
+  "sourceEditStatus": "Unmodified original artist MP3; per-episode excerpts and edits are recorded in episode production records.",
+  "durationDisplayed": "00:02:05",
+  "tempoBpm": 144,
+  "vocals": false
+}

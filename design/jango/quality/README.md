@@ -26,6 +26,9 @@ pnpm jango:prepare 01-v18-derived design/jango/emoticons/kakao-32/v18/source-ori
 
 신규 연재는 처음부터 9:16으로 구성한 1080×1920 카툰 릴스가 기본이다. 가벼운 확대 또는 이동,
 고정 말풍선·대사, 사용 권한이 확인된 BGM을 사용하고 캐러셀은 별도 요청 시 제작한다.
+2026-10-24부터 기본 BGM은 **Monkeys Spinning Monkeys — Kevin MacLeod**다.
+[공식 음원·CC BY 4.0 근거](../audio/monkeys-spinning-monkeys/license.json)를 재사용하고 회차별 구간·편집·크레딧을 검수한다.
+사용자의 음악 변경 요청이 있으면 우선하며 기존 회차의 음원은 유지한다.
 [레지스트리](../cartoon-series.json)의 `currentProductionPolicy`와 [카툰 릴스 정본](../reference/SNS-CARTOON-GUIDE.md)의
 콘티·참조 선택·생성 지시문·원본/360×640 영상·UI 겹침·커버·음향 검수표를 아래 절차와 함께 사용한다.
 v18은 캐릭터 MASTER, 승인 v6는 장면 통합·이야기·한글의 품질 참조다. v6의 4:5 구도나 2화의 여백 삽입 변환을

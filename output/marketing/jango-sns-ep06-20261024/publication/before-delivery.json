@@ -1,0 +1,24 @@
+{
+  "createdAt": "2026-10-24T16:30:34.000270+09:00",
+  "status": "produced-for-review",
+  "video": "reel/jango-ep06-music.mp4",
+  "videoSha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331",
+  "cover": "cover.jpg",
+  "coverSha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7",
+  "caption": "caption.txt",
+  "defaultMusic": "Monkeys Spinning Monkeys — Kevin MacLeod",
+  "durationSeconds": 20,
+  "size": [
+    1080,
+    1920
+  ],
+  "narration": false,
+  "technicalChecks": "passed",
+  "visualReview": "review/reel/visual-review.json",
+  "limitations": [
+    "Human listening and real-time playback on a device.",
+    "Actual Instagram composer/reel controls and profile cover crop when publication is requested."
+  ],
+  "publication": null,
+  "commit": null
+}

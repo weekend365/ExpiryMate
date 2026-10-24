@@ -1,0 +1,59 @@
+{
+  "checkedAt": "2026-10-24T16:03:50.166358+09:00",
+  "status": "pass-for-raw-artifact-integrity",
+  "checks": [
+    {
+      "scene": 1,
+      "pngChunksCrc": "pass",
+      "decodedScanlineBytes": "pass",
+      "sourceCopySha256": "pass",
+      "promptAndReferences": "pass",
+      "previewSize": "pass"
+    },
+    {
+      "scene": 2,
+      "pngChunksCrc": "pass",
+      "decodedScanlineBytes": "pass",
+      "sourceCopySha256": "pass",
+      "promptAndReferences": "pass",
+      "previewSize": "pass"
+    },
+    {
+      "scene": 3,
+      "pngChunksCrc": "pass",
+      "decodedScanlineBytes": "pass",
+      "sourceCopySha256": "pass",
+      "promptAndReferences": "pass",
+      "previewSize": "pass"
+    },
+    {
+      "scene": 4,
+      "pngChunksCrc": "pass",
+      "decodedScanlineBytes": "pass",
+      "sourceCopySha256": "pass",
+      "promptAndReferences": "pass",
+      "previewSize": "pass"
+    },
+    {
+      "scene": 5,
+      "pngChunksCrc": "pass",
+      "decodedScanlineBytes": "pass",
+      "sourceCopySha256": "pass",
+      "promptAndReferences": "pass",
+      "previewSize": "pass"
+    }
+  ],
+  "actualReferenceBindingsChecked": 24,
+  "preserved": {
+    "v18MasterOriginals": 32,
+    "publishedEpisode5SelectedSources": 5,
+    "currentGuideHash": true
+  },
+  "notClaimed": [
+    "user approval",
+    "Reel playback",
+    "Instagram UI overlap acceptance",
+    "music licensing or listening",
+    "final 1080x1920 video"
+  ]
+}

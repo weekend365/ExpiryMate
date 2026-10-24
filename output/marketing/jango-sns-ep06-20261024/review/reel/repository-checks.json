@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-10-24T16:30:34.000270+09:00",
+  "scope": "Episode-6 production files and persistent default-music documentation",
+  "commands": [
+    {
+      "command": "pnpm docs:check",
+      "exitCode": 0,
+      "detail": "31 metadata entries, 75 indexed links, canonical mobile build entry"
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "detail": "After removing unused fs import and declaring CommonJS runtime globals in the episode preview helper; exact previous helper retained as .cjs.txt, not executable source."
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "node --test --test-name-pattern='SNS policy revisions' scripts/jango-emoticon-layout.test.mjs",
+      "exitCode": 0,
+      "passed": 1,
+      "skippedByNameFilter": 18
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "fullSuite": {
+    "command": "pnpm test",
+    "status": "not rerun",
+    "reason": "The existing design-gate fixtures are still present, and the full suite has a known cleanup side effect on unregistered-test.png. This task changes media and production policy, with the relevant policy regression, preservation and media checks run instead. No app tests are claimed.",
+    "preExistingFixtures": [
+      "design/jango/emoticons/unregistered-test.png",
+      "design/jango/quality/candidates/gate-test-44135.json"
+    ]
+  },
+  "initialLintFailure": {
+    "errors": 9,
+    "source": "build_review.cjs created in the preceding raw-artwork stage",
+    "resolved": true
+  },
+  "unrelatedWorkspaceChanges": "Existing app/configuration changes are outside this task."
+}

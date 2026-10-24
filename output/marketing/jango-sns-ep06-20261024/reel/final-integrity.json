@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-24T16:31:02.933879+09:00",
+  "status": "pass",
+  "priorEpisodeFilesPreservedOrSnapshotted": 34,
+  "masterAndPriorEpisodeFilesPreserved": 576,
+  "renderInputHashesPreserved": 9,
+  "captionCharacters": 616,
+  "requiredMusicCreditPresent": true,
+  "videoAndCoverHashesMatch": true,
+  "pythonSyntax": "pass",
+  "historicalChanges": "Original episode.json, selected-artwork.json, file-hashes.json and raw-stage CommonJS preview helper are retained as exact snapshots. Original art, prompts, generation and raw-review bytes are unchanged.",
+  "manifest": "file-hashes.json; excludes itself"
+}

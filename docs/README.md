@@ -44,7 +44,7 @@ source_of_truth: true
 | [디자인 시스템](./design-system.md) | 기존 UI/UX 보존·이미지 그림체 적용 경계, 공통 토큰·접근성·검토 기준 | design-system | Yes |
 | [주요 흐름 UX 개선 기록](./ui-ux-improvement-plan.md) | 등록 복귀·구독 상태 안내 개선과 검증 관문 | mobile-design | Yes |
 | [장고 캐릭터 스타일](./JANGO_CHARACTER_STYLE_GUIDE.md) | v18 MASTER·생활 친구 성격·매체별 표현·전신 제작과 검수 | design | Yes |
-| [장고 SNS 카툰 릴스 제작 기준](../design/jango/reference/SNS-CARTOON-GUIDE.md) | 9:16 작화·콘티/시간·움직임·고정 대사·음악·커버·360×640/UI 검수·채택/게시 | design | Yes |
+| [장고 SNS 카툰 릴스 제작 기준](../design/jango/reference/SNS-CARTOON-GUIDE.md) | 9:16 작화·콘티/시간·움직임·고정 대사·기본 BGM/크레딧·커버·360×640/UI 검수·채택/게시 | design | Yes |
 | [홈 빠른 동작 UX 개선안](./product/home-quick-actions-ux-improvements.md) | 홈 등록 진입과 바코드·사진 등록 흐름 개선 가설 | mobile-design | Draft |
 | [수익화 운영 기준](./monetization.md) | 광고·파트너스 정책과 QA | product | Yes |
 

@@ -1,0 +1,22 @@
+{
+  "reviewedAt": "2026-10-24T16:03:50.166358+09:00",
+  "stage": "raw illustrations only",
+  "method": "Inspected all original generated images and all five width-360 previews; inspected final 360×640 contact sheet. Human user adoption remains pending.",
+  "observations": {
+    "identity": "Chef hat, one refrigerator-door face, left handle/pineapple, right hinges, peach cheeks and mint mittens remain recognizable.",
+    "anatomy": "Blankets naturally obscure short bodies. Scene 3 visibly shows front mittens and a rear shoe; other shoe is occluded, not asserted visible. No stretched exposed torso or extra limb was observed.",
+    "woman": "Same brown high bun and face, ivory knit and green indoor trousers through the sequence; peach quilt added only in scene 5.",
+    "continuity": "Left window, rear sofa, right bookcase, round oak table and cream/sage Jango quilt recur. Empty sofa in scene 3 makes the move to the floor legible.",
+    "narrative": "Sleepy refusal → fruit interest → blanket-turtle crawl → proud orange possession → shared cozy ending reads without added text.",
+    "mobile": "Facial emotions, orange fruit and different final quilt colors remain distinguishable at 360px width.",
+    "lettering": "No generated words or speech balloons adopted. Upper quiet wall reserved for future fixed lettering.",
+    "furnitureAndFruit": "Camera distances and incidental quilt stitching/fruit arrangement vary; no exact fruit-count claim is made."
+  },
+  "futureReview": [
+    "Add actual lettering and review its reading time.",
+    "Check 100–103% zoom and actual Instagram controls, especially outer-right hat/quilt areas in scenes 2/4/5; current frames are artwork, not final UI-safe video.",
+    "Create and inspect the separate cover at actual profile crop.",
+    "Review music rights and full audiovisual playback only if Reel production is requested."
+  ],
+  "decision": "ready to present as artwork candidates, no automatic user adoption"
+}

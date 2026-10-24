@@ -257,7 +257,7 @@
     "approvedArtwork": "All approved v6 image, lettering, production and review bytes remain unchanged; no redraw or new SNS approval is implied"
   },
   "currentProductionPolicy": {
-    "version": 1,
+    "version": 2,
     "id": "jango-cartoon-reels-20261020",
     "effectiveFrom": "2026-10-20",
     "status": "user-approved-production-rules",
@@ -275,7 +275,7 @@
     },
     "guide": {
       "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
-      "sha256": "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66"
+      "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
     },
     "guideHistory": [
       {
@@ -284,6 +284,13 @@
         "snapshot": "design/jango/quality/history/cartoon-reels-20261020/SNS-CARTOON-GUIDE.md.txt",
         "archivedAt": "2026-10-20",
         "recordScope": "Exact pre-Reels-policy document bytes; preserves the existing v24 historical baseline without changing any original expected hash."
+      },
+      {
+        "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+        "sha256": "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66",
+        "snapshot": "design/jango/quality/history/cartoon-bgm-20261024/SNS-CARTOON-GUIDE.md.txt",
+        "archivedAt": "2026-10-24T16:24:18.412930+09:00",
+        "recordScope": "Exact guide bytes before default-BGM selection; historical episode preparation hashes continue to resolve to this snapshot."
       }
     ],
     "defaults": {
@@ -352,7 +359,20 @@
           "edits",
           "requiredCredit"
         ],
-        "narration": "Only when requested"
+        "narration": "Only when requested",
+        "defaultTrack": {
+          "title": "Monkeys Spinning Monkeys",
+          "creator": "Kevin MacLeod",
+          "isrc": "USUAN1400011",
+          "file": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+          "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+          "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+          "license": "CC BY 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+          "licenseRecord": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+          "creditTemplate": "design/jango/audio/monkeys-spinning-monkeys/credit-template.txt"
+        },
+        "selectionPolicy": "Use this track for episode 6 and future Jango cartoon Reels without repeating the music-selection question; explicit episode-specific requests override it. Record the excerpt, edits and required attribution for each Reel. Existing videos remain unchanged."
       },
       "export": {
         "container": "mp4",
@@ -517,6 +537,20 @@
         "Prisma warns that package.json#prisma configuration is deprecated; typecheck succeeded and this task does not change Prisma configuration."
       ],
       "remainingIssues": []
+    },
+    "latestRevision": {
+      "id": "jango-cartoon-default-bgm-20261024",
+      "effectiveFrom": "2026-10-24",
+      "recordedAt": "2026-10-24T16:24:18.412930+09:00",
+      "authority": {
+        "type": "explicit-user-instruction",
+        "quote": "추천 배경음악을 디폴트로 지정하고 카툰 릴스 생성해줘. 이후에 만드는 릴스에도 적용해.",
+        "interpretation": "Select the preceding first recommended track, Monkeys Spinning Monkeys, as the default for current and subsequent Jango cartoon Reels."
+      },
+      "scope": "Default licensed music and episode 6 production; no publication, commit, push or replacement of earlier videos. The initial 2026-10-20 authority and verification remain historical.",
+      "previousRegistrySnapshot": "design/jango/quality/history/cartoon-bgm-20261024/cartoon-series.json.txt",
+      "previousRegistrySha256": "be54d813f1a1ef8831be7dad7078c927316004b7f3a92db61be3fed611731e19",
+      "verificationRecord": "design/jango/quality/history/cartoon-bgm-20261024/verification.json"
     }
   }
 }

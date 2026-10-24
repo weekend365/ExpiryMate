@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-24T16:53:01.541869+09:00",
+  "authority": "Explicit user publication instruction after delivery of the final media",
+  "quote": "인스타그램에 게시해줘.",
+  "scope": "Use the listed episode-6 assets in this published Instagram Reel. No MASTER/app/emoticon adoption or blanket approval of future media.",
+  "postUrl": "https://www.instagram.com/jango_plz/reel/De3oj1AyJeY/",
+  "sourceFiles": [
+    {
+      "file": "reel/jango-ep06-music.mp4",
+      "sha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331"
+    },
+    {
+      "file": "cover.jpg",
+      "sha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7"
+    },
+    {
+      "file": "caption.txt",
+      "sha256": "ae6d9f82339418780259196d0ab357d06522f27b3cd6dc15c7da7211f06b3aae"
+    }
+  ],
+  "selectedArtwork": [
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+      "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-05-r1.png",
+      "sha256": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6"
+    }
+  ],
+  "historicalRecords": "Raw preparation/generation/review files and pre-render metadata remain unchanged; publication-stage prior pointers are preserved in publication/before-*.json."
+}

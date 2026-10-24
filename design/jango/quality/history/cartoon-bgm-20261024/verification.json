@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-24T16:30:34.000270+09:00",
+  "status": "passed-for-default-music-policy",
+  "historicalV6RegistryUnchanged": true,
+  "initialPolicyVerificationUnchanged": true,
+  "currentGuideSha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed",
+  "registrySha256": "9bc7b4a6aab3af59c98def3cf59b0279112492b7a2a680339b95145c7f49435f",
+  "archivedGuideHashesVerified": [
+    "b6ca770b66b8c6f249f9f34be6ad06f3e238776c6ba4a4f99f885becb4c58e80",
+    "05a508c0778424b504cfe43e24e1a22229ebd8a00def6348d881ac7ad2d69c66"
+  ],
+  "musicSha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+  "licenseEvidenceHashesVerified": 3,
+  "relativeMarkdownLinksVerified": 74,
+  "protectedMasterAndPriorEpisodeFiles": 576,
+  "preservationRecord": "output/marketing/jango-sns-ep06-20261024/reel/preservation-before-render.json",
+  "repositoryChecks": "output/marketing/jango-sns-ep06-20261024/review/reel/repository-checks.json",
+  "scope": "Prospective BGM default only; no historic approval, MASTER, app/API/DB or previous media change. Episode-6 technical/visual review is recorded separately."
+}

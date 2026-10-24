@@ -1,0 +1,84 @@
+{
+  "preparedAt": "2026-10-24T16:24:18.412930+09:00",
+  "authorization": {
+    "quote": "추천 배경음악을 디폴트로 지정하고 카툰 릴스 생성해줘. 이후에 만드는 릴스에도 적용해.",
+    "scope": "Use the five existing episode-6 raw illustrations for a 20-second cartoon Reel with the selected instrumental BGM, Korean lettering and a separate cover. The request authorizes production and prospective default policy, not Instagram upload or commit."
+  },
+  "sources": [
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+      "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-05-r1.png",
+      "sha256": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6"
+    },
+    {
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/balloon-r1.png",
+      "sha256": "ee5903c7b189af235886dd6c5e8e6d1508742e91342dfb68b854eb0e26f20232"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/Gaegu-Bold.ttf",
+      "sha256": "cc38a4af9506a45254d1ce07c589ec473d9e5f0be319e5a77b17c214903f8c1c"
+    },
+    {
+      "file": "design/jango/emoticons/kakao-32/v18/fonts/OFL.txt",
+      "sha256": "53a9ce47085d9fef613c7ecb3730dc80d25962510bbea231b89564f58240f251"
+    },
+    {
+      "file": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+      "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14"
+    }
+  ],
+  "guide": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+  },
+  "storyboard": "episode.json",
+  "renderPlan": {
+    "size": [
+      1080,
+      1920
+    ],
+    "fps": 30,
+    "sceneDurationsSeconds": [
+      2,
+      4,
+      4,
+      6,
+      4
+    ],
+    "dialogueChangeSeconds": 12,
+    "motion": "One uniform 100–103% zoom per scene, with fixed dialogue layers and hard cuts.",
+    "format": "MP4/H.264/yuv420p/AAC 48 kHz",
+    "narration": false,
+    "font": "Gaegu Bold",
+    "music": {
+      "licenseRecord": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+      "segmentSeconds": [
+        0,
+        20
+      ],
+      "targetLUFS": -18,
+      "fadeInSeconds": 0.3,
+      "fadeOutSeconds": 1.0
+    },
+    "cover": "Separate 1080x1920 cover: 안 나온다며? / 장고랑 살아보니 06",
+    "readingAndOverlap": "Review native and 360x640 size, start/mid/end of each shot, all cut boundaries, simulated Instagram overlays and profile crops; actual platform check is deferred until authorized upload."
+  },
+  "existingFilesSnapshot": "reel/preservation-before-render.json",
+  "newArtworkGenerated": false,
+  "reusedBalloon": "Approved episode-3 blank balloon; uniform scale and optional mirror only, fixed to frame."
+}

@@ -1,0 +1,201 @@
+{
+  "id": "jango-sns-ep06-20261024",
+  "title": "장고랑 살아보니 06 — 안 나온다며?",
+  "createdAt": "2026-10-24T15:55:53.436674+09:00",
+  "status": "published",
+  "authorization": {
+    "quote": "인스타그램에 게시해줘.",
+    "context": "User requested publication immediately after delivery of the final episode-6 video, cover and caption.",
+    "scope": "Publish one episode-6 Reel to @jango_plz with prepared music, cover, caption and AI disclosure."
+  },
+  "format": {
+    "aspect": "9:16",
+    "size": [
+      1080,
+      1920
+    ],
+    "durationSeconds": 20,
+    "sceneCount": 5,
+    "fps": 30,
+    "container": "MP4",
+    "videoCodec": "H.264",
+    "audioCodec": "AAC",
+    "motion": "100→103% uniform zoom per scene, hard cuts, fixed Korean lettering",
+    "narration": false,
+    "music": {
+      "title": "Monkeys Spinning Monkeys",
+      "creator": "Kevin MacLeod",
+      "isrc": "USUAN1400011",
+      "file": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+      "sha256": "a5bb345c23849ad0786aa0bc5157a9f2d4039660fe00282e55754d475f36dc14",
+      "sourceUrl": "https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseRecord": "design/jango/audio/monkeys-spinning-monkeys/license.json",
+      "creditTemplate": "design/jango/audio/monkeys-spinning-monkeys/credit-template.txt"
+    },
+    "cover": "cover.jpg",
+    "safeAreaAt1080x1920": [
+      96,
+      280,
+      900,
+      1420
+    ]
+  },
+  "continuity": {
+    "character": "v18 short-bodied refrigerator Jango, chef hat, left handle/pineapple, right hinges, mint mittens",
+    "woman": "episode-5 face and brown high bun; intentional indoor outfit change to ivory cable-knit top, forest-green lounge pants and cream socks",
+    "room": "beige sofa against back wall, left window and plant, oak floor, oval pale rug, low round oak table front-left",
+    "jangoQuilt": "buttery-ivory quilt with broad squares and muted sage-green edge, rounded turtle-like dome",
+    "womanQuilt": "dusty peach quilt in final scene",
+    "intentionalOcclusion": "blanket naturally covers torso/legs; no elongation, no actual turtle body",
+    "expressionIntent": "lazy half-lidded eyes → food interest → determined crawl → proud innocent logic → happy sharing"
+  },
+  "scenes": [
+    {
+      "scene": 1,
+      "time": [
+        0,
+        2
+      ],
+      "action": "포근한 거실의 소파에서 이불에 파묻힌 장고가 얼굴과 모자를 내밀고 나가기 싫다는 표정을 짓는다.",
+      "dialogue": [
+        {
+          "speaker": "장고",
+          "text": "오늘은 절대 안 나가."
+        }
+      ]
+    },
+    {
+      "scene": 2,
+      "time": [
+        2,
+        6
+      ],
+      "action": "여성이 낮은 탁자에 귤 바구니를 내려놓고 장고를 바라본다. 뒤의 장고는 눈을 또렷하게 뜬다.",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "text": "그럼 귤은 나 혼자?"
+        }
+      ]
+    },
+    {
+      "scene": 3,
+      "time": [
+        6,
+        10
+      ],
+      "action": "장고가 이불을 둥근 등껍질처럼 두른 채 소파에서 탁자 앞으로 이동한 모습. 장갑과 작은 신발이 이불 아래로 보이고 여성이 내려다본다.",
+      "dialogue": [],
+      "laterEffect": "스윽…"
+    },
+    {
+      "scene": 4,
+      "time": [
+        10,
+        16
+      ],
+      "action": "탁자 앞의 장고가 이불을 그대로 두르고 귤 하나를 쥔 채 당당하게 여성을 바라본다.",
+      "dialogue": [
+        {
+          "speaker": "여성",
+          "time": [
+            10,
+            12
+          ],
+          "text": "안 나온다며?"
+        },
+        {
+          "speaker": "장고",
+          "time": [
+            12,
+            16
+          ],
+          "text": "이불 밖으론 안 나왔어."
+        }
+      ]
+    },
+    {
+      "scene": 5,
+      "time": [
+        16,
+        20
+      ],
+      "action": "여성도 자기 담요를 두르고 장고와 낮은 탁자에 나란히 앉아 귤을 나눈다. 크고 작은 이불 거북이의 따뜻한 결말.",
+      "dialogue": [],
+      "laterBrand": "장고야 부탁해",
+      "laterCta": "네 이불 속 최애 간식은?"
+    }
+  ],
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: character identity, short torso, crayon line and opaque color; exclude food plate",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2",
+      "role": "published episode 5: continuing woman face, brown bun, brown eyes, warm scene integration; replace outdoor running clothes with indoor ivory knit and green lounge pants",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "previous user-directed compact-torso correction and connected mittens/shoes; exclude phone and kitchen composition",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "approved v6 scene integration and household warmth only; do not copy text, speech balloons, 4:5 composition or superseded character style",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "policy": {
+    "file": "design/jango/reference/SNS-CARTOON-GUIDE.md",
+    "sha256": "33bd9c3e129e43c5417a2b1450a89b3977b0aa92d3f7b3001a8ba0645b8a2eed"
+  },
+  "trendReference": {
+    "url": "https://maily.so/trendaword/posts/w6ovxl07zk5",
+    "publishedAt": "2026-10-15",
+    "previousTurnResearch": true,
+    "use": "blanket-turtle silhouette and everyday-life premise; original story/dialogue/art"
+  },
+  "preservation": {
+    "v18OriginalsVerified": 32,
+    "episode5SelectedArtworkVerified": 5
+  },
+  "authorizationHistory": [
+    {
+      "quote": "그냥 이불 거북이 밈으로 원화 생성해봐.",
+      "interpretation": "User selects the previously proposed blanket-turtle storyboard and authorizes its five original scene illustrations. The later rap premise is replaced.",
+      "scope": "Raw artwork only; candidate review remains pending. No video, audio, cover, Instagram post, commit, MASTER/app/API/DB change."
+    },
+    {
+      "quote": "추천 배경음악을 디폴트로 지정하고 카툰 릴스 생성해줘. 이후에 만드는 릴스에도 적용해.",
+      "scope": "Use the five existing episode-6 raw illustrations for a 20-second cartoon Reel with the selected instrumental BGM, Korean lettering and a separate cover. The request authorizes production and prospective default policy, not Instagram upload or commit."
+    }
+  ],
+  "updatedAt": "2026-10-24T16:53:01.541869+09:00",
+  "productionRecord": "production-record.json",
+  "reviewLimitations": [
+    "Human listening was not performed by the assistant."
+  ],
+  "publication": {
+    "url": "https://www.instagram.com/jango_plz/reel/De3oj1AyJeY/",
+    "verification": "publication/verification.json",
+    "screenshots": [
+      "publication/before-share.jpg",
+      "publication/shared-confirmation.jpg",
+      "publication/profile-published.jpg",
+      "publication/reel-published.jpg"
+    ]
+  }
+}

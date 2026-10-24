@@ -1,0 +1,47 @@
+{
+  "candidate": "scene-05-r1",
+  "preparedAt": "2026-10-24T16:00:22.608511+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-05-r1.txt",
+  "promptSha256": "7a1c819a8f0bcae1034a326ab6acd9d2d737197e3a7edfd52c25393401b8cc99",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: character identity, short torso, crayon line and opaque color; exclude food plate",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2",
+      "role": "published episode 5: continuing woman face, brown bun, brown eyes, warm scene integration; replace outdoor running clothes with indoor ivory knit and green lounge pants",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "approved v6 scene integration and household warmth only; do not copy text, speech balloons, 4:5 composition or superseded character style",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a",
+      "role": "episode-6 scene 3: room, quilt silhouette, woman, tangerines and scale continuity; pending user review",
+      "inspectedBeforeGeneration": true,
+      "imageIndex": 4
+    },
+    {
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b",
+      "role": "episode-6 scene 4: room, quilt silhouette, woman, tangerines and scale continuity; pending user review",
+      "inspectedBeforeGeneration": true,
+      "imageIndex": 5
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "expression": "two differently sized blanket turtles sharing fruit; warm friendly closure"
+}

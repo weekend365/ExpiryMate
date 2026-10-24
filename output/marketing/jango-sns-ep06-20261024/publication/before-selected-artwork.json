@@ -1,0 +1,87 @@
+{
+  "status": "selected-for-user-authorized-Reel-production; final-video-review-pending",
+  "method": "official built-in imagegen, one call per scene; no CLI fallback; no art painted by code",
+  "selection": [
+    {
+      "scene": 1,
+      "candidate": "scene-01-r1",
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3",
+      "width": 941,
+      "height": 1672,
+      "preview": "review/01-360.png",
+      "previewSize": [
+        360,
+        640
+      ],
+      "alt": "햇살이 들어오는 거실 소파에서 장고가 아이보리 이불에 몸을 감싸고 얼굴과 요리사 모자만 내민 채 느긋한 표정을 짓습니다."
+    },
+    {
+      "scene": 2,
+      "candidate": "scene-02-r1",
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-02-r1.png",
+      "sha256": "2781016ab53f07b0ffc1d701a88839275815faa9eb3eed36e05020c9af0b213b",
+      "width": 941,
+      "height": 1672,
+      "preview": "review/02-360.png",
+      "previewSize": [
+        360,
+        640
+      ],
+      "alt": "아이보리 니트와 초록 바지를 입은 여성이 낮은 나무 탁자에 귤 바구니를 내려놓습니다. 소파의 이불 속 장고가 귤을 보고 눈을 크게 뜹니다."
+    },
+    {
+      "scene": 3,
+      "candidate": "scene-03-r1",
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-03-r1.png",
+      "sha256": "bc1575d6177e43270f0b61e63221bda7ff7ae27b3a7c93bb79e910937d31425a",
+      "width": 941,
+      "height": 1672,
+      "preview": "review/03-360.png",
+      "previewSize": [
+        360,
+        640
+      ],
+      "alt": "장고가 이불을 둥근 등껍질처럼 두른 채 소파에서 내려와 탁자 옆 바닥에 엎드려 있습니다. 이불 앞에서 민트 장갑이, 뒤에서 작은 신발이 보이고 여성이 귤을 까다 장고를 바라봅니다."
+    },
+    {
+      "scene": 4,
+      "candidate": "scene-04-r1",
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-04-r1.png",
+      "sha256": "d5ce94ac65c536f047c1c7d6231e701e9356493da80a64d4cc6f0c50c45dc77b",
+      "width": 941,
+      "height": 1672,
+      "preview": "review/04-360.png",
+      "previewSize": [
+        360,
+        640
+      ],
+      "alt": "이불을 그대로 두른 장고가 두 장갑으로 귤 하나를 쥐고 당당하게 웃습니다. 옆의 여성은 껍질을 벗기던 귤을 든 채 장고를 바라봅니다."
+    },
+    {
+      "scene": 5,
+      "candidate": "scene-05-r1",
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-05-r1.png",
+      "sha256": "58b69c198bc55d3f0dc619ba1ce1f8030703bb711309d9d8346f0b3037709bd6",
+      "width": 941,
+      "height": 1672,
+      "preview": "review/05-360.png",
+      "previewSize": [
+        360,
+        640
+      ],
+      "alt": "여성도 살구색 이불을 두르고 장고 옆에 앉아 귤 한 조각을 건넵니다. 장고는 아이보리 이불 속에서 두 장갑을 모아 받으려 하고 둘이 웃습니다."
+    }
+  ],
+  "rawDimensions": "941×1672 native generated PNGs, approximately 9:16. Original bytes retained; no upscale, crop or stretch.",
+  "previews": "Apple sips uniformly resampled each source by height to 640px; width rounds to 360px. Contact sheet composites the previews with numeric labels only.",
+  "overview": "review/overview.jpg",
+  "promptSet": "prompts/",
+  "authorization": "episode.json",
+  "futureWork": "Final video review, listening and any separately requested publication. Fixed lettering, motion, BGM and cover are now produced.",
+  "productionAuthorization": {
+    "quote": "추천 배경음악을 디폴트로 지정하고 카툰 릴스 생성해줘. 이후에 만드는 릴스에도 적용해.",
+    "interpretation": "Use the five raw illustrations already shown to the user in the requested Reel; this is not MASTER adoption or publication approval.",
+    "record": "reel/preparation.json"
+  }
+}

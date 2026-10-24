@@ -1,0 +1,20 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const sharp = require('../../../node_modules/.pnpm/sharp@0.34.5/node_modules/sharp');
+const dir = __dirname;
+(async () => {
+  const gutter = 18, width = 360, height = 640, top = 38;
+  const layers = [];
+  for (let i=1;i<=5;i++) {
+    const x = gutter + (i-1)*(width+gutter);
+    const input = path.join(dir, 'review', String(i).padStart(2,'0')+'-360.png');
+    const metadata = await sharp(input).metadata();
+    if (metadata.width !== width || metadata.height !== height) throw new Error('Invalid mobile preview size');
+    layers.push({input,left:x,top});
+    const label = Buffer.from(`<svg width="360" height="30"><text x="0" y="23" font-family="Arial,sans-serif" font-size="18" fill="#38453e">0${i}</text></svg>`);
+    layers.push({input:label,left:x,top:3});
+  }
+  await sharp({create:{width:gutter+5*(width+gutter),height:top+height+gutter,channels:3,background:'#f6f2e9'}})
+    .composite(layers).jpeg({quality:92}).toFile(path.join(dir,'review','overview.jpg'));
+  console.log('Contact sheet saved; source artwork unchanged.');
+})().catch(error => { console.error(error);process.exit(1); });

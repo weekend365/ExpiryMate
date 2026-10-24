@@ -1,0 +1,47 @@
+{
+  "candidate": "scene-02-r1",
+  "preparedAt": "2026-10-24T15:57:09.845274+09:00",
+  "method": "official built-in imagegen",
+  "prompt": "prompts/scene-02-r1.txt",
+  "promptSha256": "2f078f18189ab91764a3c2b9815b8ca0f721ba4f311c17515d969db1f93d3182",
+  "references": [
+    {
+      "imageIndex": 1,
+      "file": "design/jango/emoticons/kakao-32/v18/source-originals/24-r2.png",
+      "sha256": "08869caf7c4d6245df9f46e112e209032a83122cc55db76a6f909e8ff9878d11",
+      "role": "active v18 MASTER: character identity, short torso, crayon line and opaque color; exclude food plate",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 2,
+      "file": "output/marketing/jango-sns-ep05-20261021/source-art/scene-05-r2.png",
+      "sha256": "55fb281c6db658b7330d08c186c697864ffbbd88a57eb1cc8a836f688e697cf2",
+      "role": "published episode 5: continuing woman face, brown bun, brown eyes, warm scene integration; replace outdoor running clothes with indoor ivory knit and green lounge pants",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 3,
+      "file": "output/marketing/jango-sns-ep03-20261020/source-art/scene-02-r4.png",
+      "sha256": "1507a6a23be1b1b7df7c86ebecec5c80821a9474a8b32b51672434e2fff8a357",
+      "role": "previous user-directed compact-torso correction and connected mittens/shoes; exclude phone and kitchen composition",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 4,
+      "file": "output/marketing/jango-sns-ep01-v19-review-v6/jango-ep01-v6-02.png",
+      "sha256": "275441a8e5c74a253ebbe171eee38133ef9499fdaa995ebd12f4aad9d6a78bbb",
+      "role": "approved v6 scene integration and household warmth only; do not copy text, speech balloons, 4:5 composition or superseded character style",
+      "inspectedBeforeGeneration": true
+    },
+    {
+      "imageIndex": 5,
+      "file": "output/marketing/jango-sns-ep06-20261024/source-art/scene-01-r1.png",
+      "sha256": "67d54ceeecb0c6fb900588622cb746d19c45a8213efe1ca2eec29416023407e3",
+      "role": "new episode-6 scene 1: exact living room, sofa, left window, right bookcase and cream/sage quilt continuity; newly generated candidate, not user-adopted MASTER",
+      "inspectedBeforeGeneration": true
+    }
+  ],
+  "authorization": "episode.json",
+  "status": "prepared-before-generation",
+  "expression": "woman playfully offers fruit; Jango wakes with food interest; no change of identity"
+}

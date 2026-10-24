@@ -1,0 +1,87 @@
+{
+  "checkedAt": "2026-10-24T16:28:32.206094+09:00",
+  "technicalStatus": "passed",
+  "fullVideoDecode": "passed",
+  "decodedFrames": 600,
+  "seconds": 20.0,
+  "metadata": {
+    "ffmpeg_version": "7.1 built with Apple clang version 13.1.6 (clang-1316.0.21.2.5)",
+    "codec": "h264",
+    "pix_fmt": "yuv420p(progressive)",
+    "audio_codec": "aac",
+    "fps": 30.0,
+    "source_size": [
+      1080,
+      1920
+    ],
+    "size": [
+      1080,
+      1920
+    ],
+    "rotate": 0,
+    "duration": 20.0
+  },
+  "sceneCuts": [
+    2,
+    6,
+    10,
+    16
+  ],
+  "dialogueChange": 12,
+  "closingQuestionAndBrandSeconds": [
+    16,
+    20
+  ],
+  "blackFrameIntervals": [],
+  "audioDecodedSeconds": 20.010666666666665,
+  "audioChannelsMeasured": "stereo",
+  "audioPeakDbfs": -3.288,
+  "clippedSamples": 0,
+  "audioRmsPerSecondDbfs": [
+    -21.672,
+    -20.352,
+    -18.741,
+    -19.151,
+    -19.481,
+    -18.461,
+    -17.756,
+    -21.122,
+    -18.526,
+    -20.066,
+    -19.754,
+    -20.794,
+    -19.434,
+    -22.038,
+    -20.84,
+    -20.169,
+    -20.811,
+    -20.396,
+    -20.463,
+    -24.552
+  ],
+  "loudness": {
+    "input_i": "-18.39",
+    "input_tp": "-3.28",
+    "input_lra": "2.80",
+    "input_thresh": "-28.46",
+    "output_i": "-18.32",
+    "output_tp": "-3.55",
+    "output_lra": "1.70",
+    "output_thresh": "-28.36",
+    "normalization_type": "dynamic",
+    "target_offset": "0.32"
+  },
+  "detectedSilence": [],
+  "audioMaximumAdjacentSampleChange": 0.09211499989032745,
+  "narration": false,
+  "musicSource": "design/jango/audio/monkeys-spinning-monkeys/Monkeys Spinning Monkeys.mp3",
+  "episodeFilesPreserved": 34,
+  "masterAndPriorEpisodeFilesPreserved": 576,
+  "productionInputHashesPreserved": 9,
+  "humanListening": "not performed: assistant has no audio perception tool",
+  "realTimePlaybackClaim": false,
+  "visualReviewEvidence": "40 half-second frames, every cut boundary and shot start/mid/end, six native frames and UI simulation; visual observations recorded separately.",
+  "instagramOverlay": "Illustrative overlay only. Live upload/profile verification requires a later authorized publication step.",
+  "videoSha256": "8f8cd63f4311d4effa11275903541644213ea2e7626467d1e37fa353cb66c331",
+  "coverSha256": "ff2089eb33feadbbd434fb566f5d72e89b2c403387e531ed1bd933b13a13a9e7"
+}

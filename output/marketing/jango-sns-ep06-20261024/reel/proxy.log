@@ -1,0 +1,71 @@
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep06-20261024/reel/jango-ep06-music.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    title           : 장고랑 살아보니 06 — 안 나온다며?
+    encoder         : Lavf61.7.100
+    comment         : Monkeys Spinning Monkeys — Kevin MacLeod (incompetech.com)
+                    : 출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011
+                    : CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+                    : 원곡 일부 발췌, 음량 조정 및 페이드 적용.
+  Duration: 00:00:20.00, start: 0.000000, bitrate: 8995 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1080x1920, 8791 kb/s, 30 fps, 30 tbr, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:1 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x12ee06270] using cpu capabilities: ARMv8 NEON
+[libx264 @ 0x12ee06270] profile High, level 3.0, 4:2:0, 8-bit
+[libx264 @ 0x12ee06270] 264 - core 164 r3190 7ed753b - H.264/MPEG-4 AVC codec - Copyleft 2003-2024 - http://www.videolan.org/x264.html - options: cabac=1 ref=2 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=6 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=12 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=30 rc=crf mbtree=1 crf=18.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+Output #0, mp4, to '/Users/namu/Desktop/ExpiryMate/output/marketing/jango-sns-ep06-20261024/review/reel/jango-ep06-360.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    title           : 장고랑 살아보니 06 — 안 나온다며?
+    comment         : Monkeys Spinning Monkeys — Kevin MacLeod (incompetech.com)
+                    : 출처: https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400011
+                    : CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+                    : 원곡 일부 발췌, 음량 조정 및 페이드 적용.
+    encoder         : Lavf61.7.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 360x640, q=2-31, 30 fps, 15360 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc61.19.100 libx264
+      Side data:
+        cpb: bitrate max/min/avg: 0/0/0 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 194 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+frame=   42 fps=0.0 q=24.0 size=     512KiB time=00:00:01.33 bitrate=3146.0kbits/s speed=2.64xframe=  141 fps=140 q=24.0 size=    1792KiB time=00:00:04.63 bitrate=3168.4kbits/s speed=4.59xframe=  228 fps=150 q=24.0 size=    3072KiB time=00:00:07.53 bitrate=3340.6kbits/s speed=4.97xframe=  326 fps=161 q=24.0 size=    4352KiB time=00:00:10.80 bitrate=3301.1kbits/s speed=5.35xframe=  423 fps=168 q=24.0 size=    5376KiB time=00:00:14.03 bitrate=3138.3kbits/s speed=5.57xframe=  537 fps=178 q=24.0 size=    6656KiB time=00:00:17.83 bitrate=3057.6kbits/s speed= 5.9x[mp4 @ 0x12ee05440] Starting second pass: moving the moov atom to the beginning of the file
+[out#0/mp4 @ 0x12ee05360] video:7124KiB audio:475KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.245016%
+frame=  600 fps=189 q=-1.0 Lsize=    7617KiB time=00:00:19.93 bitrate=3130.5kbits/s speed=6.26x
+[libx264 @ 0x12ee06270] frame I:4     Avg QP:16.89  size:110825
+[libx264 @ 0x12ee06270] frame P:593   Avg QP:19.69  size: 11547
+[libx264 @ 0x12ee06270] frame B:3     Avg QP:23.48  size:  1267
+[libx264 @ 0x12ee06270] consecutive B-frames: 99.3%  0.0%  0.0%  0.7%
+[libx264 @ 0x12ee06270] mb I  I16..4:  2.4% 29.6% 68.0%
+[libx264 @ 0x12ee06270] mb P  I16..4:  0.0%  0.0%  0.1%  P16..4: 62.1%  6.3%  8.5%  0.0%  0.0%    skip:23.0%
+[libx264 @ 0x12ee06270] mb B  I16..4:  0.5%  0.2%  0.0%  B16..8: 11.0% 10.2%  0.7%  direct:13.6%  skip:63.8%  L0:61.0% L1:35.6% BI: 3.5%
+[libx264 @ 0x12ee06270] 8x8 transform intra:29.3% inter:50.2%
+[libx264 @ 0x12ee06270] coded y,uvDC,uvAC intra: 93.6% 94.1% 89.9% inter: 49.8% 43.0% 19.0%
+[libx264 @ 0x12ee06270] i16 v,h,dc,p: 49% 22% 17% 13%
+[libx264 @ 0x12ee06270] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 13% 21% 21%  7%  6%  5%  9%  7% 12%
+[libx264 @ 0x12ee06270] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 16% 20% 13%  8%  7%  7%  9%  9% 12%
+[libx264 @ 0x12ee06270] i8c dc,h,v,p: 53% 22% 14% 11%
+[libx264 @ 0x12ee06270] Weighted P-Frames: Y:0.0% UV:0.0%
+[libx264 @ 0x12ee06270] ref P L0: 91.5%  8.5%
+[libx264 @ 0x12ee06270] ref B L0: 99.7%  0.3%
+[libx264 @ 0x12ee06270] ref B L1: 93.7%  6.3%
+[libx264 @ 0x12ee06270] kb/s:2917.72

@@ -83,6 +83,8 @@
 - SNS 카툰 연재는 [승인 v6·현행 제작 정책](design/jango/cartoon-series.json)과
   [카툰 릴스 제작·검수 정본](design/jango/reference/SNS-CARTOON-GUIDE.md)을 따른다. 신규 기본 형식은 처음부터
   9:16으로 구성한 1080×1920 카툰 릴스이며 가벼운 확대 또는 이동·고정 말풍선/대사·사용 권한이 확인된 BGM을 쓴다.
+  기본 BGM은 **Monkeys Spinning Monkeys — Kevin MacLeod**다. [음원·사용 근거](design/jango/audio/monkeys-spinning-monkeys/license.json)를
+  재사용하고 회차별 구간·편집·CC BY 4.0 크레딧을 기록한다. 사용자가 다른 음악을 지정하면 해당 요청을 우선한다.
   캐러셀은 별도 요청 시 제작한다. v18은 캐릭터 정본, v6는 장면 통합·이야기·한글·앱 효용의 품질 참조다.
   v6의 4:5 구도·2화의 여백 삽입 변환·철회된 v1/v2 단순 콜라주를 신규 기본값으로 되살리지 않는다.
   실제 승인 참조·공식 imagegen 작화·별도 한글 조립·기능과 예시 구분을 지키고, 콘티 확인 후 제작한다.
